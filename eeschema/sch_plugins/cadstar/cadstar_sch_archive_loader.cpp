@@ -722,22 +722,23 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             }
         }
 
-        auto getHierarchicalLabel = [&]( NETELEMENT_ID aNode ) -> SCH_HIERLABEL*
-                                    {
-                                        if( aNode.Contains( "BLKT" ) )
-                                        {
-                                            NET_SCH::BLOCK_TERM blockTerm = net.BlockTerminals.at( aNode );
-                                            BLOCK_PIN_ID blockPinID = std::make_pair( blockTerm.BlockID, blockTerm.TerminalID );
+        auto getHierarchicalLabel =
+            [&]( NETELEMENT_ID aNode ) -> SCH_HIERLABEL*
+            {
+                if( aNode.Contains( "BLKT" ) )
+                {
+                    NET_SCH::BLOCK_TERM blockTerm = net.BlockTerminals.at( aNode );
+                    BLOCK_PIN_ID blockPinID = std::make_pair( blockTerm.BlockID, blockTerm.TerminalID );
 
-                                            if( m_sheetPinMap.find( blockPinID )
-                                                    != m_sheetPinMap.end() )
-                                            {
-                                                return m_sheetPinMap.at( blockPinID );
-                                            }
-                                        }
+                    if( m_sheetPinMap.find( blockPinID )
+                            != m_sheetPinMap.end() )
+                    {
+                        return m_sheetPinMap.at( blockPinID );
+                    }
+                }
 
-                                        return nullptr;
-                                    };
+                return nullptr;
+            };
 
         //Add net name to all hierarchical pins (block terminals in CADSTAR)
         for( std::pair<NETELEMENT_ID, NET_SCH::BLOCK_TERM> blockPair : net.BlockTerminals )
@@ -905,7 +906,21 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                 }
             }
 
-            // Now we can load the wires
+            auto fixNetLabelsAndSheetPins =
+                [&]( double aWireAngleDeciDeg, NETELEMENT_ID& aNetEleID )
+                {
+                    LABEL_SPIN_STYLE spin = getSpinStyleDeciDeg( aWireAngleDeciDeg );
+
+                    if( netlabels.find( aNetEleID ) != netlabels.end() )
+                        netlabels.at( aNetEleID )->SetLabelSpinStyle( spin.RotateCW().RotateCW() );
+
+                    SCH_HIERLABEL* sheetPin = getHierarchicalLabel( aNetEleID );
+
+                    if( sheetPin )
+                        sheetPin->SetLabelSpinStyle( spin.MirrorX() );
+                };
+
+            // Now we can load the wires and fix the label orientations
             for( const VECTOR2I& pt : wireChain.CPoints() )
             {
                 if( firstPt )
@@ -921,20 +936,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                     secondPt = false;
 
 
-                    wxPoint          kiLast           = last;
-                    wxPoint          kiCurrent        = (wxPoint) pt;
-                    double           wireangleDeciDeg = getPolarAngle( kiLast - kiCurrent );
-                    LABEL_SPIN_STYLE spin             = getSpinStyleDeciDeg( wireangleDeciDeg );
-
-                    if( netlabels.find( conn.StartNode ) != netlabels.end() )
-                    {
-                        netlabels.at( conn.StartNode )->SetLabelSpinStyle( spin );
-                    }
-
-                    SCH_HIERLABEL* sheetPin = getHierarchicalLabel( conn.StartNode );
-
-                    if( sheetPin )
-                        sheetPin->SetLabelSpinStyle( spin );
+                    wxPoint kiLast           = last;
+                    wxPoint kiCurrent        = (wxPoint) pt;
+                    double  wireangleDeciDeg = getPolarAngle( kiLast - kiCurrent );
+                    fixNetLabelsAndSheetPins( wireangleDeciDeg, conn.StartNode );
                 }
 
                 wire = new SCH_LINE();
@@ -954,18 +959,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             //Fix labels on the end wire
             if( wire )
             {
-                wxPoint          kiLast           = wire->GetEndPoint();
-                wxPoint          kiCurrent        = wire->GetStartPoint();
-                double           wireangleDeciDeg = getPolarAngle( kiLast - kiCurrent );
-                LABEL_SPIN_STYLE spin             = getSpinStyleDeciDeg( wireangleDeciDeg );
-
-                if( netlabels.find( conn.EndNode ) != netlabels.end() )
-                    netlabels.at( conn.EndNode )->SetLabelSpinStyle( spin );
-
-                SCH_HIERLABEL* sheetPin = getHierarchicalLabel( conn.EndNode );
-
-                if( sheetPin )
-                    sheetPin->SetLabelSpinStyle( spin );
+                wxPoint kiLast           = wire->GetEndPoint();
+                wxPoint kiCurrent        = wire->GetStartPoint();
+                double  wireangleDeciDeg = getPolarAngle( kiLast - kiCurrent );
+                fixNetLabelsAndSheetPins( wireangleDeciDeg, conn.EndNode );
             }
         }
 
