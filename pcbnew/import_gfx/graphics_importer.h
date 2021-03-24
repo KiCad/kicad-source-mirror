@@ -84,7 +84,7 @@ public:
      *
      * @return the list of messages in one string. Each message ends by '\n'
      */
-    const std::string& GetMessages() const
+    const wxString& GetMessages() const
     {
         return m_plugin->GetMessages();
     }
