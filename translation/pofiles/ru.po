@@ -9,17 +9,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-22 17:14-0700\n"
-"PO-Revision-Date: 2021-03-23 00:14+0000\n"
+"PO-Revision-Date: 2021-03-26 20:05+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -10651,7 +10651,7 @@ msgstr "Добавить полный путь для директивы .includ
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:434
 msgid "Compatibility mode:"
-msgstr ""
+msgstr "Режим совместимости:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "User configuration"
@@ -26645,18 +26645,19 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:364
 msgid "Draw an outline to show the sheet size."
-msgstr ""
+msgstr "Чертить контур для отображения габаритов листа."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:368
-#, fuzzy
 msgid "Refill zones after Zone Properties dialog"
-msgstr "Отобразить диалоговое окно свойств элемента"
+msgstr "Перезаливать зоны после изменения параметров"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:370
 msgid ""
 "If checked, zones will be re-filled after editing the properties of the zone "
 "using the Zone Properties dialog"
 msgstr ""
+"Если отмечено, зоны будут перезалиты после редактирования их свойств с "
+"помощью диалогового окна параметров зоны"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:131
 msgid "Internal Layers"
@@ -29136,7 +29137,7 @@ msgstr ""
 
 #: pcbnew/generate_footprint_info.cpp:120
 msgid "doc url"
-msgstr ""
+msgstr "doc url"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
 msgid "Centimeter"
@@ -31484,13 +31485,12 @@ msgid "%s is malformed."
 msgstr "%s неверный."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1004
-#, fuzzy
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
 "Эта зона не может быть обработана инструментом трассировки дорожек.\n"
-"Пожалуйста проверьте, что полигон не пересекает сам себя."
+"Проверьте чтобы полигон не пересекал сам себя."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1602 pcbnew/router/router_tool.cpp:424
 msgid "Interactive Router"
@@ -31636,13 +31636,13 @@ msgid "Switches posture of the currently routed track."
 msgstr "Изменить положение текущей разведённой дорожки."
 
 #: pcbnew/router/router_tool.cpp:155
-#, fuzzy
 msgid "Track Corner Mode"
-msgstr "Зазор дорожек"
+msgstr "Режим углов дорожек"
 
 #: pcbnew/router/router_tool.cpp:156
 msgid "Switches between sharp and rounded corners when routing tracks."
 msgstr ""
+"Переключиться между острыми и скруглёнными углами при трассировке дорожек."
 
 #: pcbnew/router/router_tool.cpp:177
 msgid "Select Track/Via Width"
