@@ -138,11 +138,11 @@ bool PYTHON_ACTION_PLUGIN::GetShowToolbarButton()
 }
 
 
-wxString PYTHON_ACTION_PLUGIN::GetIconFileName( bool dark )
+wxString PYTHON_ACTION_PLUGIN::GetIconFileName( bool aDark )
 {
     PyLOCK lock;
 
-    PyObject* arglist = Py_BuildValue( "(i)", (int) dark );
+    PyObject* arglist = Py_BuildValue( "(i)", static_cast<int>( aDark ) );
 
     wxString result = CallRetStrMethod( "GetIconFileName", arglist );
 

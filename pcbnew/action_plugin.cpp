@@ -159,6 +159,7 @@ void ACTION_PLUGINS::register_action( ACTION_PLUGIN* aAction )
 
     // Load icon if supplied
     wxString icon_file_name = aAction->GetIconFileName( GetBitmapStore()->IsDarkTheme() );
+
     if( !icon_file_name.IsEmpty() )
     {
         {
