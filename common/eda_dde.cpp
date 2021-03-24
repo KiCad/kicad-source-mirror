@@ -301,7 +301,6 @@ private:
 
 
 std::unique_ptr<ASYNC_SOCKET_HOLDER> socketHolder = nullptr;
-std::once_flag socketHolderCreated;
 
 /* Used by a client to sent (by a socket connection) a data to a server.
  *  - Open a Socket Client connection
@@ -312,8 +311,8 @@ std::once_flag socketHolderCreated;
  */
 bool SendCommand( int aService, const std::string& aMessage )
 {
-    std::call_once( socketHolderCreated,
-                    []() { socketHolder.reset( new ASYNC_SOCKET_HOLDER() ); } );
+    if( !socketHolder )
+        socketHolder.reset( new ASYNC_SOCKET_HOLDER() );
 
     return socketHolder->Send( aService, aMessage );
 }
