@@ -56,7 +56,7 @@ class BACK_ANNOTATE
 {
 public:
     /**
-     * Struct to hold Pcbnew footprint data.
+     * Container for Pcbnew footprint data.
      */
     struct PCB_FP_DATA
     {
@@ -87,8 +87,8 @@ public:
     /**
      * Get netlist from the Pcbnew.
      *
-     * @param aNetlist reference to where netlist will be stored
-     * @return true if success
+     * @param aNetlist is the netlist for the board editor.
+     * @return true if success.
      */
     bool FetchNetlistFromPCB( std::string& aNetlist );
 
@@ -97,8 +97,8 @@ public:
     /**
      * Run back annotation algorithm. If any errors, back annotation doesn't run.
      *
-     * @param aNetlist netlist to run back annotation from
-     * @return true if success
+     * @param aNetlist is the netlist to use for back annotation.
+     * @return true if back annotation completed success.
      */
     bool BackAnnotateSymbols( const std::string& aNetlist );
 
@@ -106,22 +106,23 @@ private:
     /**
      * Parse netlist sent over KiWay express mail interface and fill \ref m_pcbModules.
      *
-     * @param aPayload - netlist from Pcbnew
-     * @return number of errors during parsing
+     * @param aPayload is the netlist from Pcbnew.
+     * @return number of errors during parsing.
      */
     void getPcbModulesFromString( const std::string& aPayload );
 
-    ///< Create changelist
+    ///< Create changelist.
     void getChangeList();
 
     /**
      * Check if some symbols are not represented in PCB footprints and vice versa.
-     * \ref m_refs must be sorted by path
+     *
+     * \ref m_refs must be sorted by path.
      */
     void checkForUnusedSymbols();
 
     /**
-     * Apply changelist to the schematic
+     * Apply changelist to the schematic.
      */
     void applyChangelist();
 

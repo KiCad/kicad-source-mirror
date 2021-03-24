@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Brian Piccioni brian@documenteddesigns.com
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,9 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include    <sch_edit_frame.h>
-#include    <tools/backannotate.h>
-#include    <reannotate.h>
+#include <sch_edit_frame.h>
+#include <tools/backannotate.h>
+#include <reannotate.h>
 
 
 WX_STRING_REPORTER_FILTERED::WX_STRING_REPORTER_FILTERED( SEVERITY aSeverity ) :
@@ -69,6 +69,10 @@ void ReannotateFromPCBNew( SCH_EDIT_FRAME* aFrame, std::string& aNetlist )
                             false,       // aProcessNetNames
                             false );     // aDryRun
 
+    // TODO (WS): This is completely broken.  BackAnnotate symbols never fails so the attempt
+    //            to pass information back through the Kiway payload to Pcbnew never happens.
+    //            Attempting to pass information back through the Kiway payload in and of
+    //            itself is broken because Kiway payloads were never intended to be bidirectional.
     if( !backAnno.BackAnnotateSymbols( aNetlist ) )
     {
         aNetlist = _( "Errors reported by Eeschema:\n" ) + reporter.m_string.ToStdString();

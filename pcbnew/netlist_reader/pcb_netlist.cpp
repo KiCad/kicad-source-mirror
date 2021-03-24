@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 Jean-Pierre Charras.
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>.
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +77,7 @@ void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
     aOut->Print( nl, "(ref %s ",      aOut->Quotew( m_reference ).c_str() );
     aOut->Print( 0, "(fpid %s)\n",    aOut->Quotew( m_fpid.Format() ).c_str() );
 
-    if( ! ( aCtl & CTL_OMIT_EXTRA ) )
+    if( !( aCtl & CTL_OMIT_EXTRA ) )
     {
         aOut->Print( nl+1, "(value %s)\n",    aOut->Quotew( m_value ).c_str() );
         aOut->Print( nl+1, "(name %s)\n",     aOut->Quotew( m_name ).c_str() );
@@ -88,7 +88,7 @@ void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
         for( const KIID& pathStep : m_path )
             path += '/' + pathStep.AsString();
 
-        if( !m_kiids.empty() )
+        if( !( aCtl & CTL_OMIT_FP_UUID ) && !m_kiids.empty() )
             path += '/' + m_kiids.front().AsString();
 
         aOut->Print( nl+1, "(timestamp %s)\n", aOut->Quotew( path ).c_str() );
@@ -191,8 +191,7 @@ COMPONENT* NETLIST::GetComponentByPath( const KIID_PATH& aUuidPath )
 
 
 /**
- * Function ByFPID
- * is a helper function used to sort the component list used by loadNewModules.
+ * A helper function used to sort the component list used by loadNewModules.
  */
 static bool ByFPID( const COMPONENT& ref, const COMPONENT& cmp )
 {
@@ -207,8 +206,7 @@ void NETLIST::SortByFPID()
 
 
 /**
- * Operator <
- * compares two #COMPONENT objects by reference designator.
+ * Compare two #COMPONENT objects by reference designator.
  */
 bool operator < ( const COMPONENT& item1, const COMPONENT& item2 )
 {

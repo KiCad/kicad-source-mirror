@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras.
- * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>.
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@gmail.com>.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,8 +37,7 @@ class REPORTER;
 
 
 /**
- * COMPONENT_NET
- * is used to store the component pin name to net name (and pin function)
+ * Used to store the component pin name to net name (and pin function)
  * associations stored in a netlist.
  */
 class COMPONENT_NET
@@ -79,45 +78,10 @@ public:
 typedef std::vector< COMPONENT_NET > COMPONENT_NETS;
 
 /**
- * COMPONENT
- * is used to store components and all of their related information found in a netlist.
+ * Store all of the related footprint information found in a netlist.
  */
 class COMPONENT
 {
-    COMPONENT_NETS m_nets;              ///< list of nets shared by the component pins
-    wxArrayString  m_footprintFilters;  ///< Footprint filters found in netlist.
-    int            m_pinCount;          ///< Number of pins found in netlist.
-    wxString       m_reference;         ///< The component reference designator found in netlist.
-    wxString       m_value;             ///< The component value found in netlist.
-
-    /// A fully specified path to the component (but not the component: [ sheetUUID, sheetUUID, .. ]
-    KIID_PATH      m_path;
-
-    /// A vector of possible KIIDs corresponding to all units in a symbol
-    std::vector<KIID>   m_kiids;
-
-    /// The name of the component in #m_library used when it was placed on the schematic..
-    wxString       m_name;
-
-    /// The name of the component library where #m_name was found.
-    wxString       m_library;
-
-    /// The #LIB_ID of the footprint assigned to the component.
-    LIB_ID         m_fpid;
-
-    /// The alt LIB_ID of the footprint, when there are 2 different assigned footprints,
-    /// One from the netlist, the other from the .cmp file.
-    /// this one is a copy of the netlist footprint assignment
-    LIB_ID         m_altFpid;
-
-    /// The #FOOTPRINT loaded for #m_FPID.
-    std::unique_ptr< FOOTPRINT > m_footprint;
-
-    /// Component-specific properties found in the netlist.
-    std::map<wxString, wxString> m_properties;
-
-    static COMPONENT_NET    m_emptyNet;
-
 public:
     COMPONENT( const LIB_ID&            aFPID,
                const wxString&          aReference,
@@ -193,6 +157,41 @@ public:
     }
 
     void Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl );
+
+private:
+    COMPONENT_NETS m_nets;              ///< list of nets shared by the component pins
+    wxArrayString  m_footprintFilters;  ///< Footprint filters found in netlist.
+    int            m_pinCount;          ///< Number of pins found in netlist.
+    wxString       m_reference;         ///< The component reference designator found in netlist.
+    wxString       m_value;             ///< The component value found in netlist.
+
+    /// A fully specified path to the component (but not the component: [ sheetUUID, sheetUUID, .. ]
+    KIID_PATH      m_path;
+
+    /// A vector of possible KIIDs corresponding to all units in a symbol
+    std::vector<KIID>   m_kiids;
+
+    /// The name of the component in #m_library used when it was placed on the schematic..
+    wxString       m_name;
+
+    /// The name of the component library where #m_name was found.
+    wxString       m_library;
+
+    /// The #LIB_ID of the footprint assigned to the component.
+    LIB_ID         m_fpid;
+
+    /// The alt LIB_ID of the footprint, when there are 2 different assigned footprints,
+    /// One from the netlist, the other from the .cmp file.
+    /// this one is a copy of the netlist footprint assignment
+    LIB_ID         m_altFpid;
+
+    /// The #FOOTPRINT loaded for #m_FPID.
+    std::unique_ptr< FOOTPRINT > m_footprint;
+
+    /// Component-specific properties found in the netlist.
+    std::map<wxString, wxString> m_properties;
+
+    static COMPONENT_NET    m_emptyNet;
 };
 
 
@@ -200,17 +199,11 @@ typedef boost::ptr_vector< COMPONENT > COMPONENTS;
 
 
 /**
- * NETLIST
- * stores all of information read from a netlist along with the flags used to update
- * the NETLIST in the #BOARD.
+ * Store information read from a netlist along with the flags used to update the NETLIST in the
+ * #BOARD.
  */
 class NETLIST
 {
-    COMPONENTS m_components;          // Components found in the netlist.
-
-    bool       m_findByTimeStamp;     // Associate components by KIID (or refdes if false)
-    bool       m_replaceFootprints;   // Update footprints to match footprints defined in netlist
-
 public:
     NETLIST() :
         m_findByTimeStamp( false ),
@@ -219,26 +212,22 @@ public:
     }
 
     /**
-     * Function IsEmpty()
      * @return true if there are no components in the netlist.
      */
     bool IsEmpty() const { return m_components.empty(); }
 
     /**
-     * Function Clear
-     * removes all components from the netlist.
+     * Remove all components from the netlist.
      */
     void Clear() { m_components.clear(); }
 
     /**
-     * Function GetCount
      * @return the number of components in the netlist.
      */
     unsigned GetCount() const { return m_components.size(); }
 
     /**
-     * Function GetComponent
-     * returns the #COMPONENT at \a aIndex.
+     * Returns the #COMPONENT at \a aIndex.
      *
      * @param aIndex the index in #m_components to fetch.
      * @return a pointer to the #COMPONENT at \a Index.
@@ -246,8 +235,7 @@ public:
     COMPONENT* GetComponent( unsigned aIndex ) { return &m_components[ aIndex ]; }
 
     /**
-     * Function AddComponent
-     * adds \a aComponent to the NETLIST.
+     * Add \a aComponent to the NETLIST.
      *
      * @note If \a aComponent already exists in the NETLIST, \a aComponent is deleted
      *       to prevent memory leaks.  An assertion is raised in debug builds.
@@ -257,8 +245,7 @@ public:
     void AddComponent( COMPONENT* aComponent );
 
     /**
-     * Function GetComponentByReference
-     * returns a #COMPONENT by \a aReference.
+     * Return a #COMPONENT by \a aReference.
      *
      * @param aReference is the reference designator the #COMPONENT.
      * @return a pointer to the #COMPONENT that matches \a aReference if found.  Otherwise NULL.
@@ -266,8 +253,7 @@ public:
     COMPONENT* GetComponentByReference( const wxString& aReference );
 
     /**
-     * Function GetComponentByPath
-     * returns a #COMPONENT by \a aPath.
+     * Return a #COMPONENT by \a aPath.
      *
      * @param aPath is the KIID_PATH [ sheetUUID, .., compUUID ] of the #COMPONENT.
      * @return a pointer to the #COMPONENT that matches \a aPath if found.  Otherwise NULL.
@@ -284,7 +270,6 @@ public:
     bool GetReplaceFootprints() const { return m_replaceFootprints; }
 
     /**
-     * Function AnyFootprintsLinked
      * @return true if any component with a footprint link is found.
      */
     bool AnyFootprintsLinked() const;
@@ -294,6 +279,7 @@ public:
 #define CTL_OMIT_EXTRA      (1<<0)
 #define CTL_OMIT_NETS       (1<<1)
 #define CTL_OMIT_FILTERS    (1<<2)
+#define CTL_OMIT_FP_UUID    (1<<3)  ///< Don't prefix the footprint UUID to the sheet path.
 
 #define CTL_FOR_CVPCB    (CTL_OMIT_NETS | CTL_OMIT_FILTERS | CTL_OMIT_EXTRA)
 
@@ -301,6 +287,12 @@ public:
     {
         Format( "cvpcb_netlist", aOut, 0, CTL_FOR_CVPCB );
     }
+
+private:
+    COMPONENTS m_components;          // Components found in the netlist.
+
+    bool       m_findByTimeStamp;     // Associate components by KIID (or refdes if false)
+    bool       m_replaceFootprints;   // Update footprints to match footprints defined in netlist
 };
 
 

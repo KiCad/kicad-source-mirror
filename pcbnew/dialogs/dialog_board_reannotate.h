@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Brian Piccioni brian@documenteddesigns.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Brian Piccioni <brian@documenteddesigns.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -42,16 +42,16 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 
-#define SORTXFIRST 0b000       //Sort on X
-#define SORTYFIRST 0b100       //Sort on Y
-#define ASCENDINGFIRST 0b000   //Sort low to high
-#define DESCENDINGFIRST 0b010  //Sort high to low
-#define ASCENDINGSECOND 0b000  //Sort low to high
-#define DESCENDINGSECOND 0b001 //Sort high to low
+#define SORTXFIRST 0b000       // Sort on X
+#define SORTYFIRST 0b100       // Sort on Y
+#define ASCENDINGFIRST 0b000   // Sort low to high
+#define DESCENDINGFIRST 0b010  // Sort high to low
+#define ASCENDINGSECOND 0b000  // Sort low to high
+#define DESCENDINGSECOND 0b001 // Sort high to low
 
 #define MINGRID 1000
 #define MAXERROR 10
-#define VALIDPREFIX "_-+=/\\" //Prefixs can be alpha or these symbols
+#define VALIDPREFIX "_-+=/\\"  // Prefixs can be alpha or these symbols
 
 enum ActionCode
 {
@@ -72,21 +72,21 @@ enum AnnotationChoice
 struct RefDesChange
 {
     KIID        Uuid;
-    wxString    NewRefDes;       //The new reference designation (F_U21)
-    wxString    OldRefDesString; //What the old refdes preamble + number was
-    bool        Front;           //True if on the front of the board
-    ActionCode  Action;          //Used to skip (if #, etc)
+    wxString    NewRefDes;          // The new reference designation (F_U21)
+    wxString    OldRefDesString;    // What the old refdes preamble + number was
+    bool        Front;              // True if on the front of the board
+    ActionCode  Action;             // Used to skip (if #, etc)
 };
 
 struct RefDesInfo
 {
     KIID        Uuid;
-    bool        Front;              //True if on the front of the board
-    wxString    RefDesString;       //What its refdes is R1, C2
-    wxString    RefDesType;         //ie R, C, etc
-    int         x, y;               //The coordinates
-    int         roundedx, roundedy; //The coordinates after rounding.
-    ActionCode  Action;             //Used to skip (if #, etc)
+    bool        Front;              // True if on the front of the board
+    wxString    RefDesString;       // What its refdes is R1, C2
+    wxString    RefDesType;         // ie R, C, etc
+    int         x, y;               // The coordinates
+    int         roundedx, roundedy; // The coordinates after rounding.
+    ActionCode  Action;             // Used to skip (if #, etc)
     LIB_ID      FPID;
 };
 
@@ -104,33 +104,6 @@ public:
     ~DIALOG_BOARD_REANNOTATE();
 
 private:
-    PCB_EDIT_FRAME*  m_frame;
-    FOOTPRINTS       m_footprints;
-    PCB_SCREEN*      m_screen;
-    PCB_SELECTION    m_selection;
-
-    std::vector<RefDesChange>  m_changeArray;
-    std::vector<RefDesInfo>    m_frontFootprints;
-    std::vector<RefDesInfo>    m_backFootprints;
-    std::vector<RefDesTypeStr> m_refDesTypes;
-    std::vector<wxString>      m_excludeArray;
-
-    bool m_standalone;
-
-    int m_sortCode;
-    int m_gridIndex;
-    int m_annotationChoice;
-    int m_severity;
-
-    double m_sortGridx;
-    double m_sortGridy;
-
-    wxString m_frontPrefixString;
-    wxString m_backPrefixString;
-    wxString m_validPrefixes;
-
-    APP_SETTINGS_BASE* m_settings;
-
     std::vector<wxRadioButton*> m_sortButtons = {
             m_Down_Right,
             m_Right_Down,
@@ -160,10 +133,9 @@ private:
             reannotate_left_up_bitmap
     };
 
-    APP_SETTINGS_BASE* m_Config;
-
-
     void GetParameters( void );
+
+    /// Copy saved app settings to the dialog.
     void InitValues( void );
 
     void OnApplyClick( wxCommandEvent& event ) override;
@@ -171,22 +143,72 @@ private:
     void FilterFrontPrefix( wxCommandEvent& event ) override;
     void FilterBackPrefix( wxCommandEvent& event ) override;
 
+    /// Break report into strings separated by \n and sent to the reporter.
     void ShowReport( wxString aMessage, SEVERITY aSeverity );
+
+	/// Create a list of the footprints and their coordinates.
     void LogFootprints( const wxString& aMessage, const std::vector<RefDesInfo>& aFootprints );
+
+    /// Create an audit trail of the changes.
     void LogChangePlan( void );
 
+    /// Actually reannotate the board.
+    /// @return false if fail, true if success.
     bool ReannotateBoard( void );
+
+    /// Build the footprint lists, sort it, filter for excludes, then build the change list.
+    /// @return true if success, false if errors
     bool BuildFootprintList( std::vector<RefDesInfo>& aBadRefDes );
+
+    /// Scan through the footprint arrays and create the from -> to array.
     void BuildChangeArray( std::vector<RefDesInfo>& aFootprints, unsigned int aStartRefDes,
                            wxString aPrefix, bool aRemovePrefix,
                            std::vector<RefDesInfo>& aBadRefDes );
 
+    /// @return the new reference for this footprint.
     RefDesChange* GetNewRefDes( FOOTPRINT* aFootprint );
 
-    int      RoundToGrid( int aCoord, int aGrid );
+    /// Round an int coordinate to a suitable grid
+    int RoundToGrid( int aCoord, int aGrid );
+
+    /// Convert coordinates to wxString.
+    /// @return the string
     wxString CoordTowxString( int aX, int aY );
-    void     MakeSampleText( wxString& aMessage );
-    void     FilterPrefix( wxTextCtrl* aPrefix );
+
+    /// Make the text to summarize what is about to happen.
+    void MakeSampleText( wxString& aMessage );
+
+    /// Check to make sure the prefix (if there is one) is properly constructed.
+    void FilterPrefix( wxTextCtrl* aPrefix );
+
+    PCB_EDIT_FRAME*  m_frame;
+    FOOTPRINTS       m_footprints;
+    PCB_SCREEN*      m_screen;
+    PCB_SELECTION    m_selection;
+
+    std::vector<RefDesChange>  m_changeArray;
+    std::vector<RefDesInfo>    m_frontFootprints;
+    std::vector<RefDesInfo>    m_backFootprints;
+    std::vector<RefDesTypeStr> m_refDesTypes;
+    std::vector<wxString>      m_excludeArray;
+
+    bool m_standalone;
+
+    int m_sortCode;
+    int m_gridIndex;
+    int m_annotationChoice;
+    int m_severity;
+
+    double m_sortGridx;
+    double m_sortGridy;
+
+    wxString m_frontPrefixString;
+    wxString m_backPrefixString;
+    wxString m_validPrefixes;
+
+    APP_SETTINGS_BASE* m_settings;
+
+    APP_SETTINGS_BASE* m_Config;
 };
 
 #endif /* DIALOG_BOARD_REANNOTATECLASSES_H_ */

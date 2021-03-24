@@ -37,6 +37,7 @@
 #include <wildcards_and_files_ext.h>
 #include <connection_graph.h>
 
+
 BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                               bool aProcessFootprints, bool aProcessValues,
                               bool aProcessReferences, bool aProcessNetNames, bool aDryRun ) :
@@ -159,8 +160,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
             if( path == "" )
             {
-                msg.Printf( _( "Footprint '%s' has no assigned symbol." ),
-                            ref );
+                msg.Printf( _( "Footprint '%s' has no assigned symbol." ), ref );
                 m_reporter.ReportHead( msg, RPT_SEVERITY_WARNING );
                 continue;
             }
@@ -251,7 +251,7 @@ void BACK_ANNOTATE::getChangeList()
 
         if( refIndex >= 0 )
         {
-            m_refs[ refIndex ].GetSymbol()->ClearFlags(SKIP_STRUCT );
+            m_refs[ refIndex ].GetSymbol()->ClearFlags( SKIP_STRUCT );
             m_changelist.emplace_back( CHANGELIST_ITEM( m_refs[refIndex], pcbData ) );
         }
         else
@@ -553,27 +553,22 @@ void BACK_ANNOTATE::processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
 
         if( schPin->IsPowerConnection() )
         {
-            msg.Printf( _( "Net %s cannot be changed to '%s' because it is driven by a power pin." ),
-                        aOldName,
-                        aNewName );
+            msg.Printf( _( "Net %s cannot be changed to '%s' because it is driven by a power "
+                           "pin." ), aOldName, aNewName );
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
             break;
         }
 
         ++m_changesCount;
-        msg.Printf( _( "Add label '%s' to %s pin %s net." ),
-                    aNewName,
-                    aRef,
-                    aPin->GetNumber() );
+        msg.Printf( _( "Add label '%s' to %s pin %s net." ), aNewName, aRef, aPin->GetNumber() );
 
         if( !m_dryRun )
         {
             SCHEMATIC_SETTINGS& settings = m_frame->Schematic().Settings();
             SCH_LABEL* label = new SCH_LABEL( driver->GetPosition(), aNewName );
             label->SetParent( &m_frame->Schematic() );
-            label->SetTextSize( wxSize( settings.m_DefaultTextSize,
-                                        settings.m_DefaultTextSize ) );
+            label->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
             label->SetLabelSpinStyle( spin );
             label->SetFlags( IS_NEW );
 
