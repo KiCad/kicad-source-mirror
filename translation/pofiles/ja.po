@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-22 17:14-0700\n"
-"PO-Revision-Date: 2021-03-21 13:35+0000\n"
+"PO-Revision-Date: 2021-03-26 20:05+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -10603,20 +10603,19 @@ msgstr ".include ライブラリー指令の絶対パスを追加"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:434
 msgid "Compatibility mode:"
-msgstr ""
+msgstr "互換モード:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
-#, fuzzy
 msgid "User configuration"
-msgstr "光源の設定"
+msgstr "ユーザー設定"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "Spice"
-msgstr ""
+msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "PSpice"
-msgstr ""
+msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "LTSpice"
@@ -10624,11 +10623,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "PSpice and LTSpice"
-msgstr ""
+msgstr "PSpiceとLTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "HSpice"
-msgstr ""
+msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.h:138
 msgid "Simulation settings"
@@ -25986,26 +25985,25 @@ msgid "Keep out tracks"
 msgstr "配線禁止"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:43
-#, fuzzy
 msgid "Prevent tracks from routing into this area"
-msgstr "２つのネットを短絡する配線を削除"
+msgstr "このエリアへ配線がルーティングされるのを防止する"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:47
 msgid "Keep out vias"
 msgstr "ビア禁止"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
-#, fuzzy
 msgid "Prevent vias from being placed in this area"
-msgstr "ネットリスト ファイル保存後も CvPcb を継続"
+msgstr "このエリアにビアが配置されないようにする"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:52
 msgid "Keep out pads"
 msgstr "配線禁止パッド"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
+#, fuzzy
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "パッドがこの領域に重なっている場合に DRC エラーを発生させる"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
 msgid "Keep out copper fill"
@@ -26013,7 +26011,7 @@ msgstr "銅箔塗りつぶし禁止"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "ゾーンのある領域を銅箔の塗りつぶさない"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:65
 msgid "Keep out footprints"
@@ -26028,9 +26026,8 @@ msgid "Constrain outline to H, V and 45 deg"
 msgstr "外形を水平、垂直、45度に制限"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
-#, fuzzy
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
-msgstr "配線、バスを90度のみで描画"
+msgstr "垂直、水平、45度の線のみで領域を描画"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:100
 msgid "Area name:"
@@ -26575,15 +26572,14 @@ msgid "Draw an outline to show the sheet size."
 msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:368
-#, fuzzy
 msgid "Refill zones after Zone Properties dialog"
-msgstr "プロパティ ダイアログにアイテムを表示"
+msgstr "ゾーンのプロパティ ダイアログを閉じたときに再塗りぶし"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:370
 msgid ""
 "If checked, zones will be re-filled after editing the properties of the zone "
 "using the Zone Properties dialog"
-msgstr ""
+msgstr "チェックすると、[ゾーンのプロパティ] ダイアログ でゾーンのプロパティを編集した後に、ゾーンが再塗りつぶしが行われます"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:131
 msgid "Internal Layers"
@@ -31569,7 +31565,7 @@ msgstr "配線がパッドに接近しています"
 
 #: pcbnew/router/router_tool.cpp:156
 msgid "Switches between sharp and rounded corners when routing tracks."
-msgstr ""
+msgstr "配線をルーティングするときに、コーナーを直線的にするか丸めるかを切り替えます。"
 
 #: pcbnew/router/router_tool.cpp:177
 msgid "Select Track/Via Width"
@@ -31814,7 +31810,7 @@ msgstr "不明なメソッド"
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:361
 msgid "Apply action script"
-msgstr ""
+msgstr "アクション スクリプトを適用"
 
 #: pcbnew/swig/pcbnew_footprint_wizards.cpp:69
 msgid "Exception on python footprint wizard code"
@@ -32171,7 +32167,7 @@ msgstr "損失正接"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:332
 msgid "Insert board stackup table"
-msgstr ""
+msgstr "基板スタックアップの表を挿入します"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:371
 msgid "BOARD CHARACTERISTICS"
@@ -32202,7 +32198,6 @@ msgid "Board Thickness: "
 msgstr "基板厚: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:448
-#, fuzzy
 msgid "Min hole diameter: "
 msgstr "最小穴径: "
 
@@ -32488,18 +32483,16 @@ msgid "Draw Arc"
 msgstr "円弧を描く"
 
 #: pcbnew/tools/pcb_actions.cpp:122
-#, fuzzy
 msgid "Add Board Characteristics"
-msgstr "デフォルトのパッド属性を調整"
+msgstr "基板の特性の表を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:123
 msgid "Add a board characteristics table on a graphic layer"
-msgstr ""
+msgstr "図形レイヤーに基板の特性の表を追加します"
 
 #: pcbnew/tools/pcb_actions.cpp:128
-#, fuzzy
 msgid "Add Stackup Table"
-msgstr "スタブを追加"
+msgstr "スタックアップの表を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:129
 msgid "Add a board stackup table on a graphic layer"
