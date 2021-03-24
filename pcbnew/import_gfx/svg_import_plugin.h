@@ -52,7 +52,7 @@ public:
     /**
      * @return the list of messages in one string. Each message ends by '\n'
      */
-    const std::string& GetMessages() const override
+    const wxString& GetMessages() const override
     {
         return m_messages;
     }
@@ -77,7 +77,7 @@ private:
 
     struct NSVGimage* m_parsedImage;
 
-    std::string m_messages;     // messages generated during svg file parsing.
+    wxString m_messages; // messages generated during svg file parsing.
                                 // Each message ends by '\n'
 };
 

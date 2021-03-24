@@ -217,14 +217,14 @@ public:
     /**
      * @return the list of messages in one string. Each message ends by '\n'
      */
-    const std::string& GetMessages() const override
+    const wxString& GetMessages() const override
     {
         return m_messages;
     }
 
 private:
     // report message to keep trace of not supported dxf entities:
-    void reportMsg( const char* aMessage );
+    void reportMsg( const wxString& aMessage );
 
     // coordinate conversions from dxf file to mm
     double mapX( double aDxfCoordX );

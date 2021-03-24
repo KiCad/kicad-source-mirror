@@ -161,7 +161,7 @@ bool DXF_IMPORT_PLUGIN::ImportDxfFile( const wxString& aFile )
 }
 
 
-void DXF_IMPORT_PLUGIN::reportMsg( const char* aMessage )
+void DXF_IMPORT_PLUGIN::reportMsg( const wxString& aMessage )
 {
     // Add message to keep trace of not handled dxf entities
     m_messages += aMessage;
@@ -1050,8 +1050,6 @@ void DXF_IMPORT_PLUGIN::insertSpline( int aWidth )
         }
     }
 #else   // Use bezier curves, supported by pcbnew, to approximate the spline
-	tinyspline::BSpline dxfspline( m_curr_entity.m_SplineControlPointList.size(),
-                                   /* coord dim */ 2, m_curr_entity.m_SplineDegree );
     std::vector<double> ctrlp;
 
     for( unsigned ii = 0; ii < imax; ++ii )
@@ -1060,11 +1058,31 @@ void DXF_IMPORT_PLUGIN::insertSpline( int aWidth )
         ctrlp.push_back( m_curr_entity.m_SplineControlPointList[ii].m_y );
     }
 
-	dxfspline.setCtrlp( ctrlp );
-	dxfspline.setKnots( m_curr_entity.m_SplineKnotsList );
-	tinyspline::BSpline beziers( dxfspline.toBeziers() );
+    std::vector<double> coords;
+    try
+    {
+	    tinyspline::BSpline dxfspline( m_curr_entity.m_SplineControlPointList.size(),
+                                       /* coord dim */ 2, m_curr_entity.m_SplineDegree );
 
-    std::vector<double> coords = beziers.ctrlp();
+	    dxfspline.setCtrlp( ctrlp );
+	    dxfspline.setKnots( m_curr_entity.m_SplineKnotsList );
+	    tinyspline::BSpline beziers( dxfspline.toBeziers() );
+
+        coords = beziers.ctrlp();
+    }
+    catch( const std::runtime_error& )  //tinyspline throws everything including data validation as runtime errors
+    {
+        // invalid spline definition, drop this block
+        reportMsg( _( "Invalid spline definition encountered" ) );
+        return;
+    }
+
+    if( coords.size() % 8 != 0 )
+    {
+        // somehow we generated a bad Bezier curve
+        reportMsg( _( "Invalid Bezier curve created" ) );
+        return;
+    }
 
     // Each Bezier curve uses 4 vertices (a start point, 2 control points and a end point).
     // So we can have more than one Bezier curve ( there are one curve each four vertices)
