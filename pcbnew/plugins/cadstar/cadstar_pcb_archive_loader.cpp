@@ -1022,6 +1022,8 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
     //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
 
+    pad->SetLocked( true ); // Cadstar pads are always locked with respect to the footprint
+
     return pad;
 }
 
