@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="group_remove.svg"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
   <rect
      class="cls-3"
      x="0"
@@ -150,16 +150,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1904"
-     inkscape:window-height="1041"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="30.702139"
      inkscape:cx="2.5605781"
      inkscape:cy="11.755682"
      inkscape:window-x="0"
-     inkscape:window-y="37"
-     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -219,5 +219,5 @@
      x2="13.498478"
      y2="17.00152"
      id="line7942"
-     style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
 </svg>

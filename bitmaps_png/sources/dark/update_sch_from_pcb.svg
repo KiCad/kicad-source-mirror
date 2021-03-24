@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="update_sch_from_pcb.svg"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:version="1.0.2 (1.0.2+r75+1)"
    enable-background="new"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/update_sch_from_pcb.png"
    inkscape:export-xdpi="96"
@@ -26,18 +26,18 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2713"
-     inkscape:window-height="1847"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="19.771793"
-     inkscape:cx="8.1872518"
+     inkscape:cx="-3.0155764"
      inkscape:cy="11.671505"
-     inkscape:window-x="4079"
-     inkscape:window-y="77"
-     inkscape:window-maximized="0"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer4"
      inkscape:snap-global="false">
     <inkscape:grid
        type="xygrid"
@@ -784,11 +784,11 @@
        y2="14.890301"
        id="line116809"
        clip-path="none"
-       style="fill:none;stroke:#5a5a5a;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+       style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
     <path
        id="line116819"
        clip-path="none"
-       style="fill:none;stroke:#E0E0E0;stroke-width:2px;stroke-linejoin:round;stroke-opacity:1"
+       style="fill:none;stroke:#333333;stroke-width:2px;stroke-linejoin:round;stroke-opacity:1"
        d="M 0.5,19.029133 H 15"
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0" />
@@ -800,7 +800,7 @@
        y2="22.410698"
        id="line116821"
        clip-path="none"
-       style="fill:none;stroke:#E0E0E0;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;stroke:#333333;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
     <line
        class="cls-5"
        x1="19.025412"
@@ -809,7 +809,7 @@
        y2="10.936129"
        id="line116823"
        clip-path="none"
-       style="fill:none;stroke:#5a5a5a;stroke-width:2px;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1" />
+       style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1" />
     <line
        class="cls-4"
        x1="19"
@@ -817,13 +817,13 @@
        x2="19"
        y2="23.224098"
        id="line116825"
-       style="fill:none;stroke:#5a5a5a;stroke-width:2px;stroke-linejoin:round;stroke-opacity:1"
+       style="fill:none;stroke:#545454;stroke-width:2px;stroke-linejoin:round;stroke-opacity:1"
        clip-path="none" />
     <path
        class="cls-6"
        d="m 21.499996,10.906924 a 2.5,2.4999996 0 1 1 -2.5,-2.4962233 2.4981116,2.4981114 0 0 1 2.5,2.4962233 z"
        id="path116827"
-       style="fill:#E0E0E0;stroke-width:1.34879994"
+       style="fill:#333333;stroke-width:1.34879994;fill-opacity:1"
        clip-path="none"
        inkscape:connector-curvature="0" />
     <rect
@@ -833,11 +833,11 @@
        width="4"
        height="5.9106998"
        id="rect116829"
-       style="fill:#E0E0E0;fill-opacity:1;stroke:none;stroke-width:1.03829002;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:#333333;fill-opacity:1;stroke:none;stroke-width:1.03829002;stroke-linecap:round;stroke-linejoin:round"
        clip-path="none" />
     <path
        id="line116833"
-       style="fill:none;stroke:#E0E0E0;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:none;stroke:#333333;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
        d="M 18.999999,14.9107 15.2127,17.549101"
        sodipodi:nodetypes="cc"
        clip-path="none"
@@ -850,12 +850,12 @@
        y2="20.243099"
        id="line116835"
        clip-path="none"
-       style="fill:none;stroke:#E0E0E0;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;stroke:#333333;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
     <path
        class="cls-7"
        d="m 16.982611,22.71589 1.421194,-2.0158 a 0.7382,0.7382 0 0 1 1.32,0.25 l 0.3829,1.5775 a 0.9,0.9 0 0 1 -0.7489,1.1034 l -1.668094,0.2377 a 0.7367,0.7367 0 0 1 -0.7071,-1.1528 z"
        id="path1444"
-       style="fill:#E0E0E0;fill-opacity:1;stroke:none;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:#333333;fill-opacity:1;stroke:none;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
        clip-path="none"
        inkscape:connector-curvature="0" />
   </g>
@@ -991,7 +991,7 @@
      inkscape:label="wipe"
      style="display:inline">
     <path
-       style="display:inline;fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 5.143594,24 19,0"
        id="path1543"
        inkscape:connector-curvature="0" />

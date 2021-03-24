@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="load_module_board.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:version="1.0.2 (1.0.2+r75+1)"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/import_brd_file.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -25,8 +25,8 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1041"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="21.709691"
@@ -34,7 +34,7 @@
      inkscape:cy="15.216777"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -226,24 +226,23 @@
        style="fill:#ffffff;fill-opacity:1;stroke-width:1"
        inkscape:connector-curvature="0" />
   </g>
-  <g
-     id="g857">
-    <path
-       class="cls-5"
-       d="m 23.999997,16.993507 a 7,6.9999996 0 1 1 -7,-6.993506 6.9967031,6.9967026 0 0 1 7,6.993506 z"
-       id="path25365"
-       style="stroke-width:0.999996" />
-    <line
-       class="cls-6"
-       x1="17"
-       y1="20.4118"
-       x2="17"
-       y2="13.4118"
-       id="line25367" />
-    <polyline
-       class="cls-6"
-       points="20.859 18.879 18.104 21.631 15.349 18.879"
-       id="polyline25369"
-       transform="translate(-1.104,-1)" />
-  </g>
+  <path
+     class="cls-5"
+     d="m 23.999997,16.993507 a 7,6.9999996 0 1 1 -7,-6.993506 6.9967031,6.9967026 0 0 1 7,6.993506 z"
+     id="path25365"
+     style="stroke-width:0.999996" />
+  <line
+     class="cls-6"
+     x1="17"
+     y1="20.4118"
+     x2="17"
+     y2="13.4118"
+     id="line25367"
+     style="stroke:#ffffff;stroke-opacity:1" />
+  <polyline
+     class="cls-6"
+     points="20.859 18.879 18.104 21.631 15.349 18.879"
+     id="polyline25369"
+     transform="translate(-1.104,-1)"
+     style="stroke:#ffffff;stroke-opacity:1" />
 </svg>

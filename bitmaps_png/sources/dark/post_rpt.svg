@@ -1,40 +1,123 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="post_rpt.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1488" inkscape:window-height="975" id="namedview159354" showgrid="false" inkscape:zoom="30.291667" inkscape:cx="3.0701513" inkscape:cy="12" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" />
-   <metadata id="metadata43">
-      <rdf:RDF>
-         <cc:Work rdf:about="">
-            <dc:format>image/svg+xml</dc:format>
-            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-            <dc:title />
-            <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
-         </cc:Work>
-         <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-         </cc:License>
-      </rdf:RDF>
-   </metadata>
-   <defs id="defs159331">
-      <style id="style159329">.cls-1{fill:#8f8f8f;}.cls-2{fill:#42B8EB;}.cls-3{fill:#fff;}.cls-4{fill:#f2647e;}.cls-5{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
-   </defs>
-   <title id="title159333">post_rpt</title>
-   <rect class="cls-1" x="3.0489998" y="0" width="17.937201" height="17.983299" rx="2.9934001" id="rect159335" />
-   <rect class="cls-2" x="0.00010001659" y="2.9995" width="18.7099" height="9.2299004" id="rect159337" />
-   <path class="cls-3" d="M 2.07,9.9365 H 0.9965 V 8.9 H 2.07 Z" id="path159339" />
-   <path class="cls-3" d="M 5.8119,6.1 5.351,6.082 A 0.96,0.96 0 0 0 4.8246,6.2158 0.8793,0.8793 0 0 0 4.4994,6.5928 V 9.9365 H 3.4213 V 5.126 H 4.4057 L 4.4769,5.8242 A 1.5456,1.5456 0 0 1 4.9447,5.2461 1.0838,1.0838 0 0 1 5.6029,5.0371 0.9823,0.9823 0 0 1 5.7855,5.0527 1.4452,1.4452 0 0 1 5.9398,5.0908 Z" id="path159341" />
-   <path class="cls-3" d="M 10.77,7.6914 A 2.7166,2.7166 0 0 1 10.2778,9.3848 1.625,1.625 0 0 1 8.9078,10.0303 1.68,1.68 0 0 1 8.1851,9.8828 1.4832,1.4832 0 0 1 7.6441,9.4521 v 2.334 H 6.5658 V 5.126 H 7.475 L 7.5814,5.7305 A 1.6071,1.6071 0 0 1 8.1381,5.2148 1.5582,1.5582 0 0 1 8.8939,5.0371 1.5937,1.5937 0 0 1 10.2758,5.7422 3.1693,3.1693 0 0 1 10.77,7.5977 Z M 9.6968,7.5957 A 2.3439,2.3439 0 0 0 9.4194,6.3906 0.9,0.9 0 0 0 8.5923,5.9219 1.0651,1.0651 0 0 0 8.021,6.0664 1.0532,1.0532 0 0 0 7.644,6.4678 V 8.6387 A 0.9969,0.9969 0 0 0 8.021,9.0273 1.1373,1.1373 0 0 0 8.601,9.1631 0.9249,0.9249 0 0 0 9.4242,8.7568 1.8858,1.8858 0 0 0 9.6967,7.6885 Z" id="path159343" />
-   <path class="cls-3" d="m 13.0492,3.957 v 1.169 h 0.86 v 0.8008 h -0.86 V 8.585 a 0.582,0.582 0 0 0 0.1279,0.4248 0.4692,0.4692 0 0 0 0.3418,0.1269 1.0134,1.0134 0 0 0 0.1729,-0.0156 0.9933,0.9933 0 0 0 0.1592,-0.043 l 0.1162,0.792 A 1.2639,1.2639 0 0 1 13.639,9.9873 1.8184,1.8184 0 0 1 13.2435,10.0303 1.2309,1.2309 0 0 1 12.3129,9.6803 1.53,1.53 0 0 1 11.976,8.585 V 5.9268 H 11.2435 V 5.126 H 11.976 V 3.957 Z" id="path159345" />
-   <ellipse class="cls-4" cx="17.0075" cy="16.996099" rx="6.9924002" ry="7.0039001" id="ellipse159347" />
-   <line class="cls-5" x1="17.1112" y1="13.6254" x2="17.1112" y2="20.629299" id="line159349" />
-   <polyline class="cls-5" points="15.362 17.16 18.111 14.406 20.861 17.16" id="polyline159351" transform="translate(-1,-1)" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="post_rpt.svg"
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
+     id="namedview159354"
+     showgrid="false"
+     inkscape:zoom="30.291667"
+     inkscape:cx="-4.2420907"
+     inkscape:cy="12"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0" />
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs159331">
+    <style
+       id="style159329">.cls-1{fill:#8f8f8f;}.cls-2{fill:#42B8EB;}.cls-3{fill:#fff;}.cls-4{fill:#f2647e;}.cls-5{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+  </defs>
+  <title
+     id="title159333">post_rpt</title>
+  <rect
+     class="cls-1"
+     x="3.0489998"
+     y="0"
+     width="17.937201"
+     height="17.983299"
+     rx="2.9934001"
+     id="rect159335" />
+  <rect
+     class="cls-2"
+     x="0.00010001659"
+     y="2.9995"
+     width="18.7099"
+     height="9.2299004"
+     id="rect159337" />
+  <path
+     class="cls-3"
+     d="M 2.07,9.9365 H 0.9965 V 8.9 H 2.07 Z"
+     id="path159339" />
+  <path
+     class="cls-3"
+     d="M 5.8119,6.1 5.351,6.082 A 0.96,0.96 0 0 0 4.8246,6.2158 0.8793,0.8793 0 0 0 4.4994,6.5928 V 9.9365 H 3.4213 V 5.126 H 4.4057 L 4.4769,5.8242 A 1.5456,1.5456 0 0 1 4.9447,5.2461 1.0838,1.0838 0 0 1 5.6029,5.0371 0.9823,0.9823 0 0 1 5.7855,5.0527 1.4452,1.4452 0 0 1 5.9398,5.0908 Z"
+     id="path159341" />
+  <path
+     class="cls-3"
+     d="M 10.77,7.6914 A 2.7166,2.7166 0 0 1 10.2778,9.3848 1.625,1.625 0 0 1 8.9078,10.0303 1.68,1.68 0 0 1 8.1851,9.8828 1.4832,1.4832 0 0 1 7.6441,9.4521 v 2.334 H 6.5658 V 5.126 H 7.475 L 7.5814,5.7305 A 1.6071,1.6071 0 0 1 8.1381,5.2148 1.5582,1.5582 0 0 1 8.8939,5.0371 1.5937,1.5937 0 0 1 10.2758,5.7422 3.1693,3.1693 0 0 1 10.77,7.5977 Z M 9.6968,7.5957 A 2.3439,2.3439 0 0 0 9.4194,6.3906 0.9,0.9 0 0 0 8.5923,5.9219 1.0651,1.0651 0 0 0 8.021,6.0664 1.0532,1.0532 0 0 0 7.644,6.4678 V 8.6387 A 0.9969,0.9969 0 0 0 8.021,9.0273 1.1373,1.1373 0 0 0 8.601,9.1631 0.9249,0.9249 0 0 0 9.4242,8.7568 1.8858,1.8858 0 0 0 9.6967,7.6885 Z"
+     id="path159343" />
+  <path
+     class="cls-3"
+     d="m 13.0492,3.957 v 1.169 h 0.86 v 0.8008 h -0.86 V 8.585 a 0.582,0.582 0 0 0 0.1279,0.4248 0.4692,0.4692 0 0 0 0.3418,0.1269 1.0134,1.0134 0 0 0 0.1729,-0.0156 0.9933,0.9933 0 0 0 0.1592,-0.043 l 0.1162,0.792 A 1.2639,1.2639 0 0 1 13.639,9.9873 1.8184,1.8184 0 0 1 13.2435,10.0303 1.2309,1.2309 0 0 1 12.3129,9.6803 1.53,1.53 0 0 1 11.976,8.585 V 5.9268 H 11.2435 V 5.126 H 11.976 V 3.957 Z"
+     id="path159345" />
+  <ellipse
+     class="cls-4"
+     cx="17.0075"
+     cy="16.996099"
+     rx="6.9924002"
+     ry="7.0039001"
+     id="ellipse159347" />
+  <line
+     class="cls-5"
+     x1="17.1112"
+     y1="13.6254"
+     x2="17.1112"
+     y2="20.629299"
+     id="line159349"
+     style="stroke:#ffffff;stroke-opacity:1" />
+  <polyline
+     class="cls-5"
+     points="15.362 17.16 18.111 14.406 20.861 17.16"
+     id="polyline159351"
+     transform="translate(-1,-1)"
+     style="stroke:#ffffff;stroke-opacity:1" />
 </svg>

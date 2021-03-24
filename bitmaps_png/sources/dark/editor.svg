@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="editor.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -83,7 +83,7 @@
      class="cls-1"
      d="M 3.5399739,3.5178315 18.193572,3.5065769 c 1.877226,-0.00144 2.343065,1.0854891 2.34406,2.9721698 l 0.0074,14.0507343 c 9.94e-4,1.886681 -1.071734,2.987346 -2.948961,2.987346 H 4 c -1.8772269,0 -3.46255736,-1.574421 -3.46654789,-3.461098 L 0.50466938,6.4475628 C 0.50067885,4.5608862 1.6627476,3.5192733 3.5399739,3.5178315 Z"
      id="path24589"
-     style="fill:#ffffff;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#ffffff;fill-opacity:0;stroke:#F4EFF3;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      sodipodi:nodetypes="sssssssss" />
   <path
      class="cls-2"
