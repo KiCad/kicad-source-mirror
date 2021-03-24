@@ -100,8 +100,8 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     wxPlatformInfo platformInfo;
 
     libVersion << "Platform: " << wxGetOsDescription() << ", "
-// TODO (ISM): Remove OSX conditional once our wx fork is running released 3.1.5
-#if wxCHECK_VERSION( 3, 1, 5 ) && !defined( __WXOSX__  )
+// TODO (ISM): Readd conditional once our wx fork and flatpaks are running released 3.1.5
+#if 0 && wxCHECK_VERSION( 3, 1, 5 )
     << platformInfo.GetBitnessName();
 #else
     << platformInfo.GetArchName();
