@@ -33,6 +33,7 @@
 #include <wx/dcscreen.h>
 #include <wx/dcclient.h>
 #include <wx/settings.h>
+#include <wx/toplevel.h>
 
 
 BEGIN_EVENT_TABLE( EDA_MSG_PANEL, wxPanel )
@@ -108,8 +109,8 @@ void EDA_MSG_PANEL::OnPaint( wxPaintEvent& aEvent )
     dc.SetTextBackground( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
     dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
 
-    for( unsigned i=0;  i<m_Items.size();  ++i )
-        showItem( dc, m_Items[i] );
+    for( const MSG_PANEL_ITEM& item : m_Items )
+        showItem( dc, item );
 
     aEvent.Skip();
 }
@@ -199,7 +200,15 @@ void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
 
 void EDA_MSG_PANEL::showItem( wxDC& aDC, const MSG_PANEL_ITEM& aItem )
 {
-    COLOR4D color = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+    COLOR4D color;
+
+    // Change the text to a disabled color when the window isn't active
+    wxTopLevelWindow* tlw = dynamic_cast<wxTopLevelWindow*>( wxGetTopLevelParent( this ) );
+
+    if( tlw && !tlw->IsActive() )
+        color = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+    else
+        color = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
 
     aDC.SetTextForeground( color.ToColour() );
 
