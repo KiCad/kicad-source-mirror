@@ -266,7 +266,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              ncName );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s' && A.isDiffPair()",
+                    expr = wxString::Format( "A.NetClass == '%s' && A.inDiffPair('*')",
                                              ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
@@ -295,7 +295,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              ncName );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s' && A.isCoupledDiffPair()",
+                    expr = wxString::Format( "A.NetClass == '%s' && AB.isCoupledDiffPair()",
                                              ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );

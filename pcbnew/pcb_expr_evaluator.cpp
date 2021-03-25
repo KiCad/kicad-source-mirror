@@ -708,26 +708,6 @@ static void isBlindBuriedVia( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-static void isDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
-{
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
-    LIBEVAL::VALUE*   result = aCtx->AllocValue();
-
-    result->Set( 0.0 );
-    aCtx->Push( result );
-
-    if( item && item->IsConnected() )
-    {
-        NETINFO_ITEM* netinfo = static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNet();
-        int dummy_p, dummy_n;
-
-        if( netinfo && DRC_ENGINE::IsNetADiffPair( item->GetBoard(), netinfo, dummy_p, dummy_n ) )
-            result->Set( 1.0 );
-    }
-}
-
-
 static void isCoupledDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     PCB_EXPR_CONTEXT*     context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
@@ -806,7 +786,6 @@ void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( "isBlindBuriedVia()", isBlindBuriedVia );
     RegisterFunc( "memberOf('x')", memberOf );
     RegisterFunc( "fromTo('x','y')", exprFromTo );
-    RegisterFunc( "isDiffPair()", isDiffPair );
     RegisterFunc( "isCoupledDiffPair()", isCoupledDiffPair );
     RegisterFunc( "inDiffPair('x')", inDiffPair );
 }
@@ -964,7 +943,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
             return nullptr;
     }
 
-    if( aVar == "A" )
+    if( aVar == "A" || aVar == "AB" )
         vref = std::make_unique<PCB_EXPR_VAR_REF>( 0 );
     else if( aVar == "B" )
         vref = std::make_unique<PCB_EXPR_VAR_REF>( 1 );

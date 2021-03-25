@@ -112,17 +112,13 @@ True if any part of `A` lies within the given zone's outline.
 True if `A` has a hole which is plated.
 <br><br>
 
-    A.isDiffPair()
-True if `A` has a net that is part of a differential pair.
-<br><br>
-
     A.inDiffPair('<net_name>')
 True if `A` has net that is part of the specified differential pair.
 `<net_name>` is the base name of the differential pair.  For example, `inDiffPair('CLK')`
 matches items in the `CLK_P` and `CLK_N` nets.
 <br><br>
 
-    A.isCoupledDiffPair()
+    AB.isCoupledDiffPair()
 True if `A` and `B` are members of the same diff pair.
 <br><br>
 
@@ -191,12 +187,12 @@ For the latter use a `(layer "layer_name")` clause in the rule.
         (condition "A.Pad_Type == 'Through-hole'"))
 
 
-    # Specify a larger clearance around a particular diff-pair
-    (rule "dp clearance"
-        (constraint clearance (min "1.5mm"))
-        (condition "A.inDiffPair('CLK')"))
+    # Specify an optimal gap for a particular diff-pair
+    (rule "dp clock gap"
+        (constraint diff_pair_gap (opt "0.8mm"))
+        (condition "A.inDiffPair('CLK') && AB.isCoupledDiffPair()"))
 
     # Specify a larger clearance around any diff-pair
     (rule "dp clearance"
         (constraint clearance (min "1.5mm"))
-        (condition "A.isDiffPair() && !A.isCoupledDiffPair()"))
+        (condition "A.inDiffPair('*') && !AB.isCoupledDiffPair()"))
