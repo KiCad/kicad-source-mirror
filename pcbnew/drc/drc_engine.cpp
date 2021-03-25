@@ -641,6 +641,8 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 
     m_constraintMap.clear();
 
+    m_board->IncrementTimeStamp();  // Clear board-level caches
+
     try         // attempt to load full set of rules (implicit + user rules)
     {
         loadImplicitRules();

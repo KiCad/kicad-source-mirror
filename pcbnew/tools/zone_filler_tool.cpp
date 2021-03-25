@@ -95,26 +95,29 @@ void ZONE_FILLER_TOOL::singleShotRefocus( wxIdleEvent& )
 
 void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter )
 {
+    PCB_EDIT_FRAME*    frame = getEditFrame<PCB_EDIT_FRAME>();
+    BOARD_COMMIT       commit( this );
     std::vector<ZONE*> toFill;
-
-    BOARD_COMMIT commit( this );
 
     for( ZONE* zone : board()->Zones() )
         toFill.push_back( zone );
+
+    board()->IncrementTimeStamp();    // Clear caches
 
     ZONE_FILLER filler( board(), &commit );
 
     if( !board()->GetDesignSettings().m_DRCEngine->RulesValid() )
     {
-        WX_INFOBAR* infobar = frame()->GetInfoBar();
+        WX_INFOBAR* infobar = frame->GetInfoBar();
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _("Show DRC rules"),
                                                        wxEmptyString );
 
-        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
-                      [&]( wxHyperlinkEvent& aEvent )
-                      {
-                          getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog( _( "Rules" ) );
-                      } ) );
+        button->Bind( wxEVT_COMMAND_HYPERLINK,
+                      std::function<void( wxHyperlinkEvent& aEvent )>(
+                              [&]( wxHyperlinkEvent& aEvent )
+                              {
+                                  frame->ShowBoardSetupDialog( _( "Rules" ) );
+                              } ) );
 
         infobar->RemoveAllButtons();
         infobar->AddButton( button );
@@ -133,7 +136,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     if( filler.Fill( toFill ) )
     {
         commit.Push( _( "Fill Zone(s)" ), true ); // Allow undoing zone fill
-        getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
+        frame->m_ZoneFillsDirty = false;
     }
     else
     {
@@ -141,7 +144,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     }
 
     if( filler.IsDebug() )
-        getEditFrame<PCB_EDIT_FRAME>()->UpdateUserInterface();
+        frame->UpdateUserInterface();
 
     canvas()->Refresh();
 
