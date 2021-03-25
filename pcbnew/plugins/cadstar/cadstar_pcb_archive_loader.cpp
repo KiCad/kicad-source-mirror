@@ -3212,8 +3212,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities()
     std::map<TEMPLATE_ID, std::set<TEMPLATE_ID>> winningOverlaps;
     std::set<std::pair<TEMPLATE_ID, TEMPLATE_ID>> scheduleInferPriorityFromOutline;
 
-    // Calculate the intesection between aPolygon and the outline of aZone
-    auto intersectionArea = [&]( SHAPE_POLY_SET aPolygon, ZONE* aZone ) -> double
+    // Calculate the intersection between aPolygon and the outline of aZone
+    auto intersectionArea = [&]( const SHAPE_POLY_SET& aPolygon, ZONE* aZone ) -> double
                             {
                                 SHAPE_POLY_SET intersectShape( *aZone->Outline() );
 

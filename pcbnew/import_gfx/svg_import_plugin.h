@@ -38,6 +38,12 @@
 class SVG_IMPORT_PLUGIN : public GRAPHICS_IMPORT_PLUGIN
 {
 public:
+    SVG_IMPORT_PLUGIN():
+        GRAPHICS_IMPORT_PLUGIN(),
+        m_parsedImage( nullptr )
+    {
+    }
+
     const wxString GetName() const override
     {
         return "Scalable Vector Graphics";
