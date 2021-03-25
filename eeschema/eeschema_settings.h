@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -33,7 +33,6 @@ using KIGFX::COLOR4D;
 class EESCHEMA_SETTINGS : public APP_SETTINGS_BASE
 {
 public:
-
     struct APPEARANCE
     {
         wxString edit_component_visible_columns;
@@ -205,6 +204,18 @@ public:
 
     static std::vector<BOM_PLUGIN_SETTINGS> DefaultBomPlugins();
 
+
+protected:
+    virtual std::string getLegacyFrameName() const override { return "SchematicFrame"; }
+
+private:
+    bool migrateBomSettings();
+
+    nlohmann::json bomSettingsToJson() const;
+
+    static std::vector<BOM_PLUGIN_SETTINGS> bomSettingsFromJson( const nlohmann::json& aObj );
+
+public:
     APPEARANCE m_Appearance;
 
     AUTOPLACE_FIELDS m_AutoplaceFields;
@@ -236,18 +247,6 @@ public:
     bool m_RescueNeverShow;
 
     wxString m_lastSymbolLibDir;
-
-protected:
-
-    virtual std::string getLegacyFrameName() const override { return "SchematicFrame"; }
-
-private:
-
-    bool migrateBomSettings();
-
-    nlohmann::json bomSettingsToJson() const;
-
-    static std::vector<BOM_PLUGIN_SETTINGS> bomSettingsFromJson( const nlohmann::json& aObj );
 };
 
 

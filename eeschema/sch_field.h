@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,24 +37,18 @@ class LIB_FIELD;
 
 
 /**
- * SCH_FIELD
- * instances are attached to a symbol or sheet and provide a place for the component's value,
+ * Instances are attached to a symbol or sheet and provide a place for the component's value,
  * reference designator, footprint, , a sheet's name, filename, and user definable name-value
  * pairs of arbitrary purpose.
  *
- * <ul> <li>Field 0 is reserved for the symbol reference.</li>
- * <li>Field 1 is reserved for the symbol value.</li>
- * <li>Field 2 is reserved for the symbol footprint.</li>
- * <li>Field 3 is reserved for the symbol data sheet file.</li>
- * <li>Field 4 and higher are user defineable.</li></ul>
+ *  - Field 0 is reserved for the symbol reference.
+ *  - Field 1 is reserved for the symbol value.
+ *  - Field 2 is reserved for the symbol footprint.
+ *  - Field 3 is reserved for the symbol data sheet file.
+ *  - Field 4 and higher are user definable.
  */
-
 class SCH_FIELD : public SCH_ITEM, public EDA_TEXT
 {
-    int      m_id;         ///< Field index, @see enum MANDATORY_FIELD_T
-
-    wxString m_name;
-
 public:
     SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_ITEM* aParent,
                const wxString& aName = wxEmptyString );
@@ -101,12 +95,11 @@ public:
     void DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) override;
 
     /**
-     * Function GetName
-     * returns the field name.
+     * Return the field name.
      *
      * @param aUseDefaultName When true return the default field name if the field name is
      *                        empty.  Otherwise the default field name is returned.
-     * @return A wxString object containing the name of the field.
+     * @return the name of the field.
      */
     wxString GetName( bool aUseDefaultName = true ) const;
 
@@ -127,25 +120,24 @@ public:
     const EDA_RECT GetBoundingBox() const override;
 
     /**
-     * Function IsHorizJustifyFlipped
-     * Returns whether the field will be rendered with the horizontal justification
+     * Return whether the field will be rendered with the horizontal justification
      * inverted due to rotation or mirroring of the parent.
      */
     bool IsHorizJustifyFlipped() const;
 
     /**
-     * Function IsVoid
-     * returns true if the field is either empty or holds "~".
+     * @return true if the field is either empty or holds "~".
      */
     bool IsVoid() const;
 
     void SwapData( SCH_ITEM* aItem ) override;
 
     /**
-     * Function ImportValues
-     * copy parameters from a LIB_FIELD source.
-     * Pointers and specific values (position) are not copied
-     * @param aSource = the LIB_FIELD to read
+     * Copy parameters from a LIB_FIELD source.
+     *
+     * Pointers and specific values (position) are not copied.
+     *
+     * @param aSource is the LIB_FIELD to read.
      */
     void ImportValues( const LIB_FIELD& aSource );
 
@@ -211,6 +203,11 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+private:
+    int      m_id;         ///< Field index, @see enum MANDATORY_FIELD_T
+
+    wxString m_name;
 };
 
 

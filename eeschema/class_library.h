@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,16 +79,11 @@ enum class SCH_LIB_TYPE
     LT_EESCHEMA,
     LT_SYMBOL
 };
+
 // Helper class to filter a list of libraries, and/or a list of PART_LIB
 // in dialogs
 class SCHLIB_FILTER
 {
-    wxArrayString m_allowedLibs;        ///< a list of lib names to list some libraries
-                                        ///< if empty: no filter
-    bool          m_filterPowerParts;   ///< true to filter (show only) power parts
-    bool          m_forceLoad;          // When true, load a part lib from the lib
-                                        // which is given in m_allowedLibs[0]
-
 public:
     SCHLIB_FILTER()
     {
@@ -159,6 +154,13 @@ public:
         else
             return dummy;
     }
+
+private:
+    wxArrayString m_allowedLibs;        ///< a list of lib names to list some libraries
+                                        ///< if empty: no filter
+    bool          m_filterPowerParts;   ///< true to filter (show only) power parts
+    bool          m_forceLoad;          // When true, load a part lib from the lib
+                                        // which is given in m_allowedLibs[0]
 };
 
 
@@ -307,19 +309,6 @@ public:
  */
 class PART_LIB
 {
-    SCH_LIB_TYPE    type;           ///< Library type indicator.
-    wxFileName      fileName;       ///< Library file name.
-    wxDateTime      timeStamp;      ///< Library save time and date.
-    int             versionMajor;   ///< Library major version number.
-    int             versionMinor;   ///< Library minor version number.
-    wxString        header;         ///< first line of loaded library.
-    bool            isModified;     ///< Library modification status.
-    int             m_mod_hash;     ///< incremented each time library is changed.
-
-    SCH_IO_MGR::SCH_FILE_T        m_pluginType;
-    std::unique_ptr< SCH_PLUGIN > m_plugin;
-    std::unique_ptr< PROPERTIES > m_properties;   ///< Library properties
-
 public:
     PART_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
               SCH_IO_MGR::SCH_FILE_T aPluginType = SCH_IO_MGR::SCH_LEGACY );
@@ -456,6 +445,20 @@ public:
      * @throw IO_ERROR if there's any problem loading the library.
      */
     static PART_LIB* LoadLibrary( const wxString& aFileName );
+
+private:
+    SCH_LIB_TYPE    type;           ///< Library type indicator.
+    wxFileName      fileName;       ///< Library file name.
+    wxDateTime      timeStamp;      ///< Library save time and date.
+    int             versionMajor;   ///< Library major version number.
+    int             versionMinor;   ///< Library minor version number.
+    wxString        header;         ///< first line of loaded library.
+    bool            isModified;     ///< Library modification status.
+    int             m_mod_hash;     ///< incremented each time library is changed.
+
+    SCH_IO_MGR::SCH_FILE_T        m_pluginType;
+    std::unique_ptr< SCH_PLUGIN > m_plugin;
+    std::unique_ptr< PROPERTIES > m_properties;   ///< Library properties
 };
 
 

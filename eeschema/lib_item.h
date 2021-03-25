@@ -61,8 +61,6 @@ typedef std::vector< LIB_PIN* > LIB_PINS;
  */
 class LIB_ITEM : public EDA_ITEM
 {
-    friend class LIB_PART;
-
 public:
     LIB_ITEM( KICAD_T aType, LIB_PART* aComponent = NULL, int aUnit = 0, int aConvert = 0,
             FILL_TYPE aFillType = FILL_TYPE::NO_FILL );
@@ -120,7 +118,7 @@ public:
     virtual void EndEdit() {}
 
     /**
-     * Calculates the attributes of an item at \a aPosition when it is being edited.
+     * Calculate the attributes of an item at \a aPosition when it is being edited.
      *
      * This method gets called by the Draw() method when the item is being edited.  This
      * probably should be a pure virtual method but bezier curves are not yet editable in
@@ -305,6 +303,9 @@ protected:
      */
     virtual void print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                         const TRANSFORM& aTransform ) = 0;
+
+private:
+    friend class LIB_PART;
 
 protected:
     /**

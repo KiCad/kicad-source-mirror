@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,7 +69,7 @@ class SYMBOL_EDITOR_SETTINGS;
  * @param aLibId is the symbol library identifier to load.
  * @param aLibTable is the #SYMBOL_LIBRARY_TABLE to load the alias from.
  * @param aCacheLib is an optional cache library.
- * @param aParent is an optiona parent window when displaying an error message.
+ * @param aParent is an optional parent window when displaying an error message.
  * @param aShowErrorMessage set to true to show any error messages.
  *
  * @return The symbol found in the library or NULL if the symbol was not found.
@@ -89,12 +89,6 @@ LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
  */
 class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
-protected:
-    /// These are only used by symbol_editor.  Eeschema should be using the one inside the SCHEMATIC.
-    SCHEMATIC_SETTINGS  m_base_frame_defaults;
-
-    SCHEMATIC_SETTINGS* m_defaults;
-
 public:
     SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
                     FRAME_T aWindowType,
@@ -147,8 +141,7 @@ public:
     void UpdateStatusBar() override;
 
     /**
-     * Function PickSymbolFromLibTree
-     * Calls the library viewer to select component to import into schematic.
+     * Call the library viewer to select component to import into schematic.
      * if the library viewer is currently running, it is closed and reopened
      * in modal mode.
      *
@@ -156,17 +149,17 @@ public:
      * fields (e.g. footprint selection) should be enabled. This should be false
      * when they would have no effect, for example loading a part into symbol_editor.
      *
-     * @param aFilter is a SCHLIB_FILTER filter to pass the allowed library names
+     * @param aFilter is a #SCHLIB_FILTER filter to pass the allowed library names
      *  and/or the library name to load the component from and/or some other filter
      *          if NULL, no filtering.
-     * @param aHistoryList       list of previously loaded components - will be edited
-     * @param aUseLibBrowser     bool to call the library viewer to select the component
-     * @param aUnit              preselected unit
-     * @param aConvert           preselected De Morgan shape
-     * @param aHighlight         name of component to highlight in the list.
-     *                           highlights none if there isn't one by that name
-     * @param aShowFootprints    whether to show footprints in the dialog
-     * @param aAllowFields       whether to allow field editing in the dialog
+     * @param aHistoryList is the list of previously loaded components - will be edited
+     * @param aUseLibBrowser is the flag to call the library viewer to select the component
+     * @param aUnit is the preselected unit.
+     * @param aConvert is the preselected De Morgan shape.
+     * @param aHighlight is the name of component to highlight in the list.
+     *                   highlights none if there isn't one by that name.
+     * @param aShowFootprints is the whether to show footprints in the dialog.
+     * @param aAllowFields is whether to allow field editing in the dialog.
      *
      * @return the selected component
      */
@@ -194,17 +187,17 @@ public:
     LIB_PART* GetFlattenedLibPart( const LIB_ID& aLibId, bool aShowErrorMsg = false );
 
     /**
-     * Function PickSymbolFromLibBrowser
-     * Calls the library viewer to select component to import into schematic.
+     * Call the library viewer to select component to import into schematic.
      * if the library viewer is currently running, it is closed and reopened
      * in modal mode.
-     * @param aParent is the caller
+     *
+     * @param aParent is the caller.
      * @param aFilter is a filter to pass the allowed library names
-     *          and/or some other filter
-     * @param aPreselectedLibId Preselected component LIB_ID. Not valid if none selected.
-     * @param aUnit             preselected unit
-     * @param aConvert          preselected deMorgan conversion
-     * @return the selected component
+     *          and/or some other filter.
+     * @param aPreselectedLibId is the preselected component #LIB_ID. Not valid if none selected.
+     * @param aUnit is the preselected unit.
+     * @param aConvert is the preselected deMorgan conversion.
+     * @return the selected component.
      */
     PICKED_SYMBOL PickSymbolFromLibBrowser( wxTopLevelWindow* aParent,
                                             const SCHLIB_FILTER* aFilter,
@@ -261,13 +254,19 @@ public:
 
 protected:
     /**
-     * Saves Symbol Library Tables to disk.
+     * Save Symbol Library Tables to disk.
      *
      * @param aGlobal when true, the Global Table is saved.
      * @param aProject when true, the Project Table is saved.
      * @return True when all requested actions succeeded.
      */
     bool saveSymbolLibTables( bool aGlobal, bool aProject );
+
+    /// These are only used by symbol_editor.  Eeschema should be using the one inside
+    /// the SCHEMATIC.
+    SCHEMATIC_SETTINGS  m_base_frame_defaults;
+
+    SCHEMATIC_SETTINGS* m_defaults;
 
 };
 

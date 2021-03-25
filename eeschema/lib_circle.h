@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,10 +32,6 @@
 
 class LIB_CIRCLE : public LIB_ITEM
 {
-    wxPoint m_Pos;            // Position or centre (Arc and Circle) or start point (segments).
-    wxPoint m_EndPos;         // A point on the circumference of the circle.
-    int     m_Width;          // Line width.
-
 public:
     LIB_CIRCLE( LIB_PART * aParent );
 
@@ -107,6 +103,10 @@ private:
 
     void print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
+
+    wxPoint m_Pos;            // Position or centre (Arc and Circle) or start point (segments).
+    wxPoint m_EndPos;         // A point on the circumference of the circle.
+    int     m_Width;          // Line width.
 };
 
 

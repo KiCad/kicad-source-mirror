@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,14 +45,6 @@ class HIERARCHY_NAVIG_DLG;
  */
 class HIERARCHY_TREE : public wxTreeCtrl
 {
-    // Need to use wxRTTI macros in order for OnCompareItems to work properly
-    // See: https://docs.wxwidgets.org/3.1/classwx_tree_ctrl.html#ab90a465793c291ca7aa827a576b7d146
-    wxDECLARE_ABSTRACT_CLASS( HIERARCHY_TREE );
-
-private:
-    HIERARCHY_NAVIG_DLG* m_parent;
-    wxImageList*         imageList;
-
 public:
     HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent );
 
@@ -60,17 +52,18 @@ public:
     void onChar( wxKeyEvent& event );
 
     int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 ) override;
+
+private:
+    // Need to use wxRTTI macros in order for OnCompareItems to work properly
+    // See: https://docs.wxwidgets.org/3.1/classwx_tree_ctrl.html#ab90a465793c291ca7aa827a576b7d146
+    wxDECLARE_ABSTRACT_CLASS( HIERARCHY_TREE );
+
+    HIERARCHY_NAVIG_DLG* m_parent;
+    wxImageList*         imageList;
 };
 
 class HIERARCHY_NAVIG_DLG : public DIALOG_SHIM
 {
-private:
-    SCH_SHEET_PATH  m_currSheet;
-    SCH_SHEET_PATH  m_list;
-    SCH_EDIT_FRAME* m_SchFrameEditor;
-    HIERARCHY_TREE* m_Tree;
-    int             m_nbsheets;
-
 public:
     HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent );
 
@@ -87,9 +80,10 @@ private:
     /**
      * Create the hierarchical tree of the schematic.
      *
-     * This routine is reentrant!
-     * @param aList = the SCH_SHEET_PATH* list to explore
-     * @param aPreviousmenu = the wxTreeItemId used as parent to add sub items
+     * @warning This routine is reentrant!
+     *
+     * @param[in] aList is the #SCH_SHEET_PATH list to explore.
+     * @param aPreviousmenu is the wxTreeItemId used as parent to add sub items.
      */
     void buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPreviousmenu );
 
@@ -100,18 +94,20 @@ private:
     void onSelectSheetPath( wxTreeEvent& event );
 
     /**
-     * getRootString
      * @return String with page number in parenthesis
      */
     wxString getRootString();
 
     /**
-     * formatPageString
-     * @param aName 
-     * @param aPage 
      * @return String with page number in parenthesis
     */
     wxString formatPageString( wxString aName, wxString aPage );
+
+    SCH_SHEET_PATH  m_currSheet;
+    SCH_SHEET_PATH  m_list;
+    SCH_EDIT_FRAME* m_SchFrameEditor;
+    HIERARCHY_TREE* m_Tree;
+    int             m_nbsheets;
 };
 
 #endif // HIERARCH_H

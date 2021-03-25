@@ -116,43 +116,6 @@ enum SCH_CLEANUP_FLAGS {
  */
 class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 {
-    // The schematic editor control class should be able to access some internal
-    // functions of the editor frame.
-    friend class SCH_EDITOR_CONTROL;
-
-private:
-    SCHEMATIC*              m_schematic;          ///< The currently loaded schematic
-    const SCH_CONNECTION*   m_highlightedConn;    ///< The highlighted net or bus, or nullptr
-
-    wxPageSetupDialogData   m_pageSetupData;
-    SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
-    wxString                m_netListerCommand;   ///< Command line to call a custom net list
-                                                  ///< generator.
-    int                     m_exec_flags;         ///< Flags of the wxExecute() function
-                                                  ///< to call a custom net list generator.
-
-    DIALOG_SCH_FIND*        m_findReplaceDialog;
-
-protected:
-    /**
-     * Save the schematic files that have been modified and not yet saved.
-     *
-     * @return true if the auto save was successful otherwise false.
-     */
-    bool doAutoSave() override;
-
-    /**
-     * Returns true if the schematic has been modified.
-     */
-    bool isAutoSaveRequired() const override;
-
-    /**
-     * Send the kicad netlist over to CVPCB.
-     */
-    void sendNetlistToCvpcb();
-
-    void onSize( wxSizeEvent& aEvent );
-
 public:
     SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~SCH_EDIT_FRAME() override;
@@ -174,7 +137,7 @@ public:
     void SaveProjectSettings() override;
 
     /**
-     * Loads the KiCad project file (*.pro) settings specific to Eeschema.
+     * Load the KiCad project file (*.pro) settings specific to Eeschema.
      *
      * @return True if the project file was loaded correctly.
      */
@@ -237,7 +200,7 @@ public:
      * \li \c \$CLEAR: \c "HIGHLIGHTED" Clear components highlight
      * <p>
      * They are a keyword followed by a quoted string.
-     * @param cmdline = received command from Pcbnew
+     * @param cmdline is the command received from Pcbnew.
      */
     void ExecuteRemoteCommand( const char* cmdline ) override;
 
@@ -280,36 +243,36 @@ public:
     void OnFindDialogClose();
 
     /**
-     * Breaks a single segment into two at the specified point.
+     * Break a single segment into two at the specified point.
      *
-     * NOTE: always appends to the existing undo state.
+     * @note This always appends to the existing undo state.
      *
      * @param aSegment Line segment to break
      * @param aPoint Point at which to break the segment
      * @param aNewSegment Pointer to the newly created segment (if given and created)
-     * @param aScreen is the screen to examine, or nullptr to examine the current screen
+     * @param aScreen is the screen to examine, or nullptr to examine the current screen.
      * @return True if any wires or buses were broken.
      */
     bool BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
-                       SCH_LINE** aNewSegment = NULL, SCH_SCREEN* aScreen = nullptr );
+                       SCH_LINE** aNewSegment = nullptr, SCH_SCREEN* aScreen = nullptr );
 
     /**
-     * Checks every wire and bus for a intersection at \a aPoint and break into two segments
+     * Check every wire and bus for a intersection at \a aPoint and break into two segments
      * at \a aPoint if an intersection is found.
      *
-     * NOTE: always appends to the existing undo state.
+     * @note This always appends to the existing undo state.
      *
      * @param aPoint Test this point for an intersection.
-     * @param aScreen is the screen to examine, or nullptr to examine the current screen
+     * @param aScreen is the screen to examine, or nullptr to examine the current screen.
      * @return True if any wires or buses were broken.
      */
     bool BreakSegments( const wxPoint& aPoint, SCH_SCREEN* aScreen = nullptr );
 
     /**
-     * Tests all junctions and bus entries in the schematic for intersections with wires and
+     * Test all junctions and bus entries in the schematic for intersections with wires and
      * buses and breaks any intersections into multiple segments.
      *
-     * NOTE: always appends to the existing undo state.
+     * @note This always appends to the existing undo state.
      *
      * @param aScreen is the screen to examine, or nullptr to examine the current screen
      * @return True if any wires or buses were broken.
@@ -330,27 +293,27 @@ public:
      * - $PIN: number $PART: reference put cursor on the footprint pad
      * - $SHEET: time_stamp  select all footprints of components is the schematic sheet path
      *
-     * @param aObjectToSync = item to be located on board
-     *      (footprint, pad, text or schematic sheet)
-     * @param aPart = component if objectToSync is a sub item of a symbol (like a pin)
+     * @param aObjectToSync is the item to be located on board.
+     * @param aPart is the symbol if \a aObjectToSync is a sub item of a symbol (like a pin).
      */
     void SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT* aPart );
 
     /**
-     * Sends a net name to pcbnew for highlighting
+     * Sends a net name to Pcbnew for highlighting
      *
      * @param aNetName is the name of a net, or empty string to clear highlight
      */
     void SendCrossProbeNetName( const wxString& aNetName );
 
     /**
-     * Sends a connection (net or bus) to pcbnew for highlighting
+     * Send a connection (net or bus) to Pcbnew for highlighting.
+     *
      * @param aConnection is the connection to highlight
      */
     void SetCrossProbeConnection( const SCH_CONNECTION* aConnection );
 
     /**
-     * Tells PcbNew to clear the existing highlighted net, if one exists
+     * Tell Pcbnew to clear the existing highlighted net, if one exists
      */
     void SendCrossProbeClearHighlight();
 
@@ -365,35 +328,32 @@ public:
     }
 
     /**
-     * Checks if we are ready to write a netlist file for the current schematic
+     * Check if we are ready to write a netlist file for the current schematic.
      *
-     * - Test for some issues (missing or duplicate references and sheet names)
+     * Test for some issues (missing or duplicate references and sheet names).
      *
-     * @param aAnnotateMessage a message to put up in case annotation needs to be performed
-     * @returns true if all is well (i.e. you can call WriteNetListFile next)
+     * @param aAnnotateMessage a message to put up in case annotation needs to be performed.
+     * @return true if all is well (i.e. you can call WriteNetListFile next).
      */
     bool ReadyToNetlist( const wxString& aAnnotateMessage );
 
     /**
      * Create a netlist file.
      *
-     * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
-     * @param aFullFileName = full netlist file name
-     * @param aNetlistOptions = netlist options using OR'ed bits.
+     * @param aFormat is the netlist format (NET_TYPE_PCBNEW ...).
+     * @param aFullFileName is the full netlist file name.
+     * @param aNetlistOptions is the netlist options using OR'ed bits.
      * <p>
      * For SPICE netlist only:
      *      if NET_USE_NETNAMES is set, use net names from labels in schematic
      *                             else use net numbers (net codes)
      *      if NET_USE_X_PREFIX is set : change "U" and "IC" reference prefix to "X"
      * </p>
-     * @param aReporter = a REPORTER to report error messages,
-     *          mainly if a command line must be run (can be NULL
+     * @param aReporter is a #REPORTER to report error messages, can be a nullptr.
      * @return true if success.
      */
-    bool WriteNetListFile( int             aFormat,
-                           const wxString& aFullFileName,
-                           unsigned        aNetlistOptions,
-                           REPORTER*       aReporter = NULL );
+    bool WriteNetListFile( int aFormat, const wxString& aFullFileName, unsigned aNetlistOptions,
+                           REPORTER* aReporter = nullptr );
 
     /**
      * Clear the current component annotation.
@@ -453,7 +413,8 @@ public:
     int CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler, bool aOneSheetOnly = false );
 
     /**
-     * Run a modal version of the Annotate dialog for a specific purpose.
+     * Run a modal version of the annotate dialog for a specific purpose.
+     *
      * @param aMessage A user message indicating the purpose.
      * @return the result of ShowModal()
      */
@@ -481,6 +442,7 @@ public:
 
     /**
      * Called when modifying the page settings.
+     *
      * In derived classes it can be used to modify parameters like draw area size, and any other
      * local parameter related to the page settings.
      */
@@ -525,18 +487,17 @@ public:
     /**
      * Save \a aSheet to a schematic file.
      *
-     * @param aSheet A pointer to the #SCH_SHEET object to save.  A NULL pointer saves the
+     * @param aSheet is the #SCH_SHEET object to save.  A NULL pointer saves the
      *               current screen only.
      * @param aSaveUnderNewName Controls how the file is to be saved;: using  previous name
      *                          or under a new name.
      * @return True if the file has been saved.
      */
-    bool SaveEEFile( SCH_SHEET* aSheet,
-                     bool       aSaveUnderNewName = false );
+    bool SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName = false );
 
 
     /**
-     * Checks if any of the screens has unsaved changes and asks the user whether to save or
+     * Check if any of the screens has unsaved changes and asks the user whether to save or
      * drop them.
      *
      * @return True if user decided to save or drop changes, false if the operation should be
@@ -548,10 +509,10 @@ public:
                                bool aFinal = true );
 
     /**
-     * Performs routine schematic cleaning including breaking wire and buses and deleting
+     * Perform routine schematic cleaning including breaking wire and buses and deleting
      * identical objects superimposed on top of each other.
      *
-     * NOTE: always appends to the existing undo state.
+     * @note This always appends to the existing undo state.
      *
      * @param aScreen is the screen to examine, or nullptr to examine the current screen
      * @return True if any schematic clean up was performed.
@@ -562,7 +523,7 @@ public:
      * If any single wire passes through _both points_, remove the portion between the two points,
      * potentially splitting the wire into two.
      *
-     * NOTE: always appends to the existing undo state.
+     * @note This always appends to the existing undo state.
      *
      * @param aStart The starting point for trimmming
      * @param aEnd The ending point for trimming
@@ -571,7 +532,7 @@ public:
     bool TrimWire( const wxPoint& aStart, const wxPoint& aEnd );
 
     /**
-     * Collects a unique list of all possible connection points in the schematic.
+     * Collect a unique list of all possible connection points in the schematic.
      *
      * @return vector of connections
      */
@@ -582,68 +543,13 @@ public:
     void OnUpdatePCB( wxCommandEvent& event );
     void OnAnnotate( wxCommandEvent& event );
 
-private:
-    // Sets up the tool framework
-    void setupTools();
-
-    void OnExit( wxCommandEvent& event );
-
-    void OnLoadFile( wxCommandEvent& event );
-    void OnAppendProject( wxCommandEvent& event );
-    void OnImportProject( wxCommandEvent& event );
-
-    void OnClearFileHistory( wxCommandEvent& aEvent );
-
-    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
-    void doCloseWindow() override;
-
-    /**
-     * Set the main window title bar text.
-     *
-     * If file name defined by SCH_SCREEN::m_FileName is not set, the title is set to the
-     * application name appended with no file.
-     * Otherwise, the title is set to the hierarchical sheet path and the full file name, and
-     * read only is appended to the title if the user does not have write access to the file.
-     */
-    void UpdateTitle();
-
-    /**
-     * Initialize the zoom value of the current screen and mark the screen as zoom-initialized.
-     */
-    void initScreenZoom();
-
-    /**
-     * Verify that the symbol library links \a aSheet and all of it's child sheets have
-     * been remapped to the symbol library table.
-     *
-     * @param aSheet is the #SCH_SHEET object to test.
-     *
-     * @return true if \a aSheet and it's child sheets have not been remapped.
-     */
-    bool checkForNoFullyDefinedLibIds( SCH_SHEET* aSheet );
-
-    /**
-     *  Load the given filename but sets the path to the current project path.
-     *
-     *  @param full filepath of file to be imported.
-     *  @param aFileType SCH_FILE_T value for file type
-     */
-    bool importFile( const wxString& aFileName, int aFileType );
-
-    /**
-     * Fills a map of uuid -> reference from the currently loaded schematic
-     * @param aMap is a map to fill
-     */
-    void mapExistingAnnotation( std::map<wxString, wxString>& aMap );
-
-public:
     /**
      * Verify that \a aSheet will not cause a recursion error in \a aHierarchy.
      *
      * @param aSheet is the #SCH_SHEET object to test.
      * @param aHierarchy is the #SCH_SHEET_PATH where \a aSheet is going to reside.
      *
-     * @return true if \a aSheet will cause a resursion error in \a aHierarchy.
+     * @return true if \a aSheet will cause a recursion error in \a aHierarchy.
      */
     bool CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy );
 
@@ -656,7 +562,7 @@ public:
      * this would result in a broken schematic.
      *
      * @param aSchematicFileName is the absolute path and file name of the file to test.
-     * @return true if the user accepts the potential file name clase risk.
+     * @return true if the user accepts the potential file name clash risk.
      */
     bool AllowCaseSensitiveFileNameClashes( const wxString& aSchematicFileName );
 
@@ -685,7 +591,7 @@ public:
      * @param aHierarchy is the current hierarchy containing aSheet
      * @param aClearAnnotationNewItems is a reference to a bool to know if the items managed by
      * this sheet need to have their annotation cleared i.e. when an existing item list is used.
-     * it can happens when the edited sheet used an existying file, or becomes a new instance
+     * it can happens when the edited sheet used an existing file, or becomes a new instance
      * of a already existing sheet.
      */
     bool EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
@@ -770,24 +676,21 @@ public:
      * If it is a delete command, items are put on list with the .Flags member
      * set to DELETED.
      *
-     * @param aItemToCopy = the schematic item modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO)
-     * @param aAppend = add the item to the previous undo list
+     * @param aItemToCopy is the schematic item modified by the command to undo.
+     * @param aTypeCommand is the command type (see enum UNDO_REDO).
+     * @param aAppend set to true to add the item to the previous undo list.
      */
-    void SaveCopyInUndoList( SCH_SCREEN* aScreen,
-                             SCH_ITEM* aItemToCopy,
-                             UNDO_REDO aTypeCommand,
+    void SaveCopyInUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItemToCopy, UNDO_REDO aTypeCommand,
                              bool aAppend );
 
     /**
      * Create a new entry in undo list of commands.
      *
-     * @param aItemsList = the list of items modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO)
-     * @param aAppend = add the item to the previous undo list
+     * @param aItemsList is the the list of items modified by the command to undo/
+     * @param aTypeCommand is the command type (see enum UNDO_REDO).
+     * @param aAppend set to true to add the item to the previous undo list.
      */
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                             UNDO_REDO aTypeCommand,
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aTypeCommand,
                              bool aAppend );
 
     /**
@@ -804,10 +707,9 @@ public:
      * - data pointed by wrappers are deleted if not in use in schematic
      *   i.e. when they are copy of a schematic item or they are no more in use (DELETED)
      *
-     * @param whichList = the UNDO_REDO_CONTAINER to clear
-     * @param aItemCount = the count of items to remove. < 0 for all items
-     * items are removed from the beginning of the list.
-     * So this function can be called to remove old commands
+     * @param whichList is the UNDO_REDO_CONTAINER to clear
+     * @param aItemCount is the count of items to remove. Use < 0 to remove all items from
+     *                   the beginning of the list.
      */
     void ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount = -1 ) override;
 
@@ -826,7 +728,7 @@ public:
     EDA_ITEM* GetItem( const KIID& aId ) const override;
 
     /**
-     * Performs an undo of the last edit WITHOUT logging a corresponding redo.  Used to cancel
+     * Perform an undo of the last edit WITHOUT logging a corresponding redo.  Used to cancel
      * an in-progress operation.
      */
     void RollbackSchematicFromUndo();
@@ -836,8 +738,8 @@ public:
      *
      * This file will contain all components used in the current schematic.
      *
-     * @param aUseCurrentSheetFilename = false to use the root sheet filename
-     * (default) or true to use the currently opened sheet.
+     * @param aUseCurrentSheetFilename set to false to use the root sheet filename
+     *                                 (default) or true to use the currently opened sheet.
      * @return true if the file was written successfully.
      */
     bool CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilename = false );
@@ -852,8 +754,6 @@ public:
 
     /**
      * Plot or print the current sheet to the clipboard.
-     *
-     * @param aDC = wxDC given by the calling print function
      */
     virtual void PrintPage( const RENDER_SETTINGS* aSettings ) override;
 
@@ -867,7 +767,7 @@ public:
     /**
      * Set (adds) specified flags for next execution of external generator of the netlist or bom.
      *
-     * @param aFlags = wxEXEC_* flags, see wxExecute docs.
+     * @param aFlags is the wxEXEC_* flags, see wxExecute documentation.
      */
     void SetExecFlags( const int aFlags ) { m_exec_flags |= aFlags; }
 
@@ -875,19 +775,19 @@ public:
      * Clear (removes) specified flags that not needed for next execution of external generator
      * of the netlist or bom.
      *
-     * @param aFlags = wxEXEC_* flags, see wxExecute docs.
+     * @param aFlags is the wxEXEC_* flags, see wxExecute documentation.
      */
     void ClearExecFlags( const int aFlags ) { m_exec_flags &= ~( aFlags ); }
 
     wxString GetNetListerCommand() const { return m_netListerCommand; }
 
     /**
-     * Generates the connection data for the entire schematic hierarchy.
+     * Generate the connection data for the entire schematic hierarchy.
      */
     void RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags );
 
     /**
-     * Allows Eeschema to install its preferences panels into the preferences dialog.
+     * Allow Eeschema to install its preferences panels into the preferences dialog.
      */
     void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
@@ -920,13 +820,104 @@ public:
     /**
      * Update the schematic's page reference map for all global labels, and refresh the labels
      * so that they are redrawn with up-to-date references.
-     * @return
      */
     void RecomputeIntersheetRefs();
 
     void ShowAllIntersheetRefs( bool aShow );
 
     DECLARE_EVENT_TABLE()
+
+protected:
+    /**
+     * Save the schematic files that have been modified and not yet saved.
+     *
+     * @return true if the auto save was successful otherwise false.
+     */
+    bool doAutoSave() override;
+
+    /**
+     * Return true if the schematic has been modified.
+     */
+    bool isAutoSaveRequired() const override;
+
+    /**
+     * Send the KiCad netlist over to CVPCB.
+     */
+    void sendNetlistToCvpcb();
+
+    void onSize( wxSizeEvent& aEvent );
+
+private:
+    // Sets up the tool framework
+    void setupTools();
+
+    void OnExit( wxCommandEvent& event );
+
+    void OnLoadFile( wxCommandEvent& event );
+    void OnAppendProject( wxCommandEvent& event );
+    void OnImportProject( wxCommandEvent& event );
+
+    void OnClearFileHistory( wxCommandEvent& aEvent );
+
+    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
+    void doCloseWindow() override;
+
+    /**
+     * Set the main window title bar text.
+     *
+     * If file name defined by SCH_SCREEN::m_FileName is not set, the title is set to the
+     * application name appended with no file.
+     * Otherwise, the title is set to the hierarchical sheet path and the full file name, and
+     * read only is appended to the title if the user does not have write access to the file.
+     */
+    void UpdateTitle();
+
+    /**
+     * Initialize the zoom value of the current screen and mark the screen as zoom-initialized.
+     */
+    void initScreenZoom();
+
+    /**
+     * Verify that the symbol library links \a aSheet and all of it's child sheets have
+     * been remapped to the symbol library table.
+     *
+     * @param aSheet is the #SCH_SHEET object to test.
+     *
+     * @return true if \a aSheet and it's child sheets have not been remapped.
+     */
+    bool checkForNoFullyDefinedLibIds( SCH_SHEET* aSheet );
+
+    /**
+     *  Load the given filename but sets the path to the current project path.
+     *
+     *  @param full filepath of file to be imported.
+     *  @param aFileType SCH_FILE_T value for file type
+     */
+    bool importFile( const wxString& aFileName, int aFileType );
+
+    /**
+     * Fill a map of uuid -> reference from the currently loaded schematic.
+     *
+     * @param aMap is a map to fill
+     */
+    void mapExistingAnnotation( std::map<wxString, wxString>& aMap );
+
+private:
+    // The schematic editor control class should be able to access some internal
+    // functions of the editor frame.
+    friend class SCH_EDITOR_CONTROL;
+
+    SCHEMATIC*              m_schematic;          ///< The currently loaded schematic
+    const SCH_CONNECTION*   m_highlightedConn;    ///< The highlighted net or bus, or nullptr
+
+    wxPageSetupDialogData   m_pageSetupData;
+    SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
+    wxString                m_netListerCommand;   ///< Command line to call a custom net list
+                                                  ///< generator.
+    int                     m_exec_flags;         ///< Flags of the wxExecute() function
+                                                  ///< to call a custom net list generator.
+
+    DIALOG_SCH_FIND*        m_findReplaceDialog;
 };
 
 

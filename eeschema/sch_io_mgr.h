@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -40,8 +40,7 @@ class PROPERTIES;
 
 
 /**
- * SCH_IO_MGR
- * is a factory which returns an instance of a #SCH_PLUGIN.
+ * A factory which returns an instance of a #SCH_PLUGIN.
  */
 class SCH_IO_MGR
 {
@@ -58,10 +57,8 @@ public:
                     SCH_ALTIUM,  ///< Altium file format
                     SCH_CADSTAR_ARCHIVE, ///< CADSTAR Schematic Archive
                     SCH_EAGLE,  ///< Autodesk Eagle file format
-                    // Add your schematic type here.
 
-                    // ALTIUM,
-                    // etc.
+                    // Add your schematic type here.
                     SCH_FILE_UNKNOWN
             } )
 
@@ -157,12 +154,12 @@ public:
     //-----<PUBLIC SCH_PLUGIN API>-------------------------------------------------
 
     /**
-     * Returns a brief hard coded name for this SCH_PLUGIN.
+     * Return a brief hard coded name for this SCH_PLUGIN.
      */
     virtual const wxString GetName() const = 0;
 
     /**
-     * Returns the file extension for the #SCH_PLUGIN.
+     * Return the file extension for the #SCH_PLUGIN.
      */
     virtual const wxString GetFileExtension() const = 0;
 
@@ -182,7 +179,7 @@ public:
      */
     virtual int GetModifyHash() const = 0;
 
-    virtual void SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties = NULL );
+    virtual void SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties = nullptr );
 
     /**
      * Load information from some input file format that this #SCH_PLUGIN implementation
@@ -213,7 +210,8 @@ public:
      *                 possible.
      */
     virtual SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                             SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL );
+                             SCH_SHEET* aAppendToMe = nullptr,
+                             const PROPERTIES* aProperties = nullptr );
 
     /**
      * Write \a aSchematic to a storage file in a format that this #SCH_PLUGIN implementation
@@ -236,12 +234,12 @@ public:
      *                    continues to own this object (plugin may not delete it), and plugins
      *                    should expect it to be optionally NULL.  Set the
      *                    #PropSaveCurrentSheetOnly property to only save the current sheet.
-     *                    Otherwise, all hierarchial sheets are saved.
+     *                    Otherwise, all hierarchical sheets are saved.
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     virtual void Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
-                       const PROPERTIES* aProperties = NULL );
+                       const PROPERTIES* aProperties = nullptr );
 
     /**
      * Populate a list of #LIB_PART alias names contained within the library \a aLibraryPath.
@@ -259,14 +257,13 @@ public:
      *
      * @throw IO_ERROR if the library cannot be found, the part library cannot be loaded.
      */
-    virtual void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
-                                     const wxString&   aLibraryPath,
-                                     const PROPERTIES* aProperties = NULL );
+    virtual void EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
+                                     const PROPERTIES* aProperties = nullptr );
 
     /**
      * Populate a list of #LIB_PART aliases contained within the library \a aLibraryPath.
      *
-     * @note It is the reponsibility of the caller to delete the returned object from the heap.
+     * @note It is the responsibility of the caller to delete the returned object from the heap.
      *       Failure to do this will result in memory leaks.
      *
      * @param aSymbolList is an array to populate with the #LIB_PART pointers associated with
@@ -283,8 +280,8 @@ public:
      * @throw IO_ERROR if the library cannot be found, the part library cannot be loaded.
      */
     virtual void EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
-                                     const wxString&   aLibraryPath,
-                                     const PROPERTIES* aProperties = NULL );
+                                     const wxString& aLibraryPath,
+                                     const PROPERTIES* aProperties = nullptr );
 
     /**
      * Load a #LIB_PART object having \a aPartName from the \a aLibraryPath containing
@@ -308,12 +305,12 @@ public:
      *                 is thrown in the case where aAliasName cannot be found.
      */
     virtual LIB_PART* LoadSymbol( const wxString& aLibraryPath, const wxString& aPartName,
-                                  const PROPERTIES* aProperties = NULL );
+                                  const PROPERTIES* aProperties = nullptr );
 
     /**
      * Write \a aSymbol to an existing library located at \a aLibraryPath.  If a #LIB_PART
      * by the same name already exists or there are any conflicting alias names, the new
-     * #LIB_PART will silently overwrite any existing aliases and/or part becaue libraries
+     * #LIB_PART will silently overwrite any existing aliases and/or part because libraries
      * cannot have duplicate alias names.  It is the responsibility of the caller to check
      * the library for conflicts before saving.
      *
@@ -332,7 +329,7 @@ public:
      * @throw IO_ERROR if there is a problem saving.
      */
     virtual void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
-                             const PROPERTIES* aProperties = NULL );
+                             const PROPERTIES* aProperties = nullptr );
 
     /**
      * Delete the entire #LIB_PART associated with \a aAliasName from the library
@@ -353,7 +350,7 @@ public:
      * @throw IO_ERROR if there is a problem finding the alias or the library or deleting it.
      */
     virtual void DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                               const PROPERTIES* aProperties = NULL );
+                               const PROPERTIES* aProperties = nullptr );
 
     /**
      * Create a new empty symbol library at \a aLibraryPath.  It is an error to attempt
@@ -371,7 +368,7 @@ public:
      * @throw IO_ERROR if there is a problem finding the library, or creating it.
      */
     virtual void CreateSymbolLib( const wxString& aLibraryPath,
-                                  const PROPERTIES* aProperties = NULL );
+                                  const PROPERTIES* aProperties = nullptr );
 
     /**
      * Delete an existing symbol library and returns true if successful, or if library
@@ -393,7 +390,7 @@ public:
      * @throw IO_ERROR if there is a problem deleting an existing library.
      */
     virtual bool DeleteSymbolLib( const wxString& aLibraryPath,
-                                  const PROPERTIES* aProperties = NULL );
+                                  const PROPERTIES* aProperties = nullptr );
 
     /**
      * Return true if the library at \a aLibraryPath is writable.  (Often
@@ -478,7 +475,7 @@ public:
         SCH_PLUGIN_RELEASER( const SCH_PLUGIN_RELEASER& aOther ) {}
 
     public:
-        SCH_PLUGIN_RELEASER( SCH_PLUGIN* aPlugin = NULL ) :
+        SCH_PLUGIN_RELEASER( SCH_PLUGIN* aPlugin = nullptr ) :
             plugin( aPlugin )
         {
         }
@@ -492,7 +489,7 @@ public:
         void release()
         {
             SCH_IO_MGR::ReleasePlugin( plugin );
-            plugin = NULL;
+            plugin = nullptr;
         }
 
         void set( SCH_PLUGIN* aPlugin )

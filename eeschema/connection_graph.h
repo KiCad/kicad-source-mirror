@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -148,6 +149,10 @@ public:
             return PRIORITY::NONE;
     }
 
+private:
+    wxString driverName( SCH_ITEM* aItem ) const;
+
+public:
     CONNECTION_GRAPH* m_graph;
 
     bool m_dirty;
@@ -229,10 +234,6 @@ public:
 
     /// Used for multiple drivers ERC message; stores the second possible driver (or nullptr)
     SCH_ITEM* m_second_driver;
-
-private:
-
-    wxString driverName( SCH_ITEM* aItem ) const;
 };
 
 /// Associates a net code with the final name of a net
@@ -323,52 +324,7 @@ public:
 
     CONNECTION_SUBGRAPH* GetSubgraphForItem( SCH_ITEM* aItem );
 
-    // TODO(JE) Remove this when pressure valve is removed
-    static bool m_allowRealTime;
-
 private:
-    // All the sheets in the schematic (as long as we don't have partial updates)
-    SCH_SHEET_LIST m_sheetList;
-
-    // All connectable items in the schematic
-    std::vector<SCH_ITEM*> m_items;
-
-    // The owner of all CONNECTION_SUBGRAPH objects
-    std::vector<CONNECTION_SUBGRAPH*> m_subgraphs;
-
-    // Cache of a subset of m_subgraphs
-    std::vector<CONNECTION_SUBGRAPH*> m_driver_subgraphs;
-
-    // Cache to lookup subgraphs in m_driver_subgraphs by sheet path
-    std::unordered_map<SCH_SHEET_PATH, std::vector<CONNECTION_SUBGRAPH*>> m_sheet_to_subgraphs_map;
-
-    std::vector<std::pair<SCH_SHEET_PATH, SCH_PIN*>> m_invisible_power_pins;
-
-    std::unordered_map< wxString, std::shared_ptr<BUS_ALIAS> > m_bus_alias_cache;
-
-    std::map<wxString, int> m_net_name_to_code_map;
-
-    std::map<wxString, int> m_bus_name_to_code_map;
-
-    std::map<wxString, std::vector<const CONNECTION_SUBGRAPH*>> m_global_label_cache;
-
-    std::map< std::pair<SCH_SHEET_PATH, wxString>,
-              std::vector<const CONNECTION_SUBGRAPH*> > m_local_label_cache;
-
-    std::unordered_map<wxString, std::vector<CONNECTION_SUBGRAPH*>> m_net_name_to_subgraphs_map;
-
-    std::map<SCH_ITEM*, CONNECTION_SUBGRAPH*> m_item_to_subgraph_map;
-
-    NET_MAP m_net_code_to_subgraphs_map;
-
-    int m_last_net_code;
-
-    int m_last_bus_code;
-
-    int m_last_subgraph_code;
-
-    SCHEMATIC* m_schematic;     ///< The schematic this graph represents
-
     /**
      * Updates the graphical connectivity between items (i.e. where they touch)
      * The items passed in must be on the same sheet.
@@ -547,6 +503,52 @@ private:
      */
     int ercCheckHierSheets();
 
+public:
+    // TODO(JE) Remove this when pressure valve is removed
+    static bool m_allowRealTime;
+
+private:
+    // All the sheets in the schematic (as long as we don't have partial updates)
+    SCH_SHEET_LIST m_sheetList;
+
+    // All connectable items in the schematic
+    std::vector<SCH_ITEM*> m_items;
+
+    // The owner of all CONNECTION_SUBGRAPH objects
+    std::vector<CONNECTION_SUBGRAPH*> m_subgraphs;
+
+    // Cache of a subset of m_subgraphs
+    std::vector<CONNECTION_SUBGRAPH*> m_driver_subgraphs;
+
+    // Cache to lookup subgraphs in m_driver_subgraphs by sheet path
+    std::unordered_map<SCH_SHEET_PATH, std::vector<CONNECTION_SUBGRAPH*>> m_sheet_to_subgraphs_map;
+
+    std::vector<std::pair<SCH_SHEET_PATH, SCH_PIN*>> m_invisible_power_pins;
+
+    std::unordered_map< wxString, std::shared_ptr<BUS_ALIAS> > m_bus_alias_cache;
+
+    std::map<wxString, int> m_net_name_to_code_map;
+
+    std::map<wxString, int> m_bus_name_to_code_map;
+
+    std::map<wxString, std::vector<const CONNECTION_SUBGRAPH*>> m_global_label_cache;
+
+    std::map< std::pair<SCH_SHEET_PATH, wxString>,
+              std::vector<const CONNECTION_SUBGRAPH*> > m_local_label_cache;
+
+    std::unordered_map<wxString, std::vector<CONNECTION_SUBGRAPH*>> m_net_name_to_subgraphs_map;
+
+    std::map<SCH_ITEM*, CONNECTION_SUBGRAPH*> m_item_to_subgraph_map;
+
+    NET_MAP m_net_code_to_subgraphs_map;
+
+    int m_last_net_code;
+
+    int m_last_bus_code;
+
+    int m_last_subgraph_code;
+
+    SCHEMATIC* m_schematic;     ///< The schematic this graph represents
 };
 
 #endif

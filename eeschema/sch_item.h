@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,19 +86,6 @@ enum DANGLING_END_T
  */
 class DANGLING_END_ITEM
 {
-private:
-    /// A pointer to the connectable object.
-    EDA_ITEM*       m_item;
-
-    /// The position of the connection point.
-    wxPoint         m_pos;
-
-    /// The type of connection of #m_item.
-    DANGLING_END_T  m_type;
-
-    /// A pointer to the parent object (in the case of pins)
-    const EDA_ITEM* m_parent;
-
 public:
     DANGLING_END_ITEM( DANGLING_END_T aType, EDA_ITEM* aItem, const wxPoint& aPosition )
     {
@@ -143,6 +130,19 @@ public:
     EDA_ITEM* GetItem() const { return m_item; }
     const EDA_ITEM* GetParent() const { return m_parent; }
     DANGLING_END_T GetType() const { return m_type; }
+
+private:
+    /// A pointer to the connectable object.
+    EDA_ITEM*       m_item;
+
+    /// The position of the connection point.
+    wxPoint         m_pos;
+
+    /// The type of connection of #m_item.
+    DANGLING_END_T  m_type;
+
+    /// A pointer to the parent object (in the case of pins)
+    const EDA_ITEM* m_parent;
 };
 
 
@@ -154,10 +154,6 @@ typedef std::unordered_set<SCH_ITEM*> SCH_ITEM_SET;
  */
 class STROKE_PARAMS
 {
-    int m_width;
-    PLOT_DASH_TYPE m_plotstyle;
-    COLOR4D m_color;
-
 public:
     STROKE_PARAMS( int aWidth = Mils2iu( DEFAULT_LINE_THICKNESS ),
                    PLOT_DASH_TYPE aPlotStyle = PLOT_DASH_TYPE::DEFAULT,
@@ -183,6 +179,11 @@ public:
                 || m_plotstyle != aOther.m_plotstyle
                 || m_color != aOther.m_color;
     }
+
+private:
+    int m_width;
+    PLOT_DASH_TYPE m_plotstyle;
+    COLOR4D m_color;
 };
 
 
@@ -195,23 +196,6 @@ public:
  */
 class SCH_ITEM : public EDA_ITEM
 {
-    friend class CONNECTION_GRAPH;
-
-protected:
-    SCH_LAYER_ID      m_layer;
-    EDA_ITEMS         m_connections;      // List of items connected to this item.
-    FIELDS_AUTOPLACED m_fieldsAutoplaced; // indicates status of field autoplacement
-    wxPoint           m_storedPos;        // a temporary variable used in some move commands
-                                          // to store a initial pos of the item or mouse cursor
-
-    /// Stores pointers to other items that are connected to this one, per sheet
-    std::unordered_map<SCH_SHEET_PATH, SCH_ITEM_SET> m_connected_items;
-
-    /// Stores connectivity information, per sheet
-    std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTION*> m_connection_map;
-
-    bool              m_connectivity_dirty;
-
 public:
     SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType );
 
@@ -226,7 +210,7 @@ public:
 
     /**
      * Swap the internal data structures \a aItem with the schematic item.
-     * Obviously, aItem must have the same type than me
+     * Obviously, aItem must have the same type than me.
      * @param aItem The item to swap the data structures with.
      */
     virtual void SwapData( SCH_ITEM* aItem );
@@ -236,7 +220,7 @@ public:
      * The new object is not put in draw list (not linked).
      *
      * @param doClone (default = false) indicates unique values (such as timestamp and
-     *     sheet name) should be duplicated.  Use only for undo/redo operations.
+     *                sheet name) should be duplicated.  Use only for undo/redo operations.
      */
     SCH_ITEM* Duplicate( bool doClone = false ) const;
 
@@ -252,30 +236,31 @@ public:
     void     SetStoredPos( wxPoint aPos ) { m_storedPos = aPos; }
 
     /**
-     * Searches the item hierarchy to find a SCHEMATIC
+     * Searches the item hierarchy to find a SCHEMATIC.
      *
      * Every SCH_ITEM that lives on a SCH_SCREEN should be parented to either that screen
      * or another SCH_ITEM on the same screen (for example, pins to their symbols).
      *
      * Every SCH_SCREEN should be parented to the SCHEMATIC.
-     * Note that this hierarchy is not the same as the sheet hierarchy!
      *
-     * @return the parent schematic this item lives on, or nullptr
+     * @note This hierarchy is not the same as the sheet hierarchy!
+     *
+     * @return the parent schematic this item lives on, or nullptr.
      */
     SCHEMATIC* Schematic() const;
 
     /**
-     * @return bool - true if the object is locked, else false
+     * @return true if the object is locked, else false.
      */
     virtual bool IsLocked() const { return false; }
 
     /**
-     * Set the  'lock' status to \a aLocked for of this item.
+     * Set the 'lock' status to \a aLocked for of this item.
      */
     virtual void SetLocked( bool aLocked ) {}
 
     /**
-     * Allows items to support hypertext actions when hovered/clicked.
+     * Allow items to support hypertext actions when hovered/clicked.
      */
     virtual bool IsHypertext() const { return false; }
 
@@ -308,7 +293,8 @@ public:
      *
      * Each schematic item should have its own method
      *
-     * @param aOffset drawing offset (usually {0,0} but can be different when moving an object)
+     * @param aOffset is the drawing offset (usually {0,0} but can be different when moving an
+     *                object).
      */
     virtual void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) = 0;
 
@@ -340,7 +326,7 @@ public:
      * dangling end ( no connect ), override this method to provide the correct end
      * points.
      *
-     * @param aItemList - List of DANGLING_END_ITEMS to add to.
+     * @param aItemList is the list of DANGLING_END_ITEMS to add to.
      */
     virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) {}
 
@@ -353,11 +339,11 @@ public:
      * always returns false.  Only override the method if the item can be tested for a
      * dangling state.
      *
-     * If aSheet is passed a non-null pointer to a SCH_SHEET_PATH, the overrided method can
+     * If aSheet is passed a non-null pointer to a SCH_SHEET_PATH, the overridden method can
      * optionally use it to update sheet-local connectivity information
      *
-     * @param aItemList - List of items to test item against.
-     * @param aSheet - Sheet path to update connections for
+     * @param aItemList is the list of items to test item against.
+     * @param aSheet is the sheet path to update connections for.
      * @return True if the dangling state has changed from it's current setting.
      */
     virtual bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
@@ -376,7 +362,8 @@ public:
     virtual bool IsConnectable() const { return false; }
 
     /**
-     * @return true if the given point can start drawing (usually means the anchor is unused/free/dangling)
+     * @return true if the given point can start drawing (usually means the anchor is
+     *         unused/free/dangling).
      */
     virtual bool IsPointClickableAnchor( const wxPoint& aPos ) const { return false; }
 
@@ -385,7 +372,7 @@ public:
      *
      * Not all schematic items have connection points so the default method does nothing.
      *
-     * @param aPoints List of connection points to add to.
+     * @param aPoints is the list of connection points to add to.
      */
     virtual std::vector<wxPoint> GetConnectionPoints() const { return {}; }
 
@@ -400,37 +387,37 @@ public:
     /**
      * Test the item to see if it is connected to \a aPoint.
      *
-     * @param aPoint A reference to a wxPoint object containing the coordinates to test.
+     * @param aPoint is a reference to a wxPoint object containing the coordinates to test.
      * @return True if connection to \a aPoint exists.
      */
     bool IsConnected( const wxPoint& aPoint ) const;
 
     /**
-     * Retrieve the connection associated with this object in the given sheet
+     * Retrieve the connection associated with this object in the given sheet.
      *
      * @note The returned value can be nullptr.
      */
     SCH_CONNECTION* Connection( const SCH_SHEET_PATH* aSheet = nullptr ) const;
 
     /**
-     * Retrieves the set of items connected to this item on the given sheet
+     * Retrieve the set of items connected to this item on the given sheet.
      */
     SCH_ITEM_SET& ConnectedItems( const SCH_SHEET_PATH& aPath );
 
     /**
-     * Adds a connection link between this item and another
+     * Add a connection link between this item and another.
      */
     void AddConnectionTo( const SCH_SHEET_PATH& aPath, SCH_ITEM* aItem );
 
     /**
-     * Creates a new connection object associated with this object
+     * Create a new connection object associated with this object.
      *
-     * @param aPath is the sheet path to initialize
+     * @param aPath is the sheet path to initialize.
      */
     SCH_CONNECTION* InitializeConnection( const SCH_SHEET_PATH& aPath, CONNECTION_GRAPH* aGraph );
 
     /**
-     * Returns true if this item should propagate connection info to aItem
+     * Return true if this item should propagate connection info to \a aItem.
      */
     virtual bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const { return true; }
 
@@ -483,13 +470,15 @@ public:
     /**
      * Plot the schematic item to \a aPlotter.
      *
-     * @param aPlotter A pointer to a #PLOTTER object.
+     * @param aPlotter is the #PLOTTER object to plot to.
      */
     virtual void Plot( PLOTTER* aPlotter ) const;
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 
 private:
+    friend class CONNECTION_GRAPH;
+
     /**
      * Provide the object specific test to see if it is connected to \a aPosition.
      *
@@ -500,10 +489,25 @@ private:
      *       which performs tests common to all schematic items before calling the
      *       item specific connection testing.
      *
-     * @param aPosition A reference to a wxPoint object containing the test position.
+     * @param aPosition is a reference to a wxPoint object containing the test position.
      * @return True if connection to \a aPosition exists.
      */
     virtual bool doIsConnected( const wxPoint& aPosition ) const { return false; }
+
+protected:
+    SCH_LAYER_ID      m_layer;
+    EDA_ITEMS         m_connections;      // List of items connected to this item.
+    FIELDS_AUTOPLACED m_fieldsAutoplaced; // indicates status of field autoplacement
+    wxPoint           m_storedPos;        // a temporary variable used in some move commands
+                                          // to store a initial pos of the item or mouse cursor
+
+    /// Store pointers to other items that are connected to this one, per sheet.
+    std::unordered_map<SCH_SHEET_PATH, SCH_ITEM_SET> m_connected_items;
+
+    /// Store connectivity information, per sheet.
+    std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTION*> m_connection_map;
+
+    bool              m_connectivity_dirty;
 };
 
 #endif /* SCH_ITEM_H */

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,13 +65,6 @@ enum RESCUE_TYPE
 
 class RESCUE_CANDIDATE
 {
-protected:
-    wxString  m_requested_name;
-    wxString  m_new_name;
-    LIB_PART* m_lib_candidate;
-    int       m_unit;
-    int       m_convert;
-
 public:
     virtual ~RESCUE_CANDIDATE() {}
 
@@ -112,6 +105,13 @@ public:
      * @return True on success.
      */
     virtual bool PerformAction( RESCUER* aRescuer ) = 0;
+
+protected:
+    wxString  m_requested_name;
+    wxString  m_new_name;
+    LIB_PART* m_lib_candidate;
+    int       m_unit;
+    int       m_convert;
 };
 
 
@@ -121,18 +121,19 @@ public:
     /**
      * Grab all possible RESCUE_CASE_CANDIDATE objects into a vector.
      *
-     * @param aRescuer - the working RESCUER instance.
-     * @param aCandidates - the vector the will hold the candidates.
+     * @param aRescuer is the working RESCUER instance.
+     * @param aCandidates is the vector the will hold the candidates.
      */
     static void FindRescues( RESCUER& aRescuer, boost::ptr_vector<RESCUE_CANDIDATE>& aCandidates );
 
     /**
-     * Constructor RESCUE_CANDIDATE
-     * @param aRequestedName - the name the schematic asks for
-     * @param aNewName - the name we want to change it to
-     * @param aLibCandidate - the part that will give us
-     * @param aUnit The unit of the rescued symbol.
-     * @param aConvert The body style of the rescued symbol.
+     * Create a RESCUE_CANDIDATE.
+     *
+     * @param aRequestedName us the name the schematic asks for.
+     * @param aNewName is the name we want to change it to.
+     * @param aLibCandidate is the part that will give us.
+     * @param aUnit is the unit of the rescued symbol.
+     * @param aConvert is the body style of the rescued symbol.
      */
     RESCUE_CASE_CANDIDATE( const wxString& aRequestedName, const wxString& aNewName,
                            LIB_PART* aLibCandidate, int aUnit = 0, int aConvert = 0 );
@@ -151,21 +152,22 @@ class RESCUE_CACHE_CANDIDATE: public RESCUE_CANDIDATE
 
 public:
     /**
-     * Grab all possible #RESCUE_CACHE_CANDIDATE objectss into a vector.
+     * Grab all possible #RESCUE_CACHE_CANDIDATE objects into a vector.
      *
-     * @param aRescuer - the working RESCUER instance.
-     * @param aCandidates - the vector the will hold the candidates.
+     * @param aRescuer is the working RESCUER instance.
+     * @param aCandidates is the vector the will hold the candidates.
      */
     static void FindRescues( RESCUER& aRescuer, boost::ptr_vector<RESCUE_CANDIDATE>& aCandidates );
 
     /**
-     * Constructor RESCUE_CACHE_CANDIDATE
-     * @param aRequestedName - the name the schematic asks for
-     * @param aNewName - the name we want to change it to
-     * @param aCacheCandidate - the part from the cache
-     * @param aLibCandidate - the part that would be loaded from the library
-     * @param aUnit The unit of the rescued symbol.
-     * @param aConvert The body style of the rescued symbol.
+     * Create a RESCUE_CACHE_CANDIDATE.
+     *
+     * @param aRequestedName is the name the schematic asks for.
+     * @param aNewName is the name we want to change it to.
+     * @param aCacheCandidate is the part from the cache.
+     * @param aLibCandidate is the part that would be loaded from the library.
+     * @param aUnit is the unit of the rescued symbol.
+     * @param aConvert is the body style of the rescued symbol.
      */
     RESCUE_CACHE_CANDIDATE( const wxString& aRequestedName, const wxString& aNewName,
                             LIB_PART* aCacheCandidate, LIB_PART* aLibCandidate,
@@ -183,27 +185,24 @@ public:
 
 class RESCUE_SYMBOL_LIB_TABLE_CANDIDATE : public RESCUE_CANDIDATE
 {
-    LIB_ID m_requested_id;
-    LIB_ID m_new_id;
-    LIB_PART* m_cache_candidate;
-
 public:
     /**
      * Grab all possible RESCUE_SYMBOL_LIB_TABLE_CANDIDATE objects into a vector.
      *
-     * @param aRescuer - the working RESCUER instance.
-     * @param aCandidates - the vector the will hold the candidates.
+     * @param aRescuer is the working #RESCUER instance.
+     * @param aCandidates is the vector the will hold the candidates.
      */
     static void FindRescues( RESCUER& aRescuer, boost::ptr_vector<RESCUE_CANDIDATE>& aCandidates );
 
     /**
-     * Constructor RESCUE_CANDIDATE
-     * @param aRequestedName - the name the schematic asks for
-     * @param aNewName - the name we want to change it to
-     * @param aCacheCandidate - the part from the cache
-     * @param aLibCandidate - the part that would be loaded from the library
-     * @param aUnit The unit of the rescued symbol.
-     * @param aConvert The body style of the rescued symbol.
+     * Create RESCUE_CANDIDATE.
+     *
+     * @param aRequestedName is the name the schematic asks for.
+     * @param aNewName is the name we want to change it to.
+     * @param aCacheCandidate is the part from the cache.
+     * @param aLibCandidate is the part that would be loaded from the library.
+     * @param aUnit is the unit of the rescued symbol.
+     * @param aConvert is the body style of the rescued symbol.
      */
     RESCUE_SYMBOL_LIB_TABLE_CANDIDATE( const LIB_ID& aRequestedId, const LIB_ID& aNewId,
                                        LIB_PART* aCacheCandidate, LIB_PART* aLibCandidate,
@@ -216,6 +215,11 @@ public:
     virtual wxString GetActionDescription() const override;
 
     virtual bool PerformAction( RESCUER* aRescuer ) override;
+
+private:
+    LIB_ID m_requested_id;
+    LIB_ID m_new_id;
+    LIB_PART* m_cache_candidate;
 };
 
 
@@ -230,20 +234,6 @@ public:
 
 class RESCUER
 {
-protected:
-    friend class DIALOG_RESCUE_EACH;
-
-    std::vector<SCH_COMPONENT*> m_components;
-    PROJECT* m_prj;
-    SCHEMATIC* m_schematic;
-    EDA_DRAW_PANEL_GAL::GAL_TYPE m_galBackEndType;
-    SCH_SHEET_PATH* m_currentSheet;
-
-    boost::ptr_vector<RESCUE_CANDIDATE> m_all_candidates;
-    std::vector<RESCUE_CANDIDATE*> m_chosen_candidates;
-
-    std::vector<RESCUE_LOG> m_rescue_log;
-
 public:
     RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic, SCH_SHEET_PATH* aCurrentSheet,
              EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackeEndType );
@@ -253,8 +243,9 @@ public:
     }
 
     /**
-     * Writes out the rescue library. Called after successful PerformAction()s. If this fails,
-     * undo the actions.
+     * Write the rescue library.
+     *
+     * Called after successful PerformAction()s. If this fails, undo the actions.
      *
      * @return True on success.
      */
@@ -282,12 +273,12 @@ public:
     void RemoveDuplicates();
 
     /**
-     * Returen the number of rescue candidates found.
+     * Return the number of rescue candidates found.
      */
     size_t GetCandidateCount() { return m_all_candidates.size(); }
 
     /**
-     * Get the number of resuce candidates chosen by the user.
+     * Get the number of rescue candidates chosen by the user.
      */
     size_t GetChosenCandidateCount() { return m_chosen_candidates.size(); }
 
@@ -322,14 +313,25 @@ public:
     void UndoRescues();
 
     static bool RescueProject( wxWindow* aParent, RESCUER& aRescuer, bool aRunningOnDemand );
+
+protected:
+    friend class DIALOG_RESCUE_EACH;
+
+    std::vector<SCH_COMPONENT*> m_components;
+    PROJECT* m_prj;
+    SCHEMATIC* m_schematic;
+    EDA_DRAW_PANEL_GAL::GAL_TYPE m_galBackEndType;
+    SCH_SHEET_PATH* m_currentSheet;
+
+    boost::ptr_vector<RESCUE_CANDIDATE> m_all_candidates;
+    std::vector<RESCUE_CANDIDATE*> m_chosen_candidates;
+
+    std::vector<RESCUE_LOG> m_rescue_log;
 };
 
 
 class LEGACY_RESCUER : public RESCUER
 {
-private:
-    std::unique_ptr<PART_LIB> m_rescue_lib;
-
 public:
     LEGACY_RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic, SCH_SHEET_PATH* aCurrentSheet,
                     EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType ) :
@@ -350,16 +352,14 @@ public:
     virtual bool WriteRescueLibrary( wxWindow *aParent ) override;
 
     virtual void AddPart( LIB_PART* aNewPart ) override;
+
+private:
+    std::unique_ptr<PART_LIB> m_rescue_lib;
 };
 
 
 class SYMBOL_LIB_TABLE_RESCUER : public RESCUER
 {
-private:
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;
-
-    std::unique_ptr< PROPERTIES > m_properties;   ///< Library plugin properties
-
 public:
     SYMBOL_LIB_TABLE_RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic,
                               SCH_SHEET_PATH* aCurrentSheet,
@@ -378,6 +378,11 @@ public:
     virtual bool WriteRescueLibrary( wxWindow* aParent ) override;
 
     virtual void AddPart( LIB_PART* aNewPart ) override;
+
+private:
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;
+
+    std::unique_ptr< PROPERTIES > m_properties;   ///< Library plugin properties
 };
 
 #endif // _LIB_CACHE_RESCUE_H_
