@@ -106,29 +106,29 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
     UpdateCopyOfZonesList( pickedList, deletedList, GetBoard() );
 
+    // refill zones with the new properties applied
+    std::vector<ZONE*> zones_to_refill;
+
+    for( unsigned i = 0; i < pickedList.GetCount(); ++i )
+    {
+        ZONE* zone = dyn_cast<ZONE*>( pickedList.GetPickedItem( i ) );
+
+        if( zone == nullptr )
+        {
+            wxASSERT_MSG( false, "Expected a zone after zone properties edit" );
+            continue;
+        }
+
+        // aZone won't be filled if the layer set was modified, but it needs to be updated
+        if( zone->IsFilled() || zone == aZone )
+            zones_to_refill.push_back( zone );
+    }
+
+    commit.Stage( pickedList );
+
     // Only auto-refill zones here if in user preferences
     if( Settings().m_AutoRefillZones )
     {
-        // refill zones with the new properties applied
-        std::vector<ZONE*> zones_to_refill;
-
-        for( unsigned i = 0; i < pickedList.GetCount(); ++i )
-        {
-            ZONE* zone = dyn_cast<ZONE*>( pickedList.GetPickedItem( i ) );
-
-            if( zone == nullptr )
-            {
-                wxASSERT_MSG( false, "Expected a zone after zone properties edit" );
-                continue;
-            }
-
-            // aZone won't be filled if the layer set was modified, but it needs to be updated
-            if( zone->IsFilled() || zone == aZone )
-                zones_to_refill.push_back( zone );
-        }
-
-        commit.Stage( pickedList );
-
         std::lock_guard<KISPINLOCK> lock( GetBoard()->GetConnectivity()->GetLock() );
 
         if( zones_to_refill.size() )
