@@ -272,6 +272,12 @@ private:
     void setTransitions() override;
 
 private:
+    /**
+     * Set the configuration of m_additive, m_subtractive, m_exclusive_or, m_skip_heuristics
+     * from the state of modifier keys SHIFT, CTRL, ALT and depending on the OS
+     */
+    void setModifiersState( bool aShiftState, bool aCtrlState, bool aAltState );
+
     SCH_BASE_FRAME* m_frame;             // Pointer to the parent frame
     EE_SELECTION    m_selection;         // Current state of selection
 

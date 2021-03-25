@@ -311,6 +311,55 @@ const KICAD_T movableSymbolItems[] =
 };
 
 
+void EE_SELECTION_TOOL::setModifiersState( bool aShiftState, bool aCtrlState, bool aAltState )
+{
+    // Set the configuration of m_additive, m_subtractive, m_exclusive_or
+    // from the state of modifier keys SHIFT, CTRL, ALT and the OS
+
+    // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
+    // Due to the fact ALT key modifier cannot be useed freely on Windows and Linux,
+    // actions are different on OSX and others OS
+    // Especially, ALT key cannot be used to force showing the full selection choice
+    // context menu (the menu is immediately closed on Windows )
+    //
+    // No modifier = select items and deselect previous selection
+    // ALT (on OSX) = skip heuristic and show full selection choice
+    // ALT (on others) = exclusive OR of selected items (inverse selection)
+    //
+    // CTRL/CMD (on OSX) = exclusive OR of selected items (inverse selection)
+    // CTRL (on others) = skip heuristic and show full selection choice
+    //
+    // SHIFT = add selected items to the current selection
+    //
+    // CTRL/CMD+SHIFT (on OSX) = remove selected items to the current selection
+    // CTRL+SHIFT (on others) = unused (can be used for a new action)
+    //
+    // CTRL/CMT+ALT (on OSX) = unused (can be used for a new action)
+    // CTRL+ALT (on others) = do nothing (same as no modifier)
+    //
+    // SHIFT+ALT (on OSX) =  do nothing (same as no modifier)
+    // SHIFT+ALT (on others) = remove selected items to the current selection
+
+#ifdef __WXOSX_MAC__
+    m_subtractive     = aCtrlState && aShiftState && !aAltState;
+    m_additive        = aShiftState && !aCtrlState && !aAltState;
+    m_exclusive_or    = aCtrlState && !aShiftState && !aAltState;
+    m_skip_heuristics = aAltState && !aShiftState && !aCtrlState;
+
+#else
+    m_subtractive  = aShiftState && !aCtrlState && aAltState;
+    m_additive     = aShiftState && !aCtrlState && !aAltState;
+    m_exclusive_or = !aShiftState && !aCtrlState && aAltState;
+
+    // Is the user requesting that the selection list include all possible
+    // items without removing less likely selection candidates
+    // Cannot use the Alt key on windows or the disambiguation context menu is immediately
+    // dismissed rendering it useless.
+    m_skip_heuristics = aCtrlState && !aShiftState && !aAltState;
+#endif
+}
+
+
 int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
@@ -326,67 +375,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         KIID rolloverItem = lastRolloverItem;
 
         // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
-        // Due to the fact ALT key modifier cannot be useed freely on Winows and Linux,
-        // actions are different on OSX and others OS
-        // Especially, ALT key cannot be used to force showing the full selection choice
-        // context menu (the menu is immediately closed on Windows )
-        //
-        // No modifier = select items and deselect previous selection
-        // ALT (on OSX) = skip heuristic and show full selection choice
-        // ALT (on others) = exclusive OR of selected items (inverse selection)
-        //
-        // CTRL/CMD (on OSX) = exclusive OR of selected items (inverse selection)
-        // CTRL (on others) = skip heuristic and show full selection choice
-        //
-        // SHIFT = add selected items to the current selection
-        //
-        // CTRL/CMD+SHIFT (on OSX) = remove selected items to the current selection
-        // CTRL+SHIFT (on others) = unused (can be used for a new action)
-        //
-        // CTRL/CMT+ALT (on OSX) = unused (can be used for a new action)
-        // CTRL+ALT (on others) = do nothing (same as no modifier)
-        //
-        // SHIFT+ALT (on OSX) =  do nothing (same as no modifier)
-        // SHIFT+ALT (on others) = remove selected items to the current selection
-
-#ifdef __WXOSX_MAC__
-        m_subtractive = evt->Modifier( MD_CTRL ) &&
-                        evt->Modifier( MD_SHIFT ) &&
-                        !evt->Modifier( MD_ALT );
-
-        m_additive = evt->Modifier( MD_SHIFT ) &&
-                     !evt->Modifier( MD_CTRL ) &&
-                     !evt->Modifier( MD_ALT );
-
-        m_exclusive_or = evt->Modifier( MD_CTRL ) &&
-                         !evt->Modifier( MD_SHIFT ) &&
-                         !evt->Modifier( MD_ALT );
-
-        m_skip_heuristics = evt->Modifier( MD_ALT ) &&
-                            !evt->Modifier( MD_SHIFT ) &&
-                            !evt->Modifier( MD_CTRL );
-
-#else
-        m_subtractive = evt->Modifier( MD_SHIFT )
-                        && !evt->Modifier( MD_CTRL )
-                        && evt->Modifier( MD_ALT );
-
-        m_additive = evt->Modifier( MD_SHIFT )
-                     && !evt->Modifier( MD_CTRL )
-                     && !evt->Modifier( MD_ALT );
-
-        m_exclusive_or = !evt->Modifier( MD_SHIFT )
-                         && !evt->Modifier( MD_CTRL )
-                         && evt->Modifier( MD_ALT );
-
-        // Is the user requesting that the selection list include all possible
-        // items without removing less likely selection candidates
-        // Cannot use the Alt key on windows or the disambiguation context menu is immediately
-        // dismissed rendering it useless.
-        m_skip_heuristics = evt->Modifier( MD_CTRL )
-                            && !evt->Modifier( MD_SHIFT )
-                            && !evt->Modifier( MD_ALT );
-#endif
+        setModifiersState( evt->Modifier( MD_SHIFT ), evt->Modifier( MD_CTRL ),
+                           evt->Modifier( MD_ALT ) );
 
         bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
 
@@ -753,14 +743,8 @@ void EE_SELECTION_TOOL::OnIdle( wxIdleEvent& aEvent )
     {
         wxMouseState keyboardState = wxGetMouseState();
 
-        m_subtractive = m_additive = m_exclusive_or = false;
-
-        if( keyboardState.ShiftDown() && keyboardState.ControlDown() )
-            m_subtractive = true;
-        else if( keyboardState.ShiftDown() )
-            m_additive = true;
-        else if( keyboardState.ControlDown() )
-            m_exclusive_or = true;
+        setModifiersState( keyboardState.ShiftDown(), keyboardState.ControlDown(),
+                           keyboardState.AltDown() );
 
         if( m_additive )
             m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ADD );

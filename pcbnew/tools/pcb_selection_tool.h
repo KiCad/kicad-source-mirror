@@ -192,6 +192,12 @@ public:
     void FilterCollectedItems( GENERAL_COLLECTOR& aCollector );
 
 private:
+    /**
+     * Set the configuration of m_additive, m_subtractive, m_exclusive_or,
+     * m_skip_heuristics and m_highlight_modifier
+     * from the state of modifier keys SHIFT, CTRL, ALT and depending on the OS
+     */
+    void setModifiersState( bool aShiftState, bool aCtrlState, bool aAltState );
 
     /**
      * Select an item pointed by the parameter \a aWhere.
@@ -364,6 +370,7 @@ private:
     bool m_exclusive_or;          // Items' selection state should be toggled
     bool m_multiple;              // Multiple selection mode is active
     bool m_skip_heuristics;       // Heuristics are not allowed when choosing item under cursor
+    bool m_highlight_modifier;    // select highlight net on left click
 
     PCB_GROUP*        m_enteredGroup;          // If non-null, selections are limited to
                                                // members of this group

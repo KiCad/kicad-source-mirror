@@ -103,6 +103,7 @@ PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
         m_exclusive_or( false ),
         m_multiple( false ),
         m_skip_heuristics( false ),
+        m_highlight_modifier( false ),
         m_enteredGroup( nullptr ),
         m_priv( std::make_unique<PRIV>() )
 {
@@ -206,6 +207,58 @@ void PCB_SELECTION_TOOL::Reset( RESET_REASON aReason )
 }
 
 
+void PCB_SELECTION_TOOL::setModifiersState( bool aShiftState, bool aCtrlState, bool aAltState )
+{
+    // Set the configuration of m_additive, m_subtractive, m_exclusive_or
+    // from the state of modifier keys SHIFT, CTRL, ALT and the OS
+
+    // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
+    // Due to the fact ALT key modifier cannot be useed freely on Winows and Linux,
+    // actions are different on OSX and others OS
+    // Especially, ALT key cannot be used to force showing the full selection choice
+    // context menu (the menu is immediately closed on Windows )
+    //
+    // No modifier = select items and deselect previous selection
+    // ALT (on OSX) = skip heuristic and show full selection choice
+    // ALT (on others) = exclusive OR of selected items (inverse selection)
+    //
+    // CTRL (on OSX) = exclusive OR of selected items (inverse selection)
+    // CTRL (on others) = skip heuristic and show full selection choice
+    //
+    // SHIFT = add selected items to the current selection
+    //
+    // CTRL+SHIFT (on OSX) = remove selected items to the current selection
+    // CTRL+SHIFT (on others) = highlight net
+    //
+    // CTRL+ALT (on OSX) = highlight net
+    // CTRL+ALT (on others) = do nothing (same as no modifier)
+    //
+    // SHIFT+ALT (on OSX) =  do nothing (same as no modifier)
+    // SHIFT+ALT (on others) = remove selected items to the current selection
+
+#ifdef __WXOSX_MAC__
+    m_subtractive        = aCtrlState && aShiftState && !aAltState;
+    m_additive           = aShiftState && !aCtrlState && !aAltState;
+    m_exclusive_or       = aCtrlState && !aShiftState && !aAltState;
+    m_skip_heuristics    = aAltState && !aShiftState && !aCtrlState;
+    m_highlight_modifier = aCtrlState && aAltState && !aShiftState;
+
+#else
+    m_subtractive  = aShiftState && !aCtrlState && aAltState;
+    m_additive     = aShiftState && !aCtrlState && !aAltState;
+    m_exclusive_or = !aShiftState && !aCtrlState && aAltState;
+
+    // Is the user requesting that the selection list include all possible
+    // items without removing less likely selection candidates
+    // Cannot use the Alt key on windows or the disambiguation context menu is immediately
+    // dismissed rendering it useless.
+    m_skip_heuristics = aCtrlState && !aShiftState && !aAltState;
+
+    m_highlight_modifier = aCtrlState && aShiftState && !aAltState;
+#endif
+}
+
+
 int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     // Main loop: keep receiving events
@@ -215,72 +268,8 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         TRACK_DRAG_ACTION trackDragAction = m_frame->Settings().m_TrackDragAction;
 
         // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
-        // Due to the fact ALT key modifier cannot be useed freely on Winows and Linux,
-        // actions are different on OSX and others OS
-        // Especially, ALT key cannot be used to force showing the full selection choice
-        // context menu (the menu is immediately closed on Windows )
-        //
-        // No modifier = select items and deselect previous selection
-        // ALT (on OSX) = skip heuristic and show full selection choice
-        // ALT (on others) = exclusive OR of selected items (inverse selection)
-        //
-        // CTRL (on OSX) = exclusive OR of selected items (inverse selection)
-        // CTRL (on others) = skip heuristic and show full selection choice
-        //
-        // SHIFT = add selected items to the current selection
-        //
-        // CTRL+SHIFT (on OSX) = remove selected items to the current selection
-        // CTRL+SHIFT (on others) = highlight net
-        //
-        // CTRL+ALT (on OSX) = highlight net
-        // CTRL+ALT (on others) = do nothing (same as no modifier)
-        //
-        // SHIFT+ALT (on OSX) =  do nothing (same as no modifier)
-        // SHIFT+ALT (on others) = remove selected items to the current selection
-
-#ifdef __WXOSX_MAC__
-        m_subtractive = evt->Modifier( MD_CTRL ) &&
-                        evt->Modifier( MD_SHIFT ) &&
-                        !evt->Modifier( MD_ALT );
-
-        m_additive = evt->Modifier( MD_SHIFT ) &&
-                     !evt->Modifier( MD_CTRL ) &&
-                     !evt->Modifier( MD_ALT );
-
-        m_exclusive_or = evt->Modifier( MD_CTRL ) &&
-                         !evt->Modifier( MD_SHIFT ) &&
-                         !evt->Modifier( MD_ALT );
-
-        m_skip_heuristics = evt->Modifier( MD_ALT ) &&
-                            !evt->Modifier( MD_SHIFT ) &&
-                            !evt->Modifier( MD_CTRL );
-
-        bool highlight_modifier = evt->Modifier( MD_CTRL )
-                                  && evt->Modifier( MD_ALT )
-                                  && !evt->Modifier( MD_SHIFT );
-#else
-        m_subtractive = evt->Modifier( MD_ALT ) &&
-                        evt->Modifier( MD_SHIFT ) &&
-                        !evt->Modifier( MD_CTRL );
-
-        m_additive = evt->Modifier( MD_SHIFT ) &&
-                     !evt->Modifier( MD_ALT ) &&
-                     !evt->Modifier( MD_CTRL );
-
-        m_exclusive_or = evt->Modifier( MD_ALT ) &&
-                         !evt->Modifier( MD_SHIFT ) &&
-                         !evt->Modifier( MD_CTRL );
-
-        // Cannot use the Alt key on windows or the disambiguation context menu is immediately
-        // dismissed rendering it useless.
-        m_skip_heuristics = evt->Modifier( MD_CTRL ) &&
-                            !evt->Modifier( MD_SHIFT ) &&
-                            !evt->Modifier( MD_ALT );
-
-        bool highlight_modifier = evt->Modifier( MD_CTRL )
-                                  && evt->Modifier( MD_SHIFT )
-                                  && !evt->Modifier( MD_ALT );
-#endif
+        setModifiersState( evt->Modifier( MD_SHIFT ), evt->Modifier( MD_CTRL ),
+                           evt->Modifier( MD_ALT ) );
 
         bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
         PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
@@ -295,7 +284,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Single click? Select single object
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( highlight_modifier && brd_editor )
+            if( m_highlight_modifier && brd_editor )
                 m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true );
             else
             {
