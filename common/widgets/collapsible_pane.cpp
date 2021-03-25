@@ -22,6 +22,8 @@
 
 #include <wx/collpane.h>
 #include <wx/renderer.h>
+#include <wx/toplevel.h>
+#include <wx/window.h>
 
 #include <algorithm>
 
@@ -214,9 +216,6 @@ bool WX_COLLAPSIBLE_PANE_HEADER::Create( wxWindow* aParent, wxWindowID aId, cons
     if ( !wxControl::Create( aParent, aId, aPos, aSize, aStyle, aValidator, aName ) )
         return false;
 
-    m_iconRight = KiBitmap( BITMAPS::triangle_right );
-    m_iconDown  = KiBitmap( BITMAPS::triangle_down );
-
     SetLabel( aLabel );
 
     Bind( wxEVT_PAINT, &WX_COLLAPSIBLE_PANE_HEADER::onPaint, this );
@@ -260,9 +259,8 @@ wxSize WX_COLLAPSIBLE_PANE_HEADER::DoGetBestClientSize() const
 
     wxSize size = dc.GetTextExtent( text );
 
-    // Reserve space for icon
-    size.x += m_iconRight.GetWidth();
-    size.y =  std::max( size.y, m_iconRight.GetHeight() );
+    // Reserve space for arrow (which is a square the height of the text)
+    size.x += size.GetHeight();
 
 #ifdef __WXMSW__
     size.IncBy( GetSystemMetrics( SM_CXFOCUSBORDER ),
@@ -286,25 +284,43 @@ void WX_COLLAPSIBLE_PANE_HEADER::onPaint( wxPaintEvent& aEvent )
     dc.DrawRectangle( rect );
 #endif
 
+    // Make the background look like a button when the pointer is over it
+    if( m_inWindow )
+    {
+        dc.SetBrush( wxBrush( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNHIGHLIGHT ) ) );
+        dc.SetPen( *wxTRANSPARENT_PEN );
+        dc.DrawRectangle( rect );
+    }
+
     wxString text;
     int indexAccel = wxControl::FindAccelIndex( GetLabel(), &text );
 
     wxSize textSize = dc.GetTextExtent( text );
-    wxRect textRect( wxPoint( m_iconRight.GetWidth(), 0 ), textSize );
+
+    // Compute all the sizes
+    wxRect arrowRect( 0, 0, textSize.GetHeight(), textSize.GetHeight() );
+    wxRect textRect( arrowRect.GetTopRight(), textSize );
     textRect = textRect.CenterIn( rect, wxVERTICAL );
 
-    wxBitmap* icon = m_collapsed ? &m_iconRight : &m_iconDown;
+    // Find out if the window we are in is active or not
+    bool              isActive = true;
+    wxTopLevelWindow* tlw      = dynamic_cast<wxTopLevelWindow*>( wxGetTopLevelParent( this ) );
 
-    if( m_inWindow )
-    {
-        dc.SetTextForeground( wxSystemColour::wxSYS_COLOUR_HOTLIGHT );
-        dc.DrawBitmap( icon->ConvertToDisabled( 200 ), wxPoint( 0, 0 ) );
-    }
+    if( tlw && !tlw->IsActive() )
+        isActive = false;
+
+    // Draw the arrow
+    drawArrow( dc, arrowRect, isActive );
+
+    // We are responsible for showing the text as disabled when the window isn't active
+    wxColour clr;
+
+    if( isActive )
+        clr = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
     else
-    {
-        dc.DrawBitmap( *icon, wxPoint( 0, 0 ) );
-    }
+        clr = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
 
+    dc.SetTextForeground( clr );
     dc.DrawLabel( text, textRect, wxALIGN_CENTER_VERTICAL, indexAccel );
 
 #ifdef __WXMSW__
@@ -364,4 +380,47 @@ void WX_COLLAPSIBLE_PANE_HEADER::onChar( wxKeyEvent& aEvent )
         aEvent.Skip();
         break;
     }
+}
+
+
+void WX_COLLAPSIBLE_PANE_HEADER::drawArrow( wxDC& aDC, wxRect aRect, bool aIsActive )
+{
+    // The bottom corner of the triangle is located halfway across the area and 3/4 down from the top
+    wxPoint btmCorner( aRect.GetWidth() / 2, 3 * aRect.GetHeight() / 4 );
+
+    // The right corner of the triangle is located halfway down from the top and 3/4 across the area
+    wxPoint rtCorner( 3 * aRect.GetWidth() / 4, aRect.GetHeight() / 2 );
+
+    // Choose the other corner depending on if the panel is expanded or collapsed
+    wxPoint otherCorner( 0, 0 );
+
+    if( m_collapsed )
+        otherCorner = wxPoint( aRect.GetWidth() / 2, aRect.GetHeight() / 4 );
+    else
+        otherCorner = wxPoint( aRect.GetWidth() / 4,  aRect.GetHeight() / 2 );
+
+    // Choose the color to draw the triangle
+    wxColour clr;
+
+    // Highlight the arrow when the pointer is inside the header, otherwise use text color
+    if( m_inWindow )
+        clr = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
+    else
+        clr = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+
+    // If the window isn't active, then use the disabled text color
+    if( !aIsActive )
+        clr = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+
+    // Must set both the pen (for the outline) and the brush (for the polygon fill)
+    aDC.SetPen( wxPen( clr ) );
+    aDC.SetBrush( wxBrush( clr ) );
+
+    // Draw the triangle
+    wxPointList points;
+    points.Append( &btmCorner );
+    points.Append( &rtCorner );
+    points.Append( &otherCorner );
+
+    aDC.DrawPolygon( &points );
 }

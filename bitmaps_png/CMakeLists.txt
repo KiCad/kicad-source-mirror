@@ -115,8 +115,6 @@ set( BMAPS_SMALL
     small_warning
     tree_nosel
     tree_sel
-    triangle_down
-    triangle_right
     visibility
     visibility_off
     www

@@ -71,8 +71,6 @@ private:
     wxString m_label;
     bool     m_collapsed;
     bool     m_inWindow;
-    wxBitmap m_iconRight;
-    wxBitmap m_iconDown;
 
     void init();
 
@@ -89,6 +87,8 @@ private:
     void onChar( wxKeyEvent& aEvent );
 
     void doSetCollapsed( bool aCollapsed );
+
+    void drawArrow( wxDC& aDC, wxRect aRect, bool aIsActive );
 };
 
 

@@ -507,8 +507,6 @@ enum class BITMAPS : unsigned int
     trash,
     tree_nosel,
     tree_sel,
-    triangle_right,
-    triangle_down,
     undelete,
     undo,
     unit_inch,
