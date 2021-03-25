@@ -784,7 +784,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             }
             else
             {
-                label->SetTextSize( wxSize( 1000, 1000 ) );
+                const int smallText = KiROUND( (double) SCH_IU_PER_MM * 0.4 );
+                label->SetTextSize( wxSize( smallText, smallText ) );
             }
 
             netlabels.insert( { busTerm.ID, label } );
@@ -912,7 +913,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                     LABEL_SPIN_STYLE spin = getSpinStyleDeciDeg( aWireAngleDeciDeg );
 
                     if( netlabels.find( aNetEleID ) != netlabels.end() )
-                        netlabels.at( aNetEleID )->SetLabelSpinStyle( spin.RotateCW().RotateCW() );
+                        netlabels.at( aNetEleID )->SetLabelSpinStyle( spin.MirrorY() );
 
                     SCH_HIERLABEL* sheetPin = getHierarchicalLabel( aNetEleID );
 
