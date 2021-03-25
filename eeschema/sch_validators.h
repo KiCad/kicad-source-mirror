@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2016-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,9 +50,6 @@
  */
 class SCH_FIELD_VALIDATOR : public wxTextValidator
 {
-    int  m_fieldId;
-    bool m_isLibEditor;
-
 public:
     SCH_FIELD_VALIDATOR( bool aIsLibEditor, int aFieldId, wxString* aValue = NULL );
 
@@ -64,10 +61,14 @@ public:
      * Override the default Validate() function provided by wxTextValidator to provide
      * better error messages.
      *
-     * @param aParent - a pointer to the parent window of the error message dialog.
+     * @param aParent is the parent window of the error message dialog.
      * @return true if the text in the control is valid otherwise false.
      */
     virtual bool Validate( wxWindow *aParent ) override;
+
+private:
+    int  m_fieldId;
+    bool m_isLibEditor;
 };
 
 
@@ -90,7 +91,7 @@ public:
     { }
 
 protected:
-    // returns the error message if the contents of 'val' are invalid
+    /// @return the error message if the contents of \a aVal are invalid.
     wxString IsValid( const wxString& aVal ) const override;
 };
 

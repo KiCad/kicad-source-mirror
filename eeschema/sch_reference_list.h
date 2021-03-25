@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
- * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see authors.txt for contributors.
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,27 +44,7 @@
  */
 class SCH_REFERENCE
 {
-    /// Symbol reference prefix, without number (for IC1, this is IC) )
-    UTF8            m_ref;               // it's private, use the accessors please
-    SCH_COMPONENT*  m_rootSymbol;        ///< The symbol associated the reference object.
-    LIB_PART*       m_libPart;           ///< The source symbol from a library.
-    wxPoint         m_symbolPos;         ///< The physical position of the symbol in schematic
-                                        ///< used to annotate by X or Y position
-    int             m_unit;              ///< The unit number for symbol with multiple parts
-                                        ///< per package.
-    wxString        m_value;             ///< The symbol value.
-    wxString        m_footprint;         ///< The footprint assigned.
-    SCH_SHEET_PATH  m_sheetPath;         ///< The sheet path for this reference.
-    bool            m_isNew;             ///< True if not yet annotated.
-    int             m_sheetNum;          ///< The sheet number for the reference.
-    KIID            m_symbolUuid;        ///< UUID of the symbol.
-    int             m_numRef;            ///< The numeric part of the reference designator.
-    int             m_flag;
-
-    friend class SCH_REFERENCE_LIST;
-
 public:
-
     SCH_REFERENCE() :
             m_sheetPath()
     {
@@ -178,6 +158,26 @@ public:
     {
         return m_libPart->UnitsLocked();
     }
+
+private:
+    friend class SCH_REFERENCE_LIST;
+
+    /// Symbol reference prefix, without number (for IC1, this is IC) )
+    UTF8            m_ref;               // it's private, use the accessors please
+    SCH_COMPONENT*  m_rootSymbol;        ///< The symbol associated the reference object.
+    LIB_PART*       m_libPart;           ///< The source symbol from a library.
+    wxPoint         m_symbolPos;         ///< The physical position of the symbol in schematic
+                                         ///< used to annotate by X or Y position
+    int             m_unit;              ///< The unit number for symbol with multiple parts
+                                         ///< per package.
+    wxString        m_value;             ///< The symbol value.
+    wxString        m_footprint;         ///< The footprint assigned.
+    SCH_SHEET_PATH  m_sheetPath;         ///< The sheet path for this reference.
+    bool            m_isNew;             ///< True if not yet annotated.
+    int             m_sheetNum;          ///< The sheet number for the reference.
+    KIID            m_symbolUuid;        ///< UUID of the symbol.
+    int             m_numRef;            ///< The numeric part of the reference designator.
+    int             m_flag;
 };
 
 
@@ -191,8 +191,9 @@ typedef std::function<void( ERCE_T aType, const wxString& aMsg, SCH_REFERENCE* a
 /**
  * Container to create a flattened list of symbols because in a complex hierarchy, a symbol
  * can be used more than once and its reference designator is dependent on the sheet path for
- * the same symbol.  This flattened list is used for netlist generation, BOM generation, and
- * schematic annotation.
+ * the same symbol.
+ *
+ *  This flattened list is used for netlist generation, BOM generation, and schematic annotation.
  */
 class SCH_REFERENCE_LIST
 {
@@ -244,10 +245,11 @@ public:
      */
 
     /**
-     * Attempt to split all reference designators into a name (U) and number (1).  If the
-     * last character is '?' or not a digit, the reference is tagged as not annotated.  For
-     * symbols with multiple parts per package that are not already annotated, set m_unit to
-     * a max value (0x7FFFFFFF).
+     * Attempt to split all reference designators into a name (U) and number (1).
+     *
+     * If the last character is '?' or not a digit, the reference is tagged as not annotated.
+     * For symbols with multiple parts per package that are not already annotated, set m_unit
+     * to a max value (0x7FFFFFFF).
      * @see SCH_REFERENCE::Split()
      */
     void SplitReferences()
@@ -274,6 +276,11 @@ public:
     /**
      * Set the reference designators in the list that have not been annotated.
      *
+     * If a the sheet number is 2 and \a aSheetIntervalId is 100, then the first reference
+     * designator would be 201 and the last reference designator would be 299 when no overlap
+     * occurs with sheet number 3.  If there are 150 items in sheet number 2, then items are
+     * referenced U201 to U351, and items in sheet 3 start from U352
+     *
      * @param aUseSheetNum Set to true to start annotation for each sheet at the sheet number
      *                     times \a aSheetIntervalId.  Otherwise annotate incrementally.
      * @param aSheetIntervalId The per sheet reference designator multiplier.
@@ -281,27 +288,19 @@ public:
      * @param aLockedUnitMap A SCH_MULTI_UNIT_REFERENCE_MAP of reference designator wxStrings
      *      to SCH_REFERENCE_LISTs. May be an empty map. If not empty, any multi-unit parts
      *      found in this map will be annotated as a group rather than individually.
-     * <p>
-     * If a the sheet number is 2 and \a aSheetIntervalId is 100, then the first reference
-     * designator would be 201 and the last reference designator would be 299 when no overlap
-     * occurs with sheet number 3.  If there are 150 items in sheet number 2, then items are
-     * referenced U201 to U351, and items in sheet 3 start from U352
-     * </p>
      */
     void Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
                    SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap );
 
     /**
      * Check for annotations errors.
-     * <p>
+     *
      * The following annotation error conditions are tested:
-     * <ul>
-     * <li>Symbols not annotated.</li>
-     * <li>Symbols having the same reference designator (duplicates).</li>
-     * <li>Symbols with multiple parts per package having different reference designators.</li>
-     * <li>Symbols with multiple parts per package with invalid part count.</li>
-     * </ul>
-     * </p>
+     *  - Symbols not annotated.
+     *  - Symbols having the same reference designator (duplicates).
+     *  - Symbols with multiple parts per package having different reference designators.
+     *  - Symbols with multiple parts per package with invalid part count.
+     *
      * @param aErrorHandler A handler for errors.
      * @return The number of errors found.
      */
@@ -309,16 +308,13 @@ public:
 
     /**
      * Sort the list of references by X position.
-     * <p>
+     *
      * Symbols are sorted as follows:
-     * <ul>
-     * <li>Numeric value of reference designator.</li>
-     * <li>Sheet number.</li>
-     * <li>X coordinate position.</li>
-     * <li>Y coordinate position.</li>
-     * <li>Time stamp.</li>
-     * </ul>
-     * </p>
+     *  - Numeric value of reference designator.
+     *  - Sheet number.
+     *  - X coordinate position.
+     *  - Y coordinate position.
+     *  - Time stamp.
      */
     void SortByXCoordinate()
     {
@@ -327,16 +323,13 @@ public:
 
     /**
      * Sort the list of references by Y position.
-     * <p>
+     *
      * Symbols are sorted as follows:
-     * <ul>
-     * <li>Numeric value of reference designator.</li>
-     * <li>Sheet number.</li>
-     * <li>Y coordinate position.</li>
-     * <li>X coordinate position.</li>
-     * <li>Time stamp.</li>
-     * </ul>
-     * </p>
+     *  - Numeric value of reference designator.
+     *  - Sheet number.
+     *  - Y coordinate position.
+     *  - X coordinate position.
+     *  - Time stamp.
      */
     void SortByYCoordinate()
     {
@@ -355,17 +348,14 @@ public:
 
     /**
      * Sort the list of references by value.
-     * <p>
+     *
      * Symbols are sorted in the following order:
-     * <ul>
-     * <li>Numeric value of reference designator.</li>
-     * <li>Value of symbol.</li>
-     * <li>Unit number when symbol has multiple parts.</li>
-     * <li>Sheet number.</li>
-     * <li>X coordinate position.</li>
-     * <li>Y coordinate position.</li>
-     * </ul>
-     * </p>
+     *  - Numeric value of reference designator.
+     *  - Value of symbol.
+     *  - Unit number when symbol has multiple parts.
+     *  - Sheet number.
+     *  - X coordinate position.
+     *  - Y coordinate position.
      */
     void SortByRefAndValue()
     {
@@ -374,13 +364,10 @@ public:
 
     /**
      * Sort the list of references by reference.
-     * <p>
+     *
      * Symbols are sorted in the following order:
-     * <ul>
-     * <li>Numeric value of reference designator.</li>
-     * <li>Unit number when symbol has multiple parts.</li>
-     * </ul>
-     * </p>
+     *  - Numeric value of reference designator.
+     *  - Unit number when symbol has multiple parts.
      */
     void SortByReferenceOnly()
     {
@@ -396,17 +383,17 @@ public:
      * Search the sorted list of symbols for a another symbol with the same reference and a
      * given part unit.  Use this method to manage symbols with multiple parts per package.
      *
-     * @param aIndex = index in aSymbolsList for of given SCH_REFERENCE item to test.
-     * @param aUnit = the given unit number to search
-     * @return index in aSymbolsList if found or -1 if not found
+     * @param aIndex is the index in aSymbolsList for of given #SCH_REFERENCE item to test.
+     * @param aUnit is the given unit number to search.
+     * @return index in aSymbolsList if found or -1 if not found.
      */
     int FindUnit( size_t aIndex, int aUnit ) const;
 
     /**
      * Search the list for a symbol with the given KIID path.
      *
-     * @param aPath path to search
-     * @return index in aSymbolsList if found or -1 if not found
+     * @param aPath is the path to search.
+     * @return index in aSymbolsList if found or -1 if not found.
      */
     int FindRefByPath( const wxString& aPath ) const;
 
@@ -414,9 +401,9 @@ public:
      * Add all the reference designator numbers greater than \a aMinRefId to \a aIdList
      * skipping the reference at \a aIndex.
      *
-     * @param aIndex = the current symbol's index to use for reference prefix filtering.
-     * @param aIdList = the buffer to fill
-     * @param aMinRefId = the min id value to store. all values < aMinRefId are ignored
+     * @param aIndex is the current symbol's index to use for reference prefix filtering.
+     * @param aIdList is the buffer to fill.
+     * @param aMinRefId is the minimum ID value to store. All values < aMinRefId are ignored.
      */
     void GetRefsInUse( int aIndex, std::vector< int >& aIdList, int aMinRefId ) const;
 

@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,60 +77,19 @@ extern std::string toUTFTildaText( const wxString& txt );
  */
 class SCH_COMPONENT : public SCH_ITEM
 {
-private:
-    wxPoint     m_pos;
-    LIB_ID      m_lib_id;       ///< Name and library the symbol was loaded from, i.e. 74xx:74LS00.
-    int         m_unit;         ///< The unit for multiple part per package components.
-    int         m_convert;      ///< The alternate body style for components that have more than
-                                ///< one body style defined.  Primarily used for components that
-                                ///< have a De Morgan conversion.
-    wxString    m_prefix;       ///< C, R, U, Q etc - the first character which typically indicates
-                                ///< what the component is. Determined, upon placement, from the
-                                ///< library component.  Created upon file load, by the first
-                                ///<  non-digits in the reference fields.
-
-    /**
-     * The name used to look up a symbol in the symbol library embedded in a schematic.
-     *
-     * By default this is the same as #LIB_ID::GetLibItemName().  However, schematics allow for
-     * multiple variants of the same library symbol.  Set this member in order to preserve the
-     * link to the original symbol library.  If empty, #LIB_ID::GetLibItemName() should be used.
-     */
-    wxString    m_schLibSymbolName;
-
-    TRANSFORM   m_transform;    ///< The rotation/mirror transformation matrix.
-    SCH_FIELDS  m_fields;       ///< Variable length list of fields.
-
-    std::unique_ptr< LIB_PART >            m_part;    // a flattened copy of the LIB_PART from
-                                                      // the PROJECT's libraries.
-    std::vector<std::unique_ptr<SCH_PIN>>  m_pins;    // a SCH_PIN for every LIB_PIN (all units)
-    std::unordered_map<LIB_PIN*, unsigned> m_pinMap;  // library pin pointer to SCH_PIN's index
-
-    bool        m_isInNetlist;  ///< True if the component should appear in the netlist
-    bool        m_inBom;        ///< True to include in bill of materials export.
-    bool        m_onBoard;      ///< True to include in netlist when updating board.
-
-    // Defines the hierarchical path and reference of the component.  This allows support
-    // for multiple references to a single sub-sheet.
-    std::vector<SYMBOL_INSTANCE_REFERENCE> m_instanceReferences;
-
-    void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
-
 public:
     SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ), SCH_ITEM* aParent = NULL );
 
     /**
-     * Create schematic component from library component object.
+     * Create schematic symbol from library symbol object.
      *
-     * @param aPart - library part to create schematic component from.
-     * @param aLibId - libId of alias to create.
-     * @param aSheet - Schematic sheet the component is place into.
-     * @param unit - Part for components that have multiple parts per
-     *               package.
-     * @param convert - Use the alternate body style for the schematic
-     *                  component.
-     * @param pos - Position to place new component.
-     * @param setNewItemFlag - Set the component IS_NEW and IS_MOVED flags.
+     * @param aPart is the library part to create schematic symbol from.
+     * @param aLibId is the #LIB_ID of alias to create.
+     * @param aSheet is the schematic sheet the symbol is place into.
+     * @param unit is unit for symbols that have multiple parts per package.
+     * @param convert is the alternate body style for the schematic symbols.
+     * @param pos is the position of the symbol.
+     * @param setNewItemFlag is used to set the symbol #IS_NEW and #IS_MOVED flags.
      */
     SCH_COMPONENT( const LIB_PART& aPart, const LIB_ID& aLibId, const SCH_SHEET_PATH* aSheet,
                    int unit = 0, int convert = 0,
@@ -139,15 +98,15 @@ public:
     SCH_COMPONENT( const LIB_PART& aPart, const SCH_SHEET_PATH* aSheet, const PICKED_SYMBOL& aSel,
                    const wxPoint& pos = wxPoint( 0, 0 ) );
     /**
-     * Clones \a aComponent into a new schematic symbol object.
+     * Clone \a aSymbol into a new schematic symbol object.
      *
      * All fields are copied as is except for the linked list management pointers
      * which are set to NULL, and the SCH_FIELD's m_Parent pointers which are set
      * to the new object.
      *
-     * @param aComponent is the schematic symbol to clone.
+     * @param aSymbol is the schematic symbol to clone.
      */
-    SCH_COMPONENT( const SCH_COMPONENT& aComponent );
+    SCH_COMPONENT( const SCH_COMPONENT& aSymbol );
 
     ~SCH_COMPONENT() { }
 
@@ -173,13 +132,13 @@ public:
      * and false for items moved with no reference to anchor.
      *
      * Usually return true for small items (labels, junctions) and false for items which can
-     * be large (hierarchical sheets, components).
+     * be large (hierarchical sheets, symbols).
      *
-     * Note: we used to try and be smart about this and return false for components in case
-     * they are big.  However, this annoyed some users and we now have a preference which
-     * controls warping on move in general, so this was switched to true for components.
+     * @note We used to try and be smart about this and return false for symbols in case
+     *       they are big.  However, this annoyed some users and we now have a preference which
+     *       controls warping on move in general, so this was switched to true for symbols.
      *
-     * @return true for a component
+     * @return true for a symbol.
      */
     bool IsMovableFromAnchorPoint() const override { return true; }
 
@@ -312,7 +271,8 @@ public:
     void GetContextualTextVars( wxArrayString* aVars ) const;
 
     /**
-     * Resolve any references to system tokens supported by the component.
+     * Resolve any references to system tokens supported by the symbol.
+     *
      * @param aDepth a counter to limit recursion and circular references.
      */
     bool ResolveTextVar( wxString* token, int aDepth = 0 ) const;
@@ -320,7 +280,7 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
-     * Clear exiting component annotation.
+     * Clear exiting symbol annotation.
      *
      * For example, IC23 would be changed to IC? and unit number would be reset.
      *
@@ -332,12 +292,12 @@ public:
     /**
      * Add an instance to the alternate references list (m_instanceReferences), if this entry
      * does not already exist.
-     * Do nothing if already exists.
-     * In component lists shared by more than one sheet path, an entry for each
-     * sheet path must exist to manage references
-     * @param aSheetPath is the candidate sheet path
-     * this sheet path is the sheet path of the sheet containing the component,
-     * not the full component sheet path
+     *
+     * Do nothing if already exists. In symbol lists shared by more than one sheet path, an
+     * entry for each sheet path must exist to manage references.
+     *
+     * @param aSheetPath is the candidate sheet path of the sheet containing the symbol not the
+     *                   full symbol sheet path.
      * @return false if the alternate reference was existing, true if added.
      */
     bool AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPath );
@@ -366,23 +326,21 @@ public:
     //-----<Fields>-----------------------------------------------------------
 
     /**
-     * Returns a mandatory field in this symbol.
+     * Return a mandatory field in this symbol.
      *
-     * NB: If you need to fetch a user field, use GetFieldById.
+     * @note If you need to fetch a user field, use GetFieldById.
      *
      * @param aFieldType is one of the mandatory field types (REFERENCE_FIELD, VALUE_FIELD, etc.).
-     *
      * @return is the field at \a aFieldType or NULL if the field does not exist.
      */
     SCH_FIELD* GetField( MANDATORY_FIELD_T aFieldType );
     const SCH_FIELD* GetField( MANDATORY_FIELD_T aFieldNdx ) const;
 
     /**
-     * Returns a field in this symbol.
+     * Return a field in this symbol.
      *
      * @param aFieldId is the id of the field requested.  Note that this id ONLY SOMETIMES equates
-     * to the field's position in the vector.
-     *
+     *                 to the field's position in the vector.
      * @return is the field at \a aFieldType or NULL if the field does not exist.
      */
     SCH_FIELD* GetFieldById( int aFieldId );
@@ -395,7 +353,7 @@ public:
     wxString GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME* aFrame ) const;
 
     /**
-     * Populates a std::vector with SCH_FIELDs.
+     * Populate a std::vector with SCH_FIELDs.
      *
      * @param aVector is the vector to populate.
      * @param aVisibleOnly is used to add only the fields that are visible and contain text.
@@ -403,7 +361,7 @@ public:
     void GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly );
 
     /**
-     * Returns a vector of fields from the component
+     * Return a vector of fields from the symbol
      */
     std::vector<SCH_FIELD>& GetFields() { return m_fields; }
     const std::vector<SCH_FIELD>& GetFields() const { return m_fields; }
@@ -418,7 +376,7 @@ public:
     SCH_FIELD* AddField( const SCH_FIELD& aField );
 
     /**
-     * Removes a user field from the symbol.
+     * Remove a user field from the symbol.
      * @param aFieldName is the user fieldName to remove.  Attempts to remove a mandatory
      *                   field or a non-existant field are silently ignored.
      */
@@ -445,7 +403,8 @@ public:
     }
 
     /**
-     * Restores fields to the original library values.
+     * Restore fields to the original library values.
+     *
      * @param aResetStyle selects whether fields should reset the position and text attribute.
      * @param aResetRef selects whether the reference field should be restored.
      */
@@ -457,13 +416,13 @@ public:
     int GetFieldCount() const { return (int)m_fields.size(); }
 
     /**
-     * Automatically orient all the fields in the component.
+     * Automatically orient all the fields in the symbol.
      *
      * @param aScreen is the SCH_SCREEN associated with the current instance of the
-     * component. This can be NULL when aManual is false.
+     *                symbol. This can be NULL when aManual is false.
      * @param aManual should be true if the autoplace was manually initiated (e.g. by a hotkey
-     *  or a menu item). Some more 'intelligent' routines will be used that would be
-     *  annoying if done automatically during moves.
+     *                or a menu item). Some more 'intelligent' routines will be used that would be
+     *                annoying if done automatically during moves.
      */
     void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
 
@@ -477,7 +436,6 @@ public:
      * Find a symbol pin by number.
      *
      * @param number is the number of the pin to find.
-     *
      * @return Pin object if found, otherwise NULL.
      */
     SCH_PIN* GetPin( const wxString& number ) const;
@@ -492,9 +450,11 @@ public:
     SCH_PIN* GetPin( LIB_PIN* aLibPin );
 
     /**
-     * Retrieves a list of the SCH_PINs for the given sheet path.
-     * Since a component can have a different unit on a different instance of a sheet,
+     * Retrieve a list of the SCH_PINs for the given sheet path.
+     *
+     * Since a symbol can have a different unit on a different instance of a sheet,
      * this list returns the subset of pins that exist on a given sheet.
+     *
      * @return a vector of pointers (non-owning) to SCH_PINs
      */
     std::vector<SCH_PIN*> GetPins( const SCH_SHEET_PATH* aSheet = nullptr ) const;
@@ -502,23 +462,22 @@ public:
     std::vector<std::unique_ptr<SCH_PIN>>& GetRawPins() { return m_pins; }
 
     /**
-     * Print a component
+     * Print a symbol.
      *
-     * @param aDC is the device context (can be null)
-     * @param aOffset is the drawing offset (usually wxPoint(0,0),
-     *  but can be different when moving an object)
+     * @param aDC is the device context (can be null).
+     * @param aOffset is the drawing offset (usually wxPoint(0,0), but can be different when
+     *                moving an object)
      */
     void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 
     /**
-     * Tests for an acceptable reference string.
+     * Test for an acceptable reference string.
      *
      * An acceptable reference string must support unannotation i.e starts by letter
      *
      * @param aReferenceString is the reference string to validate
-     *
      * @return true if reference string is valid.
      */
     static bool IsReferenceStringValid( const wxString& aReferenceString );
@@ -539,22 +498,23 @@ public:
     void SetRef( const SCH_SHEET_PATH* aSheet, const wxString& aReference );
 
     /**
-     * Checks if the component has a valid annotation (reference) for the given sheet path
-     * @param aSheet is the sheet path to test
-     * @return true if the component exists on that sheet and has a valid reference
+     * Check if the symbol has a valid annotation (reference) for the given sheet path.
+     *
+     * @param aSheet is the sheet path to test.
+     * @return true if the symbol exists on that sheet and has a valid reference.
      */
     bool IsAnnotated( const SCH_SHEET_PATH* aSheet );
 
     /**
      * Add a full hierarchical reference to this symbol.
      *
-     * @param aPath is the hierarchical path (/&ltsheet timestamp&gt/&ltcomponent
-     *              timestamp&gt like /05678E50/A23EF560)
-     * @param aRef is the local reference like C45, R56
+     * @param aPath is the hierarchical path (/&ltsheet timestamp&gt/&ltsymbol
+     *              timestamp&gt like /05678E50/A23EF560).
+     * @param aRef is the local reference like C45, R56.
      * @param aUnit is the unit selection used for symbols with multiple units per package.
-     * @param aValue is the value used for this instance
+     * @param aValue is the value used for this instance.
      * @param aFootprint is the footprint used for this instance (which might have different
-     *                   hole spacing or other board-specific changes from other intances)
+     *                   hole spacing or other board-specific changes from other instances).
      */
     void AddHierarchicalReference( const KIID_PATH& aPath,
                                    const wxString&  aRef,
@@ -562,30 +522,30 @@ public:
                                    const wxString&  aValue = wxEmptyString,
                                    const wxString&  aFootprint = wxEmptyString );
 
-    // Returns the instance-specific unit selection for the given sheet path.
+    /// Return the instance-specific unit selection for the given sheet path.
     int GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const;
 
-    // Set the selected unit of this symbol on one sheet
+    /// Set the selected unit of this symbol on one sheet.
     void SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelection );
 
-    // Set the selected unit of this symbol for all sheets
+    /// Set the selected unit of this symbol for all sheets.
     void SetUnitSelection( int aUnitSelection );
 
-    // Returns the instance-specific value for the given sheet path.
+    /// Return the instance-specific value for the given sheet path.
     const wxString GetValue( const SCH_SHEET_PATH* sheet, bool aResolve ) const;
     void SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValue );
 
-    // Set the value for all instances (the default GUI behaviour)
+    /// Set the value for all instances (the default GUI behavior).
     void SetValue( const wxString& aValue )
     {
         SetValue( nullptr, aValue );
     }
 
-    // Returns the instance-specific footprint assignment for the given sheet path.
+    /// Return the instance-specific footprint assignment for the given sheet path.
     const wxString GetFootprint( const SCH_SHEET_PATH* sheet, bool aResolve ) const;
     void SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& aFootprint );
 
-    // Set the value for all instances (the default GUI behaviour)
+    /// Set the value for all instances (the default GUI behavior).
     void SetFootprint( const wxString& aFootprint )
     {
         SetFootprint( nullptr, aFootprint );
@@ -615,14 +575,13 @@ public:
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
     /**
-     * Test if the component's dangling state has changed for all pins.
+     * Test if the symbol's dangling state has changed for all pins.
      *
      * As a side effect, actually update the dangling status for all pins.
      *
      * @note This does not test for  short circuits.
      *
      * @param aItemList is list of all #DANGLING_END_ITEM items to be tested.
-     *
      * @return true if any pin's state has changed.
      */
     bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
@@ -644,9 +603,7 @@ public:
     }
 
     /**
-     * @return true if the component is in netlist
-     * which means this is not a power component, or something
-     * like a component reference starting by #
+     * @return true if the symbol is in netlist.
      */
     bool IsInNetlist() const;
 
@@ -655,11 +612,10 @@ public:
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     /**
-     * Return the component library item at \a aPosition that is part of this component.
+     * Return the symbol library item at \a aPosition that is part of this symbol.
      *
-     * @param aPosition is the schematic position of the component library object.
+     * @param aPosition is the schematic position of the symbol library object.
      * @param aType is the type of symbol library object to find or any if set to TYPE_NOT_INIT.
-     *
      * @return is the symbol library object if found otherwise NULL.
      */
     LIB_ITEM* GetDrawItem( const wxPoint& aPosition, KICAD_T aType = TYPE_NOT_INIT );
@@ -670,8 +626,8 @@ public:
 
     bool operator <( const SCH_ITEM& aItem ) const override;
 
-    bool operator==( const SCH_COMPONENT& aComponent) const;
-    bool operator!=( const SCH_COMPONENT& aComponent) const;
+    bool operator==( const SCH_COMPONENT& aSymbol) const;
+    bool operator!=( const SCH_COMPONENT& aSymbol) const;
 
     SCH_COMPONENT& operator=( const SCH_ITEM& aItem );
 
@@ -705,6 +661,44 @@ public:
 
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;
+
+    void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
+
+    wxPoint     m_pos;
+    LIB_ID      m_lib_id;       ///< Name and library the symbol was loaded from, i.e. 74xx:74LS00.
+    int         m_unit;         ///< The unit for multiple part per package symbols.
+    int         m_convert;      ///< The alternate body style for symbols that have more than
+                                ///< one body style defined.  Primarily used for symbols that
+                                ///< have a De Morgan conversion.
+    wxString    m_prefix;       ///< C, R, U, Q etc - the first character which typically indicates
+                                ///< what the symbol is. Determined, upon placement, from the
+                                ///< library symbol.  Created upon file load, by the first
+                                ///<  non-digits in the reference fields.
+
+    /**
+     * The name used to look up a symbol in the symbol library embedded in a schematic.
+     *
+     * By default this is the same as #LIB_ID::GetLibItemName().  However, schematics allow for
+     * multiple variants of the same library symbol.  Set this member in order to preserve the
+     * link to the original symbol library.  If empty, #LIB_ID::GetLibItemName() should be used.
+     */
+    wxString    m_schLibSymbolName;
+
+    TRANSFORM   m_transform;    ///< The rotation/mirror transformation matrix.
+    SCH_FIELDS  m_fields;       ///< Variable length list of fields.
+
+    std::unique_ptr< LIB_PART >            m_part;    // a flattened copy of the LIB_PART from
+                                                      // the PROJECT's libraries.
+    std::vector<std::unique_ptr<SCH_PIN>>  m_pins;    // a SCH_PIN for every LIB_PIN (all units)
+    std::unordered_map<LIB_PIN*, unsigned> m_pinMap;  // library pin pointer to SCH_PIN's index
+
+    bool        m_isInNetlist;  ///< True if the symbol should appear in the netlist
+    bool        m_inBom;        ///< True to include in bill of materials export.
+    bool        m_onBoard;      ///< True to include in netlist when updating board.
+
+    // Defines the hierarchical path and reference of the symbol.  This allows support
+    // for multiple references to a single sub-sheet.
+    std::vector<SYMBOL_INSTANCE_REFERENCE> m_instanceReferences;
 };
 
 #endif /* COMPONENT_CLASS_H */

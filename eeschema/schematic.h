@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -50,38 +50,14 @@ public:
 };
 
 /**
- * Holds all the data relating to one schematic
+ * Holds all the data relating to one schematic.
+ *
  * A schematic may consist of one or more sheets (and one root sheet)
- * Right now, eeschema can have only one schematic open at a time, but this could change.
+ * Right now, Eeschema can have only one schematic open at a time, but this could change.
  * Please keep this possibility in mind when adding to this object.
  */
 class SCHEMATIC : public SCHEMATIC_IFACE, public EDA_ITEM
 {
-    friend class SCH_EDIT_FRAME;
-
-private:
-    PROJECT* m_project;
-
-    /// The top-level sheet in this schematic hierarchy (or potentially the only one)
-    SCH_SHEET* m_rootSheet;
-
-    /**
-     * The sheet path of the sheet currently being edited or displayed.
-     * Note that this was moved here from SCH_EDIT_FRAME because currently many places in the code
-     * want to know the current sheet.  Potentially this can be moved back to the UI code once
-     * the only places that want to know it are UI-related
-     */
-    SCH_SHEET_PATH* m_currentSheet;
-
-    /// Holds and calculates connectivity information of this schematic
-    CONNECTION_GRAPH* m_connectionGraph;
-
-    /**
-     * Holds a map of labels to the page numbers that they appear on.  Used to update global
-     * label intersheet references.
-     */
-    std::map<wxString, std::set<wxString>> m_labelToPageRefsMap;
-
 public:
     SCHEMATIC( PROJECT* aPrj );
 
@@ -92,7 +68,7 @@ public:
         return wxT( "SCHEMATIC" );
     }
 
-    /// Initializes this schematic to a blank one, unloading anything existing
+    /// Initialize this schematic to a blank one, unloading anything existing.
     void Reset();
 
     /// Return a reference to the project this schematic is part of
@@ -119,9 +95,11 @@ public:
     }
 
     /**
-     * Initializes the schematic with a new root sheet.
+     * Initialize the schematic with a new root sheet.
+     *
      * This is typically done by calling a file loader that returns the new root sheet
      * As a side-effect, takes care of some post-load initialization.
+     *
      * @param aRootSheet is the new root sheet for this schematic.
      */
     void SetRoot( SCH_SHEET* aRootSheet );
@@ -132,7 +110,7 @@ public:
         return m_rootSheet != nullptr;
     }
 
-    /// Helper to retreive the screen of the root sheet
+    /// Helper to retrieve the screen of the root sheet
     SCH_SCREEN* RootScreen() const;
 
     /// Helper to retrieve the filename from the root sheet screen
@@ -160,13 +138,13 @@ public:
     std::vector<SCH_MARKER*> ResolveERCExclusions();
 
     /**
-     * Returns a pointer to a bus alias object for the given label, or null if one
+     * Return a pointer to a bus alias object for the given label, or null if one
      * doesn't exist.
      */
     std::shared_ptr<BUS_ALIAS> GetBusAlias( const wxString& aLabel ) const;
 
     /**
-     * Returns a list of name candidates for netclass assignment.  The list will include both
+     * Return a list of name candidates for netclass assignment.  The list will include both
      * composite names (buses) and atomic net names.  Names are fetched from available labels,
      * power pins, etc.
      */
@@ -185,7 +163,7 @@ public:
     wxString ConvertKIIDsToRefs( const wxString& aSource ) const;
 
     /**
-     * Return the full schematic flattened hiearchical sheet list.
+     * Return the full schematic flattened hierarchical sheet list.
      */
     SCH_SHEET_LIST& GetFullHierarchy() const;
 
@@ -193,6 +171,31 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
 #endif
+
+private:
+    friend class SCH_EDIT_FRAME;
+
+    PROJECT* m_project;
+
+    /// The top-level sheet in this schematic hierarchy (or potentially the only one)
+    SCH_SHEET* m_rootSheet;
+
+    /**
+     * The sheet path of the sheet currently being edited or displayed.
+     * Note that this was moved here from SCH_EDIT_FRAME because currently many places in the code
+     * want to know the current sheet.  Potentially this can be moved back to the UI code once
+     * the only places that want to know it are UI-related
+     */
+    SCH_SHEET_PATH* m_currentSheet;
+
+    /// Holds and calculates connectivity information of this schematic
+    CONNECTION_GRAPH* m_connectionGraph;
+
+    /**
+     * Holds a map of labels to the page numbers that they appear on.  Used to update global
+     * label intersheet references.
+     */
+    std::map<wxString, std::set<wxString>> m_labelToPageRefsMap;
 };
 
 #endif

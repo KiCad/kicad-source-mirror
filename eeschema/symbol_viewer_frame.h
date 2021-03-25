@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,11 +45,10 @@ class SYMBOL_VIEWER_FRAME : public SCH_BASE_FRAME
 public:
 
     /**
-     * Constructor
      * @param aKiway
-     * @param aParent = the parent frame
-     * @param aFrameType must be either FRAME_SCH_LIB_VIEWER or FRAME_SCH_LIB_VIEWER_MODAL
-     * @param aLibrary = the library to open when starting (default = NULL)
+     * @param aParent is the parent frame of the viewer.
+     * @param aFrameType must be either #FRAME_SCH_LIB_VIEWER or #FRAME_SCH_LIB_VIEWER_MODAL.
+     * @param aLibrary is the library to open when starting (default = NULL).
      */
     SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                          const wxString& aLibraryName = wxEmptyString );
@@ -57,9 +56,8 @@ public:
     ~SYMBOL_VIEWER_FRAME();
 
     /**
-     * Function ShowModal
+     * Runs the symbol viewer as a modal dialog.
      *
-     * Runs the Symbol Viewer as a modal dialog.
      * @param aSymbol an optional FPID string to initialize the viewer with and to
      *                return a selected footprint through.
      */
@@ -73,18 +71,18 @@ public:
     void OnSize( wxSizeEvent& event ) override;
 
     /**
-     * Creates or recreates a sorted list of currently loaded libraries.
+     * Create o recreates a sorted list of currently loaded libraries.
      *
-     * @return whether the selection of either library or component was changed (i.e. because the
-     * selected library no longer exists)
+     * @return whether the selection of either library or symbol was changed (i.e. because the
+     *         selected library no longer exists).
      */
     bool ReCreateLibList();
 
     /**
-     * Create or recreate the list of components in the currently selected library.
+     * Create or recreate the list of symbols in the currently selected library.
      *
-     * @return whether the selection was changed (i.e. because the selected component no longer
-     * exists)
+     * @return whether the selection was changed (i.e. because the selected symbol no longer
+     *         exists).
      */
     bool ReCreateSymbolList();
 
@@ -108,11 +106,11 @@ public:
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     /**
-     * Set a filter to display only libraries and/or components which match the filter.
+     * Set a filter to display only libraries and/or symbols which match the filter.
      *
      * @param aFilter is a filter to pass the allowed library name list and/or some other filter
      *                see SCH_BASE_FRAME::SelectComponentFromLibrary() for details.
-     *                if aFilter == NULL, remove all filtering
+     *                if aFilter == NULL, remove all filtering.
      */
     void SetFilter( const SCHLIB_FILTER* aFilter );
 
@@ -122,16 +120,16 @@ public:
     void SetSelectedLibrary( const wxString& aLibName );
 
     /**
-     * Set the selected component.
+     * Set the selected symbol.
      */
     void SetSelectedSymbol( const wxString& aSymbolName );
 
     // Accessors:
     /**
-     * Set unit and convert, and set flag preventing them from automatically resetting to 1
+     * Set unit and convert, and set flag preventing them from automatically resetting to 1.
      *
-     * @param aUnit - unit; if invalid will be set to 1
-     * @param aConvert - convert; if invalid will be set to 1
+     * @param aUnit is the unit, if invalid will be set to 1.
+     * @param aConvert is the alternate body style, if invalid will be set to 1.
      */
     void SetUnitAndConvert( int aUnit, int aConvert );
     int GetUnit() const { return m_unit; }
@@ -147,11 +145,11 @@ protected:
     void setupUIConditions() override;
 
 private:
-    // Sets up the tool framework
+    // Set up the tool framework.
     void setupTools();
 
     /**
-     * Called when the frame is activated to reload the libraries and component lists
+     * Called when the frame is activated to reload the libraries and symbol lists
      * that can be changed by the schematic editor or the library editor.
      */
     void OnActivate( wxActivateEvent& event );
@@ -169,13 +167,13 @@ private:
 private:
     wxChoice*           m_unitChoice;
 
-    wxListBox*          m_libList;             // The list of libs
-    int                 m_libListWidth;        // Last width of the window
+    wxListBox*          m_libList;             // The list of libraries.
+    int                 m_libListWidth;        // Last width of the window.
 
-    wxListBox*          m_symbolList;          // The list of components
-    int                 m_symbolListWidth;     // Last width of the window
+    wxListBox*          m_symbolList;          // The list of symbols.
+    int                 m_symbolListWidth;     // Last width of the window.
 
-    // Filters to build list of libs/list of parts
+    // Filters to build list of libs/list of symbols.
     bool                m_listPowerCmpOnly;
     wxArrayString       m_allowedLibs;
 
@@ -186,7 +184,7 @@ private:
     static int          m_convert;
 
     /**
-     * Updated to `true` if a list rewrite on GUI activation resulted in the component
+     * Updated to `true` if a list rewrite on GUI activation resulted in the symbol
      * selection changing, or if the user has changed the selection manually.
      */
     bool m_selection_changed;

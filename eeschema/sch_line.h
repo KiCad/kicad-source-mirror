@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,14 +36,7 @@ class NETLIST_OBJECT_LIST;
  */
 class SCH_LINE : public SCH_ITEM
 {
-    bool    m_startIsDangling;  ///< True if start point is not connected.
-    bool    m_endIsDangling;    ///< True if end point is not connected.
-    wxPoint m_start;            ///< Line start point
-    wxPoint m_end;              ///< Line end point
-    STROKE_PARAMS m_stroke;     ///< Line stroke properties.
-
 public:
-
     static const enum wxPenStyle PenStyle[];
 
     SCH_LINE( const wxPoint& pos = wxPoint( 0, 0 ), int layer = LAYER_NOTES );
@@ -188,10 +181,10 @@ public:
      * two lines overlap.  This method is used to merge multiple line segments into a single
      * line.
      *
-     * @param aScreen - the current screen
-     * @param aLine - Line to compare.
-     * @param aCheckJunctions - indicates we need to check for a junction if the two segments
-     *                          are colinear and touch
+     * @param aScreen is the current screen.
+     * @param aLine is the line to compare.
+     * @param aCheckJunctions is used to indicate if we need to check for a junction if the two
+     *                        segments are colinear and touch.
      * @return New line that combines the two or NULL on non-overlapping segments.
      */
     SCH_LINE* MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCheckJunctions );
@@ -246,21 +239,21 @@ public:
 #endif
 
     /**
-     * Returns if the line is a graphic (non electrical line)
+     * Return if the line is a graphic (non electrical line)
      *
      * Currently, anything on the internal NOTES layer is a graphic line
      */
     bool IsGraphicLine() const;
 
     /**
-     * Returns true if the line is a wire.
+     * Return true if the line is a wire.
      *
      * @return true if this line is on the wire layer.
      */
     bool IsWire() const;
 
     /**
-     * Returns true if the line is a bus.
+     * Return true if the line is a bus.
      *
      * @return true if this line is on the bus layer.
      */
@@ -268,6 +261,12 @@ public:
 
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;
+
+    bool    m_startIsDangling;  ///< True if start point is not connected.
+    bool    m_endIsDangling;    ///< True if end point is not connected.
+    wxPoint m_start;            ///< Line start point
+    wxPoint m_end;              ///< Line end point
+    STROKE_PARAMS m_stroke;     ///< Line stroke properties.
 };
 
 

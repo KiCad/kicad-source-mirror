@@ -116,7 +116,7 @@ SCH_COMPONENT::SCH_COMPONENT( const LIB_PART& aPart, const LIB_ID& aLibId,
     part->SetParent();
     SetLibSymbol( part.release() );
 
-    // Copy fields from the library component
+    // Copy fields from the library symbol
     UpdateFields( true, true );
 
     // Update the reference -- just the prefix for now.
@@ -135,7 +135,7 @@ SCH_COMPONENT::SCH_COMPONENT( const LIB_PART& aPart, const SCH_SHEET_PATH* aShee
                               const PICKED_SYMBOL& aSel, const wxPoint& pos ) :
     SCH_COMPONENT( aPart, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
 {
-    // Set any fields that were modified as part of the component selection
+    // Set any fields that were modified as part of the symbol selection
     for( const std::pair<int, wxString>& i : aSel.Fields )
     {
         SCH_FIELD* field = GetFieldById( i.first );
@@ -146,34 +146,34 @@ SCH_COMPONENT::SCH_COMPONENT( const LIB_PART& aPart, const SCH_SHEET_PATH* aShee
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
-    SCH_ITEM( aComponent )
+SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aSymbol ) :
+    SCH_ITEM( aSymbol )
 {
-    m_parent      = aComponent.m_parent;
-    m_pos         = aComponent.m_pos;
-    m_unit        = aComponent.m_unit;
-    m_convert     = aComponent.m_convert;
-    m_lib_id      = aComponent.m_lib_id;
-    m_isInNetlist = aComponent.m_isInNetlist;
-    m_inBom       = aComponent.m_inBom;
-    m_onBoard     = aComponent.m_onBoard;
+    m_parent      = aSymbol.m_parent;
+    m_pos         = aSymbol.m_pos;
+    m_unit        = aSymbol.m_unit;
+    m_convert     = aSymbol.m_convert;
+    m_lib_id      = aSymbol.m_lib_id;
+    m_isInNetlist = aSymbol.m_isInNetlist;
+    m_inBom       = aSymbol.m_inBom;
+    m_onBoard     = aSymbol.m_onBoard;
 
-    if( aComponent.m_part )
-        SetLibSymbol( new LIB_PART( *aComponent.m_part.get() ) );
+    if( aSymbol.m_part )
+        SetLibSymbol( new LIB_PART( *aSymbol.m_part.get() ) );
 
-    const_cast<KIID&>( m_Uuid ) = aComponent.m_Uuid;
+    const_cast<KIID&>( m_Uuid ) = aSymbol.m_Uuid;
 
-    m_transform = aComponent.m_transform;
-    m_prefix = aComponent.m_prefix;
-    m_instanceReferences = aComponent.m_instanceReferences;
-    m_fields = aComponent.m_fields;
+    m_transform = aSymbol.m_transform;
+    m_prefix = aSymbol.m_prefix;
+    m_instanceReferences = aSymbol.m_instanceReferences;
+    m_fields = aSymbol.m_fields;
 
-    // Re-parent the fields, which before this had aComponent as parent
+    // Re-parent the fields, which before this had aSymbol as parent
     for( SCH_FIELD& field : m_fields )
         field.SetParent( this );
 
-    m_fieldsAutoplaced = aComponent.m_fieldsAutoplaced;
-    m_schLibSymbolName = aComponent.m_schLibSymbolName;
+    m_fieldsAutoplaced = aSymbol.m_fieldsAutoplaced;
+    m_schLibSymbolName = aSymbol.m_schLibSymbolName;
 }
 
 
@@ -441,7 +441,7 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aInclude
     // If it was not found in m_Paths array, then see if it is in m_Field[REFERENCE] -- if so,
     // use this as a default for this path.  This will happen if we load a version 1 schematic
     // file.  It will also mean that multiple instances of the same sheet by default all have
-    // the same component references, but perhaps this is best.
+    // the same symbol references, but perhaps this is best.
     if( ref.IsEmpty() && !GetField( REFERENCE_FIELD )->GetText().IsEmpty() )
     {
         const_cast<SCH_COMPONENT*>( this )->SetRef( sheet, GetField( REFERENCE_FIELD )->GetText() );
@@ -524,7 +524,7 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     if( m_prefix != prefix )
         m_prefix = prefix;
 
-    // Power components have references starting with # and are not included in netlists
+    // Power symbols have references starting with # and are not included in netlists
     m_isInNetlist = ! ref.StartsWith( wxT( "#" ) );
 }
 
@@ -866,7 +866,7 @@ std::vector<SCH_PIN*> SCH_COMPONENT::GetPins( const SCH_SHEET_PATH* aSheet ) con
 
     if( aSheet == nullptr )
     {
-        wxCHECK_MSG( Schematic(), pins, "Can't call GetPins on a component with no schematic" );
+        wxCHECK_MSG( Schematic(), pins, "Can't call GetPins on a symbol with no schematic" );
 
         aSheet = &Schematic()->CurrentSheet();
     }
@@ -888,7 +888,7 @@ std::vector<SCH_PIN*> SCH_COMPONENT::GetPins( const SCH_SHEET_PATH* aSheet ) con
 void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_COMPONENT_T),
-                 wxT( "Cannot swap data with invalid component." ) );
+                 wxT( "Cannot swap data with invalid symbol." ) );
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) aItem;
 
@@ -1377,12 +1377,12 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
 
             aList.push_back( MSG_PANEL_ITEM( msg, GetValue( currentSheet, true ) ) );
 
-#if 0       // Display component flags, for debug only
+#if 0       // Display symbol flags, for debug only
             aList.push_back( MSG_PANEL_ITEM( _( "flags" ), wxString::Format( "%X",
                                                                              GetEditFlags() ) ) );
 #endif
 
-            // Display component reference in library and library
+            // Display symbol reference in library and library
             aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName() ) );
 
             if( !m_part->IsRoot() )
@@ -1413,7 +1413,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
 
             aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg ) );
 
-            // Display description of the component, and keywords found in lib
+            // Display description of the symbol, and keywords found in lib
             aList.push_back( MSG_PANEL_ITEM( _( "Description" ), m_part->GetDescription(),
                                              DARKCYAN ) );
             aList.push_back( MSG_PANEL_ITEM( _( "Keywords" ), m_part->GetKeyWords() ) );
@@ -1457,7 +1457,7 @@ void SCH_COMPONENT::MirrorHorizontally( int aCenter )
 
     for( SCH_FIELD& field : m_fields )
     {
-        // Move the fields to the new position because the component itself has moved.
+        // Move the fields to the new position because the symbol itself has moved.
         wxPoint pos = field.GetTextPos();
         pos.x -= dx;
         field.SetTextPos( pos );
@@ -1475,7 +1475,7 @@ void SCH_COMPONENT::MirrorVertically( int aCenter )
 
     for( SCH_FIELD& field : m_fields )
     {
-        // Move the fields to the new position because the component itself has moved.
+        // Move the fields to the new position because the symbol itself has moved.
         wxPoint pos = field.GetTextPos();
         pos.y -= dy;
         field.SetTextPos( pos );
@@ -1493,7 +1493,7 @@ void SCH_COMPONENT::Rotate( wxPoint aCenter )
 
     for( SCH_FIELD& field : m_fields )
     {
-        // Move the fields to the new position because the component itself has moved.
+        // Move the fields to the new position because the symbol itself has moved.
         wxPoint pos = field.GetTextPos();
         pos.x -= prev.x - m_pos.x;
         pos.y -= prev.y - m_pos.y;
@@ -1506,7 +1506,7 @@ bool SCH_COMPONENT::Matches( const wxFindReplaceData& aSearchData, void* aAuxDat
 {
     wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 
-    // Components are searchable via the child field and pin item text.
+    // Symbols are searchable via the child field and pin item text.
     return false;
 }
 
@@ -1593,7 +1593,7 @@ std::vector<wxPoint> SCH_COMPONENT::GetConnectionPoints() const
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
         // Collect only pins attached to the current unit and convert.
-        // others are not associated to this component instance
+        // others are not associated to this symbol instance
         int pin_unit = pin->GetLibPin()->GetUnit();
         int pin_convert = pin->GetLibPin()->GetConvert();
 
@@ -1614,7 +1614,7 @@ LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 {
     if( m_part )
     {
-        // Calculate the position relative to the component.
+        // Calculate the position relative to the symbol.
         wxPoint libPosition = aPosition - m_pos;
 
         return m_part->LocateDrawItem( m_unit, m_convert, aType, libPosition, m_transform );
@@ -1686,7 +1686,7 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
             for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
             {
                 // Collect only pins attached to the current unit and convert.
-                // others are not associated to this component instance
+                // others are not associated to this symbol instance
                 int pin_unit = pin->GetLibPin()->GetUnit();
                 int pin_convert = pin->GetLibPin()->GetConvert();
 
@@ -1728,14 +1728,14 @@ bool SCH_COMPONENT::operator <( const SCH_ITEM& aItem ) const
 }
 
 
-bool SCH_COMPONENT::operator==( const SCH_COMPONENT& aComponent ) const
+bool SCH_COMPONENT::operator==( const SCH_COMPONENT& aSymbol ) const
 {
-    if( GetFieldCount() !=  aComponent.GetFieldCount() )
+    if( GetFieldCount() !=  aSymbol.GetFieldCount() )
         return false;
 
     for( int i = VALUE_FIELD; i < GetFieldCount(); i++ )
     {
-        if( GetFields()[i].GetText().Cmp( aComponent.GetFields()[i].GetText() ) != 0 )
+        if( GetFields()[i].GetText().Cmp( aSymbol.GetFields()[i].GetText() ) != 0 )
             return false;
     }
 
@@ -1743,9 +1743,9 @@ bool SCH_COMPONENT::operator==( const SCH_COMPONENT& aComponent ) const
 }
 
 
-bool SCH_COMPONENT::operator!=( const SCH_COMPONENT& aComponent ) const
+bool SCH_COMPONENT::operator!=( const SCH_COMPONENT& aSymbol ) const
 {
-    return !( *this == aComponent );
+    return !( *this == aSymbol );
 }
 
 
@@ -1775,7 +1775,7 @@ SCH_COMPONENT& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
 
         m_fields    = c->m_fields;    // std::vector's assignment operator
 
-        // Reparent fields after assignment to new component.
+        // Reparent fields after assignment to new symbol.
         for( SCH_FIELD& field : m_fields )
             field.SetParent( this );
 
@@ -1824,7 +1824,7 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
             continue;
 
         // Collect only pins attached to the current unit and convert.
-        // others are not associated to this component instance
+        // others are not associated to this symbol instance
         int pin_unit = pin->GetLibPin()->GetUnit();
         int pin_convert = pin->GetLibPin()->GetConvert();
 

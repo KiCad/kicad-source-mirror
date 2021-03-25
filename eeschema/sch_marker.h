@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,10 +83,8 @@ public:
     /**
      * Compare DRC marker main and auxiliary text against search string.
      *
-     * @param aSearchData - Criteria to search against.
-     * @param aAuxData A pointer to optional data required for the search or NULL
-     *                 if not used.
-     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
+     * @param[in] aSearchData is the criteria to search against.
+     * @param[in] aAuxData is the optional data required for the search or NULL if not used.
      * @return True if the DRC main or auxiliary text matches the search criteria.
      */
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxDat ) const override;

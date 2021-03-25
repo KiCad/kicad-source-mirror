@@ -40,8 +40,6 @@ class DIALOG_SYMBOL_LIB_TABLE;
  */
 class SYMBOL_LIB_TABLE_ROW : public LIB_TABLE_ROW
 {
-    friend class SYMBOL_LIB_TABLE;
-
 public:
     typedef SCH_IO_MGR::SCH_FILE_T LIB_T;
 
@@ -76,8 +74,9 @@ public:
 
     /**
      * Attempt to reload the library.
+     *
      * @return true if a reload was required.
-     * @throws IO_ERROR if the reload was unsuccessful.
+     * @throw IO_ERROR if the reload was unsuccessful.
      */
     bool Refresh();
 
@@ -90,6 +89,7 @@ protected:
     }
 
 private:
+    friend class SYMBOL_LIB_TABLE;
 
     virtual LIB_TABLE_ROW* do_clone() const override
     {
@@ -108,11 +108,6 @@ private:
 
 class SYMBOL_LIB_TABLE : public LIB_TABLE
 {
-    friend class SYMBOL_LIB_TABLE_GRID;
-    friend class PANEL_SYM_LIB_TABLE;
-
-    static int m_modifyHash;     ///< helper for GetModifyHash()
-
 public:
     KICAD_T Type() override { return SYMBOL_LIB_TABLE_T; }
 
@@ -156,7 +151,6 @@ public:
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
      * @param aAliasNames is a reference to an array for the alias names.
      * @param aPowerSymbolsOnly is a flag to enumerate only power symbols.
-     *
      * @throw IO_ERROR if the library cannot be found or loaded.
      */
     void EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames,
@@ -171,9 +165,7 @@ public:
      * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW
      * @param aName is the name of the #LIB_PART to load.
      * @param aFlatten set to true to flatten derived parts.
-     *
      * @return the symbol alias if found or NULL if not found.
-     *
      * @throw IO_ERROR if the library cannot be found or read.  No exception
      *                 is thrown in the case where \a aNickname cannot be found.
      */
@@ -198,7 +190,7 @@ public:
      *
      * If a #LIB_PART by the same name already exists or there are any conflicting alias
      * names, the new #LIB_PART will silently overwrite any existing aliases and/or part
-     * becaue libraries cannot have duplicate alias names.  It is the responsibility of
+     * because libraries cannot have duplicate alias names.  It is the responsibility of
      * the caller to check the library for conflicts before saving.
      *
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW
@@ -206,9 +198,7 @@ public:
      *                call.
      * @param aOverwrite when true means overwrite any existing symbol by the same name,
      *                   else if false means skip the write and return SAVE_SKIPPED.
-     *
      * @return SAVE_T - SAVE_OK or SAVE_SKIPPED.  If error saving, then IO_ERROR is thrown.
-     *
      * @throw IO_ERROR if there is a problem saving the symbol.
      */
     SAVE_T SaveSymbol( const wxString& aNickname, const LIB_PART* aSymbol,
@@ -218,9 +208,7 @@ public:
      * Deletes the @a aSymbolName from the library given by @a aNickname.
      *
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
-     *
      * @param aSymbolName is the name of a symbol to delete from the specified library.
-     *
      * @throw IO_ERROR if there is a problem finding the footprint or the library, or deleting it.
      */
     void DeleteSymbol( const wxString& aNickname, const wxString& aSymbolName );
@@ -232,7 +220,6 @@ public:
      * installed.
      *
      * @param aNickname is the library nickname in the symbol library table.
-     *
      * @throw IO_ERROR if no library at @a aNickname exists.
      */
     bool IsSymbolLibWritable( const wxString& aNickname );
@@ -241,7 +228,6 @@ public:
      * Return true if the library given by @a aNickname was successfully loaded.
      *
      * @param aNickname is the library nickname in the symbol library table.
-     *
      * @throw IO_ERROR if no library at @a aNickname exists.
      */
     bool IsSymbolLibLoaded( const wxString& aNickname );
@@ -256,9 +242,7 @@ public:
      * Load a #LIB_PART having @a aFootprintId with possibly an empty library nickname.
      *
      * @param aId the library nickname and name of the symbol to load.
-     *
      * @return  the library symbol if found (the library owns it) or NULL if not found.
-     *
      * @throw IO_ERROR if the library cannot be found or read.  No exception
      *                 is thrown in the case where aId cannot be found.
      * @throw PARSE_ERROR if @a aId is not parsed OK.
@@ -273,9 +257,7 @@ public:
      * time being.
      *
      * @param aTable the #SYMBOL_LIB_TABLE object to load.
-     *
      * @return true if the global library table exists and is loaded properly.
-     *
      * @throw IO_ERROR if an error occurs attempting to load the symbol library table.
      */
     static bool LoadGlobalTable( SYMBOL_LIB_TABLE& aTable );
@@ -301,6 +283,12 @@ public:
     static SYMBOL_LIB_TABLE& GetGlobalLibTable();
 
     static const wxString& GetSymbolLibTableFileName();
+
+private:
+    friend class SYMBOL_LIB_TABLE_GRID;
+    friend class PANEL_SYM_LIB_TABLE;
+
+    static int m_modifyHash;     ///< helper for GetModifyHash()
 };
 
 

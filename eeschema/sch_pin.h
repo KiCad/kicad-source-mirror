@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHOR.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -34,17 +34,6 @@ class SCH_COMPONENT;
 
 class SCH_PIN : public SCH_ITEM
 {
-    LIB_PIN*       m_libPin;
-
-    wxString       m_number;
-    wxString       m_alt;
-    wxPoint        m_position;
-    bool           m_isDangling;
-
-    /// The name that this pin connection will drive onto a net
-    std::recursive_mutex                                      m_netmap_mutex;
-    std::map<const SCH_SHEET_PATH, std::pair<wxString, bool>> m_net_name_map;
-
 public:
     SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentSymbol );
 
@@ -95,9 +84,12 @@ public:
     bool IsDangling() const override { return m_isDangling; }
     void SetIsDangling( bool isDangling ) { m_isDangling = isDangling; }
 
-    bool IsPointClickableAnchor( const wxPoint& aPos ) const override { return m_isDangling && GetPosition() == aPos; }
+    bool IsPointClickableAnchor( const wxPoint& aPos ) const override
+    {
+        return m_isDangling && GetPosition() == aPos;
+    }
 
-    /// Returns the pin's position in global coordinates
+    /// @return the pin's position in global coordinates.
     wxPoint GetTransformedPosition() const;
 
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
@@ -106,7 +98,7 @@ public:
 
     /*
      * While many of these are currently simply covers for the equivalent LIB_PIN methods,
-     * the new EESchema file format will soon allow us to override them at the SCH level.
+     * the new Eeschema file format will soon allow us to override them at the schematic level.
      */
     bool IsVisible() const { return m_libPin->IsVisible(); }
 
@@ -136,6 +128,18 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
 #endif
+
+private:
+    LIB_PIN*       m_libPin;
+
+    wxString       m_number;
+    wxString       m_alt;
+    wxPoint        m_position;
+    bool           m_isDangling;
+
+    /// The name that this pin connection will drive onto a net.
+    std::recursive_mutex                                      m_netmap_mutex;
+    std::map<const SCH_SHEET_PATH, std::pair<wxString, bool>> m_net_name_map;
 };
 
 #endif

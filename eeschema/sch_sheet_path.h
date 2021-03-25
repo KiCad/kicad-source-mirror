@@ -120,24 +120,13 @@ typedef std::map<wxString, SCH_REFERENCE_LIST> SCH_MULTI_UNIT_REFERENCE_MAP;
  * Handle access to a stack of flattened #SCH_SHEET objects by way of a path for
  * creating a flattened schematic hierarchy.
  *
- * <p>
  * The #SCH_SHEET objects are stored in a list from first (usually the root sheet) to a
  * given sheet in last position.  The _last_ sheet is usually the sheet we want to select
  * or reach (which is what the function Last() returns).   Others sheets constitute the
  * "path" from the first to the last sheet.
- * </p>
  */
 class SCH_SHEET_PATH
 {
-protected:
-    std::vector< SCH_SHEET* > m_sheets;
-
-    size_t m_current_hash;
-
-    int m_virtualPageNumber;           /// Page numbers are maintained by the sheet load order.
-
-    std::map<std::pair<wxString, wxString>, bool> m_recursion_test_cache;
-
 public:
     SCH_SHEET_PATH();
 
@@ -214,9 +203,9 @@ public:
     }
 
     /**
-     * Compare if this is the same sheet path as aSheetPathToTest
+     * Compare if this is the same sheet path as \a aSheetPathToTest.
      *
-     * @param aSheetPathToTest = sheet path to compare
+     * @param aSheetPathToTest is the sheet path to compare.
      * @return 1 if this sheet path has more sheets than aSheetPathToTest,
      *   -1 if this sheet path has fewer sheets than aSheetPathToTest,
      *   or 0 if same
@@ -250,7 +239,6 @@ public:
      * Get the sheet path as an #KIID_PATH.
      *
      * @note This #KIID_PATH includes the root sheet UUID prefixed to the path.
-     * @return
      */
     KIID_PATH Path() const;
 
@@ -258,7 +246,6 @@ public:
      * Get the sheet path as an #KIID_PATH without the root sheet UUID prefix.
      *
      * @note This #KIID_PATH does not include the root sheet UUID prefixed to the path.
-     * @return
      */
     KIID_PATH PathWithoutRootUuid() const;
 
@@ -282,10 +269,10 @@ public:
      * Adds #SCH_REFERENCE object to \a aReferences for each symbol in the sheet.
      *
      * @param aReferences List of references to populate.
-     * @param aIncludePowerSymbols : false to only get normal symbols.
-     * @param aForceIncludeOrphanSymbols : true to include symbols having no symbol found in lib.
-     *                                     The normal option is false, and set to true only to
-     *                                     build the full list of symbols.
+     * @param aIncludePowerSymbols set to false to only get normal symbols.
+     * @param aForceIncludeOrphanSymbols set to true to include symbols having no symbol found
+     *                                   in lib.   The normal option is false, and set to true
+     *                                   only to build the full list of symbols.
      */
     void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
                      bool aForceIncludeOrphanSymbols = false ) const;
@@ -297,7 +284,7 @@ public:
      * The map key for each element will be the reference designator.
      *
      * @param aRefList Map of reference designators to reference lists
-     * @param aIncludePowerSymbols : false to only get normal symbols.
+     * @param aIncludePowerSymbols Set to false to only get normal symbols.
      */
     void GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
                               bool aIncludePowerSymbols = true ) const;
@@ -320,8 +307,16 @@ public:
     bool operator<( const SCH_SHEET_PATH& d1 ) const { return m_sheets < d1.m_sheets; }
 
 private:
-
     void initFromOther( const SCH_SHEET_PATH& aOther );
+
+protected:
+    std::vector< SCH_SHEET* > m_sheets;
+
+    size_t m_current_hash;
+
+    int m_virtualPageNumber;           /// Page numbers are maintained by the sheet load order.
+
+    std::map<std::pair<wxString, wxString>, bool> m_recursion_test_cache;
 };
 
 
@@ -348,11 +343,7 @@ typedef SCH_SHEET_PATHS::iterator                SCH_SHEET_PATHS_ITER;
  */
 class SCH_SHEET_LIST : public SCH_SHEET_PATHS
 {
-private:
-    SCH_SHEET_PATH  m_currentSheetPath;
-
 public:
-
     /**
      * Construct a flattened list of SCH_SHEET_PATH objects from \a aSheet.
      *
@@ -396,9 +387,9 @@ public:
      *
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal symbols.
-     * @param aForceIncludeOrphanSymbols : true to include symbols having no symbol found in lib.
-     *                                     The normal option is false, and set to true only to
-     *                                     build the full list of symbols.
+     * @param aForceIncludeOrphanSymbols Set to true to include symbols having no symbol found
+     *                                   in lib.   The normal option is false, and set to true
+     *                                   only to build the full list of symbols.
      */
     void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
                      bool aForceIncludeOrphanSymbols = false ) const;
@@ -448,7 +439,7 @@ public:
     void BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity );
 
     /**
-     * Sorts the list of sheets by page number. This should be called after #BuildSheetList
+     * Sort the list of sheets by page number. This should be called after #BuildSheetList
      *
      * @param aUpdateVirtualPageNums If true, updates the virtual page numbers to match the new
      * ordering
@@ -490,10 +481,13 @@ public:
     /**
      * Set initial sheet page numbers.
      *
-     * The number scheme is base on the old psuedo sheet numbering algorithm prior to
+     * The number scheme is base on the old pseudo sheet numbering algorithm prior to
      * the implementation of user definable sheet page numbers.
      */
     void SetInitialPageNumbers();
+
+private:
+    SCH_SHEET_PATH  m_currentSheetPath;
 };
 
 #endif // CLASS_DRAWSHEET_PATH_H

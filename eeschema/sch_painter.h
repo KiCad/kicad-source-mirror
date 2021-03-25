@@ -65,10 +65,8 @@ class SCH_PAINTER;
 
 
 /**
- * SCH_RENDER_SETTINGS
- * Stores schematic-specific render settings.
+ * Store schematic specific render settings.
  */
-
 class SCH_RENDER_SETTINGS : public RENDER_SETTINGS
 {
 public:
@@ -130,7 +128,6 @@ public:
 
 
 /**
- * SCH_PAINTER
  * Contains methods for drawing schematic-specific items.
  */
 class SCH_PAINTER : public PAINTER
@@ -156,7 +153,8 @@ private:
     void draw( const LIB_RECTANGLE* aRect, int aLayer );
     void draw( LIB_PIN* aPin, int aLayer );
     void draw( const LIB_CIRCLE* aCircle, int aLayer );
-    void draw( const LIB_PART* aPart, int, bool aDrawFields = true, int aUnit = 0, int aConvert = 0 );
+    void draw( const LIB_PART* aPart, int, bool aDrawFields = true, int aUnit = 0,
+               int aConvert = 0 );
     void draw( const LIB_ARC* aArc, int aLayer );
     void draw( const LIB_POLYLINE* aLine, int aLayer );
     void draw( const LIB_FIELD* aField, int aLayer );

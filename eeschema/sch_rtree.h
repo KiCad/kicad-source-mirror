@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2020 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -34,7 +34,6 @@
 #include <geometry/rtree.h>
 
 /**
- * EE_RTREE -
  * Implements an R-tree for fast spatial and type indexing of schematic items.
  * Non-owning.
  */
@@ -56,8 +55,7 @@ public:
     }
 
     /**
-     * Function Insert()
-     * Inserts an item into the tree. Item's bounding box is taken via its BBox() method.
+     * Insert an item into the tree. Item's bounding box is taken via its BBox() method.
      */
     void insert( SCH_ITEM* aItem )
     {
@@ -71,8 +69,7 @@ public:
     }
 
     /**
-     * Function Remove()
-     * Removes an item from the tree. Removal is done by comparing pointers, attempting
+     * Remove an item from the tree. Removal is done by comparing pointers, attempting
      * to remove a copy of the item will fail.
      */
     bool remove( SCH_ITEM* aItem )
@@ -102,8 +99,7 @@ public:
     }
 
     /**
-     * Function RemoveAll()
-     * Removes all items from the RTree
+     * Remove all items from the RTree
      */
     void clear()
     {
@@ -115,9 +111,9 @@ public:
      * Determine if a given item exists in the tree.  Note that this does not search the full tree
      * so if the item has been moved, this will return false when it should be true.
      *
-     * @param aItem Item that may potentially exist in the tree
-     * @param aRobust If true, search the whole tree, not just the bounding box
-     * @return true if the item definitely exists, false if it does not exist within bbox
+     * @param aItem Item that may potentially exist in the tree.
+     * @param aRobust If true, search the whole tree, not just the bounding box.
+     * @return true if the item definitely exists, false if it does not exist within bbox.
      */
     bool contains( const SCH_ITEM* aItem, bool aRobust = false ) const
     {
@@ -155,8 +151,9 @@ public:
     }
 
     /**
-     * Returns the number of items in the tree
-     * @return number of elements in the tree;
+     * Return the number of items in the tree.
+     *
+     * @return number of elements in the tree.
      */
     size_t size() const
     {
@@ -171,7 +168,7 @@ public:
     using iterator = typename ee_rtree::Iterator;
 
     /**
-     * The EE_TYPE struct provides a type-specific auto-range iterator to the RTree.  Using
+     * The #EE_TYPE struct provides a type-specific auto-range iterator to the RTree.  Using
      * this struct, one can write lines like:
      *
      * for( auto item : rtree.OfType( SCH_COMPONENT_T ) )
