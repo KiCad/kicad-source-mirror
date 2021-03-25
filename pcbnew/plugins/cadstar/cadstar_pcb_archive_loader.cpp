@@ -764,19 +764,21 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent,
 PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, FOOTPRINT* aParent )
 {
     PADCODE csPadcode = getPadCode( aCadstarPad.PadCodeID );
+    wxString errorMSG;
 
     PAD* pad = new PAD( aParent );
+    LSET padLayerSet;
 
     switch( aCadstarPad.Side )
     {
     case PAD_SIDE::MAXIMUM: //Bottom side
         pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
-        pad->SetLayerSet( LSET( 3, B_Cu, B_Paste, B_Mask ) );
+        padLayerSet |= LSET( 3, B_Cu, B_Paste, B_Mask );
         break;
 
     case PAD_SIDE::MINIMUM: //TOP side
         pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
-        pad->SetLayerSet( LSET( 3, F_Cu, F_Paste, F_Mask ) );
+        padLayerSet |= LSET( 3, F_Cu, F_Paste, F_Mask );
         break;
 
     case PAD_SIDE::THROUGH_HOLE:
@@ -785,13 +787,62 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         else
             pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_NPTH );
 
-        pad->SetLayerSet( pad->PTHMask() ); // for now we will assume no paste layers
-        //TODO: We need to read the csPad->Reassigns vector to make sure no paste
+        padLayerSet = LSET::AllCuMask() | LSET( 4, F_Mask, B_Mask, F_Paste, B_Paste );
         break;
 
     default:
         wxFAIL_MSG( "Unknown Pad type" );
     }
+
+    pad->SetLocalSolderMaskMargin( 0 );
+    pad->SetLocalSolderPasteMargin( 0 );
+    pad->SetLocalSolderPasteMarginRatio( 0.0 );
+    bool complexPadErrorLogged = false;
+
+    for( auto& reassign : csPadcode.Reassigns )
+    {
+        PCB_LAYER_ID kiLayer = getKiCadLayer( reassign.first );
+        PAD_SHAPE shape = reassign.second;
+
+        if( shape.Size == 0 )
+        {
+            padLayerSet.reset( kiLayer );
+        }
+        else
+        {
+            int newMargin = getKiCadLength( shape.Size - csPadcode.Shape.Size );
+
+            if( kiLayer == F_Mask || kiLayer == B_Mask )
+            {
+                if( std::abs( pad->GetLocalSolderMaskMargin() ) < std::abs( newMargin ) )
+                    pad->SetLocalSolderMaskMargin( newMargin );
+            }
+            else if( kiLayer == F_Paste || kiLayer == B_Paste )
+            {
+                if( std::abs( pad->GetLocalSolderPasteMargin() ) < std::abs( newMargin ) )
+                    pad->SetLocalSolderPasteMargin( newMargin );
+            }
+            else
+            {
+                //TODO fix properly when KiCad supports full padstacks
+
+                if( !complexPadErrorLogged )
+                {
+                    complexPadErrorLogged = true;
+                    errorMSG +=
+                            wxT( "\n - " )
+                            + wxString::Format(
+                                    _( "The CADSTAR pad definition '%s' is a complex pad stack, "
+                                       "which is not supported in KiCad. Please review the "
+                                       "imported pads as they may require manual correction." ),
+                                    csPadcode.Name );
+                }
+            }
+        }
+    }
+
+    pad->SetLayerSet( padLayerSet );
+
 
     pad->SetName( aCadstarPad.Identifier.IsEmpty() ?
                           wxString::Format( wxT( "%ld" ), aCadstarPad.ID ) :
@@ -987,15 +1038,12 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
                 csPadcode.SlotOrientation = 0;
                 drillOffset               = { 0, 0 };
 
-                if( m_padcodesTested.find( csPadcode.ID ) == m_padcodesTested.end() )
-                {
-                    wxLogError( wxString::Format(
-                            _( "The CADSTAR pad definition '%s' has the hole shape outside the "
-                               "pad shape. The hole has been moved to the center of the pad." ),
-                            csPadcode.Name ) );
-
-                    m_padcodesTested.insert( csPadcode.ID );
-                }
+                errorMSG +=
+                        wxT( "\n - " )
+                        + wxString::Format(
+                                _( "The CADSTAR pad definition '%s' has the hole shape outside the "
+                                   "pad shape. The hole has been moved to the center of the pad." ),
+                                csPadcode.Name );
             }
 
         }
@@ -1023,6 +1071,16 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
 
     pad->SetLocked( true ); // Cadstar pads are always locked with respect to the footprint
+
+    //log warnings:
+    if( m_padcodesTested.find( csPadcode.ID ) == m_padcodesTested.end() && !errorMSG.IsEmpty() )
+    {
+        wxLogError( wxString::Format(
+                _( "The CADSTAR pad definition '%s' has import errors: %s" ),
+                csPadcode.Name, errorMSG) );
+
+        m_padcodesTested.insert( csPadcode.ID );
+    }
 
     return pad;
 }
