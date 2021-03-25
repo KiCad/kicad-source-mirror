@@ -1938,21 +1938,18 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
         NET_PCB  net                      = netPair.second;
         wxString netnameForErrorReporting = net.Name;
 
+        std::map<NETELEMENT_ID, long> netelementSizes;
+
         if( netnameForErrorReporting.IsEmpty() )
             netnameForErrorReporting = wxString::Format( "$%ld", net.SignalNum );
-
-        for( NET_PCB::CONNECTION_PCB connection : net.Connections )
-        {
-            if( !connection.Unrouted )
-                loadNetTracks( net.ID, connection.Route );
-
-            //TODO: all other elements
-        }
 
         for( std::pair<NETELEMENT_ID, NET_PCB::VIA> viaPair : net.Vias )
         {
             NET_PCB::VIA via = viaPair.second;
-            loadNetVia( net.ID, via );
+
+            // viasize is used for calculating route offset (as done in CADSTAR post processor)
+            int viaSize = loadNetVia( net.ID, via );
+            netelementSizes.insert( { viaPair.first, viaSize } );
         }
 
         for( std::pair<NETELEMENT_ID, NET_PCB::PIN> pinPair : net.Pins )
@@ -1979,8 +1976,67 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
             {
                 // The below works because we have added the pads in the correct order to the
                 // footprint and the PAD_ID in Cadstar is a sequential, numerical ID
-                footprint->Pads().at( pin.PadID - (long) 1 )->SetNet( getKiCadNet( net.ID ) );
+                PAD* pad = footprint->Pads().at( pin.PadID - (long) 1 );
+                pad->SetNet( getKiCadNet( net.ID ) );
+
+                // padsize is used for calculating route offset (as done in CADSTAR post processor)
+                int padsize = std::min( pad->GetSizeX(), pad->GetSizeY() );
+                netelementSizes.insert( { pinPair.first, padsize } );
             }
+        }
+
+        // For junction points we need to find out the biggest size of the other routes connecting
+        // at the junction in order to correctly apply the same "route offset" operation that the
+        // CADSTAR post processor applies when generating Manufacturing output
+        auto getJunctionSize =
+            [&]( NETELEMENT_ID aJptNetElemId, NET_PCB::CONNECTION_PCB aConnectionToIgnore ) -> int
+            {
+                int jptsize = 0;
+
+                for( NET_PCB::CONNECTION_PCB connection : net.Connections )
+                {
+                    if( connection.Route.RouteVertices.size() == 0 )
+                        continue;
+
+                    if( connection.StartNode == aConnectionToIgnore.StartNode
+                        && connection.EndNode == aConnectionToIgnore.EndNode )
+                        continue;
+
+                    if( connection.StartNode == aJptNetElemId )
+                    {
+                        int s = getKiCadLength( connection.Route.RouteVertices.front().RouteWidth );
+                        jptsize = std::max( jptsize, s );
+                    }
+                    else if( connection.EndNode == aJptNetElemId )
+                    {
+                        int s = getKiCadLength( connection.Route.RouteVertices.back().RouteWidth );
+                        jptsize = std::max( jptsize, s );
+                    }
+                }
+
+                return jptsize;
+            };
+
+        for( NET_PCB::CONNECTION_PCB connection : net.Connections )
+        {
+            int startSize = std::numeric_limits<int>::max();
+            int endSize = std::numeric_limits<int>::max();
+
+            if( netelementSizes.find( connection.StartNode ) != netelementSizes.end() )
+                startSize = netelementSizes.at( connection.StartNode );
+            else if( net.Junctions.find( connection.StartNode ) != net.Junctions.end() )
+                startSize = getJunctionSize( connection.StartNode, connection );
+
+            if( netelementSizes.find( connection.EndNode ) != netelementSizes.end() )
+                endSize = netelementSizes.at( connection.EndNode );
+            else if( net.Junctions.find( connection.EndNode ) != net.Junctions.end() )
+                endSize = getJunctionSize( connection.EndNode, connection );
+
+            startSize /= KiCadUnitMultiplier;
+            endSize /= KiCadUnitMultiplier;
+
+            if( !connection.Unrouted )
+                loadNetTracks( net.ID, connection.Route, startSize, endSize );
         }
     }
 }
@@ -2086,18 +2142,53 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentAttributes( const COMPONENT& aComp
 }
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks(
-        const NET_ID& aCadstarNetID, const NET_PCB::ROUTE& aCadstarRoute )
+void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks( const NET_ID&         aCadstarNetID,
+                                                const NET_PCB::ROUTE& aCadstarRoute,
+                                                long aStartWidth, long aEndWidth )
 {
     std::vector<PCB_SHAPE*> shapes;
 
-    POINT prevEnd = aCadstarRoute.StartPoint;
+    std::vector<NET_PCB::ROUTE_VERTEX> offsetedVertices = aCadstarRoute.RouteVertices;
+    POINT newStartPoint = aCadstarRoute.StartPoint;
+    auto  begin = offsetedVertices.begin();
 
-    for( const NET_PCB::ROUTE_VERTEX& v : aCadstarRoute.RouteVertices )
+    // First iterate through the points and apply route offset to start and end points only
+    // the rest of route offseting will happen in makeTracksFromDrawsegments
+    for( auto it = begin, end = offsetedVertices.end(); it != end; ++it )
+    {
+        auto next = std::next( it );
+
+        if( it == offsetedVertices.begin() )
+        {
+            // second point of the route (first point is given by aCadstarRoute.StartPoint)
+            int offsetAmount = ( it->RouteWidth / 2 ) - ( aStartWidth / 2 );
+
+            if( aStartWidth < it->RouteWidth )
+                applyRouteOffset( &newStartPoint, it->Vertex.End, offsetAmount );
+        }
+
+        if( next == end )
+        {
+            // last point of the route
+            int offsetAmount = ( it->RouteWidth / 2 ) - ( aEndWidth / 2 );
+            POINT referencePoint = newStartPoint;
+
+            if( it != begin )
+                referencePoint = std::prev( it )->Vertex.End;
+
+            if( aEndWidth < it->RouteWidth )
+                applyRouteOffset( &it->Vertex.End, referencePoint, offsetAmount );
+        }
+    }
+
+    POINT prevEnd = newStartPoint;
+
+    for( const NET_PCB::ROUTE_VERTEX& v : offsetedVertices )
     {
         PCB_SHAPE* shape = getDrawSegmentFromVertex( prevEnd, v.Vertex );
         shape->SetLayer( getKiCadLayer( aCadstarRoute.LayerID ) );
         shape->SetWidth( getKiCadLength( v.RouteWidth ) );
+        shape->SetLocked( v.Fixed );
         shapes.push_back( shape );
         prevEnd = v.Vertex.End;
     }
@@ -2112,7 +2203,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks(
 }
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia(
+int CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia(
         const NET_ID& aCadstarNetID, const NET_PCB::VIA& aCadstarVia )
 {
     VIA* via = new VIA( m_board );
@@ -2159,6 +2250,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia(
             getKiCadCopperLayerID( csLayerPair.PhysicalLayerEnd ) );
     via->SetNet( getKiCadNet( aCadstarNetID ) );
     ///todo add netcode to the via
+
+    return via->GetWidth();
 }
 
 
@@ -2704,6 +2797,7 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
                                                   int aWidthOverride )
 {
     std::vector<TRACK*> tracks;
+    TRACK*              prevTrack = nullptr;
 
     for( PCB_SHAPE* ds : aDrawsegments )
     {
@@ -2758,6 +2852,30 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
         if( aNet != nullptr )
             track->SetNet( aNet );
 
+        track->SetLocked( ds->IsLocked() );
+
+        // Apply route offsetting, mimmicking the behaviour of the CADSTAR post processor
+        if( prevTrack != nullptr )
+        {
+            int offsetAmount = ( track->GetWidth() / 2 ) - ( prevTrack->GetWidth() / 2 );
+
+            if( offsetAmount > 0 )
+            {
+                // modify the start of the current track
+                wxPoint newStart = track->GetStart();
+                applyRouteOffset( &newStart, track->GetEnd(), offsetAmount );
+                track->SetStart( newStart );
+            }
+            else if( offsetAmount < 0 )
+            {
+                // ammend the end of the previous track
+                wxPoint newEnd = prevTrack->GetEnd();
+                applyRouteOffset( &newEnd, prevTrack->GetStart(), -offsetAmount );
+                prevTrack->SetEnd( newEnd );
+            } // don't do anything if offsetAmount == 0
+        }
+
+        prevTrack = track;
         tracks.push_back( track );
         aParentContainer->Add( track, ADD_MODE::APPEND );
     }
@@ -2899,6 +3017,27 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
     }
 
     //TODO Handle different font types when KiCad can support it.
+}
+
+
+void CADSTAR_PCB_ARCHIVE_LOADER::applyRouteOffset( wxPoint*       aPointToOffset,
+                                                   const wxPoint& aRefPoint,
+                                                   const long& aOffsetAmount )
+{
+    VECTOR2I v( *aPointToOffset - aRefPoint );
+    int      newLength = v.EuclideanNorm() - aOffsetAmount;
+
+    if( newLength > 0 )
+    {
+        VECTOR2I offsetted = v.Resize( newLength ) + VECTOR2I( aRefPoint );
+        aPointToOffset->x = offsetted.x;
+        aPointToOffset->y = offsetted.y;
+    }
+    else
+    {
+        *aPointToOffset = aRefPoint; // zero length track. Needs to be removed to mimmick
+                                     // cadstar behaviour
+    }
 }
 
 

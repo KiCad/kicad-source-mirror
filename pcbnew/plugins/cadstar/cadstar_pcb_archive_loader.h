@@ -148,8 +148,12 @@ private:
     void loadLibraryAreas( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint );
     void loadLibraryPads( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint );
     void loadComponentAttributes( const COMPONENT& aComponent, FOOTPRINT* aFootprint );
-    void loadNetTracks( const NET_ID& aCadstarNetID, const NET_PCB::ROUTE& aCadstarRoute );
-    void loadNetVia( const NET_ID& aCadstarNetID, const NET_PCB::VIA& aCadstarVia );
+    void loadNetTracks( const NET_ID& aCadstarNetID, const NET_PCB::ROUTE& aCadstarRoute,
+                        long aStartWidth = std::numeric_limits<long>::max(),
+                        long aEndWidth = std::numeric_limits<long>::max() );
+
+    /// Load via and return via size
+    int loadNetVia( const NET_ID& aCadstarNetID, const NET_PCB::VIA& aCadstarVia );
     void checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
     void applyDimensionSettings( const DIMENSION& aCadstarDim, DIMENSION_BASE* aKiCadDim );
 
@@ -361,6 +365,17 @@ private:
     void addAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
                        const ATTRIBUTE_ID& aCadstarAttributeID, FOOTPRINT* aFootprint,
                        const wxString& aAttributeValue );
+
+    /**
+     * @brief CADSTAR's Post Processor does an action called "Route Offset" which
+     * is applied when a route is wider than the pad on which it is terminating or
+     * when there are different widths of route, in order to reduce overlap.
+     * @param aPointToOffset Point that we want to offset by aOffsetAmount
+     * @param aRefPoint Reference point to use for determine the angle of the offset
+     * @param aOffsetAmount
+    */
+    void applyRouteOffset( wxPoint* aPointToOffset, const wxPoint& aRefPoint,
+                           const long& aOffsetAmount );
 
     //Helper Functions for obtaining CADSTAR elements in the parsed structures
     int        getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
