@@ -1241,7 +1241,7 @@ void SCH_EDIT_FRAME::UpdateTitle()
 
     if( GetScreen()->GetFileName().IsEmpty() )
     {
-        title = _( "[no file]" ) + wxT( " \u2014 " ) + _( "Schematic Editor" ),
+        title = _( "[no file]" ) + wxT( " \u2014 " ) + _( "Schematic Editor" );
     }
     else
     {
