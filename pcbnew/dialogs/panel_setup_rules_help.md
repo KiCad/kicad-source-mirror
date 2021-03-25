@@ -199,4 +199,4 @@ For the latter use a `(layer "layer_name")` clause in the rule.
     # Specify a larger clearance around any diff-pair
     (rule "dp clearance"
         (constraint clearance (min "1.5mm"))
-        (condition "A.isDiffPair() && A.NetClass != B.NetClass"))
+        (condition "A.isDiffPair() && !A.isCoupledDiffPair()"))
