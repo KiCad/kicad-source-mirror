@@ -348,12 +348,14 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
         break;
 
     case WXK_ADD:
+    case WXK_RIGHT:
         if( type == LIB_TREE_NODE::LIB )
             m_tree_ctrl->Expand( sel );
 
         break;
 
     case WXK_SUBTRACT:
+    case WXK_LEFT:
         if( type == LIB_TREE_NODE::LIB )
             m_tree_ctrl->Collapse( sel );
 
