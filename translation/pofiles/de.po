@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-22 17:14-0700\n"
-"PO-Revision-Date: 2021-03-23 00:14+0000\n"
+"PO-Revision-Date: 2021-03-26 20:05+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1779,7 +1779,7 @@ msgstr "&Fehler melden"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:632
 msgid "Report a problem with KiCad"
-msgstr "Melden eines Fehlers in KiCad"
+msgstr "Ein Problem mit KiCad melden"
 
 #: common/dialog_about/dialog_about_base.cpp:89
 msgid "&OK"
@@ -4689,19 +4689,19 @@ msgstr "Projektmanager"
 #: eeschema/menubar.cpp:128 eeschema/sch_edit_frame.cpp:1257
 #: kicad/tools/kicad_manager_actions.cpp:64
 msgid "Schematic Editor"
-msgstr "Schaltplan-Editor"
+msgstr "Schaltplaneditor"
 
 #: common/hotkey_store.cpp:75 kicad/tools/kicad_manager_actions.cpp:76
 #: pcbnew/menubar_pcb_editor.cpp:184 pcbnew/pcb_edit_frame.cpp:1220
 #: pcbnew/pcbnew_config.cpp:54
 msgid "PCB Editor"
-msgstr "Leiterplatten-Editor"
+msgstr "Leiterplatteneditor"
 
 #: common/hotkey_store.cpp:76 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:87 pagelayout_editor/pl_editor_frame.cpp:463
 #: pagelayout_editor/pl_editor_frame.cpp:531
 msgid "Drawing Sheet Editor"
-msgstr "Zeichnungsblatt-Editor"
+msgstr "Zeichnungsblatteditor"
 
 #: common/hotkey_store.cpp:142
 msgid "Gestures"
@@ -6119,7 +6119,7 @@ msgstr "Zeige aktuelle Tabelle der Tastaturbelegungen und zugeordnete Befehle"
 
 #: common/tool/actions.cpp:625
 msgid "Get Involved"
-msgstr "Bring Dich ein"
+msgstr "Mitmachen"
 
 #: common/tool/actions.cpp:626
 msgid "Open \"Contribute to KiCad\" in a web browser"
@@ -10732,7 +10732,7 @@ msgstr "Kompletten Pfad in die .include Bibliothek Anweisungen hinzufügen"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:434
 msgid "Compatibility mode:"
-msgstr ""
+msgstr "Kompatibilitätsmodus:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "User configuration"
@@ -11485,7 +11485,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
 msgstr ""
-"Aktualisierung der Symbolwerte, welche im Leiterplatten-Editor bearbeitet "
+"Aktualisierung der Symbolwerte, welche im Leiterplatteneditor bearbeitet "
 "worden sind."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
@@ -16317,7 +16317,7 @@ msgstr "Auf Platine hervorheben"
 
 #: eeschema/tools/ee_actions.cpp:624
 msgid "Highlight corresponding items in PCB editor"
-msgstr "Hebt alle entsprechenden Elemente im Leiterplatten-Editor hervor"
+msgstr "Hebt alle entsprechenden Elemente im Leiterplatteneditor hervor"
 
 #: eeschema/tools/ee_actions.cpp:629
 msgid "Show Hidden Pins"
@@ -17255,7 +17255,7 @@ msgstr "Zuletzt verwendete Jobdatei löschen"
 
 #: gerbview/gerbview_frame.cpp:93
 msgid "KiCad Gerber Viewer"
-msgstr "KiCad-Gerber-Betrachter"
+msgstr "KiCad-Gerberanzeige"
 
 #: gerbview/gerbview_frame.cpp:158
 msgid "Layers Manager"
@@ -17264,7 +17264,7 @@ msgstr "Lagenverwaltung"
 #: gerbview/gerbview_frame.cpp:597 gerbview/gerbview_frame.cpp:616
 #: gerbview/menubar.cpp:149 kicad/tools/kicad_manager_actions.cpp:88
 msgid "Gerber Viewer"
-msgstr "Gerber-Betrachter"
+msgstr "Gerberanzeige"
 
 #: gerbview/gerbview_frame.cpp:602
 #, c-format
@@ -17453,7 +17453,7 @@ msgstr "Quelldatei der aktuellen Lage zeigen"
 
 #: gerbview/tools/gerbview_actions.cpp:81
 msgid "Export to PCB Editor..."
-msgstr "Zum Leiterplatten-Editor exportieren..."
+msgstr "Zum Leiterplatteneditor exportieren..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
@@ -18712,7 +18712,7 @@ msgstr "Layoutdatei ist schreibgeschützt."
 
 #: pagelayout_editor/pl_editor_frame.cpp:96
 msgid "KiCad Drawing Sheet Editor"
-msgstr "KiCad-Zeichnungsblatt-Editor"
+msgstr "KiCad-Zeichnungsblatteditor"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -22009,7 +22009,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:144
 msgid "Copper Zone Properties"
-msgstr "Eigenschaften von Kupferflächen"
+msgstr "Kupfer-Zonen-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:129
 msgid "Numerals (0,1,2,...,9,10)"
@@ -24787,7 +24787,7 @@ msgstr "Glättungsstärke:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:83
 msgid "Non Copper Zones Properties"
-msgstr "Eigenschaften für Zonen ohne Kupfer"
+msgstr "Nicht-Kupfer-Zonen-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:79
 #: pcbnew/dialogs/dialog_pad_properties.cpp:698
@@ -26934,18 +26934,19 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:364
 msgid "Draw an outline to show the sheet size."
-msgstr ""
+msgstr "Umriss zeichnen, um die Blattgröße anzuzeigen."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:368
-#, fuzzy
 msgid "Refill zones after Zone Properties dialog"
-msgstr "Anzeige der Elementeigenschaften"
+msgstr "Zonen nach Zonen-Eigenschaften-Dialog neu füllen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:370
 msgid ""
 "If checked, zones will be re-filled after editing the properties of the zone "
 "using the Zone Properties dialog"
 msgstr ""
+"Wenn angekreuzt, werden Zonen neu ausgefüllt, nachdem die Zonen-"
+"Eigenschaften im Zonen-Eigenschaften-Dialogs bearbeitet wurden"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:131
 msgid "Internal Layers"
@@ -28732,7 +28733,7 @@ msgstr "(%s maximaler Durchmesser %s; tatsächlich %s)"
 
 #: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:149
 msgid "Modify zone properties"
-msgstr "Flächeneigenschaften editieren"
+msgstr "Zoneneigenschaften editieren"
 
 #: pcbnew/edit_zone_helpers.cpp:138
 #, c-format
@@ -29470,7 +29471,7 @@ msgstr ""
 
 #: pcbnew/generate_footprint_info.cpp:120
 msgid "doc url"
-msgstr ""
+msgstr "doc url"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
 msgid "Centimeter"
@@ -29652,7 +29653,7 @@ msgstr "Wieder&herstellen"
 #: pcbnew/menubar_pcb_editor.cpp:100
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
-"Platine leeren und zuletzt vom Leiterplatten-Editor automatisch gespeicherte "
+"Platine leeren und zuletzt vom Leiterplatteneditor automatisch gespeicherte "
 "Wiederherstellungsdatei öffnen"
 
 #: pcbnew/menubar_pcb_editor.cpp:112
@@ -30419,7 +30420,7 @@ msgstr "Beim Laden der Footprintbibliotheken ist ein Fehler aufgetreten"
 
 #: pcbnew/pcb_edit_frame.cpp:192
 msgid "KiCad PCB Editor"
-msgstr "KiCad-Leiterplatten-Editor"
+msgstr "KiCad-Leiterplatteneditor"
 
 #: pcbnew/pcb_edit_frame.cpp:329
 msgid "New PCB file is unsaved"
@@ -30449,7 +30450,7 @@ msgid ""
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
-"Die Leiterplatte kann nicht aktualisiert werden da der Leiterplatten-Editor "
+"Die Leiterplatte kann nicht aktualisiert werden da der Leiterplatteneditor "
 "im Standalone-Modus gestartet ist. Um aus dem Schaltplan eine Platine zu "
 "erstellen oder zu aktualisieren starten Sie den KiCad-Projekt-Manager und "
 "erstellen ein neues Projekt."
@@ -31859,14 +31860,12 @@ msgid "%s is malformed."
 msgstr "%s ist fehlerhaft."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1004
-#, fuzzy
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"Diese Zone kann nicht durch das Leiterbahnwerkzeug bearbeitet werden.\n"
-"Überprüfen Sie bitte ob es nicht eventuell ein selbst überschneidendes "
-"Polygon ist."
+"Diese Zone kann nicht vom Router behandelt werden.\n"
+"Stellen Sie bitte sicher, dass es kein selbst überschneidendes Polygon ist."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1602 pcbnew/router/router_tool.cpp:424
 msgid "Interactive Router"
@@ -32018,13 +32017,14 @@ msgid "Switches posture of the currently routed track."
 msgstr "Verändern die Stellung des aktuell gerouteten Leiterzuges."
 
 #: pcbnew/router/router_tool.cpp:155
-#, fuzzy
 msgid "Track Corner Mode"
-msgstr "Anzeige Leiterbahnfüllung (Umriss/voll)"
+msgstr "Leiterbahn-Ecken-Modus"
 
 #: pcbnew/router/router_tool.cpp:156
 msgid "Switches between sharp and rounded corners when routing tracks."
 msgstr ""
+"Wechselt beim Routing von Leiterbahnen zwischen scharfen und abgerundeten "
+"Ecken."
 
 #: pcbnew/router/router_tool.cpp:177
 msgid "Select Track/Via Width"
