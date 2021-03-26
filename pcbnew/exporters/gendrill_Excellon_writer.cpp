@@ -149,7 +149,7 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
 }
 
 
-void EXCELLON_WRITER::writeHoleAttribute( HOLE_ATTRIBUTE aAttribute, bool aToolAttr )
+void EXCELLON_WRITER::writeHoleAttribute( HOLE_ATTRIBUTE aAttribute )
 {
     // Hole attributes are comments (lines starting by ';') in the drill files
     // For tools (file header), they are similar to X2 apertures attributes.
@@ -159,31 +159,19 @@ void EXCELLON_WRITER::writeHoleAttribute( HOLE_ATTRIBUTE aAttribute, bool aToolA
         switch( aAttribute )
         {
         case HOLE_ATTRIBUTE::HOLE_VIA:
-            if( aToolAttr )
-                fprintf( m_file, "; #@! TA.AperFunction,ViaDrill\n" );
-            else
-                fprintf( m_file, "; via hole\n" );
+            fprintf( m_file, "; #@! TA.AperFunction,ViaDrill\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_PAD:
-            if( aToolAttr )
-                fprintf( m_file, "; #@! TA.AperFunction,ComponentDrill,Plated,PTH\n" );
-            else
-                fprintf( m_file, "; plated pad hole\n" );
+            fprintf( m_file, "; #@! TA.AperFunction,ComponentDrill,Plated,PTH\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_MECHANICAL:
-            if( aToolAttr )
-                fprintf( m_file, "; #@! TA.AperFunction,ComponentDrill,NonPlated,NPTH\n" );
-            else
-                fprintf( m_file, "; not plated pad hole\n" );
+            fprintf( m_file, "; #@! TA.AperFunction,ComponentDrill,NonPlated,NPTH\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_UNKNOWN:
-            if( aToolAttr )
-                fprintf( m_file, "; #@! TD\n" );
-            else
-                fprintf( m_file, "; unknown\n" );
+            fprintf( m_file, "; #@! TD\n" );
             break;
         }
     }
@@ -212,7 +200,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
         DRILL_TOOL& tool_descr = m_toolListBuffer[ii];
 
 #if USE_ATTRIB_FOR_HOLES
-        writeHoleAttribute( tool_descr.m_HoleAttribute, true );
+        writeHoleAttribute( tool_descr.m_HoleAttribute );
 #endif
         // if units are mm, the resolution is 0.001 mm (3 digits in mantissa)
         // if units are inches, the resolution is 0.1 mil (4 digits in mantissa)
@@ -230,8 +218,6 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
      * holes will be created later) */
     int tool_reference = -2;
 
-    HOLE_ATTRIBUTE last_item_type = HOLE_ATTRIBUTE::HOLE_UNKNOWN;
-
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
         HOLE_INFO& hole_descr = m_holeListBuffer[ii];
@@ -244,13 +230,6 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
             tool_reference = hole_descr.m_Tool_Reference;
             fprintf( m_file, "T%d\n", tool_reference );
         }
-
-        HOLE_ATTRIBUTE curr_item_type = hole_descr.m_HoleAttribute;
-
-        if( curr_item_type != last_item_type )
-            writeHoleAttribute( curr_item_type, false );
-
-        last_item_type = curr_item_type;
 
         x0 = hole_descr.m_Hole_Pos.x - m_offset.x;
         y0 = hole_descr.m_Hole_Pos.y - m_offset.y;
@@ -270,7 +249,6 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
      */
     tool_reference = -2;    // set to a value not used for
                             // m_holeListBuffer[ii].m_Tool_Reference
-    last_item_type = HOLE_ATTRIBUTE::HOLE_UNKNOWN;
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
@@ -284,13 +262,6 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
             tool_reference = hole_descr.m_Tool_Reference;
             fprintf( m_file, "T%d\n", tool_reference );
         }
-
-        HOLE_ATTRIBUTE curr_item_type = hole_descr.m_HoleAttribute;
-
-        if( curr_item_type != last_item_type )
-            writeHoleAttribute( curr_item_type, false );
-
-        last_item_type = curr_item_type;
 
         diam = std::min( hole_descr.m_Hole_Size.x, hole_descr.m_Hole_Size.y );
 

@@ -158,10 +158,8 @@ private:
      * write a comment string giving the hole attribute like
      * "; #@! TO.P,viatype\n"
      * @param aAttribute is the hole attribute
-     * @param aToolAttr = true if the comment is for a tool (like T1C0.5),
-     *  false for a hole in coord list
      */
-    void writeHoleAttribute( HOLE_ATTRIBUTE aAttribute, bool aToolAttr );
+    void writeHoleAttribute( HOLE_ATTRIBUTE aAttribute );
 };
 
 #endif  //  #ifndef _GENDRILL_EXCELLON_WRITER_
