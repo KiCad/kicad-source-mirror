@@ -222,6 +222,8 @@ protected:
      * @return Pointer to library table selected or nullptr if none selected/canceled
      */
     FP_LIB_TABLE* selectLibTable( bool aOptional = false );
+
+    void handleActivateEvent( wxActivateEvent& aEvent ) override;
 };
 
 #endif

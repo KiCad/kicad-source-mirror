@@ -270,6 +270,11 @@ public:
     ///< Set the current notebook tab.
     void SetTabIndex( int aTab );
 
+    /**
+     * Function to force a redraw of the collapsible panes in this control.
+     */
+    void RefreshCollapsiblePanes();
+
 protected:
     void OnNotebookPageChanged( wxNotebookEvent& event ) override;
 

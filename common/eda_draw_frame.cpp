@@ -55,6 +55,7 @@
 #include <view/view.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <widgets/msgpanel.h>
+#include <wx/event.h>
 #include <wx/snglinst.h>
 #include <dialogs/dialog_grid_settings.h>
 #include <widgets/ui_common.h>
@@ -65,6 +66,8 @@
 BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, EDA_DRAW_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, EDA_DRAW_FRAME::OnUpdateSelectZoom )
+
+    EVT_ACTIVATE( EDA_DRAW_FRAME::onActivate )
 END_EVENT_TABLE()
 
 
@@ -1065,4 +1068,21 @@ void EDA_DRAW_FRAME::resolveCanvasType()
         m_firstRunDialogSetting = 1;
         SaveSettings( config() );
     }
+}
+
+
+void EDA_DRAW_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
+{
+    // Force a refresh of the message panel to ensure that the text is the right color
+    // when the window activates
+    if( !IsIconized() )
+        m_messagePanel->Refresh();
+}
+
+
+void EDA_DRAW_FRAME::onActivate( wxActivateEvent& aEvent )
+{
+    handleActivateEvent( aEvent );
+
+    aEvent.Skip();
 }

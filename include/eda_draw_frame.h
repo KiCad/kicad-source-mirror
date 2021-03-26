@@ -474,6 +474,13 @@ protected:
      */
     bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
+    /**
+     * Handle a window activation event.
+     */
+    virtual void handleActivateEvent( wxActivateEvent& aEvent );
+    void onActivate( wxActivateEvent& aEvent );
+
+
     wxSocketServer*             m_socketServer;
     std::vector<wxSocketBase*>  m_sockets;         ///< interprocess communication
 

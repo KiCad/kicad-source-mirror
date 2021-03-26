@@ -2826,3 +2826,9 @@ void APPEARANCE_CONTROLS::onReadOnlySwatch()
                                 "Preferences to enable color editing." ),
                              10000, wxICON_INFORMATION );
 }
+
+
+void APPEARANCE_CONTROLS::RefreshCollapsiblePanes()
+{
+    m_paneLayerDisplayOptions->Refresh();
+}
