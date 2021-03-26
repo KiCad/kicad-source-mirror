@@ -73,7 +73,14 @@ bool SYMBOL_ASYNC_LOADER::Join()
         if( m_output && !ret.empty() )
         {
             for( const LOADED_PAIR& pair : ret )
+            {
+                // Don't show libraries that had no power symbols
+                if( m_onlyPowerSymbols && pair.second.empty() )
+                    continue;
+
+                // *Do* show empty libraries in the normal case
                 m_output->insert( pair );
+            }
         }
     }
 

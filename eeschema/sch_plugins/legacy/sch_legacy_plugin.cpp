@@ -581,7 +581,6 @@ void SCH_LEGACY_PLUGIN::init( SCHEMATIC* aSchematic, const PROPERTIES* aProperti
 {
     m_version   = 0;
     m_rootSheet = nullptr;
-    m_props     = aProperties;
     m_schematic = aSchematic;
     m_cache     = nullptr;
     m_out       = nullptr;
@@ -4204,7 +4203,7 @@ void SCH_LEGACY_PLUGIN_CACHE::DeleteSymbol( const wxString& aSymbolName )
 }
 
 
-void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName )
+void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPERTIES* aProperties )
 {
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
     {
@@ -4217,7 +4216,7 @@ void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName )
         // must be updated.
         PART_LIBS::s_modify_generation++;
 
-        if( !isBuffering( m_props ) )
+        if( !isBuffering( aProperties ) )
             m_cache->Load();
     }
 }
@@ -4256,11 +4255,10 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
-    m_props = aProperties;
-
     bool powerSymbolsOnly = ( aProperties &&
                               aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
-    cacheLib( aLibraryPath );
+
+    cacheLib( aLibraryPath, aProperties  );
 
     const LIB_PART_MAP& symbols = m_cache->m_symbols;
 
@@ -4278,11 +4276,10 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
-    m_props = aProperties;
-
     bool powerSymbolsOnly = ( aProperties &&
                               aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
-    cacheLib( aLibraryPath );
+
+    cacheLib( aLibraryPath, aProperties );
 
     const LIB_PART_MAP& symbols = m_cache->m_symbols;
 
@@ -4299,9 +4296,7 @@ LIB_PART* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxS
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
-    m_props = aProperties;
-
-    cacheLib( aLibraryPath );
+    cacheLib( aLibraryPath, aProperties );
 
     LIB_PART_MAP::const_iterator it = m_cache->m_symbols.find( aSymbolName );
 
@@ -4316,9 +4311,8 @@ void SCH_LEGACY_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART
                                     const PROPERTIES* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
-    m_props = aProperties;
 
-    cacheLib( aLibraryPath );
+    cacheLib( aLibraryPath, aProperties );
 
     m_cache->AddSymbol( aSymbol );
 
@@ -4331,9 +4325,8 @@ void SCH_LEGACY_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxStri
                                       const PROPERTIES* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
-    m_props = aProperties;
 
-    cacheLib( aLibraryPath );
+    cacheLib( aLibraryPath, aProperties );
 
     m_cache->DeleteSymbol( aSymbolName );
 
@@ -4353,8 +4346,6 @@ void SCH_LEGACY_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath,
     }
 
     LOCALE_IO toggle;
-
-    m_props = aProperties;
 
     delete m_cache;
     m_cache = new SCH_LEGACY_PLUGIN_CACHE( aLibraryPath );
