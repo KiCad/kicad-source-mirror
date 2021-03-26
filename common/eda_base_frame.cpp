@@ -99,6 +99,8 @@ BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
     EVT_MENU_HIGHLIGHT_ALL( EDA_BASE_FRAME::OnMenuEvent )
     EVT_MOVE( EDA_BASE_FRAME::OnMove )
     EVT_MAXIMIZE( EDA_BASE_FRAME::OnMaximize )
+
+    EVT_SYS_COLOUR_CHANGED( EDA_BASE_FRAME::onSystemColorChange )
 END_EVENT_TABLE()
 
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
@@ -470,6 +472,7 @@ void EDA_BASE_FRAME::ThemeChanged()
 {
     ClearScaledBitmapCache();
 
+    // Update all the toolbars to have new icons
     wxAuiPaneInfoArray panes = m_auimgr.GetAllPanes();
 
     for( size_t i = 0; i < panes.GetCount(); ++i )
@@ -1125,4 +1128,30 @@ wxSize EDA_BASE_FRAME::GetWindowSize()
 #endif
 
     return winSize;
+}
+
+
+void EDA_BASE_FRAME::HandleSystemColorChange()
+{
+    // Update the icon theme when the system theme changes and update the toolbars
+    if( GetBitmapStore()->ThemeChanged() )
+        ThemeChanged();
+
+    // This isn't handled by ThemeChanged()
+    if( GetMenuBar() )
+    {
+        // For icons in menus, icon scaling & hotkeys
+        ReCreateMenuBar();
+        GetMenuBar()->Refresh();
+    }
+}
+
+
+void EDA_BASE_FRAME::onSystemColorChange( wxSysColourChangedEvent& aEvent )
+{
+    // Call the handler to update the colors used in the frame
+    HandleSystemColorChange();
+
+    // Skip the change event to ensure the rest of the window controls get it
+    aEvent.Skip();
 }

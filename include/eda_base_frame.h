@@ -421,7 +421,7 @@ public:
     /**
      * Recreates the menu bar.
      *
-     * Needed when the language is changed
+     * Needed when the language or icons are changed
      */
     virtual void ReCreateMenuBar();
 
@@ -567,6 +567,11 @@ public:
         return Close( aForce );
     }
 
+    /**
+     * Update the UI in response to a change in the system colors.
+     */
+    virtual void HandleSystemColorChange();
+
 protected:
     ///< Default style flags used for wxAUI toolbars.
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
@@ -600,6 +605,8 @@ protected:
 
     virtual bool canCloseWindow( wxCloseEvent& aCloseEvent ) { return true; }
     virtual void doCloseWindow() { }
+
+    void onSystemColorChange( wxSysColourChangedEvent& aEvent );
 
     /**
      * Called when when the units setting has changed to allow for any derived classes
