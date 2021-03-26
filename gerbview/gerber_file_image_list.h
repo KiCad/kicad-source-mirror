@@ -76,8 +76,8 @@ public:
     unsigned ImagesMaxCount() { return m_GERBER_List.size(); }
 
     /**
-     * Add a GERBER_FILE_IMAGE* at index aIdx
-     * or at the first free location if aIdx < 0
+     * Add a GERBER_FILE_IMAGE* at index aIdx or at the first free location if aIdx < 0
+     *
      * @param aGbrImage = the image to add
      * @param aIdx = the location to use ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
      * @return true if the index used, or -1 if no room to add image
@@ -86,17 +86,25 @@ public:
 
 
     /**
-     * remove all loaded data in list, and delete all images. Memory is freed
+     * Remove all loaded data in list, and delete all images, freeing the memory.
      */
     void DeleteAllImages();
 
     /**
-     * delete the loaded data of image aIdx. Memory is freed
+     * Delete the loaded data of image aIdx, freeing the memory.
+     *
      * @param aIdx = the index ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
      */
     void DeleteImage( int aIdx );
 
     /**
+     * Get the display name for the layer at aIdx.
+     *
+     * @param aIdx = the index ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
+     * @param aNameOnly = false (default) to add the layer number (for layers manager)
+     * or true to return only the name without layer name (status bar)
+     * @param aFullName = false (default) to ellipsize the name, true to return the full name.
+     *
      * @return a name for image aIdx which can be used in layers manager
      * and layer selector or in the status bar
      * if a file is loaded, the name is:
@@ -105,11 +113,8 @@ public:
      * "<aIdx+1> <short filename> *"
      * if no file loaded, the name is:
      *  "Layer n"  with n = aIdx+1
-     * @param aIdx = the index ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
-     * @param aNameOnly = false (default) to add the layer number (for layers manager)
-     * or true to return only the name without layer name (status bar)
      */
-    const wxString GetDisplayName( int aIdx, bool aNameOnly = false );
+    const wxString GetDisplayName( int aIdx, bool aNameOnly = false, bool aFullName = false );
 
     /**
      * Sort loaded images by Z order priority, if they have the X2 FileFormat info

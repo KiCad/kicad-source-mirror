@@ -134,6 +134,10 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     // Create the PCB_LAYER_WIDGET *after* SetLayout():
     m_LayersManager = new GERBER_LAYER_WIDGET( this, GetCanvas() );
 
+    // Update the minimum string length in the layer panel with the length of the last default layer
+    wxString lyrName = GetImagesList()->GetDisplayName( GetImagesList()->ImagesMaxCount(), false, true );
+    m_LayersManager->SetSmallestLayerString( lyrName );
+
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
     LoadSettings( config() );

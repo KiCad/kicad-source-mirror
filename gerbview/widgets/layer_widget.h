@@ -138,6 +138,8 @@ protected:
 
     ROW_ICON_PROVIDER*  m_IconProvider;
 
+    wxString            m_smallestLayerString;
+
     /**
      * Virtual Function useAlternateBitmap
      * @return true if bitmaps shown in Render layer list
@@ -270,6 +272,14 @@ public:
                   long style = wxTAB_TRAVERSAL );
 
     virtual ~LAYER_WIDGET();
+
+    /**
+     * Set the string that is used for determining the smallest string displayed in the layer's tab.
+     */
+    void SetSmallestLayerString( const wxString& aString )
+    {
+        m_smallestLayerString = aString;
+    }
 
     /**
      * Function GetBestSize

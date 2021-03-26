@@ -221,7 +221,8 @@ void GERBER_LAYER_WIDGET::ReFill()
         int      aRow = findLayerRow( layer );
         bool     visible = true;
         COLOR4D  color = myframe->GetLayerColor( GERBER_DRAW_LAYER( layer ) );
-        wxString msg = GetImagesList()->GetDisplayName( layer );
+        wxString msg = GetImagesList()->GetDisplayName( layer, /* include layer number */ false,
+                                                        /* Get the full name */ true );
 
         if( myframe->GetCanvas() )
             visible = myframe->GetCanvas()->GetView()->IsLayerVisible( GERBER_DRAW_LAYER( layer ) );

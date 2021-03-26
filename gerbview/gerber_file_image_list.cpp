@@ -118,7 +118,7 @@ void GERBER_FILE_IMAGE_LIST::DeleteImage( int aIdx )
 }
 
 // Build a name for image aIdx which can be used in layers manager
-const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly )
+const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly, bool aFullName )
 {
     wxString name;
 
@@ -136,10 +136,10 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly 
         wxFileName fn( gerber->m_FileName );
         wxString filename = fn.GetFullName();
 
-        // if the filename is too long, display a shortened name:
+        // If the filename is too long, display a shortened name if requested
         const int maxlen = 30;
 
-        if( filename.Length() > maxlen )
+        if( !aFullName && filename.Length() > maxlen )
         {
             wxString shortenedfn = filename.Left(2) + "..." + filename.Right(maxlen-5);
             filename = shortenedfn;

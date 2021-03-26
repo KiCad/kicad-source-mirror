@@ -39,6 +39,7 @@
 #include <macros.h>
 #include <menus_helpers.h>
 #include <widgets/indicator_icon.h>
+#include <widgets/wx_ellipsized_static_text.h>
 
 #include <algorithm>
 
@@ -345,11 +346,16 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
 
     // column 3 (COLUMN_COLOR_LYRNAME)
     col = COLUMN_COLOR_LYRNAME;
-    wxStaticText* st = new wxStaticText( m_LayerScrolledWindow, encodeId( col, aSpec.id ), aSpec.rowName );
+    WX_ELLIPSIZED_STATIC_TEXT* st = new WX_ELLIPSIZED_STATIC_TEXT( m_LayerScrolledWindow,
+                                                                   encodeId( col, aSpec.id ),
+                                                                   aSpec.rowName, wxDefaultPosition,
+                                                                   wxDefaultSize,
+                                                                   wxST_ELLIPSIZE_MIDDLE );
     shrinkFont( st, m_PointSize );
     st->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
     st->SetToolTip( aSpec.tooltip );
-    m_LayersFlexGridSizer->wxSizer::Insert( index+col, st, 0, flags );
+    st->SetMinimumStringLength( m_smallestLayerString );
+    m_LayersFlexGridSizer->wxSizer::Insert( index+col, st, 0, flags | wxEXPAND );
 
     // column 4 (COLUMN_ALPHA_INDICATOR)
     col = COLUMN_ALPHA_INDICATOR;
@@ -475,7 +481,8 @@ void LAYER_WIDGET::passOnFocus()
 
 LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID id,
                             const wxPoint& pos, const wxSize& size, long style ) :
-    wxPanel( aParent, id, pos, size, style )
+    wxPanel( aParent, id, pos, size, style ),
+    m_smallestLayerString( "M...M" )
 {
     int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x;
     m_IconProvider = new ROW_ICON_PROVIDER( indicatorSize );
@@ -511,6 +518,9 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
     m_LayersFlexGridSizer = new wxFlexGridSizer( 0, LYR_COLUMN_COUNT, 0, 1 );
     m_LayersFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
     m_LayersFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
+
+    // Make column 3 growable/stretchable
+    m_LayersFlexGridSizer->AddGrowableCol( 3, 1 );
 
     m_LayerScrolledWindow->SetSizer( m_LayersFlexGridSizer );
     m_LayerScrolledWindow->Layout();
