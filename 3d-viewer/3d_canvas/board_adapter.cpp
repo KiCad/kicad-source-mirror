@@ -34,7 +34,7 @@
 #include <3d_math.h>
 #include "3d_fastmath.h"
 #include <geometry/geometry_utils.h>
-#include <math/util.h>      // for KiROUND
+#include <convert_to_biu.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 
@@ -82,6 +82,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_epoxyThickness3DU = 0.0f;
     m_copperThickness3DU  = 0.0f;
     m_nonCopperLayerThickness3DU = 0.0f;
+    m_solderPasteLayerThickness3DU = 0.0f;
     m_biuTo3Dunits = 1.0;
 
     m_trackCount = 0;
@@ -238,10 +239,13 @@ bool BOARD_ADAPTER::IsFootprintShown( FOOTPRINT_ATTR_T aFPAttributes ) const
 }
 
 
-// !TODO: define the actual copper thickness by user
-#define COPPER_THICKNESS KiROUND( 0.035 * IU_PER_MM )   // for 35 um
-#define TECH_LAYER_THICKNESS KiROUND( 0.04 * IU_PER_MM )
-
+// !TODO: define the actual copper thickness by user from board stackup
+#define COPPER_THICKNESS Millimeter2iu( 0.035 )   // for 35 um
+// The solder mask layer (and silkscreen) thickness
+#define TECH_LAYER_THICKNESS Millimeter2iu( 0.04 )
+// The solder paste thickness is chosen bigger than the solder mask layer
+// to be sure is covers the mask when overlapping.
+#define SOLDERPASTE_LAYER_THICKNESS Millimeter2iu( 0.08 )
 
 int BOARD_ADAPTER::GetHolePlatingThickness() const noexcept
 {
@@ -320,6 +324,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     // !TODO: use value defined by user (currently use default values by ctor
     m_copperThickness3DU         = COPPER_THICKNESS     * m_biuTo3Dunits;
     m_nonCopperLayerThickness3DU = TECH_LAYER_THICKNESS * m_biuTo3Dunits;
+    m_solderPasteLayerThickness3DU = SOLDERPASTE_LAYER_THICKNESS * m_biuTo3Dunits;
 
     // Init  Z position of each layer
     // calculate z position for each copper layer
@@ -381,15 +386,23 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
             break;
 
         case B_Mask:
-        case B_Paste:
             zposBottom = zpos_copperTop_back;
             zposTop    = zpos_copperTop_back - m_nonCopperLayerThickness3DU;
             break;
 
+        case B_Paste:
+            zposBottom = zpos_copperTop_back;
+            zposTop    = zpos_copperTop_back - m_solderPasteLayerThickness3DU;
+            break;
+
         case F_Mask:
-        case F_Paste:
-            zposTop    = zpos_copperTop_front + m_nonCopperLayerThickness3DU;
             zposBottom = zpos_copperTop_front;
+            zposTop    = zpos_copperTop_front + m_nonCopperLayerThickness3DU;
+            break;
+
+        case F_Paste:
+            zposBottom = zpos_copperTop_front;
+            zposTop    = zpos_copperTop_front + m_solderPasteLayerThickness3DU;
             break;
 
         case B_SilkS:
