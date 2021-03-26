@@ -297,6 +297,9 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
+    if( !m_grid->CommitPendingChanges() )
+        return false;
+
     // We need to keep the name and the value the same at the moment!
     wxString   newName = m_fields->at( VALUE_FIELD ).GetText();
     wxString   oldName = m_libEntry->GetName();
@@ -329,6 +332,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         wxPoint pos = m_fields->at( i ).GetPosition();
         pos.y = -pos.y;
         m_fields->at( i ).SetPosition( pos );
+        m_fields->at( i ).SetId( i );
     }
 
     m_libEntry->SetFields( *m_fields );
