@@ -173,7 +173,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     void parseEDA_TEXT( EDA_TEXT* aText );
     void parsePinNames( std::unique_ptr<LIB_PART>& aSymbol );
 
-    void parseProperty( std::unique_ptr<LIB_PART>& aSymbol );
+    LIB_FIELD* parseProperty( std::unique_ptr<LIB_PART>& aSymbol );
 
     LIB_ARC* parseArc();
     LIB_BEZIER* parseBezier();

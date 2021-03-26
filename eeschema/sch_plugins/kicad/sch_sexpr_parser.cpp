@@ -127,7 +127,9 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, int aFileV
     wxString name;
     wxString error;
     LIB_ITEM* item;
+    LIB_FIELD* field;
     std::unique_ptr<LIB_PART> symbol = std::make_unique<LIB_PART>( wxEmptyString );
+    std::set<int> fieldIDsRead;
 
     m_requiredVersion = aFileVersion;
     symbol->SetUnitCount( 1 );
@@ -197,7 +199,23 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, int aFileV
             break;
 
         case T_property:
-            parseProperty( symbol );
+            field = parseProperty( symbol );
+
+            if( field )
+            {
+                // It would appear that at some point we allowed duplicate ids to slip through
+                // when writing files.  The easiest (and most complete) solution is to disallow
+                // multiple instances of the same id (for all files since the source of the error
+                // *might* in fact be hand-edited files).
+                //
+                // While no longer used, -1 is still a valid id for user field.  It gets converted
+                // to the next unused number on save.
+                if( fieldIDsRead.count( field->GetId() ) )
+                    field->SetId( -1 );
+                else if( field )
+                    fieldIDsRead.insert( field->GetId() );
+            }
+
             break;
 
         case T_extends:
@@ -609,28 +627,12 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
             {
                 switch( token )
                 {
-                case T_left:
-                    aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-                    break;
-
-                case T_right:
-                    aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-                    break;
-
-                case T_top:
-                    aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-                    break;
-
-                case T_bottom:
-                    aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-                    break;
-
-                case T_mirror:
-                    aText->SetMirrored( true );
-                    break;
-
-                default:
-                    Expecting( "left, right, top, bottom, or mirror" );
+                case T_left:   aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );  break;
+                case T_right:  aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT ); break;
+                case T_top:    aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );    break;
+                case T_bottom: aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM ); break;
+                case T_mirror: aText->SetMirrored( true );                       break;
+                default:       Expecting( "left, right, top, bottom, or mirror" );
                 }
             }
 
@@ -712,20 +714,20 @@ void SCH_SEXPR_PARSER::parsePinNames( std::unique_ptr<LIB_PART>& aSymbol )
     }
     else if( token != T_RIGHT )
     {
-        error.Printf(
-            _( "Invalid symbol names definition in\nfile: \"%s\"\nline: %d\noffset: %d" ),
-            CurSource().c_str(), CurLineNumber(), CurOffset() );
+        error.Printf( _( "Invalid symbol names definition in\nfile: '%s'\nline: %d\noffset: %d" ),
+                      CurSource().c_str(),
+                      CurLineNumber(),
+                      CurOffset() );
         THROW_IO_ERROR( error );
     }
 }
 
 
-void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
+LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
 {
-    wxCHECK_RET( CurTok() == T_property,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
-                 wxT( " as a property token." ) );
-    wxCHECK( aSymbol, /* void */ );
+    wxCHECK_MSG( CurTok() == T_property, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a property." ) );
+    wxCHECK( aSymbol, nullptr );
 
     wxString error;
     wxString name;
@@ -736,8 +738,10 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
 
     if( !IsSymbol( token ) )
     {
-        error.Printf( _( "Invalid property name in\nfile: \"%s\"\nline: %d\noffset: %d" ),
-                      CurSource().c_str(), CurLineNumber(), CurOffset() );
+        error.Printf( _( "Invalid property name in\nfile: '%s'\nline: %d\noffset: %d" ),
+                      CurSource().c_str(),
+                      CurLineNumber(),
+                      CurOffset() );
         THROW_IO_ERROR( error );
     }
 
@@ -745,8 +749,10 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
 
     if( name.IsEmpty() )
     {
-        error.Printf( _( "Empty property name in\nfile: \"%s\"\nline: %d\noffset: %d" ),
-                      CurSource().c_str(), CurLineNumber(), CurOffset() );
+        error.Printf( _( "Empty property name in\nfile: '%s'\nline: %d\noffset: %d" ),
+                      CurSource().c_str(),
+                      CurLineNumber(),
+                      CurOffset() );
         THROW_IO_ERROR( error );
     }
 
@@ -755,8 +761,10 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
 
     if( !IsSymbol( token ) )
     {
-        error.Printf( _( "Invalid property value in\nfile: \"%s\"\nline: %d\noffset: %d" ),
-                      CurSource().c_str(), CurLineNumber(), CurOffset() );
+        error.Printf( _( "Invalid property value in\nfile: '%s'\nline: %d\noffset: %d" ),
+                      CurSource().c_str(),
+                      CurLineNumber(),
+                      CurOffset() );
         THROW_IO_ERROR( error );
     }
 
@@ -801,16 +809,19 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
         existingField = aSymbol->GetFieldById( field->GetId() );
 
         *existingField = *field;
+        return existingField;
     }
     else if( name == "ki_keywords" )
     {
         // Not a LIB_FIELD object yet.
         aSymbol->SetKeyWords( value );
+        return nullptr;
     }
     else if( name == "ki_description" )
     {
         // Not a LIB_FIELD object yet.
         aSymbol->SetDescription( value );
+        return nullptr;
     }
     else if( name == "ki_fp_filters" )
     {
@@ -822,24 +833,28 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
             filters.Add( tokenizer.GetNextToken() );
 
         aSymbol->SetFPFilters( filters );
+        return nullptr;
     }
     else if( name == "ki_locked" )
     {
         // This is a temporary LIB_FIELD object until interchangeable units are determined on
         // the fly.
         aSymbol->LockUnits( true );
+        return nullptr;
     }
     else
     {
-        existingField = aSymbol->GetFieldById( field->GetId() );
+        existingField = aSymbol->FindField( field->GetCanonicalName() );
 
         if( !existingField )
         {
-            aSymbol->AddDrawItem( field.release(), false );
+            aSymbol->AddDrawItem( field.get(), false );
+            return field.release();
         }
         else
         {
             *existingField = *field;
+            return existingField;
         }
     }
 }
@@ -2280,8 +2295,8 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             // multiple instances of the same id (for all files since the source of the error
             // *might* in fact be hand-edited files).
             //
-            // While no longer used, -1 is still a valid id for user fields and will
-            // get written out as the next unused number on save.
+            // While no longer used, -1 is still a valid id for user field.  It gets converted
+            // to the next unused number on save.
             if( fieldIDsRead.count( field->GetId() ) )
                 field->SetId( -1 );
             else
@@ -2533,8 +2548,8 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
             // complete) solution is to disallow multiple instances of the same id (for all
             // files since the source of the error *might* in fact be hand-edited files).
             //
-            // While no longer used, -1 is still a valid id for user fields and will
-            // get written out as the next unused number on save.
+            // While no longer used, -1 is still a valid id for user field.  It gets converted
+            // to the next unused number on save.
             if( fieldIDsRead.count( field->GetId() ) )
                 field->SetId( -1 );
             else
