@@ -66,6 +66,12 @@ static const SHAPE_LINE_CHAIN buildHullForPrimitiveShape( const SHAPE* aShape, i
         return SegmentHull( *seg, aClearance, aWalkaroundThickness );
     }
 
+    case SH_ARC:
+    {
+        const SHAPE_ARC* arc = static_cast<const SHAPE_ARC*>( aShape );
+        return ArcHull( *arc, aClearance, aWalkaroundThickness );
+    }
+
     case SH_SIMPLE:
     {
         const SHAPE_SIMPLE* convex = static_cast<const SHAPE_SIMPLE*>( aShape );
@@ -74,7 +80,8 @@ static const SHAPE_LINE_CHAIN buildHullForPrimitiveShape( const SHAPE* aShape, i
     }
     default:
     {
-        wxLogError("Unsupported hull shape: %d", aShape->Type() );
+        wxLogError( "Unsupported hull shape: %d (%s)", aShape->Type(),
+                    SHAPE_TYPE_asString( aShape->Type() ) );
         break;
     }
     }
