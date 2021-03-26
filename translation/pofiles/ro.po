@@ -1,40 +1,47 @@
+# Alex Gellen <alex.n.gellen@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-22 17:14-0700\n"
-"PO-Revision-Date: 2018-07-15 17:07+0200\n"
+"PO-Revision-Date: 2021-03-26 20:05+0000\n"
+"Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
-msgstr ""
+msgstr "Toate fișierele (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:100
 #, c-format
 msgid "All supported files (%s)"
-msgstr ""
+msgstr "Toate fișierele acceptate (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
 msgid "Available paths:"
-msgstr ""
+msgstr "Căi disponibile:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr ""
+msgstr "Configurați căi"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.h:63
 msgid "Select 3D Model"
-msgstr ""
+msgstr "Selectați Modelul 3D"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
 msgid "Scale"
-msgstr ""
+msgstr "Scală"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:29
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:74
@@ -56,7 +63,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1332
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:61
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:39
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:84
@@ -81,7 +88,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1343
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:78
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:49
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:94
@@ -89,21 +96,21 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1012
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1024
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:701 pcbnew/footprint.cpp:868
 #: pcbnew/pad.cpp:913
 msgid "Rotation"
-msgstr ""
+msgstr "Rotație"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:111
 msgid "Offset"
-msgstr ""
+msgstr "Decalaj"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
 msgid "Opacity"
-msgstr ""
+msgstr "Opacitate"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
@@ -111,155 +118,159 @@ msgstr ""
 #: eeschema/dialogs/dialog_print_using_printer.cpp:271
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:254
 msgid "Preview"
-msgstr ""
+msgstr "Previzualizare"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:192
 msgid "Change to isometric perspective"
-msgstr ""
+msgstr "Schimbarea în perspectivă izometrică"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:221
 msgid "Reload board and 3D models"
-msgstr ""
+msgstr "Reîncarcă placa și modelele 3D"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:273
 msgid "Build board outline"
-msgstr ""
+msgstr "Construieste conturul plăci"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:435
 msgid "Create layers"
-msgstr ""
+msgstr "Creați straturi"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:457
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:86
 msgid "No footprint loaded."
-msgstr ""
+msgstr "Nici o amprentă încărcată."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:473
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
+"Schița amprentei lipsește sau este greșită. Rulați Footprint Checker pentru "
+"o analiză completă."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:482
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
+"Schița planșei lipsește sau este greșită. Rulați DRC pentru o analiză "
+"completă."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
-msgstr ""
+msgstr "Creați trasee și via-uri"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:680
 msgid "Create zones"
-msgstr ""
+msgstr "Creați zone"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:750
 msgid "Simplifying copper layers polygons"
-msgstr ""
+msgstr "Simplificarea poligoanelor straturilor de cupru"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:829
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "Simplificați contururile găurilor"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:858
 msgid "Build Tech layers"
-msgstr ""
+msgstr "Construiți straturi tehnice"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1033
 msgid "Build BVH for holes and vias"
-msgstr ""
+msgstr "Construiți BVH pentru găuri și via-uri"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:413
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "Versiunea dvs. OpenGL nu este acceptată. Minimul necesar este 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:534
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr ""
+msgstr "Ultimul durată a randări %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:738
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr ""
+msgstr "Reţea %s ClasăReţea%s NumePad %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:763
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:776
 #, c-format
 msgid "Net %s\tNetClass %s"
-msgstr ""
+msgstr "Reţea %s ClasăReţea %s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:439
 msgid "Load Raytracing: board"
-msgstr ""
+msgstr "Încărcați Raytracing: placă"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:638
 msgid "Load Raytracing: layers"
-msgstr ""
+msgstr "Încărcați Raytracing: straturi"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:881
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:644
 msgid "Loading 3D models"
-msgstr ""
+msgstr "Se încarcă modele 3D"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:1021
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:654
 #, c-format
 msgid "Reload time %.3f s"
-msgstr ""
+msgstr "Timp de reîncărcare %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:178
 #: 3d-viewer/3d_rendering/legacy/render_3d_legacy.cpp:559
 msgid "Loading..."
-msgstr ""
+msgstr "Se încarcă..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:343
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr ""
+msgstr "Timp de redare %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:397
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr ""
+msgstr "Redare: %.0f %%"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:848
 msgid "Rendering: Post processing shader"
-msgstr ""
+msgstr "Randare: Shader de post procesare"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:448
 msgid "Load OpenGL: board"
-msgstr ""
+msgstr "Încărcați OpenGL: placă"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:481
 msgid "Load OpenGL: holes and vias"
-msgstr ""
+msgstr "Încărcați OpenGL: găuri și via-uri"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:547
 msgid "Load OpenGL: layers"
-msgstr ""
+msgstr "Încărcați OpenGL: straturi"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:884
 #, c-format
 msgid "Loading %s"
-msgstr ""
+msgstr "Se încarcă %s"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
-msgstr ""
+msgstr "Exportați vizualizarea curentă ca PNG ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 msgid "Export Current View as JPEG..."
-msgstr ""
+msgstr "Exportați vizualizarea curentă ca JPEG ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/hotkey_store.cpp:77
 #: common/tool/actions.cpp:553 pcbnew/footprint_viewer_frame.cpp:980
 #: pcbnew/pcb_base_frame.cpp:421
 msgid "3D Viewer"
-msgstr ""
+msgstr "Vizualizator 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:69
 msgid "Copy 3D Image"
-msgstr ""
+msgstr "Copiați imaginea 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:157
@@ -267,70 +278,70 @@ msgstr ""
 #: gerbview/gerbview_frame.cpp:1002 pagelayout_editor/pl_editor_frame.cpp:464
 #: pcbnew/footprint_edit_frame.cpp:915 pcbnew/pcbnew_config.cpp:55
 msgid "Display Options"
-msgstr ""
+msgstr "Opțiuni de afișare"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:111
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:592
 msgid "Raytracing"
-msgstr ""
+msgstr "Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:118
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:79
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:353
 msgid "Render Options"
-msgstr ""
+msgstr "Opțiuni de randare"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:123
 msgid "Material Properties"
-msgstr ""
+msgstr "Proprietăți materiale"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Raytracing Options"
-msgstr ""
+msgstr "Opțiuni Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:152
 msgid "Choose Colors"
-msgstr ""
+msgstr "Alege Culori"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:155
 msgid "Background Top Color..."
-msgstr ""
+msgstr "Culoare de fundal de sus..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:159
 msgid "Background Bottom Color..."
-msgstr ""
+msgstr "Culoare de fundal de jos..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:163
 msgid "Silkscreen Color..."
-msgstr ""
+msgstr "Culoare serigrafie ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:167
 msgid "Solder Mask Color..."
-msgstr ""
+msgstr "Culoarea măștii de lipit..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:171
 msgid "Solder Paste Color..."
-msgstr ""
+msgstr "Culoare pastei de lipit..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:175
 msgid "Copper/Surface Finish Color..."
-msgstr ""
+msgstr "Culoare finisare cupru / suprafață ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:179
 msgid "Board Body Color..."
-msgstr ""
+msgstr "Culoarea corpului plăcii ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:186
 msgid "Get colors from physical stackup"
-msgstr ""
+msgstr "Obțineți culori din stivuirea fizică"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:197
 msgid "3D Grid"
-msgstr ""
+msgstr "Grilă 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:209
 msgid "Reset to Default Settings"
-msgstr ""
+msgstr "Resetați la setările implicite"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:212 cvpcb/menubar.cpp:71
 #: eeschema/menubar.cpp:272
@@ -339,7 +350,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:232
 #: pcbnew/menubar_pcb_editor.cpp:442
 msgid "Preferences..."
-msgstr ""
+msgstr "Preferinte..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:213 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:273
@@ -348,7 +359,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:233
 #: pcbnew/menubar_pcb_editor.cpp:443
 msgid "Show preferences for all open tools"
-msgstr ""
+msgstr "Afișați preferințele pentru toate instrumentele deschise"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:220 cvpcb/menubar.cpp:84
 #: eeschema/menubar.cpp:283
@@ -358,7 +369,7 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:242 pcbnew/menubar_pcb_editor.cpp:453
 #: pcbnew/toolbars_footprint_viewer.cpp:176
 msgid "&File"
-msgstr ""
+msgstr "&Fisier"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:221 cvpcb/menubar.cpp:85
 #: eeschema/menubar.cpp:284
@@ -366,7 +377,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:166 pcbnew/menubar_footprint_editor.cpp:243
 #: pcbnew/menubar_pcb_editor.cpp:454
 msgid "&Edit"
-msgstr ""
+msgstr "&Editați"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:222 eeschema/menubar.cpp:285
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:177
@@ -375,113 +386,113 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:244 pcbnew/menubar_pcb_editor.cpp:455
 #: pcbnew/toolbars_footprint_viewer.cpp:177
 msgid "&View"
-msgstr ""
+msgstr "&Vizualizare"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:223 cvpcb/menubar.cpp:86
 #: gerbview/menubar.cpp:227 kicad/menubar.cpp:180
 msgid "&Preferences"
-msgstr ""
+msgstr "&Preferințe"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
-msgstr ""
+msgstr "Reîncarcă placa"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:60
 msgid "Copy 3D image to clipboard"
-msgstr ""
+msgstr "Copiați imaginea 3D în mapă"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 msgid "Set display options, and some layers visibility"
-msgstr ""
+msgstr "Setați opțiunile de afișare și vizibilitatea unor straturi"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:70
 msgid "Render current view using Raytracing"
-msgstr ""
+msgstr "Randați vizualizarea curentă utilizând Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
 msgid "3D Model Visibility"
-msgstr ""
+msgstr "Vizibilitate model 3D"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:30
 msgid "Show 3D through hole models"
-msgstr ""
+msgstr "Afișați modelele 3D prin gaură"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:33
 msgid "Show 3D SMD models"
-msgstr ""
+msgstr "Afișați modele SMD 3D"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:36
 msgid "Show 3D virtual models"
-msgstr ""
+msgstr "Afișați modele virtuale 3D"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:43
 msgid "Board Layers"
-msgstr ""
+msgstr "Straturi ale plăci"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:45
 msgid "Show silkscreen layers"
-msgstr ""
+msgstr "Afișați straturi de serigrafie"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:48
 msgid "Show solder mask layers"
-msgstr ""
+msgstr "Afișați straturile de maști de lipit"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:51
 msgid "Show solder paste layers"
-msgstr ""
+msgstr "Afișați straturile pastei de lipit"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:54
 msgid "Show adhesive layers"
-msgstr ""
+msgstr "Arată straturile adezive"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:61
 msgid "User Layers (not shown in realistic mode)"
-msgstr ""
+msgstr "Straturi ale utilizator (nu sunt afișate în modul realist)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:63
 msgid "Show comments and drawings layers"
-msgstr ""
+msgstr "Afișați straturi de comentarii și desene"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:66
 msgid "Show ECO layers"
-msgstr ""
+msgstr "Afișați straturile ECO"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:81
 msgid "Realistic mode"
-msgstr ""
+msgstr "Mod realist"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:84
 msgid "Show board body"
-msgstr ""
+msgstr "Arată corpul plăci"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
 msgid "Show filled areas in zones"
-msgstr ""
+msgstr "Afișați zonele umplute"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:90
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr ""
+msgstr "Scoateți mască de lipit din serigrafie"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:93
 msgid "Clip silkscreen at via annulus"
-msgstr ""
+msgstr "Decupați serigrafia la via anulară"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Utilizați culoarea cuprului gol pentru cupru neplacat"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "Utilizați diferite culori pentru cupru placat și neplacat. (Încet)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
-msgstr ""
+msgstr "Opțiuni cameră"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:110
 msgid "Rotation Increment:"
-msgstr ""
+msgstr "Increment de rotație:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:118
 #: common/base_units.cpp:511 pcb_calculator/widgets/unit_selector.cpp:130
@@ -492,242 +503,250 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:347
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1364
 msgid "deg"
-msgstr ""
+msgstr "Grad"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:128
 msgid "Enable animation"
-msgstr ""
+msgstr "Activați animația"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:135
 msgid "Animation speed:"
-msgstr ""
+msgstr "Viteza animației:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:163
 msgid "OpenGL Render Options"
-msgstr ""
+msgstr "Opțiuni de randare OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:165
 msgid "Show model bounding boxes"
-msgstr ""
+msgstr "Afișați perimetru de delimitare a modelului"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:168
 msgid "Show copper thickness"
-msgstr ""
+msgstr "Arată grosimea cuprului"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:175
 msgid "Other Options"
-msgstr ""
+msgstr "Alte opțiuni"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:182
 msgid "Anti-aliasing:"
-msgstr ""
+msgstr "Antidedublare:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
 msgid "Disabled"
-msgstr ""
+msgstr "Dezactivat"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
 msgid "2x"
-msgstr ""
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
 msgid "4x"
-msgstr ""
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
 msgid "8x"
-msgstr ""
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:190
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
+"Vizualizatorul 3D trebuie închis și redeschis pentru a aplica această setare"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:194
 msgid "Selection color:"
-msgstr ""
+msgstr "Culoare selectie:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:208
 msgid "While Moving"
-msgstr ""
+msgstr "În timpul mutării"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:210
 msgid "Disable anti-aliasing"
-msgstr ""
+msgstr "Dezactivați Antidedublare"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:213
 msgid "Disable thickness"
-msgstr ""
+msgstr "Dezactivați grosimea"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:216
 msgid "Disable vias"
-msgstr ""
+msgstr "Dezactivați via-uri"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:219
 msgid "Disable holes"
-msgstr ""
+msgstr "Dezactivați găurile"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:229
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:240
 msgid "Raytracing Render Options"
-msgstr ""
+msgstr "Opțiuni de randare Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:246
 msgid "Procedural textures"
-msgstr ""
+msgstr "Texturi procedurale"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:250
 msgid "Add floor"
-msgstr ""
+msgstr "Adăugați podea"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:254
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Anti-aliasing"
-msgstr ""
+msgstr "Antidedublare"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:258
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
 msgid "Post-processing"
-msgstr ""
+msgstr "Post-procesare"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:273
 msgid "Number of Samples"
-msgstr ""
+msgstr "Număr de probe"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:277
 msgid "Spread Factor %"
-msgstr ""
+msgstr "Factor de răspândire %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:281
 msgid "Recursion Level"
-msgstr ""
+msgstr "Nivel de recursivitate"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:285
 msgid "Shadows:"
-msgstr ""
+msgstr "Umbre:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:290
 msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
 msgstr ""
+"Numărul de raze care vor fi proiectate, în direcția luminii, pentru a evalua "
+"un punct de umbră"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:296
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:314
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:334
 msgid "Random direction factor of the cast rays"
-msgstr ""
+msgstr "Factorul de răspândirea aleatorie a razelor de lumină"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:303
 msgid "Reflections:"
-msgstr ""
+msgstr "Reflecții:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:308
 msgid "Number of rays that will be cast to evaluate a reflection point"
 msgstr ""
+"Numărul de raze care vor fi proiectate pentru a evalua un punct de reflecție"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:319
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
+"Numărul de interacțiuni pe care o rază le poate parcurge prin obiecte. (un "
+"număr mai mare de niveluri îmbunătățește rezultatele, în special în cazul "
+"plăcilor foarte transparente)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
 msgid "Refractions:"
-msgstr ""
+msgstr "Refracții:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:328
 msgid "Number of rays that will be cast to evaluate a refraction point"
 msgstr ""
+"Numărul de raze care vor fi proiectate pentru a evalua un punct de refracție"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:339
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr ""
+msgstr "Numărul de ricoșe pe care o rază poate lovi obiectele reflectorizante"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:359
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:584
 msgid "Lights Configuration"
-msgstr ""
+msgstr "Configurarea luminilor"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:367
 msgid "Ambient camera light:"
-msgstr ""
+msgstr "Lumina camerei ambientale:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:386
 msgid "Top light:"
-msgstr ""
+msgstr "Lumina de sus:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:396
 msgid "Bottom light:"
-msgstr ""
+msgstr "Lumina de jos:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:421
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:438
 msgid "Elevation (degrees)"
-msgstr ""
+msgstr "Elevație (grade)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:425
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:442
 msgid "Azimuth (degrees)"
-msgstr ""
+msgstr "Azimut (grade)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:446
 msgid "1:"
-msgstr ""
+msgstr "1:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:462
 msgid "5:"
-msgstr ""
+msgstr "5:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:475
 msgid "2:"
-msgstr ""
+msgstr "2:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:491
 msgid "6:"
-msgstr ""
+msgstr "6:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:504
 msgid "3:"
-msgstr ""
+msgstr "3:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:520
 msgid "7:"
-msgstr ""
+msgstr "7:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:533
 msgid "4:"
-msgstr ""
+msgstr "4:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:549
 msgid "8:"
-msgstr ""
+msgstr "8:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:571
 msgid "Reset to defaults"
-msgstr ""
+msgstr "Resetare la valorile implicite"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.h:159
 msgid "3D Display Options"
-msgstr ""
+msgstr "Opțiuni de afișare 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:96
 msgid "KiCad 3D Viewer"
-msgstr ""
+msgstr "Vizualizator 3D KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
-msgstr ""
+msgstr "Culoarea fundalului, partea de jos"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:339
 msgid "Background Color, Top"
-msgstr ""
+msgstr "Culoarea fundalului, partea de sus"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:821
 msgid "3D Image File Name"
-msgstr ""
+msgstr "Nume fișier imagine 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:842
 #, c-format
@@ -735,6 +754,8 @@ msgid ""
 "Insufficient permissions required to save file\n"
 "%s"
 msgstr ""
+"Permisiuni insuficiente disponibile pentru salvarea fișierului\n"
+"%s"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:843 common/confirm.cpp:130
 #: common/confirm.cpp:269 common/dialogs/panel_setup_severities.cpp:40
@@ -742,95 +763,95 @@ msgstr ""
 #: kicad/import_project.cpp:163 kicad/kicad.cpp:168
 #: kicad/tools/kicad_manager_control.cpp:173
 msgid "Error"
-msgstr ""
+msgstr "Eroare"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:876
 msgid "Failed to copy image to clipboard"
-msgstr ""
+msgstr "Nu s-a reușit copierea imaginii în mapă"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:887
 msgid "Can't save file"
-msgstr ""
+msgstr "Nu se poate salva fișierul"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:939
 msgid "Silkscreen Color"
-msgstr ""
+msgstr "Culoare serigrafie"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:975
 msgid "Solder Mask Color"
-msgstr ""
+msgstr "Culoarea măștii de lipit"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:998
 msgid "Copper Color"
-msgstr ""
+msgstr "Culoare cupru"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1024
 msgid "Board Body Color"
-msgstr ""
+msgstr "Culoarea corpului plăcii"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1044
 msgid "Solder Paste Color"
-msgstr ""
+msgstr "Culoare pastei de lipit"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:43
 msgid "Center pivot rotation"
-msgstr ""
+msgstr "Rotire a pivotului central"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:43
 msgid "Center pivot rotation (middle mouse click)"
-msgstr ""
+msgstr "Rotire a pivotului central (clic din mijloc al mouse-ului)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:48
 msgid "Rotate X Clockwise"
-msgstr ""
+msgstr "Rotiți X în sensul acelor de ceasornic"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:53
 msgid "Rotate X Counterclockwise"
-msgstr ""
+msgstr "Rotiți X în sens contrar acelor de ceasornic"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:58
 msgid "Rotate Y Clockwise"
-msgstr ""
+msgstr "Rotiți Y în sensul acelor de ceasornic"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:63
 msgid "Rotate Y Counterclockwise"
-msgstr ""
+msgstr "Rotiți Y în sens contrar acelor de ceasornic"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:68
 msgid "Rotate Z Clockwise"
-msgstr ""
+msgstr "Rotiți Z în sensul acelor de ceasornic"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:73
 msgid "Rotate Z Counterclockwise"
-msgstr ""
+msgstr "Rotiți Z în sens contrar acelor de ceasornic"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:79
 msgid "Move board Left"
-msgstr ""
+msgstr "Mutați placa în stânga"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:85
 msgid "Move board Right"
-msgstr ""
+msgstr "Mutați placa în dreapta"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:91
 msgid "Move board Up"
-msgstr ""
+msgstr "Mutați placa în sus"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:97
 msgid "Move board Down"
-msgstr ""
+msgstr "Mutați placa în jos"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:103
 msgid "Home view"
-msgstr ""
+msgstr "Vizualizare acasă"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:109
 msgid "Reset view"
-msgstr ""
+msgstr "Reinițializați vizualizare"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
 msgid "Flip Board"
-msgstr ""
+msgstr "Întoarce placa"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
 msgid "Flip the board view"
@@ -838,217 +859,224 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
 msgid "Toggle orthographic projection"
-msgstr ""
+msgstr "Comutați proiecția ortografică"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
 msgid "Enable/disable orthographic projection"
-msgstr ""
+msgstr "Activați / dezactivați proiecția ortografică"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:126
 msgid "View Front"
-msgstr ""
+msgstr "Vedeți partea din față"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:132
 msgid "View Back"
-msgstr ""
+msgstr "Vedeți partea din spate"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:138
 msgid "View Left"
-msgstr ""
+msgstr "Vedeți partea din stânga"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:144
 msgid "View Right"
-msgstr ""
+msgstr "Vedeți partea din dreapta"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:150
 msgid "View Top"
-msgstr ""
+msgstr "Vedeți partea de sus"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:156
 msgid "View Bottom"
-msgstr ""
+msgstr "Vizualizați partea de jos"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:161
 msgid "No 3D Grid"
-msgstr ""
+msgstr "Fără grilă 3D"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:166
 msgid "3D Grid 10mm"
-msgstr ""
+msgstr "Grilă 3D de 10 mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:171
 msgid "3D Grid 5mm"
-msgstr ""
+msgstr "Grilă 3D de 5 mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr ""
+msgstr "Grilă 3D de 2,5 mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:181
 msgid "3D Grid 1mm"
-msgstr ""
+msgstr "Grilă 3D de 1mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 msgid "Use All Properties"
-msgstr ""
+msgstr "Utilizați toate proprietățile"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 msgid "Use all material properties from each 3D model file"
-msgstr ""
+msgstr "Utilizați toate proprietățile materialelor din fiecare fișier model 3D"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:193
 msgid "Use Diffuse Only"
-msgstr ""
+msgstr "Utilizați numai difuz"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:193
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr ""
+msgstr "Utilizați numai proprietatea difuză a culorilor din fișierul model 3D"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:199
 msgid "CAD Color Style"
-msgstr ""
+msgstr "Stil de culoare CAD"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:199
 msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr ""
+"Utilizați un stil de culoare CAD bazat pe culoarea difuză a materialului"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
 msgid "Toggle Through Hole 3D models"
-msgstr ""
+msgstr "Comutați modele 3D prin gaură"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
 msgid "Toggle 3D models with 'Through hole' attribute"
-msgstr ""
+msgstr "Comutați modele 3D cu atributul „Prin gaură”"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle SMD 3D models"
-msgstr ""
+msgstr "Comutați modele 3D SMD"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle 3D models with 'Surface mount' attribute"
-msgstr ""
+msgstr "Comutați modele 3D cu atributul „Montaj de suprafață”"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
 msgid "Toggle Virtual 3D models"
-msgstr ""
+msgstr "Comutați modele 3D virtuale"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
 msgid "Toggle 3D models with 'Virtual' attribute"
-msgstr ""
+msgstr "Comutați modele 3D cu atributul „Virtual”"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:227
 msgid "Show Model Bounding Boxes"
-msgstr ""
+msgstr "Afișați perimetru de delimitare a modelului"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:232
+#, fuzzy
 msgid "Render Shadows"
-msgstr ""
+msgstr "Randare umbrelor"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:237
 msgid "Procedural Textures"
-msgstr ""
+msgstr "Texturi procedurale"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:237
 msgid "Apply procedural textures to materials (slow)"
-msgstr ""
+msgstr "Aplicați texturi procedurale materialelor (lent)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:242
 msgid "Add Floor"
-msgstr ""
+msgstr "Adăugați podea"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:242
 msgid "Adds a floor plane below the board (slow)"
-msgstr ""
+msgstr "Adaugă un plan de podea sub placă (lent)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
 msgid "Refractions"
-msgstr ""
+msgstr "Refracții"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
 msgid "Render materials with refractive properties on final render (slow)"
 msgstr ""
+"Redarea materialelor cu proprietăți de refracție la randarea finală (lent)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
 msgid "Reflections"
-msgstr ""
+msgstr "Reflecții"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
 msgid "Render materials with reflective properties on final render (slow)"
 msgstr ""
+"Redarea materialelor cu proprietăți reflectorizante la randarea finală (lent)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Render with improved quality on final render (slow)"
-msgstr ""
+msgstr "Render cu o calitate îmbunătățită la randarea finală (lent)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:263
 msgid ""
 "Apply Screen Space Ambient Occlusion and Global Illumination reflections on "
 "final render (slow)"
 msgstr ""
+"Aplicați Screen Space Ambient Occlusion și reflexii de iluminare globală la "
+"redarea finală (lent)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:268
 msgid "Toggle realistic mode"
-msgstr ""
+msgstr "Comutați modul realist"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:273
 msgid "Toggle board body display"
-msgstr ""
+msgstr "Comutați afișajul corpului plăcii"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:278
 msgid "Show 3D Axis"
-msgstr ""
+msgstr "Afișați axa 3D"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:283
 msgid "Toggle zone display"
-msgstr ""
+msgstr "Comutați afișarea zonei"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
+#, fuzzy
 msgid "Toggle adhesive display"
-msgstr ""
+msgstr "Comutați adeziv"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
 msgid "Toggle display of adhesive layers"
-msgstr ""
+msgstr "Comutați afișarea straturilor adezive"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:293
 msgid "Toggle silkscreen display"
-msgstr ""
+msgstr "Comutați serigrafie"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:293
 msgid "Toggle display of silkscreen layers"
-msgstr ""
+msgstr "Comutați afișarea straturilor de serigrafie"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:298
 msgid "Toggle solder mask display"
-msgstr ""
+msgstr "Comutați mască de lipit"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:298
 msgid "Toggle display of solder mask layers"
-msgstr ""
+msgstr "Comutați afișarea straturilor de mască de lipit"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:303
 msgid "Toggle solder paste display"
-msgstr ""
+msgstr "Comutați pasta de lipit"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:303
 msgid "Toggle display of solder paste layers"
-msgstr ""
+msgstr "Comutați afișarea straturilor de pasta de lipit"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:308
 msgid "Toggle comments display"
-msgstr ""
+msgstr "Comutați comentarii"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:308
 msgid "Toggle display of comments and drawings layers"
-msgstr ""
+msgstr "Comutați afișarea straturilor de comentarii și desene"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:313
 msgid "Toggle ECO display"
-msgstr ""
+msgstr "Comutați ECO"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:313
 msgid "Toggle display of ECO layers"
-msgstr ""
+msgstr "Comutați afișarea straturilor ECO"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:154 common/base_units.cpp:469
 #: common/dialogs/dialog_grid_settings_base.cpp:41
@@ -1131,7 +1159,7 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:99
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "mm"
-msgstr ""
+msgstr "mm"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:154
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
@@ -1142,31 +1170,31 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:757
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Inch"
-msgstr ""
+msgstr "Țol"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:154
 msgid "DPI"
-msgstr ""
+msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:338
 #: eeschema/tools/sch_drawing_tools.cpp:425
 #: pagelayout_editor/pl_editor_frame.cpp:823
 msgid "Choose Image"
-msgstr ""
+msgstr "Alegeți imaginea"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:339
 #: eeschema/tools/sch_drawing_tools.cpp:426
 #: pagelayout_editor/pl_editor_frame.cpp:824
 msgid "Image Files"
-msgstr ""
+msgstr "Fișiere imagine"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:697
 msgid "Unable to export to the Clipboard"
-msgstr ""
+msgstr "Imposibil de exportat în mapă"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:732
 msgid "Create Logo File"
-msgstr ""
+msgstr "Creați fișier de siglă"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:750
 #: bitmap2component/bitmap2cmp_gui.cpp:790
@@ -1174,23 +1202,23 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_gui.cpp:868
 #, c-format
 msgid "File \"%s\" could not be created."
-msgstr ""
+msgstr "Fișierul „%s” nu a putut fi creat."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:770
 msgid "Create PostScript File"
-msgstr ""
+msgstr "Creați fișier PostScript"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:810
 msgid "Create Symbol Library"
-msgstr ""
+msgstr "Creați o bibliotecă de simboluri"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:849
 msgid "Create Footprint Library"
-msgstr ""
+msgstr "Creați Biblioteca de amprente"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:891
 msgid "Error allocating memory for potrace bitmap"
-msgstr ""
+msgstr "Eroare la alocarea memoriei pentru bitmap potrace"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:918
 #: common/dialogs/wx_html_report_panel_base.cpp:42
@@ -1199,27 +1227,27 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1034
 #: pcbnew/dialogs/dialog_drc_base.cpp:157
 msgid "Errors"
-msgstr ""
+msgstr "Erori"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:24
 msgid "Original Picture"
-msgstr ""
+msgstr "Imagine originală"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:29
 msgid "Greyscale Picture"
-msgstr ""
+msgstr "Imagine în tonuri de gri"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:32
 msgid "Black&&White Picture"
-msgstr ""
+msgstr "Imagine alb-negru"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
 msgid "Bitmap Information"
-msgstr ""
+msgstr "Informații Bitmap"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:50
 msgid "Bitmap size:"
-msgstr ""
+msgstr "Dimensiunea bitmap-ului:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:54
 #: bitmap2component/bitmap2cmp_gui_base.cpp:58
@@ -1227,121 +1255,123 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_gui_base.cpp:74
 #: bitmap2component/bitmap2cmp_gui_base.cpp:86
 msgid "0000"
-msgstr ""
+msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:62
 msgid "pixels"
-msgstr ""
+msgstr "pixeli"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:66
 msgid "Bitmap PPI:"
-msgstr ""
+msgstr "PPI Bitmap:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:78
 msgid "PPI"
-msgstr ""
+msgstr "PPI"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:82
 msgid "BPP:"
-msgstr ""
+msgstr "BPP:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:90
 msgid "bits"
-msgstr ""
+msgstr "biți"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Output Parameters"
-msgstr ""
+msgstr "Parametrii de ieșire"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
-msgstr ""
+msgstr "Blocați raportul înălțime / lățime"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:122
 #: common/dialogs/dialog_page_settings_base.cpp:32
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28
 msgid "Size:"
-msgstr ""
+msgstr "Dimensiune:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:126
 #: bitmap2component/bitmap2cmp_gui_base.cpp:131
 msgid "300"
-msgstr ""
+msgstr "300"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:149
 msgid "Load Bitmap"
-msgstr ""
+msgstr "Încărcați Bitmap-ul"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
 msgid "Export to File"
-msgstr ""
+msgstr "Exportați în fișier"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:155
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:142
 msgid "Export to Clipboard"
-msgstr ""
+msgstr "Exportați în mapă"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Symbol (.lib file)"
-msgstr ""
+msgstr "Simbol (fișier .lib)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
-msgstr ""
+msgstr "Amprentă (fișier .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
-msgstr ""
+msgstr "Postscript (fișier .ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Worksheet (.kicad_wks file)"
-msgstr ""
+msgstr "Foaie de lucru (fișier .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
 msgid "Output Format"
-msgstr ""
+msgstr "Format de iesire"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:165
 msgid "Image Options"
-msgstr ""
+msgstr "Opțiuni de imagine"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:167
 msgid "Black / White Threshold:"
-msgstr ""
+msgstr "Prag negru / alb:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:172
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
 msgstr ""
+"Reglați nivelul pentru a converti imaginea în tonuri de gri într-o imagine "
+"alb-negru."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:352
 msgid "Negative"
-msgstr ""
+msgstr "Negativ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:530
 msgid "Front silk screen"
-msgstr ""
+msgstr "Serigrafie frontală"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:536
 msgid "Front solder mask"
-msgstr ""
+msgstr "Mască de lipit frontală"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco1"
-msgstr ""
+msgstr "Stratul utilizator Eco1"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco2"
-msgstr ""
+msgstr "Stratul utilizator Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
 msgid "Board Layer for Outline"
-msgstr ""
+msgstr "Straturi ale plăci pentru contur"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -1349,20 +1379,23 @@ msgid ""
 "The reference designator and value are always placed on the silk screen "
 "layer (but will be marked invisible)."
 msgstr ""
+"Alegeți stratul plăci pentru a plasa conturul.\n"
+"Câmpurile de referință și valoare sunt întotdeauna plasate pe stratul de "
+"serigrafie (dar vor fi marcate ca invizibile)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/bitmap2component.desktop.in:9
 #: resources/linux/launchers/bitmap2component.desktop.in:10
 msgid "Bitmap to Component Converter"
-msgstr ""
+msgstr "Convertor Bitmap în Componentă"
 
 #: common/base_units.cpp:471
 msgid "sq. mm"
-msgstr ""
+msgstr "mm²"
 
 #: common/base_units.cpp:473
 msgid "cu. mm"
-msgstr ""
+msgstr "mm³"
 
 #: common/base_units.cpp:483 common/eda_draw_frame.cpp:481
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -1383,27 +1416,27 @@ msgstr ""
 #: pagelayout_editor/pl_editor_frame.cpp:714
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "mils"
-msgstr ""
+msgstr "mils"
 
 #: common/base_units.cpp:485
 msgid "sq. mils"
-msgstr ""
+msgstr "mils²"
 
 #: common/base_units.cpp:487
 msgid "cu. mils"
-msgstr ""
+msgstr "mils³"
 
 #: common/base_units.cpp:497
 msgid "in"
-msgstr ""
+msgstr "in"
 
 #: common/base_units.cpp:499
 msgid "sq. in"
-msgstr ""
+msgstr "in²"
 
 #: common/base_units.cpp:501
 msgid "cu. in"
-msgstr ""
+msgstr "in³"
 
 #: common/base_units.cpp:505
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
@@ -1420,40 +1453,42 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:151
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:112
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: common/common.cpp:228
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
+"Nu s-au putut extinde variabilele de mediu: lipsește „%c” în poziția %u din "
+"„%s”."
 
 #: common/common.cpp:314
 #, c-format
 msgid "Cannot make path \"%s\" absolute with respect to \"%s\"."
-msgstr ""
+msgstr "Imposibil de făcut calea \"%s\" absolută în ceea ce privește \"%s\"."
 
 #: common/common.cpp:333
 #, c-format
 msgid "Output directory \"%s\" created.\n"
-msgstr ""
+msgstr "Directorul de ieșire \"%s\" a fost creat.\n"
 
 #: common/common.cpp:342
 #, c-format
 msgid "Cannot create output directory \"%s\".\n"
-msgstr ""
+msgstr "Nu se poate crea directorul de ieșire \"%s\".\n"
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
-msgstr ""
+msgstr "Nu mai afișa"
 
 #: common/confirm.cpp:127
 msgid "Message"
-msgstr ""
+msgstr "Mesaj"
 
 #: common/confirm.cpp:128
 msgid "Question"
-msgstr ""
+msgstr "Întrebare"
 
 #: common/confirm.cpp:129 common/confirm.cpp:257
 #: common/dialogs/panel_setup_severities.cpp:40
@@ -1467,34 +1502,34 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:334
 #: pcbnew/plugins/kicad/pcb_parser.cpp:675
 msgid "Warning"
-msgstr ""
+msgstr "Atenție"
 
 #: common/confirm.cpp:160 common/confirm.cpp:187
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
+msgstr "Dacă nu salvați, toate modificările dvs. se vor pierde definitiv."
 
 #: common/confirm.cpp:161 common/confirm.cpp:188 common/tool/actions.cpp:65
 #: eeschema/symbol_editor/symbol_editor.cpp:605
 #: eeschema/widgets/tuner_slider_base.cpp:66
 #: pcbnew/footprint_libraries_utils.cpp:956
 msgid "Save"
-msgstr ""
+msgstr "Salvează"
 
 #: common/confirm.cpp:161 common/confirm.cpp:188
 msgid "Discard Changes"
-msgstr ""
+msgstr "Anulează schimbările"
 
 #: common/confirm.cpp:164 common/confirm.cpp:239
 msgid "Apply to all"
-msgstr ""
+msgstr "Aplica la toate"
 
 #: common/confirm.cpp:200
 msgid "Your current changes will be permanently lost."
-msgstr ""
+msgstr "Modificările dvs. actuale se vor pierde definitiv."
 
 #: common/confirm.cpp:201 common/tool/actions.cpp:89
 msgid "Revert"
-msgstr ""
+msgstr "Resetați"
 
 #: common/confirm.cpp:201 common/confirm.cpp:231 common/tool/actions.cpp:120
 #: eeschema/dialogs/dialog_erc.cpp:277
@@ -1502,16 +1537,16 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc.cpp:242 pcbnew/microwave/microwave_polygon.cpp:125
 #: pcbnew/plugins/kicad/pcb_parser.cpp:678 pcbnew/router/router_tool.cpp:503
 msgid "Cancel"
-msgstr ""
+msgstr "Anulați"
 
 #: common/confirm.cpp:228 gerbview/dialogs/dialog_select_one_pcb_layer.cpp:184
 #: pcbnew/microwave/microwave_polygon.cpp:122 pcbnew/router/router_tool.cpp:503
 msgid "OK"
-msgstr ""
+msgstr "Bine"
 
 #: common/confirm.cpp:285
 msgid "Info"
-msgstr ""
+msgstr "Informații"
 
 #: common/confirm.cpp:298
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:154
@@ -1524,7 +1559,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:1028 pcbnew/router/router_tool.cpp:1378
 #: pcbnew/router/router_tool.cpp:1794 pcbnew/zone_filler.cpp:422
 msgid "Confirmation"
-msgstr ""
+msgstr "Configurație"
 
 #: common/dialog_about/AboutDialog_main.cpp:114
 #: common/dialogs/dialog_configure_paths_base.cpp:94
@@ -1538,215 +1573,220 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:944
 #: pcbnew/footprint_libraries_utils.cpp:1180
 msgid "Description"
-msgstr ""
+msgstr "Descriere"
 
 #: common/dialog_about/AboutDialog_main.cpp:118
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
+"Suita KiCad EDA este un set de aplicații open source pentru crearea "
+"schemelor electronice și a plăcilor cu circuite imprimate."
 
 #: common/dialog_about/AboutDialog_main.cpp:126
 msgid "KiCad on the web"
-msgstr ""
+msgstr "KiCad pe internet"
 
 #: common/dialog_about/AboutDialog_main.cpp:132
 msgid "The official KiCad website - "
-msgstr ""
+msgstr "Site-ul oficial KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:136
 msgid "Developer website - "
-msgstr ""
+msgstr "Site-ul dezvoltatorului - "
 
 #: common/dialog_about/AboutDialog_main.cpp:141
 msgid "Official KiCad library repositories - "
-msgstr ""
+msgstr "Depozite oficiale ale bibliotecii KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:148
+#, fuzzy
 msgid "Bug tracker"
-msgstr ""
+msgstr "Bug Tracker"
 
 #: common/dialog_about/AboutDialog_main.cpp:154
 msgid "Report or examine bugs - "
-msgstr ""
+msgstr "Raportați sau examinați erori - "
 
 #: common/dialog_about/AboutDialog_main.cpp:160
 msgid "KiCad users group and community"
-msgstr ""
+msgstr "Grupul și comunitatea utilizatorilor KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:165
 msgid "KiCad forum - "
-msgstr ""
+msgstr "Forum KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:179
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr ""
+msgstr "Suita KiCad EDA completă este lansată sub"
 
 #: common/dialog_about/AboutDialog_main.cpp:181
 msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr ""
+"GNU General Public License (GPL) versiunea 3 sau orice versiune ulterioară"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Team"
-msgstr ""
+msgstr "Principalul grup de dezvoltare"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
+#, fuzzy
 msgid "Lead Development Alumni"
-msgstr ""
+msgstr "Echipa de dezvoltare auxiliară"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
-msgstr ""
+msgstr "Contribuții suplimentare de către"
 
 #: common/dialog_about/AboutDialog_main.cpp:603
 msgid "Others"
-msgstr ""
+msgstr "Alţii"
 
 #: common/dialog_about/AboutDialog_main.cpp:623
 msgid "KiCad Librarian Team"
-msgstr ""
+msgstr "Echipa Bibliotecară KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:638
 msgid "3D models by"
-msgstr ""
+msgstr "Autori modelelor 3D"
 
 #: common/dialog_about/AboutDialog_main.cpp:650
 msgid "Symbols by"
-msgstr ""
+msgstr "Autori simbolurilor"
 
 #: common/dialog_about/AboutDialog_main.cpp:657
 msgid "Footprints by"
-msgstr ""
+msgstr "Autori amprentelor"
 
 #: common/dialog_about/AboutDialog_main.cpp:670
 msgid "Icons by"
-msgstr ""
+msgstr "Autori icoanelor"
 
 #: common/dialog_about/dialog_about.cpp:90
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "Despre %s"
 
 #: common/dialog_about/dialog_about.cpp:118
 #: common/dialog_about/dialog_about_base.h:56
 msgid "About"
-msgstr ""
+msgstr "Despre"
 
 #: common/dialog_about/dialog_about.cpp:123
 msgid "Version"
-msgstr ""
+msgstr "Versiune"
 
 #: common/dialog_about/dialog_about.cpp:125
 msgid "Developers"
-msgstr ""
+msgstr "Dezvoltatori"
 
 #: common/dialog_about/dialog_about.cpp:127
 msgid "Doc Writers"
-msgstr ""
+msgstr "Autorii documentației"
 
 #: common/dialog_about/dialog_about.cpp:130
 msgid "Librarians"
-msgstr ""
+msgstr "Bibliotecari"
 
 #: common/dialog_about/dialog_about.cpp:133
 msgid "Artists"
-msgstr ""
+msgstr "Artiști"
 
 #: common/dialog_about/dialog_about.cpp:135
 msgid "Translators"
-msgstr ""
+msgstr "Traducători"
 
 #: common/dialog_about/dialog_about.cpp:137
 msgid "Packagers"
-msgstr ""
+msgstr "Manager de pachete"
 
 #: common/dialog_about/dialog_about.cpp:140
 msgid "License"
-msgstr ""
+msgstr "Licență"
 
 #: common/dialog_about/dialog_about.cpp:478
 msgid "Could not open clipboard to write version information."
-msgstr ""
+msgstr "Nu s-a putut deschide mapa pentru a scrie informații despre versiune."
 
 #: common/dialog_about/dialog_about.cpp:479
 msgid "Clipboard Error"
-msgstr ""
+msgstr "Eroare la accesare mapei"
 
 #: common/dialog_about/dialog_about.cpp:488
 msgid "Copied..."
-msgstr ""
+msgstr "Copiat ..."
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
-msgstr ""
+msgstr "Titlul aplicației"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Copyright Info"
-msgstr ""
+msgstr "Informații privind drepturile de autor"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Build Version Info"
-msgstr ""
+msgstr "Informații despre versiune"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr ""
+msgstr "Informații despre versiunea bibliotecilor"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
-msgstr ""
+msgstr "& Copiați informațiile despre versiune"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
-msgstr ""
+msgstr "Copiați informațiile despre versiunea KiCad în mapă"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr ""
+msgstr "& Raportați eroarea"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:632
 msgid "Report a problem with KiCad"
-msgstr ""
+msgstr "Raportați o problemă cu KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:89
 msgid "&OK"
-msgstr ""
+msgstr "&BINE"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:48
 msgid "Report"
-msgstr ""
+msgstr "Raportați"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
-msgstr ""
+msgstr "Resetați culoarea"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
-msgstr ""
+msgstr "RGB"
 
 #: common/dialogs/dialog_color_picker_base.cpp:46
 msgid "Red:"
-msgstr ""
+msgstr "Roșu:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:50
 msgid "Green:"
-msgstr ""
+msgstr "Verde:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:54
 msgid "Blue:"
-msgstr ""
+msgstr "Albastru:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:74
 msgid "HSV"
-msgstr ""
+msgstr "HSV"
 
 #: common/dialogs/dialog_color_picker_base.cpp:91
 msgid "Hue:"
-msgstr ""
+msgstr "Nuanţă:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:95
 msgid "Saturation:"
-msgstr ""
+msgstr "Saturație:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
@@ -1755,54 +1795,56 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:94
 #: pcbnew/dialogs/dialog_text_properties.cpp:77
 msgid "Value:"
-msgstr ""
+msgstr "Valoare:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:96
 msgid "Color Picker"
-msgstr ""
+msgstr "Alegeți culoarea"
 
 #: common/dialogs/dialog_color_picker_base.cpp:154
 msgid "Defined Colors"
-msgstr ""
+msgstr "Culori definite"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
-msgstr ""
+msgstr "Opacitate:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
 msgid "Preview (old/new):"
-msgstr ""
+msgstr "Previzualizare (vechi / nou):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
-msgstr ""
+msgstr "Resetare la valorile implicite"
 
 #: common/dialogs/dialog_configure_paths.cpp:251
 #: common/dialogs/dialog_configure_paths.cpp:321
 msgid "Environment variable name cannot be empty."
-msgstr ""
+msgstr "Numele variabilei de mediu nu poate fi gol."
 
 #: common/dialogs/dialog_configure_paths.cpp:259
 #: common/dialogs/dialog_configure_paths.cpp:323
 msgid "Environment variable path cannot be empty."
-msgstr ""
+msgstr "Calea variabilei de mediu nu poate fi goală."
 
 #: common/dialogs/dialog_configure_paths.cpp:286
 #: common/dialogs/dialog_configure_paths.cpp:328
 msgid "3D search path alias cannot be empty."
-msgstr ""
+msgstr "Aliasul căii de căutare 3D nu poate fi gol."
 
 #: common/dialogs/dialog_configure_paths.cpp:294
 #: common/dialogs/dialog_configure_paths.cpp:330
 msgid "3D search path cannot be empty."
-msgstr ""
+msgstr "Calea de căutare 3D nu poate fi goală."
 
 #: common/dialogs/dialog_configure_paths.cpp:343
 msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
 msgstr ""
+"Această cale a fost deja definită în afara procesului care rulează și\n"
+"poate fi suprascris doar temporar."
 
 #: common/dialogs/dialog_configure_paths.cpp:345
 msgid ""
@@ -1812,20 +1854,26 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
+"Data viitoare când este porniți KiCad, orice cale deja existentă\n"
+"vor fi onorate și toate setările din configurația căii\n"
+"vor fi ignorate. Dacă nu ați intenționat\n"
+"acest comportament, fie redenumiți orice intrări conflictuale, fie "
+"eliminați\n"
+"variabila (variabilele) de mediu extern din sistemul dvs."
 
 #: common/dialogs/dialog_configure_paths.cpp:360
 #, c-format
 msgid "The name %s is reserved, and cannot be used here"
-msgstr ""
+msgstr "Numele %s este rezervat și nu poate fi folosit aici"
 
 #: common/dialogs/dialog_configure_paths.cpp:496
 msgid "File Browser..."
-msgstr ""
+msgstr "Navigator de fișiere..."
 
 #: common/dialogs/dialog_configure_paths.cpp:499
 #: common/widgets/grid_text_button_helpers.cpp:384
 msgid "Select Path"
-msgstr ""
+msgstr "Alege Calea"
 
 #: common/dialogs/dialog_configure_paths.cpp:578
 msgid ""
@@ -1845,11 +1893,11 @@ msgstr ""
 
 #: common/dialogs/dialog_configure_paths.cpp:599
 msgid "Environment Variable Help"
-msgstr ""
+msgstr "Ajutor pentru variabile de mediu"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:22
 msgid "Environment Variables"
-msgstr ""
+msgstr "Variabile de mediu"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:80
@@ -1872,21 +1920,21 @@ msgstr ""
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38 pcbnew/zone.cpp:612
 #: pcbnew/zone.cpp:1419
 msgid "Name"
-msgstr ""
+msgstr "Nume"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
 #: common/dialogs/dialog_configure_paths_base.cpp:93
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
 msgid "Path"
-msgstr ""
+msgstr "Cale"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:74
 msgid "3D Search Paths"
-msgstr ""
+msgstr "Căi de căutare 3D"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:92 common/eda_item.cpp:290
 msgid "Alias"
-msgstr ""
+msgstr "Alias"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
@@ -2012,11 +2060,11 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1738
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1750
 msgid "dummy"
-msgstr ""
+msgstr "fictiv"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
-msgstr ""
+msgstr "Selectează un fişier"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:56
 msgid "Configure Global Library Table"
@@ -2024,7 +2072,7 @@ msgstr ""
 
 #: common/dialogs/dialog_grid_settings_base.cpp:26 common/tool/actions.cpp:459
 msgid "Grid Origin"
-msgstr ""
+msgstr "Originea grilei"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:63
 #: common/dialogs/dialog_grid_settings_base.cpp:78
@@ -2051,70 +2099,72 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:252
 #: pcbnew/dialogs/panel_edit_options_base.cpp:381
 msgid "a page"
-msgstr ""
+msgstr "o pagina"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:67
 msgid "Current Grid"
-msgstr ""
+msgstr "Grila curentă"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
-msgstr ""
+msgstr "Grila definită de utilizator"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:91
 msgid "Size X:"
-msgstr ""
+msgstr "Dimensiunea X:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:102
 msgid "Size Y:"
-msgstr ""
+msgstr "Dimensiunea Y:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:123
 msgid "Fast Switching"
-msgstr ""
+msgstr "Schimbare rapida"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:131
 msgid "Grid 1:"
-msgstr ""
+msgstr "Grila 1:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:142
 #: common/dialogs/dialog_grid_settings_base.cpp:157
 msgid "(hotkey)"
-msgstr ""
+msgstr "(tastă)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:146
 msgid "Grid 2:"
-msgstr ""
+msgstr "Grila 2:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:173 common/tool/actions.cpp:465
 msgid "Reset Grid Origin"
-msgstr ""
+msgstr "Resetați originea grilei"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
 msgid "Reset Grid Sizes"
-msgstr ""
+msgstr "Resetați dimensiunile grilei"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
 msgid "Resets the list of grid sizes to default values"
-msgstr ""
+msgstr "Resetează lista dimensiunilor grilei la valorile implicite"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
-msgstr ""
+msgstr "Setări grilă"
 
 #: common/dialogs/dialog_hotkey_list.cpp:34
+#, fuzzy
 msgid "Hotkey List"
-msgstr ""
+msgstr "Lista tastelor"
 
 #: common/dialogs/dialog_image_editor.cpp:72
 msgid "Incorrect scale number"
-msgstr ""
+msgstr "Factorul de scalare greșit"
 
 #: common/dialogs/dialog_image_editor.cpp:82
 #, c-format
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
 msgstr ""
+"Această scară are ca rezultat o imagine prea mică (%.2f mm sau %.1f mil)."
 
 #: common/dialogs/dialog_image_editor.cpp:93
 #, c-format
@@ -2122,77 +2172,84 @@ msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
 msgstr ""
+"Această scară are ca rezultat o imagine foarte mare (%.1f mm sau %.2f in). "
+"Esti sigur?"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
 msgid "Grey"
-msgstr ""
+msgstr "Gri"
 
 #: common/dialogs/dialog_image_editor_base.cpp:39
+#, fuzzy
 msgid "Image Scale:"
-msgstr ""
+msgstr "Scalarea imaginii:"
 
 #: common/dialogs/dialog_image_editor_base.h:53
 msgid "Image Editor"
-msgstr ""
+msgstr "Editor de imagini"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
 msgid "The selection contains %d locked items."
-msgstr ""
+msgstr "Selecția conține %d elemente blocate."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
 msgstr ""
+"Aceste elemente vor fi omise, cu excepția cazului în care înlocuiți "
+"blocările."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
+#, fuzzy
 msgid "Do not show again."
-msgstr ""
+msgstr "Nu mai afișa"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:53
 msgid "Override Locks"
-msgstr ""
+msgstr "Înlocuiți blocările"
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
 msgid "Locked Items"
-msgstr ""
+msgstr "Elemente blocate"
 
 #: common/dialogs/dialog_migrate_settings.cpp:31
 msgid "Quit KiCad"
-msgstr ""
+msgstr "Ieșiți din KiCad"
 
 #: common/dialogs/dialog_migrate_settings.cpp:51
 #: common/dialogs/dialog_migrate_settings_base.cpp:21
 #, c-format
 msgid "Welcome to KiCad %s!"
-msgstr ""
+msgstr "Bine ați venit la KiCad %s!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:61
 msgid "Import settings from a previous version (none found)"
 msgstr ""
+"Importați setările dintr-o versiune anterioară (niciuna nu a fost găsită)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:123
 msgid "Select Settings Path"
-msgstr ""
+msgstr "Selectați Calea setărilor"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Cum ați dori să configurați KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 msgid "Import settings from a previous version at:"
-msgstr ""
+msgstr "Importați setările dintr-o versiune anterioară la:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
-msgstr ""
+msgstr "Alegeți o altă cale"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "Calea selectată nu conține setări KiCad valide!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
-msgstr ""
+msgstr "Importați configurația bibliotecii din versiunea anterioară"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
@@ -10083,7 +10140,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:434
 msgid "Compatibility mode:"
-msgstr ""
+msgstr "Modul de compatibilitate:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "User configuration"
@@ -24993,7 +25050,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:364
 msgid "Draw an outline to show the sheet size."
-msgstr ""
+msgstr "Desenați un contur pentru a arăta dimensiunea foii."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:368
 msgid "Refill zones after Zone Properties dialog"
@@ -27367,7 +27424,7 @@ msgstr ""
 
 #: pcbnew/generate_footprint_info.cpp:120
 msgid "doc url"
-msgstr ""
+msgstr "doc url"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
 msgid "Centimeter"
@@ -32761,7 +32818,7 @@ msgstr ""
 #: resources/linux/appdata/kicad.appdata.xml.in:6
 #: resources/linux/launchers/kicad.desktop.in:10
 msgid "KiCad"
-msgstr ""
+msgstr "KiCad"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:13
 #: resources/linux/launchers/kicad.desktop.in:11
