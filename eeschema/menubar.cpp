@@ -98,12 +98,12 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->SetTool( selTool );
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( BITMAPS::import );
-    submenuImport->Add( _( "Import Non KiCad Schematic..." ),
+    submenuImport->Add( _( "Non-KiCad Schematic..." ),
                         _( "Replace current schematic sheet with one imported from another application" ),
                         ID_IMPORT_NON_KICAD_SCH,
                         BITMAPS::import_document );
 
-    submenuImport->Add( EE_ACTIONS::importFPAssignments );
+    submenuImport->Add( EE_ACTIONS::importFPAssignments, ACTION_MENU::NORMAL, _( "Footprint Assignments..." ) );
     fileMenu->Add( submenuImport );
 
 
@@ -112,8 +112,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetTool( selTool );
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( BITMAPS::export_file );
-    submenuExport->Add( EE_ACTIONS::drawSheetOnClipboard );
-    submenuExport->Add( EE_ACTIONS::exportNetlist );
+    submenuExport->Add( EE_ACTIONS::drawSheetOnClipboard, ACTION_MENU::NORMAL, _( "Drawing to Clipboard" ) );
+    submenuExport->Add( EE_ACTIONS::exportNetlist,        ACTION_MENU::NORMAL, _( "Netlist..." ) );
     fileMenu->Add( submenuExport );
 
     fileMenu->AppendSeparator();

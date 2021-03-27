@@ -69,9 +69,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( BITMAPS::import );
 
-    submenuImport->Add( PCB_ACTIONS::importFootprint );
-    submenuImport->Add( _( "&Import Graphics..." ),
-                        _( "Import 2D Drawing file to Footprint Editor on Drawings layer" ),
+    submenuImport->Add( PCB_ACTIONS::importFootprint, ACTION_MENU::NORMAL, _( "Footprint..." ) );
+    submenuImport->Add( _( "&Graphics..." ),
+                        _( "Import 2D drawing file to current footprint" ),
                         ID_GEN_IMPORT_GRAPHICS_FILE,
                         BITMAPS::import_vector );
 
@@ -81,8 +81,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( BITMAPS::export_file );
 
-    submenuExport->Add( PCB_ACTIONS::exportFootprint );
-    submenuExport->Add( _( "Export View as &PNG..." ),
+    submenuExport->Add( PCB_ACTIONS::exportFootprint, ACTION_MENU::NORMAL, _( "Footprint..." ) );
+    submenuExport->Add( _( "View as &PNG..." ),
                         _( "Create a PNG file from the current view" ),
                         ID_FPEDIT_SAVE_PNG,
                         BITMAPS::export_png );

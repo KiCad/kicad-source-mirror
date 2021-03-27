@@ -69,9 +69,9 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetTool( selTool );
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( BITMAPS::export_file );
-    submenuExport->Add( EE_ACTIONS::exportSymbol );
-    submenuExport->Add( EE_ACTIONS::exportSymbolView );
-    submenuExport->Add( EE_ACTIONS::exportSymbolAsSVG );
+    submenuExport->Add( EE_ACTIONS::exportSymbol,      ACTION_MENU::NORMAL, _( "Symbol..." ) );
+    submenuExport->Add( EE_ACTIONS::exportSymbolView,  ACTION_MENU::NORMAL, _( "View as PNG..." ) );
+    submenuExport->Add( EE_ACTIONS::exportSymbolAsSVG, ACTION_MENU::NORMAL, _( "Symbol as SVG..." ) );
     fileMenu->Add( submenuExport );
 
     fileMenu->AppendSeparator();

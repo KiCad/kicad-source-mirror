@@ -384,12 +384,12 @@ TOOL_ACTION PCB_ACTIONS::pasteFootprint( "pcbnew.ModuleEditor.pasteFootprint",
 
 TOOL_ACTION PCB_ACTIONS::importFootprint( "pcbnew.ModuleEditor.importFootprint",
         AS_GLOBAL, 0, "",
-        _( "Import Footprint..." ), "",
+        _( "Import Footprint..." ), _( "Import footprint from file" ),
         BITMAPS::import_module );
 
 TOOL_ACTION PCB_ACTIONS::exportFootprint( "pcbnew.ModuleEditor.exportFootprint",
         AS_GLOBAL, 0, "",
-        _( "Export Footprint..." ), "",
+        _( "Export Footprint..." ), _( "Export footprint to file" ),
         BITMAPS::export_module );
 
 TOOL_ACTION PCB_ACTIONS::footprintProperties( "pcbnew.ModuleEditor.footprintProperties",
@@ -555,17 +555,17 @@ TOOL_ACTION PCB_ACTIONS::boardSetup( "pcbnew.EditorControl.boardSetup",
 
 TOOL_ACTION PCB_ACTIONS::importNetlist( "pcbnew.EditorControl.importNetlist",
         AS_GLOBAL, 0, "",
-        _( "Netlist..." ), _( "Read netlist and update board connectivity" ),
+        _( "Import Netlist..." ), _( "Read netlist and update board connectivity" ),
         BITMAPS::netlist );
 
 TOOL_ACTION PCB_ACTIONS::importSpecctraSession( "pcbnew.EditorControl.importSpecctraSession",
         AS_GLOBAL, 0, "",
-        _( "Specctra Session..." ), _( "Import routed Specctra session (*.ses) file" ),
+        _( "Import Specctra Session..." ), _( "Import routed Specctra session (*.ses) file" ),
         BITMAPS::import );
 
 TOOL_ACTION PCB_ACTIONS::exportSpecctraDSN( "pcbnew.EditorControl.exportSpecctraDSN",
         AS_GLOBAL, 0, "",
-        _( "Specctra DSN..." ), _( "Export Specctra DSN routing info" ),
+        _( "Export Specctra DSN..." ), _( "Export Specctra DSN routing info" ),
         BITMAPS::export_dsn );
 
 TOOL_ACTION PCB_ACTIONS::generateGerbers( "pcbnew.EditorControl.generateGerbers",

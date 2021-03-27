@@ -107,8 +107,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( BITMAPS::import );
 
-    submenuImport->Add( PCB_ACTIONS::importNetlist );
-    submenuImport->Add( PCB_ACTIONS::importSpecctraSession );
+    submenuImport->Add( PCB_ACTIONS::importNetlist,          ACTION_MENU::NORMAL, _( "Netlist..." ) );
+    submenuImport->Add( PCB_ACTIONS::importSpecctraSession,  ACTION_MENU::NORMAL, _( "Specctra Session..." ) );
     submenuImport->Add( _( "Graphics..." ), _( "Import 2D drawing file" ),
                         ID_GEN_IMPORT_GRAPHICS_FILE, BITMAPS::import_vector );
 
@@ -128,7 +128,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( BITMAPS::export_file );
 
-    submenuExport->Add( PCB_ACTIONS::exportSpecctraDSN );
+    submenuExport->Add( PCB_ACTIONS::exportSpecctraDSN, ACTION_MENU::NORMAL, _( "Specctra DSN..." ) );
     submenuExport->Add( _( "GenCAD..." ), _( "Export GenCAD board representation" ),
                         ID_GEN_EXPORT_FILE_GENCADFORMAT, BITMAPS::post_gencad );
     submenuExport->Add( _( "VRML..." ), _( "Export VRML 3D board representation" ),
@@ -146,12 +146,12 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                         ID_GEN_EXPORT_FILE_HYPERLYNX, BITMAPS::export_step );
 
     submenuExport->AppendSeparator();
-    submenuExport->Add( _( "Export Footprints to Library..." ),
+    submenuExport->Add( _( "Footprints to Library..." ),
                         _( "Add footprints used on board to an existing footprint library\n"
                            "(does not remove other footprints from this library)" ),
                         ID_MENU_EXPORT_FOOTPRINTS_TO_LIBRARY, BITMAPS::library_archive );
 
-    submenuExport->Add( _( "Export Footprints to New Library..." ),
+    submenuExport->Add( _( "Footprints to New Library..." ),
                         _( "Create a new footprint library containing the footprints used on board\n"
                            "(if the library already exists it will be replaced)" ),
                         ID_MENU_EXPORT_FOOTPRINTS_TO_NEW_LIBRARY, BITMAPS::library_archive_as );

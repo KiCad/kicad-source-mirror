@@ -91,12 +91,12 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     importMenu->SetTitle( _( "Import Non-KiCad Project..." ) );
     importMenu->SetIcon( BITMAPS::import_project );
 
-    importMenu->Add( _( "Import CADSTAR Project..." ),
+    importMenu->Add( _( "CADSTAR Project..." ),
                      _( "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)" ),
                      ID_IMPORT_CADSTAR_ARCHIVE_PROJECT,
                      BITMAPS::import_project );
 
-    importMenu->Add( _( "Import EAGLE Project..." ),
+    importMenu->Add( _( "EAGLE Project..." ),
                      _( "Import EAGLE CAD XML schematic and board" ),
                      ID_IMPORT_EAGLE_PROJECT,
                      BITMAPS::import_project );

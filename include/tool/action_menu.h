@@ -90,8 +90,12 @@ public:
      * After selecting the entry, a #TOOL_EVENT command containing name of the action is sent.
      *
      * @param aAction is the action to be added to menu entry.
+     * @param aIsCheckmarkEntry is true to indicate a check menu entry, false for normal menu entry
+     * @param aOverrideLabel is the label to show in the menu (overriding the action's menu text)
+     *        when non-empty
      */
-    wxMenuItem* Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry = false );
+    wxMenuItem* Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry = false,
+                     const wxString& aOverrideLabel = wxEmptyString );
 
     /**
      * Add an action menu as a submenu.
@@ -174,7 +178,8 @@ public:
 
     virtual bool PassHelpTextToHandler() { return false; }
 
-    static constexpr bool CHECK = true;
+    static constexpr bool NORMAL = false;
+    static constexpr bool CHECK  = true;
 
 protected:
     ///< Return an instance of this class. It has to be overridden in inheriting classes.

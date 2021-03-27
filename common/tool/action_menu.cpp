@@ -163,12 +163,16 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, const wxString& aTooltip, 
 }
 
 
-wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry )
+wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry,
+                              const wxString& aOverrideLabel )
 {
     /// ID numbers for tool actions are assigned above ACTION_BASE_UI_ID inside TOOL_EVENT
     BITMAPS icon = aAction.GetIcon();
 
-    wxMenuItem* item = new wxMenuItem( this, aAction.GetUIId(), aAction.GetMenuItem(),
+    // Allow the label to be overriden at point of use
+    wxString menuLabel = aOverrideLabel.IsEmpty() ? aAction.GetMenuItem() :  aOverrideLabel;
+
+    wxMenuItem* item = new wxMenuItem( this, aAction.GetUIId(), menuLabel,
                                        aAction.GetDescription(),
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
     if( !!icon )
