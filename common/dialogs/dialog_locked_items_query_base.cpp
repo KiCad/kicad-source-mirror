@@ -41,7 +41,9 @@ DIALOG_LOCKED_ITEMS_QUERY_BASE::DIALOG_LOCKED_ITEMS_QUERY_BASE( wxWindow* parent
 
 	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_doNotShowBtn = new wxCheckBox( this, wxID_ANY, _("Do not show again."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_doNotShowBtn = new wxCheckBox( this, wxID_ANY, _("Remember decision for this session."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_doNotShowBtn->SetToolTip( _("Remember the option selected for the remainder of this session.\nThis dialog will not be shown again until KiCad is restarted.") );
+
 	fgSizer4->Add( m_doNotShowBtn, 0, wxALL, 5 );
 
 
@@ -51,14 +53,19 @@ DIALOG_LOCKED_ITEMS_QUERY_BASE::DIALOG_LOCKED_ITEMS_QUERY_BASE( wxWindow* parent
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_overrideBtn = new wxButton( this, wxID_ANY, _("Override Locks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_overrideBtn->SetToolTip( _("Override locks and apply the operation on the locked items.\nThe locked items will remain locked after the operation is complete.") );
+
 	bButtonSizer->Add( m_overrideBtn, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_removeBtn = new wxButton( this, wxID_ANY, _("Remove Locked Items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_removeBtn->SetToolTip( _("Remove locked items from the selection and only apply the operation to the unlocked items (if any).") );
+
+	bButtonSizer->Add( m_removeBtn, 0, wxALL, 5 );
 
 
 	bButtonSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
-	m_sdbSizerOK = new wxButton( this, wxID_OK );
-	m_sdbSizer->AddButton( m_sdbSizerOK );
 	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
@@ -76,8 +83,8 @@ DIALOG_LOCKED_ITEMS_QUERY_BASE::DIALOG_LOCKED_ITEMS_QUERY_BASE( wxWindow* parent
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::OnInitDlg ) );
 	m_overrideBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onOverrideLocks ), NULL, this );
+	m_removeBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onOkClick ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onCancelClick ), NULL, this );
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onOkClick ), NULL, this );
 }
 
 DIALOG_LOCKED_ITEMS_QUERY_BASE::~DIALOG_LOCKED_ITEMS_QUERY_BASE()
@@ -85,7 +92,7 @@ DIALOG_LOCKED_ITEMS_QUERY_BASE::~DIALOG_LOCKED_ITEMS_QUERY_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::OnInitDlg ) );
 	m_overrideBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onOverrideLocks ), NULL, this );
+	m_removeBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onOkClick ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onCancelClick ), NULL, this );
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onOkClick ), NULL, this );
 
 }
