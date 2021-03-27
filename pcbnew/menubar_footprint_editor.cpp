@@ -69,11 +69,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( BITMAPS::import );
 
-    submenuImport->Add( PCB_ACTIONS::importFootprint, ACTION_MENU::NORMAL, _( "Footprint..." ) );
-    submenuImport->Add( _( "&Graphics..." ),
-                        _( "Import 2D drawing file to current footprint" ),
-                        ID_GEN_IMPORT_GRAPHICS_FILE,
-                        BITMAPS::import_vector );
+    submenuImport->Add( PCB_ACTIONS::importFootprint,        ACTION_MENU::NORMAL, _( "Footprint..." ) );
+    submenuImport->Add( PCB_ACTIONS::placeImportedGraphics,  ACTION_MENU::NORMAL, _( "Graphics..." ) );
 
     fileMenu->Add( submenuImport );
 

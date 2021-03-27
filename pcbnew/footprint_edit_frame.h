@@ -144,7 +144,6 @@ public:
      */
     bool SaveLibraryAs( const wxString& aLibraryPath );
 
-    void OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
     void OnUpdateLoadFootprintFromBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateSaveFootprintToBoard( wxUpdateUIEvent& aEvent );
 

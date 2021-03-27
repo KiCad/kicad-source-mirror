@@ -109,8 +109,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     submenuImport->Add( PCB_ACTIONS::importNetlist,          ACTION_MENU::NORMAL, _( "Netlist..." ) );
     submenuImport->Add( PCB_ACTIONS::importSpecctraSession,  ACTION_MENU::NORMAL, _( "Specctra Session..." ) );
-    submenuImport->Add( _( "Graphics..." ), _( "Import 2D drawing file" ),
-                        ID_GEN_IMPORT_GRAPHICS_FILE, BITMAPS::import_vector );
+    submenuImport->Add( PCB_ACTIONS::placeImportedGraphics,  ACTION_MENU::NORMAL, _( "Graphics..." ) );
 
     if( Kiface().IsSingle() )
     {

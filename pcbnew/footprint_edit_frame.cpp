@@ -102,8 +102,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_UPDATE_UI( ID_ADD_FOOTPRINT_TO_BOARD,
                    FOOTPRINT_EDIT_FRAME::OnUpdateSaveFootprintToBoard )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_SELECT_LAYER, FOOTPRINT_EDIT_FRAME::OnUpdateLayerSelectBox )
-    EVT_UPDATE_UI( ID_GEN_IMPORT_GRAPHICS_FILE, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
-
 END_EVENT_TABLE()
 
 
@@ -663,12 +661,6 @@ void FOOTPRINT_EDIT_FRAME::CloseFootprintEditor( wxCommandEvent& Event )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( GetBoard()->GetFirstFootprint() != NULL );
-}
-
-
 void FOOTPRINT_EDIT_FRAME::OnUpdateLoadFootprintFromBoard( wxUpdateUIEvent& aEvent )
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
@@ -1043,14 +1035,15 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
                 return IsSearchTreeShown();
             };
 
-    mgr->SetConditions( ACTIONS::highContrastMode,         CHECK( highContrastCond ) );
-    mgr->SetConditions( PCB_ACTIONS::flipBoard,            CHECK( boardFlippedCond ) );
-    mgr->SetConditions( PCB_ACTIONS::toggleFootprintTree,  CHECK( footprintTreeCond ) );
+    mgr->SetConditions( ACTIONS::highContrastMode,          CHECK( highContrastCond ) );
+    mgr->SetConditions( PCB_ACTIONS::flipBoard,             CHECK( boardFlippedCond ) );
+    mgr->SetConditions( PCB_ACTIONS::toggleFootprintTree,   CHECK( footprintTreeCond ) );
 
-    mgr->SetConditions( ACTIONS::print,                    ENABLE( haveFootprintCond ) );
-    mgr->SetConditions( PCB_ACTIONS::exportFootprint,      ENABLE( haveFootprintCond ) );
-    mgr->SetConditions( PCB_ACTIONS::footprintProperties,  ENABLE( haveFootprintCond ) );
-    mgr->SetConditions( PCB_ACTIONS::cleanupGraphics,      ENABLE( haveFootprintCond ) );
+    mgr->SetConditions( ACTIONS::print,                     ENABLE( haveFootprintCond ) );
+    mgr->SetConditions( PCB_ACTIONS::exportFootprint,       ENABLE( haveFootprintCond ) );
+    mgr->SetConditions( PCB_ACTIONS::footprintProperties,   ENABLE( haveFootprintCond ) );
+    mgr->SetConditions( PCB_ACTIONS::cleanupGraphics,       ENABLE( haveFootprintCond ) );
+    mgr->SetConditions( PCB_ACTIONS::placeImportedGraphics, ENABLE( haveFootprintCond ) );
 
 
 // Only enable a tool if the part is edtable

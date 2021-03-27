@@ -35,12 +35,6 @@
 
 OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
 {
-    switch( aId )
-    {
-    case ID_GEN_IMPORT_GRAPHICS_FILE:
-        return PCB_ACTIONS::placeImportedGraphics.MakeEvent();
-    }
-
     return OPT<TOOL_EVENT>();
 }
 
@@ -194,7 +188,7 @@ TOOL_ACTION PCB_ACTIONS::drawSimilarZone( "pcbnew.InteractiveDrawing.similarZone
 TOOL_ACTION PCB_ACTIONS::placeImportedGraphics( "pcbnew.InteractiveDrawing.placeImportedGraphics",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'F', LEGACY_HK_NAME( "Place DXF" ),
-        _( "Place Imported Graphics" ), "",
+        _( "Import Graphics..." ), _( "Import 2D drawing file" ),
         BITMAPS::import_vector, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
