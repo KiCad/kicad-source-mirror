@@ -207,6 +207,11 @@ public:
     virtual void ReCreateOptToolbar() = 0;
     virtual void ReCreateAuxiliaryToolbar() { }
 
+    /**
+     * Update the sizes of any controls in the toolbars of the frame.
+     */
+    virtual void UpdateToolbarControlSizes() { }
+
     /*
      * These 4 functions provide a basic way to show/hide grid and /get/set grid color.
      *

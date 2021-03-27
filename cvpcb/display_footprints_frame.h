@@ -51,6 +51,7 @@ public:
     void    ReCreateHToolbar() override;
     void    ReCreateVToolbar() override;
     void    ReCreateOptToolbar() override;
+    void    UpdateToolbarControlSizes() override;
 
     /**
      * Refresh the full display for this frame:

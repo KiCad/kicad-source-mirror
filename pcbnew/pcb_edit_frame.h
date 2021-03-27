@@ -396,6 +396,7 @@ public:
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override;
     void ReCreateMenuBar() override;
+    void UpdateToolbarControlSizes() override;
 
     /**
      * Recreate the layer box by clearing the old list and building a new one from the new

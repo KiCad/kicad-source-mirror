@@ -269,14 +269,11 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::showFootprintBrowser );
 
     m_mainToolBar->AddScaledSeparator( this );
+
     if( !Kiface().IsSingle() )
-    {
         m_mainToolBar->Add( ACTIONS::updatePcbFromSchematic );
-    }
     else
-    {
         m_mainToolBar->Add( PCB_ACTIONS::importNetlist );
-    }
 
     m_mainToolBar->Add( PCB_ACTIONS::runDRC );
 
@@ -309,6 +306,10 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 #endif
     }
 #endif
+
+    // Go through and ensure the comboboxes are the correct size, since the strings in the
+    // box could have changed widths.
+    m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_PCB_SELECT_LAYER );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->KiRealize();
@@ -485,24 +486,14 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     if( m_auxiliaryToolBar )
     {
-        UpdateTrackWidthSelectBox( m_SelTrackWidthBox );
-        UpdateViaSizeSelectBox( m_SelViaSizeBox );
-        UpdateGridSelectBox();
-
-        // combobox sizes can have changed: apply new best sizes
-        wxAuiToolBarItem* item = m_auxiliaryToolBar->FindTool( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH );
-        item->SetMinSize( m_SelTrackWidthBox->GetBestSize() );
-        item = m_auxiliaryToolBar->FindTool( ID_AUX_TOOLBAR_PCB_VIA_SIZE );
-        item->SetMinSize( m_SelViaSizeBox->GetBestSize() );
-
-        m_auxiliaryToolBar->KiRealize();
-        m_auimgr.Update();
-        return;
+        m_auxiliaryToolBar->ClearToolbar();
     }
-
-    m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR,
-                                             wxDefaultPosition, wxDefaultSize,
-                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+    else
+    {
+        m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                                 KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_auxiliaryToolBar->SetAuiManager( &m_auimgr );
+    }
 
     /* Set up toolbar items */
 
@@ -552,8 +543,40 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     UpdateZoomSelectBox();
     m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
 
+    // Go through and ensure the comboboxes are the correct size, since the strings in the
+    // box could have changed widths.
+    m_auxiliaryToolBar->UpdateControlWidth( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH );
+    m_auxiliaryToolBar->UpdateControlWidth( ID_AUX_TOOLBAR_PCB_VIA_SIZE );
+    m_auxiliaryToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
+    m_auxiliaryToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
+
     // after adding the buttons to the toolbar, must call Realize()
     m_auxiliaryToolBar->KiRealize();
+}
+
+
+void PCB_EDIT_FRAME::UpdateToolbarControlSizes()
+{
+    if( m_mainToolBar )
+    {
+        // Update the item widths
+        m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_PCB_SELECT_LAYER );
+
+        // Update the toolbar with the new widths
+        m_mainToolBar->KiRealize();
+    }
+
+    if( m_auxiliaryToolBar )
+    {
+        // Update the item widths
+        m_auxiliaryToolBar->UpdateControlWidth( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH );
+        m_auxiliaryToolBar->UpdateControlWidth( ID_AUX_TOOLBAR_PCB_VIA_SIZE );
+        m_auxiliaryToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
+        m_auxiliaryToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
+
+        // Update the toolbar with the new widths
+        m_auxiliaryToolBar->KiRealize();
+    }
 }
 
 

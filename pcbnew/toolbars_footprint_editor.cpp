@@ -134,6 +134,12 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     ReCreateLayerBox( false );
     m_mainToolBar->AddControl( m_selLayerBox );
 
+    // Go through and ensure the comboboxes are the correct size, since the strings in the
+    // box could have changed widths.
+    m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_PCB_SELECT_LAYER );
+    m_mainToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
+    m_mainToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
+
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->KiRealize();
 }
@@ -209,6 +215,21 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
 
     m_optionsToolBar->KiRealize();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::UpdateToolbarControlSizes()
+{
+    if( m_mainToolBar )
+    {
+        // Update the item widths
+        m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_PCB_SELECT_LAYER );
+        m_mainToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
+        m_mainToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
+
+        // Update the toolbar with the new widths
+        m_mainToolBar->KiRealize();
+    }
 }
 
 

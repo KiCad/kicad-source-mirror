@@ -205,6 +205,14 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Ensure the window is on top
     Raise();
+
+    // Register a call to update the toolbar sizes. It can't be done immediately because
+    // it seems to require some sizes calculated that aren't yet (at least on GTK).
+    CallAfter( [&]()
+               {
+                   // Ensure the controls on the toolbars all are correctly sized
+                    UpdateToolbarControlSizes();
+               } );
 }
 
 

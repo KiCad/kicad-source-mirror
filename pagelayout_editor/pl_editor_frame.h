@@ -116,7 +116,8 @@ public:
     void setupTools();
 
     // Virtual basic functions:
-    void    ReCreateHToolbar() override;
+    void ReCreateHToolbar() override;
+    void UpdateToolbarControlSizes() override;
 
     void SetPageSettings(const PAGE_INFO&) override;
     const PAGE_INFO& GetPageSettings () const override;

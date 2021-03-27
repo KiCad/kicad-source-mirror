@@ -332,6 +332,20 @@ void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aA
 }
 
 
+void ACTION_TOOLBAR::UpdateControlWidth( int aID )
+{
+    wxAuiToolBarItem* item = FindTool( aID );
+    wxASSERT_MSG( item, wxString::Format( "No toolbar item found for ID %d", aID ) );
+
+    // The control on the toolbar is stored inside the window field of the item
+    wxControl* control = dynamic_cast<wxControl*>( item->GetWindow() );
+    wxASSERT_MSG( control, wxString::Format( "No control located in toolbar item with ID %d", aID ) );
+
+    // Update the size the item has stored using the best size of the control
+    item->SetMinSize( control->GetBestSize() );
+}
+
+
 void ACTION_TOOLBAR::ClearToolbar()
 {
     // Clear all the maps keeping track of our items on the toolbar

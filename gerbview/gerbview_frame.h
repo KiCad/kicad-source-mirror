@@ -91,6 +91,7 @@ public:
 
     void ReCreateMenuBar() override;
     void UpdateStatusBar() override;
+    void UpdateToolbarControlSizes() override;
 
     /**
      * @return 0 for fast mode (not fully compatible with negative objects)

@@ -157,6 +157,14 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     updateView();
 
     Show( true );
+
+    // Register a call to update the toolbar sizes. It can't be done immediately because
+    // it seems to require some sizes calculated that aren't yet (at least on GTK).
+    CallAfter( [&]()
+               {
+                   // Ensure the controls on the toolbars all are correctly sized
+                    UpdateToolbarControlSizes();
+               } );
 }
 
 
@@ -311,9 +319,26 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     UpdateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
 
+    m_mainToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
+    m_mainToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
+
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
     m_mainToolBar->Realize();
+}
+
+
+void DISPLAY_FOOTPRINTS_FRAME::UpdateToolbarControlSizes()
+{
+    if( m_mainToolBar )
+    {
+        // Update the item widths
+        m_mainToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
+        m_mainToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
+
+        // Update the toolbar with the new widths
+        m_mainToolBar->KiRealize();
+    }
 }
 
 

@@ -254,6 +254,13 @@ public:
     void SelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction );
 
     /**
+     * Update the toolbar item width of a control using its best size.
+     *
+     * @param aID is the ID of the toolbar item to update the width for
+     */
+    void UpdateControlWidth( int aID );
+
+    /**
      * Clear the toolbar and remove all associated menus.
      */
     void ClearToolbar();

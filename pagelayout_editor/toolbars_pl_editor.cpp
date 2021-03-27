@@ -117,6 +117,11 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
     m_pageSelectBox->SetSelection( 0 );
 
 
+    // Go through and ensure the comboboxes are the correct size, since the strings in the
+    // box could have changed widths.
+    m_mainToolBar->UpdateControlWidth( ID_SELECT_COORDINATE_ORIGIN );
+    m_mainToolBar->UpdateControlWidth( ID_SELECT_PAGE_NUMBER );
+
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->KiRealize();
 }
@@ -171,4 +176,18 @@ void PL_EDITOR_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( ACTIONS::millimetersUnits, ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->KiRealize();
+}
+
+
+void PL_EDITOR_FRAME::UpdateToolbarControlSizes()
+{
+    if( m_mainToolBar )
+    {
+        // Update the item widths
+        m_mainToolBar->UpdateControlWidth( ID_SELECT_COORDINATE_ORIGIN );
+        m_mainToolBar->UpdateControlWidth( ID_SELECT_PAGE_NUMBER );
+
+        // Update the toolbar with the new widths
+        m_mainToolBar->KiRealize();
+    }
 }

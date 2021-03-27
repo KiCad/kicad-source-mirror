@@ -107,6 +107,7 @@ public:
 
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override;
+    void UpdateToolbarControlSizes() override;
 
     /**
      * @brief (Re)Create the menubar for the Footprint Editor frame

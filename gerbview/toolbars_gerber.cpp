@@ -82,10 +82,13 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddControl( m_SelLayerBox );
 
     if( !m_TextInfo )
-        m_TextInfo = new wxTextCtrl( m_mainToolBar, wxID_ANY, wxEmptyString, wxDefaultPosition,
+        m_TextInfo = new wxTextCtrl( m_mainToolBar, ID_TOOLBARH_GERBER_DATA_TEXT_BOX, wxEmptyString, wxDefaultPosition,
                                      wxDefaultSize, wxTE_READONLY );
 
     m_mainToolBar->AddControl( m_TextInfo );
+
+    m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER );
+    m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_GERBER_DATA_TEXT_BOX );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->KiRealize();
@@ -189,26 +192,13 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     UpdateGridSelectBox();
     UpdateZoomSelectBox();
 
-    // combobox sizes can have changed: apply new best sizes
-    auto item = m_auxiliaryToolBar->FindTool( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
-    wxASSERT( item );
-    item->SetMinSize( m_SelComponentBox->GetBestSize() );
-
-    item = m_auxiliaryToolBar->FindTool( ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
-    wxASSERT( item );
-    item->SetMinSize( m_SelNetnameBox->GetBestSize() );
-
-    item = m_auxiliaryToolBar->FindTool( ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
-    wxASSERT( item );
-    item->SetMinSize( m_SelAperAttributesBox->GetBestSize() );
-
-    item = m_auxiliaryToolBar->FindTool( ID_ON_GRID_SELECT );
-    wxASSERT( item );
-    item->SetMinSize( m_gridSelectBox->GetBestSize() );
-
-    item = m_auxiliaryToolBar->FindTool( ID_ON_ZOOM_SELECT );
-    wxASSERT( item );
-    item->SetMinSize( m_zoomSelectBox->GetBestSize() );
+    // Go through and ensure the comboboxes are the correct size, since the strings in the
+    // box could have changed widths.
+    m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
+    m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
+    m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
+    m_auxiliaryToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
+    m_auxiliaryToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
 
     // after adding the buttons to the toolbar, must call Realize()
     m_auxiliaryToolBar->KiRealize();
@@ -262,6 +252,33 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleLayerManager,      ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->KiRealize();
+}
+
+
+void GERBVIEW_FRAME::UpdateToolbarControlSizes()
+{
+    if( m_mainToolBar )
+    {
+        // Update the item widths
+        m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER );
+        m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_GERBER_DATA_TEXT_BOX );
+
+        // Update the toolbar with the new widths
+        m_mainToolBar->KiRealize();
+    }
+
+    if( m_auxiliaryToolBar )
+    {
+        // Update the item widths
+        m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
+        m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
+        m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
+        m_auxiliaryToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
+        m_auxiliaryToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
+
+        // Update the toolbar with the new widths
+        m_auxiliaryToolBar->KiRealize();
+    }
 }
 
 
