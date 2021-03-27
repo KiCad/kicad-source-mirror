@@ -106,7 +106,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     m_toolManager->SetEnvironment( GetBoard(), gal_drawPanel->GetView(),
                                    gal_drawPanel->GetViewControls(), config(), this );
     m_actions = new CVPCB_ACTIONS();
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
     gal_drawPanel->SetEventDispatcher( m_toolDispatcher );
 
     m_toolManager->RegisterTool( new COMMON_TOOLS );

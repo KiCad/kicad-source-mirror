@@ -33,11 +33,6 @@
 #include <router/pns_router.h>
 #include <router/pns_routing_settings.h>
 
-OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
-{
-    return OPT<TOOL_EVENT>();
-}
-
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be

@@ -121,9 +121,8 @@ struct TOOL_DISPATCHER::BUTTON_STATE
 };
 
 
-TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, ACTIONS *aActions ) :
-    m_toolMgr( aToolMgr ),
-    m_actions( aActions )
+TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr ) :
+    m_toolMgr( aToolMgr )
 {
     m_buttons.push_back( new BUTTON_STATE( BUT_LEFT, wxEVT_LEFT_DOWN,
                          wxEVT_LEFT_UP, wxEVT_LEFT_DCLICK ) );
@@ -620,19 +619,4 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     wxLogTrace( kicadTraceToolStack, "TOOL_DISPATCHER::DispatchWxEvent - Wx event skipped: %s",
                 ( aEvent.GetSkipped() ? "true" : "false" ) );
-}
-
-
-void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
-{
-    OPT<TOOL_EVENT> evt = m_actions->TranslateLegacyId( aEvent.GetId() );
-
-    if( evt )
-    {
-        wxLogTrace( kicadTraceToolStack, "TOOL_DISPATCHER::DispatchWxCommand %s", evt->Format() );
-
-        m_toolMgr->ProcessEvent( *evt );
-    }
-    else
-        aEvent.Skip();
 }

@@ -69,9 +69,6 @@ public:
     static TOOL_ACTION FilterFPbyFPFilters;
     static TOOL_ACTION filterFPbyPin;
     static TOOL_ACTION FilterFPbyLibrary;
-
-    ///< @copydoc COMMON_ACTIONS::TranslateLegacyId()
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }
 };
 
 #endif

@@ -201,10 +201,9 @@ void KICAD_MANAGER_FRAME::setupTools()
     m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, config(), this );
     m_actions = new KICAD_MANAGER_ACTIONS();
 
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
     // Attach the events to the tool dispatcher
-    Bind( wxEVT_TOOL, &TOOL_DISPATCHER::DispatchWxCommand, m_toolDispatcher );
     Bind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
     Bind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
 

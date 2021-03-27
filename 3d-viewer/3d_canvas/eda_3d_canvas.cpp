@@ -557,20 +557,6 @@ void EDA_3D_CANVAS::DoRePaint()
 void EDA_3D_CANVAS::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
 {
     m_eventDispatcher = aEventDispatcher;
-
-    if( m_eventDispatcher )
-    {
-        m_parent->Connect( wxEVT_TOOL,
-                           wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                           nullptr, m_eventDispatcher );
-    }
-    else
-    {
-        // While loop is used to be sure that all event handlers are removed.
-        while( m_parent->Disconnect( wxEVT_TOOL,
-                                     wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                                     nullptr, m_eventDispatcher ) );
-    }
 }
 
 

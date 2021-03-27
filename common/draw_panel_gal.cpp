@@ -334,27 +334,6 @@ void EDA_DRAW_PANEL_GAL::ForceRefresh()
 void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
 {
     m_eventDispatcher = aEventDispatcher;
-    const wxEventType eventTypes[] = { wxEVT_TOOL };
-
-    if( m_eventDispatcher )
-    {
-        for( wxEventType type : eventTypes )
-        {
-            m_parent->Connect( type, wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                               NULL, m_eventDispatcher );
-        }
-    }
-    else
-    {
-        for( wxEventType type : eventTypes )
-        {
-            // While loop is used to be sure that all event handlers are removed.
-            while( m_parent->Disconnect(
-                    type, wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ), NULL,
-                    m_eventDispatcher ) )
-                ;
-        }
-    }
 }
 
 

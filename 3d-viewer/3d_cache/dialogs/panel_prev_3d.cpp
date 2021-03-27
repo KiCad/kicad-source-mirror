@@ -104,7 +104,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRI
     m_toolManager->SetEnvironment( m_dummyBoard, nullptr, nullptr, nullptr, this );
 
     m_actions = new EDA_3D_ACTIONS();
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
     m_previewPane->SetEventDispatcher( m_toolDispatcher );
 
     // Register tools

@@ -98,9 +98,6 @@ public:
     static TOOL_ACTION toggleSolderPaste;
     static TOOL_ACTION toggleComments;
     static TOOL_ACTION toggleECO;
-
-    ///< @copydoc COMMON_ACTIONS::TranslateLegacyId()
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }
 };
 
 #endif

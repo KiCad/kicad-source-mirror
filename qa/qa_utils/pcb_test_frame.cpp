@@ -80,7 +80,7 @@ void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
     m_galPanel->UpdateColors();
 
 #ifdef USE_TOOL_MANAGER
-    
+
     m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),
             m_galPanel->GetViewControls(), nullptr );
 
@@ -114,10 +114,6 @@ BOARD* PCB_TEST_FRAME_BASE::LoadAndDisplayBoard( const std::string& filename )
 
 class TEST_ACTIONS : public ACTIONS
 {
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override
-    {
-        return OPT<TOOL_EVENT> ();
-    }
 };
 
 void PCB_TEST_FRAME_BASE::createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL_TYPE aGalType )
@@ -127,7 +123,7 @@ void PCB_TEST_FRAME_BASE::createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL
     m_galPanel = std::make_shared<PCB_DRAW_PANEL_GAL>( aParent, -1, wxPoint( 0,
                             0 ), wxDefaultSize, m_displayOptions, aGalType );
     m_galPanel->UpdateColors();
-    
+
     m_galPanel->SetEvtHandlerEnabled( true );
     m_galPanel->SetFocus();
     m_galPanel->Show( true );
@@ -151,13 +147,12 @@ void PCB_TEST_FRAME_BASE::createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL
             m_galPanel->GetViewControls(), nullptr );
 
     m_pcbActions = std::make_unique<TEST_ACTIONS>( );
-    m_toolDispatcher = std::make_unique<TOOL_DISPATCHER>( m_toolManager.get(), m_pcbActions.get() );
+    m_toolDispatcher = std::make_unique<TOOL_DISPATCHER>( m_toolManager.get() );
 
     //m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );
     createUserTools();
 
     m_toolManager->InitTools();
-    m_galPanel->SetEventDispatcher( m_toolDispatcher.get() );
     m_toolManager->InvokeTool( "test.DefaultTool" );
 #endif
 

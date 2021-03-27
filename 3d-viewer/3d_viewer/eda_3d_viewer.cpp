@@ -122,7 +122,7 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     m_toolManager->SetEnvironment( GetBoard(), nullptr, nullptr, config, this );
 
     m_actions = new EDA_3D_ACTIONS();
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
     m_canvas->SetEventDispatcher( m_toolDispatcher );
 
     // Register tools

@@ -1026,7 +1026,7 @@ void GERBVIEW_FRAME::setupTools()
     m_toolManager->SetEnvironment( m_gerberLayout, GetCanvas()->GetView(),
                                    GetCanvas()->GetViewControls(), config(), this );
     m_actions = new GERBVIEW_ACTIONS();
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_CONTROL );

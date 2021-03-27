@@ -142,7 +142,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->SetEnvironment( GetBoard(), gal_drawPanel->GetView(),
                                    gal_drawPanel->GetViewControls(), config(), this );
     m_actions = new PCB_ACTIONS();
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
     gal_drawPanel->SetEventDispatcher( m_toolDispatcher );
 
     m_toolManager->RegisterTool( new PCB_CONTROL );

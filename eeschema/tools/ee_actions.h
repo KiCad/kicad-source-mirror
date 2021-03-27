@@ -215,12 +215,6 @@ public:
     static TOOL_ACTION clearHighlight;
     static TOOL_ACTION updateNetHighlighting;
     static TOOL_ACTION highlightNetTool;
-
-    ///< @copydoc COMMON_ACTIONS::TranslateLegacyId()
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override
-    {
-        return OPT<TOOL_EVENT>();
-    }
 };
 
 

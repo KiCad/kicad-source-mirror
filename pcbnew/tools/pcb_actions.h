@@ -475,9 +475,6 @@ public:
     static TOOL_ACTION convertToLines;
     static TOOL_ACTION convertToArc;
     static TOOL_ACTION convertToTracks;
-
-    ///< @copydoc COMMON_ACTIONS::TranslateLegacyId()
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override;
 };
 
 #endif

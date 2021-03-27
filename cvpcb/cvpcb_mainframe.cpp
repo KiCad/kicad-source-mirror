@@ -232,7 +232,7 @@ void CVPCB_MAINFRAME::setupTools()
     m_actions = new CVPCB_ACTIONS();
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, config(), this );
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_CONTROL );
@@ -365,7 +365,6 @@ void CVPCB_MAINFRAME::setupEventHandlers()
           } );
 
     // Attach the events to the tool dispatcher
-    Bind( wxEVT_TOOL, &TOOL_DISPATCHER::DispatchWxCommand, m_toolDispatcher );
     Bind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
     Bind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
 }
