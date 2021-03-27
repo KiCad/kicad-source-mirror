@@ -61,8 +61,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         // will automatically refresh the menu.
         if( !openRecentMenu )
         {
-            openRecentMenu = new ACTION_MENU( false );
-            openRecentMenu->SetTool( selTool );
+            openRecentMenu = new ACTION_MENU( false, selTool );
             openRecentMenu->SetTitle( _( "Open Recent" ) );
             openRecentMenu->SetIcon( BITMAPS::recent );
 
@@ -102,8 +101,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                    BITMAPS::rescue );
 
     // Import submenu
-    ACTION_MENU* submenuImport = new ACTION_MENU( false );
-    submenuImport->SetTool( selTool );
+    ACTION_MENU* submenuImport = new ACTION_MENU( false, selTool );
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( BITMAPS::import );
 
@@ -122,8 +120,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->Add( submenuImport );
 
     // Export submenu
-    ACTION_MENU* submenuExport = new ACTION_MENU( false );
-    submenuExport->SetTool( selTool );
+    ACTION_MENU* submenuExport = new ACTION_MENU( false, selTool );
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( BITMAPS::export_file );
 
@@ -158,8 +155,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->Add( submenuExport );
 
     // Fabrication Outputs submenu
-    ACTION_MENU* submenuFabOutputs = new ACTION_MENU( false );
-    submenuFabOutputs->SetTool( selTool );
+    ACTION_MENU* submenuFabOutputs = new ACTION_MENU( false, selTool );
     submenuFabOutputs->SetTitle( _( "Fabrication Outputs" ) );
     submenuFabOutputs->SetIcon( BITMAPS::fabrication );
 
@@ -321,9 +317,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     placeMenu->AppendSeparator();
 
-    ACTION_MENU* autoplaceSubmenu = new ACTION_MENU( false );
+    ACTION_MENU* autoplaceSubmenu = new ACTION_MENU( false, selTool );
     autoplaceSubmenu->SetTitle( _( "Auto-Place Footprints" ) );
-    autoplaceSubmenu->SetTool( selTool );
     autoplaceSubmenu->SetIcon( BITMAPS::mode_module );
 
     autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceOffboardComponents );
@@ -401,8 +396,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 #endif
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
-    ACTION_MENU* submenuActionPlugins = new ACTION_MENU( false );
-    submenuActionPlugins->SetTool( selTool );
+    ACTION_MENU* submenuActionPlugins = new ACTION_MENU( false, selTool );
     submenuActionPlugins->SetTitle( _( "External Plugins" ) );
     submenuActionPlugins->SetIcon( BITMAPS::puzzle_piece );
 

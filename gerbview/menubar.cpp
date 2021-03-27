@@ -62,8 +62,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // will automatically refresh the menu.
     if( !openRecentGbrMenu )
     {
-        openRecentGbrMenu = new ACTION_MENU( false );
-        openRecentGbrMenu->SetTool( selTool );
+        openRecentGbrMenu = new ACTION_MENU( false, selTool );
         openRecentGbrMenu->SetTitle( _( "Open Recent Gerber File" ) );
         openRecentGbrMenu->SetIcon( BITMAPS::recent );
 
@@ -81,8 +80,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // will automatically refresh the menu.
     if( !openRecentDrlMenu )
     {
-        openRecentDrlMenu = new ACTION_MENU( false );
-        openRecentDrlMenu->SetTool( selTool );
+        openRecentDrlMenu = new ACTION_MENU( false, selTool );
         openRecentDrlMenu->SetTitle( _( "Open Recent Drill File" ) );
         openRecentDrlMenu->SetIcon( BITMAPS::recent );
 
@@ -100,8 +98,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // will automatically refresh the menu.
     if( !openRecentJobMenu )
     {
-        openRecentJobMenu = new ACTION_MENU( false );
-        openRecentJobMenu->SetTool( selTool );
+        openRecentJobMenu = new ACTION_MENU( false, selTool );
         openRecentJobMenu->SetTitle( _( "Open Recent Job File" ) );
         openRecentJobMenu->SetIcon( BITMAPS::recent );
 
@@ -119,8 +116,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // will automatically refresh the menu.
     if( !openRecentZipMenu )
     {
-        openRecentZipMenu = new ACTION_MENU( false );
-        openRecentZipMenu->SetTool( selTool );
+        openRecentZipMenu = new ACTION_MENU( false, selTool );
         openRecentZipMenu->SetTitle( _( "Open Recent Zip File" ) );
         openRecentZipMenu->SetIcon( BITMAPS::recent );
 

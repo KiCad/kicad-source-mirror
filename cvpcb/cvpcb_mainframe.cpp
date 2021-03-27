@@ -247,8 +247,7 @@ void CVPCB_MAINFRAME::setupTools()
     // to be able to tell the difference between a menu click and a hotkey activation.
 
     // Create the context menu for the component list box
-    m_componentContextMenu = new ACTION_MENU( false );
-    m_componentContextMenu->SetTool( tool );
+    m_componentContextMenu = new ACTION_MENU( false, tool );
     m_componentContextMenu->Add( CVPCB_ACTIONS::showFootprintViewer );
     m_componentContextMenu->AppendSeparator();
     m_componentContextMenu->Add( ACTIONS::cut );
@@ -258,8 +257,7 @@ void CVPCB_MAINFRAME::setupTools()
     m_componentContextMenu->Add( CVPCB_ACTIONS::deleteAssoc );
 
     // Create the context menu for the footprint list box
-    m_footprintContextMenu = new ACTION_MENU( false );
-    m_footprintContextMenu->SetTool( tool );
+    m_footprintContextMenu = new ACTION_MENU( false, tool );
     m_footprintContextMenu->Add( CVPCB_ACTIONS::showFootprintViewer );
 }
 

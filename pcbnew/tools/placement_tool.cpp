@@ -57,8 +57,7 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
     m_frame = getEditFrame<PCB_BASE_FRAME>();
 
     // Create a context menu and make it available through selection tool
-    m_placementMenu = new ACTION_MENU( true );
-    m_placementMenu->SetTool( this );
+    m_placementMenu = new ACTION_MENU( true, this );
     m_placementMenu->SetIcon( BITMAPS::align_items );
     m_placementMenu->SetTitle( _( "Align/Distribute" ) );
 

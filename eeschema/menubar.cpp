@@ -60,8 +60,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
         // (the file history will be updated when adding/removing files in history)
         if( !openRecentMenu )
         {
-            openRecentMenu = new ACTION_MENU( false );
-            openRecentMenu->SetTool( selTool );
+            openRecentMenu = new ACTION_MENU( false, selTool );
             openRecentMenu->SetTitle( _( "Open Recent" ) );
             openRecentMenu->SetIcon( BITMAPS::recent );
 
@@ -94,8 +93,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
 
     // Import submenu
-    ACTION_MENU* submenuImport = new ACTION_MENU( false );
-    submenuImport->SetTool( selTool );
+    ACTION_MENU* submenuImport = new ACTION_MENU( false, selTool );
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( BITMAPS::import );
     submenuImport->Add( _( "Non-KiCad Schematic..." ),
@@ -108,8 +106,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
 
     // Export submenu
-    ACTION_MENU* submenuExport = new ACTION_MENU( false );
-    submenuExport->SetTool( selTool );
+    ACTION_MENU* submenuExport = new ACTION_MENU( false, selTool );
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( BITMAPS::export_file );
     submenuExport->Add( EE_ACTIONS::drawSheetOnClipboard, ACTION_MENU::NORMAL, _( "Drawing to Clipboard" ) );

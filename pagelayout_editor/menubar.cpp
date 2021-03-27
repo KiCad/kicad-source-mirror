@@ -53,8 +53,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // will automatically refresh the menu.
     if( !openRecentMenu )
     {
-        openRecentMenu = new ACTION_MENU( false );
-        openRecentMenu->SetTool( selTool );
+        openRecentMenu = new ACTION_MENU( false, selTool );
         openRecentMenu->SetTitle( _( "Open Recent" ) );
         openRecentMenu->SetIcon( BITMAPS::recent );
 

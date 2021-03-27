@@ -141,8 +141,7 @@ private:
 
             if( member->Type() == CONNECTION_TYPE::BUS )
             {
-                ACTION_MENU* submenu = new ACTION_MENU( true );
-                submenu->SetTool( m_tool );
+                ACTION_MENU* submenu = new ACTION_MENU( true, m_tool );
                 AppendSubMenu( submenu, SCH_CONNECTION::PrintBusForUI( name ), name );
 
                 for( const std::shared_ptr<SCH_CONNECTION>& sub_member : member->Members() )
