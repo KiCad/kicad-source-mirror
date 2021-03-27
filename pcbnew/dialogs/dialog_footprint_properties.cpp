@@ -326,21 +326,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     updateOrientationControl();
 
-    if( m_footprint->IsLocked() )
-        m_AutoPlaceCtrl->SetSelection( 2 );
-    else if( allPadsLocked( m_footprint ) )
-        m_AutoPlaceCtrl->SetSelection( 1 );
-    else
-        m_AutoPlaceCtrl->SetSelection( 0 );
+    m_AutoPlaceCtrl->SetSelection( m_footprint->IsLocked() ? 1 : 0 );
 
     m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Footprint can be freely moved and oriented on the "
-                                           "canvas. At least some of the footprint's pads are "
-                                           "unlocked and can be moved with respect to the "
-                                           "footprint." ) );
-    m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Footprint can be freely moved and oriented on the "
-                                           "canvas, but all of its pads are locked with respect "
-                                           "to their position within in the footprint." ) );
-    m_AutoPlaceCtrl->SetItemToolTip( 2, _( "Footprint is locked: it cannot be freely moved and "
+                                           "canvas." ) );
+    m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Footprint is locked: it cannot be freely moved and "
                                            "oriented on the canvas and can only be selected when "
                                            "the 'Locked items' checkbox is enabled in the "
                                            "selection filter." ) );
@@ -735,13 +725,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     // Set Footprint Position
     wxPoint pos( m_posX.GetValue(), m_posY.GetValue() );
     m_footprint->SetPosition( pos );
-    m_footprint->SetLocked( m_AutoPlaceCtrl->GetSelection() == 2 );
-
-    if( m_AutoPlaceCtrl->GetSelection() == 1 )
-    {
-        for( PAD* pad : m_footprint->Pads() )
-            pad->SetLocked( true );
-    }
+    m_footprint->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
 
     int attributes = 0;
 

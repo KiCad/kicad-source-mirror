@@ -67,11 +67,11 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_TrackDragAction( TRACK_DRAG_ACTION::DRAG ),
           m_Use45DegreeGraphicSegments( false ),
           m_FlipLeftRight( false ),
-          m_AddUnlockedPads( false ),
           m_PolarCoords( false ),
           m_RotationAngle( 900 ),
           m_ShowPageLimits( true ),
           m_AutoRefillZones( true ),
+          m_AllowFreePads( false ),
           m_PnsSettings( nullptr ),
           m_FootprintViewerAutoZoom( false ),
           m_FootprintViewerZoom( 1.0 )
@@ -104,9 +104,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "editing.flip_left_right",
             &m_FlipLeftRight, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( "editing.add_unlocked_pads",
-            &m_AddUnlockedPads, false ) );
-
     m_params.emplace_back( new PARAM<bool>( "editing.magnetic_graphics",
             &m_MagneticItems.graphics, true ) );
 
@@ -130,6 +127,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "editing.auto_fill_zones",
             &m_AutoRefillZones, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.allow_free_pads",
+            &m_AllowFreePads, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.graphic_items_fill",
             &m_Display.m_DisplayGraphicsFill, true ) );

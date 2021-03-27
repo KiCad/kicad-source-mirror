@@ -281,9 +281,6 @@ public:
     bool m_FlipLeftRight;                // True: Flip footprints across Y axis
     // False: Flip footprints across X axis
 
-    bool m_AddUnlockedPads;             // True: Pads are unlocked when new footprints are added to the board
-                                        // False: Pads are locked in new footprints
-
     bool m_PolarCoords;
 
     int m_RotationAngle;
@@ -292,6 +289,10 @@ public:
 
     ///<@todo Implement real auto zone filling (not just after zone properties are edited)
     bool m_AutoRefillZones; // Fill zones after editing the zone using the Zone Properties dialog
+
+    bool m_AllowFreePads; // True: unlocked pads can be moved freely with respect to the footprint.
+                          // False (default): all pads are treated as locked for the purposes of
+                          // movement and any attempt to move them will move the footprint instead.
 
     wxString m_FootprintTextShownColumns;
 

@@ -172,7 +172,6 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
         {
             // Set the pads ratsnest settings to the global settings
             pad->SetLocalRatsnestVisible( m_frame->GetDisplayOptions().m_ShowGlobalRatsnest );
-            pad->SetLocked( !m_frame->Settings().m_AddUnlockedPads );
 
             // Pads in the library all have orphaned nets.  Replace with Default.
             pad->SetNetCode( 0 );

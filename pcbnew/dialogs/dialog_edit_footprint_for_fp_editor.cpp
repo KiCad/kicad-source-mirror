@@ -227,8 +227,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
     wxGridTableMessage tmsg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_texts->GetNumberRows() );
     m_itemsGrid->ProcessTableMessage( tmsg );
 
-    // Module Properties
-
+    // Footprint Properties
     m_AutoPlaceCtrl->SetSelection( m_footprint->IsLocked() ? 1 : 0 );
     m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Enable hotkey move commands and Auto Placement" ) );
     m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Disable hotkey move commands and Auto Placement" ) );

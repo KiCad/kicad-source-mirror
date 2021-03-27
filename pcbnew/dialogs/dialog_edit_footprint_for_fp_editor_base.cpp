@@ -132,10 +132,10 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	wxBoxSizer* bSizerProperties;
 	bSizerProperties = new wxBoxSizer( wxHORIZONTAL );
 
-	wxString m_AutoPlaceCtrlChoices[] = { _("Free"), _("Lock footprint") };
+	wxString m_AutoPlaceCtrlChoices[] = { _("Unlock footprint"), _("Lock footprint") };
 	int m_AutoPlaceCtrlNChoices = sizeof( m_AutoPlaceCtrlChoices ) / sizeof( wxString );
 	m_AutoPlaceCtrl = new wxRadioBox( m_PanelGeneral, wxID_ANY, _("Move and Place"), wxDefaultPosition, wxDefaultSize, m_AutoPlaceCtrlNChoices, m_AutoPlaceCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_AutoPlaceCtrl->SetSelection( 0 );
+	m_AutoPlaceCtrl->SetSelection( 1 );
 	bSizerProperties->Add( m_AutoPlaceCtrl, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_sizerAP = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Auto-placement Rules") ), wxVERTICAL );

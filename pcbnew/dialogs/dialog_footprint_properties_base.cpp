@@ -192,7 +192,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	wxBoxSizer* bSizerMiddle;
 	bSizerMiddle = new wxBoxSizer( wxVERTICAL );
 
-	wxString m_AutoPlaceCtrlChoices[] = { _("Free"), _("Lock pads"), _("Lock footprint") };
+	wxString m_AutoPlaceCtrlChoices[] = { _("Unlock footprint"), _("Lock footprint") };
 	int m_AutoPlaceCtrlNChoices = sizeof( m_AutoPlaceCtrlChoices ) / sizeof( wxString );
 	m_AutoPlaceCtrl = new wxRadioBox( m_PanelGeneral, wxID_ANY, _("Move and Place"), wxDefaultPosition, wxDefaultSize, m_AutoPlaceCtrlNChoices, m_AutoPlaceCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_AutoPlaceCtrl->SetSelection( 0 );

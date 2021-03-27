@@ -38,11 +38,6 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerBoardEdit;
 	bSizerBoardEdit = new wxBoxSizer( wxVERTICAL );
 
-	m_autoLockPads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Lock pads of newly added footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_autoLockPads->SetToolTip( _("If checked, when a footprint is added to the board, its pads will be locked and not movable with respect to the footprint.") );
-
-	bSizerBoardEdit->Add( m_autoLockPads, 0, wxBOTTOM, 15 );
-
 	m_flipLeftRight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Flip board items L/R (default is T/B)"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerBoardEdit->Add( m_flipLeftRight, 0, wxBOTTOM, 15 );
 
@@ -370,6 +365,11 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_Auto_Refill_Zones->SetToolTip( _("If checked, zones will be re-filled after editing the properties of the zone using the Zone Properties dialog") );
 
 	sbSizer4->Add( m_Auto_Refill_Zones, 0, wxALL, 5 );
+
+	m_Allow_Free_Pads = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Allow free pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Allow_Free_Pads->SetToolTip( _("If unchecked (default), any attempt to move unlocked pads will instead move the footprint as a whole.\nIf checked, unlocked pads can be moved freely with respect to the rest of the footprint. \nNote: Locked pads cannot be moved with respect to the parent footprint regardless of this setting.") );
+
+	sbSizer4->Add( m_Allow_Free_Pads, 0, wxALL, 5 );
 
 
 	pcbOptionsSizer->Add( sbSizer4, 1, wxEXPAND|wxTOP, 5 );
