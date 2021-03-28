@@ -228,5 +228,6 @@ void PCB_BASE_EDIT_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
     EDA_DRAW_FRAME::handleActivateEvent( aEvent );
 
     // The text in the collapsible pane headers need to be updated
-    m_appearancePanel->RefreshCollapsiblePanes();
+    if( m_appearancePanel )
+        m_appearancePanel->RefreshCollapsiblePanes();
 }
