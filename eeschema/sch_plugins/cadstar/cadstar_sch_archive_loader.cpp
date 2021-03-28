@@ -328,7 +328,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
 {
     for( std::pair<PART_ID, PART> partPair : Parts.PartDefinitions )
     {
-        PART_ID key  = partPair.first;
+        PART_ID partID  = partPair.first;
         PART    part = partPair.second;
 
         if( part.Definition.GateSymbols.size() == 0 )
@@ -337,12 +337,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
         LIB_PART* kiPart = new LIB_PART( part.Name );
 
         kiPart->SetUnitCount( part.Definition.GateSymbols.size() );
+        bool ok = true;
 
         for( std::pair<GATE_ID, PART::DEFINITION::GATE> gatePair : part.Definition.GateSymbols )
         {
             GATE_ID                gateID   = gatePair.first;
             PART::DEFINITION::GATE gate     = gatePair.second;
             SYMDEF_ID              symbolID = getSymDefFromName( gate.Name, gate.Alternate );
+            m_partSymbolsMap.insert( { { partID, gateID }, symbolID } );
 
             if( symbolID.IsEmpty() )
             {
@@ -352,18 +354,28 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
                            "been loaded into the KiCad library." ),
                         part.Name, gate.Name, gate.Alternate ) );
 
-                continue;
+                ok = false;
+                break;
             }
 
             loadSymDefIntoLibrary( symbolID, &part, gateID, kiPart );
         }
 
-        ( *m_plugin )->SaveSymbol( m_libraryFileName.GetFullPath(), kiPart );
+        if( ok )
+        {
+            ( *m_plugin )->SaveSymbol( m_libraryFileName.GetFullPath(), kiPart );
 
-        LIB_PART* loadedPart =
-                ( *m_plugin )->LoadSymbol( m_libraryFileName.GetFullPath(), kiPart->GetName() );
+            LIB_PART* loadedPart =
+                    ( *m_plugin )->LoadSymbol( m_libraryFileName.GetFullPath(), kiPart->GetName() );
 
-        m_partMap.insert( { key, loadedPart } );
+            m_partMap.insert( { partID, loadedPart } );
+        }
+        else
+        {
+            // Don't save in the library, but still keep it cached as some of the units might have
+            // been loaded correctly (saving us time later on)
+            m_partMap.insert( { partID, kiPart } );
+        }
     }
 }
 
@@ -389,10 +401,26 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 continue;
             }
 
-            LIB_PART* kiPart = m_partMap.at( sym.PartRef.RefID );
-            double    symOrientDeciDeg = 0.0;
+            PART_GATE_ID partSymbolID = { sym.PartRef.RefID, sym.GateID };
+            LIB_PART*    kiPart = m_partMap.at( sym.PartRef.RefID );
+            bool         copy = false;
 
+            // The symbol definition in the part either does not exist for this gate number
+            // or is different to the symbol instance. We need to load a new symbol
+            if( m_partSymbolsMap.find( partSymbolID ) == m_partSymbolsMap.end()
+                || m_partSymbolsMap.at( partSymbolID ) != sym.SymdefID )
+            {
+                kiPart = new LIB_PART( *kiPart ); // Make a copy
+                copy = true;
+                const PART& part = Parts.PartDefinitions.at( sym.PartRef.RefID );
+                loadSymDefIntoLibrary( sym.SymdefID, &part, sym.GateID, kiPart );
+            }
+
+            double         symOrientDeciDeg = 0.0;
             SCH_COMPONENT* component = loadSchematicSymbol( sym, *kiPart, symOrientDeciDeg );
+
+            if( copy )
+                delete kiPart;
 
             SCH_FIELD* refField = component->GetField( REFERENCE_FIELD );
 
