@@ -303,9 +303,12 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
         // Re-check the current grid.
         wxUpdateUIEvent dummy;
         OnUpdateSelectGrid( dummy );
-        // Now run the Grid Settings... dialog
-        wxCommandEvent dummy2;
-        OnGridSettings( dummy2 );
+
+        // Give a time-slice to close the menu before opening the dialog.
+        // (Only matters on some versions of GTK.)
+        wxSafeYield();
+
+        m_toolManager->RunAction( ACTIONS::gridProperties, true );
     }
     else
     {
