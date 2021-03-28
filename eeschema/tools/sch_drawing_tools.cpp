@@ -119,15 +119,16 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     auto addSymbol =
             [&]( SCH_COMPONENT* aSymbol )
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
-                aSymbol->SetParent( m_frame->GetScreen() );
-                aSymbol->SetFlags( IS_NEW | IS_MOVED );
-
                 m_frame->SaveCopyForRepeatItem( aSymbol );
 
-                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), aSymbol, false );
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
                 m_selectionTool->AddItemToSel( aSymbol );
+
+                aSymbol->SetParent( m_frame->GetScreen() );
+                aSymbol->SetFlags( IS_NEW );
+                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), aSymbol, false );
+
+                aSymbol->SetFlags( IS_MOVED );
                 m_toolMgr->RunAction( ACTIONS::refreshPreview );
             };
 
@@ -229,16 +230,18 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             }
             else
             {
-                SCH_COMPONENT* nextSymbol = nullptr;
-
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                     symbol->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+
+                symbol->ClearEditFlags();
 
                 m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true,
                                       &m_selectionTool->GetSelection() );
 
                 m_view->Update( symbol );
                 m_frame->OnModify();
+
+                SCH_COMPONENT* nextSymbol = nullptr;
 
                 if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units
                         || m_frame->eeconfig()->m_SymChooserPanel.keep_symbol )
