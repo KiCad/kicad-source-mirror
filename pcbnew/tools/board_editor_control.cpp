@@ -120,6 +120,56 @@ public:
 };
 
 
+/**
+ * Helper widget to add controls to a wxFileDialog to set netlist configuration options.
+ */
+class NETLIST_OPTIONS_HELPER : public wxPanel
+{
+public:
+    NETLIST_OPTIONS_HELPER( wxWindow* aParent )
+            : wxPanel( aParent )
+    {
+        m_cbOmitExtras = new wxCheckBox( this, wxID_ANY, _( "Omit extra information" ) );
+        m_cbOmitNets = new wxCheckBox( this, wxID_ANY, _( "Omit nets" ) );
+        m_cbOmitFpUuids = new wxCheckBox( this, wxID_ANY,
+                                          _( "Do not prefix path with footprint UUID." ) );
+
+        wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
+        sizer->Add( m_cbOmitExtras, 0, wxALL, 5 );
+        sizer->Add( m_cbOmitNets, 0, wxALL, 5 );
+        sizer->Add( m_cbOmitFpUuids, 0, wxALL, 5 );
+
+        SetSizerAndFit( sizer );
+    }
+
+    int GetNetlistOptions() const
+    {
+        int options = 0;
+
+        if( m_cbOmitExtras->GetValue() )
+            options |= CTL_OMIT_EXTRA;
+
+        if( m_cbOmitNets->GetValue() )
+            options |= CTL_OMIT_NETS;
+
+        if( m_cbOmitFpUuids->GetValue() )
+            options |= CTL_OMIT_FP_UUID;
+
+        return options;
+    }
+
+    static wxWindow* Create( wxWindow* aParent )
+    {
+        return new NETLIST_OPTIONS_HELPER( aParent );
+    }
+
+protected:
+    wxCheckBox* m_cbOmitExtras;
+    wxCheckBox* m_cbOmitNets;
+    wxCheckBox* m_cbOmitFpUuids;
+};
+
+
 BOARD_EDITOR_CONTROL::BOARD_EDITOR_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.EditorControl" ),
     m_frame( nullptr )
@@ -351,6 +401,70 @@ int BOARD_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
         m_frame->SetLastPath( LAST_PATH_SPECCTRADSN, fullFileName );
         getEditFrame<PCB_EDIT_FRAME>()->ExportSpecctraFile( fullFileName );
     }
+
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
+{
+    wxCHECK( m_frame, 0 );
+
+    wxFileName fn = m_frame->Prj().GetProjectFullName();
+
+    // Use a different file extension for the board netlist so the schematic netlist file
+    // is accidently overwritten.
+    fn.SetExt( "pcb_net" );
+
+    wxFileDialog dlg( m_frame, _( "Export Board Netlist" ), fn.GetPath(), fn.GetFullName(),
+                      _( "KiCad board netlist files" ) + wxT( " (*.pcb_net)|*.pcb_net" ),
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    dlg.SetExtraControlCreator( &NETLIST_OPTIONS_HELPER::Create );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return 0;
+
+    fn = dlg.GetPath();
+
+    if( !fn.IsDirWritable() )
+    {
+        wxString msg;
+
+        msg.Printf( _( "Path `%s` is read only." ), fn.GetPath() );
+        wxMessageDialog( m_frame, msg, _( "I/O Error" ), wxOK | wxCENTER | wxICON_EXCLAMATION );
+        return 0;
+    }
+
+    const NETLIST_OPTIONS_HELPER* noh =
+            dynamic_cast<const NETLIST_OPTIONS_HELPER*>( dlg.GetExtraControl() );
+    wxCHECK( noh, 0 );
+
+    NETLIST netlist;
+
+    for( const FOOTPRINT* footprint : board()->Footprints() )
+    {
+        COMPONENT* component = new COMPONENT( footprint->GetFPID(), footprint->GetReference(),
+                                              footprint->GetValue(), footprint->GetPath(),
+                                              { footprint->m_Uuid } );
+
+        for( const PAD* pad : footprint->Pads() )
+        {
+            const wxString& netname = pad->GetShortNetname();
+
+            if( !netname.IsEmpty() )
+            {
+                component->AddNet( pad->GetName(), netname, pad->GetPinFunction(),
+                                   pad->GetPinType() );
+            }
+        }
+
+        netlist.AddComponent( component );
+    }
+
+    FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
+
+    netlist.Format( "pcb_netlist", &formatter, 0, noh->GetNetlistOptions() );
 
     return 0;
 }
@@ -1371,6 +1485,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::ImportNetlist,          PCB_ACTIONS::importNetlist.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportSpecctraSession,  PCB_ACTIONS::importSpecctraSession.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ExportSpecctraDSN,      PCB_ACTIONS::exportSpecctraDSN.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ExportNetlist,          PCB_ACTIONS::exportNetlist.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateDrillFiles,     PCB_ACTIONS::generateDrillFiles.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateGerbers.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GeneratePosFile,        PCB_ACTIONS::generatePosFile.MakeEvent() );

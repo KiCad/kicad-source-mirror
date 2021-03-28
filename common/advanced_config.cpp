@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,6 +153,7 @@ static const wxChar DrawBoundingBoxes[] = wxT( "DrawBoundingBoxes" );
 
 static const wxChar AllowDarkMode[] = wxT( "AllowDarkMode" );
 
+static const wxChar ShowPcbnewExportNetlist[] = wxT( "ShowPcbnewExportNetlist" );
 
 } // namespace KEYS
 
@@ -255,6 +256,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_HotkeysDumper             = false;
     m_DrawBoundingBoxes         = false;
     m_AllowDarkMode             = false;
+    m_ShowPcbnewExportNetlist   = false;
 
     loadFromConfigFile();
 }
@@ -354,12 +356,15 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::AllowDarkMode,
                                                 &m_AllowDarkMode, defaultDarkMode ) );
 
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowPcbnewExportNetlist,
+                                                &m_ShowPcbnewExportNetlist, false ) );
+
     wxConfigLoadSetups( &aCfg, configParams );
+
+    dumpCfg( configParams );
 
     for( PARAM_CFG* param : configParams )
         delete param;
-
-    dumpCfg( configParams );
 }
 
 

@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <bitmaps.h>
 #include <filehistory.h>
 #include <kiface_i.h>
@@ -140,6 +141,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                         ID_PCB_GEN_CMP_FILE, BITMAPS::export_cmp );
     submenuExport->Add( _( "Hyperlynx..." ), "",
                         ID_GEN_EXPORT_FILE_HYPERLYNX, BITMAPS::export_step );
+
+    if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist )
+        submenuExport->Add( PCB_ACTIONS::exportNetlist );
 
     submenuExport->AppendSeparator();
     submenuExport->Add( _( "Footprints to Library..." ),
