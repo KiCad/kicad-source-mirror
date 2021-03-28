@@ -1232,6 +1232,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         LIB_TEXT* libtext = new LIB_TEXT( aPart );
         libtext->SetText( csText.Text );
         libtext->SetUnit( gateNumber );
+        libtext->SetTextAngle( getAngleTenthDegree( csText.OrientAngle ) );
         libtext->SetPosition( getKiCadLibraryPoint( csText.Position, symbol.Origin ) );
         applyTextSettings( csText.TextCodeID, csText.Alignment, csText.Justification, libtext );
         aPart->AddDrawItem( libtext );
@@ -2310,10 +2311,16 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( const TEXTCODE_ID& aCadstarT
     int      textHeight = KiROUND( (double) getKiCadLength( textCode.Height ) * TXT_HEIGHT_RATIO );
     int      textWidth = getKiCadLength( textCode.Width );
 
-    // The width is zero for all non-cadstar fonts. Using a width equal to the height seems
+    // In Cadstar the overbar token is "'" whereas in KiCad it is "~"
+    wxString escapedText = aKiCadTextItem->GetText();
+    escapedText.Replace( wxT( "~" ), wxT( "~~" ) );
+    escapedText.Replace( wxT( "'" ), wxT( "~" ) );
+    aKiCadTextItem->SetText( escapedText );
+
+    // The width is zero for all non-cadstar fonts. Using a width equal to 2/3 the height seems
     // to work well for most fonts.
     if( textWidth == 0 )
-        textWidth = getKiCadLength( textCode.Height );
+        textWidth = getKiCadLength( 2 * textCode.Height / 3 );
 
     aKiCadTextItem->SetTextWidth( textWidth );
     aKiCadTextItem->SetTextHeight( textHeight );
