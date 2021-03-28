@@ -173,8 +173,7 @@ const wxString& PGM_BASE::GetEditorName( bool aCanShowFileChooser )
     // If we still don't have an editor name show a dialog asking the user to select one
     if( !editorname && aCanShowFileChooser )
     {
-        DisplayInfoMessage( NULL,
-                            _( "No default editor found, you must choose it" ) );
+        DisplayInfoMessage( NULL, _( "No default editor found, you must choose it" ) );
 
         editorname = AskUserForPreferredEditor();
     }
@@ -206,10 +205,8 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 
     // Show the modal editor and return the file chosen (may be empty if the user cancels
     // the dialog).
-    return EDA_FILE_SELECTOR( _( "Select Preferred Editor" ), path,
-                              name, ext, mask,
-                              NULL, wxFD_OPEN | wxFD_FILE_MUST_EXIST,
-                              true );
+    return EDA_FILE_SELECTOR( _( "Select Preferred Editor" ), path, name, ext, mask, NULL,
+                              wxFD_OPEN | wxFD_FILE_MUST_EXIST, true );
 }
 
 
@@ -222,7 +219,8 @@ bool PGM_BASE::InitPgm()
 #ifndef __WINDOWS__
     if( wxString( wxGetenv( "HOME" ) ).IsEmpty() )
     {
-        DisplayErrorMessage( nullptr, _( "Environmental variable HOME is empty.  Unable to continue." ) );
+        DisplayErrorMessage( nullptr, _( "Environment variable HOME is empty.  "
+                                         "Unable to continue." ) );
         return false;
     }
 #endif
@@ -232,11 +230,11 @@ bool PGM_BASE::InitPgm()
 
     if( m_pgm_checker->IsAnotherRunning() )
     {
-        wxString quiz =
-                wxString::Format( _( "%s is already running. Continue?" ), pgm_name.GetName() );
-
-        if( !IsOK( NULL, quiz ) )
+        if( !IsOK( NULL, wxString::Format( _( "%s is already running. Continue?" ),
+                                           App().GetAppDisplayName() ) ) )
+        {
             return false;
+        }
     }
 
     // Init KiCad environment
