@@ -29,7 +29,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	m_textLabel->Wrap( -1 );
 	bTextValueBoxSizer->Add( m_textLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_TextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_TextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bTextValueBoxSizer->Add( m_TextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_StyledTextCtrl = new wxStyledTextCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SUNKEN, wxEmptyString );
@@ -65,7 +65,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 
 	m_PowerComponentValues = new wxStaticText( this, wxID_ANY, _("(Power symbol value field text cannot be changed.)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PowerComponentValues->Wrap( -1 );
-	m_PowerComponentValues->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_PowerComponentValues->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	bTextValueBoxSizer->Add( m_PowerComponentValues, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -76,7 +76,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	bUpperBoxSizer->Add( bTextValueBoxSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bPropertiesSizer->Add( bUpperBoxSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bPropertiesSizer->Add( bUpperBoxSizer, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
@@ -215,7 +215,6 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnCloseDialog ) );

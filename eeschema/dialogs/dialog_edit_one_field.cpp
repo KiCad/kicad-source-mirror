@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AITHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,7 @@ DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxS
     m_isPower = false;
 
     m_scintillaTricks = new SCINTILLA_TRICKS( m_StyledTextCtrl, wxT( "{}" ) );
+    m_StyledTextCtrl->SetEOLMode( wxSTC_EOL_LF );   // Normalize EOL across platforms
 
     m_text = aTextItem->GetText();
     m_isItalic = aTextItem->IsItalic();
@@ -130,6 +131,8 @@ void DIALOG_EDIT_ONE_FIELD::init()
     GetSizer()->SetSizeHints( this );
 
     // Adjust the height of the scintilla text editor after the first layout
+    // To show only one line
+    // (multiline text are is supported in fields and will be removed)
     if( m_StyledTextCtrl->IsShown() )
     {
         wxSize maxSize = m_StyledTextCtrl->GetSize();
@@ -328,11 +331,27 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 
 void DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 {
+    int key = aEvent.GetKey();
+
     SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( GetParent() );
     wxArrayString   autocompleteTokens;
     int             pos = m_StyledTextCtrl->GetCurrentPos();
     int             start = m_StyledTextCtrl->WordStartPosition( pos, true );
     wxString        partial;
+
+    // Currently, '\n' is not allowed in fields. So remove it when entered
+    // TODO: see if we must close the dialog. However this is not obvious, as
+    // if a \n is typed (and removed) when a text is selected, this text is deleted
+    // (in fact replaced by \n, that is removed by the filter)
+    if( key == '\n' )
+    {
+        wxString text = m_StyledTextCtrl->GetText();
+        int currpos = m_StyledTextCtrl->GetCurrentPos();
+        text.Replace( "\n", "" );
+        m_StyledTextCtrl->SetText( text );
+        m_StyledTextCtrl->GotoPos( currpos-1 );
+        return;
+    }
 
     auto textVarRef =
             [&]( int pt )

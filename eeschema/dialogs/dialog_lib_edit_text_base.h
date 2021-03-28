@@ -79,7 +79,7 @@ class DIALOG_LIB_EDIT_TEXT_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 739,340 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_LIB_EDIT_TEXT_BASE();
 
 };
