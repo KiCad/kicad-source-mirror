@@ -305,8 +305,8 @@ public:
         long       DrillOversize   = UNDEFINED_VALUE;
         long       SlotLength      = UNDEFINED_VALUE;
         long       SlotOrientation = 0;
-        long       DrillXoffset    = UNDEFINED_VALUE;
-        long       DrillYoffset    = UNDEFINED_VALUE;
+        long       DrillXoffset    = 0;
+        long       DrillYoffset    = 0;
 
         std::map<LAYER_ID, PAD_SHAPE> Reassigns;
 
@@ -945,7 +945,7 @@ public:
 
             void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
-        
+
         struct JUNCTION_PCB : CADSTAR_ARCHIVE_PARSER::NET::JUNCTION ///< "JPT" nodename
         {
             TRUNK_ID TrunkID; ///< TRUNKREF Statements
