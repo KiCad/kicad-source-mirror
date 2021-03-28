@@ -14,16 +14,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-22 17:14-0700\n"
-"PO-Revision-Date: 2021-03-21 13:35+0000\n"
+"PO-Revision-Date: 2021-03-30 20:35+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -10315,13 +10315,15 @@ msgstr "Zdroj 1 a zdroj 2 musí být odlišné"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:282
 msgid "No valid simulation is configured."
-msgstr ""
+msgstr "Není nastavena žádná platná simulace."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:285
 msgid ""
 "A valid simulation can be configured by selecting a simulation tab, setting "
 "the simulation parameters and clicking the OK button with the tab selected."
 msgstr ""
+"Správnou simulaci lze konfigurovat výběrem simulační karty, nastavením "
+"parametrů simulace a klepnutím na tlačítko OK na vybrané kartě."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:289
 #, fuzzy
@@ -10590,7 +10592,7 @@ msgstr "Přidejte úplnou cestu pro .include direktivy knihovny"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:434
 msgid "Compatibility mode:"
-msgstr ""
+msgstr "Režim kompatibility:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "User configuration"
@@ -14738,6 +14740,8 @@ msgstr "Jednotka %s"
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr ""
+"Upravený symbol %s ze schématu. Při ukládání je aktualizováno pouze schéma "
+"zapojení."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:722
 msgid "Manage symbol libraries"
@@ -17632,6 +17636,8 @@ msgid ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
 msgstr ""
+"Chyba při vytváření nového adresáře. Zkuste jinou cestu. Projekt nebyl "
+"importován."
 
 #: kicad/import_project.cpp:139 kicad/import_project.cpp:158
 #, c-format
@@ -17640,6 +17646,9 @@ msgid ""
 "to '%s'\n"
 "The project cannot be imported."
 msgstr ""
+"Nelze zkopírovat soubor '%s'\n"
+"do '%s'\n"
+"Projekt nelze importovat."
 
 #: kicad/import_project.cpp:221
 msgid "Import CADSTAR Archive Project Files"
@@ -23051,7 +23060,7 @@ msgstr "Režim tisku"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "Export jako černé prvky na bílém pozadí"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -23130,7 +23139,7 @@ msgstr "0.1 palce"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "Vrml Units for Output Files"
-msgstr ""
+msgstr "Jednotky VRML pro výstupní soubory"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
@@ -23141,6 +23150,8 @@ msgid ""
 "If checked: copy footprints 3D models in a folder\n"
 "If not checked: merge footprints 3D models in the vrml board file\n"
 msgstr ""
+"Pokud je zaškrtnuto: zkopíruje pouzdra 3D modelů do složky\n"
+"Pokud není zaškrtnuto: sloučí pouzdra 3D modelů v souboru desky vrml\n"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
@@ -26086,7 +26097,7 @@ msgstr "Bez vi"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "Nahlásit chybu DRC, pokud ploška překrývá tuto oblast"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
 #, fuzzy
@@ -26095,7 +26106,7 @@ msgstr "Bez zón mědi"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "Zóny nebudou do této oblasti vyplňovat měď"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:65
 msgid "Keep out footprints"
