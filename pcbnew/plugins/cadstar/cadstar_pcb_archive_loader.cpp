@@ -810,7 +810,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         }
         else
         {
-            int newMargin = getKiCadLength( shape.Size - csPadcode.Shape.Size );
+            int newMargin = getKiCadLength( shape.Size - csPadcode.Shape.Size ) / 2;
 
             if( kiLayer == F_Mask || kiLayer == B_Mask )
             {
