@@ -256,9 +256,17 @@ static bool scriptingSetup()
         pypath += wxT( ":" ) + wxString( wxGetenv("KICAD_PATH") );
     }
 
-    // Bundle wxPython folder (<kicad.app>/Contents/Frameworks/python/site-packages)
+    // TODO: Can we just use PYTHON_DEST here once we set that correctly?
+
+    wxString pythonMajorMinorVersion;
+    pythonMajorMinorVersion += wxT( PYTHON_MAJOR_MINOR_VERSION );
+
+    // Bundle Python folder (<kicad.app>/Contents/Frameworks/Python.framework/Versions/x.y/lib/pythonx.y/site-packages)
+    //
     pypath += wxT( ":" ) + Pgm().GetExecutablePath() +
-              wxT( "Contents/Frameworks/python/site-packages" );
+              wxT( "Contents/Frameworks/Python.framework/Versions/") + pythonMajorMinorVersion +
+              wxT("/lib/python") + pythonMajorMinorVersion
+              + wxT("/site-packages" );
 
     // Original content of $PYTHONPATH
     if( wxGetenv( wxT( "PYTHONPATH" ) ) != NULL )
@@ -269,6 +277,13 @@ static bool scriptingSetup()
     // set $PYTHONPATH
     wxSetEnv( "PYTHONPATH", pypath );
 
+    wxString pyhome;
+
+    pyhome += Pgm().GetExecutablePath() +
+              wxT( "Contents/Frameworks/Python.framework/Versions/Current" );
+
+    // set $PYTHONHOME
+    wxSetEnv( "PYTHONHOME", pyhome );
 #else
     wxString pypath;
 
