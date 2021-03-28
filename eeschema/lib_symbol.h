@@ -354,6 +354,8 @@ public:
 
     size_t GetPinCount() const { return m_drawings.size( LIB_PIN_T ); }
 
+    size_t GetFieldCount() const { return m_drawings.size( LIB_FIELD_T ); }
+
     /**
      * Return the next pin object from the draw list.
      *
