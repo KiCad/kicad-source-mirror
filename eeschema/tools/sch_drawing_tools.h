@@ -83,7 +83,7 @@ private:
     bool                       m_lastTextItalic;
 
     ///< Re-entrancy guards
-    bool                       m_inPlaceComponent;
+    bool                       m_inPlaceSymbol;
     bool                       m_inPlaceImage;
     bool                       m_inSingleClickPlace;
     bool                       m_inTwoClickPlace;

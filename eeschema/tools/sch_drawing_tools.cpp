@@ -59,7 +59,7 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastTextOrientation( LABEL_SPIN_STYLE::LEFT ),
         m_lastTextBold( false ),
         m_lastTextItalic( false ),
-        m_inPlaceComponent( false ),
+        m_inPlaceSymbol( false ),
         m_inPlaceImage( false ),
         m_inSingleClickPlace( false ),
         m_inTwoClickPlace( false ),
@@ -91,10 +91,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     SCHLIB_FILTER               filter;
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
 
-    if( m_inPlaceComponent )
+    if( m_inPlaceSymbol )
         return 0;
     else
-        m_inPlaceComponent = true;
+        m_inPlaceSymbol = true;
 
     if( aEvent.IsAction( &EE_ACTIONS::placeSymbol ) )
     {
@@ -312,7 +312,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     }
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-    m_inPlaceComponent = false;
+    m_inPlaceSymbol = false;
     return 0;
 }
 
