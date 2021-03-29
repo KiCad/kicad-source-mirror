@@ -403,6 +403,11 @@ public:
             return wxDIR_CONTINUE;
         }
 
+        // Don't migrate hotkeys config files; we don't have a reasonable migration handler for them
+        // and so there is no way to resolve conflicts at the moment
+        if( file.GetExt() == wxT( "hotkeys" ) )
+            return wxDIR_CONTINUE;
+
         wxString path = file.GetPath();
 
         path.Replace( m_src, m_dest, false );
