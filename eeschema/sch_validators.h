@@ -42,7 +42,7 @@
 
 /**
  * A text control validator used for validating the text allowed in library and
- * schematic component fields.
+ * schematic symbol fields.
  *
  * - The reference field does not accept spaces.
  * - The value field does not accept spaces in the symbol library editor because in symbol

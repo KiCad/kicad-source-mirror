@@ -23,7 +23,7 @@
 
 /**
  * @file listboxes.cpp
- * @brief Implementation of class for displaying footprint list and component lists.
+ * @brief Implementation of class for displaying footprint and symbol lists.
  */
 
 #include <cvpcb_mainframe.h>
@@ -31,7 +31,7 @@
 
 
 /******************************************************************************
-* Basic class (from wxListView) to display component and footprint lists
+* Basic class (from wxListView) to display symbol and footprint lists
 * Not directly used: the 2 list boxes actually used are derived from it
 ******************************************************************************/
 

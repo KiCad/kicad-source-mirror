@@ -146,9 +146,9 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
 
     if( aScreen )
     {
-        // Components and sheets own their own children so have to be visited even if
+        // Symbols and sheets own their own children so have to be visited even if
         // they're not in the filter list
-        bool componentsVisited = false;
+        bool symbolsVisited = false;
         bool sheetsVisited = false;
         bool globalLabelsVisited = false;
 
@@ -157,7 +157,7 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
             for( SCH_ITEM* item : aScreen->Items().OfType( *filter ) )
             {
                 if( *filter == SCH_COMPONENT_T || *filter == SCH_LOCATE_ANY_T )
-                    componentsVisited = true;
+                    symbolsVisited = true;
 
                 if( *filter == SCH_SHEET_T || *filter == SCH_LOCATE_ANY_T )
                     sheetsVisited = true;
@@ -169,7 +169,7 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
             }
         }
 
-        if( !componentsVisited )
+        if( !symbolsVisited )
         {
             for( SCH_ITEM* item : aScreen->Items().OfType( SCH_COMPONENT_T ) )
                 item->Visit( m_inspector, nullptr, m_scanTypes );
@@ -234,15 +234,15 @@ bool EE_COLLECTOR::IsCorner() const
 void CollectOtherUnits( const wxString& aRef, int aUnit, SCH_SHEET_PATH& aSheet,
                         std::vector<SCH_COMPONENT*>* otherUnits )
 {
-    SCH_REFERENCE_LIST components;
-    aSheet.GetSymbols( components );
+    SCH_REFERENCE_LIST symbols;
+    aSheet.GetSymbols( symbols );
 
-    for( unsigned i = 0; i < components.GetCount(); i++ )
+    for( unsigned i = 0; i < symbols.GetCount(); i++ )
     {
-        SCH_REFERENCE component = components[i];
+        SCH_REFERENCE symbol = symbols[i];
 
-        if( component.GetRef() == aRef && component.GetUnit() != aUnit )
-            otherUnits->push_back( component.GetSymbol() );
+        if( symbol.GetRef() == aRef && symbol.GetUnit() != aUnit )
+            otherUnits->push_back( symbol.GetSymbol() );
     }
 }
 

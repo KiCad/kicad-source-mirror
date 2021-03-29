@@ -83,17 +83,17 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
 
     ReadSchematicNetlist( aNetlist );
 
-    if( m_compListBox == NULL )
+    if( m_symbolsListBox == NULL )
         return false;
 
     wxSafeYield();
 
     LoadFootprintFiles();
 
-    BuildFOOTPRINTS_LISTBOX();
-    BuildLIBRARY_LISTBOX();
+    BuildFootprintsListBox();
+    BuildLibrariesListBox();
 
-    m_compListBox->Clear();
+    m_symbolsListBox->Clear();
 
     if( m_netlist.AnyFootprintsLinked() )
     {
@@ -260,16 +260,16 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
     {
         COMPONENT* component = m_netlist.GetComponent( i );
 
-        msg.Printf( CMP_FORMAT, m_compListBox->GetCount() + 1,
+        msg.Printf( CMP_FORMAT, m_symbolsListBox->GetCount() + 1,
                     component->GetReference(),
                     component->GetValue(),
                     FROM_UTF8( component->GetFPID().Format().c_str() ) );
 
-        m_compListBox->AppendLine( msg );
+        m_symbolsListBox->AppendLine( msg );
     }
 
     if( !m_netlist.IsEmpty() )
-        m_compListBox->SetSelection( 0, true );
+        m_symbolsListBox->SetSelection( 0, true );
 
     DisplayStatus();
 

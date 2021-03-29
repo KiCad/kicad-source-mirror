@@ -64,11 +64,11 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool* aAppendUndo
             {
                 for( SCH_ITEM* item : aScreen->Items().OfType( SCH_COMPONENT_T ) )
                 {
-                    SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+                    SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
 
-                    SaveCopyInUndoList( aScreen, component, UNDO_REDO::CHANGED, *aAppendUndo );
+                    SaveCopyInUndoList( aScreen, symbol, UNDO_REDO::CHANGED, *aAppendUndo );
                     *aAppendUndo = true;
-                    component->ClearAnnotation( aSheet );
+                    symbol->ClearAnnotation( aSheet );
                 }
             };
 
@@ -108,13 +108,13 @@ void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
     SCH_SHEET_LIST     sheets = Schematic().GetSheets();
     bool               appendUndo = false;
 
-    // Map of locked components
-    SCH_MULTI_UNIT_REFERENCE_MAP lockedComponents;
+    // Map of locked symbols
+    SCH_MULTI_UNIT_REFERENCE_MAP lockedSymbols;
 
     // Map of previous annotation for building info messages
     std::map<wxString, wxString> previousAnnotation;
 
-    // Test for and replace duplicate time stamps in components and sheets.  Duplicate
+    // Test for and replace duplicate time stamps in symbols and sheets.  Duplicate
     // time stamps can happen with old schematics, schematic conversions, or manual
     // editing of files.
     if( aRepairTimestamps )
@@ -133,28 +133,28 @@ void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
     if( aLockUnits )
     {
         if( aAnnotateSchematic )
-            sheets.GetMultiUnitSymbols( lockedComponents );
+            sheets.GetMultiUnitSymbols( lockedSymbols );
         else
-            GetCurrentSheet().GetMultiUnitSymbols( lockedComponents );
+            GetCurrentSheet().GetMultiUnitSymbols( lockedSymbols );
     }
 
     // Store previous annotations for building info messages
     mapExistingAnnotation( previousAnnotation );
 
-    // If it is an annotation for all the components, reset previous annotation.
+    // If it is an annotation for all the symbols, reset previous annotation.
     if( aResetAnnotation )
         DeleteAnnotation( !aAnnotateSchematic, &appendUndo );
 
     // Set sheet number and number of sheets.
     SetSheetNumberAndCount();
 
-    // Build component list
+    // Build symbol list
     if( aAnnotateSchematic )
         sheets.GetSymbols( references );
     else
         GetCurrentSheet().GetSymbols( references );
 
-    // Break full components reference in name (prefix) and number:
+    // Break full symbol reference into name (prefix) and number:
     // example: IC1 become IC, and 1
     references.SplitReferences();
 
@@ -185,7 +185,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
     }
 
     // Recalculate and update reference numbers in schematic
-    references.Annotate( useSheetNum, idStep, aStartNumber, lockedComponents );
+    references.Annotate( useSheetNum, idStep, aStartNumber, lockedSymbols );
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {

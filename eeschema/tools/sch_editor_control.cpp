@@ -538,7 +538,7 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     SCH_ITEM*          item = nullptr;
-    SCH_COMPONENT*     component = nullptr;
+    SCH_COMPONENT*     symbol = nullptr;
 
     if( aForce )
     {
@@ -570,19 +570,19 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
     case LIB_FIELD_T:
         if( item->GetParent() && item->GetParent()->Type() == SCH_COMPONENT_T )
         {
-            component = (SCH_COMPONENT*) item->GetParent();
-            m_frame->SendMessageToPCBNEW( item, component );
+            symbol = (SCH_COMPONENT*) item->GetParent();
+            m_frame->SendMessageToPCBNEW( item, symbol );
         }
         break;
 
     case SCH_COMPONENT_T:
-        component = (SCH_COMPONENT*) item;
-        m_frame->SendMessageToPCBNEW( item, component );
+        symbol = (SCH_COMPONENT*) item;
+        m_frame->SendMessageToPCBNEW( item, symbol );
         break;
 
     case SCH_PIN_T:
-        component = (SCH_COMPONENT*) item->GetParent();
-        m_frame->SendMessageToPCBNEW( static_cast<SCH_PIN*>( item ), component );
+        symbol = (SCH_COMPONENT*) item->GetParent();
+        m_frame->SendMessageToPCBNEW( static_cast<SCH_PIN*>( item ), symbol );
         break;
 
     case SCH_SHEET_T:
@@ -1443,7 +1443,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         if( item->Type() == SCH_COMPONENT_T )
         {
-            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
 
             // The library symbol gets set from the cached library symbols in the current
             // schematic not the symbol libraries.  The cached library symbol may have
@@ -1453,17 +1453,17 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             wxCHECK2( currentScreen, continue );
 
-            auto it = currentScreen->GetLibSymbols().find( component->GetSchSymbolLibraryName() );
+            auto it = currentScreen->GetLibSymbols().find( symbol->GetSchSymbolLibraryName() );
 
             if( it != currentScreen->GetLibSymbols().end() )
-                component->SetLibSymbol( new LIB_PART( *it->second ) );
+                symbol->SetLibSymbol( new LIB_PART( *it->second ) );
 
             if( !forceKeepAnnotations )
             {
                 // clear the annotation, but preserve the selected unit
-                int unit = component->GetUnit();
-                component->ClearAnnotation( nullptr );
-                component->SetUnit( unit );
+                int unit = symbol->GetUnit();
+                symbol->ClearAnnotation( nullptr );
+                symbol->SetUnit( unit );
             }
         }
 

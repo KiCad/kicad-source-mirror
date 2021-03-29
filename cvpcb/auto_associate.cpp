@@ -306,5 +306,5 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
         wxMessageBox( error_msg, _( "CvPcb Warning" ), wxOK | wxICON_WARNING, this );
 
     m_skipComponentSelect = false;
-    m_compListBox->Refresh();
+    m_symbolsListBox->Refresh();
 }

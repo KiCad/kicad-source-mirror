@@ -313,7 +313,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     m_anchorPos = m_cursor;
                 }
                 // For some items, moving the cursor to anchor is not good (for instance large
-                // hierarchical sheets or components can have the anchor outside the view)
+                // hierarchical sheets or symbols can have the anchor outside the view)
                 else if( selection.Size() == 1 && !sch_item->IsMovableFromAnchorPoint() )
                 {
                     m_cursor = getViewControls()->GetCursorPosition( true );
@@ -412,12 +412,12 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
                 && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
             {
-                SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
+                SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
                 int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
 
-                if( component )
+                if( symbol )
                 {
-                    m_frame->SelectUnit( component, unit );
+                    m_frame->SelectUnit( symbol, unit );
                     m_toolMgr->RunAction( ACTIONS::refreshPreview );
                 }
             }
@@ -592,7 +592,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         case SCH_JUNCTION_T:
             if( test->IsConnected( aPoint ) )
             {
-                // Add a new wire between the component or junction and the selected item so
+                // Add a new wire between the symbol or junction and the selected item so
                 // the selected item can be dragged.
                 SCH_LINE* newWire = nullptr;
 
@@ -692,8 +692,8 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 
         if( parent && parent->Type() == SCH_COMPONENT_T )
         {
-            SCH_COMPONENT* component = (SCH_COMPONENT*) aItem->GetParent();
-            TRANSFORM      transform = component->GetTransform().InverseTransform();
+            SCH_COMPONENT* symbol = (SCH_COMPONENT*) aItem->GetParent();
+            TRANSFORM      transform = symbol->GetTransform().InverseTransform();
 
             delta = transform.TransformCoordinate( delta );
         }

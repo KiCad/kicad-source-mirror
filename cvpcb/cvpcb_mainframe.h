@@ -65,8 +65,8 @@ class CVPCB_MAINFRAME : public KIWAY_PLAYER
     int                       m_filteringOptions;
     ACTION_TOOLBAR*           m_mainToolBar;
     FOOTPRINTS_LISTBOX*       m_footprintListBox;
-    LIBRARY_LISTBOX*          m_libListBox;
-    COMPONENTS_LISTBOX*       m_compListBox;
+    LIBRARY_LISTBOX*          m_librariesListBox;
+    COMPONENTS_LISTBOX*       m_symbolsListBox;
     wxTextCtrl*               m_tcFilterString;
     wxStaticText*             m_statusLine1;
     wxStaticText*             m_statusLine2;
@@ -256,9 +256,9 @@ public:
     /*
      * Functions to build the listboxes and their contents
      */
-    void BuildCmpListBox();
-    void BuildFOOTPRINTS_LISTBOX();
-    void BuildLIBRARY_LISTBOX();
+    void BuildSymbolsListBox();
+    void BuildFootprintsListBox();
+    void BuildLibrariesListBox();
 
     /**
      * Function SaveFootprintAssociation
@@ -390,14 +390,14 @@ private:
      */
     int buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages = NULL );
 
-    void refreshAfterComponentSearch (COMPONENT* component);
+    void refreshAfterSymbolSearch( COMPONENT* aSymbol );
 
     // Tool dispatcher
     TOOL_DISPATCHER* m_toolDispatcher;
 
     // Context menus for the list boxes
     ACTION_MENU* m_footprintContextMenu;
-    ACTION_MENU* m_componentContextMenu;
+    ACTION_MENU* m_symbolsContextMenu;
 
     // Undo/Redo item lists
     CVPCB_UNDO_REDO_LIST    m_undoList;

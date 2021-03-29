@@ -398,12 +398,12 @@ public:
      * Check for annotation errors.
      *
      * The following list of items are checked:
-     * - Components that are not annotated.
-     * - Duplicate component references.
-     * - Multiple part per package components where the part number is greater number of parts
-     *   in the package.
-     * - Multiple part per package components where the reference designator is different
-     *   between parts.
+     * - Symbols that are not annotated.
+     * - Duplicate symbol references.
+     * - Multiple part per package symbols where the part number is greater number of parts in
+     *   the package.
+     * - Multiple part per package symbols where the reference designator is different between
+     *   parts.
      *
      * @return Number of annotation errors found.
      * @param aReporter A handler for error reporting.

@@ -55,8 +55,8 @@ enum class CONNECTION_TYPE
  * more than once in a higher level sheet).  Because of this, a single item may
  * contain more than one SCH_CONNECTION -- each is specific to a sheet.
  *
- * Components contain connections for each of their pins (and for each sheet
- * they exist on) but don't use their own connection object.
+ * Symbols contain connections for each of their pins (and for each sheet they
+ * exist on) but don't use their own connection object.
  */
 class SCH_CONNECTION
 {
