@@ -249,8 +249,6 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
     // Ensure filepath is not empty.  (In normal use will be caught by grid validators,
     // but unedited data from existing files can be bad.)
-
-    // @todo What happens when there are invalid file name characters?
     if( newRelativeNativeFilename.IsEmpty() )
     {
         wxMessageBox( _( "A sheet must have a valid file name." ) );
@@ -613,16 +611,6 @@ void DIALOG_SHEET_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
         {
             wxMessageBox( _( "A sheet must have a file specified." ) );
             success = false;
-        }
-        else
-        {
-            wxFileName fn = textControl->GetValue();
-
-            if( fn.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
-            {
-                wxMessageBox( _( "Sheet filename must have a '.kicad_sch' extension." ) );
-                success = false;
-            }
         }
     }
 

@@ -87,7 +87,7 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR( const SCH_FIELD_VALIDATOR& aValidator 
 bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
 {
     // If window is disabled, simply return
-    if( !m_validatorWindow->IsEnabled() || !m_validatorWindow->IsShown() )
+    if( !m_validatorWindow->IsEnabled() )
         return true;
 
     wxTextEntry * const text = GetTextEntry();

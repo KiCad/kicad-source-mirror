@@ -471,7 +471,24 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         break;
 
     case FDC_VALUE:
-        field.SetText( aValue );
+    {
+        wxString value( aValue );
+
+        if( m_parentType == SCH_SHEET_T && aRow == SHEETFILENAME )
+        {
+            wxFileName fn( value );
+
+            // It's annoying to throw up nag dialogs when the extension isn't right.  Just
+            // fix it.
+            if( fn.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
+            {
+                fn.SetExt( KiCadSchematicFileExtension );
+                value = fn.GetFullPath();
+            }
+        }
+
+        field.SetText( value );
+    }
         break;
 
     case FDC_SHOWN:
