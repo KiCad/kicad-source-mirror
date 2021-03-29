@@ -401,6 +401,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 continue;
             }
 
+            if( sym.GateID.IsEmpty() )
+                sym.GateID = wxT( "A" ); // Assume Gate "A" if unspecified
+
             PART_GATE_ID partSymbolID = { sym.PartRef.RefID, sym.GateID };
             LIB_PART*    kiPart = m_partMap.at( sym.PartRef.RefID );
             bool         copy = false;
