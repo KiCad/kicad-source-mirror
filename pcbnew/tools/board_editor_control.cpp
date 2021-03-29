@@ -22,6 +22,7 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#include <advanced_config.h>
 #include "board_editor_control.h"
 #include "drawing_tool.h"
 #include "pcb_actions.h"
@@ -174,8 +175,9 @@ BOARD_EDITOR_CONTROL::BOARD_EDITOR_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.EditorControl" ),
     m_frame( nullptr )
 {
-    m_placeOrigin = std::make_unique<KIGFX::ORIGIN_VIEWITEM>( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
-                                                              KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS );
+    m_placeOrigin = std::make_unique<KIGFX::ORIGIN_VIEWITEM>(
+            KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
+            KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS );
 }
 
 
@@ -1485,7 +1487,11 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::ImportNetlist,          PCB_ACTIONS::importNetlist.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportSpecctraSession,  PCB_ACTIONS::importSpecctraSession.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ExportSpecctraDSN,      PCB_ACTIONS::exportSpecctraDSN.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::ExportNetlist,          PCB_ACTIONS::exportNetlist.MakeEvent() );
+
+    if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist && m_frame &&
+        m_frame->GetExportNetlistAction() )
+        Go( &BOARD_EDITOR_CONTROL::ExportNetlist, m_frame->GetExportNetlistAction()->MakeEvent() );
+
     Go( &BOARD_EDITOR_CONTROL::GenerateDrillFiles,     PCB_ACTIONS::generateDrillFiles.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateGerbers.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GeneratePosFile,        PCB_ACTIONS::generatePosFile.MakeEvent() );

@@ -18,8 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef  WXPCB_STRUCT_H_
-#define  WXPCB_STRUCT_H_
+#ifndef  __PCB_EDIT_FRAME_H__
+#define  __PCB_EDIT_FRAME_H__
 
 #include <unordered_map>
 #include <map>
@@ -30,7 +30,6 @@
 #include <map>
 #include <unordered_map>
 
-/*  Forward declarations of classes. */
 class ACTION_PLUGIN;
 class PCB_SCREEN;
 class BOARD;
@@ -59,6 +58,8 @@ class IO_ERROR;
 class FP_LIB_TABLE;
 class BOARD_NETLIST_UPDATER;
 class ACTION_MENU;
+class TOOL_ACTION;
+
 enum LAST_PATH_TYPE : unsigned int;
 
 namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
@@ -68,164 +69,9 @@ namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
  *
  * See also class PCB_BASE_FRAME(): Basic class for Pcbnew and GerbView.
  */
-
-
 class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 {
-    friend struct PCB::IFACE;
-    friend class APPEARANCE_CONTROLS;
-
-protected:
-
-    /**
-     * Store the previous layer toolbar icon state information
-     */
-    struct LAYER_TOOLBAR_ICON_VALUES
-    {
-        int     previous_requested_scale;
-        COLOR4D previous_Route_Layer_TOP_color;
-        COLOR4D previous_Route_Layer_BOTTOM_color;
-        COLOR4D previous_background_color;
-
-        LAYER_TOOLBAR_ICON_VALUES()
-                : previous_requested_scale( 0 ),
-                  previous_Route_Layer_TOP_color( COLOR4D::UNSPECIFIED ),
-                  previous_Route_Layer_BOTTOM_color( COLOR4D::UNSPECIFIED ),
-                  previous_background_color( COLOR4D::UNSPECIFIED )
-        {
-        }
-    };
-
-    LAYER_TOOLBAR_ICON_VALUES m_prevIconVal;
-
-    // The Tool Framework initialization
-    void setupTools();
-    void setupUIConditions() override;
-
-    /**
-     * Switch currently used canvas (Cairo / OpenGL).
-     *
-     * It also reinit the layers manager that slightly changes with canvases
-     */
-    void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
-
-#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
-    /**
-     * Fill action menu with all registered action plugins
-     */
-    void buildActionPluginMenus( ACTION_MENU* aActionMenu );
-
-    /**
-     * Append action plugin buttons to main toolbar
-     */
-    void AddActionPluginTools();
-
-	/**
-	 * Execute action plugin's Run() method and updates undo buffer.
-     *
-	 * @param aActionPlugin action plugin
-	 */
-	void RunActionPlugin( ACTION_PLUGIN* aActionPlugin );
-
-    /**
-     * Launched by the menu when an action is called.
-     *
-     * @param aEvent sent by wx
-     */
-    void OnActionPluginMenu( wxCommandEvent& aEvent);
-
-    /**
-     * Launched by the button when an action is called.
-     *
-     * @param aEvent sent by wx
-     */
-    void OnActionPluginButton( wxCommandEvent& aEvent );
-
-    /**
-     * Refresh plugin list (reload Python plugins).
-     *
-     * @param aEvent sent by wx
-     */
-    void OnActionPluginRefresh( wxCommandEvent& aEvent)
-    {
-       PythonPluginsReload();
-    }
-
-    /**
-     * Refresh plugin list (reload Python plugins).
-     *
-     * @param aEvent sent by wx
-     */
-    void OnActionPluginShowFolder( wxCommandEvent& aEvent)
-    {
-       PythonPluginsShowFolder();
-    }
-#endif
-
-    /**
-     * Has meaning only if KICAD_SCRIPTING_WXPYTHON option is not defined.
-     *
-     * @return the frame name identifier for the python console frame.
-     */
-    static const wxChar * pythonConsoleNameId()
-    {
-        return wxT( "PythonConsole" );
-    }
-
-    /**
-     * @return a pointer to the python console frame, or NULL if not exist
-     */
-    static wxWindow * findPythonConsole()
-    {
-       return FindWindowByName( pythonConsoleNameId() );
-    }
-
-    /**
-     * Update the state of the GUI after a new board is loaded or created.
-     */
-    void onBoardLoaded();
-
-    /**
-     * Perform auto save when the board has been modified and not saved within the
-     * auto save interval.
-     *
-     * @return true if the auto save was successful.
-     */
-    bool doAutoSave() override;
-
-    /**
-     * Return true if the board has been modified.
-     */
-    bool isAutoSaveRequired() const override;
-
-    /**
-     * Load the given filename but sets the path to the current project path.
-     *
-     * @param full file path of file to be imported.
-     * @param aFileType PCB_FILE_T value for file type
-     */
-    bool importFile( const wxString& aFileName, int aFileType );
-
-    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
-    void doCloseWindow() override;
-
-    // protected so that PCB::IFACE::CreateWindow() is the only factory.
-    PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
-
-    void onSize( wxSizeEvent& aEvent );
-
-    int inferLegacyEdgeClearance( BOARD* aBoard );
-
 public:
-    PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
-
-    wxChoice* m_SelTrackWidthBox;        // a choice box to display and select current track width
-    wxChoice* m_SelViaSizeBox;           // a choice box to display and select current via diameter
-
-    bool m_show_layer_manager_tools;
-
-    bool m_ZoneFillsDirty;               // Board has been modified since last zone fill.
-
     virtual ~PCB_EDIT_FRAME();
 
     /**
@@ -531,7 +377,7 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
     /**
-     * Writes the board data structures to \a a aFileName.
+     * Write the board data structures to \a a aFileName.
      *
      * Create a backup when requested and update flags (modified and saved flags).
      *
@@ -611,7 +457,7 @@ public:
     void OnExportVRML( wxCommandEvent& event );
 
     /**
-     * Creates the file(s) exporting current BOARD to a VRML file.
+     * Create the file(s) exporting current BOARD to a VRML file.
      *
      * @note When copying 3D shapes files, the new filename is build from the full path
      *       name, changing the separators by underscore.  This is needed because files
@@ -639,17 +485,17 @@ public:
                           const wxString& a3D_Subdir, double aXRef, double aYRef );
 
     /**
-     * Will export the current BOARD to a IDFv3 board and lib files.
+     * Export the current BOARD to a IDFv3 board and lib files.
      */
     void OnExportIDF3( wxCommandEvent& event );
 
     /**
-     * Will export the current BOARD to a Hyperlynx HYP file.
+     * Export the current BOARD to a Hyperlynx HYP file.
      */
     void OnExportHyperlynx( wxCommandEvent& event );
 
     /**
-     * Creates an IDF3 compliant BOARD (*.emn) and LIBRARY (*.emp) file.
+     * Create an IDF3 compliant BOARD (*.emn) and LIBRARY (*.emp) file.
      *
      * @param aPcb a pointer to the board to be exported to IDF.
      * @param aFullFileName the full filename of the export file.
@@ -780,7 +626,6 @@ public:
      */
     void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand );
 
-
 #if defined( KICAD_SCRIPTING_WXPYTHON )
     /**
      * Enable or disable the scripting console.
@@ -836,7 +681,172 @@ public:
 
     SELECTION& GetCurrentSelection() override;
 
+    TOOL_ACTION* GetExportNetlistAction() { return m_exportNetlistAction; }
+
     DECLARE_EVENT_TABLE()
+
+protected:
+    /**
+     * Store the previous layer toolbar icon state information
+     */
+    struct LAYER_TOOLBAR_ICON_VALUES
+    {
+        int     previous_requested_scale;
+        COLOR4D previous_Route_Layer_TOP_color;
+        COLOR4D previous_Route_Layer_BOTTOM_color;
+        COLOR4D previous_background_color;
+
+        LAYER_TOOLBAR_ICON_VALUES()
+                : previous_requested_scale( 0 ),
+                  previous_Route_Layer_TOP_color( COLOR4D::UNSPECIFIED ),
+                  previous_Route_Layer_BOTTOM_color( COLOR4D::UNSPECIFIED ),
+                  previous_background_color( COLOR4D::UNSPECIFIED )
+        {
+        }
+    };
+
+    LAYER_TOOLBAR_ICON_VALUES m_prevIconVal;
+
+    // The Tool Framework initialization
+    void setupTools();
+    void setupUIConditions() override;
+
+    /**
+     * Switch currently used canvas (Cairo / OpenGL).
+     *
+     * It also reinit the layers manager that slightly changes with canvases
+     */
+    void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
+
+#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
+    /**
+     * Fill action menu with all registered action plugins
+     */
+    void buildActionPluginMenus( ACTION_MENU* aActionMenu );
+
+    /**
+     * Append action plugin buttons to main toolbar
+     */
+    void AddActionPluginTools();
+
+	/**
+	 * Execute action plugin's Run() method and updates undo buffer.
+     *
+	 * @param aActionPlugin action plugin
+	 */
+	void RunActionPlugin( ACTION_PLUGIN* aActionPlugin );
+
+    /**
+     * Launched by the menu when an action is called.
+     *
+     * @param aEvent sent by wx
+     */
+    void OnActionPluginMenu( wxCommandEvent& aEvent);
+
+    /**
+     * Launched by the button when an action is called.
+     *
+     * @param aEvent sent by wx
+     */
+    void OnActionPluginButton( wxCommandEvent& aEvent );
+
+    /**
+     * Refresh plugin list (reload Python plugins).
+     *
+     * @param aEvent sent by wx
+     */
+    void OnActionPluginRefresh( wxCommandEvent& aEvent)
+    {
+       PythonPluginsReload();
+    }
+
+    /**
+     * Refresh plugin list (reload Python plugins).
+     *
+     * @param aEvent sent by wx
+     */
+    void OnActionPluginShowFolder( wxCommandEvent& aEvent)
+    {
+       PythonPluginsShowFolder();
+    }
+#endif
+
+    /**
+     * Has meaning only if KICAD_SCRIPTING_WXPYTHON option is not defined.
+     *
+     * @return the frame name identifier for the python console frame.
+     */
+    static const wxChar * pythonConsoleNameId()
+    {
+        return wxT( "PythonConsole" );
+    }
+
+    /**
+     * @return a pointer to the python console frame, or NULL if not exist
+     */
+    static wxWindow * findPythonConsole()
+    {
+       return FindWindowByName( pythonConsoleNameId() );
+    }
+
+    /**
+     * Update the state of the GUI after a new board is loaded or created.
+     */
+    void onBoardLoaded();
+
+    /**
+     * Perform auto save when the board has been modified and not saved within the
+     * auto save interval.
+     *
+     * @return true if the auto save was successful.
+     */
+    bool doAutoSave() override;
+
+    /**
+     * Return true if the board has been modified.
+     */
+    bool isAutoSaveRequired() const override;
+
+    /**
+     * Load the given filename but sets the path to the current project path.
+     *
+     * @param full file path of file to be imported.
+     * @param aFileType PCB_FILE_T value for file type
+     */
+    bool importFile( const wxString& aFileName, int aFileType );
+
+    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
+    void doCloseWindow() override;
+
+    // protected so that PCB::IFACE::CreateWindow() is the only factory.
+    PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
+
+    void onSize( wxSizeEvent& aEvent );
+
+    int inferLegacyEdgeClearance( BOARD* aBoard );
+
+public:
+    PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
+
+    wxChoice* m_SelTrackWidthBox;        // a choice box to display and select current track width
+    wxChoice* m_SelViaSizeBox;           // a choice box to display and select current via diameter
+
+    bool m_show_layer_manager_tools;
+
+    bool m_ZoneFillsDirty;               // Board has been modified since last zone fill.
+
+private:
+    friend struct PCB::IFACE;
+    friend class APPEARANCE_CONTROLS;
+
+    /**
+     * The export board netlist tool action object.
+     *
+     * This is created at runtime rather than declared statically so it doesn't show up in
+     * the list of assignable hot keys since it's only available as an advanced configuration
+     * option.
+     */
+    TOOL_ACTION* m_exportNetlistAction;
 };
 
-#endif  // WXPCB_STRUCT_H_
+#endif  // __PCB_EDIT_FRAME_H__

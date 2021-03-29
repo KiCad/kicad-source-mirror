@@ -20,6 +20,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <advanced_config.h>
 #include <kiface_i.h>
 #include <kiway.h>
 #include <pgm_base.h>
@@ -174,7 +175,8 @@ END_EVENT_TABLE()
 
 PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB_EDITOR, wxT( "PCB Editor" ), wxDefaultPosition,
-                         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PCB_EDIT_FRAME_NAME )
+                         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PCB_EDIT_FRAME_NAME ),
+    m_exportNetlistAction( nullptr )
 {
     m_maximizeByDefault = true;
     m_showBorderAndTitleBlock = true;   // true to display sheet references
@@ -184,12 +186,18 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_show_layer_manager_tools = true;
     m_hasAutoSave = true;
 
-    // We don't know what state board was in when it was lasat saved, so we have to
+    // We don't know what state board was in when it was last saved, so we have to
     // assume dirty
     m_ZoneFillsDirty = true;
 
     m_rotationAngle = 900;
     m_aboutTitle = _( "KiCad PCB Editor" );
+
+    // Must be created before the menus are created.
+    if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist )
+        m_exportNetlistAction = new TOOL_ACTION( "pcbnew.EditorControl.exportNetlist",
+                                                 AS_GLOBAL, 0, "", _( "Netlist..." ),
+                                                 _( "Export netlist used to update schematics" ) );
 
     // Create GAL canvas
     auto canvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
@@ -240,7 +248,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     unsigned int auiFlags = wxAUI_MGR_DEFAULT;
 #if !defined( _WIN32 )
-    // Windows cannot redraw the UI fast enough during a live resize and may lead to all kinds of graphical glitches
+    // Windows cannot redraw the UI fast enough during a live resize and may lead to all kinds
+    // of graphical glitches.
     auiFlags |= wxAUI_MGR_LIVE_RESIZE;
 #endif
     m_auimgr.SetFlags( auiFlags );
@@ -517,35 +526,37 @@ void PCB_EDIT_FRAME::setupUIConditions()
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( ACTIONS::save,                     ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( ACTIONS::undo,                     ENABLE( cond.UndoAvailable() ) );
-    mgr->SetConditions( ACTIONS::redo,                     ENABLE( cond.RedoAvailable() ) );
+    mgr->SetConditions( ACTIONS::save, ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( ACTIONS::undo, ENABLE( cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo, ENABLE( cond.RedoAvailable() ) );
 
-    mgr->SetConditions( ACTIONS::toggleGrid,               CHECK( cond.GridVisible() ) );
-    mgr->SetConditions( ACTIONS::toggleCursorStyle,        CHECK( cond.FullscreenCursor() ) );
-    mgr->SetConditions( ACTIONS::togglePolarCoords,        CHECK( cond.PolarCoordinates() ) );
-    mgr->SetConditions( ACTIONS::millimetersUnits,         CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
-    mgr->SetConditions( ACTIONS::inchesUnits,              CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
-    mgr->SetConditions( ACTIONS::milsUnits,                CHECK( cond.Units( EDA_UNITS::MILS ) ) );
+    mgr->SetConditions( ACTIONS::toggleGrid, CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::togglePolarCoords, CHECK( cond.PolarCoordinates() ) );
+    mgr->SetConditions( ACTIONS::millimetersUnits, CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::inchesUnits, CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::milsUnits, CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
-    mgr->SetConditions( ACTIONS::cut,                      ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( ACTIONS::copy,                     ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( ACTIONS::paste,                    ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
-    mgr->SetConditions( ACTIONS::pasteSpecial,             ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
-    mgr->SetConditions( ACTIONS::selectAll,                ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( ACTIONS::doDelete,                 ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( ACTIONS::duplicate,                ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::cut, ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::copy, ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::paste,
+                        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::pasteSpecial,
+                        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::selectAll, ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::doDelete, ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::duplicate, ENABLE( cond.HasItems() ) );
 
-    mgr->SetConditions( PCB_ACTIONS::rotateCw,             ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( PCB_ACTIONS::rotateCcw,            ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( PCB_ACTIONS::group,                ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
-    mgr->SetConditions( PCB_ACTIONS::ungroup,              ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( PCB_ACTIONS::lock,                 ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( PCB_ACTIONS::unlock,               ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::rotateCw, ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::rotateCcw, ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::group, ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
+    mgr->SetConditions( PCB_ACTIONS::ungroup, ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::lock, ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::unlock, ENABLE( cond.HasItems() ) );
 
-    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,       CHECK( !cond.PadFillDisplay() ) );
-    mgr->SetConditions( PCB_ACTIONS::viaDisplayMode,       CHECK( !cond.ViaFillDisplay() ) );
-    mgr->SetConditions( PCB_ACTIONS::trackDisplayMode,     CHECK( !cond.TrackFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::padDisplayMode, CHECK( !cond.PadFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::viaDisplayMode, CHECK( !cond.ViaFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::trackDisplayMode, CHECK( !cond.TrackFillDisplay() ) );
 
 
 #if defined( KICAD_SCRIPTING_WXPYTHON )
@@ -684,15 +695,14 @@ void PCB_EDIT_FRAME::setupUIConditions()
                                         PCB_SELECTION_CONDITIONS::SameNet( true ) &&
                                         PCB_SELECTION_CONDITIONS::SameLayer();
 
-    mgr->SetConditions( PCB_ACTIONS::zoneDuplicate,   ENABLE( singleZoneCond ) );
-    mgr->SetConditions( PCB_ACTIONS::drawZoneCutout,  ENABLE( singleZoneCond ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneDuplicate, ENABLE( singleZoneCond ) );
+    mgr->SetConditions( PCB_ACTIONS::drawZoneCutout, ENABLE( singleZoneCond ) );
     mgr->SetConditions( PCB_ACTIONS::drawSimilarZone, ENABLE( singleZoneCond ) );
-    mgr->SetConditions( PCB_ACTIONS::zoneMerge,       ENABLE( zoneMergeCond ) );
-    mgr->SetConditions( PCB_ACTIONS::zoneFill,        ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
-    mgr->SetConditions( PCB_ACTIONS::zoneUnfill,      ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneMerge, ENABLE( zoneMergeCond ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneFill, ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneUnfill, ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
 
     mgr->SetConditions( PCB_ACTIONS::toggleLine45degMode, CHECK( cond.Line45degMode() ) );
-
 
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
 
@@ -1386,10 +1396,6 @@ bool PCB_EDIT_FRAME::TestStandalone()
 }
 
 
-//
-// Sends a Netlist packet to eeSchema.
-// The reply is in aNetlist so it is destroyed by this
-//
 bool PCB_EDIT_FRAME::ReannotateSchematic( std::string& aNetlist )
 {
     Kiway().ExpressMail( FRAME_SCH, MAIL_REANNOTATE, aNetlist, this );
@@ -1397,7 +1403,8 @@ bool PCB_EDIT_FRAME::ReannotateSchematic( std::string& aNetlist )
 }
 
 
-bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, const wxString& aAnnotateMessage )
+bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist,
+                                                const wxString& aAnnotateMessage )
 {
     if( !TestStandalone() )
     {
@@ -1441,11 +1448,13 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, const wxStrin
 void PCB_EDIT_FRAME::RunEeschema()
 {
     wxString   msg;
-    wxFileName schematic( Prj().GetProjectPath(), Prj().GetProjectName(), KiCadSchematicFileExtension );
+    wxFileName schematic( Prj().GetProjectPath(), Prj().GetProjectName(),
+                          KiCadSchematicFileExtension );
 
     if( !schematic.FileExists() )
     {
-        wxFileName legacySchematic( Prj().GetProjectPath(), Prj().GetProjectName(), LegacySchematicFileExtension );
+        wxFileName legacySchematic( Prj().GetProjectPath(), Prj().GetProjectName(),
+                                    LegacySchematicFileExtension );
 
         if( legacySchematic.FileExists() )
         {
@@ -1472,7 +1481,7 @@ void PCB_EDIT_FRAME::RunEeschema()
         // Kiway.Player( FRAME_SCH, true )
         // therefore, the schematic editor is sometimes running, but the schematic project
         // is not loaded, if the library editor was called, and the dialog field editor was used.
-        // On linux, it happens the first time the schematic editor is launched, if
+        // On Linux, it happens the first time the schematic editor is launched, if
         // library editor was running, and the dialog field editor was open
         // On Windows, it happens always after the library editor was called,
         // and the dialog field editor was used
@@ -1498,7 +1507,7 @@ void PCB_EDIT_FRAME::RunEeschema()
         }
 
         // On Windows, Raise() does not bring the window on screen, when iconized or not shown
-        // On linux, Raise() brings the window on screen, but this code works fine
+        // On Linux, Raise() brings the window on screen, but this code works fine
         if( frame->IsIconized() )
         {
             frame->Iconize( false );
@@ -1563,12 +1572,12 @@ void PCB_EDIT_FRAME::PythonSyncEnvironmentVariables()
     const ENV_VAR_MAP& vars = Pgm().GetLocalEnvVariables();
 
     // Set the environment variables for python scripts
-    // note: the strint will be encoded UTF8 for python env
+    // note: the string will be encoded UTF8 for python env
     for( auto& var : vars )
         pcbnewUpdatePythonEnvVar( var.first, var.second.GetValue() );
 
-    // Because the env vars can de modifed by the python scripts (rewritten in UTF8),
-    // regenerate them (in unicode) for our normal environment
+    // Because the env vars can de modified by the python scripts (rewritten in UTF8),
+    // regenerate them (in Unicode) for our normal environment
     for( auto& var : vars )
         wxSetEnv( var.first, var.second.GetValue() );
 #endif
@@ -1582,8 +1591,8 @@ void PCB_EDIT_FRAME::PythonSyncProjectName()
     wxGetEnv( PROJECT_VAR_NAME, &evValue );
     pcbnewUpdatePythonEnvVar( wxString( PROJECT_VAR_NAME ).ToStdString(), evValue );
 
-    // Because PROJECT_VAR_NAME can be modifed by the python scripts (rewritten in UTF8),
-    // regenerate it (in unicode) for our normal environment
+    // Because PROJECT_VAR_NAME can be modified by the python scripts (rewritten in UTF8),
+    // regenerate it (in Unicode) for our normal environment
     wxSetEnv( PROJECT_VAR_NAME, evValue );
 #endif
 }
@@ -1602,7 +1611,7 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
     /*
      * retvalue =
      *   FP_PROPS_UPDATE_FP to show Update Footprints dialog
-     *   FP_PROPS_CHANGE_FP to show Chanage Footprints dialog
+     *   FP_PROPS_CHANGE_FP to show Change Footprints dialog
      *   FP_PROPS_OK for normal edit
      *   FP_PROPS_CANCEL if aborted
      *   FP_PROPS_EDIT_BOARD_FP to load board footprint into Footprint Editor

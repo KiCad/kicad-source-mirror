@@ -142,8 +142,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->Add( _( "Hyperlynx..." ), "",
                         ID_GEN_EXPORT_FILE_HYPERLYNX, BITMAPS::export_step );
 
-    if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist )
-        submenuExport->Add( PCB_ACTIONS::exportNetlist );
+    if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist && m_exportNetlistAction )
+        submenuExport->Add( *m_exportNetlistAction );
 
     submenuExport->AppendSeparator();
     submenuExport->Add( _( "Footprints to Library..." ),

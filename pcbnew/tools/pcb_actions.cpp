@@ -567,10 +567,6 @@ TOOL_ACTION PCB_ACTIONS::exportSpecctraDSN( "pcbnew.EditorControl.exportSpecctra
         _( "Export Specctra DSN..." ), _( "Export Specctra DSN routing info" ),
         BITMAPS::export_dsn );
 
-TOOL_ACTION PCB_ACTIONS::exportNetlist( "pcbnew.EditorControl.exportNetlist", AS_GLOBAL, 0, "",
-                                        _( "Netlist..." ),
-                                        _( "Export netlist used to update schematics" ) );
-
 TOOL_ACTION PCB_ACTIONS::generateGerbers( "pcbnew.EditorControl.generateGerbers",
         AS_GLOBAL, 0, "",
         _( "Gerbers (.gbr)..." ), _( "Generate Gerbers for fabrication" ),
