@@ -197,6 +197,8 @@ wxString PATHS::GetStockPlugins3DPath()
     fn.Assign( tfname, "" );
     fn.AppendDir( wxT( "kicad" ) );
     fn.AppendDir( wxT( "plugins" ) );
+#elif defined( __WXMAC__ )
+    fn.Assign( wxStandardPaths::Get().GetPluginsDir(), wxEmptyString );
 #else
     fn.Assign( PATHS::GetStockPluginsPath() );
 #endif
