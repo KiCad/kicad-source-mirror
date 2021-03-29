@@ -279,11 +279,7 @@ bool PGM_BASE::InitPgm()
         return false;
 
     wxFileName baseSharePath;
-#ifdef __WXMAC__
-    baseSharePath.AssignDir( PATHS::GetOSXKicadMachineDataDir() );
-#else
-    baseSharePath.AssignDir( PATHS::GetStockDataPath( false ) );
-#endif
+    baseSharePath.AssignDir( PATHS::GetStockEDALibraryPath() );
 
     // KICAD6_FOOTPRINT_DIR
     wxString envVarName = wxT( "KICAD6_FOOTPRINT_DIR" );

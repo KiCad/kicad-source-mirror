@@ -85,6 +85,10 @@
 /// Allows scripts install directory to be referenced by the program code.
 #define KICAD_DATA                      "@KICAD_DATA@"
 
+/// Allows KiCad stock EDA library data (templates, symbols, footprints, 3dmodels)
+/// directory to be referenced by the program code.
+#define KICAD_LIBRARY_DATA              "@KICAD_LIBRARY_DATA@"
+
 // Plugins directory
 #define KICAD_PLUGINDIR                 "@CMAKE_INSTALL_FULL_LIBDIR@"
 

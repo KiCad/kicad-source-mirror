@@ -162,6 +162,22 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
 }
 
 
+wxString PATHS::GetStockEDALibraryPath()
+{
+    wxString path;
+
+#if defined( __WXMAC__ )
+    path = GetOSXKicadMachineDataDir();
+#elif defined( __WXMSW__ )
+    path = GetStockDataPath( false );
+#else
+    path = wxString::FromUTF8Unchecked( KICAD_LIBRARY_DATA );
+#endif
+
+    return path;
+}
+
+
 wxString PATHS::GetStockScriptingPath()
 {
     wxString path;

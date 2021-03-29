@@ -542,6 +542,9 @@ if( NOT APPLE )
             CACHE STRING "Location of KiCad data files." )
     endif()
 
+    set( KICAD_LIBRARY_DATA ${KICAD_DATA}
+        CACHE STRING "Location of KiCad stock EDA library data" )
+
     if( WIN32 )
         set( KICAD_PLUGINS ${KICAD_BIN}/scripting/plugins
             CACHE PATH "Location of KiCad plugins." )
@@ -566,7 +569,7 @@ if( NOT APPLE )
         CACHE PATH "Location of KiCad documentation files." )
     set( KICAD_DEMOS ${KICAD_DATA}/demos
         CACHE PATH "Location of KiCad demo files." )
-    set( KICAD_TEMPLATE ${KICAD_DATA}/template
+    set( KICAD_TEMPLATE ${KICAD_LIBRARY_DATA}/template
         CACHE PATH "Location of KiCad template files." )
 else()
     # everything without leading / is relative to CMAKE_INSTALL_PREFIX.
@@ -642,6 +645,7 @@ mark_as_advanced( KICAD_BIN
     KICAD_USER_PLUGIN
     KICAD_LIB
     KICAD_DATA
+    KICAD_LIBRARY_DATA
     KICAD_DOCS
     KICAD_DEMOS
     KICAD_TEMPLATE )

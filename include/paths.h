@@ -73,6 +73,12 @@ public:
     static wxString GetStockDataPath( bool aRespectRunFromBuildDir = true );
 
     /**
+     * Gets the stock (install) EDA library data path, which is the base path for
+     * templates, schematic symbols, footprints, and 3D models.
+     */
+    static wxString GetStockEDALibraryPath();
+
+    /**
      * Gets the stock (install) scripting path
      */
     static wxString GetStockScriptingPath();
