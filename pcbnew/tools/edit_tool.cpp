@@ -1931,7 +1931,8 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 }
             }
 
-            item->Move( translation );
+            if( !item->GetParent() || !item->GetParent()->IsSelected() )
+                item->Move( translation );
 
             switch( rotationAnchor )
             {
