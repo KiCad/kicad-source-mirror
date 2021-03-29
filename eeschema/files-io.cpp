@@ -583,7 +583,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // colinear segments. If a schematic is saved without a valid
     // cache library or missing installed libraries, this can cause connectivity errors
     // unless junctions are added.
-    FixupJunctions();
+    if( schFileType == SCH_IO_MGR::SCH_LEGACY )
+        FixupJunctions();
 
     SyncView();
     GetScreen()->ClearDrawingState();
