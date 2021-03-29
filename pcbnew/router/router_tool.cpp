@@ -1636,6 +1636,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
+    // Send an initial movement to prime the collision detection
+    m_router->Move( p, nullptr );
+
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();

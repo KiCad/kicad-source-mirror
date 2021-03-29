@@ -91,6 +91,7 @@ private:
     TRACK              m_dummyTrack;
     ARC                m_dummyArc;
     VIA                m_dummyVia;
+    int                m_clearanceEpsilon;
 
     std::map<std::pair<const PNS::ITEM*, const PNS::ITEM*>, int> m_clearanceCache;
     std::map<std::pair<const PNS::ITEM*, const PNS::ITEM*>, int> m_holeClearanceCache;
@@ -106,6 +107,10 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard,
     m_dummyArc( aBoard ),
     m_dummyVia( aBoard )
 {
+    if( aBoard )
+        m_clearanceEpsilon = aBoard->GetDesignSettings().GetDRCEpsilon();
+    else
+        m_clearanceEpsilon = 0;
 }
 
 
@@ -291,7 +296,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
     {
         if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
-            rv = constraint.m_Value.Min();
+            rv = constraint.m_Value.Min() - m_clearanceEpsilon;
     }
 
     if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
@@ -299,7 +304,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
         if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
         {
             if( constraint.m_Value.Min() > rv )
-                rv = constraint.m_Value.Min();
+                rv = constraint.m_Value.Min() - m_clearanceEpsilon;
         }
     }
 
@@ -326,7 +331,7 @@ int PNS_PCBNEW_RULE_RESOLVER::HoleClearance( const PNS::ITEM* aA, const PNS::ITE
         layer = aB->Layer();
 
     if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
-        rv = constraint.m_Value.Min();
+        rv = constraint.m_Value.Min() - m_clearanceEpsilon;
 
     m_holeClearanceCache[ key ] = rv;
     return rv;
@@ -351,7 +356,7 @@ int PNS_PCBNEW_RULE_RESOLVER::HoleToHoleClearance( const PNS::ITEM* aA, const PN
         layer = aB->Layer();
 
     if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
-        rv = constraint.m_Value.Min();
+        rv = constraint.m_Value.Min() - m_clearanceEpsilon;
 
     m_holeToHoleClearanceCache[ key ] = rv;
     return rv;
