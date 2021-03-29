@@ -65,7 +65,7 @@ public:
     int ShowElectricalTypes( const TOOL_EVENT& aEvent );
     int PinLibrary( const TOOL_EVENT& aEvent );
     int UnpinLibrary( const TOOL_EVENT& aEvent );
-    int ShowSymbolTree( const TOOL_EVENT& aEvent );
+    int ToggleSymbolTree( const TOOL_EVENT& aEvent );
     int ToggleSyncedPinsMode( const TOOL_EVENT& aEvent );
 
 private:

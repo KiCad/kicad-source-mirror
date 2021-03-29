@@ -335,9 +335,14 @@ TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
 
 // FOOTPRINT_EDITOR_CONTROL
 //
-TOOL_ACTION PCB_ACTIONS::toggleFootprintTree( "pcbnew.ModuleEditor.toggleFootprintTree",
+TOOL_ACTION PCB_ACTIONS::showFootprintTree( "pcbnew.ModuleEditor.showFootprintTree",
         AS_GLOBAL, 0, "",
-        _( "Show Footprint Tree" ), _( "Toggles the footprint tree visibility" ),
+        _( "Show Footprint Tree" ), "",
+        BITMAPS::search_tree );
+
+TOOL_ACTION PCB_ACTIONS::hideFootprintTree( "pcbnew.ModuleEditor.hideFootprintTree",
+        AS_GLOBAL, 0, "",
+        _( "Hide Footprint Tree" ), "",
         BITMAPS::search_tree );
 
 TOOL_ACTION PCB_ACTIONS::newFootprint( "pcbnew.ModuleEditor.newFootprint",

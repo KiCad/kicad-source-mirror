@@ -350,7 +350,8 @@ public:
 
     // Module editor tools
 
-    static TOOL_ACTION toggleFootprintTree;
+    static TOOL_ACTION showFootprintTree;
+    static TOOL_ACTION hideFootprintTree;
 
     // We don't use ACTION::new here because we need to distinguish between New Library
     // and New Footprint.

@@ -1046,7 +1046,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::highContrastMode,          CHECK( highContrastCond ) );
     mgr->SetConditions( PCB_ACTIONS::flipBoard,             CHECK( boardFlippedCond ) );
-    mgr->SetConditions( PCB_ACTIONS::toggleFootprintTree,   CHECK( footprintTreeCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showFootprintTree,     CHECK( footprintTreeCond ) );
 
     mgr->SetConditions( ACTIONS::print,                     ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::exportFootprint,       ENABLE( haveFootprintCond ) );

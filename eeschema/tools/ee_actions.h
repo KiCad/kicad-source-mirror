@@ -199,6 +199,7 @@ public:
     static TOOL_ACTION pushPinNumSize;
     static TOOL_ACTION showElectricalTypes;
     static TOOL_ACTION showSymbolTree;
+    static TOOL_ACTION hideSymbolTree;
     static TOOL_ACTION toggleForceHV;
     static TOOL_ACTION drawSheetOnClipboard;
     static TOOL_ACTION exportSymbolView;

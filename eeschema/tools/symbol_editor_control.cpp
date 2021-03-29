@@ -112,6 +112,9 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::importSymbol,       libInferredCondition );
         ctxMenu.AddItem( EE_ACTIONS::exportSymbol,       symbolSelectedCondition );
+
+        // If we've got nothing else to show, at least show a hide tree option
+        ctxMenu.AddItem( EE_ACTIONS::hideSymbolTree,    !libInferredCondition );
     }
 
     return true;
@@ -332,7 +335,7 @@ int SYMBOL_EDITOR_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
 }
 
 
-int SYMBOL_EDITOR_CONTROL::ShowSymbolTree( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::ToggleSymbolTree( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
@@ -551,6 +554,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::ShowElectricalTypes,   EE_ACTIONS::showElectricalTypes.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::PinLibrary,            ACTIONS::pinLibrary.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::UnpinLibrary,          ACTIONS::unpinLibrary.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ShowSymbolTree,        EE_ACTIONS::showSymbolTree.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ToggleSymbolTree,      EE_ACTIONS::showSymbolTree.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ToggleSymbolTree,      EE_ACTIONS::hideSymbolTree.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode,  EE_ACTIONS::toggleSyncedPinsMode.MakeEvent() );
 }

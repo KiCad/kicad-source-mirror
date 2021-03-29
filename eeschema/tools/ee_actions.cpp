@@ -188,6 +188,11 @@ TOOL_ACTION EE_ACTIONS::showSymbolTree( "eeschema.SymbolLibraryControl.showSymbo
         _( "Show Symbol Tree" ), "",
         BITMAPS::search_tree );
 
+TOOL_ACTION EE_ACTIONS::hideSymbolTree( "eeschema.SymbolLibraryControl.hideSymbolTree",
+        AS_GLOBAL, 0, "",
+        _( "Hide Symbol Tree" ), "",
+        BITMAPS::search_tree );
+
 TOOL_ACTION EE_ACTIONS::exportSymbolView( "eeschema.SymbolLibraryControl.exportSymbolView",
         AS_GLOBAL, 0, "",
         _( "Export View as PNG..." ), _( "Create PNG file from the current view" ),

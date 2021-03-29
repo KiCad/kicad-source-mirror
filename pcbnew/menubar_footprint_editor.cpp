@@ -171,7 +171,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->Add( PCB_ACTIONS::flipBoard,                  ACTION_MENU::CHECK );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( PCB_ACTIONS::toggleFootprintTree,        ACTION_MENU::CHECK );
+    viewMenu->Add( PCB_ACTIONS::showFootprintTree,          ACTION_MENU::CHECK );
 
 
     //-- Place menu -------------------------------------------------------

@@ -129,6 +129,9 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
     ctxMenu.AddItem( PCB_ACTIONS::importFootprint,   libInferredCondition );
     ctxMenu.AddItem( PCB_ACTIONS::exportFootprint,   fpSelectedCondition );
 
+    // If we've got nothing else to show, at least show a hide tree option
+    ctxMenu.AddItem( PCB_ACTIONS::hideFootprintTree, !libInferredCondition );
+
     return true;
 }
 
@@ -524,7 +527,8 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
 
     Go( &FOOTPRINT_EDITOR_CONTROL::PinLibrary,           ACTIONS::pinLibrary.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::UnpinLibrary,         ACTIONS::unpinLibrary.MakeEvent() );
-    Go( &FOOTPRINT_EDITOR_CONTROL::ToggleFootprintTree,  PCB_ACTIONS::toggleFootprintTree.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::ToggleFootprintTree,  PCB_ACTIONS::showFootprintTree.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::ToggleFootprintTree,  PCB_ACTIONS::hideFootprintTree.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::Properties,           PCB_ACTIONS::footprintProperties.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::DefaultPadProperties, PCB_ACTIONS::defaultPadProperties.MakeEvent() );
 }
