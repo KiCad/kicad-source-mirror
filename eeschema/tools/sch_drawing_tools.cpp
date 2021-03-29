@@ -345,12 +345,6 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    // Prime the pump
-    if( image )
-        m_toolMgr->RunAction( ACTIONS::refreshPreview );
-    else if( !aEvent.IsReactivate() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
-
     auto setCursor =
             [&]()
             {
@@ -360,6 +354,21 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
+    auto cleanup =
+            [&] ()
+            {
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                m_view->ClearPreview();
+                delete image;
+                image = nullptr;
+            };
+
+    // Prime the pump
+    if( image )
+        m_toolMgr->RunAction( ACTIONS::refreshPreview );
+    else if( !aEvent.IsReactivate() )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
+
     // Set initial cursor
     setCursor();
 
@@ -368,15 +377,6 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     {
         setCursor();
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
-
-        auto cleanup =
-                [&] ()
-                {
-                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                    m_view->ClearPreview();
-                    delete image;
-                    image = nullptr;
-                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -490,7 +490,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             m_view->AddToPreview( image->Clone() );
             m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
         }
-        else if( item && evt->IsAction( &ACTIONS::doDelete ) )
+        else if( image && evt->IsAction( &ACTIONS::doDelete ) )
         {
             cleanup();
         }
@@ -919,14 +919,6 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    // Prime the pump
-    // If the tool isn't being re-activated
-    if( aEvent.HasPosition() || ( !aEvent.IsReactivate()
-            && ( isText || isGlobalLabel || isHierLabel || isNetLabel ) ) )
-    {
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
-    }
-
     auto setCursor =
             [&]()
             {
@@ -944,6 +936,23 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
+    auto cleanup =
+            [&] ()
+            {
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                m_view->ClearPreview();
+                delete item;
+                item = nullptr;
+            };
+
+    // Prime the pump
+    // If the tool isn't being re-activated
+    if( aEvent.HasPosition() || ( !aEvent.IsReactivate()
+            && ( isText || isGlobalLabel || isHierLabel || isNetLabel ) ) )
+    {
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
+    }
+
     // Set initial cursor
     setCursor();
 
@@ -957,15 +966,6 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         VECTOR2I cursorPos = evt->IsPrime() ? evt->Position() : controls->GetMousePosition();
         cursorPos = grid.BestSnapAnchor( cursorPos, snapLayer, item );
         controls->ForceCursorPosition( true, cursorPos );
-
-        auto cleanup =
-                [&] ()
-                {
-                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                    m_view->ClearPreview();
-                    delete item;
-                    item = nullptr;
-                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -1160,15 +1160,24 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    // Prime the pump
-    if( aEvent.HasPosition() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
-
     auto setCursor =
             [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
+
+    auto cleanup =
+            [&] ()
+            {
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                m_view->ClearPreview();
+                delete sheet;
+                sheet = nullptr;
+            };
+
+    // Prime the pump
+    if( aEvent.HasPosition() )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Set initial cursor
     setCursor();
@@ -1179,15 +1188,6 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         setCursor();
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
-
-        auto cleanup =
-                [&] ()
-                {
-                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                    m_view->ClearPreview();
-                    delete sheet;
-                    sheet = nullptr;
-                };
 
         if( evt->IsCancelInteractive() )
         {
