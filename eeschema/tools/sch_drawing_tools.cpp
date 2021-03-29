@@ -299,10 +299,9 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             symbol->SetPosition( (wxPoint)cursorPos );
             m_view->Update( symbol );
         }
-        else if( evt->IsAction( &ACTIONS::doDelete ) )
+        else if( symbol && evt->IsAction( &ACTIONS::doDelete ) )
         {
-            if( symbol )
-                cleanup();
+            cleanup();
         }
         else
         {
@@ -491,10 +490,9 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             m_view->AddToPreview( image->Clone() );
             m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
         }
-        else if( evt->IsAction( &ACTIONS::doDelete ) )
+        else if( item && evt->IsAction( &ACTIONS::doDelete ) )
         {
-            if( image )
-                cleanup();
+            cleanup();
         }
         else
         {
@@ -1125,10 +1123,9 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
-        else if( evt->IsAction( &ACTIONS::doDelete ) )
+        else if( item && evt->IsAction( &ACTIONS::doDelete ) )
         {
-            if( item )
-                cleanup();
+            cleanup();
         }
         else
         {
