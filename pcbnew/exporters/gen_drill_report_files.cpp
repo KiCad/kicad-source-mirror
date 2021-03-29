@@ -482,7 +482,7 @@ unsigned GENDRILL_WRITER_BASE::printToolSummary( OUTPUTFORMATTER& out, bool aSum
         // List the tool number assigned to each drill,
         // in mm then in inches.
         int tool_number = ii+1;
-        out.Print( 0, "    T%d  %2.2fmm  %2.3f\"  ", tool_number,
+        out.Print( 0, "    T%d  %2.3fmm  %2.4f\"  ", tool_number,
                  diameter_in_mm( tool.m_Diameter ),
                  diameter_in_inches( tool.m_Diameter ) );
 
