@@ -905,13 +905,19 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
         // router, otherwise it won't know how to correctly build walkaround 'hulls' for the pad
         // primitives - it can recognize only simple shapes, but not COMPOUNDs made of multiple shapes.
         // The proper way to fix this would be to implement SHAPE_COMPOUND::ConvertToSimplePolygon(),
-        // but the complexity of pad polygonization code (see PAD::GetEffectivePolygon), including approximation
-        // error handling makes me slightly scared to do it right now.
+        // but the complexity of pad polygonization code (see PAD::GetEffectivePolygon), including
+        // approximation error handling makes me slightly scared to do it right now.
 
-        const std::shared_ptr<SHAPE_POLY_SET>& outline = aPad->GetEffectivePolygon();
-        SHAPE_SIMPLE*                          shape = new SHAPE_SIMPLE();
+        // NOTE: PAD::GetEffectivePolygon puts the error on the inside, but we want the error on
+        // the outside so that the collision hull is larger than the pad
 
-        for( auto iter = outline->CIterate( 0 ); iter; iter++ )
+        SHAPE_POLY_SET outline;
+        aPad->TransformShapeWithClearanceToPolygon( outline, UNDEFINED_LAYER, 0, ARC_HIGH_DEF,
+                                                    ERROR_OUTSIDE );
+
+        SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
+
+        for( auto iter = outline.CIterate( 0 ); iter; iter++ )
             shape->Append( *iter );
 
         solid->SetShape( shape );
