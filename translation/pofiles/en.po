@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-22 17:14-0700\n"
+"POT-Creation-Date: 2021-03-30 13:37-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3366,8 +3366,8 @@ msgstr "Executable file (*)|*"
 msgid "Select Preferred Editor"
 msgstr "Select Preferred Editor"
 
-msgid "Environmental variable HOME is empty.  Unable to continue."
-msgstr "Environmental variable HOME is empty.  Unable to continue."
+msgid "Environment variable HOME is empty.  Unable to continue."
+msgstr "Environment variable HOME is empty.  Unable to continue."
 
 #, c-format
 msgid "%s is already running. Continue?"
@@ -6980,9 +6980,6 @@ msgstr "A sheet must have a name."
 msgid "A sheet must have a file specified."
 msgstr "A sheet must have a file specified."
 
-msgid "Sheet filename must have a '.kicad_sch' extension."
-msgstr "Sheet filename must have a '.kicad_sch' extension."
-
 msgid "Hierarchical path: "
 msgstr "Hierarchical path: "
 
@@ -8625,16 +8622,25 @@ msgstr ""
 msgid "Import"
 msgstr "Import"
 
-msgid "Import Non KiCad Schematic..."
-msgstr "Import Non KiCad Schematic..."
+msgid "Non-KiCad Schematic..."
+msgstr "Non-KiCad Schematic..."
 
 msgid ""
 "Replace current schematic sheet with one imported from another application"
 msgstr ""
 "Replace current schematic sheet with one imported from another application"
 
+msgid "Footprint Assignments..."
+msgstr "Footprint Assignments..."
+
 msgid "Export"
 msgstr "Export"
+
+msgid "Drawing to Clipboard"
+msgstr "Drawing to Clipboard"
+
+msgid "Netlist..."
+msgstr "Netlist..."
 
 msgid "&Units"
 msgstr "&Units"
@@ -9302,48 +9308,48 @@ msgstr ""
 #, c-format
 msgid ""
 "Invalid symbol names definition in\n"
-"file: \"%s\"\n"
+"file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
 "Invalid symbol names definition in\n"
-"file: \"%s\"\n"
+"file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 
 #, c-format
 msgid ""
 "Invalid property name in\n"
-"file: \"%s\"\n"
+"file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
 "Invalid property name in\n"
-"file: \"%s\"\n"
+"file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 
 #, c-format
 msgid ""
 "Empty property name in\n"
-"file: \"%s\"\n"
+"file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
 "Empty property name in\n"
-"file: \"%s\"\n"
+"file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 
 #, c-format
 msgid ""
 "Invalid property value in\n"
-"file: \"%s\"\n"
+"file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
 "Invalid property value in\n"
-"file: \"%s\"\n"
+"file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 
@@ -9398,6 +9404,42 @@ msgstr ""
 #, c-format
 msgid "Page type \"%s\" is not valid "
 msgstr "Page type “%s” is not valid "
+
+#, c-format
+msgid ""
+"Invalid property name in\n"
+"file: \"%s\"\n"
+"line: %d\n"
+"offset: %d"
+msgstr ""
+"Invalid property name in\n"
+"file: \"%s\"\n"
+"line: %d\n"
+"offset: %d"
+
+#, c-format
+msgid ""
+"Empty property name in\n"
+"file: \"%s\"\n"
+"line: %d\n"
+"offset: %d"
+msgstr ""
+"Empty property name in\n"
+"file: \"%s\"\n"
+"line: %d\n"
+"offset: %d"
+
+#, c-format
+msgid ""
+"Invalid property value in\n"
+"file: \"%s\"\n"
+"line: %d\n"
+"offset: %d"
+msgstr ""
+"Invalid property value in\n"
+"file: \"%s\"\n"
+"line: %d\n"
+"offset: %d"
 
 #, c-format
 msgid ""
@@ -10316,6 +10358,15 @@ msgstr ""
 msgid "Loading library \"%s\""
 msgstr "Loading library “%s”"
 
+msgid "Symbol..."
+msgstr "Symbol..."
+
+msgid "View as PNG..."
+msgstr "View as PNG..."
+
+msgid "Symbol as SVG..."
+msgstr "Symbol as SVG..."
+
 msgid "Library Editor"
 msgstr "Library Editor"
 
@@ -10893,6 +10944,9 @@ msgstr "Annotate pins with their electrical types"
 
 msgid "Show Symbol Tree"
 msgstr "Show Symbol Tree"
+
+msgid "Hide Symbol Tree"
+msgstr "Hide Symbol Tree"
 
 msgid "Export View as PNG..."
 msgstr "Export View as PNG…"
@@ -12520,14 +12574,14 @@ msgstr "Clear Recent Projects"
 msgid "Import Non-KiCad Project..."
 msgstr "Import Non-KiCad Project..."
 
-msgid "Import CADSTAR Project..."
-msgstr "Import CADSTAR Project..."
+msgid "CADSTAR Project..."
+msgstr "CADSTAR Project..."
 
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
 msgstr "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
 
-msgid "Import EAGLE Project..."
-msgstr "Import EAGLE Project..."
+msgid "EAGLE Project..."
+msgstr "EAGLE Project..."
 
 msgid "Import EAGLE CAD XML schematic and board"
 msgstr "Import EAGLE CAD XML schematic and board"
@@ -14762,8 +14816,8 @@ msgstr ""
 "    Change Array\n"
 "***********************\n"
 
-msgid "will be ignored"
-msgstr "will be ignored"
+msgid " will be ignored"
+msgstr " will be ignored"
 
 msgid ""
 "\n"
@@ -20841,6 +20895,12 @@ msgstr "Default units:"
 msgid "Import Vector Graphics File"
 msgstr "Import Vector Graphics File"
 
+msgid "Invalid spline definition encountered"
+msgstr "Invalid spline definition encountered"
+
+msgid "Invalid Bezier curve created"
+msgstr "Invalid Bezier curve created"
+
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
 msgstr ""
@@ -20872,14 +20932,14 @@ msgstr "Footprint “%s” saved"
 msgid "Footprint library \"%s\" saved as \"%s\"."
 msgstr "Footprint library “%s” saved as “%s”."
 
-msgid "&Import Graphics..."
-msgstr "&Import Graphics..."
+msgid "Footprint..."
+msgstr "Footprint..."
 
-msgid "Import 2D Drawing file to Footprint Editor on Drawings layer"
-msgstr "Import 2D Drawing file to Footprint Editor on Drawings layer"
+msgid "Graphics..."
+msgstr "Graphics..."
 
-msgid "Export View as &PNG..."
-msgstr "Export View as &PNG..."
+msgid "View as &PNG..."
+msgstr "View as &PNG..."
 
 msgid "Create a PNG file from the current view"
 msgstr "Create a PNG file from the current view"
@@ -20908,17 +20968,17 @@ msgstr "Resc&ue"
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr "Clear board and get last rescue file automatically saved by PCB editor"
 
-msgid "Graphics..."
-msgstr "Graphics..."
-
-msgid "Import 2D drawing file"
-msgstr "Import 2D drawing file"
+msgid "Specctra Session..."
+msgstr "Specctra Session..."
 
 msgid "Non-KiCad Board File..."
 msgstr "Non-KiCad Board File..."
 
 msgid "Import board file from other applications"
 msgstr "Import board file from other applications"
+
+msgid "Specctra DSN..."
+msgstr "Specctra DSN..."
 
 msgid "GenCAD..."
 msgstr "GenCAD..."
@@ -20960,8 +21020,8 @@ msgstr ""
 msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
-msgid "Export Footprints to Library..."
-msgstr "Export Footprints to Library..."
+msgid "Footprints to Library..."
+msgstr "Footprints to Library..."
 
 msgid ""
 "Add footprints used on board to an existing footprint library\n"
@@ -20970,8 +21030,8 @@ msgstr ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 
-msgid "Export Footprints to New Library..."
-msgstr "Export Footprints to New Library..."
+msgid "Footprints to New Library..."
+msgstr "Footprints to New Library..."
 
 msgid ""
 "Create a new footprint library containing the footprints used on board\n"
@@ -21494,6 +21554,9 @@ msgstr "Error loading project footprint libraries"
 msgid "KiCad PCB Editor"
 msgstr "KiCad PCB Editor"
 
+msgid "Export netlist used to update schematics"
+msgstr "Export netlist used to update schematics"
+
 msgid "New PCB file is unsaved"
 msgstr "New PCB file is unsaved"
 
@@ -21853,11 +21916,25 @@ msgstr ""
 
 #, c-format
 msgid ""
+"The CADSTAR pad definition '%s' is a complex pad stack, which is not "
+"supported in KiCad. Please review the imported pads as they may require "
+"manual correction."
+msgstr ""
+"The CADSTAR pad definition '%s' is a complex pad stack, which is not "
+"supported in KiCad. Please review the imported pads as they may require "
+"manual correction."
+
+#, c-format
+msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
+
+#, c-format
+msgid "The CADSTAR pad definition '%s' has import errors: %s"
+msgstr "The CADSTAR pad definition '%s' has import errors: %s"
 
 #, c-format
 msgid ""
@@ -22648,6 +22725,9 @@ msgstr "Too short: skew "
 msgid "Tuned: skew "
 msgstr "Tuned: skew "
 
+msgid "Diff pair gap is less than board minimum clearance."
+msgstr "Diff pair gap is less than board minimum clearance."
+
 msgid "Cannot start routing from a non-plated hole."
 msgstr "Cannot start routing from a non-plated hole."
 
@@ -22976,11 +23056,33 @@ msgstr "Via: %s (%s)"
 msgid "Locking"
 msgstr "Locking"
 
+msgid "Omit extra information"
+msgstr "Omit extra information"
+
+msgid "Omit nets"
+msgstr "Omit nets"
+
+msgid "Do not prefix path with footprint UUID."
+msgstr "Do not prefix path with footprint UUID."
+
 msgid "Merge Specctra Session file:"
 msgstr "Merge Specctra Session file:"
 
 msgid "Specctra DSN File"
 msgstr "Specctra DSN File"
+
+msgid "Export Board Netlist"
+msgstr "Export Board Netlist"
+
+msgid "KiCad board netlist files"
+msgstr "KiCad board netlist files"
+
+#, c-format
+msgid "Path `%s` is read only."
+msgstr "Path `%s` is read only."
+
+msgid "I/O Error"
+msgstr "I/O Error"
 
 #, c-format
 msgid "Orphaned net %s re-parented.\n"
@@ -23492,8 +23594,11 @@ msgstr "Add a Similar Zone"
 msgid "Add a zone with the same settings as an existing zone"
 msgstr "Add a zone with the same settings as an existing zone"
 
-msgid "Place Imported Graphics"
-msgstr "Place Imported Graphics"
+msgid "Import Graphics..."
+msgstr "Import Graphics..."
+
+msgid "Import 2D drawing file"
+msgstr "Import 2D drawing file"
 
 msgid "Place the Footprint Anchor"
 msgstr "Place the Footprint Anchor"
@@ -23616,8 +23721,8 @@ msgstr "Deletes selected item(s) and copper connections"
 msgid "Show Footprint Tree"
 msgstr "Show Footprint Tree"
 
-msgid "Toggles the footprint tree visibility"
-msgstr "Toggles the footprint tree visibility"
+msgid "Hide Footprint Tree"
+msgstr "Hide Footprint Tree"
 
 msgid "New Footprint..."
 msgstr "New Footprint..."
@@ -23652,8 +23757,14 @@ msgstr "Paste Footprint"
 msgid "Import Footprint..."
 msgstr "Import Footprint..."
 
+msgid "Import footprint from file"
+msgstr "Import footprint from file"
+
 msgid "Export Footprint..."
 msgstr "Export Footprint..."
+
+msgid "Export footprint to file"
+msgstr "Export footprint to file"
 
 msgid "Footprint Properties..."
 msgstr "Footprint Properties..."
@@ -23810,20 +23921,20 @@ msgstr "Board Setup..."
 msgid "Edit board setup including layers, design rules and various defaults"
 msgstr "Edit board setup including layers, design rules and various defaults"
 
-msgid "Netlist..."
-msgstr "Netlist..."
+msgid "Import Netlist..."
+msgstr "Import Netlist..."
 
 msgid "Read netlist and update board connectivity"
 msgstr "Read netlist and update board connectivity"
 
-msgid "Specctra Session..."
-msgstr "Specctra Session..."
+msgid "Import Specctra Session..."
+msgstr "Import Specctra Session..."
 
 msgid "Import routed Specctra session (*.ses) file"
 msgstr "Import routed Specctra session (*.ses) file"
 
-msgid "Specctra DSN..."
-msgstr "Specctra DSN..."
+msgid "Export Specctra DSN..."
+msgstr "Export Specctra DSN..."
 
 msgid "Export Specctra DSN routing info"
 msgstr "Export Specctra DSN routing info"
@@ -25180,6 +25291,57 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Environmental variable HOME is empty.  Unable to continue."
+#~ msgstr "Environmental variable HOME is empty.  Unable to continue."
+
+#~ msgid "Sheet filename must have a '.kicad_sch' extension."
+#~ msgstr "Sheet filename must have a '.kicad_sch' extension."
+
+#~ msgid "Import Non KiCad Schematic..."
+#~ msgstr "Import Non KiCad Schematic..."
+
+#, c-format
+#~ msgid ""
+#~ "Invalid symbol names definition in\n"
+#~ "file: \"%s\"\n"
+#~ "line: %d\n"
+#~ "offset: %d"
+#~ msgstr ""
+#~ "Invalid symbol names definition in\n"
+#~ "file: \"%s\"\n"
+#~ "line: %d\n"
+#~ "offset: %d"
+
+#~ msgid "Import CADSTAR Project..."
+#~ msgstr "Import CADSTAR Project..."
+
+#~ msgid "Import EAGLE Project..."
+#~ msgstr "Import EAGLE Project..."
+
+#~ msgid "will be ignored"
+#~ msgstr "will be ignored"
+
+#~ msgid "&Import Graphics..."
+#~ msgstr "&Import Graphics..."
+
+#~ msgid "Import 2D Drawing file to Footprint Editor on Drawings layer"
+#~ msgstr "Import 2D Drawing file to Footprint Editor on Drawings layer"
+
+#~ msgid "Export View as &PNG..."
+#~ msgstr "Export View as &PNG..."
+
+#~ msgid "Export Footprints to Library..."
+#~ msgstr "Export Footprints to Library..."
+
+#~ msgid "Export Footprints to New Library..."
+#~ msgstr "Export Footprints to New Library..."
+
+#~ msgid "Place Imported Graphics"
+#~ msgstr "Place Imported Graphics"
+
+#~ msgid "Toggles the footprint tree visibility"
+#~ msgstr "Toggles the footprint tree visibility"
 
 #~ msgid "Model Mode"
 #~ msgstr "Model Mode"
@@ -29892,9 +30054,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgstr ""
 #~ " from reannotation\n"
 #~ "\n"
-
-#~ msgid " will be ignored"
-#~ msgstr " will be ignored"
 
 #~ msgid "Module not found in changelist "
 #~ msgstr "Module not found in changelist "
