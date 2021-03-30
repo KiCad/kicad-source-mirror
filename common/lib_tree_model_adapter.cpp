@@ -62,7 +62,7 @@ unsigned int LIB_TREE_MODEL_ADAPTER::IntoArray( LIB_TREE_NODE const& aNode,
 {
     unsigned int n = 0;
 
-    for( auto const& child: aNode.m_Children )
+    for( std::unique_ptr<LIB_TREE_NODE> const& child: aNode.m_Children )
     {
         if( child->m_Score > 0 )
         {
@@ -91,7 +91,7 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, wxStrin
     m_colWidths[PART_COL] = 360;
     m_colWidths[DESC_COL] = 2000;
 
-    auto cfg = Kiface().KifaceSettings();
+    APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
     m_colWidths[PART_COL] = cfg->m_LibTree.column_width;
 
     // Read the pinned entries from the project config
@@ -114,7 +114,7 @@ void LIB_TREE_MODEL_ADAPTER::SaveColWidths()
 {
     if( m_widget )
     {
-        auto cfg = Kiface().KifaceSettings();
+        APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
         cfg->m_LibTree.column_width = m_widget->GetColumn( PART_COL )->GetWidth();
     }
 }
@@ -131,7 +131,7 @@ void LIB_TREE_MODEL_ADAPTER::SavePinnedItems()
     entries.clear();
     m_pinnedLibs.clear();
 
-    for( auto& child: m_tree.m_Children )
+    for( std::unique_ptr<LIB_TREE_NODE>& child: m_tree.m_Children )
     {
         if( child->m_Pinned )
         {
@@ -252,7 +252,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch, bool a
 
     if( bestMatch )
     {
-        auto item = wxDataViewItem( bestMatch );
+        wxDataViewItem item = wxDataViewItem( bestMatch );
         m_widget->Select( item );
 
         // Make sure the *parent* item is visible. The selected item is the
@@ -366,7 +366,7 @@ int LIB_TREE_MODEL_ADAPTER::GetItemCount() const
 
 wxDataViewItem LIB_TREE_MODEL_ADAPTER::FindItem( const LIB_ID& aLibId )
 {
-    for( auto& lib: m_tree.m_Children )
+    for( std::unique_ptr<LIB_TREE_NODE>& lib: m_tree.m_Children )
     {
         if( lib->m_Name != aLibId.GetLibNickname() )
             continue;
@@ -375,7 +375,7 @@ wxDataViewItem LIB_TREE_MODEL_ADAPTER::FindItem( const LIB_ID& aLibId )
         if( aLibId.GetLibItemName() == "" )
             return ToItem( lib.get() );
 
-        for( auto& alias: lib->m_Children )
+        for( std::unique_ptr<LIB_TREE_NODE>& alias: lib->m_Children )
         {
             if( alias->m_Name == aLibId.GetLibItemName() )
                 return ToItem( alias.get() );
@@ -517,11 +517,11 @@ void LIB_TREE_MODEL_ADAPTER::FindAndExpand( LIB_TREE_NODE& aNode,
                                             std::function<bool( LIB_TREE_NODE const* )> aFunc,
                                             LIB_TREE_NODE** aHighScore )
 {
-    for( auto& node: aNode.m_Children )
+    for( std::unique_ptr<LIB_TREE_NODE>& node: aNode.m_Children )
     {
         if( aFunc( &*node ) )
         {
-            auto item = wxDataViewItem( &*node );
+            wxDataViewItem item = wxDataViewItem( &*node );
             m_widget->ExpandAncestors( item );
 
             if( !(*aHighScore) || node->m_Score > (*aHighScore)->m_Score )

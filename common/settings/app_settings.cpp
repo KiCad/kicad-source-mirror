@@ -80,6 +80,12 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM<int>( "lib_tree.column_width",
             &m_LibTree.column_width, 360 ) );
 
+    // Now that we allow hiding/showing of the tree control, it's never terribly useful to
+    // decrease the width to nothing, and wxWidgets appears to have some bugs where it sets it
+    // way too narrow.
+    if( m_LibTree.column_width < 360 )
+        m_LibTree.column_width = 360;
+
     m_params.emplace_back( new PARAM<bool>( "printing.background",
             &m_Printing.background, false ) );
 
