@@ -53,11 +53,11 @@ DIALOG_LOCKED_ITEMS_QUERY_BASE::DIALOG_LOCKED_ITEMS_QUERY_BASE( wxWindow* parent
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_overrideBtn = new wxButton( this, wxID_ANY, _("Override Locks"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_overrideBtn->SetToolTip( _("Override locks and apply the operation on the locked items.\nThe locked items will remain locked after the operation is complete.") );
+	m_overrideBtn->SetToolTip( _("Override locks and apply the operation on all the items selected.\nAny locked items will remain locked after the operation is complete.") );
 
 	bButtonSizer->Add( m_overrideBtn, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_removeBtn = new wxButton( this, wxID_ANY, _("Remove Locked Items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_removeBtn = new wxButton( this, wxID_ANY, _("Skip Locked Items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_removeBtn->SetToolTip( _("Remove locked items from the selection and only apply the operation to the unlocked items (if any).") );
 
 	bButtonSizer->Add( m_removeBtn, 0, wxALL, 5 );

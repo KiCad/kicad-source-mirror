@@ -367,7 +367,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	sbSizer4->Add( m_Auto_Refill_Zones, 0, wxALL, 5 );
 
 	m_Allow_Free_Pads = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Allow free pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Allow_Free_Pads->SetToolTip( _("If unchecked (default), any attempt to move unlocked pads will instead move the footprint as a whole.\nIf checked, unlocked pads can be moved freely with respect to the rest of the footprint. \nNote: Locked pads cannot be moved with respect to the parent footprint regardless of this setting.") );
+	m_Allow_Free_Pads->SetToolTip( _("If checked, pads can be moved with respect to the rest of the footprint.") );
 
 	sbSizer4->Add( m_Allow_Free_Pads, 0, wxALL, 5 );
 

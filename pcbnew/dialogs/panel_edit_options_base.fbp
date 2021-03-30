@@ -3477,7 +3477,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass"></property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">If unchecked (default), any attempt to move unlocked pads will instead move the footprint as a whole.&#x0A;If checked, unlocked pads can be moved freely with respect to the rest of the footprint. &#x0A;Note: Locked pads cannot be moved with respect to the parent footprint regardless of this setting.</property>
+                                                            <property name="tooltip">If checked, pads can be moved with respect to the rest of the footprint.</property>
                                                             <property name="validator_data_type"></property>
                                                             <property name="validator_style">wxFILTER_NONE</property>
                                                             <property name="validator_type">wxDefaultValidator</property>
