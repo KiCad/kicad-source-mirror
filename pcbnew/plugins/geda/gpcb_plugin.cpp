@@ -931,6 +931,7 @@ const FOOTPRINT* GPCB_PLUGIN::GetEnumeratedFootprint( const wxString& aLibraryPa
 
 FOOTPRINT* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
                                        const wxString& aFootprintName,
+                                       bool  aKeepUUID,
                                        const PROPERTIES* aProperties )
 {
     const FOOTPRINT* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );

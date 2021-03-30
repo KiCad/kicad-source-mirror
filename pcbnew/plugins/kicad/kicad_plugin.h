@@ -166,6 +166,7 @@ public:
                           const PROPERTIES* aProperties = nullptr ) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                              bool  aKeepUUID = false,
                               const PROPERTIES* aProperties = nullptr ) override;
 
     void FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,

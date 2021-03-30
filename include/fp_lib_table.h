@@ -168,12 +168,16 @@ public:
      *
      * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW.
      * @param aFootprintName is the name of the footprint to load.
+     * @param aKeepUUID = true to keep initial items UUID, false to set new UUID
+     *                   normally true if loaded in the footprint editor, false
+     *                   if loaded in the board editor. Used only in kicad_plugin
      * @return  the footprint if found caller owns it, else NULL if not found.
      *
      * @throw   IO_ERROR if the library cannot be found or read.  No exception
      *          is thrown in the case where aFootprintName cannot be found.
      */
-    FOOTPRINT* FootprintLoad( const wxString& aNickname, const wxString& aFootprintName );
+    FOOTPRINT* FootprintLoad( const wxString& aNickname, const wxString& aFootprintName,
+                              bool aKeepUUID = false );
 
     /**
      * Indicates whether or not the given footprint already exists in the given library.
@@ -241,13 +245,18 @@ public:
      * Load a footprint having @a aFootprintId with possibly an empty nickname.
      *
      * @param aFootprintId the [nickname] and footprint name of the footprint to load.
+     * @param aKeepUUID = true to keep initial items UUID, false to set new UUID
+     *                   normally true if loaded in the footprint editor, false
+     *                   if loaded in the board editor
+     *                   used only in kicad_plugin
      * @return  the #FOOTPRINT if found caller owns it, else NULL if not found.
      *
      * @throw   IO_ERROR if the library cannot be found or read.  No exception is
      *                   thrown in the case where \a aFootprintName cannot be found.
      * @throw   PARSE_ERROR if @a aFootprintId is not parsed OK.
      */
-    FOOTPRINT* FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId );
+    FOOTPRINT* FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId,
+                                                  bool aKeepUUID = false );
 
     /**
      * Load the global footprint library table into \a aTable.

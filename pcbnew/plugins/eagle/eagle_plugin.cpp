@@ -2852,6 +2852,7 @@ void EAGLE_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
 
 FOOTPRINT* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
                                         const wxString& aFootprintName,
+                                        bool  aKeepUUID,
                                         const PROPERTIES* aProperties )
 {
     init( aProperties );

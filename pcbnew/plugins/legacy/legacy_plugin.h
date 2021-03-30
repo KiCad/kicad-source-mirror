@@ -80,9 +80,11 @@ public:
                  const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                             bool aBestEfforts, const PROPERTIES* aProperties = nullptr ) override;
+                             bool aBestEfforts,
+                             const PROPERTIES* aProperties = nullptr ) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                              bool  aKeepUUID = false,
                               const PROPERTIES* aProperties = nullptr ) override;
 
     bool FootprintLibDelete( const wxString& aLibraryPath,

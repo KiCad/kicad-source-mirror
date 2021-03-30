@@ -84,7 +84,7 @@ const FOOTPRINT* PLUGIN::GetEnumeratedFootprint( const wxString& aLibraryPath,
                                                  const PROPERTIES* aProperties )
 {
     // default implementation
-    return FootprintLoad( aLibraryPath, aFootprintName, aProperties );
+    return FootprintLoad( aLibraryPath, aFootprintName, false, aProperties );
 }
 
 
@@ -92,11 +92,13 @@ bool PLUGIN::FootprintExists( const wxString& aLibraryPath, const wxString& aFoo
                               const PROPERTIES* aProperties )
 {
     // default implementation
-    return FootprintLoad( aLibraryPath, aFootprintName, aProperties ) != nullptr;
+    return FootprintLoad( aLibraryPath, aFootprintName, true, aProperties ) != nullptr;
 }
 
 
-FOOTPRINT* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+FOOTPRINT* PLUGIN::FootprintLoad( const wxString& aLibraryPath,
+                                  const wxString& aFootprintName,
+                                  bool  aKeepUUID,
                                   const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.

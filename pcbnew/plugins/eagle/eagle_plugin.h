@@ -141,6 +141,7 @@ public:
                              bool aBestEfforts, const PROPERTIES* aProperties = nullptr) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                              bool  aKeepUUID = false,
                               const PROPERTIES* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override

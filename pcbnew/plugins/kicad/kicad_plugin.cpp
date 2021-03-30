@@ -2301,14 +2301,22 @@ bool PCB_IO::FootprintExists( const wxString& aLibraryPath, const wxString& aFoo
 }
 
 
-FOOTPRINT* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+FOOTPRINT* PCB_IO::FootprintLoad( const wxString& aLibraryPath,
+                                  const wxString& aFootprintName,
+                                  bool  aKeepUUID,
                                   const PROPERTIES* aProperties )
 {
     const FOOTPRINT* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
 
     if( footprint )
     {
-        FOOTPRINT* copy = static_cast<FOOTPRINT*>( footprint->Duplicate() );
+        FOOTPRINT* copy;
+
+        if( aKeepUUID )
+            copy = static_cast<FOOTPRINT*>( footprint->Clone() );
+        else
+            copy = static_cast<FOOTPRINT*>( footprint->Duplicate() );
+
         copy->SetParent( nullptr );
         return copy;
     }

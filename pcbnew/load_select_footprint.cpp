@@ -333,9 +333,13 @@ FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
 
     FOOTPRINT *footprint = nullptr;
 
+    // When loading a footprint from a library in the footprint editor
+    // the items UUIDs must be keep and not reinitialized
+    bool keepUUID = IsType( FRAME_FOOTPRINT_EDITOR );
+
     try
     {
-        footprint = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
+        footprint = fptbl->FootprintLoadWithOptionalNickname( aFootprintId, keepUUID );
     }
     catch( const IO_ERROR& )
     {

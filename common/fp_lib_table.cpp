@@ -365,13 +365,14 @@ bool FP_LIB_TABLE::FootprintExists( const wxString& aNickname, const wxString& a
 }
 
 
-FOOTPRINT* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& aFootprintName )
+FOOTPRINT* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname,
+                                        const wxString& aFootprintName, bool aKeepUUID )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PLUGIN*) row->plugin );
 
     FOOTPRINT* ret = row->plugin->FootprintLoad( row->GetFullURI( true ), aFootprintName,
-                                                 row->GetProperties() );
+                                                 aKeepUUID, row->GetProperties() );
 
     setLibNickname( ret, row->GetNickName(), aFootprintName );
 
@@ -439,14 +440,15 @@ void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
 }
 
 
-FOOTPRINT* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId )
+FOOTPRINT* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId,
+                                                            bool aKeepUUID )
 {
     wxString   nickname = aFootprintId.GetLibNickname();
     wxString   fpname   = aFootprintId.GetLibItemName();
 
     if( nickname.size() )
     {
-        return FootprintLoad( nickname, fpname );
+        return FootprintLoad( nickname, fpname, aKeepUUID );
     }
 
     // nickname is empty, sequentially search (alphabetically) all libs/nicks for first match:
@@ -459,7 +461,7 @@ FOOTPRINT* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootp
         {
             // FootprintLoad() returns NULL on not found, does not throw exception
             // unless there's an IO_ERROR.
-            FOOTPRINT* ret = FootprintLoad( nicks[i], fpname );
+            FOOTPRINT* ret = FootprintLoad( nicks[i], fpname, aKeepUUID );
 
             if( ret )
                 return ret;

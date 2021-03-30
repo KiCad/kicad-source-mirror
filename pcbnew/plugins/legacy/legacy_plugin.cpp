@@ -3296,6 +3296,7 @@ void LEGACY_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wx
 
 FOOTPRINT* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
                                          const wxString& aFootprintName,
+                                         bool aKeepUUID,
                                          const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.

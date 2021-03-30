@@ -941,6 +941,10 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
                                           MessageTextFromValue( units, clearance ) ),
                         wxString::Format( _( "(from %s)" ), source ) );
+#if 0
+    // useful for debug only
+    aList.emplace_back( "UUID", m_Uuid.AsString() );
+#endif
 }
 
 

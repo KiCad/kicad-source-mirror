@@ -395,12 +395,17 @@ public:
      *                    is known to support.  The caller continues to own this object
      *                    (plugin may not delete it), and plugins should expect it to be
      *                    optionally NULL.
+     * @param aKeepUUID = true to keep initial items UUID, false to set new UUID
+     *                   normally true if loaded in the footprint editor, false
+     *                   if loaded in the board editor. Make sense only in kicad_plugin
      * @return the #FOOTPRINT object if found caller owns it, else NULL if not found.
      *
      * @throw   IO_ERROR if the library cannot be found or read.  No exception is thrown in
      *                   the case where \a aFootprintName cannot be found.
      */
-    virtual FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+    virtual FOOTPRINT* FootprintLoad( const wxString& aLibraryPath,
+                                      const wxString& aFootprintName,
+                                      bool  aKeepUUID = false,
                                       const PROPERTIES* aProperties = nullptr );
 
     /**
