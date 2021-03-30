@@ -185,6 +185,15 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
     if( Settings().CanViolateDRC() && Settings().Mode() == RM_MarkObstacles )
         return true;
 
+    if( m_mode == PNS_MODE_ROUTE_DIFF_PAIR )
+    {
+        if( m_sizes.DiffPairGap() < m_sizes.MinClearance() )
+        {
+            SetFailureReason( _( "Diff pair gap is less than board minimum clearance." ) );
+            return false;
+        }
+    }
+
     ITEM_SET candidates = QueryHoverItems( aWhere );
 
     for( ITEM* item : candidates.Items() )

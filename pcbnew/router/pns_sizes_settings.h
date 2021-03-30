@@ -54,6 +54,9 @@ public:
     void ClearLayerPairs();
     void AddLayerPair( int aL1, int aL2 );
 
+    int MinClearance() const { return m_minClearance; }
+    void SetMinClearance( int aClearance ) { m_minClearance = aClearance; }
+
     int TrackWidth() const { return m_trackWidth; }
     void SetTrackWidth( int aWidth ) { m_trackWidth = aWidth; }
 
@@ -96,6 +99,7 @@ public:
     VIATYPE ViaType() const { return m_viaType; }
 
 private:
+    int     m_minClearance;
     int     m_trackWidth;
 
     VIATYPE m_viaType;

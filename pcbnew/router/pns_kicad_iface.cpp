@@ -415,6 +415,8 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     PNS::CONSTRAINT        constraint;
 
+    aSizes.SetMinClearance( bds.m_MinClearance );
+
     int  trackWidth = bds.m_TrackMinWidth;
     bool found = false;
 
