@@ -210,14 +210,18 @@ public:
     /**
      * Function GetConnectedItemsAtAnchor()
      * Returns a list of items connected to a source item aItem at position aAnchor
+     * with an optional maximum distance from the defined anchor.
      * @param aItem is the reference item to find other connected items.
      * @param aAnchor is the position to find connected items on.
      * @param aTypes allows one to filter by item types.
+     * @param aMaxError Maximum distance of the found items' anchors to aAnchor in IU
      * @return
      */
-    const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItemsAtAnchor( const BOARD_CONNECTED_ITEM* aItem,
-                                                                        const VECTOR2I& aAnchor,
-                                                                        const KICAD_T aTypes[] ) const;
+    const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItemsAtAnchor(
+            const BOARD_CONNECTED_ITEM* aItem,
+            const VECTOR2I& aAnchor,
+            const KICAD_T aTypes[],
+            const int& aMaxError = 0 ) const;
 
     void GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges ) const;
 

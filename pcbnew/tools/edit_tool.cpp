@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <limits>
 #include <board.h>
 #include <footprint.h>
@@ -298,6 +299,15 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     Activate();
 
     ARC* theArc = static_cast<ARC*>( selection.Front() );
+    double arcAngleDegrees = std::abs( theArc->GetAngle() ) / 10.0;
+
+    if( arcAngleDegrees + ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation >= 180.0 )
+    {
+        frame()->ShowInfoBarError(
+                wxString::Format( _( "Unable to resize arc tracks %.1f degrees or greater." ),
+                                  180.0 - ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation ) );
+        return 0; // don't bother with > 180 degree arcs
+    }
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
@@ -308,9 +318,6 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     VECTOR2I arcCenter = theArc->GetCenter();
     SEG      tanStart = SEG( arcCenter, theArc->GetStart() ).PerpendicularSeg( theArc->GetStart() );
     SEG      tanEnd = SEG( arcCenter, theArc->GetEnd() ).PerpendicularSeg( theArc->GetEnd() );
-
-    if( tanStart.ApproxParallel( tanEnd ) )
-        return 0; // don't bother with 180 degree arcs
 
     //Ensure the tangent segments are in the correct orientation
     VECTOR2I tanIntersect = tanStart.IntersectLines( tanEnd ).get();
@@ -325,7 +332,22 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
         [&]( const VECTOR2I& aAnchor, const SEG& aCollinearSeg ) -> TRACK*
         {
             auto conn = board()->GetConnectivity();
-            auto itemsOnAnchor = conn->GetConnectedItemsAtAnchor( theArc, aAnchor, track_types );
+
+            // Allow items at a distance within the width of the arc track
+            int allowedDeviation = theArc->GetWidth();
+
+            std::vector<BOARD_CONNECTED_ITEM*> itemsOnAnchor;
+
+            for( int i = 0; i < 3; i++ )
+            {
+                itemsOnAnchor = conn->GetConnectedItemsAtAnchor( theArc, aAnchor, track_types,
+                                                                 allowedDeviation );
+                allowedDeviation /= 2;
+
+                if( itemsOnAnchor.size() == 1 )
+                    break;
+            }
+
             TRACK* retval = nullptr;
 
             if( itemsOnAnchor.size() == 1 && itemsOnAnchor.front()->Type() == PCB_TRACE_T )
@@ -333,9 +355,12 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
                 retval = static_cast<TRACK*>( itemsOnAnchor.front() );
                 SEG trackSeg( retval->GetStart(), retval->GetEnd() );
 
-                //Ensure it is collinear
-                if( !trackSeg.ApproxCollinear( aCollinearSeg ) )
+                // Allow deviations in colinearity as defined in ADVANCED_CFG
+                if( trackSeg.AngleDegrees( aCollinearSeg )
+                    > ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation )
+                {
                     retval = nullptr;
+                }
             }
 
             if( !retval )
@@ -361,17 +386,20 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     TRACK* trackOnStartCopy = new TRACK( *trackOnStart );
     TRACK* trackOnEndCopy = new TRACK( *trackOnEnd );
 
-    if( trackOnStart->GetLength() > tanStart.Length() )
+    if( trackOnStart->GetLength() != 0 )
     {
         tanStart.A = trackOnStart->GetStart();
         tanStart.B = trackOnStart->GetEnd();
     }
 
-    if( trackOnEnd->GetLength() > tanEnd.Length() )
+    if( trackOnEnd->GetLength() != 0 )
     {
         tanEnd.A = trackOnEnd->GetStart();
         tanEnd.B = trackOnEnd->GetEnd();
     }
+
+    // Recalculate intersection point
+    tanIntersect = tanStart.IntersectLines( tanEnd ).get();
 
     auto isTrackStartClosestToArcStart =
         [&]( TRACK* aPointA ) -> bool
@@ -530,42 +558,63 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
 
     // Ensure we only do one commit operation on each object
     auto processTrack =
-        [&]( TRACK* aTrack, TRACK* aTrackCopy )
+        [&]( TRACK* aTrack, TRACK* aTrackCopy, int aMaxLengthIU ) -> bool
         {
             if( aTrack->IsNew() )
             {
                 getView()->Remove( aTrack );
 
-                if( aTrack->GetStart() == aTrack->GetEnd() )
+                if( aTrack->GetLength() <= aMaxLengthIU )
                 {
                     delete aTrack;
                     delete aTrackCopy;
                     aTrack = nullptr;
                     aTrackCopy = nullptr;
+                    return false;
                 }
                 else
                 {
                     m_commit->Add( aTrack );
                     delete aTrackCopy;
                     aTrackCopy = nullptr;
+                    return true;
                 }
             }
-            else  if( aTrack->GetStart() == aTrack->GetEnd() )
+            else if( aTrack->GetLength() <= aMaxLengthIU )
             {
                 aTrack->SwapData( aTrackCopy ); //restore the original before notifying COMMIT
                 m_commit->Remove( aTrack );
                 delete aTrackCopy;
                 aTrackCopy = nullptr;
+                return false;
             }
             else
             {
                 m_commit->Modified( aTrack, aTrackCopy );
             }
+
+            return true;
         };
 
-    processTrack( trackOnStart, trackOnStartCopy );
-    processTrack( trackOnEnd, trackOnEndCopy );
-    processTrack( theArc, theArcCopy );
+    // Ammend the end points of the arc if we delete the joining tracks
+    wxPoint newStart = trackOnStart->GetStart();
+    wxPoint newEnd = trackOnEnd->GetStart();
+
+    if( isStartTrackOnStartPt )
+        newStart = trackOnStart->GetEnd();
+
+    if( isEndTrackOnStartPt )
+        newEnd = trackOnEnd->GetEnd();
+
+    int maxLengthIU = KiROUND( ADVANCED_CFG::GetCfg().m_MaxTrackLengthToKeep * IU_PER_MM );
+
+    if( !processTrack( trackOnStart, trackOnStartCopy, maxLengthIU ) )
+        theArc->SetStart( newStart );
+
+    if( !processTrack( trackOnEnd, trackOnEndCopy, maxLengthIU ) )
+        theArc->SetEnd( newEnd );
+
+    processTrack( theArc, theArcCopy, 0 ); // only delete the arc if start and end points coincide
 
     // Should we commit?
     if( restore_state )

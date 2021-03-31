@@ -647,10 +647,14 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( TRACK* aTrack, wxPoint* aPos 
 
 
 const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItemsAtAnchor(
-        const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor, const KICAD_T aTypes[] ) const
+        const BOARD_CONNECTED_ITEM* aItem,
+        const VECTOR2I& aAnchor,
+        const KICAD_T aTypes[],
+        const int& aMaxError ) const
 {
-    auto& entry = m_connAlgo->ItemEntry( aItem );
-    std::vector<BOARD_CONNECTED_ITEM* > rv;
+    auto&                              entry = m_connAlgo->ItemEntry( aItem );
+    std::vector<BOARD_CONNECTED_ITEM*> rv;
+    SEG::ecoord                        maxErrorSq = (SEG::ecoord) aMaxError * aMaxError;
 
     for( auto cnItem : entry.GetItems() )
     {
@@ -658,7 +662,7 @@ const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItemsAtA
         {
             for( auto anchor : connected->Anchors() )
             {
-                if( anchor->Pos() == aAnchor )
+                if( ( anchor->Pos() - aAnchor ).SquaredEuclideanNorm() <= maxErrorSq )
                 {
                     for( int i = 0; aTypes[i] > 0; i++ )
                     {

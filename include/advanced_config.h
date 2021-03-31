@@ -79,6 +79,17 @@ public:
     double m_DrawArcCenterMaxAngle;
 
     /**
+     * Maximum angle between the tangent line of an arc track and a connected straight track
+     * in order to commence arc dragging. Units are degrees.
+     */
+    double m_MaxTangentAngleDeviation;
+
+    /**
+     * Maximum track length to keep after doing an arc track resizing operation. Units are mm.
+     */
+    double m_MaxTrackLengthToKeep;
+
+    /**
      * Extra fill clearance for zone fills.  Note that for zone tests this is essentially
      * additive with m_DRCEpsilon.  Units are mm.
      */

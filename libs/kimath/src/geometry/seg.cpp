@@ -27,6 +27,7 @@
 #include <geometry/seg.h>
 #include <math/util.h>      // for rescale
 #include <math/vector2d.h>  // for VECTOR2I, VECTOR2
+#include <trigo.h>          // for RAD2DEG
 
 template <typename T>
 int sgn( T aVal )
@@ -57,6 +58,19 @@ SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
     }
 
     return m;
+}
+
+
+double SEG::AngleDegrees( const SEG& aOther ) const
+{
+    VECTOR2I thisVec = A - B;
+    VECTOR2I otherVec = aOther.A - aOther.B;
+
+    double thisVecAngle = NormalizeAngle180( RAD2DECIDEG( thisVec.Angle() ) );
+    double otherVecAngle = NormalizeAngle180( RAD2DECIDEG( otherVec.Angle() ) );
+    double angleDegrees = std::abs( NormalizeAngle180( thisVecAngle - otherVecAngle ) ) / 10.0;
+
+    return std::min( 180.0 - angleDegrees, angleDegrees );
 }
 
 

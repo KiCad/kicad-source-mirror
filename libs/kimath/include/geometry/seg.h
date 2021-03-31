@@ -159,6 +159,14 @@ public:
     int LineDistance( const VECTOR2I& aP, bool aDetermineSide = false ) const;
 
     /**
+      * Determine the smallest angle between two segments (result in degrees)
+      *
+      * @param aOther point to determine the orientation wrs to self
+      * @return smallest angle between this and aOther (degrees)
+      */
+    double AngleDegrees( const SEG& aOther ) const;
+
+    /**
       * Compute a point on the segment (this) that is closest to point \a aP.
       *
       * @return the nearest point
