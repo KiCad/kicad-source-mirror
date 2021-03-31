@@ -122,9 +122,6 @@ private:
 
     ///< Instance of tool manager that cooperates with the dispatcher.
     TOOL_MANAGER* m_toolMgr;
-
-    ///< Instance of an actions list that handles legacy action translation
-    ACTIONS* m_actions;
 };
 
 #endif
