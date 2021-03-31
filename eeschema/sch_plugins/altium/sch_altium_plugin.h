@@ -55,6 +55,8 @@ public:
 
     const wxString GetName() const override;
 
+    void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
+
     const wxString GetFileExtension() const override;
 
     const wxString GetLibraryFileExtension() const override;
@@ -134,6 +136,8 @@ private:
     void ParseParameter( const std::map<wxString, wxString>& aProperties );
 
 private:
+    REPORTER*                       m_reporter;          // current reporter for warnings/errors
+
     SCH_SHEET* m_rootSheet;      // The root sheet of the schematic being loaded..
     SCH_SHEET* m_currentSheet;   // The current sheet of the schematic being loaded..
     SCHEMATIC* m_schematic;      // Passed to Load(), the schematic object being loaded

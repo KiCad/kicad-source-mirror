@@ -27,6 +27,7 @@
 #include <import_export.h>
 #include <map>
 #include <enum_vector.h>
+#include <reporter.h>
 
 
 class SCH_SHEET;
@@ -157,6 +158,11 @@ public:
      * Return a brief hard coded name for this SCH_PLUGIN.
      */
     virtual const wxString GetName() const = 0;
+
+    /**
+     * Set an optional reporter for warnings/errors.
+     */
+    virtual void SetReporter( REPORTER* aReporter ) {}
 
     /**
      * Return the file extension for the #SCH_PLUGIN.

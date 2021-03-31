@@ -113,20 +113,20 @@ REPORTER& NULL_REPORTER::GetInstance()
 }
 
 
-REPORTER& STDOUT_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
+REPORTER& STDOUT_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
 {
     switch( aSeverity )
     {
-        case RPT_SEVERITY_UNDEFINED: std::cout << "SEVERITY_UNDEFINED: "; break;
-        case RPT_SEVERITY_INFO:      std::cout << "SEVERITY_INFO: ";      break;
-        case RPT_SEVERITY_WARNING:   std::cout << "SEVERITY_WARNING: ";   break;
-        case RPT_SEVERITY_ERROR:     std::cout << "SEVERITY_ERROR: ";     break;
-        case RPT_SEVERITY_ACTION:    std::cout << "SEVERITY_ACTION: ";    break;
-        case RPT_SEVERITY_EXCLUSION:
-        case RPT_SEVERITY_IGNORE:    break;
+    case RPT_SEVERITY_UNDEFINED: std::cout << "SEVERITY_UNDEFINED: "; break;
+    case RPT_SEVERITY_INFO:      std::cout << "SEVERITY_INFO: ";      break;
+    case RPT_SEVERITY_WARNING:   std::cout << "SEVERITY_WARNING: ";   break;
+    case RPT_SEVERITY_ERROR:     std::cout << "SEVERITY_ERROR: ";     break;
+    case RPT_SEVERITY_ACTION:    std::cout << "SEVERITY_ACTION: ";    break;
+    case RPT_SEVERITY_EXCLUSION:
+    case RPT_SEVERITY_IGNORE:    break;
     }
 
-    std::cout << aText << std::endl;
+    std::cout << aMsg << std::endl;
 
     return *this;
 }
@@ -140,6 +140,34 @@ REPORTER& STDOUT_REPORTER::GetInstance()
         s_stdoutReporter = new STDOUT_REPORTER();
 
     return *s_stdoutReporter;
+}
+
+
+REPORTER& WXLOG_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
+{
+    switch( aSeverity )
+    {
+    case RPT_SEVERITY_ERROR:     wxLogError( aMsg );   break;
+    case RPT_SEVERITY_WARNING:   wxLogWarning( aMsg ); break;
+    case RPT_SEVERITY_UNDEFINED: wxLogMessage( aMsg ); break;
+    case RPT_SEVERITY_INFO:      wxLogInfo( aMsg );    break;
+    case RPT_SEVERITY_ACTION:    wxLogInfo( aMsg );    break;
+    case RPT_SEVERITY_EXCLUSION:                       break;
+    case RPT_SEVERITY_IGNORE:                          break;
+    }
+
+    return *this;
+}
+
+
+REPORTER& WXLOG_REPORTER::GetInstance()
+{
+    static REPORTER* s_wxLogReporter = nullptr;
+
+    if( !s_wxLogReporter )
+        s_wxLogReporter = new WXLOG_REPORTER();
+
+    return *s_wxLogReporter;
 }
 
 

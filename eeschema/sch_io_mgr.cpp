@@ -56,21 +56,13 @@ SCH_PLUGIN* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
 
     switch( aFileType )
     {
-    case SCH_LEGACY:
-        return new SCH_LEGACY_PLUGIN();
-    case SCH_KICAD:
-        return new SCH_SEXPR_PLUGIN();
-    case SCH_ALTIUM:
-        return new SCH_ALTIUM_PLUGIN();
-    case SCH_CADSTAR_ARCHIVE:
-        return new CADSTAR_SCH_ARCHIVE_PLUGIN();
-    case SCH_EAGLE:
-        return new SCH_EAGLE_PLUGIN();
-    default:
-        ;
+    case SCH_LEGACY:          return new SCH_LEGACY_PLUGIN();
+    case SCH_KICAD:           return new SCH_SEXPR_PLUGIN();
+    case SCH_ALTIUM:          return new SCH_ALTIUM_PLUGIN();
+    case SCH_CADSTAR_ARCHIVE: return new CADSTAR_SCH_ARCHIVE_PLUGIN();
+    case SCH_EAGLE:           return new SCH_EAGLE_PLUGIN();
+    default:                  return nullptr;
     }
-
-    return NULL;
 }
 
 
@@ -92,23 +84,13 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
 
     switch( aType )
     {
-    default:
-        return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ), aType );
-
-    case SCH_LEGACY:
-        return wxString( wxT( "Legacy" ) );
-
-    case SCH_KICAD:
-        return wxString( wxT( "KiCad" ) );
-
-    case SCH_ALTIUM:
-        return wxString( wxT( "Altium" ) );
-
-    case SCH_CADSTAR_ARCHIVE:
-        return wxString( wxT( "CADSTAR Schematic Archive" ) );
-
-    case SCH_EAGLE:
-        return wxString( wxT( "EAGLE" ) );
+    case SCH_LEGACY:          return wxString( wxT( "Legacy" ) );
+    case SCH_KICAD:           return wxString( wxT( "KiCad" ) );
+    case SCH_ALTIUM:          return wxString( wxT( "Altium" ) );
+    case SCH_CADSTAR_ARCHIVE: return wxString( wxT( "CADSTAR Schematic Archive" ) );
+    case SCH_EAGLE:           return wxString( wxT( "EAGLE" ) );
+    default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ),
+                                                       aType );
     }
 }
 

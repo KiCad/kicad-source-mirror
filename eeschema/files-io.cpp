@@ -39,6 +39,8 @@
 #include <profile.h>
 #include <project/project_file.h>
 #include <project_rescue.h>
+#include <wx_html_report_box.h>
+#include <dialog_HTML_reporter_base.h>
 #include <reporter.h>
 #include <richio.h>
 #include <sch_edit_frame.h>
@@ -930,8 +932,8 @@ bool SCH_EDIT_FRAME::doAutoSave()
 
 bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 {
-    wxFileName newfilename;
-    SCH_SHEET_LIST sheetList = Schematic().GetSheets();
+    wxFileName             newfilename;
+    SCH_SHEET_LIST         sheetList = Schematic().GetSheets();
     SCH_IO_MGR::SCH_FILE_T fileType = (SCH_IO_MGR::SCH_FILE_T) aFileType;
 
     switch( fileType )
@@ -953,9 +955,17 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
         try
         {
-            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi(
-                    SCH_IO_MGR::FindPlugin( (SCH_IO_MGR::SCH_FILE_T) aFileType ) );
+            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+            DIALOG_HTML_REPORTER*           reporter = new DIALOG_HTML_REPORTER( this );
+
+            pi->SetReporter( reporter->m_Reporter );
             Schematic().SetRoot( pi->Load( aFileName, &Schematic() ) );
+
+            if( reporter->m_Reporter->HasMessage() )
+                reporter->ShowModal();
+
+            pi->SetReporter( &WXLOG_REPORTER::GetInstance() );
+            delete reporter;
 
             // Non-KiCad schematics do not use a drawing-sheet (or if they do, it works differently
             // to KiCad), so set it to an empty one

@@ -99,24 +99,26 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
 
     if( Schematic.VariantHierarchy.Variants.size() > 0 )
     {
-        wxLogWarning( wxString::Format(
-                _( "The CADSTAR design contains variants which has no KiCad equivalent. Only "
-                   "the master variant ('%s') was loaded." ),
-                Schematic.VariantHierarchy.Variants.at( "V0" ).Name ) );
+        m_reporter->Report( wxString::Format( _( "The CADSTAR design contains variants which has "
+                                                 "no KiCad equivalent. Only the master variant "
+                                                 "('%s') was loaded." ),
+                                              Schematic.VariantHierarchy.Variants.at( "V0" ).Name ),
+                            RPT_SEVERITY_WARNING );
     }
 
     if( Schematic.Groups.size() > 0 )
     {
-        wxLogWarning(
-                _( "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
-                   "grouped items have been ungrouped." ) );
+        m_reporter->Report( _( "The CADSTAR design contains grouped items which has no KiCad "
+                               "equivalent. Any grouped items have been ungrouped." ),
+                            RPT_SEVERITY_WARNING );
     }
 
     if( Schematic.ReuseBlocks.size() > 0 )
     {
-        wxLogWarning(
-                _( "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
-                   "re-use block information has been discarded during the import." ) );
+        m_reporter->Report( _( "The CADSTAR design contains re-use blocks which has no KiCad "
+                               "equivalent. The re-use block information has been discarded during "
+                               "the import." ),
+                            RPT_SEVERITY_WARNING  );
     }
 
 
@@ -216,9 +218,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         }
     }
 
-    wxLogMessage(
-            _( "The CADSTAR design has been imported successfully.\n"
-               "Please review the import errors and warnings (if any)." ) );
+    m_reporter->Report( _( "The CADSTAR design has been imported successfully.\n"
+                           "Please review the import errors and warnings (if any)." ) );
 }
 
 
@@ -348,11 +349,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
 
             if( symbolID.IsEmpty() )
             {
-                wxLogWarning( wxString::Format(
-                        _( "Part definition '%s' references symbol '%s' (alternate '%s') "
-                           "which could not be found in the symbol library. The part has not "
-                           "been loaded into the KiCad library." ),
-                        part.Name, gate.Name, gate.Alternate ) );
+                m_reporter->Report( wxString::Format( _( "Part definition '%s' references symbol "
+                                                         "'%s' (alternate '%s') which could not be "
+                                                         "found in the symbol library. The part has "
+                                                         "not been loaded into the KiCad library." ),
+                                                      part.Name,
+                                                      gate.Name,
+                                                      gate.Alternate ),
+                                    RPT_SEVERITY_WARNING);
 
                 ok = false;
                 break;
@@ -393,10 +397,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
         {
             if( m_partMap.find( sym.PartRef.RefID ) == m_partMap.end() )
             {
-                wxLogError( wxString::Format(
-                        _( "Symbol '%s' references part '%s' which could not be found "
-                           "in the library. The symbol was not loaded" ),
-                        sym.ComponentRef.Designator, sym.PartRef.RefID ) );
+                m_reporter->Report( wxString::Format( _( "Symbol '%s' references part '%s' which "
+                                                         "could not be found in the library. The "
+                                                         "symbol was not loaded" ),
+                                                      sym.ComponentRef.Designator,
+                                                      sym.PartRef.RefID ),
+                                    RPT_SEVERITY_ERROR);
 
                 continue;
             }
@@ -617,10 +623,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
         }
         else
         {
-            wxLogError( wxString::Format(
-                    _( "Symbol ID '%s' is of an unknown type. It is neither a component or a "
-                       "net power / symbol. The symbol was not loaded." ),
-                    sym.ID ) );
+            m_reporter->Report( wxString::Format( _( "Symbol ID '%s' is of an unknown type. It is "
+                                                     "neither a component or a net power / symbol. "
+                                                     "The symbol was not loaded." ),
+                                                  sym.ID ),
+                                RPT_SEVERITY_ERROR );
         }
 
         if( sym.ScaleRatioDenominator != 1 || sym.ScaleRatioNumerator != 1 )
@@ -630,11 +637,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
             if( symbolName.empty() )
                 symbolName = wxString::Format( "ID: %s", sym.ID);
 
-            wxLogError( wxString::Format(
-                    _( "Symbol '%s' is scaled in the original CADSTAR schematic but this is not"
-                       " supported in KiCad. The symbol was loaded with 1:1 scale and may require "
-                       "manual fixing." ),
-                    symbolName, sym.PartRef.RefID ) );
+            m_reporter->Report( wxString::Format( _( "Symbol '%s' is scaled in the original "
+                                                     "CADSTAR schematic but this is not supported "
+                                                     "in KiCad. The symbol was loaded with 1:1 "
+                                                     "scale and may require manual fixing." ),
+                                                  symbolName,
+                                                  sym.PartRef.RefID ),
+                                RPT_SEVERITY_ERROR );
         }
     }
 }
@@ -1057,11 +1066,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadDocumentationSymbols()
 
         if( Library.SymbolDefinitions.find( docSym.SymdefID ) == Library.SymbolDefinitions.end() )
         {
-            wxLogError(
-                    wxString::Format( _( "Documentation Symbol '%s' refers to symbol definition "
-                                         "ID '%s' which does not exist in the library. The symbol "
-                                         "was not loaded." ),
-                            docSym.ID, docSym.SymdefID ) );
+            m_reporter->Report( wxString::Format( _( "Documentation Symbol '%s' refers to symbol "
+                                                     "definition ID '%s' which does not exist in "
+                                                     "the library. The symbol was not loaded." ),
+                                                  docSym.ID,
+                                                  docSym.SymdefID ),
+                                RPT_SEVERITY_ERROR );
             continue;
         }
 
@@ -1163,7 +1173,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadTextVariables()
     }
     else
     {
-        wxLogError( _( "Text Variables could not be set as there is no project attached." ) );
+        m_reporter->Report( _( "Text Variables could not be set as there is no project attached." ),
+                            RPT_SEVERITY_ERROR );
     }
 }
 
@@ -1560,22 +1571,26 @@ SCH_COMPONENT* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol(
 
     if( NormalizeAngle180( compAngleDeciDeg ) != NormalizeAngle180( aComponentOrientationDeciDeg ) )
     {
-        wxLogError(
-                wxString::Format( _( "Symbol '%s' is rotated by an angle of %.1f degrees in the "
-                                     "original CADSTAR design but KiCad only supports rotation "
-                                     "angles multiples of 90 degrees. The connecting wires will "
-                                     "need manual fixing." ),
-                        aCadstarSymbol.ComponentRef.Designator, compAngleDeciDeg / 10.0 ) );
+        m_reporter->Report( wxString::Format( _( "Symbol '%s' is rotated by an angle of %.1f "
+                                                 "degrees in the original CADSTAR design but "
+                                                 "KiCad only supports rotation angles multiples "
+                                                 "of 90 degrees. The connecting wires will need "
+                                                 "manual fixing." ),
+                                              aCadstarSymbol.ComponentRef.Designator,
+                                              compAngleDeciDeg / 10.0 ),
+                            RPT_SEVERITY_ERROR);
     }
 
     component->SetOrientation( compOrientation );
 
     if( m_sheetMap.find( aCadstarSymbol.LayerID ) == m_sheetMap.end() )
     {
-        wxLogError(
-                wxString::Format( _( "Symbol '%s' references sheet ID '%s' which does not exist in "
-                                     "the design. The symbol was not loaded." ),
-                        aCadstarSymbol.ComponentRef.Designator, aCadstarSymbol.LayerID ) );
+        m_reporter->Report( wxString::Format( _( "Symbol '%s' references sheet ID '%s' which does "
+                                                 "not exist in the design. The symbol was not "
+                                                 "loaded." ),
+                                              aCadstarSymbol.ComponentRef.Designator,
+                                              aCadstarSymbol.LayerID ),
+                            RPT_SEVERITY_ERROR );
 
         delete component;
         return nullptr;
@@ -1656,7 +1671,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolFieldAttribute(
         case ALIGNMENT::CENTERLEFT:   fieldAlignment = ALIGNMENT::CENTERRIGHT;   break;
         case ALIGNMENT::TOPLEFT:      fieldAlignment = ALIGNMENT::TOPRIGHT;      break;
         //Change right to left:
-        case ALIGNMENT::BOTTOMRIGHT:  fieldAlignment = ALIGNMENT::BOTTOMLEFT;       break;
+        case ALIGNMENT::BOTTOMRIGHT:  fieldAlignment = ALIGNMENT::BOTTOMLEFT;    break;
         case ALIGNMENT::CENTERRIGHT:  fieldAlignment = ALIGNMENT::CENTERLEFT;    break;
         case ALIGNMENT::TOPRIGHT:     fieldAlignment = ALIGNMENT::TOPLEFT;       break;
         // Center alignment does not mirror:
@@ -1718,10 +1733,12 @@ CADSTAR_SCH_ARCHIVE_LOADER::POINT CADSTAR_SCH_ARCHIVE_LOADER::getLocationOfNetEl
     auto logUnknownNetElementError =
         [&]()
         {
-            wxLogError( wxString::Format( _(
-                "Net %s references unknown net element %s. The net was "
-                "not properly loaded and may require manual fixing." ),
-                    getNetName( aNet ), aNetElementID ) );
+            m_reporter->Report( wxString::Format( _( "Net %s references unknown net element %s. "
+                                                     "The net was not properly loaded and may "
+                                                     "require manual fixing." ),
+                                                  getNetName( aNet ),
+                                                  aNetElementID ),
+                                RPT_SEVERITY_ERROR );
 
             return POINT();
         };
@@ -2002,12 +2019,15 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets(
             {
                 if( block.Figures.size() > 0 )
                 {
-                    wxLogError( wxString::Format(
-                            _( "The block ID %s (Block name: '%s') is drawn on sheet '%s' but is "
-                               "not linked to another sheet in the design. KiCad requires all "
-                               "sheet symbols to be associated to a sheet, so the block was not "
-                               "loaded." ),
-                            block.ID, block.Name, Sheets.SheetNames.at( aCadstarSheetID ) ) );
+                    m_reporter->Report( wxString::Format( _( "The block ID %s (Block name: '%s') "
+                                                             "is drawn on sheet '%s' but is not "
+                                                             "linked to another sheet in the "
+                                                             "design. KiCad requires all sheet "
+                                                             "symbols to be associated to a sheet, "
+                                                             "so the block was not loaded." ),
+                                                          block.ID, block.Name,
+                                                          Sheets.SheetNames.at( aCadstarSheetID ) ),
+                                        RPT_SEVERITY_ERROR );
                 }
 
                 continue;
@@ -2024,10 +2044,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets(
             }
             else
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "The CADSTAR schematic might be corrupt: Block %s references a "
-                           "child sheet but has no Figure defined." ),
-                        block.ID ) );
+                THROW_IO_ERROR( wxString::Format( _( "The CADSTAR schematic might be corrupt: "
+                                                     "Block %s references a child sheet but has no "
+                                                     "Figure defined." ),
+                                                  block.ID ) );
             }
 
             loadSheetAndChildSheets( block.AssocLayerID, blockExtents.first, blockExtents.second, aSheet );

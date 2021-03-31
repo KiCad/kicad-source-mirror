@@ -52,7 +52,7 @@ class SCHEMATIC;
 class CADSTAR_SCH_ARCHIVE_LOADER : public CADSTAR_SCH_ARCHIVE_PARSER
 {
 public:
-    explicit CADSTAR_SCH_ARCHIVE_LOADER( wxString aFilename )
+    explicit CADSTAR_SCH_ARCHIVE_LOADER( wxString aFilename, REPORTER* aReporter )
             : CADSTAR_SCH_ARCHIVE_PARSER( aFilename )
     {
         m_schematic      = nullptr;
@@ -60,6 +60,7 @@ public:
         m_plugin         = nullptr;
         m_designCenter.x = 0;
         m_designCenter.y = 0;
+        m_reporter       = aReporter;
     }
 
 
@@ -86,6 +87,7 @@ private:
      */
     typedef std::map<TERMINAL_ID, wxString>  TERMINAL_TO_PINNUM_MAP;
 
+    REPORTER*                        m_reporter;
     SCHEMATIC*                       m_schematic;
     SCH_SHEET*                       m_rootSheet;
     SCH_PLUGIN::SCH_PLUGIN_RELEASER* m_plugin;

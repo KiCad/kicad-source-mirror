@@ -351,10 +351,11 @@ static void eagleToKicadAlignment( EDA_TEXT* aText, int aEagleAlignment, int aRe
 
 SCH_EAGLE_PLUGIN::SCH_EAGLE_PLUGIN()
 {
-    m_kiway        = nullptr;
     m_rootSheet    = nullptr;
     m_currentSheet = nullptr;
     m_schematic    = nullptr;
+
+    m_reporter     = &WXLOG_REPORTER::GetInstance();
 }
 
 
@@ -1157,9 +1158,10 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     if( part_it == m_partlist.end() )
     {
-        wxLogError( _( "Error parsing Eagle file.  "
-                       "Could not find \"%s\" instance but it is referenced in the schematic." ),
-                einstance.part );
+        m_reporter->Report( wxString::Format( _( "Error parsing Eagle file. Could not find '%s' "
+                                                 "instance but it is referenced in the schematic." ),
+                                              einstance.part ),
+                            RPT_SEVERITY_ERROR );
 
         return;
     }
@@ -1187,8 +1189,9 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     if( !part )
     {
-        wxLogMessage( wxString::Format( _( "Could not find %s in the imported library" ),
-                                        kisymbolname ) );
+        m_reporter->Report( wxString::Format( _( "Could not find '%s' in the imported library." ),
+                                              kisymbolname ),
+                            RPT_SEVERITY_ERROR );
         return;
     }
 

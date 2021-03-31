@@ -29,6 +29,8 @@
 
 
 #include <sch_io_mgr.h>
+#include <reporter.h>
+
 
 class SCH_SHEET;
 class SCH_SCREEN;
@@ -39,6 +41,8 @@ public:
     //-----<PUBLIC SCH_PLUGIN API>-------------------------------------------------
 
     const wxString GetName() const override;
+
+    void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
 
     const wxString GetFileExtension() const override;
 
@@ -88,11 +92,14 @@ public:
 
     CADSTAR_SCH_ARCHIVE_PLUGIN()
     {
+        m_reporter = &WXLOG_REPORTER::GetInstance();
     }
 
     ~CADSTAR_SCH_ARCHIVE_PLUGIN()
     {
     }
+
+    REPORTER* m_reporter;          // current reporter for warnings/errors
 };
 
 #endif // CADSTAR_SCH_ARCHIVE_PLUGIN_H_

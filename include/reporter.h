@@ -249,8 +249,26 @@ public:
 
     static REPORTER& GetInstance();
 
-    REPORTER& Report( const wxString& aText,
-                      SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aMsg, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    bool HasMessage() const override { return false; }
+};
+
+
+class WXLOG_REPORTER : public REPORTER
+{
+public:
+    WXLOG_REPORTER()
+    {
+    }
+
+    virtual ~WXLOG_REPORTER()
+    {
+    }
+
+    static REPORTER& GetInstance();
+
+    REPORTER& Report( const wxString& aMsg, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override { return false; }
 };

@@ -86,6 +86,8 @@ public:
 
     const wxString GetName() const override;
 
+    void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
+
     const wxString GetFileExtension() const override;
 
     const wxString GetLibraryFileExtension() const override;
@@ -212,32 +214,34 @@ private:
         std::map<int, bool> units;
     };
 
+    REPORTER*   m_reporter;       ///< Reporter for warnings/errors
+
     ///< Map references to missing component units data
     std::map<wxString, EAGLE_MISSING_CMP> m_missingCmps;
 
-    KIWAY* m_kiway;      ///< For creating sub sheets.
-    SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
-    SCH_SHEET* m_currentSheet; ///< The current sheet of the schematic being loaded..
-    wxString m_version; ///< Eagle file version.
-    wxFileName m_filename;
-    wxString m_libName; ///< Library name to save symbols
-    SCHEMATIC* m_schematic;   ///< Passed to Load(), the schematic object being loaded
+    SCH_SHEET*  m_rootSheet;      ///< The root sheet of the schematic being loaded
+    SCH_SHEET*  m_currentSheet;   ///< The current sheet of the schematic being loaded
+    wxString    m_version;        ///< Eagle file version.
+    wxFileName  m_filename;
+    wxString    m_libName;        ///< Library name to save symbols
+    SCHEMATIC*  m_schematic;      ///< Passed to Load(), the schematic object being loaded
 
-    EPART_MAP m_partlist;
+    EPART_MAP                         m_partlist;
     std::map<wxString, EAGLE_LIBRARY> m_eagleLibs;
 
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;         ///< Plugin to create the KiCad symbol library.
-    std::unique_ptr< PROPERTIES > m_properties;   ///< Library plugin properties.
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER   m_pi;         ///< Plugin to create the KiCad symbol library.
+    std::unique_ptr< PROPERTIES >     m_properties; ///< Library plugin properties.
 
-    std::map<wxString, int> m_netCounts;
-    std::map<int, SCH_LAYER_ID> m_layerMap;
+    std::map<wxString, int>           m_netCounts;
+    std::map<int, SCH_LAYER_ID>       m_layerMap;
 
     ///< Wire intersection points, used for quick checks whether placing a net label in a particular
     ///< place would short two nets.
     std::vector<VECTOR2I> m_wireIntersections;
 
     ///< Wires and labels of a single connection (segment in Eagle nomenclature)
-    typedef struct SEG_DESC_STRUCT {
+    typedef struct SEG_DESC_STRUCT
+    {
         ///< Test if a particular label is attached to any of the stored segments
         const SEG* LabelAttached( const SCH_TEXT* aLabel ) const;
 
