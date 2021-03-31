@@ -189,6 +189,9 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                                                      test, F_Cu );
                 clearance = constraint.GetValue().Min();
 
+                // Touching courtyards, or courtyards -at- the clearance distance are legal.
+                clearance -= 1;
+
                 if( clearance >= 0 && footprintFront.Collide( &testFront, clearance, &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
@@ -215,6 +218,9 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                 constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, footprint,
                                                      test, B_Cu );
                 clearance = constraint.GetValue().Min();
+
+                // Touching courtyards, or courtyards -at- the clearance distance are legal.
+                clearance -= 1;
 
                 if( clearance >= 0 && footprintBack.Collide( &testBack, clearance, &actual, &pos ) )
                 {
