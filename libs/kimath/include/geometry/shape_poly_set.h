@@ -964,7 +964,7 @@ public:
      * @param aAmount is the number of units to offset edges.
      * @param aCircleSegmentsCount is the number of segments per 360 degrees to use in curve approx
      * @param aCornerStrategy #ALLOW_ACUTE_CORNERS to preserve all angles,
-     *                        #CHOP_ACUTE_CORNERS to chop angles less than 90°,
+     *                        #CHAMFER_ACUTE_CORNERS to chop angles less than 90°,
      *                        #ROUND_ACUTE_CORNERS to round off angles less than 90°,
      *                        #ROUND_ALL_CORNERS to round regardless of angles
      */

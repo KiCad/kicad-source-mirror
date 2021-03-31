@@ -1956,6 +1956,9 @@ void FOOTPRINT::BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler )
     if( ConvertOutlineToPolygon( list_front, m_poly_courtyard_front, errorMax, chainingEpsilon,
                                  aErrorHandler ) )
     {
+        // Touching courtyards, or courtyards -at- the clearance distance are legal.
+        m_poly_courtyard_front.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
+
         m_poly_courtyard_front.CacheTriangulation( false );
     }
     else
@@ -1966,6 +1969,9 @@ void FOOTPRINT::BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler )
     if( ConvertOutlineToPolygon( list_back, m_poly_courtyard_back, errorMax, chainingEpsilon,
                                  aErrorHandler ) )
     {
+        // Touching courtyards, or courtyards -at- the clearance distance are legal.
+        m_poly_courtyard_back.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
+
         m_poly_courtyard_back.CacheTriangulation( false );
     }
     else
