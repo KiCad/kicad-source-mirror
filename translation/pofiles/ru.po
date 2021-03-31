@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-03-26 20:05+0000\n"
+"PO-Revision-Date: 2021-04-03 18:26+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5325,7 +5325,6 @@ msgid "Select Preferred Editor"
 msgstr "Выбор предпочитаемого редактора"
 
 #: common/pgm_base.cpp:222
-#, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "Переменная окружения HOME пуста. Дальнейшая работа невозможна."
 
@@ -12672,9 +12671,8 @@ msgid "Import"
 msgstr "Импорт"
 
 #: eeschema/menubar.cpp:99
-#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "Импорт схемы из другой САПР..."
+msgstr "Схема из другой САПР..."
 
 #: eeschema/menubar.cpp:100
 msgid ""
@@ -12683,9 +12681,8 @@ msgstr ""
 "Заменить текущий лист схемы на схему, импортированную из другого приложения"
 
 #: eeschema/menubar.cpp:104
-#, fuzzy
 msgid "Footprint Assignments..."
-msgstr "Соответствия символ/посад.место"
+msgstr "Соответствия символ/посад.место..."
 
 #: eeschema/menubar.cpp:110 eeschema/symbol_editor/menubar_symbol_editor.cpp:69
 #: pcbnew/dialogs/dialog_export_step.cpp:130
@@ -12695,9 +12692,8 @@ msgid "Export"
 msgstr "Экспорт"
 
 #: eeschema/menubar.cpp:112
-#, fuzzy
 msgid "Drawing to Clipboard"
-msgstr "Экспорт в буфер обмена"
+msgstr "Изображение в буфер обмена"
 
 #: eeschema/menubar.cpp:113 pcbnew/menubar_pcb_editor.cpp:109
 #: pcbnew/pcb_edit_frame.cpp:199
@@ -13545,20 +13541,20 @@ msgstr ""
 "позиция: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol names definition in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Неверное направление имени символа в\n"
-"файл: \"%s\"\n"
+"Неверное определение имён символов в\n"
+"файл: '%s'\n"
 "строка: %d\n"
 "позиция: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid property name in\n"
 "file: '%s'\n"
@@ -13566,12 +13562,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Неверное имя свойства в\n"
-"файл: \"%s\"\n"
+"файл: '%s'\n"
 "строка: %d\n"
 "позиция: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Empty property name in\n"
 "file: '%s'\n"
@@ -13579,12 +13575,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Пустое имя свойства в\n"
-"файл: \"%s\"\n"
+"файл: '%s'\n"
 "строка: %d\n"
 "позиция: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid property value in\n"
 "file: '%s'\n"
@@ -13592,7 +13588,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Неверное значение свойства в\n"
-"файл: \"%s\"\n"
+"файл: '%s'\n"
 "строка: %d\n"
 "позиция: %d"
 
@@ -14807,19 +14803,16 @@ msgid "Loading library \"%s\""
 msgstr "Загрузка библиотеки \"%s\""
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:71
-#, fuzzy
 msgid "Symbol..."
-msgstr "Создать символ..."
+msgstr "Cимвол..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:72
-#, fuzzy
 msgid "View as PNG..."
-msgstr "Экспорт изображения в PNG..."
+msgstr "Просмотреть в PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:73
-#, fuzzy
 msgid "Symbol as SVG..."
-msgstr "Экспорт символа в SVG..."
+msgstr "Символ в SVG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:77
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:96
@@ -15593,9 +15586,8 @@ msgid "Show Symbol Tree"
 msgstr "Показать дерево символов"
 
 #: eeschema/tools/ee_actions.cpp:193
-#, fuzzy
 msgid "Hide Symbol Tree"
-msgstr "Показать дерево символов"
+msgstr "Скрыть дерево символов"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Export View as PNG..."
@@ -17798,18 +17790,16 @@ msgid "Import Non-KiCad Project..."
 msgstr "Импорт проекта из другой САПР..."
 
 #: kicad/menubar.cpp:94
-#, fuzzy
 msgid "CADSTAR Project..."
-msgstr "Импорт проекта CADSTAR..."
+msgstr "Проект CADSTAR..."
 
 #: kicad/menubar.cpp:95
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
 msgstr "Импорт архива схемы и платы CADSTAR (*.csa, *.cpa)"
 
 #: kicad/menubar.cpp:99
-#, fuzzy
 msgid "EAGLE Project..."
-msgstr "Импорт проекта EAGLE..."
+msgstr "Проект EAGLE..."
 
 #: kicad/menubar.cpp:100
 msgid "Import EAGLE CAD XML schematic and board"
@@ -20890,9 +20880,8 @@ msgstr ""
 "***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:528
-#, fuzzy
 msgid " will be ignored"
-msgstr "будет проигнорировано"
+msgstr " будет проигнорировано"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:541
 msgid ""
@@ -29304,11 +29293,11 @@ msgstr "Импорт файла векторной графики"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1337
 msgid "Invalid spline definition encountered"
-msgstr ""
+msgstr "Встречено неверное определение сплайна"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1344
 msgid "Invalid Bezier curve created"
-msgstr ""
+msgstr "Создана неверная кривая Безье"
 
 #: pcbnew/initpcb.cpp:49
 msgid ""
@@ -29351,18 +29340,16 @@ msgstr "Библиотека посад.мест \"%s\" сохранена ка�
 
 #: pcbnew/menubar_footprint_editor.cpp:71
 #: pcbnew/menubar_footprint_editor.cpp:80
-#, fuzzy
 msgid "Footprint..."
-msgstr "Создать посад.место..."
+msgstr "Посад.место..."
 
 #: pcbnew/menubar_footprint_editor.cpp:72 pcbnew/menubar_pcb_editor.cpp:111
 msgid "Graphics..."
 msgstr "Чертёж..."
 
 #: pcbnew/menubar_footprint_editor.cpp:81
-#, fuzzy
 msgid "View as &PNG..."
-msgstr "Экспорт изображения в PNG..."
+msgstr "Просмотреть в PNG..."
 
 #: pcbnew/menubar_footprint_editor.cpp:82
 msgid "Create a PNG file from the current view"
@@ -29473,9 +29460,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:149
-#, fuzzy
 msgid "Footprints to Library..."
-msgstr "Экспорт посад.мест в библиотеку..."
+msgstr "Посад.места в библиотеку..."
 
 #: pcbnew/menubar_pcb_editor.cpp:150
 msgid ""
@@ -29486,9 +29472,8 @@ msgstr ""
 "(не удаляя имеющиеся посад.места этой библиотеки)"
 
 #: pcbnew/menubar_pcb_editor.cpp:154
-#, fuzzy
 msgid "Footprints to New Library..."
-msgstr "Экспорт посад.мест в новую библиотеку..."
+msgstr "Посад.места в новую библиотеку..."
 
 #: pcbnew/menubar_pcb_editor.cpp:155
 msgid ""
@@ -30166,9 +30151,8 @@ msgid "KiCad PCB Editor"
 msgstr "Редактор печатных плат KiCad"
 
 #: pcbnew/pcb_edit_frame.cpp:200
-#, fuzzy
 msgid "Export netlist used to update schematics"
-msgstr "Для формирования списка цепей требуется полностью обозначенная схема."
+msgstr "Экспорт списка цепей для обновления схемы"
 
 #: pcbnew/pcb_edit_frame.cpp:338
 msgid "New PCB file is unsaved"
@@ -30622,6 +30606,9 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
+"Описание конт.пл. '%s' в CADSTAR имеет сложную структуру, которая не "
+"поддерживается в KiCad. Проверьте импортированные конт.пл., если "
+"потребуется, поправьте вручную."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1044
 #, c-format
@@ -30635,7 +30622,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1079
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
-msgstr ""
+msgstr "При импорте описания конт.пл. '%s' CADSTAR возникли ошибки: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1114
 #, c-format
@@ -31625,9 +31612,8 @@ msgid "Tuned: skew "
 msgstr "Настроен: перекос "
 
 #: pcbnew/router/pns_router.cpp:192
-#, fuzzy
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "Зазор диф.пары меньше мин. допустимого зазора (%s)."
+msgstr "Зазор диф.пары меньше мин. допустимого зазора платы."
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Cannot start routing from a non-plated hole."
@@ -32061,18 +32047,16 @@ msgid "Locking"
 msgstr "Блокировка"
 
 #: pcbnew/tools/board_editor_control.cpp:133
-#, fuzzy
 msgid "Omit extra information"
-msgstr "Информация"
+msgstr "Исключить доп. информацию"
 
 #: pcbnew/tools/board_editor_control.cpp:134
-#, fuzzy
 msgid "Omit nets"
-msgstr "Фильтр цепей"
+msgstr "Исключить цепи"
 
 #: pcbnew/tools/board_editor_control.cpp:136
 msgid "Do not prefix path with footprint UUID."
-msgstr ""
+msgstr "Исключить UUID из путей посад.мест."
 
 #: pcbnew/tools/board_editor_control.cpp:374
 msgid "Merge Specctra Session file:"
@@ -32083,24 +32067,21 @@ msgid "Specctra DSN File"
 msgstr "Файл Specctra DSN"
 
 #: pcbnew/tools/board_editor_control.cpp:421
-#, fuzzy
 msgid "Export Board Netlist"
 msgstr "Экспорт списка цепей"
 
 #: pcbnew/tools/board_editor_control.cpp:422
-#, fuzzy
 msgid "KiCad board netlist files"
 msgstr "Файлы списка цепей KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid "Path `%s` is read only."
-msgstr "Библиотека \"%s\" доступна только для чтения."
+msgstr "Путь '%s' доступен только для чтения."
 
 #: pcbnew/tools/board_editor_control.cpp:437
-#, fuzzy
 msgid "I/O Error"
-msgstr "Ошибка"
+msgstr "Ошибка ввода/вывода"
 
 #: pcbnew/tools/board_editor_control.cpp:527
 #, c-format
@@ -32794,7 +32775,6 @@ msgid "Add a zone with the same settings as an existing zone"
 msgstr "Добавить зону с теми же настройками как и у существующей зоны"
 
 #: pcbnew/tools/pcb_actions.cpp:191
-#, fuzzy
 msgid "Import Graphics..."
 msgstr "Импорт графики..."
 
@@ -32963,9 +32943,8 @@ msgid "Show Footprint Tree"
 msgstr "Показать дерево посад.мест"
 
 #: pcbnew/tools/pcb_actions.cpp:345
-#, fuzzy
 msgid "Hide Footprint Tree"
-msgstr "Показать дерево посад.мест"
+msgstr "Скрыть дерево посад.мест"
 
 #: pcbnew/tools/pcb_actions.cpp:351
 msgid "New Footprint..."
@@ -33012,18 +32991,16 @@ msgid "Import Footprint..."
 msgstr "Импорт посад.места..."
 
 #: pcbnew/tools/pcb_actions.cpp:386
-#, fuzzy
 msgid "Import footprint from file"
-msgstr "Файл не является посад.местом"
+msgstr "Импорт посад.места из файла"
 
 #: pcbnew/tools/pcb_actions.cpp:391
 msgid "Export Footprint..."
 msgstr "Экспорт посад.места..."
 
 #: pcbnew/tools/pcb_actions.cpp:391
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "Экспортировать посад.место в редактор"
+msgstr "Экспорт посад.места в файл"
 
 #: pcbnew/tools/pcb_actions.cpp:396
 msgid "Footprint Properties..."
@@ -33236,27 +33213,24 @@ msgstr ""
 "других"
 
 #: pcbnew/tools/pcb_actions.cpp:557
-#, fuzzy
 msgid "Import Netlist..."
-msgstr "Импорт списка цепей"
+msgstr "Импорт списка цепей..."
 
 #: pcbnew/tools/pcb_actions.cpp:557
 msgid "Read netlist and update board connectivity"
 msgstr "Прочитать список цепей и обновить связи на плате"
 
 #: pcbnew/tools/pcb_actions.cpp:562
-#, fuzzy
 msgid "Import Specctra Session..."
-msgstr "Сеанс Specctra..."
+msgstr "Импорт сеанса Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Import routed Specctra session (*.ses) file"
 msgstr "Импорт файла трассировки Specctra session (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:567
-#, fuzzy
 msgid "Export Specctra DSN..."
-msgstr "Specctra DSN..."
+msgstr "Экспорт Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:567
 msgid "Export Specctra DSN routing info"
