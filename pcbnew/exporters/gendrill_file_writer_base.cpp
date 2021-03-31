@@ -87,7 +87,12 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
                 continue;
 
             new_hole.m_ItemParent = via;
-            new_hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_VIA;
+
+            if( aLayerPair == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
+                new_hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_VIA_THROUGH;
+            else
+                new_hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_VIA_BURIED;
+
             new_hole.m_Tool_Reference = -1;         // Flag value for Not initialized
             new_hole.m_Hole_Orient    = 0;
             new_hole.m_Hole_Diameter  = hole_sz;

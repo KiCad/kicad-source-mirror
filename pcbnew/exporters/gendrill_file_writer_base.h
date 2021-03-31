@@ -44,7 +44,8 @@ class BOARD_ITEM;
 enum class HOLE_ATTRIBUTE
 {
     HOLE_UNKNOWN,       // uninitialized type
-    HOLE_VIA,           // a via hole (always plated)
+    HOLE_VIA_THROUGH,   // a via hole (always plated) from top to bottom
+    HOLE_VIA_BURIED,    // a via hole (always plated) not through hole
     HOLE_PAD,           // a plated or not plated pad hole
     HOLE_MECHANICAL     // a mechanical pad (provided, not used)
 };

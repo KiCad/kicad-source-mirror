@@ -158,16 +158,20 @@ void EXCELLON_WRITER::writeHoleAttribute( HOLE_ATTRIBUTE aAttribute )
     {
         switch( aAttribute )
         {
-        case HOLE_ATTRIBUTE::HOLE_VIA:
-            fprintf( m_file, "; #@! TA.AperFunction,ViaDrill\n" );
+        case HOLE_ATTRIBUTE::HOLE_VIA_THROUGH:
+            fprintf( m_file, "; #@! TA.AperFunction,Plated,PTH,ViaDrill\n" );
+            break;
+
+        case HOLE_ATTRIBUTE::HOLE_VIA_BURIED:
+            fprintf( m_file, "; #@! TA.AperFunction,Plated,Buried,ViaDrill\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_PAD:
-            fprintf( m_file, "; #@! TA.AperFunction,ComponentDrill,Plated,PTH\n" );
+            fprintf( m_file, "; #@! TA.AperFunction,Plated,PTH,ComponentDrill\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_MECHANICAL:
-            fprintf( m_file, "; #@! TA.AperFunction,ComponentDrill,NonPlated,NPTH\n" );
+            fprintf( m_file, "; #@! TA.AperFunction,NonPlated,NPTH,ComponentDrill\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_UNKNOWN:
