@@ -6,7 +6,7 @@ build_linux:
   tags:
     - kicad-ubuntu20.04
   extends: .only_code
-  image: registry.gitlab.com/kicad/kicad-ci/source_containers/ubuntu:20.04
+  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/ubuntu:20.04
   interruptible: false
   cache:
     key: "cache-linux"
