@@ -31,6 +31,7 @@
 #include <footprint_edit_frame.h>
 #include <pcbnew_id.h>
 #include <confirm.h>
+#include <widgets/infobar.h>
 #include <bitmaps.h>
 #include <footprint.h>
 #include <project.h>
@@ -282,6 +283,12 @@ int FOOTPRINT_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
         {
             view()->Update( footprint() );
             m_frame->ClearModify();
+
+            // Get rid of the save-will-update-board-only (or any other dismissable warning)
+            WX_INFOBAR* infobar = m_frame->GetInfoBar();
+
+            if( infobar->IsShown() && infobar->HasCloseButton() )
+                infobar->Dismiss();
 
             canvas()->ForceRefresh();
             m_frame->SyncLibraryTree( true );

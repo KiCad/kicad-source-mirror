@@ -467,6 +467,7 @@ void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
                     aFootprint->GetReference() );
 
         GetInfoBar()->RemoveAllButtons();
+        GetInfoBar()->AddCloseButton();
         GetInfoBar()->ShowMessage( msg, wxICON_INFORMATION );
     }
 
