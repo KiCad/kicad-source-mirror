@@ -844,7 +844,29 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
     }
     else
     {
+        // At this point, a user field is read.
         existingField = aSymbol->FindField( field->GetCanonicalName() );
+
+#if 1   // Enable it to modify the name of the field to add if already existing
+        // Disable it to skip the field having the same name as previous field
+        if( existingField )
+        {
+            // We cannot handle 2 fields with the same name, so because the field name
+            // is already in use, try to build a new name (oldname_x)
+            wxString base_name = field->GetCanonicalName();
+
+            // Arbitrary limit 10 attempts to find a new name
+            for( int ii = 1; ii < 10 && existingField ; ii++ )
+            {
+                wxString newname = base_name;
+                newname << '_' << ii;
+
+                existingField = aSymbol->FindField( newname );
+
+                if( !existingField )    // the modified name is not found, use it
+                    field->SetName( newname );
+            }
+        }
 
         if( !existingField )
         {
@@ -853,8 +875,8 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
         }
         else
         {
-            *existingField = *field;
-            return existingField;
+            // We cannot handle 2 fields with the same name, so skip this one
+            return nullptr;
         }
     }
 }
