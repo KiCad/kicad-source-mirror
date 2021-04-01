@@ -125,6 +125,8 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
     treePanel->Layout();
     treeSizer->Fit( treePanel );
 
+    aAdapter->FinishTreeInitialization();
+
     m_hsplitter->SetSashGravity( 0.8 );
     m_hsplitter->SetMinimumPaneSize( 20 );
     m_hsplitter->SplitVertically( treePanel,  ConstructRightPanel( m_hsplitter ) );

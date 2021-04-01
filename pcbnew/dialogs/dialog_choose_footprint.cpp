@@ -106,6 +106,8 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
     sizer->Add( buttonsSizer, 0, wxEXPAND | wxLEFT, 5 );
     SetSizer( sizer );
 
+    aAdapter->FinishTreeInitialization();
+
     Bind( wxEVT_TIMER, &DIALOG_CHOOSE_FOOTPRINT::OnCloseTimer, this, m_dbl_click_timer->GetId() );
     Bind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentPreselected, this );
     Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentSelected, this );

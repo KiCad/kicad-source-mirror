@@ -192,6 +192,12 @@ public:
     void AttachTo( wxDataViewCtrl* aDataViewCtrl );
 
     /**
+     * A final-stage initialization to be called after the window hierarchy has been realized
+     * and the window sizes set.
+     */
+    void FinishTreeInitialization();
+
+    /**
      * Return the alias for the given item.
      *
      * @param aSelection    item from the wxDataViewCtrl

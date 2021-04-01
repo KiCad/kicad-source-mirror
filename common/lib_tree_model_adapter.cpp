@@ -281,23 +281,12 @@ void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
     wxString descHead = _( "Description" );
 
     // The extent of the text doesn't take into account the space on either side
-    // in the header, so artificially pad it by M
-    wxSize partHeadMinWidth = KIUI::GetTextSize( partHead + "M", aDataViewCtrl );
+    // in the header, so artificially pad it
+    wxSize partHeadMinWidth = KIUI::GetTextSize( partHead + "MMM", aDataViewCtrl );
 
-    if( aDataViewCtrl->GetColumnCount() > 0 )
-    {
-        int partWidth = aDataViewCtrl->GetColumn( PART_COL )->GetWidth();
-        int descWidth = aDataViewCtrl->GetColumn( DESC_COL )->GetWidth();
-
-        // Only use the widths read back if they are non-zero.
-        // GTK returns the displayed width of the column, which is not calculated immediately
-        // this leads to cases of 0 column width if the user types too fast in the filter
-        if( descWidth > 0 )
-        {
-            m_colWidths[PART_COL] = partWidth;
-            m_colWidths[DESC_COL] = descWidth;
-        }
-    }
+    // Ensure the part column is wider than the smallest allowable width
+    if( m_colWidths[PART_COL] < partHeadMinWidth.x )
+        m_colWidths[PART_COL] = partHeadMinWidth.x;
 
     m_widget = aDataViewCtrl;
     aDataViewCtrl->SetIndent( kDataViewIndent );
@@ -308,13 +297,6 @@ void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
                                                   m_colWidths[PART_COL] );
     m_col_desc = aDataViewCtrl->AppendTextColumn( descHead, DESC_COL, wxDATAVIEW_CELL_INERT,
                                                   m_colWidths[DESC_COL] );
-
-    // Ensure the part column is wider than the smallest allowable width
-    if( m_colWidths[PART_COL] < partHeadMinWidth.x )
-    {
-        m_colWidths[PART_COL] = partHeadMinWidth.x;
-        m_col_part->SetWidth( partHeadMinWidth.x );
-    }
 
     m_col_part->SetMinWidth( partHeadMinWidth.x );
 }
@@ -398,6 +380,13 @@ unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( wxDataViewItem const&   aItem,
         return IntoArray( *node, aChildren );
     else
         return 0;
+}
+
+
+void LIB_TREE_MODEL_ADAPTER::FinishTreeInitialization()
+{
+    m_col_part->SetWidth( m_colWidths[PART_COL] );
+    m_col_desc->SetWidth( m_colWidths[DESC_COL] );
 }
 
 
