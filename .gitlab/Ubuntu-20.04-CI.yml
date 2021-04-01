@@ -99,7 +99,7 @@ report_metrics_ubuntu20.04:
   extends:
     - .unit_test
   needs:
-    - job: build_ubunt20.04
+    - job: build_ubuntu20.04
       artifacts: true
 
 qa_python:
