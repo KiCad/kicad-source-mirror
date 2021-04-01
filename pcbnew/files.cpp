@@ -928,9 +928,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     if( !IsWritable( pcbFileName ) )
     {
-        wxString msg = wxString::Format( _(
-            "No access rights to write to file \"%s\"" ),
-            pcbFileName.GetFullPath() );
+        wxString msg = wxString::Format( _( "No access rights to write to file \"%s\"" ),
+                                         pcbFileName.GetFullPath() );
 
         DisplayError( this, msg );
         return false;
@@ -992,13 +991,12 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = wxString::Format( _(
-                "Error saving board file \"%s\".\n%s" ),
-                pcbFileName.GetFullPath(), ioe.What()
-                );
+        wxString msg = wxString::Format( _( "Error saving board file '%s'.\n%s" ),
+                                         pcbFileName.GetFullPath(),
+                                         ioe.What() );
         DisplayError( this, msg );
 
-        lowerTxt.Printf( _( "Failed to create temporary file \"%s\"" ), tempFile.GetFullPath() );
+        lowerTxt.Printf( _( "Failed to create temporary file '%s'." ), tempFile.GetFullPath() );
 
         SetMsgPanel( upperTxt, lowerTxt );
 
@@ -1034,7 +1032,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     }
 
     GetBoard()->SetFileName( pcbFileName.GetFullPath() );
-    UpdateTitle();
 
     // Put the saved file in File History if requested
     if( addToHistory )
@@ -1048,7 +1045,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     if( autoSaveFileName.FileExists() )
         wxRemoveFile( autoSaveFileName.GetFullPath() );
 
-    lowerTxt.Printf( _( "File \"%s\" saved." ), pcbFileName.GetFullPath() );
+    lowerTxt.Printf( _( "File '%s' saved." ), pcbFileName.GetFullPath() );
 
     SetStatusText( lowerTxt, 0 );
 
@@ -1074,9 +1071,8 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
 
     if( !IsWritable( pcbFileName ) )
     {
-        wxString msg = wxString::Format( _(
-            "No access rights to write to file \"%s\"" ),
-            pcbFileName.GetFullPath() );
+        wxString msg = wxString::Format( _( "No access rights to write to file '%s'." ),
+                                         pcbFileName.GetFullPath() );
 
         DisplayError( this, msg );
         return false;
@@ -1094,8 +1090,9 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = wxString::Format( _( "Error saving board file \"%s\".\n%s" ),
-                                         pcbFileName.GetFullPath(), ioe.What() );
+        wxString msg = wxString::Format( _( "Error saving board file '%s'.\n%s" ),
+                                         pcbFileName.GetFullPath(),
+                                         ioe.What() );
         DisplayError( this, msg );
 
         return false;

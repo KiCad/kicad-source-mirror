@@ -138,7 +138,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
     auto sdbSizer = new wxStdDialogButtonSizer();
 
-    m_saveAndContinue = new wxButton( bottomPanel, ID_SAVE_PROJECT,
+    m_saveAndContinue = new wxButton( bottomPanel, wxID_ANY,
                                       _( "Apply, Save Schematic && Continue" ) );
     buttonsSizer->Add( m_saveAndContinue, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 20 );
 

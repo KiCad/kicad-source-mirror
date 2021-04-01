@@ -131,7 +131,6 @@ void DIALOG_CONFIG_EQUFILES::OnOkClick( wxCommandEvent& event )
         for( unsigned ii = 0; ii < m_ListEquiv->GetCount(); ii++ )
             project.m_EquivalenceFiles.emplace_back( m_ListEquiv->GetString( ii ) );
 
-        wxCommandEvent evt( ID_SAVE_PROJECT );
         Pgm().GetSettingsManager().SaveProject();
     }
 
