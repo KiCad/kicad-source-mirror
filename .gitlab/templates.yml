@@ -17,9 +17,6 @@
 .unit_test:
   stage: test
   when: on_success
-  needs:
-    - job: build_linux
-      artifacts: true
   # We define this using a before script because GitLab cannot merge variable
   # definitions across inheritance (so the variables block from this would disappear)
   before_script:

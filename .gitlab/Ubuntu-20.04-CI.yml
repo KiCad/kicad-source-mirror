@@ -53,12 +53,12 @@ build_ubuntu20.04:
       - build/linux/compilation_log.txt
 
 # Upload the compilation log in an easily downloadable form
-report_build_warn:
+report_build_warn_ubuntu20.04:
   stage: report
   extends: .only_code
   when: always
   needs:
-    - job: build_linux
+    - job: build_ubuntu20.04
       artifacts: true
   script:
     - echo "Uploading compilation log"
@@ -71,12 +71,12 @@ report_build_warn:
       - compilation_log.txt
 
 # Report on the metrics of the code
-report_metrics:
+report_metrics_ubuntu20.04:
   stage: report
   extends: .only_code
   when: always
   needs:
-    - job: build_linux
+    - job: build_ubuntu20.04
       artifacts: true
   script:
     - cat build/linux/compilation_log.txt | { grep "warning:" || test $? = 1; } | awk 'END{print "number_of_warnings "NR}' > metrics.txt
@@ -85,63 +85,75 @@ report_metrics:
     reports:
       metrics: metrics.txt
 
+.unit_test_ubuntu20.04:
+  extends:
+    - .unit_test
+  needs:
+
 
 ##########################################################################
 # Run the code unit tests. Each QA executable is split into a separate job so that the display
 # gives the test results broken down by the test executable.
 ##########################################################################
-qa_python:
+.unit_test_ubuntu20.04:
   extends:
     - .unit_test
+  needs:
+    - job: build_ubunt20.04
+      artifacts: true
+
+qa_python:
+  extends:
+    - .unit_test_ubuntu20.04
     - .only_code
   variables:
     TEST: 'qa_python'
 
 qa_common:
   extends:
-    - .unit_test
+    - .unit_test_ubuntu20.04
     - .only_code
   variables:
     TEST: 'qa_common'
 
 qa_gerbview:
   extends:
-    - .unit_test
+    - .unit_test_ubuntu20.04
     - .only_code
   variables:
     TEST: 'qa_gerbview'
 
 qa_pcbnew:
   extends:
-    - .unit_test
+    - .unit_test_ubuntu20.04
     - .only_code
   variables:
     TEST: 'qa_pcbnew'
 
 qa_eeschema:
   extends:
-    - .unit_test
+    - .unit_test_ubuntu20.04
     - .only_code
   variables:
     TEST: 'qa_eeschema'
 
 qa_kimath:
   extends:
-    - .unit_test
+    - .unit_test_ubuntu20.04
     - .only_code
   variables:
     TEST: 'qa_kimath'
 
 qa_sexpr:
   extends:
-    - .unit_test
+    - .unit_test_ubuntu20.04
     - .only_code
   variables:
     TEST: 'qa_sexpr'
 
 qa_kicad2step:
   extends:
-    - .unit_test
+    - .unit_test_ubuntu20.04
     - .only_code
   variables:
     TEST: 'qa_kicad2step'
