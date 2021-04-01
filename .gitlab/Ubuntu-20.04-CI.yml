@@ -85,12 +85,6 @@ report_metrics_ubuntu20.04:
     reports:
       metrics: metrics.txt
 
-.unit_test_ubuntu20.04:
-  extends:
-    - .unit_test
-  needs:
-
-
 ##########################################################################
 # Run the code unit tests. Each QA executable is split into a separate job so that the display
 # gives the test results broken down by the test executable.
@@ -101,6 +95,9 @@ report_metrics_ubuntu20.04:
   needs:
     - job: build_ubuntu20.04
       artifacts: true
+  tags:
+    - kicad-ubuntu20.04
+  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/ubuntu:20.04
 
 qa_python_ubuntu20.04:
   extends:
