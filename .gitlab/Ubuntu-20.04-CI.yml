@@ -1,0 +1,146 @@
+##########################################################################
+# Build KiCad on Ubuntu 20.04 and save the results
+##########################################################################
+build_linux:
+  stage: build
+  tags:
+    - kicad-ubuntu20.04
+  extends: .only_code
+  image: registry.gitlab.com/kicad/kicad-ci/source_containers/ubuntu:20.04
+  interruptible: false
+  cache:
+    key: "cache-linux"
+    paths:
+      - ccache/
+  before_script:
+    # CCache Config
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
+  script:
+    - mkdir -p build/linux
+    - cd build/linux
+    - cmake
+      -DCMAKE_C_COMPILER_LAUNCHER=ccache
+      -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+      -DCMAKE_BUILD_TYPE=Debug
+      -DKICAD_STDLIB_LIGHT_DEBUG=ON
+      -DKICAD_SCRIPTING=ON
+      -DKICAD_SCRIPTING_MODULES=ON
+      -DKICAD_SCRIPTING_PYTHON3=ON
+      -DKICAD_SCRIPTING_WXPYTHON=ON
+      -DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON
+      -DKICAD_SCRIPTING_ACTION_MENU=ON
+      -DKICAD_USE_OCE=OFF
+      -DKICAD_USE_OCC=ON
+      -DKICAD_SPICE=ON
+      -DKICAD_BUILD_I18N=ON
+      ../../
+    - ninja 2>&1 | tee compilation_log.txt
+    - cd ../../
+  artifacts:
+    # Only save the artifacts that are needed for running the tests in the next stage
+    # and the compilation log. The entire build directory is too large to save as an
+    # artifact.
+    expire_in: 2 hrs
+    when: always
+    paths:
+      - build/linux/3d-viewer/
+      - build/linux/pcbnew/pcbnew.py
+      - build/linux/pcbnew/_pcbnew.so
+      - build/linux/qa/
+      - build/linux/compilation_log.txt
+
+# Upload the compilation log in an easily downloadable form
+report_build_warn:
+  stage: report
+  extends: .only_code
+  when: always
+  needs:
+    - job: build_linux
+      artifacts: true
+  script:
+    - echo "Uploading compilation log"
+    - cp build/linux/compilation_log.txt compilation_log.txt
+  artifacts:
+    expire_in: 1 year
+    expose_as: 'Build log'
+    name: "build_log.txt"
+    paths:
+      - compilation_log.txt
+
+# Report on the metrics of the code
+report_metrics:
+  stage: report
+  extends: .only_code
+  when: always
+  needs:
+    - job: build_linux
+      artifacts: true
+  script:
+    - cat build/linux/compilation_log.txt | { grep "warning:" || test $? = 1; } | awk 'END{print "number_of_warnings "NR}' > metrics.txt
+    - cat metrics.txt
+  artifacts:
+    reports:
+      metrics: metrics.txt
+
+
+##########################################################################
+# Run the code unit tests. Each QA executable is split into a separate job so that the display
+# gives the test results broken down by the test executable.
+##########################################################################
+qa_python:
+  extends:
+    - .unit_test
+    - .only_code
+  variables:
+    TEST: 'qa_python'
+
+qa_common:
+  extends:
+    - .unit_test
+    - .only_code
+  variables:
+    TEST: 'qa_common'
+
+qa_gerbview:
+  extends:
+    - .unit_test
+    - .only_code
+  variables:
+    TEST: 'qa_gerbview'
+
+qa_pcbnew:
+  extends:
+    - .unit_test
+    - .only_code
+  variables:
+    TEST: 'qa_pcbnew'
+
+qa_eeschema:
+  extends:
+    - .unit_test
+    - .only_code
+  variables:
+    TEST: 'qa_eeschema'
+
+qa_kimath:
+  extends:
+    - .unit_test
+    - .only_code
+  variables:
+    TEST: 'qa_kimath'
+
+qa_sexpr:
+  extends:
+    - .unit_test
+    - .only_code
+  variables:
+    TEST: 'qa_sexpr'
+
+qa_kicad2step:
+  extends:
+    - .unit_test
+    - .only_code
+  variables:
+    TEST: 'qa_kicad2step'
