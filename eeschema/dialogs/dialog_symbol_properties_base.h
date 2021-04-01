@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,6 +32,7 @@ class WX_GRID;
 #include <wx/gbsizer.h>
 #include <wx/panel.h>
 #include <wx/notebook.h>
+#include <wx/textctrl.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -70,13 +71,13 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxPanel* m_pinTablePage;
 		WX_GRID* m_pinGrid;
 		wxStaticText* m_libraryIDLabel;
-		wxStaticText* m_tcLibraryID;
+		wxTextCtrl* m_tcLibraryID;
 		wxButton* m_spiceFieldsButton;
 		wxStdDialogButtonSizer* m_stdDialogButtonSizer;
 		wxButton* m_stdDialogButtonSizerOK;
 		wxButton* m_stdDialogButtonSizerCancel;
 
-		// Virtual event handlers, override them in your derived class
+		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnGridEditorShown( wxGridEvent& event ) { event.Skip(); }

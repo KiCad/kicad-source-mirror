@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,6 +49,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_fieldsGrid->SetColSize( 10, 84 );
 	m_fieldsGrid->EnableDragColMove( false );
 	m_fieldsGrid->EnableDragColSize( true );
+	m_fieldsGrid->SetColLabelSize( 22 );
 	m_fieldsGrid->SetColLabelValue( 0, _("Name") );
 	m_fieldsGrid->SetColLabelValue( 1, _("Value") );
 	m_fieldsGrid->SetColLabelValue( 2, _("Show") );
@@ -60,7 +61,6 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_fieldsGrid->SetColLabelValue( 8, _("Orientation") );
 	m_fieldsGrid->SetColLabelValue( 9, _("X Position") );
 	m_fieldsGrid->SetColLabelValue( 10, _("Y Position") );
-	m_fieldsGrid->SetColLabelSize( 22 );
 	m_fieldsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -260,12 +260,12 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_pinGrid->SetColSize( 4, 140 );
 	m_pinGrid->EnableDragColMove( false );
 	m_pinGrid->EnableDragColSize( true );
+	m_pinGrid->SetColLabelSize( 24 );
 	m_pinGrid->SetColLabelValue( 0, _("Pin Number") );
 	m_pinGrid->SetColLabelValue( 1, _("Base Pin Name") );
 	m_pinGrid->SetColLabelValue( 2, _("Alternate Assignment") );
 	m_pinGrid->SetColLabelValue( 3, _("Electrical Type") );
 	m_pinGrid->SetColLabelValue( 4, _("Graphic Style") );
-	m_pinGrid->SetColLabelSize( 24 );
 	m_pinGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -300,17 +300,16 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 
 	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library link:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_libraryIDLabel->Wrap( -1 );
-	bLibLink->Add( m_libraryIDLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bLibLink->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_tcLibraryID = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_END );
-	m_tcLibraryID->Wrap( -1 );
-	bLibLink->Add( m_tcLibraryID, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-
-	bSizerBottom->Add( bLibLink, 1, wxEXPAND|wxLEFT, 10 );
+	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
+	bLibLink->Add( m_tcLibraryID, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerBottom->Add( 20, 0, 0, wxEXPAND, 5 );
+	bSizerBottom->Add( bLibLink, 1, wxLEFT|wxEXPAND, 10 );
+
+
+	bSizerBottom->Add( 20, 0, 0, 0, 5 );
 
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Spice Model..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerBottom->Add( m_spiceFieldsButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
