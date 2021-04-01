@@ -867,7 +867,7 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
                     field->SetName( newname );
             }
         }
-
+#endif
         if( !existingField )
         {
             aSymbol->AddDrawItem( field.get(), false );
