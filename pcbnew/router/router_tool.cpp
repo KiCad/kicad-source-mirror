@@ -161,7 +161,8 @@ static const TOOL_ACTION ACT_SwitchRounding( "pcbnew.InteractiveRouter.SwitchRou
 
 
 ROUTER_TOOL::ROUTER_TOOL() :
-    TOOL_BASE( "pcbnew.InteractiveRouter" )
+        TOOL_BASE( "pcbnew.InteractiveRouter" ),
+        m_lastTargetLayer( UNDEFINED_LAYER )
 {
 }
 
@@ -416,6 +417,8 @@ ROUTER_TOOL::~ROUTER_TOOL()
 
 bool ROUTER_TOOL::Init()
 {
+    m_lastTargetLayer = UNDEFINED_LAYER;
+
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
 
     wxASSERT( frame );
@@ -476,6 +479,8 @@ bool ROUTER_TOOL::Init()
 
 void ROUTER_TOOL::Reset( RESET_REASON aReason )
 {
+    m_lastTargetLayer = UNDEFINED_LAYER;
+
     if( aReason == RUN )
         TOOL_BASE::Reset( aReason );
 }
@@ -597,6 +602,7 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
         newLayer = m_router->Sizes().GetLayerTop();
 
     m_router->SwitchLayer( *newLayer );
+    m_lastTargetLayer = *newLayer;
     frame()->SetActiveLayer( ToLAYER_ID( *newLayer ) );
 }
 
@@ -719,7 +725,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
         for( size_t i = 0; i < layers.size(); i++ )
         {
-            if( layers[i] == currentLayer )
+            if( layers[i] == m_lastTargetLayer )
             {
                 idx = i;
                 break;
@@ -735,7 +741,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
         for( size_t i = 0; i < layers.size(); i++ )
         {
-            if( layers[i] == currentLayer )
+            if( layers[i] == m_lastTargetLayer )
             {
                 idx = i;
                 break;
@@ -748,19 +754,21 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     else
     {
         targetLayer = getTargetLayerFromEvent( aEvent );
-
-        if( targetLayer != UNDEFINED_LAYER )
-        {
-            if( targetLayer == currentLayer )
-                return 0;
-        }
     }
 
-    if( !aForceVia && m_router && m_router->SwitchLayer( targetLayer ) )
+    if( targetLayer != UNDEFINED_LAYER )
     {
-        updateEndItem( aEvent );
-        m_router->Move( m_endSnapPoint, m_endItem );        // refresh
-        return 0;
+        m_lastTargetLayer = targetLayer;
+
+        if( targetLayer == currentLayer )
+            return 0;
+
+        if( !aForceVia && m_router && m_router->SwitchLayer( targetLayer ) )
+        {
+            updateEndItem( aEvent );
+            m_router->Move( m_endSnapPoint, m_endItem );        // refresh
+            return 0;
+        }
     }
 
     BOARD_DESIGN_SETTINGS& bds        = board()->GetDesignSettings();
@@ -967,7 +975,11 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     sizes.AddLayerPair( currentLayer, targetLayer );
 
     m_router->UpdateSizes( sizes );
-    m_router->ToggleViaPlacement();
+
+    if( !m_router->IsPlacingVia() )
+        m_router->ToggleViaPlacement();
+
+    m_lastTargetLayer = targetLayer;
 
     if( m_router->RoutingInProgress() )
         updateEndItem( aEvent );

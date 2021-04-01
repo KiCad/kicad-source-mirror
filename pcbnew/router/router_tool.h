@@ -76,6 +76,8 @@ private:
 private:
     std::shared_ptr<ACTION_MENU> m_diffPairMenu;
     std::shared_ptr<ACTION_MENU> m_trackViaMenu;
+
+    int                          m_lastTargetLayer;
 };
 
 #endif
