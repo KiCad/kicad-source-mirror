@@ -1,7 +1,7 @@
 ##########################################################################
 # Build KiCad on Ubuntu 20.04 and save the results
 ##########################################################################
-build_linux:
+build_ubuntu20.04:
   stage: build
   tags:
     - kicad-ubuntu20.04
@@ -21,6 +21,7 @@ build_linux:
     - mkdir -p build/linux
     - cd build/linux
     - cmake
+      -G Ninja
       -DCMAKE_C_COMPILER_LAUNCHER=ccache
       -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
       -DCMAKE_BUILD_TYPE=Debug
