@@ -52,6 +52,8 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
 {
     m_showTimer = new wxTimer( this, ID_CLOSE_INFOBAR );
 
+    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_INFOBK ) );
+
     SetShowHideEffects( wxSHOW_EFFECT_ROLL_TO_BOTTOM, wxSHOW_EFFECT_ROLL_TO_TOP );
     SetEffectDuration( 300 );
 
