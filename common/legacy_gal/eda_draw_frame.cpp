@@ -1091,6 +1091,11 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 
 bool EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
+#ifdef __WXMAC__
+    // Cairo is unsupported on Mac
+    if( aCanvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO )
+        aCanvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+#endif
     auto galCanvas = GetGalCanvas();
     wxCHECK( galCanvas, false );
     bool use_gal = galCanvas->SwitchBackend( aCanvasType );
@@ -1119,6 +1124,12 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting()
         wxASSERT( false );
         canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     }
+
+#ifdef __WXMAC__
+    // Did Cairo get saved on Mac?  Force OpenGL; Cairo doesn't work on Retina displays
+    if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO )
+        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+#endif
 
     // Coerce the value into a GAL type when Legacy is not available
     // Default to Cairo, and on the first, user will be prompted for OpenGL

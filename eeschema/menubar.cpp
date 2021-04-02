@@ -638,6 +638,7 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
     // Language submenu
     Pgm().AddMenuLanguageList( aParentMenu );
 
+#ifndef __WXMAC__
     aParentMenu->AppendSeparator();
 
     text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Eeschema_Hotkeys_Descr,
@@ -651,6 +652,7 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
     AddMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO, text,
                  _( "Use Modern Toolset with software graphics (fall-back)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
+#endif
 
     aParentMenu->AppendSeparator();
 

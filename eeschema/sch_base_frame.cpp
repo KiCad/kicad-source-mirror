@@ -139,8 +139,10 @@ void SCH_BASE_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
 {
     auto new_type = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
 
+#ifndef __WXMAC__
     if( aEvent.GetId() == ID_MENU_CANVAS_CAIRO )
         new_type = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+#endif
 
     if( m_canvasType == new_type )
         return;

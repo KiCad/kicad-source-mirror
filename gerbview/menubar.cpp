@@ -323,10 +323,12 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
+#ifndef __WXMAC__
     text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), GerbviewHotkeysDescr, HK_CANVAS_CAIRO );
     AddMenuItem( configMenu, ID_MENU_CANVAS_CAIRO, text,
                  _( "Use Modern Toolset with software graphics (fall-back)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
+#endif
 
     configMenu->AppendSeparator();
 

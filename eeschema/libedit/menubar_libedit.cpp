@@ -337,6 +337,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
 
+#ifndef __WXMAC__
     preferencesMenu->AppendSeparator();
 
     text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Libedit_Hotkeys_Descr,
@@ -350,7 +351,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( preferencesMenu, ID_MENU_CANVAS_CAIRO, text,
                  _( "Use Modern Toolset with software graphics (fall-back)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
-
+#endif
 
 
     // Menu Help:
