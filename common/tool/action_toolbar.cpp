@@ -40,6 +40,7 @@
 #include <widgets/wx_aui_art_providers.h>
 #include <wx/popupwin.h>
 #include <wx/renderer.h>
+#include <wx/sizer.h>
 
 
 ACTION_GROUP::ACTION_GROUP( std::string aName, const std::vector<const TOOL_ACTION*>& aActions )
@@ -342,7 +343,27 @@ void ACTION_TOOLBAR::UpdateControlWidth( int aID )
     wxASSERT_MSG( control, wxString::Format( "No control located in toolbar item with ID %d", aID ) );
 
     // Update the size the item has stored using the best size of the control
-    item->SetMinSize( control->GetBestSize() );
+    wxSize bestSize = control->GetBestSize();
+    item->SetMinSize( bestSize );
+
+    // Update the sizer item sizes
+    // This is a bit convoluted because there are actually 2 sizers that need to be updated:
+    // 1. The main sizer that is used for the entire toolbar (this sizer item can be found in the
+    // toolbar item)
+    if( wxSizerItem* szrItem = item->GetSizerItem() )
+        szrItem->SetMinSize( bestSize );
+
+    // 2. The controls have a second sizer that allows for padding above/below the control with stretch
+    // space, so we also need to update the sizer item for the control in that sizer with the new size.
+    // We let wx do the search for us, since SetItemMinSize is recursive and will locate the control
+    // on that sizer.
+    if( m_sizer )
+    {
+        m_sizer->SetItemMinSize( control, bestSize );
+
+        // Now actually update the toolbar with the new sizes
+        m_sizer->Layout();
+    }
 }
 
 

@@ -299,7 +299,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                    // Ensure the controls on the toolbars all are correctly sized
                     UpdateToolbarControlSizes();
                } );
-
 }
 
 

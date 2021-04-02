@@ -335,9 +335,6 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateToolbarControlSizes()
         // Update the item widths
         m_mainToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
         m_mainToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
-
-        // Update the toolbar with the new widths
-        m_mainToolBar->KiRealize();
     }
 }
 

@@ -262,9 +262,6 @@ void GERBVIEW_FRAME::UpdateToolbarControlSizes()
         // Update the item widths
         m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER );
         m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_GERBER_DATA_TEXT_BOX );
-
-        // Update the toolbar with the new widths
-        m_mainToolBar->KiRealize();
     }
 
     if( m_auxiliaryToolBar )
@@ -275,9 +272,6 @@ void GERBVIEW_FRAME::UpdateToolbarControlSizes()
         m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
         m_auxiliaryToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
         m_auxiliaryToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
-
-        // Update the toolbar with the new widths
-        m_auxiliaryToolBar->KiRealize();
     }
 }
 

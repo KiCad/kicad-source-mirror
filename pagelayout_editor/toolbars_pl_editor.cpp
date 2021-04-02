@@ -186,8 +186,5 @@ void PL_EDITOR_FRAME::UpdateToolbarControlSizes()
         // Update the item widths
         m_mainToolBar->UpdateControlWidth( ID_SELECT_COORDINATE_ORIGIN );
         m_mainToolBar->UpdateControlWidth( ID_SELECT_PAGE_NUMBER );
-
-        // Update the toolbar with the new widths
-        m_mainToolBar->KiRealize();
     }
 }
