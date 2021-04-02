@@ -20,6 +20,7 @@
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
+#include <wx/utils.h>
 
 #include <kiplatform/environment.h>
 #include <paths.h>

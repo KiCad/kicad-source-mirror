@@ -22,6 +22,7 @@
 #include <wx/debug.h>
 #include <wx/dir.h>
 #include <wx/filename.h>
+#include <wx/snglinst.h>
 #include <wx/stdpaths.h>
 #include <wx/utils.h>
 
@@ -31,6 +32,7 @@
 #include <gestfich.h>
 #include <kiplatform/environment.h>
 #include <kiway.h>
+#include <lockfile.h>
 #include <macros.h>
 #include <paths.h>
 #include <project.h>
@@ -757,6 +759,15 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     if( m_projects.count( fullPath ) )
         return true;
 
+    bool readOnly = false;
+    std::unique_ptr<wxSingleInstanceChecker> lockFile = ::LockFile( fullPath );
+
+    if( !lockFile )
+    {
+        wxLogTrace( traceSettings, "Project %s is locked; opening read-only", fullPath );
+        readOnly = true;
+    }
+
     // No MDI yet
     if( aSetActive && !m_projects.empty() )
     {
@@ -773,7 +784,12 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     bool success = loadProjectFile( *project );
 
     if( success )
-        project->SetReadOnly( project->GetProjectFile().IsReadOnly() );
+    {
+        project->SetReadOnly( readOnly || project->GetProjectFile().IsReadOnly() );
+
+        if( lockFile )
+            m_project_lock.reset( lockFile.release() );
+    }
 
     m_projects_list.push_back( std::move( project ) );
     m_projects[fullPath] = m_projects_list.back().get();
@@ -824,6 +840,9 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
 
     // Remove the reference in the environment to the previous project
     wxSetEnv( PROJECT_VAR_NAME, "" );
+
+    // Release lock on the file, in case we had one
+    m_project_lock = nullptr;
 
     if( m_kiway )
         m_kiway->ProjectChanged();

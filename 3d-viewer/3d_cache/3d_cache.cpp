@@ -47,6 +47,7 @@
 #include "sg/scenegraph.h"
 #include "plugins/3dapi/ifsg_api.h"
 
+#include <common.h>     // For ExpandEnvVarSubstitutions
 #include <filename_resolver.h>
 #include <paths.h>
 #include <pgm_base.h>

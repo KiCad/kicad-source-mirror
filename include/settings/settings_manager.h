@@ -22,7 +22,7 @@
 #define _SETTINGS_MANAGER_H
 
 #include <typeinfo>
-#include <common.h> // for wxString hash
+#include <core/wx_stl_compat.h> // for wxString hash
 #include <settings/color_settings.h>
 
 class COLOR_SETTINGS;
@@ -31,6 +31,7 @@ class KIWAY;
 class PROJECT;
 class PROJECT_FILE;
 class REPORTER;
+class wxSingleInstanceChecker;
 
 
 class SETTINGS_MANAGER
@@ -424,6 +425,9 @@ private:
 
     /// Loaded project files, mapped according to project full name
     std::map<wxString, PROJECT_FILE*> m_project_files;
+
+    /// Lock for loaded project (expand to multiple once we support MDI)
+    std::unique_ptr<wxSingleInstanceChecker> m_project_lock;
 
     static wxString backupDateTimeFormat;
 };

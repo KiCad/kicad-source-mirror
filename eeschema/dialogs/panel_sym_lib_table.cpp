@@ -22,6 +22,7 @@
 #include <set>
 #include <wx/regex.h>
 
+#include <common.h>     // For ExpandEnvVarSubstitutions
 #include <project.h>
 #include <panel_sym_lib_table.h>
 #include <lib_id.h>
