@@ -2200,6 +2200,9 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
     TRANSFORM transform;
     std::set<int> fieldIDsRead;
 
+    // We'll reset this if we find a fields_autoplaced token
+    symbol->ClearFieldsAutoplaced();
+
     m_fieldId = MANDATORY_FIELDS;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -2298,6 +2301,11 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
         case T_on_board:
             symbol->SetIncludeOnBoard( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_fields_autoplaced:
+            symbol->SetFieldsAutoplaced();
             NeedRIGHT();
             break;
 
@@ -2510,6 +2518,9 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
     std::unique_ptr<SCH_SHEET> sheet = std::make_unique<SCH_SHEET>();
     std::set<int> fieldIDsRead;
 
+    // We'll reset this if we find a fields_autoplaced token
+    sheet->ClearFieldsAutoplaced();
+
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         if( token != T_LEFT )
@@ -2533,6 +2544,11 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
             NeedRIGHT();
             break;
         }
+
+        case T_fields_autoplaced:
+            sheet->SetFieldsAutoplaced();
+            NeedRIGHT();
+            break;
 
         case T_stroke:
             parseStroke( stroke );
@@ -2817,6 +2833,9 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
         wxCHECK_MSG( false, nullptr, "Cannot parse " + GetTokenString( CurTok() ) + " as text." );
     }
 
+    // We'll reset this if we find a fields_autoplaced token
+    text->ClearFieldsAutoplaced();
+
     NeedSYMBOL();
 
     text->SetText( FromUTF8() );
@@ -2865,6 +2884,11 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
                 Expecting( "input, output, bidirectional, tri_state, or passive" );
             }
 
+            NeedRIGHT();
+            break;
+
+        case T_fields_autoplaced:
+            text->SetFieldsAutoplaced();
             NeedRIGHT();
             break;
 

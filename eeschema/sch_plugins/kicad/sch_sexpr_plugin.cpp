@@ -951,6 +951,9 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aShee
     m_out->Print( aNestLevel + 1, "(in_bom %s)", ( aSymbol->GetIncludeInBom() ) ? "yes" : "no" );
     m_out->Print( 0, " (on_board %s)", ( aSymbol->GetIncludeOnBoard() ) ? "yes" : "no" );
 
+    if( aSymbol->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
+        m_out->Print( 0, " (fields_autoplaced)" );
+
     m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aSymbol->m_Uuid.AsString() ) );
@@ -1086,11 +1089,16 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
 {
     wxCHECK_RET( aSheet != nullptr && m_out != nullptr, "" );
 
-    m_out->Print( aNestLevel, "(sheet (at %s %s) (size %s %s)\n",
+    m_out->Print( aNestLevel, "(sheet (at %s %s) (size %s %s)",
                   FormatInternalUnits( aSheet->GetPosition().x ).c_str(),
                   FormatInternalUnits( aSheet->GetPosition().y ).c_str(),
                   FormatInternalUnits( aSheet->GetSize().GetWidth() ).c_str(),
                   FormatInternalUnits( aSheet->GetSize().GetHeight() ).c_str() );
+
+    if( aSheet->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
+        m_out->Print( 0, " (fields_autoplaced)" );
+
+    m_out->Print( 0, "\n" );
 
     STROKE_PARAMS stroke( aSheet->GetBorderWidth(), PLOT_DASH_TYPE::SOLID,
                           aSheet->GetBorderColor() );
@@ -1269,6 +1277,9 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
                       FormatInternalUnits( aText->GetPosition().y ).c_str(),
                       FormatAngle( aText->GetTextAngle() ).c_str() );
     }
+
+    if( aText->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
+        m_out->Print( 0, " (fields_autoplaced)" );
 
     m_out->Print( 0, "\n" );
     aText->Format( m_out, aNestLevel, 0 );
