@@ -47,6 +47,18 @@ void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 }
 
 
+bool KIPLATFORM::UI::IsWindowActive( wxWindow* aWindow )
+{
+    GtkWindow* window = GTK_WINDOW( aWindow->GetHandle() );
+
+    if( window )
+        return gtk_window_is_active( window );
+
+    // We shouldn't really ever reach this point
+    return false;
+}
+
+
 void KIPLATFORM::UI::ReparentQuasiModal( wxNonOwnedWindow* aWindow )
 {
     // Not needed on this platform

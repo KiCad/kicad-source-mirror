@@ -42,6 +42,13 @@ void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 }
 
 
+bool KIPLATFORM::UI::IsWindowActive( wxWindow* aWindow )
+{
+    // Just always return true
+    return true;
+}
+
+
 void KIPLATFORM::UI::ReparentQuasiModal( wxNonOwnedWindow* aWindow )
 {
     wxTopLevelWindow* parent =

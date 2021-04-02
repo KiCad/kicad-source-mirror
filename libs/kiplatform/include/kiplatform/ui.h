@@ -48,6 +48,14 @@ namespace KIPLATFORM
         void ForceFocus( wxWindow* aWindow );
 
         /**
+         * Check to see if the given window is the currently active window (e.g. the window
+         * in the foreground the user is interacting with).
+         *
+         * @param aWindow is the window to check
+         */
+        bool IsWindowActive( wxWindow* aWindow );
+
+        /**
          * Move a window's parent to be the top-level window and force the window to be on top.
          *
          * This only has an affect for OSX, it is a NOP for GTK and MSW.

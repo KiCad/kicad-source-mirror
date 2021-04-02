@@ -71,6 +71,12 @@ void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 }
 
 
+bool KIPLATFORM::UI::IsWindowActive( wxWindow* aWindow )
+{
+    return ( aWindow->GetHWND() == GetForegroundWindow() );
+}
+
+
 void KIPLATFORM::UI::ReparentQuasiModal( wxNonOwnedWindow* aWindow )
 {
     // Not needed on this platform
