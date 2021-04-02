@@ -2304,6 +2304,24 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             return false;
         }
 
+        PAD* findPad( VIA* aVia )
+        {
+            const wxPoint position = aVia->GetPosition();
+            const LSET    lset = aVia->GetLayerSet();
+
+            for( FOOTPRINT* fp : m_board->Footprints() )
+            {
+                for(PAD* pad : fp->Pads() )
+                {
+                    if( pad->HitTest( position ) && ( pad->GetLayerSet() & lset ).any() )
+                        if( pad->GetNetCode() > 0 )
+                            return pad;
+                }
+            }
+
+            return nullptr;
+        }
+
         int findStitchedZoneNet( VIA* aVia )
         {
             const wxPoint position = aVia->GetPosition();
@@ -2370,9 +2388,12 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             VIA*    via = static_cast<VIA*>( aItem );
             wxPoint viaPos = via->GetPosition();
             TRACK*  track = findTrack( via );
+            PAD *   pad = findPad( via );
 
             if( track )
                 via->SetNetCode( track->GetNetCode() );
+            else if( pad )
+                via->SetNetCode( pad->GetNetCode() );
 
             if( !m_allowDRCViolations && checkDRCViolation( via ) )
             {
@@ -2400,7 +2421,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     aCommit.Add( newTrack );
                 }
             }
-            else
+            else if( !pad )
             {
                 via->SetNetCode( findStitchedZoneNet( via ) );
                 via->SetIsFree();
