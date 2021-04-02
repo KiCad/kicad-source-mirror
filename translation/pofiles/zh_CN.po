@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
 "PO-Revision-Date: 2021-04-03 18:26+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -5067,7 +5067,7 @@ msgstr "通孔焊盘"
 #: pcbnew/widgets/appearance_controls.cpp:333
 #: pcbnew/widgets/panel_selection_filter_base.cpp:39
 msgid "Tracks"
-msgstr "布线"
+msgstr "线路"
 
 #: common/layer_id.cpp:153
 msgid "Through vias"
@@ -5217,9 +5217,8 @@ msgid "Select Preferred Editor"
 msgstr "选择首选编辑器"
 
 #: common/pgm_base.cpp:222
-#, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "环境变量 HOME 为空。  无法继续。"
+msgstr "环境变量 HOME 为空。无法继续。"
 
 #: common/pgm_base.cpp:233
 #, c-format
@@ -12436,9 +12435,8 @@ msgid "Import"
 msgstr "导入"
 
 #: eeschema/menubar.cpp:99
-#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "导入非 KiCad 原理图..."
+msgstr "非 KiCad 原理图..."
 
 #: eeschema/menubar.cpp:100
 msgid ""
@@ -12446,9 +12444,8 @@ msgid ""
 msgstr "将当前的原理图页替换为从另一个应用程序导入的原理图页"
 
 #: eeschema/menubar.cpp:104
-#, fuzzy
 msgid "Footprint Assignments..."
-msgstr "封装关联"
+msgstr "封装分配..."
 
 #: eeschema/menubar.cpp:110 eeschema/symbol_editor/menubar_symbol_editor.cpp:69
 #: pcbnew/dialogs/dialog_export_step.cpp:130
@@ -13277,7 +13274,7 @@ msgstr ""
 "偏移：%d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol names definition in\n"
 "file: '%s'\n"
@@ -13285,12 +13282,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "无效的符号名称定义在\n"
-"文件：\"%s\"\n"
+"文件：'%s'\n"
 "行：%d\n"
 "偏移：%d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid property name in\n"
 "file: '%s'\n"
@@ -13298,12 +13295,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "无效的属性名称在\n"
-"文件：\"%s\"\n"
+"文件：'%s'\n"
 "行：%d\n"
 "偏移：%d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Empty property name in\n"
 "file: '%s'\n"
@@ -13311,12 +13308,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "空的属性名称在\n"
-"文件：\"%s\"\n"
+"文件：'%s'\n"
 "行：%d\n"
 "偏移：%d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid property value in\n"
 "file: '%s'\n"
@@ -13324,7 +13321,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "无效的属性值在\n"
-"文件：\"%s\"\n"
+"文件：'%s'\n"
 "行：%d\n"
 "偏移：%d"
 
@@ -14530,7 +14527,6 @@ msgid "View as PNG..."
 msgstr "查看为 PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:73
-#, fuzzy
 msgid "Symbol as SVG..."
 msgstr "导出符号为 SVG..."
 
@@ -15293,9 +15289,8 @@ msgid "Show Symbol Tree"
 msgstr "显示符号树"
 
 #: eeschema/tools/ee_actions.cpp:193
-#, fuzzy
 msgid "Hide Symbol Tree"
-msgstr "显示符号树"
+msgstr "隐藏符号树"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Export View as PNG..."
@@ -17469,18 +17464,16 @@ msgid "Import Non-KiCad Project..."
 msgstr "导入非 KiCad 工程..."
 
 #: kicad/menubar.cpp:94
-#, fuzzy
 msgid "CADSTAR Project..."
-msgstr "导入 CADSTAR 工程..."
+msgstr "CADSTAR 工程..."
 
 #: kicad/menubar.cpp:95
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
 msgstr "导入 CADSTAR 存档架构和 PCB (*.csa， *.cpa)"
 
 #: kicad/menubar.cpp:99
-#, fuzzy
 msgid "EAGLE Project..."
-msgstr "导入 Eagle 工程..."
+msgstr "Eagle 工程..."
 
 #: kicad/menubar.cpp:100
 msgid "Import EAGLE CAD XML schematic and board"
@@ -20540,9 +20533,8 @@ msgstr ""
 "***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:528
-#, fuzzy
 msgid " will be ignored"
-msgstr "将被忽略"
+msgstr " 将被忽略"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:541
 msgid ""
@@ -28753,13 +28745,12 @@ msgid "Import Vector Graphics File"
 msgstr "导入矢量图形文件"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1337
-#, fuzzy
 msgid "Invalid spline definition encountered"
-msgstr "无效的浮点数"
+msgstr "遇到了无效的花键定义"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1344
 msgid "Invalid Bezier curve created"
-msgstr ""
+msgstr "创建了无效的贝塞尔曲线"
 
 #: pcbnew/initpcb.cpp:49
 msgid ""
@@ -28801,9 +28792,8 @@ msgstr "封装库 \"%s\" 另存为 \"%s\"。"
 
 #: pcbnew/menubar_footprint_editor.cpp:71
 #: pcbnew/menubar_footprint_editor.cpp:80
-#, fuzzy
 msgid "Footprint..."
-msgstr "封装... (&F)"
+msgstr "封装..."
 
 #: pcbnew/menubar_footprint_editor.cpp:72 pcbnew/menubar_pcb_editor.cpp:111
 msgid "Graphics..."
@@ -28811,7 +28801,7 @@ msgstr "图形..."
 
 #: pcbnew/menubar_footprint_editor.cpp:81
 msgid "View as &PNG..."
-msgstr "查看为 PNG...  (&P)"
+msgstr "作为 &PNG 文件进行查看..."
 
 #: pcbnew/menubar_footprint_editor.cpp:82
 msgid "Create a PNG file from the current view"
@@ -28918,7 +28908,6 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:149
-#, fuzzy
 msgid "Footprints to Library..."
 msgstr "将封装导出到库..."
 
@@ -28931,7 +28920,6 @@ msgstr ""
 " (不会删除此库中的其他封装)"
 
 #: pcbnew/menubar_pcb_editor.cpp:154
-#, fuzzy
 msgid "Footprints to New Library..."
 msgstr "将封装导出到新库..."
 
@@ -29603,9 +29591,8 @@ msgid "KiCad PCB Editor"
 msgstr "KiCad PCB 编辑器"
 
 #: pcbnew/pcb_edit_frame.cpp:200
-#, fuzzy
 msgid "Export netlist used to update schematics"
-msgstr "导出网表需要一张完整批注的原理图。"
+msgstr "导出用于更新原理图的网表"
 
 #: pcbnew/pcb_edit_frame.cpp:338
 msgid "New PCB file is unsaved"
@@ -30018,7 +30005,7 @@ msgid ""
 "The CADSTAR pad definition '%s' is a complex pad stack, which is not "
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
-msgstr ""
+msgstr "CADSTAR 焊盘定义 '%s' 是一个复杂的焊盘叠，KiCad 不支持它。请检查导入的焊盘，因为它们可能需要人工修正。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1044
 #, c-format
@@ -30032,7 +30019,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1079
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
-msgstr ""
+msgstr "CADSTAR 焊盘定义 '%s' 有导入错误：%s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1114
 #, c-format
@@ -30972,9 +30959,8 @@ msgid "Tuned: skew "
 msgstr "调整：歪斜 "
 
 #: pcbnew/router/pns_router.cpp:192
-#, fuzzy
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "差分对间隙小于最小间隙 (%s)。"
+msgstr "差分对间距小于电路板最小间隙。"
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Cannot start routing from a non-plated hole."
@@ -31129,7 +31115,7 @@ msgstr "布线网络类宽度"
 #: pcbnew/router/router_tool.cpp:220
 #, c-format
 msgid "Track %s"
-msgstr "布线 %s"
+msgstr "线路 %s"
 
 #: pcbnew/router/router_tool.cpp:234
 msgid "Via netclass values"
@@ -31395,18 +31381,16 @@ msgid "Locking"
 msgstr "锁定"
 
 #: pcbnew/tools/board_editor_control.cpp:133
-#, fuzzy
 msgid "Omit extra information"
-msgstr "位图信息"
+msgstr "省略额外信息"
 
 #: pcbnew/tools/board_editor_control.cpp:134
-#, fuzzy
 msgid "Omit nets"
-msgstr "筛选网络"
+msgstr "省略网络"
 
 #: pcbnew/tools/board_editor_control.cpp:136
 msgid "Do not prefix path with footprint UUID."
-msgstr ""
+msgstr "不要在路径名称前添加封装 UUID。"
 
 #: pcbnew/tools/board_editor_control.cpp:374
 msgid "Merge Specctra Session file:"
@@ -31417,24 +31401,21 @@ msgid "Specctra DSN File"
 msgstr "Specctra DSN 文件"
 
 #: pcbnew/tools/board_editor_control.cpp:421
-#, fuzzy
 msgid "Export Board Netlist"
-msgstr "导出网表"
+msgstr "导出板子网表"
 
 #: pcbnew/tools/board_editor_control.cpp:422
-#, fuzzy
 msgid "KiCad board netlist files"
-msgstr "KiCad 网表文件"
+msgstr "KiCad 板子网表文件"
 
 #: pcbnew/tools/board_editor_control.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid "Path `%s` is read only."
-msgstr "\"%s\" 库为只读。"
+msgstr "路径 `%s`是只读的。"
 
 #: pcbnew/tools/board_editor_control.cpp:437
-#, fuzzy
 msgid "I/O Error"
-msgstr "错误"
+msgstr "I/O 错误"
 
 #: pcbnew/tools/board_editor_control.cpp:527
 #, c-format
@@ -32122,9 +32103,8 @@ msgid "Add a zone with the same settings as an existing zone"
 msgstr "添加与现有覆铜具有相同设置的覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:191
-#, fuzzy
 msgid "Import Graphics..."
-msgstr "导入图形(&I)..."
+msgstr "导入图形..."
 
 #: pcbnew/tools/pcb_actions.cpp:191
 msgid "Import 2D drawing file"
@@ -32289,9 +32269,8 @@ msgid "Show Footprint Tree"
 msgstr "显示封装树形工作区"
 
 #: pcbnew/tools/pcb_actions.cpp:345
-#, fuzzy
 msgid "Hide Footprint Tree"
-msgstr "显示封装树形工作区"
+msgstr "显示封装树"
 
 #: pcbnew/tools/pcb_actions.cpp:351
 msgid "New Footprint..."
@@ -32338,7 +32317,6 @@ msgid "Import Footprint..."
 msgstr "导入封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:386
-#, fuzzy
 msgid "Import footprint from file"
 msgstr "从文件导入封装"
 
@@ -32347,9 +32325,8 @@ msgid "Export Footprint..."
 msgstr "导出封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:391
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "导出封装到编辑器"
+msgstr "导出封装到文件"
 
 #: pcbnew/tools/pcb_actions.cpp:396
 msgid "Footprint Properties..."
@@ -32557,27 +32534,24 @@ msgid "Edit board setup including layers, design rules and various defaults"
 msgstr "编辑电路板设置，包括层、设计规则和各个默认值"
 
 #: pcbnew/tools/pcb_actions.cpp:557
-#, fuzzy
 msgid "Import Netlist..."
-msgstr "导入网表"
+msgstr "导入网表..."
 
 #: pcbnew/tools/pcb_actions.cpp:557
 msgid "Read netlist and update board connectivity"
 msgstr "读取网络列表并更新电路板连接"
 
 #: pcbnew/tools/pcb_actions.cpp:562
-#, fuzzy
 msgid "Import Specctra Session..."
-msgstr "自动布线会话..."
+msgstr "导入 Specctra（无网格自动布线器）会话..."
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Import routed Specctra session (*.ses) file"
 msgstr "导入布线器会话(*.ses)文件"
 
 #: pcbnew/tools/pcb_actions.cpp:567
-#, fuzzy
 msgid "Export Specctra DSN..."
-msgstr "自动布线 DSN..."
+msgstr "导出无网格自动布线器 DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:567
 msgid "Export Specctra DSN routing info"
