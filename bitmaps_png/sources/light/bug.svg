@@ -25,7 +25,7 @@
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>Bug</dc:title>
         <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-nc-sa/4.0/" />
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:creator>
           <cc:Agent>
             <dc:title>Seth Hillbrand</dc:title>
@@ -33,7 +33,7 @@
         </dc:creator>
       </cc:Work>
       <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-nc-sa/4.0/">
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
         <cc:permits
            rdf:resource="http://creativecommons.org/ns#Reproduction" />
         <cc:permits
