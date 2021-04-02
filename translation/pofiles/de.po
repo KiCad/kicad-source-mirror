@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-03-30 20:35+0000\n"
+"PO-Revision-Date: 2021-04-03 18:26+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1717,7 +1717,7 @@ msgstr "Dokumentation"
 
 #: common/dialog_about/dialog_about.cpp:130
 msgid "Librarians"
-msgstr "Biblithekare"
+msgstr "Bibliothekare"
 
 #: common/dialog_about/dialog_about.cpp:133
 msgid "Artists"
@@ -5347,7 +5347,6 @@ msgid "Select Preferred Editor"
 msgstr "Auswahl des bevorzugten Editors"
 
 #: common/pgm_base.cpp:222
-#, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "Umgebungsvariable HOME ist leer. Kann nicht fortfahren."
 
@@ -5763,7 +5762,7 @@ msgstr "Aktuelle Verletzung im Checker-Fenster als Ausschluss markieren"
 
 #: common/tool/actions.cpp:269
 msgid "Refresh"
-msgstr "Neueinlesen"
+msgstr "Neu einlesen"
 
 #: common/tool/actions.cpp:280
 msgid "Zoom to Fit"
@@ -8957,11 +8956,11 @@ msgstr "Nicht ausfüllen"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Fill with body outline color"
-msgstr "Fülle Körper mit Umrandungsfarbe"
+msgstr "Mit Körper-Umrandungsfarbe füllen"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Fill with body background color"
-msgstr "Fülle Körper mit Hintergrundfarbe"
+msgstr "Mit Körper-Hintergrundfarbe füllen"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:41
 msgid "Fill Style"
@@ -12215,7 +12214,7 @@ msgstr "Stromversorgungspin"
 
 #: eeschema/erc.cpp:66 eeschema/erc.cpp:83
 msgid "Power Output Pin"
-msgstr "Spg.ausgangspin"
+msgstr "Stromausgangspin"
 
 #: eeschema/erc.cpp:67 eeschema/erc.cpp:84
 msgid "Open Collector"
@@ -12794,9 +12793,8 @@ msgid "Import"
 msgstr "Importieren"
 
 #: eeschema/menubar.cpp:99
-#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "Importiere Nicht KiCad Schaltplan..."
+msgstr "Nicht-KiCad-Schaltplan..."
 
 #: eeschema/menubar.cpp:100
 msgid ""
@@ -12806,9 +12804,8 @@ msgstr ""
 "importierten"
 
 #: eeschema/menubar.cpp:104
-#, fuzzy
 msgid "Footprint Assignments..."
-msgstr "Footprint-Zuweisungen"
+msgstr "Footprint-Zuweisungen..."
 
 #: eeschema/menubar.cpp:110 eeschema/symbol_editor/menubar_symbol_editor.cpp:69
 #: pcbnew/dialogs/dialog_export_step.cpp:130
@@ -12911,7 +12908,7 @@ msgstr "Stromversorgung"
 
 #: eeschema/pin_type.cpp:58
 msgid "Power output"
-msgstr "Spg.ausgang"
+msgstr "Stromausgang"
 
 #: eeschema/pin_type.cpp:59
 msgid "Open collector"
@@ -13688,46 +13685,46 @@ msgstr ""
 "Spalte: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol names definition in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Unzulässige Definition Bautailname in\n"
+"Unzulässige Symbolnamen-Definition in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid property name in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Unzulässiger Name für Eigenschaft in\n"
+"Unzulässiger Eigenschaften-Name in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Empty property name in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Leerer Name für Eigenschaft in\n"
+"Leerer Eigenschaftenname in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid property value in\n"
 "file: '%s'\n"
@@ -14972,9 +14969,8 @@ msgid "View as PNG..."
 msgstr "Ansicht als PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:73
-#, fuzzy
 msgid "Symbol as SVG..."
-msgstr "Symbol als SVG-Datei exportieren..."
+msgstr "Symbol als SVG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:77
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:96
@@ -15772,9 +15768,8 @@ msgid "Show Symbol Tree"
 msgstr "Symbolbaum anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:193
-#, fuzzy
 msgid "Hide Symbol Tree"
-msgstr "Symbolbaum anzeigen"
+msgstr "Symbolbaum ausblenden"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Export View as PNG..."
@@ -18013,18 +18008,16 @@ msgid "Import Non-KiCad Project..."
 msgstr "Nicht-KiCad-Projekt importieren..."
 
 #: kicad/menubar.cpp:94
-#, fuzzy
 msgid "CADSTAR Project..."
-msgstr "CADSTAR-Projekt importieren..."
+msgstr "CADSTAR-Projekt..."
 
 #: kicad/menubar.cpp:95
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
 msgstr "CADSTAR-Archivschema und PCB importieren (* .csa, * .cpa)"
 
 #: kicad/menubar.cpp:99
-#, fuzzy
 msgid "EAGLE Project..."
-msgstr "Importiere Eagle-Projekt..."
+msgstr "EAGLE-Projekt..."
 
 #: kicad/menubar.cpp:100
 msgid "Import EAGLE CAD XML schematic and board"
@@ -20717,7 +20710,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:37
 msgid "Impedance controlled"
-msgstr "Impedanze kontrolliert"
+msgstr "Impedanzkontrolliert"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:38
 msgid ""
@@ -21126,9 +21119,8 @@ msgstr ""
 "***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:528
-#, fuzzy
 msgid " will be ignored"
-msgstr "wird ignoriert"
+msgstr " wird ignoriert"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:541
 msgid ""
@@ -23707,7 +23699,7 @@ msgid ""
 "to assign a different footprint."
 msgstr ""
 "Die aktuell zugewiesene Bibliotheks-ID und Footprint-ID. Verwenden Sie "
-"\"Ändere Footprint...\", um einen anderen Footprint zuzuweisen."
+"\"Ändere Footprint...\" um einen anderen Footprint zuzuweisen."
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:149
 msgid "All footprint generator scripts were loaded"
@@ -25828,8 +25820,8 @@ msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
-"Deaktivieren Sie Blendenmakros in Gerber-Dateien\n"
-"Verwenden Sie * nur * für kaputte Gerber-Viewer."
+"Blendenmakros in Gerber-Dateien deaktivieren\n"
+"*Nur* für kaputte Gerber-Viewer verwenden."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:256
 msgid "Default pen size:"
@@ -26203,19 +26195,19 @@ msgstr "Vorschlag Beendigung Leiterbahn"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:86
 msgid "Optimize track being dragged"
-msgstr "Optimiert das Ziehen der Spur"
+msgstr "Leiterbahnen beim Ziehen optimieren"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:89
 msgid "Use mouse path to set track posture"
-msgstr "Verwenden Sie den Mauspfad, um die Spurhaltung festzulegen"
+msgstr "Mauspfad benutzen, um Leiterbahnausrichtung zu bestimmen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:90
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
-"Wenn diese Option aktiviert ist, wird die Haltung der Spuren davon bestimmt, "
-"wie die Maus vom Startort bewegt wird"
+"Wenn aktiviert, wird die Ausrichtung von Leiterbahnen dadurch bestimmt, wie "
+"die Maus vom Startpunkt aus bewegt wird"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
 msgid "Fix all segments on click"
@@ -26227,7 +26219,7 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
-"Wenn diese Option aktiviert ist, werden alle Spursegmente bis zur "
+"Wenn diese Option aktiviert ist, werden alle Leiterbahnsegmente bis zur "
 "Cursorposition fixiert. Wenn deaktiviert, bleibt das letzte Segment (das dem "
 "Cursor am nächsten liegt) frei und folgt dem Cursor."
 
@@ -26965,8 +26957,8 @@ msgstr "Leiterbahn-Maus-Zieh-Verhalten:"
 msgid ""
 "Choose the action to perform when dragging a track segment with the mouse"
 msgstr ""
-"Wählen Sie die Aktion aus, die ausgeführt werden soll, wenn Sie ein "
-"Spursegment mit der Maus ziehen"
+"Aktion, die ausgeführt werden soll, wenn ein Leiterbahnsegment mit der Maus "
+"gezogen wird"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:339
 msgid "Moves the track segment without moving connected tracks"
@@ -29632,11 +29624,11 @@ msgstr "Importiere Vektorgrafikdatei"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1337
 msgid "Invalid spline definition encountered"
-msgstr ""
+msgstr "Ungültige Spline-Definition gefunden"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1344
 msgid "Invalid Bezier curve created"
-msgstr ""
+msgstr "Ungültige Bezier-Kurve erzeugt"
 
 #: pcbnew/initpcb.cpp:49
 msgid ""
@@ -29680,9 +29672,8 @@ msgstr "Die Footprintbibliothek \"%s\" wurde gespeichert als \"%s\"."
 
 #: pcbnew/menubar_footprint_editor.cpp:71
 #: pcbnew/menubar_footprint_editor.cpp:80
-#, fuzzy
 msgid "Footprint..."
-msgstr "&Footprint..."
+msgstr "Footprint..."
 
 #: pcbnew/menubar_footprint_editor.cpp:72 pcbnew/menubar_pcb_editor.cpp:111
 msgid "Graphics..."
@@ -29801,9 +29792,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:149
-#, fuzzy
 msgid "Footprints to Library..."
-msgstr "Footprints in Bibliothek exportieren..."
+msgstr "Footprints in Bibliothek..."
 
 #: pcbnew/menubar_pcb_editor.cpp:150
 msgid ""
@@ -29815,9 +29805,8 @@ msgstr ""
 "(entfernt keine anderen Footprints von dieser Bibliothek)"
 
 #: pcbnew/menubar_pcb_editor.cpp:154
-#, fuzzy
 msgid "Footprints to New Library..."
-msgstr "Footprints in neue Bibliothek exportieren..."
+msgstr "Footprints in neue Bibliothek..."
 
 #: pcbnew/menubar_pcb_editor.cpp:155
 msgid ""
@@ -30499,10 +30488,8 @@ msgid "KiCad PCB Editor"
 msgstr "KiCad-Leiterplatteneditor"
 
 #: pcbnew/pcb_edit_frame.cpp:200
-#, fuzzy
 msgid "Export netlist used to update schematics"
-msgstr ""
-"Exportieren der Netzliste benötigt einen komplett annotierten Schaltplan."
+msgstr "Netzliste exportieren, um Schaltpläne zu aktualisieren"
 
 #: pcbnew/pcb_edit_frame.cpp:338
 msgid "New PCB file is unsaved"
@@ -30966,6 +30953,9 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
+"Die CADSTAR-Paddefinition '%s' ist ein komplexer Pad-Stapel, der in KiCad "
+"nicht unterstützt wird. Bitte überprüfen Sie die importierten Pads, da sie "
+"möglicherweise manuell korrigiert werden müssen."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1044
 #, c-format
@@ -30979,7 +30969,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1079
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
-msgstr ""
+msgstr "Die CADSTAR-Paddefinition '%s' hat Importfehler: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1114
 #, c-format
@@ -31166,8 +31156,8 @@ msgid ""
 msgstr ""
 "Das CADSTAR-Design enthält COPPER-Elemente, die kein direktes KiCad-"
 "Äquivalent haben. Diese wurden als KiCad-Zone importiert, wenn sie fest oder "
-"schraffiert sind, oder als KiCad-Spur, wenn die Form eine ungefüllte Kontur "
-"war (offen oder geschlossen)."
+"schraffiert sind, oder als KiCad-Leiterbahn, wenn die Form eine ungefüllte "
+"Kontur war (offen oder geschlossen)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2021
 #, c-format
@@ -31994,9 +31984,8 @@ msgid "Tuned: skew "
 msgstr "Angepasst: Versatz "
 
 #: pcbnew/router/pns_router.cpp:192
-#, fuzzy
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "Differentialpaar-Abstand ist kleiner als Mindestabstand (%s)."
+msgstr "Differentialpaar-Abstand ist kleiner als Mindestabstand der Platine."
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Cannot start routing from a non-plated hole."
@@ -32437,18 +32426,16 @@ msgid "Locking"
 msgstr "Sperren"
 
 #: pcbnew/tools/board_editor_control.cpp:133
-#, fuzzy
 msgid "Omit extra information"
-msgstr "Bitmap-Informationen"
+msgstr "Zusätzliche Informationen weglassen"
 
 #: pcbnew/tools/board_editor_control.cpp:134
-#, fuzzy
 msgid "Omit nets"
-msgstr "Filter Netze"
+msgstr "Netze weglassen"
 
 #: pcbnew/tools/board_editor_control.cpp:136
 msgid "Do not prefix path with footprint UUID."
-msgstr ""
+msgstr "Dem Pfad keine Footprint-UUID voranstellen."
 
 #: pcbnew/tools/board_editor_control.cpp:374
 msgid "Merge Specctra Session file:"
@@ -32459,24 +32446,21 @@ msgid "Specctra DSN File"
 msgstr "Specctra DSN Datei"
 
 #: pcbnew/tools/board_editor_control.cpp:421
-#, fuzzy
 msgid "Export Board Netlist"
-msgstr "Export Netzliste"
+msgstr "Netzliste der Platine exportieren"
 
 #: pcbnew/tools/board_editor_control.cpp:422
-#, fuzzy
 msgid "KiCad board netlist files"
-msgstr "KiCad Netzlistendateien"
+msgstr "KiCad Platinen-Netzlistendateien"
 
 #: pcbnew/tools/board_editor_control.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid "Path `%s` is read only."
-msgstr "Bibliothek \"%s\" ist schreibgeschützt."
+msgstr "Pfad \"%s\" ist schreibgeschützt."
 
 #: pcbnew/tools/board_editor_control.cpp:437
-#, fuzzy
 msgid "I/O Error"
-msgstr "Fehler"
+msgstr "IO-Fehler"
 
 #: pcbnew/tools/board_editor_control.cpp:527
 #, c-format
@@ -33057,7 +33041,7 @@ msgstr "In Leiterbahnen umwandeln"
 
 #: pcbnew/tools/pcb_actions.cpp:79
 msgid "Converts selected graphic lines to tracks"
-msgstr "Wandelt ausgewählte Grafiklinien in Spuren um"
+msgstr "Wandelt ausgewählte Grafiklinien in Leiterbahnen um"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Draw Line"
@@ -33103,7 +33087,8 @@ msgstr "Lagenaufbau-Tabelle hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:123
 msgid "Add a board stackup table on a graphic layer"
-msgstr "Auf einer Grafiklage eine Tabelle mit dem Lagenaufbau hinzufügen"
+msgstr ""
+"Auf einer Grafiklage eine Tabelle mit dem Lagenaufbau der Platine hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:135
 msgid "Add Aligned Dimension"
@@ -33180,9 +33165,8 @@ msgstr ""
 "Fläche hinzu"
 
 #: pcbnew/tools/pcb_actions.cpp:191
-#, fuzzy
 msgid "Import Graphics..."
-msgstr "&Importiere Grafik..."
+msgstr "Importiere Grafiken..."
 
 #: pcbnew/tools/pcb_actions.cpp:191
 msgid "Import 2D drawing file"
@@ -33337,7 +33321,8 @@ msgstr "Ausgewählte Leiterbahn- und Via-Größen aktualisieren"
 
 #: pcbnew/tools/pcb_actions.cpp:321
 msgid "Adds arcs tangent to the selected straight track segments"
-msgstr "Fügt den ausgewählten geraden Spursegmenten tangentiale Bögen hinzu"
+msgstr ""
+"Fügt den ausgewählten geraden Leiterbahnsegmenten tangentiale Bögen hinzu"
 
 #: pcbnew/tools/pcb_actions.cpp:326
 msgid "Delete Full Track"
@@ -33352,9 +33337,8 @@ msgid "Show Footprint Tree"
 msgstr "Footprintbaum anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:345
-#, fuzzy
 msgid "Hide Footprint Tree"
-msgstr "Footprintbaum anzeigen"
+msgstr "Footprintbaum ausblenden"
 
 #: pcbnew/tools/pcb_actions.cpp:351
 msgid "New Footprint..."
@@ -33401,18 +33385,16 @@ msgid "Import Footprint..."
 msgstr "Footprint importieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:386
-#, fuzzy
 msgid "Import footprint from file"
-msgstr "Footprint aus einer Datei importieren"
+msgstr "Footprint aus Datei importieren"
 
 #: pcbnew/tools/pcb_actions.cpp:391
 msgid "Export Footprint..."
 msgstr "Footprint exportieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:391
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "Footprint an den Editor exportieren"
+msgstr "Footprint in Datei exportieren"
 
 #: pcbnew/tools/pcb_actions.cpp:396
 msgid "Footprint Properties..."
@@ -33637,27 +33619,24 @@ msgstr ""
 "diverser Standards"
 
 #: pcbnew/tools/pcb_actions.cpp:557
-#, fuzzy
 msgid "Import Netlist..."
-msgstr "Import Netzliste"
+msgstr "Netzliste importieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:557
 msgid "Read netlist and update board connectivity"
 msgstr "Die Netzliste einlesen und alle Verbindungen aktualisieren"
 
 #: pcbnew/tools/pcb_actions.cpp:562
-#, fuzzy
 msgid "Import Specctra Session..."
-msgstr "Specctra Session..."
+msgstr "Specctra Session importieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Import routed Specctra session (*.ses) file"
 msgstr "Eine geroutete Specctra Session Datei (*.ses) importieren"
 
 #: pcbnew/tools/pcb_actions.cpp:567
-#, fuzzy
 msgid "Export Specctra DSN..."
-msgstr "pecctra DSN..."
+msgstr "Specctra DSN exportieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:567
 msgid "Export Specctra DSN routing info"
