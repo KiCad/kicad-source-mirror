@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-03-30 20:35+0000\n"
+"PO-Revision-Date: 2021-04-03 18:26+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5276,9 +5276,8 @@ msgid "Select Preferred Editor"
 msgstr "Vybrat preferovaný editor"
 
 #: common/pgm_base.cpp:222
-#, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "Proměnná prostředí HOME je prázdná.  Nelze pokračovat."
+msgstr "Proměnná prostředí HOME je prázdná. Nelze pokračovat."
 
 #: common/pgm_base.cpp:233
 #, c-format
@@ -10323,14 +10322,12 @@ msgstr ""
 "parametrů simulace a klepnutím na tlačítko OK na vybrané kartě."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:289
-#, fuzzy
 msgid "Exit Without Valid Simulation"
-msgstr "Konec simulace"
+msgstr "Konec bez platné simulace"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:290
-#, fuzzy
 msgid "Configure Valid Simulation"
-msgstr "Zavřít simulaci"
+msgstr "Konfigurace platné simulace"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:576
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:137
@@ -12338,9 +12335,9 @@ msgid "Do not show this dialog again."
 msgstr "Nezobrazovat znovu tento dialog."
 
 #: eeschema/files-io.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "The project symbol library cache file '%s' was not found."
-msgstr "Selhalo uložení souboru knihovny symbolů '%s'."
+msgstr "Soubor mezipaměti knihovny projektu '%s' nebyl nalezen."
 
 #: eeschema/files-io.cpp:499
 msgid ""
@@ -12356,9 +12353,8 @@ msgstr ""
 "obnovit ze souboru knihovny mezipaměti a znovu načtení schématu."
 
 #: eeschema/files-io.cpp:510
-#, fuzzy
 msgid "Load Without Cache File"
-msgstr "Načíst bez uložení"
+msgstr "Načíst bez souboru mezipaměti"
 
 #: eeschema/files-io.cpp:511
 msgid "Abort"
@@ -12617,9 +12613,8 @@ msgid "Import"
 msgstr "Import"
 
 #: eeschema/menubar.cpp:99
-#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "Import jiného souboru schématu, než KiCad...."
+msgstr "Schéma jiné než KiCad...."
 
 #: eeschema/menubar.cpp:100
 msgid ""
@@ -12627,9 +12622,8 @@ msgid ""
 msgstr "Nahradit aktuální list schématu za importovaný z jiné aplikace"
 
 #: eeschema/menubar.cpp:104
-#, fuzzy
 msgid "Footprint Assignments..."
-msgstr "Přiřazení pouzdra"
+msgstr "Přiřazení pouzdra..."
 
 #: eeschema/menubar.cpp:110 eeschema/symbol_editor/menubar_symbol_editor.cpp:69
 #: pcbnew/dialogs/dialog_export_step.cpp:130
@@ -12639,9 +12633,8 @@ msgid "Export"
 msgstr "Export"
 
 #: eeschema/menubar.cpp:112
-#, fuzzy
 msgid "Drawing to Clipboard"
-msgstr "Výkres do schránky"
+msgstr "Kreslení do schránky"
 
 #: eeschema/menubar.cpp:113 pcbnew/menubar_pcb_editor.cpp:109
 #: pcbnew/pcb_edit_frame.cpp:199
@@ -12994,9 +12987,8 @@ msgid "Go to Page %s (%s)"
 msgstr "Přejít na stránku %s (%s)"
 
 #: eeschema/sch_field.cpp:502
-#, fuzzy
 msgid "Back to Previous Selected Sheet"
-msgstr "Vytvořte plošku z vybraných tvarů"
+msgstr "Zpět na předchozí vybraný list"
 
 #: eeschema/sch_field.cpp:530
 #, fuzzy
@@ -13494,7 +13486,7 @@ msgstr ""
 "offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol names definition in\n"
 "file: '%s'\n"
@@ -13502,12 +13494,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Neplatná definice názvů symbolů v\n"
-"souboru: \"%s\"\n"
+"souboru: '%s'\n"
 "řádek: %d\n"
 "offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid property name in\n"
 "file: '%s'\n"
@@ -13515,12 +13507,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Neplatný název vlastnosti v\n"
-"souboru: \"%s\"\n"
+"souboru: '%s'\n"
 "řádek: %d\n"
 "offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Empty property name in\n"
 "file: '%s'\n"
@@ -13528,12 +13520,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Prázdný název vlastnosti v \n"
-"souboru: \"%s\"\n"
+"souboru: '%s'\n"
 "řádek: %d\n"
 "offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid property value in\n"
 "file: '%s'\n"
@@ -13541,7 +13533,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Neplatná hodnota vlastnosti v\n"
-"souboru: \"%s\"\n"
+"souboru: '%s'\n"
 "řádek: %d\n"
 "offset: %d"
 
@@ -13856,9 +13848,8 @@ msgid "Power symbol"
 msgstr "Symbol napájení"
 
 #: eeschema/sch_symbol.cpp:1381
-#, fuzzy
 msgid "flags"
-msgstr "Příznaky"
+msgstr "příznaky"
 
 #: eeschema/sch_symbol.cpp:1390
 msgid "Missing parent"
@@ -14706,9 +14697,8 @@ msgid "DC Sweep"
 msgstr "Rozmítaný DC"
 
 #: eeschema/sim/spice_simulator.cpp:73
-#, fuzzy
 msgid "Pole-zero"
-msgstr "Nulový pól"
+msgstr "Pól-nula"
 
 #: eeschema/sim/spice_simulator.cpp:79
 msgid "Transfer function"
@@ -14756,19 +14746,16 @@ msgid "Loading library \"%s\""
 msgstr "Načítání knihovny \"%s\""
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:71
-#, fuzzy
 msgid "Symbol..."
-msgstr "Nový symbol..."
+msgstr "Symbol..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:72
-#, fuzzy
 msgid "View as PNG..."
-msgstr "Exportovat pohled jako PNG..."
+msgstr "Pohled jako PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:73
-#, fuzzy
 msgid "Symbol as SVG..."
-msgstr "Exportovat symbol jako SVG..."
+msgstr "Symbol jako SVG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:77
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:96
@@ -14776,9 +14763,8 @@ msgid "Library Editor"
 msgstr "Editor knihoven"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:110
-#, fuzzy
 msgid "KiCad Symbol Editor"
-msgstr "Editor symbolů"
+msgstr "KiCad editor symbolů"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:174
 #: pcbnew/footprint_edit_frame.cpp:229 pcbnew/footprint_edit_frame.cpp:719
@@ -14847,9 +14833,9 @@ msgid "Could not open the library file."
 msgstr "Soubor knihovny nelze otevřít."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:907
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'"
-msgstr "Načítání knihovny \"%s\""
+msgstr "Načítání knihovny '%s'"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:980
 #: pcbnew/footprint_libraries_utils.cpp:487
@@ -15246,9 +15232,8 @@ msgid "(failed to load)"
 msgstr "(selhalo načítání)"
 
 #: eeschema/symbol_viewer_frame.cpp:114
-#, fuzzy
 msgid "KiCad Symbol Library Viewer"
-msgstr "Soubor knihovny symbolů KiCadu"
+msgstr "KiCad prohlížeč knihoven symbolů"
 
 #: eeschema/symbol_viewer_frame.cpp:459
 #, c-format
@@ -15525,9 +15510,8 @@ msgid "Show Symbol Tree"
 msgstr "Zobrazit strom symbolů"
 
 #: eeschema/tools/ee_actions.cpp:193
-#, fuzzy
 msgid "Hide Symbol Tree"
-msgstr "Zobrazit strom symbolů"
+msgstr "Skrýt strom symbolů"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Export View as PNG..."
@@ -15776,18 +15760,16 @@ msgid "Rotates selected item(s) counter-clockwise"
 msgstr "Otočí vybranou položku(y) proti směru hodinových ručiček"
 
 #: eeschema/tools/ee_actions.cpp:384
-#, fuzzy
 msgid "Mirror Vertically"
-msgstr "Rozmístit svisle"
+msgstr "Zrcadlit vertikálně"
 
 #: eeschema/tools/ee_actions.cpp:384
 msgid "Flips selected item(s) from top to bottom"
 msgstr "Převrátí vybrané položky shora dolů"
 
 #: eeschema/tools/ee_actions.cpp:390
-#, fuzzy
 msgid "Mirror Horizontally"
-msgstr "Rozmístit vodorovně"
+msgstr "Zrcadlit horizontálně"
 
 #: eeschema/tools/ee_actions.cpp:390
 msgid "Flips selected item(s) from left to right"
@@ -15924,9 +15906,8 @@ msgid "Change to Text"
 msgstr "Změnit na text"
 
 #: eeschema/tools/ee_actions.cpp:483
-#, fuzzy
 msgid "Change existing item to a text comment"
-msgstr "Uložit netlist a seznam součástek"
+msgstr "Změnit existující položku na textový komentář"
 
 #: eeschema/tools/ee_actions.cpp:488
 msgid "Cleanup Sheet Pins"
@@ -16060,9 +16041,8 @@ msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:587
-#, fuzzy
 msgid "Edit Sheet Page Number..."
-msgstr "Upravit číslo stránky..."
+msgstr "Upravit číslo stránky listu..."
 
 #: eeschema/tools/ee_actions.cpp:588
 msgid "Edit the page number of the current or selected sheet"
@@ -16132,9 +16112,8 @@ msgid "Highlight on PCB"
 msgstr "Zvýraznit na DPS"
 
 #: eeschema/tools/ee_actions.cpp:629
-#, fuzzy
 msgid "Highlight corresponding items in PCB editor"
-msgstr "Zvýraznit odpovídající položky v editoru desky"
+msgstr "Zvýraznit odpovídající položky v editoru DPS"
 
 #: eeschema/tools/ee_actions.cpp:634
 msgid "Show Hidden Pins"
@@ -16157,32 +16136,28 @@ msgid "Force H/V Wires and Buses"
 msgstr "Vynutit H/V spoje a sběrnice"
 
 #: eeschema/tools/ee_actions.cpp:643
-#, fuzzy
 msgid "Switch H & V only mode for new wires and buses"
-msgstr "Vodorovná/svislá orientace spojů a sběrnice"
+msgstr "Přepínač pouze H & V režim pro nové spoje a sběrnice"
 
 #: eeschema/tools/ee_actions.cpp:651
 msgid "Enter Sheet"
 msgstr "Zadat list"
 
 #: eeschema/tools/ee_actions.cpp:651
-#, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "Styl textu (vertikálně) aktuálně zvoleného pole ve schématu"
+msgstr "Zobrazit vybraný obsah listu v editoru schémat"
 
 #: eeschema/tools/ee_actions.cpp:657
 msgid "Leave Sheet"
 msgstr "Opustit list"
 
 #: eeschema/tools/ee_actions.cpp:657
-#, fuzzy
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Styl textu (vertikálně) aktuálně zvoleného pole ve schématu"
+msgstr "Zobrazit nadřazený list v editoru schémat"
 
 #: eeschema/tools/ee_actions.cpp:662
-#, fuzzy
 msgid "Hierarchy Navigator"
-msgstr "Zobrazit Hierarchickou navigaci"
+msgstr "Hierarchická navigace"
 
 #: eeschema/tools/ee_actions.cpp:662
 msgid "Show schematic sheet hierarchy"
@@ -16392,9 +16367,8 @@ msgstr ""
 "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%.3f, %.3f)</b> v jednotce %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:418
-#, fuzzy
 msgid "No symbol issues found."
-msgstr "Symbol nenalezen."
+msgstr "Nenalezeny problémy se symbolem."
 
 #: eeschema/tools/ee_selection_tool.cpp:1585
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
@@ -16481,9 +16455,8 @@ msgid "Enter page number for sheet path%s"
 msgstr "Zadejte číslo stránky pro cestu listu%s"
 
 #: eeschema/tools/sch_edit_tool.cpp:1811
-#, fuzzy
 msgid "Edit Sheet Page Number"
-msgstr "Upravit číslo stránky"
+msgstr "Upravit číslo stránky listu"
 
 #: eeschema/tools/sch_editor_control.cpp:443
 msgid "Reached end of schematic."
@@ -16559,9 +16532,8 @@ msgid "Filename:"
 msgstr "Název souboru:"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:520
-#, fuzzy
 msgid "Edit Symbol Name"
-msgstr "Upravit hodnotu"
+msgstr "Upravit název symbolu"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:626
 msgid "Symbol is not derived from another symbol."
@@ -16841,9 +16813,8 @@ msgid "Cannot create file \"%s\""
 msgstr "Nelze vytvořit soubor \"%s\""
 
 #: gerbview/files.cpp:39
-#, fuzzy
 msgid "<b>No more available layers</b> in GerbView to load files"
-msgstr "<b>Nejsou volné dostupné vrstvy</b> v Gerbview k načtení souborů"
+msgstr "<b>Nejsou dostupné vrstvy</b> v Gerbview k načtení souborů"
 
 #: gerbview/files.cpp:40
 #, c-format
@@ -17072,9 +17043,8 @@ msgid "Clear Recent Job Files"
 msgstr "Vymazat poslední soubory Job"
 
 #: gerbview/gerbview_frame.cpp:93
-#, fuzzy
 msgid "KiCad Gerber Viewer"
-msgstr "Prohlížeč gerber souborů"
+msgstr "KiCad prohlížeč gerber"
 
 #: gerbview/gerbview_frame.cpp:162
 msgid "Layers Manager"
@@ -17082,9 +17052,8 @@ msgstr "Správce vrstev"
 
 #: gerbview/gerbview_frame.cpp:609 gerbview/gerbview_frame.cpp:628
 #: gerbview/menubar.cpp:145 kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Gerber Viewer"
-msgstr "Prohlížeč gerber souborů"
+msgstr "Prohlížeč gerber"
 
 #: gerbview/gerbview_frame.cpp:614
 #, c-format
@@ -17312,9 +17281,8 @@ msgid "Highlight Attribute"
 msgstr "Zvýraznit atribut"
 
 #: gerbview/tools/gerbview_actions.cpp:128
-#, fuzzy
 msgid "Highlight DCode"
-msgstr "Zvýraznit síť"
+msgstr "Zvýraznit DCode"
 
 #: gerbview/tools/gerbview_actions.cpp:134
 msgid "Next Layer"
@@ -17420,9 +17388,9 @@ msgid "Highlight"
 msgstr "Zvýraznění"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Component \"%s\""
-msgstr "Součástka %s nenalezena"
+msgstr "Zvýraznit položky komponenty \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:78
 #, c-format
@@ -17479,9 +17447,8 @@ msgid "Drawing Sheet"
 msgstr "Uchopit list"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:106
-#, fuzzy
 msgid "Show drawing sheet border and title block"
-msgstr "Tisknout okraj a rohové razítko"
+msgstr "Zobrazit okraj listu a rohové razítko"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:107
 msgid "PCB Background"
@@ -17522,19 +17489,17 @@ msgstr "Změnit barvu rendrování na"
 #: pcbnew/widgets/appearance_controls.cpp:887
 #: pcbnew/widgets/appearance_controls.cpp:1894
 #: pcbnew/widgets/appearance_controls.cpp:2096
-#, fuzzy
 msgid ""
 "Left double click or middle click for color change, right click for menu"
-msgstr "Levým výběr, prostřední pro změnu barvy, pravé pro menu"
+msgstr "Dvojklik levým nebo prostředním pro změnu barvy, pravým pro menu"
 
 #: gerbview/widgets/layer_widget.cpp:344
 msgid "Enable this for visibility"
 msgstr "Povolit pro viditelnost"
 
 #: gerbview/widgets/layer_widget.cpp:440
-#, fuzzy
 msgid "Left double click or middle click for color change"
-msgstr "Kliknutím levým nebo prostředním tlačítkem pro změnu barvy"
+msgstr "Dvojklik levým nebo prostředním tlačítkem pro změnu barvy"
 
 #: include/base_units.h:48
 msgid "-- mixed values --"
@@ -17620,9 +17585,8 @@ msgid "Edit the project schematic"
 msgstr "Upravit schéma projektu"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:105
-#, fuzzy
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "Upravit seznamy globálních a projektových knihoven symbolů"
+msgstr "Upravit globální a/nebo projektové knihovny symbolů"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:109
 #, fuzzy
@@ -17630,19 +17594,16 @@ msgid "Edit the project PCB design"
 msgstr "Upravit vývod listu"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:113
-#, fuzzy
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr "Upravit seznamy globálních a projektových knihoven pouzder"
+msgstr "Upravit globální a/nebo projektové knihoveny pouzder"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:117
-#, fuzzy
 msgid "Preview Gerber files"
-msgstr "Zobrazit soubory Gerber"
+msgstr "Náhled souborů Gerber"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:121
-#, fuzzy
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Převod bitmapy na komponenty schematu nebo DPS"
+msgstr "Převod bitmapové obrázky na symboly schématu nebo pouzdra DPS"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:125
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -17737,14 +17698,12 @@ msgstr ""
 "se nezdá být platný soubor KiCad projektu."
 
 #: kicad/kicad_manager_frame.cpp:156
-#, fuzzy
 msgid "Project Files"
-msgstr "Načíst projekt"
+msgstr "Soubory projektu"
 
 #: kicad/kicad_manager_frame.cpp:160
-#, fuzzy
 msgid "Editors"
-msgstr "Upravit"
+msgstr "Editory"
 
 #: kicad/kicad_manager_frame.cpp:551
 msgid "Load File to Edit"
@@ -17773,9 +17732,8 @@ msgid "Import Non-KiCad Project..."
 msgstr "Import jiného projektu než KiCad...."
 
 #: kicad/menubar.cpp:94
-#, fuzzy
 msgid "CADSTAR Project..."
-msgstr "Import projektu CADSTAR..."
+msgstr "Projekt CADSTAR..."
 
 #: kicad/menubar.cpp:95
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
@@ -17827,9 +17785,8 @@ msgid "Archive all project files"
 msgstr "Archivovat všechny projekty"
 
 #: kicad/menubar.cpp:224
-#, fuzzy
 msgid "Reveal project folder in Finder"
-msgstr "Otevřít adresář projektu Průzkumníku souborů"
+msgstr "Ukázat složku projektu ve vyhledávači"
 
 #: kicad/menubar.cpp:226
 msgid "Open project directory in file explorer"
@@ -17855,13 +17812,12 @@ msgid "Cannot create folder \"%s\"."
 msgstr "Nelze vytvořit složku \"%s\"."
 
 #: kicad/project_tree_item.cpp:110
-#, fuzzy
 msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
 msgstr ""
-"Změna přípony souboru změní jeho typ.\n"
-" Chcete pokračovat?"
+"Změna přípony souboru změní typ souboru.\n"
+"Chcete pokračovat?"
 
 #: kicad/project_tree_item.cpp:112
 msgid "Rename File"
@@ -18046,12 +18002,10 @@ msgid "Close the current project"
 msgstr "Zavře aktuální projekt"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Edit schematic"
 msgstr "Upravit schéma"
 
 #: kicad/tools/kicad_manager_actions.cpp:70
-#, fuzzy
 msgid "Edit schematic symbols"
 msgstr "Upravit symboly schématu"
 
@@ -18060,19 +18014,16 @@ msgid "Edit PCB"
 msgstr "Upravit DPS"
 
 #: kicad/tools/kicad_manager_actions.cpp:82
-#, fuzzy
 msgid "Edit PCB footprints"
 msgstr "Upravit pouzdra DPS"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Preview Gerber output files"
-msgstr "Zobrazit soubory Gerber"
+msgstr "Náhled výstupních souborů Gerber"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
-#, fuzzy
 msgid "Image Converter"
-msgstr "Převedeno"
+msgstr "Převod obrázků"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Convert bitmap images to schematic or PCB components"
@@ -18121,17 +18072,16 @@ msgstr ""
 "Ujistěte se, že máte oprávnění k zápisu a zkuste to znovu."
 
 #: kicad/tools/kicad_manager_control.cpp:126
-#, fuzzy
 msgid ""
 "The selected directory is not empty.  It is recommended that you create "
 "projects in their own empty directory.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
-"Zvolený adresář není prázdný.  Doporučujeme vytvořit projekty v jejich "
-"vlastním adresáři.\n"
+"Zvolený adresář není prázdný. Doporučuje se vytvořit projekty ve vlastním "
+"prázdném adresáři.\n"
 "\n"
-"Chcete vytvořit nový prázdný adresář pro projekt?"
+"Chcete pokračovat?"
 
 #: kicad/tools/kicad_manager_control.cpp:154
 msgid "System Templates"
@@ -18355,9 +18305,8 @@ msgid "Text height:"
 msgstr "Výška textu:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:147
-#, fuzzy
 msgid "Max width:"
-msgstr "Minimální šířka:"
+msgstr "Max šířka:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:149
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:162
@@ -18365,9 +18314,8 @@ msgid "Set to 0 to disable this constraint"
 msgstr "Nastavte na 0, chcete-li zakázat toto omezení"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
-#, fuzzy
 msgid "Max height:"
-msgstr "Maximální výška:"
+msgstr "Max výška:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:176
 msgid "Set to 0 to use default values"
@@ -18419,9 +18367,8 @@ msgid "Number of characters or digits to step text by for each repeat."
 msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:368
-#, fuzzy
 msgid "Step X:"
-msgstr "Krok Y:"
+msgstr "Krok X:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:373
 msgid "Distance on the X axis to step for each repeat."
@@ -18504,9 +18451,8 @@ msgid "File \"%s\" loaded"
 msgstr "Soubor \"%s\" načten"
 
 #: pagelayout_editor/files.cpp:99
-#, fuzzy
 msgid "The current page layout has been modified.  Save changes?"
-msgstr "Bylo upraveno aktuální rozložení stránky. Uložit změny?"
+msgstr "Aktuální rozložení stránky bylo upraveno. Uložit změny?"
 
 #: pagelayout_editor/files.cpp:118
 #, fuzzy
@@ -18543,9 +18489,8 @@ msgid "Unable to create \"%s\""
 msgstr "Nelze vytvořit \"%s\""
 
 #: pagelayout_editor/files.cpp:238
-#, fuzzy
 msgid "Layout file is read only."
-msgstr "Knihovna \"%s\" je pouze pro čtení."
+msgstr "Soubor rozvržení je pouze pro čtení."
 
 #: pagelayout_editor/pl_editor_frame.cpp:96
 msgid "KiCad Drawing Sheet Editor"
@@ -18713,7 +18658,6 @@ msgid "Attenuation more than %f dB"
 msgstr "Ǔtlumu více než %f dB"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18725,7 +18669,7 @@ msgid ""
 "* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 msgstr ""
-"### Můstkový T útlumový článek:\n"
+"### Můstkový T útlumový článek\n"
 "__Zin__ požadovaná vstupní impedance v &#x2126;<br>\n"
 "__Zout__ požadovaná výstupní impedance<br>\n"
 "__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
@@ -18736,7 +18680,6 @@ msgstr ""
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### PI Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18750,9 +18693,9 @@ msgid ""
 "* ___R1 = 1 / (A / Zin - 1 / R2)___\n"
 "* ___R3 = 1 / (A / Zout - 1 / R2)___"
 msgstr ""
-"## Pi attenuator\n"
+"### PI útlumový článek\n"
 "__Zin__ požadovaná vstupní impedance v &#x2126;<br>\n"
-"__Zout__ požadovaná výstupní impedance <br>\n"
+"__Zout__ požadovaná výstupní impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ útlum v dB\n"
@@ -18763,7 +18706,6 @@ msgstr ""
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "#### Attenuation is 6dB\n"
@@ -18773,8 +18715,8 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 msgstr ""
-"## Odporový rozbočovač\n"
-"### Útlum je 6 dB\n"
+"### Odporový rozbočovač\n"
+"#### Útlum je 6 dB\n"
 "___Z<sub>vst</sub>___ požadovaná vstupní impedance v &#x2126;<br>\n"
 "___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;<br>\n"
 "___Z<sub>vst</sub>___ = Z<sub>vyst</sub>___\n"
@@ -18782,7 +18724,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>vyst</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18797,7 +18738,7 @@ msgid ""
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
-"## T útlumový článek\n"
+"### T útlumový článek\n"
 "__Zin__ požadovaná vstupní impedance v &#x2126;<br>\n"
 "__Zout__ po__Zin = Zout__<br><br>žadovaná výstupní impedance <br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -18964,12 +18905,10 @@ msgid "Tee"
 msgstr "T-článek"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Bridged tee"
 msgstr "Můstkový T-článek"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Resistive splitter"
 msgstr "Odporový rozbočovač"
 
@@ -19001,9 +18940,8 @@ msgid "Zout:"
 msgstr "Z out:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
-#, fuzzy
 msgid "R3:"
-msgstr "3:"
+msgstr "R3:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
 msgid "RF Attenuators"
@@ -19014,17 +18952,14 @@ msgid "Inputs"
 msgstr "Vstupy"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:443
-#, fuzzy
 msgid "Required resistance:"
 msgstr "Požadovaný odpor:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:454
-#, fuzzy
 msgid "Exclude value 1:"
 msgstr "Vyloučit hodnotu 1:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:465
-#, fuzzy
 msgid "Exclude value 2:"
 msgstr "Vyloučit hodnotu 2:"
 
@@ -19049,17 +18984,14 @@ msgid "Solutions"
 msgstr "Řešení"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:513
-#, fuzzy
 msgid "Simple solution:"
 msgstr "Jednoduché řešení:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:533
-#, fuzzy
 msgid "3R solution:"
 msgstr "3R řešení:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:553
-#, fuzzy
 msgid "4R solution:"
 msgstr "4R řešení:"
 
@@ -19150,9 +19082,8 @@ msgid "Er:"
 msgstr "Er:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:738
-#, fuzzy
 msgid "Tan delta:"
-msgstr "Sklon lichoběžníku:"
+msgstr "Tan delta:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:757
 msgid "Rho:"
@@ -19270,15 +19201,13 @@ msgid "Applied current:"
 msgstr "Použitý proud:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1245
-#, fuzzy
 msgid "Plating resistivity:"
-msgstr "Měrný odpor pokovení (Ohm.m):"
+msgstr "Odpor pokovení:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1263
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1549
-#, fuzzy
 msgid "ohm-meter"
-msgstr "Ohm-metr"
+msgstr "ohm-metr"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1267
 msgid "Substrate relative permittivity:"
@@ -19335,9 +19264,8 @@ msgstr "Odpor:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1463
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1632
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1730
-#, fuzzy
 msgid "ohm"
-msgstr "Ohm"
+msgstr "ohm"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1357
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1636
@@ -20901,9 +20829,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:528
-#, fuzzy
 msgid " will be ignored"
-msgstr "budou ignorovány"
+msgstr " bude ignorován"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:541
 msgid ""
@@ -33027,9 +32954,8 @@ msgid "Import Footprint..."
 msgstr "Import pouzdra..."
 
 #: pcbnew/tools/pcb_actions.cpp:386
-#, fuzzy
 msgid "Import footprint from file"
-msgstr "Importovat pouzdro ze souboru &KiCad..."
+msgstr "Importovat pouzdro ze souboru"
 
 #: pcbnew/tools/pcb_actions.cpp:391
 msgid "Export Footprint..."
@@ -33267,9 +33193,8 @@ msgstr ""
 "hodnot"
 
 #: pcbnew/tools/pcb_actions.cpp:557
-#, fuzzy
 msgid "Import Netlist..."
-msgstr "Importovat netlist"
+msgstr "Import netlistu..."
 
 #: pcbnew/tools/pcb_actions.cpp:557
 msgid "Read netlist and update board connectivity"
