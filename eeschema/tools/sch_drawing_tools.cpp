@@ -1130,8 +1130,6 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( item );
-
             item->SetPosition( (wxPoint) cursorPos );
             item->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
             updatePreview();
