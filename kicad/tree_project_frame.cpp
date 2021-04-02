@@ -1083,7 +1083,7 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
     }
     else
     {
-        m_Parent->SetStatusText( _( "" ), 0 );
+        m_Parent->SetStatusText( wxT( "" ), 0 );
     }
     #endif
     
