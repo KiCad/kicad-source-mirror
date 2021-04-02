@@ -1,15 +1,9 @@
-/**
- * @file gbr_layer_box_selector.cpp
- * @brief a derived class of LAYER_BOX_SELECTOR to handle the layer box selector
- * in GerbView
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2016 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,11 +48,21 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
         Append( getLayerName( layerid ), bmp, (void*)(intptr_t) layerid );
     }
 
-    // Ensure the width of the widget is enough to show the text and the icon
-    SetMinSize( wxSize( -1, -1 ) );
-    int minwidth = GetBestSize().x + BM_SIZE + 10;
-    SetMinSize( wxSize( minwidth, -1 ) );
+    // Ensure the size of the widget is enough to show the text and the icon
+    // We have to have a selected item when doing this, because otherwise GTK
+    // will just choose a random size that might not fit the actual data
+    // (such as in cases where the font size is very large). So we select
+    // the first item, get the size of the control and make that the minimum size,
+    // then remove the selection (which was the initial state).
+    SetSelection( 0 );
 
+    SetMinSize( wxSize( -1, -1 ) );
+    wxSize bestSize = GetBestSize();
+
+    bestSize.x = GetBestSize().x + BM_SIZE + 10;
+    SetMinSize( bestSize );
+
+    SetSelection( wxNOT_FOUND );
     Thaw();
 }
 

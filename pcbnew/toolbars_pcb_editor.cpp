@@ -716,11 +716,7 @@ void PCB_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
     m_SelLayerBox->Resync();
 
     if( aForceResizeToolbar )
-    {
-        // the layer box can have its size changed
-        // Update the aui manager, to take in account the new size
-        m_auimgr.Update();
-    }
+        UpdateToolbarControlSizes();
 }
 
 

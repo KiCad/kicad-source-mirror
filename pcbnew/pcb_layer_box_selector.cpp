@@ -1,15 +1,9 @@
-/**
- * @file class_pcb_layer_box_selector.cpp
- * @brief a derived class of LAYER_BOX_SELECTOR to handle the layer box selector
- * in Pcbnew
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2015 Jean-Pierre Charras <jean-pierre.charras@ujf-grenoble.fr>
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,9 +30,7 @@
 #include <pcb_layer_box_selector.h>
 #include <tools/pcb_actions.h>
 
-#include <wx/dcclient.h>
-
-// translate aLayer to its hotkey
+// translate aLayer to its action
 static TOOL_ACTION* layer2action( PCB_LAYER_ID aLayer )
 {
     switch( aLayer )
@@ -85,12 +77,8 @@ static TOOL_ACTION* layer2action( PCB_LAYER_ID aLayer )
 // Reload the Layers
 void PCB_LAYER_BOX_SELECTOR::Resync()
 {
+    Freeze();
     Clear();
-
-    // Tray to fix a minimum width fot the BitmapComboBox
-    int minwidth = 80;
-
-    wxClientDC dc( GetParent() );   // The DC for "this" is not always initialized
 
     const int BM_SIZE = 14;
 
@@ -98,10 +86,8 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
     LSET activated = getEnabledLayers() & ~m_layerMaskDisable;
     wxString layerstatus;
 
-    for( LSEQ seq = show.UIOrder();  seq;  ++seq )
+    for( PCB_LAYER_ID layerid : show.UIOrder() )
     {
-        PCB_LAYER_ID   layerid = *seq;
-
         if( !m_showNotEnabledBrdlayers && !activated[layerid] )
             continue;
         else if( !activated[layerid] )
@@ -123,24 +109,27 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
         }
 
         Append( layername, bmp, (void*)(intptr_t) layerid );
-
-        int w, h;
-        dc.GetTextExtent ( layername, &w, &h );
-        minwidth = std::max( minwidth, w );
     }
 
     if( !m_undefinedLayerName.IsEmpty() )
-    {
         Append( m_undefinedLayerName, wxNullBitmap, (void*)(intptr_t)UNDEFINED_LAYER );
 
-        int w, h;
-        dc.GetTextExtent ( m_undefinedLayerName, &w, &h );
-        minwidth = std::max( minwidth, w );
-    }
+    // Ensure the size of the widget is enough to show the text and the icon
+    // We have to have a selected item when doing this, because otherwise GTK
+    // will just choose a random size that might not fit the actual data
+    // (such as in cases where the font size is very large). So we select
+    // the first item, get the size of the control and make that the minimum size,
+    // then remove the selection (which was the initial state).
+    SetSelection( 0 );
 
-    // Approximate bitmap size and margins
-    minwidth += BM_SIZE + 32 + ConvertDialogToPixels( wxSize( 8, 0 ) ).x;
-    SetMinSize( wxSize( minwidth, -1 ) );
+    SetMinSize( wxSize( -1, -1 ) );
+    wxSize bestSize = GetBestSize();
+
+    bestSize.x = GetBestSize().x + BM_SIZE + 10;
+    SetMinSize( bestSize );
+
+    SetSelection( wxNOT_FOUND );
+    Thaw();
 }
 
 
