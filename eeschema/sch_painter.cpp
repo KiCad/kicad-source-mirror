@@ -1509,7 +1509,8 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
 
     bool underline = false;
 
-    if( aField->IsHypertext() && ( aField->GetFlags() & IS_ROLLOVER ) > 0 )
+    if( aField->IsHypertext() && ( aField->GetFlags() & IS_ROLLOVER ) > 0
+            && !drawingShadows && !aField->IsMoving() )
     {
         color = PUREBLUE;
         underline = true;
