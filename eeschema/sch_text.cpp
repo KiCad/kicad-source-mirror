@@ -1149,11 +1149,16 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
 {
     if( token->IsSameAs( wxT( "INTERSHEET_REFS" ) ) && Schematic() )
     {
-        auto it = Schematic()->GetPageRefsMap().find( GetText() );
+        SCHEMATIC_SETTINGS& settings = Schematic()->Settings();
+        wxString            ref;
+        auto                it = Schematic()->GetPageRefsMap().find( GetText() );
 
-        if( it != Schematic()->GetPageRefsMap().end() )
+        if( it == Schematic()->GetPageRefsMap().end() )
         {
-            SCHEMATIC_SETTINGS&   settings = Schematic()->Settings();
+            ref = "?";
+        }
+        else
+        {
             std::vector<wxString> pageListCopy;
 
             pageListCopy.insert( pageListCopy.end(), it->second.begin(), it->second.end() );
@@ -1167,26 +1172,23 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
                                                  currentPage ), pageListCopy.end() );
             }
 
-            token->Printf( "%s", settings.m_IntersheetRefsPrefix );
-
             if( ( settings.m_IntersheetRefsFormatShort ) && ( pageListCopy.size() > 2 ) )
             {
-                token->Append( wxString::Format( wxT( "%s..%s" ),
-                                                 pageListCopy.front(),
-                                                 pageListCopy.back() ) );
+                ref.Append( wxString::Format( wxT( "%s..%s" ),
+                                              pageListCopy.front(),
+                                              pageListCopy.back() ) );
             }
             else
             {
                 for( const wxString& pageNo : pageListCopy )
-                    token->Append( wxString::Format( wxT( "%s," ), pageNo ) );
+                    ref.Append( wxString::Format( wxT( "%s," ), pageNo ) );
 
-                if( !token->IsEmpty() && token->Last() == ',' )
-                    token->RemoveLast();
+                if( !ref.IsEmpty() && ref.Last() == ',' )
+                    ref.RemoveLast();
             }
-
-            token->Append( settings.m_IntersheetRefsSuffix );
         }
 
+        *token = settings.m_IntersheetRefsPrefix + ref + settings.m_IntersheetRefsSuffix;
         return true;
     }
 
