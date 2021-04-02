@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-03-26 20:05+0000\n"
+"PO-Revision-Date: 2021-04-03 18:26+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5297,9 +5297,8 @@ msgid "Select Preferred Editor"
 msgstr "Wybierz preferowany edytor"
 
 #: common/pgm_base.cpp:222
-#, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "Zmienna środowiskowa HOME jest pusta.  Nie można kontynuować."
+msgstr "Zmienna środowiskowa HOME jest pusta. Nie można kontynuować."
 
 #: common/pgm_base.cpp:233
 #, c-format
@@ -12710,9 +12709,8 @@ msgid "Import"
 msgstr "Importuj"
 
 #: eeschema/menubar.cpp:99
-#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "Importuj schemat spoza programu KiCad..."
+msgstr "Schemat spoza programu KiCad..."
 
 #: eeschema/menubar.cpp:100
 msgid ""
@@ -12720,9 +12718,8 @@ msgid ""
 msgstr "Zamienia obecny arkusz schematu na zaimportowany z innej aplikacji"
 
 #: eeschema/menubar.cpp:104
-#, fuzzy
 msgid "Footprint Assignments..."
-msgstr "Przypisania footprintów"
+msgstr "Przypisania footprintów..."
 
 #: eeschema/menubar.cpp:110 eeschema/symbol_editor/menubar_symbol_editor.cpp:69
 #: pcbnew/dialogs/dialog_export_step.cpp:130
@@ -12732,9 +12729,8 @@ msgid "Export"
 msgstr "Eksportuj"
 
 #: eeschema/menubar.cpp:112
-#, fuzzy
 msgid "Drawing to Clipboard"
-msgstr "Eksportuj rysunek do schowka"
+msgstr "Rysunek do schowka"
 
 #: eeschema/menubar.cpp:113 pcbnew/menubar_pcb_editor.cpp:109
 #: pcbnew/pcb_edit_frame.cpp:199
@@ -13595,7 +13591,7 @@ msgstr ""
 "przesunięcie: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol names definition in\n"
 "file: '%s'\n"
@@ -13603,12 +13599,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Nieprawidłowe definicje nazw symbolu w\n"
-"plik: \"%s\"\n"
+"plik: '%s'\n"
 "linia: %d\n"
 "przesunięcie: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid property name in\n"
 "file: '%s'\n"
@@ -13616,12 +13612,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Nieprawidłowa nazwa właściwości w\n"
-"plik: \"%s\"\n"
+"plik: '%s'\n"
 "linia: %d\n"
 "przesunięcie: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Empty property name in\n"
 "file: '%s'\n"
@@ -13629,12 +13625,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Pusta nazwa właściwości w\n"
-"plik: \"%s\"\n"
+"plik: '%s'\n"
 "linia: %d\n"
 "przesunięcie: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid property value in\n"
 "file: '%s'\n"
@@ -13642,7 +13638,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Nieprawidłowa wartość właściwości w\n"
-"plik: \"%s\"\n"
+"plik: '%s'\n"
 "linia: %d\n"
 "przesunięcie: %d"
 
@@ -14863,19 +14859,16 @@ msgid "Loading library \"%s\""
 msgstr "Wczytywanie biblioteki \"%s\""
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:71
-#, fuzzy
 msgid "Symbol..."
-msgstr "Nowy symbol..."
+msgstr "Symbol..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:72
-#, fuzzy
 msgid "View as PNG..."
-msgstr "Eksportuj widok jako plik PNG..."
+msgstr "Pokaż jako plik PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:73
-#, fuzzy
 msgid "Symbol as SVG..."
-msgstr "Eksportuj symbol jako SVG..."
+msgstr "Symbol jako SVG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:77
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:96
@@ -15655,9 +15648,8 @@ msgid "Show Symbol Tree"
 msgstr "Pokaż drzewo zawartości biblioteki symboli"
 
 #: eeschema/tools/ee_actions.cpp:193
-#, fuzzy
 msgid "Hide Symbol Tree"
-msgstr "Pokaż drzewo zawartości biblioteki symboli"
+msgstr "Ukryj drzewo zawartości biblioteki symboli"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Export View as PNG..."
@@ -17873,18 +17865,16 @@ msgid "Import Non-KiCad Project..."
 msgstr "Importuj obwód drukowany spoza programu KiCad..."
 
 #: kicad/menubar.cpp:94
-#, fuzzy
 msgid "CADSTAR Project..."
-msgstr "Importuj projekt programu CADSTAR..."
+msgstr "Projekt programu CADSTAR..."
 
 #: kicad/menubar.cpp:95
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
 msgstr "Importuj archiwum schematu CADSTAR i PCB (*.csa, *.cpa)"
 
 #: kicad/menubar.cpp:99
-#, fuzzy
 msgid "EAGLE Project..."
-msgstr "Importuj projekt programu EAGLE..."
+msgstr "Projekt programu EAGLE..."
 
 #: kicad/menubar.cpp:100
 msgid "Import EAGLE CAD XML schematic and board"
@@ -20972,9 +20962,8 @@ msgstr ""
 "***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:528
-#, fuzzy
 msgid " will be ignored"
-msgstr "będzie zignorowane"
+msgstr " zostanie zignorowane"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:541
 msgid ""
@@ -29432,11 +29421,11 @@ msgstr "Import pliku z grafiką wektorową"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1337
 msgid "Invalid spline definition encountered"
-msgstr ""
+msgstr "Napotkano nieprawidłową definicję klinu"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1344
 msgid "Invalid Bezier curve created"
-msgstr ""
+msgstr "Stworzono nieprawidłową krzywą Beziera"
 
 #: pcbnew/initpcb.cpp:49
 msgid ""
@@ -29480,18 +29469,16 @@ msgstr "Biblioteka footprintu \"%s\" zapisana jako \"%s\"."
 
 #: pcbnew/menubar_footprint_editor.cpp:71
 #: pcbnew/menubar_footprint_editor.cpp:80
-#, fuzzy
 msgid "Footprint..."
-msgstr "Nowy footprint..."
+msgstr "Footprint..."
 
 #: pcbnew/menubar_footprint_editor.cpp:72 pcbnew/menubar_pcb_editor.cpp:111
 msgid "Graphics..."
 msgstr "Grafika..."
 
 #: pcbnew/menubar_footprint_editor.cpp:81
-#, fuzzy
 msgid "View as &PNG..."
-msgstr "Eksportuj widok jako plik PNG..."
+msgstr "Podgląd jako plik PNG..."
 
 #: pcbnew/menubar_footprint_editor.cpp:82
 msgid "Create a PNG file from the current view"
@@ -29600,9 +29587,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:149
-#, fuzzy
 msgid "Footprints to Library..."
-msgstr "Eksportuj footprinty do biblioteki..."
+msgstr "Footprinty do biblioteki..."
 
 #: pcbnew/menubar_pcb_editor.cpp:150
 msgid ""
@@ -29613,9 +29599,8 @@ msgstr ""
 "(nie usuwa innych footprintów z tej biblioteki)"
 
 #: pcbnew/menubar_pcb_editor.cpp:154
-#, fuzzy
 msgid "Footprints to New Library..."
-msgstr "Eksportuj footprinty do nowej biblioteki..."
+msgstr "Footprinty do nowej biblioteki..."
 
 #: pcbnew/menubar_pcb_editor.cpp:155
 msgid ""
@@ -30289,11 +30274,8 @@ msgid "KiCad PCB Editor"
 msgstr "Edytor obwodów drukowanych programu KiCad"
 
 #: pcbnew/pcb_edit_frame.cpp:200
-#, fuzzy
 msgid "Export netlist used to update schematics"
-msgstr ""
-"Eksport listy sieci wymaga by elementy na schemacie zostały w pełni "
-"ponumerowane."
+msgstr "Eksport listy sieci używanej do aktualizacji schematów"
 
 #: pcbnew/pcb_edit_frame.cpp:338
 msgid "New PCB file is unsaved"
@@ -30753,6 +30735,9 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
+"Definicja pola programu CADSTAR '%s' ma skomplikowany stos warstw, który nie "
+"jest wspierany w programie KiCad. Proszę sprawdzić zaimportowane pola, gdyż "
+"mogą wymagać ręcznych poprawek."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1044
 #, c-format
@@ -30766,7 +30751,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1079
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
-msgstr ""
+msgstr "Definicja pola CADSTAR '%s' zwróciła błędy podczas importu: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1114
 #, c-format
@@ -31781,10 +31766,8 @@ msgid "Tuned: skew "
 msgstr "Dostrojono: odchyłka "
 
 #: pcbnew/router/pns_router.cpp:192
-#, fuzzy
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr ""
-"Szerokość prześwitu pary różnicowej mniejsza niż minimalny prześwit (%s)."
+msgstr "Szerokość prześwitu pary różnicowej mniejsza niż minimalny prześwit."
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Cannot start routing from a non-plated hole."
@@ -32221,18 +32204,16 @@ msgid "Locking"
 msgstr "Blokowanie"
 
 #: pcbnew/tools/board_editor_control.cpp:133
-#, fuzzy
 msgid "Omit extra information"
-msgstr "Parametry bitmapy"
+msgstr "Pomiń dodatkowe informacje"
 
 #: pcbnew/tools/board_editor_control.cpp:134
-#, fuzzy
 msgid "Omit nets"
-msgstr "Filtruj sieci"
+msgstr "Pomiń sieci"
 
 #: pcbnew/tools/board_editor_control.cpp:136
 msgid "Do not prefix path with footprint UUID."
-msgstr ""
+msgstr "Nie poprzedzaj ścieżki identyfikatorem UUID footprintu."
 
 #: pcbnew/tools/board_editor_control.cpp:374
 msgid "Merge Specctra Session file:"
@@ -32243,24 +32224,21 @@ msgid "Specctra DSN File"
 msgstr "Plik Specctra DSN"
 
 #: pcbnew/tools/board_editor_control.cpp:421
-#, fuzzy
 msgid "Export Board Netlist"
-msgstr "Eksportuj listę sieci"
+msgstr "Eksportuj listę sieci płytki"
 
 #: pcbnew/tools/board_editor_control.cpp:422
-#, fuzzy
 msgid "KiCad board netlist files"
-msgstr "Pliki listy sieci"
+msgstr "Pliki listy sieci płytki programu KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid "Path `%s` is read only."
-msgstr "Biblioteka \"%s\" jest tylko do odczytu."
+msgstr "Ścieżka '%s' jest tylko do odczytu."
 
 #: pcbnew/tools/board_editor_control.cpp:437
-#, fuzzy
 msgid "I/O Error"
-msgstr "Błąd"
+msgstr "Błąd I/O"
 
 #: pcbnew/tools/board_editor_control.cpp:527
 #, c-format
@@ -32954,7 +32932,6 @@ msgid "Add a zone with the same settings as an existing zone"
 msgstr "Dodaje strefę z tymi samymi ustawieniami co istniejąca strefa"
 
 #: pcbnew/tools/pcb_actions.cpp:191
-#, fuzzy
 msgid "Import Graphics..."
 msgstr "Importuj grafikę..."
 
@@ -33123,9 +33100,8 @@ msgid "Show Footprint Tree"
 msgstr "Pokaż drzewo wyszukiwania footprintów"
 
 #: pcbnew/tools/pcb_actions.cpp:345
-#, fuzzy
 msgid "Hide Footprint Tree"
-msgstr "Pokaż drzewo wyszukiwania footprintów"
+msgstr "Ukryj drzewo wyszukiwania footprintów"
 
 #: pcbnew/tools/pcb_actions.cpp:351
 msgid "New Footprint..."
@@ -33172,18 +33148,16 @@ msgid "Import Footprint..."
 msgstr "Importuj footprint..."
 
 #: pcbnew/tools/pcb_actions.cpp:386
-#, fuzzy
 msgid "Import footprint from file"
-msgstr "To nie jest plik z footprintem"
+msgstr "Importuj footprint z pliku"
 
 #: pcbnew/tools/pcb_actions.cpp:391
 msgid "Export Footprint..."
 msgstr "Eksportuj footprint..."
 
 #: pcbnew/tools/pcb_actions.cpp:391
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "Eksportuj footprint do edytora"
+msgstr "Eksportuj footprint do pliku"
 
 #: pcbnew/tools/pcb_actions.cpp:396
 msgid "Footprint Properties..."
@@ -33398,27 +33372,24 @@ msgstr ""
 "ust. domyślnych"
 
 #: pcbnew/tools/pcb_actions.cpp:557
-#, fuzzy
 msgid "Import Netlist..."
-msgstr "Importuj listę sieci"
+msgstr "Importuj listę sieci..."
 
 #: pcbnew/tools/pcb_actions.cpp:557
 msgid "Read netlist and update board connectivity"
 msgstr "Wczytuje listę sieci oraz aktualizuje połączenia na płytce"
 
 #: pcbnew/tools/pcb_actions.cpp:562
-#, fuzzy
 msgid "Import Specctra Session..."
-msgstr "Sesja Specctra..."
+msgstr "Importuj sesję Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Import routed Specctra session (*.ses) file"
 msgstr "Importuje plik Spectra Session (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:567
-#, fuzzy
 msgid "Export Specctra DSN..."
-msgstr "Specctra DSN..."
+msgstr "Eksportuj Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:567
 msgid "Export Specctra DSN routing info"
