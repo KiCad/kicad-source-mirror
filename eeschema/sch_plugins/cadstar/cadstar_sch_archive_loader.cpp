@@ -86,6 +86,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
     m_plugin          = aSchPlugin;
     m_libraryFileName = aLibraryFileName;
 
+    loadTextVariables(); // Load text variables right at the start to ensure bounding box
+                         // calculations work correctly for text items
     loadSheets();
     loadHierarchicalSheetPins();
     loadPartsLibrary();
@@ -95,7 +97,6 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
     loadFigures();
     loadTexts();
     loadDocumentationSymbols();
-    loadTextVariables();
 
     if( Schematic.VariantHierarchy.Variants.size() > 0 )
     {
@@ -712,8 +713,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadBusses()
                 wxPoint  nearestPt   = (wxPoint) busLineChain.NearestPoint( busLabelLoc );
 
                 label->SetPosition( nearestPt );
-                applyTextSettings( bus.BusLabel.TextCodeID, bus.BusLabel.Alignment,
-                        bus.BusLabel.Justification, label );
+
+                applyTextSettings( label,
+                                   bus.BusLabel.TextCodeID,
+                                   bus.BusLabel.Alignment,
+                                   bus.BusLabel.Justification );
+
+                // Note orientation of the bus label will be determined in loadNets
+                // (the position of the wire will determine how best to place the bus label)
             }
         }
 
@@ -748,10 +755,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                 {
                     val->SetVisible( true );
                     val->SetPosition( getKiCadPoint( netTerm.NetLabel.Position ) );
-                    val->SetTextAngle( getAngleTenthDegree( netTerm.NetLabel.OrientAngle ) );
 
-                    applyTextSettings( netTerm.NetLabel.TextCodeID, netTerm.NetLabel.Alignment,
-                                       netTerm.NetLabel.Justification, val );
+                    applyTextSettings( val,
+                                       netTerm.NetLabel.TextCodeID,
+                                       netTerm.NetLabel.Alignment,
+                                       netTerm.NetLabel.Justification,
+                                       netTerm.NetLabel.OrientAngle,
+                                       netTerm.NetLabel.Mirror  );
                 }
             }
             else if( m_globalLabelsMap.find( netTerm.SymbolID ) != m_globalLabelsMap.end() )
@@ -816,9 +826,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 
             if( busTerm.HasNetLabel )
             {
-
-                applyTextSettings( busTerm.NetLabel.TextCodeID, busTerm.NetLabel.Alignment,
-                                   busTerm.NetLabel.Justification, label );
+                applyTextSettings( label,
+                                   busTerm.NetLabel.TextCodeID,
+                                   busTerm.NetLabel.Alignment,
+                                   busTerm.NetLabel.Justification );
             }
             else
             {
@@ -1095,19 +1106,19 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadDocumentationSymbols()
         {
             TEXT txt = textPair.second;
 
+            txt.Mirror = ( txt.Mirror ) ? !mirrorInvert : mirrorInvert;
+            txt.OrientAngle = docSym.OrientAngle - txt.OrientAngle;
+
             SCH_TEXT* kiTxt = getKiCadSchText( txt );
 
             wxPoint newPosition = applyTransform( kiTxt->GetPosition(), moveVector, rotationAngle,
-                    scalingFactor, centreOfTransform, mirrorInvert );
-            double  newTxtAngle = NormalizeAnglePos( kiTxt->GetTextAngle() + rotationAngle );
-            bool    newMirrorStatus = kiTxt->IsMirrored() ? !mirrorInvert : mirrorInvert;
+                                                  scalingFactor, centreOfTransform, mirrorInvert );
+
             int     newTxtWidth     = KiROUND( kiTxt->GetTextWidth() * scalingFactor );
             int     newTxtHeight    = KiROUND( kiTxt->GetTextHeight() * scalingFactor );
             int     newTxtThickness = KiROUND( kiTxt->GetTextThickness() * scalingFactor );
 
             kiTxt->SetPosition( newPosition );
-            kiTxt->SetTextAngle( newTxtAngle );
-            kiTxt->SetMirrored( newMirrorStatus );
             kiTxt->SetTextWidth( newTxtWidth );
             kiTxt->SetTextHeight( newTxtHeight );
             kiTxt->SetTextThickness( newTxtThickness );
@@ -1272,9 +1283,15 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         LIB_TEXT* libtext = new LIB_TEXT( aPart );
         libtext->SetText( csText.Text );
         libtext->SetUnit( gateNumber );
-        libtext->SetTextAngle( getAngleTenthDegree( csText.OrientAngle ) );
         libtext->SetPosition( getKiCadLibraryPoint( csText.Position, symbol.Origin ) );
-        applyTextSettings( csText.TextCodeID, csText.Alignment, csText.Justification, libtext );
+
+        applyTextSettings( libtext,
+                           csText.TextCodeID,
+                           csText.Alignment,
+                           csText.Justification,
+                           csText.OrientAngle,
+                           csText.Mirror );
+
         aPart->AddDrawItem( libtext );
     }
 
@@ -1374,47 +1391,35 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
                 attrField->SetText( aAttributeVal.Value );
                 attrField->SetUnit( gateNumber );
 
+                ATTRIBUTE_ID& attrid = aAttributeVal.AttributeID;
+                attrField->SetVisible( isAttributeVisible( attrid ) );
+
                 if( aAttributeVal.HasLocation )
                 {
                     // #1 Check if the part itself defined a location for the field
                     applyToLibraryFieldAttribute( aAttributeVal.AttributeLocation, symbol.Origin,
                                                   attrField );
-                    attrField->SetVisible( isAttributeVisible( aAttributeVal.AttributeID ) );
                 }
                 else if( symbol.TextLocations.find( aAttributeVal.AttributeID )
                          != symbol.TextLocations.end() )
                 {
                     // #2 Look in the symbol definition: Text locations
                     TEXT_LOCATION symTxtLoc = symbol.TextLocations.at( aAttributeVal.AttributeID );
-
                     applyToLibraryFieldAttribute( symTxtLoc, symbol.Origin, attrField );
-                    attrField->SetVisible( isAttributeVisible( symTxtLoc.AttributeID ) );
                 }
-                else if( symbol.AttributeValues.find( aAttributeVal.AttributeID )
-                         != symbol.AttributeValues.end() )
+                else if( symbol.AttributeValues.find( attrid ) != symbol.AttributeValues.end()
+                         && symbol.AttributeValues.at( attrid ).HasLocation )
                 {
                     // #3 Look in the symbol definition: Attribute values
-                    ATTRIBUTE_VALUE symAttrVal =
-                            symbol.AttributeValues.at( aAttributeVal.AttributeID );
-
-                    if( symAttrVal.HasLocation )
-                    {
-                        applyToLibraryFieldAttribute( symAttrVal.AttributeLocation, symbol.Origin,
-                                                      attrField );
-                        attrField->SetVisible( isAttributeVisible( symAttrVal.AttributeID ) );
-                    }
-                    else
-                    {
-                        attrField->SetVisible( false );
-                        applyTextSettings( wxT( "TC1" ), ALIGNMENT::NO_ALIGNMENT,
-                                           JUSTIFICATION::LEFT, attrField );
-                    }
+                    ATTRIBUTE_VALUE symAttrVal = symbol.AttributeValues.at( attrid );
+                    applyToLibraryFieldAttribute( symAttrVal.AttributeLocation, symbol.Origin,
+                                                  attrField );
                 }
                 else
                 {
                     attrField->SetVisible( false );
-                    applyTextSettings( wxT( "TC1" ), ALIGNMENT::NO_ALIGNMENT,
-                                       JUSTIFICATION::LEFT, attrField );
+                    applyTextSettings( attrField, wxT( "TC1" ), ALIGNMENT::NO_ALIGNMENT,
+                                       JUSTIFICATION::LEFT );
                 }
             };
 
@@ -1530,12 +1535,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyToLibraryFieldAttribute(
         const ATTRIBUTE_LOCATION& aCadstarAttrLoc, wxPoint aSymbolOrigin, LIB_FIELD* aKiCadField )
 {
     aKiCadField->SetTextPos( getKiCadLibraryPoint( aCadstarAttrLoc.Position, aSymbolOrigin ) );
-    aKiCadField->SetTextAngle( getAngleTenthDegree( aCadstarAttrLoc.OrientAngle ) );
-    aKiCadField->SetBold( false );
-    aKiCadField->SetVisible( true );
 
-    applyTextSettings( aCadstarAttrLoc.TextCodeID, aCadstarAttrLoc.Alignment,
-            aCadstarAttrLoc.Justification, aKiCadField );
+    applyTextSettings( aKiCadField,
+                       aCadstarAttrLoc.TextCodeID,
+                       aCadstarAttrLoc.Alignment,
+                       aCadstarAttrLoc.Justification,
+                       aCadstarAttrLoc.OrientAngle,
+                       aCadstarAttrLoc.Mirror );
 }
 
 
@@ -1651,46 +1657,37 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolFieldAttribute(
         bool aIsMirrored, SCH_FIELD* aKiCadField )
 {
     aKiCadField->SetPosition( getKiCadPoint( aCadstarAttrLoc.Position ) );
-    aKiCadField->SetTextAngle( getAngleTenthDegree( aCadstarAttrLoc.OrientAngle )
-                               - aComponentOrientationDeciDeg );
-    aKiCadField->SetBold( false );
     aKiCadField->SetVisible( true );
 
-    ALIGNMENT fieldAlignment = aCadstarAttrLoc.Alignment;
-    JUSTIFICATION fieldJustification = aCadstarAttrLoc.Justification;
+    ALIGNMENT alignment = aCadstarAttrLoc.Alignment;
 
-    // KiCad mirrors the justification and alignment when the component is mirrored but CADSTAR
-    // specifies it post-mirroring
+    double textAngle = getAngleTenthDegree( aCadstarAttrLoc.OrientAngle ) - aComponentOrientationDeciDeg;
+    long long cadstarAngle = getCadstarAngle( textAngle );
+
     if( aIsMirrored )
     {
-        switch( fieldAlignment )
-        {
-        // Change left to right:
-        case ALIGNMENT::NO_ALIGNMENT:
-        case ALIGNMENT::BOTTOMLEFT:   fieldAlignment = ALIGNMENT::BOTTOMRIGHT;   break;
-        case ALIGNMENT::CENTERLEFT:   fieldAlignment = ALIGNMENT::CENTERRIGHT;   break;
-        case ALIGNMENT::TOPLEFT:      fieldAlignment = ALIGNMENT::TOPRIGHT;      break;
-        //Change right to left:
-        case ALIGNMENT::BOTTOMRIGHT:  fieldAlignment = ALIGNMENT::BOTTOMLEFT;    break;
-        case ALIGNMENT::CENTERRIGHT:  fieldAlignment = ALIGNMENT::CENTERLEFT;    break;
-        case ALIGNMENT::TOPRIGHT:     fieldAlignment = ALIGNMENT::TOPLEFT;       break;
-        // Center alignment does not mirror:
-        case ALIGNMENT::BOTTOMCENTER:
-        case ALIGNMENT::CENTERCENTER:
-        case ALIGNMENT::TOPCENTER:                                               break;
-        }
+        // In KiCad, the angle of the symbol instance affects the position of the symbol fields because
+        // there is a distinction on x-axis and y-axis mirroring
+        double angleDeciDeg = NormalizeAnglePos( aComponentOrientationDeciDeg );
+        int    quadrant = KiROUND( angleDeciDeg / 900.0 );
+        quadrant %= 4;
 
-        switch( fieldJustification )
+        switch( quadrant )
         {
-        case JUSTIFICATION::LEFT:    fieldJustification = JUSTIFICATION::RIGHT;  break;
-        case JUSTIFICATION::RIGHT:   fieldJustification = JUSTIFICATION::LEFT;   break;
-        case JUSTIFICATION::CENTER:                                              break;
+        case 1:
+        case 3: alignment = rotate180( alignment ); KI_FALLTHROUGH;
+        case 0:
+        case 2: alignment = mirrorX( alignment ); break;
+        default: wxFAIL_MSG( "unknown quadrant" ); break;
         }
     }
 
-
-    applyTextSettings( aCadstarAttrLoc.TextCodeID, fieldAlignment, fieldJustification,
-                       aKiCadField );
+    applyTextSettings( aKiCadField,
+                       aCadstarAttrLoc.TextCodeID,
+                       alignment,
+                       aCadstarAttrLoc.Justification,
+                       cadstarAngle,
+                       aCadstarAttrLoc.Mirror );
 }
 
 
@@ -2065,11 +2062,16 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets(
 
                 SCH_FIELD blockNameField( getKiCadPoint( block.BlockLabel.Position ), 2,
                         loadedSheet, wxString( "Block name" ) );
-                blockNameField.SetTextAngle( getAngleTenthDegree( block.BlockLabel.OrientAngle ) );
                 blockNameField.SetText( block.Name );
                 blockNameField.SetVisible( true );
-                applyTextSettings( block.BlockLabel.TextCodeID, block.BlockLabel.Alignment,
-                        block.BlockLabel.Justification, &blockNameField );
+
+                applyTextSettings( &blockNameField,
+                                    block.BlockLabel.TextCodeID,
+                                    block.BlockLabel.Alignment,
+                                    block.BlockLabel.Justification,
+                                    block.BlockLabel.OrientAngle,
+                                    block.BlockLabel.Mirror );
+
                 fields.push_back( blockNameField );
                 loadedSheet->SetFields( fields );
             }
@@ -2342,10 +2344,62 @@ LABEL_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyleDeciDeg(
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( const TEXTCODE_ID& aCadstarTextCodeID,
-        const ALIGNMENT& aCadstarAlignment, const JUSTIFICATION& aCadstarJustification,
-        EDA_TEXT* aKiCadTextItem )
+CADSTAR_SCH_ARCHIVE_LOADER::ALIGNMENT
+CADSTAR_SCH_ARCHIVE_LOADER::mirrorX( const ALIGNMENT& aCadstarAlignment )
 {
+    switch( aCadstarAlignment )
+    {
+    // Change left to right:
+    case ALIGNMENT::NO_ALIGNMENT:
+    case ALIGNMENT::BOTTOMLEFT:    return ALIGNMENT::BOTTOMRIGHT;
+    case ALIGNMENT::CENTERLEFT:    return ALIGNMENT::CENTERRIGHT;
+    case ALIGNMENT::TOPLEFT:       return ALIGNMENT::TOPRIGHT;
+    //Change right to left:
+    case ALIGNMENT::BOTTOMRIGHT:   return ALIGNMENT::BOTTOMLEFT;
+    case ALIGNMENT::CENTERRIGHT:   return ALIGNMENT::CENTERLEFT;
+    case ALIGNMENT::TOPRIGHT:      return ALIGNMENT::TOPLEFT;
+    // Center alignment does not mirror:
+    case ALIGNMENT::BOTTOMCENTER:
+    case ALIGNMENT::CENTERCENTER:
+    case ALIGNMENT::TOPCENTER:     return aCadstarAlignment;
+    // Shouldn't be here
+    default: wxFAIL_MSG( "Unknown Cadstar Alignment" ); return aCadstarAlignment;
+    }
+}
+
+
+CADSTAR_SCH_ARCHIVE_LOADER::ALIGNMENT
+CADSTAR_SCH_ARCHIVE_LOADER::rotate180( const ALIGNMENT& aCadstarAlignment )
+{
+    switch( aCadstarAlignment )
+    {
+    case ALIGNMENT::NO_ALIGNMENT:
+    case ALIGNMENT::BOTTOMLEFT:    return ALIGNMENT::TOPRIGHT;
+    case ALIGNMENT::BOTTOMCENTER:  return ALIGNMENT::TOPCENTER;
+    case ALIGNMENT::BOTTOMRIGHT:   return ALIGNMENT::TOPLEFT;
+    case ALIGNMENT::TOPLEFT:       return ALIGNMENT::BOTTOMRIGHT;
+    case ALIGNMENT::TOPCENTER:     return ALIGNMENT::BOTTOMCENTER;
+    case ALIGNMENT::TOPRIGHT:      return ALIGNMENT::BOTTOMLEFT;
+    case ALIGNMENT::CENTERLEFT:    return ALIGNMENT::CENTERRIGHT;
+    case ALIGNMENT::CENTERCENTER:  return ALIGNMENT::CENTERCENTER;
+    case ALIGNMENT::CENTERRIGHT:   return ALIGNMENT::CENTERLEFT;
+    // Shouldn't be here
+    default: wxFAIL_MSG( "Unknown Cadstar Alignment" ); return aCadstarAlignment;
+    }
+}
+
+
+void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadTextItem,
+                                                    const TEXTCODE_ID&   aCadstarTextCodeID,
+                                                    const ALIGNMENT&     aCadstarAlignment,
+                                                    const JUSTIFICATION& aCadstarJustification,
+                                                    const long long      aCadstarOrientAngle,
+                                                    bool                 aMirrored )
+{
+    // Justification ignored for now as not supported in eeschema, but leaving this code in
+    // place for future upgrades.
+    // TODO update this when eeschema supports justification independent of anchor position.
+
     TEXTCODE textCode = getTextCode( aCadstarTextCodeID );
     int      textHeight = KiROUND( (double) getKiCadLength( textCode.Height ) * TXT_HEIGHT_RATIO );
     int      textWidth = getKiCadLength( textCode.Width );
@@ -2364,56 +2418,148 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( const TEXTCODE_ID& aCadstarT
     aKiCadTextItem->SetTextWidth( textWidth );
     aKiCadTextItem->SetTextHeight( textHeight );
     aKiCadTextItem->SetTextThickness( getKiCadLength( textCode.LineWidth ) );
+    aKiCadTextItem->SetTextAngle( getAngleTenthDegree( aCadstarOrientAngle ) );
+    aKiCadTextItem->SetBold( textCode.Font.Modifier1 == FONT_BOLD );
+    aKiCadTextItem->SetItalic( textCode.Font.Italic );
 
-    switch( aCadstarAlignment )
+    ALIGNMENT textAlignment = aCadstarAlignment;
+
+    // KiCad mirrors the justification and alignment when the symbol is mirrored but CADSTAR
+    // specifies it post-mirroring. In contrast, if the text item itself is mirrored (not
+    // supported in KiCad), CADSTAR specifies the alignment and justification pre-mirroring
+    if( aMirrored )
+        textAlignment = mirrorX( aCadstarAlignment );
+
+    auto setAlignment = [&]( EDA_TEXT* aText, ALIGNMENT aAlignment )
+                        {
+                            switch( aAlignment )
+                            {
+                            case ALIGNMENT::NO_ALIGNMENT: // Bottom left of the first line
+                                //No exact KiCad equivalent, so lets move the position of the text
+                                FixTextPositionNoAlignment( aText );
+                                KI_FALLTHROUGH;
+                            case ALIGNMENT::BOTTOMLEFT:
+                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                                break;
+
+                            case ALIGNMENT::BOTTOMCENTER:
+                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+                                break;
+
+                            case ALIGNMENT::BOTTOMRIGHT:
+                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                                break;
+
+                            case ALIGNMENT::CENTERLEFT:
+                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                                break;
+
+                            case ALIGNMENT::CENTERCENTER:
+                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+                                break;
+
+                            case ALIGNMENT::CENTERRIGHT:
+                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                                break;
+
+                            case ALIGNMENT::TOPLEFT:
+                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                                break;
+
+                            case ALIGNMENT::TOPCENTER:
+                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+                                break;
+
+                            case ALIGNMENT::TOPRIGHT:
+                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                                break;
+                            }
+                        };
+
+    LABEL_SPIN_STYLE spin = getSpinStyle( aCadstarOrientAngle, aMirrored );
+    EDA_ITEM* textEdaItem = dynamic_cast<EDA_ITEM*>( aKiCadTextItem );
+    wxCHECK( textEdaItem, /* void */ ); // ensure this is a EDA_ITEM
+
+    switch( textEdaItem->Type() )
     {
-    case ALIGNMENT::NO_ALIGNMENT: // Bottom left of the first line
-        FixTextPositionNoAlignment( aKiCadTextItem );
+    // Some KiCad schematic text items only permit a limited amount of angles
+    // and text justifications
+    case SCH_FIELD_T:
+    case LIB_FIELD_T:
+    {
+        // Spin style not used. All text justifications are permitted. However, only orientations
+        // of 0 deg or 90 deg are supported
+        double angleDeciDeg = NormalizeAnglePos( aKiCadTextItem->GetTextAngle() );
+        int    quadrant = KiROUND( angleDeciDeg / 900.0 );
+        quadrant %= 4;
+
+        switch( quadrant )
+        {
+        case 0:
+            angleDeciDeg = 0;
+            break;
+        case 1:
+            angleDeciDeg = 900;
+            break;
+        case 2:
+            angleDeciDeg = 0;
+            textAlignment = rotate180( textAlignment );
+            break;
+        case 3:
+            angleDeciDeg = 900;
+            textAlignment = rotate180( textAlignment );
+            break;
+        default: wxFAIL_MSG( "Unknown Quadrant" );
+        }
+
+        aKiCadTextItem->SetTextAngle( angleDeciDeg );
+        setAlignment( aKiCadTextItem, textAlignment );
+    }
+        return;
+
+    case SCH_TEXT_T:
+    {
+        // Note spin style in a SCH_TEXT results in a vertical alignment GR_TEXT_VJUSTIFY_BOTTOM
+        // so need to adjust the location of the text element based on Cadstar's original text
+        // alignment (anchor position).
+        setAlignment( aKiCadTextItem, textAlignment );
+        EDA_RECT bb = textEdaItem->GetBoundingBox();
+        int      off = static_cast<SCH_TEXT*>( aKiCadTextItem )->GetTextOffset();
+        wxPoint  pos;
+
+        // Change the anchor point of the text item to make it match the same bounding box
+        // And correct the error introduced by the text offseting in KiCad
+        switch( spin )
+        {
+        case LABEL_SPIN_STYLE::BOTTOM: pos = { bb.GetRight() - off, bb.GetTop()          }; break;
+        case LABEL_SPIN_STYLE::UP:     pos = { bb.GetRight() - off, bb.GetBottom()       }; break;
+        case LABEL_SPIN_STYLE::LEFT:   pos = { bb.GetRight()      , bb.GetBottom() + off }; break;
+        case LABEL_SPIN_STYLE::RIGHT:  pos = { bb.GetLeft()       , bb.GetBottom() + off }; break;
+        }
+
+        aKiCadTextItem->SetTextPos( pos );
+    }
         KI_FALLTHROUGH;
-    case ALIGNMENT::BOTTOMLEFT:
-        aKiCadTextItem->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        aKiCadTextItem->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        break;
 
-    case ALIGNMENT::BOTTOMCENTER:
-        aKiCadTextItem->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        aKiCadTextItem->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-        break;
+    // We don't want to change position of net labels as that would break connectivity
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
+    case SCH_SHEET_PIN_T:
+        static_cast<SCH_TEXT*>( aKiCadTextItem )->SetLabelSpinStyle( spin );
+        return;
 
-    case ALIGNMENT::BOTTOMRIGHT:
-        aKiCadTextItem->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        aKiCadTextItem->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        break;
-
-    case ALIGNMENT::CENTERLEFT:
-        aKiCadTextItem->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-        aKiCadTextItem->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        break;
-
-    case ALIGNMENT::CENTERCENTER:
-        aKiCadTextItem->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-        aKiCadTextItem->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-        break;
-
-    case ALIGNMENT::CENTERRIGHT:
-        aKiCadTextItem->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-        aKiCadTextItem->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        break;
-
-    case ALIGNMENT::TOPLEFT:
-        aKiCadTextItem->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        aKiCadTextItem->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        break;
-
-    case ALIGNMENT::TOPCENTER:
-        aKiCadTextItem->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        aKiCadTextItem->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-        break;
-
-    case ALIGNMENT::TOPRIGHT:
-        aKiCadTextItem->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        aKiCadTextItem->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        break;
+    default:
+        return;
     }
 }
 
@@ -2421,12 +2567,16 @@ SCH_TEXT* CADSTAR_SCH_ARCHIVE_LOADER::getKiCadSchText( const TEXT& aCadstarTextE
 {
     SCH_TEXT* kiTxt = new SCH_TEXT();
 
+    kiTxt->SetParent( m_schematic ); // set to the schematic for now to avoid asserts
     kiTxt->SetPosition( getKiCadPoint( aCadstarTextElement.Position ) );
     kiTxt->SetText( aCadstarTextElement.Text );
-    kiTxt->SetTextAngle( getAngleTenthDegree( aCadstarTextElement.OrientAngle ) );
-    kiTxt->SetMirrored( aCadstarTextElement.Mirror );
-    applyTextSettings( aCadstarTextElement.TextCodeID, aCadstarTextElement.Alignment,
-            aCadstarTextElement.Justification, kiTxt );
+
+    applyTextSettings( kiTxt,
+                       aCadstarTextElement.TextCodeID,
+                       aCadstarTextElement.Alignment,
+                       aCadstarTextElement.Justification,
+                       aCadstarTextElement.OrientAngle,
+                       aCadstarTextElement.Mirror );
 
     return kiTxt;
 }
@@ -2520,7 +2670,6 @@ wxPoint CADSTAR_SCH_ARCHIVE_LOADER::applyTransform( const wxPoint& aPoint,
 
     if( aMirrorInvert )
     {
-        MIRROR( retVal.x, aTransformCentre.x );
         MIRROR( retVal.x, aTransformCentre.x );
     }
 
