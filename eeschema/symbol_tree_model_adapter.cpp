@@ -23,13 +23,14 @@
 #include <wx/window.h>
 #include <widgets/progress_reporter.h>
 
+#include <dialogs/html_messagebox.h>
 #include <eda_pattern_match.h>
-#include <symbol_lib_table.h>
+#include <generate_alias_info.h>
 #include <lib_symbol.h>
 #include <locale_io.h>
-#include <generate_alias_info.h>
-#include <symbol_tree_model_adapter.h>
 #include <symbol_async_loader.h>
+#include <symbol_lib_table.h>
+#include <symbol_tree_model_adapter.h>
 
 
 bool SYMBOL_TREE_MODEL_ADAPTER::m_show_progress = true;
@@ -98,7 +99,15 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     if( !loader.GetErrors().IsEmpty() )
     {
-        wxLogError( loader.GetErrors() );
+        HTML_MESSAGE_BOX dlg( aParent, _( "Load Error" ) );
+
+        dlg.MessageSet( _( "Errors were encountered loading symbols:" ) );
+
+        wxString msg = loader.GetErrors();
+        msg.Replace( "\n", "<BR>" );
+
+        dlg.AddHTML_Text( msg );
+        dlg.ShowModal();
     }
 
     if( loadedSymbols.size() > 0 )

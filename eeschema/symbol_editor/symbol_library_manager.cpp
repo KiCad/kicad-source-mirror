@@ -25,6 +25,7 @@
 
 #include <symbol_library_manager.h>
 #include <class_library.h>
+#include <dialogs/html_messagebox.h>
 #include <symbol_edit_frame.h>
 #include <env_paths.h>
 #include <pgm_base.h>
@@ -90,7 +91,15 @@ void SYMBOL_LIBRARY_MANAGER::Preload( PROGRESS_REPORTER& aReporter )
 
     if( !loader.GetErrors().IsEmpty() )
     {
-        wxLogError( loader.GetErrors() );
+        HTML_MESSAGE_BOX dlg( &m_frame, _( "Load Error" ) );
+
+        dlg.MessageSet( _( "Errors were encountered loading symbols:" ) );
+
+        wxString msg = loader.GetErrors();
+        msg.Replace( "\n", "<BR>" );
+
+        dlg.AddHTML_Text( msg );
+        dlg.ShowModal();
     }
 }
 
