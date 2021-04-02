@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-03-30 20:36+0000\n"
+"PO-Revision-Date: 2021-04-03 18:26+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
-"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ro/>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1030,7 +1030,6 @@ msgid "Toggle zone display"
 msgstr "Comutați afișarea zonei"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
-#, fuzzy
 msgid "Toggle adhesive display"
 msgstr "Comutați adeziv"
 
@@ -1600,7 +1599,6 @@ msgid "Official KiCad library repositories - "
 msgstr "Depozite oficiale ale bibliotecii KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:154
-#, fuzzy
 msgid "Bug tracker"
 msgstr "Bug Tracker"
 
@@ -1973,7 +1971,7 @@ msgid "Copy default global %s library table (recommended)"
 msgstr "Copiați tabelul bibliotecii %s globale predefinit (recomandat)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
@@ -1987,7 +1985,7 @@ msgid "Copy custom global %s library table"
 msgstr "Copiați tabelul bibliotecii globale %s personalizate"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
@@ -2201,7 +2199,6 @@ msgid "Grey"
 msgstr "Gri"
 
 #: common/dialogs/dialog_image_editor_base.cpp:39
-#, fuzzy
 msgid "Image Scale:"
 msgstr "Scalarea imaginii:"
 
@@ -2280,7 +2277,6 @@ msgstr ""
 "versiunea anterioară vor fi importate în această versiune"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
 msgstr "Începeți cu setările predefinite"
 
@@ -2334,7 +2330,7 @@ msgstr "E 34x44in"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "USLetter 8.5x11in"
-msgstr "US Scrisoare 8,5x11in"
+msgstr "USScrisoare 8,5x11in"
 
 #: common/dialogs/dialog_page_settings.cpp:64
 msgid "USLegal 8.5x14in"
@@ -2357,7 +2353,6 @@ msgid "Preview Paper"
 msgstr "Previzualizare foii"
 
 #: common/dialogs/dialog_page_settings.cpp:98
-#, fuzzy
 msgid "Preview Title Block Data"
 msgstr "Previzualizați datele din titlu"
 
@@ -2390,6 +2385,8 @@ msgstr "Fișierul cu descrierea aspectului paginii „%s” nu a fost găsit."
 #: common/dialogs/dialog_page_settings.cpp:535
 msgid "the translation for paper size must preserve original spellings"
 msgstr ""
+"traducerea pentru dimensiunea hârtiei trebuie să păstreze ortografia "
+"originală"
 
 #: common/dialogs/dialog_page_settings.cpp:698
 #: common/dialogs/dialog_page_settings_base.cpp:49
@@ -2542,9 +2539,8 @@ msgstr "Lățimea foii personalizate."
 #: common/dialogs/dialog_page_settings_base.cpp:305
 #: common/dialogs/dialog_page_settings_base.cpp:317
 #: common/dialogs/dialog_page_settings_base.cpp:329
-#, fuzzy
 msgid "Export to other sheets"
-msgstr "Exportați în alte Scheme"
+msgstr "Exportați în alte foii"
 
 #: common/dialogs/dialog_page_settings_base.cpp:134
 #, fuzzy
@@ -2552,9 +2548,9 @@ msgid "Title Block Parameters"
 msgstr "Parametrii titlului"
 
 #: common/dialogs/dialog_page_settings_base.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Number of sheets: %d"
-msgstr "Număr de scheme: %d"
+msgstr "Număr de foii: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:151
 #, c-format
@@ -2638,7 +2634,7 @@ msgstr "Imprimare"
 #: common/dialogs/dialog_print_generic.cpp:45
 #: common/dialogs/dialog_print_generic.cpp:198
 msgid "Print Preview"
-msgstr ""
+msgstr "Previzualizare imprimare"
 
 #: common/dialogs/dialog_print_generic.cpp:46 common/tool/action_menu.cpp:210
 #: eeschema/dialogs/dialog_annotate.cpp:101 eeschema/dialogs/dialog_bom.cpp:132
@@ -2666,7 +2662,7 @@ msgstr "Închideți"
 
 #: common/dialogs/dialog_print_generic.cpp:107
 msgid "Warning: Bad scale number"
-msgstr ""
+msgstr "Avertisment: Număr de scală incorect"
 
 #: common/dialogs/dialog_print_generic.cpp:116
 #, c-format
@@ -2674,6 +2670,8 @@ msgid ""
 "Warning: Scale option set to a very large value.\n"
 " Clamped to %f"
 msgstr ""
+"Avertisment: Opțiunea de scale este setată la o valoare foarte mare.\n"
+"Fixat la %f"
 
 #: common/dialogs/dialog_print_generic.cpp:124
 #, c-format
@@ -2681,6 +2679,8 @@ msgid ""
 "Warning: Scale option set to a very small value.\n"
 " Clamped to %f"
 msgstr ""
+"Avertisment: Opțiunea de scale este setată la o valoare foarte mică.\n"
+"Fixat la %f"
 
 #: common/dialogs/dialog_print_generic.cpp:193
 #: common/dialogs/dialog_print_generic.cpp:240
@@ -2698,7 +2698,7 @@ msgstr "A apărut o problemă la imprimare."
 
 #: common/dialogs/dialog_print_generic.cpp:304
 msgid "An error occurred initializing the printer information."
-msgstr ""
+msgstr "A apărut o eroare la inițializarea informațiilor despre imprimantă."
 
 #: common/dialogs/dialog_print_generic_base.cpp:24
 #: eeschema/dialogs/dialog_annotate_base.cpp:83
@@ -2786,7 +2786,7 @@ msgstr ""
 
 #: common/dialogs/panel_color_settings.cpp:49
 msgid "Reveal Themes in Finder"
-msgstr ""
+msgstr "Dezvăluie teme în Finder"
 
 #: common/dialogs/panel_color_settings.cpp:129
 msgid "New theme name:"
@@ -2840,13 +2840,12 @@ msgstr ""
 "culori setate în proprietăți."
 
 #: common/dialogs/panel_color_settings_base.cpp:41
-#, fuzzy
 msgid "Open Theme Folder"
 msgstr "Deschideți dosarul cu teme"
 
 #: common/dialogs/panel_color_settings_base.cpp:42
 msgid "Open the folder containing color themes"
-msgstr ""
+msgstr "Deschideți dosarul care conține teme de culoare"
 
 #: common/dialogs/panel_common_settings.cpp:52
 msgid ""
@@ -2859,6 +2858,15 @@ msgid ""
 "If this does not match the system DPI scaling, the canvas will not match the "
 "window size and cursor position."
 msgstr ""
+"Setați scara pentru pânză.\n"
+"\n"
+"Pe monitoarele cu rezoluție mare de pixeli pe anumite platforme, KiCad nu "
+"poate determina factorul de scalare. În acest caz, este posibil să fie "
+"necesar să setați această valoare pentru a se potrivi cu scalarea DPI a "
+"sistemului dumneavoastră. 2,0 este o valoare obișnuită.\n"
+"\n"
+"Dacă aceasta nu se potrivește cu scalarea DPI a sistemului, pânza nu se va "
+"potrivi cu dimensiunea ferestrei și cu poziția cursorului."
 
 #: common/dialogs/panel_common_settings.cpp:62
 msgid ""
@@ -2867,6 +2875,10 @@ msgid ""
 "On some platforms, the automatic value is incorrect and should be set "
 "manually."
 msgstr ""
+"Utilizați o valoare automată pentru scala de pânză.\n"
+"\n"
+"Pe unele platforme, valoarea automată este incorectă și ar trebui să fie "
+"setată manual."
 
 #: common/dialogs/panel_common_settings.cpp:305
 msgid "Executable files ("
@@ -2885,6 +2897,9 @@ msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
+"Întârziere după prima modificare pentru a crea un fișier de rezervă al "
+"plăcii de disc.\n"
+"Dacă este setat la 0, backupul automat este dezactivat"
 
 #: common/dialogs/panel_common_settings_base.cpp:39
 #: common/dialogs/panel_common_settings_base.cpp:280
@@ -2897,13 +2912,15 @@ msgstr "Dimensiunea istoricului fișierului:"
 
 #: common/dialogs/panel_common_settings_base.cpp:53
 msgid "3D cache file duration:"
-msgstr ""
+msgstr "Durata fișierului cache 3D:"
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
+"Fișierele cache 3D mai vechi decât acestea sunt șterse.\n"
+"Dacă este setat la 0, ștergerea cache-ului este dezactivată"
 
 #: common/dialogs/panel_common_settings_base.cpp:65
 msgid "Days"
@@ -2928,11 +2945,11 @@ msgstr "Antidedublare Subpixel (Calitate Ultra)"
 
 #: common/dialogs/panel_common_settings_base.cpp:77
 msgid "Supersampling (2x)"
-msgstr ""
+msgstr "Supraeșantionare (2x)"
 
 #: common/dialogs/panel_common_settings_base.cpp:77
 msgid "Supersampling (4x)"
-msgstr ""
+msgstr "Supraeșantionare (4x)"
 
 #: common/dialogs/panel_common_settings_base.cpp:83
 msgid "Fallback graphics:"
@@ -2973,7 +2990,7 @@ msgstr "Interfață utilizator"
 
 #: common/dialogs/panel_common_settings_base.cpp:160
 msgid "Icon scale:"
-msgstr ""
+msgstr "Scală icoană:"
 
 #: common/dialogs/panel_common_settings_base.cpp:169
 #: common/dialogs/panel_common_settings_base.cpp:180
@@ -2986,15 +3003,15 @@ msgstr "Automat"
 
 #: common/dialogs/panel_common_settings_base.cpp:172
 msgid "Canvas scale:"
-msgstr ""
+msgstr "Scală pânză:"
 
 #: common/dialogs/panel_common_settings_base.cpp:183
 msgid "Show icons in menus"
-msgstr ""
+msgstr "Afișați icoanel în meniuri"
 
 #: common/dialogs/panel_common_settings_base.cpp:186
 msgid "Icon theme:"
-msgstr ""
+msgstr "Tema icoanelor:"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "Light"
@@ -3002,7 +3019,7 @@ msgstr "Luminos"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "Utilizați icoane concepute pentru fundaluri deschise ale ferestrelor"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
@@ -3011,12 +3028,14 @@ msgstr "Întuneric"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "Utilizați icoane concepute pentru fundaluri întunecate ale ferestrelor"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
 msgstr ""
+"Alegeți automat icoanele deschise sau întunecate pe baza temei de culoare a "
+"sistemului"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3025,15 +3044,13 @@ msgstr "Editare"
 
 #: common/dialogs/panel_common_settings_base.cpp:224
 msgid "Warp mouse to origin of moved object"
-msgstr ""
+msgstr "Deplasarea mouse-ului la originea obiectului mutat"
 
 #: common/dialogs/panel_common_settings_base.cpp:227
-#, fuzzy
 msgid "First hotkey selects tool"
 msgstr "Prima comandă rapidă selectează instrumentul"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
-#, fuzzy
 msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
@@ -3043,62 +3060,75 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "Project Backup"
-msgstr ""
+msgstr "Copie de rezervă a proiect"
 
 #: common/dialogs/panel_common_settings_base.cpp:243
 msgid "Automatically backup projects"
-msgstr ""
+msgstr "Crează automat o copie de rezervă ă a proiectelor"
 
 #: common/dialogs/panel_common_settings_base.cpp:244
 msgid ""
 "Automatically create backup archives of the current project when saving files"
 msgstr ""
+"Creați automat arhive de rezervă ale proiectului curent atunci când salvați "
+"fișiere"
 
 #: common/dialogs/panel_common_settings_base.cpp:248
 msgid "Create backups when auto save occurs"
-msgstr ""
+msgstr "Creați copii de rezervă atunci când are loc salvarea automată"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
 msgstr ""
+"Creați copii de rezervă atunci când este activată funcția de salvare "
+"automată.  Dacă nu este bifată, copiile de rezervă vor fi create numai "
+"atunci când salvați manual un fișier."
 
 #: common/dialogs/panel_common_settings_base.cpp:253
 msgid "Maximum backups to keep:"
-msgstr ""
+msgstr "Numărul maxim de copii de rezervă care trebuie păstrate:"
 
 #: common/dialogs/panel_common_settings_base.cpp:255
 msgid "How many backup files total to keep (set to 0 for no limit)"
 msgstr ""
+"Câte fișiere de backup trebuie păstrate în total (setați la 0 pentru nicio "
+"limită)"
 
 #: common/dialogs/panel_common_settings_base.cpp:262
 msgid "Maximum backups per day:"
-msgstr ""
+msgstr "Numărul maxim de copii de rezervă pe zi:"
 
 #: common/dialogs/panel_common_settings_base.cpp:264
 msgid "How many backup files to keep each day (set to 0 for no limit)"
 msgstr ""
+"Câte fișiere de backup trebuie păstrate în fiecare zi (setați la 0 pentru "
+"nicio limită)"
 
 #: common/dialogs/panel_common_settings_base.cpp:271
 msgid "Minimum time between backups:"
-msgstr ""
+msgstr "Timp minim între copii de rezervă:"
 
 #: common/dialogs/panel_common_settings_base.cpp:273
 msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
 msgstr ""
+"Numărul de minute de la ultima copie de rezervă înainte de a fi creată o "
+"alta la următoarea salvare (setați 0 pentru nici un minim)"
 
 #: common/dialogs/panel_common_settings_base.cpp:284
 msgid "Maximum total backup size:"
-msgstr ""
+msgstr "Dimensiunea totală maximă a copiilor de rezervă:"
 
 #: common/dialogs/panel_common_settings_base.cpp:286
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
+"Dacă dimensiunea totală a fișierelor de rezervă crește peste această limită, "
+"se vor șterge copiile de rezervă vechi (setați la 0 pentru nicio limită)"
 
 #: common/dialogs/panel_common_settings_base.cpp:293
 msgid "MB"
@@ -3110,13 +3140,15 @@ msgstr "Sesiune"
 
 #: common/dialogs/panel_common_settings_base.cpp:306
 msgid "Remember open files for next project launch"
-msgstr ""
+msgstr "Țineți minte fișierele deschise pentru următoarea lansare a proiectului"
 
 #: common/dialogs/panel_common_settings_base.cpp:308
 msgid ""
 "If checked, launching a project will also launch tools such as eeschema and "
 "pcbnew with previously open files"
 msgstr ""
+"Dacă este bifat, lansarea unui proiect va lansa, de asemenea, instrumente "
+"precum eeschema și pcbnew cu fișierele deschise anterior"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:76
 msgid "Type filter text"
@@ -3129,6 +3161,7 @@ msgstr "Anulați toate modificările"
 #: common/dialogs/panel_hotkeys_editor.cpp:119
 msgid "Undo all changes made so far in this dialog"
 msgstr ""
+"Anulează toate modificările făcute până acum în această fereastră de dialog"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:127
 msgid "Import Hotkeys..."
@@ -3364,7 +3397,6 @@ msgstr "Punctată"
 #: common/dialogs/panel_setup_netclasses.cpp:89
 #: eeschema/dialogs/dialog_edit_line_style.cpp:49
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:312
-#, fuzzy
 msgid "Dash-Dot"
 msgstr "Linie-Punct"
 
@@ -3410,19 +3442,19 @@ msgstr ""
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
 msgid "Schematic wire thickness"
-msgstr ""
+msgstr "Grosimea firului în schematică"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
 msgid "Bus wire thickness"
-msgstr ""
+msgstr "Grosimea busului în schematică"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
 msgid "Schematic wire color"
-msgstr ""
+msgstr "Culoarea firului în schematică"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
 msgid "Schematic wire line style"
-msgstr ""
+msgstr "Stilul firului în schematică"
 
 #: common/dialogs/panel_setup_netclasses.cpp:534
 msgid "The default net class is required."
@@ -3473,7 +3505,7 @@ msgstr "Distanţă DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 msgid "Wire Thickness"
-msgstr ""
+msgstr "Grosimea firului"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 msgid "Bus Thickness"
@@ -3929,7 +3961,6 @@ msgid "&No Thanks"
 msgstr "&Nu mulțumesc"
 
 #: common/eda_item.cpp:244
-#, fuzzy
 msgid "Screen"
 msgstr "Ecran"
 
@@ -3988,8 +4019,9 @@ msgid "Center Dimension"
 msgstr ""
 
 #: common/eda_item.cpp:259 pcbnew/dimension.cpp:983
+#, fuzzy
 msgid "Leader"
-msgstr ""
+msgstr "Indicator"
 
 #: common/eda_item.cpp:260 pcbnew/pcb_target.cpp:123
 msgid "Target"
@@ -4022,7 +4054,7 @@ msgstr ""
 
 #: common/eda_item.cpp:269
 msgid "Wire Entry"
-msgstr ""
+msgstr "Intrare fir"
 
 #: common/eda_item.cpp:270
 msgid "Bus Entry"
@@ -4061,8 +4093,9 @@ msgid "Component"
 msgstr "Componentă"
 
 #: common/eda_item.cpp:279
+#, fuzzy
 msgid "Sheet Pin"
-msgstr ""
+msgstr "Pin foaie"
 
 #: common/eda_item.cpp:280 eeschema/dialogs/dialog_migrate_buses.cpp:101
 #: pcbnew/tools/pcb_actions.cpp:1211
@@ -4101,7 +4134,7 @@ msgstr ""
 
 #: common/eda_item.cpp:295
 msgid "Polyline"
-msgstr ""
+msgstr "Linie poligonală"
 
 #: common/eda_item.cpp:296 eeschema/lib_bezier.h:50
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:97
@@ -4112,7 +4145,7 @@ msgstr "Curbă Bezier"
 
 #: common/eda_item.cpp:297 eeschema/lib_pin.h:74 eeschema/sch_pin.cpp:159
 msgid "Pin"
-msgstr ""
+msgstr "Pin"
 
 #: common/eda_item.cpp:298
 msgid "Symbol Field"
@@ -4773,12 +4806,10 @@ msgid "F.Adhesive"
 msgstr "F. Adeziv"
 
 #: common/layer_id.cpp:68
-#, fuzzy
 msgid "B.Paste"
 msgstr "B. Paste"
 
 #: common/layer_id.cpp:69
-#, fuzzy
 msgid "F.Paste"
 msgstr "F. Paste"
 
@@ -4792,14 +4823,13 @@ msgstr "F.Serigrafie"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
-msgstr ""
+msgstr "B.Mask"
 
 #: common/layer_id.cpp:73
 msgid "F.Mask"
-msgstr ""
+msgstr "F.Mask"
 
 #: common/layer_id.cpp:76
-#, fuzzy
 msgid "User.Drawings"
 msgstr "Desene.Utilizator"
 
@@ -4817,7 +4847,7 @@ msgstr "Utilizator.Eco2"
 
 #: common/layer_id.cpp:80
 msgid "Edge.Cuts"
-msgstr ""
+msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:660
 msgid "Margin"
@@ -4825,11 +4855,11 @@ msgstr "Margine"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
-msgstr ""
+msgstr "F.Courtyard"
 
 #: common/layer_id.cpp:85
 msgid "B.Courtyard"
-msgstr ""
+msgstr "B.Courtyard"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
@@ -4876,18 +4906,16 @@ msgid "User.9"
 msgstr "Utilizator.9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:678
-#, fuzzy
 msgid "Rescue"
 msgstr "Restaurare"
 
 #: common/layer_id.cpp:105
-#, fuzzy
 msgid "Wires"
-msgstr "Legături electrice"
+msgstr "Fire"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr ""
+msgstr "Buses"
 
 #: common/layer_id.cpp:107
 msgid "Bus junctions"
@@ -4917,7 +4945,7 @@ msgstr ""
 
 #: common/layer_id.cpp:113
 msgid "Pin names"
-msgstr ""
+msgstr "Numele pinilor"
 
 #: common/layer_id.cpp:114
 msgid "Symbol references"
@@ -4944,8 +4972,9 @@ msgid "Notes"
 msgstr "Notițe"
 
 #: common/layer_id.cpp:120
+#, fuzzy
 msgid "Pins"
-msgstr ""
+msgstr "Pini"
 
 #: common/layer_id.cpp:121
 msgid "Sheet borders"
@@ -4969,8 +4998,9 @@ msgstr ""
 
 #: common/layer_id.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
+#, fuzzy
 msgid "Sheet pins"
-msgstr ""
+msgstr "Pin foaie"
 
 #: common/layer_id.cpp:127
 msgid "No-connect symbols"
@@ -5089,7 +5119,6 @@ msgid "Bl/Buried vias"
 msgstr ""
 
 #: common/layer_id.cpp:155
-#, fuzzy
 msgid "Micro-vias"
 msgstr "Microvia-uri"
 
@@ -5117,11 +5146,11 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:347
 #: pcbnew/widgets/appearance_controls.cpp:655
 msgid "Ratsnest"
-msgstr ""
+msgstr "Rețea de linii"
 
 #: common/layer_id.cpp:162
 msgid "No-connects"
-msgstr ""
+msgstr "Fără conexiuni"
 
 #: common/layer_id.cpp:163
 msgid "DRC warnings"
@@ -5476,7 +5505,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:101 kicad/project_tree_pane.cpp:790
 msgid "Print..."
-msgstr ""
+msgstr "Imprimă..."
 
 #: common/tool/actions.cpp:107
 msgid "Plot..."
@@ -5545,7 +5574,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:179
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplicați"
 
 #: common/tool/actions.cpp:179
 msgid "Duplicates the selected item(s)"
@@ -5707,9 +5736,8 @@ msgid "Cursor Right Fast"
 msgstr ""
 
 #: common/tool/actions.cpp:393
-#, fuzzy
 msgid "Click"
-msgstr "Dă clic"
+msgstr "Clic"
 
 #: common/tool/actions.cpp:393
 msgid "Performs left mouse button click"
@@ -5724,8 +5752,9 @@ msgid "Performs left mouse button double-click"
 msgstr ""
 
 #: common/tool/actions.cpp:405
+#, fuzzy
 msgid "Pin Library"
-msgstr ""
+msgstr "Biblioteca Pin"
 
 #: common/tool/actions.cpp:406
 msgid "Keep the library at the top of the list"
@@ -7137,7 +7166,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_annotate.cpp:100
 msgid "Annotate"
-msgstr ""
+msgstr "Adnotați"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
 msgid "Entire schematic"
@@ -7153,7 +7182,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:25
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:28
 msgid "Scope"
-msgstr ""
+msgstr "Domeniu"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:46
 msgid "Order"
@@ -7180,8 +7209,9 @@ msgid "Reset, but keep order of multi-unit parts"
 msgstr ""
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:88
+#, fuzzy
 msgid "Numbering"
-msgstr ""
+msgstr "Numerotare"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:95
 msgid "Use first free number after:"
@@ -7484,6 +7514,200 @@ msgid ""
 "\"%O.csv\"\n"
 "```\n"
 msgstr ""
+"# 1 - Documentație completă\n"
+"\n"
+"Documentația Eeschema (*eeschema.html*) descrie aceast Netlist intermediară "
+"și oferă exemple (capitolul ***crearea de liste de rețea și fișiere bom "
+"personalizate***).\n"
+"\n"
+"# 2 - Fișierul intermediar Netlist\n"
+"\n"
+"Fișierele BOM (și fișierele netlist) pot fi create dintr-un *fișier netlist "
+"intermediar* creat de Eeschema.\n"
+"\n"
+"Acest fișier utilizează sintaxa XML și se numește \"intermediate netlist\". "
+"Netlist intermediară include o cantitate mare de date despre placa "
+"dumneavoastră și, din acest motiv, poate fi utilizată cu postprocesare "
+"pentru a crea un BOM sau alte rapoarte.\n"
+"\n"
+"În funcție de rezultat (BOM sau netlist), în postprocesare vor fi utilizate "
+"diferite subseturi ale fișierului Intermediate Netlist complet.\n"
+"\n"
+"# 3 - Conversia într-un nou format\n"
+"\n"
+"Prin aplicarea unui filtru de postprocesare la fișierul Intermediate "
+"netlist, puteți genera fișiere netlist străine, precum și fișiere BOM. "
+"Deoarece această conversie este o transformare de la text la text, acest "
+"filtru de postprocesare poate fi scris folosind *Python*, *XSLT* sau orice "
+"alt instrument capabil să primească XML ca intrare.\n"
+"\n"
+"XSLT în sine este un limbaj XML adecvat pentru transformări XML. Există un "
+"program gratuit numit `xsltproc` pe care îl puteți descărca și instala. "
+"Programul `xsltproc` poate fi utilizat pentru a citi fișierul de intrare "
+"Intermediate XML netlist, pentru a aplica o foaie de stil pentru a "
+"transforma datele de intrare și pentru a salva rezultatele într-un fișier de "
+"ieșire. Utilizarea programului `xsltproc` necesită un fișier cu foaie de "
+"stil care să utilizeze convențiile XSLT. Procesul complet de conversie este "
+"gestionat de Eeschema, după ce este configurat o dată pentru a rula "
+"`xsltproc` într-un mod specific.\n"
+"\n"
+"Un script Python este ceva mai ușor de creat.\n"
+"\n"
+"# 4 - Inițializarea ferestrei de dialog\n"
+"\n"
+"Ar trebui să adăugați un nou plugin (un script) în lista de pluginuri, "
+"făcând clic pe butonul Add Plugin.\n"
+"\n"
+"## 4.1 - Parametrii de configurare a pluginului\n"
+"\n"
+"Dialogul de configurare a plug-in-ului Eeschema necesită următoarele "
+"informații:\n"
+"\n"
+" * Titlul: de exemplu, numele formatului netlistului.\n"
+" * Linia de comandă pentru lansarea convertorului (de obicei un script).\n"
+"\n"
+"***Nota (numai pentru Windows):***\n"
+"*În mod implicit, linia de comandă se execută cu fereastra de consolă "
+"ascunsă, iar ieșirea este redirecționată către câmpul \"Plugin info\". "
+"Pentru a afișa fereastra comenzii în curs de execuție, setați caseta de "
+"selectare \"Show console window\" (Afișare fereastră consolă).*\n"
+"\n"
+"După ce faceți clic pe butonul de generare, se vor întâmpla următoarele:\n"
+"\n"
+"1. Eeschema creează un fișier intermediar netlist \\*.xml, de exemplu `test."
+"xml`.\n"
+"2. Eeschema execută scriptul din linia de comandă pentru a crea fișierul "
+"final de ieșire.\n"
+"\n"
+"## 4.2 - Generarea fișierelor netlist cu ajutorul liniei de comandă\n"
+"\n"
+"Presupunând că folosim programul `xsltproc.exe` pentru a aplica stilul de "
+"foaie la fișierul intermediar, `xsltproc.exe` se execută cu următoarea "
+"comandă.\n"
+"\n"
+"```\n"
+"xsltproc.exe -o <nume fișier de ieșire> <nume fișier foaie de stil> <fila "
+"XML de intrare de convertit>.\n"
+"```\n"
+"\n"
+"Pe Windows, linia de comandă este următoarea.\n"
+"\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
+"I\"\n"
+"```\n"
+"\n"
+"Pe Linux, comanda devine următoarea.\n"
+"\n"
+"```\n"
+"xsltproc -o \"%O\" /usr/local/kicad/bin/plugins/myconverter .xsl \"%I\"\n"
+"```\n"
+"unde `myconverter.xsl` este foaia de stil pe care o aplicați.\n"
+"\n"
+"Nu uitați ghilimelele duble din jurul numelor de fișiere, acest lucru le "
+"permite să aibă spații după substituirea de către Eeschema.\n"
+"\n"
+"Dacă se folosește un script Python, linia de comandă este ceva de genul (în "
+"funcție de scriptul Python):\n"
+"\n"
+"```\n"
+"python f:/kicad/bin/plugins/bom-in-python/myconverter.py \"%I\" \"%O\"\n"
+"```\n"
+"\n"
+"sau\n"
+"\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" \"%"
+"O\"\n"
+"```\n"
+"\n"
+"Formatul liniei de comandă acceptă parametri pentru numele de fișier. "
+"Parametrii de formatare acceptați sunt:\n"
+"\n"
+" * `%B`: nume de fișier de bază al fișierului de ieșire selectat, minus "
+"calea și extensia.\n"
+" * `%P`: directorul proiectului, fără nume și fără \"/\".\n"
+" * `%I`: numele de fișier complet și calea de acces a fișierului de intrare "
+"temporar.\n"
+"(fișierul intermediar de rețea).\n"
+" * `%O`: numele complet al fișierului și calea de acces (dar fără extensie) "
+"a fișierului de utilizator.\n"
+"de ieșire ales de utilizator.\n"
+"\n"
+"`%I` va fi înlocuit cu numele real al fișierului intermediar (de obicei, "
+"numele complet al fișierului foii rădăcină cu extensia \".xml\").\n"
+"`%O` va fi înlocuit cu numele real al fișierului de ieșire (numele complet "
+"al fișierului foii rădăcină fără extensie).\n"
+"`%B` va fi înlocuit cu numele scurt al fișierului de ieșire real (numele "
+"scurt al fișierului foii rădăcină minus extensia).\n"
+"`%P` va fi înlocuit cu calea reală a proiectului curent.\n"
+"\n"
+"## 4.3 - Formatul liniei de comandă:\n"
+"\n"
+"### 4.3.1 - Observație:\n"
+"\n"
+"De cele mai multe ori, fișierul creat trebuie să aibă o extensie, în funcție "
+"de tipul său.\n"
+"Prin urmare, trebuie să adăugați la opțiunea ***%O*** extensia corectă a "
+"fișierului.\n"
+"\n"
+"De exemplu:\n"
+"\n"
+" * **%O.csv** pentru a crea un fișier .csv (fișier cu valori separate prin "
+"virgulă).\n"
+" * **%O.htm** pentru a crea un fișier .html.\n"
+" * **%O.bom** pentru a crea un fișier .bom.\n"
+"\n"
+"### 4.3.2 Exemplu pentru xsltproc:\n"
+"\n"
+"Formatul liniei de comandă pentru xsltproc este următorul:\n"
+"\n"
+"```\n"
+"<cărarea xsltproc> xsltproc <parametrii xsltproc>.\n"
+"```\n"
+"\n"
+"Pe Windows:\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O.bom\" f:/kicad/bin/plugins/"
+"netlist_form_pads-pcb.xsl \"%I\"\n"
+"```\n"
+"\n"
+"Pe Linux:\n"
+"```\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"%I\"\n"
+"```\n"
+"\n"
+"Exemplele de mai sus presupun că `xsltproc` este instalat pe PC-ul "
+"dumneavoastră sub Windows și că fișierele xsl se află în `<path_to_kicad>/"
+"kicad/bin/plugins/`.\n"
+"\n"
+"\n"
+"### 4.3.3 Exemplu pentru scripturi Python:\n"
+"\n"
+"Presupunând că python este instalat pe PC-ul dumneavoastră, iar scripturile "
+"python sunt localizate în\n"
+"\n"
+" `<path_to_kicad>/kicad/bin/plugins/bom-in-python/`,\n"
+"\n"
+"formatul liniei de comandă pentru python este ceva de genul:\n"
+"\n"
+"```\n"
+"python <nume fișier script> <nume fișier de intrare> <nume fișier de ieșire> "
+"<nume fișier de ieșire>.\n"
+"```\n"
+"\n"
+"Pe Windows:\n"
+"```\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
+".html\"\n"
+"```\n"
+"\n"
+"Pe Linux:\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
+"```\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:41
 msgid "Bus Definitions"
@@ -7874,7 +8098,6 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
-#, fuzzy
 msgid "Note:"
 msgstr "Notă:"
 
@@ -7944,7 +8167,7 @@ msgstr "Bidirecțional"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:38 eeschema/pin_type.cpp:53
 msgid "Tri-state"
-msgstr ""
+msgstr "Tri-state"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:39
@@ -7981,7 +8204,6 @@ msgstr "Stil:"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:68
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:46
-#, fuzzy
 msgid "Combo!"
 msgstr "Combinaţie!"
 
@@ -8054,7 +8276,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:378
 msgid "Checking pins..."
-msgstr ""
+msgstr "Se verifică pinii..."
 
 #: eeschema/dialogs/dialog_erc.cpp:391
 msgid "Checking labels..."
@@ -8221,7 +8443,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:90
 #: eeschema/fields_grid_table.cpp:601 eeschema/tools/ee_actions.cpp:61
 msgid "Show Datasheet"
-msgstr ""
+msgstr "Afișați fișa tehnică"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:91
 #: eeschema/fields_grid_table.cpp:602
@@ -8255,9 +8477,8 @@ msgstr "Câmp"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:46
 #: pcbnew/fp_text_grid_table.cpp:90
-#, fuzzy
 msgid "Show"
-msgstr "Vizibilitate"
+msgstr "Arată"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:685
 msgid "Group By"
@@ -8271,9 +8492,8 @@ msgstr "Referinta"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:960
 #: eeschema/symbol_editor/symbol_editor.cpp:1207
-#, fuzzy
 msgid "Datasheet"
-msgstr "Specificații"
+msgstr "Fișă tehnică"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:982
 msgid "New field name:"
@@ -8319,7 +8539,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Wires && wire labels"
-msgstr ""
+msgstr "Fire și etichete fire"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
 msgid "Buses && bus labels"
@@ -9033,7 +9253,6 @@ msgstr "unități"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:215
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:311
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:576
-#, fuzzy
 msgid "General"
 msgstr "General"
 
@@ -9083,7 +9302,6 @@ msgstr ""
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 #: pcbnew/dialogs/dialog_find_base.cpp:120 pcbnew/fp_text.cpp:293
 #: pcbnew/pcb_shape.cpp:497 pcbnew/pcb_text.cpp:116 pcbnew/track.cpp:764
-#, fuzzy
 msgid "Status"
 msgstr "Stare"
 
@@ -9404,7 +9622,7 @@ msgstr "E"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:375
 #: eeschema/sch_edit_frame.cpp:921
 msgid "Schematic"
-msgstr ""
+msgstr "Schemă"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:379
 #: pcbnew/dialogs/dialog_export_svg.cpp:232 pcbnew/dialogs/dialog_plot.cpp:805
@@ -9430,7 +9648,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "Postscript"
-msgstr ""
+msgstr "Postscript"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
@@ -9667,7 +9885,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:45
 msgid "Import:"
-msgstr ""
+msgstr "Importați:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
 msgid "Formatting preferences"
@@ -10255,9 +10473,8 @@ msgid "JFET"
 msgstr "JFET"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:79
-#, fuzzy
 msgid "Subcircuit"
-msgstr "Circuit parțial"
+msgstr "Subcircuit"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:445
 msgid ""
@@ -10472,7 +10689,7 @@ msgstr "Hz"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:501
 msgid "Delay:"
-msgstr ""
+msgstr "Întârziere:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:512
 msgid "Damping factor:"
@@ -10578,9 +10795,8 @@ msgid "Transient noise"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
-#, fuzzy
 msgid "Uniform"
-msgstr "Consistent"
+msgstr "Uniforma"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
 msgid "Gaussian"
@@ -10793,6 +11009,15 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
+"Această schemă utilizează în prezent metoda de căutare a listei de simboluri "
+"din biblioteca de proiecte pentru încărcarea simbolurilor din bibliotecă. "
+"KiCad va încerca să mapeze simbolurile existente pentru a utiliza noul tabel "
+"al bibliotecii de simboluri. Remappingul va modifica unele fișiere din "
+"proiect și este posibil ca schemele să nu fie compatibile cu versiunile mai "
+"vechi ale KiCad. Toate fișierele modificate vor fi copiate în dosarul "
+"\"remap_backup\" din dosarul de proiect, în cazul în care trebuie să "
+"reveniți asupra modificărilor. Dacă alegeți să săriți peste acest pas, veți "
+"fi responsabil pentru remapare manuală a simbolurilor."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:210
 #, c-format
@@ -10837,7 +11062,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_remap.cpp:350
 #: eeschema/dialogs/dialog_symbol_remap.cpp:493
 msgid "Backup Error"
-msgstr ""
+msgstr "Eroare la crearea copiei de rezervă"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:352
 #: eeschema/dialogs/dialog_symbol_remap.cpp:497
@@ -10873,7 +11098,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_remap.cpp:409
 #, c-format
 msgid "Failed to create backup folder \"%s\"\n"
-msgstr ""
+msgstr "Nu s-a reușit crearea dosarului de copiei de rezervă \"%s\"\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:492
 msgid "Some of the project files could not be backed up."
@@ -11039,7 +11264,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "&Restrict buses and wires to H and V orientation"
-msgstr ""
+msgstr "&Limitați busele și firele la orientarea O și V"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "Mouse drag performs drag (G) operation"
@@ -11051,13 +11276,15 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:32
 msgid "Automatically start wires on unconnected pins"
-msgstr ""
+msgstr "Porniți automat firele pinilor neconectați"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
+"Atunci când este activat, puteți începe cablarea făcând clic pe pinii "
+"neconectați chiar și atunci când instrumentul de cablare nu este activ"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -11254,6 +11481,8 @@ msgstr ""
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr ""
+"Procent din dimensiunea textului cu care se decaleajă textul deasupra sau "
+"dedesubtul firului sau busului"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 msgid "Default line thickness:"
@@ -11754,7 +11983,7 @@ msgstr ""
 
 #: eeschema/erc_item.cpp:130
 msgid "Wires not connected to anything"
-msgstr ""
+msgstr "Firele nu sunt conectate la nimic"
 
 #: eeschema/erc_item.cpp:134
 msgid "Library symbol issue"
@@ -12390,7 +12619,7 @@ msgstr ""
 
 #: eeschema/sch_bus_entry.cpp:393
 msgid "Bus to Wire Entry"
-msgstr ""
+msgstr "Intrare bus în fir"
 
 #: eeschema/sch_bus_entry.cpp:399
 msgid "Bus to Bus Entry"
@@ -12398,11 +12627,11 @@ msgstr ""
 
 #: eeschema/sch_bus_entry.cpp:463 eeschema/sch_line.cpp:881
 msgid "Wire"
-msgstr ""
+msgstr "Fir"
 
 #: eeschema/sch_bus_entry.cpp:464 eeschema/sch_line.cpp:882
 msgid "Bus"
-msgstr ""
+msgstr "Bus"
 
 #: eeschema/sch_bus_entry.cpp:467
 msgid "Bus Entry Type"
@@ -12532,7 +12761,7 @@ msgstr ""
 #: eeschema/sch_line.cpp:717
 #, c-format
 msgid "Vertical Wire, length %s"
-msgstr ""
+msgstr "Fir vertical, lungime %s"
 
 #: eeschema/sch_line.cpp:718
 #, c-format
@@ -12547,7 +12776,7 @@ msgstr ""
 #: eeschema/sch_line.cpp:726
 #, c-format
 msgid "Horizontal Wire, length %s"
-msgstr ""
+msgstr "Fir orizontal, lungime %s"
 
 #: eeschema/sch_line.cpp:727
 #, c-format
@@ -12562,7 +12791,7 @@ msgstr ""
 #: eeschema/sch_line.cpp:735
 #, c-format
 msgid "Wire, length %s"
-msgstr ""
+msgstr "Fir, lungime %s"
 
 #: eeschema/sch_line.cpp:736
 #, c-format
@@ -12584,11 +12813,11 @@ msgstr ""
 
 #: eeschema/sch_line.cpp:889
 msgid "from netclass"
-msgstr ""
+msgstr "din netclass"
 
 #: eeschema/sch_line.cpp:910 eeschema/sch_text.cpp:712
 msgid "Assigned Netclass"
-msgstr ""
+msgstr "Netclass alocat"
 
 #: eeschema/sch_marker.cpp:165
 msgid "Electrical Rule Check Error"
@@ -12738,6 +12967,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
+"Simbolul „%s” este rotit cu un unghi de %.1f grade în designul original "
+"CADSTAR, dar KiCad acceptă doar unghiuri de rotație multipli de 90 de grade. "
+"Conexiunile firele vor necesita fixare manuală."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1576
 #, c-format
@@ -13433,6 +13665,138 @@ msgid ""
 "    </tr>\n"
 "</table>\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>Markup</th>\n"
+"        <th></th>\n"
+"        <th>Resultat</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</"
+"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Definiție bus</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>Resultat Nets</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"\t\t<td></td>\n"
+"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"</table>\n"
 
 #: eeschema/sch_validators.cpp:106
 #, c-format
@@ -14056,7 +14420,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1027
 #, c-format
 msgid "Failed to save backup to \"%s\""
-msgstr ""
+msgstr "Salvarea copiei de rezervă în \"%s\" nu a reușit"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1171
 #: eeschema/symbol_viewer_frame.cpp:389
@@ -14836,11 +15200,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:305
 msgid "Add Wire to Bus Entry"
-msgstr ""
+msgstr "Adăugați fir în intrare bus"
 
 #: eeschema/tools/ee_actions.cpp:305
 msgid "Add a wire entry to a bus"
-msgstr ""
+msgstr "Adăugați intrare fir în bus"
 
 #: eeschema/tools/ee_actions.cpp:311
 msgid "Add Label"
@@ -15013,11 +15377,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:449
 msgid "Assign Netclass..."
-msgstr ""
+msgstr "Atribuiți netclass..."
 
 #: eeschema/tools/ee_actions.cpp:449
 msgid "Assign a netclass to the net of the selected wire"
-msgstr ""
+msgstr "Alocați un netclass la rețeaua firului selectat"
 
 #: eeschema/tools/ee_actions.cpp:453
 msgid "DeMorgan Conversion"
@@ -15109,11 +15473,12 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:508
 msgid "Break Wire"
-msgstr ""
+msgstr "Rupeți firul"
 
 #: eeschema/tools/ee_actions.cpp:508
+#, fuzzy
 msgid "Divide a wire into segments which can be dragged independently"
-msgstr ""
+msgstr "Împărțiți un fir în segmente care pot fi târât independent"
 
 #: eeschema/tools/ee_actions.cpp:513
 msgid "Break Bus"
@@ -15146,7 +15511,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:544
 msgid "Highlight wires and pins of a net"
-msgstr ""
+msgstr "Evidențiați firele și pinii unei rețele"
 
 #: eeschema/tools/ee_actions.cpp:550
 msgid "Edit with Symbol Editor"
@@ -15296,11 +15661,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:643
 msgid "Force H/V Wires and Buses"
-msgstr ""
+msgstr "Forțează firele și busele O/H"
 
 #: eeschema/tools/ee_actions.cpp:643
 msgid "Switch H & V only mode for new wires and buses"
-msgstr ""
+msgstr "Comutați modul O&V numai pentru firele și busele noi"
 
 #: eeschema/tools/ee_actions.cpp:651
 msgid "Enter Sheet"
@@ -15336,11 +15701,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:682
 msgid "Add Wire"
-msgstr ""
+msgstr "Adăugați fir"
 
 #: eeschema/tools/ee_actions.cpp:682
 msgid "Add a wire"
-msgstr ""
+msgstr "Adăugați un fir"
 
 #: eeschema/tools/ee_actions.cpp:689
 msgid "Add Bus"
@@ -15358,11 +15723,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:695
 msgid "Break a wire out of a bus"
-msgstr ""
+msgstr "Rupeți un fir dintr-un bus"
 
 #: eeschema/tools/ee_actions.cpp:708
 msgid "Finish Wire or Bus"
-msgstr ""
+msgstr "Terminați firul sau busul"
 
 #: eeschema/tools/ee_actions.cpp:708
 msgid "Complete drawing at current segment"
@@ -15370,11 +15735,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:713
 msgid "Finish Wire"
-msgstr ""
+msgstr "Terminați firul"
 
 #: eeschema/tools/ee_actions.cpp:713
 msgid "Complete wire with current segment"
-msgstr ""
+msgstr "Termină firul în segmentul curent"
 
 #: eeschema/tools/ee_actions.cpp:718
 msgid "Finish Bus"
@@ -15544,8 +15909,9 @@ msgid "No new hierarchical labels found."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:654
+#, fuzzy
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr ""
+msgstr "Locația joncțiunii nu conține fire și/sau pini conectabili."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1043
 msgid "Click over a sheet."
@@ -15612,19 +15978,19 @@ msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:919
 msgid "Net must be labeled to assign a netclass."
-msgstr ""
+msgstr "Rețeaua trebuie să fie etichetat pentru a atribui un netclass."
 
 #: eeschema/tools/sch_editor_control.cpp:931
 msgid "Netclasses"
-msgstr ""
+msgstr "Netclasses"
 
 #: eeschema/tools/sch_editor_control.cpp:944
 msgid "Assign Netclass"
-msgstr ""
+msgstr "Atribuiți Netclass"
 
 #: eeschema/tools/sch_editor_control.cpp:945
 msgid "Select netclass:"
-msgstr ""
+msgstr "Selectați netclass:"
 
 #: eeschema/tools/sch_editor_control.cpp:1426
 #, c-format
@@ -16654,7 +17020,7 @@ msgstr ""
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
-msgstr ""
+msgstr "Resetați toate comenzilor rapide la valorile predefinite de KiCad"
 
 #: include/widgets/infobar.h:111
 msgid "Hide this message."
@@ -17798,7 +18164,7 @@ msgstr "Vref:"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:44
 msgid "Volt"
-msgstr ""
+msgstr "Volt"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "Separate sense pin"
@@ -18610,6 +18976,33 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
+"Seria E definită în IEC 60063 reprezintă un sistem acceptat pe scară largă "
+"de\n"
+"numere pentru componentele electronice.  Valorile disponibile sunt "
+"aproximativ\n"
+"egal distanțate pe o scară logaritmică. \n"
+"\n"
+"\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
+"\tE6: 1,0 - 1,5 - 2,2 - 3,3 - 4,7 - 6,8 -\n"
+"\tE3: 1.0 - - - 2.2 - - - 4.7 - - -\n"
+"\tE1: 1.0 - - - - - - - - - - - - -\n"
+"\n"
+"Acest calculator găsește combinații de componente standard din seria E "
+"pentru a\n"
+"crea valori arbitrare.  Puteți introduce rezistența necesară de la 0,0025 la "
+"4000 kΩ.\n"
+"Se oferă soluții care utilizează până la 4 componente.\n"
+"\n"
+"În mod implicit, valoarea solicitării este întotdeauna exclusă din setul de "
+"soluții.  De asemenea, este posibil să se specifice\n"
+"până la două valori suplimentare de exclus din soluție dacă aceste valori "
+"ale componentelor nu sunt disponibile\n"
+"\n"
+"Soluțiile sunt prezentate în următoarele formate:\n"
+"\n"
+"\tR1 + R2 +...+ Rn rezistențe în serie\n"
+"\t| R1 | R2...| Rezistențe rn în paralel\n"
+"\tR1 + (R2| R3)...\t\torice combinație a celor de mai sus\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:256
 msgid "Write Data Failed"
@@ -18779,7 +19172,6 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:159
 #: pcb_calculator/transline_ident.cpp:337
-#, fuzzy
 msgid "Roughness"
 msgstr "Asprime"
 
@@ -19066,7 +19458,7 @@ msgstr "PCB"
 #: pcbnew/tools/pcb_control.cpp:1098 pcbnew/widgets/appearance_controls.cpp:335
 #: pcbnew/widgets/panel_selection_filter_base.cpp:47
 msgid "Pads"
-msgstr ""
+msgstr "Pad-uri"
 
 #: pcbnew/board.cpp:1108 pcbnew/dialogs/dialog_board_statistics.cpp:676
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:156
@@ -19093,7 +19485,7 @@ msgstr "Noduri"
 #: pcbnew/widgets/appearance_controls_base.cpp:62
 #: pcbnew/widgets/appearance_controls_base.cpp:156
 msgid "Nets"
-msgstr ""
+msgstr "Reţele"
 
 #: pcbnew/board.cpp:1120 pcbnew/pcb_draw_panel_gal.cpp:469
 msgid "Unrouted"
@@ -19106,7 +19498,7 @@ msgstr ""
 #: pcbnew/board_connected_item.cpp:168 pcbnew/pad.cpp:870 pcbnew/track.cpp:742
 #: pcbnew/zone.cpp:589
 msgid "NetClass"
-msgstr ""
+msgstr "NetClass"
 
 #: pcbnew/board_item.cpp:36 pcbnew/pad.cpp:1076
 msgid "Rect"
@@ -20215,7 +20607,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:653
 msgid "Board"
-msgstr ""
+msgstr "Placă"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:659
 #: pcbnew/dialogs/dialog_board_statistics.cpp:666
@@ -20225,7 +20617,7 @@ msgstr "Zonă"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:712
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:37
 msgid "Components"
-msgstr ""
+msgstr "Componente"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:718
 msgid "Drill holes"
@@ -20258,11 +20650,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:234
 msgid "Plated"
-msgstr ""
+msgstr "Placat"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:235
 msgid "Via/Pad"
-msgstr ""
+msgstr "Via/Pad"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:236
 msgid "Start Layer"
@@ -21246,11 +21638,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:233
 msgid "Enable hotkey move commands and Auto Placement"
-msgstr ""
+msgstr "Activați comenzile de mutare rapidă și plasarea automată"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:234
 msgid "Disable hotkey move commands and Auto Placement"
-msgstr ""
+msgstr "Deactivați comenzile de mutare rapidă și plasarea automată"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:392
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:491
@@ -21291,7 +21683,6 @@ msgid "Text Items"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:61
-#, fuzzy
 msgid "Unconstrained"
 msgstr "Fără restricții"
 
@@ -21364,7 +21755,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1091
 #: pcbnew/pad.cpp:1436
 msgid "SMD"
-msgstr ""
+msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:187
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
@@ -21390,11 +21781,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:585
 msgid "Clearances"
-msgstr ""
+msgstr "Distanțe"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:223
 msgid "Set values to 0 to use netclass values."
-msgstr ""
+msgstr "Setați valorile la 0 pentru a utiliza valorile netclassului."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:229
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:325
@@ -23861,7 +24252,6 @@ msgid "Scaling factor:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1399
-#, fuzzy
 msgid "Duplicate:"
 msgstr "Duplicați:"
 
@@ -26274,12 +26664,12 @@ msgstr ""
 #: pcbnew/drc/drc_engine.cpp:340
 #, c-format
 msgid "netclass '%s'"
-msgstr ""
+msgstr "netclass '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:265 pcbnew/drc/drc_engine.cpp:294
 #, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr ""
+msgstr "netclass '%s' (pereche diferită)"
 
 #: pcbnew/drc/drc_engine.cpp:415
 msgid "keepout area"
@@ -29169,9 +29559,10 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1609
-#, c-format
+#, c-format, fuzzy
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Ignorarea unui fir din moment ce stratul Eagle '%s' (%d) nu a fost mapat"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1782
 #, c-format
@@ -29944,7 +30335,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:234
 msgid "Via netclass values"
-msgstr ""
+msgstr "Valorilor via netclass"
 
 #: pcbnew/router/router_tool.cpp:238 pcbnew/tools/drawing_tool.cpp:104
 #, c-format
@@ -30291,7 +30682,7 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:128
 #, c-format
 msgid "[netclass %s]"
-msgstr ""
+msgstr "[netclass %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:144
 #, c-format
@@ -32576,7 +32967,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:643
 msgid "Choose when to show net and netclass colors"
-msgstr ""
+msgstr "Alegeți când să afișați culorile rețelei și netclass"
 
 #: pcbnew/widgets/appearance_controls.cpp:651
 msgid "Net and netclass colors are shown on all copper items"
@@ -32588,7 +32979,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:664
 msgid "Net and netclass colors are not shown"
-msgstr ""
+msgstr "Culorile rețelei și netclass nu sunt afișate"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Ratsnest display:"
@@ -32823,7 +33214,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:2142
 msgid "Set netclass color"
-msgstr ""
+msgstr "Setați culoarea netclass"
 
 #: pcbnew/widgets/appearance_controls.cpp:2147
 #, c-format
@@ -32832,11 +33223,11 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:2161
 msgid "Show all netclasses"
-msgstr ""
+msgstr "Afișați toate netclasses"
 
 #: pcbnew/widgets/appearance_controls.cpp:2164
 msgid "Hide all other netclasses"
-msgstr ""
+msgstr "Ascundeți toate celelalte netclasses"
 
 #: pcbnew/widgets/appearance_controls.cpp:2218
 msgid "Save preset..."
