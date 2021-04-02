@@ -4,17 +4,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-03-21 13:36+0000\n"
+"PO-Revision-Date: 2021-04-03 18:26+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
@@ -28,7 +28,7 @@ msgstr "Сви фајлови (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
 msgid "Available paths:"
-msgstr ""
+msgstr "Доступне путање:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
@@ -524,9 +524,8 @@ msgid "Enable animation"
 msgstr "Покрени"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:135
-#, fuzzy
 msgid "Animation speed:"
-msgstr "Величина текста:"
+msgstr "Брзина анимације:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:163
 #, fuzzy
@@ -538,9 +537,8 @@ msgid "Show model bounding boxes"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:168
-#, fuzzy
 msgid "Show copper thickness"
-msgstr "Дебљина:"
+msgstr "Прикажи дебљину бакра"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:175
 #, fuzzy
@@ -557,19 +555,16 @@ msgid "Disabled"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
-#, fuzzy
 msgid "2x"
-msgstr "2"
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
-#, fuzzy
 msgid "4x"
-msgstr "4"
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
-#, fuzzy
 msgid "8x"
-msgstr "8"
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:190
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
@@ -600,12 +595,11 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:219
 msgid "Disable holes"
-msgstr ""
+msgstr "Искључити рупе"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:229
-#, fuzzy
 msgid "OpenGL"
-msgstr "Отвори"
+msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:240
 #, fuzzy
@@ -2730,12 +2724,12 @@ msgstr ""
 #: common/dialogs/dialog_print_generic.cpp:193
 #: common/dialogs/dialog_print_generic.cpp:240
 msgid "Nothing to print"
-msgstr ""
+msgstr "Ништа за штампање"
 
 #: common/dialogs/dialog_print_generic.cpp:231
 #: eeschema/dialogs/dialog_print_using_printer.cpp:308
 msgid "Previous print job not yet complete."
-msgstr ""
+msgstr "Претходно штампање није довршено."
 
 #: common/dialogs/dialog_print_generic.cpp:256
 msgid "There was a problem printing."
@@ -2865,13 +2859,12 @@ msgid "Copy color"
 msgstr "Боја бакра"
 
 #: common/dialogs/panel_color_settings.cpp:284
-#, fuzzy
 msgid "Paste color"
-msgstr "Залијепи"
+msgstr "Залијепи боју"
 
 #: common/dialogs/panel_color_settings.cpp:287
 msgid "Revert to saved color"
-msgstr ""
+msgstr "Врати на сачувану боју"
 
 #: common/dialogs/panel_color_settings_base.cpp:19
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:29
@@ -3776,18 +3769,16 @@ msgid "Error writing page layout design file"
 msgstr ""
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
-#, fuzzy
 msgid "First Page Only"
-msgstr "Само страница 1"
+msgstr "Само прва страница"
 
 #: common/drawing_sheet/ds_draw_item.cpp:137
 msgid "Subsequent Pages"
 msgstr ""
 
 #: common/drawing_sheet/ds_draw_item.cpp:138
-#, fuzzy
 msgid "All Pages"
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr "Све странице"
 
 #: common/drawing_sheet/ds_draw_item.cpp:141
 #, fuzzy
@@ -3838,19 +3829,19 @@ msgid "clipboard"
 msgstr ""
 
 #: common/dsnlexer.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s"
-msgstr "Очекује се \"%s\""
+msgstr "Очекује се %s"
 
 #: common/dsnlexer.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting '%s'"
-msgstr "Попуњавање зона"
+msgstr "Очекује се '%s'"
 
 #: common/dsnlexer.cpp:340
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected %s"
-msgstr "Попуњавање зона"
+msgstr "Неочекивано %s"
 
 #: common/dsnlexer.cpp:348
 #, c-format
@@ -4365,7 +4356,7 @@ msgstr "Дебљина"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:189
 #: pcbnew/microwave/microwave_polygon.cpp:132
 msgid "Mirrored"
-msgstr ""
+msgstr "у огледалу"
 
 #: common/eda_text.cpp:659 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:62
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:55
@@ -4472,12 +4463,12 @@ msgstr ""
 #: common/exceptions.cpp:61 common/exceptions.cpp:89
 #, c-format
 msgid "from %s : %s() line:%d"
-msgstr ""
+msgstr "од %s : %s() линија:%d"
 
 #: common/exceptions.cpp:75
 #, c-format
 msgid "%s in \"%s\", line %d, offset %d"
-msgstr ""
+msgstr "%s у \"%s\", линија %d, помак %d"
 
 #: common/exceptions.cpp:109
 #, c-format
