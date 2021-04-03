@@ -87,9 +87,9 @@ struct SELECTION_FILTER_OPTIONS
  */
 enum class HIGH_CONTRAST_MODE
 {
-    NORMAL = 0,     ///< Non-active layers are shown normally (no high-contrast mode)
-    DIMMED,         ///< Non-active layers are dimmed (old high-contrast mode)
-    HIDDEN          ///< Non-active layers are hidden
+    NORMAL = 0,     ///< Inactive layers are shown normally (no high-contrast mode)
+    DIMMED,         ///< Inactive layers are dimmed (old high-contrast mode)
+    HIDDEN          ///< Inactive layers are hidden
 };
 
 ///< Determine how zones should be displayed.

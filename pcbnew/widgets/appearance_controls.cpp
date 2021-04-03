@@ -572,7 +572,7 @@ void APPEARANCE_CONTROLS::createControls()
     layerDisplayOptionsSizer = new wxBoxSizer( wxVERTICAL );
 
     m_staticTextContrastModeTitle = new wxStaticText( layerDisplayPane, wxID_ANY,
-                                                      _( "Non-active layers:" ), wxDefaultPosition,
+                                                      _( "Inactive layers:" ), wxDefaultPosition,
                                                       wxDefaultSize, 0 );
     m_staticTextContrastModeTitle->Wrap( -1 );
     layerDisplayOptionsSizer->Add( m_staticTextContrastModeTitle, 0,
@@ -584,19 +584,19 @@ void APPEARANCE_CONTROLS::createControls()
     m_rbHighContrastNormal = new wxRadioButton( layerDisplayPane, wxID_ANY, _( "Normal" ),
                                                 wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
     m_rbHighContrastNormal->SetValue( true );
-    m_rbHighContrastNormal->SetToolTip( _( "Non-active layers will be shown in full color" ) );
+    m_rbHighContrastNormal->SetToolTip( _( "Inactive layers will be shown in full color" ) );
 
     contrastModeSizer->Add( m_rbHighContrastNormal, 0, wxRIGHT, 4 );
 
     m_rbHighContrastDim = new wxRadioButton( layerDisplayPane, wxID_ANY, _( "Dim" ),
                                              wxDefaultPosition, wxDefaultSize, 0 );
-    m_rbHighContrastDim->SetToolTip( _( "Non-active layers will be dimmed" ) );
+    m_rbHighContrastDim->SetToolTip( _( "Inactive layers will be dimmed" ) );
 
     contrastModeSizer->Add( m_rbHighContrastDim, 0, wxRIGHT | wxLEFT, 10 );
 
     m_rbHighContrastOff = new wxRadioButton( layerDisplayPane, wxID_ANY, _( "Hide" ),
                                              wxDefaultPosition, wxDefaultSize, 0 );
-    m_rbHighContrastOff->SetToolTip( _( "Non-active layers will be hidden" ) );
+    m_rbHighContrastOff->SetToolTip( _( "Inactive layers will be hidden" ) );
 
     contrastModeSizer->Add( m_rbHighContrastOff, 0, 0, 5 );
 

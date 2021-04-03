@@ -267,8 +267,7 @@ void PANEL_SETUP_LAYERS::setUserDefinedLayerCheckBoxes()
         bool     state = m_pcb->IsLayerEnabled( layer );
 
 #ifdef HIDE_INACTIVE_LAYERS
-        // This code hides non-active copper layers, or redisplays hidden
-        // layers which are now needed.
+        // This code hides inactive copper layers, or redisplays hidden layers which are now needed.
         PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( layer );
 
         ctl.name->Show( state );
@@ -379,8 +378,7 @@ void PANEL_SETUP_LAYERS::setCopperLayerCheckBoxes( int copperCount )
         bool     state = copperCount > 0;
 
 #ifdef HIDE_INACTIVE_LAYERS
-        // This code hides non-active copper layers, or redisplays hidden
-        // layers which are now needed.
+        // This code hides inactive copper layers, or redisplays hidden layers which are now needed.
         PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( layer );
 
         ctl.name->Show( state );
