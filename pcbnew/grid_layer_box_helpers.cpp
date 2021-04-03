@@ -157,7 +157,7 @@ void GRID_CELL_LAYER_SELECTOR::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
     // This is a work around for the combobox being simply dismissed when a
     // choice is made in it under OS X. The bug is almost certainly due to a
     // problem in focus events generation logic but it's not obvious to fix and
-    // for now this at least allows to use wxGrid.
+    // for now this at least allows one to use wxGrid.
     if( !LayerBox()->IsPopupShown() )
         LayerBox()->Popup();
 #endif

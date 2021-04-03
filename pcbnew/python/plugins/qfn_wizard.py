@@ -82,7 +82,7 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
 
         pad_pitch = self.pads["pitch"]
         pad_length = self.pads["length"]
-        # offset allows to define how much of the pad is outside of the package
+        # offset allows one to define how much of the pad is outside of the package
         pad_offset = self.pads["offset"]
         pad_width = self.pads["width"]
 
