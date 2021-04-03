@@ -219,7 +219,6 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnCloseDialog ) );
 	m_TextCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnSetFocusText ), NULL, this );
-	m_TextCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnTextEnter ), NULL, this );
 	m_StyledTextCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnSetFocusText ), NULL, this );
 	m_TextValueSelectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnTextValueSelectButtonClick ), NULL, this );
 }
@@ -229,7 +228,6 @@ DIALOG_LIB_EDIT_TEXT_BASE::~DIALOG_LIB_EDIT_TEXT_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnCloseDialog ) );
 	m_TextCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnSetFocusText ), NULL, this );
-	m_TextCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnTextEnter ), NULL, this );
 	m_StyledTextCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnSetFocusText ), NULL, this );
 	m_TextValueSelectButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnTextValueSelectButtonClick ), NULL, this );
 

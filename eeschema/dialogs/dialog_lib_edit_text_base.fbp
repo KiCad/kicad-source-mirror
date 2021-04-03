@@ -210,7 +210,6 @@
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
                                                 <event name="OnSetFocus">OnSetFocusText</event>
-                                                <event name="OnTextEnter">OnTextEnter</event>
                                             </object>
                                         </object>
                                         <object class="sizeritem" expanded="1">

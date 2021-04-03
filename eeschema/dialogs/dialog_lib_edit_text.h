@@ -39,8 +39,6 @@ public:
     DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT* aText );
     ~DIALOG_LIB_EDIT_TEXT() override {};
 
-    void OnTextEnter( wxCommandEvent& event ) override;
-
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
