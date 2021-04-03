@@ -106,7 +106,7 @@ bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
 
     JOINT* jt = tmpNode->FindJoint( track.CPoint( -1 ), &track );
 
-    if( !jt )
+    if( !jt || jt->Net() <= 0 )
        return false;
 
     if( ( !track.EndsWithVia() && jt->LinkCount() >= 2 )
