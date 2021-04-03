@@ -38,6 +38,11 @@ public:
 
     std::vector<wxString> m_OpenProjects;
 
+#ifdef PCM
+    std::vector<std::pair<wxString, wxString>> m_PcmRepositories;
+    wxString                                   m_PcmLastDownloadDir;
+#endif
+
 protected:
 
     virtual std::string getLegacyFrameName() const override { return "KicadFrame"; }

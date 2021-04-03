@@ -18,8 +18,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <settings/parameters.h>
 #include "kicad_settings.h"
+#include "nlohmann/json.hpp"
+#include <settings/parameters.h>
 
 
 ///! Update the schema version whenever a migration is required
@@ -27,13 +28,54 @@ const int kicadSchemaVersion = 0;
 
 
 KICAD_SETTINGS::KICAD_SETTINGS() :
-        APP_SETTINGS_BASE( "kicad", kicadSchemaVersion ),
-        m_LeftWinWidth( 200 )
+        APP_SETTINGS_BASE( "kicad", kicadSchemaVersion ), m_LeftWinWidth( 200 )
 {
     m_params.emplace_back( new PARAM<int>( "appearance.left_frame_width", &m_LeftWinWidth, 200 ) );
 
-    m_params.emplace_back( new PARAM_LIST<wxString>( "system.open_projects",
-                                                     &m_OpenProjects, {} ) );
+    m_params.emplace_back(
+            new PARAM_LIST<wxString>( "system.open_projects", &m_OpenProjects, {} ) );
+
+#ifdef PCM
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
+            "pcm.repositories",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json js = nlohmann::json::array();
+
+                for( const auto& pair : m_PcmRepositories )
+                {
+                    js.push_back( nlohmann::json( { { "name", pair.first.ToUTF8() },
+                                                    { "url", pair.second.ToUTF8() } } ) );
+
+                return js;
+            },
+            [&]( const nlohmann::json aObj )
+            {
+                m_PcmRepositories.clear();
+
+                if( !aObj.is_array() )
+                    return;
+
+                for( const auto& entry : aObj )
+                {
+                    if( entry.empty() || !entry.is_object() )
+                        continue;
+
+                    m_PcmRepositories.emplace_back(
+                            std::make_pair( wxString( entry["name"].get<std::string>() ),
+                                            wxString( entry["url"].get<std::string>() ) ) );
+                }
+            },
+            R"([
+                {
+                    "name": "KiCad official repository",
+                    "url": "https://repository.kicad.org/repository.json"
+                }
+            ])"_json ) );
+
+    m_params.emplace_back(
+            new PARAM<wxString>( "pcm.last_download_dir", &m_PcmLastDownloadDir, "" ) );
+#endif
 }
 
 
