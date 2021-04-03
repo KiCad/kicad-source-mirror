@@ -1051,6 +1051,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     if( m_selectionTool->SelectPoint( cursorPos, EE_COLLECTOR::SheetsOnly, &i ) )
                         sheet = dynamic_cast<SCH_SHEET*>( i );
 
+                    m_selectionTool->ClearSelection();
+
                     if( !sheet )
                     {
                         m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
@@ -1086,6 +1088,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     item->SetFlags( IS_NEW | IS_MOVED );
                     item->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
                     updatePreview();
+
+                    m_selectionTool->AddItemToSel( item );
 
                     // update the cursor so it looks correct before another event
                     setCursor();
