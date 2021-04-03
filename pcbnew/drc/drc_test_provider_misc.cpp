@@ -57,7 +57,7 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "miscellanous";
+        return "miscellaneous";
     };
 
     virtual const wxString GetDescription() const override

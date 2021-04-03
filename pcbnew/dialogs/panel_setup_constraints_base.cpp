@@ -102,7 +102,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	bSizerOutlinesOpts = new wxBoxSizer( wxVERTICAL );
 
 	m_rbOutlinePolygonBestQ = new wxRadioButton( this, wxID_ANY, _("Mimic legacy behavior"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rbOutlinePolygonBestQ->SetToolTip( _("Produces a slightly smoother outline at the expense of performance, some export fidelity issues, and overly agressive higher-priority zone knockouts.") );
+	m_rbOutlinePolygonBestQ->SetToolTip( _("Produces a slightly smoother outline at the expense of performance, some export fidelity issues, and overly aggressive higher-priority zone knockouts.") );
 
 	bSizerOutlinesOpts->Add( m_rbOutlinePolygonBestQ, 0, wxALL, 4 );
 

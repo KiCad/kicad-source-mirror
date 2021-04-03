@@ -1917,7 +1917,7 @@ void EAGLE_PLUGIN::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
 
         if( layer == UNDEFINED_LAYER )
         {
-            wxLogMessage( wxString::Format( _( "Ignoring a rectange since Eagle layer '%s' (%d) "
+            wxLogMessage( wxString::Format( _( "Ignoring a rectangle since Eagle layer '%s' (%d) "
                                                "was not mapped" ),
                                             eagle_layer_name( r.layer ),
                                             r.layer ) );

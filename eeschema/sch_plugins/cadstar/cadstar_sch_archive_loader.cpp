@@ -618,7 +618,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
             }
             else
             {
-                wxASSERT_MSG( false, "Unkown Symbol Variant." );
+                wxASSERT_MSG( false, "Unknown Symbol Variant." );
             }
         }
         else
