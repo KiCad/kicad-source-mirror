@@ -1384,15 +1384,11 @@ wxFileName SCH_SEXPR_PLUGIN_CACHE::GetRealFile() const
 #ifndef __WINDOWS__
     if( fn.Exists( wxFILE_EXISTS_SYMLINK ) )
     {
-        char buffer[ PATH_MAX + 1 ];
-        ssize_t pathLen = readlink( TO_UTF8( fn.GetFullPath() ), buffer, PATH_MAX );
+        char buffer[ PATH_MAX ];
+        char *realPath = realpath( TO_UTF8( fn.GetFullPath() ), buffer );
 
-        if( pathLen > 0 )
-        {
-            buffer[ pathLen ] = '\0';
-            fn.Assign( fn.GetPath() + wxT( "/" ) + wxString::FromUTF8( buffer ) );
-            fn.Normalize();
-        }
+        if( realPath )
+            fn.Assign( wxString::FromUTF8( realPath ) );
     }
 #endif
 

@@ -2409,15 +2409,11 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
     // Write through symlinks, don't replace them
     if( fn.Exists( wxFILE_EXISTS_SYMLINK ) )
     {
-        char buffer[ PATH_MAX + 1 ];
-        ssize_t pathLen = readlink( TO_UTF8( fn.GetFullPath() ), buffer, PATH_MAX );
+        char buffer[ PATH_MAX ];
+        char *realPath = realpath( TO_UTF8( fn.GetFullPath() ), buffer );
 
-        if( pathLen > 0 )
-        {
-            buffer[ pathLen ] = '\0';
-            fn.Assign( fn.GetPath() + wxT( "/" ) + wxString::FromUTF8( buffer ) );
-            fn.Normalize();
-        }
+        if( realPath )
+            fn.Assign( wxString::FromUTF8( realPath ) );
     }
 #endif
 
