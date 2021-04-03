@@ -828,23 +828,23 @@ void APPEARANCE_CONTROLS::OnNetGridRightClick( wxGridEvent& event )
     wxMenu menu;
 
     menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR,
-                                 _( "Set net color" ), wxEmptyString, wxITEM_NORMAL ) );
+                                 _( "Set Net Color" ), wxEmptyString, wxITEM_NORMAL ) );
     menu.Append( new wxMenuItem( &menu, ID_HIGHLIGHT_NET,
                                  wxString::Format( _( "Highlight %s" ), netName ),
                                  wxEmptyString, wxITEM_NORMAL ) );
     menu.Append( new wxMenuItem( &menu, ID_SELECT_NET,
-                                 wxString::Format( _( "Select tracks and vias in %s" ), netName ),
+                                 wxString::Format( _( "Select Tracks and Vias in %s" ), netName ),
                                  wxEmptyString, wxITEM_NORMAL ) );
     menu.Append( new wxMenuItem( &menu, ID_DESELECT_NET,
-                                 wxString::Format( _( "Deselect tracks and vias in %s" ), netName ),
+                                 wxString::Format( _( "Unselect Tracks and Vias in %s" ), netName ),
                                  wxEmptyString, wxITEM_NORMAL ) );
 
     menu.AppendSeparator();
 
     menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_NETS,
-                                 _( "Show all nets" ), wxEmptyString, wxITEM_NORMAL ) );
+                                 _( "Show All Nets" ), wxEmptyString, wxITEM_NORMAL ) );
     menu.Append( new wxMenuItem( &menu, ID_HIDE_OTHER_NETS,
-                                 _( "Hide all other nets" ), wxEmptyString,
+                                 _( "Hide All Other Nets" ), wxEmptyString,
                                  wxITEM_NORMAL ) );
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
@@ -884,8 +884,8 @@ void APPEARANCE_CONTROLS::OnNetGridMouseEvent( wxMouseEvent& aEvent )
         if( cell.GetCol() == NET_GRID_TABLE::COL_VISIBILITY )
             tip.Printf( showOrHide, name );
         else if( cell.GetCol() == NET_GRID_TABLE::COL_COLOR )
-            tip = _( "Left double click or middle click for color change, "
-                     "right click for menu" );
+            tip = _( "Double click (or middle click) to change color; "
+                     "right click for more actions" );
 
         m_netsGrid->GetGridWindow()->SetToolTip( tip );
     }
@@ -2139,29 +2139,29 @@ void APPEARANCE_CONTROLS::rebuildNets()
                             if( !isDefaultClass)
                             {
                                 menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR,
-                                             _( "Set netclass color" ), wxEmptyString,
+                                             _( "Set Netclass Color" ), wxEmptyString,
                                              wxITEM_NORMAL ) );
                             }
 
                             menu.Append( new wxMenuItem( &menu, ID_HIGHLIGHT_NET,
-                                         wxString::Format( _( "Highlight nets in %s" ), name ),
+                                         wxString::Format( _( "Highlight Nets in %s" ), name ),
                                                          wxEmptyString, wxITEM_NORMAL ) );
                             menu.Append( new wxMenuItem( &menu, ID_SELECT_NET,
-                                         wxString::Format( _( "Select tracks and vias in %s" ),
+                                         wxString::Format( _( "Select Tracks and Vias in %s" ),
                                                            name ),
                                          wxEmptyString, wxITEM_NORMAL ) );
                             menu.Append( new wxMenuItem( &menu, ID_DESELECT_NET,
-                                         wxString::Format( _( "Deselect tracks and vias in %s" ),
+                                         wxString::Format( _( "Unselect Tracks and Vias in %s" ),
                                                            name ),
                                          wxEmptyString, wxITEM_NORMAL ) );
 
                             menu.AppendSeparator();
 
                             menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_NETS,
-                                         _( "Show all netclasses" ), wxEmptyString,
+                                         _( "Show All Netclasses" ), wxEmptyString,
                                          wxITEM_NORMAL ) );
                             menu.Append( new wxMenuItem( &menu, ID_HIDE_OTHER_NETS,
-                                         _( "Hide all other netclasses" ), wxEmptyString,
+                                         _( "Hide All Other Netclasses" ), wxEmptyString,
                                          wxITEM_NORMAL ) );
 
                             menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
