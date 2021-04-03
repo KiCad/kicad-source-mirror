@@ -628,7 +628,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         return 0;
 
     LSET     item_layers = selection.GetSelectionLayers();
-    bool     unselect    = selection.IsHover(); // N.B. This must be saved before the re-selection
+    bool     is_hover    = selection.IsHover(); // N.B. This must be saved before the re-selection
                                                 // below
     VECTOR2I pickedReferencePoint;
 
@@ -710,14 +710,15 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     if( aPickReference && !pickReferencePoint( _( "Select reference point for move..." ), "", "",
                                                pickedReferencePoint ) )
     {
-        if( unselect )
+        if( is_hover )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
         editFrame->PopTool( tool );
         return 0;
     }
 
-    std::vector<BOARD_ITEM*> sel_items;
+    std::vector<BOARD_ITEM*> sel_items;     // All the items operated on by the move below
+    std::vector<BOARD_ITEM*> orig_items;    // All the original items in the selection
 
     for( EDA_ITEM* item : selection )
     {
@@ -725,7 +726,10 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         FOOTPRINT*  footprint = dynamic_cast<FOOTPRINT*>( item );
 
         if( boardItem )
+        {
+            orig_items.push_back( boardItem );
             sel_items.push_back( boardItem );
+        }
 
         if( footprint )
         {
@@ -963,8 +967,12 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     // Remove the dynamic ratsnest from the screen
     m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
 
-    if( unselect )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    // Unselect all items to update flags
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+    // Reselect items if they were already selected and we completed the move
+    if( !is_hover && !restore_state )
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
 
     editFrame->PopTool( tool );
 
@@ -1980,7 +1988,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     bool increment = aEvent.IsAction( &PCB_ACTIONS::duplicateIncrement );
 
     // Be sure that there is at least one item that we can modify
-    const auto& selection = m_selectionTool->RequestSelection(
+    const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
                 []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
                     std::set<BOARD_ITEM*> added_items;
@@ -2119,19 +2127,19 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         editFrame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
                                                      (int) new_items.size() ) );
 
+        // TODO(ISM): This line can't be used to activate the tool until we allow multiple activations
+        // m_toolMgr->RunAction( PCB_ACTIONS::move, true );
+        // Instead we have to create the event and call the tool's function
+        // directly
+
         // If items were duplicated, pick them up
         // this works well for "dropping" copies around and pushes the commit
         TOOL_EVENT evt = PCB_ACTIONS::move.MakeEvent();
-        bool       move_cancelled = Move( evt ) == -1;
+        Move( evt );
 
-        // After moving the new items, we need to refresh the group and view flags
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-        if( !is_hover && !move_cancelled )
-        {
-            // Do not select new items if they've been deleted again by cancelling Move()
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &new_items );
-        }
+        // Deslect the duplicated item if we originally started as a hover selection
+        if( is_hover )
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     }
 
     return 0;
