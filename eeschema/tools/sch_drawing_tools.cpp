@@ -1078,14 +1078,13 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     }
                 }
 
-                item->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
-
                 // Restore cursor after dialog
                 controls->WarpCursor( controls->GetCursorPosition(), true );
 
                 if( item )
                 {
                     item->SetFlags( IS_NEW | IS_MOVED );
+                    item->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
                     updatePreview();
 
                     // update the cursor so it looks correct before another event
