@@ -1230,6 +1230,7 @@ public:
         ATTRIBUTE_ID AttributeID;
         COLOR_ID     Color;
         bool         IsVisible = true;
+        bool         IsPickable = true;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -1246,8 +1247,9 @@ public:
 
     struct PARTNAMECOL : PARSER
     {
-        COLOR_ID     Color;
-        bool         IsVisible = true;
+        COLOR_ID Color;
+        bool     IsVisible = true;
+        bool     IsPickable = true;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };

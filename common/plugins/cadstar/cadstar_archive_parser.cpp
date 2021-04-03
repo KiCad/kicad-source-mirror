@@ -2209,6 +2209,10 @@ void CADSTAR_ARCHIVE_PARSER::ATTRCOL::Parse( XNODE* aNode, PARSER_CONTEXT* aCont
         {
             IsVisible = false;
         }
+        else if( cNodeName == wxT( "NOTPICKABLE" ) )
+        {
+            IsPickable = false;
+        }
         else
         {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
@@ -2260,6 +2264,10 @@ void CADSTAR_ARCHIVE_PARSER::PARTNAMECOL::Parse( XNODE* aNode, PARSER_CONTEXT* a
         if( cNodeName == wxT( "INVISIBLE" ) )
         {
             IsVisible = false;
+        }
+        else if( cNodeName == wxT( "NOTPICKABLE" ) )
+        {
+            IsPickable = false;
         }
         else
         {
