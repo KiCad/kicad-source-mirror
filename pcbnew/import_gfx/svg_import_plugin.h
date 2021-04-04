@@ -52,7 +52,7 @@ public:
     /**
      * @return the list of messages in one string. Each message ends by '\n'
      */
-    const wxString& GetMessages() const override
+    wxString GetMessages() const override
     {
         return m_messages;
     }

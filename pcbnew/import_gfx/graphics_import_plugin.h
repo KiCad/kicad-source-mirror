@@ -118,7 +118,7 @@ public:
      *
      * @return the list of messages in one string. Each message ends by '\n'
      */
-    const virtual wxString& GetMessages() const = 0;
+    virtual wxString GetMessages() const = 0;
 
 protected:
     ///> Importer used to create objects representing the imported shapes.
