@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-03-21 13:35+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2021-04-04 17:59+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
 "Language: no\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
@@ -16548,8 +16548,8 @@ msgstr ""
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b> Av rutenett %s </b> \"%s\" på stedet <b> (%.3f, %.3f) </b> for "
-"konvertert. <br>"
+"<b>Skjult effektinngangspinne %s</b> «%s» på stedet <b> (%.3f, %.3f) </b> av "
+"konvertert."
 
 #: eeschema/tools/ee_inspection_tool.cpp:333
 #, fuzzy, c-format
@@ -16557,22 +16557,22 @@ msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b> Av rutenett %s </b> \"%s\" på plassering <b> (%.3f, %.3f) </b> i symbol "
-"%c for konvertert. <br>"
+"<b> Skjult effektinngangspinne %s </b> «%s» på stedet <b> (%.3f, %.3f) </b> "
+"i enheten %c av konvertert."
 
 #: eeschema/tools/ee_inspection_tool.cpp:345
 #, fuzzy, c-format
 msgid "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
 msgstr ""
-"<b> Av rutenett %s </b> \"%s\" på plassering <b> (%.3f, %.3f) </b>. <br>"
+"<b> Skjult effektinngangspinne %s </b> «%s» på stedet <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr ""
-"<b> Av rutenett %s </b> \"%s\" på plassering <b> (%.3f, %.3f) </b> i symbol "
-"%c. <br>"
+"<b>Skjult effektinngangspinne %s</b> %s på stedet <b>(%.3f, %.3f)</b> i "
+"enheten %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:362
 msgid ""
@@ -16583,8 +16583,8 @@ msgstr ""
 #, fuzzy, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b> Av rutenett %s </b> \"%s\" på stedet <b> (%.3f, %.3f) </b> for "
-"konvertert. <br>"
+"<b>Pinne ute av rutenett %s</b> %s på stedet <b> (%.3f, %.3f) </b> av "
+"konvertert."
 
 #: eeschema/tools/ee_inspection_tool.cpp:383
 #, fuzzy, c-format
@@ -16592,21 +16592,20 @@ msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b> Av rutenett %s </b> \"%s\" på plassering <b> (%.3f, %.3f) </b> i symbol "
-"%c for konvertert. <br>"
+"<b>Pinne ute av rutenett %s </b> %s på stedet <b> (%.3f, %.3f) </b> i "
+"enheten %c av konvertert."
 
 #: eeschema/tools/ee_inspection_tool.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr ""
-"<b> Av rutenett %s </b> \"%s\" på plassering <b> (%.3f, %.3f) </b>. <br>"
+msgstr "<b>Pinne ute av rutenett %s</b> %s på stedet <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr ""
-"<b> Av rutenett %s </b> \"%s\" på plassering <b> (%.3f, %.3f) </b> i symbol "
-"%c. <br>"
+"<b>Pinne ute av rutenett %s </b> %s på stedet <b> (%.3f, %.3f)</b> i enheten "
+"%c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:418
 #, fuzzy
