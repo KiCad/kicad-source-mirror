@@ -114,12 +114,13 @@ void DIALOG_GLOBAL_DELETION::acceptPcbDelete()
         delAll = true;
     }
     else if( !IsOK( this, _( "Are you sure you want to delete the selected items?" ) ) )
-            return;
+    {
+        return;
+    }
 
-    BOARD*            pcb = m_Parent->GetBoard();
-    BOARD_COMMIT      commit( m_Parent );
-
-    LSET layers_filter = LSET().set();
+    BOARD*       pcb = m_Parent->GetBoard();
+    BOARD_COMMIT commit( m_Parent );
+    LSET         layers_filter = LSET().set();
 
     if( m_rbLayersOption->GetSelection() != 0 )     // Use current layer only
         layers_filter = LSET( ToLAYER_ID( m_currentLayer ) );
@@ -173,20 +174,11 @@ void DIALOG_GLOBAL_DELETION::acceptPcbDelete()
                     if( !delDrawings || !masque_layer[layer] )
                         continue;
 
-                    if( layer == Edge_Cuts )
-                    {
-                        // We currently don't differentiate between locked and unlocked board
-                        // edges.  (If we did, we'd also need to add checkboxes to filter them
-                        // as overloading m_drawingFilter* would be confusing.)
-                    }
-                    else
-                    {
-                        if( dwg->IsLocked() && !m_drawingFilterLocked->GetValue() )
-                            continue;
+                    if( dwg->IsLocked() && !m_drawingFilterLocked->GetValue() )
+                        continue;
 
-                        if( !dwg->IsLocked() && !m_drawingFilterUnlocked->GetValue() )
-                            continue;
-                    }
+                    if( !dwg->IsLocked() && !m_drawingFilterUnlocked->GetValue() )
+                        continue;
                 }
                 else if( type == PCB_TEXT_T )
                 {
