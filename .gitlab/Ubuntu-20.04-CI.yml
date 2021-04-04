@@ -60,6 +60,9 @@ report_build_warn_ubuntu20.04:
   stage: report
   extends: .only_code
   when: always
+  only:
+    - branches@kicad/code/kicad
+    - tags@kicad/code/kicad
   needs:
     - job: build_ubuntu20.04
       artifacts: true
@@ -78,6 +81,9 @@ report_metrics_ubuntu20.04:
   stage: report
   extends: .only_code
   when: always
+  only:
+    - branches@kicad/code/kicad
+    - tags@kicad/code/kicad
   needs:
     - job: build_ubuntu20.04
       artifacts: true
@@ -101,6 +107,9 @@ report_metrics_ubuntu20.04:
   tags:
     - kicad-ubuntu20.04
   image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/ubuntu:20.04
+  only:
+    - branches@kicad/code/kicad
+    - tags@kicad/code/kicad
 
 qa_python_ubuntu20.04:
   extends:
