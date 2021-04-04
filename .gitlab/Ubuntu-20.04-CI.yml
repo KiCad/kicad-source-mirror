@@ -58,7 +58,6 @@ build_ubuntu20.04:
 # Upload the compilation log in an easily downloadable form
 report_build_warn_ubuntu20.04:
   stage: report
-  extends: .only_code
   when: always
   only:
     - branches@kicad/code/kicad
@@ -79,7 +78,6 @@ report_build_warn_ubuntu20.04:
 # Report on the metrics of the code
 report_metrics_ubuntu20.04:
   stage: report
-  extends: .only_code
   when: always
   only:
     - branches@kicad/code/kicad
@@ -114,55 +112,47 @@ report_metrics_ubuntu20.04:
 qa_python_ubuntu20.04:
   extends:
     - .unit_test_ubuntu20.04
-    - .only_code
   variables:
     TEST: 'qa_python'
 
 qa_common_ubuntu20.04:
   extends:
     - .unit_test_ubuntu20.04
-    - .only_code
   variables:
     TEST: 'qa_common'
 
 qa_gerbview_ubuntu20.04:
   extends:
     - .unit_test_ubuntu20.04
-    - .only_code
   variables:
     TEST: 'qa_gerbview'
 
 qa_pcbnew_ubuntu20.04:
   extends:
     - .unit_test_ubuntu20.04
-    - .only_code
   variables:
     TEST: 'qa_pcbnew'
 
 qa_eeschema_ubuntu20.04:
   extends:
     - .unit_test_ubuntu20.04
-    - .only_code
   variables:
     TEST: 'qa_eeschema'
 
 qa_kimath_ubuntu20.04:
   extends:
     - .unit_test_ubuntu20.04
-    - .only_code
   variables:
     TEST: 'qa_kimath'
 
 qa_sexpr_ubuntu20.04:
   extends:
     - .unit_test_ubuntu20.04
-    - .only_code
   variables:
     TEST: 'qa_sexpr'
 
 qa_kicad2step_ubuntu20.04:
   extends:
     - .unit_test_ubuntu20.04
-    - .only_code
   variables:
     TEST: 'qa_kicad2step'
