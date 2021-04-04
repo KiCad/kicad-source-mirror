@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-04-03 18:26+0000\n"
+"PO-Revision-Date: 2021-04-04 18:00+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ro/>\n"
@@ -1948,7 +1948,7 @@ msgid "Configure Global %s Library Table"
 msgstr "Configurați tabelul bibliotecii %s globale"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad has been run for the first time using the new %s library table for\n"
 "accessing libraries.  In order for KiCad to access %s libraries,\n"
@@ -1956,11 +1956,11 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad a fost rulat pentru prima dată folosind noua tabelă de bibliotecă %s "
+"KiCad a fost rulat pentru prima dată folosind noul tabel de bibliotecă %s "
 "pentru\n"
 "accesarea bibliotecilor. Pentru ca KiCad să acceseze %s biblioteci,\n"
 "trebuie să vă configurați tabelul de bibliotecă global %s. Vă rugăm să "
-"selectați dintre unul\n"
+"selectați dintre una\n"
 "dintre opțiunile de mai jos. Dacă nu sunteți sigur ce opțiune să selectați, "
 "vă rugăm\n"
 "utilizați selecția predefinită."
@@ -2367,7 +2367,6 @@ msgid "Paper"
 msgstr "Foaie"
 
 #: common/dialogs/dialog_page_settings.cpp:104
-#, fuzzy
 msgid "Title Block"
 msgstr "Titlu"
 
@@ -2543,7 +2542,6 @@ msgid "Export to other sheets"
 msgstr "Exportați în alte foii"
 
 #: common/dialogs/dialog_page_settings_base.cpp:134
-#, fuzzy
 msgid "Title Block Parameters"
 msgstr "Parametrii titlului"
 
@@ -2735,11 +2733,11 @@ msgstr "Alb-negru"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 msgid "Print border and title block"
-msgstr ""
+msgstr "Imprimați marginea și titlul"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
-msgstr ""
+msgstr "Imprimați cadru de referințe."
 
 #: common/dialogs/dialog_print_generic_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
@@ -2756,7 +2754,7 @@ msgstr "Personalizat:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:74
 msgid "Set X scale adjust for exact scale plotting"
-msgstr ""
+msgstr "Setați axa X pentru o trasarea exactă"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -2782,7 +2780,7 @@ msgstr "Articole:"
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr ""
+msgstr "Vizualizați Preset Switcher"
 
 #: common/dialogs/panel_color_settings.cpp:49
 msgid "Reveal Themes in Finder"
@@ -3152,7 +3150,7 @@ msgstr ""
 
 #: common/dialogs/panel_hotkeys_editor.cpp:76
 msgid "Type filter text"
-msgstr ""
+msgstr "Scrieți textul filtrului"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:118
 msgid "Undo All Changes"
@@ -3191,36 +3189,39 @@ msgstr "comandă"
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
+"O singură acțiune poate fi asociată fiecărei setări de defilare verticală"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
-msgstr ""
+msgstr "Pan și Zoom"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:25
 msgid "Center and warp cursor on zoom"
-msgstr ""
+msgstr "Centrează și mută cursorul pe zoom"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:26
 msgid "Center the cursor on screen when zooming."
-msgstr ""
+msgstr "Centrează cursorul pe ecran atunci când se face zoom."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:33
 msgid "Automatically pan while moving object"
-msgstr ""
+msgstr "Deplasare automată în timp ce un obiect este mutat"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:34
 msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
 msgstr ""
+"Atunci când desenați un traseu sau mutați un element, secțiunea de imagine "
+"este deplasată automat când vă apropiați de marginea ecranului."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
 msgid "Use zoom acceleration"
-msgstr ""
+msgstr "Utilizați accelerarea zoomului"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:39
 msgid "Zoom faster when scrolling quickly"
-msgstr ""
+msgstr "Zoom mai rapid atunci când defilați rapid"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:45
 msgid "Zoom speed:"
@@ -3229,26 +3230,29 @@ msgstr "Viteza de zoom:"
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
 msgstr ""
+"Cât de mult se mărește zoomul pentru fiecare rotație a rotiței mouse-ului"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
 msgid "Pick the zoom speed automatically"
-msgstr ""
+msgstr "Alege viteza de zoom automat"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:67
 msgid "Auto pan speed:"
-msgstr ""
+msgstr "Viteza de deplasare automată:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
 msgstr ""
+"Cât de repede se efectuează deplasarea atunci când se mută un obiect în "
+"afara marginii ecranului"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:91
 msgid "Drag Gestures"
-msgstr ""
+msgstr "Gesturi de tragere"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:99
 msgid "Left button drag:"
-msgstr ""
+msgstr "Trageți cu butonul din stânga:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Draw selection rectangle"
@@ -3256,15 +3260,15 @@ msgstr "Desenați dreptunghiul de selecție"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
+msgstr "Trageți obiectele selectate; altfel desenează dreptunghi de selecție"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag any object (selected or not)"
-msgstr ""
+msgstr "Trageți orice obiect (selectat sau nu)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
-msgstr ""
+msgstr "Trageți cu butonul din mijloc:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:116
 #: common/dialogs/panel_mouse_settings_base.cpp:129
@@ -3274,9 +3278,8 @@ msgstr "Pivotă"
 #: common/dialogs/panel_mouse_settings_base.cpp:116
 #: common/dialogs/panel_mouse_settings_base.cpp:129
 #: common/tool/zoom_menu.cpp:43
-#, fuzzy
 msgid "Zoom"
-msgstr "Mărire"
+msgstr "Zoom"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:116
 #: common/dialogs/panel_mouse_settings_base.cpp:129
@@ -3301,19 +3304,19 @@ msgstr "Nimic"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:125
 msgid "Right button drag:"
-msgstr ""
+msgstr "Trageți cu butonul din dreapta:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
 msgid "Scroll Gestures"
-msgstr ""
+msgstr "Gesturi de defilare"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:153
 msgid "Vertical touchpad or scroll wheel movement:"
-msgstr ""
+msgstr "Mișcarea verticală a touchpad-ului sau a roții de defilare:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:158
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "Fiecărei coloane i se poate atribui o singură acțiune"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:175
 msgid "--"
@@ -3347,20 +3350,22 @@ msgstr "Zoom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:207
 msgid "Pan up/down:"
-msgstr ""
+msgstr "Deplasare sus/jos:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:223
 msgid "Pan left/right:"
-msgstr ""
+msgstr "Deplasare stânga/dreapta:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:257
 msgid "Pan left/right with horizontal movement"
-msgstr ""
+msgstr "Deplasare stânga/dreapta cu mișcare orizontală"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:258
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
 msgstr ""
+"Efectuați o deplasare la stânga și la dreapta atunci când defilați de la "
+"stânga la dreapta pe touchpad"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
 msgid "Reset to Mouse Defaults"
@@ -3410,27 +3415,27 @@ msgstr "Nume Netclass deja utilizat."
 
 #: common/dialogs/panel_setup_netclasses.cpp:472
 msgid "Minimum copper clearance"
-msgstr ""
+msgstr "Distanța minimă a cuprului"
 
 #: common/dialogs/panel_setup_netclasses.cpp:473
 msgid "Minimum track width"
-msgstr ""
+msgstr "Lățimea minimă a traseului"
 
 #: common/dialogs/panel_setup_netclasses.cpp:474
 msgid "Via pad diameter"
-msgstr ""
+msgstr "Diametrul via pad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
 msgid "Via plated hole diameter"
-msgstr ""
+msgstr "Diametrul via placate"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
 msgid "Microvia pad diameter"
-msgstr ""
+msgstr "Diametrul microvia pad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
 msgid "Microvia plated hole diameter"
-msgstr ""
+msgstr "Diametrul microvia placate"
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
 msgid "Differential pair track width"
@@ -3740,7 +3745,6 @@ msgid "First Page Option"
 msgstr "Opțiunea pentru prima pagină"
 
 #: common/drawing_sheet/ds_draw_item.cpp:144
-#, fuzzy
 msgid "Repeat Count"
 msgstr "Repetați numărul"
 
@@ -3806,9 +3810,9 @@ msgid "Unexpected '%s'"
 msgstr "Neașteptat '%s'"
 
 #: common/dsnlexer.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "need a number for '%s'"
-msgstr "e nevoie de un număr pentru „%s”"
+msgstr "e nevoie de un număr pentru '%s'"
 
 #: common/dsnlexer.cpp:673 common/dsnlexer.cpp:734
 msgid "Un-terminated delimited string"
@@ -4279,7 +4283,6 @@ msgstr "Grosime"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:306
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:189
 #: pcbnew/microwave/microwave_polygon.cpp:132
-#, fuzzy
 msgid "Mirrored"
 msgstr "Oglindit"
 
@@ -5258,9 +5261,8 @@ msgid "Select Preferred Editor"
 msgstr ""
 
 #: common/pgm_base.cpp:222
-#, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "Numele variabilei de mediu nu poate fi gol."
+msgstr "Variabila de mediu HOME este goală.  Nu se poate continua."
 
 #: common/pgm_base.cpp:233
 #, c-format
@@ -5501,7 +5503,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:95
 msgid "Settings for paper size and title block info"
-msgstr ""
+msgstr "Setări pentru dimensiunea hârtiei și informații despre titlu"
 
 #: common/tool/actions.cpp:101 kicad/project_tree_pane.cpp:790
 msgid "Print..."
@@ -5509,12 +5511,12 @@ msgstr "Imprimă..."
 
 #: common/tool/actions.cpp:107
 msgid "Plot..."
-msgstr ""
+msgstr "Trasare..."
 
 #: common/tool/actions.cpp:107 pcbnew/dialogs/dialog_plot.cpp:63
 #: pcbnew/dialogs/dialog_plot_base.h:153
 msgid "Plot"
-msgstr ""
+msgstr "Trasare"
 
 #: common/tool/actions.cpp:113
 msgid "Close the current editor"
@@ -6021,7 +6023,6 @@ msgid "List Hotkeys..."
 msgstr "Listă cu comenzi rapide..."
 
 #: common/tool/actions.cpp:620
-#, fuzzy
 msgid "Displays current hotkeys table and corresponding commands"
 msgstr ""
 "Afișează tabelul actual al comenzilor rapide și ordinele corespunzătoare"
@@ -6053,7 +6054,7 @@ msgid "Help file \"%s\" could not be found."
 msgstr ""
 
 #: common/tool/common_control.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not launch the default browser.\n"
 "For information on how to help the KiCad project, visit %s"
@@ -6116,7 +6117,7 @@ msgstr ""
 
 #: common/view/view.cpp:543
 msgid "Mirroring for Y axis is not supported yet"
-msgstr ""
+msgstr "Oglindirea pentru axa Y nu este încă acceptată"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
@@ -6236,7 +6237,7 @@ msgstr ""
 
 #: common/widgets/mathplot.cpp:1759
 msgid "Center plot view to this position"
-msgstr ""
+msgstr "Centrează trasarea în această poziție"
 
 #: common/widgets/mathplot.cpp:1760 eeschema/sim/sim_plot_frame_base.cpp:87
 msgid "Fit on Screen"
@@ -6244,15 +6245,15 @@ msgstr ""
 
 #: common/widgets/mathplot.cpp:1760
 msgid "Set plot view to show all items"
-msgstr ""
+msgstr "Setați trasarea pentru a afișa toate elementele"
 
 #: common/widgets/mathplot.cpp:1761
 msgid "Zoom in plot view."
-msgstr ""
+msgstr "Măriți vizualizarea trasări."
 
 #: common/widgets/mathplot.cpp:1762
 msgid "Zoom out plot view."
-msgstr ""
+msgstr "Micșorați vizualizarea trasări."
 
 #: common/widgets/net_selector.cpp:50
 msgid "<no net>"
@@ -7209,7 +7210,6 @@ msgid "Reset, but keep order of multi-unit parts"
 msgstr ""
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:88
-#, fuzzy
 msgid "Numbering"
 msgstr "Numerotare"
 
@@ -8742,7 +8742,6 @@ msgid "Fill with body background color"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:41
-#, fuzzy
 msgid "Fill Style"
 msgstr "Stil de umplere"
 
@@ -9213,7 +9212,6 @@ msgid "Position offset:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
-#, fuzzy
 msgid ""
 "Margin (in 0.001 inches) between a pin name position and the component "
 "body.\n"
@@ -9529,11 +9527,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:62
 msgid "Plot All Pages"
-msgstr ""
+msgstr "Trasați toate paginile"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:63
 msgid "Plot Current Page"
-msgstr ""
+msgstr "Trasați pagina curentă"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:155
 #: pcbnew/dialogs/dialog_export_svg.cpp:192
@@ -9559,7 +9557,7 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:191
 #: pcbnew/exporters/gen_footprints_placefile.cpp:200
 msgid "Plot Output Directory"
-msgstr ""
+msgstr "Trasați directorul de ieșire"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:222
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
@@ -9630,7 +9628,7 @@ msgstr "Schemă"
 #: pcbnew/exporters/gen_footprints_placefile.cpp:349
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
-msgstr "Nu s-au putut scrie fișierele plot în folderul „%s”."
+msgstr "Nu s-au putut scrie fișierele de trasare în folderul „%s”."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:24
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:24
@@ -9644,6 +9642,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
 msgstr ""
+"Directorul țintă pentru fișierele de trasare. Poate fi absolut sau relativ "
+"cu locația fișierului principal al schemei."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
@@ -9680,11 +9680,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
 msgid "Plot drawing sheet"
-msgstr ""
+msgstr "Trasarea foii de desen"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
 msgid "Plot the drawing sheet border and title block"
-msgstr ""
+msgstr "Trasarea marginii foii de desen și a titlului"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -9692,11 +9692,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
 msgid "Plot background color"
-msgstr ""
+msgstr "Trasați culoarea fundalului"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
-msgstr ""
+msgstr "Trasați culoarea de fundal dacă formatul de ieșire o acceptă"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:87
 msgid "Color theme:"
@@ -9704,7 +9704,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:94
 msgid "Select the color theme to use for plotting"
-msgstr ""
+msgstr "Selectați tema de culoare care urmează să fie utilizată pentru trasare"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:98
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:186
@@ -9728,11 +9728,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "În stânga jos, unități de trasare"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "Centrat, unități de trasare"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
@@ -9748,7 +9748,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:86
 msgid "Plot Schematic Options"
-msgstr ""
+msgstr "Opțiuni de trasare a schemelor"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:323
 msgid "Print Schematic"
@@ -9765,7 +9765,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr ""
+msgstr "Imprimați foaiea&referința și titlul"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
@@ -9804,9 +9804,8 @@ msgid "Symbol Name"
 msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:128
-#, fuzzy
 msgid "Action Taken"
-msgstr "Acțiunile întreprinse"
+msgstr "Acțiune"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:231
 #, c-format
@@ -9881,6 +9880,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
 msgstr ""
+"Directorul țintă pentru fișierele de trasare. Poate fi absolut sau relativ "
+"cu locația fișierului de placă."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:45
@@ -10700,9 +10701,8 @@ msgid "1/seconds"
 msgstr "1/secunde"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:527
-#, fuzzy
 msgid "Sinusoidal"
-msgstr "Sinusoidă"
+msgstr "Sinusoidal"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:559
 msgid "Rise delay time:"
@@ -10834,7 +10834,7 @@ msgstr "Curent"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:921
 msgid "Source Type"
-msgstr ""
+msgstr "Tipul sursei"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:929
 msgid "Source"
@@ -10900,13 +10900,12 @@ msgid "180"
 msgstr "180"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:152
-#, fuzzy
 msgid "Mirror:"
-msgstr "Oglindă:"
+msgstr "Oglindiț:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:156
 msgid "Not mirrored"
-msgstr ""
+msgstr "Nu este oglindit"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:156
 msgid "Around X axis"
@@ -11071,9 +11070,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:353
 #: eeschema/dialogs/dialog_symbol_remap.cpp:498
-#, fuzzy
 msgid "Abort Rescue"
-msgstr "Întrerupeți restaurarea"
+msgstr "Abandonați salvarea"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:370
 #: eeschema/dialogs/dialog_symbol_remap.cpp:403
@@ -11502,7 +11500,6 @@ msgid "Junction dot size:"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
-#, fuzzy
 msgid "Smallest"
 msgstr "Cel mai mic"
 
@@ -11516,7 +11513,6 @@ msgid "Large"
 msgstr "Mare"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
-#, fuzzy
 msgid "Largest"
 msgstr "Cel mai mare"
 
@@ -12219,14 +12215,12 @@ msgid "No alternate body style found for symbol \"%s\" in library \"%s\"."
 msgstr ""
 
 #: eeschema/hierarch.cpp:89
-#, fuzzy
 msgid "Navigator"
-msgstr "Iierarhie"
+msgstr "Navigare"
 
 #: eeschema/hierarch.cpp:273
-#, fuzzy
 msgid "Root"
-msgstr "Principal"
+msgstr "Rădăcină"
 
 #: eeschema/hierarch.cpp:279
 #, c-format
@@ -12369,9 +12363,8 @@ msgid "Import"
 msgstr "Importați"
 
 #: eeschema/menubar.cpp:99
-#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "Schematică KiCad"
+msgstr "Schematică non-KiCad..."
 
 #: eeschema/menubar.cpp:100
 msgid ""
@@ -12379,9 +12372,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/menubar.cpp:104
-#, fuzzy
 msgid "Footprint Assignments..."
-msgstr "Text amprentă"
+msgstr "Atribuții amprentă..."
 
 #: eeschema/menubar.cpp:110 eeschema/symbol_editor/menubar_symbol_editor.cpp:69
 #: pcbnew/dialogs/dialog_export_step.cpp:130
@@ -12391,9 +12383,8 @@ msgid "Export"
 msgstr "Exportați"
 
 #: eeschema/menubar.cpp:112
-#, fuzzy
 msgid "Drawing to Clipboard"
-msgstr "Exportați în mapă"
+msgstr "Exportați desen în mapă"
 
 #: eeschema/menubar.cpp:113 pcbnew/menubar_pcb_editor.cpp:109
 #: pcbnew/pcb_edit_frame.cpp:199
@@ -12504,7 +12495,6 @@ msgid "Inverted"
 msgstr "Inversat"
 
 #: eeschema/pin_type.cpp:77
-#, fuzzy
 msgid "Clock"
 msgstr "Ceas"
 
@@ -12539,7 +12529,7 @@ msgstr ""
 #: eeschema/plotters/plot_schematic_SVG.cpp:94
 #, c-format
 msgid "Plot: \"%s\" OK.\n"
-msgstr ""
+msgstr "Trasare: %s Bine.\n"
 
 #: eeschema/plotters/plot_schematic_DXF.cpp:96
 #: eeschema/plotters/plot_schematic_HPGL.cpp:171
@@ -13148,6 +13138,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Definiție invalidă a numelor de simboluri în\n"
+"fișier: '%s'\n"
+"linie: %d\n"
+"offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:741
 #, c-format
@@ -13175,6 +13169,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Valoare de proprietate invalidă în\n"
+"fișier: '%s'\n"
+"linie: %d\n"
+"offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1229
 #, c-format
@@ -13997,6 +13995,8 @@ msgstr ""
 msgid ""
 "This simulation provide no plots. Please refer to console window for results"
 msgstr ""
+"Această simulare nu furnizează nicio trasare . Vă rugăm să consultați "
+"fereastra consolei pentru rezultate"
 
 #: eeschema/sim/sim_plot_frame.cpp:191
 msgid "Run/Stop Simulation"
@@ -14012,7 +14012,7 @@ msgstr "Adăugați semnale"
 
 #: eeschema/sim/sim_plot_frame.cpp:194
 msgid "Add signals to plot"
-msgstr ""
+msgstr "Adăugați semnale la trasare"
 
 #: eeschema/sim/sim_plot_frame.cpp:195
 msgid "Probe"
@@ -14023,9 +14023,8 @@ msgid "Probe signals on the schematic"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:197 eeschema/sim/sim_plot_frame_base.cpp:234
-#, fuzzy
 msgid "Tune"
-msgstr "A ajusta"
+msgstr "Ajustați"
 
 #: eeschema/sim/sim_plot_frame.cpp:198
 msgid "Tune component values"
@@ -14054,7 +14053,7 @@ msgstr ""
 #: eeschema/sim/sim_plot_frame.cpp:488
 #, c-format
 msgid "Plot%u - "
-msgstr ""
+msgstr "Trasare%u- "
 
 #: eeschema/sim/sim_plot_frame.cpp:590
 msgid "Error: simulation type not defined!\n"
@@ -14062,7 +14061,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:596
 msgid "Error: simulation type doesn't support plotting!\n"
-msgstr ""
+msgstr "Eroare: tipul de simulare nu suportă trasare!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:798 eeschema/sim/sim_plot_frame.cpp:1450
 msgid "Signal"
@@ -14086,15 +14085,15 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:1075
 msgid "Save Plot as Image"
-msgstr ""
+msgstr "Salvați trasare ca imagine"
 
 #: eeschema/sim/sim_plot_frame.cpp:1092
 msgid "Save Plot Data"
-msgstr ""
+msgstr "Salvați datele de trasare"
 
 #: eeschema/sim/sim_plot_frame.cpp:1336
 msgid "You need to run plot-providing simulation first."
-msgstr ""
+msgstr "Trebuie să executați mai întâi simularea de trasare."
 
 #: eeschema/sim/sim_plot_frame.cpp:1537
 msgid ""
@@ -14110,7 +14109,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:1601
 msgid "Erase the signal from plot screen"
-msgstr ""
+msgstr "Ștergeți semnalul de pe ecranul de traseu"
 
 #: eeschema/sim/sim_plot_frame.cpp:1607
 msgid "Hide Cursor"
@@ -14122,7 +14121,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame_base.cpp:19
 msgid "New Plot"
-msgstr ""
+msgstr "Trasare nouă"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:25
 msgid "Open Workbook"
@@ -14215,7 +14214,6 @@ msgid "Frequency"
 msgstr "Frecvență"
 
 #: eeschema/sim/sim_plot_panel.cpp:317
-#, fuzzy
 msgid "Gain"
 msgstr "Câștig"
 
@@ -14302,19 +14300,16 @@ msgid "Loading library \"%s\""
 msgstr ""
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:71
-#, fuzzy
 msgid "Symbol..."
-msgstr "Simbol"
+msgstr "Simbol..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:72
-#, fuzzy
 msgid "View as PNG..."
-msgstr "Exportați vizualizarea curentă ca PNG ..."
+msgstr "Vizualizați ca PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:73
-#, fuzzy
 msgid "Symbol as SVG..."
-msgstr "Autori simbolurilor"
+msgstr "Simbol ca SVG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:77
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:96
@@ -14558,7 +14553,6 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor.cpp:592 include/lib_table_grid.h:183
 #: pcbnew/footprint_libraries_utils.cpp:943
 #: pcbnew/footprint_libraries_utils.cpp:1179
-#, fuzzy
 msgid "Nickname"
 msgstr "Poreclă"
 
@@ -15048,9 +15042,8 @@ msgid "Show Symbol Tree"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:193
-#, fuzzy
 msgid "Hide Symbol Tree"
-msgstr "Adăugați un simbol"
+msgstr "Ascundeți arborele de simboluri"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Export View as PNG..."
@@ -15174,9 +15167,8 @@ msgid "Add a symbol"
 msgstr "Adăugați un simbol"
 
 #: eeschema/tools/ee_actions.cpp:287
-#, fuzzy
 msgid "Add Power"
-msgstr "Adăugați putere"
+msgstr "Adăugați alimentare"
 
 #: eeschema/tools/ee_actions.cpp:287
 msgid "Add a power port"
@@ -15292,7 +15284,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:384
 msgid "Mirror Vertically"
-msgstr ""
+msgstr "Oglindire verticală"
 
 #: eeschema/tools/ee_actions.cpp:384
 msgid "Flips selected item(s) from top to bottom"
@@ -15300,7 +15292,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:390
 msgid "Mirror Horizontally"
-msgstr ""
+msgstr "Oglindire orizontală"
 
 #: eeschema/tools/ee_actions.cpp:390
 msgid "Flips selected item(s) from left to right"
@@ -15476,9 +15468,8 @@ msgid "Break Wire"
 msgstr "Rupeți firul"
 
 #: eeschema/tools/ee_actions.cpp:508
-#, fuzzy
 msgid "Divide a wire into segments which can be dragged independently"
-msgstr "Împărțiți un fir în segmente care pot fi târât independent"
+msgstr "Împărțiți un fir în segmente care pot fi trase independent"
 
 #: eeschema/tools/ee_actions.cpp:513
 msgid "Break Bus"
@@ -15909,7 +15900,6 @@ msgid "No new hierarchical labels found."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:654
-#, fuzzy
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "Locația joncțiunii nu conține fire și/sau pini conectabili."
 
@@ -16160,7 +16150,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:100
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:238
 msgid "Print mirrored"
-msgstr ""
+msgstr "Imprimare în oglindă"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:179
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
@@ -16402,6 +16392,8 @@ msgstr "Se încarcă %u/%zu %s"
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr ""
+"<b>Un fișier de lucru gerber nu poate fi încărcat ca fișier de trasare</b> "
+"<i>%s</i>"
 
 #: gerbview/files.cpp:356
 msgid "Open NC (Excellon) Drill File(s)"
@@ -16465,7 +16457,7 @@ msgstr "Polaritate"
 #: pcbnew/pcb_text.cpp:120 pcbnew/tools/edit_tool.cpp:1506
 #: pcbnew/tools/pcb_actions.cpp:312
 msgid "Mirror"
-msgstr "Oglindă"
+msgstr "Oglindiț"
 
 #: gerbview/gerber_draw_item.cpp:715
 msgid "AB axis"
@@ -16571,7 +16563,6 @@ msgstr "atribute X2"
 
 #: gerbview/gerbview_frame.cpp:1013
 #: resources/linux/launchers/gerbview.desktop.in:10
-#, fuzzy
 msgid "GerbView"
 msgstr "VeziGerb"
 
@@ -16659,9 +16650,8 @@ msgid "Highlight items with this aperture attribute"
 msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:164 gerbview/toolbars_gerber.cpp:166
-#, fuzzy
 msgid "DCode:"
-msgstr "CodeD:"
+msgstr "DCod:"
 
 #: gerbview/toolbars_gerber.cpp:285
 msgid "<No selection>"
@@ -16669,12 +16659,14 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:39
 msgid "Open Gerber Plot File(s)..."
-msgstr ""
+msgstr "Deschideți fișierul (fișierele) Gerber de trasare..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid ""
 "Open Gerber plot file(s) on the current layer. Previous data will be deleted"
 msgstr ""
+"Deschideți fișierul (fișierele) Gerber de trasare pe stratul curent. Datele "
+"anterioare vor fi șterse"
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Excellon Drill File(s)..."
@@ -16693,6 +16685,8 @@ msgstr ""
 #: gerbview/tools/gerbview_actions.cpp:52
 msgid "Open a Gerber job file and its associated gerber plot files"
 msgstr ""
+"Deschideți un fișier Gerber de lucru și fișierele Gerber de trasare asociate "
+"acestuia"
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Zip Archive File..."
@@ -16836,7 +16830,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:178
 msgid "Show as mirror image"
-msgstr ""
+msgstr "Afișare ca imagine în oglindă"
 
 #: gerbview/tools/gerbview_control.cpp:110
 msgid "None of the Gerber layers contain any data"
@@ -16901,9 +16895,8 @@ msgid "Items"
 msgstr "Obiecte"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:102
-#, fuzzy
 msgid "DCodes"
-msgstr "CoduriD"
+msgstr "DCoduri"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Show DCodes identification"
@@ -16929,7 +16922,7 @@ msgstr ""
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:106
 msgid "Show drawing sheet border and title block"
-msgstr ""
+msgstr "Afișați marginea foii de desen și titlul"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:107
 msgid "PCB Background"
@@ -17092,6 +17085,8 @@ msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
+"Editați marginile foilor de desen și titlul pentru utilizare în scheme și "
+"modele PCB"
 
 #: kicad/files-io.cpp:45
 msgid "KiCad project file"
@@ -17198,16 +17193,15 @@ msgstr ""
 
 #: kicad/menubar.cpp:94
 msgid "CADSTAR Project..."
-msgstr ""
+msgstr "Proiect CADSTAR..."
 
 #: kicad/menubar.cpp:95
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
 msgstr ""
 
 #: kicad/menubar.cpp:99
-#, fuzzy
 msgid "EAGLE Project..."
-msgstr "Proiect"
+msgstr "Proiectul EAGLE..."
 
 #: kicad/menubar.cpp:100
 msgid "Import EAGLE CAD XML schematic and board"
@@ -17498,7 +17492,7 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:105
 msgid "Edit drawing sheet borders and title block"
-msgstr ""
+msgstr "Editați marginile foilor de desen și titlul"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Open Text Editor"
@@ -17642,9 +17636,8 @@ msgid "Error code: %d"
 msgstr ""
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
-#, fuzzy
 msgid "Layout"
-msgstr "Schemă"
+msgstr "Aspect"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:226
 #, c-format
@@ -18062,27 +18055,31 @@ msgstr ""
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
-msgstr ""
+msgstr "Editarea datelor de examinare pentru dimensiunea paginii și titlului"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
 msgid "Show title block in preview mode"
-msgstr ""
+msgstr "Afișați titlul în modul de previzualizare"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
+"Afișați titlul în modul de previzualizare:\n"
+"substituenții de text vor fi înlocuiți cu previzualizări de date."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 msgid "Show title block in edit mode"
-msgstr ""
+msgstr "Afișați titlul în modul de editare"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
+"Afișați titlul în modul de editare:\n"
+"substituenții textului sunt afișați ca jetoane ${keyword}."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:474
 msgid "Error writing objects to clipboard"
@@ -18498,7 +18495,6 @@ msgid "T:"
 msgstr "T:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:814
-#, fuzzy
 msgid "Rough:"
 msgstr "Aspru:"
 
@@ -18737,7 +18733,6 @@ msgid "nano-Henry"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1453
-#, fuzzy
 msgid "Reactance:"
 msgstr "Reactanţă:"
 
@@ -19337,7 +19332,6 @@ msgid "Dielectric losses (odd):"
 msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:352
-#, fuzzy
 msgid "Zeven"
 msgstr "Zeven"
 
@@ -19366,9 +19360,8 @@ msgid "Number of twists per length"
 msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:412
-#, fuzzy
 msgid "environment"
-msgstr "Variabile de mediu"
+msgstr "mediu"
 
 #: pcb_calculator/transline_ident.cpp:413
 msgid "Relative permittivity of environment"
@@ -19506,7 +19499,7 @@ msgstr ""
 
 #: pcbnew/board_item.cpp:39
 msgid "Bezier Curve"
-msgstr ""
+msgstr "Curbă Bezier"
 
 #: pcbnew/board_item.cpp:40 pcbnew/dialogs/dialog_pad_properties.cpp:2134
 #: pcbnew/pcb_shape.cpp:528
@@ -20151,7 +20144,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:528
 msgid " will be ignored"
-msgstr ""
+msgstr " va fi ignorat"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:541
 msgid ""
@@ -20538,7 +20531,6 @@ msgid "Through vias:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:148
-#, fuzzy
 msgid "Blind/buried:"
 msgstr "Orb/îngropat:"
 
@@ -21475,7 +21467,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:190
 msgid "Mirror text"
-msgstr ""
+msgstr "Oglindiț textul"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:311
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:140
@@ -22139,7 +22131,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:43
 msgid "Drill and plot origin"
-msgstr ""
+msgstr "Originea de foraj și de trasare"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:46
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
@@ -22247,7 +22239,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
-msgstr ""
+msgstr "Pagină cu cadru și titlu"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Current page size"
@@ -22271,7 +22263,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:101
 msgid "Print the layer(s) horizontally mirrored"
-msgstr ""
+msgstr "Imprimă stratul (straturile) în oglindă orizontală"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:105
 msgid "One file per layer"
@@ -22730,7 +22722,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Mirror Y axis"
-msgstr ""
+msgstr "Oglindiț axa Y"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:51
 msgid ""
@@ -23217,7 +23209,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:107
 msgid "Bezier Control Pt"
-msgstr ""
+msgstr "Curbă Bezier punct de control"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:145
 msgid "Arc angle:"
@@ -23671,7 +23663,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties.cpp:483
 #: pcbnew/dialogs/dialog_text_properties.cpp:289
 msgid "back side (mirrored)"
-msgstr ""
+msgstr "partea din spate (oglindită)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:484
 #: pcbnew/dialogs/dialog_text_properties.cpp:289
@@ -23864,7 +23856,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2137
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:815
-#, fuzzy
 msgid "Add Primitive"
 msgstr "Adăugați formă"
 
@@ -24221,7 +24212,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:973
 msgid "Footprint R1 (300K), back side (mirrored), rotated 180.0º"
-msgstr ""
+msgstr "Amprenta R1 (300K), partea din spate (oglindită), rotită 180,0º"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:982
 msgid "Preview pad in sketch mode"
@@ -24296,7 +24287,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot.cpp:791
 msgid "No layer selected, Nothing to plot"
-msgstr ""
+msgstr "Nu este selectat niciun strat, nimic de trasat"
 
 #: pcbnew/dialogs/dialog_plot.cpp:846
 msgid "Warning: Scale option set to a very small value"
@@ -24309,31 +24300,33 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot.cpp:897
 #, c-format
 msgid "Plot file \"%s\" created."
-msgstr ""
+msgstr "S-a creat fișierul „%s”."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:23
 msgid "Plot format:"
-msgstr ""
+msgstr "Format trasare:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
-msgstr ""
+msgstr "Trasează cadru și titlul"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
 msgid "Plot footprint values"
-msgstr ""
+msgstr "Trasați valorile amprentei"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:84
 msgid "Plot reference designators"
-msgstr ""
+msgstr "Trasați desemnatori de referință"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plotting of invisible values / refs"
-msgstr ""
+msgstr "Forțarea trasării valorilor invizibile / referințe"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
 msgid "Force plot invisible footprint values and reference designators"
 msgstr ""
+"Forțarea trasării valorilor amprentei invizibile și a indicativelor de "
+"referință"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Exclude PCB edge layer from other layers"
@@ -24341,7 +24334,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Do not plot the contents of the PCB edge layer on any other layers."
-msgstr ""
+msgstr "Nu trasați conținutul stratului de margine al PCB pe alte straturi."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Sketch pads on fab layers"
@@ -24349,7 +24342,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr ""
+msgstr "Includeți contururile pad pe straturile F.Fab și B.Fab la trasare"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Do not tent vias"
@@ -24367,6 +24360,8 @@ msgstr ""
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
 msgstr ""
+"Utilizați originea fișierului de foraj/plasare ca origine a coordonatelor "
+"pentru fișierele trasare"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:113
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:229
@@ -24399,7 +24394,7 @@ msgstr "3:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:133
 msgid "Plot mode:"
-msgstr ""
+msgstr "Modul de trasare:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Filled"
@@ -24411,15 +24406,16 @@ msgstr "Schiță"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:143
 msgid "Mirrored plot"
-msgstr ""
+msgstr "Oglindiț trasarea"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:146
 msgid "Negative plot"
-msgstr ""
+msgstr "Trasare negativă"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
+#, fuzzy
 msgid "Check zone fills before plotting"
-msgstr ""
+msgstr "Verificați umpluturile de zonă înainte de trasare"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid ""
@@ -24463,6 +24459,8 @@ msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
+"Generați un fișier Gerber de lucru care conține informații despre placă,\n"
+"și lista fișierelor Gerber de trasare generate"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "Remove silkscreen from areas without soldermask"
@@ -24514,7 +24512,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:256
-#, fuzzy
 msgid "Default pen size:"
 msgstr "Dimensiunea predefinită a stiloului:"
 
@@ -24561,21 +24558,25 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:334
 msgid "Plot graphic items using their contours"
-msgstr ""
+msgstr "Trasarea elementelor grafice utilizând contururile acestora"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:336
 msgid "Uncheck to plot graphic items using their center lines"
 msgstr ""
+"Debifați pentru a trasa elementele grafice utilizând liniile lor centrale"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
 msgid "Use KiCad font to plot texts"
-msgstr ""
+msgstr "Utilizați fontul KiCad pentru a trasa texte"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
+"Verificați pentru a utiliza fontul KiCad\n"
+"Debifați pentru a trasa texte ASCII pe o singură linie ca text editabil ("
+"utilizând fontul DXF)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:354
 msgid "Export units:"
@@ -25271,7 +25272,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/track.cpp:1041
-#, fuzzy
 msgid "Through"
 msgstr "Prin"
 
@@ -25282,7 +25282,6 @@ msgstr "Micro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/track.cpp:1042
-#, fuzzy
 msgid "Blind/buried"
 msgstr "Orb/îngropat"
 
@@ -26114,7 +26113,6 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:533
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
-#, fuzzy
 msgid "mixed"
 msgstr "amestecat"
 
@@ -26410,7 +26408,6 @@ msgid "If you want a layer for documentation drawings"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:704
-#, fuzzy
 msgid "Drawings"
 msgstr "Desene"
 
@@ -26492,12 +26489,21 @@ msgid ""
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
+"Distanța minimă între 2 pad-uri.\n"
+"Două pad-uri mai apropiate decât această valoare vor fi unite în timpul "
+"trasării.\n"
+"Acest parametru este utilizat numai pentru trasarea straturilor de mască de "
+"sudură.\n"
+"Lăsați-l la 0 dacă nu știți ce faceți."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
 msgstr ""
+"Distanța minimă dintre deschiderile din masca de sudură.  Deschiderile pad "
+"mai apropiate decât această distanță vor fi reprezentate ca o singură "
+"deschidere."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:88
 msgid ""
@@ -28072,11 +28078,11 @@ msgstr ""
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1337
 msgid "Invalid spline definition encountered"
-msgstr ""
+msgstr "S-a întâlnit o definiție nevalidă a splinei"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1344
 msgid "Invalid Bezier curve created"
-msgstr ""
+msgstr "S-a creat o curbă Bezier nevalidă"
 
 #: pcbnew/initpcb.cpp:49
 msgid ""
@@ -28118,18 +28124,16 @@ msgstr ""
 
 #: pcbnew/menubar_footprint_editor.cpp:71
 #: pcbnew/menubar_footprint_editor.cpp:80
-#, fuzzy
 msgid "Footprint..."
-msgstr "Amprentă"
+msgstr "Amprentă..."
 
 #: pcbnew/menubar_footprint_editor.cpp:72 pcbnew/menubar_pcb_editor.cpp:111
 msgid "Graphics..."
 msgstr "Grafică..."
 
 #: pcbnew/menubar_footprint_editor.cpp:81
-#, fuzzy
 msgid "View as &PNG..."
-msgstr "Exportați vizualizarea curentă ca PNG ..."
+msgstr "Vizualizați ca &PNG..."
 
 #: pcbnew/menubar_footprint_editor.cpp:82
 msgid "Create a PNG file from the current view"
@@ -28908,7 +28912,7 @@ msgstr ""
 
 #: pcbnew/pcb_edit_frame.cpp:200
 msgid "Export netlist used to update schematics"
-msgstr ""
+msgstr "Export netlist utilizat pentru a actualiza schemele"
 
 #: pcbnew/pcb_edit_frame.cpp:338
 msgid "New PCB file is unsaved"
@@ -29314,7 +29318,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1079
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
-msgstr ""
+msgstr "Definiția pad-ului CADSTAR „%s” are erori de import: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1114
 #, c-format
@@ -29559,10 +29563,11 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1609
-#, c-format, fuzzy
+#, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
-"Ignorarea unui fir din moment ce stratul Eagle '%s' (%d) nu a fost mapat"
+"Ignorarea unui fir din moment ce stratul Eagle '%s' (%d) nu a fost "
+"cartografiat"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1782
 #, c-format
@@ -30146,6 +30151,8 @@ msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
+"Această zonă nu poate fi gestionată de router.\n"
+"Vă rugăm să verificați dacă nu este un poligon care se auto-intersectează."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1615 pcbnew/router/router_tool.cpp:424
 msgid "Interactive Router"
@@ -30589,17 +30596,16 @@ msgid "Locking"
 msgstr ""
 
 #: pcbnew/tools/board_editor_control.cpp:133
-#, fuzzy
 msgid "Omit extra information"
-msgstr "Informații Bitmap"
+msgstr "Omiteți informații suplimentare"
 
 #: pcbnew/tools/board_editor_control.cpp:134
 msgid "Omit nets"
-msgstr ""
+msgstr "Omiteți rețelele"
 
 #: pcbnew/tools/board_editor_control.cpp:136
 msgid "Do not prefix path with footprint UUID."
-msgstr ""
+msgstr "Nu prefixați calea cu amprenta UUID."
 
 #: pcbnew/tools/board_editor_control.cpp:374
 msgid "Merge Specctra Session file:"
@@ -30610,24 +30616,21 @@ msgid "Specctra DSN File"
 msgstr ""
 
 #: pcbnew/tools/board_editor_control.cpp:421
-#, fuzzy
 msgid "Export Board Netlist"
-msgstr "Exportați în alte Scheme"
+msgstr "Exportați netlist-ul plăcii"
 
 #: pcbnew/tools/board_editor_control.cpp:422
-#, fuzzy
 msgid "KiCad board netlist files"
-msgstr "Fișiere netlist KiCad"
+msgstr "Fișiere de placă netlist KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:436
 #, c-format
 msgid "Path `%s` is read only."
-msgstr ""
+msgstr "Calea de acces `%s` este numai pentru citire."
 
 #: pcbnew/tools/board_editor_control.cpp:437
-#, fuzzy
 msgid "I/O Error"
-msgstr "Eroare"
+msgstr "Eroare I/O"
 
 #: pcbnew/tools/board_editor_control.cpp:527
 #, c-format
@@ -31310,9 +31313,8 @@ msgid "Add a zone with the same settings as an existing zone"
 msgstr "Adăugați o zonă cu aceleași setări ca o zonă existentă"
 
 #: pcbnew/tools/pcb_actions.cpp:191
-#, fuzzy
 msgid "Import Graphics..."
-msgstr "Grafică..."
+msgstr "Importați grafică..."
 
 #: pcbnew/tools/pcb_actions.cpp:191
 msgid "Import 2D drawing file"
@@ -31450,7 +31452,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:312
 msgid "Mirrors selected item"
-msgstr ""
+msgstr "Oglindește elementul selectat"
 
 #: pcbnew/tools/pcb_actions.cpp:317
 msgid "Change Track Width"
@@ -31477,9 +31479,8 @@ msgid "Show Footprint Tree"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:345
-#, fuzzy
 msgid "Hide Footprint Tree"
-msgstr "Text amprentă"
+msgstr "Ascundeți arborele de amprente"
 
 #: pcbnew/tools/pcb_actions.cpp:351
 msgid "New Footprint..."
@@ -31526,18 +31527,16 @@ msgid "Import Footprint..."
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:386
-#, fuzzy
 msgid "Import footprint from file"
-msgstr "Fișiere de amprente IDFv3"
+msgstr "Importați amprenta din fișier"
 
 #: pcbnew/tools/pcb_actions.cpp:391
 msgid "Export Footprint..."
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:391
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "Exportați în fișier"
+msgstr "Exportați amprenta în fișier"
 
 #: pcbnew/tools/pcb_actions.cpp:396
 msgid "Footprint Properties..."
@@ -31745,18 +31744,16 @@ msgid "Edit board setup including layers, design rules and various defaults"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:557
-#, fuzzy
 msgid "Import Netlist..."
-msgstr "Importați comenzi rapide..."
+msgstr "Importați netlist..."
 
 #: pcbnew/tools/pcb_actions.cpp:557
 msgid "Read netlist and update board connectivity"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:562
-#, fuzzy
 msgid "Import Specctra Session..."
-msgstr "Importați comenzi rapide..."
+msgstr "Importați sesiunea Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Import routed Specctra session (*.ses) file"
@@ -31764,7 +31761,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:567
 msgid "Export Specctra DSN..."
-msgstr ""
+msgstr "Export Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:567
 msgid "Export Specctra DSN routing info"
@@ -32886,7 +32883,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "Show drawing sheet borders and title block"
-msgstr ""
+msgstr "Afișați marginile foii de desen și titlul"
 
 #: pcbnew/widgets/appearance_controls.cpp:373
 msgid "No Layers"
