@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-04-03 18:26+0000\n"
+"PO-Revision-Date: 2021-04-04 17:59+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -16226,9 +16226,8 @@ msgid "Complete bus with current segment"
 msgstr "Aktualizace návrhu DPS s aktuálním schématem (dopředná anotace)"
 
 #: eeschema/tools/ee_actions.cpp:723
-#, fuzzy
 msgid "Finish Lines"
-msgstr "Hotovo"
+msgstr "Dokončení čáry"
 
 #: eeschema/tools/ee_actions.cpp:723
 msgid "Complete connected lines with current segment"
@@ -16440,9 +16439,10 @@ msgid "Edit %s Field"
 msgstr "Upravit %s pole"
 
 #: eeschema/tools/sch_edit_tool.cpp:1744
-#, fuzzy
 msgid "There are no unreferenced pins in this sheet to remove."
-msgstr "Nejsou žádné nedefinované označení v tomto listu k vyčištění."
+msgstr ""
+"V tomto listu nejsou žádné nedefinované vývody, které by mohly být "
+"odstraněny."
 
 #: eeschema/tools/sch_edit_tool.cpp:1748
 #, fuzzy
@@ -16788,9 +16788,8 @@ msgid "Unknown Excellon command &lt;%s&gt;"
 msgstr "Neznámý příkaz Excellon &lt;%s&gt;"
 
 #: gerbview/excellon_read_drill_file.cpp:578
-#, fuzzy
 msgid "Tool definition shape not found"
-msgstr "Definovaný nástroj <%c> není podporovaný"
+msgstr "Definice tvaru nástroje nebyla nalezena"
 
 #: gerbview/excellon_read_drill_file.cpp:581
 #, c-format
@@ -17242,7 +17241,7 @@ msgstr "Export do editoru DPS..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
-msgstr ""
+msgstr "Export dat jako soubor KICAD PCB"
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear Current Layer..."
@@ -17293,9 +17292,8 @@ msgid "Previous Layer"
 msgstr "Předchozí vrstva"
 
 #: gerbview/tools/gerbview_actions.cpp:144
-#, fuzzy
 msgid "Sketch Lines"
-msgstr "Šrafované čáry"
+msgstr "Čáry jako obrys"
 
 #: gerbview/tools/gerbview_actions.cpp:144
 msgid "Show lines in outline mode"
@@ -17317,9 +17315,8 @@ msgid "Sketch Polygons"
 msgstr "Mnohoúhelníky v režimu obrysů"
 
 #: gerbview/tools/gerbview_actions.cpp:156
-#, fuzzy
 msgid "Show polygons in outline mode"
-msgstr "Zobrazit plošky jako obrys"
+msgstr "Zobrazit zóny jako obrys"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 #, fuzzy
@@ -30174,9 +30171,8 @@ msgid "KiCad PCB Editor"
 msgstr "Návrh DPS"
 
 #: pcbnew/pcb_edit_frame.cpp:200
-#, fuzzy
 msgid "Export netlist used to update schematics"
-msgstr "Exportování netlistu vyžaduje plně očíslované schéma."
+msgstr "Exportování netlistu používaný k aktualizaci schématu"
 
 #: pcbnew/pcb_edit_frame.cpp:338
 msgid "New PCB file is unsaved"
@@ -32285,7 +32281,7 @@ msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:371
 msgid "BOARD CHARACTERISTICS"
-msgstr ""
+msgstr "CHARAKTERISTIKA DESKY"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:387
 msgid "Copper Layer Count: "
