@@ -1740,6 +1740,9 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( const SEG& aSegment, int a
     CONST_SEGMENT_ITERATOR iterator = CIterateSegmentsWithHoles( aPolygonIndex );
     SEG::ecoord            minDistance = (*iterator).SquaredDistance( aSegment );
 
+    if( aNearest && minDistance == 0 )
+        *aNearest = ( *iterator ).NearestPoint( aSegment );
+
     for( iterator++; iterator && minDistance > 0; iterator++ )
     {
         SEG::ecoord currentDistance = (*iterator).SquaredDistance( aSegment );
