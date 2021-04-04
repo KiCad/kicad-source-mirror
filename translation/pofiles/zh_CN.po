@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-04-04 14:18+0000\n"
+"PO-Revision-Date: 2021-04-04 17:59+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -7320,7 +7320,6 @@ msgid "Bill of Material"
 msgstr "BOM (物料清单)"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
-#, fuzzy
 msgid ""
 "# 1 - Full documentation\n"
 "\n"
@@ -7533,7 +7532,9 @@ msgstr ""
 "\n"
 "您应通过单击“添加插件”按钮在插件列表中添加一个新插件（脚本）。\n"
 "\n"
-"## 4.1 - 插件配置参数 Eeschema 插件配置对话框需要以下信息：\n"
+"## 4.1 - 插件配置参数\n"
+"\n"
+"Eeschema 插件配置对话框需要以下信息：\n"
 "\n"
 " * 标题：例如，网表格式的名称。\n"
 " * 用于启动转换器的命令行（通常是脚本）。\n"
@@ -22797,7 +22798,7 @@ msgstr "0.1 英寸"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "Vrml Units for Output Files"
-msgstr "输出文件的 Vrml 单元"
+msgstr "输出文件的 Vrml 单位"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
