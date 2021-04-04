@@ -631,7 +631,7 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc )
 
 void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const VECTOR2I& aP )
 {
-    if( m_shapes[aVertex] != SHAPE_IS_PT )
+    if( aVertex < m_points.size() && m_shapes[aVertex] != SHAPE_IS_PT )
         convertArc( aVertex );
 
     m_points.insert( m_points.begin() + aVertex, aP );
