@@ -603,10 +603,10 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
     if( !DIALOG_SHIM::TransferDataFromWindow() )
         return false;
 
-    if( !m_PanelGeneral->TransferDataFromWindow() )
+    if( !m_itemsGrid->CommitPendingChanges() )
         return false;
 
-    if( !m_Panel3D->TransferDataFromWindow() )
+    if( !m_modelsGrid->CommitPendingChanges() )
         return false;
 
     auto view = m_frame->GetCanvas()->GetView();
