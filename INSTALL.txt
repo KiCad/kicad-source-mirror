@@ -8,7 +8,7 @@ The parts of KiCad
 
   kicad         - KiCad programs and core files.
   kicad-doc     - Documentation and interactive help (optional package).
-  kicad-library - KiCad schematic, pcb & 3D-model libraries (optional package).
+  kicad-library - Schematic symbol, PCB footprint, and 3D model libraries (optional package).
 
   This repository contains the source code for the main KiCad programs. The documentation
   and library sources are available at https://gitlab.com/kicad
@@ -17,11 +17,11 @@ The parts of KiCad
 Installation from binary packages
 ---------------------------------
 
- Compiled KiCad binaries exist for Windows (7, 8.1, 10), Mac OS (10.12+) and several
- Linux distributions (Fedora, Debian, Ubuntu, Arch). These are available from the
- main KiCad website: https://kicad.org/download/
+  Compiled KiCad binaries exist for Windows (8.1, 10), macOS (10.14+), and several
+  Linux distributions (Fedora, Debian, Ubuntu, Arch). These are available from the
+  main KiCad website: https://kicad.org/download/
 
- Data files (schematic, boards, libraries) are compatible with all platforms.
+  Data files (schematics, boards, libraries) are compatible with all platforms.
 
 
 Installation from binary packages for Windows
@@ -44,34 +44,34 @@ Linux install tree
 
   The default locations KiCad uses to install its components on Linux are:
 
-  ${prefix}/bin                            - Binaries (executable files).
-  ${prefix}/lib/kicad                      - Shared libraries
-  ${prefix}/share/doc/kicad/               - Various documentation.
-  ${prefix}/share/doc/kicad/help           - Interactive help.
-  ${prefix}/share/kicad/demos              - Sample schematics and printed boards.
-  ${prefix}/share/kicad/template           - Template projects and sheets.
-  ${prefix}/share/kicad/library            - Symbol libraries.
-  ${prefix}/share/kicad/modules            - Module libraries for printed boards.
-  ${prefix}/share/kicad/modules/packages3d - 3D component models (.wrl and .step format).
-  ${prefix}/share/kicad/resources          - Resource files (images, etc).
+  ${prefix}/bin                    - Binaries (executable files).
+  ${prefix}/lib/kicad              - Shared libraries.
+  ${prefix}/share/doc/kicad        - Various documentation.
+  ${prefix}/share/doc/kicad/help   - Interactive help.
+  ${prefix}/share/kicad/demos      - Sample schematics and printed boards.
+  ${prefix}/share/kicad/template   - Template projects and sheets.
+  ${prefix}/share/kicad/library    - Schematic symbol libraries.
+  ${prefix}/share/kicad/modules    - PCB footprint libraries.
+  ${prefix}/share/kicad/3dmodels   - 3D component models (.wrl and .step format).
+  ${prefix}/share/kicad/resources  - Resource files (images, etc).
 
   Warning:
   Do not change the KiCad tree, or the location of binary files.  Otherwise
   KiCad may not be able to find some or all of its required files.
 
 
-Mac OS X KiCad tree
--------------------
+macOS KiCad tree
+----------------
 
   System wide files
 
-  /Library/Application Support/kicad/demos
-  /Library/Application Support/kicad/internat
+  /Library/Application Support/kicad/help
+  /Library/Application Support/kicad/template
   /Library/Application Support/kicad/library
   /Library/Application Support/kicad/modules
-  /Library/Application Support/kicad/modules/packages3d
+  /Library/Application Support/kicad/3dmodels
 
-  User files can be the same as the system wide files but only inside the users home directory.
+  User files can be the same as the system wide files but only inside the user's home directory.
 
   $HOME/Library/Application Support/kicad
 
@@ -83,15 +83,15 @@ Mac OS X KiCad tree
 Installation from source code
 -----------------------------
 
-  Currently the only supported compilers are GCC on linux and windows and clang on OS X.
+  Currently the only supported compilers are GCC on Linux and Windows and Clang on macOS.
 
   Some dependencies must be satisfied for the correct installation of KiCad:
 
   wxWidgets            >= 3.0.0           http://www.wxwidgets.org/
 
-  CMake                >= 3.0.2           http://www.cmake.org/
+  CMake                >= 3.10.0          https://www.cmake.org/
 
-  Boost C++ Libraries: >= 1.59            http://www.boost.org/
+  Boost C++ Libraries  >= 1.59            https://www.boost.org/
 
   OpenGL               >= 2.1
     Linux:   Mesa 3D Graphics Library     http://www.mesa3d.org/
@@ -113,7 +113,7 @@ Installation from source code
 
   Doxygen              (optional)         http://www.doxygen.nl
 
-  python               >= 2.6 (optional)  http://python.org/
+  Python               >= 2.6 (optional)  https://python.org/
 
   wxPython             (optional)         http://www.wxpython.org/
 
@@ -126,18 +126,16 @@ Installation from source code
 
     OCC                >= 6.9.0 (optiona) https://www.opencascade.com/content/latest-release
 
-  Complete documentation for building from source can be found in the developer
-  documentation located in Documentation/development/compiling.md
+  Complete documentation for building from source can be found at: https://dev-docs.kicad.org/
 
 
-Important parameters to cmake
+Important parameters to CMake
 -----------------------------
 
-  See Documentation/development/compiling.md for a list of all CMake options
-  available when compiling KiCad.
+  See https://dev-docs.kicad.org/en/build/compile-options/ for a list of all compile options.
 
   -DCMAKE_BUILD_TYPE=<buildtype>
-  <buildtype> may current one of "Debug" and "Release".
+  <buildtype> may be one of "Debug", "Release", or "RelWithDebInfo".
 
   -DCMAKE_INSTALL_PREFIX=<prefix>
   Default to "/usr/local".
@@ -149,7 +147,7 @@ Important parameters to cmake
   Can be used only with -DCMAKE_BUILD_TYPE=Debug
 
   -DCMAKE_CXX_FLAGS=<some extra flags>
-  Extra flags for the c++ compiler for your system required.
+  Extra flags for the C++ compiler required for your system.
 
   -DCMAKE_VERBOSE_MAKEFILE=ON
   When more output is wanted use this cmake parameter or call "make VERBOSE=1".
@@ -163,5 +161,3 @@ Extra CFLAGS and linker flags
       "CXXFLAGS" (c++ compiler)
       "LDFLAGS"  (for linker)
       "CFLAGS"   (for c-compiler, not needed in kdesvn build)
-
-    eg., it may usefull on 64bit systems "-m64" to CXXFLAGS and LDFLAGS.

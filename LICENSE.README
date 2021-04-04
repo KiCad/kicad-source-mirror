@@ -1,6 +1,6 @@
 The majority of KiCad's source code is developed and distributed under the terms
-of the GPLv3 or later. However, It does include some third-party code licensed
-under licensed under the BOOST license v1.0, the ISC license and the MIT license.
+of the GPLv3 or later. However, it does include some third-party code licensed
+under other licenses (see below for details).
 
 These licenses are compatible, but a combined works as is will be governed under
 the terms of the GPLv3 (or later). This includes any binary distribution of the
@@ -28,7 +28,7 @@ Licensed under ZLib:
 - nanosvg in thirdparty/nanosvg
 Licensed in the public domain:
 - lemon in thirdparty/lemon
-Licensed under CC-BY-SA-4.0:
+Licensed under CC BY-SA 4.0:
 - All the demo files provided in demos/*
 Licensed under GPLv3 (or later):
 - All remaining code not listed above

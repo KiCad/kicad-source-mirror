@@ -1,6 +1,6 @@
 * Copyright (C) 1992-2015 Jean-Pierre Charras
-* Copyright (C) 1992-2019 Kicad Developers Team
-* under GNU General Public License (see copyright.txt)
+* Copyright (C) 1992-2021 KiCad Developers Team
+* under GNU General Public License (see LICENSE.README)
 
 == Main Authors
 Jean-Pierre Charras <jean-pierre.charras[at]wanadoo-dot-fr>

@@ -33,7 +33,7 @@ libraries, see our [Website](https://kicad.org/) and our [Forum](https://forum.k
 ## Subdirectories
 
 * [3d-viewer](3d-viewer)         - Sourcecode of the 3D viewer
-* [bitmap2component](bitmap2component)  - Sourcecode of the bitmap to pcb artwork converter
+* [bitmap2component](bitmap2component)  - Sourcecode of the bitmap to PCB artwork converter
 * [bitmaps_png](bitmaps_png)       - Menu and program icons
 * [CMakeModules](CMakeModules)      - Modules for the CMAKE build tool
 * [common](common)            - Sourcecode of the common library
@@ -45,18 +45,17 @@ libraries, see our [Website](https://kicad.org/) and our [Forum](https://forum.k
 * [helpers](helpers)           - Helper tools and utilities for development
 * [include](include)           - Interfaces to the common library
 * [kicad](kicad)             - Sourcecode of the project manager
-* [libs](libs)           - Sourcecode of kicad utilities (geometry and others)
+* [libs](libs)           - Sourcecode of KiCad utilities (geometry and others)
 * [pagelayout_editor](pagelayout_editor) - Sourcecode of the pagelayout editor
 * [patches](patches)           - Collection of patches for external dependencies
 * [pcbnew](pcbnew)           - Sourcecode of the printed circuit board editor
-* [plugins](plugins)           - Sourcecode for the 3d viewer plugins
+* [plugins](plugins)           - Sourcecode for the 3D viewer plugins
 * [qa](qa)                - Unit testing framework for KiCad
 * [resources](resources)         - Packaging resources for various operating systems
 * [scripting](scripting)         - SWIG Python scripting definitions and build scripts
 * [scripts](scripts)           - Example scripts for distribution with KiCad
 * [template](template)          - Project template
-* [thirdparty](thirdparty)           - Sourcecode of external libraries used in kicad but not written by Kicad team
+* [thirdparty](thirdparty)           - Sourcecode of external libraries used in KiCad but not written by the KiCad team
 * [tools](tools)             - Other miscellaneous helpers for testing
 * [translation](translation) - Translation data files (managed through [Weblate](https://hosted.weblate.org/projects/kicad/master-source/) for most languages)
-* [utils](utils)             - Small utils for kicad, e.g. IDF, STEP and OGL tools and converters
-
+* [utils](utils)             - Small utils for KiCad, e.g. IDF, STEP, and OGL tools and converters
