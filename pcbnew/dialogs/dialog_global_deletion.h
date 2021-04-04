@@ -38,7 +38,7 @@ private:
 
     void onOkClick( wxCommandEvent& event ) override
     {
-        acceptPcbDelete();
+        doGlobalDeletions();
         EndModal(wxID_OK);
     }
 
@@ -47,7 +47,7 @@ private:
         EndModal(wxID_CANCEL);
     }
 
-    void acceptPcbDelete();
+    void doGlobalDeletions();
     void onCheckDeleteTracks( wxCommandEvent& event ) override;
     void onCheckDeleteFootprints( wxCommandEvent& event ) override;
     void onCheckDeleteDrawings( wxCommandEvent& event ) override;
