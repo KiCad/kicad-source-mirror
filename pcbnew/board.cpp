@@ -1673,10 +1673,20 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
     {
         count++;
 
-        if( TRACK* track = dyn_cast<TRACK*>( item ) )
+        if( TRACK* track = dynamic_cast<TRACK*>( item ) )
         {
-            bool   inPad  = false;
-            double segLen = track->GetLength();
+            if( track->Type() == PCB_VIA_T )
+            {
+                VIA*           via     = static_cast<VIA*>( track );
+                BOARD_STACKUP& stackup = GetDesignSettings().GetStackupDescriptor();
+                length += stackup.GetLayerDistance( via->TopLayer(), via->BottomLayer() );
+                continue;
+            }
+
+            bool   inPad = false;
+            SEG    trackSeg( track->GetStart(), track->GetEnd() );
+            double segLen      = trackSeg.Length();
+            double segInPadLen = 0;
 
             for( auto pad_it : connectivity->GetConnectedPads( item ) )
             {
@@ -1693,31 +1703,26 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
                 else if( hitStart || hitEnd )
                 {
                     VECTOR2I loc;
-                    SEG trackSeg( track->GetStart(), track->GetEnd() );
 
                     // We may not collide even if we passed the bounding-box hit test
                     if( pad->GetEffectivePolygon()->Collide( trackSeg, 0, nullptr, &loc ) )
                     {
                         // Part 1: length of the seg to the intersection with the pad poly
-                        segLen = hitStart ? ( VECTOR2I( track->GetEnd() ) - loc ).EuclideanNorm() :
-                                            ( VECTOR2I( track->GetStart() ) - loc ).EuclideanNorm();
+                        if( hitStart )
+                            trackSeg.A = loc;
+                        else
+                            trackSeg.B = loc;
+
+                        segLen = trackSeg.Length();
 
                         // Part 2: length from the interesection to the pad anchor
-                        segLen += ( loc - pad->GetPosition() ).EuclideanNorm();
-                        break;
+                        segInPadLen += ( loc - pad->GetPosition() ).EuclideanNorm();
                     }
                 }
             }
 
             if( !inPad )
-                length += segLen;
-
-            if( track->Type() == PCB_VIA_T )
-            {
-                VIA*           via     = static_cast<VIA*>( track );
-                BOARD_STACKUP& stackup = GetDesignSettings().GetStackupDescriptor();
-                length += stackup.GetLayerDistance( via->TopLayer(), via->BottomLayer() );
-            }
+                length += segLen + segInPadLen;
         }
         else if( PAD* pad = dyn_cast<PAD*>( item ) )
         {
