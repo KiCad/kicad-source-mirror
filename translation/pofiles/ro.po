@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-04-04 18:00+0000\n"
+"PO-Revision-Date: 2021-04-05 10:29+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ro/>\n"
@@ -963,7 +963,6 @@ msgid "Show Model Bounding Boxes"
 msgstr "Afișați perimetru de delimitare a modelului"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:232
-#, fuzzy
 msgid "Render Shadows"
 msgstr "Randare umbrelor"
 
@@ -3389,9 +3388,8 @@ msgstr "Solid"
 #: common/dialogs/panel_setup_netclasses.cpp:85
 #: eeschema/dialogs/dialog_edit_line_style.cpp:47
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:312
-#, fuzzy
 msgid "Dashed"
-msgstr "Linie punctată"
+msgstr "Traforat"
 
 #: common/dialogs/panel_setup_netclasses.cpp:87
 #: eeschema/dialogs/dialog_edit_line_style.cpp:48
@@ -4097,7 +4095,6 @@ msgid "Component"
 msgstr "Componentă"
 
 #: common/eda_item.cpp:279
-#, fuzzy
 msgid "Sheet Pin"
 msgstr "Pin foaie"
 
@@ -4944,7 +4941,7 @@ msgstr ""
 
 #: common/layer_id.cpp:112
 msgid "Pin numbers"
-msgstr ""
+msgstr "Numerele pinilor"
 
 #: common/layer_id.cpp:113
 msgid "Pin names"
@@ -4975,7 +4972,6 @@ msgid "Notes"
 msgstr "Notițe"
 
 #: common/layer_id.cpp:120
-#, fuzzy
 msgid "Pins"
 msgstr "Pini"
 
@@ -5001,7 +4997,6 @@ msgstr ""
 
 #: common/layer_id.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
-#, fuzzy
 msgid "Sheet pins"
 msgstr "Pin foaie"
 
@@ -5754,9 +5749,8 @@ msgid "Performs left mouse button double-click"
 msgstr ""
 
 #: common/tool/actions.cpp:405
-#, fuzzy
 msgid "Pin Library"
-msgstr "Biblioteca Pin"
+msgstr "Fixează biblioteca"
 
 #: common/tool/actions.cpp:406
 msgid "Keep the library at the top of the list"
@@ -5764,7 +5758,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:409
 msgid "Unpin Library"
-msgstr ""
+msgstr "Anulați fixarea bibliotecii"
 
 #: common/tool/actions.cpp:410
 msgid "No longer keep the library at the top of the list"
@@ -6663,7 +6657,7 @@ msgstr "Cuvinte cheie"
 
 #: cvpcb/cvpcb_mainframe.cpp:694
 msgid "Pin Count"
-msgstr ""
+msgstr "Numărul pinilor"
 
 #: cvpcb/cvpcb_mainframe.cpp:707 eeschema/sch_symbol.cpp:1401
 #: eeschema/sch_symbol.cpp:1405 eeschema/sch_symbol.cpp:1433
@@ -6994,7 +6988,7 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
 msgid "Filter by pin count"
-msgstr ""
+msgstr "Filtrați după numărul de pini"
 
 #: cvpcb/tools/cvpcb_actions.cpp:143
 msgid "Filter footprint list by pin count"
@@ -28240,9 +28234,8 @@ msgid "Hyperlynx..."
 msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:149
-#, fuzzy
 msgid "Footprints to Library..."
-msgstr "Gestionați bibliotecile de amprente..."
+msgstr "Amprente în bibliotecă..."
 
 #: pcbnew/menubar_pcb_editor.cpp:150
 msgid ""
@@ -28251,9 +28244,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:154
-#, fuzzy
 msgid "Footprints to New Library..."
-msgstr "Gestionați bibliotecile de amprente..."
+msgstr "Amprente în bibliotecă nouă..."
 
 #: pcbnew/menubar_pcb_editor.cpp:155
 msgid ""
