@@ -42,9 +42,9 @@ class WX_GRID;
 #define ID_NOTEBOOK 1000
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_FOOTPRINT_FP_EDITOR_BASE
+/// Class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_FOOTPRINT_FP_EDITOR_BASE : public DIALOG_SHIM
+class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 {
 	private:
 		wxBoxSizer* m_GeneralBoxSizer;
@@ -121,8 +121,8 @@ class DIALOG_FOOTPRINT_FP_EDITOR_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_FOOTPRINT_FP_EDITOR_BASE();
+		DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE();
 
 };
 

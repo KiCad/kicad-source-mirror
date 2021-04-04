@@ -37,7 +37,7 @@
 #include <footprint.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
-#include <dialog_edit_footprint_for_fp_editor.h>
+#include <dialog_footprint_properties_fp_editor.h>
 #include "filename_resolver.h"
 #include <pgm_base.h>
 #include "3d_cache/dialogs/panel_prev_3d.h"
@@ -49,12 +49,12 @@
 #include <fp_lib_table.h>
 
 
-int DIALOG_FOOTPRINT_FP_EDITOR::m_page = 0;     // remember the last open page during session
+int DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::m_page = 0;     // remember the last open page during session
 
 
-DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
-                                                        FOOTPRINT* aFootprint ) :
-    DIALOG_FOOTPRINT_FP_EDITOR_BASE( aParent ),
+DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
+                                                                              FOOTPRINT* aFootprint ) :
+    DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE( aParent ),
     m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
     m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
     m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
@@ -159,13 +159,13 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_button3DShapeRemove->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     // wxFormBuilder doesn't include this event...
-    m_itemsGrid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_FOOTPRINT_FP_EDITOR::OnGridCellChanging ), NULL, this );
+    m_itemsGrid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridCellChanging ), NULL, this );
 
     finishDialogSettings();
 }
 
 
-DIALOG_FOOTPRINT_FP_EDITOR::~DIALOG_FOOTPRINT_FP_EDITOR()
+DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR()
 {
     m_frame->GetSettings()->m_FootprintTextShownColumns =
             m_itemsGrid->GetShownColumns().ToStdString();
@@ -173,7 +173,7 @@ DIALOG_FOOTPRINT_FP_EDITOR::~DIALOG_FOOTPRINT_FP_EDITOR()
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_texts );
 
-    m_itemsGrid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_FOOTPRINT_FP_EDITOR::OnGridCellChanging ), NULL, this );
+    m_itemsGrid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridCellChanging ), NULL, this );
 
     // Delete the GRID_TRICKS.
     m_itemsGrid->PopEventHandler( true );
@@ -191,7 +191,7 @@ DIALOG_FOOTPRINT_FP_EDITOR::~DIALOG_FOOTPRINT_FP_EDITOR()
 }
 
 
-bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
+bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 {
     LIB_ID   fpID          = m_footprint->GetFPID();
     wxString footprintName = fpID.GetLibItemName();
@@ -348,7 +348,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::select3DModel( int aModelIdx )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::select3DModel( int aModelIdx )
 {
     m_inSelect = true;
 
@@ -367,14 +367,14 @@ void DIALOG_FOOTPRINT_FP_EDITOR::select3DModel( int aModelIdx )
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::On3DModelSelected( wxGridEvent& aEvent )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::On3DModelSelected( wxGridEvent& aEvent )
 {
     if( !m_inSelect )
         select3DModel( aEvent.GetRow() );
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
 {
     if( aEvent.GetCol() == 0 )
     {
@@ -419,7 +419,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::OnRemove3DModel( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnRemove3DModel( wxCommandEvent&  )
 {
     if( !m_modelsGrid->CommitPendingChanges() )
         return;
@@ -437,7 +437,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnRemove3DModel( wxCommandEvent&  )
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
 {
     if( !m_modelsGrid->CommitPendingChanges() )
         return;
@@ -504,7 +504,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DRow( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAdd3DRow( wxCommandEvent&  )
 {
     if( !m_modelsGrid->CommitPendingChanges() )
         return;
@@ -529,7 +529,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DRow( wxCommandEvent&  )
 }
 
 
-bool DIALOG_FOOTPRINT_FP_EDITOR::checkFootprintName( const wxString& aFootprintName )
+bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::checkFootprintName( const wxString& aFootprintName )
 {
     if( aFootprintName.IsEmpty() )
     {
@@ -547,7 +547,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::checkFootprintName( const wxString& aFootprintN
 }
 
 
-bool DIALOG_FOOTPRINT_FP_EDITOR::Validate()
+bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
 {
     if( !m_itemsGrid->CommitPendingChanges() )
         return false;
@@ -595,7 +595,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::Validate()
 }
 
 
-bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
+bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 {
     if( !Validate() )
         return false;
@@ -729,13 +729,13 @@ static bool footprintIsFromBoard( FOOTPRINT* aFootprint )
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::OnGridCellChanging( wxGridEvent& event )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridCellChanging( wxGridEvent& event )
 {
     // Currently: nothing to do
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::OnFootprintNameText( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnFootprintNameText( wxCommandEvent& event )
 {
     if( !footprintIsFromBoard( m_footprint ) )
     {
@@ -744,7 +744,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnFootprintNameText( wxCommandEvent& event )
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::OnAddField( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
 {
     if( !m_itemsGrid->CommitPendingChanges() )
         return;
@@ -777,7 +777,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAddField( wxCommandEvent& event )
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::OnDeleteField( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteField( wxCommandEvent& event )
 {
     if( !m_itemsGrid->CommitPendingChanges() )
         return;
@@ -806,14 +806,14 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnDeleteField( wxCommandEvent& event )
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::Cfg3DPath( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Cfg3DPath( wxCommandEvent& event )
 {
     if( S3D::Configure3DPaths( this, Prj().Get3DCacheManager()->GetResolver() ) )
         m_PreviewPane->UpdateDummyFootprint();
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::adjustGridColumns( int aWidth )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::adjustGridColumns( int aWidth )
 {
     // Account for scroll bars
     int itemsWidth = aWidth - ( m_itemsGrid->GetSize().x - m_itemsGrid->GetClientSize().x );
@@ -832,7 +832,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::adjustGridColumns( int aWidth )
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 {
     if( !m_itemsGrid->IsCellEditControlShown() && !m_modelsGrid->IsCellEditControlShown() )
         adjustGridColumns( m_itemsGrid->GetRect().GetWidth() );
@@ -893,7 +893,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::OnGridSize( wxSizeEvent& event )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridSize( wxSizeEvent& event )
 {
     adjustGridColumns( event.GetSize().GetX() );
 

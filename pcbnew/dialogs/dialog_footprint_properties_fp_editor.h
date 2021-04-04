@@ -22,21 +22,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_EDIT_FOOTPRINT_FOR_FP_EDITOR_H
-#define DIALOG_EDIT_FOOTPRINT_FOR_FP_EDITOR_H
+#ifndef DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_H
+#define DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_H
 
 #include <vector>
 #include <fp_text_grid_table.h>
 #include <widgets/unit_binder.h>
 #include <footprint.h>
-#include <dialog_edit_footprint_for_fp_editor_base.h>
+#include <dialog_footprint_properties_fp_editor_base.h>
 
 
 class PANEL_PREV_3D;
 class FOOTPRINT_EDIT_FRAME;
 
 
-class DIALOG_FOOTPRINT_FP_EDITOR : public DIALOG_FOOTPRINT_FP_EDITOR_BASE
+class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR : public DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE
 {
 private:
     FOOTPRINT_EDIT_FRAME*    m_frame;
@@ -65,8 +65,8 @@ private:
 
 public:
     // Constructor and destructor
-    DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent, FOOTPRINT* aFootprint );
-    ~DIALOG_FOOTPRINT_FP_EDITOR() override;
+    DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent, FOOTPRINT* aFootprint );
+    ~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR() override;
 
     bool Validate() override;
 
@@ -96,4 +96,4 @@ private:
 };
 
 
-#endif      //  DIALOG_EDIT_FOOTPRINT_FOR_FP_EDITOR_H
+#endif      //  DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_H

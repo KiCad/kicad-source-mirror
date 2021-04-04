@@ -22,7 +22,7 @@
  */
 
 #include <confirm.h>
-#include <dialog_edit_footprint_for_fp_editor.h>
+#include <dialog_footprint_properties_fp_editor.h>
 #include <footprint_edit_frame.h>
 #include <footprint_tree_pane.h>
 #include <fp_lib_table.h>
@@ -139,7 +139,7 @@ void FOOTPRINT_EDIT_FRAME::editFootprintProperties( FOOTPRINT* aFootprint )
 {
     LIB_ID oldFPID = aFootprint->GetFPID();
 
-    DIALOG_FOOTPRINT_FP_EDITOR dialog( this, aFootprint );
+    DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR dialog( this, aFootprint );
     dialog.ShowModal();
 
     // Update library tree

@@ -68,8 +68,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_footprint_checker_base.cpp
     dialogs/dialog_footprint_properties.cpp
     dialogs/dialog_footprint_properties_base.cpp
-    dialogs/dialog_edit_footprint_for_fp_editor.cpp
-    dialogs/dialog_edit_footprint_for_fp_editor_base.cpp
+    dialogs/dialog_footprint_properties_fp_editor.cpp
+    dialogs/dialog_footprint_properties_fp_editor_base.cpp
     dialogs/dialog_enum_pads.cpp
     dialogs/dialog_enum_pads_base.cpp
     dialogs/dialog_exchange_footprints.cpp
