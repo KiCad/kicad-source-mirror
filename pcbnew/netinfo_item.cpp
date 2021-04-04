@@ -81,53 +81,53 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
 
     if( board )
     {
-        int    count = 0;
-        double lengthNet = 0.0;      // This  is the length of tracks on pcb
-        double lengthPadToDie = 0.0; // this is the length of internal ICs connections
+        int    count      = 0;
+        TRACK* startTrack = nullptr;
 
         for( FOOTPRINT* footprint : board->Footprints() )
         {
             for( PAD* pad : footprint->Pads() )
             {
                 if( pad->GetNetCode() == GetNetCode() )
-                {
                     count++;
-                    lengthPadToDie += pad->GetPadToDieLength();
-                }
             }
         }
 
         aList.emplace_back( _( "Pads" ), wxString::Format( "%d", count ) );
 
-        count  = 0;
+        count = 0;
 
         for( TRACK* track : board->Tracks() )
         {
-            if( track->Type() == PCB_VIA_T )
+            if( track->GetNetCode() == GetNetCode() )
             {
-                if( track->GetNetCode() == GetNetCode() )
+                if( track->Type() == PCB_VIA_T )
                     count++;
-            }
-
-            if( track->Type() == PCB_TRACE_T )
-            {
-                if( track->GetNetCode() == GetNetCode() )
-                    lengthNet += track->GetLength();
+                else if( !startTrack )
+                    startTrack = track;
             }
         }
 
         aList.emplace_back( _( "Vias" ), wxString::Format( "%d", count ) );
 
-        // Displays the full net length (tracks on pcb + internal ICs connections ):
-        msg = MessageTextFromValue( aFrame->GetUserUnits(), lengthNet + lengthPadToDie );
-        aList.emplace_back( _( "Net Length" ), msg );
+        if( startTrack )
+        {
+            double lengthNet      = 0.0; // This  is the length of tracks on pcb
+            double lengthPadToDie = 0.0; // this is the length of internal ICs connections
 
-        // Displays the net length of tracks only:
-        msg = MessageTextFromValue( aFrame->GetUserUnits(), lengthNet );
-        aList.emplace_back( _( "On Board" ), msg );
+            std::tie( count, lengthNet, lengthPadToDie ) = board->GetTrackLength( *startTrack );
 
-        // Displays the net length of internal ICs connections (wires inside ICs):
-        msg = MessageTextFromValue( aFrame->GetUserUnits(), lengthPadToDie );
-        aList.emplace_back( _( "In Package" ), msg );
+            // Displays the full net length (tracks on pcb + internal ICs connections ):
+            msg = MessageTextFromValue( aFrame->GetUserUnits(), lengthNet + lengthPadToDie );
+            aList.emplace_back( _( "Net Length" ), msg );
+
+            // Displays the net length of tracks only:
+            msg = MessageTextFromValue( aFrame->GetUserUnits(), lengthNet );
+            aList.emplace_back( _( "On Board" ), msg );
+
+            // Displays the net length of internal ICs connections (wires inside ICs):
+            msg = MessageTextFromValue( aFrame->GetUserUnits(), lengthPadToDie );
+            aList.emplace_back( _( "In Package" ), msg );
+        }
     }
 }

@@ -1675,22 +1675,42 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
 
         if( TRACK* track = dyn_cast<TRACK*>( item ) )
         {
-            bool inPad = false;
+            bool   inPad  = false;
+            double segLen = track->GetLength();
 
             for( auto pad_it : connectivity->GetConnectedPads( item ) )
             {
                 PAD* pad = static_cast<PAD*>( pad_it );
 
-                if( pad->HitTest( track->GetStart(), track->GetWidth() / 2 )
-                        && pad->HitTest( track->GetEnd(), track->GetWidth() / 2 ) )
+                bool hitStart = pad->HitTest( track->GetStart(), track->GetWidth() / 2 );
+                bool hitEnd   = pad->HitTest( track->GetEnd(), track->GetWidth() / 2 );
+
+                if( hitStart && hitEnd )
                 {
                     inPad = true;
                     break;
                 }
+                else if( hitStart || hitEnd )
+                {
+                    VECTOR2I loc;
+                    SEG trackSeg( track->GetStart(), track->GetEnd() );
+
+                    // We may not collide even if we passed the bounding-box hit test
+                    if( pad->GetEffectivePolygon()->Collide( trackSeg, 0, nullptr, &loc ) )
+                    {
+                        // Part 1: length of the seg to the intersection with the pad poly
+                        segLen = hitStart ? ( VECTOR2I( track->GetEnd() ) - loc ).EuclideanNorm() :
+                                            ( VECTOR2I( track->GetStart() ) - loc ).EuclideanNorm();
+
+                        // Part 2: length from the interesection to the pad anchor
+                        segLen += ( loc - pad->GetPosition() ).EuclideanNorm();
+                        break;
+                    }
+                }
             }
 
             if( !inPad )
-                length += track->GetLength();
+                length += segLen;
         }
         else if( PAD* pad = dyn_cast<PAD*>( item ) )
         {
