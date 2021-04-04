@@ -66,6 +66,7 @@ public:
     void RemoveItem( PNS::ITEM* aItem ) override;
     void Commit() override {}
     bool ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem, int aNet ) override;
+    int StackupHeight( int aFirstLayer, int aSecondLayer ) const override;
 
     void UpdateNet( int aNetCode ) override {}
 

@@ -173,6 +173,11 @@ public:
         return m_items[index].item;
     }
 
+    ENTRIES::iterator begin() { return m_items.begin(); }
+    ENTRIES::iterator end() { return m_items.end(); }
+    ENTRIES::const_iterator cbegin() const { return m_items.cbegin(); }
+    ENTRIES::const_iterator cend() const { return m_items.cend(); }
+
     void Add( ITEM* aItem, bool aBecomeOwner = false )
     {
         m_items.push_back( ENTRY( aItem, aBecomeOwner ) );

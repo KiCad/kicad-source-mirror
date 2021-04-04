@@ -1711,6 +1711,13 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
 
             if( !inPad )
                 length += segLen;
+
+            if( track->Type() == PCB_VIA_T )
+            {
+                VIA*           via     = static_cast<VIA*>( track );
+                BOARD_STACKUP& stackup = GetDesignSettings().GetStackupDescriptor();
+                length += stackup.GetLayerDistance( via->TopLayer(), via->BottomLayer() );
+            }
         }
         else if( PAD* pad = dyn_cast<PAD*>( item ) )
         {

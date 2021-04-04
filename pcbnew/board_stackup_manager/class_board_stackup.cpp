@@ -699,6 +699,38 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
 }
 
 
+int BOARD_STACKUP::GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSecondLayer ) const
+{
+    wxASSERT( IsCopperLayer( aFirstLayer ) && IsCopperLayer( aSecondLayer ) );
+
+    if( aFirstLayer == aSecondLayer )
+        return 0;
+
+    if( aSecondLayer < aFirstLayer )
+        std::swap( aFirstLayer, aSecondLayer );
+
+    int total = 0;
+
+    for( BOARD_STACKUP_ITEM* item : m_list )
+    {
+        // Will be UNDEFINED_LAYER for dielectrics
+        PCB_LAYER_ID layer = item->GetBrdLayerId();
+
+        if( layer != UNDEFINED_LAYER && !IsCopperLayer( layer ) )
+            continue;   // Silk/mask layer
+        else if( layer != UNDEFINED_LAYER && layer <= aFirstLayer )
+            continue;   // Copper layer before first
+        else if( layer != UNDEFINED_LAYER && layer >= aSecondLayer )
+            break;      // Copper layer after last: we're done
+
+        for( int sublayer = 0; sublayer < item->GetSublayersCount(); sublayer++ )
+            total += item->GetThickness( sublayer );
+    }
+
+    return total;
+}
+
+
 bool IsPrmSpecified( const wxString& aPrmValue )
 {
     // return true if the param value is specified:

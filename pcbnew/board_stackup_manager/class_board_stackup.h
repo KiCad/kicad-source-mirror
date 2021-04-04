@@ -303,6 +303,16 @@ public:
      */
     void FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
                              const BOARD* aBoard, int aNestLevel ) const;
+
+    /**
+     * Calculates the distance (height) between the two given copper layers.  This factors in the
+     * thickness of any dielectric and copper layers between the two given layers, but not the
+     * height of the given copper layers.
+     * @param aFirstLayer is a copper layer
+     * @param aSecondLayer is a different copper layer
+     * @return the height (in IU) between the two layers
+     */
+    int GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSecondLayer ) const;
 };
 
 

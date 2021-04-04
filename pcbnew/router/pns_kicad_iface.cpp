@@ -517,6 +517,17 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 }
 
 
+int PNS_KICAD_IFACE_BASE::StackupHeight( int aFirstLayer, int aSecondLayer ) const
+{
+    if( !m_board )
+        return 0;
+
+    BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
+
+    return stackup.GetLayerDistance( ToLAYER_ID( aFirstLayer ), ToLAYER_ID( aSecondLayer ) );
+}
+
+
 int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString& aComplementNet,
                                              wxString& aBaseDpName )
 {
