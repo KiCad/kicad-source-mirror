@@ -60,7 +60,7 @@ public:
 class PANEL_KICAD2STEP: public wxPanel
 {
 public:
-	PANEL_KICAD2STEP( wxWindow* parent, wxWindowID id = wxID_ANY,
+    PANEL_KICAD2STEP( wxWindow* parent, wxWindowID id = wxID_ANY,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxSize( 500,300 ),
                       long style = wxTAB_TRAVERSAL );

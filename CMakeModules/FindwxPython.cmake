@@ -45,9 +45,9 @@ if( VCPKG_TOOLCHAIN )
 # python 3.8+ requires us to use python to add additiona load directories (PATH no longer supported)
 # vcpkg does not copy all the dlls into the python folder so we need this for development
 # as the wxpython modules need the wxwidgets library DLLs to load
-	set( _py_dll "import os;os.add_dll_directory(\"${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin\");os.add_dll_directory(\"${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin\");" )
+    set( _py_dll "import os;os.add_dll_directory(\"${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin\");os.add_dll_directory(\"${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin\");" )
 else()
-	set( _py_dll "" )
+    set( _py_dll "" )
 endif()
 
 execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "${_py_dll}${_py_site_path}${_py_cmd}"
@@ -79,7 +79,7 @@ list( GET _WXPYTHON_VERSION_LIST 2 WXPYTHON_FLAVOR )
 # Determine wxWidgets version used by wxPython/Phoenix
 if( WXPYTHON_FLAVOR MATCHES "phoenix" )
     # 4.0.1;gtk3;(phoenix) does not contain wxWidgets version, request it explicitly
-	
+
     set( _py_cmd "import wx;print(wx.wxWidgets_version.split(' ')[1])")
     execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "${_py_dll}${_py_site_path}${_py_cmd}"
         RESULT_VARIABLE WXPYTHON_WXVERSION_RESULT

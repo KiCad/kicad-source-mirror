@@ -391,7 +391,8 @@ private:
                     int yy  = poly2gridY( py );
 
                     indices.insert( m_gridSize * yy + x );
- 					if( x > 0 )
+
+                    if( x > 0 )
                         indices.insert( m_gridSize * yy + x - 1 );
 
                 }
@@ -414,7 +415,8 @@ private:
                     int xx  = poly2gridX( px );
 
                     indices.insert( m_gridSize * y + xx );
-       				if( y > 0 )
+
+                    if( y > 0 )
                         indices.insert( m_gridSize * (y - 1) + xx );
                 }
             }

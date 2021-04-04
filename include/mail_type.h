@@ -49,7 +49,7 @@ enum MAIL_T
     MAIL_SCH_REFRESH,              // Tell the schematic editor to refresh the display.
     MAIL_SCH_CLEAN_NETCLASSES,     // Tell the schematic editor to clean stale nets out of
                                    //   the netclass membership lists
-    MAIL_REANNOTATE, 			   // Reannotate eeSchema
+    MAIL_REANNOTATE,               // Reannotate eeSchema
     MAIL_LIB_EDIT,
     MAIL_FP_EDIT
 };

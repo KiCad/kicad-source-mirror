@@ -307,7 +307,7 @@ public:
     const wxBrush& GetBrush() const { return m_brush; };
 
     /** Set layer brush
-     *  @param brush brush, will be copied to internal class member	*/
+     *  @param brush brush, will be copied to internal class member */
     void SetBrush( wxBrush brush ) { m_brush = brush; };
 
 protected:

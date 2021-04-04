@@ -54,7 +54,7 @@ class BASE_SCREEN;
  */
 enum class UNDO_REDO {
     UNSPECIFIED = 0,     // illegal
-    NOP,				 // Undo/redo will ignore this entry.  Only forces the start of a new stack
+    NOP,                 // Undo/redo will ignore this entry.  Only forces the start of a new stack
     CHANGED,             // params of items have a value changed: undo is made by exchange
                          // values with a copy of these values
     NEWITEM,             // new item, undo by changing in deleted

@@ -71,4 +71,4 @@ wxString GetBuildDate();
  */
 wxString GetVersionInfoData( const wxString& aTitle, bool aHtml = false, bool aBrief = false );
 
-#endif	// KICAD_BUILD_VERSION_H
+#endif  // KICAD_BUILD_VERSION_H

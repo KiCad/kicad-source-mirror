@@ -86,9 +86,9 @@
         <td><br></td>
     </tr>
     <tr>
-		<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>
-		<td></td>
-		<td>&nbsp;<br><samp>net1, net2, ...</samp></td>
+        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>
     </tr>
     <tr>
         <td>&nbsp;<br><samp>{SCL SDA}</samp></td>

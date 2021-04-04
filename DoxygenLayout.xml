@@ -34,7 +34,6 @@
       <tab type="globals" visible="yes" title="" intro=""/>
     </tab>
     <tab type="examples" visible="yes" title="" intro=""/>  
-	
     <tab type="user" url="https://dev-docs.kicad.org" title="KiCad Dev Docs"/>
   </navindex>
 

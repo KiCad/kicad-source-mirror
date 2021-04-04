@@ -827,7 +827,7 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         set( PYTHON_DEST "${OSX_BUNDLE_BUILD_LIB_DIR}/${PYTHON_LIB_DIR}"
             CACHE PATH "Python module install path."
             )
-	elseif( VCPKG_TOOLCHAIN )
+    elseif( VCPKG_TOOLCHAIN )
         set( PYTHON_DEST "${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages"
             CACHE PATH "Python module install path."
             )

@@ -229,7 +229,7 @@ private:
  *  The following table provides you with a list of commands which
  *  are the most used in a part program header.
  *  COMMAND         DESCRIPTION
- *  AFS	            Automatic Feeds and Speeds
+ *  AFS             Automatic Feeds and Speeds
  *  ATC             Automatic Tool Change
  *  BLKD            Delete all Blocks starting with a slash (/)
  *  CCW             Clockwise or Counter-clockwise Routing
@@ -288,7 +288,7 @@ private:
  *  G01X#Y#         Linear (Straight Line) Route Mode YX is the ending point
  *  G02X#Y#...      Circular CW Mode. Radius value (A#) or Center position (I#J#) follows
  *  G03X#Y#...      Circular CCW Mode. Radius value (A#) or Center position (I#J#) follows
- *  G04	X#          Variable Dwell
+ *  G04X#           Variable Dwell
  *  G05             Drill Mode
  *  G07             Override current tool feed or speed
  *  G32X#Y#A#       Routed Circle Canned Cycle

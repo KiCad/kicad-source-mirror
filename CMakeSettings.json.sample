@@ -3,7 +3,7 @@
     {
       "BuildDir": "${workspaceRoot}\\build",
       "InstallDir": "${workspaceRoot}\\build\\install"
-	  },
+    },
     {
       "environment": "vcpkg",
       "VcPkgDir": "D:/vcpkg/"
@@ -76,11 +76,11 @@
           "value": "OFF",
           "type": "BOOL"
         },
-		    {
+        {
           "name": "KICAD_WIN32_DPI_AWARE",
           "value": "ON",
           "type": "BOOL"
-		    }
+        }
       ],
       "cmakeToolchain": "${env.VcPkgDir}/scripts/buildsystems/vcpkg.cmake"
     },
@@ -140,11 +140,11 @@
           "value": "OFF",
           "type": "BOOL"
         },
-		    {
+        {
               "name": "KICAD_WIN32_DPI_AWARE",
               "value": "ON",
               "type": "BOOL"
-		    }
+        }
       ],
       "cmakeToolchain": "${env.VcPkgDir}/scripts/buildsystems/vcpkg.cmake"
     },

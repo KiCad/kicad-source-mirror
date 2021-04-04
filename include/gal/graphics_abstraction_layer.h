@@ -143,8 +143,8 @@ public:
      * DrawArc() draws a "pie piece" when fill is turned on, and a thick stroke when fill is off.
      * DrawArcSegment() with fill *on* behaves like DrawArc() with fill *off*.
      * DrawArcSegment() with fill *off* draws the outline of what it would have drawn with fill on.
-	 *
-	 * TODO: Unify Arc routines
+     *
+     * TODO: Unify Arc routines
      *
      * @param aCenterPoint  is the center point of the arc.
      * @param aRadius       is the arc radius.

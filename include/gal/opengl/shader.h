@@ -43,7 +43,7 @@ class OPENGL_GAL;
 /// Type definition for the shader
 enum SHADER_TYPE
 {
-    SHADER_TYPE_VERTEX	 = GL_VERTEX_SHADER,    ///< Vertex shader
+    SHADER_TYPE_VERTEX   = GL_VERTEX_SHADER,    ///< Vertex shader
     SHADER_TYPE_FRAGMENT = GL_FRAGMENT_SHADER,  ///< Fragment shader
     SHADER_TYPE_GEOMETRY = GL_GEOMETRY_SHADER   ///< Geometry shader
 };
