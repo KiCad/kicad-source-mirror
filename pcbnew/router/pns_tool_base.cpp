@@ -322,7 +322,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
             break;
     }
 
-    if( checkSnap( endItem ) )
+    if( m_gridHelper->GetSnap() && checkSnap( endItem ) )
     {
         m_endItem = endItem;
         m_endSnapPoint = snapToItem( endItem, mousePos );
