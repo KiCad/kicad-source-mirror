@@ -132,7 +132,7 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
 
 /**
  * Draw labelled ticks on a line. Ticks are spaced according to a
- * maximum density. Miror ticks are not labelled.
+ * maximum density. Minor ticks are not labelled.
  *
  * @param aGal the GAL to draw on
  * @param aOrigin start of line to draw ticks on

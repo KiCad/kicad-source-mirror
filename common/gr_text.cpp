@@ -201,7 +201,7 @@ void GRHaloText( wxDC * aDC, const wxPoint &aPos, COLOR4D aBgColor, COLOR4D aCol
 
 /**
  * Function PLOTTER::Text
- * same as GRText, but plot graphic text insteed of draw it
+ * same as GRText, but plot graphic text instead of draw it
  *  @param aPos = text position (according to aH_justify, aV_justify)
  *  @param aColor (COLOR4D) = text color
  *  @param aText = text to draw

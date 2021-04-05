@@ -220,7 +220,7 @@ public:
      * @param aRadius = the radius used for some shapes tool (oval, roundrect macros)
      * @param aRotDegree = the rotation of tool (primitives round, oval rect accept only 0.0)
      * @param aType = the type ( shape ) of tool
-     * @param aApertureAttribute = an aperture attribute of the tool (a tool can have onlu one attribute)
+     * @param aApertureAttribute = an aperture attribute of the tool (a tool can have only one attribute)
      * 0 = no specific attribute
      */
     int GetOrCreateAperture( const wxSize& aSize, int aRadius, double aRotDegree,
@@ -232,7 +232,7 @@ public:
      * @param aCorners = the corner list
      * @param aRotDegree = the rotation of tool
      * @param aType = the type ( shape ) of tool that can manage a list of corners (polygon)
-     * @param aApertureAttribute = an aperture attribute of the tool (a tool can have onlu one attribute)
+     * @param aApertureAttribute = an aperture attribute of the tool (a tool can have only one attribute)
      * 0 = no specific attribute
      */
     int GetOrCreateAperture( const std::vector<wxPoint>& aCorners, double aRotDegree,
@@ -301,7 +301,7 @@ protected:
      * print a Gerber net attribute object record.
      * In a gerber file, a net attribute is owned by a graphic object
      * formatNetAttribute must be called before creating the object
-     * @param aData contains the dato to format.
+     * @param aData contains the data to format.
      * the generated string depends on the type of netlist info
      */
     void formatNetAttribute( GBR_NETLIST_METADATA* aData );
@@ -309,7 +309,7 @@ protected:
     /**
      * clear a Gerber net attribute record (clear object attribute dictionary)
      * and output the clear object attribute dictionary command to gerber file
-     * has effect only if a net attribute is stored in m_objectAttributesDictionnary
+     * has effect only if a net attribute is stored in m_objectAttributesDictionary
      */
     void clearNetAttribute();
 
@@ -317,10 +317,10 @@ protected:
     // by D01, D03, G36/G37 commands
     // standard attributes are .P, .C and .N
     // this is used by gerber readers when creating a new object. Cleared by %TD command
-    // Note: m_objectAttributesDictionnary can store more than one attribute
+    // Note: m_objectAttributesDictionary can store more than one attribute
     // the string stores the line(s) actually written to the gerber file
     // it can store a .P, .C or .N attribute, or 2 or 3 attributes, separated by a \n char (EOL)
-    std::string   m_objectAttributesDictionnary;
+    std::string   m_objectAttributesDictionary;
 
     // The last aperture attribute generated (only one aperture attribute can be set)
     int           m_apertureAttribute;

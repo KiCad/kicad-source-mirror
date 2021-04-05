@@ -68,8 +68,8 @@ public:
     ///< sets the frame label
     void SetLabel( const wxString& aLabel ) override;
 
-    ///< Sets the lasy update. If this mode is on, messages are stored but the display
-    ///< is not updated (Updating display can be very time consumming if there are many messages)
+    ///< Sets the lazy update. If this mode is on, messages are stored but the display
+    ///< is not updated (Updating display can be very time consuming if there are many messages)
     ///< A call to Flush() will be needed after build the report
     void SetLazyUpdate( bool aLazyUpdate );
 

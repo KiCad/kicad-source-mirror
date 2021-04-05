@@ -62,7 +62,7 @@ principle should be easily implemented by adapting the current STL containers.
 %warnfilter(509)    UTF8;
 
 /* swig tries to wrap SetBack/SetNext on derived classes, but this method is
-   private for most childs, so if we don't ignore it won't compile */
+   private for most children, so if we don't ignore it won't compile */
 
 %ignore EDA_ITEM::SetBack;
 %ignore EDA_ITEM::SetNext;

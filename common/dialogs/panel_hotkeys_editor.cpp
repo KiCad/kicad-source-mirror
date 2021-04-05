@@ -43,7 +43,7 @@ static const wxSize default_dialog_size { 500, 350 };
  * Helper function to add a filter box to a panel, with some
  * sensible defaults for that purpose.
  *
- * @param  aParent          The panrent widget/panel
+ * @param  aParent          The parent widget/panel
  * @param  aDescriptiveText The text to show when the box is empty.
  * @return                  A newly constructed filter box - the caller owns it
  */

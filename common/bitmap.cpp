@@ -230,7 +230,7 @@ bool SaveCanvasImageToFile( EDA_DRAW_FRAME* aFrame, const wxString& aFileName,
 
 void AddBitmapToMenuItem( wxMenuItem* aMenu, const wxBitmap& aImage )
 {
-    // Retrieve the global applicaton show icon option:
+    // Retrieve the global application show icon option:
     bool useImagesInMenus = Pgm().GetCommonSettings()->m_Appearance.use_icons_in_menus;
 
     wxItemKind menu_type = aMenu->GetKind();

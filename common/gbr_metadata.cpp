@@ -489,7 +489,7 @@ std::string GBR_DATA_FIELD::GetGerberString() const
     if( !m_field.IsEmpty() )
         converted = ConvertNotAllowedCharsInGerber( m_field, m_useUTF8, m_escapeString );
 
-    // Convert the char string to std::string. Be carefull when converting a wxString to
+    // Convert the char string to std::string. Be careful when converting a wxString to
     // a std::string: using static_cast<const char*> is mandatory
     std::string txt = static_cast<const char*>( converted.utf8_str() );
 
@@ -512,7 +512,7 @@ std::string FormatStringToGerber( const wxString& aString )
     else
         converted = aString;
 
-    // Convert the char string to std::string. Be carefull when converting awxString to
+    // Convert the char string to std::string. Be careful when converting awxString to
     // a std::string: using static_cast<const char*> is mandatory
     std::string txt = static_cast<const char*>( converted.utf8_str() );
 
@@ -723,7 +723,7 @@ void GBR_CMP_PNP_METADATA::ClearData()
     m_MountType = MOUNT_TYPE_UNSPECIFIED;
 }
 /**
- * @return a string containing the formated metadata in X2 syntax.
+ * @return a string containing the formatted metadata in X2 syntax.
  * one line by non empty data
  * the orientation (.CRot) and mount type (.CMnt) are always generated
  */

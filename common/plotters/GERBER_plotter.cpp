@@ -97,7 +97,7 @@ GERBER_PLOTTER::GERBER_PLOTTER()
     m_apertureAttribute = 0;
 
     // number of digits after the point (number of digits of the mantissa
-    // Be carefull: the Gerber coordinates are stored in an integer
+    // Be careful: the Gerber coordinates are stored in an integer
     // so 6 digits (inches) or 5 digits (mm) is a good value
     // To avoid overflow, 7 digits (inches) or 6 digits is a max.
     // with lower values than 6 digits (inches) or 5 digits (mm),
@@ -166,14 +166,14 @@ void GERBER_PLOTTER::ClearAllAttributes()
     else
         fputs( "G04 #@! TD*\n", m_outputFile );
 
-    m_objectAttributesDictionnary.clear();
+    m_objectAttributesDictionary.clear();
 }
 
 
 void GERBER_PLOTTER::clearNetAttribute()
 {
     // disable a Gerber net attribute (exists only in X2 with net attributes mode).
-    if( m_objectAttributesDictionnary.empty() )     // No net attribute or not X2 mode
+    if( m_objectAttributesDictionary.empty() )     // No net attribute or not X2 mode
         return;
 
     // Remove all net attributes from object attributes dictionary
@@ -182,7 +182,7 @@ void GERBER_PLOTTER::clearNetAttribute()
     else
         fputs( "G04 #@! TD*\n", m_outputFile );
 
-    m_objectAttributesDictionnary.clear();
+    m_objectAttributesDictionary.clear();
 }
 
 
@@ -216,7 +216,7 @@ void GERBER_PLOTTER::formatNetAttribute( GBR_NETLIST_METADATA* aData )
     bool clearDict;
     std::string short_attribute_string;
 
-    if( !FormatNetAttribute( short_attribute_string, m_objectAttributesDictionnary,
+    if( !FormatNetAttribute( short_attribute_string, m_objectAttributesDictionary,
                         aData, clearDict, useX1StructuredComment ) )
         return;
 

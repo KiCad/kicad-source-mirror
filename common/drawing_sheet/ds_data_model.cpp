@@ -28,7 +28,7 @@
  * The WS_DATA_ITEM_* classes define the basic shapes of a drawing sheet (frame references
  * and title block).  The list of these items is stored in a DS_DATA_MODEL instance.
  *
- * These items cannot be drawn or plotetd "as is".  They must be converted to WS_DRAW_*
+ * These items cannot be drawn or plotted "as is".  They must be converted to WS_DRAW_*
  * types. When building the draw list:
  *   - the DS_DATA_MODEL is used to create a DS_DRAW_ITEM_LIST
  *   - coordinates are converted to draw/plot coordinates.

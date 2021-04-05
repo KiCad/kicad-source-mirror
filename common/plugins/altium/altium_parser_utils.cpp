@@ -53,14 +53,14 @@ wxString AltiumSpecialStringsToKiCadVariables( const wxString&              aStr
     wxString result;
 
     size_t start = 1;
-    size_t delemiter = 0;
+    size_t delimiter = 0;
     size_t escaping_start = 0;
     do
     {
-        delemiter = aString.find( "+", start );
+        delimiter = aString.find( "+", start );
         escaping_start = aString.find( "'", start );
 
-        if( escaping_start < delemiter )
+        if( escaping_start < delimiter )
         {
             size_t text_start = escaping_start + 1;
             size_t escaping_end = aString.find( "'", text_start );
@@ -75,7 +75,7 @@ wxString AltiumSpecialStringsToKiCadVariables( const wxString&              aStr
         }
         else
         {
-            wxString specialString = aString.substr( start, delemiter - start ).Trim( true );
+            wxString specialString = aString.substr( start, delimiter - start ).Trim( true );
 
             if( !specialString.IsEmpty() )
             {
@@ -89,9 +89,9 @@ wxString AltiumSpecialStringsToKiCadVariables( const wxString&              aStr
                     result += variableOverride->second;
                 }
             }
-            start = delemiter + 1;
+            start = delimiter + 1;
         }
-    } while( delemiter != wxString::npos );
+    } while( delimiter != wxString::npos );
 
     return result;
 }

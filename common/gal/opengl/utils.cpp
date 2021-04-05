@@ -139,7 +139,7 @@ int checkGlError( const std::string& aInfo, const char* aFile, int aLine, bool a
     {
         if( aThrow )
         {
-            wxLogTrace( traceGalOpenGlError, wxT( "Throwing exection for glGetError() '%s' "
+            wxLogTrace( traceGalOpenGlError, wxT( "Throwing exception for glGetError() '%s' "
                                                   "in file '%s' on line %d." ), errorMsg,
                         aFile, aLine );
             throw std::runtime_error( (const char*) errorMsg.char_str() );

@@ -186,7 +186,7 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
 
 void BOARD_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet )
 {
-    // Disable all layers by default, let specific implementions enable required layers
+    // Disable all layers by default, let specific implementations enable required layers
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
     {
         aView.SetLayerVisible( i, false );

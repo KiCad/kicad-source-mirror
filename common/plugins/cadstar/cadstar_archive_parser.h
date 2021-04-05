@@ -32,7 +32,7 @@
 #include <wx/xml/xml.h>
 #include <xnode.h>
 
-// THROW_IO_ERROR definitions to ensure consident wording is used in the error messages
+// THROW_IO_ERROR definitions to ensure consistent wording is used in the error messages
 
 #define THROW_MISSING_NODE_IO_ERROR( nodename, location ) \
     THROW_IO_ERROR( wxString::Format( _( "Missing node '%s' in '%s'" ), nodename, location ) )
@@ -122,7 +122,7 @@ public:
     static const double TXT_HEIGHT_RATIO;
 
     /**
-     * These are speccial fields in text objects enclosed between the tokens '<@' and '@>' such as
+     * These are special fields in text objects enclosed between the tokens '<@' and '@>' such as
      * <@[FIELD_NAME][FIELD_VALUE]@>. For example: "<@DESIGN TITLEProject Title@>"
      */
     enum class TEXT_FIELD_NAME
@@ -180,7 +180,7 @@ public:
 
         /**
          * Text fields need to be updated in CADSTAR and it is possible that they are not
-         * consistent accross text elements.
+         * consistent across text elements.
          */
         std::set<TEXT_FIELD_NAME> InconsistentTextFields;
     };
@@ -598,7 +598,7 @@ public:
     static JUSTIFICATION ParseJustification( XNODE* aNode );
 
     /**
-     * @brief Sets the readibility direction of text. From CADSTAR Help: "Horizontal text will
+     * @brief Sets the readability direction of text. From CADSTAR Help: "Horizontal text will
      * always be displayed from left to right (i.e. never upside down). Vertical text can be set as
      * readable from either the left or right edge of the design."
      *
@@ -649,7 +649,7 @@ public:
         SYMBOL,          ///< From CADSTAR Help: Assigned to Schematic Symbols and displayed on
                          ///< Schematic Designs
         UNDEFINED ///< Note: It seems that some attribute have no "ATTRUSAGE" defined. It appears
-                  ///< that the attributes that fall under this category arethe ones associated
+                  ///< that the attributes that fall under this category are the ones associated
                   ///< with the design itself (i.e. not inherited from the library)
     };
 
@@ -708,7 +708,7 @@ public:
         ATTRUSAGE AttributeUsage = ATTRUSAGE::UNDEFINED;
         bool      NoTransfer     = false; ///< True="All Design Types", False="Current Design Type"
                                           ///< "All Design Types" Description from CADSTAR Help:
-                                          ///< "The selected attribute name will beavailable when
+                                          ///< "The selected attribute name will be available when
                                           ///< any design is displayed"
                                           ///< "Current Design Type" From CADSTAR Help: This
                                           ///< restricts the availability of the selected attribute
@@ -926,7 +926,7 @@ public:
     {
         enum class PIN_TYPE
         {
-            UNCOMMITTED,        ///< Uncomitted pin (default)
+            UNCOMMITTED,        ///< Uncommitted pin (default)
             INPUT,              ///< Input pin
             OUTPUT_OR,          ///< Output pin OR tieable
             OUTPUT_NOT_OR,      ///< Output pin not OR tieable
@@ -1058,7 +1058,7 @@ public:
 
             wxString Name; ///< This name can be different to the PART name
             bool     HidePinNames =
-                    false; ///< Specifies whether to display the pin names/indentifier in
+                    false; ///< Specifies whether to display the pin names/identifier in
                            ///< the schematic symbol or not. E.g. it is useful to display
                            ///< pin name information for integrated circuits but less so
                            ///< for resistors and capacitors. (subnode HIDEPINNAMES)
@@ -1105,7 +1105,7 @@ public:
                                                   ///< Therefore, PART_PIN is only included for
                                                   ///< completeness of the parser, but won't be used
 
-        bool HidePinNames = false; ///< This seems to be a dupplicate of DEFINITION::HidePinNames
+        bool HidePinNames = false; ///< This seems to be a duplicate of DEFINITION::HidePinNames
                                    ///< Possibly only used in older file formats?
 
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< Some attributes are defined
@@ -1322,7 +1322,7 @@ public:
     static void ParseChildEValue( XNODE* aNode, PARSER_CONTEXT* aContext, EVALUE& aValueToParse );
 
     /**
-     * @brief if no childs are present, it just returns an empty
+     * @brief if no children are present, it just returns an empty
      *        vector (without throwing an exception)
      * @param aNode containing a series of POINT objects
      * @param aTestAllChildNodes
@@ -1337,7 +1337,7 @@ public:
             bool aTestAllChildNodes = false, int aExpectedNumPoints = UNDEFINED_VALUE );
 
     /**
-     * @brief if no childs are present, it just returns an empty
+     * @brief if no children are present, it just returns an empty
      *        vector (without throwing an exception)
      * @param aNode containing a series of VERTEX objects
      * @param aTestAllChildNodes
@@ -1351,7 +1351,7 @@ public:
             XNODE* aNode, PARSER_CONTEXT* aContext, bool aTestAllChildNodes = false );
 
     /**
-     * @brief if no childs are present, it just returns an empty
+     * @brief if no children are present, it just returns an empty
      *        vector (without throwing an exception)
      * @param aNode containing a series of CUTOUT objects
      * @param aTestAllChildNodes

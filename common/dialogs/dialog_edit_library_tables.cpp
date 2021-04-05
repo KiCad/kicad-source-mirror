@@ -75,7 +75,7 @@ bool DIALOG_EDIT_LIBRARY_TABLES::TransferDataFromWindow()
 {
     /* Transfer tables edited in dialog to the global and project tables:
      * A good way is to use m_contentPanel->TransferDataFromWindow to do that.
-     * But be carefull:
+     * But be careful:
      * Since wxWidgets 3.1, it is called by wxDialog::TransferDataFromWindow()
      * Before wxWidgets 3.1, it is *not* called by wxDialog::TransferDataFromWindow()
      * m_contentPanel->TransferDataFromWindow do not works with two calls.

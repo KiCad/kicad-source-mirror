@@ -29,7 +29,7 @@
 #include <widgets/grid_readonly_text_helpers.h>
 
 
-// It works for table data on clipboard for an Excell spreadsheet,
+// It works for table data on clipboard for an Excel spreadsheet,
 // why not us too for now.
 #define COL_SEP     wxT( '\t' )
 #define ROW_SEP     wxT( '\n' )

@@ -121,7 +121,7 @@ private:
     /**
      * Set a group id for the item and the layer combination.
      *
-     * @param aLayer is the layer numbe.
+     * @param aLayer is the layer number.
      * @param aGroup is the group id.
      */
     void setGroup( int aLayer, int aGroup )

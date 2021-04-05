@@ -68,7 +68,7 @@ CAIRO_GAL_BASE::CAIRO_GAL_BASE( GAL_DISPLAY_OPTIONS& aDisplayOptions ) : GAL( aD
     SetGridColor( COLOR4D( 0.1, 0.1, 0.1, 0.8 ) );
     SetAxesColor( COLOR4D( BLUE ) );
 
-    // Avoid unitialized variables:
+    // Avoid uninitialized variables:
     cairo_matrix_init_identity( &m_currentXform );
     cairo_matrix_init_identity( &m_currentWorld2Screen );
 }
@@ -157,7 +157,7 @@ void CAIRO_GAL_BASE::arc_angles_xform_and_normalize( double& aStartAngle, double
     // now rotate arc according to the rotation transform matrix
     // Remark:
     // We call angle_xform() to calculate angles according to the flip/rotation
-    // transform and normatize between -2M_PI and +2M_PI.
+    // transform and normalize between -2M_PI and +2M_PI.
     // Therefore, if aStartAngle = aEndAngle + 2*n*M_PI, the transform gives
     // aEndAngle = aStartAngle
     // So, if this is the case, force the aEndAngle value to draw a circle.

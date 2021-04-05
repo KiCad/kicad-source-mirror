@@ -651,7 +651,7 @@ void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
         Pgm().GetCommonSettings()->m_System.autosave_interval = m_autoSaveInterval;
 
     // Once this is fully implemented, wxAuiManager will be used to maintain
-    // the persistance of the main frame and all it's managed windows and
+    // the persistence of the main frame and all it's managed windows and
     // all of the legacy frame persistence position code can be removed.
     aCfg->perspective = m_auimgr.SavePerspective().ToStdString();
 
@@ -749,7 +749,7 @@ void EDA_BASE_FRAME::FinishAUIInitialization()
     m_auimgr.Update();
 #else
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
-    // hidding it.
+    // hiding it.
     m_auimgr.Update();
 
     // We don't want the infobar displayed right away

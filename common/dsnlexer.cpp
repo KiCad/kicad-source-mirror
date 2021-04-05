@@ -680,7 +680,7 @@ L_read:
     {
         /*  get the dash out of a <pin_reference> which is embedded for example
             like:  U2-14 or "U2"-"14"
-            This is detectable by a non-space immediately preceeding the dash.
+            This is detectable by a non-space immediately preceding the dash.
         */
         if( *cur == '-' && cur>start && !isSpace( cur[-1] ) )
         {

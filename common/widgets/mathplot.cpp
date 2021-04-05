@@ -3277,7 +3277,7 @@ void mpFXYVector::Clear()
 
 void mpFXYVector::SetData( const std::vector<double>& xs, const std::vector<double>& ys )
 {
-    // Check if the data vectora are of the same size
+    // Check if the data vectors are of the same size
     if( xs.size() != ys.size() )
         return;
 
@@ -3803,7 +3803,7 @@ void mpBitmapLayer::Plot( wxDC& dc, mpWindow& w )
         double  screenPixelX    = ( x1 - x0 ) / (double) m_bitmap.GetWidth();
         double  screenPixelY    = ( y1 - y0 ) / (double) m_bitmap.GetHeight();
 
-        // The minimum number of pixels that the streched image will overpass the actual mpWindow borders:
+        // The minimum number of pixels that the stretched image will overpass the actual mpWindow borders:
         wxCoord borderMarginX   = (wxCoord) (screenPixelX + 1); // ceil
         wxCoord borderMarginY   = (wxCoord) (screenPixelY + 1); // ceil
 

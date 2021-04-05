@@ -525,7 +525,7 @@ bool DS_DATA_ITEM_POLYGONS::IsInsidePage( int ii ) const
         return false;
 
     pos = GetStartPos( ii );
-    pos += m_maxCoord;  // rignt bottom pos of bounding box
+    pos += m_maxCoord;  // right bottom pos of bounding box
 
     if( model.m_RB_Corner.x < pos.x || model.m_RB_Corner.y < pos.y )
         return false;

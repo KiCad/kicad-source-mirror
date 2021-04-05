@@ -169,7 +169,7 @@ wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry
     /// ID numbers for tool actions are assigned above ACTION_BASE_UI_ID inside TOOL_EVENT
     BITMAPS icon = aAction.GetIcon();
 
-    // Allow the label to be overriden at point of use
+    // Allow the label to be overridden at point of use
     wxString menuLabel = aOverrideLabel.IsEmpty() ? aAction.GetMenuItem() :  aOverrideLabel;
 
     wxMenuItem* item = new wxMenuItem( this, aAction.GetUIId(), menuLabel,

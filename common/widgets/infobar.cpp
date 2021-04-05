@@ -195,7 +195,7 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
     // Calculate the horizontal size: because the infobar is shown on top of the draw canvas
     // it is adjusted to the canvas width.
     // On Mac, the canvas is the parent
-    // On other OS the parent is EDA_BASE_FRAME thta contains the canvas
+    // On other OS the parent is EDA_BASE_FRAME that contains the canvas
     int parentWidth = m_parent->GetClientSize().GetWidth();
     EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( m_parent );
 

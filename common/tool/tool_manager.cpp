@@ -754,7 +754,7 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
                     handled = true;
 
                     if( !st->cofunc->Running() )
-                        finishTool( st ); // The couroutine has finished immediately?
+                        finishTool( st ); // The coroutine has finished immediately?
 
                     // if it is a message, continue processing
                     finished = !( aEvent.Category() == TC_MESSAGE );

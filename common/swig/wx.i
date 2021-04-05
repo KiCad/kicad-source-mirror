@@ -235,7 +235,7 @@ public:
     when printing a value in situ that was not returned from a wrapped function.
     Remember wxString return values of functions are converted by the typemaps.
 
-    No wxString constructor is given to SWIG, since wxString contruction is
+    No wxString constructor is given to SWIG, since wxString construction is
     always done in C++, but python needs to know that it can delete a wxString
     when necessary. And most importantly we need to see a string's contents so
     the __str__() function must show content.

@@ -478,7 +478,7 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill, i
 /**
  * DXF polygon: doesn't fill it but at least it close the filled ones
  * DXF does not know thick outline.
- * It does not know thhick segments, therefore filled polygons with thick outline
+ * It does not know thick segments, therefore filled polygons with thick outline
  * are converted to inflated polygon by aWidth/2
  */
 void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
@@ -709,7 +709,7 @@ void DXF_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
 
 
 /**
- * DXF rectangular pad: alwayd done in sketch mode
+ * DXF rectangular pad: always done in sketch mode
  */
 void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
                                 double orient, OUTLINE_MODE trace_mode, void* aData )
@@ -1001,7 +1001,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                but today I'm lazy and I have no idea on how to coerce a Unicode
                wxString to spit out latin1 encoded text ...
 
-               Atleast stdio is *supposed* to do output buffering, so there is
+               At least stdio is *supposed* to do output buffering, so there is
                hope is not too slow */
             wchar_t ch = aText[i];
 
