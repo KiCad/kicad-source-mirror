@@ -268,8 +268,6 @@ public:
      */
     void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
 
-    APPEARANCE_CONTROLS* GetAppearancePanel() { return m_appearancePanel; }
-
     /**
      * Update the UI to reflect changes to the current layer's transparency.
      */

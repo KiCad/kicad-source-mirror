@@ -34,6 +34,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/zone_create_helper.h>
+#include <widgets/appearance_controls.h>
 #include <router/router_tool.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
@@ -1306,11 +1307,12 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
     // Only three shapes are currently supported
     assert( shape == S_SEGMENT || shape == S_CIRCLE || shape == S_RECT );
 
-    EDA_UNITS    userUnits = m_frame->GetUserUnits();
+    EDA_UNITS        userUnits = m_frame->GetUserUnits();
     PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-    PCB_SHAPE*&  graphic = *aGraphic;
+    PCB_SHAPE*&      graphic = *aGraphic;
+    PCB_LAYER_ID     drawingLayer = m_frame->GetActiveLayer();
 
-    m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
+    m_lineWidth = getSegmentWidth( drawingLayer );
 
     // geometric construction manager
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPointManager;
@@ -1332,17 +1334,29 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
     bool     isLocalOriginSet = ( m_frame->GetScreen()->m_LocalOrigin != VECTOR2D( 0, 0 ) );
     VECTOR2I cursorPos = m_controls->GetMousePosition();
 
-    // Prime the pump
-    m_toolMgr->RunAction( ACTIONS::refreshPreview );
-
-    if( aStartingPoint )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
-
     auto setCursor =
             [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
+
+    auto cleanup =
+            [&]()
+            {
+                preview.Clear();
+                m_view->Update( &preview );
+                delete graphic;
+                graphic = nullptr;
+
+                if( !isLocalOriginSet )
+                    m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
+            };
+
+    // Prime the pump
+    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+
+    if( aStartingPoint )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Set initial cursor
     setCursor();
@@ -1357,7 +1371,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
-        cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), m_frame->GetActiveLayer() );
+        cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), drawingLayer );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         // 45 degree angle constraint enabled with an option and toggled with Ctrl
@@ -1365,18 +1379,6 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
         if( evt->Modifier( MD_CTRL ) )
             limit45 = !limit45;
-
-        auto cleanup =
-                [&]()
-                {
-                    preview.Clear();
-                    m_view->Update( &preview );
-                    delete graphic;
-                    graphic = nullptr;
-
-                    if( !isLocalOriginSet )
-                        m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
-                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -1413,8 +1415,16 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
-            m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
-            graphic->SetLayer( m_frame->GetActiveLayer() );
+            drawingLayer = m_frame->GetActiveLayer();
+
+            if( !m_view->IsLayerVisible( drawingLayer ) )
+            {
+                m_frame->GetAppearancePanel()->SetLayerVisible( drawingLayer, true );
+                m_frame->GetCanvas()->Refresh();
+            }
+
+            m_lineWidth = getSegmentWidth( drawingLayer );
+            graphic->SetLayer( drawingLayer );
             graphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
             frame()->SetMsgPanel( graphic );
@@ -1449,13 +1459,13 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                     aStartingPoint = NULLOPT;
                 }
 
-                m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
+                m_lineWidth = getSegmentWidth( drawingLayer );
 
                 // Init the new item attributes
                 graphic->SetShape( (PCB_SHAPE_TYPE_T) shape );
                 graphic->SetFilled( false );
                 graphic->SetWidth( m_lineWidth );
-                graphic->SetLayer( m_frame->GetActiveLayer() );
+                graphic->SetLayer( drawingLayer );
                 grid.SetSkipPoint( cursorPos );
 
                 twoPointManager.SetOrigin( (wxPoint) cursorPos );
@@ -1468,6 +1478,12 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                 frame()->SetMsgPanel( graphic );
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
+
+                if( !m_view->IsLayerVisible( drawingLayer ) )
+                {
+                    m_frame->GetAppearancePanel()->SetLayerVisible( drawingLayer, true );
+                    m_frame->GetCanvas()->Refresh();
+                }
 
                 updateSegmentFromGeometryMgr( twoPointManager, graphic );
 
@@ -1612,8 +1628,10 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 
 bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool aImmediateMode )
 {
-    PCB_SHAPE*& graphic = *aGraphic;
-    m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
+    PCB_SHAPE*&  graphic = *aGraphic;
+    PCB_LAYER_ID drawingLayer = m_frame->GetActiveLayer();
+
+    m_lineWidth = getSegmentWidth( drawingLayer );
 
     // Arc geometric construction manager
     KIGFX::PREVIEW::ARC_GEOM_MANAGER arcManager;
@@ -1632,18 +1650,26 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
     bool firstPoint = false;
     bool cancelled = false;
 
-    // Prime the pump
-    m_toolMgr->RunAction( ACTIONS::refreshPreview );
-
-    if( aImmediateMode )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
-
     // Set initial cursor
     auto setCursor =
             [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
+
+    auto cleanup =
+            [&] ()
+            {
+                preview.Clear();
+                delete *aGraphic;
+                *aGraphic = nullptr;
+            };
+
+    // Prime the pump
+    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+
+    if( aImmediateMode )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     setCursor();
 
@@ -1655,21 +1681,12 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
 
         setCursor();
 
-        PCB_LAYER_ID layer = m_frame->GetActiveLayer();
-        graphic->SetLayer( layer );
+        graphic->SetLayer( drawingLayer );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic );
         m_controls->ForceCursorPosition( true, cursorPos );
-
-        auto cleanup =
-                [&] ()
-                {
-                    preview.Clear();
-                    delete *aGraphic;
-                    *aGraphic = nullptr;
-                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -1713,12 +1730,19 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
 
-                m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
+                drawingLayer = m_frame->GetActiveLayer();
+                m_lineWidth = getSegmentWidth( drawingLayer );
 
                 // Init the new item attributes
                 // (non-geometric, those are handled by the manager)
                 graphic->SetShape( S_ARC );
                 graphic->SetWidth( m_lineWidth );
+
+                if( !m_view->IsLayerVisible( drawingLayer ) )
+                {
+                    m_frame->GetAppearancePanel()->SetLayerVisible( drawingLayer, true );
+                    m_frame->GetCanvas()->Refresh();
+                }
 
                 preview.Add( graphic );
                 frame()->SetMsgPanel( graphic );
@@ -1741,8 +1765,16 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
-            m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
-            graphic->SetLayer( m_frame->GetActiveLayer() );
+            drawingLayer = m_frame->GetActiveLayer();
+
+            if( !m_view->IsLayerVisible( drawingLayer ) )
+            {
+                m_frame->GetAppearancePanel()->SetLayerVisible( drawingLayer, true );
+                m_frame->GetCanvas()->Refresh();
+            }
+
+            m_lineWidth = getSegmentWidth( drawingLayer );
+            graphic->SetLayer( drawingLayer );
             graphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
             frame()->SetMsgPanel( graphic );
@@ -1924,15 +1956,25 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     status.SetTextColor( wxColour( 255, 0, 0 ) );
     status.SetText( _( "Self-intersecting polygons are not allowed" ) );
 
-    // Prime the pump
-    if( aEvent.HasPosition() )
-        m_toolMgr->PrimeTool( aEvent.Position() );
-
     auto setCursor =
             [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
+
+    auto cleanup =
+            [&] ()
+            {
+                polyGeomMgr.Reset();
+                started = false;
+                grid.ClearSkipPoint();
+                m_controls->SetAutoPan( false );
+                m_controls->CaptureCursor( false );
+            };
+
+    // Prime the pump
+    if( aEvent.HasPosition() )
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Set initial cursor
     setCursor();
@@ -1955,16 +1997,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             polyGeomMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
         else
             polyGeomMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
-
-        auto cleanup =
-                [&] ()
-                {
-                    polyGeomMgr.Reset();
-                    started = false;
-                    grid.ClearSkipPoint();
-                    m_controls->SetAutoPan( false );
-                    m_controls->CaptureCursor( false );
-                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -2000,6 +2032,12 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         {
             if( zoneMode != ZONE_MODE::SIMILAR )
                 params.m_layer = frame()->GetActiveLayer();
+
+            if( !m_view->IsLayerVisible( params.m_layer ) )
+            {
+                m_frame->GetAppearancePanel()->SetLayerVisible( params.m_layer, true );
+                m_frame->GetCanvas()->Refresh();
+            }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -2030,10 +2068,18 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 if( !started )
                 {
                     started = true;
-                    constrainAngle = ( polyGeomMgr.GetLeaderMode() ==
-                            POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
+
+                    POLYGON_GEOM_MANAGER::LEADER_MODE leaderMode = polyGeomMgr.GetLeaderMode();
+                    constrainAngle = ( leaderMode == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
+
                     m_controls->SetAutoPan( true );
                     m_controls->CaptureCursor( true );
+
+                    if( !m_view->IsLayerVisible( params.m_layer ) )
+                    {
+                        m_frame->GetAppearancePanel()->SetLayerVisible( params.m_layer, true );
+                        m_frame->GetCanvas()->Refresh();
+                    }
                 }
             }
         }
