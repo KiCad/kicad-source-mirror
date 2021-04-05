@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <tuple>
 #include <unit_test_utils/unit_test_utils.h>
 
 #include <geometry/shape_line_chain.h>
@@ -40,6 +41,11 @@ struct CollisionFixture
 
     // Vectors containing colliding and non-colliding points
     std::vector<VECTOR2I> collidingPoints, nonCollidingPoints;
+
+    // tuple of segment under test, collision result, and intersection point
+    typedef std::tuple<SEG, bool, VECTOR2I> SEG_CASE;
+
+    std::vector<SEG_CASE> segs;
 
     /**
     * Constructor
@@ -67,6 +73,32 @@ struct CollisionFixture
 
         // Inside the outline and inside a hole => outside the polygon
         nonCollidingPoints.emplace_back( 15, 12 );
+
+        // Seg crossing the edge
+        segs.emplace_back( std::make_tuple( SEG( VECTOR2I( 90, 90 ), VECTOR2I( 110, 110 ) ),
+                                            true, VECTOR2I( 100, 100 ) ) );
+        segs.emplace_back( std::make_tuple( SEG( VECTOR2I( 110, 110 ), VECTOR2I( 90, 90 ) ),
+                                            true, VECTOR2I( 100, 100 ) ) );
+        segs.emplace_back( std::make_tuple( SEG( VECTOR2I( 50, -10 ), VECTOR2I( 50, 50 ) ),
+                                            true, VECTOR2I( 50, 0 ) ) );
+        segs.emplace_back( std::make_tuple( SEG( VECTOR2I( 50, 50 ), VECTOR2I( 50, -10 ) ),
+                                            true, VECTOR2I( 50, 0 ) ) );
+
+        // Seg fully inside
+        segs.emplace_back( std::make_tuple( SEG( VECTOR2I( 80, 80 ), VECTOR2I( 90, 90 ) ),
+                                            true, VECTOR2I( 85, 85 ) ) );
+        segs.emplace_back( std::make_tuple( SEG( VECTOR2I( 90, 90 ), VECTOR2I( 80, 80 ) ),
+                                            true, VECTOR2I( 85, 85 ) ) );
+
+        // Seg fully outside
+        segs.emplace_back( std::make_tuple( SEG( VECTOR2I( 110, 110 ), VECTOR2I( 120, 120 ) ),
+                                            false, VECTOR2I() ) );
+
+        // Seg touching
+        segs.emplace_back( std::make_tuple( SEG( VECTOR2I( 100, 100 ), VECTOR2I( 110, 110 ) ),
+                                            true, VECTOR2I( 100, 100 ) ) );
+        segs.emplace_back( std::make_tuple( SEG( VECTOR2I( 110, 110 ), VECTOR2I( 100, 100 ) ),
+                                            true, VECTOR2I( 100, 100 ) ) );
     }
 
     ~CollisionFixture()
@@ -206,6 +238,29 @@ BOOST_AUTO_TEST_CASE( CollideVertexWithClearance )
     for( const VECTOR2I& point : common.holeyPoints )
     {
         BOOST_CHECK( common.holeyPolySet.CollideVertex( point + VECTOR2I( 1, 1 ), cornerHit, 2 ) );
+    }
+}
+
+
+/**
+ * Check that SHAPE_POLY_SET::Collide does the right thing for segments
+ */
+BOOST_AUTO_TEST_CASE( CollideSegments )
+{
+    for( const SEG_CASE& testCase : segs )
+    {
+        SEG seg;
+        bool expectedResult;
+        VECTOR2I expectedLocation;
+
+        std::tie( seg, expectedResult, expectedLocation ) = testCase;
+
+        VECTOR2I location;
+
+        BOOST_CHECK( common.holeyPolySet.Collide( seg, 0, nullptr, &location ) == expectedResult );
+
+        if( expectedResult )
+            BOOST_REQUIRE_EQUAL( location, expectedLocation );
     }
 }
 
