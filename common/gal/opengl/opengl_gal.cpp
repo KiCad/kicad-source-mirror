@@ -236,6 +236,10 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     m_isGrouping = false;
     m_groupCounter = 0;
 
+    // Connect the native cursor handler
+    Connect( wxEVT_SET_CURSOR, wxSetCursorEventHandler( OPENGL_GAL::onSetNativeCursor ), NULL,
+             this );
+
     // Connecting the event handlers
     Connect( wxEVT_PAINT, wxPaintEventHandler( OPENGL_GAL::onPaint ) );
 
@@ -1715,6 +1719,27 @@ bool OPENGL_GAL::HasTarget( RENDER_TARGET aTarget )
     case TARGET_NONCACHED: return true;
     case TARGET_OVERLAY:   return ( m_overlayBuffer != 0 );
     }
+}
+
+
+bool OPENGL_GAL::SetNativeCursorStyle( KICURSOR aCursor )
+{
+    // Store the current cursor type and get the wxCursor for it
+    if( !GAL::SetNativeCursorStyle( aCursor ) )
+        return false;
+
+    m_currentwxCursor = CURSOR_STORE::GetCursor( m_currentNativeCursor );
+
+    // Update the cursor in the wx control
+    HIDPI_GL_CANVAS::SetCursor( m_currentwxCursor );
+
+    return true;
+}
+
+
+void OPENGL_GAL::onSetNativeCursor( wxSetCursorEvent& aEvent )
+{
+    aEvent.SetCursor( m_currentwxCursor );
 }
 
 

@@ -43,6 +43,7 @@
 #include <unordered_map>
 #include <boost/smart_ptr/shared_array.hpp>
 #include <memory>
+#include <wx/event.h>
 
 #ifndef CALLBACK
 #define CALLBACK
@@ -246,6 +247,9 @@ public:
     // Cursor
     // -------
 
+    /// @copydoc GAL::SetNativeCursorStyle()
+    bool SetNativeCursorStyle( KICURSOR aCursor ) override;
+
     /// @copydoc GAL::DrawCursor()
     void DrawCursor( const VECTOR2D& aCursorPosition ) override;
 
@@ -332,6 +336,8 @@ private:
     GLint                   ufm_worldPixelSize;
     GLint                   ufm_screenPixelSize;
     GLint                   ufm_pixelSizeMultiplier;
+
+    wxCursor                m_currentwxCursor;          ///< wxCursor showing the current native cursor
 
     std::unique_ptr<GL_BITMAP_CACHE>            m_bitmapCache;
 
@@ -467,6 +473,13 @@ private:
      * @param aEvent is the mouse event.
      */
     void skipMouseEvent( wxMouseEvent& aEvent );
+
+    /**
+     * Give the correct cursor image when the native widget asks for it.
+     *
+     * @param aEvent is the cursor event to plac the cursor into.
+     */
+    void onSetNativeCursor( wxSetCursorEvent& aEvent );
 
     /**
      * Blit cursor into the current screen.

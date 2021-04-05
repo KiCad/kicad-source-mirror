@@ -23,8 +23,10 @@
 
 #include <vector>
 
-#include <cursors.h>
+#include <gal/cursors.h>
 #include <kiplatform/ui.h>
+
+// Cursor files
 #include <cursors/cursor-add.xpm>
 #include <cursors/cursor-component.xpm>
 #include <cursors/cursor-eraser.xpm>

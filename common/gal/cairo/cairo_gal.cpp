@@ -1230,6 +1230,10 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     m_mouseListener = aMouseListener;
     m_paintListener = aPaintListener;
 
+    // Connect the native cursor handler
+    Connect( wxEVT_SET_CURSOR, wxSetCursorEventHandler( CAIRO_GAL::onSetNativeCursor ), NULL,
+             this );
+
     // Connecting the event handlers
     Connect( wxEVT_PAINT, wxPaintEventHandler( CAIRO_GAL::onPaint ) );
 
@@ -1531,6 +1535,27 @@ bool CAIRO_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
     }
 
     return refresh;
+}
+
+
+bool CAIRO_GAL::SetNativeCursorStyle( KICURSOR aCursor )
+{
+    // Store the current cursor type and get the wxCursor for it
+    if( !GAL::SetNativeCursorStyle( aCursor ) )
+        return false;
+
+    m_currentwxCursor = CURSOR_STORE::GetCursor( m_currentNativeCursor );
+
+    // Update the cursor in the wx control
+    wxWindow::SetCursor( m_currentwxCursor );
+
+    return true;
+}
+
+
+void CAIRO_GAL::onSetNativeCursor( wxSetCursorEvent& aEvent )
+{
+    aEvent.SetCursor( m_currentwxCursor );
 }
 
 

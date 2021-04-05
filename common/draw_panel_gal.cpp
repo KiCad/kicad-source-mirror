@@ -30,7 +30,6 @@
 #include <kiface_i.h>
 #include <macros.h>
 #include <settings/app_settings.h>
-#include <cursors.h>
 #include <trace_helpers.h>
 
 #include <class_draw_panel_gal.h>
@@ -38,6 +37,7 @@
 #include <view/wx_view_controls.h>
 #include <painter.h>
 #include <base_screen.h>
+#include <gal/cursors.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/opengl/opengl_gal.h>
 #include <gal/cairo/cairo_gal.h>
@@ -71,8 +71,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_stealsFocus( true )
 {
     m_parent = aParentWindow;
-    m_currentKiCursor = KICURSOR::DEFAULT;
-    SetCurrentCursor( KICURSOR::ARROW );
 
     SetLayoutDirection( wxLayout_LeftToRight );
 
@@ -99,8 +97,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
     Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( EDA_DRAW_PANEL_GAL::onLostFocus ), NULL, this );
-    Connect( wxEVT_SET_CURSOR, wxSetCursorEventHandler( EDA_DRAW_PANEL_GAL::onSetCursor ), NULL,
-             this );
 
     const wxEventType events[] = {
         // Binding both EVT_CHAR and EVT_CHAR_HOOK ensures that all key events,
@@ -450,15 +446,6 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     // trigger update of the gal options in case they differ from the defaults
     m_options.NotifyChanged();
 
-    wxWindow* galWindow = dynamic_cast<wxWindow*>( new_gal );
-
-    if( galWindow )
-    {
-        galWindow->Connect( wxEVT_SET_CURSOR,
-                            wxSetCursorEventHandler( EDA_DRAW_PANEL_GAL::onSetCursor ), NULL,
-                            this );
-    }
-
     delete m_gal;
     m_gal = new_gal;
 
@@ -471,6 +458,9 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
         m_gal->SetGridSize( grid_size );
 
     m_gal->SetGridVisibility( grid_visibility );
+
+    // Make sure the cursor is set on the new canvas
+    SetCurrentCursor( KICURSOR::ARROW );
 
     if( m_painter )
         m_painter->SetGAL( m_gal );
@@ -565,21 +555,10 @@ void EDA_DRAW_PANEL_GAL::onShowTimer( wxTimerEvent& aEvent )
 }
 
 
-void EDA_DRAW_PANEL_GAL::SetCurrentCursor( KICURSOR cursor )
+void EDA_DRAW_PANEL_GAL::SetCurrentCursor( KICURSOR aCursor )
 {
-    if( m_currentKiCursor == cursor )
-        return;
-
-    m_currentCursor = CURSOR_STORE::GetCursor( cursor );
-    m_currentKiCursor = cursor;
-
-    SetCursor( m_currentCursor );
-}
-
-
-void EDA_DRAW_PANEL_GAL::onSetCursor( wxSetCursorEvent& event )
-{
-    event.SetCursor( m_currentCursor );
+    if( m_gal )
+        m_gal->SetNativeCursorStyle( aCursor );
 }
 
 

@@ -31,7 +31,7 @@
 #include <tools/ee_selection.h>
 #include <ee_collectors.h>
 #include <sch_symbol.h>
-#include <cursors.h>
+#include <gal/cursors.h>
 
 class SCH_BASE_FRAME;
 class SCH_ITEM;

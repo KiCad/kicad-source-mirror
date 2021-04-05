@@ -35,7 +35,8 @@
 #include <math/vector2d.h>
 #include <widgets/msgpanel.h>
 #include <memory>
-#include <cursors.h>
+
+#include <gal/cursors.h>
 
 class BOARD;
 class EDA_DRAW_FRAME;
@@ -190,7 +191,7 @@ public:
     /**
      * Set the current cursor shape for this panel.
      */
-    void SetCurrentCursor( KICURSOR cursor );
+    void SetCurrentCursor( KICURSOR aCursor );
 
     /**
      * Return the bounding box of the view that should be used if model is not valid.
@@ -232,12 +233,8 @@ protected:
     void onLostFocus( wxFocusEvent& aEvent );
     void onRefreshTimer( wxTimerEvent& aEvent );
     void onShowTimer( wxTimerEvent& aEvent );
-    void onSetCursor( wxSetCursorEvent& event );
 
     static const int MinRefreshPeriod = 17;      ///< 60 FPS.
-
-    wxCursor                    m_currentCursor;    ///< Current mouse cursor shape id.
-    KICURSOR   m_currentKiCursor;
 
     wxWindow*                m_parent;           ///< Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)

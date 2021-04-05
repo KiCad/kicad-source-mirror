@@ -33,6 +33,7 @@ set( GAL_SRCS
     newstroke_font.cpp
     painter.cpp
     gal/color4d.cpp
+    gal/cursors.cpp
     gal/dpi_scaling.cpp
     gal/gal_display_options.cpp
     gal/graphics_abstraction_layer.cpp
@@ -321,7 +322,6 @@ set( COMMON_SRCS
     common.cpp
     config_params.cpp
     confirm.cpp
-    cursors.cpp
     dialog_shim.cpp
     gr_text.cpp
     dsnlexer.cpp

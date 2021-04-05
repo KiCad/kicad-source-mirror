@@ -34,6 +34,7 @@
 #include <math/matrix3x3.h>
 
 #include <gal/color4d.h>
+#include <gal/cursors.h>
 #include <gal/definitions.h>
 #include <gal/stroke_font.h>
 #include <gal/gal_display_options.h>
@@ -966,6 +967,14 @@ public:
     }
 
     /**
+     * Set the cursor in the native panel.
+     *
+     * @param aCursor is the cursor to use in the native panel
+     * @return true if the cursor was updated, false if the cursor given was already set
+     */
+    virtual bool SetNativeCursorStyle( KICURSOR aCursor );
+
+    /**
      * Enable/disable cursor.
      *
      * @param aCursorEnabled is true if the cursor should be drawn, else false.
@@ -1158,6 +1167,7 @@ protected:
     STROKE_FONT          m_strokeFont;         ///< Instance of object that stores information
                                                ///< about how to draw texts
 
+    KICURSOR             m_currentNativeCursor; ///< Current cursor
 private:
     struct TEXT_PROPERTIES
     {

@@ -74,6 +74,9 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     m_forceDisplayCursor = false;
     SetCursorEnabled( false );
 
+    // Initialize the native widget to an arrow cursor
+    SetNativeCursorStyle( KICURSOR::ARROW );
+
     // Initialize text properties
     ResetTextAttributes();
 
@@ -249,4 +252,15 @@ COLOR4D GAL::getCursorColor() const
         color.a = color.a * 0.5;
 
     return color;
+}
+
+
+bool GAL::SetNativeCursorStyle( KICURSOR aCursor )
+{
+    if( m_currentNativeCursor == aCursor )
+        return false;
+
+    m_currentNativeCursor = aCursor;
+
+    return true;
 }

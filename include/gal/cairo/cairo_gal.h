@@ -407,6 +407,9 @@ public:
         m_paintListener = aPaintListener;
     }
 
+    /// @copydoc GAL::SetNativeCursorStyle()
+    bool SetNativeCursorStyle( KICURSOR aCursor ) override;
+
     /// @copydoc GAL::BeginDrawing()
     void beginDrawing() override;
 
@@ -443,6 +446,13 @@ public:
      */
     void skipMouseEvent( wxMouseEvent& aEvent );
 
+    /**
+     * Give the correct cursor image when the native widget asks for it.
+     *
+     * @param aEvent is the cursor event to plac the cursor into.
+     */
+    void onSetNativeCursor( wxSetCursorEvent& aEvent );
+
     ///< Cairo-specific update handlers
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;
 
@@ -467,6 +477,7 @@ protected:
     int                 m_wxBufferWidth;
     bool                m_isInitialized;       ///< Are Cairo image & surface ready to use
     COLOR4D             m_backgroundColor;     ///< Background color
+    wxCursor            m_currentwxCursor;     ///< wxCursor showing the current native cursor
 };
 
 } // namespace KIGFX
