@@ -59,9 +59,9 @@ class KiCadPyShell(KiCadEditorNotebookFrame):
         """
         self.notebook = KiCadEditorNotebook(parent=self.parent)
         intro = 'Py %s' % version.VERSION
-        import imp
+        import types
         import builtins
-        module = imp.new_module('__main__')
+        module = types.ModuleType('__main__')
         module.__dict__['__builtins__'] = builtins
         namespace = module.__dict__.copy()
 
