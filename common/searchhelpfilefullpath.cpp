@@ -2,197 +2,107 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 CERN
- * Copyright (C) 2014-2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <pgm_base.h>
 #include <common.h>
-#include <config.h>     // to define DEFAULT_INSTALL_PATH
-#include <macros.h>
-#include <wx/log.h>
+#include <pgm_base.h>
+#include <systemdirsappend.h>
 #include <trace_helpers.h>
-#include <paths.h>
+
+#include <wx/arrstr.h>
+#include <wx/log.h>
 
 
-/**
- * Function FindFileInSearchPaths
- * looks in "this" for \a aFilename, but first modifies every search
- * path by appending a list of path fragments from aSubdirs.  That modification
- * is not relative.
- */
-wxString FindFileInSearchPaths( const SEARCH_STACK& aStack,
-        const wxString& aFilename, const wxArrayString* aSubdirs )
+wxString SearchHelpFileFullPath( const wxString& aBaseName )
 {
-    wxPathList paths;
+    SEARCH_STACK basePaths;
+    wxString     helpFile;
 
-    for( unsigned i = 0; i < aStack.GetCount(); ++i )
+    // the documentation is expected to be located in one of the system directories
+    SystemDirsAppend( &basePaths );
+
+#if defined( DEBUG )
+    basePaths.Show( wxString( __func__ ) + ": basePaths" );
+#endif
+
+    // By default, the documentation from kicad-doc is installed to a folder called "help" with
+    // subdirectories for all supported languages. Although this can be changed at build-time by
+    // overwriting ${KICAD_DOC_PATH}, the best guess KiCad can make is that help files are always
+    // located in a folder named "help". If no translation matching the current locale settings is
+    // available, the English version will be returned instead.
+
+    wxLocale*     currentLocale = Pgm().GetLocale();
+    wxArrayString localeNameDirs;
+
+    // canonical form of the current locale (e.g., "fr_FR")
+    localeNameDirs.Add( currentLocale->GetCanonicalName() );
+
+    // short form of the current locale (e.g., "fr")
+    // wxLocale::GetName() does not always return the short form
+    localeNameDirs.Add( currentLocale->GetName().BeforeLast( '_' ) );
+
+    // plain English (in case a localised version of the help file cannot be found)
+    localeNameDirs.Add( "en" );
+
+    for( wxString& locale : localeNameDirs )
     {
-        wxFileName fn( aStack[i], wxEmptyString );
+        SEARCH_STACK docPaths;
 
-        if( aSubdirs )
+        for( wxString& base : basePaths )
         {
-            for( unsigned j = 0; j < aSubdirs->GetCount(); j++ )
-                fn.AppendDir( (*aSubdirs)[j] );
+            wxFileName path( base, wxEmptyString );
+
+            // add <base>/help/<locale>/
+            path.AppendDir( "help" );
+            path.AppendDir( locale );
+            docPaths.AddPaths( path.GetPath() );
+
+            // add <base>/doc/help/<locale>/
+            path.InsertDir( path.GetDirCount() - 2, "doc" );
+            docPaths.AddPaths( path.GetPath() );
+
+            // add <base>/doc/kicad/help/<locale>/
+            path.InsertDir( path.GetDirCount() - 2, "kicad" );
+            docPaths.AddPaths( path.GetPath() );
         }
 
-        wxLogTrace( tracePathsAndFiles, "    %s", fn.GetFullPath() );
+#if defined( DEBUG )
+        docPaths.Show( wxString( __func__ ) + ": docPaths (" + locale + ")" );
+#endif
 
-        if( fn.DirExists() )
+        // search HTML first, as it is the preferred format for help files
+        wxLogTrace( tracePathsAndFiles, "Checking SEARCH_STACK for file %s.html", aBaseName );
+        helpFile = docPaths.FindValidPath( aBaseName + ".html" );
+
+        if( !helpFile.IsEmpty() )
         {
-            paths.Add( fn.GetPath() );
+            // prepend URI protocol to open the file in a browser
+            helpFile = "file://" + helpFile;
+            break;
         }
+
+        // search PDF only when no corresponding HTML file was found
+        wxLogTrace( tracePathsAndFiles, "Checking SEARCH_STACK for file %s.pdf", aBaseName );
+        helpFile = docPaths.FindValidPath( aBaseName + ".pdf" );
+
+        if( !helpFile.IsEmpty() )
+            break;
     }
 
-    return paths.FindValidPath( aFilename );
-}
-
-
-// See also FindKicadHelpPath.cpp.notused.
-wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aBaseName )
-{
-    wxArrayString   subdirs;
-    wxArrayString   altsubdirs;
-    SEARCH_STACK    ss = aSStack;
-
-    // It might already be in aSStack, but why depend on other code
-    // far away when it's so easy to add it again (to our copy) as the first place to look.
-
-    // This is CMAKE_INSTALL_PREFIX unless DEFAULT_INSTALL_PATH was defined during
-    // build configuration:
-    ss.AddPaths( wxT( DEFAULT_INSTALL_PATH ), 0 );
-
-#if defined(__WXMAC__)
-    ss.AddPaths( PATHS::GetOSXKicadMachineDataDir() );
-    ss.AddPaths( Pgm().GetExecutablePath(), 0 );
-
-    // OS X packages can have the help files in
-    // /Library/Application\ Support/kicad/help,
-    // and in Contents/SharedSupport/help inside the
-    // bundle.
-    // Below we account for an international subdirectory.
-    subdirs.Add( "help" );
-    altsubdirs.Add( "Contents" );
-    altsubdirs.Add( "SharedSupport" );
-    altsubdirs.Add( "help" );
-#endif
-
-#if ! defined(__WXMAC__) // && defined(__linux__)
-    // This is the executable path minus the trailing bin directory used on Windows and Linux.
-    wxFileName tmp( Pgm().GetExecutablePath(), wxEmptyString );
-    wxArrayString binDirs = tmp.GetDirs();
-
-    if( !binDirs.IsEmpty() && binDirs[ binDirs.GetCount() - 1 ].CmpNoCase( wxT( "bin" ) ) == 0 )
-        tmp.RemoveLastDir();
-
-    ss.AddPaths( tmp.GetPath(), 0 );
-
-    // Based on kicad-doc.bzr/CMakeLists.txt, line 20, the help files are
-    // installed into "<CMAKE_INSTALL_PREFIX>/share/doc/kicad/help" for linux.
-    // This is ${KICAD_HELP} var in that CMakeLists.txt file.
-    // Below we account for an international subdirectory.
-    subdirs.Add( "share" );
-    subdirs.Add( "doc" );
-    subdirs.Add( "kicad" );
-    subdirs.Add( "help" );
-
-    // Based on kicad-doc.bzr/CMakeLists.txt, line 35, the help files are
-    // installed into "<CMAKE_INSTALL_PREFIX>/doc/help" for Windows.
-    // This is ${KICAD_HELP} var in that CMakeLists.txt file.
-    // Below we account for an international subdirectory.
-    altsubdirs.Add( "doc" );
-    altsubdirs.Add( "help" );
-#endif
-
-    // If there's a KICAD environment variable set, always use that guy's path first.
-    if( !Pgm().GetKicadEnvVariable().IsEmpty() )
-        ss.AddPaths( Pgm().GetKicadEnvVariable(), 0 );
-
-    /* Search for a help file.
-     *  we *must* find a help file.
-     *  so help is searched in directories in this order:
-     *  help/<canonical name> like help/en_GB
-     *  help/<short name> like help/en
-     *  help/en
-     */
-
-    wxLocale* i18n = Pgm().GetLocale();
-
-    // We try to find help file in help/<canonical name>
-    // If fails, try to find help file in help/<short canonical name>
-    // If fails, try to find help file in help/en
-    wxArrayString locale_name_dirs;
-    locale_name_dirs.Add( i18n->GetCanonicalName() );           // canonical name like fr_FR
-
-    // wxLocale::GetName() does not return always the short name
-    locale_name_dirs.Add( i18n->GetName().BeforeLast( '_' ) );  // short canonical name like fr
-    locale_name_dirs.Add( "en" );                        // default (en)
-
-#if defined(DEBUG) && 1
-    ss.Show( wxString( __func__ ) );
-    wxLogTrace( tracePathsAndFiles, "%s: m_help_file:'%s'", __func__, aBaseName );
-#endif
-
-    wxLogTrace( tracePathsAndFiles, "Checking SEARCH_STACK for file %s", aBaseName );
-
-    // Help files can be html (.html ext) or pdf (.pdf ext) files.
-    // Therefore, <BaseName>.html file is searched and if not found,
-    // <BaseName>.pdf file is searched in the same paths
-    wxString fn;
-
-    for( unsigned ii = 0; ii < locale_name_dirs.GetCount(); ii++ )
-    {
-        subdirs.Add( locale_name_dirs[ii] );
-        altsubdirs.Add( locale_name_dirs[ii] );
-
-        fn = FindFileInSearchPaths( ss, aBaseName + wxT( ".html" ), &altsubdirs );
-
-        if( !fn.IsEmpty() )
-        {
-            // Prepend URI protocol since we will open in a browser
-            fn = wxT( "file://" ) + fn;
-            break;
-        }
-
-        fn = FindFileInSearchPaths( ss, aBaseName + wxT( ".pdf" ), &altsubdirs );
-
-        if( !fn.IsEmpty() )
-            break;
-
-        fn = FindFileInSearchPaths( ss, aBaseName + wxT( ".html" ), &subdirs );
-
-        if( !fn.IsEmpty() )
-        {
-            // Prepend URI protocol since we will open in a browser
-            fn = wxT( "file://" ) + fn;
-            break;
-        }
-
-        fn = FindFileInSearchPaths( ss, aBaseName + wxT( ".pdf" ), &subdirs );
-
-        if( !fn.IsEmpty() )
-            break;
-
-        subdirs.RemoveAt( subdirs.GetCount() - 1 );
-        altsubdirs.RemoveAt( altsubdirs.GetCount() - 1 );
-    }
-
-    return fn;
+    return helpFile;
 }

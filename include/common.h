@@ -57,24 +57,17 @@ int ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC,
 
 /**
  * Return the help file's full path.
- * <p>
- * Return the KiCad help file with path and extension.
- * Help files can be html (.html ext) or pdf (.pdf ext) files.
- * A \<BaseName\>.html file is searched and if not found,
- * \<BaseName\>.pdf file is searched in the same path.
- * If the help file for the current locale is not found, an attempt to find
- * the English version of the help file is made.
- * Help file is searched in directories in this order:
- *  help/\<canonical name\> like help/en_GB
- *  help/\<short name\> like help/en
- *  help/en
- * </p>
- * @param aSearchStack contains some possible base dirs that may be above the
- *  the one actually holding @a aBaseName.  These are starting points for nested searches.
- * @param aBaseName is the name of the help file to search for, <p>without extension</p>.
- * @return  wxEmptyString is returned if aBaseName is not found, else the full path & filename.
+ *
+ * Return the full path and name (including extension) of the given KiCad help file. It is expected
+ * to be found in a subfolder help/\<_LANG_\>/ in one of the system paths. Supported file types are
+ * *.html and *.pdf. If no such file is available for the current locale, an attempt to find the
+ * English version is made. The search order for \<_LANG_\> is: 1) canonical form (e.g., "fr_FR"),
+ * 2) short form (e.g., "fr"), and 3) "en".
+ *
+ * @param aBaseName is the name of the help file to search for (without extension).
+ * @return the full path and filename if \a aBaseName is found, else wxEmptyString.
  */
-wxString SearchHelpFileFullPath( const SEARCH_STACK& aSearchStack, const wxString& aBaseName );
+wxString SearchHelpFileFullPath( const wxString& aBaseName );
 
 /**
  * Make \a aTargetFullFileName absolute and create the path of this file if it doesn't yet exist.
