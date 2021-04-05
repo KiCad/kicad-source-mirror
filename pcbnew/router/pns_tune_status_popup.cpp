@@ -44,21 +44,21 @@ void PNS_TUNE_STATUS_POPUP::UpdateStatus( PNS::ROUTER* aRouter )
     {
     case PNS::MEANDER_PLACER::TUNED:
         if( l < 0.5 )
-            SetTextColor( wxColor( 0, 255, 0 ) );
+            SetTextColor( wxColor( 127, 200, 127 ) );
         else
             SetTextColor( wxColor( 0, 128, 0 ) );
 
         break;
     case PNS::MEANDER_PLACER::TOO_SHORT:
         if( l < 0.5 )
-            SetTextColor( wxColor( 255, 128, 128 ) );
+            SetTextColor( wxColor( 242, 100, 126 ) );
         else
             SetTextColor( wxColor( 128, 64, 64 ) );
 
         break;
     case PNS::MEANDER_PLACER::TOO_LONG:
         if( l < 0.5 )
-            SetTextColor( wxColor( 24, 24, 255 ) );
+            SetTextColor( wxColor( 66, 184, 235 ) );
         else
             SetTextColor( wxColor( 19, 19, 195 ) );
 
