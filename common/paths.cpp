@@ -240,6 +240,22 @@ wxString PATHS::GetUserCachePath()
 }
 
 
+wxString PATHS::GetDocumentationPath()
+{
+    wxString path;
+
+#if defined( __WXMAC__ )
+    path = GetOSXKicadDataDir();
+#elif defined( __WXMSW__ )
+    path = Pgm().GetExecutablePath() + "../share/doc/kicad";
+#else
+    path = wxString::FromUTF8Unchecked( KICAD_DOCS );
+#endif
+
+    return path;
+}
+
+
 bool PATHS::EnsurePathExists( const wxString& aPath )
 {
     wxFileName path( aPath );

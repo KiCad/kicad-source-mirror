@@ -89,6 +89,9 @@
 /// directory to be referenced by the program code.
 #define KICAD_LIBRARY_DATA              "@KICAD_LIBRARY_DATA@"
 
+/// Allows documentation install directory to be referenced by the program code.
+#define KICAD_DOCS                      "@KICAD_DOCS@"
+
 // Plugins directory
 #define KICAD_PLUGINDIR                 "@CMAKE_INSTALL_FULL_LIBDIR@"
 

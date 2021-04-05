@@ -1,7 +1,7 @@
 #
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
-#  Copyright (C) 2007-2020 Kicad Developers, see AUTHORS.txt for contributors.
+#  Copyright (C) 2007-2021 Kicad Developers, see AUTHORS.txt for contributors.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
@@ -556,9 +556,13 @@ if( NOT APPLE )
     if( NOT IS_ABSOLUTE ${CMAKE_INSTALL_DATADIR} )
         set( KICAD_DATA ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/kicad
             CACHE STRING "Location of KiCad data files." )
+        set( KICAD_DOCS ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/doc/kicad
+            CACHE STRING "Location of KiCad documentation files." )
     else()
         set( KICAD_DATA ${CMAKE_INSTALL_DATADIR}/kicad
             CACHE STRING "Location of KiCad data files." )
+        set( KICAD_DOCS ${CMAKE_INSTALL_DATADIR}/doc/kicad
+            CACHE STRING "Location of KiCad documentation files." )
     endif()
 
     set( KICAD_LIBRARY_DATA ${KICAD_DATA}
@@ -584,8 +588,6 @@ if( NOT APPLE )
             CACHE PATH "Location of KiCad user-loaded plugins" )
     endif()
 
-    set( KICAD_DOCS ${CMAKE_INSTALL_DATADIR}/doc/kicad
-        CACHE PATH "Location of KiCad documentation files." )
     set( KICAD_DEMOS ${KICAD_DATA}/demos
         CACHE PATH "Location of KiCad demo files." )
     set( KICAD_TEMPLATE ${KICAD_LIBRARY_DATA}/template

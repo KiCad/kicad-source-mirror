@@ -99,6 +99,11 @@ public:
     static wxString GetUserCachePath();
 
     /**
+     * Gets the documentation path, which is the base path for help files
+     */
+    static wxString GetDocumentationPath();
+
+    /**
      * Attempts to create a given path if it does not exist
      */
     static bool EnsurePathExists( const wxString& aPath );

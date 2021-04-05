@@ -21,6 +21,7 @@
 
 #include <common.h>
 #include <pgm_base.h>
+#include <paths.h>
 #include <systemdirsappend.h>
 #include <trace_helpers.h>
 
@@ -33,7 +34,10 @@ wxString SearchHelpFileFullPath( const wxString& aBaseName )
     SEARCH_STACK basePaths;
     wxString     helpFile;
 
-    // the documentation is expected to be located in one of the system directories
+    // help files are most likely located in the documentation install path
+    basePaths.Add( PATHS::GetDocumentationPath() );
+
+    // just in case, add all known system directories to the search stack
     SystemDirsAppend( &basePaths );
 
 #if defined( DEBUG )
