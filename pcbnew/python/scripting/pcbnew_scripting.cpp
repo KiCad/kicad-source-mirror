@@ -27,7 +27,7 @@
  * @brief methods to add scripting capabilities inside pcbnew
  */
 
-#include "../../scripting/python_scripting.h"
+#include <python_scripting.h>
 
 #include <cstdlib>
 #include <cstring>
@@ -38,7 +38,7 @@
 #include <gal/color4d.h>
 #include <trace_helpers.h>
 #include <kicad_string.h>
-
+#include <macros.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>

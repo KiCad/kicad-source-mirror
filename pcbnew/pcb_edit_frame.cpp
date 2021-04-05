@@ -1635,8 +1635,6 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 void PCB_EDIT_FRAME::ThemeChanged()
 {
     PCB_BASE_EDIT_FRAME::ThemeChanged();
-
-    PythonPluginsReload();
 }
 
 

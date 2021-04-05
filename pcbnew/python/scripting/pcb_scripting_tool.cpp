@@ -27,6 +27,7 @@
 #include <gestfich.h>
 #include <kiface_ids.h>
 #include <kiway.h>
+#include <macros.h>
 #include <python_scripting.h>
 #include <tools/pcb_actions.h>
 

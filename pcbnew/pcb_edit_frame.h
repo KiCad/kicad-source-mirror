@@ -94,11 +94,6 @@ public:
     bool IsContentModified() const override;
 
     /**
-     * Open the plugins folder in the default system file browser.
-     */
-    void PythonPluginsShowFolder();
-
-    /**
      * Synchronize the environment variables from KiCad's environment into the Python interpreter.
      */
     void PythonSyncEnvironmentVariables();
@@ -715,25 +710,6 @@ protected:
      */
     void OnActionPluginButton( wxCommandEvent& aEvent );
 
-    /**
-     * Refresh plugin list (reload Python plugins).
-     *
-     * @param aEvent sent by wx
-     */
-    void OnActionPluginRefresh( wxCommandEvent& aEvent)
-    {
-       PythonPluginsReload();
-    }
-
-    /**
-     * Refresh plugin list (reload Python plugins).
-     *
-     * @param aEvent sent by wx
-     */
-    void OnActionPluginShowFolder( wxCommandEvent& aEvent)
-    {
-       PythonPluginsShowFolder();
-    }
 
     /**
      * Has meaning only if KICAD_SCRIPTING_WXPYTHON option is not defined.
