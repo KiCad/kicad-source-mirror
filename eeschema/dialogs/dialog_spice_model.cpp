@@ -459,11 +459,11 @@ void DIALOG_SPICE_MODEL::showPinOrderNote( int aModelType )
         break;
 
     case SP_MOSFET:
-        msg += _( "For a MOSFET, pin order is drain, grid, source" );
+        msg += _( "For a MOSFET, pin order is drain, gate, source" );
         break;
 
     case SP_JFET:
-        msg += _( "For a JFET, pin order is drain, grid, source" );
+        msg += _( "For a JFET, pin order is drain, gate, source" );
         break;
 
     default:
