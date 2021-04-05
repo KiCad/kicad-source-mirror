@@ -369,6 +369,25 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
 
     assert( aItem->Owner() != NULL );
 
+    auto tryGetTrackWidth = 
+        []( PNS::ITEM* aPnsItem ) -> int
+        {
+            switch( aPnsItem->Kind() )
+            {
+            case PNS::ITEM::SEGMENT_T: return static_cast<PNS::SEGMENT*>( aPnsItem )->Width();
+            case PNS::ITEM::ARC_T: return static_cast<PNS::ARC*>( aPnsItem )->Width();
+            default: return -1;
+            }
+        };
+
+    int itemTrackWidth = tryGetTrackWidth( aItem );
+
+    if( itemTrackWidth > 0 )
+    {
+        *aInheritedWidth = itemTrackWidth;
+        return true;
+    }
+
     switch( aItem->Kind() )
     {
     case PNS::ITEM::VIA_T:
@@ -378,10 +397,6 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
     case PNS::ITEM::SOLID_T:
         p = static_cast<PNS::SOLID*>( aItem )->Pos();
         break;
-
-    case PNS::ITEM::SEGMENT_T:
-        *aInheritedWidth = static_cast<PNS::SEGMENT*>( aItem )->Width();
-        return true;
 
     default:
         return false;
@@ -394,11 +409,12 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
     int mval = INT_MAX;
 
     PNS::ITEM_SET linkedSegs = jt->Links();
-    linkedSegs.ExcludeItem( aItem ).FilterKinds( PNS::ITEM::SEGMENT_T );
+    linkedSegs.ExcludeItem( aItem ).FilterKinds( PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T );
 
     for( PNS::ITEM* item : linkedSegs.Items() )
     {
-        int w = static_cast<PNS::SEGMENT*>( item )->Width();
+        int w = tryGetTrackWidth( item );
+        assert( w > 0 );
         mval = std::min( w, mval );
     }
 
