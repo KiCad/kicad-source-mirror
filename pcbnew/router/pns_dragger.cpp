@@ -412,7 +412,8 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
             optimizer.SetRestrictArea( *affectedArea );
             optimizer.Optimize( &aDragged );
 
-            OPT_BOX2I optArea = *aDragged.ChangedArea( &aOrig );
+            OPT_BOX2I optArea = aDragged.ChangedArea( &aOrig );
+
             if( optArea )
                 Dbg()->AddBox( *optArea, 4 );
         }
