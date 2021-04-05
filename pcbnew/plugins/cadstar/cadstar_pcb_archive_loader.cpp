@@ -2915,6 +2915,8 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
         // Apply route offsetting, mimmicking the behaviour of the CADSTAR post processor
         if( prevTrack != nullptr )
         {
+            track->SetStart( prevTrack->GetEnd() ); // remove discontinuities if possible
+
             int offsetAmount = ( track->GetWidth() / 2 ) - ( prevTrack->GetWidth() / 2 );
 
             if( offsetAmount > 0 )
