@@ -793,6 +793,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     TOOL_EVENT* evt = &aEvent;
     VECTOR2I    prevPos;
 
+    bool hasMouseMoved = false;
+
     // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
@@ -803,6 +805,9 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+
+        if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
+            hasMouseMoved = true;
 
         if( evt->IsAction( &PCB_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview )
@@ -985,8 +990,10 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
             break; // finish -- we moved exactly, so we are finished
         }
-        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
+        else if( hasMouseMoved && ( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
         {
+            // Ignore mouse up and click events until we receive at least one mouse move or
+            // mouse drag event
             break; // finish
         }
         else
