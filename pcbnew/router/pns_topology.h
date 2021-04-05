@@ -55,7 +55,30 @@ public:
     const ITEM_SET ConnectedItems( ITEM* aStart, int aKindMask = ITEM::ANY_T );
     int64_t ShortestConnectionLength( ITEM* aFrom, ITEM* aTo );
 
-    const ITEM_SET AssembleTrivialPath( ITEM* aStart );
+    /**
+     * Assembles a trivial path between two joints given a starting item
+     * @param aStart is the item to assemble from
+     * @param aTerminalJoints will be filled with the start and end points of the assembled path
+     * @return a set of items in the path
+     */
+    const ITEM_SET AssembleTrivialPath( ITEM* aStart,
+                                        std::pair<JOINT*, JOINT*>* aTerminalJoints = nullptr );
+
+    /**
+     * Like AssembleTrivialPath, but follows the track length algorithm, which discards segments
+     * that are fully inside pads, and truncates segments that cross into a pad (adding a straight-
+     * line segment from the intersection to the pad anchor).
+     *
+     * NOTE: When changing this, sync with BOARD::GetTrackLength()
+     *
+     * @param aStart is the item to assemble a path from
+     * @param aStartPad will be filled with the starting pad of the path, if found
+     * @param aEndPad will be filled with the ending pad of the path, if found
+     * @return an item set containing all the items in the path
+     */
+    const ITEM_SET AssembleTuningPath( ITEM* aStart, SOLID** aStartPad = nullptr,
+                                       SOLID** aEndPad = nullptr );
+
     const DIFF_PAIR AssembleDiffPair( SEGMENT* aStart );
 
     bool AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair );
@@ -63,7 +86,8 @@ public:
     const std::set<ITEM*> AssembleCluster( ITEM* aStart, int aLayer );
 
 private:
-    bool followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::set<ITEM*>& aVisited );
+    bool followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::set<ITEM*>& aVisited,
+                            JOINT** aTerminalJoint = nullptr );
 
     NODE *m_world;
 };

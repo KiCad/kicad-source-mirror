@@ -32,7 +32,7 @@ MEANDER_PLACER_BASE::MEANDER_PLACER_BASE( ROUTER* aRouter ) :
 {
     m_world = NULL;
     m_currentWidth = 0;
-    m_padToDieLenth = 0;
+    m_padToDieLength = 0;
 }
 
 

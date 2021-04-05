@@ -25,6 +25,7 @@
 #include "pns_itemset.h"
 #include "pns_topology.h"
 #include "pns_meander_skew_placer.h"
+#include "pns_solid.h"
 
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
@@ -79,24 +80,42 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
         !m_originPair.NLine().SegmentCount() )
         return false;
 
-    m_tunedPathP = topo.AssembleTrivialPath( m_originPair.PLine().GetLink( 0 ) );
-    m_tunedPathN = topo.AssembleTrivialPath( m_originPair.NLine().GetLink( 0 ) );
+    SOLID* padA = nullptr;
+    SOLID* padB = nullptr;
+
+    m_tunedPathP = topo.AssembleTuningPath( m_originPair.PLine().GetLink( 0 ), &padA, &padB );
+
+    m_padToDieP = 0;
+
+    if( padA )
+        m_padToDieP += padA->GetPadToDie();
+
+    if( padB )
+        m_padToDieP += padB->GetPadToDie();
+
+    m_tunedPathN = topo.AssembleTuningPath( m_originPair.NLine().GetLink( 0 ), &padA, &padB );
+
+    m_padToDieN = 0;
+
+    if( padA )
+        m_padToDieN += padA->GetPadToDie();
+
+    if( padB )
+        m_padToDieN += padB->GetPadToDie();
 
     m_world->Remove( m_originLine );
 
     m_currentWidth = m_originLine.Width();
     m_currentEnd = VECTOR2I( 0, 0 );
-    m_padToDieN = GetTotalPadToDieLength( m_originPair.NLine() );
-    m_padToDieP = GetTotalPadToDieLength( m_originPair.PLine() );
 
     if ( m_originPair.PLine().Net() == m_originLine.Net() )
     {
-        m_padToDieLenth = m_padToDieN;
+        m_padToDieLength = m_padToDieN;
         m_coupledLength = itemsetLength( m_tunedPathN );
     }
     else
     {
-        m_padToDieLenth = m_padToDieP;
+        m_padToDieLength = m_padToDieP;
         m_coupledLength = itemsetLength( m_tunedPathP );
     }
 
@@ -112,7 +131,7 @@ long long int MEANDER_SKEW_PLACER::origPathLength() const
 
 long long int MEANDER_SKEW_PLACER::itemsetLength( const ITEM_SET& aSet ) const
 {
-    long long int total = m_padToDieLenth;
+    long long int total = m_padToDieLength;
     for( const ITEM* item : aSet.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )

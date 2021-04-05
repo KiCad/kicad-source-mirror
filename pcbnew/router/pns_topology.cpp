@@ -177,14 +177,14 @@ ITEM* TOPOLOGY::NearestUnconnectedItem( JOINT* aStart, int* aAnchor, int aKindMa
 }
 
 
-bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::set<ITEM*>& aVisited )
+bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
+                                  std::set<ITEM*>& aVisited, JOINT** aTerminalJoint )
 {
     assert( aLine->IsLinked() );
 
-        VECTOR2I anchor = aLeft ? aLine->CPoint( 0 ) : aLine->CPoint( -1 );
-        LINKED_ITEM* last =
-                aLeft ? aLine->Links().front() : aLine->Links().back();
-        JOINT* jt = m_world->FindJoint( anchor, aLine );
+    VECTOR2I     anchor = aLeft ? aLine->CPoint( 0 ) : aLine->CPoint( -1 );
+    LINKED_ITEM* last   = aLeft ? aLine->Links().front() : aLine->Links().back();
+    JOINT*       jt     = m_world->FindJoint( anchor, aLine );
 
     assert( jt != NULL );
 
@@ -204,7 +204,12 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::
         }
 
         if( !next_seg )
+        {
+            if( aTerminalJoint )
+                *aTerminalJoint = jt;
+
             return false;
+        }
 
         LINE l = m_world->AssembleLine( next_seg );
 
@@ -230,21 +235,25 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::
             aSet.Add( l );
         }
 
-        return followTrivialPath( &l, aLeft, aSet, aVisited );
+        return followTrivialPath( &l, aLeft, aSet, aVisited, aTerminalJoint );
     }
+
+    if( aTerminalJoint )
+        *aTerminalJoint = jt;
 
     return false;
 }
 
 
-const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart )
+const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
+                                              std::pair<JOINT*, JOINT*>* aTerminalJoints )
 {
     ITEM_SET path;
     std::set<ITEM*> visited;
     SEGMENT* seg;
     VIA* via;
 
-    seg = dyn_cast<SEGMENT*> (aStart);
+    seg = dyn_cast<SEGMENT*>( aStart );
 
     if(!seg && (via = dyn_cast<VIA*>( aStart ) ) )
     {
@@ -265,10 +274,141 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart )
 
     path.Add( l );
 
-    followTrivialPath( &l, false, path, visited );
-    followTrivialPath( &l, true, path, visited );
+    JOINT* jointA = nullptr;
+    JOINT* jointB = nullptr;
+
+    followTrivialPath( &l, false, path, visited, &jointA );
+    followTrivialPath( &l, true, path, visited, &jointB );
+
+    if( aTerminalJoints )
+    {
+        wxASSERT( jointA && jointB );
+        *aTerminalJoints = std::make_pair( jointA, jointB );
+    }
 
     return path;
+}
+
+
+const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SOLID** aEndPad )
+{
+    std::pair<JOINT*, JOINT*> joints;
+    ITEM_SET initialPath = AssembleTrivialPath( aStart, &joints );
+
+    PAD* padA = nullptr;
+    PAD* padB = nullptr;
+
+    for( ITEM* item : joints.first->LinkList() )
+    {
+        if( item->OfKind( ITEM::SOLID_T ) )
+        {
+            BOARD_ITEM* bi = static_cast<SOLID*>( item )->Parent();
+
+            if( bi->Type() == PCB_PAD_T )
+            {
+                padA = static_cast<PAD*>( bi );
+
+                if( aStartPad )
+                    *aStartPad = static_cast<SOLID*>( item );
+            }
+
+            break;
+        }
+    }
+
+    for( ITEM* item : joints.second->LinkList() )
+    {
+        if( item->OfKind( ITEM::SOLID_T ) )
+        {
+            BOARD_ITEM* bi = static_cast<SOLID*>( item )->Parent();
+
+            if( bi->Type() == PCB_PAD_T )
+            {
+                padB = static_cast<PAD*>( bi );
+
+                if( aEndPad )
+                    *aEndPad = static_cast<SOLID*>( item );
+            }
+
+            break;
+        }
+    }
+
+    auto clipLineToPad =
+            []( SHAPE_LINE_CHAIN& aLine, PAD* aPad, bool aForward = true )
+            {
+                const std::shared_ptr<SHAPE_POLY_SET>& shape = aPad->GetEffectivePolygon();
+
+                int start = aForward ? 0 : aLine.PointCount() - 1;
+                int delta = aForward ? 1 : -1;
+
+                // Skip the "first" (or last) vertex, we already know it's contained in the pad
+                int clip = start;
+
+                for( int vertex = start + delta;
+                     aForward ? vertex < aLine.PointCount() : vertex >= 0;
+                     vertex += delta )
+                {
+                    SEG seg( aLine.GetPoint( vertex ), aLine.GetPoint( vertex - delta ) );
+
+                    bool containsA = shape->Contains( seg.A );
+                    bool containsB = shape->Contains( seg.B );
+
+                    if( containsA && containsB )
+                    {
+                        // Whole segment is inside: clip out this segment
+                        clip = vertex;
+                    }
+                    else if( containsB &&
+                             ( aForward ? vertex < aLine.PointCount() - 1 : vertex > 0 ) )
+                    {
+                        // Only one point inside: Find the intersection
+                        VECTOR2I loc;
+
+                        if( shape->Collide( seg, 0, nullptr, &loc ) )
+                        {
+                            aLine.Replace( vertex - delta, vertex - delta, loc );
+                        }
+                    }
+                }
+
+                if( !aForward && clip < start )
+                    aLine.Remove( clip + 1, start );
+                else if( clip > start )
+                    aLine.Remove( start, clip - 1 );
+
+                // Now connect the dots
+                aLine.Insert( aForward ? 0 : aLine.PointCount(), aPad->GetPosition() );
+            };
+
+    auto processPad =
+            [&]( PAD* aPad )
+            {
+                const std::shared_ptr<SHAPE_POLY_SET>& shape = aPad->GetEffectivePolygon();
+
+                for( int idx = 0; idx < initialPath.Size(); idx++ )
+                {
+                    if( initialPath[idx]->Kind() != ITEM::LINE_T )
+                        continue;
+
+                    LINE* line = static_cast<LINE*>( initialPath[idx] );
+
+                    SHAPE_LINE_CHAIN& slc = line->Line();
+
+                    if( shape->Contains( slc.CPoint( 0 ) ) )
+                        clipLineToPad( slc, aPad, true );
+                    else if( shape->Contains( slc.CPoint( -1 ) ) )
+                        clipLineToPad( slc, aPad, false );
+                }
+            };
+
+    if( padA )
+        processPad( padA );
+
+    if( padB )
+        processPad( padB );
+
+    return initialPath;
 }
 
 

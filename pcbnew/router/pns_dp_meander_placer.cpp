@@ -29,6 +29,7 @@
 #include "pns_dp_meander_placer.h"
 #include "pns_diff_pair.h"
 #include "pns_router.h"
+#include "pns_solid.h"
 
 namespace PNS {
 
@@ -99,12 +100,30 @@ bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
         !m_originPair.NLine().SegmentCount() )
         return false;
 
-    m_tunedPathP = topo.AssembleTrivialPath( m_originPair.PLine().GetLink( 0 ) );
-    m_tunedPathN = topo.AssembleTrivialPath( m_originPair.NLine().GetLink( 0 ) );
+    SOLID* padA = nullptr;
+    SOLID* padB = nullptr;
 
-    m_padToDieP = GetTotalPadToDieLength( m_originPair.PLine() );
-    m_padToDieN = GetTotalPadToDieLength( m_originPair.NLine() );
-    m_padToDieLenth = std::max( m_padToDieP, m_padToDieN );
+    m_tunedPathP = topo.AssembleTuningPath( m_originPair.PLine().GetLink( 0 ), &padA, &padB );
+
+    m_padToDieP = 0;
+
+    if( padA )
+        m_padToDieP += padA->GetPadToDie();
+
+    if( padB )
+        m_padToDieP += padB->GetPadToDie();
+
+    m_tunedPathN = topo.AssembleTuningPath( m_originPair.NLine().GetLink( 0 ), &padA, &padB );
+
+    m_padToDieN = 0;
+
+    if( padA )
+        m_padToDieN += padA->GetPadToDie();
+
+    if( padB )
+        m_padToDieN += padB->GetPadToDie();
+
+    m_padToDieLength = std::max( m_padToDieP, m_padToDieN );
 
     m_world->Remove( m_originPair.PLine() );
     m_world->Remove( m_originPair.NLine() );
@@ -122,8 +141,8 @@ void DP_MEANDER_PLACER::release()
 
 long long int DP_MEANDER_PLACER::origPathLength() const
 {
-    long long int totalP = m_padToDieLenth;
-    long long int totalN = m_padToDieLenth;
+    long long int totalP = m_padToDieLength;
+    long long int totalN = m_padToDieLength;
 
     for( const ITEM* item : m_tunedPathP.CItems() )
     {

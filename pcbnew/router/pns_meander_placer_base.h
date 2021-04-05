@@ -141,7 +141,7 @@ protected:
     NODE* m_world;
 
     ///< Total length added by pad to die size.
-    int m_padToDieLenth;
+    int m_padToDieLength;
 
     ///< Width of the meandered trace(s).
     int m_currentWidth;

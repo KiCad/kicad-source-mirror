@@ -72,10 +72,19 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_world = Router()->GetWorld()->Branch();
     m_originLine = m_world->AssembleLine( m_initialSegment );
 
-    m_padToDieLenth = GetTotalPadToDieLength( m_originLine );
+    SOLID* padA = nullptr;
+    SOLID* padB = nullptr;
 
     TOPOLOGY topo( m_world );
-    m_tunedPath = topo.AssembleTrivialPath( m_initialSegment );
+    m_tunedPath = topo.AssembleTuningPath( m_initialSegment, &padA, &padB );
+
+    m_padToDieLength = 0;
+
+    if( padA )
+        m_padToDieLength += padA->GetPadToDie();
+
+    if( padB )
+        m_padToDieLength += padB->GetPadToDie();
 
     m_world->Remove( m_originLine );
 
@@ -88,7 +97,7 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
 long long int MEANDER_PLACER::origPathLength() const
 {
-    long long int total = m_padToDieLenth;
+    long long int total = m_padToDieLength;
 
     for( int idx = 0; idx < m_tunedPath.Size(); idx++ )
     {
@@ -235,7 +244,6 @@ bool MEANDER_PLACER::CommitPlacement()
     m_currentNode = NULL;
     return true;
 }
-
 
 
 bool MEANDER_PLACER::CheckFit( MEANDER_SHAPE* aShape )
