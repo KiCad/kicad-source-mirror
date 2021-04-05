@@ -292,6 +292,14 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         {
             break; // Finish
         }
+        else if( evt->Action() == TA_UNDO_REDO_PRE )
+        {
+            m_router->ClearWorld();
+        }
+        else if( evt->Action() == TA_UNDO_REDO_POST || evt->Action() == TA_MODEL_CHANGE )
+        {
+            m_router->SyncWorld();
+        }
         else if( evt->IsMotion() )
         {
             updateStartItem( *evt );
