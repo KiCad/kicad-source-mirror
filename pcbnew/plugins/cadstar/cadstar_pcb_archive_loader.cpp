@@ -2204,44 +2204,32 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks( const NET_ID&         aCadstarNe
                                                 const NET_PCB::ROUTE& aCadstarRoute,
                                                 long aStartWidth, long aEndWidth )
 {
+    if( aCadstarRoute.RouteVertices.size() == 0 )
+        return;
+
     std::vector<PCB_SHAPE*> shapes;
+    std::vector<NET_PCB::ROUTE_VERTEX> routeVertices = aCadstarRoute.RouteVertices;
 
-    std::vector<NET_PCB::ROUTE_VERTEX> offsetedVertices = aCadstarRoute.RouteVertices;
-    POINT newStartPoint = aCadstarRoute.StartPoint;
-    auto  begin = offsetedVertices.begin();
-
-    // First iterate through the points and apply route offset to start and end points only
-    // the rest of route offseting will happen in makeTracksFromDrawsegments
-    for( auto it = begin, end = offsetedVertices.end(); it != end; ++it )
+    // Add thin route at front so that route offseting works as expected
+    if( aStartWidth < routeVertices.front().RouteWidth )
     {
-        auto next = std::next( it );
-
-        if( it == offsetedVertices.begin() )
-        {
-            // second point of the route (first point is given by aCadstarRoute.StartPoint)
-            int offsetAmount = ( it->RouteWidth / 2 ) - ( aStartWidth / 2 );
-
-            if( aStartWidth < it->RouteWidth )
-                applyRouteOffset( &newStartPoint, it->Vertex.End, offsetAmount );
-        }
-
-        if( next == end )
-        {
-            // last point of the route
-            int offsetAmount = ( it->RouteWidth / 2 ) - ( aEndWidth / 2 );
-            POINT referencePoint = newStartPoint;
-
-            if( it != begin )
-                referencePoint = std::prev( it )->Vertex.End;
-
-            if( aEndWidth < it->RouteWidth )
-                applyRouteOffset( &it->Vertex.End, referencePoint, offsetAmount );
-        }
+        NET_PCB::ROUTE_VERTEX newFrontVertex = aCadstarRoute.RouteVertices.front();
+        newFrontVertex.RouteWidth = aStartWidth;
+        newFrontVertex.Vertex.End = aCadstarRoute.StartPoint;
+        routeVertices.insert( routeVertices.begin(), newFrontVertex );
     }
 
-    POINT prevEnd = newStartPoint;
+    // Add thin route at the back if required
+    if( aEndWidth < routeVertices.back().RouteWidth )
+    {
+        NET_PCB::ROUTE_VERTEX newBackVertex = aCadstarRoute.RouteVertices.back();
+        newBackVertex.RouteWidth = aEndWidth;
+        routeVertices.push_back( newBackVertex );
+    }
 
-    for( const NET_PCB::ROUTE_VERTEX& v : offsetedVertices )
+    POINT prevEnd = aCadstarRoute.StartPoint;
+
+    for( const NET_PCB::ROUTE_VERTEX& v : routeVertices )
     {
         PCB_SHAPE* shape = getDrawSegmentFromVertex( prevEnd, v.Vertex );
         shape->SetLayer( getKiCadLayer( aCadstarRoute.LayerID ) );
@@ -2251,9 +2239,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks( const NET_ID&         aCadstarNe
         prevEnd = v.Vertex.End;
     }
 
-    //Todo add real netcode to the tracks
-    std::vector<TRACK*> tracks =
-            makeTracksFromDrawsegments( shapes, m_board, getKiCadNet( aCadstarNetID ) );
+    NETINFO_ITEM*       net = getKiCadNet( aCadstarNetID );
+    std::vector<TRACK*> tracks = makeTracksFromDrawsegments( shapes, m_board, net );
 
     //cleanup
     for( PCB_SHAPE* shape : shapes )
@@ -2856,11 +2843,28 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
 {
     std::vector<TRACK*> tracks;
     TRACK*              prevTrack = nullptr;
+    TRACK*              track = nullptr;
+
+    auto addTrack = [&]( TRACK* aTrack )
+                    {
+                        // Ignore zero length tracks in the same way as the CADSTAR postprocessor
+                        // does when generating gerbers. Note that CADSTAR reports these as "Route
+                        // offset errors" when running a DRC within CADSTAR, so we shouldn't be
+                        // getting this in general, however it is used to remove any synthetic
+                        // points added to aDrawSegments by the caller of this function.
+                        if( aTrack->GetLength() != 0 )
+                        {
+                            tracks.push_back( aTrack );
+                            aParentContainer->Add( aTrack, ADD_MODE::APPEND );
+                        }
+                        else
+                        {
+                            delete aTrack;
+                        }
+                    };
 
     for( PCB_SHAPE* ds : aDrawsegments )
     {
-        TRACK* track;
-
         switch( ds->GetShape() )
         {
         case S_ARC:
@@ -2933,12 +2937,32 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
                 applyRouteOffset( &newEnd, prevTrack->GetStart(), -offsetAmount );
                 prevTrack->SetEnd( newEnd );
             } // don't do anything if offsetAmount == 0
+
+            // Add a synthetic track of the thinnest width between the tracks
+            // to ensure KiCad features works as expected on the imported design
+            // (KiCad expects tracks are contigous segments)
+            if( track->GetStart() != prevTrack->GetEnd() )
+            {
+                int    minWidth = std::min( track->GetWidth(), prevTrack->GetWidth() );
+                TRACK* synthTrack = new TRACK( aParentContainer );
+                synthTrack->SetStart( prevTrack->GetEnd() );
+                synthTrack->SetEnd( track->GetStart() );
+                synthTrack->SetWidth( minWidth );
+                synthTrack->SetLocked( track->IsLocked() );
+                synthTrack->SetNet( track->GetNet() );
+                synthTrack->SetLayer( track->GetLayer() );
+                addTrack( synthTrack );
+            }
         }
 
+        if( prevTrack )
+            addTrack( prevTrack );
+
         prevTrack = track;
-        tracks.push_back( track );
-        aParentContainer->Add( track, ADD_MODE::APPEND );
     }
+
+    if( track )
+        addTrack( track );
 
     return tracks;
 }
