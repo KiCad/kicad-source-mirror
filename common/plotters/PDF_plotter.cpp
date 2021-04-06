@@ -755,8 +755,7 @@ bool PDF_PLOTTER::EndPlot()
              "/Producer (KiCAD PDF)\n"
              "/CreationDate (%s)\n"
              "/Creator (%s)\n"
-             "/Title (%s)\n"
-             "/Trapped false\n",
+             "/Title (%s)\n",
              date_buf,
              TO_UTF8( creator ),
              TO_UTF8( title ) );
