@@ -69,45 +69,46 @@ void PCB_GROUP::RemoveAll()
 }
 
 
-PCB_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool aFootprintEditor )
+PCB_GROUP* getTopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor )
 {
-    PCB_GROUP* candidate = aItem->GetParentGroup();
+    PCB_GROUP* group = nullptr;
 
-    // Don't get the footprint's group if we are in the footprint editor
-    if( !candidate && aItem->GetParent() && aItem->GetParent()->Type() == PCB_FOOTPRINT_T
-            && !aFootprintEditor )
-        candidate = aItem->GetParent()->GetParentGroup();
-
-    while( candidate && candidate->GetParentGroup() && candidate->GetParentGroup() != aScope )
+    if( isFootprintEditor )
     {
-        if( candidate->GetParent()->Type() == PCB_FOOTPRINT_T && aFootprintEditor )
+        group = aItem->GetParentGroup();
+    }
+    else
+    {
+        if( aItem->GetParent() && aItem->GetParent()->Type() == PCB_FOOTPRINT_T )
+            group = aItem->GetParent()->GetParentGroup();
+        else
+            group = aItem->GetParentGroup();
+    }
+
+    while( group && group->GetParentGroup() && group->GetParentGroup() != aScope )
+    {
+        if( group->GetParent()->Type() == PCB_FOOTPRINT_T && isFootprintEditor )
             break;
 
-        candidate = candidate->GetParentGroup();
+        group = group->GetParentGroup();
     }
+
+    return group;
+}
+
+PCB_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor )
+{
+    PCB_GROUP* candidate = getTopLevelGroup( aItem, aScope, isFootprintEditor );
 
     return candidate == aScope ? nullptr : candidate;
 }
 
 
-bool PCB_GROUP::WithinScope( BOARD_ITEM* item, PCB_GROUP* scope )
+bool PCB_GROUP::WithinScope( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor )
 {
-    for( PCB_GROUP* parent = item->GetParentGroup(); parent; parent = parent->GetParentGroup() )
-    {
-        if( parent == scope )
-            return true;
-    }
+    PCB_GROUP* candidate = getTopLevelGroup( aItem, aScope, isFootprintEditor );
 
-    if( item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
-        item = item->GetParent();
-
-    for( PCB_GROUP* parent = item->GetParentGroup(); parent; parent = parent->GetParentGroup() )
-    {
-        if( parent == scope )
-            return true;
-    }
-
-    return false;
+    return candidate == aScope;
 }
 
 

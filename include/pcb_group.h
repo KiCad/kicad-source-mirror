@@ -95,12 +95,12 @@ public:
      * Search for highest level group containing item.
      *
      * @param aScope restricts the search to groups within the group scope.
-     * @param aFootprintEditor true if we should stop promoting at the footprint level
+     * @param isFootprintEditor true if we should stop promoting at the footprint level
      * @return group containing item, if it exists, otherwise, NULL
      */
-    static PCB_GROUP* TopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool aFootprintEditor );
+    static PCB_GROUP* TopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor );
 
-    static bool WithinScope( BOARD_ITEM* item, PCB_GROUP* scope );
+    static bool WithinScope( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor );
 
 #if defined( DEBUG )
     void Show( int nestLevel, std::ostream& os ) const override

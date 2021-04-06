@@ -2509,15 +2509,12 @@ void PCB_SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector
     {
         BOARD_ITEM* item = aCollector[j];
         BOARD_ITEM* parent = item->GetParent();
+        BOARD_ITEM* start = item;
 
-        // Ignore footprint groups in board editor
         if( !m_isFootprintEditor && parent && parent->Type() == PCB_FOOTPRINT_T )
-        {
-            ++j;
-            continue;
-        }
+            start = parent;
 
-        PCB_GROUP*  aTop = PCB_GROUP::TopLevelGroup( item, m_enteredGroup, m_isFootprintEditor );
+        PCB_GROUP*  aTop = PCB_GROUP::TopLevelGroup( start, m_enteredGroup, m_isFootprintEditor );
 
         if( aTop )
         {
@@ -2528,7 +2525,8 @@ void PCB_SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector
                 continue;
             }
         }
-        else if( m_enteredGroup && !PCB_GROUP::WithinScope( item, m_enteredGroup ) )
+        else if( m_enteredGroup
+                    && !PCB_GROUP::WithinScope( item, m_enteredGroup, m_isFootprintEditor ) )
         {
             // If a group is entered, disallow selections of objects outside the group.
             aCollector.Remove( item );
