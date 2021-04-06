@@ -397,8 +397,8 @@ int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
         if( ii < PointCount() - 1 && m_shapes[ii] >= 0 && m_shapes[ii] == m_shapes[ii + 1] )
             ii--;
 
-        m_points.insert( m_points.begin() + ii + 1, aP );
-        m_shapes.insert( m_shapes.begin() + ii + 1, ssize_t( SHAPE_IS_PT ) );
+        m_points.insert( m_points.begin() + ( ii + 1 ), aP );
+        m_shapes.insert( m_shapes.begin() + ( ii + 1 ), ssize_t( SHAPE_IS_PT ) );
 
         return ii + 1;
     }
