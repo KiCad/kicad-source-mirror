@@ -752,7 +752,6 @@ bool PDF_PLOTTER::EndPlot()
              ">>\n", (long) pageHandles.size() );
     closePdfObject();
 
-
     // The info dictionary
     int infoDictHandle = startPdfObject();
     char date_buf[250];
@@ -772,8 +771,7 @@ bool PDF_PLOTTER::EndPlot()
              "/Producer (KiCad PDF)\n"
              "/CreationDate (%s)\n"
              "/Creator %s\n"
-             "/Title %s\n"
-             "/Trapped False\n",
+             "/Title %s\n",
              date_buf,
              encodeStringForPlotter( m_creator ).c_str(),
              encodeStringForPlotter( m_title ).c_str() );
