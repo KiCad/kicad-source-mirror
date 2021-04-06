@@ -248,23 +248,30 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
 const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
                                               std::pair<JOINT*, JOINT*>* aTerminalJoints )
 {
-    ITEM_SET path;
+    ITEM_SET        path;
     std::set<ITEM*> visited;
-    SEGMENT* seg;
-    VIA* via;
+    LINKED_ITEM*    seg = nullptr;
 
-    seg = dyn_cast<SEGMENT*>( aStart );
-
-    if(!seg && (via = dyn_cast<VIA*>( aStart ) ) )
+    if( aStart->Kind() == ITEM::VIA_T )
     {
-        JOINT *jt = m_world->FindJoint( via->Pos(), via );
+        VIA*   via = static_cast<VIA*>( aStart );
+        JOINT* jt  = m_world->FindJoint( via->Pos(), via );
 
         if( !jt->IsNonFanoutVia() )
             return ITEM_SET();
 
-        for( const auto& entry : jt->Links().Items() )
-            if( ( seg = dyn_cast<SEGMENT*>( entry.item ) ) )
+        for( const ITEM_SET::ENTRY& entry : jt->Links().Items() )
+        {
+            if( entry.item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
+            {
+                seg = static_cast<LINKED_ITEM*>( entry.item );
                 break;
+            }
+        }
+    }
+    else if( aStart->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
+    {
+        seg = static_cast<LINKED_ITEM*>( aStart );
     }
 
     if( !seg )
@@ -298,41 +305,36 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
     PAD* padA = nullptr;
     PAD* padB = nullptr;
 
-    for( ITEM* item : joints.first->LinkList() )
-    {
-        if( item->OfKind( ITEM::SOLID_T ) )
-        {
-            BOARD_ITEM* bi = static_cast<SOLID*>( item )->Parent();
-
-            if( bi->Type() == PCB_PAD_T )
+    auto getPadFromJoint =
+            []( JOINT* aJoint, PAD** aTargetPad, SOLID** aTargetSolid )
             {
-                padA = static_cast<PAD*>( bi );
+                for( ITEM* item : aJoint->LinkList() )
+                {
+                    if( item->OfKind( ITEM::SOLID_T ) )
+                    {
+                        BOARD_ITEM* bi = static_cast<SOLID*>( item )->Parent();
 
-                if( aStartPad )
-                    *aStartPad = static_cast<SOLID*>( item );
-            }
+                        if( bi->Type() == PCB_PAD_T )
+                        {
+                            *aTargetPad = static_cast<PAD*>( bi );
 
-            break;
-        }
-    }
+                            if( aTargetSolid )
+                                *aTargetSolid = static_cast<SOLID*>( item );
+                        }
 
-    for( ITEM* item : joints.second->LinkList() )
-    {
-        if( item->OfKind( ITEM::SOLID_T ) )
-        {
-            BOARD_ITEM* bi = static_cast<SOLID*>( item )->Parent();
+                        break;
+                    }
+                }
+            };
 
-            if( bi->Type() == PCB_PAD_T )
-            {
-                padB = static_cast<PAD*>( bi );
+    if( joints.first )
+        getPadFromJoint( joints.first, &padA, aStartPad );
 
-                if( aEndPad )
-                    *aEndPad = static_cast<SOLID*>( item );
-            }
+    if( joints.second )
+        getPadFromJoint( joints.second, &padB, aEndPad );
 
-            break;
-        }
-    }
+    if( !padA && !padB )
+        return initialPath;
 
     auto clipLineToPad =
             []( SHAPE_LINE_CHAIN& aLine, PAD* aPad, bool aForward = true )
