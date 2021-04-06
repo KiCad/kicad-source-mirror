@@ -39,10 +39,6 @@ class PANEL_SETUP_BOARD_FINISH_BASE : public wxPanel
 		wxStaticText* m_staticTextEdgeConn;
 		wxChoice* m_choiceEdgeConn;
 
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-
-
 	public:
 
 		PANEL_SETUP_BOARD_FINISH_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );

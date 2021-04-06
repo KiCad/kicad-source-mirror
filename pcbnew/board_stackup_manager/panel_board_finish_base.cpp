@@ -59,14 +59,8 @@ PANEL_SETUP_BOARD_FINISH_BASE::PANEL_SETUP_BOARD_FINISH_BASE( wxWindow* parent, 
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	bMainSizer->Fit( this );
-
-	// Connect Events
-	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_FINISH_BASE::OnUpdateUI ) );
 }
 
 PANEL_SETUP_BOARD_FINISH_BASE::~PANEL_SETUP_BOARD_FINISH_BASE()
 {
-	// Disconnect Events
-	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_FINISH_BASE::OnUpdateUI ) );
-
 }
