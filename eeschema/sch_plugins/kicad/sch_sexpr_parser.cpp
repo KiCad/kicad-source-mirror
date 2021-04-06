@@ -2046,6 +2046,12 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
 
         switch( token )
         {
+        case T_uuid:
+            NeedSYMBOL();
+            screen->m_uuid = KIID( FromUTF8() );
+            NeedRIGHT();
+            break;
+
         case T_paper:
         {
             if( aIsCopyableOnly )

@@ -587,6 +587,8 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
     m_out->Print( 0, "(kicad_sch (version %d) (generator eeschema)\n\n",
                   SEXPR_SCHEMATIC_FILE_VERSION );
 
+    m_out->Print( 1, "(uuid %s)\n\n", TO_UTF8( screen->m_uuid.AsString() ) );
+
     screen->GetPageSettings().Format( m_out, 1, 0 );
     m_out->Print( 0, "\n" );
     screen->GetTitleBlock().Format( m_out, 1, 0 );

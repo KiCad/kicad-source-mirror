@@ -37,6 +37,7 @@
 #include <base_screen.h>
 #include <eda_item.h>
 #include <core/typeinfo.h>
+#include <kiid.h>
 #include <kiway_holder.h>
 #include <layers_id_colors_and_visibility.h>
 #include <marker_base.h>
@@ -457,6 +458,10 @@ public:
         return m_sheetInstances;
     }
 
+    const KIID& GetUuid() const { return m_uuid; }
+
+    void AssignNewUuid() { m_uuid = KIID(); }
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
@@ -521,6 +526,14 @@ private:
      */
     std::vector<SYMBOL_INSTANCE_REFERENCE> m_symbolInstances;
     std::vector<SCH_SHEET_INSTANCE> m_sheetInstances;
+
+    /**
+     * A unique identifier for each schematic file.
+     *
+     * As of right now, this only has meaning for the root schematic.  In the future, it may
+     * be useful to detect unexpected hierarchy changes.
+     */
+    KIID m_uuid;
 };
 
 

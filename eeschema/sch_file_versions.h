@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 CERN
+ * Copyright (C) 2020-2021 CERN
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -26,7 +26,6 @@
  *
  * @note Comment out the last version and add the new version as a date time stamp in the
  *       YYYYMMDD format.  Comment the changes to the file format for historical purposes.
- *
  */
 
 /**
@@ -60,4 +59,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20201015  // Add sheet instance properties.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20210123  // Rename "unconnected" pintype to "no_connect".
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20210125  // R/W uuids for pins, labels, wires, etc.
-#define SEXPR_SCHEMATIC_FILE_VERSION 20210126    // Fix bug with writing pin uuids.
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20210126  // Fix bug with writing pin uuids.
+#define SEXPR_SCHEMATIC_FILE_VERSION 20210406    // Add schematic level uuids.

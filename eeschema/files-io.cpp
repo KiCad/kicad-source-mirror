@@ -109,6 +109,10 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
     if( !IsWritable( schematicFileName ) )
         return false;
 
+    // This is a new schematic file so make sure it has a unique ID.
+    if( aSaveUnderNewName )
+        screen->AssignNewUuid();
+
     wxFileName tempFile( schematicFileName );
     tempFile.SetName( wxT( "." ) + tempFile.GetName() );
     tempFile.SetExt( tempFile.GetExt() + wxT( "$" ) );
@@ -853,7 +857,22 @@ bool SCH_EDIT_FRAME::SaveProject()
     for( SCH_SHEET_PATH& sheetPath : Schematic().GetSheets() )
     {
         SCH_SHEET* sheet = sheetPath.Last();
-        sheets.emplace_back( std::make_pair( sheet->m_Uuid, sheet->GetName() ) );
+
+        wxCHECK2( sheet, continue );
+
+        // Use the schematic UUID for the root sheet.
+        if( sheet->IsRootSheet() )
+        {
+            screen = sheet->GetScreen();
+
+            wxCHECK2( screen, continue );
+
+            sheets.emplace_back( std::make_pair( screen->GetUuid(), sheet->GetName() ) );
+        }
+        else
+        {
+            sheets.emplace_back( std::make_pair( sheet->m_Uuid, sheet->GetName() ) );
+        }
     }
 
     if( !Prj().IsNullProject() )
