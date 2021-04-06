@@ -65,6 +65,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
 {
     wxString msg;
     wxFileName schematicFileName;
+    wxFileName oldFileName;
     bool success;
 
     if( aSheet == NULL )
@@ -80,6 +81,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
 
     // Construct the name of the file to be saved
     schematicFileName = Prj().AbsolutePath( screen->GetFileName() );
+    oldFileName = schematicFileName;
 
     if( aSaveUnderNewName )
     {
@@ -110,7 +112,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
         return false;
 
     // This is a new schematic file so make sure it has a unique ID.
-    if( aSaveUnderNewName )
+    if( aSaveUnderNewName && schematicFileName != oldFileName )
         screen->AssignNewUuid();
 
     wxFileName tempFile( schematicFileName );
