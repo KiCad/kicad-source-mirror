@@ -58,6 +58,7 @@
 #include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_text.h>
 #include <schematic.h>
 #include <ee_actions.h>

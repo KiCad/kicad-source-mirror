@@ -43,6 +43,7 @@
 #include <sch_item.h>
 #include <sch_line.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>

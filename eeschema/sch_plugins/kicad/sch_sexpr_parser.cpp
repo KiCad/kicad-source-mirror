@@ -49,6 +49,7 @@
 #include <sch_junction.h>
 #include <sch_no_connect.h>
 #include <sch_screen.h>
+#include <sch_sheet_pin.h>
 #include <sch_plugins/kicad/sch_sexpr_parser.h>
 #include <template_fieldnames.h>
 

@@ -32,6 +32,7 @@
 #include <sch_marker.h>
 #include <sch_reference_list.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>

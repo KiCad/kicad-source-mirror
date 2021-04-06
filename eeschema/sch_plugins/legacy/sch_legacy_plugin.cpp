@@ -50,6 +50,7 @@
 #include <sch_no_connect.h>
 #include <sch_text.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_bitmap.h>
 #include <bus_alias.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>

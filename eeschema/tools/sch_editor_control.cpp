@@ -44,6 +44,7 @@
 #include <sch_line.h>
 #include <sch_painter.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_view.h>
 #include <schematic.h>
 #include <advanced_config.h>

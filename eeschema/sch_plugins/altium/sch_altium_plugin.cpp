@@ -50,6 +50,7 @@
 #include <sch_no_connect.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_text.h>
 
 #include <bezier_curves.h>

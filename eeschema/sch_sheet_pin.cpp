@@ -33,6 +33,7 @@
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_painter.h>
 #include <trigo.h>
 

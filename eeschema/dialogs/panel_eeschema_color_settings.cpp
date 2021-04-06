@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,6 +34,7 @@
 #include <sch_no_connect.h>
 #include <sch_painter.h>
 #include <sch_preview_panel.h>
+#include <sch_sheet_pin.h>
 #include <sch_text.h>
 #include <settings/color_settings.h>
 #include <settings/common_settings.h>

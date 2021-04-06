@@ -41,6 +41,7 @@
 #include <sch_bus_entry.h>
 #include <sch_text.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_bitmap.h>
 #include <schematic.h>
 #include <class_library.h>

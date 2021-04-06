@@ -38,6 +38,7 @@
 #include <sch_item.h>
 #include <sch_symbol.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_text.h>
 #include <sch_bitmap.h>
 #include <sch_view.h>

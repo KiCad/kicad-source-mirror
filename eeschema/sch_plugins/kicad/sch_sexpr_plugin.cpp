@@ -40,6 +40,7 @@
 #include <sch_no_connect.h>
 #include <sch_text.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <sch_screen.h>

@@ -55,6 +55,7 @@
 #include <sch_marker.h>
 #include <sch_no_connect.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_text.h>
 #include <schematic.h>
 #include <settings/color_settings.h>

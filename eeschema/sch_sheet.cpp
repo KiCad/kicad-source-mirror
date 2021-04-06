@@ -34,6 +34,7 @@
 #include <math/util.h>      // for KiROUND
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
+#include <sch_sheet_pin.h>
 #include <sch_symbol.h>
 #include <sch_painter.h>
 #include <schematic.h>
@@ -714,6 +715,18 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList 
     }
 
     aList.emplace_back( _( "File Name" ), m_fields[ SHEETFILENAME ].GetText() );
+}
+
+
+void SCH_SHEET::Move( const wxPoint& aMoveVector )
+{
+    m_pos += aMoveVector;
+
+    for( SCH_SHEET_PIN* pin : m_pins )
+        pin->Move( aMoveVector );
+
+    for( SCH_FIELD& field : m_fields )
+        field.Move( aMoveVector );
 }
 
 

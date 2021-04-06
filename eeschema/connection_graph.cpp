@@ -38,6 +38,7 @@
 #include <sch_pin.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
+#include <sch_sheet_pin.h>
 #include <sch_text.h>
 #include <schematic.h>
 #include <connection_graph.h>

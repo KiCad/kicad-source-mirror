@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_validators.h>
 #include <dialog_sheet_pin_properties.h>
 #include <dialogs/html_messagebox.h>
