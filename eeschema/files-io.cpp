@@ -114,8 +114,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
     tempFile.SetExt( tempFile.GetExt() + wxT( "$" ) );
 
     // Save
-    wxLogTrace( traceAutoSave,
-                wxT( "Saving file <" ) + schematicFileName.GetFullPath() + wxT( ">" ) );
+    wxLogTrace( traceAutoSave, "Saving file " + schematicFileName.GetFullPath() );
 
     SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromSchPath(
             schematicFileName.GetFullPath() );
@@ -179,6 +178,8 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
             screen->SetFileName( schematicFileName.GetFullPath() );
             aSheet->SetFileName( schematicFileName.GetFullPath() );
             LockFile( schematicFileName.GetFullPath() );
+
+            UpdateFileHistory( schematicFileName.GetFullPath() );
         }
 
         screen->ClrSave();

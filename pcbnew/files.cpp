@@ -54,7 +54,6 @@
 #include <project/project_local_settings.h>
 #include <project/net_settings.h>
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
-#include <plugins/eagle/eagle_plugin.h>
 #include <plugins/kicad/kicad_plugin.h>
 #include <dialogs/dialog_imported_layers.h>
 #include "footprint_info_impl.h"
@@ -413,15 +412,13 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
     case ID_COPY_BOARD_AS:
     case ID_SAVE_BOARD_AS:
     {
-        bool addToHistory = false;
+        bool     addToHistory = ( id == ID_SAVE_BOARD_AS );
         wxString orig_name;
+
         wxFileName::SplitPath( GetBoard()->GetFileName(), nullptr, nullptr, &orig_name, nullptr );
 
         if( orig_name.IsEmpty() )
-        {
-            addToHistory = true;
             orig_name = _( "noname" );
-        }
 
         wxFileName savePath( Prj().GetProjectFullName() );
 
@@ -435,8 +432,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
         wxFileName  fn( savePath.GetPath(), orig_name, KiCadPcbFileExtension );
         wxString    filename = fn.GetFullPath();
-
-        bool createProject = false;
+        bool        createProject = false;
 
         if( AskSaveBoardFileName( this, &filename, &createProject ) )
         {
@@ -599,8 +595,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( is_new && !( aCtl & KICTL_CREATE ) )
     {
         // notify user that fullFileName does not exist, ask if user wants to create it.
-        wxString ask = wxString::Format( _( "PCB \"%s\" does not exist.  Do you wish to "
-                                             "create it?" ),
+        wxString ask = wxString::Format( _( "PCB '%s' does not exist. Do you wish to create it?" ),
                                          fullFileName );
         if( !IsOK( this, ask ) )
             return false;
@@ -1032,6 +1027,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     }
 
     GetBoard()->SetFileName( pcbFileName.GetFullPath() );
+
+    // Update the lock in case it was a Save As
+    LockFile( pcbFileName.GetFullPath() );
 
     // Put the saved file in File History if requested
     if( addToHistory )
