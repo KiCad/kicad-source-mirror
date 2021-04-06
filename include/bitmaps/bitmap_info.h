@@ -990,6 +990,8 @@ const std::vector<BITMAP_INFO> g_BitmapInfo = {
     { BITMAPS::stroke_dot, wxT( "stroke_dot.png" ), -1, wxT( "light" ) },
     { BITMAPS::stroke_solid, wxT( "stroke_solid.png" ), -1, wxT( "light" ) },
     { BITMAPS::tune_diff_pair_length_legend, wxT( "tune_diff_pair_length_legend.png" ), -1, wxT( "light" ) },
+    { BITMAPS::tune_diff_pair_skew_legend, wxT( "tune_diff_pair_skew_legend.png" ), -1, wxT( "light" ) },
+    { BITMAPS::tune_single_track_length_legend, wxT( "tune_single_track_length_legend.png" ), -1, wxT( "light" ) },
     { BITMAPS::pads_npth, wxT( "pads_npth_dark.png" ), -1, wxT( "dark" ) },
     { BITMAPS::pads_npth_top_bottom, wxT( "pads_npth_top_bottom_dark.png" ), -1, wxT( "dark" ) },
     { BITMAPS::pads_npth_top, wxT( "pads_npth_top_dark.png" ), -1, wxT( "dark" ) },
@@ -1002,6 +1004,8 @@ const std::vector<BITMAP_INFO> g_BitmapInfo = {
     { BITMAPS::stroke_dot, wxT( "stroke_dot_dark.png" ), -1, wxT( "dark" ) },
     { BITMAPS::stroke_solid, wxT( "stroke_solid_dark.png" ), -1, wxT( "dark" ) },
     { BITMAPS::tune_diff_pair_length_legend, wxT( "tune_diff_pair_length_legend_dark.png" ), -1, wxT( "dark" ) },
+    { BITMAPS::tune_diff_pair_skew_legend, wxT( "tune_diff_pair_skew_legend_dark.png" ), -1, wxT( "dark" ) },
+    { BITMAPS::tune_single_track_length_legend, wxT( "tune_single_track_length_legend_dark.png" ), -1, wxT( "dark" ) },
 
 };
 
