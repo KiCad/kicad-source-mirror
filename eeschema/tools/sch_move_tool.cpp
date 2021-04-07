@@ -82,13 +82,6 @@ bool SCH_MOVE_TOOL::Init()
 }
 
 
-/* TODO - Tom/Jeff
-  - add preferences option "Move origin: always cursor / item origin"
-  - add preferences option "Default drag action: drag items / move"
-  - add preferences option "Drag always selects"
-  */
-
-
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     EESCHEMA_SETTINGS*    cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
@@ -111,7 +104,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         if( m_isDrag != wasDragging )
         {
-            auto sel = m_selectionTool->GetSelection().Front();
+            EDA_ITEM* sel = m_selectionTool->GetSelection().Front();
 
             if( sel && !sel->IsNew() )
             {
@@ -518,7 +511,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         }
     }
 
-    for( SCH_ITEM *test : itemsOverlapping )
+    for( SCH_ITEM* test : itemsOverlapping )
     {
         if( test == aOriginalItem || test->IsSelected() || !test->CanConnect( aOriginalItem ) )
             continue;
