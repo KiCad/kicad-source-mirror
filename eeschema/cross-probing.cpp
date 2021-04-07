@@ -75,8 +75,17 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                     pos = component->GetPosition();  // temporary: will be changed if the pin is found.
                     pin = component->GetPin( aSearchText );
 
+                    // Ensure we have found the right unit in case of multi-units symbol
                     if( pin )
                     {
+                        int unit = pin->GetLibPin()->GetUnit();
+
+                        if( unit != 0 && unit != component->GetUnit() )
+                        {
+                            pin = nullptr;
+                            continue;
+                        }
+
                         // Get pin position in true schematic coordinate
                         pos = pin->GetPosition();
                         foundItem = pin;
