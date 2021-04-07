@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-04-03 18:26+0000\n"
+"PO-Revision-Date: 2021-04-08 22:48+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
 "master-source/sr/>\n"
@@ -2839,9 +2839,8 @@ msgid "Add Color Theme"
 msgstr "CAD стил боје"
 
 #: common/dialogs/panel_color_settings.cpp:141
-#, fuzzy
 msgid "Theme already exists!"
-msgstr "Попуњавање зона"
+msgstr "Тема постоји већ!"
 
 #: common/dialogs/panel_color_settings.cpp:202
 #: common/dialogs/panel_color_settings.cpp:224
@@ -3622,9 +3621,8 @@ msgstr ""
 
 #: common/dialogs/panel_text_variables.cpp:114
 #: common/dialogs/panel_text_variables.cpp:142
-#, fuzzy
 msgid "Variable name cannot be empty."
-msgstr "Празан текст!"
+msgstr "Име промјенљиве не може бити празно."
 
 #: common/dialogs/panel_text_variables_base.cpp:37
 #, fuzzy
@@ -4507,9 +4505,8 @@ msgid "This path:"
 msgstr "Претражи путање:"
 
 #: common/filename_resolver.cpp:485
-#, fuzzy
 msgid "Existing path:"
-msgstr "Уређујем опције"
+msgstr "Постојећа путања:"
 
 #: common/filename_resolver.cpp:487
 msgid "Bad alias (duplicate name)"
@@ -4561,7 +4558,7 @@ msgstr ""
 #: common/gestfich.cpp:190
 #, c-format
 msgid "Command \"%s\" could not found"
-msgstr ""
+msgstr "Наредба \"%s\" није пронађена"
 
 #: common/gestfich.cpp:242
 #, c-format
@@ -4569,11 +4566,13 @@ msgid ""
 "Problem while running the PDF viewer\n"
 "Command is \"%s\""
 msgstr ""
+"Проблем током рада PDF посматрача\n"
+"Наредба је \"%s\""
 
 #: common/gestfich.cpp:249
 #, c-format
 msgid "Unable to find a PDF viewer for \"%s\""
-msgstr ""
+msgstr "Немогуће пронаћи PDF посматрач за \"%s\""
 
 #: common/gestfich.cpp:343
 #, c-format
@@ -4582,13 +4581,16 @@ msgid ""
 "\n"
 "Unknown file type."
 msgstr ""
+"Немогуће испринтати '%s'.\n"
+"\n"
+"Непознат тип датотеке."
 
 #: common/gestfich.cpp:372 eeschema/eeschema.cpp:404 eeschema/eeschema.cpp:436
 #: gerbview/gerbview.cpp:231 kicad/project_template.cpp:243
 #: pcbnew/pcbnew.cpp:476
 #, c-format
 msgid "Cannot copy file \"%s\"."
-msgstr ""
+msgstr "Немогуће копирати датотеку \"%s\"."
 
 #: common/grid_tricks.cpp:241 common/tool/actions.cpp:152
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1808
@@ -13840,9 +13842,9 @@ msgid "No library defined!"
 msgstr "Библиотека није дефинисана!"
 
 #: eeschema/sch_symbol.cpp:1437
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol not found in %s!"
-msgstr "Симбол"
+msgstr "Смибол није пронађен у %s!"
 
 #: eeschema/sch_symbol.cpp:1629
 #, fuzzy, c-format
@@ -14372,13 +14374,16 @@ msgid "You need to run plot-providing simulation first."
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:1537
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Simulation results:\n"
 "\n"
-msgstr "Поставке симулације"
+msgstr ""
+"\n"
+"\n"
+"Резултати симулације:\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1600
 msgid "Hide Signal"
@@ -14553,9 +14558,8 @@ msgid "Transfer function"
 msgstr "Стави  "
 
 #: eeschema/sim/spice_simulator.cpp:83
-#, fuzzy
 msgid "UNKNOWN!"
-msgstr "НЕПОЗНАТО (%d)"
+msgstr "НЕПОЗНАТО!"
 
 #: eeschema/sim/spice_value.cpp:42
 msgid "Spice value cannot be empty"
@@ -14660,11 +14664,9 @@ msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:747
-#, fuzzy, c-format
+#, c-format
 msgid "Open %s"
-msgstr ""
-"\n"
-"Отвори \"%s\"\n"
+msgstr "Отвори %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:818
 #, c-format
@@ -20714,9 +20716,8 @@ msgid "Only selected"
 msgstr "фајл не постоји"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:94
-#, fuzzy
 msgid "Empty"
-msgstr "Празан текст!"
+msgstr "Празно"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:95
 msgid "Invalid"
@@ -28053,9 +28054,9 @@ msgstr "ГРЕШКА у изразу."
 
 #: pcbnew/drc/drc_rule_condition.cpp:97 pcbnew/drc/drc_rule_parser.cpp:60
 #: pcbnew/drc/drc_rule_parser.cpp:443
-#, fuzzy, c-format
+#, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr "ГРЕШКА: <a href='%d:%d'>"
+msgstr "ГРЕШКА: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:70 pcbnew/drc/drc_rule_parser.cpp:453
 #, c-format
