@@ -466,23 +466,10 @@ void SCH_LINE_WIRE_BUS_TOOL::computeBreakPoint( const std::pair<SCH_LINE*, SCH_L
 
 int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType, bool aQuitOnDraw )
 {
-    SCH_SCREEN*      screen = m_frame->GetScreen();
-    SCH_LINE*        segment = nullptr;
-    EE_GRID_HELPER   grid( m_toolMgr );
-
+    SCH_SCREEN*           screen = m_frame->GetScreen();
+    SCH_LINE*             segment = nullptr;
+    EE_GRID_HELPER        grid( m_toolMgr );
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-
-    controls->ShowCursor( true );
-
-    Activate();
-
-    // Add the new label to the selection so the rotate command operates on it
-    if( m_busUnfold.label )
-        m_selectionTool->AddItemToSel( m_busUnfold.label, true );
-
-    // Continue the existing wires if we've started (usually by immediate action preference)
-    if( !m_wires.empty() )
-        segment = m_wires.back();
 
     auto setCursor =
             [&]()
@@ -496,6 +483,46 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                 else
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LINE_WIRE );
             };
+
+    auto cleanup =
+            [&] ()
+            {
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+                for( SCH_LINE* wire : m_wires )
+                    delete wire;
+
+                m_wires.clear();
+                segment = nullptr;
+
+                if( m_busUnfold.entry )
+                    m_frame->RemoveFromScreen( m_busUnfold.entry, screen );
+
+                if( m_busUnfold.label && !m_busUnfold.label_placed )
+                    m_selectionTool->RemoveItemFromSel( m_busUnfold.label, true );
+
+                if( m_busUnfold.label && m_busUnfold.label_placed )
+                    m_frame->RemoveFromScreen( m_busUnfold.label, screen );
+
+                delete m_busUnfold.entry;
+                delete m_busUnfold.label;
+                m_busUnfold = {};
+
+                m_view->ClearPreview();
+                m_view->ShowPreview( false );
+            };
+
+    controls->ShowCursor( true );
+
+    Activate();
+
+    // Add the new label to the selection so the rotate command operates on it
+    if( m_busUnfold.label )
+        m_selectionTool->AddItemToSel( m_busUnfold.label, true );
+
+    // Continue the existing wires if we've started (usually by immediate action preference)
+    if( !m_wires.empty() )
+        segment = m_wires.back();
 
     // Set initial cursor
     setCursor();
@@ -527,34 +554,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
         controls->ForceCursorPosition( true, cursorPos );
 
         bool forceHV = m_frame->eeconfig()->m_Drawing.hv_lines_only;
-
-        auto cleanup =
-                [&] ()
-                {
-                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
-                    for( SCH_LINE* wire : m_wires )
-                        delete wire;
-
-                    m_wires.clear();
-                    segment = nullptr;
-
-                    if( m_busUnfold.entry )
-                        m_frame->RemoveFromScreen( m_busUnfold.entry, screen );
-
-                    if( m_busUnfold.label && !m_busUnfold.label_placed )
-                        m_selectionTool->RemoveItemFromSel( m_busUnfold.label, true );
-
-                    if( m_busUnfold.label && m_busUnfold.label_placed )
-                        m_frame->RemoveFromScreen( m_busUnfold.label, screen );
-
-                    delete m_busUnfold.entry;
-                    delete m_busUnfold.label;
-                    m_busUnfold = {};
-
-                    m_view->ClearPreview();
-                    m_view->ShowPreview( false );
-                };
 
         //------------------------------------------------------------------------
         // Handle cancel:
@@ -1013,6 +1012,8 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
+
 void SCH_LINE_WIRE_BUS_TOOL::setTransitions()
 {
     Go( &SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded, EE_ACTIONS::addNeededJunctions.MakeEvent() );
