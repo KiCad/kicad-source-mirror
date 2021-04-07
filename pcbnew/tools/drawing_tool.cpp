@@ -577,6 +577,12 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
                 if( text )
                 {
+                    if( !m_view->IsLayerVisible( text->GetLayer() ) )
+                    {
+                        m_frame->GetAppearancePanel()->SetLayerVisible( text->GetLayer(), true );
+                        m_frame->GetCanvas()->Refresh();
+                    }
+
                     m_controls->WarpCursor( text->GetPosition(), true );
                     m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
                     m_view->Update( &selection() );
@@ -835,6 +841,12 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->SetEnd( (wxPoint) cursorPos );
                 dimension->Update();
 
+                if( !m_view->IsLayerVisible( layer ) )
+                {
+                    m_frame->GetAppearancePanel()->SetLayerVisible( layer, true );
+                    m_frame->GetCanvas()->Refresh();
+                }
+
                 preview.Add( dimension );
                 frame()->SetMsgPanel( dimension );
 
@@ -1008,6 +1020,33 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
             // Show a preview of the item
             m_view->Update( &preview );
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
+        {
+            if( dimension )
+            {
+                PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+
+                if( !m_view->IsLayerVisible( layer ) )
+                {
+                    m_frame->GetAppearancePanel()->SetLayerVisible( layer, true );
+                    m_frame->GetCanvas()->Refresh();
+                }
+
+                dimension->SetLayer( layer );
+                dimension->Text().SetTextSize( boardSettings.GetTextSize( layer ) );
+                dimension->Text().SetTextThickness( boardSettings.GetTextThickness( layer ) );
+                dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
+                dimension->SetLineThickness( boardSettings.GetLineThickness( layer ) );
+                dimension->Update();
+
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( dimension );
+            }
+            else
+            {
+                evt->SetPassEvent();
+            }
         }
         else if( evt->IsAction( &PCB_ACTIONS::properties ) )
         {
@@ -1413,18 +1452,25 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
             drawingLayer = m_frame->GetActiveLayer();
-
-            if( !m_view->IsLayerVisible( drawingLayer ) )
-            {
-                m_frame->GetAppearancePanel()->SetLayerVisible( drawingLayer, true );
-                m_frame->GetCanvas()->Refresh();
-            }
-
             m_lineWidth = getSegmentWidth( drawingLayer );
-            graphic->SetLayer( drawingLayer );
-            graphic->SetWidth( m_lineWidth );
-            m_view->Update( &preview );
-            frame()->SetMsgPanel( graphic );
+
+            if( graphic )
+            {
+                if( !m_view->IsLayerVisible( drawingLayer ) )
+                {
+                    m_frame->GetAppearancePanel()->SetLayerVisible( drawingLayer, true );
+                    m_frame->GetCanvas()->Refresh();
+                }
+
+                graphic->SetLayer( drawingLayer );
+                graphic->SetWidth( m_lineWidth );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( graphic );
+            }
+            else
+            {
+                evt->SetPassEvent();
+            }
         }
         else if( evt->IsAction( &PCB_ACTIONS::properties ) )
         {
@@ -1763,18 +1809,25 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
             drawingLayer = m_frame->GetActiveLayer();
-
-            if( !m_view->IsLayerVisible( drawingLayer ) )
-            {
-                m_frame->GetAppearancePanel()->SetLayerVisible( drawingLayer, true );
-                m_frame->GetCanvas()->Refresh();
-            }
-
             m_lineWidth = getSegmentWidth( drawingLayer );
-            graphic->SetLayer( drawingLayer );
-            graphic->SetWidth( m_lineWidth );
-            m_view->Update( &preview );
-            frame()->SetMsgPanel( graphic );
+
+            if( graphic )
+            {
+                if( !m_view->IsLayerVisible( drawingLayer ) )
+                {
+                    m_frame->GetAppearancePanel()->SetLayerVisible( drawingLayer, true );
+                    m_frame->GetCanvas()->Refresh();
+                }
+
+                graphic->SetLayer( drawingLayer );
+                graphic->SetWidth( m_lineWidth );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( graphic );
+            }
+            else
+            {
+                evt->SetPassEvent();
+            }
         }
         else if( evt->IsAction( &PCB_ACTIONS::properties ) )
         {
