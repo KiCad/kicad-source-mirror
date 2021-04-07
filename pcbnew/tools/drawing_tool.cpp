@@ -382,7 +382,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
-    FOOTPRINT*          parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
+    FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
     PCB_SHAPE*       arc = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
@@ -423,23 +423,22 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
-    BOARD_ITEM* text = NULL;
+    BOARD_ITEM*                  text = NULL;
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
-    BOARD_COMMIT commit( m_frame );
+    BOARD_COMMIT                 commit( m_frame );
+    SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::TEXT );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_controls->ShowCursor( true );
-    // do not capture or auto-pan until we start placing some text
-
-    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::TEXT );
-
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
-    Activate();
-
-    // Prime the pump
-    if( !aEvent.IsReactivate() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+    auto cleanup =
+            [&]()
+            {
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                m_controls->ForceCursorPosition( false );
+                m_controls->ShowCursor( true );
+                m_controls->SetAutoPan( false );
+                m_controls->CaptureCursor( false );
+                delete text;
+                text = NULL;
+            };
 
     auto setCursor =
             [&]()
@@ -450,6 +449,18 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::TEXT );
             };
 
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_controls->ShowCursor( true );
+    // do not capture or auto-pan until we start placing some text
+
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
+    Activate();
+
+    // Prime the pump
+    if( !aEvent.IsReactivate() )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
+
     // Set initial cursor
     setCursor();
 
@@ -459,22 +470,12 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         setCursor();
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-        auto cleanup =
-                [&]()
-                {
-                    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-                    m_controls->ForceCursorPosition( false );
-                    m_controls->ShowCursor( true );
-                    m_controls->SetAutoPan( false );
-                    m_controls->CaptureCursor( false );
-                    delete text;
-                    text = NULL;
-                };
-
         if( evt->IsCancelInteractive() )
         {
             if( text )
+            {
                 cleanup();
+            }
             else
             {
                 m_frame->PopTool( tool );
@@ -648,27 +649,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
-    TOOL_EVENT      originalEvent = aEvent;
-    DIMENSION_BASE* dimension     = nullptr;
-    BOARD_COMMIT    commit( m_frame );
-    PCB_GRID_HELPER     grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-
-    const BOARD_DESIGN_SETTINGS& boardSettings = m_board->GetDesignSettings();
-
-    // Add a VIEW_GROUP that serves as a preview for the new item
-    PCB_SELECTION preview;
-
-    m_view->Add( &preview );
-
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_controls->ShowCursor( true );
-
-    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DIMENSION );
-
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
-    Activate();
-
     enum DIMENSION_STEPS
     {
         SET_ORIGIN = 0,
@@ -676,19 +656,50 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         SET_HEIGHT,
         FINISHED
     };
-    int step = SET_ORIGIN;
 
-    // Prime the pump
-    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+    TOOL_EVENT             originalEvent = aEvent;
+    DIMENSION_BASE*        dimension     = nullptr;
+    BOARD_COMMIT           commit( m_frame );
+    PCB_GRID_HELPER        grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    BOARD_DESIGN_SETTINGS& boardSettings = m_board->GetDesignSettings();
+    PCB_SELECTION          preview;   // A VIEW_GROUP that serves as a preview for the new item(s)
+    SCOPED_DRAW_MODE       scopedDrawMode( m_mode, MODE::DIMENSION );
+    int                    step = SET_ORIGIN;
 
-    if( aEvent.HasPosition() )
-        m_toolMgr->PrimeTool( aEvent.Position() );
+    m_view->Add( &preview );
+
+    auto cleanup =
+            [&]()
+            {
+                m_controls->SetAutoPan( false );
+                m_controls->CaptureCursor( false );
+
+                preview.Clear();
+                m_view->Update( &preview );
+
+                delete dimension;
+                dimension = nullptr;
+                step = SET_ORIGIN;
+            };
 
     auto setCursor =
             [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
             };
+
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_controls->ShowCursor( true );
+
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
+    Activate();
+
+    // Prime the pump
+    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+
+    if( aEvent.HasPosition() )
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Set initial cursor
     setCursor();
@@ -708,20 +719,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
         cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
         m_controls->ForceCursorPosition( true, cursorPos );
-
-        auto cleanup =
-                [&]()
-                {
-                    m_controls->SetAutoPan( false );
-                    m_controls->CaptureCursor( false );
-
-                    preview.Clear();
-                    m_view->Update( &preview );
-
-                    delete dimension;
-                    dimension = nullptr;
-                    step = SET_ORIGIN;
-                };
 
         if( evt->IsCancelInteractive() )
         {
