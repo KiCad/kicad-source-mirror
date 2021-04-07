@@ -53,7 +53,6 @@
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
             <property name="window_style"></property>
-            <event name="OnUpdateUI">OnUpdateUI</event>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bMainSizer</property>
@@ -860,6 +859,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
+                                        <event name="OnUpdateUI">onSpecifiedValuesUpdateUi</event>
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
@@ -924,6 +924,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
+                                        <event name="OnUpdateUI">onSpecifiedValuesUpdateUi</event>
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">

@@ -92,7 +92,9 @@ public:
     ~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS() override;
 
 protected:
-    void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void onActionButtonChange( wxCommandEvent& event ) override;
+    void onSpecifiedValueUpdateUI( wxUpdateUIEvent& event ) override;
+
     void OnLayerFilterSelect( wxCommandEvent& event ) override
     {
         m_layerFilterOpt->SetValue( true );
@@ -260,17 +262,22 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
 }
 
 
-void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::OnUpdateUI( wxUpdateUIEvent&  )
+void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::onActionButtonChange( wxCommandEvent& event )
 {
-    m_lineWidth.Enable( m_setToSpecifiedValues->GetValue() );
-    m_textWidth.Enable( m_setToSpecifiedValues->GetValue() );
-    m_textHeight.Enable( m_setToSpecifiedValues->GetValue() );
-    m_thickness.Enable( m_setToSpecifiedValues->GetValue() );
-    m_Italic->Enable( m_setToSpecifiedValues->GetValue() );
-    m_Visible->Enable( m_setToSpecifiedValues->GetValue() );
-    m_LayerLabel->Enable( m_setToSpecifiedValues->GetValue() );
-    m_LayerCtrl->Enable( m_setToSpecifiedValues->GetValue() );
-    m_keepUpright->Enable( m_setToSpecifiedValues->GetValue() );
+    // Update the UNIT_BINDER controls if the action to take is changed
+    bool enable = m_setToSpecifiedValues->GetValue();
+
+    m_lineWidth.Enable( enable );
+    m_textWidth.Enable( enable );
+    m_textHeight.Enable( enable );
+    m_thickness.Enable( enable );
+}
+
+
+void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::onSpecifiedValueUpdateUI( wxUpdateUIEvent& event )
+{
+    // Update the UI for the elements inside the use specified values sizer
+    event.Enable( m_setToSpecifiedValues->GetValue() );
 }
 
 

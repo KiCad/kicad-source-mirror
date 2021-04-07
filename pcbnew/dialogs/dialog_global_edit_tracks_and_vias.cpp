@@ -70,21 +70,10 @@ public:
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent );
     ~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS() override;
 
-private:
-    void visitItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem );
-    void processItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem );
-
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
-    void OnUpdateUI( wxUpdateUIEvent& event ) override;
+protected:
+    void onSpecifiedValuesUpdateUi( wxUpdateUIEvent& event ) override;
     void OnSizeNetclassGrid( wxSizeEvent& event ) override;
-    void AdjustNetclassGridColumns( int aWidth );
 
-    void OnNetFilterSelect( wxCommandEvent& event )
-    {
-        m_netFilterOpt->SetValue( true );
-    }
     void OnNetclassFilterSelect( wxCommandEvent& event ) override
     {
         m_netclassFilterOpt->SetValue( true );
@@ -92,6 +81,20 @@ private:
     void OnLayerFilterSelect( wxCommandEvent& event ) override
     {
         m_layerFilterOpt->SetValue( true );
+    }
+
+private:
+    void visitItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem );
+    void processItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem );
+
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
+    void AdjustNetclassGridColumns( int aWidth );
+
+    void OnNetFilterSelect( wxCommandEvent& event )
+    {
+        m_netFilterOpt->SetValue( true );
     }
 
     void buildNetclassesGrid();
@@ -260,10 +263,10 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
 }
 
 
-void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnUpdateUI( wxUpdateUIEvent&  )
+void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onSpecifiedValuesUpdateUi( wxUpdateUIEvent& event )
 {
-    m_trackWidthSelectBox->Enable( m_setToSpecifiedValues->GetValue() );
-    m_viaSizesSelectBox->Enable( m_setToSpecifiedValues->GetValue() );
+    // Enable the items in the use specified values section
+    event.Enable( m_setToSpecifiedValues->GetValue() );
 }
 
 
