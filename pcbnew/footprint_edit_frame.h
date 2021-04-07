@@ -248,9 +248,6 @@ public:
     ///< @copydoc PCB_BASE_FRAME::SetActiveLayer()
     void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
 
-    ///< @copydoc PCB_BASE_FRAME::OnUpdateLayerAlpha()
-    void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) override;
-
     void OnDisplayOptionsChanged() override;
 
     ///< @copydoc EDA_DRAW_FRAME::UseGalCanvas()

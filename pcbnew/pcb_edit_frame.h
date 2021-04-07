@@ -268,11 +268,6 @@ public:
      */
     void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
 
-    /**
-     * Update the UI to reflect changes to the current layer's transparency.
-     */
-    void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) override;
-
     void OnDisplayOptionsChanged() override;
 
     /**

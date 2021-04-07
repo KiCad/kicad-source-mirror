@@ -901,12 +901,6 @@ void FOOTPRINT_EDIT_FRAME::OnDisplayOptionsChanged()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::OnUpdateLayerAlpha( wxUpdateUIEvent & )
-{
-    m_appearancePanel->OnLayerAlphaChanged();
-}
-
-
 void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
                                                PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
 {

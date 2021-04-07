@@ -223,6 +223,7 @@ wxString PCB_BASE_EDIT_FRAME::GetDesignRulesPath()
     return Prj().AbsolutePath( fn.GetFullName() );
 }
 
+
 void PCB_BASE_EDIT_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
 {
     EDA_DRAW_FRAME::handleActivateEvent( aEvent );
@@ -230,4 +231,11 @@ void PCB_BASE_EDIT_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
     // The text in the collapsible pane headers need to be updated
     if( m_appearancePanel )
         m_appearancePanel->RefreshCollapsiblePanes();
+}
+
+
+void PCB_BASE_EDIT_FRAME::OnLayerAlphaChanged()
+{
+    if( m_appearancePanel )
+        m_appearancePanel->OnLayerAlphaChanged();
 }

@@ -373,8 +373,6 @@ public:
 
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
-    virtual void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) {}
-
     /**
      * Display the current grid pane on the status bar.
      */

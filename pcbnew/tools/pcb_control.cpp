@@ -361,8 +361,7 @@ int PCB_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
         if( IsCopperLayer( currentLayer ) )
             view->UpdateLayerColor( ZONE_LAYER_FOR( currentLayer ) );
 
-        wxUpdateUIEvent dummy;
-        static_cast<PCB_EDIT_FRAME*>( m_frame )->OnUpdateLayerAlpha( dummy );
+        static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->OnLayerAlphaChanged();
     }
     else
         wxBell();
@@ -391,8 +390,7 @@ int PCB_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
         if( IsCopperLayer( currentLayer ) )
             view->UpdateLayerColor( ZONE_LAYER_FOR( currentLayer ) );
 
-        wxUpdateUIEvent dummy;
-        static_cast<PCB_BASE_FRAME*>( m_frame )->OnUpdateLayerAlpha( dummy );
+        static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->OnLayerAlphaChanged();
     }
     else
         wxBell();

@@ -1136,12 +1136,6 @@ void PCB_EDIT_FRAME::OnDisplayOptionsChanged()
 }
 
 
-void PCB_EDIT_FRAME::OnUpdateLayerAlpha( wxUpdateUIEvent & )
-{
-    m_appearancePanel->OnLayerAlphaChanged();
-}
-
-
 bool PCB_EDIT_FRAME::IsElementVisible( GAL_LAYER_ID aElement ) const
 {
     return GetBoard()->IsElementVisible( aElement );
