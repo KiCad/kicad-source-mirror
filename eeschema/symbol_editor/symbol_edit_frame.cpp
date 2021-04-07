@@ -598,12 +598,7 @@ void SYMBOL_EDIT_FRAME::OnExitKiCad( wxCommandEvent& event )
 
 void SYMBOL_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
 {
-    if( !m_unitSelectBox )
-        return;
-
-    // Using the typical event.Enable() call doesn't seem to work with wxGTK
-    // so use the pointer to alias combobox to directly enable or disable.
-    m_unitSelectBox->Enable( m_my_part && m_my_part->GetUnitCount() > 1 );
+    event.Enable( m_my_part && m_my_part->GetUnitCount() > 1 );
 }
 
 

@@ -272,12 +272,12 @@ void PANEL_SETUP_BOARD_STACKUP::onRemoveDielUI( wxUpdateUIEvent& event )
 
         if( item->GetSublayersCount() > 1 )
         {
-            m_buttonRemoveDielectricLayer->Enable( true );
+            event.Enable( true );
             return;
         }
     }
 
-    m_buttonRemoveDielectricLayer->Enable( false );
+    event.Enable( false );
 }
 
 
@@ -337,8 +337,9 @@ void PANEL_SETUP_BOARD_STACKUP::onUpdateThicknessValue( wxUpdateUIEvent& event )
 
     wxString thicknessStr = StringFromValue( m_units, thickness, true );
 
-    if( m_tcCTValue->GetValue() != thicknessStr )
-        m_tcCTValue->SetValue( thicknessStr );
+    // The text in the event will translate to the value for the text control
+    // and is only updated if it changed
+    event.SetText( thicknessStr );
 }
 
 

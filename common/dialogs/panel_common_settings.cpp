@@ -320,8 +320,6 @@ void PANEL_COMMON_SETTINGS::OnPDFViewerClick( wxCommandEvent& event )
 
 void PANEL_COMMON_SETTINGS::onUpdateUIPdfPath( wxUpdateUIEvent& event )
 {
-    bool enabled = m_otherPDFViewer->GetValue();
-    m_PDFViewerPath->Enable( enabled );
-    m_pdfViewerBtn->Enable( enabled );
+    // Used by both the m_pdfViewerBtn and m_PDFViewerPath
+    event.Enable( m_otherPDFViewer->GetValue() );
 }
-
