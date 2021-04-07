@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-04-03 18:26+0000\n"
+"PO-Revision-Date: 2021-04-08 22:48+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -678,9 +678,9 @@ msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
-"Interaktionsnummer, die ein Strahl durch Objekte wandern kann. (Eine höhere "
-"Anzahl von Ebenen verbessert die Ergebnisse, insbesondere auf sehr "
-"transparenten Platten.)"
+"Interaktionszahl, die angibt, wie oft ein Lichtstrahl Objekte durchlaufen "
+"kann. (Eine höhere Anzahl verbessert die Ergebnisse, insbesondere auf sehr "
+"transparenten Platinen.)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
 msgid "Refractions:"
@@ -1614,8 +1614,8 @@ msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
-"Die KiCad EDA Suite besteht aus quelloffenen Anwendungen für das Erstellen "
-"von elektronischen Schaltungen und den Entwurf gedruckter Leiterplatten."
+"Die KiCad EDA Suite ist eine Zusammenstellung von Open-Source-Anwendungen "
+"für die Erstellung von elektronischen Schaltplänen und Leiterplatten."
 
 #: common/dialog_about/AboutDialog_main.cpp:132
 msgid "KiCad on the web"
@@ -5115,7 +5115,7 @@ msgstr "Raster"
 
 #: common/layer_id.cpp:132
 msgid "Axes"
-msgstr "Axen"
+msgstr "Achsen"
 
 #: common/layer_id.cpp:133 common/layer_id.cpp:173
 #: gerbview/widgets/gerbview_layer_widget.cpp:107
@@ -9213,7 +9213,7 @@ msgstr "Nicht auf Platine"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:103
 msgid "Pin name position offset:"
-msgstr "Name der Position des Pintextes:"
+msgstr "Offset der Pinnamen-Position:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:120
 msgid "Show pin number text"
@@ -11261,10 +11261,10 @@ msgid ""
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
-"Dies ist nützlich, um Symbole hinzuzufügen, die aber nur in die Stückliste "
-"exportiert werden\n"
-"Nicht erforderlich, um die Platine wie mechanische Befestigungselemente und "
-"Gehäuse zu gestalten"
+"Dies ist nützlich, um Symbole hinzuzufügen, die nur in die Stückliste "
+"exportiert werden, aber\n"
+"nicht für das Platinenlayout benötigt werden, wie z. B. mechanische "
+"Verbinder und Gehäuse"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
 msgid "Update Symbol from Library..."
@@ -11480,9 +11480,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr ""
-"Aktualisierung der Symbolwerte, welche im Leiterplatteneditor bearbeitet "
-"worden sind."
+msgstr "Im Leiterplatteneditor bearbeitete Werte von Symbolen aktualisieren."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
@@ -12992,9 +12990,7 @@ msgstr ""
 #: eeschema/project_rescue.cpp:304 eeschema/project_rescue.cpp:465
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr ""
-"Gesichertes Symbol %s konnte nur in der zwischengespeicherten Bibliothek %s "
-"gefunden werden."
+msgstr "Nur in der Cache-Bibliothek gefundenes Symbol %s als %s retten."
 
 #: eeschema/project_rescue.cpp:307 eeschema/project_rescue.cpp:468
 #, c-format
@@ -13451,9 +13447,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
-"Das Symbol '%s' wird im ursprünglichen CADSTAR-Design um einen Winkel von "
+"Das Symbol '%s' ist im ursprünglichen CADSTAR-Design in einem Winkel von "
 "%.1f Grad gedreht, KiCad unterstützt jedoch nur Drehwinkel-Vielfache von 90 "
-"Grad. Die Verbindungsdrähte müssen manuell befestigt werden."
+"Grad. Die Verbindungen müssen manuell korrigiert werden."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1576
 #, c-format
@@ -15005,7 +15001,7 @@ msgstr "Einheit %s"
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr ""
-"Bearbeitungssymbol %s aus Schaltplan. Beim Speichern wird nur der Schaltplan "
+"Bearbeite Symbol %s aus Schaltplan. Beim Speichern wird nur der Schaltplan "
 "aktualisiert."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:722
@@ -18021,7 +18017,7 @@ msgstr "EAGLE-Projekt..."
 
 #: kicad/menubar.cpp:100
 msgid "Import EAGLE CAD XML schematic and board"
-msgstr "Import eines Eagle-XML-Schaltplans und -Leiterplattendesigns"
+msgstr "EAGLE-CAD-XML-Schaltplan und -Leiterplattendesign importieren"
 
 #: kicad/menubar.cpp:107
 msgid "&Archive Project..."
@@ -18282,7 +18278,7 @@ msgstr "Schaltplansymbole bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
 msgid "Edit PCB"
-msgstr "Leiterplattenlayout bearbeiten"
+msgstr "Leiterplatte bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:82
 msgid "Edit PCB footprints"
@@ -20357,7 +20353,7 @@ msgstr "Autoplatzieren %s"
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
 msgid "Board edges must be defined on the %s layer."
-msgstr "Plattenkanten müssen auf der Lage %s definiert werden."
+msgstr "Platinenränder müssen auf der %s-Lage definiert werden."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
 msgid "Autoplace Components"
@@ -20959,7 +20955,7 @@ msgstr "Platine neu annotieren"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:268
 msgid "No PCB to reannotate!"
-msgstr "Keine Leiterplatte zum erneuten Notieren!"
+msgstr "Keine Leiterplatte zum reannotieren!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:279
 msgid "PCB and schematic successfully reannotated"
@@ -25718,7 +25714,7 @@ msgid ""
 "houses"
 msgstr ""
 "Die minimale Breite und / oder der Rand der globalen Lötmaske sind nicht auf "
-"0 eingestellt. Die meisten Plattenhäuser"
+"0 eingestellt. Die meisten Fabrikanten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:176
 msgid ""
@@ -25999,11 +25995,11 @@ msgstr "Anpassen der Länge von Differenziellem Paar"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:91
 msgid "Differential Pair Skew Tuning"
-msgstr "Anpassen der Abstimmung eines differenziellem Signalpaares"
+msgstr "Versatz-Anpassung eines Differentialpaars"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:93
 msgid "Target skew:"
-msgstr "Ziel Versatz:"
+msgstr "Zielversatz:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:22
 msgid "Length / Skew"
@@ -28392,7 +28388,7 @@ msgstr "Leiterbahnlänge außerhalb des Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:181
 msgid "Skew between traces out of range"
-msgstr "Schrägstellung zwischen Spuren außerhalb der Reichweite"
+msgstr "Versatz zwischen Leiterbahnen außerhalb des Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:185
 msgid "Too many vias on a connection"
@@ -28957,7 +28953,7 @@ msgstr "Platinendatei speichern als"
 
 #: pcbnew/files.cpp:277
 msgid "Printed circuit board"
-msgstr "Bedruckte Leiterplatte"
+msgstr "Leiterplatte"
 
 #: pcbnew/files.cpp:341
 #, c-format
