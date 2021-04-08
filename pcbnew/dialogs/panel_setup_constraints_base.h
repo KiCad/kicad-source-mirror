@@ -26,6 +26,7 @@
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/radiobut.h>
+#include <wx/scrolwin.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -38,6 +39,7 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 	private:
 
 	protected:
+		wxScrolledWindow* m_scrolledWindow1;
 		wxStaticText* m_staticText26;
 		wxStaticBitmap* m_bitmapBlindBuried;
 		wxCheckBox* m_OptAllowBlindBuriedVias;
