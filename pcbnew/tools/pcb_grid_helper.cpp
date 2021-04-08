@@ -674,6 +674,16 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             addAnchor( aItem->GetPosition(), ORIGIN, aItem );
             break;
 
+        case PCB_GROUP_T:
+        {
+            const PCB_GROUP* group = static_cast<const PCB_GROUP*>( aItem );
+
+            for( BOARD_ITEM* item : group->GetItems() )
+                computeAnchors( item, aRefPos, aFrom );
+
+            break;
+        }
+
         default:
             break;
    }
