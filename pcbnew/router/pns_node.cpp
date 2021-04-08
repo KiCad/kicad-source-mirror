@@ -904,7 +904,7 @@ void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, in
 
         aCurrent = jt->NextSegment( aCurrent );
 
-        prevReversed = ( jt->Pos() == aCurrent->Anchor( aScanDirection ) );
+        prevReversed = ( aCurrent && jt->Pos() == aCurrent->Anchor( aScanDirection ) );
     }
 }
 
@@ -921,7 +921,8 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
     LINE pl;
     bool guardHit = false;
 
-    int i_start = MaxVerts / 2, i_end = i_start + 1;
+    int i_start = MaxVerts / 2;
+    int i_end   = i_start + 1;
 
     pl.SetWidth( aSeg->Width() );
     pl.SetLayers( aSeg->Layers() );
@@ -933,8 +934,8 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
 
     if( !guardHit )
     {
-        followLine( aSeg, true, i_end, MaxVerts, corners.data(), segs.data(), arcReversed.data(), guardHit,
-                    aStopAtLockedJoints );
+        followLine( aSeg, true, i_end, MaxVerts, corners.data(), segs.data(), arcReversed.data(),
+                    guardHit, aStopAtLockedJoints );
     }
 
     int n = 0;
@@ -946,8 +947,6 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
     {
         const VECTOR2I& p  = corners[i];
         LINKED_ITEM*    li = segs[i];
-
-        int nsegs = pl.Line().SegmentCount();
 
         if( !li || li->Kind() != ITEM::ARC_T )
             pl.Line().Append( p );
@@ -1345,12 +1344,12 @@ void NODE::ClearRanks( int aMarkerMask )
 
 void NODE::RemoveByMarker( int aMarker )
 {
-    std::list<ITEM*> garbage;
+    std::vector<ITEM*> garbage;
 
     for( ITEM* item : *m_index )
     {
         if( item->Marker() & aMarker )
-            garbage.push_back( item );
+            garbage.emplace_back( item );
     }
 
     for( ITEM* item : garbage )
