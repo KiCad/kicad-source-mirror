@@ -533,7 +533,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingLine( LINE& aCurrent, LINE& aObstacle )
     Dbg()->AddLine( aObstacle.CLine(), 1, 100000, "obstacle-line" );
     Dbg()->AddLine( aCurrent.CLine(), 2, 150000, "current-line" );
     Dbg()->AddLine( shovedLine.CLine(), 3, 200000, "shoved-line" );
-    
+
     if( rv == SH_OK )
     {
         if( shovedLine.Marker() & MK_HEAD )
@@ -1301,7 +1301,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
     m_multiLineMode = false;
 
     if( Dbg() )
-    {    
+    {
         Dbg()->Message( wxString::Format( "Shove start, lc = %d", aCurrentHead.SegmentCount() ) );
     }
 

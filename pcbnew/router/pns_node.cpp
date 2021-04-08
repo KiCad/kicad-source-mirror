@@ -947,16 +947,25 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
         const VECTOR2I& p  = corners[i];
         LINKED_ITEM*    li = segs[i];
 
+        int nsegs = pl.Line().SegmentCount();
+
         if( !li || li->Kind() != ITEM::ARC_T )
             pl.Line().Append( p );
 
         if( li && prev_seg != li )
         {
+            int segIdxIncrement = 1;
+
             if( li->Kind() == ITEM::ARC_T )
             {
                 const ARC*       arc = static_cast<const ARC*>( li );
                 const SHAPE_ARC* sa  = static_cast<const SHAPE_ARC*>( arc->Shape() );
+
+                int nSegs = pl.Line().SegmentCount();
+
                 pl.Line().Append( arcReversed[i] ? sa->Reversed() : *sa );
+
+                segIdxIncrement = pl.Line().SegmentCount() - nSegs - 1;
             }
 
             pl.Link( li );
@@ -968,7 +977,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
                 originSet = true;
             }
 
-            n++;
+            n += segIdxIncrement;
         }
 
         prev_seg = li;
