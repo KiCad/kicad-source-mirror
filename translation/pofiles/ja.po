@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-03-26 20:05+0000\n"
+"PO-Revision-Date: 2021-04-08 20:48+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5269,9 +5269,8 @@ msgid "Select Preferred Editor"
 msgstr "優先するエディターを選択"
 
 #: common/pgm_base.cpp:222
-#, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "環境変数 HOME が空です。継続できません。"
+msgstr "環境変数 HOME が空です。続行できません。"
 
 #: common/pgm_base.cpp:233
 #, c-format
@@ -10616,7 +10615,7 @@ msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "LTSpice"
-msgstr ""
+msgstr "LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "PSpice and LTSpice"
@@ -12628,9 +12627,8 @@ msgid "Import"
 msgstr "インポート"
 
 #: eeschema/menubar.cpp:99
-#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "KiCad以外の回路図をインポート..."
+msgstr "KiCad以外の回路図..."
 
 #: eeschema/menubar.cpp:100
 msgid ""
@@ -12638,9 +12636,8 @@ msgid ""
 msgstr "現在の回路図シートを別のアプリケーションからインポートされたもので置換"
 
 #: eeschema/menubar.cpp:104
-#, fuzzy
 msgid "Footprint Assignments..."
-msgstr "フットプリント割り当て"
+msgstr "フットプリント割り当て..."
 
 #: eeschema/menubar.cpp:110 eeschema/symbol_editor/menubar_symbol_editor.cpp:69
 #: pcbnew/dialogs/dialog_export_step.cpp:130
@@ -13502,33 +13499,33 @@ msgstr ""
 "オフセット: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol names definition in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"不正なシンボル名定義：\n"
-"ファイル: \"%s\"\n"
+"不正なシンボル名定義\n"
+"ファイル: '%s'\n"
 "行: %d\n"
 "オフセット: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid property name in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"不正なプロパティ名：\n"
-"ファイル: \"%s\"\n"
+"不正なプロパティ名\n"
+"ファイル: '%s'\n"
 "行: %d\n"
 "オフセット: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Empty property name in\n"
 "file: '%s'\n"
@@ -13536,12 +13533,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "空のプロパティ名：\n"
-"ファイル: \"%s\"\n"
+"ファイル: '%s'\n"
 "行: %d\n"
 "オフセット: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid property value in\n"
 "file: '%s'\n"
@@ -13549,7 +13546,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "不正なプロパティ値：\n"
-"ファイル: \"%s\"\n"
+"ファイル: '%s'\n"
 "行: %d\n"
 "オフセット: %d"
 
@@ -13963,7 +13960,6 @@ msgid "Syntax Help"
 msgstr "構文ヘルプ"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14125,14 +14121,14 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~上線</samp><br> &nbsp;<br><samp>~CLK</"
-"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td> &nbsp;<br><samp>~上線</samp><br> &nbsp;<br><samp>~CLK</samp><br> "
+"&nbsp;<br><samp>~~</samp> </td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>上線</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
@@ -14157,8 +14153,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${リファレンス指定子:フィールド名}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>リファレンス指定子</i> のシンボルの <i>フィー"
-"ルドの値</i></samp></td>\n"
+"        <td>&nbsp;<br><samp><i>リファレンス指定子</i> のシンボルの "
+"<i>フィールドの値</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14173,8 +14169,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>バスの定義</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>生成されるネット</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14224,10 +14220,10 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp> </td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp;&nbsp"
+";&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
 
@@ -17337,9 +17333,8 @@ msgid "Highlight Attribute"
 msgstr "属性情報をハイライト"
 
 #: gerbview/tools/gerbview_actions.cpp:128
-#, fuzzy
 msgid "Highlight DCode"
-msgstr "ネットをハイライト"
+msgstr "Dコードをハイライト"
 
 #: gerbview/tools/gerbview_actions.cpp:134
 msgid "Next Layer"
@@ -20864,9 +20859,8 @@ msgstr ""
 "***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:528
-#, fuzzy
 msgid " will be ignored"
-msgstr "は無視されます"
+msgstr " は無視されます"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:541
 msgid ""
@@ -29646,9 +29640,9 @@ msgid "Disconnected %s pin %s."
 msgstr "%s ピン %s の接続を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for symbol %s pin %s."
-msgstr "シンボル %s ピン %s に対するネットがありません。"
+msgstr "シンボル %s ピン %s に対するネットが見つかりません。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:515
 #, c-format
@@ -31507,13 +31501,12 @@ msgid "%s is malformed."
 msgstr "%s は不正です。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1017
-#, fuzzy
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
 "このゾーンは配線ツールでは扱えません。\n"
-"自己干渉したポリゴンではないことを確認して下さい。"
+"自己交差したポリゴンではないことを確認して下さい。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1615 pcbnew/router/router_tool.cpp:424
 msgid "Interactive Router"
@@ -31546,9 +31539,8 @@ msgid "Tuned: skew "
 msgstr "調整済: 遅延(スキュー) "
 
 #: pcbnew/router/pns_router.cpp:192
-#, fuzzy
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "最小クリアランス (%s) 未満の作動ペア間隔。"
+msgstr "差動ペアのギャップが、基板の最小クリアランスよりも小さいです。"
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Cannot start routing from a non-plated hole."
@@ -32012,14 +32004,13 @@ msgid "KiCad board netlist files"
 msgstr "KiCad ネットリスト ファイル"
 
 #: pcbnew/tools/board_editor_control.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid "Path `%s` is read only."
-msgstr "ライブラリー \"%s\" は読み込み専用です。"
+msgstr "パス '%s' は読み込み専用です。"
 
 #: pcbnew/tools/board_editor_control.cpp:437
-#, fuzzy
 msgid "I/O Error"
-msgstr "エラー"
+msgstr "I/O エラー"
 
 #: pcbnew/tools/board_editor_control.cpp:527
 #, c-format
@@ -32712,9 +32703,8 @@ msgid "Add a zone with the same settings as an existing zone"
 msgstr "既存のゾーンと同じ設定でゾーンを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:191
-#, fuzzy
 msgid "Import Graphics..."
-msgstr "グラフィックスをインポート (&I)..."
+msgstr "グラフィックスをインポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:191
 msgid "Import 2D drawing file"
@@ -32879,9 +32869,8 @@ msgid "Show Footprint Tree"
 msgstr "フットプリント ツリーを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:345
-#, fuzzy
 msgid "Hide Footprint Tree"
-msgstr "フットプリント ツリーを表示"
+msgstr "フットプリント ツリーを非表示"
 
 #: pcbnew/tools/pcb_actions.cpp:351
 msgid "New Footprint..."
@@ -32928,7 +32917,6 @@ msgid "Import Footprint..."
 msgstr "フットプリントをインポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:386
-#, fuzzy
 msgid "Import footprint from file"
 msgstr "ファイルからフットプリントをインポート"
 
@@ -32937,9 +32925,8 @@ msgid "Export Footprint..."
 msgstr "フットプリントをエクスポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:391
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "エディターへフットプリントをエクスポート"
+msgstr "ファイルにへフットプリントをエクスポート"
 
 #: pcbnew/tools/pcb_actions.cpp:396
 msgid "Footprint Properties..."
@@ -33150,27 +33137,24 @@ msgstr ""
 "レイヤー、デザイン ルール、様々なデフォルト値を含む、基板セットアップを編集"
 
 #: pcbnew/tools/pcb_actions.cpp:557
-#, fuzzy
 msgid "Import Netlist..."
-msgstr "ネットリストをインポート"
+msgstr "ネットリストをインポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:557
 msgid "Read netlist and update board connectivity"
 msgstr "ネットリストを読み込み、基板の結線情報を更新"
 
 #: pcbnew/tools/pcb_actions.cpp:562
-#, fuzzy
 msgid "Import Specctra Session..."
-msgstr "Specctra セッション..."
+msgstr "Specctra セッションをインポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Import routed Specctra session (*.ses) file"
 msgstr "配線済みの Specctra session ファイル (*.ses) をインポート"
 
 #: pcbnew/tools/pcb_actions.cpp:567
-#, fuzzy
 msgid "Export Specctra DSN..."
-msgstr "Specctra DSN..."
+msgstr "Specctra DSN をエクスポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:567
 msgid "Export Specctra DSN routing info"
