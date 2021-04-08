@@ -480,7 +480,7 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
         LINE dragged( m_draggedLine );
         LINE draggedWalk( m_draggedLine );
         LINE origLine( m_draggedLine );
-        
+
         dragged.SetSnapThreshhold( thresh );
 
         if( m_mode == DM_SEGMENT )

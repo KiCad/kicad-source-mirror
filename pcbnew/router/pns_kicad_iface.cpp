@@ -88,9 +88,9 @@ private:
 private:
     PNS::ROUTER_IFACE* m_routerIface;
     BOARD*             m_board;
-    TRACK              m_dummyTrack;
-    ARC                m_dummyArc;
-    VIA                m_dummyVia;
+    TRACK              m_dummyTracks[2];
+    ARC                m_dummyArcs[2];
+    VIA                m_dummyVias[2];
     int                m_clearanceEpsilon;
 
     std::map<std::pair<const PNS::ITEM*, const PNS::ITEM*>, int> m_clearanceCache;
@@ -103,9 +103,9 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard,
                                                     PNS::ROUTER_IFACE* aRouterIface ) :
     m_routerIface( aRouterIface ),
     m_board( aBoard ),
-    m_dummyTrack( aBoard ),
-    m_dummyArc( aBoard ),
-    m_dummyVia( aBoard )
+    m_dummyTracks{ { aBoard }, { aBoard } },
+    m_dummyArcs{ { aBoard }, { aBoard } },
+    m_dummyVias{ { aBoard }, { aBoard } }
 {
     if( aBoard )
         m_clearanceEpsilon = aBoard->GetDesignSettings().GetDRCEpsilon();
@@ -217,10 +217,10 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     {
         switch( aItemA->Kind() )
         {
-        case PNS::ITEM::ARC_T:     parentA = &m_dummyArc;   break;
-        case PNS::ITEM::VIA_T:     parentA = &m_dummyVia;   break;
-        case PNS::ITEM::SEGMENT_T: parentA = &m_dummyTrack; break;
-        case PNS::ITEM::LINE_T:    parentA = &m_dummyTrack; break;
+        case PNS::ITEM::ARC_T:     parentA = &m_dummyArcs[0];   break;
+        case PNS::ITEM::VIA_T:     parentA = &m_dummyVias[0];   break;
+        case PNS::ITEM::SEGMENT_T: parentA = &m_dummyTracks[0]; break;
+        case PNS::ITEM::LINE_T:    parentA = &m_dummyTracks[0]; break;
         default: break;
         }
 
@@ -235,10 +235,10 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     {
         switch( aItemB->Kind() )
         {
-        case PNS::ITEM::ARC_T:     parentB = &m_dummyArc;   break;
-        case PNS::ITEM::VIA_T:     parentB = &m_dummyVia;   break;
-        case PNS::ITEM::SEGMENT_T: parentB = &m_dummyTrack; break;
-        case PNS::ITEM::LINE_T:    parentB = &m_dummyTrack; break;
+        case PNS::ITEM::ARC_T:     parentB = &m_dummyArcs[1];   break;
+        case PNS::ITEM::VIA_T:     parentB = &m_dummyVias[1];   break;
+        case PNS::ITEM::SEGMENT_T: parentB = &m_dummyTracks[1]; break;
+        case PNS::ITEM::LINE_T:    parentB = &m_dummyTracks[1]; break;
         default: break;
         }
 
@@ -369,7 +369,7 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
 
     assert( aItem->Owner() != NULL );
 
-    auto tryGetTrackWidth = 
+    auto tryGetTrackWidth =
         []( PNS::ITEM* aPnsItem ) -> int
         {
             switch( aPnsItem->Kind() )
