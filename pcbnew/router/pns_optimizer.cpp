@@ -785,10 +785,10 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::rectBreakouts( int aWidth, const SHAPE* aSha
     VECTOR2I d_vert  = VECTOR2I( 0, s.y / 2 + aWidth );
     VECTOR2I d_horiz = VECTOR2I( s.x / 2 + aWidth, 0 );
 
-    breakouts.push_back( SHAPE_LINE_CHAIN( { c, c + d_horiz } ) );
-    breakouts.push_back( SHAPE_LINE_CHAIN( { c, c - d_horiz } ) );
-    breakouts.push_back( SHAPE_LINE_CHAIN( { c, c + d_vert } ) );
-    breakouts.push_back( SHAPE_LINE_CHAIN( { c, c - d_vert } ) );
+    breakouts.emplace_back( SHAPE_LINE_CHAIN( { c, c + d_horiz } ) );
+    breakouts.emplace_back( SHAPE_LINE_CHAIN( { c, c - d_horiz } ) );
+    breakouts.emplace_back( SHAPE_LINE_CHAIN( { c, c + d_vert } ) );
+    breakouts.emplace_back( SHAPE_LINE_CHAIN( { c, c - d_vert } ) );
 
     if( aPermitDiagonal )
     {
@@ -797,25 +797,25 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::rectBreakouts( int aWidth, const SHAPE* aSha
 
         if( s.x >= s.y )
         {
-            breakouts.push_back(
+            breakouts.emplace_back(
                     SHAPE_LINE_CHAIN( { c, c + d_offset, c + d_offset + VECTOR2I( l, l ) } ) );
-            breakouts.push_back(
+            breakouts.emplace_back(
                     SHAPE_LINE_CHAIN( { c, c + d_offset, c + d_offset - VECTOR2I( -l, l ) } ) );
-            breakouts.push_back(
+            breakouts.emplace_back(
                     SHAPE_LINE_CHAIN( { c, c - d_offset, c - d_offset + VECTOR2I( -l, l ) } ) );
-            breakouts.push_back(
+            breakouts.emplace_back(
                     SHAPE_LINE_CHAIN( { c, c - d_offset, c - d_offset - VECTOR2I( l, l ) } ) );
         }
         else
         {
             // fixme: this could be done more efficiently
-            breakouts.push_back(
+            breakouts.emplace_back(
                     SHAPE_LINE_CHAIN( { c, c + d_offset, c + d_offset + VECTOR2I( l, l ) } ) );
-            breakouts.push_back(
+            breakouts.emplace_back(
                     SHAPE_LINE_CHAIN( { c, c - d_offset, c - d_offset - VECTOR2I( -l, l ) } ) );
-            breakouts.push_back(
+            breakouts.emplace_back(
                     SHAPE_LINE_CHAIN( { c, c + d_offset, c + d_offset + VECTOR2I( -l, l ) } ) );
-            breakouts.push_back(
+            breakouts.emplace_back(
                     SHAPE_LINE_CHAIN( { c, c - d_offset, c - d_offset - VECTOR2I( l, l ) } ) );
         }
     }
@@ -1453,7 +1453,7 @@ void Tighten( NODE *aNode, const SHAPE_LINE_CHAIN& aOldLine, const LINE& aNewLin
 
     SHAPE_LINE_CHAIN current ( aNewLine.CLine() );
 
-    for( int step = 0; step < 3; step++)
+    for( int step = 0; step < 3; step++ )
     {
         current.Simplify();
 
@@ -1461,16 +1461,16 @@ void Tighten( NODE *aNode, const SHAPE_LINE_CHAIN& aOldLine, const LINE& aNewLin
         {
             SHAPE_LINE_CHAIN l_in, l_out;
 
-            l_in = current.Slice(i, i+3);
+            l_in = current.Slice( i, i + 3 );
 
-            for( int dir = 0; dir < 1; dir++)
+            for( int dir = 0; dir <= 1; dir++ )
             {
                 if( tightenSegment( dir ? true : false, aNode, aNewLine, l_in, l_out ) )
                 {
                     SHAPE_LINE_CHAIN opt = current;
                     opt.Replace(i, i + 3, l_out);
-                    auto optArea = std::abs(shovedArea( aOldLine, opt ));
-                    auto prevArea = std::abs(shovedArea( aOldLine, current ));
+                    auto optArea  = std::abs( shovedArea( aOldLine, opt ) );
+                    auto prevArea = std::abs( shovedArea( aOldLine, current ) );
 
                     if( optArea < prevArea )
                         current = opt;

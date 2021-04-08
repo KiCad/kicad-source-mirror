@@ -47,9 +47,10 @@ void LOGGER::Save( const std::string& aFilename )
 
     wxLogTrace( "PNS", "Saving to '%s' [%p]", aFilename.c_str(), f );
 
-    for( const auto evt : m_events )
+    for( const EVENT_ENTRY& evt : m_events )
     {
         uint64_t id = 0;
+
         if( evt.item && evt.item->Parent() )
         {
             const char* idString = evt.item->Parent()->m_Uuid.AsString().c_str();

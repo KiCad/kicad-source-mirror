@@ -30,7 +30,9 @@
 namespace PNS {
 
 DRAGGER::DRAGGER( ROUTER* aRouter ) :
-    DRAG_ALGO( aRouter )
+    DRAG_ALGO( aRouter ),
+    m_initialVia( {} ),
+    m_draggedVia( {} )
 {
     m_world = NULL;
     m_lastNode = NULL;

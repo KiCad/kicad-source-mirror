@@ -361,8 +361,9 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
             // current vertex lies on the hull? first look for the hull/path vertex with the index (N+1)
             for( VERTEX* vn: v->neighbours)
             {
-
-                if( vn->type  == ON_EDGE && (vn->indexp == (v->indexp + 1) ) && ( (vn->indexh == (v->indexh + 1) ) % hnew.PointCount() ) )
+                if( vn->type == ON_EDGE &&
+                    ( vn->indexp == ( v->indexp + 1 ) ) &&
+                    ( vn->indexh == ( ( v->indexh + 1 ) % hnew.PointCount() ) ) )
                 {
                     v_next = vn;
                     break;
@@ -388,7 +389,7 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
             {
                 for( VERTEX* vn: v->neighbours)
                 {
-                    if ( v->type == ON_EDGE )
+                    if ( vn->type == ON_EDGE )
                     {
                         if( vn->indexh == ( (v->indexh + 1) % hnew.PointCount() ) )
                         {

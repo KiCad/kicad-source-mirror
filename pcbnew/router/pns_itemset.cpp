@@ -32,14 +32,14 @@ ITEM_SET::~ITEM_SET()
 void ITEM_SET::Add( const LINE& aLine )
 {
     LINE* copy = aLine.Clone();
-    m_items.push_back( ENTRY( copy, true ) );
+    m_items.emplace_back( ENTRY( copy, true ) );
 }
 
 
 void ITEM_SET::Prepend( const LINE& aLine )
 {
     LINE* copy = aLine.Clone();
-    m_items.insert( m_items.begin(), ENTRY( copy, true ) );
+    m_items.emplace( m_items.begin(), ENTRY( copy, true ) );
 }
 
 

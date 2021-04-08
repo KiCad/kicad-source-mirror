@@ -697,7 +697,7 @@ public:
 
     ~PNS_PCBNEW_DEBUG_DECORATOR()
     {
-        Clear();
+        PNS_PCBNEW_DEBUG_DECORATOR::Clear();
         delete m_items;
     }
 

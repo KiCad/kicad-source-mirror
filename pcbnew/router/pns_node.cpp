@@ -201,7 +201,6 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
     int        m_kindMask;          ///<  (solids, vias, segments, etc...)
     int        m_limitCount;
     int        m_matchCount;
-    int        m_extraClearance;
     bool       m_differentNetsOnly;
 
     DEFAULT_OBSTACLE_VISITOR( NODE::OBSTACLES& aTab, const ITEM* aItem, int aKindMask,
@@ -211,7 +210,6 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         m_kindMask( aKindMask ),
         m_limitCount( -1 ),
         m_matchCount( 0 ),
-        m_extraClearance( 0 ),
         m_differentNetsOnly( aDifferentNetsOnly )
     {
         if( aItem && aItem->Kind() == ITEM::LINE_T )
@@ -892,7 +890,9 @@ void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, in
 
         if( count && guard == p )
         {
-            aSegments[aPos] = NULL;
+            if( aPos >= 0 && aPos < aLimit )
+                aSegments[aPos] = NULL;
+
             aGuardHit = true;
             break;
         }
