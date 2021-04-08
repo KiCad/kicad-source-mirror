@@ -53,6 +53,7 @@ public:
     int ShowHelp( const TOOL_EVENT& aEvent );
     int ListHotKeys( const TOOL_EVENT& aEvent );
     int GetInvolved( const TOOL_EVENT& aEvent );
+    int Donate( const TOOL_EVENT& aEvent );
     int ReportBug( const TOOL_EVENT& aEvent );
 
     ///< Sets up handlers for various events.

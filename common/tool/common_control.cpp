@@ -39,6 +39,7 @@
 #include <eda_doc.h>
 
 #define URL_GET_INVOLVED "https://kicad.org/contribute/"
+#define URL_DONATE "https://go.kicad.org/donate/"
 
 
 /// URL to launch a new issue with pre-populated description
@@ -241,6 +242,20 @@ int COMMON_CONTROL::GetInvolved( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_CONTROL::Donate( const TOOL_EVENT& aEvent )
+{
+    if( !wxLaunchDefaultBrowser( URL_DONATE ) )
+    {
+        wxString msg;
+        msg.Printf( _( "Could not launch the default browser.\n"
+                       "To donate to the KiCad project, visit %s" ),
+                    URL_DONATE );
+        wxMessageBox( msg, _( "Donate to KiCad" ), wxOK, m_frame );
+    }
+    return 0;
+}
+
+
 int COMMON_CONTROL::ReportBug( const TOOL_EVENT& aEvent )
 {
     wxString version = GetVersionInfoData( m_frame->GetAboutTitle(), false, true );
@@ -272,6 +287,7 @@ void COMMON_CONTROL::setTransitions()
     Go( &COMMON_CONTROL::ShowHelp,           ACTIONS::help.MakeEvent() );
     Go( &COMMON_CONTROL::ListHotKeys,        ACTIONS::listHotKeys.MakeEvent() );
     Go( &COMMON_CONTROL::GetInvolved,        ACTIONS::getInvolved.MakeEvent() );
+    Go( &COMMON_CONTROL::Donate,             ACTIONS::donate.MakeEvent() );
     Go( &COMMON_CONTROL::ReportBug,          ACTIONS::reportBug.MakeEvent() );
 }
 

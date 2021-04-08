@@ -626,6 +626,11 @@ TOOL_ACTION ACTIONS::getInvolved( "common.SuiteControl.getInvolved",
         _( "Open \"Contribute to KiCad\" in a web browser" ),
         BITMAPS::info );
 
+TOOL_ACTION ACTIONS::donate( "common.SuiteControl.donate",
+        AS_GLOBAL, 0, "",
+        _( "Donate" ),
+        _( "Open \"Donate to KiCad\" in a web browser" ) );
+
 TOOL_ACTION ACTIONS::reportBug( "common.SuiteControl.reportBug",
         AS_GLOBAL, 0, "",
         _( "Report Bug" ),
