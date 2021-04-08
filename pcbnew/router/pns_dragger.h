@@ -114,7 +114,7 @@ public:
 
 private:
     const ITEM_SET findViaFanoutByHandle ( NODE *aNode, const VIA_HANDLE& handle );
-    
+
     bool dragMarkObstacles( const VECTOR2I& aP );
     bool dragShove(const VECTOR2I& aP );
     bool dragWalkaround(const VECTOR2I& aP );
@@ -134,6 +134,7 @@ private:
     NODE*                  m_lastNode;
     int                    m_mode;
     LINE                   m_draggedLine;
+    LINE                   m_lastDragSolution;
     std::unique_ptr<SHOVE> m_shove;
     int                    m_draggedSegmentIndex;
     bool                   m_dragStatus;
