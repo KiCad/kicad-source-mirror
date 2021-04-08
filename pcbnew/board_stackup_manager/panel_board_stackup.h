@@ -28,6 +28,7 @@
 
 #include <board.h>
 #include <widgets/unit_binder.h>
+#include <wx/gdicmn.h>
 
 #include "panel_board_stackup_base.h"
 #include "class_board_stackup.h"
@@ -63,14 +64,23 @@ struct BOARD_STACKUP_ROW_UI_ITEM
     wxControl*      m_EpsilonCtrl;      // control shown in column 8
     wxControl*      m_LossTgCtrl;       // control shown in column 9
 
+    wxColour        m_UserColor;        // User-specified color (if any)
+
     BOARD_STACKUP_ROW_UI_ITEM( BOARD_STACKUP_ITEM* aItem, int aSubItem = 1 ) :
-        m_Item( aItem ), m_SubItem( aSubItem ),
-        m_isEnabled( true ), m_Icon( nullptr ), m_LayerName( nullptr ),
+        m_Item( aItem ),
+        m_SubItem( aSubItem ),
+        m_isEnabled( true ),
+        m_Icon( nullptr ),
+        m_LayerName( nullptr ),
         m_LayerTypeCtrl( nullptr ),
-        m_MaterialCtrl( nullptr ),m_MaterialButt( nullptr ),
-        m_ThicknessCtrl( nullptr ), m_ThicknessLockCtrl( nullptr ),
+        m_MaterialCtrl( nullptr ),
+        m_MaterialButt( nullptr ),
+        m_ThicknessCtrl( nullptr ),
+        m_ThicknessLockCtrl( nullptr ),
         m_ColorCtrl( nullptr ),
-        m_EpsilonCtrl( nullptr ), m_LossTgCtrl( nullptr )
+        m_EpsilonCtrl( nullptr ),
+        m_LossTgCtrl( nullptr ),
+        m_UserColor( wxNullColour )
     {}
 };
 
@@ -110,8 +120,6 @@ public:
     // Called by wxWidgets: transfer current settings stored in m_stackup to the board
     bool TransferDataFromWindow() override;
 
-    std::map<int, wxColor> m_UserColors;  // the list of user colors for each grid row
-                                          // other colors are defined colors, and are not stored
 private:
     /** Creates a BOARD_STACKUP_ROW_UI_ITEM relative to the aStackupItem.
      * @return a BOARD_STACKUP_ROW_UI_ITEM filled with corresponding widgets
@@ -245,7 +253,6 @@ private:
     wxSize          m_numericFieldsSize;    // Best size to enter double values in wxTextCtrl
     wxArrayString   m_core_prepreg_choice;  // Used to display the option list in dialog
     wxSize          m_colorSwatchesSize;    // the size of color swatches in the wxBitmapComboBox.
-    wxSize          m_colorComboSize;       // the size of the wxBitmapComboBox.
     wxSize          m_colorIconsSize;       // the size of color swatches in grid, left column.
 
     // The list of controls (wxChoice, wxBitmapComboBox, wxTextCtrl) added to the panel
