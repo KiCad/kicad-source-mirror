@@ -397,7 +397,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
     if( aSetDirtyBit )
         frame->OnModify();
-    else
+    else if( frame->GetDisplayOptions().m_Live3DRefresh )
         frame->Update3DView( true );
 
     clear();

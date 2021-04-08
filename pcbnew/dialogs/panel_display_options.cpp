@@ -67,6 +67,8 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataToWindow()
         m_OptDisplayPadNoConn->SetValue( pcbEdit->IsElementVisible( LAYER_NO_CONNECTS ) );
         m_ShowNetNamesOption->SetSelection( displ_opts.m_DisplayNetNamesMode );
 
+        m_live3Drefresh->SetValue( displ_opts.m_Live3DRefresh );
+
         CROSS_PROBING_SETTINGS& crossProbing = pcbEdit->GetPcbNewSettings()->m_CrossProbing;
 
         m_checkCrossProbeCenter->SetValue( crossProbing.center_on_items );
@@ -107,6 +109,7 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
         pcbEdit->SetElementVisibility( LAYER_NO_CONNECTS, m_OptDisplayPadNoConn->GetValue() );
 
         displ_opts.m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
+        displ_opts.m_Live3DRefresh       = m_live3Drefresh->GetValue();
 
         pcbEdit->SetDisplayOptions( displ_opts );
         settings->LoadDisplayOptions( displ_opts, pcbEdit->ShowPageLimits() );

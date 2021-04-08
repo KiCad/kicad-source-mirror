@@ -47,6 +47,7 @@ class PANEL_DISPLAY_OPTIONS_BASE : public wxPanel
 		wxCheckBox* m_checkCrossProbeCenter;
 		wxCheckBox* m_checkCrossProbeZoom;
 		wxCheckBox* m_checkCrossProbeAutoHighlight;
+		wxCheckBox* m_live3Drefresh;
 
 	public:
 

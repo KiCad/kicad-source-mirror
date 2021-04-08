@@ -111,6 +111,7 @@ public:
     bool m_DisplayInvertXAxis;          //< true: Invert the X axis for display
     bool m_DisplayInvertYAxis;          //< true: Invert the Y axis for display
 
+    bool m_Live3DRefresh;   ///< If true, 3D viewer will redraw on every modification operation
 };
 
 #endif // PCBSTRUCT_H_

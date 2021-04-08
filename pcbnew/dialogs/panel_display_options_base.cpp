@@ -87,6 +87,11 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 
 	sbSizer3->Add( m_checkCrossProbeAutoHighlight, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_live3Drefresh = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Refresh 3D view automatically"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_live3Drefresh->SetToolTip( _("When enabled, edits to the board will cause the 3D view to refresh (may be slow with larger boards)") );
+
+	sbSizer3->Add( m_live3Drefresh, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
 
 	pcbOptionsSizer->Add( sbSizer3, 1, wxEXPAND|wxTOP, 5 );
 

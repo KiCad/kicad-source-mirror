@@ -64,4 +64,5 @@ PCB_DISPLAY_OPTIONS::PCB_DISPLAY_OPTIONS()
     m_DisplayOrigin           = PCB_ORIGIN_PAGE;
     m_DisplayInvertXAxis      = false;
     m_DisplayInvertYAxis      = false;
+    m_Live3DRefresh           = false;
 }

@@ -124,6 +124,8 @@ public:
      */
     void UpdateUserInterface();
 
+    void HardRedraw() override;
+
     /**
      * Execute a remote command send by Eeschema via a socket, port KICAD_PCB_PORT_SERVICE_NUMBER
      * (currently 4242).

@@ -1203,12 +1203,19 @@ void PCB_EDIT_FRAME::OnModify( )
 {
     PCB_BASE_FRAME::OnModify();
 
-    Update3DView( true );
+    if( GetDisplayOptions().m_Live3DRefresh )
+        Update3DView( true );
 
     if( !GetTitle().StartsWith( "*" ) )
         UpdateTitle();
 
     m_ZoneFillsDirty = true;
+}
+
+
+void PCB_EDIT_FRAME::HardRedraw()
+{
+    Update3DView( true );
 }
 
 

@@ -191,6 +191,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "pcb_display.origin_invert_y_axis",
             &m_Display.m_DisplayInvertYAxis, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.live_3d_refresh",
+            &m_Display.m_Live3DRefresh, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_vias",
             &m_Cleanup.cleanup_vias, true ) );
 
