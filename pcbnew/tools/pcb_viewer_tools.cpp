@@ -101,7 +101,7 @@ int PCB_VIEWER_TOOLS::ShowPadNumbers( const TOOL_EVENT& aEvent )
     for( FOOTPRINT* fp : board()->Footprints() )
     {
         for( PAD* pad : fp->Pads() )
-            view()->Update( pad, KIGFX::GEOMETRY );
+            view()->Update( pad, KIGFX::REPAINT );
     }
 
     canvas()->Refresh();
@@ -120,7 +120,7 @@ int PCB_VIEWER_TOOLS::PadDisplayMode( const TOOL_EVENT& aEvent )
     for( FOOTPRINT* fp : board()->Footprints() )
     {
         for( PAD* pad : fp->Pads() )
-            view()->Update( pad, KIGFX::GEOMETRY );
+            view()->Update( pad, KIGFX::REPAINT );
     }
 
     canvas()->Refresh();
@@ -141,7 +141,7 @@ int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
         for( BOARD_ITEM* item : fp->GraphicalItems() )
         {
             if( item->Type() == PCB_FP_SHAPE_T )
-                view()->Update( item, KIGFX::GEOMETRY );
+                view()->Update( item, KIGFX::REPAINT );
         }
     }
 
@@ -150,7 +150,7 @@ int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
         KICAD_T t = item->Type();
 
         if( t == PCB_SHAPE_T || BaseType( t ) == PCB_DIMENSION_T || t == PCB_TARGET_T )
-            view()->Update( item, KIGFX::GEOMETRY );
+            view()->Update( item, KIGFX::REPAINT );
     }
 
     canvas()->Refresh();
@@ -168,13 +168,13 @@ int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
 
     for( FOOTPRINT* fp : board()->Footprints() )
     {
-        view()->Update( &fp->Reference(), KIGFX::GEOMETRY );
-        view()->Update( &fp->Value(), KIGFX::GEOMETRY );
+        view()->Update( &fp->Reference(), KIGFX::REPAINT );
+        view()->Update( &fp->Value(), KIGFX::REPAINT );
 
         for( BOARD_ITEM* item : fp->GraphicalItems() )
         {
             if( item->Type() == PCB_FP_TEXT_T )
-                view()->Update( item, KIGFX::GEOMETRY );
+                view()->Update( item, KIGFX::REPAINT );
         }
     }
 
@@ -183,7 +183,7 @@ int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
         KICAD_T t = item->Type();
 
         if( t == PCB_TEXT_T || BaseType( t ) == PCB_DIMENSION_T )
-            view()->Update( item, KIGFX::GEOMETRY );
+            view()->Update( item, KIGFX::REPAINT );
     }
 
     canvas()->Refresh();

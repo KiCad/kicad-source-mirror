@@ -126,7 +126,7 @@ int PCB_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
     for( auto track : board()->Tracks() )
     {
         if( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T )
-            view()->Update( track, KIGFX::GEOMETRY );
+            view()->Update( track, KIGFX::REPAINT );
     }
 
     canvas()->Refresh();
@@ -171,7 +171,7 @@ int PCB_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
     for( auto track : board()->Tracks() )
     {
         if( track->Type() == PCB_TRACE_T || track->Type() == PCB_VIA_T )
-            view()->Update( track, KIGFX::GEOMETRY );
+            view()->Update( track, KIGFX::REPAINT );
     }
 
     canvas()->Refresh();
@@ -210,7 +210,7 @@ int PCB_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
     m_frame->SetDisplayOptions( opts );
 
     for( ZONE* zone : board()->Zones() )
-        view()->Update( zone, KIGFX::GEOMETRY );
+        view()->Update( zone, KIGFX::REPAINT );
 
     canvas()->Refresh();
 
