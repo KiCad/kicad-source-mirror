@@ -224,15 +224,15 @@ void TransformRoundRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxSize& a
 
     auto genArc =
             [&]( const wxPoint& aCenter, int aStart, int aEnd )
-    {
-        for( int angle = aStart + delta; angle < aEnd; angle += delta )
-        {
-            wxPoint pt( -radius, 0 );
-            RotatePoint( &pt, angle );
-            pt += aCenter;
-            outline.Append( pt.x, pt.y );
-        }
-    };
+            {
+                for( int angle = aStart + delta; angle < aEnd; angle += delta )
+                {
+                    wxPoint pt( -radius, 0 );
+                    RotatePoint( &pt, angle );
+                    pt += aCenter;
+                    outline.Append( pt.x, pt.y );
+                }
+            };
 
     outline.NewOutline();
 
