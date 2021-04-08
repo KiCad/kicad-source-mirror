@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-04-05 10:29+0000\n"
+"PO-Revision-Date: 2021-04-08 22:48+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ro/>\n"
@@ -3449,7 +3449,7 @@ msgstr "Grosimea firului în schematică"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
 msgid "Bus wire thickness"
-msgstr "Grosimea busului în schematică"
+msgstr "Grosimea magistralei în schematică"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
 msgid "Schematic wire color"
@@ -3477,7 +3477,7 @@ msgstr "Distanţă"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:193
 #: pcbnew/tools/board_inspection_tool.cpp:520
 msgid "Track Width"
-msgstr ""
+msgstr "Lățimea traseului"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1491
@@ -3487,16 +3487,16 @@ msgstr "Dimensiune Via"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 msgid "Via Hole"
-msgstr ""
+msgstr "Gaură via"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:196
 msgid "uVia Size"
-msgstr ""
+msgstr "Dimensiune μVia"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
 msgid "uVia Hole"
-msgstr ""
+msgstr "Gaură μVia"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:49
 msgid "DP Width"
@@ -3512,12 +3512,12 @@ msgstr "Grosimea firului"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 msgid "Bus Thickness"
-msgstr ""
+msgstr "Grosime magistrală"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:54
 #: eeschema/dialogs/dialog_edit_line_style_base.h:65 eeschema/sch_line.cpp:893
 msgid "Line Style"
-msgstr ""
+msgstr "Stil linie"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60 common/pgm_base.cpp:78
 #: common/widgets/footprint_select_widget.cpp:135
@@ -3550,7 +3550,7 @@ msgstr "Afișați toate rețelele"
 #: common/dialogs/panel_setup_netclasses_base.cpp:139
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:60
 msgid "Apply Filters"
-msgstr ""
+msgstr "Aplicați filtre"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:149
 msgid "Assign Net Class"
@@ -3588,7 +3588,7 @@ msgstr ""
 #: common/dialogs/panel_text_variables.cpp:114
 #: common/dialogs/panel_text_variables.cpp:142
 msgid "Variable name cannot be empty."
-msgstr ""
+msgstr "Numele variabilei nu poate fi gol."
 
 #: common/dialogs/panel_text_variables_base.cpp:37
 msgid "Variable Name"
@@ -3623,15 +3623,15 @@ msgstr "Salvați raportul în fișier"
 #: common/dialogs/wx_html_report_panel.cpp:346
 #, c-format
 msgid "Cannot write report to file \"%s\"."
-msgstr ""
+msgstr "Nu se poate scrie raportul în fișierul \"%s\"."
 
 #: common/dialogs/wx_html_report_panel.cpp:348
 msgid "File save error"
-msgstr ""
+msgstr "Eroare de salvare a fișierului"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:14
 msgid "Output Messages"
-msgstr ""
+msgstr "Mesaje de ieșire"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:31
 #: eeschema/dialogs/dialog_erc_base.cpp:66
@@ -3670,16 +3670,16 @@ msgstr "Salvați..."
 
 #: common/draw_panel_gal.cpp:250 common/draw_panel_gal.cpp:433
 msgid "Could not use OpenGL, falling back to software rendering"
-msgstr ""
+msgstr "Nu a putut utiliza OpenGL, revenind la randarea în software"
 
 #: common/draw_panel_gal.cpp:256 common/draw_panel_gal.cpp:440
 msgid "Could not use OpenGL"
-msgstr ""
+msgstr "Nu s-a putut utiliza OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:844
 #, c-format
 msgid "The file \"%s\" was not fully read"
-msgstr ""
+msgstr "Fișierul \"%s\" nu a fost citit în întregime"
 
 #: common/drawing_sheet/ds_data_item.cpp:394
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:649
@@ -3712,7 +3712,7 @@ msgstr "Dreptunghi"
 #: common/drawing_sheet/ds_draw_item.cpp:126
 #: common/drawing_sheet/ds_draw_item.cpp:298
 msgid "Imported Shape"
-msgstr ""
+msgstr "Formă importată"
 
 #: common/drawing_sheet/ds_data_item.cpp:398
 #: common/drawing_sheet/ds_draw_item.cpp:130
@@ -3724,7 +3724,7 @@ msgstr "Imagine"
 #: common/drawing_sheet/ds_data_model_io.cpp:94
 #: common/drawing_sheet/ds_data_model_io.cpp:122
 msgid "Error writing page layout design file"
-msgstr ""
+msgstr "Eroare la scrierea fișierului de proiectare a aspectului paginii"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
@@ -3776,7 +3776,7 @@ msgstr "Linie, lungime %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:482
 msgid "Page Limits"
-msgstr ""
+msgstr "Limitele paginilor"
 
 #: common/dsnlexer.cpp:34
 msgid "clipboard"
@@ -3785,22 +3785,22 @@ msgstr "Mapă"
 #: common/dsnlexer.cpp:324
 #, c-format
 msgid "Expecting %s"
-msgstr ""
+msgstr "Se așteaptă %s"
 
 #: common/dsnlexer.cpp:332
 #, c-format
 msgid "Expecting '%s'"
-msgstr ""
+msgstr "Se așteaptă ' %s'"
 
 #: common/dsnlexer.cpp:340
 #, c-format
 msgid "Unexpected %s"
-msgstr ""
+msgstr "Neașteptat %s"
 
 #: common/dsnlexer.cpp:348
 #, c-format
 msgid "%s is a duplicate"
-msgstr ""
+msgstr "%s este un duplicat"
 
 #: common/dsnlexer.cpp:356
 #, c-format
@@ -3831,7 +3831,7 @@ msgstr "&Ajutor"
 #: common/eda_base_frame.cpp:850
 #, c-format
 msgid "File \"%s\" was not found."
-msgstr ""
+msgstr "Fișierul \"%s\" nu a fost găsit."
 
 #: common/eda_base_frame.cpp:895
 msgid "Preferences"
@@ -3844,7 +3844,7 @@ msgstr "General"
 
 #: common/eda_base_frame.cpp:900
 msgid "Mouse and Touchpad"
-msgstr ""
+msgstr "Mouse și touchpad"
 
 #: common/eda_base_frame.cpp:903
 msgid "Hotkeys"
@@ -3853,17 +3853,19 @@ msgstr "Comenzi rapide"
 #: common/eda_base_frame.cpp:947
 #, c-format
 msgid "You do not have write permissions to folder \"%s\"."
-msgstr ""
+msgstr "Nu aveți permisiuni de scriere pentru folderul \"%s\"."
 
 #: common/eda_base_frame.cpp:952
 #, c-format
 msgid "You do not have write permissions to save file \"%s\" to folder \"%s\"."
 msgstr ""
+"Nu aveți permisiuni de scriere pentru a salva fișierul \"%s\" în dosarul \"%"
+"s\"."
 
 #: common/eda_base_frame.cpp:957 pcbnew/plugins/altium/altium_pcb.cpp:1202
 #, c-format
 msgid "You do not have write permissions to save file \"%s\"."
-msgstr ""
+msgstr "Nu aveți permisiuni de scriere pentru a salva fișierul \"%s\"."
 
 #: common/eda_base_frame.cpp:987
 #, c-format
@@ -3874,24 +3876,31 @@ msgid ""
 "it was not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
+"Ei bine, acest lucru este posibil jenant!\n"
+"Se pare că ultima dată când ai editat fișierul\n"
+"\"%s\"\n"
+"nu a fost salvat corespunzător.  Doriți să restaurați ultimele modificări "
+"salvate pe care le-ați făcut?"
 
 #: common/eda_base_frame.cpp:1003
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
+"Fișierul de salvare automată nu a putut fi redenumit cu numele de fișier al "
+"plăcii."
 
 #: common/eda_doc.cpp:143
 msgid "Doc Files"
-msgstr ""
+msgstr "Fișiere Doc"
 
 #: common/eda_doc.cpp:158
 #, c-format
 msgid "Doc File \"%s\" not found"
-msgstr ""
+msgstr "Fișierul Doc \"%s\" nu a fost găsit"
 
 #: common/eda_doc.cpp:201
 #, c-format
 msgid "Unknown MIME type for doc file \"%s\""
-msgstr ""
+msgstr "Tip MIME necunoscut pentru fișierul doc \"%s\""
 
 #: common/eda_draw_frame.cpp:134 common/tool/actions.cpp:482
 #: pagelayout_editor/pl_editor_frame.cpp:154
@@ -3906,16 +3915,16 @@ msgstr "Țoli"
 
 #: common/eda_draw_frame.cpp:257
 msgid "Edit User Grid..."
-msgstr ""
+msgstr "Editați grila utilizatorului..."
 
 #: common/eda_draw_frame.cpp:369
 msgid "Zoom Auto"
-msgstr ""
+msgstr "Zoom automat"
 
 #: common/eda_draw_frame.cpp:376
 #, c-format
 msgid "Zoom %.2f"
-msgstr ""
+msgstr "Zoom %.2f"
 
 #: common/eda_draw_frame.cpp:486 pagelayout_editor/pl_editor_frame.cpp:721
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
@@ -3932,11 +3941,11 @@ msgstr "Unităţi"
 #: common/eda_draw_frame.cpp:904 eeschema/dialogs/panel_sym_lib_table.cpp:455
 #: pcbnew/footprint_libraries_utils.cpp:1197
 msgid "Select Library"
-msgstr ""
+msgstr "Selectați Biblioteca"
 
 #: common/eda_draw_frame.cpp:904
 msgid "New Library"
-msgstr ""
+msgstr "Biblioteca nouă"
 
 #: common/eda_draw_frame.cpp:1038
 msgid ""
@@ -3949,6 +3958,14 @@ msgid ""
 "If you'd like to choose later, select Accelerated Graphics in the "
 "Preferences menu."
 msgstr ""
+"KiCad vă poate utiliza placa grafică pentru a vă oferi o experiență mai lină "
+"și mai rapidă. Această opțiune este dezactivată în mod implicit, deoarece nu "
+"este compatibilă cu toate computerele.\n"
+"\n"
+"Încercați să activați accelerarea grafică?\n"
+"\n"
+"Dacă doriți să alegeți mai târziu, selectați Grafică accelerată din meniul "
+"Preferințe."
 
 #: common/eda_draw_frame.cpp:1045
 msgid "Enable Graphics Acceleration"
@@ -3956,7 +3973,7 @@ msgstr "Activați accelerarea grafică"
 
 #: common/eda_draw_frame.cpp:1047
 msgid "&Enable Acceleration"
-msgstr ""
+msgstr "&Activați accelerarea"
 
 #: common/eda_draw_frame.cpp:1047
 msgid "&No Thanks"
@@ -4010,15 +4027,15 @@ msgstr ""
 
 #: common/eda_item.cpp:256
 msgid "Aligned Dimension"
-msgstr ""
+msgstr "Dimensiune aliniată"
 
 #: common/eda_item.cpp:257
 msgid "Orthogonal Dimension"
-msgstr ""
+msgstr "Dimensiune ortogonală"
 
 #: common/eda_item.cpp:258
 msgid "Center Dimension"
-msgstr ""
+msgstr "Dimensiune centrală"
 
 #: common/eda_item.cpp:259 pcbnew/dimension.cpp:983
 #, fuzzy
@@ -4031,7 +4048,7 @@ msgstr "Țintă"
 
 #: common/eda_item.cpp:262
 msgid "Item List"
-msgstr ""
+msgstr "Lista de obiecte"
 
 #: common/eda_item.cpp:263
 msgid "Net Info"
@@ -4048,11 +4065,11 @@ msgstr ""
 
 #: common/eda_item.cpp:267 eeschema/sch_junction.h:87
 msgid "Junction"
-msgstr "Joncţiune"
+msgstr "Intersecție"
 
 #: common/eda_item.cpp:268
 msgid "No-Connect Flag"
-msgstr ""
+msgstr "Indicator de neconectare"
 
 #: common/eda_item.cpp:269
 msgid "Wire Entry"
@@ -4060,11 +4077,11 @@ msgstr "Intrare fir"
 
 #: common/eda_item.cpp:270
 msgid "Bus Entry"
-msgstr ""
+msgstr "Intrarea magistrală"
 
 #: common/eda_item.cpp:271
 msgid "Graphic Line"
-msgstr ""
+msgstr "Linie grafică"
 
 #: common/eda_item.cpp:272 eeschema/sch_bitmap.cpp:201
 msgid "Bitmap"
@@ -4080,15 +4097,15 @@ msgstr "Etichetă rețea"
 
 #: common/eda_item.cpp:275 eeschema/sch_text.cpp:656
 msgid "Global Label"
-msgstr ""
+msgstr "Etichetă globală"
 
 #: common/eda_item.cpp:276 eeschema/sch_text.cpp:657
 msgid "Hierarchical Label"
-msgstr ""
+msgstr "Etichetă ierarhică"
 
 #: common/eda_item.cpp:277
 msgid "Schematic Field"
-msgstr ""
+msgstr "Câmp schematic"
 
 #: common/eda_item.cpp:278
 msgid "Component"
@@ -4105,7 +4122,7 @@ msgstr "Foaie"
 
 #: common/eda_item.cpp:287
 msgid "SCH Screen"
-msgstr ""
+msgstr "Ecranul SCH"
 
 #: common/eda_item.cpp:289
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:166
@@ -4154,11 +4171,11 @@ msgstr ""
 
 #: common/eda_item.cpp:300
 msgid "Gerber Layout"
-msgstr ""
+msgstr "Aspect Gerber"
 
 #: common/eda_item.cpp:301
 msgid "Draw Item"
-msgstr ""
+msgstr "Desenați elementul"
 
 #: common/eda_text.cpp:487 eeschema/dialogs/dialog_edit_label_base.cpp:126
 #: eeschema/sch_text.cpp:676 eeschema/symbol_editor/symbol_editor.cpp:1195
@@ -4320,11 +4337,11 @@ msgstr "Înălțime"
 
 #: common/eda_text.cpp:665
 msgid "Horizontal Justification"
-msgstr ""
+msgstr "Justificare orizontală"
 
 #: common/eda_text.cpp:667
 msgid "Vertical Justification"
-msgstr ""
+msgstr "Justificare verticală"
 
 #: common/env_vars.cpp:70
 msgid ""
@@ -4345,12 +4362,15 @@ msgstr ""
 #: common/env_vars.cpp:77
 msgid "A directory containing project templates installed with KiCad."
 msgstr ""
+"Un director care conține șabloanele de proiect instalate împreună cu KiCad."
 
 #: common/env_vars.cpp:79
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
 msgstr ""
+"Opțional. Poate fi definit dacă doriți să vă creați propriul dosar de "
+"șabloane de proiect."
 
 #: common/env_vars.cpp:82
 msgid ""
@@ -4360,22 +4380,31 @@ msgid ""
 "For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a folder "
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
+"Definit intern de KiCad (nu poate fi editat) și este setat la calea absolută "
+"a fișierului de proiect încărcat în prezent.  Această variabilă de mediu "
+"poate fi utilizată pentru a defini fișiere și căi de acces relative la "
+"proiectul încărcat în mod curent.  De exemplu, ${KIPRJMOD}/libs/"
+"footprints.pretty poate fi definit ca un dosar care conține o bibliotecă de "
+"amprente specifică proiectului numită footprints.pretty."
 
 #: common/env_vars.cpp:88
 msgid "A directory containing system-wide scripts installed with KiCad"
 msgstr ""
+"Un director care conține scripturi la nivel de sistem instalate cu KiCad"
 
 #: common/env_vars.cpp:90
 msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr ""
+"Un director care conține scripturile specifice utilizatorului instalate cu "
+"KiCad"
 
 #: common/env_vars.cpp:94
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
-msgstr ""
+msgstr "Versiune învechită a KICAD_TEMPLATE_DIR."
 
 #: common/env_vars.cpp:96
 msgid "Deprecated version of KICAD6_3DMODEL_DIR."
-msgstr ""
+msgstr "Versiune învechită a KICAD6_3DMODEL_DIR."
 
 #: common/env_vars.cpp:98
 msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
@@ -4383,17 +4412,17 @@ msgstr "Versiune învechită a KICAD6_FOOTPRINT_DIR."
 
 #: common/env_vars.cpp:100
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
-msgstr ""
+msgstr "Versiune învechită a KICAD_SYMBOL_DIR."
 
 #: common/exceptions.cpp:61 common/exceptions.cpp:89
 #, c-format
 msgid "from %s : %s() line:%d"
-msgstr ""
+msgstr "de la %s : %s() linie:%d"
 
 #: common/exceptions.cpp:75
 #, c-format
 msgid "%s in \"%s\", line %d, offset %d"
-msgstr ""
+msgstr "%s în \"%s\", linia %d, offset %d"
 
 #: common/exceptions.cpp:109
 #, c-format
@@ -4410,15 +4439,15 @@ msgstr ""
 
 #: common/filehistory.cpp:155
 msgid "No Files"
-msgstr ""
+msgstr "Nu există fișiere"
 
 #: common/filename_resolver.cpp:451
 msgid "The given path does not exist"
-msgstr ""
+msgstr "Calea dată nu există"
 
 #: common/filename_resolver.cpp:454
 msgid "3D model search path"
-msgstr ""
+msgstr "Calea de căutare a modelului 3D"
 
 #: common/filename_resolver.cpp:479
 msgid "Alias: "
@@ -4426,36 +4455,36 @@ msgstr "Alias: "
 
 #: common/filename_resolver.cpp:482
 msgid "This path:"
-msgstr ""
+msgstr "Această cale:"
 
 #: common/filename_resolver.cpp:485
 msgid "Existing path:"
-msgstr ""
+msgstr "Calea existentă:"
 
 #: common/filename_resolver.cpp:487
 msgid "Bad alias (duplicate name)"
-msgstr ""
+msgstr "Alias incorect (nume duplicat)"
 
 #: common/filename_resolver.cpp:609
 msgid "3D configuration directory is unknown"
-msgstr ""
+msgstr "Directorul de configurare 3D este necunoscut"
 
 #: common/filename_resolver.cpp:612 common/filename_resolver.cpp:637
 #: common/filename_resolver.cpp:662
 msgid "Write 3D search path list"
-msgstr ""
+msgstr "Scrieți lista căilor de căutare 3D"
 
 #: common/filename_resolver.cpp:634
 msgid "Could not open configuration file"
-msgstr ""
+msgstr "Nu s-a putut deschide fișierul de configurare"
 
 #: common/filename_resolver.cpp:661
 msgid "Problems writing configuration file"
-msgstr ""
+msgstr "Probleme la scrierea fișierului de configurare"
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:857
 msgid "Load Error"
-msgstr ""
+msgstr "Eroare la încărcare"
 
 #: common/footprint_info.cpp:101
 msgid "Errors were encountered loading footprints:"
@@ -4471,7 +4500,7 @@ msgstr ""
 #: common/fp_lib_table.cpp:300
 #, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr ""
+msgstr "Fișierele fp-lib-table nu conțin nicio bibliotecă cu numele \"%s\"."
 
 #: common/fp_lib_table.cpp:492 eeschema/symbol_lib_table.cpp:507
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:109
@@ -4482,7 +4511,7 @@ msgstr ""
 #: common/gestfich.cpp:190
 #, c-format
 msgid "Command \"%s\" could not found"
-msgstr ""
+msgstr "Comanda \"%s\" nu a fost găsită"
 
 #: common/gestfich.cpp:242
 #, c-format
@@ -4490,11 +4519,13 @@ msgid ""
 "Problem while running the PDF viewer\n"
 "Command is \"%s\""
 msgstr ""
+"Problemă la executarea vizualizatorului PDF\n"
+"Comanda este \"%s\""
 
 #: common/gestfich.cpp:249
 #, c-format
 msgid "Unable to find a PDF viewer for \"%s\""
-msgstr ""
+msgstr "Nu se poate găsi un vizualizator PDF pentru \"%s\""
 
 #: common/gestfich.cpp:343
 #, c-format
@@ -4503,13 +4534,16 @@ msgid ""
 "\n"
 "Unknown file type."
 msgstr ""
+"Nu se poate imprima '%s'.\n"
+"\n"
+"Tip de fișier necunoscut."
 
 #: common/gestfich.cpp:372 eeschema/eeschema.cpp:404 eeschema/eeschema.cpp:436
 #: gerbview/gerbview.cpp:231 kicad/project_template.cpp:243
 #: pcbnew/pcbnew.cpp:476
 #, c-format
 msgid "Cannot copy file \"%s\"."
-msgstr ""
+msgstr "Nu se poate copia fișierul \"%s\"."
 
 #: common/grid_tricks.cpp:241 common/tool/actions.cpp:152
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1808
@@ -4545,7 +4579,7 @@ msgstr "Ștergeți"
 
 #: common/grid_tricks.cpp:244
 msgid "Delete selected cells"
-msgstr ""
+msgstr "Ștergeți celulele selectate"
 
 #: common/grid_tricks.cpp:245 common/tool/actions.cpp:170
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -4559,7 +4593,7 @@ msgstr "Selectează tot"
 
 #: common/grid_tricks.cpp:245
 msgid "Select all cells"
-msgstr ""
+msgstr "Selectați toate celulele"
 
 #: common/hotkey_store.cpp:43
 msgid "Pan Left/Right"
@@ -4571,7 +4605,7 @@ msgstr ""
 
 #: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:255
 msgid "Finish Drawing"
-msgstr ""
+msgstr "Finalizați desenul"
 
 #: common/hotkey_store.cpp:47 common/hotkey_store.cpp:52
 msgid "Show Clarify Selection Menu"
@@ -4583,11 +4617,11 @@ msgstr "Adăugați la selecție"
 
 #: common/hotkey_store.cpp:49 common/hotkey_store.cpp:54
 msgid "Toggle Selection State"
-msgstr ""
+msgstr "Comutați starea de selecție"
 
 #: common/hotkey_store.cpp:50 common/hotkey_store.cpp:55
 msgid "Remove from Selection"
-msgstr ""
+msgstr "Eliminați din selecție"
 
 #: common/hotkey_store.cpp:57
 msgid "Ignore Grid Snaps"
@@ -4599,19 +4633,19 @@ msgstr ""
 
 #: common/hotkey_store.cpp:73
 msgid "Project Manager"
-msgstr ""
+msgstr "Manager de Proiect"
 
 #: common/hotkey_store.cpp:74 eeschema/eeschema_config.cpp:64
 #: eeschema/menubar.cpp:125 eeschema/sch_edit_frame.cpp:1244
 #: eeschema/sch_edit_frame.cpp:1257 kicad/tools/kicad_manager_actions.cpp:64
 msgid "Schematic Editor"
-msgstr ""
+msgstr "Editor de schemă"
 
 #: common/hotkey_store.cpp:75 kicad/tools/kicad_manager_actions.cpp:76
 #: pcbnew/menubar_pcb_editor.cpp:183 pcbnew/pcb_edit_frame.cpp:1238
 #: pcbnew/pcbnew_config.cpp:54
 msgid "PCB Editor"
-msgstr ""
+msgstr "Editor PCB"
 
 #: common/hotkey_store.cpp:76 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:86 pagelayout_editor/pl_editor_frame.cpp:471
@@ -4626,7 +4660,7 @@ msgstr "Gesturi"
 #: common/kiway.cpp:240
 #, c-format
 msgid "Failed to load kiface library \"%s\"."
-msgstr ""
+msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
 
 #: common/kiway.cpp:249
 #, c-format
@@ -4641,33 +4675,40 @@ msgid ""
 "\"%s\"\n"
 "could not be loaded\n"
 msgstr ""
+"Eroare fatală de instalare. Fișier:\n"
+"\"%s\"\n"
+"nu a putut fi încărcat\n"
 
 #: common/kiway.cpp:288
 msgid "It is missing.\n"
-msgstr ""
+msgstr "Lipsește.\n"
 
 #: common/kiway.cpp:290
+#, fuzzy
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
 msgstr ""
+"Este posibil să lipsească un fișier de bibliotecă partajată (.dll sau .so).\n"
 
 #: common/kiway.cpp:292
 msgid ""
 "From command line: argv[0]:\n"
 "'"
 msgstr ""
+"Din linia de comandă: argv[0]:\n"
+"'"
 
 #: common/kiway.cpp:397 common/kiway.cpp:401 common/kiway.cpp:405
 msgid "Error loading editor"
-msgstr ""
+msgstr "Eroare la încărcarea editorului"
 
 #: common/kiway.cpp:490
 #, c-format
 msgid "Unable to switch language to %s"
-msgstr ""
+msgstr "Nu se poate schimba limba în %s"
 
 #: common/languages_menu.cpp:48
 msgid "Set Language"
-msgstr ""
+msgstr "Setați limba"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
@@ -4915,15 +4956,15 @@ msgstr "Fire"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr "Buses"
+msgstr "Magistrale"
 
 #: common/layer_id.cpp:107
 msgid "Bus junctions"
-msgstr ""
+msgstr "Intersecții de magistrale"
 
 #: common/layer_id.cpp:108
 msgid "Junctions"
-msgstr "Noduri"
+msgstr "Intersecții"
 
 #: common/layer_id.cpp:109
 msgid "Labels"
@@ -4932,12 +4973,12 @@ msgstr "Etichete"
 #: common/layer_id.cpp:110
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
 msgid "Global labels"
-msgstr ""
+msgstr "Etichete globale"
 
 #: common/layer_id.cpp:111
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Hierarchical labels"
-msgstr ""
+msgstr "Etichete ierarhice"
 
 #: common/layer_id.cpp:112
 msgid "Pin numbers"
@@ -4977,7 +5018,7 @@ msgstr "Pini"
 
 #: common/layer_id.cpp:121
 msgid "Sheet borders"
-msgstr ""
+msgstr "Marginile foilor"
 
 #: common/layer_id.cpp:122
 msgid "Sheet backgrounds"
@@ -4985,7 +5026,7 @@ msgstr ""
 
 #: common/layer_id.cpp:123
 msgid "Sheet names"
-msgstr ""
+msgstr "Numele foilor"
 
 #: common/layer_id.cpp:124
 msgid "Sheet fields"
@@ -5002,19 +5043,19 @@ msgstr "Pin foaie"
 
 #: common/layer_id.cpp:127
 msgid "No-connect symbols"
-msgstr ""
+msgstr "Simboluri de neconectare"
 
 #: common/layer_id.cpp:128
 msgid "ERC warnings"
-msgstr ""
+msgstr "Avertismente ERC"
 
 #: common/layer_id.cpp:129
 msgid "ERC errors"
-msgstr ""
+msgstr "Erori ERC"
 
 #: common/layer_id.cpp:130 common/layer_id.cpp:170
 msgid "Helper items"
-msgstr ""
+msgstr "Elemente de ajutor"
 
 #: common/layer_id.cpp:131 common/layer_id.cpp:171 common/tool/grid_menu.cpp:40
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
@@ -5037,19 +5078,19 @@ msgstr "Cursorul"
 
 #: common/layer_id.cpp:135
 msgid "Highlighted items"
-msgstr ""
+msgstr "Elemente evidențiate"
 
 #: common/layer_id.cpp:136
 msgid "Hidden items"
-msgstr ""
+msgstr "Elemente ascunse"
 
 #: common/layer_id.cpp:137 common/layer_id.cpp:174
 msgid "Selection highlight"
-msgstr ""
+msgstr "Evidențiere selecție"
 
 #: common/layer_id.cpp:138 common/layer_id.cpp:168
 msgid "Drawing sheet"
-msgstr ""
+msgstr "Foaie de desen"
 
 #: common/layer_id.cpp:142
 msgid "Footprints front"
@@ -5073,7 +5114,7 @@ msgstr "Valori"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
 msgid "Reference designators"
-msgstr ""
+msgstr "Indicatori de referință"
 
 #: common/layer_id.cpp:146
 msgid "Footprint text front"
@@ -5085,7 +5126,7 @@ msgstr ""
 
 #: common/layer_id.cpp:148
 msgid "Hidden text"
-msgstr ""
+msgstr "Text ascuns"
 
 #: common/layer_id.cpp:149
 msgid "Pads front"
@@ -5110,7 +5151,7 @@ msgstr "Trasee"
 
 #: common/layer_id.cpp:153
 msgid "Through vias"
-msgstr ""
+msgstr "Prin via-uri"
 
 #: common/layer_id.cpp:154
 msgid "Bl/Buried vias"
@@ -5122,7 +5163,7 @@ msgstr "Microvia-uri"
 
 #: common/layer_id.cpp:156
 msgid "Via holes"
-msgstr ""
+msgstr "Găuri via"
 
 #: common/layer_id.cpp:157
 msgid "Via hole walls"
@@ -5130,7 +5171,7 @@ msgstr ""
 
 #: common/layer_id.cpp:158
 msgid "Plated holes"
-msgstr ""
+msgstr "Găuri placate"
 
 #: common/layer_id.cpp:159
 msgid "Plated hole walls"
@@ -5138,7 +5179,7 @@ msgstr ""
 
 #: common/layer_id.cpp:160
 msgid "Non-plated holes"
-msgstr ""
+msgstr "Găuri neplacate"
 
 #: common/layer_id.cpp:161 pcbnew/dialogs/panel_edit_options_base.cpp:315
 #: pcbnew/widgets/appearance_controls.cpp:347
@@ -5152,19 +5193,19 @@ msgstr "Fără conexiuni"
 
 #: common/layer_id.cpp:163
 msgid "DRC warnings"
-msgstr ""
+msgstr "Avertismente RDC"
 
 #: common/layer_id.cpp:164
 msgid "DRC errors"
-msgstr ""
+msgstr "Erori DRC"
 
 #: common/layer_id.cpp:165
 msgid "DRC exclusions"
-msgstr ""
+msgstr "Excluderi DRC"
 
 #: common/layer_id.cpp:166
 msgid "DRC marker shadows"
-msgstr ""
+msgstr "Umbre de marcaj DRC"
 
 #: common/layer_id.cpp:167 pcbnew/widgets/appearance_controls.cpp:352
 msgid "Anchors"
@@ -5172,15 +5213,15 @@ msgstr "Ancore"
 
 #: common/layer_id.cpp:172
 msgid "Grid axes"
-msgstr ""
+msgstr "Axele grilei"
 
 #: common/lib_id.cpp:280
 msgid "Illegal character found in logical library name"
-msgstr ""
+msgstr "Caracter ilegal găsit în numele bibliotecii logice"
 
 #: common/lib_id.cpp:296
 msgid "Illegal character found in revision"
-msgstr ""
+msgstr "Caracter ilegal găsit în revizuire"
 
 #: common/lib_tree_model.cpp:139 eeschema/lib_item.cpp:61
 #: eeschema/sch_pin.cpp:166 eeschema/symbol_editor/symbol_editor.cpp:1190
@@ -5205,7 +5246,7 @@ msgstr "Articol"
 #: common/libeval_compiler/libeval_compiler.cpp:565
 #, c-format
 msgid "Unrecognized character '%c'"
-msgstr ""
+msgstr "Caracter nerecunoscut \"%c"
 
 #: common/libeval_compiler/libeval_compiler.cpp:830
 msgid "Unknown parent of function parameters"
@@ -5221,23 +5262,23 @@ msgstr ""
 #: common/libeval_compiler/libeval_compiler.cpp:1035
 #, c-format
 msgid "Unrecognized item '%s'"
-msgstr ""
+msgstr "Element nerecunoscut '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:877
 #: common/libeval_compiler/libeval_compiler.cpp:977
 #, c-format
 msgid "Unrecognized property '%s'"
-msgstr ""
+msgstr "Proprietate nerecunoscută '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:912
 #, c-format
 msgid "Unrecognized function '%s'"
-msgstr ""
+msgstr "Funcție nerecunoscută '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1007
 #, c-format
 msgid "Missing units for '%s'| (%s)"
-msgstr ""
+msgstr "Unități lipsă pentru \"%s\"| (%s)"
 
 #: common/pgm_base.cpp:176
 msgid "No default editor found, you must choose it"
@@ -5245,15 +5286,15 @@ msgstr "Nu s-a găsit niciun editor predefinit, trebuie să-l alegeți"
 
 #: common/pgm_base.cpp:196
 msgid "Executable file (*.exe)|*.exe"
-msgstr ""
+msgstr "Fișier executabil (*.exe)|*.exe"
 
 #: common/pgm_base.cpp:198
 msgid "Executable file (*)|*"
-msgstr ""
+msgstr "Fișier executabil (*)|*"
 
 #: common/pgm_base.cpp:208
 msgid "Select Preferred Editor"
-msgstr ""
+msgstr "Selectați editorul preferat"
 
 #: common/pgm_base.cpp:222
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -5262,22 +5303,22 @@ msgstr "Variabila de mediu HOME este goală.  Nu se poate continua."
 #: common/pgm_base.cpp:233
 #, c-format
 msgid "%s is already running. Continue?"
-msgstr ""
+msgstr "%s rulează deja. Continuați?"
 
 #: common/pgm_base.cpp:615
 msgid "This language is not supported by the operating system."
-msgstr ""
+msgstr "Această limbă nu este suportată de sistemul de operare."
 
 #: common/pgm_base.cpp:666 common/pgm_base.cpp:704
 msgid "The KiCad language file for this language is not installed."
-msgstr ""
+msgstr "Fișierul de limbă KiCad pentru această limbă nu este instalat."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2307
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:244
 #: pcbnew/plugins/altium/altium_pcb.cpp:60
 #, c-format
 msgid "Cannot open file '%s'"
-msgstr ""
+msgstr "Nu se poate deschide fișierul '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2323
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2341
@@ -5285,47 +5326,47 @@ msgstr ""
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2363
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2369
 msgid "The selected file is not valid or might be corrupt!"
-msgstr ""
+msgstr "Fișierul selectat nu este valid sau este posibil să fie deteriorat!"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2468
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr ""
+msgstr "Număr neașteptat de puncte în \"%s\". A găsit %d, dar se aștept %d."
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:38
 #, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr ""
+msgstr "Lipsește nodul '%s' în '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:41
 #, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr ""
+msgstr "Nod necunoscut '%s' în '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:44
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Lipsește parametrul '%s' în '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:47
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Parametru necunoscut '%s' în '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:50
 #, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr ""
+msgstr "Imposibil de analizat \"%s\" în '%s'"
 
 #: common/plugins/eagle/eagle_parser.cpp:120
 #, c-format
 msgid "Invalid size %lld: too large"
-msgstr ""
+msgstr "Dimensiune invalidă %lld: prea mare"
 
 #: common/plugins/eagle/eagle_parser.cpp:282
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
-msgstr ""
+msgstr "Arc nevalid cu rază %f și unghi %f"
 
 #: common/project.cpp:312 common/project.cpp:317
 msgid "Error loading project footprint library table"
@@ -5333,40 +5374,40 @@ msgstr "Eroare la încărcarea tabelului bibliotecii de amprente a proiectului"
 
 #: common/project/project_archiver.cpp:90
 msgid "Could not open archive file\n"
-msgstr ""
+msgstr "Nu s-a putut deschide fișierul de arhivă\n"
 
 #: common/project/project_archiver.cpp:99
 msgid "Invalid archive file format\n"
-msgstr ""
+msgstr "Format de fișier de arhivă invalid\n"
 
 #: common/project/project_archiver.cpp:110
 #, c-format
 msgid "Extracting file \"%s\"\n"
-msgstr ""
+msgstr "Extragerea fișierului \"%s\"\n"
 
 #: common/project/project_archiver.cpp:146
 msgid "Error extracting file!\n"
-msgstr ""
+msgstr "Eroare la extragerea fișierului!\n"
 
 #: common/project/project_archiver.cpp:203
 #, c-format
 msgid "Unable to create archive file \"%s\"\n"
-msgstr ""
+msgstr "Nu se poate crea fișierul de arhivă \"%s\"\n"
 
 #: common/project/project_archiver.cpp:249
 #, c-format
 msgid "Archive file \"%s\"\n"
-msgstr ""
+msgstr "Fișier de arhivă \"%s\"\n"
 
 #: common/project/project_archiver.cpp:259
 #, c-format
 msgid "Archive file \"%s\": Failed!\n"
-msgstr ""
+msgstr "Fișier de arhivă \"%s\": A eșuat!\n"
 
 #: common/project/project_archiver.cpp:285
 #, c-format
 msgid "Zip archive \"%s\" created (%s uncompressed, %s compressed)\n"
-msgstr ""
+msgstr "Arhiva Zip \"%s\" creată (%s necomprimată, %s comprimată)\n"
 
 #: common/rc_item.cpp:328
 msgid "Excluded "
@@ -5383,19 +5424,19 @@ msgstr "Atenție: "
 #: common/richio.cpp:171
 #, c-format
 msgid "Unable to open filename \"%s\" for reading"
-msgstr ""
+msgstr "Nu se poate deschide numele de fișier \"%s\" pentru citire"
 
 #: common/richio.cpp:205 common/richio.cpp:300
 msgid "Maximum line length exceeded"
-msgstr ""
+msgstr "Lungimea maximă a liniei depășită"
 
 #: common/richio.cpp:267
 msgid "Line length exceeded"
-msgstr ""
+msgstr "Lungimea liniei depășită"
 
 #: common/richio.cpp:551
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
-msgstr ""
+msgstr "OUTPUTSTREAM_OUTPUTFORMATTER eroare de scriere"
 
 #: common/settings/color_settings.cpp:310
 msgid "(Footprints)"
@@ -5407,7 +5448,7 @@ msgstr "KiCad Predefinit"
 
 #: common/settings/color_settings.cpp:367
 msgid "KiCad Classic"
-msgstr ""
+msgstr "KiCad Clasic"
 
 #: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:58
 #, c-format
@@ -5417,7 +5458,7 @@ msgstr "Câmp %d"
 #: common/tool/action_menu.cpp:211
 #, c-format
 msgid "Close %s"
-msgstr ""
+msgstr "Închide %s"
 
 #: common/tool/action_menu.cpp:223 common/tool/actions.cpp:113
 msgid "Quit"
@@ -5426,7 +5467,7 @@ msgstr "Închide"
 #: common/tool/action_menu.cpp:224
 #, c-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Părăsiți %s"
 
 #: common/tool/actions.cpp:41
 msgid "New..."
@@ -5434,11 +5475,11 @@ msgstr "Nou..."
 
 #: common/tool/actions.cpp:41
 msgid "Create a new document in the editor"
-msgstr ""
+msgstr "Creați un nou document în editor"
 
 #: common/tool/actions.cpp:47
 msgid "New Library..."
-msgstr ""
+msgstr "Biblioteca nouă..."
 
 #: common/tool/actions.cpp:47
 msgid "Create a new library folder"
@@ -5458,43 +5499,43 @@ msgstr "Deschide..."
 
 #: common/tool/actions.cpp:59
 msgid "Open existing document"
-msgstr ""
+msgstr "Deschideți documentul existent"
 
 #: common/tool/actions.cpp:65
 msgid "Save changes"
-msgstr ""
+msgstr "Salvați modificările"
 
 #: common/tool/actions.cpp:71 eeschema/tools/ee_actions.cpp:138
 msgid "Save As..."
-msgstr ""
+msgstr "Salvați ca..."
 
 #: common/tool/actions.cpp:71
 msgid "Save current document to another location"
-msgstr ""
+msgstr "Salvați documentul curent într-o altă locație"
 
 #: common/tool/actions.cpp:77
 msgid "Save Copy As..."
-msgstr ""
+msgstr "Salvați copia ca..."
 
 #: common/tool/actions.cpp:77
 msgid "Save a copy of the current document to another location"
-msgstr ""
+msgstr "Salvați o copie a documentului curent într-o altă locație"
 
 #: common/tool/actions.cpp:83
 msgid "Save All"
-msgstr ""
+msgstr "Salvează tot"
 
 #: common/tool/actions.cpp:83
 msgid "Save all changes"
-msgstr ""
+msgstr "Salvați toate modificările"
 
 #: common/tool/actions.cpp:89
 msgid "Throw away changes"
-msgstr ""
+msgstr "Aruncați modificările"
 
 #: common/tool/actions.cpp:95
 msgid "Page Settings..."
-msgstr ""
+msgstr "Setări pagină..."
 
 #: common/tool/actions.cpp:95
 msgid "Settings for paper size and title block info"
@@ -5515,15 +5556,15 @@ msgstr "Trasare"
 
 #: common/tool/actions.cpp:113
 msgid "Close the current editor"
-msgstr ""
+msgstr "Închideți editorul curent"
 
 #: common/tool/actions.cpp:120
 msgid "Cancel current tool"
-msgstr ""
+msgstr "Anulați instrumentul curent"
 
 #: common/tool/actions.cpp:126
 msgid "Show Context Menu"
-msgstr ""
+msgstr "Afișați meniul contextual"
 
 #: common/tool/actions.cpp:126
 msgid "Perform the right-mouse-button action"
@@ -5535,7 +5576,7 @@ msgstr "Anulează"
 
 #: common/tool/actions.cpp:135
 msgid "Undo last edit"
-msgstr ""
+msgstr "Anulați ultima modificare"
 
 #: common/tool/actions.cpp:146
 msgid "Redo"
@@ -5543,7 +5584,7 @@ msgstr "Refă"
 
 #: common/tool/actions.cpp:146
 msgid "Redo last edit"
-msgstr ""
+msgstr "Refaceți ultima modificare"
 
 #: common/tool/actions.cpp:152
 msgid "Cut selected item(s) to clipboard"
@@ -5559,7 +5600,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:170
 msgid "Select all items on screen"
-msgstr ""
+msgstr "Selectați toate elementele de pe ecran"
 
 #: common/tool/actions.cpp:174
 msgid "Paste Special..."
@@ -5575,27 +5616,27 @@ msgstr "Duplicați"
 
 #: common/tool/actions.cpp:179
 msgid "Duplicates the selected item(s)"
-msgstr ""
+msgstr "Dublează elementele selectate"
 
 #: common/tool/actions.cpp:190
 msgid "Deletes selected item(s)"
-msgstr ""
+msgstr "Șterge elementele selectate"
 
 #: common/tool/actions.cpp:195
 msgid "Interactive Delete Tool"
-msgstr ""
+msgstr "Instrument interactiv de ștergere"
 
 #: common/tool/actions.cpp:195
 msgid "Delete clicked items"
-msgstr ""
+msgstr "Ștergerea elementelor pe care s-a făcut clic"
 
 #: common/tool/actions.cpp:202
 msgid "Change Edit Method"
-msgstr ""
+msgstr "Modificarea metodei de editare"
 
 #: common/tool/actions.cpp:202
 msgid "Change edit method constraints"
-msgstr ""
+msgstr "Modificarea constrângerilor metodei de editare"
 
 #: common/tool/actions.cpp:207 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
@@ -5604,43 +5645,43 @@ msgstr "Găsește"
 
 #: common/tool/actions.cpp:207
 msgid "Find text"
-msgstr ""
+msgstr "Găsiți textul"
 
 #: common/tool/actions.cpp:213 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
-msgstr ""
+msgstr "Găsește și înlocuiește"
 
 #: common/tool/actions.cpp:213
 msgid "Find and replace text"
-msgstr ""
+msgstr "Găsește și înlocuiește textul"
 
 #: common/tool/actions.cpp:219 pcbnew/dialogs/dialog_find_base.cpp:93
 msgid "Find Next"
-msgstr ""
+msgstr "Găsește următorul"
 
 #: common/tool/actions.cpp:219
 msgid "Find next match"
-msgstr ""
+msgstr "Găsiți următoarea potrivire"
 
 #: common/tool/actions.cpp:225
 msgid "Find Next Marker"
-msgstr ""
+msgstr "Găsiți următorul marcaj"
 
 #: common/tool/actions.cpp:231
 msgid "Replace and Find Next"
-msgstr ""
+msgstr "Înlocuiește și găsește următorul"
 
 #: common/tool/actions.cpp:231
 msgid "Replace current match and find next"
-msgstr ""
+msgstr "Înlocuiți potrivirea curentă și găsiți următorul"
 
 #: common/tool/actions.cpp:237
 msgid "Replace All"
-msgstr ""
+msgstr "Înlocuiți tot"
 
 #: common/tool/actions.cpp:237
 msgid "Replace all matches"
-msgstr ""
+msgstr "Înlocuiți toate potrivirile"
 
 #: common/tool/actions.cpp:248
 msgid "Previous Marker"
@@ -5689,12 +5730,12 @@ msgstr ""
 #: common/tool/actions.cpp:313 common/widgets/mathplot.cpp:1761
 #: eeschema/sim/sim_plot_frame_base.cpp:79
 msgid "Zoom In"
-msgstr ""
+msgstr "Mărește"
 
 #: common/tool/actions.cpp:319 common/widgets/mathplot.cpp:1762
 #: eeschema/sim/sim_plot_frame_base.cpp:83
 msgid "Zoom Out"
-msgstr ""
+msgstr "Micșorează"
 
 #: common/tool/actions.cpp:331
 msgid "Zoom to Selection"
@@ -5702,35 +5743,35 @@ msgstr ""
 
 #: common/tool/actions.cpp:344
 msgid "Cursor Up"
-msgstr ""
+msgstr "Cursor sus"
 
 #: common/tool/actions.cpp:350
 msgid "Cursor Down"
-msgstr ""
+msgstr "Cursor jos"
 
 #: common/tool/actions.cpp:356
 msgid "Cursor Left"
-msgstr ""
+msgstr "Cursor stânga"
 
 #: common/tool/actions.cpp:362
 msgid "Cursor Right"
-msgstr ""
+msgstr "Cursor dreapta"
 
 #: common/tool/actions.cpp:369
 msgid "Cursor Up Fast"
-msgstr ""
+msgstr "Cursor sus rapid"
 
 #: common/tool/actions.cpp:375
 msgid "Cursor Down Fast"
-msgstr ""
+msgstr "Cursor jos rapid"
 
 #: common/tool/actions.cpp:381
 msgid "Cursor Left Fast"
-msgstr ""
+msgstr "Cursor stânga rapid"
 
 #: common/tool/actions.cpp:387
 msgid "Cursor Right Fast"
-msgstr ""
+msgstr "Cursor dreapta rapid"
 
 #: common/tool/actions.cpp:393
 msgid "Click"
@@ -5782,39 +5823,39 @@ msgstr ""
 
 #: common/tool/actions.cpp:440
 msgid "Switch to Fast Grid 1"
-msgstr ""
+msgstr "Treceți la grilă rapidă 1"
 
 #: common/tool/actions.cpp:445
 msgid "Switch to Fast Grid 2"
-msgstr ""
+msgstr "Treceți la grilă rapidă 2"
 
 #: common/tool/actions.cpp:450
 msgid "Switch to Next Grid"
-msgstr ""
+msgstr "Treceți la grila următoare"
 
 #: common/tool/actions.cpp:454
 msgid "Switch to Previous Grid"
-msgstr ""
+msgstr "Treceți la grila anterioară"
 
 #: common/tool/actions.cpp:459
 msgid "Set the grid origin point"
-msgstr ""
+msgstr "Setați punctul de origine al grilei"
 
 #: common/tool/actions.cpp:472
 msgid "Show Grid"
-msgstr ""
+msgstr "Arată grila"
 
 #: common/tool/actions.cpp:472
 msgid "Display grid dots or lines in the edit window"
-msgstr ""
+msgstr "Afișați puncte sau linii de grilă în fereastra de editare"
 
 #: common/tool/actions.cpp:477
 msgid "Grid Properties..."
-msgstr ""
+msgstr "Proprietăți grilă..."
 
 #: common/tool/actions.cpp:477
 msgid "Set grid dimensions"
-msgstr ""
+msgstr "Setați dimensiunile grilei"
 
 #: common/tool/actions.cpp:482
 msgid "Use inches"
@@ -5830,7 +5871,7 @@ msgstr "Mils"
 
 #: common/tool/actions.cpp:487
 msgid "Use mils"
-msgstr ""
+msgstr "Utilizați mils"
 
 #: common/tool/actions.cpp:492
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5845,35 +5886,36 @@ msgstr "Milimetri"
 
 #: common/tool/actions.cpp:492
 msgid "Use millimeters"
-msgstr ""
+msgstr "Utilizați milimetri"
 
 #: common/tool/actions.cpp:501
 msgid "Switch units"
-msgstr ""
+msgstr "Schimbaţi unitățile"
 
 #: common/tool/actions.cpp:501
 msgid "Switch between imperial and metric units"
-msgstr ""
+msgstr "Schimbaţi între unitățile imperiale și metrice"
 
 #: common/tool/actions.cpp:506
 msgid "Polar Coordinates"
-msgstr ""
+msgstr "Coordonate polare"
 
 #: common/tool/actions.cpp:506
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr ""
+msgstr "Schimbaţi între sistemele de coordonate polare și carteziene"
 
 #: common/tool/actions.cpp:512
 msgid "Reset Local Coordinates"
-msgstr ""
+msgstr "Resetați coordonatele locale"
 
 #: common/tool/actions.cpp:518
 msgid "Always Show Cursor"
-msgstr ""
+msgstr "Arată întotdeauna cursorul"
 
 #: common/tool/actions.cpp:518
+#, fuzzy
 msgid "Display crosshairs even in selection tool"
-msgstr ""
+msgstr "Afișați reticulele chiar și în instrumentul de selecție"
 
 #: common/tool/actions.cpp:523
 msgid "Full-Window Crosshairs"
@@ -5885,7 +5927,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:528
 msgid "Single Layer View Mode"
-msgstr ""
+msgstr "Modul de vizualizare a unui singur strat"
 
 #: common/tool/actions.cpp:528
 msgid "Toggle inactive layers between normal and dimmed"
@@ -5901,7 +5943,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:537
 msgid "Select item(s)"
-msgstr ""
+msgstr "Selectați articolele"
 
 #: common/tool/actions.cpp:544
 msgid "Measure Tool"
@@ -5913,7 +5955,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:553
 msgid "Show 3D viewer window"
-msgstr ""
+msgstr "Afișați fereastra de vizualizare 3D"
 
 #: common/tool/actions.cpp:558 eeschema/symbol_viewer_frame.cpp:100
 #: eeschema/symbol_viewer_frame.cpp:902
@@ -5963,7 +6005,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:584
 msgid "Update Schematic from PCB..."
-msgstr ""
+msgstr "Actualizați schema de la PCB..."
 
 #: common/tool/actions.cpp:584
 msgid "Update schematic with changes made to PCB"
@@ -6135,7 +6177,7 @@ msgstr ""
 
 #: common/widgets/gal_options_panel.cpp:87
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr ""
+msgstr "Grafică accelerată de hardware (recomandat)"
 
 #: common/widgets/gal_options_panel.cpp:88
 msgid ""
@@ -6467,7 +6509,7 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:370 gerbview/files.cpp:66
 msgid "Drill files"
-msgstr ""
+msgstr "Fișiere de foraj"
 
 #: common/wildcards_and_files_ext.cpp:376
 msgid "SVG files"
@@ -7119,6 +7161,8 @@ msgstr ""
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
+"Rețeaua %s este conectată grafic la magistrală %s, dar nu este membră a "
+"acestei magistrale"
 
 #: eeschema/connection_graph.cpp:2862
 #, c-format
@@ -7705,11 +7749,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:41
 msgid "Bus Definitions"
-msgstr ""
+msgstr "Definiții magistrală"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:58
 msgid "Bus Aliases"
-msgstr ""
+msgstr "Aliasuri ale magistralei"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:68
 msgid "Alias Name"
@@ -7730,11 +7774,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:183
 msgid "Bus Alias Name"
-msgstr ""
+msgstr "Nume alias al magistralei"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:184
 msgid "Net or Bus Name"
-msgstr ""
+msgstr "Numele rețelei sau al magistralei"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
@@ -8258,7 +8302,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:362
 msgid "Checking bus conflicts..."
-msgstr ""
+msgstr "Se verifică conflictele magistralelor..."
 
 #: eeschema/dialogs/dialog_erc.cpp:367
 msgid "Checking conflicts..."
@@ -8537,7 +8581,7 @@ msgstr "Fire și etichete fire"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
 msgid "Buses && bus labels"
-msgstr ""
+msgstr "Etichete magistrale"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
 msgid "Sheet titles"
@@ -8709,7 +8753,7 @@ msgstr "Diametru:"
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
 msgid "Junction Properties"
-msgstr ""
+msgstr "Proprietățile intersecției"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item.cpp:51
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:496
@@ -9306,12 +9350,18 @@ msgid ""
 "This schematic has one or more buses with more than one label.\n"
 "This was allowed in previous KiCad versions but is no longer permitted."
 msgstr ""
+"Această schemă are una sau mai multemagistrale cu mai mult de o etichetă.\n"
+"Acest lucru era permis în versiunile anterioare KiCad, dar nu mai este "
+"permis."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:23
 msgid ""
 "Please select a new name for each of the buses below.\n"
 "A name has been suggested for you based on the labels attached to the bus."
 msgstr ""
+"Vă rugăm să selectați un nume nou pentru fiecare dintre magistralele de mai "
+"jos.\n"
+"Un nume a fost sugerat pentru dvs. pe baza etichetelor atașate la autobuz."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:32
 msgid "Proposed new name:"
@@ -9323,7 +9373,7 @@ msgstr "Acceptați numele"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.h:53
 msgid "Migrate Buses"
-msgstr ""
+msgstr "Migrați magistrale"
 
 #: eeschema/dialogs/dialog_netlist.cpp:269
 #: eeschema/dialogs/dialog_netlist_base.h:67
@@ -11256,7 +11306,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "&Restrict buses and wires to H and V orientation"
-msgstr "&Limitați busele și firele la orientarea O și V"
+msgstr "&Limitați magistralele și firele la orientarea O și V"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "Mouse drag performs drag (G) operation"
@@ -11474,7 +11524,7 @@ msgstr ""
 msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr ""
 "Procent din dimensiunea textului cu care se decaleajă textul deasupra sau "
-"dedesubtul firului sau busului"
+"dedesubtul firului sau magistralei"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 msgid "Default line thickness:"
@@ -11491,7 +11541,7 @@ msgstr "Conexiuni"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
 msgid "Junction dot size:"
-msgstr ""
+msgstr "Dimensiunea punctului de intersecție:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 msgid "Smallest"
@@ -11851,7 +11901,7 @@ msgstr ""
 #: eeschema/erc.cpp:294
 #, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
-msgstr ""
+msgstr "Aliasul magistralei %s are definiții contradictorii pe %s și %s"
 
 #: eeschema/erc.cpp:364
 #, c-format
@@ -11946,26 +11996,31 @@ msgstr ""
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
 msgstr ""
+"Conflict între definițiile aliasurilor de magistrală între foile schematice"
 
 #: eeschema/erc_item.cpp:106
 msgid "More than one name given to this bus or net"
-msgstr ""
+msgstr "Mai multe denumiri date acestei magistrale sau acestei rețele"
 
 #: eeschema/erc_item.cpp:110
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr ""
+"Rețeaua este conectată grafic la o magistrală, dar nu este un membru al "
+"magistralei"
 
 #: eeschema/erc_item.cpp:114
 msgid "Label attached to bus item does not describe a bus"
-msgstr ""
+msgstr "Eticheta atașată la elementul de magistrală nu descrie o magistrală"
 
 #: eeschema/erc_item.cpp:118
 msgid "Buses are graphically connected but share no bus members"
 msgstr ""
+"Magistralele sunt conectate grafic, dar nu împart niciun membru al "
+"magistralei"
 
 #: eeschema/erc_item.cpp:122
 msgid "Invalid connection between bus and net items"
-msgstr ""
+msgstr "Conexiune nevalabilă între autobuz și elementele rețelei"
 
 #: eeschema/erc_item.cpp:126 pcbnew/drc/drc_item.cpp:165
 msgid "Unresolved text variable"
@@ -12603,11 +12658,11 @@ msgstr ""
 
 #: eeschema/sch_bus_entry.cpp:393
 msgid "Bus to Wire Entry"
-msgstr "Intrare bus în fir"
+msgstr "Intrare magistrală în fir"
 
 #: eeschema/sch_bus_entry.cpp:399
 msgid "Bus to Bus Entry"
-msgstr ""
+msgstr "Intrare magistrală în magistrală"
 
 #: eeschema/sch_bus_entry.cpp:463 eeschema/sch_line.cpp:881
 msgid "Wire"
@@ -12615,11 +12670,11 @@ msgstr "Fir"
 
 #: eeschema/sch_bus_entry.cpp:464 eeschema/sch_line.cpp:882
 msgid "Bus"
-msgstr "Bus"
+msgstr "Magistrală"
 
 #: eeschema/sch_bus_entry.cpp:467
 msgid "Bus Entry Type"
-msgstr ""
+msgstr "Tipul de intrare în magistrală"
 
 #: eeschema/sch_connection.cpp:404
 msgid "Connection Name"
@@ -12633,7 +12688,7 @@ msgstr ""
 #: eeschema/sch_connection.cpp:419 eeschema/sch_connection.cpp:434
 #, c-format
 msgid "Bus Alias %s Members"
-msgstr ""
+msgstr "Alias magistrală %s Membri"
 
 #: eeschema/sch_edit_frame.cpp:166 pcbnew/board_connected_item.cpp:136
 msgid "Not Found"
@@ -12750,7 +12805,7 @@ msgstr "Fir vertical, lungime %s"
 #: eeschema/sch_line.cpp:718
 #, c-format
 msgid "Vertical Bus, length %s"
-msgstr ""
+msgstr "Magistrală verticală, lungime %s"
 
 #: eeschema/sch_line.cpp:719
 #, c-format
@@ -12765,7 +12820,7 @@ msgstr "Fir orizontal, lungime %s"
 #: eeschema/sch_line.cpp:727
 #, c-format
 msgid "Horizontal Bus, length %s"
-msgstr ""
+msgstr "Magistrală orizontală, lungime %s"
 
 #: eeschema/sch_line.cpp:728
 #, c-format
@@ -12780,7 +12835,7 @@ msgstr "Fir, lungime %s"
 #: eeschema/sch_line.cpp:736
 #, c-format
 msgid "Bus, length %s"
-msgstr ""
+msgstr "Magistrală, lungime %s"
 
 #: eeschema/sch_line.cpp:737
 #, c-format
@@ -13012,7 +13067,7 @@ msgstr ""
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2540
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2572
 msgid "Bus Entry needed"
-msgstr ""
+msgstr "Intrare în magistrală necesară"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:143
 #, c-format
@@ -13731,7 +13786,7 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <th>Definiție bus</th>\n"
+"        <th>Definiție magistrală</th>\n"
 "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
 ";&nbsp;&nbsp;</th>\n"
 "        <th>Resultat Nets</th>\n"
@@ -13875,6 +13930,8 @@ msgstr ""
 #: eeschema/sch_validators.cpp:204
 msgid "Signal name contains '[' or ']' but is not a valid vector bus name"
 msgstr ""
+"Numele semnalului conține '[' sau ']', dar nu este un nume valid de "
+"magistrală vectorială"
 
 #: eeschema/sheet.cpp:60
 #, c-format
@@ -15174,23 +15231,23 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:293
 msgid "Add a no-connection flag"
-msgstr ""
+msgstr "Adăugați un indicator de neconectare"
 
 #: eeschema/tools/ee_actions.cpp:299
 msgid "Add Junction"
-msgstr ""
+msgstr "Adăugați intersecție"
 
 #: eeschema/tools/ee_actions.cpp:299
 msgid "Add a junction"
-msgstr ""
+msgstr "Adăugați o intersecție"
 
 #: eeschema/tools/ee_actions.cpp:305
 msgid "Add Wire to Bus Entry"
-msgstr "Adăugați fir în intrare bus"
+msgstr "Adăugați fir în intrare magistrală"
 
 #: eeschema/tools/ee_actions.cpp:305
 msgid "Add a wire entry to a bus"
-msgstr "Adăugați intrare fir în bus"
+msgstr "Adăugați intrare fir în magistrală"
 
 #: eeschema/tools/ee_actions.cpp:311
 msgid "Add Label"
@@ -15467,11 +15524,11 @@ msgstr "Împărțiți un fir în segmente care pot fi trase independent"
 
 #: eeschema/tools/ee_actions.cpp:513
 msgid "Break Bus"
-msgstr ""
+msgstr "Rupți magistrala"
 
 #: eeschema/tools/ee_actions.cpp:513
 msgid "Divide a bus into segments which can be dragged independently"
-msgstr ""
+msgstr "Împărțiți magistrala în segmente care pot fi mutate în mod independent"
 
 #: eeschema/tools/ee_actions.cpp:524
 msgid "Add a simulator probe"
@@ -15582,11 +15639,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:604
 msgid "Bus Definitions..."
-msgstr ""
+msgstr "Definiții magistrală..."
 
 #: eeschema/tools/ee_actions.cpp:604
 msgid "Manage bus definitions"
-msgstr ""
+msgstr "Gestionarea definițiilor de magistrală"
 
 #: eeschema/tools/ee_actions.cpp:609
 msgid "Export Drawing to Clipboard"
@@ -15646,11 +15703,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:643
 msgid "Force H/V Wires and Buses"
-msgstr "Forțează firele și busele O/H"
+msgstr "Forțează firele și magistralele O/H"
 
 #: eeschema/tools/ee_actions.cpp:643
 msgid "Switch H & V only mode for new wires and buses"
-msgstr "Comutați modul O&V numai pentru firele și busele noi"
+msgstr "Comutați modul O&V numai pentru firele și magistralele noi"
 
 #: eeschema/tools/ee_actions.cpp:651
 msgid "Enter Sheet"
@@ -15682,7 +15739,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:674
 msgid "Add Junctions to Selection where needed"
-msgstr ""
+msgstr "Adăugați intersecție la selecție acolo unde este necesar"
 
 #: eeschema/tools/ee_actions.cpp:682
 msgid "Add Wire"
@@ -15694,25 +15751,25 @@ msgstr "Adăugați un fir"
 
 #: eeschema/tools/ee_actions.cpp:689
 msgid "Add Bus"
-msgstr ""
+msgstr "Adăugați magistrală"
 
 #: eeschema/tools/ee_actions.cpp:689
 msgid "Add a bus"
-msgstr ""
+msgstr "Adăugați o magistrală"
 
 #: eeschema/tools/ee_actions.cpp:695
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:76
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:133
 msgid "Unfold from Bus"
-msgstr ""
+msgstr "Desfășurare din magistrală"
 
 #: eeschema/tools/ee_actions.cpp:695
 msgid "Break a wire out of a bus"
-msgstr "Rupeți un fir dintr-un bus"
+msgstr "Rupeți un fir dintr-o magistrală"
 
 #: eeschema/tools/ee_actions.cpp:708
 msgid "Finish Wire or Bus"
-msgstr "Terminați firul sau busul"
+msgstr "Terminați firul sau magistrala"
 
 #: eeschema/tools/ee_actions.cpp:708
 msgid "Complete drawing at current segment"
@@ -15728,11 +15785,11 @@ msgstr "Termină firul în segmentul curent"
 
 #: eeschema/tools/ee_actions.cpp:718
 msgid "Finish Bus"
-msgstr ""
+msgstr "Terminați magistrala"
 
 #: eeschema/tools/ee_actions.cpp:718
 msgid "Complete bus with current segment"
-msgstr ""
+msgstr "Completați magistrala cu segmentul curent"
 
 #: eeschema/tools/ee_actions.cpp:723
 msgid "Finish Lines"
@@ -15895,7 +15952,7 @@ msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:654
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr "Locația joncțiunii nu conține fire și/sau pini conectabili."
+msgstr "Locația intersecțiilor nu conține fire și/sau pini conectabili."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1043
 msgid "Click over a sheet."
@@ -15986,11 +16043,11 @@ msgstr ""
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:115
 msgid "No bus selected"
-msgstr ""
+msgstr "Nicio magistrală selectată"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:124
 msgid "Bus has no members"
-msgstr ""
+msgstr "Magistrala nu are niciun membru"
 
 #: eeschema/tools/symbol_editor_control.cpp:162
 msgid "No symbol library selected."
@@ -16259,7 +16316,7 @@ msgstr "Nu există straturi goale în care să încărcați fișierul."
 
 #: gerbview/excellon_read_drill_file.cpp:280
 msgid "Error reading EXCELLON drill file"
-msgstr ""
+msgstr "Eroare la citirea fișierului de foraj EXCELLON"
 
 #: gerbview/excellon_read_drill_file.cpp:420
 #, c-format
@@ -16391,7 +16448,7 @@ msgstr ""
 
 #: gerbview/files.cpp:356
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr ""
+msgstr "Deschideți fișierul (fișierele) de foraj NC (Excellon)"
 
 #: gerbview/files.cpp:453
 #, c-format
@@ -16518,7 +16575,7 @@ msgstr ""
 
 #: gerbview/gerbview_frame.cpp:74 gerbview/menubar.cpp:88
 msgid "Clear Recent Drill Files"
-msgstr ""
+msgstr "Ștergeți fișierele de forare recente"
 
 #: gerbview/gerbview_frame.cpp:76 gerbview/menubar.cpp:106
 msgid "Clear Recent Job Files"
@@ -16578,7 +16635,7 @@ msgstr "Goliți fișierele Gerber recente"
 
 #: gerbview/menubar.cpp:84
 msgid "Open Recent Drill File"
-msgstr ""
+msgstr "Deschideți fișierul de foraj recent"
 
 #: gerbview/menubar.cpp:102
 msgid "Open Recent Job File"
@@ -16664,13 +16721,15 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Excellon Drill File(s)..."
-msgstr ""
+msgstr "Deschideți fișierul (fișierele) de foraj Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
 msgid ""
 "Open Excellon drill file(s) on the current layer. Previous data will be "
 "deleted"
 msgstr ""
+"Deschideți fișierul (fișierele) de foraj Excellon pe stratul curent. Datele "
+"anterioare vor fi șterse"
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Gerber Job File..."
@@ -16688,7 +16747,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:58
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr ""
+msgstr "Deschideți un fișier de arhivă comprimată (Gerber și Foraj)"
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Show Layers Manager"
@@ -18909,15 +18968,15 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1946
 msgid "Via: (diam - drill)"
-msgstr ""
+msgstr "Via: (diam - foraj)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1947
 msgid "Plated Pad: (diam - drill)"
-msgstr ""
+msgstr "Pad placat: (diam - foraj)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1948
 msgid "NP Pad: (diam - drill)"
-msgstr ""
+msgstr "Pad NP: (diam - foraj)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1967
 msgid "Board Classes"
@@ -20607,7 +20666,7 @@ msgstr "Componente"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:718
 msgid "Drill holes"
-msgstr ""
+msgstr "Găuri de foraj"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:725
 #, c-format
@@ -20652,7 +20711,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:258
 msgid "Drill Holes"
-msgstr ""
+msgstr "Găuri de foraj"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:265
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:214
@@ -22662,7 +22721,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
 msgid "Use drill/place file origin as origin"
-msgstr ""
+msgstr "Folosiți originea fișierului de foraj/plasare ca origine"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Save the origin coordinates in the file"
@@ -22670,7 +22729,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:73
 msgid "Generate Drill File"
-msgstr ""
+msgstr "Generarea fișierului de foraj"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:74
 msgid "Generate Map File"
@@ -22683,11 +22742,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill.cpp:382
 #, c-format
 msgid "Could not write drill and/or map files to folder \"%s\"."
-msgstr ""
+msgstr "Nu s-a putut scrie fișiere de foraj și/sau de hartă în dosarul \"%s\"."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:431
 msgid "Save Drill Report File"
-msgstr ""
+msgstr "Salvați fișier raport de foraj"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:457
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:116
@@ -22708,7 +22767,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
 msgid "Drill File Format"
-msgstr ""
+msgstr "Formatul fișierului de foraj"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 msgid "Excellon"
@@ -22751,11 +22810,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use alternate drill mode"
-msgstr ""
+msgstr "Utilizați modul alternativ de foraj"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
 msgid "Oval Holes Drill Mode"
-msgstr ""
+msgstr "Mod de găuri ovale"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:69
 msgid ""
@@ -22764,6 +22823,12 @@ msgid ""
 " \"Use alternate mode\" uses another drill/ route command (G85)\n"
 "(Use it only if the recommended command does not work)"
 msgstr ""
+"Găurile ovale creează frecvent probleme pentru producătorii de PCB .\n"
+"\"Utilizați comanda de rută\" utilizează comanda obișnuită de traseu G00 "
+"(recomandată).\n"
+"\"Utilizarea modului alternativ\" (Utilizează modul alternativ) utilizează o "
+"altă comandă de găurire/rutare (G85)\n"
+"(Folosiți-o numai dacă comanda recomandată nu funcționează)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:76
 msgid "Gerber X2"
@@ -22784,26 +22849,28 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "Creates a drill map in PS, HPGL or other formats"
-msgstr ""
+msgstr "Creează o hartă de foraj în PS, HPGL sau alte formate"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Drill/place file origin"
-msgstr ""
+msgstr "Originea fișierului de foraj/plasare"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
-msgstr ""
+msgstr "Origine foraj"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:100
 msgid ""
 "Choose the coordinate origin: absolute or relative to the drill/place file "
 "origin"
 msgstr ""
+"Alegeți originea coordonatelor: absolută sau relativă față de originea "
+"fișierului de foraj/plasare"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
 msgid "Drill Units"
-msgstr ""
+msgstr "Unități de foraj"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
 msgid "Decimal format (recommended)"
@@ -22851,7 +22918,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:91
 msgid "Generate Drill Files"
-msgstr ""
+msgstr "Generarea fișierelor de foraj"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:66
@@ -23076,11 +23143,11 @@ msgstr "Setați stratul la valorile predefinite:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:195
 msgid "Via Drill"
-msgstr ""
+msgstr "Foraj Via"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:197
 msgid "uVia Drill"
-msgstr ""
+msgstr "Foraj μVia"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
@@ -23361,7 +23428,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_move_exact.cpp:109
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around drill/place origin"
-msgstr ""
+msgstr "Rotire în jurul originii foraj/plasare"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:203
 #: pcbnew/dialogs/dialog_position_relative.cpp:161
@@ -23735,6 +23802,8 @@ msgid ""
 "Warning: Pad drill will leave no copper or drill shape and pad shape do not "
 "overlap."
 msgstr ""
+"Avertisment: Forajul pad nu va lăsa cupru sau forma găurii și forma pad nu "
+"se suprapun."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1254
 msgid "Warning: Negative local clearance values will have no effect."
@@ -24258,7 +24327,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot.cpp:64
 msgid "Generate Drill Files..."
-msgstr ""
+msgstr "Generarea de fișiere de foraj..."
 
 #: pcbnew/dialogs/dialog_plot.cpp:670
 msgid "HPGL pen size constrained."
@@ -24348,7 +24417,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
 msgid "Use drill/place file origin"
-msgstr ""
+msgstr "Utilizați originea fișierului de foraj/plasare"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:109
 msgid ""
@@ -24360,7 +24429,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot_base.cpp:113
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:229
 msgid "Drill marks:"
-msgstr ""
+msgstr "Semne de foraj:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:117
 msgid "Actual size"
@@ -24963,7 +25032,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:230
 msgid "No drill mark"
-msgstr ""
+msgstr "Fără marcaj de foraj"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:231
 msgid "Small mark"
@@ -24971,7 +25040,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:232
 msgid "Real drill"
-msgstr ""
+msgstr "Foraj real"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:241
 msgid "One page per layer"
@@ -25293,11 +25362,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
 msgid "Via drill size must be smaller than via diameter"
-msgstr ""
+msgstr "Dimensiunea de foraj trebuie să fie mai mică decât diametrul via"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
-msgstr ""
+msgstr "Foraj Via:"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
@@ -25313,7 +25382,7 @@ msgstr "&Via-uri"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Pads"
-msgstr ""
+msgstr "&Pad-uri"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 msgid "&Remove unused layers"
@@ -25754,7 +25823,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:38
 msgid "Allow micro vias (uVias)"
-msgstr ""
+msgstr "Permiteți micro vias (µVia-uri)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:50
 msgid "Arc/circle approximated by segments"
@@ -25846,11 +25915,11 @@ msgstr "µVia-uri"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:330
 msgid "Minimum uVia diameter:"
-msgstr ""
+msgstr "Diametrul minim µVia:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:344
 msgid "Minimum uVia hole:"
-msgstr ""
+msgstr "Gaura minimă µVia:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:367
 msgid "Silkscreen"
@@ -26840,7 +26909,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:93
 msgid "Drilled holes too close together"
-msgstr ""
+msgstr "Găuri prea aproape una de alta"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Track width"
@@ -26852,7 +26921,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Drill out of range"
-msgstr ""
+msgstr "Foraj în afara razei de acțiune"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Via diameter"
@@ -26864,7 +26933,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:117
 msgid "Micro via drill out of range"
-msgstr ""
+msgstr "Foraj μVia în afara razei de acțiune"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Courtyards overlap"
@@ -29618,6 +29687,7 @@ msgstr ""
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s at line %zu"
 msgstr ""
+"Se așteaptă valoarea mărimii burghiului, dar a găsit %s!%s!%s la linia %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:515
 #, c-format
@@ -30339,7 +30409,7 @@ msgstr "Valorilor via netclass"
 #: pcbnew/router/router_tool.cpp:238 pcbnew/tools/drawing_tool.cpp:104
 #, c-format
 msgid "Via %s, drill %s"
-msgstr ""
+msgstr "Via %s, foraj %s"
 
 #: pcbnew/router/router_tool.cpp:242 pcbnew/tools/drawing_tool.cpp:110
 #, c-format
@@ -31769,11 +31839,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:577
 msgid "Drill Files (.drl)..."
-msgstr ""
+msgstr "Fișiere de foraj (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:577
 msgid "Generate Excellon drill file(s)"
-msgstr ""
+msgstr "Generare fișiere de foraj Excellon"
 
 #: pcbnew/tools/pcb_actions.cpp:582
 msgid "Component Placement (.pos)..."
@@ -31873,11 +31943,13 @@ msgstr "Adăugați o amprentă"
 
 #: pcbnew/tools/pcb_actions.cpp:650
 msgid "Drill/Place File Origin"
-msgstr ""
+msgstr "Originea fișierului de foraj/plasare"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Place origin point for drill files and component placement files"
 msgstr ""
+"Poziționarea punctului de origine pentru fișierele de găurire și fișierele "
+"de plasare a componentelor"
 
 #: pcbnew/tools/pcb_actions.cpp:657
 msgid "Toggle Lock"
@@ -32393,6 +32465,8 @@ msgid ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
 msgstr ""
+"Selectează o conexiune sau extinde o selecție existentă la intersecție, pad-"
+"uri sau conexiuni întregi"
 
 #: pcbnew/tools/pcb_actions.cpp:1201
 msgid "Select All Tracks in Net"
@@ -32729,7 +32803,7 @@ msgstr ""
 
 #: pcbnew/track.cpp:719 pcbnew/track.cpp:1100
 msgid "Drill"
-msgstr ""
+msgstr "Foraj"
 
 #: pcbnew/track.cpp:730
 #, c-format
@@ -33529,7 +33603,7 @@ msgstr ""
 
 #: resources/linux/mime/kicad-gerbers.xml.in:10
 msgid "Excellon drill file"
-msgstr ""
+msgstr "Fișier de foraj Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 msgid "KiCad Project"
