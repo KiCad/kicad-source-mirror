@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-04-08 20:48+0000\n"
+"PO-Revision-Date: 2021-04-08 22:48+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -7326,6 +7326,11 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"検索したパス:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:344
 msgid "Generating BOM requires a fully annotated schematic."
@@ -23071,7 +23076,7 @@ msgstr "印刷モード"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "白い背景に黒の要素としてエクスポート"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -23149,7 +23154,7 @@ msgstr "0.1 inch"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "Vrml Units for Output Files"
-msgstr ""
+msgstr "VRML出力ファイルの単位"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
@@ -23160,6 +23165,8 @@ msgid ""
 "If checked: copy footprints 3D models in a folder\n"
 "If not checked: merge footprints 3D models in the vrml board file\n"
 msgstr ""
+"チェックした場合: フットプリントの 3D モデルをフォルダーにコピーする\n"
+"チェックしない場合: VRMLボードファイル内のフットプリント3Dモデルをマージする\n"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
@@ -26063,9 +26070,8 @@ msgid "Keep out pads"
 msgstr "配線禁止パッド"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
-#, fuzzy
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr "パッドがこの領域に重なっている場合に DRC エラーを発生させる"
+msgstr "パッドがこの領域に重なっている場合、DRC エラーを発生させる"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
 msgid "Keep out copper fill"
@@ -26081,7 +26087,7 @@ msgstr "配線禁止フットプリント"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:66
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr ""
+msgstr "フットプリントのコートヤードとこのエリアが重なっている場合、DRCエラーを発生させます"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
 msgid "Constrain outline to H, V and 45 deg"
@@ -26606,7 +26612,7 @@ msgstr "マウスで配線セグメントをドラッグした時に実行され
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:339
 msgid "Moves the track segment without moving connected tracks"
-msgstr "接続された配線を移動することなく配線セグメントを移動"
+msgstr "接続された配線を移動せずに、配線セグメントを移動します"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:343
 #: pcbnew/tools/pcb_actions.cpp:1350
@@ -26631,7 +26637,7 @@ msgstr "配線の角度を制限することなく最も近い接続点に配線
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:364
 msgid "Draw an outline to show the sheet size."
-msgstr ""
+msgstr "シートサイズを示す枠線を描画します。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:368
 msgid "Refill zones after Zone Properties dialog"
@@ -27745,9 +27751,9 @@ msgid "netclass '%s'"
 msgstr "ネットクラス '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:265 pcbnew/drc/drc_engine.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "ネットクラス '%s'"
+msgstr "ネットクラス '%s' (差動ペア)"
 
 #: pcbnew/drc/drc_engine.cpp:415
 msgid "keepout area"
@@ -29112,7 +29118,7 @@ msgstr ""
 
 #: pcbnew/generate_footprint_info.cpp:120
 msgid "doc url"
-msgstr ""
+msgstr "doc url"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
 msgid "Centimeter"
@@ -29211,7 +29217,7 @@ msgstr "不正な浮動小数点数"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1344
 msgid "Invalid Bezier curve created"
-msgstr ""
+msgstr "不正なベジェ曲線が作成されました"
 
 #: pcbnew/initpcb.cpp:49
 msgid ""
@@ -29253,9 +29259,8 @@ msgstr "フットプリント ライブラリー \"%s\" を \"%s\" へ保存し�
 
 #: pcbnew/menubar_footprint_editor.cpp:71
 #: pcbnew/menubar_footprint_editor.cpp:80
-#, fuzzy
 msgid "Footprint..."
-msgstr "フットプリント (&F)..."
+msgstr "フットプリント..."
 
 #: pcbnew/menubar_footprint_editor.cpp:72 pcbnew/menubar_pcb_editor.cpp:111
 msgid "Graphics..."
@@ -29374,7 +29379,6 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:149
-#, fuzzy
 msgid "Footprints to Library..."
 msgstr "フットプリントをライブラリーにエクスポート..."
 
@@ -29387,9 +29391,8 @@ msgstr ""
 "(このライブラリーにある他のフットプリントを削除しません)"
 
 #: pcbnew/menubar_pcb_editor.cpp:154
-#, fuzzy
 msgid "Footprints to New Library..."
-msgstr "新規ライブラリーへフットプリントをエクスポート..."
+msgstr "フットプリントを新しいライブラリーにエクスポート..."
 
 #: pcbnew/menubar_pcb_editor.cpp:155
 msgid ""
@@ -30530,6 +30533,8 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
+"CADSTAR のパッド定義 '%s' は KiCad でサポートされていない複雑なパッドスタックです。 "
+"手動での修正が必要な場合もあるので、インポートされたパッドを確認してください。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1044
 #, c-format
@@ -30543,7 +30548,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1079
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
-msgstr ""
+msgstr "CADSTAR のパッド定義 '%s' にインポート エラーがあります: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1114
 #, c-format
