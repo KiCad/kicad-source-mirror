@@ -1623,22 +1623,28 @@ void OPENGL_GAL::EndGroup()
 
 void OPENGL_GAL::DrawGroup( int aGroupNumber )
 {
-    if( m_groups[aGroupNumber] )
-        m_cachedManager->DrawItem( *m_groups[aGroupNumber] );
+    auto group = m_groups.find( aGroupNumber );
+
+    if( group != m_groups.end() )
+        m_cachedManager->DrawItem( *group->second );
 }
 
 
 void OPENGL_GAL::ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor )
 {
-    if( m_groups[aGroupNumber] )
-        m_cachedManager->ChangeItemColor( *m_groups[aGroupNumber], aNewColor );
+    auto group = m_groups.find( aGroupNumber );
+
+    if( group != m_groups.end() )
+        m_cachedManager->ChangeItemColor( *group->second, aNewColor );
 }
 
 
 void OPENGL_GAL::ChangeGroupDepth( int aGroupNumber, int aDepth )
 {
-    if( m_groups[aGroupNumber] )
-        m_cachedManager->ChangeItemDepth( *m_groups[aGroupNumber], aDepth );
+    auto group = m_groups.find( aGroupNumber );
+
+    if( group != m_groups.end() )
+        m_cachedManager->ChangeItemDepth( *group->second, aDepth );
 }
 
 
