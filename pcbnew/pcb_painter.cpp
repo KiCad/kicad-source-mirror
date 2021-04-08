@@ -1164,9 +1164,11 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 else
                 {
                     SHAPE_POLY_SET polySet;
+
+                    // Use ERROR_INSIDE because it avoids Clipper and is therefore much faster.
                     aPad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ),
                                                                 clearance,
-                                                                bds.m_MaxError, ERROR_OUTSIDE );
+                                                                bds.m_MaxError, ERROR_INSIDE );
                     m_gal->DrawPolygon( polySet );
                 }
             }
