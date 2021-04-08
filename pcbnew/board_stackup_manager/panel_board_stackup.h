@@ -178,7 +178,11 @@ private:
      */
     void updateCopperLayerCount();
 
-    void onUpdateThicknessValue( wxUpdateUIEvent& event ) override;
+    /**
+     * Recompute the board thickness and update the textbox
+     */
+    void computeBoardThickness();
+
     void onColorSelected( wxCommandEvent& event );
     void onMaterialChange( wxCommandEvent& event );
     void onThicknessChange( wxCommandEvent& event );

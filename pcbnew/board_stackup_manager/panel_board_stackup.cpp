@@ -114,6 +114,7 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
 
     buildLayerStackPanel( true );
     synchronizeWithBoard( true );
+    computeBoardThickness();
 
     m_choiceCopperLayers->Bind( wxEVT_CHOICE,
             [&]( wxCommandEvent& )
@@ -208,6 +209,7 @@ void PANEL_SETUP_BOARD_STACKUP::onAddDielectricLayer( wxCommandEvent& event )
     brd_stackup_item->AddDielectricPrms( new_sublayer+1 );
 
     rebuildLayerStackPanel();
+    computeBoardThickness();
 }
 
 
@@ -258,6 +260,7 @@ void PANEL_SETUP_BOARD_STACKUP::onRemoveDielectricLayer( wxCommandEvent& event )
     brd_stackup_item->RemoveDielectricPrms( sublayer );
 
     rebuildLayerStackPanel();
+    computeBoardThickness();
 }
 
 
@@ -317,7 +320,7 @@ wxColor PANEL_SETUP_BOARD_STACKUP::GetSelectedColor( int aRow ) const
 }
 
 
-void PANEL_SETUP_BOARD_STACKUP::onUpdateThicknessValue( wxUpdateUIEvent& event )
+void PANEL_SETUP_BOARD_STACKUP::computeBoardThickness()
 {
     int thickness = 0;
 
@@ -339,7 +342,7 @@ void PANEL_SETUP_BOARD_STACKUP::onUpdateThicknessValue( wxUpdateUIEvent& event )
 
     // The text in the event will translate to the value for the text control
     // and is only updated if it changed
-    event.SetText( thicknessStr );
+    m_tcCTValue->SetValue( thicknessStr );
 }
 
 
@@ -1109,6 +1112,7 @@ void PANEL_SETUP_BOARD_STACKUP::ImportSettingsFrom( BOARD* aBoard )
     m_board = savedBrd;
 
     rebuildLayerStackPanel();
+    computeBoardThickness();
 }
 
 
@@ -1271,6 +1275,8 @@ void PANEL_SETUP_BOARD_STACKUP::onThicknessChange( wxCommandEvent& event )
     int idx = GetSublayerId( row );
 
     item->SetThickness( ValueFromString( m_frame->GetUserUnits(), value ), idx );
+
+    computeBoardThickness();
 }
 
 
