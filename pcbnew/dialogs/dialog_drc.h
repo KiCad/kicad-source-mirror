@@ -96,7 +96,7 @@ private:
     void OnChangingNotebookPage( wxNotebookEvent& aEvent ) override;
 
     void deleteAllMarkers( bool aIncludeExclusions );
-    void refreshBoardEditor();
+    void refreshEditor();
 
     // PROGRESS_REPORTER calls
     bool updateUI() override;
@@ -105,7 +105,7 @@ private:
     BOARD_DESIGN_SETTINGS& bds() { return m_currentBoard->GetDesignSettings(); }
 
     BOARD*             m_currentBoard;     // the board currently on test
-    PCB_EDIT_FRAME*    m_brdEditor;
+    PCB_EDIT_FRAME*    m_frame;
     bool               m_running;
     std::atomic<bool>  m_cancelled;
     bool               m_drcRun;
@@ -116,7 +116,7 @@ private:
     wxString           m_footprintsTitleTemplate;
 
     RC_ITEMS_PROVIDER* m_markersProvider;
-    RC_TREE_MODEL*     m_markerTreeModel;
+    RC_TREE_MODEL*     m_markersTreeModel;
 
     RC_ITEMS_PROVIDER* m_unconnectedItemsProvider;
     RC_TREE_MODEL*     m_unconnectedTreeModel;

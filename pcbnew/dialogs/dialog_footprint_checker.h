@@ -33,28 +33,43 @@ class FOOTPRINT_EDIT_FRAME;
 
 class DIALOG_FOOTPRINT_CHECKER: public DIALOG_FOOTPRINT_CHECKER_BASE
 {
-    FOOTPRINT_EDIT_FRAME* m_frame;
-    RC_TREE_MODEL*        m_markersTreeModel;
-
-    void runChecks();
-    void deleteAllMarkers();
-
-    void OnRunChecksClick( wxCommandEvent& aEvent ) override;
-    void OnCancelClick( wxCommandEvent& aEvent ) override;
-    void OnClose( wxCloseEvent& event ) override;
-
-    void OnSelectItem( wxDataViewEvent& event ) override;
-    void OnLeftDClickItem( wxMouseEvent& event ) override;
-    void OnDeleteAllClick( wxCommandEvent& event ) override;
-
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
 public:
     DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParent );
     ~DIALOG_FOOTPRINT_CHECKER();
 
     void SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider );
+
+private:
+    void syncCheckboxes();
+    void updateDisplayedCounts();
+
+    void runChecks();
+
+    void deleteAllMarkers();
+    void refreshEditor();
+
+    void OnRunChecksClick( wxCommandEvent& aEvent ) override;
+    void OnCancelClick( wxCommandEvent& aEvent ) override;
+    void OnClose( wxCloseEvent& event ) override;
+
+    void OnSeverity( wxCommandEvent& aEvent ) override;
+
+    void OnSelectItem( wxDataViewEvent& event ) override;
+    void OnLeftDClickItem( wxMouseEvent& event ) override;
+    void OnDeleteOneClick( wxCommandEvent& event ) override;
+    void OnDeleteAllClick( wxCommandEvent& event ) override;
+
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
+private:
+    FOOTPRINT_EDIT_FRAME* m_frame;
+    bool                  m_checksRun;
+
+    RC_TREE_MODEL*        m_markersTreeModel;
+    RC_ITEMS_PROVIDER*    m_markersProvider;
+
+    int                   m_severities;
 };
 
 #endif // DIALOG_FOOTPRINT_CHECKER_H

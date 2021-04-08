@@ -23,6 +23,7 @@
 
 #include <wx/wx.h>
 #include <dialog_footprint_checker.h>
+#include <widgets/appearance_controls.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <pcb_marker.h>
@@ -34,7 +35,10 @@
 
 DIALOG_FOOTPRINT_CHECKER::DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParent ) :
         DIALOG_FOOTPRINT_CHECKER_BASE( aParent ),
-        m_frame( aParent )
+        m_frame( aParent ),
+        m_checksRun( false ),
+        m_markersProvider( nullptr ),
+        m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
     m_markersTreeModel = new RC_TREE_MODEL( m_frame, m_markersDataView );
     m_markersDataView->AssociateModel( m_markersTreeModel );
@@ -47,9 +51,10 @@ DIALOG_FOOTPRINT_CHECKER::DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParen
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
 
     m_sdbSizerOK->SetDefault();
-    m_sdbSizer->SetSizeHints( this );
-    GetSizer()->SetSizeHints(this);
-    Centre();
+
+    syncCheckboxes();
+
+    finishDialogSettings();
 }
 
 
@@ -70,6 +75,19 @@ bool DIALOG_FOOTPRINT_CHECKER::TransferDataToWindow()
 bool DIALOG_FOOTPRINT_CHECKER::TransferDataFromWindow()
 {
     return true;
+}
+
+
+// Don't globally define this; different facilities use different definitions of "ALL"
+static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SEVERITY_EXCLUSION;
+
+
+void DIALOG_FOOTPRINT_CHECKER::syncCheckboxes()
+{
+    m_showAll->SetValue( m_severities == RPT_SEVERITY_ALL );
+    m_showErrors->SetValue( m_severities & RPT_SEVERITY_ERROR );
+    m_showWarnings->SetValue( m_severities & RPT_SEVERITY_WARNING );
+    m_showExclusions->SetValue( m_severities & RPT_SEVERITY_EXCLUSION );
 }
 
 
@@ -102,23 +120,153 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
 
     footprint->BuildPolyCourtyards( &errorHandler );
 
+    m_checksRun = true;
+
     SetMarkersProvider( new BOARD_DRC_ITEMS_PROVIDER( m_frame->GetBoard() ) );
 
-    WINDOW_THAWER thawer( m_frame );
-
-    m_frame->GetCanvas()->Refresh();
+    refreshEditor();
 }
 
 
 void DIALOG_FOOTPRINT_CHECKER::SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider )
 {
     m_markersTreeModel->SetProvider( aProvider );
+    updateDisplayedCounts();
 }
 
 
 void DIALOG_FOOTPRINT_CHECKER::OnRunChecksClick( wxCommandEvent& aEvent )
 {
+    m_checksRun = false;
+
     runChecks();
+}
+
+
+void DIALOG_FOOTPRINT_CHECKER::OnSelectItem( wxDataViewEvent& aEvent )
+{
+    BOARD*        board = m_frame->GetBoard();
+    RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
+    const KIID&   itemID = node ? RC_TREE_MODEL::ToUUID( aEvent.GetItem() ) : niluuid;
+    BOARD_ITEM*   item = board->GetItem( itemID );
+
+    if( node && item )
+    {
+        PCB_LAYER_ID             principalLayer = item->GetLayer();
+        LSET                     violationLayers;
+        std::shared_ptr<RC_ITEM> rc_item = node->m_RcItem;
+
+        if( rc_item->GetErrorCode() == DRCE_MALFORMED_COURTYARD )
+        {
+            BOARD_ITEM* a = board->GetItem( rc_item->GetMainItemID() );
+
+            if( a && ( a->GetFlags() & MALFORMED_B_COURTYARD ) > 0
+                  && ( a->GetFlags() & MALFORMED_F_COURTYARD ) == 0 )
+            {
+                principalLayer = B_CrtYd;
+            }
+            else
+            {
+                principalLayer = F_CrtYd;
+            }
+        }
+        else if (rc_item->GetErrorCode() == DRCE_INVALID_OUTLINE )
+        {
+            principalLayer = Edge_Cuts;
+        }
+        else
+        {
+            BOARD_ITEM*  a = board->GetItem( rc_item->GetMainItemID() );
+            BOARD_ITEM*  b = board->GetItem( rc_item->GetAuxItemID() );
+            BOARD_ITEM*  c = board->GetItem( rc_item->GetAuxItem2ID() );
+            BOARD_ITEM*  d = board->GetItem( rc_item->GetAuxItem3ID() );
+
+            if( a || b || c || d )
+                violationLayers = LSET::AllLayersMask();
+
+            if( a )
+                violationLayers &= a->GetLayerSet();
+
+            if( b )
+                violationLayers &= b->GetLayerSet();
+
+            if( c )
+                violationLayers &= c->GetLayerSet();
+
+            if( d )
+                violationLayers &= d->GetLayerSet();
+        }
+
+        if( violationLayers.count() )
+            principalLayer = violationLayers.Seq().front();
+        else
+            violationLayers.set( principalLayer );
+
+        WINDOW_THAWER thawer( m_frame );
+
+        m_frame->FocusOnItem( item );
+        m_frame->GetCanvas()->Refresh();
+
+        if( ( violationLayers & board->GetVisibleLayers() ) == 0 )
+        {
+            m_frame->GetAppearancePanel()->SetLayerVisible( principalLayer, true );
+            m_frame->GetCanvas()->Refresh();
+        }
+
+        if( board->GetVisibleLayers().test( principalLayer ) )
+            m_frame->SetActiveLayer( principalLayer );
+    }
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_FOOTPRINT_CHECKER::OnLeftDClickItem( wxMouseEvent& event )
+{
+    if( m_markersDataView->GetCurrentItem().IsOk() )
+    {
+        // turn control over to m_frame, hide this DIALOG_FOOTPRINT_CHECKER window,
+        // no destruction so we can preserve listbox cursor
+        if( !IsModal() )
+            Show( false );
+    }
+
+    // Do not skip aVent here: tihs is not useful, and Pcbnew crashes
+    // if skipped (at least on Windows)
+}
+
+
+void DIALOG_FOOTPRINT_CHECKER::OnSeverity( wxCommandEvent& aEvent )
+{
+    int flag = 0;
+
+    if( aEvent.GetEventObject() == m_showAll )
+        flag = RPT_SEVERITY_ALL;
+    else if( aEvent.GetEventObject() == m_showErrors )
+        flag = RPT_SEVERITY_ERROR;
+    else if( aEvent.GetEventObject() == m_showWarnings )
+        flag = RPT_SEVERITY_WARNING;
+    else if( aEvent.GetEventObject() == m_showExclusions )
+        flag = RPT_SEVERITY_EXCLUSION;
+
+    if( aEvent.IsChecked() )
+        m_severities |= flag;
+    else if( aEvent.GetEventObject() == m_showAll )
+        m_severities = RPT_SEVERITY_ERROR;
+    else
+        m_severities &= ~flag;
+
+    syncCheckboxes();
+
+    // Set the provider's severity levels through the TreeModel so that the old tree
+    // can be torn down before the severity changes.
+    //
+    // It's not clear this is required, but we've had a lot of issues with wxDataView
+    // being cranky on various platforms.
+
+    m_markersTreeModel->SetSeverities( m_severities );
+
+    updateDisplayedCounts();
 }
 
 
@@ -141,28 +289,25 @@ void DIALOG_FOOTPRINT_CHECKER::OnClose( wxCloseEvent& aEvent )
 }
 
 
-void DIALOG_FOOTPRINT_CHECKER::OnSelectItem( wxDataViewEvent& aEvent )
+void DIALOG_FOOTPRINT_CHECKER::refreshEditor()
 {
-    const KIID&   itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
-    BOARD_ITEM*   item = m_frame->GetBoard()->GetItem( itemID );
     WINDOW_THAWER thawer( m_frame );
 
-    m_frame->FocusOnItem( item );
     m_frame->GetCanvas()->Refresh();
-
-    aEvent.Skip();
 }
 
 
-void DIALOG_FOOTPRINT_CHECKER::OnLeftDClickItem( wxMouseEvent& event )
+void DIALOG_FOOTPRINT_CHECKER::OnDeleteOneClick( wxCommandEvent& aEvent )
 {
-    event.Skip();
+    // Clear the selection.  It may be the selected DRC marker.
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    if( m_markersDataView->GetCurrentItem().IsOk() )
-    {
-        if( !IsModal() )
-            Show( false );
-    }
+    m_markersTreeModel->DeleteCurrentItem( true );
+
+    // redraw the pcb
+    refreshEditor();
+
+    updateDisplayedCounts();
 }
 
 
@@ -170,9 +315,9 @@ void DIALOG_FOOTPRINT_CHECKER::OnDeleteAllClick( wxCommandEvent& event )
 {
     deleteAllMarkers();
 
-    WINDOW_THAWER thawer( m_frame );
-
-    m_frame->GetCanvas()->Refresh();
+    m_checksRun = false;
+    refreshEditor();
+    updateDisplayedCounts();
 }
 
 
@@ -184,4 +329,37 @@ void DIALOG_FOOTPRINT_CHECKER::deleteAllMarkers()
     m_markersTreeModel->DeleteItems( false, true, true );
 }
 
+
+void DIALOG_FOOTPRINT_CHECKER::updateDisplayedCounts()
+{
+    // Collect counts:
+
+    int numErrors = 0;
+    int numWarnings = 0;
+    int numExcluded = 0;
+
+    if( m_markersProvider )
+    {
+        numErrors += m_markersProvider->GetCount( RPT_SEVERITY_ERROR );
+        numWarnings += m_markersProvider->GetCount( RPT_SEVERITY_WARNING );
+        numExcluded += m_markersProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+    }
+
+    // Update badges:
+
+    if( !m_checksRun && numErrors == 0 )
+        numErrors = -1;
+
+    if( !m_checksRun && numWarnings == 0 )
+        numWarnings = -1;
+
+    m_errorsBadge->SetMaximumNumber( numErrors );
+    m_errorsBadge->UpdateNumber( numErrors, RPT_SEVERITY_ERROR );
+
+    m_warningsBadge->SetMaximumNumber( numWarnings );
+    m_warningsBadge->UpdateNumber( numWarnings, RPT_SEVERITY_WARNING );
+
+    m_exclusionsBadge->SetMaximumNumber( numExcluded );
+    m_exclusionsBadge->UpdateNumber( numExcluded, RPT_SEVERITY_EXCLUSION );
+}
 

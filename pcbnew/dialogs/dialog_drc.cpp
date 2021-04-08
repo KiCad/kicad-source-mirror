@@ -36,7 +36,6 @@
 #include <pcb_marker.h>
 #include <wx/wupdlock.h>
 #include <widgets/appearance_controls.h>
-#include <widgets/number_badge.h>
 #include <widgets/ui_common.h>
 #include <widgets/progress_reporter.h>
 #include <dialogs/wx_html_report_box.h>
@@ -52,7 +51,7 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         m_drcRun( false ),
         m_footprintTestsRun( false ),
         m_markersProvider( nullptr ),
-        m_markerTreeModel( nullptr ),
+        m_markersTreeModel( nullptr ),
         m_unconnectedItemsProvider( nullptr ),
         m_unconnectedTreeModel( nullptr ),
         m_footprintWarningsProvider( nullptr ),
@@ -61,18 +60,18 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
 
-    m_brdEditor    = aEditorFrame;
-    m_currentBoard = m_brdEditor->GetBoard();
+    m_frame    = aEditorFrame;
+    m_currentBoard = m_frame->GetBoard();
 
     m_messages->SetImmediateMode();
 
-    m_markerTreeModel = new RC_TREE_MODEL( m_brdEditor, m_markerDataView );
-    m_markerDataView->AssociateModel( m_markerTreeModel );
+    m_markersTreeModel = new RC_TREE_MODEL( m_frame, m_markerDataView );
+    m_markerDataView->AssociateModel( m_markersTreeModel );
 
-    m_unconnectedTreeModel = new RC_TREE_MODEL( m_brdEditor, m_unconnectedDataView );
+    m_unconnectedTreeModel = new RC_TREE_MODEL( m_frame, m_unconnectedDataView );
     m_unconnectedDataView->AssociateModel( m_unconnectedTreeModel );
 
-    m_footprintWarningsTreeModel = new RC_TREE_MODEL( m_brdEditor, m_footprintsDataView );
+    m_footprintWarningsTreeModel = new RC_TREE_MODEL( m_frame, m_footprintsDataView );
     m_footprintsDataView->AssociateModel( m_footprintWarningsTreeModel );
 
     if( Kiface().IsSingle() )
@@ -94,9 +93,9 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
 
 DIALOG_DRC::~DIALOG_DRC()
 {
-    m_brdEditor->FocusOnItem( nullptr );
+    m_frame->FocusOnItem( nullptr );
 
-    PCBNEW_SETTINGS* settings = m_brdEditor->GetPcbNewSettings();
+    PCBNEW_SETTINGS* settings = m_frame->GetPcbNewSettings();
     settings->m_DrcDialog.refill_zones          = m_cbRefillZones->GetValue();
     settings->m_DrcDialog.test_all_track_errors = m_cbReportAllTrackErrors->GetValue();
 
@@ -105,20 +104,20 @@ DIALOG_DRC::~DIALOG_DRC()
 
     settings->m_DrcDialog.severities            = m_severities;
 
-    m_markerTreeModel->DecRef();
+    m_markersTreeModel->DecRef();
 }
 
 
 void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 {
-    if( m_currentBoard != m_brdEditor->GetBoard() )
+    if( m_currentBoard != m_frame->GetBoard() )
     {
         // If m_currentBoard is not the current board, (for instance because a new board
         // was loaded), close the dialog, because many pointers are now invalid in lists
         SetReturnCode( wxID_CANCEL );
         Close();
 
-        DRC_TOOL* drcTool = m_brdEditor->GetToolManager()->GetTool<DRC_TOOL>();
+        DRC_TOOL* drcTool = m_frame->GetToolManager()->GetTool<DRC_TOOL>();
         drcTool->DestroyDRCDialog();
     }
 }
@@ -130,7 +129,7 @@ void DIALOG_DRC::initValues()
     m_unconnectedTitleTemplate = m_Notebook->GetPageText( 1 );
     m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
 
-    auto cfg = m_brdEditor->GetPcbNewSettings();
+    auto cfg = m_frame->GetPcbNewSettings();
 
     m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
     m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_all_track_errors );
@@ -140,7 +139,7 @@ void DIALOG_DRC::initValues()
         m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
 
     m_severities = cfg->m_DrcDialog.severities;
-    m_markerTreeModel->SetSeverities( m_severities );
+    m_markersTreeModel->SetSeverities( m_severities );
     m_unconnectedTreeModel->SetSeverities( m_severities );
     m_footprintWarningsTreeModel->SetSeverities( m_severities );
 
@@ -188,13 +187,13 @@ void DIALOG_DRC::syncCheckboxes()
 
 void DIALOG_DRC::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 {
-    m_brdEditor->ShowBoardSetupDialog( _( "Rules" ) );
+    m_frame->ShowBoardSetupDialog( _( "Rules" ) );
 }
 
 
 void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 {
-    DRC_TOOL* drcTool = m_brdEditor->GetToolManager()->GetTool<DRC_TOOL>();
+    DRC_TOOL* drcTool = m_frame->GetToolManager()->GetTool<DRC_TOOL>();
     bool      refillZones            = m_cbRefillZones->GetValue();
     bool      reportAllTrackErrors   = m_cbReportAllTrackErrors->GetValue();
     bool      testFootprints         = m_cbTestFootprints->GetValue();
@@ -203,7 +202,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     // and that they at least parse.
     try
     {
-        drcTool->GetDRCEngine()->InitEngine( m_brdEditor->GetDesignRulesPath() );
+        drcTool->GetDRCEngine()->InitEngine( m_frame->GetDesignRulesPath() );
     }
     catch( PARSE_ERROR& )
     {
@@ -227,7 +226,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     m_footprintTestsRun = false;
     m_cancelled = false;
 
-    m_brdEditor->RecordDRCExclusions();
+    m_frame->RecordDRCExclusions();
     deleteAllMarkers( true );
     m_unconnectedTreeModel->DeleteItems( false, true, true );
     m_footprintWarningsTreeModel->DeleteItems( false, true, true );
@@ -269,14 +268,14 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
         KIPLATFORM::UI::ForceFocus( m_markerDataView );
     }
 
-    refreshBoardEditor();
+    refreshEditor();
 }
 
 
 void DIALOG_DRC::SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider )
 {
     m_markersProvider = aProvider;
-    m_markerTreeModel->SetProvider( m_markersProvider );
+    m_markersTreeModel->SetProvider( m_markersProvider );
     updateDisplayedCounts();
 }
 
@@ -299,7 +298,7 @@ void DIALOG_DRC::SetFootprintsProvider( RC_ITEMS_PROVIDER* aProvider )
 
 void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 {
-    BOARD*        board = m_brdEditor->GetBoard();
+    BOARD*        board = m_frame->GetBoard();
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
     const KIID&   itemID = node ? RC_TREE_MODEL::ToUUID( aEvent.GetItem() ) : niluuid;
     BOARD_ITEM*   item = board->GetItem( itemID );
@@ -326,7 +325,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
                 }
             };
 
-    if( item && node )
+    if( node && item )
     {
         PCB_LAYER_ID             principalLayer = item->GetLayer();
         LSET                     violationLayers;
@@ -378,19 +377,19 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
         else
             violationLayers.set( principalLayer );
 
-        WINDOW_THAWER thawer( m_brdEditor );
+        WINDOW_THAWER thawer( m_frame );
 
-        m_brdEditor->FocusOnItem( item );
-        m_brdEditor->GetCanvas()->Refresh();
+        m_frame->FocusOnItem( item );
+        m_frame->GetCanvas()->Refresh();
 
         if( ( violationLayers & board->GetVisibleLayers() ) == 0 )
         {
-            m_brdEditor->GetAppearancePanel()->SetLayerVisible( principalLayer, true );
-            m_brdEditor->GetCanvas()->Refresh();
+            m_frame->GetAppearancePanel()->SetLayerVisible( principalLayer, true );
+            m_frame->GetCanvas()->Refresh();
         }
 
         if( board->GetVisibleLayers().test( principalLayer ) )
-            m_brdEditor->SetActiveLayer( principalLayer );
+            m_frame->SetActiveLayer( principalLayer );
     }
 
     aEvent.Skip();
@@ -401,7 +400,7 @@ void DIALOG_DRC::OnDRCItemDClick( wxDataViewEvent& aEvent )
 {
     if( aEvent.GetItem().IsOk() )
     {
-        // turn control over to m_brdEditor, hide this DIALOG_DRC window,
+        // turn control over to m_frame, hide this DIALOG_DRC window,
         // no destruction so we can preserve listbox cursor
         if( !IsModal() )
             Show( false );
@@ -479,7 +478,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         if( marker )
         {
             marker->SetExcluded( false );
-            m_brdEditor->GetCanvas()->GetView()->Update( marker );
+            m_frame->GetCanvas()->GetView()->Update( marker );
 
             // Update view
             static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
@@ -495,7 +494,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         if( marker )
         {
             marker->SetExcluded( true );
-            m_brdEditor->GetCanvas()->GetView()->Update( marker );
+            m_frame->GetCanvas()->GetView()->Update( marker );
 
             // Update view
             if( m_severities & RPT_SEVERITY_EXCLUSION )
@@ -511,10 +510,10 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     case 3:
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_ERROR;
 
-        for( PCB_MARKER* marker : m_brdEditor->GetBoard()->Markers() )
+        for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
         {
             if( marker->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
-                m_brdEditor->GetCanvas()->GetView()->Update( marker );
+                m_frame->GetCanvas()->GetView()->Update( marker );
         }
 
         // Rebuild model and view
@@ -525,10 +524,10 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     case 4:
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_WARNING;
 
-        for( PCB_MARKER* marker : m_brdEditor->GetBoard()->Markers() )
+        for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
         {
             if( marker->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
-                m_brdEditor->GetCanvas()->GetView()->Update( marker );
+                m_frame->GetCanvas()->GetView()->Update( marker );
         }
 
         // Rebuild model and view
@@ -540,13 +539,13 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     {
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
 
-        std::vector<PCB_MARKER*>& markers = m_brdEditor->GetBoard()->Markers();
+        std::vector<PCB_MARKER*>& markers = m_frame->GetBoard()->Markers();
 
         for( unsigned i = 0; i < markers.size(); )
         {
             if( markers[i]->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
             {
-                m_brdEditor->GetCanvas()->GetView()->Remove( markers.at( i ) );
+                m_frame->GetCanvas()->GetView()->Remove( markers.at( i ) );
                 markers.erase( markers.begin() + i );
             }
             else
@@ -560,15 +559,15 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case 6:
-        m_brdEditor->ShowBoardSetupDialog( _( "Violation Severity" ) );
+        m_frame->ShowBoardSetupDialog( _( "Violation Severity" ) );
         break;
     }
 
     if( modified )
     {
         updateDisplayedCounts();
-        refreshBoardEditor();
-        m_brdEditor->OnModify();
+        refreshEditor();
+        m_frame->OnModify();
     }
 }
 
@@ -601,7 +600,7 @@ void DIALOG_DRC::OnSeverity( wxCommandEvent& aEvent )
     // It's not clear this is required, but we've had a lot of issues with wxDataView
     // being cranky on various platforms.
 
-    m_markerTreeModel->SetSeverities( m_severities );
+    m_markersTreeModel->SetSeverities( m_severities );
     m_unconnectedTreeModel->SetSeverities( m_severities );
     m_footprintWarningsTreeModel->SetSeverities( m_severities );
 
@@ -662,13 +661,13 @@ void DIALOG_DRC::OnCancelClick( wxCommandEvent& aEvent )
         return;
     }
 
-    m_brdEditor->FocusOnItem( nullptr );
+    m_frame->FocusOnItem( nullptr );
 
     SetReturnCode( wxID_CANCEL );
 
     // The dialog can be modal or not modal.
     // Leave the DRC caller destroy (or not) the dialog
-    DRC_TOOL* drcTool = m_brdEditor->GetToolManager()->GetTool<DRC_TOOL>();
+    DRC_TOOL* drcTool = m_frame->GetToolManager()->GetTool<DRC_TOOL>();
     drcTool->DestroyDRCDialog();
 }
 
@@ -685,11 +684,11 @@ void DIALOG_DRC::OnChangingNotebookPage( wxNotebookEvent& aEvent )
 }
 
 
-void DIALOG_DRC::refreshBoardEditor()
+void DIALOG_DRC::refreshEditor()
 {
-    WINDOW_THAWER thawer( m_brdEditor );
+    WINDOW_THAWER thawer( m_frame );
 
-    m_brdEditor->GetCanvas()->Refresh();
+    m_frame->GetCanvas()->Refresh();
 }
 
 
@@ -699,7 +698,7 @@ void DIALOG_DRC::PrevMarker()
     {
         switch( m_Notebook->GetSelection() )
         {
-        case 0: m_markerTreeModel->PrevMarker();            break;
+        case 0: m_markersTreeModel->PrevMarker();           break;
         case 1: m_unconnectedTreeModel->PrevMarker();       break;
         case 2: m_footprintWarningsTreeModel->PrevMarker(); break;
         }
@@ -713,7 +712,7 @@ void DIALOG_DRC::NextMarker()
     {
         switch( m_Notebook->GetSelection() )
         {
-        case 0: m_markerTreeModel->NextMarker();            break;
+        case 0: m_markersTreeModel->NextMarker();           break;
         case 1: m_unconnectedTreeModel->NextMarker();       break;
         case 2: m_footprintWarningsTreeModel->NextMarker(); break;
         }
@@ -732,17 +731,17 @@ void DIALOG_DRC::ExcludeMarker()
     if( marker && !marker->IsExcluded() )
     {
         marker->SetExcluded( true );
-        m_brdEditor->GetCanvas()->GetView()->Update( marker );
+        m_frame->GetCanvas()->GetView()->Update( marker );
 
         // Update view
         if( m_severities & RPT_SEVERITY_EXCLUSION )
-            m_markerTreeModel->ValueChanged( node );
+            m_markersTreeModel->ValueChanged( node );
         else
-            m_markerTreeModel->DeleteCurrentItem( false );
+            m_markersTreeModel->DeleteCurrentItem( false );
 
         updateDisplayedCounts();
-        refreshBoardEditor();
-        m_brdEditor->OnModify();
+        refreshEditor();
+        m_frame->OnModify();
     }
 }
 
@@ -750,9 +749,9 @@ void DIALOG_DRC::ExcludeMarker()
 void DIALOG_DRC::deleteAllMarkers( bool aIncludeExclusions )
 {
     // Clear current selection list to avoid selection of deleted items
-    m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_markerTreeModel->DeleteItems( false, aIncludeExclusions, true );
+    m_markersTreeModel->DeleteItems( false, aIncludeExclusions, true );
 }
 
 
@@ -764,13 +763,13 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
         return false;
 
     std::map<KIID, EDA_ITEM*> itemMap;
-    m_brdEditor->GetBoard()->FillItemMap( itemMap );
+    m_frame->GetBoard()->FillItemMap( itemMap );
 
     EDA_UNITS              units = GetUserUnits();
-    BOARD_DESIGN_SETTINGS& bds = m_brdEditor->GetBoard()->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
     int                    count;
 
-    fprintf( fp, "** Drc report for %s **\n", TO_UTF8( m_brdEditor->GetBoard()->GetFileName() ) );
+    fprintf( fp, "** Drc report for %s **\n", TO_UTF8( m_frame->GetBoard()->GetFileName() ) );
 
     wxDateTime now = wxDateTime::Now();
 
@@ -826,12 +825,12 @@ void DIALOG_DRC::OnDeleteOneClick( wxCommandEvent& aEvent )
     if( m_Notebook->GetSelection() == 0 )
     {
         // Clear the selection.  It may be the selected DRC marker.
-        m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-        m_markerTreeModel->DeleteCurrentItem( true );
+        m_markersTreeModel->DeleteCurrentItem( true );
 
         // redraw the pcb
-        refreshBoardEditor();
+        refreshEditor();
     }
     else if( m_Notebook->GetSelection() == 1 )
     {
@@ -879,7 +878,7 @@ void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
     deleteAllMarkers( s_includeExclusions );
 
     m_drcRun = false;
-    refreshBoardEditor();
+    refreshEditor();
     updateDisplayedCounts();
 }
 

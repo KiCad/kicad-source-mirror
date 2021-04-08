@@ -17,7 +17,11 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
+#include <wx/stattext.h>
+#include <wx/checkbox.h>
+#include <widgets/number_badge.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -36,6 +40,16 @@ class DIALOG_FOOTPRINT_CHECKER_BASE : public DIALOG_SHIM
 
 	protected:
 		wxDataViewCtrl* m_markersDataView;
+		wxStaticText* m_showLabel;
+		wxCheckBox* m_showAll;
+		wxCheckBox* m_showErrors;
+		NUMBER_BADGE* m_errorsBadge;
+		wxCheckBox* m_showWarnings;
+		NUMBER_BADGE* m_warningsBadge;
+		wxCheckBox* m_showExclusions;
+		NUMBER_BADGE* m_exclusionsBadge;
+		wxStaticLine* m_staticline1;
+		wxButton* m_DeleteCurrentMarkerButton;
 		wxButton* m_DeleteAllMarkersButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -45,6 +59,8 @@ class DIALOG_FOOTPRINT_CHECKER_BASE : public DIALOG_SHIM
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnSelectItem( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnLeftDClickItem( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnSeverity( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteOneClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteAllClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRunChecksClick( wxCommandEvent& event ) { event.Skip(); }
