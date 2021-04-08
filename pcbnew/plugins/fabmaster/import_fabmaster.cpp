@@ -1897,7 +1897,7 @@ bool FABMASTER::loadZones( BOARD* aBoard )
     for( auto zone : zones_to_delete )
     {
         aBoard->Remove( zone );
-        free(zone);
+        delete zone;
     }
 
     return true;
@@ -2179,7 +2179,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     if( padstack == pads.end() )
                     {
                         ///TODO:Warning
-                        free( newpad );
+                        delete newpad;
                         continue;
                     }
                     else
