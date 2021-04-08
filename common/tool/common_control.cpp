@@ -39,7 +39,7 @@
 #include <eda_doc.h>
 
 #define URL_GET_INVOLVED "https://kicad.org/contribute/"
-#define URL_DONATE "https://go.kicad.org/donate/"
+#define URL_DONATE "https://go.kicad.org/app-donate"
 
 
 /// URL to launch a new issue with pre-populated description
