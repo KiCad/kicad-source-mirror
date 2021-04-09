@@ -6,7 +6,7 @@ build_linux:
   extends: .only_code
   interruptible: false
   cache:
-    key: "cache-linux"
+    key: "cache-fedora-linux"
     paths:
       - ccache/
   before_script:

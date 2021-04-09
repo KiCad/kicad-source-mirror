@@ -5,14 +5,15 @@ build_ubuntu20.04:
   stage: build
   tags:
     - kicad-ubuntu20.04
-  extends: .only_code
   image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/ubuntu:20.04
   only:
     - branches@kicad/code/kicad
     - tags@kicad/code/kicad
+  except:
+    - schedules
   interruptible: false
   cache:
-    key: "cache-linux"
+    key: "cache-ubuntu-linux"
     paths:
       - ccache/
   before_script:
@@ -62,6 +63,8 @@ report_build_warn_ubuntu20.04:
   only:
     - branches@kicad/code/kicad
     - tags@kicad/code/kicad
+  except:
+    - schedules
   needs:
     - job: build_ubuntu20.04
       artifacts: true
@@ -82,6 +85,8 @@ report_metrics_ubuntu20.04:
   only:
     - branches@kicad/code/kicad
     - tags@kicad/code/kicad
+  except:
+    - schedules
   needs:
     - job: build_ubuntu20.04
       artifacts: true
