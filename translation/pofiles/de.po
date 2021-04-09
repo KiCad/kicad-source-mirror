@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-04-08 22:48+0000\n"
+"PO-Revision-Date: 2021-04-10 08:26+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -16170,13 +16170,12 @@ msgstr "Löschen von nicht referenzierten Schaltplanpins"
 
 #: eeschema/tools/ee_actions.cpp:492 pcbnew/tools/pcb_actions.cpp:447
 msgid "Edit Text & Graphics Properties..."
-msgstr "Bearbeiten Text- und Grafikeigenschaften..."
+msgstr "Text- und Grafikeigenschaften bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "Edit text and graphics properties globally across schematic"
 msgstr ""
-"Bearbeiten der Text- und Grafikeigenschaften global für alle "
-"Schaltplanblätter"
+"Text- und Grafikeigenschaften global auf dem ganzen Schaltplan bearbeiten"
 
 #: eeschema/tools/ee_actions.cpp:498
 msgid "Symbol Properties..."
@@ -33465,7 +33464,7 @@ msgstr "Leiterbahn- und Via-Eigenschaften auf der ganzen Platine bearbeiten"
 
 #: pcbnew/tools/pcb_actions.cpp:448
 msgid "Edit Text and graphics properties globally across board"
-msgstr "Bearbeiten Text- und Grafikeigenschaften global für die Platine"
+msgstr "Text- und Grafikeigenschaften global auf der ganzen Platine bearbeiten"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Global Deletions..."
