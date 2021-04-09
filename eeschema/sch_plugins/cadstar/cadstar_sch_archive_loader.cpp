@@ -1696,7 +1696,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolFieldAttribute(
 
     ALIGNMENT alignment = aCadstarAttrLoc.Alignment;
 
-    double textAngle = getAngleTenthDegree( aCadstarAttrLoc.OrientAngle ) - aComponentOrientationDeciDeg;
+    double textAngle = aComponentOrientationDeciDeg
+        - getAngleTenthDegree( aCadstarAttrLoc.OrientAngle );
+
     long long cadstarAngle = getCadstarAngle( textAngle );
 
     if( aIsMirrored )
