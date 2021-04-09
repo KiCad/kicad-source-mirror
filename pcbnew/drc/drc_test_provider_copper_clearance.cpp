@@ -500,15 +500,18 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     bool testShorting = !m_drcEngine->IsErrorLimitExceeded( DRCE_SHORTING_ITEMS );
     bool testHoles = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE );
 
-    FOOTPRINT* padParent = static_cast<FOOTPRINT*>( pad->GetParent() );
-    bool       isNetTie = padParent->IsNetTie();
-
-    // Graphic items are allowed to act as net-ties within their own footprint
-    if( isNetTie
-            && ( other->Type() == PCB_FP_SHAPE_T || other->Type() == PCB_PAD_T )
-            && other->GetParent() == padParent )
+    // Disable some tests *within* a single footprint
+    if( other->GetParent() == pad->GetParent() )
     {
-        testClearance = false;
+        FOOTPRINT* fp = static_cast<FOOTPRINT*>( pad->GetParent() );
+
+        // Graphic items are allowed to act as net-ties within their own footprint
+        if( fp->IsNetTie() && ( other->Type() == PCB_FP_SHAPE_T || other->Type() == PCB_PAD_T ) )
+            testClearance = false;
+
+        // CADSTAR implements thermal vias using pads insteads of vias
+        if( fp->AllowThermalPads() && other->Type() == PCB_PAD_T )
+            testHoles = false;
     }
 
     if( pad->GetAttribute() == PAD_ATTRIB_NPTH && !pad->FlashLayer( layer ) )

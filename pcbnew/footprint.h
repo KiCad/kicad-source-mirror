@@ -236,7 +236,16 @@ public:
     int GetFlag() const { return m_arflag; }
 
     // A bit of a hack until net ties are supported as first class citizens
-    bool IsNetTie() const { return GetKeywords().StartsWith( wxT( "net tie" ) ); }
+    bool IsNetTie() const
+    {
+        return GetKeywords().StartsWith( wxT( "net tie" ) );
+    }
+
+    // Might as well keep all the hacks in the same place....
+    bool AllowThermalPads() const
+    {
+        return GetKeywords().StartsWith( wxT( "allow thermal pads" ) );
+    }
 
     void Move( const wxPoint& aMoveVector ) override;
 
