@@ -1,9 +1,9 @@
 ##########################################################################
 # Build KiCad on Windows and save the results
 ##########################################################################
-build_win64:
+win64_build:
   stage: build
-  tags: 
+  tags:
     - kicad-windows-1809
   extends: .only_code
   interruptible: false
