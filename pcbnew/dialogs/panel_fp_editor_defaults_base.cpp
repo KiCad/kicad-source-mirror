@@ -104,49 +104,49 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	defaultPropertiesLabel->Wrap( -1 );
 	defaultPropertiesSizer->Add( defaultPropertiesLabel, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_layerClassesGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+    m_graphicsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 
 	// Grid
-	m_layerClassesGrid->CreateGrid( 6, 5 );
-	m_layerClassesGrid->EnableEditing( true );
-	m_layerClassesGrid->EnableGridLines( true );
-	m_layerClassesGrid->EnableDragGridSize( false );
-	m_layerClassesGrid->SetMargins( 0, 0 );
+	m_graphicsGrid->CreateGrid( 6, 5 );
+	m_graphicsGrid->EnableEditing( true );
+	m_graphicsGrid->EnableGridLines( true );
+	m_graphicsGrid->EnableDragGridSize( false );
+	m_graphicsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_layerClassesGrid->SetColSize( 0, 110 );
-	m_layerClassesGrid->SetColSize( 1, 100 );
-	m_layerClassesGrid->SetColSize( 2, 100 );
-	m_layerClassesGrid->SetColSize( 3, 100 );
-	m_layerClassesGrid->SetColSize( 4, 60 );
-	m_layerClassesGrid->EnableDragColMove( false );
-	m_layerClassesGrid->EnableDragColSize( true );
-	m_layerClassesGrid->SetColLabelSize( 22 );
-	m_layerClassesGrid->SetColLabelValue( 0, _("Line Thickness") );
-	m_layerClassesGrid->SetColLabelValue( 1, _("Text Width") );
-	m_layerClassesGrid->SetColLabelValue( 2, _("Text Height") );
-	m_layerClassesGrid->SetColLabelValue( 3, _("Text Thickness") );
-	m_layerClassesGrid->SetColLabelValue( 4, _("Italic") );
-	m_layerClassesGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+	m_graphicsGrid->SetColSize( 0, 110 );
+	m_graphicsGrid->SetColSize( 1, 100 );
+	m_graphicsGrid->SetColSize( 2, 100 );
+	m_graphicsGrid->SetColSize( 3, 100 );
+	m_graphicsGrid->SetColSize( 4, 60 );
+	m_graphicsGrid->EnableDragColMove( false );
+	m_graphicsGrid->EnableDragColSize( true );
+	m_graphicsGrid->SetColLabelSize( 22 );
+	m_graphicsGrid->SetColLabelValue( 0, _( "Line Thickness") );
+	m_graphicsGrid->SetColLabelValue( 1, _( "Text Width") );
+	m_graphicsGrid->SetColLabelValue( 2, _( "Text Height") );
+	m_graphicsGrid->SetColLabelValue( 3, _( "Text Thickness") );
+	m_graphicsGrid->SetColLabelValue( 4, _( "Italic") );
+	m_graphicsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
-	m_layerClassesGrid->EnableDragRowSize( false );
-	m_layerClassesGrid->SetRowLabelSize( 125 );
-	m_layerClassesGrid->SetRowLabelValue( 0, _("Silk Layers") );
-	m_layerClassesGrid->SetRowLabelValue( 1, _("Copper Layers") );
-	m_layerClassesGrid->SetRowLabelValue( 2, _("Edge Cuts") );
-	m_layerClassesGrid->SetRowLabelValue( 3, _("Courtyards") );
-	m_layerClassesGrid->SetRowLabelValue( 4, _("Fab Layers") );
-	m_layerClassesGrid->SetRowLabelValue( 5, _("Other Layers") );
-	m_layerClassesGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+	m_graphicsGrid->EnableDragRowSize( false );
+	m_graphicsGrid->SetRowLabelSize( 125 );
+	m_graphicsGrid->SetRowLabelValue( 0, _( "Silk Layers") );
+	m_graphicsGrid->SetRowLabelValue( 1, _( "Copper Layers") );
+	m_graphicsGrid->SetRowLabelValue( 2, _( "Edge Cuts") );
+	m_graphicsGrid->SetRowLabelValue( 3, _( "Courtyards") );
+	m_graphicsGrid->SetRowLabelValue( 4, _( "Fab Layers") );
+	m_graphicsGrid->SetRowLabelValue( 5, _( "Other Layers") );
+	m_graphicsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
 
 	// Cell Defaults
-	m_layerClassesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_layerClassesGrid->SetToolTip( _("Net Class parameters") );
+	m_graphicsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_graphicsGrid->SetToolTip( _( "Net Class parameters") );
 
-	defaultPropertiesSizer->Add( m_layerClassesGrid, 1, wxBOTTOM|wxLEFT, 20 );
+	defaultPropertiesSizer->Add( m_graphicsGrid, 1, wxBOTTOM | wxLEFT, 20 );
 
 
 	bSizerMargins->Add( defaultPropertiesSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );

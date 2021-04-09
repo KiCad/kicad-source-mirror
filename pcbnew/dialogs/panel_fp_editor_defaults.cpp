@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,7 +175,7 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame
         m_parent( aParent )
 {
     m_textItemsGrid->SetDefaultRowSize( m_textItemsGrid->GetDefaultRowSize() + 4 );
-    m_layerClassesGrid->SetDefaultRowSize( m_layerClassesGrid->GetDefaultRowSize() + 4 );
+    m_graphicsGrid->SetDefaultRowSize( m_graphicsGrid->GetDefaultRowSize() + 4 );
 
     m_textItemsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE(), true );
 
@@ -191,10 +191,10 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame
 
     // Work around a bug in wxWidgets where it fails to recalculate the grid height
     // after changing the default row size
-    m_layerClassesGrid->AppendRows( 1 );
-    m_layerClassesGrid->DeleteRows( m_layerClassesGrid->GetNumberRows() - 1, 1 );
+    m_graphicsGrid->AppendRows( 1 );
+    m_graphicsGrid->DeleteRows( m_graphicsGrid->GetNumberRows() - 1, 1 );
 
-    m_layerClassesGrid->PushEventHandler( new GRID_TRICKS( m_layerClassesGrid ) );
+    m_graphicsGrid->PushEventHandler( new GRID_TRICKS( m_graphicsGrid ) );
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
@@ -204,8 +204,8 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame
 
 PANEL_FP_EDITOR_DEFAULTS::~PANEL_FP_EDITOR_DEFAULTS()
 {
-    // destroy GRID_TRICKS before m_layerClassesGrid.
-    m_layerClassesGrid->PopEventHandler( true );
+    // destroy GRID_TRICKS before m_graphicsGrid.
+    m_graphicsGrid->PopEventHandler( true );
 }
 
 
@@ -214,10 +214,11 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
     wxColour disabledColour = wxSystemSettings::GetColour( wxSYS_COLOUR_BACKGROUND );
 
 #define SET_MILS_CELL( row, col, val ) \
-    m_layerClassesGrid->SetCellValue( row, col, StringFromValue( m_frame->GetUserUnits(), val, true ) )
+    m_graphicsGrid->SetCellValue( row, col, StringFromValue( m_frame->GetUserUnits(), val, true ) )
 
 #define DISABLE_CELL( row, col ) \
-    m_layerClassesGrid->SetReadOnly( row, col ); m_layerClassesGrid->SetCellBackgroundColour( row, col, disabledColour );
+    m_graphicsGrid->SetReadOnly( row, col ); \
+    m_graphicsGrid->SetCellBackgroundColour( row, col, disabledColour );
 
     for( int i = 0; i < ROW_COUNT; ++i )
     {
@@ -235,13 +236,13 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
             SET_MILS_CELL( i, COL_TEXT_WIDTH, m_brdSettings.m_TextSize[ i ].x );
             SET_MILS_CELL( i, COL_TEXT_HEIGHT, m_brdSettings.m_TextSize[ i ].y );
             SET_MILS_CELL( i, COL_TEXT_THICKNESS, m_brdSettings.m_TextThickness[ i ] );
-            m_layerClassesGrid->SetCellValue( i, COL_TEXT_ITALIC, m_brdSettings.m_TextItalic[ i ] ? "1" : "" );
+            m_graphicsGrid->SetCellValue( i, COL_TEXT_ITALIC, m_brdSettings.m_TextItalic[ i ] ? "1" : "" );
 
             auto attr = new wxGridCellAttr;
             attr->SetRenderer( new wxGridCellBoolRenderer() );
             attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
             attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-            m_layerClassesGrid->SetAttr( i, COL_TEXT_ITALIC, attr );
+            m_graphicsGrid->SetAttr( i, COL_TEXT_ITALIC, attr );
         }
     }
 
@@ -257,17 +258,17 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
         m_textItemsGrid->GetTable()->SetValueAsLong( i, 2, item.m_Layer );
     }
 
-    for( int col = 0; col < m_layerClassesGrid->GetNumberCols(); col++ )
+    for( int col = 0; col < m_graphicsGrid->GetNumberCols(); col++ )
     {
         // Set the minimal width to the column label size.
-        m_layerClassesGrid->SetColMinimalWidth( col, m_layerClassesGrid->GetVisibleWidth( col, true, false, false ) );
+        m_graphicsGrid->SetColMinimalWidth( col, m_graphicsGrid->GetVisibleWidth( col, true, false, false ) );
 
         // Set the width to see the full contents
-        if( m_layerClassesGrid->IsColShown( col ) )
-            m_layerClassesGrid->SetColSize( col, m_layerClassesGrid->GetVisibleWidth( col, true, true, true ) );
+        if( m_graphicsGrid->IsColShown( col ) )
+            m_graphicsGrid->SetColSize( col, m_graphicsGrid->GetVisibleWidth( col, true, true, true ) );
     }
 
-    m_layerClassesGrid->SetRowLabelSize( m_layerClassesGrid->GetVisibleWidth( -1, true, true, true ) );
+    m_graphicsGrid->SetRowLabelSize( m_graphicsGrid->GetVisibleWidth( -1, true, true, true ) );
 
     Layout();
 
@@ -290,7 +291,7 @@ bool PANEL_FP_EDITOR_DEFAULTS::Show( bool aShow )
 
     if( aShow && m_firstShow )
     {
-        m_layerClassesGrid->SetColSize( 0, m_layerClassesGrid->GetColSize( 0 ) + 1 );
+        m_graphicsGrid->SetColSize( 0, m_graphicsGrid->GetColSize( 0 ) + 1 );
         m_firstShow = false;
     }
 
@@ -301,13 +302,13 @@ bool PANEL_FP_EDITOR_DEFAULTS::Show( bool aShow )
 int PANEL_FP_EDITOR_DEFAULTS::getGridValue( int aRow, int aCol )
 {
     return ValueFromString( m_frame->GetUserUnits(),
-                            m_layerClassesGrid->GetCellValue( aRow, aCol ) );
+                            m_graphicsGrid->GetCellValue( aRow, aCol ) );
 }
 
 
 bool PANEL_FP_EDITOR_DEFAULTS::validateData()
 {
-    if( !m_textItemsGrid->CommitPendingChanges() || !m_layerClassesGrid->CommitPendingChanges() )
+    if( !m_textItemsGrid->CommitPendingChanges() || !m_graphicsGrid->CommitPendingChanges() )
         return false;
 
     // Test text parameters.
@@ -320,7 +321,7 @@ bool PANEL_FP_EDITOR_DEFAULTS::validateData()
         {
             wxString msg = _( "Text will not be readable with a thickness greater than\n"
                               "1/4 its width or height." );
-            m_parent->SetError( msg, this, m_layerClassesGrid, row, COL_TEXT_THICKNESS );
+            m_parent->SetError( msg, this, m_graphicsGrid, row, COL_TEXT_THICKNESS );
             return false;
         }
     }
@@ -345,7 +346,7 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
                                                 getGridValue( i, COL_TEXT_HEIGHT ) );
         m_brdSettings.m_TextThickness[ i ] = getGridValue( i, COL_TEXT_THICKNESS );
 
-        wxString msg = m_layerClassesGrid->GetCellValue( i, COL_TEXT_ITALIC );
+        wxString msg = m_graphicsGrid->GetCellValue( i, COL_TEXT_ITALIC );
         m_brdSettings.m_TextItalic[ i ] = wxGridCellBoolEditor::IsTrueValue( msg );
     }
 
@@ -373,7 +374,7 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
 
 void PANEL_FP_EDITOR_DEFAULTS::OnAddTextItem( wxCommandEvent& event )
 {
-    if( !m_textItemsGrid->CommitPendingChanges() || !m_layerClassesGrid->CommitPendingChanges() )
+    if( !m_textItemsGrid->CommitPendingChanges() || !m_graphicsGrid->CommitPendingChanges() )
         return;
 
     wxGridTableBase* table = m_textItemsGrid->GetTable();
@@ -393,7 +394,7 @@ void PANEL_FP_EDITOR_DEFAULTS::OnAddTextItem( wxCommandEvent& event )
 
 void PANEL_FP_EDITOR_DEFAULTS::OnDeleteTextItem( wxCommandEvent& event )
 {
-    if( !m_textItemsGrid->CommitPendingChanges() || !m_layerClassesGrid->CommitPendingChanges() )
+    if( !m_textItemsGrid->CommitPendingChanges() || !m_graphicsGrid->CommitPendingChanges() )
         return;
 
     int curRow = m_textItemsGrid->GetGridCursorRow();
