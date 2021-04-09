@@ -178,6 +178,7 @@ wxString PATHS::GetStockPluginsPath()
 
 #if defined( __WXMSW__ )
     fn.AssignDir( Pgm().GetExecutablePath() );
+    fn.AppendDir( wxT( "scripting" ) );
 #else
     fn.AssignDir( PATHS::GetStockDataPath( false ) );
 #endif
@@ -201,7 +202,8 @@ wxString PATHS::GetStockPlugins3DPath()
 #elif defined( __WXMAC__ )
     fn.Assign( wxStandardPaths::Get().GetPluginsDir(), wxEmptyString );
 #else
-    fn.Assign( PATHS::GetStockPluginsPath() );
+    fn.AssignDir( Pgm().GetExecutablePath() );
+    fn.AppendDir( wxT( "plugins" ) );
 #endif
 
     fn.AppendDir( "3d" );
