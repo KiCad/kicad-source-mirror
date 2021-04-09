@@ -1280,11 +1280,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
 
     for( std::pair<TEXT_ID, TEXT> textPair : symbol.Texts )
     {
-        TEXT      csText  = textPair.second;
+        TEXT csText = textPair.second;
+
         LIB_TEXT* libtext = new LIB_TEXT( aPart );
         libtext->SetText( csText.Text );
         libtext->SetUnit( gateNumber );
         libtext->SetPosition( getKiCadLibraryPoint( csText.Position, symbol.Origin ) );
+        libtext->SetMultilineAllowed( true ); // temporarily so that we calculate bbox correctly
 
         applyTextSettings( libtext,
                            csText.TextCodeID,
@@ -1293,7 +1295,39 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
                            csText.OrientAngle,
                            csText.Mirror );
 
-        aPart->AddDrawItem( libtext );
+        // Split out multi line text items into individual text elements
+        if( csText.Text.Contains( "\n" ) )
+        {
+            wxArrayString strings;
+            wxStringSplit( csText.Text, strings, '\n' );
+            wxPoint firstLinePos;
+
+            for( int ii = 0; ii < strings.size(); ++ii )
+            {
+                EDA_RECT bbox = libtext->GetTextBox( ii, true );
+                wxPoint  linePos = { bbox.GetLeft(), -bbox.GetBottom() };
+
+                RotatePoint( &linePos, libtext->GetTextPos(), -libtext->GetTextAngle() );
+
+                LIB_TEXT* line = static_cast<LIB_TEXT*>( libtext->Clone() );
+                line->SetText( strings[ii] );
+                line->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                line->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                line->SetTextPos( linePos );
+
+                // Multiline text not allowed in LIB_TEXT
+                line->SetMultilineAllowed( false );
+                aPart->AddDrawItem( line );
+            }
+
+            delete libtext;
+        }
+        else
+        {
+            // Multiline text not allowed in LIB_TEXT
+            libtext->SetMultilineAllowed( false );
+            aPart->AddDrawItem( libtext );
+        }
     }
 
     if( symbol.TextLocations.find( SYMBOL_NAME_ATTRID ) != symbol.TextLocations.end() )
@@ -2494,6 +2528,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
     {
     // Some KiCad schematic text items only permit a limited amount of angles
     // and text justifications
+    case LIB_TEXT_T:
     case SCH_FIELD_T:
     case LIB_FIELD_T:
     {
@@ -2560,6 +2595,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
         return;
 
     default:
+        wxFAIL_MSG( "Unexpected item type" );
         return;
     }
 }

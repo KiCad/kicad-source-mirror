@@ -2541,6 +2541,15 @@ void CADSTAR_ARCHIVE_PARSER::FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextIte
         wxPoint positionOffset( 0, aKiCadTextItem->GetInterline() );
         RotatePoint( &positionOffset, txtAngleDecideg );
 
+        EDA_ITEM* textEdaItem = dynamic_cast<EDA_ITEM*>( aKiCadTextItem );
+
+        if( textEdaItem && ( textEdaItem->Type() == LIB_TEXT_T )
+            || ( textEdaItem->Type() == LIB_FIELD_T ) )
+        {
+            // Y coordinate increases upwards in the symbol editor
+            positionOffset.y = -positionOffset.y;
+        }
+
         //Count num of additional lines
         wxString text = aKiCadTextItem->GetText();
         int      numExtraLines = text.Replace( "\n", "\n" );

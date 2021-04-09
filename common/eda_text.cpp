@@ -235,7 +235,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
         if( strings.GetCount() )     // GetCount() == 0 for void strings
         {
-            if( aLine >= 0 && ( aLine < (int)strings.GetCount() ) )
+            if( aLine >= 0 && ( aLine < static_cast<int>( strings.GetCount() ) ) )
                 text = strings.Item( aLine );
             else
                 text = strings.Item( 0 );
@@ -266,6 +266,11 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     // bounding box will be moved later according to the actual text options
     wxSize textsize = wxSize( dx, dy );
     wxPoint pos = GetTextPos();
+
+    if( IsMultilineAllowed() && aLine > 0 && ( aLine < static_cast<int>( strings.GetCount() ) ) )
+    {
+        pos.y -= aLine * GetInterline();
+    }
 
     if( aInvertY )
         pos.y = -pos.y;
