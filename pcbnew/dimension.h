@@ -451,6 +451,7 @@ public:
     {
         return wxT( "ORTHOGONAL_DIMENSION" );
     }
+    void     Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
 protected:
 

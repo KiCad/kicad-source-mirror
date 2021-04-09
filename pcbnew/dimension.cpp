@@ -856,6 +856,60 @@ void ORTHOGONAL_DIMENSION::updateText()
 }
 
 
+void ORTHOGONAL_DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
+{
+    // restrict angle to -179.9 to 180.0 degrees
+    if( aAngle > 1800 )
+    {
+        aAngle -= 3600;
+    }
+    else if( aAngle <= -1800 )
+    {
+        aAngle += 3600;
+    }
+
+    // adjust orientation and height to new angle
+    // we can only handle the cases of -90, 0, 90, 180 degrees exactly;
+    // in the other cases we will use the nearest 90 degree angle to
+    // choose at least an approximate axis for the target orientation
+    // In case of exactly 45 or 135 degrees, we will round towards zero for consistency
+    if( aAngle > 450 && aAngle <= 1350 )
+    {
+        // about 90 degree
+        if( m_orientation == DIR::HORIZONTAL )
+        {
+            m_orientation = DIR::VERTICAL;
+        }
+        else
+        {
+            m_orientation = DIR::HORIZONTAL;
+            m_height = -m_height;
+        }
+    }
+    else if( aAngle < -450 && aAngle >= -1350 )
+    {
+        // about -90 degree
+        if( m_orientation == DIR::HORIZONTAL )
+        {
+            m_orientation = DIR::VERTICAL;
+            m_height = -m_height;
+        }
+        else
+        {
+            m_orientation = DIR::HORIZONTAL;
+        }
+    }
+    else if( aAngle > 1350 || aAngle < -1350 )
+    {
+        // about 180 degree
+        m_height = -m_height;
+    }
+
+    // this will update m_crossBarStart and m_crossbarEnd
+    DIMENSION_BASE::Rotate( aRotCentre, aAngle );
+}
+
+
 LEADER::LEADER( BOARD_ITEM* aParent ) :
         DIMENSION_BASE( aParent, PCB_DIM_LEADER_T ),
         m_textFrame( DIM_TEXT_FRAME::NONE )
