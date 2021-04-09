@@ -240,10 +240,10 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Konstantin Baranovskiy" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Roman Bashkov" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Roberto Fernandez Bautista" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Frank Bennett" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michael Beardsworth" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matthew Beckler" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Konrad Beckmann" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "David Beinder" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Frank Bennett" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Roman Beranek" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Gustav Bergquist" ), CONTRIB_DEV, nullptr ) );
