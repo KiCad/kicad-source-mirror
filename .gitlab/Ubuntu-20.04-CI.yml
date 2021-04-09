@@ -1,7 +1,7 @@
 ##########################################################################
 # Build KiCad on Ubuntu 20.04 and save the results
 ##########################################################################
-build_ubuntu20.04:
+ubuntu20.04_build:
   stage: build
   tags:
     - kicad-ubuntu20.04
@@ -13,7 +13,7 @@ build_ubuntu20.04:
     - schedules
   interruptible: false
   cache:
-    key: "cache-ubuntu-linux"
+    key: "cache-ubuntu20.04-linux"
     paths:
       - ccache/
   before_script:
@@ -57,7 +57,7 @@ build_ubuntu20.04:
       - build/linux/compilation_log.txt
 
 # Upload the compilation log in an easily downloadable form
-report_build_warn_ubuntu20.04:
+ubuntu20.04_report_build_warn:
   stage: report
   when: always
   only:
@@ -66,7 +66,7 @@ report_build_warn_ubuntu20.04:
   except:
     - schedules
   needs:
-    - job: build_ubuntu20.04
+    - job: ubuntu20.04_build
       artifacts: true
   script:
     - echo "Uploading compilation log"
@@ -79,7 +79,7 @@ report_build_warn_ubuntu20.04:
       - compilation_log.txt
 
 # Report on the metrics of the code
-report_metrics_ubuntu20.04:
+ubuntu20.04_report_metrics:
   stage: report
   when: always
   only:
@@ -88,24 +88,23 @@ report_metrics_ubuntu20.04:
   except:
     - schedules
   needs:
-    - job: build_ubuntu20.04
+    - job: ubuntu20.04_build
       artifacts: true
   script:
-    - cat build/linux/compilation_log.txt | { grep "warning:" || test $? = 1; } | awk 'END{print "number_of_warnings "NR}' > metrics.txt
+    - cat build/linux/compilation_log.txt | { grep "warning:" || test $? = 1; } | awk 'END{print "number_of_ubuntu_20.04_warnings "NR}' > metrics.txt
     - cat metrics.txt
   artifacts:
     reports:
       metrics: metrics.txt
 
 ##########################################################################
-# Run the code unit tests. Each QA executable is split into a separate job so that the display
-# gives the test results broken down by the test executable.
+# Run the code unit tests.
 ##########################################################################
-.unit_test_ubuntu20.04:
+ubuntu20.04_qa:
   extends:
     - .unit_test
   needs:
-    - job: build_ubuntu20.04
+    - job: ubuntu20.04_build
       artifacts: true
   tags:
     - kicad-ubuntu20.04
@@ -113,51 +112,8 @@ report_metrics_ubuntu20.04:
   only:
     - branches@kicad/code/kicad
     - tags@kicad/code/kicad
-
-qa_python_ubuntu20.04:
-  extends:
-    - .unit_test_ubuntu20.04
-  variables:
-    TEST: 'qa_python'
-
-qa_common_ubuntu20.04:
-  extends:
-    - .unit_test_ubuntu20.04
-  variables:
-    TEST: 'qa_common'
-
-qa_gerbview_ubuntu20.04:
-  extends:
-    - .unit_test_ubuntu20.04
-  variables:
-    TEST: 'qa_gerbview'
-
-qa_pcbnew_ubuntu20.04:
-  extends:
-    - .unit_test_ubuntu20.04
-  variables:
-    TEST: 'qa_pcbnew'
-
-qa_eeschema_ubuntu20.04:
-  extends:
-    - .unit_test_ubuntu20.04
-  variables:
-    TEST: 'qa_eeschema'
-
-qa_kimath_ubuntu20.04:
-  extends:
-    - .unit_test_ubuntu20.04
-  variables:
-    TEST: 'qa_kimath'
-
-qa_sexpr_ubuntu20.04:
-  extends:
-    - .unit_test_ubuntu20.04
-  variables:
-    TEST: 'qa_sexpr'
-
-qa_kicad2step_ubuntu20.04:
-  extends:
-    - .unit_test_ubuntu20.04
-  variables:
-    TEST: 'qa_kicad2step'
+  except:
+    - schedules
+  parallel:
+    matrix:
+      - TEST: [qa_python, qa_common, qa_gerbview, qa_pcbnew, qa_eeschema, qa_kimath, qa_sexpr, qa_kicad2step]
