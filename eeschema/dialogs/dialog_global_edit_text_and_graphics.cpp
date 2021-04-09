@@ -94,7 +94,7 @@ protected:
     bool TransferDataFromWindow() override;
 
     void visitItem( const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem );
-    void processItem( const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem );
+    void processItem( const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem, SCH_ITEM* aParentItem );
 };
 
 
@@ -224,8 +224,15 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::OnUpdateUI( wxUpdateUIEvent&  )
 
 
 void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aSheetPath,
-                                                        SCH_ITEM* aItem )
+                                                        SCH_ITEM*             aItem,
+                                                        SCH_ITEM* aParentItem = nullptr )
 {
+    if( m_selectedFilterOpt->GetValue() && !m_selection.Contains( aItem )
+        && ( aParentItem == nullptr || !m_selection.Contains( aParentItem ) ) )
+    {
+        return;
+    }
+
     EDA_TEXT* eda_text = dynamic_cast<EDA_TEXT*>( aItem );
     SCH_TEXT* sch_text = dynamic_cast<SCH_TEXT*>( aItem );
     SCH_LINE* lineItem = dynamic_cast<SCH_LINE*>( aItem );
@@ -310,11 +317,6 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
 void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aSheetPath,
                                                       SCH_ITEM* aItem )
 {
-    if( m_selectedFilterOpt->GetValue() && !m_selection.Contains( aItem ) )
-    {
-        return;
-    }
-
     if( m_netFilterOpt->GetValue() && !m_netFilter->GetValue().IsEmpty() )
     {
         SCH_CONNECTION* connection = aItem->Connection( &aSheetPath );
@@ -368,10 +370,10 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         SCH_COMPONENT* component = (SCH_COMPONENT*) aItem;
 
         if( m_references->GetValue() )
-            processItem( aSheetPath, component->GetField( REFERENCE_FIELD ) );
+            processItem( aSheetPath, component->GetField( REFERENCE_FIELD ), aItem );
 
         if( m_values->GetValue() )
-            processItem( aSheetPath, component->GetField( VALUE_FIELD ) );
+            processItem( aSheetPath, component->GetField( VALUE_FIELD ), aItem );
 
         if( m_otherFields->GetValue() )
         {
@@ -383,7 +385,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
                 if( !m_fieldnameFilterOpt->GetValue() || m_fieldnameFilter->GetValue().IsEmpty()
                         || WildCompareString( m_fieldnameFilter->GetValue(), fieldName, false ) )
                 {
-                    processItem( aSheetPath, &field );
+                    processItem( aSheetPath, &field, aItem );
                 }
             }
         }
@@ -393,7 +395,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
 
         if( m_sheetTitles->GetValue() )
-            processItem( aSheetPath, &sheet->GetFields()[ SHEETNAME ] );
+            processItem( aSheetPath, &sheet->GetFields()[SHEETNAME], aItem );
 
         if( m_sheetFields->GetValue() )
         {
@@ -407,7 +409,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
                 if( !m_fieldnameFilterOpt->GetValue() || m_fieldnameFilter->GetValue().IsEmpty()
                         || WildCompareString( m_fieldnameFilter->GetValue(), fieldName, false ) )
                 {
-                    processItem( aSheetPath, &field );
+                    processItem( aSheetPath, &field, aItem );
                 }
             }
         }
