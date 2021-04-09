@@ -680,8 +680,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     std::list<std::pair<const wxString, const SCH_IO_MGR::SCH_FILE_T>> loaders;
 
     // Import Altium schematic files.
-    if( ADVANCED_CFG::GetCfg().m_PluginAltiumSch )
-        loaders.emplace_back( AltiumSchematicFileWildcard(), SCH_IO_MGR::SCH_ALTIUM );
+    loaders.emplace_back( AltiumSchematicFileWildcard(), SCH_IO_MGR::SCH_ALTIUM );
 
     // Import CADSTAR Schematic Archive files.
     loaders.emplace_back( CadstarSchematicArchiveFileWildcard(), SCH_IO_MGR::SCH_CADSTAR_ARCHIVE );

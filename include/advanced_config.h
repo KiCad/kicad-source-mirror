@@ -134,12 +134,6 @@ public:
     bool m_DrawTriangulationOutlines;
 
     /**
-     * When true, enable Altium Schematic import (*.SchDoc)
-     * the current implementation is highly incomplete
-     */
-    bool m_PluginAltiumSch;
-
-    /**
      * Sets an absolute minimum pen width for plotting.  Some formats (PDF, for example) don't
      * like ultra-thin lines.  Units are mm.
      */

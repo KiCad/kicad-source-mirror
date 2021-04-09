@@ -140,11 +140,6 @@ static const wxChar MaxTrackLengthToKeep[] = wxT( "MaxTrackLengthToKeep" );
 static const wxChar StrokeTriangulation[] = wxT( "StrokeTriangulation" );
 
 /**
- * When true, enable Altium Schematic import (*.SchDoc)
- */
-static const wxChar PluginAltiumSch[] = wxT( "PluginAltiumSch" );
-
-/**
  * Absolute minimum pen width to send to the plotter.  PDF seems happy enough with 0.0212mm
  * (which equates to 1px @ 1200dpi).
  */
@@ -253,7 +248,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_MaxTangentAngleDeviation  = 1.0;
     m_MaxTrackLengthToKeep      = 0.0001;
     m_DrawTriangulationOutlines = false;
-    m_PluginAltiumSch           = false;
 
     m_ExtraClearance            = 0.0001;
     m_DRCEpsilon                = 0.0001;   // 0.1um is small enough not to materially violate
@@ -346,9 +340,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::StrokeTriangulation,
                                                 &m_DrawTriangulationOutlines, false ) );
-
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::PluginAltiumSch,
-                                                &m_PluginAltiumSch, false ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MinPlotPenWidth,
                                                   &m_MinPlotPenWidth, 0.0212, 0.0, 1.0 ) );
