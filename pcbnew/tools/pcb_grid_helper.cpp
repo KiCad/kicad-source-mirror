@@ -568,10 +568,19 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     break;
 
                 case S_POLYGON:
-                    for( const wxPoint& p : shape->BuildPolyPointsList() )
-                        addAnchor( p, CORNER | SNAPPABLE, shape );
+                {
+                    SHAPE_LINE_CHAIN lc;
+                    lc.SetClosed( true );
 
+                    for( const wxPoint& p : shape->BuildPolyPointsList() )
+                    {
+                        addAnchor( p, CORNER | SNAPPABLE, shape );
+                        lc.Append( p );
+                    }
+
+                    addAnchor( lc.NearestPoint( aRefPos ), OUTLINE, aItem );
                     break;
+                }
 
                 case S_CURVE:
                     addAnchor( start, CORNER | SNAPPABLE, shape );
