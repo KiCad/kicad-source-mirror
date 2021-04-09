@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-04-08 22:48+0000\n"
+"PO-Revision-Date: 2021-04-10 08:26+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -8830,10 +8830,9 @@ msgid "Read Only"
 msgstr "読み取り専用"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item.cpp:106
-#, fuzzy
 msgid ""
 "Line width may not be 0 for shapes other than filled with body outline color."
-msgstr "塗りつぶされていない図形の場合、線幅を0にすることはできません。"
+msgstr "ボディ外形色で塗りつぶされていない図形は、線幅を0にすることはできません。"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Do not fill"
@@ -10329,23 +10328,22 @@ msgstr "ソース 1 とソース 2 は異なっていなければなりません
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:282
 msgid "No valid simulation is configured."
-msgstr ""
+msgstr "有効なシミュレーションが設定されていません。"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:285
 msgid ""
 "A valid simulation can be configured by selecting a simulation tab, setting "
 "the simulation parameters and clicking the OK button with the tab selected."
 msgstr ""
+"有効なシミュレーションは、シミュレーションのタブを選択、パラメーターを設定し、タブを選択した状態でOK ボタンをクリックすることで設定できます。"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:289
-#, fuzzy
 msgid "Exit Without Valid Simulation"
-msgstr "シミュレーションを終了"
+msgstr "有効なシミュレーションを行わずに終了"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:290
-#, fuzzy
 msgid "Configure Valid Simulation"
-msgstr "シミュレーションを閉じる"
+msgstr "有効なシミュレーションを設定"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:576
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:137
@@ -11737,9 +11735,8 @@ msgid "Show inter-sheet references"
 msgstr "シート間のリファレンスを表示"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:159
-#, fuzzy
 msgid "Show own page reference"
-msgstr "フットプリントのリファレンスを表示"
+msgstr "ページ自身のリファレンスを表示"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:163
 msgid "Standard (1,2,3)"
@@ -12369,16 +12366,16 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
+"特定の条件下で回路図が壊れる可能性があります。 開くときに見つからないシンボルがない回路図であれば、データ損失を防ぐために変更を加える直前に保存します。 "
+"見つからないシンボルがある場合は、回路図の手動復旧またはシンボル キャッシュ ライブラリー ファイルのリカバリと回路図の再読み込みが必要です。"
 
 #: eeschema/files-io.cpp:510
-#, fuzzy
 msgid "Load Without Cache File"
-msgstr "保存しないでロード"
+msgstr "キャッシュファイルなしでロード"
 
 #: eeschema/files-io.cpp:511
-#, fuzzy
 msgid "Abort"
-msgstr "停止割り込み中\n"
+msgstr "中断"
 
 #: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:772
 msgid ""
@@ -13006,9 +13003,8 @@ msgid "Go to Page %s (%s)"
 msgstr "ページに移動: %s (%s)"
 
 #: eeschema/sch_field.cpp:502
-#, fuzzy
 msgid "Back to Previous Selected Sheet"
-msgstr "選択された形状からパッドを作成"
+msgstr "前に選択したシートに戻る"
 
 #: eeschema/sch_field.cpp:530
 msgid "Intersheet References"
@@ -15382,9 +15378,7 @@ msgstr "フットプリント '%s' のシンボルが見つかりません。"
 msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
 "must be manually deleted (if desired)."
-msgstr ""
-"フットプリント '%s' はPCBに存在しません。回路図の対応するシンボルは、手動で削"
-"除する必要があります。(必要な場合)"
+msgstr "フットプリント '%s' はPCBに存在しません。回路図の対応するシンボルは、手動で削除する必要があります(必要な場合)。"
 
 #: eeschema/tools/backannotate.cpp:302
 msgid "Re-linking footprints requires a fully annotated schematic."
@@ -15571,9 +15565,8 @@ msgid "Show Symbol Tree"
 msgstr "シンボル ツリーを表示"
 
 #: eeschema/tools/ee_actions.cpp:193
-#, fuzzy
 msgid "Hide Symbol Tree"
-msgstr "シンボル ツリーを表示"
+msgstr "シンボル ツリーを非表示"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Export View as PNG..."
@@ -17781,9 +17774,8 @@ msgid "Import Non-KiCad Project..."
 msgstr "KiCad以外のプロジェクトをインポート..."
 
 #: kicad/menubar.cpp:94
-#, fuzzy
 msgid "CADSTAR Project..."
-msgstr "CADSTAR プロジェクトをインポート..."
+msgstr "CADSTAR プロジェクト..."
 
 #: kicad/menubar.cpp:95
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
@@ -17791,9 +17783,8 @@ msgstr ""
 "CADSTAR 回路図アーカイブと基板アーカイブ(*.csa, *.cpa)をインポートします"
 
 #: kicad/menubar.cpp:99
-#, fuzzy
 msgid "EAGLE Project..."
-msgstr "Eagle プロジェクトをインポート..."
+msgstr "Eagle プロジェクト..."
 
 #: kicad/menubar.cpp:100
 msgid "Import EAGLE CAD XML schematic and board"
@@ -28204,9 +28195,8 @@ msgid "Checking footprint courtyard definitions..."
 msgstr "フットプリントのコートヤードの定義をチェック..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:88
-#, fuzzy
 msgid "Gathering footprint courtyards..."
-msgstr "フットプリントのコートヤードの定義をチェック..."
+msgstr "フットプリントのコートヤードを収集..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:149
 msgid "Checking footprints for overlapping courtyards..."
@@ -29211,9 +29201,8 @@ msgid "Import Vector Graphics File"
 msgstr "ベクター グラフィックス ファイルをインポート"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1337
-#, fuzzy
 msgid "Invalid spline definition encountered"
-msgstr "不正な浮動小数点数"
+msgstr "不正なスプラインの定義が検出されました"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1344
 msgid "Invalid Bezier curve created"
@@ -29613,14 +29602,14 @@ msgid "Updated %s properties."
 msgstr "%s のプロパティを更新しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "%s に[部品表から除外]の製造属性を設定しています。"
+msgstr "%s に[部品表から除外]の製造属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "%s の[部品表から除外]の製造属性を削除しています。"
+msgstr "%s の[部品表から除外]の製造属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:376
 #, c-format
@@ -29638,9 +29627,9 @@ msgid "Disconnect %s pin %s."
 msgstr "%s ピン %s の接続を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:455
-#, fuzzy, c-format
+#, c-format
 msgid "Disconnected %s pin %s."
-msgstr "%s ピン %s の接続を削除します。"
+msgstr "%s のピン %s を切断しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:465
 #, c-format
@@ -30074,9 +30063,8 @@ msgid "KiCad PCB Editor"
 msgstr "KiCad PCBエディター"
 
 #: pcbnew/pcb_edit_frame.cpp:200
-#, fuzzy
 msgid "Export netlist used to update schematics"
-msgstr "ネットリストのエクスポートには回路図の完全なアノテーションが必要です。"
+msgstr "回路図の更新に使用するネットリストをエクスポート"
 
 #: pcbnew/pcb_edit_frame.cpp:338
 msgid "New PCB file is unsaved"
@@ -31661,15 +31649,12 @@ msgid "Switches posture of the currently routed track."
 msgstr "現在の配線パターンの姿勢を変更します。"
 
 #: pcbnew/router/router_tool.cpp:155
-#, fuzzy
 msgid "Track Corner Mode"
-msgstr "配線がパッドに接近しています"
+msgstr "直線/曲線を切り替え"
 
 #: pcbnew/router/router_tool.cpp:156
 msgid "Switches between sharp and rounded corners when routing tracks."
-msgstr ""
-"配線をルーティングするときに、コーナーを直線的にするか丸めるかを切り替えま"
-"す。"
+msgstr "配線を引くときに、角を直線的にするか丸めるかを切り替えます。"
 
 #: pcbnew/router/router_tool.cpp:177
 msgid "Select Track/Via Width"
@@ -31977,18 +31962,16 @@ msgid "Locking"
 msgstr "ロック"
 
 #: pcbnew/tools/board_editor_control.cpp:133
-#, fuzzy
 msgid "Omit extra information"
-msgstr "ビットマップ情報"
+msgstr "追加情報を省略"
 
 #: pcbnew/tools/board_editor_control.cpp:134
-#, fuzzy
 msgid "Omit nets"
-msgstr "ネットをフィルター"
+msgstr "ネットを省略"
 
 #: pcbnew/tools/board_editor_control.cpp:136
 msgid "Do not prefix path with footprint UUID."
-msgstr ""
+msgstr "パスの前にフットプリントのUUIDを付けない。"
 
 #: pcbnew/tools/board_editor_control.cpp:374
 msgid "Merge Specctra Session file:"
@@ -31999,14 +31982,12 @@ msgid "Specctra DSN File"
 msgstr "Specctra DSN ファイル"
 
 #: pcbnew/tools/board_editor_control.cpp:421
-#, fuzzy
 msgid "Export Board Netlist"
-msgstr "ネットリストをエクスポート"
+msgstr "基板のネットリストをエクスポート"
 
 #: pcbnew/tools/board_editor_control.cpp:422
-#, fuzzy
 msgid "KiCad board netlist files"
-msgstr "KiCad ネットリスト ファイル"
+msgstr "KiCad 基板ネットリスト ファイル"
 
 #: pcbnew/tools/board_editor_control.cpp:436
 #, c-format
@@ -32308,7 +32289,7 @@ msgstr "基板スタックアップの表を挿入します"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:371
 msgid "BOARD CHARACTERISTICS"
-msgstr ""
+msgstr "基板の特性"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:387
 msgid "Copper Layer Count: "
