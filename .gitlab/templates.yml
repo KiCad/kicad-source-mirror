@@ -24,7 +24,7 @@
     - export CTEST_OUTPUT_ON_FAILURE=1
   script:
     - cd build/linux/qa
-    - ctest -R ${TEST}
+    - ctest -R qa_${TEST}
   # GitLab supports displaying the results in the GUI through JUNIT artifacts
   # (https://docs.gitlab.com/ee/ci/junit_test_reports.html)
   # so we upload the JUNIT results. Note that there is a bug with how paths

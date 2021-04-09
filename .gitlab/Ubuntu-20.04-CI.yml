@@ -116,4 +116,5 @@ ubuntu20.04_qa:
     - schedules
   parallel:
     matrix:
-      - TEST: [qa_python, qa_common, qa_gerbview, qa_pcbnew, qa_eeschema, qa_kimath, qa_sexpr, qa_kicad2step]
+      # The name of the test without the qa_ prefix
+      - TEST: [python, common, gerbview, pcbnew, eeschema, kimath, sexpr, kicad2step]
