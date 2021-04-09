@@ -519,7 +519,7 @@ void SYMBOL_EDIT_FRAME::Save()
             }
             else
             {
-                schframe->UpdateSymbolFromEditor( *m_my_part );
+                schframe->SaveSymbolToSchematic( *m_my_part );
                 GetScreen()->ClrModify();
             }
         }

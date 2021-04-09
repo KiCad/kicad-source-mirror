@@ -753,8 +753,14 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
             cmp.m_Screen->SetModify();
 
             if ( m_checkBoxUpdateFields->IsChecked() )
-                cmp.m_Component->UpdateFields( false, false );
-
+            {
+                cmp.m_Component->UpdateFields( nullptr,
+                                               false, /* update style */
+                                               false, /* update ref */
+                                               false, /* update other fields */
+                                               false, /* reset ref */
+                                               true /* reset other fields */ );
+            }
         }
     }
 

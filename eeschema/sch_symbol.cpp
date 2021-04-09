@@ -117,7 +117,12 @@ SCH_COMPONENT::SCH_COMPONENT( const LIB_PART& aPart, const LIB_ID& aLibId,
     SetLibSymbol( part.release() );
 
     // Copy fields from the library symbol
-    UpdateFields( true, true );
+    UpdateFields( aSheet,
+                  true, /* update style */
+                  false, /* update ref */
+                  false, /* update other fields */
+                  true, /* reset ref */
+                  true /* reset other fields */ );
 
     // Update the reference -- just the prefix for now.
     if( aSheet )
@@ -767,7 +772,8 @@ SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName, bool aIncludeDe
 }
 
 
-void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
+void SCH_COMPONENT::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, bool aUpdateRef,
+                                  bool aUpdateOtherFields, bool aResetRef, bool aResetOtherFields )
 {
     if( m_part )
     {
@@ -780,9 +786,6 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
         {
             int id = libField->GetId();
             SCH_FIELD* schField;
-
-            if( id == REFERENCE_FIELD && !aResetRef )
-                continue;
 
             if( id >= 0 && id < MANDATORY_FIELDS )
             {
@@ -800,24 +803,42 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
                 }
             }
 
-            if( aResetStyle )
+            if( aUpdateStyle )
             {
                 schField->ImportValues( *libField );
                 schField->SetTextPos( m_pos + libField->GetTextPos() );
             }
 
-            if( id == VALUE_FIELD )
+            if( id == REFERENCE_FIELD )
             {
-                schField->SetText( m_lib_id.GetLibItemName() ); // fetch alias-specific value
-                symbolName = m_lib_id.GetLibItemName();
+                if( aResetOtherFields )
+                    SetRef( aPath, m_part->GetReferenceField().GetText() );
+                else if( aUpdateRef )
+                    SetRef( aPath, libField->GetText() );
+            }
+            else if( id == VALUE_FIELD )
+            {
+                if( aResetOtherFields )
+                    SetValue( m_lib_id.GetLibItemName() );      // fetch alias-specific value
+                else
+                    SetValue( libField->GetText() );
+            }
+            else if( id == FOOTPRINT_FIELD )
+            {
+                if( aResetOtherFields || aUpdateOtherFields )
+                    SetFootprint( libField->GetText() );
             }
             else if( id == DATASHEET_FIELD )
             {
-                schField->SetText( GetDatasheet() );            // fetch alias-specific value
+                if( aResetOtherFields )
+                    schField->SetText( GetDatasheet() );        // fetch alias-specific value
+                else if( aUpdateOtherFields )
+                    schField->SetText( libField->GetText() );
             }
             else
             {
-                schField->SetText( libField->GetText() );
+                if( aResetOtherFields || aUpdateOtherFields )
+                    schField->SetText( libField->GetText() );
             }
         }
     }

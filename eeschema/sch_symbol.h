@@ -405,10 +405,15 @@ public:
     /**
      * Restore fields to the original library values.
      *
-     * @param aResetStyle selects whether fields should reset the position and text attribute.
-     * @param aResetRef selects whether the reference field should be restored.
+     * @param aUpdateStyle selects whether fields should update the position and text attributes.
+     * @param aUpdateRef selects whether the reference field should be updated.
+     * @param aUpdateOtherFields selects whether non-reference fields should be updated.
+     * @param aResetRef selects whether the reference should be reset to the library value.
+     * @param aResetOtherFields selects whether non-reference fields should be reset to library
+     *                          values.
      */
-    void UpdateFields( bool aResetStyle, bool aResetRef = false );
+    void UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, bool aUpdateRef,
+                       bool aUpdateOtherFields, bool aResetRef, bool aResetOtherFields );
 
     /**
      * Return the number of fields in this symbol.

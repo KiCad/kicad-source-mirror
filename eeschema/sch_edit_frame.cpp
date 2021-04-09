@@ -1603,7 +1603,7 @@ void SCH_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
 }
 
 
-void SCH_EDIT_FRAME::UpdateSymbolFromEditor( const LIB_PART& aSymbol )
+void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_PART& aSymbol )
 {
     wxString msg;
     bool appendToUndo = false;
@@ -1642,7 +1642,12 @@ void SCH_EDIT_FRAME::UpdateSymbolFromEditor( const LIB_PART& aSymbol )
         }
 
         symbol->SetLibSymbol( aSymbol.Flatten().release() );
-        symbol->UpdateFields( true, true );
+        symbol->UpdateFields( &GetCurrentSheet(),
+                              true, /* update style */
+                              true, /* update ref */
+                              true, /* update other fields */
+                              false, /* reset ref */
+                              false /* reset other fields */ );
 
         currentScreen->Append( symbol );
         selectionTool->SelectHighlightItem( symbol );

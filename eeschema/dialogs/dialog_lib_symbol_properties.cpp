@@ -166,10 +166,10 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_grid->ProcessTableMessage( msg );
     adjustGridColumns( m_grid->GetRect().GetWidth() );
 
-    m_SymbolNameCtrl->SetValue( m_libEntry->GetName() );
+    m_SymbolNameCtrl->ChangeValue( m_libEntry->GetName() );
 
-    m_DescCtrl->SetValue( m_libEntry->GetDescription() );
-    m_KeywordCtrl->SetValue( m_libEntry->GetKeyWords() );
+    m_DescCtrl->ChangeValue( m_libEntry->GetDescription() );
+    m_KeywordCtrl->ChangeValue( m_libEntry->GetKeyWords() );
     m_SelNumberOfUnits->SetValue( m_libEntry->GetUnitCount() );
     m_OptionPartsInterchangeable->SetValue( !m_libEntry->UnitsLocked() || m_libEntry->GetUnitCount() == 1 );
     m_AsConvertButt->SetValue( m_libEntry->HasConversion() );
@@ -180,7 +180,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_ShowPinNumButt->SetValue( m_libEntry->ShowPinNumbers() );
     m_ShowPinNameButt->SetValue( m_libEntry->ShowPinNames() );
     m_PinsNameInsideButt->SetValue( m_libEntry->GetPinNameOffset() != 0 );
-    m_pinNameOffset.SetValue( m_libEntry->GetPinNameOffset() );
+    m_pinNameOffset.ChangeValue( m_libEntry->GetPinNameOffset() );
 
     wxArrayString tmp = m_libEntry->GetFPFilters();
     m_FootprintFilterListBox->Append( tmp );
@@ -443,7 +443,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnSymbolNameText( wxCommandEvent& event )
 {
-    m_grid->SetCellValue( VALUE_FIELD, FDC_VALUE, m_SymbolNameCtrl->GetValue() );
+    if( !m_Parent->IsSymbolFromSchematic() )
+        m_grid->SetCellValue( VALUE_FIELD, FDC_VALUE, m_SymbolNameCtrl->GetValue() );
 }
 
 

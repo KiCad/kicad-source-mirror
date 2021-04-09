@@ -505,7 +505,7 @@ bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         {
         case wxID_YES:
             if( schframe && GetCurPart() )  // Should be always the case
-                schframe->UpdateSymbolFromEditor( *GetCurPart() );
+                schframe->SaveSymbolToSchematic( *GetCurPart());
 
             return true;
 

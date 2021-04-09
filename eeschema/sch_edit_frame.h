@@ -815,7 +815,7 @@ public:
      *
      * @param aSymbol is the #LIB_PART to update.
      */
-    void UpdateSymbolFromEditor( const LIB_PART& aSymbol );
+    void SaveSymbolToSchematic( const LIB_PART& aSymbol );
 
     /**
      * Update the schematic's page reference map for all global labels, and refresh the labels
