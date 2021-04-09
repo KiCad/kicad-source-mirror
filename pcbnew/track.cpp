@@ -612,8 +612,18 @@ double VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     }
     else if( IsHoleLayer( aLayer ) )
     {
-        if( !( visible & LSET::PhysicalLayersMask() ).any() )
-            return HIDE;
+        if( m_viaType == VIATYPE::BLIND_BURIED || m_viaType == VIATYPE::MICROVIA )
+        {
+            // Show a blind or micro via's hole if it crosses a visible layer
+            if( !( visible & GetLayerSet() ).any() )
+                return HIDE;
+        }
+        else
+        {
+            // Show a through via's hole if any physical layer is shown
+            if( !( visible & LSET::PhysicalLayersMask() ).any() )
+                return HIDE;
+        }
     }
     else if( IsNetnameLayer( aLayer ) )
     {
