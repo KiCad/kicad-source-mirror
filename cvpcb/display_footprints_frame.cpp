@@ -497,7 +497,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     UpdateStatusBar();
 
     GetCanvas()->Refresh();
-    Update3DView( true );
+    Update3DView( true, true );
 }
 
 
