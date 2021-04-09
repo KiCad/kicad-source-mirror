@@ -305,8 +305,8 @@ protected:
     void rebuildList()
     {
         wxArrayString netNames;
-        wxString      netstring = m_filterCtrl->GetValue().MakeLower();
-        wxString      filter = netstring;
+        wxString      netstring = m_filterCtrl->GetValue().Trim().Trim( false );
+        wxString      filter = netstring.Lower();
 
         m_unescapedNetNameMap.clear();
 
@@ -333,10 +333,10 @@ protected:
         if( filter.IsEmpty() || wxString( NO_NET ).MakeLower().Matches( filter ) )
             netNames.insert( netNames.begin(), NO_NET );
 
-        if( !filter.IsEmpty() && netNames.IsEmpty() )
+        if( !filter.IsEmpty() && !m_netinfoList->GetNetItem( netstring ) )
         {
             wxString newnet = wxString::Format( "%s: %s", CREATE_NET, netstring );
-            netNames.insert( netNames.begin(), newnet );
+            netNames.insert( netNames.end(), newnet );
         }
 
         if( !m_indeterminateLabel.IsEmpty() )
