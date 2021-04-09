@@ -164,7 +164,7 @@
                                         <property name="col_label_values">&quot;Text Items&quot; &quot;Show&quot; &quot;Layer&quot;</property>
                                         <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                                         <property name="cols">3</property>
-                                        <property name="column_sizes">233,60,120</property>
+                                        <property name="column_sizes">255,60,120</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
                                         <property name="default_pane">0</property>
@@ -218,7 +218,7 @@
                                         <property name="tooltip"></property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
-                                        <property name="window_style"></property>
+                                        <property name="window_style">wxBORDER_SIMPLE|wxTAB_TRAVERSAL</property>
                                         <event name="OnSize">OnGridSize</event>
                                     </object>
                                 </object>
@@ -627,7 +627,7 @@
                                         <property name="tooltip">Net Class parameters</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
-                                        <property name="window_style">wxTAB_TRAVERSAL</property>
+                                        <property name="window_style">wxBORDER_SIMPLE|wxTAB_TRAVERSAL</property>
                                     </object>
                                 </object>
                             </object>
