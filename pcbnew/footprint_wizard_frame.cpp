@@ -565,16 +565,11 @@ void FOOTPRINT_WIZARD_FRAME::OnActivate( wxActivateEvent& event )
 }
 
 
-/**
- * Function Update3DView
- * must be called after a footprint selection
- * Updates the 3D view and 3D frame title.
- */
-void FOOTPRINT_WIZARD_FRAME::Update3DView( bool aForceReload, const wxString* aTitle )
+void FOOTPRINT_WIZARD_FRAME::Update3DView( bool aMarkDirty, bool aRefresh, const wxString* aTitle )
 {
     wxString frm3Dtitle;
     frm3Dtitle.Printf( _( "ModView: 3D Viewer [%s]" ), m_wizardName );
-    PCB_BASE_FRAME::Update3DView( aForceReload, &frm3Dtitle );
+    PCB_BASE_FRAME::Update3DView( aMarkDirty, aRefresh, &frm3Dtitle );
 }
 
 

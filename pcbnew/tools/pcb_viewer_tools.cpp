@@ -68,7 +68,7 @@ int PCB_VIEWER_TOOLS::Show3DViewer( const TOOL_EVENT& aEvent )
      || frame()->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
      || frame()->IsType( FRAME_FOOTPRINT_WIZARD ) )
     {
-        frame()->Update3DView( true );
+        frame()->Update3DView( true, true );
 
         // A stronger version of Raise() which promotes the window to its parent's level.
         KIPLATFORM::UI::ReparentQuasiModal( draw3DFrame );
@@ -222,10 +222,10 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     controls.ShowCursor( true );
     controls.SetAutoPan( false );
     controls.CaptureCursor( false );
-    
-    auto setCursor = 
+
+    auto setCursor =
             [&]()
-            { 
+            {
                 frame()->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
             };
 

@@ -170,7 +170,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
             ToggleSearchTree();
     }
 
-    Update3DView( true );
+    Update3DView( true, true );
     UpdateView();
     GetCanvas()->Refresh();
     m_treePane->GetLibTree()->RefreshLibTree();    // update any previously-highlighted items

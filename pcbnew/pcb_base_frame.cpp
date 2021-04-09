@@ -88,7 +88,7 @@ EDA_3D_VIEWER* PCB_BASE_FRAME::Get3DViewerFrame()
 }
 
 
-void PCB_BASE_FRAME::Update3DView( bool aReloadRequest, const wxString* aTitle )
+void PCB_BASE_FRAME::Update3DView( bool aMarkDirty, bool aRefresh, const wxString* aTitle )
 {
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
@@ -97,10 +97,11 @@ void PCB_BASE_FRAME::Update3DView( bool aReloadRequest, const wxString* aTitle )
         if( aTitle )
             draw3DFrame->SetTitle( *aTitle );
 
-        if( aReloadRequest )
+        if( aMarkDirty )
             draw3DFrame->ReloadRequest();
 
-        draw3DFrame->Redraw();
+        if( aRefresh )
+            draw3DFrame->Redraw();
     }
 }
 

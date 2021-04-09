@@ -194,15 +194,8 @@ private:
      */
     void ParametersUpdated( wxGridEvent& event );
 
-    /**
-     * Must be called after a footprint selection.
-     *
-     * Updates the 3D view and 3D frame title.
-     *
-     * @param aForceReload true to reload data immediately.
-     * @param aTitle (optional) the window title to set for the viewer.
-     */
-    void Update3DView( bool aForceReload, const wxString* aTitle ) override;
+    /// @copydoc PCB_BASE_FRAME::Update3DView
+    void Update3DView( bool aMarkDirty, bool aRefresh, const wxString* aTitle = nullptr ) override;
 
     /*
      * Not used here but needed by PCB_BASE_EDIT_FRAME.

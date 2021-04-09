@@ -736,7 +736,7 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
 void FOOTPRINT_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
-    Update3DView( true );
+    Update3DView( true, true );
     m_treePane->GetLibTree()->RefreshLibTree();
 
     if( !GetTitle().StartsWith( "*" ) )

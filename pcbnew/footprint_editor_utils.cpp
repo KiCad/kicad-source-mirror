@@ -84,7 +84,7 @@ void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID )
     if( m_zoomSelectBox->GetSelection() == 0 )
         Zoom_Automatique( false );
 
-    Update3DView( true );
+    Update3DView( true, true );
 
     GetScreen()->ClrModify();
 

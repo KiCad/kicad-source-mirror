@@ -154,14 +154,8 @@ private:
      */
     void SelectAndViewFootprint( int aMode );
 
-    /**
-     * Updates the 3D view and 3D frame title.
-     *
-     * Must be called after a footprint selection.
-     *
-     * @param aForceReload true to reload data immediately.
-     */
-    void Update3DView( bool aForceReload, const wxString* aTitle = nullptr ) override;
+    /// @copydoc PCB_BASE_FRAME::Update3DView
+    void Update3DView( bool aMarkDirty, bool aRefresh, const wxString* aTitle = nullptr ) override;
 
     void SaveCopyInUndoList( EDA_ITEM*, UNDO_REDO ) override {}
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO ) override {}

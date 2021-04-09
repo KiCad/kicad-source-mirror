@@ -1203,8 +1203,7 @@ void PCB_EDIT_FRAME::OnModify( )
 {
     PCB_BASE_FRAME::OnModify();
 
-    if( GetDisplayOptions().m_Live3DRefresh )
-        Update3DView( true );
+    Update3DView( true, GetDisplayOptions().m_Live3DRefresh );
 
     if( !GetTitle().StartsWith( "*" ) )
         UpdateTitle();
@@ -1215,7 +1214,7 @@ void PCB_EDIT_FRAME::OnModify( )
 
 void PCB_EDIT_FRAME::HardRedraw()
 {
-    Update3DView( true );
+    Update3DView( true, true );
 }
 
 

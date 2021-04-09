@@ -87,10 +87,13 @@ public:
     /**
      * Update the 3D view, if the viewer is opened by this frame.
      *
+     * @param aMarkDirty alerts the 3D view that data is stale (it may not refresh instantly)
+     * @param aRefresh will tell the 3D view to refresh immediately
      * @param aTitle is the new title of the 3D frame, or nullptr to do not change the
      *               frame title
      */
-    virtual void Update3DView( bool aReloadRequest, const wxString* aTitle = nullptr );
+    virtual void Update3DView( bool aMarkDirty, bool aRefresh,
+                               const wxString* aTitle = nullptr );
 
     /**
      * Attempt to load \a aFootprintId from the footprint library table.

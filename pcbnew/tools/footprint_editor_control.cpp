@@ -171,7 +171,7 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
     }
 
     m_frame->UpdateView();
-    m_frame->Update3DView( true );
+    m_frame->Update3DView( true, true );
 
     m_frame->SyncLibraryTree( false );
     return 0;
@@ -232,7 +232,7 @@ int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
 
             m_frame->UpdateView();
             canvas()->Refresh();
-            m_frame->Update3DView( true );
+            m_frame->Update3DView( true, true );
 
             m_frame->SyncLibraryTree( false );
         }

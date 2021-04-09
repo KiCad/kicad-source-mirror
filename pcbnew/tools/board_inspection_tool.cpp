@@ -36,6 +36,7 @@
 #include <dialogs/dialog_constraints_reporter.h>
 #include <kicad_string.h>
 #include "board_inspection_tool.h"
+#include <pcbnew_settings.h>
 #include <widgets/appearance_controls.h>
 
 
@@ -713,7 +714,8 @@ int BOARD_INSPECTION_TOOL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
     else
         m_frame->SendMessageToEESCHEMA( nullptr );
 
-    m_frame->Update3DView( false );
+    // Update 3D viewer highlighting
+    m_frame->Update3DView( false, frame()->GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 
     return 0;
 }
@@ -732,13 +734,14 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     }
     m_probingSchToPcb = false;
 
-    bool request3DviewRedraw = true;
+    bool request3DviewRedraw = frame()->GetPcbNewSettings()->m_Display.m_Live3DRefresh;
 
     if( item && item->Type() != PCB_FOOTPRINT_T )
         request3DviewRedraw = false;
 
+    // Update 3D viewer highlighting
     if( request3DviewRedraw )
-        m_frame->Update3DView( false );
+        m_frame->Update3DView( false, true );
 
     return 0;
 }
