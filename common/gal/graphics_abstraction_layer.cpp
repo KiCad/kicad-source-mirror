@@ -212,6 +212,21 @@ void GAL::ComputeWorldScreenMatrix()
 }
 
 
+BOX2D GAL::GetVisibleWorldExtents() const
+{
+    const MATRIX3x3D& matrix = GetScreenWorldMatrix();
+
+    VECTOR2D halfSize = VECTOR2D( matrix.GetScale().x * m_screenSize.x * 0.5,
+                                  matrix.GetScale().y * m_screenSize.y * 0.5 );
+
+    BOX2D extents;
+    extents.SetOrigin( GetLookAtPoint() - halfSize );
+    extents.SetSize( halfSize * 2 );
+
+    return extents;
+}
+
+
 double GAL::computeMinGridSpacing() const
 {
     // just return the current value. This could be cleverer and take

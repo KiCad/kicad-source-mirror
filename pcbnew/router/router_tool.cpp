@@ -546,7 +546,7 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
 {
     if( aEvent.Category() == TC_VIEW || aEvent.Category() == TC_MOUSE )
     {
-        auto viewAreaD = getView()->GetBoundary();
+        BOX2D viewAreaD = getView()->GetGAL()->GetVisibleWorldExtents();
         m_router->SetVisibleViewArea( BOX2I( viewAreaD.GetOrigin(), viewAreaD.GetSize() ) );
     }
 
@@ -1647,6 +1647,10 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     // Set initial cursor
     setCursor();
+
+    // Set the initial visible area
+    BOX2D viewAreaD = getView()->GetGAL()->GetVisibleWorldExtents();
+    m_router->SetVisibleViewArea( BOX2I( viewAreaD.GetOrigin(), viewAreaD.GetSize() ) );
 
     // Send an initial movement to prime the collision detection
     m_router->Move( p, nullptr );

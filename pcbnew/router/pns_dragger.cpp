@@ -394,12 +394,9 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
 
     OPTIMIZER optimizer( m_lastNode );
 
-    int effort = OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY;
-
-    if( !Settings().GetOptimizeEntireDraggedTrack() )
-        effort |=  OPTIMIZER::RESTRICT_AREA;
-
-    optimizer.SetEffortLevel( effort );
+    optimizer.SetEffortLevel( OPTIMIZER::MERGE_SEGMENTS |
+                              OPTIMIZER::KEEP_TOPOLOGY |
+                              OPTIMIZER::RESTRICT_AREA );
 
     OPT_BOX2I affectedArea = aDragged.ChangedArea( &aOrig );
     VECTOR2I anchor( aP );
@@ -411,18 +408,21 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
 
     optimizer.SetPreserveVertex( anchor );
 
-    if( affectedArea )
-    {
-        Dbg()->AddPoint( anchor, 3 );
-        Dbg()->AddBox( *affectedArea, 2 );
-        optimizer.SetRestrictArea( *affectedArea );
-        optimizer.Optimize( &aDragged );
+    // If we get an affected area and "optimize entire track" is off, we restrict to just that
+    // affected area.  Otherwise, people almost never want KiCad to reroute tracks in areas they
+    // can't even see, so restrict the area to what is visible.
+    if( !affectedArea || Settings().GetOptimizeEntireDraggedTrack() )
+        affectedArea = VisibleViewArea();
 
-        OPT_BOX2I optArea = aDragged.ChangedArea( &aOrig );
+    Dbg()->AddPoint( anchor, 3 );
+    Dbg()->AddBox( *affectedArea, 2 );
+    optimizer.SetRestrictArea( *affectedArea );
+    optimizer.Optimize( &aDragged );
 
-        if( optArea )
-            Dbg()->AddBox( *optArea, 4 );
-    }
+    OPT_BOX2I optArea = aDragged.ChangedArea( &aOrig );
+
+    if( optArea )
+        Dbg()->AddBox( *optArea, 4 );
 
     m_lastNode->Add( aDragged );
     m_draggedItems.Clear();

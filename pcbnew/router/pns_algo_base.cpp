@@ -38,7 +38,6 @@ LOGGER* ALGO_BASE::Logger()
 
 const BOX2I& ALGO_BASE::VisibleViewArea() const
 {
-    auto bb = m_router->VisibleViewArea();
     return m_router->VisibleViewArea();
 }
 

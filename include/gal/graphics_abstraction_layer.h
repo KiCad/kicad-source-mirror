@@ -607,6 +607,11 @@ public:
     }
 
     /**
+     * @return the bounding box of the world that is displayed on screen at the moment
+     */
+    BOX2D GetVisibleWorldExtents() const;
+
+    /**
      * Set the unit length.
      *
      * This defines the length [inch] per one integer. For instance a value 0.001 means

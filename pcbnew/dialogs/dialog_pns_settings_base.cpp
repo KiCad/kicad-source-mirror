@@ -84,7 +84,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bOptions->Add( m_suggestEnding, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_optimizeEntireDraggedTrack = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Optimize entire track being dragged"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_optimizeEntireDraggedTrack->SetToolTip( _("When enabled, the entire track will be optimized and re-routed when dragged.  When disabled, only the area near the segment being dragged will be optimized.") );
+	m_optimizeEntireDraggedTrack->SetToolTip( _("When enabled, the entire portion of the track that is visible on the screen will be optimized and re-routed when a segment is dragged.  When disabled, only the area near the segment being dragged will be optimized.") );
 
 	bOptions->Add( m_optimizeEntireDraggedTrack, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
