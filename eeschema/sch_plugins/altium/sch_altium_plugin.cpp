@@ -58,6 +58,9 @@
 #include <kicad_string.h>
 #include <sch_edit_frame.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/mstream.h>
+#include <wx/zstream.h>
+#include <wx/wfstream.h>
 
 
 const wxPoint GetRelativePosition( const wxPoint& aPosition, const SCH_COMPONENT* aComponent )
@@ -270,7 +273,8 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
     try
     {
         CFB::CompoundFileReader reader( buffer.get(), bytesRead );
-        Parse( reader );
+        ParseStorage( reader ); // we need this before parsing the FileHeader
+        ParseFileHeader( reader );
     }
     catch( CFB::CFBException& exception )
     {
@@ -279,7 +283,39 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
 }
 
 
-void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
+void SCH_ALTIUM_PLUGIN::ParseStorage( const CFB::CompoundFileReader& aReader )
+{
+    const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, "Storage" );
+
+    if( file == nullptr )
+        return;
+
+    ALTIUM_PARSER reader( aReader, file );
+
+    std::map<wxString, wxString> properties = reader.ReadProperties();
+    wxString header = ALTIUM_PARSER::PropertiesReadString( properties, "HEADER", "" );
+    int      weight = ALTIUM_PARSER::PropertiesReadInt( properties, "WEIGHT", 0 );
+
+    if( weight < 0 )
+        THROW_IO_ERROR( "Storage weight is negative!" );
+
+    for( int i = 0; i < weight; i++ )
+    {
+        m_altiumStorage.emplace_back( reader );
+    }
+
+    if( reader.HasParsingError() )
+        THROW_IO_ERROR( "stream was not parsed correctly!" );
+
+    // TODO pointhi: is it possible to have multiple headers in one Storage file? Otherwise throw IO Error.
+    if( reader.GetRemainingBytes() != 0 )
+        wxLogError(
+                wxString::Format( "Storage file was not fully parsed as %d bytes are remaining.",
+                                  reader.GetRemainingBytes() ) );
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader )
 {
     const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, "FileHeader" );
 
@@ -391,8 +427,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::JUNCTION:
             ParseJunction( properties );
             break;
-        case ALTIUM_SCH_RECORD::IMAGE:
-            break;
+        case ALTIUM_SCH_RECORD::IMAGE: ParseImage( properties ); break;
         case ALTIUM_SCH_RECORD::SHEET:
             ParseSheet( properties );
             break;
@@ -490,6 +525,27 @@ bool SCH_ALTIUM_PLUGIN::IsComponentPartVisible( int aOwnerindex, int aOwnerpartd
         return false;
 
     return component->second.displaymode == aOwnerpartdisplaymode;
+}
+
+
+const ASCH_STORAGE_FILE* SCH_ALTIUM_PLUGIN::GetFileFromStorage( const wxString& aFilename ) const
+{
+    const ASCH_STORAGE_FILE* nonExactMatch = nullptr;
+
+    for( const ASCH_STORAGE_FILE& file : m_altiumStorage )
+    {
+        if( file.filename.IsSameAs( aFilename ) )
+        {
+            return &file;
+        }
+
+        if( file.filename.EndsWith( aFilename ) )
+        {
+            nonExactMatch = &file;
+        }
+    }
+
+    return nonExactMatch;
 }
 
 
@@ -1871,6 +1927,69 @@ void SCH_ALTIUM_PLUGIN::ParseJunction( const std::map<wxString, wxString>& aProp
 
     junction->SetFlags( IS_NEW );
     m_currentSheet->GetScreen()->Append( junction );
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseImage( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_IMAGE elem( aProperties );
+
+    wxPoint                     center = ( elem.location + elem.corner ) / 2 + m_sheetOffset;
+    std::unique_ptr<SCH_BITMAP> bitmap = std::make_unique<SCH_BITMAP>( center );
+
+    if( elem.embedimage )
+    {
+        const ASCH_STORAGE_FILE* storageFile = GetFileFromStorage( elem.filename );
+
+        if( !storageFile )
+        {
+            wxLogError(
+                    wxString::Format( "Embedded file not found in storage: %s", elem.filename ) );
+            return;
+        }
+
+        wxString storagePath = wxFileName::CreateTempFileName( "kicad_import_" );
+
+        // As wxZlibInputStream is not seekable, we need to write a temporary file
+        wxMemoryInputStream fileStream( storageFile->data.data(), storageFile->data.size() );
+        wxZlibInputStream   zlibInputStream( fileStream );
+        wxFFileOutputStream outputStream( storagePath );
+        outputStream.Write( zlibInputStream );
+        outputStream.Close();
+
+        if( !bitmap->ReadImageFile( storagePath ) )
+        {
+            wxLogError( wxString::Format( "Error while reading image: %s", storagePath ) );
+            return;
+        }
+
+        // Remove temporary file
+        wxRemoveFile( storagePath );
+    }
+    else
+    {
+        if( !wxFileExists( elem.filename ) )
+        {
+            wxLogError( wxString::Format( "File not found on disk: %s", elem.filename ) );
+            return;
+        }
+
+        if( !bitmap->ReadImageFile( elem.filename ) )
+        {
+            wxLogError( wxString::Format( "Error while reading image: %s", elem.filename ) );
+            return;
+        }
+    }
+
+    // we only support one scale, thus we need to select one in case it does not keep aspect ratio
+    wxSize  currentImageSize = bitmap->GetSize();
+    wxPoint expectedImageSize = elem.location - elem.corner;
+    double  scaleX = std::abs( static_cast<double>( expectedImageSize.x ) / currentImageSize.x );
+    double  scaleY = std::abs( static_cast<double>( expectedImageSize.y ) / currentImageSize.y );
+    bitmap->SetImageScale( std::min( scaleX, scaleY ) );
+
+    bitmap->SetFlags( IS_NEW );
+    m_currentSheet->GetScreen()->Append( bitmap.release() );
 }
 
 

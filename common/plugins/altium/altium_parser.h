@@ -30,6 +30,7 @@
 
 #include <math/util.h>
 #include <wx/gdicmn.h>
+#include <vector>
 
 
 namespace CFB
@@ -81,6 +82,21 @@ public:
         {
             m_error = true;
             return wxString( "" );
+        }
+    }
+
+    std::vector<char> ReadVector( size_t aSize )
+    {
+        if( aSize > GetRemainingBytes() )
+        {
+            m_error = true;
+            return {};
+        }
+        else
+        {
+            std::vector<char> data( m_pos, m_pos + aSize );
+            m_pos += aSize;
+            return data;
         }
     }
 

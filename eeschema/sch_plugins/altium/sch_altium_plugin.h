@@ -104,10 +104,12 @@ public:
     wxFileName getLibFileName();
 
     void ParseAltiumSch( const wxString& aFileName );
-    void Parse( const CFB::CompoundFileReader& aReader );
+    void ParseStorage( const CFB::CompoundFileReader& aReader );
+    void ParseFileHeader( const CFB::CompoundFileReader& aReader );
 
 private:
     bool IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const;
+    const ASCH_STORAGE_FILE* GetFileFromStorage( const wxString& aFilename ) const;
 
     void ParseComponent( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParsePin( const std::map<wxString, wxString>& aProperties );
@@ -128,6 +130,7 @@ private:
     void ParseBus( const std::map<wxString, wxString>& aProperties );
     void ParseWire( const std::map<wxString, wxString>& aProperties );
     void ParseJunction( const std::map<wxString, wxString>& aProperties );
+    void ParseImage( const std::map<wxString, wxString>& aProperties );
     void ParseSheet( const std::map<wxString, wxString>& aProperties );
     void ParseSheetName( const std::map<wxString, wxString>& aProperties );
     void ParseFileName( const std::map<wxString, wxString>& aProperties );
@@ -156,6 +159,7 @@ private:
     std::map<int, LIB_PART*>        m_symbols;           // every component has its unique symbol
 
     std::map<wxString, LIB_PART*>   m_powerSymbols;
+    std::vector<ASCH_STORAGE_FILE>  m_altiumStorage;
 
     std::map<int, ASCH_COMPONENT>   m_altiumComponents;
     std::vector<ASCH_PORT>          m_altiumPortsCurrentSheet; // we require all connections first

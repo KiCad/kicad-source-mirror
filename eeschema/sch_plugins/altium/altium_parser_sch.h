@@ -35,6 +35,17 @@
 // this constant specifies a item which is not inside an component
 const int ALTIUM_COMPONENT_NONE = -1;
 
+class ALTIUM_PARSER;
+
+struct ASCH_STORAGE_FILE
+{
+    wxString          filename;
+    std::vector<char> data;
+
+    explicit ASCH_STORAGE_FILE( ALTIUM_PARSER& aReader );
+};
+
+
 enum class ALTIUM_SCH_RECORD
 {
     HEADER              = 0,
@@ -537,6 +548,22 @@ struct ASCH_JUNCTION
     wxPoint location;
 
     explicit ASCH_JUNCTION( const std::map<wxString, wxString>& aProperties );
+};
+
+
+struct ASCH_IMAGE
+{
+    int indexinsheet;
+    int ownerpartid;
+
+    wxString filename;
+    wxPoint  location;
+    wxPoint  corner;
+
+    bool embedimage;
+    bool keepaspect;
+
+    explicit ASCH_IMAGE( const std::map<wxString, wxString>& aProperties );
 };
 
 
