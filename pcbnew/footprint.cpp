@@ -123,7 +123,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     {
         PAD* newPad = static_cast<PAD*>( pad->Clone() );
         ptrMap[ pad ] = newPad;
-        Add( newPad );
+        Add( newPad, ADD_MODE::APPEND ); // Append to ensure indexes are identical
     }
 
     // Copy zones
@@ -131,7 +131,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     {
         FP_ZONE* newZone = static_cast<FP_ZONE*>( zone->Clone() );
         ptrMap[ zone ] = newZone;
-        Add( newZone );
+        Add( newZone, ADD_MODE::APPEND ); // Append to ensure indexes are identical
 
         // Ensure the net info is OK and especially uses the net info list
         // living in the current board
@@ -145,7 +145,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     {
         BOARD_ITEM* newItem = static_cast<BOARD_ITEM*>( item->Clone() );
         ptrMap[ item ] = newItem;
-        Add( newItem );
+        Add( newItem, ADD_MODE::APPEND ); // Append to ensure indexes are identical
     }
 
     // Copy groups
@@ -153,7 +153,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     {
         PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( group->Clone() );
         ptrMap[ group ] = newGroup;
-        Add( newGroup );
+        Add( newGroup, ADD_MODE::APPEND ); // Append to ensure indexes are identical
     }
 
     // Rebuild groups
