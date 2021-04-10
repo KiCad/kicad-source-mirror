@@ -38,6 +38,7 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( PCB_BASE_EDIT_FRAME* aFrame, PAGED_DIALO
     m_magneticPads->Show( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) != nullptr );
     m_magneticGraphics->Show( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) != nullptr );
     m_flipLeftRight->Show( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) != nullptr );
+    m_allowFreePads->Show( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) != nullptr );
 
 #ifdef __WXOSX_MAC__
     m_mouseCmdsOSX->Show( true );
@@ -64,13 +65,16 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
 
     if( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) )
     {
+        const MAGNETIC_SETTINGS& mag_opts = general_opts.m_MagneticItems;
+
         /* Set display options */
         m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts.m_DisplayRatsnestLinesCurved );
         m_showSelectedRatsnest->SetValue( displ_opts.m_ShowModuleRatsnest );
 
-        m_magneticPadChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.pads ) );
-        m_magneticTrackChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.tracks ) );
-        m_magneticGraphicsChoice->SetSelection( !general_opts.m_MagneticItems.graphics );
+        m_magneticPadChoice->SetSelection( static_cast<int>( mag_opts.pads ) );
+        m_magneticTrackChoice->SetSelection( static_cast<int>( mag_opts.tracks ) );
+        m_magneticGraphicsChoice->SetSelection( !mag_opts.graphics );
+
         m_flipLeftRight->SetValue( general_opts.m_FlipLeftRight );
 
         switch( general_opts.m_TrackDragAction )
@@ -80,15 +84,16 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
         case TRACK_DRAG_ACTION::DRAG_FREE_ANGLE: m_rbTrackDragFree->SetValue( true ); break;
         }
 
-        m_Show_Page_Limits->SetValue( m_frame->ShowPageLimits() );
-        m_Auto_Refill_Zones->SetValue( general_opts.m_AutoRefillZones );
-        m_Allow_Free_Pads->SetValue( general_opts.m_AllowFreePads );
+        m_showPageLimits->SetValue( m_frame->ShowPageLimits() );
+        m_autoRefillZones->SetValue( general_opts.m_AutoRefillZones );
+        m_allowFreePads->SetValue( general_opts.m_AllowFreePads );
     }
     else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
     {
-        m_magneticPads->SetValue( m_frame->GetMagneticItemsSettings()->pads
-                                                            == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
-        m_magneticGraphics->SetValue( m_frame->GetMagneticItemsSettings()->graphics );
+        const MAGNETIC_SETTINGS* mag_opts = m_frame->GetMagneticItemsSettings();
+
+        m_magneticPads->SetValue( mag_opts->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+        m_magneticGraphics->SetValue( mag_opts->graphics );
     }
 
     return true;
@@ -105,21 +110,21 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 
     if( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) )
     {
-        PCBNEW_SETTINGS& pcbnewSettings = m_frame->Settings();
+        PCBNEW_SETTINGS&   pcbnewSettings = m_frame->Settings();
+        MAGNETIC_SETTINGS& mag_opts = pcbnewSettings.m_MagneticItems;
 
         displ_opts.m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
         displ_opts.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
 
-        m_frame->Settings().m_MagneticItems.pads =
-                static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
-        m_frame->Settings().m_MagneticItems.tracks =
-                static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );
-        m_frame->Settings().m_MagneticItems.graphics = !m_magneticGraphicsChoice->GetSelection();
+        mag_opts.pads = static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
+        mag_opts.tracks = static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );
+        mag_opts.graphics = !m_magneticGraphicsChoice->GetSelection();
 
-        m_frame->Settings().m_FlipLeftRight = m_flipLeftRight->GetValue();
-        m_frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
-        m_frame->Settings().m_AutoRefillZones = m_Auto_Refill_Zones->GetValue();
-        m_frame->Settings().m_AllowFreePads = m_Allow_Free_Pads->GetValue();
+        pcbnewSettings.m_FlipLeftRight = m_flipLeftRight->GetValue();
+        pcbnewSettings.m_AutoRefillZones = m_autoRefillZones->GetValue();
+        pcbnewSettings.m_AllowFreePads = m_allowFreePads->GetValue();
+
+        m_frame->SetShowPageLimits( m_showPageLimits->GetValue() );
 
         if( m_rbTrackDragMove->GetValue() )
             pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::MOVE;
@@ -130,11 +135,11 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
     }
     else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
     {
-        m_frame->GetMagneticItemsSettings()->pads = m_magneticPads->GetValue()
-                                                            ? MAGNETIC_OPTIONS::CAPTURE_ALWAYS
-                                                            : MAGNETIC_OPTIONS::NO_EFFECT;
+        MAGNETIC_SETTINGS* mag_opts = m_frame->GetMagneticItemsSettings();
 
-        m_frame->GetMagneticItemsSettings()->graphics = m_magneticGraphics->GetValue();
+        mag_opts->pads = m_magneticPads->GetValue() ? MAGNETIC_OPTIONS::CAPTURE_ALWAYS
+                                                    : MAGNETIC_OPTIONS::NO_EFFECT;
+        mag_opts->graphics = m_magneticGraphics->GetValue();
     }
 
     // Apply changes to the GAL

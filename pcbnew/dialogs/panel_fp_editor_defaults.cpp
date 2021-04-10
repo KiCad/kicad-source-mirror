@@ -144,7 +144,7 @@ public:
 };
 
 
-// Columns of layer classes grid
+// Columns of graphics grid
 enum
 {
     COL_LINE_THICKNESS = 0,
@@ -182,6 +182,7 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
     m_textItemsGrid->SetColAttr( 1, attr );
 
     attr = new wxGridCellAttr;

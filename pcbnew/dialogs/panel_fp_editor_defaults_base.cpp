@@ -36,7 +36,7 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	m_textItemsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_textItemsGrid->SetColSize( 0, 255 );
+	m_textItemsGrid->SetColSize( 0, 268 );
 	m_textItemsGrid->SetColSize( 1, 60 );
 	m_textItemsGrid->SetColSize( 2, 120 );
 	m_textItemsGrid->EnableDragColMove( false );

@@ -47,6 +47,8 @@ class PANEL_EDIT_OPTIONS_BASE : public wxPanel
 		wxCheckBox* m_segments45OnlyCtrl;
 		wxStaticText* m_staticTextRotationAngle;
 		wxTextCtrl* m_rotationAngle;
+		wxStaticText* m_staticText32;
+		wxCheckBox* m_allowFreePads;
 		wxStaticBoxSizer* m_mouseCmdsWinLin;
 		wxStaticText* m_staticText181;
 		wxStaticBoxSizer* m_mouseCmdsOSX;
@@ -64,9 +66,8 @@ class PANEL_EDIT_OPTIONS_BASE : public wxPanel
 		wxRadioButton* m_rbTrackDragMove;
 		wxRadioButton* m_rbTrackDrag45;
 		wxRadioButton* m_rbTrackDragFree;
-		wxCheckBox* m_Show_Page_Limits;
-		wxCheckBox* m_Auto_Refill_Zones;
-		wxCheckBox* m_Allow_Free_Pads;
+		wxCheckBox* m_showPageLimits;
+		wxCheckBox* m_autoRefillZones;
 
 	public:
 

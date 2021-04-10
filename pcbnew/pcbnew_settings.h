@@ -31,7 +31,7 @@ namespace PNS
 
 enum class MAGNETIC_OPTIONS
 {
-    NO_EFFECT,
+    NO_EFFECT = 0,
     CAPTURE_CURSOR_IN_TRACK_TOOL,
     CAPTURE_ALWAYS
 };
