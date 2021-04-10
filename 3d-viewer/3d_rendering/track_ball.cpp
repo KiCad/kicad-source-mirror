@@ -97,10 +97,10 @@ void TRACK_BALL::Pan( const wxPoint& aNewMousePosition )
 
     if( m_projectionType == PROJECTION_TYPE::ORTHO )
     {
-        // With the orthographic projection, there is just a zoom factor
-        const float panFactor = m_zoom / 37.5f; // Magic number from CAMERA::rebuildProjection
-        m_camera_pos.x -= panFactor * ( m_lastPosition.x - aNewMousePosition.x );
-        m_camera_pos.y -= panFactor * ( aNewMousePosition.y - m_lastPosition.y );
+        m_camera_pos.x -= m_frustum.nw *
+                ( m_lastPosition.x - aNewMousePosition.x ) / m_windowSize.x;
+        m_camera_pos.y -= m_frustum.nh *
+                ( aNewMousePosition.y - m_lastPosition.y ) / m_windowSize.y;
     }
     else // PROJECTION_TYPE::PERSPECTIVE
     {
