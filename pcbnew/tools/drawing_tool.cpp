@@ -2218,10 +2218,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             m_worstClearance( 0 ),
             m_flaggedDRC( false )
         {
-            ROUTER_TOOL*           router = m_frame->GetToolManager()->GetTool<ROUTER_TOOL>();
-            PNS::ROUTING_SETTINGS& cfg = router->Router()->Settings();
+            ROUTER_TOOL* router = m_frame->GetToolManager()->GetTool<ROUTER_TOOL>();
 
-            m_allowDRCViolations = cfg.Mode() == PNS::RM_MarkObstacles && cfg.CanViolateDRC();
+            m_allowDRCViolations = router->Router()->Settings().AllowDRCViolations();
 
             try
             {

@@ -256,7 +256,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
     }
     }
 
-    if( Settings().CanViolateDRC() )
+    if( Settings().AllowDRCViolations() )
         m_dragStatus = true;
     else
         m_dragStatus = !m_world->CheckColliding( m_draggedItems );
@@ -619,7 +619,7 @@ bool DRAGGER::FixRoute()
                 return false;
         }
 
-        if( !m_dragStatus && !Settings().CanViolateDRC()  )
+        if( !m_dragStatus && !Settings().AllowDRCViolations() )
             return false;
 
         Router()->CommitRouting( node );

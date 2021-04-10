@@ -44,7 +44,7 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTIN
     m_smartPads->SetValue( m_settings.SmartPads() );
     m_effort->SetValue( m_settings.OptimizerEffort() );
     m_smoothDragged->SetValue( m_settings.SmoothDraggedSegments() );
-    m_violateDrc->SetValue( m_settings.CanViolateDRC() );
+    m_violateDrc->SetValue( m_settings.GetAllowDRCViolationsSetting() );
     m_freeAngleMode->SetValue( m_settings.GetFreeAngleMode() );
     m_dragToolMode->SetSelection ( m_settings.InlineDragEnabled() ? 1 : 0 );
     m_optimizeDraggedTrack->SetValue( m_settings.GetOptimizeDraggedTrack() );
@@ -83,7 +83,7 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
 
     if( m_mode->GetSelection() == PNS::RM_MarkObstacles )
     {
-        m_settings.SetCanViolateDRC( m_violateDrc->GetValue() );
+        m_settings.SetAllowDRCViolations( m_violateDrc->GetValue() );
         m_settings.SetFreeAngleMode( m_freeAngleMode->GetValue() );
     }
 
@@ -98,7 +98,7 @@ void DIALOG_PNS_SETTINGS::onModeChange( wxCommandEvent& aEvent )
         m_freeAngleMode->SetValue( m_settings.GetFreeAngleMode() );
         m_freeAngleMode->Enable();
 
-        m_violateDrc->SetValue( m_settings.CanViolateDRC() );
+        m_violateDrc->SetValue( m_settings.GetAllowDRCViolationsSetting() );
         m_violateDrc->Enable();
     }
     else
@@ -110,7 +110,7 @@ void DIALOG_PNS_SETTINGS::onModeChange( wxCommandEvent& aEvent )
         m_freeAngleMode->Enable( false );
 
         if( m_violateDrc->IsEnabled() )
-            m_settings.SetCanViolateDRC( m_violateDrc->GetValue() );
+            m_settings.SetAllowDRCViolations( m_violateDrc->GetValue() );
 
         m_violateDrc->SetValue( false );
         m_violateDrc->Enable( false );

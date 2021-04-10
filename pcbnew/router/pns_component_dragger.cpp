@@ -163,7 +163,8 @@ bool COMPONENT_DRAGGER::FixRoute()
     if( node )
     {
         bool ok;
-        if( Settings().CanViolateDRC() )
+
+        if( Settings().AllowDRCViolations() )
             ok = true;
         else
             ok = !node->CheckColliding( m_draggedItems );

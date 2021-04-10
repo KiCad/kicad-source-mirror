@@ -520,7 +520,7 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
     m_head.SetBlockingObstacle( nullptr );
 
     // If we are enforcing DRC violations, push back to the hull
-    if( !Settings().CanViolateDRC() )
+    if( !Settings().AllowDRCViolations() )
     {
         NODE::OPT_OBSTACLE obs = m_currentNode->NearestObstacle( &m_head );
 
@@ -1048,7 +1048,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         }
 
         // Collisions still prevent fixing unless "Allow DRC violations" is checked
-        if( !Settings().CanViolateDRC() && m_world->CheckColliding( &pl ) )
+        if( !Settings().AllowDRCViolations() && m_world->CheckColliding( &pl ) )
             return false;
     }
 

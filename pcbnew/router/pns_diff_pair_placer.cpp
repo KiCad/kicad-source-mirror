@@ -713,11 +713,10 @@ void DIFF_PAIR_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 
 bool DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
 {
-    if( !m_fitOk && !Settings().CanViolateDRC() )
+    if( !m_fitOk && !Settings().AllowDRCViolations() )
         return false;
 
-    if( m_currentTrace.CP().SegmentCount() < 1 ||
-            m_currentTrace.CN().SegmentCount() < 1 )
+    if( m_currentTrace.CP().SegmentCount() < 1 || m_currentTrace.CN().SegmentCount() < 1 )
         return false;
 
     if( m_currentTrace.CP().SegmentCount() > 1 )

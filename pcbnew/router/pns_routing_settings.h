@@ -119,17 +119,17 @@ public:
 
     ///< Return true if jumping over unmovable obstacles is on.
     bool JumpOverObstacles() const { return m_jumpOverObstacles; }
-
-    ///< Enable/disable jumping over unmovable obstacles.
-    void SetJumpOverObstacles( bool aJumpOverObstacles )
-    {
-        m_jumpOverObstacles = aJumpOverObstacles;
-    }
+    void SetJumpOverObstacles( bool aJump ) { m_jumpOverObstacles = aJump; }
 
     void SetStartDiagonal( bool aStartDiagonal ) { m_startDiagonal = aStartDiagonal; }
 
-    bool CanViolateDRC() const { return m_canViolateDRC; }
-    void SetCanViolateDRC( bool aViolate ) { m_canViolateDRC = aViolate; }
+    bool AllowDRCViolations() const
+    {
+        return m_routingMode == PNS_MODE::RM_MarkObstacles && m_allowDRCViolations;
+    }
+
+    bool GetAllowDRCViolationsSetting() const { return m_allowDRCViolations; }
+    void SetAllowDRCViolations( bool aViolate ) { m_allowDRCViolations = aViolate; }
 
     bool GetFreeAngleMode() const { return m_freeAngleMode; }
 
@@ -173,7 +173,7 @@ private:
     bool m_followMouse;
     bool m_jumpOverObstacles;
     bool m_smoothDraggedSegments;
-    bool m_canViolateDRC;
+    bool m_allowDRCViolations;
     bool m_freeAngleMode;
     bool m_inlineDragEnabled;
     bool m_snapToTracks;

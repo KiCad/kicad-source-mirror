@@ -182,7 +182,7 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
 
 bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, int aLayer )
 {
-    if( Settings().CanViolateDRC() && Settings().Mode() == RM_MarkObstacles )
+    if( Settings().AllowDRCViolations() )
         return true;
 
     if( m_mode == PNS_MODE_ROUTE_DIFF_PAIR )
