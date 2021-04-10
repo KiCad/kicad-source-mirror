@@ -408,11 +408,12 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
 
     optimizer.SetPreserveVertex( anchor );
 
-    // If we get an affected area and "optimize entire track" is off, we restrict to just that
-    // affected area.  Otherwise, people almost never want KiCad to reroute tracks in areas they
-    // can't even see, so restrict the area to what is visible.
-    if( !affectedArea || Settings().GetOptimizeEntireDraggedTrack() )
+    // People almost never want KiCad to reroute tracks in areas they can't even see, so restrict
+    // the area to what is visible even if we are optimizing the "entire" track.
+    if( Settings().GetOptimizeEntireDraggedTrack() )
         affectedArea = VisibleViewArea();
+    else if( !affectedArea )
+        affectedArea = BOX2I( aP ); // No valid area yet? set to minimum to disable optimization
 
     Dbg()->AddPoint( anchor, 3 );
     Dbg()->AddBox( *affectedArea, 2 );
