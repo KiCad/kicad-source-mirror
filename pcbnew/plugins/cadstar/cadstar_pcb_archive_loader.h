@@ -96,6 +96,18 @@ private:
                                                          ///< components on the board. Does NOT own
                                                          ///< the FOOTPRINT objects (these should
                                                          ///< have been loaded to m_board).
+
+    /**
+     * Map of pad anchor points (first) to copper pads (second). In the vast majority
+     * of designs there is only one copper pad, but just in case, making it a vector
+     */
+    using ASSOCIATED_COPPER_PADS = std::map<PAD_ID, std::vector<PAD_ID>>;
+
+    /**
+     * Associated copper pads (if any) for each component library definition
+     */
+    std::map<SYMDEF_ID, ASSOCIATED_COPPER_PADS> m_librarycopperpads;
+
     std::map<NET_ID, NETINFO_ITEM*>       m_netMap;      ///< Map between Cadstar and KiCad Nets
     std::map<ROUTECODE_ID, NETCLASSPTR>   m_netClassMap; ///< Map between Cadstar and KiCad classes
     std::map<TEMPLATE_ID, ZONE*> m_zonesMap;             ///< Map between Cadstar and KiCad zones
@@ -394,6 +406,7 @@ private:
     // Helper Functions for obtaining individual elements as KiCad elements:
     double     getHatchCodeAngleDegrees( const HATCHCODE_ID& aCadstarHatchcodeID );
     PAD*       getKiCadPad( const COMPONENT_PAD& aCadstarPad, FOOTPRINT* aParent );
+    PAD*&      getPadReference( FOOTPRINT* aFootprint, const PAD_ID aCadstarPadID );
     FOOTPRINT* getFootprintFromCadstarID( const COMPONENT_ID& aCadstarComponentID );
     int        getKiCadHatchCodeThickness( const HATCHCODE_ID& aCadstarHatchcodeID );
     int        getKiCadHatchCodeGap( const HATCHCODE_ID& aCadstarHatchcodeID );
