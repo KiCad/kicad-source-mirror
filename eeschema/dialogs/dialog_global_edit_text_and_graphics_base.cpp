@@ -187,7 +187,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	wxString m_orientationChoices[] = { _("Right"), _("Up"), _("Left"), _("Down"), _("...") };
 	int m_orientationNChoices = sizeof( m_orientationChoices ) / sizeof( wxString );
 	m_orientation = new wxChoice( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_orientationNChoices, m_orientationChoices, 0 );
-	m_orientation->SetSelection( 0 );
+	m_orientation->SetSelection( 4 );
 	fgSizer1->Add( m_orientation, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
@@ -227,7 +227,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	wxString m_hAlignChoices[] = { _("Left"), _("Center"), _("Right"), _("...") };
 	int m_hAlignNChoices = sizeof( m_hAlignChoices ) / sizeof( wxString );
 	m_hAlign = new wxChoice( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_hAlignNChoices, m_hAlignChoices, 0 );
-	m_hAlign->SetSelection( 0 );
+	m_hAlign->SetSelection( 3 );
 	fgSizer1->Add( m_hAlign, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
@@ -249,7 +249,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	wxString m_vAlignChoices[] = { _("Top"), _("Center"), _("Bottom"), _("...") };
 	int m_vAlignNChoices = sizeof( m_vAlignChoices ) / sizeof( wxString );
 	m_vAlign = new wxChoice( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_vAlignNChoices, m_vAlignChoices, 0 );
-	m_vAlign->SetSelection( 0 );
+	m_vAlign->SetSelection( 3 );
 	fgSizer1->Add( m_vAlign, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
