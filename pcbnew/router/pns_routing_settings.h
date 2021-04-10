@@ -155,8 +155,8 @@ public:
     CORNER_MODE GetCornerMode() const { return m_cornerMode; }
     void SetCornerMode( CORNER_MODE aMode ) { m_cornerMode = aMode; }
 
-    bool GetOptimizeDraggedTrack() const { return m_optimizeDraggedTrack; }
-    void SetOptimizeDraggedTrack( bool aEnable ) { m_optimizeDraggedTrack = aEnable; }
+    bool GetOptimizeEntireDraggedTrack() const { return m_optimizeEntireDraggedTrack; }
+    void SetOptimizeEntireDraggedTrack( bool aEnable ) { m_optimizeEntireDraggedTrack = aEnable; }
 
     bool GetAutoPosture() const { return m_autoPosture; }
     void SetAutoPosture( bool aEnable ) { m_autoPosture = aEnable; }
@@ -178,7 +178,7 @@ private:
     bool m_inlineDragEnabled;
     bool m_snapToTracks;
     bool m_snapToPads;
-    bool m_optimizeDraggedTrack;
+    bool m_optimizeEntireDraggedTrack;
     bool m_autoPosture;
     bool m_fixAllSegments;
 

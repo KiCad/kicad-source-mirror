@@ -50,7 +50,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_inlineDragEnabled = false;
     m_snapToTracks = false;
     m_snapToPads = false;
-    m_optimizeDraggedTrack = true;
+    m_optimizeEntireDraggedTrack = false;
     m_cornerMode = CORNER_MODE::MITERED_45;
     m_autoPosture = true;
     m_fixAllSegments = true;
@@ -90,7 +90,8 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_params.emplace_back( new PARAM<bool>( "inline_drag",      &m_inlineDragEnabled, false ) );
     m_params.emplace_back( new PARAM<bool>( "snap_to_tracks",   &m_snapToTracks,      false ) );
     m_params.emplace_back( new PARAM<bool>( "snap_to_pads",     &m_snapToPads,        false ) );
-    m_params.emplace_back( new PARAM<bool>( "optimize_dragged_track", &m_optimizeDraggedTrack, true ) );
+    m_params.emplace_back( new PARAM<bool>( "optimize_dragged_track",
+                                            &m_optimizeEntireDraggedTrack, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "auto_posture",     &m_autoPosture,       true ) );
     m_params.emplace_back( new PARAM<bool>( "fix_all_segments", &m_fixAllSegments,    true ) );

@@ -21,7 +21,6 @@
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/slider.h>
 #include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -48,13 +47,9 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_smoothDragged;
 		wxCheckBox* m_violateDrc;
 		wxCheckBox* m_suggestEnding;
-		wxCheckBox* m_optimizeDraggedTrack;
+		wxCheckBox* m_optimizeEntireDraggedTrack;
 		wxCheckBox* m_autoPosture;
 		wxCheckBox* m_fixAllSegments;
-		wxStaticText* m_effortLabel;
-		wxSlider* m_effort;
-		wxStaticText* m_lowLabel;
-		wxStaticText* m_highLabel;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;

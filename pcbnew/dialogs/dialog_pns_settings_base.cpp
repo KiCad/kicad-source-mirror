@@ -83,8 +83,10 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	bOptions->Add( m_suggestEnding, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_optimizeDraggedTrack = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Optimize track being dragged"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptions->Add( m_optimizeDraggedTrack, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_optimizeEntireDraggedTrack = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Optimize entire track being dragged"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_optimizeEntireDraggedTrack->SetToolTip( _("When enabled, the entire track will be optimized and re-routed when dragged.  When disabled, only the area near the segment being dragged will be optimized.") );
+
+	bOptions->Add( m_optimizeEntireDraggedTrack, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_autoPosture = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Use mouse path to set track posture"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_autoPosture->SetToolTip( _("When enabled, the posture of tracks will be guided by how the mouse is moved from the starting location") );
@@ -95,53 +97,6 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_fixAllSegments->SetToolTip( _("When enabled, all track segments will be fixed in place up to the cursor location.  When disabled, the last segment (closest to the cursor) will remain free and follow the cursor.") );
 
 	bOptions->Add( m_fixAllSegments, 0, wxALL, 5 );
-
-	wxBoxSizer* bEffort;
-	bEffort = new wxBoxSizer( wxHORIZONTAL );
-
-	m_effortLabel = new wxStaticText( bOptions->GetStaticBox(), wxID_ANY, _("Optimizer effort:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_effortLabel->Wrap( -1 );
-	m_effortLabel->SetToolTip( _("Defines how much time the router shall spend optimizing the routed/shoved traces.\nMore effort means cleaner routing (but slower), less effort means faster routing but somewhat jagged traces.") );
-
-	bEffort->Add( m_effortLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 20 );
-
-
-	bEffort->Add( 5, 0, 0, wxEXPAND, 5 );
-
-	wxBoxSizer* bSlider;
-	bSlider = new wxBoxSizer( wxVERTICAL );
-
-	m_effort = new wxSlider( bOptions->GetStaticBox(), wxID_ANY, 1, 0, 2, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_BOTTOM|wxSL_HORIZONTAL|wxSL_TOP );
-	m_effort->SetMinSize( wxSize( -1,28 ) );
-
-	bSlider->Add( m_effort, 1, wxEXPAND|wxTOP, 5 );
-
-	wxBoxSizer* bSliderLabels;
-	bSliderLabels = new wxBoxSizer( wxHORIZONTAL );
-
-	m_lowLabel = new wxStaticText( bOptions->GetStaticBox(), wxID_ANY, _("low"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_lowLabel->Wrap( -1 );
-	m_lowLabel->SetFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
-	bSliderLabels->Add( m_lowLabel, 0, 0, 5 );
-
-
-	bSliderLabels->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_highLabel = new wxStaticText( bOptions->GetStaticBox(), wxID_ANY, _("high"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_highLabel->Wrap( -1 );
-	m_highLabel->SetFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
-	bSliderLabels->Add( m_highLabel, 0, 0, 5 );
-
-
-	bSlider->Add( bSliderLabels, 0, wxEXPAND|wxBOTTOM, 5 );
-
-
-	bEffort->Add( bSlider, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	bOptions->Add( bEffort, 0, wxEXPAND|wxALL, 5 );
 
 
 	bMainSizer->Add( bOptions, 1, wxEXPAND|wxALL, 5 );
