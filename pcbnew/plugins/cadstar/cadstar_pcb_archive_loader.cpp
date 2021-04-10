@@ -759,6 +759,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             totalCopperPads++;
 
             // Now renumber all the associated pads if they are PCB Only
+            int numRenames = 0;
             COMPONENT_PAD associatedPad;
 
             for( PAD_ID padID : compCopper.AssociatedPadIDs )
@@ -769,7 +770,16 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
                 {
                     PAD* assocPad = getPadReference( aFootprint, padID );
                     assocPad->SetName( pad->GetName() );
+                    ++numRenames;
                 }
+            }
+
+            if( numRenames < compCopper.AssociatedPadIDs.size() - 1 )
+            {
+                // This is an older design of thermal pad. The schematic will
+                // have multiple pins for the same pad, so lets use the
+                // "allow thermal pads" hack
+                aFootprint->SetKeywords( wxT( "allow thermal pads" ) );
             }
         }
         else
