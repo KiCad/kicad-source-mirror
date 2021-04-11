@@ -119,7 +119,7 @@ public:
 
     bool IsLinkedChecked() const
     {
-        return IsLinked() && LinkCount() == SegmentCount();
+        return IsLinked() && LinkCount() == ShapeCount();
     }
 
     ///< Assign a shape to the line (a polyline/line chain).

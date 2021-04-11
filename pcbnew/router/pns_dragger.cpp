@@ -506,7 +506,8 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
 
         if( ok )
         {
-            //Dbg()->AddLine( origLine.CLine(), 4, 100000 );
+            Dbg()->AddLine( origLine.CLine(), 5, 50000 );
+            Dbg()->AddLine( draggedWalk.CLine(), 6, 75000 );
             m_lastNode->Remove( origLine );
             optimizeAndUpdateDraggedLine( draggedWalk, origLine, aP );
         }
@@ -550,7 +551,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         else
             dragged.DragCorner( aP, m_draggedSegmentIndex );
 
-        Dbg()->AddLine( dragged.CLine(), 5, 10000 );
+        Dbg()->AddLine( dragged.CLine(), 5, 5000 );
 
         SHOVE::SHOVE_STATUS st = m_shove->ShoveLines( dragged );
 
