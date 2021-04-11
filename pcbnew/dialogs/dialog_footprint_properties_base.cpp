@@ -156,32 +156,32 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	sbOrientationSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Orientation") ), wxVERTICAL );
 
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 4, 0 );
+	gbSizer1 = new wxGridBagSizer( 1, 0 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_Orient0 = new wxRadioButton( sbOrientationSizer->GetStaticBox(), wxID_ANY, _("0.0"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_Orient0, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), 0, 5 );
+	gbSizer1->Add( m_Orient0, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM, 3 );
 
 	m_Orient90 = new wxRadioButton( sbOrientationSizer->GetStaticBox(), wxID_ANY, _("90.0"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_Orient90, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), 0, 5 );
+	gbSizer1->Add( m_Orient90, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM, 3 );
 
 	m_Orient270 = new wxRadioButton( sbOrientationSizer->GetStaticBox(), wxID_ANY, _("-90.0"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_Orient270, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), 0, 5 );
+	gbSizer1->Add( m_Orient270, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM, 3 );
 
 	m_Orient180 = new wxRadioButton( sbOrientationSizer->GetStaticBox(), wxID_ANY, _("180.0"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_Orient180, wxGBPosition( 3, 0 ), wxGBSpan( 1, 2 ), 0, 5 );
+	gbSizer1->Add( m_Orient180, wxGBPosition( 3, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM, 1 );
 
 	m_OrientOther = new wxRadioButton( sbOrientationSizer->GetStaticBox(), wxID_ANY, _("Other:"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_OrientOther, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_OrientValueCtrl = new wxTextCtrl( sbOrientationSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_OrientValueCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	gbSizer1->Add( m_OrientValueCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	gbSizer1->AddGrowableCol( 1 );
 
-	sbOrientationSizer->Add( gbSizer1, 1, wxEXPAND, 5 );
+	sbOrientationSizer->Add( gbSizer1, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
 	bSizerLeft->Add( sbOrientationSizer, 0, wxEXPAND|wxALL, 5 );
@@ -209,7 +209,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_allow90Label->Wrap( -1 );
 	m_allow90Label->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	m_sizerAllow90->Add( m_allow90Label, 0, wxALL, 5 );
+	m_sizerAllow90->Add( m_allow90Label, 0, wxALL, 2 );
 
 	m_CostRot90Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sizerAllow90->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -218,7 +218,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_sizerAP->Add( m_sizerAllow90, 0, wxEXPAND, 5 );
 
 
-	m_sizerAP->Add( 0, 8, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_sizerAP->Add( 0, 8, 0, wxEXPAND|wxTOP|wxBOTTOM, 8 );
 
 	m_sizerAllow180 = new wxBoxSizer( wxVERTICAL );
 
@@ -226,7 +226,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_allow180Label->Wrap( -1 );
 	m_allow180Label->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	m_sizerAllow180->Add( m_allow180Label, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_sizerAllow180->Add( m_allow180Label, 0, wxBOTTOM|wxRIGHT|wxLEFT, 2 );
 
 	m_CostRot180Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sizerAllow180->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
