@@ -256,6 +256,16 @@ void SHAPE_LINE_CHAIN::Mirror( bool aX, bool aY, const VECTOR2I& aRef )
 }
 
 
+void SHAPE_LINE_CHAIN::Mirror( const SEG& axis )
+{
+    for( auto& pt : m_points )
+        pt = axis.ReflectPoint( pt );
+
+    for( auto& arc : m_arcs )
+        arc.Mirror( axis );
+}
+
+
 void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const VECTOR2I& aP )
 {
     if( aEndIndex < 0 )

@@ -297,9 +297,6 @@ private:
     ///< Generate a 90-degree circular arc.
     SHAPE_LINE_CHAIN makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool aSide );
 
-    ///< Reflect a point onto other side of a given segment.
-    VECTOR2I reflect( VECTOR2I aP, const SEG& aLine );
-
     ///< Produce a meander shape of given type.
     SHAPE_LINE_CHAIN genMeanderShape( VECTOR2D aP, VECTOR2D aDir, bool aSide, MEANDER_TYPE aType,
                                       int aAmpl, int aBaselineOffset = 0 );

@@ -709,6 +709,12 @@ public:
     void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aRef = { 0, 0 } );
 
     /**
+     * Mirrors the line points using an given axis
+     * @param axis Axis on which to mirror
+     */
+    void Mirror( const SEG& axis );
+
+    /**
      * Function Rotate
      * rotates all vertices by a given angle
      * @param aCenter is the rotation center

@@ -237,25 +237,6 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool
 }
 
 
-VECTOR2I MEANDER_SHAPE::reflect( VECTOR2I p, const SEG& line )
-{
-    typedef int64_t ecoord;
-    VECTOR2I d = line.B - line.A;
-    ecoord l_squared = d.Dot( d );
-    ecoord t = d.Dot( p - line.A );
-    VECTOR2I c, rv;
-
-    if( !l_squared )
-        c = p;
-    else {
-        c.x = line.A.x + rescale( t, (ecoord) d.x, l_squared );
-        c.y = line.A.y + rescale( t, (ecoord) d.y, l_squared );
-    }
-
-    return 2 * c - p;
-}
-
-
 void MEANDER_SHAPE::start( SHAPE_LINE_CHAIN* aTarget, const VECTOR2D& aWhere, const VECTOR2D& aDir )
 {
     m_currentTarget = aTarget;
@@ -392,8 +373,7 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( VECTOR2D aP, VECTOR2D aDir,
     {
         SEG axis( aP, aP + aDir );
 
-        for( int i = 0; i < lc.PointCount(); i++ )
-            lc.SetPoint( i, reflect( lc.CPoint( i ), axis ) );
+        lc.Mirror( axis );
     }
 
     return lc;

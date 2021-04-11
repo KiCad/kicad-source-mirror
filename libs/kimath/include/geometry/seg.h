@@ -181,6 +181,13 @@ public:
     const VECTOR2I NearestPoint( const SEG &aSeg ) const;
 
     /**
+      * Reflect a point using this segment as axis.
+      *
+      * @return the reflected point
+      */
+    const VECTOR2I ReflectPoint( const VECTOR2I& aP ) const;
+
+    /**
      * Compute intersection point of segment (this) with segment \a aSeg.
      *
      * @param aSeg: segment to intersect with
@@ -446,6 +453,24 @@ inline const VECTOR2I SEG::NearestPoint( const VECTOR2I& aP ) const
     int yp = rescale( t, (ecoord)d.y, l_squared );
 
     return A + VECTOR2I( xp, yp );
+}
+
+inline const VECTOR2I SEG::ReflectPoint( const VECTOR2I& aP ) const
+{
+    VECTOR2I                d = B - A;
+    VECTOR2I::extended_type l_squared = d.Dot( d );
+    VECTOR2I::extended_type t = d.Dot( aP - A );
+    VECTOR2I                c;
+
+    if( !l_squared )
+        c = aP;
+    else
+    {
+        c.x = A.x + rescale( t, static_cast<VECTOR2I::extended_type>( d.x ), l_squared );
+        c.y = A.y + rescale( t, static_cast<VECTOR2I::extended_type>( d.y ), l_squared );
+    }
+
+    return 2 * c - aP;
 }
 
 inline std::ostream& operator<<( std::ostream& aStream, const SEG& aSeg )

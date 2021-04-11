@@ -494,6 +494,16 @@ void SHAPE_ARC::Mirror( bool aX, bool aY, const VECTOR2I& aVector )
 }
 
 
+void SHAPE_ARC::Mirror( const SEG& axis )
+{
+    m_start = axis.ReflectPoint( m_start );
+    m_end = axis.ReflectPoint( m_end );
+    m_mid = axis.ReflectPoint( m_mid );
+
+    update_bbox();
+}
+
+
 void SHAPE_ARC::Reverse()
 {
     std::swap( m_start, m_end );
