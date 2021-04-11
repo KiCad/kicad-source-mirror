@@ -309,9 +309,9 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const SHAPE_LINE
 
     // The total new arcs index is added to the new arc indices
     size_t            prev_arc_count = m_arcs.size();
-    std::vector<long> new_shapes     = aLine.m_shapes;
+    std::vector<ssize_t> new_shapes     = aLine.m_shapes;
 
-    for( long& shape : new_shapes )
+    for( ssize_t& shape : new_shapes )
     {
         if( shape >= 0 )
             shape += prev_arc_count;
