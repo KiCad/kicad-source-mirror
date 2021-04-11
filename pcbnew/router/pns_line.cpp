@@ -587,6 +587,22 @@ void LINE::dragCorner45( const VECTOR2I& aP, int aIndex )
 
 void LINE::dragCornerFree( const VECTOR2I& aP, int aIndex )
 {
+    const std::vector<ssize_t>& shapes = m_line.CShapes();
+
+    // If we're asked to drag the end of an arc, insert a new vertex to drag instead
+    if( shapes[aIndex] >= 0 )
+    {
+        if( aIndex > 0 && shapes[aIndex - 1] == -1 )
+            m_line.Insert( aIndex, m_line.GetPoint( aIndex ) );
+        else if( aIndex < shapes.size() - 1 && shapes[aIndex + 1] == -1 )
+        {
+            aIndex++;
+            m_line.Insert( aIndex, m_line.GetPoint( aIndex ) );
+        }
+        else
+            wxASSERT_MSG( false, "Attempt to dragCornerFree in the middle of an arc!" );
+    }
+
     m_line.SetPoint( aIndex, aP );
     m_line.Simplify();
 }

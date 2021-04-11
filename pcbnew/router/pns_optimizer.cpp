@@ -561,7 +561,8 @@ bool OPTIMIZER::mergeFull( LINE* aLine )
 
 bool OPTIMIZER::mergeColinear( LINE* aLine )
 {
-    SHAPE_LINE_CHAIN& line = aLine->Line();
+    SHAPE_LINE_CHAIN&          line   = aLine->Line();
+    const std::vector<ssize_t> shapes = line.CShapes();
 
     int nSegs = line.SegmentCount();
 
@@ -570,7 +571,7 @@ bool OPTIMIZER::mergeColinear( LINE* aLine )
         SEG s1 = line.CSegment( segIdx );
         SEG s2 = line.CSegment( segIdx + 1 );
 
-        if( s1.Collinear( s2 ) )
+        if( shapes[segIdx] < 0 && shapes[segIdx + 1] < 0 && s1.Collinear( s2 ) )
             line.Replace( segIdx, segIdx + 1, s1.A );
     }
 

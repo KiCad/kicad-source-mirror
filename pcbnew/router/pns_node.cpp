@@ -943,13 +943,15 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
     LINKED_ITEM* prev_seg = NULL;
     bool originSet = false;
 
+    SHAPE_LINE_CHAIN& line = pl.Line();
+
     for( int i = i_start + 1; i < i_end; i++ )
     {
         const VECTOR2I& p  = corners[i];
         LINKED_ITEM*    li = segs[i];
 
         if( !li || li->Kind() != ITEM::ARC_T )
-            pl.Line().Append( p );
+            line.Append( p );
 
         if( li && prev_seg != li )
         {
@@ -960,11 +962,17 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
                 const ARC*       arc = static_cast<const ARC*>( li );
                 const SHAPE_ARC* sa  = static_cast<const SHAPE_ARC*>( arc->Shape() );
 
-                int nSegs = pl.Line().SegmentCount();
+                int      nSegs     = line.PointCount();
+                VECTOR2I last      = line.CPoint( -1 );
+                ssize_t  lastShape = line.CShapes()[nSegs - 1];
 
-                pl.Line().Append( arcReversed[i] ? sa->Reversed() : *sa );
+                line.Append( arcReversed[i] ? sa->Reversed() : *sa );
 
-                segIdxIncrement = pl.Line().SegmentCount() - nSegs - 1;
+                segIdxIncrement = line.PointCount() - nSegs - 1;
+
+                // Are we adding an arc after an arc? add the hidden segment
+                if( lastShape >= 0 )
+                    segIdxIncrement++;
             }
 
             pl.Link( li );
