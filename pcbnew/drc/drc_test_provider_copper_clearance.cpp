@@ -509,9 +509,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         if( fp->IsNetTie() && ( other->Type() == PCB_FP_SHAPE_T || other->Type() == PCB_PAD_T ) )
             testClearance = false;
 
-        // CADSTAR implements thermal vias using pads insteads of vias
-        if( fp->AllowThermalPads() && other->Type() == PCB_PAD_T )
-            testHoles = false;
+        // No hole testing within a footprint
+        testHoles = false;
     }
 
     if( pad->GetAttribute() == PAD_ATTRIB_NPTH && !pad->FlashLayer( layer ) )

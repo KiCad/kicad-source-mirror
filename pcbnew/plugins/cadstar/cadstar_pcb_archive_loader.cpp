@@ -655,7 +655,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
                                               wxT( "" ) );
         FOOTPRINT* footprint = new FOOTPRINT( m_board );
         footprint->SetPosition( getKiCadPoint( component.Origin ) );
-        footprint->SetKeywords( wxT( "allow thermal pads" ) );
 
         LIB_ID libID;
         libID.Parse( fpName, true );

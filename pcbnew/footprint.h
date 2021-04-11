@@ -241,12 +241,6 @@ public:
         return GetKeywords().StartsWith( wxT( "net tie" ) );
     }
 
-    // Might as well keep all the hacks in the same place....
-    bool AllowThermalPads() const
-    {
-        return GetKeywords().StartsWith( wxT( "allow thermal pads" ) );
-    }
-
     void Move( const wxPoint& aMoveVector ) override;
 
     void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
