@@ -349,7 +349,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         }
         else if( IsHoleLayer( originalLayer ) )
         {
-            const VIA* via = static_cast<const VIA*>( item );
+            const VIA* via = dynamic_cast<const VIA*>( item );
             VIATYPE    viaType = via ? via->GetViaType() : VIATYPE::NOT_DEFINED;
 
             if( via && ( viaType == VIATYPE::BLIND_BURIED || viaType == VIATYPE::MICROVIA ) )
