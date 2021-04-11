@@ -214,6 +214,16 @@ public:
     int Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const;
 
     /**
+     * Compare sheets by their page number and then by their name. Finally
+     * compare using #Cmp()
+     *
+     * @return -1 if aSheetPathToTest is greater than this (should appear later in the sort order)
+     *          0 if aSheetPathToTest is equal to this
+     *          1 if aSheetPathToTest is less than this (should appear earlier in the sort order)
+     */
+    int ComparePageNumAndName( const SCH_SHEET_PATH& aSheetPathToTest ) const;
+
+    /**
      * Return a pointer to the last #SCH_SHEET of the list.
      *
      * One can see the others sheet as the "path" to reach this last sheet.
@@ -468,6 +478,9 @@ public:
 
     /**
      * Sort the list of sheets by page number. This should be called after #BuildSheetList
+     *
+     * If page numbers happen to be equal, then it compares the sheet names to ensure deterministic
+     * ordering.
      *
      * @param aUpdateVirtualPageNums If true, updates the virtual page numbers to match the new
      * ordering

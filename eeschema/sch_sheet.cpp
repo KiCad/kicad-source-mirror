@@ -1150,7 +1150,7 @@ void SCH_SHEET::SetPageNumber( const SCH_SHEET_PATH& aInstance, const wxString& 
 int SCH_SHEET::ComparePageNum( const wxString& aPageNumberA, const wxString aPageNumberB )
 {
     if( aPageNumberA == aPageNumberB )
-        return 1;
+        return 0; // A == B
 
     // First sort numerically if the page numbers are integers
     long pageA, pageB;
@@ -1159,29 +1159,25 @@ int SCH_SHEET::ComparePageNum( const wxString& aPageNumberA, const wxString aPag
 
     if( isIntegerPageA && isIntegerPageB )
     {
-        if( pageA > pageB )
-            return 1;
-        else if( pageA == pageB )
-            return 0;
+        if( pageA < pageB )
+            return -1; //A < B
         else
-            return -1;
+            return 1; // A > B
     }
 
     // Numerical page numbers always before strings
     if( isIntegerPageA )
-        return -1;
+        return -1; //A < B
     else if( isIntegerPageB )
-        return 1;
+        return 1; // A > B
 
     // If not numeric, then sort as strings
     int result = aPageNumberA.Cmp( aPageNumberB );
 
-    if( result == 0 )
-        return 0;
-    else if( result > 0 )
-        return 1;
+    if( result > 0 )
+        return 1; // A > B
 
-    return -1;
+    return -1; //A < B
 }
 
 

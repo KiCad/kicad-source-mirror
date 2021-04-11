@@ -166,10 +166,7 @@ int HIERARCHY_TREE::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemI
     SCH_SHEET_PATH* item1Path = &static_cast<TreeItemData*>( GetItemData( item1 ) )->m_SheetPath;
     SCH_SHEET_PATH* item2Path = &static_cast<TreeItemData*>( GetItemData( item2 ) )->m_SheetPath;
 
-    wxString item1PageNo = item1Path->Last()->GetPageNumber( *item1Path );
-    wxString item2PageNo = item2Path->Last()->GetPageNumber( *item2Path );
-
-    return SCH_SHEET::ComparePageNum( item1PageNo, item2PageNo );
+    return item1Path->ComparePageNumAndName( *item2Path );
 }
 
 
