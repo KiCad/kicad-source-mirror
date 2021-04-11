@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2021-04-08 22:48+0000\n"
+"PO-Revision-Date: 2021-04-12 07:24+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ro/>\n"
@@ -2950,7 +2950,7 @@ msgstr "Supraeșantionare (4x)"
 
 #: common/dialogs/panel_common_settings_base.cpp:83
 msgid "Fallback graphics:"
-msgstr "Grafică alternativă:"
+msgstr "Grafică de rezervă:"
 
 #: common/dialogs/panel_common_settings_base.cpp:87
 msgid "Fast Antialiasing"
@@ -6100,17 +6100,17 @@ msgstr ""
 
 #: common/tool/common_control.cpp:238
 msgid "Get involved with KiCad"
-msgstr ""
+msgstr "Implică-te cu KiCad"
 
 #: common/tool/grid_menu.cpp:93
 #, c-format
 msgid "Grid: %s (%s)"
-msgstr ""
+msgstr "Grilă: %s (%s)"
 
 #: common/tool/grid_menu.cpp:104
 #, c-format
 msgid "User grid: %s (%s)"
-msgstr ""
+msgstr "Grilă utilizator: %s (%s)"
 
 #: common/tool/zoom_menu.cpp:49
 #, c-format
@@ -6128,28 +6128,28 @@ msgstr ""
 
 #: common/validators.cpp:298
 msgid "Entry contains leading white space."
-msgstr ""
+msgstr "Intrarea conține un spațiu alb la început."
 
 #: common/validators.cpp:302
 #, c-format
 msgid "\"%s\" is not a valid library identifier format."
-msgstr ""
+msgstr "\"%s\" nu este un format valid de identificator de bibliotecă."
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
-msgstr ""
+msgstr "Eroare de validare a identificatorului bibliotecii"
 
 #: common/validators.cpp:356
 msgid "Invalid signal name"
-msgstr ""
+msgstr "Nume de semnal nevalid"
 
 #: common/validators.cpp:367
 msgid "Signal names cannot contain CR or LF characters"
-msgstr ""
+msgstr "Numele semnalului nu pot conține caractere CR sau LF"
 
 #: common/validators.cpp:370
 msgid "Signal names cannot contain spaces"
-msgstr ""
+msgstr "Numele semnalului nu pot conține spații"
 
 #: common/view/view.cpp:543
 msgid "Mirroring for Y axis is not supported yet"
@@ -6169,11 +6169,12 @@ msgstr "Grafică accelerată"
 
 #: common/widgets/gal_options_panel.cpp:82
 msgid "Fallback graphics"
-msgstr ""
+msgstr "Grafică de rezervă"
 
 #: common/widgets/gal_options_panel.cpp:83
+#, fuzzy
 msgid "Rendering Engine"
-msgstr ""
+msgstr "Motor de randare"
 
 #: common/widgets/gal_options_panel.cpp:87
 msgid "Hardware-accelerated graphics (recommended)"
@@ -6184,10 +6185,12 @@ msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Grafică software (pentru computerele care nu suportă cerințele de accelerare "
+"hardware ale KiCad)"
 
 #: common/widgets/gal_options_panel.cpp:100
 msgid "Grid Options"
-msgstr ""
+msgstr "Opțiuni grilă"
 
 #: common/widgets/gal_options_panel.cpp:105
 msgid "Dots"
@@ -6199,15 +6202,15 @@ msgstr "Linii"
 
 #: common/widgets/gal_options_panel.cpp:107
 msgid "Small crosses"
-msgstr ""
+msgstr "Cruci mici"
 
 #: common/widgets/gal_options_panel.cpp:110
 msgid "Grid Style"
-msgstr ""
+msgstr "Stilul grilei"
 
 #: common/widgets/gal_options_panel.cpp:122
 msgid "Grid thickness:"
-msgstr ""
+msgstr "Grosimea grilei:"
 
 #: common/widgets/gal_options_panel.cpp:133
 #: common/widgets/gal_options_panel.cpp:149
@@ -6217,7 +6220,7 @@ msgstr "px"
 
 #: common/widgets/gal_options_panel.cpp:138
 msgid "Min grid spacing:"
-msgstr ""
+msgstr "Distanța minimă a grilei:"
 
 #: common/widgets/gal_options_panel.cpp:154
 msgid "Snap to Grid:"
@@ -6233,7 +6236,7 @@ msgstr "Întotdeauna"
 
 #: common/widgets/gal_options_panel.cpp:158
 msgid "When grid shown"
-msgstr ""
+msgstr "Când este afișată grila"
 
 #: common/widgets/gal_options_panel.cpp:158
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
@@ -6245,7 +6248,7 @@ msgstr "Niciodată"
 
 #: common/widgets/gal_options_panel.cpp:184
 msgid "Cursor Options"
-msgstr ""
+msgstr "Opțiuni cursor"
 
 #: common/widgets/gal_options_panel.cpp:190
 msgid "Small crosshair"
@@ -6257,11 +6260,11 @@ msgstr ""
 
 #: common/widgets/gal_options_panel.cpp:196
 msgid "Cursor Shape"
-msgstr ""
+msgstr "Forma cursorului"
 
 #: common/widgets/gal_options_panel.cpp:201
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr ""
+msgstr "Forma cursorului pentru instrumentele de desen, plasare și mișcare"
 
 #: common/widgets/gal_options_panel.cpp:204
 msgid "Always show crosshairs"
@@ -6269,7 +6272,7 @@ msgstr ""
 
 #: common/widgets/grid_text_button_helpers.cpp:354
 msgid "Select a File"
-msgstr ""
+msgstr "Selectează un fişier"
 
 #: common/widgets/mathplot.cpp:1759
 msgid "Center plot view to this position"
@@ -6316,12 +6319,12 @@ msgstr "Resetare la valorile implicite"
 #: common/widgets/unit_binder.cpp:206
 #, c-format
 msgid "%s must be at least %s."
-msgstr ""
+msgstr "%s trebuie să fie cel puțin %s."
 
 #: common/widgets/unit_binder.cpp:220
 #, c-format
 msgid "%s must be less than %s."
-msgstr ""
+msgstr "%s trebuie să fie mai mic decât %s."
 
 #: common/widgets/widget_hotkey_list.cpp:95
 msgid "Press a new hotkey, or press Esc to cancel..."
@@ -6333,7 +6336,7 @@ msgstr "Comandă:"
 
 #: common/widgets/widget_hotkey_list.cpp:110
 msgid "Current key:"
-msgstr ""
+msgstr "Cheia curentă:"
 
 #: common/widgets/widget_hotkey_list.cpp:152
 msgid "Set Hotkey"
@@ -6345,7 +6348,7 @@ msgstr "Modificare..."
 
 #: common/widgets/widget_hotkey_list.cpp:380
 msgid "Undo Changes"
-msgstr ""
+msgstr "Anulează modificările"
 
 #: common/widgets/widget_hotkey_list.cpp:381
 msgid "Clear Assigned Hotkey"
@@ -6361,10 +6364,12 @@ msgid ""
 "\"%s\" is already assigned to \"%s\" in section \"%s\". Are you sure you "
 "want to change its assignment?"
 msgstr ""
+"\"%s\" este deja atribuit la \"%s\" în secțiunea \"%s\". Sunteți sigur că "
+"doriți să modificați atribuirea acesteia?"
 
 #: common/widgets/widget_hotkey_list.cpp:424
 msgid "Confirm change"
-msgstr ""
+msgstr "Confirmați modificarea"
 
 #: common/widgets/widget_hotkey_list.cpp:444
 msgid "Command"
@@ -6372,7 +6377,7 @@ msgstr "Comandă"
 
 #: common/widgets/widget_hotkey_list.cpp:447
 msgid "(double-click to edit)"
-msgstr ""
+msgstr "(faceți dublu clic pentru editare)"
 
 #: common/widgets/widget_hotkey_list.cpp:450
 msgid "Hotkey"
@@ -6380,11 +6385,11 @@ msgstr "Comandă rapidă"
 
 #: common/wildcards_and_files_ext.cpp:177
 msgid "All files"
-msgstr ""
+msgstr "Toate fișierele"
 
 #: common/wildcards_and_files_ext.cpp:183
 msgid "KiCad drawing symbol files"
-msgstr ""
+msgstr "Fișiere cu simboluri de desen KiCad"
 
 #: common/wildcards_and_files_ext.cpp:189
 msgid "KiCad symbol library files"
@@ -6396,19 +6401,19 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:201
 msgid "All KiCad symbol library files"
-msgstr ""
+msgstr "Toate fișierele bibliotecii de simboluri KiCad"
 
 #: common/wildcards_and_files_ext.cpp:207
 msgid "KiCad project files"
-msgstr ""
+msgstr "Fișiere de proiect KiCad"
 
 #: common/wildcards_and_files_ext.cpp:213
 msgid "KiCad legacy project files"
-msgstr ""
+msgstr "Fișiere de proiect vechi KiCad"
 
 #: common/wildcards_and_files_ext.cpp:219
 msgid "All KiCad project files"
-msgstr ""
+msgstr "Toate fișierele de proiect KiCad"
 
 #: common/wildcards_and_files_ext.cpp:225
 msgid "KiCad legacy schematic files"
@@ -6420,23 +6425,23 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:237
 msgid "Altium schematic files"
-msgstr ""
+msgstr "Fișiere schematice Altium"
 
 #: common/wildcards_and_files_ext.cpp:243
 msgid "CADSTAR Schematic Archive files"
-msgstr ""
+msgstr "Fișiere de arhivă schematică CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:249
 msgid "CADSTAR Archive files"
-msgstr ""
+msgstr "Fișiere de arhivă CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:255
 msgid "Eagle XML schematic files"
-msgstr ""
+msgstr "Fișiere schematice Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:261
 msgid "Eagle XML files"
-msgstr ""
+msgstr "Fișiere Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:267
 msgid "KiCad netlist files"
@@ -6444,28 +6449,28 @@ msgstr "Fișiere netlist KiCad"
 
 #: common/wildcards_and_files_ext.cpp:273 gerbview/files.cpp:47
 msgid "Gerber files"
-msgstr ""
+msgstr "Fișiere Gerber"
 
 #: common/wildcards_and_files_ext.cpp:279
 #: common/wildcards_and_files_ext.cpp:320
 msgid "KiCad printed circuit board files"
-msgstr ""
+msgstr "Fișiere cu circuite imprimate KiCad"
 
 #: common/wildcards_and_files_ext.cpp:285
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr ""
+msgstr "Eagle ver. 6.x fișiere PCB XML"
 
 #: common/wildcards_and_files_ext.cpp:290
 msgid "CADSTAR PCB Archive files"
-msgstr ""
+msgstr "Fișiere de arhivă CADSTAR PCB"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "P-Cad 200x ASCII PCB files"
-msgstr ""
+msgstr "Fișiere PCB P-Cad 200x ASCII"
 
 #: common/wildcards_and_files_ext.cpp:300
 msgid "Altium Designer PCB files"
-msgstr ""
+msgstr "Fișiere PCB Altium Designer"
 
 #: common/wildcards_and_files_ext.cpp:305
 msgid "Altium Circuit Studio PCB files"
@@ -6513,15 +6518,15 @@ msgstr "Fișiere de foraj"
 
 #: common/wildcards_and_files_ext.cpp:376
 msgid "SVG files"
-msgstr ""
+msgstr "Fișiere SVG"
 
 #: common/wildcards_and_files_ext.cpp:382
 msgid "HTML files"
-msgstr ""
+msgstr "Fișiere HTML"
 
 #: common/wildcards_and_files_ext.cpp:388
 msgid "CSV Files"
-msgstr ""
+msgstr "Fișiere CSV"
 
 #: common/wildcards_and_files_ext.cpp:394
 msgid "Portable document format files"
@@ -6529,19 +6534,19 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:400
 msgid "PostScript files"
-msgstr ""
+msgstr "Fișiere PostScript"
 
 #: common/wildcards_and_files_ext.cpp:406
 msgid "Report files"
-msgstr ""
+msgstr "Fișiere de raport"
 
 #: common/wildcards_and_files_ext.cpp:412
 msgid "Component placement files"
-msgstr ""
+msgstr "Fișiere de plasare a componentelor"
 
 #: common/wildcards_and_files_ext.cpp:418
 msgid "VRML and X3D files"
-msgstr ""
+msgstr "Fișiere VRML și X3D"
 
 #: common/wildcards_and_files_ext.cpp:424
 msgid "IDFv3 footprint files"
@@ -6577,7 +6582,7 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:472
 msgid "Zip file"
-msgstr ""
+msgstr "Fișier zip"
 
 #: common/wildcards_and_files_ext.cpp:478
 msgid "GenCAD 1.4 board files"
@@ -6585,7 +6590,7 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:484
 msgid "DXF Files"
-msgstr ""
+msgstr "Fișiere DXF"
 
 #: common/wildcards_and_files_ext.cpp:490
 msgid "Gerber job file"
@@ -6605,25 +6610,27 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:514
 msgid "PNG file"
-msgstr ""
+msgstr "Fișier PNG"
 
 #: common/wildcards_and_files_ext.cpp:520
 msgid "Jpeg file"
-msgstr ""
+msgstr "Fișier JPEG"
 
 #: cvpcb/auto_associate.cpp:105
 #, c-format
 msgid "Equivalence file \"%s\" could not be found in the default search paths."
 msgstr ""
+"Fișierul de echivalență \"%s\" nu a putut fi găsit în căile de căutare "
+"predefinite."
 
 #: cvpcb/auto_associate.cpp:126
 #, c-format
 msgid "Error opening equivalence file \"%s\"."
-msgstr ""
+msgstr "Eroare la deschiderea fișierului de echivalență \"%s\"."
 
 #: cvpcb/auto_associate.cpp:178
 msgid "Equivalence File Load Error"
-msgstr ""
+msgstr "Eroare de încărcare a fișierului de echivalență"
 
 #: cvpcb/auto_associate.cpp:185
 #, c-format
@@ -6689,7 +6696,7 @@ msgstr ""
 #: cvpcb/cvpcb_mainframe.cpp:523 cvpcb/tools/cvpcb_association_tool.cpp:207
 #, c-format
 msgid "\"%s\" is not a valid footprint."
-msgstr ""
+msgstr "\"%s\" nu este o amprentă validă."
 
 #: cvpcb/cvpcb_mainframe.cpp:678 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1419 eeschema/symbol_editor/symbol_editor.cpp:1206
@@ -6742,7 +6749,7 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:788
 msgid "Configuration Error"
-msgstr ""
+msgstr "Eroare de configurare"
 
 #: cvpcb/cvpcb_mainframe.cpp:792 pcbnew/footprint_edit_frame.cpp:813
 #: pcbnew/load_select_footprint.cpp:225
@@ -17070,7 +17077,7 @@ msgstr "Resetați toate comenzilor rapide la valorile predefinite de KiCad"
 
 #: include/widgets/infobar.h:111
 msgid "Hide this message."
-msgstr ""
+msgstr "Ascundeți acest mesaj."
 
 #: include/widgets/resettable_panel.h:54
 msgid "Reset all settings on this page to their default"
@@ -17115,7 +17122,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:109
 msgid "Edit the project PCB design"
-msgstr ""
+msgstr "Editați designul PCB al proiectului"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:113
 msgid "Edit global and/or project PCB footprint libraries"
@@ -21810,17 +21817,17 @@ msgstr "Altele"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:196
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:289
 msgid "Not in schematic"
-msgstr ""
+msgstr "Nu în schematică"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:199
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:292
 msgid "Exclude from position files"
-msgstr ""
+msgstr "Excludeți din fișierele de poziție"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:202
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:295
 msgid "Exclude from BOM"
-msgstr ""
+msgstr "Excludeți din BOM"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:221
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
@@ -26432,12 +26439,13 @@ msgid "If you want a board perimeter layer"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:650
+#, fuzzy
 msgid "Pcb_Edges"
-msgstr ""
+msgstr "Pcb_Edges"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:653
 msgid "Board contour"
-msgstr ""
+msgstr "Conturul plăcii"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:663
 msgid "Edge_Cuts setback"
