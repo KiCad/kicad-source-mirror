@@ -30,6 +30,9 @@
 #include <erc_settings.h>
 #include <sch_reference_list.h>
 #include <class_library.h>
+#include <tools/ee_selection.h>
+#include <tools/ee_selection_tool.h>
+#include <tool/tool_manager.h>
 
 
 void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
@@ -57,29 +60,55 @@ void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 }
 
 
-void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool* aAppendUndo )
+void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool* aAppendUndo )
 {
-    auto clearAnnotation =
+    auto clearSymbolAnnotation =
+        [&]( EDA_ITEM* aItem, SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet )
+        {
+            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( aItem );
+
+            SaveCopyInUndoList( aScreen, symbol, UNDO_REDO::CHANGED, *aAppendUndo );
+            *aAppendUndo = true;
+            symbol->ClearAnnotation( aSheet );
+        };
+
+    auto clearSheetAnnotation =
             [&]( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet )
             {
                 for( SCH_ITEM* item : aScreen->Items().OfType( SCH_COMPONENT_T ) )
-                {
-                    SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
-
-                    SaveCopyInUndoList( aScreen, symbol, UNDO_REDO::CHANGED, *aAppendUndo );
-                    *aAppendUndo = true;
-                    symbol->ClearAnnotation( aSheet );
-                }
+                    clearSymbolAnnotation( item, aScreen, aSheet );
             };
 
-    if( aCurrentSheetOnly )
+    SCH_SCREEN* screen = GetScreen();
+    SCH_SHEET_PATH currentSheet = GetCurrentSheet();
+
+    switch( aAnnotateScope )
     {
-        clearAnnotation( GetScreen(), &GetCurrentSheet() );
-    }
-    else
+    case ANNOTATE_ALL:
     {
         for( const SCH_SHEET_PATH& sheet : Schematic().GetSheets() )
-            clearAnnotation( sheet.LastScreen(), nullptr );
+            clearSheetAnnotation( sheet.LastScreen(), nullptr );
+
+        break;
+    }
+    case ANNOTATE_CURRENT_SHEET:
+    {
+        clearSheetAnnotation( screen, &currentSheet );
+        break;
+    }
+
+    case ANNOTATE_SELECTION:
+    {
+        EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+        EE_SELECTION&      selection = selTool->RequestSelection();
+
+        for( EDA_ITEM* item : selection.Items() )
+        {
+            if( item->Type() == SCH_COMPONENT_T )
+                clearSymbolAnnotation( item, screen, &currentSheet );
+        }
+        break;
+    }
     }
 
     // Update the references for the sheet that is currently being displayed.
@@ -94,7 +123,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool* aAppendUndo
 }
 
 
-void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
+void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
                                       ANNOTATE_ORDER_T  aSortOption,
                                       ANNOTATE_ALGO_T   aAlgoOption,
                                       int               aStartNumber,
@@ -103,9 +132,13 @@ void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
                                       bool              aLockUnits,
                                       REPORTER&         aReporter )
 {
+    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+    EE_SELECTION&      selection = selTool->RequestSelection();
+
     SCH_REFERENCE_LIST references;
     SCH_SCREENS        screens( Schematic().Root() );
     SCH_SHEET_LIST     sheets = Schematic().GetSheets();
+    SCH_SHEET_PATH     currentSheet = GetCurrentSheet();
     bool               appendUndo = false;
 
     // Map of locked symbols
@@ -132,10 +165,20 @@ void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
     // If units must be locked, collect all the sets that must be annotated together.
     if( aLockUnits )
     {
-        if( aAnnotateSchematic )
+        switch( aAnnotateScope )
+        {
+        case ANNOTATE_ALL:
             sheets.GetMultiUnitSymbols( lockedSymbols );
-        else
-            GetCurrentSheet().GetMultiUnitSymbols( lockedSymbols );
+            break;
+
+        case ANNOTATE_CURRENT_SHEET:
+            currentSheet.GetMultiUnitSymbols( lockedSymbols );
+            break;
+
+        case ANNOTATE_SELECTION:
+            selection.GetMultiUnitSymbols( lockedSymbols, currentSheet );
+            break;
+        }
     }
 
     // Store previous annotations for building info messages
@@ -143,16 +186,43 @@ void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
 
     // If it is an annotation for all the symbols, reset previous annotation.
     if( aResetAnnotation )
-        DeleteAnnotation( !aAnnotateSchematic, &appendUndo );
+        DeleteAnnotation( aAnnotateScope, &appendUndo );
 
     // Set sheet number and number of sheets.
     SetSheetNumberAndCount();
 
     // Build symbol list
-    if( aAnnotateSchematic )
+    switch( aAnnotateScope )
+    {
+    case ANNOTATE_ALL:
         sheets.GetSymbols( references );
-    else
+        break;
+
+    case ANNOTATE_CURRENT_SHEET:
         GetCurrentSheet().GetSymbols( references );
+        break;
+
+    case ANNOTATE_SELECTION:
+        selection.GetSymbols( references, currentSheet );
+        break;
+    }
+
+    // Build additional list of references to be used during reannotation
+    // to avoid duplicate designators (no additional references when annotating
+    // the full schematic)
+    SCH_REFERENCE_LIST additionalRefs;
+
+    if( aAnnotateScope != ANNOTATE_ALL )
+    {
+        SCH_REFERENCE_LIST allRefs;
+        sheets.GetSymbols( allRefs );
+
+        for( size_t i = 0; i < allRefs.GetCount(); i++ )
+        {
+            if( !references.Contains( allRefs[i] ) )
+                additionalRefs.AddItem( allRefs[i] );
+        }
+    }
 
     // Break full symbol reference into name (prefix) and number:
     // example: IC1 become IC, and 1
@@ -185,7 +255,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
     }
 
     // Recalculate and update reference numbers in schematic
-    references.Annotate( useSheetNum, idStep, aStartNumber, lockedSymbols );
+    references.Annotate( useSheetNum, idStep, aStartNumber, lockedSymbols, additionalRefs );
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
@@ -247,7 +317,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
             {
                 aReporter.Report( aMsg, RPT_SEVERITY_ERROR );
             },
-            !aAnnotateSchematic ) )
+            aAnnotateScope ) )
     {
         aReporter.ReportTail( _( "Annotation complete." ), RPT_SEVERITY_ACTION );
     }
@@ -265,16 +335,29 @@ void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
 }
 
 
-int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler, bool aOneSheetOnly )
+int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
+                                   ANNOTATE_SCOPE_T         aAnnotateScope )
 {
     SCH_REFERENCE_LIST  referenceList;
     constexpr bool      includePowerSymbols = false;
 
     // Build the list of symbols
-    if( !aOneSheetOnly )
-        Schematic().GetSheets().GetSymbols( referenceList, includePowerSymbols );
-    else
-        GetCurrentSheet().GetSymbols( referenceList );
+    switch( aAnnotateScope )
+    {
+    case ANNOTATE_ALL:
+        Schematic().GetSheets().GetSymbols( referenceList );
+        break;
+
+    case ANNOTATE_CURRENT_SHEET:
+        GetCurrentSheet().GetSymbols( referenceList, includePowerSymbols );
+        break;
+
+    case ANNOTATE_SELECTION:
+        EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+        EE_SELECTION&      selection = selTool->RequestSelection();
+        selection.GetSymbols( referenceList, GetCurrentSheet(), includePowerSymbols );
+        break;
+    }
 
     // Empty schematic does not need annotation
     if( referenceList.GetCount() == 0 )

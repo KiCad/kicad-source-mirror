@@ -613,6 +613,7 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
 {
     // List of reference for power symbols
     SCH_REFERENCE_LIST references;
+    SCH_REFERENCE_LIST additionalreferences; // Todo: add as a parameter to this function
 
     // Map of locked symbols (not used, but needed by Annotate()
     SCH_MULTI_UNIT_REFERENCE_MAP lockedSymbols;
@@ -674,7 +675,7 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
     }
 
     // Recalculate and update reference numbers in schematic
-    references.Annotate( false, 0, 100, lockedSymbols );
+    references.Annotate( false, 0, 100, lockedSymbols, additionalreferences );
     references.UpdateAnnotation();
 }
 

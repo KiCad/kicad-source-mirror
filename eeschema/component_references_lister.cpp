@@ -48,6 +48,18 @@ void SCH_REFERENCE_LIST::RemoveItem( unsigned int aIndex )
 }
 
 
+bool SCH_REFERENCE_LIST::Contains( const SCH_REFERENCE& aItem )
+{
+    for( unsigned ii = 0; ii < GetCount(); ii++ )
+    {
+        if( flatList[ii].IsSameInstance( aItem ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 bool SCH_REFERENCE_LIST::sortByXPosition( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
 {
     int ii = item1.CompareRef( item2 );
@@ -192,7 +204,8 @@ void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList, 
 
     for( const SCH_REFERENCE& ref : flatList )
     {
-        if( flatList[aIndex].CompareRef( ref ) == 0 && ref.m_numRef >= aMinRefId )
+        // Don't add new references to the list as we will reannotate those
+        if( flatList[aIndex].CompareRef( ref ) == 0 && ref.m_numRef >= aMinRefId && !ref.m_isNew )
             aIdList.push_back( ref.m_numRef );
     }
 
@@ -278,10 +291,23 @@ wxString buildFullReference( const SCH_REFERENCE& aItem, int aUnitNumber = -1 )
 
 
 void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
-                                   SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap )
+                                   SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap,
+                                   const SCH_REFERENCE_LIST& aAdditionalRefs )
 {
     if ( flatList.size() == 0 )
         return;
+
+    int originalSize = GetCount();
+
+    // We don't want to reannotate the additional references even if not annotated
+    // so we change the m_isNew flag to be false after splitting
+    for( size_t i = 0; i < aAdditionalRefs.GetCount(); i++ )
+    {
+        SCH_REFERENCE additionalRef = aAdditionalRefs[i];
+        additionalRef.Split();
+        additionalRef.m_isNew = false;
+        AddItem( additionalRef ); //add to this container
+    }
 
     int LastReferenceNumber = 0;
     int NumberOfUnits, Unit;
@@ -383,7 +409,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             LastReferenceNumber = CreateFirstFreeRefId( idList, minRefId );
             ref_unit.m_numRef = LastReferenceNumber;
 
-            if( !ref_unit.IsUnitsLocked() )
+            if( !ref_unit.IsUnitsLocked() && !lockedList )
                 ref_unit.m_unit = 1;
 
             ref_unit.m_flag = 1;
@@ -491,6 +517,12 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             }
         }
     }
+
+    // Remove aAdditionalRefs references
+    for( int i = originalSize; i < ( aAdditionalRefs.GetCount() + originalSize ); i++ )
+        RemoveItem( originalSize );
+
+    wxASSERT( originalSize == GetCount() ); // Make sure we didn't make a mistake
 }
 
 int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )

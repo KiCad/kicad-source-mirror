@@ -172,7 +172,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     REPORTER& reporter = m_MessageWindow->Reporter();
     m_MessageWindow->SetLazyUpdate( true );     // Don't update after each message
 
-    m_Parent->AnnotateSymbols( GetScope() == ANNOTATE_ALL, GetSortOrder(), GetAnnotateAlgo(),
+    m_Parent->AnnotateSymbols( GetScope(), GetSortOrder(), GetAnnotateAlgo(),
                                GetStartNumber(), GetResetItems(), true, GetLockUnits(), reporter );
 
     m_MessageWindow->Flush( true );             // Now update to show all messages
@@ -199,7 +199,7 @@ void DIALOG_ANNOTATE::OnClearAnnotationClick( wxCommandEvent& event )
 {
     bool appendUndo = false;
 
-    m_Parent->DeleteAnnotation( GetScope() == ANNOTATE_CURRENT_SHEET, &appendUndo );
+    m_Parent->DeleteAnnotation( GetScope(), &appendUndo );
     m_btnClear->Enable( false );
 }
 

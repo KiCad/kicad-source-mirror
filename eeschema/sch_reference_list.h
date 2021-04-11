@@ -149,7 +149,9 @@ public:
      */
     bool IsSameInstance( const SCH_REFERENCE& other ) const
     {
-        // JEY TODO: should this be checking unit as well?
+        // Only compare symbol and path.
+        // We may have changed the unit number or the designator but
+        // can still be referencing the same instance.
         return GetSymbol() == other.GetSymbol()
                && GetSheetPath().Path() == other.GetSheetPath().Path();
     }
@@ -235,6 +237,13 @@ public:
      */
     void RemoveItem( unsigned int aIndex );
 
+    /**
+     * Return true if aItem exists in this list
+     * @param aItem Reference to check
+     * @return true if aItem exists in this list
+     */
+    bool Contains( const SCH_REFERENCE& aItem );
+
     /* Sort functions:
      * Sort functions are used to sort symbols for annotation or BOM generation.  Because
      * sorting depends on what we want to do, there are many sort functions.
@@ -288,9 +297,13 @@ public:
      * @param aLockedUnitMap A SCH_MULTI_UNIT_REFERENCE_MAP of reference designator wxStrings
      *      to SCH_REFERENCE_LISTs. May be an empty map. If not empty, any multi-unit parts
      *      found in this map will be annotated as a group rather than individually.
+     * @param aAdditionalRefs Additional references to use for checking that there a reference
+     *      designator doesn't already exist. The caller must ensure that none of the references
+     *      in aAdditionalRefs exist in this list.
      */
     void Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
-                   SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap );
+                   SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap,
+                   const SCH_REFERENCE_LIST& aAdditionalRefs );
 
     /**
      * Check for annotations errors.
