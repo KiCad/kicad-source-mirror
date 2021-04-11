@@ -58,6 +58,13 @@ public:
 
 private:
     /**
+     * @return the "free" area of the canvas in pixels.
+     * the free area is the area that create no autopan when the mouse cursor
+     * is inside this area
+     */
+    EDA_RECT GetCanvasFreeAreaPixels();
+
+    /**
      * Get the next queued text item.
      *
      * @return next SCH_TEXT* or nullptr if empty
