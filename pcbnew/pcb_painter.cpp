@@ -337,33 +337,57 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         PCB_LAYER_ID primary = GetPrimaryHighContrastLayer();
         bool         isActive = m_highContrastLayers.count( aLayer );
 
-        if( originalLayer == LAYER_PADS_TH )
+        switch( originalLayer )
         {
+        case LAYER_PADS_TH:
             if( !static_cast<const PAD*>( item )->FlashLayer( primary ) )
                 isActive = false;
-        }
-        else if( originalLayer == LAYER_VIA_THROUGH )
-        {
+
+            break;
+
+        case LAYER_VIA_BBLIND:
+        case LAYER_VIA_MICROVIA:
+            // Target graphic is active if the via crosses the primary layer
+            if( static_cast<const VIA*>( item )->GetLayerSet().test( primary ) == 0 )
+                isActive = false;
+
+            break;
+
+        case LAYER_VIA_THROUGH:
             if( !static_cast<const VIA*>( item )->FlashLayer( primary ) )
                 isActive = false;
-        }
-        else if( IsHoleLayer( originalLayer ) )
-        {
-            const VIA* via = dynamic_cast<const VIA*>( item );
-            VIATYPE    viaType = via ? via->GetViaType() : VIATYPE::NOT_DEFINED;
 
-            if( via && ( viaType == VIATYPE::BLIND_BURIED || viaType == VIATYPE::MICROVIA ) )
+            break;
+
+        case LAYER_PAD_PLATEDHOLES:
+        case LAYER_PAD_HOLEWALLS:
+        case LAYER_NON_PLATEDHOLES:
+            // Pad holes are active is any physical layer is active
+            if( LSET::PhysicalLayersMask().test( primary ) == 0 )
+                isActive = false;
+
+            break;
+
+        case LAYER_VIA_HOLES:
+        case LAYER_VIA_HOLEWALLS:
+            if( static_cast<const VIA*>( item )->GetViaType() == VIATYPE::BLIND_BURIED
+                    || static_cast<const VIA*>( item )->GetViaType() == VIATYPE::MICROVIA )
             {
                 // A blind or micro via's hole is active if it crosses the primary layer
-                if( via->GetLayerSet().test( primary ) == 0 )
+                if( static_cast<const VIA*>( item )->GetLayerSet().test( primary ) == 0 )
                     isActive = false;
             }
             else
             {
-                // A through via or pad's hole is active if any physical layer is active
+                // A through via's hole is active if any physical layer is active
                 if( LSET::PhysicalLayersMask().test( primary ) == 0 )
                     isActive = false;
             }
+
+            break;
+
+        default:
+            break;
         }
 
         if( !isActive )
