@@ -103,6 +103,35 @@ bool EDIT_TOOL::Init()
     // Find the selection tool, so they can cooperate
     m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
+    auto propertiesCondition =
+            [&]( const SELECTION& aSel )
+            {
+                if( aSel.GetSize() == 0 )
+                {
+                    if( getView()->IsLayerVisible( LAYER_SCHEMATIC_DRAWINGSHEET ) )
+                    {
+                        DS_PROXY_VIEW_ITEM* ds = frame()->GetCanvas()->GetDrawingSheet();
+                        VECTOR2D            cursor = getViewControls()->GetCursorPosition( false );
+
+                        if( ds && ds->HitTestDrawingSheetItems( getView(), (wxPoint) cursor ) )
+                            return true;
+                    }
+
+                    return false;
+                }
+
+                if( aSel.GetSize() == 1 )
+                    return true;
+
+                for( EDA_ITEM* item : aSel )
+                {
+                    if( !dynamic_cast<TRACK*>( item ) )
+                        return false;
+                }
+
+                return true;
+            };
+
     auto inFootprintEditor =
             [ this ]( const SELECTION& aSelection )
             {
@@ -134,43 +163,43 @@ bool EDIT_TOOL::Init()
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
 
-    menu.AddItem( PCB_ACTIONS::move, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    menu.AddItem( PCB_ACTIONS::inlineBreakTrack, SELECTION_CONDITIONS::Count( 1 )
-                  && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
-    menu.AddItem( PCB_ACTIONS::drag45Degree, SELECTION_CONDITIONS::Count( 1 )
-                  && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems ) );
-    menu.AddItem( PCB_ACTIONS::dragFreeAngle, SELECTION_CONDITIONS::Count( 1 )
-                  && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems )
-                  && !SELECTION_CONDITIONS::OnlyType( PCB_FOOTPRINT_T ) );
-    menu.AddItem( PCB_ACTIONS::filletTracks, SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
-    menu.AddItem( PCB_ACTIONS::rotateCcw, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::rotateCw, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::mirror, inFootprintEditor && SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::move,              SELECTION_CONDITIONS::NotEmpty
+                                                      && notMovingCondition );
+    menu.AddItem( PCB_ACTIONS::inlineBreakTrack,  SELECTION_CONDITIONS::Count( 1 )
+                                                      && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
+    menu.AddItem( PCB_ACTIONS::drag45Degree,      SELECTION_CONDITIONS::Count( 1 )
+                                                      && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems ) );
+    menu.AddItem( PCB_ACTIONS::dragFreeAngle,     SELECTION_CONDITIONS::Count( 1 )
+                                                      && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems )
+                                                      && !SELECTION_CONDITIONS::OnlyType( PCB_FOOTPRINT_T ) );
+    menu.AddItem( PCB_ACTIONS::filletTracks,      SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
+    menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::flip,              SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::mirror,            inFootprintEditor && SELECTION_CONDITIONS::NotEmpty );
 
-    menu.AddItem( PCB_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 )
-                      || SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
+    menu.AddItem( PCB_ACTIONS::properties,        propertiesCondition );
 
     // Footprint actions
     menu.AddSeparator();
-    menu.AddItem( PCB_ACTIONS::editFpInFpEditor, singleFootprintCondition );
-    menu.AddItem( PCB_ACTIONS::updateFootprint, singleFootprintCondition );
-    menu.AddItem( PCB_ACTIONS::changeFootprint, singleFootprintCondition );
+    menu.AddItem( PCB_ACTIONS::editFpInFpEditor,  singleFootprintCondition );
+    menu.AddItem( PCB_ACTIONS::updateFootprint,   singleFootprintCondition );
+    menu.AddItem( PCB_ACTIONS::changeFootprint,   singleFootprintCondition );
 
     // Add the submenu for create array and special move
     auto specialToolsSubMenu = std::make_shared<SPECIAL_TOOLS_CONTEXT_MENU>( this );
     menu.AddSeparator();
     m_selectionTool->GetToolMenu().AddSubMenu( specialToolsSubMenu );
-    menu.AddMenu( specialToolsSubMenu.get(), SELECTION_CONDITIONS::NotEmpty, 100 );
+    menu.AddMenu( specialToolsSubMenu.get(),      SELECTION_CONDITIONS::NotEmpty, 100 );
 
     menu.AddSeparator( 150 );
-    menu.AddItem( ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty, 150 );
-    menu.AddItem( ACTIONS::copy, SELECTION_CONDITIONS::NotEmpty, 150 );
+    menu.AddItem( ACTIONS::cut,                   SELECTION_CONDITIONS::NotEmpty, 150 );
+    menu.AddItem( ACTIONS::copy,                  SELECTION_CONDITIONS::NotEmpty, 150 );
     // Selection tool handles the context menu for some other tools, such as the Picker.
     // Don't add things like Paste when another tool is active.
-    menu.AddItem( ACTIONS::paste, noActiveToolCondition, 150 );
-    menu.AddItem( ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty, 150 );
-    menu.AddItem( ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty, 150 );
+    menu.AddItem( ACTIONS::paste,                 noActiveToolCondition, 150 );
+    menu.AddItem( ACTIONS::duplicate,             SELECTION_CONDITIONS::NotEmpty, 150 );
+    menu.AddItem( ACTIONS::doDelete,              SELECTION_CONDITIONS::NotEmpty, 150 );
 
     menu.AddSeparator( 150 );
     menu.AddItem( ACTIONS::selectAll, noItemsCondition, 150 );

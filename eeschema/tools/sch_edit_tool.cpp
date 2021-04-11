@@ -205,10 +205,21 @@ bool SCH_EDIT_TOOL::Init()
             };
 
     auto propertiesCondition =
-            []( const SELECTION& aSel )
+            [&]( const SELECTION& aSel )
             {
                 if( aSel.GetSize() == 0 )
-                    return true;            // Show drawing-sheet properties
+                {
+                    if( getView()->IsLayerVisible( LAYER_SCHEMATIC_DRAWINGSHEET ) )
+                    {
+                        DS_PROXY_VIEW_ITEM* ds = m_frame->GetCanvas()->GetView()->GetDrawingSheet();
+                        VECTOR2D            cursor = getViewControls()->GetCursorPosition( false );
+
+                        if( ds && ds->HitTestDrawingSheetItems( getView(), (wxPoint) cursor ) )
+                            return true;
+                    }
+
+                    return false;
+                }
 
                 SCH_ITEM*           firstItem   = dynamic_cast<SCH_ITEM*>( aSel.Front() );
                 const EE_SELECTION* eeSelection = dynamic_cast<const EE_SELECTION*>( &aSel );
