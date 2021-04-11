@@ -491,10 +491,8 @@ int SHAPE_LINE_CHAIN::ShapeCount() const
             while( i < numPoints && m_shapes[i] == arcIdx )
                 i++;
 
-            // Is there another arc right after?  Add the "hidden" segment
+            // Add the "hidden" segment at the end of the arc, if it exists
             if( i < numPoints &&
-                m_shapes[i] != SHAPE_IS_PT &&
-                m_shapes[i] != arcIdx &&
                 m_points[i] != m_points[i - 1] )
             {
                 numShapes++;
