@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -298,11 +298,15 @@ void SCH_EDIT_FRAME::EndSegment()
     if( segment == NULL || segment->Type() != SCH_LINE_T || !segment->IsNew() )
         return;
 
-    // Remove segments backtracking over others
+    // Remove zero length segments and segments backtracking over other segments.
     RemoveBacktracks( s_wires );
 
     if( s_wires.GetCount() == 0 )
+    {
+        screen->ClearDrawingState();
+        screen->SetCurItem( NULL );
         return;
+    }
 
     // Collect the possible connection points for the new lines
     std::vector< wxPoint > connections;
