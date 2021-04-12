@@ -571,8 +571,16 @@ bool OPTIMIZER::mergeColinear( LINE* aLine )
         SEG s1 = line.CSegment( segIdx );
         SEG s2 = line.CSegment( segIdx + 1 );
 
-        if( shapes[segIdx] < 0 && shapes[segIdx + 1] < 0 && s1.Collinear( s2 ) )
-            line.Replace( segIdx, segIdx + 1, s1.A );
+        // Skip zero-length segs caused by abutting arcs
+        if( s1.SquaredLength() == 0 || s2.SquaredLength() == 0 )
+            continue;
+
+        if( s1.Collinear( s2 ) )
+        {
+            // We should not see a collinear vertex inside an arc
+            wxASSERT( shapes[segIdx + 1] < 0 );
+            line.Remove( segIdx + 1 );
+        }
     }
 
     return line.SegmentCount() < nSegs;

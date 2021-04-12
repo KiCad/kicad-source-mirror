@@ -963,8 +963,8 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
                 const SHAPE_ARC* sa  = static_cast<const SHAPE_ARC*>( arc->Shape() );
 
                 int      nSegs     = line.PointCount();
-                VECTOR2I last      = line.CPoint( -1 );
-                ssize_t  lastShape = line.CShapes()[nSegs - 1];
+                VECTOR2I last      = nSegs ? line.CPoint( -1 ) : VECTOR2I();
+                ssize_t  lastShape = nSegs ? line.CShapes()[nSegs - 1] : -1;
 
                 line.Append( arcReversed[i] ? sa->Reversed() : *sa );
 

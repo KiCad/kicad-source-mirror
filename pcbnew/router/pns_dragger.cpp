@@ -402,9 +402,12 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
 
     OPTIMIZER optimizer( m_lastNode );
 
-    optimizer.SetEffortLevel( OPTIMIZER::MERGE_SEGMENTS |
-                              OPTIMIZER::KEEP_TOPOLOGY |
-                              OPTIMIZER::RESTRICT_AREA );
+    int effort = OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY | OPTIMIZER::RESTRICT_AREA;
+
+    if( Settings().SmoothDraggedSegments() )
+        effort |= OPTIMIZER::MERGE_COLINEAR;
+
+    optimizer.SetEffortLevel( effort );
 
     OPT_BOX2I affectedArea = aDragged.ChangedArea( &aOrig );
     VECTOR2I anchor( aP );
