@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-12 11:06-0700\n"
-"PO-Revision-Date: 2021-04-12 07:24+0000\n"
+"PO-Revision-Date: 2021-04-13 22:28+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
-"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ro/>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6095,7 +6095,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:625
 msgid "Get Involved"
-msgstr ""
+msgstr "Implică-te"
 
 #: common/tool/actions.cpp:626
 msgid "Open \"Contribute to KiCad\" in a web browser"
@@ -6122,11 +6122,15 @@ msgid ""
 "or\n"
 "%s could not be found."
 msgstr ""
+"Fișier de ajutor în format html sau pdf\n"
+"%s\n"
+"sau\n"
+"%s nu a putut fi găsit."
 
 #: common/tool/common_control.cpp:213
 #, c-format
 msgid "Help file \"%s\" could not be found."
-msgstr ""
+msgstr "Fișierul de ajutor \"%s\" nu a putut fi găsit."
 
 #: common/tool/common_control.cpp:236
 #, c-format
@@ -6168,16 +6172,16 @@ msgstr "Grilă utilizator: %s (%s)"
 #: common/tool/zoom_menu.cpp:49
 #, c-format
 msgid "Zoom: %.2f"
-msgstr ""
+msgstr "Zoom: %.2f"
 
 #: common/validators.cpp:250
 #, c-format
 msgid "Incorrect value: %s"
-msgstr ""
+msgstr "Valoare incorectă: %s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
-msgstr ""
+msgstr "Intrarea conține spațiu alb la sfârșit."
 
 #: common/validators.cpp:298
 msgid "Entry contains leading white space."
@@ -6527,7 +6531,7 @@ msgstr "Fișiere PCB Altium Designer"
 
 #: common/wildcards_and_files_ext.cpp:305
 msgid "Altium Circuit Studio PCB files"
-msgstr ""
+msgstr "Fișiere PCB Altium Circuit Studio"
 
 #: common/wildcards_and_files_ext.cpp:310
 msgid "Altium Circuit Maker PCB files"
@@ -6535,7 +6539,7 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:315
 msgid "Fabmaster PCB files"
-msgstr ""
+msgstr "Fișiere PCB Fabmaster"
 
 #: common/wildcards_and_files_ext.cpp:326
 msgid "KiCad footprint files"
@@ -6559,7 +6563,7 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:356
 msgid "Page layout design files"
-msgstr ""
+msgstr "Fișiere de proiectare a aspectului paginii"
 
 #: common/wildcards_and_files_ext.cpp:363
 msgid "KiCad symbol footprint link files"
@@ -6583,7 +6587,7 @@ msgstr "Fișiere CSV"
 
 #: common/wildcards_and_files_ext.cpp:394
 msgid "Portable document format files"
-msgstr ""
+msgstr "Fișiere în format de document portabil"
 
 #: common/wildcards_and_files_ext.cpp:400
 msgid "PostScript files"
@@ -6607,7 +6611,7 @@ msgstr "Fișiere de amprente IDFv3"
 
 #: common/wildcards_and_files_ext.cpp:430
 msgid "Text files"
-msgstr ""
+msgstr "Fișiere text"
 
 #: common/wildcards_and_files_ext.cpp:436
 msgid "Legacy footprint export files"
@@ -6615,11 +6619,11 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:442
 msgid "Electrical rule check file"
-msgstr ""
+msgstr "Fișier de verificare a regulilor electrice"
 
 #: common/wildcards_and_files_ext.cpp:448
 msgid "Spice library file"
-msgstr ""
+msgstr "Fișier de bibliotecă Spice"
 
 #: common/wildcards_and_files_ext.cpp:454
 msgid "SPICE netlist file"
@@ -6639,7 +6643,7 @@ msgstr "Fișier zip"
 
 #: common/wildcards_and_files_ext.cpp:478
 msgid "GenCAD 1.4 board files"
-msgstr ""
+msgstr "Fișiere de placă GenCAD 1.4"
 
 #: common/wildcards_and_files_ext.cpp:484
 msgid "DXF Files"
@@ -6647,15 +6651,15 @@ msgstr "Fișiere DXF"
 
 #: common/wildcards_and_files_ext.cpp:490
 msgid "Gerber job file"
-msgstr ""
+msgstr "Fișier de lucru Gerber"
 
 #: common/wildcards_and_files_ext.cpp:496
 msgid "Specctra DSN file"
-msgstr ""
+msgstr "Fișier Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:502
 msgid "IPC-D-356 Test Files"
-msgstr ""
+msgstr "Fișiere de testare IPC-D-356"
 
 #: common/wildcards_and_files_ext.cpp:508
 msgid "Workbook file"
@@ -6696,10 +6700,12 @@ msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
 msgstr ""
+"Componenta %s: amprenta %s nu se găsește în niciuna dintre bibliotecile de "
+"amprente ale proiectului."
 
 #: cvpcb/auto_associate.cpp:306
 msgid "CvPcb Warning"
-msgstr ""
+msgstr "Avertisment CvPcb"
 
 #: cvpcb/cvpcb.cpp:154
 msgid ""
@@ -6716,14 +6722,16 @@ msgstr ""
 #: cvpcb/cvpcb.cpp:169
 msgid "An error occurred attempting to load the global footprint library table"
 msgstr ""
+"S-a produs o eroare la încercarea de a încărca tabelul bibliotecii globale "
+"de amprentă"
 
 #: cvpcb/cvpcb_mainframe.cpp:60 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
-msgstr ""
+msgstr "Atribuiți amprente"
 
 #: cvpcb/cvpcb_mainframe.cpp:99 pcbnew/dialogs/panel_fp_lib_table.cpp:1046
 msgid "Footprint Libraries"
-msgstr ""
+msgstr "Biblioteci de amprente"
 
 #: cvpcb/cvpcb_mainframe.cpp:103
 msgid "Symbol : Footprint Assignments"
@@ -6731,12 +6739,13 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:106
 msgid "Filtered Footprints"
-msgstr ""
+msgstr "Amprente filtrate"
 
 #: cvpcb/cvpcb_mainframe.cpp:142
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:105
+#, fuzzy
 msgid "Apply, Save Schematic && Continue"
-msgstr ""
+msgstr "Aplică, Salvează Schematic && Continuă"
 
 #: cvpcb/cvpcb_mainframe.cpp:210
 msgid "Symbol to footprint changes are unsaved"
@@ -6770,30 +6779,30 @@ msgstr "Bibliotecă"
 
 #: cvpcb/cvpcb_mainframe.cpp:719
 msgid "Search Text"
-msgstr ""
+msgstr "Căutați text"
 
 #: cvpcb/cvpcb_mainframe.cpp:723
 msgid "No Filtering"
-msgstr ""
+msgstr "Fără filtrare"
 
 #: cvpcb/cvpcb_mainframe.cpp:725
 #, c-format
 msgid "Filtered by %s"
-msgstr ""
+msgstr "Filtrat după %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:739
 #, c-format
 msgid "Description: %s;  Keywords: %s"
-msgstr ""
+msgstr "Descriere: %s;  Cuvinte cheie: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:771
 #, c-format
 msgid "Library location: %s"
-msgstr ""
+msgstr "Locația bibliotecii: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:773
 msgid "Library location: unknown"
-msgstr ""
+msgstr "Locația bibliotecii: necunoscută"
 
 #: cvpcb/cvpcb_mainframe.cpp:786
 msgid ""
@@ -6807,7 +6816,7 @@ msgstr "Eroare de configurare"
 #: cvpcb/cvpcb_mainframe.cpp:791 pcbnew/footprint_edit_frame.cpp:813
 #: pcbnew/load_select_footprint.cpp:225
 msgid "Loading Footprint Libraries"
-msgstr ""
+msgstr "Se încarcă bibliotecile de amprente"
 
 #: cvpcb/cvpcb_mainframe.cpp:854
 #, c-format
@@ -6815,6 +6824,8 @@ msgid ""
 "Error loading schematic.\n"
 "%s"
 msgstr ""
+"Eroare la încărcarea schemei.\n"
+"%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:49
 #, c-format
@@ -6823,7 +6834,7 @@ msgstr ""
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:101
 msgid "No editor defined in KiCad. Please choose it."
-msgstr ""
+msgstr "Nu există un editor definit în KiCad. Vă rugăm să îl alegeți."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:247
 msgid "Footprint Association File"
@@ -6832,7 +6843,7 @@ msgstr ""
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:291
 #, c-format
 msgid "File \"%s\" already exists in list"
-msgstr ""
+msgstr "Fișierul \"%s\" există deja în listă"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
@@ -6857,16 +6868,16 @@ msgstr "Înlătură"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:42
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:62
 msgid "Move Up"
-msgstr ""
+msgstr "Mutați în sus"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:45
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:67
 msgid "Move Down"
-msgstr ""
+msgstr "Mutați în jos"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:48
 msgid "Edit File"
-msgstr ""
+msgstr "Editați fișierul"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:63
 msgid "Available environment variables for relative paths:"
@@ -6903,7 +6914,7 @@ msgstr "Relativ"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 msgid "Path Type"
-msgstr ""
+msgstr "Tip de cale"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -6932,12 +6943,12 @@ msgstr ""
 #: cvpcb/display_footprints_frame.cpp:68
 #: pcbnew/toolbars_footprint_viewer.cpp:157
 msgid "Footprint Viewer"
-msgstr ""
+msgstr "Vizualizator de amprente"
 
 #: cvpcb/display_footprints_frame.cpp:399
 #, c-format
 msgid "Footprint ID \"%s\" is not valid."
-msgstr ""
+msgstr "ID-ul amprentei \"%s\" nu este valid."
 
 #: cvpcb/display_footprints_frame.cpp:414
 #, c-format
@@ -6948,17 +6959,17 @@ msgstr ""
 #: cvpcb/display_footprints_frame.cpp:448
 #, c-format
 msgid "Footprint \"%s\" not found."
-msgstr ""
+msgstr "Amprenta \"%s\" nu a fost găsită."
 
 #: cvpcb/display_footprints_frame.cpp:478 pcbnew/footprint.cpp:870
 #, c-format
 msgid "Footprint: %s"
-msgstr ""
+msgstr "Amprenta: %s"
 
 #: cvpcb/display_footprints_frame.cpp:489
 #, c-format
 msgid "Lib: %s"
-msgstr ""
+msgstr "Lib: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
 msgid ""
@@ -7004,15 +7015,15 @@ msgstr ""
 
 #: cvpcb/readwrite_dlgs.cpp:296
 msgid "Schematic saved"
-msgstr ""
+msgstr "Schemă salvată"
 
 #: cvpcb/toolbars_cvpcb.cpp:74
 msgid "Footprint Filters:"
-msgstr ""
+msgstr "Filtre de amprentă:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:52
 msgid "View selected footprint"
-msgstr ""
+msgstr "Vizualizați amprenta selectată"
 
 #: cvpcb/tools/cvpcb_actions.cpp:53
 msgid "View the selected footprint in the footprint viewer"
@@ -7020,7 +7031,7 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
 msgid "Manage Footprint Association Files"
-msgstr ""
+msgstr "Gestionați fișierele de asociere a amprentelor"
 
 #: cvpcb/tools/cvpcb_actions.cpp:61
 msgid ""
@@ -7030,7 +7041,7 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
 msgid "Save to Schematic"
-msgstr ""
+msgstr "Salvați în schemă"
 
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
@@ -7038,7 +7049,7 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:91
 msgid "Select next unassigned symbol"
-msgstr ""
+msgstr "Selectați următorul simbol neatribuit"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
 msgid "Select next symbol with no footprint assignment"
@@ -7054,7 +7065,7 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:108
 msgid "Assign footprint"
-msgstr ""
+msgstr "Atribuiți amprentă"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
 msgid "Assign footprint to selected symbols"
@@ -7062,7 +7073,7 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 msgid "Automatically assign footprints"
-msgstr ""
+msgstr "Atribuirea automată a amprentelor"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Perform automatic footprint assignment"
@@ -7070,7 +7081,7 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:121
 msgid "Delete association"
-msgstr ""
+msgstr "Ștergeți asocierea"
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
 msgid "Delete selected footprint associations"
