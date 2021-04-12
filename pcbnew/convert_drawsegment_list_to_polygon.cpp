@@ -844,7 +844,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 {
                     BOARD_ITEM* a = fetchOwner( *seg1 );
                     BOARD_ITEM* b = fetchOwner( *seg2 );
-                    (*aErrorHandler)( _( "(self-intersecting)" ), a, b, (wxPoint) ( *seg1 ).A );
+
+                    if( a && b )
+                        (*aErrorHandler)( _( "(self-intersecting)" ), a, b, (wxPoint) ( *seg1 ).A );
                 }
 
                 selfIntersecting = true;
@@ -856,7 +858,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 {
                     BOARD_ITEM* a = fetchOwner( *seg1 );
                     BOARD_ITEM* b = fetchOwner( *seg2 );
-                    (*aErrorHandler)( _( "(self-intersecting)" ), a, b, (wxPoint) pt.get() );
+
+                    if( a && b )
+                        (*aErrorHandler)( _( "(self-intersecting)" ), a, b, (wxPoint) pt.get() );
                 }
 
                 selfIntersecting = true;
