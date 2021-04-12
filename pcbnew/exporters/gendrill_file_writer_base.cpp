@@ -237,7 +237,7 @@ std::vector<DRILL_LAYER_PAIR> GENDRILL_WRITER_BASE::getUniqueLayerPairs() const
 
     ret.emplace_back( F_Cu, B_Cu );      // always first in returned list
 
-    for( std::set< DRILL_LAYER_PAIR >::const_iterator it = unique.begin();  it != unique.end(); ++it )
+    for( std::set<DRILL_LAYER_PAIR>::const_iterator it = unique.begin(); it != unique.end(); ++it )
         ret.push_back( *it );
 
     return ret;
@@ -270,7 +270,7 @@ const std::string GENDRILL_WRITER_BASE::layerPairName( DRILL_LAYER_PAIR aPair ) 
 
 
 const wxString GENDRILL_WRITER_BASE::getDrillFileName( DRILL_LAYER_PAIR aPair, bool aNPTH,
-                                               bool aMerge_PTH_NPTH ) const
+                                                       bool aMerge_PTH_NPTH ) const
 {
     wxASSERT( m_pcb );
 

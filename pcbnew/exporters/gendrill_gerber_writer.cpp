@@ -291,7 +291,7 @@ void GERBER_WRITER::SetFormat( int aRightDigits )
 
 
 const wxString GERBER_WRITER::getDrillFileName( DRILL_LAYER_PAIR aPair, bool aNPTH,
-                                         bool aMerge_PTH_NPTH ) const
+                                                bool aMerge_PTH_NPTH ) const
 {
     // Gerber files extension is always .gbr.
     // Therefore, to mark drill files, add "-drl" to the filename.
