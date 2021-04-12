@@ -318,20 +318,25 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const SHAPE_LINE
 
     if( startShape >= 0 )
     {
-        wxASSERT( newLine.m_points.front() == m_points[aStartIndex] &&
-                  aStartIndex < m_points.size() - 1 );
+        wxASSERT( !newLine.PointCount() ||
+                  ( newLine.m_points.front() == m_points[aStartIndex] &&
+                  aStartIndex < m_points.size() - 1 ) );
         aStartIndex++;
         newLine.Remove( 0 );
     }
 
     if( endShape >= 0 )
     {
-        wxASSERT( newLine.m_points.back() == m_points[aEndIndex] && aEndIndex > 0 );
+        wxASSERT( !newLine.PointCount() ||
+                  ( newLine.m_points.back() == m_points[aEndIndex] && aEndIndex > 0 ) );
         aEndIndex--;
         newLine.Remove( -1 );
     }
 
     Remove( aStartIndex, aEndIndex );
+
+    if( !aLine.PointCount() )
+        return;
 
     // The total new arcs index is added to the new arc indices
     size_t               prev_arc_count = m_arcs.size();
