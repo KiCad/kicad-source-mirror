@@ -1070,6 +1070,11 @@ void SCH_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 {
     wxString fileName = Prj().AbsolutePath( GetScreen()->GetFileName() );
 
+    const wxBrush& brush =
+            wxBrush( GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND ).ToColour() );
+    aSettings->GetPrintDC()->SetBackground( brush );
+    aSettings->GetPrintDC()->Clear();
+
     aSettings->GetPrintDC()->SetLogicalFunction( wxCOPY );
     GetScreen()->Print( aSettings );
     PrintDrawingSheet( aSettings, GetScreen(), IU_PER_MILS, fileName );
