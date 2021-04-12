@@ -1,12 +1,13 @@
 # Mark Roszko <mark.roszko@gmail.com>, 2020.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
+# Pomian <kontakt@rapiddev.pl>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-12 11:06-0700\n"
 "PO-Revision-Date: 2021-04-13 22:28+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: Pomian <kontakt@rapiddev.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -2226,6 +2227,9 @@ msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"Zapamiętaj wybraną opcję do końca tej sesji.\n"
+"To okno dialogowe nie zostanie wyświetlone, dopóki program KiCad nie "
+"zostanie uruchomiony ponownie."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -2236,6 +2240,9 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"Pomiń blokady i zastosuj operację do wszystkich wybranych elementów.\n"
+"Wszelkie zablokowane elementy pozostaną zablokowane po zakończeniu tej "
+"operacji."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:60
 msgid "Skip Locked Items"
@@ -2246,6 +2253,8 @@ msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"Usuń zablokowane elementy z zaznaczenia i zastosuj operację tylko do "
+"odblokowanych elementów (jeśli istnieją)."
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
 msgid "Locked Items"
@@ -6108,7 +6117,7 @@ msgstr "Otwiera dokument \"Współtworzenie programu KiCad\" w przeglądarce"
 
 #: common/tool/actions.cpp:631
 msgid "Donate"
-msgstr ""
+msgstr "Przekaż darowiznę"
 
 #: common/tool/actions.cpp:632
 msgid "Open \"Donate to KiCad\" in a web browser"
@@ -13273,7 +13282,7 @@ msgstr "Nieznany rekord id: %d."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:596
 #, c-format
 msgid "Pin has non-existent ownerindex %d."
-msgstr ""
+msgstr "Pin ma nieistniejący indeks rodzica %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:637
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1722
@@ -13286,7 +13295,7 @@ msgstr "Pin posiada niespodziewany typ elektryczny."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:680
 msgid "Pin has unexpected outer edge type."
-msgstr ""
+msgstr "Pin ma nieoczekiwany typ krawędzi zewnętrznej."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:683
 msgid "Pin has unexpected inner edge type."
