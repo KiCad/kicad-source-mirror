@@ -696,81 +696,21 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
     {
         SCH_SHEET_LIST sheetPaths( aSheet, true );
 
-        m_out->Print( 0, "\n" );
-        m_out->Print( 1, "(sheet_instances\n" );
+        SCH_REFERENCE_LIST symbolInstances;
 
         for( const SCH_SHEET_PATH& sheetPath : sheetPaths )
-        {
-            SCH_SHEET* sheet = sheetPath.Last();
+            sheetPath.GetSymbols( symbolInstances, true, true );
 
-            wxCHECK2( sheet, continue );
+        symbolInstances.SortByReferenceOnly();
 
-            m_out->Print( 2, "(path %s (page %s))\n",
-                          m_out->Quotew( sheetPath.PathAsString() ).c_str(),
-                          m_out->Quotew( sheet->GetPageNumber( sheetPath ) ).c_str() );
-        }
-
-        m_out->Print( 1, ")\n" );  // Close sheet instances token.
-        m_out->Print( 0, "\n" );
-        m_out->Print( 1, "(symbol_instances\n" );
-
-        for( const SCH_SHEET_PATH& sheetPath : sheetPaths )
-        {
-            SCH_REFERENCE_LIST instances;
-
-            sheetPath.GetSymbols( instances, true, true );
-            instances.SortByReferenceOnly();
-
-            for( size_t i = 0; i < instances.GetCount(); i++ )
-            {
-                m_out->Print( 2, "(path %s\n",
-                              m_out->Quotew( instances[i].GetPath() ).c_str() );
-                m_out->Print( 3, "(reference %s) (unit %d) (value %s) (footprint %s)\n",
-                              m_out->Quotew( instances[i].GetRef() ).c_str(),
-                              instances[i].GetUnit(),
-                              m_out->Quotew( instances[i].GetValue() ).c_str(),
-                              m_out->Quotew( instances[i].GetFootprint() ).c_str() );
-                m_out->Print( 2, ")\n" );
-            }
-        }
-
-        m_out->Print( 1, ")\n" );  // Close symbol instances token.
+        saveInstances( sheetPaths.GetSheetInstances(), symbolInstances.GetSymbolInstances(), 1 );
     }
     else
     {
         // Schematic files (SCH_SCREEN objects) can be shared so we have to save and restore
         // symbol and sheet instance data even if the file being saved is not the root sheet
         // because it is possible that the file is the root sheet of another project.
-        if( screen->m_sheetInstances.size() )
-        {
-            m_out->Print( 0, "\n" );
-            m_out->Print( 1, "(sheet_instances\n" );
-
-            for( const SCH_SHEET_INSTANCE& instance : screen->m_sheetInstances )
-            {
-                m_out->Print( 2, "(path %s (page %s))\n",
-                              m_out->Quotew( instance.m_Path.AsString() ).c_str(),
-                              m_out->Quotew( instance.m_PageNumber ).c_str() );
-            }
-
-            m_out->Print( 1, ")\n" );  // Close sheet instances token.
-        }
-
-        if( screen->m_symbolInstances.size() )
-        {
-            m_out->Print( 0, "\n" );
-            m_out->Print( 1, "(symbol_instances\n" );
-
-            for( const SYMBOL_INSTANCE_REFERENCE& instance : screen->m_symbolInstances )
-            {
-                m_out->Print( 2, "(path %s (reference %s) (unit %d))\n",
-                              m_out->Quotew( instance.m_Path.AsString() ).c_str(),
-                              m_out->Quotew( instance.m_Reference ).c_str(),
-                              instance.m_Unit );
-            }
-
-            m_out->Print( 1, ")\n" );  // Close instances token.
-        }
+        saveInstances( screen->m_sheetInstances, screen->m_symbolInstances, 1 );
     }
 
     m_out->Print( 0, ")\n" );
@@ -1316,6 +1256,52 @@ void SCH_SEXPR_PLUGIN::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNes
     m_out->Print( aNestLevel, "(bus_alias %s (members %s))\n",
                   m_out->Quotew( aAlias->GetName() ).c_str(),
                   TO_UTF8( members ) );
+}
+
+
+void SCH_SEXPR_PLUGIN::saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheets,
+                                      const std::vector<SYMBOL_INSTANCE_REFERENCE>& aSymbols,
+                                      int aNestLevel )
+{
+    if( aSheets.size() )
+    {
+        m_out->Print( 0, "\n" );
+        m_out->Print( aNestLevel, "(sheet_instances\n" );
+
+        for( const SCH_SHEET_INSTANCE& instance : aSheets )
+        {
+            wxString path = instance.m_Path.AsString();
+
+            if( path.IsEmpty() )
+                path = wxT( "/" ); // Root path
+
+            m_out->Print( aNestLevel + 1, "(path %s (page %s))\n",
+                          m_out->Quotew( path ).c_str(),
+                          m_out->Quotew( instance.m_PageNumber ).c_str() );
+        }
+
+        m_out->Print( aNestLevel, ")\n" ); // Close sheet instances token.
+    }
+
+    if( aSymbols.size() )
+    {
+        m_out->Print( 0, "\n" );
+        m_out->Print( aNestLevel, "(symbol_instances\n" );
+
+        for( const SYMBOL_INSTANCE_REFERENCE& instance : aSymbols )
+        {
+            m_out->Print( aNestLevel + 1, "(path %s\n",
+                          m_out->Quotew( instance.m_Path.AsString() ).c_str() );
+            m_out->Print( aNestLevel + 2, "(reference %s) (unit %d) (value %s) (footprint %s)\n",
+                          m_out->Quotew( instance.m_Reference ).c_str(),
+                          instance.m_Unit,
+                          m_out->Quotew( instance.m_Value ).c_str(),
+                          m_out->Quotew( instance.m_Footprint ).c_str() );
+            m_out->Print( aNestLevel + 1, ")\n" );
+        }
+
+        m_out->Print( aNestLevel, ")\n" ); // Close symbol instances token.
+    }
 }
 
 

@@ -509,6 +509,8 @@ public:
 
     std::vector<KIID_PATH> GetPaths() const;
 
+    std::vector<SCH_SHEET_INSTANCE> GetSheetInstances() const;
+
     /**
      * Check all of the sheet instance for empty page numbers.
      *

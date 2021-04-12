@@ -240,6 +240,26 @@ int SCH_REFERENCE_LIST::GetLastReference( int aIndex, int aMinValue ) const
 }
 
 
+std::vector<SYMBOL_INSTANCE_REFERENCE> SCH_REFERENCE_LIST::GetSymbolInstances() const
+{
+    std::vector<SYMBOL_INSTANCE_REFERENCE> retval;
+
+    for( const SCH_REFERENCE& ref : flatList )
+    {
+        SYMBOL_INSTANCE_REFERENCE instance;
+        instance.m_Path = ref.GetPath();
+        instance.m_Reference = ref.GetRef();
+        instance.m_Unit = ref.GetUnit();
+        instance.m_Value = ref.GetValue();
+        instance.m_Footprint = ref.GetFootprint();
+
+        retval.push_back( instance );
+    }
+
+    return retval;
+}
+
+
 int SCH_REFERENCE_LIST::CreateFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue )
 {
     int expectedId = aFirstValue;

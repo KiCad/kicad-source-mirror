@@ -883,6 +883,27 @@ std::vector<KIID_PATH> SCH_SHEET_LIST::GetPaths() const
 }
 
 
+std::vector<SCH_SHEET_INSTANCE> SCH_SHEET_LIST::GetSheetInstances() const
+{
+    std::vector<SCH_SHEET_INSTANCE> retval;
+
+    for( const SCH_SHEET_PATH& path : *this )
+    {
+        SCH_SHEET_INSTANCE instance;
+        const SCH_SHEET* sheet = path.Last();
+
+        wxCHECK2( sheet, continue );
+
+        instance.m_Path = path.PathWithoutRootUuid();
+        instance.m_PageNumber = sheet->GetPageNumber( path );
+
+        retval.push_back( instance );
+    }
+
+    return retval;
+}
+
+
 bool SCH_SHEET_LIST::AllSheetPageNumbersEmpty() const
 {
     for( const SCH_SHEET_PATH& instance : *this )

@@ -428,6 +428,8 @@ public:
      */
     int GetLastReference( int aIndex, int aMinValue ) const;
 
+    std::vector<SYMBOL_INSTANCE_REFERENCE> GetSymbolInstances() const;
+
 #if defined(DEBUG)
     void Show( const char* aPrefix = "" )
     {

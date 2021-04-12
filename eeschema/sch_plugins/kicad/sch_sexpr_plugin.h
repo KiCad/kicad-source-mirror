@@ -32,6 +32,8 @@ class KIWAY;
 class LINE_READER;
 class SCH_SCREEN;
 class SCH_SHEET;
+struct SCH_SHEET_INSTANCE;
+class SCH_SHEET_PATH;
 class SCH_BITMAP;
 class SCH_JUNCTION;
 class SCH_NO_CONNECT;
@@ -40,6 +42,7 @@ class SCH_BUS_ENTRY_BASE;
 class SCH_TEXT;
 class SCH_COMPONENT;
 class SCH_FIELD;
+struct SYMBOL_INSTANCE_REFERENCE;
 class PROPERTIES;
 class EE_SELECTION;
 class SCH_SEXPR_PLUGIN_CACHE;
@@ -141,6 +144,8 @@ private:
     void saveLine( SCH_LINE* aLine, int aNestLevel );
     void saveText( SCH_TEXT* aText, int aNestLevel );
     void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNestLevel );
+    void saveInstances( const std::vector<SCH_SHEET_INSTANCE>&        aSheets,
+                        const std::vector<SYMBOL_INSTANCE_REFERENCE>& aSymbols, int aNestLevel );
 
     void cacheLib( const wxString& aLibraryFileName, const PROPERTIES* aProperties );
     bool isBuffering( const PROPERTIES* aProperties );
