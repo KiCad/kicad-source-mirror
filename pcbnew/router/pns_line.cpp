@@ -723,6 +723,8 @@ void LINE::dragSegment45( const VECTOR2I& aP, int aIndex )
     SHAPE_LINE_CHAIN path( m_line );
     VECTOR2I         target( aP );
 
+    wxASSERT( aIndex < m_line.PointCount() );
+
     SEG guideA[2], guideB[2];
     int index = aIndex;
 

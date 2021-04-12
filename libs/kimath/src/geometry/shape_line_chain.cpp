@@ -307,6 +307,7 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const SHAPE_LINE
 
     // We only process lines in order in this house
     wxASSERT( aStartIndex <= aEndIndex );
+    wxASSERT( aEndIndex < m_points.size() );
 
     SHAPE_LINE_CHAIN newLine = aLine;
 

@@ -89,7 +89,7 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
     else if( distB <= w2 )
     {
         //todo (snh) Adjust segment for arcs
-        if( ( m_draggedSegmentIndex < m_draggedLine.PointCount() - 1 ) &&
+        if( ( m_draggedSegmentIndex < m_draggedLine.PointCount() - 2 ) &&
             ( m_draggedLine.CLine().CShapes()[ m_draggedSegmentIndex + 1 ] < 0 ) )
         {
             m_draggedSegmentIndex++;
@@ -100,7 +100,7 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
     else if( m_freeAngleMode )
     {
         if( distB < distA &&
-            ( m_draggedSegmentIndex < m_draggedLine.PointCount() - 1 ) &&
+            ( m_draggedSegmentIndex < m_draggedLine.PointCount() - 2 ) &&
             ( m_draggedLine.CLine().CShapes()[ m_draggedSegmentIndex + 1 ] < 0 ) )
         {
             m_draggedSegmentIndex++;
