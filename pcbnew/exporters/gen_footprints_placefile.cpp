@@ -339,7 +339,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     // Create output directory if it does not exist.
     // Also transform it in absolute path.
     // Bail if it fails
-    wxFileName  outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
+    wxString    path = ExpandEnvVarSubstitutions( m_plotOpts.GetOutputDirectory(), &Prj() );
+    wxFileName  outputDir = wxFileName::DirName( path );
     wxString    boardFilename = m_parent->GetBoard()->GetFileName();
 
     m_reporter = &m_messagesPanel->Reporter();
