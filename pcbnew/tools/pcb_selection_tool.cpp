@@ -104,6 +104,7 @@ PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
         m_multiple( false ),
         m_skip_heuristics( false ),
         m_highlight_modifier( false ),
+        m_nonModifiedCursor( KICURSOR::ARROW ),
         m_enteredGroup( nullptr ),
         m_priv( std::make_unique<PRIV>() )
 {
@@ -256,6 +257,27 @@ void PCB_SELECTION_TOOL::setModifiersState( bool aShiftState, bool aCtrlState, b
 
     m_highlight_modifier = aCtrlState && aShiftState && !aAltState;
 #endif
+}
+
+
+void PCB_SELECTION_TOOL::OnIdle( wxIdleEvent& aEvent )
+{
+    if( m_frame->ToolStackIsEmpty() && !m_multiple )
+    {
+        wxMouseState keyboardState = wxGetMouseState();
+
+        setModifiersState( keyboardState.ShiftDown(), keyboardState.ControlDown(),
+                           keyboardState.AltDown() );
+
+        if( m_additive )
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ADD );
+        else if( m_subtractive )
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SUBTRACT );
+        else if( m_exclusive_or )
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::XOR );
+        else
+            m_frame->GetCanvas()->SetCurrentCursor( m_nonModifiedCursor );
+    }
 }
 
 
@@ -430,25 +452,18 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         if( m_frame->ToolStackIsEmpty() )
         {
-            //move cursor prediction
+            // move cursor prediction
             if( !modifier_enabled
                     && dragAction == MOUSE_DRAG_ACTION::DRAG_SELECTED
                     && !m_selection.Empty()
                     && evt->HasPosition()
                     && selectionContains( evt->Position() ) )
             {
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+                m_nonModifiedCursor = KICURSOR::MOVING;
             }
             else
             {
-                if( m_additive )
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ADD );
-                else if( m_subtractive )
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SUBTRACT );
-                else if( m_exclusive_or )
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::XOR );
-                else
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+                m_nonModifiedCursor = KICURSOR::ARROW;
             }
         }
     }

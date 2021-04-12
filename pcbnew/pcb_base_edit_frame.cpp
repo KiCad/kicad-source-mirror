@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -26,18 +26,19 @@
 #include <kiface_i.h>
 #include <pcb_base_edit_frame.h>
 #include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+#include <tools/pcb_selection_tool.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <board.h>
-#include "footprint_info_impl.h"
+#include <dimension.h>
+#include <footprint_info_impl.h>
 #include <project.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
-#include <tools/pcb_actions.h>
-#include <dialogs/dialog_grid_settings.h>
 #include <widgets/appearance_controls.h>
+#include <dialogs/dialog_grid_settings.h>
 #include <dialogs/eda_view_switcher.h>
-#include <dimension.h>
 #include <wildcards_and_files_ext.h>
 
 
@@ -50,6 +51,19 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
         m_selectionFilterPanel( nullptr ),
         m_appearancePanel( nullptr )
 {
+    Bind( wxEVT_IDLE,
+          [this]( wxIdleEvent& aEvent )
+          {
+              // Handle cursor adjustments.  While we can get motion and key events through
+              // wxWidgets, we can't get modifier-key-up events.
+              if( m_toolManager )
+              {
+                  PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
+
+                  if( selTool )
+                      selTool->OnIdle( aEvent );
+              }
+          } );
 }
 
 
