@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,8 @@
 #include <wx/richmsgdlg.h>
 #include <wx/choicdlg.h>
 #include <wx/dcclient.h>
+
+#include <locale_io.h>
 
 // Some wx widget ID to know what widget has fired a event:
 #define ID_INCREMENT 256    // space between 2 ID type. Bigger than the layer count max
@@ -1054,6 +1056,10 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
     BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
 
     STRING_FORMATTER old_stackup;
+
+    // FormatBoardStackup() (using FormatInternalUnits()) expects a "C" locale
+    // to execute some tests. So switch to the suitable locale
+    LOCALE_IO dummy;
     brd_stackup.FormatBoardStackup( &old_stackup, m_board, 0 );
 
     brd_stackup.m_FinishType = m_stackup.m_FinishType;
