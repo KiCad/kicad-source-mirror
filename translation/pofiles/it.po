@@ -2,7 +2,7 @@
 # Ing. Angelo Aliberti <microrf@tiscali.it>, 2005.
 # Michele Petrecca <michelinux@alice.it>, 2005, 2006.
 # Doriano Blengino <web@xonelectronics.it>, 06-2006
-# Marco Ciampa <ciampix@posteo.net>, 2014-2020.
+# Marco Ciampa <ciampix@posteo.net>, 2014-2020, 2021.
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
 # ZbeeGin <zbeegin@op.pl>, 2020.
 #
@@ -100,16 +100,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 13:37-0700\n"
-"PO-Revision-Date: 2020-11-30 00:07+0000\n"
+"PO-Revision-Date: 2021-04-12 18:05+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -18833,9 +18833,8 @@ msgid "Number of characters or digits to step text by for each repeat."
 msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:368
-#, fuzzy
 msgid "Step X:"
-msgstr "Y passo:"
+msgstr "X passo:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:373
 msgid "Distance on the X axis to step for each repeat."
@@ -26943,7 +26942,6 @@ msgid "Track & Via Properties"
 msgstr "Proprietà piste e via"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
-#, fuzzy
 msgid "Via drill size must be smaller than via diameter"
 msgstr "La dimensione del foro del via deve essere minore del diametro del via"
 
