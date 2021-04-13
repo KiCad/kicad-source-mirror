@@ -114,43 +114,32 @@ DIRECTION_45 DP_PRIMITIVE_PAIR::anchorDirection( const ITEM* aItem, const VECTOR
         return DIRECTION_45( aItem->Anchor( 1 ) - aItem->Anchor( 0 ) );
 }
 
-void DP_PRIMITIVE_PAIR::CursorOrientation( const VECTOR2I& aCursorPos, VECTOR2I& aMidpoint, VECTOR2I& aDirection ) const
+void DP_PRIMITIVE_PAIR::CursorOrientation( const VECTOR2I& aCursorPos, VECTOR2I& aMidpoint,
+                                           VECTOR2I& aDirection ) const
 {
     assert( m_primP && m_primN );
 
     VECTOR2I aP, aN, dir, midpoint;
 
-    if ( m_primP->OfKind( ITEM::SEGMENT_T ) && m_primN->OfKind( ITEM::SEGMENT_T ) )
+    if( m_primP->OfKind( ITEM::SEGMENT_T ) && m_primN->OfKind( ITEM::SEGMENT_T ) )
     {
-        aP = m_primP->Anchor( 1 );
-        aN = m_primN->Anchor( 1 );
+        aP       = m_primP->Anchor( 1 );
+        aN       = m_primN->Anchor( 1 );
         midpoint = ( aP + aN ) / 2;
-        SEG s = static_cast <SEGMENT*>( m_primP )->Seg();
-
-        if ( s.B != s.A )
-        {
-            dir = s.B - s.A;
-        }
-        else
-        {
-            dir = VECTOR2I( 0, 1 );
-        }
-
-        dir = dir.Resize( ( aP - aN ).EuclideanNorm() );
-
+        dir      = ( aP - aN ).Perpendicular();
     }
     else
     {
-        aP = m_primP->Anchor( 0 );
-        aN = m_primN->Anchor( 0 );
+        aP       = m_primP->Anchor( 0 );
+        aN       = m_primN->Anchor( 0 );
         midpoint = ( aP + aN ) / 2;
-        dir = ( aP - aN ).Perpendicular();
+        dir      = ( aP - aN ).Perpendicular();
 
-        if ( dir.Dot( aCursorPos - midpoint ) < 0 )
+        if( dir.Dot( aCursorPos - midpoint ) < 0 )
             dir = -dir;
     }
 
-    aMidpoint = midpoint;
+    aMidpoint  = midpoint;
     aDirection = dir;
 }
 
