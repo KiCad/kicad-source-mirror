@@ -956,15 +956,15 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
     std::string       tool = aEvent.GetCommandStr().get();
     PCB_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
     BOARD*            board = getModel<BOARD>();
-    auto&             opt = displayOptions();
 
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
 
     picker->SetClickHandler(
-        [this, board, opt]( const VECTOR2D& pt ) -> bool
+        [this, board]( const VECTOR2D& pt ) -> bool
         {
-        PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+            const PCB_DISPLAY_OPTIONS& opt = displayOptions();
+            PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
             m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::PadFilter );
@@ -1013,8 +1013,10 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
         } );
 
     picker->SetFinalizeHandler(
-        [board, opt] ( int aCondition )
+        [this, board]( int aCondition )
         {
+            const PCB_DISPLAY_OPTIONS& opt = displayOptions();
+
             if( aCondition != PCB_PICKER_TOOL::END_ACTIVATE )
             {
                 for( FOOTPRINT* fp : board->Footprints() )
