@@ -125,6 +125,19 @@ void DP_PRIMITIVE_PAIR::CursorOrientation( const VECTOR2I& aCursorPos, VECTOR2I&
     {
         aP = m_primP->Anchor( 1 );
         aN = m_primN->Anchor( 1 );
+
+        // If both segments are parallel, use that as the direction.  Otherwise, fall back on the
+        // direction perpendicular to the anchor points.
+        const SEG& segP = static_cast<SEGMENT*>( m_primP )->Seg();
+        const SEG& segN = static_cast<SEGMENT*>( m_primN )->Seg();
+
+        if( ( segP.B != segP.A ) && ( segN.B != segN.A ) && segP.ApproxParallel( segN ) )
+        {
+            aMidpoint  = ( aP + aN ) / 2;
+            aDirection = segP.B - segP.A;
+            aDirection = aDirection.Resize( ( aP - aN ).EuclideanNorm() );
+            return;
+        }
     }
     else
     {
