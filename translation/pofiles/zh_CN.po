@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-12 11:06-0700\n"
-"PO-Revision-Date: 2021-04-04 17:59+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-04-13 22:28+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2189,15 +2189,16 @@ msgid "These items will be skipped unless you override the locks."
 msgstr "除非您覆盖锁定，否则跳过这些项目。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
-#, fuzzy
 msgid "Remember decision for this session."
-msgstr "不再排除此违规"
+msgstr "记住本会话的决定。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"记住为本会话剩余部分所选择的选项。\n"
+"在 KiCad 重新启动之前，这个对话框不会再次显示。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -2208,17 +2209,18 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"无视锁定并对选定的所有项应用操作。\n"
+"任何锁定的项目将在操作完成后保持锁定。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:60
-#, fuzzy
 msgid "Skip Locked Items"
-msgstr "锁定项"
+msgstr "跳过锁定项"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:61
 msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
-msgstr ""
+msgstr "从选择中移除锁定的项目，并只对未锁定项目(如果有的话)进行操作。"
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
 msgid "Locked Items"
@@ -6021,12 +6023,11 @@ msgstr "在 Web 浏览器中打开“参与 KiCad”"
 
 #: common/tool/actions.cpp:631
 msgid "Donate"
-msgstr ""
+msgstr "捐款"
 
 #: common/tool/actions.cpp:632
-#, fuzzy
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "在 Web 浏览器中打开“参与 KiCad”"
+msgstr "在 Web 浏览器中打开“向 KiCad 捐款”"
 
 #: common/tool/actions.cpp:636
 msgid "Report Bug"
@@ -6064,18 +6065,17 @@ msgid "Get involved with KiCad"
 msgstr "参与 KiCad"
 
 #: common/tool/common_control.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
 "无法启动默认浏览器。\n"
-"有关如何帮助 KiCad 项目的信息，请访问 %s"
+"有关如何向 KiCad 项目捐款，请访问 %s"
 
 #: common/tool/common_control.cpp:253
-#, fuzzy
 msgid "Donate to KiCad"
-msgstr "欢迎来到 KiCad %s！"
+msgstr "向 KiCad 捐款"
 
 #: common/tool/grid_menu.cpp:93
 #, c-format
@@ -10581,14 +10581,12 @@ msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
 msgstr "对于 BJT，引脚顺序为集电极，基极，发射极，基板（可选）"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:462
-#, fuzzy
 msgid "For a MOSFET, pin order is drain, gate, source"
-msgstr "对于 MOSFET，引脚顺序为漏极，栅极，源极"
+msgstr "对于 MOSFET，引脚顺序为 drain、gate、source"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:466
-#, fuzzy
 msgid "For a JFET, pin order is drain, gate, source"
-msgstr "对于 JFET，引脚顺序为漏极，栅极，源极"
+msgstr "对于 JFET，引脚顺序为 drain、gate、source"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1015
 msgid "Select library"
@@ -12994,91 +12992,89 @@ msgid ""
 msgstr "输入实现 SCH_PLUGIN::Symbol*() 函数的 Python 符号。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'."
 msgstr "无法打开文件 ‘%s’"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Record id: %d."
-msgstr "未知的 DRC 错误码 %d"
+msgstr "未知的记录编号： %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:596
 #, c-format
 msgid "Pin has non-existent ownerindex %d."
-msgstr ""
+msgstr "引脚有不存在的所有者索引 %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:637
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1722
-#, fuzzy
 msgid "Pin has unexpected orientation."
-msgstr "文本方向"
+msgstr "引脚方向不符预期。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:675
-#, fuzzy
 msgid "Pin has unexpected electrical type."
-msgstr "显示引脚电气类型 (&S)"
+msgstr "引脚电气类型不符预期。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:680
 msgid "Pin has unexpected outer edge type."
-msgstr ""
+msgstr "引脚的外边缘类型出乎意料。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:683
 msgid "Pin has unexpected inner edge type."
-msgstr ""
+msgstr "引脚的内边缘类型出乎意料。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:805
 #, c-format
 msgid "Label has non-existent ownerindex %d."
-msgstr ""
+msgstr "标签有不存在的所有者索引 %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:841
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr ""
+msgstr "贝塞尔曲线有 %d 个控制点。预期至少2 个。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:899
 #, c-format
 msgid "Bezier has non-existent ownerindex %d."
-msgstr ""
+msgstr "贝塞尔曲线有不存在的所有者索引 %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:984
 #, c-format
 msgid "Polyline has non-existent ownerindex %d."
-msgstr ""
+msgstr "多段线有不存在的所有者索引 %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1046
 #, c-format
 msgid "Polygon has non-existent ownerindex %d."
-msgstr ""
+msgstr "多边形有不存在的所有者索引 %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1128
 #, c-format
 msgid "Rounded rectangle has non-existent ownerindex %d."
-msgstr ""
+msgstr "圆角矩形有不存在的所有者索引 %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1166
 msgid "Arc drawing is not possible for now on schematic."
-msgstr ""
+msgstr "当前不可能在原理图上画圆弧。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1175
 #, c-format
 msgid "Arc has non-existent ownerindex %d."
-msgstr ""
+msgstr "圆弧有不存在的所有者索引 %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1236
 #, c-format
 msgid "Line has non-existent ownerindex %d."
-msgstr ""
+msgstr "线段有不存在的所有者索引 %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1308
 #, c-format
 msgid "Rectangle has non-existent ownerindex %d."
-msgstr ""
+msgstr "矩形有不存在的所有者索引 %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1613
 msgid "Power Port has unknown style, use bar instead."
-msgstr ""
+msgstr "电源端口有未知的类型，使用条。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1655
 #, c-format
@@ -13088,7 +13084,7 @@ msgstr "电源符号创建名为 '%s' 的全局标签"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2156
 #, c-format
 msgid "Designator has non-existent ownerindex %d."
-msgstr ""
+msgstr "指示符有未知的所有者类型 %d。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:71
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:64
@@ -13251,16 +13247,16 @@ msgid "Unable to read file \"%s\""
 msgstr "无法读取文件 \"%s\""
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1161
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
-msgstr "解析 Eagle 文件时出错。  找不到 \"%s\" 实例, 但在原理图中引用了它。"
+msgstr "解析 Eagle 文件时出错。  找不到 '%s' 实例, 但在原理图中引用了它。"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1192
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find '%s' in the imported library."
-msgstr "在导入的库中找不到 %s"
+msgstr "在导入的库中找不到 '%s' 。"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2311
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2349
@@ -13882,7 +13878,6 @@ msgid "Syntax Help"
 msgstr "语法帮助"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14054,8 +14049,8 @@ msgstr ""
 "samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"samp><br> <samp>动齿条</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14063,7 +14058,7 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>变量值</i></samp></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
@@ -14076,8 +14071,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14092,9 +14087,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>总线定义</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
-"        <th>Resultant Nets</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>合成网</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
@@ -14110,9 +14105,9 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
-"\t\t<td></td>\n"
-"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
@@ -14144,9 +14139,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
 
@@ -15116,9 +15111,8 @@ msgstr "符号 \"%s\" 保存到库中 \"%s\""
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:96
 #: eeschema/symbol_tree_model_adapter.cpp:104
-#, fuzzy
 msgid "Errors were encountered loading symbols:"
-msgstr "加载封装时出现错误："
+msgstr "加载符号时出现错误："
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:166
 #, c-format
@@ -20181,9 +20175,9 @@ msgstr "介电层"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:433
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1171
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1386
-#, fuzzy, c-format
+#, c-format
 msgid "Custom (%s)"
-msgstr "自定义"
+msgstr "自定义 (%s)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:633
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:155
@@ -22788,9 +22782,8 @@ msgid "Footprint Checker"
 msgstr "封装检查器"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:331
-#, fuzzy
 msgid "Footprint can be freely moved and oriented on the canvas."
-msgstr "封装可以被自由移动和自动放置，但其焊盘不能被编辑。"
+msgstr "封装可以在画布上被自由移动和更改方向。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:333
 msgid ""
@@ -22862,7 +22855,6 @@ msgstr "侧面："
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
-#, fuzzy
 msgid "Unlock footprint"
 msgstr "解锁封装"
 
@@ -25603,16 +25595,15 @@ msgid "Suggest track finish"
 msgstr "建议布线完成"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:86
-#, fuzzy
 msgid "Optimize entire track being dragged"
-msgstr "优化正在拖动的布线"
+msgstr "优化整个正被拖动的布线"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid ""
 "When enabled, the entire portion of the track that is visible on the screen "
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
-msgstr ""
+msgstr "启用后，当一段线路被拖动时，屏幕上可见的整个导线部分将被优化和重排路径。禁用后，将只优化被拖动部分附近的区域。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:91
 msgid "Use mouse path to set track posture"
@@ -26197,15 +26188,14 @@ msgid "Highlight nets when they are highlighted in the schematic editor"
 msgstr "当网络在原理图编辑器中高亮显示时将其高亮显示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:90
-#, fuzzy
 msgid "Refresh 3D view automatically"
-msgstr "自动调整"
+msgstr "自动刷新 3D 视图"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:91
 msgid ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
-msgstr ""
+msgstr "启用后，对电路板的编辑将造成 3D 视图刷新 (较大的电路板完成刷新可能会需要不少时间）"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Magnetic pads"
@@ -26229,23 +26219,21 @@ msgid ""
 msgstr "绘制图形线时，强制水平、垂直或 45 度。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:58
-#, fuzzy
 msgid "Step for &rotate commands:"
-msgstr "重做最后操作"
+msgstr "&旋转命令的步骤："
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr "设置上下文菜单和热键旋转的增量（以度为单位）。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:75
-#, fuzzy
 msgid "Allow free pads"
-msgstr "允许的功能"
+msgstr "允许自由焊盘"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:76
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
-msgstr ""
+msgstr "若选中，焊盘可相对于封装的其他部分进行移动。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:102
 #: pcbnew/dialogs/panel_edit_options_base.cpp:183
@@ -26556,13 +26544,10 @@ msgid "Mimic legacy behavior"
 msgstr "模仿旧行为"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:110
-#, fuzzy
 msgid ""
 "Produces a slightly smoother outline at the expense of performance, some "
 "export fidelity issues, and overly aggressive higher-priority zone knockouts."
-msgstr ""
-"以牺牲性能、一些导出保真度问题和过于激进的高优先级覆铜挖空为代价，生成稍微平"
-"滑的轮廓。"
+msgstr "以牺牲性能、一些导出保真度问题和过于激进的高优先级区域挖空为代价，生成稍微平滑的轮廓。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:114
 msgid "Smoothed polygons (best performance)"
@@ -28527,9 +28512,9 @@ msgid "The current PCB has been modified.  Save changes?"
 msgstr "当前 PCB 已被修改。是否保存更改？"
 
 #: pcbnew/files.cpp:598
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr "PCB \"%s\" 不存在，你想创建它吗？"
+msgstr "PCB '%s' 不存在，你想创建它吗？"
 
 #: pcbnew/files.cpp:807
 #, c-format
@@ -28549,18 +28534,18 @@ msgid "No access rights to write to file \"%s\""
 msgstr "没有权限写入文件 \"%s\""
 
 #: pcbnew/files.cpp:989 pcbnew/files.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "%s"
 msgstr ""
-"保存电路板文件 \"%s\" 错误。\n"
+"保存电路板文件 '%s' 出错。\n"
 "%s"
 
 #: pcbnew/files.cpp:994
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file '%s'."
-msgstr "无法创建临时文件 \"%s\""
+msgstr "未能创建临时文件 '%s'。"
 
 #: pcbnew/files.cpp:1007
 #, c-format
@@ -28572,14 +28557,14 @@ msgstr ""
 "重命名临时文件 \"%s\" 失败"
 
 #: pcbnew/files.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' saved."
-msgstr "文件 \"%s\" 已保存。"
+msgstr "文件 '%s' 已保存。"
 
 #: pcbnew/files.cpp:1072
-#, fuzzy, c-format
+#, c-format
 msgid "No access rights to write to file '%s'."
-msgstr "没有权限写入文件 \"%s\""
+msgstr "没有权限写入文件 '%s'。"
 
 #: pcbnew/files.cpp:1129
 #, c-format
@@ -30702,7 +30687,7 @@ msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr "忽略文本，因为 Eagle 图层 '%s' (%d) 未映射"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1920
-#, fuzzy, c-format
+#, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr "忽略矩形，因为 Eagle 图层 '%s' (%d) 未映射"
 
@@ -32198,7 +32183,7 @@ msgstr "特殊工具"
 #: pcbnew/tools/edit_tool.cpp:336
 #, c-format
 msgid "Unable to resize arc tracks %.1f degrees or greater."
-msgstr ""
+msgstr "无法将圆弧导线角度调整 %.1f 度或更多。"
 
 #: pcbnew/tools/edit_tool.cpp:652
 msgid "Drag Arc Track"
@@ -34106,21 +34091,18 @@ msgid "Layer Display Options"
 msgstr "图层显示选项"
 
 #: pcbnew/widgets/appearance_controls.cpp:575
-#, fuzzy
 msgid "Inactive layers:"
 msgstr "非活动图层："
 
 #: pcbnew/widgets/appearance_controls.cpp:587
-#, fuzzy
 msgid "Inactive layers will be shown in full color"
-msgstr "非活动图层将显示全彩色"
+msgstr "非活动图层将以全彩色显示"
 
 #: pcbnew/widgets/appearance_controls.cpp:591
 msgid "Dim"
 msgstr "暗显"
 
 #: pcbnew/widgets/appearance_controls.cpp:593
-#, fuzzy
 msgid "Inactive layers will be dimmed"
 msgstr "非活动图层将变暗"
 
@@ -34129,7 +34111,6 @@ msgid "Hide"
 msgstr "隐藏"
 
 #: pcbnew/widgets/appearance_controls.cpp:599
-#, fuzzy
 msgid "Inactive layers will be hidden"
 msgstr "非活动图层将被隐藏"
 
@@ -34182,7 +34163,6 @@ msgid "Ratsnest lines are shown to items on visible layers"
 msgstr "飞线线显示为可见图层上的项目"
 
 #: pcbnew/widgets/appearance_controls.cpp:831
-#, fuzzy
 msgid "Set Net Color"
 msgstr "设置网络颜色"
 
@@ -34193,18 +34173,17 @@ msgstr "高亮 %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:836
 #: pcbnew/widgets/appearance_controls.cpp:2150
-#, fuzzy, c-format
+#, c-format
 msgid "Select Tracks and Vias in %s"
-msgstr "选择 %s 中的布线和过孔"
+msgstr "选择 %s 中的导线和过孔"
 
 #: pcbnew/widgets/appearance_controls.cpp:839
 #: pcbnew/widgets/appearance_controls.cpp:2154
-#, fuzzy, c-format
+#, c-format
 msgid "Unselect Tracks and Vias in %s"
-msgstr "在 %s 中取消选择布线和过孔"
+msgstr "取消选择 %s 中的导线和过孔"
 
 #: pcbnew/widgets/appearance_controls.cpp:847
-#, fuzzy
 msgid "Hide All Other Nets"
 msgstr "隐藏所有其他网络"
 
@@ -34219,10 +34198,9 @@ msgid "Click to show ratsnest for %s"
 msgstr "单击以显示 %s 的飞线"
 
 #: pcbnew/widgets/appearance_controls.cpp:887
-#, fuzzy
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
-msgstr "双击或中键更改颜色，右键单击菜单"
+msgstr "双击(或中键单击)更改颜色，右键单击查看更多操作"
 
 #: pcbnew/widgets/appearance_controls.cpp:1389
 msgid "Double click or middle click for color change, right click for menu"
@@ -34401,22 +34379,19 @@ msgid "Show or hide ratsnest for nets in %s"
 msgstr "显示或隐藏 %s 中的网络飞线"
 
 #: pcbnew/widgets/appearance_controls.cpp:2142
-#, fuzzy
 msgid "Set Netclass Color"
 msgstr "设置网络类颜色"
 
 #: pcbnew/widgets/appearance_controls.cpp:2147
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Nets in %s"
 msgstr "高亮 %s 中的网络"
 
 #: pcbnew/widgets/appearance_controls.cpp:2161
-#, fuzzy
 msgid "Show All Netclasses"
 msgstr "显示所有网络类"
 
 #: pcbnew/widgets/appearance_controls.cpp:2164
-#, fuzzy
 msgid "Hide All Other Netclasses"
 msgstr "隐藏所有其他网络类"
 
