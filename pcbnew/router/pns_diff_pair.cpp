@@ -119,28 +119,24 @@ void DP_PRIMITIVE_PAIR::CursorOrientation( const VECTOR2I& aCursorPos, VECTOR2I&
 {
     assert( m_primP && m_primN );
 
-    VECTOR2I aP, aN, dir, midpoint;
+    VECTOR2I aP, aN;
 
     if( m_primP->OfKind( ITEM::SEGMENT_T ) && m_primN->OfKind( ITEM::SEGMENT_T ) )
     {
-        aP       = m_primP->Anchor( 1 );
-        aN       = m_primN->Anchor( 1 );
-        midpoint = ( aP + aN ) / 2;
-        dir      = ( aP - aN ).Perpendicular();
+        aP = m_primP->Anchor( 1 );
+        aN = m_primN->Anchor( 1 );
     }
     else
     {
-        aP       = m_primP->Anchor( 0 );
-        aN       = m_primN->Anchor( 0 );
-        midpoint = ( aP + aN ) / 2;
-        dir      = ( aP - aN ).Perpendicular();
-
-        if( dir.Dot( aCursorPos - midpoint ) < 0 )
-            dir = -dir;
+        aP = m_primP->Anchor( 0 );
+        aN = m_primN->Anchor( 0 );
     }
 
-    aMidpoint  = midpoint;
-    aDirection = dir;
+    aMidpoint  = ( aP + aN ) / 2;
+    aDirection = ( aP - aN ).Perpendicular();
+
+    if( aDirection.Dot( aCursorPos - aMidpoint ) < 0 )
+        aDirection = -aDirection;
 }
 
 
