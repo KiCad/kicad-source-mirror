@@ -332,7 +332,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     }
 
     // Apply high-contrast dimming
-    if( m_hiContrastEnabled && !highlighted && !selected )
+    if( m_hiContrastEnabled && m_highContrastLayers.size() && !highlighted && !selected )
     {
         PCB_LAYER_ID primary = GetPrimaryHighContrastLayer();
         bool         isActive = m_highContrastLayers.count( aLayer );

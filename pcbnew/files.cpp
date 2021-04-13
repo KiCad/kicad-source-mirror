@@ -264,7 +264,7 @@ bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* a
 
     if( wxWindow* extraControl = dlg.GetExtraControl() )
         *aCreateProject = static_cast<CREATE_PROJECT_CHECKBOX*>( extraControl )->GetValue();
-    else if( Kiface().IsSingle() && !aParent->Prj().IsNullProject() )
+    else if( !aParent->Prj().IsNullProject() )
         *aCreateProject = true;
 
     return true;
@@ -951,7 +951,11 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
             // If no project to load then initialize project text vars with board properties
             if( !mgr->LoadProject( projectFile.GetFullPath() ) )
+            {
                 Prj().GetTextVars() = GetBoard()->GetProperties();
+
+                // TODO: save netclasses from currentProject to new project...
+            }
 
             GetBoard()->SetProject( &Prj() );
         }
@@ -1107,20 +1111,27 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
 
             SETTINGS_MANAGER* mgr = GetSettingsManager();
 
+            // Shelve the current project
             GetBoard()->ClearProject();
 
             mgr->SaveProject( currentProject );
             mgr->UnloadProject( &Prj() );
 
-            mgr->LoadProject( projectFile.GetFullPath() );
-            mgr->SaveProject();
-
-            mgr->UnloadProject( &Prj() );
-            mgr->LoadProject( currentProject );
+            // Create a new project for the saved-as-copy
 
             // If no project to load then initialize project text vars with board properties
-            if( !mgr->LoadProject( currentProject ) )
+            if( !mgr->LoadProject( projectFile.GetFullPath() ) )
+            {
                 Prj().GetTextVars() = GetBoard()->GetProperties();
+
+                // TODO: save netclasses from currentProject to new project...
+            }
+
+            mgr->SaveProject();
+
+            // Now go back to our own project
+            mgr->UnloadProject( &Prj() );
+            mgr->LoadProject( currentProject );
 
             GetBoard()->SetProject( &Prj() );
         }
