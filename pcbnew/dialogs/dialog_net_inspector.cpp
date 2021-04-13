@@ -1928,6 +1928,19 @@ void DIALOG_NET_INSPECTOR::onDeleteNet( wxCommandEvent& aEvent )
                         || IsOK( this, wxString::Format( _( "Net '%s' is in use.  Delete anyway?" ),
                                                          i->GetNetName() ) ) )
                 {
+                    // This is a bit hacky, but it will do for now, since this is the only path
+                    // outside the netlist updater where you can remove a net from a BOARD.
+                    int removedCode = i->GetNetCode();
+
+                    m_frame->GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                            [removedCode]( KIGFX::VIEW_ITEM* aItem ) -> bool
+                            {
+                                if( auto bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
+                                    return bci->GetNetCode() == removedCode;
+
+                                return false;
+                            } );
+
                     m_brd->Remove( i->GetNet() );
                     m_frame->OnModify();
 

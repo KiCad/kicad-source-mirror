@@ -671,7 +671,28 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     {
     case PCB_NETINFO_T:
     {
-        NETINFO_ITEM* item = (NETINFO_ITEM*) aBoardItem;
+        NETINFO_ITEM* item        = static_cast<NETINFO_ITEM*>( aBoardItem );
+        NETINFO_ITEM* unconnected = m_NetInfo.GetNetItem( NETINFO_LIST::UNCONNECTED );
+        int           removedCode = item->GetNetCode();
+
+        for( FOOTPRINT* fp : m_footprints )
+        {
+            for( PAD* pad : fp->Pads() )
+            {
+                if( pad->GetNetCode() == removedCode )
+                    pad->SetNet( unconnected );
+            }
+        }
+
+        for( ZONE* zone : m_zones )
+        {
+            if( zone->GetNetCode() == removedCode )
+                zone->SetNet( unconnected );
+        }
+
+        for( TRACK* track : TracksInNet( removedCode ) )
+            track->SetNet( unconnected );
+
         m_NetInfo.RemoveNet( item );
         break;
     }
