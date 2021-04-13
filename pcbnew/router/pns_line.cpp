@@ -613,6 +613,8 @@ void LINE::dragCornerFree( const VECTOR2I& aP, int aIndex )
 
 void LINE::DragCorner( const VECTOR2I& aP, int aIndex, bool aFreeAngle )
 {
+    wxCHECK_RET( aIndex >= 0, "Negative index passed to LINE::DragCorner" );
+
     if( aFreeAngle )
     {
         dragCornerFree( aP, aIndex );
