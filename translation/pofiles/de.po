@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-12 11:06-0700\n"
-"PO-Revision-Date: 2021-04-10 08:26+0000\n"
+"PO-Revision-Date: 2021-04-13 22:28+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2253,15 +2253,16 @@ msgstr ""
 "überschreiben."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
-#, fuzzy
 msgid "Remember decision for this session."
-msgstr "Ausschluss für die Verletzung entfernen"
+msgstr "Entscheidung für diese Sitzung merken."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"Die Option für den Rest dieser Sitzung merken.\n"
+"Dieses Dialogfeld wird erst nach einem Neustart von KiCad wieder angezeigt."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -2274,9 +2275,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:60
-#, fuzzy
 msgid "Skip Locked Items"
-msgstr "Gesperrte Elemente"
+msgstr "Gesperrte Elemente überspringen"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:61
 msgid ""
@@ -6157,12 +6157,11 @@ msgstr "\"Zu KiCad beitragen\" im Webbrowser öffnen"
 
 #: common/tool/actions.cpp:631
 msgid "Donate"
-msgstr ""
+msgstr "Spenden"
 
 #: common/tool/actions.cpp:632
-#, fuzzy
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "\"Zu KiCad beitragen\" im Webbrowser öffnen"
+msgstr "\"An KiCad spenden\" im Webbrowser öffnen"
 
 #: common/tool/actions.cpp:636
 msgid "Report Bug"
@@ -6201,19 +6200,17 @@ msgid "Get involved with KiCad"
 msgstr "Beteilige Dich an KiCad"
 
 #: common/tool/common_control.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
 "Der Standardbrowser konnte nicht geöffnet werden.\n"
-"Weitere Informationen darüber, wie Sie das KiCad-Projekt unterstützen "
-"können, finden Sie unter %s"
+"Um an das KiCad-Projekt zu spenden, besuchen Sie %s"
 
 #: common/tool/common_control.cpp:253
-#, fuzzy
 msgid "Donate to KiCad"
-msgstr "Willkommen zu KiCad %s!"
+msgstr "An KiCad spenden"
 
 #: common/tool/grid_menu.cpp:93
 #, c-format
@@ -10855,14 +10852,12 @@ msgstr ""
 "(optional)"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:462
-#, fuzzy
 msgid "For a MOSFET, pin order is drain, gate, source"
-msgstr "Bei einem MOSFET ist die Pin-Reihenfolge Drain, Gitter, Source"
+msgstr "Bei einem MOSFET ist die Pin-Reihenfolge Drain, Gate, Source"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:466
-#, fuzzy
 msgid "For a JFET, pin order is drain, gate, source"
-msgstr "Bei einem JFET ist die Pin-Reihenfolge Drain, Gitter, Source"
+msgstr "Bei einem JFET ist die Pin-Reihenfolge Drain, Gate, Source"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1015
 msgid "Select library"
@@ -13357,91 +13352,89 @@ msgstr ""
 "beinhaltet."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'."
-msgstr "Konnte Datei '%s' nicht öffnen"
+msgstr "Konnte Datei '%s' nicht öffnen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Record id: %d."
-msgstr "Unbekannter DRC Fehlercode %d"
+msgstr "Unbekannte Record-ID: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:596
 #, c-format
 msgid "Pin has non-existent ownerindex %d."
-msgstr ""
+msgstr "Pin hat einen nicht vorhandenen ownerindex %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:637
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1722
-#, fuzzy
 msgid "Pin has unexpected orientation."
-msgstr "Textausrichtung"
+msgstr "Pin hat unerwartete Ausrichtung."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:675
-#, fuzzy
 msgid "Pin has unexpected electrical type."
-msgstr "Zeige El&ektrischen Anschlusstyp"
+msgstr "Pin hat unerwarteten elektrischen Typ."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:680
 msgid "Pin has unexpected outer edge type."
-msgstr ""
+msgstr "Pin hat unerwarteten outer edge type."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:683
 msgid "Pin has unexpected inner edge type."
-msgstr ""
+msgstr "Pin hat unerwarteten inner edge type."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:805
 #, c-format
 msgid "Label has non-existent ownerindex %d."
-msgstr ""
+msgstr "Label hat nicht vorhandenen ownerindex %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:841
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr ""
+msgstr "Bezier hat %d Kontrollpunkte. Mindestens 2 werden erwartet."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:899
 #, c-format
 msgid "Bezier has non-existent ownerindex %d."
-msgstr ""
+msgstr "Bezier hat einen nicht vorhandenen ownerindex %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:984
 #, c-format
 msgid "Polyline has non-existent ownerindex %d."
-msgstr ""
+msgstr "Polylinie hat nicht vorhandenen ownerindex %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1046
 #, c-format
 msgid "Polygon has non-existent ownerindex %d."
-msgstr ""
+msgstr "Polygon hat einen nicht vorhandenen ownerindex %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1128
 #, c-format
 msgid "Rounded rectangle has non-existent ownerindex %d."
-msgstr ""
+msgstr "Abgerundetes Rechteck hat nicht existierenden ownerindex %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1166
 msgid "Arc drawing is not possible for now on schematic."
-msgstr ""
+msgstr "Das Zeichnen von Bögen ist auf Schaltplänen vorerst nicht möglich."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1175
 #, c-format
 msgid "Arc has non-existent ownerindex %d."
-msgstr ""
+msgstr "Arc hat einen nicht vorhandenen ownerindex %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1236
 #, c-format
 msgid "Line has non-existent ownerindex %d."
-msgstr ""
+msgstr "Linie hat nicht vorhandenen ownerindex %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1308
 #, c-format
 msgid "Rectangle has non-existent ownerindex %d."
-msgstr ""
+msgstr "Rechteck hat nicht vorhandenen ownerindex %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1613
 msgid "Power Port has unknown style, use bar instead."
-msgstr ""
+msgstr "Power Port hat unbekannten Stil, benutze stattdessen 'bar'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1655
 #, c-format
@@ -13451,7 +13444,7 @@ msgstr "Spannungssymbol erstellt einen globalen Bezeichner mit Namen '%s'"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2156
 #, c-format
 msgid "Designator has non-existent ownerindex %d."
-msgstr ""
+msgstr "Bezeichner hat nicht vorhandenen ownerindex %d."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:71
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:64
@@ -13644,7 +13637,7 @@ msgid "Unable to read file \"%s\""
 msgstr "Kann Datei \"%s\" nicht lesen"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1161
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
@@ -13653,9 +13646,9 @@ msgstr ""
 "werden obwohl diese im Schaltplan referenziert ist."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1192
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find '%s' in the imported library."
-msgstr "Konnte %s nicht in der importierten Bibliothek finden"
+msgstr "Konnte '%s' nicht in der importierten Bibliothek finden"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2311
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2349
@@ -20746,9 +20739,9 @@ msgstr "Dielektrische Schichten"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:433
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1171
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1386
-#, fuzzy, c-format
+#, c-format
 msgid "Custom (%s)"
-msgstr "Benutzerdefiniert"
+msgstr "Benutzerdefiniert (%s)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:633
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:155
