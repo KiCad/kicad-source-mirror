@@ -268,12 +268,12 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         }
         else
         {
-            changed = true;
-            aPcbFootprint->SetReference( aNetlistComponent->GetReference() );
-
             msg.Printf( _( "Changed %s reference designator to %s." ),
                         aPcbFootprint->GetReference(),
                         aNetlistComponent->GetReference() );
+
+            changed = true;
+            aPcbFootprint->SetReference( aNetlistComponent->GetReference() );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -291,13 +291,13 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         }
         else
         {
-            changed = true;
-            aPcbFootprint->SetValue( aNetlistComponent->GetValue() );
-
             msg.Printf( _( "Changed %s value from %s to %s." ),
                         aPcbFootprint->GetReference(),
                         aPcbFootprint->GetValue(),
                         aNetlistComponent->GetValue() );
+
+            changed = true;
+            aPcbFootprint->SetValue( aNetlistComponent->GetValue() );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -318,13 +318,13 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         }
         else
         {
-            changed = true;
-            aPcbFootprint->SetPath( new_path );
-
             msg.Printf( _( "Updated %s symbol association from %s to %s." ),
                         aPcbFootprint->GetReference(),
                         aPcbFootprint->GetPath().AsString(),
                         new_path.AsString() );
+
+            changed = true;
+            aPcbFootprint->SetPath( new_path );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -339,11 +339,11 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         }
         else
         {
-            changed = true;
-            aPcbFootprint->SetProperties( aNetlistComponent->GetProperties() );
-
             msg.Printf( _( "Updated %s properties." ),
                         aPcbFootprint->GetReference() );
+
+            changed = true;
+            aPcbFootprint->SetProperties( aNetlistComponent->GetProperties() );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
