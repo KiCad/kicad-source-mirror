@@ -932,6 +932,22 @@ void SETTINGS_MANAGER::SaveProjectAs( const wxString& aFullPath )
 }
 
 
+void SETTINGS_MANAGER::SaveProjectCopy( const wxString& aFullPath )
+{
+    PROJECT_FILE* project = m_project_files.at( Prj().GetProjectFullName() );
+    wxString      oldName = project->GetFilename();
+    wxFileName    fn( aFullPath );
+
+    project->SetFilename( fn.GetName() );
+    project->SaveToFile( fn.GetPath() );
+    project->SetFilename( oldName );
+
+    Prj().GetLocalSettings().SetFilename( fn.GetName() );
+    Prj().GetLocalSettings().SaveToFile( fn.GetPath() );
+    Prj().GetLocalSettings().SetFilename( oldName );
+}
+
+
 bool SETTINGS_MANAGER::loadProjectFile( PROJECT& aProject )
 {
     wxFileName fullFn( aProject.GetProjectFullName() );

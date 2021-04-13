@@ -932,53 +932,28 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     // TODO: this will break if we ever go multi-board
     wxFileName projectFile( pcbFileName );
-    bool       projectFileExists = false;
 
     projectFile.SetExt( ProjectFileExtension );
-    projectFileExists = projectFile.FileExists();
 
-    if( aChangeProject && !projectFileExists )
+    if( !projectFile.FileExists() && aChangeProject )
+        GetSettingsManager()->SaveProjectAs( projectFile.GetFullPath() );
+
+    if( projectFile.FileExists() )
     {
-        // If this is a new board, project filename won't be set yet
-        if( projectFile.GetFullPath() != Prj().GetProjectFullName() )
-        {
-            GetBoard()->ClearProject();
+        // Save various DRC parameters, such as violation severities (which may have been
+        // edited via the DRC dialog as well as the Board Setup dialog), DRC exclusions, etc.
+        SaveProjectSettings();
 
-            SETTINGS_MANAGER* mgr = GetSettingsManager();
-
-            mgr->SaveProject( Prj().GetProjectFullName() );
-            mgr->UnloadProject( &Prj() );
-
-            // If no project to load then initialize project text vars with board properties
-            if( !mgr->LoadProject( projectFile.GetFullPath() ) )
-            {
-                Prj().GetTextVars() = GetBoard()->GetProperties();
-
-                // TODO: save netclasses from currentProject to new project...
-            }
-
-            GetBoard()->SetProject( &Prj() );
-        }
+        GetBoard()->SynchronizeProperties();
+        GetBoard()->SynchronizeNetsAndNetClasses();
     }
 
-    if( projectFileExists )
-        GetBoard()->SynchronizeProperties();
-
     wxFileName tempFile( aFileName );
+    wxString   upperTxt;
+    wxString   lowerTxt;
+
     tempFile.SetName( wxT( "." ) + tempFile.GetName() );
     tempFile.SetExt( tempFile.GetExt() + wxT( "$" ) );
-
-    GetBoard()->SynchronizeNetsAndNetClasses();
-
-    // Save various DRC parameters, such as violation severities (which may have been
-    // edited via the DRC dialog as well as the Board Setup dialog), DRC exclusions, etc.
-    SaveProjectSettings();
-
-    GetSettingsManager()->SaveProject();
-
-
-    wxString    upperTxt;
-    wxString    lowerTxt;
 
     try
     {
@@ -1080,6 +1055,10 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
         return false;
     }
 
+    // Save various DRC parameters, such as violation severities (which may have been
+    // edited via the DRC dialog as well as the Board Setup dialog), DRC exclusions, etc.
+    SaveProjectSettings();
+
     GetBoard()->SynchronizeNetsAndNetClasses();
 
     try
@@ -1100,42 +1079,12 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
         return false;
     }
 
-    if( aCreateProject )
-    {
-        wxFileName projectFile( pcbFileName );
-        projectFile.SetExt( ProjectFileExtension );
+    wxFileName projectFile( pcbFileName );
 
-        if( !projectFile.FileExists() )
-        {
-            wxString currentProject = Prj().GetProjectFullName();
+    projectFile.SetExt( ProjectFileExtension );
 
-            SETTINGS_MANAGER* mgr = GetSettingsManager();
-
-            // Shelve the current project
-            GetBoard()->ClearProject();
-
-            mgr->SaveProject( currentProject );
-            mgr->UnloadProject( &Prj() );
-
-            // Create a new project for the saved-as-copy
-
-            // If no project to load then initialize project text vars with board properties
-            if( !mgr->LoadProject( projectFile.GetFullPath() ) )
-            {
-                Prj().GetTextVars() = GetBoard()->GetProperties();
-
-                // TODO: save netclasses from currentProject to new project...
-            }
-
-            mgr->SaveProject();
-
-            // Now go back to our own project
-            mgr->UnloadProject( &Prj() );
-            mgr->LoadProject( currentProject );
-
-            GetBoard()->SetProject( &Prj() );
-        }
-    }
+    if( aCreateProject && !projectFile.FileExists() )
+        GetSettingsManager()->SaveProjectCopy( projectFile.GetFullPath() );
 
     DisplayInfoMessage( this, wxString::Format( _( "Board copied to:\n\"%s\"" ),
                                                 pcbFileName.GetFullPath() ) );

@@ -279,6 +279,11 @@ public:
     void SaveProjectAs( const wxString& aFullPath );
 
     /**
+     * Saves a copy of the current project under the given path
+     */
+    void SaveProjectCopy( const wxString& aFullPath );
+
+    /**
      * @return the full path to where project backups should be stored
      */
     wxString GetProjectBackupsPath() const;
