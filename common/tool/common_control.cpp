@@ -25,6 +25,7 @@
 #include <bitmaps.h>
 #include <build_version.h>
 #include <common.h>     // for SearchHelpFileFullPath
+#include <pgm_base.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <eda_draw_frame.h>
@@ -40,6 +41,7 @@
 
 #define URL_GET_INVOLVED "https://kicad.org/contribute/"
 #define URL_DONATE "https://go.kicad.org/app-donate"
+#define URL_DOCUMENTATION "https://docs.kicad.org/"
 
 
 /// URL to launch a new issue with pre-populated description
@@ -169,6 +171,10 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
     wxString helpFile;
     wxString msg;
 
+    // the URL of help files is "https://docs.kicad.org/<version>/<language>/<name>/"
+    const wxString baseUrl = URL_DOCUMENTATION + GetMajorMinorVersion() + "/"
+                             + Pgm().GetLocale()->GetName().BeforeLast( '_' ) + "/";
+
     /* We have to get document for beginners,
      * or the full specific doc
      * if event id is wxID_INDEX, we want the document for beginners.
@@ -195,10 +201,16 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 
         if( !helpFile )
         {
-            msg = wxString::Format( _( "Help file \"%s\" or\n\"%s\" could not be found." ),
+            msg = wxString::Format( _( "Help file \"%s\" or\n\"%s\" could not be found.\n"
+                                       "Do you want to access the KiCad online help?" ),
                                     names[0], names[1] );
-            wxMessageBox( msg );
-            return -1;
+            wxMessageDialog dlg( NULL, msg, _( "File Not Found" ),
+                                 wxYES_NO | wxNO_DEFAULT | wxCANCEL );
+
+            if( dlg.ShowModal() != wxID_YES )
+                return -1;
+
+            helpFile = baseUrl + names[0] + "/";
         }
     }
     else
@@ -209,9 +221,16 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 
         if( !helpFile )
         {
-            msg = wxString::Format( _( "Help file \"%s\" could not be found." ), base_name );
-            wxMessageBox( msg );
-            return -1;
+            msg = wxString::Format( _( "Help file \"%s\" could not be found.\n"
+                                       "Do you want to access the KiCad online help?" ),
+                                    base_name );
+            wxMessageDialog dlg( NULL, msg, _( "File Not Found" ),
+                                 wxYES_NO | wxNO_DEFAULT | wxCANCEL );
+
+            if( dlg.ShowModal() != wxID_YES )
+                return -1;
+
+            helpFile = baseUrl + base_name + "/";
         }
     }
 
