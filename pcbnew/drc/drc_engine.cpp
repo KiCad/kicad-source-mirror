@@ -259,7 +259,7 @@ void DRC_ENGINE::loadImplicitRules()
                     }
                 }
 
-                if( nc->GetDiffPairWidth() || nc->GetDiffPairGap() )
+                if( nc->GetDiffPairWidth() )
                 {
                     netclassRule = new DRC_RULE;
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
@@ -271,21 +271,10 @@ void DRC_ENGINE::loadImplicitRules()
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
-                    if( nc->GetDiffPairWidth() )
-                    {
-                        DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
-                        constraint.Value().SetMin( bds.m_TrackMinWidth );
-                        constraint.Value().SetOpt( nc->GetDiffPairWidth() );
-                        netclassRule->AddConstraint( constraint );
-                    }
-
-                    if( nc->GetDiffPairGap() )
-                    {
-                        DRC_CONSTRAINT constraint( DIFF_PAIR_GAP_CONSTRAINT );
-                        constraint.Value().SetMin( bds.m_MinClearance );
-                        constraint.Value().SetOpt( nc->GetDiffPairGap() );
-                        netclassRule->AddConstraint( constraint );
-                    }
+                    DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
+                    constraint.Value().SetMin( bds.m_TrackMinWidth );
+                    constraint.Value().SetOpt( nc->GetDiffPairWidth() );
+                    netclassRule->AddConstraint( constraint );
                 }
 
                 if( nc->GetDiffPairGap() )
@@ -300,9 +289,9 @@ void DRC_ENGINE::loadImplicitRules()
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
-                    DRC_CONSTRAINT constraint( CLEARANCE_CONSTRAINT );
-                    constraint.Value().SetMin( std::max( bds.m_MinClearance,
-                                                         nc->GetDiffPairGap() ) );
+                    DRC_CONSTRAINT constraint( DIFF_PAIR_GAP_CONSTRAINT );
+                    constraint.Value().SetMin( bds.m_MinClearance );
+                    constraint.Value().SetOpt( nc->GetDiffPairGap() );
                     netclassRule->AddConstraint( constraint );
                 }
 
