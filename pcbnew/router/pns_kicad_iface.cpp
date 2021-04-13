@@ -488,10 +488,17 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     int diffPairGap = bds.m_MinClearance;
     int diffPairViaGap = bds.m_MinClearance;
 
+    found = false;
+
+    // First try to pick up diff pair width from starting track, if enabled
+    if( bds.m_UseConnectedTrackWidth && aStartItem )
+        found = inheritTrackWidth( aStartItem, &diffPairWidth );
+
+    // Next, pick up gap from netclass, and width also if we didn't get a starting width above
     if( bds.UseNetClassDiffPair() && aStartItem )
     {
-        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem,
-                                             nullptr, aStartItem->Layer(), &constraint ) )
+        if( !found && m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem,
+                                                       nullptr, aStartItem->Layer(), &constraint ) )
         {
             diffPairWidth = constraint.m_Value.Opt();
         }
