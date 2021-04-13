@@ -196,6 +196,8 @@ public:
         return m_settings;
     }
 
+    APP_SETTINGS_BASE* config() const override;
+
     COLOR_SETTINGS* GetColorSettings() const override;
 
     /**

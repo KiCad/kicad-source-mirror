@@ -280,6 +280,12 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
+APP_SETTINGS_BASE* SYMBOL_EDIT_FRAME::config() const
+{
+    return static_cast<APP_SETTINGS_BASE*>( GetSettings() );
+}
+
+
 COLOR_SETTINGS* SYMBOL_EDIT_FRAME::GetColorSettings() const
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
@@ -296,7 +302,7 @@ void SYMBOL_EDIT_FRAME::setupTools()
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
-                                   GetCanvas()->GetViewControls(), config(), this );
+                                   GetCanvas()->GetViewControls(), GetSettings(), this );
     m_actions = new EE_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
