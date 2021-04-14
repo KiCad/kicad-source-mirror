@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +87,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
     if( !ProcessNetlist( aCtl ) )
         return false;
 
-    aFormatter->Print( 0, ".title %s\n", (const char*) m_title.c_str() );
+    aFormatter->Print( 0, ".title %s\n", TO_UTF8( m_title ) );
 
     // Write .include directives
     for( const auto& lib : m_libraries )
@@ -108,7 +108,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
         else
             full_path = lib;    // just use the unaltered path
 
-        aFormatter->Print( 0, ".include \"%s\"\n", (const char*) full_path.c_str() );
+        aFormatter->Print( 0, ".include \"%s\"\n", TO_UTF8( full_path ) );
     }
 
     unsigned int NC_counter = 1;
@@ -119,7 +119,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
             continue;
 
         wxString device = GetSpiceDevice( item.m_refName );
-        aFormatter->Print( 0, "%s ", (const char*) device.c_str() );
+        aFormatter->Print( 0, "%s ", TO_UTF8( device ) );
 
         size_t pspiceNodes = item.m_pinSequence.empty() ? item.m_pins.size() : item.m_pinSequence.size();
 
@@ -159,7 +159,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
             }
         }
 
-        aFormatter->Print( 0, "%s\n", (const char*) item.m_model.c_str() );
+        aFormatter->Print( 0, "%s\n", TO_UTF8( item.m_model ) );
     }
 
     // Print out all directives found in the text fields on the schematics
@@ -464,7 +464,7 @@ void NETLIST_EXPORTER_PSPICE::writeDirectives( OUTPUTFORMATTER* aFormatter, unsi
 {
     for( auto& dir : m_directives )
     {
-        aFormatter->Print( 0, "%s\n", (const char*) dir.c_str() );
+        aFormatter->Print( 0, "%s\n", TO_UTF8( dir ) );
     }
 }
 

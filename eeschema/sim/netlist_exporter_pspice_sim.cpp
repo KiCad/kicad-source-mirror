@@ -4,6 +4,8 @@
  * Copyright (C) 2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
@@ -24,6 +26,7 @@
 
 #include "netlist_exporter_pspice_sim.h"
 #include <kicad_string.h>
+#include <macros.h>     // for TO_UTF8 def
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
 
@@ -33,8 +36,8 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::ComponentToVector(
     wxString res;
 
     // Some of the flags should exclude mutually
-    assert( ( ( aType & SPT_VOLTAGE ) == 0 ) != ( ( aType & SPT_CURRENT ) == 0 ) );
-    assert( ( ( aType & SPT_AC_PHASE ) == 0 ) || ( ( aType & SPT_AC_MAG ) == 0 ) );
+    wxASSERT( ( ( aType & SPT_VOLTAGE ) == 0 ) != ( ( aType & SPT_CURRENT ) == 0 ) );
+    wxASSERT( ( ( aType & SPT_AC_PHASE ) == 0 ) || ( ( aType & SPT_AC_MAG ) == 0 ) );
 
     if( aType & SPT_VOLTAGE )
     {
@@ -237,8 +240,7 @@ void NETLIST_EXPORTER_PSPICE_SIM::writeDirectives( OUTPUTFORMATTER* aFormatter, 
 
             /// @todo is it required to switch to lowercase
             aFormatter->Print( 0, ".save %s\n",
-                    (const char*) ComponentToVector( item.m_refName, SPT_CURRENT, current )
-                            .c_str() );
+                    TO_UTF8( ComponentToVector( item.m_refName, SPT_CURRENT, current ) ) );
         }
     }
 
@@ -252,7 +254,7 @@ void NETLIST_EXPORTER_PSPICE_SIM::writeDirectives( OUTPUTFORMATTER* aFormatter, 
         if( netname == "V(0)" || netname == "V(GND)" )
             continue;
 
-        aFormatter->Print( 0, ".save %s\n", (const char*) netname.c_str() );
+        aFormatter->Print( 0, ".save %s\n", TO_UTF8( netname ) );
     }
 
     if( m_simCommand.IsEmpty() )
@@ -266,10 +268,10 @@ void NETLIST_EXPORTER_PSPICE_SIM::writeDirectives( OUTPUTFORMATTER* aFormatter, 
         for( const auto& dir : GetDirectives() )
         {
             if( !IsSimCommand( dir ) )
-                aFormatter->Print( 0, "%s\n", (const char*) dir.c_str() );
+                aFormatter->Print( 0, "%s\n", TO_UTF8( dir ) );
         }
 
         // Finish with our custom simulation command
-        aFormatter->Print( 0, "%s\n", (const char*) m_simCommand.c_str() );
+        aFormatter->Print( 0, "%s\n", TO_UTF8( m_simCommand ) );
     }
 }
