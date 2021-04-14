@@ -2543,8 +2543,8 @@ void CADSTAR_ARCHIVE_PARSER::FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextIte
 
         EDA_ITEM* textEdaItem = dynamic_cast<EDA_ITEM*>( aKiCadTextItem );
 
-        if( textEdaItem && ( textEdaItem->Type() == LIB_TEXT_T )
-            || ( textEdaItem->Type() == LIB_FIELD_T ) )
+        if( textEdaItem &&
+            ( textEdaItem->Type() == LIB_TEXT_T || textEdaItem->Type() == LIB_FIELD_T ) )
         {
             // Y coordinate increases upwards in the symbol editor
             positionOffset.y = -positionOffset.y;
