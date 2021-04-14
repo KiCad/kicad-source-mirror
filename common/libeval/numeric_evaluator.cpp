@@ -107,7 +107,10 @@ void NUMERIC_EVALUATOR::parseSetResult( double val )
     else
     {
         // Can be printed as a floating point
-        snprintf( m_token.token, m_token.OutLen, "%.10g", val );
+        // Warning: DO NOT use a format like %f or %g, because they can create issues.
+        // especially %g can generate an exponent, incompatible with UNIT_BINDER
+        // Use the optimized Double2Str
+        snprintf( m_token.token, m_token.OutLen, "%s", Double2Str( val ).c_str() );
     }
 }
 

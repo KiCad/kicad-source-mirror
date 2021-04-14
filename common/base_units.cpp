@@ -81,7 +81,7 @@ std::string Double2Str( double aValue )
     {
         // For these values, %g works fine, and sometimes %f
         // gives a bad value (try aValue = 1.222222222222, with %.16f format!)
-        len = sprintf( buf, "%.16g", aValue );
+        len = sprintf( buf, "%.10g", aValue );
     }
 
     return std::string( buf, len );
@@ -437,6 +437,7 @@ void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits )
 long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, EDA_DATA_TYPE aType )
 {
     double value = DoubleValueFromString( aUnits, aTextValue, aType );
+
     return KiROUND<double, long long int>( value );
 }
 
