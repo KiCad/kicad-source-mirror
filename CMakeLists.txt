@@ -632,7 +632,7 @@ else()
     set( KICAD_DEMOS demos
         CACHE PATH "Location of KiCad demo files." FORCE )
 
-    # RPATH setttings for building shared libraries
+    # RPATH settings for building shared libraries
     set( CMAKE_MACOSX_RPATH FALSE )
 
     # Override default paths for fixup_bundle
