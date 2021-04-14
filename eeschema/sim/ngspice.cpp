@@ -166,7 +166,7 @@ vector<double> NGSPICE::GetRealPlot( const string& aName, int aMaxLen )
         {
             for( int i = 0; i < length; i++ )
             {
-                assert( vi->v_compdata[i].cx_imag == 0.0 );
+                wxASSERT( vi->v_compdata[i].cx_imag == 0.0 );
                 data.push_back( vi->v_compdata[i].cx_real );
             }
         }

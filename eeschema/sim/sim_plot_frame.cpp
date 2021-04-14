@@ -1539,8 +1539,12 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
         for( const auto& vec : m_simulator->AllPlots() )
         {
-            double val = m_simulator->GetRealPlot( vec, 1 ).at( 0 );
+            std::vector<double> val_list = m_simulator->GetRealPlot( vec, 1 );
 
+            if( val_list.size() == 0 )      // The list of values can be empty!
+                continue;
+
+            double val = val_list.at( 0 );
             wxString      outLine, signal;
             SIM_PLOT_TYPE type = m_exporter->VectorToSignal( vec, signal );
 
