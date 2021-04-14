@@ -4,7 +4,7 @@
 # Doriano Blengino <web@xonelectronics.it>, 06-2006
 # Marco Ciampa <ciampix@posteo.net>, 2014-2021.
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
-# ZbeeGin <zbeegin@op.pl>, 2020.
+# ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 #
 # db: Usare le maiuscole con moderazione: vanno usate per i nomi propri e all'inizio
 # db: di una frase: negli altri casi può risultare molto inelegante
@@ -101,16 +101,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-13 10:39+0200\n"
-"PO-Revision-Date: 2021-04-12 18:45+0200\n"
-"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"PO-Revision-Date: 2021-04-15 06:26+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -766,9 +766,9 @@ msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
-"Numero di interazioni di un raggio che può viaggiare attraverso oggetti "
-"(maggiore è il numero, migliore è il risultato, specialmente su schede molto "
-"trasparenti)."
+"Numero di interazioni di un raggio che può viaggiare attraverso oggetti. ("
+"maggiore è il numero, migliore è il risultato, specialmente su schede molto "
+"trasparenti)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
 msgid "Refractions:"
@@ -1462,7 +1462,7 @@ msgstr "Soglia bianco / nero:"
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr "Regola il livello di conversione da scala di grigi a bianco e nero"
+msgstr "Regola il livello di conversione da scala di grigi a bianco e nero."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:352
@@ -1623,7 +1623,7 @@ msgstr "Attenzione"
 
 #: common/confirm.cpp:160 common/confirm.cpp:187
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr "Non salvando, tutte le modifiche andranno perse!"
+msgstr "Non salvando, tutte le modifiche andranno perse."
 
 #: common/confirm.cpp:161 common/confirm.cpp:188 common/tool/actions.cpp:65
 #: eeschema/symbol_editor/symbol_editor.cpp:605
@@ -2578,7 +2578,7 @@ msgstr "Altezza:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:80
 msgid "Custom paper height."
-msgstr "Altezza foglio personalizzata"
+msgstr "Altezza foglio personalizzata."
 
 #: common/dialogs/dialog_page_settings_base.cpp:84
 #: common/dialogs/dialog_page_settings_base.cpp:105
@@ -2661,7 +2661,7 @@ msgstr "Larghezza:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:101
 msgid "Custom paper width."
-msgstr "Larghezza foglio personalizzato"
+msgstr "Larghezza foglio personalizzato."
 
 #: common/dialogs/dialog_page_settings_base.cpp:112
 #: common/dialogs/dialog_page_settings_base.cpp:185
@@ -3794,7 +3794,7 @@ msgstr "Tutti"
 #: pcbnew/dialogs/dialog_drc_base.cpp:163
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:49
 msgid "Warnings"
-msgstr "Avvisi:"
+msgstr "Avvisi"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:54
 msgid "Actions"
@@ -4028,7 +4028,7 @@ msgstr ""
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Il file di salvataggio automatico non può essere rinominato con il nome file "
-"della scheda"
+"della scheda."
 
 #: common/eda_doc.cpp:143
 msgid "Doc Files"
@@ -4647,7 +4647,7 @@ msgid ""
 "%d"
 msgstr ""
 "Denominatore librerie \"%s\" duplicato nel file tabella librerie impronte "
-"alla riga %d."
+"alla riga %d"
 
 #: common/fp_lib_table.cpp:300
 #, c-format
@@ -6047,7 +6047,7 @@ msgstr "Commuta unità"
 
 #: common/tool/actions.cpp:501
 msgid "Switch between imperial and metric units"
-msgstr "Commuta tra unità in pollici e  millimetri"
+msgstr "Commuta tra unità in pollici e millimetri"
 
 #: common/tool/actions.cpp:506
 msgid "Polar Coordinates"
@@ -6300,7 +6300,7 @@ msgstr "Valore errato: %s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
-msgstr "La voce contiene uno spazio iniziale"
+msgstr "La voce contiene uno spazio iniziale."
 
 #: common/validators.cpp:298
 msgid "Entry contains leading white space."
@@ -6818,7 +6818,7 @@ msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
 msgstr ""
-"Componente %s: impronta \"%s\" non trovato in nessuna libreria del progetto"
+"Componente %s: impronta \"%s\" non trovato in nessuna libreria del progetto."
 
 #: cvpcb/auto_associate.cpp:306
 msgid "CvPcb Warning"
@@ -7108,9 +7108,9 @@ msgid ""
 "will need to re-assign them manually.)"
 msgstr ""
 "Alcune delle impronte assegnate sono voci obsolete senza nomi di librerie. "
-"Vuoi che Kicad cerchi di convertirle nel nuovo formato LIB_ID (se si "
+"Vuoi che Kicad cerchi di convertirle nel nuovo formato LIB_ID? (Se si "
 "risponde no, questi assegnamenti verranno cancellati e sarà necessario ri-"
-"assegnarli manualmente)?"
+"assegnarli manualmente.)"
 
 #: cvpcb/readwrite_dlgs.cpp:145
 #, c-format
@@ -8362,7 +8362,7 @@ msgstr "Etichetta:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:28
 msgid "Enter the text to be used within the schematic"
-msgstr "Inserire il testo da usare nello schema."
+msgstr "Inserire il testo da usare nello schema"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:37
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
@@ -9756,7 +9756,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
 msgid "Add Generator..."
-msgstr "Aggiungi generatore"
+msgstr "Aggiungi generatore..."
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:42
 msgid "Remove Generator"
@@ -9798,7 +9798,7 @@ msgstr "Incolla speciale"
 #: eeschema/dialogs/dialog_pin_properties.cpp:50
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:201
 msgid "Alternate Pin Name"
-msgstr "Nome pin alternativo:"
+msgstr "Nome pin alternativo"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:188
 #: eeschema/dialogs/dialog_symbol_properties.cpp:333
@@ -9911,7 +9911,7 @@ msgid ""
 "\"%s\""
 msgstr ""
 "Usare un percorso relativo a\n"
-"\"%s\"?"
+"\"%s\""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:175
 #: pcbnew/dialogs/dialog_export_svg.cpp:199
@@ -10135,7 +10135,7 @@ msgstr "Stampa squad&ratura e riquadro iscrizioni del foglio"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
-msgstr "Stampa (o no) la squadratura"
+msgstr "Stampa (o no) la squadratura."
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:28
 msgid "Print in &black and white only"
@@ -12152,8 +12152,8 @@ msgid ""
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
-"Sono stati effettuati dei cambiamenti ad una o più librerie di simboli.  I "
-"cambiamenti devono essere salvati o annullati prima che la tabela librerie "
+"Sono stati effettuati dei cambiamenti ad una o più librerie di simboli.\n"
+"I cambiamenti devono essere salvati o annullati prima che la tabela librerie "
 "di simboli possa venire modificata."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1004
@@ -12511,7 +12511,7 @@ msgstr "File \"%s\" salvato."
 
 #: eeschema/files-io.cpp:200
 msgid "File write operation failed."
-msgstr "Operazione di scrittura file fallita"
+msgstr "Operazione di scrittura file fallita."
 
 #: eeschema/files-io.cpp:263 eeschema/files-io.cpp:971
 #, c-format
@@ -13487,7 +13487,7 @@ msgid ""
 "master variant ('%s') was loaded."
 msgstr ""
 "Il progetto CADSTAR contiene varianti che non hanno equivalente KiCad. Solo "
-"la variante master (\"%s\") è stata caricata. "
+"la variante master (\"%s\") è stata caricata."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:113
 msgid ""
@@ -13538,7 +13538,7 @@ msgid ""
 "The symbol was not loaded"
 msgstr ""
 "Il simbolo \"%s\" che fa riferimento alla parte \"%s\" non si trova nella "
-"libraria. Il simbolo non è stato caricato."
+"libraria. Il simbolo non è stato caricato"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:506
 #, c-format
@@ -13657,7 +13657,7 @@ msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
 msgstr ""
-"Errore nell'analisi del file Eagle.  Impossibile trovare l'istanza \"%s\" "
+"Errore nell'analisi del file Eagle. Impossibile trovare l'istanza \"%s\" "
 "anche se questa ha un riferimento nello schema."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1192
@@ -14556,7 +14556,7 @@ msgstr "Regola i valori dei componenti"
 
 #: eeschema/sim/sim_plot_frame.cpp:199
 msgid "Sim Parameters"
-msgstr "Parametri sim."
+msgstr "Parametri sim"
 
 #: eeschema/sim/sim_plot_frame.cpp:200
 msgid "Simulation parameters and settings"
@@ -14908,7 +14908,7 @@ msgstr "Apri %s"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:819
 #, c-format
 msgid "Library \"%s\" already exists"
-msgstr "La libreria \"%s\" esiste già."
+msgstr "La libreria \"%s\" esiste già"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:827
 #, c-format
@@ -16653,7 +16653,7 @@ msgstr "Impossibile salvare il file \"%s\"."
 
 #: eeschema/tools/symbol_editor_control.cpp:436
 msgid "Filename:"
-msgstr "Nome file"
+msgstr "Nome file:"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:520
 msgid "Edit Symbol Name"
@@ -17321,7 +17321,7 @@ msgid ""
 "deleted"
 msgstr ""
 "Apre (i) file Excellon nello strato corrente. I dati preesistenti verranno "
-"cancellati."
+"cancellati"
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Gerber Job File..."
@@ -17385,7 +17385,7 @@ msgstr "Cancella tutti gli strati"
 
 #: gerbview/tools/gerbview_actions.cpp:93
 msgid "Clear all layers. All data will be deleted"
-msgstr "Ripulisce tutti gli strati. Tutti i dati verranno cancellati."
+msgstr "Ripulisce tutti gli strati. Tutti i dati verranno cancellati"
 
 #: gerbview/tools/gerbview_actions.cpp:98
 msgid "Reload All Layers"
@@ -17477,7 +17477,7 @@ msgstr "Mostra come immagine speculare"
 
 #: gerbview/tools/gerbview_control.cpp:110
 msgid "None of the Gerber layers contain any data"
-msgstr "Nessuno degli strati Gerber contiene dati."
+msgstr "Nessuno degli strati Gerber contiene dati"
 
 #: gerbview/tools/gerbview_control.cpp:117
 msgid "Board File Name"
@@ -17494,7 +17494,7 @@ msgstr "Il file sorgente \"%s\" non è disponibile"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:182
 msgid "No editor defined. Please select one"
-msgstr "Nessun editor definito. Selezionarne uno."
+msgstr "Nessun editor definito. Selezionarne uno"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:188
 #, c-format
@@ -17731,7 +17731,7 @@ msgid ""
 "designs"
 msgstr ""
 "Modifica squadratura del foglio e riquadro iscrizioni per usarli nei "
-"progetti di schema e circuito stampato."
+"progetti di schema e circuito stampato"
 
 #: kicad/files-io.cpp:45
 msgid "KiCad project file"
@@ -18907,7 +18907,7 @@ msgstr ""
 "Tipo di regolatore.\n"
 "Esistono 2 tipi:\n"
 " - regolatori con pin dedicato di regolazione della tensione.\n"
-" - regolatori a 3 piedini"
+" - regolatori a 3 piedini."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:45
 msgid "Standard Type"
@@ -18949,8 +18949,8 @@ msgid ""
 "The internal reference voltage of the regulator.\n"
 "Should not be 0."
 msgstr ""
-"La tensione di riferimento interna del regolatore\n"
-"non deve essere 0"
+"La tensione di riferimento interna del regolatore.\n"
+"Non deve essere 0."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:157
 msgid "For 3 terminal regulators only, the  Adjust pin current."
@@ -18973,7 +18973,7 @@ msgstr "File dati del regolatore:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:206
 msgid "The name of the data file which stores known regulators parameters."
-msgstr "Nome file dati che contiene i parametri dei regolatori conosciuti"
+msgstr "Nome file dati che contiene i parametri dei regolatori conosciuti."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
 msgid "Edit Regulator"
@@ -18981,7 +18981,7 @@ msgstr "Modifica regolatore"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:226
 msgid "Edit the current selected regulator."
-msgstr "Modifica il regolatore corrente"
+msgstr "Modifica il regolatore corrente."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:230
 msgid "Add Regulator"
@@ -20195,7 +20195,7 @@ msgstr "Autopiazza componenti"
 
 #: pcbnew/board.cpp:88
 msgid "This is the default net class."
-msgstr "Questo è il gruppo di collegamenti predefinito"
+msgstr "Questo è il gruppo di collegamenti predefinito."
 
 #: pcbnew/board.cpp:777
 msgid "PCB"
@@ -21892,7 +21892,7 @@ msgstr "Applica impostazioni alle altre zone"
 msgid ""
 "Export this zone setup (excluding layer and net selection) to all other "
 "copper zones."
-msgstr "Applica le impostazioni di questa zona a tutte altre zone in rame"
+msgstr "Applica le impostazioni di questa zona a tutte altre zone in rame."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:144
 msgid "Copper Zone Properties"
@@ -22100,7 +22100,7 @@ msgstr "Ruota:"
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
-msgstr "Ruota e sposta l'elemento - la multiselezione verrà ruotata assieme."
+msgstr "Ruota e sposta l'elemento - la multiselezione verrà ruotata assieme"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:279
 msgid "Numbering Options"
@@ -22287,7 +22287,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:210
 msgid "Dimension Text"
-msgstr "Testo dimensione:"
+msgstr "Testo dimensione"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:110
@@ -23694,7 +23694,7 @@ msgstr "Cartella d'uscita:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
 msgid "Drill File Format"
-msgstr "Formato file forature:"
+msgstr "Formato file forature"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 msgid "Excellon"
@@ -23780,7 +23780,7 @@ msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 msgid "Map File Format"
-msgstr "Formato file mappa:"
+msgstr "Formato file mappa"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "Creates a drill map in PS, HPGL or other formats"
@@ -23961,7 +23961,7 @@ msgstr "Filtro strati"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:102
 msgid "Current layer:"
-msgstr "Strato corrente"
+msgstr "Strato corrente:"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.h:74
 msgid "Delete Items"
@@ -24226,7 +24226,7 @@ msgstr "Punto di c. Bezier"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:145
 msgid "Arc angle:"
-msgstr "Angolo dell'arco"
+msgstr "Angolo dell'arco:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:165
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1284
@@ -25758,7 +25758,7 @@ msgstr "Deseleziona tutti gli strati in rame"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:459
 msgid "Select all Layers"
-msgstr "Seleziona tutti gli strati:"
+msgstr "Seleziona tutti gli strati"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:463
 msgid "Deselect all Layers"
@@ -26591,7 +26591,7 @@ msgid ""
 "Show or hide the track and via clearance area. If \"New track\" is selected, "
 "track clearance area is shown only when creating the track."
 msgstr ""
-"Mostra / nasconde l'area di distanza piste e via.  Se «Nuova pista» è "
+"Mostra / nasconde l'area di distanza piste e via. Se «Nuova pista» è "
 "selezionato, l'area di distanza viene mostrata solo mentre si crea la pista."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
@@ -26612,8 +26612,8 @@ msgid ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
 msgstr ""
-"Se abilitato, modifiche sulla scheda faranno ricaricare la vista 3D  "
-"(potrebbe rallentare nel caso di schede molto grandi)"
+"Se abilitato, modifiche sulla scheda faranno ricaricare la vista 3D ("
+"potrebbe rallentare nel caso di schede molto grandi)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Magnetic pads"
@@ -28038,7 +28038,7 @@ msgstr "Parità schema"
 
 #: pcbnew/drc/drc_item.cpp:45
 msgid "Signal Integrity"
-msgstr "Integrità segnale:"
+msgstr "Integrità segnale"
 
 #: pcbnew/drc/drc_item.cpp:49
 msgid "Missing connection between items"
@@ -29806,7 +29806,7 @@ msgstr "Aggiungi %s attributo di fabbricazione \"escludi dalla DIBA\"."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:364
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "Rimuovi %s  attributo di fabbricazione \"escludi dalla DIBA\"."
+msgstr "Rimuovi %s attributo di fabbricazione \"escludi dalla DIBA\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:375
 #, c-format
@@ -30489,7 +30489,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:1255
 #, c-format
 msgid "Polygon on Altium layer %d has no KiCad equivalent. Ignore it instead"
-msgstr "Il poligono sullo strato Altium  %d non ha equivalente KiCad. Ignoralo"
+msgstr "Il poligono sullo strato Altium %d non ha equivalente KiCad. Ignoralo"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1267
 #: pcbnew/plugins/altium/altium_pcb.cpp:1497
@@ -31966,7 +31966,7 @@ msgstr "Larghezza %s, spazio %s"
 #: pcbnew/router/router_tool.cpp:366
 #, c-format
 msgid "Width %s, gap %s, via gap %s"
-msgstr "Larghezza %s, spazio %s, spazio via %s "
+msgstr "Larghezza %s, spazio %s, spazio via %s"
 
 #: pcbnew/router/router_tool.cpp:506
 #, c-format
@@ -32390,7 +32390,7 @@ msgstr "Risoluzione distanza per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:447
 msgid "Items belong to the same net. Clearance is 0."
-msgstr "Gli elementi appartengono allo stesso collegamento.  La distanza è 0."
+msgstr "Gli elementi appartengono allo stesso collegamento. La distanza è 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:472
 msgid "Select an item for a constraints resolution report."
@@ -32660,7 +32660,7 @@ msgstr "Inserire raggio stondamento:"
 #: pcbnew/tools/edit_tool.cpp:1163 pcbnew/tools/edit_tool.cpp:1326
 #: pcbnew/tools/pcb_actions.cpp:316
 msgid "Fillet Tracks"
-msgstr "Piste di stondamento:"
+msgstr "Piste di stondamento"
 
 #: pcbnew/tools/edit_tool.cpp:1173
 msgid ""
