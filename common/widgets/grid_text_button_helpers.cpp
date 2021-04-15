@@ -219,7 +219,8 @@ class TEXT_BUTTON_FP_CHOOSER : public wxComboCtrl
 public:
     TEXT_BUTTON_FP_CHOOSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg,
                             const wxString& aPreselect ) :
-            wxComboCtrl( aParent ),
+            wxComboCtrl( aParent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                         wxTE_PROCESS_ENTER ),
             m_dlg( aParentDlg ),
             m_preselect( aPreselect )
     {
@@ -274,7 +275,8 @@ class TEXT_BUTTON_URL : public wxComboCtrl
 {
 public:
     TEXT_BUTTON_URL( wxWindow* aParent, DIALOG_SHIM* aParentDlg ) :
-            wxComboCtrl( aParent ),
+            wxComboCtrl( aParent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                         wxTE_PROCESS_ENTER ),
             m_dlg( aParentDlg )
     {
         SetButtonBitmaps( KiBitmap( BITMAPS::www ) );
@@ -322,7 +324,8 @@ public:
                               wxString* aCurrentDir, wxString* aExt = nullptr,
                               bool aNormalize = false,
                               wxString aNormalizeBasePath = wxEmptyString ) :
-            wxComboCtrl( aParent ),
+            wxComboCtrl( aParent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                         wxTE_PROCESS_ENTER ),
             m_dlg( aParentDlg ),
             m_grid( aGrid ),
             m_currentDir( aCurrentDir ),
