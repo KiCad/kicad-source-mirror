@@ -844,12 +844,13 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     endif()
 
     if( APPLE )
-        # change to add_compile_definitions() after minimum required CMake version is 3.12
-        set_property( DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS PYTHON_MAJOR_MINOR_VERSION="${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}")
-        #TODO put this into Resources/site-packages or something that's notarizable, but as it is we pull it in during bundling
-        set( PYTHON_DEST "${PYTHON_SITE_PACKAGE_PATH}"
+        set( OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR ${OSX_BUNDLE_LIB_DIR}/Python.framework/Versions/${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+        set( OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR "${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR}")
+        set( PYTHON_DEST "${OSX_BUNDLE_BUILD_DIR}/${OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR}"
             CACHE PATH "Python module install path."
             )
+        # change to add_compile_definitions() after minimum required CMake version is 3.12
+        set_property( DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR="${OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR}")
     elseif( VCPKG_TOOLCHAIN )
         set( PYTHON_DEST "${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages"
             CACHE PATH "Python module install path."

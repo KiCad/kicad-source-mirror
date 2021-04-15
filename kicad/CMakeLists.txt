@@ -142,10 +142,10 @@ if( APPLE )
 
         # Find python if it is requested
         if( ${SCRIPTING_HELPER} )
-            file( GLOB WXPYTHON_DIR RELATIVE ${OSX_BUNDLE_INSTALL_LIB_DIR}/${PYTHON_LIB_DIR} ${OSX_BUNDLE_INSTALL_LIB_DIR}/${PYTHON_LIB_DIR}/wx-?.?-osx_cocoa )
-            file( GLOB PYTHON_SCRIPTING_SO ${OSX_BUNDLE_INSTALL_LIB_DIR}/${PYTHON_LIB_DIR}/*.so )
+            file( GLOB WXPYTHON_DIR RELATIVE ${OSX_BUNDLE_BUILD_DIR}/${OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR} ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/wx-?.?-osx_cocoa )
+            file( GLOB PYTHON_SCRIPTING_SO ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/*.so )
             set( BUNDLE_FIX_LIBS \${BUNDLE_FIX_LIBS} \${PYTHON_SCRIPTING_SO} )
-            file( GLOB PYTHON_SCRIPTING_SO ${OSX_BUNDLE_INSTALL_LIB_DIR}/${PYTHON_LIB_DIR}/\${WXPYTHON_DIR}/wx/*.so )
+            file( GLOB PYTHON_SCRIPTING_SO ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/\${WXPYTHON_DIR}/wx/*.so )
             set( BUNDLE_FIX_LIBS \${BUNDLE_FIX_LIBS} \${PYTHON_SCRIPTING_SO} )
         endif()
 
@@ -172,11 +172,8 @@ if( APPLE )
             execute_process( COMMAND cp -RP ${PYTHON_FRAMEWORK} ${OSX_BUNDLE_INSTALL_LIB_DIR}/)
             # We're using cp -RP because CMake's COPY_RESOLVED_BUNDLE... and COPY_DIRECTORY don't handle symlinks correctly
 
-            file( REMOVE GLOB ${OSX_BUNDLE_INSTALL_LIB_DIR}/Python.framework/Versions/3.8/lib/python3.8/site-packages/wx/*.dylib)
-
             # Add any .so files in the site-packages directory to the list of things to fixup during fixup_bundle
-            set( PYTHON_SITE_PACKAGES_PATH ${OSX_BUNDLE_INSTALL_LIB_DIR}/Python.framework/Versions/3.8/lib/python3.8/site-packages)
-            file( GLOB_RECURSE PYTHON_SITE_PACKAGES_LIBS \${PYTHON_SITE_PACKAGES_PATH}/*.so )
+            file( GLOB_RECURSE PYTHON_SITE_PACKAGES_LIBS ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/*.so )
             set( BUNDLE_FIX_LIBS \${BUNDLE_FIX_LIBS} \${PYTHON_SITE_PACKAGES_LIBS} )
 
             fixup_bundle( ${OSX_BUNDLE_INSTALL_BIN_DIR}/kicad
@@ -188,13 +185,12 @@ if( APPLE )
             # BundleUtilities clobbers the rpaths and install_names that we carefully setup in Python.framework, even if we mark Python things as IGNORE_ITEMs.
 
             # python/site-packages/_pcbnew.so
-            execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python.framework/Versions/3.8/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_LIB_DIR}/Python.framework/Versions/3.8/lib/python3.8/site-packages/_pcbnew.so )
-            execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python.framework/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_LIB_DIR}/Python.framework/Versions/3.8/lib/python3.8/site-packages/_pcbnew.so )
-            execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python.framework/Versions/3.8/Resources/Python.app/Contents/MacOS/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_LIB_DIR}/Python.framework/Versions/3.8/lib/python3.8/site-packages/_pcbnew.so )
+            execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python.framework/Versions/3.8/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/_pcbnew.so )
+            execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python.framework/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/_pcbnew.so )
+            execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python.framework/Versions/3.8/Resources/Python.app/Contents/MacOS/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/_pcbnew.so )
 
             # _pcbnew.kiface
             execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_KIFACE_DIR}/_pcbnew.kiface )
-
             execute_process( COMMAND install_name_tool -add_rpath @executable_path/../Frameworks ${OSX_BUNDLE_INSTALL_KIFACE_DIR}/_pcbnew.kiface )
 
             # Python.framework/Versions/Current/bin/python3

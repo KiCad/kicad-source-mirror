@@ -256,17 +256,9 @@ static bool scriptingSetup()
         pypath += wxT( ":" ) + wxString( wxGetenv("KICAD_PATH") );
     }
 
-    // TODO: Can we just use PYTHON_DEST here once we set that correctly?
+    // OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR is provided via the build system.
 
-    wxString pythonMajorMinorVersion;
-    pythonMajorMinorVersion += wxT( PYTHON_MAJOR_MINOR_VERSION );
-
-    // Bundle Python folder (<kicad.app>/Contents/Frameworks/Python.framework/Versions/x.y/lib/pythonx.y/site-packages)
-    //
-    pypath += wxT( ":" ) + Pgm().GetExecutablePath() +
-              wxT( "Contents/Frameworks/Python.framework/Versions/") + pythonMajorMinorVersion +
-              wxT("/lib/python") + pythonMajorMinorVersion
-              + wxT("/site-packages" );
+    pypath += wxT( ":" ) + Pgm().GetExecutablePath() + wxT( OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR );
 
     // Original content of $PYTHONPATH
     if( wxGetenv( wxT( "PYTHONPATH" ) ) != NULL )
