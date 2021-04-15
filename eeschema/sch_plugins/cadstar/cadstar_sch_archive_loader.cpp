@@ -1302,7 +1302,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
             wxStringSplit( csText.Text, strings, '\n' );
             wxPoint firstLinePos;
 
-            for( int ii = 0; ii < strings.size(); ++ii )
+            for( size_t ii = 0; ii < strings.size(); ++ii )
             {
                 EDA_RECT bbox = libtext->GetTextBox( ii, true );
                 wxPoint  linePos = { bbox.GetLeft(), -bbox.GetBottom() };
