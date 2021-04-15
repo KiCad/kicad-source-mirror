@@ -765,8 +765,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
     const DRC_CONSTRAINT* constraintRef = nullptr;
     bool                  implicit = false;
 
-    // Local overrides take precedence
-    if( aConstraintId == CLEARANCE_CONSTRAINT || aConstraintId == HOLE_CLEARANCE_CONSTRAINT )
+    // Local overrides take precedence over everything *except* board min clearance
+    if( aConstraintId == CLEARANCE_CONSTRAINT )
     {
         int overrideA = 0;
         int overrideB = 0;
@@ -793,8 +793,19 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
 
         if( overrideA || overrideB )
         {
+            int override = std::max( overrideA, overrideB );
+
+            if( override < m_designSettings->m_MinClearance )
+            {
+                override = m_designSettings->m_MinClearance;
+
+                REPORT( "" )
+                REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
+                                          EscapeHTML( MessageTextFromValue( UNITS, override ) ) ) )
+            }
+
             DRC_CONSTRAINT constraint( aConstraintId, m_msg );
-            constraint.m_Value.SetMin( std::max( overrideA, overrideB ) );
+            constraint.m_Value.SetMin( override );
             return constraint;
         }
     }
