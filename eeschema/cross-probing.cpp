@@ -45,8 +45,8 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                                                     SCH_SEARCH_T    aSearchType,
                                                     const wxString& aSearchText )
 {
-    SCH_SHEET_PATH* sheetWithComponentFound = NULL;
-    SCH_COMPONENT*  component               = NULL;
+    SCH_SHEET_PATH* sheetWithComponentFound = nullptr;
+    SCH_COMPONENT*  component               = nullptr;
     wxPoint         pos;
     SCH_PIN*        pin = nullptr;
     SCH_SHEET_LIST  sheetList;
@@ -72,7 +72,8 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
                 if( aSearchType == HIGHLIGHT_PIN )
                 {
-                    pos = component->GetPosition();  // temporary: will be changed if the pin is found.
+                    // temporary: will be changed if the pin is found.
+                    pos = component->GetPosition();
                     pin = component->GetPin( aSearchText );
 
                     // Ensure we have found the right unit in case of multi-units symbol
@@ -190,7 +191,6 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                 // Use LUT to do linear interpolation of "compRatio" within "first", then
                 // use that result to linearly interpolate "second" which gives the scaling
                 // factor needed.
-
                 if( compRatio >= lut.front().first )
                 {
                     for( it = lut.begin(); it < lut.end() - 1; it++ )
@@ -208,40 +208,44 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                     }
                 }
                 else
+                {
                     compRatioBent = lut.front().second; // Small component default is first entry
+                }
 
                 // This is similar to the original KiCad code that scaled the zoom to make sure
-                // components were visible on screen.  It's simply a ratio of screen size to component
-                // size, and its job is to zoom in to make the component fullscreen.  Earlier in the
-                // code the component BBox is given a 20% margin to add some breathing room. We compare
-                // the height of this enlarged component bbox to the default text height.  If a
-                // component will end up with the sides clipped, we adjust later to make sure it fits
-                // on screen.
+                // components were visible on screen.  It's simply a ratio of screen size to
+                // component size, and its job is to zoom in to make the component fullscreen.
+                // Earlier in the code the component BBox is given a 20% margin to add some
+                // breathing room. We compare the height of this enlarged component bbox to the
+                // default text height.  If a component will end up with the sides clipped, we
+                // adjust later to make sure it fits on screen.
                 screenSize.x      = std::max( 10.0, screenSize.x );
                 screenSize.y      = std::max( 10.0, screenSize.y );
                 double ratio      = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
+
                 // Original KiCad code for how much to scale the zoom
                 double kicadRatio = std::max( fabs( bbSize.x / screenSize.x ),
                                               fabs( bbSize.y / screenSize.y ) );
 
-                // If the width of the part we're probing is bigger than what the screen width will be
-                // after the zoom, then punt and use the KiCad zoom algorithm since it guarantees the
-                // part's width will be encompassed within the screen.
-
+                // If the width of the part we're probing is bigger than what the screen width
+                // will be after the zoom, then punt and use the KiCad zoom algorithm since it
+                // guarantees the part's width will be encompassed within the screen.
                 if( bbSize.x > screenSize.x * ratio * compRatioBent )
                 {
-                    ratio = kicadRatio; // Use standard KiCad zoom for parts too wide to fit on screen
+                    // Use standard KiCad zoom for parts too wide to fit on screen/
+                    ratio = kicadRatio;
                     compRatioBent = 1.0; // Reset so we don't modify the "KiCad" ratio
                     wxLogTrace( "CROSS_PROBE_SCALE",
                                 "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f",
                                 ratio );
                 }
 
-                // Now that "compRatioBent" holds our final scaling factor we apply it to the original
-                // fullscreen zoom ratio to arrive at the final ratio itself.
+                // Now that "compRatioBent" holds our final scaling factor we apply it to the
+                // original fullscreen zoom ratio to arrive at the final ratio itself.
                 ratio *= compRatioBent;
 
                 bool alwaysZoom = false; // DEBUG - allows us to minimize zooming or not
+
                 // Try not to zoom on every cross-probe; it gets very noisy
                 if( ( ratio < 0.5 || ratio > 1.0 ) || alwaysZoom )
                     getView()->SetScale( getView()->GetScale() / ratio );
@@ -275,6 +279,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
     m_frame->SetStatusText( msg );
 
     m_probingPcbToSch = true;   // recursion guard
+
     {
         // Clear any existing highlighting
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
@@ -282,6 +287,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
         if( foundItem )
             m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, foundItem );
     }
+
     m_probingPcbToSch = false;
 
     m_frame->GetCanvas()->Refresh();
@@ -295,13 +301,13 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     SCH_EDITOR_CONTROL* editor = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
     char                line[1024];
 
-    strncpy( line, cmdline, sizeof(line) - 1 );
-    line[ sizeof(line) - 1 ] = '\0';
+    strncpy( line, cmdline, sizeof( line ) - 1 );
+    line[ sizeof( line ) - 1 ] = '\0';
 
     char* idcmd = strtok( line, " \n\r" );
-    char* text  = strtok( NULL, "\"\n\r" );
+    char* text  = strtok( nullptr, "\"\n\r" );
 
-    if( idcmd == NULL )
+    if( idcmd == nullptr )
         return;
 
     CROSS_PROBING_SETTINGS& crossProbingSettings = eeconfig()->m_CrossProbing;
@@ -330,7 +336,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         return;
     }
 
-    if( text == NULL )
+    if( text == nullptr )
         return;
 
     if( strcmp( idcmd, "$PART:" ) != 0 )
@@ -339,18 +345,18 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     wxString part_ref = FROM_UTF8( text );
 
     /* look for a complement */
-    idcmd = strtok( NULL, " \n\r" );
+    idcmd = strtok( nullptr, " \n\r" );
 
-    if( idcmd == NULL )    // Highlight component only (from Cvpcb or Pcbnew)
+    if( idcmd == nullptr )    // Highlight component only (from CvPcb or Pcbnew)
     {
         // Highlight component part_ref, or clear Highlight, if part_ref is not existing
         editor->FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
         return;
     }
 
-    text = strtok( NULL, "\"\n\r" );
+    text = strtok( nullptr, "\"\n\r" );
 
-    if( text == NULL )
+    if( text == nullptr )
         return;
 
     wxString msg = FROM_UTF8( text );
@@ -458,7 +464,9 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT
     if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
+        {
             SendCommand( MSG_TO_PCB, packet );
+        }
         else
         {
             // Typically ExpressMail is going to be s-expression packets, but since
@@ -479,7 +487,9 @@ void SCH_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
     if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
+        {
             SendCommand( MSG_TO_PCB, packet );
+        }
         else
         {
             // Typically ExpressMail is going to be s-expression packets, but since
@@ -519,7 +529,7 @@ void SCH_EDIT_FRAME::SetCrossProbeConnection( const SCH_CONNECTION* aConnection 
     }
 
     // TODO: This could be replaced by just sending the bus name once we have bus contents
-    // included as part of the netlist sent from eeschema to pcbnew (and thus pcbnew can
+    // included as part of the netlist sent from Eeschema to Pcbnew (and thus Pcbnew can
     // natively keep track of bus membership)
 
     for( size_t i = 1; i < all_members.size(); i++ )
@@ -547,7 +557,9 @@ void SCH_EDIT_FRAME::SendCrossProbeClearHighlight()
     std::string packet = "$CLEAR\n";
 
     if( Kiface().IsSingle() )
+    {
         SendCommand( MSG_TO_PCB, packet );
+    }
     else
     {
         // Typically ExpressMail is going to be s-expression packets, but since
@@ -687,7 +699,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_REANNOTATE:
-        //Reannotate the schematic as per the netlist.
+        // Reannotate the schematic as per the netlist.
         ReannotateFromPCBNew( this, payload );
         break;
 
