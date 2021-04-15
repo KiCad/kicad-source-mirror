@@ -176,6 +176,9 @@ public:
             m_preselect( aPreselect )
     {
         SetButtonBitmaps( KiBitmap( BITMAPS::small_library ) );
+
+        // win32 fix, avoids drawing the "native dropdown caret"
+        Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
     }
 
 protected:
@@ -225,6 +228,9 @@ public:
             m_preselect( aPreselect )
     {
         SetButtonBitmaps( KiBitmap( BITMAPS::small_library ) );
+
+        // win32 fix, avoids drawing the "native dropdown caret"
+        Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
     }
 
 protected:
@@ -280,6 +286,9 @@ public:
             m_dlg( aParentDlg )
     {
         SetButtonBitmaps( KiBitmap( BITMAPS::www ) );
+
+        // win32 fix, avoids drawing the "native dropdown caret"
+        Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
     }
 
 protected:
@@ -334,6 +343,9 @@ public:
             m_normalizeBasePath( aNormalizeBasePath )
     {
         SetButtonBitmaps( KiBitmap( BITMAPS::small_folder ) );
+
+        // win32 fix, avoids drawing the "native dropdown caret"
+        Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
     }
 
 protected:
