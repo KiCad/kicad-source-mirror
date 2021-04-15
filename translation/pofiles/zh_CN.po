@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-12 11:06-0700\n"
-"PO-Revision-Date: 2021-04-13 22:28+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-04-15 15:01+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -12994,7 +12994,7 @@ msgstr "输入实现 SCH_PLUGIN::Symbol*() 函数的 Python 符号。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:250
 #, c-format
 msgid "Cannot open file '%s'."
-msgstr "无法打开文件 ‘%s’"
+msgstr "无法打开文件 '%s'。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 #, c-format
@@ -13251,7 +13251,7 @@ msgstr "无法读取文件 \"%s\""
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
-msgstr "解析 Eagle 文件时出错。  找不到 '%s' 实例, 但在原理图中引用了它。"
+msgstr "解析 Eagle 文件时出错。 找不到 '%s' 实例, 但在原理图中引用了它。"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1192
 #, c-format
