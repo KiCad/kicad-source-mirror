@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-04-13 22:28+0000\n"
+"PO-Revision-Date: 2021-04-17 23:05+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29271,11 +29271,9 @@ msgid "No access rights to write to file \"%s\""
 msgstr "Нет права записи в файл \"%s\""
 
 #: pcbnew/files.cpp:949 pcbnew/files.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr ""
-"Ошибка сохранения платы '%s'.\n"
-"%s"
+msgstr "Ошибка сохранения файла особых правил '%s'."
 
 #: pcbnew/files.cpp:980 pcbnew/files.cpp:1082
 #, c-format
@@ -35520,37 +35518,32 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "[ИНФОРМАЦИЯ] не удалось загрузить: слишком большой файл\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "Преобразователь изображений"
+msgstr "Преобразователь изображений KiCad"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Создание компонентов KiCad из растровых изображений"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-#, fuzzy
 msgid "bitmap2component"
-msgstr "компонент"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
-#, fuzzy
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr "Редактор схем KiCad"
+msgstr "Редактор схем KiCad (автономно)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
-#, fuzzy
 msgid "Schematic Capture Tool"
-msgstr "Цвет проводника схемы"
+msgstr "Редактор электрических схем"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr ""
+msgstr "Редактирование электрических схем KiCad в автономном режиме"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-#, fuzzy
 msgid "eeschema"
-msgstr "Eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -35561,9 +35554,8 @@ msgid "View Gerber files"
 msgstr "Просмотреть Gerber-файлы"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-#, fuzzy
 msgid "gerbview"
-msgstr "Gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -35576,39 +35568,35 @@ msgstr "САПР"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "Suite of tools for schematic design and circuit board layout"
-msgstr ""
+msgstr "Комплекс инструментов для составления схем и трассировки печатных плат"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
-#, fuzzy
 msgid "KiCad PCB Calculator"
-msgstr "PCB Calculator"
+msgstr "Калькулятор печатных плат KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Калькулятор для вычисления различных электрических параметров"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
-#, fuzzy
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "Редактор печатных плат KiCad"
+msgstr "Редактор печатных плат KiCad (автономно)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
-#, fuzzy
 msgid "PCB layout editor"
-msgstr "Редактор форматных рамок"
+msgstr "Редактор печатных плат"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr ""
+msgstr "Редактирование печатных плат KiCad в автономном режиме"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-#, fuzzy
 msgid "pcbnew"
-msgstr "Pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
-msgstr ""
+msgstr "САПР для составления схем и трассировки печатных плат"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -35619,13 +35607,19 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"KiCad – это свободная система автоматизированного проектирования с открытым "
+"исходным кодом. Она позволяет составлять схемы, анализировать их работу с "
+"помощью встроенного симулятора, трассировать печатные платы, просматривать "
+"их в 3D-виде, распечатывать чертежи и экспортировать данные в различные "
+"форматы. KiCad также содержит высококачественную библиотеку компонентов "
+"насчитывающую тысячи символов, посадочных мест и 3D-моделей. KiCad имеет "
+"минимальные системные требования и работает на Linux, Windows и macOS."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
 msgid "KiCad Main Window"
-msgstr ""
+msgstr "Главное окно KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:67
-#, fuzzy
 msgid "KiCad PCB Layout Editor"
 msgstr "Редактор печатных плат KiCad"
 
@@ -35634,9 +35628,8 @@ msgid "The KiCad Developers"
 msgstr "Разработчики KiCad"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
-msgstr "Gerber файлы"
+msgstr "Файл Gerber"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
 msgid "Excellon drill file"
