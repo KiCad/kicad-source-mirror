@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-12 11:06-0700\n"
-"PO-Revision-Date: 2021-04-13 22:28+0000\n"
+"PO-Revision-Date: 2021-04-15 16:43+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ro/>\n"
@@ -6155,9 +6155,8 @@ msgstr ""
 "Pentru informații despre cum să ajutați proiectul KiCad, vizitați %s"
 
 #: common/tool/common_control.cpp:253
-#, fuzzy
 msgid "Donate to KiCad"
-msgstr "Bine ați venit la KiCad %s!"
+msgstr "Donează la KiCad"
 
 #: common/tool/grid_menu.cpp:93
 #, c-format
@@ -12967,9 +12966,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'."
-msgstr "Nu se poate deschide fișierul '%s'"
+msgstr "Nu se poate deschide fișierul '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 #, c-format
@@ -19883,9 +19882,9 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:433
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1171
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1386
-#, fuzzy, c-format
+#, c-format
 msgid "Custom (%s)"
-msgstr "Personalizat"
+msgstr "Personalizat (%s)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:633
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:155
@@ -27983,9 +27982,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/files.cpp:994
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file '%s'."
-msgstr "<b>Nu se poate crea fișierul temporar \"%s\"</b>\n"
+msgstr "Nu s-a reușit crearea fișierului temporar \"%s\"."
 
 #: pcbnew/files.cpp:1007
 #, c-format
@@ -33382,9 +33381,8 @@ msgid "Layer Display Options"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:575
-#, fuzzy
 msgid "Inactive layers:"
-msgstr "Creați straturi"
+msgstr "Straturi inactive:"
 
 #: pcbnew/widgets/appearance_controls.cpp:587
 msgid "Inactive layers will be shown in full color"
@@ -33468,7 +33466,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:2150
 #, fuzzy, c-format
 msgid "Select Tracks and Vias in %s"
-msgstr "Creați trasee și via-uri"
+msgstr "Creați trasee și via-uri în %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:839
 #: pcbnew/widgets/appearance_controls.cpp:2154
