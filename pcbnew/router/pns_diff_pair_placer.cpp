@@ -631,7 +631,7 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
         gwsTarget.SetFitVias( m_placingVia, m_sizes.ViaDiameter(), viaGap() );
 
         // far from the initial segment extension line -> allow a 45-degree obtuse turn
-        if( lead_dist > m_sizes.DiffPairGap() + m_sizes.DiffPairWidth() )
+        if( lead_dist > ( m_sizes.DiffPairGap() + m_sizes.DiffPairWidth() ) / 2 )
         {
             gwsTarget.BuildForCursor( fp );
         }
@@ -640,7 +640,8 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
         else
         {
             gwsTarget.BuildForCursor( fpProj );
-            gwsTarget.FilterByOrientation( DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_HALF_FULL, DIRECTION_45( dirV ) );
+            gwsTarget.FilterByOrientation( DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_HALF_FULL,
+                                           DIRECTION_45( dirV ) );
         }
 
         m_snapOnTarget = false;
