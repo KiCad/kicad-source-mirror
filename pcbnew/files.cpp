@@ -930,13 +930,25 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
         return false;
     }
 
-    // TODO: this will break if we ever go multi-board
+    // TODO: these will break if we ever go multi-board
     wxFileName projectFile( pcbFileName );
+    wxFileName rulesFile( pcbFileName );
+    wxString   msg;
 
     projectFile.SetExt( ProjectFileExtension );
+    rulesFile.SetExt( DesignRulesFileExtension );
 
     if( !projectFile.FileExists() && aChangeProject )
         GetSettingsManager()->SaveProjectAs( projectFile.GetFullPath() );
+
+    if( !rulesFile.FileExists() && aChangeProject )
+        KiCopyFile( GetDesignRulesPath(), rulesFile.GetFullPath(), msg );
+
+    if( !msg.IsEmpty() )
+    {
+        DisplayError( this, wxString::Format( _( "Error saving custom rules file '%s'." ),
+                                              rulesFile.GetFullPath() ) );
+    }
 
     if( projectFile.FileExists() )
     {
@@ -965,10 +977,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = wxString::Format( _( "Error saving board file '%s'.\n%s" ),
-                                         pcbFileName.GetFullPath(),
-                                         ioe.What() );
-        DisplayError( this, msg );
+        DisplayError( this, wxString::Format( _( "Error saving board file '%s'.\n%s" ),
+                                              pcbFileName.GetFullPath(),
+                                              ioe.What() ) );
 
         lowerTxt.Printf( _( "Failed to create temporary file '%s'." ), tempFile.GetFullPath() );
 
@@ -983,11 +994,10 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     // If save succeeded, replace the original with what we just wrote
     if( !wxRenameFile( tempFile.GetFullPath(), pcbFileName.GetFullPath() ) )
     {
-        wxString msg = wxString::Format( _( "Error saving board file \"%s\".\n"
-                                            "Failed to rename temporary file \"%s\"" ),
-                                         pcbFileName.GetFullPath(),
-                                         tempFile.GetFullPath() );
-        DisplayError( this, msg );
+        DisplayError( this, wxString::Format( _( "Error saving board file \"%s\".\n"
+                                                 "Failed to rename temporary file \"%s\"" ),
+                                              pcbFileName.GetFullPath(),
+                                              tempFile.GetFullPath() ) );
 
         lowerTxt.Printf( _( "Failed to rename temporary file \"%s\"" ),
                          tempFile.GetFullPath() );
@@ -1048,10 +1058,8 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
 
     if( !IsWritable( pcbFileName ) )
     {
-        wxString msg = wxString::Format( _( "No access rights to write to file '%s'." ),
-                                         pcbFileName.GetFullPath() );
-
-        DisplayError( this, msg );
+        DisplayError( this, wxString::Format( _( "No access rights to write to file '%s'." ),
+                                              pcbFileName.GetFullPath() ) );
         return false;
     }
 
@@ -1071,20 +1079,31 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = wxString::Format( _( "Error saving board file '%s'.\n%s" ),
-                                         pcbFileName.GetFullPath(),
-                                         ioe.What() );
-        DisplayError( this, msg );
+        DisplayError( this, wxString::Format( _( "Error saving board file '%s'.\n%s" ),
+                                              pcbFileName.GetFullPath(),
+                                              ioe.What() ) );
 
         return false;
     }
 
     wxFileName projectFile( pcbFileName );
+    wxFileName rulesFile( pcbFileName );
+    wxString   msg;
 
     projectFile.SetExt( ProjectFileExtension );
+    rulesFile.SetExt( DesignRulesFileExtension );
 
     if( aCreateProject && !projectFile.FileExists() )
         GetSettingsManager()->SaveProjectCopy( projectFile.GetFullPath() );
+
+    if( aCreateProject && !rulesFile.FileExists() )
+        KiCopyFile( GetDesignRulesPath(), rulesFile.GetFullPath(), msg );
+
+    if( !msg.IsEmpty() )
+    {
+        DisplayError( this, wxString::Format( _( "Error saving custom rules file '%s'." ),
+                                              rulesFile.GetFullPath() ) );
+    }
 
     DisplayInfoMessage( this, wxString::Format( _( "Board copied to:\n\"%s\"" ),
                                                 pcbFileName.GetFullPath() ) );
