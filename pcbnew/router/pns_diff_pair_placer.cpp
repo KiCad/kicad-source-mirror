@@ -724,7 +724,8 @@ bool DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForce
 
     TOPOLOGY topo( m_lastNode );
 
-    if( !m_snapOnTarget && !m_currentTrace.EndsWithVias() && !aForceFinish )
+    if( !m_snapOnTarget && !m_currentTrace.EndsWithVias() && !aForceFinish &&
+        !Settings().GetFixAllSegments() )
     {
         SHAPE_LINE_CHAIN newP( m_currentTrace.CP() );
         SHAPE_LINE_CHAIN newN( m_currentTrace.CN() );
