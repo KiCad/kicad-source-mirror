@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-12 11:06-0700\n"
+"POT-Creation-Date: 2021-04-15 09:44-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -20958,6 +20958,10 @@ msgid "No access rights to write to file \"%s\""
 msgstr "No access rights to write to file “%s”"
 
 #, c-format
+msgid "Error saving custom rules file '%s'."
+msgstr "Error saving custom rules file '%s'."
+
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "%s"
@@ -25743,44 +25747,26 @@ msgstr "Performing polygon fills…"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] load failed: input line too long\n"
 
-msgid "KiCad"
-msgstr "KiCad"
-
-msgid "EDA Suite"
-msgstr "EDA Suite"
-
-msgid ""
-"KiCad is a Cross Platform and Open Source Electronics Design Automation "
-"Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
-"output."
-msgstr ""
-"KiCad is a Cross Platform and Open Source Electronics Design Automation "
-"Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
-"output."
-
-msgid "Eeschema Schematic Editor"
-msgstr "Eeschema Schematic Editor"
-
-msgid "PcbNew PCB Layout"
-msgstr "PcbNew PCB Layout"
-
-msgid "PcbNew 3D Viewer"
-msgstr "PcbNew 3D Viewer"
-
-msgid "The KiCad Developers"
-msgstr "The KiCad Developers"
+msgid "KiCad Image Converter"
+msgstr "KiCad Image Converter"
 
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Create a component from a bitmap for use with KiCad"
 
-msgid "Eeschema (Standalone)"
-msgstr "Eeschema (Standalone)"
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
-msgid "Electronic schematic capture"
-msgstr "Electronic schematic capture"
+msgid "KiCad Schematic Editor (Standalone)"
+msgstr "KiCad Schematic Editor (Standalone)"
 
-msgid "KiCad electronic schematic design (standalone)"
-msgstr "KiCad electronic schematic design (standalone)"
+msgid "Schematic Capture Tool"
+msgstr "Schematic Capture Tool"
+
+msgid "Standalone schematic editor for KiCad schematics"
+msgstr "Standalone schematic editor for KiCad schematics"
+
+msgid "eeschema"
+msgstr "eeschema"
 
 msgid "Gerber File Viewer"
 msgstr "Gerber File Viewer"
@@ -25788,23 +25774,65 @@ msgstr "Gerber File Viewer"
 msgid "View Gerber files"
 msgstr "View Gerber files"
 
-msgid "Electronic Design Automation suite"
-msgstr "Electronic Design Automation suite"
+msgid "gerbview"
+msgstr "gerbview"
+
+msgid "KiCad"
+msgstr "KiCad"
+
+msgid "EDA Suite"
+msgstr "EDA Suite"
+
+msgid "Suite of tools for schematic design and circuit board layout"
+msgstr "Suite of tools for schematic design and circuit board layout"
+
+msgid "KiCad PCB Calculator"
+msgstr "KiCad PCB Calculator"
 
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculator for various electronics-related computations"
 
-msgid "Pcbnew (Standalone)"
-msgstr "Pcbnew (Standalone)"
+msgid "KiCad PCB Editor (Standalone)"
+msgstr "KiCad PCB Editor (Standalone)"
 
-msgid "PCB layout"
-msgstr "PCB layout"
+msgid "PCB layout editor"
+msgstr "PCB layout editor"
 
-msgid "KiCad printed circuit board layout (standalone)"
-msgstr "KiCad printed circuit board layout (standalone)"
+msgid "Standalone circuit board editor for KiCad boards"
+msgstr "Standalone circuit board editor for KiCad boards"
 
-msgid "Gerber File"
-msgstr "Gerber File"
+msgid "pcbnew"
+msgstr "pcbnew"
+
+msgid "An EDA suite for schematic and circuit board design"
+msgstr "An EDA suite for schematic and circuit board design"
+
+msgid ""
+"KiCad is a free and open-source electronics design automation (EDA) suite. "
+"It features schematic capture, integrated circuit simulation, printed "
+"circuit board (PCB) layout, 3D rendering, and plotting/data export to "
+"numerous formats. KiCad also includes a high-quality component library "
+"featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
+"system requirements and runs on Linux, Windows, and macOS."
+msgstr ""
+"KiCad is a free and open-source electronics design automation (EDA) suite. "
+"It features schematic capture, integrated circuit simulation, printed "
+"circuit board (PCB) layout, 3D rendering, and plotting/data export to "
+"numerous formats. KiCad also includes a high-quality component library "
+"featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
+"system requirements and runs on Linux, Windows, and macOS."
+
+msgid "KiCad Main Window"
+msgstr "KiCad Main Window"
+
+msgid "KiCad PCB Layout Editor"
+msgstr "KiCad PCB Layout Editor"
+
+msgid "The KiCad Developers"
+msgstr "The KiCad Developers"
+
+msgid "Gerber file"
+msgstr "Gerber file"
 
 msgid "Excellon drill file"
 msgstr "Excellon drill file"
@@ -25817,6 +25845,48 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid ""
+#~ "KiCad is a Cross Platform and Open Source Electronics Design Automation "
+#~ "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
+#~ "output."
+#~ msgstr ""
+#~ "KiCad is a Cross Platform and Open Source Electronics Design Automation "
+#~ "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
+#~ "output."
+
+#~ msgid "Eeschema Schematic Editor"
+#~ msgstr "Eeschema Schematic Editor"
+
+#~ msgid "PcbNew PCB Layout"
+#~ msgstr "PcbNew PCB Layout"
+
+#~ msgid "PcbNew 3D Viewer"
+#~ msgstr "PcbNew 3D Viewer"
+
+#~ msgid "Eeschema (Standalone)"
+#~ msgstr "Eeschema (Standalone)"
+
+#~ msgid "Electronic schematic capture"
+#~ msgstr "Electronic schematic capture"
+
+#~ msgid "KiCad electronic schematic design (standalone)"
+#~ msgstr "KiCad electronic schematic design (standalone)"
+
+#~ msgid "Electronic Design Automation suite"
+#~ msgstr "Electronic Design Automation suite"
+
+#~ msgid "Pcbnew (Standalone)"
+#~ msgstr "Pcbnew (Standalone)"
+
+#~ msgid "PCB layout"
+#~ msgstr "PCB layout"
+
+#~ msgid "KiCad printed circuit board layout (standalone)"
+#~ msgstr "KiCad printed circuit board layout (standalone)"
+
+#~ msgid "Gerber File"
+#~ msgstr "Gerber File"
 
 #~ msgid "Do not show again."
 #~ msgstr "Do not show again."

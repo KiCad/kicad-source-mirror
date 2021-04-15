@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-12 11:06-0700\n"
+"POT-Creation-Date: 2021-04-15 09:44-0700\n"
 "PO-Revision-Date: 2021-03-19 16:01+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -518,7 +518,7 @@ msgid "Rotation Increment:"
 msgstr "Sukimo kampinis žingsnis:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:118
-#: common/base_units.cpp:511 pcb_calculator/widgets/unit_selector.cpp:130
+#: common/base_units.cpp:463 pcb_calculator/widgets/unit_selector.cpp:130
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:298
 #: pcbnew/dialogs/dialog_create_array_base.cpp:250
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:152
@@ -758,6 +758,7 @@ msgid "3D Display Options"
 msgstr "3D vaizdo tinkinimas"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:96
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:72
 #, fuzzy
 msgid "KiCad 3D Viewer"
 msgstr "Naršyklė 3D"
@@ -1099,7 +1100,7 @@ msgstr "Perjungti ECO ekraną"
 msgid "Toggle display of ECO layers"
 msgstr "Perjungti ECO sluoksnių rodymą"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:154 common/base_units.cpp:469
+#: bitmap2component/bitmap2cmp_gui.cpp:154 common/base_units.cpp:421
 #: common/dialogs/dialog_grid_settings_base.cpp:41
 #: common/dialogs/dialog_grid_settings_base.cpp:52
 #: common/dialogs/dialog_grid_settings_base.cpp:98
@@ -1405,20 +1406,19 @@ msgstr ""
 "(tačiau bus pažymėti nematomi)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
-#: resources/linux/launchers/bitmap2component.desktop.in:9
-#: resources/linux/launchers/bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "Bitmap to Component Converter"
 msgstr "Bitų žemėlapis į komponentų keitiklį"
 
-#: common/base_units.cpp:471
+#: common/base_units.cpp:423
 msgid "sq. mm"
 msgstr "kv. mm"
 
-#: common/base_units.cpp:473
+#: common/base_units.cpp:425
 msgid "cu. mm"
 msgstr "kub. mm"
 
-#: common/base_units.cpp:483 common/eda_draw_frame.cpp:487
+#: common/base_units.cpp:435 common/eda_draw_frame.cpp:487
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:238
@@ -1439,27 +1439,27 @@ msgstr "kub. mm"
 msgid "mils"
 msgstr "mils"
 
-#: common/base_units.cpp:485
+#: common/base_units.cpp:437
 msgid "sq. mils"
 msgstr "kv"
 
-#: common/base_units.cpp:487
+#: common/base_units.cpp:439
 msgid "cu. mils"
 msgstr "kub. mils"
 
-#: common/base_units.cpp:497
+#: common/base_units.cpp:449
 msgid "in"
 msgstr "coliai"
 
-#: common/base_units.cpp:499
+#: common/base_units.cpp:451
 msgid "sq. in"
 msgstr "kv"
 
-#: common/base_units.cpp:501
+#: common/base_units.cpp:453
 msgid "cu. in"
 msgstr "kub. į"
 
-#: common/base_units.cpp:505
+#: common/base_units.cpp:457
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:529
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:549
@@ -1655,27 +1655,27 @@ msgstr "Švino vystymo absolventai"
 msgid "Additional Contributions By"
 msgstr "Papildomi įnašai"
 
-#: common/dialog_about/AboutDialog_main.cpp:618
+#: common/dialog_about/AboutDialog_main.cpp:622
 msgid "Others"
 msgstr "Kitos"
 
-#: common/dialog_about/AboutDialog_main.cpp:638
+#: common/dialog_about/AboutDialog_main.cpp:642
 msgid "KiCad Librarian Team"
 msgstr "„KiCad“ bibliotekininkų komanda"
 
-#: common/dialog_about/AboutDialog_main.cpp:653
+#: common/dialog_about/AboutDialog_main.cpp:657
 msgid "3D models by"
 msgstr "3D modeliai"
 
-#: common/dialog_about/AboutDialog_main.cpp:665
+#: common/dialog_about/AboutDialog_main.cpp:669
 msgid "Symbols by"
 msgstr "Simboliai"
 
-#: common/dialog_about/AboutDialog_main.cpp:672
+#: common/dialog_about/AboutDialog_main.cpp:676
 msgid "Footprints by"
 msgstr "Pėdsakai"
 
-#: common/dialog_about/AboutDialog_main.cpp:685
+#: common/dialog_about/AboutDialog_main.cpp:689
 msgid "Icons by"
 msgstr "Ikonos"
 
@@ -1889,7 +1889,7 @@ msgid "File Browser..."
 msgstr "Failų naršyklė ..."
 
 #: common/dialogs/dialog_configure_paths.cpp:499
-#: common/widgets/grid_text_button_helpers.cpp:384
+#: common/widgets/grid_text_button_helpers.cpp:399
 msgid "Select Path"
 msgstr "Pasirinkite kelią"
 
@@ -3749,7 +3749,7 @@ msgid "The file \"%s\" was not fully read"
 msgstr "Failas „%s“ nebuvo iki galo perskaitytas"
 
 #: common/drawing_sheet/ds_data_item.cpp:394
-#: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:649
+#: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:654
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47 eeschema/lib_text.h:55
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:40
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:145
@@ -3788,8 +3788,8 @@ msgstr "Importuota forma"
 msgid "Image"
 msgstr "Vaizdas"
 
-#: common/drawing_sheet/ds_data_model_io.cpp:94
-#: common/drawing_sheet/ds_data_model_io.cpp:122
+#: common/drawing_sheet/ds_data_model_io.cpp:93
+#: common/drawing_sheet/ds_data_model_io.cpp:121
 msgid "Error writing page layout design file"
 msgstr "Klaida rašant puslapio maketo dizaino failą"
 
@@ -4241,7 +4241,7 @@ msgstr "Gerberio maketas"
 msgid "Draw Item"
 msgstr "Lygiosios elementas"
 
-#: common/eda_text.cpp:487 eeschema/dialogs/dialog_edit_label_base.cpp:126
+#: common/eda_text.cpp:492 eeschema/dialogs/dialog_edit_label_base.cpp:126
 #: eeschema/sch_text.cpp:676 eeschema/symbol_editor/symbol_editor.cpp:1195
 #: gerbview/gerber_file_image.cpp:352 gerbview/gerber_file_image.cpp:356
 #: gerbview/gerber_file_image.cpp:359
@@ -4250,7 +4250,7 @@ msgstr "Lygiosios elementas"
 msgid "Normal"
 msgstr "Įprastai"
 
-#: common/eda_text.cpp:488 common/eda_text.cpp:653
+#: common/eda_text.cpp:493 common/eda_text.cpp:658
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:199
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:109
@@ -4271,7 +4271,7 @@ msgstr "Įprastai"
 msgid "Italic"
 msgstr "Kursyvas"
 
-#: common/eda_text.cpp:489 common/eda_text.cpp:655
+#: common/eda_text.cpp:494 common/eda_text.cpp:660
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:177
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:139
@@ -4283,11 +4283,11 @@ msgstr "Kursyvas"
 msgid "Bold"
 msgstr "Pusjuodis"
 
-#: common/eda_text.cpp:490
+#: common/eda_text.cpp:495
 msgid "Bold+Italic"
 msgstr "Pusjuodis kursyvas"
 
-#: common/eda_text.cpp:639 eeschema/dialogs/dialog_edit_label_base.cpp:120
+#: common/eda_text.cpp:644 eeschema/dialogs/dialog_edit_label_base.cpp:120
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:187
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:227
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:149
@@ -4299,7 +4299,7 @@ msgstr "Pusjuodis kursyvas"
 msgid "Left"
 msgstr "Kairėn"
 
-#: common/eda_text.cpp:640 common/eda_text.cpp:644 common/tool/actions.cpp:325
+#: common/eda_text.cpp:645 common/eda_text.cpp:649 common/tool/actions.cpp:325
 #: common/widgets/mathplot.cpp:1759
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:227
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:249
@@ -4318,7 +4318,7 @@ msgstr "Kairėn"
 msgid "Center"
 msgstr "Centras"
 
-#: common/eda_text.cpp:641 eeschema/dialogs/dialog_edit_label_base.cpp:120
+#: common/eda_text.cpp:646 eeschema/dialogs/dialog_edit_label_base.cpp:120
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:187
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:227
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:149
@@ -4330,7 +4330,7 @@ msgstr "Centras"
 msgid "Right"
 msgstr "Dešinėje"
 
-#: common/eda_text.cpp:643
+#: common/eda_text.cpp:648
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:249
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:179
 #: eeschema/fields_grid_table.cpp:148 eeschema/fields_grid_table.cpp:401
@@ -4339,7 +4339,7 @@ msgstr "Dešinėje"
 msgid "Top"
 msgstr "Viršus"
 
-#: common/eda_text.cpp:645
+#: common/eda_text.cpp:650
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:249
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:179
 #: eeschema/fields_grid_table.cpp:150 eeschema/fields_grid_table.cpp:403
@@ -4348,7 +4348,7 @@ msgstr "Viršus"
 msgid "Bottom"
 msgstr "Apačia"
 
-#: common/eda_text.cpp:651
+#: common/eda_text.cpp:656
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
@@ -4357,14 +4357,14 @@ msgstr "Apačia"
 msgid "Thickness"
 msgstr "Storis"
 
-#: common/eda_text.cpp:657
+#: common/eda_text.cpp:662
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:306
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:189
 #: pcbnew/microwave/microwave_polygon.cpp:132
 msgid "Mirrored"
 msgstr "Veidrodinis"
 
-#: common/eda_text.cpp:659 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:62
+#: common/eda_text.cpp:664 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:62
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:55
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:84
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:44
@@ -4374,7 +4374,7 @@ msgstr "Veidrodinis"
 msgid "Visible"
 msgstr "Matoma"
 
-#: common/eda_text.cpp:661 eeschema/lib_field.cpp:435
+#: common/eda_text.cpp:666 eeschema/lib_field.cpp:435
 #: eeschema/sch_bitmap.cpp:203 pcbnew/dialogs/dialog_board_statistics.cpp:657
 #: pcbnew/dialogs/dialog_board_statistics.cpp:664
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
@@ -4388,7 +4388,7 @@ msgstr "Matoma"
 msgid "Width"
 msgstr "Plotis"
 
-#: common/eda_text.cpp:663 eeschema/lib_field.cpp:438
+#: common/eda_text.cpp:668 eeschema/lib_field.cpp:438
 #: eeschema/sch_bitmap.cpp:205 pcbnew/dialogs/dialog_board_statistics.cpp:658
 #: pcbnew/dialogs/dialog_board_statistics.cpp:665
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
@@ -4399,11 +4399,11 @@ msgstr "Plotis"
 msgid "Height"
 msgstr "Aukštis"
 
-#: common/eda_text.cpp:665
+#: common/eda_text.cpp:670
 msgid "Horizontal Justification"
 msgstr "Horizontalusis pagrindimas"
 
-#: common/eda_text.cpp:667
+#: common/eda_text.cpp:672
 msgid "Vertical Justification"
 msgstr "Vertikalus pagrindimas"
 
@@ -5390,11 +5390,11 @@ msgstr "Имя переменной окружения не может быть 
 msgid "%s is already running. Continue?"
 msgstr "%s jau veikia. Tęsti?"
 
-#: common/pgm_base.cpp:615
+#: common/pgm_base.cpp:611
 msgid "This language is not supported by the operating system."
 msgstr "Operacinė sistema nepalaiko šios kalbos."
 
-#: common/pgm_base.cpp:666 common/pgm_base.cpp:704
+#: common/pgm_base.cpp:662 common/pgm_base.cpp:700
 msgid "The KiCad language file for this language is not installed."
 msgstr "Šios kalbos KiCad kalbos failas nėra įdiegtas."
 
@@ -6386,7 +6386,7 @@ msgstr "Žymeklio forma piešimo, padėjimo ir judėjimo įrankiams"
 msgid "Always show crosshairs"
 msgstr "Visada rodykite kryželį"
 
-#: common/widgets/grid_text_button_helpers.cpp:354
+#: common/widgets/grid_text_button_helpers.cpp:369
 msgid "Select a File"
 msgstr "Pasirinkti failą"
 
@@ -6710,6 +6710,7 @@ msgid "DXF Files"
 msgstr "DXF failai"
 
 #: common/wildcards_and_files_ext.cpp:490
+#: resources/linux/mime/kicad-gerbers.xml.in:21
 msgid "Gerber job file"
 msgstr "Gerberio darbo byla"
 
@@ -6918,7 +6919,7 @@ msgstr "Simbolio pėdsakų asociacijos failai (.equ)"
 #: eeschema/dialogs/dialog_bus_manager.cpp:77
 #: eeschema/dialogs/dialog_bus_manager.cpp:111
 #: eeschema/dialogs/dialog_spice_model_base.cpp:651
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:995
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1001
 #: pcbnew/footprint_libraries_utils.cpp:507
 msgid "Add"
 msgstr "Pridėti"
@@ -7255,7 +7256,7 @@ msgstr ""
 
 #: eeschema/class_library.cpp:494
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:146
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:895
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:901
 #: eeschema/symbol_tree_model_adapter.cpp:66
 msgid "Loading Symbol Libraries"
 msgstr "Įkeliamos simbolių bibliotekos"
@@ -10314,7 +10315,7 @@ msgid "Electrical Rules"
 msgstr "Elektros taisyklės"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:74
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:987
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:993
 #: pcbnew/dialogs/dialog_board_statistics.cpp:649
 #: pcbnew/footprint_libraries_utils.cpp:499
 msgid "Project"
@@ -12040,7 +12041,7 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "Pridėjus šią biblioteką, reikės pakeisti vieną iš slapyvardžių."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:496
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:994
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1000
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:872
 #: pcbnew/footprint_libraries_utils.cpp:506
 msgid "Skip"
@@ -12115,8 +12116,8 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1027
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1040
 #: eeschema/sch_base_frame.cpp:218 eeschema/sch_base_frame.cpp:234
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1371
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1426
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1377
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1432
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1068
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1081
 msgid "File Save Error"
@@ -12441,7 +12442,7 @@ msgstr ""
 "Klaida išsaugant scheminį failą „%s“.\n"
 "Nepavyko pervadinti laikino failo %s"
 
-#: eeschema/files-io.cpp:161 pcbnew/files.cpp:1013
+#: eeschema/files-io.cpp:161 pcbnew/files.cpp:1002
 #, c-format
 msgid "Failed to rename temporary file \"%s\""
 msgstr "Nepavyko pervadinti laikino failo „%s“"
@@ -13102,6 +13103,7 @@ msgid "The following libraries were not found:"
 msgstr "Nerasta šių bibliotekų:"
 
 #: eeschema/sch_edit_frame.cpp:220
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:62
 #, fuzzy
 msgid "KiCad Schematic Editor"
 msgstr "Schemų redaktoriaus savybės"
@@ -13539,7 +13541,7 @@ msgstr ""
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1581
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1615
 #, c-format
 msgid ""
 "Symbol '%s' is rotated by an angle of %.1f degrees in the original CADSTAR "
@@ -13550,7 +13552,7 @@ msgstr ""
 "tačiau „KiCad“ palaiko tik 90 laipsnių pasikartojimo kampus. Jungiamiesiems "
 "laidams reikės rankinio tvirtinimo."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1595
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1629
 #, c-format
 msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
@@ -13559,7 +13561,7 @@ msgstr ""
 "Simbolis „%s“ nurodo dokumento ID „%s“, kurio nėra projekte. Simbolis nebuvo "
 "įkeltas."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1734
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1770
 #, c-format
 msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
@@ -13568,7 +13570,7 @@ msgstr ""
 "Grynasis %s nurodo nežinomą grynąjį elementą %s. Tinklas nebuvo tinkamai "
 "pakrautas, todėl gali reikėti jį taisyti rankiniu būdu."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2020
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2056
 #, c-format
 msgid ""
 "The block ID %s (Block name: '%s') is drawn on sheet '%s' but is not linked "
@@ -13576,7 +13578,7 @@ msgid ""
 "associated to a sheet, so the block was not loaded."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2045
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2081
 #, c-format
 msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
@@ -14848,19 +14850,19 @@ msgstr ""
 "Modeliavimo rezultatai:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1600
+#: eeschema/sim/sim_plot_frame.cpp:1604
 msgid "Hide Signal"
 msgstr "Slėpti signalą"
 
-#: eeschema/sim/sim_plot_frame.cpp:1601
+#: eeschema/sim/sim_plot_frame.cpp:1605
 msgid "Erase the signal from plot screen"
 msgstr "Ištrinkite signalą iš siužeto ekrano"
 
-#: eeschema/sim/sim_plot_frame.cpp:1607
+#: eeschema/sim/sim_plot_frame.cpp:1611
 msgid "Hide Cursor"
 msgstr "Slėpti žymeklį"
 
-#: eeschema/sim/sim_plot_frame.cpp:1609
+#: eeschema/sim/sim_plot_frame.cpp:1613
 msgid "Show Cursor"
 msgstr "Rodyti žymeklį"
 
@@ -15085,27 +15087,27 @@ msgstr "Bibliotekos"
 msgid "Library changes are unsaved"
 msgstr "Bibliotekos pakeitimai neišsaugoti"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:503
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:509
 msgid "Save changes to schematic before closing?"
 msgstr "Išsaugoti schemos pakeitimus prieš uždarant?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:552
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:558
 #: eeschema/tools/sch_edit_tool.cpp:115
 #, c-format
 msgid "Unit %s"
 msgstr "Vienetas %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:708
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:714
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr "Redaguoti simbolį %s iš schemos. Išsaugojus bus atnaujinta tik schema."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:717
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:723
 msgid "Manage symbol libraries"
 msgstr "Tvarkykite simbolių bibliotekas"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:728
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:734
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
@@ -15113,22 +15115,22 @@ msgstr ""
 "Senųjų bibliotekų simboliai nėra redaguojami. Norėdami pereiti į dabartinį "
 "formatą, naudokite simbolių bibliotekų tvarkymą."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:738
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:744
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr "Simbolis %s yra kilęs iš %s. Simbolių grafika nebus redaguojama."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:742
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:748
 #, c-format
 msgid "Open %s"
 msgstr "Atidaryti %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:813
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:819
 #, c-format
 msgid "Library \"%s\" already exists"
 msgstr "Biblioteka „%s“ jau yra"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:821
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:827
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -15137,47 +15139,47 @@ msgstr ""
 "Nepavyko sukurti bibliotekos failo „%s“.\n"
 "Patikrinkite rašymo leidimą."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:831
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:837
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:202
 msgid "Could not open the library file."
 msgstr "Nepavyko atidaryti bibliotekos failo."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:902
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:908
 #, fuzzy, c-format
 msgid "Loading library '%s'"
 msgstr "Įkeliama biblioteka „%s“"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:975
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:981
 #: pcbnew/footprint_libraries_utils.cpp:487
 msgid "Add the library to the global library table?"
 msgstr "Pridėti biblioteką prie visuotinės bibliotekos lentelės?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:976
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:982
 #: pcbnew/footprint_libraries_utils.cpp:488
 msgid "Add To Global Library Table"
 msgstr "Pridėti prie visuotinės bibliotekos lentelės"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:986
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:992
 #: pcbnew/footprint_libraries_utils.cpp:498
 msgid "Global"
 msgstr "Globaliai"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:989
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:995
 #: pcbnew/footprint_libraries_utils.cpp:501
 msgid "Choose the Library Table to add the library to:"
 msgstr "Pasirinkite bibliotekos lentelę, prie kurios pridėsite biblioteką:"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:990
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:996
 #: pcbnew/footprint_libraries_utils.cpp:502
 msgid "Add To Library Table"
 msgstr "Pridėti prie bibliotekos lentelės"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1022
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1028
 #, c-format
 msgid "Failed to save backup to \"%s\""
 msgstr "Nepavyko išsaugoti atsarginės kopijos aplanke „%s“"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1166
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1172
 #: eeschema/symbol_viewer_frame.cpp:389
 #, c-format
 msgid ""
@@ -15187,12 +15189,12 @@ msgstr ""
 "Dabartinėje konfigūracijoje nėra bibliotekos „%s“.\n"
 "Norėdami redaguoti konfigūraciją, naudokite „Tvarkyti simbolių bibliotekas“."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1169
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1175
 #: eeschema/symbol_viewer_frame.cpp:392
 msgid "Library not found in symbol library table."
 msgstr "Biblioteka nerasta simbolių bibliotekos lentelėje."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1177
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1183
 #: eeschema/symbol_viewer_frame.cpp:396
 #, c-format
 msgid ""
@@ -15202,13 +15204,13 @@ msgstr ""
 "Biblioteka „%s“ nėra įgalinta dabartinėje konfigūracijoje.\n"
 "Norėdami redaguoti konfigūraciją, naudokite „Tvarkyti simbolių bibliotekas“."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1180
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1186
 #: eeschema/symbol_viewer_frame.cpp:399
 msgid "Symbol library not enabled."
 msgstr "Simbolių biblioteka neįgalinta."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1368
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1423
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1374
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1429
 #, fuzzy
 msgid "Error saving global library table."
 msgstr ""
@@ -15216,8 +15218,8 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1369
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1424
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1375
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1430
 #, fuzzy
 msgid "Error saving project library table."
 msgstr ""
@@ -17157,7 +17159,7 @@ msgstr "Įrankis %d neapibrėžtas"
 msgid "Unknown Excellon G Code: &lt;%s&gt;"
 msgstr "Nežinomas Excellon G kodas: &lt;%s&gt;"
 
-#: gerbview/export_to_pcbnew.cpp:67
+#: gerbview/export_to_pcbnew.cpp:68
 #, c-format
 msgid "Cannot create file \"%s\""
 msgstr "Negalima sukurti failo „%s“"
@@ -17395,6 +17397,7 @@ msgid "Clear Recent Job Files"
 msgstr "Išvalyti naujausius darbo failus"
 
 #: gerbview/gerbview_frame.cpp:93
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
 #, fuzzy
 msgid "KiCad Gerber Viewer"
 msgstr "Gerber failai"
@@ -17428,7 +17431,6 @@ msgid "X2 attr"
 msgstr "X2 atributai"
 
 #: gerbview/gerbview_frame.cpp:1013
-#: resources/linux/launchers/gerbview.desktop.in:10
 msgid "GerbView"
 msgstr "GerbView"
 
@@ -19953,8 +19955,7 @@ msgid "Board Classes"
 msgstr "Plokštės klasė"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:421
-#: resources/linux/launchers/pcbcalculator.desktop.in:9
-#: resources/linux/launchers/pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "PCB Calculator"
 msgstr "PCB Skaičiuoklė"
 
@@ -20533,11 +20534,11 @@ msgstr "Autoplace komponentai"
 msgid "This is the default net class."
 msgstr "Tai yra numatytoji neto klasė."
 
-#: pcbnew/board.cpp:756
+#: pcbnew/board.cpp:777
 msgid "PCB"
 msgstr "PCB"
 
-#: pcbnew/board.cpp:1105 pcbnew/dialogs/dialog_board_statistics.cpp:670
+#: pcbnew/board.cpp:1126 pcbnew/dialogs/dialog_board_statistics.cpp:670
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:77
 #: pcbnew/netinfo_item.cpp:96 pcbnew/pcb_draw_panel_gal.cpp:454
 #: pcbnew/tools/pcb_control.cpp:1096 pcbnew/widgets/appearance_controls.cpp:335
@@ -20545,7 +20546,7 @@ msgstr "PCB"
 msgid "Pads"
 msgstr "Aikštelės"
 
-#: pcbnew/board.cpp:1108 pcbnew/dialogs/dialog_board_statistics.cpp:676
+#: pcbnew/board.cpp:1129 pcbnew/dialogs/dialog_board_statistics.cpp:676
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:156
 #: pcbnew/dialogs/dialog_find_base.cpp:78
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:77
@@ -20558,21 +20559,21 @@ msgstr "Aikštelės"
 msgid "Vias"
 msgstr "Perėjimai"
 
-#: pcbnew/board.cpp:1111 pcbnew/pcb_draw_panel_gal.cpp:460
+#: pcbnew/board.cpp:1132 pcbnew/pcb_draw_panel_gal.cpp:460
 msgid "Track Segments"
 msgstr "Takelio segmentai"
 
-#: pcbnew/board.cpp:1114 pcbnew/pcb_draw_panel_gal.cpp:463
+#: pcbnew/board.cpp:1135 pcbnew/pcb_draw_panel_gal.cpp:463
 msgid "Nodes"
 msgstr "Mazgai"
 
-#: pcbnew/board.cpp:1117 pcbnew/pcb_draw_panel_gal.cpp:466
+#: pcbnew/board.cpp:1138 pcbnew/pcb_draw_panel_gal.cpp:466
 #: pcbnew/widgets/appearance_controls_base.cpp:62
 #: pcbnew/widgets/appearance_controls_base.cpp:156
 msgid "Nets"
 msgstr "Grandinės"
 
-#: pcbnew/board.cpp:1120 pcbnew/pcb_draw_panel_gal.cpp:469
+#: pcbnew/board.cpp:1141 pcbnew/pcb_draw_panel_gal.cpp:469
 msgid "Unrouted"
 msgstr "Nepakirta"
 
@@ -20626,32 +20627,32 @@ msgstr "Pozicijos Y"
 msgid "Locked"
 msgstr "Užrakintas"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:305
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:306
 #, c-format
 msgid "Dielectric %d"
 msgstr "Dielektrikas %d"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:525
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:526
 msgid "Top Silk Screen"
 msgstr "Viršutinis šilkinis ekranas"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:533
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:534
 msgid "Top Solder Paste"
 msgstr "Viršutinė litavimo pasta"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:541
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:542
 msgid "Top Solder Mask"
 msgstr "Viršutinė litavimo kaukė"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:585
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:586
 msgid "Bottom Solder Mask"
 msgstr "Apatinė litavimo kaukė"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:593
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:594
 msgid "Bottom Solder Paste"
 msgstr "Apatinė litavimo pasta"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:601
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:602
 msgid "Bottom Silk Screen"
 msgstr "Apatinis šilko ekranas"
 
@@ -21074,8 +21075,8 @@ msgstr "Nežinomas valymo veiksmas"
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:413
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:565
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:810
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:847
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:859
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:849
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:863
 msgid "(self-intersecting)"
 msgstr "(susikerta)"
 
@@ -24812,13 +24813,13 @@ msgstr "Grynasis vardas negali būti tuščias."
 msgid "Net '%s' is in use.  Delete anyway?"
 msgstr "Naudojamas tinklas „%s“. Vis tiek ištrinti?"
 
-#: pcbnew/dialogs/dialog_net_inspector.cpp:1945
+#: pcbnew/dialogs/dialog_net_inspector.cpp:1958
 #, c-format
 msgid "Delete all nets in group '%s'?"
 msgstr "Ištrinti visus grupės „%s“ tinklus?"
 
-#: pcbnew/dialogs/dialog_net_inspector.cpp:1968
-#: pcbnew/dialogs/dialog_net_inspector.cpp:1969
+#: pcbnew/dialogs/dialog_net_inspector.cpp:1981
+#: pcbnew/dialogs/dialog_net_inspector.cpp:1982
 msgid "Report file"
 msgstr "Pranešti apie failą"
 
@@ -28431,121 +28432,121 @@ msgstr "plokštės sąrankos apribojimai"
 msgid "board setup micro-via constraints"
 msgstr "plokštės nustatymo „mikro-via“ apribojimai"
 
-#: pcbnew/drc/drc_engine.cpp:237 pcbnew/drc/drc_engine.cpp:312
-#: pcbnew/drc/drc_engine.cpp:340
+#: pcbnew/drc/drc_engine.cpp:237 pcbnew/drc/drc_engine.cpp:300
+#: pcbnew/drc/drc_engine.cpp:328
 #, c-format
 msgid "netclass '%s'"
 msgstr "tinklo klasė „%s“"
 
-#: pcbnew/drc/drc_engine.cpp:265 pcbnew/drc/drc_engine.cpp:294
+#: pcbnew/drc/drc_engine.cpp:265 pcbnew/drc/drc_engine.cpp:283
 #, fuzzy, c-format
 msgid "netclass '%s' (diff pair)"
 msgstr "tinklo klasė „%s“"
 
-#: pcbnew/drc/drc_engine.cpp:415
+#: pcbnew/drc/drc_engine.cpp:403
 msgid "keepout area"
 msgstr "saugojimo zona"
 
-#: pcbnew/drc/drc_engine.cpp:420
+#: pcbnew/drc/drc_engine.cpp:408
 #, c-format
 msgid "keepout area '%s'"
 msgstr "saugojimo zona „%s“"
 
-#: pcbnew/drc/drc_engine.cpp:692
+#: pcbnew/drc/drc_engine.cpp:680
 msgid "Tessellating copper zones..."
 msgstr "Vario zonų išardymas ..."
 
-#: pcbnew/drc/drc_engine.cpp:791 pcbnew/drc/drc_engine.cpp:801
+#: pcbnew/drc/drc_engine.cpp:779 pcbnew/drc/drc_engine.cpp:789
 #, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr "Vietinis nepaisymas %s; klirensas: %s."
 
-#: pcbnew/drc/drc_engine.cpp:824
+#: pcbnew/drc/drc_engine.cpp:812
 #, c-format
 msgid "Checking %s; clearance: %s."
 msgstr "Tikrinimas %s; klirensas: %s."
 
-#: pcbnew/drc/drc_engine.cpp:831
+#: pcbnew/drc/drc_engine.cpp:819
 #, c-format
 msgid "Checking %s; courtyard clearance: %s."
 msgstr "Tikrinimas %s; kiemo klirensas: %s."
 
-#: pcbnew/drc/drc_engine.cpp:838
+#: pcbnew/drc/drc_engine.cpp:826
 #, c-format
 msgid "Checking %s; silk clearance: %s."
 msgstr "Tikrinimas %s; šilko šalinimas: %s."
 
-#: pcbnew/drc/drc_engine.cpp:845
+#: pcbnew/drc/drc_engine.cpp:833
 #, c-format
 msgid "Checking %s; hole clearance: %s."
 msgstr "Tikrinimas %s; skylių tarpas: %s."
 
-#: pcbnew/drc/drc_engine.cpp:852
+#: pcbnew/drc/drc_engine.cpp:840
 #, c-format
 msgid "Checking %s; edge clearance: %s."
 msgstr "Tikrinimas %s; krašto tarpas: %s."
 
-#: pcbnew/drc/drc_engine.cpp:858
+#: pcbnew/drc/drc_engine.cpp:846
 #, c-format
 msgid "Checking %s."
 msgstr "Tikrinama %s."
 
-#: pcbnew/drc/drc_engine.cpp:865
+#: pcbnew/drc/drc_engine.cpp:853
 msgid "Board and netclass clearances apply only between copper items."
 msgstr "Lentos ir tinklo klasės tarpai galioja tik tarp varinių gaminių."
 
-#: pcbnew/drc/drc_engine.cpp:909
+#: pcbnew/drc/drc_engine.cpp:897
 msgid "Keepout constraint not met."
 msgstr "Išlaikymo apribojimas netenkinamas."
 
-#: pcbnew/drc/drc_engine.cpp:911
+#: pcbnew/drc/drc_engine.cpp:899
 msgid "Disallow constraint not met."
 msgstr "Neleisti apribojimo nesilaikoma."
 
-#: pcbnew/drc/drc_engine.cpp:933
+#: pcbnew/drc/drc_engine.cpp:921
 msgid "Keepout layer(s) not matched."
 msgstr "Išlaikymo sluoksnis (-iai) neatitinka."
 
-#: pcbnew/drc/drc_engine.cpp:937 pcbnew/drc/drc_engine.cpp:958
+#: pcbnew/drc/drc_engine.cpp:925 pcbnew/drc/drc_engine.cpp:946
 #, fuzzy, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "Taisyklės sluoksnis „%s“ neatitinka."
 
-#: pcbnew/drc/drc_engine.cpp:943 pcbnew/drc/drc_engine.cpp:963
+#: pcbnew/drc/drc_engine.cpp:931 pcbnew/drc/drc_engine.cpp:951
 #, fuzzy
 msgid "Rule layer not matched; rule ignored."
 msgstr "Taisyklės sluoksnis neatitinka."
 
-#: pcbnew/drc/drc_engine.cpp:971
+#: pcbnew/drc/drc_engine.cpp:959
 msgid "Unconditional constraint applied."
 msgstr "Taikytas besąlyginis suvaržymas."
 
-#: pcbnew/drc/drc_engine.cpp:972
+#: pcbnew/drc/drc_engine.cpp:960
 msgid "Unconditional rule applied."
 msgstr "Taikyta besąlyginė taisyklė."
 
-#: pcbnew/drc/drc_engine.cpp:985
+#: pcbnew/drc/drc_engine.cpp:973
 #, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "Tikrinama taisyklės sąlyga \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:991
+#: pcbnew/drc/drc_engine.cpp:979
 msgid "Constraint applied."
 msgstr "Taikytas apribojimas."
 
-#: pcbnew/drc/drc_engine.cpp:992
+#: pcbnew/drc/drc_engine.cpp:980
 msgid "Rule applied; overrides previous constraints."
 msgstr "Taikoma taisyklė; viršija ankstesnius apribojimus."
 
-#: pcbnew/drc/drc_engine.cpp:999
+#: pcbnew/drc/drc_engine.cpp:987
 msgid "Membership not satisfied; constraint ignored."
 msgstr "Narystė nepatenkinta; apribojimas ignoruojamas."
 
-#: pcbnew/drc/drc_engine.cpp:1000
+#: pcbnew/drc/drc_engine.cpp:988
 msgid "Condition not satisfied; rule ignored."
 msgstr "Sąlyga netenkinama; taisyklė ignoruota."
 
-#: pcbnew/drc/drc_engine.cpp:1045 pcbnew/drc/drc_engine.cpp:1056
+#: pcbnew/drc/drc_engine.cpp:1033 pcbnew/drc/drc_engine.cpp:1044
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
 msgstr "Vietinis klirensas %s; klirensas: %s."
@@ -29348,7 +29349,14 @@ msgstr ""
 msgid "No access rights to write to file \"%s\""
 msgstr "Nėra prieigos teisių rašyti į failą „%s“"
 
-#: pcbnew/files.cpp:989 pcbnew/files.cpp:1091
+#: pcbnew/files.cpp:949 pcbnew/files.cpp:1104
+#, fuzzy, c-format
+msgid "Error saving custom rules file '%s'."
+msgstr ""
+"Klaida išsaugant plokštės failą „%s“.\n"
+"%s"
+
+#: pcbnew/files.cpp:980 pcbnew/files.cpp:1082
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -29357,12 +29365,12 @@ msgstr ""
 "Klaida išsaugant plokštės failą „%s“.\n"
 "%s"
 
-#: pcbnew/files.cpp:994
+#: pcbnew/files.cpp:984
 #, fuzzy, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Nepavyko sukurti laikino failo „%s“"
 
-#: pcbnew/files.cpp:1007
+#: pcbnew/files.cpp:997
 #, c-format
 msgid ""
 "Error saving board file \"%s\".\n"
@@ -29371,17 +29379,17 @@ msgstr ""
 "Klaida išsaugant plokštės failą „%s“.\n"
 "Nepavyko pervadinti laikino failo „%s“"
 
-#: pcbnew/files.cpp:1046
+#: pcbnew/files.cpp:1035
 #, fuzzy, c-format
 msgid "File '%s' saved."
 msgstr "Failas „%s“ išsaugotas."
 
-#: pcbnew/files.cpp:1072
+#: pcbnew/files.cpp:1061
 #, fuzzy, c-format
 msgid "No access rights to write to file '%s'."
 msgstr "Nėra prieigos teisių rašyti į failą „%s“"
 
-#: pcbnew/files.cpp:1129
+#: pcbnew/files.cpp:1108
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -29613,7 +29621,7 @@ msgid "Footprint exported to file \"%s\""
 msgstr "Pėdsakas eksportuotas į failą „%s“"
 
 #: pcbnew/footprint_libraries_utils.cpp:445
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2445
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2446
 #, c-format
 msgid "Library \"%s\" is read only."
 msgstr "Biblioteka „%s“ yra tik skaitoma."
@@ -30307,7 +30315,7 @@ msgstr "Keisti pėdsaką %s iš „%s“ į „%s“"
 msgid "Change %s reference designator to %s."
 msgstr "Pakeiskite %s nuorodos žymeklį į %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:274
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:271
 #, fuzzy, c-format
 msgid "Changed %s reference designator to %s."
 msgstr "Pakeiskite %s nuorodos žymeklį į %s."
@@ -30317,7 +30325,7 @@ msgstr "Pakeiskite %s nuorodos žymeklį į %s."
 msgid "Change %s value from %s to %s."
 msgstr "Pakeiskite %s vertę iš %s į %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:297
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:294
 #, fuzzy, c-format
 msgid "Changed %s value from %s to %s."
 msgstr "Pakeiskite %s vertę iš %s į %s."
@@ -30327,7 +30335,7 @@ msgstr "Pakeiskite %s vertę iš %s į %s."
 msgid "Update %s symbol association from %s to %s."
 msgstr "Atnaujinkite %s simbolių susiejimą iš %s į %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:324
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:321
 #, fuzzy, c-format
 msgid "Updated %s symbol association from %s to %s."
 msgstr "Atnaujinkite %s simbolių susiejimą iš %s į %s."
@@ -30337,7 +30345,7 @@ msgstr "Atnaujinkite %s simbolių susiejimą iš %s į %s."
 msgid "Update %s properties."
 msgstr "Atnaujinti %s ypatybes."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:345
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:342
 #, fuzzy, c-format
 msgid "Updated %s properties."
 msgstr "Atnaujinti %s ypatybes."
@@ -31232,7 +31240,7 @@ msgstr "Netikėtas sluoksnis „%s“ sluoksnių kamštyje."
 msgid "Design rule %s was not found. This was ignored."
 msgstr "Dizaino taisyklė %s nerasta. Tai buvo ignoruojama."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:641
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:642
 msgid ""
 "KiCad design rules are different from CADSTAR ones. Only the compatible "
 "design rules were imported. It is recommended that you review the design "
@@ -31242,7 +31250,7 @@ msgstr ""
 "dizaino taisyklės. Rekomenduojama peržiūrėti pritaikytas projektavimo "
 "taisykles."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:743
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:834
 #, fuzzy, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
@@ -31252,7 +31260,7 @@ msgstr ""
 "CADSTAR sritis „%s“ bibliotekos komponente „%s“ neturi „KiCad“ atitikmens. "
 "Teritorija nėra nei „via oroute“ laikymo zona. Plotas nebuvo importuotas."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:835
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:926
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' is a complex pad stack, which is not "
@@ -31260,7 +31268,7 @@ msgid ""
 "manual correction."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1044
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1135
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
@@ -31269,12 +31277,12 @@ msgstr ""
 "CADSTAR trinkelės apibrėžimas „%s“ turi skylės formą už trinkelės formos. "
 "Skylė perkelta į trinkelės centrą."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1079
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1170
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1114
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1212
 #, c-format
 msgid ""
 "The file appears to be corrupt. Unable to find group ID %s in the group "
@@ -31283,7 +31291,7 @@ msgstr ""
 "Atrodo, kad failas yra sugadintas. Nepavyko rasti grupės ID %s grupės "
 "apibrėžimuose."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1121
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1219
 #, c-format
 msgid ""
 "The file appears to be corrupt. Unable to find sub group %s in the group map "
@@ -31292,7 +31300,7 @@ msgstr ""
 "Atrodo, kad failas yra sugadintas. Nepavyko rasti pogrupio %s grupės "
 "žemėlapyje (tėvų grupės ID = %s, vardas = %s)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1194
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1292
 #, fuzzy, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
@@ -31301,7 +31309,7 @@ msgstr ""
 "„%s“ forma yra liukas užpildytas CADSTAR, kuris neturi „KiCad“ atitikmens. "
 "Vietoj to naudokite kietą užpildą."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1205
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1303
 #, c-format
 msgid ""
 "Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
@@ -31309,19 +31317,19 @@ msgid ""
 "internal dimension style instead."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1262
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1360
 #, fuzzy, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported"
 msgstr "Dimensijos ID %s neturi „KiCad“ atitikmens. Tai nebuvo importuota"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1398
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1496
 #, c-format
 msgid ""
 "Dimension ID %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
 msgstr "Dimensijos ID %s neturi „KiCad“ atitikmens. Tai nebuvo importuota."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1438
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1536
 #, c-format
 msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
@@ -31332,7 +31340,7 @@ msgstr ""
 "nepalaiko talpinimo vietų. Importuoti buvo tik palaikomi šios srities "
 "elementai."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1446
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1544
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
@@ -31341,18 +31349,18 @@ msgstr ""
 "CADSTAR srityje „%s“ nėra „KiCad“ atitikmens. Grynos paskirties vietos "
 "nepalaikomos."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1473
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1571
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
 msgstr "Nepavyko rasti komponento „%s“ bibliotekoje („Symdef ID“: „%s“)"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1588
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1688
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr ""
 "Nepavyko rasti dokumentacijos simbolio bibliotekoje („Symdef ID“: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1657
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1757
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
@@ -31361,7 +31369,7 @@ msgstr ""
 "CADSTAR šablone „%s“ įjungtas parametras „Leisti jokiose maršrutų srityse“. "
 "Šis nustatymas neturi „KiCad“ atitikmens, todėl jis buvo ignoruojamas."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1665
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1765
 #, fuzzy, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
@@ -31370,7 +31378,7 @@ msgstr ""
 "CADSTAR šablone „%s“ yra įgalinta parinktis „Box Isolated Pins“. Šis "
 "nustatymas neturi „KiCad“ atitikmens, todėl jis buvo ignoruojamas."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1673
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1773
 #, fuzzy, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
@@ -31379,7 +31387,7 @@ msgstr ""
 "CADSTAR šablone „%s“ įjungtas parametras „Automatic Repour“. Šis nustatymas "
 "neturi „KiCad“ atitikmens, todėl jis buvo ignoruojamas."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1684
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1784
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
@@ -31390,7 +31398,7 @@ msgstr ""
 "„Sliver Width“. Tam nėra „KiCad“ atitikmens, todėl šis parametras buvo "
 "ignoruojamas."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1694
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1794
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
@@ -31403,7 +31411,7 @@ msgstr ""
 "dviejų nustatymų. Neaktyvaus vario nustatymas buvo taikomas kaip minimalus "
 "KiCad zonos salos plotas."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1754
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1854
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
@@ -31414,7 +31422,7 @@ msgstr ""
 "ir perlais. „KiCad“ palaiko tik vieną nustatymą abiem. Buvo pritaikytas "
 "trinkelių nustatymas."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1777
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1877
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has thermal reliefs in the original design but "
@@ -31423,7 +31431,7 @@ msgid ""
 "will be removed."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1814
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1914
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
@@ -31434,7 +31442,7 @@ msgstr ""
 "tokio pavadinimo tinklo nėra. Sluoksnis buvo įkeltas, tačiau vario zona "
 "nebuvo sukurta."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1916
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2016
 msgid ""
 "The CADSTAR design contains COPPER elements, which have no direct KiCad "
 "equivalent. These have been imported as a KiCad Zone if solid or hatch "
@@ -31446,7 +31454,7 @@ msgstr ""
 "arba liukas, arba kaip „KiCad Track“, jei forma buvo neužpildyta (atvira "
 "arba uždara)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2021
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2121
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
@@ -31454,7 +31462,7 @@ msgid ""
 msgstr ""
 "Grynasis „%s“ nurodo komponento ID „%s“, kurio nėra. Tai buvo ignoruota."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2027
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2127
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
@@ -31463,11 +31471,11 @@ msgstr ""
 "Tinklas '%s' buvo pridėtas prie nesuderinto indekso '%d', komponente '%s'. "
 "Tai buvo ignoruota."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2159
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2277
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2266
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2384
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -31478,7 +31486,7 @@ msgstr ""
 "„KiCad“ palaiko tik apskritas vijas, todėl šis „via“ tipas pakeistas į "
 "„via“, kurio apskritimo forma yra %.2f mm skersmens."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2482
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2600
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
@@ -31487,7 +31495,7 @@ msgstr ""
 "„%s“ forma yra liukas užpildytas CADSTAR, kuris neturi „KiCad“ atitikmens. "
 "Vietoj to naudokite kietą užpildą."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3303
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3421
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -31497,7 +31505,7 @@ msgstr ""
 "CADSTAR perėjimo kodas „%s“ turi %d liukus. „KiCad“ palaiko tik 2 liukus "
 "(kryžminius) 90 laipsnių atstumu. Importuotas perėjimas yra kryžminis."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3313
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3431
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
@@ -31508,7 +31516,7 @@ msgstr ""
 "„KiCad“ palaiko tik vieną plotį. Importuotam perinti naudojamas plotis, "
 "apibrėžtas pirmojo liuko apibrėžime, t. Y. %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3325
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3443
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
@@ -31520,7 +31528,7 @@ msgstr ""
 "naudojamas žingsnio dydis, apibrėžtas pirmajame perinimo apibrėžime, t. Y. "
 "%.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3338
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3456
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -31533,14 +31541,14 @@ msgstr ""
 "du liukai, esantys 90 laipsnių atstumu, nukreipti %.1f laipsnių kampu nuo "
 "horizontalios."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3411
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3529
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Milimetres were applied instead."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3626
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3744
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -31552,7 +31560,7 @@ msgstr ""
 "Pastaba: „KiCad“ „Net Class“ versija yra artimesnė CADSTAR „Net Route "
 "Code“ (kuri buvo importuota visiems tinklams)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3636
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3754
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -31743,7 +31751,7 @@ msgid "footprint library path \"%s\" does not exist"
 msgstr "pėdsakų bibliotekos kelio „%s“ nėra"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:281
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:293
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:294
 #, c-format
 msgid "library \"%s\" has no footprint \"%s\" to delete"
 msgstr "biblioteka „%s“ neturi ištrinti pėdsako „%s“"
@@ -31759,7 +31767,7 @@ msgid "Element token contains %d parameters."
 msgstr "Elemento žetone yra %d parametrai."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:961
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2357
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2358
 #, c-format
 msgid "Library \"%s\" is read only"
 msgstr "Biblioteka „%s“ yra tik skaitoma"
@@ -31784,28 +31792,28 @@ msgstr "bibliotekos kelyje „%s“ rastas netikėtas failas „%s“"
 msgid "footprint library \"%s\" cannot be deleted"
 msgstr "pėdsakų bibliotekos „%s“ negalima ištrinti"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:166
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:167
 #, c-format
 msgid "Cannot create footprint library path \"%s\""
 msgstr "Negalima sukurti pėdsakų bibliotekos kelio „%s“"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:172
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:173
 #, c-format
 msgid "Footprint library path \"%s\" is read only"
 msgstr "Pėdsakų bibliotekos kelias „%s“ yra tik skaitomas"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:211
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:212
 #, c-format
 msgid "Cannot rename temporary file \"%s\" to footprint library file \"%s\""
 msgstr ""
 "Negalima pervadinti laikino failo „%s“ į pėdsakų bibliotekos failą „%s“"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:236
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:237
 #, c-format
 msgid "Footprint library path '%s' does not exist (or is not a directory)."
 msgstr "Pėdsakų bibliotekos kelias „%s“ neegzistuoja (arba nėra katalogas)."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:337
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:338
 #, c-format
 msgid ""
 "Please report this bug.  Error validating group structure: %s\n"
@@ -31816,34 +31824,34 @@ msgstr ""
 "\n"
 "Vis tiek išsaugoti?"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:339
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:340
 msgid "Internal group data structure corrupt"
 msgstr "Vidinės grupės duomenų struktūra sugadinta"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:341
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:342
 msgid "Save Anyway"
 msgstr "Išsaugoti vis tiek"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:1296
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:1297
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "nežinomas pagalvėlės tipas: %d"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:1762
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:1763
 #, c-format
 msgid "unknown via type %d"
 msgstr "nežinoma per tipą %d"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:1941
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:1942
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "nežinomas zonos kampų lyginimo tipas %d"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2194
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2195
 msgid "this file does not contain a PCB"
 msgstr "šiame faile nėra PCB"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2345
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2346
 #, c-format
 msgid ""
 "Library \"%s\" does not exist.\n"
@@ -31852,41 +31860,41 @@ msgstr ""
 "Bibliotekos „%s“ nėra.\n"
 "Ar norėtumėte jį sukurti?"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2349
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2350
 msgid "Library Not Found"
 msgstr "Biblioteka nerasta"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2388
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2389
 #, c-format
 msgid "Footprint file name \"%s\" is not valid."
 msgstr "Netinkamas pėdsako failo pavadinimas „%s“."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2394
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2395
 #, c-format
 msgid "No write permissions to delete file \"%s\""
 msgstr "Nėra rašymo leidimų ištrinti failą „%s“"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2464
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2465
 #, c-format
 msgid "Cannot overwrite library path \"%s\"."
 msgstr "Negalima perrašyti bibliotekos kelio „%s“."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2489
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2490
 #, c-format
 msgid "User does not have permission to delete directory \"%s\"."
 msgstr "Vartotojas neturi leidimo ištrinti katalogą „%s“."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2497
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2498
 #, c-format
 msgid "Library directory \"%s\" has unexpected sub-directories."
 msgstr "Bibliotekos kataloge „%s“ yra netikėtų pakatalogių."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2516
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2517
 #, c-format
 msgid "Unexpected file \"%s\" was found in library path \"%s\"."
 msgstr "Bibliotekos kelyje „%s“ rastas netikėtas failas „%s“."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2532
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2533
 #, c-format
 msgid "Footprint library \"%s\" cannot be deleted."
 msgstr "Pėdsakų bibliotekos „%s“ negalima ištrinti."
@@ -32137,7 +32145,7 @@ msgstr "Sumažinkite vingio amplitudę vienu žingsniu."
 msgid "Length Tuner"
 msgstr "Ilgio derintuvas"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:444
+#: pcbnew/router/pns_diff_pair_placer.cpp:445
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either _N/_P or +/-."
@@ -32146,7 +32154,7 @@ msgstr ""
 "diferencialinei porai priklausančių tinklų pavadinimai baigiasi _N / _P arba "
 "+/-."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:465
+#: pcbnew/router/pns_diff_pair_placer.cpp:466
 msgid ""
 "Can't find a suitable starting point.  If starting from an existing "
 "differential pair make sure you are at the end."
@@ -32154,7 +32162,7 @@ msgstr ""
 "Nerandate tinkamo atspirties taško. Jei pradedate nuo esamos diferencialinės "
 "poros, įsitikinkite, kad esate pabaigoje."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:518
+#: pcbnew/router/pns_diff_pair_placer.cpp:519
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
 msgstr "Nerandate tinkamo pradinio taško susietam tinklui \"%s\"."
@@ -32195,12 +32203,12 @@ msgstr "Sureguliuota: "
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1041
+#: pcbnew/router/pns_kicad_iface.cpp:1048
 #, c-format
 msgid "%s is malformed."
 msgstr "%s yra netinkamai suformuotas."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1044
+#: pcbnew/router/pns_kicad_iface.cpp:1051
 #, fuzzy
 msgid ""
 "This zone cannot be handled by the router.\n"
@@ -32209,7 +32217,7 @@ msgstr ""
 "Šios zonos negalima tvarkyti takelio išdėstymo įrankiu.\n"
 "Patikrinkite, ar tai nėra savaime besikertantis daugiakampis."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1642 pcbnew/router/router_tool.cpp:427
+#: pcbnew/router/pns_kicad_iface.cpp:1649 pcbnew/router/router_tool.cpp:427
 msgid "Interactive Router"
 msgstr "Interaktyvus trasavimas"
 
@@ -35649,103 +35657,132 @@ msgstr "Daugiakampio užpildų atlikimas ..."
 msgid "[INFO] load failed: input line too long\n"
 msgstr "Nepavyko įkelti [INFO]: įvesties eilutė per ilga\n"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:6
-#: resources/linux/launchers/kicad.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 #, fuzzy
-msgid "KiCad"
-msgstr "Išeikite iš „KiCad“"
+msgid "KiCad Image Converter"
+msgstr "Konvertuotas"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:13
-#: resources/linux/launchers/kicad.desktop.in:11
-msgid "EDA Suite"
-msgstr ""
-
-#: resources/linux/appdata/kicad.appdata.xml.in:37
-msgid ""
-"KiCad is a Cross Platform and Open Source Electronics Design Automation "
-"Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
-"output."
-msgstr ""
-
-#: resources/linux/appdata/kicad.appdata.xml.in:49
-#, fuzzy
-msgid "Eeschema Schematic Editor"
-msgstr "Perjunkite į scheminį redaktorių"
-
-#: resources/linux/appdata/kicad.appdata.xml.in:54
-#, fuzzy
-msgid "PcbNew PCB Layout"
-msgstr "Печать разметки листа"
-
-#: resources/linux/appdata/kicad.appdata.xml.in:59
-#, fuzzy
-msgid "PcbNew 3D Viewer"
-msgstr "Naršyklė 3D"
-
-#: resources/linux/appdata/kicad.appdata.xml.in:71
-#, fuzzy
-msgid "The KiCad Developers"
-msgstr "Kūrėjai"
-
-#: resources/linux/launchers/bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 #, fuzzy
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Создать файл библиотеки компонентов для Eeschema"
 
-#: resources/linux/launchers/eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 #, fuzzy
-msgid "Eeschema (Standalone)"
-msgstr "Руководство Eeschema"
+msgid "bitmap2component"
+msgstr "Paleisti Bitmap2Component"
 
-#: resources/linux/launchers/eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 #, fuzzy
-msgid "Electronic schematic capture"
-msgstr "Eeschema - principinių schemų rengyklė"
+msgid "KiCad Schematic Editor (Standalone)"
+msgstr "Schemų redaktoriaus savybės"
 
-#: resources/linux/launchers/eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 #, fuzzy
-msgid "KiCad electronic schematic design (standalone)"
-msgstr "„KiCad“ senieji scheminiai failai"
+msgid "Schematic Capture Tool"
+msgstr "Scheminis laukas"
 
-#: resources/linux/launchers/gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+msgid "Standalone schematic editor for KiCad schematics"
+msgstr ""
+
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#, fuzzy
+msgid "eeschema"
+msgstr "Eezema"
+
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 #, fuzzy
 msgid "Gerber File Viewer"
 msgstr "Gerber failai"
 
-#: resources/linux/launchers/gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 #, fuzzy
 msgid "View Gerber files"
 msgstr "Peržiūrėti „Gerber“ failus"
 
-#: resources/linux/launchers/kicad.desktop.in:12
-msgid "Electronic Design Automation suite"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#, fuzzy
+msgid "gerbview"
+msgstr "Gerbview"
+
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
+#, fuzzy
+msgid "KiCad"
+msgstr "Išeikite iš „KiCad“"
+
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+msgid "EDA Suite"
 msgstr ""
 
-#: resources/linux/launchers/pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+msgid "Suite of tools for schematic design and circuit board layout"
+msgstr ""
+
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#, fuzzy
+msgid "KiCad PCB Calculator"
+msgstr "PCB Skaičiuoklė"
+
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr ""
 
-#: resources/linux/launchers/pcbnew.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 #, fuzzy
-msgid "Pcbnew (Standalone)"
-msgstr "Pcbnew žinynas"
+msgid "KiCad PCB Editor (Standalone)"
+msgstr "Page Layout Editor"
 
-#: resources/linux/launchers/pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 #, fuzzy
-msgid "PCB layout"
-msgstr "Печать разметки листа"
+msgid "PCB layout editor"
+msgstr "Page Layout Editor"
 
-#: resources/linux/launchers/pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+msgid "Standalone circuit board editor for KiCad boards"
+msgstr ""
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 #, fuzzy
-msgid "KiCad printed circuit board layout (standalone)"
-msgstr "KiCad spausdintinių plokščių failai"
+msgid "pcbnew"
+msgstr "Pcbnew"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
+msgid "An EDA suite for schematic and circuit board design"
+msgstr ""
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
+msgid ""
+"KiCad is a free and open-source electronics design automation (EDA) suite. "
+"It features schematic capture, integrated circuit simulation, printed "
+"circuit board (PCB) layout, 3D rendering, and plotting/data export to "
+"numerous formats. KiCad also includes a high-quality component library "
+"featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
+"system requirements and runs on Linux, Windows, and macOS."
+msgstr ""
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
+#, fuzzy
+msgid "KiCad Main Window"
+msgstr "KiCad žinynas"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:67
+#, fuzzy
+msgid "KiCad PCB Layout Editor"
+msgstr "Page Layout Editor"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:84
+#, fuzzy
+msgid "The KiCad Developers"
+msgstr "Kūrėjai"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
 #, fuzzy
-msgid "Gerber File"
+msgid "Gerber file"
 msgstr "Gerber failai"
 
-#: resources/linux/mime/kicad-gerbers.xml.in:10
+#: resources/linux/mime/kicad-gerbers.xml.in:26
 #, fuzzy
 msgid "Excellon drill file"
 msgstr "Загрузить файл сверловки EXCELLON"
@@ -35760,10 +35797,50 @@ msgstr "KiCad projekto failas"
 msgid "KiCad Schematic"
 msgstr "Redaguoti schemą"
 
-#: resources/linux/mime/kicad-kicad.xml.in:17
+#: resources/linux/mime/kicad-kicad.xml.in:23
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad spausdintinių plokščių failai"
+
+#, fuzzy
+#~ msgid "Eeschema Schematic Editor"
+#~ msgstr "Perjunkite į scheminį redaktorių"
+
+#, fuzzy
+#~ msgid "PcbNew PCB Layout"
+#~ msgstr "Печать разметки листа"
+
+#, fuzzy
+#~ msgid "PcbNew 3D Viewer"
+#~ msgstr "Naršyklė 3D"
+
+#, fuzzy
+#~ msgid "Eeschema (Standalone)"
+#~ msgstr "Руководство Eeschema"
+
+#, fuzzy
+#~ msgid "Electronic schematic capture"
+#~ msgstr "Eeschema - principinių schemų rengyklė"
+
+#, fuzzy
+#~ msgid "KiCad electronic schematic design (standalone)"
+#~ msgstr "„KiCad“ senieji scheminiai failai"
+
+#, fuzzy
+#~ msgid "Pcbnew (Standalone)"
+#~ msgstr "Pcbnew žinynas"
+
+#, fuzzy
+#~ msgid "PCB layout"
+#~ msgstr "Печать разметки листа"
+
+#, fuzzy
+#~ msgid "KiCad printed circuit board layout (standalone)"
+#~ msgstr "KiCad spausdintinių plokščių failai"
+
+#, fuzzy
+#~ msgid "Gerber File"
+#~ msgstr "Gerber failai"
 
 #~ msgid "Do not show again."
 #~ msgstr "Daugiau neberodyti."
@@ -35942,15 +36019,6 @@ msgstr "KiCad spausdintinių plokščių failai"
 #~ msgid "Net Class Memberships"
 #~ msgstr "Grynosios klasės narystės"
 
-#~ msgid "Eeschema"
-#~ msgstr "Eezema"
-
-#~ msgid "Pcbnew"
-#~ msgstr "Pcbnew"
-
-#~ msgid "Page Layout Editor"
-#~ msgstr "Page Layout Editor"
-
 #~ msgid "Worksheet"
 #~ msgstr "Užduotis"
 
@@ -35978,9 +36046,6 @@ msgstr "KiCad spausdintinių plokščių failai"
 
 #~ msgid "Add a sheet pin"
 #~ msgstr "Pridėkite lapo kaištį"
-
-#~ msgid "Gerbview"
-#~ msgstr "Gerbview"
 
 #~ msgid "Export to Pcbnew..."
 #~ msgstr "Eksportuoti į „Pcbnew“ ..."
@@ -39404,9 +39469,6 @@ msgstr "KiCad spausdintinių plokščių failai"
 #~ msgid "Run Gerbview"
 #~ msgstr "Paleisti Gerbview"
 
-#~ msgid "Run Bitmap2Component"
-#~ msgstr "Paleisti Bitmap2Component"
-
 #~ msgid "Run PcbCalculator"
 #~ msgstr "Paleisti PcbCalculator"
 
@@ -39454,9 +39516,6 @@ msgstr "KiCad spausdintinių plokščių failai"
 #, fuzzy
 #~ msgid "Configure footprint library table"
 #~ msgstr "Конфигурация библиотек посад.мест"
-
-#~ msgid "KiCad &Manual"
-#~ msgstr "KiCad žinynas"
 
 #~ msgid "Open KiCad user manual"
 #~ msgstr "Atverti KiCad žinyną"
