@@ -176,7 +176,7 @@ void DRC_ENGINE::loadImplicitRules()
     rule->AddConstraint( courtyardClearanceConstraint );
 
     DRC_CONSTRAINT diffPairGapConstraint( DIFF_PAIR_GAP_CONSTRAINT );
-    diffPairGapConstraint.Value().SetMin( bds.GetDefault()->GetClearance() );
+    diffPairGapConstraint.Value().SetMin( bds.m_MinClearance );
     rule->AddConstraint( diffPairGapConstraint );
 
     rule = createImplicitRule( _( "board setup constraints" ) );
@@ -284,8 +284,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              ncName );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s' && AB.isCoupledDiffPair()",
-                                             ncName );
+                    expr = wxString::Format( "A.NetClass == '%s'", ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
