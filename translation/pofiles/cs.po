@@ -13,11 +13,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-04-12 07:24+0000\n"
+"POT-Creation-Date: 2021-04-12 11:06-0700\n"
+"PO-Revision-Date: 2021-04-15 16:44+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2216,9 +2216,8 @@ msgid "These items will be skipped unless you override the locks."
 msgstr "Tyto položky budou přeskočeny, pokud nepřepíšete zámky."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
-#, fuzzy
 msgid "Remember decision for this session."
-msgstr "Odeberte vyloučení z tohoto porušení"
+msgstr "Pamatovat rozhodnutí pro tuto relaci."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
@@ -13172,14 +13171,14 @@ msgstr ""
 "Zadejte symbol pythonu, který implementuje SCH_PLUGIN::Symbol*() funkce."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'."
-msgstr "Nelze otevřít soubor '%s'"
+msgstr "Nelze otevřít soubor '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Record id: %d."
-msgstr "Neznámý kód chyby DRC %d"
+msgstr "Neznámé ID záznamu: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:596
 #, c-format
@@ -13188,9 +13187,8 @@ msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:637
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1722
-#, fuzzy
 msgid "Pin has unexpected orientation."
-msgstr "Orientace textu"
+msgstr "Vývod má neočekávanou orientaci."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:675
 #, fuzzy
