@@ -54,6 +54,8 @@
 
 ### Examples
 
+    (version 1)
+
     (rule HV
        (constraint clearance (min 1.5mm))
        (condition "A.NetClass == 'HV'"))
@@ -78,7 +80,9 @@
 
 ### Notes
 
-Version clause must be the first clause.
+Version clause must be the first clause.  It indicates the syntax version of the file so that 
+future rules parsers can perform automatic updates.  It should be
+set to "1".
 
 Rules should be ordered by specificity.  Later rules take
 precedence over earlier rules; once a matching rule is found
