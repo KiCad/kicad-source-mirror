@@ -28,9 +28,9 @@
 #include <core/typeinfo.h>
 #include <math/vector2d.h>
 #include <eda_text.h>
-#include <bitmap_base.h>
 #include "widgets/msgpanel.h"
 #include <geometry/shape_poly_set.h>
+#include <eda_item.h>
 #include <eda_units.h>
 
 #include <algorithm>

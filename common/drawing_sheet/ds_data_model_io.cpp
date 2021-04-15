@@ -24,7 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <eda_item.h>
+#include <kicad_string.h>
 #include <locale_io.h>
 #include <macros.h>
 #include <drawing_sheet/ds_painter.h>
@@ -33,7 +33,6 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <math/vector2d.h>
 #include <drawing_sheet/drawing_sheet_reader_lexer.h>
-#include <convert_to_biu.h>
 
 #include <wx/msgdlg.h>
 

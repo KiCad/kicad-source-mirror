@@ -327,4 +327,20 @@ void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSpli
  */
 void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed = 1 );
 
+/**
+ * Prints a float number without using scientific notation and no trailing 0
+ * We want to avoid scientific notation in S-expr files (not easy to read)
+ * for floating numbers.
+ * So we cannot always just use the %g or the %f format to print a fp number
+ * this helper function uses the %f format when needed, or %g when %f is
+ * not well working and then removes trailing 0
+ */
+std::string Double2Str( double aValue );
+
+/**
+ * A helper to convert the \a double \a aAngle (in internal unit)
+ * to a string in degrees
+ */
+wxString AngleToStringDegrees( double aAngle );
+
 #endif  // KICAD_STRING_H_

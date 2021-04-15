@@ -52,41 +52,6 @@
 #error "Cannot resolve internal units due to no definition of EESCHEMA, CVPCB or PCBNEW."
 #endif
 
-// Helper function to print a float number without using scientific notation
-// and no trailing 0
-// So we cannot always just use the %g or the %f format to print a fp number
-// this helper function uses the %f format when needed, or %g when %f is
-// not well working and then removes trailing 0
-
-std::string Double2Str( double aValue )
-{
-    char    buf[50];
-    int     len;
-
-    if( aValue != 0.0 && fabs( aValue ) <= 0.0001 )
-    {
-        // For these small values, %f works fine,
-        // and %g gives an exponent
-        len = sprintf( buf,  "%.16f", aValue );
-
-        while( --len > 0 && buf[len] == '0' )
-            buf[len] = '\0';
-
-        if( buf[len] == '.' )
-            buf[len] = '\0';
-        else
-            ++len;
-    }
-    else
-    {
-        // For these values, %g works fine, and sometimes %f
-        // gives a bad value (try aValue = 1.222222222222, with %.16f format!)
-        len = sprintf( buf, "%.10g", aValue );
-    }
-
-    return std::string( buf, len );
-}
-
 
 double To_User_Unit( EDA_UNITS aUnit, double aValue )
 {
@@ -439,20 +404,6 @@ long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, EDA
     double value = DoubleValueFromString( aUnits, aTextValue, aType );
 
     return KiROUND<double, long long int>( value );
-}
-
-
-/**
- * A helper to convert \a aAngle in deci-degrees to a string in degrees.
- */
-wxString AngleToStringDegrees( double aAngle )
-{
-    wxString text;
-
-    text.Printf( wxT( "%.3f" ), aAngle / 10.0 );
-    StripTrailingZeros( text, 1 );
-
-    return text;
 }
 
 

@@ -27,6 +27,7 @@
  */
 
 #include <clocale>
+#include <cmath>
 #include <macros.h>
 #include <richio.h>                        // StrPrintf
 #include <kicad_string.h>
@@ -865,4 +866,45 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
                 break;
         }
     }
+}
+
+
+std::string Double2Str( double aValue )
+{
+    char    buf[50];
+    int     len;
+
+    if( aValue != 0.0 && std::fabs( aValue ) <= 0.0001 )
+    {
+        // For these small values, %f works fine,
+        // and %g gives an exponent
+        len = sprintf( buf,  "%.16f", aValue );
+
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        if( buf[len] == '.' )
+            buf[len] = '\0';
+        else
+            ++len;
+    }
+    else
+    {
+        // For these values, %g works fine, and sometimes %f
+        // gives a bad value (try aValue = 1.222222222222, with %.16f format!)
+        len = sprintf( buf, "%.10g", aValue );
+    }
+
+    return std::string( buf, len );
+}
+
+
+wxString AngleToStringDegrees( double aAngle )
+{
+    wxString text;
+
+    text.Printf( wxT( "%.3f" ), aAngle / 10.0 );
+    StripTrailingZeros( text, 1 );
+
+    return text;
 }
