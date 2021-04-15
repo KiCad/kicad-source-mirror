@@ -34,11 +34,6 @@ set( _py_cmd "import wx;print(wx.version())" )
 if( PYTHON_SITE_PACKAGE_PATH )
     set( _py_site_path
         "import sys;sys.path.insert(0, \"${PYTHON_SITE_PACKAGE_PATH}\");" )
-
-    if( APPLE ) # extra path for macOS, so that 'wx' module is accessible
-        set( _py_site_path
-            "${_py_site_path}sys.path.insert(0, \"${PYTHON_SITE_PACKAGE_PATH}/wx-3.0-osx_cocoa\");" ) #TODO is this needed with Python3?
-    endif()
 endif()
 
 if( VCPKG_TOOLCHAIN )
