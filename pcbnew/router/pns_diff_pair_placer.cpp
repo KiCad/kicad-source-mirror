@@ -55,6 +55,7 @@ DIFF_PAIR_PLACER::DIFF_PAIR_PLACER( ROUTER* aRouter ) :
     m_snapOnTarget = false;
     m_currentEndItem = NULL;
     m_currentMode = RM_MarkObstacles;
+    m_currentTraceOk = false;
     m_idle = true;
 }
 
@@ -556,6 +557,8 @@ bool DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_currentEnd = p;
     m_placingVia = false;
     m_chainedPlacement = false;
+    m_currentTraceOk = false;
+    m_currentTrace = DIFF_PAIR();
 
     initPlacement();
 
@@ -655,6 +658,7 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 
     if( result )
     {
+        m_currentTraceOk = true;
         m_currentTrace.SetNets( m_netP, m_netN );
         m_currentTrace.SetWidth( m_sizes.DiffPairWidth() );
         m_currentTrace.SetGap( m_sizes.DiffPairGap() );
@@ -668,7 +672,7 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
         return true;
     }
 
-    return false;
+    return m_currentTraceOk;
 }
 
 

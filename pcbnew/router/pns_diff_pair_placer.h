@@ -265,6 +265,7 @@ private:
 
     VECTOR2I m_currentEnd, m_currentStart;
     DIFF_PAIR m_currentTrace;
+    bool m_currentTraceOk;
 
     ITEM* m_currentEndItem;
     PNS_MODE m_currentMode;
