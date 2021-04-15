@@ -650,7 +650,6 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
         m_snapOnTarget = false;
     }
 
-    m_currentTrace = DIFF_PAIR();
     m_currentTrace.SetGap( gap() );
     m_currentTrace.SetLayer( m_currentLayer );
 
