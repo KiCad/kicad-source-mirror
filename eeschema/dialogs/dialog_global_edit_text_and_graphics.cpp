@@ -73,7 +73,7 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_
     UNIT_BINDER            m_textSize;
     UNIT_BINDER            m_lineWidth;
 
-    bool                   m_hasChange;
+    bool                   m_appendUndo;
 
 public:
     DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_EDIT_FRAME* parent );
@@ -104,7 +104,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
         m_lineWidth( parent, m_lineWidthLabel, m_LineWidthCtrl, m_lineWidthUnits, true )
 {
     m_parent = parent;
-    m_hasChange = false;
+    m_appendUndo = false;
 
     // TODO(JE) remove once real-time connectivity is a given
     if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
@@ -237,64 +237,41 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
     SCH_TEXT* sch_text = dynamic_cast<SCH_TEXT*>( aItem );
     SCH_LINE* lineItem = dynamic_cast<SCH_LINE*>( aItem );
 
-    m_parent->SaveCopyInUndoList( aSheetPath.LastScreen(), aItem, UNDO_REDO::CHANGED, m_hasChange );
+    m_parent->SaveCopyInUndoList( aSheetPath.LastScreen(), aItem, UNDO_REDO::CHANGED, m_appendUndo );
+    m_appendUndo = true;
 
     if( eda_text )
     {
         if( !m_textSize.IsIndeterminate() )
-        {
             eda_text->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
-            m_hasChange = true;
-        }
 
         if( m_hAlign->GetStringSelection() != INDETERMINATE_ACTION )
-        {
             eda_text->SetHorizJustify( EDA_TEXT::MapHorizJustify( m_hAlign->GetSelection() - 1 ) );
-            m_hasChange = true;
-        }
 
         if( m_vAlign->GetStringSelection() != INDETERMINATE_ACTION )
-        {
             eda_text->SetVertJustify( EDA_TEXT::MapVertJustify( m_vAlign->GetSelection() - 1 ) );
-            m_hasChange = true;
-        }
 
         if( m_Visible->Get3StateValue() != wxCHK_UNDETERMINED )
-        {
             eda_text->SetVisible( m_Visible->GetValue() );
-            m_hasChange = true;
-        }
 
         if( m_Italic->Get3StateValue() != wxCHK_UNDETERMINED )
-        {
             eda_text->SetItalic( m_Italic->GetValue() );
-            m_hasChange = true;
-        }
 
         if( m_Bold->Get3StateValue() != wxCHK_UNDETERMINED )
-        {
             eda_text->SetBold( m_Bold->GetValue() );
-            m_hasChange = true;
-        }
     }
 
     // No else!  Labels are both.
     if( sch_text )
     {
         if( m_orientation->GetStringSelection() != INDETERMINATE_ACTION )
-        {
             sch_text->SetLabelSpinStyle( (LABEL_SPIN_STYLE::SPIN) m_orientation->GetSelection() );
-            m_hasChange = true;
-        }
     }
 
     if( lineItem )
     {
         if( !m_lineWidth.IsIndeterminate() )
-        {
             lineItem->SetLineWidth( m_lineWidth.GetValue() );
-            m_hasChange = true;
-        }
 
         if( m_lineStyle->GetStringSelection() != INDETERMINATE_ACTION )
         {
@@ -302,15 +279,10 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
                 lineItem->SetLineStyle( PLOT_DASH_TYPE::DEFAULT );
             else
                 lineItem->SetLineStyle( m_lineStyle->GetSelection() );
-
-            m_hasChange = true;
         }
 
         if( m_setColor->GetValue() )
-        {
             lineItem->SetLineColor( m_colorSwatch->GetSwatchColor() );
-            m_hasChange = true;
-        }
     }
 }
 
@@ -417,22 +389,13 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         if( m_sheetBorders->GetValue() )
         {
             if( !m_lineWidth.IsIndeterminate() )
-            {
                 sheet->SetBorderWidth( m_lineWidth.GetValue() );
-                m_hasChange = true;
-            }
 
             if( m_setColor->GetValue() )
-            {
                 sheet->SetBorderColor( m_colorSwatch->GetSwatchColor() );
-                m_hasChange = true;
-            }
 
             if( m_setBgColor->GetValue() )
-            {
                 sheet->SetBackgroundColor( m_bgColorSwatch->GetSwatchColor() );
-                m_hasChange = true;
-            }
         }
     }
     else if( aItem->Type() == SCH_JUNCTION_T )
@@ -444,19 +407,15 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
             if( item->GetLayer() == LAYER_BUS )
             {
                 if( m_buses->GetValue() && m_setColor->GetValue() )
-                {
                     junction->SetColor( m_colorSwatch->GetSwatchColor() );
-                    m_hasChange = true;
-                }
+
                 break;
             }
             else if( item->GetLayer() == LAYER_WIRE )
             {
                 if( m_wires->GetValue() && m_setColor->GetValue() )
-                {
                     junction->SetColor( m_colorSwatch->GetSwatchColor() );
-                    m_hasChange = true;
-                }
+
                 break;
             }
         }
@@ -491,12 +450,12 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         if( screen )
         {
             m_parent->SetCurrentSheet( sheetPath );
-            m_hasChange = false;
+            m_appendUndo = false;
 
-            for( auto item : screen->Items() )
+            for( SCH_ITEM* item : screen->Items() )
                 visitItem( sheetPath, item );
 
-            if( m_hasChange )
+            if( m_appendUndo )
             {
                 m_parent->OnModify();
                 m_parent->HardRedraw();
