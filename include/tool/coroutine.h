@@ -46,6 +46,9 @@
 #include <memory>
 #include <advanced_config.h>
 
+#include <trace_helpers.h>
+#include <wx/log.h>
+
 /**
  *  Implement a coroutine.
  *
@@ -267,6 +270,9 @@ public:
         m_caller.tsan_fiber     = __tsan_get_current_fiber();
         m_caller.own_tsan_fiber = false;
 #endif
+
+        wxLogTrace( kicadTraceCoroutineStack,  "COROUTINE::Call (from root)" );
+
         ctx.Continue( doCall( &args, aArg ) );
 
         return Running();
@@ -283,6 +289,9 @@ public:
     bool Call( const COROUTINE& aCor, ArgType aArg )
     {
         INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROUTINE, this, aCor.m_callContext };
+
+        wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::Call (from routine)" );
+
         doCall( &args, aArg );
         // we will not be asked to continue
 
@@ -307,6 +316,9 @@ public:
         m_caller.tsan_fiber     = __tsan_get_current_fiber();
         m_caller.own_tsan_fiber = false;
 #endif
+
+        wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::Resume (from root)" );
+
         ctx.Continue( doResume( &args ) );
 
         return Running();
@@ -323,6 +335,9 @@ public:
     bool Resume( const COROUTINE& aCor )
     {
         INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROUTINE, this, aCor.m_callContext };
+
+        wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::Resume (from routine)" );
+
         doResume( &args );
         // we will not be asked to continue
 
@@ -379,6 +394,9 @@ private:
         m_callee.tsan_fiber     = __tsan_create_fiber( 0 );
         m_callee.own_tsan_fiber = true;
 #endif
+
+        wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::doCall" );
+
         m_callee.ctx = libcontext::make_fcontext( sp, stackSize, callerStub );
         m_running = true;
 
@@ -417,6 +435,9 @@ private:
         // Tell TSAN we are changing fibers to the callee
         __tsan_switch_to_fiber( m_callee.tsan_fiber, 0 );
 #endif
+
+        wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::jumpIn" );
+
         args = reinterpret_cast<INVOCATION_ARGS*>(
             libcontext::jump_fcontext( &( m_caller.ctx ), m_callee.ctx,
                                        reinterpret_cast<intptr_t>( args ) )
@@ -434,6 +455,9 @@ private:
         // Tell TSAN we are changing fibers back to the caller
         __tsan_switch_to_fiber( m_caller.tsan_fiber, 0 );
 #endif
+
+        wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::jumpOut" );
+
         ret = reinterpret_cast<INVOCATION_ARGS*>(
             libcontext::jump_fcontext( &( m_callee.ctx ), m_caller.ctx,
                                        reinterpret_cast<intptr_t>( &args ) )

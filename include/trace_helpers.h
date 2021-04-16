@@ -83,6 +83,13 @@ extern const wxChar* const kicadTraceKeyEvent;
 extern const wxChar* const kicadTraceToolStack;
 
 /**
+ * Flag to enable tracing of the coroutine call stack.
+ *
+ * Use "KICAD_COROUTINE_STACK" to enable.
+ */
+extern const wxChar* const kicadTraceCoroutineStack;
+
+/**
  * Flag to enable auto save feature debug tracing.
  *
  * Use "KICAD_AUTOSAVE" to enable.
