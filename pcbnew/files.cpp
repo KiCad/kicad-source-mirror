@@ -1101,7 +1101,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     wxFileName currentRules( GetDesignRulesPath() );
 
     if( aCreateProject && currentRules.FileExists() && !rulesFile.FileExists() )
-        KiCopyFile( currentRules, rulesFile.GetFullPath(), msg );
+        KiCopyFile( currentRules.GetFullPath(), rulesFile.GetFullPath(), msg );
 
     if( !msg.IsEmpty() )
     {
