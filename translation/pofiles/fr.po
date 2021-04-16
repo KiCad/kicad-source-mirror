@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-15 19:37+0200\n"
-"PO-Revision-Date: 2021-04-15 19:45+0200\n"
+"POT-Creation-Date: 2021-04-16 08:50+0200\n"
+"PO-Revision-Date: 2021-04-16 08:39+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1404,7 +1404,7 @@ msgstr ""
 "sur la couche de sérigraphie."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "Bitmap to Component Converter"
 msgstr "Convertisseur Bitmap en Composant"
 
@@ -6703,6 +6703,7 @@ msgid "DXF Files"
 msgstr "Fichiers DXF"
 
 #: common/wildcards_and_files_ext.cpp:490
+#: resources/linux/mime/kicad-gerbers.xml.in:21
 msgid "Gerber job file"
 msgstr "Fichier Gerber job"
 
@@ -7349,28 +7350,28 @@ msgstr ""
 "Le label hiérarchique %s n'a pas de pin de feuille correspondante dans la "
 "feuille parente."
 
-#: eeschema/cross-probing.cpp:261 pcbnew/cross-probing.cpp:167
+#: eeschema/cross-probing.cpp:265 pcbnew/cross-probing.cpp:167
 #, c-format
 msgid "%s pin %s found"
 msgstr "%s pin %s trouvée"
 
-#: eeschema/cross-probing.cpp:263
+#: eeschema/cross-probing.cpp:267
 #, c-format
 msgid "%s found but pin %s not found"
 msgstr "%s trouvé mais pin %s non trouvée"
 
-#: eeschema/cross-probing.cpp:267 pcbnew/cross-probing.cpp:180
+#: eeschema/cross-probing.cpp:271 pcbnew/cross-probing.cpp:180
 #, c-format
 msgid "%s found"
 msgstr "%s trouvé"
 
-#: eeschema/cross-probing.cpp:272 pcbnew/cross-probing.cpp:163
+#: eeschema/cross-probing.cpp:276 pcbnew/cross-probing.cpp:163
 #: pcbnew/cross-probing.cpp:182
 #, c-format
 msgid "%s not found"
 msgstr "%s  non trouvé"
 
-#: eeschema/cross-probing.cpp:323
+#: eeschema/cross-probing.cpp:329
 msgid "Selected net:"
 msgstr "Net sélectionné:"
 
@@ -17454,7 +17455,7 @@ msgid "Clear Recent Job Files"
 msgstr "Effacer Liste Fichiers Job Récents"
 
 #: gerbview/gerbview_frame.cpp:93
-#: resources/linux/launchers/org.kicad.gerbview.desktop:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
 msgid "KiCad Gerber Viewer"
 msgstr "Visualisateur Gerber KiCad"
 
@@ -18580,6 +18581,22 @@ msgstr "%s fermé [pid=%d]\n"
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
+
+#: libs/kiplatform/msw/app.cpp:49
+msgid ""
+"Windows 7 and older is no longer supported by KiCad and its dependencies."
+msgstr ""
+"Windows 7 et plus anciennes version ne sont plus prises en charge par KiCad "
+"et ses dépendances."
+
+#: libs/kiplatform/msw/app.cpp:50
+msgid "Unsupported Operating System"
+msgstr "Système d’exploitation non pris en charge"
+
+#: libs/kiplatform/msw/environment.cpp:56
+#, c-format
+msgid "Error code: %d"
+msgstr "Code d’erreur: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -19950,7 +19967,7 @@ msgid "Board Classes"
 msgstr "Classes de Circuits Imprimés"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:421
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
@@ -28172,6 +28189,8 @@ msgid ""
 "\n"
 "### Examples\n"
 "\n"
+"    (version 1)\n"
+"\n"
 "    (rule HV\n"
 "       (constraint clearance (min 1.5mm))\n"
 "       (condition \"A.NetClass == 'HV'\"))\n"
@@ -28196,7 +28215,10 @@ msgid ""
 "\n"
 "### Notes\n"
 "\n"
-"Version clause must be the first clause.\n"
+"Version clause must be the first clause.  It indicates the syntax version of "
+"the file so that \n"
+"future rules parsers can perform automatic updates.  It should be\n"
+"set to \"1\".\n"
 "\n"
 "Rules should be ordered by specificity.  Later rules take\n"
 "precedence over earlier rules; once a matching rule is found\n"
@@ -28373,6 +28395,8 @@ msgstr ""
 "\n"
 "### Examples\n"
 "\n"
+"    (version 1)\n"
+"\n"
 "    (rule HV\n"
 "       (constraint clearance (min 1.5mm))\n"
 "       (condition \"A.NetClass == 'HV'\"))\n"
@@ -28397,7 +28421,10 @@ msgstr ""
 "\n"
 "### Notes\n"
 "\n"
-"Version clause must be the first clause.\n"
+"Version clause must be the first clause.  It indicates the syntax version of "
+"the file so that \n"
+"future rules parsers can perform automatic updates.  It should be\n"
+"set to \"1\".\n"
 "\n"
 "Rules should be ordered by specificity.  Later rules take\n"
 "precedence over earlier rules; once a matching rule is found\n"
@@ -35868,87 +35895,119 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop:9
+#: plugins/3d/vrml/vrml.cpp:219
+msgid "[INFO] load failed: input line too long\n"
+msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
+
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop:12
-#| msgid "Run Bitmap2Component"
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
-#: resources/linux/launchers/org.kicad.eeschema.desktop:10
-msgid "KiCad Schematic Editor (Standalone)"
-msgstr "Editeur de Schématique KiCad (indépendant)."
-
-#: resources/linux/launchers/org.kicad.eeschema.desktop:11
-msgid "Schematic Capture Tool"
-msgstr "Outil de Capture Schématique"
-
-#: resources/linux/launchers/org.kicad.eeschema.desktop:12
-msgid "Standalone schematic editor for KiCad schematics"
-msgstr "Editeur de schématique indépendant pour les schémas KiCad"
-
-#: resources/linux/launchers/org.kicad.eeschema.desktop:13
-#| msgid "Eeschema"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop:11
-msgid "Gerber File Viewer"
-msgstr "Visionneuse de fichiers Gerber"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+msgid "KiCad Schematic Editor (Standalone)"
+msgstr "Editeur de Schématique KiCad (indépendant)."
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop:12
-msgid "View Gerber files"
-msgstr "Visualiser fichiers Gerber"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+msgid "Schematic Capture Tool"
+msgstr "Outil de Capture Schématique"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop:13
-#| msgid "Gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+msgid "Standalone schematic editor for KiCad schematics"
+msgstr "Editeur de schématique indépendant pour les schémas KiCad"
+
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "gerbview"
 msgstr "gerbview"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+msgid "Gerber File Viewer"
+msgstr "Visionneuse de fichiers Gerber"
+
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+msgid "View Gerber files"
+msgstr "Visualiser fichiers Gerber"
+
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
+
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "KiCad"
 msgstr "KiCad"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 msgid "EDA Suite"
 msgstr "Suite CAO Electronique"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop:10
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+msgid "pcbnew"
+msgstr "pcbnew"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editeur de PCB KiCad (indépendant)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "PCB layout editor"
 msgstr "Éditeur de circuit imprimé"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop:13
-#| msgid "Pcbnew"
-msgid "pcbnew"
-msgstr "pcbnew"
+#: resources/linux/mime/kicad-gerbers.xml.in:5
+msgid "Gerber file"
+msgstr "Fichier Gerber"
+
+#: resources/linux/mime/kicad-gerbers.xml.in:26
+msgid "Excellon drill file"
+msgstr "Fichier de perçage Excellon"
+
+#: resources/linux/mime/kicad-kicad.xml.in:5
+msgid "KiCad Project"
+msgstr "Projet KiCad"
+
+#: resources/linux/mime/kicad-kicad.xml.in:11
+msgid "KiCad Schematic"
+msgstr "Schématique KiCad"
+
+#: resources/linux/mime/kicad-kicad.xml.in:23
+msgid "KiCad Printed Circuit Board"
+msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid ""
 #~ "KiCad is a Cross Platform and Open Source Electronics Design Automation "
@@ -36100,15 +36159,6 @@ msgstr "pcbnew"
 #~ msgid "Switches the corner type of the currently routed track."
 #~ msgstr "Commute le type de raccord de la piste en cours de tracé."
 
-#~ msgid ""
-#~ "Windows 7 and older is no longer supported by KiCad and its dependencies."
-#~ msgstr ""
-#~ "Windows 7 et plus anciennes version ne sont plus prises en charge par "
-#~ "KiCad et ses dépendances."
-
-#~ msgid "Unsupported Operating System"
-#~ msgstr "Système d’exploitation non pris en charge"
-
 #~ msgid "Plain PCB (no copper or silk)"
 #~ msgstr "PCB simple (pas de cuivre ni de sérigraphie)"
 
@@ -36119,40 +36169,33 @@ msgstr "pcbnew"
 #~ "Le texte ne sera pas lisible avec une épaisseur supérieure à 1/4 de sa "
 #~ "largeur ou hauteur."
 
-#, c-format
 #~ msgid "Track width less than minimum track width (%s)."
 #~ msgstr "Largeur de piste inférieure à la largeur de piste minimale (%s)."
 
-#, c-format
 #~ msgid "Via diameter less than minimum via diameter (%s)."
 #~ msgstr "Diamètre via inférieur au diamètre via minimum (%s)."
 
-#, c-format
 #~ msgid "Via hole diameter less than minimum through hole diameter (%s)."
 #~ msgstr "Diamètre perçage via inférieur au diamètre minimum (%s)."
 
 #~ msgid "Via hole diameter larger than via diameter."
 #~ msgstr "Diamètre de perçage de via plus grand que la taille de via."
 
-#, c-format
 #~ msgid "Diameter and hole leave via annulus less than minimum (%s)."
 #~ msgstr ""
 #~ "Le diamètre de perçage et la taille de via laissent un anneau plus mince "
 #~ "que le minimum (%s)."
 
-#, c-format
 #~ msgid "Differential pair track width less than minimum track width (%s)."
 #~ msgstr ""
 #~ "La largeur de piste de la paire différentielle est inférieure à la "
 #~ "largeur de piste minimale (%s)."
 
-#, c-format
 #~ msgid "Differential pair via gap less than minimum clearance (%s)."
 #~ msgstr ""
 #~ "Séparation des vias de la paire différentielle est inférieure à "
 #~ "l'isolation minimale (%s)."
 
-#, c-format
 #~ msgid "Change %s footprint from \"%s\" to \"%s\"."
 #~ msgstr "Change empreinte \"%s\" de \"%s\" en \"%s\"."
 
@@ -36248,7 +36291,6 @@ msgstr "pcbnew"
 #~ msgid "Vout = Vref * (R1 + R2) / R2"
 #~ msgstr "Vout = Vref * (R1 + R2) / R2"
 
-#, c-format
 #~ msgid "Directory \"%s\" is not writable."
 #~ msgstr "Le répertoire \"%s\" est non accessible en écriture."
 
@@ -36297,7 +36339,6 @@ msgstr "pcbnew"
 #~ msgid "Flip (mirror) the board view"
 #~ msgstr "Retourner (miroir) la vue du circuit imprimé"
 
-#, c-format
 #~ msgid "Render time %.0f ms ( %.1f fps)"
 #~ msgstr "Temps de rendu %.0f ms ( %.1f fps)"
 
@@ -36389,7 +36430,6 @@ msgstr "pcbnew"
 #~ msgid "mu Rel I"
 #~ msgstr "mu Rel I"
 
-#, c-format
 #~ msgid ""
 #~ "Project name:\n"
 #~ "%s\n"
@@ -36409,7 +36449,6 @@ msgstr "pcbnew"
 #~ msgid "Regulator list change"
 #~ msgstr "Changement de la Liste des Régulateurs"
 
-#, c-format
 #~ msgid ""
 #~ "Board thickness %s differs from stackup thickness %s\n"
 #~ "Allowed max error %s"
@@ -36462,7 +36501,6 @@ msgstr "pcbnew"
 #~ "L'épaisseur sera la même pour toutes les couches diélectriques non "
 #~ "verrouillées."
 
-#, c-format
 #~ msgid "Via drill less than minimum through hole (%s)."
 #~ msgstr "Perçage de via inférieur au perçage minimum  ( %s)."
 
@@ -36523,7 +36561,6 @@ msgstr "pcbnew"
 #~ "Le nouveau format de fichier ne peut pas être ouvert avec les versions "
 #~ "précédentes de KiCad."
 
-#, c-format
 #~ msgid "Error saving %s symbol library table."
 #~ msgstr "Erreur en sauvant la table de librairie de symboles %s"
 
@@ -36580,7 +36617,6 @@ msgstr "pcbnew"
 #~ msgid "Filter Selection"
 #~ msgstr "Filtre de sélection"
 
-#, c-format
 #~ msgid ""
 #~ "Value < %s  can be time consuming when \n"
 #~ "filling zones."
@@ -36591,7 +36627,6 @@ msgstr "pcbnew"
 #~ msgid "Filter the types of items in the selection"
 #~ msgstr "Filtre des types d'éléments dans la sélection"
 
-#, c-format
 #~ msgid "Multiple item %s%s (unit %d)\n"
 #~ msgstr "Multiple élément %s%s (unité %d]\n"
 
@@ -36620,15 +36655,12 @@ msgstr "pcbnew"
 #~ "Force la direction des segments à H, V ou 45° en création de segments sur "
 #~ "couches techniques."
 
-#, c-format
 #~ msgid "More than one symbol found in symbol file \"%s\"."
 #~ msgstr "Plus de 1 symbole trouvé dans le fichier de symbole \"%s\"."
 
-#, c-format
 #~ msgid "Saving symbol in \"%s\""
 #~ msgstr "Symbole sauvé en  \"%s\""
 
-#, c-format
 #~ msgid "An error occurred saving symbol file \"%s\""
 #~ msgstr ""
 #~ "Une erreur s'est produite lors de la sauvegarde du fichier symbole \"%s\""
@@ -36760,11 +36792,9 @@ msgstr "pcbnew"
 #~ msgid "Drill too small"
 #~ msgstr "Perçage trop petit"
 
-#, c-format
 #~ msgid "(%s %s; actual %s)"
 #~ msgstr "(%s %s; réel %s)"
 
-#, c-format
 #~ msgid ""
 #~ "The selected file is not valid or might be corrupt: The layer stack "
 #~ "refers to layer ID '%s' which does not exist in the layer definitions."
@@ -36781,7 +36811,6 @@ msgstr "pcbnew"
 #~ "La marge locale de masque de soudure doit être nulle ou plus grande que "
 #~ "zéro"
 
-#, c-format
 #~ msgid "Pad local solder mask clearance must be greater than %s"
 #~ msgstr ""
 #~ "La marge locale de masque de soudure du pad doit être plus grande que %s"
@@ -36801,7 +36830,6 @@ msgstr "pcbnew"
 #~ msgstr ""
 #~ "Forme de pad incorrecte: la forme doit être équivalente à un seul polygone"
 
-#, c-format
 #~ msgid ""
 #~ "This will change the net assigned to %s pad %s to %s.\n"
 #~ "Do you wish to continue?"
@@ -36809,7 +36837,6 @@ msgstr "pcbnew"
 #~ "Cela va changer le net assigné à %s pad %s à %s.\n"
 #~ "Souhaitez-vous continuer?"
 
-#, c-format
 #~ msgid ""
 #~ "This will change the net assigned to %lu connected pads to %s.\n"
 #~ "Do you wish to continue?"
@@ -36819,10 +36846,6 @@ msgstr "pcbnew"
 
 #~ msgid "Continue"
 #~ msgstr "Continuer"
-
-#, fuzzy, c-format
-#~ msgid "Error code: %d"
-#~ msgstr "Erreur: "
 
 #~ msgid "Multi-Symbol Placement"
 #~ msgstr "Placement multi-symbole"
@@ -36836,32 +36859,27 @@ msgstr "pcbnew"
 #~ msgid "failed to open file"
 #~ msgstr "impossible d'ouvrir le fichier"
 
-#, c-format
 #~ msgid "pin %s"
 #~ msgstr "pin %s"
 
 #~ msgid "component"
 #~ msgstr "composant"
 
-#, c-format
 #~ msgid "%s %s found"
 #~ msgstr "%s %s trouvé"
 
-#, c-format
 #~ msgid "Component %s not found"
 #~ msgstr "Composant %s non trouvé"
 
 #~ msgid "No Colon in Nicknames"
 #~ msgstr "Pas de \"deux points\" dans les Noms Logiques"
 
-#, c-format
 #~ msgid "Duplicate Nickname: \"%s\"."
 #~ msgstr "Nom logique: \"%s\" dupliqué."
 
 #~ msgid "Please Delete or Modify One"
 #~ msgstr "SVP supprimer ou modifier l'un d'eux"
 
-#, c-format
 #~ msgid ""
 #~ "The current configuration does not include a library with the\n"
 #~ "nickname \"%s\".  Use Manage Symbol Libraries\n"
@@ -36878,7 +36896,6 @@ msgstr "pcbnew"
 #~ msgid "Edit Component Name"
 #~ msgstr "Editer Nom du Composant"
 
-#, c-format
 #~ msgid ""
 #~ "Current project directory:\n"
 #~ "%s"
@@ -36919,15 +36936,12 @@ msgstr "pcbnew"
 #~ msgid "CTRL+ALT"
 #~ msgstr "CTRL+ALT"
 
-#, c-format
 #~ msgid "Duplicate nicknames \"%s\"."
 #~ msgstr "Noms Logiques \"%s\" dupliqués."
 
-#, c-format
 #~ msgid "Component \"%s\" replaced in \"%s\""
 #~ msgstr "Composant \"%s\" remplacé en \"%s\""
 
-#, c-format
 #~ msgid "Component \"%s\" added in \"%s\""
 #~ msgstr "Composant \"%s\" ajouté en \"%s\""
 
@@ -36943,7 +36957,6 @@ msgstr "pcbnew"
 #~ msgid "Plot sheet background color"
 #~ msgstr "Tracer la couleur de fond de la feuille"
 
-#, c-format
 #~ msgid ""
 #~ "Library \"%s\" is read only and must be saved as a different library."
 #~ msgstr ""
@@ -36975,15 +36988,12 @@ msgstr "pcbnew"
 #~ msgid "Default Values:"
 #~ msgstr "Valeurs par Défaut:"
 
-#, c-format
 #~ msgid "File \"%s\" written"
 #~ msgstr "Fichier \"%s\" écrit"
 
-#, c-format
 #~ msgid "Page size: width %.4g height %.4g"
 #~ msgstr "Dim feuille: largeur %.4g hauteur %.4g"
 
-#, c-format
 #~ msgid "Wrote board file: \"%s\""
 #~ msgstr "Écriture fichier CI: \"%s\""
 
@@ -37000,7 +37010,6 @@ msgstr "pcbnew"
 #~ msgid "Keepout violation"
 #~ msgstr "Violation de zone interdite"
 
-#, c-format
 #~ msgid ""
 #~ "File \"%s\" is format version: %d.\n"
 #~ "I only support format version <= %d.\n"
@@ -37031,7 +37040,6 @@ msgstr "pcbnew"
 #~ msgid "Anonymous"
 #~ msgstr "Anonyme"
 
-#, c-format
 #~ msgid "Cannot find footprint for symbol '%s'."
 #~ msgstr "Impossible de trouver l'empreinte pour le symbole \"%s\"."
 
@@ -37070,15 +37078,12 @@ msgstr "pcbnew"
 #~ msgid "Through Hole Pads"
 #~ msgstr "Pads Traversants"
 
-#, c-format
 #~ msgid "Change '%s' labels to '%s'."
 #~ msgstr "Change labels de \"%s\" en \"%s\"."
 
-#, c-format
 #~ msgid "Change '%s' global labels to '%s'."
 #~ msgstr "Change labels globaux de \"%s\" en \"%s\"."
 
-#, c-format
 #~ msgid "Change '%s' hierarchical label to '%s'."
 #~ msgstr "Change label hiérarchique de \"%s\" en \"%s\"."
 
@@ -37097,14 +37102,12 @@ msgstr "pcbnew"
 #~ msgid "Reset 3D models"
 #~ msgstr "Réinitialiser modèles 3D"
 
-#, c-format
 #~ msgid "%s %s \"%s\" from \"%s\" to \"%s\""
 #~ msgstr "%s %s \"%s\" de \"%s\" en \"%s\""
 
 #~ msgid "symbols"
 #~ msgstr "symboles"
 
-#, c-format
 #~ msgid "%s footprint \"%s\" (from \"%s\") to \"%s\""
 #~ msgstr "%s empreinte \"%s\" (de \"%s\") en \"%s\""
 
@@ -41460,9 +41463,6 @@ msgstr "pcbnew"
 
 #~ msgid "Run Gerbview"
 #~ msgstr "Lancer Gerbview"
-
-#~ msgid "Run PcbCalculator"
-#~ msgstr "Lancer PcbCalculator"
 
 #~ msgid "Run PlEditor"
 #~ msgstr "Lancer PlEditor"
