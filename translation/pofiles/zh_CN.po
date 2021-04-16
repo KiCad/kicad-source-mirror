@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-04-15 16:43+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-04-17 23:05+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -28741,11 +28741,9 @@ msgid "No access rights to write to file \"%s\""
 msgstr "没有权限写入文件 \"%s\""
 
 #: pcbnew/files.cpp:949 pcbnew/files.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr ""
-"保存电路板文件 '%s' 出错。\n"
-"%s"
+msgstr "保存自定义规则文件 '%s' 出错。"
 
 #: pcbnew/files.cpp:980 pcbnew/files.cpp:1082
 #, c-format
@@ -34838,37 +34836,32 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "[信息] 载入失败：输入行太长\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "图片转换器"
+msgstr "KiCad 图片转换器"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "从位图创建用于 KiCad 的元件"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-#, fuzzy
 msgid "bitmap2component"
-msgstr "运行 Bitmap2Component"
+msgstr "位图到组件"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
-#, fuzzy
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr "KiCad 原理图编辑器"
+msgstr "KiCad 原理图编辑器 (独立版)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
-#, fuzzy
 msgid "Schematic Capture Tool"
-msgstr "原理图线色"
+msgstr "原理图捕获工具"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr ""
+msgstr "KiCad 原理图的独立原理图编辑器"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-#, fuzzy
 msgid "eeschema"
-msgstr "Eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -34879,9 +34872,8 @@ msgid "View Gerber files"
 msgstr "查看 Gerber 文件"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-#, fuzzy
 msgid "gerbview"
-msgstr "GerbView"
+msgstr "gerbview 软件"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -34894,39 +34886,35 @@ msgstr "EDA 工具箱"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "Suite of tools for schematic design and circuit board layout"
-msgstr ""
+msgstr "用于原理图设计和电路板布局的工具套件"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
-#, fuzzy
 msgid "KiCad PCB Calculator"
-msgstr "PCB 计算器"
+msgstr "KiCad PCB 计算器"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "用于各种电子相关计算的计算器"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
-#, fuzzy
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "KiCad PCB 编辑器"
+msgstr "KiCad PCB 编辑器 (独立版）"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
-#, fuzzy
 msgid "PCB layout editor"
-msgstr "图框编辑器"
+msgstr "PCB 布局编辑器"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr ""
+msgstr "Kicad 板的独立电路板编辑器"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-#, fuzzy
 msgid "pcbnew"
-msgstr "Pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
-msgstr ""
+msgstr "用于原理图和电路板设计的电子设计自动化套件"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -34937,23 +34925,23 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"KiCad 是一款免费和开源的电子设计自动化（EDA）套件。 "
+"它具有示意图捕获、集成电路仿真、印刷电路板（PCB）布局、3D渲染和绘图/数据导出到众多格式等功能。 KiCad "
+"还包括一个高质量的组件库，具有成千上万的符号、封装和3D模型。KiCad 具有最小的系统要求，可在Linux、Windows和MacOS上运行。"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
-#, fuzzy
 msgid "KiCad Main Window"
-msgstr "KiCad 手册 (&M)"
+msgstr "KiCad 主窗口"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:67
-#, fuzzy
 msgid "KiCad PCB Layout Editor"
-msgstr "KiCad PCB 编辑器"
+msgstr "KiCad PCB 布局编辑器"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:84
 msgid "The KiCad Developers"
 msgstr "KiCad 开发者们"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
 msgstr "Gerber 文件"
 
