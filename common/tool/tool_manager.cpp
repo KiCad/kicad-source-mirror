@@ -400,6 +400,9 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
 
     TOOL_ID id = aTool->GetId();
 
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::runTool - running tool %s",
+                                     aTool->GetName() );
+
     if( aTool->GetType() == INTERACTIVE )
         static_cast<TOOL_INTERACTIVE*>( aTool )->resetTransitions();
 
