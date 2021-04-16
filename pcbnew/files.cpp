@@ -941,8 +941,10 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     if( !projectFile.FileExists() && aChangeProject )
         GetSettingsManager()->SaveProjectAs( projectFile.GetFullPath() );
 
-    if( !rulesFile.FileExists() && aChangeProject )
-        KiCopyFile( GetDesignRulesPath(), rulesFile.GetFullPath(), msg );
+    wxFileName currentRules( GetDesignRulesPath() );
+
+    if( currentRules.FileExists() && !rulesFile.FileExists() && aChangeProject )
+        KiCopyFile( currentRules.GetFullPath(), rulesFile.GetFullPath(), msg );
 
     if( !msg.IsEmpty() )
     {
@@ -1096,8 +1098,10 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     if( aCreateProject && !projectFile.FileExists() )
         GetSettingsManager()->SaveProjectCopy( projectFile.GetFullPath() );
 
-    if( aCreateProject && !rulesFile.FileExists() )
-        KiCopyFile( GetDesignRulesPath(), rulesFile.GetFullPath(), msg );
+    wxFileName currentRules( GetDesignRulesPath() );
+
+    if( aCreateProject && currentRules.FileExists() && !rulesFile.FileExists() )
+        KiCopyFile( currentRules, rulesFile.GetFullPath(), msg );
 
     if( !msg.IsEmpty() )
     {
