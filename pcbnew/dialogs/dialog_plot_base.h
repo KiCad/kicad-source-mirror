@@ -73,7 +73,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotModuleValueOpt;
 		wxCheckBox* m_plotModuleRefOpt;
 		wxCheckBox* m_plotInvisibleText;
-		wxCheckBox* m_excludeEdgeLayerOpt;
+		wxCheckBox* m_includeEdgeLayerOpt;
 		wxCheckBox* m_sketchPadsOnFabLayers;
 		wxCheckBox* m_plotNoViaOnMaskOpt;
 		wxCheckBox* m_useAuxOriginCheckBox;

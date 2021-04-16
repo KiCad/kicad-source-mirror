@@ -277,15 +277,8 @@ public:
     void        SetExcludeEdgeLayer( bool aFlag ) { m_excludeEdgeLayer = aFlag; }
     bool        GetExcludeEdgeLayer() const { return m_excludeEdgeLayer; }
 
-    void SetFormat( PLOT_FORMAT aFormat )
-    {
-        m_format = aFormat;
-    }
-
-    PLOT_FORMAT GetFormat() const
-    {
-        return m_format;
-    }
+    void        SetFormat( PLOT_FORMAT aFormat ) { m_format = aFormat; }
+    PLOT_FORMAT GetFormat() const { return m_format; }
 
     void        SetOutputDirectory( wxString aDir ) { m_outputDirectory = aDir; }
     wxString    GetOutputDirectory() const { return m_outputDirectory; }

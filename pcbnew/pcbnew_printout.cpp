@@ -37,10 +37,10 @@
 PCBNEW_PRINTOUT_SETTINGS::PCBNEW_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
     : BOARD_PRINTOUT_SETTINGS( aPageInfo )
 {
-    m_drillMarks = SMALL_DRILL_SHAPE;
-    m_pagination = ALL_LAYERS;
-    m_noEdgeLayer = false;
-    m_asItemCheckboxes = false;
+    m_DrillMarks = SMALL_DRILL_SHAPE;
+    m_Pagination = ALL_LAYERS;
+    m_PrintEdgeCutsOnAllPages = true;
+    m_AsItemCheckboxes = false;
 }
 
 
@@ -50,8 +50,8 @@ void PCBNEW_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
 
     if( auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
     {
-        m_drillMarks = static_cast<DRILL_MARK_SHAPE_T>( cfg->m_Plot.pads_drill_mode );
-        m_pagination = static_cast<PAGINATION_T>( cfg->m_Plot.all_layers_on_one_page );
+        m_DrillMarks = static_cast<DRILL_MARK_SHAPE_T>( cfg->m_Plot.pads_drill_mode );
+        m_Pagination = static_cast<PAGINATION_T>( cfg->m_Plot.all_layers_on_one_page );
         m_Mirror     = cfg->m_Plot.mirror;
     }
 }
@@ -63,8 +63,8 @@ void PCBNEW_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 
     if( auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
     {
-        cfg->m_Plot.pads_drill_mode        = m_drillMarks;
-        cfg->m_Plot.all_layers_on_one_page = m_pagination;
+        cfg->m_Plot.pads_drill_mode        = m_DrillMarks;
+        cfg->m_Plot.all_layers_on_one_page = m_Pagination;
         cfg->m_Plot.mirror                 = m_Mirror;
     }
 }
@@ -88,7 +88,7 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
     PCB_LAYER_ID extractLayer;
 
     // compute layer mask from page number if we want one page per layer
-    if( m_pcbnewSettings.m_pagination == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE )
+    if( m_pcbnewSettings.m_Pagination == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE )
     {
         // This sequence is TBD, call a different sequencer if needed, such as Seq().
         // Could not find documentation on page order.
@@ -110,7 +110,7 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
         layerName = LSET::Name( extractLayer );
 
     // In Pcbnew we can want the layer EDGE always printed
-    if( !m_pcbnewSettings.m_noEdgeLayer )
+    if( m_pcbnewSettings.m_PrintEdgeCutsOnAllPages )
         m_settings.m_LayerSet.set( Edge_Cuts );
 
     DrawPage( layerName, aPage, pageCount );
@@ -144,7 +144,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
     RENDER_SETTINGS* renderSettings = aView.GetPainter()->GetSettings();
     COLOR4D          backgroundColor = renderSettings->GetLayerColor( LAYER_PCB_BACKGROUND );
 
-    if( m_pcbnewSettings.m_asItemCheckboxes )
+    if( m_pcbnewSettings.m_AsItemCheckboxes )
     {
         auto setVisibility =
                 [&]( GAL_LAYER_ID aLayer )
@@ -222,7 +222,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
             aView.SetLayerVisible( layer, true );
     }
 
-    if( m_pcbnewSettings.m_drillMarks != PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE )
+    if( m_pcbnewSettings.m_DrillMarks != PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE )
     {
         // Enable hole layers to draw drill marks
         for( int layer : { LAYER_PAD_PLATEDHOLES, LAYER_NON_PLATEDHOLES, LAYER_VIA_HOLES } )
@@ -240,7 +240,7 @@ void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
 
     KIGFX::PCB_PRINT_PAINTER& painter = dynamic_cast<KIGFX::PCB_PRINT_PAINTER&>( aPainter );
 
-    switch( m_pcbnewSettings.m_drillMarks )
+    switch( m_pcbnewSettings.m_DrillMarks )
     {
     case PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE:
         painter.SetDrillMarks( false, 0 );
@@ -264,7 +264,7 @@ void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
     }
 
     painter.GetSettings()->SetDrawIndividualViaLayers(
-            m_pcbnewSettings.m_pagination == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE );
+            m_pcbnewSettings.m_Pagination == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE );
 }
 
 

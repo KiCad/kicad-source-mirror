@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,76 +16,79 @@ DIALOG_PRINT_GENERIC_BASE::DIALOG_PRINT_GENERIC_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
+	m_bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bOptionsSizer;
-	bOptionsSizer = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bRightCol;
+	bRightCol = new wxBoxSizer( wxVERTICAL );
 
-	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
+	m_sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
 
-	gbOptionsSizer = new wxGridBagSizer( 2, 0 );
-	gbOptionsSizer->SetFlexibleDirection( wxBOTH );
-	gbOptionsSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	gbOptionsSizer->SetEmptyCellSize( wxSize( -1,10 ) );
+	m_gbOptionsSizer = new wxGridBagSizer( 3, 0 );
+	m_gbOptionsSizer->SetFlexibleDirection( wxBOTH );
+	m_gbOptionsSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_gbOptionsSizer->SetEmptyCellSize( wxSize( -1,10 ) );
 
-	m_outputModeLabel = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_outputModeLabel = new wxStaticText( m_sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputModeLabel->Wrap( -1 );
-	gbOptionsSizer->Add( m_outputModeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_gbOptionsSizer->Add( m_outputModeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_outputModeChoices[] = { _("Color"), _("Black and white") };
 	int m_outputModeNChoices = sizeof( m_outputModeChoices ) / sizeof( wxString );
-	m_outputMode = new wxChoice( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_outputModeNChoices, m_outputModeChoices, 0 );
+	m_outputMode = new wxChoice( m_sbOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_outputModeNChoices, m_outputModeChoices, 0 );
 	m_outputMode->SetSelection( 0 );
-	gbOptionsSizer->Add( m_outputMode, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+	m_gbOptionsSizer->Add( m_outputMode, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_titleBlock = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_FRAME_SEL, _("Print border and title block"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_titleBlock = new wxCheckBox( m_sbOptionsSizer->GetStaticBox(), wxID_FRAME_SEL, _("Print border and title block"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_titleBlock->SetValue(true);
 	m_titleBlock->SetToolTip( _("Print Frame references.") );
 
-	gbOptionsSizer->Add( m_titleBlock, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxALL|wxEXPAND, 5 );
+	m_gbOptionsSizer->Add( m_titleBlock, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	gbOptionsSizer->AddGrowableCol( 1 );
+	m_gbOptionsSizer->AddGrowableCol( 1 );
 
-	sbOptionsSizer->Add( gbOptionsSizer, 1, wxEXPAND, 5 );
+	m_sbOptionsSizer->Add( m_gbOptionsSizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bOptionsSizer->Add( sbOptionsSizer, 1, wxEXPAND|wxALL, 5 );
+	bRightCol->Add( m_sbOptionsSizer, 1, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* bScaleSizer;
 	bScaleSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scale") ), wxVERTICAL );
 
 	m_scale1 = new wxRadioButton( bScaleSizer->GetStaticBox(), wxID_ANY, _("1:1"), wxDefaultPosition, wxDefaultSize, 0 );
-	bScaleSizer->Add( m_scale1, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bScaleSizer->Add( m_scale1, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	bScaleSizer->Add( 0, 2, 0, 0, 5 );
+	bScaleSizer->Add( 0, 5, 0, 0, 5 );
 
 	m_scaleFit = new wxRadioButton( bScaleSizer->GetStaticBox(), wxID_ANY, _("Fit to page"), wxDefaultPosition, wxDefaultSize, 0 );
-	bScaleSizer->Add( m_scaleFit, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bScaleSizer->Add( m_scaleFit, 0, wxRIGHT|wxLEFT, 5 );
+
+
+	bScaleSizer->Add( 0, 3, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerScaleCustom;
 	bSizerScaleCustom = new wxBoxSizer( wxHORIZONTAL );
 
 	m_scaleCustom = new wxRadioButton( bScaleSizer->GetStaticBox(), wxID_ANY, _("Custom:"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerScaleCustom->Add( m_scaleCustom, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerScaleCustom->Add( m_scaleCustom, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_scaleCustomText = new wxTextCtrl( bScaleSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_scaleCustomText->SetToolTip( _("Set X scale adjust for exact scale plotting") );
 
-	bSizerScaleCustom->Add( m_scaleCustomText, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bSizerScaleCustom->Add( m_scaleCustomText, 1, wxEXPAND|wxRIGHT, 5 );
 
 
-	bScaleSizer->Add( bSizerScaleCustom, 1, wxEXPAND, 5 );
+	bScaleSizer->Add( bSizerScaleCustom, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bOptionsSizer->Add( bScaleSizer, 0, wxALL|wxEXPAND, 5 );
+	bRightCol->Add( bScaleSizer, 0, wxALL|wxEXPAND, 5 );
 
 
-	bUpperSizer->Add( bOptionsSizer, 1, wxEXPAND, 5 );
+	m_bUpperSizer->Add( bRightCol, 1, wxEXPAND, 5 );
 
 
-	bMainSizer->Add( bUpperSizer, 1, wxEXPAND|wxALL, 5 );
+	bMainSizer->Add( m_bUpperSizer, 1, wxEXPAND|wxALL, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );

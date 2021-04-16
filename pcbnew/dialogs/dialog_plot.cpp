@@ -164,7 +164,7 @@ void DIALOG_PLOT::init_Dialog()
     m_svgUnits->SetSelection( m_plotOpts.GetSvgUseInch() );
 
     // Option for excluding contents of "Edges Pcb" layer
-    m_excludeEdgeLayerOpt->SetValue( m_plotOpts.GetExcludeEdgeLayer() );
+    m_includeEdgeLayerOpt->SetValue( !m_plotOpts.GetExcludeEdgeLayer() );
 
     // Option to exclude pads from silkscreen layers
     m_sketchPadsOnFabLayers->SetValue( m_plotOpts.GetSketchPadsOnFabLayers() );
@@ -447,7 +447,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
         m_defaultPenSize.Enable( false );
-        m_excludeEdgeLayerOpt->Enable( true );
+        m_includeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXCtrl->Enable( false );
@@ -475,7 +475,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
         m_defaultPenSize.Enable( false );
-        m_excludeEdgeLayerOpt->Enable( true );
+        m_includeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( true );
         m_fineAdjustXCtrl->Enable( true );
         m_fineAdjustYCtrl->Enable( true );
@@ -499,7 +499,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
         m_defaultPenSize.Enable( false );
-        m_excludeEdgeLayerOpt->Enable( true );
+        m_includeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXCtrl->Enable( false );
@@ -524,7 +524,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
         m_defaultPenSize.Enable( true );
-        m_excludeEdgeLayerOpt->Enable( true );
+        m_includeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( true );
         m_fineAdjustXCtrl->Enable( false );
         m_fineAdjustYCtrl->Enable( false );
@@ -548,7 +548,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
         m_defaultPenSize.Enable( false );
-        m_excludeEdgeLayerOpt->Enable( true );
+        m_includeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXCtrl->Enable( false );
@@ -626,7 +626,7 @@ void DIALOG_PLOT::applyPlotSettings()
     int             sel;
     PCB_PLOT_PARAMS tempOptions;
 
-    tempOptions.SetExcludeEdgeLayer( m_excludeEdgeLayerOpt->GetValue() );
+    tempOptions.SetExcludeEdgeLayer( !m_includeEdgeLayerOpt->GetValue() );
     tempOptions.SetSubtractMaskFromSilk( m_subtractMaskFromSilk->GetValue() );
     tempOptions.SetPlotFrameRef( m_plotSheetRef->GetValue() );
     tempOptions.SetSketchPadsOnFabLayers( m_sketchPadsOnFabLayers->GetValue() );

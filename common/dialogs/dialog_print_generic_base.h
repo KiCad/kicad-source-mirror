@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -47,9 +47,9 @@ class DIALOG_PRINT_GENERIC_BASE : public DIALOG_SHIM
 			wxID_PRINT_OPTIONS
 		};
 
-		wxBoxSizer* bUpperSizer;
-		wxStaticBoxSizer* sbOptionsSizer;
-		wxGridBagSizer* gbOptionsSizer;
+		wxBoxSizer* m_bUpperSizer;
+		wxStaticBoxSizer* m_sbOptionsSizer;
+		wxGridBagSizer* m_gbOptionsSizer;
 		wxStaticText* m_outputModeLabel;
 		wxChoice* m_outputMode;
 		wxCheckBox* m_titleBlock;

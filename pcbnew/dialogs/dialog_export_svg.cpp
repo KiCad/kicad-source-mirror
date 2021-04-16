@@ -61,6 +61,7 @@ private:
 
     void OnButtonPlot( wxCommandEvent& event ) override;
 
+    void onPagePerLayerClicked( wxCommandEvent& event ) override;
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
     void ExportSVGFile( bool aOnlyOneFile );
 
@@ -100,7 +101,7 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
 DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
 {
     m_printBW = m_ModeColorOption->GetSelection();
-    m_oneFileOnly = m_rbFileOpt->GetSelection() == 1;
+    m_oneFileOnly = !m_checkboxPagePerLayer->GetValue();
     m_outputDirectory = m_outputDirectoryName->GetValue();
     m_outputDirectory.Replace( wxT( "\\" ), wxT( "/" ) );
 
@@ -109,9 +110,18 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
     cfg->m_ExportSvg.black_and_white  = m_printBW;
     cfg->m_ExportSvg.mirror           = m_printMirror;
     cfg->m_ExportSvg.one_file         = m_oneFileOnly;
-    cfg->m_ExportSvg.plot_board_edges = m_PrintBoardEdgesCtrl->GetValue();
     cfg->m_ExportSvg.page_size        = m_rbSvgPageSizeOpt->GetSelection();
     cfg->m_ExportSvg.output_dir       = m_outputDirectory.ToStdString();
+
+    if( m_checkboxPagePerLayer->GetValue() )
+    {
+        m_oneFileOnly = false;
+        cfg->m_ExportSvg.plot_board_edges = m_checkboxEdgesOnAllPages->GetValue();
+    }
+    else
+    {
+        m_oneFileOnly = true;
+    }
 
     cfg->m_ExportSvg.layers.clear();
 
@@ -128,7 +138,7 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
 
 void DIALOG_EXPORT_SVG::initDialog()
 {
-    auto cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
     m_printBW         = cfg->m_ExportSvg.black_and_white;
     m_printMirror     = cfg->m_ExportSvg.mirror;
@@ -136,13 +146,15 @@ void DIALOG_EXPORT_SVG::initDialog()
     m_outputDirectory = cfg->m_ExportSvg.output_dir;
 
     m_rbSvgPageSizeOpt->SetSelection( cfg->m_ExportSvg.page_size );
-    m_PrintBoardEdgesCtrl->SetValue( cfg->m_ExportSvg.plot_board_edges );
+    m_checkboxPagePerLayer->SetValue( !m_oneFileOnly );
+
+    wxCommandEvent dummy;
+    onPagePerLayerClicked( dummy );
 
     m_outputDirectoryName->SetValue( m_outputDirectory );
 
     m_ModeColorOption->SetSelection( m_printBW ? 1 : 0 );
     m_printMirrorOpt->SetValue( m_printMirror );
-    m_rbFileOpt->SetSelection( m_oneFileOnly ? 1 : 0 );
 
     for( LSEQ seq = m_board->GetEnabledLayers().UIOrder(); seq; ++seq )
     {
@@ -215,6 +227,23 @@ void DIALOG_EXPORT_SVG::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 }
 
 
+void DIALOG_EXPORT_SVG::onPagePerLayerClicked( wxCommandEvent& event )
+{
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+
+    if( m_checkboxPagePerLayer->GetValue() )
+    {
+        m_checkboxEdgesOnAllPages->Enable( true );
+        m_checkboxEdgesOnAllPages->SetValue( cfg->m_ExportSvg.plot_board_edges );
+    }
+    else
+    {
+        m_checkboxEdgesOnAllPages->Enable( false );
+        m_checkboxEdgesOnAllPages->SetValue( false );
+    }
+}
+
+
 void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
 {
     m_outputDirectory = m_outputDirectoryName->GetValue();
@@ -251,7 +280,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
 
         m_printMaskLayer = aOnlyOneFile ? all_selected : LSET( layer );
 
-        if( m_PrintBoardEdgesCtrl->IsChecked() )
+        if( m_checkboxEdgesOnAllPages->GetValue() )
             m_printMaskLayer.set( Edge_Cuts );
 
         if( CreateSVGFile( svgPath ) )
@@ -336,7 +365,7 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
 
 void DIALOG_EXPORT_SVG::OnButtonPlot( wxCommandEvent& event )
 {
-    m_oneFileOnly = m_rbFileOpt->GetSelection() == 1;
+    m_oneFileOnly = !m_checkboxPagePerLayer->GetValue();
     ExportSVGFile( m_oneFileOnly );
 }
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -91,22 +91,22 @@ DIALOG_EXPORT_SVG_BASE::DIALOG_EXPORT_SVG_BASE( wxWindow* parent, wxWindowID id,
 	m_rbSvgPageSizeOpt->SetSelection( 0 );
 	sbOptionsSizer->Add( m_rbSvgPageSizeOpt, 0, wxEXPAND|wxALL, 5 );
 
-	m_PrintBoardEdgesCtrl = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Print board edges"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PrintBoardEdgesCtrl->SetValue(true);
-	m_PrintBoardEdgesCtrl->SetToolTip( _("Print (or not) the edges layer on others layers") );
-
-	sbOptionsSizer->Add( m_PrintBoardEdgesCtrl, 0, wxALL, 5 );
-
 	m_printMirrorOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Print mirrored"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_printMirrorOpt->SetToolTip( _("Print the layer(s) horizontally mirrored") );
 
-	sbOptionsSizer->Add( m_printMirrorOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	sbOptionsSizer->Add( m_printMirrorOpt, 0, wxALL, 5 );
 
-	wxString m_rbFileOptChoices[] = { _("One file per layer"), _("All layers in a single file") };
-	int m_rbFileOptNChoices = sizeof( m_rbFileOptChoices ) / sizeof( wxString );
-	m_rbFileOpt = new wxRadioBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Pagination"), wxDefaultPosition, wxDefaultSize, m_rbFileOptNChoices, m_rbFileOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbFileOpt->SetSelection( 0 );
-	sbOptionsSizer->Add( m_rbFileOpt, 0, wxALL|wxEXPAND, 5 );
+	m_checkboxPagePerLayer = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Print one page per layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbOptionsSizer->Add( m_checkboxPagePerLayer, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	sbOptionsSizer->Add( 0, 3, 0, wxEXPAND, 5 );
+
+	m_checkboxEdgesOnAllPages = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Print board edges on all pages"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbOptionsSizer->Add( m_checkboxEdgesOnAllPages, 0, wxRIGHT|wxLEFT, 28 );
+
+
+	sbOptionsSizer->Add( 0, 0, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
 	bUpperSizer->Add( sbOptionsSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -141,6 +141,7 @@ DIALOG_EXPORT_SVG_BASE::DIALOG_EXPORT_SVG_BASE( wxWindow* parent, wxWindowID id,
 
 	// Connect Events
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_SVG_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
+	m_checkboxPagePerLayer->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_SVG_BASE::onPagePerLayerClicked ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_SVG_BASE::OnButtonPlot ), NULL, this );
 }
 
@@ -148,6 +149,7 @@ DIALOG_EXPORT_SVG_BASE::~DIALOG_EXPORT_SVG_BASE()
 {
 	// Disconnect Events
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_SVG_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
+	m_checkboxPagePerLayer->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_SVG_BASE::onPagePerLayerClicked ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_SVG_BASE::OnButtonPlot ), NULL, this );
 
 }

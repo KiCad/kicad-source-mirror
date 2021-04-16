@@ -48,17 +48,17 @@ protected:
 
     wxSizer* getMainSizer()
     {
-        return bUpperSizer;
+        return m_bUpperSizer;
     }
 
     wxGridBagSizer* getOptionsSizer()
     {
-        return gbOptionsSizer;
+        return m_gbOptionsSizer;
     }
 
     wxStaticBox* getOptionsBox()
     {
-        return sbOptionsSizer->GetStaticBox();
+        return m_sbOptionsSizer->GetStaticBox();
     }
 
     /**
