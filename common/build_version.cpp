@@ -269,8 +269,15 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 #endif
 #endif
 
-    aMsg << indent4 << "KICAD_SANITIZE=";
-#ifdef KICAD_SANITIZE
+    aMsg << indent4 << "KICAD_SANITIZE_ADDRESS=";
+#ifdef KICAD_SANITIZE_ADDRESS
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_SANITIZE_THREADS=";
+#ifdef KICAD_SANITIZE_THREADS
     aMsg << ON;
 #else
     aMsg << OFF;

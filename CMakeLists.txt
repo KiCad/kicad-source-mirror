@@ -107,7 +107,12 @@ option( KICAD_I18N_UNIX_STRICT_PATH
     OFF )
 
 # Not supported by all platforms (for instance mingw)
-option( KICAD_SANITIZE
+option( KICAD_SANITIZE_ADDRESS
+    "Build KiCad with sanitizer options. WARNING: Not compatible with gold linker"
+    OFF )
+
+# Not supported by all platforms (for instance mingw)
+option( KICAD_SANITIZE_THREADS
     "Build KiCad with sanitizer options. WARNING: Not compatible with gold linker"
     OFF )
 
@@ -245,7 +250,7 @@ if( WIN32 )
 
     # Used for the resource compiler and other arch dependent steps
     if( MSVC )
-        # CMake does not set CMAKE_SYSTEM_PROCESSOR correctly for MSVC 
+        # CMake does not set CMAKE_SYSTEM_PROCESSOR correctly for MSVC
         # and it will always return the host instead of the target arch
         if("${MSVC_C_ARCHITECTURE_ID}" STREQUAL "ARM64")
             set( KICAD_BUILD_ARCH "arm64" )
@@ -341,11 +346,25 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3" )
     endif()
 
-    if( KICAD_SANITIZE )
-        add_definitions( -DKICAD_SANITIZE )
+    if( KICAD_SANITIZE_ADDRESS )
+        add_definitions( -DKICAD_SANITIZE_ADDRESS )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_SANITIZE_VECTOR -fsanitize=address -fno-optimize-sibling-calls -fsanitize-address-use-after-scope -fno-omit-frame-pointer" )
 
         # ASAN shouldn't be used with these options (https://github.com/google/sanitizers/wiki/AddressSanitizer#faq)
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-stack-protector -U_FORTIFY_SOURCE" )
+    endif()
+
+    if( KICAD_SANITIZE_THREADS )
+        add_definitions( -DKICAD_SANITIZE_THREADS )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_SANITIZE_VECTOR -fsanitize=thread -fno-optimize-sibling-calls -fno-omit-frame-pointer" )
+
+        # Based on this warning https://github.com/JuliaLang/julia/blob/29d5158d27ddc3983ae2e373c4cd05569b9ead6c/src/julia.h#L77
+        if( CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 11 )
+            message( WARNING "Clang version 11 and below may leak memory when running the thread sanitizer.\n"
+                             "Be careful when using this compiler.")
+        endif()
+
+        # Just duplicate the same flags as ASAN here, because why not.
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-stack-protector -U_FORTIFY_SOURCE" )
     endif()
 
