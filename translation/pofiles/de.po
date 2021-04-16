@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-04-13 22:28+0000\n"
+"PO-Revision-Date: 2021-04-17 23:05+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2266,13 +2266,17 @@ msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
-msgstr "Sperren überschreiben"
+msgstr "Sperrung ignorieren"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:56
 msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"Ignoriert die Sperrung und wendet die Operation auf alle markierten Elemente "
+"an.\n"
+"Alle gesperrten Elemente bleiben gesperrt, nachdem die Operation "
+"abgeschlossen ist."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:60
 msgid "Skip Locked Items"
@@ -2283,6 +2287,8 @@ msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"Entfernt gesperrte Elemente von der Auswahl und wendet die Operation auf "
+"alle ungesperrten Elemente an (falls vorhanden)."
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
 msgid "Locked Items"
@@ -4562,7 +4568,7 @@ msgstr "Fehler beim Laden"
 
 #: common/footprint_info.cpp:101
 msgid "Errors were encountered loading footprints:"
-msgstr "Diese Fehler traten beim Laden der Footprints auf:"
+msgstr "Fehler traten beim Laden der Footprints auf:"
 
 #: common/fp_lib_table.cpp:200
 #, c-format
@@ -13650,7 +13656,7 @@ msgstr ""
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1192
 #, c-format
 msgid "Could not find '%s' in the imported library."
-msgstr "Konnte '%s' nicht in der importierten Bibliothek finden"
+msgstr "Konnte '%s' nicht in der importierten Bibliothek finden."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2311
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2349
@@ -14282,7 +14288,6 @@ msgid "Syntax Help"
 msgstr "Syntax-Hilfe"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14453,10 +14458,10 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~überstrich</samp><br> &nbsp;<br><samp>~CLK</"
 "samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>überstrich</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;"
-"</u></samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> "
-"</td>\n"
+"        <td> "
+"<samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>überstrich</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14477,8 +14482,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refbez:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>feld_wert</i> von Symbol <i>refbez</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>feld_wert</i> von Symbol "
+"<i>refbez</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14493,8 +14498,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus-Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Resultierende Netze</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14545,9 +14550,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
 
@@ -15556,9 +15561,8 @@ msgstr "Symbol \"%s\" wurde in der Bibliothek \"%s\" gespeichert"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:96
 #: eeschema/symbol_tree_model_adapter.cpp:104
-#, fuzzy
 msgid "Errors were encountered loading symbols:"
-msgstr "Diese Fehler traten beim Laden der Footprints auf:"
+msgstr "Fehler traten beim Laden der Symbole auf:"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:166
 #, c-format
@@ -21590,7 +21594,7 @@ msgstr "Lagenaufbau der Platine"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:84
 msgid "Board Editor Layers"
-msgstr "Lagen Board Editor"
+msgstr "Platineneditor-Lagen"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:86
 msgid "Physical Stackup"
@@ -23397,11 +23401,9 @@ msgid "Footprint Checker"
 msgstr "Footprint-Prüfer"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:331
-#, fuzzy
 msgid "Footprint can be freely moved and oriented on the canvas."
 msgstr ""
-"Bauteil kann frei bewegt und autoplatziert werden, aber die Pads können "
-"nicht gewählt oder editiert werden."
+"Footprint kann auf der Zeichenfläche frei bewegt und ausgerichtet werden."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:333
 msgid ""
@@ -23474,9 +23476,8 @@ msgstr "Seite:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
-#, fuzzy
 msgid "Unlock footprint"
-msgstr "Entsperrte Footprints"
+msgstr "Footprint entsperren"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
@@ -26333,9 +26334,8 @@ msgid "Suggest track finish"
 msgstr "Vorschlag Beendigung Leiterbahn"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:86
-#, fuzzy
 msgid "Optimize entire track being dragged"
-msgstr "Leiterbahnen beim Ziehen optimieren"
+msgstr "Ganze Leiterbahn beim Ziehen optimieren"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid ""
@@ -26343,6 +26343,9 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
+"Falls aktiviert, wird beim Ziehen eines Segments der ganze auf dem "
+"Bildschirm sichtbare Bereich der Leiterbahn optimiert und neu geroutet. Wenn "
+"deaktiviert, wird nur der Bereich bei dem gezogenen Segment optimiert."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:91
 msgid "Use mouse path to set track posture"
@@ -26948,15 +26951,16 @@ msgid "Highlight nets when they are highlighted in the schematic editor"
 msgstr "Markieren Sie Netze, wenn sie im Schaltplaneditor hervorgehoben sind"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:90
-#, fuzzy
 msgid "Refresh 3D view automatically"
-msgstr "Automatisch anpassen"
+msgstr "3D-Ansicht automatisch aktualisieren"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:91
 msgid ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
 msgstr ""
+"Wenn aktiviert, wird die 3D-Ansicht bei Änderungen an der Platine "
+"aktualisiert (kann bei größeren Platinen langsam sein)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Magnetic pads"
@@ -26982,9 +26986,8 @@ msgstr ""
 "Linien erzwingen."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:58
-#, fuzzy
 msgid "Step for &rotate commands:"
-msgstr "Wiederherstellen des letzten Rückgängigmachens"
+msgstr "Schrittweite für &Drehbefehle:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
@@ -26992,14 +26995,15 @@ msgstr ""
 "Einstellung für den Rotationswinkel (in Grad) in Kontextmenüs und Hotkeys."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:75
-#, fuzzy
 msgid "Allow free pads"
-msgstr "Zulässige Funktionen"
+msgstr "Freie Pads zulassen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:76
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 msgstr ""
+"Wenn aktiviert, können Pads unabhängig von anderen Komponenten des "
+"Footprints verschoben werden."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:102
 #: pcbnew/dialogs/panel_edit_options_base.cpp:183
@@ -27325,16 +27329,15 @@ msgstr "Strategie Flächenbefüllung"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:109
 msgid "Mimic legacy behavior"
-msgstr "Mimic Legacy-Verhalten"
+msgstr "Legacy-Verhalten nachahmen"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:110
-#, fuzzy
 msgid ""
 "Produces a slightly smoother outline at the expense of performance, some "
 "export fidelity issues, and overly aggressive higher-priority zone knockouts."
 msgstr ""
-"Erzeugt eine etwas glattere Gliederung auf Kosten der Leistung, einiger "
-"Probleme mit der Exporttreue und übermäßig aggressiver Zonenausfälle mit "
+"Erzeugt eine etwas glattere Kontur auf Kosten der Leistung, einiger Probleme "
+"mit der Exporttreue und übermäßig aggressiven Knockouts für Zonen mit "
 "höherer Priorität."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:114
@@ -28351,6 +28354,215 @@ msgid ""
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 msgstr ""
+"### Übergeordnete Bestimmungen\n"
+"\n"
+"    (version <zahl>)\n"
+"\n"
+"    (rule <regel_name> <regel_bestimmung> ...)\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Regel-Bestimmungen\n"
+"\n"
+"    (constraint <einschränkungs_typ> ...)\n"
+"\n"
+"    (condition \"<ausdruck>\")\n"
+"\n"
+"    (layer \"<lage_name>\")\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Einschränkungs-Typen\n"
+"\n"
+" * annular_width\n"
+" * clearance\n"
+" * courtyard_clearance\n"
+" * diff\\_pair\\_gap\n"
+" * diff\\_pair\\_uncoupled\n"
+" * disallow\n"
+" * edge_clearance\n"
+" * length\n"
+" * hole\n"
+" * hole_clearance\n"
+" * silk_clearance\n"
+" * skew\n"
+" * track_width\n"
+" * via_count\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Element-Typen\n"
+"\n"
+" * buried_via\n"
+" * graphic\n"
+" * hole\n"
+" * micro_via\n"
+" * pad\n"
+" * text\n"
+" * track\n"
+" * via\n"
+" * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### Beispiele\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # wider clearance between HV tracks\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"<br><br>\n"
+"\n"
+"### Notes\n"
+"\n"
+"Die Versionsbestimmung muss die erste Bestimmung sein.\n"
+"\n"
+"Regeln sollten nach ihrer Spezifität geordnet werden. Spätere Regeln haben "
+"Vorrang\n"
+"vor früheren Regeln; sobald eine passende Regel gefunden wurde, werden "
+"keine\n"
+"weiteren Regeln mehr geprüft.\n"
+"\n"
+"Verwenden Sie Strg+/, um die Zeile(n) zu kommentieren oder zu "
+"entkommentieren.\n"
+"<br><br><br>\n"
+"\n"
+"### Ausdrucks-Funktionen\n"
+"\n"
+"Alle Funktionsparameter unterstützen einfache Wildcards (`*` und `?`).\n"
+"<br><br>\n"
+"\n"
+"    A.insideCourtyard('<footprint_refbez>')\n"
+"Wahr, wenn ein Teil von `A` innerhalb des wesentlichen Sperrbereichs des "
+"angegebenen Footprints liegt.\n"
+"<br><br>\n"
+"\n"
+"    A.insideFrontCourtyard('<footprint_refbez>')\n"
+"Wahr, wenn ein Teil von `A` innerhalb des vorderseitigen Sperrbereichs des "
+"angegebenen Footprints liegt.\n"
+"<br><br>\n"
+"\n"
+"    A.insideBackCourtyard('<footprint_refbez>')\n"
+"Wahr, wenn ein Teil von `A` innerhalb des rückseitigen Sperrbereichs des "
+"angegebenen Footprints liegt.\n"
+"<br><br>\n"
+"\n"
+"    A.insideArea('<zonen_name>')\n"
+"Wahr, wenn ein Teil von `A` innerhalb des angegebenen Zonenumrisses liegt.\n"
+"<br><br>\n"
+"\n"
+"    A.isPlated()\n"
+"Wahr, wenn `A` ein metallisiertes Loch hat.\n"
+"<br><br>\n"
+"\n"
+"    A.inDiffPair('<netz_name>')\n"
+"Wahr, wenn `A` Teil des angegebenen Differentialpaars ist.\n"
+"`<netz_name>` ist der basisname des Diffeentialpaars. Beispielsweise passt "
+"`inDiffPair('CLK')`\n"
+"zu Elementen in den `CLK_P`- und `CLK_N`-Netzen.\n"
+"<br><br>\n"
+"\n"
+"    AB.isCoupledDiffPair()\n"
+"Wahr, wenn `A` und `B` Teile des selben Differenzialpaars sind.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOf('<guppen_name>')\n"
+"Wahr, wenn `A` Mitglied der angegebenen Gruppe ist. Erlaubt verschachtelte "
+"Gruppen.\n"
+"<br><br>\n"
+"\n"
+"    A.existsOnLayer('<lage_name>')\n"
+"Wahr, wenn `A` auf der angegebenen Lage existiert. Der Lagenname kann einer "
+"der Namen aus\n"
+"Platinenaufbau > Platineneditor-Lagen oder der interne Name \n"
+"(wie `F.Cu`).\n"
+"\n"
+"Hinweis: Dies gibt wahr zurück, wenn `A` auf der angegebenen Lage liegt, "
+"unabhängig\n"
+"davon, ob diese Regel für die angegebene Lage angewendet wird.\n"
+"Für letzteres die `(layer \"layer_name\")`-Bestimmung in der Regel benutzen."
+"\n"
+"<br><br><br>\n"
+"\n"
+"### Weitere Beispiele\n"
+"\n"
+"    (rule \"copper keepout\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.insideArea('zone3')\"))\n"
+"\n"
+"\n"
+"    (rule \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.insideCourtyard('U3')\"))\n"
+"\n"
+"\n"
+"    # prevent silk over tented vias\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"\n"
+"\n"
+"    (rule \"Distance between Vias of Different Nets\"  \n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
+"\n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"  \n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+"    \n"
+"    (rule \"Pad to Track Clearance\"  \n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+"\n"
+"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
+"        (constraint clearance (min 0.8mm))\n"
+"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"\n"
+"\n"
+"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"        (constraint hole (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"    \n"
+"    (rule \"Max Drill Hole Size PTH\"  \n"
+"        (constraint hole (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"\n"
+"\n"
+"    # Specify an optimal gap for a particular diff-pair\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"\n"
+"    # Specify a larger clearance around any diff-pair\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:74
 msgid "Default properties for new dimension objects:"
@@ -29349,9 +29561,9 @@ msgid "The current PCB has been modified.  Save changes?"
 msgstr "Die aktuelle Platine wurde modifiziert. Änderungen speichern?"
 
 #: pcbnew/files.cpp:598
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr "Platine \"%s\" existiert nicht. Soll diese erstellt werden?"
+msgstr "Leiterplatte '%s' existiert nicht. Soll diese erstellt werden?"
 
 #: pcbnew/files.cpp:807
 #, c-format
@@ -29374,25 +29586,23 @@ msgid "No access rights to write to file \"%s\""
 msgstr "Keine Zugriffsrechte zum Speichern von Datei \"%s\""
 
 #: pcbnew/files.cpp:949 pcbnew/files.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr ""
-"Fehler beim Speichern von \"%s\".\n"
-"%s"
+msgstr "Fehler beim Speichern von benutzerdefinierter Regeldatei '%s'."
 
 #: pcbnew/files.cpp:980 pcbnew/files.cpp:1082
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Speichern von \"%s\".\n"
+"Fehler beim Speichern von Platinendatei '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:984
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file '%s'."
-msgstr "Konnte temporäre Datei \"%s\" nicht erstellen"
+msgstr "Konnte temporäre Datei \"%s\" nicht erstellen."
 
 #: pcbnew/files.cpp:997
 #, c-format
@@ -29404,14 +29614,14 @@ msgstr ""
 "Konnte temporäre Datei \"%s\" nicht umbennen"
 
 #: pcbnew/files.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' saved."
 msgstr "Datei \"%s\" gespeichert."
 
 #: pcbnew/files.cpp:1061
-#, fuzzy, c-format
+#, c-format
 msgid "No access rights to write to file '%s'."
-msgstr "Keine Zugriffsrechte zum Speichern von Datei \"%s\""
+msgstr "Keine Zugriffsrechte zum Speichern von Datei \"%s\"."
 
 #: pcbnew/files.cpp:1108
 #, c-format
@@ -31673,11 +31883,9 @@ msgstr ""
 "zugeordnet"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1920
-#, fuzzy, c-format
+#, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
-"Das Ignorieren eines Rechtecks seit der Eagle-Ebene '%s' (%d) wurde nicht "
-"zugeordnet"
+msgstr "Rechteck ignoriert, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2105
 #, c-format
@@ -33232,6 +33440,8 @@ msgstr "Spezialwerkzeuge"
 #, c-format
 msgid "Unable to resize arc tracks %.1f degrees or greater."
 msgstr ""
+"Leiterbahnbögen mit mindestens %.1f Grad können nicht in der Größe geändert "
+"werden."
 
 #: pcbnew/tools/edit_tool.cpp:652
 msgid "Drag Arc Track"
@@ -35194,32 +35404,28 @@ msgid "Layer Display Options"
 msgstr "Lagen-Anzeigeoptionen"
 
 #: pcbnew/widgets/appearance_controls.cpp:575
-#, fuzzy
 msgid "Inactive layers:"
-msgstr "Nicht aktive Lagen:"
+msgstr "Inaktive Lagen:"
 
 #: pcbnew/widgets/appearance_controls.cpp:587
-#, fuzzy
 msgid "Inactive layers will be shown in full color"
-msgstr "Nicht aktive Lagen werden in Farbe angezeigt"
+msgstr "Inaktive Lagen werden in voller Farbe angezeigt"
 
 #: pcbnew/widgets/appearance_controls.cpp:591
 msgid "Dim"
 msgstr "Dimmen"
 
 #: pcbnew/widgets/appearance_controls.cpp:593
-#, fuzzy
 msgid "Inactive layers will be dimmed"
-msgstr "Nicht aktive Lagen werden abgeblendet"
+msgstr "Inaktive Lagen werden abgeblendet"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Hide"
 msgstr "Ausblenden"
 
 #: pcbnew/widgets/appearance_controls.cpp:599
-#, fuzzy
 msgid "Inactive layers will be hidden"
-msgstr "Nicht aktive Lagen werden ausgeblendet"
+msgstr "Inaktive Lagen werden ausgeblendet"
 
 #: pcbnew/widgets/appearance_controls.cpp:609
 msgid "Flip board view"
@@ -35272,9 +35478,8 @@ msgid "Ratsnest lines are shown to items on visible layers"
 msgstr "Netzlinien werden für Elemente auf sichtbaren Lagen angezeigt"
 
 #: pcbnew/widgets/appearance_controls.cpp:831
-#, fuzzy
 msgid "Set Net Color"
-msgstr "Netzfarbe einstellen"
+msgstr "Netzfarbe setzen"
 
 #: pcbnew/widgets/appearance_controls.cpp:833
 #, c-format
@@ -35283,18 +35488,17 @@ msgstr "Hervorhebung %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:836
 #: pcbnew/widgets/appearance_controls.cpp:2150
-#, fuzzy, c-format
+#, c-format
 msgid "Select Tracks and Vias in %s"
-msgstr "Wähle Leiterbahnen und Vias in %s"
+msgstr "Leiterbahnen und Vias in %s auswählen"
 
 #: pcbnew/widgets/appearance_controls.cpp:839
 #: pcbnew/widgets/appearance_controls.cpp:2154
-#, fuzzy, c-format
+#, c-format
 msgid "Unselect Tracks and Vias in %s"
 msgstr "Leiterbahnen und Vias in %s abwählen"
 
 #: pcbnew/widgets/appearance_controls.cpp:847
-#, fuzzy
 msgid "Hide All Other Nets"
 msgstr "Alle anderen Netze ausblenden"
 
@@ -35309,10 +35513,11 @@ msgid "Click to show ratsnest for %s"
 msgstr "Klicken Sie hier, um Netzlinien für %s anzuzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:887
-#, fuzzy
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
-msgstr "Doppelklick oder Mittelklick für Farbänderung, Rechtsklick für Menü"
+msgstr ""
+"Doppelklick (oder Mittelklick) um Farbe zu ändern, Rechtsklick für weitere "
+"Aktionen"
 
 #: pcbnew/widgets/appearance_controls.cpp:1389
 msgid "Double click or middle click for color change, right click for menu"
@@ -35491,22 +35696,19 @@ msgid "Show or hide ratsnest for nets in %s"
 msgstr "Netzlinien für Netze in %s ein- oder ausblenden"
 
 #: pcbnew/widgets/appearance_controls.cpp:2142
-#, fuzzy
 msgid "Set Netclass Color"
-msgstr "Setze Netzklassenfarbe"
+msgstr "Netzklassenfarbe setzen"
 
 #: pcbnew/widgets/appearance_controls.cpp:2147
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Nets in %s"
-msgstr "Hervorgehobene Netze in %s"
+msgstr "Netze in %s hervorheben"
 
 #: pcbnew/widgets/appearance_controls.cpp:2161
-#, fuzzy
 msgid "Show All Netclasses"
 msgstr "Alle Netzklassen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:2164
-#, fuzzy
 msgid "Hide All Other Netclasses"
 msgstr "Verstecke alle anderen Netzklassen"
 
@@ -35741,9 +35943,8 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] Laden fehlgeschlagen: Eingabezeile zu lang\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "Bildkonverter"
+msgstr "KiCad-Bildkonverter"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
@@ -35751,28 +35952,24 @@ msgstr ""
 "Eine Komponente aus einer Bitmap erstellen um diese mit KiCad zu verwenden"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-#, fuzzy
 msgid "bitmap2component"
-msgstr "Bitmap2Component starten"
+msgstr "bitmap2Component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
-#, fuzzy
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr "KiCad-Schaltplan-Editor"
+msgstr "KiCad-Schaltplan-Editor (alleinstehend)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
-#, fuzzy
 msgid "Schematic Capture Tool"
-msgstr "Farbe Schaltplanverbindung"
+msgstr "Werkzeug zur Schaltplanerfassung"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr ""
+msgstr "Eigenständiger Schaltplaneditor für KiCad-Schaltpläne"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-#, fuzzy
 msgid "eeschema"
-msgstr "Eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -35783,9 +35980,8 @@ msgid "View Gerber files"
 msgstr "Gerberdateien betrachten"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-#, fuzzy
 msgid "gerbview"
-msgstr "Gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -35798,39 +35994,35 @@ msgstr "EDA Suite"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "Suite of tools for schematic design and circuit board layout"
-msgstr ""
+msgstr "Werkzeugsammlung für Schaltplanentwurf und Leiterplattenlayout"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
-#, fuzzy
 msgid "KiCad PCB Calculator"
-msgstr "PCB-Kalkulator"
+msgstr "KiCad-PCB-Kalkulator"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Rechner für verschiedene elektronikbezogene Berechnungen"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
-#, fuzzy
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "KiCad-Leiterplatteneditor"
+msgstr "KiCad-Leiterplatteneditor (eigenständig)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
-#, fuzzy
 msgid "PCB layout editor"
-msgstr "Seitenlayout Editor"
+msgstr "Leiterplatten-Layout-Editor"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr ""
+msgstr "Eigenständiger Leiterplatteneditor für KiCad-Platinen"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-#, fuzzy
 msgid "pcbnew"
-msgstr "Pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
-msgstr ""
+msgstr "Eine EDA-Suite für Schaltplan- und Leiterplattendesign"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -35841,13 +36033,18 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"KiCad ist eine freie und quelloffene EDA-Suite (Electronic Design Automation)"
+". Es bietet Schaltplanerfassung, Simulation integrierter Schaltungen, "
+"Leiterplatten-Layout, 3D-Rendering und Plotting/Datenexport in zahlreiche "
+"Formate. KiCad enthält auch eine hochwertige Komponentenbibliothek mit "
+"Tausenden von Symbolen, Footprints und 3D-Modellen. KiCad hat minimale "
+"Systemanforderungen und läuft unter Linux, Windows und macOS."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
 msgid "KiCad Main Window"
-msgstr ""
+msgstr "KiCad-Hauptfenster"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:67
-#, fuzzy
 msgid "KiCad PCB Layout Editor"
 msgstr "KiCad-Leiterplatteneditor"
 
@@ -35856,9 +36053,8 @@ msgid "The KiCad Developers"
 msgstr "Die KiCad-Entwickler"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
-msgstr "Gerber Dateien"
+msgstr "Gerber-Datei"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
 msgid "Excellon drill file"
