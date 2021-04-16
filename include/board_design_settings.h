@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@
 #include <pad.h>
 #include <netclass.h>
 #include <config_params.h>
-#include <board_stackup_manager/class_board_stackup.h>
+#include <board_stackup_manager/board_stackup.h>
 #include <drc/drc_engine.h>
 #include <settings/nested_settings.h>
 #include <widgets/ui_common.h>

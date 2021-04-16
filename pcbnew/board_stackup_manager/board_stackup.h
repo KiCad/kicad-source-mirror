@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,11 +19,11 @@
  */
 
 /**
- * @file class_board_stackup.h
+ * @file board_stackup.h
  */
 
-#ifndef CLASS_BOARD_STACKUP_H
-#define CLASS_BOARD_STACKUP_H
+#ifndef BOARD_STACKUP_H
+#define BOARD_STACKUP_H
 
 
 #include <vector>
@@ -63,27 +63,28 @@ enum BS_EDGE_CONNECTOR_CONSTRAINTS
  */
 class DIELECTRIC_PRMS
 {
-    friend class BOARD_STACKUP_ITEM;
+public:
+    DIELECTRIC_PRMS() :
+        m_Thickness(0), m_ThicknessLocked( false ),
+        m_EpsilonR( 1.0 ), m_LossTangent( 0.0 )
+    {}
 
 private:
+    friend class BOARD_STACKUP_ITEM;
+
     wxString m_Material;    /// type of material (for dielectric and solder mask)
     int m_Thickness;        /// the physical layer thickness in internal units
     bool m_ThicknessLocked; /// true for dielectric layers with a fixed thickness
                             /// (for impedance controlled purposes), unused for other layers
     double m_EpsilonR;      /// For dielectric (and solder mask) the dielectric constant
     double m_LossTangent;   /// For dielectric (and solder mask) the dielectric loss
-
-public:
-    DIELECTRIC_PRMS() :
-        m_Thickness(0), m_ThicknessLocked( false ),
-        m_EpsilonR( 1.0 ), m_LossTangent( 0.0 )
-    {}
 };
 
 
 /**
- * this class manage one layer needed to make a physical board
- * it can be a solder mask, silk screen, copper or a dielectric
+ * Manage one layer needed to make a physical board.
+ *
+ * It can be a solder mask, silk screen, copper or a dielectric.
  */
 class BOARD_STACKUP_ITEM
 {
@@ -91,30 +92,8 @@ public:
     BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType );
     BOARD_STACKUP_ITEM( const BOARD_STACKUP_ITEM& aOther );
 
-
-private:
-    BOARD_STACKUP_ITEM_TYPE m_Type;
-    wxString m_LayerName;   /// name of layer as shown in layer manager. Useful to create reports
-    wxString m_TypeName;    /// type name of layer (copper, silk screen, core, prepreg ...)
-    wxString m_Color;       /// mainly for silkscreen and solder mask
-    PCB_LAYER_ID m_LayerId; /// the layer id (F.Cu to B.Cu, F.Silk, B.silk, F.Mask, B.Mask)
-                            /// and UNDEFINED_LAYER (-1) for dielectric layers that are not
-                            /// really layers for the board editor
-    int m_DielectricLayerId;/// the "layer" id for dielectric layers,
-                            /// from 1 (top) to 31 (bottom)
-                            /// (only 31 dielectric layers for 32 copper layers)
-    /// List of dielectric parameters
-    /// usually only one item, but in complex (microwave) boards, one can have
-    /// more than one dielectric layer between 2 copper layers, and therefore
-    /// more than one item in list
-    std::vector<DIELECTRIC_PRMS> m_DielectricPrmsList;
-
-    bool m_enabled;         /// true if this stackup item must be taken in account,
-                            /// false to ignore it. Mainly used in dialog stackup editor.
-
-public:
     /**
-     * add (insert) a DIELECTRIC_PRMS item to m_DielectricPrmsList
+     * Add (insert) a DIELECTRIC_PRMS item to m_DielectricPrmsList
      * all values are set to default
      * @param aDielectricPrmsIdx is a index in m_DielectricPrmsList
      * the new item will be inserted at this position
@@ -196,51 +175,40 @@ public:
     void SetEpsilonR( double aEpsilon, int aDielectricSubLayer = 0 );
     void SetLossTangent( double aTg, int aDielectricSubLayer = 0 );
     void SetMaterial( const wxString& aName, int aDielectricSubLayer = 0 );
+
+private:
+    BOARD_STACKUP_ITEM_TYPE m_Type;
+    wxString m_LayerName;   /// name of layer as shown in layer manager. Useful to create reports
+    wxString m_TypeName;    /// type name of layer (copper, silk screen, core, prepreg ...)
+    wxString m_Color;       /// mainly for silkscreen and solder mask
+    PCB_LAYER_ID m_LayerId; /// the layer id (F.Cu to B.Cu, F.Silk, B.silk, F.Mask, B.Mask)
+                            /// and UNDEFINED_LAYER (-1) for dielectric layers that are not
+                            /// really layers for the board editor
+    int m_DielectricLayerId;/// the "layer" id for dielectric layers,
+                            /// from 1 (top) to 31 (bottom)
+                            /// (only 31 dielectric layers for 32 copper layers)
+    /// List of dielectric parameters
+    /// usually only one item, but in complex (microwave) boards, one can have
+    /// more than one dielectric layer between 2 copper layers, and therefore
+    /// more than one item in list
+    std::vector<DIELECTRIC_PRMS> m_DielectricPrmsList;
+
+    bool m_enabled;         /// true if this stackup item must be taken in account,
+                            /// false to ignore it. Mainly used in dialog stackup editor.
 };
 
 
 /**
- * this class manage the layers needed to make a physical board
- * they are solder mask, silk screen, copper and dielectric
- * Some other layers, used in fabrication, are not managed here because they
- * are not used to make a physical board itself
- * Note also there are a few other parameters related to the physical stackup,
- * like finish type, impedance control and a few others
+ * Manage layers needed to make a physical board.
+ *
+ * They are solder mask, silk screen, copper and dielectric.  Some other layers, used in
+ * fabrication, are not managed here because they are not used to make a physical board itself.
+ *
+ * @note There are a few other parameters related to the physical stackup like finish type,
+ *       impedance control and a few others.
  */
 class BOARD_STACKUP
 {
-    // The list of items describing the stackup for fabrication.
-    // this is not just copper layers, but also mask dielectric layers
-    std::vector<BOARD_STACKUP_ITEM*> m_list;
-
-public:
-    /** The name of external copper finish
-     */
-    wxString m_FinishType;
-
-    /** True if some layers have impedance controlled tracks or have specific
-     * constrains for micro-wave applications
-     * If the board has dielectric constrains, the .gbrjob will contain
-     * info about dielectric constrains: loss tangent and Epsilon rel.
-     * If not, these values will be not specified in job file.
-     */
-    bool m_HasDielectricConstrains;
-
-    /** True if some layers (copper and/or dielectric) have specific thickness
-     */
-    bool m_HasThicknessConstrains;
-
-    /** If the board has edge connector cards, some constrains can be specified
-     * in job file:
-     *  BS_EDGE_CONNECTOR_NONE = no edge connector
-     *  BS_EDGE_CONNECTOR_IN_USE = board has edge connectors
-     *  BS_EDGE_CONNECTOR_BEVELLED = edge connectors are beveled
-     */
-    BS_EDGE_CONNECTOR_CONSTRAINTS m_EdgeConnectorConstraints;
-
-    bool m_CastellatedPads;         ///< True if castellated pads exist
-    bool m_EdgePlating;             ///< True if the edge board is plated
-
 public:
     BOARD_STACKUP();
     BOARD_STACKUP( const BOARD_STACKUP& aOther );
@@ -253,7 +221,8 @@ public:
     /// @return a reference to the layer aIndex, or nullptr if not exists
     BOARD_STACKUP_ITEM* GetStackupLayer( int aIndex );
 
-    /** @return  the board layers full mask allowed in the stackup list
+    /**
+     * @return the board layers full mask allowed in the stackup list
      * i.e. the SilkS, Mask, Paste and all copper layers
      */
     static LSET StackupAllowedBrdLayers()
@@ -285,7 +254,7 @@ public:
     bool SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings );
 
     /**
-     * Creates a default stackup, according to the current BOARD_DESIGN_SETTINGS settings.
+     * Create a default stackup, according to the current BOARD_DESIGN_SETTINGS settings.
      * @param aSettings is the current board setting.
      * if nullptr, build a full stackup (with 32 copper layers)
      * @param aActiveCopperLayersCount is used only if aSettings == nullptr is the number
@@ -296,7 +265,7 @@ public:
             int aActiveCopperLayersCount = 0 );
 
     /**
-     * Writes the stackup info on board file
+     * Write the stackup info on board file
      * @param aFormatter is the OUTPUTFORMATTER used to create the file
      * @param aBoard is the board
      * @param aNestLevel is the index to nest level to indent the lines in file
@@ -305,15 +274,52 @@ public:
                              const BOARD* aBoard, int aNestLevel ) const;
 
     /**
-     * Calculates the distance (height) between the two given copper layers.  This factors in the
-     * thickness of any dielectric and copper layers between the two given layers, but not the
-     * height of the given copper layers.
+     * Calculate the distance (height) between the two given copper layers.
+     *
+     * This factors in the thickness of any dielectric and copper layers between the two given
+     * layers, but not the height of the given copper layers.
      * @param aFirstLayer is a copper layer
      * @param aSecondLayer is a different copper layer
      * @return the height (in IU) between the two layers
      */
     int GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSecondLayer ) const;
+
+    /**
+     * The name of external copper finish
+     */
+    wxString m_FinishType;
+
+    /**
+     * True if some layers have impedance controlled tracks or have specific
+     * constrains for micro-wave applications
+     * If the board has dielectric constrains, the .gbrjob will contain
+     * info about dielectric constrains: loss tangent and Epsilon rel.
+     * If not, these values will be not specified in job file.
+     */
+    bool m_HasDielectricConstrains;
+
+    /**
+     * True if some layers (copper and/or dielectric) have specific thickness
+     */
+    bool m_HasThicknessConstrains;
+
+    /**
+     * If the board has edge connector cards, some constrains can be specified
+     * in job file:
+     *  BS_EDGE_CONNECTOR_NONE = no edge connector
+     *  BS_EDGE_CONNECTOR_IN_USE = board has edge connectors
+     *  BS_EDGE_CONNECTOR_BEVELLED = edge connectors are beveled
+     */
+    BS_EDGE_CONNECTOR_CONSTRAINTS m_EdgeConnectorConstraints;
+
+    bool m_CastellatedPads;         ///< True if castellated pads exist
+    bool m_EdgePlating;             ///< True if the edge board is plated
+
+private:
+    // The list of items describing the stackup for fabrication.
+    // this is not just copper layers, but also mask dielectric layers
+    std::vector<BOARD_STACKUP_ITEM*> m_list;
 };
 
 
-#endif      // CLASS_BOARD_STACKUP_H
+#endif      // BOARD_STACKUP_H

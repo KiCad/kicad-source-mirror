@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
  * @file stackup_predefined_prms.cpp
  */
 
-#include "class_board_stackup.h"
+#include "board_stackup.h"
 #include <convert_to_biu.h>
 #include <core/arraydim.h>
 #include <layers_id_colors_and_visibility.h>
@@ -42,20 +42,20 @@
 // These names are in fact usual copper finish names.
 static wxString CopperFinishType[] =
 {
-    NotSpecifiedPrm(),          // Not specified, not in .gbrjob file
-    _HKI("ENIG"),               // used in .gbrjob file
-    _HKI("ENEPIG"),             // used in .gbrjob file
-    _HKI("HAL SnPb"),           // used in .gbrjob file
-    _HKI("HAL lead-free"),      // used in .gbrjob file
-    _HKI("Hard gold"),          // used in .gbrjob file
-    _HKI("Immersion tin"),      // used in .gbrjob file
-    _HKI("Immersion nickel"),   // used in .gbrjob file
-    _HKI("Immersion silver"),   // used in .gbrjob file
-    _HKI("Immersion gold"),     // used in .gbrjob file
-    _HKI("HT_OSP"),             // used in .gbrjob file
-    _HKI("OSP"),                // used in .gbrjob file
-    _HKI("None"),               // used in .gbrjob file
-    _HKI("User defined")        // keep this option at end
+    NotSpecifiedPrm(),            // Not specified, not in .gbrjob file
+    _HKI( "ENIG" ),               // used in .gbrjob file
+    _HKI( "ENEPIG" ),             // used in .gbrjob file
+    _HKI( "HAL SnPb" ),           // used in .gbrjob file
+    _HKI( "HAL lead-free" ),      // used in .gbrjob file
+    _HKI( "Hard gold" ),          // used in .gbrjob file
+    _HKI( "Immersion tin" ),      // used in .gbrjob file
+    _HKI( "Immersion nickel" ),   // used in .gbrjob file
+    _HKI( "Immersion silver" ),   // used in .gbrjob file
+    _HKI( "Immersion gold" ),     // used in .gbrjob file
+    _HKI( "HT_OSP" ),             // used in .gbrjob file
+    _HKI( "OSP" ),                // used in .gbrjob file
+    _HKI( "None" ),               // used in .gbrjob file
+    _HKI( "User defined" )        // keep this option at end
 };
 
 
