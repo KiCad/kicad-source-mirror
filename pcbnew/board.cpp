@@ -1703,6 +1703,13 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
                 length += stackup.GetLayerDistance( via->TopLayer(), via->BottomLayer() );
                 continue;
             }
+            else if( track->Type() == PCB_ARC_T )
+            {
+                // Note: we don't apply the clip-to-pad optimization if an arc ends in a pad
+                // Room for future improvement.
+                length += track->GetLength();
+                continue;
+            }
 
             bool   inPad = false;
             SEG    trackSeg( track->GetStart(), track->GetEnd() );

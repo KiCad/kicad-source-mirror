@@ -328,7 +328,7 @@ public:
         double radius = GetRadius();
         double includedAngle  = std::abs( GetAngle() );
 
-        return radius * M_PI * includedAngle / 180.0;
+        return radius * M_PI * includedAngle / 1800.0;
     }
 
     EDA_ITEM* Clone() const override;

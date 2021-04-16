@@ -1038,6 +1038,7 @@ std::vector<CN_ITEM*> DIALOG_NET_INSPECTOR::relevantConnectivityItems() const
 
     const auto type_bits = std::bitset<MAX_STRUCT_TYPE_ID>()
             .set( PCB_TRACE_T )
+            .set( PCB_ARC_T )
             .set( PCB_VIA_T )
             .set( PCB_PAD_T );
 
