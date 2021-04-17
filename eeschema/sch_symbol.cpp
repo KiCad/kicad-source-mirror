@@ -34,7 +34,7 @@
 #include <schematic.h>
 #include <trace_helpers.h>
 #include <trigo.h>
-
+#include <refdes_utils.h>
 
 /**
  * Convert a wxString to UTF8 and replace any control characters with a ~,
@@ -92,29 +92,6 @@ static LIB_PART* dummy()
 }
 
 
-wxString refDesPrefix( const wxString& aSource )
-{
-    wxString result;
-    size_t   sourceLen = aSource.length();
-
-    for( size_t i = 0; i < sourceLen; ++i )
-    {
-        if( aSource[i] == '?' || wxIsdigit( aSource[i] ) )
-            break;
-
-        result += aSource[i];
-    }
-
-    return result;
-}
-
-
-wxString refDesUnannotated( const wxString& aSource )
-{
-    return refDesPrefix( aSource ) + wxT( "?" );
-}
-
-
 SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
     SCH_ITEM( aParent, SCH_COMPONENT_T )
 {
@@ -147,10 +124,10 @@ SCH_COMPONENT::SCH_COMPONENT( const LIB_PART& aPart, const LIB_ID& aLibId,
                   true, /* reset ref */
                   true /* reset other fields */ );
 
-    m_prefix = refDesPrefix( m_part->GetReferenceField().GetText() );
+    m_prefix = UTIL::GetRefDesPrefix( m_part->GetReferenceField().GetText() );
 
     if( aSheet )
-        SetRef( aSheet, refDesUnannotated( m_prefix ) );
+        SetRef( aSheet, UTIL::GetRefDesUnannotated( m_prefix ) );
 
     // Inherit the include in bill of materials and board netlist settings from library symbol.
     m_inBom = aPart.GetIncludeInBom();
@@ -476,7 +453,7 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aInclude
     }
 
     if( ref.IsEmpty() )
-        ref = refDesUnannotated( m_prefix );
+        ref = UTIL::GetRefDesUnannotated( m_prefix );
 
     if( aIncludeUnit && GetUnitCount() > 1 )
         ref += LIB_PART::SubReference( GetUnit() );
@@ -487,7 +464,7 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aInclude
 
 bool SCH_COMPONENT::IsReferenceStringValid( const wxString& aReferenceString )
 {
-    return !refDesPrefix( aReferenceString ).IsEmpty();
+    return !UTIL::GetRefDesPrefix( aReferenceString ).IsEmpty();
 }
 
 
@@ -526,7 +503,7 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     rf->SetText( ref );  // for drawing.
 
     // Reinit the m_prefix member if needed
-    m_prefix = refDesPrefix( ref );
+    m_prefix = UTIL::GetRefDesPrefix( ref );
 
     if( m_prefix.IsEmpty() )
         m_prefix = wxT( "U" );
@@ -581,7 +558,7 @@ void SCH_COMPONENT::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSel
     }
 
     // didn't find it; better add it
-    AddHierarchicalReference( path, refDesUnannotated( m_prefix ), aUnitSelection );
+    AddHierarchicalReference( path, UTIL::GetRefDesUnannotated( m_prefix ), aUnitSelection );
 }
 
 
@@ -638,7 +615,8 @@ void SCH_COMPONENT::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValu
     }
 
     // didn't find it; better add it
-    AddHierarchicalReference( path, refDesUnannotated( m_prefix ), m_unit, aValue, wxEmptyString );
+    AddHierarchicalReference( path, UTIL::GetRefDesUnannotated( m_prefix ), m_unit,
+                              aValue, wxEmptyString );
 }
 
 
@@ -688,8 +666,8 @@ void SCH_COMPONENT::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& a
     }
 
     // didn't find it; better add it
-    AddHierarchicalReference( path, refDesUnannotated( m_prefix ), m_unit, wxEmptyString,
-                              aFootprint );
+    AddHierarchicalReference( path, UTIL::GetRefDesUnannotated( m_prefix ), m_unit,
+                              wxEmptyString, aFootprint );
 }
 
 
@@ -1039,7 +1017,7 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
 void SCH_COMPONENT::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath )
 {
     // Build a reference with no annotation, i.e. a reference ending with a single '?'
-    wxString defRef = refDesUnannotated( m_prefix );
+    wxString defRef = UTIL::GetRefDesUnannotated( m_prefix );
 
     if( aSheetPath )
     {

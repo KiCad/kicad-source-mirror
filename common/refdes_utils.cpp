@@ -32,13 +32,22 @@
 namespace UTIL
 {
 
-wxString GetReferencePrefix( const wxString& aRefDes )
+wxString GetRefDesPrefix( const wxString& aRefDes )
 {
-    // find the first non-digit character from the back
+    // find the first non-digit, non-question-mark character from the back
     auto res = std::find_if( aRefDes.rbegin(), aRefDes.rend(),
-            []( wxUniChar aChr ) { return !std::isdigit( aChr ); } );
+            []( wxUniChar aChr )
+            {
+                return aChr != '?' && !std::isdigit( aChr );
+            } );
 
     return { aRefDes.begin(), res.base() };
+}
+
+
+wxString GetRefDesUnannotated( const wxString& aSource )
+{
+   return UTIL::GetRefDesPrefix( aSource ) + wxT( "?" );
 }
 
 

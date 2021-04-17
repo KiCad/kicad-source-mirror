@@ -1705,7 +1705,9 @@ wxString FOOTPRINT::GetNextPadName( const wxString& aLastPadName ) const
     for( PAD* pad : m_pads )
         usedNames.insert( pad->GetName() );
 
-    wxString prefix = UTIL::GetReferencePrefix( aLastPadName );
+    // Pad names aren't technically reference designators, but the formatting is close enough
+    // for these to give us what we need.
+    wxString prefix = UTIL::GetRefDesPrefix( aLastPadName );
     int      num = GetTrailingInt( aLastPadName );
 
     while( usedNames.count( wxString::Format( "%s%d", prefix, num ) ) )
@@ -1720,8 +1722,8 @@ void FOOTPRINT::IncrementReference( int aDelta )
     const wxString& refdes = GetReference();
 
     SetReference( wxString::Format( wxT( "%s%i" ),
-                  UTIL::GetReferencePrefix( refdes ),
-                  GetTrailingInt( refdes ) + aDelta ) );
+                                    UTIL::GetRefDesPrefix( refdes ),
+                                    GetTrailingInt( refdes ) + aDelta ) );
 }
 
 
