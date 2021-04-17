@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-04-13 22:22+0000\n"
+"PO-Revision-Date: 2021-04-17 23:05+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2200,18 +2200,19 @@ msgstr "選択対象に%d個のロックされたアイテムが含まれてい�
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr "ロックを無視しなければ、これらのアイテムをスキップします。"
+msgstr "ロックを無視しない場合は、これらのアイテムをスキップします。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
-#, fuzzy
 msgid "Remember decision for this session."
-msgstr "この違反のための除外を外す"
+msgstr "このセッションの間、選択を維持する。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"セッションが終わるまで、選択したオプションを維持します。\n"
+"このダイアログは、KiCad が再起動されるまで表示されません。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -2222,6 +2223,8 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"ロックを無視して、選択したすべての項目に対して操作を適用します。\n"
+"操作が完了しても、ロックされたアイテムはロックされたままになります。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:60
 msgid "Skip Locked Items"
@@ -2231,7 +2234,7 @@ msgstr "ロックされたアイテムを除外"
 msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
-msgstr ""
+msgstr "ロックされたアイテムを選択から除外し、ロックされていないアイテムにのみ操作を適用します。"
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
 msgid "Locked Items"
@@ -13187,14 +13190,14 @@ msgid "Cannot open file '%s'."
 msgstr "ファイル '%s' を開くことができません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Record id: %d."
-msgstr "不明な DRC エラー コード %d"
+msgstr "不明なレコードID: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:596
 #, c-format
 msgid "Pin has non-existent ownerindex %d."
-msgstr ""
+msgstr "ピンに存在しないownerindex %d があります。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:637
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1722
@@ -13207,7 +13210,7 @@ msgstr "予期しないピンのエレクトリカル タイプ."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:680
 msgid "Pin has unexpected outer edge type."
-msgstr ""
+msgstr "ピンの外周端が予期せぬタイプです。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:683
 msgid "Pin has unexpected inner edge type."
@@ -13216,32 +13219,32 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:805
 #, c-format
 msgid "Label has non-existent ownerindex %d."
-msgstr ""
+msgstr "ラベルに存在しないオーナーインデックス %d があります。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:841
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr ""
+msgstr "ベジェ曲線に %d の制御点しかありません。少なくとも2つ必要です。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:899
 #, c-format
 msgid "Bezier has non-existent ownerindex %d."
-msgstr ""
+msgstr "ベジェ曲線に存在しないオーナーインデックス %d があります。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:984
 #, c-format
 msgid "Polyline has non-existent ownerindex %d."
-msgstr ""
+msgstr "ポリラインに存在しないオーナーインデックス %d があります。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1046
 #, c-format
 msgid "Polygon has non-existent ownerindex %d."
-msgstr ""
+msgstr "ポリゴンに存在しないオーナーインデックス %d があります。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1128
 #, c-format
 msgid "Rounded rectangle has non-existent ownerindex %d."
-msgstr ""
+msgstr "角丸長方形に存在しないオーナーインデックス %d があります。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1166
 msgid "Arc drawing is not possible for now on schematic."
@@ -13250,12 +13253,12 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1175
 #, c-format
 msgid "Arc has non-existent ownerindex %d."
-msgstr ""
+msgstr "円弧に存在しないオーナーインデックス %d があります。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1236
 #, c-format
 msgid "Line has non-existent ownerindex %d."
-msgstr ""
+msgstr "線に存在しないオーナーインデックス %d があります。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1308
 #, c-format
@@ -23191,12 +23194,12 @@ msgstr "面:"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
 msgid "Unlock footprint"
-msgstr "フットプリントをアンロック"
+msgstr "フットプリントをロック解除"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
 msgid "Lock footprint"
-msgstr "フットプリントをロック"
+msgstr "フットプリントをロックする"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:197
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:137
@@ -25998,6 +26001,8 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
+"有効にすると、配線のセグメントがドラッグされたときに、画面上に表示されている配線全体が最適化され、再ルーティングされます。 "
+"無効にすると、ドラッグされた配線セグメントの近くの部分だけが最適化されます。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:91
 msgid "Use mouse path to set track posture"
@@ -26603,7 +26608,7 @@ msgstr "3D表示を自動的に更新"
 msgid ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
-msgstr ""
+msgstr "有効にすると、基板を編集すると3Dビューが更新されます (ボードが大きい場合は遅くなる可能性があります)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Magnetic pads"
@@ -28975,11 +28980,9 @@ msgid "No access rights to write to file \"%s\""
 msgstr "\"%s\" ファイルへの書き込み権限がありません"
 
 #: pcbnew/files.cpp:949 pcbnew/files.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr ""
-"基板保存中のエラー '%s'.\n"
-"%s"
+msgstr "カスタムルールファイルの保存中のエラー '%s'."
 
 #: pcbnew/files.cpp:980 pcbnew/files.cpp:1082
 #, c-format
@@ -35217,9 +35220,8 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] ロードに失敗しました: 入力行が長すぎます\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "イメージ コンバーター"
+msgstr "KiCad イメージ コンバーター"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
@@ -35230,18 +35232,16 @@ msgid "bitmap2component"
 msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
-#, fuzzy
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr "KiCad 回路図エディター"
+msgstr "KiCad 回路図エディター (スタンドアロン)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
-#, fuzzy
 msgid "Schematic Capture Tool"
-msgstr "回路図のワイヤーの色"
+msgstr "回路図キャプチャーツール"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr ""
+msgstr "KiCad回路図のスタンドアロンの回路図エディター"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
@@ -35270,21 +35270,19 @@ msgstr "EDAスイート"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "Suite of tools for schematic design and circuit board layout"
-msgstr ""
+msgstr "回路図設計と基板レイアウトのためのツール群"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
-#, fuzzy
 msgid "KiCad PCB Calculator"
-msgstr "PCB 電卓"
+msgstr "KiCad PCB 計算機"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "様々な電気関係の計算用ツール"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
-#, fuzzy
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "KiCad PCBエディター"
+msgstr "KiCad PCBエディター (スタンドアロン)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "PCB layout editor"
@@ -35292,7 +35290,7 @@ msgstr "基板レイアウト エディター"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr ""
+msgstr "KiCad基板のPCBエディター(スタンドアロン)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "pcbnew"
@@ -35300,7 +35298,7 @@ msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
-msgstr ""
+msgstr "回路図と基板設計のためのEDAスイート"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -35311,23 +35309,23 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"KiCadはフリーでオープンソースの電子設計自動化(EDA) スイートです。回路図のキャプチャ、集積回路のシミュレーション、プリント基板(PCB)のレイア"
+"ウト、3Dレンダリング、プロッティングや様々なフォーマットへのデータのエクスポートなどの機能があります。また、KiCadには何千ものシンボル、フットプリン"
+"ト、3Dモデルを含む高品質な部品ライブラリーが含まれています。KiCadのシステム要件は最小限で、Linux、Windows、MacOSで動作します。"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
-#, fuzzy
 msgid "KiCad Main Window"
-msgstr "KiCad マニュアル (&M)"
+msgstr "KiCad メインウィンドウ"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:67
-#, fuzzy
 msgid "KiCad PCB Layout Editor"
-msgstr "PCB レイアウト エディター"
+msgstr "KiCad PCB レイアウト エディター"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:84
 msgid "The KiCad Developers"
 msgstr "KiCadの開発者"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
 msgstr "ガーバー ファイル"
 
