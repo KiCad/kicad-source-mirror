@@ -673,12 +673,12 @@ private:
     LIB_ID      m_lib_id;       ///< Name and library the symbol was loaded from, i.e. 74xx:74LS00.
     int         m_unit;         ///< The unit for multiple part per package symbols.
     int         m_convert;      ///< The alternate body style for symbols that have more than
-                                ///< one body style defined.  Primarily used for symbols that
-                                ///< have a De Morgan conversion.
-    wxString    m_prefix;       ///< C, R, U, Q etc - the first character which typically indicates
-                                ///< what the symbol is. Determined, upon placement, from the
-                                ///< library symbol.  Created upon file load, by the first
-                                ///<  non-digits in the reference fields.
+                                ///<   one body style defined.  Primarily used for symbols that
+                                ///<   have a De Morgan conversion.
+    wxString    m_prefix;       ///< C, R, U, Q etc - the first character(s) which typically
+                                ///<   indicate what the symbol is. Determined, upon placement,
+                                ///<   from the library symbol.  Created upon file load, by the
+                                ///<   first non-digits in the reference fields.
 
     /**
      * The name used to look up a symbol in the symbol library embedded in a schematic.
