@@ -336,6 +336,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
     OnModify();
 
     m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL } );
+    m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
 
     GetCanvas()->Refresh();
 }
@@ -365,6 +366,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
     OnModify();
 
     m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL } );
+    m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
 
     GetCanvas()->Refresh();
 }
