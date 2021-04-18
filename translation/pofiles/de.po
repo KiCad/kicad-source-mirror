@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-04-17 23:05+0000\n"
+"PO-Revision-Date: 2021-04-20 00:29+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -8681,7 +8681,7 @@ msgstr "Auf Elemente klicken um diese auf der Platine hervorzuheben."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:59
 msgid "Violations"
-msgstr "Verstösse"
+msgstr "Verstöße"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:88
 #: pcbnew/dialogs/dialog_drc_base.cpp:169
