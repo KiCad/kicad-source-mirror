@@ -99,6 +99,7 @@ public:
     {
         m_pos = aPos;
         m_shape.SetCenter( aPos );
+        m_hole.SetCenter( aPos );
     }
 
     VIATYPE ViaType() const { return m_viaType; }
@@ -113,7 +114,7 @@ public:
     }
 
     int Drill() const { return m_drill; }
-    void SetDrill( int aDrill ) { m_drill = aDrill; }
+    void SetDrill( int aDrill ) { m_drill = aDrill; m_hole.SetRadius( aDrill / 2 ); }
 
     bool IsFree() const { return m_isFree; }
     void SetIsFree( bool aIsFree ) { m_isFree = aIsFree; }
