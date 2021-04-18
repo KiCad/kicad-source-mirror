@@ -1363,7 +1363,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
     m_ruleResolver = new PNS_PCBNEW_RULE_RESOLVER( m_board, this );
 
     aWorld->SetRuleResolver( m_ruleResolver );
-    aWorld->SetMaxClearance( 4 * worstClearance );
+    aWorld->SetMaxClearance( 1.5 * worstClearance );
 }
 
 
