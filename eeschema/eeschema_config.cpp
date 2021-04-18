@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <mutex>
+
 #include <class_library.h>
 #include <confirm.h>
 #include <dialogs/panel_eeschema_color_settings.h>
@@ -224,8 +226,14 @@ void SYMBOL_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 }
 
 
+static std::mutex s_symbolTableMutex;
+
+
 SYMBOL_LIB_TABLE* PROJECT::SchSymbolLibTable()
 {
+    wxLogDebug( "Getting symbol lib table" );
+    std::lock_guard<std::mutex> lock( s_symbolTableMutex );
+
     // This is a lazy loading function, it loads the project specific table when
     // that table is asked for, not before.
     SYMBOL_LIB_TABLE* tbl = (SYMBOL_LIB_TABLE*) GetElem( ELEM_SYMBOL_LIB_TABLE );

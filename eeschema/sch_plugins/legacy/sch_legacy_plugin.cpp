@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <boost/algorithm/string/join.hpp>
 #include <cctype>
+#include <mutex>
 #include <set>
 
 #include <wx/mstream.h>
@@ -476,8 +477,7 @@ static void parseQuotedString( wxString& aString, LINE_READER& aReader,
  */
 class SCH_LEGACY_PLUGIN_CACHE
 {
-    static int      m_modHash;      // Keep track of the modification status of the library.
-
+    static int      s_modHash;      // Keep track of the modification status of the library.
     wxString        m_fileName;     // Absolute path and file name.
     wxFileName      m_libFileName;  // Absolute path and file name is required here.
     wxDateTime      m_fileModTime;
@@ -523,11 +523,23 @@ class SCH_LEGACY_PLUGIN_CACHE
 
     friend SCH_LEGACY_PLUGIN;
 
+    static std::mutex s_modHashMutex;
+
 public:
     SCH_LEGACY_PLUGIN_CACHE( const wxString& aLibraryPath );
     ~SCH_LEGACY_PLUGIN_CACHE();
 
-    int GetModifyHash() const { return m_modHash; }
+    static void IncrementModifyHash()
+    {
+        std::lock_guard<std::mutex> mut( SCH_LEGACY_PLUGIN_CACHE::s_modHashMutex );
+        SCH_LEGACY_PLUGIN_CACHE::s_modHash++;
+    }
+
+    static int GetModifyHash()
+    {
+        std::lock_guard<std::mutex> mut( SCH_LEGACY_PLUGIN_CACHE::s_modHashMutex );
+        return SCH_LEGACY_PLUGIN_CACHE::s_modHash;
+    }
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
     // error codes nor user interface calls from here, nor in any SCH_PLUGIN objects.
@@ -2395,7 +2407,8 @@ void SCH_LEGACY_PLUGIN::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
 }
 
 
-int SCH_LEGACY_PLUGIN_CACHE::m_modHash = 1;     // starts at 1 and goes up
+int SCH_LEGACY_PLUGIN_CACHE::s_modHash = 1;     // starts at 1 and goes up
+std::mutex SCH_LEGACY_PLUGIN_CACHE::s_modHashMutex;
 
 
 SCH_LEGACY_PLUGIN_CACHE::SCH_LEGACY_PLUGIN_CACHE( const wxString& aFullPathAndFileName ) :
@@ -2533,7 +2546,7 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::removeSymbol( LIB_PART* aPart )
     m_symbols.erase( it );
     delete aPart;
     m_isModified = true;
-    ++m_modHash;
+    SCH_LEGACY_PLUGIN_CACHE::IncrementModifyHash();
     return firstChild;
 }
 
@@ -2551,7 +2564,7 @@ void SCH_LEGACY_PLUGIN_CACHE::AddSymbol( const LIB_PART* aPart )
 
     m_symbols[ name ] = const_cast< LIB_PART* >( aPart );
     m_isModified = true;
-    ++m_modHash;
+    SCH_LEGACY_PLUGIN_CACHE::IncrementModifyHash();
 }
 
 
@@ -2631,7 +2644,7 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
         }
     }
 
-    ++m_modHash;
+    SCH_LEGACY_PLUGIN_CACHE::IncrementModifyHash();
 
     // Remember the file modification time of library file when the
     // cache snapshot was made, so that in a networked environment we will
@@ -4199,7 +4212,7 @@ void SCH_LEGACY_PLUGIN_CACHE::DeleteSymbol( const wxString& aSymbolName )
         delete part;
     }
 
-    ++m_modHash;
+    SCH_LEGACY_PLUGIN_CACHE::IncrementModifyHash();
     m_isModified = true;
 }
 
@@ -4215,7 +4228,7 @@ void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPER
         // Because m_cache is rebuilt, increment PART_LIBS::s_modify_generation
         // to modify the hash value that indicate component to symbol links
         // must be updated.
-        PART_LIBS::s_modify_generation++;
+        PART_LIBS::IncrementModifyGeneration();
 
         if( !isBuffering( aProperties ) )
             m_cache->Load();
@@ -4243,7 +4256,7 @@ bool SCH_LEGACY_PLUGIN::isBuffering( const PROPERTIES* aProperties )
 int SCH_LEGACY_PLUGIN::GetModifyHash() const
 {
     if( m_cache )
-        return m_cache->GetModifyHash();
+        return SCH_LEGACY_PLUGIN_CACHE::GetModifyHash();
 
     // If the cache hasn't been loaded, it hasn't been modified.
     return 0;

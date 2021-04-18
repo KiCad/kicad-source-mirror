@@ -32,6 +32,7 @@
 #define CLASS_LIBRARY_H
 
 #include <map>
+#include <mutex>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <wx/filename.h>
 
@@ -197,11 +198,24 @@ class PART_LIBS : public PART_LIBS_BASE, public PROJECT::_ELEM
 public:
     KICAD_T Type() override { return PART_LIBS_T; }
 
-    static int s_modify_generation;         ///< helper for GetModifyHash()
+    static int        s_modify_generation;         ///< helper for GetModifyHash()
+    static std::mutex s_generationMutex;
 
     PART_LIBS()
     {
-        ++s_modify_generation;
+        IncrementModifyGeneration();
+    }
+
+    static void IncrementModifyGeneration()
+    {
+        std::lock_guard<std::mutex> mut( PART_LIBS::s_generationMutex );
+        ++PART_LIBS::s_modify_generation;
+    }
+
+    static int GetModifyGeneration()
+    {
+        std::lock_guard<std::mutex> mut( PART_LIBS::s_generationMutex );
+        return PART_LIBS::s_modify_generation;
     }
 
     /// Return the modification hash for all libraries.  The value returned

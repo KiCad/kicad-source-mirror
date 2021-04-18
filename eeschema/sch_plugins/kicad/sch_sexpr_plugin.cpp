@@ -777,7 +777,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 }
 
 
-void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSheetPath, 
+void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSheetPath,
                                OUTPUTFORMATTER* aFormatter )
 {
     wxCHECK( aSelection && aFormatter, /* void */ );
@@ -2094,7 +2094,7 @@ void SCH_SEXPR_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPERT
         // Because m_cache is rebuilt, increment PART_LIBS::s_modify_generation
         // to modify the hash value that indicate component to symbol links
         // must be updated.
-        PART_LIBS::s_modify_generation++;
+        PART_LIBS::IncrementModifyGeneration();
 
         if( !isBuffering( aProperties ) )
             m_cache->Load();

@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <mutex>
+
 #include <macros.h>
 #include <template_fieldnames.h>
 #include <pgm_base.h>
@@ -32,6 +34,8 @@ using namespace TFIELD_T;
 #define VALCANONICAL "Value"
 #define FTPCANONICAL "Footprint"
 #define DSHCANONICAL "Datasheet"
+
+static std::mutex s_defaultFieldMutex;
 
 const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTranslate )
 {
@@ -52,6 +56,10 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTra
         case  DATASHEET_FIELD: return DSHCANONICAL;   // Link to a datasheet for component
         }
     }
+
+    // Mutex protection is needed so that multiple loader threads don't write to the static variables
+    // at once
+    std::lock_guard<std::mutex> lock( s_defaultFieldMutex );
 
     // Fetching translations can take a surprising amount of time when loading libraries,
     // so only do it when necessary.

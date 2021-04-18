@@ -185,6 +185,8 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
     LIB_TABLE_ROW* row = nullptr;
     LIB_TABLE* cur = (LIB_TABLE*) this;
 
+    std::lock_guard<std::recursive_mutex> lock( m_nickIndexMutex );
+
     do
     {
         cur->ensureIndex();
@@ -301,6 +303,8 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
 
 bool LIB_TABLE::InsertRow( LIB_TABLE_ROW* aRow, bool doReplace )
 {
+    std::lock_guard<std::recursive_mutex> lock( m_nickIndexMutex );
+
     ensureIndex();
 
     INDEX_CITER it = nickIndex.find( aRow->GetNickName() );

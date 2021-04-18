@@ -30,6 +30,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
+#include <mutex>
 #include <project.h>
 #include <properties.h>
 #include <richio.h>
@@ -318,6 +319,8 @@ public:
     /// Delete all rows.
     void Clear()
     {
+        std::lock_guard<std::recursive_mutex> lock( m_nickIndexMutex );
+
         rows.clear();
         nickIndex.clear();
     }
@@ -501,6 +504,8 @@ protected:
 
     void reindex()
     {
+        std::lock_guard<std::recursive_mutex> lock( m_nickIndexMutex );
+
         nickIndex.clear();
 
         for( LIB_TABLE_ROWS_ITER it = rows.begin(); it != rows.end(); ++it )
@@ -509,6 +514,8 @@ protected:
 
     void ensureIndex()
     {
+        std::lock_guard<std::recursive_mutex> lock( m_nickIndexMutex );
+
         // The dialog lib table editor may not maintain the nickIndex.
         // Lazy indexing may be required.  To handle lazy indexing, we must enforce
         // that "nickIndex" is either empty or accurate, but never inaccurate.
@@ -533,6 +540,9 @@ protected:
     INDEX nickIndex;
 
     LIB_TABLE* fallBack;
+
+    /// Mutex to protect access to the nickIndex variable
+    mutable std::recursive_mutex m_nickIndexMutex;
 };
 
 #endif  // _LIB_TABLE_BASE_H_
