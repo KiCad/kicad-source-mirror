@@ -491,15 +491,6 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 
     SCH_FIELD* rf = GetField( REFERENCE_FIELD );
 
-    // @todo Should we really be checking for what is a "reasonable" position?
-    if( rf->GetText().IsEmpty()
-      || ( abs( rf->GetTextPos().x - m_pos.x ) +
-           abs( rf->GetTextPos().y - m_pos.y ) > Mils2iu( 10000 ) ) )
-    {
-        // move it to a reasonable position
-        rf->SetTextPos( m_pos + wxPoint( Mils2iu( 50 ), Mils2iu( 50 ) ) );
-    }
-
     rf->SetText( ref );  // for drawing.
 
     // Reinit the m_prefix member if needed
