@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-12 11:06-0700\n"
-"PO-Revision-Date: 2021-04-17 23:05+0000\n"
+"PO-Revision-Date: 2021-04-20 00:29+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -2224,6 +2224,8 @@ msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"Zapamatujte si vybranou možnost pro zbytek této relace.\n"
+"Tento dialog se znovu nezobrazí, dokud nebude restartován KiCad."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -2234,6 +2236,8 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"Přepsat zámky a aplikovat operaci na všech vybraných položkách.\n"
+"Všechny uzamčené položky zůstanou zamčené po dokončení operace."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:60
 msgid "Skip Locked Items"
@@ -2244,6 +2248,8 @@ msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"Odstranit blokované prvky z výběru a použít operaci pouze na odblokované "
+"položky (pokud existují)."
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
 msgid "Locked Items"
@@ -3026,9 +3032,8 @@ msgid "Icon theme:"
 msgstr "Motiv ikon:"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
-#, fuzzy
 msgid "Light"
-msgstr "Vpravo"
+msgstr "Světlo"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
@@ -6078,7 +6083,7 @@ msgstr "Otevře \"Přispějte do KiCadu\" ve webovém prohlížeči"
 
 #: common/tool/actions.cpp:631
 msgid "Donate"
-msgstr ""
+msgstr "Přispět"
 
 #: common/tool/actions.cpp:632
 msgid "Open \"Donate to KiCad\" in a web browser"
@@ -11763,9 +11768,8 @@ msgid "Largest"
 msgstr "Největší"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:151
-#, fuzzy
 msgid "Inter-sheet References"
-msgstr "Reference"
+msgstr "Odkazy mezi listy"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:153
 msgid "Show inter-sheet references"
@@ -12449,9 +12453,8 @@ msgid "Saving will overwrite existing files."
 msgstr "Uložení přepíše existující soubory."
 
 #: eeschema/files-io.cpp:798
-#, fuzzy
 msgid "Save Warning"
-msgstr "Upozornění na uložení projektu"
+msgstr "Záznam varování"
 
 #: eeschema/files-io.cpp:801
 msgid ""
@@ -13039,9 +13042,8 @@ msgid "Back to Previous Selected Sheet"
 msgstr "Zpět na předchozí vybraný list"
 
 #: eeschema/sch_field.cpp:530
-#, fuzzy
 msgid "Intersheet References"
-msgstr "Reference"
+msgstr "Reference mezi listy"
 
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:42
 #, c-format
@@ -13176,7 +13178,7 @@ msgstr "Neznámé ID záznamu: %d."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:596
 #, c-format
 msgid "Pin has non-existent ownerindex %d."
-msgstr ""
+msgstr "Vývod má neexistující index vlastníka %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:637
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1722
@@ -13189,36 +13191,36 @@ msgstr "Vývod má neočekávaný elektrický typ."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:680
 msgid "Pin has unexpected outer edge type."
-msgstr ""
+msgstr "Vývod má neočekávaný typ vnějšího okraje."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:683
 msgid "Pin has unexpected inner edge type."
-msgstr ""
+msgstr "Vývod má neočekávaný typ vnitřního okraje."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:805
-#, fuzzy, c-format
+#, c-format
 msgid "Label has non-existent ownerindex %d."
-msgstr "Oblast mědi obsahuje neexistující název sítě"
+msgstr "Označení má neexistující index vlastníků %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:841
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr ""
+msgstr "Bezierova křivka má %d řídicích bodů. Očekává se nejméně 2."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:899
 #, c-format
 msgid "Bezier has non-existent ownerindex %d."
-msgstr ""
+msgstr "Křivka Bezier má neexistující index vlastností %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:984
 #, c-format
 msgid "Polyline has non-existent ownerindex %d."
-msgstr ""
+msgstr "Lomená čára má neexistující index vlastností %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1046
 #, c-format
 msgid "Polygon has non-existent ownerindex %d."
-msgstr ""
+msgstr "Mnohoúhelník má neexistující index vlastností %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1128
 #, c-format
@@ -13227,22 +13229,22 @@ msgstr "Zaoblený obdélník má neexistující index vlastníka %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1166
 msgid "Arc drawing is not possible for now on schematic."
-msgstr ""
+msgstr "Kreslení oblouků není v současné době možné ve schématu."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1175
 #, c-format
 msgid "Arc has non-existent ownerindex %d."
-msgstr ""
+msgstr "Oblouk má neexistující index vlastností %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1236
 #, c-format
 msgid "Line has non-existent ownerindex %d."
-msgstr ""
+msgstr "Čára má neexistující index %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1308
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle has non-existent ownerindex %d."
-msgstr "Oblast mědi obsahuje neexistující název sítě"
+msgstr "Obdélník má neexistující index vlastností %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1613
 msgid "Power Port has unknown style, use bar instead."
@@ -13256,7 +13258,7 @@ msgstr "Symbol moci vytváří globální štítek s názvem „%s“"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2156
 #, c-format
 msgid "Designator has non-existent ownerindex %d."
-msgstr ""
+msgstr "Reference schématu má neexistující index vlastností %d."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:71
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:64
@@ -14667,9 +14669,8 @@ msgid "Save Plot Data"
 msgstr "Uložit data vykreslení"
 
 #: eeschema/sim/sim_plot_frame.cpp:1336
-#, fuzzy
 msgid "You need to run plot-providing simulation first."
-msgstr "Nejprve musíte spustit simulaci."
+msgstr "Nejdříve musíte spustit simulaci, která generuje grafy."
 
 #: eeschema/sim/sim_plot_frame.cpp:1537
 msgid ""
@@ -14939,6 +14940,8 @@ msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
+"Symboly ve starých knihovnách nejsou upravitelné. Použít Správa Knihovny "
+"symbolů pro migraci do aktuálního formátu."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:744
 #, c-format
