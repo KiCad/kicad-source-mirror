@@ -81,6 +81,8 @@ public:
                                   PNS::CONSTRAINT* aConstraint ) override;
     virtual wxString NetName( int aNet ) override;
 
+    int ClearanceEpsilon() const { return m_clearanceEpsilon; }
+
 private:
     int holeRadius( const PNS::ITEM* aItem ) const;
     int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet, wxString& aBaseDpName );
@@ -1363,7 +1365,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
     m_ruleResolver = new PNS_PCBNEW_RULE_RESOLVER( m_board, this );
 
     aWorld->SetRuleResolver( m_ruleResolver );
-    aWorld->SetMaxClearance( 1.5 * worstClearance );
+    aWorld->SetMaxClearance( worstClearance + m_ruleResolver->ClearanceEpsilon() );
 }
 
 
