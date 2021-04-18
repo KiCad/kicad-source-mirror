@@ -279,8 +279,16 @@ public:
      * Merge all basic shapes to a #SHAPE_POLY_SET.
      *
      * @note The results are relative to the pad position, orientation 0.
+     *
+     * @param aMergedPolygon will store the final polygon
+     * @param aLayer is the layer to take in account, as the exact shape can depend on the layer
+     * @param aErrorLoc is used when a circle (or arc) is approximated by segments
+     *  = ERROR_INSIDE to build a polygon inside the arc/circle (usual shape to raw/plot)
+     *  = ERROR_OUIDE to build a polygon outside the arc/circle
+     * (for instance when building a clearance area)
      */
-    void MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer ) const;
+    void MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
+                                   ERROR_LOC aErrorLoc = ERROR_INSIDE ) const;
 
     /**
      * Clear the basic shapes list.

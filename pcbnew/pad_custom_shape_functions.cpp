@@ -200,7 +200,8 @@ void PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_I
     }
 }
 
-void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer ) const
+void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
+                                    ERROR_LOC aErrorLoc ) const
 {
     BOARD* board = GetBoard();
     int    maxError = board ? board->GetDesignSettings().m_MaxError: ARC_HIGH_DEF;
@@ -225,7 +226,7 @@ void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID
         break;
     }
 
-    addPadPrimitivesToPolygon( aMergedPolygon, aLayer, maxError, ERROR_INSIDE );
+    addPadPrimitivesToPolygon( aMergedPolygon, aLayer, maxError, aErrorLoc );
 }
 
 
