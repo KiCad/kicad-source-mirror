@@ -1599,13 +1599,13 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
                 break;
             }
 
-            m_out->Print( nested_level, " (width %s)",
+            m_out->Print( 0, " (width %s)",
                           FormatInternalUnits( primitive->GetWidth() ).c_str() );
 
             if( primitive->IsFilled() )
-                m_out->Print( nested_level, " (fill yes)" );
+                m_out->Print( 0, " (fill yes)" );
 
-            m_out->Print( nested_level, ")" );
+            m_out->Print( 0, ")" );
         }
 
         m_out->Print( 0, "\n");
