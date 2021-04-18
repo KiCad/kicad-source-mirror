@@ -885,11 +885,13 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
 SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 {
     int clearance = getClearance( aCurrent, aObstacleVia );
-    LINE_PAIR_VEC draggedLines;
     VECTOR2I mtv;
     int rank = -1;
 
-    SHAPE_COMPOUND shape;
+    bool lineCollision = false;
+    bool viaCollision = false;
+    VECTOR2I mtvLine, mtvVia;
+
 
     if( aCurrent->OfKind( ITEM::LINE_T ) )
     {
@@ -900,36 +902,32 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
         m_logger.Log( currentLine, 4, "current" );
 #endif
 
-        shape.AddShape( currentLine->Shape()->Clone() );
-
-        // SHAPE_LINE_CHAIN collisions don't currently pay any attention to the line-chain's
-        // width, so we have to add it to the clearance.
-        clearance += currentLine->Width() / 2;
-
-        // Add a second shape for the via (if any)
+        lineCollision = aObstacleVia->Shape()->Collide( currentLine->Shape(), clearance + currentLine->Width() / 2, &mtvLine );
+ 
+        // Check the via if present. Via takes priority.
         if( currentLine->EndsWithVia() )
         {
             const VIA& currentVia = currentLine->Via();
             int        viaClearance = getClearance( &currentVia, aObstacleVia );
-            int        holeClearance = getHoleClearance( &currentVia, aObstacleVia );
-            int        effectiveRadius = std::max( currentVia.Diameter() / 2 + viaClearance,
-                                                   currentVia.Drill() / 2 + holeClearance );
 
-            // Since we have to run the collision with the line's clearance + 1/2 its width (as
-            // it's the only way to take the SHAPE_LINE_CHAIN's width into account), we need to
-            // subtract that clearance back out of the via's effective radius.
-            shape.AddShape( new SHAPE_CIRCLE( currentVia.Pos(), effectiveRadius - clearance ) );
+            viaCollision = aObstacleVia->Shape()->Collide( currentVia.Shape(), viaClearance, &mtvVia );
         }
     }
     else if( aCurrent->OfKind( ITEM::SOLID_T ) )
     {
-        shape.AddShape( aCurrent->Shape()->Clone() );
+       // TODO: is this possible at all? We don't shove solids.
+       return SH_INCOMPLETE;
     }
 
-    aObstacleVia->Shape()->Collide( &shape, clearance + PNS_HULL_MARGIN, &mtv );
-    rank = aCurrent->Rank() + 10000;
+    // fixme: we may have a sign issue in Collide(CIRCLE, LINE_CHAIN)
+    if( viaCollision )
+        mtv = mtvVia;
+    else if ( lineCollision )
+        mtv = -mtvLine;
+    else
+        mtv = VECTOR2I(0, 0);
 
-    return pushOrShoveVia( aObstacleVia, mtv, rank );
+    return pushOrShoveVia( aObstacleVia, -mtv, rank );
 }
 
 
