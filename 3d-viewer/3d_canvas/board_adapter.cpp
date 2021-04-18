@@ -242,10 +242,10 @@ bool BOARD_ADAPTER::IsFootprintShown( FOOTPRINT_ATTR_T aFPAttributes ) const
 // !TODO: define the actual copper thickness by user from board stackup
 #define COPPER_THICKNESS Millimeter2iu( 0.035 )   // for 35 um
 // The solder mask layer (and silkscreen) thickness
-#define TECH_LAYER_THICKNESS Millimeter2iu( 0.04 )
+#define TECH_LAYER_THICKNESS Millimeter2iu( 0.025 )
 // The solder paste thickness is chosen bigger than the solder mask layer
 // to be sure is covers the mask when overlapping.
-#define SOLDERPASTE_LAYER_THICKNESS Millimeter2iu( 0.08 )
+#define SOLDERPASTE_LAYER_THICKNESS Millimeter2iu( 0.04 )
 
 int BOARD_ADAPTER::GetHolePlatingThickness() const noexcept
 {

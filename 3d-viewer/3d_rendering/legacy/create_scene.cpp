@@ -721,6 +721,9 @@ void RENDER_3D_LEGACY::generateCylinder( const SFVEC2F& aCenter, float aInnerRad
 
 void RENDER_3D_LEGACY::generateViasAndPads()
 {
+    const int   platingThickness    = m_boardAdapter.GetHolePlatingThickness();
+    const float platingThickness3d  = platingThickness * m_boardAdapter.BiuTo3dUnits();
+
     if( m_boardAdapter.GetViaCount() > 0 )
     {
         const unsigned int reserve_nr_triangles_estimation =
@@ -741,7 +744,6 @@ void RENDER_3D_LEGACY::generateViasAndPads()
                 const VIA* via = static_cast<const VIA*>( track );
 
                 const float holediameter = via->GetDrillValue() * m_boardAdapter.BiuTo3dUnits();
-                const float thickness = m_boardAdapter.GetCopperThickness();
                 const int nrSegments = m_boardAdapter.GetCircleSegmentCount( via->GetDrillValue() );
                 const float hole_inner_radius = holediameter / 2.0f;
 
@@ -758,7 +760,8 @@ void RENDER_3D_LEGACY::generateViasAndPads()
 
                 wxASSERT( zbot < ztop );
 
-                generateCylinder( via_center, hole_inner_radius, hole_inner_radius + thickness,
+                generateCylinder( via_center, hole_inner_radius,
+                                  hole_inner_radius + platingThickness3d,
                                   ztop, zbot, nrSegments, layerTriangleVIA );
             }
         }
@@ -790,13 +793,11 @@ void RENDER_3D_LEGACY::generateViasAndPads()
                     if( !hasHole )
                         continue;
 
-                    const int copperThickness = m_boardAdapter.GetHolePlatingThickness();
-
                     pad->TransformHoleWithClearanceToPolygon( tht_outer_holes_poly,
-                                                              copperThickness,
-                                                              ARC_LOW_DEF, ERROR_INSIDE );
+                                                              platingThickness,
+                                                              ARC_HIGH_DEF, ERROR_INSIDE );
                     pad->TransformHoleWithClearanceToPolygon( tht_inner_holes_poly, 0,
-                                                              ARC_LOW_DEF, ERROR_INSIDE );
+                                                              ARC_HIGH_DEF, ERROR_INSIDE );
                 }
             }
         }

@@ -269,7 +269,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 const VIA*    via               = static_cast<const VIA*>( track );
                 const VIATYPE viatype           = via->GetViaType();
                 const float   holediameter      = via->GetDrillValue() * BiuTo3dUnits();
-                const float   thickness         = GetCopperThickness();
+
+                // holes and layer copper extend half info cylinder wall to hide transition
+                const float   thickness         = GetHolePlatingThickness() * BiuTo3dUnits() / 2.0f;
                 const float   hole_inner_radius = ( holediameter / 2.0f );
                 const float   ring_radius       = via->GetWidth() * BiuTo3dUnits() / 2.0f;
 
@@ -456,7 +458,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             // The hole in the body is inflated by copper thickness, if not plated, no copper
             const int inflate = ( pad->GetAttribute () != PAD_ATTRIB_NPTH ) ?
-                                GetHolePlatingThickness() : 0;
+                                GetHolePlatingThickness() / 2 : 0;
 
             m_holeCount++;
             m_averageHoleDiameter += ( ( pad->GetDrillSize().x +
