@@ -393,6 +393,8 @@ private:
         // Create a new fiber to go with the new context
         m_callee.tsan_fiber     = __tsan_create_fiber( 0 );
         m_callee.own_tsan_fiber = true;
+
+        __tsan_set_fiber_name( m_callee.tsan_fiber, "Coroutine fiber" );
 #endif
 
         wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::doCall" );
