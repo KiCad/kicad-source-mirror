@@ -48,31 +48,6 @@ REPORTER& WX_HTML_REPORT_BOX::Report( const wxString& aText, SEVERITY aSeverity 
     return *this;
 }
 
-
-wxString fixLinespacing( wxHtmlCell* aCell, int aMinLinespacing )
-{
-    // wxWidgets default linespacing is about 110% of font-height (which is way too small),
-    // and the default paragraph spacing is about 200% (which is too big).  The heading,
-    // bullet lists, etc. line spacing is fine.
-    //
-    // And of course they provide no way to set it, which leaves us with very few options.
-    // Fortunately we know we're dealing mostly with single lines in the reporter so we apply
-    // an egregious hack and enforce a minimum linespacing for things ending in '.' (which
-    // normally won't include headings or bullet list items).
-
-    wxString             content = aCell->ConvertToText( nullptr );
-    wxHtmlContainerCell* container = dynamic_cast<wxHtmlContainerCell*>( aCell );
-
-    for( wxHtmlCell* child = aCell->GetFirstChild(); child; child = child->GetNext() )
-        content += fixLinespacing( child, aMinLinespacing );
-
-    if( container && content.EndsWith( "." ) && container->GetHeight() < aMinLinespacing )
-        container->SetMinHeight( aMinLinespacing );
-
-    return content;
-}
-
-
 void WX_HTML_REPORT_BOX::Flush()
 {
     wxString html;
@@ -81,11 +56,6 @@ void WX_HTML_REPORT_BOX::Flush()
         html += generateHtml( line );
 
     SetPage( addHeader( html ) );
-
-    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    int    minLineHeight = KiROUND( font.GetPixelSize().y * 1.3 );
-
-    fixLinespacing( GetInternalRepresentation(), minLineHeight );
 }
 
 
@@ -107,7 +77,20 @@ wxString WX_HTML_REPORT_BOX::addHeader( const wxString& aBody )
 
 wxString WX_HTML_REPORT_BOX::generateHtml( const wxString& aLine )
 {
-    return aLine + "<br>";
+    // wxWidgets default linespacing is about 110% of font-height (which is way too small),
+    // and the default paragraph spacing is about 200% (which is too big).  The heading,
+    // bullet lists, etc. line spacing is fine.
+    //
+    // And of course they provide no way to set it, which leaves us with very few options.
+    // Fortunately we know we're dealing mostly with single lines in the reporter so we apply
+    // an egregious hack and enforce a minimum linespacing by inserting an invisible img
+    // element with appropriate height
+
+    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    int    additionalLineSpacing = KiROUND( font.GetPixelSize().y * 0.6 );
+
+    return wxString::Format( wxT( "<img align=texttop height=%d width=0 src=#>%s<br>" ),
+                             additionalLineSpacing, aLine );
 }
 
 
