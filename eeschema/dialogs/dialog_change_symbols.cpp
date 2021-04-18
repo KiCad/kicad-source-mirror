@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020-2021 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -25,7 +26,7 @@
 #include <kicad_string.h>   // WildCompareString
 #include <kiway.h>
 #include <lib_id.h>
-
+#include <refdes_utils.h>
 #include <core/kicad_algo.h>
 #include <dialog_change_symbols.h>
 #include <sch_symbol.h>
@@ -35,7 +36,6 @@
 #include <schematic.h>
 #include <template_fieldnames.h>
 #include <wx_html_report_panel.h>
-
 
 bool g_selectRefDes = false;
 bool g_selectValue  = false;
@@ -592,7 +592,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHE
             if( resetText )
             {
                 if( i == REFERENCE_FIELD )
-                    aSymbol->SetRef( aInstance, libField->GetText() );
+                    aSymbol->SetRef( aInstance, UTIL::GetRefDesUnannotated( libField->GetText() ) );
                 else if( i == VALUE_FIELD )
                     aSymbol->SetValue( aInstance, libField->GetText() );
                 else if( i == FOOTPRINT_FIELD )
