@@ -128,8 +128,6 @@ bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNe
         virtHead.SetDiameter( m_sizes.DiffPairGap() + 2 * m_sizes.DiffPairWidth() );
     }
 
-    VECTOR2I lead( 0, 0 );// = aP - m_currentStart ;
-    VECTOR2I force;
     bool solidsOnly = true;
 
     if( m_currentMode == RM_MarkObstacles )
@@ -143,7 +141,42 @@ bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNe
     }
 
     // fixme: I'm too lazy to do it well. Circular approximaton will do for the moment.
-    if( virtHead.PushoutForce( m_currentNode, lead, force, solidsOnly, 40 ) )
+
+    // Note: this code is lifted from VIA::PushoutForce and then optimized for this use case and to
+    // check proper clearances to the diff pair line.  It can be removed if some specialized
+    // pushout for traces / diff pairs is implemented.  Just calling VIA::PushoutForce does not work
+    // as the via may have different resolved clearance to items than the diff pair should.
+    int      maxIter  = 40;
+    int      iter     = 0;
+    bool     collided = false;
+    VECTOR2I force, totalForce;
+    std::set<ITEM*> handled;
+
+    while( iter < maxIter )
+    {
+        NODE::OPT_OBSTACLE obs = m_currentNode->CheckColliding( &virtHead, solidsOnly ?
+                                                                           ITEM::SOLID_T :
+                                                                           ITEM::ANY_T  );
+        if( !obs || handled.count( obs->m_item ) )
+            break;
+
+        int clearance = m_currentNode->GetClearance( obs->m_item, &m_currentTrace.PLine() );
+
+        if( obs->m_item->Shape()->Collide( virtHead.Shape(), clearance, &force ) )
+        {
+            collided = true;
+            totalForce += force;
+            virtHead.SetPos( virtHead.Pos() + force );
+        }
+
+        handled.insert( obs->m_item );
+
+        iter++;
+    }
+
+    bool succeeded = ( !collided || iter != maxIter );
+
+    if( succeeded )
     {
         aNewP = aP + force;
         return true;
