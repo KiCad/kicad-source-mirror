@@ -565,7 +565,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
     wxString cache_name = CacheName( aProject->GetProjectFullName() );
     PART_LIB* cache_lib;
 
-    if( !cache_name.IsEmpty() )
+    if( !aProject->IsNullProject() && !cache_name.IsEmpty() )
     {
         try
         {

@@ -1466,6 +1466,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 symbol->ClearAnnotation( nullptr );
                 symbol->SetUnit( unit );
             }
+
+            // Make sure pins get a new UUID
+            for( SCH_PIN* pin : symbol->GetPins() )
+                const_cast<KIID&>( pin->m_Uuid ) = KIID();
         }
 
         if( item->Type() == SCH_SHEET_T )
