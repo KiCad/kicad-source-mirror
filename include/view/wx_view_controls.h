@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -38,6 +38,7 @@
 #include <view/view_controls.h>
 
 #include <memory>
+class EDA_DRAW_PANEL_GAL;
 
 namespace KIGFX
 {
@@ -50,7 +51,7 @@ class ZOOM_CONTROLLER;
 class WX_VIEW_CONTROLS : public VIEW_CONTROLS, public wxEvtHandler
 {
 public:
-    WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel );
+    WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPanel );
     virtual ~WX_VIEW_CONTROLS();
 
     /// Handler functions
@@ -160,7 +161,7 @@ private:
     STATE       m_state;
 
     ///< Panel that is affected by VIEW_CONTROLS.
-    wxScrolledCanvas* m_parentPanel;
+    EDA_DRAW_PANEL_GAL* m_parentPanel;
 
     ///< Store information about point where dragging has started.
     VECTOR2D    m_dragStartPoint;
