@@ -108,6 +108,23 @@ wxString PIN_NUMBERS::GetSummary() const
 }
 
 
+wxString PIN_NUMBERS::GetDuplicates() const
+{
+    wxString ret;
+
+    for( const wxString& pinNumber : duplicate_pins )
+    {
+        ret += pinNumber;
+        ret += ',';
+    }
+
+    // Remove the trailing comma
+    ret.RemoveLast();
+
+    return ret;
+}
+
+
 int PIN_NUMBERS::Compare( const wxString& lhs, const wxString& rhs )
 {
     wxString::size_type cursor1 = 0;

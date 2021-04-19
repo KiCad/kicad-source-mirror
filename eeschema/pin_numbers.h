@@ -34,6 +34,12 @@ class PIN_NUMBERS
 public:
     wxString GetSummary() const;
 
+    /// <summary>
+    /// Gets a formatted string of all the pins that have duplicate numbers.
+    /// </summary>
+    /// <returns></returns>
+    wxString GetDuplicates() const;
+
     static int Compare( const wxString& lhs, const wxString& rhs );
 
 private:
@@ -52,7 +58,18 @@ public:
     typedef container_type::iterator iterator;
     typedef container_type::const_iterator const_iterator;
 
-    void insert( value_type const &v ) { pins.insert( v ); }
+    void insert( value_type const& v )
+    {
+        // Check if the insertion occurred. If no insertion was performed then
+        // the pin number is a duplicate so add it to the duplicate set.
+        bool not_duplicate = pins.insert( v ).second;
+
+        if( not_duplicate == false )
+        {
+            duplicate_pins.insert( v );
+        }
+    }
+
     container_type::size_type size() const { return pins.size(); }
 
     iterator begin() { return pins.begin(); }
@@ -62,6 +79,7 @@ public:
 
 private:
     container_type pins;
+    std::set<wxString> duplicate_pins;
 };
 
 #endif

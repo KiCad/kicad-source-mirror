@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 21 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,8 +48,12 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbGroup;
 		wxBitmapButton* m_refreshButton;
 		wxStaticLine* m_staticline2;
-		wxStaticText* m_staticText1;
-		wxStaticText* m_summary;
+		wxStaticText* m_staticTextPinNumbers;
+		wxStaticText* m_pin_numbers_summary;
+		wxStaticText* m_staticTextPinCount;
+		wxStaticText* m_pin_count;
+		wxStaticText* m_staticTextDuplicatePins;
+		wxStaticText* m_duplicate_pins;
 		wxStdDialogButtonSizer* m_Buttons;
 		wxButton* m_ButtonsOK;
 		wxButton* m_ButtonsCancel;

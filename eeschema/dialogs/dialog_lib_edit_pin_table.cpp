@@ -816,5 +816,11 @@ void DIALOG_LIB_EDIT_PIN_TABLE::updateSummary()
             pinNumbers.insert( pin->GetNumber() );
     }
 
-    m_summary->SetLabel( pinNumbers.GetSummary() );
+    m_pin_numbers_summary->SetLabel( pinNumbers.GetSummary() );
+
+    wxString count;
+    count << m_pins.size();
+    m_pin_count->SetLabel( count );
+
+    m_duplicate_pins->SetLabel( pinNumbers.GetDuplicates() );
 }
