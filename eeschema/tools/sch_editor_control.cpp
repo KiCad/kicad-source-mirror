@@ -1549,6 +1549,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             sheet->AddInstance( pastePath.Path() );
             sheet->SetPageNumber( pastePath, pageNum );
             updatePastedInstances( pastePath, clipPath, sheet, forceKeepAnnotations );
+
+            // Make sure pins get a new UUID
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                const_cast<KIID&>( pin->m_Uuid ) = KIID();
         }
 
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVED );
