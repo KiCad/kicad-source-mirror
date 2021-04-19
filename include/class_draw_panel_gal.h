@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2018 CERN
- * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -225,6 +225,13 @@ public:
      * Clear the contents of the debug overlay and removes it from the VIEW.
      */
     void ClearDebugOverlay();
+
+    /**
+     * used on wxMSW: true after a wxEVT_MOUSE_CAPTURE_LOST was received
+     * false after the mouse is recaptured.
+     * Used to avoid calling twice a CaptureMouse(), not accepted by wxMSW
+     */
+    bool m_MouseCapturedLost;
 
 protected:
     virtual void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );

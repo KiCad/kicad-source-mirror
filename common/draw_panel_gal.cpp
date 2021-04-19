@@ -71,6 +71,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_stealsFocus( true )
 {
     m_parent = aParentWindow;
+    m_MouseCapturedLost = false;
 
     SetLayoutDirection( wxLayout_LeftToRight );
 

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -36,6 +36,7 @@
 #include <settings/common_settings.h>
 #include <math/util.h>      // for KiROUND
 #include <widgets/ui_common.h>
+#include <class_draw_panel_gal.h>
 
 #if defined __WXMSW__
     #define USE_MOUSE_CAPTURE
@@ -65,7 +66,7 @@ static std::unique_ptr<ZOOM_CONTROLLER> GetZoomControllerForPlatform( bool aAcce
 }
 
 
-WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel ) :
+WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPanel ) :
         VIEW_CONTROLS( aView ),
         m_state( IDLE ),
         m_parentPanel( aParentPanel ),
@@ -472,7 +473,12 @@ void WX_VIEW_CONTROLS::onLeave( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onCaptureLost( wxMouseEvent& aEvent )
 {
-   // This method must be present to suppress the capture-lost assertion
+    // This method must be present to suppress the capture-lost assertion
+
+    // Set the flag to allow calling m_parentPanel->CaptureMouse()
+    // Nots: One cannot call m_parentPanel->CaptureMouse() twice, thit is not accepted
+    // by wxWidgets (MSW specific) so we need this guard
+    m_parentPanel->m_MouseCapturedLost = true;
 }
 
 void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
@@ -590,11 +596,25 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
 void WX_VIEW_CONTROLS::CaptureCursor( bool aEnabled )
 {
 #if defined USE_MOUSE_CAPTURE
-    if( aEnabled && !m_parentPanel->HasCapture() )
+    // Note: for some reason, m_parentPanel->HasCapture() can be false even if CaptureMouse()
+    // was called (i.e. mouse was captured, so when need to test m_MouseCapturedLost to be
+    // sure a wxEVT_MOUSE_CAPTURE_LOST event was fired before. Otherwise wxMSW complains
+    if( aEnabled && !m_parentPanel->HasCapture() && m_parentPanel->m_MouseCapturedLost )
+    {
         m_parentPanel->CaptureMouse();
+
+        // Clear the flag to allow calling m_parentPanel->CaptureMouse()
+        // Calling it without calling ReleaseMouse() is not accepted by wxWidgets (MSW specific)
+        m_parentPanel->m_MouseCapturedLost = false;
+    }
     else if( !aEnabled && m_parentPanel->HasCapture()
              && m_state != DRAG_PANNING && m_state != DRAG_ZOOMING )
+    {
         m_parentPanel->ReleaseMouse();
+
+        // Mouse is released, calling CaptureMouse() is allowed now:
+        m_parentPanel->m_MouseCapturedLost = true;
+    }
 #endif
     VIEW_CONTROLS::CaptureCursor( aEnabled );
 }
