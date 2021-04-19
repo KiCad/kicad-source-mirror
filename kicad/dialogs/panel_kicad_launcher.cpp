@@ -97,35 +97,35 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
         };
 
     addLauncher( KICAD_MANAGER_ACTIONS::editSchematic,
-                 KiScaledBitmap( BITMAPS::icon_eeschema, this, 48 ),
+                 KiBitmap( BITMAPS::icon_eeschema, 48 ),
                  _( "Edit the project schematic" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::editSymbols,
-                 KiScaledBitmap( BITMAPS::icon_libedit, this, 48 ),
+                 KiBitmap( BITMAPS::icon_libedit, 48 ),
                  _( "Edit global and/or project schematic symbol libraries" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::editPCB,
-                 KiScaledBitmap( BITMAPS::icon_pcbnew, this, 48 ),
+                 KiBitmap( BITMAPS::icon_pcbnew, 48 ),
                  _( "Edit the project PCB design" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::editFootprints,
-                 KiScaledBitmap( BITMAPS::icon_modedit, this, 48 ),
+                 KiBitmap( BITMAPS::icon_modedit, 48 ),
                  _( "Edit global and/or project PCB footprint libraries" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::viewGerbers,
-                 KiScaledBitmap( BITMAPS::icon_gerbview, this, 48 ),
+                 KiBitmap( BITMAPS::icon_gerbview, 48 ),
                  _( "Preview Gerber files" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::convertImage,
-                 KiScaledBitmap( BITMAPS::icon_bitmap2component, this, 48 ),
+                 KiBitmap( BITMAPS::icon_bitmap2component, 48 ),
                  _( "Convert bitmap images to schematic symbols or PCB footprints" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::showCalculator,
-                 KiScaledBitmap( BITMAPS::icon_pcbcalculator, this, 48 ),
+                 KiBitmap( BITMAPS::icon_pcbcalculator, 48 ),
                  _( "Show tools for calculating resistance, current capacity, etc." ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::editDrawingSheet,
-                 KiScaledBitmap( BITMAPS::icon_pagelayout_editor, this, 48 ),
+                 KiBitmap( BITMAPS::icon_pagelayout_editor, 48 ),
                  _( "Edit drawing sheet borders and title blocks for use in schematics and PCB "
                     "designs" ) );
 

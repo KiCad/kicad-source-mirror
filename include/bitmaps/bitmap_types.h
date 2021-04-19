@@ -45,8 +45,9 @@ BITMAP_STORE* GetBitmapStore();
  * Construct a wxBitmap from an image identifier
  * Returns the image from the active theme if the image has multiple theme variants.
  * @param aBitmap is from the BITMAPS enum in bitmaps_list.h
+ * @param aHeightTag is the requested height tag for multi-res bitmaps (-1 for any)
  */
-wxBitmap KiBitmap( BITMAPS aBitmap );
+wxBitmap KiBitmap( BITMAPS aBitmap, int aHeightTag = -1 );
 
 /**
  * Compatibility shim for pcb_calculator until its images are pulled into the PNG pipeline

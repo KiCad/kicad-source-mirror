@@ -101,9 +101,9 @@ BITMAP_STORE* GetBitmapStore()
 }
 
 
-wxBitmap KiBitmap( BITMAPS aBitmap )
+wxBitmap KiBitmap( BITMAPS aBitmap, int aHeightTag )
 {
-    return GetBitmapStore()->GetBitmap( aBitmap );
+    return GetBitmapStore()->GetBitmap( aBitmap, aHeightTag );
 }
 
 
