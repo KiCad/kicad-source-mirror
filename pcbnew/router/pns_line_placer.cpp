@@ -519,7 +519,11 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
     buildInitialLine( aP, m_head );
     m_head.SetBlockingObstacle( nullptr );
 
-    // If we are enforcing DRC violations, push back to the hull
+    // Note: Something like the below could be used to implement a "stop at first obstacle" mode,
+    // but we don't have one right now and there isn't a lot of demand for one.  If we do end up
+    // doing that, put it in a new routing mode as "highlight collisions" mode should not have
+    // collision handling other than highlighting.
+#if 0
     if( !Settings().AllowDRCViolations() )
     {
         NODE::OPT_OBSTACLE obs = m_currentNode->NearestObstacle( &m_head );
@@ -530,6 +534,7 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
             m_head.SetBlockingObstacle( obs->m_item );
         }
     }
+#endif
 
     aNewHead = m_head;
 
