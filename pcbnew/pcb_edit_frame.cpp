@@ -400,6 +400,7 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 
     delete m_selectionFilterPanel;
     delete m_appearancePanel;
+    delete m_exportNetlistAction;
 }
 
 

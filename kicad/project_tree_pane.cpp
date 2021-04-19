@@ -839,8 +839,8 @@ void PROJECT_TREE_PANE::onDeleteFile( wxCommandEvent& event )
     }
     else
     {
-        msg = wxString::Format( _( "Are you sure you want to delete %lu items?" ),
-                                tree_data.size() );
+        msg = wxString::Format( _( "Are you sure you want to delete %d items?" ),
+                                (int)tree_data.size() );
         caption = _( "Delete Multiple Items" );
     }
 
