@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -656,13 +656,21 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     wxString  msg;
     BOARD*    board = GetBoard();
 
-    aList.emplace_back( _( "Type" ), _( "Track" ) );
+    aList.emplace_back( _( "Type" ),
+                        Type() == PCB_ARC_T ? ( "Track (arc)" ) : _( "Track" ) );
+
 
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
     aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 
     aList.emplace_back( _( "Width" ), MessageTextFromValue( units, m_Width ) );
+
+    if( Type() == PCB_ARC_T )
+    {
+        double radius = static_cast<ARC*>( this )->GetRadius();
+        aList.emplace_back( _( "Radius" ), MessageTextFromValue( units, radius ) );
+    }
 
     // Display full track length (in Pcbnew)
     if( board )
@@ -889,7 +897,9 @@ bool VIA::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 
 wxString TRACK::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _("Track %s on %s, length %s" ),
+    return wxString::Format( Type() == PCB_ARC_T ?
+                                _("Track (arc) %s on %s, length %s" )
+                                : _("Track %s on %s, length %s" ),
                              GetNetnameMsg(),
                              GetLayerName(),
                              MessageTextFromValue( aUnits, GetLength() ) );
