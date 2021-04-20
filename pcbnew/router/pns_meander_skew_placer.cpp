@@ -111,12 +111,12 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     if ( m_originPair.PLine().Net() == m_originLine.Net() )
     {
         m_padToDieLength = m_padToDieN;
-        m_coupledLength = itemsetLength( m_tunedPathN );
+        m_coupledLength = lineLength( m_tunedPathN );
     }
     else
     {
         m_padToDieLength = m_padToDieP;
-        m_coupledLength = itemsetLength( m_tunedPathP );
+        m_coupledLength = lineLength( m_tunedPathP );
     }
 
     return true;
@@ -125,22 +125,7 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
 long long int MEANDER_SKEW_PLACER::origPathLength() const
 {
-    return itemsetLength ( m_tunedPath );
-}
-
-
-long long int MEANDER_SKEW_PLACER::itemsetLength( const ITEM_SET& aSet ) const
-{
-    long long int total = m_padToDieLength;
-    for( const ITEM* item : aSet.CItems() )
-    {
-        if( const LINE* l = dyn_cast<const LINE*>( item ) )
-        {
-            total += l->CLine().Length();
-        }
-    }
-
-    return total;
+    return lineLength( m_tunedPath );
 }
 
 

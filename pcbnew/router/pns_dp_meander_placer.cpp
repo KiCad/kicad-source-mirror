@@ -141,22 +141,8 @@ void DP_MEANDER_PLACER::release()
 
 long long int DP_MEANDER_PLACER::origPathLength() const
 {
-    long long int totalP = m_padToDieLength;
-    long long int totalN = m_padToDieLength;
-
-    for( const ITEM* item : m_tunedPathP.CItems() )
-    {
-        if( const LINE* l = dyn_cast<const LINE*>( item ) )
-            totalP += l->CLine().Length();
-
-    }
-
-    for( const ITEM* item : m_tunedPathN.CItems() )
-    {
-        if( const LINE* l = dyn_cast<const LINE*>( item ) )
-            totalN += l->CLine().Length();
-    }
-
+    long long int totalP = m_padToDieLength + lineLength( m_tunedPathP );
+    long long int totalN = m_padToDieLength + lineLength( m_tunedPathN );
     return std::max( totalP, totalN );
 }
 

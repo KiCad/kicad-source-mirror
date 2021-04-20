@@ -97,27 +97,7 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
 long long int MEANDER_PLACER::origPathLength() const
 {
-    long long int total = m_padToDieLength;
-
-    for( int idx = 0; idx < m_tunedPath.Size(); idx++ )
-    {
-        const ITEM* item = m_tunedPath[idx];
-
-        if( const LINE* l = dyn_cast<const LINE*>( item ) )
-        {
-            total += l->CLine().Length();
-        }
-        else if( item->OfKind( ITEM::VIA_T ) && idx > 0 && idx < m_tunedPath.Size() - 1 )
-        {
-            int layerPrev = m_tunedPath[idx - 1]->Layer();
-            int layerNext = m_tunedPath[idx + 1]->Layer();
-
-            if( layerPrev != layerNext )
-                total += m_router->GetInterface()->StackupHeight( layerPrev, layerNext );
-        }
-    }
-
-    return total;
+    return m_padToDieLength + lineLength( m_tunedPath );
 }
 
 

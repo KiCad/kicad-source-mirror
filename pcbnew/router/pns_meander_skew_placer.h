@@ -53,7 +53,6 @@ public:
 
 private:
     long long int currentSkew() const;
-    long long int itemsetLength( const ITEM_SET& aSet ) const;
 
     long long int origPathLength() const override;
 
