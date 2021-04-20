@@ -650,7 +650,7 @@ GLuint OPENGL_RENDER_LIST::generate_top_or_bot_seg_ends(
 
             setBlendfunction();
 
-            glAlphaFunc( GL_GREATER, 0.2f );
+            glAlphaFunc( GL_GREATER, 0.98f );
             glEnable( GL_ALPHA_TEST );
 
             glNormal3f( 0.0f, 0.0f, aIsNormalUp?1.0f:-1.0f );

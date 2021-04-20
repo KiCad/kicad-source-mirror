@@ -982,19 +982,25 @@ bool RENDER_3D_LEGACY::initializeOpenGL()
     if( !circleImage )
         return false;
 
+    unsigned int circleRadius = ( SIZE_OF_CIRCLE_TEXTURE / 2 ) - 0;
+
     circleImage->CircleFilled( ( SIZE_OF_CIRCLE_TEXTURE / 2 ) - 0,
                                ( SIZE_OF_CIRCLE_TEXTURE / 2 ) - 0,
-                               ( SIZE_OF_CIRCLE_TEXTURE / 2 ) - 4,
+                               circleRadius,
                                0xFF );
 
-    IMAGE* circleImage_Copy = new IMAGE( *circleImage );
+    IMAGE* circleImageBlured = new IMAGE( circleImage->GetWidth(), circleImage->GetHeight() );
 
-    circleImage->EfxFilter( circleImage_Copy, IMAGE_FILTER::BLUR_3X3 );
+    circleImageBlured->EfxFilter_SkipCenter( circleImage, IMAGE_FILTER::GAUSSIAN_BLUR, circleRadius - 8 );
 
-    m_circleTexture = OglLoadTexture( *circleImage );
+    circleImage->EfxFilter_SkipCenter( circleImageBlured, IMAGE_FILTER::GAUSSIAN_BLUR, circleRadius - 8 );
 
-    delete circleImage_Copy;
-    circleImage_Copy = 0;
+    circleImageBlured->EfxFilter_SkipCenter( circleImage, IMAGE_FILTER::GAUSSIAN_BLUR, circleRadius - 8 );
+
+    m_circleTexture = OglLoadTexture( *circleImageBlured );
+
+    delete circleImageBlured;
+    circleImageBlured = 0;
 
     delete circleImage;
     circleImage = 0;

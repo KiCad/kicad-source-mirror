@@ -176,6 +176,16 @@ public:
     void EfxFilter( IMAGE* aInImg, IMAGE_FILTER aFilterType );
 
     /**
+     * Apply a filter to the input image and store it in the image class.
+     * skip the circle center defined by radius
+     *
+     * @param aInImg input image
+     * @param aFilterType filter type to apply
+     * @param aRadius center circle that the effect will not be applied
+     */
+    void EfxFilter_SkipCenter( IMAGE* aInImg, IMAGE_FILTER aFilterType, unsigned int aRadius );
+
+    /**
      * Save image buffer to a PNG file into the working folder.
      *
      * Each RGB channel will have the 8bit-channel from the image.

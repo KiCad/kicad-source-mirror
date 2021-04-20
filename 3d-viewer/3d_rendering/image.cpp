@@ -524,6 +524,64 @@ void IMAGE::EfxFilter( IMAGE* aInImg, IMAGE_FILTER aFilterType )
 }
 
 
+void IMAGE::EfxFilter_SkipCenter( IMAGE* aInImg, IMAGE_FILTER aFilterType, unsigned int aRadius )
+{
+    if( ( !aInImg ) || ( m_width != aInImg->m_width ) || ( m_height != aInImg->m_height ) )
+        return;
+
+    S_FILTER filter = FILTERS[static_cast<int>( aFilterType )];
+
+    aInImg->m_wraping = IMAGE_WRAP::ZERO;
+
+    const unsigned int radiusSquared = aRadius * aRadius;
+
+    const unsigned int xCenter = m_width / 2;
+    const unsigned int yCenter = m_height / 2;
+
+    for( size_t iy = 0; iy < m_height; iy++ )
+    {
+        int yc = iy - yCenter;
+
+        yc = yc * yc;
+
+        for( size_t ix = 0; ix < m_width; ix++ )
+        {
+            int xc = ix - xCenter;
+
+            xc = xc * xc;
+
+            if( ( xc + yc ) < radiusSquared )
+            {
+                const unsigned int offset = ix + iy * m_width;
+
+                m_pixels[offset] = aInImg->m_pixels[offset];
+
+                continue;
+            }
+
+            int v = 0;
+
+            for( size_t sy = 0; sy < 5; sy++ )
+            {
+                for( size_t sx = 0; sx < 5; sx++ )
+                {
+                    int factor = filter.kernel[sx][sy];
+                    unsigned char pixelv = aInImg->Getpixel( ix + sx - 2, iy + sy - 2 );
+
+                    v += pixelv * factor;
+                }
+            }
+
+            v /= filter.div;
+            v += filter.offset;
+            CLAMP(v, 0, 255);
+
+            m_pixels[ix + iy * m_width] = v;
+        }
+    }
+}
+
+
 void IMAGE::SetPixelsFromNormalizedFloat( const float* aNormalizedFloatArray )
 {
     for( unsigned int i = 0; i < m_wxh; i++ )
