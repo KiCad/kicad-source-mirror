@@ -155,7 +155,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch, bool a
         // Also note that this cannot happen when we have deleted a symbol as GTK will also
         // iterate over the tree in this case and find a symbol that has an invalid link
         // and crash https://gitlab.com/kicad/code/kicad/-/issues/6910
-        if( !aState && !aSearch.IsNull() && m_tree.Children.size() )
+        if( !aState && m_tree.Children.size() )
         {
             for( std::unique_ptr<LIB_TREE_NODE>& child: m_tree.Children )
                 m_widget->Collapse( wxDataViewItem( &*child ) );
