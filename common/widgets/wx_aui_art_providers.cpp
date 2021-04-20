@@ -136,6 +136,11 @@ WX_AUI_DOCK_ART::WX_AUI_DOCK_ART() : wxAuiDefaultDockArt()
 #endif
 #endif
 
+    SetColour( wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR,
+               wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
+    SetColour( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
+               wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
+
     // Turn off the ridiculous looking gradient
     m_gradientType = wxAUI_GRADIENT_NONE;
 }

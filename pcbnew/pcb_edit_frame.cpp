@@ -289,11 +289,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
 
-    m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR,
-                                          wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-    m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
-                                          wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-
     FinishAUIInitialization();
 
     if( PCBNEW_SETTINGS* settings = dynamic_cast<PCBNEW_SETTINGS*>( config() ) )

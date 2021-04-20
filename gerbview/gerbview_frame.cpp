@@ -164,11 +164,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
-    m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR,
-                                          wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-    m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
-                                          wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-
     ReFillLayerWidget();                // this is near end because contents establish size
     m_auimgr.Update();
 

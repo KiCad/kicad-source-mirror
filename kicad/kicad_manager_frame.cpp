@@ -160,11 +160,6 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                       .Caption( _( "Editors" ) ).PaneBorder( false )
                       .MinSize( m_launcher->GetBestSize() ) );
 
-    m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR,
-                                          wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-    m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
-                                          wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-
     m_auimgr.Update();
 
     // Now the actual m_leftWin size is set, give it a reasonable min width

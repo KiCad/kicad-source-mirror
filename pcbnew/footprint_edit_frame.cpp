@@ -250,11 +250,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     ActivateGalCanvas();
 
-    m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR,
-                                          wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-    m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
-                                          wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-
     FinishAUIInitialization();
 
     if( m_settings->m_LibWidth > 0 )
