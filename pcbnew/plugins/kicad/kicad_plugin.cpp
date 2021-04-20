@@ -615,13 +615,15 @@ void PCB_IO::formatProperties( const BOARD* aBoard, int aNestLevel ) const
                       m_out->Quotew( prop.second ).c_str() );
     }
 
-    m_out->Print( 0, "\n" );
+    if( !aBoard->GetProperties().empty() )
+        m_out->Print( 0, "\n" );
 }
 
 
 void PCB_IO::formatHeader( const BOARD* aBoard, int aNestLevel ) const
 {
     formatGeneral( aBoard, aNestLevel );
+
     // Layers list.
     formatBoardLayers( aBoard, aNestLevel );
 
@@ -641,14 +643,13 @@ void PCB_IO::format( const BOARD* aBoard, int aNestLevel ) const
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_footprints( aBoard->Footprints().begin(),
                                                                   aBoard->Footprints().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_drawings( aBoard->Drawings().begin(),
-            aBoard->Drawings().end() );
+                                                                aBoard->Drawings().end() );
     std::set<TRACK*, TRACK::cmp_tracks> sorted_tracks( aBoard->Tracks().begin(),
-            aBoard->Tracks().end() );
+                                                       aBoard->Tracks().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aBoard->Zones().begin(),
-            aBoard->Zones().end() );
+                                                             aBoard->Zones().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_groups( aBoard->Groups().begin(),
-            aBoard->Groups().end() );
-
+                                                              aBoard->Groups().end() );
     formatHeader( aBoard, aNestLevel );
 
     // Save the footprints.
@@ -822,14 +823,16 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
             {
                 int nestLevel = 0;
 
-                if( ii && ( !( ii%4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave ) )   // newline every 4 pts
+                if( ii && ( !( ii%4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave ) )
                 {
+                    // newline every 4 pts.
                     nestLevel = aNestLevel + 1;
                     m_out->Print( 0, "\n" );
                 }
 
                 m_out->Print( nestLevel, "%s(xy %s)",
-                              nestLevel ? "" : " ", FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
+                              nestLevel ? "" : " ",
+                              FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
             }
 
             m_out->Print( 0, ")" );
@@ -921,14 +924,16 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
             {
                 int nestLevel = 0;
 
-                if( ii && ( !( ii%4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave ) )   // newline every 4 pts
+                if( ii && ( !( ii%4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave ) )
                 {
+                    // newline every 4 pts.
                     nestLevel = aNestLevel + 1;
                     m_out->Print( 0, "\n" );
                 }
 
                 m_out->Print( nestLevel, "%s(xy %s)",
-                              nestLevel ? "" : " ", FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
+                              nestLevel ? "" : " ",
+                              FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
             }
 
             m_out->Print( 0, ")" );
@@ -1038,7 +1043,8 @@ void PCB_IO::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
 
     if( !( m_ctl & CTL_OMIT_AT ) )
     {
-        m_out->Print( aNestLevel+1, "(at %s", FormatInternalUnits( aFootprint->GetPosition() ).c_str() );
+        m_out->Print( aNestLevel+1, "(at %s",
+                      FormatInternalUnits( aFootprint->GetPosition() ).c_str() );
 
         if( aFootprint->GetOrientation() != 0.0 )
             m_out->Print( 0, " %s", FormatAngle( aFootprint->GetOrientation() ).c_str() );
@@ -1124,13 +1130,14 @@ void PCB_IO::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
         m_out->Print( 0, ")\n" );
     }
 
-    Format((BOARD_ITEM*) &aFootprint->Reference(), aNestLevel + 1 );
-    Format((BOARD_ITEM*) &aFootprint->Value(), aNestLevel + 1 );
+    Format( (BOARD_ITEM*) &aFootprint->Reference(), aNestLevel + 1 );
+    Format( (BOARD_ITEM*) &aFootprint->Value(), aNestLevel + 1 );
 
     std::set<PAD*, FOOTPRINT::cmp_pads> sorted_pads( aFootprint->Pads().begin(),
                                                      aFootprint->Pads().end() );
-    std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> sorted_drawings( aFootprint->GraphicalItems().begin(),
-                                                                    aFootprint->GraphicalItems().end() );
+    std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> sorted_drawings(
+            aFootprint->GraphicalItems().begin(),
+            aFootprint->GraphicalItems().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aFootprint->Zones().begin(),
                                                              aFootprint->Zones().end() );
     std::set<BOARD_ITEM*, PCB_GROUP::ptr_cmp> sorted_groups( aFootprint->Groups().begin(),
@@ -1185,6 +1192,7 @@ void PCB_IO::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
 
             m_out->Print( aNestLevel+1, ")\n" );
         }
+
         ++bs3D;
     }
 
@@ -1202,13 +1210,13 @@ void PCB_IO::formatLayers( LSET aLayerMask, int aNestLevel ) const
     output += "(layers";
 
     static const LSET cu_all( LSET::AllCuMask() );
-    static const LSET fr_bk( 2, B_Cu,       F_Cu );
-    static const LSET adhes( 2, B_Adhes,    F_Adhes );
-    static const LSET paste( 2, B_Paste,    F_Paste );
-    static const LSET silks( 2, B_SilkS,    F_SilkS );
-    static const LSET mask(  2, B_Mask,     F_Mask );
-    static const LSET crt_yd(2, B_CrtYd,    F_CrtYd );
-    static const LSET fab(   2, B_Fab,      F_Fab );
+    static const LSET fr_bk(  2, B_Cu,       F_Cu );
+    static const LSET adhes(  2, B_Adhes,    F_Adhes );
+    static const LSET paste(  2, B_Paste,    F_Paste );
+    static const LSET silks(  2, B_SilkS,    F_SilkS );
+    static const LSET mask(   2, B_Mask,     F_Mask );
+    static const LSET crt_yd( 2, B_CrtYd,    F_CrtYd );
+    static const LSET fab(    2, B_Fab,      F_Fab );
 
     LSET cu_mask = cu_all;
 
@@ -1262,7 +1270,6 @@ void PCB_IO::formatLayers( LSET aLayerMask, int aNestLevel ) const
     }
 
     // output any individual layers not handled in wildcard combos above
-
     wxString layerName;
 
     for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
@@ -1314,13 +1321,13 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
 
     switch( aPad->GetProperty() )
     {
-    case PAD_PROP_NONE:             break;  // could be also "none"
-    case PAD_PROP_BGA:              property = "pad_prop_bga"; break;
+    case PAD_PROP_NONE:                                                  break;  // could be "none"
+    case PAD_PROP_BGA:              property = "pad_prop_bga";           break;
     case PAD_PROP_FIDUCIAL_GLBL:    property = "pad_prop_fiducial_glob"; break;
-    case PAD_PROP_FIDUCIAL_LOCAL:   property = "pad_prop_fiducial_loc"; break;
-    case PAD_PROP_TESTPOINT:        property = "pad_prop_testpoint"; break;
-    case PAD_PROP_HEATSINK:         property = "pad_prop_heatsink"; break;
-    case PAD_PROP_CASTELLATED:      property = "pad_prop_castellated"; break;
+    case PAD_PROP_FIDUCIAL_LOCAL:   property = "pad_prop_fiducial_loc";  break;
+    case PAD_PROP_TESTPOINT:        property = "pad_prop_testpoint";     break;
+    case PAD_PROP_HEATSINK:         property = "pad_prop_heatsink";      break;
+    case PAD_PROP_CASTELLATED:      property = "pad_prop_castellated";   break;
 
     default:
         THROW_IO_ERROR( wxString::Format( "unknown pad property: %d", aPad->GetProperty() ) );
@@ -1343,7 +1350,7 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
     m_out->Print( 0, " (size %s)", FormatInternalUnits( aPad->GetSize() ).c_str() );
 
     if( (aPad->GetDelta().GetWidth()) != 0 || (aPad->GetDelta().GetHeight() != 0 ) )
-        m_out->Print( 0, " (rect_delta %s )", FormatInternalUnits( aPad->GetDelta() ).c_str() );
+        m_out->Print( 0, " (rect_delta %s)", FormatInternalUnits( aPad->GetDelta() ).c_str() );
 
     wxSize sz = aPad->GetDrillSize();
     wxPoint shapeoffset = aPad->GetOffset();
@@ -1663,8 +1670,8 @@ void PCB_IO::format( const PCB_GROUP* aGroup, int aNestLevel ) const
     for( const wxString& memberId : memberIds )
         m_out->Print( aNestLevel + 2, "%s\n", TO_UTF8( memberId ) );
 
-    m_out->Print( 0, " )\n" );
-    m_out->Print( aNestLevel, ")\n" );
+    m_out->Print( aNestLevel + 1, ")\n" );  // Close `members` token.
+    m_out->Print( aNestLevel, ")\n" );      // Close `group` token.
 }
 
 
@@ -1739,8 +1746,8 @@ void PCB_IO::format( const TRACK* aTrack, int aNestLevel ) const
         const VIA*  via = static_cast<const VIA*>( aTrack );
         BOARD*      board = (BOARD*) via->GetParent();
 
-        wxCHECK_RET( board != 0, wxT( "Via " ) + via->GetSelectMenuText( EDA_UNITS::MILLIMETRES )
-                                         + wxT( " has no parent." ) );
+        wxCHECK_RET( board != 0, wxT( "Via " ) +
+                     via->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) + wxT( " has no parent." ) );
 
         m_out->Print( aNestLevel, "(via" );
 
@@ -1797,10 +1804,10 @@ void PCB_IO::format( const TRACK* aTrack, int aNestLevel ) const
         const ARC* arc = static_cast<const ARC*>( aTrack );
 
         m_out->Print( aNestLevel, "(arc (start %s) (mid %s) (end %s) (width %s)",
-                FormatInternalUnits( arc->GetStart() ).c_str(),
-                FormatInternalUnits( arc->GetMid() ).c_str(),
-                FormatInternalUnits( arc->GetEnd() ).c_str(),
-                FormatInternalUnits( arc->GetWidth() ).c_str() );
+                      FormatInternalUnits( arc->GetStart() ).c_str(),
+                      FormatInternalUnits( arc->GetMid() ).c_str(),
+                      FormatInternalUnits( arc->GetEnd() ).c_str(),
+                      FormatInternalUnits( arc->GetWidth() ).c_str() );
 
         m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( arc->GetLayer() ) ).c_str() );
     }
@@ -1902,7 +1909,9 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
 
     if( aZone->GetIsRuleArea() )
     {
-        m_out->Print( aNestLevel+1, "(keepout (tracks %s) (vias %s) (pads %s ) (copperpour %s) (footprints %s))\n",
+        m_out->Print( aNestLevel + 1,
+                      "(keepout (tracks %s) (vias %s) (pads %s ) (copperpour %s) "
+                      "(footprints %s))\n",
                       aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",
                       aZone->GetDoNotAllowVias() ? "not_allowed" : "allowed",
                       aZone->GetDoNotAllowPads() ? "not_allowed" : "allowed",
@@ -1910,7 +1919,7 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
                       aZone->GetDoNotAllowFootprints() ? "not_allowed" : "allowed" );
     }
 
-    m_out->Print( aNestLevel+1, "(fill" );
+    m_out->Print( aNestLevel + 1, "(fill" );
 
     // Default is not filled.
     if( aZone->IsFilled() )
@@ -2117,8 +2126,8 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
             for( ZONE_SEGMENT_FILL::const_iterator it = segs.begin(); it != segs.end(); ++it )
             {
                 m_out->Print( aNestLevel + 2, "(pts (xy %s) (xy %s))\n",
-                        FormatInternalUnits( wxPoint( it->A ) ).c_str(),
-                        FormatInternalUnits( wxPoint( it->B ) ).c_str() );
+                              FormatInternalUnits( wxPoint( it->A ) ).c_str(),
+                              FormatInternalUnits( wxPoint( it->B ) ).c_str() );
             }
 
             m_out->Print( aNestLevel + 1, ")\n" );
@@ -2427,7 +2436,8 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
     footprint->SetParent( nullptr );
 
     wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expr footprint file '%s'." ), fullPath );
-    footprints.insert( footprintName, new FP_CACHE_ITEM( footprint, WX_FILENAME( fn.GetPath(), fullName ) ) );
+    footprints.insert( footprintName,
+                       new FP_CACHE_ITEM( footprint, WX_FILENAME( fn.GetPath(), fullName ) ) );
     m_cache->Save( footprint );
 }
 
@@ -2487,7 +2497,8 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
 
     if( !fn.IsDirWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "User does not have permission to delete directory \"%s\"." ),
+        THROW_IO_ERROR( wxString::Format( _( "User does not have permission to delete directory "
+                                             "\"%s\"." ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -2495,7 +2506,8 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
 
     if( dir.HasSubDirs() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library directory \"%s\" has unexpected sub-directories." ),
+        THROW_IO_ERROR( wxString::Format( _( "Library directory \"%s\" has unexpected "
+                                             "sub-directories." ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -2514,7 +2526,8 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
 
             if( tmp.GetExt() != KiCadFootprintFileExtension )
             {
-                THROW_IO_ERROR( wxString::Format( _( "Unexpected file \"%s\" was found in library path \"%s\"." ),
+                THROW_IO_ERROR( wxString::Format( _( "Unexpected file \"%s\" was found in "
+                                                     "library path \"%s\"." ),
                                                   files[i].GetData(), aLibraryPath.GetData() ) );
             }
         }
