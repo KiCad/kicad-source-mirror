@@ -880,23 +880,4 @@ if( APPLE )
             )
     endif()
 
-    if( KICAD_SCRIPTING_WXPYTHON )
-        # find wx-X.Y-osx_cocoa path below PYTHON_SITE_PACKAGE_PATH
-        # TODO It does not seem that we need this, at this point, but
-        # before removing it, I'd like to take a look and figure out why
-        # (and if it is needed, but it's just needed for something I'm not testing!)
-        # Can we leave this alone? I don't think we use this with kicad-mac-builder but
-        # that doesn't mean it's not usable...
-#        file( GLOB WXPYTHON_DIR RELATIVE ${PYTHON_SITE_PACKAGE_PATH} ${PYTHON_SITE_PACKAGE_PATH}/wx-?.?-osx_cocoa )
-#        if( NOT WXPYTHON_DIR )
-#            message( FATAL_ERROR "Could not find 'wx-?.?-osx_cocoa' in '${PYTHON_SITE_PACKAGE_PATH}'" )
-#        endif()
-#        # copy contents
-#        add_custom_target( ScriptingWxpythonCopy ALL
-#                COMMAND ${CMAKE_COMMAND} -E copy_directory "${PYTHON_SITE_PACKAGE_PATH}/${WXPYTHON_DIR}" "${PYTHON_DEST}/${WXPYTHON_DIR}"
-#                COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_SITE_PACKAGE_PATH}/wxversion.py" "${PYTHON_DEST}"
-#                COMMENT "Copying wxPython into ${PYTHON_DEST}"
-#                )
-#        add_dependencies( ScriptingWxpythonCopy ScriptingPythonDirectoryCreation )
-    endif()
 endif()
