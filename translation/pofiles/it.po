@@ -101,16 +101,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-04-15 06:26+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"PO-Revision-Date: 2021-04-21 08:29+0000\n"
+"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -29154,11 +29154,9 @@ msgid "No access rights to write to file \"%s\""
 msgstr "Nessun diritto di accesso durante la scrittura del file \"%s\""
 
 #: pcbnew/files.cpp:949 pcbnew/files.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr ""
-"Errore durante il salvataggio del file scheda \"%s\".\n"
-"%s"
+msgstr "Errore durante il salvataggio del file regole \"%s\"."
 
 #: pcbnew/files.cpp:980 pcbnew/files.cpp:1082
 #, c-format
@@ -35465,9 +35463,8 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] caricamento fallito: riga in ingresso troppo lunga\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "Convertitore immagini"
+msgstr "Convertitore immagini KiCad"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
@@ -35478,18 +35475,16 @@ msgid "bitmap2component"
 msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
-#, fuzzy
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr "Editor schemi KiCad"
+msgstr "Editor schemi elettrici KiCad (autonomo)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
-#, fuzzy
 msgid "Schematic Capture Tool"
-msgstr "Colore filo schema"
+msgstr "Strumento di disegno elettrico"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr ""
+msgstr "Editor di schemi elettrici indipendente di KiCad"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
@@ -35518,21 +35513,19 @@ msgstr "Suite EDA"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "Suite of tools for schematic design and circuit board layout"
-msgstr ""
+msgstr "Suite per la progettazione di schemi elettrici e circuiti stampati"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
-#, fuzzy
 msgid "KiCad PCB Calculator"
-msgstr "Calcolatrice C. S."
+msgstr "Calcolatrice per C.S. KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calcolatrice per vari calcoli relativi ai circuiti elettrici"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
-#, fuzzy
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "Editor di C.S. KiCad"
+msgstr "Editor di C.S. KiCad (autonomo)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 #, fuzzy
@@ -35541,7 +35534,7 @@ msgstr "Progettazione C.S."
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr ""
+msgstr "Editor di C.S. autonomo di KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "pcbnew"
@@ -35549,7 +35542,7 @@ msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
-msgstr ""
+msgstr "Suite EDA per la progettazione di schemi elettrici e circuiti stampati"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -35560,10 +35553,17 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"KiCad è una suite di automazione per la progettazione elettronica (EDA) "
+"gratuita e open source. Permette la progettazione di schemi elettrici e "
+"circuiti stampati (PCB), la simulazione elettronica, il rendering 3D e la "
+"stampa / esportazione dei dati in numerosi formati. KiCad include anche una "
+"libreria di componenti di alta qualità con migliaia di simboli, impronte e "
+"modelli 3D. KiCad ha requisiti di sistema minimi e funziona su Linux, "
+"Windows e macOS."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
 msgid "KiCad Main Window"
-msgstr ""
+msgstr "Finestra principale KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:67
 #, fuzzy
@@ -35580,24 +35580,20 @@ msgid "Gerber file"
 msgstr "File Gerber"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
-#, fuzzy
 msgid "Excellon drill file"
-msgstr "Genera file forature Excellon2"
+msgstr "File forature Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "File progetto KiCad"
+msgstr "Progetto KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:11
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "Schema non-KiCad..."
+msgstr "Schema KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:23
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
-msgstr "File di circuiti stampati KiCad"
+msgstr "Circuito stampato KiCad"
 
 #~ msgid ""
 #~ "KiCad is a Cross Platform and Open Source Electronics Design Automation "
