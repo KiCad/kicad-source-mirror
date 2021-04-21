@@ -1373,23 +1373,7 @@ unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const TRACK* aTrack ) con
     if( bds.m_HasStackup )
     {
         const BOARD_STACKUP& stackup = bds.GetStackupDescriptor();
-
-        std::pair<PCB_LAYER_ID, int> layer_dist[2] = { std::make_pair( via.TopLayer(), 0 ),
-                                                       std::make_pair( via.BottomLayer(), 0 ) };
-
-        for( const BOARD_STACKUP_ITEM* i : stackup.GetList() )
-        {
-            for( std::pair<PCB_LAYER_ID, int>& j : layer_dist )
-            {
-                if( j.first != UNDEFINED_LAYER )
-                    j.second += i->GetThickness();
-
-                if( j.first == i->GetBrdLayerId() )
-                    j.first = UNDEFINED_LAYER;
-            }
-        }
-
-        return std::abs( layer_dist[0].second - layer_dist[1].second );
+        return stackup.GetLayerDistance( via.TopLayer(), via.BottomLayer() );
     }
     else
     {
