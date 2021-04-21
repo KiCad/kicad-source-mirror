@@ -782,7 +782,7 @@ void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg, bool aShowClos
     if( aCallback )
         m_infoBar->SetCallback( aCallback );
 
-    GetInfoBar()->ShowMessageFor( aErrorMsg, 8000, wxICON_ERROR );
+    GetInfoBar()->ShowMessageFor( aErrorMsg, 6000, wxICON_ERROR );
 }
 
 
@@ -793,7 +793,7 @@ void EDA_BASE_FRAME::ShowInfoBarWarning( const wxString& aWarningMsg, bool aShow
     if( aShowCloseButton )
         m_infoBar->AddCloseButton();
 
-    GetInfoBar()->ShowMessageFor( aWarningMsg, 8000, wxICON_WARNING );
+    GetInfoBar()->ShowMessageFor( aWarningMsg, 6000, wxICON_WARNING );
 }
 
 
@@ -804,7 +804,7 @@ void EDA_BASE_FRAME::ShowInfoBarMsg( const wxString& aMsg, bool aShowCloseButton
     if( aShowCloseButton )
         m_infoBar->AddCloseButton();
 
-    GetInfoBar()->ShowMessageFor( aMsg, 10000, wxICON_INFORMATION );
+    GetInfoBar()->ShowMessageFor( aMsg, 8000, wxICON_INFORMATION );
 }
 
 
