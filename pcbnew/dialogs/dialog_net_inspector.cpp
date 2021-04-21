@@ -1870,7 +1870,9 @@ void DIALOG_NET_INSPECTOR::onRenameNet( wxCommandEvent& aEvent )
         // is easier.
         auto removed_item = m_data_model->deleteItem( m_data_model->findItem( net ) );
 
+        m_brd->GetNetInfo().RemoveNet( net );
         net->SetNetname( fullNetName );
+        m_brd->GetNetInfo().AppendNet( net );
         m_frame->OnModify();
 
         if( netFilterMatches( net ) )
