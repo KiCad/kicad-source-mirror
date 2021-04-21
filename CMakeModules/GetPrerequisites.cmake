@@ -1,4 +1,6 @@
-# From https://raw.githubusercontent.com/Kitware/CMake/45ed314bfff5b9b59dcba8139ab1c695a81a05f3/Modules/GetPrerequisites.cmake, for BundleUtilities.cmake
+# Taken from https://github.com/Kitware/CMake/blob/45ed314bfff5b9b59dcba8139ab1c695a81a05f3/Modules/GetPrerequisites.cmake,
+# because macOS packaging needs 45ed314 in order to preserve executable scripts in the bundle.
+# This change has been included in CMake 3.20.1.
 
 # Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
 # file Copyright.txt or https://cmake.org/licensing for details.
