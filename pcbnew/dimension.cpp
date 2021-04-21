@@ -344,6 +344,9 @@ void DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         aList.emplace_back( start, end );
     }
 
+    if( IsLocked() )
+        aList.emplace_back( _( "Status" ), _( "Locked" ) );
+
     aList.emplace_back( _( "Layer" ), GetLayerName() );
 }
 

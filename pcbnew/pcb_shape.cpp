@@ -494,7 +494,7 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     aList.emplace_back( _( "Type" ), _( "Drawing" ) );
 
     if( IsLocked() )
-        aList.emplace_back( _( "Status" ), _( "locked" ) );
+        aList.emplace_back( _( "Status" ), _( "Locked" ) );
 
     wxString shape = _( "Shape" );
 
@@ -562,7 +562,7 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Layer" ), GetLayerName() );
 
-    aList.emplace_back( _( "Width" ), MessageTextFromValue( units, m_width ) );
+    aList.emplace_back( _( "Line width" ), MessageTextFromValue( units, m_width ) );
 }
 
 

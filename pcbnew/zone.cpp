@@ -592,6 +592,9 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
         aList.emplace_back( _( "Priority" ), wxString::Format( "%d", GetPriority() ) );
     }
 
+    if( IsLocked() )
+        aList.emplace_back( _( "Status" ), _( "Locked" ) );
+
     wxString layerDesc;
     int count = 0;
 

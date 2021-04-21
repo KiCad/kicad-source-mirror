@@ -869,6 +869,9 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
     aList.emplace_back( _( "NetClass" ), UnescapeString( GetNetClass()->GetName() ) );
 
+    if( IsLocked() )
+        aList.emplace_back( _( "Status" ), _( "Locked" ) );
+
     if( GetAttribute() == PAD_ATTRIB_SMD || GetAttribute() == PAD_ATTRIB_CONN )
         aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 

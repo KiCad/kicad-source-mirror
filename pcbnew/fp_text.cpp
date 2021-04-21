@@ -278,7 +278,7 @@ void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     aList.emplace_back( _( "Type" ), text_type_msg[m_Type] );
 
     if( IsLocked() )
-        aList.emplace_back( _( "Status" ), _( "locked" ) );
+        aList.emplace_back( _( "Status" ), _( "Locked" ) );
 
     aList.emplace_back( _( "Display" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 

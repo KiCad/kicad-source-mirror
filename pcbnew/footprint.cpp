@@ -849,7 +849,7 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     wxString attrs;
 
     if( IsLocked() )
-        addToken( &status, _( "locked" ) );
+        addToken( &status, _( "Locked" ) );
 
     if( m_fpStatus & FP_is_PLACED )
         addToken( &status, _( "autoplaced" ) );
