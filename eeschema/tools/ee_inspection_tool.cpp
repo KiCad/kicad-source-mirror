@@ -492,7 +492,9 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
         datasheet = component->GetField( DATASHEET_FIELD )->GetText();
     }
 
-    if( !datasheet.IsEmpty() && datasheet != wxT( "~" ) )
+    if( datasheet.IsEmpty() || datasheet == wxT( "~" ) )
+        m_frame->ShowInfoBarError( _( "No datasheet defined." ) );
+    else
         GetAssociatedDocument( m_frame, datasheet, &m_frame->Prj() );
 
     return 0;
