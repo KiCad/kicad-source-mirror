@@ -2156,7 +2156,17 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
     {
     case T_gr_arc:
         shape->SetShape( S_ARC );
-        NeedLEFT();
+        token = NextTok();
+
+        if( token == T_locked )
+        {
+            shape->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
         token = NextTok();
 
         // the start keyword actually gives the arc center
@@ -2182,7 +2192,17 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
     case T_gr_circle:
         shape->SetShape( S_CIRCLE );
-        NeedLEFT();
+        token = NextTok();
+
+        if( token == T_locked )
+        {
+            shape->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
         token = NextTok();
 
         if( token != T_center )
@@ -2207,7 +2227,17 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
     case T_gr_curve:
         shape->SetShape( S_CURVE );
-        NeedLEFT();
+        token = NextTok();
+
+        if( token == T_locked )
+        {
+            shape->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
         token = NextTok();
 
         if( token != T_pts )
@@ -2222,7 +2252,17 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
     case T_gr_rect:
         shape->SetShape( S_RECT );
-        NeedLEFT();
+        token = NextTok();
+
+        if( token == T_locked )
+        {
+            shape->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
         token = NextTok();
 
         if( token != T_start )
@@ -2246,7 +2286,17 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
     case T_gr_line:
         // Default PCB_SHAPE type is S_SEGMENT.
-        NeedLEFT();
+        token = NextTok();
+
+        if( token == T_locked )
+        {
+            shape->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
         token = NextTok();
 
         if( token != T_start )
@@ -2272,7 +2322,17 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
     {
         shape->SetShape( S_POLYGON );
         shape->SetWidth( 0 ); // this is the default value. will be (perhaps) modified later
-        NeedLEFT();
+        token = NextTok();
+
+        if( token == T_locked )
+        {
+            shape->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
         token = NextTok();
 
         if( token != T_pts )
@@ -2350,12 +2410,13 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
             }
             break;
 
-        /// We continue to parse the status field but it is no longer written
+        // We continue to parse the status field but it is no longer written
         case T_status:
             shape->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             NeedRIGHT();
             break;
 
+        // Continue to process "(locked)" format which was output during 5.99 development
         case T_locked:
             shape->SetLocked( true );
             NeedRIGHT();
@@ -2468,11 +2529,19 @@ DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as DIMENSION." ) );
 
     T token;
-
+    bool locked = false;
     std::unique_ptr<DIMENSION_BASE> dimension;
 
+    token = NextTok();
+
+    if( token == T_locked )
+    {
+        locked = true;
+        token = NextTok();
+    }
+
     // skip value that used to be saved
-    if( NextTok() != T_LEFT )
+    if( token != T_LEFT )
         NeedLEFT();
 
     token = NextTok();
@@ -2856,6 +2925,9 @@ DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
                        "arrow1b, arrow2a, or arrow2b" );
         }
     }
+
+    if( locked )
+        dimension->SetLocked( true );
 
     dimension->Update();
 
@@ -3328,7 +3400,17 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
     {
     case T_fp_arc:
         shape->SetShape( S_ARC );
-        NeedLEFT();
+        token = NextTok();
+
+        if( token == T_locked )
+        {
+            shape->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
         token = NextTok();
 
         // the start keyword actually gives the arc center
@@ -3364,7 +3446,17 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 
     case T_fp_circle:
         shape->SetShape( S_CIRCLE );
-        NeedLEFT();
+        token = NextTok();
+
+        if( token == T_locked )
+        {
+            shape->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
         token = NextTok();
 
         if( token != T_center )
@@ -3388,7 +3480,17 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 
     case T_fp_curve:
         shape->SetShape( S_CURVE );
-        NeedLEFT();
+        token = NextTok();
+
+        if( token == T_locked )
+        {
+            shape->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
         token = NextTok();
 
         if( token != T_pts )
@@ -3403,7 +3505,17 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 
     case T_fp_rect:
         shape->SetShape( S_RECT );
-        NeedLEFT();
+        token = NextTok();
+
+        if( token == T_locked )
+        {
+            shape->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
         token = NextTok();
 
         if( token != T_start )
@@ -3428,7 +3540,17 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 
     case T_fp_line:
         // Default PCB_SHAPE type is S_SEGMENT.
-        NeedLEFT();
+        token = NextTok();
+
+        if( token == T_locked )
+        {
+            shape->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
         token = NextTok();
 
         if( token != T_start )
@@ -3454,7 +3576,17 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
     case T_fp_poly:
     {
         shape->SetShape( S_POLYGON );
-        NeedLEFT();
+        token = NextTok();
+
+        if( token == T_locked )
+        {
+            shape->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
         token = NextTok();
 
         if( token != T_pts )
@@ -3528,12 +3660,13 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 
             break;
 
-        /// We continue to parse the status field but it is no longer written
+        // We continue to parse the status field but it is no longer written
         case T_status:
             shape->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             NeedRIGHT();
             break;
 
+        // Continue to process "(locked)" format which was output during 5.99 development
         case T_locked:
             shape->SetLocked( true );
             NeedRIGHT();
@@ -3655,6 +3788,12 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
+        if( token == T_locked )
+        {
+            pad->SetLocked( true );
+            token = NextTok();
+        }
+
         if( token != T_LEFT )
             Expecting( T_LEFT );
 
@@ -4026,6 +4165,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             NeedRIGHT();
             break;
 
+        // Continue to process "(locked)" format which was output during 5.99 development
         case T_locked:
             pad->SetLocked( true );
             NeedRIGHT();
@@ -4192,6 +4332,12 @@ ARC* PCB_PARSER::parseARC()
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
+        if( token == T_locked )
+        {
+            arc->SetLocked( true );
+            token = NextTok();
+        }
+
         if( token != T_LEFT )
             Expecting( T_LEFT );
 
@@ -4237,11 +4383,12 @@ ARC* PCB_PARSER::parseARC()
             const_cast<KIID&>( arc->m_Uuid ) = CurStrToKIID();
             break;
 
-        /// We continue to parse the status field but it is no longer written
+        // We continue to parse the status field but it is no longer written
         case T_status:
             arc->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
 
+        // Continue to process "(locked)" format which was output during 5.99 development
         case T_locked:
             arc->SetLocked( true );
             break;
@@ -4269,6 +4416,12 @@ TRACK* PCB_PARSER::parseTRACK()
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
+        if( token == T_locked )
+        {
+            track->SetLocked( true );
+            token = NextTok();
+        }
+
         if( token != T_LEFT )
             Expecting( T_LEFT );
 
@@ -4308,11 +4461,12 @@ TRACK* PCB_PARSER::parseTRACK()
             const_cast<KIID&>( track->m_Uuid ) = CurStrToKIID();
             break;
 
-        /// We continue to parse the status field but it is no longer written
+        // We continue to parse the status field but it is no longer written
         case T_status:
             track->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
 
+        // Continue to process "(locked)" format which was output during 5.99 development
         case T_locked:
             track->SetLocked( true );
             break;
@@ -4340,6 +4494,12 @@ VIA* PCB_PARSER::parseVIA()
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
+        if( token == T_locked )
+        {
+            via->SetLocked( true );
+            token = NextTok();
+        }
+
         if( token == T_LEFT )
             token = NextTok();
 
@@ -4414,12 +4574,13 @@ VIA* PCB_PARSER::parseVIA()
             NeedRIGHT();
             break;
 
-        /// We continue to parse the status field but it is no longer written
+        // We continue to parse the status field but it is no longer written
         case T_status:
             via->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             NeedRIGHT();
             break;
 
+        // Continue to process "(locked)" format which was output during 5.99 development
         case T_locked:
             via->SetLocked( true );
             NeedRIGHT();
@@ -4473,6 +4634,12 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
+        if( token == T_locked )
+        {
+            zone->SetLocked( true );
+            token = NextTok();
+        }
+
         if( token == T_LEFT )
             token = NextTok();
 

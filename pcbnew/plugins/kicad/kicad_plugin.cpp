@@ -694,6 +694,9 @@ void PCB_IO::format( const DIMENSION_BASE* aDimension, int aNestLevel ) const
 
     m_out->Print( aNestLevel, "(dimension" );
 
+    if( aDimension->IsLocked() )
+        m_out->Print( 0, " locked" );
+
     if( aDimension->Type() == PCB_DIM_ALIGNED_T )
         m_out->Print( 0, " (type aligned)" );
     else if( aDimension->Type() == PCB_DIM_LEADER_T )
@@ -779,10 +782,13 @@ void PCB_IO::format( const DIMENSION_BASE* aDimension, int aNestLevel ) const
 
 void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 {
+    std::string locked = aShape->IsLocked() ? " locked" : "";
+
     switch( aShape->GetShape() )
     {
     case S_SEGMENT:  // Line
-        m_out->Print( aNestLevel, "(gr_line (start %s) (end %s)",
+        m_out->Print( aNestLevel, "(gr_line%s (start %s) (end %s)",
+                     locked.c_str(),
                       FormatInternalUnits( aShape->GetStart() ).c_str(),
                       FormatInternalUnits( aShape->GetEnd() ).c_str() );
 
@@ -792,19 +798,22 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
         break;
 
     case S_RECT:  // Rectangle
-        m_out->Print( aNestLevel, "(gr_rect (start %s) (end %s)",
+        m_out->Print( aNestLevel, "(gr_rect%s (start %s) (end %s)",
+                      locked.c_str(),
                       FormatInternalUnits( aShape->GetStart() ).c_str(),
                       FormatInternalUnits( aShape->GetEnd() ).c_str() );
         break;
 
     case S_CIRCLE:  // Circle
-        m_out->Print( aNestLevel, "(gr_circle (center %s) (end %s)",
+        m_out->Print( aNestLevel, "(gr_circle%s (center %s) (end %s)",
+                      locked.c_str(),
                       FormatInternalUnits( aShape->GetStart() ).c_str(),
                       FormatInternalUnits( aShape->GetEnd() ).c_str() );
         break;
 
     case S_ARC:     // Arc
-        m_out->Print( aNestLevel, "(gr_arc (start %s) (end %s) (angle %s)",
+        m_out->Print( aNestLevel, "(gr_arc%s (start %s) (end %s) (angle %s)",
+                      locked.c_str(),
                       FormatInternalUnits( aShape->GetStart() ).c_str(),
                       FormatInternalUnits( aShape->GetEnd() ).c_str(),
                       FormatAngle( aShape->GetAngle() ).c_str() );
@@ -817,7 +826,8 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
             const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
             const int pointsCount = outline.PointCount();
 
-            m_out->Print( aNestLevel, "(gr_poly (pts\n" );
+            m_out->Print( aNestLevel, "(gr_poly%s (pts\n",
+                          locked.c_str() );
 
             for( int ii = 0; ii < pointsCount; ++ii )
             {
@@ -846,7 +856,8 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
         break;
 
     case S_CURVE:   // Bezier curve
-        m_out->Print( aNestLevel, "(gr_curve (pts (xy %s) (xy %s) (xy %s) (xy %s))",
+        m_out->Print( aNestLevel, "(gr_curve%s (pts (xy %s) (xy %s) (xy %s) (xy %s))",
+                      locked.c_str(),
                       FormatInternalUnits( aShape->GetStart() ).c_str(),
                       FormatInternalUnits( aShape->GetBezControl1() ).c_str(),
                       FormatInternalUnits( aShape->GetBezControl2() ).c_str(),
@@ -873,9 +884,6 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
             m_out->Print( 0, " (fill none)" );
     }
 
-    if( aShape->IsLocked() )
-        m_out->Print( 0, " (locked)" );
-
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aShape->m_Uuid.AsString() ) );
 
     m_out->Print( 0, ")\n" );
@@ -884,28 +892,34 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 
 void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
 {
+    std::string locked = aFPShape->IsLocked() ? " locked" : "";
+
     switch( aFPShape->GetShape() )
     {
     case S_SEGMENT:  // Line
-        m_out->Print( aNestLevel, "(fp_line (start %s) (end %s)",
+        m_out->Print( aNestLevel, "(fp_line%s (start %s) (end %s)",
+                      locked.c_str(),
                       FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
                       FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
         break;
 
     case S_RECT:    // Rectangle
-        m_out->Print( aNestLevel, "(fp_rect (start %s) (end %s)",
+        m_out->Print( aNestLevel, "(fp_rect%s (start %s) (end %s)",
+                      locked.c_str(),
                       FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
                       FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
         break;
 
     case S_CIRCLE:  // Circle
-        m_out->Print( aNestLevel, "(fp_circle (center %s) (end %s)",
+        m_out->Print( aNestLevel, "(fp_circle%s (center %s) (end %s)",
+                      locked.c_str(),
                       FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
                       FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
         break;
 
     case S_ARC:     // Arc
-        m_out->Print( aNestLevel, "(fp_arc (start %s) (end %s) (angle %s)",
+        m_out->Print( aNestLevel, "(fp_arc%s (start %s) (end %s) (angle %s)",
+                      locked.c_str(),
                       FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
                       FormatInternalUnits( aFPShape->GetEnd0() ).c_str(),
                       FormatAngle( aFPShape->GetAngle() ).c_str() );
@@ -918,7 +932,8 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
             const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
             int pointsCount = outline.PointCount();
 
-            m_out->Print( aNestLevel, "(fp_poly (pts" );
+            m_out->Print( aNestLevel, "(fp_poly%s (pts",
+                          locked.c_str() );
 
             for( int ii = 0; ii < pointsCount; ++ii )
             {
@@ -946,7 +961,8 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
         break;
 
     case S_CURVE:   // Bezier curve
-        m_out->Print( aNestLevel, "(fp_curve (pts (xy %s) (xy %s) (xy %s) (xy %s))",
+        m_out->Print( aNestLevel, "(fp_curve%s (pts (xy %s) (xy %s) (xy %s) (xy %s))",
+                      locked.c_str(),
                       FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
                       FormatInternalUnits( aFPShape->GetBezier0_C1() ).c_str(),
                       FormatInternalUnits( aFPShape->GetBezier0_C2() ).c_str(),
@@ -972,9 +988,6 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
         else
             m_out->Print( 0, " (fill none)" );
     }
-
-    if( aFPShape->IsLocked() )
-        m_out->Print( 0, " (locked)" );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aFPShape->m_Uuid.AsString() ) );
 
@@ -1337,15 +1350,16 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
                   m_out->Quotew( aPad->GetName() ).c_str(),
                   type,
                   shape );
+
+    if( aPad->IsLocked() )
+        m_out->Print( 0, " locked" );
+
     m_out->Print( 0, " (at %s", FormatInternalUnits( aPad->GetPos0() ).c_str() );
 
     if( aPad->GetOrientation() != 0.0 )
         m_out->Print( 0, " %s", FormatAngle( aPad->GetOrientation() ).c_str() );
 
     m_out->Print( 0, ")" );
-
-    if( aPad->IsLocked() )
-        m_out->Print( 0, " (locked)" );
 
     m_out->Print( 0, " (size %s)", FormatInternalUnits( aPad->GetSize() ).c_str() );
 
@@ -1770,6 +1784,9 @@ void PCB_IO::format( const TRACK* aTrack, int aNestLevel ) const
             THROW_IO_ERROR( wxString::Format( _( "unknown via type %d"  ), via->GetViaType() ) );
         }
 
+        if( via->IsLocked() )
+            m_out->Print( 0, " locked" );
+
         m_out->Print( 0, " (at %s) (size %s)",
                       FormatInternalUnits( aTrack->GetStart() ).c_str(),
                       FormatInternalUnits( aTrack->GetWidth() ).c_str() );
@@ -1802,8 +1819,10 @@ void PCB_IO::format( const TRACK* aTrack, int aNestLevel ) const
     else if( aTrack->Type() == PCB_ARC_T )
     {
         const ARC* arc = static_cast<const ARC*>( aTrack );
+        std::string locked = arc->IsLocked() ? " locked" : "";
 
-        m_out->Print( aNestLevel, "(arc (start %s) (mid %s) (end %s) (width %s)",
+        m_out->Print( aNestLevel, "(arc%s (start %s) (mid %s) (end %s) (width %s)",
+                      locked.c_str(),
                       FormatInternalUnits( arc->GetStart() ).c_str(),
                       FormatInternalUnits( arc->GetMid() ).c_str(),
                       FormatInternalUnits( arc->GetEnd() ).c_str(),
@@ -1813,16 +1832,16 @@ void PCB_IO::format( const TRACK* aTrack, int aNestLevel ) const
     }
     else
     {
-        m_out->Print( aNestLevel, "(segment (start %s) (end %s) (width %s)",
+        std::string locked = aTrack->IsLocked() ? " locked" : "";
+
+        m_out->Print( aNestLevel, "(segment%s (start %s) (end %s) (width %s)",
+                      locked.c_str(),
                       FormatInternalUnits( aTrack->GetStart() ).c_str(),
                       FormatInternalUnits( aTrack->GetEnd() ).c_str(),
                       FormatInternalUnits( aTrack->GetWidth() ).c_str() );
 
         m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( aTrack->GetLayer() ) ).c_str() );
     }
-
-    if( aTrack->IsLocked() )
-        m_out->Print( 0, " (locked)" );
 
     m_out->Print( 0, " (net %d)", m_mapping->Translate( aTrack->GetNetCode() ) );
 
@@ -1834,10 +1853,13 @@ void PCB_IO::format( const TRACK* aTrack, int aNestLevel ) const
 
 void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
 {
+    std::string locked = aZone->IsLocked() ? " locked" : "";
+
     // Save the NET info; For keepout zones, net code and net name are irrelevant
     // so be sure a dummy value is stored, just for ZONE compatibility
     // (perhaps netcode and netname should be not stored)
-    m_out->Print( aNestLevel, "(zone (net %d) (net_name %s)",
+    m_out->Print( aNestLevel, "(zone%s (net %d) (net_name %s)",
+                  locked.c_str(),
                   aZone->GetIsRuleArea() ? 0 : m_mapping->Translate( aZone->GetNetCode() ),
                   m_out->Quotew( aZone->GetIsRuleArea() ? wxT("") : aZone->GetNetname() ).c_str() );
 
