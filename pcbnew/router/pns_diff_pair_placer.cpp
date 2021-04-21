@@ -477,7 +477,7 @@ bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, IT
         {
             *aErrorMsg = _( "Unable to find complementary differential pair "
                             "nets. Make sure the names of the nets belonging "
-                            "to a differential pair end with either _N/_P or +/-." );
+                            "to a differential pair end with either N/P or +/-." );
         }
         return false;
     }
