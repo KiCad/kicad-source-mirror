@@ -233,28 +233,31 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
         const std::shared_ptr<SHAPE>& itemShape = item->GetEffectiveShape();
 
-        if( testCopper && item->IsOnCopperLayer() )
+        for( PCB_LAYER_ID testLayer : { Edge_Cuts, Margin } )
         {
-            edgesTree.QueryColliding( item, UNDEFINED_LAYER, Edge_Cuts, nullptr,
-                    [&]( BOARD_ITEM* edge ) -> bool
-                    {
-                        return testAgainstEdge( item, itemShape.get(), edge,
-                                                EDGE_CLEARANCE_CONSTRAINT,
-                                                DRCE_COPPER_EDGE_CLEARANCE );
-                    },
-                    m_largestClearance );
-        }
+            if( testCopper && item->IsOnCopperLayer() )
+            {
+                edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
+                        [&]( BOARD_ITEM* edge ) -> bool
+                        {
+                            return testAgainstEdge( item, itemShape.get(), edge,
+                                                    EDGE_CLEARANCE_CONSTRAINT,
+                                                    DRCE_COPPER_EDGE_CLEARANCE );
+                        },
+                        m_largestClearance );
+            }
 
-        if( testSilk && ( item->GetLayer() == F_SilkS || item->GetLayer() == B_SilkS ) )
-        {
-            edgesTree.QueryColliding( item, UNDEFINED_LAYER, Edge_Cuts, nullptr,
-                    [&]( BOARD_ITEM* edge ) -> bool
-                    {
-                        return testAgainstEdge( item, itemShape.get(), edge,
-                                                SILK_CLEARANCE_CONSTRAINT,
-                                                DRCE_SILK_MASK_CLEARANCE );
-                    },
-                    m_largestClearance );
+            if( testSilk && ( item->GetLayer() == F_SilkS || item->GetLayer() == B_SilkS ) )
+            {
+                edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
+                        [&]( BOARD_ITEM* edge ) -> bool
+                        {
+                            return testAgainstEdge( item, itemShape.get(), edge,
+                                                    SILK_CLEARANCE_CONSTRAINT,
+                                                    DRCE_SILK_MASK_CLEARANCE );
+                        },
+                        m_largestClearance );
+            }
         }
     }
 
