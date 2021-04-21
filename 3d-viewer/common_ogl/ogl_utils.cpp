@@ -81,9 +81,9 @@ GLuint OglLoadTexture( const IMAGE& aImage )
 
         ori++;
 
-        dst[0] = v;
-        dst[1] = v;
-        dst[2] = v;
+        dst[0] = 255;
+        dst[1] = 255;
+        dst[2] = 255;
         dst[3] = v;
         dst+= 4;
     }

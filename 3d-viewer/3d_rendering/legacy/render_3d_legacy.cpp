@@ -982,7 +982,7 @@ bool RENDER_3D_LEGACY::initializeOpenGL()
     if( !circleImage )
         return false;
 
-    unsigned int circleRadius = ( SIZE_OF_CIRCLE_TEXTURE / 2 ) - 0;
+    unsigned int circleRadius = ( SIZE_OF_CIRCLE_TEXTURE / 2 ) - 4;
 
     circleImage->CircleFilled( ( SIZE_OF_CIRCLE_TEXTURE / 2 ) - 0,
                                ( SIZE_OF_CIRCLE_TEXTURE / 2 ) - 0,
@@ -990,10 +990,6 @@ bool RENDER_3D_LEGACY::initializeOpenGL()
                                0xFF );
 
     IMAGE* circleImageBlured = new IMAGE( circleImage->GetWidth(), circleImage->GetHeight() );
-
-    circleImageBlured->EfxFilter_SkipCenter( circleImage, IMAGE_FILTER::GAUSSIAN_BLUR, circleRadius - 8 );
-
-    circleImage->EfxFilter_SkipCenter( circleImageBlured, IMAGE_FILTER::GAUSSIAN_BLUR, circleRadius - 8 );
 
     circleImageBlured->EfxFilter_SkipCenter( circleImage, IMAGE_FILTER::GAUSSIAN_BLUR, circleRadius - 8 );
 
