@@ -912,6 +912,15 @@ void SETTINGS_MANAGER::SaveProjectAs( const wxString& aFullPath )
 {
     wxString oldName = Prj().GetProjectFullName();
 
+    // Side effect: clear read-only status
+    Prj().SetReadOnly( false );
+
+    if( aFullPath.IsSameAs( oldName ) )
+    {
+        SaveProject( aFullPath );
+        return;
+    }
+
     // Changing this will cause UnloadProject to not save over the "old" project when loading below
     Prj().setProjectFullName( aFullPath );
 
@@ -938,6 +947,9 @@ void SETTINGS_MANAGER::SaveProjectCopy( const wxString& aFullPath )
     wxString      oldName = project->GetFilename();
     wxFileName    fn( aFullPath );
 
+    bool readOnly = project->IsReadOnly();
+    project->SetReadOnly( false );
+
     project->SetFilename( fn.GetName() );
     project->SaveToFile( fn.GetPath() );
     project->SetFilename( oldName );
@@ -945,6 +957,8 @@ void SETTINGS_MANAGER::SaveProjectCopy( const wxString& aFullPath )
     Prj().GetLocalSettings().SetFilename( fn.GetName() );
     Prj().GetLocalSettings().SaveToFile( fn.GetPath() );
     Prj().GetLocalSettings().SetFilename( oldName );
+
+    project->SetReadOnly( readOnly );
 }
 
 
