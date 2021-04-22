@@ -401,7 +401,7 @@ int DIALOG_SHIM::ShowQuasiModal()
     {
         void*&  m_what;
         NULLER( void*& aPtr ) : m_what( aPtr ) {}
-        ~NULLER() { m_what = 0; }   // indeed, set it to NULL on destruction
+        ~NULLER() { m_what = nullptr; }   // indeed, set it to NULL on destruction
     } clear_this( (void*&) m_qmodal_loop );
 
     // release the mouse if it's currently captured as the window having it
@@ -465,11 +465,11 @@ void DIALOG_SHIM::EndQuasiModal( int retCode )
         else
             m_qmodal_loop->ScheduleExit( 0 );
 
-        m_qmodal_loop = NULL;
+        m_qmodal_loop = nullptr;
     }
 
     delete m_qmodal_parent_disabler;
-    m_qmodal_parent_disabler = 0;
+    m_qmodal_parent_disabler = nullptr;
 
     Show( false );
 }

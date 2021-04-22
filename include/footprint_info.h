@@ -169,7 +169,7 @@ public:
     typedef std::vector<std::unique_ptr<FOOTPRINT_INFO>> FPILIST;
     typedef SYNC_QUEUE<std::unique_ptr<IO_ERROR>>        ERRLIST;
 
-    FOOTPRINT_LIST() : m_lib_table( 0 )
+    FOOTPRINT_LIST() : m_lib_table( nullptr )
     {
     }
 

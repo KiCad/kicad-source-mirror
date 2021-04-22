@@ -190,7 +190,7 @@ public:
     COROUTINE( std::function<ReturnType(ArgType)> aEntry ) :
         m_func( std::move( aEntry ) ),
         m_running( false ),
-        m_args( 0 ),
+        m_args( nullptr ),
         m_caller(),
         m_callContext( nullptr ),
         m_callee(),

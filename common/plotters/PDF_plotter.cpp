@@ -115,7 +115,7 @@ bool PDF_PLOTTER::OpenFile( const wxString& aFullFilename )
     // Open the PDF file in binary mode
     m_outputFile = wxFopen( m_filename, wxT( "wb" ) );
 
-    if( m_outputFile == NULL )
+    if( m_outputFile == nullptr )
         return false ;
 
     return true;
@@ -543,7 +543,7 @@ void PDF_PLOTTER::closePdfStream()
 
     // We are done with the temporary file, junk it
     fclose( workFile );
-    workFile = 0;
+    workFile = nullptr;
     ::wxRemoveFile( workFilename );
 
     unsigned out_count;

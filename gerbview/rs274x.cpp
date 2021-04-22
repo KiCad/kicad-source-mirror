@@ -179,7 +179,7 @@ bool GERBER_FILE_IMAGE::ReadRS274XCommand( char *aBuff, unsigned int aBuffSize, 
         }
 
         // end of current line, read another one.
-        if( fgets( aBuff, aBuffSize, m_Current_File ) == NULL )
+        if( fgets( aBuff, aBuffSize, m_Current_File ) == nullptr )
         {
             // end of file
             ok = false;
@@ -712,7 +712,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         D_CODE* dcode;
         dcode = GetDCODEOrCreate( code );
 
-        if( dcode == NULL )
+        if( dcode == nullptr )
             break;
 
         dcode->m_AperFunction = m_AperFunction;
@@ -920,7 +920,7 @@ bool GERBER_FILE_IMAGE::GetEndOfBlock( char* aBuff, unsigned int aBuffSize, char
             aText++;
         }
 
-        if( fgets( aBuff, aBuffSize, gerber_file ) == NULL )
+        if( fgets( aBuff, aBuffSize, gerber_file ) == nullptr )
             break;
 
         m_LineNum++;
@@ -944,8 +944,8 @@ char* GERBER_FILE_IMAGE::GetNextLine( char *aBuff, unsigned int aBuffSize, char*
                 break;
 
             case 0:    // End of text found in aBuff: Read a new string
-                if( fgets( aBuff, aBuffSize, aFile ) == NULL )
-                    return NULL;
+                if( fgets( aBuff, aBuffSize, aFile ) == nullptr )
+                    return nullptr;
 
                 m_LineNum++;
                 aText = aBuff;
@@ -986,7 +986,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
 
         aText = GetNextLine( aBuff, aBuffSize, aText, gerber_file );
 
-        if( aText == NULL )  // End of File
+        if( aText == nullptr )  // End of File
             return false;
 
         // aText points the beginning of a new line.
@@ -1011,7 +1011,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
             am.m_localparamStack.push_back( AM_PARAM() );
             AM_PARAM& param = am.m_localparamStack.back();
             aText = GetNextLine(  aBuff, aBuffSize, aText, gerber_file );
-            if( aText == NULL)   // End of File
+            if( aText == nullptr)   // End of File
                 return false;
             param.ReadParam( aText );
             continue;
@@ -1097,7 +1097,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
 
             aText = GetNextLine( aBuff, aBuffSize, aText, gerber_file );
 
-            if( aText == NULL)   // End of File
+            if( aText == nullptr)   // End of File
                 return false;
 
             param.ReadParam( aText );
@@ -1121,7 +1121,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
             // in advance, i.e. be immediate.
             wxASSERT( prim.params[1].IsImmediate() );
 
-            paramCount = (int) prim.params[1].GetValue( 0 ) * 2 + 1;
+            paramCount = (int) prim.params[1].GetValue( nullptr ) * 2 + 1;
 
             for( int jj = 0; jj < paramCount && *aText != '*'; ++jj )
             {
@@ -1131,7 +1131,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
 
                 aText = GetNextLine( aBuff, aBuffSize, aText, gerber_file );
 
-                if( aText == NULL )  // End of File
+                if( aText == nullptr )  // End of File
                     return false;
 
                 param.ReadParam( aText );

@@ -818,20 +818,20 @@ bool GPCB_FPL_CACHE::testFlags( const wxString& aFlag, long aMask, const wxChar*
 
 
 GPCB_PLUGIN::GPCB_PLUGIN() :
-    m_cache( 0 ),
+    m_cache( nullptr ),
     m_ctl( 0 )
 {
-    m_reader = NULL;
-    init( 0 );
+    m_reader = nullptr;
+    init( nullptr );
 }
 
 
 GPCB_PLUGIN::GPCB_PLUGIN( int aControlFlags ) :
-    m_cache( 0 ),
+    m_cache( nullptr ),
     m_ctl( aControlFlags )
 {
-    m_reader = NULL;
-    init( 0 );
+    m_reader = nullptr;
+    init( nullptr );
 }
 
 
@@ -915,7 +915,7 @@ const FOOTPRINT* GPCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
     FOOTPRINT_MAP::const_iterator it = mods.find( TO_UTF8( aFootprintName ) );
 
     if( it == mods.end() )
-        return NULL;
+        return nullptr;
 
     return it->second->GetFootprint();
 }
@@ -1036,7 +1036,7 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPER
     if( m_cache && m_cache->GetPath() == aLibraryPath )
     {
         delete m_cache;
-        m_cache = NULL;
+        m_cache = nullptr;
     }
 
     return true;
@@ -1053,7 +1053,7 @@ bool GPCB_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 {
     LOCALE_IO   toggle;
 
-    init( NULL );
+    init( nullptr );
 
     validateCache( aLibraryPath );
 

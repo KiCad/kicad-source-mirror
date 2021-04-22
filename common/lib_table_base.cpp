@@ -219,7 +219,7 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
         }
 
         // not found, search fall back table(s), if any
-    } while( ( cur = cur->fallBack ) != 0 );
+    } while( ( cur = cur->fallBack ) != nullptr );
 
     return nullptr; // not found
 }
@@ -255,7 +255,7 @@ const LIB_TABLE_ROW* LIB_TABLE::FindRowByURI( const wxString& aURI )
         }
 
         // not found, search fall back table(s), if any
-    } while( ( cur = cur->fallBack ) != 0 );
+    } while( ( cur = cur->fallBack ) != nullptr );
 
     return nullptr; // not found
 }
@@ -281,7 +281,7 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
             }
         }
 
-    } while( ( cur = cur->fallBack ) != 0 );
+    } while( ( cur = cur->fallBack ) != nullptr );
 
     ret.reserve( unique.size() );
 

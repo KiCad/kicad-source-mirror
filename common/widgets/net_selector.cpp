@@ -83,22 +83,22 @@ public:
         m_filterCtrl->SetValidator( *m_filterValidator );
         mainSizer->Add( m_filterCtrl, 0, wxEXPAND, 0 );
 
-        m_listBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, 0,
+        m_listBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr,
                                    wxLB_SINGLE|wxLB_NEEDED_SB );
         mainSizer->Add( m_listBox, 0, wxEXPAND|wxTOP, 2 );
 
         SetSizer( mainSizer );
         Layout();
 
-        Connect( wxEVT_IDLE, wxIdleEventHandler( NET_SELECTOR_COMBOPOPUP::onIdle ), NULL, this );
-        Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR_COMBOPOPUP::onKeyDown ), NULL, this );
-        Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_COMBOPOPUP::onMouseClick ), NULL, this );
-        m_listBox->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_COMBOPOPUP::onMouseClick ), NULL, this );
-        m_filterCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( NET_SELECTOR_COMBOPOPUP::onFilterEdit ), NULL, this );
-        m_filterCtrl->Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( NET_SELECTOR_COMBOPOPUP::onEnter ), NULL, this );
+        Connect( wxEVT_IDLE, wxIdleEventHandler( NET_SELECTOR_COMBOPOPUP::onIdle ), nullptr, this );
+        Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR_COMBOPOPUP::onKeyDown ), nullptr, this );
+        Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_COMBOPOPUP::onMouseClick ), nullptr, this );
+        m_listBox->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_COMBOPOPUP::onMouseClick ), nullptr, this );
+        m_filterCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( NET_SELECTOR_COMBOPOPUP::onFilterEdit ), nullptr, this );
+        m_filterCtrl->Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( NET_SELECTOR_COMBOPOPUP::onEnter ), nullptr, this );
 
         // <enter> in a ListBox comes in as a double-click on GTK
-        m_listBox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( NET_SELECTOR_COMBOPOPUP::onEnter ), NULL, this );
+        m_listBox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( NET_SELECTOR_COMBOPOPUP::onEnter ), nullptr, this );
 
         return true;
     }
@@ -548,13 +548,13 @@ NET_SELECTOR::NET_SELECTOR( wxWindow *parent, wxWindowID id, const wxPoint &pos,
     m_netSelectorPopup = new NET_SELECTOR_COMBOPOPUP();
     SetPopupControl( m_netSelectorPopup );
 
-    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR::onKeyDown ), NULL, this );
+    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR::onKeyDown ), nullptr, this );
 }
 
 
 NET_SELECTOR::~NET_SELECTOR()
 {
-    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR::onKeyDown ), NULL, this );
+    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR::onKeyDown ), nullptr, this );
 }
 
 

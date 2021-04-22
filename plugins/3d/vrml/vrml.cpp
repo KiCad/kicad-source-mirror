@@ -147,7 +147,7 @@ class LOCALESWITCH
 public:
     LOCALESWITCH()
     {
-        m_locale = setlocale( LC_NUMERIC, 0 );
+        m_locale = setlocale( LC_NUMERIC, NULL );
         setlocale( LC_NUMERIC, "C" );
     }
 

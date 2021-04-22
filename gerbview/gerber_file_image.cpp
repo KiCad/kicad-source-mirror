@@ -86,19 +86,19 @@ void GERBER_LAYER::ResetDefaultValues()
 
 
 GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer ) :
-    EDA_ITEM( (EDA_ITEM*)NULL, GERBER_IMAGE_T )
+    EDA_ITEM( nullptr, GERBER_IMAGE_T )
 {
     m_GraphicLayer = aLayer;        // Graphic layer Number
     m_IsVisible    = true;          // must be drawn
     m_PositiveDrawColor  = WHITE;   // The color used to draw positive items for this image
 
     m_Selected_Tool = 0;
-    m_FileFunction = NULL;          // file function parameters
+    m_FileFunction = nullptr;          // file function parameters
 
     ResetDefaultValues();
 
     for( unsigned ii = 0; ii < arrayDim( m_Aperture_List ); ii++ )
-        m_Aperture_List[ii] = 0;
+        m_Aperture_List[ii] = nullptr;
 }
 
 
@@ -128,14 +128,14 @@ D_CODE* GERBER_FILE_IMAGE::GetDCODEOrCreate( int aDCODE, bool aCreateIfNoExist )
         // lazily create the D_CODE if it does not exist.
         if( aCreateIfNoExist )
         {
-            if( m_Aperture_List[ndx] == NULL )
+            if( m_Aperture_List[ndx] == nullptr )
                 m_Aperture_List[ndx] = new D_CODE( ndx + FIRST_DCODE );
         }
 
         return m_Aperture_List[ndx];
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -148,7 +148,7 @@ D_CODE* GERBER_FILE_IMAGE::GetDCODE( int aDCODE ) const
         return m_Aperture_List[ndx];
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -162,7 +162,7 @@ APERTURE_MACRO* GERBER_FILE_IMAGE::FindApertureMacro( const APERTURE_MACRO& aLoo
         return pam;
     }
 
-    return NULL;    // not found
+    return nullptr;    // not found
 }
 
 
@@ -175,7 +175,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_ImageNegative = false;                        // true = Negative image
     m_IsX2_file     = false;                        // true only if a %TF, %TA or %TD command
     delete m_FileFunction;                          // file function parameters
-    m_FileFunction = NULL;
+    m_FileFunction = nullptr;
     m_MD5_value.Empty();                            // MD5 value found in a %TF.MD5 command
     m_PartString.Empty();                           // string found in a %TF.Part command
     m_hasNegativeItems    = -1;                     // set to uninitialized
@@ -218,7 +218,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_LastArcDataType = ARC_INFO_TYPE_NONE;         // Extra coordinate info type for arcs
                                                     // (radius or IJ center coord)
     m_LineNum = 0;                                  // line number in file being read
-    m_Current_File    = NULL;                       // Gerber file to read
+    m_Current_File    = nullptr;                    // Gerber file to read
     m_PolygonFillMode = false;
     m_PolygonFillModeState = 0;
     m_Selected_Tool = 0;
@@ -274,7 +274,7 @@ void GERBER_FILE_IMAGE::InitToolTable()
 {
     for( int count = 0; count < TOOLS_MAX_COUNT; count++ )
     {
-        if( m_Aperture_List[count] == NULL )
+        if( m_Aperture_List[count] == nullptr )
             continue;
 
         m_Aperture_List[count]->m_Num_Dcode = count + FIRST_DCODE;

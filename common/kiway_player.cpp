@@ -45,10 +45,10 @@ KIWAY_PLAYER::KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType
         long aStyle, const wxString& aWdoName ) :
     EDA_BASE_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aWdoName, aKiway ),
     m_modal( false ),
-    m_modal_loop( 0 ),
-    m_modal_resultant_parent( 0 )
+    m_modal_loop( nullptr ),
+    m_modal_resultant_parent( nullptr ),
+    m_modal_ret_val( false )
 {
-    m_modal_ret_val = 0;
 }
 
 
@@ -57,8 +57,8 @@ KIWAY_PLAYER::KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& a
         const wxString& aWdoName ) :
     EDA_BASE_FRAME( aParent, (FRAME_T) aId, aTitle, aPos, aSize, aStyle, aWdoName, nullptr ),
     m_modal( false ),
-    m_modal_loop( 0 ),
-    m_modal_resultant_parent( 0 ),
+    m_modal_loop( nullptr ),
+    m_modal_resultant_parent( nullptr ),
     m_modal_ret_val( false )
 {
 }
@@ -92,7 +92,7 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
     {
         void*&  m_what;
         NULLER( void*& aPtr ) : m_what( aPtr ) {}
-        ~NULLER() { m_what = 0; }   // indeed, set it to NULL on destruction
+        ~NULLER() { m_what = nullptr; }   // indeed, set it to NULL on destruction
     } clear_this( (void*&) m_modal_loop );
 
 
@@ -166,7 +166,7 @@ void KIWAY_PLAYER::DismissModal( bool aRetVal, const wxString& aResult )
     if( m_modal_loop )
     {
         m_modal_loop->Exit();
-        m_modal_loop = 0;      // this marks it as dismissed.
+        m_modal_loop = nullptr;      // this marks it as dismissed.
     }
 
     Show( false );

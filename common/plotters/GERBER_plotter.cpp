@@ -91,8 +91,8 @@ static bool polyCompare( const std::vector<wxPoint>& aPolygon,
 
 GERBER_PLOTTER::GERBER_PLOTTER()
 {
-    workFile  = NULL;
-    finalFile = NULL;
+    workFile  = nullptr;
+    finalFile = nullptr;
     m_currentApertureIdx = -1;
     m_apertureAttribute = 0;
 
@@ -205,7 +205,7 @@ void GERBER_PLOTTER::formatNetAttribute( GBR_NETLIST_METADATA* aData )
     // print a Gerber net attribute record.
     // it is added to the object attributes dictionary
     // On file, only modified or new attributes are printed.
-    if( aData == NULL )
+    if( aData == nullptr )
         return;
 
     if( !m_useNetAttributes )
@@ -253,7 +253,7 @@ bool GERBER_PLOTTER::StartPlot()
     m_outputFile = workFile;
     wxASSERT( m_outputFile );
 
-    if( m_outputFile == NULL )
+    if( m_outputFile == nullptr )
         return false;
 
     for( unsigned ii = 0; ii < m_headerExtraLines.GetCount(); ii++ )
@@ -386,7 +386,7 @@ bool GERBER_PLOTTER::EndPlot()
     fclose( workFile );
     fclose( finalFile );
     ::wxRemoveFile( m_workFilename );
-    m_outputFile = 0;
+    m_outputFile = nullptr;
 
     return true;
 }

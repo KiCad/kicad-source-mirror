@@ -37,7 +37,7 @@ FILTER_READER::FILTER_READER( LINE_READER& aReader ) :
     // is not owned here.
     delete [] m_line;
 
-    m_line = 0;
+    m_line = nullptr;
 }
 
 
@@ -45,7 +45,7 @@ FILTER_READER::~FILTER_READER()
 {
     // Our 'm_line' points to aReader's, and he will delete that buffer.
     // Prevent subsequent call to ~LINE_READER() from deleting a buffer we do not own.
-    m_line = 0;
+    m_line = nullptr;
 }
 
 
@@ -62,7 +62,7 @@ char* FILTER_READER::ReadLine()
     m_line   = reader.Line();
     m_length = reader.Length();
 
-    return m_length ? m_line : NULL;
+    return m_length ? m_line : nullptr;
 }
 
 
@@ -103,5 +103,5 @@ char* WHITESPACE_FILTER_READER::ReadLine()
     m_line   = s;
     m_length = reader.Length();
 
-    return m_length ? m_line : NULL;
+    return m_length ? m_line : nullptr;
 }

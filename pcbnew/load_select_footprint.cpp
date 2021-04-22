@@ -83,10 +83,10 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
     FOOTPRINT*      newFootprint = nullptr;
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
-    if( frame == NULL )     // happens if no board editor opened
+    if( frame == nullptr )     // happens if no board editor opened
         return false;
 
-    if( aFootprint == NULL )
+    if( aFootprint == nullptr )
     {
         if( !frame->GetBoard() || !frame->GetBoard()->GetFirstFootprint() )
             return false;
@@ -94,7 +94,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
         aFootprint = SelectFootprintFromBoard( frame->GetBoard() );
     }
 
-    if( aFootprint == NULL )
+    if( aFootprint == nullptr )
         return false;
 
     // Ensure we do not have the pad editor open (that is apseudo modal dlg).
@@ -268,7 +268,7 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
     DIALOG_CHOOSE_FOOTPRINT dialog( this, title, ptr );
 
     if( dialog.ShowQuasiModal() == wxID_CANCEL )
-        return NULL;
+        return nullptr;
 
     if( dialog.IsExternalBrowserSelected() )
     {
@@ -277,7 +277,7 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
         footprintName = SelectFootprintFromLibBrowser();
 
         if( footprintName.IsEmpty() )  // Cancel command
-            return NULL;
+            return nullptr;
         else
             fpid.Parse( footprintName );
     }
@@ -286,7 +286,7 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
         fpid = dialog.GetSelectedLibId();
 
         if( !fpid.IsValid() )
-            return NULL;
+            return nullptr;
         else
             footprintName = fpid.Format();
     }
@@ -311,7 +311,7 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
 
 FOOTPRINT* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
 {
-    FOOTPRINT* footprint = NULL;
+    FOOTPRINT* footprint = nullptr;
 
     try
     {
@@ -329,7 +329,7 @@ FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
 {
     FP_LIB_TABLE*   fptbl = Prj().PcbFootprintLibs();
 
-    wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up LIB_ID in NULL FP_LIB_TABLE." ) );
+    wxCHECK_MSG( fptbl, nullptr, wxT( "Cannot look up LIB_ID in NULL FP_LIB_TABLE." ) );
 
     FOOTPRINT *footprint = nullptr;
 
@@ -387,7 +387,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
     if( dlg.ShowModal() == wxID_OK )
         fpname = dlg.GetTextSelection();
     else
-        return NULL;
+        return nullptr;
 
     oldName = fpname;
 
@@ -450,7 +450,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 }
 
 
-static FOOTPRINT* s_FootprintInitialCopy = NULL;    // Copy of footprint for abort/undo command
+static FOOTPRINT* s_FootprintInitialCopy = nullptr;    // Copy of footprint for abort/undo command
 
 static PICKED_ITEMS_LIST s_PickedList;              // A pick-list to save initial footprint
                                                     //   and dragged tracks
@@ -470,7 +470,7 @@ FOOTPRINT* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
     DIALOG_GET_FOOTPRINT_BY_NAME dlg( this, fplist );
 
     if( dlg.ShowModal() != wxID_OK )    //Aborted by user
-        return NULL;
+        return nullptr;
 
     footprintName = dlg.GetValue();
     footprintName.Trim( true );
@@ -491,7 +491,7 @@ FOOTPRINT* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 
 void PCB_BASE_FRAME::PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsnest )
 {
-    if( aFootprint == 0 )
+    if( aFootprint == nullptr )
         return;
 
     OnModify();
@@ -505,7 +505,7 @@ void PCB_BASE_FRAME::PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsne
         ITEM_PICKER picker( nullptr, aFootprint, UNDO_REDO::CHANGED );
         picker.SetLink( s_FootprintInitialCopy );
         s_PickedList.PushItem( picker );
-        s_FootprintInitialCopy = NULL;     // the picker is now owner of s_ModuleInitialCopy.
+        s_FootprintInitialCopy = nullptr;     // the picker is now owner of s_ModuleInitialCopy.
     }
 
     if( s_PickedList.GetCount() )
@@ -521,7 +521,7 @@ void PCB_BASE_FRAME::PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsne
     aFootprint->ClearFlags();
 
     delete s_FootprintInitialCopy;
-    s_FootprintInitialCopy = NULL;
+    s_FootprintInitialCopy = nullptr;
 
     if( aRecreateRatsnest )
         m_pcb->GetConnectivity()->Update( aFootprint );

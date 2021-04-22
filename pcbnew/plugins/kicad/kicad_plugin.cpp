@@ -1760,7 +1760,7 @@ void PCB_IO::format( const TRACK* aTrack, int aNestLevel ) const
         const VIA*  via = static_cast<const VIA*>( aTrack );
         BOARD*      board = (BOARD*) via->GetParent();
 
-        wxCHECK_RET( board != 0, wxT( "Via " ) +
+        wxCHECK_RET( board != nullptr, wxT( "Via " ) +
                      via->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) + wxT( " has no parent." ) );
 
         m_out->Print( aNestLevel, "(via" );
@@ -2161,12 +2161,12 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
 
 
 PCB_IO::PCB_IO( int aControlFlags ) :
-    m_cache( 0 ),
+    m_cache( nullptr ),
     m_ctl( aControlFlags ),
     m_parser( new PCB_PARSER() ),
     m_mapping( new NETINFO_MAPPING() )
 {
-    init( 0 );
+    init( nullptr );
     m_out = &m_sf;
 }
 

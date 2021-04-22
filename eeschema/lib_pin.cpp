@@ -506,7 +506,7 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, wxPo
     }
 
     GRText( DC, txtpos, color, typeName, orient, wxSize( textSize, textSize ), hjustify,
-            GR_TEXT_VJUSTIFY_CENTER, pensize, false, false, 0 );
+            GR_TEXT_VJUSTIFY_CENTER, pensize, false, false, nullptr );
 }
 
 

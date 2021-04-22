@@ -30,7 +30,7 @@
 #include <wx/log.h>
 #include <map>
 
-OBJECT_2D_STATS *OBJECT_2D_STATS::s_instance = 0;
+OBJECT_2D_STATS *OBJECT_2D_STATS::s_instance = nullptr;
 
 
 OBJECT_2D::OBJECT_2D( OBJECT_2D_TYPE aObjType, const BOARD_ITEM& aBoardItem )

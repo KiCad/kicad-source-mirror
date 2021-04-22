@@ -406,7 +406,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     }
 
     // Emit component pads
-    PAD* old_pad = 0;
+    PAD* old_pad = nullptr;
     int  pad_name_number = 0;
 
     for( unsigned i = 0; i<pads.size(); ++i )

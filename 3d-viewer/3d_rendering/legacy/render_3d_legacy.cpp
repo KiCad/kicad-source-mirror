@@ -996,10 +996,10 @@ bool RENDER_3D_LEGACY::initializeOpenGL()
     m_circleTexture = OglLoadTexture( *circleImageBlured );
 
     delete circleImageBlured;
-    circleImageBlured = 0;
+    circleImageBlured = nullptr;
 
     delete circleImage;
-    circleImage = 0;
+    circleImage = nullptr;
 
     init_lights();
 

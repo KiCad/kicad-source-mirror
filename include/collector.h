@@ -56,7 +56,7 @@ public:
     COLLECTOR() :
             m_Threshold( 0 ),
             m_MenuCancelled( false ),
-            m_scanTypes( 0 ),
+            m_scanTypes( nullptr ),
             // Inspect() is virtual so calling it from a class common inspector preserves
             // polymorphism.
             m_inspector( [=]( EDA_ITEM* aItem, void* aTestData )

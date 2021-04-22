@@ -108,8 +108,8 @@ LANGUAGE_DESCR LanguagesList[] =
 
 PGM_BASE::PGM_BASE()
 {
-    m_pgm_checker = NULL;
-    m_locale = NULL;
+    m_pgm_checker = nullptr;
+    m_locale = nullptr;
     m_Printing = false;
     m_ModalDialogCount = 0;
 
@@ -131,10 +131,10 @@ void PGM_BASE::Destroy()
 {
     // unlike a normal destructor, this is designed to be called more than once safely:
     delete m_pgm_checker;
-    m_pgm_checker = 0;
+    m_pgm_checker = nullptr;
 
     delete m_locale;
-    m_locale = 0;
+    m_locale = nullptr;
 }
 
 

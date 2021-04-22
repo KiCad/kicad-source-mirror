@@ -68,7 +68,7 @@ struct LAYER;
 class PCB_PARSER : public PCB_LEXER
 {
 public:
-    PCB_PARSER( LINE_READER* aReader = NULL ) :
+    PCB_PARSER( LINE_READER* aReader = nullptr ) :
         PCB_LEXER( aReader ),
         m_board( nullptr ),
         m_resetKIIDs( false )
@@ -108,7 +108,7 @@ public:
      *                         wxArrayString to this function and care must be taken to
      *                         delete it even on exception.
      */
-    FOOTPRINT* parseFOOTPRINT( wxArrayString* aInitialComments = 0 );
+    FOOTPRINT* parseFOOTPRINT( wxArrayString* aInitialComments = nullptr );
 
     /**
      * Return whether a version number, if any was parsed, was too recent
@@ -189,7 +189,7 @@ private:
     DIMENSION_BASE* parseDIMENSION();
 
     // Parse a footprint, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
-    FOOTPRINT*      parseFOOTPRINT_unchecked( wxArrayString* aInitialComments = 0 );
+    FOOTPRINT*      parseFOOTPRINT_unchecked( wxArrayString* aInitialComments = nullptr );
 
     FP_TEXT*        parseFP_TEXT();
     FP_SHAPE*       parseFP_SHAPE();

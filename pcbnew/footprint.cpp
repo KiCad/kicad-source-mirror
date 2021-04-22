@@ -50,7 +50,7 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         m_visibleBBoxCacheTimeStamp( 0 ),
         m_textExcludedBBoxCacheTimeStamp( 0 ),
         m_hullCacheTimeStamp( 0 ),
-        m_initial_comments( 0 )
+        m_initial_comments( nullptr )
 {
     m_attributes   = 0;
     m_layer        = F_Cu;
@@ -962,7 +962,7 @@ PAD* FOOTPRINT::FindPadByName( const wxString& aPadName ) const
             return pad;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -978,7 +978,7 @@ PAD* FOOTPRINT::GetPad( const wxPoint& aPosition, LSET aLayerMask )
             return pad;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1614,8 +1614,8 @@ BOARD_ITEM* FOOTPRINT::Duplicate() const
 
 BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootprint )
 {
-    BOARD_ITEM* new_item = NULL;
-    FP_ZONE* new_zone = NULL;
+    BOARD_ITEM* new_item = nullptr;
+    FP_ZONE* new_zone = nullptr;
 
     switch( aItem->Type() )
     {

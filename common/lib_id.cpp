@@ -59,7 +59,7 @@ const char* EndsWithRev( const char* start, const char* tail, char separator )
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 

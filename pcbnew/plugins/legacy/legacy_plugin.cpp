@@ -188,7 +188,7 @@ typedef unsigned LAYER_MSK;
 static const char delims[] = " \t\r\n";
 
 
-static bool inline isSpace( int c ) { return strchr( delims, c ) != 0; }
+static bool inline isSpace( int c ) { return strchr( delims, c ) != nullptr; }
 
 #define MASK(x)             (1<<(x))
 
@@ -3344,7 +3344,7 @@ bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath,
     if( m_cache && m_cache->m_lib_path == aLibraryPath )
     {
         delete m_cache;
-        m_cache = 0;
+        m_cache = nullptr;
     }
 
     return true;

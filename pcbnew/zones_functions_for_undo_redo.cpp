@@ -151,7 +151,7 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LA
     {
         ZONE* zone = aPcb->GetArea( ii );
 
-        if( zone == NULL )      // End of list
+        if( zone == nullptr )      // End of list
             break;
 
         if( aNetCode >= 0 && aNetCode != zone->GetNetCode() )
@@ -221,7 +221,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
         {
             ZONE* zone = aPcb->GetArea( ii );
 
-            if( zone == NULL )
+            if( zone == nullptr )
             {
                 /* End of list: the stored item is not found:
                  * it must be in aDeletedList:
@@ -232,7 +232,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                 if( status == UNDO_REDO::NEWITEM )
                 {
                     delete ref;
-                    ref = NULL;
+                    ref = nullptr;
                     aPickList.RemovePicker( kk );
                     kk--;
                 }
@@ -241,13 +241,13 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                     ZONE* zcopy = (ZONE*) aPickList.GetPickedItemLink( kk );
                     aPickList.SetPickedItemStatus( UNDO_REDO::DELETED, kk );
 
-                    wxASSERT_MSG( zcopy != NULL,
+                    wxASSERT_MSG( zcopy != nullptr,
                                   wxT( "UpdateCopyOfZonesList() error: link = NULL" ) );
 
                     *ref = *zcopy;
 
                     // the copy was deleted; the link does not exists now.
-                    aPickList.SetPickedItemLink( NULL, kk );
+                    aPickList.SetPickedItemLink( nullptr, kk );
                     delete zcopy;
                 }
 
@@ -256,7 +256,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
 
                 for( unsigned nn = 0; nn < aAuxiliaryList.GetCount(); nn++ )
                 {
-                    if( ref != NULL && aAuxiliaryList.GetPickedItem( nn ) == ref )
+                    if( ref != nullptr && aAuxiliaryList.GetPickedItem( nn ) == ref )
                     {
                         aAuxiliaryList.RemovePicker( nn );
                         notfound = false;
@@ -270,7 +270,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                 #if  defined(DEBUG)
                     printf( "UpdateCopyOfZonesList(): item not found in aAuxiliaryList,"
                             "combined with another zone\n" );
-                    fflush(0);
+                    fflush(nullptr);
                 #endif
                 }
                 break;

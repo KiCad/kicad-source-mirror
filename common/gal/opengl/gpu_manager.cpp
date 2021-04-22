@@ -196,7 +196,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, m_indicesSize * sizeof( int ), (GLvoid*) m_indices.get(),
                   GL_DYNAMIC_DRAW );
 
-    glDrawElements( GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, 0 );
+    glDrawElements( GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, NULL );
 
 #ifdef __WXDEBUG__
     wxLogTrace( traceGalProfile, wxT( "Cached manager size: %d" ), m_indicesSize );

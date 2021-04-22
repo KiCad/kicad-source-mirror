@@ -57,7 +57,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
 
 BOARD::BOARD() :
-        BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),
+        BOARD_ITEM_CONTAINER( (BOARD_ITEM*) nullptr, PCB_T ),
         m_boardUse( BOARD_USE::NORMAL ),
         m_timeStamp( 1 ),
         m_paper( PAGE_INFO::A4 ),
@@ -279,7 +279,7 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
         return SEARCH_RESULT::CONTINUE;
     };
 
-    Visit( inspector, NULL, top_level_board_stuff );
+    Visit( inspector, nullptr, top_level_board_stuff );
 }
 
 
@@ -299,7 +299,7 @@ TRACKS BOARD::TracksInNet( int aNetCode )
 
     // visit this BOARD's TRACKs and VIAs with above TRACK INSPECTOR which
     // appends all in aNetCode to ret.
-    Visit( inspector, NULL, GENERAL_COLLECTOR::Tracks );
+    Visit( inspector, nullptr, GENERAL_COLLECTOR::Tracks );
 
     return ret;
 }
@@ -562,9 +562,9 @@ bool BOARD::IsFootprintLayerVisible( PCB_LAYER_ID aLayer ) const
 
 void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 {
-    if( aBoardItem == NULL )
+    if( aBoardItem == nullptr )
     {
-        wxFAIL_MSG( wxT( "BOARD::Add() param error: aBoardItem NULL" ) );
+        wxFAIL_MSG( wxT( "BOARD::Add() param error: aBoardItem nullptr" ) );
         return;
     }
 
@@ -664,7 +664,7 @@ void BOARD::FinalizeBulkRemove( std::vector<BOARD_ITEM*>& aRemovedItems )
 
 void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 {
-    // find these calls and fix them!  Don't send me no stinking' NULL.
+    // find these calls and fix them!  Don't send me no stinking' nullptr.
     wxASSERT( aBoardItem );
 
     switch( aBoardItem->Type() )
@@ -1290,7 +1290,7 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
 {
     // the first valid netcode is 1 and the last is m_NetInfo.GetCount()-1.
     // zero is reserved for "no connection" and is not actually a net.
-    // NULL is returned for non valid netcodes
+    // nullptr is returned for non valid netcodes
 
     wxASSERT( m_NetInfo.GetNetCount() > 0 );
 
@@ -1505,7 +1505,7 @@ PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerSet ) const
 
     for( FOOTPRINT* footprint : m_footprints )
     {
-        PAD* pad = NULL;
+        PAD* pad = nullptr;
 
         if( footprint->HitTest( aPosition ) )
             pad = footprint->GetPad( aPosition, aLayerSet );
@@ -1514,7 +1514,7 @@ PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerSet ) const
             return pad;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1601,7 +1601,7 @@ PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const wxPoint& aPosition, LSET 
             }
 
             // Not found:
-            return 0;
+            return nullptr;
         }
 
         if( pad->GetPosition().x == aPosition.x )       // Must search considering Y coordinate
@@ -1637,7 +1637,7 @@ PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const wxPoint& aPosition, LSET 
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1765,8 +1765,8 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
 FOOTPRINT* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer,
                                 bool aVisibleOnly, bool aIgnoreLocked ) const
 {
-    FOOTPRINT* footprint     = NULL;
-    FOOTPRINT* alt_footprint = NULL;
+    FOOTPRINT* footprint     = nullptr;
+    FOOTPRINT* alt_footprint = nullptr;
     int        min_dim       = 0x7FFFFFFF;
     int        alt_min_dim   = 0x7FFFFFFF;
     bool       current_layer_back = IsBackLayer( aActiveLayer );
@@ -1822,7 +1822,7 @@ FOOTPRINT* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLa
     if( alt_footprint)
         return alt_footprint;
 
-    return NULL;
+    return nullptr;
 }
 
 

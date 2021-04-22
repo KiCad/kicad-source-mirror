@@ -2243,7 +2243,7 @@ bool SCH_SEXPR_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath,
     if( m_cache && m_cache->IsFile( aLibraryPath ) )
     {
         delete m_cache;
-        m_cache = 0;
+        m_cache = nullptr;
     }
 
     return true;

@@ -47,7 +47,7 @@ int     KIWAY::m_kiface_version[KIWAY_FACE_COUNT];
 
 
 KIWAY::KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop ):
-    m_program( aProgram ), m_ctl( aCtlBits ), m_top( 0 )
+    m_program( aProgram ), m_ctl( aCtlBits ), m_top( nullptr )
 {
     SetTop( aTop );     // hook player_destroy_handler() into aTop.
 

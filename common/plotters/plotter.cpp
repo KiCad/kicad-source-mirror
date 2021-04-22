@@ -55,7 +55,7 @@ PLOTTER::PLOTTER( )
     m_plotMirror = false;       // Plot mirror option flag
     m_mirrorIsHorizontal = true;
     m_yaxisReversed = false;
-    m_outputFile = 0;
+    m_outputFile = nullptr;
     m_colorMode = false;          // Starts as a BW plot
     m_negativeMode = false;
     // Temporary init to avoid not initialized vars, will be set later

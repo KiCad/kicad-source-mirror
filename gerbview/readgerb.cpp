@@ -45,7 +45,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
     GERBER_FILE_IMAGE_LIST* images = GetImagesList();
     GERBER_FILE_IMAGE* gerber = GetGbrImage( layer );
 
-    if( gerber != NULL )
+    if( gerber != nullptr )
     {
         Erase_Current_DrawLayer( false );
     }
@@ -126,7 +126,7 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
     // Read the gerber file */
     m_Current_File = wxFopen( aFullFileName, wxT( "rt" ) );
 
-    if( m_Current_File == 0 )
+    if( m_Current_File == nullptr )
         return false;
 
     m_FileName = aFullFileName;
@@ -137,7 +137,7 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
 
     while( true )
     {
-        if( fgets( lineBuffer, GERBER_BUFZ, m_Current_File ) == NULL )
+        if( fgets( lineBuffer, GERBER_BUFZ, m_Current_File ) == nullptr )
             break;
 
         m_LineNum++;

@@ -51,7 +51,7 @@ public:
      *  @param aParent the parent creator of this canvas.
      *  @param aAttribList a list of openGL options created by #OGL_ATT_LIST::GetAttributesList.
      */
-    C3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribList  = 0,
+    C3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribList  = nullptr,
                       S3D_CACHE* aCacheManager = nullptr );
 
     ~C3D_MODEL_VIEWER();
