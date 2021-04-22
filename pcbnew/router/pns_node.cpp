@@ -169,8 +169,7 @@ void NODE::unlinkParent()
 OBSTACLE_VISITOR::OBSTACLE_VISITOR( const ITEM* aItem ) :
     m_item( aItem ),
     m_node( NULL ),
-    m_override( NULL ),
-    m_extraClearance( 0 )
+    m_override( NULL )
 {
 }
 
@@ -212,10 +211,6 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         m_matchCount( 0 ),
         m_differentNetsOnly( aDifferentNetsOnly )
     {
-        if( aItem && aItem->Kind() == ITEM::LINE_T )
-        {
-             m_extraClearance += static_cast<const LINE*>( aItem )->Width() / 2;
-        }
     }
 
     virtual ~DEFAULT_OBSTACLE_VISITOR()

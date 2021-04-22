@@ -97,7 +97,7 @@ public:
 
     /**
      * Epsilon for DRC tests.  Note that for zone tests this is essentially additive with
-     * m_extraClearance.  Units are mm.
+     * m_ExtraClearance.  Units are mm.
      */
     double m_DRCEpsilon;
 

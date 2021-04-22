@@ -130,7 +130,6 @@ protected:
 
     const NODE* m_node;             ///< node we are searching in (either root or a branch)
     const NODE* m_override;         ///< node that overrides root entries
-    int         m_extraClearance;   ///< additional clearance
 };
 
 /**
