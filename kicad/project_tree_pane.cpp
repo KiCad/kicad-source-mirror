@@ -144,7 +144,7 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
     m_selectedItem = nullptr;
     m_watcherNeedReset = false;
 
-    m_watcher = NULL;
+    m_watcher = nullptr;
     Connect( wxEVT_FSWATCHER,
              wxFileSystemWatcherEventHandler( PROJECT_TREE_PANE::onFileSystemEvent ) );
 
@@ -166,8 +166,9 @@ PROJECT_TREE_PANE::~PROJECT_TREE_PANE()
     if( m_watcher )
     {
         m_watcher->RemoveAll();
-        m_watcher->SetOwner( NULL );
+        m_watcher->SetOwner( nullptr );
         delete m_watcher;
+        m_watcher = nullptr;
     }
 }
 
@@ -1022,48 +1023,48 @@ wxTreeItemId PROJECT_TREE_PANE::findSubdirTreeItem( const wxString& aSubDir )
         return m_root;
 
     // The subdir is in the main tree or in a subdir: Locate it
-    wxTreeItemIdValue  cookie;
-    wxTreeItemId       root_id = m_root;
-    std::stack < wxTreeItemId > subdirs_id;
+    wxTreeItemIdValue        cookie;
+    wxTreeItemId             root_id = m_root;
+    std::stack<wxTreeItemId> subdirs_id;
 
-    wxTreeItemId kid = m_TreeProject->GetFirstChild( root_id, cookie );
+    wxTreeItemId child = m_TreeProject->GetFirstChild( root_id, cookie );
 
     while( true )
     {
-        if( ! kid.IsOk() )
+        if( ! child.IsOk() )
         {
             if( subdirs_id.empty() )    // all items were explored
             {
-                root_id = kid;          // Not found: return an invalid wxTreeItemId
+                root_id = child;          // Not found: return an invalid wxTreeItemId
                 break;
             }
             else
             {
                 root_id = subdirs_id.top();
                 subdirs_id.pop();
-                kid = m_TreeProject->GetFirstChild( root_id, cookie );
+                child = m_TreeProject->GetFirstChild( root_id, cookie );
 
-                if( ! kid.IsOk() )
+                if( !child.IsOk() )
                     continue;
             }
         }
 
-        PROJECT_TREE_ITEM* itemData = GetItemIdData( kid );
+        PROJECT_TREE_ITEM* itemData = GetItemIdData( child );
 
         if( itemData && ( itemData->GetType() == TREE_FILE_TYPE::DIRECTORY ) )
         {
             if( itemData->GetFileName() == aSubDir )    // Found!
             {
-                root_id = kid;
+                root_id = child;
                 break;
             }
 
-            // kid is a subdir, push in list to explore it later
+            // child is a subdir, push in list to explore it later
             if( itemData->IsPopulated() )
-                subdirs_id.push( kid );
+                subdirs_id.push( child );
         }
 
-        kid = m_TreeProject->GetNextChild( root_id, cookie );
+        child = m_TreeProject->GetNextChild( root_id, cookie );
     }
 
     return root_id;
@@ -1072,6 +1073,10 @@ wxTreeItemId PROJECT_TREE_PANE::findSubdirTreeItem( const wxString& aSubDir )
 
 void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
 {
+    // No need to process events when we're shutting down
+    if( !m_watcher )
+        return;
+
     const wxFileName& pathModified = event.GetPath();
     wxString subdir = pathModified.GetPath();
     wxString fn = pathModified.GetFullPath();
