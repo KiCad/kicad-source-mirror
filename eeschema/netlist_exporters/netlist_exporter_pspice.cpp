@@ -42,18 +42,20 @@
 
 wxString NETLIST_EXPORTER_PSPICE::GetSpiceDevice( const wxString& aComponent ) const
 {
-    const auto& spiceItems = GetSpiceItems();
+    const std::list<SPICE_ITEM>& spiceItems = GetSpiceItems();
 
-    auto it = std::find_if( spiceItems.begin(), spiceItems.end(), [&]( const SPICE_ITEM& item ) {
-        return item.m_refName == aComponent;
-    } );
+    auto it = std::find_if( spiceItems.begin(), spiceItems.end(),
+                            [&]( const SPICE_ITEM& item )
+                            {
+                                return item.m_refName == aComponent;
+                            } );
 
     if( it == spiceItems.end() )
         return wxEmptyString;
 
     // Prefix the device type if plain reference would result in a different device type
-    return it->m_primitive != it->m_refName[0] ?
-        wxString( it->m_primitive + it->m_refName ) : it->m_refName;
+    return it->m_primitive != it->m_refName[0] ? wxString( it->m_primitive + it->m_refName )
+                                               : it->m_refName;
 }
 
 
@@ -90,7 +92,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
     aFormatter->Print( 0, ".title %s\n", TO_UTF8( m_title ) );
 
     // Write .include directives
-    for( const auto& lib : m_libraries )
+    for( const wxString& lib : m_libraries )
     {
         wxString full_path;
 
@@ -101,19 +103,21 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
 
             if( full_path.IsEmpty() )
             {
-                DisplayError( NULL, wxString::Format( _( "Could not find library file %s" ), lib ) );
+                DisplayError( NULL, wxString::Format( _( "Could not find library file %s." ), lib ) );
                 full_path = lib;
             }
         }
         else
+        {
             full_path = lib;    // just use the unaltered path
+        }
 
         aFormatter->Print( 0, ".include \"%s\"\n", TO_UTF8( full_path ) );
     }
 
     unsigned int NC_counter = 1;
 
-    for( const auto& item : m_spiceItems )
+    for( const SPICE_ITEM& item : m_spiceItems )
     {
         if( !item.m_enabled )
             continue;
@@ -171,30 +175,29 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
 }
 
 
-wxString NETLIST_EXPORTER_PSPICE::GetSpiceField( SPICE_FIELD aField,
-        SCH_COMPONENT* aComponent, unsigned aCtl )
+wxString NETLIST_EXPORTER_PSPICE::GetSpiceField( SPICE_FIELD aField, SCH_COMPONENT* aSymbol,
+                                                 unsigned aCtl )
 {
-    SCH_FIELD* field = aComponent->FindField( GetSpiceFieldName( aField ) );
-    return field ? field->GetShownText() : GetSpiceFieldDefVal( aField, aComponent, aCtl );
+    SCH_FIELD* field = aSymbol->FindField( GetSpiceFieldName( aField ) );
+    return field ? field->GetShownText() : GetSpiceFieldDefVal( aField, aSymbol, aCtl );
 }
 
 
-wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
-        SCH_COMPONENT* aComponent, unsigned aCtl )
+wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField, SCH_COMPONENT* aSymbol,
+                                                       unsigned aCtl )
 {
     switch( aField )
     {
     case SF_PRIMITIVE:
     {
-        const wxString refName = aComponent->GetField( REFERENCE_FIELD )->GetShownText();
+        const wxString refName = aSymbol->GetField( REFERENCE_FIELD )->GetShownText();
         return refName.GetChar( 0 );
-        break;
     }
 
     case SF_MODEL:
     {
-        wxChar prim = aComponent->GetField( REFERENCE_FIELD )->GetShownText().GetChar( 0 );
-        wxString value = aComponent->GetField( VALUE_FIELD )->GetShownText();
+        wxChar prim = aSymbol->GetField( REFERENCE_FIELD )->GetShownText().GetChar( 0 );
+        wxString value = aSymbol->GetField( VALUE_FIELD )->GetShownText();
 
         // Is it a passive component?
         if( aCtl & NET_ADJUST_PASSIVE_VALS && ( prim == 'C' || prim == 'L' || prim == 'R' ) )
@@ -222,42 +225,35 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
         }
 
         return value;
-        break;
     }
 
     case SF_ENABLED:
         return wxString( "Y" );
-        break;
 
     case SF_NODE_SEQUENCE:
     {
         wxString nodeSeq;
         std::vector<LIB_PIN*> pins;
 
-        wxCHECK( aComponent->GetPartRef(), wxString() );
-        aComponent->GetPartRef()->GetPins( pins );
+        wxCHECK( aSymbol->GetPartRef(), wxString() );
+        aSymbol->GetPartRef()->GetPins( pins );
 
-        for( auto pin : pins )
+        for( LIB_PIN* pin : pins )
             nodeSeq += pin->GetNumber() + " ";
 
         nodeSeq.Trim();
 
         return nodeSeq;
-        break;
     }
 
     case SF_LIB_FILE:
         // There is no default Spice library
         return wxEmptyString;
-        break;
 
     default:
-        wxASSERT_MSG( false, "Missing default value definition for a Spice field" );
-        break;
+        wxASSERT_MSG( false, "Missing default value definition for a Spice field." );
+        return wxString( "<unknown>" );
     }
-
-
-    return wxString( "<unknown>" );
 }
 
 
@@ -284,7 +280,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
         SCH_SHEET_PATH sheet = sheetList[sheet_idx];
 
         // Process component attributes to find Spice directives
-        for( auto item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
             SCH_COMPONENT* symbol = findNextSymbol( item, &sheet );
 
@@ -306,8 +302,8 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             // Duplicate references will result in simulation errors
             if( refNames.count( spiceItem.m_refName ) )
             {
-                DisplayError( NULL, wxT( "There are duplicate components. "
-                                         "You need to annotate schematics first." ) );
+                DisplayError( NULL, wxT( "Multiple symbols have the same reference designator.\n"
+                                         "Annotation must be corrected before simulating." ) );
                 return false;
             }
 
@@ -370,7 +366,7 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 {
     const SCH_SHEET_LIST& sheetList = m_schematic->GetSheets();
     wxRegEx couplingK( "^[kK][[:digit:]]*[[:space:]]+[[:alnum:]]+[[:space:]]+[[:alnum:]]+",
-            wxRE_ADVANCED );
+                       wxRE_ADVANCED );
 
     m_directives.clear();
     bool controlBlock = false;
@@ -378,7 +374,7 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_TEXT_T ) )
+        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_TEXT_T ) )
         {
             wxString text = static_cast<SCH_TEXT*>( item )->GetShownText();
 
@@ -462,7 +458,7 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 
 void NETLIST_EXPORTER_PSPICE::writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const
 {
-    for( auto& dir : m_directives )
+    for( const wxString& dir : m_directives )
     {
         aFormatter->Print( 0, "%s\n", TO_UTF8( dir ) );
     }

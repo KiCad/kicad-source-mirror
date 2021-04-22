@@ -185,12 +185,12 @@ public:
     /**
      * Retrieve either the requested field value or the default value.
      */
-    static wxString GetSpiceField( SPICE_FIELD aField, SCH_COMPONENT* aComponent, unsigned aCtl );
+    static wxString GetSpiceField( SPICE_FIELD aField, SCH_COMPONENT* aSymbol, unsigned aCtl );
 
     /**
      * Retrieve the default value for a given field.
      */
-    static wxString GetSpiceFieldDefVal( SPICE_FIELD aField, SCH_COMPONENT* aComponent,
+    static wxString GetSpiceFieldDefVal( SPICE_FIELD aField, SCH_COMPONENT* aSymbol,
                                          unsigned aCtl );
 
     /**

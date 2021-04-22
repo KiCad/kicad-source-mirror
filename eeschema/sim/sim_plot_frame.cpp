@@ -1296,10 +1296,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
     updateNetlistExporter();
 
     if( !m_exporter->ProcessNetlist( NET_ALL_FLAGS ) )
-    {
-        DisplayError( this, _( "There were errors during netlist export, aborted." ) );
         return;
-    }
 
     if( plotPanelWindow != m_welcomePanel )
         m_settingsDlg->SetSimCommand( m_plots[plotPanelWindow].m_simCommand );
