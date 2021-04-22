@@ -102,10 +102,12 @@ int SCRIPTING_TOOL::reloadPlugins( const TOOL_EVENT& aEvent )
 
     {
         PyLOCK      lock;
+        std::string sys_path = SCRIPTING::PyScriptingPath( false ).ToStdString();
+        std::string user_path = SCRIPTING::PyScriptingPath( true ).ToStdString();
 
         using namespace pybind11::literals;
-        auto locals = pybind11::dict( "sys_path"_a = SCRIPTING::PyScriptingPath( false ),
-                                      "user_path"_a = SCRIPTING::PyScriptingPath( true ) );
+        auto locals = pybind11::dict( "sys_path"_a = sys_path,
+                                      "user_path"_a = user_path );
 
         pybind11::exec( R"(
 import sys
