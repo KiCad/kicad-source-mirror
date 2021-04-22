@@ -448,14 +448,14 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem, nullptr,
                                              aStartItem->Layer(), &constraint ) )
         {
-            trackWidth = constraint.m_Value.Opt();
-            found = true;    // Note: allowed to override anything, including bds.m_TrackMinWidth
+            trackWidth = std::max( trackWidth, constraint.m_Value.Opt() );
+            found = true;
         }
     }
 
     if( !found )
     {
-        trackWidth = bds.GetCurrentTrackWidth();
+        trackWidth = std::max( trackWidth, bds.GetCurrentTrackWidth() );
     }
 
     aSizes.SetTrackWidth( trackWidth );
@@ -468,13 +468,13 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER, aStartItem,
                                              nullptr, aStartItem->Layer(), &constraint ) )
         {
-            viaDiameter = constraint.m_Value.Opt();
+            viaDiameter = std::max( viaDiameter, constraint.m_Value.Opt() );
         }
 
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_HOLE, aStartItem,
                                              nullptr, aStartItem->Layer(), &constraint ) )
         {
-            viaDrill = constraint.m_Value.Opt();
+            viaDrill = std::max( viaDrill, constraint.m_Value.Opt() );
         }
     }
     else
@@ -502,14 +502,14 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         if( !found && m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem,
                                                        nullptr, aStartItem->Layer(), &constraint ) )
         {
-            diffPairWidth = constraint.m_Value.Opt();
+            diffPairWidth = std::max( diffPairWidth, constraint.m_Value.Opt() );
         }
 
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, aStartItem,
                                              nullptr, aStartItem->Layer(), &constraint ) )
         {
-            diffPairGap = constraint.m_Value.Opt();
-            diffPairViaGap = constraint.m_Value.Opt();
+            diffPairGap = std::max( diffPairGap, constraint.m_Value.Opt() );
+            diffPairViaGap = std::max( diffPairViaGap, constraint.m_Value.Opt() );
         }
     }
     else
