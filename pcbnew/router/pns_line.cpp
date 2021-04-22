@@ -562,10 +562,12 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
     return DIRECTION_45().BuildInitialTrace( aOrigin.CPoint( 0 ), aP, dir.IsDiagonal() );
 }
 
+
 void LINE::dragCorner45( const VECTOR2I& aP, int aIndex )
 {
     SHAPE_LINE_CHAIN path;
 
+    int width = m_line.Width();
     VECTOR2I snapped = snapDraggedCorner( m_line, aP, aIndex );
 
     if( aIndex == 0 )
@@ -586,8 +588,10 @@ void LINE::dragCorner45( const VECTOR2I& aP, int aIndex )
     }
 
     path.Simplify();
+    path.SetWidth( width );
     m_line = path;
 }
+
 
 void LINE::dragCornerFree( const VECTOR2I& aP, int aIndex )
 {
