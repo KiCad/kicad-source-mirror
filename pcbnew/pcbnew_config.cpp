@@ -237,6 +237,6 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
      * The explicit save action in PCB_EDIT_FRAME::SavePcbFile will call SaveProject directly,
      * so if the user does choose to save the board, the project file will get created then.
      */
-    if( !Prj().IsNullProject() && ( fn.Exists() || GetBoard()->m_LegacyDesignSettingsLoaded ) )
+    if( !Prj().IsNullProject() && fn.Exists() )
         GetSettingsManager()->SaveProject();
 }

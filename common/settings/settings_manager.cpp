@@ -912,9 +912,6 @@ void SETTINGS_MANAGER::SaveProjectAs( const wxString& aFullPath )
 {
     wxString oldName = Prj().GetProjectFullName();
 
-    // Side effect: clear read-only status
-    Prj().SetReadOnly( false );
-
     if( aFullPath.IsSameAs( oldName ) )
     {
         SaveProject( aFullPath );

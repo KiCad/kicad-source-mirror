@@ -274,12 +274,15 @@ public:
 
     /**
      * Sets the currently loaded project path and saves it (pointers remain valid)
+     * Note that this will not modify the read-only state of the project, so it will have no effect
+     * if the project is marked as read-only!
      * @param aFullPath is the full filename to set for the project
      */
     void SaveProjectAs( const wxString& aFullPath );
 
     /**
-     * Saves a copy of the current project under the given path
+     * Saves a copy of the current project under the given path.  Will save the copy even if the
+     * current project is marked as read-only.
      */
     void SaveProjectCopy( const wxString& aFullPath );
 

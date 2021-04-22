@@ -939,7 +939,10 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     rulesFile.SetExt( DesignRulesFileExtension );
 
     if( !projectFile.FileExists() && aChangeProject )
+    {
+        Prj().SetReadOnly( false );
         GetSettingsManager()->SaveProjectAs( projectFile.GetFullPath() );
+    }
 
     wxFileName currentRules( GetDesignRulesPath() );
 
