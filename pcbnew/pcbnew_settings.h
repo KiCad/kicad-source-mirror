@@ -195,7 +195,6 @@ public:
         bool     sort_on_fp_location;
         bool     remove_front_prefix;
         bool     remove_back_prefix;
-        bool     update_schematic;
         bool     exclude_locked;
         int      grid_index;
         int      sort_code;

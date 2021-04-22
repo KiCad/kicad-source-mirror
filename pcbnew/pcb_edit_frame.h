@@ -589,14 +589,6 @@ public:
     bool FetchNetlistFromSchematic( NETLIST& aNetlist, const wxString& aAnnotateMessage );
 
     /**
-     * Send a command to Eeschema to re-annotate the schematic.
-     *
-     * @param aNetlist a #NETLIST filled in by the caller.
-     * @return false if failed due to standalone mode, true if a reply.
-     */
-    bool ReannotateSchematic( std::string& aNetlist );
-
-    /**
      * Test if standalone mode.
      *
      * @return true if in standalone, opens Eeschema, and opens the schematic for this project

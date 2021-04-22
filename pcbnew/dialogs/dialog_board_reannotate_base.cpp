@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -169,27 +169,23 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	AnnotateLabel = new wxStaticText( sbSizeScope->GetStaticBox(), wxID_ANY, _("Reannotate:"), wxDefaultPosition, wxDefaultSize, 0 );
 	AnnotateLabel->Wrap( -1 );
-	fgSizer6111->Add( AnnotateLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer6111->Add( AnnotateLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_AnnotateAll = new wxRadioButton( sbSizeScope->GetStaticBox(), wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AnnotateAll->SetValue( true );
-	fgSizer6111->Add( m_AnnotateAll, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer6111->Add( m_AnnotateAll, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_AnnotateFront = new wxRadioButton( sbSizeScope->GetStaticBox(), wxID_ANY, _("Front"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer6111->Add( m_AnnotateFront, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer6111->Add( m_AnnotateFront, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_AnnotateBack = new wxRadioButton( sbSizeScope->GetStaticBox(), wxID_ANY, _("Back"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer6111->Add( m_AnnotateBack, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer6111->Add( m_AnnotateBack, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_AnnotateSelection = new wxRadioButton( sbSizeScope->GetStaticBox(), wxID_ANY, _("Selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer6111->Add( m_AnnotateSelection, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer6111->Add( m_AnnotateSelection, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	sbSizeScope->Add( fgSizer6111, 0, wxTOP, 5 );
-
-	m_UpdateSchematic = new wxCheckBox( sbSizeScope->GetStaticBox(), wxID_ANY, _("Update schematic"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_UpdateSchematic->SetValue(true);
-	sbSizeScope->Add( m_UpdateSchematic, 0, wxALL, 5 );
+	sbSizeScope->Add( fgSizer6111, 0, wxBOTTOM|wxTOP, 5 );
 
 
 	bSizerOpts->Add( sbSizeScope, 0, wxALL|wxEXPAND, 5 );
@@ -274,10 +270,10 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_ExcludeListText->Wrap( -1 );
 	m_ExcludeListText->SetToolTip( _("Do not re-annotate this type \nof reference (R means R*)") );
 
-	gbSizer1->Add( m_ExcludeListText, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_ExcludeListText, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_ExcludeList = new wxTextCtrl( m_Advanced, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_ExcludeList, wxGBPosition( 5, 1 ), wxGBSpan( 1, 4 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_ExcludeList, wxGBPosition( 5, 1 ), wxGBSpan( 1, 4 ), wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	gbSizer1->AddGrowableCol( 1 );
@@ -327,6 +323,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	this->SetSizer( bmainSizer );
 	this->Layout();
+	bmainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_BOARD_REANNOTATE_BASE::OnClose ) );

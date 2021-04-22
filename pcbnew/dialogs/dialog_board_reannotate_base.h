@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,10 +27,10 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/statbox.h>
-#include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/textctrl.h>
 #include <wx/valgen.h>
+#include <wx/checkbox.h>
 #include <wx/gbsizer.h>
 #include <wx/notebook.h>
 #include <wx/button.h>
@@ -74,7 +74,6 @@ class DIALOG_BOARD_REANNOTATE_BASE : public DIALOG_SHIM
 		wxRadioButton* m_AnnotateFront;
 		wxRadioButton* m_AnnotateBack;
 		wxRadioButton* m_AnnotateSelection;
-		wxCheckBox* m_UpdateSchematic;
 		wxPanel* m_Advanced;
 		wxStaticText* m_FrontRefDesStartText;
 		wxTextCtrl* m_FrontRefDesStart;
@@ -104,7 +103,7 @@ class DIALOG_BOARD_REANNOTATE_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Geographical Reannotation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 573,566 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Geographical Reannotation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_BOARD_REANNOTATE_BASE();
 
 };

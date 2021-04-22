@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -430,8 +430,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Reannotate.remove_front_prefix, false ) );
     m_params.emplace_back( new PARAM<bool>( "reannotate_dialog.annotate_remove_back_prefix",
             &m_Reannotate.remove_back_prefix, false ) );
-    m_params.emplace_back( new PARAM<bool>( "reannotate_dialog.annotate_update_schematic",
-            &m_Reannotate.update_schematic, true ) );
     m_params.emplace_back( new PARAM<bool>( "reannotate_dialog.annotate_exclude_locked",
             &m_Reannotate.exclude_locked, false ) );
 

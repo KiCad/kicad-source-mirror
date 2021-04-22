@@ -1392,13 +1392,6 @@ bool PCB_EDIT_FRAME::TestStandalone()
 }
 
 
-bool PCB_EDIT_FRAME::ReannotateSchematic( std::string& aNetlist )
-{
-    Kiway().ExpressMail( FRAME_SCH, MAIL_REANNOTATE, aNetlist, this );
-    return true;
-}
-
-
 bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist,
                                                 const wxString& aAnnotateMessage )
 {

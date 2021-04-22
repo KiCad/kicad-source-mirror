@@ -106,14 +106,6 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
 
     m_frame      = aParentFrame;
     m_screen     = m_frame->GetScreen();
-    m_standalone = !m_frame->TestStandalone(); // Do this here forces the menu on top
-
-    // Only update the schematic if not in standalone mode.
-    if( m_standalone )
-    {
-        m_UpdateSchematic->Enable( false );
-        m_UpdateSchematic->SetValue( false );
-    }
 
     m_FrontRefDesStart->SetValidator( wxTextValidator( wxFILTER_DIGITS ) );
     m_BackRefDesStart->SetValidator( wxTextValidator( wxFILTER_DIGITS ) );
@@ -179,7 +171,6 @@ DIALOG_BOARD_REANNOTATE::~DIALOG_BOARD_REANNOTATE()
     cfg->m_Reannotate.sort_on_fp_location = m_locationChoice->GetSelection() == 0;
     cfg->m_Reannotate.remove_front_prefix     = m_RemoveFrontPrefix->GetValue();
     cfg->m_Reannotate.remove_back_prefix      = m_RemoveBackPrefix->GetValue();
-    cfg->m_Reannotate.update_schematic        = m_UpdateSchematic->GetValue();
     cfg->m_Reannotate.exclude_locked          = m_ExcludeLocked->GetValue();
 
     cfg->m_Reannotate.grid_index              = m_gridIndex;
@@ -202,7 +193,6 @@ void DIALOG_BOARD_REANNOTATE::InitValues( void )
     m_locationChoice->SetSelection( cfg->m_Reannotate.sort_on_fp_location ? 0 : 1 );
     m_RemoveFrontPrefix->SetValue( cfg->m_Reannotate.remove_front_prefix );
     m_RemoveBackPrefix->SetValue( cfg->m_Reannotate.remove_back_prefix );
-    m_UpdateSchematic->SetValue( cfg->m_Reannotate.update_schematic );
     m_ExcludeLocked->SetValue( cfg->m_Reannotate.exclude_locked );
 
     m_gridIndex         = cfg->m_Reannotate.grid_index ;
@@ -357,11 +347,6 @@ void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
                                              : _( "reference designator location" ),
                                   MessageTextFromValue( m_units, m_sortGridx ),
                                   MessageTextFromValue( m_units, m_sortGridy ) );
-
-    if( m_UpdateSchematic->GetValue() )
-        aMessage += _( "\nThe schematic will be updated." );
-    else
-        aMessage += _( "\nThe schematic will not be updated." );
 
     ShowReport( aMessage, RPT_SEVERITY_INFO );
 }
@@ -552,7 +537,7 @@ void DIALOG_BOARD_REANNOTATE::LogFootprints( const wxString& aMessage,
 
         for( const RefDesInfo& mod : aFootprints )
         {
-            message += wxString::Format( _( "\n%d %s Uuid: [%s], X, Y: %s, Rounded X, Y, %s" ),
+            message += wxString::Format( _( "\n%d %s UUID: [%s], X, Y: %s, Rounded X, Y, %s" ),
                                          i++,
                                          mod.RefDesString,
                                          mod.Uuid.AsString(),
@@ -567,7 +552,6 @@ void DIALOG_BOARD_REANNOTATE::LogFootprints( const wxString& aMessage,
 
 bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 {
-    std::string             payload;
     std::vector<RefDesInfo> BadRefDes;
     wxString                message, badrefdes;
     STRING_FORMATTER        stringformatter;
@@ -585,7 +569,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
     {
         message.Printf(
                 _( "\nPCB has %d empty or invalid reference designations."
-                   "\nRecommend you run DRC with 'Test footprints against schematic' checked.\n" ),
+                   "\nRecommend running DRC with 'Test footprints against schematic' checked.\n" ),
                 (int) BadRefDes.size() );
 
         for( const RefDesInfo& mod : BadRefDes )
@@ -601,69 +585,25 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
         message += _( "Reannotate anyway?" );
 
         if( !IsOK( m_frame, message ) )
-            return ( false );
-    }
-
-    payload.clear();           // If not updating schematic no netlist error.
-
-    // If updating schematic send a netlist.
-    if( m_UpdateSchematic->GetValue() )
-    {
-
-        for( FOOTPRINT* footprint : m_footprints )
-        {
-            // Create a netlist
-            newref = GetNewRefDes( footprint );
-
-            if( nullptr == newref )
-                return false; // Not found in changelist
-
-            // Add to the netlist
-            netlist.AddComponent( new COMPONENT( footprint->GetFPID(), newref->NewRefDes,
-                                                 footprint->GetValue(), footprint->GetPath(),
-                                                 { footprint->m_Uuid } ) );
-        }
-
-        netlist.Format( "pcb_netlist", &stringformatter, 0,
-                        CTL_OMIT_NETS | CTL_OMIT_FILTERS | CTL_OMIT_FP_UUID );
-
-        payload = stringformatter.GetString(); // Create netlist
-
-        // Send netlist to Eeschema.
-        bool attemptreannotate =  m_frame->ReannotateSchematic( payload );
-
-        if( !attemptreannotate )
-        {
-            // Didn't get a valid reply.
-            ShowReport( _( "\nReannotate failed!\n" ), RPT_SEVERITY_WARNING );
             return false;
-        }
-
     }
 
-    bool reannotateOk = payload.size() == 0;
-
-    ShowReport( payload, reannotateOk ? RPT_SEVERITY_ACTION : RPT_SEVERITY_ERROR );
     BOARD_COMMIT commit( m_frame );
 
-    if( reannotateOk )
+    for( FOOTPRINT* footprint : m_footprints )
     {
+        newref = GetNewRefDes( footprint );
 
-    	for( FOOTPRINT* footprint : m_footprints )
-        {
-            newref = GetNewRefDes( footprint );
+        if( nullptr == newref )
+            return false;
 
-            if( nullptr == newref )
-                return false;
-
-            commit.Modify( footprint );                           // Make a copy for undo
-            footprint->SetReference( newref->NewRefDes );         // Update the PCB reference
-            m_frame->GetCanvas()->GetView()->Update( footprint ); // Touch the footprint
-        }
+        commit.Modify( footprint );                           // Make a copy for undo
+        footprint->SetReference( newref->NewRefDes );         // Update the PCB reference
+        m_frame->GetCanvas()->GetView()->Update( footprint ); // Touch the footprint
     }
 
     commit.Push( "Geographic reannotation" );
-    return reannotateOk;
+    return true;
 }
 
 

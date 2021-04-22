@@ -192,8 +192,6 @@ private:
     std::vector<RefDesTypeStr> m_refDesTypes;
     std::vector<wxString>      m_excludeArray;
 
-    bool m_standalone;
-
     int m_sortCode;
     int m_gridIndex;
     int m_annotationChoice;

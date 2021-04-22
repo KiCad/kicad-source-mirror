@@ -264,7 +264,6 @@ set( EESCHEMA_SRCS
     tools/symbol_editor_edit_tool.cpp
     tools/symbol_editor_move_tool.cpp
     tools/symbol_editor_pin_tool.cpp
-    tools/reannotate.cpp
     tools/sch_drawing_tools.cpp
     tools/sch_edit_tool.cpp
     tools/sch_editor_control.cpp
