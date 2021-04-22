@@ -28,6 +28,7 @@
 
 enum COL_ORDER
 {
+    COL_PIN_COUNT,
     COL_NUMBER,
     COL_NAME,
     COL_TYPE,
@@ -40,7 +41,7 @@ enum COL_ORDER
     COL_POSY,
     COL_VISIBLE,
 
-    COL_COUNT       // keep as last
+    COL_COUNT // keep as last
 };
 
 

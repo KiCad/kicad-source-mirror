@@ -21,38 +21,40 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxSize( 800,400 ), 0 );
 
 	// Grid
-	m_grid->CreateGrid( 5, 11 );
+	m_grid->CreateGrid( 5, 12 );
 	m_grid->EnableEditing( true );
 	m_grid->EnableGridLines( true );
 	m_grid->EnableDragGridSize( false );
 	m_grid->SetMargins( 0, 0 );
 
 	// Columns
-	m_grid->SetColSize( 0, 66 );
-	m_grid->SetColSize( 1, 84 );
-	m_grid->SetColSize( 2, 140 );
+	m_grid->SetColSize( 0, 60 );
+	m_grid->SetColSize( 1, 66 );
+	m_grid->SetColSize( 2, 84 );
 	m_grid->SetColSize( 3, 140 );
-	m_grid->SetColSize( 4, 100 );
-	m_grid->SetColSize( 5, 110 );
+	m_grid->SetColSize( 4, 140 );
+	m_grid->SetColSize( 5, 100 );
 	m_grid->SetColSize( 6, 110 );
-	m_grid->SetColSize( 7, 84 );
+	m_grid->SetColSize( 7, 110 );
 	m_grid->SetColSize( 8, 84 );
 	m_grid->SetColSize( 9, 84 );
 	m_grid->SetColSize( 10, 84 );
+	m_grid->SetColSize( 11, 84 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
 	m_grid->SetColLabelSize( 24 );
-	m_grid->SetColLabelValue( 0, _("Number") );
-	m_grid->SetColLabelValue( 1, _("Name") );
-	m_grid->SetColLabelValue( 2, _("Electrical Type") );
-	m_grid->SetColLabelValue( 3, _("Graphic Style") );
-	m_grid->SetColLabelValue( 4, _("Orientation") );
-	m_grid->SetColLabelValue( 5, _("Number Text Size") );
-	m_grid->SetColLabelValue( 6, _("Name Text Size") );
-	m_grid->SetColLabelValue( 7, _("Length") );
-	m_grid->SetColLabelValue( 8, _("X Position") );
-	m_grid->SetColLabelValue( 9, _("Y Position") );
-	m_grid->SetColLabelValue( 10, _("Visible") );
+	m_grid->SetColLabelValue( 0, _("Count") );
+	m_grid->SetColLabelValue( 1, _("Number") );
+	m_grid->SetColLabelValue( 2, _("Name") );
+	m_grid->SetColLabelValue( 3, _("Electrical Type") );
+	m_grid->SetColLabelValue( 4, _("Graphic Style") );
+	m_grid->SetColLabelValue( 5, _("Orientation") );
+	m_grid->SetColLabelValue( 6, _("Number Text Size") );
+	m_grid->SetColLabelValue( 7, _("Name Text Size") );
+	m_grid->SetColLabelValue( 8, _("Length") );
+	m_grid->SetColLabelValue( 9, _("X Position") );
+	m_grid->SetColLabelValue( 10, _("Y Position") );
+	m_grid->SetColLabelValue( 11, _("Visible") );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows

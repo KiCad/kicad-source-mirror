@@ -77,7 +77,7 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
                                                 &m_EditSymbolVisibleColumns, "0 1 2 3 4 5 6 7" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "pin_table_visible_columns",
-                                                &m_PinTableVisibleColumns, "0 1 2 3 4 8 9" ) );
+                                                &m_PinTableVisibleColumns, "0 1 2 3 4 5 9 10" ) );
 
     m_params.emplace_back( new PARAM<bool>( "use_eeschema_color_settings",
                                             &m_UseEeschemaColorSettings, true ) );

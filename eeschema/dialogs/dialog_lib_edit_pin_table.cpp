@@ -66,6 +66,7 @@ public:
     {
         switch( aCol )
         {
+        case COL_PIN_COUNT:    return _( "Count" );
         case COL_NUMBER:       return _( "Number" );
         case COL_NAME:         return _( "Name" );
         case COL_TYPE:         return _( "Electrical Type" );
@@ -104,6 +105,7 @@ public:
 
             switch( aCol )
             {
+            case COL_PIN_COUNT: val << pins.size(); break;
             case COL_NUMBER:
                 val = pin->GetNumber();
                 break;
@@ -464,6 +466,10 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     wxGridCellAttr* attr;
 
     attr = new wxGridCellAttr;
+    attr->SetReadOnly( true );
+    m_grid->SetColAttr( COL_PIN_COUNT, attr );
+
+    attr = new wxGridCellAttr;
     wxArrayString typeNames = PinTypeNames();
     typeNames.push_back( INDETERMINATE_STATE );
     attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinTypeIcons(), typeNames ) );
@@ -558,6 +564,11 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
 
     m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue() );
 
+    if( m_cbGroup->GetValue() )
+        m_grid->ShowCol( COL_PIN_COUNT );
+    else
+        m_grid->HideCol( COL_PIN_COUNT );
+
     updateSummary();
 
     return true;
@@ -635,8 +646,8 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
 
     m_dataModel->AppendRow( m_pins[ m_pins.size() - 1 ] );
 
-    m_grid->MakeCellVisible( m_grid->GetNumberRows() - 1, 0 );
-    m_grid->SetGridCursor( m_grid->GetNumberRows() - 1, 0 );
+    m_grid->MakeCellVisible( m_grid->GetNumberRows() - 1, 1 );
+    m_grid->SetGridCursor( m_grid->GetNumberRows() - 1, 1 );
 
     m_grid->EnableCellEditControl( true );
     m_grid->ShowCellEditControl();
@@ -686,6 +697,17 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnRebuildRows( wxCommandEvent&  )
         return;
 
     m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue() );
+
+    if( m_cbGroup->GetValue() )
+    {
+        m_grid->ShowCol( COL_PIN_COUNT );
+        m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+    }
+    else
+    {
+        m_grid->HideCol( COL_PIN_COUNT );
+    }
+
 
     adjustGridColumns();
 }
