@@ -761,6 +761,12 @@ static void inDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
         if( polarity == 0 )
             return;
 
+        if( BOARD* board = item->GetBoard() )
+        {
+            if( !board->FindNet( coupledNet ) )
+                return;
+        }
+
         if( baseName.Matches( arg->AsString() ) )
             result->Set( 1.0 );
     }
