@@ -176,4 +176,11 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( WARN_FLAGS_CXX "${WARN_FLAGS_CXX} -Wno-psabi" )
         message( STATUS "Disabling warning -Wpsabi" )
     endif()
+
+    # Append any additional warning flags so the end of the warning string
+    if( KICAD_ADDITIONAL_WARN_FLAGS )
+        set( WARN_FLAGS_CXX "${WARN_FLAGS_CXX} ${KICAD_ADDITIONAL_WARN_FLAGS}" )
+        message( STATUS "Adding additional warning flags: ${KICAD_ADDITIONAL_WARN_FLAGS}")
+    endif()
+
 endif()
