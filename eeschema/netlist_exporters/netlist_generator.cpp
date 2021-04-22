@@ -83,14 +83,14 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
         break;
 
     default:
-        {
-            wxFileName  tmpFile = fileName;
-            tmpFile.SetExt( GENERIC_INTERMEDIATE_NETLIST_EXT );
-            fileName = tmpFile.GetFullPath();
+    {
+        wxFileName  tmpFile = fileName;
+        tmpFile.SetExt( GENERIC_INTERMEDIATE_NETLIST_EXT );
+        fileName = tmpFile.GetFullPath();
 
-            helper = new NETLIST_EXPORTER_XML( sch );
-            executeCommandLine = true;
-        }
+        helper = new NETLIST_EXPORTER_XML( sch );
+        executeCommandLine = true;
+    }
         break;
     }
 
@@ -105,8 +105,8 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
         // strip trailing '/'
         prj_dir = prj_dir.SubString( 0, prj_dir.Len() - 2 );
 
-        // build full command line from user's format string, e.g.:
-        // "xsltproc -o %O /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl %I"
+        // build full command line from user's format string.
+        // For instance, "xsltproc -o %O /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl %I"
         // becomes, after the user selects /tmp/s1.net as the output file from the file dialog:
         // "xsltproc -o /tmp/s1.net /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl /tmp/s1.xml"
         wxString commandLine = NETLIST_EXPORTER_BASE::MakeCommandLine( m_netListerCommand,
@@ -121,15 +121,17 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
             wxString msg;
 
             msg << _( "Run command:" ) << wxT( "\n" ) << commandLine << wxT( "\n\n" );
-
             aReporter->ReportHead( msg, RPT_SEVERITY_ACTION );
 
             if( diag != 0 )
-                aReporter->ReportTail( wxString::Format(
-                                       _("Command error. Return code %d" ), diag ),
-                                       RPT_SEVERITY_ERROR );
+            {
+                msg.Printf( _( "Command error. Return code %d." ), diag );
+                aReporter->ReportTail( msg, RPT_SEVERITY_ERROR );
+            }
             else
-                aReporter->ReportTail( _( "Success" ), RPT_SEVERITY_INFO );
+            {
+                aReporter->ReportTail( _( "Success." ), RPT_SEVERITY_INFO );
+            }
 
             if( output.GetCount() )
             {
@@ -152,7 +154,9 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
             }
         }
         else
+        {
             ProcessExecute( commandLine, m_exec_flags );
+        }
 
         DefaultExecFlags(); // Reset flags to default after executing
     }
