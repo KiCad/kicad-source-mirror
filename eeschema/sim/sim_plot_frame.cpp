@@ -458,8 +458,8 @@ bool SIM_PLOT_FRAME::IsSimulationRunning()
 
 SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand )
 {
-    SIM_PANEL_BASE* plotPanel;
-    SIM_TYPE        simType = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( aSimCommand );
+    SIM_PANEL_BASE* plotPanel = nullptr;
+    SIM_TYPE        simType   = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( aSimCommand );
 
     if( SIM_PANEL_BASE::IsPlottable( simType ) )
     {
@@ -972,7 +972,7 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
 
     file.AddLine( wxString::Format( "%llu", m_plots.size() ) );
 
-    for( const auto& plot : m_plots )
+    for( const std::pair<SIM_PANEL_BASE*, PLOT_INFO> plot : m_plots )
     {
         if( plot.first )
         {
@@ -1306,7 +1306,8 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 
     if( m_settingsDlg->ShowModal() == wxID_OK )
     {
-        wxString oldCommand = m_plots[plotPanelWindow].m_simCommand;
+        wxString oldCommand = plotPanelWindow != m_welcomePanel ?
+                              m_plots[plotPanelWindow].m_simCommand : wxString();
         wxString newCommand = m_settingsDlg->GetSimCommand();
         SIM_TYPE newSimType = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( newCommand );
 
