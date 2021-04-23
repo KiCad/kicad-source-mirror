@@ -93,7 +93,11 @@ SCRIPTING::~SCRIPTING()
 
 bool SCRIPTING::IsWxAvailable()
 {
+#ifdef KICAD_SCRIPTING_WXPYTHON
     return true;
+#else
+    return false;
+#endif
 }
 
 bool SCRIPTING::scriptingSetup()

@@ -54,6 +54,11 @@ cmake_dependent_option( BUILD_SMALL_DEBUG_FILES "In debug build: create smaller 
 # so that build option settings can be included in bug reports.
 #
 
+option( KICAD_SCRIPTING_WXPYTHON
+    "Build wxPython implementation for wx interface building in Python and py.shell (default ON)."
+    ON )
+mark_as_advanced( KICAD_SCRIPTING_WXPYTHON )
+
 option( KICAD_USE_OCE
     "Build tools and plugins related to OpenCascade Community Edition (default ON)"
     ON )
@@ -447,6 +452,10 @@ if( MSVC )
     if( KICAD_WIN32_BUILD_PARALLEL_CL_MP )
         string( APPEND CMAKE_CXX_FLAGS " /MP" )
     endif()
+endif()
+
+if( KICAD_SCRIPTING_WXPYTHON )
+    add_definitions( -DKICAD_SCRIPTING_WXPYTHON )
 endif()
 
 if( KICAD_SPICE )

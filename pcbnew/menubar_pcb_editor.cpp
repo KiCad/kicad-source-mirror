@@ -32,6 +32,7 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
 #include <pgm_base.h>
+#include <python_scripting.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -406,8 +407,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     update = toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
     update->Enable( !Kiface().IsSingle() );
 
-    toolsMenu->AppendSeparator();
-    toolsMenu->Add( PCB_ACTIONS::showPythonConsole );
+    if( SCRIPTING::IsWxAvailable() )
+    {
+        toolsMenu->AppendSeparator();
+        toolsMenu->Add( PCB_ACTIONS::showPythonConsole );
+    }
 
     ACTION_MENU* submenuActionPlugins = new ACTION_MENU( false, selTool );
     submenuActionPlugins->SetTitle( _( "External Plugins" ) );
