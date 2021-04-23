@@ -823,6 +823,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     VECTOR2I    prevPos;
 
     bool hasMouseMoved = false;
+    bool hasRedrawn3D  = false;
+    bool allowRedraw3D = editFrame->GetDisplayOptions().m_Live3DRefresh;
 
     // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
@@ -844,6 +846,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         {
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
+                bool redraw3D = false;
+
                 VECTOR2I mousePos( controls->GetMousePosition() );
 
                 m_cursor = grid.BestSnapAnchor( mousePos, item_layers, sel_items );
@@ -876,6 +880,15 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                     // group and not its descendants.
                     if( !item->GetParent() || !item->GetParent()->IsSelected() )
                         static_cast<BOARD_ITEM*>( item )->Move( movement );
+
+                    if( !redraw3D && item->Type() == PCB_FOOTPRINT_T )
+                        redraw3D = true;
+                }
+
+                if( redraw3D && allowRedraw3D )
+                {
+                    editFrame->Update3DView( false, true );
+                    hasRedrawn3D = true;
                 }
 
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
@@ -1038,6 +1051,9 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
     m_dragging = false;
     editFrame->UndoRedoBlock( false );
+
+    if( hasRedrawn3D && restore_state )
+        editFrame->Update3DView( false, true );
 
     // Discard reference point when selection is "dropped" onto the board
     selection.ClearReferencePoint();
