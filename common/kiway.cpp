@@ -165,6 +165,7 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
         switch( aFaceId )
         {
             case FACE_PL_EDITOR: dirName = "pagelayout_editor";   break;
+            case FACE_PYTHON:    dirName = "scripting";           break;
             default:             dirName = name + 1;              break;
         }
 

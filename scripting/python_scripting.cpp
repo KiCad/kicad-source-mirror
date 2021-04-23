@@ -36,6 +36,7 @@
 
 #include <eda_base_frame.h>
 #include <gal/color4d.h>
+#include <gestfich.h>
 #include <trace_helpers.h>
 #include <kicad_string.h>
 #include <macros.h>
