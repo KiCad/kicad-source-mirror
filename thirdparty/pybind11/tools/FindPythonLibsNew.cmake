@@ -188,6 +188,8 @@ if(CMAKE_HOST_WIN32)
   if(NOT EXISTS "${PYTHON_LIBRARY}")
     get_filename_component(_PYTHON_ROOT ${PYTHON_INCLUDE_DIR} DIRECTORY)
     set(PYTHON_LIBRARY "${_PYTHON_ROOT}/libs/python${PYTHON_LIBRARY_SUFFIX}.lib")
+  elseif(DEFINED VCPKG_TOOLCHAIN AND NOT EXISTS "${PYTHON_LIBRARY}")
+    set(PYTHON_LIBRARY "${PYTHON_PREFIX}/../../lib/python${PYTHON_LIBRARY_SUFFIX}.lib")
   endif()
 
   # if we are in MSYS & MINGW, and we didn't find windows python lib, look for system python lib
