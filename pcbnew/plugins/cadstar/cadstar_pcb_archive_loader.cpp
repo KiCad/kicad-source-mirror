@@ -2165,7 +2165,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
         // at the junction in order to correctly apply the same "route offset" operation that the
         // CADSTAR post processor applies when generating Manufacturing output
         auto getJunctionSize =
-            [&]( NETELEMENT_ID aJptNetElemId, NET_PCB::CONNECTION_PCB aConnectionToIgnore ) -> int
+            [&]( NETELEMENT_ID aJptNetElemId, const NET_PCB::CONNECTION_PCB& aConnectionToIgnore ) -> int
             {
                 int jptsize = 0;
 

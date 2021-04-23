@@ -38,6 +38,7 @@ class SIZES_SETTINGS
 {
 public:
     SIZES_SETTINGS() :
+            m_minClearance( 0 ),
             m_trackWidth( 155000 ),
             m_viaType( VIATYPE::THROUGH ),
             m_viaDiameter( 600000 ),
