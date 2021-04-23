@@ -781,7 +781,7 @@ void SCH_COMPONENT::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle
                 schField->SetTextPos( m_pos + libField->GetTextPos() );
             }
 
-            if( id == REFERENCE_FIELD )
+            if( id == REFERENCE_FIELD && aPath )
             {
                 if( aResetOtherFields )
                     SetRef( aPath, m_part->GetReferenceField().GetText() );
