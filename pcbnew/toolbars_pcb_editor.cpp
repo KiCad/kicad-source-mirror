@@ -458,14 +458,24 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
 
     PCB_SELECTION_TOOL* selTool   = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
 
-    std::unique_ptr<ACTION_MENU> routeMenu = std::make_unique<ACTION_MENU>( false, selTool );
-    routeMenu->Add( PCB_ACTIONS::routerHighlightMode,  ACTION_MENU::CHECK );
-    routeMenu->Add( PCB_ACTIONS::routerShoveMode,      ACTION_MENU::CHECK );
-    routeMenu->Add( PCB_ACTIONS::routerWalkaroundMode, ACTION_MENU::CHECK );
+    auto makeRouteMenu =
+            [&]()
+            {
+                std::unique_ptr<ACTION_MENU> routeMenu =
+                        std::make_unique<ACTION_MENU>( false, selTool );
 
-    routeMenu->AppendSeparator();
-    routeMenu->Add( PCB_ACTIONS::routerSettingsDialog );
-    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::routeSingleTrack, std::move( routeMenu ) );
+                routeMenu->Add( PCB_ACTIONS::routerHighlightMode,  ACTION_MENU::CHECK );
+                routeMenu->Add( PCB_ACTIONS::routerShoveMode,      ACTION_MENU::CHECK );
+                routeMenu->Add( PCB_ACTIONS::routerWalkaroundMode, ACTION_MENU::CHECK );
+
+                routeMenu->AppendSeparator();
+                routeMenu->Add( PCB_ACTIONS::routerSettingsDialog );
+
+                return routeMenu;
+            };
+
+    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::routeSingleTrack, makeRouteMenu() );
+    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::routeDiffPair, makeRouteMenu() );
 
     std::unique_ptr<ACTION_MENU> zoneMenu = std::make_unique<ACTION_MENU>( false, selTool );
     zoneMenu->Add( PCB_ACTIONS::zoneFillAll );
