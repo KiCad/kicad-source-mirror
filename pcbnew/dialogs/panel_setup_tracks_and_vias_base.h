@@ -60,7 +60,7 @@ class PANEL_SETUP_TRACKS_AND_VIAS_BASE : public wxPanel
 
 	public:
 
-		PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 674,343 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_SETUP_TRACKS_AND_VIAS_BASE();
 
 };

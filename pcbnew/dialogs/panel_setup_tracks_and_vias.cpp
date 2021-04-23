@@ -82,6 +82,23 @@ PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent,
     m_trackWidthsGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
     m_viaSizesGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
     m_diffPairsGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
+
+    // Ensure width of columns is enough to enter any reasonable value
+    WX_GRID* grid_list[] = { m_trackWidthsGrid, m_viaSizesGrid, m_diffPairsGrid, nullptr };
+    int min_linesize = m_trackWidthsGrid->GetTextExtent( "000.000000 mm " ).x;
+
+    for( int ii = 0; grid_list[ii]; ii++ )
+    {
+        WX_GRID* curr_grid = grid_list[ii];
+
+        for( int col = 0; col < curr_grid->GetNumberCols(); col++ )
+        {
+            int min_w = curr_grid->GetVisibleWidth( col, true, true, true );
+            int best_w = std::max( min_linesize, min_w );
+            curr_grid->SetColMinimalWidth( col, best_w );
+            curr_grid->SetColSize( col,best_w );
+        }
+    }
 }
 
 PANEL_SETUP_TRACKS_AND_VIAS::~PANEL_SETUP_TRACKS_AND_VIAS()
