@@ -222,7 +222,11 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_toolBar->Realize();
 
+#ifndef wxHAS_NATIVE_TABART
+    // Non-native default tab art has ulgy gradients we don't want
     m_plotNotebook->SetArtProvider( new wxAuiSimpleTabArt() );
+#endif
+
     m_welcomePanel = new SIM_PANEL_BASE( wxEmptyString, m_plotNotebook, wxID_ANY );
     m_plotNotebook->AddPage( m_welcomePanel, _( "Welcome!" ), 1, true );
 
