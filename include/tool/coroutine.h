@@ -111,9 +111,8 @@ private:
 
         ~CONTEXT_T()
         {
-
 #ifdef KICAD_SANITIZE_THREADS
-          // Only destroy the fiber when we own it
+            // Only destroy the fiber when we own it
             if( own_tsan_fiber )
                 __tsan_destroy_fiber( tsan_fiber );
 #endif
@@ -196,7 +195,7 @@ public:
         m_callee(),
         m_retVal( 0 )
 #ifdef KICAD_USE_VALGRIND
-        ,valgrind_stack( 0 )
+        ,m_valgrind_stack( 0 )
 #endif
 #ifdef KICAD_SANITIZE_ADDRESS
         ,asan_stack( nullptr )
@@ -208,10 +207,12 @@ public:
     ~COROUTINE()
     {
 #ifdef KICAD_USE_VALGRIND
-        VALGRIND_STACK_DEREGISTER( valgrind_stack );
+        VALGRIND_STACK_DEREGISTER( m_valgrind_stack );
 #endif
+
         if( m_caller.ctx )
             libcontext::release_fcontext( m_caller.ctx );
+
         if( m_callee.ctx )
             libcontext::release_fcontext( m_callee.ctx );
     }
@@ -385,7 +386,7 @@ private:
         stackSize -= size_t( ( (ptrdiff_t) m_stack.get() + stackSize ) - (ptrdiff_t) sp );
 
 #ifdef KICAD_USE_VALGRIND
-        valgrind_stack = VALGRIND_STACK_REGISTER( sp, m_stack.get() );
+        m_valgrind_stack = VALGRIND_STACK_REGISTER( sp, m_stack.get() );
 #endif
 #endif
 
@@ -498,7 +499,7 @@ private:
     ReturnType m_retVal;
 
 #ifdef KICAD_USE_VALGRIND
-    uint32_t valgrind_stack;
+    uint32_t m_valgrind_stack;
 #endif
 #ifdef KICAD_SANITIZE_ADDRESS
     void* asan_stack;
