@@ -168,8 +168,11 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
         *m_dummyPad = *aPad;
         m_dummyPad->ClearFlags( SELECTED|BRIGHTENED );
     }
-    else    // We are editing a "master" pad, i.e. a template to create new pads
+    else
+    {
+        // We are editing a "master" pad, i.e. a template to create new pads
         *m_dummyPad = *m_padMaster;
+    }
 
     // Pad needs to have a parent for painting; use the parent board for its design settings
     if( !m_dummyPad->GetParent() )
