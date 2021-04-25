@@ -92,11 +92,11 @@ for layer_info in plot_plan:
 
     pctl.SetLayer(layer_info[1])
     pctl.OpenPlotfile(layer_info[0], PLOT_FORMAT_GERBER, layer_info[2])
-    print 'plot %s' % pctl.GetPlotFileName()
+    print('plot %s' % pctl.GetPlotFileName())
     if gen_job_file == True:
         jobfile_writer.AddGbrFile( layer_info[1], os.path.basename(pctl.GetPlotFileName()) );
     if pctl.PlotLayer() == False:
-        print "plot error"
+        print("plot error")
 
 #generate internal copper layers, if any
 lyrcnt = board.GetCopperLayerCount();
@@ -106,9 +106,9 @@ for innerlyr in range ( 1, lyrcnt-1 ):
     pctl.SetLayer(innerlyr)
     lyrname = 'inner%s' % innerlyr
     pctl.OpenPlotfile(lyrname, PLOT_FORMAT_GERBER, "inner")
-    print 'plot %s' % pctl.GetPlotFileName()
+    print('plot %s' % pctl.GetPlotFileName())
     if pctl.PlotLayer() == False:
-        print "plot error"
+        print("plot error")
 
 
 # At the end you have to close the last plot, otherwise you don't know when
@@ -133,18 +133,18 @@ drlwriter.SetFormat( metricFmt )
 
 genDrl = True
 genMap = True
-print 'create drill and map files in %s' % pctl.GetPlotDirName()
+print('create drill and map files in %s' % pctl.GetPlotDirName())
 drlwriter.CreateDrillandMapFilesSet( pctl.GetPlotDirName(), genDrl, genMap );
 
 # One can create a text file to report drill statistics
 rptfn = pctl.GetPlotDirName() + 'drill_report.rpt'
-print 'report: %s' % rptfn
+print('report: %s' % rptfn)
 drlwriter.GenDrillReportFile( rptfn );
 
 if gen_job_file == True:
     #job_fn=os.path.splitext(pctl.GetPlotFileName())[0] + '.gbrjob'
     job_fn=os.path.dirname(pctl.GetPlotFileName()) + '/' + os.path.basename(filename)
     job_fn=os.path.splitext(job_fn)[0] + '.gbrjob'
-    print 'create job file %s' % job_fn
+    print('create job file %s' % job_fn)
     jobfile_writer.CreateJobFile( job_fn )
 

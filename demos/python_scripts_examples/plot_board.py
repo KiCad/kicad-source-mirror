@@ -72,7 +72,7 @@ plot_plan = [
 for layer_info in plot_plan:
     pctl.SetLayer(layer_info[1])
     pctl.OpenPlotfile(layer_info[0], PLOT_FORMAT_GERBER, layer_info[2])
-    print layer_info[0]
+    print(layer_info[0])
     pctl.PlotLayer()
 
 # Our fabricators want two additional gerbers:
