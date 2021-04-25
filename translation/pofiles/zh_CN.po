@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-04-20 00:29+0000\n"
+"PO-Revision-Date: 2021-04-26 10:31+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -31527,15 +31527,15 @@ msgstr ""
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:178
 msgid "Too long: skew "
-msgstr "太长：歪斜 "
+msgstr "太长：偏移 "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:181
 msgid "Too short: skew "
-msgstr "太短：歪斜 "
+msgstr "太短：偏移 "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:184
 msgid "Tuned: skew "
-msgstr "调整：歪斜 "
+msgstr "调整：偏移 "
 
 #: pcbnew/router/pns_router.cpp:192
 msgid "Diff pair gap is less than board minimum clearance."
@@ -33930,7 +33930,7 @@ msgstr "调整差分对布线长度"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Tune skew of a differential pair"
-msgstr "调整差分对布线歪斜"
+msgstr "调整差分对布线偏移"
 
 #: pcbnew/tools/pcb_actions.cpp:1333 pcbnew/tools/pcb_actions.cpp:1339
 msgid ""
