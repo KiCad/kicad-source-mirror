@@ -515,6 +515,14 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     UpdateTrackWidthSelectBox( m_SelTrackWidthBox );
     m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
 
+    m_auxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, wxEmptyString,
+                                 KiScaledBitmap( BITMAPS::auto_track_width, this ),
+                                 _( "When routing from an existing track use its width instead "
+                                    "of the current width setting" ),
+                                 wxITEM_CHECK );
+
+    m_auxiliaryToolBar->AddScaledSeparator( this );
+
     // Creates box to display and choose vias diameters:
 
     if( m_SelViaSizeBox == nullptr )
@@ -523,14 +531,6 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     UpdateViaSizeSelectBox( m_SelViaSizeBox );
     m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
-    m_auxiliaryToolBar->AddScaledSeparator( this );
-
-    // Creates box to display and choose strategy to handle tracks an vias sizes:
-    m_auxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, wxEmptyString,
-                                 KiScaledBitmap( BITMAPS::auto_track_width, this ),
-                                 _( "When routing from an existing track use its width instead "
-                                    "of the current width setting" ),
-                                 wxITEM_CHECK );
 
     // Add the box to display and select the current grid size:
     m_auxiliaryToolBar->AddScaledSeparator( this );
