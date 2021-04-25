@@ -229,8 +229,7 @@ bool PAD::FlashLayer( int aLayer ) const
     if( m_keepTopBottomLayer && ( aLayer == F_Cu || aLayer == B_Cu ) )
         return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
 
-    return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<int>( aLayer ),
-            types );
+    return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<int>( aLayer ), types );
 }
 
 

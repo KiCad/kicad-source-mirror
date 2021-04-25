@@ -513,7 +513,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         testHoles = false;
     }
 
-    if( pad->GetAttribute() == PAD_ATTRIB_NPTH && !pad->FlashLayer( layer ) )
+    if( pad->GetAttribute() == PAD_ATTRIB_NPTH )
         testClearance = false;
 
     if( !IsCopperLayer( layer ) )
