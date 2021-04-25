@@ -565,6 +565,9 @@ set( BMAPS_128
     icon_pcbcalculator
     )
 
+# Images in this section are generated at whatever resolution is set in the source SVG file
+# Use Inkscape Document Properties > Custom Size to set (make sure units are pixels)
+# These are used for images in the UI that are not-square or very large (infographics, etc)
 set( BMAPS_OTHER
     pads_npth
     pads_npth_top_bottom
