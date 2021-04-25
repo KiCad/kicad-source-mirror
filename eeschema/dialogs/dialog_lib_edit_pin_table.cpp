@@ -31,9 +31,12 @@
 #include <symbol_editor_settings.h>
 #include <kiplatform/ui.h>
 #include <widgets/grid_icon_text_helpers.h>
+#include <widgets/grid_combobox.h>
 #include <widgets/wx_grid.h>
 #include <settings/settings_manager.h>
 #include <string_utils.h>
+
+#define UNITS_ALL "ALL"
 
 class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 {
@@ -78,6 +81,7 @@ public:
         case COL_POSX:         return _( "X Position" );
         case COL_POSY:         return _( "Y Position" );
         case COL_VISIBLE:      return _( "Visible" );
+        case COL_UNIT:         return _( "Unit" );
         default:               wxFAIL; return wxEmptyString;
         }
     }
@@ -139,6 +143,12 @@ public:
                 break;
             case COL_VISIBLE:
                 val = StringFromBool( pin->IsVisible() );
+                break;
+            case COL_UNIT:
+                if( pin->GetUnit() )
+                    val = LIB_SYMBOL::SubReference( pin->GetUnit(), false );
+                else
+                    val = UNITS_ALL;
                 break;
             default:
                 wxFAIL;
@@ -224,6 +234,24 @@ public:
 
             case COL_VISIBLE:
                 pin->SetVisible(BoolFromString( aValue ));
+                break;
+
+            case COL_UNIT:
+                if( aValue == UNITS_ALL )
+                {
+                    pin->SetUnit( 0 );
+                }
+                else
+                {
+                    for( auto i = 1; i <= pin->GetParent()->GetUnitCount(); i++ )
+                    {
+                        if( aValue == LIB_SYMBOL::SubReference( i, false ) )
+                        {
+                            pin->SetUnit( i );
+                            break;
+                        }
+                    }
+                }
                 break;
             default:
                 wxFAIL;
@@ -492,6 +520,18 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_grid->SetColAttr( COL_ORIENTATION, attr );
 
     attr = new wxGridCellAttr;
+    wxArrayString unitNames;
+    unitNames.push_back( _("ALL") );
+
+    for( auto i = 1; i <= aSymbol->GetUnitCount(); i++ )
+    {
+        unitNames.push_back( LIB_SYMBOL::SubReference( i, false ) );
+    }
+
+    attr->SetEditor( new GRID_CELL_COMBOBOX( unitNames ) );
+    m_grid->SetColAttr( COL_UNIT, attr );
+
+    attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetEditor( new wxGridCellBoolEditor() );
     attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
@@ -563,6 +603,15 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
         m_pins.push_back( new LIB_PIN( *pin ) );
 
     m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue() );
+
+    if( m_part->IsMulti() )
+    {
+        m_grid->ShowCol( COL_UNIT );
+    }
+    else
+    {
+        m_grid->HideCol( COL_UNIT );
+    }
 
     if( m_cbGroup->GetValue() )
         m_grid->ShowCol( COL_PIN_COUNT );
