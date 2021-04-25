@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-12 11:06-0700\n"
-"PO-Revision-Date: 2021-04-20 00:29+0000\n"
+"PO-Revision-Date: 2021-04-26 10:31+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -11776,9 +11776,8 @@ msgid "Show inter-sheet references"
 msgstr "Připojit reference mezi listy"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:159
-#, fuzzy
 msgid "Show own page reference"
-msgstr "Zobrazit reference pouzder"
+msgstr "Zobrazit vlastní reference stránky"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:163
 msgid "Standard (1,2,3)"
@@ -15311,9 +15310,8 @@ msgstr "Symbol \"%s\" uložen do knihovny \"%s\""
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:96
 #: eeschema/symbol_tree_model_adapter.cpp:104
-#, fuzzy
 msgid "Errors were encountered loading symbols:"
-msgstr "Vyskytly se chyby při načítání pouzder:"
+msgstr "Vyskytly se chyby při načítání symbolů:"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:166
 #, c-format
@@ -15468,9 +15466,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:302
-#, fuzzy
 msgid "Re-linking footprints requires a fully annotated schematic."
-msgstr "Exportování netlistu vyžaduje kompletně očíslované schéma."
+msgstr "Opětovné propojení pouzder vyžaduje plně očíslované schéma."
 
 #: eeschema/tools/backannotate.cpp:305
 msgid "Footprint re-linking cancelled by user."
@@ -15596,9 +15593,8 @@ msgid "Duplicate Symbol"
 msgstr "Duplikovat symbol"
 
 #: eeschema/tools/ee_actions.cpp:133
-#, fuzzy
 msgid "Make a copy of the selected symbol"
-msgstr "Uložit kopii aktuálního listu"
+msgstr "Udělat kopii vybraného symbolu"
 
 #: eeschema/tools/ee_actions.cpp:138
 msgid "Save the current symbol to a different library."
@@ -15633,9 +15629,8 @@ msgid "Update Symbol Fields..."
 msgstr "Aktualizovat pole symbolů..."
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update symbol to match changes made in parent symbol"
-msgstr "Uložit pouzdro do aktivní knihovny"
+msgstr "Aktualizovat symbol se změnami provedenými v nadřazeném symbolu"
 
 #: eeschema/tools/ee_actions.cpp:178
 msgid "Add Symbol to Schematic"
@@ -15737,9 +15732,8 @@ msgid "Add Lines"
 msgstr "Přidat čáry"
 
 #: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:702
-#, fuzzy
 msgid "Add connected graphic lines"
-msgstr "Přidat grafické čáry"
+msgstr "Přidat připojené grafické čáry"
 
 #: eeschema/tools/ee_actions.cpp:250
 msgid "Move Symbol Anchor"
@@ -16138,18 +16132,16 @@ msgid "Edit Symbol Fields..."
 msgstr "Upravit pole symbolu..."
 
 #: eeschema/tools/ee_actions.cpp:555
-#, fuzzy
 msgid "Bulk-edit fields of all symbols in schematic"
-msgstr "Vložit symbol do schématu"
+msgstr "Masové zpracování polí všech symbolů v schématu zapojení"
 
 #: eeschema/tools/ee_actions.cpp:560
 msgid "Edit Symbol Library Links..."
 msgstr "Upravit odkazy knihovny symbolů..."
 
 #: eeschema/tools/ee_actions.cpp:560
-#, fuzzy
 msgid "Edit links between schematic and library symbols"
-msgstr "Upravte odkazy mezi schematickými značkami a součástkami knihovny"
+msgstr "Upravit propojení mezi symboly schematu a knihovny symbolů"
 
 #: eeschema/tools/ee_actions.cpp:565
 msgid "Assign Footprints..."
@@ -16337,9 +16329,8 @@ msgid "Unfold from Bus"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:695
-#, fuzzy
 msgid "Break a wire out of a bus"
-msgstr "Přidá drát do sběrnice"
+msgstr "Přidává obyčejný výstup připojení sběrnice"
 
 #: eeschema/tools/ee_actions.cpp:708
 msgid "Finish Wire or Bus"
@@ -16354,19 +16345,16 @@ msgid "Finish Wire"
 msgstr "Dokončit spoj"
 
 #: eeschema/tools/ee_actions.cpp:713
-#, fuzzy
 msgid "Complete wire with current segment"
-msgstr "Aktualizace návrhu DPS s aktuálním schématem (dopředná anotace)"
+msgstr "Dokončení kreslení spojení na aktuálním segmentu"
 
 #: eeschema/tools/ee_actions.cpp:718
-#, fuzzy
 msgid "Finish Bus"
-msgstr "Finština"
+msgstr "Dokončit sběrnici"
 
 #: eeschema/tools/ee_actions.cpp:718
-#, fuzzy
 msgid "Complete bus with current segment"
-msgstr "Aktualizace návrhu DPS s aktuálním schématem (dopředná anotace)"
+msgstr "Ukončení sběrnice na aktuálním segmentu"
 
 #: eeschema/tools/ee_actions.cpp:723
 msgid "Finish Lines"
@@ -16396,9 +16384,8 @@ msgid "Drags the selected item(s)"
 msgstr "Přetáhněte vybranou položku(y)"
 
 #: eeschema/tools/ee_actions.cpp:741
-#, fuzzy
 msgid "Move Activate"
-msgstr "Přesunout položku"
+msgstr "Aktivace přesunu"
 
 #: eeschema/tools/ee_actions.cpp:745
 msgid "Symbol Move Activate"
@@ -16588,9 +16575,8 @@ msgstr ""
 "odstraněny."
 
 #: eeschema/tools/sch_edit_tool.cpp:1760
-#, fuzzy
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
-msgstr "Chcete vyčistit tento list?"
+msgstr "Chcete odstranit nedefinované vývody z listu?"
 
 #: eeschema/tools/sch_edit_tool.cpp:1820
 #, c-format
@@ -17454,9 +17440,8 @@ msgid "Show flashed items in outline mode"
 msgstr "Zobrazit plošky jako obrys"
 
 #: gerbview/tools/gerbview_actions.cpp:156
-#, fuzzy
 msgid "Sketch Polygons"
-msgstr "Mnohoúhelníky v režimu obrysů"
+msgstr "Mnohoúhelníky v režimu osnovy"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 msgid "Show polygons in outline mode"
@@ -17468,9 +17453,8 @@ msgid "Ghost Negative Objects"
 msgstr "Zobrazit &Negativní objekty"
 
 #: gerbview/tools/gerbview_actions.cpp:162
-#, fuzzy
 msgid "Show negative objects in ghost color"
-msgstr "Zobrazit negativní objekty v této barvě"
+msgstr "Zobrazit negativní objekty šedivé"
 
 #: gerbview/tools/gerbview_actions.cpp:168
 msgid "Show DCodes"
@@ -17485,9 +17469,8 @@ msgid "Show in Differential Mode"
 msgstr "Zobrazit v diferenciálním režimu"
 
 #: gerbview/tools/gerbview_actions.cpp:173
-#, fuzzy
 msgid "Show layers in diff (compare) mode"
-msgstr "Zobrazit obrys v režimu čáry"
+msgstr "Zobrazit vrstvy v režimu diff (porovnat)"
 
 #: gerbview/tools/gerbview_actions.cpp:178
 msgid "Flip Gerber View"
@@ -17538,9 +17521,9 @@ msgid "Highlight Items of Net \"%s\""
 msgstr "Zvýraznit položky sítě \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Aperture Type \"%s\""
-msgstr "Typ stránky \"%s\" není platný"
+msgstr "Zvýraznit typ otvoru \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
 #, c-format
@@ -17582,9 +17565,8 @@ msgstr "Zobrazit (x, y) bodů mřížky"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:106
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Drawing Sheet"
-msgstr "Uchopit list"
+msgstr "Výkresový list"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:106
 msgid "Show drawing sheet border and title block"
@@ -17677,18 +17659,16 @@ msgid "Malformed expression"
 msgstr "Poškozený výraz"
 
 #: include/panel_hotkeys_editor.h:55
-#, fuzzy
 msgid "Reset all hotkeys to the built-in KiCad defaults"
-msgstr "Obnovit všechny barvy v tomto motivu na výchozí hodnoty KiCadu"
+msgstr "Resetovat všechny klávesové zkratky s výchozími hodnotami KiCadu"
 
 #: include/widgets/infobar.h:111
 msgid "Hide this message."
 msgstr "Skrýt tuto zprávu."
 
 #: include/widgets/resettable_panel.h:54
-#, fuzzy
 msgid "Reset all settings on this page to their default"
-msgstr "Obnovit všechny barvy v tomto motivu na výchozí hodnoty KiCadu"
+msgstr "Obnovit všechna nastavení na této stránce na výchozí hodnoty"
 
 #: kicad/dialogs/dialog_template_selector.cpp:126
 msgid "<html><h1>Template Selector</h1></html>"
@@ -17930,9 +17910,8 @@ msgid "Open project directory in file explorer"
 msgstr "Otevřít adresář projektu Průzkumníku souborů"
 
 #: kicad/project_template.cpp:52
-#, fuzzy
 msgid "Could open the template path!"
-msgstr "Nelze otevřít cestu k šablonám!"
+msgstr "Nelze otevřít cestu šablon!"
 
 #: kicad/project_template.cpp:57
 #, fuzzy
@@ -20382,7 +20361,7 @@ msgstr "Core"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:113
 msgid "PrePreg"
-msgstr "PrePreg"
+msgstr "Prepreg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:184
 #, c-format
@@ -28989,11 +28968,9 @@ msgid "No access rights to write to file \"%s\""
 msgstr "Nemáte přístupová práva k zápisu do souboru \"%s\""
 
 #: pcbnew/files.cpp:949 pcbnew/files.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr ""
-"Chyba uložení souboru desky \"%s\".\n"
-"%s"
+msgstr "Chyba ukládání souboru vlastních pravidel '%s'."
 
 #: pcbnew/files.cpp:980 pcbnew/files.cpp:1082
 #, fuzzy, c-format
@@ -29024,9 +29001,9 @@ msgid "File '%s' saved."
 msgstr "Soubor '%s' uložen."
 
 #: pcbnew/files.cpp:1061
-#, fuzzy, c-format
+#, c-format
 msgid "No access rights to write to file '%s'."
-msgstr "Nemáte přístupová práva k zápisu do souboru \"%s\""
+msgstr "Nemáte přístupová práva k zápisu do souboru '%s'."
 
 #: pcbnew/files.cpp:1108
 #, c-format
@@ -35308,9 +35285,8 @@ msgstr "Gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
-#, fuzzy
 msgid "KiCad"
-msgstr "Ukončit KiCad"
+msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 msgid "EDA Suite"
