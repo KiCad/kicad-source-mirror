@@ -122,7 +122,7 @@
           "drill": 0.0
         }
       ],
-      "zones_allow_external_fillets": false,
+      "zones_allow_external_fillets": true,
       "zones_use_no_outline": true
     },
     "layer_presets": []
@@ -392,6 +392,7 @@
       "default_text_size": 50.0,
       "default_wire_thickness": 6.0,
       "field_names": [],
+      "intersheets_ref_own_page": false,
       "intersheets_ref_prefix": "",
       "intersheets_ref_short": false,
       "intersheets_ref_show": false,
@@ -406,6 +407,12 @@
       "version": 0
     },
     "net_format_name": "",
+    "ngspice": {
+      "meta": {
+        "version": 0
+      },
+      "model_mode": 0
+    },
     "page_layout_descr_file": "",
     "plot_directory": "",
     "spice_adjust_passive_values": false,
@@ -415,7 +422,7 @@
   },
   "sheets": [
     [
-      "1ce0043a-34b3-4db0-bd6b-9ae47c2acb93",
+      "28f865a0-4433-4a53-bbd7-b62f276848e4",
       ""
     ]
   ],

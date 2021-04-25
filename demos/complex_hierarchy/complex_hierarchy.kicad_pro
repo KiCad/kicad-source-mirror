@@ -102,7 +102,7 @@
       "rules": {
         "allow_blind_buried_vias": false,
         "allow_microvias": false,
-        "max_error": 0.005,
+        "max_error": 0.01,
         "min_clearance": 0.19999999999999998,
         "min_copper_edge_clearance": 0.01,
         "min_hole_clearance": 0.0,
@@ -375,7 +375,6 @@
         "microvia_drill": 0.2032,
         "name": "power",
         "nets": [
-          "+12C",
           "-VAA",
           "/12Vext",
           "GND",
@@ -415,6 +414,7 @@
       "default_text_size": 50.0,
       "default_wire_thickness": 6.0,
       "field_names": [],
+      "intersheets_ref_own_page": false,
       "intersheets_ref_prefix": "",
       "intersheets_ref_short": false,
       "intersheets_ref_show": false,
@@ -429,6 +429,12 @@
       "version": 0
     },
     "net_format_name": "Pcbnew",
+    "ngspice": {
+      "meta": {
+        "version": 0
+      },
+      "model_mode": 0
+    },
     "page_layout_descr_file": "",
     "plot_directory": "",
     "spice_adjust_passive_values": false,
@@ -438,7 +444,7 @@
   },
   "sheets": [
     [
-      "00000000-0000-0000-0000-00004b3a1333",
+      "5b9623a5-6d01-41fc-9865-e1bc779418c8",
       ""
     ],
     [

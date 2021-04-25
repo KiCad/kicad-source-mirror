@@ -412,6 +412,7 @@
       "default_text_size": 50.0,
       "default_wire_thickness": 6.0,
       "field_names": [],
+      "intersheets_ref_own_page": false,
       "intersheets_ref_prefix": "",
       "intersheets_ref_short": false,
       "intersheets_ref_show": false,
@@ -426,6 +427,12 @@
       "version": 0
     },
     "net_format_name": "Pcbnew",
+    "ngspice": {
+      "meta": {
+        "version": 0
+      },
+      "model_mode": 0
+    },
     "page_layout_descr_file": "",
     "plot_directory": "",
     "spice_adjust_passive_values": false,
@@ -435,7 +442,7 @@
   },
   "sheets": [
     [
-      "00000000-0000-0000-0000-00004bf03687",
+      "f54f2c44-70ae-46db-88a1-bf696c289e90",
       ""
     ],
     [

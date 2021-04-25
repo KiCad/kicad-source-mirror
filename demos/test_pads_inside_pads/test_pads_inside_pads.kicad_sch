@@ -1,4 +1,6 @@
-(kicad_sch (version 20210126) (generator eeschema)
+(kicad_sch (version 20210406) (generator eeschema)
+
+  (uuid 8d3a5066-9577-4e18-8fe9-905c643339bb)
 
   (paper "A4")
 
@@ -38,7 +40,6 @@
       )
     )
   )
-
 
 
   (wire (pts (xy 105.41 36.83) (xy 95.25 36.83))

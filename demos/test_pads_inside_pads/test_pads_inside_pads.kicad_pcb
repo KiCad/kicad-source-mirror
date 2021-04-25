@@ -1,7 +1,7 @@
-(kicad_pcb (version 20210228) (generator pcbnew)
+(kicad_pcb (version 20210424) (generator pcbnew)
 
   (general
-    (thickness 1.6002)
+    (thickness 1.6)
   )
 
   (paper "A4")
@@ -29,6 +29,19 @@
   )
 
   (setup
+    (stackup
+      (layer "F.SilkS" (type "Top Silk Screen"))
+      (layer "F.Paste" (type "Top Solder Paste"))
+      (layer "F.Mask" (type "Top Solder Mask") (color "Green") (thickness 0.01))
+      (layer "F.Cu" (type "copper") (thickness 0.035))
+      (layer "dielectric 1" (type "core") (thickness 1.51) (material "FR4") (epsilon_r 4.5) (loss_tangent 0.02))
+      (layer "B.Cu" (type "copper") (thickness 0.035))
+      (layer "B.Mask" (type "Bottom Solder Mask") (color "Green") (thickness 0.01))
+      (layer "B.Paste" (type "Bottom Solder Paste"))
+      (layer "B.SilkS" (type "Bottom Silk Screen"))
+      (copper_finish "None")
+      (dielectric_constraints no)
+    )
     (pad_to_mask_clearance 0)
     (pcbplotparams
       (layerselection 0x0000030_80000001)
@@ -65,7 +78,6 @@
     )
   )
 
-
   (net 0 "")
   (net 1 "/NET1")
   (net 2 "/NET2")
@@ -91,27 +103,27 @@
     (fp_line (start -11 11) (end -11 -11) (layer "F.SilkS") (width 0.15) (tstamp 92a02999-a192-495f-bb12-4f5c45a5972f))
     (fp_line (start 11 -11) (end 11 11) (layer "F.SilkS") (width 0.15) (tstamp 9ecc6a7f-6316-4fb1-9a6d-877714694934))
     (fp_line (start 11 11) (end -11 11) (layer "F.SilkS") (width 0.15) (tstamp d3505e79-4ca0-4c1a-8116-65df111647be))
-    (pad "1" thru_hole circle (at 3.81 -7.62) (locked) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at 3.81 -7.62) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
       (net 2 "/NET2") (pinfunction "1") (pintype "passive") (tstamp 1d1c91af-2430-49bb-aa10-c85e31465067))
-    (pad "1" thru_hole circle (at -8.255 -7.62) (locked) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at -8.255 -7.62) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
       (net 2 "/NET2") (pinfunction "1") (pintype "passive") (tstamp 2d5ff131-583f-4b35-bf9c-4c69fb359fd5))
-    (pad "1" smd rect (at 0 0) (locked) (size 20.32 20.32) (layers "F.Cu" "F.Paste" "F.Mask")
+    (pad "1" smd rect locked (at 0 0) (size 20.32 20.32) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 2 "/NET2") (pinfunction "1") (pintype "passive") (tstamp 524ddc9b-4a8e-40f1-bab5-c794faaad669))
-    (pad "1" thru_hole circle (at -3.81 -4.445) (locked) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at -3.81 -4.445) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
       (net 2 "/NET2") (pinfunction "1") (pintype "passive") (tstamp 642daf42-cf9b-4f31-b756-055f16342b54))
-    (pad "1" thru_hole circle (at -3.81 -7.62) (locked) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at -3.81 -7.62) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
       (net 2 "/NET2") (pinfunction "1") (pintype "passive") (tstamp 78e511dc-d8f6-474a-8d1c-6a42560cb938))
-    (pad "1" thru_hole circle (at 3.81 -4.445) (locked) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at 3.81 -4.445) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
       (net 2 "/NET2") (pinfunction "1") (pintype "passive") (tstamp 7a2b20ed-df5e-4d40-ae20-5c178b193123))
-    (pad "1" thru_hole circle (at 8.255 -4.445) (locked) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at 8.255 -4.445) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
       (net 2 "/NET2") (pinfunction "1") (pintype "passive") (tstamp b1686322-1603-418b-834a-588ad11bf569))
-    (pad "1" thru_hole circle (at -8.255 -4.445) (locked) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at -8.255 -4.445) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
       (net 2 "/NET2") (pinfunction "1") (pintype "passive") (tstamp c162bfa2-ed71-444d-8ec1-15faab5a8aeb))
-    (pad "1" thru_hole circle (at 0 -4.445) (locked) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at 0 -4.445) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
       (net 2 "/NET2") (pinfunction "1") (pintype "passive") (tstamp c41e3352-fe7e-4f1f-9a7f-dacef92b31c2))
-    (pad "1" thru_hole circle (at 0 -7.62) (locked) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at 0 -7.62) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
       (net 2 "/NET2") (pinfunction "1") (pintype "passive") (tstamp c465f930-44c6-4eef-9fcb-d2319aeb3b0a))
-    (pad "1" thru_hole circle (at 8.255 -7.62) (locked) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at 8.255 -7.62) (size 1.524 1.524) (drill 0.762) (layers *.Cu *.Mask)
       (net 2 "/NET2") (pinfunction "1") (pintype "passive") (tstamp e15db349-8c4a-41d5-b95a-fb3865840e97))
   )
 
@@ -133,7 +145,7 @@
       (tstamp 2abee844-1fc7-4133-a04f-0a70041ee2ff)
     )
     (fp_circle (center 0 0) (end 0 -2.286) (layer "F.SilkS") (width 0.381) (fill none) (tstamp 0e9c7ae8-ec29-4404-a610-c989c9302588))
-    (pad "1" thru_hole circle (at 0 0) (locked) (size 4.064 4.064) (drill 3.048) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at 0 0) (size 4.064 4.064) (drill 3.048) (layers *.Cu *.Mask)
       (net 2 "/NET2") (pinfunction "1") (pintype "passive") (tstamp feddcea1-e2f4-4733-980c-c44e9074b886))
   )
 
@@ -155,7 +167,7 @@
       (tstamp 5a9fac68-7c3b-4255-aac7-fbb0b08a7163)
     )
     (fp_circle (center 0 0) (end 0 -2.286) (layer "F.SilkS") (width 0.381) (fill none) (tstamp 13c78dfe-e522-4715-8ab5-867071caa69e))
-    (pad "1" thru_hole circle (at 0 0) (locked) (size 4.064 4.064) (drill 3.048) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at 0 0) (size 4.064 4.064) (drill 3.048) (layers *.Cu *.Mask)
       (net 1 "/NET1") (pinfunction "1") (pintype "passive") (tstamp 63e3e6f8-8b69-4903-a59f-e56ceec010ab))
   )
 
@@ -177,11 +189,11 @@
       (tstamp ce35a393-6d6e-47ea-adaf-ddd646280b2d)
     )
     (fp_circle (center 0 0) (end 0 -2.286) (layer "F.SilkS") (width 0.381) (fill none) (tstamp 0f5d77d2-850f-4ebd-a4ba-437a96ef97e7))
-    (pad "1" thru_hole circle (at 0 0) (locked) (size 4.064 4.064) (drill 3.048) (layers *.Cu *.Mask)
+    (pad "1" thru_hole circle locked (at 0 0) (size 4.064 4.064) (drill 3.048) (layers *.Cu *.Mask)
       (net 1 "/NET1") (pinfunction "1") (pintype "passive") (die_length 7.62) (tstamp e62dcc93-6e23-4dcc-a1d1-9cc59c15b145))
   )
 
-  (gr_rect (start 68.05 23.5) (end 125.23 71.36) (layer "Edge.Cuts") (width 0.381) (fill none) (tstamp a9cd5f86-b613-4436-a03d-d2c5e50ff2cf))
+  (gr_rect (start 68.05 23.5) (end 125.23 71.36) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp a9cd5f86-b613-4436-a03d-d2c5e50ff2cf))
 
   (segment (start 107.061 61.468) (end 87.122 61.468) (width 0.2032) (layer "B.Cu") (net 1) (tstamp 49c90b83-46f7-4695-9fb2-a36ccaefc53a))
   (segment (start 107.696 45.085) (end 107.696 45.593) (width 0.2032) (layer "B.Cu") (net 2) (tstamp 02f6e7d9-28b2-458a-ac7b-f336cdd00b97))

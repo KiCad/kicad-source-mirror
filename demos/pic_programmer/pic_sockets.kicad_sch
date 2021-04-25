@@ -1,4 +1,6 @@
-(kicad_sch (version 20210126) (generator eeschema)
+(kicad_sch (version 20210406) (generator eeschema)
+
+  (uuid 07104395-590a-4ebf-a72b-dad9fa47c291)
 
   (paper "A4")
 
@@ -35,7 +37,7 @@
       )
       (symbol "24C16_1_1"
         (rectangle (start -10.16 -7.62) (end 10.16 7.62)
-          (stroke (width 0)) (fill (type none))
+          (stroke (width 0.2032)) (fill (type none))
         )
         (pin input line (at -17.78 5.08 0) (length 7.62)
           (name "A0" (effects (font (size 1.524 1.524))))
@@ -152,7 +154,7 @@
       )
       (symbol "PIC12C508A_0_1"
         (rectangle (start 10.16 -15.24) (end -11.43 16.51)
-          (stroke (width 0)) (fill (type none))
+          (stroke (width 0.254)) (fill (type none))
         )
       )
       (symbol "PIC12C508A_1_1"
@@ -239,7 +241,7 @@
       )
       (symbol "PIC16F54_0_1"
         (rectangle (start -12.7 17.78) (end 11.43 -17.78)
-          (stroke (width 0)) (fill (type none))
+          (stroke (width 0.254)) (fill (type none))
         )
       )
       (symbol "PIC16F54_1_1"
@@ -420,7 +422,7 @@
             (xy 1.905 2.54)
             (xy 0 1.27)
           )
-          (stroke (width 0)) (fill (type none))
+          (stroke (width 0.2032)) (fill (type none))
         )
       )
     )
@@ -439,7 +441,7 @@
       )
       (symbol "SUPP28_0_1"
         (rectangle (start -7.62 -19.05) (end 7.62 19.05)
-          (stroke (width 0)) (fill (type none))
+          (stroke (width 0.254)) (fill (type none))
         )
       )
       (symbol "SUPP28_1_1"
@@ -572,7 +574,7 @@
       )
       (symbol "SUPP40_0_1"
         (rectangle (start -7.62 -26.67) (end 7.62 26.67)
-          (stroke (width 0)) (fill (type none))
+          (stroke (width 0.254)) (fill (type none))
         )
       )
       (symbol "SUPP40_1_1"
@@ -1470,14 +1472,14 @@
     (property "Datasheet" "" (id 3) (at 93.98 33.02 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (pin "4" (uuid 227f6df8-2033-41fe-94e6-e99071068964))
+    (pin "8" (uuid b209b5dc-b5b1-4308-a8e6-b4e84c9017e7))
     (pin "1" (uuid f339a487-c14f-46fb-9fca-bb28ceb75e1d))
     (pin "2" (uuid d9ab5d87-39e6-4e51-aac3-15f33638bc3d))
     (pin "3" (uuid e6d8fbbd-8bac-4a77-87d3-e030713ee82a))
     (pin "5" (uuid 2ddc6230-ee41-4d27-af20-80e553e7a906))
     (pin "6" (uuid 618e7f2f-4583-4198-8af3-3c60d15b069c))
     (pin "7" (uuid f175b289-e510-4f7c-90a3-dc883f394b18))
-    (pin "4" (uuid 227f6df8-2033-41fe-94e6-e99071068964))
-    (pin "8" (uuid b209b5dc-b5b1-4308-a8e6-b4e84c9017e7))
   )
 
   (symbol (lib_id "pic_programmer_schlib:SUPP28") (at 218.44 64.77 0) (unit 1)

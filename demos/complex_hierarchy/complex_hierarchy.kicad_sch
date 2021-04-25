@@ -1,4 +1,6 @@
-(kicad_sch (version 20210126) (generator eeschema)
+(kicad_sch (version 20210406) (generator eeschema)
+
+  (uuid 5b9623a5-6d01-41fc-9865-e1bc779418c8)
 
   (paper "A4")
 
@@ -8,49 +10,6 @@
   )
 
   (lib_symbols
-    (symbol "complex_hierarchy_schlib:+12C" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "#PWR" (id 0) (at 0 -3.81 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Value" "+12C" (id 1) (at 0 3.81 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (symbol "+12C_0_1"
-        (polyline
-          (pts
-            (xy -0.762 1.27)
-            (xy 0 2.54)
-          )
-          (stroke (width 0)) (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 0)
-            (xy 0 2.54)
-          )
-          (stroke (width 0)) (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 2.54)
-            (xy 0.762 1.27)
-          )
-          (stroke (width 0)) (fill (type none))
-        )
-      )
-      (symbol "+12C_1_1"
-        (pin power_in line (at 0 0 90) (length 0) hide
-          (name "+12C" (effects (font (size 1.27 1.27))))
-          (number "1" (effects (font (size 1.27 1.27))))
-        )
-      )
-    )
     (symbol "complex_hierarchy_schlib:+12V" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (id 0) (at 0 -3.81 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -486,7 +445,6 @@
   (junction (at 63.5 33.02) (diameter 1.016) (color 0 0 0 0))
   (junction (at 76.2 63.5) (diameter 1.016) (color 0 0 0 0))
   (junction (at 81.28 63.5) (diameter 1.016) (color 0 0 0 0))
-  (junction (at 90.17 63.5) (diameter 1.016) (color 0 0 0 0))
   (junction (at 233.68 33.02) (diameter 1.016) (color 0 0 0 0))
   (junction (at 233.68 69.85) (diameter 1.016) (color 0 0 0 0))
 
@@ -576,14 +534,6 @@
   (wire (pts (xy 90.17 62.23) (xy 90.17 63.5))
     (stroke (width 0) (type solid) (color 0 0 0 0))
     (uuid 36cc51df-302a-4e4c-bb35-b7ea261d4251)
-  )
-  (wire (pts (xy 90.17 63.5) (xy 96.52 63.5))
-    (stroke (width 0) (type solid) (color 0 0 0 0))
-    (uuid 1621a4f3-c773-4a1b-86b1-eec0f0114898)
-  )
-  (wire (pts (xy 96.52 63.5) (xy 96.52 62.23))
-    (stroke (width 0) (type solid) (color 0 0 0 0))
-    (uuid 4e22e479-8513-4280-819e-520492892cf7)
   )
   (wire (pts (xy 168.91 63.5) (xy 179.07 63.5))
     (stroke (width 0) (type solid) (color 0 0 0 0))
@@ -773,31 +723,13 @@
     (pin "1" (uuid 314141b4-1a21-43f9-9089-f0b4f2c7bf3e))
   )
 
-  (symbol (lib_id "complex_hierarchy_schlib:+12C") (at 96.52 62.23 0) (unit 1)
+  (symbol (lib_id "complex_hierarchy_schlib:+12V") (at 187.96 31.75 0) (unit 1)
     (in_bom yes) (on_board yes)
-    (uuid 00000000-0000-0000-0000-00004b03c68d)
-    (property "Reference" "#PWR014" (id 0) (at 96.52 62.992 0)
-      (effects (font (size 0.762 0.762)) hide)
+    (uuid d418c5eb-438d-44c1-a35d-5bffdd0f0c32)
+    (property "Reference" "#U0101" (id 0) (at 187.96 33.02 0)
+      (effects (font (size 0.508 0.508)) hide)
     )
-    (property "Value" "+12C" (id 1) (at 96.52 59.436 0)
-      (effects (font (size 1.016 1.016)))
-    )
-    (property "Footprint" "" (id 2) (at 96.52 62.23 0)
-      (effects (font (size 0.254 0.254)) hide)
-    )
-    (property "Datasheet" "" (id 3) (at 96.52 62.23 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (pin "1" (uuid bf2c2818-9658-4078-9165-8092a396f8e9))
-  )
-
-  (symbol (lib_id "complex_hierarchy_schlib:+12C") (at 187.96 31.75 0) (unit 1)
-    (in_bom yes) (on_board yes)
-    (uuid 00000000-0000-0000-0000-00004b03ce6c)
-    (property "Reference" "#PWR011" (id 0) (at 187.96 32.512 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Value" "+12C" (id 1) (at 187.96 28.956 0)
+    (property "Value" "+12V" (id 1) (at 187.96 29.21 0)
       (effects (font (size 1.016 1.016)))
     )
     (property "Footprint" "" (id 2) (at 187.96 31.75 0)
@@ -806,7 +738,7 @@
     (property "Datasheet" "" (id 3) (at 187.96 31.75 0)
       (effects (font (size 1.524 1.524)) hide)
     )
-    (pin "1" (uuid 0faea58b-f6f7-4ba7-acdf-3af8547b0009))
+    (pin "1" (uuid 412733be-2642-49c3-afe2-e83ae72a602d))
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:GND") (at 53.34 71.12 0) (unit 1)
@@ -1264,12 +1196,6 @@
     (path "/00000000-0000-0000-0000-00004b03ce88"
       (reference "#PWR010") (unit 1) (value "GND") (footprint "")
     )
-    (path "/00000000-0000-0000-0000-00004b03ce6c"
-      (reference "#PWR011") (unit 1) (value "+12C") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004b03c68d"
-      (reference "#PWR014") (unit 1) (value "+12C") (footprint "")
-    )
     (path "/00000000-0000-0000-0000-00004ae173d0"
       (reference "#PWR017") (unit 1) (value "GND") (footprint "")
     )
@@ -1287,6 +1213,9 @@
     )
     (path "/00000000-0000-0000-0000-00004ae173ef"
       (reference "#U016") (unit 1) (value "+12V") (footprint "")
+    )
+    (path "/d418c5eb-438d-44c1-a35d-5bffdd0f0c32"
+      (reference "#U0101") (unit 1) (value "+12V") (footprint "")
     )
     (path "/00000000-0000-0000-0000-00004b03cec2"
       (reference "C1") (unit 1) (value "47uF") (footprint "Capacitor_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal")
