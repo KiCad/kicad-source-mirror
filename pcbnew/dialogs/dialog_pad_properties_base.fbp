@@ -9665,11 +9665,11 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="sizeritem" expanded="0">
+                        <object class="sizeritem" expanded="1">
                             <property name="border">10</property>
                             <property name="flag">wxEXPAND|wxTOP|wxRIGHT</property>
                             <property name="proportion">1</property>
-                            <object class="wxBoxSizer" expanded="0">
+                            <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size">290,-1</property>
                                 <property name="name">bSizerDisplayPad</property>
                                 <property name="orient">wxVERTICAL</property>
@@ -9694,11 +9694,11 @@
                                         <property name="width">0</property>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="0">
-                                    <property name="border">5</property>
+                                <object class="sizeritem" expanded="1">
+                                    <property name="border">6</property>
                                     <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxSimplebook" expanded="0">
+                                    <object class="wxSimplebook" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -9749,10 +9749,10 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style">wxBORDER_SIMPLE</property>
-                                        <object class="simplebookpage" expanded="0">
+                                        <object class="simplebookpage" expanded="1">
                                             <property name="label">a page</property>
                                             <property name="select">0</property>
-                                            <object class="wxPanel" expanded="0">
+                                            <object class="wxPanel" expanded="1">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
@@ -9803,7 +9803,7 @@
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                                                <object class="wxBoxSizer" expanded="0">
+                                                <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">page0Sizer</property>
                                                     <property name="orient">wxVERTICAL</property>
@@ -9869,10 +9869,10 @@
                                                 </object>
                                             </object>
                                         </object>
-                                        <object class="simplebookpage" expanded="0">
+                                        <object class="simplebookpage" expanded="1">
                                             <property name="label">a page</property>
                                             <property name="select">0</property>
-                                            <object class="wxPanel" expanded="0">
+                                            <object class="wxPanel" expanded="1">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
@@ -9923,7 +9923,7 @@
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                                                <object class="wxBoxSizer" expanded="0">
+                                                <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">page1Sizer</property>
                                                     <property name="orient">wxVERTICAL</property>
