@@ -305,7 +305,9 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
     // Test for time stamp change.
     KIID_PATH new_path = aNetlistComponent->GetPath();
-    new_path.push_back( aNetlistComponent->GetKIIDs().front() );
+
+    if( !aNetlistComponent->GetKIIDs().empty() )
+        new_path.push_back( aNetlistComponent->GetKIIDs().front() );
 
     if( aPcbFootprint->GetPath() != new_path )
     {

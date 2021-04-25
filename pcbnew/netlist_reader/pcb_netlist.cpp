@@ -42,7 +42,8 @@ void COMPONENT::SetFootprint( FOOTPRINT* aFootprint )
     m_footprint.reset( aFootprint );
     KIID_PATH path = m_path;
 
-    path.push_back( m_kiids.front() );
+    if( !m_kiids.empty() )
+        path.push_back( m_kiids.front() );
 
     if( aFootprint == NULL )
         return;
