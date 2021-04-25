@@ -58,6 +58,9 @@ DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
 
 DIALOG_GROUP_PROPERTIES::~DIALOG_GROUP_PROPERTIES()
 {
+    if( m_brdEditor->IsBeingDeleted() )
+        return;
+
     m_brdEditor->FocusOnItem( nullptr );
     m_brdEditor->GetCanvas()->Refresh();
 }
