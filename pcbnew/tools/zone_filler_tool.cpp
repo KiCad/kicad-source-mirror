@@ -72,6 +72,8 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
     else
         filler.InstallNewProgressReporter( aCaller, _( "Checking Zones" ), 4 );
 
+    std::lock_guard<KISPINLOCK> lock( board()->GetConnectivity()->GetLock() );
+
     if( filler.Fill( toFill, true, aCaller ) )
     {
         commit.Push( _( "Fill Zone(s)" ), false );
