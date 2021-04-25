@@ -286,7 +286,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoleAgainstHole( BOARD_ITEM* aItem, S
 
     auto constraint = m_drcEngine->EvalRules( HOLE_TO_HOLE_CONSTRAINT, aItem, aOther,
                                               UNDEFINED_LAYER /* holes pierce all layers */ );
-    int  minClearance = constraint.GetValue().Min();
+    int  minClearance = constraint.GetValue().Min() - m_board->GetDesignSettings().GetDRCEpsilon();
 
     if( minClearance >= 0 && actual < minClearance )
     {
