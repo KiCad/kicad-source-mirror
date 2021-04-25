@@ -134,8 +134,8 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
         if( zones_to_refill.size() )
         {
             ZONE_FILLER filler( GetBoard(), &commit );
-            wxString    title =
-                    wxString::Format( _( "Refill %d Zones" ), (int) zones_to_refill.size() );
+            wxString    title = wxString::Format( _( "Refill %d Zones" ),
+                                                  (int) zones_to_refill.size() );
             filler.InstallNewProgressReporter( this, title, 4 );
 
             if( !filler.Fill( zones_to_refill ) )

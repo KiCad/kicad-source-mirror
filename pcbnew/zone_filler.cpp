@@ -135,6 +135,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             zone->CacheBoundingBox();
             m_worstClearance = std::max( m_worstClearance, zone->GetLocalClearance() );
         }
+
+        // Rules may depend on insideCourtyard() or other expressions
+        footprint->BuildPolyCourtyards();
     }
 
     // Sort by priority to reduce deferrals waiting on higher priority zones.
