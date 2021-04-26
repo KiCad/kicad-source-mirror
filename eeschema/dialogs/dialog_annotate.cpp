@@ -120,7 +120,6 @@ void DIALOG_ANNOTATE::InitValues()
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     int option;
 
-    // These are always reset to attempt to keep the user out of trouble...
     m_rbScope->SetSelection( cfg->m_AnnotatePanel.scope );
     m_rbOptions->SetSelection( cfg->m_AnnotatePanel.options );
 
