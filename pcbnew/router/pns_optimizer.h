@@ -104,7 +104,9 @@ public:
         PRESERVE_VERTEX       = 0x20,
         RESTRICT_VERTEX_RANGE = 0x40,
         MERGE_COLINEAR        = 0x80,    ///< Merge co-linear segments
-        RESTRICT_AREA         = 0x100
+        RESTRICT_AREA         = 0x100,
+        LIMIT_CORNER_COUNT    = 0x200  ///< Do not attempt to optimize if the resulting line's
+                                       ///< corner count is outside the predefined range
     };
 
     OPTIMIZER( NODE* aWorld );
@@ -114,7 +116,7 @@ public:
     static bool Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld,
                           const VECTOR2I aV = VECTOR2I(0, 0) );
 
-    bool Optimize( LINE* aLine, LINE* aResult = NULL );
+    bool Optimize( LINE* aLine, LINE* aResult = nullptr, LINE* aRoot = nullptr );
     bool Optimize( DIFF_PAIR* aPair );
 
 
@@ -324,6 +326,29 @@ private:
     int m_start;
     int m_end;
 };
+
+
+class CORNER_COUNT_LIMIT_CONSTRAINT: public OPT_CONSTRAINT
+{
+public:
+    CORNER_COUNT_LIMIT_CONSTRAINT( NODE* aWorld, int aMinCorners, int aMaxCorners, int aAngleMask ) :
+        OPT_CONSTRAINT( aWorld ),
+        m_minCorners( aMinCorners ),
+        m_maxCorners( aMaxCorners ),
+        m_angleMask( aAngleMask )
+    {
+    };
+
+    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
+                        const SHAPE_LINE_CHAIN& aCurrentPath,
+                        const SHAPE_LINE_CHAIN& aReplacement ) override;
+
+private:
+    int m_minCorners;
+    int m_maxCorners;
+    int m_angleMask;
+};
+
 
 
 };

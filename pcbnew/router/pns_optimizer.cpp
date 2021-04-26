@@ -272,6 +272,21 @@ bool RESTRICT_VERTEX_RANGE_CONSTRAINT::Check( int aVertex1, int aVertex2, const 
     return true;
 }
 
+
+bool CORNER_COUNT_LIMIT_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
+                                                const SHAPE_LINE_CHAIN& aCurrentPath,
+                                                const SHAPE_LINE_CHAIN& aReplacement )
+{
+    LINE newPath( *aOriginLine, aCurrentPath );
+    newPath.Line().Replace( aVertex1, aVertex2, aReplacement );
+    int cc = newPath.CountCorners( m_angleMask );
+    if( cc >= m_minCorners && cc <= m_maxCorners )
+        return true;
+
+    return false;
+}
+
+
 /**
  * Determine if a point is located within a given polygon
  *
@@ -587,8 +602,16 @@ bool OPTIMIZER::mergeColinear( LINE* aLine )
 }
 
 
-bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
+bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult, LINE* aRoot )
 {
+    g_dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+
+    if( aRoot )
+    {
+        g_dbg->AddLine( aRoot->CLine(), 3, 100000 );
+    }
+
+
     if( !aResult )
     {
         aResult = aLine;
@@ -601,6 +624,14 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
 
     bool hasArcs = aLine->ArcCount();
     bool rv = false;
+
+    if( (m_effortLevel & LIMIT_CORNER_COUNT) && aRoot )
+    {
+        const int angleMask = DIRECTION_45::ANG_OBTUSE;
+        int rootObtuseCorners = aRoot->CountCorners( angleMask );
+        auto c = new CORNER_COUNT_LIMIT_CONSTRAINT( m_world, rootObtuseCorners, aLine->SegmentCount(), angleMask );
+        AddConstraint( c );
+    }
 
     if( m_effortLevel & PRESERVE_VERTEX )
     {
