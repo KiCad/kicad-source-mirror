@@ -118,7 +118,7 @@ class add_automatic_border( ActionPlugin ):
             edge_candidate = False
             #  Detect if current drawing is a PCB edge
             # and a candicate for north/south/east or west
-            if draw.GetClass() == 'DRAWSEGMENT' \
+            if draw.GetClass() == 'PCB_SHAPE' \
               and draw.GetLayer() == Edge_Cuts:
                 # Try candicate for east/west ?
                 if draw.GetStart().x == draw.GetEnd().x:
@@ -201,7 +201,7 @@ class add_automatic_border( ActionPlugin ):
         need_add = False
         if west is None:
             need_add = True
-            west = DRAWSEGMENT()
+            west = PCB_SHAPE()
             west.SetLayer( Edge_Cuts )
 
         west.SetStart( wxPoint( min_x, min_y ) )
@@ -212,7 +212,7 @@ class add_automatic_border( ActionPlugin ):
         need_add = False
         if north is None:
             need_add = True
-            north = DRAWSEGMENT()
+            north = PCB_SHAPE()
             north.SetLayer( Edge_Cuts )
 
         north.SetStart( wxPoint( min_x, min_y ) )
@@ -223,7 +223,7 @@ class add_automatic_border( ActionPlugin ):
         need_add = False
         if east is None:
             need_add = True
-            east = DRAWSEGMENT()
+            east = PCB_SHAPE()
             east.SetLayer( Edge_Cuts )
 
         east.SetStart( wxPoint( max_x, min_y ) )
@@ -234,7 +234,7 @@ class add_automatic_border( ActionPlugin ):
         need_add = False
         if south is None:
             need_add = True
-            south = DRAWSEGMENT()
+            south = PCB_SHAPE()
             south.SetLayer( Edge_Cuts )
 
         south.SetStart( wxPoint( min_x, max_y ) )

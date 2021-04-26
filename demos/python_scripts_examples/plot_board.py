@@ -32,8 +32,10 @@ popt = pctl.GetPlotOptions()
 popt.SetOutputDirectory("plot/")
 
 # Set some important plot options:
+# One cannot plot the frame references, because the board does not know
+# the frame references.
 popt.SetPlotFrameRef(False)
-popt.SetLineWidth(FromMM(0.35))
+popt.SetSketchPadLineWidth(FromMM(0.1))
 
 popt.SetAutoScale(False)
 popt.SetScale(1)
@@ -72,7 +74,7 @@ plot_plan = [
 for layer_info in plot_plan:
     pctl.SetLayer(layer_info[1])
     pctl.OpenPlotfile(layer_info[0], PLOT_FORMAT_GERBER, layer_info[2])
-    print(layer_info[0])
+    print ( layer_info[0] )
     pctl.PlotLayer()
 
 # Our fabricators want two additional gerbers:
@@ -106,9 +108,6 @@ popt.SetPlotReference(True)
 popt.SetPlotValue(True)
 popt.SetPlotInvisibleText(False)
 
-# Comments in, uhmm... green
-#Note: currently, color is overidden by plot functions, so SetColor is not useful.
-popt.SetColor( COLOR4D( 1.0, 0, 0, 1.0 ) )  # color = RED, GREEN, BLUE, OPACITY )
 pctl.SetLayer(Cmts_User)
 pctl.PlotLayer()
 
