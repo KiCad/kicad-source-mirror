@@ -147,7 +147,9 @@ private:
     LINE assembleLine( const LINKED_ITEM* aSeg, int* aIndex = NULL );
 
     void replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew );
-    void replaceLine( LINE& aOld, LINE& aNew );
+    void replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea = true, NODE *aNode = nullptr );
+
+    LINE* findRootLine( LINE *aLine );
 
     OPT_BOX2I                   m_affectedArea;
 
@@ -160,6 +162,7 @@ private:
     std::vector<SPRINGBACK_TAG> m_nodeStack;
     std::vector<LINE>           m_lineStack;
     std::vector<LINE>           m_optimizerQueue;
+    std::unordered_map<const LINKED_ITEM*, LINE*> m_rootLineHistory;
 
     NODE*                       m_root;
     NODE*                       m_currentNode;

@@ -56,21 +56,70 @@ void SHOVE::replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew )
     m_currentNode->Replace( aOld, std::move( aNew ) );
 }
 
-void SHOVE::replaceLine( LINE& aOld, LINE& aNew )
+void SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NODE* aNode )
 {
-    OPT_BOX2I changed_area = ChangedArea( aOld, aNew );
-
-    if( changed_area )
+    if( aIncludeInChangedArea )
     {
-        if( Dbg() )
+        OPT_BOX2I changed_area = ChangedArea( aOld, aNew );
+
+        if( changed_area )
         {
-            Dbg()->AddBox( *changed_area, 3, "shove-changed-area" );
-        }
+            if( Dbg() )
+            {
+                Dbg()->AddBox( *changed_area, 3, "shove-changed-area" );
+            }
 
         m_affectedArea = m_affectedArea ? m_affectedArea->Merge( *changed_area ) : *changed_area;
+        }
     }
 
-    m_currentNode->Replace( aOld, aNew );
+    bool  foundPredecessor = false;
+    LINE* rootLine = nullptr;
+
+    // Keep track of the 'root lines', i.e. the unmodified (pre-shove) versions
+    // of the affected tracks in a map. The optimizer can then query the pre-shove shape
+    // for each shoved line and perform additional constraint checks (i.e. prevent overzealous optimizations)
+
+    // Check if the shoved line already has an ancestor (e.g. line from a previous shove iteration/cursor movement)
+    for( auto link : aOld.Links() )
+    {
+        auto oldLineIter = m_rootLineHistory.find( link );
+        if( oldLineIter != m_rootLineHistory.end() )
+        {
+            rootLine = oldLineIter->second;
+            foundPredecessor = true;
+            break;
+        }
+    }
+
+    // If found, use it, otherwise, create new entry in the map (we have a genuine new 'root' line)
+    if( !foundPredecessor )
+    {
+        for( auto link : aOld.Links() )
+        {
+            if( ! rootLine )
+            {
+                rootLine = aOld.Clone();
+            }
+            m_rootLineHistory[link] = rootLine;
+        }
+    }
+
+    // Now update the NODE (calling Replace invalidates the Links() in a LINE)
+    if( aNode )
+    {
+        aNode->Replace( aOld, aNew );
+    }
+    else
+    {
+        m_currentNode->Replace( aOld, aNew );
+    }
+
+    // point the Links() of the new line to its oldest ancestor
+    for( auto link : aNew.Links() )
+    {
+        m_rootLineHistory[ link ] = rootLine;
+    }
 }
 
 int SHOVE::getClearance( const ITEM* aA, const ITEM* aB ) const
@@ -115,6 +164,16 @@ SHOVE::SHOVE( NODE* aWorld, ROUTER* aRouter ) :
 
 SHOVE::~SHOVE()
 {
+    std::unordered_set<LINE*> alreadyDeleted;
+    for( auto it : m_rootLineHistory )
+    {
+        auto it2 = alreadyDeleted.find( it.second );
+        if( it2 == alreadyDeleted.end() )
+        {
+            alreadyDeleted.insert( it.second );
+            delete it.second;
+        }
+    }
 }
 
 
@@ -1577,6 +1636,23 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( const VIA_HANDLE aOldVia, const VEC
 }
 
 
+LINE* SHOVE::findRootLine( LINE *aLine )
+{
+    for( auto link : aLine->Links() )
+    {
+        if( auto seg = dyn_cast<SEGMENT*>( link ) )
+        {
+            auto it = m_rootLineHistory.find( seg );
+
+            if( it != m_rootLineHistory.end() )
+                return it->second;
+        }
+    }
+
+    return nullptr;
+}
+
+
 void SHOVE::runOptimizer( NODE* aNode )
 {
     OPTIMIZER optimizer( aNode );
@@ -1620,6 +1696,8 @@ void SHOVE::runOptimizer( NODE* aNode )
         break;
     }
 
+    optFlags |= OPTIMIZER::LIMIT_CORNER_COUNT;
+
     if( area )
     {
         if( Dbg() )
@@ -1646,12 +1724,12 @@ void SHOVE::runOptimizer( NODE* aNode )
             if( !( line.Marker() & MK_HEAD ) )
             {
                 LINE optimized;
+                LINE* root = findRootLine( &line );
 
-                if( optimizer.Optimize( &line, &optimized ) )
+                if( optimizer.Optimize( &line, &optimized, root ) )
                 {
-                    aNode->Remove( line );
-                    line.SetShape( optimized.CLine() );
-                    aNode->Add( line );
+                    replaceLine( line, optimized, false, aNode );
+                    line = optimized; // keep links in the lines in the queue up to date
                 }
             }
         }
