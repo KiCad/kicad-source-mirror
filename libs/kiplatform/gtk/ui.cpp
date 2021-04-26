@@ -49,6 +49,9 @@ void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 
 bool KIPLATFORM::UI::IsWindowActive( wxWindow* aWindow )
 {
+    if( !aWindow )
+        return false;
+
     GtkWindow* window = GTK_WINDOW( aWindow->GetHandle() );
 
     if( window )

@@ -75,6 +75,11 @@ void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 
 bool KIPLATFORM::UI::IsWindowActive( wxWindow* aWindow )
 {
+    if(! aWindow )
+    {
+	return false;
+    }
+
     return ( aWindow->GetHWND() == GetForegroundWindow() );
 }
 
