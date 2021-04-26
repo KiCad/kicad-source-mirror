@@ -296,7 +296,7 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                     }
                 }
 
-                sTool->FilterCollectorForGroups( aCollector );
+                sTool->FilterCollectorForHierarchy( aCollector );
             },
             !m_isFootprintEditor /* prompt user regarding locked items */ );
 
@@ -1439,7 +1439,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 for( BOARD_ITEM* item : added_items )
                     aCollector.Append( item );
 
-                sTool->FilterCollectorForGroups( aCollector );
+                sTool->FilterCollectorForHierarchy( aCollector );
             },
             !m_dragging && !m_isFootprintEditor /* prompt user regarding locked items */ );
 
@@ -1574,7 +1574,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                 for( BOARD_ITEM* item : added_items )
                     aCollector.Append( item );
 
-                sTool->FilterCollectorForGroups( aCollector );
+                sTool->FilterCollectorForHierarchy( aCollector );
             },
             !m_dragging && !m_isFootprintEditor /* prompt user regarding locked items */ );
 
@@ -1698,7 +1698,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
                 for( BOARD_ITEM* item : added_items )
                     aCollector.Append( item );
 
-                sTool->FilterCollectorForGroups( aCollector );
+                sTool->FilterCollectorForHierarchy( aCollector );
             },
             !m_dragging && !m_isFootprintEditor/* prompt user regarding locked items */ );
 
@@ -1991,7 +1991,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 for( BOARD_ITEM* item : added_items )
                     aCollector.Append( item );
 
-                sTool->FilterCollectorForGroups( aCollector );
+                sTool->FilterCollectorForHierarchy( aCollector );
             },
             !m_isFootprintEditor /* prompt user regarding locked items */ );
 
@@ -2113,7 +2113,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                     for( BOARD_ITEM* item : added_items )
                         aCollector.Append( item );
 
-                    sTool->FilterCollectorForGroups( aCollector );
+                    sTool->FilterCollectorForHierarchy( aCollector );
                 } );
 
     if( selection.Empty() )
@@ -2280,7 +2280,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
                     for( BOARD_ITEM* item : added_items )
                         aCollector.Append( item );
 
-                    sTool->FilterCollectorForGroups( aCollector );
+                    sTool->FilterCollectorForHierarchy( aCollector );
                 } );
 
     if( selection.Empty() )

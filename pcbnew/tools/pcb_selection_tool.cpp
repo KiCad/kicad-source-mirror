@@ -707,7 +707,7 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     // Apply the stateful filter
     FilterCollectedItems( collector );
 
-    FilterCollectorForGroups( collector );
+    FilterCollectorForHierarchy( collector );
 
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
@@ -809,8 +809,8 @@ bool PCB_SELECTION_TOOL::selectMultiple()
         if( view->IsMirroredX() )
             windowSelection = !windowSelection;
 
-        m_frame->GetCanvas()->SetCurrentCursor(
-                windowSelection ? KICURSOR::SELECT_WINDOW : KICURSOR::SELECT_LASSO );
+        m_frame->GetCanvas()->SetCurrentCursor( windowSelection ? KICURSOR::SELECT_WINDOW
+                                                                : KICURSOR::SELECT_LASSO );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -872,7 +872,7 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             // Apply the stateful filter
             FilterCollectedItems( collector );
 
-            FilterCollectorForGroups( collector );
+            FilterCollectorForHierarchy( collector );
 
             for( EDA_ITEM* i : collector )
             {
@@ -2515,11 +2515,22 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 }
 
 
-void PCB_SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) const
+void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollector ) const
 {
     std::unordered_set<BOARD_ITEM*> toAdd;
 
-    // If any element is a member of a group, replace those elements with the top containing group.
+    // Set TEMP_SELECTED on all parents which are included in the GENERAL_COLLECTOR.  This
+    // algorithm is O3n, whereas checking for the parent inclusion could potentially be On^2.
+
+    for( int j = 0; j < aCollector.GetCount(); j++ )
+    {
+        if( aCollector[j]->GetParent() )
+            aCollector[j]->GetParent()->ClearFlags( TEMP_SELECTED );
+    }
+
+    for( int j = 0; j < aCollector.GetCount(); j++ )
+            aCollector[j]->SetFlags( TEMP_SELECTED );
+
     for( int j = 0; j < aCollector.GetCount(); )
     {
         BOARD_ITEM* item = aCollector[j];
@@ -2529,6 +2540,8 @@ void PCB_SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector
         if( !m_isFootprintEditor && parent && parent->Type() == PCB_FOOTPRINT_T )
             start = parent;
 
+        // If any element is a member of a group, replace those elements with the top containing
+        // group.
         PCB_GROUP*  aTop = PCB_GROUP::TopLevelGroup( start, m_enteredGroup, m_isFootprintEditor );
 
         if( aTop )
@@ -2536,6 +2549,8 @@ void PCB_SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector
             if( aTop != item )
             {
                 toAdd.insert( aTop );
+                aTop->SetFlags( TEMP_SELECTED );
+
                 aCollector.Remove( item );
                 continue;
             }
@@ -2544,6 +2559,14 @@ void PCB_SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector
                     && !PCB_GROUP::WithinScope( item, m_enteredGroup, m_isFootprintEditor ) )
         {
             // If a group is entered, disallow selections of objects outside the group.
+            aCollector.Remove( item );
+            continue;
+        }
+
+        // Footprints are a bit easier as they can't be nested.
+        if( parent && parent->GetFlags() & TEMP_SELECTED )
+        {
+            // Remove children of selected items
             aCollector.Remove( item );
             continue;
         }

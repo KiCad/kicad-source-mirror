@@ -186,9 +186,13 @@ public:
      */
     void ExitGroup( bool aSelectGroup = false );
 
-    void FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) const;
-
     PCB_GROUP* GetEnteredGroup() { return m_enteredGroup; }
+
+    /**
+     * In general we don't want to select both a parent and any of it's children.  This includes
+     * both footprints and their items, and groups and their members.
+     */
+    void FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollector ) const;
 
     ///< Apply the SELECTION_FILTER_OPTIONS to a collection of items
     void FilterCollectedItems( GENERAL_COLLECTOR& aCollector );
