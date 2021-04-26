@@ -36,7 +36,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxString m_rbScopeChoices[] = { _("Entire schematic"), _("Current sheet only") };
+	wxString m_rbScopeChoices[] = { _("Entire schematic"), _("Current sheet only"), _("Selection only") };
 	int m_rbScopeNChoices = sizeof( m_rbScopeChoices ) / sizeof( wxString );
 	m_rbScope = new wxRadioBox( this, wxID_ANY, _("Scope"), wxDefaultPosition, wxDefaultSize, m_rbScopeNChoices, m_rbScopeChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbScope->SetSelection( 1 );
@@ -49,7 +49,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerXpos = new wxBoxSizer( wxHORIZONTAL );
 
 	m_rbSortBy_X_Position = new wxRadioButton( sbSizer1->GetStaticBox(), ID_SORT_BY_X_POSITION, _("Sort components by &X position"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	bSizerXpos->Add( m_rbSortBy_X_Position, 0, wxBOTTOM|wxTOP, 3 );
+	bSizerXpos->Add( m_rbSortBy_X_Position, 0, wxALIGN_CENTER_VERTICAL, 3 );
 
 
 	bSizerXpos->Add( 0, 0, 1, 0, 5 );
@@ -60,11 +60,14 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 
 	sbSizer1->Add( bSizerXpos, 0, wxEXPAND, 5 );
 
+
+	sbSizer1->Add( 0, 5, 0, wxEXPAND, 5 );
+
 	wxBoxSizer* bSizerYpos;
 	bSizerYpos = new wxBoxSizer( wxHORIZONTAL );
 
 	m_rbSortBy_Y_Position = new wxRadioButton( sbSizer1->GetStaticBox(), ID_SORT_BY_Y_POSITION, _("Sort components by &Y position"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerYpos->Add( m_rbSortBy_Y_Position, 0, wxBOTTOM|wxTOP, 3 );
+	bSizerYpos->Add( m_rbSortBy_Y_Position, 0, wxALIGN_CENTER_VERTICAL, 3 );
 
 
 	bSizerYpos->Add( 0, 0, 1, 0, 5 );

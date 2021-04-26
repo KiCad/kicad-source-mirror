@@ -79,6 +79,15 @@ enum COMPONENT_ORIENTATION_T
 };
 
 
+/** Schematic annotation scope options. */
+enum ANNOTATE_SCOPE_T
+{
+    ANNOTATE_ALL,
+    ANNOTATE_CURRENT_SHEET,
+    ANNOTATE_SELECTION
+};
+
+
 /** Schematic annotation order options. */
 enum ANNOTATE_ORDER_T
 {

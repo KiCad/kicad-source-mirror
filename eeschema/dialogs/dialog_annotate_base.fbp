@@ -162,7 +162,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;Entire schematic&quot; &quot;Current sheet only&quot;</property>
+                                        <property name="choices">&quot;Entire schematic&quot; &quot;Current sheet only&quot; &quot;Selection only&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -234,7 +234,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">3</property>
-                                                    <property name="flag">wxBOTTOM|wxTOP</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxRadioButton" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -371,6 +371,16 @@
                                             <property name="border">5</property>
                                             <property name="flag">wxEXPAND</property>
                                             <property name="proportion">0</property>
+                                            <object class="spacer" expanded="1">
+                                                <property name="height">5</property>
+                                                <property name="permission">protected</property>
+                                                <property name="width">0</property>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem" expanded="1">
+                                            <property name="border">5</property>
+                                            <property name="flag">wxEXPAND</property>
+                                            <property name="proportion">0</property>
                                             <object class="wxBoxSizer" expanded="1">
                                                 <property name="minimum_size"></property>
                                                 <property name="name">bSizerYpos</property>
@@ -378,7 +388,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">3</property>
-                                                    <property name="flag">wxBOTTOM|wxTOP</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxRadioButton" expanded="0">
                                                         <property name="BottomDockable">1</property>

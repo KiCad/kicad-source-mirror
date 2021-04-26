@@ -55,9 +55,10 @@ private:
     void OnApplyClick( wxCommandEvent& event ) override;
 
     // User functions:
-    bool GetLevel();
     bool GetResetItems();
     bool GetLockUnits();
+
+    ANNOTATE_SCOPE_T GetScope();
 
     ANNOTATE_ORDER_T GetSortOrder();
 
@@ -172,8 +173,8 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     REPORTER& reporter = m_MessageWindow->Reporter();
     m_MessageWindow->SetLazyUpdate( true );     // Don't update after each message
 
-    m_Parent->AnnotateSymbols( GetLevel(), GetSortOrder(), GetAnnotateAlgo(), GetStartNumber(),
-                               GetResetItems(), true, GetLockUnits(), reporter );
+    m_Parent->AnnotateSymbols( GetScope() == ANNOTATE_ALL, GetSortOrder(), GetAnnotateAlgo(),
+                               GetStartNumber(), GetResetItems(), true, GetLockUnits(), reporter );
 
     m_MessageWindow->Flush( true );             // Now update to show all messages
 
@@ -199,7 +200,7 @@ void DIALOG_ANNOTATE::OnClearAnnotationClick( wxCommandEvent& event )
 {
     bool appendUndo = false;
 
-    m_Parent->DeleteAnnotation( !GetLevel(), &appendUndo );
+    m_Parent->DeleteAnnotation( GetScope() == ANNOTATE_CURRENT_SHEET, &appendUndo );
     m_btnClear->Enable( false );
 }
 
@@ -208,12 +209,6 @@ void DIALOG_ANNOTATE::OnOptionChanged( wxCommandEvent& event )
 {
     m_sdbSizer1OK->Enable( true );
     m_sdbSizer1OK->SetDefault();
-}
-
-
-bool DIALOG_ANNOTATE::GetLevel()
-{
-    return m_rbScope->GetSelection() == 0;
 }
 
 
@@ -226,6 +221,18 @@ bool DIALOG_ANNOTATE::GetResetItems()
 bool DIALOG_ANNOTATE::GetLockUnits()
 {
     return m_rbOptions->GetSelection() == 2;
+}
+
+
+ANNOTATE_SCOPE_T DIALOG_ANNOTATE::GetScope()
+{
+    switch( m_rbScope->GetSelection() )
+    {
+    case 0:  return ANNOTATE_ALL;
+    case 1:  return ANNOTATE_CURRENT_SHEET;
+    case 2:  return ANNOTATE_SELECTION;
+    default: return ANNOTATE_ALL;
+    }
 }
 
 
