@@ -513,7 +513,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         testHoles = false;
     }
 
-    if( pad->GetAttribute() == PAD_ATTRIB_NPTH )
+    // A NPTH has no cylinder, but it may still have pads on some layers
+    if( pad->GetAttribute() == PAD_ATTRIB_NPTH && !pad->FlashLayer( layer ) )
         testClearance = false;
 
     if( !IsCopperLayer( layer ) )
