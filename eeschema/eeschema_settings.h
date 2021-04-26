@@ -132,6 +132,8 @@ public:
 
     struct PANEL_ANNOTATE
     {
+        int scope;
+        int options;
         int method;
         int messages_filter;
         int sort_order;

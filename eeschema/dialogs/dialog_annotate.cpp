@@ -59,18 +59,9 @@ private:
     bool GetResetItems();
     bool GetLockUnits();
 
-    /**
-     * @return 0 if annotation by X position,
-     *         1 if annotation by Y position,
-     */
-    int GetSortOrder();
+    ANNOTATE_ORDER_T GetSortOrder();
 
-    /**
-     * @return 0 if annotation using first free Id value
-     *         1 for first free Id value inside sheet num * 100 to sheet num * 100 + 99
-     *         2 for first free Id value inside sheet num * 1000 to sheet num * 1000 + 999
-     */
-    int GetAnnotateAlgo();
+    ANNOTATE_ALGO_T GetAnnotateAlgo();
 
     int GetStartNumber();
 
@@ -117,6 +108,8 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
 
     cfg->m_AnnotatePanel.sort_order = GetSortOrder();
     cfg->m_AnnotatePanel.method = GetAnnotateAlgo();
+    cfg->m_AnnotatePanel.options = m_rbOptions->GetSelection();
+    cfg->m_AnnotatePanel.scope = m_rbScope->GetSelection();
     cfg->m_AnnotatePanel.messages_filter = m_MessageWindow->GetVisibleSeverities();
 }
 
@@ -127,8 +120,8 @@ void DIALOG_ANNOTATE::InitValues()
     int option;
 
     // These are always reset to attempt to keep the user out of trouble...
-    m_rbScope->SetSelection( 0 );
-    m_rbOptions->SetSelection( 0 );
+    m_rbScope->SetSelection( cfg->m_AnnotatePanel.scope );
+    m_rbOptions->SetSelection( cfg->m_AnnotatePanel.options );
 
     option = cfg->m_AnnotatePanel.sort_order;
 
@@ -179,8 +172,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     REPORTER& reporter = m_MessageWindow->Reporter();
     m_MessageWindow->SetLazyUpdate( true );     // Don't update after each message
 
-    m_Parent->AnnotateSymbols( GetLevel(), (ANNOTATE_ORDER_T) GetSortOrder(),
-                               (ANNOTATE_OPTION_T) GetAnnotateAlgo(), GetStartNumber(),
+    m_Parent->AnnotateSymbols( GetLevel(), GetSortOrder(), GetAnnotateAlgo(), GetStartNumber(),
                                GetResetItems(), true, GetLockUnits(), reporter );
 
     m_MessageWindow->Flush( true );             // Now update to show all messages
@@ -237,23 +229,23 @@ bool DIALOG_ANNOTATE::GetLockUnits()
 }
 
 
-int DIALOG_ANNOTATE::GetSortOrder()
+ANNOTATE_ORDER_T DIALOG_ANNOTATE::GetSortOrder()
 {
     if( m_rbSortBy_Y_Position->GetValue() )
-        return 1;
+        return SORT_BY_Y_POSITION;
     else
-        return 0;
+        return SORT_BY_X_POSITION;
 }
 
 
-int DIALOG_ANNOTATE::GetAnnotateAlgo()
+ANNOTATE_ALGO_T DIALOG_ANNOTATE::GetAnnotateAlgo()
 {
     if( m_rbSheetX100->GetValue() )
-        return 1;
+        return SHEET_NUMBER_X_100;
     else if( m_rbSheetX1000->GetValue() )
-        return 2;
+        return SHEET_NUMBER_X_1000;
     else
-        return 0;
+        return INCREMENTAL_BY_REF;
 }
 
 

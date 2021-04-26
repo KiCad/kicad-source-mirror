@@ -65,7 +65,8 @@ class HIERARCHY_NAVIG_DLG;
 
 // @todo Move this to transform alone with all of the transform manipulation code.
 /// enum used in RotationMiroir()
-enum COMPONENT_ORIENTATION_T {
+enum COMPONENT_ORIENTATION_T
+{
     CMP_NORMAL,                     // Normal orientation, no rotation or mirror
     CMP_ROTATE_CLOCKWISE,           // Rotate -90
     CMP_ROTATE_COUNTERCLOCKWISE,    // Rotate +90
@@ -79,7 +80,8 @@ enum COMPONENT_ORIENTATION_T {
 
 
 /** Schematic annotation order options. */
-enum ANNOTATE_ORDER_T {
+enum ANNOTATE_ORDER_T
+{
     SORT_BY_X_POSITION,     ///< Annotate by X position from left to right.
     SORT_BY_Y_POSITION,     ///< Annotate by Y position from top to bottom.
     UNSORTED,               ///< Annotate by position of component in the schematic sheet
@@ -88,7 +90,8 @@ enum ANNOTATE_ORDER_T {
 
 
 /** Schematic annotation type options. */
-enum ANNOTATE_OPTION_T {
+enum ANNOTATE_ALGO_T
+{
     INCREMENTAL_BY_REF,     ///< Annotate incrementally using the first free reference number.
     SHEET_NUMBER_X_100,     ///< Annotate using the first free reference number starting at
                             ///< the sheet number * 100.
@@ -98,13 +101,15 @@ enum ANNOTATE_OPTION_T {
 
 
 /// Schematic search type used by the socket link with Pcbnew
-enum SCH_SEARCH_T {
+enum SCH_SEARCH_T
+{
     HIGHLIGHT_PIN,
     HIGHLIGHT_COMPONENT
 };
 
 
-enum SCH_CLEANUP_FLAGS {
+enum SCH_CLEANUP_FLAGS
+{
     NO_CLEANUP,
     LOCAL_CLEANUP,
     GLOBAL_CLEANUP
@@ -369,7 +374,7 @@ public:
      * @param aAnnotateSchematic Annotate the entire schematic if true.  Otherwise annotate
      *                           the current sheet only.
      * @param aSortOption Define the annotation order.  See #ANNOTATE_ORDER_T.
-     * @param aAlgoOption Define the annotation style.  See #ANNOTATE_OPTION_T.
+     * @param aAlgoOption Define the annotation style.  See #ANNOTATE_ALGO_T.
      * @param aStartNumber The start number for non-sheet-based annotation styles.
      * @param aResetAnnotation Clear any previous annotation if true.  Otherwise, keep the
      *                         existing component annotation.
@@ -391,7 +396,7 @@ public:
      * 200 to 299, and so on.
      */
     void AnnotateSymbols( bool aAnnotateSchematic, ANNOTATE_ORDER_T aSortOption,
-                          ANNOTATE_OPTION_T aAlgoOption, int aStartNumber, bool aResetAnnotation,
+                          ANNOTATE_ALGO_T aAlgoOption, int aStartNumber, bool aResetAnnotation,
                           bool aRepairTimestamps, bool aLockUnits, REPORTER& aReporter );
 
     /**

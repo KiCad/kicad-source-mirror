@@ -96,7 +96,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool* aAppendUndo
 
 void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
                                       ANNOTATE_ORDER_T  aSortOption,
-                                      ANNOTATE_OPTION_T aAlgoOption,
+                                      ANNOTATE_ALGO_T   aAlgoOption,
                                       int               aStartNumber,
                                       bool              aResetAnnotation,
                                       bool              aRepairTimestamps,

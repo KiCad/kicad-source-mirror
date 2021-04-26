@@ -193,6 +193,12 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "annotation.method",
             &m_AnnotatePanel.method, 0, 0, 2 ) );
 
+    m_params.emplace_back( new PARAM<int>( "annotation.scope",
+            &m_AnnotatePanel.scope, 0, 0, 2 ) );
+
+    m_params.emplace_back( new PARAM<int>( "annotation.options",
+            &m_AnnotatePanel.options, 0, 0, 2 ) );
+
     m_params.emplace_back( new PARAM<int>( "annotation.messages_filter",
             &m_AnnotatePanel.messages_filter, -1 ) );
 
