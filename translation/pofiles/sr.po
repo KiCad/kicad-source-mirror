@@ -4,17 +4,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-04-08 22:48+0000\n"
+"PO-Revision-Date: 2021-04-28 11:31+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
@@ -498,14 +498,12 @@ msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
-#, fuzzy
 msgid "Camera Options"
-msgstr "Опште опције"
+msgstr "Опције камере"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:110
-#, fuzzy
 msgid "Rotation Increment:"
-msgstr "Повећање текста:"
+msgstr "Инкремент ротације:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:118
 #: common/base_units.cpp:463 pcb_calculator/widgets/unit_selector.cpp:130
@@ -520,9 +518,8 @@ msgid "deg"
 msgstr "deg"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:128
-#, fuzzy
 msgid "Enable animation"
-msgstr "Покрени"
+msgstr "Дозволи анимацију"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:135
 msgid "Animation speed:"
@@ -542,18 +539,16 @@ msgid "Show copper thickness"
 msgstr "Прикажи дебљину бакра"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:175
-#, fuzzy
 msgid "Other Options"
-msgstr "Остало:"
+msgstr "Остале опције"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:182
-#, fuzzy
 msgid "Anti-aliasing:"
-msgstr "Anti-aliasing"
+msgstr "Анти-алијасинг:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
 msgid "Disabled"
-msgstr ""
+msgstr "Онемогућено"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
 msgid "2x"
@@ -578,7 +573,7 @@ msgstr "Појасни избор"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:208
 msgid "While Moving"
-msgstr ""
+msgstr "Током кретања"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:210
 #, fuzzy
@@ -613,7 +608,6 @@ msgid "Procedural textures"
 msgstr "Процедуралне текстуре"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:250
-#, fuzzy
 msgid "Add floor"
 msgstr "Додај под"
 
@@ -634,15 +628,15 @@ msgstr "Број тачака"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:277
 msgid "Spread Factor %"
-msgstr ""
+msgstr "Фактор распршености %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:281
 msgid "Recursion Level"
-msgstr ""
+msgstr "Ниво рекурзије"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:285
 msgid "Shadows:"
-msgstr ""
+msgstr "Сјенке:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:290
 msgid ""
@@ -657,9 +651,8 @@ msgid "Random direction factor of the cast rays"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:303
-#, fuzzy
 msgid "Reflections:"
-msgstr "Рефлекције"
+msgstr "Рефлекције:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:308
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -716,44 +709,36 @@ msgid "Azimuth (degrees)"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:446
-#, fuzzy
 msgid "1:"
-msgstr "1:1"
+msgstr "1:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:462
-#, fuzzy
 msgid "5:"
-msgstr "5"
+msgstr "5:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:475
-#, fuzzy
 msgid "2:"
-msgstr "2:1"
+msgstr "2:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:491
-#, fuzzy
 msgid "6:"
-msgstr "6"
+msgstr "6:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:504
-#, fuzzy
 msgid "3:"
-msgstr "3:2"
+msgstr "3:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:520
-#, fuzzy
 msgid "7:"
-msgstr "7"
+msgstr "7:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:533
-#, fuzzy
 msgid "4:"
-msgstr "4"
+msgstr "4:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:549
-#, fuzzy
 msgid "8:"
-msgstr "8"
+msgstr "8:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:571
 #, fuzzy
