@@ -969,6 +969,9 @@ int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
     // Filter the view items based on the selection box
     BOX2I selectionBox;
 
+    // Intermediate step to allow filtering against hierarchy
+    GENERAL_COLLECTOR collection;
+
     selectionBox.SetMaximum();
     view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
@@ -979,8 +982,13 @@ int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
         if( !item || !Selectable( item ) || !itemPassesFilter( item ) )
             continue;
 
-        select( item );
+        collection.Append( item );
     }
+
+    FilterCollectorForHierarchy( collection );
+
+    for( EDA_ITEM* item : collection )
+        select( static_cast<BOARD_ITEM*>( item ) );
 
     m_frame->GetCanvas()->ForceRefresh();
 
