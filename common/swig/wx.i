@@ -274,6 +274,14 @@ public:
 }
 
 
+%typemap(in) wxString& (bool temp=false)
+{
+    $1 = new wxString( Py2wxString( $input ) );
+    if ($1 == NULL) SWIG_fail;
+    temp = true;
+}
+
+
 %typemap(out) wxString
 {
     $result = PyUnicode_FromString($1.utf8_str());
