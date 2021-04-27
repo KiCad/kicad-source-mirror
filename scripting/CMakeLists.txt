@@ -10,6 +10,7 @@ add_library( scripting STATIC
 target_link_libraries( scripting
     ${wxWidgets_LIBRARIES}      # wxLogDebug, wxASSERT
     ${Boost_LIBRARIES}          # Because of the OPT types
+    ${PYTHON_LIBRARIES}
     common
 )
 
@@ -45,7 +46,7 @@ target_include_directories( scripting_kiface PRIVATE
     ${wxWidgets_LIBRARIES}
     ${Boost_INCLUDE_DIR}
 )
-    
+
 target_link_libraries( scripting_kiface
     scripting
     )
@@ -55,7 +56,7 @@ set_target_properties( scripting_kiface PROPERTIES
     PREFIX          ${KIFACE_PREFIX}
     SUFFIX          ${KIFACE_SUFFIX}
     )
-    
+
 if( MAKE_LINK_MAPS )
     set_target_properties( scripting_kiface PROPERTIES
         LINK_FLAGS "-Wl,-cref,-Map=_scripting.kiface.map" )

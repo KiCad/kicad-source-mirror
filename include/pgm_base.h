@@ -38,6 +38,7 @@
 #include <wx/filename.h>
 #include <wx/gdicmn.h>
 
+#undef pid_t
 #include <pybind11/embed.h>
 
 class wxSingleInstanceChecker;
