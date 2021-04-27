@@ -26,8 +26,9 @@
  * @file wx_python_helpers.cpp
  * @brief Python wrapping helpers for wx structures/objects
  */
+
+#include <Python.h> // must be first to avoid wx/python typedef conflicts on msvc
 #include <macros.h>
-#include <Python.h>
 #include <wx/intl.h>
 #include <wx/string.h>
 #include <wx/arrstr.h>
