@@ -818,11 +818,14 @@ find_package( PythonLibs 3.6 REQUIRED )
 # so long as unused search paths are at the end like this.
 set( INC_AFTER ${INC_AFTER} ${PYTHON_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/scripting )
 
-# Find the wxPython installation
-find_package( wxPython REQUIRED )
 
-if( WXPYTHON_VERSION VERSION_LESS 4.0.0 )
-    message( FATAL_ERROR "wxPython Phoenix is required" )
+if( KICAD_SCRIPTING_WXPYTHON )
+    # Find the wxPython installation
+    find_package( wxPython REQUIRED )
+
+    if( WXPYTHON_VERSION VERSION_LESS 4.0.0 )
+        message( FATAL_ERROR "wxPython Phoenix is required" )
+    endif()
 endif()
 
 # GTK3 is required on Linux
