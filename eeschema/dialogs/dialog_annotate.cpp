@@ -56,7 +56,6 @@ private:
 
     // User functions:
     bool GetResetItems();
-    bool GetLockUnits();
 
     ANNOTATE_SCOPE_T GetScope();
 
@@ -173,7 +172,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     m_MessageWindow->SetLazyUpdate( true );     // Don't update after each message
 
     m_Parent->AnnotateSymbols( GetScope(), GetSortOrder(), GetAnnotateAlgo(),
-                               GetStartNumber(), GetResetItems(), true, GetLockUnits(), reporter );
+                               GetStartNumber(), GetResetItems(), true, reporter );
 
     m_MessageWindow->Flush( true );             // Now update to show all messages
 
@@ -214,12 +213,6 @@ void DIALOG_ANNOTATE::OnOptionChanged( wxCommandEvent& event )
 bool DIALOG_ANNOTATE::GetResetItems()
 {
     return m_rbOptions->GetSelection() >= 1;
-}
-
-
-bool DIALOG_ANNOTATE::GetLockUnits()
-{
-    return m_rbOptions->GetSelection() == 2;
 }
 
 

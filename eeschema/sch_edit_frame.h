@@ -378,7 +378,9 @@ public:
     void DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool* appendUndo );
 
     /**
-     * Annotate the symbols in the schematic that are not currently annotated.
+     * Annotate the symbols in the schematic that are not currently annotated. Multi-unit symbols
+     * are annotated together. E.g. if two components were R8A and R8B, they may become R3A and
+     * R3B, but not R3A and R3C or R3C and R4D.
      *
      * @param aAnnotateScope See #ANNOTATE_SCOPE_T
      * @param aSortOption Define the annotation order.  See #ANNOTATE_ORDER_T.
@@ -390,13 +392,6 @@ public:
      *                          Otherwise, keep the existing time stamps.  This option
      *                          could change previous annotation because time stamps are
      *                          used to handle annotation in complex hierarchies.
-     * @param aLockUnits    When both aLockUnits and aResetAnnotation are true, all unit
-     *                      associations should be kept when reannotating. That is, if two
-     *                      components were R8A and R8B, they may become R3A and R3B, but not
-     *                      R3A and R3C or R3C and R4D.
-     *                      When aResetAnnotation is true but aLockUnits is false, the usual
-     *                      behavior of annotating each part individually is performed.
-     *                      When aResetAnnotation is false, this option has no effect.
      * @param aReporter A sink for error messages.  Use NULL_REPORTER if you don't need errors.
      *
      * When the sheet number is used in annotation, each sheet annotation starts from sheet
@@ -405,7 +400,7 @@ public:
      */
     void AnnotateSymbols( ANNOTATE_SCOPE_T aAnnotateScope, ANNOTATE_ORDER_T aSortOption,
                           ANNOTATE_ALGO_T aAlgoOption, int aStartNumber, bool aResetAnnotation,
-                          bool aRepairTimestamps, bool aLockUnits, REPORTER& aReporter );
+                          bool aRepairTimestamps, REPORTER& aReporter );
 
     /**
      * Check for annotation errors.

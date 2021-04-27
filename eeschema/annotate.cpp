@@ -129,7 +129,6 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
                                       int               aStartNumber,
                                       bool              aResetAnnotation,
                                       bool              aRepairTimestamps,
-                                      bool              aLockUnits,
                                       REPORTER&         aReporter )
 {
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
@@ -162,23 +161,20 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
         }
     }
 
-    // If units must be locked, collect all the sets that must be annotated together.
-    if( aLockUnits )
+    // Collect all the sets that must be annotated together.
+    switch( aAnnotateScope )
     {
-        switch( aAnnotateScope )
-        {
-        case ANNOTATE_ALL:
-            sheets.GetMultiUnitSymbols( lockedSymbols );
-            break;
+    case ANNOTATE_ALL:
+        sheets.GetMultiUnitSymbols( lockedSymbols );
+        break;
 
-        case ANNOTATE_CURRENT_SHEET:
-            currentSheet.GetMultiUnitSymbols( lockedSymbols );
-            break;
+    case ANNOTATE_CURRENT_SHEET:
+        currentSheet.GetMultiUnitSymbols( lockedSymbols );
+        break;
 
-        case ANNOTATE_SELECTION:
-            selection.GetMultiUnitSymbols( lockedSymbols, currentSheet );
-            break;
-        }
+    case ANNOTATE_SELECTION:
+        selection.GetMultiUnitSymbols( lockedSymbols, currentSheet );
+        break;
     }
 
     // Store previous annotations for building info messages

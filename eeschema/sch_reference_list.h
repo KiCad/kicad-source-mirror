@@ -92,8 +92,8 @@ public:
      * Attempt to split the reference designator into a name (U) and number (1).
      *
      * If the last character is '?' or not a digit, the reference is tagged as not annotated.
-     * For symbols with multiple parts per package that are not already annotated, sets m_unit
-     * to a max value (0x7FFFFFFF).
+     * For symbols with multiple parts per package that are not already annotated, keeps the unit
+     * number the same. E.g. U?A or U?B
      */
     void Split();
 
@@ -257,8 +257,7 @@ public:
      * Attempt to split all reference designators into a name (U) and number (1).
      *
      * If the last character is '?' or not a digit, the reference is tagged as not annotated.
-     * For symbols with multiple parts per package that are not already annotated, set m_unit
-     * to a max value (0x7FFFFFFF).
+     * For symbols with multiple parts, keeps the unit number intact
      * @see SCH_REFERENCE::Split()
      */
     void SplitReferences()

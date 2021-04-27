@@ -81,7 +81,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 
 	fgSizer1->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );
 
-	wxString m_rbOptionsChoices[] = { _("Keep existing annotations"), _("Reset existing annotations"), _("Reset, but keep order of multi-unit parts") };
+	wxString m_rbOptionsChoices[] = { _("Keep existing annotations"), _("Reset existing annotations") };
 	int m_rbOptionsNChoices = sizeof( m_rbOptionsChoices ) / sizeof( wxString );
 	m_rbOptions = new wxRadioBox( this, wxID_ANY, _("Options"), wxDefaultPosition, wxDefaultSize, m_rbOptionsNChoices, m_rbOptionsChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbOptions->SetSelection( 0 );

@@ -299,12 +299,28 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
 
     int originalSize = GetCount();
 
-    // We don't want to reannotate the additional references even if not annotated
-    // so we change the m_isNew flag to be false after splitting
+    // For multi units components, store the list of already used full references.
+    // The algorithm tries to allocate the new reference to components having the same
+    // old reference.
+    // This algo works fine as long as the previous annotation has no duplicates.
+    // But when a hierarchy is reannotated with this option, the previous anotation can
+    // have duplicate references, and obviously we must fix these duplicate.
+    // therefore do not try to allocate a full reference more than once when trying
+    // to keep this order of multi units.
+    // inUseRefs keep trace of previously allocated references
+    std::unordered_set<wxString> inUseRefs;
+
     for( size_t i = 0; i < aAdditionalRefs.GetCount(); i++ )
     {
         SCH_REFERENCE additionalRef = aAdditionalRefs[i];
         additionalRef.Split();
+
+        // Add the additional reference to the multi-unit set if annotated
+        if( !additionalRef.m_isNew )
+            inUseRefs.insert( buildFullReference( additionalRef ) );
+
+        // We don't want to reannotate the additional references even if not annotated
+        // so we change the m_isNew flag to be false after splitting
         additionalRef.m_isNew = false;
         AddItem( additionalRef ); //add to this container
     }
@@ -327,18 +343,6 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         minRefId = flatList[first].m_sheetNum * aSheetIntervalId + 1;
     else
         minRefId = aStartNumber + 1;
-
-    // For multi units components, when "keep order of multi unit" option is selected,
-    // store the list of already used full references.
-    // The algorithm try to allocate the new reference to components having the same
-    // old reference.
-    // This algo works fine as long as the previous annotation has no duplicates.
-    // But when a hierarchy is reannotated with this option, the previous anotation can
-    // have duplicate references, and obviously we must fix these duplicate.
-    // therefore do not try to allocate a full reference more than once when trying
-    // to keep this order of multi units.
-    // inUseRefs keep trace of previously allocated references
-    std::unordered_set<wxString> inUseRefs;
 
     // This is the list of all Id already in use for a given reference prefix.
     // Will be refilled for each new reference prefix.
@@ -395,7 +399,6 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 ref_unit.m_numRef = LastReferenceNumber;
             }
 
-            ref_unit.m_unit  = 1;
             ref_unit.m_flag  = 1;
             ref_unit.m_isNew = false;
             continue;
@@ -408,9 +411,6 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         {
             LastReferenceNumber = CreateFirstFreeRefId( idList, minRefId );
             ref_unit.m_numRef = LastReferenceNumber;
-
-            if( !ref_unit.IsUnitsLocked() && !lockedList )
-                ref_unit.m_unit = 1;
 
             ref_unit.m_flag = 1;
         }
@@ -453,7 +453,6 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                     if( inUseRefs.find( ref_candidate ) == inUseRefs.end() )
                     {
                         flatList[jj].m_numRef = ref_unit.m_numRef;
-                        flatList[jj].m_unit = thisRef.m_unit;
                         flatList[jj].m_isNew = false;
                         flatList[jj].m_flag = 1;
                         // lock this new full reference
@@ -504,11 +503,9 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                         continue;
 
                     // Component without reference number found, annotate it if possible
-                    if( !cmp_unit.IsUnitsLocked()
-                        || ( cmp_unit.m_unit == Unit ) )
+                    if( cmp_unit.m_unit == Unit )
                     {
                         cmp_unit.m_numRef = ref_unit.m_numRef;
-                        cmp_unit.m_unit   = Unit;
                         cmp_unit.m_flag   = 1;
                         cmp_unit.m_isNew  = false;
                         break;
@@ -743,9 +740,6 @@ void SCH_REFERENCE::Split()
     {
         m_isNew = true;
 
-        if( !IsUnitsLocked() )
-            m_unit = 0x7FFFFFFF;
-
         refText.erase( ll );  // delete last char
 
         SetRefStr( refText );
@@ -753,9 +747,6 @@ void SCH_REFERENCE::Split()
     else if( isdigit( refText[ll] ) == 0 )
     {
         m_isNew = true;
-
-        if( !IsUnitsLocked() )
-            m_unit = 0x7FFFFFFF;
     }
     else
     {
