@@ -1,51 +1,58 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
-
+import sys
 from pcbnew import *
 
-size_0_6mm = wxSizeMM(0.6,0.6)
-size_1_0mm = wxSizeMM(1.0,1.0)
+# A helper function to convert a UTF8 string coming from Kicad for python2 or python3
+def fromUTF8Text( aText ):
+    if sys.version_info < (3, 0):
+        return aText.encode()
+    else:
+        return aText
 
-# create a blank board
-pcb = BOARD()
+def GenerateBoard():
+    size_0_6mm = wxSizeMM(0.6,0.6)
+    size_1_0mm = wxSizeMM(1.0,1.0)
 
-pcb.GetNetClasses().GetDefault().SetClearance(FromMM(0.1))
+    # create a blank board
+    pcb = CreateEmptyBoard()
 
-# create a new module, it's parent is our previously created pcb
-module = FOOTPRINT(pcb)
-module.SetReference("M1")   # give it a reference name
-module.Reference().SetPos0(wxPointMM(6,-2))
-module.Reference().SetDrawCoord()
-pcb.Add(module)             # add it to our pcb
-m_pos = wxPointMM(50,50)
-module.SetPosition(m_pos)
+    # create a new footprint, it's parent is our previously created pcb
+    footprint = FOOTPRINT(pcb)
+    footprint.SetReference("M1")   # give it a reference name
+    footprint.Reference().SetPos0(wxPointMM(6,-2))
+    footprint.Reference().SetDrawCoord()
+    pcb.Add(footprint)             # add it to our pcb
+    m_pos = wxPointMM(50,50)
+    footprint.SetPosition(m_pos)
 
-# create a pad array and add it to the module
-n = 1
-for y in range (0,10):
-    for x in range (0,10):
-        pad = PAD(module)
-        pad.SetDrillSize(size_0_6mm)
-        pad.SetSize(size_1_0mm)
-        pt = wxPointMM(1.27*x,1.27*y)
-        pad.SetPos0(pt);
-        pad.SetDrawCoord()
-        pad.SetName(str(n))
-        module.Add(pad)
-        n+=1
-
-
-# save the PCB to disk
-pcb.Save("my2.kicad_pcb")
-
-pcb = LoadBoard("my2.kicad_pcb")
-
-print(map( lambda x: x.GetReference() , list(pcb.GetFootprints())))
-
-for m in pcb.GetFootprints():
-    for p in m.Pads():
-        print('pad ', p.GetName(), p.GetPosition(), p.GetOffset())
+    # create a pad array and add it to the footprint
+    n = 1
+    for y in range (0,5):
+        for x in range (0,5):
+            pad = PAD(footprint)
+            pad.SetDrillSize(size_0_6mm)
+            pad.SetSize(size_1_0mm)
+            pt = wxPointMM(1.27*x,1.27*y)
+            pad.SetPos0(pt);
+            pad.SetDrawCoord()
+            pad.SetName(str(n))
+            footprint.Add(pad)
+            n+=1
 
 
-# pcb.GetDesignSettings()
+    # save the PCB to disk
+    pcb.Save("my2.kicad_pcb")
+
+def ReadBoard():
+    pcb = LoadBoard("my2.kicad_pcb")
+
+    for m in pcb.GetFootprints():
+        print( 'footprint: ', fromUTF8Text( m.GetReference() ) )
+
+        for p in m.Pads():
+            print('pad ', fromUTF8Text( p.GetName() ), ToMM(p.GetPosition()), ToMM(p.GetOffset()))
+
+GenerateBoard()
+ReadBoard()

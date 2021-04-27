@@ -24,8 +24,8 @@ import sys
 import os
 from pcbnew import *
 
-# A helper function to convert a string filename for python2 or python3
-def getFName( afilename ):
+# A helper function to convert a UTF8 string for python2 or python3
+def fromUTF8Text( afilename ):
     if sys.version_info < (3, 0):
         return afilename.encode()
     else:
@@ -100,7 +100,7 @@ for layer_info in plot_plan:
     pctl.SetLayer(layer_info[1])
     pctl.OpenPlotfile(layer_info[0], PLOT_FORMAT_GERBER, layer_info[2])
 
-    print( 'plot %s' % getFName( pctl.GetPlotFileName() ) )
+    print( 'plot %s' % fromUTF8Text( pctl.GetPlotFileName() ) )
 
     if gen_job_file == True:
         jobfile_writer.AddGbrFile( layer_info[1], os.path.basename(pctl.GetPlotFileName()) );
@@ -116,7 +116,7 @@ for innerlyr in range ( 1, lyrcnt-1 ):
     lyrname = 'inner%s' % innerlyr
     pctl.OpenPlotfile(lyrname, PLOT_FORMAT_GERBER, "inner")
 
-    print( "plot %s" % getFName( pctl.GetPlotFileName() ) )
+    print( "plot %s" % fromUTF8Text( pctl.GetPlotFileName() ) )
 
     if pctl.PlotLayer() == False:
         print( "plot error" )
@@ -144,12 +144,12 @@ drlwriter.SetFormat( metricFmt )
 
 genDrl = True
 genMap = True
-print( 'create drill and map files in %s' % getFName( pctl.GetPlotFileName() ) )
+print( 'create drill and map files in %s' % fromUTF8Text( pctl.GetPlotFileName() ) )
 drlwriter.CreateDrillandMapFilesSet( pctl.GetPlotDirName(), genDrl, genMap );
 
 # One can create a text file to report drill statistics
 rptfn = pctl.GetPlotDirName() + 'drill_report.rpt'
-print( 'report: %s' % getFName( rptfn ) )
+print( 'report: %s' % fromUTF8Text( rptfn ) )
 drlwriter.GenDrillReportFile( rptfn );
 
 if gen_job_file == True:
@@ -157,7 +157,7 @@ if gen_job_file == True:
     job_fn=os.path.dirname(pctl.GetPlotFileName()) + '/' + os.path.basename(filename)
     job_fn=os.path.splitext(job_fn)[0] + '.gbrjob'
 
-    print( 'create job file %s ' % getFName( job_fn ) )
+    print( 'create job file %s ' % fromUTF8Text( job_fn ) )
 
     jobfile_writer.CreateJobFile( job_fn )
 

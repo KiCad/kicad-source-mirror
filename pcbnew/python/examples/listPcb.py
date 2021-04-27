@@ -5,6 +5,13 @@ from __future__ import print_function
 import sys
 from pcbnew import *
 
+# A helper function to convert a UTF8 string for python2 or python3
+def fromUTF8Text( afilename ):
+    if sys.version_info < (3, 0):
+        return afilename.encode()
+    else:
+        return afilename
+
 filename=sys.argv[1]
 
 pcb = LoadBoard(filename)
@@ -14,7 +21,7 @@ FromUnits = FromMM
 #ToUnits=ToMils
 #FromUnits=FromMils
 
-print("LISTING VIAS:")
+print("List vias:")
 
 for item in pcb.GetTracks():
     if type(item) is VIA:
@@ -36,21 +43,21 @@ for item in pcb.GetTracks():
         print("Unknown type    %s" % type(item))
 
 print("")
-print("LIST DRAWINGS:")
+print("List drawings:")
 
 for item in pcb.GetDrawings():
-    if type(item) is TEXTE_PCB:
-        print("* Text:    '%s' at %s" % (item.GetText(), item.GetPosition()))
-    elif type(item) is DRAWSEGMENT:
-        print("* Drawing: %s" % item.GetShapeStr())  # dir(item)
+    if type(item) is PCB_TEXT:
+        print("* Text:    '%s' at %s" % ( fromUTF8Text( item.GetText() ), ToUnits(item.GetPosition()) ) )
+    elif type(item) is PCB_SHAPE:
+        print( "* Drawing: %s" % fromUTF8Text( item.GetShapeStr() ) )
     else:
-        print(type(item))
+        print("* Drawing type: %s" % type(item))
 
 print("")
-print("LIST MODULES:")
+print("List footprints:")
 
-for module in pcb.GetFootprints():
-    print("* Module: %s at %s" % (module.GetReference(), ToUnits(module.GetPosition())))
+for footprint in pcb.Footprints():
+    print("* Module: %s at %s" % ( fromUTF8Text( footprint.GetReference() ), ToUnits(footprint.GetPosition())))
 
 print("")
 print("Nets cnt: ", pcb.GetNetCount())
@@ -58,11 +65,8 @@ print("track w cnt:", len(pcb.GetTrackWidthList()))
 print("via s cnt:", len(pcb.GetViasDimensionsList()))
 
 print("")
-print("LIST ZONES:", pcb.GetAreaCount())
+print("List zones:", pcb.GetAreaCount())
 
 for idx in range(0, pcb.GetAreaCount()):
     zone=pcb.GetArea(idx)
-    print("zone:", idx, "priority:", zone.GetPriority(), "netname", zone.GetNetname())
-
-print("")
-print("NetClasses:", pcb.GetNetClasses().GetCount())
+    print("zone:", idx, "priority:", zone.GetPriority(), "netname", fromUTF8Text( zone.GetNetname() ) )
