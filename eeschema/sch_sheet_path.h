@@ -108,6 +108,7 @@ class SCH_SHEET;
 class SCH_SCREEN;
 class SCH_MARKER;
 class SCH_ITEM;
+class SCH_COMPONENT;
 class SCH_REFERENCE_LIST;
 
 
@@ -266,6 +267,20 @@ public:
     void UpdateAllScreenReferences();
 
     /**
+     * Append a #SCH_REFERENCE object to \a aReferences based on \a aSymbol
+     *
+     * @param aReferences List of references to populate.
+     * @param aSymbol A symbol to add to aReferences
+     * @param aIncludePowerSymbols set to false to only get normal symbols.
+     * @param aForceIncludeOrphanSymbols set to true to include symbols having no symbol found
+     *                                   in lib.   The normal option is false, and set to true
+     *                                   only to build the full list of symbols.
+     */
+    void AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_COMPONENT* aSymbol,
+                       bool aIncludePowerSymbols = true,
+                       bool aForceIncludeOrphanSymbols = false ) const;
+
+    /**
      * Adds #SCH_REFERENCE object to \a aReferences for each symbol in the sheet.
      *
      * @param aReferences List of references to populate.
@@ -276,6 +291,19 @@ public:
      */
     void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
                      bool aForceIncludeOrphanSymbols = false ) const;
+
+    /**
+     * Append a #SCH_REFERENCE_LIST object to \a aRefList based on \a aSymbol,
+     * storing same-reference set of multi-unit parts together.
+     *
+     * The map key for each element will be the reference designator.
+     *
+     * @param aRefList Map of reference designators to reference lists
+     * @param aSymbol A symbol to add to aRefList
+     * @param aIncludePowerSymbols Set to false to only get normal symbols.
+     */
+    void AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList, SCH_COMPONENT* aSymbol,
+                                bool aIncludePowerSymbols = true ) const;
 
     /**
      * Add a #SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of

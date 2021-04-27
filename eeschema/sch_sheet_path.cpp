@@ -267,20 +267,27 @@ void SCH_SHEET_PATH::GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludeP
     for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
     {
         SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+        AppendSymbol( aReferences, symbol, aIncludePowerSymbols, aForceIncludeOrphanSymbols );
+    }
+}
 
-        // Skip pseudo-symbols, which have a reference starting with #.  This mainly
-        // affects power symbols.
-        if( aIncludePowerSymbols || symbol->GetRef( this )[0] != wxT( '#' ) )
+
+void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_COMPONENT* aSymbol,
+                                   bool aIncludePowerSymbols,
+                                   bool aForceIncludeOrphanSymbols ) const
+{
+    // Skip pseudo-symbols, which have a reference starting with #.  This mainly
+    // affects power symbols.
+    if( aIncludePowerSymbols || aSymbol->GetRef( this )[0] != wxT( '#' ) )
+    {
+        LIB_PART* part = aSymbol->GetPartRef().get();
+
+        if( part || aForceIncludeOrphanSymbols )
         {
-            LIB_PART* part = symbol->GetPartRef().get();
+            SCH_REFERENCE schReference( aSymbol, part, *this );
 
-            if( part || aForceIncludeOrphanSymbols )
-            {
-                SCH_REFERENCE schReference( symbol, part, *this );
-
-                schReference.SetSheetNumber( m_virtualPageNumber );
-                aReferences.AddItem( schReference );
-            }
+            schReference.SetSheetNumber( m_virtualPageNumber );
+            aReferences.AddItem( schReference );
         }
     }
 }
@@ -292,26 +299,33 @@ void SCH_SHEET_PATH::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList
     for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
     {
         SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+        AppendMultiUnitSymbol( aRefList, symbol, aIncludePowerSymbols );
+    }
+}
 
-        // Skip pseudo-symbols, which have a reference starting with #.  This mainly
-        // affects power symbols.
-        if( !aIncludePowerSymbols && symbol->GetRef( this )[0] == wxT( '#' ) )
-            continue;
 
-        LIB_PART* part = symbol->GetPartRef().get();
+void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
+                                            SCH_COMPONENT*                aSymbol,
+                                            bool aIncludePowerSymbols ) const
+{
+    // Skip pseudo-symbols, which have a reference starting with #.  This mainly
+    // affects power symbols.
+    if( !aIncludePowerSymbols && aSymbol->GetRef( this )[0] == wxT( '#' ) )
+        return;
 
-        if( part && part->GetUnitCount() > 1 )
-        {
-            SCH_REFERENCE schReference = SCH_REFERENCE( symbol, part, *this );
-            schReference.SetSheetNumber( m_virtualPageNumber );
-            wxString reference_str = schReference.GetRef();
+    LIB_PART* part = aSymbol->GetPartRef().get();
 
-            // Never lock unassigned references
-            if( reference_str[reference_str.Len() - 1] == '?' )
-                continue;
+    if( part && part->GetUnitCount() > 1 )
+    {
+        SCH_REFERENCE schReference = SCH_REFERENCE( aSymbol, part, *this );
+        schReference.SetSheetNumber( m_virtualPageNumber );
+        wxString reference_str = schReference.GetRef();
 
-            aRefList[reference_str].AddItem( schReference );
-        }
+        // Never lock unassigned references
+        if( reference_str[reference_str.Len() - 1] == '?' )
+            return;
+
+        aRefList[reference_str].AddItem( schReference );
     }
 }
 
