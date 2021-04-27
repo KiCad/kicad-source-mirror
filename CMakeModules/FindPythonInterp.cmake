@@ -73,8 +73,10 @@ if( ${PYTHON_ROOT_DIR} )
         PATHS ${PYTHON_ROOT_DIR}
         NO_DEFAULT_PATH )
 else()
-    # If there is no specific path given, look for python in the path
-    find_program(PYTHON_EXECUTABLE NAMES ${_Python_NAMES})
+    if(NOT VCPKG_TOOLCHAIN)
+        # If there is no specific path given, look for python in the path
+        find_program(PYTHON_EXECUTABLE NAMES ${_Python_NAMES})
+    endif()
 endif()
 
 # Set up the versions we know about, in the order we will search. Always add
