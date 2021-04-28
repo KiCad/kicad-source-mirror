@@ -196,9 +196,6 @@ void DXF_IMPORT_PLUGIN::reportMsg( const wxString& aMessage )
 
 void DXF_IMPORT_PLUGIN::addSpline( const DL_SplineData& aData )
 {
-    if( m_currentBlock != nullptr )
-        return;
-
     // Called when starting reading a spline
     m_curr_entity.Clear();
     m_curr_entity.m_EntityParseStatus = 1;
@@ -217,9 +214,6 @@ void DXF_IMPORT_PLUGIN::addSpline( const DL_SplineData& aData )
 
 void DXF_IMPORT_PLUGIN::addControlPoint( const DL_ControlPointData& aData )
 {
-    if( m_currentBlock != nullptr )
-        return;
-
     // Called for every spline control point, when reading a spline entity
     m_curr_entity.m_SplineControlPointList.emplace_back( aData.x , aData.y,
                                                                          aData.w );
@@ -228,9 +222,6 @@ void DXF_IMPORT_PLUGIN::addControlPoint( const DL_ControlPointData& aData )
 
 void DXF_IMPORT_PLUGIN::addFitPoint( const DL_FitPointData& aData )
 {
-    if( m_currentBlock != nullptr )
-        return;
-
     // Called for every spline fit point, when reading a spline entity
     // we store only the X,Y coord values in a VECTOR2D
     m_curr_entity.m_SplineFitPointList.emplace_back( aData.x, aData.y );
@@ -239,9 +230,6 @@ void DXF_IMPORT_PLUGIN::addFitPoint( const DL_FitPointData& aData )
 
 void DXF_IMPORT_PLUGIN::addKnot( const DL_KnotData& aData)
 {
-    if( m_currentBlock != nullptr )
-        return;
-
     // Called for every spline knot value, when reading a spline entity
     m_curr_entity.m_SplineKnotsList.push_back( aData.k );
 }
@@ -514,9 +502,6 @@ void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
 
 void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 {
-    if( m_currentBlock != nullptr )
-        return;
-
     DXF_ARBITRARY_AXIS arbAxis      = getArbitraryAxis( getExtrusion() );
     VECTOR3D           centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.cx, aData.cy, aData.cz ) );
 
@@ -950,9 +935,6 @@ double DXF_IMPORT_PLUGIN::getCurrentUnitScale()
 
 void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int code )
 {
-    if( m_currentBlock != nullptr )
-        return;
-
     // Called for every int variable in the DXF file (e.g. "$INSUNITS").
 
     if( key == "$DWGCODEPAGE" )
