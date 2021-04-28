@@ -45,6 +45,8 @@
 #include <settings/settings_manager.h>
 #include <project/project_local_settings.h>
 #include <wildcards_and_files_ext.h>
+#include <locale_io.h>
+
 
 static PCB_EDIT_FRAME* s_PcbEditFrame = NULL;
 
@@ -123,6 +125,10 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
     pro.SetExt( ProjectFileExtension );
     pro.MakeAbsolute();
     wxString projectPath = pro.GetFullPath();
+
+    // Ensure the "C" locale is temporary set, before reading any file
+    // It also avoid wxWidget alerts about locale issues, later, when using Python 3
+    LOCALE_IO dummy;
 
     PROJECT* project = GetSettingsManager()->GetProject( projectPath );
 
