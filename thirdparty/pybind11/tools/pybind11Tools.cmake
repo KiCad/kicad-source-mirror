@@ -120,8 +120,11 @@ set_property(
   TARGET pybind11::module
   APPEND
   PROPERTY
-    INTERFACE_LINK_LIBRARIES pybind11::python_link_helper
-    "$<$<OR:$<PLATFORM_ID:Windows>,$<PLATFORM_ID:Cygwin>>:$<BUILD_INTERFACE:${PYTHON_LIBRARIES}>>")
+    INTERFACE_LINK_LIBRARIES pybind11::python_link_helper)
+
+if(WIN32)
+    target_link_libraries(pybind11::module INTERFACE ${PYTHON_LIBRARIES})
+endif()
 
 if(PYTHON_VERSION VERSION_LESS 3)
   set_property(
@@ -130,10 +133,13 @@ if(PYTHON_VERSION VERSION_LESS 3)
     PROPERTY INTERFACE_LINK_LIBRARIES pybind11::python2_no_register)
 endif()
 
+# KiCad Workaround, this ends tying release libraries into debug builds which doesn't end well
 set_property(
-  TARGET pybind11::embed
-  APPEND
-  PROPERTY INTERFACE_LINK_LIBRARIES pybind11::pybind11 $<BUILD_INTERFACE:${PYTHON_LIBRARIES}>)
+    TARGET pybind11::embed
+    APPEND
+    PROPERTY INTERFACE_LINK_LIBRARIES pybind11::pybind11)
+
+target_link_libraries(pybind11::embed INTERFACE ${PYTHON_LIBRARIES})
 
 function(pybind11_extension name)
   # The prefix and extension are provided by FindPythonLibsNew.cmake
