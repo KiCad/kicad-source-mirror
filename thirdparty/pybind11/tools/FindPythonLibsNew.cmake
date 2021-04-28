@@ -188,6 +188,21 @@ if(CMAKE_HOST_WIN32)
   if(NOT EXISTS "${PYTHON_LIBRARY}")
     get_filename_component(_PYTHON_ROOT ${PYTHON_INCLUDE_DIR} DIRECTORY)
     set(PYTHON_LIBRARY "${_PYTHON_ROOT}/libs/python${PYTHON_LIBRARY_SUFFIX}.lib")
+  elseif(DEFINED VCPKG_TOOLCHAIN AND NOT EXISTS "${PYTHON_LIBRARY}")
+    set(PYTHON_LIBRARY "${PYTHON_PREFIX}/../../lib/python${PYTHON_LIBRARY_SUFFIX}.lib")
+  endif()
+
+  if(DEFINED VCPKG_TOOLCHAIN)
+    unset(PYTHON_LIBRARY)
+    find_library(
+      PYTHON_LIBRARY
+      NAMES "python${PYTHON_LIBRARY_SUFFIX}"
+      NO_SYSTEM_ENVIRONMENT_PATH)
+
+    find_library(PYTHON_DEBUG_LIBRARY
+      NAMES python${PYTHON_LIBRARY_SUFFIX}_d
+      NO_SYSTEM_ENVIRONMENT_PATH
+    )
   endif()
 
   # if we are in MSYS & MINGW, and we didn't find windows python lib, look for system python lib
@@ -233,7 +248,7 @@ else()
   endif()
 endif()
 
-mark_as_advanced(PYTHON_LIBRARY PYTHON_INCLUDE_DIR)
+mark_as_advanced(PYTHON_DEBUG_LIBRARY PYTHON_LIBRARY PYTHON_INCLUDE_DIR)
 
 # We use PYTHON_INCLUDE_DIR, PYTHON_LIBRARY and PYTHON_DEBUG_LIBRARY for the
 # cache entries because they are meant to specify the location of a single
@@ -245,6 +260,10 @@ if(NOT PYTHON_DEBUG_LIBRARY)
   set(PYTHON_DEBUG_LIBRARY "")
 endif()
 set(PYTHON_DEBUG_LIBRARIES "${PYTHON_DEBUG_LIBRARY}")
+
+set(PYTHON_LIBRARY_DEBUG "${PYTHON_DEBUG_LIBRARY}")
+set(PYTHON_LIBRARY_RELEASE "${PYTHON_LIBRARY}")
+select_library_configurations(PYTHON)
 
 find_package_message(PYTHON "Found PythonLibs: ${PYTHON_LIBRARY}"
                      "${PYTHON_EXECUTABLE}${PYTHON_VERSION_STRING}")
