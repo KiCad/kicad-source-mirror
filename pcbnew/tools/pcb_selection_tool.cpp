@@ -707,7 +707,7 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     // Apply the stateful filter
     FilterCollectedItems( collector );
 
-    FilterCollectorForHierarchy( collector );
+    FilterCollectorForHierarchy( collector, false );
 
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
@@ -872,7 +872,7 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             // Apply the stateful filter
             FilterCollectedItems( collector );
 
-            FilterCollectorForHierarchy( collector );
+            FilterCollectorForHierarchy( collector, true );
 
             for( EDA_ITEM* i : collector )
             {
@@ -985,7 +985,7 @@ int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
         collection.Append( item );
     }
 
-    FilterCollectorForHierarchy( collection );
+    FilterCollectorForHierarchy( collection, true );
 
     for( EDA_ITEM* item : collection )
         select( static_cast<BOARD_ITEM*>( item ) );
@@ -2523,7 +2523,8 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 }
 
 
-void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollector ) const
+void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollector,
+                                                      bool aMultiselect ) const
 {
     std::unordered_set<BOARD_ITEM*> toAdd;
 
@@ -2536,8 +2537,11 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
             aCollector[j]->GetParent()->ClearFlags( TEMP_SELECTED );
     }
 
-    for( int j = 0; j < aCollector.GetCount(); j++ )
+    if( aMultiselect )
+    {
+        for( int j = 0; j < aCollector.GetCount(); j++ )
             aCollector[j]->SetFlags( TEMP_SELECTED );
+    }
 
     for( int j = 0; j < aCollector.GetCount(); )
     {

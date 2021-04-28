@@ -157,7 +157,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     if( !( changeFlags & CHT_DONE ) )
                         board->Footprints().front()->Add( boardItem );
                 }
-                else if( boardItem->Type() == PCB_FP_TEXT_T ||
+                else if( boardItem->Type() == PCB_PAD_T ||
+                         boardItem->Type() == PCB_FP_TEXT_T ||
                          boardItem->Type() == PCB_FP_SHAPE_T ||
                          boardItem->Type() == PCB_FP_ZONE_T )
                 {

@@ -437,7 +437,7 @@ public:
         m_ignoreLockedItems         = false;
 
 #if defined(USE_MATCH_LAYER)
-        m_IncludeSecondary          = false;
+        m_includeSecondary          = false;
 #else
         m_includeSecondary          = true;
 #endif
