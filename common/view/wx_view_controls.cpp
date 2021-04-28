@@ -75,7 +75,6 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
         m_state( IDLE ),
         m_parentPanel( aParentPanel ),
         m_scrollScale( 1.0, 1.0 ),
-        m_initialZoomScale( 0.0 ),
 #ifdef __WXGTK3__
         m_lastTimestamp( 0 ),
 #endif
@@ -238,8 +237,9 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
             if( !justWarped )
             {
                 VECTOR2D d = m_dragStartPoint - mousePos;
+                m_dragStartPoint = mousePos;
                 VECTOR2D delta = m_view->ToWorld( d, false );
-                m_view->SetCenter( m_lookStartPoint + delta );
+                m_view->SetCenter( m_view->GetCenter() + delta );
                 aEvent.StopPropagation();
             }
 
@@ -275,11 +275,13 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
             if( !justWarped )
             {
                 VECTOR2D d = m_dragStartPoint - mousePos;
+                m_dragStartPoint = mousePos;
+
                 double scale = exp( d.y * m_settings.m_zoomSpeed * 0.001 );
 
                 wxLogTrace( traceZoomScroll, wxString::Format( "dy: %f  scale: %f", d.y, scale ) );
 
-                m_view->SetScale( m_initialZoomScale * scale, m_view->ToWorld( m_zoomStartPoint ) );
+                m_view->SetScale( m_view->GetScale() * scale, m_view->ToWorld( m_zoomStartPoint ) );
                 aEvent.StopPropagation();
             }
 
@@ -402,7 +404,6 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
             ( aEvent.RightDown() && m_settings.m_dragRight == MOUSE_DRAG_ACTION::PAN ) )
         {
             m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
-            m_lookStartPoint = m_view->GetCenter();
             m_state = DRAG_PANNING;
 
 #if defined USE_MOUSE_CAPTURE
@@ -415,7 +416,6 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         {
             m_dragStartPoint   = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             m_zoomStartPoint = m_dragStartPoint;
-            m_initialZoomScale = m_view->GetScale();
             m_state = DRAG_ZOOMING;
 
 #if defined USE_MOUSE_CAPTURE

@@ -168,9 +168,6 @@ private:
     ///< Store information about point where dragging has started.
     VECTOR2D    m_dragStartPoint;
 
-    ///< Stores information about the center of viewport when dragging has started.
-    VECTOR2D    m_lookStartPoint;
-
     ///< Current direction of panning (only autopanning mode).
     VECTOR2D    m_panDirection;
 
@@ -182,9 +179,6 @@ private:
 
     ///< Current scrollbar position.
     VECTOR2I    m_scrollPos;
-
-    ///< The zoom scale when a drag zoom started.
-    double      m_initialZoomScale;
 
     ///< The mouse position when a drag zoom started.
     VECTOR2D      m_zoomStartPoint;
