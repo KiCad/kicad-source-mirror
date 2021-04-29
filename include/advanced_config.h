@@ -166,11 +166,6 @@ public:
     bool m_DrawBoundingBoxes;
 
     /**
-     * Enable detection of dark mode and automatic switch to dark-mode icon theme
-     */
-    bool m_AllowDarkMode;
-
-    /**
      * Enable exporting board editor netlist to a file for troubleshooting purposes.
      */
     bool m_ShowPcbnewExportNetlist;

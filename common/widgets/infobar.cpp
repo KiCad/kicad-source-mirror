@@ -19,6 +19,7 @@
  */
 
 #include <id.h>
+#include <kiplatform/ui.h>
 #include <widgets/infobar.h>
 #include "wx/artprov.h"
 #include <wx/aui/framemanager.h>
@@ -54,7 +55,10 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
 
 #ifdef __WXMAC__
     // wxWidgets hard-codes wxSYS_COLOUR_INFOBK to { 0xFF, 0xFF, 0xD3 } on Mac.
-    SetBackgroundColour( wxColour( 255, 249, 189 ) );
+    if( KIPLATFORM::UI::IsDarkTheme() )
+        SetBackgroundColour( wxColour( 28, 27, 20 ) );
+    else
+        SetBackgroundColour( wxColour( 255, 249, 189 ) );
 #endif
 
     SetShowHideEffects( wxSHOW_EFFECT_ROLL_TO_BOTTOM, wxSHOW_EFFECT_ROLL_TO_TOP );

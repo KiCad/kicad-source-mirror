@@ -181,11 +181,8 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
 
 #if !wxCHECK_VERSION( 3, 1, 0 )
     // Custom art provider makes dark mode work on wx < 3.1
-    if( ADVANCED_CFG::GetCfg().m_AllowDarkMode )
-    {
-        WX_AUI_TOOLBAR_ART* newArt = new WX_AUI_TOOLBAR_ART();
-        SetArtProvider( newArt );
-    }
+    WX_AUI_TOOLBAR_ART* newArt = new WX_AUI_TOOLBAR_ART();
+    SetArtProvider( newArt );
 #endif
 
     Connect( wxEVT_COMMAND_TOOL_CLICKED, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolEvent ),

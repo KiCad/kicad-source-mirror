@@ -170,7 +170,7 @@ bool BITMAP_STORE::ThemeChanged()
 
     wxString oldTheme = m_theme;
 
-    if( ADVANCED_CFG::GetCfg().m_AllowDarkMode && settings )
+    if( settings )
     {
         switch( settings->m_Appearance.icon_theme )
         {

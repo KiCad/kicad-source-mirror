@@ -159,8 +159,6 @@ static const wxChar HotkeysDumper[] = wxT( "HotkeysDumper" );
 
 static const wxChar DrawBoundingBoxes[] = wxT( "DrawBoundingBoxes" );
 
-static const wxChar AllowDarkMode[] = wxT( "AllowDarkMode" );
-
 static const wxChar ShowPcbnewExportNetlist[] = wxT( "ShowPcbnewExportNetlist" );
 
 } // namespace KEYS
@@ -264,7 +262,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_SmallDrillMarkSize        = 0.35;
     m_HotkeysDumper             = false;
     m_DrawBoundingBoxes         = false;
-    m_AllowDarkMode             = false;
     m_ShowPcbnewExportNetlist   = false;
 
     loadFromConfigFile();
@@ -358,15 +355,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DrawBoundingBoxes,
                                                 &m_DrawBoundingBoxes, false ) );
-
-#if defined( __WXGTK__ ) || defined( __WXMSW__ )
-    bool defaultDarkMode = true;
-#else
-    bool defaultDarkMode = false;
-#endif
-
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::AllowDarkMode,
-                                                &m_AllowDarkMode, defaultDarkMode ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowPcbnewExportNetlist,
                                                 &m_ShowPcbnewExportNetlist, false ) );

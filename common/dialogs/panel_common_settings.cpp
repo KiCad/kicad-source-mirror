@@ -72,14 +72,6 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
     m_antialiasingFallbackLabel->Show( false );
 #endif
 
-    if( !ADVANCED_CFG::GetCfg().m_AllowDarkMode )
-    {
-        m_rbIconThemeLight->Hide();
-        m_rbIconThemeDark->Hide();
-        m_rbIconThemeAuto->Hide();
-        m_stIconTheme->Hide();
-    }
-
     m_textEditorBtn->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
     m_pdfViewerBtn->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
