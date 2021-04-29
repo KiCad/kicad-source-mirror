@@ -25,6 +25,7 @@
 #include "grid_tricks.h"
 #include "lib_pin.h"
 #include "pin_numbers.h"
+#include "pgm_base.h"
 #include <bitmaps.h>
 #include <confirm.h>
 #include <symbol_edit_frame.h>
@@ -34,6 +35,7 @@
 #include <widgets/grid_combobox.h>
 #include <widgets/wx_grid.h>
 #include <settings/settings_manager.h>
+#include <wx/tokenzr.h>
 #include <string_utils.h>
 
 #define UNITS_ALL "ALL"
@@ -41,9 +43,10 @@
 class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 {
 public:
-    PIN_TABLE_DATA_MODEL( SYMBOL_EDIT_FRAME* aFrame ) :
+    PIN_TABLE_DATA_MODEL( SYMBOL_EDIT_FRAME* aFrame, DIALOG_LIB_EDIT_PIN_TABLE* aPinTable ) :
             m_frame( aFrame ),
-            m_edited( false )
+            m_edited( false ),
+            m_pinTable( aPinTable )
     {
         m_frame->Bind( UNITS_CHANGED, &PIN_TABLE_DATA_MODEL::onUnitsChanged, this );
     }
@@ -180,13 +183,77 @@ public:
 
         LIB_PINS pins = m_rows[ aRow ];
 
+        // If the NUMBER column is edited and the pins are grouped, renumber, and add or remove pins based on the comma separated list of pins.
+        if( aCol == COL_NUMBER && m_pinTable->IsDisplayGrouped() )
+        {
+            wxStringTokenizer tokenizer( aValue, "," );
+            size_t            i = 0;
+            while( tokenizer.HasMoreTokens() )
+            {
+                wxString pinName = tokenizer.GetNextToken();
+
+                // Trim whitespace from both ends of the string
+                pinName.Trim( true ).Trim( false );
+
+                if( i < pins.size() )
+                {
+                    // Renumber the existing pins
+                    pins.at( i )->SetNumber( pinName );
+                }
+                else
+                {
+                    // Create new pins
+                    LIB_PIN* newPin = new LIB_PIN( nullptr );
+                    LIB_PIN* last = pins.back();
+
+                    newPin->SetNumber( pinName );
+                    newPin->SetName( last->GetName() );
+                    newPin->SetOrientation( last->GetOrientation() );
+                    newPin->SetType( last->GetType() );
+                    newPin->SetShape( last->GetShape() );
+                    newPin->SetUnit( last->GetUnit() );
+                    newPin->SetParent( last->GetParent() );
+
+                    VECTOR2I pos = last->GetPosition();
+
+                    auto* cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+
+                    if( last->GetOrientation() == PIN_LEFT || last->GetOrientation() == PIN_RIGHT )
+                        pos.y -= Mils2iu( cfg->m_Repeat.pin_step );
+                    else
+                        pos.x += Mils2iu( cfg->m_Repeat.pin_step );
+
+                    newPin->SetPosition( pos );
+
+                    pins.push_back( newPin );
+                    m_pinTable->AddPin( newPin );
+                }
+
+                i++;
+            }
+
+            while( i < pins.size() )
+            {
+                auto pin = pins.back();
+                m_pinTable->RemovePin( pin );
+                pins.pop_back();
+            }
+
+            m_rows[aRow] = pins;
+            m_edited = true;
+
+            return;
+        }
+
         for( LIB_PIN* pin : pins )
         {
             switch( aCol )
             {
             case COL_NUMBER:
-                if( pins.size() == 1 )
+                if( !m_pinTable->IsDisplayGrouped() )
+                {
                     pin->SetNumber( aValue );
+                }
                 break;
 
             case COL_NAME:
@@ -463,6 +530,8 @@ private:
     std::vector<LIB_PINS> m_rows;
 
     bool                  m_edited;
+
+    DIALOG_LIB_EDIT_PIN_TABLE* m_pinTable;
 };
 
 
@@ -472,7 +541,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
         m_editFrame( parent ),
         m_part( aSymbol )
 {
-    m_dataModel = new PIN_TABLE_DATA_MODEL( m_editFrame );
+    m_dataModel = new PIN_TABLE_DATA_MODEL( m_editFrame, this );
 
     // Save original columns widths so we can do proportional sizing.
     for( int i = 0; i < COL_COUNT; ++i )
@@ -671,6 +740,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
 
     LIB_PIN* newPin = new LIB_PIN( nullptr );
 
+    // Copy the settings of the last pin onto the new pin.
     if( m_pins.size() > 0 )
     {
         LIB_PIN* last = m_pins.back();
@@ -678,6 +748,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
         newPin->SetOrientation( last->GetOrientation() );
         newPin->SetType( last->GetType() );
         newPin->SetShape( last->GetShape() );
+        newPin->SetUnit( last->GetUnit() );
 
         VECTOR2I pos = last->GetPosition();
 
@@ -701,6 +772,13 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
     m_grid->EnableCellEditControl( true );
     m_grid->ShowCellEditControl();
 
+    updateSummary();
+}
+
+
+void DIALOG_LIB_EDIT_PIN_TABLE::AddPin( LIB_PIN* pin )
+{
+    m_pins.push_back( pin );
     updateSummary();
 }
 
@@ -734,9 +812,22 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
 }
 
 
+void DIALOG_LIB_EDIT_PIN_TABLE::RemovePin( LIB_PIN* pin )
+{
+    m_pins.erase( std::find( m_pins.begin(), m_pins.end(), pin ) );
+    updateSummary();
+}
+
+
 void DIALOG_LIB_EDIT_PIN_TABLE::OnCellEdited( wxGridEvent& event )
 {
     updateSummary();
+}
+
+
+bool DIALOG_LIB_EDIT_PIN_TABLE::IsDisplayGrouped()
+{
+    return m_cbGroup->GetValue();
 }
 
 

@@ -68,6 +68,9 @@ public:
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnCancel( wxCommandEvent& event ) override;
     void OnClose( wxCloseEvent& event ) override;
+    void AddPin( LIB_PIN* pin );
+    void RemovePin( LIB_PIN* pin );
+    bool IsDisplayGrouped();
 
 protected:
 
