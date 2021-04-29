@@ -145,7 +145,17 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
     if( aRespectRunFromBuildDir && wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
         // Allow debugging from build dir by placing relevant files/folders in the build root
+#if defined( __WXMAC__ )
+        wxFileName fn = wxStandardPaths::Get().GetExecutablePath();
+
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+        path = fn.GetPath();
+#else
         path = Pgm().GetExecutablePath() + wxT( ".." );
+#endif
     }
     else
     {
