@@ -288,10 +288,17 @@ void DRC_ENGINE::loadImplicitRules()
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
-                    DRC_CONSTRAINT constraint( DIFF_PAIR_GAP_CONSTRAINT );
-                    constraint.Value().SetMin( bds.m_MinClearance );
-                    constraint.Value().SetOpt( nc->GetDiffPairGap() );
-                    netclassRule->AddConstraint( constraint );
+                    DRC_CONSTRAINT gapConstraint( DIFF_PAIR_GAP_CONSTRAINT );
+                    gapConstraint.Value().SetMin( bds.m_MinClearance );
+                    gapConstraint.Value().SetOpt( nc->GetDiffPairGap() );
+                    netclassRule->AddConstraint( gapConstraint );
+
+                    // The diffpair gap overrides the netclass min clearance, but not the board
+                    // min clearance.
+                    DRC_CONSTRAINT clearanceConstraint( CLEARANCE_CONSTRAINT );
+                    clearanceConstraint.Value().SetMin( std::max( bds.m_MinClearance,
+                                                                  nc->GetDiffPairGap() ) );
+                    netclassRule->AddConstraint( clearanceConstraint );
                 }
 
                 if( nc->GetViaDiameter() || nc->GetViaDrill() )
