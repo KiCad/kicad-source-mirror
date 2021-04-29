@@ -202,9 +202,9 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
     if( right_row <= 0 )
         m_rightGridLayers->Show( false );
 
-    // Now fix min grid layer name column size (it also sets a minimal size)
-    m_leftGridLayers->AutoSizeColumn( LAYERNAME_COLNUM );
-    m_rightGridLayers->AutoSizeColumn( LAYERNAME_COLNUM );
+    // Now fix min grid column size (it also sets a minimal size)
+    m_leftGridLayers->AutoSizeColumns();
+    m_rightGridLayers->AutoSizeColumns();
 }
 
 
