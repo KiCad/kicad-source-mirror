@@ -477,6 +477,7 @@ int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
         if( item->Replace( *data, sheet ) )
         {
             m_frame->UpdateItem( item );
+            m_frame->GetCurrentSheet().UpdateAllScreenReferences();
             m_frame->OnModify();
         }
 
@@ -490,6 +491,7 @@ int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
 {
     wxFindReplaceData* data = m_frame->GetFindReplaceData();
+    bool               modified = false;
 
     if( !data )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
@@ -506,11 +508,17 @@ int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
             if( item->Replace( *data, sheet ) )
             {
                 m_frame->UpdateItem( item );
-                m_frame->OnModify();
+                modified = true;
             }
 
             item = nextMatch( screen, sheet, dynamic_cast<SCH_ITEM*>( item ), data );
         }
+    }
+
+    if( modified )
+    {
+        m_frame->GetCurrentSheet().UpdateAllScreenReferences();
+        m_frame->OnModify();
     }
 
     return 0;

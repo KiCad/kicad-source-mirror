@@ -394,29 +394,53 @@ bool SCH_FIELD::IsReplaceable() const
 
 bool SCH_FIELD::Replace( const wxFindReplaceData& aSearchData, void* aAuxData )
 {
-    bool isReplaced = false;
+    wxString text;
+    bool     resolve = false;    // Replace in source text, not shown text
+    bool     isReplaced = false;
 
     if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
         SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
 
-        if( m_id == REFERENCE_FIELD )
+        switch( m_id )
         {
-            wxCHECK_MSG( aAuxData != NULL, false,
-                         wxT( "Cannot replace reference designator without valid sheet path." ) );
+        case REFERENCE_FIELD:
+            wxCHECK_MSG( aAuxData, false, wxT( "Need sheetpath to replace in refdes." ) );
 
             if( !( aSearchData.GetFlags() & FR_REPLACE_REFERENCES ) )
                 return false;
 
-            wxString text = parentSymbol->GetRef((SCH_SHEET_PATH*) aAuxData );
-
+            text = parentSymbol->GetRef( (SCH_SHEET_PATH*) aAuxData );
             isReplaced = EDA_ITEM::Replace( aSearchData, text );
 
             if( isReplaced )
-                parentSymbol->SetRef((SCH_SHEET_PATH*) aAuxData, text );
-        }
-        else
-        {
+                parentSymbol->SetRef( (SCH_SHEET_PATH*) aAuxData, text );
+
+            break;
+
+        case VALUE_FIELD:
+            wxCHECK_MSG( aAuxData, false, wxT( "Need sheetpath to replace in value field." ) );
+
+            text = parentSymbol->GetValue((SCH_SHEET_PATH*) aAuxData, resolve );
+            isReplaced = EDA_ITEM::Replace( aSearchData, text );
+
+            if( isReplaced )
+                parentSymbol->SetValue( (SCH_SHEET_PATH*) aAuxData, text );
+
+            break;
+
+        case FOOTPRINT_FIELD:
+            wxCHECK_MSG( aAuxData, false, wxT( "Need sheetpath to replace in footprint field." ) );
+
+            text = parentSymbol->GetFootprint((SCH_SHEET_PATH*) aAuxData, resolve );
+            isReplaced = EDA_ITEM::Replace( aSearchData, text );
+
+            if( isReplaced )
+                parentSymbol->SetFootprint( (SCH_SHEET_PATH*) aAuxData, text );
+
+            break;
+
+        default:
             isReplaced = EDA_TEXT::Replace( aSearchData );
         }
     }

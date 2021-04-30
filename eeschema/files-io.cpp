@@ -587,6 +587,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SetSheetNumberAndCount();
 
     RecomputeIntersheetRefs();
+    GetCurrentSheet().UpdateAllScreenReferences();
 
     // re-create junctions if needed. Eeschema optimizes wires by merging
     // colinear segments. If a schematic is saved without a valid
