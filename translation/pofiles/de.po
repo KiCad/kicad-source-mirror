@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-04-20 00:29+0000\n"
+"PO-Revision-Date: 2021-05-01 07:31+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -1413,7 +1413,7 @@ msgid ""
 "The reference designator and value are always placed on the silk screen "
 "layer (but will be marked invisible)."
 msgstr ""
-"Platinenlage wählen, auf der der Umriss platziert werden soll.\n"
+"Platinenlage wählen, auf welcher der Umriss platziert werden soll.\n"
 "Referenzbezeichner und Wert werden immer auf der Bestückungsdruck-Lage "
 "platziert (jedoch als unsichtbar markiert)."
 
@@ -5161,7 +5161,7 @@ msgstr "Hintergrund"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:169
 msgid "Cursor"
-msgstr "Cursor"
+msgstr "Fadenkreuz"
 
 #: common/layer_id.cpp:135
 msgid "Highlighted items"
@@ -6300,7 +6300,7 @@ msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
-"Software-Rendering (für Computer, die die Anforderungen für KiCad-"
+"Software-Rendering (für Computer, welche die Anforderungen für KiCad-"
 "Grafikbeschleunigung nicht erfüllen)"
 
 #: common/widgets/gal_options_panel.cpp:100
@@ -28596,7 +28596,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:133
 msgid "How many digits of precision to show"
-msgstr "Wie viele Stellen Genauigkeit sollen angezeigt werden?"
+msgstr "Anzahl der angezeigten Nachkommastellen"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:149
 msgid ""
@@ -34739,7 +34739,7 @@ msgstr "Vermindern Opazität der Lagen"
 
 #: pcbnew/tools/pcb_actions.cpp:1049
 msgid "Show Board Statistics"
-msgstr "Anzeige Platinestatistik"
+msgstr "Platinenstatistik anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:1049
 msgid "Shows board statistics"
