@@ -548,17 +548,25 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
         wxDisplay display( aState.display );
         wxRect clientSize = display.GetClientArea();
 
+#ifndef _WIN32
         // The percentage size (represented in decimal) of the region around the screen's border where
         // an upper corner is not allowed
-#define SCREEN_BORDER_REGION 0.10
+        #define SCREEN_BORDER_REGION 0.10
+#else
+        // Windows uses a very rectangular clearly defined display region, there is no ambigious "screen border region"
+        // GetClientArea already accounts for the taskbar stealing display space
+        #define SCREEN_BORDER_REGION 0
+#endif
 
-        int yLim      = clientSize.y + ( clientSize.height * ( 1.0 - SCREEN_BORDER_REGION ) );
+        int yLimTop   = clientSize.y + ( clientSize.height * ( SCREEN_BORDER_REGION ) );
+        int yLimBottom = clientSize.y + ( clientSize.height * ( 1.0 - SCREEN_BORDER_REGION ) );
         int xLimLeft  = clientSize.x + ( clientSize.width  * SCREEN_BORDER_REGION );
         int xLimRight = clientSize.x + ( clientSize.width  * ( 1.0 - SCREEN_BORDER_REGION ) );
 
         if( upperLeft.x  > xLimRight ||  // Upper left corner too close to right edge of screen
             upperRight.x < xLimLeft  ||  // Upper right corner too close to left edge of screen
-            upperRight.y > yLim )        // Upper corner too close to the bottom of the screen
+            upperLeft.y < yLimTop ||   // Upper corner too close to the bottom of the screen
+            upperLeft.y > yLimBottom )
         {
             m_framePos = wxDefaultPosition;
             wxLogTrace( traceDisplayLocation, "Resetting to default position" );
