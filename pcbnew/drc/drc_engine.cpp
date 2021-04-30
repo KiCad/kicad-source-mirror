@@ -237,8 +237,7 @@ void DRC_ENGINE::loadImplicitRules()
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s'",
-                                             ncName );
+                    expr = wxString::Format( "A.NetClass == '%s'", ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassClearanceRules.push_back( netclassRule );
 
@@ -266,8 +265,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              ncName );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s' && A.inDiffPair('*')",
-                                             ncName );
+                    expr = wxString::Format( "A.NetClass == '%s' && A.inDiffPair('*')", ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
@@ -288,13 +286,23 @@ void DRC_ENGINE::loadImplicitRules()
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
-                    DRC_CONSTRAINT gapConstraint( DIFF_PAIR_GAP_CONSTRAINT );
-                    gapConstraint.Value().SetMin( bds.m_MinClearance );
-                    gapConstraint.Value().SetOpt( nc->GetDiffPairGap() );
-                    netclassRule->AddConstraint( gapConstraint );
+                    DRC_CONSTRAINT constraint( DIFF_PAIR_GAP_CONSTRAINT );
+                    constraint.Value().SetMin( bds.m_MinClearance );
+                    constraint.Value().SetOpt( nc->GetDiffPairGap() );
+                    netclassRule->AddConstraint( constraint );
 
                     // The diffpair gap overrides the netclass min clearance, but not the board
                     // min clearance.
+                    netclassRule = new DRC_RULE;
+                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
+                                                             ncName );
+                    netclassRule->m_Implicit = true;
+
+                    expr = wxString::Format( "A.NetClass == '%s' && AB.isCoupledDiffPair()",
+                                             ncName );
+                    netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassItemSpecificRules.push_back( netclassRule );
+
                     DRC_CONSTRAINT clearanceConstraint( CLEARANCE_CONSTRAINT );
                     clearanceConstraint.Value().SetMin( std::max( bds.m_MinClearance,
                                                                   nc->GetDiffPairGap() ) );
