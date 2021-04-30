@@ -100,11 +100,11 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
     #if defined( KICAD_BUILD_ARCH_X64 )
     aMsg << " (64-bit)";
-    #elif defined( DKICAD_BUILD_ARCH_X86 )
+    #elif defined( KICAD_BUILD_ARCH_X86 )
     aMsg << " (32-bit)";
-    #elif defined( DKICAD_BUILD_ARCH_ARM )
+    #elif defined( KICAD_BUILD_ARCH_ARM )
     aMsg << " (ARM 32-bit)";
-    #elif defined( DKICAD_BUILD_ARCH_ARM64 )
+    #elif defined( KICAD_BUILD_ARCH_ARM64 )
     aMsg << " (ARM 64-bit)";
     #endif
 
