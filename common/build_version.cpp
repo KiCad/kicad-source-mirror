@@ -96,7 +96,21 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
             << " build";
 
     wxPlatformInfo platform;
-    aMsg << "Application: " << aTitle << eol << eol;
+    aMsg << "Application: " << aTitle;
+
+    #if defined( KICAD_BUILD_ARCH_X64 )
+    aMsg << " (64-bit)";
+    #elif defined( DKICAD_BUILD_ARCH_X86 )
+    aMsg << " (32-bit)";
+    #elif defined( DKICAD_BUILD_ARCH_ARM )
+    aMsg << " (ARM 32-bit)";
+    #elif defined( DKICAD_BUILD_ARCH_ARM64 )
+    aMsg << " (ARM 64-bit)";
+    #endif
+
+    aMsg << eol << eol;
+
+
     aMsg << "Version: " << version << eol << eol;
     aMsg << "Libraries:" << eol;
 

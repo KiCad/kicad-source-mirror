@@ -284,6 +284,15 @@ if( WIN32 )
     endif()
 endif()
 
+if(KICAD_BUILD_ARCH_X64)
+    add_definitions( -DKICAD_BUILD_ARCH_X64 )
+elseif(KICAD_BUILD_ARCH_X86)
+    add_definitions( -DKICAD_BUILD_ARCH_X86 )
+elseif(KICAD_BUILD_ARCH_ARM64)
+    add_definitions( -DKICAD_BUILD_ARCH_ARM64 )
+elseif(KICAD_BUILD_ARCH_ARM)
+    add_definitions( -DKICAD_BUILD_ARCH_ARM )
+endif()
 
 #================================================
 # Provide access to CCACHE
