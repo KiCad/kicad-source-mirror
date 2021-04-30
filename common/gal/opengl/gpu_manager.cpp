@@ -35,10 +35,10 @@
 #include <confirm.h>
 #include <trace_helpers.h>
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
 #include <profile.h>
 #include <wx/log.h>
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
 using namespace KIGFX;
 
@@ -153,9 +153,9 @@ void GPU_CACHED_MANAGER::DrawAll()
 
 void GPU_CACHED_MANAGER::EndDrawing()
 {
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     PROF_COUNTER totalRealTime;
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     wxASSERT( m_isDrawing );
 
@@ -198,9 +198,9 @@ void GPU_CACHED_MANAGER::EndDrawing()
 
     glDrawElements( GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, NULL );
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     wxLogTrace( traceGalProfile, wxT( "Cached manager size: %d" ), m_indicesSize );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
@@ -218,11 +218,11 @@ void GPU_CACHED_MANAGER::EndDrawing()
 
     m_isDrawing = false;
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     totalRealTime.Stop();
     wxLogTrace( traceGalProfile, wxT( "GPU_CACHED_MANAGER::EndDrawing(): %.1f ms" ),
                 totalRealTime.msecs() );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 }
 
 
@@ -264,9 +264,9 @@ void GPU_NONCACHED_MANAGER::DrawAll()
 
 void GPU_NONCACHED_MANAGER::EndDrawing()
 {
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     PROF_COUNTER totalRealTime;
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     if( m_container->GetSize() == 0 )
         return;
@@ -299,9 +299,9 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
 
     glDrawArrays( GL_TRIANGLES, 0, m_container->GetSize() );
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     wxLogTrace( traceGalProfile, wxT( "Noncached manager size: %d" ), m_container->GetSize() );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     // Deactivate vertex array
     glDisableClientState( GL_COLOR_ARRAY );
@@ -315,11 +315,11 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
 
     m_container->Clear();
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     totalRealTime.Stop();
     wxLogTrace( traceGalProfile, wxT( "GPU_NONCACHED_MANAGER::EndDrawing(): %.1f ms" ),
                 totalRealTime.msecs() );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 }
 
 void GPU_MANAGER::EnableDepthTest( bool aEnabled )

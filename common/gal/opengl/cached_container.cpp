@@ -40,10 +40,10 @@
 #include <algorithm>
 #include <cassert>
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
 #include <wx/log.h>
 #include <profile.h>
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
 using namespace KIGFX;
 
@@ -308,9 +308,9 @@ void CACHED_CONTAINER::mergeFreeChunks()
     if( m_freeChunks.size() <= 1 ) // There are no chunks that can be merged
         return;
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     PROF_COUNTER totalTime;
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     // Reversed free chunks map - this one stores chunk size with its offset as the key
     std::list<CHUNK> freeChunks;
@@ -379,7 +379,7 @@ void CACHED_CONTAINER::showUsedChunks()
 
 void CACHED_CONTAINER::test()
 {
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     // Free space check
     unsigned int             freeSpace = 0;
     FREE_CHUNK_MAP::iterator itf;
@@ -405,5 +405,5 @@ void CACHED_CONTAINER::test()
     assert( ( m_freeSpace + used_space ) == m_currentSize );
 
     // Overlapping check TODO
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 }

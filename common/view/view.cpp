@@ -40,9 +40,9 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <painter.h>
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
 #include <profile.h>
-#endif /* __WXDEBUG__  */
+#endif /* KICAD_GAL_PROFILE  */
 
 namespace KIGFX {
 
@@ -1124,9 +1124,9 @@ void VIEW::ClearTargets()
 
 void VIEW::Redraw()
 {
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     PROF_COUNTER totalRealTime;
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     VECTOR2D screenSize = m_gal->GetScreenPixelSize();
     BOX2D    rect( ToWorld( VECTOR2D( 0, 0 ) ),
@@ -1147,10 +1147,10 @@ void VIEW::Redraw()
     markTargetClean( TARGET_NONCACHED );
     markTargetClean( TARGET_OVERLAY );
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     totalRealTime.Stop();
     wxLogTrace( traceGalProfile, "VIEW::Redraw(): %.1f ms", totalRealTime.msecs() );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 }
 
 

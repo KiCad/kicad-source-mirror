@@ -34,9 +34,9 @@
 
 #include <list>
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
 #include <profile.h>
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
 using namespace KIGFX;
 
@@ -139,9 +139,9 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     if( usedSpace() > aNewSize )
         return false;
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     PROF_COUNTER totalTime;
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     GLuint newBuffer;
 
@@ -153,11 +153,11 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
 
     // It would be best to use GL_COPY_WRITE_BUFFER here,
     // but it is not available everywhere
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     GLint eaBuffer = -1;
     glGetIntegerv( GL_ELEMENT_ARRAY_BUFFER_BINDING, &eaBuffer );
     wxASSERT( eaBuffer == 0 );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, newBuffer );
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, nullptr, GL_DYNAMIC_DRAW );
     checkGlError( "creating buffer during defragmentation", __FILE__, __LINE__ );
@@ -208,12 +208,12 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     Map();
     checkGlError( "switching buffers during defragmentation", __FILE__, __LINE__ );
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     totalTime.Stop();
 
     wxLogTrace( traceGalCachedContainerGpu, "Defragmented container storing %d vertices / %.1f ms",
                 m_currentSize - m_freeSpace, totalTime.msecs() );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     m_freeSpace += ( aNewSize - m_currentSize );
     m_currentSize = aNewSize;
@@ -238,9 +238,9 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
     if( usedSpace() > aNewSize )
         return false;
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     PROF_COUNTER totalTime;
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     GLuint  newBuffer;
     VERTEX* newBufferMem;
@@ -250,11 +250,11 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
 
     // It would be best to use GL_COPY_WRITE_BUFFER here,
     // but it is not available everywhere
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     GLint eaBuffer = -1;
     glGetIntegerv( GL_ELEMENT_ARRAY_BUFFER_BINDING, &eaBuffer );
     wxASSERT( eaBuffer == 0 );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, newBuffer );
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, nullptr, GL_DYNAMIC_DRAW );
     newBufferMem = static_cast<VERTEX*>( glMapBuffer( GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY ) );
@@ -273,12 +273,12 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
     Map();
     checkGlError( "switching buffers during defragmentation", __FILE__, __LINE__ );
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     totalTime.Stop();
 
     wxLogTrace( traceGalCachedContainerGpu, "Defragmented container storing %d vertices / %.1f ms",
                 m_currentSize - m_freeSpace, totalTime.msecs() );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     m_freeSpace += ( aNewSize - m_currentSize );
     m_currentSize = aNewSize;

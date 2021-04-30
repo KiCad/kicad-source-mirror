@@ -49,10 +49,10 @@
 
 #include <macros.h>
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
 #include <profile.h>
 #include <wx/log.h>
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
 #include <functional>
 #include <limits>
@@ -412,9 +412,9 @@ VECTOR2D OPENGL_GAL::getScreenPixelSize() const
 
 void OPENGL_GAL::beginDrawing()
 {
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     PROF_COUNTER totalRealTime( "OPENGL_GAL::beginDrawing()", true );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     wxASSERT_MSG( m_isContextLocked, "GAL_DRAWING_CONTEXT RAII object should have locked context. "
                                      "Calling GAL::beginDrawing() directly is not allowed." );
@@ -553,11 +553,11 @@ void OPENGL_GAL::beginDrawing()
     // Unbind buffers - set compositor for direct drawing
     m_compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     totalRealTime.Stop();
     wxLogTrace( traceGalProfile, wxT( "OPENGL_GAL::beginDrawing(): %.1f ms" ),
                 totalRealTime.msecs() );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 }
 
 
@@ -565,9 +565,9 @@ void OPENGL_GAL::endDrawing()
 {
     wxASSERT_MSG( m_isContextLocked, "What happened to the context lock?" );
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     PROF_COUNTER totalRealTime( "OPENGL_GAL::endDrawing()", true );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     // Cached & non-cached containers are rendered to the same buffer
     m_compositor->SetBuffer( m_mainBuffer );
@@ -594,11 +594,11 @@ void OPENGL_GAL::endDrawing()
 
     SwapBuffers();
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     totalRealTime.Stop();
     wxLogTrace( traceGalProfile, wxT( "OPENGL_GAL::endDrawing(): %.1f ms" ),
                 totalRealTime.msecs() );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 }
 
 

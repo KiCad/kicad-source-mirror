@@ -34,10 +34,10 @@
 #include <list>
 #include <cassert>
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
 #include <wx/log.h>
 #include <profile.h>
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
 using namespace KIGFX;
 
@@ -100,9 +100,9 @@ bool CACHED_CONTAINER_RAM::defragmentResize( unsigned int aNewSize )
     if( usedSpace() > aNewSize )
         return false;
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     PROF_COUNTER totalTime;
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     VERTEX* newBufferMem = static_cast<VERTEX*>( malloc( aNewSize * VERTEX_SIZE ) );
 
@@ -115,12 +115,12 @@ bool CACHED_CONTAINER_RAM::defragmentResize( unsigned int aNewSize )
     free( m_vertices );
     m_vertices = newBufferMem;
 
-#ifdef __WXDEBUG__
+#ifdef KICAD_GAL_PROFILE
     totalTime.Stop();
 
     wxLogTrace( traceGalCachedContainer, "Defragmented container storing %d vertices / %.1f ms",
                 m_currentSize - m_freeSpace, totalTime.msecs() );
-#endif /* __WXDEBUG__ */
+#endif /* KICAD_GAL_PROFILE */
 
     m_freeSpace += ( aNewSize - m_currentSize );
     m_currentSize = aNewSize;
