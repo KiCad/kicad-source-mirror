@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Brian Piccioni brian@documenteddesigns.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Brian Piccioni <brian@documenteddesigns.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <refdes_utils.h>
 #include <tool/tool_manager.h>
 #include <wx/filedlg.h>
 #include <tools/board_reannotate_tool.h>
@@ -30,6 +31,7 @@
 
 BOARD_REANNOTATE_TOOL::BOARD_REANNOTATE_TOOL() :
      PCB_TOOL_BASE( "pcbnew.ReannotateTool" ),
+     m_selectionTool( NULL ),
      m_frame( nullptr )
 {
 }
@@ -37,6 +39,9 @@ BOARD_REANNOTATE_TOOL::BOARD_REANNOTATE_TOOL() :
 
 bool BOARD_REANNOTATE_TOOL::Init()
 {
+    // Find the selection tool, so they can cooperate
+    m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+
     return true;
 }
 
@@ -51,6 +56,79 @@ int BOARD_REANNOTATE_TOOL::ShowReannotateDialog( const TOOL_EVENT& aEvent )
 {
     DIALOG_BOARD_REANNOTATE dialog( m_frame );
     dialog.ShowModal();
+    return 0;
+}
+
+
+int BOARD_REANNOTATE_TOOL::ReannotateDuplicatesInSelection()
+{
+    PCB_SELECTION& selection = m_selectionTool->GetSelection();
+
+    if( selection.Empty() )
+        return 0;
+
+    // 1. Build list of designators on the board
+    FOOTPRINTS         fpOnBoard = m_frame->GetBoard()->Footprints();
+    std::multimap<wxString, KIID> usedDesignatorsMap;
+
+    for( FOOTPRINT* fp : fpOnBoard )
+        usedDesignatorsMap.insert( { fp->GetReference(), fp->m_Uuid } );
+
+    // 2. Get a sorted list of footprints from the selection
+    FOOTPRINTS fpInSelection;
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+            fpInSelection.push_back( static_cast<FOOTPRINT*>( item ) );
+    }
+
+    std::sort( fpInSelection.begin(), fpInSelection.end(),
+               []( const FOOTPRINT* aA, const FOOTPRINT* aB ) -> bool
+               {
+                   int ii = UTIL::RefDesStringCompare( aA->GetReference(), aB->GetReference() );
+
+                   if( ii == 0 )
+                       ii = aA->m_Uuid < aB->m_Uuid; // ensure a deterministic sort
+
+                   return ii < 0;
+               } );
+
+    // 3. Iterate through the sorted list of footprints
+    for( FOOTPRINT* fp : fpInSelection )
+    {
+        wxString stem = UTIL::GetRefDesPrefix( fp->GetReference() );
+        int      value = UTIL::GetRefDesNumber( fp->GetReference() );
+        bool     duplicate = false;
+
+        while( usedDesignatorsMap.find( fp->GetReference() ) != usedDesignatorsMap.end() )
+        {
+            auto result = usedDesignatorsMap.equal_range( fp->GetReference() );
+
+            for( auto& it = result.first; it != result.second; it++ )
+            {
+                if( it->second != fp->m_Uuid )
+                {
+                    duplicate = true;
+                    break;
+                }
+            }
+
+            if( !duplicate )
+                break; // The only designator in the board with this reference is the selected one
+
+            if( value < 0 )
+                value = 1;
+            else
+                ++value;
+
+            fp->SetReference( stem + std::to_string( value ) );
+        }
+
+        if( duplicate )
+            usedDesignatorsMap.insert( { fp->GetReference(), fp->m_Uuid } );
+    }
+
     return 0;
 }
 

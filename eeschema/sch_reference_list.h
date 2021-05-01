@@ -158,7 +158,10 @@ public:
 
     bool IsUnitsLocked()
     {
-        return m_libPart->UnitsLocked();
+        if( m_libPart )
+            return m_libPart->UnitsLocked();
+        else
+            return true; // Assume units locked when we don't have a library
     }
 
 private:
@@ -282,6 +285,14 @@ public:
     }
 
     /**
+     * Replace any duplicate reference designators with the next available number after the
+     * present number. Multi-unit symbols are reannotated together.
+     *
+     * @param aAdditionalReferences Additional references to check for duplicates
+     */
+    void ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditionalReferences );
+
+    /**
      * Set the reference designators in the list that have not been annotated.
      *
      * If a the sheet number is 2 and \a aSheetIntervalId is 100, then the first reference
@@ -299,10 +310,12 @@ public:
      * @param aAdditionalRefs Additional references to use for checking that there a reference
      *      designator doesn't already exist. The caller must ensure that none of the references
      *      in aAdditionalRefs exist in this list.
+     * @param aStartAtCurrent Use m_numRef for each reference as the start number (overrides
+            aStartNumber)
      */
     void Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
                    SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap,
-                   const SCH_REFERENCE_LIST& aAdditionalRefs );
+                   const SCH_REFERENCE_LIST& aAdditionalRefs, bool aStartAtCurrent = false );
 
     /**
      * Check for annotations errors.

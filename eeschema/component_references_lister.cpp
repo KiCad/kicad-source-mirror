@@ -309,15 +309,38 @@ wxString buildFullReference( const SCH_REFERENCE& aItem, int aUnitNumber = -1 )
     return fullref;
 }
 
+void SCH_REFERENCE_LIST::ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditionalReferences )
+{
+    SplitReferences();
+
+    // All multi-unit symbols always locked to ensure consistent re-annotation
+    SCH_MULTI_UNIT_REFERENCE_MAP lockedSymbols;
+
+    for( size_t i = 0; i < GetCount(); i++ )
+    {
+        SCH_REFERENCE& ref = flatList[i];
+        wxString       refstr = ref.GetSymbol()->GetRef( &ref.GetSheetPath() );
+
+        // Never lock unassigned references
+        if( refstr[refstr.Len() - 1] == '?' )
+            continue;
+
+        lockedSymbols[refstr].AddItem( ref );
+
+        ref.m_isNew = true; // We want to reannotate all references
+    }
+
+    Annotate( false, 0, 0, lockedSymbols, aAdditionalReferences, true );
+}
 
 void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
                                    SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap,
-                                   const SCH_REFERENCE_LIST& aAdditionalRefs )
+                                   const SCH_REFERENCE_LIST& aAdditionalRefs, bool aStartAtCurrent )
 {
     if ( flatList.size() == 0 )
         return;
 
-    int originalSize = GetCount();
+    size_t originalSize = GetCount();
 
     // For multi units components, store the list of already used full references.
     // The algorithm tries to allocate the new reference to components having the same
@@ -407,6 +430,13 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             else
                 minRefId = aStartNumber + 1;
 
+            GetRefsInUse( first, idList, minRefId );
+        }
+
+        // Find references greater than current reference (unless not annotated)
+        if( aStartAtCurrent && ref_unit.m_numRef > 0 )
+        {
+            minRefId = ref_unit.m_numRef;
             GetRefsInUse( first, idList, minRefId );
         }
 

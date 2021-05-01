@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Brian Piccioni brian@documenteddesigns.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Brian Piccioni <brian@documenteddesigns.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -40,12 +40,14 @@ public:
     bool Init() override;
     void Reset( RESET_REASON aReason ) override;
     int  ShowReannotateDialog( const TOOL_EVENT& aEvent );
-    //
+    int  ReannotateDuplicatesInSelection();
+
 private:
     void setTransitions() override; //> Bind handlers to corresponding TOOL_ACTIONs
 
 private:
-    PCB_EDIT_FRAME* m_frame; // Pointer to the currently used edit frame.
+    PCB_SELECTION_TOOL* m_selectionTool;
+    PCB_EDIT_FRAME*     m_frame; // Pointer to the currently used edit frame.
 };
 
 #endif /* PCBREANNOTATETOOL_H_ */

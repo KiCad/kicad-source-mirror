@@ -1463,6 +1463,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             return 0;
     }
 
+    bool reannotateOnPaste = !forceKeepAnnotations;
+    forceKeepAnnotations = true; // Always keep annotations of pasted instances
+
     // SCH_SEXP_PLUGIN added the items to the paste screen, but not to the view or anything
     // else.  Pull them back out to start with.
     //
@@ -1684,6 +1687,21 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
 
     pasteInstances.SortByPageNumbers();
+
+    if( reannotateOnPaste )
+    {
+        for( SCH_SHEET_PATH& instance : pasteInstances )
+        {
+            pastedSymbols[instance].SortByReferenceOnly();
+            pastedSymbols[instance].ReannotateDuplicates( existingRefs );
+            pastedSymbols[instance].UpdateAnnotation();
+
+            // Update existing refs for next iteration
+            for( size_t i = 0; i < pastedSymbols[instance].GetCount(); i++ )
+                existingRefs.AddItem( pastedSymbols[instance][i] );
+        }
+    }
+
     m_frame->GetCurrentSheet().UpdateAllScreenReferences();
 
     if( sheetsPasted )

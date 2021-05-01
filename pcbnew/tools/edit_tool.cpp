@@ -198,6 +198,7 @@ bool EDIT_TOOL::Init()
     // Selection tool handles the context menu for some other tools, such as the Picker.
     // Don't add things like Paste when another tool is active.
     menu.AddItem( ACTIONS::paste,                 noActiveToolCondition, 150 );
+    menu.AddItem( ACTIONS::pasteSpecial,          noActiveToolCondition, 150 );
     menu.AddItem( ACTIONS::duplicate,             SELECTION_CONDITIONS::NotEmpty, 150 );
     menu.AddItem( ACTIONS::doDelete,              SELECTION_CONDITIONS::NotEmpty, 150 );
 

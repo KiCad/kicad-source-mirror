@@ -28,6 +28,7 @@
 #include "pcb_control.h"
 #include "pcb_picker_tool.h"
 #include "pcb_selection_tool.h"
+#include "board_reannotate_tool.h"
 #include <3d_viewer/eda_3d_viewer.h>
 #include <bitmaps.h>
 #include <board_commit.h>
@@ -891,12 +892,6 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
             break;
         }
 
-        // Add or just select items for the move/place command
-        if( aIsNew )
-            editTool->GetCurrentCommit()->Add( item );
-        else
-            editTool->GetCurrentCommit()->Added( item );
-
         // We only need to add the items that aren't inside a group currently selected
         // to the selection. If an item is inside a group and that group is selected,
         // then the selection tool will select it for us.
@@ -906,6 +901,18 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
 
     // Select the items that should be selected
     m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &itemsToSel );
+
+    // Reannotate duplicate footprints
+    m_toolMgr->GetTool<BOARD_REANNOTATE_TOOL>()->ReannotateDuplicatesInSelection();
+
+    for( BOARD_ITEM* item : aItems )
+    {
+        // Commit after reannotation
+        if( aIsNew )
+            editTool->GetCurrentCommit()->Add( item );
+        else
+            editTool->GetCurrentCommit()->Added( item );
+    }
 
     PCB_SELECTION& selection = selectionTool->GetSelection();
 
