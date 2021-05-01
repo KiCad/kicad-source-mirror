@@ -75,7 +75,7 @@
   <defs
      id="defs115715">
     <style
-       id="style115713">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:none;stroke:#E0E0E0;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style115713">.cls-1{fill:#8f8f8f;}.cls-2{fill:#DED3DD;}.cls-3{fill:none;stroke:#E0E0E0;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title115717">add_pcb_target</title>
@@ -103,7 +103,7 @@
      x2="12.000001"
      y2="23"
      id="line115725"
-     style="stroke:#f4eff3;stroke-opacity:1" />
+     style="stroke:#DED3DD;stroke-opacity:1" />
   <line
      class="cls-3"
      x1="23"
@@ -111,5 +111,5 @@
      x2="1"
      y2="12"
      id="line115727"
-     style="stroke:#f4eff3;stroke-opacity:1" />
+     style="stroke:#DED3DD;stroke-opacity:1" />
 </svg>

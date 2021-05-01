@@ -75,7 +75,7 @@
   <defs
      id="defs26229">
     <style
-       id="style26227">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#f2647e;}.cls-4{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style26227">.cls-1{fill:#8f8f8f;}.cls-2{fill:#DED3DD;}.cls-3{fill:#f2647e;}.cls-4{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title26231">pin2pin</title>
@@ -84,13 +84,13 @@
      style="fill:#42B8EB;fill-opacity:1;stroke:none;stroke-width:0.999997"
      d="m 14.857201,11 c -0.988297,2.6e-5 -1.976176,0.376559 -2.728516,1.128906 -1.504898,1.504642 -1.504928,3.952415 0,5.457032 L 12.999779,18.5 13.757591,16.369141 13.58181,16.166016 c -0.711641,-0.711595 -0.733888,-1.869333 -0.0293,-2.587891 0.711572,-0.725542 1.880652,-0.730657 2.597657,-0.01367 l 1.707031,1.707031 c 0.715785,0.715788 0.71279,1.871196 0,2.583985 -0.09397,0.09381 -0.263672,0.21875 -0.263672,0.21875 l 1.449219,1.46875 c 0,0 0.05821,-0.0465 0.21875,-0.207031 1.516971,-1.518587 1.528046,-3.996887 0.04102,-5.492188 -0.0026,-0.0029 -0.007,-0.007 -0.0098,-0.0098 L 17.585717,12.128906 C 16.833264,11.376456 15.845498,10.999974 14.857201,11 Z m 1.007812,4.5 c 0,0 -0.05821,0.0465 -0.21875,0.207031 -1.516971,1.518587 -1.528046,3.996887 -0.04101,5.492188 0.0026,0.0029 0.007,0.007 0.0098,0.0098 l 1.707032,1.705078 c 1.504906,1.504902 3.952352,1.504695 5.457031,0 1.504898,-1.504642 1.504928,-3.952414 0,-5.457031 l -0.871094,-0.914062 -0.757812,2.130859 0.175781,0.203125 c 0.711641,0.711595 0.733888,1.869333 0.0293,2.587891 -0.711572,0.725542 -1.880651,0.730657 -2.597657,0.01367 l -1.705078,-1.707032 c -0.715785,-0.715788 -0.71279,-1.871195 0,-2.583984 0.09397,-0.09381 0.261719,-0.21875 0.261719,-0.21875 z" />
   <circle
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="path3297"
      cx="6"
      cy="9"
      r="3" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 9.5,9 H 18 v 0 0"
      id="path3299" />
 </svg>

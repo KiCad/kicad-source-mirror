@@ -75,7 +75,7 @@
   <defs
      id="defs160041">
     <style
-       id="style160039">.cls-1{fill:#F4EFF3;}.cls-2{fill:#42B8EB;}.cls-3{fill:#8f8f8f;}</style>
+       id="style160039">.cls-1{fill:#DED3DD;}.cls-2{fill:#42B8EB;}.cls-3{fill:#8f8f8f;}</style>
   </defs>
   <title
      id="title160043">text_sketch</title>
@@ -95,5 +95,5 @@
      x2="23.5"
      y2="0.5"
      id="line158655"
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+     style="fill:none;stroke:#DED3DD;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
 </svg>

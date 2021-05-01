@@ -76,7 +76,7 @@
   <defs
      id="defs26695">
     <style
-       id="style26693">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#F4EFF3;}.cls-2{stroke:#42B8EB;stroke-width:2px;}.cls-3{fill:#F4EFF3;}</style>
+       id="style26693">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#DED3DD;}.cls-2{stroke:#42B8EB;stroke-width:2px;}.cls-3{fill:#DED3DD;}</style>
   </defs>
   <title
      id="title26697">ps_diff_pair_gap</title>
@@ -116,7 +116,7 @@
      style="stroke-width:0.999997" />
   <path
      id="polygon26709"
-     style="fill:#F4EFF3"
+     style="fill:#DED3DD"
      d="m 4.5,10 -3,-5 h 6 z"
      class="cls-3"
      sodipodi:nodetypes="cccc" />
@@ -129,7 +129,7 @@
      id="line26711" />
   <path
      id="polygon26713"
-     style="fill:#F4EFF3"
+     style="fill:#DED3DD"
      d="m 4.5,15 3,5 h -6 z"
      class="cls-3"
      sodipodi:nodetypes="cccc" />

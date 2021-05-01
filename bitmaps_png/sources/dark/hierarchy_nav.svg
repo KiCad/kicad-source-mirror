@@ -78,12 +78,12 @@
   <defs
      id="defs25215">
     <style
-       id="style25213">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#8f8f8f;}</style>
+       id="style25213">.cls-1{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#8f8f8f;}</style>
   </defs>
   <title
      id="title25217">hierarchy_nav</title>
   <rect
-     style="fill:#545454;stroke:#F4EFF3;stroke-linecap:round;stroke-opacity:1;fill-opacity:1"
+     style="fill:#545454;stroke:#DED3DD;stroke-linecap:round;stroke-opacity:1;fill-opacity:1"
      id="rect845"
      width="21"
      height="21"
@@ -106,7 +106,7 @@
      width="11.000001"
      height="5.0000033"
      id="rect25225"
-     style="fill:none;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-opacity:1" />
+     style="fill:none;fill-opacity:1;stroke:#DED3DD;stroke-width:1;stroke-opacity:1" />
   <rect
      class="cls-2"
      x="8.5"
@@ -114,9 +114,9 @@
      width="11"
      height="5.0000033"
      id="rect25227"
-     style="fill:none;fill-opacity:1;stroke:#F4EFF3;stroke-width:0.999994;stroke-opacity:1" />
+     style="fill:none;fill-opacity:1;stroke:#DED3DD;stroke-width:0.999994;stroke-opacity:1" />
   <rect
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect849"
      width="21"
      height="2.5"

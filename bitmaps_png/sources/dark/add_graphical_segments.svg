@@ -75,12 +75,12 @@
   <defs
      id="defs28019">
     <style
-       id="style28017">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-2{fill:#42B8EB;}</style>
+       id="style28017">.cls-1{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-2{fill:#42B8EB;}</style>
   </defs>
   <title
      id="title28021">add_graphical_segments</title>
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
      d="M 3,21 21,3"
      id="path4866" />
 </svg>

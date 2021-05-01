@@ -28,15 +28,15 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs5">
-      <style id="style3">.cls-1,.cls-2,.cls-3,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#8f8f8f;}.cls-1,.cls-3,.cls-5{stroke-width:0.75px;}.cls-2{stroke:#F4EFF3;}.cls-3{stroke:#42B8EB;}.cls-4{fill:#42B8EB;}.cls-5{stroke:#f2647e;}.cls-6{fill:#f2647e;}.cls-7{fill:#fff;}.cls-8{fill:#F4EFF3;}</style>
+      <style id="style3">.cls-1,.cls-2,.cls-3,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#8f8f8f;}.cls-1,.cls-3,.cls-5{stroke-width:0.75px;}.cls-2{stroke:#DED3DD;}.cls-3{stroke:#42B8EB;}.cls-4{fill:#42B8EB;}.cls-5{stroke:#f2647e;}.cls-6{fill:#f2647e;}.cls-7{fill:#fff;}.cls-8{fill:#DED3DD;}</style>
    </defs>
    <title id="title7">icon_3d</title>
    <line class="cls-1" x1="18" y1="33.852211" x2="18" y2="47" id="line9-3" style="fill:none;stroke:#8f8f8f;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
    <line class="cls-1" x1="30" y1="34" x2="30" y2="47.147789" id="line11-6" style="fill:none;stroke:#8f8f8f;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
    <rect class="cls-2" x="10.0274" y="3.9363773" width="28.160999" height="20.232588" id="rect13-7" style="fill:#E0E0E0;stroke:none;stroke-width:0.999999" />
-   <polygon class="cls-3" points="3.058,0.98 15.038,0.98 16.088,2.654 2.007,2.654 " id="polygon15-5" style="fill:#F4EFF3;stroke:none;stroke-width:0.497346" transform="matrix(2,0,0,2.021399,6.0124006,-1.4288198)" />
+   <polygon class="cls-3" points="3.058,0.98 15.038,0.98 16.088,2.654 2.007,2.654 " id="polygon15-5" style="fill:#DED3DD;stroke:none;stroke-width:0.497346" transform="matrix(2,0,0,2.021399,6.0124006,-1.4288198)" />
    <polygon class="cls-4" points="15.038,14.337 3.058,14.337 2.007,12.663 16.088,12.663 " id="polygon17-3" style="fill:#686868;stroke:none;stroke-width:0.497346" transform="matrix(2,0,0,2.021399,6.0124006,-1.4288198)" />
-   <polygon class="cls-3" points="3.058,14.324 15.038,14.324 16.088,15.997 2.007,15.997 " id="polygon19-5" style="fill:#F4EFF3;stroke:none;stroke-width:0.497346" transform="matrix(2,0,0,2.021399,6.0124006,-1.4288198)" />
+   <polygon class="cls-3" points="3.058,14.324 15.038,14.324 16.088,15.997 2.007,15.997 " id="polygon19-5" style="fill:#DED3DD;stroke:none;stroke-width:0.497346" transform="matrix(2,0,0,2.021399,6.0124006,-1.4288198)" />
    <rect class="cls-2" x="10.0274" y="30.908312" width="28.160999" height="4.0446172" id="rect21-6" style="fill:#E0E0E0;stroke:none;stroke-width:0.999999" />
    <rect class="cls-5" x="8" y="37" width="32" height="4.0051999" id="rect23-2" style="fill:#42B8EB;stroke:none;stroke-width:0.999999" />
 </svg>

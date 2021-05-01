@@ -86,7 +86,7 @@
      width="6.0036001"
      height="6.0035"
      id="rect157603"
-     style="stroke-width:1.0015748;stroke-miterlimit:4;stroke-dasharray:none;fill:#F4EFF3;fill-opacity:1" />
+     style="stroke-width:1.0015748;stroke-miterlimit:4;stroke-dasharray:none;fill:#DED3DD;fill-opacity:1" />
   <rect
      class="cls-2"
      x="9.5"
@@ -94,7 +94,7 @@
      width="5"
      height="5"
      id="rect157605"
-     style="fill:#F4EFF3;fill-opacity:1;stroke-width:1.00157;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;fill-opacity:1;stroke-width:1.00157;stroke-miterlimit:4;stroke-dasharray:none" />
   <rect
      class="cls-1"
      x="16.9965"
@@ -102,7 +102,7 @@
      width="6.0036001"
      height="6.0035"
      id="rect157607"
-     style="stroke-width:1.0015748;stroke-miterlimit:4;stroke-dasharray:none;fill:#F4EFF3;fill-opacity:1" />
+     style="stroke-width:1.0015748;stroke-miterlimit:4;stroke-dasharray:none;fill:#DED3DD;fill-opacity:1" />
   <rect
      class="cls-3"
      x="1.5"
@@ -110,7 +110,7 @@
      width="5"
      height="5"
      id="rect157609"
-     style="fill:#F4EFF3;fill-opacity:1;stroke-width:1.00157;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;fill-opacity:1;stroke-width:1.00157;stroke-miterlimit:4;stroke-dasharray:none" />
   <rect
      class="cls-1"
      x="8.9954996"
@@ -118,7 +118,7 @@
      width="6.0036001"
      height="6.0035"
      id="rect157611"
-     style="stroke-width:1.0015748;stroke-miterlimit:4;stroke-dasharray:none;fill:#F4EFF3;fill-opacity:1" />
+     style="stroke-width:1.0015748;stroke-miterlimit:4;stroke-dasharray:none;fill:#DED3DD;fill-opacity:1" />
   <rect
      class="cls-2"
      x="17.5"
@@ -126,7 +126,7 @@
      width="5.000001"
      height="5"
      id="rect157613"
-     style="fill:#F4EFF3;fill-opacity:1;stroke-width:1.00157;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;fill-opacity:1;stroke-width:1.00157;stroke-miterlimit:4;stroke-dasharray:none" />
   <rect
      class="cls-1"
      x="0.99450004"
@@ -134,13 +134,13 @@
      width="6.0036001"
      height="6.0035"
      id="rect157615"
-     style="stroke-width:1.0015748;stroke-miterlimit:4;stroke-dasharray:none;fill:#F4EFF3;fill-opacity:1" />
+     style="stroke-width:1.0015748;stroke-miterlimit:4;stroke-dasharray:none;fill:#DED3DD;fill-opacity:1" />
   <polygon
      class="cls-3"
      points="17.996,17.998 9.995,17.998 9.995,24.002 17.996,24.002 20.033,24.002 24,24.002 24,17.998 20.033,17.998 "
      id="polygon157617"
      transform="matrix(0.92823991,0,0,0.83277817,0.22224206,2.5116584)"
-     style="stroke-width:1.13738;fill:#F4EFF3;fill-opacity:1" />
+     style="stroke-width:1.13738;fill:#DED3DD;fill-opacity:1" />
   <path
      id="polyline157619"
      transform="translate(-1,-1)"

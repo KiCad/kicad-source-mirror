@@ -380,7 +380,7 @@
     </clipPath>
   </defs>
   <rect
-     style="display:inline;fill:#545454;fill-opacity:1;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     style="display:inline;fill:#545454;fill-opacity:1;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
      id="rect845"
      width="21"
      height="21"
@@ -401,31 +401,31 @@
      id="rect4570"
      style="fill:#8f8f8f;fill-opacity:1;stroke:none;stroke-width:3.77953;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 16.5,1.5 v 21"
      id="path1521" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 10.5,1.5 v 21"
      id="path1521-1" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 4.5,1.5 v 21"
      id="path1538" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 1.5,7.5 h 21"
      id="path2119" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 1.5,12.5 h 21"
      id="path2121" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 1.5,17.5 h 21"
      id="path2123" />
   <rect
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect849"
      width="21"
      height="2.5"

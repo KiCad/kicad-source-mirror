@@ -75,13 +75,13 @@
   <defs
      id="defs116534">
     <style
-       id="style116532">.cls-1{fill:#F4EFF3;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#f2647e;}.cls-4{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style116532">.cls-1{fill:#DED3DD;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#f2647e;}.cls-4{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title116536">directory_browser</title>
   <path
      id="path845"
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:0.999995"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:0.999995"
      d="m 2.9511719,3.000149 c -1.085455,0.026508 -1.95149553,0.9142215 -1.9511719,2 -1.9869e-4,0.016275 -1.9869e-4,0.032553 0,0.048828 V 19.000149 c 0,1.104569 0.8954305,2 2,2 0.016275,1.99e-4 0.032553,1.99e-4 0.048828,0 H 21 c 1.104569,0 2,-0.895431 2,-2 1.99e-4,-0.01628 1.99e-4,-0.03255 0,-0.04883 V 8.000149 c 0,-1.1045695 -0.895431,-2 -2,-2 -2.833333,0 -8.5,0 -8.5,0 l -3,-3 H 3 c -0.016275,-1.987e-4 -0.032553,-1.987e-4 -0.048828,0 z"
      sodipodi:nodetypes="cccsccsccsccccc" />
   <path

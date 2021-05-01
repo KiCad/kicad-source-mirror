@@ -75,7 +75,7 @@
   <defs
      id="defs115972">
     <style
-       id="style115970">.cls-1,.cls-2,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-4{stroke:#F4EFF3;}.cls-1,.cls-2{stroke-width:2px;}.cls-2{stroke:#8f8f8f;}.cls-3{fill:#42B8EB;}</style>
+       id="style115970">.cls-1,.cls-2,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-4{stroke:#DED3DD;}.cls-1,.cls-2{stroke-width:2px;}.cls-2{stroke:#8f8f8f;}.cls-3{fill:#42B8EB;}</style>
   </defs>
   <title
      id="title115974">auto_track_width</title>
@@ -88,7 +88,7 @@
      class="cls-2"
      d="m 13,21 h 5 c 2.209139,0 4,-1.790861 4,-4 V 2"
      id="path115978"
-     style="stroke:#F4EFF3;stroke-width:1.99937;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="stroke:#DED3DD;stroke-width:1.99937;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      sodipodi:nodetypes="cssc" />
   <circle
      class="cls-3"

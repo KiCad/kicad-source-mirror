@@ -75,13 +75,13 @@
   <defs
      id="defs27977">
     <style
-       id="style27975">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;stroke-dasharray:2 4;}.cls-2{fill:#42B8EB;}</style>
+       id="style27975">.cls-1{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;stroke-dasharray:2 4;}.cls-2{fill:#42B8EB;}</style>
   </defs>
   <title
      id="title27979">add_dashed_line</title>
   <path
      id="polygon27981"
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2, 4;stroke-dashoffset:0"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2, 4;stroke-dashoffset:0"
      d="M 11,14 3,3 21,6 19.5,18 4.5,21.5 Z"
      class="cls-1"
      sodipodi:nodetypes="cccccc" />

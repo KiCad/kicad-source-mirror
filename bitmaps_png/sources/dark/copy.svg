@@ -84,37 +84,37 @@
      sodipodi:nodetypes="ccccccc"
      class="st0"
      d="M 12.5,0.5 H 0.49999998 v 21 H 17.499999 V 5.4999999 Z"
-     style="display:none;fill:#545454;stroke:#F4EFF3;stroke-width:1;stroke-miterlimit:10" />
+     style="display:none;fill:#545454;stroke:#DED3DD;stroke-width:1;stroke-miterlimit:10" />
   <path
      id="polygon25929"
      sodipodi:nodetypes="cccccc"
      class="st0"
      d="m 11.5,1.5 h -10 v 19 h 15 v -14 z"
-     style="fill:#545454;stroke:#F4EFF3;stroke-miterlimit:10" />
+     style="fill:#545454;stroke:#DED3DD;stroke-miterlimit:10" />
   <path
      id="polygon25931"
      sodipodi:nodetypes="cccc"
      class="st1"
      d="M 17,7 11,1 v 6 z"
-     style="fill:#F4EFF3" />
+     style="fill:#DED3DD" />
   <path
      id="polygon25929-97"
      sodipodi:nodetypes="cccccc"
      class="st0"
      d="m 17.5,3.5 h -10 v 19 h 15 v -14 z"
-     style="fill:#545454;stroke:#F4EFF3;stroke-miterlimit:10" />
+     style="fill:#545454;stroke:#DED3DD;stroke-miterlimit:10" />
   <path
      id="polygon25931-5"
      sodipodi:nodetypes="cccc"
      class="st1"
      d="M 23,9 17,3 v 6 z"
-     style="fill:#F4EFF3" />
+     style="fill:#DED3DD" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 10,11.5 h 8"
      id="path3435" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 10,14.5 h 5"
      id="path3437" />
 </svg>

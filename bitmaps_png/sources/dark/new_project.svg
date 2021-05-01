@@ -75,13 +75,13 @@
   <defs
      id="defs158486">
     <style
-       id="style158484">.cls-1{fill:#ededed;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#42B8EB;}.cls-5,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-5{stroke:#F4EFF3;}.cls-6{fill:#f2647e;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
+       id="style158484">.cls-1{fill:#ededed;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#42B8EB;}.cls-5,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-5{stroke:#DED3DD;}.cls-6{fill:#f2647e;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
   </defs>
   <title
      id="title158488">new_project</title>
   <path
      id="rect158494"
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:1"
      d="M 4 1 L 4 23 L 21 23 L 21 5.5 L 15.5 5.5 L 15.5 1 L 4 1 z " />
   <path
      class="cls-4"

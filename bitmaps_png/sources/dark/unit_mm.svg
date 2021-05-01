@@ -80,7 +80,7 @@
       <path
          transform="scale(0.3) rotate(180) translate(-2.3,0)"
          d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
-         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#F4EFF3;stroke-opacity:1;fill:#F4EFF3;fill-opacity:1"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#DED3DD;stroke-opacity:1;fill:#DED3DD;fill-opacity:1"
          id="path886" />
     </marker>
     <marker
@@ -94,7 +94,7 @@
       <path
          transform="scale(0.3) translate(-2.3,0)"
          d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
-         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#F4EFF3;stroke-opacity:1;fill:#F4EFF3;fill-opacity:1"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#DED3DD;stroke-opacity:1;fill:#DED3DD;fill-opacity:1"
          id="path883" />
     </marker>
     <marker
@@ -107,7 +107,7 @@
        inkscape:isstock="true">
       <path
          transform="scale(0.2) translate(6,0)"
-         style="fill-rule:evenodd;stroke:#F4EFF3;stroke-width:1pt;stroke-opacity:1;fill:#F4EFF3;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#DED3DD;stroke-width:1pt;stroke-opacity:1;fill:#DED3DD;fill-opacity:1"
          d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
          id="path1231" />
     </marker>
@@ -121,7 +121,7 @@
        inkscape:isstock="true">
       <path
          transform="scale(0.2) translate(6,0)"
-         style="fill-rule:evenodd;stroke:#F4EFF3;stroke-width:1pt;stroke-opacity:1;fill:#F4EFF3;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#DED3DD;stroke-width:1pt;stroke-opacity:1;fill:#DED3DD;fill-opacity:1"
          d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
          id="path865" />
     </marker>
@@ -135,7 +135,7 @@
        inkscape:isstock="true">
       <path
          transform="scale(0.2) rotate(180) translate(6,0)"
-         style="fill-rule:evenodd;stroke:#F4EFF3;stroke-width:1pt;stroke-opacity:1;fill:#F4EFF3;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#DED3DD;stroke-width:1pt;stroke-opacity:1;fill:#DED3DD;fill-opacity:1"
          d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
          id="path868" />
     </marker>
@@ -149,7 +149,7 @@
        inkscape:isstock="true">
       <path
          transform="scale(-0.2)"
-         style="fill-rule:evenodd;stroke:#F4EFF3;stroke-width:1pt;stroke-opacity:1;fill:#F4EFF3;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#DED3DD;stroke-width:1pt;stroke-opacity:1;fill:#DED3DD;fill-opacity:1"
          d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
          id="path992" />
     </marker>
@@ -163,12 +163,12 @@
        inkscape:isstock="true">
       <path
          transform="scale(0.4) translate(10,0)"
-         style="fill-rule:evenodd;stroke:#F4EFF3;stroke-width:1pt;stroke-opacity:1;fill:#F4EFF3;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#DED3DD;stroke-width:1pt;stroke-opacity:1;fill:#DED3DD;fill-opacity:1"
          d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
          id="path859" />
     </marker>
     <style
-       id="style3">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#F4EFF3;}</style>
+       id="style3">.cls-1{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#DED3DD;}</style>
   </defs>
   <title
      id="title7">unit_mils</title>
@@ -182,17 +182,17 @@
    id="tspan847"
    x="13.55504"
    y="12.963709"
-   style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.8667px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';text-align:center;text-anchor:middle;fill:#F4EFF3;fill-opacity:1">mm</tspan> </text>
+   style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.8667px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';text-align:center;text-anchor:middle;fill:#DED3DD;fill-opacity:1">mm</tspan> </text>
   <path
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 1,17 6,-2.5 v 5 L 1,17"
      id="path911" />
   <path
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 23,17 -6,-2.5 v 5 L 23,17"
      id="path911-5" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2.00001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2.00001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 18,17 H 6"
      id="path928" />
 </svg>

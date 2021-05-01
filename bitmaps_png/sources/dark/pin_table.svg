@@ -84,7 +84,7 @@
      id="title159129">pin_table</title>
   <path
      id="rect845"
-     style="display:inline;fill:#545454;fill-opacity:1;stroke:#F4EFF3;stroke-width:0.999997;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     style="display:inline;fill:#545454;fill-opacity:1;stroke:#DED3DD;stroke-width:0.999997;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
      d="m 1.5,1.5 v 16 L 4,17 l 2.5,1.5 0.5,1 h 15.5 v -18 z"
      sodipodi:nodetypes="cccccccc" />
   <line
@@ -94,7 +94,7 @@
      x2="23"
      y2="7.5"
      id="line159137"
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-miterlimit:10;stroke-opacity:1" />
+     style="fill:none;stroke:#DED3DD;stroke-width:1;stroke-miterlimit:10;stroke-opacity:1" />
   <line
      class="cls-3"
      x1="1"
@@ -102,7 +102,7 @@
      x2="23"
      y2="11.5364"
      id="line159139"
-     style="stroke:#F4EFF3;stroke-width:1;stroke-opacity:1" />
+     style="stroke:#DED3DD;stroke-width:1;stroke-opacity:1" />
   <line
      class="cls-3"
      x1="1"
@@ -110,7 +110,7 @@
      x2="23"
      y2="15.5"
      id="line159141"
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-miterlimit:10;stroke-opacity:1" />
+     style="fill:none;stroke:#DED3DD;stroke-width:1;stroke-miterlimit:10;stroke-opacity:1" />
   <line
      class="cls-3"
      x1="15.5"
@@ -118,7 +118,7 @@
      x2="15.5"
      y2="19"
      id="line159145"
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-miterlimit:10;stroke-opacity:1" />
+     style="fill:none;stroke:#DED3DD;stroke-width:1;stroke-miterlimit:10;stroke-opacity:1" />
   <path
      class="cls-4"
      d="M 22.9962,20.9858 H 7.2784 a 1,1 0 0 1 0,-2 h 15.7178 a 1,1 0 0 1 0,2 z"
@@ -128,7 +128,7 @@
      d="m 3.9991,23.9936 a 4.0078,4.0078 0 1 1 4.0078,-4.0078 4.0121,4.0121 0 0 1 -4.0078,4.0078 z m 0,-6.0156 A 2.0078,2.0078 0 1 0 6.0069,19.9858 2.01,2.01 0 0 0 3.9991,17.978 Z"
      id="path159151" />
   <line
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-miterlimit:10;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1;stroke-miterlimit:10;stroke-opacity:1"
      id="line828"
      y2="19"
      x2="8.5"
@@ -136,7 +136,7 @@
      x1="8.5"
      class="cls-3" />
   <rect
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect849"
      width="21"
      height="2.5"

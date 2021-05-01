@@ -75,13 +75,13 @@
   <defs
      id="defs25895">
     <style
-       id="style25893">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#F4EFF3;}.cls-2{fill:#42B8EB;}.cls-3{fill:#f2647e;}.cls-4{stroke:#545454;stroke-width:2px;}</style>
+       id="style25893">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#DED3DD;}.cls-2{fill:#42B8EB;}.cls-3{fill:#f2647e;}.cls-4{stroke:#545454;stroke-width:2px;}</style>
   </defs>
   <title
      id="title25897">new_footprint</title>
   <path
      id="polygon9"
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:none;stroke:#DED3DD;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
      d="M 0.53710938 3.4492188 L 0.53710938 8.6152344 L 2.5195312 10.417969 L 2.5195312 12.902344 L 0.53710938 14.703125 L 0.53710938 20.451172 L 23.519531 20.451172 L 23.535156 5 L 19 5 L 19 3.4492188 L 0.53710938 3.4492188 z " />
   <rect
      class="cls-2"

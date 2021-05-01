@@ -65,7 +65,7 @@
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccc" />
   <path
-     style="fill:#666666;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#666666;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 4,2.0000001 V 22"
      id="path2999"
      inkscape:connector-curvature="0"
@@ -74,6 +74,6 @@
      inkscape:connector-curvature="0"
      id="path3769"
      d="M 22,20 H 2.0000001"
-     style="fill:#666666;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#666666;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      sodipodi:nodetypes="cc" />
 </svg>

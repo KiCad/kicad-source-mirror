@@ -70,7 +70,7 @@
    id="defs41" />
   <path
    id="polyline160015"
-   style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+   style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
    d="M 3,6.5 8,2 13,6.5"
    class="cls-1"
    sodipodi:nodetypes="ccc" /><line
@@ -80,5 +80,5 @@
    x2="8"
    y2="14"
    id="line160013"
-   style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+   style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 </svg>

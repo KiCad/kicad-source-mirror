@@ -75,7 +75,7 @@
   <defs
      id="defs5">
     <style
-       id="style3">.cls-1{fill:#f2647e;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#42B8EB;}.cls-4{fill:#f29100;}.cls-5{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}</style>
+       id="style3">.cls-1{fill:#f2647e;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#42B8EB;}.cls-4{fill:#f29100;}.cls-5{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;}</style>
   </defs>
   <title
      id="title7">via_sketch</title>
@@ -112,5 +112,5 @@
      x2="23.5"
      y2="0.5"
      id="line158655"
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+     style="fill:none;stroke:#DED3DD;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
 </svg>

@@ -78,7 +78,7 @@
   <defs
      id="defs160221">
     <style
-       id="style160219">.cls-1{fill:#d8d8d8;}.cls-2{fill:#E0E0E0;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#42B8EB;}.cls-5{fill:#fff;}.cls-6{fill:#8f8f8f;}.cls-7{fill:none;stroke:#f2647e;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style160219">.cls-1{fill:#d8d8d8;}.cls-2{fill:#E0E0E0;}.cls-3{fill:#DED3DD;}.cls-4{fill:#42B8EB;}.cls-5{fill:#fff;}.cls-6{fill:#8f8f8f;}.cls-7{fill:none;stroke:#f2647e;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath954">
@@ -1008,7 +1008,7 @@
        id="path1543"
        inkscape:connector-curvature="0" />
     <path
-       style="display:inline;fill:none;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#DED3DD;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 5.143594,24 19,0"
        id="path1545"
        inkscape:connector-curvature="0" />

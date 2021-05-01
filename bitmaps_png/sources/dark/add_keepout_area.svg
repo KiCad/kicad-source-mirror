@@ -58,8 +58,8 @@
 <style
    type="text/css"
    id="style833">
-	.st0{fill:#F4EFF3;}
-	.st1{fill:none;stroke:#F4EFF3;}
+	.st0{fill:#DED3DD;}
+	.st1{fill:none;stroke:#DED3DD;}
 </style>
 <g
    id="Слой_1"
@@ -136,7 +136,7 @@
    id="title842">add_keepout_area</title>
 	<path
    id="polygon844"
-   style="fill:#F4EFF3"
+   style="fill:#DED3DD"
    d="M 2.1,20.5 14,8.5 h 2.5 l -13,13.4 z"
    class="st0"
    sodipodi:nodetypes="ccccc" />
@@ -154,7 +154,7 @@
    id="polygon850" />
 	<path
    id="polygon852"
-   style="fill:#F4EFF3"
+   style="fill:#DED3DD"
    d="M 7.1,21.5 20,8.5 h 1.5 V 10 L 9.9,21.5 Z"
    class="st0"
    sodipodi:nodetypes="cccccc" />
@@ -168,7 +168,7 @@
    id="polygon856" />
 	<path
    id="polygon858"
-   style="fill:none;stroke:#F4EFF3"
+   style="fill:none;stroke:#DED3DD"
    d="m 11.5,2.5 h -9 v 19 h 19 v -13 h -10 z"
    class="st1"
    sodipodi:nodetypes="ccccccc" />

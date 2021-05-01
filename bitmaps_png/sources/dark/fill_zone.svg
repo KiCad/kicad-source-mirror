@@ -76,7 +76,7 @@
   <defs
      id="defs117277">
     <style
-       id="style117269">.cls-1{fill:#595959;}.cls-2{fill:#666;}.cls-3{fill:url(#Безымянный_градиент_19);}.cls-4{fill:url(#Безымянный_градиент_19-2);}.cls-5{fill:#f29100;}.cls-6,.cls-9{fill:#8f8f8f;}.cls-7{fill:#F4EFF3;}.cls-8{fill:#42B8EB;opacity:0.8;}.cls-10,.cls-9{stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75px;}.cls-10{fill:none;}.cls-11{fill:#f2647e;}</style>
+       id="style117269">.cls-1{fill:#595959;}.cls-2{fill:#666;}.cls-3{fill:url(#Безымянный_градиент_19);}.cls-4{fill:url(#Безымянный_градиент_19-2);}.cls-5{fill:#f29100;}.cls-6,.cls-9{fill:#8f8f8f;}.cls-7{fill:#DED3DD;}.cls-8{fill:#42B8EB;opacity:0.8;}.cls-10,.cls-9{stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75px;}.cls-10{fill:none;}.cls-11{fill:#f2647e;}</style>
     <linearGradient
        id="Безымянный_градиент_19"
        x1="14.5755"
@@ -118,7 +118,7 @@
      class="cls-9"
      d="m 11.147713,2.6405896 8.954533,9.0076514 -9.258464,9.313061 A 1.7637589,1.7741905 0 0 1 8.3494502,20.96128 L 1.8892259,14.462734 a 1.7637589,1.7741905 0 0 1 2.17e-5,-2.509083 z"
      id="path117299"
-     style="fill:#F4EFF3;fill-opacity:1" />
+     style="fill:#DED3DD;fill-opacity:1" />
   <path
      class="cls-10"
      d="m 13.517911,12.030864 a 1.9450871,1.9565912 0 1 1 0,-2.7669993 1.9449572,1.9564604 0 0 1 0,2.7669993 z"

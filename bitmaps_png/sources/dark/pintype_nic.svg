@@ -75,7 +75,7 @@
   <defs
      id="defs26367">
     <style
-       id="style26365">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style26365">.cls-1{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title26369">pintype_input</title>
@@ -86,7 +86,7 @@
      x2="12"
      y2="12"
      id="line26373"
-     style="fill:none;stroke:#F4EFF3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+     style="fill:none;stroke:#DED3DD;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-1"
      x1="23.0058"

@@ -75,12 +75,12 @@
   <defs
      id="defs116686">
     <style
-       id="style116684">.cls-1{fill:#8f8f8f;}.cls-2{fill:#fff;}.cls-2,.cls-3{stroke:#F4EFF3;}.cls-2,.cls-3,.cls-4{stroke-linecap:round;stroke-linejoin:round;}.cls-3,.cls-4{fill:none;}.cls-4{stroke:#42B8EB;}.cls-5{fill:#F4EFF3;}</style>
+       id="style116684">.cls-1{fill:#8f8f8f;}.cls-2{fill:#fff;}.cls-2,.cls-3{stroke:#DED3DD;}.cls-2,.cls-3,.cls-4{stroke-linecap:round;stroke-linejoin:round;}.cls-3,.cls-4{fill:none;}.cls-4{stroke:#42B8EB;}.cls-5{fill:#DED3DD;}</style>
   </defs>
   <title
      id="title116688">drc</title>
   <path
-     style="display:inline;fill:#545454;fill-opacity:1;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="display:inline;fill:#545454;fill-opacity:1;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 1.5,1.5 h 21 v 3 0 l -8,8 v 10 h -5 v -10 l -8,-8 z"
      id="path943"
      sodipodi:nodetypes="cccccccccc" />

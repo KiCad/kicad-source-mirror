@@ -75,7 +75,7 @@
   <defs
      id="defs159857">
     <style
-       id="style159855">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#42B8EB;}</style>
+       id="style159855">.cls-1{fill:#8f8f8f;}.cls-2{fill:#DED3DD;}.cls-3{fill:#42B8EB;}</style>
   </defs>
   <title
      id="title159859">show_ratsnest</title>
@@ -96,7 +96,7 @@
      class="cls-3"
      d="M 11.7432,7.999 A 2.8084,2.8084 0 1 1 8.9347,5.19 2.8086,2.8086 0 0 1 11.7432,7.999 Z"
      id="path159869"
-     style="fill:#F4EFF3;fill-opacity:1" />
+     style="fill:#DED3DD;fill-opacity:1" />
   <path
      class="cls-1"
      d="m 10.9345,7.999 a 2,2 0 1 1 -2,-2 2,2 0 0 1 2,2 z"

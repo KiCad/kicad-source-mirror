@@ -74,33 +74,33 @@
     </rdf:RDF>
   </metadata>
   <rect
-     style="fill:#545454;fill-opacity:1;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#545454;fill-opacity:1;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect1430"
      width="10"
      height="5"
      x="2"
      y="2" />
   <rect
-     style="fill:#F4EFF3;fill-opacity:1;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#DED3DD;fill-opacity:1;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect1430-0"
      width="8"
      height="4"
      x="14"
      y="10" />
   <rect
-     style="fill:#F4EFF3;fill-opacity:1;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#DED3DD;fill-opacity:1;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect1430-0-7"
      width="8"
      height="4"
      x="14"
      y="18" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 7,7 v 13 h 7"
      id="path1462"
      sodipodi:nodetypes="ccc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 7,12 h 7.5"
      id="path1464"
      sodipodi:nodetypes="cc" />

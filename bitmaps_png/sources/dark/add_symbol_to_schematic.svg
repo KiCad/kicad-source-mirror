@@ -21,7 +21,7 @@
      points="5,24 21.654,13 5,2 "
      id="polygon27928"
      transform="translate(-1,-1.0000859)"
-     style="fill:none;stroke:#F4EFF3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+     style="fill:none;stroke:#DED3DD;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-1"
      x1="20.6542"
@@ -29,7 +29,7 @@
      x2="23.0242"
      y2="11.999914"
      id="line27930"
-     style="fill:none;stroke:#F4EFF3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+     style="fill:none;stroke:#DED3DD;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-1"
      x1="3.9219999"
@@ -37,7 +37,7 @@
      x2="1"
      y2="5.9999142"
      id="line27932"
-     style="fill:none;stroke:#F4EFF3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+     style="fill:none;stroke:#DED3DD;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-1"
      x1="3.9043999"
@@ -45,20 +45,20 @@
      x2="1"
      y2="17.999914"
      id="line27934"
-     style="fill:none;stroke:#F4EFF3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+     style="fill:none;stroke:#DED3DD;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <path
      id="line27936"
-     style="fill:none;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     style="fill:none;stroke:#DED3DD;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
      d="m 7,8.4999141 h 3"
      class="cls-1"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 8.5,11.999914 v 5"
      id="path17250"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 6.000682,14.464151 11,14.499914"
      id="path17252"
      sodipodi:nodetypes="cc" />
@@ -124,7 +124,7 @@
   <defs
      id="defs5">
     <style
-       id="style3">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#f2647e;}.cls-4{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style3">.cls-1{fill:#8f8f8f;}.cls-2{fill:#DED3DD;}.cls-3{fill:#f2647e;}.cls-4{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title7">add_symbol_to_schematic</title>

@@ -75,13 +75,13 @@
   <defs
      id="defs190">
     <style
-       id="style188">.cls-1,.cls-3,.cls-4{fill:none;stroke-linejoin:round;}.cls-1{stroke:#f2647e;}.cls-1,.cls-4{stroke-linecap:round;}.cls-2{fill:#d8d8d8;}.cls-3{stroke:#42B8EB;}.cls-4{stroke:#F4EFF3;}.cls-5{fill:#F4EFF3;}.cls-6{fill:#8f8f8f;}.cls-7{fill:#f2647e;}</style>
+       id="style188">.cls-1,.cls-3,.cls-4{fill:none;stroke-linejoin:round;}.cls-1{stroke:#f2647e;}.cls-1,.cls-4{stroke-linecap:round;}.cls-2{fill:#d8d8d8;}.cls-3{stroke:#42B8EB;}.cls-4{stroke:#DED3DD;}.cls-5{fill:#DED3DD;}.cls-6{fill:#8f8f8f;}.cls-7{fill:#f2647e;}</style>
   </defs>
   <title
      id="title192">add_hierarchical_label</title>
   <path
      id="polygon200"
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none"
      d="m 21.015362,12 -4.5,-5 -4.5,5 4.5,5 z"
      class="cls-4"
      sodipodi:nodetypes="ccccc" />
@@ -96,10 +96,10 @@
        id="tspan12813"
        x="1.0236715"
        y="17.606413"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:16.3788px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Medium';fill:#F4EFF3;fill-opacity:1;stroke-width:1.02367"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:16.3788px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Medium';fill:#DED3DD;fill-opacity:1;stroke-width:1.02367"
        dy="0">A</tspan></text>
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 21.015362,12 h 4.28474"
      id="path12817" />
 </svg>

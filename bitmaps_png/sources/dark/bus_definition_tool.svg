@@ -75,7 +75,7 @@
   <defs
      id="defs619">
     <style
-       id="style617">.cls-1{fill:#8f8f8f;}.cls-2,.cls-3,.cls-4{fill:none;stroke-linejoin:round;}.cls-2,.cls-4{stroke:#F4EFF3;}.cls-2{stroke-width:2px;}.cls-3{stroke:#42B8EB;}.cls-3,.cls-4{stroke-linecap:round;}.cls-5{fill:#fff;}.cls-6{fill:#f2647e;}</style>
+       id="style617">.cls-1{fill:#8f8f8f;}.cls-2,.cls-3,.cls-4{fill:none;stroke-linejoin:round;}.cls-2,.cls-4{stroke:#DED3DD;}.cls-2{stroke-width:2px;}.cls-3{stroke:#42B8EB;}.cls-3,.cls-4{stroke-linecap:round;}.cls-5{fill:#fff;}.cls-6{fill:#f2647e;}</style>
   </defs>
   <title
      id="title621">bus_definition_tool</title>
@@ -117,7 +117,7 @@
      x2="11"
      y2="8"
      id="line631-7"
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      style="fill:none;stroke:#42B8EB;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 11,8 4.5,14.5"

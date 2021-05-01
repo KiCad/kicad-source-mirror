@@ -75,7 +75,7 @@
   <defs
      id="defs160511">
     <style
-       id="style160509">.cls-1{fill:#F4EFF3;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#42B8EB;}</style>
+       id="style160509">.cls-1{fill:#DED3DD;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#42B8EB;}</style>
   </defs>
   <title
      id="title160513">zoom_auto_fit_in_page</title>
@@ -93,5 +93,5 @@
      class="cls-1"
      d="M 9.997649,18.999997 A 8.998129,8.9999987 0 1 1 16.362105,3.6373771 v 0 A 8.9954858,8.9973549 0 0 1 9.997649,18.999997 Z m 0,-16.2787297 a 7.2800339,7.2815466 0 1 0 5.151046,2.129772 7.2612755,7.2627843 0 0 0 -5.151046,-2.1294309 z"
      id="path160587"
-     style="fill:#F4EFF3;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
 </svg>

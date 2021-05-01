@@ -75,23 +75,23 @@
   <defs
      id="defs26991">
     <style
-       id="style26989">.cls-1{fill:#F4EFF3;}.cls-2{fill:#f2647e;}.cls-3{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}</style>
+       id="style26989">.cls-1{fill:#DED3DD;}.cls-2{fill:#f2647e;}.cls-3{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;}</style>
   </defs>
   <title
      id="title26993">rotate_pos_z</title>
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 12,13 H 22.5"
      id="path3721"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 12,13 V 1"
      id="path3719"
      sodipodi:nodetypes="cc" />
   <path
      id="polygon27005"
-     style="fill:#F4EFF3;stroke-width:1"
+     style="fill:#DED3DD;stroke-width:1"
      d="m 4.6825815,12.29109 0.99606,6.576265 L 0.50000006,16 Z"
      sodipodi:nodetypes="cccc"
      inkscape:transform-center-x="-1.0283138"
@@ -117,7 +117,7 @@
      style="stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none" />
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:9.56849px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';letter-spacing:0px;word-spacing:0px;fill:#F4EFF3;fill-opacity:1;stroke-width:1"
+     style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:9.56849px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';letter-spacing:0px;word-spacing:0px;fill:#DED3DD;fill-opacity:1;stroke-width:1"
      x="15.948255"
      y="8.7775164"
      id="text3785"
@@ -126,5 +126,5 @@
        id="tspan3783"
        x="15.948255"
        y="8.7775164"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.56849px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#F4EFF3;fill-opacity:1;stroke-width:1">Y</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.56849px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#DED3DD;fill-opacity:1;stroke-width:1">Y</tspan></text>
 </svg>

@@ -75,7 +75,7 @@
   <defs
      id="defs26011">
     <style
-       id="style26009">.cls-1{fill:#ededed;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#42B8EB;}.cls-5{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-6{fill:#f2647e;}.cls-7{fill:#fff;}</style>
+       id="style26009">.cls-1{fill:#ededed;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#42B8EB;}.cls-5{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;}.cls-6{fill:#f2647e;}.cls-7{fill:#fff;}</style>
   </defs>
   <title
      id="title26013">open_project</title>
@@ -83,7 +83,7 @@
      id="g869">
     <path
        id="rect158494"
-       style="fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1"
+       style="fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:1"
        d="M 4,1 V 23 H 21 V 1 Z"
        sodipodi:nodetypes="ccccc" />
     <path

@@ -75,7 +75,7 @@
   <defs
      id="defs25235">
     <style
-       id="style25233">.cls-1{fill:#42B8EB;}.cls-2{fill:#f29100;}.cls-3{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-4{fill:#F4EFF3;}</style>
+       id="style25233">.cls-1{fill:#42B8EB;}.cls-2{fill:#f29100;}.cls-3{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;}.cls-4{fill:#DED3DD;}</style>
   </defs>
   <title
      id="title25237">hole_to_copper_clearance</title>
@@ -96,13 +96,13 @@
      id="line25243" />
   <path
      id="polygon26709"
-     style="fill:#F4EFF3;stroke:none"
+     style="fill:#DED3DD;stroke:none"
      d="m 4.971,18.706 0.8962582,-5.761659 4.6093278,3.841106 z"
      class="cls-3"
      sodipodi:nodetypes="cccc" />
   <path
      id="polygon26709-6"
-     style="fill:#F4EFF3;stroke:none;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:#DED3DD;stroke:none;stroke-linecap:round;stroke-linejoin:round"
      d="M 15.196,6.735 14.299742,12.496659 9.6904139,8.655553 Z"
      class="cls-3"
      sodipodi:nodetypes="cccc" />

@@ -75,17 +75,17 @@
   <defs
      id="defs27361">
     <style
-       id="style27359">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#42B8EB;}</style>
+       id="style27359">.cls-1{fill:#8f8f8f;}.cls-2{fill:#DED3DD;}.cls-3{fill:#42B8EB;}</style>
   </defs>
   <title
      id="title27363">tool_ratsnest</title>
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="M 1.6666667,-0.33333333 12,12 v 0 0 L 24.333333,1.6666667"
      id="path1418"
      sodipodi:nodetypes="ccccc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1.00157;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1.00157;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 1.6666667,24.333333 12,12 24.333333,22.333333"
      id="path1420"
      sodipodi:nodetypes="ccc" />
@@ -93,7 +93,7 @@
      class="cls-3"
      d="M 14.8088,12.0002 A 2.8088,2.8088 0 1 1 12,9.1912 a 2.8087,2.8087 0 0 1 2.8088,2.809 z"
      id="path27373"
-     style="fill:#F4EFF3;fill-opacity:1" />
+     style="fill:#DED3DD;fill-opacity:1" />
   <circle
      class="cls-1"
      cx="12"

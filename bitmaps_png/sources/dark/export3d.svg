@@ -28,7 +28,7 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs24663">
-      <style id="style24661">.cls-1,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#8f8f8f;}.cls-2{fill:#E0E0E0;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#686868;}.cls-5{fill:#42B8EB;}.cls-6{fill:#f2647e;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
+      <style id="style24661">.cls-1,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#8f8f8f;}.cls-2{fill:#E0E0E0;}.cls-3{fill:#DED3DD;}.cls-4{fill:#686868;}.cls-5{fill:#42B8EB;}.cls-6{fill:#f2647e;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
    </defs>
    <title id="title24665">export3d</title>
    <line class="cls-1" x1="5.1465998" y1="16.841299" x2="5.1465998" y2="23.3456" id="line24667" />

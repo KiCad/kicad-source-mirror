@@ -76,7 +76,7 @@
   <defs
      id="defs11">
     <style
-       id="style3">.cls-1{fill:#42B8EB;}.cls-2{fill:#595959;}.cls-3{fill:url(#Безымянный_градиент_19);}.cls-4{fill:url(#Безымянный_градиент_19-2);}.cls-5{fill:#F4EFF3;}.cls-6{fill:#f2647e;}.cls-7{fill:#545454;}</style>
+       id="style3">.cls-1{fill:#42B8EB;}.cls-2{fill:#595959;}.cls-3{fill:url(#Безымянный_градиент_19);}.cls-4{fill:url(#Безымянный_градиент_19-2);}.cls-5{fill:#DED3DD;}.cls-6{fill:#f2647e;}.cls-7{fill:#545454;}</style>
     <linearGradient
        id="Безымянный_градиент_19"
        x1="8.3372"
@@ -104,13 +104,13 @@
   <title
      id="title13">show_zone</title>
   <circle
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
      id="path867"
      cx="17"
      cy="11"
      r="2" />
   <rect
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
      id="rect869"
      width="5"
      height="2"

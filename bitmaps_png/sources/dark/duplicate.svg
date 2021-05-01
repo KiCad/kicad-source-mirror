@@ -84,7 +84,7 @@
      sodipodi:nodetypes="ccccc"
      class="st0"
      d="m 1.5,1.5 v 19 h 15 v -19 z"
-     style="fill:#545454;stroke:#F4EFF3;stroke-miterlimit:10" />
+     style="fill:#545454;stroke:#DED3DD;stroke-miterlimit:10" />
   <path
      id="polygon25929-97"
      sodipodi:nodetypes="ccccc"
@@ -92,11 +92,11 @@
      d="m 7.5,3.5 v 19 h 15 v -19 z"
      style="fill:#545454;stroke:#42B8EB;stroke-miterlimit:10;stroke-opacity:1" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 15,9.9999997 V 16"
      id="path2083" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 12,13 h 6"
      id="path2083-4" />
 </svg>

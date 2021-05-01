@@ -75,7 +75,7 @@
   <defs
      id="defs157793">
     <style
-       id="style157791">.cls-1,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#8f8f8f;}.cls-2{fill:#E0E0E0;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#686868;}.cls-5{fill:#42B8EB;}.cls-6{fill:#f2647e;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
+       id="style157791">.cls-1,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#8f8f8f;}.cls-2{fill:#E0E0E0;}.cls-3{fill:#DED3DD;}.cls-4{fill:#686868;}.cls-5{fill:#42B8EB;}.cls-6{fill:#f2647e;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
   </defs>
   <title
      id="title157795">import3d</title>
@@ -105,7 +105,7 @@
      style="fill:#E0E0E0" />
   <path
      id="polygon157803"
-     style="fill:#F4EFF3"
+     style="fill:#DED3DD"
      d="m 0.049998,2.0172999 1,-2 h 13.000001 l 1,2 z"
      sodipodi:nodetypes="ccccc" />
   <path
@@ -115,7 +115,7 @@
      sodipodi:nodetypes="ccccc" />
   <path
      id="polygon157807"
-     style="fill:#F4EFF3"
+     style="fill:#DED3DD"
      d="M 0.049998,15.0173 1.100998,13.5 H 14 l 1.049999,1.5173 z"
      sodipodi:nodetypes="ccccc" />
   <path

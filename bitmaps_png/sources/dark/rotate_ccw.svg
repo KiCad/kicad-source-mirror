@@ -77,7 +77,7 @@
   <defs
      id="defs25707">
     <style
-       id="style25705">.cls-1{fill:#F4EFF3;}.cls-2{fill:#42B8EB;}.cls-3{fill:#8f8f8f;}</style>
+       id="style25705">.cls-1{fill:#DED3DD;}.cls-2{fill:#42B8EB;}.cls-3{fill:#8f8f8f;}</style>
   </defs>
   <title
      id="title25709">mirror_h</title>
@@ -89,7 +89,7 @@
      style="fill:none;stroke:#42B8EB;stroke-width:1.67083;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   <path
      id="path1535"
-     style="fill:#f4eff3;fill-opacity:1;stroke-width:1.09389"
+     style="fill:#DED3DD;fill-opacity:1;stroke-width:1.09389"
      d="M 22,21 2,11.666668 V 21 Z"
      class="cls-2"
      sodipodi:nodetypes="cccc" />

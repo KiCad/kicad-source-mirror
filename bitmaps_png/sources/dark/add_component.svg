@@ -75,7 +75,7 @@
   <defs
      id="defs27924">
     <style
-       id="style27922">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style27922">.cls-1{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title27926">add_component</title>
@@ -107,17 +107,17 @@
      id="line27934" />
   <path
      id="line27936"
-     style="fill:none;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     style="fill:none;stroke:#DED3DD;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
      d="m 7,8.5 h 3"
      class="cls-1"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 8.5,12 v 5"
      id="path17250"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 6.000682,14.464237 11,14.5"
      id="path17252"
      sodipodi:nodetypes="cc" />

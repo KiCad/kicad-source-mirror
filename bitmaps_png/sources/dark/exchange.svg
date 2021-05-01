@@ -76,7 +76,7 @@
   <defs
      id="defs116951">
     <style
-       id="style116943">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#42B8EB;}.cls-3{fill:#f2647e;}.cls-4{fill:url(#Безымянный_градиент_19);}.cls-5{fill:url(#Безымянный_градиент_19-2);}.cls-6{fill:#fff;}</style>
+       id="style116943">.cls-1{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#42B8EB;}.cls-3{fill:#f2647e;}.cls-4{fill:url(#Безымянный_градиент_19);}.cls-5{fill:url(#Безымянный_градиент_19-2);}.cls-6{fill:#fff;}</style>
     <linearGradient
        id="Безымянный_градиент_19"
        x1="12.2163"
@@ -105,23 +105,23 @@
      id="title116953">exchange</title>
   <path
      id="path116971"
-     style="display:inline;fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1"
+     style="display:inline;fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:1"
      d="M 15.306641,6 C 14.334953,5.9974206 13.403876,6.3834973 12.71875,7.0722656 L 6.046875,15.462891 C 5.7042971,15.807392 5.2378903,16.0013 4.7519531,16 H 2 1.9296875 v 0.0039 C 1.4065366,16.040781 1.0007505,16.475552 1,17 c 7.505e-4,0.524448 0.4065366,0.959219 0.9296875,0.996094 V 18 H 2 4.7519531 c 0.972017,0.0028 1.9044864,-0.383263 2.5898438,-1.072266 L 14.013672,8.5371094 C 14.356155,8.1925838 14.822706,7.9986758 15.308594,8 h 2.011718 c 1.23835,0.017838 1.238351,-2.017838 0,-2 z"
      sodipodi:nodetypes="cccccccccccccccccc" />
   <path
      id="polygon116973"
-     style="display:inline;fill:#F4EFF3;fill-opacity:1;stroke-width:1"
+     style="display:inline;fill:#DED3DD;fill-opacity:1;stroke-width:1"
      d="M 16,3.5000001 V 10.5 l 6.999999,-3.4999999 z"
      class="cls-5"
      sodipodi:nodetypes="cccc" />
   <path
      id="polygon116977"
-     style="display:inline;fill:#F4EFF3;fill-opacity:1;stroke-width:1"
+     style="display:inline;fill:#DED3DD;fill-opacity:1;stroke-width:1"
      d="M 16,13.500001 V 20.5 L 22.999999,17 Z"
      class="cls-6"
      sodipodi:nodetypes="cccc" />
   <path
      id="path116971-4"
-     style="display:inline;fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1"
+     style="display:inline;fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:1"
      d="M 1.9296875 6 L 1.9296875 6.0039062 C 1.4065375 6.0407812 1.000751 6.475552 1 7 C 1.000751 7.524448 1.4065375 7.9592137 1.9296875 7.9960938 L 1.9296875 8 L 2 8 L 4.7519531 8 C 5.2378903 7.9987 5.7042971 8.1926084 6.046875 8.5371094 L 7.7910156 10.732422 L 9.0214844 9.1855469 L 7.3417969 7.0722656 C 6.6564395 6.3832626 5.7239701 5.9972 4.7519531 6 L 2 6 L 1.9296875 6 z M 12.251953 13.246094 L 11.021484 14.792969 L 12.71875 16.927734 C 13.403876 17.616502 14.334953 18.0026 15.306641 18 L 17.320312 18 C 18.558664 18.017838 18.558663 15.98216 17.320312 16 L 15.308594 16 C 14.822706 16.001325 14.356155 15.807417 14.013672 15.462891 L 12.251953 13.246094 z " />
 </svg>

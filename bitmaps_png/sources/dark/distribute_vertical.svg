@@ -75,7 +75,7 @@
   <defs
      id="defs116574">
     <style
-       id="style116572">.cls-1,.cls-3{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#42B8EB;stroke-width:1.0035px;}.cls-2{fill:#8f8f8f;}.cls-3{stroke:#F4EFF3;}.cls-4{fill:#F4EFF3;}</style>
+       id="style116572">.cls-1,.cls-3{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#42B8EB;stroke-width:1.0035px;}.cls-2{fill:#8f8f8f;}.cls-3{stroke:#DED3DD;}.cls-4{fill:#DED3DD;}</style>
   </defs>
   <title
      id="title116576">distribute_horizontal</title>
@@ -91,7 +91,7 @@
      width="12"
      height="8"
      id="rect116580"
-     style="fill:#F4EFF3;fill-opacity:1;stroke-width:0.999997"
+     style="fill:#DED3DD;fill-opacity:1;stroke-width:0.999997"
      transform="scale(-1)" />
   <path
      id="line116586"
@@ -106,5 +106,5 @@
      height="7.9980106"
      transform="matrix(-0.99999999,1.243547e-4,-7.9587011e-5,-1,0,0)"
      id="rect116588"
-     style="fill:#F4EFF3;fill-opacity:1;stroke-width:1" />
+     style="fill:#DED3DD;fill-opacity:1;stroke-width:1" />
 </svg>

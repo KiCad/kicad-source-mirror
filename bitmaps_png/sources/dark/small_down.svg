@@ -77,7 +77,7 @@
   <defs
      id="defs160009">
     <style
-       id="style160007">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style160007">.cls-1{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title160011">small_down</title>
@@ -90,7 +90,7 @@
      id="line160013" />
   <path
      id="polyline160015"
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
      d="M 13,9.5 8,14 3,9.5"
      class="cls-1"
      sodipodi:nodetypes="ccc" />

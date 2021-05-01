@@ -17,16 +17,16 @@
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <path
-     style="display:inline;fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="display:inline;fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 18,16 H 11.5"
      id="path1476"
      sodipodi:nodetypes="cc" />
   <path
      id="path1455"
-     style="fill:none;fill-opacity:1;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;fill-opacity:1;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 11.500001,16 a 6.5,6.4999995 0 0 1 -6.5,-6.5" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 14.000001,21 5,-5 -5,-5"
      id="path1535"
      sodipodi:nodetypes="ccc" />
@@ -92,12 +92,12 @@
   <defs
      id="defs116847">
     <style
-       id="style116845">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#F4EFF3;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#F4EFF3;}.cls-4{stroke:#f2647e;stroke-width:2px;}</style>
+       id="style116845">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#DED3DD;}.cls-2{fill:#DED3DD;}.cls-3{fill:#DED3DD;}.cls-4{stroke:#f2647e;stroke-width:2px;}</style>
   </defs>
   <title
      id="title116849">enter_sheet</title>
   <path
-     style="display:inline;fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="display:inline;fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 5,9.5 V 3"
      id="path1476-6-3" />
 </svg>

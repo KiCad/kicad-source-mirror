@@ -75,7 +75,7 @@
   <defs
      id="defs157579">
     <style
-       id="style157577">.cls-1{fill:#f29100;}.cls-2{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-3{fill:#F4EFF3;}</style>
+       id="style157577">.cls-1{fill:#f29100;}.cls-2{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;}.cls-3{fill:#DED3DD;}</style>
   </defs>
   <title
      id="title157581">hole_to_hole_clearance</title>
@@ -100,13 +100,13 @@
      id="line157587" />
   <path
      id="polygon26709"
-     style="fill:#F4EFF3"
+     style="fill:#DED3DD"
      d="M 5.2827533,19.202483 6.5,13.5 l 4.387177,4.093003 z"
      class="cls-3"
      sodipodi:nodetypes="cccc" />
   <path
      id="polygon26709-0"
-     style="fill:#F4EFF3"
+     style="fill:#DED3DD"
      d="M 18.877579,5.1615793 17.521256,10.832593 13.235474,6.6335358 Z"
      class="cls-3"
      sodipodi:nodetypes="cccc" />

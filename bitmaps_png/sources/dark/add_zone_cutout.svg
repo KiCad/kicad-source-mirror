@@ -75,13 +75,13 @@
   <defs
      id="defs115786">
     <style
-       id="style115784">.cls-1{fill:#8f8f8f;}.cls-2{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-3{fill:#42B8EB;}</style>
+       id="style115784">.cls-1{fill:#8f8f8f;}.cls-2{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-3{fill:#42B8EB;}</style>
   </defs>
   <title
      id="title115788">add_zone_cutout</title>
   <path
      id="polyline115792"
-     style="fill:#8f8f8f;fill-opacity:1;stroke:#F4EFF3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:#8f8f8f;fill-opacity:1;stroke:#DED3DD;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
      transform="matrix(1.0843314,0,0,1,-1.5097832,-1)"
      d="M 18.914682,20 H 6.0034997 V 6 H 16.148"
      class="cls-2"

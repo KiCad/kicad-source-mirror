@@ -75,7 +75,7 @@
   <defs
      id="defs160583">
     <style
-       id="style160581">.cls-1{fill:#F4EFF3;}.cls-2{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style160581">.cls-1{fill:#DED3DD;}.cls-2{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title160585">zoom_in</title>
@@ -83,7 +83,7 @@
      class="cls-1"
      d="M 9.9976493,18.999997 A 8.998129,8.9999987 0 1 1 16.362105,3.6373763 v 0 A 8.9954858,8.9973549 0 0 1 9.9976493,18.999997 Z m 0,-16.2787305 A 7.2800339,7.2815466 0 1 0 15.148695,4.8510385 7.2612755,7.2627843 0 0 0 9.9976493,2.7216076 Z"
      id="path160587"
-     style="fill:#F4EFF3;fill-opacity:1;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;fill-opacity:1;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      class="cls-1"
      d="M 21.941949,23.012172 A 1.071826,1.071826 0 0 1 21.181811,22.69715 l -6.176896,-6.176896 a 1.0927916,1.0927916 0 0 1 1.520275,-1.520382 l 6.177004,6.176896 a 1.075159,1.075159 0 0 1 -0.760245,1.835404 z"

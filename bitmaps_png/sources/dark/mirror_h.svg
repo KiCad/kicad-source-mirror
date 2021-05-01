@@ -76,7 +76,7 @@
   <defs
      id="defs25707">
     <style
-       id="style25705">.cls-1{fill:#F4EFF3;}.cls-2{fill:#42B8EB;}.cls-3{fill:#8f8f8f;}</style>
+       id="style25705">.cls-1{fill:#DED3DD;}.cls-2{fill:#42B8EB;}.cls-3{fill:#8f8f8f;}</style>
   </defs>
   <title
      id="title25709">mirror_h</title>
@@ -88,7 +88,7 @@
      sodipodi:nodetypes="cccc" />
   <path
      id="polygon25715"
-     style="fill:#f4eff3;stroke-width:1.07418;fill-opacity:1"
+     style="fill:#DED3DD;stroke-width:1.07418;fill-opacity:1"
      d="M 11,2 1.9999997,22 H 11 Z"
      class="cls-3"
      sodipodi:nodetypes="cccc" />

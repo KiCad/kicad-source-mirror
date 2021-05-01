@@ -75,13 +75,13 @@
   <defs
      id="defs27999">
     <style
-       id="style27997">.cls-1{fill:#8f8f8f;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-2{fill:#42B8EB;}</style>
+       id="style27997">.cls-1{fill:#8f8f8f;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-2{fill:#42B8EB;}</style>
   </defs>
   <title
      id="title28001">add_graphical_polygon</title>
   <path
      id="polygon27981-2"
-     style="fill:#8f8f8f;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1"
+     style="fill:#8f8f8f;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1"
      d="M 11,14 3,3 l 18,3 -1.5,12 -15,3.5 z"
      class="cls-1"
      sodipodi:nodetypes="cccccc" />

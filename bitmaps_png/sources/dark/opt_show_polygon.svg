@@ -75,7 +75,7 @@
   <defs
      id="defs158647">
     <style
-       id="style158645">.cls-1{fill:#8f8f8f;}.cls-1,.cls-2{stroke:#F4EFF3;}.cls-1,.cls-2,.cls-3{stroke-linecap:round;stroke-linejoin:round;}.cls-2,.cls-3{fill:none;}.cls-3{stroke:#42B8EB;}</style>
+       id="style158645">.cls-1{fill:#8f8f8f;}.cls-1,.cls-2{stroke:#DED3DD;}.cls-1,.cls-2,.cls-3{stroke-linecap:round;stroke-linejoin:round;}.cls-2,.cls-3{fill:none;}.cls-3{stroke:#42B8EB;}</style>
   </defs>
   <title
      id="title158649">opt_show_polygon</title>
@@ -97,5 +97,5 @@
      x2="23.5"
      y2="0.5"
      id="line158655"
-     style="stroke:#F4EFF3;stroke-opacity:1" />
+     style="stroke:#DED3DD;stroke-opacity:1" />
 </svg>

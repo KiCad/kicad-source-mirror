@@ -34,10 +34,10 @@
 <style
    type="text/css"
    id="style833">
-	.st0{fill:#545454;stroke:#F4EFF3;}
+	.st0{fill:#545454;stroke:#DED3DD;}
 	.st1{fill:#42B8EB;}
 	.st2{fill:#727272;}
-	.st3{fill:#F4EFF3;}
+	.st3{fill:#DED3DD;}
 </style>
 <sodipodi:namedview
    bordercolor="#666666"
@@ -86,7 +86,7 @@
    inkscape:connector-curvature="0"
    class="st2"
    d="M1.1,4h21.8C23.5,4,24,4.5,24,5.1v5.8c0,0.6-0.5,1.1-1.1,1.1  h0H1.1C0.5,12,0,11.5,0,10.9V5.1C0,4.5,0.5,4,1.1,4L1.1,4z"
-   style="fill:#F4EFF3;fill-opacity:1" />
+   style="fill:#DED3DD;fill-opacity:1" />
 <path
    id="polygon26475"
    sodipodi:nodetypes="cccccc"
@@ -96,7 +96,7 @@
    id="polygon26477"
    class="st3"
    points="17.5,16 15,18.6 15,16 "
-   style="fill:#F4EFF3;fill-opacity:1" />
+   style="fill:#DED3DD;fill-opacity:1" />
 <rect
    id="rect26479"
    x="2"
@@ -112,7 +112,7 @@
    class="st3"
    width="1"
    height="10"
-   style="fill:#F4EFF3;fill-opacity:1" />
+   style="fill:#DED3DD;fill-opacity:1" />
 <rect
    id="rect26487"
    x="0"
@@ -120,7 +120,7 @@
    class="st3"
    width="5"
    height="1"
-   style="fill:#F4EFF3;fill-opacity:1" />
+   style="fill:#DED3DD;fill-opacity:1" />
 <rect
    id="rect26489"
    x="21"
@@ -128,7 +128,7 @@
    class="st3"
    width="1"
    height="10"
-   style="fill:#F4EFF3;fill-opacity:1" />
+   style="fill:#DED3DD;fill-opacity:1" />
 <rect
    id="rect26491"
    x="19"
@@ -136,5 +136,5 @@
    class="st3"
    width="5"
    height="1"
-   style="fill:#F4EFF3;fill-opacity:1" />
+   style="fill:#DED3DD;fill-opacity:1" />
 </svg>

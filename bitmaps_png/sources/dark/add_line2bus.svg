@@ -75,21 +75,21 @@
   <defs
      id="defs115671">
     <style
-       id="style115669">.cls-1{fill:#F4EFF3;}.cls-2{fill:#42B8EB;}</style>
+       id="style115669">.cls-1{fill:#DED3DD;}.cls-2{fill:#42B8EB;}</style>
   </defs>
   <title
      id="title115673">add_line2bus</title>
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:3;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:3;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 20.5,1.5 v 21"
      id="path241460"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 2,3 H 11.5"
      id="path241451" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 2,11 H 11.5"
      id="path241453"
      sodipodi:nodetypes="cc" />

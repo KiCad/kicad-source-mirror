@@ -75,7 +75,7 @@
   <defs
      id="defs159815">
     <style
-       id="style159813">.cls-1{fill:#F4EFF3;}.cls-2{fill:#7a7a7a;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#686868;}.cls-5{fill:#329dd8;}.cls-6{fill:#42B8EB;}</style>
+       id="style159813">.cls-1{fill:#DED3DD;}.cls-2{fill:#7a7a7a;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#686868;}.cls-5{fill:#329dd8;}.cls-6{fill:#42B8EB;}</style>
   </defs>
   <title
      id="title159817">show_mod_edge</title>
@@ -152,5 +152,5 @@
      x2="23.5"
      y2="0.5"
      id="line158655"
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+     style="fill:none;stroke:#DED3DD;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
 </svg>

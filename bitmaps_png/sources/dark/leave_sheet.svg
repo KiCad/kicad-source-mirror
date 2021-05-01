@@ -78,17 +78,17 @@
   <defs
      id="defs25553">
     <style
-       id="style25551">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#F4EFF3;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#f2647e;}.cls-4{stroke:#545454;stroke-width:2px;}</style>
+       id="style25551">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#DED3DD;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#f2647e;}.cls-4{stroke:#545454;stroke-width:2px;}</style>
   </defs>
   <title
      id="title25555">leave_sheet</title>
   <path
-     style="display:inline;fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="display:inline;fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 12,4 V 21"
      id="path1476"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 17,8 12,3 7,8"
      id="path1535"
      sodipodi:nodetypes="ccc" />

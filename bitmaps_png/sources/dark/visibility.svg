@@ -75,7 +75,7 @@
   <defs
      id="defs27615">
     <style
-       id="style27613">.cls-1{fill:#F4EFF3;}.cls-2{fill:#545454;}</style>
+       id="style27613">.cls-1{fill:#DED3DD;}.cls-2{fill:#545454;}</style>
   </defs>
   <title
      id="title27617">visibility</title>
@@ -90,7 +90,7 @@
      class="cls-2"
      d="m 21.7206,12 c 0,0 -4.3521,5.2839 -9.7206,5.2839 C 6.6315,17.2839 2.2794,12 2.2794,12 2.2794,12 6.6315,6.7159 12,6.7159 17.3685,6.7159 21.7206,12 21.7206,12 Z"
      id="path27621"
-     style="fill:#f4eff3;fill-opacity:1" />
+     style="fill:#DED3DD;fill-opacity:1" />
   <circle
      class="cls-1"
      cx="12"
@@ -102,5 +102,5 @@
      class="cls-2"
      d="M 14.2422,12 A 2.2421,2.2421 0 1 1 12,9.7559 2.2431,2.2431 0 0 1 14.2422,12 Z"
      id="path27625"
-     style="fill:#f4eff3;fill-opacity:1" />
+     style="fill:#DED3DD;fill-opacity:1" />
 </svg>

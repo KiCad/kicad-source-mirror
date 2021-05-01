@@ -439,11 +439,11 @@
      class="cls-1"
      d="M 18,10.4473 H 16 V 6 C 16,0.66666898 8,0.66666898 8,6 V 8 H 6 V 6 C 6,2.6862893 8.6862916,2.6047049e-6 12,2.6047049e-6 15.313708,2.6047049e-6 18,2.6862893 18,6 Z"
      id="path25679"
-     style="fill:#F4EFF3"
+     style="fill:#DED3DD"
      sodipodi:nodetypes="ccssccsssc" />
   <path
      class="cls-1"
      d="M 19,10.1065 H 5 a 2,2 0 0 0 -2,2 v 10 a 2,2 0 0 0 2,2 h 14 a 2,2 0 0 0 2,-2 v -10 a 2,2 0 0 0 -2,-2 z m -6,8.5473 v 1.736 a 1,1 0 0 1 -2,0 v -1.736 a 2,2 0 1 1 2,0 z"
      id="path25681"
-     style="fill:#F4EFF3" />
+     style="fill:#DED3DD" />
 </svg>

@@ -75,7 +75,7 @@
   <defs
      id="defs117021">
     <style
-       id="style117019">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#F4EFF3;}.cls-2{fill:#42B8EB;}.cls-3{fill:#f2647e;}.cls-4{stroke:#545454;stroke-width:2px;}</style>
+       id="style117019">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#DED3DD;}.cls-2{fill:#42B8EB;}.cls-3{fill:#f2647e;}.cls-4{stroke:#545454;stroke-width:2px;}</style>
   </defs>
   <title
      id="title117023">export_module</title>
@@ -84,7 +84,7 @@
      points="1.247,18.922 21.516,18.922 21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 "
      id="polygon9"
      transform="matrix(1.1338986,0,0,1.1442747,-0.91624335,-1.2001742)"
-     style="fill:none;stroke:#F4EFF3;stroke-width:0.877906;stroke-linecap:round;stroke-linejoin:round" />
+     style="fill:none;stroke:#DED3DD;stroke-width:0.877906;stroke-linecap:round;stroke-linejoin:round" />
   <rect
      class="cls-2"
      x="2.9609406"

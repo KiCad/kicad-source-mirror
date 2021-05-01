@@ -75,7 +75,7 @@
   <defs
      id="defs160374">
     <style
-       id="style160372">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#42B8EB;stroke-width:2px;}.cls-2{stroke:#F4EFF3;}.cls-3{fill:#F4EFF3;}</style>
+       id="style160372">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#42B8EB;stroke-width:2px;}.cls-2{stroke:#DED3DD;}.cls-3{fill:#DED3DD;}</style>
   </defs>
   <title
      id="title160376">width_track</title>
@@ -104,18 +104,18 @@
      class="cls-5"
      d="M 11,7 A 0.66792456,0.66792456 0 0 1 10.803747,6.5260948 l 3.79e-4,-5.57826204 a 0.67006878,0.67006878 0 0 1 1.339935,-2e-7 l 9.5e-5,5.57873594 A 0.67006878,0.67006878 0 0 1 11,7 Z"
      id="path27513"
-     style="fill:#F4EFF3;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
   <polygon
      class="cls-5"
      points="11.178,11.222 16.038,14.028 13.984,16.082 "
      id="polygon858"
      transform="matrix(-1.5444005,-0.7071068,1.5444005,-0.7071068,11.37411,25.225551)"
-     style="fill:#F4EFF3;stroke:none;stroke-width:0.676648;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;stroke:none;stroke-width:0.676648;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      class="cls-5"
      d="m 11.885734,16.96757 a 0.66792456,0.66792456 0 0 1 0.196253,0.473905 l -3.79e-4,5.578262 a 0.67006878,0.67006878 0 0 1 -1.339935,0 l -9.5e-5,-5.578736 a 0.67006878,0.67006878 0 0 1 1.144156,-0.473431 z"
      id="path849"
-     style="fill:#F4EFF3;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     style="fill:#DED3DD;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
      inkscape:transform-center-x="0.031084036"
      inkscape:transform-center-y="5.1871657" />
   <polygon
@@ -123,7 +123,7 @@
      points="16.038,14.028 13.984,16.082 11.178,11.222 "
      id="polygon851"
      transform="matrix(1.5444005,0.7071068,-1.5444005,0.7071068,11.511624,-1.25798)"
-     style="fill:#F4EFF3;stroke:none;stroke-width:0.676648;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     style="fill:#DED3DD;stroke:none;stroke-width:0.676648;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
      inkscape:transform-center-x="-0.00080347549"
      inkscape:transform-center-y="2.2541221" />
 </svg>

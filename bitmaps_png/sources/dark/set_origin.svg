@@ -75,20 +75,20 @@
   <defs
      id="defs159751">
     <style
-       id="style159749">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#F4EFF3;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#8f8f8f;}.cls-4{stroke:#E0E0E0;stroke-width:2px;}</style>
+       id="style159749">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#DED3DD;}.cls-2{fill:#DED3DD;}.cls-3{fill:#8f8f8f;}.cls-4{stroke:#E0E0E0;stroke-width:2px;}</style>
   </defs>
   <title
      id="title159753">set_origin</title>
   <path
      id="polyline159755"
      transform="translate(-1,-1)"
-     style="fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round"
      d="M 21,22.5 H 3.5 V 6"
      class="cls-1"
      sodipodi:nodetypes="ccc" />
   <path
      id="polygon159757"
-     style="fill:#F4EFF3"
+     style="fill:#DED3DD"
      d="M 2.5,1 1,6 h 3 z"
      class="cls-2"
      sodipodi:nodetypes="cccc" />
@@ -101,7 +101,7 @@
      id="line159759" />
   <path
      id="polygon159761"
-     style="fill:#F4EFF3"
+     style="fill:#DED3DD"
      d="M 23,21.5 18,20 v 3 z"
      class="cls-2"
      sodipodi:nodetypes="cccc" />
@@ -122,13 +122,13 @@
      style="stroke-width:0.999995;fill:#8f8f8f;fill-opacity:1" />
   <path
      id="line159769"
-     style="fill:none;stroke:#f4eff3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
      d="m 14,3.5 v 13"
      class="cls-4"
      sodipodi:nodetypes="cc" />
   <path
      id="line159771"
-     style="fill:none;stroke:#f4eff3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
      d="M 20.5,10 H 7.5"
      class="cls-4"
      sodipodi:nodetypes="cc" />

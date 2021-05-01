@@ -119,58 +119,58 @@
      inkscape:label="Bottom"
      style="display:inline">
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;fill-rule:evenodd;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 19.962567,4.3484557 c 3,8.0000003 3,8.0000003 0,16.0000003"
        id="path4198"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;fill-rule:evenodd;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 19.962567,20.348456 c -8,3 -8,3 -16,0"
        id="path4200"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;fill-rule:evenodd;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 19.962567,20.348456 C 14.943023,17.336729 12.443061,15.836752 10.439137,13.82498"
        id="path4202"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <circle
        id="path2992-3"
-       style="fill:#ffffff;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;fill-opacity:1;stroke:#DED3DD;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        cx="-20.5"
        cy="-20.5"
        transform="scale(-1)"
        r="2" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#F4EFF3;stroke-width:0.999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;fill-rule:evenodd;stroke:#DED3DD;stroke-width:0.999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 12.353449,12.353554 4.3535513,4.3535489"
        id="path4204"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;fill-rule:evenodd;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 3.5,19.5 v -16 h 16"
        id="path4206"
        inkscape:connector-curvature="0" />
     <circle
        id="path2992-3-1"
-       style="fill:#ffffff;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;fill-opacity:1;stroke:#DED3DD;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        cx="-3.5"
        cy="-20.5"
        transform="scale(-1)"
        r="2" />
     <circle
        id="path2992-3-3"
-       style="fill:#ffffff;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;fill-opacity:1;stroke:#DED3DD;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        cx="-20.5"
        cy="-3.5"
        transform="scale(-1)"
        r="2" />
     <ellipse
        id="path2992-3-1-4"
-       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#DED3DD;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        cx="-3.5"
        cy="-3.5"
        transform="scale(-1)"
@@ -190,6 +190,6 @@
        x2="23.5"
        y2="0.5"
        id="line158655"
-       style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="fill:none;stroke:#DED3DD;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
 </svg>

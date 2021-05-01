@@ -72,12 +72,12 @@
   <defs
      id="defs9472">
     <style
-       id="style9470">.cls-1{fill:#F4EFF3;}.cls-2{fill:#42B8EB;}.cls-3{fill:#8f8f8f;}</style>
+       id="style9470">.cls-1{fill:#DED3DD;}.cls-2{fill:#42B8EB;}.cls-3{fill:#8f8f8f;}</style>
   </defs>
   <title
      id="title9474">folder</title>
   <path
      id="path845"
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:0.999995"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:0.999995"
      d="M 2.9511719,2 A 2,2 0 0 0 1,4 2,2 0 0 0 1,4.048828 V 12 a 2,2 0 0 0 2,2 2,2 0 0 0 0.048828,0 H 13 a 2,2 0 0 0 2,-2 2,2 0 0 0 0,-0.04883 V 6 A 2,2 0 0 0 13,4 H 12.951172 8.5 L 6.5,2 H 3 a 2,2 0 0 0 -0.048828,0 z" />
 </svg>

@@ -78,7 +78,7 @@
   <defs
      id="defs160487">
     <style
-       id="style160485">.cls-1{fill:#42B8EB;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#F4EFF3;}</style>
+       id="style160485">.cls-1{fill:#42B8EB;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#DED3DD;}</style>
   </defs>
   <title
      id="title160489">zoom_area</title>
@@ -91,10 +91,10 @@
      class="cls-1"
      d="M 9.9976483,18.999997 A 8.998129,8.9999987 0 1 1 16.362105,3.6373769 v 0 A 8.9954858,8.9973549 0 0 1 9.9976483,18.999997 Z m 0,-16.2787299 A 7.2800339,7.2815466 0 1 0 15.148695,4.8510391 7.2612755,7.2627843 0 0 0 9.9976483,2.7216082 Z"
      id="path160567"
-     style="fill:#F4EFF3;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      class="cls-1"
      d="M 21.941949,23.012172 A 1.071826,1.071826 0 0 1 21.181811,22.69715 l -6.176896,-6.176896 a 1.0927916,1.0927916 0 0 1 1.520275,-1.520382 l 6.177004,6.176896 a 1.075159,1.075159 0 0 1 -0.760245,1.835404 z"
      id="path160569"
-     style="fill:#F4EFF3;stroke-width:1" />
+     style="fill:#DED3DD;stroke-width:1" />
 </svg>

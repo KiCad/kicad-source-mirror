@@ -75,7 +75,7 @@
   <defs
      id="defs157891">
     <style
-       id="style157889">.cls-1,.cls-2,.cls-4{fill:none;}.cls-1{stroke:#8f8f8f;}.cls-1,.cls-4{stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-2{stroke-width:0.9528px;}.cls-2{stroke:#F4EFF3;stroke-miterlimit:10;}.cls-3{fill:#f2647e;}.cls-4{stroke:#545454;stroke-width:2px;}</style>
+       id="style157889">.cls-1,.cls-2,.cls-4{fill:none;}.cls-1{stroke:#8f8f8f;}.cls-1,.cls-4{stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-2{stroke-width:0.9528px;}.cls-2{stroke:#DED3DD;stroke-miterlimit:10;}.cls-3{fill:#f2647e;}.cls-4{stroke:#545454;stroke-width:2px;}</style>
   </defs>
   <title
      id="title157893">import_vector</title>
@@ -84,13 +84,13 @@
      sodipodi:nodetypes="ccccccc"
      class="st0"
      d="m 15.5,1.5 h -12 v 21 h 17 v -16 z"
-     style="fill:#545454;stroke:#F4EFF3;stroke-miterlimit:10" />
+     style="fill:#545454;stroke:#DED3DD;stroke-miterlimit:10" />
   <path
      id="polygon25931"
      sodipodi:nodetypes="cccc"
      class="st1"
      d="M 21,7 15,1 v 6 z"
-     style="fill:#F4EFF3" />
+     style="fill:#DED3DD" />
   <g
      id="g1453"
      transform="matrix(0.78709598,0,0,0.78708421,4.0125438,1.6968183)"

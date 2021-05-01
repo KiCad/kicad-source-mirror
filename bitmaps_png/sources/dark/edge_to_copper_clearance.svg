@@ -75,7 +75,7 @@
   <defs
      id="defs116739">
     <style
-       id="style116732">.cls-1,.cls-2,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-4{stroke-width:2px;}.cls-1{stroke:url(#Безымянный_градиент_19);}.cls-2{stroke:#F4EFF3;}.cls-3{fill:#F4EFF3;}.cls-4{stroke:#42B8EB;}</style>
+       id="style116732">.cls-1,.cls-2,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-4{stroke-width:2px;}.cls-1{stroke:url(#Безымянный_градиент_19);}.cls-2{stroke:#DED3DD;}.cls-3{fill:#DED3DD;}.cls-4{stroke:#42B8EB;}</style>
     <linearGradient
        id="Безымянный_градиент_19"
        x1="1"
@@ -99,7 +99,7 @@
      class="cls-1"
      points="2 24 24 24 24 2 2 2"
      id="polyline116743"
-     style="stroke:#F4EFF3;stroke-opacity:1"
+     style="stroke:#DED3DD;stroke-opacity:1"
      transform="translate(-1,-1)" />
   <line
      class="cls-2"
@@ -110,14 +110,14 @@
      id="line116745" />
   <path
      id="polygon116747"
-     style="fill:#F4EFF3;stroke:none;stroke-width:0.801924"
+     style="fill:#DED3DD;stroke:none;stroke-width:0.801924"
      transform="matrix(1.0542963,0,0,1.4749263,-2.2266738,-5.5176991)"
      d="M 18.2365,11.538 V 7.47 l 4.7425,2.034 z"
      class="cls-3"
      sodipodi:nodetypes="cccc" />
   <path
      id="polygon116749"
-     style="fill:#F4EFF3;stroke:none;stroke-width:0.80203"
+     style="fill:#DED3DD;stroke:none;stroke-width:0.80203"
      transform="matrix(1.0540184,0,0,1.4749262,-1.4500659,-5.5176988)"
      d="M 12.76075,11.538 V 7.47 L 8.017,9.504 Z"
      class="cls-3"

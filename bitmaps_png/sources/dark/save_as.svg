@@ -40,9 +40,9 @@
 <style
    type="text/css"
    id="style833">
-	.st0{fill:#727272;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:bevel;}
+	.st0{fill:#727272;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:bevel;}
 	.st1{fill:#545454;}
-	.st2{fill:#F4EFF3;}
+	.st2{fill:#DED3DD;}
 	.st3{fill:none;stroke:#727272;stroke-linejoin:round;}
 </style>
 <sodipodi:namedview
@@ -83,7 +83,7 @@
    sodipodi:nodetypes="cccccc"
    class="st0"
    d="M 22.554435,5 22.5,22.5 H 1.5 V 1.5 L 19,1.4626365 Z"
-   style="fill:#F4EFF3;fill-opacity:1" />
+   style="fill:#DED3DD;fill-opacity:1" />
 <rect
    x="6"
    y="2"
@@ -97,7 +97,7 @@
    sodipodi:nodetypes="cc"
    class="st3"
    d="M 12.513322,3 12.5,8"
-   style="stroke:#F4EFF3;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+   style="stroke:#DED3DD;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
 <rect
    x="5"
    y="12"

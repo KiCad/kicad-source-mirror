@@ -76,7 +76,7 @@
   <defs
      id="defs11">
     <style
-       id="style3">.cls-1{fill:none;stroke:#42B8EB;stroke-miterlimit:10;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#595959;}.cls-4{fill:url(#Безымянный_градиент_19);}.cls-5{fill:url(#Безымянный_градиент_19-2);}.cls-6{fill:#F4EFF3;}.cls-7{fill:#f2647e;}.cls-8{fill:#545454;}</style>
+       id="style3">.cls-1{fill:none;stroke:#42B8EB;stroke-miterlimit:10;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#595959;}.cls-4{fill:url(#Безымянный_градиент_19);}.cls-5{fill:url(#Безымянный_градиент_19-2);}.cls-6{fill:#DED3DD;}.cls-7{fill:#f2647e;}.cls-8{fill:#545454;}</style>
     <linearGradient
        id="Безымянный_градиент_19"
        x1="8.3372"
@@ -104,14 +104,14 @@
   <title
      id="title13">show_zone_disable копия</title>
   <circle
-     style="display:inline;fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+     style="display:inline;fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
      id="path867"
      cx="17"
      cy="11"
      r="2"
      sodipodi:insensitive="true" />
   <rect
-     style="display:inline;fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+     style="display:inline;fill:#DED3DD;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
      id="rect869"
      width="5"
      height="2"

@@ -28,10 +28,10 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs26499">
-      <style id="style26497">.cls-1,.cls-2,.cls-3{fill:none;}.cls-1{stroke:#8f8f8f;stroke-width:0.75px;}.cls-1,.cls-2{stroke-miterlimit:10;}.cls-2{stroke:#F4EFF3;}.cls-3{stroke:#E0E0E0;stroke-linecap:round;stroke-linejoin:round;}.cls-4{fill:#E0E0E0;}.cls-5{fill:#f2647e;}.cls-6{fill:#F4EFF3;}</style>
+      <style id="style26497">.cls-1,.cls-2,.cls-3{fill:none;}.cls-1{stroke:#8f8f8f;stroke-width:0.75px;}.cls-1,.cls-2{stroke-miterlimit:10;}.cls-2{stroke:#DED3DD;}.cls-3{stroke:#E0E0E0;stroke-linecap:round;stroke-linejoin:round;}.cls-4{fill:#E0E0E0;}.cls-5{fill:#f2647e;}.cls-6{fill:#DED3DD;}</style>
    </defs>
    <title id="title26501">polar_coord</title>
-   <path class="cls-1" d="m 6.0816,17.8985 a 6.37,6.37 0 0 1 1.8978,4.5442" id="path26503" style="stroke:#F4EFF3;stroke-opacity:1" />
+   <path class="cls-1" d="m 6.0816,17.8985 a 6.37,6.37 0 0 1 1.8978,4.5442" id="path26503" style="stroke:#DED3DD;stroke-opacity:1" />
    <line class="cls-2" x1="1.5216" y1="22.5" x2="19.950199" y2="4.0714002" id="line26505" />
    <polyline class="cls-3" points="21 23.5 2.522 23.5 2.538 5.582" id="polyline26507" transform="translate(-1,-1)" />
    <polygon class="cls-4" points="2.542,1.153 1.084,6.572 3.989,6.574 " id="polygon26509" transform="translate(-1,-1)" />

@@ -86,7 +86,7 @@
      x2="12"
      y2="13.624"
      id="line358"
-     style="stroke:#F4EFF3;stroke-opacity:1" />
+     style="stroke:#DED3DD;stroke-opacity:1" />
   <line
      class="cls-1"
      x1="3"
@@ -94,7 +94,7 @@
      x2="21"
      y2="14"
      id="line360"
-     style="stroke:#F4EFF3;stroke-opacity:1" />
+     style="stroke:#DED3DD;stroke-opacity:1" />
   <line
      class="cls-1"
      x1="6"
@@ -102,7 +102,7 @@
      x2="18"
      y2="18"
      id="line362"
-     style="stroke:#F4EFF3;stroke-opacity:1" />
+     style="stroke:#DED3DD;stroke-opacity:1" />
   <line
      class="cls-1"
      x1="10"
@@ -110,5 +110,5 @@
      x2="14"
      y2="22"
      id="line364"
-     style="stroke:#F4EFF3;stroke-opacity:1" />
+     style="stroke:#DED3DD;stroke-opacity:1" />
 </svg>

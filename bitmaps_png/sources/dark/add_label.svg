@@ -75,7 +75,7 @@
   <defs
      id="defs157961">
     <style
-       id="style157959">.cls-1{fill:#F4EFF3;}.cls-2{fill:#42B8EB;}</style>
+       id="style157959">.cls-1{fill:#DED3DD;}.cls-2{fill:#42B8EB;}</style>
   </defs>
   <title
      id="title157963">label</title>
@@ -90,9 +90,9 @@
        id="tspan15401"
        x="7.0734468"
        y="15.398791"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15.8339px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Medium';fill:#F4EFF3;fill-opacity:1;stroke-width:0.999997">A</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15.8339px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Medium';fill:#DED3DD;fill-opacity:1;stroke-width:0.999997">A</tspan></text>
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 2,18 H 22"
      id="path15966" />
 </svg>

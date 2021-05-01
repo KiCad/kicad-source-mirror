@@ -28,7 +28,7 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs159193">
-      <style id="style159191">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:#F4EFF3;}.cls-2{stroke:#f2647e;}</style>
+      <style id="style159191">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:#DED3DD;}.cls-2{stroke:#f2647e;}</style>
    </defs>
    <title id="title159195">pintype_noconnect</title>
    <line class="cls-1" x1="7.8228998" y1="12" x2="22.604799" y2="12" id="line159197" />

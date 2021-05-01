@@ -135,13 +135,13 @@
      width="3"
      height="2"
      id="rect24945"
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none"
      transform="rotate(-90)" />
   <path
      class="cls-5"
      d="M 9,15.5 A 0.99999998,0.99999998 0 1 1 8.000106,16.499789 0.99978932,0.99978932 0 0 1 9,15.5 Z"
      id="path24963"
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none" />
+     style="fill:#DED3DD;fill-opacity:1;stroke:none" />
   <rect
      class="cls-5"
      x="-15"
@@ -149,7 +149,7 @@
      width="3"
      height="2"
      id="rect909"
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none"
      transform="rotate(-90)" />
   <rect
      class="cls-5"
@@ -158,7 +158,7 @@
      width="3"
      height="2"
      id="rect911"
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none"
      transform="rotate(-90)" />
   <rect
      class="cls-5"
@@ -167,7 +167,7 @@
      width="3"
      height="2"
      id="rect913"
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none"
      transform="rotate(-90)" />
   <rect
      class="cls-5"
@@ -176,7 +176,7 @@
      width="3"
      height="2"
      id="rect917"
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none"
      transform="rotate(-90)" />
   <rect
      class="cls-5"
@@ -185,7 +185,7 @@
      width="3"
      height="2"
      id="rect919"
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none"
      transform="rotate(-90)" />
   <rect
      class="cls-5"
@@ -194,7 +194,7 @@
      width="3"
      height="2"
      id="rect921"
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none"
      transform="rotate(-90)" />
   <rect
      class="cls-5"
@@ -203,24 +203,24 @@
      width="3"
      height="2"
      id="rect923"
-     style="fill:#F4EFF3;fill-opacity:1;stroke:none"
+     style="fill:#DED3DD;fill-opacity:1;stroke:none"
      transform="rotate(-90)" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 3,16.5 h 11 l 1,-1 v -2"
      id="path925"
      sodipodi:nodetypes="cccc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 19,19.5 h 2 3"
      id="path927" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 19,13.5 h 1.5 l 2,-2 V 0"
      id="path929"
      clip-path="url(#clipPath935)" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="M 3,13.5 H 5 8"
      id="path931" />
 </svg>

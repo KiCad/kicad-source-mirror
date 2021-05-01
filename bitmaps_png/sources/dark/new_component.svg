@@ -75,7 +75,7 @@
   <defs
      id="defs117075">
     <style
-       id="style117073">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#f2647e;}.cls-4{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style117073">.cls-1{fill:#8f8f8f;}.cls-2{fill:#DED3DD;}.cls-3{fill:#f2647e;}.cls-4{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title117077">export_part</title>
@@ -89,7 +89,7 @@
        points="5,24 21.654,13 5,2 "
        id="polygon27928"
        transform="matrix(0.99890119,0,0,1,-2.6122763,-6.1182919)"
-       style="fill:none;fill-opacity:1;stroke:#F4EFF3;stroke-width:2.0011px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;fill-opacity:1;stroke:#DED3DD;stroke-width:2.0011px;stroke-linecap:round;stroke-linejoin:round" />
     <line
        class="cls-1"
        x1="19.018129"
@@ -97,7 +97,7 @@
        x2="21.385527"
        y2="6.8817091"
        id="line27930"
-       style="fill:none;stroke:#F4EFF3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;stroke:#DED3DD;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
     <line
        class="cls-1"
        x1="2.3043151"
@@ -105,7 +105,7 @@
        x2="-0.614474"
        y2="0.88170809"
        id="line27932"
-       style="fill:none;stroke:#F4EFF3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;stroke:#DED3DD;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
     <line
        class="cls-1"
        x1="2.2867343"
@@ -113,20 +113,20 @@
        x2="-0.614474"
        y2="12.881707"
        id="line27934"
-       style="fill:none;stroke:#F4EFF3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;stroke:#DED3DD;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
     <path
        id="line27936"
-       style="fill:none;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#DED3DD;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        d="M 5.3789332,3.3817081 H 8.3756368"
        class="cls-1"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#DED3DD;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 6.877285,6.8817082 V 11.881708"
        id="path17250"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#DED3DD;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 4.3807133,9.3459452 4.9938248,0.03576"
        id="path17252"
        sodipodi:nodetypes="cc" />

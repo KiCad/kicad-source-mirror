@@ -75,7 +75,7 @@
   <defs
      id="defs27539">
     <style
-       id="style27537">.cls-1,.cls-2,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#f2647e;}.cls-1,.cls-2{stroke-width:2px;}.cls-2{stroke:#42B8EB;}.cls-3{fill:#f29100;}.cls-4{fill:#8f8f8f;}.cls-5{stroke:#F4EFF3;}.cls-6{fill:#F4EFF3;}</style>
+       id="style27537">.cls-1,.cls-2,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#f2647e;}.cls-1,.cls-2{stroke-width:2px;}.cls-2{stroke:#42B8EB;}.cls-3{fill:#f29100;}.cls-4{fill:#8f8f8f;}.cls-5{stroke:#DED3DD;}.cls-6{fill:#DED3DD;}</style>
   </defs>
   <title
      id="title27541">via_diameter</title>
@@ -106,33 +106,33 @@
      d="m 0.59368333,13.504017 c -0.4454809,-6e-6 -1.0467011,-1.099139 -0.731657,-1.4141 L 12.285826,-0.3338831 c 0.471362,-0.4594986 1.544722,0.7963034 1.085157,1.2676 L 0.94718343,13.357517 c -0.093665,0.0939 -0.2208742,0.146615 -0.3535001,0.1465 z"
      id="path27505"
      sodipodi:nodetypes="cccccc"
-     style="fill:#F4EFF3;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      class="cls-5"
      d="m 11.132292,24.042625 c -0.445365,-9.6e-5 -1.10843,-0.97387 -0.793558,-1.288838 l 12.4238,-12.423899 c 0.471362,-0.4833946 1.630519,0.671143 1.147058,1.142437 l -12.4241,12.4238 c -0.09355,0.09388 -0.220665,0.146601 -0.3532,0.1465 z"
      id="path27507"
      sodipodi:nodetypes="cccccc"
-     style="fill:#F4EFF3;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
   <polygon
      class="cls-5"
      points="13.984,16.082 11.178,11.222 16.038,14.028 "
      id="polygon27511"
      transform="matrix(1.5920561,-0.59205607,-0.59205607,1.5920561,6.3480501,6.2519492)"
-     style="fill:#F4EFF3;stroke:none;stroke-width:0.676648;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;stroke:none;stroke-width:0.676648;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      class="cls-5"
      d="M 4.5760834,5.2150888 A 0.66792456,0.66792456 0 0 1 4.1022108,5.0187586 L 0.15805183,1.0740638 A 0.67006878,0.67006878 0 0 1 1.1055292,0.1265866 L 5.0503581,4.0712815 A 0.67006878,0.67006878 0 0 1 4.5760834,5.2150888 Z"
      id="path27513"
-     style="fill:#F4EFF3;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
   <polygon
      class="cls-5"
      points="16.038,14.028 13.984,16.082 11.178,11.222 "
      id="polygon858"
      transform="matrix(-1.5920561,0.59205607,0.59205607,-1.5920561,17.728033,17.837967)"
-     style="fill:#F4EFF3;stroke:none;stroke-width:0.676648;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;stroke:none;stroke-width:0.676648;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      class="cls-5"
      d="m 23.504555,24.143562 a 0.66792456,0.66792456 0 0 1 -0.473873,-0.19633 l -3.944159,-3.944694 a 0.67006878,0.67006878 0 0 1 0.947478,-0.947477 l 3.944829,3.944694 a 0.67006878,0.67006878 0 0 1 -0.474275,1.143807 z"
      id="path860"
-     style="fill:#F4EFF3;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#DED3DD;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
 </svg>

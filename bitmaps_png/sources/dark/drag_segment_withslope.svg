@@ -29,7 +29,7 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs11">
-      <style id="style3">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#F4EFF3;}.cls-2{fill:url(#Безымянный_градиент_19);}.cls-3{fill:url(#Безымянный_градиент_19-2);}.cls-4{stroke:#f2647e;stroke-width:2px;}.cls-5{fill:#42B8EB;}.cls-6{fill:#F4EFF3;}</style>
+      <style id="style3">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#DED3DD;}.cls-2{fill:url(#Безымянный_градиент_19);}.cls-3{fill:url(#Безымянный_градиент_19-2);}.cls-4{stroke:#f2647e;stroke-width:2px;}.cls-5{fill:#42B8EB;}.cls-6{fill:#DED3DD;}</style>
       <linearGradient id="Безымянный_градиент_19" x1="1.0078" y1="15.6693" x2="8.3475" y2="15.6693" gradientUnits="userSpaceOnUse">
          <stop offset="0" stop-color="#ececec" id="stop5" />
          <stop offset="1" stop-color="#c6c6c5" id="stop7" />

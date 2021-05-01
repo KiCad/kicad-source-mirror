@@ -78,7 +78,7 @@
   <defs
      id="defs25591">
     <style
-       id="style25589">.cls-1{fill:#F4EFF3;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#42B8EB;}.cls-4{fill:#f2647e;}.cls-5{fill:#fff;}</style>
+       id="style25589">.cls-1{fill:#DED3DD;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#42B8EB;}.cls-4{fill:#f2647e;}.cls-5{fill:#fff;}</style>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath942">
@@ -345,20 +345,20 @@
      style="stroke-width:2.13171"
      clip-path="url(#clipPath946)" />
   <circle
-     style="fill:none;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="path859"
      cx="7.5"
      cy="8.5"
      r="3.5" />
   <path
      inkscape:connector-curvature="0"
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 1.5,8.5 h 12"
      id="path861"
      sodipodi:nodetypes="cc" />
   <path
      inkscape:connector-curvature="0"
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#DED3DD;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 7.5,14.5 V 1.5"
      id="path863"
      sodipodi:nodetypes="cc" />
