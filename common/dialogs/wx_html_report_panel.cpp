@@ -236,6 +236,7 @@ void WX_HTML_REPORT_PANEL::onMenuEvent( wxMenuEvent& event )
             bool primarySelection = wxTheClipboard->IsUsingPrimarySelection();
             wxTheClipboard->UsePrimarySelection( false );   // required to use the main clipboard
             wxTheClipboard->SetData( new wxTextDataObject( m_htmlView->SelectionToText() ) );
+            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
             wxTheClipboard->Close();
             wxTheClipboard->UsePrimarySelection( primarySelection );
         }

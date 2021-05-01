@@ -332,6 +332,7 @@ void DIALOG_CHOOSE_SYMBOL::OnCharHook( wxKeyEvent& e )
         if( wxTheClipboard->Open() )
         {
             wxTheClipboard->SetData( new wxTextDataObject( txt ) );
+            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
             wxTheClipboard->Close();
         }
     }

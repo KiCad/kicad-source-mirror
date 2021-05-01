@@ -636,6 +636,7 @@ void GRID_TRICKS::cutcopy( bool doCopy, bool doDelete )
     if( doCopy )
     {
         wxTheClipboard->SetData( new wxTextDataObject( txt ) );
+        wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
         wxTheClipboard->Close();
     }
 

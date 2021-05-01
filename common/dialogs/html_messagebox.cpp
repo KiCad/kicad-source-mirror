@@ -150,6 +150,7 @@ void HTML_MESSAGE_BOX::OnCharHook( wxKeyEvent& aEvent )
         if( wxTheClipboard->Open() )
         {
             wxTheClipboard->SetData( new wxTextDataObject( m_htmlWindow->SelectionToText() ) );
+            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
             wxTheClipboard->Close();
         }
 

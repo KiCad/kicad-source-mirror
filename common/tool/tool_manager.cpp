@@ -980,6 +980,8 @@ bool TOOL_MANAGER::SaveClipboard( const std::string& aTextUTF8 )
         // Store the UTF8 string as unicode string in clipboard:
         wxTheClipboard->SetData( new wxTextDataObject( wxString( aTextUTF8.c_str(),
                                                                  wxConvUTF8 ) ) );
+
+        wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
         wxTheClipboard->Close();
 
         return true;

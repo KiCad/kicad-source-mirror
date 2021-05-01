@@ -696,6 +696,7 @@ void BM2CMP_FRAME::OnExportToClipboard( wxCommandEvent& event )
         // This data objects are held by the clipboard,
         // so do not delete them in the app.
         wxTheClipboard->SetData( new wxTextDataObject( buffer.c_str() ) );
+        wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
         wxTheClipboard->Close();
     }
     else

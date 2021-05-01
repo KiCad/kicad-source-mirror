@@ -510,6 +510,7 @@ void PNS_LOG_VIEWER_FRAME::onListCopy( wxCommandEvent& event )
         // This data objects are held by the clipboard,
         // so do not delete them in the app.
         wxTheClipboard->SetData( new wxTextDataObject(s) );
+        wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
         wxTheClipboard->Close();
     }
 }
