@@ -28,32 +28,33 @@
 
 /**
  * The set of pad shapes, used with PAD::{Set,Get}Shape()
+ * DO NOT REORDER, legacy_plugin is dependent on the integer values
  */
-enum PAD_SHAPE_T
+enum class PAD_SHAPE : int
 {
-    PAD_SHAPE_CIRCLE,
-    PAD_SHAPE_RECT,
-    PAD_SHAPE_OVAL,
-    PAD_SHAPE_TRAPEZOID,
-    PAD_SHAPE_ROUNDRECT,
+    CIRCLE,
+    RECT,
+    OVAL,
+    TRAPEZOID,
+    ROUNDRECT,
 
     // Rectangle with a chamfered corner ( and with rounded other corners).
-    PAD_SHAPE_CHAMFERED_RECT,
-    PAD_SHAPE_CUSTOM            // A shape defined by user, using a set of basic shapes
-                                // (thick segments, circles, arcs, polygons.
+    CHAMFERED_RECT,
+    CUSTOM            // A shape defined by user, using a set of basic shapes
+                      // (thick segments, circles, arcs, polygons.
 };
 
-static inline std::string PAD_SHAPE_T_asString( PAD_SHAPE_T a )
+static inline std::string PAD_SHAPE_T_asString( PAD_SHAPE a )
 {
     switch( a )
     {
-    case PAD_SHAPE_CIRCLE:         return "PAD_SHAPE_CIRCLE";
-    case PAD_SHAPE_RECT:           return "PAD_SHAPE_RECT";
-    case PAD_SHAPE_OVAL:           return "PAD_SHAPE_OVAL";
-    case PAD_SHAPE_TRAPEZOID:      return "PAD_SHAPE_TRAPEZOID";
-    case PAD_SHAPE_ROUNDRECT:      return "PAD_SHAPE_ROUNDRECT";
-    case PAD_SHAPE_CHAMFERED_RECT: return "PAD_SHAPE_CHAMFERED_RECT";
-    case PAD_SHAPE_CUSTOM:         return "PAD_SHAPE_CUSTOM";
+    case PAD_SHAPE::CIRCLE:         return "PAD_SHAPE::CIRCLE";
+    case PAD_SHAPE::RECT:           return "PAD_SHAPE::RECT";
+    case PAD_SHAPE::OVAL:           return "PAD_SHAPE::OVAL";
+    case PAD_SHAPE::TRAPEZOID:      return "PAD_SHAPE::TRAPEZOID";
+    case PAD_SHAPE::ROUNDRECT:      return "PAD_SHAPE::ROUNDRECT";
+    case PAD_SHAPE::CHAMFERED_RECT: return "PAD_SHAPE::CHAMFERED_RECT";
+    case PAD_SHAPE::CUSTOM:         return "PAD_SHAPE::CUSTOM";
     }
 
     return "";  // Just to quiet GCC.

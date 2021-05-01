@@ -581,31 +581,31 @@ size_t FABMASTER::processPadStacks( size_t aRow )
             if( pad_shape == "CIRCLE" )
             {
                 pad->height = pad->width;
-                pad->shape = PAD_SHAPE_CIRCLE;
+                pad->shape = PAD_SHAPE::CIRCLE;
             }
             else if( pad_shape == "RECTANGLE" )
             {
-                pad->shape = PAD_SHAPE_RECT;
+                pad->shape = PAD_SHAPE::RECT;
             }
             else if( pad_shape == "ROUNDED_RECT" )
             {
-                pad->shape = PAD_SHAPE_ROUNDRECT;
+                pad->shape = PAD_SHAPE::ROUNDRECT;
             }
             else if( pad_shape == "SQUARE" )
             {
-                pad->shape = PAD_SHAPE_RECT;
+                pad->shape = PAD_SHAPE::RECT;
                 pad->height = pad->width;
             }
             else if( pad_shape == "OBLONG" || pad_shape == "OBLONG_X" || pad_shape == "OBLONG_Y" )
-                pad->shape = PAD_SHAPE_OVAL;
+                pad->shape = PAD_SHAPE::OVAL;
             else if( pad_shape == "OCTAGON" )
             {
-                pad->shape = PAD_SHAPE_RECT;
+                pad->shape = PAD_SHAPE::RECT;
                 pad->is_octogon = true;
             }
             else if( pad_shape == "SHAPE" )
             {
-                pad->shape = PAD_SHAPE_CUSTOM;
+                pad->shape = PAD_SHAPE::CUSTOM;
                 pad->custom_name = pad_shapename;
             }
             else
@@ -932,7 +932,7 @@ size_t FABMASTER::processCustomPads( size_t aRow )
 
         auto name = pad_shape_name.substr( prefix.length() );
         name += "_" + pad_refdes + "_" + pad_pin_num;
-        auto ret = pad_shapes.emplace( name, PAD_SHAPE{} );
+        auto ret = pad_shapes.emplace( name, FABMASTER_PAD_SHAPE{} );
 
         auto& custom_pad = ret.first->second;
 
@@ -2188,7 +2188,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                         newpad->SetShape( pad.shape );
 
-                        if( pad.shape == PAD_SHAPE_CUSTOM )
+                        if( pad.shape == PAD_SHAPE::CUSTOM )
                         {
                             // Choose the smaller dimension to ensure the base pad
                             // is fully hidden by the custom pad
@@ -2252,7 +2252,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                     wxLogError( wxString::Format(
                                             _( "Invalid custom pad named '%s'. Replacing with circular pad." ),
                                             custom_name.c_str() ) );
-                                    newpad->SetShape( PAD_SHAPE_CIRCLE );
+                                    newpad->SetShape( PAD_SHAPE::CIRCLE );
                                 }
                                 else
                                 {
@@ -2281,7 +2281,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                     wxLogError( wxString::Format(
                                             _( "Invalid custom pad named '%s'. Replacing with circular pad." ),
                                             custom_name.c_str() ) );
-                                    newpad->SetShape( PAD_SHAPE_CIRCLE );
+                                    newpad->SetShape( PAD_SHAPE::CIRCLE );
                                 }
                             }
                             else

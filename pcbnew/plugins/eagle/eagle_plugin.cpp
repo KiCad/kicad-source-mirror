@@ -1706,28 +1706,28 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
         switch( *e.shape )
         {
         case EPAD::ROUND:
-            pad->SetShape( PAD_SHAPE_CIRCLE );
+            pad->SetShape( PAD_SHAPE::CIRCLE );
             break;
 
         case EPAD::OCTAGON:
             // no KiCad octagonal pad shape, use PAD_CIRCLE for now.
             // pad->SetShape( PAD_OCTAGON );
-            wxASSERT( pad->GetShape() == PAD_SHAPE_CIRCLE );    // verify set in PAD constructor
-            pad->SetShape( PAD_SHAPE_CHAMFERED_RECT );
+            wxASSERT( pad->GetShape() == PAD_SHAPE::CIRCLE );    // verify set in PAD constructor
+            pad->SetShape( PAD_SHAPE::CHAMFERED_RECT );
             pad->SetChamferPositions( RECT_CHAMFER_ALL );
             pad->SetChamferRectRatio( 0.25 );
             break;
 
         case EPAD::LONG:
-            pad->SetShape( PAD_SHAPE_OVAL );
+            pad->SetShape( PAD_SHAPE::OVAL );
             break;
 
         case EPAD::SQUARE:
-            pad->SetShape( PAD_SHAPE_RECT );
+            pad->SetShape( PAD_SHAPE::RECT );
             break;
 
         case EPAD::OFFSET:
-            pad->SetShape( PAD_SHAPE_OVAL );
+            pad->SetShape( PAD_SHAPE::OVAL );
             break;
         }
     }
@@ -1750,7 +1750,7 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
         pad->SetSize( wxSize( KiROUND( diameter ), KiROUND( diameter ) ) );
     }
 
-    if( pad->GetShape() == PAD_SHAPE_OVAL )
+    if( pad->GetShape() == PAD_SHAPE::OVAL )
     {
         // The Eagle "long" pad is wider than it is tall,
         // m_elongation is percent elongation
@@ -2146,7 +2146,7 @@ void EAGLE_PLUGIN::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
     PAD* pad = new PAD( aFootprint );
     aFootprint->Add( pad );
 
-    pad->SetShape( PAD_SHAPE_CIRCLE );
+    pad->SetShape( PAD_SHAPE::CIRCLE );
     pad->SetAttribute( PAD_ATTRIB_NPTH );
 
     // Mechanical purpose only:
@@ -2189,7 +2189,7 @@ void EAGLE_PLUGIN::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     aFootprint->Add( pad );
     transferPad( e, pad );
 
-    pad->SetShape( PAD_SHAPE_RECT );
+    pad->SetShape( PAD_SHAPE::RECT );
     pad->SetAttribute( PAD_ATTRIB_SMD );
 
     wxSize padSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() );
@@ -2218,7 +2218,7 @@ void EAGLE_PLUGIN::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         if( e.roundness )
             roundRatio = std::fmax( *e.roundness / 200.0, roundRatio );
 
-        pad->SetShape( PAD_SHAPE_ROUNDRECT );
+        pad->SetShape( PAD_SHAPE::ROUNDRECT );
         pad->SetRoundRectRadiusRatio( roundRatio );
     }
 

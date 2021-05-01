@@ -200,7 +200,7 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
     if( !m_IsHolePlated && m_Hole )
     {
         // mechanical hole
-        pad->SetShape( PAD_SHAPE_CIRCLE );
+        pad->SetShape( PAD_SHAPE::CIRCLE );
         pad->SetAttribute( PAD_ATTRIB_NPTH );
 
         pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
@@ -263,16 +263,16 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
             || padShapeName == wxT( "MtHole" ) )
         {
             if( width != height )
-                pad->SetShape( PAD_SHAPE_OVAL );
+                pad->SetShape( PAD_SHAPE::OVAL );
             else
-                pad->SetShape( PAD_SHAPE_CIRCLE );
+                pad->SetShape( PAD_SHAPE::CIRCLE );
         }
         else if( padShapeName == wxT( "Rect" ) )
-            pad->SetShape( PAD_SHAPE_RECT );
+            pad->SetShape( PAD_SHAPE::RECT );
         else if(  padShapeName == wxT( "RndRect" ) )
-            pad->SetShape( PAD_SHAPE_ROUNDRECT );
+            pad->SetShape( PAD_SHAPE::ROUNDRECT );
         else if( padShapeName == wxT( "Polygon" ) )
-            pad->SetShape( PAD_SHAPE_RECT ); // approximation
+            pad->SetShape( PAD_SHAPE::RECT ); // approximation
 
         pad->SetSize( wxSize( width, height ) );
         pad->SetDelta( wxSize( 0, 0 ) );

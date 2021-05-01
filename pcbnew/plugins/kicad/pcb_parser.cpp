@@ -3759,29 +3759,29 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
     switch( token )
     {
     case T_circle:
-        pad->SetShape( PAD_SHAPE_CIRCLE );
+        pad->SetShape( PAD_SHAPE::CIRCLE );
         break;
 
     case T_rect:
-        pad->SetShape( PAD_SHAPE_RECT );
+        pad->SetShape( PAD_SHAPE::RECT );
         break;
 
     case T_oval:
-        pad->SetShape( PAD_SHAPE_OVAL );
+        pad->SetShape( PAD_SHAPE::OVAL );
         break;
 
     case T_trapezoid:
-        pad->SetShape( PAD_SHAPE_TRAPEZOID );
+        pad->SetShape( PAD_SHAPE::TRAPEZOID );
         break;
 
     case T_roundrect:
-        // Note: the shape can be PAD_SHAPE_ROUNDRECT or PAD_SHAPE_CHAMFERED_RECT
+        // Note: the shape can be PAD_SHAPE::ROUNDRECT or PAD_SHAPE::CHAMFERED_RECT
         // (if chamfer parameters are found later in pad descr.)
-        pad->SetShape( PAD_SHAPE_ROUNDRECT );
+        pad->SetShape( PAD_SHAPE::ROUNDRECT );
         break;
 
     case T_custom:
-        pad->SetShape( PAD_SHAPE_CUSTOM );
+        pad->SetShape( PAD_SHAPE::CUSTOM );
         break;
 
     default:
@@ -3996,7 +3996,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             pad->SetChamferRectRatio( parseDouble( "chamfer ratio" ) );
 
             if( pad->GetChamferRectRatio() > 0 )
-                pad->SetShape( PAD_SHAPE_CHAMFERED_RECT );
+                pad->SetShape( PAD_SHAPE::CHAMFERED_RECT );
 
             NeedRIGHT();
             break;
@@ -4038,7 +4038,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             }
 
             if( pad->GetChamferPositions() != RECT_NO_CHAMFER )
-                pad->SetShape( PAD_SHAPE_CHAMFERED_RECT );
+                pad->SetShape( PAD_SHAPE::CHAMFERED_RECT );
         }
             break;
 
@@ -4215,7 +4215,7 @@ bool PCB_PARSER::parsePAD_option( PAD* aPad )
                     break;
 
                 case T_rect:
-                    aPad->SetAnchorPadShape( PAD_SHAPE_RECT );
+                    aPad->SetAnchorPadShape( PAD_SHAPE::RECT );
                     break;
 
                 default:

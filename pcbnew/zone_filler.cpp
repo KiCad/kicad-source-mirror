@@ -539,7 +539,7 @@ bool hasThermalConnection( PAD* pad, const ZONE* aZone )
  */
 void ZONE_FILLER::addKnockout( PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_POLY_SET& aHoles )
 {
-    if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
+    if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
     {
         SHAPE_POLY_SET poly;
         aPad->TransformShapeWithClearanceToPolygon( poly, aLayer, aGap, m_maxError,
@@ -1314,7 +1314,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             reliefBB.Inflate( thermalReliefGap + epsilon );
 
             // For circle pads, the thermal spoke orientation is 45 deg
-            if( pad->GetShape() == PAD_SHAPE_CIRCLE )
+            if( pad->GetShape() == PAD_SHAPE::CIRCLE )
                 padAngle = s_RoundPadThermalSpokeAngle;
 
             for( int i = 0; i < 4; i++ )

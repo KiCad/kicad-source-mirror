@@ -1420,10 +1420,10 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
 
             switch( padchar )
             {
-            case 'C':   padshape = PAD_SHAPE_CIRCLE;      break;
-            case 'R':   padshape = PAD_SHAPE_RECT;        break;
-            case 'O':   padshape = PAD_SHAPE_OVAL;        break;
-            case 'T':   padshape = PAD_SHAPE_TRAPEZOID;   break;
+            case 'C':   padshape = static_cast<int>( PAD_SHAPE::CIRCLE );      break;
+            case 'R':   padshape = static_cast<int>( PAD_SHAPE::RECT );        break;
+            case 'O':   padshape = static_cast<int>( PAD_SHAPE::OVAL );        break;
+            case 'T':   padshape = static_cast<int>( PAD_SHAPE::TRAPEZOID );   break;
             default:
                 m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line: %d of footprint: \"%s\"" ),
                                 padchar,
@@ -1455,7 +1455,7 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             // chances are both were ASCII, but why take chances?
 
             pad->SetName( padname );
-            pad->SetShape( PAD_SHAPE_T( padshape ) );
+            pad->SetShape( static_cast<PAD_SHAPE>( padshape ) );
             pad->SetSize( wxSize( size_x, size_y ) );
             pad->SetDelta( wxSize( delta_x, delta_y ) );
             pad->SetOrientation( orient );

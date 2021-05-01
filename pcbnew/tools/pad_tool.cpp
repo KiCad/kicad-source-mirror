@@ -591,7 +591,7 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
     else
         layer = *aPad->GetLayerSet().UIOrder();
 
-    if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
+    if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
     {
         commit.Modify( aPad );
 
@@ -677,11 +677,11 @@ void PAD_TOOL::recombinePad( PAD* aPad )
         // We've found an intersecting item.  First convert the pad to a custom-shape
         // pad (if it isn't already)
         //
-        if( aPad->GetShape() == PAD_SHAPE_RECT || aPad->GetShape() == PAD_SHAPE_CIRCLE )
+        if( aPad->GetShape() == PAD_SHAPE::RECT || aPad->GetShape() == PAD_SHAPE::CIRCLE )
         {
             aPad->SetAnchorPadShape( aPad->GetShape() );
         }
-        else if( aPad->GetShape() != PAD_SHAPE_CUSTOM )
+        else if( aPad->GetShape() != PAD_SHAPE::CUSTOM )
         {
             // Create a new minimally-sized circular anchor and convert existing pad
             // to a polygon primitive
@@ -689,7 +689,7 @@ void PAD_TOOL::recombinePad( PAD* aPad )
             aPad->TransformShapeWithClearanceToPolygon( existingOutline, layer, 0, maxError,
                                                         ERROR_INSIDE );
 
-            aPad->SetAnchorPadShape( PAD_SHAPE_CIRCLE );
+            aPad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
             wxSize minAnnulus( Millimeter2iu( 0.2 ), Millimeter2iu( 0.2 ) );
             aPad->SetSize( aPad->GetDrillSize() + minAnnulus );
             aPad->SetOffset( wxPoint( 0, 0 ) );
@@ -704,7 +704,7 @@ void PAD_TOOL::recombinePad( PAD* aPad )
             aPad->AddPrimitive( shape );
         }
 
-        aPad->SetShape( PAD_SHAPE_CUSTOM );
+        aPad->SetShape( PAD_SHAPE::CUSTOM );
 
         // Now add the new shape to the primitives list
         //

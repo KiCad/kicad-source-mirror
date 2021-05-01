@@ -140,8 +140,8 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
 
     case MICROWAVE_FOOTPRINT_SHAPE::STUB_ARC:     // Arc Stub created by a polygonal approach:
     {
-        pad->SetShape( PAD_SHAPE_CUSTOM );
-        pad->SetAnchorPadShape( PAD_SHAPE_RECT );
+        pad->SetShape( PAD_SHAPE::CUSTOM );
+        pad->SetAnchorPadShape( PAD_SHAPE::RECT );
 
         int numPoints = (angle / 50) + 3;     // Note: angles are in 0.1 degrees
         std::vector<wxPoint> polyPoints;
@@ -211,7 +211,7 @@ FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
         pad->SetSize( wxSize( tw, tw ) );
 
         pad->SetPosition( footprint->GetPosition() );
-        pad->SetShape( PAD_SHAPE_RECT );
+        pad->SetShape( PAD_SHAPE::RECT );
         pad->SetAttribute( PAD_ATTRIB_SMD );
         pad->SetLayerSet( F_Cu );
 

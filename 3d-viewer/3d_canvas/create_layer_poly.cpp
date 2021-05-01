@@ -37,7 +37,7 @@
 void BOARD_ADAPTER::buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& aCornerBuffer,
                                               int aWidth ) const
 {
-    if( aPad->GetShape() == PAD_SHAPE_CIRCLE )    // Draw a ring
+    if( aPad->GetShape() == PAD_SHAPE::CIRCLE )    // Draw a ring
     {
         TransformRingToPolygon( aCornerBuffer, aPad->ShapePos(), aPad->GetSize().x / 2,
                                 aWidth, ARC_HIGH_DEF, ERROR_INSIDE );

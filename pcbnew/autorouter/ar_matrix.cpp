@@ -918,7 +918,7 @@ void AR_MATRIX::PlacePad( PAD* aPad, int color, int marge, AR_MATRIX::CELL_OP op
     dx = aPad->GetSize().x / 2;
     dx += marge;
 
-    if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
+    if( aPad->GetShape() == PAD_SHAPE::CIRCLE )
     {
         traceFilledCircle( shape_pos.x, shape_pos.y, dx, aPad->GetLayerSet(), color, op_logic );
         return;
@@ -927,7 +927,7 @@ void AR_MATRIX::PlacePad( PAD* aPad, int color, int marge, AR_MATRIX::CELL_OP op
     dy = aPad->GetSize().y / 2;
     dy += marge;
 
-    if( aPad->GetShape() == PAD_SHAPE_TRAPEZOID )
+    if( aPad->GetShape() == PAD_SHAPE::TRAPEZOID )
     {
         dx += abs( aPad->GetDelta().y ) / 2;
         dy += abs( aPad->GetDelta().x ) / 2;

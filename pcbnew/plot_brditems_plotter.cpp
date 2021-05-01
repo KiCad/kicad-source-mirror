@@ -218,26 +218,26 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, COLOR4D aColor, OUTLINE_MODE aP
 
     switch( aPad->GetShape() )
     {
-    case PAD_SHAPE_CIRCLE:
+    case PAD_SHAPE::CIRCLE:
         m_plotter->FlashPadCircle( shape_pos, aPad->GetSize().x, aPlotMode, &gbr_metadata );
         break;
 
-    case PAD_SHAPE_OVAL:
+    case PAD_SHAPE::OVAL:
         m_plotter->FlashPadOval( shape_pos, aPad->GetSize(), aPad->GetOrientation(), aPlotMode,
                                  &gbr_metadata );
         break;
 
-    case PAD_SHAPE_RECT:
+    case PAD_SHAPE::RECT:
         m_plotter->FlashPadRect( shape_pos, aPad->GetSize(), aPad->GetOrientation(), aPlotMode,
                                  &gbr_metadata );
         break;
 
-    case PAD_SHAPE_ROUNDRECT:
+    case PAD_SHAPE::ROUNDRECT:
         m_plotter->FlashPadRoundRect( shape_pos, aPad->GetSize(), aPad->GetRoundRectCornerRadius(),
                                       aPad->GetOrientation(), aPlotMode, &gbr_metadata );
         break;
 
-    case PAD_SHAPE_TRAPEZOID:
+    case PAD_SHAPE::TRAPEZOID:
     {
         // Build the pad polygon in coordinates relative to the pad
         // (i.e. for a pad at pos 0,0, rot 0.0). Needed to use aperture macros,
@@ -257,7 +257,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, COLOR4D aColor, OUTLINE_MODE aP
     }
         break;
 
-    case PAD_SHAPE_CHAMFERED_RECT:
+    case PAD_SHAPE::CHAMFERED_RECT:
         if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
         {
             static_cast<GERBER_PLOTTER*>( m_plotter )->FlashPadChamferRoundRect(
@@ -271,7 +271,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, COLOR4D aColor, OUTLINE_MODE aP
         KI_FALLTHROUGH;
 
     default:
-    case PAD_SHAPE_CUSTOM:
+    case PAD_SHAPE::CUSTOM:
     {
         const std::shared_ptr<SHAPE_POLY_SET>& polygons = aPad->GetEffectivePolygon();
 

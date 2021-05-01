@@ -69,17 +69,17 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 
         switch( pad->GetShape() )
         {
-        case PAD_SHAPE_TRAPEZOID:
+        case PAD_SHAPE::TRAPEZOID:
             // Because the trap delta is applied as +1/2 at one end and -1/2 at the other,
             // the midpoint is actually unchanged.  Therefore all the cardinal points are
             // the same as for a rectangle.
             KI_FALLTHROUGH;
 
-        case PAD_SHAPE_RECT:
-        case PAD_SHAPE_CIRCLE:
-        case PAD_SHAPE_OVAL:
-        case PAD_SHAPE_ROUNDRECT:
-        case PAD_SHAPE_CHAMFERED_RECT:
+        case PAD_SHAPE::RECT:
+        case PAD_SHAPE::CIRCLE:
+        case PAD_SHAPE::OVAL:
+        case PAD_SHAPE::ROUNDRECT:
+        case PAD_SHAPE::CHAMFERED_RECT:
             switch( n )
             {
             case 1: pt1.y -= pad->GetSize().y / 2; break;    // North
@@ -93,12 +93,12 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
                 RotatePoint( pt1, pad->ShapePos(), pad->GetOrientation() );
 
             // Thermal spokes on circular pads form an 'X' instead of a '+'
-            if( pad->GetShape() == PAD_SHAPE_CIRCLE )
+            if( pad->GetShape() == PAD_SHAPE::CIRCLE )
                 RotatePoint( pt1, pad->ShapePos(), 450 );
 
             return pt1;
 
-        case PAD_SHAPE_CUSTOM:
+        case PAD_SHAPE::CUSTOM:
         {
             switch( n )
             {

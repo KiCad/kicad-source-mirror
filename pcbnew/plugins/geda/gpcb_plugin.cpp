@@ -540,7 +540,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             static const LSET pad_front( 3, F_Cu, F_Mask, F_Paste );
             static const LSET pad_back(  3, B_Cu, B_Mask, B_Paste );
 
-            pad->SetShape( PAD_SHAPE_RECT );
+            pad->SetShape( PAD_SHAPE::RECT );
             pad->SetAttribute( PAD_ATTRIB_SMD );
             pad->SetLayerSet( pad_front );
 
@@ -599,9 +599,9 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             if( !testFlags( parameters[paramCnt-2], 0x0100, wxT( "square" ) ) )
             {
                 if( pad->GetSize().x == pad->GetSize().y )
-                    pad->SetShape( PAD_SHAPE_CIRCLE );
+                    pad->SetShape( PAD_SHAPE::CIRCLE );
                 else
-                    pad->SetShape( PAD_SHAPE_OVAL );
+                    pad->SetShape( PAD_SHAPE::OVAL );
             }
 
             footprint->Add( pad );
@@ -625,14 +625,14 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
             PAD* pad = new PAD( footprint.get() );
 
-            pad->SetShape( PAD_SHAPE_CIRCLE );
+            pad->SetShape( PAD_SHAPE::CIRCLE );
 
             static const LSET pad_set = LSET::AllCuMask() | LSET( 3, F_SilkS, F_Mask, B_Mask );
 
             pad->SetLayerSet( pad_set );
 
             if( testFlags( parameters[paramCnt-2], 0x0100, wxT( "square" ) ) )
-                pad->SetShape( PAD_SHAPE_RECT );
+                pad->SetShape( PAD_SHAPE::RECT );
 
             // Set the pad name:
             // Pcbnew pad name is used for electrical connection calculations.
@@ -679,8 +679,8 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             padPos += footprint->GetPosition();
             pad->SetPosition( padPos );
 
-            if( pad->GetShape() == PAD_SHAPE_CIRCLE  &&  pad->GetSize().x != pad->GetSize().y )
-                pad->SetShape( PAD_SHAPE_OVAL );
+            if( pad->GetShape() == PAD_SHAPE::CIRCLE  &&  pad->GetSize().x != pad->GetSize().y )
+                pad->SetShape( PAD_SHAPE::OVAL );
 
             footprint->Add( pad );
             continue;

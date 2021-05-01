@@ -118,7 +118,7 @@ static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
                 rk.x_size = pad->GetSize().x;
 
                 // Rule: round pads have y = 0
-                if( pad->GetShape() == PAD_SHAPE_CIRCLE )
+                if( pad->GetShape() == PAD_SHAPE::CIRCLE )
                     rk.y_size = 0;
                 else
                     rk.y_size = pad->GetSize().y;

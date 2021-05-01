@@ -1307,13 +1307,13 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
 
     switch( aPad->GetShape() )
     {
-    case PAD_SHAPE_CIRCLE:          shape = "circle";       break;
-    case PAD_SHAPE_RECT:            shape = "rect";         break;
-    case PAD_SHAPE_OVAL:            shape = "oval";         break;
-    case PAD_SHAPE_TRAPEZOID:       shape = "trapezoid";    break;
-    case PAD_SHAPE_CHAMFERED_RECT:
-    case PAD_SHAPE_ROUNDRECT:       shape = "roundrect";    break;
-    case PAD_SHAPE_CUSTOM:          shape = "custom";       break;
+    case PAD_SHAPE::CIRCLE:          shape = "circle";       break;
+    case PAD_SHAPE::RECT:            shape = "rect";         break;
+    case PAD_SHAPE::OVAL:            shape = "oval";         break;
+    case PAD_SHAPE::TRAPEZOID:       shape = "trapezoid";    break;
+    case PAD_SHAPE::CHAMFERED_RECT:
+    case PAD_SHAPE::ROUNDRECT:       shape = "roundrect";    break;
+    case PAD_SHAPE::CUSTOM:          shape = "custom";       break;
 
     default:
         THROW_IO_ERROR( wxString::Format( _( "unknown pad type: %d"), aPad->GetShape() ) );
@@ -1409,14 +1409,14 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
     }
 
     // Output the radius ratio for rounded and chamfered rect pads
-    if( aPad->GetShape() == PAD_SHAPE_ROUNDRECT || aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT)
+    if( aPad->GetShape() == PAD_SHAPE::ROUNDRECT || aPad->GetShape() == PAD_SHAPE::CHAMFERED_RECT)
     {
         m_out->Print( 0,  " (roundrect_rratio %s)",
                       Double2Str( aPad->GetRoundRectRadiusRatio() ).c_str() );
     }
 
     // Output the chamfer corners for chamfered rect pads
-    if( aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT)
+    if( aPad->GetShape() == PAD_SHAPE::CHAMFERED_RECT)
     {
         m_out->Print( 0, "\n" );
 
@@ -1520,7 +1520,7 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "%s", output.c_str()+1 );   // +1 skips 1st space on 1st element
     }
 
-    if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
+    if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
     {
         m_out->Print( 0, "\n");
         m_out->Print( aNestLevel+1, "(options" );
@@ -1533,7 +1533,7 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
         #endif
 
         // Output the anchor pad shape (circle/rect)
-        if( aPad->GetAnchorPadShape() == PAD_SHAPE_RECT )
+        if( aPad->GetAnchorPadShape() == PAD_SHAPE::RECT )
             shape = "rect";
         else
             shape = "circle";

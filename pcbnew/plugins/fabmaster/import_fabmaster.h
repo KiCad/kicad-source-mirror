@@ -96,7 +96,7 @@ private:
         std::string name;
         bool fixed;
         bool via;
-        PAD_SHAPE_T shape;
+        PAD_SHAPE shape;
         std::string custom_name;
         bool top;
         bool bottom;
@@ -302,7 +302,7 @@ private:
      * GRAPHIC_DATA_2!GRAPHIC_DATA_3!GRAPHIC_DATA_4!GRAPHIC_DATA_5!GRAPHIC_DATA_6!GRAPHIC_DATA_7!
      * GRAPHIC_DATA_8!GRAPHIC_DATA_9!PAD_STACK_NAME!REFDES!PIN_NUMBER!
      */
-    struct PAD_SHAPE
+    struct FABMASTER_PAD_SHAPE
     {
         std::string name;       ///<! PAD_SHAPE_NAME
         std::string padstack;   ///<! PAD_STACK_NAME
@@ -312,14 +312,14 @@ private:
 
         struct HASH
         {
-            std::size_t operator()( const std::unique_ptr<PAD_SHAPE>& aPad ) const
+            std::size_t operator()( const std::unique_ptr<FABMASTER_PAD_SHAPE>& aPad ) const
             {
                 return std::hash<std::string>{}( aPad->name );
             }
         };
     };
 
-    std::unordered_map<std::string, PAD_SHAPE> pad_shapes;
+    std::unordered_map<std::string, FABMASTER_PAD_SHAPE> pad_shapes;
 
     // * A!SYM_TYPE!SYM_NAME!REFDES!SYM_X!SYM_Y!SYM_ROTATE!SYM_MIRROR!NET_NAME!CLASS!SUBCLASS!RECORD_TAG!
     // * GRAPHIC_DATA_NAME!GRAPHIC_DATA_NUMBER!GRAPHIC_DATA_1!GRAPHIC_DATA_2!GRAPHIC_DATA_3!GRAPHIC_DATA_4!

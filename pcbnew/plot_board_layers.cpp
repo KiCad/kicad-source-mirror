@@ -287,7 +287,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             wxSize padPlotsSize = pad->GetSize() + margin * 2 + wxSize( width_adj, width_adj );
 
             // Store these parameters that can be modified to plot inflated/deflated pads shape
-            PAD_SHAPE_T padShape = pad->GetShape();
+            PAD_SHAPE padShape = pad->GetShape();
             wxSize      padSize  = pad->GetSize();
             wxSize      padDelta = pad->GetDelta(); // has meaning only for trapezoidal pads
             double      padCornerRadius = pad->GetRoundRectCornerRadius();
@@ -298,8 +298,8 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
             switch( pad->GetShape() )
             {
-            case PAD_SHAPE_CIRCLE:
-            case PAD_SHAPE_OVAL:
+            case PAD_SHAPE::CIRCLE:
+            case PAD_SHAPE::OVAL:
                 pad->SetSize( padPlotsSize );
 
                 if( aPlotOpt.GetSkipPlotNPTH_Pads() &&
@@ -311,19 +311,19 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 itemplotter.PlotPad( pad, color, padPlotMode );
                 break;
 
-            case PAD_SHAPE_RECT:
+            case PAD_SHAPE::RECT:
                 pad->SetSize( padPlotsSize );
 
                 if( mask_clearance > 0 )
                 {
-                    pad->SetShape( PAD_SHAPE_ROUNDRECT );
+                    pad->SetShape( PAD_SHAPE::ROUNDRECT );
                     pad->SetRoundRectCornerRadius( mask_clearance );
                 }
 
                 itemplotter.PlotPad( pad, color, padPlotMode );
                 break;
 
-            case PAD_SHAPE_TRAPEZOID:
+            case PAD_SHAPE::TRAPEZOID:
                 // inflate/deflate a trapezoid is a bit complex.
                 // so if the margin is not null, build a similar polygonal pad shape,
                 // and inflate/deflate the polygonal shape
@@ -334,8 +334,8 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 else
                 {
                     PAD dummy( *pad );
-                    dummy.SetAnchorPadShape( PAD_SHAPE_CIRCLE );
-                    dummy.SetShape( PAD_SHAPE_CUSTOM );
+                    dummy.SetAnchorPadShape( PAD_SHAPE::CIRCLE );
+                    dummy.SetShape( PAD_SHAPE::CUSTOM );
                     SHAPE_POLY_SET outline;
                     outline.NewOutline();
                     int dx = padSize.x / 2;
@@ -366,14 +366,14 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
                 break;
 
-            case PAD_SHAPE_ROUNDRECT:
-            case PAD_SHAPE_CHAMFERED_RECT:
+            case PAD_SHAPE::ROUNDRECT:
+            case PAD_SHAPE::CHAMFERED_RECT:
                 // Chamfer and rounding are stored as a percent and so don't need scaling
                 pad->SetSize( padPlotsSize );
                 itemplotter.PlotPad( pad, color, padPlotMode );
                 break;
 
-            case PAD_SHAPE_CUSTOM:
+            case PAD_SHAPE::CUSTOM:
             {
                 // inflate/deflate a custom shape is a bit complex.
                 // so build a similar pad shape, and inflate/deflate the polygonal shape

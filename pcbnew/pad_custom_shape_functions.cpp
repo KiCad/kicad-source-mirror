@@ -212,7 +212,7 @@ void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID
     // The anchor pad is always at 0,0
     switch( GetAnchorPadShape() )
     {
-    case PAD_SHAPE_RECT:
+    case PAD_SHAPE::RECT:
     {
         SHAPE_RECT rect( -GetSize().x / 2, -GetSize().y / 2, GetSize().x, GetSize().y );
         aMergedPolygon->AddOutline( rect.Outline() );
@@ -220,7 +220,7 @@ void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID
         break;
 
     default:
-    case PAD_SHAPE_CIRCLE:
+    case PAD_SHAPE::CIRCLE:
         TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0, 0 ), GetSize().x / 2, maxError,
                                   ERROR_INSIDE );
         break;
@@ -264,7 +264,7 @@ bool PAD::GetBestAnchorPosition( VECTOR2I& aPos )
     int64_t minDist = std::numeric_limits<int64_t>::max();
     int64_t minDistEdge;
 
-    if( GetAnchorPadShape() == PAD_SHAPE_CIRCLE )
+    if( GetAnchorPadShape() == PAD_SHAPE::CIRCLE )
     {
         minDistEdge = GetSize().x;
     }

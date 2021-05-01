@@ -1886,27 +1886,27 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
         switch( elem.topshape )
         {
         case ALTIUM_PAD_SHAPE::RECT:
-            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
+            pad->SetShape( PAD_SHAPE::RECT );
             break;
         case ALTIUM_PAD_SHAPE::CIRCLE:
             if( elem.sizeAndShape
                     && elem.sizeAndShape->alt_shape[0] == ALTIUM_PAD_SHAPE_ALT::ROUNDRECT )
             {
-                pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_ROUNDRECT ); // 100 = round, 0 = rectangular
+                pad->SetShape( PAD_SHAPE::ROUNDRECT ); // 100 = round, 0 = rectangular
                 double ratio = elem.sizeAndShape->cornerradius[0] / 200.;
                 pad->SetRoundRectRadiusRatio( ratio );
             }
             else if( elem.topsize.x == elem.topsize.y )
             {
-                pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CIRCLE );
+                pad->SetShape( PAD_SHAPE::CIRCLE );
             }
             else
             {
-                pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_OVAL );
+                pad->SetShape( PAD_SHAPE::OVAL );
             }
             break;
         case ALTIUM_PAD_SHAPE::OCTAGONAL:
-            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CHAMFERED_RECT );
+            pad->SetShape( PAD_SHAPE::CHAMFERED_RECT );
             pad->SetChamferPositions( RECT_CHAMFER_ALL );
             pad->SetChamferRectRatio( 0.25 );
             break;

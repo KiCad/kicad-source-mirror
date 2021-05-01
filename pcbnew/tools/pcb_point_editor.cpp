@@ -249,16 +249,16 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
         switch( pad->GetShape() )
         {
-        case PAD_SHAPE_CIRCLE:
+        case PAD_SHAPE::CIRCLE:
             points->AddPoint( shapePos );
             points->AddPoint( wxPoint( shapePos.x + halfSize.x, shapePos.y ) );
             break;
 
-        case PAD_SHAPE_OVAL:
-        case PAD_SHAPE_TRAPEZOID:
-        case PAD_SHAPE_RECT:
-        case PAD_SHAPE_ROUNDRECT:
-        case PAD_SHAPE_CHAMFERED_RECT:
+        case PAD_SHAPE::OVAL:
+        case PAD_SHAPE::TRAPEZOID:
+        case PAD_SHAPE::RECT:
+        case PAD_SHAPE::ROUNDRECT:
+        case PAD_SHAPE::CHAMFERED_RECT:
         {
             if( (int) pad->GetOrientation() % 900 != 0 )
                 break;
@@ -1183,7 +1183,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
         switch( pad->GetShape() )
         {
-        case PAD_SHAPE_CIRCLE:
+        case PAD_SHAPE::CIRCLE:
         {
             wxPoint center = (wxPoint) m_editPoints->Point( CIRC_CENTER ).GetPosition();
             wxPoint end = (wxPoint) m_editPoints->Point( CIRC_END ).GetPosition();
@@ -1201,11 +1201,11 @@ void PCB_POINT_EDITOR::updateItem() const
         }
             break;
 
-        case PAD_SHAPE_OVAL:
-        case PAD_SHAPE_TRAPEZOID:
-        case PAD_SHAPE_RECT:
-        case PAD_SHAPE_ROUNDRECT:
-        case PAD_SHAPE_CHAMFERED_RECT:
+        case PAD_SHAPE::OVAL:
+        case PAD_SHAPE::TRAPEZOID:
+        case PAD_SHAPE::RECT:
+        case PAD_SHAPE::ROUNDRECT:
+        case PAD_SHAPE::CHAMFERED_RECT:
         {
             VECTOR2I topLeft = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition();
             VECTOR2I topRight = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition();
@@ -1632,7 +1632,7 @@ void PCB_POINT_EDITOR::updatePoints()
 
         switch( pad->GetShape() )
         {
-        case PAD_SHAPE_CIRCLE:
+        case PAD_SHAPE::CIRCLE:
         {
             int target = locked ? 0 : 2;
 
@@ -1659,11 +1659,11 @@ void PCB_POINT_EDITOR::updatePoints()
         }
             break;
 
-        case PAD_SHAPE_OVAL:
-        case PAD_SHAPE_TRAPEZOID:
-        case PAD_SHAPE_RECT:
-        case PAD_SHAPE_ROUNDRECT:
-        case PAD_SHAPE_CHAMFERED_RECT:
+        case PAD_SHAPE::OVAL:
+        case PAD_SHAPE::TRAPEZOID:
+        case PAD_SHAPE::RECT:
+        case PAD_SHAPE::ROUNDRECT:
+        case PAD_SHAPE::CHAMFERED_RECT:
         {
             // Careful; pad shape and orientation are mutable...
             int target = locked || (int) pad->GetOrientation() % 900 > 0 ? 0 : 4;

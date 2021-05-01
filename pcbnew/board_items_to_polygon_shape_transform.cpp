@@ -160,12 +160,12 @@ void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
             {
                 switch( pad->GetShape() )
                 {
-                case PAD_SHAPE_CIRCLE:
+                case PAD_SHAPE::CIRCLE:
                     if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
                         continue;
                     break;
 
-                case PAD_SHAPE_OVAL:
+                case PAD_SHAPE::OVAL:
                     if( pad->GetDrillShape() != PAD_DRILL_SHAPE_CIRCLE )
                         continue;
                     break;
@@ -212,7 +212,7 @@ void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
         // size is only the size of the anchor), so for those we punt and just use clearance.x.
 
         if( ( clearance.x < 0 || clearance.x != clearance.y )
-                && pad->GetShape() != PAD_SHAPE_CUSTOM )
+                && pad->GetShape() != PAD_SHAPE::CUSTOM )
         {
             PAD dummy( *pad );
             dummy.SetSize( pad->GetSize() + clearance + clearance );
@@ -618,8 +618,8 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
     switch( GetShape() )
     {
-    case PAD_SHAPE_CIRCLE:
-    case PAD_SHAPE_OVAL:
+    case PAD_SHAPE::CIRCLE:
+    case PAD_SHAPE::OVAL:
         if( dx == dy )
         {
             TransformCircleToPolygon( aCornerBuffer, padShapePos, dx + aClearanceValue, aError,
@@ -638,11 +638,11 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
         break;
 
-    case PAD_SHAPE_TRAPEZOID:
-    case PAD_SHAPE_RECT:
+    case PAD_SHAPE::TRAPEZOID:
+    case PAD_SHAPE::RECT:
     {
-        int  ddx = GetShape() == PAD_SHAPE_TRAPEZOID ? m_deltaSize.x / 2 : 0;
-        int  ddy = GetShape() == PAD_SHAPE_TRAPEZOID ? m_deltaSize.y / 2 : 0;
+        int  ddx = GetShape() == PAD_SHAPE::TRAPEZOID ? m_deltaSize.x / 2 : 0;
+        int  ddy = GetShape() == PAD_SHAPE::TRAPEZOID ? m_deltaSize.y / 2 : 0;
 
         wxPoint corners[4];
         corners[0] = wxPoint( -dx - ddy,  dy + ddx );
@@ -676,12 +676,12 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     }
         break;
 
-    case PAD_SHAPE_CHAMFERED_RECT:
-    case PAD_SHAPE_ROUNDRECT:
+    case PAD_SHAPE::CHAMFERED_RECT:
+    case PAD_SHAPE::ROUNDRECT:
     {
         int    radius = GetRoundRectCornerRadius();
         wxSize shapesize( m_size );
-        bool   doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
+        bool   doChamfer = GetShape() == PAD_SHAPE::CHAMFERED_RECT;
 
         double chamferRatio = doChamfer ? GetChamferRectRatio() : 0.0;
 
@@ -728,7 +728,7 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     }
         break;
 
-    case PAD_SHAPE_CUSTOM:
+    case PAD_SHAPE::CUSTOM:
     {
         SHAPE_POLY_SET outline;
         MergePrimitivesAsPolygon( &outline, aLayer, aErrorLoc );

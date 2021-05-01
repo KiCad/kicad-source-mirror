@@ -76,7 +76,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
     {
         const PAD* pad = static_cast<const PAD*>( aItem );
 
-        ret = hash<int>{}( pad->GetShape() << 16 );
+        ret = hash<int>{}( static_cast<int>( pad->GetShape() ) << 16 );
         hash_combine( ret, pad->GetDrillShape() << 18 );
         hash_combine( ret, pad->GetSize().x << 8 );
         hash_combine( ret, pad->GetSize().y << 9 );

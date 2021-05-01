@@ -157,7 +157,7 @@ public:
     /**
      * Set the new shape of this pad.
      */
-    void SetShape( PAD_SHAPE_T aShape )
+    void SetShape( PAD_SHAPE aShape )
     {
         m_padShape = aShape;
         SetDirty();
@@ -166,7 +166,7 @@ public:
     /**
      * @return the shape of this pad.
      */
-    PAD_SHAPE_T GetShape() const { return m_padShape; }
+    PAD_SHAPE GetShape() const { return m_padShape; }
 
     void SetPosition( const wxPoint& aPos ) override
     {
@@ -179,7 +179,7 @@ public:
     /**
      * @return the shape of the anchor pad shape, for custom shaped pads.
      */
-    PAD_SHAPE_T GetAnchorPadShape() const       { return m_anchorPadShape; }
+    PAD_SHAPE GetAnchorPadShape() const       { return m_anchorPadShape; }
 
     /**
      * @return the option for the custom pad shape to use as clearance area in copper zones.
@@ -202,12 +202,12 @@ public:
     /**
      * Set the shape of the anchor pad for custom shaped pads.
      *
-     * @param aShape is the shape of the anchor pad shape( currently, only #PAD_SHAPE_RECT or
-     *               #PAD_SHAPE_CIRCLE.
+     * @param aShape is the shape of the anchor pad shape( currently, only #PAD_SHAPE::RECT or
+     *               #PAD_SHAPE::CIRCLE.
      */
-    void SetAnchorPadShape( PAD_SHAPE_T aShape )
+    void SetAnchorPadShape( PAD_SHAPE aShape )
     {
-        m_anchorPadShape = ( aShape ==  PAD_SHAPE_RECT ) ? PAD_SHAPE_RECT : PAD_SHAPE_CIRCLE;
+        m_anchorPadShape = ( aShape ==  PAD_SHAPE::RECT ) ? PAD_SHAPE::RECT : PAD_SHAPE::CIRCLE;
         SetDirty();
     }
 
@@ -680,9 +680,9 @@ private:
 
     wxPoint       m_pos;                // Pad Position on board
 
-    PAD_SHAPE_T   m_padShape;           // Shape: PAD_SHAPE_CIRCLE, PAD_SHAPE_RECT,
-                                        //   PAD_SHAPE_OVAL, PAD_SHAPE_TRAPEZOID,
-                                        //   PAD_SHAPE_ROUNDRECT, PAD_SHAPE_POLYGON
+    PAD_SHAPE   m_padShape;           // Shape: PAD_SHAPE::CIRCLE, PAD_SHAPE::RECT,
+                                        //   PAD_SHAPE::OVAL, PAD_SHAPE::TRAPEZOID,
+                                        //   PAD_SHAPE::ROUNDRECT, PAD_SHAPE_POLYGON
     /*
      * Editing definitions of primitives for custom pad shapes.  In local coordinates relative
      * to m_Pos (NOT shapePos) at orient 0.
@@ -722,8 +722,8 @@ private:
                                             //   size, default 0.25
     int               m_chamferPositions;   // The positions of the chamfers (at orient 0)
 
-    PAD_SHAPE_T       m_anchorPadShape;     // For custom shaped pads: shape of pad anchor,
-                                            //   PAD_SHAPE_RECT, PAD_SHAPE_CIRCLE
+    PAD_SHAPE       m_anchorPadShape;     // For custom shaped pads: shape of pad anchor,
+                                          //   PAD_SHAPE::RECT, PAD_SHAPE::CIRCLE
 
     /*
      * Most of the time the hole is the center of the shape (m_Offset = 0). But some designers
@@ -737,7 +737,7 @@ private:
     LSET        m_layerMask;        // Bitwise layer: 1 = copper layer, 15 = cmp,
                                     // 2..14 = internal layers, 16..31 = technical layers
 
-    wxSize      m_deltaSize;        // Delta for PAD_SHAPE_TRAPEZOID; half the delta squeezes
+    wxSize      m_deltaSize;        // Delta for PAD_SHAPE::TRAPEZOID; half the delta squeezes
                                     //   one end and half expands the other.  It is only valid
                                     //   to have a single axis be non-0.
 

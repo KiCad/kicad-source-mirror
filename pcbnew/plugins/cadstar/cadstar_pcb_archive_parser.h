@@ -270,7 +270,7 @@ public:
     };
 
 
-    struct PAD_SHAPE : PARSER
+    struct CADSTAR_PAD_SHAPE : PARSER
     {
         PAD_SHAPE_TYPE ShapeType;
         long           Size            = UNDEFINED_VALUE;
@@ -287,7 +287,7 @@ public:
     struct PADREASSIGN : PARSER
     {
         LAYER_ID  LayerID;
-        PAD_SHAPE Shape;
+        CADSTAR_PAD_SHAPE Shape;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -297,7 +297,7 @@ public:
     {
         PADCODE_ID ID;
         wxString   Name;
-        PAD_SHAPE  Shape;
+        CADSTAR_PAD_SHAPE Shape;
         long       ReliefClearance = UNDEFINED_VALUE; ///< if undefined inherits from design
         long       ReliefWidth     = UNDEFINED_VALUE; ///< if undefined inherits from design
         bool       Plated          = true;
@@ -308,7 +308,7 @@ public:
         long       DrillXoffset    = 0;
         long       DrillYoffset    = 0;
 
-        std::map<LAYER_ID, PAD_SHAPE> Reassigns;
+        std::map<LAYER_ID, CADSTAR_PAD_SHAPE> Reassigns;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -317,7 +317,7 @@ public:
     struct VIAREASSIGN : PARSER
     {
         LAYER_ID  LayerID;
-        PAD_SHAPE Shape;
+        CADSTAR_PAD_SHAPE Shape;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -327,13 +327,13 @@ public:
     {
         VIACODE_ID ID;
         wxString   Name;
-        PAD_SHAPE  Shape;
+        CADSTAR_PAD_SHAPE Shape;
         long       ReliefClearance = UNDEFINED_VALUE; ///< if undefined inherits from design
         long       ReliefWidth     = UNDEFINED_VALUE; ///< if undefined inherits from design
         long       DrillDiameter   = UNDEFINED_VALUE;
         long       DrillOversize   = UNDEFINED_VALUE;
 
-        std::map<LAYER_ID, PAD_SHAPE> Reassigns;
+        std::map<LAYER_ID, CADSTAR_PAD_SHAPE> Reassigns;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };

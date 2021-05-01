@@ -630,7 +630,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SPACINGCODE::Parse( XNODE* aNode, PARSER_CONTEX
 }
 
 
-bool CADSTAR_PCB_ARCHIVE_PARSER::PAD_SHAPE::IsPadShape( XNODE* aNode )
+bool CADSTAR_PCB_ARCHIVE_PARSER::CADSTAR_PAD_SHAPE::IsPadShape( XNODE* aNode )
 {
     wxString aNodeName = aNode->GetName();
 
@@ -648,7 +648,7 @@ bool CADSTAR_PCB_ARCHIVE_PARSER::PAD_SHAPE::IsPadShape( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::PAD_SHAPE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+void CADSTAR_PCB_ARCHIVE_PARSER::CADSTAR_PAD_SHAPE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( IsPadShape( aNode ) );
 
@@ -725,7 +725,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADREASSIGN::Parse( XNODE* aNode, PARSER_CONTEX
 
     LayerID = GetXmlAttributeIDString( aNode, 0 );
 
-    if( PAD_SHAPE::IsPadShape( aNode->GetChildren() ) )
+    if( CADSTAR_PAD_SHAPE::IsPadShape( aNode->GetChildren() ) )
         Shape.Parse( aNode->GetChildren(), aContext );
     else
         THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
@@ -748,7 +748,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADCODE::Parse( XNODE* aNode, PARSER_CONTEXT* a
     {
         wxString cNodeName = cNode->GetName();
 
-        if( PAD_SHAPE::IsPadShape( cNode ) )
+        if( CADSTAR_PAD_SHAPE::IsPadShape( cNode ) )
         {
             Shape.Parse( cNode, aContext );
         }
@@ -813,7 +813,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::VIAREASSIGN::Parse( XNODE* aNode, PARSER_CONTEX
 
     LayerID = GetXmlAttributeIDString( aNode, 0 );
 
-    if( PAD_SHAPE::IsPadShape( aNode->GetChildren() ) )
+    if( CADSTAR_PAD_SHAPE::IsPadShape( aNode->GetChildren() ) )
         Shape.Parse( aNode->GetChildren(), aContext );
     else
         THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
@@ -836,7 +836,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::VIACODE::Parse( XNODE* aNode, PARSER_CONTEXT* a
     {
         wxString cNodeName = cNode->GetName();
 
-        if( PAD_SHAPE::IsPadShape( cNode ) )
+        if( CADSTAR_PAD_SHAPE::IsPadShape( cNode ) )
         {
             Shape.Parse( cNode, aContext );
         }

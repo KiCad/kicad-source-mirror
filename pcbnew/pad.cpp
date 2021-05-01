@@ -63,8 +63,8 @@ PAD::PAD( FOOTPRINT* parent ) :
         m_pos = GetParent()->GetPosition();
     }
 
-    SetShape( PAD_SHAPE_CIRCLE );                   // Default pad shape is PAD_CIRCLE.
-    SetAnchorPadShape( PAD_SHAPE_CIRCLE );          // Default shape for custom shaped pads
+    SetShape( PAD_SHAPE::CIRCLE );                   // Default pad shape is PAD_CIRCLE.
+    SetAnchorPadShape( PAD_SHAPE::CIRCLE );          // Default shape for custom shaped pads
                                                     // is PAD_CIRCLE.
     SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );        // Default pad drill shape is a circle.
     m_attribute           = PAD_ATTRIB_PTH;         // Default pad type is plated through hole
@@ -321,18 +321,18 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
                };
 
     wxPoint shapePos = ShapePos();  // Fetch only once; rotation involves trig
-    PAD_SHAPE_T effectiveShape = GetShape();
+    PAD_SHAPE effectiveShape = GetShape();
 
-    if( GetShape() == PAD_SHAPE_CUSTOM )
+    if( GetShape() == PAD_SHAPE::CUSTOM )
         effectiveShape = GetAnchorPadShape();
 
     switch( effectiveShape )
     {
-    case PAD_SHAPE_CIRCLE:
+    case PAD_SHAPE::CIRCLE:
         add( new SHAPE_CIRCLE( shapePos, m_size.x / 2 ) );
         break;
 
-    case PAD_SHAPE_OVAL:
+    case PAD_SHAPE::OVAL:
         if( m_size.x == m_size.y ) // the oval pad is in fact a circle
             add( new SHAPE_CIRCLE( shapePos, m_size.x / 2 ) );
         else
@@ -345,11 +345,11 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         }
         break;
 
-    case PAD_SHAPE_RECT:
-    case PAD_SHAPE_TRAPEZOID:
-    case PAD_SHAPE_ROUNDRECT:
+    case PAD_SHAPE::RECT:
+    case PAD_SHAPE::TRAPEZOID:
+    case PAD_SHAPE::ROUNDRECT:
     {
-        int     r = ( effectiveShape == PAD_SHAPE_ROUNDRECT ) ? GetRoundRectCornerRadius() : 0;
+        int     r = ( effectiveShape == PAD_SHAPE::ROUNDRECT ) ? GetRoundRectCornerRadius() : 0;
         wxPoint half_size( m_size.x / 2, m_size.y / 2 );
         wxSize  trap_delta( 0, 0 );
 
@@ -367,7 +367,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
                 break;
             }
         }
-        else if( effectiveShape == PAD_SHAPE_TRAPEZOID )
+        else if( effectiveShape == PAD_SHAPE::TRAPEZOID )
         {
             trap_delta = m_deltaSize / 2;
         }
@@ -420,7 +420,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     }
         break;
 
-    case PAD_SHAPE_CHAMFERED_RECT:
+    case PAD_SHAPE::CHAMFERED_RECT:
     {
         SHAPE_POLY_SET outline;
 
@@ -438,7 +438,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         break;
     }
 
-    if( GetShape() == PAD_SHAPE_CUSTOM )
+    if( GetShape() == PAD_SHAPE::CUSTOM )
     {
         for( const std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
         {
@@ -893,7 +893,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
     aList.emplace_back( ShowPadShape(), props );
 
-    if( ( GetShape() == PAD_SHAPE_CIRCLE || GetShape() == PAD_SHAPE_OVAL ) && m_size.x == m_size.y )
+    if( ( GetShape() == PAD_SHAPE::CIRCLE || GetShape() == PAD_SHAPE::OVAL ) && m_size.x == m_size.y )
     {
         aList.emplace_back( _( "Diameter" ), MessageTextFromValue( units, m_size.x ) );
     }
@@ -1005,7 +1005,7 @@ int PAD::Compare( const PAD* padref, const PAD* padcmp )
 {
     int diff;
 
-    if( ( diff = padref->GetShape() - padcmp->GetShape() ) != 0 )
+    if( ( diff = static_cast<int>( padref->GetShape() ) - static_cast<int>( padcmp->GetShape() ) ) != 0 )
         return diff;
 
     if( ( diff = padref->GetDrillShape() - padcmp->GetDrillShape() ) != 0)
@@ -1073,13 +1073,13 @@ wxString PAD::ShowPadShape() const
 {
     switch( GetShape() )
     {
-    case PAD_SHAPE_CIRCLE:         return _( "Circle" );
-    case PAD_SHAPE_OVAL:           return _( "Oval" );
-    case PAD_SHAPE_RECT:           return _( "Rect" );
-    case PAD_SHAPE_TRAPEZOID:      return _( "Trap" );
-    case PAD_SHAPE_ROUNDRECT:      return _( "Roundrect" );
-    case PAD_SHAPE_CHAMFERED_RECT: return _( "Chamferedrect" );
-    case PAD_SHAPE_CUSTOM:         return _( "CustomShape" );
+    case PAD_SHAPE::CIRCLE:         return _( "Circle" );
+    case PAD_SHAPE::OVAL:           return _( "Oval" );
+    case PAD_SHAPE::RECT:           return _( "Rect" );
+    case PAD_SHAPE::TRAPEZOID:      return _( "Trap" );
+    case PAD_SHAPE::ROUNDRECT:      return _( "Roundrect" );
+    case PAD_SHAPE::CHAMFERED_RECT: return _( "Chamferedrect" );
+    case PAD_SHAPE::CUSTOM:         return _( "CustomShape" );
     default:                       return wxT( "???" );
     }
 }
@@ -1295,7 +1295,7 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     }
 
     if( aLayer == LAYER_PADS_TH
-            && GetShape() != PAD_SHAPE_CUSTOM
+            && GetShape() != PAD_SHAPE::CUSTOM
             && GetSizeX() <= GetDrillSizeX()
             && GetSizeY() <= GetDrillSizeY() )
     {
@@ -1375,11 +1375,11 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
 
     switch( aMasterPad.GetShape() )
     {
-    case PAD_SHAPE_TRAPEZOID:
+    case PAD_SHAPE::TRAPEZOID:
         SetDelta( aMasterPad.GetDelta() );
         break;
 
-    case PAD_SHAPE_CIRCLE:
+    case PAD_SHAPE::CIRCLE:
         // ensure size.y == size.x
         SetSize( wxSize( GetSize().x, GetSize().x ) );
         break;
@@ -1439,14 +1439,14 @@ static struct PAD_DESC
                 .Map( PAD_ATTRIB_CONN,            _HKI( "Edge connector" ) )
                 .Map( PAD_ATTRIB_NPTH,            _HKI( "NPTH, mechanical" ) );
 
-        ENUM_MAP<PAD_SHAPE_T>::Instance()
-                .Map( PAD_SHAPE_CIRCLE,           _HKI( "Circle" ) )
-                .Map( PAD_SHAPE_RECT,             _HKI( "Rectangle" ) )
-                .Map( PAD_SHAPE_OVAL,             _HKI( "Oval" ) )
-                .Map( PAD_SHAPE_TRAPEZOID,        _HKI( "Trapezoid" ) )
-                .Map( PAD_SHAPE_ROUNDRECT,        _HKI( "Rounded rectangle" ) )
-                .Map( PAD_SHAPE_CHAMFERED_RECT,   _HKI( "Chamfered rectangle" ) )
-                .Map( PAD_SHAPE_CUSTOM,           _HKI( "Custom" ) );
+        ENUM_MAP<PAD_SHAPE>::Instance()
+                .Map( PAD_SHAPE::CIRCLE,           _HKI( "Circle" ) )
+                .Map( PAD_SHAPE::RECT,             _HKI( "Rectangle" ) )
+                .Map( PAD_SHAPE::OVAL,             _HKI( "Oval" ) )
+                .Map( PAD_SHAPE::TRAPEZOID,        _HKI( "Trapezoid" ) )
+                .Map( PAD_SHAPE::ROUNDRECT,        _HKI( "Rounded rectangle" ) )
+                .Map( PAD_SHAPE::CHAMFERED_RECT,   _HKI( "Chamfered rectangle" ) )
+                .Map( PAD_SHAPE::CUSTOM,           _HKI( "Custom" ) );
 
         ENUM_MAP<PAD_PROP_T>::Instance()
                 .Map( PAD_PROP_NONE,              _HKI( "None" ) )
@@ -1465,7 +1465,7 @@ static struct PAD_DESC
                     &PAD::SetAttribute, &PAD::GetAttribute );
         propMgr.AddProperty( padType );
 
-        auto shape = new PROPERTY_ENUM<PAD, PAD_SHAPE_T>( _HKI( "Shape" ),
+        auto shape = new PROPERTY_ENUM<PAD, PAD_SHAPE>( _HKI( "Shape" ),
                     &PAD::SetShape, &PAD::GetShape );
         propMgr.AddProperty( shape );
 
@@ -1515,7 +1515,7 @@ static struct PAD_DESC
         roundRadiusRatio->SetAvailableFunc(
                     [=]( INSPECTABLE* aItem ) -> bool
                     {
-                        return aItem->Get( shape ) == PAD_SHAPE_ROUNDRECT;
+                        return aItem->Get( shape ) == static_cast<int>( PAD_SHAPE::ROUNDRECT );
                     } );
         propMgr.AddProperty( roundRadiusRatio );
 
@@ -1530,5 +1530,5 @@ static struct PAD_DESC
 } _PAD_DESC;
 
 ENUM_TO_WXANY( PAD_ATTR_T );
-ENUM_TO_WXANY( PAD_SHAPE_T );
+ENUM_TO_WXANY( PAD_SHAPE );
 ENUM_TO_WXANY( PAD_PROP_T );
