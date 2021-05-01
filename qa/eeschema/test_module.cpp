@@ -28,6 +28,7 @@
  */
 #include <boost/test/unit_test.hpp>
 
+#include <pgm_base.h>
 #include <wx/init.h>
 
 #include <unit_test_utils/wx_assert.h>
@@ -48,7 +49,10 @@ bool init_unit_test()
 {
     boost::unit_test::framework::master_test_suite().p_name.value = "Common Eeschema module tests";
 
-    bool ok = wxInitialize();
+    bool ok = wxInitialize( boost::unit_test::framework::master_test_suite().argc,
+                            boost::unit_test::framework::master_test_suite().argv );
+
+    Pgm().InitPgm( true ); // Initialize in headless mode
 
     wxSetAssertHandler( &wxAssertThrower );
 
@@ -59,6 +63,8 @@ bool init_unit_test()
 int main( int argc, char* argv[] )
 {
     int ret = boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
+
+    Pgm().Destroy();
 
     // This causes some glib warnings on GTK3 (http://trac.wxwidgets.org/ticket/18274)
     // but without it, Valgrind notices a lot of leaks from WX

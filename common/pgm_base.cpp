@@ -202,7 +202,7 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 }
 
 
-bool PGM_BASE::InitPgm()
+bool PGM_BASE::InitPgm( bool aHeadless )
 {
     wxFileName pgm_name( App().argv[0] );
 
@@ -264,7 +264,7 @@ bool PGM_BASE::InitPgm()
     SetLanguagePath();
     SetDefaultLanguage( tmp );
 
-    m_settings_manager = std::make_unique<SETTINGS_MANAGER>();
+    m_settings_manager = std::make_unique<SETTINGS_MANAGER>( aHeadless );
 
     // Something got in the way of settings load: can't continue
     if( !m_settings_manager->IsOK() )

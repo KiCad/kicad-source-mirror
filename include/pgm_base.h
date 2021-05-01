@@ -266,9 +266,10 @@ public:
      *
      * @note Do not initialize anything relating to DSOs or projects.
      *
+     * @param aHeadless If true, run in headless mode (e.g. for unit tests)
      * @return true if success, false if failure and program is to terminate.
      */
-    bool InitPgm();
+    bool InitPgm( bool aHeadless = false );
 
     // The PGM_* classes can have difficulties at termination if they
     // are not destroyed soon enough.  Relying on a static destructor can be

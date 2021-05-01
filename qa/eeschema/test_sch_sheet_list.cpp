@@ -44,7 +44,9 @@ public:
         delete m_pi;
     }
 
-    void loadSchematic( const wxString& aBaseName );
+    void loadSchematic( const wxString& aRelativePath );
+
+    wxFileName buildFullPath( const wxString& aRelativePath );
 
     ///> Schematic to load
     SCHEMATIC m_schematic;
@@ -55,26 +57,23 @@ public:
 };
 
 
-void TEST_SCH_SHEET_LIST_FIXTURE::loadSchematic( const wxString& aBaseName )
+void TEST_SCH_SHEET_LIST_FIXTURE::loadSchematic( const wxString& aRelativePath )
 {
-    wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
-
-    fn.AppendDir( "netlists" );
-    fn.AppendDir( aBaseName );
-    fn.SetName( aBaseName );
-    fn.SetExt( KiCadSchematicFileExtension );
+    wxFileName fn = buildFullPath( aRelativePath );
 
     BOOST_TEST_MESSAGE( fn.GetFullPath() );
 
     wxFileName pro( fn );
     pro.SetExt( ProjectFileExtension );
 
-    m_manager.LoadProject( pro.GetFullPath() );
+    m_schematic.Reset();
+    m_schematic.CurrentSheet().clear();
 
+    m_manager.LoadProject( pro.GetFullPath() );
     m_manager.Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, nullptr );
 
-    m_schematic.Reset();
     m_schematic.SetProject( &m_manager.Prj() );
+
     m_schematic.SetRoot( m_pi->Load( fn.GetFullPath(), &m_schematic ) );
 
     BOOST_REQUIRE_EQUAL( m_pi->GetError().IsEmpty(), true );
@@ -90,6 +89,7 @@ void TEST_SCH_SHEET_LIST_FIXTURE::loadSchematic( const wxString& aBaseName )
 
     // Restore all of the loaded symbol instances from the root sheet screen.
     sheets.UpdateSymbolInstances( m_schematic.RootScreen()->GetSymbolInstances() );
+    sheets.UpdateSheetInstances( m_schematic.RootScreen()->GetSheetInstances() );
 
     sheets.AnnotatePowerSymbols();
 
@@ -100,12 +100,24 @@ void TEST_SCH_SHEET_LIST_FIXTURE::loadSchematic( const wxString& aBaseName )
 }
 
 
+wxFileName TEST_SCH_SHEET_LIST_FIXTURE::buildFullPath( const wxString& aRelativePath )
+{
+    wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
+    fn.AppendDir( "netlists" );
+
+    wxString path = fn.GetFullPath();
+    path += aRelativePath + wxT( "." ) + KiCadSchematicFileExtension;
+
+    return wxFileName( path );
+}
+
+
 BOOST_FIXTURE_TEST_SUITE( SchSheetList, TEST_SCH_SHEET_LIST_FIXTURE )
 
 
 BOOST_AUTO_TEST_CASE( TestSheetListPageProperties )
 {
-    loadSchematic( "complex_hierarchy" );
+    loadSchematic( "complex_hierarchy/complex_hierarchy" );
 
     SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
@@ -119,5 +131,78 @@ BOOST_AUTO_TEST_CASE( TestSheetListPageProperties )
     BOOST_CHECK_EQUAL( sheets.at( 2 ).GetPageNumber(), "3" );
 }
 
+
+BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
+{
+    BOOST_TEST_CONTEXT( "Read Sub-Sheet, prior to modification" )
+    {
+        // Check the Sub Sheet has the expected page numbers
+        loadSchematic( "complex_hierarchy_shared/ampli_ht/ampli_ht" );
+
+        SCH_SHEET_LIST sheets = m_schematic.GetSheets();
+
+        BOOST_CHECK_EQUAL( sheets.size(), 2 );
+        BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "i" );
+        BOOST_CHECK_EQUAL( sheets.at( 1 ).GetPageNumber(), "ii" );
+    }
+
+    BOOST_TEST_CONTEXT( "Read Root Sheet, prior to modification" )
+    {
+        // Check the parent sheet has the expected page numbers
+        loadSchematic( "complex_hierarchy_shared/complex_hierarchy" );
+
+        SCH_SHEET_LIST sheets = m_schematic.GetSheets();
+
+        BOOST_CHECK_EQUAL( sheets.size(), 5 );
+        BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "1" );
+        BOOST_CHECK_EQUAL( sheets.at( 1 ).GetPageNumber(), "2" );
+        BOOST_CHECK_EQUAL( sheets.at( 2 ).GetPageNumber(), "3" );
+        BOOST_CHECK_EQUAL( sheets.at( 3 ).GetPageNumber(), "4" );
+        BOOST_CHECK_EQUAL( sheets.at( 4 ).GetPageNumber(), "5" );
+    }
+
+    BOOST_TEST_CONTEXT( "Modify page numbers in root sheet" )
+    {
+        SCH_SHEET_LIST sheets = m_schematic.GetSheets();
+
+        // Ammend Page numbers
+        sheets.at( 0 ).SetPageNumber( "A" );
+        sheets.at( 1 ).SetPageNumber( "B" );
+        sheets.at( 2 ).SetPageNumber( "C" );
+        sheets.at( 3 ).SetPageNumber( "D" );
+        sheets.at( 4 ).SetPageNumber( "E" );
+
+        // Save and reload
+        wxString   tempName = "complex_hierarchy_shared/complex_hierarchy_modified";
+        wxFileName tempFn = buildFullPath( tempName );
+        m_pi->Save( tempFn.GetFullPath(), &m_schematic.Root(), &m_schematic );
+        loadSchematic( tempName );
+
+        sheets = m_schematic.GetSheets();
+
+        BOOST_CHECK_EQUAL( sheets.size(), 5 );
+        BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "A" );
+        BOOST_CHECK_EQUAL( sheets.at( 1 ).GetPageNumber(), "B" );
+        BOOST_CHECK_EQUAL( sheets.at( 2 ).GetPageNumber(), "C" );
+        BOOST_CHECK_EQUAL( sheets.at( 3 ).GetPageNumber(), "D" );
+        BOOST_CHECK_EQUAL( sheets.at( 4 ).GetPageNumber(), "E" );
+
+        // Cleanup
+        wxRemoveFile( tempFn.GetFullPath() );
+    }
+
+    BOOST_TEST_CONTEXT( "Read Sub-Sheet, after modification" )
+    {
+        // Check the Sub Sheet has the expected page numbers
+        // (This should not have been modified after editing the root sheet)
+        loadSchematic( "complex_hierarchy_shared/ampli_ht/ampli_ht" );
+
+        SCH_SHEET_LIST sheets = m_schematic.GetSheets();
+
+        BOOST_CHECK_EQUAL( sheets.size(), 2 );
+        BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "i" );
+        BOOST_CHECK_EQUAL( sheets.at( 1 ).GetPageNumber(), "ii" );
+    }
+}
 
 BOOST_AUTO_TEST_SUITE_END()
