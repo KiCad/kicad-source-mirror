@@ -28,7 +28,6 @@
  */
 
 #include "bvh_pbrt.h"
-#include <wx/debug.h>
 
 
 #define BVH_RANGED_TRAVERSAL
