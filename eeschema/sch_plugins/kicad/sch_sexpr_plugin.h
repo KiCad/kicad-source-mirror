@@ -99,8 +99,8 @@ public:
 
     void Format( SCH_SHEET* aSheet );
 
-    void Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSheetPath,
-                 OUTPUTFORMATTER* aFormatter );
+    void Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelectionPath,
+                 SCH_SHEET_LIST* aFullSheetHierarchy, OUTPUTFORMATTER* aFormatter );
 
     void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                              const wxString&   aLibraryPath,

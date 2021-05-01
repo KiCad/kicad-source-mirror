@@ -380,6 +380,7 @@ void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
         delete undo;
 
         SetSheetNumberAndCount();
+        UpdateHierarchyNavigator();
 
         TestDanglingEnds();
     }

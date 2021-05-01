@@ -717,10 +717,11 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 }
 
 
-void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSheetPath,
+void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelectionPath,
+                               SCH_SHEET_LIST* aFullSheetHierarchy,
                                OUTPUTFORMATTER* aFormatter )
 {
-    wxCHECK( aSelection && aFormatter, /* void */ );
+    wxCHECK( aSelection && aSelectionPath && aFullSheetHierarchy && aFormatter, /* void */ );
 
     LOCALE_IO toggle;
 
@@ -765,6 +766,12 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSheetP
         m_out->Print( 0, ")\n\n" );
     }
 
+    // Store the selected sheets instance information
+    SCH_SHEET_LIST selectedSheets;
+    selectedSheets.push_back( *aSelectionPath ); // Include the "root" of the selection
+
+    SCH_REFERENCE_LIST selectedSymbols;
+
     for( i = 0; i < aSelection->GetSize(); ++i )
     {
         item = (SCH_ITEM*) aSelection->GetItem( i );
@@ -772,7 +779,10 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSheetP
         switch( item->Type() )
         {
         case SCH_COMPONENT_T:
-            saveSymbol( static_cast<SCH_COMPONENT*>( item ), aSheetPath, 0 );
+            saveSymbol( static_cast<SCH_COMPONENT*>( item ), aSelectionPath, 0 );
+
+            aSelectionPath->AppendSymbol( selectedSymbols, static_cast<SCH_COMPONENT*>( item ),
+                                          true, true );
             break;
 
         case SCH_BITMAP_T:
@@ -781,6 +791,16 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSheetP
 
         case SCH_SHEET_T:
             saveSheet( static_cast< SCH_SHEET* >( item ), 0 );
+
+            {
+                SCH_SHEET_PATH subSheetPath = *aSelectionPath;
+                subSheetPath.push_back( static_cast<SCH_SHEET*>( item ) );
+
+                aFullSheetHierarchy->GetSheetsWithinPath( selectedSheets, subSheetPath );
+                aFullSheetHierarchy->GetSymbolsWithinPath( selectedSymbols, subSheetPath, true,
+                                                          true );
+            }
+
             break;
 
         case SCH_JUNCTION_T:
@@ -811,6 +831,30 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSheetP
             wxASSERT( "Unexpected schematic object type in SCH_SEXPR_PLUGIN::Format()" );
         }
     }
+
+    // Make all instance information relative to the selection path
+    KIID_PATH selectionPath = aSelectionPath->PathWithoutRootUuid();
+
+    selectedSheets.SortByPageNumbers();
+    std::vector<SCH_SHEET_INSTANCE> sheetinstances = selectedSheets.GetSheetInstances();
+
+    for( SCH_SHEET_INSTANCE& sheetInstance : sheetinstances )
+    {
+        wxASSERT_MSG( sheetInstance.m_Path.MakeRelativeTo( selectionPath ),
+                      "Sheet is not inside the selection path?" );
+    }
+
+
+    selectedSymbols.SortByReferenceOnly();
+    std::vector<SYMBOL_INSTANCE_REFERENCE> symbolInstances = selectedSymbols.GetSymbolInstances();
+
+    for( SYMBOL_INSTANCE_REFERENCE& symbolInstance : symbolInstances )
+    {
+        wxASSERT_MSG( symbolInstance.m_Path.MakeRelativeTo( selectionPath ),
+                      "Symbol is not inside the selection path?" );
+    }
+
+    saveInstances( sheetinstances, symbolInstances, 0 );
 }
 
 

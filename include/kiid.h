@@ -113,6 +113,7 @@ public:
 
     KIID_PATH( const wxString& aString );
 
+    bool MakeRelativeTo( const KIID_PATH& aPath );
 
     wxString AsString() const;
 

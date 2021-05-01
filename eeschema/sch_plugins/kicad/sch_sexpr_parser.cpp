@@ -2162,16 +2162,10 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
             break;
 
         case T_sheet_instances:
-            if( aIsCopyableOnly )
-                Unexpected( T_sheet_instances );
-
             parseSchSheetInstances( aSheet, screen );
             break;
 
         case T_symbol_instances:
-            if( aIsCopyableOnly )
-                Unexpected( T_symbol_instances );
-
             parseSchSymbolInstances( screen );
             break;
 

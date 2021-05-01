@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,26 @@ wxString GetRefDesPrefix( const wxString& aRefDes )
 wxString GetRefDesUnannotated( const wxString& aSource )
 {
    return UTIL::GetRefDesPrefix( aSource ) + wxT( "?" );
+}
+
+
+int GetRefDesNumber( const wxString& aRefDes )
+{
+    int    retval = -1; // negative to indicate not found
+    size_t firstnum = aRefDes.find_first_of( "0123456789" );
+
+    if( firstnum != wxString::npos )
+    {
+        wxString candidateValue = aRefDes.Mid( firstnum );
+        long     result;
+
+        if( !candidateValue.ToLong( &result ) )
+            retval = -1;
+        else
+            retval = static_cast<int>( result );
+    }
+
+    return retval;
 }
 
 

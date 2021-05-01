@@ -224,6 +224,14 @@ public:
     int ComparePageNumAndName( const SCH_SHEET_PATH& aSheetPathToTest ) const;
 
     /**
+     * Check if this path is contained inside aSheetPathToTest.
+     *
+     * @param aSheetPathToTest is the sheet path to compare against.
+     * @return true if this path is contained inside or equal to aSheetPathToTest.
+     */
+    bool IsContainedWithin( const SCH_SHEET_PATH& aSheetPathToTest ) const;
+
+    /**
      * Return a pointer to the last #SCH_SHEET of the list.
      *
      * One can see the others sheet as the "path" to reach this last sheet.
@@ -433,6 +441,30 @@ public:
                      bool aForceIncludeOrphanSymbols = false ) const;
 
     /**
+     * Add a #SCH_REFERENCE object to \a aReferences for each symbol in the list of sheets that are
+     * contained within \a aSheetPath as well as recursively downwards inside aSheetPath.
+     *
+     * @param aReferences List of references to populate.
+     * @param aSheetPath Path to return symbols from
+     * @param aIncludePowerSymbols Set to false to only get normal symbols.
+     * @param aForceIncludeOrphanSymbols Set to true to include symbols having no symbol found
+     *                                   in lib.   The normal option is false, and set to true
+     *                                   only to build the full list of symbols.
+     */
+    void GetSymbolsWithinPath( SCH_REFERENCE_LIST& aReferences, const SCH_SHEET_PATH& aSheetPath,
+                               bool aIncludePowerSymbols = true,
+                               bool aForceIncludeOrphanSymbols = false ) const;
+
+    /**
+     * Add a #SCH_SHEET_PATH object to \a aSheets for each sheet in the list that are
+     * contained within \a aSheetPath as well as recursively downwards inside aSheetPath.
+     *
+     * @param aReferences List of sheets to populate.
+     * @param aSheetPath Path to return sheets from
+     */
+    void GetSheetsWithinPath( SCH_SHEET_PATHS& aSheets, const SCH_SHEET_PATH& aSheetPath ) const;
+
+    /**
      * Add a #SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
      * multi-unit parts in the list of sheets. The map key for each element will be the
      * reference designator.
@@ -459,6 +491,11 @@ public:
      * a particular screen.
      */
     SCH_SHEET_PATH* FindSheetForScreen( const SCH_SCREEN* aScreen );
+
+    /**
+     * Return a #SCH_SHEET_LIST with a copy of all the #SCH_SHEET_PATH using a particular screen.
+     */
+    SCH_SHEET_LIST FindAllSheetsForScreen( const SCH_SCREEN* aScreen ) const;
 
     /**
      * Build the list of sheets and their sheet path from \a aSheet.

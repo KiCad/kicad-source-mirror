@@ -55,6 +55,16 @@ wxString GetRefDesPrefix( const wxString& aRefDes );
 wxString GetRefDesUnannotated( const wxString& aRefDes );
 
 /**
+ * Get the numeric suffix from a refdes - e.g.
+ *      R1    -> 1
+ *      IC34  -> 34
+ *      R?    -> -1
+ * @param  aRefDes full refdes
+ * @return         the suffix, or -1 if nothing found
+ */
+int GetRefDesNumber( const wxString& aRefDes );
+
+/**
  * Acts just like the strcmp function but treats numbers within the string text
  * correctly for sorting.  eg. A10 > A2
  * return -1 if first string is less than the second

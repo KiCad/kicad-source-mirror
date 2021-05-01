@@ -177,6 +177,21 @@ int SCH_SHEET_PATH::ComparePageNumAndName( const SCH_SHEET_PATH& aSheetPathToTes
 }
 
 
+bool SCH_SHEET_PATH::IsContainedWithin( const SCH_SHEET_PATH& aSheetPathToTest ) const
+{
+    if( aSheetPathToTest.size() > size() )
+        return false;
+
+    for( size_t i = 0; i < aSheetPathToTest.size(); ++i )
+    {
+        if( at( i )->m_Uuid != aSheetPathToTest.at( i )->m_Uuid )
+            return false;
+    }
+
+    return true;
+}
+
+
 SCH_SHEET* SCH_SHEET_PATH::Last() const
 {
     if( !empty() )
@@ -551,7 +566,7 @@ bool SCH_SHEET_LIST::PageNumberExists( const wxString& aPageNumber ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {
-        if( sheet.Last()->GetPageNumber( sheet ) == aPageNumber )
+        if( sheet.GetPageNumber() == aPageNumber )
             return true;
     }
 
@@ -720,6 +735,30 @@ void SCH_SHEET_LIST::GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludeP
 }
 
 
+void SCH_SHEET_LIST::GetSymbolsWithinPath( SCH_REFERENCE_LIST&   aReferences,
+                                           const SCH_SHEET_PATH& aSheetPath,
+                                           bool                  aIncludePowerSymbols,
+                                           bool                  aForceIncludeOrphanSymbols ) const
+{
+    for( const SCH_SHEET_PATH& sheet : *this )
+    {
+        if( sheet.IsContainedWithin( aSheetPath ) )
+            sheet.GetSymbols( aReferences, aIncludePowerSymbols, aForceIncludeOrphanSymbols );
+    }
+}
+
+
+void SCH_SHEET_LIST::GetSheetsWithinPath( SCH_SHEET_PATHS&      aSheets,
+                                          const SCH_SHEET_PATH& aSheetPath ) const
+{
+    for( const SCH_SHEET_PATH& sheet : *this )
+    {
+        if( sheet.IsContainedWithin( aSheetPath ) )
+            aSheets.push_back( sheet );
+    }
+}
+
+
 void SCH_SHEET_LIST::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
                                           bool aIncludePowerSymbols ) const
 {
@@ -789,6 +828,20 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForScreen( const SCH_SCREEN* aScreen )
     }
 
     return nullptr;
+}
+
+
+SCH_SHEET_LIST SCH_SHEET_LIST::FindAllSheetsForScreen( const SCH_SCREEN* aScreen ) const
+{
+    SCH_SHEET_LIST retval;
+
+    for( const SCH_SHEET_PATH& sheetpath : *this )
+    {
+        if( sheetpath.LastScreen() == aScreen )
+            retval.push_back( sheetpath );
+    }
+
+    return retval;
 }
 
 
