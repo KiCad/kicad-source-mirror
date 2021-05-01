@@ -806,13 +806,20 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
             shortFileName = fileName;
     }
 
-    SetWksFileName( shortFileName );
+    DS_DATA_MODEL* ws = new DS_DATA_MODEL;
 
-    if( m_drawingSheet == NULL )
-        m_drawingSheet = new DS_DATA_MODEL;
+    if( ws->LoadDrawingSheet( fileName ) )
+    {
+        if( m_drawingSheet != nullptr )
+        {
+            delete m_drawingSheet;
+        }
 
-    m_drawingSheet->LoadDrawingSheet( fileName );
+        m_drawingSheet = ws;
 
-    GetPageLayoutInfoFromDialog();
-    UpdatePageLayoutExample();
+        SetWksFileName( shortFileName );
+
+        GetPageLayoutInfoFromDialog();
+        UpdatePageLayoutExample();
+    }
 }

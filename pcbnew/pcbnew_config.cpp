@@ -77,7 +77,10 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     wxString filename = DS_DATA_MODEL::MakeFullFileName( BASE_SCREEN::m_PageLayoutDescrFileName,
                                                          Prj().GetProjectPath() );
 
-    DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename );
+    if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
+    {
+        ShowInfoBarError( _( "Error loading drawing sheet" ), true );
+    }
 
     // Load render settings that aren't stored in PCB_DISPLAY_OPTIONS
 
