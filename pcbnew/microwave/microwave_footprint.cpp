@@ -212,7 +212,7 @@ FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
 
         pad->SetPosition( footprint->GetPosition() );
         pad->SetShape( PAD_SHAPE::RECT );
-        pad->SetAttribute( PAD_ATTRIB_SMD );
+        pad->SetAttribute( PAD_ATTRIB::SMD );
         pad->SetLayerSet( F_Cu );
 
         Line.Printf( wxT( "%d" ), pad_num );

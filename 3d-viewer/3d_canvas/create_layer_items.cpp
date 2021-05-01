@@ -457,7 +457,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 continue;
 
             // The hole in the body is inflated by copper thickness, if not plated, no copper
-            const int inflate = ( pad->GetAttribute () != PAD_ATTRIB_NPTH ) ?
+            const int inflate = ( pad->GetAttribute () != PAD_ATTRIB::NPTH ) ?
                                 GetHolePlatingThickness() / 2 : 0;
 
             m_holeCount++;
@@ -491,7 +491,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // The hole in the body is inflated by copper thickness.
             const int inflate = GetHolePlatingThickness();
 
-            if( pad->GetAttribute () != PAD_ATTRIB_NPTH )
+            if( pad->GetAttribute () != PAD_ATTRIB::NPTH )
             {
                 if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) && GetFlag( FL_USE_REALISTIC_MODE ) )
                 {

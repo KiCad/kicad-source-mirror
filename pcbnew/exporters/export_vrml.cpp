@@ -675,7 +675,7 @@ void EXPORTER_PCB_VRML::ExportVrmlPadHole( PAD* aPad )
 
         bool pth = false;
 
-        if( ( aPad->GetAttribute() != PAD_ATTRIB_NPTH ) )
+        if( ( aPad->GetAttribute() != PAD_ATTRIB::NPTH ) )
             pth = true;
 
         if( aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )

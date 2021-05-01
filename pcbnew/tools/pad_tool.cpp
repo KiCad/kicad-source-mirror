@@ -207,7 +207,7 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
                     continue;
 
             // Special-case for aperture pads
-            if( aPadTypeFilter && pad->GetAttribute() == PAD_ATTRIB_CONN )
+            if( aPadTypeFilter && pad->GetAttribute() == PAD_ATTRIB::CONN )
             {
                 if( pad->IsAperturePad() != aSrcPad.IsAperturePad() )
                     continue;

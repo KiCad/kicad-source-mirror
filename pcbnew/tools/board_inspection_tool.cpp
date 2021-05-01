@@ -155,7 +155,7 @@ void BOARD_INSPECTION_TOOL::reportZoneConnection( ZONE* aZone, PAD* aPad, REPORT
     // Resolve complex connection types into simple types
     if( connection == ZONE_CONNECTION::THT_THERMAL )
     {
-        if( aPad->GetAttribute() == PAD_ATTRIB_PTH )
+        if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
         {
             connection = ZONE_CONNECTION::THERMAL;
         }
@@ -329,7 +329,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     {
         layer = b->GetLayer();
     }
-    else if( a->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB_SMD )
+    else if( a->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB::SMD )
     {
         PAD* pad = static_cast<PAD*>( a );
 
@@ -338,7 +338,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         else
             layer = B_Cu;
     }
-    else if( b->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB_SMD )
+    else if( b->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB::SMD )
     {
         PAD* pad = static_cast<PAD*>( b );
 

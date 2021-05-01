@@ -165,7 +165,7 @@ bool isCopper( const PNS::ITEM* aItem )
     if( parent && parent->Type() == PCB_PAD_T )
     {
         PAD* pad = static_cast<PAD*>( parent );
-        return pad->IsOnCopperLayer() && pad->GetAttribute() != PAD_ATTRIB_NPTH;
+        return pad->IsOnCopperLayer() && pad->GetAttribute() != PAD_ATTRIB::NPTH;
     }
 
     return true;
@@ -863,12 +863,12 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 
     switch( aPad->GetAttribute() )
     {
-    case PAD_ATTRIB_PTH:
-    case PAD_ATTRIB_NPTH:
+    case PAD_ATTRIB::PTH:
+    case PAD_ATTRIB::NPTH:
         break;
 
-    case PAD_ATTRIB_CONN:
-    case PAD_ATTRIB_SMD:
+    case PAD_ATTRIB::CONN:
+    case PAD_ATTRIB::SMD:
         {
             LSET lmsk = aPad->GetLayerSet();
             bool is_copper = false;
@@ -879,7 +879,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
                 {
                     is_copper = true;
 
-                    if( aPad->GetAttribute() != PAD_ATTRIB_NPTH )
+                    if( aPad->GetAttribute() != PAD_ATTRIB::NPTH )
                         layers = LAYER_RANGE( i );
 
                     break;
@@ -902,7 +902,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     {
         SHAPE_SEGMENT* slot = (SHAPE_SEGMENT*) aPad->GetEffectiveHoleShape()->Clone();
 
-        if( aPad->GetAttribute() != PAD_ATTRIB_NPTH )
+        if( aPad->GetAttribute() != PAD_ATTRIB::NPTH )
         {
             BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
             slot->SetWidth( slot->GetWidth() + bds.GetHolePlatingThickness() * 2 );
@@ -911,7 +911,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
         solid->SetHole( slot );
     }
 
-    if( aPad->GetAttribute() == PAD_ATTRIB_NPTH )
+    if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
         solid->SetRoutable( false );
 
     solid->SetLayers( layers );

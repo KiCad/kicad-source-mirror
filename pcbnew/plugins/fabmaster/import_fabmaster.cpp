@@ -2297,12 +2297,12 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         {
                             if( pad.plated )
                             {
-                                newpad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_PTH );
+                                newpad->SetAttribute( PAD_ATTRIB::PTH );
                                 newpad->SetLayerSet( PAD::PTHMask() );
                             }
                             else
                             {
-                                newpad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_NPTH );
+                                newpad->SetAttribute( PAD_ATTRIB::NPTH );
                                 newpad->SetLayerSet( PAD::UnplatedHoleMask() );
                             }
 
@@ -2315,7 +2315,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         }
                         else
                         {
-                            newpad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
+                            newpad->SetAttribute( PAD_ATTRIB::SMD );
 
                             if( pad.top )
                                 newpad->SetLayerSet( PAD::SMDMask() );

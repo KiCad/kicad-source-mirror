@@ -727,7 +727,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
 
 
             PAD* pad = new PAD( aFootprint );
-            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
+            pad->SetAttribute( PAD_ATTRIB::SMD );
             pad->SetLayerSet( LSET( 1, copperLayer ) );
             pad->SetName( anchorPad.Identifier.IsEmpty()
                                   ? wxString::Format( wxT( "%ld" ), anchorPad.ID )
@@ -863,20 +863,20 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     switch( aCadstarPad.Side )
     {
     case PAD_SIDE::MAXIMUM: //Bottom side
-        pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
+        pad->SetAttribute( PAD_ATTRIB::SMD );
         padLayerSet |= LSET( 3, B_Cu, B_Paste, B_Mask );
         break;
 
     case PAD_SIDE::MINIMUM: //TOP side
-        pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
+        pad->SetAttribute( PAD_ATTRIB::SMD );
         padLayerSet |= LSET( 3, F_Cu, F_Paste, F_Mask );
         break;
 
     case PAD_SIDE::THROUGH_HOLE:
         if( csPadcode.Plated )
-            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_PTH );
+            pad->SetAttribute( PAD_ATTRIB::PTH );
         else
-            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_NPTH );
+            pad->SetAttribute( PAD_ATTRIB::NPTH );
 
         padLayerSet = LSET::AllCuMask() | LSET( 4, F_Mask, B_Mask, F_Paste, B_Paste );
         break;
@@ -947,7 +947,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
             // Through-hole, zero sized pad?. Lets load this just on the F_Mask for now to
             // prevent DRC errors.
             // TODO: This could be a custom padstack, update when KiCad supports padstacks
-            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
+            pad->SetAttribute( PAD_ATTRIB::SMD );
             pad->SetLayerSet( LSET( 1, F_Mask ) );
         }
 

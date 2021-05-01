@@ -78,13 +78,13 @@ enum CODE_CHOICE
     CHOICE_SHAPE_CUSTOM_RECT_ANCHOR
 };
 
-static PAD_ATTR_T code_type[] =
+static PAD_ATTRIB code_type[] =
 {
-    PAD_ATTRIB_PTH,
-    PAD_ATTRIB_SMD,
-    PAD_ATTRIB_CONN,
-    PAD_ATTRIB_NPTH,
-    PAD_ATTRIB_SMD                  // Aperture pad :type SMD with no copper layers,
+    PAD_ATTRIB::PTH,
+    PAD_ATTRIB::SMD,
+    PAD_ATTRIB::CONN,
+    PAD_ATTRIB::NPTH,
+    PAD_ATTRIB::SMD                  // Aperture pad :type SMD with no copper layers,
                                     // only on tech layers (usually only on paste layer
 };
 
@@ -610,7 +610,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     enablePrimitivePage( PAD_SHAPE::CUSTOM == m_dummyPad->GetShape() );
 
     // Type of pad selection
-    bool aperture = m_dummyPad->GetAttribute() == PAD_ATTRIB_SMD && m_dummyPad->IsAperturePad();
+    bool aperture = m_dummyPad->GetAttribute() == PAD_ATTRIB::SMD && m_dummyPad->IsAperturePad();
 
     if( aperture )
     {
@@ -620,10 +620,10 @@ void DIALOG_PAD_PROPERTIES::initValues()
     {
         switch( m_dummyPad->GetAttribute() )
         {
-        case PAD_ATTRIB_PTH:    m_PadType->SetSelection( PTH_DLG_TYPE ); break;
-        case PAD_ATTRIB_SMD:    m_PadType->SetSelection( SMD_DLG_TYPE ); break;
-        case PAD_ATTRIB_CONN:   m_PadType->SetSelection( CONN_DLG_TYPE ); break;
-        case PAD_ATTRIB_NPTH:   m_PadType->SetSelection( NPTH_DLG_TYPE ); break;
+        case PAD_ATTRIB::PTH:    m_PadType->SetSelection( PTH_DLG_TYPE ); break;
+        case PAD_ATTRIB::SMD:    m_PadType->SetSelection( SMD_DLG_TYPE ); break;
+        case PAD_ATTRIB::CONN:   m_PadType->SetSelection( CONN_DLG_TYPE ); break;
+        case PAD_ATTRIB::NPTH:   m_PadType->SetSelection( NPTH_DLG_TYPE ); break;
         }
     }
 
@@ -639,7 +639,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     }
 
     // Ensure the pad property is compatible with the pad type
-    if( m_dummyPad->GetAttribute() == PAD_ATTRIB_NPTH )
+    if( m_dummyPad->GetAttribute() == PAD_ATTRIB::NPTH )
     {
         m_choiceFabProperty->SetSelection( 0 );
         m_choiceFabProperty->Enable( false );
@@ -1302,7 +1302,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     if( !padlayers_mask[F_Cu] && !padlayers_mask[B_Cu] )
     {
-        if( ( drill_size.x || drill_size.y ) && m_dummyPad->GetAttribute() != PAD_ATTRIB_NPTH )
+        if( ( drill_size.x || drill_size.y ) && m_dummyPad->GetAttribute() != PAD_ATTRIB::NPTH )
         {
             warning_msgs.Add( _( "Warning: Plated through holes should normally have a copper pad "
                                  "on at least one layer." ) );
@@ -1314,8 +1314,8 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     switch( m_dummyPad->GetAttribute() )
     {
-    case PAD_ATTRIB_NPTH:   // Not plated, but through hole, a hole is expected
-    case PAD_ATTRIB_PTH:    // Pad through hole, a hole is also expected
+    case PAD_ATTRIB::NPTH:   // Not plated, but through hole, a hole is expected
+    case PAD_ATTRIB::PTH:    // Pad through hole, a hole is also expected
         if( drill_size.x <= 0
             || ( drill_size.y <= 0 && m_dummyPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ) )
         {
@@ -1323,7 +1323,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         }
         break;
 
-    case PAD_ATTRIB_CONN:      // Connector pads are smd pads, just they do not have solder paste.
+    case PAD_ATTRIB::CONN:      // Connector pads are smd pads, just they do not have solder paste.
         if( padlayers_mask[B_Paste] || padlayers_mask[F_Paste] )
         {
             warning_msgs.Add( _( "Warning: Connector pads normally have no solder paste. Use an "
@@ -1331,7 +1331,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         }
         KI_FALLTHROUGH;
 
-    case PAD_ATTRIB_SMD:       // SMD and Connector pads (One external copper layer only)
+    case PAD_ATTRIB::SMD:       // SMD and Connector pads (One external copper layer only)
     {
         LSET innerlayers_mask = padlayers_mask & LSET::InternalCuMask();
 
@@ -1343,31 +1343,31 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     if( ( m_dummyPad->GetProperty() == PAD_PROP_FIDUCIAL_GLBL ||
           m_dummyPad->GetProperty() == PAD_PROP_FIDUCIAL_LOCAL ) &&
-        m_dummyPad->GetAttribute() == PAD_ATTRIB_NPTH )
+        m_dummyPad->GetAttribute() == PAD_ATTRIB::NPTH )
     {
         warning_msgs.Add(  _( "Warning: Fiducial property makes no sense on NPTH pads." ) );
     }
 
     if( m_dummyPad->GetProperty() == PAD_PROP_TESTPOINT &&
-        m_dummyPad->GetAttribute() == PAD_ATTRIB_NPTH )
+        m_dummyPad->GetAttribute() == PAD_ATTRIB::NPTH )
     {
         warning_msgs.Add(  _( "Warning: Testpoint property makes no sense on NPTH pads." ) );
     }
 
     if( m_dummyPad->GetProperty() == PAD_PROP_HEATSINK &&
-        m_dummyPad->GetAttribute() == PAD_ATTRIB_NPTH )
+        m_dummyPad->GetAttribute() == PAD_ATTRIB::NPTH )
     {
         warning_msgs.Add(  _( "Warning: Heatsink property makes no sense of NPTH pads." ) );
     }
 
     if( m_dummyPad->GetProperty() == PAD_PROP_CASTELLATED &&
-        m_dummyPad->GetAttribute() != PAD_ATTRIB_PTH )
+        m_dummyPad->GetAttribute() != PAD_ATTRIB::PTH )
     {
         warning_msgs.Add(  _( "Warning: Castellated property is for PTH pads." ) );
     }
 
     if( m_dummyPad->GetProperty() == PAD_PROP_BGA &&
-        m_dummyPad->GetAttribute() != PAD_ATTRIB_SMD )
+        m_dummyPad->GetAttribute() != PAD_ATTRIB::SMD )
     {
         warning_msgs.Add(  _( "Warning: BGA property is for SMD pads." ) );
     }
@@ -1582,8 +1582,8 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     int padNetcode = NETINFO_LIST::UNCONNECTED;
 
-    // For PAD_ATTRIB_NPTH, ensure there is no net name selected
-    if( m_padMaster->GetAttribute() != PAD_ATTRIB_NPTH  )
+    // For PAD_ATTRIB::NPTH, ensure there is no net name selected
+    if( m_padMaster->GetAttribute() != PAD_ATTRIB::NPTH  )
         padNetcode = m_PadNetSelector->GetSelectedNetcode();
 
     m_currentPad->SetNetCode( padNetcode );
@@ -1830,21 +1830,21 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
     switch( aPad->GetAttribute() )
     {
-    case PAD_ATTRIB_PTH:
+    case PAD_ATTRIB::PTH:
         break;
 
-    case PAD_ATTRIB_CONN:
-    case PAD_ATTRIB_SMD:
-        // SMD and PAD_ATTRIB_CONN has no hole.
-        // basically, SMD and PAD_ATTRIB_CONN are same type of pads
-        // PAD_ATTRIB_CONN has just a default non technical layers that differs from SMD
+    case PAD_ATTRIB::CONN:
+    case PAD_ATTRIB::SMD:
+        // SMD and PAD_ATTRIB::CONN has no hole.
+        // basically, SMD and PAD_ATTRIB::CONN are same type of pads
+        // PAD_ATTRIB::CONN has just a default non technical layers that differs from SMD
         // and are intended to be used in virtual edge board connectors
         // However we can accept a non null offset,
         // mainly to allow complex pads build from a set of basic pad shapes
         aPad->SetDrillSize( wxSize( 0, 0 ) );
         break;
 
-    case PAD_ATTRIB_NPTH:
+    case PAD_ATTRIB::NPTH:
         // Mechanical purpose only:
         // no net name, no pad name allowed
         aPad->SetName( wxEmptyString );

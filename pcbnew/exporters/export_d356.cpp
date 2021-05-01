@@ -111,8 +111,8 @@ static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
                 const wxSize& drill = pad->GetDrillSize();
                 rk.drill = std::min( drill.x, drill.y );
                 rk.hole = (rk.drill != 0);
-                rk.smd = pad->GetAttribute() == PAD_ATTRIB_SMD;
-                rk.mechanical = ( pad->GetAttribute() == PAD_ATTRIB_NPTH );
+                rk.smd = pad->GetAttribute() == PAD_ATTRIB::SMD;
+                rk.mechanical = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
                 rk.x_location = pad->GetPosition().x - origin.x;
                 rk.y_location = origin.y - pad->GetPosition().y;
                 rk.x_size = pad->GetSize().x;

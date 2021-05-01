@@ -56,7 +56,7 @@ public:
 
     bool isThrough() const
     {
-        return m_type == PAD_ATTRIB_NPTH || m_type == PAD_ATTRIB_PTH;
+        return m_type == PAD_ATTRIB::NPTH || m_type == PAD_ATTRIB::PTH;
     }
 
     bool operator==( const HYPERLYNX_PAD_STACK& other ) const
@@ -87,7 +87,7 @@ public:
 
     bool isSMD() const
     {
-        return m_type == PAD_ATTRIB_SMD;
+        return m_type == PAD_ATTRIB::SMD;
     }
 
     PCB_LAYER_ID getSMDLayer() const
@@ -138,7 +138,7 @@ private:
     int         m_sx, m_sy;
     double      m_angle;
     LSET        m_layers;
-    PAD_ATTR_T  m_type;
+    PAD_ATTRIB  m_type;
 };
 
 
@@ -238,7 +238,7 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PAD* aPad )
     m_layers = aPad->GetLayerSet();
     m_drill  = aPad->GetDrillSize().x;
     m_shape  = aPad->GetShape();
-    m_type   = PAD_ATTRIB_PTH;
+    m_type   = PAD_ATTRIB::PTH;
     m_id     = 0;
 }
 
@@ -252,7 +252,7 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const VIA* aVia )
     m_layers = LSET::AllCuMask();
     m_drill  = aVia->GetDrillValue();
     m_shape  = PAD_SHAPE::CIRCLE;
-    m_type   = PAD_ATTRIB_PTH;
+    m_type   = PAD_ATTRIB::PTH;
     m_id     = 0;
 }
 

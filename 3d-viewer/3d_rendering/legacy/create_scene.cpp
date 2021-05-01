@@ -785,7 +785,7 @@ void RENDER_3D_LEGACY::generateViasAndPads()
         {
             for( const PAD* pad : footprint->Pads() )
             {
-                if( pad->GetAttribute() != PAD_ATTRIB_NPTH )
+                if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
                 {
                     const wxSize drillsize = pad->GetDrillSize();
                     const bool   hasHole   = drillsize.x && drillsize.y;

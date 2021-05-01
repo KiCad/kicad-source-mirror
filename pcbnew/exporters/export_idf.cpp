@@ -324,7 +324,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
         if( drill > 0.0 )
         {
             // plating
-            if( pad->GetAttribute() == PAD_ATTRIB_NPTH )
+            if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
                 kplate = IDF3::NPTH;
             else
                 kplate = IDF3::PTH;

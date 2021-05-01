@@ -76,14 +76,14 @@ enum PAD_DRILL_SHAPE_T
  *
  * The double name is for convenience of Python devs
  */
-enum PAD_ATTR_T
+enum class PAD_ATTRIB
 {
-    PAD_ATTRIB_PTH,     ///< Plated through hole pad
-    PAD_ATTRIB_SMD,     ///< Smd pad, appears on the solder paste layer (default)
-    PAD_ATTRIB_CONN,    ///< Like smd, does not appear on the solder paste layer (default)
+    PTH,     ///< Plated through hole pad
+    SMD,     ///< Smd pad, appears on the solder paste layer (default)
+    CONN,    ///< Like smd, does not appear on the solder paste layer (default)
                         ///< note also has a special attribute in Gerber X files
                         ///< Used for edgecard connectors for instance
-    PAD_ATTRIB_NPTH,    ///< like PAD_PTH, but not plated
+    NPTH,    ///< like PAD_PTH, but not plated
                         ///< mechanical use only, no connection allowed
 };
 

@@ -838,7 +838,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
         {
             m_xpath->push( "hole" );
 
-            // Fabricate a FOOTPRINT with a single PAD_ATTRIB_NPTH pad.
+            // Fabricate a FOOTPRINT with a single PAD_ATTRIB::NPTH pad.
             // Use m_hole_count to gen up a unique name.
 
             FOOTPRINT* footprint = new FOOTPRINT( m_board );
@@ -2142,12 +2142,12 @@ void EAGLE_PLUGIN::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
 {
     EHOLE   e( aTree );
 
-    // we add a PAD_ATTRIB_NPTH pad to this footprint.
+    // we add a PAD_ATTRIB::NPTH pad to this footprint.
     PAD* pad = new PAD( aFootprint );
     aFootprint->Add( pad );
 
     pad->SetShape( PAD_SHAPE::CIRCLE );
-    pad->SetAttribute( PAD_ATTRIB_NPTH );
+    pad->SetAttribute( PAD_ATTRIB::NPTH );
 
     // Mechanical purpose only:
     // no offset, no net name, no pad name allowed
@@ -2190,7 +2190,7 @@ void EAGLE_PLUGIN::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     transferPad( e, pad );
 
     pad->SetShape( PAD_SHAPE::RECT );
-    pad->SetAttribute( PAD_ATTRIB_SMD );
+    pad->SetAttribute( PAD_ATTRIB::SMD );
 
     wxSize padSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() );
     pad->SetSize( padSize );

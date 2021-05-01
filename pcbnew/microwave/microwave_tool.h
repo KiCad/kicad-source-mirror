@@ -79,7 +79,7 @@ private:
      * Create a footprint "GAP" or "STUB" used in micro wave designs.
      *
      * This footprint has 2 pads:
-     * PAD_ATTRIB_SMD, rectangular, H size = V size = current track width.
+     * PAD_ATTRIB::SMD, rectangular, H size = V size = current track width.
      * the "gap" is isolation created between this 2 pads
      *
      * @param aComponentShape is the component to create.
@@ -99,7 +99,7 @@ private:
      * Create a basic footprint for micro wave applications.
      *
      * The default pad settings are:
-     *  PAD_ATTRIB_SMD, rectangular, H size = V size = current track width.
+     *  PAD_ATTRIB::SMD, rectangular, H size = V size = current track width.
      *
      * @param aValue is the text value.
      * @param aTextSize is the size of ref and value texts ( <= 0 to use board default values ).

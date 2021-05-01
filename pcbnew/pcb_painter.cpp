@@ -237,7 +237,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         int        holeLayer = aLayer;
         int        annularRingLayer = UNDEFINED_LAYER;
 
-        if( pad && pad->GetAttribute() == PAD_ATTRIB_PTH )
+        if( pad && pad->GetAttribute() == PAD_ATTRIB::PTH )
             annularRingLayer = LAYER_PADS_TH;
         else if( via && via->GetViaType() == VIATYPE::MICROVIA )
             annularRingLayer = LAYER_VIA_MICROVIA;

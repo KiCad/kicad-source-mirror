@@ -128,7 +128,7 @@ static void isPlated( LIBEVAL::CONTEXT* aCtx, void* self )
     if( !item )
         return;
 
-    if( item->Type() == PCB_PAD_T && static_cast<PAD*>( item )->GetAttribute() == PAD_ATTRIB_PTH )
+    if( item->Type() == PCB_PAD_T && static_cast<PAD*>( item )->GetAttribute() == PAD_ATTRIB::PTH )
         result->Set( 1.0 );
     else if( item->Type() == PCB_VIA_T )
         result->Set( 1.0 );

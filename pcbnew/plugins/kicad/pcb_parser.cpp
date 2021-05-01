@@ -3727,11 +3727,11 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
     switch( token )
     {
     case T_thru_hole:
-        pad->SetAttribute( PAD_ATTRIB_PTH );
+        pad->SetAttribute( PAD_ATTRIB::PTH );
         break;
 
     case T_smd:
-        pad->SetAttribute( PAD_ATTRIB_SMD );
+        pad->SetAttribute( PAD_ATTRIB::SMD );
 
         // Default PAD object is thru hole with drill.
         // SMD pads have no hole
@@ -3739,7 +3739,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         break;
 
     case T_connect:
-        pad->SetAttribute( PAD_ATTRIB_CONN );
+        pad->SetAttribute( PAD_ATTRIB::CONN );
 
         // Default PAD object is thru hole with drill.
         // CONN pads have no hole
@@ -3747,7 +3747,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         break;
 
     case T_np_thru_hole:
-        pad->SetAttribute( PAD_ATTRIB_NPTH );
+        pad->SetAttribute( PAD_ATTRIB::NPTH );
         break;
 
     default:
@@ -3888,7 +3888,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 // than 0 used to fix a bunch of debug assertions even though it is defined as a
                 // through hole pad.  Wouldn't a though hole pad with no drill be a surface mount
                 // pad (or a conn pad which is a smd pad with no solder paste)?
-                if( ( pad->GetAttribute() != PAD_ATTRIB_SMD ) && ( pad->GetAttribute() != PAD_ATTRIB_CONN ) )
+                if( ( pad->GetAttribute() != PAD_ATTRIB::SMD ) && ( pad->GetAttribute() != PAD_ATTRIB::CONN ) )
                     pad->SetDrillSize( drillSize );
                 else
                     pad->SetDrillSize( wxSize( 0, 0 ) );

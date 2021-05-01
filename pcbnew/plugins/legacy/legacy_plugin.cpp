@@ -1496,18 +1496,18 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             // e.g. "At SMD N 00888000"
             // sscanf( PtLine, "%s %s %X", BufLine, BufCar, &m_layerMask );
 
-            PAD_ATTR_T  attribute;
+            PAD_ATTRIB  attribute;
 
             data = strtok_r( line + SZ( "At" ), delims, &saveptr );
 
             if( !strcmp( data, "SMD" ) )
-                attribute = PAD_ATTRIB_SMD;
+                attribute = PAD_ATTRIB::SMD;
             else if( !strcmp( data, "CONN" ) )
-                attribute = PAD_ATTRIB_CONN;
+                attribute = PAD_ATTRIB::CONN;
             else if( !strcmp( data, "HOLE" ) )
-                attribute = PAD_ATTRIB_NPTH;
+                attribute = PAD_ATTRIB::NPTH;
             else
-                attribute = PAD_ATTRIB_PTH;
+                attribute = PAD_ATTRIB::PTH;
 
             strtok_r( NULL, delims, &saveptr );  // skip unused prm
             data = strtok_r( NULL, delims, &saveptr );

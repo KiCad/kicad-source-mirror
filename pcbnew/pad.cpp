@@ -67,7 +67,7 @@ PAD::PAD( FOOTPRINT* parent ) :
     SetAnchorPadShape( PAD_SHAPE::CIRCLE );          // Default shape for custom shaped pads
                                                     // is PAD_CIRCLE.
     SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );        // Default pad drill shape is a circle.
-    m_attribute           = PAD_ATTRIB_PTH;         // Default pad type is plated through hole
+    m_attribute           = PAD_ATTRIB::PTH;         // Default pad type is plated through hole
     SetProperty( PAD_PROP_NONE );                   // no special fabrication property
     m_localClearance      = 0;
     m_localSolderMaskMargin  = 0;
@@ -214,7 +214,7 @@ bool PAD::FlashLayer( int aLayer ) const
         return false;
 
     /// We don't remove the copper from non-PTH pads
-    if( GetAttribute() != PAD_ATTRIB_PTH )
+    if( GetAttribute() != PAD_ATTRIB::PTH )
         return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
 
     /// Heatsink pads always get copper
@@ -556,11 +556,11 @@ void PAD::SetLocalCoord()
 }
 
 
-void PAD::SetAttribute( PAD_ATTR_T aAttribute )
+void PAD::SetAttribute( PAD_ATTRIB aAttribute )
 {
     m_attribute = aAttribute;
 
-    if( aAttribute == PAD_ATTRIB_SMD )
+    if( aAttribute == PAD_ATTRIB::SMD )
         m_drill = wxSize( 0, 0 );
 
     SetDirty();
@@ -871,7 +871,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     if( IsLocked() )
         aList.emplace_back( _( "Status" ), _( "Locked" ) );
 
-    if( GetAttribute() == PAD_ATTRIB_SMD || GetAttribute() == PAD_ATTRIB_CONN )
+    if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
         aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 
     // Show the pad shape, attribute and property
@@ -1089,10 +1089,10 @@ wxString PAD::ShowPadAttr() const
 {
     switch( GetAttribute() )
     {
-    case PAD_ATTRIB_PTH:    return _( "PTH" );
-    case PAD_ATTRIB_SMD:    return _( "SMD" );
-    case PAD_ATTRIB_CONN:   return _( "Conn" );
-    case PAD_ATTRIB_NPTH:   return _( "NPTH" );
+    case PAD_ATTRIB::PTH:    return _( "PTH" );
+    case PAD_ATTRIB::SMD:    return _( "SMD" );
+    case PAD_ATTRIB::CONN:   return _( "Conn" );
+    case PAD_ATTRIB::NPTH:   return _( "NPTH" );
     default:                return wxT( "???" );
     }
 }
@@ -1102,7 +1102,7 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     if( GetName().IsEmpty() )
     {
-        if( GetAttribute() == PAD_ATTRIB_SMD || GetAttribute() == PAD_ATTRIB_CONN )
+        if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
         {
             return wxString::Format( _( "Pad of %s on %s" ),
                                      GetParent()->GetReference(),
@@ -1116,7 +1116,7 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
     }
     else
     {
-        if( GetAttribute() == PAD_ATTRIB_SMD || GetAttribute() == PAD_ATTRIB_CONN )
+        if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
         {
             return wxString::Format( _( "Pad %s of %s on %s" ),
                                      GetName(),
@@ -1150,13 +1150,13 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     aCount = 0;
 
     // These 2 types of pads contain a hole
-    if( m_attribute == PAD_ATTRIB_PTH )
+    if( m_attribute == PAD_ATTRIB::PTH )
     {
         aLayers[aCount++] = LAYER_PAD_PLATEDHOLES;
         aLayers[aCount++] = LAYER_PAD_HOLEWALLS;
     }
 
-    if( m_attribute == PAD_ATTRIB_NPTH )
+    if( m_attribute == PAD_ATTRIB::NPTH )
         aLayers[aCount++] = LAYER_NON_PLATEDHOLES;
 
     if( IsOnLayer( F_Cu ) && IsOnLayer( B_Cu ) )
@@ -1171,7 +1171,7 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 
         // Is this a PTH pad that has only front copper?  If so, we need to also display the
         // net name on the PTH netname layer so that it isn't blocked by the drill hole.
-        if( m_attribute == PAD_ATTRIB_PTH )
+        if( m_attribute == PAD_ATTRIB::PTH )
             aLayers[aCount++] = LAYER_PAD_NETNAMES;
         else
             aLayers[aCount++] = LAYER_PAD_FR_NETNAMES;
@@ -1182,7 +1182,7 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 
         // Is this a PTH pad that has only back copper?  If so, we need to also display the
         // net name on the PTH netname layer so that it isn't blocked by the drill hole.
-        if( m_attribute == PAD_ATTRIB_PTH )
+        if( m_attribute == PAD_ATTRIB::PTH )
             aLayers[aCount++] = LAYER_PAD_NETNAMES;
         else
             aLayers[aCount++] = LAYER_PAD_BK_NETNAMES;
@@ -1240,7 +1240,7 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         visible = board->GetVisibleLayers() & board->GetEnabledLayers();
 
     // Handle Render tab switches
-    if( ( GetAttribute() == PAD_ATTRIB_PTH || GetAttribute() == PAD_ATTRIB_NPTH )
+    if( ( GetAttribute() == PAD_ATTRIB::PTH || GetAttribute() == PAD_ATTRIB::NPTH )
          && !aView->IsLayerVisible( LAYER_PADS_TH ) )
     {
         return HIDE;
@@ -1390,8 +1390,8 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
 
     switch( aMasterPad.GetAttribute() )
     {
-    case PAD_ATTRIB_SMD:
-    case PAD_ATTRIB_CONN:
+    case PAD_ATTRIB::SMD:
+    case PAD_ATTRIB::CONN:
         // These pads do not have hole (they are expected to be only on one
         // external copper layer)
         SetDrillSize( wxSize( 0, 0 ) );
@@ -1433,11 +1433,11 @@ static struct PAD_DESC
 {
     PAD_DESC()
     {
-        ENUM_MAP<PAD_ATTR_T>::Instance()
-                .Map( PAD_ATTRIB_PTH,             _HKI( "Through-hole" ) )
-                .Map( PAD_ATTRIB_SMD,             _HKI( "SMD" ) )
-                .Map( PAD_ATTRIB_CONN,            _HKI( "Edge connector" ) )
-                .Map( PAD_ATTRIB_NPTH,            _HKI( "NPTH, mechanical" ) );
+        ENUM_MAP<PAD_ATTRIB>::Instance()
+                .Map( PAD_ATTRIB::PTH,             _HKI( "Through-hole" ) )
+                .Map( PAD_ATTRIB::SMD,             _HKI( "SMD" ) )
+                .Map( PAD_ATTRIB::CONN,            _HKI( "Edge connector" ) )
+                .Map( PAD_ATTRIB::NPTH,            _HKI( "NPTH, mechanical" ) );
 
         ENUM_MAP<PAD_SHAPE>::Instance()
                 .Map( PAD_SHAPE::CIRCLE,           _HKI( "Circle" ) )
@@ -1461,7 +1461,7 @@ static struct PAD_DESC
         REGISTER_TYPE( PAD );
         propMgr.InheritsAfter( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
-        auto padType = new PROPERTY_ENUM<PAD, PAD_ATTR_T>( _HKI( "Pad Type" ),
+        auto padType = new PROPERTY_ENUM<PAD, PAD_ATTRIB>( _HKI( "Pad Type" ),
                     &PAD::SetAttribute, &PAD::GetAttribute );
         propMgr.AddProperty( padType );
 
@@ -1529,6 +1529,6 @@ static struct PAD_DESC
     }
 } _PAD_DESC;
 
-ENUM_TO_WXANY( PAD_ATTR_T );
+ENUM_TO_WXANY( PAD_ATTRIB );
 ENUM_TO_WXANY( PAD_SHAPE );
 ENUM_TO_WXANY( PAD_PROP_T );

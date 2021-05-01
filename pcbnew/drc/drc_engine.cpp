@@ -1286,7 +1286,7 @@ std::shared_ptr<SHAPE> DRC_ENGINE::GetShape( BOARD_ITEM* aItem, PCB_LAYER_ID aLa
     {
         PAD* aPad = static_cast<PAD*>( aItem );
 
-        if( aPad->GetAttribute() == PAD_ATTRIB_PTH )
+        if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
         {
             BOARD_DESIGN_SETTINGS& bds = aPad->GetBoard()->GetDesignSettings();
 

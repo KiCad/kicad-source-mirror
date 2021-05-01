@@ -1323,10 +1323,10 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
 
     switch( aPad->GetAttribute() )
     {
-    case PAD_ATTRIB_PTH:    type = "thru_hole";      break;
-    case PAD_ATTRIB_SMD:    type = "smd";            break;
-    case PAD_ATTRIB_CONN:   type = "connect";        break;
-    case PAD_ATTRIB_NPTH:   type = "np_thru_hole";   break;
+    case PAD_ATTRIB::PTH:    type = "thru_hole";      break;
+    case PAD_ATTRIB::SMD:    type = "smd";            break;
+    case PAD_ATTRIB::CONN:   type = "connect";        break;
+    case PAD_ATTRIB::NPTH:   type = "np_thru_hole";   break;
 
     default:
         THROW_IO_ERROR( wxString::Format( "unknown pad attribute: %d", aPad->GetAttribute() ) );
@@ -1397,7 +1397,7 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
 
     formatLayers( aPad->GetLayerSet() );
 
-    if( aPad->GetAttribute() == PAD_ATTRIB_PTH )
+    if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
     {
         if( aPad->GetRemoveUnconnected() )
         {

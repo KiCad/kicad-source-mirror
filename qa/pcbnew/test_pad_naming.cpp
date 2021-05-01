@@ -39,7 +39,7 @@ struct PAD_FIXTURE
     {
         PAD pad( &m_footprint );
 
-        pad.SetAttribute( PAD_ATTRIB_NPTH );
+        pad.SetAttribute( PAD_ATTRIB::NPTH );
         pad.SetLayerSet( PAD::UnplatedHoleMask() );
 
         return pad;
@@ -49,7 +49,7 @@ struct PAD_FIXTURE
     {
         PAD pad( &m_footprint );
 
-        pad.SetAttribute( PAD_ATTRIB_PTH );
+        pad.SetAttribute( PAD_ATTRIB::PTH );
         pad.SetLayerSet( PAD::ApertureMask() );
 
         return pad;
@@ -59,7 +59,7 @@ struct PAD_FIXTURE
     {
         PAD pad( &m_footprint );
 
-        pad.SetAttribute( PAD_ATTRIB_SMD );
+        pad.SetAttribute( PAD_ATTRIB::SMD );
         pad.SetLayerSet( PAD::SMDMask() );
 
         return pad;

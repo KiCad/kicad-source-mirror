@@ -208,7 +208,7 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
             {
                 PAD* pad = static_cast<PAD*>( parent );
 
-                if( pad->GetAttribute() == PAD_ATTRIB_NPTH )
+                if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
                     SetFailureReason( _( "Cannot start routing from a non-plated hole." ) );
             }
                 break;

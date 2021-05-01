@@ -1797,7 +1797,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
 
         if( elem.holesize == 0 )
         {
-            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
+            pad->SetAttribute( PAD_ATTRIB::SMD );
         }
         else
         {
@@ -1808,8 +1808,8 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                             "Pad '%s' of Footprint %s is not marked as multilayer, but it is an THT pad",
                             elem.name, footprint->GetReference() ) );
             }
-            pad->SetAttribute( elem.plated ? PAD_ATTR_T::PAD_ATTRIB_PTH :
-                                             PAD_ATTR_T::PAD_ATTRIB_NPTH );
+            pad->SetAttribute( elem.plated ? PAD_ATTRIB::PTH :
+                                             PAD_ATTRIB::NPTH );
             if( !elem.sizeAndShape || elem.sizeAndShape->holeshape == ALTIUM_PAD_HOLE_SHAPE::ROUND )
             {
                 pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );

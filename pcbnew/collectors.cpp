@@ -243,8 +243,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         // for through pads: pads on Front or Back board sides must be visible
         pad = static_cast<PAD*>( item );
 
-        if( (pad->GetAttribute() != PAD_ATTRIB_SMD) &&
-            (pad->GetAttribute() != PAD_ATTRIB_CONN) )   // a hole is present, so multiple layers
+        if( (pad->GetAttribute() != PAD_ATTRIB::SMD) &&
+            (pad->GetAttribute() != PAD_ATTRIB::CONN) )   // a hole is present, so multiple layers
         {
             // proceed to the common tests below, but without the parent footprint test,
             // by leaving footprint==NULL, but having pad != null

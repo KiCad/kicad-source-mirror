@@ -1268,7 +1268,7 @@ void RENDER_3D_RAYTRACE::addPadsAndVias()
     {
         for( PAD* pad : footprint->Pads() )
         {
-            if( pad->GetAttribute() != PAD_ATTRIB_NPTH )
+            if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
             {
                 insertHole( pad );
             }

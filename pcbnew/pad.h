@@ -95,9 +95,9 @@ public:
             {
                 if( *p == PCB_LOCATE_HOLE_T )
                     return true;
-                else if( *p == PCB_LOCATE_PTH_T && m_attribute != PAD_ATTRIB_NPTH )
+                else if( *p == PCB_LOCATE_PTH_T && m_attribute != PAD_ATTRIB::NPTH )
                     return true;
-                else if( *p == PCB_LOCATE_NPTH_T && m_attribute == PAD_ATTRIB_NPTH )
+                else if( *p == PCB_LOCATE_NPTH_T && m_attribute == PAD_ATTRIB::NPTH )
                     return true;
             }
         }
@@ -367,8 +367,8 @@ public:
     void SetLayerSet( LSET aLayers ) override   { m_layerMask = aLayers; }
     LSET GetLayerSet() const override           { return m_layerMask; }
 
-    void SetAttribute( PAD_ATTR_T aAttribute );
-    PAD_ATTR_T GetAttribute() const             { return m_attribute; }
+    void SetAttribute( PAD_ATTRIB aAttribute );
+    PAD_ATTRIB GetAttribute() const             { return m_attribute; }
 
     void SetProperty( PAD_PROP_T aProperty );
     PAD_PROP_T GetProperty() const              { return m_property; }
@@ -744,8 +744,8 @@ private:
     wxPoint     m_pos0;             // Initial Pad position (i.e. pad position relative to the
                                     //   footprint anchor, orientation 0)
 
-    PAD_ATTR_T  m_attribute;        // PAD_ATTRIB_NORMAL, PAD_ATTRIB_SMD, PAD_ATTRIB_CONN,
-                                    //   PAD_ATTRIB_NPTH
+    PAD_ATTRIB  m_attribute;        // PAD_ATTRIB_NORMAL, PAD_ATTRIB::SMD, PAD_ATTRIB::CONN,
+                                    //   PAD_ATTRIB::NPTH
     PAD_PROP_T  m_property;         // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
 
     double      m_orient;           // in 1/10 degrees

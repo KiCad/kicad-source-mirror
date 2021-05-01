@@ -541,7 +541,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             static const LSET pad_back(  3, B_Cu, B_Mask, B_Paste );
 
             pad->SetShape( PAD_SHAPE::RECT );
-            pad->SetAttribute( PAD_ATTRIB_SMD );
+            pad->SetAttribute( PAD_ATTRIB::SMD );
             pad->SetLayerSet( pad_front );
 
             if( testFlags( parameters[paramCnt-2], 0x0080, wxT( "onsolder" ) ) )

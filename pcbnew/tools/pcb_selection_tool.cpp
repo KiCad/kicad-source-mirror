@@ -2085,7 +2085,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         pad = static_cast<const PAD*>( aItem );
 
-        if( pad->GetAttribute() == PAD_ATTRIB_PTH || pad->GetAttribute() == PAD_ATTRIB_NPTH )
+        if( pad->GetAttribute() == PAD_ATTRIB::PTH || pad->GetAttribute() == PAD_ATTRIB::NPTH )
         {
             // Check render mode (from the Items tab) first
             if( !board()->IsElementVisible( LAYER_PADS_TH ) )

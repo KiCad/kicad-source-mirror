@@ -250,7 +250,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
     {
         PAD* pad = static_cast<PAD*>( other );
 
-        if( pad->GetAttribute() == PAD_ATTRIB_NPTH && !pad->FlashLayer( layer ) )
+        if( pad->GetAttribute() == PAD_ATTRIB::NPTH && !pad->FlashLayer( layer ) )
             testClearance = false;
     }
 
@@ -400,7 +400,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem
 
                     // Note: drill size represents finish size, which means the actual hole
                     // size is the plating thickness larger.
-                    if( pad->GetAttribute() == PAD_ATTRIB_PTH )
+                    if( pad->GetAttribute() == PAD_ATTRIB::PTH )
                         size += m_board->GetDesignSettings().GetHolePlatingThickness();
 
                     itemShape = std::make_shared<SHAPE_SEGMENT>( hole->GetSeg(), size );
@@ -514,7 +514,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     }
 
     // A NPTH has no cylinder, but it may still have pads on some layers
-    if( pad->GetAttribute() == PAD_ATTRIB_NPTH && !pad->FlashLayer( layer ) )
+    if( pad->GetAttribute() == PAD_ATTRIB::NPTH && !pad->FlashLayer( layer ) )
         testClearance = false;
 
     if( !IsCopperLayer( layer ) )
@@ -612,7 +612,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         if( pad->GetNetCode() && otherPad->GetNetCode() == pad->GetNetCode() )
             testClearance = false;
 
-        if( otherPad->GetAttribute() == PAD_ATTRIB_NPTH && !otherPad->FlashLayer( layer ) )
+        if( otherPad->GetAttribute() == PAD_ATTRIB::NPTH && !otherPad->FlashLayer( layer ) )
             testClearance = false;
     }
 

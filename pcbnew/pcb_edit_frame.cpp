@@ -1035,7 +1035,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                         // Round-corner rects are expensive to draw, but are mostly found on
                         // SMD pads which only need redrawing on an active-to-not-active
                         // switch.
-                        if( pad->GetAttribute() == PAD_ATTRIB_SMD )
+                        if( pad->GetAttribute() == PAD_ATTRIB::SMD )
                         {
                             if( ( oldLayer == F_Cu || aLayer == F_Cu ) && pad->IsOnLayer( F_Cu ) )
                                 return true;

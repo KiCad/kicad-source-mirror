@@ -62,7 +62,7 @@ public:
         int        qty;
     };
 
-    using padsType_t = typeContainer_t<PAD_ATTR_T>;
+    using padsType_t = typeContainer_t<PAD_ATTRIB>;
     using viasType_t = typeContainer_t<VIATYPE>;
 
     /**

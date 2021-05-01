@@ -1010,7 +1010,7 @@ unsigned FOOTPRINT::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 
     for( PAD* pad : m_pads )
     {
-        if( pad->GetAttribute() == PAD_ATTRIB_NPTH )
+        if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
             continue;
 
         cnt++;
@@ -1040,7 +1040,7 @@ unsigned FOOTPRINT::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
         if( !aIncludeNPTH )
         {
             // skip NPTH
-            if( pad->GetAttribute() == PAD_ATTRIB_NPTH )
+            if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
             {
                 continue;
             }
@@ -1995,7 +1995,7 @@ bool FOOTPRINT::HasThroughHolePads() const
 {
     for( PAD* pad : Pads() )
     {
-        if( pad->GetAttribute() != PAD_ATTRIB_SMD )
+        if( pad->GetAttribute() != PAD_ATTRIB::SMD )
             return true;
     }
 
