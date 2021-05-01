@@ -357,12 +357,12 @@ public:
         if( std::is_same<ValueType, nlohmann::json>::value )
         {
             if( OPT<nlohmann::json> optval = aSettings->GetJson( m_path ) )
-                return *optval == m_default;
+                return *optval == m_getter();
         }
         else
         {
             if( OPT<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
-                return *optval == m_default;
+                return *optval == m_getter();
         }
 
         // Not in file
