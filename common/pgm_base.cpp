@@ -37,26 +37,18 @@
 #include <wx/snglinst.h>
 #include <wx/stdpaths.h>
 #include <wx/sysopt.h>
-#include <wx/richmsgdlg.h>
 #include <wx/filedlg.h>
 #include <wx/tooltip.h>
 
-#include <build_version.h>
 #include <config_params.h>
 #include <confirm.h>
 #include <core/arraydim.h>
-#include <dialogs/dialog_configure_paths.h>
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>
-#include <gal/gal_display_options.h>
 #include <gestfich.h>
-#include <hotkeys_basic.h>
 #include <id.h>
-#include <kiplatform/environment.h>
 #include <lockfile.h>
-#include <macros.h>
 #include <menus_helpers.h>
-#include <paths.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>

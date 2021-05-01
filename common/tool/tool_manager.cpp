@@ -33,6 +33,7 @@
 
 #include <wx/event.h>
 #include <wx/clipbrd.h>
+#include <wx/app.h>
 
 #include <view/view.h>
 #include <eda_base_frame.h>
