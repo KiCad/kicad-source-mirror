@@ -25,7 +25,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
 #include <netlist_lexer.h>  // netlist_lexer is common to Eeschema and Pcbnew
 #include <macros.h>
 

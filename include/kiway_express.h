@@ -26,10 +26,10 @@
 #define KIWAY_EXPRESS_H_
 
 // @see http://wiki.wxwidgets.org/Custom_Events_Tutorial
-
-#include <wx/wx.h>
 #include <frame_type.h>
 #include <mail_type.h>
+#include <wx/string.h>
+#include <wx/event.h>
 
 
 /**

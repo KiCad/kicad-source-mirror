@@ -35,6 +35,7 @@
 #include <gestfich.h>
 #include <bitmaps/bitmap_types.h>
 #include <confirm.h>
+#include <wx/filedlg.h>
 
 
 bool SYMBOL_EDITOR_CONTROL::Init()

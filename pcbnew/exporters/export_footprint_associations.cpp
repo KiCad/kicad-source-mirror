@@ -29,6 +29,8 @@
 #include <footprint.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/filedlg.h>
+
 
 
 bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName )

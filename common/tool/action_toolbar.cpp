@@ -42,6 +42,7 @@
 #include <wx/popupwin.h>
 #include <wx/renderer.h>
 #include <wx/sizer.h>
+#include <wx/dcclient.h>
 
 
 wxBitmap MakeDisabledBitmap( const wxBitmap& aSource )

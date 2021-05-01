@@ -77,6 +77,9 @@
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/cmdline.h>
+#include <wx/app.h>
+#include <wx/filedlg.h>
+
 #include <gal/graphics_abstraction_layer.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 

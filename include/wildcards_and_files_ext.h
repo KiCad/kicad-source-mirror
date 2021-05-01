@@ -32,10 +32,9 @@
 #ifndef INCLUDE_WILDCARDS_AND_FILES_EXT_H_
 #define INCLUDE_WILDCARDS_AND_FILES_EXT_H_
 
-#include <wx/wx.h>
-
 #include <string>
 #include <vector>
+#include <wx/string.h>
 
 /**
  * \defgroup file_extensions File Extension Definitions

@@ -33,6 +33,7 @@
 #include <bitmaps.h>
 #include <map>
 #include "dxf_import_plugin.h"
+#include <wx/filedlg.h>
 
 #include <memory>
 

@@ -35,6 +35,7 @@
 #include <tool/tool_manager.h>
 #include <tools/gerbview_actions.h>
 #include <tools/gerbview_control.h>
+#include <wx/checklst.h>
 
 // TODO(JE)
 #define OPTKEY_LAYERBASE             wxT( "PlotLayer_%d" )

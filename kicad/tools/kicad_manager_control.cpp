@@ -31,6 +31,7 @@
 #include <dialogs/dialog_template_selector.h>
 #include <gestfich.h>
 #include <wx/dir.h>
+#include <wx/filedlg.h>
 
 
 ///< Helper widget to select whether a new directory should be created for a project.

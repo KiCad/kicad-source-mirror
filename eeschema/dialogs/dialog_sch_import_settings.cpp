@@ -26,6 +26,7 @@
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
 #include <schematic.h>
+#include <wx/filedlg.h>
 
 #include <dialog_sch_import_settings.h>
 

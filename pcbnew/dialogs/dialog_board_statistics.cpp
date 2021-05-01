@@ -27,6 +27,7 @@
 #include "base_units.h"
 #include <macros.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/filedlg.h>
 
 #define COL_LABEL 0
 #define COL_AMOUNT 1

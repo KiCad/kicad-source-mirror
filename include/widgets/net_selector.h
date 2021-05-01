@@ -24,7 +24,6 @@
 #ifndef __WIDGET_NET_SELECTOR_H
 #define __WIDGET_NET_SELECTOR_H
 
-#include <wx/wx.h>
 #include <wx/combo.h>
 
 

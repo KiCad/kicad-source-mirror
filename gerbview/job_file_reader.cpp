@@ -41,6 +41,8 @@
 #include <gbr_metadata.h>
 #include <dialogs/html_messagebox.h>
 #include <view/view.h>
+#include <wx/filedlg.h>
+
 
 using json = nlohmann::json;
 

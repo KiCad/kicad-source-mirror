@@ -38,6 +38,8 @@
 #include <widgets/ui_common.h>
 #include <class_draw_panel_gal.h>
 
+#include <wx/wx.h>      // for GetForegroundWindow() on wxMSW
+
 #if defined __WXMSW__
     #define USE_MOUSE_CAPTURE
 #endif

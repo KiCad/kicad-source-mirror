@@ -44,6 +44,7 @@
 #include <cctype>
 #include <math/util.h>      // for KiROUND
 #include <export_d356.h>
+#include <wx/filedlg.h>
 
 
 

@@ -39,6 +39,8 @@
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 
+#include <wx/filedlg.h>
+
 
 DIALOG_CONFIG_EQUFILES::DIALOG_CONFIG_EQUFILES( CVPCB_MAINFRAME* aParent ) :
     DIALOG_CONFIG_EQUFILES_BASE( aParent )

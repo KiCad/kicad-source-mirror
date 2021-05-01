@@ -46,6 +46,7 @@
 #include <project/project_local_settings.h>
 #include <wildcards_and_files_ext.h>
 #include <locale_io.h>
+#include <wx/app.h>
 
 
 static PCB_EDIT_FRAME* s_PcbEditFrame = NULL;

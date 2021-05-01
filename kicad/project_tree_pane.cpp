@@ -28,6 +28,8 @@
 #include <wx/regex.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
+#include <wx/msgdlg.h>
+#include <wx/textdlg.h>
 
 #include <bitmaps.h>
 #include <common.h>

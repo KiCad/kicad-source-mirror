@@ -30,6 +30,7 @@
 #include <wildcards_and_files_ext.h>
 #include <symbol_library_manager.h>
 #include <wx/filename.h>
+#include <wx/filedlg.h>
 
 
 void SYMBOL_EDIT_FRAME::ImportPart()

@@ -24,7 +24,9 @@
 #include <core/optional.h>
 #include <wx/event.h>
 #include <wx/infobar.h>
-#include <wx/wx.h>
+#include <wx/timer.h>
+#include <wx/panel.h>
+#include <wx/sizer.h>
 
 
 class wxAuiManager;

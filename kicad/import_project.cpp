@@ -32,6 +32,8 @@
 #include <wx/filefn.h>
 #include <wx/filename.h>
 #include <wx/dir.h>
+#include <wx/filedlg.h>
+#include <wx/dirdlg.h>
 
 #include <common.h>
 #include <confirm.h>

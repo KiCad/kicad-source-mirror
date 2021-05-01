@@ -47,7 +47,6 @@
 #include <kiplatform/app.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/infobar.h>
-#include <wx/wupdlock.h>
 #include <settings/settings_manager.h>
 #include <paths.h>
 #include <project/project_file.h>
@@ -57,6 +56,10 @@
 #include <plugins/kicad/kicad_plugin.h>
 #include <dialogs/dialog_imported_layers.h>
 #include "footprint_info_impl.h"
+
+#include <wx/wupdlock.h>
+#include <wx/filedlg.h>
+
 
 
 //#define     USE_INSTRUMENTATION     1

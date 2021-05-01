@@ -25,7 +25,6 @@
 
 #include <tool/tool_manager.h>
 #include <wx/filedlg.h>
-#include <wx/wx.h>
 #include <tools/board_reannotate_tool.h>
 
 

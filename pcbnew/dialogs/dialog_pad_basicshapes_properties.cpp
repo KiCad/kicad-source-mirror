@@ -39,6 +39,8 @@
 
 #include <dialog_pad_properties.h>
 #include <bitmaps.h>
+#include <wx/dcclient.h>
+
 
 DIALOG_PAD_PRIMITIVES_PROPERTIES::DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aParent,
                                                                     PCB_BASE_FRAME* aFrame,

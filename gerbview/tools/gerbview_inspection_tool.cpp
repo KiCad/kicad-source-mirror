@@ -36,7 +36,9 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
-
+#include <wx/msgdlg.h>
+#include <wx/textdlg.h>
+#include <wx/choicdlg.h>
 
 
 GERBVIEW_INSPECTION_TOOL::GERBVIEW_INSPECTION_TOOL() :

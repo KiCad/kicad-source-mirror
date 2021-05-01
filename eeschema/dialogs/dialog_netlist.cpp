@@ -49,6 +49,9 @@
 
 #include <eeschema_id.h>
 #include <wx/regex.h>
+#include <wx/filedlg.h>
+#include <wx/msgdlg.h>
+
 
 
 #define CUSTOMPANEL_COUNTMAX 8  // Max number of netlist plugins

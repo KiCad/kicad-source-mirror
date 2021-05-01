@@ -31,6 +31,7 @@
 #include <tool/tool_manager.h>
 #include <view/view.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/filedlg.h>
 
 #include "gerbview_actions.h"
 #include "gerbview_control.h"

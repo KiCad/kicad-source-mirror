@@ -25,7 +25,9 @@
 #define NUMBER_BADGE_H_
 
 #include <widgets/ui_common.h>
-#include <wx/wx.h>
+#include <wx/dcclient.h>
+#include <wx/panel.h>
+
 
 /**
  * A simple UI element that puts a number on top of a colored rounded rectangle with a fill

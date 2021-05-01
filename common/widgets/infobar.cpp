@@ -28,6 +28,7 @@
 #include <wx/sizer.h>
 #include <wx/timer.h>
 #include <wx/hyperlink.h>
+#include <wx/bmpbuttn.h>
 #include <eda_base_frame.h>
 
 

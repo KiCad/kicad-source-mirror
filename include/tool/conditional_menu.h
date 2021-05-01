@@ -30,7 +30,6 @@
 #include <tool/selection_conditions.h>
 #include <tool/action_menu.h>
 #include <list>
-#include <wx/wx.h>
 
 class PCB_SELECTION_TOOL;
 class TOOL_ACTION;

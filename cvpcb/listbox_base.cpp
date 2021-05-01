@@ -28,6 +28,7 @@
 
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>
+#include <wx/dcclient.h>
 
 
 /******************************************************************************

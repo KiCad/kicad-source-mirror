@@ -42,6 +42,7 @@
 #include <widgets/wx_grid.h>
 #include <wx/grid.h>
 #include <wx/msgdlg.h>
+#include <wx/textdlg.h>
 
 #include "dialog_fields_editor_global.h"
 

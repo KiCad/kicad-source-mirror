@@ -46,6 +46,8 @@
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <sch_file_versions.h>
+#include <wx/filedlg.h>
+
 
 
 // clang-format off

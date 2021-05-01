@@ -28,7 +28,6 @@
 #include <project.h>
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>
-#include <wx/clipbrd.h>
 #include <sch_edit_frame.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_sheet.h>
@@ -39,6 +38,9 @@
 #include <symbol_lib_table.h>
 #include <dialogs/dialog_sheet_properties.h>
 #include <tool/actions.h>
+
+#include <wx/clipbrd.h>
+#include <wx/dcmemory.h>
 
 
 bool SCH_EDIT_FRAME::CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )

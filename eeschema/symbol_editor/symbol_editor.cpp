@@ -42,6 +42,8 @@
 #include <dialogs/dialog_lib_new_component.h>
 #include <dialog_helpers.h>
 #include <wx/clipbrd.h>
+#include <wx/filedlg.h>
+
 
 
 /**

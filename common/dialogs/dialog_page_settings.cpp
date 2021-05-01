@@ -36,6 +36,8 @@
 #include <drawing_sheet/ds_painter.h>
 #include <wx/valgen.h>
 #include <wx/tokenzr.h>
+#include <wx/filedlg.h>
+#include <wx/dcmemory.h>
 
 #define MAX_PAGE_EXAMPLE_SIZE 200
 

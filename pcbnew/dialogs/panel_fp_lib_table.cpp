@@ -35,6 +35,8 @@
 #include <wx/dir.h>
 #include <wx/regex.h>
 #include <wx/grid.h>
+#include <wx/dirdlg.h>
+#include <wx/filedlg.h>
 
 #include <project.h>
 #include <3d_viewer/eda_3d_viewer.h>      // for KICAD6_3DMODEL_DIR

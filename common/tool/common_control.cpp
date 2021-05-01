@@ -38,6 +38,7 @@
 #include <kicad_curl/kicad_curl_easy.h>
 #include <dialogs/dialog_configure_paths.h>
 #include <eda_doc.h>
+#include <wx/msgdlg.h>
 
 #define URL_GET_INVOLVED "https://kicad.org/contribute/"
 #define URL_DONATE "https://go.kicad.org/app-donate"

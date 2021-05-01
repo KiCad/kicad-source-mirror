@@ -30,6 +30,8 @@
 #include <regex>
 #include <wildcards_and_files_ext.h>
 #include <wx/regex.h>
+#include <wx/wx.h>
+
 
 bool compareFileExtensions( const std::string& aExtension,
         const std::vector<std::string>& aReference, bool aCaseSensitive )

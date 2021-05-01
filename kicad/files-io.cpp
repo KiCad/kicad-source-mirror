@@ -27,6 +27,8 @@
  */
 
 #include <wx/dir.h>
+#include <wx/filedlg.h>
+#include <wx/dirdlg.h>
 
 #include <confirm.h>
 #include <dialogs/panel_kicad_launcher.h>

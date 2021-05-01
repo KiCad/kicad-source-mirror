@@ -46,6 +46,7 @@
 #include <project/project_file.h> // LAST_PATH_TYPE
 
 #include <wx/app.h>
+#include <wx/filedlg.h>
 
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* frame );
 static void CreateArtworksSection( FILE* aFile );

@@ -35,8 +35,10 @@
 #include <dsnlexer.h>
 #include <ptree.h>
 #include <boost/property_tree/ptree.hpp>
-#include <wx/choicdlg.h>
 #include <tools/sch_editor_control.h>
+
+#include <wx/choicdlg.h>
+#include <wx/filedlg.h>
 
 
 void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfReferences )

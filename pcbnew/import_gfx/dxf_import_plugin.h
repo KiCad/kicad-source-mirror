@@ -32,7 +32,6 @@
 #include <dl_dxf.h>
 #include <math/vector3.h>
 #include <wildcards_and_files_ext.h>
-#include <wx/wx.h>
 
 #include <list>
 

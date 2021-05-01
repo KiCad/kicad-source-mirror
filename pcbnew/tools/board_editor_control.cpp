@@ -65,6 +65,7 @@
 #include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <footprint_edit_frame.h>
+#include <wx/filedlg.h>
 
 using namespace std::placeholders;
 

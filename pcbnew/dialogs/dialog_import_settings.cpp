@@ -26,6 +26,7 @@
 #include <board.h>
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
+#include <wx/filedlg.h>
 
 #include <dialog_import_settings.h>
 

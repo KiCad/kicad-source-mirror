@@ -38,7 +38,11 @@
 #include <dialogs/dialog_text_entry.h>
 #include <validators.h>
 #include <bitmaps.h>
+
 #include <wx/tokenzr.h>
+#include <wx/filedlg.h>
+#include <wx/dcclient.h>
+
 #include <bitset>
 
 struct DIALOG_NET_INSPECTOR::COLUMN_DESC

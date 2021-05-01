@@ -48,6 +48,7 @@
 #include <tools/ee_actions.h>
 #include <eeschema_settings.h>
 #include <wx/ffile.h>
+#include <wx/filedlg.h>
 #include <dialog_shim.h>
 
 SIM_PLOT_TYPE operator|( SIM_PLOT_TYPE aFirst, SIM_PLOT_TYPE aSecond )

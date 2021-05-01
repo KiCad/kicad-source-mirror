@@ -52,6 +52,8 @@
 #include <dialogs/dialog_sheet_pin_properties.h>
 #include <kicad_string.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/filedlg.h>
+
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),

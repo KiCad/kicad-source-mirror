@@ -37,6 +37,8 @@
 #include <tools/pcb_control.h>
 #include <dialogs/dialog_print_generic.h>
 #include <pcbnew_printout.h>
+#include <wx/checklst.h>
+#include <wx/textdlg.h>
 
 
 class DIALOG_PRINT_PCBNEW : public DIALOG_PRINT_GENERIC

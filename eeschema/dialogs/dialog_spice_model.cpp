@@ -33,6 +33,8 @@
 #include <wx/textfile.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
+#include <wx/filedlg.h>
+
 
 #include <cctype>
 #include <cstring>

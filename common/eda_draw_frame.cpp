@@ -59,6 +59,9 @@
 #include <wx/snglinst.h>
 #include <dialogs/dialog_grid_settings.h>
 #include <widgets/ui_common.h>
+#include <wx/dirdlg.h>
+#include <wx/filedlg.h>
+#include <wx/msgdlg.h>
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum size of the find/replace history stacks.
 

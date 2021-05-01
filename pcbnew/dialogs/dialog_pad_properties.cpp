@@ -47,6 +47,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pad_tool.h>
 #include <advanced_config.h>    // for pad property feature management
+#include <wx/choicdlg.h>
 
 
 // list of pad shapes, ordered like the pad shape wxChoice in dialog.

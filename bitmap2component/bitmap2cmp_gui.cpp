@@ -35,6 +35,11 @@
 #include <wildcards_and_files_ext.h>
 #include <wx/clipbrd.h>
 #include <wx/rawbmp.h>
+#include <wx/filedlg.h>
+#include <wx/rawbmp.h>
+#include <wx/msgdlg.h>
+#include <wx/dcclient.h>
+
 
 #include "bitmap2cmp_gui_base.h"
 

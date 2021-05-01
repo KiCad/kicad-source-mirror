@@ -33,6 +33,8 @@
 #include <wildcards_and_files_ext.h>
 #include <footprint.h>
 #include <wx/listimpl.cpp>
+#include <wx/filedlg.h>
+
 
 /* creates a BOM list from board
  *  The format is:

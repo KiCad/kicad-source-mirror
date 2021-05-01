@@ -29,6 +29,7 @@
 #include <project/project_archiver.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/log.h>
 
 
 #define ZipFileExtension wxT( "zip" )

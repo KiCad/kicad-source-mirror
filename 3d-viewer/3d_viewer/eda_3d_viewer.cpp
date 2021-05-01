@@ -52,6 +52,7 @@
 #include <tool/action_toolbar.h>
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/filedlg.h>
 
 /**
  * Flag to enable 3D viewer main frame window debug tracing.

@@ -43,6 +43,8 @@
 #include <wx/stc/stc.h>
 #include <kiplatform/app.h>
 
+#include <wx/wx.h>      // for GetForegroundWindow() on wxMSW
+
 ///< Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
 {

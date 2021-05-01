@@ -33,11 +33,10 @@
 #ifndef __WX_VIEW_CONTROLS_H
 #define __WX_VIEW_CONTROLS_H
 
-#include <wx/wx.h>
-
 #include <view/view_controls.h>
-
+#include <wx/timer.h>
 #include <memory>
+
 class EDA_DRAW_PANEL_GAL;
 
 namespace KIGFX

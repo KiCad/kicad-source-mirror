@@ -66,6 +66,9 @@
 #include <symbol_editor_settings.h>
 #include <dialogs/dialog_edit_label.h>
 #include <core/kicad_algo.h>
+//#include <wx/filedlg.h>
+#include <wx/textdlg.h>
+
 
 
 class SYMBOL_UNIT_MENU : public ACTION_MENU
