@@ -63,5 +63,18 @@ bool GRAPHICS_IMPORTER::Import( double aScale )
 
     m_plugin->SetImporter( this );
 
-    return m_plugin->Import();
+    bool success = false;
+
+    try
+    {
+        success = m_plugin->Import();
+    }
+    catch( const std::bad_alloc& )
+    {
+        // Memory exhaustion
+        // TODO report back an error message
+        return false;
+    }
+
+    return success;
 }
