@@ -817,12 +817,19 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
         if( fullFileName.IsEmpty() )
             wxGetEnv( wxT( "KICAD_WKSFILE" ), &fullFileName );
 
-        if( fullFileName.IsEmpty() || !wxFileExists( fullFileName ) )
+
+        if( fullFileName.IsEmpty() )
         {
             #if 0
             if( !fullFileName.IsEmpty() )
                 wxLogMessage( wxT( "Drawing sheet file <%s> not found" ), fullFileName.GetData() );
             #endif
+            SetDefaultLayout();
+            return true; // we assume its fine / default init
+        }
+
+        if( !wxFileExists( fullFileName ) )
+        {
             SetDefaultLayout();
             return false;
         }
