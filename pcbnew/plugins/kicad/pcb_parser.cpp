@@ -4051,31 +4051,31 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 switch( token )
                 {
                 case T_pad_prop_bga:
-                    pad->SetProperty( PAD_PROP_BGA );
+                    pad->SetProperty( PAD_PROP::BGA );
                     break;
 
                 case T_pad_prop_fiducial_glob:
-                    pad->SetProperty( PAD_PROP_FIDUCIAL_GLBL );
+                    pad->SetProperty( PAD_PROP::FIDUCIAL_GLBL );
                     break;
 
                 case T_pad_prop_fiducial_loc:
-                    pad->SetProperty( PAD_PROP_FIDUCIAL_LOCAL );
+                    pad->SetProperty( PAD_PROP::FIDUCIAL_LOCAL );
                     break;
 
                 case T_pad_prop_testpoint:
-                    pad->SetProperty( PAD_PROP_TESTPOINT );
+                    pad->SetProperty( PAD_PROP::TESTPOINT );
                     break;
 
                 case T_pad_prop_castellated:
-                    pad->SetProperty( PAD_PROP_CASTELLATED );
+                    pad->SetProperty( PAD_PROP::CASTELLATED );
                     break;
 
                 case T_pad_prop_heatsink:
-                    pad->SetProperty( PAD_PROP_HEATSINK );
+                    pad->SetProperty( PAD_PROP::HEATSINK );
                     break;
 
                 case T_none:
-                    pad->SetProperty( PAD_PROP_NONE );
+                    pad->SetProperty( PAD_PROP::NONE );
                     break;
 
                 case T_RIGHT:

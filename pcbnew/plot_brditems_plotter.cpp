@@ -170,33 +170,33 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, COLOR4D aColor, OUTLINE_MODE aP
         // that replace previous aperture attribute:
         switch( aPad->GetProperty() )
         {
-        case PAD_PROP_BGA:          // Only applicable to outer layers
+        case PAD_PROP::BGA:          // Only applicable to outer layers
             if( plotOnExternalCopperLayer )
                 gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_BGAPAD_CUDEF );
             break;
 
-        case PAD_PROP_FIDUCIAL_GLBL:
+        case PAD_PROP::FIDUCIAL_GLBL:
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_FIDUCIAL_GLBL );
             break;
 
-        case PAD_PROP_FIDUCIAL_LOCAL:
+        case PAD_PROP::FIDUCIAL_LOCAL:
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_FIDUCIAL_LOCAL );
             break;
 
-        case PAD_PROP_TESTPOINT:    // Only applicable to outer layers
+        case PAD_PROP::TESTPOINT:    // Only applicable to outer layers
             if( plotOnExternalCopperLayer )
                 gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_TESTPOINT );
             break;
 
-        case PAD_PROP_HEATSINK:
+        case PAD_PROP::HEATSINK:
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_HEATSINKPAD );
             break;
 
-        case PAD_PROP_CASTELLATED:
+        case PAD_PROP::CASTELLATED:
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CASTELLATEDPAD );
             break;
 
-        case PAD_PROP_NONE:
+        case PAD_PROP::NONE:
             break;
         }
 

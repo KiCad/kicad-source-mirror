@@ -370,8 +370,8 @@ public:
     void SetAttribute( PAD_ATTRIB aAttribute );
     PAD_ATTRIB GetAttribute() const             { return m_attribute; }
 
-    void SetProperty( PAD_PROP_T aProperty );
-    PAD_PROP_T GetProperty() const              { return m_property; }
+    void SetProperty( PAD_PROP aProperty );
+    PAD_PROP GetProperty() const              { return m_property; }
 
     // We don't currently have an attribute for APERTURE, and adding one will change the file
     // format, so for now just infer a copper-less pad to be an APERTURE pad.
@@ -746,7 +746,7 @@ private:
 
     PAD_ATTRIB  m_attribute;        // PAD_ATTRIB_NORMAL, PAD_ATTRIB::SMD, PAD_ATTRIB::CONN,
                                     //   PAD_ATTRIB::NPTH
-    PAD_PROP_T  m_property;         // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
+    PAD_PROP  m_property;         // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
 
     double      m_orient;           // in 1/10 degrees
 

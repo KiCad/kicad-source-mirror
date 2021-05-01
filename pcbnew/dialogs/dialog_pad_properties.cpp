@@ -629,13 +629,13 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     switch( m_dummyPad->GetProperty() )
     {
-    case PAD_PROP_NONE:             m_choiceFabProperty->SetSelection( 0 ); break;
-    case PAD_PROP_BGA:              m_choiceFabProperty->SetSelection( 1 ); break;
-    case PAD_PROP_FIDUCIAL_LOCAL:   m_choiceFabProperty->SetSelection( 2 ); break;
-    case PAD_PROP_FIDUCIAL_GLBL:    m_choiceFabProperty->SetSelection( 3 ); break;
-    case PAD_PROP_TESTPOINT:        m_choiceFabProperty->SetSelection( 4 ); break;
-    case PAD_PROP_HEATSINK:         m_choiceFabProperty->SetSelection( 5 ); break;
-    case PAD_PROP_CASTELLATED:      m_choiceFabProperty->SetSelection( 6 ); break;
+    case PAD_PROP::NONE:             m_choiceFabProperty->SetSelection( 0 ); break;
+    case PAD_PROP::BGA:              m_choiceFabProperty->SetSelection( 1 ); break;
+    case PAD_PROP::FIDUCIAL_LOCAL:   m_choiceFabProperty->SetSelection( 2 ); break;
+    case PAD_PROP::FIDUCIAL_GLBL:    m_choiceFabProperty->SetSelection( 3 ); break;
+    case PAD_PROP::TESTPOINT:        m_choiceFabProperty->SetSelection( 4 ); break;
+    case PAD_PROP::HEATSINK:         m_choiceFabProperty->SetSelection( 5 ); break;
+    case PAD_PROP::CASTELLATED:      m_choiceFabProperty->SetSelection( 6 ); break;
     }
 
     // Ensure the pad property is compatible with the pad type
@@ -1341,32 +1341,32 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         break;
     }
 
-    if( ( m_dummyPad->GetProperty() == PAD_PROP_FIDUCIAL_GLBL ||
-          m_dummyPad->GetProperty() == PAD_PROP_FIDUCIAL_LOCAL ) &&
+    if( ( m_dummyPad->GetProperty() == PAD_PROP::FIDUCIAL_GLBL ||
+          m_dummyPad->GetProperty() == PAD_PROP::FIDUCIAL_LOCAL ) &&
         m_dummyPad->GetAttribute() == PAD_ATTRIB::NPTH )
     {
         warning_msgs.Add(  _( "Warning: Fiducial property makes no sense on NPTH pads." ) );
     }
 
-    if( m_dummyPad->GetProperty() == PAD_PROP_TESTPOINT &&
+    if( m_dummyPad->GetProperty() == PAD_PROP::TESTPOINT &&
         m_dummyPad->GetAttribute() == PAD_ATTRIB::NPTH )
     {
         warning_msgs.Add(  _( "Warning: Testpoint property makes no sense on NPTH pads." ) );
     }
 
-    if( m_dummyPad->GetProperty() == PAD_PROP_HEATSINK &&
+    if( m_dummyPad->GetProperty() == PAD_PROP::HEATSINK &&
         m_dummyPad->GetAttribute() == PAD_ATTRIB::NPTH )
     {
         warning_msgs.Add(  _( "Warning: Heatsink property makes no sense of NPTH pads." ) );
     }
 
-    if( m_dummyPad->GetProperty() == PAD_PROP_CASTELLATED &&
+    if( m_dummyPad->GetProperty() == PAD_PROP::CASTELLATED &&
         m_dummyPad->GetAttribute() != PAD_ATTRIB::PTH )
     {
         warning_msgs.Add(  _( "Warning: Castellated property is for PTH pads." ) );
     }
 
-    if( m_dummyPad->GetProperty() == PAD_PROP_BGA &&
+    if( m_dummyPad->GetProperty() == PAD_PROP::BGA &&
         m_dummyPad->GetAttribute() != PAD_ATTRIB::SMD )
     {
         warning_msgs.Add(  _( "Warning: BGA property is for SMD pads." ) );
@@ -1642,19 +1642,19 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 }
 
 
-PAD_PROP_T DIALOG_PAD_PROPERTIES::getSelectedProperty()
+PAD_PROP DIALOG_PAD_PROPERTIES::getSelectedProperty()
 {
-    PAD_PROP_T prop = PAD_PROP_NONE;
+    PAD_PROP prop = PAD_PROP::NONE;
 
     switch( m_choiceFabProperty->GetSelection() )
     {
-    case 0:     prop = PAD_PROP_NONE; break;
-    case 1:     prop = PAD_PROP_BGA; break;
-    case 2:     prop = PAD_PROP_FIDUCIAL_LOCAL; break;
-    case 3:     prop = PAD_PROP_FIDUCIAL_GLBL; break;
-    case 4:     prop = PAD_PROP_TESTPOINT; break;
-    case 5:     prop = PAD_PROP_HEATSINK; break;
-    case 6:     prop = PAD_PROP_CASTELLATED; break;
+    case 0:     prop = PAD_PROP::NONE; break;
+    case 1:     prop = PAD_PROP::BGA; break;
+    case 2:     prop = PAD_PROP::FIDUCIAL_LOCAL; break;
+    case 3:     prop = PAD_PROP::FIDUCIAL_GLBL; break;
+    case 4:     prop = PAD_PROP::TESTPOINT; break;
+    case 5:     prop = PAD_PROP::HEATSINK; break;
+    case 6:     prop = PAD_PROP::CASTELLATED; break;
     }
 
     return prop;

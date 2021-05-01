@@ -164,7 +164,7 @@ private:
 	void OnPrimitiveSelection( wxListEvent& event ) override;
 
     /// Return the pad property currently selected
-    PAD_PROP_T getSelectedProperty();
+    PAD_PROP getSelectedProperty();
 };
 
 /**

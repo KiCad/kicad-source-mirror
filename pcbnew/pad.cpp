@@ -68,7 +68,7 @@ PAD::PAD( FOOTPRINT* parent ) :
                                                     // is PAD_CIRCLE.
     SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );        // Default pad drill shape is a circle.
     m_attribute           = PAD_ATTRIB::PTH;         // Default pad type is plated through hole
-    SetProperty( PAD_PROP_NONE );                   // no special fabrication property
+    SetProperty( PAD_PROP::NONE );                   // no special fabrication property
     m_localClearance      = 0;
     m_localSolderMaskMargin  = 0;
     m_localSolderPasteMargin = 0;
@@ -218,7 +218,7 @@ bool PAD::FlashLayer( int aLayer ) const
         return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
 
     /// Heatsink pads always get copper
-    if( GetProperty() == PAD_PROP_HEATSINK )
+    if( GetProperty() == PAD_PROP::HEATSINK )
         return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
 
     if( !m_removeUnconnectedLayer )
@@ -567,7 +567,7 @@ void PAD::SetAttribute( PAD_ATTRIB aAttribute )
 }
 
 
-void PAD::SetProperty( PAD_PROP_T aProperty )
+void PAD::SetProperty( PAD_PROP aProperty )
 {
     m_property = aProperty;
 
@@ -877,18 +877,18 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     // Show the pad shape, attribute and property
     wxString props = ShowPadAttr();
 
-    if( GetProperty() != PAD_PROP_NONE )
+    if( GetProperty() != PAD_PROP::NONE )
         props += ',';
 
     switch( GetProperty() )
     {
-    case PAD_PROP_NONE:                                           break;
-    case PAD_PROP_BGA:            props += _("BGA" );             break;
-    case PAD_PROP_FIDUCIAL_GLBL:  props += _("Fiducial global" ); break;
-    case PAD_PROP_FIDUCIAL_LOCAL: props += _("Fiducial local" );  break;
-    case PAD_PROP_TESTPOINT:      props += _("Test point" );      break;
-    case PAD_PROP_HEATSINK:       props += _("Heat sink" );       break;
-    case PAD_PROP_CASTELLATED:    props += _("Castellated" );     break;
+    case PAD_PROP::NONE:                                           break;
+    case PAD_PROP::BGA:            props += _("BGA" );             break;
+    case PAD_PROP::FIDUCIAL_GLBL:  props += _("Fiducial global" ); break;
+    case PAD_PROP::FIDUCIAL_LOCAL: props += _("Fiducial local" );  break;
+    case PAD_PROP::TESTPOINT:      props += _("Test point" );      break;
+    case PAD_PROP::HEATSINK:       props += _("Heat sink" );       break;
+    case PAD_PROP::CASTELLATED:    props += _("Castellated" );     break;
     }
 
     aList.emplace_back( ShowPadShape(), props );
@@ -1448,14 +1448,14 @@ static struct PAD_DESC
                 .Map( PAD_SHAPE::CHAMFERED_RECT,   _HKI( "Chamfered rectangle" ) )
                 .Map( PAD_SHAPE::CUSTOM,           _HKI( "Custom" ) );
 
-        ENUM_MAP<PAD_PROP_T>::Instance()
-                .Map( PAD_PROP_NONE,              _HKI( "None" ) )
-                .Map( PAD_PROP_BGA,               _HKI( "BGA pad" ) )
-                .Map( PAD_PROP_FIDUCIAL_GLBL,     _HKI( "Fiducial, global to board" ) )
-                .Map( PAD_PROP_FIDUCIAL_LOCAL,    _HKI( "Fiducial, local to footprint" ) )
-                .Map( PAD_PROP_TESTPOINT,         _HKI( "Test point pad" ) )
-                .Map( PAD_PROP_HEATSINK,          _HKI( "Heatsink pad" ) )
-                .Map( PAD_PROP_CASTELLATED,       _HKI( "Castellated pad" ) );
+        ENUM_MAP<PAD_PROP>::Instance()
+                .Map( PAD_PROP::NONE,              _HKI( "None" ) )
+                .Map( PAD_PROP::BGA,               _HKI( "BGA pad" ) )
+                .Map( PAD_PROP::FIDUCIAL_GLBL,     _HKI( "Fiducial, global to board" ) )
+                .Map( PAD_PROP::FIDUCIAL_LOCAL,    _HKI( "Fiducial, local to footprint" ) )
+                .Map( PAD_PROP::TESTPOINT,         _HKI( "Test point pad" ) )
+                .Map( PAD_PROP::HEATSINK,          _HKI( "Heatsink pad" ) )
+                .Map( PAD_PROP::CASTELLATED,       _HKI( "Castellated pad" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PAD );
@@ -1507,7 +1507,7 @@ static struct PAD_DESC
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Thermal Relief" ),
                     &PAD::SetThermalGap, &PAD::GetThermalGap,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_PROP_T>( _HKI( "Fabrication Property" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_PROP>( _HKI( "Fabrication Property" ),
                     &PAD::SetProperty, &PAD::GetProperty ) );
 
         auto roundRadiusRatio = new PROPERTY<PAD, double>( _HKI( "Round Radius Ratio" ),
@@ -1531,4 +1531,4 @@ static struct PAD_DESC
 
 ENUM_TO_WXANY( PAD_ATTRIB );
 ENUM_TO_WXANY( PAD_SHAPE );
-ENUM_TO_WXANY( PAD_PROP_T );
+ENUM_TO_WXANY( PAD_PROP );
