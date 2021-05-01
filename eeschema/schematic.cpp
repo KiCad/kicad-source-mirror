@@ -60,6 +60,8 @@ void SCHEMATIC::Reset()
 
         project.m_ErcSettings       = nullptr;
         project.m_SchematicSettings = nullptr;
+
+        m_project = nullptr; // clear the project, so we don't do this again when setting a new one
     }
 
     delete m_rootSheet;

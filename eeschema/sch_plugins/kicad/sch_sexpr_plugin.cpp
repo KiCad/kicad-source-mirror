@@ -455,6 +455,8 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
 
     wxASSERT( m_currentPath.size() == 1 );  // only the project path should remain
 
+    m_currentPath.pop(); // Clear the path stack for next call to Load
+
     return sheet;
 }
 
