@@ -806,7 +806,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
             shortFileName = fileName;
     }
 
-    DS_DATA_MODEL* ws = new DS_DATA_MODEL;
+    std::unique_ptr<DS_DATA_MODEL> ws = std::make_unique<DS_DATA_MODEL>();
 
     if( ws->LoadDrawingSheet( fileName ) )
     {
@@ -815,7 +815,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
             delete m_drawingSheet;
         }
 
-        m_drawingSheet = ws;
+        m_drawingSheet = ws.release();
 
         SetWksFileName( shortFileName );
 
