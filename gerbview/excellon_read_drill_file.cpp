@@ -252,18 +252,20 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
     if( gerber_layer )
         Erase_Current_DrawLayer( false );
 
-    EXCELLON_IMAGE* drill_layer = new EXCELLON_IMAGE( layerId );
+    std::unique_ptr<EXCELLON_IMAGE> drill_layer_uptr = std::make_unique<EXCELLON_IMAGE>( layerId );
 
     // Read the Excellon drill file:
-    bool success = drill_layer->LoadFile( aFullFileName );
+    bool success = drill_layer_uptr->LoadFile( aFullFileName );
 
     if( !success )
     {
-        delete drill_layer;
+        drill_layer_uptr.reset();
         msg.Printf( _( "File %s not found." ), aFullFileName );
         ShowInfoBarError( msg );
         return false;
     }
+
+    EXCELLON_IMAGE* drill_layer = drill_layer_uptr.release();
 
     layerId = images->AddGbrImage( drill_layer, layerId );
 
