@@ -19,12 +19,11 @@ DIALOG_PASTE_SPECIAL_BASE::DIALOG_PASTE_SPECIAL_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* optionsSizer;
 	optionsSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText7 = new wxStaticText( this, wxID_ANY, _("Paste Options"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText7->Wrap( -1 );
-	optionsSizer->Add( m_staticText7, 0, wxALL, 5 );
-
-	m_keepAnnotations = new wxCheckBox( this, wxID_ANY, _("Keep existing annotations, even if they are duplicated"), wxDefaultPosition, wxDefaultSize, 0 );
-	optionsSizer->Add( m_keepAnnotations, 0, wxALL, 5 );
+	wxString m_pasteOptionsChoices[] = { _("Assign unique reference designators to pasted symbols"), _("Keep existing reference designators, even if they are duplicated"), _("Clear reference designators on all pasted symbols") };
+	int m_pasteOptionsNChoices = sizeof( m_pasteOptionsChoices ) / sizeof( wxString );
+	m_pasteOptions = new wxRadioBox( this, wxID_ANY, _("Paste Options"), wxDefaultPosition, wxDefaultSize, m_pasteOptionsNChoices, m_pasteOptionsChoices, 1, wxRA_SPECIFY_COLS );
+	m_pasteOptions->SetSelection( 1 );
+	optionsSizer->Add( m_pasteOptions, 0, wxALL, 5 );
 
 
 	m_mainSizer->Add( optionsSizer, 1, wxALL|wxEXPAND, 10 );

@@ -1450,30 +1450,29 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         paste_screen->Append( new SCH_TEXT( wxPoint( 0, 0 ), text ) );
     }
 
-    bool forceKeepAnnotations = false;
-
     // Save loaded screen instances to m_clipboardSheetInstances
     setClipboardInstances( paste_screen );
 
+    PASTE_MODE pasteMode = PASTE_MODE::REMOVE_ANNOTATIONS;
+
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
     {
-        DIALOG_PASTE_SPECIAL dlg( m_frame, &forceKeepAnnotations );
+        DIALOG_PASTE_SPECIAL dlg( m_frame, &pasteMode );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return 0;
     }
 
-    bool reannotateOnPaste = !forceKeepAnnotations;
-    forceKeepAnnotations = true; // Always keep annotations of pasted instances
+    bool forceKeepAnnotations = pasteMode != PASTE_MODE::REMOVE_ANNOTATIONS;
 
     // SCH_SEXP_PLUGIN added the items to the paste screen, but not to the view or anything
     // else.  Pull them back out to start with.
     //
     EDA_ITEMS       loadedItems;
     bool            sheetsPasted = false;
-    SCH_SHEET_LIST  hierarchy    = m_frame->Schematic().GetSheets();
-    SCH_SHEET_PATH& pasteRoot    = m_frame->GetCurrentSheet();
-    wxFileName      destFn       = pasteRoot.Last()->GetFileName();
+    SCH_SHEET_LIST  hierarchy = m_frame->Schematic().GetSheets();
+    SCH_SHEET_PATH& pasteRoot = m_frame->GetCurrentSheet();
+    wxFileName      destFn = pasteRoot.Last()->GetFileName();
 
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( m_frame->Prj().GetProjectPath() );
@@ -1688,7 +1687,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     pasteInstances.SortByPageNumbers();
 
-    if( reannotateOnPaste )
+    if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS )
     {
         for( SCH_SHEET_PATH& instance : pasteInstances )
         {

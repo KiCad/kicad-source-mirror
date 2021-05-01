@@ -24,13 +24,27 @@
 #include <dialog_paste_special.h>
 
 
-static bool g_keepAnnotations = true;
+static PASTE_MODE g_paste_mode = PASTE_MODE::UNIQUE_ANNOTATIONS;
 
 
-DIALOG_PASTE_SPECIAL::DIALOG_PASTE_SPECIAL( wxWindow* parent, bool* aKeep ) :
-    DIALOG_PASTE_SPECIAL_BASE( parent ),
-    m_keep( aKeep )
+DIALOG_PASTE_SPECIAL::DIALOG_PASTE_SPECIAL( wxWindow* aParent,
+                                            PASTE_MODE* aMode,
+                                            wxString aReplacement ) :
+    DIALOG_PASTE_SPECIAL_BASE( aParent ),
+    m_mode( aMode )
 {
+    m_pasteOptions->SetItemToolTip( static_cast<int>( PASTE_MODE::UNIQUE_ANNOTATIONS ),
+                                    _( "Finds the next available reference designator for "
+                                       "any designators that already exist in the design." ) );
+
+    m_pasteOptions->SetItemToolTip( static_cast<int>( PASTE_MODE::KEEP_ANNOTATIONS ),
+                                    wxT( "" ) ); // Self explanatory
+
+    m_pasteOptions->SetItemToolTip( static_cast<int>( PASTE_MODE::REMOVE_ANNOTATIONS ),
+                                    wxString::Format( _( "Replaces reference designators "
+                                                         "with '%s'." ),
+                                                      aReplacement ) );
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
@@ -38,13 +52,13 @@ DIALOG_PASTE_SPECIAL::DIALOG_PASTE_SPECIAL( wxWindow* parent, bool* aKeep ) :
 
 bool DIALOG_PASTE_SPECIAL::TransferDataToWindow()
 {
-    m_keepAnnotations->SetValue( g_keepAnnotations );
+    m_pasteOptions->SetSelection( static_cast<int>( g_paste_mode ) );
     return true;
 }
 
 
 bool DIALOG_PASTE_SPECIAL::TransferDataFromWindow()
 {
-    g_keepAnnotations = *m_keep = m_keepAnnotations->GetValue();
+    g_paste_mode = *m_mode = static_cast<PASTE_MODE>( m_pasteOptions->GetSelection() );
     return true;
 }

@@ -179,6 +179,8 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_migrate_settings.cpp
     dialogs/dialog_migrate_settings_base.cpp
     dialogs/dialog_page_settings_base.cpp
+    dialogs/dialog_paste_special.cpp
+    dialogs/dialog_paste_special_base.cpp
     dialogs/dialog_text_entry_base.cpp
     dialogs/dialog_page_settings.cpp
     dialogs/dialog_print_generic.cpp

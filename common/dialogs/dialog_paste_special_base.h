@@ -12,12 +12,11 @@
 #include <wx/intl.h>
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/radiobox.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/button.h>
@@ -34,8 +33,7 @@ class DIALOG_PASTE_SPECIAL_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_staticText7;
-		wxCheckBox* m_keepAnnotations;
+		wxRadioBox* m_pasteOptions;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

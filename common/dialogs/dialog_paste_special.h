@@ -31,18 +31,26 @@
 
 class SCH_SHEET_PIN;
 
+enum class PASTE_MODE
+{
+    UNIQUE_ANNOTATIONS = 0,
+    KEEP_ANNOTATIONS = 1,
+    REMOVE_ANNOTATIONS = 2
+};
+
 
 class DIALOG_PASTE_SPECIAL : public DIALOG_PASTE_SPECIAL_BASE
 {
 
 public:
-    DIALOG_PASTE_SPECIAL( wxWindow* parent, bool* aKeepAnnotations );
+    DIALOG_PASTE_SPECIAL( wxWindow* aParent, PASTE_MODE* aMode,
+                          wxString aReplacement = wxT( "?" ) );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
-    bool* m_keep;
+    PASTE_MODE* m_mode;
 };
 
 #endif // DIALOG_PASTE_SPECIAL_H
