@@ -223,7 +223,16 @@ bool PL_EDITOR_FRAME::LoadPageLayoutDescrFile( const wxString& aFullFileName )
 {
     if( wxFileExists( aFullFileName ) )
     {
-        DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( aFullFileName );
+        bool loaded = false;
+
+        loaded = DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( aFullFileName );
+
+        if( !loaded )
+        {
+            ShowInfoBarError( _( "Error reading drawing sheet" ), true );
+            return false;
+        }
+
         SetCurrentFileName( aFullFileName );
         UpdateFileHistory( aFullFileName );
         GetScreen()->ClrModify();
@@ -233,9 +242,7 @@ bool PL_EDITOR_FRAME::LoadPageLayoutDescrFile( const wxString& aFullFileName )
 
         if( fn.FileExists() && !fn.IsFileWritable() )
         {
-            m_infoBar->RemoveAllButtons();
-            m_infoBar->AddCloseButton();
-            m_infoBar->ShowMessage( _( "Layout file is read only." ), wxICON_WARNING );
+            ShowInfoBarWarning( _( "Layout file is read only." ), true );
         }
 
         return true;

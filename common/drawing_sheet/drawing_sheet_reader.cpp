@@ -808,7 +808,7 @@ void DS_DATA_MODEL::SetPageLayout( const char* aPageLayout, bool Append, const w
 }
 
 
-void DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append )
+bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append )
 {
     wxString fullFileName = aFullFileName;
 
@@ -824,7 +824,7 @@ void DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
                 wxLogMessage( wxT( "Drawing sheet file <%s> not found" ), fullFileName.GetData() );
             #endif
             SetDefaultLayout();
-            return;
+            return false;
         }
     }
 
@@ -834,14 +834,17 @@ void DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
     {
         if( !Append )
             SetDefaultLayout();
-        return;
+        return false;
     }
 
     size_t filelen = wksFile.Length();
-    char * buffer = new char[filelen+10];
+    std::unique_ptr<char[]> buffer = std::make_unique<char[]>(filelen+10);
 
-    if( wksFile.Read( buffer, filelen ) != filelen )
-        wxLogMessage( _("The file \"%s\" was not fully read"), fullFileName.GetData() );
+    if( wksFile.Read( buffer.get(), filelen ) != filelen )
+    {
+        wxLogMessage( _( "The file \"%s\" was not fully read" ), fullFileName.GetData() );
+        return false;
+    }
     else
     {
         buffer[filelen]=0;
@@ -849,7 +852,7 @@ void DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
         if( ! Append )
             ClearList();
 
-        DRAWING_SHEET_READER_PARSER pl_parser( buffer, fullFileName );
+        DRAWING_SHEET_READER_PARSER pl_parser( buffer.get(), fullFileName );
 
         try
         {
@@ -858,8 +861,14 @@ void DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
         catch( const IO_ERROR& ioe )
         {
             wxLogMessage( ioe.What() );
+            return false;
+        }
+        catch( const std::bad_alloc& )
+        {
+            wxLogMessage( "Memory exhaustion reading drawing sheet" );
+            return false;
         }
     }
 
-    delete[] buffer;
+    return true;
 }

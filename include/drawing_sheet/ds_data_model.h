@@ -154,7 +154,7 @@ public:
      *                      default internal description.
      * @param Append if true: do not delete old layout, and load only \a aFullFileName.
      */
-    void LoadDrawingSheet( const wxString& aFullFileName = wxEmptyString, bool Append = false );
+    bool LoadDrawingSheet( const wxString& aFullFileName = wxEmptyString, bool Append = false );
 
     /**
      * Populate the list from a S expr description stored in a string.
