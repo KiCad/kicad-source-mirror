@@ -244,7 +244,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // After schematic has been linked to project, SCHEMATIC_SETTINGS works
     m_defaults = &m_schematic->Settings();
-    LoadProjectSettings();
 
     setupTools();
     setupUIConditions();
@@ -277,6 +276,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     resolveCanvasType();
     SwitchCanvas( m_canvasType );
+
+    LoadProjectSettings();
 
     initScreenZoom();
 
