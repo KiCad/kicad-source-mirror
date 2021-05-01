@@ -1281,8 +1281,10 @@ void SCH_EDIT_FRAME::initScreenZoom()
 void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 {
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
-    SCH_SHEET_LIST list = Schematic().GetSheets();
+    SCH_SHEET_LIST      list = Schematic().GetSheets();
+#ifdef PROFILE
     PROF_COUNTER   timer;
+#endif
 
     // Ensure schematic graph is accurate
     if( aCleanupFlags == LOCAL_CLEANUP )
@@ -1295,8 +1297,10 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
             SchematicCleanUp( sheet.LastScreen() );
     }
 
+#ifdef PROFILE
     timer.Stop();
     wxLogTrace( "CONN_PROFILE", "SchematicCleanUp() %0.4f ms", timer.msecs() );
+#endif
 
     if( settings.m_IntersheetRefsShow )
         RecomputeIntersheetRefs();

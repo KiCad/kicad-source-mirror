@@ -268,7 +268,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( !AskToSaveChanges() )
         return false;
 
+#ifdef PROFILE
     PROF_COUNTER openFiles( "OpenProjectFile" );
+#endif
 
     wxFileName pro = fullFileName;
     pro.SetExt( ProjectFileExtension );
