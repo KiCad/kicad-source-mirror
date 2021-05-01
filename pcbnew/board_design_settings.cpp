@@ -589,7 +589,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             {
                 m_ZoneFillVersion = aVal ? 6 : 5;
             },
-            6 ) );
+            true ) );
 
     m_params.emplace_back( new PARAM<bool>( "zones_allow_external_fillets",
             &m_ZoneKeepExternalFillets, false ) );

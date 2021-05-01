@@ -516,7 +516,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
     }
 
     // Remove aAdditionalRefs references
-    for( int i = originalSize; i < ( aAdditionalRefs.GetCount() + originalSize ); i++ )
+    for( size_t i = originalSize; i < ( aAdditionalRefs.GetCount() + originalSize ); i++ )
         RemoveItem( originalSize );
 
     wxASSERT( originalSize == GetCount() ); // Make sure we didn't make a mistake

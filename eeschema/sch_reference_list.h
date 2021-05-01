@@ -223,7 +223,7 @@ public:
         flatList.clear();
     }
 
-    unsigned GetCount() const { return flatList.size(); }
+    size_t GetCount() const { return flatList.size(); }
 
     SCH_REFERENCE& GetItem( int aIdx ) { return flatList[aIdx]; }
     const SCH_REFERENCE& GetItem( int aIdx ) const { return flatList[aIdx]; }

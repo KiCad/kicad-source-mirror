@@ -230,10 +230,8 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
     }
 
     // insert all intersections found into the new hull/path SLCs
-    for( auto ip : ips )
+    for( auto& ip : ips )
     {
-        bool isNewP, isNewH;
-
         if( pnew.Find( ip.p ) < 0 )
         {
             pnew.Split(ip.p);
