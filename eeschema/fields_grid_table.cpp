@@ -35,6 +35,7 @@
 #include <wildcards_and_files_ext.h>
 #include <project/project_file.h>
 #include "eda_doc.h"
+#include <wx/settings.h>
 
 
 enum

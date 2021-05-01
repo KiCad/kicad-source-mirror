@@ -53,6 +53,7 @@
 #include <tools/cvpcb_association_tool.h>
 #include <tools/cvpcb_control.h>
 #include <wx/button.h>
+#include <wx/settings.h>
 
 #define CVPCB_MAINFRAME_NAME wxT( "CvpcbFrame" )
 

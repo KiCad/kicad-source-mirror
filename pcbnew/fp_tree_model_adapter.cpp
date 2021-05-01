@@ -24,6 +24,7 @@
 #include <footprint_info.h>
 #include <footprint_info_impl.h>
 #include <generate_footprint_info.h>
+#include <wx/settings.h>
 
 #include "fp_tree_model_adapter.h"
 

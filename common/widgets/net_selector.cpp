@@ -35,6 +35,7 @@
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
+#include <wx/panel.h>
 
 
 wxDEFINE_EVENT( NET_SELECTED, wxCommandEvent );

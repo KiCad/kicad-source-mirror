@@ -32,6 +32,7 @@
 #include <footprint.h>
 #include <tool/tool_manager.h>
 #include <tools/footprint_editor_control.h>
+#include <wx/settings.h>
 
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
