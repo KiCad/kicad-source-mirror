@@ -50,20 +50,23 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
         Erase_Current_DrawLayer( false );
     }
 
-    gerber = new GERBER_FILE_IMAGE( layer );
+    // use an unique ptr while we load to free on exception properly
+    std::unique_ptr<GERBER_FILE_IMAGE> gerber_uptr = std::make_unique<GERBER_FILE_IMAGE>( layer );
 
     // Read the gerber file. The image will be added only if it can be read
     // to avoid broken data.
-    bool success = gerber->LoadGerberFile( GERBER_FullFileName );
+    bool success = gerber_uptr->LoadGerberFile( GERBER_FullFileName );
 
     if( !success )
     {
-        delete gerber;
+        gerber_uptr.reset();
         msg.Printf( _( "File \"%s\" not found" ), GERBER_FullFileName );
         ShowInfoBarError( msg );
         return false;
     }
 
+    gerber = gerber_uptr.release();
+    wxASSERT( gerber != nullptr );
     images->AddGbrImage( gerber, layer );
 
     // Display errors list

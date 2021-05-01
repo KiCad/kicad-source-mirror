@@ -37,7 +37,8 @@
 
 // HTML Messages used more than one time:
 #define MSG_NO_MORE_LAYER _( "<b>No more available layers</b> in GerbView to load files" )
-#define MSG_NOT_LOADED    _( "\n<b>Not loaded:</b> <i>%s</i>" )
+#define MSG_NOT_LOADED _( "\n<b>Not loaded:</b> <i>%s</i>" )
+#define MSG_OOM _( "\n<b>Memory was exhausted reading:</b> <i>%s</i>" )
 
 
 void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
@@ -253,47 +254,58 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
 
         visibility[ layer ] = true;
 
-        if( aFileType && (*aFileType)[ii] == 1 )
+        try
         {
-            LoadExcellonFiles( filename.GetFullPath() );
-            layer = GetActiveLayer();   // Loading NC drill file changes the active layer
-        }
-        else
-        {
-            if( filename.GetExt() == GerberJobFileExtension.c_str() )
+            if( aFileType && ( *aFileType )[ii] == 1 )
             {
-                //We cannot read a gerber job file as a gerber plot file: skip it
-                wxString txt;
-                txt.Printf(
-                    _( "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>" ),
-                    filename.GetFullName() );
-                success = false;
-                reporter.Report( txt, RPT_SEVERITY_ERROR );
+                LoadExcellonFiles( filename.GetFullPath() );
+                layer = GetActiveLayer(); // Loading NC drill file changes the active layer
             }
-            else if( Read_GERBER_File( filename.GetFullPath() ) )
+            else
             {
-                UpdateFileHistory( m_lastFileName );
-
-                layer = getNextAvailableLayer( layer );
-
-                if( layer == NO_AVAILABLE_LAYERS && ii < aFilenameList.GetCount()-1 )
+                if( filename.GetExt() == GerberJobFileExtension.c_str() )
                 {
+                    //We cannot read a gerber job file as a gerber plot file: skip it
+                    wxString txt;
+                    txt.Printf( _( "<b>A gerber job file cannot be loaded as a plot file</b> "
+                                   "<i>%s</i>" ),
+                                filename.GetFullName() );
                     success = false;
-                    reporter.Report( MSG_NO_MORE_LAYER, RPT_SEVERITY_ERROR );
-
-                    // Report the name of not loaded files:
-                    ii += 1;
-                    while( ii < aFilenameList.GetCount() )
-                    {
-                        filename = aFilenameList[ii++];
-                        wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
-                        reporter.Report( txt, RPT_SEVERITY_ERROR );
-                    }
-                    break;
+                    reporter.Report( txt, RPT_SEVERITY_ERROR );
                 }
+                else if( Read_GERBER_File( filename.GetFullPath() ) )
+                {
+                    UpdateFileHistory( m_lastFileName );
 
-                SetActiveLayer( layer, false );
+                    layer = getNextAvailableLayer( layer );
+
+                    if( layer == NO_AVAILABLE_LAYERS && ii < aFilenameList.GetCount() - 1 )
+                    {
+                        success = false;
+                        reporter.Report( MSG_NO_MORE_LAYER, RPT_SEVERITY_ERROR );
+
+                        // Report the name of not loaded files:
+                        ii += 1;
+                        while( ii < aFilenameList.GetCount() )
+                        {
+                            filename = aFilenameList[ii++];
+                            wxString txt =
+                                    wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
+                            reporter.Report( txt, RPT_SEVERITY_ERROR );
+                        }
+                        break;
+                    }
+
+                    SetActiveLayer( layer, false );
+                }
             }
+        }
+        catch( const std::bad_alloc& )
+        {
+            wxString txt = wxString::Format( MSG_OOM, filename.GetFullName() );
+            reporter.Report( txt, RPT_SEVERITY_ERROR );
+            success = false;
+            continue;
         }
 
         if( progress )
