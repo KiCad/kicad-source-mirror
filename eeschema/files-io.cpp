@@ -393,6 +393,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         SCH_PLUGIN* plugin = SCH_IO_MGR::FindPlugin( schFileType );
         SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( plugin );
 
+        bool failedLoad = false;
         try
         {
             Schematic().SetRoot( pi->Load( fullFileName, &Schematic() ) );
@@ -408,14 +409,26 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         catch( const IO_ERROR& ioe )
         {
+            msg.Printf( _( "Error loading schematic file \"%s\"" ),
+                        fullFileName);
+            DisplayErrorMessage( this, msg, ioe.What() );
+
+            failedLoad = true;
+        }
+        catch( const std::bad_alloc& )
+        {
+            msg.Printf( _( "Memory exhausted loading schematic file \"%s\"" ), fullFileName );
+            DisplayErrorMessage( this, msg );
+
+            failedLoad = true;
+        }
+
+        if( failedLoad )
+        {
             // Do not leave g_RootSheet == NULL because it is expected to be
             // a valid sheet. Therefore create a dummy empty root sheet and screen.
             CreateScreens();
             m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
-
-            msg.Printf( _( "Error loading schematic file \"%s\".\n%s" ),
-                        fullFileName, ioe.What() );
-            DisplayError( this, msg );
 
             msg.Printf( _( "Failed to load \"%s\"" ), fullFileName );
             SetMsgPanel( wxEmptyString, msg );
