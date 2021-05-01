@@ -21,6 +21,7 @@
 #ifndef _COMMON_SETTINGS_H
 #define _COMMON_SETTINGS_H
 
+#include <settings/environment.h>
 #include <settings/json_settings.h>
 
 
@@ -69,7 +70,7 @@ public:
     struct ENVIRONMENT
     {
         bool show_warning_dialog;
-        std::map<std::string, wxString> vars;
+        ENV_VAR_MAP vars;
     };
 
     struct INPUT
@@ -127,6 +128,11 @@ public:
     virtual ~COMMON_SETTINGS() {}
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
+
+    /**
+     * Creates the built-in environment variables and sets their default values
+     */
+    void InitializeEnvironment();
 
 private:
     bool migrateSchema0to1();

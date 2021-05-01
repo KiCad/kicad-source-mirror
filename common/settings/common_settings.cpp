@@ -19,8 +19,13 @@
  */
 
 #include <set>
+
+#include <paths.h>
+#include <search_stack.h>
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
+#include <systemdirsappend.h>
+#include <trace_helpers.h>
 #include <wx/config.h>
 #include <wx/log.h>
 
@@ -94,7 +99,98 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "environment.show_warning_dialog",
             &m_Env.show_warning_dialog, false ) );
 
-    m_params.emplace_back( new PARAM_MAP<wxString>( "environment.vars", &m_Env.vars, {} ) );
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "environment.vars",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = {};
+
+                for( const std::pair<wxString, ENV_VAR_ITEM> entry : m_Env.vars )
+                {
+                    const ENV_VAR_ITEM& var = entry.second;
+
+                    wxASSERT( entry.first == var.GetKey() );
+
+                    // Default values are never persisted
+                    if( var.IsDefault() )
+                    {
+                        wxLogTrace( traceEnvVars,
+                                    "COMMON_SETTINGS: Env var %s skipping save (default)",
+                                    var.GetKey() );
+                        continue;
+                    }
+
+                    wxString value = var.GetValue();
+
+                    // Vars that existed in JSON are persisted, but if they were overridden
+                    // externally, we persist the old value (i.e. the one that was loaded from JSON)
+                    if( var.GetDefinedExternally() )
+                    {
+                        if( var.GetDefinedInSettings() )
+                        {
+                            wxLogTrace( traceEnvVars,
+                                        "COMMON_SETTINGS: Env var %s was overridden externally, "
+                                        "saving previously-loaded value %s",
+                                        var.GetKey(), var.GetSettingsValue() );
+                            value = var.GetSettingsValue();
+                        }
+                        else
+                        {
+                            wxLogTrace( traceEnvVars,
+                                        "COMMON_SETTINGS: Env var %s skipping save (external)",
+                                        var.GetKey() );
+                            continue;
+                        }
+                    }
+
+                    wxLogTrace( traceEnvVars,
+                                "COMMON_SETTINGS: Saving env var %s = %s",
+                                var.GetKey(), value);
+
+                    std::string key( var.GetKey().ToUTF8() );
+                    ret[key] = value;
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_object() )
+                    return;
+
+                for( const auto& entry : aJson.items() )
+                {
+                    wxString key = wxString( entry.key().c_str(), wxConvUTF8 );
+                    wxString val = entry.value().get<wxString>();
+
+                    if( m_Env.vars.count( key ) )
+                    {
+                        if( m_Env.vars[key].GetDefinedExternally() )
+                        {
+                            wxLogTrace( traceEnvVars, "COMMON_SETTINGS: %s is defined externally",
+                                        key );
+                            m_Env.vars[key].SetDefinedInSettings();
+                            m_Env.vars[key].SetSettingsValue( val );
+                            continue;
+                        }
+                        else
+                        {
+                            wxLogTrace( traceEnvVars, "COMMON_SETTINGS: Updating %s: %s -> %s",
+                                        key, m_Env.vars[key].GetValue(), val );
+                            m_Env.vars[key].SetValue( val );
+                        }
+                    }
+                    else
+                    {
+                        wxLogTrace( traceEnvVars, "COMMON_SETTINGS: Loaded new var: %s = %s",
+                                    key, val );
+                        m_Env.vars[key] = ENV_VAR_ITEM( key, val );
+                    }
+
+                    m_Env.vars[key].SetDefinedInSettings();
+                    m_Env.vars[key].SetSettingsValue( val );
+                }
+            },
+            {} ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.auto_pan", &m_Input.auto_pan, false ) );
 
@@ -345,4 +441,85 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacyString( aCfg, "WorkingDir",              "system.working_dir" );
 
     return ret;
+}
+
+
+void COMMON_SETTINGS::InitializeEnvironment()
+{
+    auto addVar =
+        [&]( const wxString& aKey, const wxString& aDefault )
+        {
+            m_Env.vars[aKey] = ENV_VAR_ITEM( aKey, aDefault, aDefault );
+
+            wxString envValue;
+
+            if( wxGetEnv( aKey, &envValue ) == true && !envValue.IsEmpty() )
+            {
+                m_Env.vars[aKey].SetValue( envValue );
+                m_Env.vars[aKey].SetDefinedExternally();
+                wxLogTrace( traceEnvVars,
+                            "InitializeEnvironment: Entry %s defined externally as %s", aKey,
+                            envValue );
+            }
+            else
+            {
+                wxLogTrace( traceEnvVars, "InitializeEnvironment: Setting entry %s to default %s",
+                            aKey, aDefault );
+            }
+        };
+
+    wxFileName basePath( PATHS::GetStockEDALibraryPath(), wxEmptyString );
+
+    wxFileName path( basePath );
+    path.AppendDir( wxT( "modules" ) );
+    addVar( wxT( "KICAD6_FOOTPRINT_DIR" ), path.GetFullPath() );
+
+    path = basePath;
+    path.AppendDir( wxT( "3dmodels" ) );
+    addVar( wxT( "KICAD6_3DMODEL_DIR" ), path.GetFullPath() );
+
+    // We don't have just one default template path, so use this logic that originally was in
+    // PGM_BASE::InitPgm to determine the best default template path
+    {
+        // Attempt to find the best default template path.
+        SEARCH_STACK bases;
+        SEARCH_STACK templatePaths;
+
+        SystemDirsAppend( &bases );
+
+        for( unsigned i = 0; i < bases.GetCount(); ++i )
+        {
+            wxFileName fn( bases[i], wxEmptyString );
+
+            // Add KiCad template file path to search path list.
+            fn.AppendDir( "template" );
+
+            // Only add path if exists and can be read by the user.
+            if( fn.DirExists() && fn.IsDirReadable() )
+            {
+                wxLogTrace( tracePathsAndFiles, "Checking template path '%s' exists",
+                            fn.GetPath() );
+                templatePaths.AddPaths( fn.GetPath() );
+            }
+        }
+
+        if( templatePaths.IsEmpty() )
+        {
+            path = basePath;
+            path.AppendDir( "template" );
+        }
+        else
+        {
+            // Take the first one.  There may be more but this will likely be the best option.
+            path.AssignDir( templatePaths[0] );
+        }
+
+        addVar( wxT( "KICAD6_TEMPLATE_DIR" ), path.GetFullPath() );
+    }
+
+    addVar( wxT( "KICAD_USER_TEMPLATE_DIR" ), PATHS::GetUserTemplatesPath() );
+
+    path = basePath;
+    path.AppendDir( wxT( "library" ) );
+    addVar( wxT( "KICAD6_SYMBOL_DIR" ), path.GetFullPath() );
 }

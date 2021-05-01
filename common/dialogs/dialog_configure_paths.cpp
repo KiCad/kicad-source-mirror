@@ -229,19 +229,17 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
 
     // Environment variables
 
-    ENV_VAR_MAP envVarMap;
+    ENV_VAR_MAP& envVarMap = Pgm().GetLocalEnvVariables();
 
     for( int row = 0; row < m_EnvVars->GetNumberRows(); ++row )
     {
-        wxString     name = m_EnvVars->GetCellValue( row, TV_NAME_COL );
-        wxString     path = m_EnvVars->GetCellValue( row, TV_VALUE_COL );
-        wxString     external = m_EnvVars->GetCellValue( row, TV_FLAG_COL );
-        ENV_VAR_ITEM var( path );
+        wxString name     = m_EnvVars->GetCellValue( row, TV_NAME_COL );
+        wxString path     = m_EnvVars->GetCellValue( row, TV_VALUE_COL );
+        bool     external = !m_EnvVars->GetCellValue( row, TV_FLAG_COL ).IsEmpty();
 
-        if( external.Length() )
+        if( external )
         {
             // Don't check for consistency on external variables, just use them as-is
-            var.SetDefinedExternally( true );
         }
         else if( name.IsEmpty() )
         {
@@ -260,10 +258,13 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
             return false;
         }
 
-        envVarMap[ name ] = var;
+        if( envVarMap.count( name ) )
+            envVarMap.at( name ).SetValue( path );
+        else
+            envVarMap[ name ] = ENV_VAR_ITEM( name, path );
     }
 
-    Pgm().SetLocalEnvVariables( envVarMap );
+    Pgm().SetLocalEnvVariables();
 
     // 3D search paths
 
