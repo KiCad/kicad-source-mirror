@@ -274,12 +274,15 @@ void SIM_PLOT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_Simulator.white_background     = m_plotUseWhiteBg;
     }
 
-    if( m_schematicFrame )
+    if( !m_isNonUserClose )     // If we're exiting the project has already been released.
     {
         PROJECT_FILE& project = Prj().GetProjectFile();
 
-        project.m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
-        m_schematicFrame->SaveProjectSettings();
+        if( project.m_SchematicSettings )
+            project.m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
+
+        if( m_schematicFrame )
+            m_schematicFrame->SaveProjectSettings();
     }
 }
 

@@ -53,6 +53,7 @@
 #include <settings/settings_manager.h>
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
+#include <sim/spice_settings.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
@@ -679,6 +680,9 @@ void SCH_EDIT_FRAME::doCloseWindow()
 
     if( FindHierarchyNavigator() )
         FindHierarchyNavigator()->Close( true );
+
+    if( Kiway().Player( FRAME_SIMULATOR, false ) )
+        Prj().GetProjectFile().m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
 
     SCH_SCREENS screens( Schematic().Root() );
     wxFileName fn;
