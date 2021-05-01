@@ -49,7 +49,7 @@ protected:
     wxPoint              m_end;          // Line end point or circle and arc start point
     wxPoint              m_thirdPoint;   // Used only for Arcs: arc end point
 
-    PCB_SHAPE_TYPE_T     m_shape;        // Shape: line, Circle, Arc
+    PCB_SHAPE_TYPE       m_shape;        // Shape: line, Circle, Arc
     double               m_angle;        // Used only for Arcs: Arc angle in 1/10 deg
     wxPoint              m_bezierC1;     // Bezier Control Point 1
     wxPoint              m_bezierC2;     // Bezier Control Point 2
@@ -97,17 +97,17 @@ public:
     {
         switch( m_shape )
         {
-        case S_RECT:
-        case S_CIRCLE:
-        case S_POLYGON:
+        case PCB_SHAPE_TYPE::RECT:
+        case PCB_SHAPE_TYPE::CIRCLE:
+        case PCB_SHAPE_TYPE::POLYGON:
             return m_filled;
 
-        case S_SEGMENT:
-        case S_ARC:
-        case S_CURVE:
+        case PCB_SHAPE_TYPE::SEGMENT:
+        case PCB_SHAPE_TYPE::ARC:
+        case PCB_SHAPE_TYPE::CURVE:
             return false;
 
-        case S_LAST:        // Make CLang compiler happy
+        case PCB_SHAPE_TYPE::LAST: // Make CLang compiler happy
             return false;
         }
 
@@ -126,8 +126,8 @@ public:
     virtual void SetAngle( double aAngle, bool aUpdateEnd = true );
     double GetAngle() const { return m_angle; }
 
-    void SetShape( PCB_SHAPE_TYPE_T aShape )       { m_shape = aShape; }
-    PCB_SHAPE_TYPE_T GetShape() const              { return m_shape; }
+    void SetShape( PCB_SHAPE_TYPE aShape )          { m_shape = aShape; }
+    PCB_SHAPE_TYPE GetShape() const                 { return m_shape; }
 
     void SetBezControl1( const wxPoint& aPoint )    { m_bezierC1 = aPoint; }
     const wxPoint& GetBezControl1() const           { return m_bezierC1; }

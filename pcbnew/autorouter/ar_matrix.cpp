@@ -777,15 +777,15 @@ void AR_MATRIX::TraceSegmentPcb( PCB_SHAPE* pt_segm, int color, int marge,
 
     switch( pt_segm->GetShape() )
     {
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::CIRCLE:
         traceCircle( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
         break;
 
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         traceArc( ux0, uy0, ux1, uy1, pt_segm->GetAngle(), half_width, layer, color, op_logic );
         break;
 
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::SEGMENT:
         drawSegmentQcq( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
         break;
 

@@ -28,17 +28,17 @@
 #include <board.h>
 #include <string>
 
-wxString BOARD_ITEM::ShowShape( PCB_SHAPE_TYPE_T aShape )
+wxString BOARD_ITEM::ShowShape( PCB_SHAPE_TYPE aShape )
 {
     switch( aShape )
     {
-    case S_SEGMENT:         return _( "Line" );
-    case S_RECT:            return _( "Rect" );
-    case S_ARC:             return _( "Arc" );
-    case S_CIRCLE:          return _( "Circle" );
-    case S_CURVE:           return _( "Bezier Curve" );
-    case S_POLYGON:         return _( "Polygon" );
-    default:                return wxT( "??" );
+    case PCB_SHAPE_TYPE::SEGMENT: return _( "Line" );
+    case PCB_SHAPE_TYPE::RECT:    return _( "Rect" );
+    case PCB_SHAPE_TYPE::ARC:     return _( "Arc" );
+    case PCB_SHAPE_TYPE::CIRCLE:  return _( "Circle" );
+    case PCB_SHAPE_TYPE::CURVE:   return _( "Bezier Curve" );
+    case PCB_SHAPE_TYPE::POLYGON: return _( "Polygon" );
+    default:                      return wxT( "??" );
     }
 }
 

@@ -75,7 +75,8 @@ bool CONVERT_TOOL::Init()
     static KICAD_T convertableTracks[] = { PCB_TRACE_T, PCB_ARC_T, EOT };
     static KICAD_T zones[]  = { PCB_ZONE_T, PCB_FP_ZONE_T, EOT };
 
-    auto graphicLines = P_S_C::OnlyGraphicShapeTypes( { S_SEGMENT, S_RECT, S_CIRCLE } )
+    auto graphicLines = P_S_C::OnlyGraphicShapeTypes( { PCB_SHAPE_TYPE::SEGMENT, PCB_SHAPE_TYPE::RECT,
+                                            PCB_SHAPE_TYPE::CIRCLE } )
                                 && P_S_C::SameLayer();
 
     auto trackLines   = S_C::MoreThan( 1 ) && S_C::OnlyTypes( convertableTracks )
@@ -84,9 +85,11 @@ bool CONVERT_TOOL::Init()
     auto anyLines     = graphicLines || trackLines;
 
     auto anyPolys     = S_C::OnlyTypes( zones )
-                                || P_S_C::OnlyGraphicShapeTypes( { S_POLYGON, S_RECT } );
+                    || P_S_C::OnlyGraphicShapeTypes(
+                            { PCB_SHAPE_TYPE::POLYGON, PCB_SHAPE_TYPE::RECT } );
 
-    auto lineToArc    = S_C::Count( 1 ) && ( P_S_C::OnlyGraphicShapeTypes( { S_SEGMENT } )
+    auto lineToArc = S_C::Count( 1 )
+                     && ( P_S_C::OnlyGraphicShapeTypes( { PCB_SHAPE_TYPE::SEGMENT } )
                                                     || S_C::OnlyType( PCB_TRACE_T ) );
 
     auto showConvert = anyPolys || anyLines || lineToArc;
@@ -127,9 +130,9 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
                     case PCB_FP_SHAPE_T:
                         switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
                         {
-                        case S_SEGMENT:
-                        case S_RECT:
-                        case S_CIRCLE:
+                        case PCB_SHAPE_TYPE::SEGMENT:
+                        case PCB_SHAPE_TYPE::RECT:
+                        case PCB_SHAPE_TYPE::CIRCLE:
                         // case S_ARC: // Not yet
                             break;
 
@@ -185,7 +188,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
         {
             PCB_SHAPE* graphic = isFootprint ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
 
-            graphic->SetShape( S_POLYGON );
+            graphic->SetShape( PCB_SHAPE_TYPE::POLYGON );
             graphic->SetFilled( false );
             graphic->SetWidth( poly.Outline( 0 ).Width() );
             graphic->SetLayer( destLayer );
@@ -341,7 +344,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromRects( const std::deque<EDA_ITEM*>& aI
 
         PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( item );
 
-        if( graphic->GetShape() != S_RECT )
+        if( graphic->GetShape() != PCB_SHAPE_TYPE::RECT )
             continue;
 
         SHAPE_LINE_CHAIN outline;
@@ -374,7 +377,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromCircles( const std::deque<EDA_ITEM*>& 
 
         PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( item );
 
-        if( graphic->GetShape() != S_CIRCLE )
+        if( graphic->GetShape() != PCB_SHAPE_TYPE::CIRCLE )
             continue;
 
         BOARD_DESIGN_SETTINGS& bds = graphic->GetBoard()->GetDesignSettings();
@@ -405,10 +408,10 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                     case PCB_FP_SHAPE_T:
                         switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
                         {
-                        case S_POLYGON:
+                        case PCB_SHAPE_TYPE::POLYGON:
                             break;
 
-                        case S_RECT:
+                        case PCB_SHAPE_TYPE::RECT:
                             break;
 
                         default:
@@ -447,11 +450,11 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 {
                     PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( aItem );
 
-                    if( graphic->GetShape() == S_POLYGON )
+                    if( graphic->GetShape() == PCB_SHAPE_TYPE::POLYGON )
                     {
                         set = graphic->GetPolyShape();
                     }
-                    else if( graphic->GetShape() == S_RECT )
+                    else if( graphic->GetShape() == PCB_SHAPE_TYPE::RECT )
                     {
                         SHAPE_LINE_CHAIN outline;
                         VECTOR2I start( graphic->GetStart() );
@@ -517,7 +520,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
             {
                 if( fpEditor )
                 {
-                    FP_SHAPE* graphic = new FP_SHAPE( footprint, S_SEGMENT );
+                    FP_SHAPE* graphic = new FP_SHAPE( footprint, PCB_SHAPE_TYPE::SEGMENT );
 
                     graphic->SetLayer( layer );
                     graphic->SetStart( wxPoint( seg.A ) );
@@ -530,7 +533,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 {
                     PCB_SHAPE* graphic = new PCB_SHAPE;
 
-                    graphic->SetShape( S_SEGMENT );
+                    graphic->SetShape( PCB_SHAPE_TYPE::SEGMENT );
                     graphic->SetLayer( layer );
                     graphic->SetStart( wxPoint( seg.A ) );
                     graphic->SetEnd( wxPoint( seg.B ) );
@@ -553,7 +556,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 // Creating segments on copper layer
                 for( SEG& seg : segs )
                 {
-                    FP_SHAPE* graphic = new FP_SHAPE( footprint, S_SEGMENT );
+                    FP_SHAPE* graphic = new FP_SHAPE( footprint, PCB_SHAPE_TYPE::SEGMENT );
                     graphic->SetLayer( layer );
                     graphic->SetStart( wxPoint( seg.A ) );
                     graphic->SetStart0( wxPoint( seg.A ) );
@@ -641,7 +644,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
 
         VECTOR2I center = GetArcCenter( start, mid, end );
 
-        arc->SetShape( S_ARC );
+        arc->SetShape( PCB_SHAPE_TYPE::ARC );
         arc->SetFilled( false );
         arc->SetLayer( layer );
         arc->SetWidth( line->GetWidth() );

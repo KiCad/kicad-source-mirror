@@ -1791,14 +1791,14 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
 
         switch( shape->GetShape() )
         {
-        case S_SEGMENT:
-        case S_ARC:
-        case S_CURVE:
+        case PCB_SHAPE_TYPE::SEGMENT:
+        case PCB_SHAPE_TYPE::ARC:
+        case PCB_SHAPE_TYPE::CURVE:
             return shape->GetWidth() * shape->GetWidth();
 
-        case S_RECT:
-        case S_CIRCLE:
-        case S_POLYGON:
+        case PCB_SHAPE_TYPE::RECT:
+        case PCB_SHAPE_TYPE::CIRCLE:
+        case PCB_SHAPE_TYPE::POLYGON:
         {
             if( !shape->IsFilled() )
                 return shape->GetWidth() * shape->GetWidth();

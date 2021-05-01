@@ -155,11 +155,11 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         return false;
 
     // Only an arc has a angle parameter. So do not show this parameter for other shapes
-    if( m_item->GetShape() != S_ARC )
+    if( m_item->GetShape() != PCB_SHAPE_TYPE::ARC )
         m_angle.Show( false );
 
     // Only a Bezeier curve has control points. So do not show these parameters for other shapes
-    if( m_item->GetShape() != S_CURVE )
+    if( m_item->GetShape() != PCB_SHAPE_TYPE::CURVE )
     {
         m_bezierCtrlPt1Label->Show( false );
         m_bezierCtrl1X.Show( false );
@@ -172,7 +172,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
     // Change texts according to the segment shape:
     switch( m_item->GetShape() )
     {
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::CIRCLE:
         SetTitle( _( "Circle Properties" ) );
         m_startPointLabel->SetLabel( _( "Center" ) );
 
@@ -185,25 +185,25 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_filledCtrl->Show( true );
         break;
 
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         SetTitle( _( "Arc Properties" ) );
         m_AngleValue = m_item->GetAngle() / 10.0;
         m_filledCtrl->Show( false );
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         SetTitle( _( "Polygon Properties" ) );
         m_sizerLeft->Show( false );
         m_filledCtrl->Show( true );
         break;
 
-    case S_RECT:
+    case PCB_SHAPE_TYPE::RECT:
         SetTitle( _( "Rectangle Properties" ) );
 
         m_filledCtrl->Show( true );
         break;
 
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::SEGMENT:
         SetTitle( _( "Line Segment Properties" ) );
 
         if( m_item->GetStart().x == m_item->GetEnd().x )
@@ -218,7 +218,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         break;
     }
 
-    if( m_item->GetShape() == S_ARC )
+    if( m_item->GetShape() == PCB_SHAPE_TYPE::ARC )
     {
         m_startX.SetValue( m_item->GetArcStart().x );
         m_startY.SetValue( m_item->GetArcStart().y );
@@ -234,11 +234,11 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_startY.SetValue( m_item->GetStart().y );
     }
 
-    if( m_item->GetShape() == S_CIRCLE )
+    if( m_item->GetShape() == PCB_SHAPE_TYPE::CIRCLE )
     {
         m_endX.SetValue( m_item->GetRadius() );
     }
-    else if( m_item->GetShape() == S_ARC )
+    else if( m_item->GetShape() == PCB_SHAPE_TYPE::ARC )
     {
         m_endX.SetValue( m_item->GetArcEnd().x );
         m_endY.SetValue( m_item->GetArcEnd().y );
@@ -290,7 +290,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     BOARD_COMMIT commit( m_parent );
     commit.Modify( m_item );
 
-    if( m_item->GetShape() == S_ARC )
+    if( m_item->GetShape() == PCB_SHAPE_TYPE::ARC )
     {
         m_item->SetArcStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
     }
@@ -305,11 +305,11 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         m_item->SetStartY( m_startY.GetValue() );
     }
 
-    if( m_item->GetShape() == S_CIRCLE )
+    if( m_item->GetShape() == PCB_SHAPE_TYPE::CIRCLE )
     {
         m_item->SetEnd( m_item->GetStart() + wxPoint( m_endX.GetValue(), 0 ) );
     }
-    else if( m_item->GetShape() == S_ARC )
+    else if( m_item->GetShape() == PCB_SHAPE_TYPE::ARC )
     {
         m_item->SetArcEnd( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
     }
@@ -325,13 +325,13 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     }
 
     // For Bezier curve: Set the two control points
-    if( m_item->GetShape() == S_CURVE )
+    if( m_item->GetShape() == PCB_SHAPE_TYPE::CURVE )
     {
         m_item->SetBezControl1( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue() ) );
         m_item->SetBezControl2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue() ) );
     }
 
-    if( m_item->GetShape() == S_ARC )
+    if( m_item->GetShape() == PCB_SHAPE_TYPE::ARC )
     {
         m_item->SetCenter( GetArcCenter( m_item->GetArcStart(), m_item->GetArcEnd(), m_AngleValue ) );
         m_item->SetAngle( m_AngleValue * 10.0, false );
@@ -343,7 +343,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         m_fp_item->SetStart0( m_fp_item->GetStart() );
         m_fp_item->SetEnd0( m_fp_item->GetEnd() );
 
-        if( m_fp_item->GetShape() == S_CURVE )
+        if( m_fp_item->GetShape() == PCB_SHAPE_TYPE::CURVE )
         {
             m_fp_item->SetBezier0_C1( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue() ) );
             m_fp_item->SetBezier0_C2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue() ) );
@@ -375,28 +375,28 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
     // Type specific checks.
     switch( m_item->GetShape() )
     {
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         // Check angle of arc.
         if( m_angle.GetValue() == 0 )
             error_msgs.Add( _( "The arc angle cannot be zero." ) );
 
         KI_FALLTHROUGH;
 
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::CIRCLE:
         // Check radius.
         if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
             error_msgs.Add( _( "The radius cannot be zero." ) );
         break;
 
-    case S_RECT:
+    case PCB_SHAPE_TYPE::RECT:
         // Check for null rect.
         if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
             error_msgs.Add( _( "The rectangle cannot be empty." ) );
         break;
 
-    case S_POLYGON:
-    case S_SEGMENT:
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::POLYGON:
+    case PCB_SHAPE_TYPE::SEGMENT:
+    case PCB_SHAPE_TYPE::CURVE:
         break;
 
     default:

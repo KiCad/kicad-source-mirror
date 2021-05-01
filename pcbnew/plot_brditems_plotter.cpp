@@ -437,7 +437,7 @@ void BRDITEMS_PLOTTER::PlotDimension( const DIMENSION_BASE* aDim )
         {
             const SEG& seg = static_cast<const SHAPE_SEGMENT*>( shape.get() )->GetSeg();
 
-            draw.SetShape( S_SEGMENT );
+            draw.SetShape( PCB_SHAPE_TYPE::SEGMENT );
             draw.SetStart( wxPoint( seg.A ) );
             draw.SetEnd( wxPoint( seg.B ) );
 
@@ -450,7 +450,7 @@ void BRDITEMS_PLOTTER::PlotDimension( const DIMENSION_BASE* aDim )
             wxPoint start( shape->Centre() );
             int radius = static_cast<const SHAPE_CIRCLE*>( shape.get() )->GetRadius();
 
-            draw.SetShape( S_CIRCLE );
+            draw.SetShape( PCB_SHAPE_TYPE::CIRCLE );
             draw.SetFilled( false );
             draw.SetStart( start );
             draw.SetEnd( wxPoint( start.x + radius, start.y ) );
@@ -477,7 +477,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( const PCB_TARGET* aMire )
 
     PCB_SHAPE draw;
 
-    draw.SetShape( S_CIRCLE );
+    draw.SetShape( PCB_SHAPE_TYPE::CIRCLE );
     draw.SetFilled( false );
     draw.SetWidth( aMire->GetWidth() );
     draw.SetLayer( aMire->GetLayer() );
@@ -492,7 +492,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( const PCB_TARGET* aMire )
 
     PlotPcbShape( &draw );
 
-    draw.SetShape( S_SEGMENT );
+    draw.SetShape( PCB_SHAPE_TYPE::SEGMENT );
 
     radius = aMire->GetSize() / 2;
     dx1    = radius;
@@ -567,11 +567,11 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
 
     switch( aShape->GetShape() )
     {
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::SEGMENT:
         m_plotter->ThickSegment( pos, end, thickness, GetPlotMode(), &gbr_metadata );
         break;
 
-    case S_RECT:
+    case PCB_SHAPE_TYPE::RECT:
     {
         std::vector<wxPoint> pts = aShape->GetRectCorners();
 
@@ -595,7 +595,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
     }
         break;
 
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::CIRCLE:
         radius = KiROUND( GetLineLength( end, pos ) );
 
         if( aShape->IsFilled() )
@@ -605,7 +605,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
 
         break;
 
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
     {
         radius = KiROUND( GetLineLength( end, pos ) );
         double startAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
@@ -624,7 +624,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
     }
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         if( aShape->IsPolyShapeValid() )
         {
             const std::vector<wxPoint> &polyPoints = aShape->BuildPolyPointsList();
@@ -682,7 +682,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
         }
         break;
 
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
         m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezControl1(),
                                 aShape->GetBezControl2(), aShape->GetEnd(), 0, thickness );
         break;
@@ -887,11 +887,11 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 
     switch( aShape->GetShape() )
     {
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::SEGMENT:
         m_plotter->ThickSegment( start, end, thickness, GetPlotMode(), &gbr_metadata );
         break;
 
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::CIRCLE:
         radius = KiROUND( GetLineLength( end, start ) );
 
         if( aShape->IsFilled() )
@@ -901,7 +901,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 
         break;
 
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         radius = KiROUND( GetLineLength( end, start ) );
         StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
         EndAngle = StAngle + aShape->GetAngle();
@@ -918,12 +918,12 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
         }
         break;
 
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
         m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezControl1(),
                                 aShape->GetBezControl2(), aShape->GetEnd(), 0, thickness );
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         if( aShape->IsPolyShapeValid() )
         {
             if( sketch || thickness > 0 )
@@ -956,7 +956,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
         }
         break;
 
-    case S_RECT:
+    case PCB_SHAPE_TYPE::RECT:
     {
         std::vector<wxPoint> pts = aShape->GetRectCorners();
 

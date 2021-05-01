@@ -227,7 +227,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             else
                 poly = new PCB_SHAPE();
 
-            poly->SetShape( S_POLYGON );
+            poly->SetShape( PCB_SHAPE_TYPE::POLYGON );
 
             if( layer == Edge_Cuts || layer == F_CrtYd || layer == B_CrtYd )
                 poly->SetFilled( false );

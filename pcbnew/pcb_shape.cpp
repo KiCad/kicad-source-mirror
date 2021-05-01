@@ -49,7 +49,7 @@ PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T idtype ) :
     m_angle = 0;
     m_filled = false;
     m_flags = 0;
-    m_shape = S_SEGMENT;
+    m_shape = PCB_SHAPE_TYPE::SEGMENT;
     m_width = Millimeter2iu( DEFAULT_LINE_WIDTH );
 }
 
@@ -67,7 +67,7 @@ void PCB_SHAPE::SetPosition( const wxPoint& aPos )
 
 wxPoint PCB_SHAPE::GetPosition() const
 {
-    if( m_shape == S_POLYGON )
+    if( m_shape == PCB_SHAPE_TYPE::POLYGON )
         return (wxPoint) m_poly.CVertex( 0 );
     else
         return m_start;
@@ -80,23 +80,23 @@ double PCB_SHAPE::GetLength() const
 
     switch( m_shape )
     {
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
         for( size_t ii = 1; ii < m_bezierPoints.size(); ++ii )
             length += GetLineLength( m_bezierPoints[ ii - 1], m_bezierPoints[ii] );
 
         break;
 
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::SEGMENT:
         length = GetLineLength( GetStart(), GetEnd() );
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         for( int ii = 0; ii < m_poly.COutline( 0 ).SegmentCount(); ii++ )
             length += m_poly.COutline( 0 ).CSegment( ii ).Length();
 
         break;
 
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         length = 2 * M_PI * GetRadius() * ( GetAngle() / 3600.0 );
         break;
 
@@ -114,7 +114,7 @@ void PCB_SHAPE::Move( const wxPoint& aMoveVector )
 {
     // Move vector should not affect start/end for polygon since it will
     // be applied directly to polygon outline.
-    if( m_shape != S_POLYGON )
+    if( m_shape != PCB_SHAPE_TYPE::POLYGON )
     {
         m_start += aMoveVector;
         m_end += aMoveVector;
@@ -122,15 +122,15 @@ void PCB_SHAPE::Move( const wxPoint& aMoveVector )
 
     switch ( m_shape )
     {
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         m_poly.Move( VECTOR2I( aMoveVector ) );
         break;
 
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         m_thirdPoint += aMoveVector;
         break;
 
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
         m_bezierC1 += aMoveVector;
         m_bezierC2 += aMoveVector;
 
@@ -161,21 +161,21 @@ void PCB_SHAPE::Scale( double aScale )
     // specific parameters:
     switch( m_shape )
     {
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
         scalePt( m_bezierC1 );
         scalePt( m_bezierC2 );
         break;
 
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         scalePt( m_thirdPoint );
         break;
 
-    case S_CIRCLE:          //  ring or circle
+    case PCB_SHAPE_TYPE::CIRCLE: //  ring or circle
         m_end.x = m_start.x + KiROUND( radius * aScale );
         m_end.y = m_start.y;
         break;
 
-    case S_POLYGON:         // polygon
+    case PCB_SHAPE_TYPE::POLYGON: // polygon
     {
         std::vector<wxPoint> pts;
 
@@ -199,16 +199,16 @@ void PCB_SHAPE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     switch( m_shape )
     {
-    case S_ARC:
-    case S_SEGMENT:
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::ARC:
+    case PCB_SHAPE_TYPE::SEGMENT:
+    case PCB_SHAPE_TYPE::CIRCLE:
         // these can all be done by just rotating the constituent points
         RotatePoint( &m_start, aRotCentre, aAngle );
         RotatePoint( &m_end, aRotCentre, aAngle );
         RotatePoint( &m_thirdPoint, aRotCentre, aAngle );
         break;
 
-    case S_RECT:
+    case PCB_SHAPE_TYPE::RECT:
         if( KiROUND( aAngle ) % 900 == 0 )
         {
             RotatePoint( &m_start, aRotCentre, aAngle );
@@ -217,7 +217,7 @@ void PCB_SHAPE::Rotate( const wxPoint& aRotCentre, double aAngle )
         }
 
         // Convert non-cartesian-rotated rect to a diamond
-        m_shape = S_POLYGON;
+        m_shape = PCB_SHAPE_TYPE::POLYGON;
         m_poly.RemoveAllContours();
         m_poly.NewOutline();
         m_poly.Append( m_start );
@@ -227,11 +227,11 @@ void PCB_SHAPE::Rotate( const wxPoint& aRotCentre, double aAngle )
 
         KI_FALLTHROUGH;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         m_poly.Rotate( -DECIDEG2RAD( aAngle ), VECTOR2I( aRotCentre ) );
         break;
 
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
         RotatePoint( &m_start, aRotCentre, aAngle);
         RotatePoint( &m_end, aRotCentre, aAngle);
         RotatePoint( &m_bezierC1, aRotCentre, aAngle);
@@ -265,7 +265,7 @@ void PCB_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 
     switch ( m_shape )
     {
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         if( aFlipLeftRight )
             m_thirdPoint.x   = aCentre.x - ( m_thirdPoint.x - aCentre.x );
         else
@@ -274,11 +274,11 @@ void PCB_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         m_angle = -m_angle;
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         m_poly.Mirror( aFlipLeftRight, !aFlipLeftRight, VECTOR2I( aCentre ) );
         break;
 
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
         {
             if( aFlipLeftRight )
             {
@@ -298,9 +298,9 @@ void PCB_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         }
         break;
 
-    case S_SEGMENT:
-    case S_RECT:
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::SEGMENT:
+    case PCB_SHAPE_TYPE::RECT:
+    case PCB_SHAPE_TYPE::CIRCLE:
         break;
 
     default:
@@ -316,7 +316,7 @@ void PCB_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 void PCB_SHAPE::RebuildBezierToSegmentsPointsList( int aMinSegLen )
 {
     // Has meaning only for S_CURVE DRAW_SEGMENT shape
-    if( m_shape != S_CURVE )
+    if( m_shape != PCB_SHAPE_TYPE::CURVE )
     {
         m_bezierPoints.clear();
         return;
@@ -345,19 +345,19 @@ wxPoint PCB_SHAPE::GetCenter() const
 
     switch( m_shape )
     {
-    case S_ARC:
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::ARC:
+    case PCB_SHAPE_TYPE::CIRCLE:
         c = m_start;
         break;
 
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::SEGMENT:
         // Midpoint of the line
         c = ( GetStart() + GetEnd() ) / 2;
         break;
 
-    case S_POLYGON:
-    case S_RECT:
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::POLYGON:
+    case PCB_SHAPE_TYPE::RECT:
+    case PCB_SHAPE_TYPE::CURVE:
         c = GetBoundingBox().Centre();
         break;
 
@@ -377,7 +377,7 @@ wxPoint PCB_SHAPE::GetArcEnd() const
 
     switch( m_shape )
     {
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         endPoint = m_thirdPoint;
         break;
 
@@ -395,7 +395,7 @@ wxPoint PCB_SHAPE::GetArcMid() const
 
     switch( m_shape )
     {
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         // rotate the starting point of the arc, given by m_End, through half
         // the angle m_Angle to get the middle of the arc.
         // m_Start is the arc centre
@@ -500,14 +500,14 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     switch( m_shape )
     {
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::CIRCLE:
         aList.emplace_back( shape, _( "Circle" ) );
 
         msg = MessageTextFromValue( units, GetLineLength( m_start, m_end ) );
         aList.emplace_back( _( "Radius" ), msg );
         break;
 
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         aList.emplace_back( shape, _( "Arc" ) );
 
         msg.Printf( wxT( "%.1f" ), m_angle / 10.0 );
@@ -517,21 +517,21 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
         aList.emplace_back( _( "Radius" ), msg );
         break;
 
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
         aList.emplace_back( shape, _( "Curve" ) );
 
         msg = MessageTextFromValue( units, GetLength() );
         aList.emplace_back( _( "Length" ), msg );
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         aList.emplace_back( shape, _( "Polygon" ) );
 
         msg.Printf( "%d", GetPolyShape().Outline(0).PointCount() );
         aList.emplace_back( _( "Points" ), msg );
         break;
 
-    case S_RECT:
+    case PCB_SHAPE_TYPE::RECT:
         aList.emplace_back( shape, _( "Rectangle" ) );
 
         msg = MessageTextFromValue( units, std::abs( m_end.x - m_start.x ) );
@@ -541,7 +541,7 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
         aList.emplace_back( _( "Height" ), msg );
         break;
 
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::SEGMENT:
     {
         aList.emplace_back( shape, _( "Segment" ) );
 
@@ -574,7 +574,7 @@ const EDA_RECT PCB_SHAPE::GetBoundingBox() const
 
     switch( m_shape )
     {
-    case S_RECT:
+    case PCB_SHAPE_TYPE::RECT:
     {
         std::vector<wxPoint> pts = GetRectCorners();
 
@@ -585,19 +585,19 @@ const EDA_RECT PCB_SHAPE::GetBoundingBox() const
     }
         break;
 
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::SEGMENT:
         bbox.SetEnd( m_end );
         break;
 
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::CIRCLE:
         bbox.Inflate( GetRadius() );
         break;
 
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         computeArcBBox( bbox );
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
     {
         if( m_poly.IsEmpty() )
             break;
@@ -620,7 +620,7 @@ const EDA_RECT PCB_SHAPE::GetBoundingBox() const
     }
         break;
 
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
         bbox.Merge( m_bezierC1 );
         bbox.Merge( m_bezierC2 );
         bbox.Merge( m_end );
@@ -645,7 +645,7 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
     switch( m_shape )
     {
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::CIRCLE:
     {
         int radius = GetRadius();
         int dist   = KiROUND( EuclideanNorm( aPosition - GetCenter() ) );
@@ -663,7 +663,7 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     }
         break;
 
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
     {
         wxPoint relPos = aPosition - GetCenter();
         int radius = GetRadius();
@@ -703,7 +703,7 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     }
         break;
 
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
         const_cast<PCB_SHAPE*>( this )->RebuildBezierToSegmentsPointsList( m_width );
 
         for( unsigned int i= 1; i < m_bezierPoints.size(); i++)
@@ -714,13 +714,13 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
         break;
 
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::SEGMENT:
         if( TestSegmentHit( aPosition, m_start, m_end, maxdist ) )
             return true;
 
         break;
 
-    case S_RECT:
+    case PCB_SHAPE_TYPE::RECT:
     {
         std::vector<wxPoint> pts = GetRectCorners();
 
@@ -748,7 +748,7 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     }
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         if( IsFilled() )
         {
             return m_poly.Collide( VECTOR2I( aPosition ), maxdist );
@@ -782,7 +782,7 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 
     switch( m_shape )
     {
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::CIRCLE:
         // Test if area intersects or contains the circle:
         if( aContained )
             return arect.Contains( bb );
@@ -800,7 +800,7 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
         }
         break;
 
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         // Test for full containment of this arc in the rect
         if( aContained )
         {
@@ -820,7 +820,7 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
         }
         break;
 
-    case S_RECT:
+    case PCB_SHAPE_TYPE::RECT:
         if( aContained )
         {
             return arect.Contains( bb );
@@ -839,7 +839,7 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 
         break;
 
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::SEGMENT:
         if( aContained )
         {
             return arect.Contains( GetStart() ) && aRect.Contains( GetEnd() );
@@ -853,7 +853,7 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         if( aContained )
         {
             return arect.Contains( bb );
@@ -885,7 +885,7 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
         }
         break;
 
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
         if( aContained )
         {
             return arect.Contains( bb );
@@ -952,7 +952,7 @@ const BOX2I PCB_SHAPE::ViewBBox() const
 {
     // For arcs - do not include the center point in the bounding box,
     // it is redundant for displaying an arc
-    if( m_shape == S_ARC )
+    if( m_shape == PCB_SHAPE_TYPE::ARC )
     {
         EDA_RECT bbox;
         bbox.SetOrigin( m_end );
@@ -1089,16 +1089,16 @@ std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
 
     switch( m_shape )
     {
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         effectiveShapes.emplace_back( new SHAPE_ARC( GetCenter(), GetArcStart(),
                                                      GetAngle() / 10.0, m_width ) );
         break;
 
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::SEGMENT:
         effectiveShapes.emplace_back( new SHAPE_SEGMENT( GetStart(), GetEnd(), m_width ) );
         break;
 
-    case S_RECT:
+    case PCB_SHAPE_TYPE::RECT:
     {
         std::vector<wxPoint> pts = GetRectCorners();
 
@@ -1117,7 +1117,7 @@ std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
     }
         break;
 
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::CIRCLE:
     {
         if( IsFilled() )
         {
@@ -1140,7 +1140,7 @@ std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
         break;
     }
 
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
     {
         auto bezierPoints = buildBezierToSegmentsPointsList( GetWidth() );
         wxPoint start_pt = bezierPoints[0];
@@ -1155,7 +1155,7 @@ std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
         break;
     }
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
     {
         SHAPE_LINE_CHAIN l = GetPolyShape().COutline( 0 );
         FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_parent );

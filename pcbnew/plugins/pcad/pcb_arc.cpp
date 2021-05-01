@@ -160,7 +160,8 @@ void PCB_ARC::AddToFootprint( FOOTPRINT* aFootprint )
 {
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {
-        FP_SHAPE* arc = new FP_SHAPE( aFootprint, ( IsCircle() ? S_CIRCLE : S_ARC ) );
+        FP_SHAPE* arc = new FP_SHAPE(
+                aFootprint, ( IsCircle() ? PCB_SHAPE_TYPE::CIRCLE : PCB_SHAPE_TYPE::ARC ) );
         aFootprint->Add( arc );
 
         arc->m_Start0   = wxPoint( m_positionX, m_positionY );
@@ -184,7 +185,7 @@ void PCB_ARC::AddToBoard()
 
     m_board->Add( arc, ADD_MODE::APPEND );
 
-    arc->SetShape( IsCircle() ? S_CIRCLE : S_ARC );
+    arc->SetShape( IsCircle() ? PCB_SHAPE_TYPE::CIRCLE : PCB_SHAPE_TYPE::ARC );
     arc->SetFilled( false );
     arc->SetLayer( m_KiCadLayer );
     arc->SetStart( wxPoint( m_positionX, m_positionY ) );

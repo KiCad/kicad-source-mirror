@@ -37,7 +37,7 @@
 #include <view/view.h>
 
 
-FP_SHAPE::FP_SHAPE( FOOTPRINT* parent, PCB_SHAPE_TYPE_T aShape ) :
+FP_SHAPE::FP_SHAPE( FOOTPRINT* parent, PCB_SHAPE_TYPE aShape ) :
         PCB_SHAPE( parent, PCB_FP_SHAPE_T )
 {
     m_shape = aShape;
@@ -161,15 +161,15 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 
     switch( GetShape() )
     {
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         // Update arc angle but do not yet update m_ThirdPoint0 and m_thirdPoint,
         // arc center and start point must be updated before calculation arc end.
         SetAngle( -GetAngle(), false );
         KI_FALLTHROUGH;
 
     default:
-    case S_SEGMENT:
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::SEGMENT:
+    case PCB_SHAPE_TYPE::CURVE:
         // If Start0 and Start are equal (ie: Footprint Editor), then flip both sets around the
         // centre point.
         if( m_start == m_Start0 )
@@ -205,7 +205,7 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         RebuildBezierToSegmentsPointsList( m_width );
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         // polygon corners coordinates are relative to the footprint position, orientation 0
         m_poly.Mirror( aFlipLeftRight, !aFlipLeftRight );
         break;
@@ -228,15 +228,15 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
 
     switch( GetShape() )
     {
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         // Update arc angle but do not yet update m_ThirdPoint0 and m_thirdPoint,
         // arc center and start point must be updated before calculation arc end.
         SetAngle( -GetAngle(), false );
         KI_FALLTHROUGH;
 
     default:
-    case S_CURVE:
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::CURVE:
+    case PCB_SHAPE_TYPE::SEGMENT:
         if( aMirrorAroundXAxis )
         {
             MIRROR( m_Start0.y, aCentre.y );
@@ -264,7 +264,7 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
 
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         // polygon corners coordinates are always relative to the
         // footprint position, orientation 0
         m_poly.Mirror( !aMirrorAroundXAxis, aMirrorAroundXAxis );
@@ -301,7 +301,7 @@ void FP_SHAPE::Move( const wxPoint& aMoveVector )
     default:
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         // polygon corners coordinates are always relative to the
         // footprint position, orientation 0
         m_poly.Move( VECTOR2I( aMoveVector ) );

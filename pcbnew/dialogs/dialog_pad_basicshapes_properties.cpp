@@ -75,7 +75,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
 
     switch( m_shape->GetShape() )
     {
-    case S_SEGMENT:         // Segment with rounded ends
+    case PCB_SHAPE_TYPE::SEGMENT: // Segment with rounded ends
         SetTitle( _( "Segment" ) );
         m_startX.SetValue( m_shape->GetStart().x );
         m_startY.SetValue( m_shape->GetStart().y );
@@ -93,7 +93,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_filledCtrl->Show( false );
         break;
 
-    case S_CURVE:         // Bezier line
+    case PCB_SHAPE_TYPE::CURVE: // Bezier line
         SetTitle( _( "Bezier" ) );
         m_startX.SetValue( m_shape->GetStart().x );
         m_startY.SetValue( m_shape->GetStart().y );
@@ -107,7 +107,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_filledCtrl->Show( false );
         break;
 
-    case S_ARC:             // Arc with rounded ends
+    case PCB_SHAPE_TYPE::ARC: // Arc with rounded ends
         SetTitle( _( "Arc" ) );
         m_startX.SetValue( m_shape->GetEnd().x );     // confusingly, the start point of the arc
         m_startY.SetValue( m_shape->GetEnd().y );
@@ -128,7 +128,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_filledCtrl->Show( false );
         break;
 
-    case S_CIRCLE:          //  ring or circle
+    case PCB_SHAPE_TYPE::CIRCLE: //  ring or circle
         if( m_shape->GetWidth() )
             SetTitle( _( "Ring" ) );
         else
@@ -155,7 +155,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_filledCtrl->Show( true );
         break;
 
-    case S_POLYGON:         // polygon
+    case PCB_SHAPE_TYPE::POLYGON: // polygon
         // polygon has a specific dialog editor. So nothing here
         break;
 
@@ -182,19 +182,19 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
 
     switch( m_shape->GetShape() )
     {
-    case S_SEGMENT:         // Segment with rounded ends
+    case PCB_SHAPE_TYPE::SEGMENT: // Segment with rounded ends
         m_shape->SetStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
         m_shape->SetEnd( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
         break;
 
-    case S_CURVE:         // Segment with rounded ends
+    case PCB_SHAPE_TYPE::CURVE: // Segment with rounded ends
         m_shape->SetStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
         m_shape->SetEnd( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
         m_shape->SetBezControl1( wxPoint( m_ctrl1X.GetValue(), m_ctrl1Y.GetValue() ) );
         m_shape->SetBezControl1( wxPoint( m_ctrl2X.GetValue(), m_ctrl2Y.GetValue() ) );
         break;
 
-    case S_ARC:             // Arc with rounded ends
+    case PCB_SHAPE_TYPE::ARC: // Arc with rounded ends
         // NB: we store the center of the arc in m_Start, and, confusingly,
         // the start point in m_End
         m_shape->SetStart( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
@@ -203,12 +203,12 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
         m_shape->SetAngle( m_radius.GetValue() );
         break;
 
-    case S_CIRCLE:          //  ring or circle
+    case PCB_SHAPE_TYPE::CIRCLE: //  ring or circle
         m_shape->SetStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
         m_shape->SetEnd( m_shape->GetStart() + wxPoint( m_radius.GetValue(), 0 ) );
         break;
 
-    case S_POLYGON:         // polygon
+    case PCB_SHAPE_TYPE::POLYGON: // polygon
         // polygon has a specific dialog editor. So nothing here
         break;
 

@@ -45,29 +45,29 @@ class PCB_GROUP;
 /**
  * The set of shapes for PCB graphics and tracks and footprint graphics in the .m_Shape member
  */
-enum PCB_SHAPE_TYPE_T
+enum class PCB_SHAPE_TYPE : int
 {
-    S_SEGMENT = 0,  ///< usual segment : line with rounded ends
-    S_RECT,         ///< segment with non rounded ends
-    S_ARC,          ///< Arcs (with rounded ends)
-    S_CIRCLE,       ///< ring
-    S_POLYGON,      ///< polygon (not yet used for tracks, but could be in microwave apps)
-    S_CURVE,        ///< Bezier Curve
-    S_LAST          ///< last value for this list
+    SEGMENT = 0,  ///< usual segment : line with rounded ends
+    RECT,         ///< segment with non rounded ends
+    ARC,          ///< Arcs (with rounded ends)
+    CIRCLE,       ///< ring
+    POLYGON,      ///< polygon (not yet used for tracks, but could be in microwave apps)
+    CURVE,        ///< Bezier Curve
+    LAST          ///< last value for this list
 };
 
-static inline wxString PCB_SHAPE_TYPE_T_asString( PCB_SHAPE_TYPE_T a )
+static inline wxString PCB_SHAPE_TYPE_T_asString( PCB_SHAPE_TYPE a )
 {
     switch( a )
     {
-    case S_SEGMENT: return "S_SEGMENT";
-    case S_RECT:    return "S_RECT";
-    case S_ARC:     return "S_ARC";
-    case S_CIRCLE:  return "S_CIRCLE";
-    case S_POLYGON: return "S_POLYGON";
-    case S_CURVE:   return "S_CURVE";
-    case S_LAST:    return "S_LAST";    // Synthetic value, but if we come across it we're
-                                        // going to want to know.
+    case PCB_SHAPE_TYPE::SEGMENT: return "S_SEGMENT";
+    case PCB_SHAPE_TYPE::RECT:    return "S_RECT";
+    case PCB_SHAPE_TYPE::ARC:     return "S_ARC";
+    case PCB_SHAPE_TYPE::CIRCLE:  return "S_CIRCLE";
+    case PCB_SHAPE_TYPE::POLYGON: return "S_POLYGON";
+    case PCB_SHAPE_TYPE::CURVE:   return "S_CURVE";
+    case PCB_SHAPE_TYPE::LAST:    return "S_LAST";    // Synthetic value, but if we come across it we're
+                                                      // going to want to know.
     }
 
     return wxEmptyString;  // Just to quiet GCC.
@@ -267,7 +267,7 @@ public:
     /**
      * Convert the enum #PCB_SHAPE_TYPE_T integer value to a wxString.
      */
-    static wxString ShowShape( PCB_SHAPE_TYPE_T aShape );
+    static wxString ShowShape( PCB_SHAPE_TYPE aShape );
 
     /**
      * Move this object.

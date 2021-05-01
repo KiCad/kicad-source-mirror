@@ -1618,15 +1618,15 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
 
 void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
 {
-    PCB_SHAPE_TYPE_T shape;
+    PCB_SHAPE_TYPE shape;
     char*            line = m_reader->Line();     // obtain current (old) line
 
     switch( line[1] )
     {
-    case 'S':   shape = S_SEGMENT;   break;
-    case 'C':   shape = S_CIRCLE;    break;
-    case 'A':   shape = S_ARC;       break;
-    case 'P':   shape = S_POLYGON;   break;
+    case 'S': shape = PCB_SHAPE_TYPE::SEGMENT; break;
+    case 'C': shape = PCB_SHAPE_TYPE::CIRCLE; break;
+    case 'A': shape = PCB_SHAPE_TYPE::ARC; break;
+    case 'P': shape = PCB_SHAPE_TYPE::POLYGON; break;
     default:
         m_error.Printf( _( "Unknown FP_SHAPE type:'%c=0x%02x' on line:%d of footprint:\"%s\"" ),
                         (unsigned char) line[1],
@@ -1647,7 +1647,7 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
 
     switch( shape )
     {
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         {
             BIU     start0_x = biuParse( line + SZ( "DA" ), &data );
             BIU     start0_y = biuParse( data, &data );
@@ -1667,8 +1667,8 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
         }
         break;
 
-    case S_SEGMENT:
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::SEGMENT:
+        case PCB_SHAPE_TYPE::CIRCLE:
         {
             // e.g. "DS -7874 -10630 7874 -10630 50 20\r\n"
             BIU     start0_x = biuParse( line + SZ( "DS" ), &data );
@@ -1684,7 +1684,7 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
         }
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
         {
             // e.g. "DP %d %d %d %d %d %d %d\n"
             BIU start0_x = biuParse( line + SZ( "DP" ), &data );
@@ -1923,7 +1923,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
             if( width < 0 )
                 width = 0;
 
-            dseg->SetShape( PCB_SHAPE_TYPE_T( shape ) );
+            dseg->SetShape( static_cast<PCB_SHAPE_TYPE>( shape ) );
             dseg->SetFilled( false );
             dseg->SetWidth( width );
             dseg->SetStart( wxPoint( start_x, start_y ) );

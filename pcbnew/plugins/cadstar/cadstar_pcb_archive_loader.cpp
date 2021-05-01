@@ -1104,7 +1104,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
                                                        ERROR_LOC::ERROR_INSIDE );
 
             PCB_SHAPE* padShape = new PCB_SHAPE;
-            padShape->SetShape( S_POLYGON );
+            padShape->SetShape( PCB_SHAPE_TYPE::POLYGON );
             padShape->SetFilled( true );
             padShape->SetPolyShape( padOutline );
             padShape->SetWidth( 0 );
@@ -1967,7 +1967,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
                 {
                     SHAPE_POLY_SET segment;
 
-                    if( seg->GetShape() == PCB_SHAPE_TYPE_T::S_ARC )
+                    if( seg->GetShape() == PCB_SHAPE_TYPE::ARC )
                     {
                         TransformArcToPolygon( segment, seg->GetStart(), seg->GetArcMid(),
                                                seg->GetEnd(), copperWidth, ARC_HIGH_DEF,
@@ -2607,12 +2607,12 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
 
         if( isFootprint( aContainer ) )
         {
-            shape = new FP_SHAPE( (FOOTPRINT*) aContainer, S_POLYGON );
+            shape = new FP_SHAPE( (FOOTPRINT*) aContainer, PCB_SHAPE_TYPE::POLYGON );
         }
         else
         {
             shape = new PCB_SHAPE( aContainer );
-            shape->SetShape( S_POLYGON );
+            shape->SetShape( PCB_SHAPE_TYPE::POLYGON );
         }
 
         shape->SetFilled( true );
@@ -2734,12 +2734,12 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aC
 
         if( isFootprint( aContainer ) )
         {
-            ds = new FP_SHAPE( static_cast<FOOTPRINT*>( aContainer ), S_SEGMENT );
+            ds = new FP_SHAPE( static_cast<FOOTPRINT*>( aContainer ), PCB_SHAPE_TYPE::SEGMENT );
         }
         else
         {
             ds = new PCB_SHAPE( aContainer );
-            ds->SetShape( S_SEGMENT );
+            ds->SetShape( PCB_SHAPE_TYPE::SEGMENT );
         }
 
         ds->SetStart( startPoint );
@@ -2756,12 +2756,12 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aC
 
         if( isFootprint( aContainer ) )
         {
-            ds = new FP_SHAPE((FOOTPRINT*) aContainer, S_ARC );
+            ds = new FP_SHAPE( (FOOTPRINT*) aContainer, PCB_SHAPE_TYPE::ARC );
         }
         else
         {
             ds = new PCB_SHAPE( aContainer );
-            ds->SetShape( S_ARC );
+            ds->SetShape( PCB_SHAPE_TYPE::ARC );
         }
 
         ds->SetArcStart( startPoint );
@@ -2904,7 +2904,7 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments( const
     {
         switch( ds->GetShape() )
         {
-        case S_ARC:
+        case PCB_SHAPE_TYPE::ARC:
         {
             if( ds->GetClass() == wxT( "MGRAPHIC" ) )
             {
@@ -2919,7 +2919,7 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments( const
             }
         }
         break;
-        case S_SEGMENT:
+        case PCB_SHAPE_TYPE::SEGMENT:
             if( ds->GetClass() == wxT( "MGRAPHIC" ) )
             {
                 FP_SHAPE* em = (FP_SHAPE*) ds;
@@ -2985,7 +2985,7 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
     {
         switch( ds->GetShape() )
         {
-        case S_ARC:
+        case PCB_SHAPE_TYPE::ARC:
             if( ds->GetClass() == wxT( "MGRAPHIC" ) )
             {
                 FP_SHAPE* em = (FP_SHAPE*) ds;
@@ -2998,7 +2998,7 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
                 track = new ARC( aParentContainer, &arc );
             }
             break;
-        case S_SEGMENT:
+        case PCB_SHAPE_TYPE::SEGMENT:
             if( ds->GetClass() == wxT( "MGRAPHIC" ) )
             {
                 FP_SHAPE* em = (FP_SHAPE*) ds;

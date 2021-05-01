@@ -522,7 +522,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
             switch( shape->GetShape() )
             {
-                case S_CIRCLE:
+                case PCB_SHAPE_TYPE::CIRCLE:
                 {
                     int r = ( start - end ).EuclideanNorm();
 
@@ -534,14 +534,14 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     break;
                 }
 
-                case S_ARC:
+                case PCB_SHAPE_TYPE::ARC:
                     addAnchor( shape->GetArcStart(), CORNER | SNAPPABLE, shape );
                     addAnchor( shape->GetArcEnd(), CORNER | SNAPPABLE, shape );
                     addAnchor( shape->GetArcMid(), CORNER | SNAPPABLE, shape );
                     addAnchor( shape->GetCenter(), ORIGIN | SNAPPABLE, shape );
                     break;
 
-                case S_RECT:
+                case PCB_SHAPE_TYPE::RECT:
                 {
                     VECTOR2I point2( end.x, start.y );
                     VECTOR2I point3( start.x, end.y );
@@ -561,13 +561,13 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     break;
                 }
 
-                case S_SEGMENT:
+                case PCB_SHAPE_TYPE::SEGMENT:
                     addAnchor( start, CORNER | SNAPPABLE, shape );
                     addAnchor( end, CORNER | SNAPPABLE, shape );
                     addAnchor( shape->GetCenter(), CORNER | SNAPPABLE, shape );
                     break;
 
-                case S_POLYGON:
+                case PCB_SHAPE_TYPE::POLYGON:
                 {
                     SHAPE_LINE_CHAIN lc;
                     lc.SetClosed( true );
@@ -582,7 +582,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     break;
                 }
 
-                case S_CURVE:
+                case PCB_SHAPE_TYPE::CURVE:
                     addAnchor( start, CORNER | SNAPPABLE, shape );
                     addAnchor( end, CORNER | SNAPPABLE, shape );
                     KI_FALLTHROUGH;

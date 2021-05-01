@@ -1247,7 +1247,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
     switch( aShape->GetShape() )
     {
-    case S_SEGMENT:
+    case PCB_SHAPE_TYPE::SEGMENT:
         if( sketch )
         {
             m_gal->DrawSegment( start, end, thickness );
@@ -1261,7 +1261,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         }
         break;
 
-    case S_RECT:
+    case PCB_SHAPE_TYPE::RECT:
     {
         std::vector<wxPoint> pts = aShape->GetRectCorners();
 
@@ -1299,7 +1299,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     }
         break;
 
-    case S_ARC:
+    case PCB_SHAPE_TYPE::ARC:
         if( sketch )
         {
             m_gal->DrawArcSegment( start, aShape->GetRadius(),
@@ -1319,7 +1319,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         }
         break;
 
-    case S_CIRCLE:
+    case PCB_SHAPE_TYPE::CIRCLE:
         if( sketch )
         {
             m_gal->DrawCircle( start, aShape->GetRadius() - thickness / 2 );
@@ -1335,7 +1335,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         }
         break;
 
-    case S_POLYGON:
+    case PCB_SHAPE_TYPE::POLYGON:
     {
         SHAPE_POLY_SET&  shape = const_cast<PCB_SHAPE*>( aShape )->GetPolyShape();
         const FOOTPRINT* parentFootprint = aShape->GetParentFootprint();
@@ -1390,7 +1390,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     }
         break;
 
-    case S_CURVE:
+    case PCB_SHAPE_TYPE::CURVE:
         if( sketch )
         {
             // Use thickness as filter value to convert the curve to polyline when the curve
@@ -1415,7 +1415,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         }
         break;
 
-    case S_LAST:
+    case PCB_SHAPE_TYPE::LAST:
         break;
     }
 }
