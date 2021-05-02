@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-12 11:06-0700\n"
-"PO-Revision-Date: 2021-04-26 10:31+0000\n"
+"PO-Revision-Date: 2021-05-03 07:06+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -17993,9 +17993,8 @@ msgid "Opens the directory in the default system file manager"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:727
-#, fuzzy
 msgid "Reveals the directories in a Finder window"
-msgstr "Otevřít adresář projektu Průzkumníku souborů"
+msgstr "Zobrazení adresáře projektu v Správci souborů"
 
 #: kicad/project_tree_pane.cpp:729
 msgid "Open Directories in File Explorer"
@@ -18064,9 +18063,8 @@ msgid "Are you sure you want to delete %lu items?"
 msgstr "Opravdu chcete smazat %lu položek?"
 
 #: kicad/project_tree_pane.cpp:844
-#, fuzzy
 msgid "Delete Multiple Items"
-msgstr "Odstranit položky, na které jste klikli"
+msgstr "Smazat několik prvků"
 
 #: kicad/project_tree_pane.cpp:876
 #, c-format
@@ -18718,9 +18716,8 @@ msgid "Append an existing drawing sheet file to current file"
 msgstr "Nelze zapsat nárvh rozložení stánky"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
-#, fuzzy
 msgid "Show Design Inspector"
-msgstr "&Zobrazit informace o verzi"
+msgstr "Zobrazit inspektora návrhu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show the list of items in page layout"
@@ -18731,14 +18728,12 @@ msgid "Page Preview Settings..."
 msgstr "Nastavení náhledu stránky..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
-#, fuzzy
 msgid "Edit preview data for page size and title block"
-msgstr "Tisk listu &reference a název bloku"
+msgstr "Úprava dat náhledu pro velikost stránky a pole písma"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
-#, fuzzy
 msgid "Show title block in preview mode"
-msgstr "Zobrazit spoje jako obrys"
+msgstr "Zobrazit název bloku v režimu náhledu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
@@ -18749,9 +18744,8 @@ msgstr ""
 "textové zástupné symboly budou nahrazeny s náhledem dat."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
-#, fuzzy
 msgid "Show title block in edit mode"
-msgstr "Zobrazit spoje jako obrys"
+msgstr "Zobrazit pole písma v režimu úprav"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
@@ -20339,9 +20333,8 @@ msgid "Plated board edge"
 msgstr "Pokovené okraje desky"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
-#, fuzzy
 msgid "Copper finish:"
-msgstr "Měď:"
+msgstr "Povrch mědi:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
@@ -20666,14 +20659,12 @@ msgid "Remove duplicate track"
 msgstr "Smazat duplicitní spoje"
 
 #: pcbnew/cleanup_item.cpp:51
-#, fuzzy
 msgid "Merge co-linear tracks"
-msgstr "Sloučit zóny"
+msgstr "Sloučit kolineární spoje"
 
 #: pcbnew/cleanup_item.cpp:52
-#, fuzzy
 msgid "Remove track not connected at both ends"
-msgstr "Spoj má nespojený konec"
+msgstr "Odstranit spoj nepřipojený na obou koncích"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
