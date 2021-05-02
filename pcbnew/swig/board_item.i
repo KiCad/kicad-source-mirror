@@ -29,13 +29,27 @@
 
 
 
-
 %include board_item.h         // generate code for this interface
+
+/* Only for compatibility with old python scipts: */
+const int S_SEGMENT = (const int)PCB_SHAPE_TYPE::SEGMENT;
+const int S_RECT = (const int)PCB_SHAPE_TYPE::RECT;
+const int S_ARC = (const int)PCB_SHAPE_TYPE::ARC;
+const int S_CIRCLE = (const int)PCB_SHAPE_TYPE::CIRCLE;
+const int S_POLYGON = (const int)PCB_SHAPE_TYPE::POLYGON;
+const int S_CURVE = (const int)PCB_SHAPE_TYPE::CURVE;
 
 %rename(Get) operator       BOARD_ITEM*;
 
 %{
 #include <board_item.h>
+/* for compatibility with old python scipts: */
+const int S_SEGMENT = (const int)PCB_SHAPE_TYPE::SEGMENT;
+const int S_RECT = (const int)PCB_SHAPE_TYPE::RECT;
+const int S_ARC = (const int)PCB_SHAPE_TYPE::ARC;
+const int S_CIRCLE = (const int)PCB_SHAPE_TYPE::CIRCLE;
+const int S_POLYGON = (const int)PCB_SHAPE_TYPE::POLYGON;
+const int S_CURVE = (const int)PCB_SHAPE_TYPE::CURVE;
 %}
 
 
