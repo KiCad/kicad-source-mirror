@@ -305,6 +305,9 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
 
     formatRepeatParameters( aItem );
 
+    if( !aItem->m_Info.IsEmpty() )
+        m_out->Print( 0, " (comment %s)\n", m_out->Quotew( aItem->m_Info ).c_str() );
+
     m_out->Print( 0, ")\n" );
 }
 
@@ -327,6 +330,9 @@ void DS_DATA_MODEL_IO::format( DS_DATA_MODEL* aModel, DS_DATA_ITEM* aItem, int a
 
     formatRepeatParameters( aItem );
 
+    if( !aItem->m_Info.IsEmpty() )
+        m_out->Print( 0, " (comment %s)\n", m_out->Quotew( aItem->m_Info ).c_str() );
+
     m_out->Print( 0, ")\n" );
 }
 
@@ -347,6 +353,9 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_POLYGONS* aItem, int aNestLevel ) co
 
     if( aItem->m_LineWidth )
         m_out->Print( 0, " (linewidth %s)\n", double2Str( aItem->m_LineWidth ).c_str() );
+
+    if( !aItem->m_Info.IsEmpty() )
+        m_out->Print( 0, " (comment %s)\n", m_out->Quotew( aItem->m_Info ).c_str() );
 
     // Write polygon corners list
     for( int kk = 0; kk < aItem->GetPolyCount(); kk++ )
@@ -394,6 +403,9 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) cons
 
     formatRepeatParameters( aItem );
     m_out->Print( 0,"\n");
+
+    if( !aItem->m_Info.IsEmpty() )
+        m_out->Print( 0, " (comment %s)\n", m_out->Quotew( aItem->m_Info ).c_str() );
 
     // Write image in png readable format
     m_out->Print( aNestLevel, "(%s\n", getTokenName( T_pngdata ) );
