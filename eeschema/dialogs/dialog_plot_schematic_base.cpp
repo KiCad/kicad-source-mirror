@@ -31,7 +31,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	bSizerDir->Add( m_outputDirectoryName, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 4 );
 
 	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerDir->Add( m_browseButton, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT, 5 );
+	bSizerDir->Add( m_browseButton, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bMainSizer->Add( bSizerDir, 0, wxALL|wxEXPAND, 7 );

@@ -356,7 +356,7 @@ bool DXF_PLOTTER::StartPlot()
        - Greys (251 - 255)
      */
 
-    wxASSERT( numLayers < NBCOLORS );
+    wxASSERT( numLayers <= NBCOLORS );
 
     for( EDA_COLOR_T i = BLACK; i < numLayers; i = static_cast<EDA_COLOR_T>( int( i ) + 1 )  )
     {

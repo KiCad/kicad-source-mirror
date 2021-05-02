@@ -196,7 +196,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxRIGHT</property>
+                            <property name="flag">wxRIGHT|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxBitmapButton" expanded="1">
                                 <property name="BottomDockable">1</property>
