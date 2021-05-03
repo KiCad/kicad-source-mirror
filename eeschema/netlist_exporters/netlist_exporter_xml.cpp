@@ -32,6 +32,7 @@
 #include <kicad_string.h>
 #include <connection_graph.h>
 #include <refdes_utils.h>
+#include <wx/wfstream.h>
 
 #include <symbol_lib_table.h>
 
@@ -42,11 +43,18 @@ static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 );
 bool NETLIST_EXPORTER_XML::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
     // output the XML format netlist.
-    wxXmlDocument   xdoc;
 
+    // declare the stream ourselves to use the buffered FILE api
+    // instead of letting wx use the syscall variant
+    wxFFileOutputStream stream( aOutFileName );
+
+    if( !stream.IsOk() )
+        return false;
+
+    wxXmlDocument       xdoc;
     xdoc.SetRoot( makeRoot( GNL_ALL | aNetlistOptions ) );
 
-    return xdoc.Save( aOutFileName, 2 /* indent bug, today was ignored by wxXml lib */ );
+    return xdoc.Save( stream, 2 /* indent bug, today was ignored by wxXml lib */ );
 }
 
 
