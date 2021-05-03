@@ -1040,6 +1040,13 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
         }
 
+        if( aPad->GetShape() == PAD_SHAPE::CUSTOM && ( margin.x || margin.y ) )
+        {
+            // We can't draw as shapes because we don't know which edges are internal and which
+            // are external (so we don't know when to apply the margin and when not to).
+            simpleShapes = false;
+        }
+
         for( const SHAPE* shape : shapes->Shapes() )
         {
             // Drawing components of compound shapes in outline mode produces a mess.
@@ -1094,36 +1101,47 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 case SH_RECT:
                 {
                     const SHAPE_RECT* r = (const SHAPE_RECT*) shape;
-                    VECTOR2I          position = r->GetPosition();
-                    VECTOR2I          effectiveSize = r->GetSize() + margin;
+                    VECTOR2I          pos = r->GetPosition();
+                    VECTOR2I          effectiveMargin = margin;
 
-                    // At this point, if margin.x < 0 the actual rectangle size is
-                    // smaller than SHAPE_RECT r (the pad size was not modifed)
-                    if( margin.x < 0 )
+                    // This is a bit of an encapsulation leak, but fixing it would be a lot of
+                    // work.  We don't want to apply margins to the "internal" rectangle of a
+                    // rounded rect.  Only the 4 segments that form the edges get the margin.
+                    if( aPad->GetShape() == PAD_SHAPE::ROUNDRECT )
+                        effectiveMargin = { 0, 0 };
+
+                    if( effectiveMargin.x < 0 )
                     {
+                        // A negative margin just produces a smaller rect.
+
+                        VECTOR2I effectiveSize = r->GetSize() + effectiveMargin;
+
                         if( effectiveSize.x > 0 && effectiveSize.y > 0 )
-                            m_gal->DrawRectangle( position - margin, position + effectiveSize );
+                            m_gal->DrawRectangle( pos - effectiveMargin, pos + effectiveSize );
+                    }
+                    else if( effectiveMargin.x > 0 )
+                    {
+                        // A positive margin produces a larger rect, but with rounded corners
+
+                        m_gal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
+
+                        // Use segments to produce the margin with rounded corners
+                        m_gal->DrawSegment( pos,
+                                            pos + VECTOR2I( r->GetWidth(), 0 ),
+                                            effectiveMargin.x * 2 );
+                        m_gal->DrawSegment( pos + VECTOR2I( r->GetWidth(), 0 ),
+                                            pos + r->GetSize(),
+                                            effectiveMargin.x * 2 );
+                        m_gal->DrawSegment( pos + r->GetSize(),
+                                            pos + VECTOR2I( 0, r->GetHeight() ),
+                                            effectiveMargin.x * 2 );
+                        m_gal->DrawSegment( pos + VECTOR2I( 0, r->GetHeight() ),
+                                            pos,
+                                            effectiveMargin.x * 2 );
                     }
                     else
                     {
                         m_gal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
-                    }
-
-                    // Now add on a rounded margin (using segments) if the margin > 0
-                    if( margin.x > 0 )
-                    {
-                        m_gal->DrawSegment( position,
-                                            position + VECTOR2I( r->GetWidth(), 0 ),
-                                            margin.x * 2 );
-                        m_gal->DrawSegment( position + VECTOR2I( r->GetWidth(), 0 ),
-                                            position + r->GetSize(),
-                                            margin.x * 2 );
-                        m_gal->DrawSegment( position + r->GetSize(),
-                                            position + VECTOR2I( 0, r->GetHeight() ),
-                                            margin.x * 2 );
-                        m_gal->DrawSegment( position + VECTOR2I( 0, r->GetHeight() ),
-                                            position,
-                                            margin.x * 2 );
                     }
                 }
                     break;
