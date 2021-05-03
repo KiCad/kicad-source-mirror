@@ -61,7 +61,7 @@ private:
     int m_c = 0;
 };
 
-class C : public INSPECTABLE
+class C 
 {
 public:
     bool getBool() const { return m_bool; }
@@ -307,6 +307,17 @@ BOOST_AUTO_TEST_CASE( EnumGlob )
     {
         BOOST_CHECK_EQUAL( v.GetLabel( i ), labels[i] );
     }
+
+    D item ;
+    wxString str;
+
+    item.setGlobEnum( static_cast<enum_glob>( -1 ) );
+    wxAny any = item.Get( prop );
+    BOOST_CHECK_EQUAL( any.GetAs<wxString>( &str ), false );
+
+    item.setGlobEnum( enum_glob::TEST1 );
+    any = item.Get( prop );
+    BOOST_CHECK_EQUAL( any.GetAs<wxString>( &str ), true );
 }
 
 BOOST_AUTO_TEST_CASE( EnumClass )
