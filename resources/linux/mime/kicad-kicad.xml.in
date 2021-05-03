@@ -4,16 +4,16 @@
         <sub-class-of type="text/plain"/>
         <comment>KiCad Project</comment>
         <generic-icon name="application-x-kicad-project"/>
-        <glob pattern="*.pro"/>
-        <glob pattern="*.kicad_pro"/>
+        <glob pattern="*.pro" weight="50"/>
+        <glob pattern="*.kicad_pro" weight="50"/>
     </mime-type>
     <mime-type type="application/x-kicad-schematic">
         <sub-class-of type="text/plain"/>
         <comment>KiCad Schematic</comment>
         <generic-icon name="application-x-kicad-schematic"/>
-        <glob pattern="*.sch"/>
-        <glob pattern="*.kicad_sch"/>
-        <magic priority="100">
+        <glob pattern="*.sch" weight="50"/>
+        <glob pattern="*.kicad_sch" weight="50"/>
+        <magic priority="50">
             <!--The new schematic file (.kicad_sch) header-->
             <match type="string" offset="0" value="(kicad_sch"/>
             <!--The old schematic file (.sch) header-->
@@ -24,8 +24,8 @@
         <sub-class-of type="text/plain"/>
         <comment>KiCad Printed Circuit Board</comment>
         <generic-icon name="application-x-kicad-pcb"/>
-        <glob pattern="*.kicad_pcb"/>
-        <magic priority="100">
+        <glob pattern="*.kicad_pcb" weight="50"/>
+        <magic priority="50">
             <!--The new board file (.kicad_pcb) header-->
             <match type="string" offset="0" value="(kicad_pcb"/>
             <!--The old board file (.brd) header-->
