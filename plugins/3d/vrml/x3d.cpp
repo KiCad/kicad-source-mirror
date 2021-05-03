@@ -33,6 +33,7 @@
 
 #include <vector>
 #include <wx/tokenzr.h>
+#include <wx/wfstream.h>
 #include <iostream>
 
 #include "x3d.h"
@@ -43,9 +44,10 @@
 
 SCENEGRAPH* X3DPARSER::Load( const wxString& aFileName )
 {
+    wxFFileInputStream stream( aFileName );
     wxXmlDocument doc;
 
-    if( !doc.Load( aFileName ) )
+    if( !stream.IsOk() || !doc.Load( stream ) )
         return NULL;
 
     if( doc.GetRoot()->GetName() != wxT( "X3D" ) )

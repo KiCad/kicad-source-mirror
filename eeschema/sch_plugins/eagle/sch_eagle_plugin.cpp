@@ -31,6 +31,7 @@
 #include <memory>
 #include <wx/filename.h>
 #include <wx/tokenzr.h>
+#include <wx/wfstream.h>
 
 #include <class_library.h>
 #include <plugins/eagle/eagle_parser.h>
@@ -394,13 +395,14 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     wxASSERT( !aFileName || aSchematic != nullptr );
     LOCALE_IO toggle; // toggles on, then off, the C locale.
 
-    // Load the document
-    wxXmlDocument xmlDocument;
-
-    m_filename  = aFileName;
+    m_filename = aFileName;
     m_schematic = aSchematic;
 
-    if( !xmlDocument.Load( m_filename.GetFullPath() ) )
+    // Load the document
+    wxXmlDocument xmlDocument;
+    wxFFileInputStream stream( m_filename.GetFullPath() );
+
+    if( !stream.IsOk() || !xmlDocument.Load( stream ) )
     {
         THROW_IO_ERROR( wxString::Format( _( "Unable to read file \"%s\"" ),
                                           m_filename.GetFullPath() ) );

@@ -55,6 +55,7 @@ Load() TODO's
 #include <wx/string.h>
 #include <wx/xml/xml.h>
 #include <wx/filename.h>
+#include <wx/wfstream.h>
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <core/arraydim.h>
@@ -327,11 +328,12 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
 
     try
     {
-        // Load the document
-        wxXmlDocument xmlDocument;
         wxFileName fn = aFileName;
+        // Load the document
+        wxFFileInputStream stream( fn.GetFullPath() );
+        wxXmlDocument xmlDocument;
 
-        if( !xmlDocument.Load( fn.GetFullPath() ) )
+        if( !stream.IsOk() || !xmlDocument.Load( stream ) )
         {
             THROW_IO_ERROR( wxString::Format( _( "Unable to read file \"%s\"" ),
                                               fn.GetFullPath() ) );
@@ -2772,10 +2774,11 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
             string filename = (const char*) aLibPath.char_str( wxConvFile );
 
             // Load the document
-            wxXmlDocument xmlDocument;
             wxFileName fn( filename );
+            wxFFileInputStream stream( fn.GetFullPath() );
+            wxXmlDocument xmlDocument;
 
-            if( !xmlDocument.Load( fn.GetFullPath() ) )
+            if( !stream.IsOk() || !xmlDocument.Load( stream ) )
                 THROW_IO_ERROR( wxString::Format( _( "Unable to read file \"%s\"" ),
                                                   fn.GetFullPath() ) );
 
