@@ -538,6 +538,16 @@ public:
             return s_undef;
     }
 
+    bool IsValueDefined( T value ) const
+    {
+        int idx = m_choices.Index( static_cast<int>( value ) );
+
+        if( idx >= 0 && idx < (int) m_choices.GetCount() )
+            return true;
+
+        return false;
+    }
+
     const T ToEnum( const wxString value )
     {
         if( m_reverseMap.count( value ) )
@@ -576,6 +586,10 @@ private:
         {                                                                                   \
             type            value = GetValue( src );                                        \
             ENUM_MAP<type>& conv = ENUM_MAP<type>::Instance();                              \
+            if( ! conv.IsValueDefined( value ) )                                            \
+            {                                                                               \
+                return false;                                                               \
+            }                                                                               \
             if( dstType->CheckType<wxString>() )                                            \
             {                                                                               \
                 wxAnyValueTypeImpl<wxString>::SetValue( conv.ToString( value ), dst );      \
