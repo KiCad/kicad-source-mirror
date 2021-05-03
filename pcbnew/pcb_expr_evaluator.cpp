@@ -870,17 +870,18 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
             if( !m_isEnum )
             {
                 str = item->Get<wxString>( it->second );
+                return LIBEVAL::VALUE( str );
             }
             else
             {
                 const wxAny& any = item->Get( it->second );
-                any.GetAs<wxString>( &str );
+                bool valid = any.GetAs<wxString>( &str );
+
+                if( valid )
+                    return LIBEVAL::VALUE( str );
             }
 
-            if( str == "UNDEFINED" )
-                return LIBEVAL::VALUE();
-            else
-                return LIBEVAL::VALUE( str );
+            return LIBEVAL::VALUE();
         }
     }
 }
