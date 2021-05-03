@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-02 09:48+0200\n"
-"PO-Revision-Date: 2021-05-02 09:52+0200\n"
+"POT-Creation-Date: 2021-05-03 10:37+0200\n"
+"PO-Revision-Date: 2021-05-03 09:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -750,6 +750,7 @@ msgid "3D Display Options"
 msgstr "Options d'Affichage 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:97
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:72
 msgid "KiCad 3D Viewer"
 msgstr "Visionneuse 3D KiCad"
 
@@ -13156,6 +13157,7 @@ msgid "The following libraries were not found:"
 msgstr "Les librairies suivantes n'ont pas pu être trouvées:"
 
 #: eeschema/sch_edit_frame.cpp:224
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:62
 msgid "KiCad Schematic Editor"
 msgstr "Editeur de Schématique KiCad"
 
@@ -35926,6 +35928,7 @@ msgid "kicad"
 msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
 msgid "KiCad"
 msgstr "KiCad"
 
@@ -35965,6 +35968,39 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
+msgid "An EDA suite for schematic and circuit board design"
+msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
+msgid ""
+"KiCad is a free and open-source electronics design automation (EDA) suite. "
+"It features schematic capture, integrated circuit simulation, printed "
+"circuit board (PCB) layout, 3D rendering, and plotting/data export to "
+"numerous formats. KiCad also includes a high-quality component library "
+"featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
+"system requirements and runs on Linux, Windows, and macOS."
+msgstr ""
+"KiCad est une suite gratuite et open-source d'outils pour la conception "
+"électronique (EDA). Il comprend la capture schématique, la simulation de "
+"circuits , la conception de circuits imprimés (PCB), le rendu 3D et "
+"l’exportation de traçage/données vers de nombreux formats. KiCad comprend "
+"également une bibliothèque de composants de haute qualité avec des milliers "
+"de symboles, d’empreintes et de modèles 3D. KiCad a des exigences système "
+"minimales et fonctionne sur Linux, Windows et macOS."
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
+msgid "KiCad Main Window"
+msgstr "Fenêtre Principale KiCad"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:67
+msgid "KiCad PCB Layout Editor"
+msgstr "Editeur de PCB KiCad"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:84
+msgid "The KiCad Developers"
+msgstr "Développeurs KiCad"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
 msgid "Gerber file"
@@ -36080,9 +36116,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "PcbNew 3D Viewer"
 #~ msgstr "Visualisateur 3D de PcbNew"
-
-#~ msgid "The KiCad Developers"
-#~ msgstr "Développeurs KiCad"
 
 #~ msgid "Eeschema (Standalone)"
 #~ msgstr "Eeschema (Seul)"
@@ -42665,9 +42698,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Open the GerbView Manual"
 #~ msgstr "Ouvrir la documentation de GerbView"
-
-#~ msgid "KiCad &Manual"
-#~ msgstr "&Manuel de KiCad"
 
 #~ msgid "Open KiCad user manual"
 #~ msgstr "Ouvrir la documentation de KiCad"
