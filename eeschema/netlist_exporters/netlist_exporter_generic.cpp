@@ -31,6 +31,7 @@
 #include <class_library.h>
 #include <sch_base_frame.h>
 #include <symbol_lib_table.h>
+#include <wx/wfstream.h>
 
 
 static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 );
@@ -41,12 +42,19 @@ bool NETLIST_EXPORTER_GENERIC::WriteNetlist( const wxString& aOutFileName, unsig
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
         m_masterList->GetItem( ii )->m_Flag = 0;
 
+    // declare the stream ourselves to use the buffered FILE api
+    // instead of letting wx use the syscall variant
+    wxFFileOutputStream stream( aOutFileName );
+
+    if( !stream.IsOk() )
+        return false;
+
     // output the XML format netlist.
     wxXmlDocument   xdoc;
 
     xdoc.SetRoot( makeRoot( GNL_ALL ) );
 
-    return xdoc.Save( aOutFileName, 2 /* indent bug, today was ignored by wxXml lib */ );
+    return xdoc.Save( stream, 2 /* indent bug, today was ignored by wxXml lib */ );
 }
 
 
