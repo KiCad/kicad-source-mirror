@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -376,11 +376,4 @@ void BBOX_3D::ApplyTransformationAA( glm::mat4 aTransformMatrix )
 
     m_min = tmpBBox.m_min;
     m_max = tmpBBox.m_max;
-}
-
-
-void BBOX_3D::debug() const
-{
-    wxLogDebug( "min(%f, %f, %f) - max(%f, %f, %f)\n", m_min.x, m_min.y, m_min.z,
-                m_max.x, m_max.y, m_max.z );
 }

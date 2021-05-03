@@ -127,7 +127,7 @@ public:
         m_counter[static_cast<int>( aObjType )]++;
     }
 
-    void PrintStats();
+    // void PrintStats();
 
     static OBJECT_3D_STATS& Instance()
     {

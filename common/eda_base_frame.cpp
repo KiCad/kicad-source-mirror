@@ -304,12 +304,13 @@ bool EDA_BASE_FRAME::doAutoSave()
 }
 
 
-void EDA_BASE_FRAME::OnCharHook( wxKeyEvent& event )
+void EDA_BASE_FRAME::OnCharHook( wxKeyEvent& aKeyEvent )
 {
-    wxLogTrace( kicadTraceKeyEvent, "EDA_BASE_FRAME::OnCharHook %s", dump( event ) );
+    wxLogTrace( kicadTraceKeyEvent, "EDA_BASE_FRAME::OnCharHook %s", dump( aKeyEvent ) );
+
     // Key events can be filtered here.
     // Currently no filtering is made.
-    event.Skip();
+    aKeyEvent.Skip();
 }
 
 

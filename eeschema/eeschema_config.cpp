@@ -234,7 +234,6 @@ static std::mutex s_symbolTableMutex;
 
 SYMBOL_LIB_TABLE* PROJECT::SchSymbolLibTable()
 {
-    wxLogDebug( "Getting symbol lib table" );
     std::lock_guard<std::mutex> lock( s_symbolTableMutex );
 
     // This is a lazy loading function, it loads the project specific table when

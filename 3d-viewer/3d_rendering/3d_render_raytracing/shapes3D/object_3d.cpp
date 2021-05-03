@@ -64,13 +64,13 @@ const std::map<OBJECT_3D_TYPE, const char*> objectTypeNames
 // clang-format on
 
 
-void OBJECT_3D_STATS::PrintStats()
-{
-    wxLogDebug( "OBJECT_3D_STATS:\n" );
+// void OBJECT_3D_STATS::PrintStats()
+// {
+//     wxLogDebug( "OBJECT_3D_STATS:\n" );
 
-    for( auto& objectType : objectTypeNames )
-    {
-        wxLogDebug( "  %20s  %u\n", objectType.second,
-                    m_counter[static_cast<int>( objectType.first )] );
-    }
-}
+//     for( auto& objectType : objectTypeNames )
+//     {
+//         wxLogDebug( "  %20s  %u\n", objectType.second,
+//                     m_counter[static_cast<int>( objectType.first )] );
+//     }
+// }

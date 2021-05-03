@@ -39,8 +39,10 @@
 #include <kiway.h>
 #include <macros.h>
 #include <paths.h>
+#include <richio.h>
 #include <settings/settings_manager.h>
 #include <systemdirsappend.h>
+#include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
 
 #include <stdexcept>
@@ -327,6 +329,56 @@ struct APP_KICAD : public wxApp
 
         return Event_Skip;
     }
+
+#if defined( DEBUG )
+    /**
+     * Process any unhandled events at the application level.
+     */
+    bool ProcessEvent( wxEvent& aEvent ) override
+    {
+        if( aEvent.GetEventType() == wxEVT_CHAR || aEvent.GetEventType() == wxEVT_CHAR_HOOK )
+        {
+            wxKeyEvent* keyEvent = static_cast<wxKeyEvent*>( &aEvent );
+
+            if( keyEvent )
+                wxLogTrace( kicadTraceKeyEvent, "APP_KICAD::ProcessEvent %s", dump( *keyEvent ) );
+        }
+
+        aEvent.Skip();
+        return false;
+    }
+
+    /**
+     * Override main loop exception handling on debug builds.
+     *
+     * It can be painfully difficult to debug exceptions that happen in wxUpdateUIEvent
+     * handlers.  The override provides a bit more useful information about the exception
+     * and a breakpoint can be set to pin point the event where the exception was thrown.
+     */
+    bool OnExceptionInMainLoop() override
+    {
+        try
+        {
+            throw;
+        }
+        catch( const std::exception& e )
+        {
+            wxLogError( "Unhandled exception class: %s  what: %s",
+                        FROM_UTF8( typeid(e).name() ),
+                        FROM_UTF8( e.what() ) );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( ioe.What() );
+        }
+        catch(...)
+        {
+            wxLogError( "Unhandled exception of unknown type" );
+        }
+
+        return false;   // continue on. Return false to abort program
+    }
+#endif
 
     /**
      * Set MacOS file associations.

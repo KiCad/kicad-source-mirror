@@ -144,7 +144,7 @@ public:
      * function to capture and filter these keys when they are used as hotkeys, and skip it if
      * the key is not used as hotkey (otherwise the key events will be not sent to menus).
      */
-    virtual void OnCharHook( wxKeyEvent& event );
+    virtual void OnCharHook( wxKeyEvent& aKeyEvent );
 
     /**
      * The #TOOL_DISPATCHER needs these to work around some issues in wxWidgets where the menu

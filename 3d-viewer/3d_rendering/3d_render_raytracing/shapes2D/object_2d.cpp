@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,13 +59,3 @@ const std::map<OBJECT_2D_TYPE, const char*> objectTypeNames
     { OBJECT_2D_TYPE::BVHCONTAINER,  "OBJECT_2D_TYPE::BVHCONTAINER" },
 };
 // clang-format on
-
-
-void OBJECT_2D_STATS::PrintStats()
-{
-    for( auto& objectType : objectTypeNames )
-    {
-        wxLogDebug( "  %20s  %u\n", objectType.second,
-                    m_counter[static_cast<int>( objectType.first )] );
-    }
-}

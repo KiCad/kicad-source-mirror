@@ -253,8 +253,7 @@ wxString dump( const wxKeyEvent& aEvent )
 #else
                 "  not-set    not-set"
 #endif
-                "  (%5d,%5d)"
-                "\n",
+                "  (%5d,%5d)",
                 eventType,
                 GetKeyName( aEvent ),
                 aEvent.GetKeyCode(),

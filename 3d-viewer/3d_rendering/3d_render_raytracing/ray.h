@@ -88,10 +88,10 @@ struct RAY
 
     SFVEC3F at( float t ) const { return m_Origin + m_Dir * t; }
 
-    SFVEC2F at2D( float t ) const {
-        return SFVEC2F( m_Origin.x + m_Dir.x * t, m_Origin.y + m_Dir.y * t ); }
-
-    void debug() const;
+    SFVEC2F at2D( float t ) const
+    {
+        return SFVEC2F( m_Origin.x + m_Dir.x * t, m_Origin.y + m_Dir.y * t );
+    }
 };
 
 

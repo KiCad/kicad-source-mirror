@@ -506,6 +506,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     {
         wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
 
+        wxLogTrace( kicadTraceKeyEvent, "TOOL_DISPATCHER::DispatchWxEvent %s", dump( *ke ) );
+
         keyIsEscape = ( ke->GetKeyCode() == WXK_ESCAPE );
 
         wxTextEntry*      textEntry = dynamic_cast<wxTextEntry*>( focus );

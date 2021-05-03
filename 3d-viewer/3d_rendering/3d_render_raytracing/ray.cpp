@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -363,11 +363,4 @@ bool RAYSEG2D::IntersectCircle( const SFVEC2F &aCenter, float aRadius, float *aO
     *aOutNormalT1 = ( hitPointT2 - aCenter ) / aRadius;
 
     return true;
-}
-
-
-void RAY::debug() const
-{
-    wxLogDebug( "O(%f, %f, %f) D(%f, %f, %f)\n", m_Origin.x, m_Origin.y, m_Origin.z,
-                m_Dir.x, m_Dir.y, m_Dir.z );
 }
