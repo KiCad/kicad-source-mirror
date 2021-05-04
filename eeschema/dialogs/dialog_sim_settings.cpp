@@ -333,6 +333,18 @@ bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
         }
     }
 
+    if( !m_dcSource1->GetCount() )
+    {
+        wxChar type1 = getStringSelection( m_dcSourceType1 ).Upper().GetChar( 0 );
+        updateDCSources( type1, m_dcSource1 );
+    }
+
+    if( !m_dcSource2->GetCount() )
+    {
+        wxChar type2 = getStringSelection( m_dcSourceType2 ).Upper().GetChar( 0 );
+        updateDCSources( type2, m_dcSource2 );
+    }
+
     if( m_simCommand.IsEmpty() && !empty( m_customTxt ) )
         return parseCommand( m_customTxt->GetValue() );
 
