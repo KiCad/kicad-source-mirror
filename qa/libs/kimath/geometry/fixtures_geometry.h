@@ -46,6 +46,10 @@ struct CommonTestData
     SHAPE_POLY_SET uniqueVertexPolySet;
     SHAPE_POLY_SET solidPolySet;
     SHAPE_POLY_SET holeyPolySet;
+    SHAPE_POLY_SET holeyCurvedPolySingle; ///< Polygon with a single outline + multiple holes.
+                                          ///< Holes and outline contain arcs
+    SHAPE_POLY_SET holeyCurvedPolyMulti;  ///< Polygon with a multiple outlines + multiple holes.
+                                          ///< Holes and outlines contain arcs
 
     // Vectors containing the information with which the polygons are populated.
     std::vector<VECTOR2I> uniquePoints;
@@ -138,6 +142,55 @@ struct CommonTestData
 
         hole.SetClosed( true );
         holeyPolySet.AddHole( hole );
+
+
+        // GENERATE CURVED POLYGON WITH HOLES
+        // For visualisation, launch test_pns with the arguments "viewcurvedpoly -[single|multi]"
+
+        // First shape:
+        SHAPE_LINE_CHAIN oline0;
+        oline0.Append( { 244000, 180000 } );
+        oline0.Append( SHAPE_ARC( { 582000, 232000 }, { 614000, 354000 }, { 450000, 436000 }, 0 ) );
+        oline0.Append( SHAPE_ARC( { 450000, 436000 }, { 310000, 480000 }, { 502000, 614000 }, 0 ) );
+        oline0.Append( { 872000, 202000 } );
+        oline0.SetClosed( true );
+        holeyCurvedPolySingle.AddOutline( oline0 );
+
+        SHAPE_LINE_CHAIN o0h1;
+        o0h1.Append( { 370000, 482000 } );
+        o0h1.Append( SHAPE_ARC( { 342000, 576000 }, { 436000, 552000 }, { 474000, 622000 }, 0 ) );
+        o0h1.Append( SHAPE_ARC( { 474000, 622000 }, { 534000, 520000 }, { 518000, 470000 }, 0 ) );
+        o0h1.SetClosed( true );
+        holeyCurvedPolySingle.AddHole( o0h1 );
+
+        SHAPE_LINE_CHAIN o0h2;
+        o0h2.Append( SHAPE_ARC( { 680000, 286000 }, { 728000, 306000 }, { 760000, 258000 }, 0 ) );
+        o0h2.Append( SHAPE_ARC( { 760000, 258000 }, { 746000, 222000 }, { 686000, 260000 }, 0 ) );
+        o0h2.SetClosed( true );
+        holeyCurvedPolySingle.AddHole( o0h2 );
+
+        holeyCurvedPolyMulti = holeyCurvedPolySingle;
+
+        // Second shape:
+        SHAPE_LINE_CHAIN oline1;
+        oline1.Append( { 640000, 840000 } );
+        oline1.Append( SHAPE_ARC( { 829000, 959000 }, { 990000, 736000 }, { 951000, 461000 }, 0 ) );
+        oline1.Append( SHAPE_ARC( { 951000, 461000 }, { 600000, 572000 }, { 620000, 726000 }, 0 ) );
+        oline1.SetClosed( true );
+        holeyCurvedPolyMulti.AddOutline( oline1 );
+
+        SHAPE_LINE_CHAIN o1h1;
+        o1h1.Append( { 670000, 482000 } );
+        o1h1.Append( SHAPE_ARC( { 642000, 576000 }, { 736000, 652000 }, { 774000, 622000 }, 0 ) );
+        o1h1.Append( SHAPE_ARC( { 774000, 622000 }, { 834000, 520000 }, { 818000, 470000 }, 0 ) );
+        o1h1.SetClosed( true );
+        holeyCurvedPolyMulti.AddHole( o1h1 );
+
+        SHAPE_LINE_CHAIN o1h2;
+        o1h2.Append( SHAPE_ARC( { 680000, 286000 }, { 728000, 306000 }, { 760000, 258000 }, 0 ) );
+        o1h2.Append( SHAPE_ARC( { 760000, 258000 }, { 746000, 222000 }, { 686000, 260000 }, 0 ) );
+        o1h2.SetClosed( true );
+        holeyCurvedPolyMulti.AddHole( o1h2 );
     }
 
     ~CommonTestData()
