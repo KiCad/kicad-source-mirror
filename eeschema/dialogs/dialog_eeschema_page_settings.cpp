@@ -89,19 +89,20 @@ void DIALOG_EESCHEMA_PAGE_SETTINGS::onTransferDataToWindow()
     wxCHECK( cfg, /* void */ );
 
     m_PaperExport->SetValue( cfg->m_PageSettings.export_paper );
-    m_RevisionExport->SetValue( cfg->m_PageSettings.export_revision );
-    m_DateExport->SetValue( cfg->m_PageSettings.export_date );
-    m_TitleExport->SetValue( cfg->m_PageSettings.export_title );
-    m_CompanyExport->SetValue( cfg->m_PageSettings.export_company );
-    m_Comment1Export->SetValue( cfg->m_PageSettings.export_comment1 );
-    m_Comment2Export->SetValue( cfg->m_PageSettings.export_comment2 );
-    m_Comment3Export->SetValue( cfg->m_PageSettings.export_comment3 );
-    m_Comment4Export->SetValue( cfg->m_PageSettings.export_comment4 );
-    m_Comment5Export->SetValue( cfg->m_PageSettings.export_comment5 );
-    m_Comment6Export->SetValue( cfg->m_PageSettings.export_comment6 );
-    m_Comment7Export->SetValue( cfg->m_PageSettings.export_comment7 );
-    m_Comment8Export->SetValue( cfg->m_PageSettings.export_comment8 );
-    m_Comment9Export->SetValue( cfg->m_PageSettings.export_comment9 );
+    m_RevisionExport->SetValue( m_TextRevision->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_revision );
+    m_DateExport->SetValue( m_TextDate->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_date );
+    m_TitleExport->SetValue( m_TextTitle->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_title );
+    m_CompanyExport->SetValue( m_TextCompany->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_company );
+    m_Comment1Export->SetValue( m_TextComment1->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_comment1 );
+    m_Comment2Export->SetValue( m_TextComment2->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_comment2 );
+    m_Comment3Export->SetValue( m_TextComment3->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_comment3 );
+    m_Comment4Export->SetValue( m_TextComment4->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_comment4 );
+    m_Comment5Export->SetValue( m_TextComment5->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_comment5 );
+    m_Comment6Export->SetValue( m_TextComment6->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_comment6 );
+    m_Comment7Export->SetValue( m_TextComment7->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_comment7 );
+    m_Comment8Export->SetValue( m_TextComment8->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_comment8 );
+    m_Comment9Export->SetValue( m_TextComment9->GetValue().IsEmpty() ? false : cfg->m_PageSettings.export_comment9 );
+    
 }
 
 
