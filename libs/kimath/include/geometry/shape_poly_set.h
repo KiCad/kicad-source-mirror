@@ -550,6 +550,9 @@ public:
     ///< Return the area of this poly set
     double Area();
 
+    ///< Appends all the arcs in this polyset to \a aArcBuffer
+    void GetArcs( std::vector<SHAPE_ARC>& aArcBuffer ) const;
+
     ///< Appends a vertex at the end of the given outline/hole (default: the last outline)
     /**
      * Add a new vertex to the contour indexed by \p aOutline and \p aHole (defaults to the
@@ -1357,6 +1360,16 @@ private:
 
     void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aShape,
                     const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
+
+    /**
+     * Detect arcs in a polyset and convert them from segments to true arcs by adding an arc
+     * and associated references. The original segment points are not changed.
+     *
+     * @param aArcs List of possible arcs that might be in this polyset
+     * @param aMargin Maximum acceptable deviation from the found points to the arc (defaults
+     * to ARC_HIGH_DEF)
+     */
+    void detectArcs( const std::vector<SHAPE_ARC>& aArcs, int aMargin = PCB_IU_PER_MM * 0.005 );
 
     /**
      * Check whether the point \a aP is inside the \a aSubpolyIndex-th polygon of the polyset. If

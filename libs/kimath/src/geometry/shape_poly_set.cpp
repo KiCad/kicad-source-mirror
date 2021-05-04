@@ -489,6 +489,19 @@ double SHAPE_POLY_SET::Area()
 }
 
 
+void SHAPE_POLY_SET::GetArcs( std::vector<SHAPE_ARC>& aArcBuffer ) const
+{
+    for( const POLYGON& poly : m_polys )
+    {
+        for( size_t i = 0; i < poly.size(); i++ )
+        {
+            for( SHAPE_ARC arc : poly[i].m_arcs )
+                aArcBuffer.push_back( arc );
+        }
+    }
+}
+
+
 void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aOtherShape,
                                 POLYGON_MODE aFastMode )
 {
@@ -502,6 +515,12 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
     ClipperLib::Clipper c;
 
     c.StrictlySimple( aFastMode == PM_STRICTLY_SIMPLE );
+
+    // All possible arcs in the resulting shape of the booleanop
+    std::vector<SHAPE_ARC> possibleArcs;
+
+    aShape.GetArcs( possibleArcs );
+    aOtherShape.GetArcs( possibleArcs );
 
     for( const POLYGON& poly : aShape.m_polys )
     {
@@ -520,6 +539,20 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
     c.Execute( aType, solution, ClipperLib::pftNonZero, ClipperLib::pftNonZero );
 
     importTree( &solution );
+
+    detectArcs( possibleArcs );
+}
+
+
+void SHAPE_POLY_SET::detectArcs( const std::vector<SHAPE_ARC>& aArcs, int aMargin )
+{
+    for( POLYGON& poly : m_polys )
+    {
+        for( size_t i = 0; i < poly.size(); i++ )
+        {
+            poly[i].DetectArcs( aArcs, aMargin );
+        }
+    }
 }
 
 
