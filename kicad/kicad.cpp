@@ -341,7 +341,9 @@ struct APP_KICAD : public wxApp
             wxKeyEvent* keyEvent = static_cast<wxKeyEvent*>( &aEvent );
 
             if( keyEvent )
+            {
                 wxLogTrace( kicadTraceKeyEvent, "APP_KICAD::ProcessEvent %s", dump( *keyEvent ) );
+            }
         }
 
         aEvent.Skip();

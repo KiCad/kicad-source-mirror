@@ -303,10 +303,10 @@ void DRC_ENGINE::loadImplicitRules()
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
-                    DRC_CONSTRAINT clearanceConstraint( CLEARANCE_CONSTRAINT );
-                    clearanceConstraint.Value().SetMin( std::max( bds.m_MinClearance,
+                    DRC_CONSTRAINT min_clearanceConstraint( CLEARANCE_CONSTRAINT );
+                    min_clearanceConstraint.Value().SetMin( std::max( bds.m_MinClearance,
                                                                   nc->GetDiffPairGap() ) );
-                    netclassRule->AddConstraint( clearanceConstraint );
+                    netclassRule->AddConstraint( min_clearanceConstraint );
                 }
 
                 if( nc->GetViaDiameter() || nc->GetViaDrill() )

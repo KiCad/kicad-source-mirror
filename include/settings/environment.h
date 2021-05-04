@@ -61,6 +61,7 @@ class ENV_VAR_ITEM
 public:
     ENV_VAR_ITEM( const wxString& aValue = wxEmptyString, bool aIsDefinedExternally = false ) :
             m_value( aValue ),
+            m_isBuiltin( true ),
             m_isDefinedExternally( aIsDefinedExternally ),
             m_isDefinedInSettings( false )
     {

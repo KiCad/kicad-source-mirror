@@ -968,7 +968,8 @@ void LEADER::updateGeometry()
 
     SEG arrowSeg( m_start, m_end );
     SEG textSeg( m_end, m_text.GetPosition() );
-    OPT_VECTOR2I arrowSegEnd, textSegEnd;
+    OPT_VECTOR2I arrowSegEnd = boost::make_optional( false, VECTOR2I() );;
+    OPT_VECTOR2I textSegEnd = boost::make_optional( false, VECTOR2I() );
 
     if( m_textFrame == DIM_TEXT_FRAME::CIRCLE )
     {
