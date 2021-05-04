@@ -22,9 +22,6 @@
 #include <bitmaps.h>
 #include <geometry/shape_poly_set.h>
 #include <kiface_i.h>
-#include "bitmaps/viacalc.cpp"
-#include "bitmaps/regul.cpp"
-#include "bitmaps/regul_3pins.cpp"
 #include "attenuators/attenuator_classes.h"
 #include "class_regulator_data.h"
 #include "pcb_calculator_frame.h"
@@ -205,12 +202,12 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
 
         ToleranceSelection( m_rbToleranceSelection->GetSelection() );
 
-       	m_viaBitmap->SetBitmap( KiBitmap( viacalc_xpm ) );
+       	m_viaBitmap->SetBitmap( KiBitmap( BITMAPS::viacalc ) );
        	m_panelViaSize->Layout();
 
         m_attenuatorBitmap->SetBitmap( *m_currAttenuator->m_SchBitMap );
-       	m_bitmapRegul3pins->SetBitmap( KiBitmap( regul_3pins_xpm ) );
-       	m_bitmapRegul4pins->SetBitmap( KiBitmap( regul_xpm ) );
+       	m_bitmapRegul3pins->SetBitmap( KiBitmap( BITMAPS::regul_3pins ) );
+       	m_bitmapRegul4pins->SetBitmap( KiBitmap( BITMAPS::regul ) );
        	m_panelRegulators->Layout();
 
        	m_attenuatorBitmap->GetParent()->Layout();

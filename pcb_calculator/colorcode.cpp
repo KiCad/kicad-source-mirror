@@ -19,19 +19,17 @@
  */
 
 #include <wx/app.h>
-#include "bitmaps/color_code_value_and_name.xpm"
-#include "bitmaps/color_code_value.xpm"
-#include "bitmaps/color_code_multiplier.xpm"
-#include "bitmaps/color_code_tolerance.xpm"
+#include <bitmaps.h>
+
 #include "pcb_calculator_frame.h"
 
 
 void PCB_CALCULATOR_FRAME::initColorCodePanel()
 {
-    m_ccValueNamesBitmap = new wxBitmap( color_code_value_and_name_xpm );
-    m_ccValuesBitmap = new wxBitmap( color_code_value_xpm );
-    m_ccMultipliersBitmap = new wxBitmap( color_code_multiplier_xpm );
-    m_ccTolerancesBitmap = new wxBitmap( color_code_tolerance_xpm );
+    m_ccValueNamesBitmap  = KiBitmapNew( BITMAPS::color_code_value_and_name );
+    m_ccValuesBitmap      = KiBitmapNew( BITMAPS::color_code_value );
+    m_ccMultipliersBitmap = KiBitmapNew( BITMAPS::color_code_multiplier );
+    m_ccTolerancesBitmap  = KiBitmapNew( BITMAPS::color_code_tolerance );
 }
 
 

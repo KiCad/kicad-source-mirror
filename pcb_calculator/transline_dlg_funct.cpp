@@ -21,10 +21,9 @@
 #include <wx/settings.h>
 #include <wx/wx.h>
 
-#include <bitmaps/bitmap_types.h>
+#include <bitmaps.h>
 #include "common_data.h"
 #include "pcb_calculator_frame.h"
-#include "bitmaps/microstrip_zodd_zeven.cpp"
 
 
 extern double DoubleFromString( const wxString& TextValue );
@@ -209,7 +208,7 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
 
     // This helper bitmap is shown for coupled microstrip only:
     m_bmCMicrostripZoddZeven->Show( aType == C_MICROSTRIP_TYPE );
-    m_bmCMicrostripZoddZeven->SetBitmap( KiBitmap( microstrip_zodd_zeven_xpm ) );
+    m_bmCMicrostripZoddZeven->SetBitmap( KiBitmap( BITMAPS::microstrip_zodd_zeven ) );
     m_fgSizerZcomment->Show( aType == C_MICROSTRIP_TYPE );
 
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
