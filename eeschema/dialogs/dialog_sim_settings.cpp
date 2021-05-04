@@ -44,13 +44,13 @@ static bool empty( const wxTextEntryBase* aCtrl )
 }
 
 
-static void setStringSelection( wxRadioBox* aCtrl, const wxString& aStr )
+static void setStringSelection( wxChoice* aCtrl, const wxString& aStr )
 {
     aCtrl->SetSelection( aCtrl->FindString( aStr ) );
 }
 
 
-static wxString getStringSelection( const wxRadioBox* aCtrl )
+static wxString getStringSelection( const wxChoice* aCtrl )
 {
     return aCtrl->GetString( aCtrl->GetSelection() );
 }
@@ -583,7 +583,6 @@ void DIALOG_SIM_SETTINGS::updateDCUnits( wxChar aType, wxChoice* aSource,
     aEndValUnit->SetLabel( unit );
     aStepUnit->SetLabel( unit );
 
-    m_pgDC->Fit();
     m_pgDC->Refresh();
 }
 

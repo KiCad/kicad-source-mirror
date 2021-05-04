@@ -90,42 +90,51 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	bSizer82->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizer151;
-	bSizer151 = new wxBoxSizer( wxHORIZONTAL );
-
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 0, 0 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_dcEnable2 = new wxCheckBox( m_pgDC, wxID_ANY, _("Enable second source"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dcEnable2 = new wxCheckBox( m_pgDC, wxID_ANY, _("Source 2"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dcEnable2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
 	gbSizer1->Add( m_dcEnable2, wxGBPosition( 0, 3 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	wxString m_dcSourceType1Choices[] = { _("V"), _("I"), _("R"), _("TEMP") };
 	int m_dcSourceType1NChoices = sizeof( m_dcSourceType1Choices ) / sizeof( wxString );
-	m_dcSourceType1 = new wxRadioBox( m_pgDC, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, m_dcSourceType1NChoices, m_dcSourceType1Choices, 4, wxRA_SPECIFY_COLS );
+	m_dcSourceType1 = new wxChoice( m_pgDC, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dcSourceType1NChoices, m_dcSourceType1Choices, 0 );
 	m_dcSourceType1->SetSelection( 0 );
-	gbSizer1->Add( m_dcSourceType1, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALL, 5 );
+	gbSizer1->Add( m_dcSourceType1, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	wxString m_dcSourceType2Choices[] = { _("V"), _("I"), _("R"), _("TEMP") };
 	int m_dcSourceType2NChoices = sizeof( m_dcSourceType2Choices ) / sizeof( wxString );
-	m_dcSourceType2 = new wxRadioBox( m_pgDC, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, m_dcSourceType2NChoices, m_dcSourceType2Choices, 4, wxRA_SPECIFY_COLS );
+	m_dcSourceType2 = new wxChoice( m_pgDC, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dcSourceType2NChoices, m_dcSourceType2Choices, 0 );
 	m_dcSourceType2->SetSelection( 0 );
-	gbSizer1->Add( m_dcSourceType2, wxGBPosition( 1, 3 ), wxGBSpan( 1, 2 ), wxALL, 5 );
+	gbSizer1->Add( m_dcSourceType2, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
-	m_staticText4 = new wxStaticText( m_pgDC, wxID_ANY, _("DC source:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( m_pgDC, wxID_ANY, _("Source:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
 	gbSizer1->Add( m_staticText4, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_staticText41 = new wxStaticText( m_pgDC, wxID_ANY, _("Sweep type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText41->Wrap( -1 );
+	gbSizer1->Add( m_staticText41, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
+	m_staticText411 = new wxStaticText( m_pgDC, wxID_ANY, _("Source 1"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText411->Wrap( -1 );
+	m_staticText411->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	gbSizer1->Add( m_staticText411, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	wxArrayString m_dcSource1Choices;
 	m_dcSource1 = new wxChoice( m_pgDC, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dcSource1Choices, 0 );
 	m_dcSource1->SetSelection( 0 );
-	gbSizer1->Add( m_dcSource1, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_dcSource1, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	wxArrayString m_dcSource2Choices;
 	m_dcSource2 = new wxChoice( m_pgDC, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dcSource2Choices, 0 );
 	m_dcSource2->SetSelection( 0 );
-	gbSizer1->Add( m_dcSource2, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_dcSource2, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText5 = new wxStaticText( m_pgDC, wxID_ANY, _("Starting value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
@@ -136,6 +145,8 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	m_src1DCStartValUnit = new wxStaticText( m_pgDC, wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_src1DCStartValUnit->Wrap( -1 );
+	m_src1DCStartValUnit->SetMinSize( wxSize( 80,-1 ) );
+
 	gbSizer1->Add( m_src1DCStartValUnit, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_dcStart2 = new wxTextCtrl( m_pgDC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -154,6 +165,8 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	m_src1DCEndValUnit = new wxStaticText( m_pgDC, wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_src1DCEndValUnit->Wrap( -1 );
+	m_src1DCEndValUnit->SetMinSize( wxSize( 80,-1 ) );
+
 	gbSizer1->Add( m_src1DCEndValUnit, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_dcStop2 = new wxTextCtrl( m_pgDC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -172,6 +185,8 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	m_src1DCStepUnit = new wxStaticText( m_pgDC, wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_src1DCStepUnit->Wrap( -1 );
+	m_src1DCStepUnit->SetMinSize( wxSize( 80,-1 ) );
+
 	gbSizer1->Add( m_src1DCStepUnit, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_dcIncr2 = new wxTextCtrl( m_pgDC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -185,10 +200,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	gbSizer1->Add( m_swapDCSources, wxGBPosition( 6, 0 ), wxGBSpan( 1, 5 ), wxALL|wxEXPAND, 5 );
 
 
-	bSizer151->Add( gbSizer1, 1, wxEXPAND, 5 );
-
-
-	bSizer82->Add( bSizer151, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizer82->Add( gbSizer1, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 
 
 	bSizer82->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -416,7 +428,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer2->Fit( m_pgCustom );
 	m_simPages->AddPage( m_pgCustom, _("Custom"), false );
 
-	bSizer1->Add( m_simPages, 1, wxEXPAND | wxALL, 5 );
+	bSizer1->Add( m_simPages, 1, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer88;
 	bSizer88 = new wxBoxSizer( wxVERTICAL );
@@ -469,8 +481,8 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SIM_SETTINGS_BASE::onInitDlg ) );
 	m_dcEnable2->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCEnableSecondSource ), NULL, this );
-	m_dcSourceType1->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCSource1Selected ), NULL, this );
-	m_dcSourceType2->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCSource2Selected ), NULL, this );
+	m_dcSourceType1->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCSource1Selected ), NULL, this );
+	m_dcSourceType2->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCSource2Selected ), NULL, this );
 	m_swapDCSources->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onSwapDCSources ), NULL, this );
 	m_loadDirectives->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onLoadDirectives ), NULL, this );
 }
@@ -480,8 +492,8 @@ DIALOG_SIM_SETTINGS_BASE::~DIALOG_SIM_SETTINGS_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SIM_SETTINGS_BASE::onInitDlg ) );
 	m_dcEnable2->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCEnableSecondSource ), NULL, this );
-	m_dcSourceType1->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCSource1Selected ), NULL, this );
-	m_dcSourceType2->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCSource2Selected ), NULL, this );
+	m_dcSourceType1->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCSource1Selected ), NULL, this );
+	m_dcSourceType2->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onDCSource2Selected ), NULL, this );
 	m_swapDCSources->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onSwapDCSources ), NULL, this );
 	m_loadDirectives->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onLoadDirectives ), NULL, this );
 

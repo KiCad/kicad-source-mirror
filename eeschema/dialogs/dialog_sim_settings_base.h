@@ -58,9 +58,11 @@ class DIALOG_SIM_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText110;
 		wxPanel* m_pgDC;
 		wxCheckBox* m_dcEnable2;
-		wxRadioBox* m_dcSourceType1;
-		wxRadioBox* m_dcSourceType2;
+		wxChoice* m_dcSourceType1;
+		wxChoice* m_dcSourceType2;
 		wxStaticText* m_staticText4;
+		wxStaticText* m_staticText41;
+		wxStaticText* m_staticText411;
 		wxChoice* m_dcSource1;
 		wxChoice* m_dcSource2;
 		wxStaticText* m_staticText5;
