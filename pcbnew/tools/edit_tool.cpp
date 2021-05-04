@@ -2205,11 +2205,11 @@ bool EDIT_TOOL::updateModificationPoint( PCB_SELECTION& aSelection )
         auto pos = item->GetPosition();
         aSelection.SetReferencePoint( VECTOR2I( pos.x, pos.y ) );
     }
-    // ...otherwise modify items with regard to the grid-snapped cursor position
+    // ...otherwise modify items with regard to the grid-snapped center position
     else
     {
-        m_cursor = getViewControls()->GetCursorPosition( true );
-        aSelection.SetReferencePoint( m_cursor );
+        PCB_GRID_HELPER grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
+        aSelection.SetReferencePoint( grid.BestSnapAnchor( aSelection.GetCenter(), nullptr ) );
     }
 
     return true;
