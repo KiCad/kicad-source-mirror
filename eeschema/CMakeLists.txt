@@ -292,6 +292,7 @@ if( KICAD_SPICE )
         sim/sim_plot_frame_base.cpp
         sim/sim_plot_panel.cpp
         sim/sim_panel_base.cpp
+        sim/sim_workbook.cpp
         sim/spice_simulator.cpp
         sim/spice_value.cpp
         dialogs/dialog_signal_list.cpp

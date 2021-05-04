@@ -42,6 +42,12 @@ public:
     virtual bool operator==( const SPICE_SIMULATOR_SETTINGS& aRhs ) const = 0;
 
     bool operator!=( const SPICE_SIMULATOR_SETTINGS& aRhs ) const { return !( *this == aRhs ); }
+
+    wxString GetWorkbookPath() const { return m_workbookPath; }
+    void SetWorkbookPath( wxString aPath ) { m_workbookPath = aPath; }
+
+private:
+    wxString m_workbookPath;
 };
 
 /**

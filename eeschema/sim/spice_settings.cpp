@@ -35,6 +35,13 @@ SPICE_SIMULATOR_SETTINGS::SPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent,
                                                     const std::string& aPath ) :
     NESTED_SETTINGS( "simulator", spiceSettingsSchemaVersion, aParent, aPath )
 {
+    m_params.emplace_back( new PARAM<wxString>( "workbook_path", &m_workbookPath, "" ) );
+}
+
+
+bool SPICE_SIMULATOR_SETTINGS::operator==( const SPICE_SIMULATOR_SETTINGS &aRhs ) const
+{
+    return m_workbookPath == aRhs.m_workbookPath;
 }
 
 
@@ -57,5 +64,6 @@ bool NGSPICE_SIMULATOR_SETTINGS::operator==( const SPICE_SIMULATOR_SETTINGS& aRh
 
     wxCHECK( settings, false );
 
-    return m_modelMode == settings->m_modelMode;
+    return ( *static_cast<const SPICE_SIMULATOR_SETTINGS*>( this ) ) == aRhs
+        && m_modelMode == settings->m_modelMode;
 }
