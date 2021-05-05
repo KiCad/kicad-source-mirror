@@ -32,6 +32,15 @@
 #include <wx/dynlib.h>
 #include <ngspice/sharedspice.h>
 
+// We have an issue here where NGSPICE incorrectly used bool for years
+// and defined it to be int when in C-mode.  We cannot adjust the function
+// signatures without re-writing sharedspice.h for KiCad.
+// Instead, we maintain status-quo for older NGSPICE versions (<=34) and
+// use the new signatures for newer versions
+#ifndef NGSPICE_PACKAGE_VERSION
+    typedef bool NG_BOOL;
+#endif
+
 class wxDynamicLibrary;
 
 class NGSPICE : public SPICE_SIMULATOR
@@ -113,6 +122,7 @@ private:
 
     wxDynamicLibrary m_dll;
 
+
     ///< Execute commands from a file
     bool loadSpinit( const std::string& aFileName );
 
@@ -125,8 +135,8 @@ private:
     // Callback functions
     static int cbSendChar( char* what, int id, void* user );
     static int cbSendStat( char* what, int id, void* user );
-    static int cbBGThreadRunning( bool is_running, int id, void* user );
-    static int cbControlledExit( int status, bool immediate, bool exit_upon_quit, int id,
+    static int cbBGThreadRunning( NG_BOOL is_running, int id, void* user );
+    static int cbControlledExit( int status, NG_BOOL immediate, NG_BOOL exit_upon_quit, int id,
                                  void* user );
 
     // Assure ngspice is in a valid state and reinitializes it if need be

@@ -632,7 +632,7 @@ int NGSPICE::cbSendStat( char* what, int id, void* user )
 }
 
 
-int NGSPICE::cbBGThreadRunning( bool is_running, int id, void* user )
+int NGSPICE::cbBGThreadRunning( NG_BOOL is_running, int id, void* user )
 {
     NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
 
@@ -644,7 +644,7 @@ int NGSPICE::cbBGThreadRunning( bool is_running, int id, void* user )
 }
 
 
-int NGSPICE::cbControlledExit( int status, bool immediate, bool exit_upon_quit, int id, void* user )
+int NGSPICE::cbControlledExit( int status, NG_BOOL immediate, NG_BOOL exit_upon_quit, int id, void* user )
 {
     // Something went wrong, reload the dll
     NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
