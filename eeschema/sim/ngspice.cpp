@@ -282,8 +282,25 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
 
 bool NGSPICE::Run()
 {
-    LOCALE_IO c_locale;               // ngspice works correctly only with C locale
-    return Command( "bg_run" );     // bg_* commands execute in a separate thread
+    wxBusyCursor dummy;
+
+    LOCALE_IO c_locale;                     // ngspice works correctly only with C locale
+    bool success = Command( "bg_run" );     // bg_* commands execute in a separate thread
+
+    if( success )
+    {
+        // wait for end of simulation.
+        // calling wxYield() allows printing activity, and stopping ngspice from GUI
+        // Also note: do not user wxSafeYield, because when using it we cannot stop
+        // ngspice from the GUI
+        do
+        {
+            wxMilliSleep( 50 );
+            wxYield();
+        } while( m_ngSpice_Running() );
+    }
+
+    return success;
 }
 
 
@@ -296,7 +313,7 @@ bool NGSPICE::Stop()
 
 bool NGSPICE::IsRunning()
 {
-    LOCALE_IO c_locale;               // ngspice works correctly only with C locale
+    // No need to use C locale here
     return m_ngSpice_Running();
 }
 

@@ -1336,6 +1336,12 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onAddSignal( wxCommandEvent& event )
 {
+    if( IsSimulationRunning() )
+    {
+        DisplayInfoMessage( this, _( "Simulator is running. Try later" ) );
+        return;
+    }
+
     SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
     if( !plotPanel || !m_exporter || plotPanel->GetType() != m_exporter->GetSimType() )
@@ -1353,6 +1359,12 @@ void SIM_PLOT_FRAME::onProbe( wxCommandEvent& event )
 {
     if( m_schematicFrame == NULL )
         return;
+
+    if( IsSimulationRunning() )
+    {
+        DisplayInfoMessage( this, _( "Simulator is running. Try later" ) );
+        return;
+    }
 
     m_schematicFrame->GetToolManager()->RunAction( EE_ACTIONS::simProbe );
     m_schematicFrame->Raise();
