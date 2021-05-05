@@ -700,11 +700,15 @@ void LIB_PART::GetPins( LIB_PINS& aList, int aUnit, int aConvert ) const
      * when m_unit == 0, the body item is common to units
      * when m_convert == 0, the body item is common to shapes
      */
-    for( const LIB_ITEM& item : m_drawings[ LIB_PIN_T ] )
+
+    PART_SPTR                  parent = m_parent.lock();
+    const LIB_ITEMS_CONTAINER& drawItems = parent ? parent->m_drawings : m_drawings;
+
+    for( const LIB_ITEM& item : drawItems[LIB_PIN_T] )
     {
         // Unit filtering:
         if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
-             continue;
+            continue;
 
         // Shape filtering:
         if( aConvert && item.m_convert && ( item.m_convert != aConvert ) )

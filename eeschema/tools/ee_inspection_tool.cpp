@@ -205,10 +205,8 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
     if( !part )
         return 0;
 
-    LIB_PINS                  pinList;
-    std::unique_ptr<LIB_PART> flattenedPart = part->Flatten();
-
-    flattenedPart->GetPins( pinList );
+    LIB_PINS pinList;
+    part->GetPins( pinList );
 
     // Sort pins by pin num, so 2 duplicate pins
     // (pins with the same number) will be consecutive in list
