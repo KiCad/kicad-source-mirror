@@ -88,7 +88,7 @@ class DIALOG_CHOOSE_SYMBOL : public DIALOG_SHIM
 {
 public:
     /**
-     * Create dialog to choose component.
+     * Create dialog to choose symbol.
      *
      * @param aParent   a SCH_BASE_FRAME parent window.
      * @param aTitle    Dialog title.
@@ -112,10 +112,10 @@ public:
     /**
      * To be called after this dialog returns from ShowModal().
      *
-     * For multi-unit components, if the user selects the component itself
-     * rather than picking an individual unit, 0 will be returned in aUnit.
-     * Beware that this is an invalid unit number - this should be replaced
-     * with whatever default is desired (usually 1).
+     * For multi-unit symbols, if the user selects the component itself rather than picking
+     * an individual unit, 0 will be returned in aUnit.
+     * Beware that this is an invalid unit number - this should be replaced with whatever
+     * default is desired (usually 1).
      *
      * @param aUnit if not NULL, the selected unit is filled in here.
      * @return the #LIB_ID of the symbol that has been selected.
@@ -153,8 +153,7 @@ public:
     }
 
     /**
-     * @return true if the user pressed the thumbnail view of the component to
-     *         launch the component browser.
+     * @return true if the user requested the symbol browser.
      */
     bool IsExternalBrowserSelected() const
     {
@@ -175,10 +174,10 @@ protected:
     void OnComponentPreselected( wxCommandEvent& aEvent );
 
     /**
-     * Handle the selection of an item. This is called when either the search
-     * box or the tree receive an Enter, or the tree receives a double click.
-     * If the item selected is a category, it is expanded or collapsed; if it
-     * is a component, the component is picked.
+     * Handle the selection of an item. This is called when either the search box or the tree
+     * receive an Enter, or the tree receives a double click.
+     * If the item selected is a category, it is expanded or collapsed; if it is a symbol, the
+     * symbol is picked.
      */
     void OnComponentSelected( wxCommandEvent& aEvent );
 

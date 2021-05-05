@@ -56,7 +56,7 @@ std::string toUTFTildaText( const wxString& txt )
 /**
  * Used to draw a dummy shape when a LIB_PART is not found in library
  *
- * This component is a 400 mils square with the text ??
+ * This symbol is a 400 mils square with the text "??"
  * DEF DUMMY U 0 40 Y Y 1 0 N
  * F0 "U" 0 -350 60 H V
  * F1 "DUMMY" 0 350 60 H V
@@ -883,35 +883,35 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
     wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_COMPONENT_T),
                  wxT( "Cannot swap data with invalid symbol." ) );
 
-    SCH_COMPONENT* component = (SCH_COMPONENT*) aItem;
+    SCH_COMPONENT* symbol = (SCH_COMPONENT*) aItem;
 
-    std::swap( m_lib_id, component->m_lib_id );
+    std::swap( m_lib_id, symbol->m_lib_id );
 
-    LIB_PART* part = component->m_part.release();
-    component->m_part.reset( m_part.release() );
-    component->UpdatePins();
+    LIB_PART* part = symbol->m_part.release();
+    symbol->m_part.reset( m_part.release() );
+    symbol->UpdatePins();
     m_part.reset( part );
     UpdatePins();
 
-    std::swap( m_pos, component->m_pos );
-    std::swap( m_unit, component->m_unit );
-    std::swap( m_convert, component->m_convert );
+    std::swap( m_pos, symbol->m_pos );
+    std::swap( m_unit, symbol->m_unit );
+    std::swap( m_convert, symbol->m_convert );
 
-    m_fields.swap( component->m_fields );    // std::vector's swap()
+    m_fields.swap( symbol->m_fields );    // std::vector's swap()
 
-    for( SCH_FIELD& field : component->m_fields )
-        field.SetParent( component );
+    for( SCH_FIELD& field : symbol->m_fields )
+        field.SetParent( symbol );
 
     for( SCH_FIELD& field : m_fields )
         field.SetParent( this );
 
     TRANSFORM tmp = m_transform;
 
-    m_transform = component->m_transform;
-    component->m_transform = tmp;
+    m_transform = symbol->m_transform;
+    symbol->m_transform = tmp;
 
-    std::swap( m_instanceReferences, component->m_instanceReferences );
-    std::swap( m_schLibSymbolName, component->m_schLibSymbolName );
+    std::swap( m_instanceReferences, symbol->m_instanceReferences );
+    std::swap( m_schLibSymbolName, symbol->m_schLibSymbolName );
 }
 
 

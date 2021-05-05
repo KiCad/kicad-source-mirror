@@ -35,7 +35,7 @@ class SYMBOL_LIBRARY_MANAGER;
 class wxBoxSizer;
 
 /**
- * Library Editor pane with component tree and symbol library table selector.
+ * Library Editor pane with symbol tree and symbol library table selector.
  */
 class SYMBOL_TREE_PANE : public wxPanel
 {
@@ -53,7 +53,7 @@ protected:
     void onUpdateUI( wxUpdateUIEvent& aEvent );
 
     SYMBOL_EDIT_FRAME*      m_symbolEditFrame;
-    LIB_TREE*               m_tree;             ///< component search tree widget
+    LIB_TREE*               m_tree;             ///< symbol search tree widget
     SYMBOL_LIBRARY_MANAGER* m_libMgr;
 };
 

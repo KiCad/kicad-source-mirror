@@ -37,7 +37,7 @@ class LIB_FIELD;
 
 
 /**
- * Instances are attached to a symbol or sheet and provide a place for the component's value,
+ * Instances are attached to a symbol or sheet and provide a place for the symbol's value,
  * reference designator, footprint, , a sheet's name, filename, and user definable name-value
  * pairs of arbitrary purpose.
  *

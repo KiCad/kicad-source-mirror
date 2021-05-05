@@ -68,8 +68,9 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     wxString          errorMsg;
     SCH_SCREENS       screens( Schematic().Root() );
 
-    // Create a new empty library to archive components:
-    std::unique_ptr<PART_LIB> archLib = std::make_unique<PART_LIB>( SCH_LIB_TYPE::LT_EESCHEMA, aFileName );
+    // Create a new empty library to archive symbols:
+    std::unique_ptr<PART_LIB> archLib = std::make_unique<PART_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
+                                                                    aFileName );
 
     // Save symbols to file only when the library will be fully filled
     archLib->EnableBuffering();
@@ -84,21 +85,21 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
         for( auto aItem : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
-            LIB_PART* part = nullptr;
-            auto      component = static_cast<SCH_COMPONENT*>( aItem );
+            LIB_PART*      part = nullptr;
+            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( aItem );
 
             try
             {
-                if( archLib->FindPart( component->GetLibId() ) )
+                if( archLib->FindPart( symbol->GetLibId() ) )
                     continue;
 
-                part = GetLibPart( component->GetLibId(), true );
+                part = GetLibPart( symbol->GetLibId(), true );
             }
             catch( const IO_ERROR& )
             {
                 // Queue up error messages for later.
                 tmp.Printf( _( "Failed to add symbol \"%s\" to library file \"%s\"." ),
-                            component->GetLibId().GetUniStringLibItemName(), aFileName );
+                            symbol->GetLibId().GetUniStringLibItemName(), aFileName );
 
                 // Don't bail out here.  Attempt to add as many of the symbols to the library
                 // as possible.
@@ -113,7 +114,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                 std::unique_ptr<LIB_PART> flattenedPart = part->Flatten();
 
                 // Use the full LIB_ID as the symbol name to prevent symbol name collisions.
-                flattenedPart->SetName( component->GetLibId().GetUniStringLibId() );
+                flattenedPart->SetName( symbol->GetLibId().GetUniStringLibId() );
 
                 // AddPart() does first clone the part before adding.
                 archLib->AddPart( flattenedPart.get() );
@@ -121,10 +122,10 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
             else
             {
                 tmp.Printf( _( "Symbol %s not found in any library or cache." ),
-                            component->GetLibId().GetUniStringLibId() );
+                            symbol->GetLibId().GetUniStringLibId() );
             }
 
-            if( !tmp.empty() && !errorMsg.Contains( component->GetLibId().GetUniStringLibId() ) )
+            if( !tmp.empty() && !errorMsg.Contains( symbol->GetLibId().GetUniStringLibId() ) )
             {
                 if( errorMsg.empty() )
                     errorMsg += tmp;

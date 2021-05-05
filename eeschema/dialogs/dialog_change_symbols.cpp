@@ -442,12 +442,12 @@ bool DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
 
         wxCHECK2( screen, continue );
 
-        std::vector<SCH_COMPONENT*> components;
+        std::vector<SCH_COMPONENT*> symbols;
 
         for( SCH_ITEM* item : screen->Items().OfType( SCH_COMPONENT_T ) )
-            components.push_back( static_cast<SCH_COMPONENT*>( item ) );
+            symbols.push_back( static_cast<SCH_COMPONENT*>( item ) );
 
-        for( SCH_COMPONENT* symbol : components )
+        for( SCH_COMPONENT* symbol : symbols )
         {
             if( !isMatch( symbol, &instance ) )
                 continue;

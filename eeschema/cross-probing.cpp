@@ -39,10 +39,10 @@
 #include <advanced_config.h>
 #include <netclass.h>
 
-SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
-                                                    bool            aSearchHierarchy,
-                                                    SCH_SEARCH_T    aSearchType,
-                                                    const wxString& aSearchText )
+SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
+                                                 bool            aSearchHierarchy,
+                                                 SCH_SEARCH_T    aSearchType,
+                                                 const wxString& aSearchText )
 {
     SCH_SHEET_PATH* sheetWithComponentFound = nullptr;
     SCH_COMPONENT*  component               = nullptr;
@@ -349,7 +349,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( idcmd == nullptr )    // Highlight component only (from CvPcb or Pcbnew)
     {
         // Highlight component part_ref, or clear Highlight, if part_ref is not existing
-        editor->FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
+        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
         return;
     }
 
@@ -364,21 +364,21 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     {
         // Highlighting the reference itself isn't actually that useful, and it's harder to
         // see.  Highlight the parent and display the message.
-        editor->FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, msg );
+        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_COMPONENT, msg );
     }
     else if( strcmp( idcmd, "$VAL:" ) == 0 )
     {
         // Highlighting the value itself isn't actually that useful, and it's harder to see.
         // Highlight the parent and display the message.
-        editor->FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, msg );
+        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_COMPONENT, msg );
     }
     else if( strcmp( idcmd, "$PAD:" ) == 0 )
     {
-        editor->FindComponentAndItem( part_ref, true, HIGHLIGHT_PIN, msg );
+        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_PIN, msg );
     }
     else
     {
-        editor->FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
+        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
     }
 }
 

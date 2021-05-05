@@ -1147,8 +1147,8 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
         {
             SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
 
-            editor->FindComponentAndItem( refs[0].GetRef() + refs[0].GetRefNumber(), true,
-                                          HIGHLIGHT_COMPONENT, wxEmptyString );
+            editor->FindSymbolAndItem( refs[ 0 ].GetRef() + refs[ 0 ].GetRefNumber(), true,
+                                       HIGHLIGHT_COMPONENT, wxEmptyString );
         }
     }
     else

@@ -788,7 +788,7 @@ void SCH_LEGACY_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen, 
         if( strCompare( "$Descr", line ) )
             loadPageSettings( aReader, aScreen );
         else if( strCompare( "$Comp", line ) )
-            aScreen->Append( loadComponent( aReader ) );
+            aScreen->Append( loadSymbol( aReader ) );
         else if( strCompare( "$Sheet", line ) )
             aScreen->Append( loadSheet( aReader ) );
         else if( strCompare( "$Bitmap", line ) )
@@ -1490,13 +1490,13 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
 }
 
 
-SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
+SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
 {
     const char* line = aReader.Line();
 
     wxCHECK( strCompare( "$Comp", line, &line ), NULL );
 
-    std::unique_ptr<SCH_COMPONENT> component = std::make_unique<SCH_COMPONENT>();
+    std::unique_ptr<SCH_COMPONENT> symbol = std::make_unique<SCH_COMPONENT>();
 
     line = aReader.ReadLine();
 
@@ -1526,7 +1526,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
             else
                 libId.SetLibItemName( libName, false );
 
-            component->SetLibId( libId );
+            symbol->SetLibId( libId );
 
             wxString refDesignator = tokens.GetNextToken();
 
@@ -1547,9 +1547,9 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
             prefix.Trim( false );
 
             if( prefix.IsEmpty() )
-                component->SetPrefix( wxString( "U" ) );
+                symbol->SetPrefix( wxString( "U" ) );
             else
-                component->SetPrefix( prefix );
+                symbol->SetPrefix( prefix );
         }
         else if( strCompare( "U", line, &line ) )
         {
@@ -1566,7 +1566,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                     m_rootSheet->GetScreen()->SetModify();
             }
 
-            component->SetUnit( unit );
+            symbol->SetUnit( unit );
 
             // Same can also happen with the convert parameter
             int convert = parseInt( aReader, line, &line );
@@ -1580,13 +1580,13 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                     m_rootSheet->GetScreen()->SetModify();
             }
 
-            component->SetConvert( convert );
+            symbol->SetConvert( convert );
 
             wxString text;
             parseUnquotedString( text, aReader, line, &line );
 
             if( text != "00000000" )
-                const_cast<KIID&>( component->m_Uuid ) = KIID( text );
+                const_cast<KIID&>( symbol->m_Uuid ) = KIID( text );
         }
         else if( strCompare( "P", line, &line ) )
         {
@@ -1594,7 +1594,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
 
             pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
             pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
-            component->SetPosition( pos );
+            symbol->SetPosition( pos );
         }
         else if( strCompare( "AR", line, &line ) )
         {
@@ -1609,7 +1609,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
 
             parseQuotedString( pathStr, aReader, line, &line );
 
-            // Note: AR path excludes root sheet, but includes component.  Normalize to
+            // Note: AR path excludes root sheet, but includes symbol.  Normalize to
             // internal format by shifting everything down one and adding the root sheet.
             KIID_PATH path( pathStr );
 
@@ -1649,8 +1649,8 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
             if( tmp < 0 || tmp > MAX_UNIT_COUNT_PER_PACKAGE )
                 SCH_PARSE_ERROR( "unit value out of range", aReader, line );
 
-            component->AddHierarchicalReference( path, reference, (int)tmp );
-            component->GetField( REFERENCE_FIELD )->SetText( reference );
+            symbol->AddHierarchicalReference( path, reference, (int)tmp );
+            symbol->GetField( REFERENCE_FIELD )->SetText( reference );
 
         }
         else if( strCompare( "F", line, &line ) )
@@ -1668,23 +1668,23 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
             int size = Mils2Iu( parseInt( aReader, line, &line ) );
             int attributes = parseHex( aReader, line, &line );
 
-            if( index >= component->GetFieldCount() )
+            if( index >= symbol->GetFieldCount() )
             {
-                // The first MANDATOR_FIELDS _must_ be constructed within
-                // the SCH_COMPONENT constructor.  This assert is simply here
-                // to guard against a change in that constructor.
-                wxASSERT( component->GetFieldCount() >= MANDATORY_FIELDS );
+                // The first MANDATOR_FIELDS _must_ be constructed within the SCH_COMPONENT
+                // constructor.  This assert is simply here to guard against a change in that
+                // constructor.
+                wxASSERT( symbol->GetFieldCount() >= MANDATORY_FIELDS );
 
-                // Ignore the _supplied_ fieldNdx.  It is not important anymore
-                // if within the user defined fields region (i.e. >= MANDATORY_FIELDS).
+                // Ignore the _supplied_ fieldNdx.  It is not important anymore if within the
+                // user defined fields region (i.e. >= MANDATORY_FIELDS).
                 // We freely renumber the index to fit the next available field slot.
-                index = component->GetFieldCount();  // new has this index after insertion
+                index = symbol->GetFieldCount();  // new has this index after insertion
 
-                SCH_FIELD field( wxPoint( 0, 0 ), index, component.get(), name );
-                component->AddField( field );
+                SCH_FIELD field( wxPoint( 0, 0 ), index, symbol.get(), name );
+                symbol->AddField( field );
             }
 
-            SCH_FIELD& field = component->GetFields()[index];
+            SCH_FIELD& field = symbol->GetFields()[index];
 
             // Prior to version 2 of the schematic file format, none of the following existed.
             if( m_version > 1 )
@@ -1702,7 +1702,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                 else if( hjustify == 'R' )
                     field.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
                 else if( hjustify != 'C' )
-                    SCH_PARSE_ERROR( "component field text horizontal justification must be "
+                    SCH_PARSE_ERROR( "symbol field text horizontal justification must be "
                                      "L, R, or C", aReader, line );
 
                 // We are guaranteed to have a least one character here for older file formats
@@ -1712,26 +1712,26 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                 else if( textAttrs[0] == 'B' )
                     field.SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
                 else if( textAttrs[0] != 'C' )
-                    SCH_PARSE_ERROR( "component field text vertical justification must be "
+                    SCH_PARSE_ERROR( "symbol field text vertical justification must be "
                                      "B, T, or C", aReader, line );
 
                 // Newer file formats include the bold and italics text attribute.
                 if( textAttrs.Length() > 1 )
                 {
                     if( textAttrs.Length() != 3 )
-                        SCH_PARSE_ERROR( _( "component field text attributes must be 3 characters wide" ),
+                        SCH_PARSE_ERROR( _( "symbol field text attributes must be 3 characters wide" ),
                                          aReader, line );
 
                     if( textAttrs[1] == 'I' )
                         field.SetItalic( true );
                     else if( textAttrs[1] != 'N' )
-                        SCH_PARSE_ERROR( "component field text italics indicator must be I or N",
+                        SCH_PARSE_ERROR( "symbol field text italics indicator must be I or N",
                                          aReader, line );
 
                     if( textAttrs[2] == 'B' )
                         field.SetBold( true );
                     else if( textAttrs[2] != 'N' )
-                        SCH_PARSE_ERROR( "component field text bold indicator must be B or N",
+                        SCH_PARSE_ERROR( "symbol field text bold indicator must be B or N",
                                          aReader, line );
                 }
             }
@@ -1746,7 +1746,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
             else if( orientation == 'V' )
                 field.SetTextAngle( TEXT_ANGLE_VERT );
             else
-                SCH_PARSE_ERROR( "component field orientation must be H or V", aReader, line );
+                SCH_PARSE_ERROR( "symbol field orientation must be H or V", aReader, line );
 
             if( name.IsEmpty() )
                 name = TEMPLATE_FIELDNAME::GetDefaultFieldName( index );
@@ -1756,8 +1756,8 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
         else if( strCompare( "$EndComp", line ) )
         {
             // Ensure all flags (some are set by previous initializations) are reset:
-            component->ClearFlags();
-            return component.release();
+            symbol->ClearFlags();
+            return symbol.release();
         }
         else
         {
@@ -1777,30 +1777,30 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
             transform.x1 = parseInt( aReader, line, &line );
 
             if( transform.x1 < -1 || transform.x1 > 1 )
-                SCH_PARSE_ERROR( "invalid component X1 transform value", aReader, line );
+                SCH_PARSE_ERROR( "invalid symbol X1 transform value", aReader, line );
 
             transform.y1 = parseInt( aReader, line, &line );
 
             if( transform.y1 < -1 || transform.y1 > 1 )
-                SCH_PARSE_ERROR( "invalid component Y1 transform value", aReader, line );
+                SCH_PARSE_ERROR( "invalid symbol Y1 transform value", aReader, line );
 
             transform.x2 = parseInt( aReader, line, &line );
 
             if( transform.x2 < -1 || transform.x2 > 1 )
-                SCH_PARSE_ERROR( "invalid component X2 transform value", aReader, line );
+                SCH_PARSE_ERROR( "invalid symbol X2 transform value", aReader, line );
 
             transform.y2 = parseInt( aReader, line, &line );
 
             if( transform.y2 < -1 || transform.y2 > 1 )
-                SCH_PARSE_ERROR( "invalid component Y2 transform value", aReader, line );
+                SCH_PARSE_ERROR( "invalid symbol Y2 transform value", aReader, line );
 
-            component->SetTransform( transform );
+            symbol->SetTransform( transform );
         }
 
         line = aReader.ReadLine();
     }
 
-    SCH_PARSE_ERROR( "invalid component line", aReader, line );
+    SCH_PARSE_ERROR( "invalid symbol line", aReader, line );
 
     return NULL;  // Prevents compiler warning.  Should never get here.
 }
@@ -2057,11 +2057,10 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
         {
             /*format:
              * AR Path="/140/2" Ref="C99"   Part="1"
-             * where 140 is the uid of the containing sheet
-             * and 2 is the timestamp of this component.
+             * where 140 is the uid of the containing sheet and 2 is the timestamp of this symbol.
              * (timestamps are actually 8 hex chars)
-             * Ref is the conventional component reference for this 'path'
-             * Part is the conventional component part selection for this 'path'
+             * Ref is the conventional symbol reference designator for this 'path'
+             * Part is the conventional symbol unit selection for this 'path'
              */
             wxString path = "/";
 

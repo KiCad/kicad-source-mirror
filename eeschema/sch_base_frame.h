@@ -141,27 +141,25 @@ public:
     void UpdateStatusBar() override;
 
     /**
-     * Call the library viewer to select component to import into schematic.
-     * if the library viewer is currently running, it is closed and reopened
-     * in modal mode.
+     * Call the library viewer to select symbol to import into schematic.
+     * If the library viewer is currently running, it is closed and reopened in modal mode.
      *
-     * aAllowFields chooses whether or not features that permit the user to edit
-     * fields (e.g. footprint selection) should be enabled. This should be false
-     * when they would have no effect, for example loading a part into symbol_editor.
+     * aAllowFields chooses whether or not features that permit the user to edit fields
+     * (e.g. footprint selection) should be enabled. This should be false when they would
+     * have no effect, for example loading a part into symbol_editor.
      *
-     * @param aFilter is a #SCHLIB_FILTER filter to pass the allowed library names
-     *  and/or the library name to load the component from and/or some other filter
-     *          if NULL, no filtering.
-     * @param aHistoryList is the list of previously loaded components - will be edited
-     * @param aUseLibBrowser is the flag to call the library viewer to select the component
+     * @param aFilter is an optional #SCHLIB_FILTER filter to pass the allowed library names
+     *                and/or the library name to load the symbol from and/or some other filter
+     * @param aHistoryList is the list of previously loaded symbols - will be edited
+     * @param aUseLibBrowser is the flag to call the library viewer to select the symbol
      * @param aUnit is the preselected unit.
      * @param aConvert is the preselected De Morgan shape.
-     * @param aHighlight is the name of component to highlight in the list.
+     * @param aHighlight is the name of symbol to highlight in the list.
      *                   highlights none if there isn't one by that name.
      * @param aShowFootprints is the whether to show footprints in the dialog.
      * @param aAllowFields is whether to allow field editing in the dialog.
      *
-     * @return the selected component
+     * @return the selected symbol
      */
     PICKED_SYMBOL PickSymbolFromLibTree( const SCHLIB_FILTER* aFilter,
                                          std::vector<PICKED_SYMBOL>& aHistoryList,
@@ -187,17 +185,16 @@ public:
     LIB_PART* GetFlattenedLibPart( const LIB_ID& aLibId, bool aShowErrorMsg = false );
 
     /**
-     * Call the library viewer to select component to import into schematic.
-     * if the library viewer is currently running, it is closed and reopened
-     * in modal mode.
+     * Call the library viewer to select symbol to import into schematic.
+     * If the library viewer is currently running, it is closed and reopened in modal mode.
      *
      * @param aParent is the caller.
      * @param aFilter is a filter to pass the allowed library names
      *          and/or some other filter.
-     * @param aPreselectedLibId is the preselected component #LIB_ID. Not valid if none selected.
+     * @param aPreselectedLibId is the preselected symbol's #LIB_ID. Not valid if none selected.
      * @param aUnit is the preselected unit.
      * @param aConvert is the preselected deMorgan conversion.
-     * @return the selected component.
+     * @return the selected symbol.
      */
     PICKED_SYMBOL PickSymbolFromLibBrowser( wxTopLevelWindow* aParent,
                                             const SCHLIB_FILTER* aFilter,

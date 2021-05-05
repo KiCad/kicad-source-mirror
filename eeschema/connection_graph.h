@@ -338,9 +338,9 @@ private:
      * Any item that is stored in the list of items that have a connection point
      * at a given (x, y) location will eventually be electrically connected.
      * This means that we can't store SCH_COMPONENTs in this map -- we must store
-     * a structure that links a specific pin on a component back to that
-     * component: a SCH_PIN_CONNECTION.  This wrapper class is a convenience for
-     * linking a pin and component to a specific (x, y) point.
+     * a structure that links a specific pin on a symbol back to that symbol: a
+     * SCH_PIN_CONNECTION.  This wrapper class is a convenience for linking a pin
+     * and symbol to a specific (x, y) point.
      *
      * In the second phase, we iterate over each value in the map, which is a
      * vector of items that have overlapping connection points.  After some

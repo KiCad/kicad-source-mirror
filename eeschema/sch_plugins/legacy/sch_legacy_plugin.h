@@ -150,7 +150,7 @@ private:
     SCH_LINE* loadWire( LINE_READER& aReader );
     SCH_BUS_ENTRY_BASE* loadBusEntry( LINE_READER& aReader );
     SCH_TEXT* loadText( LINE_READER& aReader );
-    SCH_COMPONENT* loadComponent( LINE_READER& aReader );
+    SCH_COMPONENT* loadSymbol( LINE_READER& aReader );
     std::shared_ptr<BUS_ALIAS> loadBusAlias( LINE_READER& aReader, SCH_SCREEN* aScreen );
 
     void saveComponent( SCH_COMPONENT* aComponent );

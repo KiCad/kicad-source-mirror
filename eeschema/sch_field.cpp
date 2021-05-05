@@ -23,12 +23,11 @@
  */
 
 /*
- * Fields are texts attached to a component, having a special meaning
- * Fields 0 and 1 are very important: reference and value
+ * Fields are texts attached to a symbol, some of which have a special meaning.
+ * Fields 0 and 1 are very important: reference and value.
  * Field 2 is used as default footprint name.
- * Field 3 is reserved (not currently used
- * Fields 4 and more are user fields.
- * They can be renamed and can appear in reports
+ * Field 3 is used to point to a datasheet (usually a URL).
+ * Fields 4+ are user fields.  They can be renamed and can appear in reports.
  */
 
 #include <wx/menu.h>
@@ -687,9 +686,9 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter ) const
 
 void SCH_FIELD::SetPosition( const wxPoint& aPosition )
 {
-    // Actual positions are calculated by the rotation/mirror transform of the
-    // parent component of the field.  The inverse transform is used to calculate
-    // the position relative to the parent component.
+    // Actual positions are calculated by the rotation/mirror transform of the parent symbol
+    // of the field.  The inverse transform is used to calculate the position relative to the
+    // parent symbol.
     if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
         SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );

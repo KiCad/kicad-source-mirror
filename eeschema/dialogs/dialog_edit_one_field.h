@@ -39,7 +39,7 @@ class SCINTILLA_TRICKS;
 
 
 /**
- * A base class to edit schematic and component library fields.
+ * A base class to edit schematic and symbol library fields.
  *
  * This class is setup in expectation of its children possibly using Kiway player so
  * #DIALOG_SHIM::ShowQuasiModal is required when calling any subclasses.
@@ -103,7 +103,7 @@ protected:
 
 
 /**
- * Handle editing a single component field in the library editor.
+ * Handle editing a single symbol field in the library editor.
  *
  * @note Use ShowQuasiModal when calling this class!
  */
@@ -119,7 +119,7 @@ public:
     {
         aField->SetText( m_text );
 
-        // VALUE === component name, so update the parent component if it changes.
+        // VALUE === symbol name, so update the parent symbol if it changes.
         if( aField->GetId() == VALUE_FIELD && aField->GetParent() )
             aField->GetParent()->SetName( m_text );
 
@@ -129,7 +129,7 @@ public:
 
 
 /**
- * Handle editing a single component field in the schematic editor.
+ * Handle editing a single symbol field in the schematic editor.
  *
  * @note Use ShowQuasiModal when calling this class!
  */

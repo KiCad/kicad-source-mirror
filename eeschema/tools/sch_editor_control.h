@@ -138,18 +138,16 @@ public:
     void AssignFootprints( const std::string& aChangedSetOfReferences );
 
     /**
-     * Find a component in the schematic and an item in this component.
+     * Find a symbol in the schematic and an item in this symobl.
      *
-     * @param aReference The component reference designator to find.
+     * @param aReference The symbol reference designator to find.
      * @param aSearchHierarchy If false, search the current sheet only.  Otherwise,
      *                         the entire hierarchy
      * @param aSearchType A #SCH_SEARCH_T value used to determine what to search for.
      * @param aSearchText The text to search for, either in value, reference or elsewhere.
      */
-    SCH_ITEM* FindComponentAndItem( const wxString& aReference,
-                                    bool            aSearchHierarchy,
-                                    SCH_SEARCH_T    aSearchType,
-                                    const wxString& aSearchText );
+    SCH_ITEM* FindSymbolAndItem( const wxString& aReference, bool aSearchHierarchy,
+                                 SCH_SEARCH_T aSearchType, const wxString& aSearchText );
 
 private:
     ///< copy selection to clipboard
@@ -167,7 +165,7 @@ private:
 
     SCH_SHEET_PATH updatePastedSheet( const SCH_SHEET_PATH& aPastePath, const KIID_PATH& aClipPath,
                                       SCH_SHEET* aSheet, bool aForceKeepAnnotations,
-                                      SCH_SHEET_LIST*     aPastedSheetsSoFar,
+                                      SCH_SHEET_LIST* aPastedSheetsSoFar,
                                       SCH_REFERENCE_LIST* aPastedSymbolsSoFar );
 
     void setClipboardInstances( const SCH_SCREEN* aPastedScreen );
@@ -192,9 +190,8 @@ private:
      *                         field if \a aForceVisibilityState is true.
      * @return bool = true if success.
      */
-    bool processCmpToFootprintLinkFile( const wxString& aFullFilename,
-                                        bool            aForceVisibilityState,
-                                        bool            aVisibilityState );
+    bool processCmpToFootprintLinkFile( const wxString& aFullFilename, bool aForceVisibilityState,
+                                        bool aVisibilityState );
 
     ///< Set up handlers for various events.
     void setTransitions() override;

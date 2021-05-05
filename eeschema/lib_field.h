@@ -37,12 +37,12 @@ class SCH_LEGACY_PLUGIN_CACHE;
 
 
 /**
- * Field object used in symbol libraries.  At least MANDATORY_FIELDS are always present
- * in a ram resident library symbol.  All constructors must ensure this because
- * the component property editor assumes it.
+ * Field object used in symbol libraries.  At least MANDATORY_FIELDS are always present in a
+ * RAM-resident library symbol.  All constructors must ensure this because the symbol property
+ * editor assumes it.
  * <p>
- * A field is a string linked to a component.  Unlike purely graphical text, fields can
- * be used in netlist generation and other tools (BOM).
+ * A field is a string linked to a symbol.  Unlike purely graphical text, fields can be used in
+ * netlist generation and other tools (BOM).
  *
  *  The first 4 fields have a special meaning:
  *
@@ -128,8 +128,8 @@ public:
      * Set a user definable field name to \a aName.
      *
      * Reserved fields such as value and reference are not renamed.  If the field name is
-     * changed, the field modified flag is set.  If the field is the child of a component,
-     * the parent component's modified flag is also set.
+     * changed, the field modified flag is set.  If the field is the child of a symbol, the
+     * parent symbol's modified flag is also set.
      *
      * @param aName - User defined field name.
      */

@@ -760,7 +760,7 @@ void SCH_SHEET::Rotate( wxPoint aCenter )
     }
     else
     {
-        // Move the fields to the new position because the component itself has moved.
+        // Move the fields to the new position because the parent itself has moved.
         for( SCH_FIELD& field : m_fields )
         {
             wxPoint pos = field.GetTextPos();

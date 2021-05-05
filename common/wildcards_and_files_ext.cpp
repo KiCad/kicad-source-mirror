@@ -359,7 +359,7 @@ wxString PageLayoutDescrFileWildcard()
 }
 
 
-// Wildcard for cvpcb component to footprint link file
+// Wildcard for cvpcb symbol to footprint link file
 wxString ComponentFileWildcard()
 {
     return _( "KiCad symbol footprint link files" ) + AddFileExtListToFilter( { "cmp" } );

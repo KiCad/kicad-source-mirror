@@ -92,7 +92,7 @@ public:
     int TestConflictingBusAliases();
 
     /**
-     * Test if all units of each multiunit component have the same footprint assigned.
+     * Test if all units of each multiunit symbol have the same footprint assigned.
      * @return The error count.
      */
     int TestMultiunitFootprints();
@@ -111,7 +111,7 @@ public:
     int TestPinToPin();
 
     /**
-     * Checks if shared pins on multi-unit components have been connected to different nets
+     * Checks if shared pins on multi-unit symbols have been connected to different nets
      * @return the error count
      */
     int TestMultUnitPinConflicts();

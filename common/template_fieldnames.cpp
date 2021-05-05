@@ -30,10 +30,10 @@
 
 using namespace TFIELD_T;
 
-#define REFCANONICAL "Reference"
-#define VALCANONICAL "Value"
-#define FTPCANONICAL "Footprint"
-#define DSHCANONICAL "Datasheet"
+#define REFERENCE_CANONICAL "Reference"
+#define VALUE_CANONICAL "Value"
+#define FOOTPRINT_CANONICAL "Footprint"
+#define DATASHEET_CANONICAL "Datasheet"
 
 static std::mutex s_defaultFieldMutex;
 
@@ -50,25 +50,25 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTra
     {
         switch( aFieldNdx )
         {
-        case  REFERENCE_FIELD: return REFCANONICAL;   // The component reference, R1, C1, etc.
-        case  VALUE_FIELD:     return VALCANONICAL;   // The component value + name
-        case  FOOTPRINT_FIELD: return FTPCANONICAL;   // The footprint for use with Pcbnew
-        case  DATASHEET_FIELD: return DSHCANONICAL;   // Link to a datasheet for component
+        case  REFERENCE_FIELD: return REFERENCE_CANONICAL;   // The symbol reference, R1, C1, etc.
+        case  VALUE_FIELD:     return VALUE_CANONICAL;       // The symbol value
+        case  FOOTPRINT_FIELD: return FOOTPRINT_CANONICAL;   // The footprint for use with Pcbnew
+        case  DATASHEET_FIELD: return DATASHEET_CANONICAL;   // Link to a datasheet for symbol
         }
     }
 
-    // Mutex protection is needed so that multiple loader threads don't write to the static variables
-    // at once
+    // Mutex protection is needed so that multiple loader threads don't write to the static
+    // variables at once
     std::lock_guard<std::mutex> lock( s_defaultFieldMutex );
 
     // Fetching translations can take a surprising amount of time when loading libraries,
     // so only do it when necessary.
     if( Pgm().GetLocale() != locale )
     {
-        referenceDefault = _( REFCANONICAL );
-        valueDefault     = _( VALCANONICAL );
-        footprintDefault = _( FTPCANONICAL );
-        datasheetDefault = _( DSHCANONICAL );
+        referenceDefault = _( REFERENCE_CANONICAL );
+        valueDefault     = _( VALUE_CANONICAL );
+        footprintDefault = _( FOOTPRINT_CANONICAL );
+        datasheetDefault = _( DATASHEET_CANONICAL );
         fieldDefault     = _( "Field%d" );
         locale = Pgm().GetLocale();
     }
@@ -76,19 +76,19 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTra
     // Fixed values for the mandatory fields
     switch( aFieldNdx )
     {
-    case  REFERENCE_FIELD: return referenceDefault;   // The component reference, R1, C1, etc.
-    case  VALUE_FIELD:     return valueDefault;       // The component value + name
+    case  REFERENCE_FIELD: return referenceDefault;   // The symbol reference, R1, C1, etc.
+    case  VALUE_FIELD:     return valueDefault;       // The symbol value
     case  FOOTPRINT_FIELD: return footprintDefault;   // The footprint for use with Pcbnew
-    case  DATASHEET_FIELD: return datasheetDefault;   // Link to a datasheet for component
+    case  DATASHEET_FIELD: return datasheetDefault;   // Link to a datasheet for symbol
     default:               return wxString::Format( fieldDefault, aFieldNdx );
     }
 
 }
 
-#undef REFCANONICAL
-#undef VALCANONICAL
-#undef FTPCANONICAL
-#undef DSHCANONICAL
+#undef REFERENCE_CANONICAL
+#undef VALUE_CANONICAL
+#undef FOOTPRINT_CANONICAL
+#undef DATASHEET_CANONICAL
 
 
 void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const

@@ -339,19 +339,19 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
 
     if( aItem->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* component = (SCH_COMPONENT*) aItem;
+        SCH_COMPONENT* symbol = (SCH_COMPONENT*) aItem;
 
         if( m_references->GetValue() )
-            processItem( aSheetPath, component->GetField( REFERENCE_FIELD ), aItem );
+            processItem( aSheetPath, symbol->GetField( REFERENCE_FIELD ), aItem );
 
         if( m_values->GetValue() )
-            processItem( aSheetPath, component->GetField( VALUE_FIELD ), aItem );
+            processItem( aSheetPath, symbol->GetField( VALUE_FIELD ), aItem );
 
         if( m_otherFields->GetValue() )
         {
-            for( int i = 2; i < component->GetFieldCount(); ++i )
+            for( int i = 2; i < symbol->GetFieldCount(); ++i )
             {
-                SCH_FIELD&      field = component->GetFields()[i];
+                SCH_FIELD&      field = symbol->GetFields()[i];
                 const wxString& fieldName = field.GetName();
 
                 if( !m_fieldnameFilterOpt->GetValue() || m_fieldnameFilter->GetValue().IsEmpty()

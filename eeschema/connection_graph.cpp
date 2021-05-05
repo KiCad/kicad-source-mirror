@@ -518,9 +518,9 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
         }
         else if( item->Type() == SCH_COMPONENT_T )
         {
-            SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
 
-            for( SCH_PIN* pin : component->GetPins( &aSheet ) )
+            for( SCH_PIN* pin : symbol->GetPins( &aSheet ) )
             {
                 pin->InitializeConnection( aSheet, this );
 

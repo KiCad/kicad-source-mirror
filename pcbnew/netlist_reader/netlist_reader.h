@@ -208,7 +208,7 @@ protected:
 class LEGACY_NETLIST_READER : public NETLIST_READER
 {
     /**
-     * Function loadComponent
+     * Function loadSymbol
      * read the \a aLine containing the description of a component from a legacy format
      * netlist and add it to the netlist.
      *

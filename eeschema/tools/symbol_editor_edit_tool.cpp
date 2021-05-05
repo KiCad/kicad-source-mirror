@@ -514,8 +514,8 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     LIB_PART* parent = aField->GetParent();
     wxCHECK( parent, /* void */ );
 
-    // Editing the component value field is equivalent to creating a new component based
-    // on the current component.  Set the dialog message to inform the user.
+    // Editing the symbol value field is equivalent to creating a new symbol based on the
+    // current symbol.  Set the dialog message to inform the user.
     if( aField->GetId() == VALUE_FIELD )
         caption = _( "Edit Symbol Name" );
     else

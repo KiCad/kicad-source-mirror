@@ -368,7 +368,7 @@ void DIALOG_ERC::testErc()
     m_parent->RecalculateConnections( NO_CLEANUP );
     sch->ConnectionGraph()->RunERC();
 
-    // Test is all units of each multiunit component have the same footprint assigned.
+    // Test is all units of each multiunit symbol have the same footprint assigned.
     if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_FP ) )
     {
         AdvancePhase( _( "Checking footprints..." ) );
