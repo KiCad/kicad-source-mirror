@@ -62,6 +62,12 @@ void FOOTPRINT_FILTER_IT::increment()
         if( filter_type == FOOTPRINT_FILTER::UNFILTERED_FP_LIST )
             break;
 
+        if( filter_type & FOOTPRINT_FILTER::FILTERING_BY_PIN_COUNT )
+        {
+            if( !PinCountMatch( candidate ) )
+                continue;
+        }
+
         if( filter_type & FOOTPRINT_FILTER::FILTERING_BY_LIBRARY )
         {
             if( !lib_name.IsEmpty() && !candidate.InLibrary( lib_name ) )
@@ -71,12 +77,6 @@ void FOOTPRINT_FILTER_IT::increment()
         if( filter_type & FOOTPRINT_FILTER::FILTERING_BY_COMPONENT_FP_FILTER )
         {
             if( !FootprintFilterMatch( candidate ) )
-                continue;
-        }
-
-        if( filter_type & FOOTPRINT_FILTER::FILTERING_BY_PIN_COUNT )
-        {
-            if( !PinCountMatch( candidate ) )
                 continue;
         }
 
