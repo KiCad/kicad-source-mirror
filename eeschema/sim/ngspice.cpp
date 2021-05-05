@@ -608,46 +608,45 @@ bool NGSPICE::loadCodemodels( const string& aPath )
 }
 
 
-int NGSPICE::cbSendChar( char* what, int id, void* user )
+int NGSPICE::cbSendChar( char* aWhat, int aId, void* aUser )
 {
-    NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
+    NGSPICE* sim = reinterpret_cast<NGSPICE*>( aUser );
 
     if( sim->m_reporter )
     {
         // strip stdout/stderr from the line
-        if( ( strncasecmp( what, "stdout ", 7 ) == 0 )
-                || ( strncasecmp( what, "stderr ", 7 ) == 0 ) )
-            what += 7;
+        if( ( strncasecmp( aWhat, "stdout ", 7 ) == 0 )
+                || ( strncasecmp( aWhat, "stderr ", 7 ) == 0 ) )
+            aWhat += 7;
 
-        sim->m_reporter->Report( what );
+        sim->m_reporter->Report( aWhat );
     }
 
     return 0;
 }
 
 
-int NGSPICE::cbSendStat( char* what, int id, void* user )
+int NGSPICE::cbSendStat( char *aWhat, int aId, void* aUser )
 {
     return 0;
 }
 
 
-int NGSPICE::cbBGThreadRunning( NG_BOOL is_running, int id, void* user )
+int NGSPICE::cbBGThreadRunning( NG_BOOL aFinished, int aId, void* aUser )
 {
-    NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
+    NGSPICE* sim = reinterpret_cast<NGSPICE*>( aUser );
 
     if( sim->m_reporter )
-        // I know the test below seems like an error, but well, it works somehow..
-        sim->m_reporter->OnSimStateChange( sim, is_running ? SIM_IDLE : SIM_RUNNING );
+        sim->m_reporter->OnSimStateChange( sim, aFinished ? SIM_IDLE : SIM_RUNNING );
 
     return 0;
 }
 
 
-int NGSPICE::cbControlledExit( int status, NG_BOOL immediate, NG_BOOL exit_upon_quit, int id, void* user )
+int NGSPICE::cbControlledExit( int aStatus, NG_BOOL aImmediate, NG_BOOL aExitOnQuit, int aId, void* aUser )
 {
     // Something went wrong, reload the dll
-    NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
+    NGSPICE* sim = reinterpret_cast<NGSPICE*>( aUser );
     sim->m_error = true;
 
     return 0;

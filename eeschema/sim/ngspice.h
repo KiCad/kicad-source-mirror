@@ -133,11 +133,11 @@ private:
     bool loadCodemodels( const std::string& aPath );
 
     // Callback functions
-    static int cbSendChar( char* what, int id, void* user );
-    static int cbSendStat( char* what, int id, void* user );
-    static int cbBGThreadRunning( NG_BOOL is_running, int id, void* user );
-    static int cbControlledExit( int status, NG_BOOL immediate, NG_BOOL exit_upon_quit, int id,
-                                 void* user );
+    static int cbSendChar( char* what, int aId, void* aUser );
+    static int cbSendStat( char* what, int aId, void* aUser );
+    static int cbBGThreadRunning( NG_BOOL aFinished, int aId, void* aUser );
+    static int cbControlledExit( int aStatus, NG_BOOL aImmediate, NG_BOOL aExitOnQuit, int aId,
+                                 void* aUser );
 
     // Assure ngspice is in a valid state and reinitializes it if need be
     void validate();
