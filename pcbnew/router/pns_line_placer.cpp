@@ -194,22 +194,19 @@ bool LINE_PLACER::handlePullback()
 
     DIRECTION_45 first_head, last_tail;
 
-    const std::vector<ssize_t>& headShapes = head.CShapes();
-    const std::vector<ssize_t>& tailShapes = tail.CShapes();
-
     wxASSERT( tail.PointCount() >= 2 );
 
-    if( headShapes[0] == -1 )
+    if( !head.IsPtOnArc( 0 ) )
         first_head = DIRECTION_45( head.CSegment( 0 ) );
     else
-        first_head = DIRECTION_45( head.CArcs()[ headShapes[0] ] );
+        first_head = DIRECTION_45( head.CArcs()[head.ArcIndex(0)] );
 
     int lastSegIdx = tail.PointCount() - 2;
 
-    if( tailShapes[lastSegIdx] == -1 )
+    if( !tail.IsPtOnArc( lastSegIdx ) )
         last_tail = DIRECTION_45( tail.CSegment( lastSegIdx ) );
     else
-        last_tail = DIRECTION_45( tail.CArcs()[tailShapes[lastSegIdx]] );
+        last_tail = DIRECTION_45( tail.CArcs()[tail.ArcIndex(lastSegIdx)] );
 
     DIRECTION_45::AngleType angle = first_head.Angle( last_tail );
 
@@ -226,7 +223,7 @@ bool LINE_PLACER::handlePullback()
     {
         lastSegIdx = tail.PrevShape( -1 );
 
-        if( tailShapes[lastSegIdx] == -1 )
+        if( !tail.IsPtOnArc( lastSegIdx ) )
         {
             const SEG& seg = tail.CSegment( lastSegIdx );
             m_direction    = DIRECTION_45( seg );
@@ -234,7 +231,7 @@ bool LINE_PLACER::handlePullback()
         }
         else
         {
-            const SHAPE_ARC& arc = tail.CArcs()[tailShapes[lastSegIdx]];
+            const SHAPE_ARC& arc = tail.CArcs()[tail.ArcIndex( lastSegIdx )];
             m_direction          = DIRECTION_45( arc );
             m_p_start            = arc.GetP0();
         }
@@ -357,23 +354,20 @@ bool LINE_PLACER::mergeHead()
 
     DIRECTION_45 dir_tail, dir_head;
 
-    const std::vector<ssize_t>& headShapes = head.CShapes();
-    const std::vector<ssize_t>& tailShapes = tail.CShapes();
-
-    if( headShapes[0] == -1 )
+    if( !head.IsPtOnArc( 0 ) )
         dir_head = DIRECTION_45( head.CSegment( 0 ) );
     else
-        dir_head = DIRECTION_45( head.CArcs()[ headShapes[0] ] );
+        dir_head = DIRECTION_45( head.CArcs()[head.ArcIndex( 0 )] );
 
     if( n_tail )
     {
         wxASSERT( tail.PointCount() >= 2 );
         int lastSegIdx = tail.PointCount() - 2;
 
-        if( tailShapes[lastSegIdx] == -1 )
+        if( !tail.IsPtOnArc( lastSegIdx ) )
             dir_tail = DIRECTION_45( tail.CSegment( -1 ) );
         else
-            dir_tail = DIRECTION_45( tail.CArcs()[ tailShapes[lastSegIdx] ] );
+            dir_tail = DIRECTION_45( tail.CArcs()[tail.ArcIndex( lastSegIdx )] );
 
         if( dir_head.Angle( dir_tail ) & ForbiddenAngles )
             return false;
@@ -388,10 +382,10 @@ bool LINE_PLACER::mergeHead()
 
     int lastSegIdx = tail.PointCount() - 2;
 
-    if( tailShapes[lastSegIdx] == -1 )
+    if( !tail.IsArcSegment( lastSegIdx ) )
         m_direction = DIRECTION_45( tail.CSegment( -1 ) );
     else
-        m_direction = DIRECTION_45( tail.CArcs()[ tailShapes[lastSegIdx] ] );
+        m_direction = DIRECTION_45( tail.CArcs()[tail.ArcIndex( lastSegIdx )] );
 
     head.Remove( 0, -1 );
 
@@ -1343,7 +1337,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     {
         ssize_t arcIndex = l.ArcIndex( i );
 
-        if( arcIndex < 0 || ( lastArc >= 0 && i == lastV - 1 && l.CShapes()[lastV] == -1 ) )
+        if( arcIndex < 0 || ( lastArc >= 0 && i == lastV - 1 && !l.IsPtOnArc( lastV ) ) )
         {
             seg = SEGMENT( pl.CSegment( i ), m_currentNet );
             seg.SetWidth( pl.Width() );

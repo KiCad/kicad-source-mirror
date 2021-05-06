@@ -122,11 +122,9 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
     m_result.SetWidth( m_originLine.Width() );
     m_result.SetBaselineOffset( 0 );
 
-    const std::vector<ssize_t>& tunedShapes = tuned.CShapes();
-
     for( int i = 0; i < tuned.SegmentCount(); i++ )
     {
-        if( tunedShapes[i] >= 0 )
+        if( tuned.IsArcSegment( i ) )
             continue;
 
         const SEG s = tuned.CSegment( i );

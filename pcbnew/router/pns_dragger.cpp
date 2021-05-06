@@ -137,7 +137,7 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
     {
         if( distB < distA &&
             ( m_draggedSegmentIndex < m_draggedLine.PointCount() - 2 ) &&
-            ( m_draggedLine.CLine().CShapes()[ m_draggedSegmentIndex + 1 ] < 0 ) )
+            ( !m_draggedLine.CLine().IsPtOnArc( static_cast<size_t>(m_draggedSegmentIndex) + 1 ) ) )
         {
             m_draggedSegmentIndex++;
         }

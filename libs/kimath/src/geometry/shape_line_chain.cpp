@@ -31,6 +31,7 @@
 #include <string>            // for basic_string
 
 #include <clipper.hpp>
+#include <core/kicad_algo.h> // for alg::run_on_pair
 #include <geometry/seg.h>    // for SEG, OPT_VECTOR2I
 #include <geometry/circle.h>    // for CIRCLE
 #include <geometry/shape_line_chain.h>
@@ -41,8 +42,10 @@
 
 class SHAPE;
 
+const ssize_t                     SHAPE_LINE_CHAIN::SHAPE_IS_PT = -1;
+const std::pair<ssize_t, ssize_t> SHAPE_LINE_CHAIN::SHAPES_ARE_PT = { SHAPE_IS_PT, SHAPE_IS_PT };
 
-SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV )
+SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV)
     : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ), m_closed( false ), m_width( 0 )
 {
     for(size_t i = 0; i < aV.size(); i+= 2 )
@@ -94,11 +97,18 @@ void SHAPE_LINE_CHAIN::convertArc( ssize_t aArcIndex )
     // Clear the shapes references
     for( auto& sh : m_shapes )
     {
-        if( sh == aArcIndex )
-            sh = SHAPE_IS_PT;
+        alg::run_on_pair( sh,
+            [&]( ssize_t& aShapeIndex )
+            {
+                if( aShapeIndex == aArcIndex )
+                    aShapeIndex = SHAPE_IS_PT;
 
-        if( sh > aArcIndex )
-            --sh;
+                if( aShapeIndex > aArcIndex )
+                    --aShapeIndex;
+            } );
+
+        if( sh.second != SHAPE_IS_PT && sh.first == SHAPE_IS_PT )
+            std::swap( sh.first, sh.second );
     }
 
     m_arcs.erase( m_arcs.begin() + aArcIndex );
@@ -230,7 +240,7 @@ void SHAPE_LINE_CHAIN::DetectArcs( const std::vector<SHAPE_ARC>& aArcs, int aMar
 {
     // Remove all arcs
     m_arcs.clear();
-    std::fill( m_shapes.begin(), m_shapes.end(), ssize_t( SHAPE_IS_PT ) );
+    std::fill( m_shapes.begin(), m_shapes.end(), SHAPES_ARE_PT );
 
     auto emplaceArc =
         [&]( point_iter aStart, point_iter aEnd, SHAPE_ARC aReplacementArc )
@@ -239,7 +249,19 @@ void SHAPE_LINE_CHAIN::DetectArcs( const std::vector<SHAPE_ARC>& aArcs, int aMar
             size_t endIndex = aEnd - m_points.begin();
 
             for( int ii = startIndex; ii <= endIndex; ++ii )
-                m_shapes[ii] = m_arcs.size();
+            {
+                if( m_shapes[ii].first == SHAPE_IS_PT )
+                {
+                    m_shapes[ii].first = m_arcs.size();
+                }
+                else
+                {
+                    // The point can't be shared with more than two arcs
+                    assert( m_shapes[ii].second == SHAPE_IS_PT );
+
+                    m_shapes[ii].second = m_arcs.size();
+                }
+            }
 
             m_arcs.push_back( aReplacementArc );
         };
@@ -336,8 +358,24 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Reverse() const
 
     for( auto& sh : a.m_shapes )
     {
-        if( sh != SHAPE_IS_PT )
-            sh = a.m_arcs.size() - sh - 1;
+        if( sh != SHAPES_ARE_PT )
+        {
+            alg::run_on_pair( sh,
+                [&]( ssize_t& aShapeIndex )
+                {
+                    if( aShapeIndex != SHAPE_IS_PT )
+                        aShapeIndex = a.m_arcs.size() - aShapeIndex - 1;
+                } );
+
+            if( sh.second != SHAPE_IS_PT )
+            {
+                // If the second element is populated, the first one should be too!
+                assert( sh.first != SHAPE_IS_PT );
+
+                // Switch round first and second in shared points, as part of reversing the chain
+                std::swap( sh.first, sh.second );
+            }
+        }
     }
 
     for( SHAPE_ARC& arc : a.m_arcs )
@@ -356,11 +394,8 @@ long long int SHAPE_LINE_CHAIN::Length() const
     for( int i = 0; i < SegmentCount(); i++ )
     {
         // Only include segments that aren't part of arc shapes
-        if( m_shapes[i] == SHAPE_IS_PT || m_shapes[i + 1] == SHAPE_IS_PT ||
-            ( m_shapes[i] != m_shapes[i + 1] ) )
-        {
+        if( !IsArcSegment(i) )
             l += CSegment( i ).Length();
-        }
     }
 
     for( int i = 0; i < ArcCount(); i++ )
@@ -409,8 +444,11 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const VECTOR2I& 
     // N.B. This works because convertArc changes m_shapes on the first run
     for( int ind = aStartIndex; ind <= aEndIndex; ind++ )
     {
-        if( m_shapes[ind] != SHAPE_IS_PT )
-            convertArc( ind );
+        if( m_shapes[ind] != SHAPES_ARE_PT )
+            alg::run_on_pair( m_shapes[ind], [&]( size_t aIndex )
+                                             {
+                                                 convertArc( aIndex );
+                                             } );
     }
 
     if( aStartIndex == aEndIndex )
@@ -445,8 +483,10 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const SHAPE_LINE
 
     // It's possible that the start or end lands on the end of an arc.  If so, we'd better have a
     // replacement line that matches up to the same coordinates, as we can't break the arc(s).
-    ssize_t startShape = m_shapes[aStartIndex];
-    ssize_t endShape   = m_shapes[aEndIndex];
+
+    // @todo fixme: need to handle the case when there are two arcs associated with one point
+    ssize_t startShape = m_shapes[aStartIndex].first;
+    ssize_t endShape   = m_shapes[aEndIndex].first;
 
     if( startShape >= 0 )
     {
@@ -471,13 +511,19 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const SHAPE_LINE
         return;
 
     // The total new arcs index is added to the new arc indices
-    size_t               prev_arc_count = m_arcs.size();
-    std::vector<ssize_t> new_shapes     = newLine.m_shapes;
+    size_t prev_arc_count = m_arcs.size();
+    std::vector<std::pair<ssize_t, ssize_t>> new_shapes = newLine.m_shapes;
 
-    for( ssize_t& shape : new_shapes )
+    for( std::pair<ssize_t, ssize_t>& shape_pair : new_shapes )
     {
-        if( shape >= 0 )
-            shape += prev_arc_count;
+        if( shape_pair != SHAPES_ARE_PT )
+        {
+            if( shape_pair.first != SHAPE_IS_PT )
+                shape_pair.first += prev_arc_count;
+
+            if( shape_pair.second != SHAPE_IS_PT )
+                shape_pair.second += prev_arc_count;
+        }
     }
 
     m_shapes.insert( m_shapes.begin() + aStartIndex, new_shapes.begin(), new_shapes.end() );
@@ -502,14 +548,41 @@ void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
     if( aStartIndex >= PointCount() )
         return;
 
-    aEndIndex = std::min( aEndIndex, PointCount() );
+    aEndIndex = std::min( aEndIndex, PointCount() - 1 );
     std::set<size_t> extra_arcs;
+    auto logArcIdxRemoval = [&]( ssize_t& aShapeIndex )
+                            {
+                                if( aShapeIndex != SHAPE_IS_PT )
+                                    extra_arcs.insert( aShapeIndex );
+                            };
 
     // Remove any overlapping arcs in the point range
-    for( int i = aStartIndex; i < aEndIndex; i++ )
+    for( int i = aStartIndex; i <= aEndIndex; i++ )
     {
-        if( m_shapes[i] != SHAPE_IS_PT )
-            extra_arcs.insert( m_shapes[i] );
+        if( IsSharedPt( i ) )
+        {
+            if( i == aStartIndex )
+            {
+                logArcIdxRemoval( m_shapes[i].second ); // Only remove the arc on the second index
+
+                // Ensure that m_shapes has been built correctly.
+                assert( i < aEndIndex || m_shapes[i + 1].first == m_shapes[i].second );
+
+                continue;
+            }
+            else if( i == aEndIndex )
+            {
+                logArcIdxRemoval( m_shapes[i].first ); // Only remove the arc on the first index
+
+                // Ensure that m_shapes has been built correctly.
+                assert( i > aStartIndex || IsSharedPt( i - 1 )
+                                ? m_shapes[i - 1].second == m_shapes[i].first
+                                : m_shapes[i - 1].first == m_shapes[i].first );
+                continue;
+            }
+        }
+
+        alg::run_on_pair( m_shapes[i], logArcIdxRemoval );
     }
 
     for( auto arc : extra_arcs )
@@ -572,11 +645,11 @@ int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
     {
         // Are we splitting at the beginning of an arc?  If so, let's split right before so that
         // the shape is preserved
-        if( ii < PointCount() - 1 && m_shapes[ii] >= 0 && m_shapes[ii] == m_shapes[ii + 1] )
+        if( IsArcSegment( ii ) )
             ii--;
 
         m_points.insert( m_points.begin() + ( ii + 1 ), aP );
-        m_shapes.insert( m_shapes.begin() + ( ii + 1 ), ssize_t( SHAPE_IS_PT ) );
+        m_shapes.insert( m_shapes.begin() + ( ii + 1 ), SHAPES_ARE_PT );
 
         return ii + 1;
     }
@@ -628,17 +701,29 @@ int SHAPE_LINE_CHAIN::ShapeCount() const
 
     for( int i = 0; i < m_points.size() - 1; i++ )
     {
-        if( m_shapes[i] == SHAPE_IS_PT )
+        if( m_shapes[i] == SHAPES_ARE_PT )
         {
             numShapes++;
         }
         else
         {
-            arcIdx = m_shapes[i];
+            // Expect that the second index only gets populated when the point is shared between
+            // two shapes. Otherwise, the shape index should always go on the first element of
+            // the pair.
+            assert( m_shapes[i].first != SHAPE_IS_PT );
+
+            // Start assuming the point is shared with the previous arc
+            // If so, the new/next arc index should be located at the second
+            // element in the pair
+            arcIdx = m_shapes[i].second;
+
+            if( arcIdx == SHAPE_IS_PT )
+                arcIdx = m_shapes[i].first; // Not a shared point
+
             numShapes++;
 
             // Now skip the rest of the arc
-            while( i < numPoints && m_shapes[i] == arcIdx )
+            while( i < numPoints && m_shapes[i].first == arcIdx )
                 i++;
 
             // Add the "hidden" segment at the end of the arc, if it exists
@@ -669,21 +754,53 @@ int SHAPE_LINE_CHAIN::NextShape( int aPointIndex, bool aForwards ) const
 
     int delta = aForwards ? 1 : -1;
 
-    if( m_shapes[aPointIndex] == SHAPE_IS_PT )
+    if( m_shapes[aPointIndex] == SHAPES_ARE_PT )
         return aPointIndex + delta;
 
-    int arcIndex = m_shapes[aPointIndex];
     int arcStart = aPointIndex;
 
-    while( aPointIndex < static_cast<int>( m_shapes.size() ) && m_shapes[aPointIndex] == arcIndex )
+    // The second element should only get populated when the point is shared between two shapes.
+    // If not a shared point, then the index should always go on the first element.
+    assert( m_shapes[aPointIndex].first != SHAPE_IS_PT );
+
+    // Start with the assumption the point is shared
+    int arcIndex = m_shapes[aPointIndex].second;
+
+    if( arcIndex == SHAPE_IS_PT || !aForwards )
+        arcIndex = m_shapes[aPointIndex].first; // Not a shared point or we are going backwards
+
+    int numPoints = static_cast<int>( m_shapes.size() );
+
+    // Now skip the rest of the arc
+    while( aPointIndex < numPoints && aPointIndex >= 0 && m_shapes[aPointIndex].first == arcIndex )
         aPointIndex += delta;
+
+    bool indexStillOnArc = alg::pair_contains( m_shapes[aPointIndex], arcIndex );
 
     // We want the last vertex of the arc if the initial point was the start of one
     // Well-formed arcs should generate more than one point to travel above
-    if( aPointIndex - arcStart > 1 )
+    if( aPointIndex - arcStart > 1 && !indexStillOnArc )
         aPointIndex -= delta;
 
     return aPointIndex;
+}
+
+
+void SHAPE_LINE_CHAIN::SetPoint( int aIndex, const VECTOR2I& aPos )
+{
+    if( aIndex < 0 )
+        aIndex += PointCount();
+    else if( aIndex >= PointCount() )
+        aIndex -= PointCount();
+
+    m_points[aIndex] = aPos;
+
+    alg::run_on_pair( m_shapes[aIndex],
+        [&]( ssize_t& aIdx )
+        {
+            if( aIdx != SHAPE_IS_PT )
+                convertArc( aIdx );
+        } );
 }
 
 
@@ -692,20 +809,31 @@ void SHAPE_LINE_CHAIN::RemoveShape( int aPointIndex )
     if( aPointIndex < 0 )
         aPointIndex += PointCount();
 
-    if( m_shapes[aPointIndex] == SHAPE_IS_PT )
+    if( m_shapes[aPointIndex] == SHAPES_ARE_PT )
     {
         Remove( aPointIndex );
         return;
     }
 
+    //@todo should this be replaced to use NextShape() / PrevShape()?
     int start  = aPointIndex;
     int end    = aPointIndex;
-    int arcIdx = m_shapes[aPointIndex];
+    int arcIdx = ArcIndex( aPointIndex );
 
-    while( start >= 0 && m_shapes[start] == arcIdx )
-        start--;
+    if( !IsSharedPt( aPointIndex ) )
+    {
+        // aPointIndex is not a shared point, so iterate backwards to find the start of the arc
+        while( start >= 0 && m_shapes[start].first == arcIdx )
+            start--;
 
-    while( end < static_cast<int>( m_shapes.size() ) - 1 && m_shapes[end] == arcIdx )
+        // Check if the previous point might be a shared point and decrement 'start' if so
+        if( start >= 1 && m_shapes[static_cast<ssize_t>( start ) - 1].second == arcIdx )
+            start--;
+    }
+
+    // For the end point we only need to check the first element in m_shapes (the second one is only
+    // populated if there is an arc after the current one sharing the same point).
+    while( end < static_cast<int>( m_shapes.size() ) - 1 && m_shapes[end].first == arcIdx )
         end++;
 
     Remove( start, end );
@@ -726,16 +854,17 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
 
     for( int i = aStartIndex; i <= aEndIndex && i < numPoints; i++ )
     {
-        if( m_shapes[i] != SHAPE_IS_PT )
+        if( m_shapes[i] != SHAPES_ARE_PT )
         {
-            int  arcIdx   = m_shapes[i];
+            int  arcIdx = ArcIndex( i );
             bool wholeArc = true;
             int  arcStart = i;
+            size_t prevIdx = static_cast<size_t>( i ) - 1;
 
-            if( i > 0 && m_shapes[i - 1] >= 0 && m_shapes[i - 1] != arcIdx )
+            if( i > 0 && IsArcSegment( prevIdx ) && ArcIndex( prevIdx ) != arcIdx )
                 wholeArc = false;
 
-            while( i < numPoints && m_shapes[i] == arcIdx )
+            while( i < numPoints && ArcIndex( i ) == arcIdx )
                 i++;
 
             i--;
@@ -749,6 +878,7 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
             }
             else
             {
+                //@todo need to split up the arc
                 rv.Append( m_points[arcStart] );
                 i = arcStart;
             }
@@ -772,16 +902,39 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_LINE_CHAIN& aOtherLine )
         return;
     }
 
-    else if( PointCount() == 0 || aOtherLine.CPoint( 0 ) != CPoint( -1 ) )
+    size_t num_arcs = m_arcs.size();
+    m_arcs.insert( m_arcs.end(), aOtherLine.m_arcs.begin(), aOtherLine.m_arcs.end() );
+
+    auto fixShapeIndices =
+            [&]( const std::pair<ssize_t, ssize_t>& aShapeIndices ) -> std::pair<ssize_t, ssize_t>
+            {
+                std::pair<ssize_t, ssize_t> retval =  aShapeIndices;
+
+                alg::run_on_pair( retval, [&]( ssize_t& aIndex )
+                                          {
+                                              if( aIndex != SHAPE_IS_PT )
+                                                  aIndex = aIndex + num_arcs;
+                                          } );
+
+                return retval;
+            };
+
+    if( PointCount() == 0 || aOtherLine.CPoint( 0 ) != CPoint( -1 ) )
     {
         const VECTOR2I p = aOtherLine.CPoint( 0 );
         m_points.push_back( p );
-        m_shapes.push_back( aOtherLine.CShapes()[0] );
+        m_shapes.push_back( fixShapeIndices( aOtherLine.CShapes()[0] ) );
         m_bbox.Merge( p );
     }
+    else if( aOtherLine.IsArcSegment( 0 ) )
+    {
+        // Associate the new arc shape with the last point of this chain
+        if( m_shapes.back() == SHAPES_ARE_PT )
+            m_shapes.back().first = aOtherLine.CShapes()[0].first + num_arcs;
+        else
+            m_shapes.back().second = aOtherLine.CShapes()[0].first + num_arcs;
+    }
 
-    size_t num_arcs = m_arcs.size();
-    m_arcs.insert( m_arcs.end(), aOtherLine.m_arcs.begin(), aOtherLine.m_arcs.end() );
 
     for( int i = 1; i < aOtherLine.PointCount(); i++ )
     {
@@ -791,9 +944,11 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_LINE_CHAIN& aOtherLine )
         ssize_t arcIndex = aOtherLine.ArcIndex( i );
 
         if( arcIndex != ssize_t( SHAPE_IS_PT ) )
-            m_shapes.push_back( num_arcs + arcIndex );
+        {
+            m_shapes.push_back( fixShapeIndices( aOtherLine.m_shapes[i] ) );
+        }
         else
-            m_shapes.push_back( ssize_t( SHAPE_IS_PT ) );
+            m_shapes.push_back( SHAPES_ARE_PT );
 
         m_bbox.Merge( p );
     }
@@ -804,15 +959,15 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_LINE_CHAIN& aOtherLine )
 
 void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc )
 {
-    auto& chain = aArc.ConvertToPolyline();
+    SHAPE_LINE_CHAIN chain = aArc.ConvertToPolyline();
 
-    for( auto& pt : chain.CPoints() )
-    {
-        m_points.push_back( pt );
-        m_shapes.push_back( m_arcs.size() );
-    }
+    // @todo should the below 4 LOC be moved to SHAPE_ARC::ConvertToPolyline ?
+    chain.m_arcs.push_back( aArc );
 
-    m_arcs.push_back( aArc );
+    for( auto& sh : chain.m_shapes )
+        sh.first = 0;
+
+    Append( chain );
 
     assert( m_shapes.size() == m_points.size() );
 }
@@ -820,11 +975,12 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc )
 
 void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const VECTOR2I& aP )
 {
-    if( aVertex < m_points.size() && m_shapes[aVertex] != SHAPE_IS_PT )
+    if( aVertex < m_points.size() && m_shapes[aVertex] != SHAPES_ARE_PT )
         convertArc( aVertex );
 
+    //@todo need to check we aren't creating duplicate points
     m_points.insert( m_points.begin() + aVertex, aP );
-    m_shapes.insert( m_shapes.begin() + aVertex, ssize_t( SHAPE_IS_PT ) );
+    m_shapes.insert( m_shapes.begin() + aVertex, SHAPES_ARE_PT );
 
     assert( m_shapes.size() == m_points.size() );
 }
@@ -832,28 +988,46 @@ void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const VECTOR2I& aP )
 
 void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const SHAPE_ARC& aArc )
 {
-    if( m_shapes[aVertex] != SHAPE_IS_PT )
+    if( aVertex < m_points.size() && m_shapes[aVertex] != SHAPES_ARE_PT )
         convertArc( aVertex );
 
     /// Step 1: Find the position for the new arc in the existing arc vector
-    size_t arc_pos = m_arcs.size();
+    ssize_t arc_pos = m_arcs.size();
 
     for( auto arc_it = m_shapes.rbegin() ;
               arc_it != m_shapes.rend() + aVertex;
               arc_it++ )
     {
-        if( *arc_it != SHAPE_IS_PT )
-            arc_pos = ( *arc_it )++;
+        if( *arc_it != SHAPES_ARE_PT )
+        {
+            arc_pos = std::max( ( *arc_it ).first, ( *arc_it ).second );
+            arc_pos++;
+        }
+    }
+
+    //Increment all arc indices before inserting the new arc
+    for( auto& sh : m_shapes )
+    {
+        alg::run_on_pair( sh,
+            [&]( ssize_t& aIndex )
+            {
+                if( aIndex >= arc_pos )
+                    aIndex++;
+            } );
     }
 
     m_arcs.insert( m_arcs.begin() + arc_pos, aArc );
 
     /// Step 2: Add the arc polyline points to the chain
+    //@todo need to check we aren't creating duplicate points at start or end
     auto& chain = aArc.ConvertToPolyline();
     m_points.insert( m_points.begin() + aVertex, chain.CPoints().begin(), chain.CPoints().end() );
 
     /// Step 3: Add the vector of indices to the shape vector
-    std::vector<size_t> new_points( chain.PointCount(), arc_pos );
+    //@todo need to check we aren't creating duplicate points at start or end
+    std::vector<std::pair<ssize_t, ssize_t>> new_points( chain.PointCount(),
+                                                         { arc_pos, SHAPE_IS_PT } );
+
     m_shapes.insert( m_shapes.begin() + aVertex, new_points.begin(), new_points.end() );
     assert( m_shapes.size() == m_points.size() );
 }
@@ -1210,7 +1384,7 @@ const OPT<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersecting() c
 SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify( bool aRemoveColinear )
 {
     std::vector<VECTOR2I> pts_unique;
-    std::vector<ssize_t> shapes_unique;
+    std::vector<std::pair<ssize_t, ssize_t>> shapes_unique;
 
     if( PointCount() < 2 )
     {
@@ -1236,18 +1410,19 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify( bool aRemoveColinear )
         // one of them is part of a shape and one is not.
         while( j < np && m_points[i] == m_points[j] &&
                ( m_shapes[i] == m_shapes[j] ||
-                 m_shapes[i] == SHAPE_IS_PT ||
-                 m_shapes[j] == SHAPE_IS_PT ) )
+                 m_shapes[i] == SHAPES_ARE_PT ||
+                 m_shapes[j] == SHAPES_ARE_PT ) )
         {
             j++;
         }
 
-        int shapeToKeep = m_shapes[i];
+        std::pair<ssize_t,ssize_t> shapeToKeep = m_shapes[i];
 
-        if( shapeToKeep == SHAPE_IS_PT )
+        if( shapeToKeep == SHAPES_ARE_PT )
             shapeToKeep = m_shapes[j - 1];
 
-        wxASSERT( shapeToKeep < static_cast<int>( m_arcs.size() ) );
+        assert( shapeToKeep.first < static_cast<int>( m_arcs.size() ) );
+        assert( shapeToKeep.second < static_cast<int>( m_arcs.size() ) );
 
         pts_unique.push_back( CPoint( i ) );
         shapes_unique.push_back( shapeToKeep );
@@ -1268,7 +1443,8 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify( bool aRemoveColinear )
         const VECTOR2I p1 = pts_unique[i + 1];
         int n = i;
 
-        if( aRemoveColinear && shapes_unique[i] < 0 && shapes_unique[i + 1] < 0 )
+        if( aRemoveColinear && shapes_unique[i] == SHAPES_ARE_PT
+            && shapes_unique[i + 1] == SHAPES_ARE_PT )
         {
             while( n < np - 2
                     && ( SEG( p0, p1 ).LineDistance( pts_unique[n + 2] ) <= 1
@@ -1321,9 +1497,9 @@ const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const VECTOR2I& aP,
 
         // An internal shape point here is everything after the start of an arc and before the
         // second-to-last vertex of the arc, because we are looking at segments here!
-        if( i > 0 && i < SegmentCount() - 1 && m_shapes[i] >= 0 &&
-                ( ( m_shapes[i - 1] >= 0 && m_shapes[i - 1] == m_shapes[i] ) &&
-                  ( m_shapes[i + 2] >= 0 && m_shapes[i + 2] == m_shapes[i] ) ) )
+        if( i > 0 && i < SegmentCount() - 1 && m_shapes[i] != SHAPES_ARE_PT
+            && ( ( m_shapes[i - 1] != SHAPES_ARE_PT && m_shapes[i - 1] == m_shapes[i] )
+                 && ( m_shapes[i + 2] != SHAPES_ARE_PT && m_shapes[i + 2] == m_shapes[i] ) ) )
         {
             isInternalShapePoint = true;
         }
@@ -1335,18 +1511,11 @@ const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const VECTOR2I& aP,
         }
     }
 
-    // Is this the start of an arc?  If so, return it directly
-    if( !aAllowInternalShapePoints &&
-        ( ( nearest == 0 && m_shapes[nearest] >= 0 ) ||
-          ( m_shapes[nearest] >= 0 && m_shapes[nearest] != m_shapes[nearest - 1] ) ) )
+    // Is this the start or end of an arc?  If so, return it directly
+    if( !aAllowInternalShapePoints && ( IsArcStart( nearest ) || IsArcEnd( nearest ) ) )
     {
+        //@todo should we calculate the nearest point to the "true" arc?
         return m_points[nearest];
-    }
-    else if( !aAllowInternalShapePoints && nearest < SegmentCount() &&
-             m_shapes[nearest] >= 0 && m_shapes[nearest + 1] == m_shapes[nearest] )
-    {
-        // If the nearest segment is the last of the arc, just return the arc endpoint
-        return m_points[nearest + 1];
     }
 
     return CSegment( nearest ).NearestPoint( aP );
@@ -1482,7 +1651,7 @@ bool SHAPE_LINE_CHAIN::Parse( std::stringstream& aStream )
         m_points.emplace_back( x, y );
 
         aStream >> ind;
-        m_shapes.push_back( ind );
+        m_shapes.emplace_back( std::make_pair( ind, SHAPE_IS_PT ) );
     }
 
     for( size_t i = 0; i < n_arcs; i++ )

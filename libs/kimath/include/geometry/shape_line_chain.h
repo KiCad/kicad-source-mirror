@@ -132,14 +132,14 @@ public:
         for( auto pt : aV )
             m_points.emplace_back( pt.x, pt.y );
 
-        m_shapes = std::vector<ssize_t>( aV.size(), ssize_t( SHAPE_IS_PT ) );
+        m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( aV.size(), SHAPES_ARE_PT );
     }
 
     SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed = false )
             : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ), m_closed( aClosed ), m_width( 0 )
     {
         m_points = aV;
-        m_shapes = std::vector<ssize_t>( aV.size(), ssize_t( SHAPE_IS_PT ) );
+        m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( aV.size(), SHAPES_ARE_PT );
     }
 
     SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed = false )
@@ -149,7 +149,7 @@ public:
     {
         m_points = aArc.ConvertToPolyline().CPoints();
         m_arcs.emplace_back( aArc );
-        m_shapes = std::vector<ssize_t>( m_points.size(), 0 );
+        m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( m_points.size(), SHAPES_ARE_PT );
     }
 
     SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath );
@@ -305,18 +305,7 @@ public:
      * @param aIndex is the index of the point to move.
      * @param aPos is the new absolute location of the point.
      */
-    void SetPoint( int aIndex, const VECTOR2I& aPos )
-    {
-        if( aIndex < 0 )
-            aIndex += PointCount();
-        else if( aIndex >= PointCount() )
-            aIndex -= PointCount();
-
-        m_points[aIndex] = aPos;
-
-        if( m_shapes[aIndex] != SHAPE_IS_PT )
-            convertArc( m_shapes[aIndex] );
-    }
+    void SetPoint( int aIndex, const VECTOR2I& aPos );
 
     /**
      * Return a reference to a given point in the line chain.
@@ -344,7 +333,7 @@ public:
      */
     const VECTOR2I& CLastPoint() const
     {
-        return m_points[PointCount() - 1];
+        return m_points[static_cast<size_t>( PointCount() ) - 1];
     }
 
     /**
@@ -358,7 +347,7 @@ public:
     /**
      * @return the vector of values indicating shape type and location.
      */
-    const std::vector<ssize_t>& CShapes() const
+    const std::vector<std::pair<ssize_t, ssize_t>>& CShapes() const
     {
         return m_shapes;
     }
@@ -441,7 +430,7 @@ public:
         if( m_points.size() == 0 || aAllowDuplication || CPoint( -1 ) != aP )
         {
             m_points.push_back( aP );
-            m_shapes.push_back( ssize_t( SHAPE_IS_PT ) );
+            m_shapes.push_back( SHAPES_ARE_PT );
             m_bbox.Merge( aP );
         }
     }
@@ -716,12 +705,15 @@ public:
         return m_arcs.size();
     }
 
+    /**
+     * Return the arc index for the given segment index.
+     */
     ssize_t ArcIndex( size_t aSegment ) const
     {
-        if( aSegment >= m_shapes.size() )
-            return SHAPE_IS_PT;
-
-        return m_shapes[aSegment];
+        if( IsSharedPt( aSegment ) )
+            return m_shapes[aSegment].second;
+        else
+            return m_shapes[aSegment].first;
     }
 
     const SHAPE_ARC& Arc( size_t aArc ) const
@@ -729,16 +721,58 @@ public:
         return m_arcs[aArc];
     }
 
-    bool isArc( size_t aSegment ) const
+    /**
+     * Test if a point is shared between multiple shapes
+     * @param aIndex
+     * @return
+    */
+    bool IsSharedPt( size_t aIndex ) const
+    {
+        return aIndex < m_shapes.size() - 1
+               && m_shapes[aIndex].first != SHAPE_IS_PT
+               && m_shapes[aIndex].second != SHAPE_IS_PT;
+    }
+
+
+    bool IsPtOnArc( size_t aPtIndex ) const
+    {
+        return aPtIndex < m_shapes.size() && m_shapes[aPtIndex] != SHAPES_ARE_PT;
+    }
+
+
+    bool IsArcSegment( size_t aSegment ) const
     {
         /*
          * A segment is part of an arc except in the special case of two arcs next to each other
          * but without a shared vertex.  Here there is a segment between the end of the first arc
          * and the start of the second arc.
          */
-        return ( aSegment < m_shapes.size() - 1
-                 && m_shapes[aSegment] != SHAPE_IS_PT
-                 && m_shapes[aSegment] == m_shapes[aSegment + 1] );
+        size_t nextIdx = aSegment + 1;
+
+        if( nextIdx > m_shapes.size() - 1 )
+            return false; // Always false, even if the shape is closed
+
+        return ( IsPtOnArc( aSegment )
+                 && ( IsSharedPt( aSegment )
+                      || m_shapes[aSegment].first == m_shapes[nextIdx].first ) );
+    }
+
+
+    bool IsArcStart( size_t aIndex ) const
+    {
+        if( aIndex == 0 )
+            return IsPtOnArc( aIndex );
+
+        return ( IsSharedPt( aIndex ) || ( IsPtOnArc( aIndex ) && !IsArcSegment( aIndex - 1 ) ) );
+    }
+
+
+    bool IsArcEnd( size_t aIndex ) const
+    {
+        if( aIndex == static_cast<size_t>( PointCount() ) - 1 )
+            return IsPtOnArc( aIndex );
+
+        return ( IsSharedPt( aIndex ) || ( IsPtOnArc( aIndex ) && !IsArcSegment( aIndex ) ) );
     }
 
     virtual const VECTOR2I GetPoint( int aIndex ) const override { return CPoint(aIndex); }
@@ -763,7 +797,9 @@ protected:
 
 private:
 
-    constexpr static ssize_t SHAPE_IS_PT = -1;
+    static const ssize_t SHAPE_IS_PT;
+
+    static const std::pair<ssize_t, ssize_t> SHAPES_ARE_PT;
 
     /// array of vertices
     std::vector<VECTOR2I> m_points;
@@ -772,8 +808,17 @@ private:
      * Array of indices that refer to the index of the shape if the point is part of a larger
      * shape, e.g. arc or spline.
      * If the value is -1, the point is just a point.
+     *
+     * There can be up to two shapes associated with a single point (e.g. the end point of
+     * one arc might be the start point of another).
+     *
+     * Generally speaking only the first element of the pair will be populated (i.e. with a value
+     * not equal to SHAPE_IS_PT), unless the point is shared between two arc shapes. If the point
+     * is shared, then both the first and second element of the pair should be populated.
+     *
+     * The second element must always be SHAPE_IS_PT if the first element is SHAPE_IS_PT.
      */
-    std::vector<ssize_t> m_shapes;
+    std::vector<std::pair<ssize_t, ssize_t>> m_shapes;
 
     std::vector<SHAPE_ARC> m_arcs;
 

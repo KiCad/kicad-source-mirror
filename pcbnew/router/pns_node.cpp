@@ -583,7 +583,7 @@ void NODE::Add( LINE& aLine, bool aAllowRedundant )
 
     for( int i = 0; i < l.SegmentCount(); i++ )
     {
-        if( l.isArc( i ) )
+        if( l.IsArcSegment( i ) )
             continue;
 
         SEG s = l.CSegment( i );
@@ -972,7 +972,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
 
                 int      nSegs     = line.PointCount();
                 VECTOR2I last      = nSegs ? line.CPoint( -1 ) : VECTOR2I();
-                ssize_t  lastShape = nSegs ? line.CShapes()[nSegs - 1] : -1;
+                ssize_t lastShape = nSegs ? line.ArcIndex( static_cast<ssize_t>( nSegs ) - 1 ) : -1;
 
                 line.Append( arcReversed[i] ? sa->Reversed() : *sa );
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +26,26 @@
 #define INCLUDE_CORE_KICAD_ALGO_H_
 
 #include <algorithm>
+#include <functional> // std::function
+#include <utility>    // std::pair
 
 namespace alg
 {
+/**
+ *  @brief Apply a function to the first and second element of a std::pair
+ *  @param  __pair   A pair of elements (both elements must be the same type).
+ *  @param  __f      A unary function object.
+ *
+ *  Applies the function object @p __f to @p __pair.first and @p __pair.second
+ *  If @p __f has a return value it is ignored.
+*/
+template <typename _Type, typename _Function>
+void run_on_pair( std::pair<_Type, _Type>& __pair, _Function __f )
+{
+    __f( __pair.first );
+    __f( __pair.second );
+}
+
 /**
  *  @brief Apply a function to every sequential pair of elements of a sequence.
  *  @param  __first  An input iterator.
@@ -82,6 +99,22 @@ bool contains( const _Container& __container, _Value __value )
 {
     return std::find( __container.begin(), __container.end(), __value ) != __container.end();
 }
+
+/**
+ * @brief Returns true if either of the elements in an std::pair contains the given value
+ *
+ * @param  __pair   A pair of elements (both elements must be the same type).
+ * @param  __value  A value to test
+ * @return true if @p __value is contained in @p __pair
+ */
+template <typename _Type, typename _Value>
+bool pair_contains( const std::pair<_Type, _Type> __pair, _Value __value )
+{
+    return __pair.first == static_cast<_Type>( __value )
+           || __pair.second == static_cast<_Type>( __value );
+}
+
+
 } // namespace alg
 
 #endif /* INCLUDE_CORE_KICAD_ALGO_H_ */

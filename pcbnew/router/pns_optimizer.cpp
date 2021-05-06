@@ -576,7 +576,6 @@ bool OPTIMIZER::mergeFull( LINE* aLine )
 bool OPTIMIZER::mergeColinear( LINE* aLine )
 {
     SHAPE_LINE_CHAIN&          line   = aLine->Line();
-    const std::vector<ssize_t> shapes = line.CShapes();
 
     int nSegs = line.SegmentCount();
 
@@ -592,7 +591,7 @@ bool OPTIMIZER::mergeColinear( LINE* aLine )
         if( s1.Collinear( s2 ) )
         {
             // We should not see a collinear vertex inside an arc
-            wxASSERT( shapes[segIdx + 1] < 0 );
+            wxASSERT( !line.IsPtOnArc( segIdx + 1 ) );
             line.Remove( segIdx + 1 );
         }
     }
@@ -696,8 +695,11 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
     for( int n = 0; n < n_segs - step; n++ )
     {
         // Do not attempt to merge false segments that are part of an arc
-        if( aCurrentPath.isArc( n ) || aCurrentPath.isArc( static_cast<std::size_t>( n ) + step ) )
+        if( aCurrentPath.IsArcSegment( n )
+            || aCurrentPath.IsArcSegment( static_cast<std::size_t>( n ) + step ) )
+        {
             continue;
+        }
 
         const SEG s1    = aCurrentPath.CSegment( n );
         const SEG s2    = aCurrentPath.CSegment( n + step );

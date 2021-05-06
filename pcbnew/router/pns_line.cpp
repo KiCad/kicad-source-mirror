@@ -540,7 +540,7 @@ bool LINE::Is45Degree() const
     {
         const SEG& s = m_line.CSegment( i );
 
-        if( m_line.isArc( i ) )
+        if( m_line.IsArcSegment( i ) )
             continue;
 
         if( s.Length() < 10 )
@@ -687,7 +687,7 @@ void LINE::dragCorner45( const VECTOR2I& aP, int aIndex )
     else
     {
         // Are we next to an arc? Insert a new point so we slice correctly
-        if( m_line.CShapes()[aIndex + 1] >= 0 )
+        if( m_line.IsPtOnArc( static_cast<size_t>( aIndex ) + 1 ) )
             m_line.Insert( aIndex + 1, m_line.CPoint( aIndex + 1 ) );
 
         // fixme: awkward behaviour for "outwards" drags
@@ -705,23 +705,28 @@ void LINE::dragCorner45( const VECTOR2I& aP, int aIndex )
 
 void LINE::dragCornerFree( const VECTOR2I& aP, int aIndex )
 {
-    const std::vector<ssize_t>& shapes = m_line.CShapes();
+    ssize_t idx = static_cast<ssize_t>( aIndex );
+    ssize_t numpts = static_cast<ssize_t>( m_line.PointCount() );
 
     // If we're asked to drag the end of an arc, insert a new vertex to drag instead
-    if( shapes[aIndex] >= 0 )
+    if( m_line.IsPtOnArc( idx ) )
     {
-        if( aIndex > 0 && shapes[aIndex - 1] == -1 )
-            m_line.Insert( aIndex, m_line.GetPoint( aIndex ) );
-        else if( aIndex < shapes.size() - 1 && shapes[aIndex + 1] != shapes[aIndex] )
+        if( idx == 0 || ( idx > 0 && !m_line.IsPtOnArc( idx - 1 ) ) )
         {
-            aIndex++;
-            m_line.Insert( aIndex, m_line.GetPoint( aIndex ) );
+            m_line.Insert( idx, m_line.GetPoint( idx ) );
+        }
+        else if( ( idx == numpts - 1 ) || ( idx < numpts - 1 && !m_line.IsArcSegment( idx ) ) )
+        {
+            idx++;
+            m_line.Insert( idx, m_line.GetPoint( idx ) );
         }
         else
+        {
             wxASSERT_MSG( false, "Attempt to dragCornerFree in the middle of an arc!" );
+        }
     }
 
-    m_line.SetPoint( aIndex, aP );
+    m_line.SetPoint( idx, aP );
     m_line.Simplify();
 }
 
@@ -850,14 +855,12 @@ void LINE::dragSegment45( const VECTOR2I& aP, int aIndex )
 
     target = snapToNeighbourSegments( path, aP, aIndex );
 
-    const std::vector<ssize_t>& shapes = path.CShapes();
-
     // We require a valid s_prev and s_next.  If we are at the start or end of the line, we insert
     // a new point at the start or end so there is a zero-length segment for prev or next (we will
     // resize it as part of the drag operation).  If we are next to an arc, we do this also, as we
     // cannot drag away one of the arc's points.
 
-    if( index == 0 || shapes[index] >= 0 )
+    if( index == 0 || path.IsPtOnArc( index ) )
     {
         path.Insert( index > 0 ? index + 1 : 0, path.CPoint( index ) );
         index++;
@@ -867,7 +870,7 @@ void LINE::dragSegment45( const VECTOR2I& aP, int aIndex )
     {
         path.Insert( path.PointCount() - 1, path.CPoint( -1 ) );
     }
-    else if( shapes[index + 1] >= 0 )
+    else if( path.IsPtOnArc( index + 1 ) )
     {
         path.Insert( index + 1, path.CPoint( index + 1 ) );
     }
@@ -1079,24 +1082,24 @@ void LINE::ClipVertexRange( int aStart, int aEnd )
     int arcIdx    = -1;
     int linkIdx   = 0;
 
-    auto shapes    = m_line.CShapes();
-    int  numPoints = static_cast<int>( shapes.size() );
+    int numPoints = static_cast<int>( m_line.PointCount() );
 
     for( int i = 0; i < m_line.PointCount(); i++ )
     {
         if( i <= aStart )
             firstLink = linkIdx;
 
-        if( shapes[i] >= 0 )
+        //@todo RFB Should this be replaced by m_line.NextShape( i ); ?
+        if( m_line.IsPtOnArc( i ) )
         {
             // Account for "hidden segments" between two arcs
-            if( i > aStart && ( shapes[i - 1] >= 0 ) && ( shapes[i - 1] != shapes[i] ) )
+            if( i > aStart && ( m_line.IsArcSegment( static_cast<size_t>( i ) - 1 ) ) )
                 linkIdx++;
 
-            arcIdx = shapes[i];
+            arcIdx = m_line.ArcIndex(i);
 
             // Skip over the rest of the arc vertices
-            while( i < numPoints && shapes[i] == arcIdx )
+            while( i < numPoints && m_line.ArcIndex( i ) == arcIdx )
                 i++;
 
             // Back up two vertices to restart at the segment coincident with the end of the arc
