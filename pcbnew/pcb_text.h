@@ -92,6 +92,9 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
+    bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const override;
+    bool TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy = 0 ) const override;
+
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override
     {
         return TextHitTest( aPosition, aAccuracy );

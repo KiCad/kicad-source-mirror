@@ -138,6 +138,25 @@ const EDA_RECT PCB_TEXT::GetBoundingBox() const
 }
 
 
+bool PCB_TEXT::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
+    return EDA_TEXT::TextHitTest( aPoint, aAccuracy );
+}
+
+
+bool PCB_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
+{
+    EDA_RECT rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContains )
+        return rect.Contains( GetBoundingBox() );
+    else
+        return rect.Intersects( GetTextBox(), GetDrawRotation() );
+}
+
+
 void PCB_TEXT::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     wxPoint pt = GetTextPos();
