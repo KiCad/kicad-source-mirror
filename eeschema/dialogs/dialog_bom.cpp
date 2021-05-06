@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,7 +85,8 @@ private:
 
     void pluginInit();
     void installGeneratorsList();
-    BOM_GENERATOR_HANDLER* addGenerator( const wxString& aPath, const wxString& aName = wxEmptyString );
+    BOM_GENERATOR_HANDLER* addGenerator( const wxString& aPath,
+                                         const wxString& aName = wxEmptyString );
     bool pluginExists( const wxString& aName );
 
     BOM_GENERATOR_HANDLER* selectedGenerator()
@@ -326,7 +327,6 @@ void DIALOG_BOM::OnRunGenerator( wxCommandEvent& event )
     // Calculate the xml netlist filename
     wxFileName fn = m_parent->Schematic().GetFileName();
 
-    fn.SetPath( wxPathOnly( Prj().GetProjectFullName() ) );
     fn.ClearExt();
 
     wxString fullfilename = fn.GetFullPath();
