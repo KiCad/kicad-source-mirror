@@ -1405,12 +1405,12 @@ void SCH_EDITOR_CONTROL::setClipboardInstances( const SCH_SCREEN* aPastedScreen 
 {
     m_clipboardSheetInstances.clear();
 
-    for( const SCH_SHEET_INSTANCE sheet : aPastedScreen->GetSheetInstances() )
+    for( const SCH_SHEET_INSTANCE& sheet : aPastedScreen->GetSheetInstances() )
         m_clipboardSheetInstances[sheet.m_Path] = sheet;
 
     m_clipboardSymbolInstances.clear();
 
-    for( const SYMBOL_INSTANCE_REFERENCE symbol : aPastedScreen->GetSymbolInstances() )
+    for( const SYMBOL_INSTANCE_REFERENCE& symbol : aPastedScreen->GetSymbolInstances() )
         m_clipboardSymbolInstances[symbol.m_Path] = symbol;
 }
 
