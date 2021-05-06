@@ -323,7 +323,8 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
             m_isPower = true;
     }
 
-    m_StyledTextCtrl->Bind( wxEVT_STC_CHARADDED, &DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded, this );
+    m_StyledTextCtrl->Bind( wxEVT_STC_CHARADDED,
+                            &DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded, this );
 
     init();
 }
@@ -469,6 +470,7 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
         {
             wxString ref = symbol->GetRef( aSheetPath );
             int      unit = symbol->GetUnit();
+            LIB_ID   libId = symbol->GetLibId();
 
             for( SCH_SHEET_PATH& sheet : editFrame->Schematic().GetSheets() )
             {
@@ -476,7 +478,7 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
                 std::vector<SCH_COMPONENT*> otherUnits;
                 constexpr bool              appendUndo = true;
 
-                CollectOtherUnits( ref, unit, sheet, &otherUnits );
+                CollectOtherUnits( ref, unit, libId, sheet, &otherUnits );
 
                 for( SCH_COMPONENT* otherUnit : otherUnits )
                 {

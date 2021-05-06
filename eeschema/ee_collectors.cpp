@@ -231,8 +231,8 @@ bool EE_COLLECTOR::IsCorner() const
 }
 
 
-void CollectOtherUnits( const wxString& aRef, int aUnit, SCH_SHEET_PATH& aSheet,
-                        std::vector<SCH_COMPONENT*>* otherUnits )
+void CollectOtherUnits( const wxString& aRef, int aUnit, const LIB_ID& aLibId,
+                        SCH_SHEET_PATH& aSheet, std::vector<SCH_COMPONENT*>* otherUnits )
 {
     SCH_REFERENCE_LIST symbols;
     aSheet.GetSymbols( symbols );
@@ -241,7 +241,8 @@ void CollectOtherUnits( const wxString& aRef, int aUnit, SCH_SHEET_PATH& aSheet,
     {
         SCH_REFERENCE symbol = symbols[i];
 
-        if( symbol.GetRef() == aRef && symbol.GetUnit() != aUnit )
+        if( symbol.GetRef() == aRef && symbol.GetSymbol()->GetLibId() == aLibId
+          && symbol.GetUnit() != aUnit )
             otherUnits->push_back( symbol.GetSymbol() );
     }
 }

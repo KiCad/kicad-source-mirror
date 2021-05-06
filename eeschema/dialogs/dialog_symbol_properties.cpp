@@ -118,11 +118,13 @@ public:
         }
 
         m_typeAttr = new wxGridCellAttr;
-        m_typeAttr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinTypeIcons(), PinTypeNames() ) );
+        m_typeAttr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinTypeIcons(),
+                                                                   PinTypeNames() ) );
         m_typeAttr->SetReadOnly( true );
 
         m_shapeAttr = new wxGridCellAttr;
-        m_shapeAttr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinShapeIcons(), PinShapeNames() ) );
+        m_shapeAttr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinShapeIcons(),
+                                                                    PinShapeNames() ) );
         m_shapeAttr->SetReadOnly( true );
     }
 
@@ -638,7 +640,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     switch( m_mirrorCtrl->GetSelection() )
     {
-    case 0:                                        break;
+    case 0:                                         break;
     case 1: m_comp->SetOrientation( CMP_MIRROR_X ); break;
     case 2: m_comp->SetOrientation( CMP_MIRROR_Y ); break;
     }
@@ -709,6 +711,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     {
         wxString ref = m_comp->GetRef( &GetParent()->GetCurrentSheet() );
         int      unit = m_comp->GetUnit();
+        LIB_ID   libId = m_comp->GetLibId();
 
         for( SCH_SHEET_PATH& sheet : GetParent()->Schematic().GetSheets() )
         {
@@ -716,7 +719,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
             std::vector<SCH_COMPONENT*> otherUnits;
             constexpr bool              appendUndo = true;
 
-            CollectOtherUnits( ref, unit, sheet, &otherUnits );
+            CollectOtherUnits( ref, unit, libId, sheet, &otherUnits );
 
             for( SCH_COMPONENT* otherUnit : otherUnits )
             {
@@ -872,7 +875,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
         m_fieldsGrid->ForceRefresh();
 
         m_fieldsGrid->SetGridCursor( i - 1, m_fieldsGrid->GetGridCursorCol() );
-        m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(), m_fieldsGrid->GetGridCursorCol() );
+        m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(),
+                                       m_fieldsGrid->GetGridCursorCol() );
     }
     else
     {
@@ -896,7 +900,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
         m_fieldsGrid->ForceRefresh();
 
         m_fieldsGrid->SetGridCursor( i + 1, m_fieldsGrid->GetGridCursorCol() );
-        m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(), m_fieldsGrid->GetGridCursorCol() );
+        m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(),
+                                       m_fieldsGrid->GetGridCursorCol() );
     }
     else
     {

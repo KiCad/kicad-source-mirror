@@ -74,36 +74,36 @@ public:
     SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData ) override;
 
     /**
-     * Function Collect
-     * scans a EDA_ITEM using this class's Inspector method, which does the collection.
+     * Scan a #EDA_ITEM using this class's Inspector method which does the collection.
+     *
      * @param aScreen The eeschema screen to use for scanning
      * @param aFilterList A list of #KICAD_T types with a terminating #EOT, that determines
      *                    what is to be collected and the priority order of the resulting
      *                    collection.
-     * @param aPos A wxPoint to use in hit-testing.
-     * @param aUnit A symbol unit filter (for symbol editor)
-     * @param aConvert A DeMorgan filter (for symbol editor)
+     * @param aPos are the coordinates to use in hit testing.
+     * @param aUnit is the symbol unit filter (for symbol editor).
+     * @param aConvert is the DeMorgan filter (for symbol editor)
      */
     void Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], const wxPoint& aPos,
-            int aUnit = 0, int aConvert = 0 );
+                  int aUnit = 0, int aConvert = 0 );
 
     /**
-     * Function Collect
-     * scans a EDA_ITEM using this class's Inspector method, which does the collection.
-     * @param aItems The LIB_PART multivector holding the part components
-     * @param aFilterList A list of #KICAD_T types with a terminating #EOT, that determines
+     * Scan an #EDA_ITEM using this class's Inspector method which does the collection.
+     *
+     * @param aItems is a LIB_PART multivector holding the part items.
+     * @param aFilterList is a list of #KICAD_T types with a terminating #EOT, that determines
      *                    what is to be collected and the priority order of the resulting
      *                    collection.
-     * @param aPos A wxPoint to use in hit-testing.
-     * @param aUnit A symbol unit filter (for symbol editor)
-     * @param aConvert A DeMorgan filter (for symbol editor)
+     * @param aPos are the coordinates to use in hit testing.
+     * @param aUnit is the symbol unit filter (for symbol editor).
+     * @param aConvert is the DeMorgan filter (for symbol editor).
      */
     void Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterList[], const wxPoint& aPos,
-            int aUnit = 0, int aConvert = 0 );
+                  int aUnit = 0, int aConvert = 0 );
 
     /**
-     * Function IsCorner
-     * tests if the collected items forms as corner of two line segments.
+     * Test if the collected items form a corner of two line segments.
+     *
      * @return True if the collected items form a corner of two line segments.
      */
     bool IsCorner() const;
@@ -114,7 +114,7 @@ public:
 };
 
 
-void CollectOtherUnits( const wxString& thisRef, int thisUnit, SCH_SHEET_PATH& aSheet,
-                        std::vector<SCH_COMPONENT*>* otherUnits );
+void CollectOtherUnits( const wxString& thisRef, int thisUnit, const LIB_ID& aLibId,
+                        SCH_SHEET_PATH& aSheet, std::vector<SCH_COMPONENT*>* otherUnits );
 
 #endif // EE_COLLECTORS_H
