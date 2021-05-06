@@ -46,7 +46,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	int m_choiceRegTypeNChoices = sizeof( m_choiceRegTypeChoices ) / sizeof( wxString );
 	m_choiceRegType = new wxChoice( m_panelRegulators, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceRegTypeNChoices, m_choiceRegTypeChoices, 0 );
 	m_choiceRegType->SetSelection( 0 );
-	bSizerType->Add( m_choiceRegType, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizerType->Add( m_choiceRegType, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizeLeftpReg->Add( bSizerType, 0, wxEXPAND|wxALL, 5 );
@@ -724,7 +724,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizer441 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_Value_EpsilonR = new wxTextCtrl( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer441->Add( m_Value_EpsilonR, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizer441->Add( m_Value_EpsilonR, 1, wxEXPAND|wxLEFT, 5 );
 
 	m_button_EpsilonR = new wxButton( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer441->Add( m_button_EpsilonR, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
@@ -743,7 +743,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizer442 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_Value_TanD = new wxTextCtrl( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer442->Add( m_Value_TanD, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizer442->Add( m_Value_TanD, 1, wxEXPAND|wxLEFT, 5 );
 
 	m_button_TanD = new wxButton( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer442->Add( m_button_TanD, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
@@ -764,7 +764,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizer443 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_Value_Rho = new wxTextCtrl( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer443->Add( m_Value_Rho, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizer443->Add( m_Value_Rho, 1, wxEXPAND|wxLEFT, 5 );
 
 	m_button_Rho = new wxButton( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer443->Add( m_button_Rho, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
@@ -1248,17 +1248,17 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 
 	fgSizerVS_Inputs->Add( m_staticTextResistivity, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bSizer422;
-	bSizer422 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerResistivity;
+	bSizerResistivity = new wxBoxSizer( wxHORIZONTAL );
 
 	m_textCtrlPlatingResistivity = new wxTextCtrl( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer422->Add( m_textCtrlPlatingResistivity, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
+	bSizerResistivity->Add( m_textCtrlPlatingResistivity, 1, wxEXPAND|wxLEFT, 5 );
 
 	m_button_ResistivityVia = new wxButton( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer422->Add( m_button_ResistivityVia, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizerResistivity->Add( m_button_ResistivityVia, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	fgSizerVS_Inputs->Add( bSizer422, 1, wxEXPAND, 5 );
+	fgSizerVS_Inputs->Add( bSizerResistivity, 1, wxEXPAND, 5 );
 
 	m_viaResistivityUnits = new wxStaticText( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, _("ohm-meter"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaResistivityUnits->Wrap( -1 );
@@ -1270,17 +1270,17 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 
 	fgSizerVS_Inputs->Add( m_staticTextPermittivity, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bSizer423;
-	bSizer423 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerPermittivity;
+	bSizerPermittivity = new wxBoxSizer( wxHORIZONTAL );
 
 	m_textCtrlPlatingPermittivity = new wxTextCtrl( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer423->Add( m_textCtrlPlatingPermittivity, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
+	bSizerPermittivity->Add( m_textCtrlPlatingPermittivity, 1, wxEXPAND|wxLEFT, 5 );
 
 	m_button_Permittivity = new wxButton( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer423->Add( m_button_Permittivity, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizerPermittivity->Add( m_button_Permittivity, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	fgSizerVS_Inputs->Add( bSizer423, 1, wxEXPAND, 5 );
+	fgSizerVS_Inputs->Add( bSizerPermittivity, 1, wxEXPAND, 5 );
 
 
 	fgSizerVS_Inputs->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -1323,7 +1323,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_staticTextWarning->Wrap( -1 );
 	m_staticTextWarning->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizerViaLeftColumn->Add( m_staticTextWarning, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 10 );
+	bSizerViaLeftColumn->Add( m_staticTextWarning, 0, wxALL|wxEXPAND, 10 );
 
 
 	bSizerViaSize->Add( bSizerViaLeftColumn, 1, wxEXPAND, 5 );
@@ -1488,7 +1488,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelViaSize->SetSizer( bSizerViaSize );
 	m_panelViaSize->Layout();
 	bSizerViaSize->Fit( m_panelViaSize );
-	m_Notebook->AddPage( m_panelViaSize, _("Via Size"), false );
+	m_Notebook->AddPage( m_panelViaSize, _("Via Size"), true );
 	m_panelTrackWidth = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerTrackWidth;
 	bSizerTrackWidth = new wxBoxSizer( wxHORIZONTAL );
@@ -1964,7 +1964,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelBoardClass->SetSizer( bSizerBoardClass );
 	m_panelBoardClass->Layout();
 	bSizerBoardClass->Fit( m_panelBoardClass );
-	m_Notebook->AddPage( m_panelBoardClass, _("Board Classes"), true );
+	m_Notebook->AddPage( m_panelBoardClass, _("Board Classes"), false );
 
 	bmainFrameSizer->Add( m_Notebook, 1, wxEXPAND, 5 );
 
