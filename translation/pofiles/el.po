@@ -6,16 +6,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-04-10 08:26+0000\n"
+"PO-Revision-Date: 2021-05-07 15:32+0000\n"
 "Last-Translator: fresh <fresh190@protonmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -2240,6 +2240,8 @@ msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"Αποθήκευση της επιλογής για το υπόλοιπο αυτής της περιόδου.\n"
+"Αυτός ο διάλογος δε θα επανεμφανιστεί έως την επανεκκίνηση του KiCad."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -6136,7 +6138,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:631
 msgid "Donate"
-msgstr ""
+msgstr "Δωρεά"
 
 #: common/tool/actions.cpp:632
 #, fuzzy
@@ -10757,7 +10759,7 @@ msgstr "Προσθήκη διαδρομής για βιβλιοθήκη οδηγ
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:434
 msgid "Compatibility mode:"
-msgstr ""
+msgstr "Λειτουργία συμβατότητας:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 #, fuzzy
