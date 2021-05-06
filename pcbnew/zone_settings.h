@@ -103,6 +103,7 @@ public:
     long            m_ThermalReliefSpokeWidth;     // thickness of the copper bridge in thermal reliefs
 
     bool            m_Zone_45_Only;
+    bool            m_Locked;
 
 private:
     int             m_cornerSmoothingType;   // Corner smoothing type

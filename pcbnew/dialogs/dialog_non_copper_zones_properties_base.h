@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -42,6 +42,7 @@ class DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextLayerSelection;
 		wxDataViewListCtrl* m_layers;
 		wxCheckBox* m_ConstrainOpt;
+		wxCheckBox* m_cbLocked;
 		wxStaticText* m_staticTextStyle;
 		wxChoice* m_OutlineDisplayCtrl;
 		wxStaticText* m_MinWidthLabel;

@@ -115,6 +115,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_keepoutDoNotAllowPads       = aSource.GetDoNotAllowPads();
     m_keepoutDoNotAllowFootprints = aSource.GetDoNotAllowFootprints();
     m_Zone_45_Only                = aSource.GetHV45();
+    m_Locked                      = aSource.IsLocked();
     m_removeIslands               = aSource.GetIslandRemovalMode();
     m_minIslandArea               = aSource.GetMinIslandArea();
 
@@ -148,6 +149,7 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
     aTarget.SetDoNotAllowPads( GetDoNotAllowPads() );
     aTarget.SetDoNotAllowFootprints( GetDoNotAllowFootprints() );
     aTarget.SetHV45( m_Zone_45_Only );
+    aTarget.SetLocked( m_Locked );
     aTarget.SetIslandRemovalMode( GetIslandRemovalMode() );
     aTarget.SetMinIslandArea( GetMinIslandArea() );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,8 +20,8 @@
 #include <wx/dataview.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/choice.h>
 #include <wx/textctrl.h>
+#include <wx/choice.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -45,17 +45,18 @@ class DIALOG_RULE_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbPadsCtrl;
 		wxCheckBox* m_cbCopperPourCtrl;
 		wxCheckBox* m_cbFootprintsCtrl;
-		wxCheckBox* m_cbConstrainCtrl;
-		wxStaticText* m_staticTextStyle;
-		wxChoice* m_OutlineDisplayCtrl;
 		wxStaticText* m_staticText3;
 		wxTextCtrl* m_tcName;
+		wxCheckBox* m_cbConstrainCtrl;
+		wxCheckBox* m_cbLocked;
+		wxStaticText* m_staticTextStyle;
+		wxChoice* m_OutlineDisplayCtrl;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
 
-		// Virtual event handlers, override them in your derived class
+		// Virtual event handlers, overide them in your derived class
 		virtual void OnLayerSelection( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onLayerListRightDown( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnSizeLayersList( wxSizeEvent& event ) { event.Skip(); }

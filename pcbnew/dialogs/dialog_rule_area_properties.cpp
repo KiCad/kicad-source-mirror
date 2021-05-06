@@ -28,7 +28,6 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <footprint_edit_frame.h>
-#include <zones.h>
 #include <zone_settings.h>
 #include <dialog_rule_area_properties_base.h>
 
@@ -93,6 +92,8 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
     m_cbFootprintsCtrl->SetValue( m_zonesettings.GetDoNotAllowFootprints() );
     m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowCopperPour() );
 
+    m_cbLocked->SetValue( m_zonesettings.m_Locked );
+
     m_cbConstrainCtrl->SetValue( m_zonesettings.m_Zone_45_Only );
 
     m_tcName->SetValue( m_zonesettings.m_Name );
@@ -131,7 +132,9 @@ void DIALOG_RULE_AREA_PROPERTIES::OnLayerSelection( wxDataViewEvent& event )
             m_zonesettings.m_Layers &= ~LSET::InternalCuMask();
     }
     else
+    {
         m_zonesettings.m_Layers.set( ToLAYER_ID( layerID.GetInteger() ), selected );
+    }
 }
 
 
@@ -162,6 +165,7 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
     cfg->m_Zones.hatching_style = static_cast<int>( m_zonesettings.m_ZoneBorderDisplayStyle );
 
     m_zonesettings.m_Zone_45_Only = m_cbConstrainCtrl->GetValue();
+    m_zonesettings.m_Locked = m_cbLocked->GetValue();
     m_zonesettings.m_ZonePriority = 0;  // for a keepout, this param is not used.
 
     m_zonesettings.m_Name = m_tcName->GetValue();

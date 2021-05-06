@@ -102,17 +102,32 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* sbGeneral;
 	sbGeneral = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General") ), wxHORIZONTAL );
 
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1->AddGrowableCol( 1 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
 	m_zoneNameLabel = new wxStaticText( sbGeneral->GetStaticBox(), wxID_ANY, _("Zone name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_zoneNameLabel->Wrap( -1 );
 	m_zoneNameLabel->SetToolTip( _("A unique name for this zone to identify it for DRC") );
 
-	sbGeneral->Add( m_zoneNameLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_zoneNameLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcZoneName = new wxTextCtrl( sbGeneral->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbGeneral->Add( m_tcZoneName, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_tcZoneName, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+
+	m_staticTextPriorityLevel = new wxStaticText( sbGeneral->GetStaticBox(), wxID_ANY, _("Zone priority level:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPriorityLevel->Wrap( -1 );
+	m_staticTextPriorityLevel->SetToolTip( _("Zones are filled by priority level, level 3 has higher priority than level 2.\nWhen a zone is inside another zone:\n* If its priority is higher, its outlines are removed from the other zone.\n* If its priority is equal, a DRC error is set.") );
+
+	fgSizer1->Add( m_staticTextPriorityLevel, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_PriorityLevelCtrl = new wxSpinCtrl( sbGeneral->GetStaticBox(), ID_M_PRIORITYLEVELCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0 );
+	fgSizer1->Add( m_PriorityLevelCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	sbGeneral->Add( 5, 0, 0, wxEXPAND, 5 );
+	sbGeneral->Add( fgSizer1, 1, wxEXPAND, 5 );
 
 
 	bSizer7->Add( sbGeneral, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
@@ -126,16 +141,10 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_constrainOutline = new wxCheckBox( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Constrain outline to H, V and 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_constrainOutline, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	gbSizer1->Add( m_constrainOutline, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT, 5 );
 
-	m_staticTextPriorityLevel = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Zone priority level:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextPriorityLevel->Wrap( -1 );
-	m_staticTextPriorityLevel->SetToolTip( _("Zones are filled by priority level, level 3 has higher priority than level 2.\nWhen a zone is inside another zone:\n* If its priority is higher, its outlines are removed from the other zone.\n* If its priority is equal, a DRC error is set.") );
-
-	gbSizer1->Add( m_staticTextPriorityLevel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-	m_PriorityLevelCtrl = new wxSpinCtrl( m_ExportableSetupSizer->GetStaticBox(), ID_M_PRIORITYLEVELCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0 );
-	gbSizer1->Add( m_PriorityLevelCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALL, 5 );
+	m_cbLocked = new wxCheckBox( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_cbLocked, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT, 5 );
 
 	m_staticTextStyle = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Outline display:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStyle->Wrap( -1 );
@@ -226,7 +235,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 
 	m_connectionLabel = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Pad connections:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_connectionLabel->Wrap( -1 );
-	m_connectionLabel->SetToolTip( _("Default pad connection type to zone.\nThis setting can be overridden by local pad settings") );
+	m_connectionLabel->SetToolTip( _("Default pad connection type to zone.\nThis setting can be overridden by local  pad settings") );
 
 	gbSizerSettings->Add( m_connectionLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 

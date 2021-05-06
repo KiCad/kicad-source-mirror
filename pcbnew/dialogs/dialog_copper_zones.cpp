@@ -147,6 +147,7 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
 bool DIALOG_COPPER_ZONE::TransferDataToWindow()
 {
     m_constrainOutline->SetValue( m_settings.m_Zone_45_Only );
+    m_cbLocked->SetValue( m_settings.m_Locked );
     m_cornerSmoothingChoice->SetSelection( m_settings.GetCornerSmoothingType() );
     m_cornerRadius.SetValue( m_settings.GetCornerRadius() );
     m_PriorityLevelCtrl->SetValue( m_settings.m_ZonePriority );
@@ -380,6 +381,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     m_settings.m_ZonePriority = m_PriorityLevelCtrl->GetValue();
 
     m_settings.m_Zone_45_Only = m_constrainOutline->GetValue();
+    m_settings.m_Locked = m_cbLocked->GetValue();
 
     m_settings.m_ThermalReliefGap = m_antipadClearance.GetValue();
     m_settings.m_ThermalReliefSpokeWidth = m_spokeWidth.GetValue();

@@ -75,9 +75,10 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText18;
 		wxStaticText* m_zoneNameLabel;
 		wxTextCtrl* m_tcZoneName;
-		wxCheckBox* m_constrainOutline;
 		wxStaticText* m_staticTextPriorityLevel;
 		wxSpinCtrl* m_PriorityLevelCtrl;
+		wxCheckBox* m_constrainOutline;
+		wxCheckBox* m_cbLocked;
 		wxStaticText* m_staticTextStyle;
 		wxChoice* m_OutlineDisplayCtrl;
 		wxStaticLine* m_staticline1;

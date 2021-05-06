@@ -115,6 +115,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
 
     m_minWidth.SetValue( m_settings.m_ZoneMinThickness );
     m_ConstrainOpt->SetValue( m_settings.m_Zone_45_Only );
+    m_cbLocked->SetValue( m_settings.m_Locked );
 
     switch( m_settings.m_ZoneBorderDisplayStyle )
     {
@@ -237,6 +238,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     cfg->m_Zones.hatching_style = static_cast<int>( m_settings.m_ZoneBorderDisplayStyle );
 
     m_settings.m_Zone_45_Only = m_ConstrainOpt->GetValue();
+    m_settings.m_Locked = m_cbLocked->GetValue();
 
     // Get the layer selection for this zone
     int layer = -1;

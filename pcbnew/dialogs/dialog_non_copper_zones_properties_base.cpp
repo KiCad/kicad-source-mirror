@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,47 +51,50 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	m_ConstrainOpt = new wxCheckBox( sbShape->GetStaticBox(), wxID_ANY, _("Constrain outline to H, V and 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_ConstrainOpt, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
 
+	m_cbLocked = new wxCheckBox( sbShape->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_cbLocked, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 	m_staticTextStyle = new wxStaticText( sbShape->GetStaticBox(), wxID_ANY, _("Outline style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStyle->Wrap( -1 );
-	gbSizer1->Add( m_staticTextStyle, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_staticTextStyle, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxString m_OutlineDisplayCtrlChoices[] = { _("Line"), _("Hatched"), _("Fully hatched") };
 	int m_OutlineDisplayCtrlNChoices = sizeof( m_OutlineDisplayCtrlChoices ) / sizeof( wxString );
 	m_OutlineDisplayCtrl = new wxChoice( sbShape->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_OutlineDisplayCtrlNChoices, m_OutlineDisplayCtrlChoices, 0 );
 	m_OutlineDisplayCtrl->SetSelection( 0 );
-	gbSizer1->Add( m_OutlineDisplayCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+	gbSizer1->Add( m_OutlineDisplayCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
 	m_MinWidthLabel = new wxStaticText( sbShape->GetStaticBox(), wxID_ANY, _("Minimum width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MinWidthLabel->Wrap( -1 );
-	gbSizer1->Add( m_MinWidthLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_MinWidthLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_MinWidthCtrl = new wxTextCtrl( sbShape->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_MinWidthCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_MinWidthCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_MinWidthUnits = new wxStaticText( sbShape->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MinWidthUnits->Wrap( -1 );
-	gbSizer1->Add( m_MinWidthUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	gbSizer1->Add( m_MinWidthUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 	m_staticTextSmoothing = new wxStaticText( sbShape->GetStaticBox(), wxID_ANY, _("Outline smooth:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSmoothing->Wrap( -1 );
-	gbSizer1->Add( m_staticTextSmoothing, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_staticTextSmoothing, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_cornerSmoothingChoiceChoices[] = { _("None"), _("Chamfer"), _("Fillet") };
 	int m_cornerSmoothingChoiceNChoices = sizeof( m_cornerSmoothingChoiceChoices ) / sizeof( wxString );
 	m_cornerSmoothingChoice = new wxChoice( sbShape->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cornerSmoothingChoiceNChoices, m_cornerSmoothingChoiceChoices, 0 );
 	m_cornerSmoothingChoice->SetSelection( 0 );
-	gbSizer1->Add( m_cornerSmoothingChoice, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_cornerSmoothingChoice, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_cornerRadiusLabel = new wxStaticText( sbShape->GetStaticBox(), wxID_ANY, _("Chamfer distance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerRadiusLabel->Wrap( -1 );
-	gbSizer1->Add( m_cornerRadiusLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_cornerRadiusLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_cornerRadiusCtrl = new wxTextCtrl( sbShape->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_cornerRadiusCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_cornerRadiusCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_cornerRadiusUnits = new wxStaticText( sbShape->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerRadiusUnits->Wrap( -1 );
-	gbSizer1->Add( m_cornerRadiusUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	gbSizer1->Add( m_cornerRadiusUnits, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 
 	gbSizer1->AddGrowableCol( 1 );
@@ -114,7 +117,7 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	m_staticTextGridFillType->Wrap( -1 );
 	fgSizer1->Add( m_staticTextGridFillType, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	wxString m_GridStyleCtrlChoices[] = { _("Solid fill"), _("HatchBorder pattern") };
+	wxString m_GridStyleCtrlChoices[] = { _("Solid shape"), _("HatchBorder pattern") };
 	int m_GridStyleCtrlNChoices = sizeof( m_GridStyleCtrlChoices ) / sizeof( wxString );
 	m_GridStyleCtrl = new wxChoice( sbFill->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_GridStyleCtrlNChoices, m_GridStyleCtrlChoices, 0 );
 	m_GridStyleCtrl->SetSelection( 0 );
