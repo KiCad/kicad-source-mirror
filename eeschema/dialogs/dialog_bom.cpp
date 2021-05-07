@@ -457,7 +457,6 @@ void DIALOG_BOM::OnRunPlugin( wxCommandEvent& event )
     // Calculate the xml netlist filename
     wxFileName fn = g_RootSheet->GetScreen()->GetFileName();
 
-    fn.SetPath( wxPathOnly( Prj().GetProjectFullName() ) );
     fn.ClearExt();
 
     wxString fullfilename = fn.GetFullPath();
