@@ -431,6 +431,9 @@ int PCB_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
         std::string      tool = aEvent.GetCommandStr().get();
         PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
+        if( !picker )   // Happens in footprint wizard
+            return 0;
+
         // Deactivate other tools; particularly important if another PICKER is currently running
         Activate();
 
