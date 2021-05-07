@@ -723,7 +723,10 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( ACTIONS::deleteTool );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::placeFootprint );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::routeSingleTrack);
-    CURRENT_EDIT_TOOL( PCB_ACTIONS::routeDiffPair);
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::routeDiffPair );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::routerTuneDiffPair );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::routerTuneDiffPairSkew );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::routerTuneSingleTrace );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawVia );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawZone );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawRuleArea );

@@ -395,6 +395,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     static ACTION_GROUP* dimensionGroup = nullptr;
     static ACTION_GROUP* originGroup    = nullptr;
     static ACTION_GROUP* routingGroup   = nullptr;
+    static ACTION_GROUP* tuneGroup      = nullptr;
     static ACTION_GROUP* microwaveGroup = nullptr;
 
     if( !dimensionGroup )
@@ -420,6 +421,14 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
                                           &PCB_ACTIONS::routeDiffPair } );
     }
 
+    if( !tuneGroup )
+    {
+        tuneGroup = new ACTION_GROUP( "group.pcbTune", 
+                                      { &PCB_ACTIONS::routerTuneSingleTrace,
+                                        &PCB_ACTIONS::routerTuneDiffPair,
+                                        &PCB_ACTIONS::routerTuneDiffPairSkew } );
+    }
+
     if( !microwaveGroup )
     {
         microwaveGroup = new ACTION_GROUP( "group.pcbMicrowave",
@@ -437,6 +446,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( PCB_ACTIONS::placeFootprint,       ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->AddGroup( routingGroup,                 ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->AddGroup( tuneGroup,                    ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawVia,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->AddGroup( microwaveGroup,               ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawZone,             ACTION_TOOLBAR::TOGGLE );

@@ -1307,21 +1307,21 @@ TOOL_ACTION PCB_ACTIONS::routerTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTr
         AS_GLOBAL,
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         '7', LEGACY_HK_NAME( "Tune Single Track (Modern Toolset only)" ),
-        _( "Tune length of a single track" ), "",
+        _( "Tune length of a single track" ), _( "Tune length of a single track" ),
         BITMAPS::ps_tune_length, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_SINGLE );
 
 TOOL_ACTION PCB_ACTIONS::routerTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
         AS_GLOBAL,
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         '8', LEGACY_HK_NAME( "Tune Differential Pair Length (Modern Toolset only)" ),
-        _( "Tune length of a differential pair" ), "",
+        _( "Tune length of a differential pair" ), _( "Tune length of a differential pair" ),
         BITMAPS::ps_diff_pair_tune_length, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_DIFF_PAIR );
 
 TOOL_ACTION PCB_ACTIONS::routerTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
         AS_GLOBAL,
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         '9', LEGACY_HK_NAME( "Tune Differential Pair Skew (Modern Toolset only)" ),
-        _( "Tune skew of a differential pair" ), "",
+        _( "Tune skew of a differential pair" ), _( "Tune skew of a differential pair" ),
         BITMAPS::ps_diff_pair_tune_phase, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW );
 
 TOOL_ACTION PCB_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
