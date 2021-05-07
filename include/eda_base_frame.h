@@ -190,6 +190,7 @@ public:
     int GetAutoSaveInterval() const { return m_autoSaveInterval; }
 
     bool IsType( FRAME_T aType ) const { return m_ident == aType; }
+    FRAME_T GetFrameType() const { return m_ident; }
 
     /**
      * Return a #SEARCH_STACK pertaining to entire program.
