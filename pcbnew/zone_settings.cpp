@@ -71,6 +71,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_padConnection = ZONE_CONNECTION::THERMAL; // How pads are covered by copper in zone
 
     m_Zone_45_Only = false;
+    m_Locked = false;
 
     m_cornerSmoothingType = SMOOTHING_NONE;
     m_cornerRadius = 0;
