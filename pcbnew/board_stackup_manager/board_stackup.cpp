@@ -711,6 +711,7 @@ int BOARD_STACKUP::GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSec
         std::swap( aFirstLayer, aSecondLayer );
 
     int total = 0;
+    bool start = false;
 
     for( BOARD_STACKUP_ITEM* item : m_list )
     {
@@ -719,10 +720,19 @@ int BOARD_STACKUP::GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSec
 
         if( layer != UNDEFINED_LAYER && !IsCopperLayer( layer ) )
             continue;   // Silk/mask layer
-        else if( layer != UNDEFINED_LAYER && layer <= aFirstLayer )
-            continue;   // Copper layer before first
-        else if( layer != UNDEFINED_LAYER && layer >= aSecondLayer )
-            break;      // Copper layer after last: we're done
+
+        // Reached the start copper layer?  Start counting the next dielectric after it
+        if( !start && ( layer != UNDEFINED_LAYER && layer >= aFirstLayer ) )
+        {
+            start = true;
+            continue;
+        }
+        else if( !start )
+            continue;
+
+        // Reached the stop copper layer?  we're done
+        if( start && ( layer != UNDEFINED_LAYER && layer >= aSecondLayer ) )
+            break;
 
         for( int sublayer = 0; sublayer < item->GetSublayersCount(); sublayer++ )
             total += item->GetThickness( sublayer );

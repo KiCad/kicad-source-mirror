@@ -434,18 +434,24 @@ bool ROUTER_TOOL::Init()
     m_diffPairMenu->SetTool( this );
     m_menu.AddSubMenu( m_diffPairMenu );
 
+    auto notRoutingCond =
+            [this]( const SELECTION& )
+            {
+                return !m_router->RoutingInProgress();
+            };
+
     menu.AddItem( ACTIONS::cancelInteractive,        SELECTION_CONDITIONS::ShowAlways );
 
     menu.AddSeparator();
 
-    menu.AddItem( PCB_ACTIONS::routeSingleTrack,     SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( PCB_ACTIONS::routeDiffPair,        SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( PCB_ACTIONS::routeSingleTrack,     notRoutingCond );
+    menu.AddItem( PCB_ACTIONS::routeDiffPair,        notRoutingCond );
     menu.AddItem( ACT_EndTrack,                      SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_UndoLastSegment,               SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( PCB_ACTIONS::breakTrack,           SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( PCB_ACTIONS::breakTrack,           notRoutingCond );
 
-    menu.AddItem( PCB_ACTIONS::drag45Degree,         SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( PCB_ACTIONS::dragFreeAngle,        SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( PCB_ACTIONS::drag45Degree,         notRoutingCond );
+    menu.AddItem( PCB_ACTIONS::dragFreeAngle,        notRoutingCond );
 
 //        Add( ACT_AutoEndRoute );  // fixme: not implemented yet. Sorry.
     menu.AddItem( ACT_PlaceThroughVia,               SELECTION_CONDITIONS::ShowAlways );
