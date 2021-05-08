@@ -736,7 +736,7 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
         {
             msg.Printf( _( "Save %d legacy libraries as current format (*.kicad_sym) and "
                            "replace legacy entries in table?" ),
-                        legacyRows.size() );
+                        (int) legacyRows.size() );
         }
 
         if( !IsOK( m_parent, msg ) )
@@ -759,6 +759,20 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
 
         wxFileName newLib( resolvedPath );
         newLib.SetExt( "kicad_sym" );
+
+        if( newLib.Exists() )
+        {
+            msg.Printf( _( "File '%s' already exists. Do you want overwrite this file?" ),
+                        newLib.GetFullPath() );
+
+            switch( wxMessageBox( msg, _( "Migrate Library" ),
+                                  wxYES_NO | wxCANCEL | wxICON_QUESTION, m_parent ) )
+            {
+            case wxYES:    break;
+            case wxNO:     continue;
+            case wxCANCEL: return;
+            }
+        }
 
         if( convertLibrary( libName, legacyLib.GetFullPath(), newLib.GetFullPath() ) )
         {
