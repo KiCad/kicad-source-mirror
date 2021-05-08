@@ -573,7 +573,11 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
         else if( evt->IsActivate() )
         {
             if( segment || m_busUnfold.in_progress )
-                cleanup();
+            {
+                m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel drawing." ) );
+                evt->SetPassEvent( false );
+                continue;
+            }
 
             if( evt->IsMoveTool() )
             {

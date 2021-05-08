@@ -210,7 +210,11 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             }
 
             if( symbol )
-                cleanup();
+            {
+                m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel symbol creation." ) );
+                evt->SetPassEvent( false );
+                continue;
+            }
 
             if( evt->IsMoveTool() )
             {
@@ -444,7 +448,11 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             }
 
             if( image )
-                cleanup();
+            {
+                m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel image creation." ) );
+                evt->SetPassEvent( false );
+                continue;
+            }
 
             if( evt->IsMoveTool() )
             {
@@ -1062,7 +1070,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             }
 
             if( item )
-                cleanup();
+            {
+                m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel item creation." ) );
+                evt->SetPassEvent( false );
+                continue;
+            }
 
             if( evt->IsPointEditor() )
             {
@@ -1284,7 +1296,11 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             }
 
             if( sheet )
-                cleanup();
+            {
+                m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel sheet creation." ) );
+                evt->SetPassEvent( false );
+                continue;
+            }
 
             if( evt->IsPointEditor() )
             {
