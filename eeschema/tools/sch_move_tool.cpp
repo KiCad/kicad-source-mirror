@@ -364,11 +364,25 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         //
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
-            if( m_moveInProgress && evt->IsCancelInteractive() )
-                evt->SetPassEvent( false );
-
             if( m_moveInProgress )
+            {
+                if( evt->IsActivate() )
+                {
+                    // Allowing other tools to activate during a move runs the risk of race
+                    // conditions in which we try to spool up both event loops at once.
+
+                    if( m_isDrag )
+                        m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel drag." ) );
+                    else
+                        m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel move." ) );
+
+                    evt->SetPassEvent( false );
+                    continue;
+                }
+
+                evt->SetPassEvent( false );
                 restore_state = true;
+            }
 
             break;
         }
@@ -391,7 +405,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             if( selection.Front()->IsNew() )
             {
                 // This doesn't really make sense; we'll just end up dragging a stack of
-                // objects so Duplicate() is going to ignore this and we'll just carry on.
+                // objects so we ignore the duplicate and just carry on.
                 continue;
             }
 
