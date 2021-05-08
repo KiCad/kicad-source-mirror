@@ -311,6 +311,8 @@ PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
 
 bool PANEL_SYM_LIB_TABLE::verifyTables()
 {
+    wxString msg;
+
     for( SYMBOL_LIB_TABLE_GRID* model : { global_model(), project_model() } )
     {
         if( !model )
@@ -324,6 +326,23 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
             if( !nick || !uri )
             {
+                if( !nick && !uri )
+                    msg = _( "A library table row nickname and path cells are empty." );
+                else if( !nick )
+                    msg = _( "A library table row nickname cell is empty." );
+                else
+                    msg = _( "A library table row path cell is empty." );
+
+                wxMessageDialog badCellDlg( this, msg, _( "Invalid Row Definition" ),
+                                            wxYES_NO | wxCENTER | wxICON_QUESTION | wxYES_DEFAULT );
+                badCellDlg.SetExtendedMessage( _( "Empty cells will result in all rows that are "
+                                                  "invalid to be removed from the table." ) );
+                badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( "Remove Invalid Cells" ),
+                                           wxMessageDialog::ButtonLabel( "Cancel Table Update" ) );
+
+                if( badCellDlg.ShowModal() == wxID_NO )
+                    return false;
+
                 // Delete the "empty" row, where empty means missing nick or uri.
                 // This also updates the UI which could be slow, but there should only be a few
                 // rows to delete, unless the user fell asleep on the Add Row
@@ -332,9 +351,9 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
             }
             else if( ( illegalCh = LIB_ID::FindIllegalLibraryNameChar( nick ) ) )
             {
-                wxString msg = wxString::Format( _( "Illegal character '%c' in nickname '%s'" ),
-                                                 illegalCh,
-                                                 nick );
+                msg = wxString::Format( _( "Illegal character '%c' in nickname '%s'" ),
+                                        illegalCh,
+                                        nick );
 
                 // show the tabbed panel holding the grid we have flunked:
                 if( model != cur_model() )
@@ -373,9 +392,8 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
                 if( nick1 == nick2 )
                 {
-                    wxString msg = wxString::Format( _( "Multiple libraries cannot share the same "
-                                                        "nickname ('%s')." ),
-                                                     nick1 );
+                    msg = wxString::Format( _( "Multiple libraries cannot share the same "
+                                               "nickname ('%s')." ), nick1 );
 
                     // show the tabbed panel holding the grid we have flunked:
                     if( model != cur_model() )
@@ -418,9 +436,9 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
             }
             catch( const IO_ERROR& ioe )
             {
-                wxString msg = wxString::Format( _( "Symbol library \"%s\" failed to load.\n %s" ),
-                                                 row.GetNickName(),
-                                                 ioe.What() );
+                msg = wxString::Format( _( "Symbol library \"%s\" failed to load.\n %s" ),
+                                        row.GetNickName(),
+                                        ioe.What() );
 
                 wxMessageDialog errdlg( this, msg, _( "Error Loading Library" ) );
                 errdlg.ShowModal();
