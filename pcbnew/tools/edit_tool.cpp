@@ -211,6 +211,11 @@ bool EDIT_TOOL::Init()
 
 int EDIT_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
 {
+    // GetAndPlace makes sense only in board editor, although it is also called
+    // in fpeditor, that shares the same EDIT_TOOL list
+    if( !getEditFrame<PCB_BASE_FRAME>()->IsType( FRAME_PCB_EDITOR ) )
+        return 0;
+
     PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     FOOTPRINT*          fp = getEditFrame<PCB_BASE_FRAME>()->GetFootprintFromBoardByReference();
 

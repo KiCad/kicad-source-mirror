@@ -245,7 +245,7 @@ TOOL_ACTION PCB_ACTIONS::getAndPlace( "pcbnew.InteractiveEdit.FindMove",
         'T', LEGACY_HK_NAME( "Get and Move Footprint" ),
         _( "Get and Move Footprint" ),
         _( "Selects a footprint by reference designator and places it under the cursor for moving"),
-        BITMAPS::move );
+        BITMAPS::move, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveMove.move",
         AS_GLOBAL,
