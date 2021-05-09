@@ -41,7 +41,7 @@ TRACE_DESC::TRACE_DESC( const NETLIST_EXPORTER_PSPICE_SIM& aExporter, const wxSt
 
 
 SIM_WORKBOOK::SIM_WORKBOOK() :
-    m_dirty( false )
+    m_flagModified( false )
 {
 }
 
@@ -57,7 +57,7 @@ void SIM_WORKBOOK::AddPlotPanel( SIM_PANEL_BASE* aPlotPanel )
     wxASSERT( m_plots.count( aPlotPanel ) == 0 );
     m_plots[aPlotPanel] = PLOT_INFO();
 
-    m_dirty = true;
+    m_flagModified = true;
 }
 
 
@@ -66,35 +66,34 @@ void SIM_WORKBOOK::RemovePlotPanel( SIM_PANEL_BASE* aPlotPanel )
     wxASSERT( m_plots.count( aPlotPanel ) == 1 );
     m_plots.erase( aPlotPanel );
 
-    m_dirty = true;
+    m_flagModified = true;
 }
 
 
 void SIM_WORKBOOK::AddTrace( const SIM_PANEL_BASE* aPlotPanel, const wxString& aName,
         const TRACE_DESC& aTrace )
 {
-    // XXX: A plot is created automatically if there is none with this name yet.
-    m_plots[aPlotPanel].m_traces.insert(
+    m_plots.at( aPlotPanel ).m_traces.insert(
             std::make_pair( aName, aTrace ) );
 
-    m_dirty = true;
+    m_flagModified = true;
 }
 
 
 void SIM_WORKBOOK::RemoveTrace( const SIM_PANEL_BASE* aPlotPanel, const wxString& aName )
 {
-    auto& traceMap = m_plots[aPlotPanel].m_traces;
+    auto& traceMap = m_plots.at( aPlotPanel ).m_traces;
     auto traceIt = traceMap.find( aName );
     wxASSERT( traceIt != traceMap.end() );
     traceMap.erase( traceIt );
 
-    m_dirty = true;
+    m_flagModified = true;
 }
 
 
 SIM_WORKBOOK::TRACE_MAP::const_iterator SIM_WORKBOOK::RemoveTrace( const SIM_PANEL_BASE* aPlotPanel,
         TRACE_MAP::const_iterator aIt )
 {
-    m_dirty = true;
+    m_flagModified = true;
     return m_plots.at( aPlotPanel ).m_traces.erase( aIt );
 }

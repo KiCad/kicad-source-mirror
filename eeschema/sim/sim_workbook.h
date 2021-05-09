@@ -124,8 +124,10 @@ public:
 
     void SetSimCommand( const SIM_PANEL_BASE* aPlotPanel, const wxString& aSimCommand )
     {
+        if( m_plots.at( aPlotPanel ).m_simCommand != aSimCommand )
+            m_flagModified = true;
+
         m_plots.at( aPlotPanel ).m_simCommand = aSimCommand;
-        m_dirty = true;
     }
 
     const wxString& GetSimCommand( const SIM_PANEL_BASE* aPlotPanel ) const
@@ -140,11 +142,13 @@ public:
         return m_plots.at( aPlotPanel ).m_traces;
     }
 
-    bool IsDirty() const { return m_dirty; }
+
+    void ClrModified() { m_flagModified = false; }
+    bool IsModified() const { return m_flagModified; }
 
 private:
     ///< Dirty bit, indicates something in the workbook has changed
-    bool m_dirty;
+    bool m_flagModified;
 
     ///< Map of plot panels and associated data
     std::map<const SIM_PANEL_BASE*, PLOT_INFO> m_plots;

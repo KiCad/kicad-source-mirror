@@ -145,7 +145,18 @@ private:
     void initWorkbook();
 
     /**
-     * Give icons to menuitems of the main menubar
+     * Set the main window title bar text.
+     */
+    void updateTitle();
+
+    /**
+     * Update the frame to match the changes to the workbook. Should be always called after the
+     * workbook was modified.
+     */
+    void onModify();
+
+    /**
+     * Give icons to menuitems of the main menubar.
      */
     void setIconsForMenuItems();
 
@@ -269,6 +280,7 @@ private:
     void onTune( wxCommandEvent& event );
     void onShowNetlist( wxCommandEvent& event );
 
+    bool canCloseWindow( wxCloseEvent& aEvent ) override;
     void doCloseWindow() override;
 
     void onCursorUpdate( wxCommandEvent& aEvent );

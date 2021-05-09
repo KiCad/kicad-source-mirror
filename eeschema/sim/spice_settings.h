@@ -43,11 +43,11 @@ public:
 
     bool operator!=( const SPICE_SIMULATOR_SETTINGS& aRhs ) const { return !( *this == aRhs ); }
 
-    wxString GetWorkbookPath() const { return m_workbookPath; }
-    void SetWorkbookPath( wxString aPath ) { m_workbookPath = aPath; }
+    wxString GetWorkbookFilename() const { return m_workbookFilename; }
+    void SetWorkbookFilename( wxString aFilename ) { m_workbookFilename = aFilename; }
 
 private:
-    wxString m_workbookPath;
+    wxString m_workbookFilename;
 };
 
 /**

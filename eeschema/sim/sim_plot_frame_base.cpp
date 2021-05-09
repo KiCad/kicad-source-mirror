@@ -22,15 +22,15 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_fileMenu->AppendSeparator();
 
 	wxMenuItem* m_openWorkbook;
-	m_openWorkbook = new wxMenuItem( m_fileMenu, wxID_OPEN, wxString( _("Open Workbook") ) , wxEmptyString, wxITEM_NORMAL );
+	m_openWorkbook = new wxMenuItem( m_fileMenu, wxID_OPEN, wxString( _("Open...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_fileMenu->Append( m_openWorkbook );
 
 	wxMenuItem* m_saveWorkbook;
-	m_saveWorkbook = new wxMenuItem( m_fileMenu, wxID_SAVE, wxString( _("Save Workbook") ) , wxEmptyString, wxITEM_NORMAL );
+	m_saveWorkbook = new wxMenuItem( m_fileMenu, wxID_SAVE, wxString( _("Save") ) , wxEmptyString, wxITEM_NORMAL );
 	m_fileMenu->Append( m_saveWorkbook );
 
 	wxMenuItem* m_saveWorkbookAs;
-	m_saveWorkbookAs = new wxMenuItem( m_fileMenu, wxID_SAVE_AS, wxString( _("Save Workbook As...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_saveWorkbookAs = new wxMenuItem( m_fileMenu, wxID_SAVE_AS, wxString( _("Save As...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_fileMenu->Append( m_saveWorkbookAs );
 
 	m_fileMenu->AppendSeparator();
