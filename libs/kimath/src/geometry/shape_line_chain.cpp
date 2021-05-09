@@ -1714,7 +1714,7 @@ double SHAPE_LINE_CHAIN::Area() const
         j = i;
     }
 
-    return -area * 0.5;
+    return std::fabs( area * 0.5 ); // The result would be negative if points are anti-clockwise
 }
 
 

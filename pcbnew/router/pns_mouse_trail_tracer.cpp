@@ -119,7 +119,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
 
     PNS_DBG( dbg, AddLine, straight, m_forced ? BLUE : GREEN, 100000, "mt-straight" );
 
-    double areaS = std::abs( straight.Area() );
+    double areaS = straight.Area();
 
     SHAPE_LINE_CHAIN diag( DIRECTION_45().BuildInitialTrace( p0, aP, true, false ) );
     diag.Append( m_trail.Reverse() );
@@ -128,7 +128,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
 
     PNS_DBG( dbg, AddLine, diag, YELLOW, 100000, "mt-diag" );
 
-    double areaDiag = std::abs( diag.Area() );
+    double areaDiag = diag.Area();
     double ratio    = areaS / ( areaDiag + 1.0 );
 
     // heuristic to detect that the user dragged back the cursor to the beginning of the trace
@@ -152,7 +152,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
         SHAPE_LINE_CHAIN trail( m_trail );
         trail.SetClosed( true );
 
-        if( std::abs( trail.Area() ) > areaCutoff )
+        if( trail.Area() > areaCutoff )
             areaOk = true;
 }
 

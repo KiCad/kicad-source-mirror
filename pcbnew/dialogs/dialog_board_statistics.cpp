@@ -323,13 +323,13 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
         for( int i = 0; i < polySet.OutlineCount(); i++ )
         {
             SHAPE_LINE_CHAIN& outline = polySet.Outline( i );
-            m_boardArea += std::fabs( outline.Area() );
+            m_boardArea += outline.Area();
 
             // If checkbox "subtract holes" is checked
             if( m_checkBoxSubtractHoles->GetValue() )
             {
                 for( int j = 0; j < polySet.HoleCount( i ); j++ )
-                    m_boardArea -= std::fabs( polySet.Hole( i, j ).Area() );
+                    m_boardArea -= polySet.Hole( i, j ).Area();
             }
 
             if( boundingBoxCreated )
