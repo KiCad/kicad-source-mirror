@@ -95,6 +95,19 @@ public:
     SHAPE_ARC& ConstructFromStartEndAngle( const VECTOR2I& aStart, const VECTOR2I& aEnd,
                                            double aAngle, double aWidth = 0 );
 
+    /**
+     * Constructs this arc from the given start, end and center.
+     * @param aStart is the arc starting point
+     * @param aEnd is the arc endpoint
+     * @param aCenter is the arc center
+     * @param aClockwise determines which of the two solutions to construct
+     * @param aWidth is the arc line thickness
+     * @return *this
+     */
+    SHAPE_ARC& ConstructFromStartEndCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                                            const VECTOR2I& aCenter, bool aClockwise = false,
+                                            double aWidth = 0 );
+
     const VECTOR2I& GetP0() const { return m_start; }
     const VECTOR2I& GetP1() const { return m_end; }
     const VECTOR2I& GetArcMid() const { return m_mid; }
@@ -106,6 +119,8 @@ public:
                   VECTOR2I* aLocation = nullptr ) const override;
     bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
                   VECTOR2I* aLocation = nullptr ) const override;
+
+    bool IsClockwise() const;
 
     void SetWidth( int aWidth )
     {

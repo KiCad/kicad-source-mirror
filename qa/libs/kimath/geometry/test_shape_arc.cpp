@@ -479,6 +479,64 @@ BOOST_AUTO_TEST_CASE( BasicTTRGeom )
 }
 
 
+/**
+ * Info to set up an arc start, end and center
+ */
+struct ARC_START_END_CENTER
+{
+    VECTOR2I m_start;
+    VECTOR2I m_end;
+    VECTOR2I m_center;
+};
+
+
+struct ARC_SEC_CASE
+{
+    /// The text context name
+    std::string m_ctx_name;
+
+    /// Geom of the arc
+    ARC_START_END_CENTER m_geom;
+
+    /// clockwise or anti-clockwise?
+    bool m_clockwise;
+
+    /// Expected mid-point of the arc
+    VECTOR2I m_expected_mid;
+};
+
+
+
+static const std::vector<ARC_SEC_CASE> arc_sec_cases = {
+    { "180 deg, clockwise", { { 100, 0 }, { 0, 0 }, { 50, 0 } }, true, { 50, -50 } },
+    { "180 deg, anticlockwise", { { 100, 0 }, { 0, 0 }, { 50, 0 } }, false, { 50, 50 } },
+    { "180 deg flipped, clockwise", { { 0, 0 }, { 100, 0 }, { 50, 0 } }, true, { 50, 50 } },
+    { "180 deg flipped, anticlockwise", { { 0, 0 }, { 100, 0 }, { 50, 0 } }, false, { 50, -50 } },
+    { "90 deg, clockwise", { { -100, 0 }, { 0, 100 }, { 0, 0 } }, true, { -71, 71 } },
+    { "90 deg, anticlockwise", { { -100, 0 }, { 0, 100 }, { 0, 0 } }, false, { 71, -71 } },
+};
+
+
+BOOST_AUTO_TEST_CASE( BasicSECGeom )
+{
+    for( const auto& c : arc_sec_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_ctx_name )
+        {
+            VECTOR2I start = c.m_geom.m_start;
+            VECTOR2I end = c.m_geom.m_end;
+            VECTOR2I center = c.m_geom.m_center;
+            bool     cw = c.m_clockwise;
+
+            SHAPE_ARC this_arc;
+            this_arc.ConstructFromStartEndCenter( start, end, center, cw );
+
+            BOOST_CHECK_EQUAL( this_arc.GetArcMid(), c.m_expected_mid );
+        }
+    }
+}
+
+
 struct ARC_PT_COLLIDE_CASE
 {
     std::string         m_ctx_name;

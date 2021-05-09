@@ -791,6 +791,23 @@ protected:
     void convertArc( ssize_t aArcIndex );
 
     /**
+     * Splits an arc into two arcs at aPtIndex. Parameter \p aCoincident controls whether the two
+     * arcs are to be coincident at aPtIndex or whether a short straight segment should be created
+     * instead
+     *
+     * @param aPtIndex index of the point in the chain in which to split the arc
+     * @param aCoincident If true, the end point of the first arc will be coincident with the start
+                          point of the second arc at aPtIndex.
+                          If false, the end point of the first arc will be at aPtIndex-1 and the
+                          start point of the second arc will be at aPtIndex, resulting in a short
+                          straight line segment between aPtIndex-1 and aPtIndex.
+     */
+    void splitArc( ssize_t aPtIndex, bool aCoincident = false );
+
+
+    void ammendArc( size_t aArcIndex, VECTOR2I aNewStart, VECTOR2I aNewEnd );
+
+    /**
      * Create a new Clipper path from the SHAPE_LINE_CHAIN in a given orientation
      */
     ClipperLib::Path convertToClipper( bool aRequiredOrientation ) const;

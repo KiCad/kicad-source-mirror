@@ -196,6 +196,34 @@ SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndAngle( const VECTOR2I& aStart, const 
 }
 
 
+SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                                                   const VECTOR2I& aCenter, bool aClockwise,
+                                                   double aWidth )
+{
+    VECTOR2I startLine = aStart - aCenter;
+    VECTOR2I endLine = aEnd - aCenter;
+
+    double startangle = NormalizeAnglePos(RAD2DECIDEG( startLine.Angle() ));
+    double endangle = NormalizeAnglePos(RAD2DECIDEG( endLine.Angle() ));
+    double angle = endangle - startangle;
+
+    if( aClockwise )
+        angle = NormalizeAngleNeg( angle );
+    else
+        angle = NormalizeAnglePos( angle );
+
+    m_start = aStart;
+    m_end = aEnd;
+    m_mid = aStart;
+
+    RotatePoint( m_mid, aCenter, -angle / 2.0 );
+
+    update_bbox();
+
+    return *this;
+}
+
+
 bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I* aLocation ) const
 {
     if( aSeg.A == aSeg.B )
@@ -318,6 +346,12 @@ const BOX2I SHAPE_ARC::BBox( int aClearance ) const
         bbox.Inflate( aClearance );
 
     return bbox;
+}
+
+
+bool SHAPE_ARC::IsClockwise() const
+{
+    return GetCentralAngle() < 0;
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,20 +43,58 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline )
             VECTOR2I( 1500, 0 ),
     } );
 
-    SHAPE_LINE_CHAIN arc_insert1( SHAPE_ARC( VECTOR2I( 0, -100 ), VECTOR2I( 0, -200 ), 1800 ) );
+    SHAPE_LINE_CHAIN arc_insert1( SHAPE_ARC( VECTOR2I( 0, -100 ), VECTOR2I( 0, -200 ), 180.0 ) );
 
-    SHAPE_LINE_CHAIN arc_insert2( SHAPE_ARC( VECTOR2I( 0, 500 ), VECTOR2I( 0, 400 ), 1800 ) );
+    SHAPE_LINE_CHAIN arc_insert2( SHAPE_ARC( VECTOR2I( 0, 500 ), VECTOR2I( 0, 400 ), 180.0 ) );
 
     BOOST_CHECK_EQUAL( base_chain.CShapes().size(), base_chain.CPoints().size() );
     BOOST_CHECK_EQUAL( arc_insert1.CShapes().size(), arc_insert1.CPoints().size() );
     BOOST_CHECK_EQUAL( arc_insert2.CShapes().size(), arc_insert2.CPoints().size() );
 
-    base_chain.Insert( 0, SHAPE_ARC( VECTOR2I( 0, -100 ), VECTOR2I( 0, -200 ), 1800 ) );
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( arc_insert1 ) );
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( arc_insert2 ) );
 
+    base_chain.Insert( 0, SHAPE_ARC( VECTOR2I( 0, -100 ), VECTOR2I( 0, -200 ), 1800 ) );
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
     BOOST_CHECK_EQUAL( base_chain.CShapes().size(), base_chain.CPoints().size() );
 
     base_chain.Replace( 0, 2, chain_insert );
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
     BOOST_CHECK_EQUAL( base_chain.CShapes().size(), base_chain.CPoints().size() );
+}
+
+
+// Similar test to above but with larger coordinates, so we have more than one point per arc
+BOOST_AUTO_TEST_CASE( ArcToPolylineLargeCoords )
+{
+    SHAPE_LINE_CHAIN base_chain( { VECTOR2I( 0, 0 ), VECTOR2I( 0, 100000 ), VECTOR2I( 100000, 0 ) } );
+
+    SHAPE_LINE_CHAIN chain_insert( {
+            VECTOR2I( 0, 1500000 ),
+            VECTOR2I( 1500000, 1500000 ),
+            VECTOR2I( 1500000, 0 ),
+    } );
+
+    base_chain.Append( SHAPE_ARC( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 100000 ), 180.0 ) );
+
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
+    BOOST_CHECK_EQUAL( base_chain.PointCount(), 11 );
+
+    base_chain.Insert( 9, VECTOR2I( 250000, 0 ) );
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
+    BOOST_CHECK_EQUAL( base_chain.PointCount(), 12 );
+    BOOST_CHECK_EQUAL( base_chain.ArcCount(), 2 ); // Should have two arcs after the split
+
+    base_chain.Replace( 5, 6, chain_insert );
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
+    BOOST_CHECK_EQUAL( base_chain.PointCount(), 13 ); // Adding 3 points, removing 2
+    BOOST_CHECK_EQUAL( base_chain.ArcCount(), 3 ); // Should have three arcs after the split
+
+    base_chain.Replace( 4, 6, VECTOR2I( 550000, 0 ) );
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
+    BOOST_CHECK_EQUAL( base_chain.PointCount(), 11 ); // Adding 1 point, removing 3
+    BOOST_CHECK_EQUAL( base_chain.ArcCount(), 3 );    // Should still have three arcs
 }
 
 
