@@ -1349,7 +1349,7 @@ EDA_ITEM* EE_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
 
 int EE_SELECTION_TOOL::SelectNode( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition( false );
 
     SelectPoint( cursorPos, nodeTypes  );
 
