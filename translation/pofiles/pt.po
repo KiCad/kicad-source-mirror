@@ -3,22 +3,22 @@
 # This file is distributed under GNU Free Documentation License.
 # http://www.gnu.org/licenses/fdl-1.3.html
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
-# ssantos <ssantos@web.de>, 2020.
+# ssantos <ssantos@web.de>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2020-12-10 23:29+0000\n"
+"PO-Revision-Date: 2021-05-09 22:09+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
-msgstr "Todos arquivos (*.*)|*.*"
+msgstr "Todos ficheiros (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:100
 #, c-format
@@ -55,7 +55,7 @@ msgstr "Disponível:"
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr "Locais dos Arquivos"
+msgstr "Locais dos Ficheiros"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.h:63
 msgid "Select 3D Model"
@@ -398,7 +398,7 @@ msgstr "Exibir preferências para todas as ferramentas abertas"
 #: pcbnew/menubar_footprint_editor.cpp:238 pcbnew/menubar_pcb_editor.cpp:450
 #: pcbnew/toolbars_footprint_viewer.cpp:176
 msgid "&File"
-msgstr "&Arquivo"
+msgstr "&Ficheiro"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:221 cvpcb/menubar.cpp:85
 #: eeschema/menubar.cpp:281
@@ -796,7 +796,7 @@ msgstr "Cor do fundo superior"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:821
 msgid "3D Image File Name"
-msgstr "Nome do Arquivo de Imagem 3D"
+msgstr "Nome do ficheiro de Imagem 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:842
 #, c-format
@@ -804,8 +804,8 @@ msgid ""
 "Insufficient permissions required to save file\n"
 "%s"
 msgstr ""
-"Permissões de gravação são necessárias para salvar a biblioteca\n"
-"\"%s\""
+"Permissões insuficientes necessárias para gravar o ficheiro\n"
+"%s"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:843 common/confirm.cpp:130
 #: common/confirm.cpp:269 common/dialogs/panel_setup_severities.cpp:40
@@ -821,7 +821,7 @@ msgstr "Falha ao copiar imagem para a área de transferência"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:887
 msgid "Can't save file"
-msgstr "Não foi possível salvar o arquivo"
+msgstr "Não foi possível salvar o ficheiro"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:939
 msgid "Silkscreen Color"
@@ -969,7 +969,7 @@ msgstr "Usar Todas as Propriedades"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 msgid "Use all material properties from each 3D model file"
-msgstr "Usar todas as propriedades materiais de cada arquivo de modelo 3D"
+msgstr "Usar todas as propriedades de materiais de cada ficheiro de modelo 3D"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:193
 msgid "Use Diffuse Only"
@@ -977,7 +977,7 @@ msgstr "Usar Apenas Difusão"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:193
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Utilizar apenas a propriedade difusa da cor do modelo do arquivo 3D"
+msgstr "Utilizar apenas a propriedade difusa da cor do modelo do ficheiro 3D"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:199
 msgid "CAD Color Style"
@@ -1249,7 +1249,7 @@ msgstr "Não foi possível exportar para a Área de Transferência"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:732
 msgid "Create Logo File"
-msgstr "Criar Arquivo de Logotipo"
+msgstr "Criar ficheiro de logotipo"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:750
 #: bitmap2component/bitmap2cmp_gui.cpp:790
@@ -1257,12 +1257,12 @@ msgstr "Criar Arquivo de Logotipo"
 #: bitmap2component/bitmap2cmp_gui.cpp:868
 #, c-format
 msgid "File \"%s\" could not be created."
-msgstr "O arquivo \"%s\" não pode ser criado."
+msgstr "O ficheiro \"%s\" não pode ser criado."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:770
 #, fuzzy
 msgid "Create PostScript File"
-msgstr "Criar arquivo Postscript"
+msgstr "Criar ficheiro Postscript"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:810
 msgid "Create Symbol Library"
@@ -1360,7 +1360,7 @@ msgstr "Carregar Bitmap"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
 msgid "Export to File"
-msgstr "Exportar para Arquivo"
+msgstr "Exportar para ficheiro"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:155
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:142
@@ -1375,17 +1375,17 @@ msgstr "Símbolos"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 #, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (arquivo .kicad_mod)"
+msgstr "Pcbnew (ficheiro .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 #, fuzzy
 msgid "Postscript (.ps file)"
-msgstr "Postscript (arquivo .ps)"
+msgstr "Postscript (ficheiro .ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 #, fuzzy
 msgid "Worksheet (.kicad_wks file)"
-msgstr "Logo para legenda (arquivo .kicad_wks)"
+msgstr "Logo para legenda (ficheiro .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -1643,8 +1643,8 @@ msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
-"O pacote KiCad EDA é um conjunto de aplicativos de código aberto para a "
-"criação de esquemas eletrônicos e placas de circuito impresso."
+"O pacote KiCad EDA é um conjunto de aplicações de código aberto para a "
+"criação de esquemas eletrónicos e placas de circuito impresso."
 
 #: common/dialog_about/AboutDialog_main.cpp:132
 msgid "KiCad on the web"
@@ -1808,7 +1808,7 @@ msgstr "Copiar informações da versão do KiCad para a área de transferência"
 #: common/dialog_about/dialog_about_base.cpp:63
 #, fuzzy
 msgid "&Report Bug"
-msgstr "Arquivo de relatório"
+msgstr "Ficheiro de relatório"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:637
 #, fuzzy
@@ -1923,9 +1923,9 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"A próxima vez que o Kicad for iniciado, quaisquer locais de arquivo que já\n"
+"A próxima vez que o Kicad for iniciado, quaisquer locais de ficheiro que já\n"
 "tenham sido definidos serão honrados e qualquer configuração realizada\n"
-"na caixa de diálogo de configuração de locais de arquivos será ignorada.\n"
+"na caixa de diálogo de configuração de locais de ficheiros será ignorada.\n"
 "Se você não quiser este comportamento, renomeie quaisquer entradas "
 "conflitantes\n"
 "ou remova as variáveis de ambiente externas do seu sistema."
@@ -1937,7 +1937,7 @@ msgstr "O nome %s é reservado e não pode ser usado aqui"
 
 #: common/dialogs/dialog_configure_paths.cpp:496
 msgid "File Browser..."
-msgstr "Navegador de Arquivos..."
+msgstr "Navegador de Ficheiros..."
 
 #: common/dialogs/dialog_configure_paths.cpp:499
 #: common/widgets/grid_text_button_helpers.cpp:399
@@ -1952,11 +1952,11 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"Entre com o nome e o valor de cada variável de ambiente.  Entradas em cinza "
-"são de nomes definidos externamente pelo sistema ou utilizador.  Variáveis "
-"de ambiente definidas pelo sistema ou utilizador tem precedência em relação "
-"às definidas nesta tabela, isto significa que, neste caso, os valores desta "
-"tabela serão ignorados."
+"Entre com o nome e o valor de cada variável de ambiente.  Entradas em "
+"cinzento são de nomes definidos externamente pelo sistema ou utilizador. "
+"Variáveis de ambiente definidas pelo sistema ou utilizador tem precedência "
+"em relação às definidas nesta tabela, isto significa que, neste caso, os "
+"valores desta tabela serão ignorados."
 
 #: common/dialogs/dialog_configure_paths.cpp:584
 msgid ""
@@ -2060,7 +2060,7 @@ msgstr "Copiar tabela de biblioteca %s global personalizada"
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
-"Selecione esta opção para copiar um arquivo de tabela de biblioteca %s "
+"Selecione esta opção para copiar um ficheiro de tabela de biblioteca %s "
 "diferente do padrão"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
@@ -2079,7 +2079,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
 msgid "Select global %s library table file:"
-msgstr "Selecione o arquivo da tabela da biblioteca %s global:"
+msgstr "Selecione o ficheiro da tabela da biblioteca %s global:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2155,7 +2155,7 @@ msgstr "fictício"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
-msgstr "Selecionar um arquivo"
+msgstr "Selecionar um ficheiro"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:56
 msgid "Configure Global Library Table"
@@ -2382,7 +2382,7 @@ msgstr "Voltar Ajustes Padrão"
 #: common/dialogs/dialog_migrate_settings_base.h:67
 #, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Locais dos Arquivos"
+msgstr "Locais dos Ficheiros"
 
 #: common/dialogs/dialog_page_settings.cpp:52
 msgid "A5 148x210mm"
@@ -2479,7 +2479,7 @@ msgstr "Retrato"
 #: common/dialogs/dialog_page_settings.cpp:464
 #, c-format
 msgid "Page layout description file \"%s\" not found."
-msgstr "Arquivo de descrição de layout de página \"%s\" não encontrado."
+msgstr "Ficheiro de descrição de layout de página \"%s\" não encontrado."
 
 #: common/dialogs/dialog_page_settings.cpp:535
 msgid "the translation for paper size must preserve original spellings"
@@ -2492,7 +2492,7 @@ msgstr "Paisagem"
 
 #: common/dialogs/dialog_page_settings.cpp:779
 msgid "Select Page Layout Description File"
-msgstr "Selecionar Arquivo de Descrição de Layout de Página"
+msgstr "Selecionar ficheiro de descrição de layout de página"
 
 #: common/dialogs/dialog_page_settings.cpp:795
 #, c-format
@@ -2503,7 +2503,7 @@ msgid ""
 "instead of\n"
 "\"%s\"?"
 msgstr ""
-"O nome do arquivo de descrição do layout de página foi mudado.\n"
+"O nome do ficheiro de descrição do layout de página foi mudado.\n"
 "Gostaria de usar o caminho relativo:\n"
 "\"%s\"\n"
 "ao invés de\n"
@@ -2712,7 +2712,7 @@ msgstr "Comentário9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
 msgid "Page layout description file"
-msgstr "Arquivo de descrição de layout de página"
+msgstr "Ficheiro de descrição de layout de página"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Browse..."
@@ -2985,7 +2985,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings.cpp:305
 msgid "Executable files ("
-msgstr "Arquivos executáveis ("
+msgstr "Ficheiros executáveis ("
 
 #: common/dialogs/panel_common_settings.cpp:310
 #, fuzzy
@@ -3001,7 +3001,7 @@ msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
-"Intervalo após a primeira alteração para a criação do arquivo de backup da "
+"Intervalo após a primeira alteração para a criação do ficheiro de backup da "
 "placa de circuito em disco.\n"
 "Se definido em 0, o backup automático será desativado"
 
@@ -3012,11 +3012,11 @@ msgstr "minutos"
 
 #: common/dialogs/panel_common_settings_base.cpp:46
 msgid "File history size:"
-msgstr "Tamanho do histórico de arquivos:"
+msgstr "Tamanho do histórico de ficheiros:"
 
 #: common/dialogs/panel_common_settings_base.cpp:53
 msgid "3D cache file duration:"
-msgstr "Retenção dos arquivos de cache 3D:"
+msgstr "Retenção dos ficheiros de cache 3D:"
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid ""
@@ -3073,7 +3073,7 @@ msgstr "Suavização de Alta Qualidade"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
 msgid "Helper Applications"
-msgstr "Aplicativos Auxiliares"
+msgstr "Aplicações Auxiliares"
 
 #: common/dialogs/panel_common_settings_base.cpp:105
 msgid "Text editor:"
@@ -3148,7 +3148,7 @@ msgstr "Editando"
 
 #: common/dialogs/panel_common_settings_base.cpp:224
 msgid "Warp mouse to origin of moved object"
-msgstr "Relocar o mouse na origem do objeto movido"
+msgstr "Relocar o rato na origem do objeto movido"
 
 #: common/dialogs/panel_common_settings_base.cpp:227
 msgid "First hotkey selects tool"
@@ -3173,7 +3173,7 @@ msgstr "Habilitar backup automático do projeto"
 #: common/dialogs/panel_common_settings_base.cpp:244
 msgid ""
 "Automatically create backup archives of the current project when saving files"
-msgstr "Criar arquivos de backup do projeto atual ao salvá-lo"
+msgstr "Criar arquivo de backup do projeto atual ao salvá-lo"
 
 #: common/dialogs/panel_common_settings_base.cpp:248
 msgid "Create backups when auto save occurs"
@@ -3193,7 +3193,7 @@ msgstr "Número máximo de backup a manter:"
 
 #: common/dialogs/panel_common_settings_base.cpp:255
 msgid "How many backup files total to keep (set to 0 for no limit)"
-msgstr "Quantidade de arquivos de backup a manter (use 0 para sem limite)"
+msgstr "Quantidade de ficheiros de backup a manter (use 0 para sem limite)"
 
 #: common/dialogs/panel_common_settings_base.cpp:262
 msgid "Maximum backups per day:"
@@ -3225,8 +3225,8 @@ msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
-"Se o tamanho total dos arquivos de backup cresce acima deste limite, os "
-"backups antigos serão excluídos (use 0 para desativar)"
+"Se o tamanho total dos ficheiros de backup cresce acima deste limite, os "
+"backups antigos serão apagados (use 0 para desativar)"
 
 #: common/dialogs/panel_common_settings_base.cpp:293
 msgid "MB"
@@ -3238,7 +3238,7 @@ msgstr "Sessão"
 
 #: common/dialogs/panel_common_settings_base.cpp:306
 msgid "Remember open files for next project launch"
-msgstr "Lembrar arquivos para próximo carregamento de projeto"
+msgstr "Lembrar ficheiros para próximo carregamento de projeto"
 
 #: common/dialogs/panel_common_settings_base.cpp:308
 msgid ""
@@ -3246,7 +3246,7 @@ msgid ""
 "pcbnew with previously open files"
 msgstr ""
 "Se marcado, o lançamento de um projeto também iniciará Eeschema e PCBnew com "
-"arquivos abertos anteriormente"
+"ficheiros abertos anteriormente"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:76
 msgid "Type filter text"
@@ -3268,12 +3268,12 @@ msgstr "Importar Teclas de Atalho…"
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
 msgstr ""
-"Importar definições de teclas de atalho de um arquivo externo, substituindo "
+"Importar definições de teclas de atalho de um ficheiro externo, substituindo "
 "os valores atuais"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:192
 msgid "Import Hotkeys File:"
-msgstr "Importar Arquivo de Teclas de Atalho:"
+msgstr "Importar ficheiro de teclas de atalho:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
@@ -3301,7 +3301,7 @@ msgstr "Ce&ntralizar e posicionar no cursor ao aplicar zoom"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:26
 msgid "Center the cursor on screen when zooming."
-msgstr "Centralizar o cursor na tela ao aplicar zoom."
+msgstr "Centralizar o cursor no ecrã ao aplicar zoom."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:33
 #, fuzzy
@@ -3323,7 +3323,7 @@ msgstr "&Ativar Aceleração"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:39
 msgid "Zoom faster when scrolling quickly"
-msgstr "Zoom rápido quando usar scrool do mouse"
+msgstr "Zoom rápido quando usar scroll do rato"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:45
 msgid "Zoom speed:"
@@ -3331,7 +3331,7 @@ msgstr "Velocidade do zoom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
-msgstr "Quão longe para aumentar o zoom para cada rotação da roda do mouse"
+msgstr "Quão longe para aumentar o zoom para cada rotação da roda do rato"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
 msgid "Pick the zoom speed automatically"
@@ -3343,7 +3343,7 @@ msgstr "Velocidade do Auto-posicionando:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
-msgstr "Quão rápido para se deslocar ao mover um objeto fora da borda da tela"
+msgstr "Quão rápido para se deslocar ao mover um objeto fora da borda do ecrã"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:91
 #, fuzzy
@@ -3574,12 +3574,12 @@ msgstr "Espessura do &Barramento:"
 #: common/dialogs/panel_setup_netclasses.cpp:482
 #, fuzzy
 msgid "Schematic wire color"
-msgstr "Arquivos de esquema"
+msgstr "Ficheiros de esquema"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
 #, fuzzy
 msgid "Schematic wire line style"
-msgstr "Arquivos de esquema"
+msgstr "Ficheiros de esquema"
 
 #: common/dialogs/panel_setup_netclasses.cpp:534
 msgid "The default net class is required."
@@ -3749,16 +3749,16 @@ msgstr "Informação:"
 #: common/dialogs/wx_html_report_panel.cpp:329
 #: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:615
 msgid "Save Report to File"
-msgstr "Salvar Relatório para Arquivo"
+msgstr "Salvar relatório para ficheiro"
 
 #: common/dialogs/wx_html_report_panel.cpp:346
 #, c-format
 msgid "Cannot write report to file \"%s\"."
-msgstr "Não foi possível gravar relatório no arquivo \"%s\"."
+msgstr "Não foi possível gravar relatório no ficheiro \"%s\"."
 
 #: common/dialogs/wx_html_report_panel.cpp:348
 msgid "File save error"
-msgstr "Erro ao salvar arquivo"
+msgstr "Erro ao salvar ficheiro"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:14
 msgid "Output Messages"
@@ -3815,7 +3815,7 @@ msgstr "Não foi possível abrir o CvPcb"
 #: common/drawing_sheet/drawing_sheet_reader.cpp:844
 #, c-format
 msgid "The file \"%s\" was not fully read"
-msgstr "O arquivo \"%s\" não foi lido completamente"
+msgstr "O ficheiro \"%s\" não foi lido completamente"
 
 #: common/drawing_sheet/ds_data_item.cpp:394
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:654
@@ -3860,7 +3860,7 @@ msgstr "Imagem"
 #: common/drawing_sheet/ds_data_model_io.cpp:93
 #: common/drawing_sheet/ds_data_model_io.cpp:121
 msgid "Error writing page layout design file"
-msgstr "Erro gravando arquivo de desenho de layout de página"
+msgstr "Erro gravando ficheiro de desenho de layout de página"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
@@ -3898,7 +3898,7 @@ msgstr "Comentário"
 #: common/drawing_sheet/ds_draw_item.cpp:187
 #, fuzzy, c-format
 msgid "Text '%s'"
-msgstr "Arquivos de texto"
+msgstr "Ficheiros de texto"
 
 #: common/drawing_sheet/ds_draw_item.cpp:395 eeschema/lib_rectangle.cpp:279
 #, fuzzy, c-format
@@ -3955,8 +3955,7 @@ msgstr "String delimitada não terminada"
 
 #: common/dsnlexer.cpp:696
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr ""
-"Delimitador de string precisa ser um único caractere podendo ser ', \", ou $"
+msgstr "Delimitador de cadeia precisa ser um único caractere: ', \", ou $"
 
 #: common/eda_base_frame.cpp:430
 msgid "&About KiCad"
@@ -3969,7 +3968,7 @@ msgstr "&Ajuda"
 #: common/eda_base_frame.cpp:851
 #, c-format
 msgid "File \"%s\" was not found."
-msgstr "Arquivo \"%s\" não encontrado."
+msgstr "Ficheiro \"%s\" não encontrado."
 
 #: common/eda_base_frame.cpp:896
 msgid "Preferences"
@@ -3982,7 +3981,7 @@ msgstr "Comum"
 
 #: common/eda_base_frame.cpp:901
 msgid "Mouse and Touchpad"
-msgstr "Mouse e Touchpad"
+msgstr "Rato e touchpad"
 
 #: common/eda_base_frame.cpp:904
 msgid "Hotkeys"
@@ -3997,13 +3996,13 @@ msgstr "Você não tem permissão de escrita na pasta \"%s\"."
 #, c-format
 msgid "You do not have write permissions to save file \"%s\" to folder \"%s\"."
 msgstr ""
-"Você não tem permissão de escrita para salvar o arquivo \"%s\" na pasta \"%s"
-"\"."
+"Você não tem permissão de escrita para salvar o ficheiro \"%s\" na pasta \"%"
+"s\"."
 
 #: common/eda_base_frame.cpp:958 pcbnew/plugins/altium/altium_pcb.cpp:1202
 #, c-format
 msgid "You do not have write permissions to save file \"%s\"."
-msgstr "Você não tem permissão de escrita para salvar o arquivo \"%s\"."
+msgstr "Você não tem permissão de escrita para salvar o ficheiro \"%s\"."
 
 #: common/eda_base_frame.cpp:988
 #, c-format
@@ -4015,7 +4014,7 @@ msgid ""
 "made?"
 msgstr ""
 "Bem, isto é potencialmente embaraçoso!\n"
-"Aparentemente, a última vez que você editou o arquivo\n"
+"Aparentemente, a última vez que você editou o ficheiro\n"
 "%s\"\n"
 "ele não foi salvo corretamente.  Gostaria de restaurar as últimas alterações "
 "salvas?"
@@ -4023,22 +4022,22 @@ msgstr ""
 #: common/eda_base_frame.cpp:1004
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
-"O arquivo de recuperação automático não pôde ser renomeado para o nome de "
-"arquivo da placa."
+"O ficheiro de recuperação automático não pôde ser renomeado para o nome de "
+"ficheiro da placa."
 
 #: common/eda_doc.cpp:143
 msgid "Doc Files"
-msgstr "Arquivos Doc"
+msgstr "Ficheiros Doc"
 
 #: common/eda_doc.cpp:158
 #, c-format
 msgid "Doc File \"%s\" not found"
-msgstr "Arquivo Doc \"%s\" não encontrado"
+msgstr "Ficheiro Doc \"%s\" não encontrado"
 
 #: common/eda_doc.cpp:201
 #, c-format
 msgid "Unknown MIME type for doc file \"%s\""
-msgstr "Tipo MIME desconhecido para o arquivo doc \"%s\""
+msgstr "Tipo MIME desconhecido para o ficheiro doc \"%s\""
 
 #: common/eda_draw_frame.cpp:134 common/tool/actions.cpp:482
 #: pagelayout_editor/pl_editor_frame.cpp:154
@@ -4263,7 +4262,7 @@ msgstr "Rótulo Hierárquico"
 #: common/eda_item.cpp:277
 #, fuzzy
 msgid "Schematic Field"
-msgstr "Arquivos de esquema"
+msgstr "Ficheiros de esquema"
 
 #: common/eda_item.cpp:278
 msgid "Component"
@@ -4546,8 +4545,8 @@ msgid ""
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
 "Definido internamente pelo KiCad (não pode ser editado) e tem como valor o "
-"caminho absoluto do arquivo de projeto atual.  Esta variável de ambiente "
-"pode ser utilizada para definir arquivos e pastas relativos ao projeto "
+"caminho absoluto do ficheiro de projeto atual.  Esta variável de ambiente "
+"pode ser utilizada para definir ficheiros e pastas relativos ao projeto "
 "atual.  Por exemplo, ${KIPRJMOD}/libs/footprints.pretty pode ser definido "
 "como uma pasta contendo uma biblioteca de footprint chamada de footprints."
 "pretty."
@@ -4603,7 +4602,7 @@ msgid ""
 "Full error text:\n"
 "%s"
 msgstr ""
-"O KiCad não conseguiu abrir este arquivo, ele foi criado em uma versão mais "
+"O KiCad não conseguiu abrir este ficheiro, ele foi criado em uma versão mais "
 "recente da que está sendo executada.\n"
 "Para abri-lo, atualize o KiCad para uma versão mais recente.\n"
 "\n"
@@ -4615,7 +4614,7 @@ msgstr ""
 #: common/filehistory.cpp:155
 #, fuzzy
 msgid "No Files"
-msgstr "Arquivos Doc"
+msgstr "Ficheiros Doc"
 
 #: common/filename_resolver.cpp:451
 msgid "The given path does not exist"
@@ -4653,11 +4652,11 @@ msgstr "Gravar lista de caminhos de busca 3D"
 
 #: common/filename_resolver.cpp:634
 msgid "Could not open configuration file"
-msgstr "Não foi possível abrir o arquivo de configuração"
+msgstr "Não foi possível abrir o ficheiro de configuração"
 
 #: common/filename_resolver.cpp:661
 msgid "Problems writing configuration file"
-msgstr "Problemas ao gravar o arquivo de configuração"
+msgstr "Problemas ao gravar o ficheiro de configuração"
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:856
 #: eeschema/symbol_editor/symbol_library_manager.cpp:94
@@ -4675,14 +4674,14 @@ msgid ""
 "Duplicate library nickname \"%s\" found in footprint library table file line "
 "%d"
 msgstr ""
-"Apelido duplicado \"%s\" encontrado no arquivo da tabela de bibliotecas de "
+"Apelido duplicado \"%s\" encontrado no ficheiro da tabela de bibliotecas de "
 "footprint linha %d"
 
 #: common/fp_lib_table.cpp:300
 #, fuzzy, c-format
 msgid "fp-lib-table files contain no library named '%s'."
 msgstr ""
-"os arquivos fp-lib-table não contém nenhuma biblioteca com o apelido \"%s\""
+"os ficheiros fp-lib-table não contém nenhuma biblioteca com o apelido \"%s\""
 
 #: common/fp_lib_table.cpp:492 eeschema/symbol_lib_table.cpp:507
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:109
@@ -4719,14 +4718,14 @@ msgid ""
 msgstr ""
 "Não é possível imprimir '%s'.\n"
 "\n"
-"Tipo de arquivo desconhecido."
+"Tipo de ficheiro desconhecido."
 
 #: common/gestfich.cpp:372 eeschema/eeschema.cpp:404 eeschema/eeschema.cpp:436
 #: gerbview/gerbview.cpp:231 kicad/project_template.cpp:243
 #: pcbnew/pcbnew.cpp:476
 #, c-format
 msgid "Cannot copy file \"%s\"."
-msgstr "Não é possível copiar o arquivo \"%s\"."
+msgstr "Não é possível copiar o ficheiro \"%s\"."
 
 #: common/grid_tricks.cpp:241 common/tool/actions.cpp:152
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1936
@@ -4866,10 +4865,9 @@ msgid ""
 "\"%s\"\n"
 "could not be loaded\n"
 msgstr ""
-"Erro Fatal de Instalação. Arquivo:\n"
+"Erro Fatal de Instalação. Ficheiro:\n"
 "\"%s\"\n"
 "não pôde ser carregado\n"
-"\n"
 
 #: common/kiway.cpp:288
 msgid "It is missing.\n"
@@ -5253,7 +5251,7 @@ msgstr "Excluir campo"
 #: common/layer_id.cpp:125
 #, fuzzy
 msgid "Sheet file names"
-msgstr "Nome do arquivo de desenho"
+msgstr "Nome do ficheiro de desenho"
 
 #: common/layer_id.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
@@ -5536,11 +5534,11 @@ msgstr "Editor padrão não encontrado, você deve escolhê-lo"
 
 #: common/pgm_base.cpp:196
 msgid "Executable file (*.exe)|*.exe"
-msgstr "Arquivo executável (*.exe)|*.exe"
+msgstr "Ficheiro executável (*.exe)|*.exe"
 
 #: common/pgm_base.cpp:198
 msgid "Executable file (*)|*"
-msgstr "Arquivo executável (*)|*"
+msgstr "Ficheiro executável (*)|*"
 
 #: common/pgm_base.cpp:208
 msgid "Select Preferred Editor"
@@ -5562,13 +5560,13 @@ msgstr "Essa linguagem não é suportada pelo sistema operacional."
 
 #: common/pgm_base.cpp:662 common/pgm_base.cpp:700
 msgid "The KiCad language file for this language is not installed."
-msgstr "O arquivo KiCad para essa linguagem não está instalado."
+msgstr "O ficheiro KiCad para essa linguagem não está instalado."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2315
 #: pcbnew/plugins/altium/altium_pcb.cpp:60
 #, c-format
 msgid "Cannot open file '%s'"
-msgstr "Não é possível abrir o arquivo \"%s\"."
+msgstr "Não é possível abrir o ficheiro \"%s\"."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2331
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2349
@@ -5576,7 +5574,7 @@ msgstr "Não é possível abrir o arquivo \"%s\"."
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2371
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2377
 msgid "The selected file is not valid or might be corrupt!"
-msgstr "O arquivo selecionado é inválido ou pode estar corrompido!"
+msgstr "O ficheiro selecionado é inválido ou pode estar corrompido!"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2476
 #, c-format
@@ -5629,31 +5627,31 @@ msgstr "Não foi possível abrir o arquivo de biblioteca\n"
 
 #: common/project/project_archiver.cpp:99
 msgid "Invalid archive file format\n"
-msgstr "Impossível arquivar o formado de arquivo\n"
+msgstr "Formato de arquivo inválido\n"
 
 #: common/project/project_archiver.cpp:110
 #, c-format
 msgid "Extracting file \"%s\"\n"
-msgstr "Extraing arquivo \"%s\"\n"
+msgstr "Extraing ficheiro \"%s\"\n"
 
 #: common/project/project_archiver.cpp:146
 msgid "Error extracting file!\n"
-msgstr "Erro ao gravar no arquivo \"%s\"!\n"
+msgstr "Erro ao gravar no ficheiro \"%s\"!\n"
 
 #: common/project/project_archiver.cpp:203
 #, c-format
 msgid "Unable to create archive file \"%s\"\n"
-msgstr "Não foi possível criar o arquivo zip \"%s\"\n"
+msgstr "Não foi possível criar o ficheiro de arquivo zip \"%s\"\n"
 
 #: common/project/project_archiver.cpp:249
 #, c-format
 msgid "Archive file \"%s\"\n"
-msgstr "Arquivo \"%s\"\n"
+msgstr "Ficheiro de arquivos \"%s\"\n"
 
 #: common/project/project_archiver.cpp:259
 #, c-format
 msgid "Archive file \"%s\": Failed!\n"
-msgstr "Arquivo \"%s\": Falha!\n"
+msgstr "Ficheiro de arquivos \"%s\": Falha!\n"
 
 #: common/project/project_archiver.cpp:285
 #, c-format
@@ -5675,7 +5673,7 @@ msgstr "Atenção: "
 #: common/richio.cpp:171
 #, c-format
 msgid "Unable to open filename \"%s\" for reading"
-msgstr "Não foi possível abrir o arquivo \"%s\" para leitura"
+msgstr "Não foi possível abrir o ficheiro \"%s\" para leitura"
 
 #: common/richio.cpp:205 common/richio.cpp:300
 msgid "Maximum line length exceeded"
@@ -5822,7 +5820,7 @@ msgstr "Exibir Menu de Contexto"
 
 #: common/tool/actions.cpp:126
 msgid "Perform the right-mouse-button action"
-msgstr "Executar a ação do botão-direito-do-mouse"
+msgstr "Executar a ação do botão-direito-do-rato"
 
 #: common/tool/actions.cpp:135
 msgid "Undo"
@@ -5881,11 +5879,11 @@ msgstr "Apaga o(s) iten(s) selecionado(s)"
 
 #: common/tool/actions.cpp:195
 msgid "Interactive Delete Tool"
-msgstr "Ferramenta de Exclusão Interativa"
+msgstr "Ferramenta de apagar interativa"
 
 #: common/tool/actions.cpp:195
 msgid "Delete clicked items"
-msgstr "Excluir itens clicados"
+msgstr "Apagar itens clicados"
 
 #: common/tool/actions.cpp:202
 #, fuzzy
@@ -6292,11 +6290,11 @@ msgstr "Configurar Caminhos..."
 
 #: common/tool/actions.cpp:589
 msgid "Edit path configuration environment variables"
-msgstr "Editar variáveis de ambiente de configurações de locais de arquivos"
+msgstr "Editar variáveis de ambiente de configurações de locais de ficheiros"
 
 #: common/tool/actions.cpp:594
 msgid "Manage Symbol Libraries..."
-msgstr "Gerenciar Bibliotecas de Símbolos..."
+msgstr "Gerir bibliotecas de símbolos..."
 
 #: common/tool/actions.cpp:595
 msgid "Edit the global and project symbol library lists"
@@ -6304,7 +6302,7 @@ msgstr "Editar as listas de bibliotecas de símbolos globais e do projeto"
 
 #: common/tool/actions.cpp:600
 msgid "Manage Footprint Libraries..."
-msgstr "Gerenciar Bibliotecas de Footprint…"
+msgstr "Gerir bibliotecas de footprint…"
 
 #: common/tool/actions.cpp:601
 msgid "Edit the global and project footprint library lists"
@@ -6325,7 +6323,7 @@ msgstr "Ajuda"
 
 #: common/tool/actions.cpp:613
 msgid "Open product documentation in a web browser"
-msgstr "Abre a documentação do produto em um navegador web"
+msgstr "Abre a documentação do produto num navegador web"
 
 #: common/tool/actions.cpp:619
 msgid "List Hotkeys..."
@@ -6341,7 +6339,7 @@ msgstr "Participe"
 
 #: common/tool/actions.cpp:626
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr "Abre \"Contribuir com o KiCad\" em um navegador web"
+msgstr "Abre \"Contribuir com o KiCad\" num navegador web"
 
 #: common/tool/actions.cpp:631
 msgid "Donate"
@@ -6355,7 +6353,7 @@ msgstr "Abre \"Contribuir com o KiCad\" em um navegador web"
 #: common/tool/actions.cpp:636
 #, fuzzy
 msgid "Report Bug"
-msgstr "Arquivo de relatório"
+msgstr "Ficheiro de relatório"
 
 #: common/tool/common_control.cpp:199
 #, c-format
@@ -6365,7 +6363,7 @@ msgid ""
 "or\n"
 "%s could not be found."
 msgstr ""
-"O arquivo de ajuda html ou pdf \n"
+"O ficheiro de ajuda html ou pdf \n"
 "%s\n"
 "ou\n"
 "%s não foi encontrado."
@@ -6373,7 +6371,7 @@ msgstr ""
 #: common/tool/common_control.cpp:213
 #, c-format
 msgid "Help file \"%s\" could not be found."
-msgstr "Arquivo de ajuda \"%s\" não foi encontrado."
+msgstr "Ficheiro de ajuda \"%s\" não foi encontrado."
 
 #: common/tool/common_control.cpp:236
 #, c-format
@@ -6575,8 +6573,9 @@ msgid "Always show crosshairs"
 msgstr "Sempre exibir o alvo"
 
 #: common/widgets/grid_text_button_helpers.cpp:369
+#, fuzzy
 msgid "Select a File"
-msgstr "Selecionar um Arquivo"
+msgstr "Selecionar um ficheiro"
 
 #: common/widgets/mathplot.cpp:1759
 msgid "Center plot view to this position"
@@ -6584,7 +6583,7 @@ msgstr "Centralizar visão de plotagem para esta posição"
 
 #: common/widgets/mathplot.cpp:1760 eeschema/sim/sim_plot_frame_base.cpp:87
 msgid "Fit on Screen"
-msgstr "Ajustar à tela"
+msgstr "Ajustar ao ecrã"
 
 #: common/widgets/mathplot.cpp:1760
 msgid "Set plot view to show all items"
@@ -6690,118 +6689,115 @@ msgstr "Tecla de Atalho"
 
 #: common/wildcards_and_files_ext.cpp:177
 msgid "All files"
-msgstr "Todos os arquivos"
+msgstr "Todos os ficheiros"
 
 #: common/wildcards_and_files_ext.cpp:183
 msgid "KiCad drawing symbol files"
-msgstr "Arquivos de símbolos de desenho do KiCad"
+msgstr "Ficheiros de símbolos de desenho do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:189
 msgid "KiCad symbol library files"
-msgstr "Arquivos de biblioteca de símbolos do KiCad"
+msgstr "Ficheiros de biblioteca de símbolos do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:195
 #, fuzzy
 msgid "KiCad legacy symbol library files"
-msgstr "Arquivos de biblioteca de símbolos do KiCad"
+msgstr "Ficheiros de biblioteca de símbolos do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:201
 #, fuzzy
 msgid "All KiCad symbol library files"
-msgstr "Arquivos de biblioteca de símbolos do KiCad"
+msgstr "Ficheiros de biblioteca de símbolos do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:207
 msgid "KiCad project files"
-msgstr "Arquivo de projeto KiCad"
+msgstr "Ficheiro de projeto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:213
 #, fuzzy
 msgid "KiCad legacy project files"
-msgstr "Arquivo de projeto KiCad"
+msgstr "Ficheiro de projeto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:219
 #, fuzzy
 msgid "All KiCad project files"
-msgstr "Arquivo de projeto KiCad"
+msgstr "Ficheiro de projeto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:225
 #, fuzzy
 msgid "KiCad legacy schematic files"
-msgstr "Arquivos esquemáticos do KiCad"
+msgstr "Ficheiros esquemáticos do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:231
 #, fuzzy
 msgid "KiCad s-expression schematic files"
-msgstr "Arquivos esquemáticos do KiCad"
+msgstr "Ficheiros esquemáticos do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:237
 #, fuzzy
 msgid "Altium schematic files"
-msgstr "Arquivos esquemáticos do KiCad"
+msgstr "Ficheiros esquemáticos do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:243
-#, fuzzy
 msgid "CADSTAR Schematic Archive files"
-msgstr "Arquivos esquemáticos do KiCad"
+msgstr "Ficheiros de arquivos esquemáticos do CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:249
-#, fuzzy
 msgid "CADSTAR Archive files"
-msgstr "Arquivo \"%s\""
+msgstr "Ficheiros de arquivos CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:255
 msgid "Eagle XML schematic files"
-msgstr "Arquivos XML esquemáticos do Eagle"
+msgstr "Ficheiros XML esquemáticos do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:261
 msgid "Eagle XML files"
-msgstr "Arquivos XML do Eagle"
+msgstr "Ficheiros XML do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:267
 msgid "KiCad netlist files"
-msgstr "Arquivos netlist do KiCad"
+msgstr "Ficheiros netlist do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:273 gerbview/files.cpp:47
 msgid "Gerber files"
-msgstr "Arquivos Gerber"
+msgstr "Ficheiros Gerber"
 
 #: common/wildcards_and_files_ext.cpp:279
 #: common/wildcards_and_files_ext.cpp:320
 msgid "KiCad printed circuit board files"
-msgstr "Arquivos de placa de circuito impresso do KiCad"
+msgstr "Ficheiros de placa de circuito impresso do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:285
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr "Arquivos de PCI em XML ver. 6.x do Eagle"
+msgstr "Ficheiros de PCI em XML ver. 6.x do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:290
-#, fuzzy
 msgid "CADSTAR PCB Archive files"
-msgstr "Arquivo \"%s\""
+msgstr "Ficheiros de arquivos CADSTAR PCB"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "P-Cad 200x ASCII PCB files"
-msgstr "Arquivos de PCI em ASCII do P-Cad 200x"
+msgstr "Ficheiros de PCI em ASCII do P-Cad 200x"
 
 #: common/wildcards_and_files_ext.cpp:300
 msgid "Altium Designer PCB files"
-msgstr "Arquivo de design do Altium"
+msgstr "Ficheiro de design do Altium"
 
 #: common/wildcards_and_files_ext.cpp:305
 msgid "Altium Circuit Studio PCB files"
-msgstr "Arquivo circuito estúdio do Altium"
+msgstr "Ficheiro circuito estúdio do Altium"
 
 #: common/wildcards_and_files_ext.cpp:310
 msgid "Altium Circuit Maker PCB files"
-msgstr "Arquivo maker do Altium"
+msgstr "Ficheiro maker do Altium"
 
 #: common/wildcards_and_files_ext.cpp:315
 msgid "Fabmaster PCB files"
-msgstr "Arquivos Fabmaster"
+msgstr "Ficheiros Fabmaster"
 
 #: common/wildcards_and_files_ext.cpp:326
 msgid "KiCad footprint files"
-msgstr "Arquivos de footprint do KiCad"
+msgstr "Ficheiros de footprint do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:332
 msgid "KiCad footprint library paths"
@@ -6809,51 +6805,51 @@ msgstr "Locais de bibliotecas de footprint do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:338
 msgid "Legacy footprint library files"
-msgstr "Arquivos de biblioteca de footprint legados"
+msgstr "Ficheiros de biblioteca de footprint legados"
 
 #: common/wildcards_and_files_ext.cpp:344
 msgid "Eagle ver. 6.x XML library files"
-msgstr "Arquivos de biblioteca em XML ver. 6.x do Eagle"
+msgstr "Ficheiros de biblioteca em XML ver. 6.x do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:350
 msgid "Geda PCB footprint library files"
-msgstr "Arquivos de biblioteca de footprint PCB do Geda"
+msgstr "Ficheiros de biblioteca de footprint PCB do Geda"
 
 #: common/wildcards_and_files_ext.cpp:356
 msgid "Page layout design files"
-msgstr "Arquivos de desenho de layout de página"
+msgstr "Ficheiros de desenho de layout de página"
 
 #: common/wildcards_and_files_ext.cpp:363
 msgid "KiCad symbol footprint link files"
-msgstr "Arquivos de ligação entre símbolos e footprints do KiCad"
+msgstr "Ficheiros de ligação entre símbolos e footprints do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:370 gerbview/files.cpp:66
 msgid "Drill files"
-msgstr "Arquivos de furação"
+msgstr "Ficheiros de furação"
 
 #: common/wildcards_and_files_ext.cpp:376
 msgid "SVG files"
-msgstr "Arquivos SVG"
+msgstr "Ficheiros SVG"
 
 #: common/wildcards_and_files_ext.cpp:382
 msgid "HTML files"
-msgstr "Arquivos HTML"
+msgstr "Ficheiros HTML"
 
 #: common/wildcards_and_files_ext.cpp:388
 msgid "CSV Files"
-msgstr "Arquivos CSV"
+msgstr "Ficheiros CSV"
 
 #: common/wildcards_and_files_ext.cpp:394
 msgid "Portable document format files"
-msgstr "Arquivos de formato de documentos portáveis"
+msgstr "Ficheiros de formato de documentos portáveis"
 
 #: common/wildcards_and_files_ext.cpp:400
 msgid "PostScript files"
-msgstr "Arquivos PostScript"
+msgstr "Ficheiros PostScript"
 
 #: common/wildcards_and_files_ext.cpp:406
 msgid "Report files"
-msgstr "Arquivos de relatório"
+msgstr "Ficheiros de relatório"
 
 #: common/wildcards_and_files_ext.cpp:412
 #, fuzzy
@@ -6862,93 +6858,93 @@ msgstr "Parâmetros do Componente:"
 
 #: common/wildcards_and_files_ext.cpp:418
 msgid "VRML and X3D files"
-msgstr "Arquivos VRML e X3D"
+msgstr "Ficheiros VRML e X3D"
 
 #: common/wildcards_and_files_ext.cpp:424
 msgid "IDFv3 footprint files"
-msgstr "Arquivos de footprint IDFv3"
+msgstr "Ficheiros de footprint IDFv3"
 
 #: common/wildcards_and_files_ext.cpp:430
 msgid "Text files"
-msgstr "Arquivos de texto"
+msgstr "Ficheiros de texto"
 
 #: common/wildcards_and_files_ext.cpp:436
 msgid "Legacy footprint export files"
-msgstr "Arquivos de exportação de footprint legados"
+msgstr "Ficheiros de exportação de footprint legados"
 
 #: common/wildcards_and_files_ext.cpp:442
 #, fuzzy
 msgid "Electrical rule check file"
-msgstr "Arquivo de checagem de regas eletrônicas"
+msgstr "Ficheiro de checagem de regas eletrônicas"
 
 #: common/wildcards_and_files_ext.cpp:448
 msgid "Spice library file"
-msgstr "Arquivo de biblioteca Spice"
+msgstr "Ficheiro de biblioteca Spice"
 
 #: common/wildcards_and_files_ext.cpp:454
 msgid "SPICE netlist file"
-msgstr "Arquivo de netlist SPICE"
+msgstr "Ficheiro de netlist SPICE"
 
 #: common/wildcards_and_files_ext.cpp:460
 msgid "CadStar netlist file"
-msgstr "Arquivo de netlist CadStar"
+msgstr "Ficheiro de netlist CadStar"
 
 #: common/wildcards_and_files_ext.cpp:466
 msgid "Symbol footprint association files"
-msgstr "Arquivos de associação entre símbolo e footprint"
+msgstr "Ficheiros de associação entre símbolo e footprint"
 
 #: common/wildcards_and_files_ext.cpp:472
 msgid "Zip file"
-msgstr "Arquivo ZIP"
+msgstr "Ficheiro ZIP"
 
 #: common/wildcards_and_files_ext.cpp:478
 msgid "GenCAD 1.4 board files"
-msgstr "Arquivos de placa GenCAD 1.4"
+msgstr "Ficheiros de placa GenCAD 1.4"
 
 #: common/wildcards_and_files_ext.cpp:484
 msgid "DXF Files"
-msgstr "Arquivos DXF"
+msgstr "Ficheiros DXF"
 
 #: common/wildcards_and_files_ext.cpp:490
 #: resources/linux/mime/kicad-gerbers.xml.in:21
 msgid "Gerber job file"
-msgstr "Arquivo de trabalho Gerber"
+msgstr "Ficheiro de trabalho Gerber"
 
 #: common/wildcards_and_files_ext.cpp:496
 msgid "Specctra DSN file"
-msgstr "Arquivo Specctra DSN"
+msgstr "Ficheiro Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:502
 msgid "IPC-D-356 Test Files"
-msgstr "Arquivos de Teste IPC-D-356"
+msgstr "Ficheiros de Teste IPC-D-356"
 
 #: common/wildcards_and_files_ext.cpp:508
 msgid "Workbook file"
-msgstr "Arquivo Workbook"
+msgstr "Ficheiro Workbook"
 
 #: common/wildcards_and_files_ext.cpp:514
 msgid "PNG file"
-msgstr "Arquivo PNG"
+msgstr "Ficheiro PNG"
 
 #: common/wildcards_and_files_ext.cpp:520
 msgid "Jpeg file"
-msgstr "Arquivo Jpeg"
+msgstr "Ficheiro Jpeg"
 
 #: cvpcb/auto_associate.cpp:105
 #, c-format
 msgid "Equivalence file \"%s\" could not be found in the default search paths."
 msgstr ""
-"O arquivo de equivalência \"%s\" não foi encontrado nos caminhos de busca "
+"O ficheiro de equivalência \"%s\" não foi encontrado nos caminhos de busca "
 "padrão."
 
 #: cvpcb/auto_associate.cpp:126
 #, c-format
 msgid "Error opening equivalence file \"%s\"."
-msgstr "Erro ao abrir arquivo de equivalência \"%s\"."
+msgstr "Erro ao abrir ficheiro de equivalência \"%s\"."
 
 #: cvpcb/auto_associate.cpp:178
 msgid "Equivalence File Load Error"
-msgstr "Erro Carregando Arquivo de Equivalência"
+msgstr "Erro Carregando Ficheiro de Equivalência"
 
 #: cvpcb/auto_associate.cpp:185
 #, fuzzy, c-format
@@ -7018,7 +7014,7 @@ msgstr "Aplicar, Salvar Esquema && Continuar"
 #: cvpcb/cvpcb_mainframe.cpp:210
 #, fuzzy
 msgid "Symbol to footprint changes are unsaved"
-msgstr "Arquivos de associação entre símbolo e footprint"
+msgstr "Ficheiros de associação entre símbolo e footprint"
 
 #: cvpcb/cvpcb_mainframe.cpp:384
 msgid "Symbol to Footprint links have been modified. Save changes?"
@@ -7104,7 +7100,7 @@ msgstr ""
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:49
 #, c-format
 msgid "Project file: \"%s\""
-msgstr "Arquivo de projeto: \"%s\""
+msgstr "Ficheiro de projeto: \"%s\""
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:101
 msgid "No editor defined in KiCad. Please choose it."
@@ -7112,16 +7108,16 @@ msgstr "Nenhum editor definido no KiCat. Por favor escolha."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:247
 msgid "Footprint Association File"
-msgstr "Arquivo de Associação de Footprint"
+msgstr "Ficheiro de Associação de Footprint"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:291
 #, c-format
 msgid "File \"%s\" already exists in list"
-msgstr "Arquivo \"%s\" já existe na lista"
+msgstr "Ficheiro \"%s\" já existe na lista"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr "Arquivos de Associação entre Símbolo e Footprint (.equ)"
+msgstr "Ficheiros de Associação entre Símbolo e Footprint (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:77
@@ -7151,7 +7147,7 @@ msgstr "Mover para Baixo"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:48
 msgid "Edit File"
-msgstr "Editar Arquivo"
+msgstr "Editar Ficheiro"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:63
 msgid "Available environment variables for relative paths:"
@@ -7201,7 +7197,7 @@ msgstr "Atribuição do esquema"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:41
 msgid "Cmp file assignment"
-msgstr "Atribuição do arquivo Cmp"
+msgstr "Atribuição do ficheiro Cmp"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.cpp:19
 msgid ""
@@ -7211,7 +7207,7 @@ msgid ""
 "Please choose the assignment."
 msgstr ""
 "Há um conflito entre as atribuições de footprint contidas na netlist do "
-"esquema e o arquivo de associação de símbolos de footprint (.cmp).\n"
+"esquema e o ficheiro de associação de símbolos de footprint (.cmp).\n"
 "\n"
 "Favor escolher a atribuição correta."
 
@@ -7326,15 +7322,15 @@ msgstr "Visualizar o footprint selecionado no visualizador de footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
 msgid "Manage Footprint Association Files"
-msgstr "Gerenciar Arquivos de Associação de Footprint"
+msgstr "Gerir ficheiros de associação de footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:61
 msgid ""
 "Configure footprint association file (.equ) list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
-"Configura a lista de arquivos de associação de footprint (.equ).  Estes "
-"arquivos são utilizados para atribuir automaticamente o nome do footprint "
+"Configura a lista de ficheiros de associação de footprint (.equ).  Estes "
+"ficheiros são utilizados para atribuir automaticamente o nome do footprint "
 "partindo do valor do símbolo."
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
@@ -7390,7 +7386,7 @@ msgstr "Executar associação de footprint automática"
 
 #: cvpcb/tools/cvpcb_actions.cpp:121
 msgid "Delete association"
-msgstr "Excluir associação"
+msgstr "Apagar associação"
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
 msgid "Delete selected footprint associations"
@@ -7403,7 +7399,7 @@ msgstr "Apagar todas as associações de footprint"
 #: cvpcb/tools/cvpcb_actions.cpp:135
 #, fuzzy
 msgid "Use symbol footprint filters"
-msgstr "Arquivos de ligação entre símbolos e footprints do KiCad"
+msgstr "Ficheiros de ligação entre símbolos e footprints do KiCad"
 
 #: cvpcb/tools/cvpcb_actions.cpp:136
 #, fuzzy
@@ -7467,7 +7463,7 @@ msgid ""
 "%s\n"
 "not found. Script not available."
 msgstr ""
-"Arquivo de script:\n"
+"Ficheiro de script:\n"
 "%s\n"
 "não encontrado. Script não disponível."
 
@@ -7711,11 +7707,11 @@ msgstr "Apelido \"%s\" já em uso."
 
 #: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:681
 msgid "Generator files:"
-msgstr "Arquivos do gerador:"
+msgstr "Ficheiros do gerador:"
 
 #: eeschema/dialogs/dialog_bom.cpp:438
 msgid "Generator file name not found."
-msgstr "Nome do arquivo de gerador não encontrado."
+msgstr "Nome do ficheiro de gerador não encontrado."
 
 #: eeschema/dialogs/dialog_bom.cpp:448
 msgid "No text editor selected in KiCad.  Please choose one."
@@ -7737,7 +7733,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 msgid "Edit the script file in the text editor"
-msgstr "Edite o arquivo de script no editor de texto"
+msgstr "Edite o ficheiro de script no editor de texto"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:82
 msgid "Remove the current generator script from list"
@@ -8689,14 +8685,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:755
 #, fuzzy, c-format
 msgid "Report file '%s' created\n"
-msgstr ""
-"Arquivo de relatório %s criado\n"
-"\n"
+msgstr "Ficheiro de relatório %s criado\n"
 
 #: eeschema/dialogs/dialog_erc.cpp:760
 #, fuzzy, c-format
 msgid "Unable to create report file '%s'"
-msgstr "Não é possível criar o arquivo de relatório \"%s\""
+msgstr "Não é possível criar o ficheiro de relatório \"%s\""
 
 #: eeschema/dialogs/dialog_erc.cpp:773
 #, c-format
@@ -9008,19 +9002,19 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Ocorreu um erro ao gravar arquivo vazio de tabela de biblioteca de "
-"símbolos.\n"
+"Ocorreu um erro ao gravar ficheiro vazio de tabela de biblioteca de símbolos."
+"\n"
 "\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
-msgstr "Por favor, selecione um arquivo de tabela de biblioteca de símbolos."
+msgstr "Por favor, selecione um ficheiro de tabela de biblioteca de símbolos."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
 #, fuzzy, c-format
 msgid "File '%s' not found."
-msgstr "Arquivo %s não encontrado"
+msgstr "Ficheiro %s não encontrado"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
 #, fuzzy, c-format
@@ -9029,7 +9023,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"O arquivo \"%s\" não é um arquivo de biblioteca de símbolo válido.\n"
+"O ficheiro \"%s\" não é um ficheiro de biblioteca de símbolo válido.\n"
 "\n"
 "%s"
 
@@ -9043,8 +9037,8 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Cannot copy global symbol library table file '%s' to '%s'."
 msgstr ""
-"Não é possível copiar o arquivo da tabela da biblioteca de símbolos "
-"globais:\n"
+"Não é possível copiar o ficheiro da tabela da biblioteca de símbolos globais:"
+"\n"
 "\n"
 "  \"%s\"\n"
 "\n"
@@ -9378,7 +9372,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:276
 msgid "Delete extra units from symbol?"
-msgstr "Excluir unidades extras do símbolo?"
+msgstr "Apagar unidades extras do símbolo?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:282
 msgid "Add new pins for alternate body style (DeMorgan) to symbol?"
@@ -9471,7 +9465,7 @@ msgstr "Mover para baixo"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:98
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:101
 msgid "Delete field"
-msgstr "Excluir campo"
+msgstr "Apagar campo"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:131
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
@@ -9661,7 +9655,7 @@ msgstr "Editar filtro de footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:306
 msgid "Delete footprint filter"
-msgstr "Excluir filtro de footprint"
+msgstr "Apagar filtro de footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:320
 msgid "Footprint Filters"
@@ -9687,7 +9681,7 @@ msgstr "Novo Rótulo"
 #: pcbnew/dialogs/dialog_find_base.cpp:120 pcbnew/fp_text.cpp:281
 #: pcbnew/pcb_shape.cpp:497 pcbnew/pcb_text.cpp:116 pcbnew/track.cpp:774
 msgid "Status"
-msgstr "Status"
+msgstr "Estado"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:215
 msgid "Updated"
@@ -9761,7 +9755,7 @@ msgstr "Comando Netlist:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:442
 msgid "Save Netlist File"
-msgstr "Salvar Arquivo Netlist"
+msgstr "Salvar Ficheiro Netlist"
 
 #: eeschema/dialogs/dialog_netlist.cpp:481
 #, c-format
@@ -9780,7 +9774,7 @@ msgstr "Este plugin já existe."
 
 #: eeschema/dialogs/dialog_netlist.cpp:658
 msgid "Error. You must provide a command String"
-msgstr "Erro. Você precisa prover uma String de comando"
+msgstr "Erro. Precisa prover uma cadeia de comando"
 
 #: eeschema/dialogs/dialog_netlist.cpp:664
 msgid "Error. You must provide a Title"
@@ -10031,7 +10025,7 @@ msgstr "Esquema"
 #: pcbnew/exporters/gen_footprints_placefile.cpp:350
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
-msgstr "Não foi possível gravar arquivos de plotagem na pasta \"%s\"."
+msgstr "Não foi possível gravar ficheiros de plotagem na pasta \"%s\"."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:24
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:24
@@ -10045,8 +10039,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
 msgstr ""
-"Diretório de destino para arquivos de plotagem. Pode ser absoluto ou "
-"relativo ao local do arquivo principal do esquema."
+"Diretório de destino para ficheiros de plotagem. Pode ser absoluto ou "
+"relativo ao local do ficheiro principal do esquema."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
@@ -10288,7 +10282,7 @@ msgstr "Importar Configurações De"
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:73
 #: pcbnew/dialogs/dialog_import_settings.cpp:127
 msgid "File not found."
-msgstr "Arquivo não encontrado."
+msgstr "Ficheiro não encontrado."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:22
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:22
@@ -10303,8 +10297,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
 msgstr ""
-"Diretório de destino para arquivos de plotagem. Pode ser absoluto ou "
-"relativo ao local do arquivo da placa."
+"Diretório de destino para ficheiros de plotagem. Pode ser absoluto ou "
+"relativo ao local do ficheiro da placa."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:45
@@ -10449,7 +10443,7 @@ msgstr "Classes de Rede"
 #: pcbnew/dialogs/dialog_board_setup.cpp:94
 #, fuzzy
 msgid "Text Variables"
-msgstr "Arquivos de texto"
+msgstr "Ficheiros de texto"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:86
 #: pcbnew/dialogs/dialog_board_setup.cpp:136
@@ -10499,12 +10493,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_sheet_properties.cpp:364
 #, fuzzy, c-format
 msgid "The file \"%s\" does not appear to be a valid schematic file."
-msgstr "\"%s\" não parece ser um arquivo do Eeschema"
+msgstr "\"%s\" não parece ser um ficheiro do Eeschema"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:366
 #, fuzzy
 msgid "Invalid Schematic File"
-msgstr "Arquivos de esquema"
+msgstr "Ficheiros de esquema"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:419
 #: kicad/tools/kicad_manager_control.cpp:522
@@ -10515,7 +10509,7 @@ msgstr "\"%s\" já existe."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:420
 #, c-format
 msgid "Link \"%s\" to this file?"
-msgstr "Ligar \"%s\" neste arquivo?"
+msgstr "Ligar \"%s\" neste ficheiro?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:445
 #, c-format
@@ -10525,7 +10519,7 @@ msgstr "Alterar o link \"%s\" de \"%s\" para \"%s\"?"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:449
 #, c-format
 msgid "Create new file \"%s\" with contents of \"%s\"?"
-msgstr "Criar um novo arquivo \"%s\" com o conteúdo de \"%s\"?"
+msgstr "Criar um novo ficheiro \"%s\" com o conteúdo de \"%s\"?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:452
 msgid "This action cannot be undone."
@@ -10534,7 +10528,7 @@ msgstr "Essa ação não pode ser desfeita."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:517
 #, c-format
 msgid "Error occurred saving schematic file \"%s\"."
-msgstr "Erro ao salvar o arquivo de esquema \"%s\"."
+msgstr "Erro ao salvar o ficheiro de esquema \"%s\"."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:521
 #, c-format
@@ -11042,7 +11036,7 @@ msgstr "Biblioteca:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:220
 msgid "Select file..."
-msgstr "Selecionar arquivo…"
+msgstr "Selecionar ficheiro…"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:226
 msgid "Model:"
@@ -11510,18 +11504,18 @@ msgstr ""
 "Este esquema utiliza atualmente o método de busca na lista de bibliotecas de "
 "símbolos do projeto para carregar símbolos de biblioteca.  O KiCad tentará "
 "mapear os símbolos existentes para usarem a nova tabela de biblioteca de "
-"símbolos.  O remapeamento mudará alguns arquivos do projeto, e esquemas "
+"símbolos.  O remapeamento mudará alguns ficheiros do projeto, e esquemas "
 "podem não ser mais compatíveis com versões anteriores do KiCad.  Todos os "
-"arquivos que forem alterados serão antes copiados para a pasta \"remap_backup"
-"\" na pasta do projeto, caso precise reverter as alterações.  Se optar por "
-"ignorar esta etapa, será responsável por realizar o remapeamento dos "
-"símbolos manualmente."
+"ficheiros que forem alterados serão antes copiados para a pasta "
+"\"remap_backup\" na pasta do projeto, caso precise reverter as alterações.  "
+"Se optar por ignorar esta etapa, será responsável por realizar o "
+"remapeamento dos símbolos manualmente."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:210
 #, c-format
 msgid "Adding library \"%s\", file \"%s\" to project symbol library table."
 msgstr ""
-"Adicionando a biblioteca \"%s\", arquivo \"%s\" à tabela de bibliotecas de "
+"Adicionando a biblioteca \"%s\", ficheiro \"%s\" à tabela de bibliotecas de "
 "símbolo do projeto."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:219
@@ -11587,7 +11581,7 @@ msgstr "Abortar a Recuperação"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:478
 #, c-format
 msgid "Backing up file \"%s\" to file \"%s\"."
-msgstr "Realizando o backup do arquivo \"%s\" no arquivo \"%s\"."
+msgstr "Realizando o backup do ficheiro \"%s\" no ficheiro \"%s\"."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:377
 #: eeschema/dialogs/dialog_symbol_remap.cpp:417
@@ -11597,7 +11591,7 @@ msgstr "Realizando o backup do arquivo \"%s\" no arquivo \"%s\"."
 #: eeschema/dialogs/dialog_symbol_remap.cpp:486
 #, c-format
 msgid "Failed to back up file \"%s\".\n"
-msgstr "Falha ao realizar o backup do arquivo \"%s\".\n"
+msgstr "Falha ao realizar o backup do ficheiro \"%s\".\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:409
 #, c-format
@@ -11606,7 +11600,7 @@ msgstr "Falha ao criar o diretório para backup \"%s\"\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:492
 msgid "Some of the project files could not be backed up."
-msgstr "Alguns dos arquivos do projeto não puderam ser salvos no backup."
+msgstr "Alguns dos ficheiros do projeto não puderam ser salvos no backup."
 
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30
 #: eeschema/dialogs/dialog_symbol_remap_base.h:51
@@ -11694,7 +11688,7 @@ msgid ""
 "sure you want to use these colors?"
 msgstr ""
 "Alguns itens têm a mesma cor que o fundo\n"
-"e eles não serão vistos na tela. Está\n"
+"e eles não serão vistos no ecrã. Está\n"
 "certo de utilizar estas cores?"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:206
@@ -11797,12 +11791,11 @@ msgstr "&Restringir fios e barramentos à orientação Horizontal ou Vertical"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "Mouse drag performs drag (G) operation"
-msgstr "Arrastar o mouse executa a operação de arrastar (G)"
+msgstr "Arrastar o rato executa a operação de arrastar (G)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:28
 msgid "If unchecked, mouse drag will perform move (M) operation"
-msgstr ""
-"Se desmarcado, o arrasto do mouse executará a operação de movimento (M)"
+msgstr "Se desmarcado, o arrasto do rato executará a operação de movimento (M)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:32
 #, fuzzy
@@ -12263,7 +12256,7 @@ msgstr "Biblioteca \"%s\" não encontrada."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:758
 #, fuzzy, c-format
 msgid "Failed to save symbol library file '%s'."
-msgstr "Falha ao salvar o arquivo de biblioteca de símbolos \"%s\""
+msgstr "Falha ao salvar o ficheiro de biblioteca de símbolos \"%s\""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:990
 msgid ""
@@ -12299,7 +12292,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1068
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1081
 msgid "File Save Error"
-msgstr "Erro ao Salvar Arquivo"
+msgstr "Erro ao Salvar Ficheiro"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1039
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1080
@@ -12349,7 +12342,7 @@ msgstr "Gerenciar Bibliotecas de Símbolos..."
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:145
 msgid "Path Substitutions:"
-msgstr "Substituições de Locais de Arquivos:"
+msgstr "Substituições de Locais de Ficheiros:"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:174
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:167
@@ -12600,7 +12593,7 @@ msgstr "Notação de unidade do símbolo:"
 #: eeschema/erc_item.cpp:142
 #, fuzzy
 msgid "Symbol has more units than are defined"
-msgstr "Arquivos de associação entre símbolo e footprint"
+msgstr "Ficheiros de associação entre símbolo e footprint"
 
 #: eeschema/erc_item.cpp:146
 #, fuzzy
@@ -12614,7 +12607,7 @@ msgstr "Designador de referência padrão:"
 
 #: eeschema/fields_grid_table.cpp:133 eeschema/files-io.cpp:98
 msgid "Schematic Files"
-msgstr "Arquivos de esquema"
+msgstr "Ficheiros de esquema"
 
 #: eeschema/files-io.cpp:136
 #, c-format
@@ -12622,13 +12615,13 @@ msgid ""
 "Error saving schematic file \"%s\".\n"
 "%s"
 msgstr ""
-"Erro salvando arquivo de esquema \"%s\".\n"
+"Erro salvando ficheiro de esquema \"%s\".\n"
 "%s"
 
 #: eeschema/files-io.cpp:140
 #, fuzzy, c-format
 msgid "Failed to create temporary file \"%s\""
-msgstr "Falhou ao criar arquivo de biblioteca de símbolos \"%s\""
+msgstr "Falhou ao criar ficheiro de biblioteca de símbolos \"%s\""
 
 #: eeschema/files-io.cpp:156
 #, fuzzy, c-format
@@ -12636,28 +12629,28 @@ msgid ""
 "Error saving schematic file \"%s\".\n"
 "Failed to rename temporary file %s"
 msgstr ""
-"Erro salvando arquivo de esquema \"%s\".\n"
+"Erro salvando ficheiro de esquema \"%s\".\n"
 "%s"
 
 #: eeschema/files-io.cpp:161 pcbnew/files.cpp:1002
 #, fuzzy, c-format
 msgid "Failed to rename temporary file \"%s\""
-msgstr "Falhou ao criar arquivo \"%s\""
+msgstr "Falhou ao criar ficheiro \"%s\""
 
 #: eeschema/files-io.cpp:195 pagelayout_editor/files.cpp:160
 #: pagelayout_editor/files.cpp:174 pagelayout_editor/files.cpp:207
 #, fuzzy, c-format
 msgid "File \"%s\" saved."
-msgstr "Arquivo %s salvo"
+msgstr "Ficheiro %s salvo"
 
 #: eeschema/files-io.cpp:200
 msgid "File write operation failed."
-msgstr "Operação de gravação de arquivo falhou."
+msgstr "Operação de gravação de ficheiro falhou."
 
 #: eeschema/files-io.cpp:263 eeschema/files-io.cpp:971
 #, c-format
 msgid "Schematic file \"%s\" is already open."
-msgstr "O arquivo de esquema \"%s\" já está aberto."
+msgstr "O ficheiro de esquema \"%s\" já está aberto."
 
 #: eeschema/files-io.cpp:282
 #, c-format
@@ -12667,7 +12660,7 @@ msgstr "O esquema \"%s\"não existe. Deseja criá-lo?"
 #: eeschema/files-io.cpp:371
 #, fuzzy
 msgid "Schematic file changes are unsaved"
-msgstr "Arquivo de esquema \"%s\" não encontrado."
+msgstr "Ficheiro de esquema \"%s\" não encontrado."
 
 #: eeschema/files-io.cpp:401
 msgid ""
@@ -12684,7 +12677,7 @@ msgid ""
 "Error loading schematic file \"%s\".\n"
 "%s"
 msgstr ""
-"Erro ao carregar o arquivo de esquema \"%s\".\n"
+"Erro ao carregar o ficheiro de esquema \"%s\".\n"
 "%s"
 
 #: eeschema/files-io.cpp:418 eeschema/files-io.cpp:1042
@@ -12699,13 +12692,13 @@ msgid ""
 "usable with other versions of KiCad."
 msgstr ""
 "Foi encontrado um erro ao carregar o esquema que foi corrigido "
-"automaticamente. Por favor, salve o esquema para reparar o arquivo quebrado, "
-"ou ele pode não ser utilizável em outras versões do KiCad."
+"automaticamente. Por favor, salve o esquema para reparar o ficheiro "
+"quebrado, ou ele pode não ser utilizável em outras versões do KiCad."
 
 #: eeschema/files-io.cpp:469
 msgid "Illegal entry found in project file symbol library list."
 msgstr ""
-"Entrada ilegal encontrada na lista de biblioteca de símbolo do arquivo de "
+"Entrada ilegal encontrada na lista de biblioteca de símbolo do ficheiro de "
 "projeto."
 
 #: eeschema/files-io.cpp:470
@@ -12721,7 +12714,7 @@ msgid ""
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
 "Bibliotecas de símbolos definidas na lista de biblioteca de símbolos do "
-"arquivo de projeto não são mais suportadas e serão\n"
+"ficheiro de projeto não são mais suportadas e serão\n"
 "removidas.  Isto pode causar a quebra de links de biblioteca de símbolos em "
 "determinadas condições."
 
@@ -12732,7 +12725,7 @@ msgstr "Não mostrar esta caixa de diálogo novamente."
 #: eeschema/files-io.cpp:506
 #, fuzzy, c-format
 msgid "The project symbol library cache file '%s' was not found."
-msgstr "Falha ao salvar o arquivo de biblioteca de símbolos \"%s\""
+msgstr "Falha ao salvar o ficheiro de biblioteca de símbolos \"%s\""
 
 #: eeschema/files-io.cpp:508
 msgid ""
@@ -12758,14 +12751,14 @@ msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
 msgstr ""
-"Este arquivo foi criado por uma versão mais antiga do Pcbnew.\n"
-"Ele será armazenado no novo formato de arquivo quando você salvar esse "
-"arquivo novamente."
+"Este ficheiro foi criado por uma versão mais antiga do Pcbnew.\n"
+"Ele será armazenado no novo formato de ficheiro quando você salvar esse "
+"ficheiro novamente."
 
 #: eeschema/files-io.cpp:609
 #, fuzzy
 msgid "Schematic file is read only."
-msgstr "O arquivo de esquema \"%s\" já está aberto."
+msgstr "O ficheiro de esquema \"%s\" já está aberto."
 
 #: eeschema/files-io.cpp:634
 msgid "Append Schematic"
@@ -12793,7 +12786,7 @@ msgstr "Importar Esquema"
 #: eeschema/files-io.cpp:797
 #, fuzzy
 msgid "Saving will overwrite existing files."
-msgstr "Tem certeza que deseja sobrescrever o arquivo existente?"
+msgstr "Tem certeza que deseja sobrescrever o ficheiro existente?"
 
 #: eeschema/files-io.cpp:798
 #, fuzzy
@@ -12810,12 +12803,12 @@ msgstr "As seguintes bibliotecas não foram encontradas:"
 #: eeschema/files-io.cpp:802
 #, fuzzy
 msgid "Overwrite Files"
-msgstr "Sobrescrevendo arquivos:"
+msgstr "Sobrescrevendo ficheiros:"
 
 #: eeschema/files-io.cpp:803
 #, fuzzy
 msgid "Abort Project Save"
-msgstr "Carregar Arquivo de Projeto"
+msgstr "Carregar Ficheiro de Projeto"
 
 #: eeschema/files-io.cpp:1039
 #, c-format
@@ -12969,7 +12962,7 @@ msgstr "Texto Gráfico \"%s\""
 #: eeschema/libarch.cpp:100
 #, c-format
 msgid "Failed to add symbol \"%s\" to library file \"%s\"."
-msgstr "Falha ao adicionar o símbolo \"%s\" no arquivo de biblioteca \"%s\"."
+msgstr "Falha ao adicionar o símbolo \"%s\" no ficheiro de biblioteca \"%s\"."
 
 #: eeschema/libarch.cpp:108
 msgid "Unexpected exception occurred."
@@ -12988,7 +12981,7 @@ msgstr "Ocorreram erros ao criar a biblioteca de símbolos %s."
 #: eeschema/libarch.cpp:151 eeschema/libarch.cpp:157
 #, c-format
 msgid "Failed to save symbol library file \"%s\""
-msgstr "Falha ao salvar o arquivo de biblioteca de símbolos \"%s\""
+msgstr "Falha ao salvar o ficheiro de biblioteca de símbolos \"%s\""
 
 #: eeschema/menubar.cpp:64 kicad/menubar.cpp:63
 #: pagelayout_editor/menubar.cpp:57 pcbnew/menubar_pcb_editor.cpp:66
@@ -13080,12 +13073,12 @@ msgstr "P&referências"
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:53
 #, c-format
 msgid "Failed to create file \"%s\""
-msgstr "Falhou ao criar arquivo \"%s\""
+msgstr "Falhou ao criar ficheiro \"%s\""
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:104
 #, c-format
 msgid "Could not find library file %s"
-msgstr "Não foi possível localizar o arquivo de biblioteca %s"
+msgstr "Não foi possível localizar o ficheiro de biblioteca %s"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:123
 msgid "Run command:"
@@ -13190,14 +13183,12 @@ msgstr ""
 #: eeschema/plotters/plot_schematic_PS.cpp:123
 #, c-format
 msgid "Unable to create file \"%s\".\n"
-msgstr ""
-"Impossível criar arquivo \"%s\"\n"
-"\n"
+msgstr "Impossível criar ficheiro \"%s\"\n"
 
 #: eeschema/plotters/plot_schematic_SVG.cpp:89
 #, c-format
 msgid "Cannot create file \"%s\".\n"
-msgstr "Impossível criar o arquivo \"%s\".\n"
+msgstr "Impossível criar o ficheiro \"%s\".\n"
 
 #: eeschema/project_rescue.cpp:193
 #, fuzzy, c-format
@@ -13235,7 +13226,7 @@ msgstr "Nenhum símbolo foi recuperado."
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:183
 #, c-format
 msgid "Failed to create symbol library file \"%s\""
-msgstr "Falhou ao criar arquivo de biblioteca de símbolos \"%s\""
+msgstr "Falhou ao criar ficheiro de biblioteca de símbolos \"%s\""
 
 #: eeschema/project_rescue.cpp:807
 #, c-format
@@ -13321,7 +13312,7 @@ msgstr "Alternar para Editor de Esquemas"
 #: eeschema/sch_edit_frame.cpp:300
 #, fuzzy
 msgid "New schematic file is unsaved"
-msgstr "Arquivo de esquema \"%s\" não encontrado."
+msgstr "Ficheiro de esquema \"%s\" não encontrado."
 
 #: eeschema/sch_edit_frame.cpp:643
 #: eeschema/symbol_editor/symbol_editor.cpp:1109
@@ -13349,7 +13340,7 @@ msgstr "Novo Esquema"
 #: eeschema/sch_edit_frame.cpp:950
 #, c-format
 msgid "Schematic file \"%s\" already exists."
-msgstr "O arquivo de esquema \"%s\" já existe."
+msgstr "O ficheiro de esquema \"%s\" já existe."
 
 #: eeschema/sch_edit_frame.cpp:971
 msgid "Open Schematic"
@@ -13367,7 +13358,7 @@ msgstr "Não foi possível abrir o CvPcb"
 #: eeschema/sch_edit_frame.cpp:1249
 #, fuzzy
 msgid "[no file]"
-msgstr " [sem arquivo]"
+msgstr "[sem ficheiro]"
 
 #: eeschema/sch_edit_frame.cpp:1266 kicad/kicad_manager_frame.cpp:616
 #: pcbnew/footprint_edit_frame.cpp:777 pcbnew/pcb_edit_frame.cpp:1241
@@ -13387,7 +13378,7 @@ msgstr "Rede destacada: %s"
 
 #: eeschema/sch_field.cpp:186
 msgid "File:"
-msgstr "Arquivo:"
+msgstr "Ficheiro:"
 
 #: eeschema/sch_field.cpp:489
 #, fuzzy
@@ -13539,7 +13530,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:250
 #, fuzzy, c-format
 msgid "Cannot open file '%s'."
-msgstr "Não é possível abrir o arquivo \"%s\"."
+msgstr "Não é possível abrir o ficheiro \"%s\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 #, fuzzy, c-format
@@ -13772,7 +13763,7 @@ msgstr ""
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2779
 #, c-format
 msgid "Unable to read file \"%s\""
-msgstr "Incapaz de ler o arquivo \"%s\""
+msgstr "Incapaz de ler o ficheiro \"%s\""
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1161
 #, fuzzy, c-format
@@ -13780,7 +13771,7 @@ msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
 msgstr ""
-"Erro ao analisar arquivo Eagle. Instância \"%s\" no foi encontrada mas está "
+"Erro ao analisar ficheiro Eagle. Instância \"%s\" no foi encontrada mas está "
 "referenciada no esquemático."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1192
@@ -13809,7 +13800,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13822,7 +13813,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13835,7 +13826,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13848,7 +13839,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13861,7 +13852,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13874,7 +13865,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de footprint inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13887,7 +13878,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13900,7 +13891,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Número de ponto flutuante inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13913,7 +13904,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Número de ponto flutuante inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13926,7 +13917,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Número de ponto flutuante inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13940,7 +13931,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Número de ponto flutuante inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13954,7 +13945,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Número de ponto flutuante ausente em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13967,7 +13958,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13980,7 +13971,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -13993,7 +13984,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14006,7 +13997,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14019,7 +14010,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14032,7 +14023,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Número de ponto flutuante inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14045,7 +14036,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Número de ponto flutuante inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14058,7 +14049,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14077,7 +14068,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14090,7 +14081,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14103,7 +14094,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14116,7 +14107,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14129,7 +14120,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Número de ponto flutuante inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14142,7 +14133,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14155,7 +14146,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -14163,7 +14154,7 @@ msgstr ""
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2562
 #, c-format
 msgid "Library file \"%s\" not found."
-msgstr "Arquivo de biblioteca \"%s\" não encontrado."
+msgstr "Ficheiro de biblioteca \"%s\" não encontrado."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2045
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4166
@@ -14206,7 +14197,7 @@ msgstr "string sem aspas esperada"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:811
 #, c-format
 msgid "\"%s\" does not appear to be an Eeschema file"
-msgstr "\"%s\" não parece ser um arquivo do Eeschema"
+msgstr "\"%s\" não parece ser um ficheiro do Eeschema"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:838
 msgid "Missing 'EELAYER END'"
@@ -14217,11 +14208,11 @@ msgstr "Faltando 'EELAYER END'"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1162
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2576
 msgid "unexpected end of file"
-msgstr "fim inesperado do arquivo"
+msgstr "fim inesperado do ficheiro"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1121
 msgid "Unexpected end of file"
-msgstr "Fim de arquivo inesperado"
+msgstr "Fim de ficheiro inesperado"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1446
 msgid "expected 'Italics' or '~'"
@@ -14235,12 +14226,12 @@ msgstr "atributos de texto do campo do componente devem ter 3 caracteres"
 #, c-format
 msgid "user does not have permission to read library document file \"%s\""
 msgstr ""
-"utilizador não tem permissão para ler o arquivo de documento da biblioteca "
+"utilizador não tem permissão para ler o ficheiro de documento da biblioteca "
 "\"%s\""
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2669
 msgid "symbol document library file is empty"
-msgstr "arquivo da biblioteca de documentos de símbolo está vazio"
+msgstr "ficheiro da biblioteca de documentos de símbolo está vazio"
 
 #: eeschema/sch_screen.cpp:556
 #, fuzzy, c-format
@@ -14290,7 +14281,7 @@ msgstr "Nome da folha"
 #: eeschema/sch_sheet.cpp:58
 #, fuzzy
 msgid "Sheet file"
-msgstr "Arquivo de Folha de Desenho"
+msgstr "Ficheiro de Folha de Desenho"
 
 #: eeschema/sch_sheet.cpp:707
 msgid "Sheet Name"
@@ -14303,7 +14294,7 @@ msgstr "Rótulo Hierárquico"
 
 #: eeschema/sch_sheet.cpp:717
 msgid "File Name"
-msgstr "Nome do arquivo"
+msgstr "Nome do ficheiro"
 
 #: eeschema/sch_sheet.cpp:926
 #, c-format
@@ -14686,7 +14677,7 @@ msgstr "Utilizar esquema parcial"
 #: eeschema/sheet.cpp:159
 #, c-format
 msgid "Error occurred loading schematic file \"%s\"."
-msgstr "Ocorreu um erro ao carregar o arquivo de esquema \"%s\"."
+msgstr "Ocorreu um erro ao carregar o ficheiro de esquema \"%s\"."
 
 #: eeschema/sheet.cpp:162
 #, c-format
@@ -14860,7 +14851,7 @@ msgstr "Abrir pasta de trabalho de simulação"
 
 #: eeschema/sim/sim_plot_frame.cpp:1048
 msgid "There was an error while opening the workbook file"
-msgstr "Houve um erro ao abrir o arquivo de pasta de trabalho"
+msgstr "Houve um erro ao abrir o ficheiro de pasta de trabalho"
 
 #: eeschema/sim/sim_plot_frame.cpp:1057
 msgid "Save Simulation Workbook"
@@ -14868,7 +14859,7 @@ msgstr "Salvar Pasta de Trabalho de Simulação"
 
 #: eeschema/sim/sim_plot_frame.cpp:1066
 msgid "There was an error while saving the workbook file"
-msgstr "Houve um erro ao salvar o arquivo de pasta de trabalho"
+msgstr "Houve um erro ao salvar o ficheiro de pasta de trabalho"
 
 #: eeschema/sim/sim_plot_frame.cpp:1075
 msgid "Save Plot as Image"
@@ -14898,7 +14889,7 @@ msgstr "Ocultar Sinal"
 
 #: eeschema/sim/sim_plot_frame.cpp:1605
 msgid "Erase the signal from plot screen"
-msgstr "Apagar o sinal da tela de plotagem"
+msgstr "Apagar o sinal do ecrã de plotagem"
 
 #: eeschema/sim/sim_plot_frame.cpp:1611
 msgid "Hide Cursor"
@@ -14926,7 +14917,7 @@ msgstr "Salvar como Imagem"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
 msgid "Save as .csv File"
-msgstr "Salvar como Arquivo .csv"
+msgstr "Salvar como Ficheiro .csv"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:45
 msgid "Close Simulation"
@@ -14935,7 +14926,7 @@ msgstr "Fechar Simulação"
 #: eeschema/sim/sim_plot_frame_base.cpp:48
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:24
 msgid "File"
-msgstr "Arquivo"
+msgstr "Ficheiro"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:56
 msgid "Add Signals..."
@@ -15184,13 +15175,13 @@ msgid ""
 "Could not create the library file '%s'.\n"
 "Check write permission."
 msgstr ""
-"Não foi possível criar o arquivo de biblioteca '%s'.\n"
+"Não foi possível criar o ficheiro de biblioteca '%s'.\n"
 "Verifique a permissão de gravação."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:837
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:202
 msgid "Could not open the library file."
-msgstr "Não foi possível abrir o arquivo de biblioteca."
+msgstr "Não foi possível abrir o ficheiro de biblioteca."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:908
 #, fuzzy, c-format
@@ -15425,7 +15416,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor.cpp:741
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Delete Symbol"
-msgstr "Excluir símbolo"
+msgstr "Apagar símbolo"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:742
 #, fuzzy
@@ -15455,7 +15446,7 @@ msgstr "Salvar Biblioteca \"%s\" Como..."
 #: eeschema/symbol_editor/symbol_editor.cpp:1037
 #, c-format
 msgid "Failed to save changes to symbol library file \"%s\""
-msgstr "Falha ao salvar alterações no arquivo de biblioteca de símbolos \"%s\""
+msgstr "Falha ao salvar alterações no ficheiro de biblioteca de símbolos \"%s\""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1039
 msgid "Error saving library"
@@ -15464,7 +15455,7 @@ msgstr "Erro salvando a biblioteca"
 #: eeschema/symbol_editor/symbol_editor.cpp:1082
 #, c-format
 msgid "Symbol library file \"%s\" saved"
-msgstr "Arquivo de biblioteca de símbolos \"%s\" salvo"
+msgstr "Ficheiro de biblioteca de símbolos \"%s\" salvo"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1183
 #, fuzzy
@@ -15503,7 +15494,7 @@ msgstr "Não é possível importar a biblioteca de símbolos \"%s\"."
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:84
 #, c-format
 msgid "Symbol library file \"%s\" is empty."
-msgstr "O arquivo de biblioteca de símbolos \"%s\" está vazio."
+msgstr "O ficheiro de biblioteca de símbolos \"%s\" está vazio."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:94
 #, c-format
@@ -15522,7 +15513,8 @@ msgstr "Exportar Símbolo"
 #, c-format
 msgid "Error occurred attempting to load symbol library file \"%s\""
 msgstr ""
-"Ocorreu um erro ao tentar carregar o arquivo de biblioteca de símbolos \"%s\""
+"Ocorreu um erro ao tentar carregar o ficheiro de biblioteca de símbolos \"%"
+"s\""
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:150
 #, c-format
@@ -15606,7 +15598,7 @@ msgstr ""
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
-"Apelido de biblioteca duplicado \"%s\" encontrado no arquivo de tabela de "
+"Apelido de biblioteca duplicado \"%s\" encontrado no ficheiro de tabela de "
 "bibliotecas de símbolo, linha %d"
 
 #: eeschema/symbol_tree_model_adapter.cpp:152
@@ -15628,7 +15620,7 @@ msgstr "Falha ao carregar \"%s\""
 #: eeschema/symbol_viewer_frame.cpp:114
 #, fuzzy
 msgid "KiCad Symbol Library Viewer"
-msgstr "Arquivos de biblioteca de símbolos do KiCad"
+msgstr "Ficheiros de biblioteca de símbolos do KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:459
 #, c-format
@@ -15659,7 +15651,7 @@ msgstr "Referências de símbolo"
 
 #: eeschema/tools/assign_footprints.cpp:204
 msgid "Load Symbol Footprint Link File"
-msgstr "Carregar Arquivo de Associação entre Símbolo Esquemático e Footprint"
+msgstr "Carregar Ficheiro de Associação entre Símbolo Esquemático e Footprint"
 
 #: eeschema/tools/assign_footprints.cpp:215
 msgid "Keep existing footprint field visibility"
@@ -15684,7 +15676,7 @@ msgstr "Alterar Visibilidade"
 #: eeschema/tools/assign_footprints.cpp:230
 #, c-format
 msgid "Failed to open component-footprint link file \"%s\""
-msgstr "Falha ao abrir o arquivo de vínculos componente-footprint \"%s\""
+msgstr "Falha ao abrir o ficheiro de vínculos componente-footprint \"%s\""
 
 #: eeschema/tools/backannotate.cpp:72
 msgid "Select at least one property to back annotate."
@@ -15751,7 +15743,7 @@ msgstr "Alterar o valor %s de %s para %s."
 #: eeschema/tools/backannotate.cpp:388
 #, fuzzy, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr "Não foi possível abrir o arquivo netlist \"%s\"."
+msgstr "Não foi possível abrir o ficheiro netlist \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:531
 #, fuzzy, c-format
@@ -15792,7 +15784,7 @@ msgstr "Simular circuito no SPICE"
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Opens the datasheet in a browser"
-msgstr "Abre a ficha técnica em um navegador"
+msgstr "Abre a ficha técnica num navegador"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1128
 msgid "Create Corner"
@@ -15888,7 +15880,7 @@ msgstr "Exportar..."
 
 #: eeschema/tools/ee_actions.cpp:168
 msgid "Export a symbol to a new library file"
-msgstr "Exporta um símbolo para um novo arquivo de biblioteca"
+msgstr "Exporta um símbolo para um novo ficheiro de biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:173
 #, fuzzy
@@ -15927,7 +15919,7 @@ msgstr "Exportar Visualização como PNG…"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Create PNG file from the current view"
-msgstr "Cria um arquivo PNG a partir da vista atual"
+msgstr "Cria um ficheiro PNG a partir da vista atual"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Export Symbol as SVG..."
@@ -15935,7 +15927,7 @@ msgstr "Exportar Símbolo como SVG…"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create SVG file from the current symbol"
-msgstr "Cria um arquivo SVG a partir do símbolo atual"
+msgstr "Cria um ficheiro SVG a partir do símbolo atual"
 
 #: eeschema/tools/ee_actions.cpp:208
 msgid "Synchronized Pins Edit Mode"
@@ -15948,9 +15940,9 @@ msgid ""
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
 "Modo de Edição Sincronizada de Pinos\n"
-"Quando habilitado, propaga todas as alterações (exceto números de pino) para "
+"Quando ativado, propaga todas as alterações (exceto números de pino) para "
 "outras unidades.\n"
-"Habilitado por padrão para peças de várias unidades com unidades "
+"Ativado por padrão para peças de várias unidades com unidades "
 "intercambiáveis."
 
 #: eeschema/tools/ee_actions.cpp:220
@@ -16077,7 +16069,7 @@ msgstr "Adicionar Entrada de Fio em Barramento"
 
 #: eeschema/tools/ee_actions.cpp:305
 msgid "Add a wire entry to a bus"
-msgstr "Adiciona uma entrada de fio em um barramento"
+msgstr "Adiciona uma entrada de fio num barramento"
 
 #: eeschema/tools/ee_actions.cpp:311
 msgid "Add Label"
@@ -16324,7 +16316,7 @@ msgstr "Mudar para texto"
 
 #: eeschema/tools/ee_actions.cpp:483
 msgid "Change existing item to a text comment"
-msgstr "Transforma o item existente em um comentário de texto"
+msgstr "Transforma o item existente num comentário de texto"
 
 #: eeschema/tools/ee_actions.cpp:488
 msgid "Cleanup Sheet Pins"
@@ -16443,7 +16435,7 @@ msgstr "Importar Atribuições de Footprint..."
 #: eeschema/tools/ee_actions.cpp:571
 msgid "Import symbol footprint assignments from .cmp file created by Pcbnew"
 msgstr ""
-"Importa atribuições de footprint de símbolos do arquivo .cmp criado pelo "
+"Importa atribuições de footprint de símbolos do ficheiro .cmp criado pelo "
 "Pcbnew"
 
 #: eeschema/tools/ee_actions.cpp:576
@@ -16501,7 +16493,7 @@ msgstr "Definições de Barramento..."
 
 #: eeschema/tools/ee_actions.cpp:604
 msgid "Manage bus definitions"
-msgstr "Gerenciar definições de barramento"
+msgstr "Gerir definições de barramento"
 
 #: eeschema/tools/ee_actions.cpp:609
 msgid "Export Drawing to Clipboard"
@@ -16526,7 +16518,7 @@ msgstr "Exportar Netlist…"
 
 #: eeschema/tools/ee_actions.cpp:619
 msgid "Export file containing netlist in one of several formats"
-msgstr "Exportar arquivo contendo uma netlist em um dos vários formatos"
+msgstr "Exportar ficheiro que contem uma netlist num dos vários formatos"
 
 #: eeschema/tools/ee_actions.cpp:624
 msgid "Generate BOM..."
@@ -16876,7 +16868,7 @@ msgstr "Não há pinos não referênciados nesta folha para remover."
 
 #: eeschema/tools/sch_edit_tool.cpp:1760
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
-msgstr "Deseja excluir pinos não referenciados desta folha?"
+msgstr "Deseja apagar pinos não referenciados desta folha?"
 
 #: eeschema/tools/sch_edit_tool.cpp:1820
 #, fuzzy, c-format
@@ -16959,16 +16951,16 @@ msgstr "Nenhum símbolo para exportar"
 
 #: eeschema/tools/symbol_editor_control.cpp:396
 msgid "Image File Name"
-msgstr "Nome do Arquivo de Imagem"
+msgstr "Nome do Ficheiro de Imagem"
 
 #: eeschema/tools/symbol_editor_control.cpp:407
 #, c-format
 msgid "Can't save file \"%s\"."
-msgstr "Não é possível salvar o arquivo \"%s\"."
+msgstr "Não é possível salvar o ficheiro \"%s\"."
 
 #: eeschema/tools/symbol_editor_control.cpp:436
 msgid "Filename:"
-msgstr "Nome do arquivo:"
+msgstr "Nome do ficheiro:"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:520
 #, fuzzy
@@ -17214,16 +17206,16 @@ msgstr "Visíveis"
 #: gerbview/excellon_read_drill_file.cpp:263
 #, fuzzy, c-format
 msgid "File %s not found."
-msgstr "Arquivo %s não encontrado"
+msgstr "Ficheiro %s não encontrado"
 
 #: gerbview/excellon_read_drill_file.cpp:273
 #, fuzzy
 msgid "No empty layers to load file into."
-msgstr "Não há espaço para carregar o arquivo"
+msgstr "Não há espaço para carregar o ficheiro"
 
 #: gerbview/excellon_read_drill_file.cpp:280
 msgid "Error reading EXCELLON drill file"
-msgstr "Erro de leitura no arquivo de perfuração EXCELLON"
+msgstr "Erro de leitura no ficheiro de perfuração EXCELLON"
 
 #: gerbview/excellon_read_drill_file.cpp:420
 #, c-format
@@ -17252,14 +17244,14 @@ msgstr "G Code Excellon Desconhecido: &lt;%s&gt;"
 #: gerbview/export_to_pcbnew.cpp:68
 #, c-format
 msgid "Cannot create file \"%s\""
-msgstr "Impossível criar o arquivo \"%s\""
+msgstr "Impossível criar o ficheiro \"%s\""
 
 #: gerbview/files.cpp:39
 #, fuzzy
 msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr ""
 "<b>Nenhuma camada gráfica livre disponível</b> no Gerbview para carregar "
-"arquivos"
+"ficheiros"
 
 #: gerbview/files.cpp:40
 #, c-format
@@ -17272,15 +17264,15 @@ msgstr ""
 
 #: gerbview/files.cpp:85
 msgid "Zip files"
-msgstr "Arquivos zip"
+msgstr "Ficheiros zip"
 
 #: gerbview/files.cpp:103
 msgid "Job files"
-msgstr "Arquivos de trabalho"
+msgstr "Ficheiros de trabalho"
 
 #: gerbview/files.cpp:136
 msgid "Gerber files (.g* .lgr .pho)"
-msgstr "Arquivos Gerber (.g* .lgr .pho)"
+msgstr "Ficheiros Gerber (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:142
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
@@ -17332,15 +17324,15 @@ msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 
 #: gerbview/files.cpp:171
 msgid "Open Gerber File(s)"
-msgstr "Abrir Arquivo(s) Gerber"
+msgstr "Abrir Ficheiro(s) Gerber"
 
 #: gerbview/files.cpp:228
 msgid "File not found:"
-msgstr "Arquivo não encontrado:"
+msgstr "Ficheiro não encontrado:"
 
 #: gerbview/files.cpp:240
 msgid "Loading Gerber files..."
-msgstr "Carregando Arquivos Gerber…"
+msgstr "Carregando Ficheiros Gerber…"
 
 #: gerbview/files.cpp:242 gerbview/files.cpp:247
 #, fuzzy, c-format
@@ -17354,36 +17346,36 @@ msgstr ""
 
 #: gerbview/files.cpp:356
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr "Abrir Arquivo(s) de Perfuração NC (Excellon)"
+msgstr "Abrir Ficheiro(s) de Perfuração NC (Excellon)"
 
 #: gerbview/files.cpp:453
 #, c-format
 msgid "Zip file \"%s\" cannot be opened"
-msgstr "O arquivo zip \"%s\" não pode ser aberto"
+msgstr "O ficheiro zip \"%s\" não pode ser aberto"
 
 #: gerbview/files.cpp:495
 #, fuzzy, c-format
 msgid "Info: skip file \"%s\" (unknown type)\n"
-msgstr "Info: arquivo ignorado <i>\"%s\"</i> (tipo desconhecido)\n"
+msgstr "Info: ficheiro ignorado <i>\"%s\"</i> (tipo desconhecido)\n"
 
 #: gerbview/files.cpp:507
 #, fuzzy, c-format
 msgid "Info: skip file \"%s\" (gerber job file)\n"
-msgstr "Info: arquivo ignorado <i>\"%s\"</i> (tipo desconhecido)\n"
+msgstr "Info: ficheiro ignorado <i>\"%s\"</i> (tipo desconhecido)\n"
 
 #: gerbview/files.cpp:548
 #, c-format
 msgid "<b>Unable to create temporary file \"%s\"</b>\n"
-msgstr "<b>Não foi possível criar o arquivo temporário \"%s\"</b>\n"
+msgstr "<b>Não foi possível criar o ficheiro temporário \"%s\"</b>\n"
 
 #: gerbview/files.cpp:578
 #, c-format
 msgid "<b>unzipped file %s read error</b>\n"
-msgstr "<b>erro de leitura no arquivo descompactado %s</b>\n"
+msgstr "<b>erro de leitura no ficheiro descompactado %s</b>\n"
 
 #: gerbview/files.cpp:613
 msgid "Open Zip File"
-msgstr "Abrir Arquivo Zip"
+msgstr "Abrir Ficheiro Zip"
 
 #: gerbview/gerber_draw_item.cpp:672
 #, fuzzy
@@ -17479,33 +17471,33 @@ msgstr "Camada gráfica %d"
 #: gerbview/gerbview_frame.cpp:72 gerbview/menubar.cpp:124
 #, fuzzy
 msgid "Clear Recent Zip Files"
-msgstr "Abrir Arquivo de Perfuração Recente"
+msgstr "Abrir Ficheiro de Perfuração Recente"
 
 #: gerbview/gerbview_frame.cpp:74 gerbview/menubar.cpp:88
 #, fuzzy
 msgid "Clear Recent Drill Files"
-msgstr "Abrir Arquivo de Perfuração Recente"
+msgstr "Abrir Ficheiro de Perfuração Recente"
 
 #: gerbview/gerbview_frame.cpp:76 gerbview/menubar.cpp:106
 #, fuzzy
 msgid "Clear Recent Job Files"
-msgstr "Abrir Arquivo de &Trabalho Gerber Recente"
+msgstr "Abrir Ficheiro de &Trabalho Gerber Recente"
 
 #: gerbview/gerbview_frame.cpp:93
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
 #, fuzzy
 msgid "KiCad Gerber Viewer"
-msgstr "Arquivos Gerber"
+msgstr "Ficheiros Gerber"
 
 #: gerbview/gerbview_frame.cpp:162
 msgid "Layers Manager"
-msgstr "Gerenciador de Camadas"
+msgstr "Gestor de camadas"
 
 #: gerbview/gerbview_frame.cpp:609 gerbview/gerbview_frame.cpp:628
 #: gerbview/menubar.cpp:145 kicad/tools/kicad_manager_actions.cpp:88
 #, fuzzy
 msgid "Gerber Viewer"
-msgstr "Arquivos Gerber"
+msgstr "Ficheiros Gerber"
 
 #: gerbview/gerbview_frame.cpp:614
 #, c-format
@@ -17534,25 +17526,25 @@ msgstr "GerbView"
 #, fuzzy
 msgid "This job file uses an outdated format. Please recreate it."
 msgstr ""
-"Este arquivo de trabalho usa um formato desatualizado. Favor recriá-lo."
+"Este ficheiro de trabalho usa um formato desatualizado. Favor recriá-lo."
 
 #: gerbview/job_file_reader.cpp:191
 msgid "Open Gerber Job File"
-msgstr "Abrir Arquivo de Trabalho Gerber"
+msgstr "Abrir Ficheiro de Trabalho Gerber"
 
 #: gerbview/menubar.cpp:66
 #, fuzzy
 msgid "Open Recent Gerber File"
-msgstr "Abrir Arquivo de &Trabalho Gerber Recente"
+msgstr "Abrir Ficheiro de &Trabalho Gerber Recente"
 
 #: gerbview/menubar.cpp:70
 #, fuzzy
 msgid "Clear Recent Gerber Files"
-msgstr "Abrir Arquivo de &Trabalho Gerber Recente"
+msgstr "Abrir Ficheiro de &Trabalho Gerber Recente"
 
 #: gerbview/menubar.cpp:84
 msgid "Open Recent Drill File"
-msgstr "Abrir Arquivo de Perfuração Recente"
+msgstr "Abrir Ficheiro de Perfuração Recente"
 
 #: gerbview/menubar.cpp:102
 #, fuzzy
@@ -17567,7 +17559,7 @@ msgstr "Abrir Zip Recente"
 #: gerbview/readgerb.cpp:62 pcbnew/footprint_libraries_utils.cpp:247
 #, c-format
 msgid "File \"%s\" not found"
-msgstr "Arquivo \"%s\" não encontrado"
+msgstr "Ficheiro \"%s\" não encontrado"
 
 #: gerbview/readgerb.cpp:85
 #, fuzzy
@@ -17575,8 +17567,8 @@ msgid ""
 "Warning: this file has no D-Code definition\n"
 "Therefore the size of some items is undefined"
 msgstr ""
-"Atenção: este arquivo não tem definições de D-code\n"
-"É talvez um arquivo RS274D antigo\n"
+"Atenção: este ficheiro não tem definições de D-code\n"
+"É talvez um ficheiro RS274D antigo\n"
 "Portanto, o tamanho dos itens é indefinido"
 
 #: gerbview/readgerb.cpp:88
@@ -17585,8 +17577,8 @@ msgid ""
 "Warning: this file has some missing D-Code definitions\n"
 "Therefore the size of some items is undefined"
 msgstr ""
-"Atenção: este arquivo não tem definições de D-code\n"
-"É talvez um arquivo RS274D antigo\n"
+"Atenção: este ficheiro não tem definições de D-code\n"
+"É talvez um ficheiro RS274D antigo\n"
 "Portanto, o tamanho dos itens é indefinido"
 
 #: gerbview/rs274d.cpp:645
@@ -17602,7 +17594,7 @@ msgstr ""
 #: gerbview/rs274x.cpp:232
 #, c-format
 msgid "GERBER file \"%s\" may not display as intended."
-msgstr "O arquivo GERBER \"%s\" pode não ser exibido como pretendido."
+msgstr "O ficheiro GERBER \"%s\" pode não ser exibido como pretendido."
 
 #: gerbview/rs274x.cpp:540
 msgid "RS274X: Command \"IR\" rotation value not allowed"
@@ -17639,55 +17631,55 @@ msgstr "<Nada selecionado>"
 #: gerbview/tools/gerbview_actions.cpp:39
 #, fuzzy
 msgid "Open Gerber Plot File(s)..."
-msgstr "Abrir Arquivo(s) &Gerber..."
+msgstr "Abrir Ficheiro(s) &Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 #, fuzzy
 msgid ""
 "Open Gerber plot file(s) on the current layer. Previous data will be deleted"
 msgstr ""
-"Abra o(s) arquivo(s) Gerber na camada atual. Os dados anteriores serão "
+"Abra o(s) ficheiro(s) Gerber na camada atual. Os dados anteriores serão "
 "excluídos"
 
 #: gerbview/tools/gerbview_actions.cpp:45
 #, fuzzy
 msgid "Open Excellon Drill File(s)..."
-msgstr "Abrir Arquivo(s) de Perfuração &Excellon..."
+msgstr "Abrir Ficheiro(s) de Perfuração &Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
 msgid ""
 "Open Excellon drill file(s) on the current layer. Previous data will be "
 "deleted"
 msgstr ""
-"Abrir arquivo(s) de perfuração Excellon na camada atual. Os dados anteriores "
-"serão excluídos"
+"Abrir ficheiro(s) de perfuração Excellon na camada atual. Os dados "
+"anteriores serão apagados"
 
 #: gerbview/tools/gerbview_actions.cpp:51
 #, fuzzy
 msgid "Open Gerber Job File..."
-msgstr "Abrir Arquivo de &Trabalho Gerber..."
+msgstr "Abrir Ficheiro de &Trabalho Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
 #, fuzzy
 msgid "Open a Gerber job file and its associated gerber plot files"
-msgstr "Abre um arquivo de trabalho Gerber e seus arquivos gerber associados"
+msgstr "Abre um ficheiro de trabalho Gerber e seus ficheiros gerber associados"
 
 #: gerbview/tools/gerbview_actions.cpp:57
-#, fuzzy
 msgid "Open Zip Archive File..."
-msgstr "Abrir Arquivo &Zip..."
+msgstr "Abrir ficheiro de arquivo Zip..."
 
 #: gerbview/tools/gerbview_actions.cpp:58
+#, fuzzy
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr "Abrir um arquivo zipado (Gerber e Perfuração)"
+msgstr "Abrir um ficheiro de ficheiro zipado (Gerber e Perfuração)"
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Show Layers Manager"
-msgstr "Exibir Gerenciador de Camadas"
+msgstr "Exibir gestor de camadas"
 
 #: gerbview/tools/gerbview_actions.cpp:64
 msgid "Show or hide the layer manager"
-msgstr "Exibir ou ocultar o gerenciador de camadas"
+msgstr "Exibir ou ocultar o gestor de camadas"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 #, fuzzy
@@ -17696,7 +17688,7 @@ msgstr "&Listar DCodes…"
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "List D-codes defined in Gerber files"
-msgstr "Listar D-codes definidos em arquivos Gerber"
+msgstr "Listar D-codes definidos em ficheiros Gerber"
 
 #: gerbview/tools/gerbview_actions.cpp:75
 #, fuzzy
@@ -17731,7 +17723,7 @@ msgstr "Limpar &Todas as Camadas"
 
 #: gerbview/tools/gerbview_actions.cpp:93
 msgid "Clear all layers. All data will be deleted"
-msgstr "Limpar todas as camadas. Todos os dados serão excluídos"
+msgstr "Limpar todas as camadas. Todos os dados serão apagados"
 
 #: gerbview/tools/gerbview_actions.cpp:98
 msgid "Reload All Layers"
@@ -17830,7 +17822,7 @@ msgstr "Nenhuma das camadas Gerber contém dados"
 
 #: gerbview/tools/gerbview_control.cpp:117
 msgid "Board File Name"
-msgstr "Nome do Arquivo de Placa"
+msgstr "Nome do Ficheiro de Placa"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:144
 msgid "D Codes"
@@ -17839,7 +17831,7 @@ msgstr "Códigos D"
 #: gerbview/tools/gerbview_inspection_tool.cpp:172
 #, c-format
 msgid "Source file \"%s\" is not available"
-msgstr "Arquivo fonte : \"%s\" não disponível"
+msgstr "Ficheiro fonte : \"%s\" não disponível"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:182
 msgid "No editor defined. Please select one"
@@ -17848,7 +17840,7 @@ msgstr "Nenhum editor definido. Por favor selecione um"
 #: gerbview/tools/gerbview_inspection_tool.cpp:188
 #, c-format
 msgid "No file loaded on the active layer %d"
-msgstr "Nenhum arquivo carregado na camada ativa %d"
+msgstr "Nenhum ficheiro carregado na camada ativa %d"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:48
 msgid "Highlight"
@@ -17991,11 +17983,11 @@ msgstr "Definir todas as teclas de atalho para o padrão do KiCad"
 #: include/filehistory.h:54
 #, fuzzy
 msgid "Clear Recent Files"
-msgstr "Abrir Arquivo de Perfuração Recente"
+msgstr "Abrir Ficheiro de Perfuração Recente"
 
 #: include/kiway_player.h:222
 msgid "This file is already open."
-msgstr "Este arquivo já está aberto."
+msgstr "Este ficheiro já está aberto."
 
 #: include/lib_table_grid.h:184
 msgid "Library Path"
@@ -18077,7 +18069,7 @@ msgstr "Editar as listas de bibliotecas de footprint globais e do projeto"
 #: kicad/dialogs/panel_kicad_launcher.cpp:117
 #, fuzzy
 msgid "Preview Gerber files"
-msgstr "Visualizar Arquivos Gerber"
+msgstr "Visualizar Ficheiros Gerber"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:121
 #, fuzzy
@@ -18096,7 +18088,7 @@ msgstr ""
 
 #: kicad/files-io.cpp:45
 msgid "KiCad project file"
-msgstr "Arquivo de projeto KiCad"
+msgstr "Ficheiro de projeto KiCad"
 
 #: kicad/files-io.cpp:65
 msgid "Unzip Project"
@@ -18122,7 +18114,7 @@ msgstr "Descompactando projeto em \"%s\"\n"
 
 #: kicad/files-io.cpp:116
 msgid "Archive Project Files"
-msgstr "Compactar arquivos do projeto"
+msgstr "Arquivar ficheiros do projeto"
 
 #: kicad/import_project.cpp:73
 msgid "KiCad Project Destination"
@@ -18155,25 +18147,24 @@ msgid ""
 msgstr ""
 
 #: kicad/import_project.cpp:221
-#, fuzzy
 msgid "Import CADSTAR Archive Project Files"
-msgstr "Compactar arquivos do projeto"
+msgstr "Importar ficheiros de arquivos do projeto CADSTAR"
 
 #: kicad/import_project.cpp:229
 msgid "Import Eagle Project Files"
-msgstr "Importar Arquivos de Projeto Eagle"
+msgstr "Importar Ficheiros de Projeto Eagle"
 
 #: kicad/kicad.cpp:167
 #, fuzzy, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
-msgstr "\"%s\" não parece ser um arquivo do Eeschema"
+msgstr "\"%s\" não parece ser um ficheiro do Eeschema"
 
 #: kicad/kicad_manager_frame.cpp:156
 #, fuzzy
 msgid "Project Files"
-msgstr "Salvar arquivo de projeto"
+msgstr "Salvar ficheiro de projeto"
 
 #: kicad/kicad_manager_frame.cpp:160
 #, fuzzy
@@ -18182,7 +18173,7 @@ msgstr "&Editar"
 
 #: kicad/kicad_manager_frame.cpp:550
 msgid "Load File to Edit"
-msgstr "Carregar Arquivo para Edição"
+msgstr "Carregar Ficheiro para Edição"
 
 #: kicad/kicad_manager_frame.cpp:660
 #, fuzzy, c-format
@@ -18206,7 +18197,7 @@ msgstr "Abrir um projeto recente"
 #: kicad/menubar.cpp:91
 #, fuzzy
 msgid "Import Non-KiCad Project..."
-msgstr "Importar Arquivo de Placa não KiCad..."
+msgstr "Importar Ficheiro de Placa não KiCad..."
 
 #: kicad/menubar.cpp:94
 #, fuzzy
@@ -18228,39 +18219,39 @@ msgstr "Importar esquema eletrônico e placa no formato XML EAGLE CAD"
 
 #: kicad/menubar.cpp:107
 msgid "&Archive Project..."
-msgstr "&Compactar Projeto…"
+msgstr "&Arquivar projeto…"
 
 #: kicad/menubar.cpp:108
 msgid "Archive all needed project files into zip archive"
-msgstr "Armazenar projeto em um arquivo zip"
+msgstr "Arquivar todos os ficheiros de projeto necessários no arquivo zip"
 
 #: kicad/menubar.cpp:112
 msgid "&Unarchive Project..."
-msgstr "&Descompactar Projeto…"
+msgstr "&Desarquivar projeto…"
 
 #: kicad/menubar.cpp:113 kicad/menubar.cpp:215
 msgid "Unarchive project files from zip archive"
-msgstr "Recuperar projeto de um arquivo zip"
+msgstr "Desarquivar ficheiros de projeto do arquivo zip"
 
 #: kicad/menubar.cpp:128
 msgid "Browse Project Files"
-msgstr "Procurar Arquivos de Projeto"
+msgstr "Procurar Ficheiros de Projeto"
 
 #: kicad/menubar.cpp:129
 msgid "Open project directory in file browser"
-msgstr "Abre a pasta do projeto no navegador de arquivos"
+msgstr "Abre a pasta do projeto no navegador de ficheiros"
 
 #: kicad/menubar.cpp:154
 msgid "Edit Local File..."
-msgstr "Editar Arquivo Local..."
+msgstr "Editar Ficheiro Local..."
 
 #: kicad/menubar.cpp:155
 msgid "Edit local file in text editor"
-msgstr "Edita um arquivo local no editor de texto"
+msgstr "Edita um ficheiro local no editor de texto"
 
 #: kicad/menubar.cpp:211
 msgid "Archive all project files"
-msgstr "Armazenar projeto em um arquivo zip"
+msgstr "Arquivar todos os ficheiros do projeto"
 
 #: kicad/menubar.cpp:224
 #, fuzzy
@@ -18269,7 +18260,7 @@ msgstr "Abre o diretório do projeto no Finder"
 
 #: kicad/menubar.cpp:226
 msgid "Open project directory in file explorer"
-msgstr "Abrir pasta do projeto no navegador de arquivos"
+msgstr "Abrir pasta do projeto no navegador de ficheiros"
 
 #: kicad/project_template.cpp:52
 #, fuzzy
@@ -18284,7 +18275,7 @@ msgstr "Não foi possível abrir a pasta com meta informações para este modelo
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
 msgstr ""
-"Não foi possível localizar o arquivo de informação meta HTML para este "
+"Não foi possível localizar o ficheiro de informação meta HTML para este "
 "modelo!"
 
 #: kicad/project_template.cpp:224
@@ -18297,16 +18288,16 @@ msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
 msgstr ""
-"Alterar a extensão do arquivo irá alterar o tipo de arquivo.\n"
+"Alterar a extensão do ficheiro irá alterar o tipo de ficheiro.\n"
 "Você quer continuar?"
 
 #: kicad/project_tree_item.cpp:112
 msgid "Rename File"
-msgstr "Renomear Arquivo"
+msgstr "Renomear Ficheiro"
 
 #: kicad/project_tree_item.cpp:120
 msgid "Unable to rename file ... "
-msgstr "Impossível renomerar arquivo ... "
+msgstr "Impossível renomerar ficheiro ... "
 
 #: kicad/project_tree_item.cpp:120
 msgid "Permission error?"
@@ -18355,11 +18346,11 @@ msgstr "Revela o diretório em uma janela do Finder"
 #: kicad/project_tree_pane.cpp:719
 #, fuzzy
 msgid "Open Directory in File Explorer"
-msgstr "&Abrir Pasta no Explorador de Arquivos"
+msgstr "&Abrir Pasta no Explorador de Ficheiros"
 
 #: kicad/project_tree_pane.cpp:720 pcbnew/menubar_pcb_editor.cpp:418
 msgid "Opens the directory in the default system file manager"
-msgstr "Abre o diretório no gerenciador de arquivos padrão do sistema"
+msgstr "Abre o diretório no gestor de ficheiros padrão do sistema"
 
 #: kicad/project_tree_pane.cpp:727
 #, fuzzy
@@ -18369,21 +18360,21 @@ msgstr "Revela o diretório em uma janela do Finder"
 #: kicad/project_tree_pane.cpp:729
 #, fuzzy
 msgid "Open Directories in File Explorer"
-msgstr "&Abrir Pasta no Explorador de Arquivos"
+msgstr "&Abrir Pasta no Explorador de Ficheiros"
 
 #: kicad/project_tree_pane.cpp:730
 #, fuzzy
 msgid "Opens the directories in the default system file manager"
-msgstr "Abre o diretório no gerenciador de arquivos padrão do sistema"
+msgstr "Abre o diretório no gerenciador de ficheiros padrão do sistema"
 
 #: kicad/project_tree_pane.cpp:741
 msgid "Open the file in a Text Editor"
-msgstr "Abrir o arquivo em um Editor de Texto"
+msgstr "Abrir o ficheiro num Editor de Texto"
 
 #: kicad/project_tree_pane.cpp:743
 #, fuzzy
 msgid "Open files in a Text Editor"
-msgstr "Abrir o arquivo em um Editor de Texto"
+msgstr "Abrir o ficheiro em um Editor de Texto"
 
 #: kicad/project_tree_pane.cpp:745
 #, fuzzy
@@ -18393,34 +18384,34 @@ msgstr "&Abrir em um Editor de Texto"
 #: kicad/project_tree_pane.cpp:753
 #, fuzzy
 msgid "Rename File..."
-msgstr "&Renomear Arquivo..."
+msgstr "&Renomear Ficheiro..."
 
 #: kicad/project_tree_pane.cpp:754
 msgid "Rename file"
-msgstr "Renomear arquivo"
+msgstr "Renomear ficheiro"
 
 #: kicad/project_tree_pane.cpp:758
 #, fuzzy
 msgid "Rename Files..."
-msgstr "&Renomear Arquivo..."
+msgstr "&Renomear Ficheiro..."
 
 #: kicad/project_tree_pane.cpp:759
 #, fuzzy
 msgid "Rename files"
-msgstr "Renomear arquivo"
+msgstr "Renomear ficheiro"
 
 #: kicad/project_tree_pane.cpp:768
 msgid "Delete the file and its content"
-msgstr "Excluir o arquivo e seu conteúdo"
+msgstr "Apagar o ficheiro e conteúdo dele"
 
 #: kicad/project_tree_pane.cpp:770
 #, fuzzy
 msgid "Delete the files and their contents"
-msgstr "Excluir o arquivo e seu conteúdo"
+msgstr "Excluir o ficheiro e seu conteúdo"
 
 #: kicad/project_tree_pane.cpp:794
 msgid "Print the contents of the file"
-msgstr "Imprime o conteúdo do arquivo"
+msgstr "Imprime o conteúdo do ficheiro"
 
 #: kicad/project_tree_pane.cpp:836
 #, fuzzy
@@ -18429,12 +18420,12 @@ msgstr "&Apagar Pasta"
 
 #: kicad/project_tree_pane.cpp:836
 msgid "Delete File"
-msgstr "Excluir"
+msgstr "Apagar o ficheiro"
 
 #: kicad/project_tree_pane.cpp:837
 #, c-format
 msgid "Are you sure you want to delete '%s'?"
-msgstr "Tem certeza que deseja excluir '%s'?"
+msgstr "Tem certeza que deseja apagar '%s'?"
 
 #: kicad/project_tree_pane.cpp:842
 #, fuzzy, c-format
@@ -18449,11 +18440,11 @@ msgstr "Excluir itens clicados"
 #: kicad/project_tree_pane.cpp:876
 #, c-format
 msgid "Change filename: \"%s\""
-msgstr "Alterar o nome do arquivo: \"%s\""
+msgstr "Alterar o nome do ficheiro: \"%s\""
 
 #: kicad/project_tree_pane.cpp:878
 msgid "Change filename"
-msgstr "Alterar nome de arquivo"
+msgstr "Alterar nome de ficheiro"
 
 #: kicad/project_tree_pane.cpp:1193
 msgid "Network path: not monitoring folder changes"
@@ -18519,7 +18510,7 @@ msgstr "Editar Footprints da PCI"
 #: kicad/tools/kicad_manager_actions.cpp:88
 #, fuzzy
 msgid "Preview Gerber output files"
-msgstr "Visualizar Arquivos Gerber"
+msgstr "Visualizar Ficheiros Gerber"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 #, fuzzy
@@ -18622,11 +18613,11 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_control.cpp:249
 msgid "Overwriting files:"
-msgstr "Sobrescrevendo arquivos:"
+msgstr "Sobrescrevendo ficheiros:"
 
 #: kicad/tools/kicad_manager_control.cpp:254
 msgid "Similar files already exist in the destination folder."
-msgstr "Arquivos semelhantes já existem na pasta de destino."
+msgstr "Ficheiros semelhantes já existem na pasta de destino."
 
 #: kicad/tools/kicad_manager_control.cpp:272
 msgid "A problem occurred creating new project from template!"
@@ -18643,7 +18634,7 @@ msgstr "Abrir Projeto Existente"
 #: kicad/tools/kicad_manager_control.cpp:466
 #, fuzzy, c-format
 msgid "Cannot copy folder \"%s\"."
-msgstr "Não é possível copiar o arquivo \"%s\"."
+msgstr "Não é possível copiar o ficheiro \"%s\"."
 
 #: kicad/tools/kicad_manager_control.cpp:509
 #, fuzzy
@@ -18662,7 +18653,7 @@ msgstr "Novo projeto a partir de modelo"
 
 #: kicad/tools/kicad_manager_control.cpp:621
 msgid "Application failed to load:\n"
-msgstr "Falha ao carregar o aplicativo:\n"
+msgstr "Falha ao carregar a aplicação:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:621
 #: kicad/tools/kicad_manager_control.cpp:628 pcbnew/pcb_edit_frame.cpp:1466
@@ -18952,7 +18943,7 @@ msgstr "Configurações"
 
 #: pagelayout_editor/files.cpp:52
 msgid "Page Layout Description File"
-msgstr "Arquivo de Descrição de Layout de Página"
+msgstr "Ficheiro de Descrição de Layout de Página"
 
 #: pagelayout_editor/files.cpp:58
 msgid "The current page layout has been modified. Save changes?"
@@ -18961,7 +18952,7 @@ msgstr "O layout da página atual foi modificado. Salvar as alterações?"
 #: pagelayout_editor/files.cpp:71
 #, c-format
 msgid "File \"%s\" loaded"
-msgstr "Arquivo \"%s\" carregado"
+msgstr "Ficheiro \"%s\" carregado"
 
 #: pagelayout_editor/files.cpp:99
 msgid "The current page layout has been modified.  Save changes?"
@@ -18970,17 +18961,17 @@ msgstr "O layout da página atual foi modificado.  Salvar as alterações?"
 #: pagelayout_editor/files.cpp:118
 #, fuzzy
 msgid "Append Existing Drawing Sheet"
-msgstr "Anexar Arquivo de Layout de Página Existente"
+msgstr "Anexar Ficheiro de Layout de Página Existente"
 
 #: pagelayout_editor/files.cpp:129 pagelayout_editor/files.cpp:154
 #, c-format
 msgid "Unable to load %s file"
-msgstr "Não foi possível carregar o arquivo %s"
+msgstr "Não foi possível carregar o ficheiro %s"
 
 #: pagelayout_editor/files.cpp:136
 #, c-format
 msgid "File \"%s\" inserted"
-msgstr "Arquivo \"%s\" inserido"
+msgstr "Ficheiro \"%s\" inserido"
 
 #: pagelayout_editor/files.cpp:144
 msgid "Open"
@@ -19021,7 +19012,7 @@ msgstr "Propriedades"
 #: pagelayout_editor/pl_editor_frame.cpp:320
 #, c-format
 msgid "Error when loading file \"%s\""
-msgstr "Erro carregando o arquivo \"%s\""
+msgstr "Erro carregando o ficheiro \"%s\""
 
 #: pagelayout_editor/pl_editor_frame.cpp:430
 msgid "Error Init Printer info"
@@ -19029,7 +19020,7 @@ msgstr "Erro na inicialização da Impressora"
 
 #: pagelayout_editor/pl_editor_frame.cpp:540
 msgid "no file selected"
-msgstr "nenhum arquivo selecionado"
+msgstr "nenhum ficheiro selecionado"
 
 #: pagelayout_editor/pl_editor_frame.cpp:748
 #, c-format
@@ -19044,7 +19035,7 @@ msgstr "Novo desenho de layout de página"
 #: pagelayout_editor/pl_editor_frame.cpp:892
 #, fuzzy
 msgid "Page layout changes are unsaved"
-msgstr "Arquivos de desenho de layout de página"
+msgstr "Ficheiros de desenho de layout de página"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
 #, fuzzy
@@ -19078,7 +19069,7 @@ msgstr "Canto Superior Esquerdo da página"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:89
 msgid "Origin of coordinates displayed to the status bar"
-msgstr "Coordenadas de origem exibidas na barra de status"
+msgstr "Coordenadas de origem exibidas na barra de estado"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:104
 msgid "Page 1"
@@ -19115,7 +19106,7 @@ msgstr "Adicionar uma imagem bitmap"
 #: pagelayout_editor/tools/pl_actions.cpp:73
 #, fuzzy
 msgid "Append Existing Drawing Sheet..."
-msgstr "Anexar Arquivo de Layout de Página Existente..."
+msgstr "Anexar Ficheiro de Layout de Página Existente..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
 #, fuzzy
@@ -19232,7 +19223,7 @@ msgstr ""
 
 #: pcb_calculator/datafile_read_write.cpp:73
 msgid "Data file error."
-msgstr "Erro no arquivo de dados."
+msgstr "Erro no ficheiro de dados."
 
 #: pcb_calculator/dialogs/dialog_regulator_form.cpp:33
 #: pcb_calculator/regulators_funct.cpp:174
@@ -19342,12 +19333,13 @@ msgstr "Regulador:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:204
 msgid "Regulators data file:"
-msgstr "Arquivo de dados de reguladores:"
+msgstr "Ficheiro de dados de reguladores:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:206
 msgid "The name of the data file which stores known regulators parameters."
 msgstr ""
-"O nome do arquivo de dados que armazena parâmetros de reguladores conhecidos."
+"O nome do ficheiro de dados que armazena parâmetros de reguladores "
+"conhecidos."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
 msgid "Edit Regulator"
@@ -20123,7 +20115,7 @@ msgstr ""
 #: pcb_calculator/pcb_calculator_frame.cpp:256
 #, fuzzy
 msgid "Write Data Failed"
-msgstr "Erro Gravando Arquivo de Dados"
+msgstr "Erro Gravando Ficheiro de Dados"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:260
 #, fuzzy
@@ -20131,7 +20123,7 @@ msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"Dados modificados e nenhum nome de arquivo de dados para salvar "
+"Dados modificados e nenhum nome de ficheiro de dados para salvar "
 "modificações\n"
 "Você quer sair e cancelar as alterações?"
 
@@ -20141,28 +20133,28 @@ msgid ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"Impossível gravar arquivo \"%s\"\n"
+"Impossível gravar ficheiro \"%s\"\n"
 "Gostaria de sair e cancelar as alterações?"
 
 #: pcb_calculator/regulators_funct.cpp:126
 #, c-format
 msgid "PCB Calculator data file (*.%s)|*.%s"
-msgstr "Arquivo de dados da Calculadora de PCI (*%s)|*.%s"
+msgstr "Ficheiro de dados da Calculadora de PCI (*%s)|*.%s"
 
 #: pcb_calculator/regulators_funct.cpp:130
 msgid "Select PCB Calculator Data File"
-msgstr "Selecione o arquivo de dados da Calculadora de PCI"
+msgstr "Selecione o ficheiro de dados da Calculadora de PCI"
 
 #: pcb_calculator/regulators_funct.cpp:145
 msgid "Do you want to load this file and replace current regulator list?"
 msgstr ""
-"Gostaria de carregar este arquivo e sobrescrever a lista atual de "
+"Gostaria de carregar este ficheiro e sobrescrever a lista atual de "
 "reguladores?"
 
 #: pcb_calculator/regulators_funct.cpp:161
 #, c-format
 msgid "Unable to read data file \"%s\""
-msgstr "Impossível ler o arquivo de dados \"%s\""
+msgstr "Impossível ler o ficheiro de dados \"%s\""
 
 #: pcb_calculator/regulators_funct.cpp:193
 msgid "This regulator is already in list. Aborted"
@@ -21096,7 +21088,7 @@ msgstr "Salvar lista de Materiais"
 #: pcbnew/dialogs/dialog_export_vrml.cpp:264
 #, c-format
 msgid "Unable to create file \"%s\""
-msgstr "Impossível criar arquivo \"%s\""
+msgstr "Impossível criar ficheiro \"%s\""
 
 #: pcbnew/build_BOM_from_board.cpp:108
 msgid "Designator"
@@ -21215,7 +21207,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:88
 #, fuzzy
 msgid "Only selected"
-msgstr "nenhum arquivo selecionado"
+msgstr "nenhum ficheiro selecionado"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:94
 #, fuzzy
@@ -21742,7 +21734,7 @@ msgid ""
 "Error loading board file:\n"
 "%s"
 msgstr ""
-"Erro ao carregar o arquivo de placa:\n"
+"Erro ao carregar o ficheiro de placa:\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:89
@@ -21844,7 +21836,7 @@ msgstr "Furo Mecânico (NPTH):"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:626
 msgid "Save Report File"
-msgstr "Salvar Arquivo de Relatório"
+msgstr "Salvar Ficheiro de Relatório"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:647
 #, fuzzy
@@ -21882,12 +21874,12 @@ msgstr "Componentes"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:718
 #, fuzzy
 msgid "Drill holes"
-msgstr "Arquivos de furação"
+msgstr "Ficheiros de furação"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:725
 #, c-format
 msgid "Error writing to file \"%s\""
-msgstr "Erro ao gravar no arquivo \"%s\""
+msgstr "Erro ao gravar no ficheiro \"%s\""
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:117
 msgid "Board Size"
@@ -21933,12 +21925,12 @@ msgstr "Trocar Camadas"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:258
 #, fuzzy
 msgid "Drill Holes"
-msgstr "Arquivos de furação"
+msgstr "Ficheiros de furação"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:265
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:214
 msgid "Generate Report File..."
-msgstr "Gerar Arquivo de Relatório..."
+msgstr "Gerar Ficheiro de Relatório..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:66
 msgid "Board Statistics"
@@ -22910,14 +22902,12 @@ msgstr "Configuração da Placa..."
 #: pcbnew/dialogs/dialog_drc.cpp:634
 #, fuzzy, c-format
 msgid "Report file '%s' created<br>"
-msgstr ""
-"Arquivo de relatório %s criado\n"
-"\n"
+msgstr "Ficheiro de relatório %s criado"
 
 #: pcbnew/dialogs/dialog_drc.cpp:639
 #, fuzzy, c-format
 msgid "Unable to create report file '%s'<br>"
-msgstr "Não é possível criar o arquivo de relatório \"%s\""
+msgstr "Não é possível criar o ficheiro de relatório \"%s\""
 
 #: pcbnew/dialogs/dialog_drc.cpp:865
 #, fuzzy
@@ -23104,7 +23094,7 @@ msgstr "%s footprints com identificador:"
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 #, fuzzy
 msgid "New footprint library id:"
-msgstr "Arquivos de biblioteca de footprint legados"
+msgstr "Ficheiros de biblioteca de footprint legados"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:96
 msgid "Remove text items which are not in library footprint"
@@ -23138,7 +23128,7 @@ msgstr "Atualizar Footprints a partir da Biblioteca"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
 #, c-format
 msgid "File %s already exists."
-msgstr "O arquivo %s já existe."
+msgstr "O ficheiro %s já existe."
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:223
 #, fuzzy, c-format
@@ -23149,11 +23139,11 @@ msgstr "Incapaz de criar \"%s\""
 #: pcbnew/dialogs/dialog_export_step_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
 msgid "File name:"
-msgstr "Nome do arquivo:"
+msgstr "Nome do ficheiro:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "Select an IDF export filename"
-msgstr "Selecione um nome de arquivo de exportação do IDF"
+msgstr "Selecione um nome de ficheiro de exportação do IDF"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "*.emn"
@@ -23202,7 +23192,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step.cpp:280
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "Arquivo '%s' já existe. Deseja sobrescrever este arquivo?"
+msgstr "Ficheiro '%s' já existe. Deseja sobrescrever este ficheiro?"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:283
 msgid "STEP Export"
@@ -23210,11 +23200,11 @@ msgstr "Exportar STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:25
 msgid "Select a STEP export filename"
-msgstr "Selecione um nome de arquivo para exportação do STEP"
+msgstr "Selecione um nome de ficheiro para exportação do STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:25
 msgid "STEP files (*.stp;*.step)|*.stp;*.step"
-msgstr "Arquivos STEP (*.stp;*.step)|*.stp;*.step"
+msgstr "Ficheiros STEP (*.stp;*.step)|*.stp;*.step"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:37
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
@@ -23256,7 +23246,7 @@ msgstr "Ignorar componentes virtuais"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:139
 #, fuzzy
 msgid "Overwrite old file"
-msgstr "Sobrescrevendo arquivos:"
+msgstr "Sobrescrevendo ficheiros:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:145
 #, fuzzy
@@ -23303,7 +23293,7 @@ msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
 "Não foi possível tornar o caminho relativo (volume de destino diferente do "
-"volume do arquivo da placa)!"
+"volume do ficheiro da placa)!"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:259
 #, c-format
@@ -23315,14 +23305,14 @@ msgstr "Exportado \"%s\"."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:427
 #, c-format
 msgid "Unable to create file \"%s\"."
-msgstr "Não foi possível criar o arquivo \"%s\"."
+msgstr "Não foi possível criar o ficheiro \"%s\"."
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:29
 msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
 msgstr ""
-"Entre um nome de arquivo se não desejar usar os nomes padrão\n"
+"Entre um nome de ficheiro se não desejar usar os nomes padrão\n"
 "Pode ser utilizado somente ao imprimir a folha atual"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:63
@@ -23369,11 +23359,11 @@ msgstr "Imprimir a(s) camada(s) espelhadas horizontalmente"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:105
 msgid "One file per layer"
-msgstr "Um arquivo por camada"
+msgstr "Um ficheiro por camada"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:105
 msgid "All layers in a single file"
-msgstr "Todas as camadas em um único arquivo"
+msgstr "Todas as camadas num único ficheiro"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:107
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:243
@@ -23382,20 +23372,20 @@ msgstr "Paginação"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:70
 msgid "Export SVG File"
-msgstr "Exportar arquivo SVG"
+msgstr "Exportar ficheiro SVG"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:179
 msgid "Are you sure you want to overwrite the existing file?"
-msgstr "Tem certeza que deseja sobrescrever o arquivo existente?"
+msgstr "Tem certeza que deseja sobrescrever o ficheiro existente?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:255
 #, fuzzy, c-format
 msgid "Unable to create directory \"%s\""
-msgstr "Impossível criar arquivo \"%s\""
+msgstr "Impossível criar ficheiro \"%s\""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
-msgstr "Salvar arquivo VRML Board"
+msgstr "Salvar ficheiro VRML Board"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
@@ -23403,7 +23393,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 msgid "Footprint 3D model path:"
-msgstr "Local de arquivos de Footprint 3D:"
+msgstr "Local de ficheiros de Footprint 3D:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "meter"
@@ -23419,7 +23409,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
-msgstr "Copiar arquivos de modelo 3D para a pasta de modelos 3D"
+msgstr "Copiar ficheiros de modelo 3D para a pasta de modelos 3D"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:125
 msgid ""
@@ -23430,14 +23420,14 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
 msgstr ""
-"Utilize caminhos relativos para os arquivos de modelo no arquivo VRML da "
+"Utilize caminhos relativos para os ficheiros de modelo no ficheiro VRML da "
 "placa"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:130
 msgid "Use paths for model files in board VRML file relative to the vrml file"
 msgstr ""
-"Utilize caminhos para arquivos de modelo no arquivo VRML da placa relativos "
-"ao arquivo vrml"
+"Utilize caminhos para ficheiros de modelo no ficheiro VRML da placa "
+"relativos ao ficheiro vrml"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:67
 msgid "VRML Export Options"
@@ -23579,7 +23569,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:391
 #, c-format
 msgid "Invalid filename: %s"
-msgstr "Nome de arquivo inválido: %s"
+msgstr "Nome de ficheiro inválido: %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:639
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:582
@@ -24083,24 +24073,23 @@ msgstr "Formato"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:60
 #, fuzzy
 msgid "Separate files for front, back"
-msgstr "Arquivos separados para frente e verso"
+msgstr "Ficheiros separados para frente e verso"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:60
 msgid "Single file for board"
-msgstr "Arquivo único para a placa"
+msgstr "Ficheiro único para a placa"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:62
 msgid "Files"
-msgstr "Arquivos"
+msgstr "Ficheiros"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:64
 msgid ""
 "Creates 2 files: one for each board side or\n"
 "Creates only one file containing all footprints to place\n"
 msgstr ""
-"Cria 2 arquivos: um para cada lado da placa ou\n"
-"Criar apenas um arquivo contendo todos os footprints a serem colocados\n"
-"\n"
+"Cria 2 ficheiros: um para cada lado da placa ou\n"
+"Criar apenas um ficheiro contendo todos os footprints a serem colocados\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
 #, fuzzy
@@ -24115,7 +24104,7 @@ msgstr "Incluir camada do contorno da &placa"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:72
 #, fuzzy
 msgid "Generate Placement Files"
-msgstr "Gerar Arquivo de Mapeamento"
+msgstr "Gerar Ficheiro de Mapeamento"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:40
 msgid "Export to GenCAD settings"
@@ -24123,7 +24112,7 @@ msgstr "Configurações de Exportação para GenCAD"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:48
 msgid "Select a GenCAD export filename"
-msgstr "Selecione um nome de arquivo de exportação GenCAD"
+msgstr "Selecione um nome de ficheiro de exportação GenCAD"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:135
 msgid "Flip bottom footprint padstacks"
@@ -24144,31 +24133,31 @@ msgstr "Origem do Furo"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Save the origin coordinates in the file"
-msgstr "Salvar as coordenadas da origem no arquivo"
+msgstr "Salvar as coordenadas da origem no ficheiro"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:73
 msgid "Generate Drill File"
-msgstr "Gerar Arquivo de Furação"
+msgstr "Gerar Ficheiro de Furação"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:74
 msgid "Generate Map File"
-msgstr "Gerar Arquivo de Mapeamento"
+msgstr "Gerar Ficheiro de Mapeamento"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:308
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
 "Não é possível tornar o caminho relativo (volume de destino diferente do "
-"volume do arquivo)!"
+"volume do ficheiro)!"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:382
 #, c-format
 msgid "Could not write drill and/or map files to folder \"%s\"."
 msgstr ""
-"Não foi possível salvar a furação e/ou mapear arquivos para a pasta \"%s\"."
+"Não foi possível salvar a furação e/ou mapear ficheiros para a pasta \"%s\"."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:431
 msgid "Save Drill Report File"
-msgstr "Salvar arquivo relatório de furação"
+msgstr "Salvar ficheiro relatório de furação"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:457
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:116
@@ -24181,9 +24170,7 @@ msgstr "** Não foi possível criar %s **\n"
 #: pcbnew/dialogs/dialog_gendrill.cpp:462
 #, c-format
 msgid "Report file %s created\n"
-msgstr ""
-"Arquivo de relatório %s criado\n"
-"\n"
+msgstr "Ficheiro de relatório %s criado\n"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:22
 msgid "Output folder:"
@@ -24191,7 +24178,7 @@ msgstr "Pasta de saída:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
 msgid "Drill File Format"
-msgstr "Formato do Arquivo de Furação"
+msgstr "Formato do Ficheiro de Furação"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 msgid "Excellon"
@@ -24224,7 +24211,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:60
 msgid "PTH and NPTH in single file"
-msgstr "Furos mecânicos e revestidos em um único arquivo"
+msgstr "Furos mecânicos e revestidos num único ficheiro"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
 msgid ""
@@ -24233,7 +24220,7 @@ msgid ""
 "file."
 msgstr ""
 "Não recomendado.\n"
-"Utilize apenas para fábricas que solicitem o PTH e NPTH em um único arquivo."
+"Utilize apenas para fábricas que solicitem o PTH e NPTH num único ficheiro."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use route command (recommended)"
@@ -24277,7 +24264,7 @@ msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 msgid "Map File Format"
-msgstr "Formato do Arquivo de Mapeamento"
+msgstr "Formato do Ficheiro de Mapeamento"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "Creates a drill map in PS, HPGL or other formats"
@@ -24351,7 +24338,7 @@ msgstr "Vias encobertas:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:91
 msgid "Generate Drill Files"
-msgstr "Gerar Arquivos de Furação"
+msgstr "Gerar Ficheiros de Furação"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:66
@@ -24472,7 +24459,7 @@ msgstr "Camada atual:"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.h:74
 msgid "Delete Items"
-msgstr "Excluir Itens"
+msgstr "Apagar Itens"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:213
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
@@ -24620,19 +24607,19 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Ocorreu um erro ao gravar arquivo vazio de tabela de biblioteca de "
+"Ocorreu um erro ao gravar ficheiro vazio de tabela de biblioteca de "
 "footprint.\n"
 "\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:74
 msgid "Please select a footprint library table file."
-msgstr "Por favor, selecione um arquivo de tabela de biblioteca de footprint."
+msgstr "Por favor, selecione um ficheiro de tabela de biblioteca de footprint."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:84
 #, c-format
 msgid "File \"%s\" not found."
-msgstr "Arquivo \"%s\" não encontrado."
+msgstr "Ficheiro \"%s\" não encontrado."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:98
 #, c-format
@@ -24641,7 +24628,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"O arquivo \"%s\" não é um arquivo de biblioteca de footprint válido.\n"
+"O ficheiro \"%s\" não é um ficheiro de biblioteca de footprint válido.\n"
 "\n"
 "%s"
 
@@ -24656,7 +24643,7 @@ msgid ""
 "\n"
 "\"%s\"."
 msgstr ""
-"Não foi possível copiar o arquivo global de tabela de biblioteca de "
+"Não foi possível copiar o ficheiro global de tabela de biblioteca de "
 "footprint:\n"
 "\n"
 "  \"%s\"\n"
@@ -25005,7 +24992,7 @@ msgstr "O nome de camada \"%s\" já está em uso."
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1851
 #, fuzzy
 msgid "Rename Net"
-msgstr "Renomear arquivo"
+msgstr "Renomear ficheiro"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1864
 #, fuzzy
@@ -25025,7 +25012,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1981
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1982
 msgid "Report file"
-msgstr "Arquivo de relatório"
+msgstr "Ficheiro de relatório"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:44
 msgid "Show zero pad nets"
@@ -25071,11 +25058,11 @@ msgstr "Selecionar Netlist"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:149
 msgid "Please, choose a valid netlist file."
-msgstr "Por favor, escolha um arquivo netlist válido."
+msgstr "Por favor, escolha um ficheiro netlist válido."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:155 pcbnew/dialogs/dialog_netlist.cpp:190
 msgid "The netlist file does not exist."
-msgstr "O arquivo netlist não existe."
+msgstr "O ficheiro netlist não existe."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:159
 #: pcbnew/dialogs/dialog_update_pcb.cpp:141
@@ -25086,7 +25073,7 @@ msgstr "Alterações aplicadas a PCI"
 #: pcbnew/dialogs/dialog_netlist.cpp:225
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
-msgstr "Lendo o arquivo netlist \"%s\".\n"
+msgstr "Lendo o ficheiro netlist \"%s\".\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:229
 #, fuzzy
@@ -25101,7 +25088,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
 msgid "Netlist file:"
-msgstr "Arquivo netlist:"
+msgstr "Ficheiro netlist:"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
 #, fuzzy
@@ -25140,17 +25127,17 @@ msgstr "Excluir footprints sem símbolo associado"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 msgid "Delete tracks shorting multiple nets"
-msgstr "Excluir trilhas em curto com diversas redes"
+msgstr "Apagar trilhas em curto com diversas redes"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:63
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid "Delete nets containing only a single pad"
-msgstr "Excluir redes contendo apenas uma única ilha"
+msgstr "Apagar redes contendo apenas uma única ilha"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:66
 #, fuzzy
 msgid "Generate warnings for pads with no net"
-msgstr "Gerar arquivos para fabricação"
+msgstr "Gerar ficheiros para fabricação"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:67
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:53
@@ -25226,7 +25213,7 @@ msgstr "Selecione um canto para adicionar o novo canto após."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:429
 msgid "Select a corner to delete."
-msgstr "Selecione um canto para excluir."
+msgstr "Selecione um canto para apagar."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:480
 #, fuzzy, c-format
@@ -25555,7 +25542,7 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
-"Raio do canto em porcentagem da largura da ilha.\n"
+"Raio do canto em percentagem da largura da ilha.\n"
 "A largura é o menor valor entre o tamanho X e o tamanho Y.\n"
 "O valor máximo é 50 por cento."
 
@@ -25588,7 +25575,7 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
-"Tamanho do chanfro em porcentagem da largura da ilha.\n"
+"Tamanho do chanfro em percentagem da largura da ilha.\n"
 "A largura é o menor valor entre o tamanho X e o tamanho Y.\n"
 "O valor máximo é 50 por cento."
 
@@ -25913,7 +25900,7 @@ msgstr "Polígono de Forma Básica"
 
 #: pcbnew/dialogs/dialog_plot.cpp:64
 msgid "Generate Drill Files..."
-msgstr "Criar Arquivo de Furação…"
+msgstr "Criar Ficheiro de Furação…"
 
 #: pcbnew/dialogs/dialog_plot.cpp:670
 msgid "HPGL pen size constrained."
@@ -25934,7 +25921,7 @@ msgid ""
 "in a range of  [%s; %s] (%s) for current design rules."
 msgstr ""
 "Correção de largura restrita. O valor de correção de largura razoável deve "
-"estar em um intervalo de  [%s; %s] (%s) para as regras de desenho atuais."
+"estar num intervalo de  [%s; %s] (%s) para as regras de desenho atuais."
 
 #: pcbnew/dialogs/dialog_plot.cpp:791
 msgid "No layer selected, Nothing to plot"
@@ -25951,7 +25938,7 @@ msgstr "Atenção: Opção de escala definida para um valor muito grande"
 #: pcbnew/dialogs/dialog_plot.cpp:897
 #, c-format
 msgid "Plot file \"%s\" created."
-msgstr "Arquivo de plotagem \"%s\" criado."
+msgstr "Ficheiro de plotagem \"%s\" criado."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:23
 msgid "Plot format:"
@@ -26015,7 +26002,7 @@ msgstr "Origem do Furo"
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
 msgstr ""
-"Utilizar o eixo auxiliar como origem de coordenadas em arquivos de plotagem"
+"Utilizar o eixo auxiliar como origem de coordenadas em ficheiros de plotagem"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:113
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:229
@@ -26096,7 +26083,7 @@ msgstr "Opções Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:204
 msgid "Use Protel filename extensions"
-msgstr "Utilizar nome de extensões de arquivo Protel"
+msgstr "Utilizar nome de extensões de ficheiro Protel"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:205
 msgid ""
@@ -26108,15 +26095,16 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:210
 msgid "Generate Gerber job file"
-msgstr "Criar arquivo de trabalho Gerber"
+msgstr "Criar ficheiro de trabalho Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:212
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
-"Criar um arquivo de trabalho Gerber que contenha informações sobre a placa,\n"
-"e a lista de arquivos de plotagem Gerber gerados"
+"Criar um ficheiro de trabalho Gerber que contenha informações sobre a placa,"
+"\n"
+"e a lista de ficheiros de plotagem Gerber gerados"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "Remove silkscreen from areas without soldermask"
@@ -26146,10 +26134,10 @@ msgid ""
 "If not checked, use X1 format.\n"
 "In X1 format, these attributes are included as comments in files."
 msgstr ""
-"Utiliza o formato de arquivo X2 Gerber.\n"
+"Utiliza o formato de ficheiro X2 Gerber.\n"
 "Inclue principalmente atributos X2 nos cabeçalhos Gerber.\n"
 "Se não estiver marcado, utiliza o formato X1.\n"
-"No formato X1, estes atributos são incluídos como comentários nos arquivos."
+"No formato X1, estes atributos são incluídos como comentários nos ficheiros."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:236
 msgid "Include netlist attributes"
@@ -26161,7 +26149,7 @@ msgid ""
 "In X1 format, they are comments.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"Inclui metadados netlist e atributos de abertura em arquivos Gerber.\n"
+"Inclui metadados netlist e atributos de abertura em ficheiros Gerber.\n"
 "No formato X1, eles serão comentários.\n"
 "Utilizado para verificar a conectividade em ferramentas CAM e visualizadores "
 "Gerber."
@@ -26261,7 +26249,7 @@ msgstr "Exportar unidades:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:362
 msgid "The units to use for the exported DXF file"
-msgstr "Unidades para usar para o arquivo DXF exportado"
+msgstr "Unidades para usar para o ficheiro DXF exportado"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:372
 #, fuzzy
@@ -26451,7 +26439,7 @@ msgstr "Modelo"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Mouse drag behavior:"
-msgstr "Comportamento ao arrastar o mouse:"
+msgstr "Comportamento ao arrastar o rato:"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
 msgid "Move item"
@@ -26486,7 +26474,7 @@ msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
-"Quando habilitado, o roteador tenta mover os traços em colisão para trás de "
+"Quando ativado, o roteador tenta mover os traços em colisão para trás de "
 "obstáculos sólidos (ex. ilhas) ao invés de \"refletir\" de volta a colisão"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
@@ -26526,7 +26514,7 @@ msgid ""
 "When enabled, the router attempts to merge several jagged segments into a "
 "single straight one (dragging mode)."
 msgstr ""
-"Quando ativado, o roteador tenta mesclar vários segmentos irregulares em um "
+"Quando ativado, o roteador tenta mesclar vários segmentos irregulares num "
 "único reto (modo arrastar)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:76
@@ -27087,7 +27075,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:51
 #, fuzzy
 msgid "Generate warnings for pads with no nets"
-msgstr "Gerar arquivos para fabricação"
+msgstr "Gerar ficheiros para fabricação"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:55
 msgid "Update PCB from Schematic"
@@ -27269,7 +27257,7 @@ msgstr "Alinhar em Ilhas:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:270
 #: pcbnew/dialogs/panel_edit_options_base.cpp:278
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr "Captura o cursor quando o mouse entrar em uma área de ilha"
+msgstr "Captura o cursor quando o rato entrar numa área de ilha"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:274
 #: pcbnew/dialogs/panel_edit_options_base.cpp:288
@@ -27283,7 +27271,7 @@ msgstr "Alinhar em trilhas:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
 #: pcbnew/dialogs/panel_edit_options_base.cpp:292
 msgid "Capture cursor when the mouse approaches a track"
-msgstr "Captura o cursor quando o mouse aproximar-se de uma trilha"
+msgstr "Captura o cursor quando o rato aproximar-se de uma trilha"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:296
 msgid "Snap to graphics:"
@@ -27293,7 +27281,7 @@ msgstr "Alinhar em gráficos:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:306
 msgid "Capture cursor when the mouse approaches graphical control points"
 msgstr ""
-"Captura o cursor quando o mouse aproximar-se de um ponto de controle gráfico"
+"Captura o cursor quando o rato aproximar-se de um ponto de controle gráfico"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:319
 msgid "Always show selected ratsnest"
@@ -27421,7 +27409,7 @@ msgstr "As seguintes bibliotecas não foram encontradas:"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:829
 #, fuzzy
 msgid "Failed to open directories to look for libraries"
-msgstr "Falha ao salvar alterações no arquivo de biblioteca de símbolos \"%s\""
+msgstr "Falha ao salvar alterações no ficheiro de biblioteca de símbolos \"%s\""
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:855
 #, fuzzy
@@ -27436,7 +27424,7 @@ msgstr "Adicionar Cota"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:138
 #, fuzzy
 msgid "Path Substitutions"
-msgstr "Substituições de Locais de Arquivos:"
+msgstr "Substituições de Locais de Ficheiros:"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
 msgid "Icon"
@@ -29449,16 +29437,16 @@ msgstr "Recarregar %d Zonas"
 
 #: pcbnew/exporters/export_d356.cpp:373
 msgid "Export D-356 Test File"
-msgstr "Exportar Arquivo de Teste D-356"
+msgstr "Exportar Ficheiro de Teste D-356"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:71
 msgid "Save Footprint Association File"
-msgstr "Salvar Arquivo de Associação de Footprint"
+msgstr "Salvar Ficheiro de Associação de Footprint"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:81
 #, c-format
 msgid "Could not create file \"%s\"."
-msgstr "Não foi possível criar o arquivo \"%s\"."
+msgstr "Não foi possível criar o ficheiro \"%s\"."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:188
 msgid ""
@@ -29466,7 +29454,7 @@ msgid ""
 "(Supported shapes are oval, rectangle, circle.)\n"
 "They have been exported as oval pads."
 msgstr ""
-"O arquivo contém formas de ilha não suportadas pelo exportador Hyperlynx\n"
+"O ficheiro contém formas de ilha não suportadas pelo exportador Hyperlynx\n"
 "(Formas suportadas são oval, retângulo e círculo)\n"
 "Estas foram exportadas como ilhas ovais."
 
@@ -29490,7 +29478,7 @@ msgstr ""
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:66
 msgid "Generate Position File"
-msgstr "Gerar Arquivo de Posicionamento"
+msgstr "Gerar Ficheiro de Posicionamento"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:270
 #: pcbnew/exporters/gen_footprints_placefile.cpp:384
@@ -29502,7 +29490,7 @@ msgstr "Não foi possível criar \"%s\"."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:393
 #, fuzzy, c-format
 msgid "Front (top side) placement file: \"%s\"."
-msgstr "Arquivo de posicionamento do lado frontal (superior): \"%s\"."
+msgstr "Ficheiro de posicionamento do lado frontal (superior): \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:279
 #: pcbnew/exporters/gen_footprints_placefile.cpp:301
@@ -29516,7 +29504,7 @@ msgstr "Contagem de componentes: %d."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:436
 #, fuzzy, c-format
 msgid "Back (bottom side) placement file: \"%s\"."
-msgstr "Arquivo de posicionamento do lado de trás (inferior): \"%s\"."
+msgstr "Ficheiro de posicionamento do lado de trás (inferior): \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:306
 #: pcbnew/exporters/gen_footprints_placefile.cpp:447
@@ -29529,7 +29517,7 @@ msgstr "Contador de componente completo: %d\n"
 #: pcbnew/exporters/gen_footprints_placefile.cpp:451
 #, fuzzy
 msgid "File generation successful."
-msgstr "O arquivo STEP foi criado com sucesso."
+msgstr "O ficheiro STEP foi criado com sucesso."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:334
 msgid "No footprint for automated placement."
@@ -29538,7 +29526,7 @@ msgstr "Nenhum footprint para posicionamento automático."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:391
 #, fuzzy, c-format
 msgid "Placement file: \"%s\"."
-msgstr "Arquivo de posicionamento: \"%s\"."
+msgstr "Ficheiro de posicionamento: \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:522
 #, c-format
@@ -29546,7 +29534,7 @@ msgid ""
 "Footprint report file created:\n"
 "\"%s\""
 msgstr ""
-"Arquivo de relatório de footprint criado:\n"
+"Ficheiro de relatório de footprint criado:\n"
 "\"%s\""
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:523
@@ -29558,17 +29546,17 @@ msgstr "Relatório de Footprint"
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:112
 #, c-format
 msgid "Create file %s\n"
-msgstr "Criar arquivo %s\n"
+msgstr "Criar ficheiro %s\n"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:150
 #, c-format
 msgid "Unable to create job file \"%s\""
-msgstr "Não foi possível criar o arquivo de trabalho \"%s\""
+msgstr "Não foi possível criar o ficheiro de trabalho \"%s\""
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:156
 #, c-format
 msgid "Create Gerber job file \"%s\""
-msgstr "Criar arquivo de trabalho Gerber \"%s\""
+msgstr "Criar ficheiro de trabalho Gerber \"%s\""
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:573
 msgid ""
@@ -29581,15 +29569,15 @@ msgstr ""
 #: pcbnew/files.cpp:138
 #, fuzzy
 msgid "All KiCad Board Files"
-msgstr "Importar Arquivo de Placa não KiCad"
+msgstr "Importar Ficheiro de Placa não KiCad"
 
 #: pcbnew/files.cpp:179
 msgid "Open Board File"
-msgstr "Abrir Arquivo de placa"
+msgstr "Abrir Ficheiro de placa"
 
 #: pcbnew/files.cpp:179
 msgid "Import Non KiCad Board File"
-msgstr "Importar Arquivo de Placa não KiCad"
+msgstr "Importar Ficheiro de Placa não KiCad"
 
 #: pcbnew/files.cpp:206
 #, fuzzy
@@ -29604,7 +29592,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:248
 msgid "Save Board File As"
-msgstr "Salvar Arquivo de Placa Como"
+msgstr "Salvar Ficheiro de Placa Como"
 
 #: pcbnew/files.cpp:276
 msgid "Printed circuit board"
@@ -29613,12 +29601,12 @@ msgstr "Imprimir Placa"
 #: pcbnew/files.cpp:340
 #, c-format
 msgid "Recovery file \"%s\" not found."
-msgstr "Arquivo de recuperação \"%s\" não encontrado."
+msgstr "Ficheiro de recuperação \"%s\" não encontrado."
 
 #: pcbnew/files.cpp:345
 #, fuzzy, c-format
 msgid "OK to load recovery file \"%s\""
-msgstr "OK para carregar a recuperação ou o arquivo de backup \"%s\""
+msgstr "OK para carregar a recuperação ou o ficheiro de backup \"%s\""
 
 #: pcbnew/files.cpp:368
 #, fuzzy, c-format
@@ -29659,7 +29647,7 @@ msgstr "Alerta de Isolamento de Borda"
 #: pcbnew/files.cpp:572
 #, c-format
 msgid "PCB file \"%s\" is already open."
-msgstr "O arquivo de PCI \"%s\" já está aberto."
+msgstr "O ficheiro de PCI \"%s\" já está aberto."
 
 #: pcbnew/files.cpp:579
 msgid "The current PCB has been modified.  Save changes?"
@@ -29693,13 +29681,13 @@ msgstr ""
 #: pcbnew/files.cpp:926
 #, c-format
 msgid "No access rights to write to file \"%s\""
-msgstr "Sem permissões de acesso para gravar no arquivo \"%s\""
+msgstr "Sem permissões de acesso para gravar no ficheiro \"%s\""
 
 #: pcbnew/files.cpp:949 pcbnew/files.cpp:1104
 #, fuzzy, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr ""
-"Erro ao salvar o arquivo de placa de circuito \"%s\".\n"
+"Erro ao salvar o ficheiro de placa de circuito \"%s\".\n"
 "%s"
 
 #: pcbnew/files.cpp:980 pcbnew/files.cpp:1082
@@ -29708,13 +29696,13 @@ msgid ""
 "Error saving board file '%s'.\n"
 "%s"
 msgstr ""
-"Erro ao salvar o arquivo de placa de circuito \"%s\".\n"
+"Erro ao salvar o ficheiro de placa de circuito \"%s\".\n"
 "%s"
 
 #: pcbnew/files.cpp:984
 #, fuzzy, c-format
 msgid "Failed to create temporary file '%s'."
-msgstr "Falhou ao criar arquivo de biblioteca de símbolos \"%s\""
+msgstr "Falhou ao criar ficheiro de biblioteca de símbolos \"%s\""
 
 #: pcbnew/files.cpp:997
 #, fuzzy, c-format
@@ -29722,18 +29710,18 @@ msgid ""
 "Error saving board file \"%s\".\n"
 "Failed to rename temporary file \"%s\""
 msgstr ""
-"Erro ao salvar o arquivo de placa de circuito \"%s\".\n"
+"Erro ao salvar o ficheiro de placa de circuito \"%s\".\n"
 "%s"
 
 #: pcbnew/files.cpp:1035
 #, fuzzy, c-format
 msgid "File '%s' saved."
-msgstr "Arquivo %s salvo"
+msgstr "Ficheiro %s salvo"
 
 #: pcbnew/files.cpp:1061
 #, fuzzy, c-format
 msgid "No access rights to write to file '%s'."
-msgstr "Sem permissões de acesso para gravar no arquivo \"%s\""
+msgstr "Sem permissões de acesso para gravar no ficheiro \"%s\""
 
 #: pcbnew/files.cpp:1108
 #, c-format
@@ -29860,7 +29848,7 @@ msgstr "sem camadas"
 #: pcbnew/footprint_edit_frame.cpp:241 pcbnew/pcb_edit_frame.cpp:279
 #, fuzzy
 msgid "Selection Filter"
-msgstr "Selecionar um Arquivo"
+msgstr "Selecionar um Ficheiro"
 
 #: pcbnew/footprint_edit_frame.cpp:289
 #, fuzzy
@@ -29887,12 +29875,12 @@ msgstr "Nenhum footprint selecionado."
 
 #: pcbnew/footprint_edit_frame.cpp:1123
 msgid "Footprint Image File Name"
-msgstr "Nome do Arquivo de Imagem de Footprint"
+msgstr "Nome do Ficheiro de Imagem de Footprint"
 
 #: pcbnew/footprint_editor_utils.cpp:208
 #, fuzzy
 msgid "Edit Zone"
-msgstr "Editar Arquivo"
+msgstr "Editar Ficheiro"
 
 #: pcbnew/footprint_editor_utils.cpp:281
 #, fuzzy, c-format
@@ -29937,10 +29925,10 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
-"Não é permitido escrever/modificar bibliotecas legadas (arquivos .mod)\n"
+"Não é permitido escrever/modificar bibliotecas legadas (ficheiros .mod)\n"
 "Por favor, salve a biblioteca atual no novo formato .pretty\n"
 "e atualize sua tabela de bibliotecas de footprint\n"
-"para salvar seu footprint (um arquivo .kicad_mod) na pasta da biblioteca ."
+"para salvar seu footprint (um ficheiro .kicad_mod) na pasta da biblioteca ."
 "pretty"
 
 #: pcbnew/footprint_libraries_utils.cpp:62
@@ -29950,7 +29938,7 @@ msgid ""
 "and update your footprint lib table\n"
 "before deleting a footprint"
 msgstr ""
-"Não é permitida a modificação de bibliotecas legadas (arquivos .mod)\n"
+"Não é permitida a modificação de bibliotecas legadas (ficheiros .mod)\n"
 "Por favor, salve a biblioteca atual no novo formato .pretty\n"
 "e atualize sua tabela de bibliotecas de footprint\n"
 "antes de excluir um footprint"
@@ -29961,7 +29949,7 @@ msgstr "Importar Footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:259
 msgid "Not a footprint file"
-msgstr "Não é um arquivo de footprint"
+msgstr "Não é um ficheiro de footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:271
 #, fuzzy, c-format
@@ -29976,12 +29964,12 @@ msgstr "Exportar Footprint"
 #: pcbnew/footprint_libraries_utils.cpp:357
 #, c-format
 msgid "Unable to create or write file \"%s\""
-msgstr "Não é possível criar ou gravar arquivo \"%s\""
+msgstr "Não é possível criar ou gravar ficheiro \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:371
 #, c-format
 msgid "Footprint exported to file \"%s\""
-msgstr "Footprint exportado para o arquivo \"%s\""
+msgstr "Footprint exportado para o ficheiro \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:445
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2446
@@ -30229,11 +30217,11 @@ msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:250
 msgid "Open File"
-msgstr "Abrir Arquivo"
+msgstr "Abrir Ficheiro"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:275
 msgid "No file selected!"
-msgstr "Nenhum arquivo selecionado!"
+msgstr "Nenhum ficheiro selecionado!"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:286
 msgid "Please select a valid layer."
@@ -30242,11 +30230,11 @@ msgstr "Por favor, selecione uma camada válida."
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:335
 #, fuzzy
 msgid "Items in the imported file could not be handled properly."
-msgstr "Alguns dos arquivos do projeto não puderam ser salvos no backup."
+msgstr "Alguns dos ficheiros do projeto não puderam ser salvos no backup."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:343
 msgid "There is no plugin to handle this file type."
-msgstr "Não há um plugin para tratar este tipo de arquivo."
+msgstr "Não há um plugin para tratar este tipo de ficheiro."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:26
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:31
@@ -30313,7 +30301,7 @@ msgstr "Padrões"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.h:87
 msgid "Import Vector Graphics File"
-msgstr "Importar Arquivo de Gráficos Vetoriais"
+msgstr "Importar Ficheiro de Gráficos Vetoriais"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1337
 msgid "Invalid spline definition encountered"
@@ -30380,7 +30368,7 @@ msgstr "Exportar Visualização como &PNG…"
 
 #: pcbnew/menubar_footprint_editor.cpp:82
 msgid "Create a PNG file from the current view"
-msgstr "Criar um arquivo PNG a partir da vista atual"
+msgstr "Criar um ficheiro PNG a partir da vista atual"
 
 #: pcbnew/menubar_footprint_editor.cpp:153 pcbnew/menubar_pcb_editor.cpp:258
 msgid "&Drawing Mode"
@@ -30414,7 +30402,7 @@ msgstr "Rec&uperar"
 #, fuzzy
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
-"Limpar placa e resgatar o último arquivo de recuperação automaticamente "
+"Limpar placa e resgatar o último ficheiro de recuperação automaticamente "
 "salvo pelo Pcbnew"
 
 #: pcbnew/menubar_pcb_editor.cpp:110
@@ -30424,11 +30412,11 @@ msgstr "Specctra Session..."
 #: pcbnew/menubar_pcb_editor.cpp:115
 #, fuzzy
 msgid "Non-KiCad Board File..."
-msgstr "Importar Arquivo de Placa não KiCad..."
+msgstr "Importar Ficheiro de Placa não KiCad..."
 
 #: pcbnew/menubar_pcb_editor.cpp:116
 msgid "Import board file from other applications"
-msgstr "Importar arquivo de placa de outros aplicativos"
+msgstr "Importar ficheiro de placa de outras aplicações"
 
 #: pcbnew/menubar_pcb_editor.cpp:128
 msgid "Specctra DSN..."
@@ -30476,12 +30464,12 @@ msgstr "Exporta uma representação da placa em SVG"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "Footprint Association (.cmp) File..."
-msgstr "Arquivo de Associação de Footprint (.cmp)…"
+msgstr "Ficheiro de Associação de Footprint (.cmp)…"
 
 #: pcbnew/menubar_pcb_editor.cpp:140
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr ""
-"Exportar arquivo de associação de footprint (*.cmp) para a anotação reversa "
+"Exportar ficheiro de associação de footprint (*.cmp) para a anotação reversa "
 "do esquema"
 
 #: pcbnew/menubar_pcb_editor.cpp:142
@@ -30610,7 +30598,7 @@ msgstr "Forma complexa"
 
 #: pcbnew/microwave/microwave_polygon.cpp:129
 msgid "Read Shape Description File..."
-msgstr "Ler Arquivo de Descrição de Forma..."
+msgstr "Ler Ficheiro de Descrição de Forma..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:132
 msgid "Symmetrical"
@@ -30622,11 +30610,11 @@ msgstr "Opção de Forma"
 
 #: pcbnew/microwave/microwave_polygon.cpp:168
 msgid "Read descr shape file"
-msgstr "Ler arquivo de descrição de forma"
+msgstr "Ler ficheiro de descrição de forma"
 
 #: pcbnew/microwave/microwave_polygon.cpp:183
 msgid "File not found"
-msgstr "Arquivo não encontrado"
+msgstr "Ficheiro não encontrado"
 
 #: pcbnew/microwave/microwave_polygon.cpp:272
 #, fuzzy
@@ -30910,7 +30898,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de footprint inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -30958,7 +30946,7 @@ msgstr ""
 #: pcbnew/netlist_reader/netlist.cpp:66
 #, c-format
 msgid "Cannot open netlist file \"%s\"."
-msgstr "Não foi possível abrir o arquivo netlist \"%s\"."
+msgstr "Não foi possível abrir o ficheiro netlist \"%s\"."
 
 #: pcbnew/netlist_reader/netlist.cpp:67
 msgid "Netlist Load Error."
@@ -31012,7 +31000,7 @@ msgid ""
 "line: %d"
 msgstr ""
 "ID de footprint inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d"
 
 #: pcbnew/pad.cpp:689
@@ -31229,12 +31217,12 @@ msgstr "Exportar o netlist requer um esquema completamente anotado."
 #: pcbnew/pcb_edit_frame.cpp:338
 #, fuzzy
 msgid "New PCB file is unsaved"
-msgstr "Arquivo %s salvo"
+msgstr "Ficheiro %s salvo"
 
 #: pcbnew/pcb_edit_frame.cpp:867
 #, c-format
 msgid "The auto save file \"%s\" could not be removed!"
-msgstr "O arquivo de salvamento automático \"%s\" não pôde ser removido!"
+msgstr "O ficheiro de salvamento automático \"%s\" não pôde ser removido!"
 
 #: pcbnew/pcb_edit_frame.cpp:1095
 #, fuzzy
@@ -31268,7 +31256,7 @@ msgstr "Netlist Eeschema"
 #: pcbnew/pcb_edit_frame.cpp:1465
 #, c-format
 msgid "Schematic file \"%s\" not found."
-msgstr "Arquivo de esquema \"%s\" não encontrado."
+msgstr "Ficheiro de esquema \"%s\" não encontrado."
 
 #: pcbnew/pcb_edit_frame.cpp:1496
 msgid "Eeschema failed to load:\n"
@@ -31282,7 +31270,7 @@ msgstr "Regras de Desenho"
 #: pcbnew/pcb_edit_frame.cpp:1696
 #, fuzzy
 msgid "Could not compile custom design rules."
-msgstr "Não foi possível abrir o arquivo de configuração"
+msgstr "Não foi possível abrir o ficheiro de configuração"
 
 #: pcbnew/pcb_edit_frame.cpp:1732
 msgid "Export Hyperlynx Layout"
@@ -31439,7 +31427,7 @@ msgstr "Insira o módulo python que implemente as funções PLUGIN::Footprint*()
 #: pcbnew/plugins/altium/altium_pcb.cpp:429
 #, fuzzy, c-format
 msgid "File not found: '%s'"
-msgstr "Arquivo não encontrado:"
+msgstr "Ficheiro não encontrado:"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:775
 #, fuzzy, c-format
@@ -31922,7 +31910,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:76
 #, fuzzy
 msgid "Could not read file "
-msgstr "Não foi possível criar o arquivo \"%s\"."
+msgstr "Não foi possível criar o ficheiro \"%s\". "
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:232
 #, c-format
@@ -31941,7 +31929,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:294
 #, fuzzy, c-format
 msgid "Could not find column label %s"
-msgstr "Não foi possível localizar o arquivo de biblioteca %s"
+msgstr "Não foi possível localizar o ficheiro de biblioteca %s"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:338
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:419
@@ -32041,7 +32029,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2289
 #, fuzzy, c-format
 msgid "Could not find custom pad named %s"
-msgstr "Não foi possível localizar o arquivo de biblioteca %s"
+msgstr "Não foi possível localizar o ficheiro de biblioteca %s"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2483
 #, c-format
@@ -32051,7 +32039,7 @@ msgstr ""
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:89
 #, c-format
 msgid "Cannot convert \"%s\" to an integer"
-msgstr "Não foi possível converter \"%s\" em um número inteiro"
+msgstr "Não foi possível converter \"%s\" num número inteiro"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:227
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:875
@@ -32063,7 +32051,7 @@ msgstr "caminho da biblioteca de footprint \"%s\" não existe"
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:294
 #, c-format
 msgid "library \"%s\" has no footprint \"%s\" to delete"
-msgstr "a biblioteca \"%s\" não tem nenhum footprint \"%s\" para excluir"
+msgstr "a biblioteca \"%s\" não tem nenhum footprint \"%s\" para apagar"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:345
 #, c-format
@@ -32084,7 +32072,7 @@ msgstr "Biblioteca \"%s\" somente para leitura"
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:980
 #, c-format
 msgid "user does not have permission to delete directory \"%s\""
-msgstr "o utilizador não tem permissão para excluir o diretório \"%s\""
+msgstr "o utilizador não tem permissão para apagar o diretório \"%s\""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
 #, c-format
@@ -32094,7 +32082,7 @@ msgstr "diretório da biblioteca \"%s\" tem subdiretórios inesperados"
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1007
 #, c-format
 msgid "unexpected file \"%s\" was found in library path \"%s\""
-msgstr "arquivo inesperado \"%s\" foi encontrado no local da biblioteca \"%s\""
+msgstr "ficheiro inesperado \"%s\" foi encontrado no local da biblioteca \"%s\""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1025
 #, c-format
@@ -32115,7 +32103,7 @@ msgstr "O diretório da biblioteca de footprint \"%s\" é somente para leitura"
 #, c-format
 msgid "Cannot rename temporary file \"%s\" to footprint library file \"%s\""
 msgstr ""
-"Não foi possível renomear o arquivo temporário \"%s\" para o arquivo de "
+"Não foi possível renomear o ficheiro temporário \"%s\" para o ficheiro de "
 "biblioteca de footprint \"%s\""
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:237
@@ -32158,7 +32146,7 @@ msgstr "tipo de suavização de canto de zona desconhecido %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2195
 msgid "this file does not contain a PCB"
-msgstr "este arquivo não contém uma PCI"
+msgstr "este ficheiro não contém uma PCI"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2346
 #, c-format
@@ -32176,12 +32164,12 @@ msgstr "Biblioteca Não Encontrada"
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2389
 #, c-format
 msgid "Footprint file name \"%s\" is not valid."
-msgstr "O nome do arquivo de footprint \"%s\" não é válido."
+msgstr "O nome do ficheiro de footprint \"%s\" não é válido."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2395
 #, c-format
 msgid "No write permissions to delete file \"%s\""
-msgstr "Sem permissões de gravação para excluir o arquivo \"%s\""
+msgstr "Sem permissões de gravação para apagar o ficheiro \"%s\""
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2465
 #, fuzzy, c-format
@@ -32201,7 +32189,7 @@ msgstr "diretório da biblioteca \"%s\" tem subdiretórios inesperados"
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2517
 #, fuzzy, c-format
 msgid "Unexpected file \"%s\" was found in library path \"%s\"."
-msgstr "arquivo inesperado \"%s\" foi encontrado no local da biblioteca \"%s\""
+msgstr "ficheiro inesperado \"%s\" foi encontrado no local da biblioteca \"%s\""
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2533
 #, fuzzy, c-format
@@ -32236,7 +32224,7 @@ msgstr "Camadas indefinidas:"
 #, c-format
 msgid "Layer \"%s\" in file \"%s\" at line %d, is not in fixed layer hash"
 msgstr ""
-"A camada \"%s\" no arquivo \"%s\" na linha %d, não está no hash de camada "
+"A camada \"%s\" no ficheiro \"%s\" na linha %d, não está no hash de camada "
 "fixado"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1508
@@ -32248,7 +32236,7 @@ msgstr "%d não é uma contagem de camada válida"
 #, c-format
 msgid "Duplicate NETCLASS name \"%s\" in file \"%s\" at line %d, offset %d"
 msgstr ""
-"Nome de Classe de Rede duplicado \"%s\" no arquivo \"%s\" na linha %d, "
+"Nome de Classe de Rede duplicado \"%s\" no ficheiro \"%s\" na linha %d, "
 "posição %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3241
@@ -32266,7 +32254,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -32279,7 +32267,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -32294,7 +32282,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de rede inválido em\n"
-"arquivo: \"%s\"\n"
+"ficheiro: \"%s\"\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -32367,7 +32355,7 @@ msgid ""
 "invalid float number in file: \"%s\"\n"
 "line: %d, offset: %d"
 msgstr ""
-"número de ponto flutuante inválido no arquivo: \"%s\"\n"
+"número de ponto flutuante inválido no ficheiro: \"%s\"\n"
 "linha: %d, posição: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2933
@@ -32377,18 +32365,18 @@ msgid ""
 "missing float number in file: \"%s\"\n"
 "line: %d, offset: %d"
 msgstr ""
-"número de ponto flutuante faltando no arquivo: \"%s\"\n"
+"número de ponto flutuante faltando no ficheiro: \"%s\"\n"
 "linha: %d, posição: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3111
 #, c-format
 msgid "File '%s' is empty."
-msgstr "O arquivo '%s' está vazio."
+msgstr "O ficheiro '%s' está vazio."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3114
 #, c-format
 msgid "File '%s' is not a legacy library."
-msgstr "O arquivo '%s' não é uma biblioteca legada."
+msgstr "O ficheiro '%s' não é uma biblioteca legada."
 
 #: pcbnew/plugins/pcad/pcb.cpp:49 pcbnew/plugins/pcad/pcb.cpp:59
 #: pcbnew/plugins/pcad/pcb.cpp:69
@@ -32431,7 +32419,7 @@ msgstr "Aumentar Espaçamento"
 
 #: pcbnew/router/length_tuner_tool.cpp:63
 msgid "Increase meander spacing by one step."
-msgstr "Aumentar o espaçamento da sinuosidade em um passo."
+msgstr "Aumentar o espaçamento da sinuosidade por um passo."
 
 #: pcbnew/router/length_tuner_tool.cpp:69
 msgid "Decrease Spacing"
@@ -32439,7 +32427,7 @@ msgstr "Diminuir Espaçamento"
 
 #: pcbnew/router/length_tuner_tool.cpp:69
 msgid "Decrease meander spacing by one step."
-msgstr "Diminuir o espaçamento da sinuosidade em um passo."
+msgstr "Diminuir o espaçamento da sinuosidade por um passo."
 
 #: pcbnew/router/length_tuner_tool.cpp:75
 msgid "Increase Amplitude"
@@ -32447,7 +32435,7 @@ msgstr "Aumentar Amplitude"
 
 #: pcbnew/router/length_tuner_tool.cpp:75
 msgid "Increase meander amplitude by one step."
-msgstr "Aumentar a amplitude da sinuosidade em um passo."
+msgstr "Aumentar a amplitude da sinuosidade por um passo."
 
 #: pcbnew/router/length_tuner_tool.cpp:81
 msgid "Decrease Amplitude"
@@ -32455,7 +32443,7 @@ msgstr "Diminuir Amplitude"
 
 #: pcbnew/router/length_tuner_tool.cpp:81
 msgid "Decrease meander amplitude by one step."
-msgstr "Diminuir a amplitude da sinuosidade em um passo."
+msgstr "Diminuir a amplitude da sinuosidade por um passo."
 
 #: pcbnew/router/length_tuner_tool.cpp:103
 msgid "Length Tuner"
@@ -32892,13 +32880,13 @@ msgstr ""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:92
 msgid "Session file imported and merged OK."
-msgstr "Arquivo Session importado e agregado OK."
+msgstr "Ficheiro Session importado e agregado OK."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:167
 #: pcbnew/specctra_import_export/specctra_import.cpp:278
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
-msgstr "Arquivo Session usa identificador de camada inválido:  \"%s\""
+msgstr "Ficheiro Session usa identificador de camada inválido:  \"%s\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:218
 msgid "Session via padstack has no shapes"
@@ -32913,20 +32901,20 @@ msgstr "Forma de via não suportada: %s"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:324
 msgid "Session file is missing the \"session\" section"
-msgstr "Está faltando a seção \"session\" no arquivo de seção"
+msgstr "Está faltando a seção \"session\" no ficheiro de seção"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:327
 msgid "Session file is missing the \"routes\" section"
-msgstr "Está faltando a seção \"routes\" no arquivo de seção"
+msgstr "Está faltando a seção \"routes\" no ficheiro de seção"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:330
 msgid "Session file is missing the \"library_out\" section"
-msgstr "Está faltando a seção \"library_out\" no arquivo de seção"
+msgstr "Está faltando a seção \"library_out\" no ficheiro de seção"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:357
 #, fuzzy, c-format
 msgid "Reference '%s' not found."
-msgstr "Arquivo de recuperação \"%s\" não encontrado."
+msgstr "Ficheiro de recuperação \"%s\" não encontrado."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:499
 #, c-format
@@ -33039,7 +33027,7 @@ msgstr "Anexar aquivo Specctra Session:"
 
 #: pcbnew/tools/board_editor_control.cpp:397
 msgid "Specctra DSN File"
-msgstr "Arquivo Specctra DSN"
+msgstr "Ficheiro Specctra DSN"
 
 #: pcbnew/tools/board_editor_control.cpp:421
 #, fuzzy
@@ -33049,7 +33037,7 @@ msgstr "Exportar Netlist"
 #: pcbnew/tools/board_editor_control.cpp:422
 #, fuzzy
 msgid "KiCad board netlist files"
-msgstr "Arquivos netlist do KiCad"
+msgstr "Ficheiros netlist do KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:436
 #, fuzzy, c-format
@@ -33425,7 +33413,7 @@ msgstr "Imprimir bordas da placa"
 #: pcbnew/tools/drawing_tool.cpp:73
 #, fuzzy
 msgid "Select Via Size"
-msgstr "Selecionar um arquivo"
+msgstr "Selecionar um ficheiro"
 
 #: pcbnew/tools/drawing_tool.cpp:271 pcbnew/tools/drawing_tool.cpp:1558
 msgid "Draw a line segment"
@@ -33459,7 +33447,7 @@ msgstr "Desenhar uma cota"
 
 #: pcbnew/tools/drawing_tool.cpp:1103
 msgid "No graphic items found in file to import"
-msgstr "Nenhum item gráfico encontrado no arquivo de importação"
+msgstr "Nenhum item gráfico encontrado no ficheiro de importação"
 
 #: pcbnew/tools/drawing_tool.cpp:1153 pcbnew/tools/drawing_tool.cpp:1224
 msgid "Place a DXF_SVG drawing"
@@ -33524,7 +33512,7 @@ msgstr "Editar largura da trilha / tamanho da via"
 #: pcbnew/tools/edit_tool.cpp:1159
 #, fuzzy
 msgid "At least two straight track segments must be selected."
-msgstr "Alguns dos arquivos do projeto não puderam ser salvos no backup."
+msgstr "Alguns dos ficheiros do projeto não puderam ser salvos no backup."
 
 #: pcbnew/tools/edit_tool.cpp:1163
 #, fuzzy
@@ -33551,7 +33539,7 @@ msgstr "Impossível arrastar este segmento: muitos segmentos conectados"
 #: pcbnew/tools/edit_tool.cpp:1335
 #, fuzzy
 msgid "Some of the track segments could not be filleted."
-msgstr "Alguns dos arquivos do projeto não puderam ser salvos no backup."
+msgstr "Alguns dos ficheiros do projeto não puderam ser salvos no backup."
 
 #: pcbnew/tools/edit_tool.cpp:1735 pcbnew/tools/pcb_actions.cpp:302
 #, fuzzy
@@ -33839,7 +33827,7 @@ msgstr "&Importar Gráficos..."
 
 #: pcbnew/tools/pcb_actions.cpp:186
 msgid "Import 2D drawing file"
-msgstr "Importar arquivo de desenho 2D"
+msgstr "Importar ficheiro de desenho 2D"
 
 #: pcbnew/tools/pcb_actions.cpp:192
 msgid "Place the Footprint Anchor"
@@ -33880,7 +33868,7 @@ msgstr "Apagar Último Ponto"
 
 #: pcbnew/tools/pcb_actions.cpp:213
 msgid "Delete the last point added to the current item"
-msgstr "Excluir o último ponto adicionado ao item atual"
+msgstr "Apagar o último ponto adicionado ao item atual"
 
 #: pcbnew/tools/pcb_actions.cpp:218
 #, fuzzy
@@ -34004,7 +33992,7 @@ msgstr "Apagar Trilha Inteira"
 
 #: pcbnew/tools/pcb_actions.cpp:321
 msgid "Deletes selected item(s) and copper connections"
-msgstr "Exclui o(s) item(s) selecionado(s) e conexões de cobre"
+msgstr "Apaga o(s) item(s) selecionado(s) e conexões de cobre"
 
 #: pcbnew/tools/pcb_actions.cpp:335
 msgid "Show Footprint Tree"
@@ -34041,7 +34029,7 @@ msgstr "Mostrar footprint selecionado na tela do editor"
 
 #: pcbnew/tools/pcb_actions.cpp:361
 msgid "Delete Footprint from Library"
-msgstr "Excluir Footprint da Biblioteca"
+msgstr "Apagar Footprint da Biblioteca"
 
 #: pcbnew/tools/pcb_actions.cpp:366
 msgid "Cut Footprint"
@@ -34062,7 +34050,7 @@ msgstr "Importar Footprint..."
 #: pcbnew/tools/pcb_actions.cpp:381
 #, fuzzy
 msgid "Import footprint from file"
-msgstr "Importar Footprint de um arquivo &KiCad..."
+msgstr "Importar Footprint de um ficheiro &KiCad..."
 
 #: pcbnew/tools/pcb_actions.cpp:386
 msgid "Export Footprint..."
@@ -34311,7 +34299,7 @@ msgstr "Specctra Session..."
 
 #: pcbnew/tools/pcb_actions.cpp:557
 msgid "Import routed Specctra session (*.ses) file"
-msgstr "Importar arquivo de seção Specctra roteado (*.ses)"
+msgstr "Importar ficheiro de seção Specctra roteado (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:562
 #, fuzzy
@@ -34332,11 +34320,11 @@ msgstr "Gerar Gerbers para fabricação"
 
 #: pcbnew/tools/pcb_actions.cpp:572
 msgid "Drill Files (.drl)..."
-msgstr "Arquivos de Furação (.drl)..."
+msgstr "Ficheiros de Furação (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:572
 msgid "Generate Excellon drill file(s)"
-msgstr "Gerar arquivo(s) de perfuração Excellon"
+msgstr "Gerar ficheiro(s) de perfuração Excellon"
 
 #: pcbnew/tools/pcb_actions.cpp:577
 #, fuzzy
@@ -34347,7 +34335,8 @@ msgstr "Parâmetros do Componente:"
 #, fuzzy
 msgid "Generate component placement file(s) for pick and place"
 msgstr ""
-"Gerar arquivo de posicionamento de footprint para equipamentos pick and place"
+"Gerar ficheiro de posicionamento de footprint para equipamentos pick and "
+"place"
 
 #: pcbnew/tools/pcb_actions.cpp:583
 msgid "Footprint Report (.rpt)..."
@@ -34359,11 +34348,11 @@ msgstr "Criar relatório de todos os footprints da placa atual"
 
 #: pcbnew/tools/pcb_actions.cpp:589
 msgid "IPC-D-356 Netlist File..."
-msgstr "Arquivo de Netlist IPC-D-356…"
+msgstr "Ficheiro de Netlist IPC-D-356…"
 
 #: pcbnew/tools/pcb_actions.cpp:589
 msgid "Generate IPC-D-356 netlist file"
-msgstr "Gerar arquivo netlist IPC-D-356"
+msgstr "Gerar ficheiro netlist IPC-D-356"
 
 #: pcbnew/tools/pcb_actions.cpp:594
 msgid "BOM..."
@@ -34446,7 +34435,7 @@ msgstr "Origem do Furo"
 #: pcbnew/tools/pcb_actions.cpp:646
 #, fuzzy
 msgid "Place origin point for drill files and component placement files"
-msgstr "Definir ponto de origem para arquivos de furação e posicionamento"
+msgstr "Definir ponto de origem para ficheiros de furação e posicionamento"
 
 #: pcbnew/tools/pcb_actions.cpp:652
 msgid "Toggle Lock"
@@ -34495,7 +34484,7 @@ msgstr ""
 #: pcbnew/tools/pcb_actions.cpp:682
 #, fuzzy
 msgid "Enter the group to edit items"
-msgstr "Insira o nome do arquivo de relatório"
+msgstr "Insira o nome do ficheiro de relatório"
 
 #: pcbnew/tools/pcb_actions.cpp:687
 msgid "Leave Group"
@@ -35963,7 +35952,7 @@ msgstr "Mostrar Inspetor de Design"
 #: pcbnew/widgets/appearance_controls_base.cpp:128
 #, fuzzy
 msgid "Configure net classes"
-msgstr "Locais dos Arquivos"
+msgstr "Locais dos Ficheiros"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:169
 #, fuzzy
@@ -35992,7 +35981,7 @@ msgstr ""
 #: pcbnew/widgets/panel_selection_filter_base.cpp:21
 #, fuzzy
 msgid "All items"
-msgstr "Todos os arquivos"
+msgstr "Todos os ficheiros"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
 #, fuzzy
@@ -36188,7 +36177,7 @@ msgstr "Alternar para Editor de Esquemas"
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 #, fuzzy
 msgid "Schematic Capture Tool"
-msgstr "Arquivos de esquema"
+msgstr "Ficheiros de esquema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
@@ -36202,12 +36191,12 @@ msgstr "Eeschema"
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 #, fuzzy
 msgid "Gerber File Viewer"
-msgstr "Arquivos Gerber"
+msgstr "Ficheiros Gerber"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 #, fuzzy
 msgid "View Gerber files"
-msgstr "Visualizar Arquivos Gerber"
+msgstr "Visualizar Ficheiros Gerber"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 #, fuzzy
@@ -36288,17 +36277,17 @@ msgstr "Desenvolvedores"
 #: resources/linux/mime/kicad-gerbers.xml.in:5
 #, fuzzy
 msgid "Gerber file"
-msgstr "Arquivos Gerber"
+msgstr "Ficheiros Gerber"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
 #, fuzzy
 msgid "Excellon drill file"
-msgstr "Gerar arquivo(s) de perfuração Excellon"
+msgstr "Gerar ficheiro(s) de perfuração Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 #, fuzzy
 msgid "KiCad Project"
-msgstr "Arquivo de projeto KiCad"
+msgstr "Ficheiro de projeto KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:11
 #, fuzzy
@@ -36308,7 +36297,7 @@ msgstr "Editar Esquema Eletrônico"
 #: resources/linux/mime/kicad-kicad.xml.in:23
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
-msgstr "Arquivos de placa de circuito impresso do KiCad"
+msgstr "Ficheiros de placa de circuito impresso do KiCad"
 
 #, fuzzy
 #~ msgid "Eeschema Schematic Editor"
