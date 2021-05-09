@@ -28,6 +28,9 @@
 
 void KIPLATFORM::ENV::Init()
 {
+    // Disable the automatic window tabbing OSX does
+    [NSWindow setAllowsAutomaticWindowTabbing:NO];
+
     // No tasks for this platform
 }
 
