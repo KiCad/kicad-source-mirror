@@ -49,6 +49,7 @@ Kevin Cozens <kevin[at]ve3syb-dot-ca>
 Ian McInerney <ian.s.mcinerney[at]ieee-dot-org>
 Thomas Pointhuber <thomas.pointhuber[at]gmx-dot-at>
 Roberto Fernandez Bautista <roberto.fer.bau[at]gmail-dot-com>
+Mikołaj Wielgus <wielgusmikolaj[at]gmail-dot-com>
 
 See git repo on GitLab for contributors at
 https://gitlab.com/kicad/code/kicad/-/graphs/master
