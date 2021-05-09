@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-04-04 17:59+0000\n"
+"PO-Revision-Date: 2021-05-09 22:09+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
@@ -185,9 +185,9 @@ msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 msgstr "Din OpenGL-versjon støttes ikke. Minimum kreves er 1,5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:534
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Gjengivelsestid %.3f s"
+msgstr "Siste opptegningstid %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:724
 #, c-format
@@ -7348,15 +7348,15 @@ msgid "Item not annotated: %s%s\n"
 msgstr "Varen er ikke kommentert: %s %s\n"
 
 #: eeschema/component_references_lister.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
-msgstr "Feil: symbol %s %s enhet %d og symbol har bare %d enheter definert\n"
+msgstr "Feil: symbol %s%s%s (enhet %d) overstiger definerte enheter (%d)\n"
 
 #: eeschema/component_references_lister.cpp:587
 #: eeschema/component_references_lister.cpp:617
 #, fuzzy, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "Flere gjenstander %s %s\n"
+msgstr "Dupliserte elementer %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:594
 #: eeschema/component_references_lister.cpp:624
@@ -7500,9 +7500,9 @@ msgid "(file missing)"
 msgstr "Det mangler.\n"
 
 #: eeschema/dialogs/dialog_bom.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Skjemaet for dette brettet kan ikke bli funnet."
+msgstr "Fant ikke det valgte BOM-generatorskriptet %s."
 
 #: eeschema/dialogs/dialog_bom.cpp:297
 #, c-format
@@ -15308,9 +15308,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from schematic]"
-msgstr "%s fra skjematisk"
+msgstr "%s%s [fra koblingsskjema]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:153
 msgid "[Read Only Library]"
@@ -17792,9 +17792,9 @@ msgid "Highlight Aperture Type \"%s\""
 msgstr "Fremhev blenderåpningstype \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight DCode D%d"
-msgstr "Høydepunkt %s"
+msgstr "Framhev DCode D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:81
 #: gerbview/widgets/layer_widget.cpp:533
@@ -18099,9 +18099,9 @@ msgid "Load File to Edit"
 msgstr "Last inn fil for å redigere"
 
 #: kicad/kicad_manager_frame.cpp:660
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr "Prosjekt"
+msgstr "Prosjekt: %s"
 
 #: kicad/kicad_manager_frame.cpp:695
 msgid "Restoring session"
@@ -20794,9 +20794,9 @@ msgstr "Dielektriske lag"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:433
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1171
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1386
-#, fuzzy, c-format
+#, c-format
 msgid "Custom (%s)"
-msgstr "Egendefinert"
+msgstr "Egendefinert (%s)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:633
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:155
@@ -29360,15 +29360,13 @@ msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB \"%s\" eksisterer ikke. Ønsker du å lage den?"
 
 #: pcbnew/files.cpp:807
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred when saving footprint '%s' to the project specific footprint "
 "library: %s"
 msgstr ""
-"Det oppsto en feil under lagring av prosjektspesifikk tabell for "
-"biblioteksavtrykk:\n"
-"\n"
-"%s"
+"Det oppsto en feil under lagring av fotavtrykket «%s» i prosjektspesifikt "
+"fotavtrykksbibliotek: %s"
 
 #: pcbnew/files.cpp:837
 #, fuzzy, c-format
@@ -29385,11 +29383,9 @@ msgid "No access rights to write to file \"%s\""
 msgstr "Ingen tilgangsrettigheter til å skrive til filen \"%s\""
 
 #: pcbnew/files.cpp:949 pcbnew/files.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr ""
-"Feil ved lagring av tavlefilen \"%s\".\n"
-"%s"
+msgstr "Klarte ikke å lagre egendefinert regelfil «%s»."
 
 #: pcbnew/files.cpp:980 pcbnew/files.cpp:1082
 #, fuzzy, c-format
@@ -29552,7 +29548,7 @@ msgstr "Redigering %s fra tavle. Lagring oppdaterer bare tavlen."
 #: pcbnew/footprint_edit_frame.cpp:756
 #, fuzzy, c-format
 msgid "%s%s [from %s.%s]"
-msgstr "%s [fra %s. %s]"
+msgstr "%s%s [fra %s. %s]"
 
 #: pcbnew/footprint_edit_frame.cpp:841
 msgid "Updating Footprint Libraries"
@@ -30457,9 +30453,9 @@ msgid "Via connected to unknown net (%s)."
 msgstr "Via koblet til ukjent nett (%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "Koble kobbersonen fra %s til %s på nytt."
+msgstr "Koble kobbersonen «%s» fra %s til %s igjen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:707
 #, c-format
@@ -30467,9 +30463,9 @@ msgid "Reconnect copper zone from %s to %s."
 msgstr "Koble kobbersonen fra %s til %s på nytt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:728
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "Koble kobbersonen fra %s til %s på nytt."
+msgstr "Koblet kobbersonen «%s» fra %s til %s igjen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:735
 #, fuzzy, c-format
@@ -30484,7 +30480,7 @@ msgstr "Kobbersone (%s) har ingen puter tilkoblet."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:756
 #, fuzzy, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "Kobbersone (%s) har ingen puter tilkoblet."
+msgstr "Kobbersone på lag %s ved (%s,%s) har ingen tilknyttede puter."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:824
 #, c-format
@@ -30894,9 +30890,8 @@ msgid "Edit design rules"
 msgstr "Designregler"
 
 #: pcbnew/pcb_edit_frame.cpp:1696
-#, fuzzy
 msgid "Could not compile custom design rules."
-msgstr "DRC ufullstendig: kunne ikke kompilere designregler.  "
+msgstr "Kunne ikke kompilere egendefinerte designregler."
 
 #: pcbnew/pcb_edit_frame.cpp:1732
 msgid "Export Hyperlynx Layout"
@@ -31696,7 +31691,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:535
 #, fuzzy, c-format
 msgid "Invalid pad size on line %zu"
-msgstr "Ugyldig størrelse %ll d: for stor"
+msgstr "Ugyldig putestørrelse på linje %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:570
 #, c-format
@@ -31706,7 +31701,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:613
 #, fuzzy, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' at line %zu"
-msgstr "Ukjent arktype \"%s\" på linje: %d"
+msgstr "Ukjent puteformsnavn «%s» på lag «%s» på linje %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:927
 #, c-format
