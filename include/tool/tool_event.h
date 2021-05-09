@@ -354,6 +354,11 @@ public:
         return m_modifiers & aMask;
     }
 
+    bool DisableGridSnapping() const
+    {
+        return Modifier( MD_CTRL );
+    }
+
     int KeyCode() const
     {
         return m_keyCode;

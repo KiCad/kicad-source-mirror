@@ -264,7 +264,7 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
     GAL*     gal = m_toolMgr->GetView()->GetGAL();
 
     controls()->ForceCursorPosition( false );
-    m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.Modifier( MD_ALT )  );
+    m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
     if( aEvent.IsMotion() || aEvent.IsClick() )
@@ -289,7 +289,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
     int  layer;
     GAL* gal = m_toolMgr->GetView()->GetGAL();
 
-    m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.Modifier( MD_ALT )  );
+    m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
     controls()->ForceCursorPosition( false );

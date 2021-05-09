@@ -254,7 +254,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     line->SetFlags( IS_NEW );
 
     if( aEvent.HasPosition() )
-        startingPoint = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+        startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
@@ -301,7 +301,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     rect->SetFlags(IS_NEW );
 
     if( aEvent.HasPosition() )
-        startingPoint = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+        startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
@@ -347,7 +347,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     circle->SetFlags( IS_NEW );
 
     if( aEvent.HasPosition() )
-        startingPoint = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+        startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
@@ -719,7 +719,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         setCursor();
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
 
@@ -860,7 +860,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->SetEnd( (wxPoint) cursorPos );
                 dimension->Update();
 
-                if( !!evt->Modifier( MD_CTRL ) || dimension->Type() == PCB_DIM_CENTER_T )
+                if( !!evt->Modifier( MD_SHIFT ) || dimension->Type() == PCB_DIM_CENTER_T )
                     constrainDimension( dimension );
 
                 // Dimensions that have origin and end in the same spot are not valid
@@ -941,7 +941,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 dimension->Update();
 
-                if( !!evt->Modifier( MD_CTRL ) || dimension->Type() == PCB_DIM_CENTER_T )
+                if( !!evt->Modifier( MD_SHIFT ) || dimension->Type() == PCB_DIM_CENTER_T )
                     constrainDimension( dimension );
 
                 break;
@@ -1272,7 +1272,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         setCursor();
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(),
                                                   LSET::AllLayersMask() );
         m_controls->ForceCursorPosition( true, cursorPos );
@@ -1407,14 +1407,14 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
             m_frame->SetMsgPanel( graphic );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), drawingLayer );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         // 45 degree angle constraint enabled with an option and toggled with Ctrl
         bool limit45 = frame()->Settings().m_Use45DegreeGraphicSegments;
 
-        if( evt->Modifier( MD_CTRL ) )
+        if( evt->Modifier( MD_SHIFT ) )
             limit45 = !limit45;
 
         if( evt->IsCancelInteractive() )
@@ -1581,7 +1581,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
             // 45 degree lines
             if( started
                 && ( ( limit45 && shape == PCB_SHAPE_TYPE::SEGMENT )
-                     || ( evt->Modifier( MD_CTRL ) && shape == PCB_SHAPE_TYPE::RECT ) ) )
+                     || ( evt->Modifier( MD_SHIFT ) && shape == PCB_SHAPE_TYPE::RECT ) ) )
             {
                 const VECTOR2I lineVector( cursorPos - VECTOR2I( twoPointManager.GetOrigin() ) );
 
@@ -1731,7 +1731,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         graphic->SetLayer( drawingLayer );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -1805,7 +1805,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         else if( evt->IsMotion() )
         {
             // set angle snap
-            arcManager.SetAngleSnap( evt->Modifier( MD_CTRL ) );
+            arcManager.SetAngleSnap( evt->Modifier( MD_SHIFT ) );
 
             // update, but don't step the manager state
             arcManager.AddPoint( cursorPos, false );
@@ -2040,14 +2040,14 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 
         LSET layers( m_frame->GetActiveLayer() );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
         cursorPos          = grid.BestSnapAnchor( cursorPos, layers );
 
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( ( sourceZone && sourceZone->GetHV45() ) || constrainAngle || evt->Modifier( MD_CTRL ) )
+        if( ( sourceZone && sourceZone->GetHV45() ) || constrainAngle || evt->Modifier( MD_SHIFT ) )
             polyGeomMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
         else
             polyGeomMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );

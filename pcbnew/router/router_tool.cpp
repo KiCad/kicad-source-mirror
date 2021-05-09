@@ -1100,7 +1100,7 @@ void ROUTER_TOOL::performRouting()
 
         if( evt->IsMotion() )
         {
-            m_router->SetOrthoMode( evt->Modifier( MD_CTRL ) );
+            m_router->SetOrthoMode( evt->Modifier( MD_SHIFT ) );
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
@@ -1339,7 +1339,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
             if( evt->HasPosition() )
             {
-                if( evt->Modifier( MD_CTRL ) )
+                if( evt->Modifier( MD_SHIFT ) )
                     performDragging( PNS::DM_ANY );
                 else
                     performRouting();
@@ -1598,7 +1598,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     VECTOR2I p0 = controls()->GetCursorPosition( false );
     VECTOR2I p = p0;
 
-    m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.Modifier( MD_ALT )  );
+    m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
     if( startItem )
@@ -1797,7 +1797,7 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     TOOL_MANAGER* toolManager = frame()->GetToolManager();
     GAL*          gal = toolManager->GetView()->GetGAL();
 
-    m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.Modifier( MD_ALT )  );
+    m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
     if( toolManager->IsContextMenuActive() )

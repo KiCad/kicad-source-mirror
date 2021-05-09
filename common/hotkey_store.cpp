@@ -54,8 +54,9 @@ static GESTURE_PSEUDO_ACTION* g_gesturePseudoActions[] = {
     new GESTURE_PSEUDO_ACTION( _( "Toggle Selection State" ), MD_ALT + PSEUDO_WXK_CLICK ),
     new GESTURE_PSEUDO_ACTION( _( "Remove from Selection" ), MD_SHIFT + MD_ALT + PSEUDO_WXK_CLICK ),
 #endif
-    new GESTURE_PSEUDO_ACTION( _( "Ignore Grid Snaps" ), MD_ALT ),
+    new GESTURE_PSEUDO_ACTION( _( "Ignore Grid Snaps" ), MD_CTRL ),
     new GESTURE_PSEUDO_ACTION( _( "Ignore Other Snaps" ), MD_SHIFT ),
+    new GESTURE_PSEUDO_ACTION( _( "Ignore H/V/45 Constraints" ), MD_SHIFT )
 };
 
 

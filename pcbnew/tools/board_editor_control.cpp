@@ -951,7 +951,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        cursorPos = controls->GetCursorPosition( !evt->DisableGridSnapping() );
 
         if( reselect && fp )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
@@ -1191,7 +1191,7 @@ int BOARD_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        cursorPos = controls->GetCursorPosition( !evt->DisableGridSnapping() );
 
         if( evt->IsCancelInteractive() )
         {

@@ -840,7 +840,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         VECTOR2I movement;
         editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
             hasMouseMoved = true;

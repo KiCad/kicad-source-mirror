@@ -186,7 +186,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
         if( evt->IsCancelInteractive() )
         {
@@ -418,7 +418,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
         if( evt->IsCancelInteractive() )
         {
@@ -684,7 +684,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     {
         setCursor();
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         cursorPos = evt->IsPrime() ? (wxPoint) evt->Position()
                                    : (wxPoint) controls->GetMousePosition();
@@ -1042,7 +1042,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     {
         setCursor();
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         VECTOR2I cursorPos = evt->IsPrime() ? evt->Position() : controls->GetMousePosition();
         cursorPos = grid.BestSnapAnchor( cursorPos, snapLayer, item );
@@ -1272,7 +1272,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     {
         setCursor();
 
-        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
         if( evt->IsCancelInteractive() )
         {

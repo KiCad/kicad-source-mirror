@@ -71,7 +71,7 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_snap )
         {
             grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-            grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+            grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
             cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
             controls->ForceCursorPosition( true, cursorPos );
         }

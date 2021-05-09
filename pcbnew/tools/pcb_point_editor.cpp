@@ -431,7 +431,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( view->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( view->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         if( !m_editPoints || evt->IsSelectionEvent() ||
                 evt->Matches( EVENTS::InhibitSelectionEditing ) )
@@ -507,7 +507,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
 
             // The alternative constraint limits to 45 degrees
-            bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
+            bool enableAltConstraint = !!evt->Modifier( MD_SHIFT );
 
             if( enableAltConstraint )
                 m_altConstraint->Apply();

@@ -107,7 +107,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     {
         setCursor();
 
-        cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
         auto cleanup =
                 [&] ()
@@ -295,7 +295,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     {
         setCursor();
 
-        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
         auto cleanup =
                 [&] ()
@@ -458,7 +458,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
             if( !part )
                 continue;
 
-            VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+            VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
             wxPoint  offset( -cursorPos.x, cursorPos.y );
 
             part->SetOffset( offset );

@@ -236,7 +236,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     {
         setCursor();
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( view.GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( view.GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetMousePosition(), nullptr );
         controls.ForceCursorPosition(true, cursorPos );
 
@@ -297,7 +297,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         // move or drag when origin set updates rules
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
-            twoPtMgr.SetAngleSnap( evt->Modifier( MD_CTRL ) );
+            twoPtMgr.SetAngleSnap( evt->Modifier( MD_SHIFT ) );
             twoPtMgr.SetEnd( cursorPos );
 
             view.SetVisible( &ruler, true );

@@ -1709,7 +1709,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 {
-    wxPoint cursorPos = wxPoint( getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) ) );
+    wxPoint cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
     EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::WiresOnly );
 
     std::vector<SCH_LINE*> lines;

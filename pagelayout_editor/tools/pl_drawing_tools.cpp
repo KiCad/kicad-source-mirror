@@ -107,7 +107,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
     {
         setCursor();
 
-        cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
         auto cleanup =
                 [&] ()
@@ -251,7 +251,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     {
         setCursor();
 
-        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {

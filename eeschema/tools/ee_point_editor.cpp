@@ -310,7 +310,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 modified = true;
             }
 
-            bool snap = !evt->Modifier( MD_ALT );
+            bool snap = !evt->DisableGridSnapping();
 
             if( item->Type() == LIB_ARC_T && getEditedPointIndex() == ARC_CENTER )
                 snap = false;
@@ -833,7 +833,7 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     if( !polyLine )
         return false;
 
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
     polyLine->AddCorner( mapCoords( cursorPos ) );
 
     updateItem( polyLine, true );

@@ -887,7 +887,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 int SCH_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    VECTOR2D              cursorPos = controls->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+    VECTOR2D              cursorPos = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
     highlightNet( m_toolMgr, cursorPos );
 
@@ -907,7 +907,7 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL*    selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    VECTOR2D              cursorPos = controls->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+    VECTOR2D              cursorPos = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
     // TODO remove once real-time connectivity is a given
     if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )

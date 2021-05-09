@@ -206,7 +206,7 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 modified = true;
             }
 
-            m_editedPoint->SetPosition( controls->GetCursorPosition( !evt->Modifier( MD_ALT ) ) );
+            m_editedPoint->SetPosition( controls->GetCursorPosition( !evt->DisableGridSnapping() ) );
 
             updateItem();
             updatePoints();
