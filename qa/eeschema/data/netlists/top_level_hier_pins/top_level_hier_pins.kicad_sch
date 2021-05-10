@@ -1,0 +1,57 @@
+(kicad_sch (version 20210406) (generator eeschema)
+
+  (uuid e602c70f-05a6-4a8d-b379-8e76c2586249)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (wire (pts (xy 139.7 76.2) (xy 152.4 76.2))
+    (stroke (width 0) (type solid) (color 0 0 0 0))
+    (uuid 3074abfa-705b-40de-ba99-d14b5df48b71)
+  )
+
+  (hierarchical_label "INPUT" (shape input) (at 139.7 76.2 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid a4939eee-f4b6-4417-bfab-880e11b1d9c3)
+  )
+
+  (sheet (at 152.4 71.12) (size 25.4 10.16) (fields_autoplaced)
+    (stroke (width 0.0006) (type solid) (color 132 0 132 1))
+    (fill (color 255 255 255 0.0000))
+    (uuid 8b055b93-d115-4991-b853-dd747f0957ab)
+    (property "Sheet name" "Subsheet1" (id 0) (at 152.4 70.4843 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheet file" "subsheet.kicad_sch" (id 1) (at 152.4 81.7887 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "SUB_INPUT" input (at 152.4 76.2 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid dbd0b769-7796-46eb-9458-f9c7cb70597c)
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+    (path "/8b055b93-d115-4991-b853-dd747f0957ab" (page "2"))
+    (path "/8b055b93-d115-4991-b853-dd747f0957ab/d1e0bb44-07da-4574-92bf-3f9adc5e8751" (page "3"))
+  )
+
+  (symbol_instances
+    (path "/8b055b93-d115-4991-b853-dd747f0957ab/d1e0bb44-07da-4574-92bf-3f9adc5e8751/285c0e97-7e2b-456e-b955-a3bac708cdc4"
+      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/8b055b93-d115-4991-b853-dd747f0957ab/d1e0bb44-07da-4574-92bf-3f9adc5e8751/5d60735e-17ab-412e-acd7-0b8752e14c64"
+      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/8b055b93-d115-4991-b853-dd747f0957ab/d1e0bb44-07da-4574-92bf-3f9adc5e8751/d21dccc4-3b84-4309-8a03-49ef532d46d9"
+      (reference "R1") (unit 1) (value "R") (footprint "")
+    )
+    (path "/8b055b93-d115-4991-b853-dd747f0957ab/d1e0bb44-07da-4574-92bf-3f9adc5e8751/34621417-dac8-4a11-b54c-b5b5c180b754"
+      (reference "R2") (unit 1) (value "R") (footprint "")
+    )
+  )
+)

@@ -1365,6 +1365,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         if( !subgraph->m_dirty )
             continue;
 
+        wxLogTrace( ConnTrace, "Processing %lu (%s) for propagation", subgraph->m_code,
+                    subgraph->m_driver_connection->Name() );
+
         // For subgraphs that are driven by a global (power port or label) and have more
         // than one global driver, we need to seek out other subgraphs driven by the
         // same name as the non-chosen driver and update them to match the chosen one.
@@ -1423,6 +1426,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
     {
+        // All SGs should have been processed by propagateToNeighbors above
+        wxASSERT_MSG( !subgraph->m_dirty, "Subgraph not processed by propagateToNeighbors!" );
+
         if( subgraph->m_bus_parents.size() < 2 )
             continue;
 
@@ -1789,21 +1795,22 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
     if( conn->IsBus() )
         propagate_bus_neighbors( aSubgraph );
 
-    // If we don't have any hier pins (i.e. no children), nothing to do
-    if( aSubgraph->m_hier_pins.empty() )
+    // If we have both ports and pins, skip processing as we'll be visited by a parent or child.
+    // If we only have one or the other, process (we can either go bottom-up or top-down depending
+    // on which subgraph comes up first)
+    if( !aSubgraph->m_hier_ports.empty() && !aSubgraph->m_hier_pins.empty() )
     {
-        // If we also don't have any parents, we'll never be visited again
-        if( aSubgraph->m_hier_ports.empty() )
-            aSubgraph->m_dirty = false;
-
+        wxLogTrace( ConnTrace, "%lu (%s) has both hier ports and pins; deferring processing",
+                    aSubgraph->m_code, conn->Name() );
         return;
     }
-
-    // If we do have hier ports, skip this subgraph as it will be visited by a parent
-    // TODO(JE) this will leave the subgraph dirty if there is no matching parent subgraph,
-    // which should be flagged as an ERC error
-    if( !aSubgraph->m_hier_ports.empty() )
+    else if( aSubgraph->m_hier_ports.empty() && aSubgraph->m_hier_pins.empty() )
+    {
+        wxLogTrace( ConnTrace, "%lu (%s) has no hier pins or ports; marking clean",
+                    aSubgraph->m_code, conn->Name() );
+        aSubgraph->m_dirty = false;
         return;
+    }
 
     visited.insert( aSubgraph );
 

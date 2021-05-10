@@ -1,0 +1,48 @@
+(kicad_sch (version 20210406) (generator eeschema)
+
+  (uuid 60c507a6-849f-4288-aba3-1905085b3f33)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (wire (pts (xy 127 88.9) (xy 139.7 88.9))
+    (stroke (width 0) (type solid) (color 0 0 0 0))
+    (uuid 9f6e294c-594e-482a-bd29-59ac27289816)
+  )
+  (wire (pts (xy 203.2 88.9) (xy 190.5 88.9))
+    (stroke (width 0) (type solid) (color 0 0 0 0))
+    (uuid bc9dbfdf-a984-42b8-a104-88448653a38c)
+  )
+
+  (hierarchical_label "SUB_INPUT" (shape input) (at 127 88.9 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 68cc449a-24e7-4f61-9ffd-00b79f144118)
+  )
+  (hierarchical_label "SUB_OUTPUT" (shape output) (at 203.2 88.9 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 64241e40-ccc2-4fea-8000-ffa243d18897)
+  )
+
+  (sheet (at 139.7 83.82) (size 50.8 10.16) (fields_autoplaced)
+    (stroke (width 0.0006) (type solid) (color 132 0 132 1))
+    (fill (color 255 255 255 0.0000))
+    (uuid d1e0bb44-07da-4574-92bf-3f9adc5e8751)
+    (property "Sheet name" "SubSubSheet" (id 0) (at 139.7 83.1843 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheet file" "subsubsheet.kicad_sch" (id 1) (at 139.7 94.4887 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "SUBSUB_INPUT" input (at 139.7 88.9 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid 277a9f08-8815-4eb8-ba55-98f7eada92e5)
+    )
+    (pin "SUBSUB_OUTPUT" output (at 190.5 88.9 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid 611a4915-5afb-43f4-9ba3-5566f00e70ad)
+    )
+  )
+)

@@ -290,4 +290,10 @@ BOOST_AUTO_TEST_CASE( GroupBusMatching )
 }
 
 
+BOOST_AUTO_TEST_CASE( TopLevelHierPins )
+{
+    doNetlistTest( "top_level_hier_pins" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
