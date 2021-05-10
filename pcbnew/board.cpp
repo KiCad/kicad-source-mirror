@@ -673,25 +673,27 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     {
         NETINFO_ITEM* item        = static_cast<NETINFO_ITEM*>( aBoardItem );
         NETINFO_ITEM* unconnected = m_NetInfo.GetNetItem( NETINFO_LIST::UNCONNECTED );
-        int           removedCode = item->GetNetCode();
 
         for( FOOTPRINT* fp : m_footprints )
         {
             for( PAD* pad : fp->Pads() )
             {
-                if( pad->GetNetCode() == removedCode )
+                if( pad->GetNet() == item )
                     pad->SetNet( unconnected );
             }
         }
 
         for( ZONE* zone : m_zones )
         {
-            if( zone->GetNetCode() == removedCode )
+            if( zone->GetNet() == item )
                 zone->SetNet( unconnected );
         }
 
-        for( TRACK* track : TracksInNet( removedCode ) )
-            track->SetNet( unconnected );
+        for( TRACK* track : m_tracks )
+        {
+            if( track->GetNet() == item )
+                track->SetNet( unconnected );
+        }
 
         m_NetInfo.RemoveNet( item );
         break;
