@@ -1131,7 +1131,7 @@ void SIM_PLOT_FRAME::menuSaveWorkbook( wxCommandEvent& event )
         return;
     }
 
-    if ( !saveWorkbook( m_simulator->Settings()->GetWorkbookFilename() ) )
+    if ( !saveWorkbook( Prj().AbsolutePath( m_simulator->Settings()->GetWorkbookFilename() ) ) )
         DisplayErrorMessage( this, _( "There was an error while saving the workbook file" ) );
 }
 
@@ -1537,7 +1537,7 @@ bool SIM_PLOT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         wxString msg = _( "Save changes to \"%s\" before closing?" );
 
         return HandleUnsavedChanges( this, wxString::Format( msg, filename.GetFullName() ), 
-                                     [&]()->bool { return saveWorkbook( filename.GetFullPath() ); } );
+                                     [&]()->bool { return saveWorkbook( Prj().AbsolutePath ( filename.GetFullName() ) ); } );
     }
 
     return true;

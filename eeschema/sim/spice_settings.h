@@ -44,7 +44,7 @@ public:
     bool operator!=( const SPICE_SIMULATOR_SETTINGS& aRhs ) const { return !( *this == aRhs ); }
 
     wxString GetWorkbookFilename() const { return m_workbookFilename; }
-    void SetWorkbookFilename( wxString aFilename ) { m_workbookFilename = aFilename; }
+    void     SetWorkbookFilename( wxString aFilename ) { m_workbookFilename = aFilename; }
 
 private:
     wxString m_workbookFilename;
