@@ -91,9 +91,11 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
             // sure that the BestSize isn't needed by setting wxEXPAND.  Unfortunately this makes
             // wxALIGN_BOTTOM non-functional, so we have to jump through a bunch more hoops to
             // try and align the title and help text in the middle of the icon.
-            m_toolsSizer->Add( label, wxGBPosition( row, 1 ), wxGBSpan( 1, 1 ), wxTOP|wxEXPAND, 10 );
+            m_toolsSizer->Add( label, wxGBPosition( row, 1 ), wxGBSpan( 1, 1 ),
+                               wxTOP | wxEXPAND, 10 );
 
-            m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_TOP|wxTOP, 1 );
+            m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ),
+                               wxALIGN_TOP | wxTOP, 1 );
         };
 
     addLauncher( KICAD_MANAGER_ACTIONS::editSchematic,
@@ -129,9 +131,5 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
                  _( "Edit drawing sheet borders and title blocks for use in schematics and PCB "
                     "designs" ) );
 
-    if( m_toolsSizer->IsColGrowable( 1 ) )
-        m_toolsSizer->RemoveGrowableCol( 1 );
-
-    m_toolsSizer->AddGrowableCol( 1 );
     Layout();
 }

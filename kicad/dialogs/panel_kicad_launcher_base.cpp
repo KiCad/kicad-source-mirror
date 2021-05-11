@@ -24,10 +24,7 @@ PANEL_KICAD_LAUNCHER_BASE::PANEL_KICAD_LAUNCHER_BASE( wxWindow* parent, wxWindow
 	m_mainSizer->Add( m_toolsSizer, 0, wxALL|wxEXPAND, 5 );
 
 
-	m_mainSizer->Add( 0, 20, 0, wxEXPAND, 5 );
-
-
-	bSizer2->Add( m_mainSizer, 1, wxEXPAND|wxTOP|wxLEFT, 8 );
+	bSizer2->Add( m_mainSizer, 1, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizer2 );

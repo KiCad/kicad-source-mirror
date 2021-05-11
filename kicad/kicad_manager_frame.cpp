@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -164,6 +164,14 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Now the actual m_leftWin size is set, give it a reasonable min width
     m_auimgr.GetPane( m_leftWin ).MinSize( 250, -1 );
+
+    wxSizer* mainSizer = GetSizer();
+
+    if( mainSizer )
+    {
+        mainSizer->Fit( this );
+        SetMinSize( GetSize() );
+    }
 
     SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
 
