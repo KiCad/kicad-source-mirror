@@ -234,7 +234,17 @@ long long int SHAPE_LINE_CHAIN::Length() const
     long long int l = 0;
 
     for( int i = 0; i < SegmentCount(); i++ )
-        l += CSegment( i ).Length();
+    {
+        // Only include segments that aren't part of arc shapes
+        if( m_shapes[i] == SHAPE_IS_PT || m_shapes[i + 1] == SHAPE_IS_PT ||
+            ( m_shapes[i] != m_shapes[i + 1] ) )
+        {
+            l += CSegment( i ).Length();
+        }
+    }
+
+    for( int i = 0; i < ArcCount(); i++ )
+        l += CArcs()[i].GetLength();
 
     return l;
 }

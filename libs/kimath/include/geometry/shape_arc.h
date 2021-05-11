@@ -149,6 +149,11 @@ public:
     double  GetEndAngle() const;
 
     /**
+     * @return the length of the arc shape
+     */
+    double GetLength() const;
+
+    /**
      * Constructs a SHAPE_LINE_CHAIN of segments from a given arc
      * @param aAccuracy maximum divergence from true arc given in internal units
      *   ** Note that the default is ARC_HIGH_DEF in PCBNew units

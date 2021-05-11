@@ -386,6 +386,15 @@ VECTOR2I SHAPE_ARC::GetCenter() const
 }
 
 
+double SHAPE_ARC::GetLength() const
+{
+    double radius = GetRadius();
+    double includedAngle  = std::abs( GetCentralAngle() );
+
+    return radius * M_PI * includedAngle / 180.0;
+}
+
+
 double SHAPE_ARC::GetCentralAngle() const
 {
     VECTOR2I center = GetCenter();
