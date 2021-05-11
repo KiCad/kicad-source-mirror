@@ -298,6 +298,18 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::drawVia );
     placeMenu->Add( PCB_ACTIONS::drawZone );
     placeMenu->Add( PCB_ACTIONS::drawRuleArea );
+
+    ACTION_MENU* muwaveSubmenu = new ACTION_MENU( false, selTool );
+    muwaveSubmenu->SetTitle( _( "Add Microwave Shape" ) );
+    muwaveSubmenu->SetIcon( BITMAPS::mw_add_line );
+    muwaveSubmenu->Add( PCB_ACTIONS::microwaveCreateLine );
+    muwaveSubmenu->Add( PCB_ACTIONS::microwaveCreateGap );
+    muwaveSubmenu->Add( PCB_ACTIONS::microwaveCreateStub );
+    muwaveSubmenu->Add( PCB_ACTIONS::microwaveCreateStubArc );
+    muwaveSubmenu->Add( PCB_ACTIONS::microwaveCreateFunctionShape );
+    placeMenu->Add( muwaveSubmenu );
+
+    placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::placeText );
     placeMenu->Add( PCB_ACTIONS::drawLine );
     placeMenu->Add( PCB_ACTIONS::drawArc );

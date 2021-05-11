@@ -396,7 +396,6 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     static ACTION_GROUP* originGroup    = nullptr;
     static ACTION_GROUP* routingGroup   = nullptr;
     static ACTION_GROUP* tuneGroup      = nullptr;
-    static ACTION_GROUP* microwaveGroup = nullptr;
 
     if( !dimensionGroup )
     {
@@ -429,16 +428,6 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
                                         &PCB_ACTIONS::routerTuneDiffPairSkew } );
     }
 
-    if( !microwaveGroup )
-    {
-        microwaveGroup = new ACTION_GROUP( "group.pcbMicrowave",
-                                           { &PCB_ACTIONS::microwaveCreateLine,
-                                             &PCB_ACTIONS::microwaveCreateGap,
-                                             &PCB_ACTIONS::microwaveCreateStub,
-                                             &PCB_ACTIONS::microwaveCreateStubArc,
-                                             &PCB_ACTIONS::microwaveCreateFunctionShape } );
-    }
-
     m_drawToolBar->Add( ACTIONS::selectionTool,            ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::highlightNetTool,     ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::localRatsnestTool,    ACTION_TOOLBAR::TOGGLE );
@@ -448,7 +437,6 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddGroup( routingGroup,                 ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->AddGroup( tuneGroup,                    ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawVia,              ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->AddGroup( microwaveGroup,               ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawZone,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawRuleArea,         ACTION_TOOLBAR::TOGGLE );
 
