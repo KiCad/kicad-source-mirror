@@ -648,7 +648,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Otavio Augusto Gomes"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "herostrat"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Diego Herranz"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Joel"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Joel Guittet"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Aristeidis Kimirtzis"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Chris Morgan"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Thomas Pointhuber"), LIBRARIANS, aInfo.CreateKiBitmap( BITMAPS::library ) ) );
