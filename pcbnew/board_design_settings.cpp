@@ -165,6 +165,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_ZoneFillVersion = 6;                      // Use new algo by default to fill zones
     m_ZoneKeepExternalFillets = false;          // Use new algo by default.  Legacy boards might
                                                 // want to set it to true for old algo....
+    m_UseHeightForLengthCalcs = true;
 
     // Global mask margins:
     m_SolderMaskMargin  = Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE );
@@ -196,6 +197,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_params.emplace_back( new PARAM<bool>( "rules.allow_blind_buried_vias",
             &m_BlindBuriedViaAllowed, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "rules.use_height_for_length_calcs",
+            &m_UseHeightForLengthCalcs, true ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_clearance", &m_MinClearance,
             Millimeter2iu( DEFAULT_MINCLEARANCE ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),

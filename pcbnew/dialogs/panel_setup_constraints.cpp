@@ -66,6 +66,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
 
     m_OptAllowBlindBuriedVias->SetValue( m_BrdSettings->m_BlindBuriedViaAllowed );
     m_OptAllowMicroVias->SetValue( m_BrdSettings->m_MicroViasAllowed );
+    m_useHeightForLengthCalcs->SetValue( m_BrdSettings->m_UseHeightForLengthCalcs );
 
     m_maxError.SetValue( m_BrdSettings->m_MaxError );
 
@@ -120,8 +121,9 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
 
     // These are all stored in project file, not board, so no need for OnModify()
 
-    m_BrdSettings->m_BlindBuriedViaAllowed = m_OptAllowBlindBuriedVias->GetValue();
-    m_BrdSettings->m_MicroViasAllowed = m_OptAllowMicroVias->GetValue();
+    m_BrdSettings->m_BlindBuriedViaAllowed   = m_OptAllowBlindBuriedVias->GetValue();
+    m_BrdSettings->m_MicroViasAllowed        = m_OptAllowMicroVias->GetValue();
+    m_BrdSettings->m_UseHeightForLengthCalcs = m_useHeightForLengthCalcs->GetValue();
 
     m_BrdSettings->m_MaxError = Clamp<int>( IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
                                             m_maxError.GetValue(),

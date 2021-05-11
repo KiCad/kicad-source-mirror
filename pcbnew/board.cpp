@@ -1691,6 +1691,7 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
     constexpr KICAD_T types[]      = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, EOT };
     auto              connectivity = GetBoard()->GetConnectivity();
     BOARD_STACKUP&    stackup      = GetDesignSettings().GetStackupDescriptor();
+    bool              useHeight    = GetDesignSettings().m_UseHeightForLengthCalcs;
 
     for( BOARD_CONNECTED_ITEM* item : connectivity->GetConnectedItems(
                  static_cast<const BOARD_CONNECTED_ITEM*>( &aTrack ), types ) )
@@ -1699,7 +1700,7 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
 
         if( TRACK* track = dynamic_cast<TRACK*>( item ) )
         {
-            if( track->Type() == PCB_VIA_T )
+            if( track->Type() == PCB_VIA_T && useHeight )
             {
                 VIA* via = static_cast<VIA*>( track );
                 length += stackup.GetLayerDistance( via->TopLayer(), via->BottomLayer() );

@@ -138,6 +138,24 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 
 	sbFeatureRules->Add( m_bSizerPolygonFillOption, 0, wxEXPAND|wxTOP, 10 );
 
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxVERTICAL );
+
+	m_staticline15 = new wxStaticLine( m_scrolledWindow1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer11->Add( m_staticline15, 0, wxEXPAND | wxALL, 5 );
+
+	m_staticText33 = new wxStaticText( m_scrolledWindow1, wxID_ANY, _("Length tuning"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText33->Wrap( -1 );
+	bSizer11->Add( m_staticText33, 0, wxALL, 5 );
+
+	m_useHeightForLengthCalcs = new wxCheckBox( m_scrolledWindow1, wxID_ANY, _("Include stackup height in track length calculations"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useHeightForLengthCalcs->SetToolTip( _("When enabled, the distance between copper layers will be included in track length calculations for tracks with vias.  When disabled, via stackup height is ignored.") );
+
+	bSizer11->Add( m_useHeightForLengthCalcs, 0, wxALL, 5 );
+
+
+	sbFeatureRules->Add( bSizer11, 1, wxEXPAND, 5 );
+
 
 	bScrolledSizer->Add( sbFeatureRules, 1, wxEXPAND, 5 );
 

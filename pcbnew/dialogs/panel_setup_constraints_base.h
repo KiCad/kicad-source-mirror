@@ -59,6 +59,9 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxRadioButton* m_rbOutlinePolygonFastest;
 		wxStaticBitmap* m_filletBitmap;
 		wxCheckBox* m_allowExternalFilletsOpt;
+		wxStaticLine* m_staticline15;
+		wxStaticText* m_staticText33;
+		wxCheckBox* m_useHeightForLengthCalcs;
 		wxStaticText* m_staticText23;
 		wxStaticBitmap* m_bitmapClearance;
 		wxStaticText* m_clearanceTitle;

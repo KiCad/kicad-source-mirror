@@ -758,6 +758,9 @@ public:
     // Could be removed later, or at least always set to true
     bool       m_HasStackup;
 
+    /// Enable inclusion of stackup height in track length measurements and length tuning
+    bool       m_UseHeightForLengthCalcs;
+
 private:
     // Indices into the trackWidth, viaSizes and diffPairDimensions lists.
     // The 0 index is always the current netclass value(s)

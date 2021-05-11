@@ -544,7 +544,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 
 int PNS_KICAD_IFACE_BASE::StackupHeight( int aFirstLayer, int aSecondLayer ) const
 {
-    if( !m_board )
+    if( !m_board || !m_board->GetDesignSettings().m_UseHeightForLengthCalcs )
         return 0;
 
     BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
