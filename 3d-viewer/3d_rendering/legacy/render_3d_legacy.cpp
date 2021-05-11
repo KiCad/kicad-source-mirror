@@ -62,7 +62,7 @@ RENDER_3D_LEGACY::RENDER_3D_LEGACY( BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
     m_circleTexture = 0;
     m_grid = 0;
     m_lastGridType = GRID3D_TYPE::NONE;
-    m_currentIntersectedBoardItem = nullptr;
+    m_currentRollOverItem = nullptr;
     m_boardWithHoles = nullptr;
 
     m_3dModelMap.clear();
@@ -1179,16 +1179,25 @@ void RENDER_3D_LEGACY::render3dModelsSelected( bool aRenderTopOrBot, bool aRende
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
-        const bool isIntersected = ( fp == m_currentIntersectedBoardItem );
+        bool highlight = false;
 
-        if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) && !isIntersected
-          && ( ( aRenderSelectedOnly && !fp->IsSelected() )
-             || ( !aRenderSelectedOnly && fp->IsSelected() ) ) )
+        if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) )
         {
-            continue;
+            if( fp == m_currentRollOverItem )
+            {
+                if( aRenderSelectedOnly )
+                    highlight = m_boardAdapter.GetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM );
+                else if( !fp->IsSelected() )
+                    continue;
+            }
+            else if( ( aRenderSelectedOnly && !fp->IsSelected() )
+                  || ( !aRenderSelectedOnly && fp->IsSelected() ) )
+            {
+                continue;
+            }
         }
 
-        if( isIntersected && aRenderSelectedOnly )
+        if( highlight )
         {
             glEnable( GL_POLYGON_OFFSET_LINE );
             glPolygonOffset( 8.0, 1.0 );
@@ -1203,12 +1212,12 @@ void RENDER_3D_LEGACY::render3dModelsSelected( bool aRenderTopOrBot, bool aRende
                 if( ( aRenderTopOrBot && !fp->IsFlipped() )
                  || ( !aRenderTopOrBot && fp->IsFlipped() ) )
                 {
-                    renderFootprint( fp, aRenderTransparentOnly, isIntersected );
+                    renderFootprint( fp, aRenderTransparentOnly, highlight );
                 }
             }
         }
 
-        if( isIntersected && aRenderSelectedOnly )
+        if( highlight )
         {
             // Restore
             glDisable( GL_POLYGON_OFFSET_LINE );
@@ -1282,12 +1291,12 @@ void RENDER_3D_LEGACY::renderFootprint( const FOOTPRINT* aFootprint, bool aRende
                     // values have changed.  cache the matrix somewhere.
                     glm::mat4 mtx( 1 );
                     mtx = glm::translate( mtx, { sM.m_Offset.x, sM.m_Offset.y, sM.m_Offset.z } );
-                    mtx = glm::rotate(
-                            mtx, glm::radians( (float) -sM.m_Rotation.z ), { 0.0f, 0.0f, 1.0f } );
-                    mtx = glm::rotate(
-                            mtx, glm::radians( (float) -sM.m_Rotation.y ), { 0.0f, 1.0f, 0.0f } );
-                    mtx = glm::rotate(
-                            mtx, glm::radians( (float) -sM.m_Rotation.x ), { 1.0f, 0.0f, 0.0f } );
+                    mtx = glm::rotate( mtx, glm::radians( (float) -sM.m_Rotation.z ),
+                                       { 0.0f, 0.0f, 1.0f } );
+                    mtx = glm::rotate( mtx, glm::radians( (float) -sM.m_Rotation.y ),
+                                       { 0.0f, 1.0f, 0.0f } );
+                    mtx = glm::rotate( mtx, glm::radians( (float) -sM.m_Rotation.x ),
+                                       { 1.0f, 0.0f, 0.0f } );
                     mtx = glm::scale( mtx, { sM.m_Scale.x, sM.m_Scale.y, sM.m_Scale.z } );
                     glMultMatrixf( glm::value_ptr( mtx ) );
 

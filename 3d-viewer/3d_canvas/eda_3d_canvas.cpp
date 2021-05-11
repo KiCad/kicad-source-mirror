@@ -112,7 +112,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
           m_opengl_supports_raytracing( true ),
           m_render_raytracing_was_requested( false ),
           m_accelerator3DShapes( nullptr ),
-          m_currentIntersectedBoardItem( nullptr )
+          m_currentRollOverItem( nullptr )
 {
     wxLogTrace( m_logTrace, "EDA_3D_CANVAS::EDA_3D_CANVAS" );
 
@@ -701,23 +701,23 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
 
         RAY mouseRay = getRayAtCurrrentMousePosition();
 
-        BOARD_ITEM *intersectedBoardItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
+        BOARD_ITEM *rollOverItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
 
-        if( intersectedBoardItem )
+        if( rollOverItem )
         {
-            if( intersectedBoardItem != m_currentIntersectedBoardItem )
+            if( rollOverItem != m_currentRollOverItem )
             {
-                m_3d_render_ogl_legacy->SetCurrentIntersectedBoardItem( intersectedBoardItem );
-                m_currentIntersectedBoardItem = intersectedBoardItem;
+                m_3d_render_ogl_legacy->SetCurrentRollOverItem( rollOverItem );
+                m_currentRollOverItem = rollOverItem;
 
                 Request_refresh();
             }
 
-            switch( intersectedBoardItem->Type() )
+            switch( rollOverItem->Type() )
             {
             case PCB_PAD_T:
             {
-                PAD* pad = dynamic_cast<PAD*>( intersectedBoardItem );
+                PAD* pad = dynamic_cast<PAD*>( rollOverItem );
 
                 if( pad && pad->IsOnCopperLayer() )
                 {
@@ -731,7 +731,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
 
             case PCB_FOOTPRINT_T:
             {
-                FOOTPRINT* footprint = dynamic_cast<FOOTPRINT *>( intersectedBoardItem );
+                FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( rollOverItem );
 
                 if( footprint )
                     reporter.Report( footprint->GetReference() );
@@ -742,7 +742,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
             case PCB_VIA_T:
             case PCB_ARC_T:
             {
-                TRACK* track = dynamic_cast<TRACK *>( intersectedBoardItem );
+                TRACK* track = dynamic_cast<TRACK*>( rollOverItem );
 
                 if( track )
                 {
@@ -755,7 +755,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
 
             case PCB_ZONE_T:
             {
-                ZONE* zone = dynamic_cast<ZONE*>( intersectedBoardItem );
+                ZONE* zone = dynamic_cast<ZONE*>( rollOverItem );
 
                 if( zone && zone->IsOnCopperLayer() )
                 {
@@ -772,16 +772,16 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
         }
         else
         {
-            if( ( m_currentIntersectedBoardItem != nullptr ) &&
+            if( ( m_currentRollOverItem != nullptr ) &&
                 ( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY ) )
             {
-                m_3d_render_ogl_legacy->SetCurrentIntersectedBoardItem( nullptr );
+                m_3d_render_ogl_legacy->SetCurrentRollOverItem( nullptr );
                 Request_refresh();
 
                 reporter.Report( "" );
             }
 
-            m_currentIntersectedBoardItem = nullptr;
+            m_currentRollOverItem = nullptr;
         }
     }
 }

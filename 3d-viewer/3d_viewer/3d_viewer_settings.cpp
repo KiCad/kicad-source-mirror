@@ -66,6 +66,8 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
     m_params.emplace_back( new PARAM<bool>(
             "render.opengl_show_model_bbox", &m_Render.opengl_show_model_bbox, false ) );
     m_params.emplace_back( new PARAM<bool>(
+            "render.epengl_highlight_on_rollover", &m_Render.opengl_highlight_on_rollover, true ) );
+    m_params.emplace_back( new PARAM<bool>(
             "render.opengl_AA_disableOnMove", &m_Render.opengl_AA_disableOnMove, false ) );
     m_params.emplace_back( new PARAM<bool>(
             "render.opengl_thickness_disableOnMove", &m_Render.opengl_thickness_disableOnMove, false ) );

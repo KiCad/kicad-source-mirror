@@ -168,6 +168,9 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_checkBoxCuThickness = new wxCheckBox( sbSizerOpenGLRenderoptions->GetStaticBox(), wxID_ANY, _("Show copper thickness"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerOpenGLRenderoptions->Add( m_checkBoxCuThickness, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_checkBoxHighlightOnRollOver = new wxCheckBox( sbSizerOpenGLRenderoptions->GetStaticBox(), wxID_ANY, _("Highlight items on rollover"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerOpenGLRenderoptions->Add( m_checkBoxHighlightOnRollOver, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 
 	bSizerOpenGL->Add( sbSizerOpenGLRenderoptions, 0, wxALL|wxEXPAND, 5 );
 
@@ -175,7 +178,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	sbSizerOtherOptions = new wxStaticBoxSizer( new wxStaticBox( m_panelOpenGL, wxID_ANY, _("Other Options") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer7;
-	fgSizer7 = new wxFlexGridSizer( 2, 2, 2, 0 );
+	fgSizer7 = new wxFlexGridSizer( 2, 2, 0, 0 );
 	fgSizer7->SetFlexibleDirection( wxBOTH );
 	fgSizer7->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 

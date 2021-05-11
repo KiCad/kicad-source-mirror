@@ -41,6 +41,7 @@ public:
         bool opengl_render_bbox_only_OnMove;
         bool opengl_copper_thickness;
         bool opengl_show_model_bbox;
+        bool opengl_highlight_on_rollover;
         KIGFX::COLOR4D opengl_selection_color;
 
         bool raytrace_anti_aliasing;

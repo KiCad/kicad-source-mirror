@@ -287,7 +287,7 @@ private:
     CONTAINER_3D           m_3DShapes_container;      // Holds 3D shapes from footprints
     ACCELERATOR_3D*        m_accelerator3DShapes;    // used for mouse over searching
 
-    BOARD_ITEM*            m_currentIntersectedBoardItem;
+    BOARD_ITEM*            m_currentRollOverItem;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

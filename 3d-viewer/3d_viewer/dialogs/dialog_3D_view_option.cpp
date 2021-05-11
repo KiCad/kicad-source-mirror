@@ -200,6 +200,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
     // OpenGL options
     m_checkBoxCuThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
     m_checkBoxBoundingBoxes->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
+    m_checkBoxHighlightOnRollOver->SetValue( m_settings.GetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM ) );
     m_checkBoxDisableAAMove->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE ) );
     m_checkBoxDisableMoveThickness->SetValue(
             m_settings.GetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE ) );
@@ -281,6 +282,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     // OpenGL options
     m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
     m_settings.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, m_checkBoxBoundingBoxes->GetValue() );
+    m_settings.SetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM, m_checkBoxHighlightOnRollOver->GetValue() );
     m_settings.SetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE, m_checkBoxDisableAAMove->GetValue() );
     m_settings.SetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE,
                         m_checkBoxDisableMoveThickness->GetValue() );

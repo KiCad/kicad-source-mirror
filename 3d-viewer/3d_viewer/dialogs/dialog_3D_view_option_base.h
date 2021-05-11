@@ -71,6 +71,7 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxPanel* m_panelOpenGL;
 		wxCheckBox* m_checkBoxBoundingBoxes;
 		wxCheckBox* m_checkBoxCuThickness;
+		wxCheckBox* m_checkBoxHighlightOnRollOver;
 		wxStaticText* m_staticText221;
 		wxChoice* m_choiceAntiAliasing;
 		wxStaticText* m_staticText231;

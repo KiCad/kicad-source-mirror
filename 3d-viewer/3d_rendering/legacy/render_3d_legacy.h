@@ -67,9 +67,9 @@ public:
 
     int GetWaitForEditingTimeOut() override;
 
-    void SetCurrentIntersectedBoardItem( BOARD_ITEM* aCurrentIntersectedBoardItem )
+    void SetCurrentRollOverItem( BOARD_ITEM* aRollOverItem )
     {
-        m_currentIntersectedBoardItem = aCurrentIntersectedBoardItem;
+        m_currentRollOverItem = aRollOverItem;
     }
 
 private:
@@ -198,20 +198,21 @@ private:
     OPENGL_RENDER_LIST* m_outerViaThroughHoles;
     OPENGL_RENDER_LIST* m_outerThroughHoleRings;
 
-    LIST_TRIANGLES m_triangles;     ///< store pointers so can be deleted latter
-    GLuint m_circleTexture;
+    LIST_TRIANGLES      m_triangles;       ///< store pointers so can be deleted latter
+    GLuint              m_circleTexture;
 
-    GLuint m_grid;                  ///< oGL list that stores current grid
-    GRID3D_TYPE m_lastGridType;     ///< Stores the last grid type.
+    GLuint              m_grid;             ///< oGL list that stores current grid
+    GRID3D_TYPE         m_lastGridType;     ///< Stores the last grid type.
 
     OPENGL_RENDER_LIST* m_vias;
     OPENGL_RENDER_LIST* m_padHoles;
 
-    MAP_3DMODEL m_3dModelMap;
+    MAP_3DMODEL         m_3dModelMap;
 
-    BOARD_ITEM* m_currentIntersectedBoardItem;
+    BOARD_ITEM*         m_currentRollOverItem;
 
-    SHAPE_POLY_SET m_antiBoardPolys; ///< The negative polygon representation of the board outline.
+    SHAPE_POLY_SET      m_antiBoardPolys;   ///< The negative polygon representation of the board
+                                            ///< outline.
 };
 
 #endif // RENDER_3D_LEGACY_H_

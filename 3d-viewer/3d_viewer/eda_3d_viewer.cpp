@@ -509,6 +509,7 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
         // OpenGL options
         TRANSFER_SETTING( FL_RENDER_OPENGL_COPPER_THICKNESS,          opengl_copper_thickness );
         TRANSFER_SETTING( FL_RENDER_OPENGL_SHOW_MODEL_BBOX,           opengl_show_model_bbox );
+        TRANSFER_SETTING( FL_HIGHLIGHT_ROLLOVER_ITEM,                 opengl_highlight_on_rollover );
         TRANSFER_SETTING( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE,        opengl_AA_disableOnMove );
         TRANSFER_SETTING( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE,
                           opengl_thickness_disableOnMove );
@@ -681,8 +682,8 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
         TRANSFER_SETTING( opengl_AA_disableOnMove,        FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE );
         TRANSFER_SETTING( opengl_copper_thickness,        FL_RENDER_OPENGL_COPPER_THICKNESS );
         TRANSFER_SETTING( opengl_show_model_bbox,         FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
-        TRANSFER_SETTING( opengl_thickness_disableOnMove,
-                          FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE );
+        TRANSFER_SETTING( opengl_highlight_on_rollover,   FL_HIGHLIGHT_ROLLOVER_ITEM );
+        TRANSFER_SETTING( opengl_thickness_disableOnMove, FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE );
         TRANSFER_SETTING( opengl_vias_disableOnMove,      FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE );
         TRANSFER_SETTING( opengl_holes_disableOnMove,     FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE );
 
