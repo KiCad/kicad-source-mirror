@@ -46,7 +46,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_fileMenu->AppendSeparator();
 
 	wxMenuItem* m_exitSim;
-	m_exitSim = new wxMenuItem( m_fileMenu, wxID_CLOSE, wxString( _("Close Simulation") ) + wxT('\t') + wxT("CTRL+W"), wxEmptyString, wxITEM_NORMAL );
+	m_exitSim = new wxMenuItem( m_fileMenu, wxID_CLOSE, wxString( _("Close") ) + wxT('\t') + wxT("CTRL+W"), wxEmptyString, wxITEM_NORMAL );
 	m_fileMenu->Append( m_exitSim );
 
 	m_mainMenu->Append( m_fileMenu, _("File") );
@@ -290,8 +290,10 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	this->Connect( m_showDotted->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowDottedUpdate ) );
 	m_viewMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuWhiteBackground ), this, m_showWhiteBackground->GetId());
 	this->Connect( m_showWhiteBackground->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowWhiteBackgroundUpdate ) );
+	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotDragged ), NULL, this );
 	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotChanged ), NULL, this );
 	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClose ), NULL, this );
+	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClosed ), NULL, this );
 	m_signals->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( SIM_PLOT_FRAME_BASE::onSignalDblClick ), NULL, this );
 	m_signals->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( SIM_PLOT_FRAME_BASE::onSignalRClick ), NULL, this );
 }
@@ -303,8 +305,10 @@ SIM_PLOT_FRAME_BASE::~SIM_PLOT_FRAME_BASE()
 	this->Disconnect( ID_MENU_SHOW_LEGEND, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowLegendUpdate ) );
 	this->Disconnect( ID_MENU_DOTTED, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowDottedUpdate ) );
 	this->Disconnect( ID_MENU_WHITE_BG, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowWhiteBackgroundUpdate ) );
+	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotDragged ), NULL, this );
 	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotChanged ), NULL, this );
 	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClose ), NULL, this );
+	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEventHandler( SIM_PLOT_FRAME_BASE::onPlotClosed ), NULL, this );
 	m_signals->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( SIM_PLOT_FRAME_BASE::onSignalDblClick ), NULL, this );
 	m_signals->Disconnect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( SIM_PLOT_FRAME_BASE::onSignalRClick ), NULL, this );
 

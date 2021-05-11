@@ -110,8 +110,10 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void menuShowDottedUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void menuWhiteBackground( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuShowWhiteBackgroundUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onPlotDragged( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onPlotChanged( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onPlotClose( wxAuiNotebookEvent& event ) { event.Skip(); }
+		virtual void onPlotClosed( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onSignalDblClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onSignalRClick( wxListEvent& event ) { event.Skip(); }
 

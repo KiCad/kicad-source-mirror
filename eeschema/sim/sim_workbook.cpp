@@ -70,6 +70,23 @@ void SIM_WORKBOOK::RemovePlotPanel( SIM_PANEL_BASE* aPlotPanel )
 }
 
 
+std::vector<const SIM_PANEL_BASE*> SIM_WORKBOOK::GetSortedPlotPanels() const
+{
+    std::vector<const SIM_PANEL_BASE*> plotPanels;
+
+    for( const auto& plot : m_plots )
+        plotPanels.push_back( plot.first );
+
+    std::sort( plotPanels.begin(), plotPanels.end(),
+    [&]( const SIM_PANEL_BASE*& a, const SIM_PANEL_BASE*& b )
+    {
+        return m_plots.at( a ).pos < m_plots.at( b ).pos;
+    });
+
+    return plotPanels;
+}
+
+
 void SIM_WORKBOOK::AddTrace( const SIM_PANEL_BASE* aPlotPanel, const wxString& aName,
         const TRACE_DESC& aTrace )
 {

@@ -90,6 +90,9 @@ public:
 
         ///< Spice directive used to execute the simulation
         wxString m_simCommand;
+
+        ///< The current position of the plot in the notebook
+        unsigned int pos;
     };
 
     typedef std::map<const SIM_PANEL_BASE*, PLOT_INFO> PLOT_MAP;
@@ -101,6 +104,7 @@ public:
     void AddPlotPanel( SIM_PANEL_BASE* aPlotPanel );
     void RemovePlotPanel( SIM_PANEL_BASE* aPlotPanel );
 
+    std::vector<const SIM_PANEL_BASE*> GetSortedPlotPanels() const;
 
     bool HasPlotPanel( SIM_PANEL_BASE* aPlotPanel ) const
     {
@@ -122,6 +126,14 @@ public:
         return m_plots.at( aPlotPanel ).m_traces.cend();
     }
 
+    void SetPlotPanelPosition( const SIM_PANEL_BASE* aPlotPanel, unsigned int pos )
+    {
+        if( pos != m_plots.at( aPlotPanel ).pos )
+            m_flagModified = true;
+
+        m_plots.at( aPlotPanel ).pos = pos;
+    }
+
     void SetSimCommand( const SIM_PANEL_BASE* aPlotPanel, const wxString& aSimCommand )
     {
         if( m_plots.at( aPlotPanel ).m_simCommand != aSimCommand )
@@ -135,13 +147,15 @@ public:
         return m_plots.at( aPlotPanel ).m_simCommand;
     }
 
-    const PLOT_MAP GetPlots() const { return m_plots; }
+    PLOT_INFO GetPlot( const SIM_PANEL_BASE* aPlotPanel ) const
+    {
+        return m_plots.at( aPlotPanel );
+    }
 
     const TRACE_MAP GetTraces( const SIM_PANEL_BASE* aPlotPanel ) const
     {
         return m_plots.at( aPlotPanel ).m_traces;
     }
-
 
     void ClrModified() { m_flagModified = false; }
     bool IsModified() const { return m_flagModified; }

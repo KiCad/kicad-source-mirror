@@ -340,7 +340,16 @@ void SIM_PLOT_FRAME::updateTitle()
 }
 
 
-void SIM_PLOT_FRAME::onModify()
+void SIM_PLOT_FRAME::updateWorkbook()
+{
+    // We need to keep track of the plot panel positions
+    for( unsigned int i = 0; i < m_plotNotebook->GetPageCount(); i++ )
+        m_workbook->SetPlotPanelPosition(
+            dynamic_cast<SIM_PANEL_BASE*>( m_plotNotebook->GetPage( i ) ), i );
+}
+
+
+void SIM_PLOT_FRAME::updateFrame()
 {
     updateTitle();
 }
@@ -518,7 +527,7 @@ SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand )
 
     m_plotNotebook->AddPage( dynamic_cast<wxWindow*>( plotPanel ), pageTitle, true );
 
-    onModify();
+    updateFrame();
     return plotPanel;
 }
 
@@ -685,7 +694,7 @@ void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName, bool aErase )
     updateSignalList();
     wxCommandEvent dummy;
     onCursorUpdate( dummy );
-    onModify();
+    updateFrame();
 }
 
 
@@ -794,7 +803,7 @@ bool SIM_PLOT_FRAME::updatePlot( const TRACE_DESC& aDescriptor, SIM_PLOT_PANEL* 
                 offset += inner;
             }
 
-            onModify();
+            updateFrame();
             return true;
         }
     }
@@ -803,7 +812,7 @@ bool SIM_PLOT_FRAME::updatePlot( const TRACE_DESC& aDescriptor, SIM_PLOT_PANEL* 
                 data_x.data(), data_y.data(), aDescriptor.GetType() ) )
         m_workbook->AddTrace( aPanel, aDescriptor.GetTitle(), aDescriptor );
 
-    onModify();
+    updateFrame();
     return true;
 }
 
@@ -922,7 +931,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
     if( !file.Open() )
     {
-        onModify();
+        updateFrame();
         return false;
     }
 
@@ -931,7 +940,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
     if( !file.GetFirstLine().ToLong( &plotsCount ) )        // GetFirstLine instead of GetNextLine
     {
         file.Close();
-        onModify();
+        updateFrame();
         return false;
     }
 
@@ -941,7 +950,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
         if( !file.GetNextLine().ToLong( &plotType ) )
         {
-            onModify();
+            updateFrame();
             return false;
         }
 
@@ -959,7 +968,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
         if( !file.GetNextLine().ToLong( &tracesCount ) )
         {
-            onModify();
+            updateFrame();
             return false;
         }
 
@@ -971,7 +980,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
             if( !file.GetNextLine().ToLong( &traceType ) )
             {
                 file.Close();
-                onModify();
+                updateFrame();
                 return false;
             }
 
@@ -981,7 +990,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
             if( name.IsEmpty() || param.IsEmpty() )
             {
                 file.Close();
-                onModify();
+                updateFrame();
                 return false;
             }
 
@@ -994,7 +1003,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
     // Successfully loading a workbook does not count as modyfying it.
     m_workbook->ClrModified();
 
-    onModify();
+    updateFrame();
     return true;
 }
 
@@ -1020,32 +1029,23 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
         file.Create();
     }
 
-    unsigned long plotCount = 0;
+    std::vector<const SIM_PANEL_BASE*> plotPanels = m_workbook->GetSortedPlotPanels();
 
-    // XXX: Count all valid plots. Replace this once we move the workbook format to JSON or
-    // S-expressions.
-    for( const auto& plot : m_workbook->GetPlots() )
+    file.AddLine( wxString::Format( "%llu", plotPanels.size() ) );
+
+    for( const SIM_PANEL_BASE*& plotPanel : plotPanels )
     {
-        if( plot.first )
-            plotCount++;
-    }
+        SIM_WORKBOOK::PLOT_INFO plot = m_workbook->GetPlot( plotPanel );
 
-    file.AddLine( wxString::Format( "%llu", plotCount ) );
+        file.AddLine( wxString::Format( "%d", plotPanel->GetType() ) );
+        file.AddLine( plot.m_simCommand );
+        file.AddLine( wxString::Format( "%llu", plot.m_traces.size() ) );
 
-    for( const auto& plot : m_workbook->GetPlots() )
-    {
-        if( plot.first )
+        for( const auto& trace : plot.m_traces )
         {
-            file.AddLine( wxString::Format( "%d", plot.first->GetType() ) );
-            file.AddLine( plot.second.m_simCommand );
-            file.AddLine( wxString::Format( "%llu", plot.second.m_traces.size() ) );
-
-            for( const auto& trace : plot.second.m_traces )
-            {
-                file.AddLine( wxString::Format( "%d", trace.second.GetType() ) );
-                file.AddLine( trace.second.GetName() );
-                file.AddLine( trace.second.GetParam() );
-            }
+            file.AddLine( wxString::Format( "%d", trace.second.GetType() ) );
+            file.AddLine( trace.second.GetName() );
+            file.AddLine( trace.second.GetParam() );
         }
     }
 
@@ -1056,7 +1056,7 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
     // the frame is closed and then opened again.
     m_simulator->Settings()->SetWorkbookFilename( wxFileName( savePath ).GetFullName() );
     m_workbook->ClrModified();
-    onModify();
+    updateFrame();
 
     return res;
 }
@@ -1097,7 +1097,7 @@ void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
         if( prevPlot )
         {
             m_workbook->SetSimCommand( newPlot, m_workbook->GetSimCommand( prevPlot ) );
-            onModify();
+            updateFrame();
         }
     }
 }
@@ -1322,7 +1322,13 @@ void SIM_PLOT_FRAME::onPlotClose( wxAuiNotebookEvent& event )
     m_workbook->RemovePlotPanel( plotPanel );
     wxCommandEvent dummy;
     onCursorUpdate( dummy );
-    onModify();
+}
+
+
+void SIM_PLOT_FRAME::onPlotClosed( wxAuiNotebookEvent& event )
+{
+    updateWorkbook();
+    updateFrame();
 }
 
 
@@ -1331,6 +1337,16 @@ void SIM_PLOT_FRAME::onPlotChanged( wxAuiNotebookEvent& event )
     updateSignalList();
     wxCommandEvent dummy;
     onCursorUpdate( dummy );
+
+    updateWorkbook();
+    updateFrame();
+}
+
+
+void SIM_PLOT_FRAME::onPlotDragged( wxAuiNotebookEvent& event )
+{
+    updateWorkbook();
+    updateFrame();
 }
 
 
@@ -1415,7 +1431,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 
         m_workbook->SetSimCommand( plotPanelWindow, newCommand );
         m_simulator->Init();
-        onModify();
+        updateFrame();
     }
 }
 
@@ -1654,7 +1670,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
         updateSignalList();
         plotPanel->GetPlotWin()->UpdateAll();
         plotPanel->ResetScales();
-        onModify();
+        updateFrame();
     }
     else if( simType == ST_OP )
     {

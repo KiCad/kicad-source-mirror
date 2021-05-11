@@ -150,10 +150,15 @@ private:
     void updateTitle();
 
     /**
+     * Update the workbook to match the changes in the frame.
+     */
+    void updateWorkbook();
+
+    /**
      * Update the frame to match the changes to the workbook. Should be always called after the
      * workbook was modified.
      */
-    void onModify();
+    void updateFrame();
 
     /**
      * Give icons to menuitems of the main menubar.
@@ -267,8 +272,10 @@ private:
     }
 
     // Event handlers
-    void onPlotChanged( wxAuiNotebookEvent& event ) override;
     void onPlotClose( wxAuiNotebookEvent& event ) override;
+    void onPlotClosed( wxAuiNotebookEvent& event ) override;
+    void onPlotChanged( wxAuiNotebookEvent& event ) override;
+    void onPlotDragged( wxAuiNotebookEvent& event ) override;
 
     void onSignalDblClick( wxMouseEvent& event ) override;
     void onSignalRClick( wxListEvent& event ) override;
