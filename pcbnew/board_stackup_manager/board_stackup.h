@@ -277,7 +277,12 @@ public:
      * Calculate the distance (height) between the two given copper layers.
      *
      * This factors in the thickness of any dielectric and copper layers between the two given
-     * layers, but not the height of the given copper layers.
+     * layers, and half the height of the given start and end layers.  This half-height calculation
+     * allows this to be used for consistent length measurements when calculating net length through
+     * a series of vias.  A more advanced algorithm would be possible once we have a good concept of
+     * the start and end for a length measurment, but for now this will do.
+     * See https://gitlab.com/kicad/code/kicad/-/issues/8384 for more background.
+     *
      * @param aFirstLayer is a copper layer
      * @param aSecondLayer is a different copper layer
      * @return the height (in IU) between the two layers
