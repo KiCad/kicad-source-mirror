@@ -672,8 +672,10 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
         aList.emplace_back( _( "Radius" ), MessageTextFromValue( units, radius ) );
     }
 
+    aList.emplace_back( _( "Segment Length" ), MessageTextFromValue( units, GetLength() ) );
+
     // Display full track length (in Pcbnew)
-    if( board )
+    if( board && GetNetCode() > 0 )
     {
         int    count;
         double trackLen;
@@ -681,7 +683,7 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 
         std::tie( count, trackLen, lenPadToDie ) = board->GetTrackLength( *this );
 
-        aList.emplace_back( _( "Length" ), MessageTextFromValue( units, trackLen ) );
+        aList.emplace_back( _( "Routed Length" ), MessageTextFromValue( units, trackLen ) );
 
         if( lenPadToDie != 0 )
         {
