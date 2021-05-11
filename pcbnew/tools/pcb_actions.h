@@ -201,6 +201,7 @@ public:
     /// Activation of the Push and Shove settings dialogs
     static TOOL_ACTION routerSettingsDialog;
     static TOOL_ACTION routerDiffPairDialog;
+    static TOOL_ACTION lengthTunerSettingsDialog;
 
     /// Actions to enable switching modes via hotkey assignments
     static TOOL_ACTION routerHighlightMode;

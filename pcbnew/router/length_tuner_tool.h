@@ -47,10 +47,10 @@ private:
     void performTuning();
     void updateStatusPopup( PNS_TUNE_STATUS_POPUP& aPopup );
 
-    int routerOptionsDialog( const TOOL_EVENT& aEvent );
     int meanderSettingsDialog( const TOOL_EVENT& aEvent );
 
     PNS::MEANDER_SETTINGS m_savedMeanderSettings;
+    PNS::ROUTER_MODE      m_lastTuneMode;
 };
 
 #endif

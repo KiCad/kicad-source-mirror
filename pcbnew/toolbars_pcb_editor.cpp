@@ -488,6 +488,18 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::routeSingleTrack, makeRouteMenu() );
     m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::routeDiffPair, makeRouteMenu() );
 
+    auto makeTuneMenu = 
+        [&]()
+        {
+            std::unique_ptr<ACTION_MENU> tuneMenu = std::make_unique<ACTION_MENU>( false, selTool );
+            tuneMenu->Add( PCB_ACTIONS::lengthTunerSettingsDialog );
+            return tuneMenu;
+        };
+
+    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::routerTuneSingleTrace, makeTuneMenu() );
+    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::routerTuneDiffPair, makeTuneMenu() );
+    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::routerTuneDiffPairSkew, makeTuneMenu() );
+
     std::unique_ptr<ACTION_MENU> zoneMenu = std::make_unique<ACTION_MENU>( false, selTool );
     zoneMenu->Add( PCB_ACTIONS::zoneFillAll );
     zoneMenu->Add( PCB_ACTIONS::zoneUnfillAll );

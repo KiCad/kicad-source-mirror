@@ -1352,3 +1352,14 @@ TOOL_ACTION PCB_ACTIONS::dragFreeAngle( "pcbnew.InteractiveRouter.DragFreeAngle"
         _( "Drag (free angle)" ),
         _( "Drags the nearest joint in the track without restricting the track angle." ),
         BITMAPS::drag );
+
+
+// LENGTH_TUNER_TOOL
+//
+TOOL_ACTION PCB_ACTIONS::lengthTunerSettingsDialog( "pcbnew.LengthTuner.Settings",
+        AS_CONTEXT,
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
+        MD_CTRL + 'L', LEGACY_HK_NAME( "Length Tuning Settings (Modern Toolset only)" ),
+        _( "Length Tuning Settings..." ),
+        _( "Sets the length tuning parameters for currently routed item." ),
+        BITMAPS::router_len_tuner_setup );
