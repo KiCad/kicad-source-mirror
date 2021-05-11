@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,11 +29,15 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 
 	m_staticText4 = new wxStaticText( sbSizerUpper->GetStaticBox(), wxID_ANY, _("Tune from:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
+	m_staticText4->Hide();
+
 	fgSizerLenSkew->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString m_choicePathFromChoices;
 	m_choicePathFrom = new wxChoice( sbSizerUpper->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePathFromChoices, 0 );
 	m_choicePathFrom->SetSelection( 0 );
+	m_choicePathFrom->Hide();
+
 	fgSizerLenSkew->Add( m_choicePathFrom, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
@@ -41,11 +45,15 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 
 	m_staticText15 = new wxStaticText( sbSizerUpper->GetStaticBox(), wxID_ANY, _("Tune to:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText15->Wrap( -1 );
+	m_staticText15->Hide();
+
 	fgSizerLenSkew->Add( m_staticText15, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString m_choice4Choices;
 	m_choice4 = new wxChoice( sbSizerUpper->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice4Choices, 0 );
 	m_choice4->SetSelection( 0 );
+	m_choice4->Hide();
+
 	fgSizerLenSkew->Add( m_choice4, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
@@ -53,6 +61,8 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 
 	m_staticText3 = new wxStaticText( sbSizerUpper->GetStaticBox(), wxID_ANY, _("Constraint:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
+	m_staticText3->Hide();
+
 	fgSizerLenSkew->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_constraintSourceChoices[] = { _("From Design Rules"), _("Manual") };
@@ -60,6 +70,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	m_constraintSource = new wxChoice( sbSizerUpper->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_constraintSourceNChoices, m_constraintSourceChoices, 0 );
 	m_constraintSource->SetSelection( 1 );
 	m_constraintSource->Enable( false );
+	m_constraintSource->Hide();
 
 	fgSizerLenSkew->Add( m_constraintSource, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 

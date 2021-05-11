@@ -116,7 +116,7 @@
                                         <property name="floatable">1</property>
                                         <property name="font"></property>
                                         <property name="gripper">0</property>
-                                        <property name="hidden">0</property>
+                                        <property name="hidden">1</property>
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">Tune from:</property>
                                         <property name="markup">0</property>
@@ -178,7 +178,7 @@
                                         <property name="floatable">1</property>
                                         <property name="font"></property>
                                         <property name="gripper">0</property>
-                                        <property name="hidden">0</property>
+                                        <property name="hidden">1</property>
                                         <property name="id">wxID_ANY</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -251,7 +251,7 @@
                                         <property name="floatable">1</property>
                                         <property name="font"></property>
                                         <property name="gripper">0</property>
-                                        <property name="hidden">0</property>
+                                        <property name="hidden">1</property>
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">Tune to:</property>
                                         <property name="markup">0</property>
@@ -313,7 +313,7 @@
                                         <property name="floatable">1</property>
                                         <property name="font"></property>
                                         <property name="gripper">0</property>
-                                        <property name="hidden">0</property>
+                                        <property name="hidden">1</property>
                                         <property name="id">wxID_ANY</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -386,7 +386,7 @@
                                         <property name="floatable">1</property>
                                         <property name="font"></property>
                                         <property name="gripper">0</property>
-                                        <property name="hidden">0</property>
+                                        <property name="hidden">1</property>
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">Constraint:</property>
                                         <property name="markup">0</property>
@@ -448,7 +448,7 @@
                                         <property name="floatable">1</property>
                                         <property name="font"></property>
                                         <property name="gripper">0</property>
-                                        <property name="hidden">0</property>
+                                        <property name="hidden">1</property>
                                         <property name="id">wxID_ANY</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
