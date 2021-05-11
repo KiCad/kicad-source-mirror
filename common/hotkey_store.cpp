@@ -29,34 +29,39 @@
 #include <tool/tool_action.h>
 
 
-class GESTURE_PSEUDO_ACTION : public TOOL_ACTION
+class PSEUDO_ACTION : public TOOL_ACTION
 {
 public:
-    GESTURE_PSEUDO_ACTION( const wxString& aLabel, int aHotKey )
+    PSEUDO_ACTION( const wxString& aLabel, int aHotKey )
     {
         m_label = aLabel;
         m_hotKey = aHotKey;
     }
 };
 
-static GESTURE_PSEUDO_ACTION* g_gesturePseudoActions[] = {
-    new GESTURE_PSEUDO_ACTION( _( "Pan Left/Right" ), MD_CTRL + PSEUDO_WXK_WHEEL ),
-    new GESTURE_PSEUDO_ACTION( _( "Pan Up/Down" ), MD_SHIFT + PSEUDO_WXK_WHEEL ),
-    new GESTURE_PSEUDO_ACTION( _( "Finish Drawing" ), PSEUDO_WXK_DBLCLICK ),
+static PSEUDO_ACTION* g_gesturePseudoActions[] = {
+    new PSEUDO_ACTION( _( "Pan Left/Right" ), MD_CTRL + PSEUDO_WXK_WHEEL ),
+    new PSEUDO_ACTION( _( "Pan Up/Down" ), MD_SHIFT + PSEUDO_WXK_WHEEL ),
+    new PSEUDO_ACTION( _( "Finish Drawing" ), PSEUDO_WXK_DBLCLICK ),
 #ifdef __WXOSX_MAC__
-    new GESTURE_PSEUDO_ACTION( _( "Show Clarify Selection Menu" ), MD_ALT + PSEUDO_WXK_CLICK ),
-    new GESTURE_PSEUDO_ACTION( _( "Add to Selection" ), MD_SHIFT + PSEUDO_WXK_CLICK ),
-    new GESTURE_PSEUDO_ACTION( _( "Toggle Selection State" ), MD_CTRL + PSEUDO_WXK_CLICK ),
-    new GESTURE_PSEUDO_ACTION( _( "Remove from Selection" ), MD_SHIFT + MD_CTRL + PSEUDO_WXK_CLICK ),
+    new PSEUDO_ACTION( _( "Show Clarify Selection Menu" ), MD_ALT + PSEUDO_WXK_CLICK ),
+    new PSEUDO_ACTION( _( "Add to Selection" ), MD_SHIFT + PSEUDO_WXK_CLICK ),
+    new PSEUDO_ACTION( _( "Toggle Selection State" ), MD_CTRL + PSEUDO_WXK_CLICK ),
+    new PSEUDO_ACTION( _( "Remove from Selection" ), MD_SHIFT + MD_CTRL + PSEUDO_WXK_CLICK ),
 #else
-    new GESTURE_PSEUDO_ACTION( _( "Show Clarify Selection Menu" ), MD_CTRL + PSEUDO_WXK_CLICK ),
-    new GESTURE_PSEUDO_ACTION( _( "Add to Selection" ), MD_SHIFT + PSEUDO_WXK_CLICK ),
-    new GESTURE_PSEUDO_ACTION( _( "Toggle Selection State" ), MD_ALT + PSEUDO_WXK_CLICK ),
-    new GESTURE_PSEUDO_ACTION( _( "Remove from Selection" ), MD_SHIFT + MD_ALT + PSEUDO_WXK_CLICK ),
+    new PSEUDO_ACTION( _( "Show Clarify Selection Menu" ), MD_CTRL + PSEUDO_WXK_CLICK ),
+    new PSEUDO_ACTION( _( "Add to Selection" ), MD_SHIFT + PSEUDO_WXK_CLICK ),
+    new PSEUDO_ACTION( _( "Toggle Selection State" ), MD_ALT + PSEUDO_WXK_CLICK ),
+    new PSEUDO_ACTION( _( "Remove from Selection" ), MD_SHIFT + MD_ALT + PSEUDO_WXK_CLICK ),
 #endif
-    new GESTURE_PSEUDO_ACTION( _( "Ignore Grid Snaps" ), MD_CTRL ),
-    new GESTURE_PSEUDO_ACTION( _( "Ignore Other Snaps" ), MD_SHIFT ),
-    new GESTURE_PSEUDO_ACTION( _( "Ignore H/V/45 Constraints" ), MD_SHIFT )
+    new PSEUDO_ACTION( _( "Ignore Grid Snaps" ), MD_CTRL ),
+    new PSEUDO_ACTION( _( "Ignore Other Snaps" ), MD_SHIFT ),
+    new PSEUDO_ACTION( _( "Ignore H/V/45 Constraints" ), MD_SHIFT )
+};
+
+static PSEUDO_ACTION* g_standardPlatformCommands[] = {
+    new PSEUDO_ACTION( _( "Close" ), MD_CTRL + 'W' ),
+    new PSEUDO_ACTION( _( "Quit" ), MD_CTRL + 'Q' )
 };
 
 
@@ -92,7 +97,7 @@ HOTKEY_STORE::HOTKEY_STORE()
 }
 
 
-void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncludeGestures )
+void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncludeReadOnlyCmds )
 {
     m_toolManagers = std::move( aToolManagerList );
 
@@ -102,7 +107,7 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncl
 
     for( TOOL_MANAGER* toolMgr : m_toolManagers )
     {
-        for( const auto& entry : toolMgr->GetActions() )
+        for( const std::pair<const std::string, TOOL_ACTION*>& entry : toolMgr->GetActions() )
         {
             // Internal actions probably shouldn't be allowed hotkeys
             if( entry.second->GetLabel().IsEmpty() )
@@ -120,7 +125,7 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncl
     // If a previous list was built, ensure this previous list is cleared:
     m_hk_sections.clear();
 
-    for( const auto& entry : masterMap )
+    for( const std::pair<const std::string, HOTKEY>& entry : masterMap )
     {
         TOOL_ACTION* entryAction = entry.second.m_Actions[ 0 ];
         wxString     entryApp = GetAppName( entryAction );
@@ -131,12 +136,18 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncl
             currentApp = entryApp;
             currentSection = &m_hk_sections.back();
             currentSection->m_SectionName = GetSectionName( entryAction );
+
+            if( aIncludeReadOnlyCmds && currentApp == "common" )
+            {
+                for( TOOL_ACTION* command : g_standardPlatformCommands )
+                    currentSection->m_HotKeys.emplace_back( HOTKEY( command ) );
+            }
         }
 
         currentSection->m_HotKeys.emplace_back( HOTKEY( entry.second ) );
     }
 
-    if( aIncludeGestures )
+    if( aIncludeReadOnlyCmds )
     {
         m_hk_sections.emplace_back( HOTKEY_SECTION() );
         currentSection = &m_hk_sections.back();
