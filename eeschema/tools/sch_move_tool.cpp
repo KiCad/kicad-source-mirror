@@ -594,10 +594,6 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         }
 
         case SCH_SHEET_T:
-            // Dragging a sheet just because it's connected to something else feels a bit like
-            // the tail wagging the dog, but this could be moved down to the next case.
-            break;
-
         case SCH_COMPONENT_T:
         case SCH_JUNCTION_T:
             if( test->IsConnected( aPoint ) )
