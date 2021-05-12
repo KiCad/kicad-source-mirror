@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -45,13 +45,12 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	m_borderColorLabel = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Sheet border:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderColorLabel->Wrap( -1 );
-	bSizer6->Add( m_borderColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer6->Add( m_borderColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_borderColorSwatch = new COLOR_SWATCH( sbSizer5->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-	m_borderColorSwatch->SetMinSize( wxSize( 48,24 ) );
 
-	bSizer6->Add( m_borderColorSwatch, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer6->Add( m_borderColorSwatch, 1, wxALL, 5 );
 
 	m_backgroundColorLabel = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Sheet background:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backgroundColorLabel->Wrap( -1 );
@@ -59,9 +58,8 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	m_backgroundColorSwatch = new COLOR_SWATCH( sbSizer5->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_backgroundColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-	m_backgroundColorSwatch->SetMinSize( wxSize( 48,24 ) );
 
-	bSizer6->Add( m_backgroundColorSwatch, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer6->Add( m_backgroundColorSwatch, 1, wxALL, 5 );
 
 
 	sbSizer5->Add( bSizer6, 0, wxEXPAND, 5 );
