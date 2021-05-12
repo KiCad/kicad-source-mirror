@@ -931,6 +931,8 @@ bool SCH_EDIT_FRAME::doAutoSave()
     if( !IsWritable( tmp ) )
         return false;
 
+    wxString title = GetTitle();    // Save frame title, that can be modified by the save process
+
     for( size_t i = 0; i < screens.GetCount(); i++ )
     {
         // Only create auto save files for the schematics that have been modified.
@@ -962,6 +964,8 @@ bool SCH_EDIT_FRAME::doAutoSave()
             GetSettingsManager()->TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
         }
     }
+
+    SetTitle( title );
 
     return autoSaveOk;
 }
