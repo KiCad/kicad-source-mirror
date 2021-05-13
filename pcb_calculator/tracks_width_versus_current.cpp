@@ -41,6 +41,8 @@ wxString tracks_width_versus_current_formula =
 
 extern double DoubleFromString( const wxString& TextValue );
 
+// The IPC2221 formula used to calculate track width is valid only for copper material
+const double copper_resistivity = 1.72e-8;
 
 void PCB_CALCULATOR_FRAME::writeTrackWidthConfig()
 {
@@ -216,7 +218,7 @@ void PCB_CALCULATOR_FRAME::OnTWResetButtonClick( wxCommandEvent& event )
     m_TrackDeltaTValue->SetValue( wxString::Format( "%g", 10.0 ) );
     m_TrackLengthValue->SetValue( wxString::Format( "%g", 20.0 ) );
     m_TW_CuLength_choiceUnit->SetSelection( 0 );
-    m_TWResistivity->SetValue( wxString::Format( "%g", 1.72e-8 ) );
+    m_TWResistivity->SetValue( wxString::Format( "%g", copper_resistivity ) );
     m_ExtTrackWidthValue->SetValue( wxString::Format( "%g", 0.2 ) );
     m_TW_ExtTrackWidth_choiceUnit->SetSelection( 0 );
     m_ExtTrackThicknessValue->SetValue( wxString::Format( "%g", 0.035 ) );
@@ -429,7 +431,11 @@ void PCB_CALCULATOR_FRAME::initTrackWidthPanel()
     m_TrackDeltaTValue->SetValue( cfg->m_TrackWidth.delta_tc );
     m_TrackLengthValue->SetValue( cfg->m_TrackWidth.track_len );
     m_TW_CuLength_choiceUnit->SetSelection( cfg->m_TrackWidth.track_len_units );
+#if 0   // the IPC formula is valid for copper traces, so we do not currently adjust the resistivity
     m_TWResistivity->SetValue( cfg->m_TrackWidth.resistivity );
+#else
+    m_TWResistivity->SetValue( wxString::Format( "%g", copper_resistivity ) );
+#endif
     m_ExtTrackWidthValue->SetValue( cfg->m_TrackWidth.ext_track_width );
     m_TW_ExtTrackWidth_choiceUnit->SetSelection( cfg->m_TrackWidth.ext_track_width_units );
     m_ExtTrackThicknessValue->SetValue( cfg->m_TrackWidth.ext_track_thickness );

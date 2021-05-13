@@ -253,7 +253,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelRegulators->SetSizer( bSizerMainReg );
 	m_panelRegulators->Layout();
 	bSizerMainReg->Fit( m_panelRegulators );
-	m_Notebook->AddPage( m_panelRegulators, _("Regulators"), false );
+	m_Notebook->AddPage( m_panelRegulators, _("Regulators"), true );
 	m_panelAttenuators = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerAtt;
 	bSizerAtt = new wxBoxSizer( wxHORIZONTAL );
@@ -1488,7 +1488,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelViaSize->SetSizer( bSizerViaSize );
 	m_panelViaSize->Layout();
 	bSizerViaSize->Fit( m_panelViaSize );
-	m_Notebook->AddPage( m_panelViaSize, _("Via Size"), true );
+	m_Notebook->AddPage( m_panelViaSize, _("Via Size"), false );
 	m_panelTrackWidth = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerTrackWidth;
 	bSizerTrackWidth = new wxBoxSizer( wxHORIZONTAL );
@@ -1539,11 +1539,11 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_TW_CuLength_choiceUnit->SetSelection( 0 );
 	fgSizerTWprms->Add( m_TW_CuLength_choiceUnit, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
-	m_staticText103 = new wxStaticText( sbSizerTW_Prms->GetStaticBox(), wxID_ANY, _("Resistivity:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText103 = new wxStaticText( sbSizerTW_Prms->GetStaticBox(), wxID_ANY, _("Copper resistivity:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText103->Wrap( -1 );
 	fgSizerTWprms->Add( m_staticText103, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxBOTTOM, 5 );
 
-	m_TWResistivity = new wxTextCtrl( sbSizerTW_Prms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TWResistivity = new wxTextCtrl( sbSizerTW_Prms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	fgSizerTWprms->Add( m_TWResistivity, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_resistivityUnits = new wxStaticText( sbSizerTW_Prms->GetStaticBox(), wxID_ANY, _("ohm-meter"), wxDefaultPosition, wxDefaultSize, 0 );
