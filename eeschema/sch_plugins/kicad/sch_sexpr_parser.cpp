@@ -2895,6 +2895,26 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
         case T_effects:
             parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ) );
+
+            // Spin style is defined differently for graphical text (#SCH_TEXT) objects.
+            if( text->Type() == SCH_TEXT_T )
+            {
+                if( text->GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT
+                  && text->GetTextAngle() == TEXT_ANGLE_VERT )
+                {
+                    // The vertically aligned text angle is always 90 (labels use 270 for the
+                    // down direction) combined with the text justification flags.
+                    text->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
+                }
+                else if( text->GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT
+                       && text->GetTextAngle() == TEXT_ANGLE_HORIZ )
+                {
+                    // The horizontally aligned text angle is always 0 (labels use 180 for the
+                    // left direction) combined with the text justification flags.
+                    text->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+                }
+            }
+
             break;
 
         case T_iref:    // legacy format; current is a T_property (aka SCH_FIELD)

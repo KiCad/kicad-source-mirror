@@ -59,7 +59,7 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
         m_lastSheetPinType( PINSHEETLABEL_SHAPE::PS_INPUT ),
         m_lastGlobalLabelShape( PINSHEETLABEL_SHAPE::PS_INPUT ),
-        m_lastTextOrientation( LABEL_SPIN_STYLE::LEFT ),
+        m_lastTextOrientation( LABEL_SPIN_STYLE::RIGHT ),
         m_lastTextBold( false ),
         m_lastTextItalic( false ),
         m_inPlaceSymbol( false ),

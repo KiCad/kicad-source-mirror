@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -86,7 +86,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	bSizeCtrlSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_textSizeCtrl = new wxTextCtrl( this, wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizeCtrlSizer->Add( m_textSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 6 );
+	bSizeCtrlSizer->Add( m_textSizeCtrl, 0, wxBOTTOM|wxRIGHT|wxTOP, 6 );
 
 	m_textSizeUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeUnits->Wrap( -1 );
@@ -98,10 +98,10 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_formattingHelp = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
 	m_formattingHelp->SetToolTip( _("Show syntax help window") );
 
-	bSizeCtrlSizer->Add( m_formattingHelp, 0, wxBOTTOM|wxRIGHT|wxLEFT, 7 );
+	bSizeCtrlSizer->Add( m_formattingHelp, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	m_textEntrySizer->Add( bSizeCtrlSizer, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 6 );
+	m_textEntrySizer->Add( bSizeCtrlSizer, 1, wxEXPAND, 6 );
 
 	m_note1 = new wxStaticText( this, wxID_ANY, _("Note:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_note1->Wrap( -1 );
@@ -117,22 +117,22 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* m_OptionsSizer;
 	m_OptionsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxString m_TextOrientChoices[] = { _("Left"), _("Up"), _("Right"), _("Down") };
+	wxString m_TextOrientChoices[] = { _("Align right"), _("Align bottom"), _("Align left"), _("Align top") };
 	int m_TextOrientNChoices = sizeof( m_TextOrientChoices ) / sizeof( wxString );
-	m_TextOrient = new wxRadioBox( this, wxID_ANY, _("Orientation"), wxDefaultPosition, wxDefaultSize, m_TextOrientNChoices, m_TextOrientChoices, 1, wxRA_SPECIFY_COLS );
-	m_TextOrient->SetSelection( 0 );
+	m_TextOrient = new wxRadioBox( this, wxID_ANY, _("Justification"), wxDefaultPosition, wxDefaultSize, m_TextOrientNChoices, m_TextOrientChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextOrient->SetSelection( 2 );
 	m_OptionsSizer->Add( m_TextOrient, 1, wxRIGHT|wxTOP|wxEXPAND, 3 );
 
 	wxString m_TextStyleChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold and italic") };
 	int m_TextStyleNChoices = sizeof( m_TextStyleChoices ) / sizeof( wxString );
 	m_TextStyle = new wxRadioBox( this, wxID_ANY, _("Style"), wxDefaultPosition, wxDefaultSize, m_TextStyleNChoices, m_TextStyleChoices, 1, wxRA_SPECIFY_COLS );
-	m_TextStyle->SetSelection( 3 );
+	m_TextStyle->SetSelection( 0 );
 	m_OptionsSizer->Add( m_TextStyle, 1, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 3 );
 
 	wxString m_TextShapeChoices[] = { _("Input"), _("Output"), _("Bidirectional"), _("Tri-state"), _("Passive") };
 	int m_TextShapeNChoices = sizeof( m_TextShapeChoices ) / sizeof( wxString );
 	m_TextShape = new wxRadioBox( this, wxID_ANY, _("Shape"), wxDefaultPosition, wxDefaultSize, m_TextShapeNChoices, m_TextShapeChoices, 1, wxRA_SPECIFY_COLS );
-	m_TextShape->SetSelection( 3 );
+	m_TextShape->SetSelection( 0 );
 	m_OptionsSizer->Add( m_TextShape, 1, wxEXPAND|wxTOP|wxLEFT, 3 );
 
 

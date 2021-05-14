@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -664,14 +664,14 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 
     switch( GetLabelSpinStyle() )
     {
-    case LABEL_SPIN_STYLE::LEFT:   msg = _( "Horizontal left" );  break;
-    case LABEL_SPIN_STYLE::UP:     msg = _( "Vertical up" );      break;
-    case LABEL_SPIN_STYLE::RIGHT:  msg = _( "Horizontal right" ); break;
-    case LABEL_SPIN_STYLE::BOTTOM: msg = _( "Vertical down" );    break;
-    default:                       msg = wxT( "???" );            break;
+    case LABEL_SPIN_STYLE::LEFT:   msg = _( "Align right" );   break;
+    case LABEL_SPIN_STYLE::UP:     msg = _( "Align bottom" );  break;
+    case LABEL_SPIN_STYLE::RIGHT:  msg = _( "Align left" );    break;
+    case LABEL_SPIN_STYLE::BOTTOM: msg = _( "Align top" );     break;
+    default:                       msg = wxT( "???" );         break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Justification" ), msg, BROWN ) );
 
     wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
     int style = 0;
@@ -1216,6 +1216,7 @@ void SCH_GLOBALLABEL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aO
         m_intersheetRefsField.Print( aSettings, aOffset );
 }
 
+
 void SCH_GLOBALLABEL::Plot( PLOTTER* aPlotter ) const
 {
     SCH_TEXT::Plot( aPlotter );
@@ -1225,6 +1226,7 @@ void SCH_GLOBALLABEL::Plot( PLOTTER* aPlotter ) const
     if ( show )
         m_intersheetRefsField.Plot( aPlotter );
 }
+
 
 void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
                                           std::vector<wxPoint>& aPoints, const wxPoint& Pos ) const
@@ -1463,7 +1465,8 @@ void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
 
 
 void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
-                                        std::vector<wxPoint>& aPoints, const wxPoint& aPos, PINSHEETLABEL_SHAPE aShape ) const
+                                        std::vector<wxPoint>& aPoints, const wxPoint& aPos,
+                                        PINSHEETLABEL_SHAPE aShape ) const
 {
     int* Template = TemplateShape[static_cast<int>( aShape )][static_cast<int>( m_spin_style )];
     int  halfSize = GetTextHeight() / 2;
