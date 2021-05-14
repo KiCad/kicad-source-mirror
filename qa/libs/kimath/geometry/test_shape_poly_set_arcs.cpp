@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string>
 #include <tuple>
 #include <unit_test_utils/unit_test_utils.h>
 
@@ -29,25 +30,53 @@
 
 BOOST_AUTO_TEST_SUITE( CurvedPolys )
 
+
 /**
  * Simplify the polygon a large number of times and check that the area
- * does not change.
+ * does not change and also that the arcs are the same before and after
  */
 BOOST_AUTO_TEST_CASE( TestSimplify )
 {
-    KI_TEST::CommonTestData testData;
-    SHAPE_POLY_SET testPoly = testData.holeyCurvedPolySingle;
+    KI_TEST::CommonTestData               testData;
 
-    double originalArea = testData.holeyCurvedPolySingle.Area();
-
-    for( int i = 1; i < 20; i++ )
+    std::map<std::string, SHAPE_POLY_SET> polysToTest =
     {
-        BOOST_TEST_CONTEXT( "Simplify Iteration " << i )
-        {
-            testPoly.Simplify( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+        { "Case 1: Single polygon", testData.holeyCurvedPolySingle },
+        { "Case 2: Multi polygon", testData.holeyCurvedPolyMulti }
+    };
 
-            BOOST_CHECK_EQUAL( testPoly.Area(), originalArea );
-    }
+    for( std::pair<std::string, SHAPE_POLY_SET> testCase : polysToTest )
+    {
+        BOOST_TEST_CONTEXT( testCase.first )
+        {
+            SHAPE_POLY_SET testPoly = testCase.second;
+
+            double originalArea = testPoly.Area();
+
+            std::vector<SHAPE_ARC> originalArcs;
+            testPoly.GetArcs( originalArcs );
+
+            for( int i = 1; i <= 3; i++ )
+            {
+                BOOST_TEST_CONTEXT( "Simplify Iteration " << i )
+                {
+                    testPoly.Simplify( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+                    std::vector<SHAPE_ARC> foundArcs;
+                    testPoly.GetArcs( foundArcs );
+
+                    BOOST_CHECK_EQUAL( testPoly.Area(), originalArea );
+                    BOOST_CHECK_EQUAL( originalArcs.size(), foundArcs.size() );
+                    KI_TEST::CheckUnorderedMatches( originalArcs, foundArcs,
+                                                    []( const SHAPE_ARC& aA, const SHAPE_ARC& aB ) -> bool
+                                                    {
+                                                        // We accept that the arcs could be reversed after Simplify
+                                                        return aA == aB || aA.Reversed() == aB;
+                                                    } );
+
+                }
+            }
+        }
     }
 }
 
