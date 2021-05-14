@@ -811,10 +811,10 @@ void FOOTPRINT_EDIT_FRAME::initLibraryTree()
     FP_LIB_TABLE*   fpTable = Prj().PcbFootprintLibs();
 
     WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
+
     if( GFootprintList.GetCount() == 0 )
-    {
         GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + "fp-info-cache" );
-    }
+
     GFootprintList.ReadFootprintFiles( fpTable, NULL, &progressReporter );
     progressReporter.Show( false );
 

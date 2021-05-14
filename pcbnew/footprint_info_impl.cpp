@@ -393,16 +393,18 @@ void FOOTPRINT_LIST_IMPL::ReadCacheFromFile( const wxString& aFilePath )
 
             while( cacheFile.GetCurrentLine() + 6 < cacheFile.GetLineCount() )
             {
-                wxString     libNickname    = cacheFile.GetNextLine();
-                wxString     name           = cacheFile.GetNextLine();
-                wxString     description    = UnescapeString( cacheFile.GetNextLine() );
-                wxString     keywords       = UnescapeString( cacheFile.GetNextLine() );
-                int          orderNum       = wxAtoi( cacheFile.GetNextLine() );
-                unsigned int padCount       = (unsigned) wxAtoi( cacheFile.GetNextLine() );
-                unsigned int uniquePadCount = (unsigned) wxAtoi( cacheFile.GetNextLine() );
+                wxString             libNickname    = cacheFile.GetNextLine();
+                wxString             name           = cacheFile.GetNextLine();
+                wxString             desc           = UnescapeString( cacheFile.GetNextLine() );
+                wxString             keywords       = UnescapeString( cacheFile.GetNextLine() );
+                int                  orderNum       = wxAtoi( cacheFile.GetNextLine() );
+                unsigned int         padCount       = (unsigned) wxAtoi( cacheFile.GetNextLine() );
+                unsigned int         uniquePadCount = (unsigned) wxAtoi( cacheFile.GetNextLine() );
 
-                auto* fpinfo = new FOOTPRINT_INFO_IMPL( libNickname, name, description, keywords,
-                                                        orderNum, padCount, uniquePadCount );
+                FOOTPRINT_INFO_IMPL* fpinfo = new FOOTPRINT_INFO_IMPL( libNickname, name, desc,
+                                                                       keywords, orderNum,
+                                                                       padCount,  uniquePadCount );
+
                 m_list.emplace_back( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
             }
         }

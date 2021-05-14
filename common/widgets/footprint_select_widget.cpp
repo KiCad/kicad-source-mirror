@@ -23,13 +23,14 @@
 #include <project.h>
 #include <widgets/footprint_choice.h>
 #include <widgets/footprint_select_widget.h>
-
-#include <wx/wupdlock.h>
 #include <widgets/progress_reporter.h>
+#include <footprint_info_impl.h>
+#include <wx/wupdlock.h>
 
+
+extern FOOTPRINT_LIST_IMPL GFootprintList;        // KIFACE scope.
 
 wxDEFINE_EVENT( EVT_FOOTPRINT_SELECTED, wxCommandEvent );
-
 
 FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWindow* aParent,
                                                   FOOTPRINT_LIST* aFpList, bool aUpdate,
@@ -60,6 +61,15 @@ void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
     try
     {
         m_fp_list = FOOTPRINT_LIST::GetInstance( aKiway );
+
+        if( m_fp_list->GetCount() == 0 )
+        {
+            // If the fp-info-cache is empty (or, more likely, hasn't been created in a new
+            // project yet), load footprints the hard way.
+            FP_LIB_TABLE* fpTable = aProject.PcbFootprintLibs( aKiway );
+            static_cast<FOOTPRINT_LIST_IMPL*>( m_fp_list )->ReadFootprintFiles( fpTable );
+        }
+
         m_fp_filter.SetList( *m_fp_list );
     }
     catch( ... )
@@ -137,7 +147,7 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
 
     if( !m_zero_filter )
     {
-        for( auto& fpinfo : m_fp_filter )
+        for( FOOTPRINT_INFO& fpinfo : m_fp_filter )
         {
             wxString display_name( fpinfo.GetLibNickname() + ":" + fpinfo.GetFootprintName() );
 
