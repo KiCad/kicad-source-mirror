@@ -37,6 +37,7 @@
 #include <class_track.h>
 #include <class_marker_pcb.h>
 #include <pcb_base_frame.h>
+#include "footprint_edit_frame.h"
 #include <confirm.h>
 
 #include <gal/graphics_abstraction_layer.h>
@@ -438,6 +439,21 @@ BOX2I PCB_DRAW_PANEL_GAL::GetDefaultViewBBox() const
 {
     if( m_worksheet && m_view->IsLayerVisible( LAYER_WORKSHEET ) )
         return m_worksheet->ViewBBox();
+
+    // The footprint editor frame has no worksheet, but the best default view box is the
+    // view box able to show the current footprint
+    FOOTPRINT_EDIT_FRAME* fp_frame;
+
+    if( ( fp_frame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_edaFrame ) ) )
+    {
+        MODULE* footprint = fp_frame->GetBoard()->m_Modules;
+
+        if( footprint )
+        {
+            EDA_RECT bbox = footprint->GetBoundingBox();
+            return bbox;
+        }
+    }
 
     return BOX2I();
 }
