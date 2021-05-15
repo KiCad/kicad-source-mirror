@@ -3373,8 +3373,7 @@ LEGACY_PLUGIN::LEGACY_PLUGIN() :
     m_props( nullptr ),
     m_reader( nullptr ),
     m_fp( nullptr ),
-    m_cache( nullptr ),
-    m_mapping( new NETINFO_MAPPING() )
+    m_cache( nullptr )
 {
     init( NULL );
 }
@@ -3383,5 +3382,4 @@ LEGACY_PLUGIN::LEGACY_PLUGIN() :
 LEGACY_PLUGIN::~LEGACY_PLUGIN()
 {
     delete m_cache;
-    delete m_mapping;
 }
