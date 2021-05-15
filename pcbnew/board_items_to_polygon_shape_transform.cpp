@@ -283,7 +283,6 @@ void FOOTPRINT::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
 
 
 /**
- * Function TransformTextShapeWithClearanceToPolygon
  * Convert the text to a polygonSet describing the actual character strokes (one per segment).
  * @aCornerBuffer = SHAPE_POLY_SET to store the polygon corners
  * @aClearanceValue = the clearance around the text
@@ -293,19 +292,17 @@ void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
                                                         PCB_LAYER_ID aLayer, int aClearance,
                                                         int aError, ERROR_LOC aErrorLoc ) const
 {
-    bool forceBold = true;
-    int  penWidth = 0;      // force max width for bold text
-
     prms.m_cornerBuffer = &aCornerBuffer;
     prms.m_textWidth  = GetEffectiveTextPenWidth() + ( 2 * aClearance );
     prms.m_error = aError;
     wxSize size = GetTextSize();
+    int  penWidth = GetEffectiveTextPenWidth();
 
     if( IsMirrored() )
         size.x = -size.x;
 
     GRText( NULL, GetTextPos(), BLACK, GetShownText(), GetDrawRotation(), size, GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToPoly, &prms );
+            GetVertJustify(), penWidth, IsItalic(), IsBold(), addTextSegmToPoly, &prms );
 }
 
 
@@ -381,7 +378,6 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
 
 
 /**
- * Function TransformTextShapeWithClearanceToPolygon
  * Convert the text to a polygonSet describing the actual character strokes (one per segment).
  * @aCornerBuffer = SHAPE_POLY_SET to store the polygon corners
  * @aClearanceValue = the clearance around the text
@@ -396,34 +392,15 @@ void PCB_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
     if( IsMirrored() )
         size.x = -size.x;
 
-    bool forceBold = true;
     int  penWidth = GetEffectiveTextPenWidth();
 
     prms.m_cornerBuffer = &aCornerBuffer;
     prms.m_textWidth = GetEffectiveTextPenWidth() + ( 2 * aClearanceValue );
     prms.m_error = aError;
-    COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by GRText
+    COLOR4D color;  // not actually used, but needed by GRText
 
-    if( IsMultilineAllowed() )
-    {
-        wxArrayString strings_list;
-        wxStringSplit( GetShownText(), strings_list, '\n' );
-        std::vector<wxPoint> positions;
-        positions.reserve( strings_list.Count() );
-        GetLinePositions( positions, strings_list.Count() );
-
-        for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
-        {
-            wxString txt = strings_list.Item( ii );
-            GRText( NULL, positions[ii], color, txt, GetTextAngle(), size, GetHorizJustify(),
-                    GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToPoly, &prms );
-        }
-    }
-    else
-    {
-        GRText( NULL, GetTextPos(), color, GetShownText(), GetTextAngle(), size, GetHorizJustify(),
-                GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToPoly, &prms );
-    }
+    GRText( NULL, GetTextPos(), color, GetShownText(), GetTextAngle(), size, GetHorizJustify(),
+            GetVertJustify(), penWidth, IsItalic(), IsBold(), addTextSegmToPoly, &prms );
 }
 
 

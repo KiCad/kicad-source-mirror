@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,33 +96,16 @@ void BOARD_ADAPTER::addShapeWithClearance( const PCB_TEXT* aText, CONTAINER_2D_B
     s_biuTo3Dunits = m_biuTo3Dunits;
 
     // not actually used, but needed by GRText
-    const COLOR4D dummy_color = COLOR4D::BLACK;
-    bool          forceBold = true;
-    int           penWidth = 0;         // force max width for bold
+    const COLOR4D dummy_color;
 
-    if( aText->IsMultilineAllowed() )
-    {
-        wxArrayString strings_list;
-        wxStringSplit( aText->GetShownText(), strings_list, '\n' );
-        std::vector<wxPoint> positions;
-        positions.reserve( strings_list.Count() );
-        aText->GetLinePositions( positions, strings_list.Count() );
+    // Use the actual text width to generate segments. The segment position depend on
+    // text thickness and justification
+    bool isBold = aText->IsBold();
+    int  penWidth = aText->GetEffectiveTextPenWidth();
 
-        for( unsigned ii = 0; ii < strings_list.Count(); ++ii )
-        {
-            wxString txt = strings_list.Item( ii );
-
-            GRText( nullptr, positions[ii], dummy_color, txt, aText->GetTextAngle(), size,
-                    aText->GetHorizJustify(), aText->GetVertJustify(), penWidth,
-                    aText->IsItalic(), forceBold, addTextSegmToContainer );
-        }
-    }
-    else
-    {
-        GRText( nullptr, aText->GetTextPos(), dummy_color, aText->GetShownText(),
-                aText->GetTextAngle(), size, aText->GetHorizJustify(), aText->GetVertJustify(),
-                penWidth, aText->IsItalic(), forceBold, addTextSegmToContainer );
-    }
+    GRText( nullptr, aText->GetTextPos(), dummy_color, aText->GetShownText(),
+            aText->GetTextAngle(), size, aText->GetHorizJustify(), aText->GetVertJustify(),
+            penWidth, aText->IsItalic(), isBold, addTextSegmToContainer );
 }
 
 
@@ -229,15 +212,15 @@ void BOARD_ADAPTER::addFootprintShapesWithClearance( const FOOTPRINT* aFootprint
     {
         s_textWidth = text->GetEffectiveTextPenWidth() + ( 2 * aInflateValue );
         wxSize size = text->GetTextSize();
-        bool   forceBold = true;
-        int    penWidth = 0;        // force max width for bold
+        bool   isBold = text->IsBold();
+        int    penWidth = text->GetEffectiveTextPenWidth();
 
         if( text->IsMirrored() )
             size.x = -size.x;
 
         GRText( nullptr, text->GetTextPos(), BLACK, text->GetShownText(), text->GetDrawRotation(),
                 size, text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
-                forceBold, addTextSegmToContainer );
+                isBold, addTextSegmToContainer );
     }
 }
 
