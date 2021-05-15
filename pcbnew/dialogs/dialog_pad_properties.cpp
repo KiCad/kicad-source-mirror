@@ -1256,22 +1256,26 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     // Some pads need a negative solder mask clearance (mainly for BGA with small pads)
     // However the negative solder mask clearance must not create negative mask size
     // Therefore test for minimal acceptable negative value
-    // Hovewer, a negative value can give strange result with custom shapes, so it is not
-    // allowed for custom pad shape
-    if( m_dummyPad->GetLocalSolderMaskMargin() < 0 && m_dummyPad->GetShape() == PAD_SHAPE::CUSTOM )
+    if( m_dummyPad->GetLocalSolderMaskMargin() < 0 )
     {
-        warning_msgs.Add( _( "Warning: Negative solder mask clearances are not supported for "
-                             "custom pad shapes." ) );
-    }
-    else
-    {
-        wxSize solder_size;
-        int    solder_margin = m_dummyPad->GetLocalSolderMaskMargin();
+        int absMargin = abs( m_dummyPad->GetLocalSolderMaskMargin() );
 
-        solder_size.x = pad_size.x + solder_margin;
-        solder_size.y = pad_size.y + solder_margin;
+        if( m_dummyPad->GetShape() == PAD_SHAPE::CUSTOM )
+        {
+            for( const std::shared_ptr<PCB_SHAPE>& shape : m_dummyPad->GetPrimitives() )
+            {
+                EDA_RECT shapeBBox = shape->GetBoundingBox();
 
-        if( solder_size.x <= 0 || solder_size.y <= 0 )
+                if( absMargin > shapeBBox.GetWidth() || absMargin > shapeBBox.GetHeight() )
+                {
+                    warning_msgs.Add( _( "Warning: Negative solder mask clearances larger than "
+                                         "some shape primitives. Results may be surprising." ) );
+
+                    break;
+                }
+            }
+        }
+        else if( absMargin > pad_size.x || absMargin > pad_size.y )
         {
             warning_msgs.Add( _( "Warning: Negative solder mask clearance larger than pad. No "
                                  "solder mask will be generated." ) );
