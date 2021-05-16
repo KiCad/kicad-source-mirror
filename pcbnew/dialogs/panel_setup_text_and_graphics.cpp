@@ -71,6 +71,23 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aPar
     m_grid->AppendRows( 1 );
     m_grid->DeleteRows( m_grid->GetNumberRows() - 1, 1 );
 
+    // Gives a suitable size to m_grid columns
+    // The default wxWidget col size is not very good
+    // Calculate a min best size to handle longest usual numeric values:
+    int min_best_width = m_grid->GetTextExtent( "555,555555 mils" ).x;
+
+    for( int i = 0; i < m_grid->GetNumberCols(); ++i )
+    {
+        // We calculate the column min size only from texts sizes, not using the initial col width
+        // as this initial width is sometimes strange depending on the language (wxGrid bug?)
+        int min_width =  m_grid->GetVisibleWidth( i, true, true, false );
+
+        m_grid->SetColMinimalWidth( i, min_width );
+
+        // We use a "best size" >= min_best_width
+        m_grid->SetColSize( i, std::max( min_width, min_best_width ) );
+    }
+
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 }
 

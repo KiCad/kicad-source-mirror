@@ -18,25 +18,34 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bMessages;
-	bMessages = new wxBoxSizer( wxVERTICAL );
-
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+	bMessages = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bitmapWarning = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_WARNING, wxART_OTHER ), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_bitmapWarning, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bMessages->Add( m_bitmapWarning, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Use your board house's recommendation for solder mask clearance and minimum bridge width.\nIf none is provided, setting the values to zero is suggested."), wxDefaultPosition, wxDefaultSize, 0 );
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxVERTICAL );
+
+	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Use your board house's recommendation for solder mask clearance and minimum bridge width."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoMaskMinWidth->Wrap( -1 );
 	m_staticTextInfoMaskMinWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	bSizer4->Add( m_staticTextInfoMaskMinWidth, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticTextInfoMaskMinWidth1 = new wxStaticText( this, wxID_ANY, _("If none is provided, setting the values to zero is suggested."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoMaskMinWidth1->Wrap( -1 );
+	m_staticTextInfoMaskMinWidth1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+
+	bSizer4->Add( m_staticTextInfoMaskMinWidth1, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bMessages->Add( bSizer4, 1, wxEXPAND, 5 );
 
 
 	bSizer3->Add( bMessages, 0, wxEXPAND|wxALL, 5 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer3->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 
 	wxFlexGridSizer* fgGridSolderMaskSizer;
 	fgGridSolderMaskSizer = new wxFlexGridSizer( 0, 3, 0, 0 );

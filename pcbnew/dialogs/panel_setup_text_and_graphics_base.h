@@ -37,9 +37,9 @@ class PANEL_SETUP_TEXT_AND_GRAPHICS_BASE : public wxPanel
 
 	protected:
 		wxBoxSizer* m_gridSizer;
-		wxStaticText* m_staticText1;
+		wxStaticText* m_staticTextDefProp;
 		WX_GRID* m_grid;
-		wxStaticText* m_staticText2;
+		wxStaticText* m_staticTextDefPropDim;
 		wxStaticText* m_lblDimensionUnits;
 		wxChoice* m_dimensionUnits;
 		wxStaticText* m_lblTextPositionMode;

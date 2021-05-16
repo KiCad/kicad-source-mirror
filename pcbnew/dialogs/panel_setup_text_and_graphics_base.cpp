@@ -18,9 +18,9 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 
 	m_gridSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Default properties for new graphic items:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	m_gridSizer->Add( m_staticText1, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_staticTextDefProp = new wxStaticText( this, wxID_ANY, _("Default properties for new graphic items:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDefProp->Wrap( -1 );
+	m_gridSizer->Add( m_staticTextDefProp, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 
@@ -66,14 +66,14 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_grid->SetToolTip( _("Net Class parameters") );
 
-	m_gridSizer->Add( m_grid, 0, wxBOTTOM|wxLEFT, 20 );
+	m_gridSizer->Add( m_grid, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 
 	m_gridSizer->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );
 
-	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Default properties for new dimension objects:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	m_gridSizer->Add( m_staticText2, 0, wxALL, 5 );
+	m_staticTextDefPropDim = new wxStaticText( this, wxID_ANY, _("Default properties for new dimension objects:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDefPropDim->Wrap( -1 );
+	m_gridSizer->Add( m_staticTextDefPropDim, 0, wxALL, 5 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 0, 0 );
@@ -165,7 +165,7 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	m_gridSizer->Add( gbSizer1, 1, wxBOTTOM|wxEXPAND|wxLEFT, 20 );
 
 
-	mainSizer->Add( m_gridSizer, 0, wxRIGHT|wxLEFT, 5 );
+	mainSizer->Add( m_gridSizer, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
 	this->SetSizer( mainSizer );

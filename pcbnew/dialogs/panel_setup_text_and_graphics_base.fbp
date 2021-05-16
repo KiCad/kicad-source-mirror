@@ -56,7 +56,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxRIGHT|wxLEFT</property>
+                    <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
@@ -104,7 +104,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_staticText1</property>
+                                <property name="name">m_staticTextDefProp</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -125,8 +125,8 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">20</property>
-                            <property name="flag">wxBOTTOM|wxLEFT</property>
+                            <property name="border">5</property>
+                            <property name="flag">wxEXPAND|wxBOTTOM|wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxGrid" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -263,7 +263,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_staticText2</property>
+                                <property name="name">m_staticTextDefPropDim</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>

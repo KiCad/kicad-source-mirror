@@ -166,16 +166,16 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizerWarningText;
 	bSizerWarningText = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextAlert = new wxStaticText( this, wxID_ANY, _("Global solder mask min width and/or margin are not set to 0.  Most board houses"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAlert = new wxStaticText( this, wxID_ANY, _("Global solder mask min width and/or margin are not set to 0. "), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAlert->Wrap( -1 );
-	bSizerWarningText->Add( m_staticTextAlert, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerWarningText->Add( m_staticTextAlert, 0, wxTOP|wxLEFT, 5 );
+
+	m_staticTextAlert1 = new wxStaticText( this, wxID_ANY, _("Most board houses expect 0 and use their constraints, especially for solder mask min width."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAlert1->Wrap( 580 );
+	bSizerWarningText->Add( m_staticTextAlert1, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerSecondLine;
 	bSizerSecondLine = new wxBoxSizer( wxHORIZONTAL );
-
-	m_staticTextAlert1 = new wxStaticText( this, wxID_ANY, _("expect 0 and use their constraints, especially for solder mask min width."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextAlert1->Wrap( 580 );
-	bSizerSecondLine->Add( m_staticTextAlert1, 0, wxTOP, 2 );
 
 
 	bSizerSecondLine->Add( 0, 0, 1, wxEXPAND, 5 );
