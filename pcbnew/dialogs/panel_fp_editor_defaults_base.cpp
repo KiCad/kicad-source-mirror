@@ -144,8 +144,6 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 
 	// Cell Defaults
 	m_graphicsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_graphicsGrid->SetToolTip( _("Net Class parameters") );
-
 	defaultPropertiesSizer->Add( m_graphicsGrid, 1, wxBOTTOM|wxLEFT, 20 );
 
 

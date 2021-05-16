@@ -206,7 +206,7 @@
                                 <property name="size"></property>
                                 <property name="subclass">WX_GRID; widgets/wx_grid.h; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
-                                <property name="tooltip">Net Class parameters</property>
+                                <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style">wxTAB_TRAVERSAL</property>
