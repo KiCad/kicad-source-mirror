@@ -36,7 +36,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	m_staticTextInfoMaskMinWidth1->Wrap( -1 );
 	m_staticTextInfoMaskMinWidth1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizer4->Add( m_staticTextInfoMaskMinWidth1, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer4->Add( m_staticTextInfoMaskMinWidth1, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
 	bMessages->Add( bSizer4, 1, wxEXPAND, 5 );
@@ -135,12 +135,11 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	bSizer3->Add( m_staticTextInfoPaste, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	bMainSizer->Add( bSizer3, 1, wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( bSizer3, 1, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 }
 
 PANEL_SETUP_MASK_AND_PASTE_BASE::~PANEL_SETUP_MASK_AND_PASTE_BASE()

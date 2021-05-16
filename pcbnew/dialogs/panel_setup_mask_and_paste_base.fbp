@@ -43,7 +43,7 @@
             <property name="minimum_size"></property>
             <property name="name">PANEL_SETUP_MASK_AND_PASTE_BASE</property>
             <property name="pos"></property>
-            <property name="size">-1,-1</property>
+            <property name="size">727,280</property>
             <property name="subclass">; forward_declare</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
@@ -56,7 +56,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxRIGHT|wxLEFT</property>
+                    <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
@@ -202,7 +202,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                            <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
                                             <property name="proportion">0</property>
                                             <object class="wxStaticText" expanded="1">
                                                 <property name="BottomDockable">1</property>
