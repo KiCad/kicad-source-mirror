@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-12 11:06-0700\n"
-"PO-Revision-Date: 2021-05-03 07:06+0000\n"
+"PO-Revision-Date: 2021-05-18 06:32+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -13247,7 +13247,7 @@ msgstr "Obdélník má neexistující index vlastností %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1613
 msgid "Power Port has unknown style, use bar instead."
-msgstr ""
+msgstr "Symbol Napájení má neznámý styl, použijte silný styl čáry."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1655
 #, c-format
@@ -14945,7 +14945,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:744
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
-msgstr ""
+msgstr "Symbol %s je odvozen z %s. Grafika symbolu nebude upravitelná."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:748
 #, c-format
@@ -15048,11 +15048,11 @@ msgstr "Chyba při ukládání tabulky knihoven projektu."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:56
 msgid "Normal save as operation"
-msgstr ""
+msgstr "Normální zápis bez dalších operací"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:58
 msgid "Do not perform any additional operations after saving library."
-msgstr ""
+msgstr "Po uložení knihovny neprovádějte žádnou další operaci."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:61
 msgid "Replace library table entry"
@@ -15064,6 +15064,9 @@ msgid ""
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
+"Nahradit položku knihovny symbolů s novou knihovnou.\n"
+"\n"
+"Původní knihovna již nebude použitelná."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:66
 msgid "Add new global library table entry"
@@ -15076,6 +15079,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Přidat nový záznam do tabulky globální knihovny symbolů.\n"
+"\n"
+"Logický název v tabulce knihoven symbolů je přidána přípona\n"
+"s celým číslem, která neposkytuje žádné duplikáty v tabulkách."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:72
 msgid "Add new project library table entry"
@@ -15166,6 +15173,8 @@ msgstr "Knihovna není nastavena. Symbol nelze uložit."
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
 msgstr ""
+"Odvozené symboly musí být uloženy ve stejné knihovně jako jejich mateřské "
+"symbol."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:664
 #, c-format
