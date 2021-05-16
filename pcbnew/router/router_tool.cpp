@@ -36,6 +36,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>
 #include <dialogs/dialog_track_via_size.h>
 #include <widgets/infobar.h>
+#include <widgets/appearance_controls.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <tool/action_menu.h>
@@ -609,7 +610,6 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 
     m_router->SwitchLayer( *newLayer );
     m_lastTargetLayer = *newLayer;
-    frame()->SetActiveLayer( ToLAYER_ID( *newLayer ) );
 }
 
 
@@ -1000,17 +1000,22 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
 bool ROUTER_TOOL::prepareInteractive()
 {
-    int routingLayer = getStartLayer( m_startItem );
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    int             routingLayer = getStartLayer( m_startItem );
 
     if( !IsCopperLayer( routingLayer ) )
     {
-        frame()->ShowInfoBarError( _( "Tracks on Copper layers only." ) );
+        editFrame->ShowInfoBarError( _( "Tracks on Copper layers only." ) );
         return false;
     }
 
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-
     editFrame->SetActiveLayer( ToLAYER_ID( routingLayer ) );
+
+    if( !getView()->IsLayerVisible( routingLayer ) )
+    {
+        editFrame->GetAppearancePanel()->SetLayerVisible( routingLayer, true );
+        editFrame->GetCanvas()->Refresh();
+    }
 
     if( m_startItem && m_startItem->Net() > 0 )
         highlightNet( true, m_startItem->Net() );
@@ -1125,7 +1130,17 @@ void ROUTER_TOOL::performRouting()
                 switchLayerOnViaPlacement();
 
             // Synchronize the indicated layer
-            frame()->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
+            PCB_LAYER_ID    routingLayer = ToLAYER_ID( m_router->GetCurrentLayer() );
+            PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+
+            editFrame->SetActiveLayer( routingLayer );
+
+            if( !getView()->IsLayerVisible( routingLayer ) )
+            {
+                editFrame->GetAppearancePanel()->SetLayerVisible( routingLayer, true );
+                editFrame->GetCanvas()->Refresh();
+            }
+
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
             m_startItem = nullptr;
