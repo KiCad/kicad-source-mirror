@@ -403,6 +403,7 @@ public:
      */
     inline bool IsLayerVisible( int aLayer ) const
     {
+        wxCHECK( aLayer >= 0, false);
         wxCHECK( aLayer < (int) m_layers.size(), false );
 
         if( GetPrintMode() > 0 )
