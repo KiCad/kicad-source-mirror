@@ -771,11 +771,6 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
 void DIALOG_LIB_SYMBOL_PROPERTIES::syncControlStates( bool aIsAlias )
 {
     bSizerLowerBasicPanel->Show( !aIsAlias );
-
-#ifdef KICAD_SPICE
-    m_spiceFieldsButton->Show( !aIsAlias );
-#endif
-
     m_inheritanceSelectCombo->Enable( aIsAlias );
     m_inheritsStaticText->Enable( aIsAlias );
     m_grid->ForceRefresh();
