@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 09:44-0700\n"
-"PO-Revision-Date: 2021-03-19 16:01+0000\n"
+"PO-Revision-Date: 2021-05-18 06:32+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2233,13 +2233,15 @@ msgstr "Các đối tượng này sẽ được bỏ qua trừ khi bạn ghi đ�
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr ""
+msgstr "Hãy nhớ quyết định cho phiên này."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"Hãy nhớ tùy chọn đã chọn cho phần còn lại của phiên này.\n"
+"Hộp thoại này sẽ không hiển thị lại cho đến khi KiCad được khởi động lại."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 #, fuzzy
@@ -2251,6 +2253,8 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"Ghi đè các khóa và áp dụng thao tác trên tất cả các thành phần đã chọn.\n"
+"Mọi thành phần bị khóa sẽ vẫn bị khóa sau khi hoạt động hoàn tất."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:60
 #, fuzzy
@@ -2262,6 +2266,8 @@ msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"Loại bỏ các phần tử đã khóa khỏi lựa chọn và chỉ áp dụng thao tác với các "
+"phần tử đã mở khóa (nếu có)."
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
 msgid "Locked Items"
@@ -6388,7 +6394,7 @@ msgstr "Mở \"Đóng góp cho KiCad\" trong trình duyệt web"
 
 #: common/tool/actions.cpp:631
 msgid "Donate"
-msgstr ""
+msgstr "Đóng góp"
 
 #: common/tool/actions.cpp:632
 #, fuzzy
@@ -8497,8 +8503,9 @@ msgid "New Library Reference"
 msgstr "Tham chiếu Thư viện Mới"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:58
+#, fuzzy
 msgid "Map Orphans"
-msgstr ""
+msgstr "Bản đồ Orphans"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:59
 #, fuzzy
@@ -8731,109 +8738,112 @@ msgstr "Xóa các loại trừ nữa?"
 #: pcbnew/dialogs/dialog_drc_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:82
 msgid "Delete All Markers"
-msgstr ""
+msgstr "Xóa tất cả các điểm đánh dấu"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
 msgid "Errors and Warnings Only"
-msgstr ""
+msgstr "Chỉ lỗi và cảnh báo"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
 msgid "Errors, Warnings and Exclusions"
-msgstr ""
+msgstr "Lỗi, Cảnh báo và Loại trừ"
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "%d (các) biểu tượng yêu cầu chú thích. <br> <br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:306
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr ""
+msgstr "-------- ERC bị hủy bởi người dùng. <br> <br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
+#, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr ""
+msgstr "ERC đã hoàn thành. <br> <br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
-msgstr ""
+msgstr "Đang kiểm tra tên trang tính ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:362
 msgid "Checking bus conflicts..."
-msgstr ""
+msgstr "Đang kiểm tra xung đột bus ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:367
 msgid "Checking conflicts..."
-msgstr ""
+msgstr "Đang kiểm tra xung đột ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:374
 msgid "Checking footprints..."
-msgstr ""
+msgstr "Đang kiểm tra footprint ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:378
 msgid "Checking pins..."
-msgstr ""
+msgstr "Đang kiểm tra các pin..."
 
 #: eeschema/dialogs/dialog_erc.cpp:391
 msgid "Checking labels..."
-msgstr ""
+msgstr "Đang kiểm tra nhãn..."
 
 #: eeschema/dialogs/dialog_erc.cpp:397
 msgid "Checking for unresolved variables..."
-msgstr ""
+msgstr "Đang kiểm tra các biến chưa được giải quyết..."
 
 #: eeschema/dialogs/dialog_erc.cpp:403
 msgid "Checking no connect pins for connections..."
-msgstr ""
+msgstr "Đang kiểm tra không có chân kết nối cho kết nối..."
 
 #: eeschema/dialogs/dialog_erc.cpp:409
 msgid "Checking for library symbol issues..."
-msgstr ""
+msgstr "Đang kiểm tra các vấn đề về biểu tượng trong thư viện..."
 
 #: eeschema/dialogs/dialog_erc.cpp:487 pcbnew/dialogs/dialog_drc.cpp:428
 msgid "errors"
-msgstr ""
+msgstr "Các Lỗi"
 
 #: eeschema/dialogs/dialog_erc.cpp:488 pcbnew/dialogs/dialog_drc.cpp:429
 msgid "warnings"
-msgstr ""
+msgstr "Cảnh báo"
 
 #: eeschema/dialogs/dialog_erc.cpp:489 pcbnew/dialogs/dialog_drc.cpp:430
 msgid "appropriate"
-msgstr ""
+msgstr "thích hợp"
 
 #: eeschema/dialogs/dialog_erc.cpp:494 pcbnew/dialogs/dialog_drc.cpp:435
 msgid "Remove exclusion for this violation"
-msgstr ""
+msgstr "Xóa loại trừ đối với vi phạm này"
 
 #: eeschema/dialogs/dialog_erc.cpp:495 pcbnew/dialogs/dialog_drc.cpp:436
 #, c-format
 msgid "It will be placed back in the %s list"
-msgstr ""
+msgstr "Nó sẽ được đặt trở lại trong danh sách %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:440
 msgid "Exclude this violation"
-msgstr ""
+msgstr "Loại trừ vi phạm này"
 
 #: eeschema/dialogs/dialog_erc.cpp:500 pcbnew/dialogs/dialog_drc.cpp:441
 #, c-format
 msgid "It will be excluded from the %s list"
-msgstr ""
+msgstr "Nó sẽ bị loại khỏi danh sách %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:448
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr ""
+msgstr "Thay đổi mức độ nghiêm trọng thành Lỗi đối với tất cả các vi phạm '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:514 eeschema/dialogs/dialog_erc.cpp:520
 #: pcbnew/dialogs/dialog_drc.cpp:450 pcbnew/dialogs/dialog_drc.cpp:457
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
+"Vi phạm nghiêm trọng cũng có thể được chỉnh sửa trong thiết lập Bo mạch ... "
+"Hộp Thoại"
 
 #: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:455
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr ""
+msgstr "Thay đổi mức độ nghiêm trọng thành Cảnh báo cho tất cả các vi phạm '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:461
 #, c-format
