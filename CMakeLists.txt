@@ -84,12 +84,12 @@ option( KICAD_SCRIPTING_ACTION_MENU
     ON )
 
 option( KICAD_USE_OCE
-    "Build tools and plugins related to OpenCascade Community Edition (default ON)"
-    ON )
+    "Build tools and plugins related to OpenCascade Community Edition (default OFF)"
+    OFF )
 
 option( KICAD_USE_OCC
-    "Build tools and plugins related to OpenCascade Technology (overrides KICAD_USE_OCE, default OFF)"
-    OFF )
+    "Build tools and plugins related to OpenCascade Technology (overrides KICAD_USE_OCE, default ON)"
+    ON )
 
 option( KICAD_INSTALL_DEMOS
     "Install KiCad demos and examples (default ON)"
