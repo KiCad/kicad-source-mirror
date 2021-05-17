@@ -192,11 +192,6 @@ set( EESCHEMA_SRCS
     menubar.cpp
     pin_number.cpp
     pin_type.cpp
-    plotters/plot_schematic_DXF.cpp
-    plotters/plot_schematic_HPGL.cpp
-    plotters/plot_schematic_PDF.cpp
-    plotters/plot_schematic_PS.cpp
-    plotters/plot_schematic_SVG.cpp
     sch_draw_panel.cpp
     project_rescue.cpp
     sch_base_frame.cpp
