@@ -13,14 +13,14 @@ KiCad welcomes contributions via merge requests on GitLab.  Here are some tips t
 
 ### General Guidelines:
 1. Always create a new branch for merge requests instead of using your fork's master branch.
-2. Make sure your code submission follows the [KiCad Code Style Guide](https://docs.kicad-pcb.org/doxygen/md_Documentation_development_coding-style-policy.html), see below for some details.
-3. Make sure all User Interface changes follow the [User Interface Guidelines](https://docs.kicad-pcb.org/doxygen/md_Documentation_development_ui-policy.html).
+2. Make sure your code submission follows the [KiCad Code Style Guide](https://dev-docs.kicad.org/en/rules-guidelines/code-style/), see below for some details.
+3. Make sure all User Interface changes follow the [User Interface Guidelines](https://dev-docs.kicad.org/en/rules-guidelines/ui/).
 4. If you are planning a large change or new feature, be sure to ask on the [developer mailing list](https://launchpad.net/~kicad-developers) before you begin your work to see if anyone else is working on it and to ensure that it fits into the overall development plans.
 5. Give merge requests a short and descriptive title that summarizes the major changes it contains. A longer description of the changes should be contained inside the description of the merge request.
 
 ### Code style and formatting
 
-Make sure to read the [KiCad Code Style Guide](https://docs.kicad-pcb.org/doxygen/md_Documentation_development_coding-style-policy.html) if you haven't already.  You can use the `clang-format` tool to check many, but not all, of these style requirements.  When you create a merge request, one of the CI pipeline steps will be to run a formatting check on your contribution.  This automatic check is not always 100% correct. Some tips to interpreting the results of automatic format checks:
+Make sure to read the [KiCad Code Style Guide](https://dev-docs.kicad.org/en/rules-guidelines/code-style/) if you haven't already.  You can use the `clang-format` tool to check many, but not all, of these style requirements.  When you create a merge request, one of the CI pipeline steps will be to run a formatting check on your contribution.  This automatic check is not always 100% correct. Some tips to interpreting the results of automatic format checks:
 
 1. Some of our formatting guidelines have exceptions, or only apply to certain situations.  `clang-format` doesn't know about these nuances, so it will sometimes suggest that you make sweeping format changes to areas of a file near your code (even if you didn't change that code).  Keep in mind Rule 7 of the style guide: when there is flexibility or doubt, follow the existing formatting of the file you are editing, rather than rigidly following `clang-format`.
 
