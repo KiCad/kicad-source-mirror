@@ -63,7 +63,7 @@ public:
     DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent );
 
     /**
-     * Return true if the project configutation was modified.
+     * Return true if the project configuration was modified.
      */
     bool PrjConfigChanged() { return m_configChanged; }
 
@@ -102,10 +102,11 @@ private:
     void setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen );
 
     /**
-    * Everything done, close the plot and restore the environment
-    * @param aPlotter the plotter to close and destroy
-    * @param aOldsheetpath the stored old sheet path for the current sheet before the plot started
-    */
+     * Everything done, close the plot and restore the environment.
+     *
+     * @param aPlotter the plotter to close and destroy
+     * @param aOldsheetpath the stored old sheet path for the current sheet before the plot started
+     */
     void restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH& aOldsheetpath );
 
     // DXF
@@ -180,6 +181,24 @@ private:
      */
     wxFileName createPlotFileName( const wxString& aPlotFileName, const wxString& aExtension,
                                    REPORTER* aReporter = nullptr );
+
+    /**
+     * Determine the best absolute path to plot files given the contents of the path
+     * edit control.
+     *
+     * - If the path edit control results in an absolute path, use it as is.
+     * - If the path edit control is not an absolute path and the project file is valid, use
+         the project root path to normalize the contents of the path edit control.
+     * - If the path edit control is not an absolute path and the project file does not exist
+     *   and the screen file name is valid, use the screen file name path.
+     * - If the path edit control is not an absolute path and the project file does not exist
+     *   and the screen file name is empty, user the user's documents folder.
+     * - Fall back to the user's document path if any of the above conditions do not result
+     *   in a valid absolute path.
+     *
+     * @return a valid path to write the plot files.
+     */
+    wxString getOutputPath();
 
     SCH_EDIT_FRAME* m_parent;
     bool            m_configChanged;        // true if a project config param has changed

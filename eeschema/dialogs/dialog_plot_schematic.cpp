@@ -34,6 +34,7 @@
 #include <pgm_base.h>
 #include <plotters_specific.h>
 #include <reporter.h>
+#include <trace_helpers.h>
 #include <settings/settings_manager.h>
 #include <drawing_sheet/ds_painter.h>
 
@@ -44,6 +45,8 @@
 
 #include <wx/dirdlg.h>
 #include <wx/msgdlg.h>
+#include <wx/stdpaths.h>
+
 
 // static members (static to remember last state):
 int DIALOG_PLOT_SCHEMATIC::m_pageSizeSelect = PAGE_SIZE_AUTO;
@@ -194,14 +197,26 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
 {
     // Build the absolute path of current output directory to preselect it in the file browser.
     wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
-    path = Prj().AbsolutePath( path );
+
+    // When editing a schematic that is not part of a project in the stand alone mode, the
+    // project path is not defined so point to the users document path to save the plot files.
+    if( Prj().IsNullProject() )
+    {
+        path = wxStandardPaths::Get().GetDocumentsDir();
+    }
+    else
+    {
+        // Build the absolute path of current output directory to preselect it in the file browser.
+        path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
+        path = Prj().AbsolutePath( path );
+    }
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 
     if( dirDialog.ShowModal() == wxID_CANCEL )
         return;
 
-    wxFileName      dirName = wxFileName::DirName( dirDialog.GetPath() );
+    wxFileName dirName = wxFileName::DirName( dirDialog.GetPath() );
 
     wxFileName fn( Prj().AbsolutePath( m_parent->Schematic().Root().GetFileName() ) );
     wxString defaultPath = fn.GetPathWithSep();
@@ -409,25 +424,40 @@ wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( const wxString& aPlotFileN
                                                       const wxString& aExtension,
                                                       REPORTER* aReporter )
 {
-    wxString   path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
-    wxFileName outputDir = wxFileName::DirName( path );
-    wxString plotFileName;
+    wxFileName retv;
+    wxFileName tmp;
+
+    tmp.SetPath( getOutputPath() );
+    retv.SetPath( tmp.GetPath() );
 
     if( !aPlotFileName.IsEmpty() )
-        plotFileName = Prj().AbsolutePath( aPlotFileName + wxT( "." ) + aExtension );
+        retv.SetName( aPlotFileName );
     else
-        plotFileName = Prj().AbsolutePath( _( "Schematic" ) + wxT( "." ) + aExtension );
+        retv.SetName( _( "Schematic" ) );
 
-    if( !EnsureFileDirectoryExists( &outputDir, plotFileName, aReporter ) )
+    retv.SetExt( aExtension );
+
+    if( !EnsureFileDirectoryExists( &tmp, retv.GetFullName(), aReporter )
+      || !tmp.IsDirWritable() )
     {
         wxString msg = wxString::Format( _( "Could not write plot files to folder \"%s\"." ),
-                                         outputDir.GetPath() );
+                                         tmp.GetPath() );
         aReporter->Report( msg, RPT_SEVERITY_ERROR );
+        retv.Clear();
+
+        SCHEMATIC_SETTINGS& settings = m_parent->Schematic().Settings();
+        settings.m_PlotDirectoryName.Clear();
+
+        m_configChanged = true;
+    }
+    else
+    {
+        retv.SetPath( tmp.GetPath() );
     }
 
-    wxFileName fn( plotFileName );
-    fn.SetPath( outputDir.GetFullPath() );
-    return fn;
+    wxLogTrace( tracePathsAndFiles, "Writing plot file '%s'.", retv.GetFullPath() );
+
+    return retv;
 }
 
 
@@ -478,6 +508,9 @@ void DIALOG_PLOT_SCHEMATIC::createDxfFile( bool aPlotAll, bool aPlotDrawingSheet
             fname.Replace( "\\", "_" );
             wxString ext = DXF_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
+
+            if( !plotFileName.IsOk() )
+                return;
 
             if( plotOneSheetDxf( plotFileName.GetFullPath(), screen, aRenderSettings,
                                  plot_offset, 1.0, aPlotDrawingSheet ) )
@@ -644,6 +677,9 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef,
             wxString ext = HPGL_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 
+            if( !plotFileName.IsOk() )
+                return;
+
             LOCALE_IO toggle;
 
             if( plotOneSheetHpgl( plotFileName.GetFullPath(), screen, plotPage, aRenderSettings,
@@ -713,7 +749,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetHpgl( const wxString&   aFileName,
     // Init :
     plotter->SetCreator( wxT( "Eeschema-HPGL" ) );
 
-    if( ! plotter->OpenFile( aFileName ) )
+    if( !plotter->OpenFile( aFileName ) )
     {
         delete plotter;
         return false;
@@ -800,6 +836,9 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
                 fname.Replace( "\\", "_" );
                 wxString ext = PDF_PLOTTER::GetDefaultFileExtension();
                 plotFileName = createPlotFileName( fname, ext, &reporter );
+
+                if( !plotFileName.IsOk() )
+                    return;
 
                 if( !plotter->OpenFile( plotFileName.GetFullPath() ) )
                 {
@@ -985,6 +1024,7 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
         try
         {
             wxString fname = m_parent->GetUniqueFilenameForCurrentSheet();
+
             // The sub sheet can be in a sub_hierarchy, but we plot the file in the
             // main project folder (or the folder specified by the caller),
             // so replace separators to create a unique filename:
@@ -992,6 +1032,9 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
             fname.Replace ("\\", "_" );
             wxString ext = PS_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
+
+            if( !plotFileName.IsOk() )
+                return;
 
             if( plotOneSheetPS( plotFileName.GetFullPath(), screen, aRenderSettings, plotPage,
                                 plot_offset, scale, aPlotFrameRef ) )
@@ -1114,6 +1157,9 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
             wxString ext = SVG_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 
+            if( !plotFileName.IsOk() )
+                return;
+
             bool success = plotOneSheetSVG( plotFileName.GetFullPath(), screen, aRenderSettings,
                                             getModeColor() ? false : true, aPrintFrameRef );
 
@@ -1198,4 +1244,97 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString&  aFileName,
     delete plotter;
 
     return true;
+}
+
+
+wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
+{
+    wxString msg;
+    wxString extMsg;
+    wxFileName fn;
+
+    extMsg.Printf( _( "Falling back to user path '%s'." ),
+                   wxStandardPaths::Get().GetDocumentsDir() );
+
+    // Build the absolute path of current output directory to preselect it in the file browser.
+    wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
+
+    fn.SetPath( path );
+
+    // If the contents of the path edit control results in an absolute path, return it as is.
+    if( fn.IsAbsolute() )
+        return path;
+
+    // When editing a schematic that is not part of a project in the stand alone mode, the
+    // project path is not defined.
+    if( Prj().IsNullProject() )
+    {
+        SCH_SCREEN* screen = m_parent->Schematic().RootScreen();
+
+        if( screen && !screen->GetFileName().IsEmpty() )
+        {
+            fn = screen->GetFileName();
+            msg.Printf( _( "Cannot normalize path '%s%s'." ), fn.GetPathWithSep(), path );
+            fn.SetPath( fn.GetPathWithSep() + path );
+
+            // Normalize always returns true for a non-empty file name so clear the file name
+            // and extension so that only the path is normalized.
+            fn.SetName( wxEmptyString );
+            fn.SetExt( wxEmptyString );
+
+            if( fn.Normalize() )
+            {
+                path = fn.GetPath();
+            }
+            else
+            {
+                wxMessageDialog dlg( this, msg, _( "Warning" ),
+                                     wxOK | wxCENTER | wxRESIZE_BORDER | wxICON_EXCLAMATION |
+                                     wxSTAY_ON_TOP );
+
+                dlg.SetExtendedMessage( extMsg );
+                dlg.ShowModal();
+
+                path = wxStandardPaths::Get().GetDocumentsDir();
+            }
+        }
+        else
+        {
+            msg = _( "No project or path defined for the current schematic." );
+
+            wxMessageDialog dlg( this, msg, _( "Warning" ),
+                                 wxOK | wxCENTER | wxRESIZE_BORDER | wxICON_EXCLAMATION |
+                                 wxSTAY_ON_TOP );
+            dlg.SetExtendedMessage( extMsg );
+            dlg.ShowModal();
+
+            // Always fall back to user's document path if no other absolute path can be normalized.
+            path = wxStandardPaths::Get().GetDocumentsDir();
+        }
+    }
+    else
+    {
+        msg.Printf( _( "Cannot normalize path '%s%s'." ), Prj().GetProjectPath(), path );
+
+        // Build the absolute path of current output directory and the project path.
+        fn.SetPath( Prj().GetProjectPath() + path );
+
+        if( fn.Normalize() )
+        {
+            path = fn.GetPath();
+        }
+        else
+        {
+            wxMessageDialog dlg( this, msg, _( "Warning" ),
+                                 wxOK | wxCENTER | wxRESIZE_BORDER | wxICON_EXCLAMATION |
+                                 wxSTAY_ON_TOP );
+
+            dlg.SetExtendedMessage( extMsg );
+            dlg.ShowModal();
+
+            path = wxStandardPaths::Get().GetDocumentsDir();
+        }
+    }
+
+    return path;
 }
