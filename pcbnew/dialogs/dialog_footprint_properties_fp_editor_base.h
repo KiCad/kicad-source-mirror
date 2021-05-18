@@ -29,7 +29,6 @@ class WX_GRID;
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/radiobox.h>
 #include <wx/slider.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
@@ -59,7 +58,6 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_DocCtrl;
 		wxStaticText* staticKeywordsLabel;
 		wxTextCtrl* m_KeywordCtrl;
-		wxRadioBox* m_AutoPlaceCtrl;
 		wxStaticBoxSizer* m_sizerAP;
 		wxBoxSizer* m_sizerAllow90;
 		wxStaticText* m_allow90Label;

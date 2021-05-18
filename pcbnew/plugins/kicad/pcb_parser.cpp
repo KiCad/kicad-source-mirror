@@ -500,6 +500,9 @@ BOARD_ITEM* PCB_PARSER::Parse()
     case T_module:      // legacy token
     case T_footprint:
         item = (BOARD_ITEM*) parseFOOTPRINT( initial_comments.release() );
+
+        // Locking a footprint has no meaning outside of a board.
+        item->SetLocked( false );
         break;
 
     default:

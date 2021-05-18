@@ -228,10 +228,6 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     m_itemsGrid->ProcessTableMessage( tmsg );
 
     // Footprint Properties
-    m_AutoPlaceCtrl->SetSelection( m_footprint->IsLocked() ? 1 : 0 );
-    m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Enable hotkey move commands and Auto Placement" ) );
-    m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Disable hotkey move commands and Auto Placement" ) );
-
     m_CostRot90Ctrl->SetValue( m_footprint->GetPlacementCost90() );
     m_CostRot180Ctrl->SetValue( m_footprint->GetPlacementCost180() );
 
@@ -659,8 +655,6 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
         m_footprint->Add( newText, ADD_MODE::APPEND );
         view->Add( newText );
     }
-
-    m_footprint->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
 
     int attributes = 0;
 

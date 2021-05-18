@@ -132,12 +132,6 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	wxBoxSizer* bSizerProperties;
 	bSizerProperties = new wxBoxSizer( wxHORIZONTAL );
 
-	wxString m_AutoPlaceCtrlChoices[] = { _("Unlock footprint"), _("Lock footprint") };
-	int m_AutoPlaceCtrlNChoices = sizeof( m_AutoPlaceCtrlChoices ) / sizeof( wxString );
-	m_AutoPlaceCtrl = new wxRadioBox( m_PanelGeneral, wxID_ANY, _("Move and Place"), wxDefaultPosition, wxDefaultSize, m_AutoPlaceCtrlNChoices, m_AutoPlaceCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_AutoPlaceCtrl->SetSelection( 1 );
-	bSizerProperties->Add( m_AutoPlaceCtrl, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
-
 	m_sizerAP = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Auto-placement Rules") ), wxVERTICAL );
 
 	m_sizerAllow90 = new wxBoxSizer( wxVERTICAL );
@@ -149,7 +143,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_sizerAllow90->Add( m_allow90Label, 0, 0, 5 );
 
 	m_CostRot90Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
-	m_sizerAllow90->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_sizerAllow90->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 
 	m_sizerAP->Add( m_sizerAllow90, 0, wxEXPAND, 5 );
@@ -166,13 +160,16 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_sizerAllow180->Add( m_allow180Label, 0, 0, 5 );
 
 	m_CostRot180Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
-	m_sizerAllow180->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_sizerAllow180->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 
-	m_sizerAP->Add( m_sizerAllow180, 0, wxEXPAND, 5 );
+	m_sizerAP->Add( m_sizerAllow180, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
 	bSizerProperties->Add( m_sizerAP, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerProperties->Add( 10, 0, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbFabSizer;
 	sbFabSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Fabrication Attributes") ), wxVERTICAL );
@@ -180,7 +177,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	wxBoxSizer* bPartTypeSizer;
 	bPartTypeSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_componentTypeLabel = new wxStaticText( sbFabSizer->GetStaticBox(), wxID_ANY, _("Component:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_componentTypeLabel = new wxStaticText( sbFabSizer->GetStaticBox(), wxID_ANY, _("Component type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_componentTypeLabel->Wrap( -1 );
 	bPartTypeSizer->Add( m_componentTypeLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -188,10 +185,10 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	int m_componentTypeNChoices = sizeof( m_componentTypeChoices ) / sizeof( wxString );
 	m_componentType = new wxChoice( sbFabSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_componentTypeNChoices, m_componentTypeChoices, 0 );
 	m_componentType->SetSelection( 0 );
-	bPartTypeSizer->Add( m_componentType, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bPartTypeSizer->Add( m_componentType, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	sbFabSizer->Add( bPartTypeSizer, 0, wxEXPAND, 5 );
+	sbFabSizer->Add( bPartTypeSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 	m_boardOnly = new wxCheckBox( sbFabSizer->GetStaticBox(), wxID_ANY, _("Not in schematic"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbFabSizer->Add( m_boardOnly, 0, wxALL, 5 );
