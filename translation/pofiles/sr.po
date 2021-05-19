@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-04-28 11:31+0000\n"
+"PO-Revision-Date: 2021-05-21 08:32+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1716,9 +1716,9 @@ msgid "Icons by"
 msgstr ""
 
 #: common/dialog_about/dialog_about.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "About %s"
-msgstr "О"
+msgstr "О %s"
 
 #: common/dialog_about/dialog_about.cpp:118
 #: common/dialog_about/dialog_about_base.h:56
@@ -3905,14 +3905,14 @@ msgid "%s is a duplicate"
 msgstr "%s је дупликат"
 
 #: common/dsnlexer.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected '%s'"
-msgstr "Попуњавање зона"
+msgstr "Неочекивано '%s'"
 
 #: common/dsnlexer.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "need a number for '%s'"
-msgstr "Попуњавање зона"
+msgstr "потребан је број за '%s'"
 
 #: common/dsnlexer.cpp:673 common/dsnlexer.cpp:734
 msgid "Un-terminated delimited string"
@@ -4822,9 +4822,9 @@ msgid "Error loading editor"
 msgstr "Грешка: "
 
 #: common/kiway.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to switch language to %s"
-msgstr "Попуњавање зона"
+msgstr "Немогуће промијенити језик у %s"
 
 #: common/languages_menu.cpp:48
 msgid "Set Language"
@@ -5559,9 +5559,9 @@ msgid "Error extracting file!\n"
 msgstr "фајл не постоји"
 
 #: common/project/project_archiver.cpp:204
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create archive file \"%s\"\n"
-msgstr "Попуњавање зона"
+msgstr "Немогуће направити архивиран фајл \"%s\"\n"
 
 #: common/project/project_archiver.cpp:250
 #, fuzzy, c-format
@@ -5621,14 +5621,14 @@ msgid "KiCad Classic"
 msgstr ""
 
 #: common/template_fieldnames.cpp:72 eeschema/sch_sheet.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Field%d"
-msgstr "Поље"
+msgstr "Поље%d"
 
 #: common/tool/action_menu.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "Close %s"
-msgstr "Затвори"
+msgstr "Затвори %s"
 
 #: common/tool/action_menu.cpp:224
 #, fuzzy, c-format
@@ -6195,9 +6195,8 @@ msgid "Symbol Library Browser"
 msgstr "Симбол"
 
 #: common/tool/actions.cpp:558
-#, fuzzy
 msgid "Browse symbol libraries"
-msgstr "Учитавање  "
+msgstr "Претражи библиотеке симбола"
 
 #: common/tool/actions.cpp:563 eeschema/eeschema_config.cpp:223
 #: eeschema/symbol_editor/symbol_editor.cpp:159
@@ -7016,9 +7015,9 @@ msgid "No Filtering"
 msgstr "Филтер"
 
 #: cvpcb/cvpcb_mainframe.cpp:727
-#, fuzzy, c-format
+#, c-format
 msgid "Filtered by %s"
-msgstr "Попуњавање зона"
+msgstr "Филтрирано од стране %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:741
 #, c-format
@@ -7026,9 +7025,9 @@ msgid "Description: %s;  Keywords: %s"
 msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:773
-#, fuzzy, c-format
+#, c-format
 msgid "Library location: %s"
-msgstr "Маркер није пронађен"
+msgstr "Локација библиотеке: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:775
 #, fuzzy
@@ -7417,7 +7416,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:907
 #: eeschema/symbol_tree_model_adapter.cpp:66
 msgid "Loading Symbol Libraries"
-msgstr "Учитавање  "
+msgstr "Учитавање библиотека симбола"
 
 #: eeschema/class_library.cpp:513
 msgid "Loading "
@@ -7454,15 +7453,15 @@ msgstr ""
 
 #: eeschema/component_references_lister.cpp:666
 #: eeschema/component_references_lister.cpp:696
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "Попуњавање зона"
+msgstr "Удуплати предмете %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:673
 #: eeschema/component_references_lister.cpp:703
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s\n"
-msgstr "Попуњавање зона"
+msgstr "Удуплати предмете %s%s\n"
 
 #: eeschema/component_references_lister.cpp:717
 #, c-format
@@ -7492,9 +7491,9 @@ msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
 
 #: eeschema/cross-probing.cpp:264 pcbnew/cross-probing.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "%s pin %s found"
-msgstr "Попуњавање зона"
+msgstr "%s пин %s пронађен"
 
 #: eeschema/cross-probing.cpp:266
 #, fuzzy, c-format
@@ -8009,14 +8008,14 @@ msgid "Update symbols %s from '%s' to '%s'"
 msgstr "Попуњавање зона"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:521
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "Попуњавање зона"
+msgstr "Промијенити симбол %s са '%s' у '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "Попуњавање зона"
+msgstr "Промијенити симболе %s са '%s' у'%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:539
 #, fuzzy
@@ -8185,9 +8184,9 @@ msgid "Symbol library identifier \"%s\" is not valid."
 msgstr ""
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:633
-#, fuzzy, c-format
+#, c-format
 msgid "Available Candidates for %s "
-msgstr "Попуњавање зона"
+msgstr "Доступни кандидати за %s "
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:637
 #, c-format
@@ -8934,9 +8933,9 @@ msgid "Please select a symbol library table file."
 msgstr ""
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found."
-msgstr "Маркер није пронађен"
+msgstr "Фајл '%s' није пронађен."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
 #, c-format
@@ -9318,9 +9317,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:429
 #: eeschema/dialogs/dialog_symbol_properties.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "The name '%s' is already in use."
-msgstr "фајл не постоји"
+msgstr "Име'%s' је већ у употреби."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:499
 #: eeschema/dialogs/dialog_sheet_properties.cpp:664
@@ -10445,9 +10444,9 @@ msgstr "Schematic фајлови"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:419
 #: kicad/tools/kicad_manager_control.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" already exists."
-msgstr "Попуњавање зона"
+msgstr "\"%s\" већ постоји."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:420
 #, fuzzy, c-format
@@ -12204,9 +12203,8 @@ msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:768
-#, fuzzy
 msgid "Migrate Library"
-msgstr "Учитавање  "
+msgstr "Премјестити библиотеку"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:792
 #, fuzzy, c-format
@@ -12285,9 +12283,8 @@ msgid "Remove library from table"
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:135
-#, fuzzy
 msgid "Migrate Libraries..."
-msgstr "Учитавање  "
+msgstr "Премјестити библиотеке..."
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:145
 msgid "Path Substitutions:"
@@ -12857,14 +12854,14 @@ msgid "Pos Y"
 msgstr "Позиција Y"
 
 #: eeschema/lib_pin.cpp:1159
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s [%s, %s, %s]"
-msgstr "Попуњавање зона"
+msgstr "Пин %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1167
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s [%s, %s]"
-msgstr "Попуњавање зона"
+msgstr "Пин %s [%s, %s]"
 
 #: eeschema/lib_polyline.cpp:351
 #, c-format
@@ -13094,9 +13091,9 @@ msgid "NonLogic"
 msgstr ""
 
 #: eeschema/project_rescue.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Rename %s to %s"
-msgstr "Преименуј у %s"
+msgstr "Преименуј из %s у %s"
 
 #: eeschema/project_rescue.cpp:301 eeschema/project_rescue.cpp:462
 #, c-format
@@ -13279,9 +13276,9 @@ msgid "<root sheet>"
 msgstr ""
 
 #: eeschema/sch_field.cpp:519
-#, fuzzy, c-format
+#, c-format
 msgid "Go to Page %s (%s)"
-msgstr "Попуњавање зона"
+msgstr "Иди на страницу %s (%s)"
 
 #: eeschema/sch_field.cpp:525
 msgid "Back to Previous Selected Sheet"
@@ -13308,9 +13305,9 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr ""
 
 #: eeschema/sch_line.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Wire, length %s"
-msgstr "Вертикално"
+msgstr "Вертикална жица, дужина %s"
 
 #: eeschema/sch_line.cpp:718
 #, fuzzy, c-format
@@ -13323,9 +13320,9 @@ msgid "Vertical Graphic Line, length %s"
 msgstr ""
 
 #: eeschema/sch_line.cpp:726
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Wire, length %s"
-msgstr "Хоризонтално"
+msgstr "Хоризонтална жица, дужина %s"
 
 #: eeschema/sch_line.cpp:727
 #, fuzzy, c-format
@@ -13333,14 +13330,14 @@ msgid "Horizontal Bus, length %s"
 msgstr "Хоризонтално бројање:"
 
 #: eeschema/sch_line.cpp:728
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Graphic Line, length %s"
-msgstr "Хоризонтално"
+msgstr "Хоризонтална графичка линија, дужина %s"
 
 #: eeschema/sch_line.cpp:735
-#, fuzzy, c-format
+#, c-format
 msgid "Wire, length %s"
-msgstr "Дужина"
+msgstr "Жица, дужина %s"
 
 #: eeschema/sch_line.cpp:736
 #, fuzzy, c-format
@@ -13348,9 +13345,9 @@ msgid "Bus, length %s"
 msgstr "Дужина"
 
 #: eeschema/sch_line.cpp:737
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Line, length %s"
-msgstr "Текст"
+msgstr "Графичка линија, дужина %s"
 
 #: eeschema/sch_line.cpp:883
 msgid "Graphical"
@@ -15047,9 +15044,8 @@ msgid "[Read Only Library]"
 msgstr "Изабери библиотеку"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:184
-#, fuzzy
 msgid "No symbol libraries are loaded."
-msgstr "Учитавање  "
+msgstr "Ниједна библиотека симбола није учитана."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:210
 #, fuzzy
@@ -15120,9 +15116,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:666
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'"
-msgstr "Попуњавање зона"
+msgstr "Симбол '%s' већ постоји у библиотеци '%s'"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:738
 #, c-format
@@ -15441,14 +15437,14 @@ msgid "Change %s footprint assignment from '%s' to '%s'."
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr "Попуњавање зона"
+msgstr "Промијени %s вриједност '%s' у '%s'."
 
 #: eeschema/tools/backannotate.cpp:388
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr "Попуњавање зона"
+msgstr "Немогуће пронаћи %s пин '%s'."
 
 #: eeschema/tools/backannotate.cpp:531
 #, c-format
@@ -16898,9 +16894,9 @@ msgid "Deselect all"
 msgstr "Изабери све ћелије"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Select Layer: %s"
-msgstr "Изабери слој:"
+msgstr "Изабери слој: %s"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:171
 #: pcbnew/board_connected_item.cpp:160 pcbnew/board_connected_item.cpp:161
@@ -16989,9 +16985,9 @@ msgid "Visibles"
 msgstr ""
 
 #: gerbview/excellon_read_drill_file.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid "File %s not found."
-msgstr "Маркер није пронађен"
+msgstr "Фајл %s није пронађен."
 
 #: gerbview/excellon_read_drill_file.cpp:275
 #, fuzzy
@@ -17347,9 +17343,9 @@ msgid "Open Recent Zip File"
 msgstr "Отвори"
 
 #: gerbview/readgerb.cpp:63 pcbnew/footprint_libraries_utils.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" not found"
-msgstr "Маркер није пронађен"
+msgstr "Фајл \"%s\" није пронађен"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
@@ -17960,9 +17956,9 @@ msgid "Load File to Edit"
 msgstr "фајл не постоји"
 
 #: kicad/kicad_manager_frame.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr "Пројект"
+msgstr "Пројект: %s"
 
 #: kicad/kicad_manager_frame.cpp:698
 msgid "Restoring session"
@@ -20496,9 +20492,9 @@ msgid "Locked"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "Dielectric %d"
-msgstr "Губици у диелектрикуму:"
+msgstr "Диелектрикум %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:526
 msgid "Top Silk Screen"
@@ -20979,9 +20975,9 @@ msgid "(not a closed shape)"
 msgstr ""
 
 #: pcbnew/cross-probing.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "%s pin %s not found"
-msgstr "Попуњавање зона"
+msgstr "%s пин %s није пронађен"
 
 #: pcbnew/cross-probing.cpp:188
 #, c-format
@@ -22876,9 +22872,9 @@ msgid "File %s already exists."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create %s"
-msgstr "Попуњавање зона"
+msgstr "Немогуће креирати %s"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_step_base.cpp:21
@@ -23706,9 +23702,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Options for Library \"%s\""
-msgstr "Опције"
+msgstr "Опције за библиотеку \"%s\""
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:25
 #, fuzzy
@@ -24930,9 +24926,9 @@ msgid "Connected layers only"
 msgstr "Струја"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:923
-#, fuzzy, c-format
+#, c-format
 msgid "%s and %s"
-msgstr " и остали"
+msgstr "%s и %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1218
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1223
@@ -26924,9 +26920,9 @@ msgid "Illegal character '%c' in nickname '%s'."
 msgstr ""
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Select %s Library"
-msgstr "Изабери библиотеку"
+msgstr "Изабери %s библиотеку"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:845
 msgid "The following directories could not be opened: \n"
@@ -27179,9 +27175,9 @@ msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:432
-#, fuzzy, c-format
+#, c-format
 msgid "The %s layer is mandatory."
-msgstr "Попуњавање зона"
+msgstr "%s слој је обавезан."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:465
 #, c-format
@@ -28172,9 +28168,9 @@ msgid "Suffix"
 msgstr ""
 
 #: pcbnew/dimension.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "Dimension '%s' on %s"
-msgstr "Попуњавање зона"
+msgstr "Димензија '%s' на %s"
 
 #: pcbnew/drc/drc_engine.cpp:140 pcbnew/drc/drc_engine.cpp:182
 #: pcbnew/drc/drc_engine.cpp:212
@@ -28249,9 +28245,9 @@ msgid "Checking %s; edge clearance: %s."
 msgstr "Попуњавање зона"
 
 #: pcbnew/drc/drc_engine.cpp:872
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s."
-msgstr "Провјеравање зона"
+msgstr "Провјеравање %s."
 
 #: pcbnew/drc/drc_engine.cpp:879
 msgid "Board and netclass clearances apply only between copper items."
@@ -28834,9 +28830,9 @@ msgid "(no edges found on Edge.Cuts layer)"
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s)"
-msgstr "Слојеви"
+msgstr "(слој %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:218
 #, fuzzy
@@ -28957,9 +28953,9 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:301
 #: pcbnew/exporters/gen_footprints_placefile.cpp:397
 #: pcbnew/exporters/gen_footprints_placefile.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Component count: %d."
-msgstr "компонента"
+msgstr "Број компоненти: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:298
 #: pcbnew/exporters/gen_footprints_placefile.cpp:436
@@ -29212,9 +29208,9 @@ msgid "Attributes:"
 msgstr "Атрибути"
 
 #: pcbnew/footprint.cpp:871
-#, fuzzy, c-format
+#, c-format
 msgid "3D-Shape: %s"
-msgstr "3D-Облик"
+msgstr "3D-облик: %s"
 
 #: pcbnew/footprint.cpp:871
 msgid "<none>"
@@ -29226,9 +29222,9 @@ msgid "Doc: %s"
 msgstr "Попуњавање зона"
 
 #: pcbnew/footprint.cpp:876 pcbnew/tools/pcb_control.cpp:1133
-#, fuzzy, c-format
+#, c-format
 msgid "Keywords: %s"
-msgstr "Попуњавање зона"
+msgstr "Кључне ријечи: %s"
 
 #: pcbnew/footprint.cpp:1157
 #, fuzzy
@@ -29586,14 +29582,14 @@ msgid "Angle"
 msgstr "Угао"
 
 #: pcbnew/fp_text.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Reference '%s'"
-msgstr "Референца"
+msgstr "Референца '%s'"
 
 #: pcbnew/fp_text.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "Value '%s' of %s"
-msgstr "Попуњавање зона"
+msgstr "Вриједност '%s' од %s"
 
 #: pcbnew/fp_text.cpp:318
 #, fuzzy, c-format
@@ -30112,9 +30108,9 @@ msgid "Change %s value from %s to %s."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s value from %s to %s."
-msgstr "Попуњавање зона"
+msgstr "Промијењена %s вриједност са %s у %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:316
 #, fuzzy, c-format
@@ -30187,14 +30183,14 @@ msgid "Reconnected %s pin %s from %s to %s."
 msgstr "Попуњавање зона"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Connect %s pin %s to %s."
-msgstr "Попуњавање зона"
+msgstr "Повежи %s пин %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "Connected %s pin %s to %s."
-msgstr "Попуњавање зона"
+msgstr "Повезан %s пин %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:631
 #, fuzzy, c-format
@@ -30469,9 +30465,9 @@ msgstr ""
 
 #: pcbnew/pad.cpp:945 pcbnew/track.cpp:703 pcbnew/track.cpp:710
 #: pcbnew/track.cpp:746 pcbnew/track.cpp:752 pcbnew/zone.cpp:634
-#, fuzzy, c-format
+#, c-format
 msgid "(from %s)"
-msgstr "од "
+msgstr "(од %s)"
 
 #: pcbnew/pad.cpp:1079
 msgid "Trap"
@@ -30667,9 +30663,9 @@ msgid "Missing argument to '%s'"
 msgstr ""
 
 #: pcbnew/pcb_expr_evaluator.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized layer '%s'"
-msgstr "Недефинисани слојеви:"
+msgstr "Непрепознат слој '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:474
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -30722,9 +30718,9 @@ msgid "Violation"
 msgstr "Ротација"
 
 #: pcbnew/pcb_marker.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Marker (%s)"
-msgstr "Маркер @(%s, %s)"
+msgstr "Маркер (%s)"
 
 #: pcbnew/pcb_shape.cpp:494
 #, fuzzy
@@ -30799,9 +30795,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'"
-msgstr "Фајл није пронађен:"
+msgstr "Фајл није пронађен: '%s'"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:775
 #, fuzzy, c-format
@@ -32447,9 +32443,9 @@ msgid "Overridden by larger thermal relief from %s;clearance: %s."
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "Clearance: %s."
-msgstr "Чисто"
+msgstr "Размак: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:231
 #: pcbnew/tools/board_inspection_tool.cpp:530
@@ -34655,9 +34651,9 @@ msgid "Full Length"
 msgstr "Пуна дужина"
 
 #: pcbnew/track.cpp:708
-#, fuzzy, c-format
+#, c-format
 msgid "Min Width: %s"
-msgstr "Ширина линије"
+msgstr "Минимална ширина: %s"
 
 #: pcbnew/track.cpp:721
 msgid "Micro Via"
@@ -35188,9 +35184,9 @@ msgid "Show Only Back Assembly Layers"
 msgstr "Прикажи све позадинске слојеве"
 
 #: pcbnew/widgets/appearance_controls.cpp:1920
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide %s"
-msgstr "Прикажи"
+msgstr "Прикажи или сакриј %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1961
 #, c-format
