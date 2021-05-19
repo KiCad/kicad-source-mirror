@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -136,9 +136,8 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
     {
         aView.SetLayerVisible( PCBNEW_LAYER_ID_START + layer, true );
 
-        // Enable the corresponding zone layer
-        if( IsCopperLayer( layer ) )
-            aView.SetLayerVisible( LAYER_ZONE_START + layer, true );
+        // Enable the corresponding zone layer (copper layers and other layers)
+        aView.SetLayerVisible( LAYER_ZONE_START + layer, true );
     }
 
     RENDER_SETTINGS* renderSettings = aView.GetPainter()->GetSettings();
@@ -271,7 +270,7 @@ void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
 void PCBNEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
 {
     BOARD_PRINTOUT::setupGal( aGal );
-    aGal->SetWorldUnitLength( 1e-9 /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
+    aGal->SetWorldUnitLength( 0.001/IU_PER_MM /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
 }
 
 
