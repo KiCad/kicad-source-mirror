@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 16 16"
+   version="1.1"
+   sodipodi:docname="small_refresh.svg"
+   inkscape:version="1.0.2 (1.0.2+r75+1)"
+   width="16"
+   height="16">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1035"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="43.318962"
+     inkscape:cx="1.1827997"
+     inkscape:cy="9.2451712"
+     inkscape:window-x="633"
+     inkscape:window-y="336"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>refresh</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs26815">
+    <style
+       id="style26813">.cls-1{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+  </defs>
+  <title
+     id="title26817">refresh</title>
+  <path
+     class="cls-1"
+     d="M 13.5436,5.3419694 A -6.12144,6.1212522 0 0 0 2.3731,5.9320513"
+     id="path26819"
+     style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke:#ded3dd;stroke-opacity:1" />
+  <path
+     class="cls-1"
+     d="M 2.69194,10.609808 A -6.11622,6.1160323 0 0 0 14.06506,9.5023617"
+     id="path26821"
+     style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke:#ded3dd;stroke-opacity:1" />
+  <polyline
+     class="cls-1"
+     points="17.701 17.481 22.198 17.078 23.071 21.738"
+     id="polyline26823"
+     transform="matrix(-0.6,0,0,0.59998159,15.9136,0.20012715)"
+     style="stroke-width:3.33338;stroke-miterlimit:4;stroke-dasharray:none;stroke:#ded3dd;stroke-opacity:1" />
+  <polyline
+     class="cls-1"
+     points="8.441 8.231 3.945 8.634 3.071 3.974"
+     id="polyline26825"
+     transform="matrix(-0.6,0,0,0.59998159,15.9136,0.20012715)"
+     style="stroke-width:3.33338;stroke-miterlimit:4;stroke-dasharray:none;stroke:#ded3dd;stroke-opacity:1" />
+</svg>
