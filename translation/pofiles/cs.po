@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-05-18 06:32+0000\n"
+"PO-Revision-Date: 2021-05-21 08:32+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2659,14 +2659,13 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_paste_special.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Změna '%s' reference na '%s'."
+msgstr "Nahrazení označení reference na '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Použití referencí aby odpovídali součástky a pouzdra.\n"
+msgstr "Přiřadit jedinečné označení reference na vložené symboly"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
@@ -6154,16 +6153,17 @@ msgid ""
 msgstr ""
 
 #: common/tool/common_control.cpp:208 common/tool/common_control.cpp:228
-#, fuzzy
 msgid "File Not Found"
 msgstr "Soubor nenalezen"
 
 #: common/tool/common_control.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file \"%s\" could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "Soubor nápovědy \"%s\" nelze najít."
+msgstr ""
+"Soubor nápovědy \"%s\" nenalezen.\n"
+"Chcete získat přístup k online nápovědě KiCadu?"
 
 #: common/tool/common_control.cpp:255
 #, c-format
@@ -7353,9 +7353,8 @@ msgid "Current sheet only"
 msgstr "Pouze aktuální list"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
-#, fuzzy
 msgid "Selection only"
-msgstr "Pouze &výběr"
+msgstr "Pouze výběr"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:23
@@ -9911,14 +9910,13 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1277
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1317
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "Nelze otevřít soubor '%s'."
+msgstr "Nelze normalizovat cestu '%s%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1303
-#, fuzzy
 msgid "No project or path defined for the current schematic."
-msgstr "Vytvořit rozpisku materiálu z aktuálního schématu"
+msgstr "Žádný projekt nebo definovaná cesta pro aktuální schéma."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:24
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:24
@@ -10549,9 +10547,8 @@ msgid "AC"
 msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:98
-#, fuzzy
 msgid "Source 2"
-msgstr "Zdroj"
+msgstr "Zdroj 2"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
@@ -10579,9 +10576,8 @@ msgid "TEMP"
 msgstr "TEPLOTA"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:115
-#, fuzzy
 msgid "Source:"
-msgstr "Zdroj"
+msgstr "Zdroj:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:119
 #, fuzzy
@@ -10589,9 +10585,8 @@ msgid "Sweep type:"
 msgstr "Typ tvaru:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:123
-#, fuzzy
 msgid "Source 1"
-msgstr "Zdroj"
+msgstr "Zdroj 1"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:139
 msgid "Starting value:"
@@ -12081,9 +12076,8 @@ msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Soubor '%s' již existuje. Chcete tento soubor přepsat?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:768
-#, fuzzy
 msgid "Migrate Library"
-msgstr "Migrovat knihovny..."
+msgstr "Migrovat knihovnu"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:792
 #, c-format
@@ -12203,9 +12197,8 @@ msgid "Colors"
 msgstr "Barvy"
 
 #: eeschema/eeschema_config.cpp:99 pcbnew/pcbnew_config.cpp:82
-#, fuzzy
 msgid "Error loading drawing sheet"
-msgstr "Chyba při načítání editoru"
+msgstr "Chyba při načítání listu výkresu"
 
 #: eeschema/eeschema_config.cpp:270 eeschema/sheet.cpp:283
 #, c-format
@@ -12478,11 +12471,9 @@ msgstr ""
 "hierarchického listu schématu."
 
 #: eeschema/files-io.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic file \"%s\""
-msgstr ""
-"Chyba při načítání souboru schématu \"%s\".\n"
-"%s"
+msgstr "Chyba při načítání souboru schématu \"%s\""
 
 #: eeschema/files-io.cpp:420
 #, fuzzy, c-format
@@ -12887,9 +12878,9 @@ msgid "Failed to create file \"%s\""
 msgstr "Selhalo vytvoření souboru \"%s\""
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file %s."
-msgstr "Nelze najít soubor knihovny %s"
+msgstr "Nelze najít soubor knihovny %s."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:123
 msgid "Run command:"
@@ -12901,9 +12892,8 @@ msgid "Command error. Return code %d."
 msgstr "Chyba příkazu. Návratový kód %d"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:133
-#, fuzzy
 msgid "Success."
-msgstr "Ǔspěch"
+msgstr "Úspěch."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:139
 msgid "Info messages:"
@@ -14198,7 +14188,6 @@ msgid "Syntax Help"
 msgstr "Nápověda syntaxe"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14334,136 +14323,136 @@ msgid ""
 "</table>\n"
 msgstr ""
 "<tabulka>\n"
-" <tr>\n"
-" <th> Označení </th>\n"
-" <th> </th>\n"
-" <th> Výsledek </th>\n"
-" </tr>\n"
-" <tr>\n"
-" <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
-" <td></td>\n"
-" <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
-" <td></td>\n"
-" <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td><br></td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
-" <td></td>\n"
-" <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
-" <td></td>\n"
-" <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td></td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</samp><br> "
-"&nbsp;<br><samp>~~</samp> </td>\n"
-" <td></td>\n"
-" <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td><br></td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td>&nbsp;<br><samp>${variable}</samp></td>\n"
-" <td></td>\n"
-" <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
-" <td></td>\n"
-" <td>&nbsp;<br><samp>2020.1</samp></td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td><br></td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
-" <td></td>\n"
-" <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></samp></td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> & nbsp; <br> <samp>${R3:VALUE}</samp> </td>\n"
-" <td> </td>\n"
-" <td> & nbsp; <br> <samp> 150K</samp> </td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> <br> </td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> <br> </td>\n"
-" </tr>\n"
-" <tr>\n"
-" <th> Definice sběrnice </th>\n"
-" <th> & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; & "
-"nbsp; & nbsp; & nbsp; & nbsp; & nbsp; </th>\n"
-" <th> Výsledné sítě </th>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> & nbsp; <br> <samp>prefix[m..n]</samp> </td>\n"
-" <td> </td>\n"
-" <td> & nbsp; <br> <samp> předpona k prefixu </samp> </td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> & nbsp; <br> <samp>D[0..7]</samp> </td>\n"
-" <td> </td>\n"
-" <td> & nbsp; <br> <samp> D0, D1, D2, D3, D4, D5, D6, D7 </samp> </td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> <br> </td>\n"
-" </tr>\n"
-" <tr>\n"
-"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
-"\t\t<td></td>\n"
-"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> & nbsp; <br> <samp> {SCL SDA} </samp> </td>\n"
-" <td> </td>\n"
-" <td> & nbsp; <br> <samp> SCL, SDA </samp> </td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> <br> </td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> & nbsp; <br> <samp> předpona {net1 net2 ...} </samp> </td>\n"
-" <td> </td>\n"
-" <td> & nbsp; <br> <samp> prefix.net1, prefix.net2, ... </samp> </td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> & nbsp; <br> <samp> USB1 {D + D-} </samp> </td>\n"
-" <td> </td>\n"
-" <td> & nbsp; <br> <samp> USB1.D +, USB1.D- </samp> </td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> <br> </td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> & nbsp; <br> <samp> MEM {D [1..2] LATCH} </samp> </td>\n"
-" <td> </td>\n"
-" <td> & nbsp; <br> <samp> MEM.D1, MEM.D2, MEM.LATCH </samp> </td>\n"
-" </tr>\n"
-" <tr>\n"
-" <td> & nbsp; <br> <samp> MEM {D _ {[1..2]} ~ LATCH} </samp> </td>\n"
-" <td> </td>\n"
-" <td> <samp> & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; <sub> & nbsp; </sub> & "
-"nbsp; & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; <sub> & nbsp; </sub> & nbsp; & "
-"nbsp; & nbsp; & nbsp; & nbsp; <u> & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; </"
-"u> </samp> <br> <samp> MEM.D <sub> 1 </sub>, MEM.D <sub> 2 </sub>, MEM.LATCH "
-"</samp> </td>\n"
-" </tr>\n"
+"    <tr>\n"
+"        <th> Označení </th>\n"
+"        <th> </th>\n"
+"        <th> Výsledek </th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</"
+"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>proměnná_hodnota</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>hodnota "
+"pole</i>symbolu<i>reference</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Definice sběrnice</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>Výsledné sítě</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>předpona k prefixu</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> <br> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>předpona {net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{D + D-}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D +, USB1.D-</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2]LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>MEM.D1, MEM.D2, MEM.LATCH</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
 "</tabulka>\n"
 
 #: eeschema/sch_validators.cpp:106
@@ -18202,9 +18191,9 @@ msgid "Are you sure you want to delete '%s'?"
 msgstr "Opravdu chcete smazat '%s'?"
 
 #: kicad/project_tree_pane.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete %d items?"
-msgstr "Opravdu chcete smazat %lu položek?"
+msgstr "Opravdu chcete odstranit položky %d?"
 
 #: kicad/project_tree_pane.cpp:847
 msgid "Delete Multiple Items"
@@ -19633,7 +19622,6 @@ msgid "Conductor length:"
 msgstr "Délka vodiče:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1542
-#, fuzzy
 msgid "Copper resistivity:"
 msgstr "Měrný odpor:"
 
@@ -19861,9 +19849,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:253
-#, fuzzy
 msgid "Write Data Failed"
-msgstr "Chyba zápisu dat souboru"
+msgstr "Zápis dat se nezdařil"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:257
 #, fuzzy
@@ -23008,13 +22995,12 @@ msgid "Copy 3D model files to 3D model path"
 msgstr "Zkopírovat soubory 3D modelů na místě určeném cestou k 3D modelům"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:125
-#, fuzzy
 msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
-"Pokud je zaškrtnuto: zkopíruje pouzdra 3D modelů do složky\n"
-"Pokud není zaškrtnuto: sloučí pouzdra 3D modelů v souboru desky vrml\n"
+"Je-li zaškrtnuto: zkopíruje pouzdra 3D modelů do cílové složky\n"
+"Není-li zaškrtnuto: sloučí pouzdra 3D modelů v souboru desky vrml"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
@@ -23490,9 +23476,8 @@ msgid "Footprint name:"
 msgstr "Název pouzdra:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:180
-#, fuzzy
 msgid "Component type:"
-msgstr "Jméno součástky"
+msgstr "Typ komponenty:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:220
 msgid "Set values to 0 to use netclass values."
@@ -26202,9 +26187,8 @@ msgid "Layers:"
 msgstr "Vrstvy:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:41
-#, fuzzy
 msgid "Basic rules:"
-msgstr "Základní pravidla"
+msgstr "Základní pravidla:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
 msgid "Keep out tracks"
@@ -28189,9 +28173,9 @@ msgid "Local override on %s; clearance: %s."
 msgstr "Lokálně přepsat na %s; izolační mezera: %s."
 
 #: pcbnew/drc/drc_engine.cpp:818
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Min. izolační mezera:"
+msgstr "Minimální izolační mezera desky: %s."
 
 #: pcbnew/drc/drc_engine.cpp:838
 #, c-format
@@ -32619,9 +32603,8 @@ msgid "Create arc from line segment"
 msgstr "Táhnout obrys segmentu"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:248
-#, fuzzy
 msgid "Layer Name"
-msgstr "Základní název"
+msgstr "Název vrstvy"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:262
 msgid "Thickness (mm)"
@@ -34278,9 +34261,8 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Vybrat všechny moduly a spoje ve stejném listu schématu"
 
 #: pcbnew/tools/pcb_actions.cpp:1218
-#, fuzzy
 msgid "Filter Selected Items..."
-msgstr "Výběr filtru..."
+msgstr "Filtr vybraných položek..."
 
 #: pcbnew/tools/pcb_actions.cpp:1218
 msgid "Remove items from the selection by type"
@@ -34343,9 +34325,8 @@ msgid "Route Differential Pair"
 msgstr "Táhnout diferenciální pár"
 
 #: pcbnew/tools/pcb_actions.cpp:1272
-#, fuzzy
 msgid "Route differential pairs"
-msgstr "Táhnout diferenciální pár"
+msgstr "Táhnout diferenciální páry"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
 msgid "Interactive Router Settings..."
@@ -34815,9 +34796,8 @@ msgid "Layer Display Options"
 msgstr "Nastavení zobrazení"
 
 #: pcbnew/widgets/appearance_controls.cpp:578
-#, fuzzy
 msgid "Inactive layers:"
-msgstr "Nepokovené plošky:"
+msgstr "Neaktivní vrstvy:"
 
 #: pcbnew/widgets/appearance_controls.cpp:590
 msgid "Inactive layers will be shown in full color"
@@ -34893,7 +34873,6 @@ msgid "Ratsnest lines are shown to items on visible layers"
 msgstr "Zahrnout položky v &neviditelných vrstvách"
 
 #: pcbnew/widgets/appearance_controls.cpp:834
-#, fuzzy
 msgid "Set Net Color"
 msgstr "Nastavit barvu sítě"
 
@@ -34915,7 +34894,6 @@ msgid "Unselect Tracks and Vias in %s"
 msgstr "Zrušit výběr spojů a prokovů v %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:850
-#, fuzzy
 msgid "Hide All Other Nets"
 msgstr "Skrýt všechny ostatní sítě"
 
@@ -35122,12 +35100,11 @@ msgid "Set Netclass Color"
 msgstr "Nastavit barvu třídy spojů"
 
 #: pcbnew/widgets/appearance_controls.cpp:2150
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Nets in %s"
 msgstr "Zvýraznit sítě v %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2164
-#, fuzzy
 msgid "Show All Netclasses"
 msgstr "Zobrazit všechny třídy spojů"
 
@@ -35175,9 +35152,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls_base.cpp:46
-#, fuzzy
 msgid "Objects"
-msgstr "Zobrazit negativní objekty v této barvě"
+msgstr "Objekty"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:74
 #, fuzzy
@@ -35190,7 +35166,6 @@ msgid "Configure net classes"
 msgstr "Konfigurace cest"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:169
-#, fuzzy
 msgid "Presets:"
 msgstr "Předvolby:"
 
@@ -35203,9 +35178,8 @@ msgid "(unsaved)"
 msgstr "(neuloženo)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:184
-#, fuzzy
 msgid "Layer presets"
-msgstr "Předvolby vrstvy"
+msgstr "Přednastavení vrstvy"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:130
 #, c-format
@@ -35213,38 +35187,32 @@ msgid "Only %s"
 msgstr "Pouze %s"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:21
-#, fuzzy
 msgid "All items"
-msgstr "Všechny soubory"
+msgstr "Všechny položky"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
-#, fuzzy
 msgid "Locked items"
 msgstr "Uzamčené položky"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:27
-#, fuzzy
 msgid "Allow selection of locked items"
-msgstr "Chcete-li odstranit zamčené položky, odstraňte je znovu"
+msgstr "Povolit výběr uzamčených položek"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:59
-#, fuzzy
 msgid "Rule Areas"
-msgstr "Vyplněná oblast"
+msgstr "Pravidla oblastí"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:63
 msgid "Dimensions"
 msgstr "Rozměry"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:67
-#, fuzzy
 msgid "Other items"
-msgstr "Další strany"
+msgstr "Další položky"
 
 #: pcbnew/zone.cpp:550
-#, fuzzy
 msgid "Rule Area"
-msgstr "Vyplněná oblast"
+msgstr "Pravidla oblasti"
 
 #: pcbnew/zone.cpp:552
 msgid "Copper Zone"
@@ -35324,9 +35292,9 @@ msgid "Rule Area on %s"
 msgstr "Oblast pravidla na %s"
 
 #: pcbnew/zone.cpp:885
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s on %s"
-msgstr "Zóna [%s] na %s"
+msgstr "Zóna %s na %s"
 
 #: pcbnew/zone.cpp:1409
 msgid "Inherited"
@@ -35353,9 +35321,8 @@ msgid "Building zone fills..."
 msgstr "Sestavování zón..."
 
 #: pcbnew/zone_filler.cpp:311
-#, fuzzy
 msgid "Removing isolated copper islands..."
-msgstr "Odstranění izolovaných ostrovů mědi ..."
+msgstr "Odstranění izolovaných ostrovů mědi..."
 
 #: pcbnew/zone_filler.cpp:424
 msgid "Zone fills are out-of-date. Refill?"
@@ -35378,14 +35345,12 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] načtení se nezdařilo: vstupní řádek je moc dlouhý\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "Převod obrázků"
+msgstr "KiCad převod obrázků"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
-#, fuzzy
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr "Vytvořit soubor knihovny pro Eeschema"
+msgstr "Vytvořit komponentu z bitmapy pro použití s KiCadem"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 #, fuzzy
@@ -35393,9 +35358,8 @@ msgid "bitmap2component"
 msgstr "Spustit Bitmap2Component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
-#, fuzzy
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr "KiCad editor schémat"
+msgstr "KiCad editor schémat (Samostatně)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 #, fuzzy
@@ -35412,12 +35376,10 @@ msgid "eeschema"
 msgstr "Eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
-#, fuzzy
 msgid "Gerber File Viewer"
-msgstr "Prohlížeč gerber souborů"
+msgstr "Prohlížeč gerber souboru"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
-#, fuzzy
 msgid "View Gerber files"
 msgstr "Zobrazit soubory Gerber"
 
@@ -35433,30 +35395,27 @@ msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 msgid "EDA Suite"
-msgstr ""
+msgstr "EDA Suite"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
-#, fuzzy
 msgid "KiCad PCB Calculator"
-msgstr "Kalkulátor DPS"
+msgstr "KiCad DPS kalkulátor"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
-msgstr ""
+msgstr "Kalkulačka pro různé výpočty související s elektronikou"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
-#, fuzzy
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "Návrh DPS"
+msgstr "KiCad DPS editor (Samostatně)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
-#, fuzzy
 msgid "PCB layout editor"
-msgstr "Editor rozvržení stránky"
+msgstr "Editor návrhu DPS"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
@@ -35482,44 +35441,36 @@ msgid ""
 msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
-#, fuzzy
 msgid "KiCad Main Window"
-msgstr "KiCad &Manuál"
+msgstr "Kicad Hlavní okno"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:67
-#, fuzzy
 msgid "KiCad PCB Layout Editor"
-msgstr "Návrh DPS"
+msgstr "KiCad editor návrhu DPS"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:84
-#, fuzzy
 msgid "The KiCad Developers"
-msgstr "Vývojáři"
+msgstr "Vývojáři Kicadu"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
-msgstr "Soubory Gerber"
+msgstr "Soubor Gerber"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
-#, fuzzy
 msgid "Excellon drill file"
-msgstr "Načíst soubor vrtání (formát EXCELLON)"
+msgstr "Soubor vrtání Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "Soubor projektu KiCadu"
+msgstr "KiCad projekt"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "Upravit schéma"
+msgstr "KiCad schéma"
 
 #: resources/linux/mime/kicad-kicad.xml.in:25
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
-msgstr "Soubory desek plošných spojů KiCad"
+msgstr "KiCad deska plošných spojů"
 
 #, c-format
 #~ msgid ""
