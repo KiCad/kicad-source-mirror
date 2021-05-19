@@ -1140,6 +1140,8 @@ bool PCB_EDIT_FRAME::doAutoSave()
 {
     wxFileName tmpFileName;
 
+    wxString title = GetTitle();    // Save frame title, that can be modified by the save process
+
     if( GetBoard()->GetFileName().IsEmpty() )
     {
         tmpFileName = wxFileName( PATHS::GetDefaultUserProjectsPath(), wxT( "noname" ),
@@ -1184,10 +1186,14 @@ bool PCB_EDIT_FRAME::doAutoSave()
             GetSettingsManager()->TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
         }
 
+        SetTitle( title );      // Restore initial frame title
+
         return true;
     }
 
     GetBoard()->SetFileName( tmpFileName.GetFullPath() );
+
+    SetTitle( title );      // Restore initial frame title
 
     return false;
 }
