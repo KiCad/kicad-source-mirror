@@ -656,13 +656,8 @@ void dumpNode( wxString& buf, TREE_NODE* tok, int depth = 0 )
 
 void CONTEXT::ReportError( const wxString& aErrorMsg )
 {
-    m_errorStatus.pendingError = true;
-    m_errorStatus.message = aErrorMsg;
-    m_errorStatus.srcPos = -1;
-    m_errorStatus.stage = CST_RUNTIME;
-
     if( m_errorCallback )
-        m_errorCallback( m_errorStatus.message, m_errorStatus.srcPos );
+        m_errorCallback( aErrorMsg, -1 );
 }
 
 
@@ -1116,6 +1111,22 @@ void UOP::Exec( CONTEXT* ctx )
         double          arg2Value = arg2 ? arg2->AsDouble() : 0.0;
         double          arg1Value = arg1 ? arg1->AsDouble() : 0.0;
         double          result;
+
+        if( ctx->HasErrorCallback() )
+        {
+            if( arg1->GetType() == VT_STRING && arg2->GetType() == VT_NUMERIC )
+            {
+                ctx->ReportError( wxString::Format( _( "Type mismatch between '%s' and %lf" ),
+                                                    arg1->AsString(),
+                                                    arg2->AsDouble() ) );
+            }
+            else if( arg1->GetType() == VT_NUMERIC && arg2->GetType() == VT_STRING )
+            {
+                ctx->ReportError( wxString::Format( _( "Type mismatch between %lf and '%s'" ),
+                                                    arg1->AsDouble(),
+                                                    arg2->AsString() ) );
+            }
+        }
 
         switch( m_op )
         {

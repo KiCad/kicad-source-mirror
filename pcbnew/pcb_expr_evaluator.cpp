@@ -83,7 +83,7 @@ static void existsOnLayer( LIBEVAL::CONTEXT* aCtx, void *self )
     if( !item )
         return;
 
-    if( !arg )
+    if( !arg && aCtx->HasErrorCallback() )
     {
         aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
                                              wxT( "existsOnLayer()" ) ) );
@@ -110,7 +110,7 @@ static void existsOnLayer( LIBEVAL::CONTEXT* aCtx, void *self )
         }
     }
 
-    if( !anyMatch )
+    if( !anyMatch && aCtx->HasErrorCallback() )
         aCtx->ReportError( wxString::Format( _( "Unrecognized layer '%s'" ), layerName ) );
 }
 
@@ -180,8 +180,12 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
 
     if( !arg )
     {
-        aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
-                                             wxT( "insideCourtyard()" ) ) );
+        if( aCtx->HasErrorCallback() )
+        {
+            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+                                                 wxT( "insideCourtyard()" ) ) );
+        }
+
         return;
     }
 
@@ -257,8 +261,12 @@ static void insideFrontCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
 
     if( !arg )
     {
-        aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
-                                             wxT( "insideFrontCourtyard()" ) ) );
+        if( aCtx->HasErrorCallback() )
+        {
+            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+                                                 wxT( "insideFrontCourtyard()" ) ) );
+        }
+
         return;
     }
 
@@ -335,8 +343,11 @@ static void insideBackCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
 
     if( !arg )
     {
-        aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
-                                             wxT( "insideBackCourtyard()" ) ) );
+        if( aCtx->HasErrorCallback() )
+        {
+            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+                                                 wxT( "insideBackCourtyard()" ) ) );
+        }
         return;
     }
 
@@ -413,8 +424,12 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
     if( !arg )
     {
-        aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
-                                             wxT( "insideArea()" ) ) );
+        if( aCtx->HasErrorCallback() )
+        {
+            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+                                                 wxT( "insideArea()" ) ) );
+        }
+
         return;
     }
 
@@ -471,7 +486,9 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
                     if( ( footprint->GetFlags() & MALFORMED_COURTYARDS ) != 0 )
                     {
-                        aCtx->ReportError( _( "Footprint's courtyard is not a single, closed shape." ) );
+                        if( aCtx->HasErrorCallback() )
+                            aCtx->ReportError( _( "Footprint's courtyard is not a single, closed shape." ) );
+
                         return false;
                     }
 
@@ -481,7 +498,9 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
                         if( courtyard.OutlineCount() == 0 )
                         {
-                            aCtx->ReportError( _( "Footprint has no front courtyard." ) );
+                            if( aCtx->HasErrorCallback() )
+                                aCtx->ReportError( _( "Footprint has no front courtyard." ) );
+
                             return false;
                         }
                         else
@@ -496,7 +515,9 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
                         if( courtyard.OutlineCount() == 0 )
                         {
-                            aCtx->ReportError( _( "Footprint has no back courtyard." ) );
+                            if( aCtx->HasErrorCallback() )
+                                aCtx->ReportError( _( "Footprint has no back courtyard." ) );
+
                             return false;
                         }
                         else
@@ -643,8 +664,11 @@ static void memberOf( LIBEVAL::CONTEXT* aCtx, void* self )
 
     if( !arg )
     {
-        aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
-                                             wxT( "memberOf()" ) ) );
+        if( aCtx->HasErrorCallback() )
+        {
+            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+                                                 wxT( "memberOf()" ) ) );
+        }
         return;
     }
 
@@ -744,8 +768,12 @@ static void inDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
 
     if( !arg )
     {
-        aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
-                                             wxT( "inDiffPair()" ) ) );
+        if( aCtx->HasErrorCallback() )
+        {
+            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+                                                 wxT( "inDiffPair()" ) ) );
+        }
+
         return;
     }
 

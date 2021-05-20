@@ -134,7 +134,7 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporte
             }
             else
             {
-                msg.Printf( _( "Unrecognized item '%s'.| Expected version number" ),
+                msg.Printf( _( "Unrecognized item '%s'.| Expected version number." ),
                             FromUTF8() );
                 reportError( msg );
             }

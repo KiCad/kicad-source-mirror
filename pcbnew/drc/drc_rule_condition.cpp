@@ -55,12 +55,15 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
     }
 
     PCB_EXPR_CONTEXT ctx( aLayer );
-    ctx.SetErrorCallback(
-            [&]( const wxString& aMessage, int aOffset )
-            {
-                if( aReporter )
+
+    if( aReporter )
+    {
+        ctx.SetErrorCallback(
+                [&]( const wxString& aMessage, int aOffset )
+                {
                     aReporter->Report( _( "ERROR:" ) + wxS( " " )+ aMessage );
-            } );
+                } );
+    }
 
     BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
     BOARD_ITEM* b = const_cast<BOARD_ITEM*>( aItemB );
@@ -87,10 +90,10 @@ bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSou
 {
     PCB_EXPR_COMPILER compiler;
 
-    compiler.SetErrorCallback(
-            [&]( const wxString& aMessage, int aOffset )
-            {
-                if( aReporter )
+    if( aReporter )
+    {
+        compiler.SetErrorCallback(
+                [&]( const wxString& aMessage, int aOffset )
                 {
                     wxString rest;
                     wxString first = aMessage.BeforeFirst( '|', &rest );
@@ -101,8 +104,8 @@ bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSou
                                                      rest );
 
                     aReporter->Report( msg, RPT_SEVERITY_ERROR );
-                }
-            } );
+                } );
+    }
 
     m_ucode = std::make_unique<PCB_EXPR_UCODE>();
 

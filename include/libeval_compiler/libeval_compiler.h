@@ -311,15 +311,14 @@ public:
         m_errorCallback = std::move( aCallback );
     }
 
+    bool HasErrorCallback() { return m_errorCallback != nullptr; }
+
     void ReportError( const wxString& aErrorMsg );
-    bool IsErrorPending() const { return m_errorStatus.pendingError; }
-    const ERROR_STATUS& GetError() const { return m_errorStatus; }
 
 private:
     std::vector<VALUE*> m_ownedValues;
     VALUE*              m_stack[100];       // std::stack not performant enough
     int                 m_stackPtr;
-    ERROR_STATUS        m_errorStatus;
 
     std::function<void( const wxString& aMessage, int aOffset )> m_errorCallback;
 };
