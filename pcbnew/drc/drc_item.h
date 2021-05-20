@@ -44,6 +44,7 @@ enum PCB_DRC_CODE {
     DRCE_DANGLING_VIA,                   // via which isn't connected to anything
     DRCE_DANGLING_TRACK,                 // track with at least one end not connected to anything
     DRCE_DRILLED_HOLES_TOO_CLOSE,        // overlapping drilled holes break drill bits
+    DRCE_DRILLED_HOLES_COLOCATED,        // two holes at the same location
     DRCE_HOLE_CLEARANCE,                 //
     DRCE_TRACK_WIDTH,                    // Track width is too small or too large
     DRCE_ANNULAR_WIDTH,                  // Via size and drill leave annulus too small or too large
@@ -136,6 +137,7 @@ private:
     static DRC_ITEM viaDangling;
     static DRC_ITEM trackDangling;
     static DRC_ITEM holeNearHole;
+    static DRC_ITEM holesCoLocated;
     static DRC_ITEM holeClearance;
     static DRC_ITEM trackWidth;
     static DRC_ITEM annularWidth;

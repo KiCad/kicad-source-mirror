@@ -93,6 +93,10 @@ DRC_ITEM DRC_ITEM::holeNearHole( DRCE_DRILLED_HOLES_TOO_CLOSE,
         _( "Drilled holes too close together" ),
         wxT( "hole_near_hole" ) );
 
+DRC_ITEM DRC_ITEM::holesCoLocated( DRCE_DRILLED_HOLES_COLOCATED,
+        _( "Drilled holes co-located" ),
+        wxT( "holes_co_located" ) );
+
 DRC_ITEM DRC_ITEM::trackWidth( DRCE_TRACK_WIDTH,
         _( "Track width" ),
         wxT( "track_width" ) );
@@ -257,10 +261,11 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_DANGLING_VIA:             return std::make_shared<DRC_ITEM>( viaDangling );
     case DRCE_DANGLING_TRACK:           return std::make_shared<DRC_ITEM>( trackDangling );
     case DRCE_DRILLED_HOLES_TOO_CLOSE:  return std::make_shared<DRC_ITEM>( holeNearHole );
+    case DRCE_DRILLED_HOLES_COLOCATED:  return std::make_shared<DRC_ITEM>( holesCoLocated );
     case DRCE_HOLE_CLEARANCE:           return std::make_shared<DRC_ITEM>( holeClearance );
     case DRCE_TRACK_WIDTH:              return std::make_shared<DRC_ITEM>( trackWidth );
-    case DRCE_ANNULAR_WIDTH:                  return std::make_shared<DRC_ITEM>( annularWidth );
-    case DRCE_DRILL_OUT_OF_RANGE:          return std::make_shared<DRC_ITEM>( drillTooSmall );
+    case DRCE_ANNULAR_WIDTH:            return std::make_shared<DRC_ITEM>( annularWidth );
+    case DRCE_DRILL_OUT_OF_RANGE:       return std::make_shared<DRC_ITEM>( drillTooSmall );
     case DRCE_VIA_DIAMETER:             return std::make_shared<DRC_ITEM>( viaDiameter );
     case DRCE_PADSTACK:                 return std::make_shared<DRC_ITEM>( padstack );
     case DRCE_MICROVIA_DRILL_OUT_OF_RANGE: return std::make_shared<DRC_ITEM>( microviaDrillTooSmall );

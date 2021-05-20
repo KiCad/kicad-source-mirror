@@ -241,7 +241,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_test_provider_copper_clearance.cpp
     drc/drc_test_provider_courtyard_clearance.cpp
     drc/drc_test_provider_edge_clearance.cpp
-    drc/drc_test_provider_hole_clearance.cpp
+    drc/drc_test_provider_hole_to_hole.cpp
     drc/drc_test_provider_hole_size.cpp
     drc/drc_test_provider_lvs.cpp
     drc/drc_test_provider_misc.cpp

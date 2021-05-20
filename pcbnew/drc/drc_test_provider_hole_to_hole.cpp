@@ -35,20 +35,21 @@
     Holes clearance test. Checks pad and via holes for their mechanical clearances.
     Generated errors:
     - DRCE_DRILLED_HOLES_TOO_CLOSE
+    - DRCE_DRILLED_HOLES_COLOCATED
 
     TODO: vias-in-smd-pads check
 */
 
-class DRC_TEST_PROVIDER_HOLE_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
+class DRC_TEST_PROVIDER_HOLE_TO_HOLE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
-    DRC_TEST_PROVIDER_HOLE_CLEARANCE () :
+    DRC_TEST_PROVIDER_HOLE_TO_HOLE () :
         DRC_TEST_PROVIDER_CLEARANCE_BASE(),
         m_board( nullptr )
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_HOLE_CLEARANCE()
+    virtual ~DRC_TEST_PROVIDER_HOLE_TO_HOLE()
     {
     }
 
@@ -56,7 +57,7 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "hole_clearance";
+        return "hole_to_hole_clearance";
     };
 
     virtual const wxString GetDescription() const override
@@ -93,11 +94,12 @@ static std::shared_ptr<SHAPE_CIRCLE> getDrilledHoleShape( BOARD_ITEM* aItem )
 }
 
 
-bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
+bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
 {
-    if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE )
+            && m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_COLOCATED ) )
     {
-        reportAux( "Hole-to-hole violations ignored. Tests not run." );
+        reportAux( "Hole to hole violations ignored. Tests not run." );
         return true;        // continue with other tests
     }
 
@@ -269,52 +271,66 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 }
 
 
-bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoleAgainstHole( BOARD_ITEM* aItem, SHAPE_CIRCLE* aHole,
-                                                            BOARD_ITEM* aOther )
+bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHAPE_CIRCLE* aHole,
+                                                          BOARD_ITEM* aOther )
 {
-    if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
+    bool reportCoLocation = !m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_COLOCATED );
+    bool reportHole2Hole = !m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE );
+
+    if( !reportCoLocation && !reportHole2Hole )
         return false;
 
     std::shared_ptr<SHAPE_CIRCLE> otherHole = getDrilledHoleShape( aOther );
+    int                           epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
+    SEG::ecoord                   epsilon_sq = SEG::Square( epsilon );
 
-    // Holes with identical locations are allowable
-    if( aHole->GetCenter() == otherHole->GetCenter() )
-        return true;
-
-    int actual = ( aHole->GetCenter() - otherHole->GetCenter() ).EuclideanNorm();
-    actual = std::max( 0, actual - aHole->GetRadius() - otherHole->GetRadius() );
-
-    auto constraint = m_drcEngine->EvalRules( HOLE_TO_HOLE_CONSTRAINT, aItem, aOther,
-                                              UNDEFINED_LAYER /* holes pierce all layers */ );
-    int  minClearance = constraint.GetValue().Min() - m_board->GetDesignSettings().GetDRCEpsilon();
-
-    if( minClearance >= 0 && actual < minClearance )
+    // Holes at same location generate a separate violation
+    if( ( aHole->GetCenter() - otherHole->GetCenter() ).SquaredEuclideanNorm() < epsilon_sq )
     {
-        std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
+        if( reportCoLocation )
+        {
+            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DRILLED_HOLES_COLOCATED );
+            drce->SetItems( aItem, aOther );
+            reportViolation( drce, (wxPoint) aHole->GetCenter() );
+        }
+    }
+    else if( reportHole2Hole )
+    {
+        int actual = ( aHole->GetCenter() - otherHole->GetCenter() ).EuclideanNorm();
+        actual = std::max( 0, actual - aHole->GetRadius() - otherHole->GetRadius() );
 
-        m_msg.Printf( _( "(%s min %s; actual %s)" ),
-                      constraint.GetName(),
-                      MessageTextFromValue( userUnits(), minClearance ),
-                      MessageTextFromValue( userUnits(), actual ) );
+        auto constraint = m_drcEngine->EvalRules( HOLE_TO_HOLE_CONSTRAINT, aItem, aOther,
+                                                  UNDEFINED_LAYER /* holes pierce all layers */ );
+        int  minClearance = constraint.GetValue().Min() - epsilon;
 
-        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
-        drce->SetItems( aItem, aOther );
-        drce->SetViolatingRule( constraint.GetParentRule() );
+        if( minClearance >= 0 && actual < minClearance )
+        {
+            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
 
-        reportViolation( drce, (wxPoint) aHole->GetCenter() );
+            m_msg.Printf( _( "(%s min %s; actual %s)" ),
+                          constraint.GetName(),
+                          MessageTextFromValue( userUnits(), minClearance ),
+                          MessageTextFromValue( userUnits(), actual ) );
+
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            drce->SetItems( aItem, aOther );
+            drce->SetViolatingRule( constraint.GetParentRule() );
+
+            reportViolation( drce, (wxPoint) aHole->GetCenter() );
+        }
     }
 
     return true;
 }
 
 
-int DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetNumPhases() const
+int DRC_TEST_PROVIDER_HOLE_TO_HOLE::GetNumPhases() const
 {
     return 1;
 }
 
 
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_HOLE_TO_HOLE::GetConstraintTypes() const
 {
     return { HOLE_TO_HOLE_CONSTRAINT };
 }
@@ -322,5 +338,5 @@ std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetConstraintTypes(
 
 namespace detail
 {
-    static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_HOLE_CLEARANCE> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_HOLE_TO_HOLE> dummy;
 }
