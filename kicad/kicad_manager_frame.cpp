@@ -167,11 +167,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     wxSizer* mainSizer = GetSizer();
 
-    if( mainSizer )
-    {
+    // Only fit the initial window size the first time KiCad is run.
+    if( mainSizer && config()->m_Window.state.size_x == 0 && config()->m_Window.state.size_y == 0 )
         mainSizer->Fit( this );
-        SetMinSize( GetSize() );
-    }
 
     SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
 
@@ -266,7 +264,8 @@ KICAD_SETTINGS* KICAD_MANAGER_FRAME::kicadSettings() const
 
 const wxString KICAD_MANAGER_FRAME::GetProjectFileName() const
 {
-    return Pgm().GetSettingsManager().IsProjectOpen() ? Prj().GetProjectFullName() : wxString( wxEmptyString );
+    return Pgm().GetSettingsManager().IsProjectOpen() ? Prj().GetProjectFullName() :
+                                                        wxString( wxEmptyString );
 }
 
 
@@ -456,7 +455,8 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 }
 
 
-void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, bool aCreateStubFiles )
+void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
+                                            bool aCreateStubFiles )
 {
     wxCHECK_RET( aProjectFileName.DirExists() && aProjectFileName.IsDirWritable(),
                  "Project folder must exist and be writable to create a new project." );
@@ -490,6 +490,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
 
                 if( file.IsOpened() )
                     file.Write( wxT( "{\n}\n") );
+
                 // wxFFile dtor will close the file
             }
         }
@@ -503,7 +504,8 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
         wxFileName fn( aProjectFileName.GetFullPath() );
         fn.SetExt( KiCadSchematicFileExtension );
 
-        // If a <project>.kicad_sch file does not exist, create a "stub" file ( minimal schematic file )
+        // If a <project>.kicad_sch file does not exist, create a "stub" file ( minimal schematic
+        // file ).
         if( !fn.FileExists() )
         {
             wxFFile file( fn.GetFullPath(), "wb" );
@@ -513,7 +515,6 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
                                               "  (paper \"A4\")\n  (lib_symbols)\n"
                                               "  (symbol_instances)\n)\n",
                                               SEXPR_SCHEMATIC_FILE_VERSION ) );
-
 
             // wxFFile dtor will close the file
         }
@@ -559,7 +560,7 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
     wxString filename = wxT( "\"" );
     filename += dlg.GetPath() + wxT( "\"" );
 
-    if( !dlg.GetPath().IsEmpty() &&  !Pgm().GetEditorName().IsEmpty() )
+    if( !dlg.GetPath().IsEmpty() && !Pgm().GetEditorName().IsEmpty() )
         m_toolManager->RunAction( KICAD_MANAGER_ACTIONS::openTextEditor, true, &filename );
 }
 
@@ -633,7 +634,7 @@ void KICAD_MANAGER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     auto settings = dynamic_cast<KICAD_SETTINGS*>( aCfg );
 
-    wxCHECK( settings, /*void*/);
+    wxCHECK( settings, /*void*/ );
 
     m_leftWinWidth = settings->m_LeftWinWidth;
 }
