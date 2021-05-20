@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-04-26 10:31+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-05-20 07:15+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -533,9 +533,8 @@ msgid "Show copper thickness"
 msgstr "显示铜厚度"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:171
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "高亮项目"
+msgstr "翻转时高亮显示条目"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:178
 msgid "Other Options"
@@ -2625,27 +2624,24 @@ msgstr "浏览..."
 msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
-msgstr ""
+msgstr "为设计中已经存在的任何指示符查找下一个可用的参考指示符。"
 
 #: common/dialogs/dialog_paste_special.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "更改 '%s' 的参考指示符为 '%s'。"
+msgstr "用 '%s' 替换参考指示符。"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "使用参考指标来匹配符号和封装。\n"
+msgstr "为所粘贴的符号分配唯一的参考指示符"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "即使现有标注是重复的也保留它们"
+msgstr "保留现有的参考指示符，即使它们是重复的"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Clear reference designators on all pasted symbols"
-msgstr "非法位号值！"
+msgstr "清理所有粘贴符号上的参考指示符"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -4632,9 +4628,8 @@ msgid "Ignore Other Snaps"
 msgstr "忽略其他吸附"
 
 #: common/hotkey_store.cpp:59
-#, fuzzy
 msgid "Ignore H/V/45 Constraints"
-msgstr "约束"
+msgstr "忽略 H/V/45 约束"
 
 #: common/hotkey_store.cpp:64 common/tool/action_menu.cpp:223
 #: common/tool/actions.cpp:113
@@ -6092,18 +6087,22 @@ msgid ""
 "\"%s\" could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
+"帮助文件 \"%s\"或\n"
+"“%s” 无法被找到。\n"
+"你想访问 KiCad 联机帮助吗？"
 
 #: common/tool/common_control.cpp:208 common/tool/common_control.cpp:228
-#, fuzzy
 msgid "File Not Found"
 msgstr "文件未找到"
 
 #: common/tool/common_control.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file \"%s\" could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "无法找到帮助文件 \"%s\" 。"
+msgstr ""
+"无法找到帮助文件 \"%s\" 。\n"
+"是否要访问 KiCad 联机帮助?"
 
 #: common/tool/common_control.cpp:255
 #, c-format
@@ -7270,9 +7269,8 @@ msgid "Current sheet only"
 msgstr "仅当前图框"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
-#, fuzzy
 msgid "Selection only"
-msgstr "仅限选择 (&S)"
+msgstr "仅所选部分"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:23
@@ -8186,29 +8184,24 @@ msgstr ""
 "在 “原理图设置” > “常规” > “格式” 中。"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:667
-#, fuzzy
 msgid "Align right"
-msgstr "向右对齐"
+msgstr "右对齐"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:668
-#, fuzzy
 msgid "Align bottom"
-msgstr "向下对齐"
+msgstr "底部对齐"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:669
-#, fuzzy
 msgid "Align left"
-msgstr "向左对齐"
+msgstr "左对齐"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:670
-#, fuzzy
 msgid "Align top"
-msgstr "向上对齐"
+msgstr "顶部对齐"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:122 eeschema/sch_text.cpp:674
-#, fuzzy
 msgid "Justification"
-msgstr "对齐："
+msgstr "齐行"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
 msgid "Bold and italic"
@@ -9791,18 +9784,17 @@ msgstr "无法创建文件 \"%s\"。\n"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1256
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr ""
+msgstr "退回到用户路径 '%s'。"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1277
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1317
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "无法打开文件 '%s'。"
+msgstr "无法正常化路径 '%s%s'。"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1303
-#, fuzzy
 msgid "No project or path defined for the current schematic."
-msgstr "生成当前原理图的 BOM"
+msgstr "没有为当前原理图未定义工程或路径。"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:24
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:24
@@ -10425,9 +10417,8 @@ msgid "AC"
 msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:98
-#, fuzzy
 msgid "Source 2"
-msgstr "源"
+msgstr "源 2"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
@@ -10455,19 +10446,16 @@ msgid "TEMP"
 msgstr "温度"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:115
-#, fuzzy
 msgid "Source:"
-msgstr "源"
+msgstr "源："
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:119
-#, fuzzy
 msgid "Sweep type:"
-msgstr "形状类型："
+msgstr "扫描类型："
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:123
-#, fuzzy
 msgid "Source 1"
-msgstr "源"
+msgstr "源 1"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:139
 msgid "Starting value:"
@@ -11816,34 +11804,30 @@ msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:330
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:531
-#, fuzzy
 msgid "A library table row nickname and path cells are empty."
-msgstr "库别名 '%s' 已经存在。"
+msgstr "库表行昵称和路径单元格为空。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:332
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:533
-#, fuzzy
 msgid "A library table row nickname cell is empty."
-msgstr "库别名 '%s' 已经存在。"
+msgstr "库表行昵称单元为空。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:334
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:535
-#, fuzzy
 msgid "A library table row path cell is empty."
-msgstr "符号库 \"%s\" 为空。"
+msgstr "库表行路径单元格为空。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:336
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
-#, fuzzy
 msgid "Invalid Row Definition"
-msgstr "遇到了无效的花键定义"
+msgstr "无效的行定义"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:338
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:539
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
-msgstr ""
+msgstr "空单元格将导致从表格中删除无效的所有行。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:354
 #, c-format
@@ -11934,9 +11918,8 @@ msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "文件 \"%s\" 已经存在，你想覆盖它吗？"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:768
-#, fuzzy
 msgid "Migrate Library"
-msgstr "迁移库..."
+msgstr "迁移库"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:792
 #, c-format
@@ -12054,9 +12037,8 @@ msgid "Colors"
 msgstr "颜色"
 
 #: eeschema/eeschema_config.cpp:99 pcbnew/pcbnew_config.cpp:82
-#, fuzzy
 msgid "Error loading drawing sheet"
-msgstr "加载编辑器时出错"
+msgstr "加载图纸错误"
 
 #: eeschema/eeschema_config.cpp:270 eeschema/sheet.cpp:283
 #, c-format
@@ -12328,16 +12310,14 @@ msgstr ""
 "层次原理图时发生错误。"
 
 #: eeschema/files-io.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic file \"%s\""
-msgstr ""
-"加载原理图文件 \"%s\" 时出错。\n"
-"%s"
+msgstr "加载原理图文件 \"%s\" 时出错"
 
 #: eeschema/files-io.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading schematic file \"%s\""
-msgstr "载入原理图文件 \"%s\" 发生错误。"
+msgstr "加载原理图文件 \"%s\" 时内存耗尽"
 
 #: eeschema/files-io.cpp:433 eeschema/files-io.cpp:1062
 #, c-format
@@ -12730,23 +12710,22 @@ msgid "Failed to create file \"%s\""
 msgstr "创建文件 \"%s\" 失败"
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file %s."
-msgstr "无法找到库文件 \"%s\""
+msgstr "无法找到库文件 %s。"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:123
 msgid "Run command:"
 msgstr "运行命令："
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:128
-#, fuzzy, c-format
+#, c-format
 msgid "Command error. Return code %d."
-msgstr "命令错误。返回代码 %d"
+msgstr "命令错误。返回代码 %d。"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:133
-#, fuzzy
 msgid "Success."
-msgstr "成功"
+msgstr "成功。"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:139
 msgid "Info messages:"
@@ -13838,9 +13817,8 @@ msgid "expected 'Italics' or '~'"
 msgstr "需要“斜体”或 \"~\" 符号"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1722
-#, fuzzy
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr "元件字段文本的属性必须是3个字符宽度"
+msgstr "符号字段文本属性必须是3个字符宽"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2673
 #, c-format
@@ -14573,9 +14551,8 @@ msgid "There was an error while saving the workbook file"
 msgstr "保存工作簿文件时出现错误"
 
 #: eeschema/sim/sim_plot_frame.cpp:1146
-#, fuzzy
 msgid "Save Simulation Workbook As"
-msgstr "保存仿真工作簿"
+msgstr "将仿真工作簿保存为"
 
 #: eeschema/sim/sim_plot_frame.cpp:1164
 msgid "Save Plot as Image"
@@ -14587,7 +14564,7 @@ msgstr "保存绘制数据"
 
 #: eeschema/sim/sim_plot_frame.cpp:1443 eeschema/sim/sim_plot_frame.cpp:1467
 msgid "Simulator is running. Try later"
-msgstr ""
+msgstr "仿真器正在运行中。稍后再试"
 
 #: eeschema/sim/sim_plot_frame.cpp:1451
 msgid "You need to run plot-providing simulation first."
@@ -16406,9 +16383,8 @@ msgid "No symbol issues found."
 msgstr "没有找到符号问题。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:494
-#, fuzzy
 msgid "No datasheet defined."
-msgstr "数据手册字段"
+msgstr "未定义数据表。"
 
 #: eeschema/tools/ee_selection_tool.cpp:1586
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
@@ -16423,11 +16399,11 @@ msgstr "展开选定内容 (&E)\tE"
 
 #: eeschema/tools/sch_drawing_tools.cpp:214
 msgid "Press <ESC> to cancel symbol creation."
-msgstr ""
+msgstr "按 <ESC> 键取消符号创建。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:452
 msgid "Press <ESC> to cancel image creation."
-msgstr ""
+msgstr "按 <ESC> 取消图片创建。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:511
 #: pagelayout_editor/pl_editor_frame.cpp:842
@@ -16447,7 +16423,7 @@ msgstr "结点位置不包含可连接的电线和/或引脚。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1074
 msgid "Press <ESC> to cancel item creation."
-msgstr ""
+msgstr "按下 <ESC> 取消项目创建。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1130
 msgid "Click over a sheet."
@@ -16455,7 +16431,7 @@ msgstr "单击图框。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1300
 msgid "Press <ESC> to cancel sheet creation."
-msgstr ""
+msgstr "按下 <ESC> 取消图框创建。"
 
 #: eeschema/tools/sch_edit_tool.cpp:81
 msgid "Symbol Unit"
@@ -16552,15 +16528,15 @@ msgstr "总线没有成员"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:577
 msgid "Press <ESC> to cancel drawing."
-msgstr ""
+msgstr "按下 <ESC> 取消绘图。"
 
 #: eeschema/tools/sch_move_tool.cpp:375
 msgid "Press <ESC> to cancel drag."
-msgstr ""
+msgstr "按下 <ESC> 取消拖动。"
 
 #: eeschema/tools/sch_move_tool.cpp:377
 msgid "Press <ESC> to cancel move."
-msgstr ""
+msgstr "按下 <ESC> 取消移动。"
 
 #: eeschema/tools/symbol_editor_control.cpp:163
 msgid "No symbol library selected."
@@ -16875,13 +16851,13 @@ msgstr ""
 "<b>未加载：</b> <i>%s</i>"
 
 #: gerbview/files.cpp:41
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "<b>Memory was exhausted reading:</b> <i>%s</i>"
 msgstr ""
 "\n"
-"<b>未加载：</b> <i>%s</i>"
+"<b>读取该文件时内存耗尽：</b> <i>%s</i>"
 
 #: gerbview/files.cpp:86
 msgid "Zip files"
@@ -17972,9 +17948,9 @@ msgid "Are you sure you want to delete '%s'?"
 msgstr "确定要删除 \"%s\"？"
 
 #: kicad/project_tree_pane.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete %d items?"
-msgstr "您确定要删除 %lu 个项目吗？"
+msgstr "你确定你想删除 %d 个项目吗？"
 
 #: kicad/project_tree_pane.cpp:847
 msgid "Delete Multiple Items"
@@ -18511,9 +18487,8 @@ msgid "Unable to create \"%s\""
 msgstr "\"%s\" 无法建立"
 
 #: pagelayout_editor/files.cpp:234
-#, fuzzy
 msgid "Error reading drawing sheet"
-msgstr "完成图框"
+msgstr "读取图表出错"
 
 #: pagelayout_editor/files.cpp:247
 msgid "Layout file is read only."
@@ -19397,9 +19372,8 @@ msgid "Conductor length:"
 msgstr "导线长度："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1542
-#, fuzzy
 msgid "Copper resistivity:"
-msgstr "电阻率："
+msgstr "铜电阻率："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1569
 msgid "External Layer Traces"
@@ -20882,7 +20856,7 @@ msgstr ""
 "排序代码 %d"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "%d %s UUID: [%s], X, Y: %s, Rounded X, Y, %s"
@@ -20891,15 +20865,15 @@ msgstr ""
 "%d %s UUID: [%s], X, Y: %s, 四舍五入的 X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:571
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
 "Recommend running DRC with 'Test footprints against schematic' checked.\n"
 msgstr ""
 "\n"
-"PCB 上有 %d 个空白或无效的参考名称。\n"
-"建议您运行 DRC 并选中“根据原理图测试封装”。\n"
+"PCB 上有 %d 个空白或无效的参考指示符。\n"
+"建议选中'测试原理图封装' 选项，然后运行 DRC。\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:577
 #, c-format
@@ -21638,12 +21612,11 @@ msgid "Pad connections:"
 msgstr "焊盘连接："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
-#, fuzzy
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local  pad settings"
 msgstr ""
-"默认焊盘与覆铜连接类型。\n"
+"焊盘与区域默认连接类型。\n"
 "该设置可被本地焊盘设置覆盖"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:242 pcbnew/zone.cpp:1411
@@ -22721,15 +22694,13 @@ msgstr "水平镜像打印层"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:99
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
-#, fuzzy
 msgid "Print one page per layer"
-msgstr "每层一页"
+msgstr "每层打印一页"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:105
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
-#, fuzzy
 msgid "Print board edges on all pages"
-msgstr "打印电路板边框"
+msgstr "所有页面上打印电路板边框"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:71
 msgid "Export SVG File"
@@ -22765,31 +22736,28 @@ msgid "0.1 Inch"
 msgstr "0.1 英寸"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
-#, fuzzy
 msgid "VRML Units for Output Files"
-msgstr "输出文件的 Vrml 单位"
+msgstr "输出文件的 VRML 单位"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
 msgstr "复制 3D 模型文件到 3D 模型路径"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:125
-#, fuzzy
 msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
-"如果选中：将封装 3D 模型复制到文件夹中\n"
-"如果未选中：合并 VRML 板文件中封装 3D 模型\n"
+"如果选中：将 3D 模型复制到目标文件夹中\n"
+"如果未选中：在 VRML 板文件中嵌入 3D 模型"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
 msgstr "电路板 VRML 的模型文件使用相对路径"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:130
-#, fuzzy
 msgid "Use paths for model files in board VRML file relative to the VRML file"
-msgstr "电路板 VRML 的模型文件使用相对路径"
+msgstr "使用 VRML 板文件中模型文件相对于 VRML 文件的路径"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:67
 msgid "VRML Export Options"
@@ -23241,9 +23209,8 @@ msgid "Footprint name:"
 msgstr "封装名称："
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:180
-#, fuzzy
 msgid "Component type:"
-msgstr "元件："
+msgstr "元件类型："
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:220
 msgid "Set values to 0 to use netclass values."
@@ -24559,11 +24526,10 @@ msgid "Warning: Negative local clearance values will have no effect."
 msgstr "警告：局部间隙值为负将没有效果。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1271
-#, fuzzy
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
-msgstr "警告：自定义形状焊盘不支持负的阻焊间隙值。"
+msgstr "警告：负防焊膜间隙大于某些形状原基板。可能产生意料之外的结果。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1280
 msgid ""
@@ -25174,9 +25140,8 @@ msgid "Force plot invisible footprint values and reference designators"
 msgstr "强制绘制隐藏的值或位号"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
-#, fuzzy
 msgid "Plot Edge.Cuts on all layers"
-msgstr "重新加载所有图层"
+msgstr "在所有层上绘制电路板边框轮廓层"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Do not plot the contents of the PCB edge layer on any other layers."
@@ -25261,16 +25226,14 @@ msgid "Check zone fills before plotting"
 msgstr "在绘制之前检查覆铜填充"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask min width and/or margin are not set to 0. "
-msgstr "全局阻焊层的最小宽度和/或边距未设置为 0。  大多数电路板厂"
+msgstr "全局阻焊层最小宽度和/或边距未设置为 0。 "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
-#, fuzzy
 msgid ""
 "Most board houses expect 0 and use their constraints, especially for solder "
 "mask min width."
-msgstr "预期为 0，并使用它们的约束，特别是对于阻焊层最小宽度。"
+msgstr "多数板厂预期 0，并使用它们的约束，特别是对于阻焊层最小宽度。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -25875,9 +25838,8 @@ msgid "Layers:"
 msgstr "层："
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:41
-#, fuzzy
 msgid "Basic rules:"
-msgstr "基本规则"
+msgstr "基本规则："
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
 msgid "Keep out tracks"
@@ -26672,20 +26634,19 @@ msgid "Allow fillets outside zone outline"
 msgstr "允许圆角超出覆铜轮廓"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:147
-#, fuzzy
 msgid "Length tuning"
-msgstr "布线长度调整"
+msgstr "长度调整"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:151
 msgid "Include stackup height in track length calculations"
-msgstr ""
+msgstr "在线路长度计算中包括堆叠高度"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:152
 msgid ""
 "When enabled, the distance between copper layers will be included in track "
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
-msgstr ""
+msgstr "启用后，计算带过孔的线路的长度时将包括铜层之间的距离。禁用时，过孔堆叠高度将被忽略。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:189
 msgid "Minimum clearance:"
@@ -27349,17 +27310,14 @@ msgid "User9"
 msgstr "用户 9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:29
-#, fuzzy
 msgid ""
 "Use your board house's recommendation for solder mask clearance and minimum "
 "bridge width."
-msgstr ""
-"使用您的电路板厂推荐的焊罩间隙和最小桥宽。\n"
-"如果未提供，则建议将这些值设置为零。"
+msgstr "使用您的电路板厂推荐的焊罩间隙和最小桥宽。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:35
 msgid "If none is provided, setting the values to zero is suggested."
-msgstr ""
+msgstr "如果没有提供，建议将这些值设置为 0。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:58
 msgid ""
@@ -28007,9 +27965,9 @@ msgid "Local override on %s; clearance: %s."
 msgstr "%s 上的本地替代；间隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:818
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum clearance: %s."
-msgstr "最小间隙："
+msgstr "板最小间隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:838
 #, c-format
@@ -28857,12 +28815,12 @@ msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB '%s' 不存在，你想创建它吗？"
 
 #: pcbnew/files.cpp:715
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Memory exhausted loading board file:\n"
 "%s"
 msgstr ""
-"电路板文件载入错误：\n"
+"加载电路板文件时内存耗尽：\n"
 "%s"
 
 #: pcbnew/files.cpp:824
@@ -29650,9 +29608,8 @@ msgid "Fabrication Outputs"
 msgstr "制造输出"
 
 #: pcbnew/menubar_pcb_editor.cpp:303
-#, fuzzy
 msgid "Add Microwave Shape"
-msgstr "添加微波间隙"
+msgstr "添加微波形状"
 
 #: pcbnew/menubar_pcb_editor.cpp:338
 msgid "Auto-Place Footprints"
@@ -31576,12 +31533,10 @@ msgid "Length Tuner"
 msgstr "长度调整"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:478
-#, fuzzy
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
-msgstr ""
-"无法找到互补差分对网络。请确保属于差分对网络的名称以 _N/_P 或 +/- 结束。"
+msgstr "无法找到互补差分对网络。请确保属于差分对网络的名称以 N/P 或 +/- 结尾。"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:499
 msgid ""
@@ -34238,9 +34193,8 @@ msgid "Segment Length"
 msgstr "线段长度"
 
 #: pcbnew/track.cpp:686
-#, fuzzy
 msgid "Routed Length"
-msgstr "电路板长度"
+msgstr "线路长度"
 
 #: pcbnew/track.cpp:694
 msgid "Full Length"
@@ -34277,9 +34231,9 @@ msgid "NetCode"
 msgstr "网络代码"
 
 #: pcbnew/track.cpp:903
-#, fuzzy, c-format
+#, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "布线 %s (%s), 长度：%s"
+msgstr "导线 (圆弧) %s 位于 %s，长度 %s"
 
 #: pcbnew/track.cpp:904
 #, c-format
