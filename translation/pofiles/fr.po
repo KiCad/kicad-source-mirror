@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-05-16 09:37+0200\n"
+"POT-Creation-Date: 2021-05-20 12:47+0200\n"
+"PO-Revision-Date: 2021-05-20 12:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -10046,18 +10046,17 @@ msgstr "Impossible de créer le  fichier \"%s\"\n"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1256
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr ""
+msgstr "Solution de secours: chemin utilisateur \"%s\"."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1277
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1317
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "Impossible d'ouvrir le  fichier \"%s\"."
+msgstr "Impossible de normaliser le chemin \"%s%s\"."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1303
-#, fuzzy
 msgid "No project or path defined for the current schematic."
-msgstr "Créer la liste de matériel de la schématique"
+msgstr "Aucun projet ou chemin défini pour la schématique actuelle."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:24
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:24
@@ -12556,7 +12555,7 @@ msgstr ""
 msgid "Invalid connection between bus and net items"
 msgstr "Connexion non valide entre le bus et éléments de net"
 
-#: eeschema/erc_item.cpp:126 pcbnew/drc/drc_item.cpp:165
+#: eeschema/erc_item.cpp:126 pcbnew/drc/drc_item.cpp:169
 msgid "Unresolved text variable"
 msgstr "Variable texte non résolue"
 
@@ -22276,7 +22275,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:342
 msgid "Smoothing amount:"
-msgstr "Effort de lissage:"
+msgstr "Importance de lissage:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:344
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:176
@@ -23836,9 +23835,8 @@ msgid "Footprint name:"
 msgstr "Nom empreinte:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:180
-#, fuzzy
 msgid "Component type:"
-msgstr "Composant:"
+msgstr "Type de Composant :"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:220
 msgid "Set values to 0 to use netclass values."
@@ -25052,7 +25050,7 @@ msgstr "degré"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:174
 msgid "Smooth amount:"
-msgstr "Effort de lissage:"
+msgstr "Importance de lissage:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:84
 msgid "Non Copper Zones Properties"
@@ -28939,98 +28937,102 @@ msgid "Drilled holes too close together"
 msgstr "Trous trop proches"
 
 #: pcbnew/drc/drc_item.cpp:97
+msgid "Drilled holes co-located"
+msgstr "Trous forés co-localisés"
+
+#: pcbnew/drc/drc_item.cpp:101
 msgid "Track width"
 msgstr "Largeur piste"
 
-#: pcbnew/drc/drc_item.cpp:101
+#: pcbnew/drc/drc_item.cpp:105
 msgid "Annular width"
 msgstr "Largeur des anneaux"
 
-#: pcbnew/drc/drc_item.cpp:105
+#: pcbnew/drc/drc_item.cpp:109
 msgid "Drill out of range"
 msgstr "Perçage hors de plage"
 
-#: pcbnew/drc/drc_item.cpp:109
+#: pcbnew/drc/drc_item.cpp:113
 msgid "Via diameter"
 msgstr "Diamètre via"
 
-#: pcbnew/drc/drc_item.cpp:113
+#: pcbnew/drc/drc_item.cpp:117
 msgid "Padstack is not valid"
 msgstr "Le padstack n’est pas valide"
 
-#: pcbnew/drc/drc_item.cpp:117
+#: pcbnew/drc/drc_item.cpp:121
 msgid "Micro via drill out of range"
 msgstr "Perçage microvia hors de plage"
 
-#: pcbnew/drc/drc_item.cpp:121
+#: pcbnew/drc/drc_item.cpp:125
 msgid "Courtyards overlap"
 msgstr "Zones d'occupation d'empreintes chevauchantes"
 
-#: pcbnew/drc/drc_item.cpp:125
+#: pcbnew/drc/drc_item.cpp:129
 msgid "Footprint has no courtyard defined"
 msgstr "Empreinte n’a aucune zone d'occupation définie"
 
-#: pcbnew/drc/drc_item.cpp:129
+#: pcbnew/drc/drc_item.cpp:133
 msgid "Footprint has malformed courtyard"
 msgstr "Empreinte une zone d'occupation mal formée"
 
-#: pcbnew/drc/drc_item.cpp:133
+#: pcbnew/drc/drc_item.cpp:137
 msgid "PTH inside courtyard"
 msgstr "Pad à l'intérieur d'une zone réservée"
 
-#: pcbnew/drc/drc_item.cpp:137
+#: pcbnew/drc/drc_item.cpp:141
 msgid "NPTH inside courtyard"
 msgstr "Pad non métallisé à l'intérieur d'une zone d'occupation"
 
-#: pcbnew/drc/drc_item.cpp:141
+#: pcbnew/drc/drc_item.cpp:145
 msgid "Item on a disabled layer"
 msgstr "Elément sur une couche inactive"
 
-#: pcbnew/drc/drc_item.cpp:145
+#: pcbnew/drc/drc_item.cpp:149
 msgid "Board has malformed outline"
 msgstr "Le C.I. a un contour mal formé"
 
-#: pcbnew/drc/drc_item.cpp:149
+#: pcbnew/drc/drc_item.cpp:153
 msgid "Duplicate footprints"
 msgstr "Empreintes dupliquées"
 
-#: pcbnew/drc/drc_item.cpp:153
+#: pcbnew/drc/drc_item.cpp:157
 msgid "Missing footprint"
 msgstr "Empreinte manquante"
 
-#: pcbnew/drc/drc_item.cpp:157
+#: pcbnew/drc/drc_item.cpp:161
 msgid "Extra footprint"
 msgstr "Empreinte supplémentaire"
 
-#: pcbnew/drc/drc_item.cpp:161
+#: pcbnew/drc/drc_item.cpp:165
 msgid "Pad net doesn't match schematic"
 msgstr "Le net du pad  n'a pas de correspondance schématique"
 
-#: pcbnew/drc/drc_item.cpp:169
+#: pcbnew/drc/drc_item.cpp:173
 msgid "Silkscreen clipped by solder mask"
 msgstr "Sérigraphie tronquée par masque de soudure"
 
-#: pcbnew/drc/drc_item.cpp:173
+#: pcbnew/drc/drc_item.cpp:177
 msgid "Silkscreen overlap"
 msgstr "Recouvrement de sérigraphie"
 
-#: pcbnew/drc/drc_item.cpp:177
+#: pcbnew/drc/drc_item.cpp:181
 msgid "Trace length out of range"
 msgstr "Longueur de piste hors de plage"
 
-#: pcbnew/drc/drc_item.cpp:181
+#: pcbnew/drc/drc_item.cpp:185
 msgid "Skew between traces out of range"
 msgstr "Biais entre les traces hors de plage"
 
-#: pcbnew/drc/drc_item.cpp:185
+#: pcbnew/drc/drc_item.cpp:189
 msgid "Too many vias on a connection"
 msgstr "Trop de vias sur une connexion"
 
-#: pcbnew/drc/drc_item.cpp:189
+#: pcbnew/drc/drc_item.cpp:193
 msgid "Differential pair gap out of range"
 msgstr "Distance de paire différentielle hors de plage."
 
-#: pcbnew/drc/drc_item.cpp:193
+#: pcbnew/drc/drc_item.cpp:197
 msgid "Differential uncoupled length too long"
 msgstr "Longueur de Paire non couplée trop longue"
 
@@ -29259,15 +29261,6 @@ msgstr "Vérification des isolations cuivre/contour de PCB..."
 msgid "Checking silk to board edge clearances..."
 msgstr "Vérification marge sérigraphie/contour de PCB..."
 
-#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:119
-msgid "Checking hole to hole clearances..."
-msgstr "Vérification marge trou à trou..."
-
-#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:295
-#, c-format
-msgid "(%s min %s; actual %s)"
-msgstr "(%s min %s; réel %s)"
-
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:78
 msgid "Checking pad holes..."
 msgstr "Vérification perçage des pads..."
@@ -29293,6 +29286,15 @@ msgstr "(%s largeur min %s; réelle %s)"
 #, c-format
 msgid "(%s max width %s; actual %s)"
 msgstr "(%s largeur max %s; réelle %s)"
+
+#: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:121
+msgid "Checking hole to hole clearances..."
+msgstr "Vérification marge trou à trou..."
+
+#: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:310
+#, c-format
+msgid "(%s min %s; actual %s)"
+msgstr "(%s min %s; réel %s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:118
 #, c-format
@@ -36017,6 +36019,11 @@ msgstr "Exécution de remplissage des polygones..."
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -36027,9 +36034,10 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
@@ -36043,9 +36051,10 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -36055,9 +36064,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -36072,6 +36081,10 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -36079,6 +36092,11 @@ msgstr "Calculateur pour PCB KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 msgid "KiCad PCB Editor (Standalone)"
@@ -36091,10 +36109,6 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -36158,12 +36172,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Net Class parameters"
 #~ msgstr "Paramètres de NeClass"
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
 
 #~ msgid "Welcome!"
 #~ msgstr "Bienvenue !"
