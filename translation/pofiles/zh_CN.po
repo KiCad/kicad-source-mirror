@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-05-20 07:15+0000\n"
+"PO-Revision-Date: 2021-05-21 08:32+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -2624,24 +2624,24 @@ msgstr "浏览..."
 msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
-msgstr "为设计中已经存在的任何指示符查找下一个可用的参考指示符。"
+msgstr "为设计中已经存在的任何位号查找下一个可用的位号。"
 
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "用 '%s' 替换参考指示符。"
+msgstr "用 '%s' 替换位号。"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "为所粘贴的符号分配唯一的参考指示符"
+msgstr "为所粘贴的符号分配唯一的位号"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "保留现有的参考指示符，即使它们是重复的"
+msgstr "保留现有的位号，即使它们是重复的"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
-msgstr "清理所有粘贴符号上的参考指示符"
+msgstr "清理所有粘贴符号上的位号"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -4993,7 +4993,7 @@ msgstr "引脚名"
 
 #: common/layer_id.cpp:114
 msgid "Symbol references"
-msgstr "符号参考"
+msgstr "符号位号"
 
 #: common/layer_id.cpp:115
 msgid "Symbol values"
@@ -10062,7 +10062,7 @@ msgstr "导入："
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
 msgid "Formatting preferences"
-msgstr "格式化偏好设置"
+msgstr "格式偏好设置"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Field name templates"
@@ -11595,7 +11595,7 @@ msgstr "标签增量："
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:268
 msgid "Dialog Preferences"
-msgstr "偏好设置对话框"
+msgstr "对话框偏好设置"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:270
 msgid "Show footprint previews in Symbol Chooser"
@@ -12242,7 +12242,7 @@ msgstr "同一符号的单元的值不同"
 
 #: eeschema/erc_item.cpp:150
 msgid "Duplicate reference designators"
-msgstr "重复参考标识符"
+msgstr "重复位号"
 
 #: eeschema/fields_grid_table.cpp:134 eeschema/files-io.cpp:98
 msgid "Schematic Files"
@@ -15368,7 +15368,7 @@ msgstr "用户取消了封装重新链接。"
 #: eeschema/tools/backannotate.cpp:328
 #, c-format
 msgid "Change '%s' reference designator to '%s'."
-msgstr "更改 '%s' 的参考指示符为 '%s'。"
+msgstr "更改 '%s' 的位号为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:345
 #, c-format
@@ -20793,7 +20793,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"有 %i 种类型的参考标号。\n"
+"有 %i 种类型的位号。\n"
 "**********************************************************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:503
@@ -20872,7 +20872,7 @@ msgid ""
 "Recommend running DRC with 'Test footprints against schematic' checked.\n"
 msgstr ""
 "\n"
-"PCB 上有 %d 个空白或无效的参考指示符。\n"
+"PCB 上有 %d 个空白或无效的位号。\n"
 "建议选中'测试原理图封装' 选项，然后运行 DRC。\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:577
@@ -20997,11 +20997,11 @@ msgstr "背面"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
 msgid "Front reference start:"
-msgstr "顶层工位起点："
+msgstr "顶层位号起点："
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
 msgid "Starting reference designation for front."
-msgstr "顶层的起始工位。"
+msgstr "顶层的起始位号。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
 #: pcbnew/dialogs/dialog_create_array_base.cpp:93
@@ -21030,13 +21030,13 @@ msgstr "底层工位起点："
 msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
-msgstr "空白从前面继续，或输入大于前面最高参考名称的数字。"
+msgstr "空白从前面继续，或输入大于前面最高位号的数字。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:227
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
-msgstr "留空或为零，或在前面输入一个大于最高参考名称的数字。"
+msgstr "留空或为零，或在前面输入一个大于最高位号的数字。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
 msgid "Remove front prefix"
@@ -21069,7 +21069,7 @@ msgstr "顶层前缀："
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:244
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:249
 msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr "组件侧引用名称的可选前缀 (如：F_)"
+msgstr "元件侧位号的可选前缀 (如：F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
 msgid "Back prefix:"
@@ -21078,7 +21078,7 @@ msgstr "底层前缀："
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:255
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr "锡膏侧参考名称的可选前缀 (例如：B_)"
+msgstr "锡膏侧位号的可选前缀 (例如：B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
 msgid "Exclude locked footprints"
@@ -21098,7 +21098,7 @@ msgid ""
 "of reference (R means R*)"
 msgstr ""
 "不要重新批注此类型\n"
-"参考值（R 表示 R*）"
+"位号（R 表示 R*）"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:290
 msgid "Reference Designators"
@@ -22840,7 +22840,7 @@ msgstr "重新"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference designators"
-msgstr "搜索封装参考指示符"
+msgstr "搜索封装位号"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
 msgid "Search footprint values"
@@ -24303,7 +24303,7 @@ msgstr "读取网表文件 \"%s\"\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:229
 msgid "Using reference designators to match symbols and footprints.\n"
-msgstr "使用参考指标来匹配符号和封装。\n"
+msgstr "使用位号来匹配符号和封装。\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:231
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
@@ -29788,7 +29788,7 @@ msgstr "更改 %s 的位号为 %s。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:271
 #, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "更改 %s 的参考位号为 %s。"
+msgstr "更改 %s 的位号为 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:287
 #, c-format
@@ -31972,7 +31972,7 @@ msgstr "未找到位号 \"%s\"。"
 #: pcbnew/specctra_import_export/specctra_import.cpp:499
 #, c-format
 msgid "A wire_via references a missing padstack \"%s\""
-msgstr "发现一个导线_过孔索引指向了丢失的焊盘槽/孔 \"%s\""
+msgstr "发现一个导线_过孔指向了丢失的焊盘槽/孔 \"%s\""
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:68
 msgid "Exception on python action plugin code"
