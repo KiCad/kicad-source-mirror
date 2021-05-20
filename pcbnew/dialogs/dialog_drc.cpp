@@ -41,6 +41,7 @@
 #include <dialogs/wx_html_report_box.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <tools/drc_tool.h>
+#include <tools/board_inspection_tool.h>
 #include <kiplatform/ui.h>
 
 DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
@@ -441,6 +442,12 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
                      wxString::Format( _( "It will be excluded from the %s list" ), listName ) );
     }
 
+    if( rcItem->GetErrorCode() == DRCE_CLEARANCE
+            || rcItem->GetErrorCode() == DRCE_COPPER_EDGE_CLEARANCE )
+    {
+        menu.Append( 3, _( "Run clearance resolution tool..." ) );
+    }
+
     menu.AppendSeparator();
 
     if( bds().m_DRCSeverities[ rcItem->GetErrorCode() ] == RPT_SEVERITY_WARNING )
@@ -448,24 +455,24 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         msg.Printf( _( "Change severity to Error for all '%s' violations" ),
                     rcItem->GetErrorText(),
                     _( "Violation severities can also be edited in the Board Setup... dialog" ) );
-        menu.Append( 3, msg );
+        menu.Append( 4, msg );
     }
     else
     {
         msg.Printf( _( "Change severity to Warning for all '%s' violations" ),
                     rcItem->GetErrorText(),
                     _( "Violation severities can also be edited in the Board Setup... dialog" ) );
-        menu.Append( 4, msg );
+        menu.Append( 5, msg );
     }
 
     msg.Printf( _( "Ignore all '%s' violations" ),
                 rcItem->GetErrorText(),
                 _( "Violations will not be checked or reported" ) );
-    menu.Append( 5, msg );
+    menu.Append( 6, msg );
 
     menu.AppendSeparator();
 
-    menu.Append( 6, _( "Edit violation severities..." ), _( "Open the Board Setup... dialog" ) );
+    menu.Append( 7, _( "Edit violation severities..." ), _( "Open the Board Setup... dialog" ) );
 
     bool modified = false;
 
@@ -508,6 +515,15 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case 3:
+    {
+        TOOL_MANAGER*          toolMgr = m_frame->GetToolManager();
+        BOARD_INSPECTION_TOOL* inspectionTool = toolMgr->GetTool<BOARD_INSPECTION_TOOL>();
+
+        inspectionTool->InspectDRCError( node->m_RcItem );
+    }
+        break;
+
+    case 4:
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_ERROR;
 
         for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
@@ -521,7 +537,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         modified = true;
         break;
 
-    case 4:
+    case 5:
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_WARNING;
 
         for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
@@ -535,7 +551,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         modified = true;
         break;
 
-    case 5:
+    case 6:
     {
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
 
@@ -558,7 +574,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     }
         break;
 
-    case 6:
+    case 7:
         m_frame->ShowBoardSetupDialog( _( "Violation Severity" ) );
         break;
     }

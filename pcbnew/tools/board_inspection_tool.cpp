@@ -38,7 +38,7 @@
 #include "board_inspection_tool.h"
 #include <pcbnew_settings.h>
 #include <widgets/appearance_controls.h>
-
+#include <drc/drc_item.h>
 
 void DIALOG_INSPECTION_REPORTER::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 {
@@ -251,6 +251,91 @@ void BOARD_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_T aClearanceType, PC
 
     r->Report( "" );
     r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
+}
+
+
+void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem )
+{
+    BOARD_ITEM*  a = m_frame->GetBoard()->GetItem( aDRCItem->GetMainItemID() );
+    BOARD_ITEM*  b = m_frame->GetBoard()->GetItem( aDRCItem->GetAuxItemID() );
+    PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+
+    if( !a || !b )
+        return;
+
+    if( m_inspectClearanceDialog == nullptr )
+    {
+        m_inspectClearanceDialog = std::make_unique<DIALOG_INSPECTION_REPORTER>( m_frame );
+        m_inspectClearanceDialog->SetTitle( _( "Clearance Report" ) );
+
+        m_inspectClearanceDialog->Connect( wxEVT_CLOSE_WINDOW,
+                    wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectClearanceDialogClosed ),
+                    nullptr, this );
+    }
+
+    WX_HTML_REPORT_BOX* r = m_inspectClearanceDialog->m_Reporter;
+    r->SetUnits( m_frame->GetUserUnits() );
+    r->Clear();
+
+    switch( aDRCItem->GetErrorCode() )
+    {
+    case DRCE_COPPER_EDGE_CLEARANCE:
+        r->Report( "<h7>" + _( "Edge clearance resolution for:" ) + "</h7>" );
+
+        r->Report( wxString::Format( "<ul><li>%s</li><li>%s</li></ul>",
+                                     EscapeHTML( getItemDescription( a ) ),
+                                     EscapeHTML( getItemDescription( b ) ) ) );
+
+        reportClearance( EDGE_CLEARANCE_CONSTRAINT, layer, a, b, r );
+        break;
+
+    case DRCE_CLEARANCE:
+        if( a->Type() == PCB_TRACE_T || a->Type() == PCB_ARC_T )
+        {
+            layer = a->GetLayer();
+        }
+        else if( b->Type() == PCB_TRACE_T || b->Type() == PCB_ARC_T )
+        {
+            layer = b->GetLayer();
+        }
+        else if( a->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB::SMD )
+        {
+            PAD* pad = static_cast<PAD*>( a );
+
+            if( pad->IsOnLayer( F_Cu ) )
+                layer = F_Cu;
+            else
+                layer = B_Cu;
+        }
+        else if( b->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB::SMD )
+        {
+            PAD* pad = static_cast<PAD*>( b );
+
+            if( pad->IsOnLayer( F_Cu ) )
+                layer = F_Cu;
+            else
+                layer = B_Cu;
+        }
+
+        r->Report( "<h7>" + _( "Clearance resolution for:" ) + "</h7>" );
+
+        r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+                                     _( "Layer" ),
+                                     EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
+                                     EscapeHTML( getItemDescription( a ) ),
+                                     EscapeHTML( getItemDescription( b ) ) ) );
+
+        reportClearance( CLEARANCE_CONSTRAINT, layer, a, b, r );
+        break;
+
+    default:
+        return;
+    }
+
+    r->Flush();
+
+    m_inspectClearanceDialog->Raise();
+    m_inspectClearanceDialog->Show( true );
 }
 
 
