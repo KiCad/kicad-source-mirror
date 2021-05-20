@@ -400,9 +400,7 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
         mgr.TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
 
         if( aSave )
-        {
             mgr.SaveProject();
-        }
 
         m_active_project = false;
         mgr.UnloadProject( &Prj() );

@@ -32,7 +32,6 @@
 #include <wx/textdlg.h>
 
 #include <bitmaps.h>
-#include <common.h>
 #include <gestfich.h>
 #include <macros.h>
 #include <menus_helpers.h>
@@ -164,6 +163,12 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
 
 
 PROJECT_TREE_PANE::~PROJECT_TREE_PANE()
+{
+    shutdownFileWatcher();
+}
+
+
+void PROJECT_TREE_PANE::shutdownFileWatcher()
 {
     if( m_watcher )
     {
@@ -1300,6 +1305,9 @@ void PROJECT_TREE_PANE::FileWatcherReset()
 
 void PROJECT_TREE_PANE::EmptyTreePrj()
 {
+    // Make sure we don't try to inspect the tree after we've deleted its items.
+    shutdownFileWatcher();
+
     m_TreeProject->DeleteAllItems();
 }
 

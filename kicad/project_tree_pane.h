@@ -156,6 +156,12 @@ private:
     void onIdle( wxIdleEvent &aEvent );
 
     /**
+     * Shutdown the file watcher.  Used when closing to prevent post-free access into the project
+     * tree.  (Using the destructor doesn't work as wxWidgets defers destruction in some cases.)
+     */
+    void shutdownFileWatcher();
+
+    /**
      * Function addItemToProjectTree
      * @brief  Add the file or directory aName to the project tree
      * @param aName = the filename or the directory name to add in tree
