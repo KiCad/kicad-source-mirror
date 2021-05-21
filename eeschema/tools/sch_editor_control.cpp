@@ -1222,7 +1222,7 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
 }
 
 
-bool SCH_EDITOR_CONTROL::doCopy()
+bool SCH_EDITOR_CONTROL::doCopy( bool aUseLocalClipboard )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selTool->RequestSelection();
@@ -1250,6 +1250,12 @@ bool SCH_EDITOR_CONTROL::doCopy()
 
     plugin.Format( &selection, &selPath, &hiearchy, &formatter );
 
+    if( aUseLocalClipboard )
+    {
+        m_localClipboard = formatter.GetString();
+        return true;
+    }
+
     return m_toolMgr->SaveClipboard( formatter.GetString() );
 }
 
@@ -1264,6 +1270,15 @@ bool SCH_EDITOR_CONTROL::searchSupplementaryClipboard( const wxString& aSheetFil
     }
 
     return false;
+}
+
+
+int SCH_EDITOR_CONTROL::Duplicate( const TOOL_EVENT& aEvent )
+{
+    doCopy( true ); // Use the local clipboard
+    Paste( aEvent );
+
+    return 0;
 }
 
 
@@ -1426,7 +1441,12 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    std::string        text = m_toolMgr->GetClipboardUTF8();
+    std::string        text;
+
+    if( aEvent.IsAction( &ACTIONS::duplicate ) )
+        text = m_localClipboard;
+    else
+        text = m_toolMgr->GetClipboardUTF8();
 
     if( text.empty() )
         return 0;
@@ -1990,6 +2010,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Copy,                  ACTIONS::copy.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::paste.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::pasteSpecial.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Duplicate,             ACTIONS::duplicate.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editWithLibEdit.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowCvpcb,             EE_ACTIONS::assignFootprints.MakeEvent() );

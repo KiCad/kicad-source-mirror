@@ -45,7 +45,6 @@ public:
     int Rotate( const TOOL_EVENT& aEvent );
     int Mirror( const TOOL_EVENT& aEvent );
 
-    int Duplicate( const TOOL_EVENT& aEvent );
     int RepeatDrawItem( const TOOL_EVENT& aEvent );
 
     int Properties( const TOOL_EVENT& aEvent );

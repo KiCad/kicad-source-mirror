@@ -111,6 +111,7 @@ public:
     int Cut( const TOOL_EVENT& aEvent );
     int Copy( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
+    int Duplicate( const TOOL_EVENT& aEvent );
 
     int EditWithSymbolEditor( const TOOL_EVENT& aEvent );
     int ShowCvpcb( const TOOL_EVENT& aEvent );
@@ -150,8 +151,8 @@ public:
                                  SCH_SEARCH_T aSearchType, const wxString& aSearchText );
 
 private:
-    ///< copy selection to clipboard
-    bool doCopy();
+    ///< copy selection to clipboard or to m_localClipboard if aUseLocalClipboard is true
+    bool doCopy( bool aUseLocalClipboard = false );
 
     bool rescueProject( RESCUER& aRescuer, bool aRunningOnDemand );
 
@@ -210,6 +211,9 @@ private:
 private:
     bool      m_probingPcbToSch; // Recursion guard when cross-probing to PcbNew
     EDA_ITEM* m_pickerItem;      // Current item for picker highlighting.
+
+    // Temporary storage location for Duplicate action
+    std::string m_localClipboard;
 
     // A map of sheet filename --> screens for the clipboard contents.  We use these to hook up
     // cut/paste operations for unsaved sheet content.
