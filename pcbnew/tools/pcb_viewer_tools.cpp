@@ -252,7 +252,9 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         if( evt->IsCancelInteractive() )
         {
             if( originSet )
+            {
                 clearRuler();
+            }
             else
             {
                 frame()->PopTool( tool );
@@ -328,6 +330,8 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     view.Remove( &ruler );
 
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    controls.SetAutoPan( false );
+    controls.CaptureCursor( false );
     return 0;
 }
 

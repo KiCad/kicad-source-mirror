@@ -2055,7 +2055,9 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         if( evt->IsCancelInteractive() )
         {
             if( polyGeomMgr.IsPolygonInProgress() )
+            {
                 cleanup();
+            }
             else
             {
                 m_frame->PopTool( tool );
@@ -2198,6 +2200,8 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_controls->ForceCursorPosition( false );
+    controls()->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
     return 0;
 }
 

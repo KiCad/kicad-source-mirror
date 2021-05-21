@@ -121,7 +121,9 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
                 break;
             }
             else if( newItem )
+            {
                 cleanup();
+            }
             else
             {
                 frame()->PopTool( aTool );
@@ -258,6 +260,8 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
 
     view()->Remove( &preview );
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    controls()->SetAutoPan( false );
+    controls()->CaptureCursor( false );
 }
 
 
