@@ -1114,13 +1114,13 @@ void UOP::Exec( CONTEXT* ctx )
 
         if( ctx->HasErrorCallback() )
         {
-            if( arg1->GetType() == VT_STRING && arg2->GetType() == VT_NUMERIC )
+            if( arg1 && arg1->GetType() == VT_STRING && arg2 && arg2->GetType() == VT_NUMERIC )
             {
                 ctx->ReportError( wxString::Format( _( "Type mismatch between '%s' and %lf" ),
                                                     arg1->AsString(),
                                                     arg2->AsDouble() ) );
             }
-            else if( arg1->GetType() == VT_NUMERIC && arg2->GetType() == VT_STRING )
+            else if( arg1 && arg1->GetType() == VT_NUMERIC && arg2 && arg2->GetType() == VT_STRING )
             {
                 ctx->ReportError( wxString::Format( _( "Type mismatch between %lf and '%s'" ),
                                                     arg1->AsDouble(),
