@@ -1019,6 +1019,9 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::zoomTool,               CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,          CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 
+    mgr->SetConditions( PCB_ACTIONS::checkFootprint,     ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::repairFootprint,    ENABLE( cond.HasItems() ) );
+
 
     auto highContrastCond =
             [this] ( const SELECTION& )
@@ -1027,10 +1030,10 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
             };
 
     auto boardFlippedCond =
-        [this]( const SELECTION& )
-        {
-            return GetCanvas()->GetView()->IsMirroredX();
-        };
+            [this]( const SELECTION& )
+            {
+                return GetCanvas()->GetView()->IsMirroredX();
+            };
 
     auto footprintTreeCond =
             [this] (const SELECTION& )

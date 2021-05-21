@@ -218,6 +218,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                     ID_ADD_FOOTPRINT_TO_BOARD,
                     BITMAPS::insert_module_board );
 
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( PCB_ACTIONS::repairFootprint );
+
 
     //-- Preferences menu -------------------------------------------------
     //

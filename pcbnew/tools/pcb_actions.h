@@ -441,6 +441,7 @@ public:
     static TOOL_ACTION boardStatistics;
     static TOOL_ACTION boardReannotate;
     static TOOL_ACTION repairBoard;
+    static TOOL_ACTION repairFootprint;
     static TOOL_ACTION inspectClearance;
     static TOOL_ACTION inspectConstraints;
 

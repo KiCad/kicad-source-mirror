@@ -510,6 +510,85 @@ void FOOTPRINT_EDITOR_CONTROL::DestroyCheckerDialog()
 }
 
 
+int FOOTPRINT_EDITOR_CONTROL::RepairFootprint( const TOOL_EVENT& aEvent )
+{
+    FOOTPRINT* footprint = board()->Footprints().front();
+    int        errors = 0;
+    wxString   details;
+
+    /*******************************
+     * Repair duplicate IDs and missing nets
+     */
+
+    std::set<KIID> ids;
+    int            duplicates = 0;
+
+    auto processItem =
+            [&]( EDA_ITEM* aItem )
+            {
+                if( ids.count( aItem->m_Uuid ) )
+                {
+                    duplicates++;
+                    const_cast<KIID&>( aItem->m_Uuid ) = KIID();
+                }
+
+                ids.insert( aItem->m_Uuid );
+            };
+
+    // Footprint IDs are the most important, so give them the first crack at "claiming" a
+    // particular KIID.
+
+    processItem( footprint );
+
+    // After that the principal use is for DRC marker pointers, which are most likely to pads.
+
+    for( PAD* pad : footprint->Pads() )
+        processItem( pad );
+
+    // From here out I don't think order matters much.
+
+    processItem( &footprint->Reference() );
+    processItem( &footprint->Value() );
+
+    for( BOARD_ITEM* item : footprint->GraphicalItems() )
+        processItem( item );
+
+    for( ZONE* zone : footprint->Zones() )
+        processItem( zone );
+
+    for( PCB_GROUP* group : footprint->Groups() )
+        processItem( group );
+
+    if( duplicates )
+    {
+        errors += duplicates;
+        details += wxString::Format( _( "%d duplicate IDs replaced.\n" ), duplicates );
+    }
+
+    /*******************************
+     * Your test here
+     */
+
+    /*******************************
+     * Inform the user
+     */
+
+    if( errors )
+    {
+        m_frame->OnModify();
+
+        wxString msg = wxString::Format( _( "%d potential problems repaired." ), errors );
+        DisplayInfoMessage( m_frame, msg, details );
+    }
+    else
+    {
+        DisplayInfoMessage( m_frame, _( "No footprint problems found." ) );
+    }
+
+    return 0;
+}
+
+
 void FOOTPRINT_EDITOR_CONTROL::setTransitions()
 {
     Go( &FOOTPRINT_EDITOR_CONTROL::NewFootprint,         PCB_ACTIONS::newFootprint.MakeEvent() );
@@ -531,6 +610,7 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
     Go( &FOOTPRINT_EDITOR_CONTROL::CleanupGraphics,      PCB_ACTIONS::cleanupGraphics.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_CONTROL::CheckFootprint,       PCB_ACTIONS::checkFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::RepairFootprint,      PCB_ACTIONS::repairFootprint.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_CONTROL::PinLibrary,           ACTIONS::pinLibrary.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::UnpinLibrary,         ACTIONS::unpinLibrary.MakeEvent() );

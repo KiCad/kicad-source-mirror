@@ -72,6 +72,8 @@ public:
     int CheckFootprint( const TOOL_EVENT& aEvent );
     void DestroyCheckerDialog();
 
+    int RepairFootprint( const TOOL_EVENT& aEvent );
+
     /**
      * Edit the properties used for new pad creation.
      */

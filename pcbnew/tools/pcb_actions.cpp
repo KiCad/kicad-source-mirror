@@ -1072,6 +1072,12 @@ TOOL_ACTION PCB_ACTIONS::repairBoard( "pcbnew.Control.repairBoard",
         _( "Run various diagnostics and attempt to repair board" ),
         BITMAPS::rescue );
 
+TOOL_ACTION PCB_ACTIONS::repairFootprint( "pcbnew.ModuleEditor.repairFootprint",
+        AS_GLOBAL, 0, "",
+        _( "Repair Footprint" ),
+        _( "Run various diagnostics and attempt to repair footprint" ),
+        BITMAPS::rescue );
+
 
 // PLACEMENT_TOOL
 //
