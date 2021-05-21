@@ -1886,21 +1886,33 @@ void SCH_SEXPR_PARSER::parseSchSheetInstances( SCH_SHEET* aRootSheet, SCH_SCREEN
 
                 token = NextTok();
 
+                std::vector<wxString> whitespaces = { wxT( "\r" ), wxT( "\n" ), wxT( "\t" ),
+                                                      wxT( " " ) };
+
+                size_t numReplacements = 0;
+
                 switch( token )
                 {
                 case T_page:
                     NeedSYMBOL();
                     instance.m_PageNumber = FromUTF8();
 
+                    // Whitespaces are not permitted
+                    for( wxString ch : whitespaces )
+                        numReplacements += instance.m_PageNumber.Replace( ch, wxEmptyString );
+
+
                     // Empty page numbers are not permitted
                     if( instance.m_PageNumber.IsEmpty() )
                     {
-                        // Use space character instead
-                        instance.m_PageNumber = wxT( " " );
-
-                        // Set the file as modified so the user can be warned.
-                        aScreen->SetModify();
+                        // Use hash character instead
+                        instance.m_PageNumber = wxT( "#" );
+                        numReplacements++;
                     }
+
+                    // Set the file as modified so the user can be warned.
+                    if( numReplacements > 0 )
+                        aScreen->SetModify();
 
                     NeedRIGHT();
                     break;
