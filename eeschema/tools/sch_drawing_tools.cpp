@@ -1345,6 +1345,24 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             getViewControls()->SetAutoPan( false );
             getViewControls()->CaptureCursor( false );
 
+            // Find the list of paths in the hierarchy that refer to the destination sheet where
+            // the new sheet will be drawn
+            SCH_SCREEN*    currentScreen = m_frame->GetCurrentSheet().LastScreen();
+            SCH_SHEET_LIST hierarchy = m_frame->Schematic().GetSheets();
+            SCH_SHEET_LIST instances = hierarchy.FindAllSheetsForScreen( currentScreen );
+            instances.SortByPageNumbers();
+
+            int pageNum = static_cast<int>( hierarchy.size() ) + 1;
+
+            // Set a page number for all the instances of the new sheet in the hierarchy
+            for( SCH_SHEET_PATH& instance : instances )
+            {
+                SCH_SHEET_PATH sheetPath = instance;
+                sheetPath.push_back( sheet );
+                sheet->AddInstance( sheetPath.Path() );
+                sheet->SetPageNumber( sheetPath, wxString::Format( "%d", pageNum++ ) );
+            }
+
             if( m_frame->EditSheetProperties( static_cast<SCH_SHEET*>( sheet ),
                                               &m_frame->GetCurrentSheet(), nullptr ) )
             {

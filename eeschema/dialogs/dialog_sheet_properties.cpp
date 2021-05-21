@@ -166,12 +166,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
 
     instance.push_back( m_sheet );
 
-    wxString nextPageNumber;
-
-    if( m_sheet->IsNew() )
-        nextPageNumber.Printf( "%d", static_cast<int>( hierarchy.size() ) + 1 );
-    else
-        nextPageNumber = m_sheet->GetPageNumber( instance );
+    wxString nextPageNumber = m_sheet->GetPageNumber( instance );
 
     m_pageNumberTextCtrl->ChangeValue( nextPageNumber );
 
