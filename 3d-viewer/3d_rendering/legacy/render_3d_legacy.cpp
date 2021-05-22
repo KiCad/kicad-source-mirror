@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1179,19 +1179,18 @@ void RENDER_3D_LEGACY::render3dModelsSelected( bool aRenderTopOrBot, bool aRende
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
+        const bool isIntersected = fp == m_currentRollOverItem;
         bool highlight = false;
 
         if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) )
         {
-            if( fp == m_currentRollOverItem )
+            if( isIntersected )
             {
                 if( aRenderSelectedOnly )
                     highlight = m_boardAdapter.GetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM );
-                else if( !fp->IsSelected() )
-                    continue;
             }
             else if( ( aRenderSelectedOnly && !fp->IsSelected() )
-                  || ( !aRenderSelectedOnly && fp->IsSelected() ) )
+                     || ( !aRenderSelectedOnly && fp->IsSelected() ) )
             {
                 continue;
             }
@@ -1212,7 +1211,7 @@ void RENDER_3D_LEGACY::render3dModelsSelected( bool aRenderTopOrBot, bool aRende
                 if( ( aRenderTopOrBot && !fp->IsFlipped() )
                  || ( !aRenderTopOrBot && fp->IsFlipped() ) )
                 {
-                    renderFootprint( fp, aRenderTransparentOnly, highlight );
+                    renderFootprint( fp, aRenderTransparentOnly, isIntersected );
                 }
             }
         }
