@@ -798,10 +798,9 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     title.Printf( _( "Select %s Library" ), fileType.m_Description );
 
     wxString openDir = cfg->m_lastFootprintLibDir;
+
     if( m_cur_grid == m_project_grid )
-    {
         openDir = m_lastProjectLibDir;
-    }
 
     if( fileType.m_IsFile )
     {
@@ -816,22 +815,28 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
         dlg.GetPaths( files );
 
-        cfg->m_lastFootprintLibDir = dlg.GetDirectory();
+        if( m_cur_grid == m_global_grid )
+            cfg->m_lastFootprintLibDir = dlg.GetDirectory();
+        else
+            m_lastProjectLibDir = dlg.GetDirectory();
     }
     else
     {
         wxDirDialog dlg( nullptr, title, openDir,
-                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE );
 
         int result = dlg.ShowModal();
 
         if( result == wxID_CANCEL )
             return;
 
+        dlg.GetPaths( files );
+
         // is there a file extension configured to hunt out their containing folders?
-        if( fileType.m_FolderSearchExtension != "" )
+        if( files.GetCount() == 1 && fileType.m_FolderSearchExtension != "" )
         {
-            wxDir rootDir( dlg.GetPath() );
+            wxDir rootDir( files.front() );
+            files.clear();
 
             LIBRARY_TRAVERSER traverser( fileType.m_FolderSearchExtension, rootDir.GetName() );
             rootDir.Traverse( traverser );
@@ -851,18 +856,15 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
                                      detailedMsg );
             }
         }
-        else
-        {
-            files.Add( dlg.GetPath() );
-        }
 
-        if( m_cur_grid == m_global_grid )
+        if( !files.IsEmpty() )
         {
-            cfg->m_lastFootprintLibDir = dlg.GetPath();
-        }
-        else
-        {
-            m_lastProjectLibDir = dlg.GetPath();
+            wxFileName first( files.front() );
+
+            if( m_cur_grid == m_global_grid )
+                cfg->m_lastFootprintLibDir = first.GetPath();
+            else
+                m_lastProjectLibDir = first.GetPath();
         }
     }
 
