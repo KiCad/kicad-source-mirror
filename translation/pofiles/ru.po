@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-05-22 12:10+0000\n"
+"PO-Revision-Date: 2021-05-23 18:32+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -2701,14 +2701,12 @@ msgid "Assign unique reference designators to pasted symbols"
 msgstr "Присвоить уникальные обозначения для вставленных символов"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Keep existing reference designators, even if they are duplicated"
 msgstr "Оставить существующие обозначения, даже если они повторяются"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Неправильное значение поля Обозначение!"
+msgstr "Удалить обозначения во всех вставленных символах"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -4739,9 +4737,8 @@ msgid "Ignore Other Snaps"
 msgstr "Отменить остальные привязки"
 
 #: common/hotkey_store.cpp:59
-#, fuzzy
 msgid "Ignore H/V/45 Constraints"
-msgstr "Ограничения"
+msgstr "Отменить ограничения углов"
 
 #: common/hotkey_store.cpp:64 common/tool/action_menu.cpp:223
 #: common/tool/actions.cpp:113
@@ -4816,7 +4813,7 @@ msgstr ""
 
 #: common/kiway.cpp:408 common/kiway.cpp:412 common/kiway.cpp:416
 msgid "Error loading editor"
-msgstr "Ошибка при загрузке редактора"
+msgstr "Ошибка загрузки редактора"
 
 #: common/kiway.cpp:501
 #, c-format
@@ -5503,7 +5500,7 @@ msgstr "Извлечение файла \"%s\"\n"
 
 #: common/project/project_archiver.cpp:147
 msgid "Error extracting file!\n"
-msgstr "Ошибка при извлечении файла!\n"
+msgstr "Ошибка извлечения файла!\n"
 
 #: common/project/project_archiver.cpp:204
 #, c-format
@@ -6204,18 +6201,22 @@ msgid ""
 "\"%s\" could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
+"Файлы помощи \"%s\" и\n"
+"\"%s\" найти не удалось.\n"
+"Желаете просмотреть справку KiCad онлайн?"
 
 #: common/tool/common_control.cpp:208 common/tool/common_control.cpp:228
-#, fuzzy
 msgid "File Not Found"
 msgstr "Файл не найден"
 
 #: common/tool/common_control.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file \"%s\" could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "Не удалось найти файл руководства пользователя \"%s\"."
+msgstr ""
+"Не удалось найти файл помощи \"%s\".\n"
+"Желаете просмотреть справку KiCad онлайн?"
 
 #: common/tool/common_control.cpp:255
 #, c-format
@@ -7408,7 +7409,6 @@ msgid "Current sheet only"
 msgstr "Только текущий лист"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
-#, fuzzy
 msgid "Selection only"
 msgstr "Только выделенные"
 
@@ -8355,29 +8355,24 @@ msgstr ""
 "в меню Параметры схемы > Общие > Форматирование."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:667
-#, fuzzy
 msgid "Align right"
 msgstr "Выровнять справа"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:668
-#, fuzzy
 msgid "Align bottom"
 msgstr "Выровнять снизу"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:669
-#, fuzzy
 msgid "Align left"
 msgstr "Выровнять слева"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:670
-#, fuzzy
 msgid "Align top"
 msgstr "Выровнять сверху"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:122 eeschema/sch_text.cpp:674
-#, fuzzy
 msgid "Justification"
-msgstr "Выравнивание:"
+msgstr "Выравнивание"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
 msgid "Bold and italic"
@@ -9970,18 +9965,17 @@ msgstr "Не удалось создать файл \"%s\".\n"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1256
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr ""
+msgstr "Возврат к пользовательскому пути '%s."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1277
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1317
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "Не удалось открыть файл '%s'."
+msgstr "Не удалось нормализовать путь '%s%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1303
-#, fuzzy
 msgid "No project or path defined for the current schematic."
-msgstr "Сформировать перечень элементов (BOM) для текущей схемы"
+msgstr "Для текущей схемы не определён проект или каталог."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:24
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:24
@@ -10613,9 +10607,8 @@ msgid "AC"
 msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:98
-#, fuzzy
 msgid "Source 2"
-msgstr "Источник"
+msgstr "Источник 2"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
@@ -10643,19 +10636,16 @@ msgid "TEMP"
 msgstr "TEMP"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:115
-#, fuzzy
 msgid "Source:"
-msgstr "Источник"
+msgstr "Источник:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:119
-#, fuzzy
 msgid "Sweep type:"
-msgstr "Тип фигуры:"
+msgstr "Тип источника:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:123
-#, fuzzy
 msgid "Source 1"
-msgstr "Источник"
+msgstr "Источник 1"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:139
 msgid "Starting value:"
@@ -12022,34 +12012,30 @@ msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:330
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:531
-#, fuzzy
 msgid "A library table row nickname and path cells are empty."
-msgstr "Библиотека с именем '%s' уже существует."
+msgstr "Ячейки уникального имени и пути пусты в таблице библиотек."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:332
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:533
-#, fuzzy
 msgid "A library table row nickname cell is empty."
-msgstr "Библиотека с именем '%s' уже существует."
+msgstr "Ячейка уникального имени пуста в таблице библиотек."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:334
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:535
-#, fuzzy
 msgid "A library table row path cell is empty."
-msgstr "Файл библиотеки символов \"%s\" пуст."
+msgstr "Ячейка пути пуста в таблице библиотек."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:336
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
-#, fuzzy
 msgid "Invalid Row Definition"
-msgstr "Встречено неверное определение сплайна"
+msgstr "Неверное определение строки"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:338
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:539
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
-msgstr ""
+msgstr "Пустые ячейки приведут к удалению неверных строк из таблицы."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:354
 #, c-format
@@ -12080,7 +12066,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:443
 msgid "Error Loading Library"
-msgstr "Ошибка при загрузке библиотеки"
+msgstr "Ошибка загрузки библиотеки"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:495
 msgid "Warning: Duplicate Nickname"
@@ -12146,9 +12132,8 @@ msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Файл '%s' уже существует. Перезаписать этот файл?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:768
-#, fuzzy
 msgid "Migrate Library"
-msgstr "Конвертировать библиотеки..."
+msgstr "Конвертировать библиотеку"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:792
 #, c-format
@@ -12177,7 +12162,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Ошибка при сохранении глобальной таблицы библиотек:\n"
+"Ошибка сохранения глобальной таблицы библиотек:\n"
 "\n"
 "%s"
 
@@ -12199,7 +12184,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Ошибка при сохранении таблицы библиотек проекта:\n"
+"Ошибка сохранения таблицы библиотек проекта:\n"
 "\n"
 "%s"
 
@@ -12269,9 +12254,8 @@ msgid "Colors"
 msgstr "Цвета"
 
 #: eeschema/eeschema_config.cpp:99 pcbnew/pcbnew_config.cpp:82
-#, fuzzy
 msgid "Error loading drawing sheet"
-msgstr "Ошибка при загрузке редактора"
+msgstr "Ошибка загрузки форматной рамки"
 
 #: eeschema/eeschema_config.cpp:270 eeschema/sheet.cpp:283
 #, c-format
@@ -12544,16 +12528,14 @@ msgstr ""
 "схемы с иерархическими листами."
 
 #: eeschema/files-io.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic file \"%s\""
-msgstr ""
-"Ошибка загрузки файла схемы \"%s\".\n"
-"%s"
+msgstr "Ошибка загрузки файла схемы \"%s\""
 
 #: eeschema/files-io.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading schematic file \"%s\""
-msgstr "При загрузке файла схемы \"%s\" возникла ошибка."
+msgstr "Закончилась память при загрузке файла схемы \"%s\""
 
 #: eeschema/files-io.cpp:433 eeschema/files-io.cpp:1062
 #, c-format
@@ -12686,7 +12668,7 @@ msgid ""
 "Error loading schematic \"%s\".\n"
 "%s"
 msgstr ""
-"Ошибка при загрузке библиотеки \"%s\".\n"
+"Ошибка загрузки библиотеки \"%s\".\n"
 "%s"
 
 #: eeschema/files-io.cpp:1085
@@ -12955,23 +12937,22 @@ msgid "Failed to create file \"%s\""
 msgstr "Не удалось создать файл \"%s\""
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file %s."
-msgstr "Не удалось найти файл библиотеки %s"
+msgstr "Не удалось найти файл библиотеки %s."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:123
 msgid "Run command:"
 msgstr "Выполнить команду:"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:128
-#, fuzzy, c-format
+#, c-format
 msgid "Command error. Return code %d."
-msgstr "Ошибка команды. Код возврата %d"
+msgstr "Ошибка команды. Код возврата %d."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:133
-#, fuzzy
 msgid "Success."
-msgstr "Успешно"
+msgstr "Успешно."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:139
 msgid "Info messages:"
@@ -13102,7 +13083,7 @@ msgid ""
 "Error saving global symbol library table:\n"
 "%s"
 msgstr ""
-"Ошибка при сохранении глобальной таблицы библиотек символов:\n"
+"Ошибка сохранения глобальной таблицы библиотек символов:\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:233
@@ -13111,7 +13092,7 @@ msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 msgstr ""
-"Ошибка при сохранении таблицы библиотек символов проекта:\n"
+"Ошибка сохранения таблицы библиотек символов проекта:\n"
 "%s"
 
 #: eeschema/sch_bus_entry.cpp:393
@@ -14095,9 +14076,8 @@ msgid "expected 'Italics' or '~'"
 msgstr "ожидалось 'Italics' или '~'"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1722
-#, fuzzy
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr "атрибуты текстового поля компонента должны быть длиной в 3 символа"
+msgstr "атрибуты текстового поля символа должны быть длиной в 3 символа"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2673
 #, c-format
@@ -14844,9 +14824,8 @@ msgid "There was an error while saving the workbook file"
 msgstr "Произошла ошибка при сохранении файла сессии"
 
 #: eeschema/sim/sim_plot_frame.cpp:1146
-#, fuzzy
 msgid "Save Simulation Workbook As"
-msgstr "Сохранить сессию симуляции"
+msgstr "Сохранить сессию симуляции как"
 
 #: eeschema/sim/sim_plot_frame.cpp:1164
 msgid "Save Plot as Image"
@@ -14858,7 +14837,7 @@ msgstr "Сохранить данные графика"
 
 #: eeschema/sim/sim_plot_frame.cpp:1443 eeschema/sim/sim_plot_frame.cpp:1467
 msgid "Simulator is running. Try later"
-msgstr ""
+msgstr "Симуляция запущена. Попробуйте позже"
 
 #: eeschema/sim/sim_plot_frame.cpp:1451
 msgid "You need to run plot-providing simulation first."
@@ -15051,7 +15030,7 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
-"Ошибка при загрузке библиотеки символов %s.\n"
+"Ошибка загрузки библиотеки символов %s.\n"
 "\n"
 "%s\n"
 
@@ -15217,12 +15196,12 @@ msgstr "Библиотека символов не задействована."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1380
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1435
 msgid "Error saving global library table."
-msgstr "Ошибка при сохранении глобальной таблицы библиотек."
+msgstr "Ошибка сохранения глобальной таблицы библиотек."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1381
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1436
 msgid "Error saving project library table."
-msgstr "Ошибка при сохранении таблицы библиотек проекта."
+msgstr "Ошибка сохранения таблицы библиотек проекта."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:58
 msgid "Normal save as operation"
@@ -15412,7 +15391,7 @@ msgstr "Не удалось сохранить изменения символа
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1041
 msgid "Error saving library"
-msgstr "Ошибка при сохранении библиотеки"
+msgstr "Ошибка сохранения библиотеки"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1084
 #, c-format
@@ -15561,7 +15540,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Ошибка при загрузке библиотеки символов %s.\n"
+"Ошибка загрузки библиотеки символов %s.\n"
 "\n"
 "%s"
 
@@ -16705,9 +16684,8 @@ msgid "No symbol issues found."
 msgstr "Проблемы с символами не найдены."
 
 #: eeschema/tools/ee_inspection_tool.cpp:494
-#, fuzzy
 msgid "No datasheet defined."
-msgstr "поле документации"
+msgstr "Документация не указана."
 
 #: eeschema/tools/ee_selection_tool.cpp:1586
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
@@ -16722,11 +16700,11 @@ msgstr "Добавить к выделенному"
 
 #: eeschema/tools/sch_drawing_tools.cpp:214
 msgid "Press <ESC> to cancel symbol creation."
-msgstr ""
+msgstr "Нажмите <ESC> для отмены создания символа."
 
 #: eeschema/tools/sch_drawing_tools.cpp:452
 msgid "Press <ESC> to cancel image creation."
-msgstr ""
+msgstr "Нажмите <ESC> для отмены создания изображения."
 
 #: eeschema/tools/sch_drawing_tools.cpp:511
 #: pagelayout_editor/pl_editor_frame.cpp:842
@@ -16748,7 +16726,7 @@ msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:1074
 msgid "Press <ESC> to cancel item creation."
-msgstr ""
+msgstr "Нажмите <ESC> для отмены создания элемента."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1130
 msgid "Click over a sheet."
@@ -16756,7 +16734,7 @@ msgstr "Укажите лист."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1300
 msgid "Press <ESC> to cancel sheet creation."
-msgstr ""
+msgstr "Нажмите <ESC> для отмены создания листа."
 
 #: eeschema/tools/sch_edit_tool.cpp:81
 msgid "Symbol Unit"
@@ -16854,15 +16832,15 @@ msgstr "Шина не имеет сигналов"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:577
 msgid "Press <ESC> to cancel drawing."
-msgstr ""
+msgstr "Нажмите <ESC> для отмены черчения."
 
 #: eeschema/tools/sch_move_tool.cpp:375
 msgid "Press <ESC> to cancel drag."
-msgstr ""
+msgstr "Нажмите <ESC> для отмены перетаскивания."
 
 #: eeschema/tools/sch_move_tool.cpp:377
 msgid "Press <ESC> to cancel move."
-msgstr ""
+msgstr "Нажмите <ESC> для отмены перемещения."
 
 #: eeschema/tools/symbol_editor_control.cpp:163
 msgid "No symbol library selected."
@@ -17179,13 +17157,13 @@ msgstr ""
 "<b>Не загружен:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:41
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "<b>Memory was exhausted reading:</b> <i>%s</i>"
 msgstr ""
 "\n"
-"<b>Не загружен:</b> <i>%s</i>"
+"<b>Закончилась память при загрузке:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:86
 msgid "Zip files"
@@ -18286,9 +18264,9 @@ msgid "Are you sure you want to delete '%s'?"
 msgstr "Подтвердите удаление файла '%s'."
 
 #: kicad/project_tree_pane.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete %d items?"
-msgstr "Уверены в удалении '%lu' элементов?"
+msgstr "Уверены в удалении %d элементов?"
 
 #: kicad/project_tree_pane.cpp:847
 msgid "Delete Multiple Items"
@@ -18829,9 +18807,8 @@ msgid "Unable to create \"%s\""
 msgstr "Не удалось создать \"%s\""
 
 #: pagelayout_editor/files.cpp:234
-#, fuzzy
 msgid "Error reading drawing sheet"
-msgstr "Завершить черчение листа"
+msgstr "Ошибка загрузки форматной рамки"
 
 #: pagelayout_editor/files.cpp:247
 msgid "Layout file is read only."
@@ -18852,7 +18829,7 @@ msgstr "Свойства"
 #: pagelayout_editor/pl_editor_frame.cpp:320
 #, c-format
 msgid "Error when loading file \"%s\""
-msgstr "Ошибка при загрузке файла \"%s\""
+msgstr "Ошибка загрузки файла \"%s\""
 
 #: pagelayout_editor/pl_editor_frame.cpp:430
 msgid "Error Init Printer info"
@@ -18990,7 +18967,7 @@ msgstr ""
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:474
 msgid "Error writing objects to clipboard"
-msgstr "Ошибка при записи объектов в буфер обмена"
+msgstr "Ошибка записи объектов в буфер обмена"
 
 #: pcb_calculator/attenuators.cpp:129
 #, c-format
@@ -19718,7 +19695,6 @@ msgid "Conductor length:"
 msgstr "Длина проводника:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1542
-#, fuzzy
 msgid "Copper resistivity:"
 msgstr "Удельное сопротивление:"
 
@@ -21217,16 +21193,16 @@ msgstr ""
 "Код сортировки %d"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "%d %s UUID: [%s], X, Y: %s, Rounded X, Y, %s"
 msgstr ""
 "\n"
-"%d %s Uuid: [%s], X, Y: %s, Округлённые X, Y, %s"
+"%d %s UUID: [%s], X, Y: %s, Округлённые X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:571
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -21234,8 +21210,8 @@ msgid ""
 msgstr ""
 "\n"
 "На плате %d пустых или неверных обозначений.\n"
-"Рекомендуется запустить проверку плавил проектирования DRC с отметкой\n"
-"'Проверять соответствия в схеме и на плате'\n"
+"Рекомендуется запустить проверку плавил проектирования DRC с отметкой "
+"'Проверять соответствия в схеме и на плате'.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:577
 #, c-format
@@ -21688,7 +21664,7 @@ msgstr "Отверстий"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:726
 #, c-format
 msgid "Error writing to file \"%s\""
-msgstr "Ошибка при записи в файла \"%s\""
+msgstr "Ошибка записи в файл \"%s\""
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:117
 msgid "Board Size"
@@ -21990,12 +21966,11 @@ msgid "Pad connections:"
 msgstr "Подкл. к конт.пл.:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
-#, fuzzy
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local  pad settings"
 msgstr ""
-"Тип соединения конт.пл. к зоне по умолчанию.\n"
+"Тип соединения конт.пл. с зоной по умолчанию.\n"
 "Эта настройка может быть переопределена локальной настройкой конт.пл."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:242 pcbnew/zone.cpp:1411
@@ -23095,15 +23070,13 @@ msgstr "Печать слоя(слоёв) зеркально по гориз."
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:99
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
-#, fuzzy
 msgid "Print one page per layer"
 msgstr "Каждый слой на отдельной странице"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:105
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
-#, fuzzy
 msgid "Print board edges on all pages"
-msgstr "Печать контура платы"
+msgstr "Контур платы на всех листах"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:71
 msgid "Export SVG File"
@@ -23139,7 +23112,6 @@ msgid "0.1 Inch"
 msgstr "0,1 дюйм"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
-#, fuzzy
 msgid "VRML Units for Output Files"
 msgstr "Ед.изм. для vrml-файлов"
 
@@ -23148,20 +23120,18 @@ msgid "Copy 3D model files to 3D model path"
 msgstr "Копировать файл 3D модели в каталог 3D моделей"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:125
-#, fuzzy
 msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
 "Если отмечено: копировать 3D-модели посад.мест в каталог\n"
-"Если НЕ отмечено: интегрировать 3D-модели посад.мест в vrml-файл платы\n"
+"Если НЕ отмечено: интегрировать 3D-модели посад.мест в vrml-файл платы"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
 msgstr "Использовать относительные пути к файлам моделей в VRML-файле платы"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:130
-#, fuzzy
 msgid "Use paths for model files in board VRML file relative to the VRML file"
 msgstr "Указывать файлы моделей в VRML-файле платы в виде относительных путей"
 
@@ -23629,9 +23599,8 @@ msgid "Footprint name:"
 msgstr "Имя посад.места:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:180
-#, fuzzy
 msgid "Component type:"
-msgstr "Компонент:"
+msgstr "Тип компонента:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:220
 msgid "Set values to 0 to use netclass values."
@@ -24980,13 +24949,12 @@ msgstr ""
 "Предупреждение: отрицательные значения локального зазора ни на что не влияют."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1271
-#, fuzzy
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
 msgstr ""
-"Предупреждение: отрицательные зазоры паяльной маски не поддерживаются конт."
-"пл. сложной формы."
+"Предупреждение: отрицательные зазоры паяльной маски больше некоторых "
+"примитивов. Результат может быть неожиданным."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1280
 msgid ""
@@ -25618,9 +25586,8 @@ msgid "Force plot invisible footprint values and reference designators"
 msgstr "Принудительно чертить скрытые значения и/или обозначения посад.мест"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
-#, fuzzy
 msgid "Plot Edge.Cuts on all layers"
-msgstr "Перезагрузить все слои"
+msgstr "Чертить Edge.Cuts на всех слоях"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Do not plot the contents of the PCB edge layer on any other layers."
@@ -25707,12 +25674,10 @@ msgid "Check zone fills before plotting"
 msgstr "Проверить заполнение зон перед черчением"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask min width and/or margin are not set to 0. "
-msgstr "Минимальные глобальные ширина и/или зазор не равны нулю."
+msgstr "Минимальные глобальные ширина и/или зазор не равны нулю. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
-#, fuzzy
 msgid ""
 "Most board houses expect 0 and use their constraints, especially for solder "
 "mask min width."
@@ -26348,9 +26313,8 @@ msgid "Layers:"
 msgstr "Слои:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:41
-#, fuzzy
 msgid "Basic rules:"
-msgstr "Основные правила"
+msgstr "Основные правила:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
 msgid "Keep out tracks"
@@ -27166,13 +27130,12 @@ msgid "Allow fillets outside zone outline"
 msgstr "Разрешить заполнение за пределами зоны"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:147
-#, fuzzy
 msgid "Length tuning"
-msgstr "Настройка длины дорожки"
+msgstr "Настройка длины дорожек"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:151
 msgid "Include stackup height in track length calculations"
-msgstr ""
+msgstr "Включать высоту пакета перех.отв. в длину дорожки"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:152
 msgid ""
@@ -27180,6 +27143,9 @@ msgid ""
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
 msgstr ""
+"Если отмечено, расстояние между слоями меди будет включено в длину дорожки "
+"при определении длины дорожек с перех.отв. В противном случае, высота пакета "
+"перех.отв. будет игнорироваться."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:189
 msgid "Minimum clearance:"
@@ -27844,19 +27810,17 @@ msgid "User9"
 msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:29
-#, fuzzy
 msgid ""
 "Use your board house's recommendation for solder mask clearance and minimum "
 "bridge width."
 msgstr ""
-"Используйте значения зазора и мин. ширины паяльной маски рекомендуемые "
-"производителем печатных плат.\n"
-"Если производитель не предоставляет их, рекомендуется использовать значения "
-"равные нулю."
+"Используйте параметры паяльной маски и ширину мостиков рекомендуемые "
+"производителем печатных плат."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:35
 msgid "If none is provided, setting the values to zero is suggested."
 msgstr ""
+"Если требования отсутствуют, рекомендуется установить значения равные нулю."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:58
 msgid ""
@@ -27972,7 +27936,6 @@ msgid "Check rule syntax"
 msgstr "Проверить синтаксис правил"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28236,6 +28199,8 @@ msgstr ""
 "\n"
 "### Примеры\n"
 "\n"
+"    (version 1)\n"
+"\n"
 "    (rule HV\n"
 "       (constraint clearance (min 1.5mm))\n"
 "       (condition \"A.NetClass == 'HV'\"))\n"
@@ -28260,7 +28225,11 @@ msgstr ""
 "\n"
 "### Примечания\n"
 "\n"
-"Определение версии должно быть первым.\n"
+"Определение версии должно быть первым. Этим обозначается версия синтаксиса "
+"файла, так что\n"
+"будущие подпрограммы разбора правил смогут применять автоматическое "
+"обновление. Её следует\n"
+"устанавливать равной \"1\".\n"
 "\n"
 "Правила должны следовать в определённом порядке. Более поздние правила\n"
 "имеют преимущество над более ранними.\n"
@@ -28275,8 +28244,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.insideCourtyard('<обозначения_посад.мест>')\n"
-"Истина если любая часть `A` лежит в главной области установки указанных "
-"посад.мест.\n"
+"Истина если любая часть `A` лежит в главной области установки указанных посад"
+".мест.\n"
 "<br><br>\n"
 "\n"
 "    A.insideFrontCourtyard('<обозначения_посад.мест>')\n"
@@ -28308,8 +28277,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOf('<имя_группы>')\n"
-"Истина если `A` является членом указанной группы (включая вложенные "
-"группы).\n"
+"Истина если `A` является членом указанной группы (включая вложенные группы)."
+"\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<имя_слоя>')\n"
@@ -28525,9 +28494,9 @@ msgid "Local override on %s; clearance: %s."
 msgstr "Локально переопределено на %s; зазор: %s."
 
 #: pcbnew/drc/drc_engine.cpp:818
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Минимальный зазор:"
+msgstr "Минимальный зазор для платы: %s."
 
 #: pcbnew/drc/drc_engine.cpp:838
 #, c-format
@@ -29382,12 +29351,12 @@ msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "Плата '%s' не существует. Создать?"
 
 #: pcbnew/files.cpp:715
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Memory exhausted loading board file:\n"
 "%s"
 msgstr ""
-"Ошибка загрузки файла платы:\n"
+"Закончилась память при загрузке файла платы:\n"
 "%s"
 
 #: pcbnew/files.cpp:824
@@ -29895,7 +29864,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Ошибка при загрузке посад.места %s из библиотеки %s.\n"
+"Ошибка загрузки посад.места %s из библиотеки %s.\n"
 "\n"
 "%s"
 
@@ -30191,9 +30160,8 @@ msgid "Fabrication Outputs"
 msgstr "Файлы для производства"
 
 #: pcbnew/menubar_pcb_editor.cpp:303
-#, fuzzy
 msgid "Add Microwave Shape"
-msgstr "Добавить зазор СВЧ"
+msgstr "Добавить форму СВЧ"
 
 #: pcbnew/menubar_pcb_editor.cpp:338
 msgid "Auto-Place Footprints"
@@ -32214,13 +32182,12 @@ msgid "Length Tuner"
 msgstr "Настройщик длины"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:478
-#, fuzzy
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
-"Не удалось найти второй проводник диф.пары. Проверьте, что имена цепей диф."
-"пары заканчиваются на _N/_P или +/-."
+"Не удалось найти второй проводник диф.пары. Проверьте, что имена цепей "
+"диф.пары заканчиваются на N/P или +/-."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:499
 msgid ""
@@ -34912,7 +34879,6 @@ msgid "Segment Length"
 msgstr "Длина сегмента"
 
 #: pcbnew/track.cpp:686
-#, fuzzy
 msgid "Routed Length"
 msgstr "Длина на плате"
 
@@ -34951,9 +34917,9 @@ msgid "NetCode"
 msgstr "Код цепи"
 
 #: pcbnew/track.cpp:903
-#, fuzzy, c-format
+#, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "Дорожка %s на %s, длина %s"
+msgstr "Дорожка (дуга) %s на %s, длина %s"
 
 #: pcbnew/track.cpp:904
 #, c-format
