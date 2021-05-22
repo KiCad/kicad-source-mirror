@@ -9,17 +9,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-04-17 23:05+0000\n"
+"PO-Revision-Date: 2021-05-22 12:10+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -549,9 +549,8 @@ msgid "Show copper thickness"
 msgstr "Показать толщину меди"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:171
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Подсвеченные элементы"
+msgstr "Подсвечивать элементы при перетаскивании"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:178
 msgid "Other Options"
@@ -2690,17 +2689,16 @@ msgstr "Обзор..."
 msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
-msgstr ""
+msgstr "Найти следующее доступное обозначение среди уже существующих."
 
 #: common/dialogs/dialog_paste_special.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Обозначение '%s' изменено на '%s'."
+msgstr "Заменить обозначение на '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Для сопоставление компонентов и посад.мест используются обозначения.\n"
+msgstr "Присвоить уникальные обозначения для вставленных символов"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
