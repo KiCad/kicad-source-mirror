@@ -822,6 +822,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     }
     else
     {
+#if wxCHECK_VERSION( 3, 1, 4 )     // 3.1.4 required for wxDD_MULTIPLE
         wxDirDialog dlg( nullptr, title, openDir,
                          wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE );
 
@@ -831,12 +832,19 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             return;
 
         dlg.GetPaths( files );
+#else
+        wxDirDialog dlg( nullptr, title, openDir,
+                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+
+        int result = dlg.ShowModal();
+
+        if( result == wxID_CANCEL )
+            return;
 
         // is there a file extension configured to hunt out their containing folders?
-        if( files.GetCount() == 1 && fileType.m_FolderSearchExtension != "" )
+        if( fileType.m_FolderSearchExtension != "" )
         {
-            wxDir rootDir( files.front() );
-            files.clear();
+            wxDir rootDir( dlg.GetPath() );
 
             LIBRARY_TRAVERSER traverser( fileType.m_FolderSearchExtension, rootDir.GetName() );
             rootDir.Traverse( traverser );
@@ -856,6 +864,11 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
                                      detailedMsg );
             }
         }
+        else
+        {
+            files.Add( dlg.GetPath() );
+        }
+#endif
 
         if( !files.IsEmpty() )
         {
