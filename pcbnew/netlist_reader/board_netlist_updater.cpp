@@ -952,7 +952,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
             if( m_lookupByTimestamp )
             {
-                for( auto& uuid : component->GetKIIDs() )
+                for( const KIID& uuid : component->GetKIIDs() )
                 {
                     KIID_PATH base = component->GetPath();
                     base.push_back( uuid );
@@ -965,7 +965,9 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                 }
             }
             else
+            {
                 match = footprint->GetReference().CmpNoCase( component->GetReference() ) == 0;
+            }
 
             if( match )
             {
@@ -1019,23 +1021,21 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     //
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
+        bool matched = false;
         bool doDelete = m_deleteUnusedFootprints;
 
         if( ( footprint->GetAttributes() & FP_BOARD_ONLY ) > 0 )
             doDelete = false;
 
-        if( doDelete )
-        {
-            if( m_lookupByTimestamp )
-                component = aNetlist.GetComponentByPath( footprint->GetPath() );
-            else
-                component = aNetlist.GetComponentByReference( footprint->GetReference() );
+        if( m_lookupByTimestamp )
+            component = aNetlist.GetComponentByPath( footprint->GetPath() );
+        else
+            component = aNetlist.GetComponentByReference( footprint->GetReference() );
 
-            if( component && component->GetProperties().count( "exclude_from_board" ) == 0 )
-                doDelete = false;
-        }
+        if( component && component->GetProperties().count( "exclude_from_board" ) == 0 )
+            matched = true;
 
-        if( doDelete && footprint->IsLocked() )
+        if( doDelete && !matched && footprint->IsLocked() )
         {
             if( m_isDryRun )
             {
@@ -1052,7 +1052,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             doDelete = false;
         }
 
-        if( doDelete )
+        if( doDelete && !matched )
         {
             if( m_isDryRun )
             {
@@ -1068,6 +1068,9 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         }
         else if( !m_isDryRun )
         {
+            if( !matched )
+                footprint->SetPath( KIID_PATH() );
+
             for( PAD* pad : footprint->Pads() )
             {
                 if( pad->GetNet() )
