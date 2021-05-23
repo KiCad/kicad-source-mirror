@@ -53,7 +53,7 @@ BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBo
     m_reporter = &NULL_REPORTER::GetInstance();
 
     m_deleteSinglePadNets = true;
-    m_deleteUnusedComponents = false;
+    m_deleteUnusedFootprints = false;
     m_isDryRun = false;
     m_replaceFootprints = true;
     m_lookupByTimestamp = false;
@@ -103,7 +103,7 @@ wxString BOARD_NETLIST_UPDATER::getPinFunction( PAD* aPad )
 }
 
 
-wxPoint BOARD_NETLIST_UPDATER::estimateComponentInsertionPosition()
+wxPoint BOARD_NETLIST_UPDATER::estimateFootprintInsertionPosition()
 {
     wxPoint bestPosition;
 
@@ -131,7 +131,7 @@ wxPoint BOARD_NETLIST_UPDATER::estimateComponentInsertionPosition()
 }
 
 
-FOOTPRINT* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
+FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
 {
     wxString msg;
 
@@ -178,9 +178,9 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
         }
 
         footprint->SetParent( m_board );
-        footprint->SetPosition( estimateComponentInsertionPosition( ) );
+        footprint->SetPosition( estimateFootprintInsertionPosition() );
 
-        m_addedComponents.push_back( footprint );
+        m_addedFootprints.push_back( footprint );
         m_commit.Add( footprint );
 
         msg.Printf( _( "Added %s (footprint \"%s\")." ),
@@ -194,7 +194,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
 }
 
 
-FOOTPRINT* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, FOOTPRINT* aPcbComponent,
+FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT* aFootprint,
                                                     COMPONENT* aNewComponent )
 {
     wxString msg;
@@ -224,8 +224,8 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, FOOTPRINT
     if( m_isDryRun )
     {
         msg.Printf( _( "Change %s footprint from '%s' to '%s'."),
-                    aPcbComponent->GetReference(),
-                    aPcbComponent->GetFPID().Format().wx_str(),
+                    aFootprint->GetReference(),
+                    aFootprint->GetFPID().Format().wx_str(),
                     aNewComponent->GetFPID().Format().wx_str() );
 
         delete newFootprint;
@@ -233,11 +233,11 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, FOOTPRINT
     }
     else
     {
-        m_frame->ExchangeFootprint( aPcbComponent, newFootprint, m_commit );
+        m_frame->ExchangeFootprint( aFootprint, newFootprint, m_commit );
 
         msg.Printf( _( "Changed %s footprint from '%s' to '%s'."),
-                    aPcbComponent->GetReference(),
-                    aPcbComponent->GetFPID().Format().wx_str(),
+                    aFootprint->GetReference(),
+                    aFootprint->GetFPID().Format().wx_str(),
                     aNewComponent->GetFPID().Format().wx_str() );
     }
 
@@ -972,7 +972,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                 FOOTPRINT* tmp = footprint;
 
                 if( m_replaceFootprints && component->GetFPID() != footprint->GetFPID() )
-                    tmp = replaceComponent( aNetlist, footprint, component );
+                    tmp = replaceFootprint( aNetlist, footprint, component );
 
                 if( tmp )
                 {
@@ -994,7 +994,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         if( matchCount == 0 )
         {
-            FOOTPRINT* footprint = addNewComponent( component );
+            FOOTPRINT* footprint = addNewFootprint( component );
 
             if( footprint )
             {
@@ -1019,7 +1019,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     //
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
-        bool doDelete = m_deleteUnusedComponents;
+        bool doDelete = m_deleteUnusedFootprints;
 
         if( ( footprint->GetAttributes() & FP_BOARD_ONLY ) > 0 )
             doDelete = false;

@@ -110,7 +110,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     updater.SetReporter ( &reporter );
     updater.SetIsDryRun( aDryRun );
     updater.SetLookupByTimestamp( !m_cbRelinkFootprints->GetValue() );
-    updater.SetDeleteUnusedComponents ( m_cbDeleteExtraFootprints->GetValue() );
+    updater.SetDeleteUnusedFootprints( m_cbDeleteExtraFootprints->GetValue());
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
     updater.SetDeleteSinglePadNets( m_cbDeleteSinglePadNets->GetValue() );
     updater.SetWarnPadNoNetInNetlist( m_warnForNoNetPads );

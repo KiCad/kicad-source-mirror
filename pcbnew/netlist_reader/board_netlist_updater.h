@@ -84,53 +84,24 @@ public:
      */
     bool UpdateNetlist( NETLIST& aNetlist );
 
-    ///< Set the reporter object.
-    void SetReporter( REPORTER* aReporter )
-    {
-        m_reporter = aReporter;
-    }
+    void SetReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 
-    ///< Enable "delete single pad nets" option.
-    void SetDeleteSinglePadNets( bool aEnabled )
-    {
-        m_deleteSinglePadNets = aEnabled;
-    }
+    ///< Enable dry run mode (just report, no changes to PCB).
+    void SetIsDryRun( bool aEnabled ) { m_isDryRun = aEnabled; }
+
+    void SetDeleteSinglePadNets( bool aEnabled ) { m_deleteSinglePadNets = aEnabled; }
 
     ///< Enable warning option if a connectable pad is not found in netlist
     ///< connectable = pad with a name and on a copper layer.
-    void SetWarnPadNoNetInNetlist( bool aEnabled )
-    {
-        m_warnForNoNetPads = aEnabled;
-    }
+    void SetWarnPadNoNetInNetlist( bool aEnabled ) { m_warnForNoNetPads = aEnabled; }
 
-    ///< Enable dry run mode (just report, no changes to PCB).
-    void SetIsDryRun( bool aEnabled )
-    {
-        m_isDryRun = aEnabled;
-    }
+    void SetReplaceFootprints( bool aEnabled ) { m_replaceFootprints = aEnabled; }
 
-    ///< Enable replacing footprints with new ones.
-    void SetReplaceFootprints( bool aEnabled )
-    {
-        m_replaceFootprints = aEnabled;
-    }
+    void SetDeleteUnusedFootprints( bool aEnabled ) { m_deleteUnusedFootprints = aEnabled; }
 
-    ///< Enable removing unused components.
-    void SetDeleteUnusedComponents( bool aEnabled )
-    {
-        m_deleteUnusedComponents = aEnabled;
-    }
+    void SetLookupByTimestamp( bool aEnabled ) { m_lookupByTimestamp = aEnabled; }
 
-    ///< Enable component lookup by timestamp instead of reference.
-    void SetLookupByTimestamp( bool aEnabled )
-    {
-        m_lookupByTimestamp = aEnabled;
-    }
-
-    std::vector<FOOTPRINT*> GetAddedComponents() const
-    {
-        return m_addedComponents;
-    }
+    std::vector<FOOTPRINT*> GetAddedFootprints() const { return m_addedFootprints; }
 
 private:
     void cacheNetname( PAD* aPad, const wxString& aNetname );
@@ -139,11 +110,11 @@ private:
     void cachePinFunction( PAD* aPad, const wxString& aPinFunction );
     wxString getPinFunction( PAD* aPad );
 
-    wxPoint estimateComponentInsertionPosition();
+    wxPoint estimateFootprintInsertionPosition();
 
-    FOOTPRINT* addNewComponent( COMPONENT* aComponent );
+    FOOTPRINT* addNewFootprint( COMPONENT* aComponent );
 
-    FOOTPRINT* replaceComponent( NETLIST& aNetlist, FOOTPRINT* aPcbComponent,
+    FOOTPRINT* replaceFootprint( NETLIST& aNetlist, FOOTPRINT* aFootprint,
                                  COMPONENT* aNewComponent );
 
     bool updateFootprintParameters( FOOTPRINT* aPcbFootprint, COMPONENT* aNetlistComponent );
@@ -153,8 +124,6 @@ private:
     void cacheCopperZoneConnections();
 
     bool updateCopperZoneNets( NETLIST& aNetlist );
-
-    bool deleteUnusedComponents( NETLIST& aNetlist );
 
     bool deleteSinglePadNets();
 
@@ -169,11 +138,11 @@ private:
     std::map<wxString, wxString>       m_oldToNewNets;
     std::map<PAD*, wxString>           m_padNets;
     std::map<PAD*, wxString>           m_padPinFunctions;
-    std::vector<FOOTPRINT*>            m_addedComponents;
+    std::vector<FOOTPRINT*>            m_addedFootprints;
     std::map<wxString, NETINFO_ITEM*>  m_addedNets;
 
     bool m_deleteSinglePadNets;
-    bool m_deleteUnusedComponents;
+    bool m_deleteUnusedFootprints;
     bool m_isDryRun;
     bool m_replaceFootprints;
     bool m_lookupByTimestamp;

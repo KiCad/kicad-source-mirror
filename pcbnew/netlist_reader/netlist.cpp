@@ -99,7 +99,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
     for( auto track : board->Tracks() )
         GetCanvas()->GetView()->Update( track );
 
-    std::vector<FOOTPRINT*> newFootprints = aUpdater.GetAddedComponents();
+    std::vector<FOOTPRINT*> newFootprints = aUpdater.GetAddedFootprints();
 
     // Spread new footprints.
     wxPoint areaPosition = (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition();

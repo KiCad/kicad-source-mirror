@@ -247,7 +247,7 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
     updater.SetReporter ( &reporter );
     updater.SetIsDryRun( aDryRun );
     updater.SetLookupByTimestamp( m_matchByUUID );
-    updater.SetDeleteUnusedComponents ( m_cbDeleteExtraFootprints->GetValue() );
+    updater.SetDeleteUnusedFootprints( m_cbDeleteExtraFootprints->GetValue());
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
     updater.SetDeleteSinglePadNets( m_cbDeleteSinglePadNets->GetValue() );
     m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();

@@ -546,7 +546,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             BOARD_NETLIST_UPDATER updater( this, GetBoard() );
             updater.SetLookupByTimestamp( false );
-            updater.SetDeleteUnusedComponents ( false );
+            updater.SetDeleteUnusedFootprints( false );
             updater.SetReplaceFootprints( false );
             updater.SetDeleteSinglePadNets( false );
             updater.SetWarnPadNoNetInNetlist( false );
