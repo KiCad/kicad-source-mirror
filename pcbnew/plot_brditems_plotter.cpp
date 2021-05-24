@@ -348,18 +348,14 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
             break;
 
         case PCB_TEXT_T:
-            if( item->GetLayer() != Edge_Cuts )
-                PlotPcbText( (PCB_TEXT*) item );
-
+            PlotPcbText( (PCB_TEXT*) item );
             break;
 
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
         case PCB_DIM_ORTHOGONAL_T:
         case PCB_DIM_LEADER_T:
-            if( item->GetLayer() != Edge_Cuts )
-                PlotDimension( (DIMENSION_BASE*) item );
-
+            PlotDimension( (DIMENSION_BASE*) item );
             break;
 
         case PCB_TARGET_T:

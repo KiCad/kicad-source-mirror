@@ -31,6 +31,7 @@
     "Disallow" test. Goes through all items, matching types/conditions drop errors.
     Errors generated:
     - DRCE_ALLOWED_ITEMS
+    - DRCE_TEXT_ON_EDGECUTS
 */
 
 class DRC_TEST_PROVIDER_DISALLOW : public DRC_TEST_PROVIDER
@@ -64,18 +65,6 @@ public:
 
 bool DRC_TEST_PROVIDER_DISALLOW::Run()
 {
-    if( m_drcEngine->IsErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
-    {
-        reportAux( "Disallow violations ignored. Tests not run." );
-        return true;    // continue with other tests
-    }
-
-    if( !m_drcEngine->HasRulesForConstraintType( DISALLOW_CONSTRAINT ) )
-    {
-        reportAux( "No disallow constraints found. Skipping check." );
-        return true;    // continue with other tests
-    }
-
     if( !reportPhase( _( "Checking keepouts & disallow constraints..." ) ) )
         return false;   // DRC cancelled
 
@@ -103,6 +92,28 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     auto checkItem =
             [&]( BOARD_ITEM* item ) -> bool
             {
+                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_ON_EDGECUTS )
+                        && item->GetLayer() == Edge_Cuts )
+                {
+                    switch( item->Type() )
+                    {
+                    case PCB_TEXT_T:
+                    case PCB_DIM_ALIGNED_T:
+                    case PCB_DIM_CENTER_T:
+                    case PCB_DIM_ORTHOGONAL_T:
+                    case PCB_DIM_LEADER_T:
+                    {
+                        std::shared_ptr<DRC_ITEM> drc = DRC_ITEM::Create( DRCE_TEXT_ON_EDGECUTS );
+                        drc->SetItems( item );
+                        reportViolation( drc, item->GetPosition() );
+                    }
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
                     return false;
 

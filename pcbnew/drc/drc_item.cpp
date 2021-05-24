@@ -57,6 +57,10 @@ DRC_ITEM DRC_ITEM::itemsNotAllowed( DRCE_ALLOWED_ITEMS,
         _( "Items not allowed" ),
         wxT( "items_not_allowed" ) );
 
+DRC_ITEM DRC_ITEM::textOnEdgeCuts( DRCE_TEXT_ON_EDGECUTS,
+        _( "Text (or dimension) on Edge.Cuts layer" ),
+        wxT( "text_on_edge_cuts" ) );
+
 DRC_ITEM DRC_ITEM::clearance( DRCE_CLEARANCE,
         _( "Clearance violation" ),
         wxT( "clearance" ) );
@@ -253,6 +257,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_UNCONNECTED_ITEMS:        return std::make_shared<DRC_ITEM>( unconnectedItems );
     case DRCE_SHORTING_ITEMS:           return std::make_shared<DRC_ITEM>( shortingItems );
     case DRCE_ALLOWED_ITEMS:            return std::make_shared<DRC_ITEM>( itemsNotAllowed );
+    case DRCE_TEXT_ON_EDGECUTS:         return std::make_shared<DRC_ITEM>( textOnEdgeCuts );
     case DRCE_CLEARANCE:                return std::make_shared<DRC_ITEM>( clearance );
     case DRCE_TRACKS_CROSSING:          return std::make_shared<DRC_ITEM>( tracksCrossing );
     case DRCE_COPPER_EDGE_CLEARANCE:    return std::make_shared<DRC_ITEM>( copperEdgeClearance );
