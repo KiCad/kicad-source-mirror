@@ -203,7 +203,8 @@ private:
      * @param aPanel is the panel that should receive the update.
      * @return True if a plot was successfully added/updated.
      */
-    bool updatePlot( const TRACE_DESC& aDescriptor, SIM_PLOT_PANEL* aPanel );
+    bool updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam,
+                     SIM_PLOT_PANEL* aPanel );
 
     /**
      * Update the list of currently plotted signals.

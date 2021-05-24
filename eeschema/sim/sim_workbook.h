@@ -27,75 +27,19 @@
 #include <sim/sim_plot_panel.h>
 
 
-///< Trace descriptor class
-class TRACE_DESC
-{
-public:
-    TRACE_DESC( const NETLIST_EXPORTER_PSPICE_SIM& aExporter, const wxString& aName,
-            SIM_PLOT_TYPE aType, const wxString& aParam );
-
-    ///< Modifies an existing TRACE_DESC simulation type
-    TRACE_DESC( const NETLIST_EXPORTER_PSPICE_SIM& aExporter,
-            const TRACE_DESC& aDescription, SIM_PLOT_TYPE aNewType )
-        : TRACE_DESC( aExporter, aDescription.GetName(), aNewType, aDescription.GetParam() )
-    {
-    }
-
-    const wxString& GetTitle() const
-    {
-        return m_title;
-    }
-
-    const wxString& GetName() const
-    {
-        return m_name;
-    }
-
-    const wxString& GetParam() const
-    {
-        return m_param;
-    }
-
-    SIM_PLOT_TYPE GetType() const
-    {
-        return m_type;
-    }
-
-private:
-    // Three basic parameters
-    ///< Name of the measured net/device
-    wxString m_name;
-
-    ///< Type of the signal
-    SIM_PLOT_TYPE m_type;
-
-    ///< Name of the signal parameter
-    wxString m_param;
-
-    // Generated data
-    ///< Title displayed in the signal list/plot legend
-    wxString m_title;
-};
-
-
 class SIM_WORKBOOK
 {
 public:
-    typedef std::map<wxString, TRACE_DESC> TRACE_MAP;
 
     struct PLOT_INFO
     {
-        ///< Map of the traces displayed on the plot
-        TRACE_MAP m_traces;
-
         ///< Spice directive used to execute the simulation
+        ///< TODO: use SIM_PANEL_BASE::m_simCommand instead
         wxString m_simCommand;
 
         ///< The current position of the plot in the notebook
         unsigned int pos;
     };
-
-    typedef std::map<const SIM_PANEL_BASE*, PLOT_INFO> PLOT_MAP;
 
     SIM_WORKBOOK();
 
@@ -111,20 +55,8 @@ public:
         return m_plots.count( aPlotPanel ) == 1;
     }
 
-    void AddTrace( const SIM_PANEL_BASE* aPlotPanel, const wxString& aName,
-            const TRACE_DESC& aTrace );
+    void AddTrace( const SIM_PANEL_BASE* aPlotPanel, const wxString& aName );
     void RemoveTrace( const SIM_PANEL_BASE* aPlotPanel, const wxString& aName );
-    TRACE_MAP::const_iterator RemoveTrace( const SIM_PANEL_BASE* aPlotPanel, TRACE_MAP::const_iterator aIt );
-
-    TRACE_MAP::const_iterator TracesBegin( const SIM_PANEL_BASE* aPlotPanel ) const
-    {
-        return m_plots.at( aPlotPanel ).m_traces.cbegin();
-    }
-
-    TRACE_MAP::const_iterator TracesEnd( const SIM_PANEL_BASE* aPlotPanel ) const
-    {
-        return m_plots.at( aPlotPanel ).m_traces.cend();
-    }
 
     void SetPlotPanelPosition( const SIM_PANEL_BASE* aPlotPanel, unsigned int pos )
     {
@@ -150,11 +82,6 @@ public:
     PLOT_INFO GetPlot( const SIM_PANEL_BASE* aPlotPanel ) const
     {
         return m_plots.at( aPlotPanel );
-    }
-
-    const TRACE_MAP GetTraces( const SIM_PANEL_BASE* aPlotPanel ) const
-    {
-        return m_plots.at( aPlotPanel ).m_traces;
     }
 
     void ClrModified() { m_flagModified = false; }

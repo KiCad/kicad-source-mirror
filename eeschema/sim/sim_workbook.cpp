@@ -24,21 +24,6 @@
 
 #include <sim/sim_workbook.h>
 
-TRACE_DESC::TRACE_DESC( const NETLIST_EXPORTER_PSPICE_SIM& aExporter, const wxString& aName,
-                        SIM_PLOT_TYPE aType, const wxString& aParam ) :
-    m_name( aName ),
-    m_type( aType ),
-    m_param( aParam )
-{
-    // Title generation
-    m_title = wxString::Format( "%s(%s)", aParam, aName );
-
-    if( aType & SPT_AC_MAG )
-        m_title += " (mag)";
-    else if( aType & SPT_AC_PHASE )
-        m_title += " (phase)";
-}
-
 
 SIM_WORKBOOK::SIM_WORKBOOK() :
     m_flagModified( false )
@@ -87,30 +72,14 @@ std::vector<const SIM_PANEL_BASE*> SIM_WORKBOOK::GetSortedPlotPanels() const
 }
 
 
-void SIM_WORKBOOK::AddTrace( const SIM_PANEL_BASE* aPlotPanel, const wxString& aName,
-        const TRACE_DESC& aTrace )
+void SIM_WORKBOOK::AddTrace( const SIM_PANEL_BASE* aPlotPanel, const wxString& aName )
 {
-    m_plots.at( aPlotPanel ).m_traces.insert(
-            std::make_pair( aName, aTrace ) );
-
     m_flagModified = true;
 }
 
 
 void SIM_WORKBOOK::RemoveTrace( const SIM_PANEL_BASE* aPlotPanel, const wxString& aName )
 {
-    auto& traceMap = m_plots.at( aPlotPanel ).m_traces;
-    auto traceIt = traceMap.find( aName );
-    wxASSERT( traceIt != traceMap.end() );
-    traceMap.erase( traceIt );
-
     m_flagModified = true;
 }
 
-
-SIM_WORKBOOK::TRACE_MAP::const_iterator SIM_WORKBOOK::RemoveTrace( const SIM_PANEL_BASE* aPlotPanel,
-        TRACE_MAP::const_iterator aIt )
-{
-    m_flagModified = true;
-    return m_plots.at( aPlotPanel ).m_traces.erase( aIt );
-}

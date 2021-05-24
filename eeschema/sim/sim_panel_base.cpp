@@ -86,13 +86,8 @@ SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( wxString aCommand, wxWindow* parent, wxWindo
     m_textInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT,
             wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
     m_textInfo->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-
-    //ST_UNKNOWN serves purpose of a welcome panel
     m_textInfo->SetLabel(
-            ( GetType() == ST_UNKNOWN )
-                    ? _( "Start the simulation by clicking the Run Simulation button" )
-                    : _( "This simulation provide no plots. Please refer to console window for "
-                         "results" ) );
+            _( "This simulation provide no plots. Please refer to console window for results" ) );
 
     m_sizer->Add( m_textInfo, 1, wxALL | wxEXPAND, 5 );
     m_sizer->Add( 0, 1, 1, wxEXPAND, 5 );

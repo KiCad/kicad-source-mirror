@@ -94,8 +94,8 @@ private:
 class TRACE : public mpFXYVector
 {
 public:
-    TRACE( const wxString& aName ) :
-        mpFXYVector( aName ), m_cursor( nullptr ), m_flags( 0 )
+    TRACE( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam ) :
+            mpFXYVector( aName ), m_cursor( nullptr ), m_type( aType ), m_param( aParam )
     {
         SetContinuity( true );
         SetDrawOutsideMargins( false );
@@ -141,14 +141,9 @@ public:
         return m_cursor;
     }
 
-    void SetFlags( int aFlags )
+    SIM_PLOT_TYPE GetType() const
     {
-        m_flags = aFlags;
-    }
-
-    int GetFlags() const
-    {
-        return m_flags;
+        return m_type;
     }
 
     void SetTraceColour( wxColour aColour )
@@ -161,10 +156,20 @@ public:
         return m_traceColour;
     }
 
+    const wxString& GetParam() const
+    {
+        return m_param;
+    }
+
+
 protected:
     CURSOR* m_cursor;
-    int m_flags;
+    SIM_PLOT_TYPE m_type;
     wxColour m_traceColour;
+
+private:
+    ///< Name of the signal parameter
+    wxString m_param;
 };
 
 
@@ -198,8 +203,8 @@ public:
         return m_axis_y2 ? m_axis_y2->GetName() : "";
     }
 
-    bool AddTrace( const wxString& aName, int aPoints, const double* aX,
-                   const double* aY, SIM_PLOT_TYPE aFlags );
+    bool AddTrace( const wxString& aName, int aPoints, const double* aX, const double* aY,
+                   SIM_PLOT_TYPE aType, const wxString& aParam );
 
     bool DeleteTrace( const wxString& aName );
 

@@ -433,21 +433,27 @@ void SIM_PLOT_PANEL::UpdatePlotColors()
 
 void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
 {
-    int        flags    = trace->GetFlags();
-    wxPenStyle penStyle = ( ( flags & SPT_AC_PHASE || flags & SPT_CURRENT ) && m_dotted_cp ) ?
-                                  wxPENSTYLE_DOT :
-                                  wxPENSTYLE_SOLID;
+    int        type = trace->GetType();
+    wxPenStyle penStyle = ( ( type & SPT_AC_PHASE || type & SPT_CURRENT ) && m_dotted_cp )
+                                  ? wxPENSTYLE_DOT
+                                  : wxPENSTYLE_SOLID;
     trace->SetPen( wxPen( trace->GetTraceColour(), 2, penStyle ) );
 }
 
 
-bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
-        const double* aX, const double* aY, SIM_PLOT_TYPE aFlags )
+bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints, const double* aX,
+                               const double* aY, SIM_PLOT_TYPE aType, const wxString& aParam )
 {
     TRACE* trace = NULL;
+    wxString name = aName;
+
+    if( aType & SPT_AC_MAG )
+        name += " (mag)";
+    else if( aType & SPT_AC_PHASE )
+        name += " (phase)";
 
     // Find previous entry, if there is one
-    auto prev = m_traces.find( aName );
+    auto prev = m_traces.find( name );
     bool addedNewEntry = ( prev == m_traces.end() );
 
     if( addedNewEntry )
@@ -458,7 +464,7 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
 
             for( const auto& tr : m_traces )
             {
-                if( !( tr.second->GetFlags() & SPT_CURRENT ) )
+                if( !( tr.second->GetType() & SPT_CURRENT ) )
                 {
                     hasVoltageTraces = true;
                     break;
@@ -472,10 +478,10 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
         }
 
         // New entry
-        trace = new TRACE( aName );
+        trace = new TRACE( aName, aType, aParam );
         trace->SetTraceColour( m_colors.GenerateColor( m_traces ) );
         UpdateTraceStyle( trace );
-        m_traces[aName] = trace;
+        m_traces[name] = trace;
 
         // It is a trick to keep legend & coords always on the top
         for( mpLayer* l : m_topLevel )
@@ -495,7 +501,7 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
 
     if( GetType() == ST_AC )
     {
-        if( aFlags & SPT_AC_PHASE )
+        if( aType & SPT_AC_PHASE )
         {
             for( int i = 0; i < aPoints; i++ )
                 tmp[i] = tmp[i] * 180.0 / M_PI;                 // convert to degrees
@@ -509,12 +515,10 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
 
     trace->SetData( std::vector<double>( aX, aX + aPoints ), tmp );
 
-    if( ( aFlags & SPT_AC_PHASE ) || ( aFlags & SPT_CURRENT ) )
+    if( ( aType & SPT_AC_PHASE ) || ( aType & SPT_CURRENT ) )
         trace->SetScale( m_axis_x, m_axis_y2 );
     else
         trace->SetScale( m_axis_x, m_axis_y1 );
-
-    trace->SetFlags( aFlags );
 
     m_plotWin->UpdateAll();
 
