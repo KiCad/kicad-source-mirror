@@ -9,13 +9,14 @@
 # Jan Vykydal <vvykys@gmail.com>, 2020.
 # Jan Straka <bach@email.cz>, 2020, 2021.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
+# Radek Kuznik <radek.kzn@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-05-21 08:32+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2021-05-24 19:21+0000\n"
+"Last-Translator: Radek Kuznik <radek.kzn@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -12401,9 +12402,8 @@ msgid "Units of same symbol have different values"
 msgstr "Jednotky stejného symbolu mají různé hodnoty"
 
 #: eeschema/erc_item.cpp:150
-#, fuzzy
 msgid "Duplicate reference designators"
-msgstr "Vykreslit označení reference"
+msgstr "Duplicitní označení reference"
 
 #: eeschema/fields_grid_table.cpp:134 eeschema/files-io.cpp:98
 msgid "Schematic Files"
@@ -32909,9 +32909,8 @@ msgid "Creates a rule area from the selection"
 msgstr "Vytvoří nový projekt ze šablony"
 
 #: pcbnew/tools/pcb_actions.cpp:64
-#, fuzzy
 msgid "Convert to Lines"
-msgstr "Převedeno"
+msgstr "Převést na čáru"
 
 #: pcbnew/tools/pcb_actions.cpp:64
 #, fuzzy
@@ -32950,13 +32949,12 @@ msgid "Draw Graphic Polygon"
 msgstr "Grafická Kři&vka"
 
 #: pcbnew/tools/pcb_actions.cpp:89
-#, fuzzy
 msgid "Draw a graphic polygon"
-msgstr "Přidat čáru nebo mnohoúhelník"
+msgstr "Kreslit grafický mnohoúhelník"
 
 #: pcbnew/tools/pcb_actions.cpp:94
 msgid "Draw Rectangle"
-msgstr "Nakreslit obdélník"
+msgstr "Kreslit obdélník"
 
 #: pcbnew/tools/pcb_actions.cpp:100
 msgid "Draw Circle"
