@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2016-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,30 +43,26 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsLibEditor, int aFieldId, wxSt
     m_isLibEditor = aIsLibEditor;
 
     // Fields cannot contain carriage returns, line feeds, or tabs.
-    wxString excludes( "\r\n\t" );
+    wxString excludes( wxT( "\r\n\t" ) );
 
-    // The reference field cannot contain spaces.
-    if( aFieldId == REFERENCE_FIELD )
+    // The reference and sheet name fields cannot contain spaces.
+    if( aFieldId == REFERENCE_FIELD || m_fieldId == SHEETNAME_V )
     {
-        excludes += " ";
+        excludes += wxT( " " );
     }
     else if( aFieldId == VALUE_FIELD && m_isLibEditor )
     {
-        excludes += " :/\\";
-    }
-    else if( aFieldId == SHEETFILENAME_V )
-    {
-        excludes += ":/\\";
+        excludes += wxT( " :/\\" );
     }
 
     long style = GetStyle();
 
     // The reference, value sheetname and sheetfilename fields cannot be empty.
     if( aFieldId == REFERENCE_FIELD
-            || aFieldId == VALUE_FIELD
-            || aFieldId == SHEETNAME_V
-            || aFieldId == SHEETFILENAME_V
-            || aFieldId == FIELD_NAME )
+      || aFieldId == VALUE_FIELD
+      || aFieldId == SHEETNAME_V
+      || aFieldId == SHEETFILENAME_V
+      || aFieldId == FIELD_NAME )
     {
         style |= wxFILTER_EMPTY;
     }
@@ -84,13 +80,13 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR( const SCH_FIELD_VALIDATOR& aValidator 
 }
 
 
-bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
+bool SCH_FIELD_VALIDATOR::Validate( wxWindow* aParent )
 {
     // If window is disabled, simply return
     if( !m_validatorWindow->IsEnabled() )
         return true;
 
-    wxTextEntry * const text = GetTextEntry();
+    wxTextEntry* const text = GetTextEntry();
 
     if( !text )
         return false;
@@ -145,34 +141,46 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
     }
     else if( HasFlag( wxFILTER_EXCLUDE_CHAR_LIST ) && ContainsExcludedCharacters( val ) )
     {
-        wxArrayString whiteSpace;
-        bool spaceIllegal = m_fieldId == REFERENCE_FIELD
-                                || ( m_fieldId == VALUE_FIELD && m_isLibEditor )
-                                || m_fieldId == SHEETNAME_V
-                                || m_fieldId == SHEETFILENAME_V;
+        wxArrayString badCharsFound;
 
-        if( val.Find( '\r' ) != wxNOT_FOUND )
-            whiteSpace.Add( _( "carriage return" ) );
-        if( val.Find( '\n' ) != wxNOT_FOUND )
-            whiteSpace.Add( _( "line feed" ) );
-        if( val.Find( '\t' ) != wxNOT_FOUND )
-            whiteSpace.Add( _( "tab" ) );
-        if( spaceIllegal && (val.Find( ' ' ) != wxNOT_FOUND) )
-            whiteSpace.Add( _( "space" ) );
+        for( const wxString& excludeChar : GetExcludes() )
+        {
+            if( val.Find( excludeChar ) != wxNOT_FOUND )
+            {
+                if( excludeChar == wxT( "\r" ) )
+                    badCharsFound.Add( _( "carriage return" ) );
+                else if( excludeChar == wxT( "\n" ) )
+                    badCharsFound.Add( _( "line feed" ) );
+                else if( excludeChar == wxT( "\t" ) )
+                    badCharsFound.Add( _( "tab" ) );
+                else if( excludeChar == wxT( " " ) )
+                    badCharsFound.Add( _( "space" ) );
+                else
+                    badCharsFound.Add( wxString::Format( wxT( "'%s'" ), excludeChar ) );
+            }
+        }
 
         wxString badChars;
 
-        if( whiteSpace.size() == 1 )
-            badChars = whiteSpace[0];
-        else if( whiteSpace.size() == 2 )
-            badChars.Printf( _( "%s or %s" ), whiteSpace[0], whiteSpace[1] );
-        else if( whiteSpace.size() == 3 )
-            badChars.Printf( _( "%s, %s, or %s" ), whiteSpace[0], whiteSpace[1], whiteSpace[2] );
-        else if( whiteSpace.size() == 4 )
-            badChars.Printf( _( "%s, %s, %s, or %s" ),
-                             whiteSpace[0], whiteSpace[1], whiteSpace[2], whiteSpace[3] );
-        else
-            wxCHECK_MSG( false, true, "Invalid illegal character in field validator." );
+        for( size_t i = 0; i < badCharsFound.GetCount(); i++ )
+        {
+            if( !badChars.IsEmpty() )
+            {
+                if( badCharsFound.GetCount() == 2 )
+                {
+                    badChars += _( " or " );
+                }
+                else
+                {
+                    if( i < badCharsFound.GetCount() - 2 )
+                        badChars += _( ", or " );
+                    else
+                        badChars += wxT( ", " );
+                }
+            }
+
+            badChars += badCharsFound.Item( i );
+        }
 
         msg.Printf( fieldCharError, badChars );
     }
