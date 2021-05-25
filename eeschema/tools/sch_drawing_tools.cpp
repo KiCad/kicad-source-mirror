@@ -281,6 +281,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                                       &m_selectionTool->GetSelection() );
 
                 m_view->Update( symbol );
+                m_frame->GetScreen()->Update( symbol );
                 m_frame->OnModify();
 
                 SCH_COMPONENT* nextSymbol = nullptr;

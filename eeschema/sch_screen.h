@@ -198,8 +198,6 @@ public:
     SCH_ITEM* GetItem( const wxPoint& aPosition, int aAccuracy = 0,
                        KICAD_T aType = SCH_LOCATE_ANY_T ) const;
 
-    void Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
-
     /**
      * Initialize the #LIB_PART reference for each #SCH_COMPONENT found in this schematic
      * from the project #SYMBOL_LIB_TABLE.
