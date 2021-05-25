@@ -1423,6 +1423,8 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
             if( !started )
             {
+                // We've handled the cancel event.  Don't cancel other tools
+                evt->SetPassEvent( false );
                 m_frame->PopTool( aTool );
                 cancelled = true;
             }
@@ -1741,6 +1743,8 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
 
             if( !firstPoint )
             {
+                // We've handled the cancel event.  Don't cancel other tools
+                evt->SetPassEvent( false );
                 m_frame->PopTool( aTool );
                 cancelled = true;
             }
@@ -2060,6 +2064,8 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             }
             else
             {
+                // We've handled the cancel event.  Don't cancel other tools
+                evt->SetPassEvent( false );
                 m_frame->PopTool( tool );
                 break;
             }

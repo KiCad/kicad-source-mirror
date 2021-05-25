@@ -548,11 +548,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 inDrag = false;
                 frame()->UndoRedoBlock( false );
             }
-            else if( evt->IsCancelInteractive() )
-            {
-                break;
-            }
 
+            // Only cancel point editor when activating a new tool
+            // Otherwise, allow the points to persist when moving up the
+            // tool stack
             if( evt->IsActivate() && !evt->IsMoveTool() )
                 break;
         }
