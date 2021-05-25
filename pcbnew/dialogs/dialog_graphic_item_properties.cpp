@@ -32,6 +32,8 @@
 #include <board_commit.h>
 #include <pcb_layer_box_selector.h>
 #include <dialogs/html_messagebox.h>
+#include <tool/tool_manager.h>
+#include <tool/actions.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <macros.h>
@@ -350,6 +352,8 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         }
     }
 
+    bool wasLocked = m_item->IsLocked();
+
     m_item->SetFilled( m_filledCtrl->GetValue() );
     m_item->SetLocked( m_locked->GetValue() );
     m_item->SetWidth( m_thickness.GetValue() );
@@ -358,6 +362,10 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     m_item->RebuildBezierToSegmentsPointsList( m_item->GetWidth() );
 
     commit.Push( _( "Modify drawing properties" ) );
+
+    // Notify clients which treat locked and unlocked items differently (ie: POINT_EDITOR)
+    if( wasLocked != m_item->IsLocked() )
+        m_parent->GetToolManager()->PostEvent( EVENTS::SelectedEvent );
 
     m_parent->UpdateMsgPanel();
 

@@ -391,31 +391,27 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     if( !m_selectionTool || aEvent.Matches( EVENTS::InhibitSelectionEditing ) )
         return 0;
 
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     const PCB_SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() != 1 || selection.Front()->GetEditFlags() )
         return 0;
 
-    Activate();
-
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    KIGFX::VIEW* view = getView();
-    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-
-    controls->ShowCursor( true );
-
-    PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
-    if( !item )
+    if( !item || item->IsLocked() )
         return 0;
 
+    Activate();
+    getViewControls()->ShowCursor( true );
+
+    PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
     m_editPoints = makePoints( item );
 
     if( !m_editPoints )
         return 0;
 
-    view->Add( m_editPoints.get() );
+    getView()->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
     m_refill = false;
@@ -431,7 +427,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( view->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         if( !m_editPoints || evt->IsSelectionEvent() ||
                 evt->Matches( EVENTS::InhibitSelectionEditing ) )
@@ -455,9 +451,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                 commit.StageItems( selection, CHT_MODIFY );
 
-                controls->ForceCursorPosition( false );
+                getViewControls()->ForceCursorPosition( false );
                 m_original = *m_editedPoint;    // Save the original position
-                controls->SetAutoPan( true );
+                getViewControls()->SetAutoPan( true );
                 inDrag = true;
 
                 if( m_editedPoint->GetGridConstraint() != SNAP_BY_GRID )
@@ -518,7 +514,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 m_editedPoint->SetPosition( grid.BestSnapAnchor( pos, snapLayers, { item } ) );
 
             updateItem();
-            controls->ForceCursorPosition( true, m_editedPoint->GetPosition() );
+            getViewControls()->ForceCursorPosition( true, m_editedPoint->GetPosition() );
             updatePoints();
         }
         else if( m_editedPoint && evt->Action() == TA_MOUSE_DOWN && evt->Buttons() == BUT_LEFT )
@@ -534,7 +530,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 getView()->Update( m_editPoints.get() );
             }
 
-            controls->SetAutoPan( false );
+            getViewControls()->SetAutoPan( false );
             setAltConstraint( false );
 
             commit.Push( _( "Drag a corner" ) );
@@ -574,7 +570,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
     if( m_editPoints )
     {
-        view->Remove( m_editPoints.get() );
+        getView()->Remove( m_editPoints.get() );
 
         finishItem();
         m_editPoints.reset();
