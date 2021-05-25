@@ -441,11 +441,10 @@ BOX2I PCB_DRAW_PANEL_GAL::GetDefaultViewBBox() const
         return m_worksheet->ViewBBox();
 
     // The footprint editor frame has no worksheet, but the best default view box is the
-    // view box able to show the current footprint
-    FOOTPRINT_EDIT_FRAME* fp_frame;
-
-    if( ( fp_frame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_edaFrame ) ) )
+    // view box able to show the current footprint, even if some layers are not shown
+    if( m_edaFrame->IsType( FRAME_PCB_MODULE_EDITOR ) )
     {
+        PCB_BASE_FRAME* fp_frame = static_cast<PCB_BASE_FRAME*>( m_edaFrame );
         MODULE* footprint = fp_frame->GetBoard()->m_Modules;
 
         if( footprint )
