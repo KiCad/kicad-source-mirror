@@ -84,11 +84,7 @@ VECTOR2I PCB_GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSe
     if( !m_enableSnap )
         return aPoint;
 
-    const VECTOR2D gridOffset( GetOrigin() );
-    const VECTOR2D gridSize( GetGrid() );
-
-    VECTOR2I nearest( KiROUND( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x,
-                      KiROUND( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y );
+    VECTOR2I nearest = Align( aPoint );
 
     pts[0] = aSeg.A;
     pts[1] = aSeg.B;
@@ -202,7 +198,9 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* a
         item.push_back( aReferenceItem );
     }
     else
+    {
         layers = LSET::AllLayersMask();
+    }
 
     return BestSnapAnchor( aOrigin, layers, item );
 }

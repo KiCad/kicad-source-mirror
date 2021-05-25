@@ -1020,7 +1020,6 @@ bool ROUTER_TOOL::prepareInteractive()
     if( m_startItem && m_startItem->Net() > 0 )
         highlightNet( true, m_startItem->Net() );
 
-    controls()->ForceCursorPosition( false );
     controls()->SetAutoPan( true );
 
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
@@ -1653,7 +1652,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     m_gridHelper->SetAuxAxes( true, p );
     controls()->ShowCursor( true );
-    controls()->ForceCursorPosition( false );
     controls()->SetAutoPan( true );
     frame()->UndoRedoBlock( true );
 

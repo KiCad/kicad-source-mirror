@@ -278,9 +278,7 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
         m_startItem = nullptr;
 
     m_startSnapPoint = snapToItem( m_startItem, p );
-
-    if( checkSnap( m_startItem ) )
-        controls()->ForceCursorPosition( true, m_startSnapPoint );
+    controls()->ForceCursorPosition( true, m_startSnapPoint );
 }
 
 
