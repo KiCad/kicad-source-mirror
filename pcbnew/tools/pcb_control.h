@@ -30,6 +30,7 @@
 #include <io_mgr.h>
 #include <memory>
 #include <tools/pcb_tool_base.h>
+#include <status_popup.h>
 
 namespace KIGFX {
     class ORIGIN_VIEWITEM;
@@ -122,6 +123,8 @@ private:
     std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_gridOrigin;
 
     BOARD_ITEM* m_pickerItem;
+
+    std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
 };
 
 #endif

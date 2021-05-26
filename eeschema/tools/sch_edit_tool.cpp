@@ -1007,17 +1007,6 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
             {
                 if( m_pickerItem )
                 {
-                    SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( m_pickerItem );
-
-                    if( sch_item && sch_item->IsLocked() )
-                    {
-                        STATUS_TEXT_POPUP statusPopup( m_frame );
-                        statusPopup.SetText( _( "Item locked." ) );
-                        statusPopup.PopupFor( 2000 );
-                        statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-                        return true;
-                    }
-
                     EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
                     selectionTool->UnbrightenItem( m_pickerItem );
                     selectionTool->AddItemToSel( m_pickerItem, true /*quiet mode*/ );

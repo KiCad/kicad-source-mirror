@@ -486,10 +486,10 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
             {
                 if( m_pickerItem && m_pickerItem->IsLocked() )
                 {
-                    STATUS_TEXT_POPUP statusPopup( m_frame );
-                    statusPopup.SetText( _( "Item locked." ) );
-                    statusPopup.PopupFor( 2000 );
-                    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                    m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
+                    m_statusPopup->SetText( _( "Item locked." ) );
+                    m_statusPopup->PopupFor( 2000 );
+                    m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
                     return true;
                 }
 
@@ -547,6 +547,8 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
         {
             if( m_pickerItem )
                 m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+
+            m_statusPopup.reset();
 
             // Ensure the cursor gets changed&updated
             m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
