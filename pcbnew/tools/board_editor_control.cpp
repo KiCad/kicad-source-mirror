@@ -1145,7 +1145,9 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
     if( modified )
     {
         commit.Push( aMode == ON ? _( "Lock" ) : _( "Unlock" ) );
-        m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+
+        m_toolMgr->PostEvent( EVENTS::SelectedEvent );
+        m_frame->UpdateMsgPanel();
         m_frame->OnModify();
     }
 
