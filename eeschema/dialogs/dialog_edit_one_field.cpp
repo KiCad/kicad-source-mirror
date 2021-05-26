@@ -81,9 +81,7 @@ DIALOG_EDIT_ONE_FIELD::~DIALOG_EDIT_ONE_FIELD()
 void DIALOG_EDIT_ONE_FIELD::init()
 {
     SCH_BASE_FRAME* parent = GetParent();
-    bool isSymbolEditor = parent->IsType( FRAME_SCH_SYMBOL_EDITOR );
-
-    m_TextCtrl->SetValidator( SCH_FIELD_VALIDATOR( isSymbolEditor, m_fieldId, &m_text ) );
+    bool isSymbolEditor = parent && parent->IsType( FRAME_SCH_SYMBOL_EDITOR );
 
     // Disable options for graphic text editing which are not needed for fields.
     m_CommonConvert->Show( false );
@@ -100,13 +98,16 @@ void DIALOG_EDIT_ONE_FIELD::init()
 
     if( use_validator )
     {
-        m_StyledTextCtrl->Show( false );
+        m_TextCtrl->SetValidator( SCH_FIELD_VALIDATOR( isSymbolEditor, m_fieldId, &m_text ) );
         SetInitialFocus( m_TextCtrl );
+
+        m_StyledTextCtrl->Show( false );
     }
     else
     {
-        m_TextCtrl->Show( false );
         SetInitialFocus( m_StyledTextCtrl );
+
+        m_TextCtrl->Show( false );
     }
 
     // Show the footprint selection dialog if this is the footprint field.
