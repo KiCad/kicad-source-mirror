@@ -46,9 +46,16 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsLibEditor, int aFieldId, wxSt
     wxString excludes( wxT( "\r\n\t" ) );
 
     // The reference and sheet name fields cannot contain spaces.
-    if( aFieldId == REFERENCE_FIELD || m_fieldId == SHEETNAME_V )
+    if( aFieldId == REFERENCE_FIELD )
     {
         excludes += wxT( " " );
+    }
+    else if( m_fieldId == SHEETNAME_V )
+    {
+        // Does it make sense to exclude the colon and back slash characters?  The forward slash
+        // makes sense because it is used as the separator when generating human readable sheet
+        // paths.
+        excludes += wxT( ":/\\" );
     }
     else if( aFieldId == VALUE_FIELD && m_isLibEditor )
     {
