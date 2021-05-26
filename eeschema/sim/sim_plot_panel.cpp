@@ -386,9 +386,9 @@ void SIM_PLOT_PANEL::prepareDCAxes()
 {
     wxRegEx simCmd( "^.dc[[:space:]]+([[:alnum:]]+\\M).*", wxRE_ADVANCED | wxRE_ICASE );
 
-    if( simCmd.Matches( m_simCommand ) )
+    if( simCmd.Matches( GetSimCommand() ) )
     {
-        switch( static_cast<char>( simCmd.GetMatch( m_simCommand.Lower(), 1 ).GetChar( 0 ) ) )
+        switch( static_cast<char>( simCmd.GetMatch( GetSimCommand().Lower(), 1 ).GetChar( 0 ) ) )
         {
         case 'v':
             m_axis_x =

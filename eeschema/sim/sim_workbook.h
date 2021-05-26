@@ -33,10 +33,6 @@ public:
 
     struct PLOT_INFO
     {
-        ///< Spice directive used to execute the simulation
-        ///< TODO: use SIM_PANEL_BASE::m_simCommand instead
-        wxString m_simCommand;
-
         ///< The current position of the plot in the notebook
         unsigned int pos;
     };
@@ -64,24 +60,6 @@ public:
             m_flagModified = true;
 
         m_plots.at( aPlotPanel ).pos = pos;
-    }
-
-    void SetSimCommand( const SIM_PANEL_BASE* aPlotPanel, const wxString& aSimCommand )
-    {
-        if( m_plots.at( aPlotPanel ).m_simCommand != aSimCommand )
-            m_flagModified = true;
-
-        m_plots.at( aPlotPanel ).m_simCommand = aSimCommand;
-    }
-
-    const wxString& GetSimCommand( const SIM_PANEL_BASE* aPlotPanel ) const
-    {
-        return m_plots.at( aPlotPanel ).m_simCommand;
-    }
-
-    PLOT_INFO GetPlot( const SIM_PANEL_BASE* aPlotPanel ) const
-    {
-        return m_plots.at( aPlotPanel );
     }
 
     void ClrModified() { m_flagModified = false; }

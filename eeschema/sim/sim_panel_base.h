@@ -46,8 +46,12 @@ public:
 
     SIM_TYPE GetType() const;
 
-protected:
-    const wxString m_simCommand;
+    void SetSimCommand( const wxString& aSimCommand );
+
+    const wxString& GetSimCommand() const { return m_simCommand; }
+
+private:
+    wxString m_simCommand;
 };
 
 
