@@ -544,7 +544,7 @@ public:
      * @param aP the point to be looked for
      * @return index of the correspoinding point in the line chain or negative when not found.
      */
-    int Find( const VECTOR2I& aP ) const;
+    int Find( const VECTOR2I& aP, int aThreshold = 0 ) const;
 
     /**
      * Function FindSegment()
@@ -553,7 +553,7 @@ public:
      * @param aP the point to be looked for
      * @return index of the correspoinding segment in the line chain or negative when not found.
      */
-    int FindSegment( const VECTOR2I& aP ) const;
+    int FindSegment( const VECTOR2I& aP, int aThreshold = 1 ) const;
 
     /**
      * Function Slice()

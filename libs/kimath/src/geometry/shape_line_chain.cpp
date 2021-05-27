@@ -463,20 +463,30 @@ int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
 }
 
 
-int SHAPE_LINE_CHAIN::Find( const VECTOR2I& aP ) const
+int SHAPE_LINE_CHAIN::Find( const VECTOR2I& aP, int aThreshold ) const
 {
     for( int s = 0; s < PointCount(); s++ )
-        if( CPoint( s ) == aP )
-            return s;
+    {
+        if( aThreshold == 0 )
+        {
+            if( CPoint( s ) == aP )
+                return s;
+        }
+        else
+        {
+            if( (CPoint( s ) - aP).EuclideanNorm() <= aThreshold )
+                return s;
+        }
+    }
 
     return -1;
 }
 
 
-int SHAPE_LINE_CHAIN::FindSegment( const VECTOR2I& aP ) const
+int SHAPE_LINE_CHAIN::FindSegment( const VECTOR2I& aP, int aThreshold ) const
 {
     for( int s = 0; s < SegmentCount(); s++ )
-        if( CSegment( s ).Distance( aP ) <= 1 )
+        if( CSegment( s ).Distance( aP ) <= aThreshold )
             return s;
 
     return -1;
