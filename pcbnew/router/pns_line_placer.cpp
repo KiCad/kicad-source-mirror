@@ -538,8 +538,7 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
 
     do {
         viaOk = buildInitialLine( walkP, initTrack, round == 0 );
-        printf("round %d vok %d\n", round, viaOk?1:0);
-        
+
         double initialLength = initTrack.CLine().Length();
         double hugThresholdLength = initialLength * Settings().WalkaroundHugLengthThreshold();
 
@@ -556,7 +555,6 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
             Dbg()->AddLine( wr.lineCw.CLine(), 6, 10000, "wf-result-cw" );
             Dbg()->AddLine( wr.lineCcw.CLine(), 5, 20000, "wf-result-ccw" );
 
-            
             int bestLength = len_cw < len_ccw ? len_cw : len_ccw;
 
             if( bestLength > hugThresholdLength )
@@ -574,7 +572,7 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
             bool valid_cw = false, valid_ccw = false;
             VECTOR2I p_cw, p_ccw;
             int dist_ccw, dist_cw;
-            
+
             if( wr.statusCcw == WALKAROUND::ALMOST_DONE )
             {
                 valid_ccw = cursorDistMinimum( l_ccw, aP, hugThresholdLength, dist_ccw, p_ccw );
@@ -584,23 +582,19 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
                     l_ccw = l_ccw.Slice( 0, idx_ccw );
                     Dbg()->AddPoint( p_ccw, 5, 500000, "hug-target-ccw" );
 //                    Dbg()->AddLine( l_ccw, 5, 200000, "wh-result-ccw" );
-
-
                 }
             }
             if( wr.statusCw == WALKAROUND::ALMOST_DONE )
             {
                 valid_cw = cursorDistMinimum( l_cw, aP, hugThresholdLength, dist_cw, p_cw );
                 if( valid_cw )
-                {   
+                {
                     int idx_cw = l_cw.Split( p_cw );
                     l_cw = l_cw.Slice( 0, idx_cw );
                     Dbg()->AddPoint( p_cw, 4, 500000, "hug-target-cw" );
                   //  Dbg()->AddLine( l_cw, 6, 200000, "wh-result-cw" );
                 }
             }
-
-          // return false;
 
             if( dist_cw < dist_ccw && valid_cw )
             {
@@ -619,8 +613,6 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
         }
         else if ( wr.statusCcw == WALKAROUND::STUCK || wr.statusCw == WALKAROUND::STUCK )
         {
-            printf("FINISH3\n");
-
             return false;
         }
 
@@ -628,7 +620,6 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
     } while( round < 2 && m_placingVia );
 
     Dbg()->AddLine( walkFull.CLine(), 2, 200000, "walk-full" );
-
 
     switch( Settings().OptimizerEffort() )
     {
