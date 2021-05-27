@@ -110,7 +110,6 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     wxFileName  tmp;
     wxFileName  currentSheetFileName;
     bool        libTableChanged = false;
-    SCH_SCREEN* currentScreen = aHierarchy->LastScreen();
     SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( aFileName );
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( schFileType ) );
     std::unique_ptr< SCH_SHEET> newSheet = std::make_unique<SCH_SHEET>( &Schematic() );
@@ -206,11 +205,11 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     wxMessageDialog::ButtonLabel cancelButtonLabel( _( "Cancel Load" ) );
 
     if( fileName.GetPathWithSep() == Prj().GetProjectPath()
-          && !prjScreens.HasSchematic( fullFilename ) )
+      && !prjScreens.HasSchematic( fullFilename ) )
     {
         // A schematic in the current project path that isn't part of the current project.
         // It's possible the user copied this schematic from another project so the library
-        // links may not be avaible.  Even this is check is no guarantee that all symbol
+        // links may not be available.  Even this is check is no guarantee that all symbol
         // library links are valid but it's better than nothing.
         for( const auto& name : names )
         {
@@ -282,7 +281,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                 {
                     msg.Printf( _( "An error occurred loading the symbol library table \"%s\"." ),
                                 symLibTableFn.GetFullPath() );
-                    DisplayErrorMessage( NULL, msg, ioe.What() );
+                    DisplayErrorMessage( nullptr, msg, ioe.What() );
                     return false;
                 }
             }
@@ -435,16 +434,6 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     SCH_SCREEN* newScreen = newSheet->GetScreen();
     wxCHECK_MSG( newScreen, false, "No screen defined for sheet." );
 
-    // Set all sheets loaded into the correct sheet file paths.
-
-    for( SCH_ITEM* aItem : currentScreen->Items().OfType( SCH_SHEET_T ) )
-    {
-        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
-
-        if( wxFileName( sheet->GetFileName() ).IsRelative( wxPATH_UNIX ) )
-            sheet->SetFileName( topLevelSheetPath + sheet->GetFileName() );
-    }
-
     if( libTableChanged )
     {
         Prj().SchSymbolLibTable()->Save( Prj().GetProjectPath() +
@@ -467,7 +456,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 bool SCH_EDIT_FRAME::EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
                                           bool* aClearAnnotationNewItems )
 {
-    if( aSheet == NULL || aHierarchy == NULL )
+    if( aSheet == nullptr || aHierarchy == nullptr )
         return false;
 
     // Get the new texts
@@ -578,7 +567,7 @@ bool SCH_EDIT_FRAME::AllowCaseSensitiveFileNameClashes( const wxString& aSchemat
                                  wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION );
         dlg.ShowCheckBox( _( "Do not show this message again." ) );
         dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Create New Sheet" ) ),
-                                wxMessageDialog::ButtonLabel( _( "Discard New Sheet" ) ) );
+                            wxMessageDialog::ButtonLabel( _( "Discard New Sheet" ) ) );
 
         if( dlg.ShowModal() == wxID_NO )
             return false;
