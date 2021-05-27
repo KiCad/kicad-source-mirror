@@ -234,67 +234,6 @@ SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg )
                        std::abs( p1.x - p0.x ), std::abs( p1.y - p0.y ) );
 }
 
-#if 0
-void DrawDebugPoint( VECTOR2I aP, int aColor )
-{
-    SHAPE_LINE_CHAIN l;
-
-    l.Append( aP - VECTOR2I( -50000, -50000 ) );
-    l.Append( aP + VECTOR2I( -50000, -50000 ) );
-
-    ROUTER::GetInstance()->DisplayDebugLine ( l, aColor, 10000 );
-
-    l.Clear();
-    l.Append( aP - VECTOR2I( 50000, -50000 ) );
-    l.Append( aP + VECTOR2I( 50000, -50000 ) );
-
-    ROUTER::GetInstance()->DisplayDebugLine( l, aColor, 10000 );
-}
-
-
-void DrawDebugBox( BOX2I aB, int aColor )
-{
-    SHAPE_LINE_CHAIN l;
-
-    VECTOR2I o = aB.GetOrigin();
-    VECTOR2I s = aB.GetSize();
-
-    l.Append( o );
-    l.Append( o.x + s.x, o.y );
-    l.Append( o.x + s.x, o.y + s.y );
-    l.Append( o.x, o.y + s.y );
-    l.Append( o );
-
-    ROUTER::GetInstance()->DisplayDebugLine( l, aColor, 10000 );
-}
-
-
-void DrawDebugSeg( SEG aS, int aColor )
-{
-    SHAPE_LINE_CHAIN l;
-
-    l.Append( aS.A );
-    l.Append( aS.B );
-
-    ROUTER::GetInstance()->DisplayDebugLine( l, aColor, 10000 );
-}
-
-
-void DrawDebugDirs( VECTOR2D aP, int aMask, int aColor )
-{
-    BOX2I b( aP - VECTOR2I( 10000, 10000 ), VECTOR2I( 20000, 20000 ) );
-
-    DrawDebugBox( b, aColor );
-    for( int i = 0; i < 8; i++ )
-    {
-        if( ( 1 << i ) & aMask )
-        {
-            VECTOR2I v = DIRECTION_45( ( DIRECTION_45::Directions ) i ).ToVector() * 100000;
-            DrawDebugSeg( SEG( aP, aP + v ), aColor );
-        }
-    }
-}
-#endif
 
 OPT_BOX2I ChangedArea( const ITEM* aItemA, const ITEM* aItemB )
 {
@@ -319,6 +258,83 @@ OPT_BOX2I ChangedArea( const ITEM* aItemA, const ITEM* aItemB )
 OPT_BOX2I ChangedArea( const LINE& aLineA, const LINE& aLineB )
 {
     return aLineA.ChangedArea( &aLineB );
+}
+
+
+void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& line,
+                       SHAPE_LINE_CHAIN::INTERSECTIONS& ips )
+{
+    SHAPE_LINE_CHAIN::INTERSECTIONS ips_raw;
+
+    hull.Intersect( line, ips_raw );
+
+    for( const auto& p : ips_raw )
+    {
+        SHAPE_LINE_CHAIN::INTERSECTION ipp;
+
+        SEG      d1[2];
+        VECTOR2I d2[2];
+        int      d1_idx = 0, d2_idx = 0;
+
+        ipp = p;
+        ipp.valid = false;
+
+        if( !p.is_corner_our && !p.is_corner_their )
+        {
+            ipp.valid = true;
+            ips.push_back( ipp );
+            continue;
+        }
+
+        if( p.is_corner_our )
+        {
+            d1[0] = hull.CSegment( p.index_our );
+            d1[1] = hull.CSegment( p.index_our - 1 );
+            d1_idx = 2;
+        }
+        else
+        {
+            d1[0] = hull.CSegment( p.index_our );
+            d1_idx = 1;
+        }
+
+        if( p.is_corner_their )
+        {
+            if( p.index_their > 0 )
+            {
+                d2[d2_idx++] = line.CSegment( p.index_their - 1 ).A;
+            }
+            if( p.index_their < line.PointCount() - 1 )
+            {
+                d2[d2_idx++] = line.CSegment( p.index_their ).B;
+            }
+        }
+        else
+        {
+            d2[d2_idx++] = line.CSegment( p.index_their ).A;
+            d2[d2_idx++] = line.CSegment( p.index_their ).B;
+        }
+
+        for( int i = 0; i < d1_idx; i++ )
+        {
+            for( int j = 0; j < d2_idx; j++ )
+            {
+                if( d1[i].Side( d2[j] ) > 0 )
+                {
+                    ipp.valid = true;
+                }
+            }
+        }
+
+#ifdef TOM_EXTRA_DEBUG
+        printf("p %d %d hi %d their %d co %d ct %d ipv %d\n", p.p.x, p.p.y, p.index_our, p.index_their, p.is_corner_our?1:0, p.is_corner_their?1:0, ipp.valid ?1:0);
+        printf("d1 %d d2 %d\n", d1_idx, d2_idx );
+#endif
+        if( ipp.valid )
+        {
+            ips.push_back( ipp );
+        }
+    }
 }
 
 }

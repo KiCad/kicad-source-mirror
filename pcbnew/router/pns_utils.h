@@ -61,12 +61,9 @@ SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg );
 OPT_BOX2I ChangedArea( const ITEM* aItemA, const ITEM* aItemB );
 OPT_BOX2I ChangedArea( const LINE& aLineA, const LINE& aLineB );
 
-#if 0
-void DrawDebugPoint( VECTOR2I aP, int aColor );
-void DrawDebugBox( BOX2I aB, int aColor );
-void DrawDebugSeg( SEG aS, int aColor );
-void DrawDebugDirs( VECTOR2D aP, int aMask, int aColor );
-#endif
+void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& line,
+                       SHAPE_LINE_CHAIN::INTERSECTIONS& ips );
+
 
 }
 
