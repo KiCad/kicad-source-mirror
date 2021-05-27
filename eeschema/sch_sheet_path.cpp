@@ -473,9 +473,53 @@ void SCH_SHEET_PATH::SetPageNumber( const wxString& aPageNumber )
 }
 
 
+void SCH_SHEET_PATH::MakeFilePathRelativeToParentSheet()
+{
+    wxCHECK( m_sheets.size() > 1, /* void */  );
+
+    wxFileName sheetFileName = Last()->GetFileName();
+
+    // If the sheet file name is absolute, then the user requested is so don't make it relative.
+    if( sheetFileName.IsAbsolute() )
+        return;
+
+    SCH_SCREEN* screen = LastScreen();
+    SCH_SCREEN* parentScreen = m_sheets[ m_sheets.size() - 2 ]->GetScreen();
+
+    wxCHECK( screen && parentScreen, /* void */ );
+
+    wxFileName fileName = screen->GetFileName();
+    wxFileName parentFileName = parentScreen->GetFileName();
+
+    // SCH_SCREEN file names must be absolute.  If they are not, someone set them incorrectly
+    // on load or on creation.
+    wxCHECK( fileName.IsAbsolute() && parentFileName.IsAbsolute(), /* void */ );
+
+    if( fileName.GetPath() == parentFileName.GetPath() )
+    {
+        Last()->SetFileName( fileName.GetFullName() );
+    }
+    else if( fileName.MakeRelativeTo( parentFileName.GetPath() ) )
+    {
+        Last()->SetFileName( fileName.GetFullPath() );
+    }
+    else
+    {
+        Last()->SetFileName( screen->GetFileName() );
+    }
+
+    wxLogTrace( tracePathsAndFiles,
+                wxT( "\n    File name: '%s'"
+                     "\n    parent file name '%s',"
+                     "\n    sheet '%s' file name '%s'." ),
+                screen->GetFileName(), parentScreen->GetFileName(), PathHumanReadable(),
+                Last()->GetFileName() );
+}
+
+
 SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet, bool aCheckIntegrity )
 {
-    if( aSheet != NULL )
+    if( aSheet != nullptr )
     {
         BuildSheetList( aSheet, aCheckIntegrity );
         SortByPageNumbers();
@@ -485,7 +529,7 @@ SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet, bool aCheckIntegrity )
 
 void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity )
 {
-    wxCHECK_RET( aSheet != NULL, wxT( "Cannot build sheet list from undefined sheet." ) );
+    wxCHECK_RET( aSheet != nullptr, wxT( "Cannot build sheet list from undefined sheet." ) );
 
     std::vector<SCH_SHEET*> badSheets;
 

@@ -68,7 +68,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
     wxFileName oldFileName;
     bool success;
 
-    if( aSheet == NULL )
+    if( aSheet == nullptr )
         aSheet = GetCurrentSheet().Last();
 
     SCH_SCREEN* screen = aSheet->GetScreen();
@@ -208,7 +208,7 @@ void SCH_EDIT_FRAME::Save_File( bool doSaveAs )
 {
     if( doSaveAs )
     {
-        if( SaveEEFile( NULL, true ) )
+        if( SaveEEFile( nullptr, true ) )
         {
             SCH_SCREEN* screen = GetScreen();
 
@@ -231,7 +231,7 @@ void SCH_EDIT_FRAME::Save_File( bool doSaveAs )
     }
     else
     {
-        SaveEEFile( NULL );
+        SaveEEFile( nullptr );
     }
 
     UpdateTitle();
@@ -348,18 +348,18 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // event handler in there.
             // And when a schematic file is loaded, we need these libs to initialize
             // some parameters (links to PART LIB, dangling ends ...)
-            Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
+            Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, nullptr );
             Prj().SchLibs();
         }
     }
     else
     {
         // No legacy symbol libraries including the cache are loaded with the new file format.
-        Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
+        Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, nullptr );
     }
 
     // Load the symbol library table, this will be used forever more.
-    Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
+    Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, nullptr );
     Prj().SchSymbolLibTable();
 
     // Load project settings after schematic has been set up with the project link, since this will
@@ -775,6 +775,117 @@ bool SCH_EDIT_FRAME::SaveProject()
     // I want to see it in the debugger, show me the string!  Can't do that with wxFileName.
     wxString    fileName = Prj().AbsolutePath( Schematic().Root().GetFileName() );
     wxFileName  fn = fileName;
+
+    // If this a new schematic without a project and we are in the stand alone mode.  All new
+    // sheets that are not loaded from an existing file will have to be saved to a new path
+    // along with the root sheet.
+    if( Prj().GetProjectFullName().IsEmpty() )
+    {
+        // This should only be possible in stand alone mode.
+        wxCHECK( Kiface().IsSingle(), false );
+
+        wxFileDialog dlg( this, _( "Schematic Files" ), fn.GetPath(), fn.GetFullName(),
+                          KiCadSchematicFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+
+        wxFileName newFileName = dlg.GetPath();
+
+        if( newFileName.GetExt().IsEmpty() )
+            newFileName.SetExt( KiCadSchematicFileExtension );
+
+        if( !newFileName.DirExists() && !newFileName.Mkdir() )
+        {
+            msg.Printf( _( "Cannot create folder \"%s\"." ), newFileName.GetPath() );
+
+            wxMessageDialog dlgBadPath( this, msg, _( "Error" ),
+                                        wxOK | wxICON_EXCLAMATION | wxCENTER );
+
+            dlgBadPath.ShowModal();
+            return false;
+        }
+
+        if( !newFileName.IsDirWritable() )
+        {
+            msg.Printf( _( "You do not have write permissions to folder \"%s\"." ),
+                        newFileName.GetPath() );
+
+            wxMessageDialog dlgBadPerms( this, msg, _( "Error" ),
+                                         wxOK | wxICON_EXCLAMATION | wxCENTER );
+
+            dlgBadPerms.ShowModal();
+            return false;
+        }
+
+        Schematic().Root().SetFileName( newFileName.GetFullName() );
+        Schematic().RootScreen()->SetFileName( newFileName.GetFullPath() );
+
+        // Set the base path to all new sheets.
+        for( size_t i = 0; i < screens.GetCount(); i++ )
+        {
+            screen = screens.GetScreen( i );
+
+            wxCHECK2( screen, continue );
+
+            // The root screen file name has already been set.
+            if( screen == Schematic().RootScreen() )
+                continue;
+
+            wxFileName tmp = screen->GetFileName();
+
+            // Assume existing sheet files are being reused and do not save them to the new
+            // path.  Maybe in the future, add a user option to copy schematic files to the
+            // new project path.
+            if( tmp.FileExists() )
+                continue;
+
+            if( tmp.GetPath().IsEmpty() )
+            {
+                tmp.SetPath( newFileName.GetPath() );
+            }
+            else if( tmp.GetPath() == fn.GetPath() )
+            {
+                tmp.SetPath( newFileName.GetPath() );
+            }
+            else if( tmp.GetPath().StartsWith( fn.GetPath() ) )
+            {
+                // NOTE: this hasn't been tested because the sheet properties dialog no longer
+                //       allows adding a path specifier in the file name field.
+                wxString newPath = newFileName.GetPath();
+                newPath += tmp.GetPath().Right( fn.GetPath().Length() );
+                tmp.SetPath( newPath );
+            }
+
+            wxLogTrace( tracePathsAndFiles,
+                        wxT( "Changing schematic file name path from '%s' to '%s'." ),
+                        screen->GetFileName(), tmp.GetFullPath() );
+
+            if( !tmp.DirExists() && !tmp.Mkdir() )
+            {
+                msg.Printf( _( "Cannot create folder \"%s\"." ), newFileName.GetPath() );
+
+                wxMessageDialog dlgBadFilePath( this, msg, _( "Error" ),
+                                                wxOK | wxICON_EXCLAMATION | wxCENTER );
+
+                dlgBadFilePath.ShowModal();
+                return false;
+            }
+
+            screen->SetFileName( tmp.GetFullPath() );
+        }
+
+        // Attempt to make sheet file name paths relative to the new root schematic path.
+        SCH_SHEET_LIST sheets = Schematic().GetSheets();
+
+        for( SCH_SHEET_PATH& sheet : sheets )
+        {
+            if( sheet.Last()->IsRootSheet() )
+                continue;
+
+            sheet.MakeFilePathRelativeToParentSheet();
+        }
+    }
 
     // Warn user on potential file overwrite.  This can happen on shared sheets.
     wxArrayString overwrittenFiles;

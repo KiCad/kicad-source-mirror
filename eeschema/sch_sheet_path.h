@@ -195,7 +195,7 @@ public:
 
     const SCH_SHEET* GetSheet( unsigned aIndex ) const
     {
-        SCH_SHEET* retv = NULL;
+        SCH_SHEET* retv = nullptr;
 
         if( aIndex < size() )
             retv = at( aIndex );
@@ -345,6 +345,24 @@ public:
      * @return true if \a aFileName will cause recursion in the sheet path.  Otherwise false.
      */
     bool TestForRecursion( const wxString& aSrcFileName, const wxString& aDestFileName );
+
+    /**
+     * Make the sheet file name relative to it's parent sheet.
+     *
+     * This should only be called when changing the parent sheet path such performing a save
+     * as or a new schematic without a project in stand alone mode.  The sheet file name is
+     * only made relative if the current file name is relative.  Absolute sheet file name paths
+     * are a user choice so do not change them.
+     *
+     * Sheet file name paths are set according to the following criteria:
+     *  - If the sheet file name path is in the same as the parent sheet file name path, set
+     *    the sheet file name to just the file name and extension with no path.
+     *  - If the sheet file name path can be made relative to the parent sheet file name path,
+     *    set the sheet file name using the relative path.
+     *  - If the sheet file name path cannot be converted to a relative path, then fall back to
+     *    the absolute file name path.
+     */
+    void MakeFilePathRelativeToParentSheet();
 
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
