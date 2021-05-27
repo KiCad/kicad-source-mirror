@@ -349,6 +349,7 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     PART_DRAW_OPTIONS opts;
     opts.draw_hidden_fields = true;
+    opts.show_connect_point = true;
 
     RENDER_SETTINGS* renderSettings = symbolEditor->GetRenderSettings();
     renderSettings->SetPrintDC( &dc );

@@ -61,10 +61,12 @@ extern bool operator<( const LIB_PART& aItem1, const LIB_PART& aItem2 );
 
 struct PART_DRAW_OPTIONS
 {
-    TRANSFORM transform;           // Coordinate adjustment settings
-    bool draw_visible_fields;      // Whether to draw "visible" fields
-    bool draw_hidden_fields;       // Whether to draw "hidden" fields
-    bool show_elec_type;           // Whether to show the pin electrical type
+    TRANSFORM transform;            // Coordinate adjustment settings
+    bool draw_visible_fields;       // Whether to draw "visible" fields
+    bool draw_hidden_fields;        // Whether to draw "hidden" fields
+    bool show_elec_type;            // Whether to show the pin electrical type
+    bool show_connect_point;        // Whether to show the pin connect point marker (small circle)
+                                    // usefull in dialog pin properties
 
     PART_DRAW_OPTIONS()
     {
@@ -72,6 +74,7 @@ struct PART_DRAW_OPTIONS
         draw_visible_fields = true;
         draw_hidden_fields = true;
         show_elec_type = false;
+        show_connect_point = false;
     }
 };
 

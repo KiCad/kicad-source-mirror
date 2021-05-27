@@ -174,6 +174,7 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
     PART_DRAW_OPTIONS* opts = (PART_DRAW_OPTIONS*) aData;
     bool               drawHiddenFields = opts ? opts->draw_hidden_fields : false;
     bool               showPinType = opts ? opts->show_elec_type : false;
+    bool               show_connect_point = opts ? opts->show_connect_point : false;
 
     LIB_PART* part = GetParent();
 
@@ -192,6 +193,13 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
 
         if( showPinType )
             printPinElectricalTypeName( aSettings, pos1, orient );
+
+        if( show_connect_point )
+        {
+            wxDC* DC = aSettings->GetPrintDC();
+            COLOR4D color = aSettings->GetLayerColor( IsVisible() ? LAYER_PIN : LAYER_HIDDEN );
+            GRCircle( nullptr, DC, pos1.x, pos1.y, TARGET_PIN_RADIUS, 0, color );
+        }
     }
 }
 
