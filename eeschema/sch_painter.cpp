@@ -761,6 +761,11 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         return;
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+#if 1
+    bool dangling = !m_schematic || aPin->HasFlag(IS_DANGLING );
+#else
+    bool dangling = aPin->HasFlag( IS_DANGLING );
+#endif
 
     if( drawingShadows && !aPin->IsSelected() )
         return;
@@ -776,7 +781,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         }
         else
         {
-            if( aPin->HasFlag( IS_DANGLING ) && aPin->IsPowerConnection() )
+            if( dangling && aPin->IsPowerConnection() )
                 drawPinDanglingSymbol( pos, drawingShadows );
 
             return;
@@ -940,15 +945,18 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     }
 
 
-    if( aPin->HasFlag( IS_DANGLING ) && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
+    if( dangling )
         drawPinDanglingSymbol( pos, drawingShadows );
 
     LIB_PART* libEntry = aPin->GetParent();
 
     // Draw the labels
-    if( drawingShadows && ( libEntry->Type() == LIB_PART_T || libEntry->IsSelected() )
+    if( drawingShadows
+            && ( libEntry->Type() == LIB_PART_T || libEntry->IsSelected() )
             && !eeconfig()->m_Selection.draw_selected_children )
+    {
         return;
+    }
 
     int textOffset = libEntry->GetPinNameOffset();
 
@@ -1008,7 +1016,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     }
 
     int   insideOffset = textOffset;
-    int   outsideOffset = 10;
+    int   outsideOffset = 2 * Mils2iu( PIN_TEXT_MARGIN ) + ( dangling ? TARGET_PIN_RADIUS / 2 : 0 );
     float lineThickness = (float) m_schSettings.GetDefaultPenWidth();
     float aboveOffset = Mils2iu( PIN_TEXT_MARGIN ) + ( thickness[ABOVE] + lineThickness ) / 2.0;
     float belowOffset = Mils2iu( PIN_TEXT_MARGIN ) + ( thickness[BELOW] + lineThickness ) / 2.0;
