@@ -75,7 +75,7 @@ void GRID_CELL_TEXT_BUTTON::StartingKey( wxKeyEvent& event )
     // Do it ourselves instead.  We know that if we get this far that we have
     // a valid character, so not a whole lot of testing needs to be done.
 
-    // wxComboCtrl inherits from wxTextEntry, so can staticly cast
+    // wxComboCtrl inherits from wxTextEntry, so can statically cast
     wxTextEntry* textEntry = static_cast<wxTextEntry*>( Combo() );
     int ch;
 
@@ -356,18 +356,17 @@ protected:
 
     void OnButtonClick() override
     {
-        wxString path = GetValue();
+        wxFileName fn = GetValue();
 
-        if( path.IsEmpty() )
-            path = *m_currentDir;
+        if( fn.GetPath().IsEmpty() && m_currentDir )
+            fn.SetPath( *m_currentDir );
         else
-            path = ExpandEnvVarSubstitutions( path, &m_dlg->Prj() );
+            fn.SetPath( ExpandEnvVarSubstitutions( fn.GetPath(), &m_dlg->Prj() ) );
 
         if( m_ext )
         {
-            wxFileName fn( path );
-            wxFileDialog dlg( nullptr, _( "Select a File" ), fn.GetPath(), fn.GetFullName(), *m_ext,
-                    wxFD_FILE_MUST_EXIST | wxFD_OPEN );
+            wxFileDialog dlg( m_dlg, _( "Select a File" ), fn.GetPath(), fn.GetFullName(), *m_ext,
+                              wxFD_FILE_MUST_EXIST | wxFD_OPEN );
 
             if( dlg.ShowModal() == wxID_OK )
             {
@@ -391,12 +390,13 @@ protected:
                 if( !m_grid->CommitPendingChanges() )
                 {;} // shouldn't happen, but Coverity doesn't know that
 
-                *m_currentDir = lastPath;
+                if( m_currentDir )
+                    *m_currentDir = lastPath;
             }
         }
         else
         {
-            wxDirDialog dlg( nullptr, _( "Select Path" ), path,
+            wxDirDialog dlg( m_dlg, _( "Select Path" ), fn.GetPath(),
                              wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
             if( dlg.ShowModal() == wxID_OK )
