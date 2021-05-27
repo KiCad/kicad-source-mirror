@@ -29,6 +29,8 @@
  * @brief Implementation of SCH_SCREEN and SCH_SCREENS classes.
  */
 
+#include <wx/filefn.h>
+
 #include <eda_rect.h>
 #include <id.h>
 #include <kicad_string.h>
@@ -100,6 +102,14 @@ void SCH_SCREEN::clearLibSymbols()
         delete libSymbol.second;
 
     m_libSymbols.clear();
+}
+
+
+void SCH_SCREEN::SetFileName( const wxString& aFileName )
+{
+    wxASSERT( aFileName.IsEmpty() || wxIsAbsolutePath( aFileName ) );
+
+    m_fileName = aFileName;
 }
 
 

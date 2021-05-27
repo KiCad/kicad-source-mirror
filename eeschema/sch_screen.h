@@ -128,7 +128,15 @@ public:
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
 
-    void SetFileName( const wxString& aFileName )           { m_fileName = aFileName; }
+    /**
+     * Set the file name for this screen to \a aFileName.
+     *
+     * @note Screen file names must be absolute or empty.  Absolute file names do not have to
+     *       exist yet in the case of a new schematic file but file names cannot be relative.
+     *
+     * @param aFileName is the absolute file name and path of the screen.
+     */
+    void SetFileName( const wxString& aFileName );
 
     const wxString& GetFileName() const                     { return m_fileName; }
 

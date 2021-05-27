@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see CHANGELOG.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +87,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
                      wxGridEventHandler( DIALOG_SHEET_PROPERTIES::OnGridCellChanging ),
-                     NULL, this );
+                     nullptr, this );
 
     finishDialogSettings();
 }
@@ -106,7 +106,7 @@ DIALOG_SHEET_PROPERTIES::~DIALOG_SHEET_PROPERTIES()
 
     m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
                         wxGridEventHandler( DIALOG_SHEET_PROPERTIES::OnGridCellChanging ),
-                        NULL, this );
+                        nullptr, this );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
@@ -128,7 +128,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
         if( field_copy.GetId() == SHEETFILENAME )
         {
             wxString filename = field_copy.GetText();
-            filename.Replace( wxT("/"), wxT("\\") );
+            filename.Replace( wxT( "/" ), wxT( "\\" ) );
             field_copy.SetText( filename );
         }
 #endif
@@ -240,23 +240,24 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
         return false;
 
-    wxString newRelativeNativeFilename = m_fields->at( SHEETFILENAME ).GetText();
+    // Sheet file names can be relative or absolute.
+    wxString sheetFileName = m_fields->at( SHEETFILENAME ).GetText();
 
     // Ensure filepath is not empty.  (In normal use will be caught by grid validators,
     // but unedited data from existing files can be bad.)
-    if( newRelativeNativeFilename.IsEmpty() )
+    if( sheetFileName.IsEmpty() )
     {
-        wxMessageBox( _( "A sheet must have a valid file name." ) );
+        DisplayError( this, _( "A sheet must have a valid file name." ) );
         return false;
     }
 
-    // Ensure the filename extension is OK.  (In normaly use will be caught by grid
-    // validators, but unedited data from existing files can be bad.)
-    wxFileName fn( newRelativeNativeFilename );
+    // Ensure the filename extension is OK.  In normal use will be caught by grid validators,
+    // but unedited data from existing files can be bad.
+    wxFileName fn( sheetFileName );
 
     if( fn.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
     {
-        wxMessageBox( _( "Sheet file must have a '.kicad_sch' extension." ) );
+        DisplayError( this, _( "Sheet file must have a '.kicad_sch' extension." ) );
         return false;
     }
 
@@ -272,8 +273,54 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
     if( filename_changed || m_sheet->IsNew() )
     {
+        SCH_SCREEN* currentScreen = m_frame->GetCurrentSheet().LastScreen();
+
+        wxCHECK( currentScreen, false );
+
+        bool clearFileName = false;
+
+        // This can happen for the root sheet when opening Eeschema in the stand alone mode.
+        if( currentScreen->GetFileName().IsEmpty() )
+        {
+            clearFileName = true;
+            currentScreen->SetFileName( m_frame->Prj().AbsolutePath( wxT( "noname.kicad_sch" ) ) );
+        }
+
+        wxFileName tmp( fn );
+        wxFileName screenFileName = currentScreen->GetFileName();
+
+        if( fn.IsAbsolute() && fn.MakeRelativeTo( screenFileName.GetPath() ) )
+        {
+            wxMessageDialog makeRelDlg( this, _( "Use relative path for sheet file?" ),
+                                        _( "Sheet File Path" ),
+                                        wxYES_NO | wxYES_DEFAULT | wxICON_QUESTION | wxCENTER );
+
+            makeRelDlg.SetExtendedMessage(
+                    _( "Using relative hierarchical sheet file name paths improves schematic\n"
+                       "portability across systems and platforms.  Using absolute paths can\n"
+                       "result in portability issues." ) );
+            makeRelDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Use Relative Path" ) ),
+                                       wxMessageDialog::ButtonLabel( _( "Use Absolute Path" ) ) );
+
+            if( makeRelDlg.ShowModal() == wxID_YES )
+            {
+                wxLogTrace( tracePathsAndFiles, "\n    Converted absolute path: '%s'\n"
+                            "    to relative path: '%s'", tmp.GetPath(), fn.GetPath() );
+                m_fields->at( SHEETFILENAME ).SetText( fn.GetFullPath() );
+                newRelativeFilename = fn.GetFullPath();
+            }
+        }
+
         if( !onSheetFilenameChanged( newRelativeFilename ) )
+        {
+            if( clearFileName )
+                currentScreen->SetFileName( wxEmptyString );
+
             return false;
+        }
+
+        if( clearFileName )
+            currentScreen->SetFileName( wxEmptyString );
 
         // One last validity check (and potential repair) just to be sure to be sure
         SCH_SHEET_LIST repairedList( &m_frame->Schematic().Root(), true );
@@ -346,39 +393,44 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 {
     wxString msg;
 
-    // Relative file names are relative to the path of the current sheet.  This allows for
-    // nesting of schematic files in subfolders.
-    wxFileName fileName( aNewFilename );
+    // Sheet file names are relative to the path of the current sheet.  This allows for
+    // nesting of schematic files in subfolders.  Screen file names are always absolute.
+    wxFileName sheetFileName( aNewFilename );
 
-    if( fileName.GetExt().IsEmpty() )
+    if( sheetFileName.GetExt().IsEmpty() )
     {
-        fileName.SetExt( KiCadSchematicFileExtension );
+        sheetFileName.SetExt( KiCadSchematicFileExtension );
     }
-    else if( fileName.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
+    else if( sheetFileName.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
     {
         msg.Printf( _( "The file \"%s\" does not appear to be a valid schematic file." ),
-                    fileName.GetFullName() );
+                    sheetFileName.GetFullName() );
         wxMessageDialog badSchFileDialog( this, msg, _( "Invalid Schematic File" ),
-                wxOK | wxCENTRE | wxICON_EXCLAMATION );
+                                          wxOK | wxCENTRE | wxICON_EXCLAMATION );
         badSchFileDialog.ShowModal();
         return false;
     }
 
-    if( !fileName.IsAbsolute() )
+    wxFileName screenFileName( sheetFileName );
+    wxFileName tmp( sheetFileName );
+
+    SCH_SCREEN* currentScreen = m_frame->GetCurrentSheet().LastScreen();
+
+    wxCHECK( currentScreen, false );
+
+    // SCH_SCREEN file names are always absolute.
+    wxFileName currentScreenFileName = currentScreen->GetFileName();
+
+    if( !screenFileName.Normalize( wxPATH_NORM_ALL, currentScreenFileName.GetPath() ) )
     {
-        const SCH_SCREEN* currentScreen = m_frame->GetCurrentSheet().LastScreen();
-        wxCHECK_MSG( currentScreen, false, "Invalid sheet path object." );
-
-        wxFileName currentSheetFileName = currentScreen->GetFileName();
-
-        if( !fileName.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() ) )
-        {
-            wxFAIL_MSG( "Cannot normalize new sheet schematic file path." );
-            return false;
-        }
+        msg.Printf( _( "Cannot normalize new sheet schematic file path:\n'%s'\n"
+                       "against parent sheet schematic file path:\n`%s`." ),
+                    sheetFileName.GetPath(), currentScreenFileName.GetPath() );
+        DisplayError( this, msg );
+        return false;
     }
 
-    wxString newAbsoluteFilename = fileName.GetFullPath();
+    wxString newAbsoluteFilename = screenFileName.GetFullPath();
 
     // Inside Eeschema, filenames are stored using unix notation
     newAbsoluteFilename.Replace( wxT( "\\" ), wxT( "/" ) );
@@ -388,7 +440,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     bool clearAnnotation = false;
     bool restoreSheet = false;
     bool isExistingSheet = false;
-    SCH_SCREEN* useScreen = NULL;
+    SCH_SCREEN* useScreen = nullptr;
 
     // Search for a schematic file having the same filename already in use in the hierarchy
     // or on disk, in order to reuse it.
@@ -396,12 +448,11 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     {
         loadFromFile = wxFileExists( newAbsoluteFilename );
 
-        wxLogTrace( tracePathsAndFiles, "Sheet requested file \"%s\", %s",
-                    newAbsoluteFilename,
-                    ( loadFromFile ) ? "found" : "not found" );
+        wxLogTrace( tracePathsAndFiles, "\n    Sheet requested file \"%s\", %s",
+                    newAbsoluteFilename, ( loadFromFile ) ? "found" : "not found" );
     }
 
-    if( m_sheet->GetScreen() == NULL )      // New just created sheet.
+    if( m_sheet->GetScreen() == nullptr )      // New just created sheet.
     {
         if( !m_frame->AllowCaseSensitiveFileNameClashes( newAbsoluteFilename ) )
             return false;
@@ -411,7 +462,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
             clearAnnotation = true;
             wxString existsMsg;
             wxString linkMsg;
-            existsMsg.Printf( _( "\"%s\" already exists." ), fileName.GetFullName() );
+            existsMsg.Printf( _( "\"%s\" already exists." ), sheetFileName.GetFullName() );
             linkMsg.Printf( _( "Link \"%s\" to this file?" ), newAbsoluteFilename );
             msg.Printf( wxT( "%s\n\n%s" ), existsMsg, linkMsg );
 
@@ -440,9 +491,9 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
         replaceMsg.Printf( _( "Change \"%s\" link from \"%s\" to \"%s\"?" ),
                            newAbsoluteFilename,
                            m_sheet->GetFileName(),
-                           fileName.GetFullName() );
+                           sheetFileName.GetFullName() );
         newMsg.Printf( _( "Create new file \"%s\" with contents of \"%s\"?" ),
-                       fileName.GetFullName(),
+                       sheetFileName.GetFullName(),
                        m_sheet->GetFileName() );
         noUndoMsg = _( "This action cannot be undone." );
 
@@ -473,7 +524,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
                     return false;
 
                 if( loadFromFile )
-                    m_sheet->SetScreen( NULL );
+                    m_sheet->SetScreen( nullptr );
             }
             else                                      // Save to new file name.
             {
@@ -515,7 +566,6 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
                 msg.Printf( _( "Failed to save schematic \"%s\"" ), newAbsoluteFilename );
                 m_frame->SetMsgPanel( wxEmptyString, msg );
-
                 return false;
             }
 
@@ -524,13 +574,12 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
             // the screen reference counting in complex hierarchies.
             if( m_sheet->GetScreenCount() > 1 )
             {
-                m_sheet->SetScreen( NULL );
+                m_sheet->SetScreen( nullptr );
                 loadFromFile = true;
             }
         }
     }
 
-    wxFileName nativeFileName( aNewFilename );
     SCH_SHEET_PATH& currentSheet = m_frame->GetCurrentSheet();
 
     if( useScreen )
@@ -538,7 +587,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
         // Create a temporary sheet for recursion testing to prevent a possible recursion error.
         std::unique_ptr< SCH_SHEET> tmpSheet = std::make_unique<SCH_SHEET>();
         tmpSheet->GetFields()[SHEETNAME] = m_fields->at( SHEETNAME );
-        tmpSheet->GetFields()[SHEETFILENAME].SetText( nativeFileName.GetFullPath() );
+        tmpSheet->GetFields()[SHEETFILENAME].SetText( sheetFileName.GetFullPath() );
         tmpSheet->SetScreen( useScreen );
 
         // No need to check for valid library IDs if we are using an existing screen.
@@ -564,7 +613,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
         }
 
         if( !m_frame->LoadSheetFromFile( m_sheet, &currentSheet, newAbsoluteFilename )
-                || m_frame->CheckSheetForRecursion( m_sheet, &currentSheet ) )
+          || m_frame->CheckSheetForRecursion( m_sheet, &currentSheet ) )
         {
             if( restoreSheet )
                 currentSheet.LastScreen()->Append( m_sheet );
