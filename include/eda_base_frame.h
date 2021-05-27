@@ -498,7 +498,7 @@ public:
      *
      * @return true if the contents of the frame have not been saved
      */
-    virtual bool IsContentModified();
+    virtual bool IsContentModified() const;
 
     /**
      * Get the undecorated window size that can be used for restoring the window size.

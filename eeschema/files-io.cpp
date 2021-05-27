@@ -188,7 +188,6 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
             UpdateFileHistory( schematicFileName.GetFullPath() );
         }
 
-        screen->ClrSave();
         screen->ClrModify();
         UpdateTitle();
 
@@ -1029,6 +1028,10 @@ bool SCH_EDIT_FRAME::doAutoSave()
     wxFileName  tmp;
     SCH_SCREENS screens( Schematic().Root() );
 
+    // Don't run autosave if content has not been modified
+    if( !IsContentModified() )
+        return true;
+
     bool autoSaveOk = true;
 
     if( fn.GetPath().IsEmpty() )
@@ -1047,7 +1050,7 @@ bool SCH_EDIT_FRAME::doAutoSave()
     for( size_t i = 0; i < screens.GetCount(); i++ )
     {
         // Only create auto save files for the schematics that have been modified.
-        if( !screens.GetScreen( i )->IsSave() )
+        if( !screens.GetScreen( i )->IsModify() )
             continue;
 
         tmpFileName = fn = screens.GetScreen( i )->GetFileName();

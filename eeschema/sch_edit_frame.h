@@ -175,7 +175,7 @@ public:
      *
      * @return true if the any changes have not been saved
      */
-    bool IsContentModified() override;
+    bool IsContentModified() const override;
 
     /**
      * Must be called after a schematic change in order to set the "modify" flag of the

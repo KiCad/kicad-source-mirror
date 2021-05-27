@@ -316,7 +316,7 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::IsContentModified()
+bool FOOTPRINT_EDIT_FRAME::IsContentModified() const
 {
     return GetScreen() && GetScreen()->IsModify() && GetBoard() && GetBoard()->GetFirstFootprint();
 }

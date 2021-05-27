@@ -328,7 +328,7 @@ bool PL_EDITOR_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 }
 
 
-bool PL_EDITOR_FRAME::IsContentModified()
+bool PL_EDITOR_FRAME::IsContentModified() const
 {
     return GetScreen() && GetScreen()->IsModify();
 }

@@ -139,7 +139,7 @@ public:
      *
      * @return true if the any changes have not been saved
      */
-    bool IsContentModified() override
+    bool IsContentModified() const override
     {
         return m_modified;
     }

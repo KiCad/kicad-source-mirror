@@ -783,7 +783,6 @@ void SCH_EDIT_FRAME::OnModify()
         return;
 
     GetScreen()->SetModify();
-    GetScreen()->SetSave();
 
     if( ADVANCED_CFG::GetCfg().m_RealTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
         RecalculateConnections( NO_CLEANUP );
@@ -1099,13 +1098,7 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 
     if( Schematic().IsValid() )
     {
-        SCH_SCREENS screenList( Schematic().Root() );
-
-        for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
-        {
-            if( screen->IsSave() )
-                return true;
-        }
+        return IsContentModified();
     }
 
     return false;
@@ -1555,7 +1548,7 @@ void SCH_EDIT_FRAME::FixupJunctions()
 }
 
 
-bool SCH_EDIT_FRAME::IsContentModified()
+bool SCH_EDIT_FRAME::IsContentModified() const
 {
     return Schematic().GetSheets().IsModified();
 }

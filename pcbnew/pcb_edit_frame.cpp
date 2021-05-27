@@ -447,7 +447,7 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 }
 
 
-bool PCB_EDIT_FRAME::IsContentModified()
+bool PCB_EDIT_FRAME::IsContentModified() const
 {
     return GetScreen() && GetScreen()->IsModify();
 }
@@ -456,7 +456,7 @@ bool PCB_EDIT_FRAME::IsContentModified()
 bool PCB_EDIT_FRAME::isAutoSaveRequired() const
 {
     if( GetScreen() )
-        return GetScreen()->IsSave();
+        return GetScreen()->IsModify();
 
     return false;
 }

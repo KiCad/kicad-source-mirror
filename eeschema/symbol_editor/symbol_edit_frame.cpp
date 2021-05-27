@@ -1230,7 +1230,7 @@ bool SYMBOL_EDIT_FRAME::HasLibModifications() const
 }
 
 
-bool SYMBOL_EDIT_FRAME::IsContentModified()
+bool SYMBOL_EDIT_FRAME::IsContentModified() const
 {
     wxCHECK( m_libMgr, false );
 

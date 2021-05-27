@@ -91,7 +91,7 @@ public:
      *
      * @return true if the any changes have not been saved
      */
-    bool IsContentModified() override;
+    bool IsContentModified() const override;
 
     /**
      * Reload the Python plugins if they are newer than the already loaded, and load new

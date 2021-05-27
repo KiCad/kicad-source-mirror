@@ -1025,7 +1025,7 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
 }
 
 
-bool EDA_BASE_FRAME::IsContentModified()
+bool EDA_BASE_FRAME::IsContentModified() const
 {
     // This function should be overridden in child classes
     return false;

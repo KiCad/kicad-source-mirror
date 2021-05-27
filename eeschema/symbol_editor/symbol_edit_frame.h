@@ -66,7 +66,7 @@ public:
      *
      * @return true if the any changes have not been saved
      */
-    bool IsContentModified() override;
+    bool IsContentModified() const override;
 
     /**
      * Check if any pending libraries have been modified.
@@ -100,7 +100,7 @@ public:
      *
      * This is a LIB_PART that I own, it is at best a copy of one in a library.
      */
-    LIB_PART* GetCurPart() { return m_my_part; }
+    LIB_PART* GetCurPart() const { return m_my_part; }
 
     /**
      * Take ownership of aPart and notes that it is the one currently being edited.

@@ -1065,7 +1065,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
         m_infoBar->Dismiss();
 
     GetScreen()->ClrModify();
-    GetScreen()->ClrSave();
     UpdateTitle();
     return true;
 }
@@ -1139,6 +1138,10 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
 bool PCB_EDIT_FRAME::doAutoSave()
 {
     wxFileName tmpFileName;
+
+    // Don't run autosave if content has not been modified
+    if( !IsContentModified() )
+        return true;
 
     wxString title = GetTitle();    // Save frame title, that can be modified by the save process
 
