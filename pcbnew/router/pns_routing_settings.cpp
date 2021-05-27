@@ -52,6 +52,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_snapToPads = false;
     m_optimizeEntireDraggedTrack = false;
     m_cornerMode = CORNER_MODE::MITERED_45;
+    m_walkaroundHugLengthThreshold = 1.5;
     m_autoPosture = true;
     m_fixAllSegments = true;
 
@@ -99,6 +100,8 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_params.emplace_back( new PARAM_ENUM<CORNER_MODE>( "corner_mode", &m_cornerMode,
                            CORNER_MODE::MITERED_45, CORNER_MODE::ROUNDED_90,
                            CORNER_MODE::MITERED_45 ) );
+
+    m_params.emplace_back( new PARAM<double>( "walkaround_hug_length_threshold",     &m_walkaroundHugLengthThreshold,     1.5 ) );
 
     LoadFromFile();
 }

@@ -52,8 +52,7 @@ NODE::OPT_OBSTACLE WALKAROUND::nearestObstacle( const LINE& aPath )
 }
 
 
-WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
-                                                              bool aWindingDirection )
+WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWindingDirection )
 {
     OPT<OBSTACLE>& current_obs =
         aWindingDirection ? m_currentObstacle[0] : m_currentObstacle[1];
@@ -61,47 +60,10 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
     if( !current_obs )
         return DONE;
 
-    SHAPE_LINE_CHAIN path_walk[2];
+    SHAPE_LINE_CHAIN path_walk;
 
-    if( aPath.PointCount() > 1 )
-    {
-        VECTOR2I last = aPath.CPoint( -1 );
-
-        if( ( current_obs->m_hull ).PointInside( last ) || ( current_obs->m_hull ).PointOnEdge( last ) )
-        {
-            m_recursiveBlockageCount++;
-
-            if( m_recursiveBlockageCount < 3 )
-                aPath.Line().Append( current_obs->m_hull.NearestPoint( last ) );
-            else
-            {
-                aPath = aPath.ClipToNearestObstacle( m_world );
-                return DONE;
-            }
-        }
-    }
-
-    aPath.Walkaround( current_obs->m_hull, path_walk[0],
+    bool s_cw = aPath.Walkaround( current_obs->m_hull, path_walk,
                       aWindingDirection );
-    aPath.Walkaround( current_obs->m_hull, path_walk[1],
-                      !aWindingDirection );
-
-    if( !aPath.Walkaround( current_obs->m_hull, path_walk[1], !aWindingDirection ) )
-        return STUCK;
-
-    auto l =aPath.CLine();
-
-#if 0
-    if( m_logger )
-    {
-        m_logger->NewGroup( aWindingDirection ? "walk-cw" : "walk-ccw", m_iteration );
-        m_logger->Log( &path_walk[0], 0, "path_walk" );
-        m_logger->Log( &path_pre[0], 1, "path_pre" );
-        m_logger->Log( &path_post[0], 4, "path_post" );
-        m_logger->Log( &current_obs->m_hull, 2, "hull" );
-        m_logger->Log( current_obs->m_item, 3, "item" );
-    }
-#endif
 
     if ( Dbg() )
     {
@@ -111,68 +73,19 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
         Dbg()->AddLine( current_obs->m_hull, 1, 1, name);
         snprintf(name, sizeof(name), "path-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
         Dbg()->AddLine( aPath.CLine(), 2, 1, name );
+        snprintf(name, sizeof(name), "result-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
+        Dbg()->AddLine( path_walk, 3, 10000, name );
+        Dbg()->Message( wxString::Format( "Stat cw %d", !!s_cw ) );
         Dbg()->EndGroup();
     }
 
-    int len_pre = path_walk[0].Length();
-    int len_alt = path_walk[1].Length();
+    current_obs = nearestObstacle( LINE( aPath, path_walk ) );
 
-    LINE walk_path( aPath, path_walk[1] );
-
-    bool alt_collides = static_cast<bool>( m_world->CheckColliding( &walk_path, m_itemMask ) );
-
-    SHAPE_LINE_CHAIN pnew;
-
-    /*if( !m_forceLongerPath && len_alt < len_pre && !alt_collides && !prev_recursive )
-    {
-        pnew = path_pre[1];
-        pnew.Append( path_walk[1] );
-        pnew.Append( path_post[1] );
-
-        if( !path_post[1].PointCount() || !path_walk[1].PointCount() )
-            current_obs = nearestObstacle( LINE( aPath, path_pre[1] ) );
-        else
-            current_obs = nearestObstacle( LINE( aPath, path_post[1] ) );
-    }
-    else*/
-    {
-        pnew = path_walk[0];
-        current_obs = nearestObstacle( LINE( aPath, path_walk[0] ) );
-    }
-
-    pnew.Simplify();
-    aPath.SetShape( pnew );
+    path_walk.Simplify();
+    aPath.SetShape( path_walk );
 
     return IN_PROGRESS;
 }
-
-
-
-bool clipToLoopStart( SHAPE_LINE_CHAIN& l )
-{
-    auto ip = l.SelfIntersecting();
-
-    if(!ip)
-        return false;
-    else {
-        int pidx = l.Split( ip->p );
-        auto lead = l.Slice(0, pidx);
-        auto tail = l.Slice(pidx + 1, -1);
-
-        int pidx2 = tail.Split( ip->p );
-
-        auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
-        dbg->AddPoint( ip->p, 5 );
-
-        l = lead;
-        l.Append( tail.Slice( 0, pidx2 ) );
-        //l = l.Slice(0, pidx);
-        return true;
-    }
-
-
-}
-
 
 
 const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
@@ -210,20 +123,11 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
 
     while( m_iteration < m_iterationLimit )
     {
-        if( s_cw != STUCK )
+        if( s_cw != STUCK && s_cw != ALMOST_DONE )
             s_cw = singleStep( path_cw, true );
 
-        if( s_ccw != STUCK )
+        if( s_ccw != STUCK && s_ccw != ALMOST_DONE )
             s_ccw = singleStep( path_ccw, false );
-
-        auto old = path_cw.CLine();
-
-        if( clipToLoopStart( path_cw.Line() ) )
-            s_cw = ALMOST_DONE;
-
-        if( clipToLoopStart( path_ccw.Line() ) )
-            s_ccw = ALMOST_DONE;
-
 
         if( s_cw != IN_PROGRESS )
         {
@@ -254,9 +158,6 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
         result.lineCcw = path_ccw;
         result.statusCcw = ALMOST_DONE;
     }
-
-    result.lineCw.Line().Simplify();
-    result.lineCcw.Line().Simplify();
 
     if( result.lineCw.SegmentCount() < 1 || result.lineCw.CPoint( 0 ) != aInitialPath.CPoint( 0 ) )
     {
@@ -359,40 +260,6 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::Route( const LINE& aInitialPath,
             aWalkPath = ( len_cw > len_ccw ? path_cw : path_ccw );
         else
             aWalkPath = ( len_cw < len_ccw ? path_cw : path_ccw );
-    }
-
-    if( m_cursorApproachMode )
-    {
-        // int len_cw = path_cw.GetCLine().Length();
-        // int len_ccw = path_ccw.GetCLine().Length();
-        bool found = false;
-
-        SHAPE_LINE_CHAIN l = aWalkPath.CLine();
-
-        for( int i = 0; i < l.SegmentCount(); i++ )
-        {
-            const SEG s = l.Segment( i );
-
-            VECTOR2I nearest = s.NearestPoint( m_cursorPos );
-            VECTOR2I::extended_type dist_a = ( s.A - m_cursorPos ).SquaredEuclideanNorm();
-            VECTOR2I::extended_type dist_b = ( s.B - m_cursorPos ).SquaredEuclideanNorm();
-            VECTOR2I::extended_type dist_n = ( nearest - m_cursorPos ).SquaredEuclideanNorm();
-
-            if( dist_n <= dist_a && dist_n < dist_b )
-            {
-                l.Remove( i + 1, -1 );
-                l.Append( nearest );
-                l.Simplify();
-                found = true;
-                break;
-            }
-        }
-
-        if( found )
-        {
-            aWalkPath = aInitialPath;
-            aWalkPath.SetShape( l );
-        }
     }
 
     aWalkPath.Line().Simplify();

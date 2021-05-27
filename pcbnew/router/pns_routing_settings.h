@@ -164,6 +164,8 @@ public:
     bool GetFixAllSegments() const { return m_fixAllSegments; }
     void SetFixAllSegments( bool aEnable ) { m_fixAllSegments = aEnable; }
 
+    double WalkaroundHugLengthThreshold() const { return m_walkaroundHugLengthThreshold; }
+
 private:
     bool m_shoveVias;
     bool m_startDiagonal;
@@ -189,6 +191,8 @@ private:
 
     int m_walkaroundIterationLimit;
     int m_shoveIterationLimit;
+    double m_walkaroundHugLengthThreshold;
+
     TIME_LIMIT m_shoveTimeLimit;
     TIME_LIMIT m_walkaroundTimeLimit;
 };

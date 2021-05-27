@@ -319,7 +319,7 @@ private:
 
     const VIA makeVia( const VECTOR2I& aP );
 
-    bool buildInitialLine( const VECTOR2I& aP, LINE& aHead );
+    bool buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aForceNoVia = false );
 
 
     DIRECTION_45   m_direction;         ///< current routing direction
