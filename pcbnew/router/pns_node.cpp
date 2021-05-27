@@ -39,6 +39,7 @@
 #include "pns_index.h"
 #include "pns_debug_decorator.h"
 #include "pns_router.h"
+#include "pns_utils.h"
 
 
 namespace PNS {
@@ -298,14 +299,14 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
     nearest.m_distFirst = INT_MAX;
 
     auto updateNearest =
-            [&]( VECTOR2I pt, ITEM* obstacle, const SHAPE_LINE_CHAIN& hull, bool isHole )
+            [&]( const SHAPE_LINE_CHAIN::INTERSECTION& pt, ITEM* obstacle, const SHAPE_LINE_CHAIN& hull, bool isHole )
             {
-                int dist = aLine->CLine().PathLength( pt );
+                int dist = aLine->CLine().PathLength( pt.p, pt.index_their );
 
                 if( dist < nearest.m_distFirst )
                 {
                     nearest.m_distFirst = dist;
-                    nearest.m_ipFirst = pt;
+                    nearest.m_ipFirst = pt.p;
                     nearest.m_item = obstacle;
                     nearest.m_hull = hull;
 
@@ -319,6 +320,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
     std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersectingPts;
     int layer = aLine->Layer();
 
+    
     for( const OBSTACLE& obstacle : obstacleList )
     {
         if( aRestrictedSet && aRestrictedSet->find( obstacle.m_item ) == aRestrictedSet->end() )
@@ -326,13 +328,18 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
 
         int clearance = GetClearance( obstacle.m_item, aLine ) + aLine->Width() / 2;
         obstacleHull = obstacle.m_item->Hull( clearance + PNS_HULL_MARGIN, 0, layer );
-        debugDecorator->AddLine( obstacleHull, 2 );
+        //debugDecorator->AddLine( obstacleHull, 2, 40000, "obstacle-hull-test" );
+        //debugDecorator->AddLine( aLine->CLine(), 5, 40000, "obstacle-test-line" );
 
         intersectingPts.clear();
-        obstacleHull.Intersect( aLine->CLine(), intersectingPts );
+        HullIntersection( obstacleHull, aLine->CLine(), intersectingPts );
 
-        for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
-            updateNearest( ip.p, obstacle.m_item, obstacleHull, false );
+        for( const auto& ip : intersectingPts )
+        {
+            //debugDecorator->AddPoint( ip.p, ip.valid?3:6, 100000, (const char *) wxString::Format("obstacle-isect-point-%d" ).c_str() );
+            if(ip.valid)
+                updateNearest( ip, obstacle.m_item, obstacleHull, false );
+        }
 
         if( aLine->EndsWithVia() )
         {
@@ -347,26 +354,28 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                 viaClearance = holeClearance;
 
             obstacleHull = obstacle.m_item->Hull( viaClearance + PNS_HULL_MARGIN, 0, layer );
-            debugDecorator->AddLine( obstacleHull, 3 );
+            //debugDecorator->AddLine( obstacleHull, 3 );
 
             intersectingPts.clear();
-            obstacleHull.Intersect( aLine->CLine(), intersectingPts );
+            HullIntersection( obstacleHull, aLine->CLine(), intersectingPts );
+
+//            obstacleHull.Intersect( aLine->CLine(), intersectingPts, true );
 
             for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
-                updateNearest( ip.p, obstacle.m_item, obstacleHull, false );
+                updateNearest( ip, obstacle.m_item, obstacleHull, false );
         }
 
         if( obstacle.m_item->Hole() )
         {
             clearance = GetHoleClearance( obstacle.m_item, aLine ) + aLine->Width() / 2;
             obstacleHull = obstacle.m_item->HoleHull( clearance + PNS_HULL_MARGIN, 0, layer );
-            debugDecorator->AddLine( obstacleHull, 4 );
+            //debugDecorator->AddLine( obstacleHull, 4 );
 
             intersectingPts.clear();
-            obstacleHull.Intersect( aLine->CLine(), intersectingPts );
+            HullIntersection( obstacleHull, aLine->CLine(), intersectingPts );
 
             for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
-                updateNearest( ip.p, obstacle.m_item, obstacleHull, true );
+                updateNearest( ip, obstacle.m_item, obstacleHull, true );
 
             if( aLine->EndsWithVia() )
             {
@@ -385,19 +394,21 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                     viaClearance = holeToHole;
 
                 obstacleHull = obstacle.m_item->Hull( viaClearance + PNS_HULL_MARGIN, 0, layer );
-                debugDecorator->AddLine( obstacleHull, 5 );
+                //debugDecorator->AddLine( obstacleHull, 5 );
 
                 intersectingPts.clear();
-                obstacleHull.Intersect( aLine->CLine(), intersectingPts );
+                HullIntersection( obstacleHull, aLine->CLine(), intersectingPts );
 
                 for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
-                    updateNearest( ip.p, obstacle.m_item, obstacleHull, true );
+                    updateNearest( ip, obstacle.m_item, obstacleHull, true );
             }
         }
     }
 
     if( nearest.m_distFirst == INT_MAX )
         nearest.m_item = obstacleList[0].m_item;
+
+    debugDecorator->AddLine( nearest.m_hull, 2, 60000, "obstacle-nearest-hull" );
 
     return nearest;
 }
