@@ -38,7 +38,7 @@
 #define PROJECT_VAR_NAME            wxT( "KIPRJMOD" )
 
 /// default name for nameless projects
-#define NAMELESS_PROJECT wxT( "noname" )
+#define NAMELESS_PROJECT _( "untitled" )
 
 class wxConfigBase;
 class PARAM_CFG;

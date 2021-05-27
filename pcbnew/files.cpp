@@ -421,7 +421,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
         wxFileName::SplitPath( GetBoard()->GetFileName(), nullptr, nullptr, &orig_name, nullptr );
 
         if( orig_name.IsEmpty() )
-            orig_name = _( "noname" );
+            orig_name = NAMELESS_PROJECT;
 
         wxFileName savePath( Prj().GetProjectFullName() );
 
@@ -1147,7 +1147,7 @@ bool PCB_EDIT_FRAME::doAutoSave()
 
     if( GetBoard()->GetFileName().IsEmpty() )
     {
-        tmpFileName = wxFileName( PATHS::GetDefaultUserProjectsPath(), wxT( "noname" ),
+        tmpFileName = wxFileName( PATHS::GetDefaultUserProjectsPath(), NAMELESS_PROJECT,
                                   KiCadPcbFileExtension );
         GetBoard()->SetFileName( tmpFileName.GetFullPath() );
     }
