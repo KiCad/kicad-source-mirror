@@ -203,5 +203,5 @@ bool SEG::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
 
 bool SEG::Contains( const VECTOR2I& aP ) const
 {
-    return SquaredDistance( aP ) <= 1;       // 1 * 1 to be pedantic
+    return Distance( aP ) <= 1;       // 1 * 1 to be pedantic
 }
