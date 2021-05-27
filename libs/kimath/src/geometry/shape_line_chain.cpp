@@ -749,8 +749,9 @@ int SHAPE_LINE_CHAIN::Intersect( const SEG& aSeg, INTERSECTIONS& aIp ) const
         if( p )
         {
             INTERSECTION is;
-            is.our = CSegment( s );
-            is.their = aSeg;
+            is.valid = true;
+            is.index_our = s;
+            is.is_corner_our = is.is_corner_their = false;
             is.p = *p;
             aIp.push_back( is );
         }
@@ -772,16 +773,10 @@ static inline void addIntersection( SHAPE_LINE_CHAIN::INTERSECTIONS& aIps, int a
 
     const auto& last = aIps.back();
 
-    if( ( (last.our.Index() + 1) % aPc) == aP.our.Index() && last.p == aP.p )
-        return;
-
-    if( last.our.Index() == aP.our.Index() && last.p == aP.p )
-        return;
-
     aIps.push_back( aP );
 }
 
-int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp ) const
+int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp, bool aExcludeColinearAndTouching ) const
 {
     BOX2I bb_other = aChain.BBox();
 
@@ -798,27 +793,37 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
             const SEG& b = aChain.CSegment( s2 );
             INTERSECTION is;
 
-            if( a.Collinear( b ) )
-            {
-                is.our = a;
-                is.their = b;
+            is.index_our = s1;
+            is.index_their = s2;
+            is.is_corner_our = false;
+            is.is_corner_their = false;
+            is.valid = true;
 
-                if( a.Contains( b.A ) ) { is.p = b.A; addIntersection(aIp, PointCount(), is); }
-                if( a.Contains( b.B ) ) { is.p = b.B; addIntersection(aIp, PointCount(), is); }
-                if( b.Contains( a.A ) ) { is.p = a.A; addIntersection(aIp, PointCount(), is); }
-                if( b.Contains( a.B ) ) { is.p = a.B; addIntersection(aIp, PointCount(), is); }
+            OPT_VECTOR2I p = a.Intersect( b );
+
+            bool coll = a.Collinear( b );
+
+            if( coll && ! aExcludeColinearAndTouching )
+            {
+                if( a.Contains( b.A ) ) { is.p = b.A; is.is_corner_their = true; addIntersection(aIp, PointCount(), is); }
+                if( a.Contains( b.B ) ) { is.p = b.B; is.index_their++; is.is_corner_their = true; addIntersection(aIp, PointCount(), is); }
+                if( b.Contains( a.A ) ) { is.p = a.A; is.is_corner_our = true; addIntersection(aIp, PointCount(), is); }
+                if( b.Contains( a.B ) ) { is.p = a.B; is.index_our++; is.is_corner_our = true; addIntersection(aIp, PointCount(), is); }
             }
-            else
+            else if( p )
             {
-                OPT_VECTOR2I p = a.Intersect( b );
+                is.p = *p;
+                is.is_corner_our = false;
+                is.is_corner_their = false;
 
-                if( p )
-                {
-                    is.p = *p;
-                    is.our = a;
-                    is.their = b;
-                    addIntersection(aIp, PointCount(), is);
-                }
+                int distA = ( b.A - *p ).EuclideanNorm();
+                int distB = ( b.B - *p ).EuclideanNorm();
+
+                if ( p == a.A ) { is.is_corner_our = true; }
+                if ( p == a.B ) { is.is_corner_our = true; is.index_our++; }
+                if ( p == b.A ) { is.is_corner_their = true; }
+                if ( p == b.B ) { is.is_corner_their = true; is.index_their++; }
+                addIntersection(aIp, PointCount(), is);
             }
         }
     }
@@ -968,8 +973,8 @@ const OPT<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersecting() c
             if( s1 + 1 != s2 && CSegment( s1 ).Contains( s2a ) )
             {
                 INTERSECTION is;
-                is.our = CSegment( s1 );
-                is.their = CSegment( s2 );
+                is.index_our = s1;
+                is.index_their = s2;
                 is.p = s2a;
                 return is;
             }
@@ -980,8 +985,8 @@ const OPT<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersecting() c
                      !( IsClosed() && s1 == 0 && s2 == SegmentCount()-1 ) )
             {
                 INTERSECTION is;
-                is.our = CSegment( s1 );
-                is.their = CSegment( s2 );
+                is.index_our = s1;
+                is.index_their = s2;
                 is.p = s2b;
                 return is;
             }
@@ -992,8 +997,8 @@ const OPT<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersecting() c
                 if( p )
                 {
                     INTERSECTION is;
-                    is.our = CSegment( s1 );
-                    is.their = CSegment( s2 );
+                    is.index_our = s1;
+                    is.index_their = s2;
                     is.p = *p;
                     return is;
                 }

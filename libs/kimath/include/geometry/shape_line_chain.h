@@ -57,12 +57,20 @@ public:
      */
     struct INTERSECTION
     {
-        /// segment belonging from the (this) argument of Intersect()
-        SEG our;
-        /// segment belonging from the aOther argument of Intersect()
-        SEG their;
         /// point of intersection between our and their.
         VECTOR2I p;
+        /// index of the intersecting corner/segment in the 'our' (== this) line
+        int index_our;
+        /// index of the intersecting corner/segment in the 'their' (Intersect() method parameter) line
+        int index_their;
+        /// when true, the corner [index_our] of the 'our' line lies exactly on 'their' line
+        bool is_corner_our;
+        /// when true, the corner [index_their] of the 'their' line lies exactly on 'our' line.
+        /// Note that when both is_corner_our and is_corner_their are set, the line chains touch with with corners
+        bool is_corner_their;
+        /// auxillary flag to avoid copying intersection info to intersection refining code, used by the refining
+        /// code (e.g. hull handling stuff in the P&S) to reject false intersection points.
+        bool valid;
     };
 
 
@@ -593,7 +601,7 @@ public:
      * sorted with increasing path lengths from the starting point of aChain.
      * @return number of intersections found
      */
-    int Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp ) const;
+    int Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp, bool aExcludeColinearAndTouching = false ) const;
 
     /**
      * Function PathLength()
