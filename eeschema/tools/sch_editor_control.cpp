@@ -1174,13 +1174,12 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
     List->ReversePickersListOrder();
     m_frame->PushCommandToRedoList( List );
 
-    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    selTool->RebuildSelection();
-
     m_frame->SetSheetNumberAndCount();
     m_frame->TestDanglingEnds();
-
     m_frame->OnPageSettingsChange();
+
+    m_toolMgr->GetTool<EE_SELECTION_TOOL>()->RebuildSelection();
+
     m_frame->SyncView();
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();
@@ -1207,13 +1206,12 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
     list->ReversePickersListOrder();
     m_frame->PushCommandToUndoList( list );
 
-    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    selTool->RebuildSelection();
-
     m_frame->SetSheetNumberAndCount();
     m_frame->TestDanglingEnds();
-
     m_frame->OnPageSettingsChange();
+
+    m_toolMgr->GetTool<EE_SELECTION_TOOL>()->RebuildSelection();
+
     m_frame->SyncView();
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();
