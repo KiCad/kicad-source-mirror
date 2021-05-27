@@ -65,6 +65,7 @@ add_executable( test_pns
     ../qa_utils/utility_program.cpp
     ../qa_utils/mocks.cpp
     ../../common/base_units.cpp
+    playground.cpp
   )
 
 # Pcbnew tests, so pretend to be pcbnew (for units, etc)

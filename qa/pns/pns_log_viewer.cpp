@@ -27,8 +27,6 @@
 
 #include <wx/clipbrd.h>
 
-#include <pcb_painter.h>
-#include <pcb_test_frame.h>
 #include <qa_utils/utility_registry.h>
 #include <pgm_base.h>
 
@@ -40,13 +38,9 @@
 #include "router/pns_diff_pair.h"
 #include "router/pns_utils.h"
 
-#include "pns_log_viewer_frame_base.h"
+#include "pns_log_viewer_frame.h"
 
 #include "qa/drc_proto/drc_proto.h"
-
-#define ID_LIST_COPY 10001
-#define ID_LIST_SHOW_ALL 10002
-#define ID_LIST_SHOW_NONE 10003
 
 #define TOM_EXTRA_DEBUG
 
@@ -85,7 +79,7 @@ public:
     {
         for( int i = 0; i < aL.PointCount(); i++ )
         {
-            char msg[10];
+            char msg[1024];
             snprintf(msg, sizeof(msg), "%d", i );
             Add( aL.CPoint(i), msg, color );
         }
@@ -235,79 +229,6 @@ private:
 };
 
 
-
-
-class PNS_LOG_VIEWER_FRAME : public PNS_LOG_VIEWER_FRAME_BASE, public PCB_TEST_FRAME_BASE
-{
-public:
-    PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FRAME_BASE( frame )
-    {
-        LoadSettings();
-        createView( this, PCB_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-
-        m_viewSizer->Add( m_galPanel.get(), 1, wxEXPAND, 5 );
-
-        Layout();
-
-        Show( true );
-        Maximize();
-        Raise();
-
-        auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
-                m_galPanel->GetView()->GetPainter()->GetSettings() );
-
-        settings->SetZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE );
-
-        m_listPopupMenu = new wxMenu( wxT( "" ) );
-        m_listPopupMenu->Append( ID_LIST_COPY, wxT( "Copy selected geometry" ), wxT( "" ),
-                                 wxITEM_NORMAL );
-        m_listPopupMenu->Append( ID_LIST_SHOW_ALL, wxT( "Show all" ), wxT( "" ), wxITEM_NORMAL );
-        m_listPopupMenu->Append( ID_LIST_SHOW_NONE, wxT( "Show none" ), wxT( "" ), wxITEM_NORMAL );
-
-        m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_ITEM_CONTEXT_MENU,
-                             wxMouseEventHandler( PNS_LOG_VIEWER_FRAME::onListRightClick ), NULL,
-                             this );
-        //m_itemList->Connect(m_itemList->GetId(),wxEVT_LISTBOX,wxCommandEventHandler(PNS_LOG_VIEWER_FRAME::onListSelect),NULL,this);
-        m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_SELECTION_CHANGED,
-                             wxCommandEventHandler( PNS_LOG_VIEWER_FRAME::onListSelect ), NULL,
-                             this );
-        m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_ITEM_CHECKED,
-                             wxCommandEventHandler( PNS_LOG_VIEWER_FRAME::onListChecked ), NULL,
-                             this );
-
-        m_itemList->AppendColumn( "Type" );
-        m_itemList->AppendColumn( "Value" );
-    }
-
-    virtual ~PNS_LOG_VIEWER_FRAME() {}
-
-    void SetLogFile( PNS_LOG_FILE* aLog );
-
-private:
-    void         drawLoggedItems( int iter );
-    void         updateDumpPanel( int iter );
-    virtual void createUserTools() override;
-    void         buildListTree( wxTreeListItem item, PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* ent,
-                                int depth = 0 );
-    void         syncModel();
-    PNS_TEST_DEBUG_DECORATOR::STAGE* getCurrentStage();
-
-    virtual void onReload( wxCommandEvent& event ) override;
-    virtual void onExit( wxCommandEvent& event ) override;
-    virtual void onRewindScroll( wxScrollEvent& event ) override;
-    virtual void onRewindCountText( wxCommandEvent& event ) override;
-    virtual void onListRightClick( wxMouseEvent& event );
-    virtual void onListSelect( wxCommandEvent& event );
-    virtual void onBtnRewindLeft( wxCommandEvent& event ) override;
-    virtual void onBtnRewindRight( wxCommandEvent& event ) override;
-    virtual void onListChecked( wxCommandEvent& event );
-
-    std::shared_ptr<KIGFX::VIEW_OVERLAY>  m_overlay;
-    std::shared_ptr<PNS_LOG_FILE>         m_logFile;
-    std::shared_ptr<PNS_TEST_ENVIRONMENT> m_env;
-    int                                   m_rewindIter;
-    wxMenu*                               m_listPopupMenu;
-};
 
 
 class WX_SHAPE_TREE_ITEM_DATA : public wxClientData
