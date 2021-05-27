@@ -842,7 +842,7 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
 }
 
 
-int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP ) const
+int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP, int aIndex ) const
 {
     int sum = 0;
 
@@ -851,7 +851,21 @@ int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP ) const
         const SEG seg = CSegment( i );
         int d = seg.Distance( aP );
 
-        if( d <= 1 )
+        bool indexMatch = true;
+
+        if( aIndex >= 0 )
+        {
+            if( aIndex == SegmentCount() )
+            {
+                indexMatch = ( i == SegmentCount() - 1 );
+            }
+            else
+            {
+                indexMatch = ( i == aIndex );
+            }
+        }
+
+        if( indexMatch )
         {
             sum += ( aP - seg.A ).EuclideanNorm();
             return sum;

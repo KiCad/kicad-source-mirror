@@ -610,7 +610,7 @@ public:
      * belonging to our line.
      * @return: path length in Euclidean metric or -1 if aP does not belong to the line chain.
      */
-    int PathLength( const VECTOR2I& aP ) const;
+    int PathLength( const VECTOR2I& aP, int aIndex = -1 ) const;
 
     /**
      * Function CheckClearance()
