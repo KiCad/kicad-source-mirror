@@ -300,8 +300,9 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     if( previousSimCommand != m_simCommand )
     {
         m_simCommand.Trim();
-        updateNetlistOpts();
     }
+
+    updateNetlistOpts();
 
     return true;
 }
