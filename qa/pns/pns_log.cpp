@@ -129,8 +129,10 @@ void PNS_TEST_ENVIRONMENT::createRouter()
     m_router->SetMode( m_mode );
     m_router->SyncWorld();
     m_router->LoadSettings( new PNS::ROUTING_SETTINGS (nullptr, ""));
-    m_router->Settings().SetMode( PNS::RM_Shove );
-    m_router->Settings().SetOptimizeDraggedTrack( true );
+    m_router->Settings().SetMode( PNS::RM_Walkaround );
+    m_router->Sizes().SetTrackWidth( 250000 );
+
+    //m_router->Settings().SetOptimizeDraggedTrack( true );
 
     m_debugDecorator.Clear();
     m_iface->SetDebugDecorator( &m_debugDecorator );
@@ -305,6 +307,7 @@ void PNS_TEST_DEBUG_DECORATOR::AddPoint( VECTOR2I aP, int aColor, int aSize, con
     ent->m_width = 30000;
     ent->m_iter = m_iter;
     ent->m_name = aName;
+    ent->m_hasLabels = false;
 
     addEntry( ent );
 }
@@ -379,7 +382,6 @@ void PNS_TEST_DEBUG_DECORATOR::NewStage(const std::string& name, int iter)
 
 void PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT::IterateTree( std::function<bool(PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT*)> visitor, int depth )
 {
-    printf("LOG D:%d iter: %p\n", depth, this );
     if( ! visitor( this ) )
         return;
     

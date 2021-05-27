@@ -92,12 +92,11 @@ target_link_libraries( test_pns
     tinyspline_lib
     nanosvg
     idf3
-    unit_test_utils
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}      # must follow GITHUB
+    ${Boost_LIBRARIES}
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )
 

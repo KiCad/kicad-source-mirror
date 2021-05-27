@@ -173,6 +173,7 @@ public:
         std::vector<DEBUG_ENT*> m_children;
         int                     m_color;
         int                     m_width;
+        bool m_hasLabels = true;
         int                     m_iter;
         std::string             m_name;
         std::string             m_msg;
