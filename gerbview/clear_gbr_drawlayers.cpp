@@ -42,7 +42,7 @@ bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
     if( GetGerberLayout() == NULL )
         return false;
 
-    if( query && GetScreen()->IsModify() )
+    if( query && GetScreen()->IsContentModified() )
     {
         if( !IsOK( this, _( "Current data will be lost?" ) ) )
             return false;

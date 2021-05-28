@@ -133,7 +133,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         }
         else
         {
-            GetScreen()->SetModify();
+            GetScreen()->SetContentModified();
             HardRedraw();
             msg.Printf( _( "File \"%s\" inserted" ), filename );
             SetStatusText( msg );
@@ -237,7 +237,7 @@ bool PL_EDITOR_FRAME::LoadPageLayoutDescrFile( const wxString& aFullFileName )
 
         SetCurrentFileName( aFullFileName );
         UpdateFileHistory( aFullFileName );
-        GetScreen()->ClrModify();
+        GetScreen()->SetContentModified( false );
 
         wxFileName fn = aFullFileName;
         m_infoBar->Dismiss();
@@ -291,7 +291,7 @@ bool PL_EDITOR_FRAME::SavePageLayoutDescrFile( const wxString& aFullFileName )
         if( !wxRenameFile( tempFile.GetFullPath(), aFullFileName ) )
             return false;
 
-        GetScreen()->ClrModify();
+        GetScreen()->SetContentModified( false );
         return true;
     }
 

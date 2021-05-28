@@ -158,7 +158,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
     m_adapter->SetPreselectNode( newFootprint->GetFPID(), 0 );
 
     ClearUndoRedoList();
-    GetScreen()->ClrModify();
+    GetScreen()->SetContentModified( false );
 
     // Update the save items if needed.
     if( !is_last_fp_from_brd )

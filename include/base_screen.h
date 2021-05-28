@@ -56,9 +56,8 @@ public:
 
     void InitDataPoints( const wxSize& aPageSizeInternalUnits );
 
-    void SetModify()        { m_flagModified = true; }
-    void ClrModify()        { m_flagModified = false; }
-    bool IsModify() const   { return m_flagModified; }
+    void SetContentModified( bool aModified = true )    { m_flagModified = aModified; }
+    bool IsContentModified() const                      { return m_flagModified; }
 
     /**
      * Return the class name.

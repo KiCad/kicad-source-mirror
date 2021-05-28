@@ -350,7 +350,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
         if( !IsOK( this, msg ) )
             return false;
 
-        GetScreen()->ClrModify();    // do not prompt the user for changes
+        GetScreen()->SetContentModified( false );    // do not prompt the user for changes
 
         if( OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) ) )
         {
@@ -772,7 +772,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         if( loadedBoard->IsModified() )
             OnModify();
         else
-            GetScreen()->ClrModify();
+            GetScreen()->SetContentModified( false );
 
         if( ( pluginType == IO_MGR::LEGACY &&
               loadedBoard->GetFileFormatVersionAtLoad() < LEGACY_BOARD_FILE_VERSION ) ||
@@ -1064,7 +1064,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     if( m_infoBar->IsShown() && m_infoBar->HasCloseButton() )
         m_infoBar->Dismiss();
 
-    GetScreen()->ClrModify();
+    GetScreen()->SetContentModified( false );
     UpdateTitle();
     return true;
 }
@@ -1178,7 +1178,7 @@ bool PCB_EDIT_FRAME::doAutoSave()
 
     if( SavePcbFile( autoSaveFileName.GetFullPath(), false, false ) )
     {
-        GetScreen()->SetModify();
+        GetScreen()->SetContentModified();
         GetBoard()->SetFileName( tmpFileName.GetFullPath() );
         UpdateTitle();
         m_autoSaveState = false;

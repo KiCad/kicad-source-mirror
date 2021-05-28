@@ -180,7 +180,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
             node->m_Name = m_frame->GetLoadedFPID().GetLibItemName();
 
             // mark modified part with an asterisk
-            if( m_frame->GetScreen()->IsModify() )
+            if( m_frame->GetScreen()->IsContentModified() )
                 aVariant = node->m_Name + " *";
             else
                 aVariant = node->m_Name;
@@ -253,7 +253,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
 #endif
 
             // mark modified libs with bold font
-            if( m_frame->GetScreen()->IsModify() && !m_frame->IsCurrentFPFromBoard() )
+            if( m_frame->GetScreen()->IsContentModified() && !m_frame->IsCurrentFPFromBoard() )
                 aAttr.SetBold( true );
         }
         break;
@@ -271,7 +271,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
 #endif
 
             // mark modified part with bold font
-            if( m_frame->GetScreen()->IsModify() && !m_frame->IsCurrentFPFromBoard() )
+            if( m_frame->GetScreen()->IsContentModified() && !m_frame->IsCurrentFPFromBoard() )
                 aAttr.SetBold( true );
         }
         break;

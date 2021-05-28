@@ -158,7 +158,7 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
     newFootprint->ClearFlags();
 
     m_frame->Zoom_Automatique( false );
-    m_frame->GetScreen()->SetModify();
+    m_frame->GetScreen()->SetContentModified();
 
     // If selected from the library tree then go ahead and save it there
     if( !selected.GetLibNickname().empty() )
@@ -218,7 +218,7 @@ int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
             newFootprint->ClearFlags();
 
             m_frame->Zoom_Automatique( false );
-            m_frame->GetScreen()->SetModify();
+            m_frame->GetScreen()->SetContentModified();
 
             // If selected from the library tree then go ahead and save it there
             if( !selected.GetLibNickname().empty() )

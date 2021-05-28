@@ -750,7 +750,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
             cmp.m_Component->SetLibId( id );
             cmp.m_Component->SetLibSymbol( symbol->Flatten().release() );
             cmp.m_Screen->Append( cmp.m_Component );
-            cmp.m_Screen->SetModify();
+            cmp.m_Screen->SetContentModified();
 
             if ( m_checkBoxUpdateFields->IsChecked() )
             {

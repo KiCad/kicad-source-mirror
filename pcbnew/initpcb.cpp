@@ -58,7 +58,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
 
     // Clear undo and redo lists because we want a full deletion
     ClearUndoRedoList();
-    GetScreen()->ClrModify();
+    GetScreen()->SetContentModified( false );
 
     if( !aFinal )
     {
@@ -120,7 +120,7 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
 
     // Clear undo and redo lists because we want a full deletion
     ClearUndoRedoList();
-    GetScreen()->ClrModify();
+    GetScreen()->SetContentModified( false );
 
     BOARD* board = new BOARD;
 

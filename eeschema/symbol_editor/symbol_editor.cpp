@@ -140,7 +140,7 @@ void SYMBOL_EDIT_FRAME::updateTitle()
     if( IsSymbolFromSchematic() )
     {
         title = wxString::Format( _( "%s%s [from schematic]" ) + wxT( " \u2014 " ),
-                                     GetScreen() && GetScreen()->IsModify() ? "*" : "",
+                                     GetScreen() && GetScreen()->IsContentModified() ? "*" : "",
                                    m_reference );
     }
     else
@@ -150,7 +150,7 @@ void SYMBOL_EDIT_FRAME::updateTitle()
             bool readOnly = m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() );
 
             title = wxString::Format( wxT( "%s%s %s\u2014 " ),
-                                      GetScreen() && GetScreen()->IsModify() ? "*" : "",
+                                      GetScreen() && GetScreen()->IsContentModified() ? "*" : "",
                                       GetCurPart()->GetLibId().Format().c_str(),
                                       readOnly ? _( "[Read Only Library]" ) + wxT( " " ) : "" );
         }
@@ -253,7 +253,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConver
         return true;
     }
 
-    if( GetScreen()->IsModify() && GetCurPart() )
+    if( GetScreen()->IsContentModified() && GetCurPart() )
     {
         if( !HandleUnsavedChanges( this, _( "The current symbol has been modified.  "
                                             "Save changes?" ),
@@ -522,7 +522,7 @@ void SYMBOL_EDIT_FRAME::Save()
             else
             {
                 schframe->SaveSymbolToSchematic( *m_my_part );
-                GetScreen()->ClrModify();
+                GetScreen()->SetContentModified( false );
             }
         }
         else

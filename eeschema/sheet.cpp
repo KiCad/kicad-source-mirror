@@ -95,7 +95,7 @@ bool SCH_EDIT_FRAME::checkForNoFullyDefinedLibIds( SCH_SHEET* aSheet )
 void SCH_EDIT_FRAME::InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename )
 {
     aSheet->SetScreen( new SCH_SCREEN( &Schematic() ) );
-    aSheet->GetScreen()->SetModify();
+    aSheet->GetScreen()->SetContentModified();
     aSheet->GetScreen()->SetFileName( aNewFilename );
 }
 

@@ -210,7 +210,7 @@ bool DIALOG_PAGES_SETTINGS::TransferDataFromWindow()
 
     if( SavePageSettings() )
     {
-        m_screen->SetModify();
+        m_screen->SetContentModified();
 
         if( LocalPrjConfigChanged() )
             m_parent->SaveProjectSettings();

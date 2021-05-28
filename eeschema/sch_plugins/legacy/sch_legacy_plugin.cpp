@@ -1563,7 +1563,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
 
                 // Set the file as modified so the user can be warned.
                 if( m_rootSheet->GetScreen() )
-                    m_rootSheet->GetScreen()->SetModify();
+                    m_rootSheet->GetScreen()->SetContentModified();
             }
 
             symbol->SetUnit( unit );
@@ -1577,7 +1577,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
 
                 // Set the file as modified so the user can be warned.
                 if( m_rootSheet->GetScreen() )
-                    m_rootSheet->GetScreen()->SetModify();
+                    m_rootSheet->GetScreen()->SetContentModified();
             }
 
             symbol->SetConvert( convert );

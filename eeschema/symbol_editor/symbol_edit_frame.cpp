@@ -781,7 +781,7 @@ SYMBOL_LIBRARY_MANAGER& SYMBOL_EDIT_FRAME::GetLibManager()
 
 void SYMBOL_EDIT_FRAME::OnModify()
 {
-    GetScreen()->SetModify();
+    GetScreen()->SetContentModified();
     storeCurrentPart();
 
     m_treePane->GetLibTree()->RefreshLibTree();
@@ -1043,7 +1043,7 @@ bool SYMBOL_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxStr
 
 void SYMBOL_EDIT_FRAME::storeCurrentPart()
 {
-    if( m_my_part && !GetCurLib().IsEmpty() && GetScreen()->IsModify() )
+    if( m_my_part && !GetCurLib().IsEmpty() && GetScreen()->IsContentModified() )
         m_libMgr->UpdatePart( m_my_part, GetCurLib() ); // UpdatePart() makes a copy
 }
 
@@ -1235,7 +1235,7 @@ bool SYMBOL_EDIT_FRAME::IsContentModified() const
     wxCHECK( m_libMgr, false );
 
     // Test if the currently edited part is modified
-    if( GetScreen() && GetScreen()->IsModify() && GetCurPart() )
+    if( GetScreen() && GetScreen()->IsContentModified() && GetCurPart() )
         return true;
 
     // Test if any library has been modified

@@ -330,7 +330,7 @@ bool PL_EDITOR_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 
 bool PL_EDITOR_FRAME::IsContentModified() const
 {
-    return GetScreen() && GetScreen()->IsModify();
+    return GetScreen() && GetScreen()->IsContentModified();
 }
 
 
@@ -872,7 +872,7 @@ DS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
 void PL_EDITOR_FRAME::OnNewPageLayout()
 {
     ClearUndoRedoList();
-    GetScreen()->ClrModify();
+    GetScreen()->SetContentModified( false );
     GetCanvas()->DisplayWorksheet();
 
     m_propertiesPagelayout->CopyPrmsFromItemToPanel( nullptr );

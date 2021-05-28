@@ -449,14 +449,14 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
 bool PCB_EDIT_FRAME::IsContentModified() const
 {
-    return GetScreen() && GetScreen()->IsModify();
+    return GetScreen() && GetScreen()->IsContentModified();
 }
 
 
 bool PCB_EDIT_FRAME::isAutoSaveRequired() const
 {
     if( GetScreen() )
-        return GetScreen()->IsModify();
+        return GetScreen()->IsContentModified();
 
     return false;
 }

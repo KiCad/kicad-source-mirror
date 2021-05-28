@@ -318,7 +318,7 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 
 bool FOOTPRINT_EDIT_FRAME::IsContentModified() const
 {
-    return GetScreen() && GetScreen()->IsModify() && GetBoard() && GetBoard()->GetFirstFootprint();
+    return GetScreen() && GetScreen()->IsContentModified() && GetBoard() && GetBoard()->GetFirstFootprint();
 }
 
 
@@ -408,7 +408,7 @@ void FOOTPRINT_EDIT_FRAME::ClearModify()
     if( GetBoard()->GetFirstFootprint() )
         m_footprintNameWhenLoaded = GetBoard()->GetFirstFootprint()->GetFPID().GetLibItemName();
 
-    GetScreen()->ClrModify();
+    GetScreen()->SetContentModified( false );
 }
 
 

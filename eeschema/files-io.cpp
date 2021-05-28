@@ -188,7 +188,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
             UpdateFileHistory( schematicFileName.GetFullPath() );
         }
 
-        screen->ClrModify();
+        screen->SetContentModified( false );
         UpdateTitle();
 
         msg.Printf( _( "File \"%s\" saved." ),  screen->GetFileName() );
@@ -379,7 +379,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( is_new )
     {
         // mark new, unsaved file as modified.
-        GetScreen()->SetModify();
+        GetScreen()->SetContentModified();
         GetScreen()->SetFileName( fullFileName );
     }
     else
@@ -1050,7 +1050,7 @@ bool SCH_EDIT_FRAME::doAutoSave()
     for( size_t i = 0; i < screens.GetCount(); i++ )
     {
         // Only create auto save files for the schematics that have been modified.
-        if( !screens.GetScreen( i )->IsModify() )
+        if( !screens.GetScreen( i )->IsContentModified() )
             continue;
 
         tmpFileName = fn = screens.GetScreen( i )->GetFileName();
@@ -1061,7 +1061,7 @@ bool SCH_EDIT_FRAME::doAutoSave()
         screens.GetScreen( i )->SetFileName( fn.GetFullPath() );
 
         if( SaveEEFile( screens.GetSheet( i ), false ) )
-            screens.GetScreen( i )->SetModify();
+            screens.GetScreen( i )->SetContentModified();
         else
             autoSaveOk = false;
 
@@ -1145,7 +1145,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             Schematic().Root().SetFileName( newfilename.GetFullPath() );
             GetScreen()->SetFileName( newfilename.GetFullPath() );
-            GetScreen()->SetModify();
+            GetScreen()->SetContentModified();
 
             // Only fix junctions for CADSTAR importer for now as it may cause issues with
             // other importers
@@ -1194,7 +1194,7 @@ bool SCH_EDIT_FRAME::AskToSaveChanges()
     // Save any currently open and modified project files.
     for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
     {
-        if( screen->IsModify() )
+        if( screen->IsContentModified() )
         {
             if( !HandleUnsavedChanges( this, _( "The current schematic has been modified.  "
                                                 "Save changes?" ),

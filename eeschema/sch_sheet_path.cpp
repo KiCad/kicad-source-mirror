@@ -566,7 +566,7 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity )
         for( SCH_SHEET* sheet : badSheets )
         {
             m_currentSheetPath.LastScreen()->Remove( sheet );
-            m_currentSheetPath.LastScreen()->SetModify();
+            m_currentSheetPath.LastScreen()->SetContentModified();
         }
     }
 
@@ -622,7 +622,7 @@ bool SCH_SHEET_LIST::IsModified() const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {
-        if( sheet.LastScreen() && sheet.LastScreen()->IsModify() )
+        if( sheet.LastScreen() && sheet.LastScreen()->IsContentModified() )
             return true;
     }
 
@@ -635,7 +635,7 @@ void SCH_SHEET_LIST::ClearModifyStatus()
     for( const SCH_SHEET_PATH& sheet : *this )
     {
         if( sheet.LastScreen() )
-            sheet.LastScreen()->ClrModify();
+            sheet.LastScreen()->SetContentModified( false );
     }
 }
 

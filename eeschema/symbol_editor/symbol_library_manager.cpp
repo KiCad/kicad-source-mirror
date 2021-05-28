@@ -298,7 +298,7 @@ bool SYMBOL_LIBRARY_MANAGER::ClearLibraryModified( const wxString& aLibrary ) co
         SCH_SCREEN* screen = partBuf->GetScreen();
 
         if( screen )
-            screen->ClrModify();
+            screen->SetContentModified( false );
     }
 
     return true;
@@ -316,7 +316,7 @@ bool SYMBOL_LIBRARY_MANAGER::ClearPartModified( const wxString& aAlias,
     auto partBuf = libI->second.GetBuffer( aAlias );
     wxCHECK( partBuf, false );
 
-    partBuf->GetScreen()->ClrModify();
+    partBuf->GetScreen()->SetContentModified( false );
     return true;
 }
 
@@ -456,7 +456,7 @@ bool SYMBOL_LIBRARY_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibra
         wxCHECK( bufferedPart, false );
 
         *bufferedPart = *aPart;
-        partBuf->GetScreen()->SetModify();
+        partBuf->GetScreen()->SetContentModified();
     }
     else              // New symbol
     {
@@ -466,7 +466,7 @@ bool SYMBOL_LIBRARY_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibra
 
         SCH_SCREEN* screen = new SCH_SCREEN;
         libBuf.CreateBuffer( partCopy, screen );
-        screen->SetModify();
+        screen->SetContentModified();
     }
 
     return true;
@@ -863,7 +863,7 @@ void SYMBOL_LIBRARY_MANAGER::PART_BUFFER::SetOriginal( LIB_PART* aPart )
 
 bool SYMBOL_LIBRARY_MANAGER::PART_BUFFER::IsModified() const
 {
-    return m_screen && m_screen->IsModify();
+    return m_screen && m_screen->IsContentModified();
 }
 
 

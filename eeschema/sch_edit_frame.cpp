@@ -782,7 +782,7 @@ void SCH_EDIT_FRAME::OnModify()
     if( !GetScreen() )
         return;
 
-    GetScreen()->SetModify();
+    GetScreen()->SetContentModified();
 
     if( ADVANCED_CFG::GetCfg().m_RealTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
         RecalculateConnections( NO_CLEANUP );
@@ -1217,7 +1217,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
 
     aItem->ClearFlags( IS_NEW );
 
-    aScreen->SetModify();
+    aScreen->SetContentModified();
     UpdateItem( aItem );
 
     if( !aItem->IsMoving() && aItem->IsConnectable() )

@@ -269,7 +269,7 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
                             symbol->GetLibId().GetLibItemName().wx_str(),
                             symbol->GetLibId().GetLibNickname().wx_str() );
                 aReporter.Report( msg, RPT_SEVERITY_ACTION );
-                screen->SetModify();
+                screen->SetContentModified();
             }
         }
     }

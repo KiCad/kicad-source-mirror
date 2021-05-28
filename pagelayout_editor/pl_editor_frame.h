@@ -255,7 +255,7 @@ public:
      */
     void OnModify()
     {
-        GetScreen()->SetModify();
+        GetScreen()->SetContentModified();
     }
 
     /**

@@ -296,7 +296,7 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
     // Markers are not saved in the file, no need to flag as modified.
     // TODO: Maybe we should have a listing somewhere of items that aren't saved?
     if( aItem->Type() != SCH_MARKER_T )
-        SetModify();
+        SetContentModified();
 
     Remove( aItem );
 

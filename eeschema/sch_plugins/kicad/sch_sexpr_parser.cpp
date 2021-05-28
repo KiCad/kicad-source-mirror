@@ -1912,7 +1912,7 @@ void SCH_SEXPR_PARSER::parseSchSheetInstances( SCH_SHEET* aRootSheet, SCH_SCREEN
 
                     // Set the file as modified so the user can be warned.
                     if( numReplacements > 0 )
-                        aScreen->SetModify();
+                        aScreen->SetContentModified();
 
                     NeedRIGHT();
                     break;
