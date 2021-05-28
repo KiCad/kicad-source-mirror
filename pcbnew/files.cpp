@@ -55,6 +55,8 @@
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 #include <plugins/kicad/kicad_plugin.h>
 #include <dialogs/dialog_imported_layers.h>
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
 #include "footprint_info_impl.h"
 
 #include <wx/wupdlock.h>
@@ -768,6 +770,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // we should not ask PLUGINs to do these items:
         loadedBoard->BuildListOfNets();
         ResolveDRCExclusions();
+        m_toolManager->RunAction( PCB_ACTIONS::repairBoard, true, true);
 
         if( loadedBoard->IsModified() )
             OnModify();
