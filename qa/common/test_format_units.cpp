@@ -24,6 +24,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <base_units.h>
+#include <locale_io.h>
 
 #include <algorithm>
 #include <iostream>
@@ -44,6 +45,7 @@ BOOST_FIXTURE_TEST_SUITE( UnitConversion, UnitFixture )
  */
 BOOST_AUTO_TEST_CASE( wxPointUnitFormat )
 {
+    LOCALE_IO toggle;
     std::string str = FormatInternalUnits( wxPoint( 123456, 52525252 ) );
     std::string strZero = FormatInternalUnits( wxPoint( 0, 0 ) );
     std::string strNeg = FormatInternalUnits( wxPoint( -123456, -52525252 ) );
