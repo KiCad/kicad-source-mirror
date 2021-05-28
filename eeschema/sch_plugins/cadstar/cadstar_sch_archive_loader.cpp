@@ -266,7 +266,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheets()
         ReplaceIllegalFileNameChars( &filename );
         filename += wxT( "." ) + KiCadSchematicFileExtension;
 
-        wxFileName fn( filename );
+        wxFileName fn( m_schematic->Prj().GetProjectPath() + filename );
         m_rootSheet->GetScreen()->SetFileName( fn.GetFullPath() );
 
         m_sheetMap.insert( { rootSheetID, m_rootSheet } );
@@ -2035,7 +2035,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets(
 
     filenameField.SetText( filename );
 
-    wxFileName fn( filename );
+    wxFileName fn( m_schematic->Prj().GetProjectPath() + filename );
     sheet->GetScreen()->SetFileName( fn.GetFullPath() );
     aParentSheet.Last()->GetScreen()->Append( sheet );
     instance.push_back( sheet );
