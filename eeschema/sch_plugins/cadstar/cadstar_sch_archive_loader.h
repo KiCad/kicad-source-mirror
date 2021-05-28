@@ -210,6 +210,10 @@ private:
     ALIGNMENT        rotate180( const ALIGNMENT& aCadstarAlignment );
 
     //General Graphical manipulation functions
+
+    LIB_PART* getScaledLibPart( const LIB_PART* aPart, long long aScalingFactorNumerator,
+                                long long aScalingFactorDenominator );
+
     std::pair<wxPoint, wxSize> getFigureExtentsKiCad( const FIGURE& aCadstarFigure );
 
     wxPoint getKiCadPoint( wxPoint aCadstarPoint );

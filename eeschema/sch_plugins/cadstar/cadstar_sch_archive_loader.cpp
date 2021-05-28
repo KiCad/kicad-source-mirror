@@ -427,8 +427,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 loadSymDefIntoLibrary( sym.SymdefID, &part, sym.GateID, kiPart );
             }
 
+            LIB_PART* scaledPart = getScaledLibPart( kiPart, sym.ScaleRatioNumerator,
+                                                     sym.ScaleRatioDenominator );
+
             double         symOrientDeciDeg = 0.0;
-            SCH_COMPONENT* component = loadSchematicSymbol( sym, *kiPart, symOrientDeciDeg );
+            SCH_COMPONENT* component = loadSchematicSymbol( sym, *scaledPart, symOrientDeciDeg );
+
+            delete scaledPart;
 
             if( copy )
                 delete kiPart;
@@ -584,9 +589,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     wxASSERT( kiPart->GetValueField().GetText() == symbolInstanceNetName );
                 }
 
-                double returnedOrientation = 0.0;
-                SCH_COMPONENT* component = loadSchematicSymbol( sym, *kiPart, returnedOrientation );
+                LIB_PART* scaledPart = getScaledLibPart( kiPart, sym.ScaleRatioNumerator,
+                                                         sym.ScaleRatioDenominator );
+
+                double returnedOrient = 0.0;
+                SCH_COMPONENT* component = loadSchematicSymbol( sym, *scaledPart, returnedOrient );
                 m_powerSymMap.insert( { sym.ID, component } );
+
+                delete scaledPart;
             }
             else if( sym.SymbolVariant.Type == SYMBOLVARIANT::TYPE::SIGNALREF )
             {
@@ -641,8 +651,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
             m_reporter->Report( wxString::Format( _( "Symbol '%s' is scaled in the original "
                                                      "CADSTAR schematic but this is not supported "
-                                                     "in KiCad. The symbol was loaded with 1:1 "
-                                                     "scale and may require manual fixing." ),
+                                                     "in KiCad. When the symbol is reloaded from "
+                                                     "the library, it will revert to the original "
+                                                     "1:1 scale." ),
                                                   symbolName,
                                                   sym.PartRef.RefID ),
                                 RPT_SEVERITY_ERROR );
@@ -1806,7 +1817,11 @@ CADSTAR_SCH_ARCHIVE_LOADER::POINT CADSTAR_SCH_ARCHIVE_LOADER::getLocationOfNetEl
         wxPoint libpinPosition =
                 Library.SymbolDefinitions.at( symdefid ).Terminals.at( termid ).Position;
         wxPoint libOrigin   = Library.SymbolDefinitions.at( symdefid ).Origin;
-        wxPoint pinOffset   = libpinPosition - libOrigin;
+
+        wxPoint pinOffset = libpinPosition - libOrigin;
+        pinOffset.x = ( pinOffset.x * sym.ScaleRatioNumerator ) / sym.ScaleRatioDenominator;
+        pinOffset.y = ( pinOffset.y * sym.ScaleRatioNumerator ) / sym.ScaleRatioDenominator;
+
         wxPoint pinPosition = symbolOrigin + pinOffset;
 
         double compAngleDeciDeg = getAngleTenthDegree( sym.OrientAngle );
@@ -2621,7 +2636,89 @@ SCH_TEXT* CADSTAR_SCH_ARCHIVE_LOADER::getKiCadSchText( const TEXT& aCadstarTextE
 }
 
 
-std::pair<wxPoint, wxSize> CADSTAR_SCH_ARCHIVE_LOADER::getFigureExtentsKiCad(
+LIB_PART* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_PART* aPart,
+                                                        long long aScalingFactorNumerator,
+                                                        long long aScalingFactorDenominator )
+{
+    LIB_PART* retval = new LIB_PART( *aPart );
+
+    if( aScalingFactorNumerator == aScalingFactorDenominator )
+        return retval; // 1:1 scale, nothing to do
+
+    auto scaleLen =
+        [&]( int aLength ) -> int
+        {
+            return( aLength * aScalingFactorNumerator ) / aScalingFactorDenominator;
+        };
+
+    auto scalePt =
+        [&]( wxPoint aCoord ) -> wxPoint
+        {
+            return wxPoint( scaleLen( aCoord.x ), scaleLen( aCoord.y ) );
+        };
+
+    auto scaleSize =
+        [&]( wxSize aSize ) -> wxSize
+        {
+            return wxSize( scaleLen( aSize.x ), scaleLen( aSize.y ) );
+        };
+
+    LIB_ITEMS_CONTAINER& items = retval->GetDrawItems();
+
+    for( auto& item : items )
+    {
+        switch( item.Type() )
+        {
+        case KICAD_T::LIB_ARC_T:
+        {
+            LIB_ARC& arc = static_cast<LIB_ARC&>( item );
+            arc.SetPosition( scalePt( arc.GetPosition() ) );
+            arc.SetStart( scalePt( arc.GetStart() ) );
+            arc.SetEnd( scalePt( arc.GetEnd() ) );
+            arc.CalcRadiusAngles(); // Maybe not needed?
+        }
+        break;
+
+        case KICAD_T::LIB_POLYLINE_T:
+        {
+            LIB_POLYLINE& poly = static_cast<LIB_POLYLINE&>( item );
+
+            std::vector<wxPoint> originalPts = poly.GetPolyPoints();
+            poly.ClearPoints();
+
+            for( wxPoint& pt : originalPts )
+                poly.AddPoint( scalePt( pt ) );
+        }
+        break;
+
+        case KICAD_T::LIB_PIN_T:
+        {
+            LIB_PIN& pin = static_cast<LIB_PIN&>( item );
+
+            pin.SetPosition( scalePt( pin.GetPosition() ) );
+            pin.SetLength( scaleLen( pin.GetLength() ) );
+        }
+        break;
+
+        case KICAD_T::LIB_TEXT_T:
+        {
+            LIB_TEXT& txt = static_cast<LIB_TEXT&>( item );
+
+            txt.SetPosition( scalePt( txt.GetPosition() ) );
+            txt.SetTextSize( scaleSize( txt.GetTextSize() ) );
+        }
+        break;
+
+        default: break;
+        }
+
+    }
+
+    return retval;
+}
+
+std::pair<wxPoint, wxSize>
+CADSTAR_SCH_ARCHIVE_LOADER::getFigureExtentsKiCad(
         const FIGURE& aCadstarFigure )
 {
     wxPoint upperLeft( Assignments.Settings.DesignLimit.x, 0 );
