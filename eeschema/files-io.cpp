@@ -1152,7 +1152,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             // other importers
             if( fileType == SCH_IO_MGR::SCH_CADSTAR_ARCHIVE )
             {
-                FixupJunctions( true );
+                FixupJunctions();
                 RecalculateConnections( GLOBAL_CLEANUP );
             }
 

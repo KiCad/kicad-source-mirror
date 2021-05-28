@@ -1498,17 +1498,17 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 }
 
 
-void SCH_EDIT_FRAME::FixupJunctions( bool aAddNeededJunctions )
+void SCH_EDIT_FRAME::FixupJunctions()
 {
     // Save the current sheet, to retrieve it later
     SCH_SHEET_PATH oldsheetpath = GetCurrentSheet();
-
-    bool modified = false;
 
     SCH_SHEET_LIST sheetList = Schematic().GetSheets();
 
     for( const SCH_SHEET_PATH& sheet : sheetList )
     {
+        size_t num_undos = m_undoList.m_CommandsList.size();
+
         // We require a set here to avoid adding multiple junctions to the same spot
         std::set<wxPoint> junctions;
 
@@ -1517,39 +1517,18 @@ void SCH_EDIT_FRAME::FixupJunctions( bool aAddNeededJunctions )
 
         SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
 
-        for( auto aItem : screen->Items().OfType( SCH_COMPONENT_T ) )
-        {
-            auto cmp = static_cast<SCH_COMPONENT*>( aItem );
+        EE_SELECTION allItems;
 
-            for( const SCH_PIN* pin : cmp->GetPins( &sheet ) )
-            {
-                auto pos = pin->GetPosition();
+        for( auto item : screen->Items() )
+            allItems.Add( item );
 
-                // Test if a _new_ junction is needed, and add it if missing
-                if( screen->IsJunctionNeeded( pos, true ) )
-                    junctions.insert( pos );
-            }
-        }
+        m_toolManager->RunAction( EE_ACTIONS::addNeededJunctions, true, &allItems );
 
-        for( const wxPoint& pos : junctions )
-            AddJunction( screen, pos, false, false );
-
-        if( aAddNeededJunctions )
-        {
-            EE_SELECTION allItems;
-
-            for( auto item : screen->Items() )
-                allItems.Add( item );
-
-            m_toolManager->RunAction( EE_ACTIONS::addNeededJunctions, true, &allItems );
-        }
-
-        if( junctions.size() )
-            modified = true;
+        // Check if we modified anything during this routine
+        // Needs to happen for every sheet to set the proper modified flag
+        if( m_undoList.m_CommandsList.size() > num_undos )
+            OnModify();
     }
-
-    if( modified )
-        OnModify();
 
     // Reselect the initial sheet:
     SetCurrentSheet( oldsheetpath );
