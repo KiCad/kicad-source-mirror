@@ -154,13 +154,13 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
 
     // Colors are built from the colorRefs() table (size NBCOLORS).
     // The look is better when colorRefs() order is displayed in a grid matrix
-    // of 6 row and 5 columns, first filling a row, and after the next column.
+    // of 7 row and 5 columns, first filling a row, and after the next column.
     // But the wxFlexGrid used here must be filled by columns, then next row
     // the best interval colorRefs() from a matrix row to the next row is 6
     // So when have to reorder the index used to explore colorRefs()
     int grid_col = 0;
     int grid_row = 0;
-    int table_row_count = 6;
+    int table_row_count = 7;
 
     wxSize  swatchSize = ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );
     wxSize  checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
@@ -204,13 +204,13 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
 
         for( int jj = 0; jj < NBCOLORS; ++jj, grid_col++ )
         {
-            if( grid_col*table_row_count >= NBCOLORS )
+            if( grid_col * table_row_count >= NBCOLORS )
             {   // the current grid row is filled, and we must fill the next grid row
                 grid_col = 0;
                 grid_row++;
             }
 
-            int     ii = grid_row + (grid_col*table_row_count); // The index in colorRefs()
+            int     ii = grid_row + ( grid_col * table_row_count ); // The index in colorRefs()
             int     butt_ID = ID_COLOR_BLACK + ii;
             COLOR4D buttcolor = COLOR4D( colorRefs()[ii].m_Numcolor );
 

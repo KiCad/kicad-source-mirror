@@ -44,30 +44,35 @@ const StructColors* colorRefs()
         { 194,  194, 194, LIGHTGRAY,     TS( "Gray 3" ),    WHITE             },
         { 255,  255, 255, WHITE,         TS( "White" ),     WHITE             },
         { 194,  255, 255, LIGHTYELLOW,   TS( "L.Yellow" ),  WHITE             },
+        { 191,  229, 255, LIGHTERORANGE, TS( "L.Orange" ),  WHITE             },
         { 72,   0,   0,   DARKBLUE,      TS( "Blue 1" ),    BLUE              },
         { 0,    72,  0,   DARKGREEN,     TS( "Green 1" ),   GREEN             },
         { 72,   72,  0,   DARKCYAN,      TS( "Cyan 1" ),    CYAN              },
         { 0,    0,   72,  DARKRED,       TS( "Red 1" ),     RED               },
         { 72,   0,   72,  DARKMAGENTA,   TS( "Magenta 1" ), MAGENTA           },
         { 0,    72,  72,  DARKBROWN,     TS( "Brown 1" ),   BROWN             },
+        { 0,    77,  128, DARKORANGE,    TS( "Orange 1" ),  ORANGE            },
         { 132,  0,   0,   BLUE,          TS( "Blue 2" ),    LIGHTBLUE         },
         { 0,    132, 0,   GREEN,         TS( "Green 2" ),   LIGHTGREEN        },
         { 132,  132, 0,   CYAN,          TS( "Cyan 2" ),    LIGHTCYAN         },
         { 0,    0,   132, RED,           TS( "Red 2" ),     LIGHTRED          },
         { 132,  0,   132, MAGENTA,       TS( "Magenta 2" ), LIGHTMAGENTA      },
         { 0,    132, 132, BROWN,         TS( "Brown 2" ),   YELLOW            },
+        { 0,    102, 204, ORANGE,        TS( "Orange 2" ),  LIGHTORANGE       },
         { 194,  0,   0,   LIGHTBLUE,     TS( "Blue 3" ),    PUREBLUE,         },
         { 0,    194, 0,   LIGHTGREEN,    TS( "Green 3" ),   PUREGREEN         },
         { 194,  194, 0,   LIGHTCYAN,     TS( "Cyan 3" ),    PURECYAN          },
         { 0,    0,   194, LIGHTRED,      TS( "Red 3" ),     PURERED           },
         { 194,  0,   194, LIGHTMAGENTA,  TS( "Magenta 3" ), PUREMAGENTA       },
         { 0,    194, 194, YELLOW,        TS( "Yellow 3" ),  PUREYELLOW        },
+        { 0,    133, 221, LIGHTORANGE,   TS( "Orange 3" ),  PUREORANGE        },
         { 255,  0,   0,   PUREBLUE,      TS( "Blue 4" ),    WHITE             },
         { 0,    255, 0,   PUREGREEN,     TS( "Green 4" ),   WHITE             },
         { 255,  255, 0,   PURECYAN,      TS( "Cyan 4" ),    WHITE             },
         { 0,    0,   255, PURERED,       TS( "Red 4" ),     WHITE             },
         { 255,  0,   255, PUREMAGENTA,   TS( "Magenta 4" ), WHITE             },
         { 0,    255, 255, PUREYELLOW,    TS( "Yellow 4" ),  WHITE             },
+        { 0,    153, 255, PUREORANGE,    TS( "Orange 4" ),  WHITE             },
     };
     return s_ColorRefs;
 }
@@ -81,9 +86,23 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
         return;
     }
 
-    r = colorRefs()[aColor].m_Red / 255.0;
-    g = colorRefs()[aColor].m_Green / 255.0;
-    b = colorRefs()[aColor].m_Blue / 255.0;
+    int candidate = 0;
+
+    for( ; candidate < NBCOLORS; ++candidate )
+    {
+        if( colorRefs()[candidate].m_Numcolor == aColor )
+            break;
+    }
+
+    if( candidate >= NBCOLORS )
+    {
+        *this = COLOR4D::UNSPECIFIED;
+        return;
+    }
+
+    r = colorRefs()[candidate].m_Red / 255.0;
+    g = colorRefs()[candidate].m_Green / 255.0;
+    b = colorRefs()[candidate].m_Blue / 255.0;
     a = 1.0;
 }
 

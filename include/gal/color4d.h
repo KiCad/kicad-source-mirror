@@ -71,6 +71,11 @@ enum EDA_COLOR_T
     PURERED,
     PUREMAGENTA,
     PUREYELLOW,
+    LIGHTERORANGE,
+    DARKORANGE,
+    ORANGE,
+    LIGHTORANGE,
+    PUREORANGE,
     NBCOLORS,                    ///< Number of colors
     HIGHLIGHT_FLAG =  ( 1<<19 ),
     MASKCOLOR      =    31       ///< mask for color index into colorRefs()[]
