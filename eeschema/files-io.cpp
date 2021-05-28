@@ -58,6 +58,7 @@
 #include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <wx/ffile.h>
+#include <tools/ee_actions.h>
 #include <tools/ee_inspection_tool.h>
 #include <paths.h>
 
@@ -1150,7 +1151,10 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             // Only fix junctions for CADSTAR importer for now as it may cause issues with
             // other importers
             if( fileType == SCH_IO_MGR::SCH_CADSTAR_ARCHIVE )
-                FixupJunctions();
+            {
+                FixupJunctions( true );
+                RecalculateConnections( GLOBAL_CLEANUP );
+            }
 
             // Only perform the dangling end test on root sheet.
             GetScreen()->TestDanglingEnds();

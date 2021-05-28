@@ -1498,7 +1498,7 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 }
 
 
-void SCH_EDIT_FRAME::FixupJunctions()
+void SCH_EDIT_FRAME::FixupJunctions( bool aAddNeededJunctions )
 {
     // Save the current sheet, to retrieve it later
     SCH_SHEET_PATH oldsheetpath = GetCurrentSheet();
@@ -1533,6 +1533,16 @@ void SCH_EDIT_FRAME::FixupJunctions()
 
         for( const wxPoint& pos : junctions )
             AddJunction( screen, pos, false, false );
+
+        if( aAddNeededJunctions )
+        {
+            EE_SELECTION allItems;
+
+            for( auto item : screen->Items() )
+                allItems.Add( item );
+
+            m_toolManager->RunAction( EE_ACTIONS::addNeededJunctions, true, &allItems );
+        }
 
         if( junctions.size() )
             modified = true;

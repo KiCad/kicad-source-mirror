@@ -813,7 +813,7 @@ public:
 
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override;
 
-    void FixupJunctions();
+    void FixupJunctions( bool aAddNeededJunctions = false );
 
     void FocusOnItem( SCH_ITEM* aItem );
 
