@@ -142,11 +142,11 @@ if( APPLE )
 
         # Find python if it is requested
         if( ${SCRIPTING_HELPER} )
-            file( GLOB WXPYTHON_DIR RELATIVE ${OSX_BUNDLE_BUILD_DIR}/${OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR} ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/wx-?.?-osx_cocoa )
-            file( GLOB PYTHON_SCRIPTING_SO ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/*.so )
-            set( BUNDLE_FIX_LIBS \${BUNDLE_FIX_LIBS} \${PYTHON_SCRIPTING_SO} )
-            file( GLOB PYTHON_SCRIPTING_SO ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/\${WXPYTHON_DIR}/wx/*.so )
-            set( BUNDLE_FIX_LIBS \${BUNDLE_FIX_LIBS} \${PYTHON_SCRIPTING_SO} )
+            # file( GLOB WXPYTHON_DIR RELATIVE ${OSX_BUNDLE_BUILD_DIR}/${OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR} ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/wx-?.?-osx_cocoa )
+            # file( GLOB PYTHON_SCRIPTING_SO ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/*.so )
+            # set( BUNDLE_FIX_LIBS \${BUNDLE_FIX_LIBS} \${PYTHON_SCRIPTING_SO} )
+            # file( GLOB PYTHON_SCRIPTING_SO ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/\${WXPYTHON_DIR}/wx/*.so )
+            # set( BUNDLE_FIX_LIBS \${BUNDLE_FIX_LIBS} \${PYTHON_SCRIPTING_SO} )
         endif()
 
         # override default embedded path settings
@@ -156,7 +156,7 @@ if( APPLE )
         include( ${CMAKE_MODULE_PATH}/BundleUtilities.cmake )
 
         if ( ${PYTHON_FRAMEWORK_HELPER} )
-            # This idea here is to (eventually) repair anything that fixup_bundle doesn't handle
+            # This idea here is to repair anything that fixup_bundle doesn't handle
             # properly for our setup with both Python.framework *and* symlinked subapps
             # that's needed for *running* here
 
@@ -166,8 +166,7 @@ if( APPLE )
             # Of course, making it all work right here would be even slicker,
             # but if wishes were horses...
 
-            # At this point, the above is not true.  The bottom comes from what we were doing in KiCad patches
-            # in kicad-mac-builder for Python 2, but currently the effectual fixing for Python3 is happening in dyldstyle.
+            # It would be awesome if we find a better solution (or BundleUtilities works for our corner case better)
 
             execute_process( COMMAND cp -RP ${PYTHON_FRAMEWORK} ${OSX_BUNDLE_INSTALL_LIB_DIR}/)
             # We're using cp -RP because CMake's COPY_RESOLVED_BUNDLE... and COPY_DIRECTORY don't handle symlinks correctly
@@ -182,27 +181,8 @@ if( APPLE )
                 IGNORE_ITEM \"Python;python;python3;python3.8;pythonw;pythonw3;pythonw3.8\"
                 )
 
-            # BundleUtilities clobbers the rpaths and install_names that we carefully setup in Python.framework, even if we mark Python things as IGNORE_ITEMs.
-
-            # python/site-packages/_pcbnew.so
-            execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python.framework/Versions/3.8/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/_pcbnew.so )
-            execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python.framework/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/_pcbnew.so )
-            execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python.framework/Versions/3.8/Resources/Python.app/Contents/MacOS/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/_pcbnew.so )
-
-            # _pcbnew.kiface
-            execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_KIFACE_DIR}/_pcbnew.kiface )
-            execute_process( COMMAND install_name_tool -add_rpath @executable_path/../Frameworks ${OSX_BUNDLE_INSTALL_KIFACE_DIR}/_pcbnew.kiface )
-
-            # Python.framework/Versions/Current/bin/python3
-            execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python.framework/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_LIB_DIR}/Python.framework/Versions/Current/bin/python3 )
-            execute_process( COMMAND install_name_tool -add_rpath @executable_path/../../../../ ${OSX_BUNDLE_INSTALL_LIB_DIR}/Python.framework/Versions/Current/bin/python3 )
-
-            # Python.framework/Versions/Current/Resources/Python.app/Contents/MacOS/Python
-            execute_process( COMMAND install_name_tool -change @executable_path/../../Contents/MacOS/Python.framework/Versions/3.8/Resources/Python.app/Contents/MacOS/Python @rpath/Python.framework/Python ${OSX_BUNDLE_INSTALL_LIB_DIR}/Python.framework/Versions/Current/Resources/Python.app/Contents/MacOS/Python )
-            execute_process( COMMAND install_name_tool -add_rpath @executable_path/../Frameworks ${OSX_BUNDLE_INSTALL_LIB_DIR}/Python.framework/Resources/Python.app/Contents/MacOS/Python )
-            execute_process( COMMAND install_name_tool -add_rpath @executable_path/../../../../../../../ ${OSX_BUNDLE_INSTALL_LIB_DIR}/Python.framework/Resources/Python.app/Contents/MacOS/Python )
-            execute_process( COMMAND install_name_tool -add_rpath @executable_path/../../../../../ ${OSX_BUNDLE_INSTALL_LIB_DIR}/Python.framework/Resources/Python.app/Contents/MacOS/Python )
-
+            # BundleUtilities clobbers the rpaths and install_names that we carefully setup in Python.framework, even if
+            # we mark Python things as IGNORE_ITEMs.  We'll refix them later.
         else()
             fixup_bundle( ${OSX_BUNDLE_INSTALL_BIN_DIR}/kicad
                 \"\${BUNDLE_FIX_LIBS}\"
@@ -242,6 +222,12 @@ if( APPLE )
         move_to_main_bundle( \"pcb_calculator.app\" \"PCB Calculator.app\" )
         move_to_main_bundle( \"pcbnew.app\" \"Pcbnew.app\" )
         move_to_main_bundle( \"pl_editor.app\" \"Page Layout Editor.app\" )
+
+        if ( ${PYTHON_FRAMEWORK_HELPER} )
+            include( ${CMAKE_MODULE_PATH}/RefixupMacOS.cmake )
+            refix_kicad_bundle(${OSX_BUNDLE_INSTALL_DIR})
+        endif( )
+
         " COMPONENT Runtime
         )
 endif()
