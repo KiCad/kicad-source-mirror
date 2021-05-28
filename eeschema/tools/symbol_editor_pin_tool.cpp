@@ -139,7 +139,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
         aPin->GetParent()->GetPins( pinList );
         std::vector<bool> got_unit( aPin->GetParent()->GetUnitCount() );
 
-        got_unit[aPin->GetUnit()] = true;
+        got_unit[static_cast<size_t>(aPin->GetUnit()) - 1] = true;
 
         for( LIB_PIN* other : pinList )
         {
@@ -149,7 +149,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
             /// Only change one pin per unit to allow stacking pins
             /// If you change all units on the position, then pins are not
             /// uniquely editable
-            if( got_unit[other->GetUnit()] )
+            if( got_unit[static_cast<size_t>( other->GetUnit() ) - 1] )
                 continue;
 
             if( other->GetPosition() == original_pin.GetPosition()
@@ -184,7 +184,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
                 other->SetNumberTextSize( aPin->GetNumberTextSize() );
 
                 other->SetModified();
-                got_unit[other->GetUnit()] = true;
+                got_unit[static_cast<size_t>( other->GetUnit() ) - 1] = true;
             }
         }
     }
