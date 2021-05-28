@@ -191,9 +191,9 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
 
         PNS::NODE* node = nullptr;
 
-        
         if( m_router->GetState() == PNS::ROUTER::ROUTE_TRACK )
         {
+            #if 0
             m_debugDecorator.BeginGroup( "head");
 
             auto traces = m_router->Placer()->Traces();
@@ -206,6 +206,7 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
             }
 
             m_debugDecorator.EndGroup();
+            #endif
 
             node = m_router->Placer()->CurrentNode(true);
         }
@@ -221,6 +222,7 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
 
         node->GetUpdatedItems( removed, added );
 
+        #if 0
         if( ! added.empty() )
         {
             bool first = true;
@@ -238,6 +240,7 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
 
             m_debugDecorator.EndGroup();
         }
+        #endif
     }
 }
 
@@ -251,7 +254,7 @@ PNS_TEST_DEBUG_DECORATOR::STAGE* PNS_TEST_DEBUG_DECORATOR::currentStage()
 }
 
 
-void PNS_TEST_DEBUG_DECORATOR::BeginGroup( std::string name )
+void PNS_TEST_DEBUG_DECORATOR::BeginGroup( std::string name, const SRC_LOCATION_INFO& aSrcLoc )
 {
     STAGE* st = currentStage();
     DEBUG_ENT *ent = new DEBUG_ENT();
@@ -271,7 +274,7 @@ void PNS_TEST_DEBUG_DECORATOR::BeginGroup( std::string name )
 }
 
 
-void PNS_TEST_DEBUG_DECORATOR::EndGroup( )
+void PNS_TEST_DEBUG_DECORATOR::EndGroup( const SRC_LOCATION_INFO& aSrcLoc )
 {
     printf("LOG EndGroup\n" );
 
@@ -290,7 +293,18 @@ void PNS_TEST_DEBUG_DECORATOR::addEntry( DEBUG_ENT* ent )
     m_activeEntry->AddChild( ent );
 }
 
-void PNS_TEST_DEBUG_DECORATOR::AddPoint( VECTOR2I aP, int aColor, int aSize, const std::string aName )
+
+/*    virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, const KIGFX::COLOR4D& aColor,
+                          int aWidth, const std::string aName,
+                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
+    virtual void AddSegment( SEG aS, const KIGFX::COLOR4D& aColor,
+                             const std::string        aName,
+                             const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
+    virtual void AddBox( BOX2I aB, const KIGFX::COLOR4D& aColor,
+                         const std::string        aName,
+                         const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
+*/
+void PNS_TEST_DEBUG_DECORATOR::AddPoint( VECTOR2I aP, const KIGFX::COLOR4D& aColor, int aSize, const std::string aName, const SRC_LOCATION_INFO& aSrcLoc  )
 {
     auto sh = new SHAPE_LINE_CHAIN;
 
@@ -308,72 +322,75 @@ void PNS_TEST_DEBUG_DECORATOR::AddPoint( VECTOR2I aP, int aColor, int aSize, con
     ent->m_iter = m_iter;
     ent->m_name = aName;
     ent->m_hasLabels = false;
+    ent->m_srcLoc = aSrcLoc;
 
     addEntry( ent );
 }
 
 
-void PNS_TEST_DEBUG_DECORATOR::AddLine( const SHAPE_LINE_CHAIN& aLine, int aType, int aWidth,
-                                        const std::string aName )
+void PNS_TEST_DEBUG_DECORATOR::AddLine( const SHAPE_LINE_CHAIN& aLine, const KIGFX::COLOR4D& aColor,
+                          int aWidth, const std::string aName,
+                          const SRC_LOCATION_INFO& aSrcLoc )
 {
     auto       sh = new SHAPE_LINE_CHAIN( aLine );
     DEBUG_ENT* ent = new DEBUG_ENT();
 
     ent->m_shapes.push_back( sh );
-    ent->m_color = aType;
+    ent->m_color = aColor;
     ent->m_width = aWidth;
     ent->m_name = aName;
     ent->m_iter = m_iter;
+    ent->m_srcLoc = aSrcLoc;
 
     addEntry( ent );
 }
 
-void PNS_TEST_DEBUG_DECORATOR::AddSegment( SEG aS, int aColor,  const std::string aName )
+void PNS_TEST_DEBUG_DECORATOR::AddSegment( SEG aS, const KIGFX::COLOR4D& aColor,
+                             const std::string        aName,
+                             const SRC_LOCATION_INFO& aSrcLoc )
 {
+
     auto sh = new SHAPE_LINE_CHAIN ( { aS.A, aS.B } );
     DEBUG_ENT* ent = new DEBUG_ENT();
 
-        ent->m_shapes.push_back( sh );
-        ent->m_color = aColor;
-        ent->m_width = 10000;
-        ent->m_name = aName;
-        ent->m_iter = m_iter;
-            addEntry( ent );
+    ent->m_shapes.push_back( sh );
+    ent->m_color = aColor;
+    ent->m_width = 10000;
+    ent->m_name = aName;
+    ent->m_iter = m_iter;
+    ent->m_srcLoc = aSrcLoc;
 
+    addEntry( ent );
 }
 
-void PNS_TEST_DEBUG_DECORATOR::AddBox( BOX2I aB, int aColor,  const std::string aName )
+void PNS_TEST_DEBUG_DECORATOR::AddBox( BOX2I aB, const KIGFX::COLOR4D& aColor,
+                            const std::string        aName,
+                            const SRC_LOCATION_INFO& aSrcLoc )
 {
     auto sh = new SHAPE_RECT ( aB.GetPosition(), aB.GetWidth(), aB.GetHeight() );
     DEBUG_ENT* ent = new DEBUG_ENT();
 
-        ent->m_shapes.push_back( sh );
-        ent->m_color = aColor;
-       ent->m_width = 10000;
-        ent->m_name = aName;
-        ent->m_iter = m_iter;
-                    addEntry( ent );
+    ent->m_shapes.push_back( sh );
+    ent->m_color = aColor;
+    ent->m_width = 10000;
+    ent->m_name = aName;
+    ent->m_iter = m_iter;
+    ent->m_srcLoc = aSrcLoc;
+    addEntry( ent );
 
 }
 
-void PNS_TEST_DEBUG_DECORATOR::AddDirections( VECTOR2D aP, int aMask, int aColor,  const std::string aName )
-{
 
-}
-
-void PNS_TEST_DEBUG_DECORATOR::Message( const wxString msg )
+void PNS_TEST_DEBUG_DECORATOR::Message( const wxString msg, const SRC_LOCATION_INFO& aSrcLoc )
 {
     DEBUG_ENT* ent = new DEBUG_ENT();
     ent->m_msg = msg.c_str();
+    ent->m_srcLoc = aSrcLoc;
     addEntry( ent );
 }
 
-void PNS_TEST_DEBUG_DECORATOR::Clear()
-{
-    //dec_dbg("clear");
-}
 
-void PNS_TEST_DEBUG_DECORATOR::NewStage(const std::string& name, int iter)
+void PNS_TEST_DEBUG_DECORATOR::NewStage(const std::string& name, int iter, const SRC_LOCATION_INFO& aSrcLoc)
 {
     m_stages.push_back( new STAGE );
     m_activeEntry = m_stages.back()->m_entries;

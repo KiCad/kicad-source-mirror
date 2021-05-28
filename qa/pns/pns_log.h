@@ -108,12 +108,13 @@ private:
 class PNS_TEST_DEBUG_DECORATOR : public PNS::DEBUG_DECORATOR
 {
 public:
+
     struct DEBUG_ENT
     {
         DEBUG_ENT( DEBUG_ENT* aParent = nullptr )
         {
             m_iter = 0;
-            m_color = 0;
+            m_color = KIGFX::COLOR4D::WHITE;
             m_width = 10000;
             m_name = "<unknown>";
             m_parent = aParent;
@@ -171,13 +172,13 @@ public:
         DEBUG_ENT*              m_parent;
         std::vector<SHAPE*>     m_shapes;
         std::vector<DEBUG_ENT*> m_children;
-        int                     m_color;
+        KIGFX::COLOR4D          m_color;
         int                     m_width;
         bool m_hasLabels = true;
         int                     m_iter;
         std::string             m_name;
         std::string             m_msg;
-        //wxTreeListItem m_item;
+        PNS::DEBUG_DECORATOR::SRC_LOCATION_INFO m_srcLoc;
         bool m_visible;
         bool m_selected;
     };
@@ -205,26 +206,37 @@ public:
         m_iter = 0;
         m_grouping = false;
         m_activeEntry = nullptr;
+        SetDebugEnabled( true );
     }
 
-    virtual ~PNS_TEST_DEBUG_DECORATOR() {}
+    virtual ~PNS_TEST_DEBUG_DECORATOR()
+    {
+        // fixme: I know it's a hacky tool but it should clean after itself at some point...
+
+    }
 
     virtual void SetIteration( int iter ) override { m_iter = iter; }
 
-    virtual void Message( const wxString msg ) override;
-    virtual void AddPoint( VECTOR2I aP, int aColor, int aSize = 100000,
-                           const std::string aName = "" ) override;
-    virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, int aType = 0, int aWidth = 0,
-                          const std::string aName = "" ) override;
-    virtual void AddSegment( SEG aS, int aColor, const std::string aName = "" ) override;
-    virtual void AddBox( BOX2I aB, int aColor, const std::string aName = "" ) override;
-    virtual void AddDirections( VECTOR2D aP, int aMask, int aColor,
-                                const std::string aName = "" ) override;
-    virtual void Clear() override;
-    virtual void NewStage( const std::string& name, int iter ) override;
-
-    virtual void BeginGroup( const std::string name ) override;
-    virtual void EndGroup() override;
+    virtual void Message( const wxString           msg,
+                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
+    virtual void NewStage( const std::string& name, int iter,
+                           const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
+    virtual void BeginGroup( const std::string        name,
+                             const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
+    virtual void EndGroup( const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
+    virtual void AddPoint( VECTOR2I aP, const KIGFX::COLOR4D& aColor, int aSize,
+                           const std::string        aName,
+                           const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
+    virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, const KIGFX::COLOR4D& aColor,
+                          int aWidth, const std::string aName,
+                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
+    virtual void AddSegment( SEG aS, const KIGFX::COLOR4D& aColor,
+                             const std::string        aName,
+                             const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
+    virtual void AddBox( BOX2I aB, const KIGFX::COLOR4D& aColor,
+                         const std::string        aName,
+                         const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
+    virtual void Clear(){};
 
     int GetStageCount() const { return m_stages.size(); }
 

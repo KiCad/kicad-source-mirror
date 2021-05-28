@@ -78,9 +78,15 @@ public:
 
         m_itemList->AppendColumn( "Type" );
         m_itemList->AppendColumn( "Value" );
+        m_itemList->AppendColumn( "File" );
+        m_itemList->AppendColumn( "Method" );
+        m_itemList->AppendColumn( "Line" );
     }
 
-    virtual ~PNS_LOG_VIEWER_FRAME() {}
+    virtual ~PNS_LOG_VIEWER_FRAME() 
+    {
+        m_overlay = nullptr;
+    }
 
     void SetLogFile( PNS_LOG_FILE* aLog );
 

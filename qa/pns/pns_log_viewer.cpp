@@ -245,51 +245,6 @@ void PNS_LOG_VIEWER_FRAME::createUserTools()
 }
 
 
-static const COLOR4D assignColor( int aStyle )
-{
-    COLOR4D color;
-
-    switch( aStyle )
-    {
-    case 0:
-        color = COLOR4D( 0, 1, 0, 1 );
-        break;
-
-    case 1:
-        color = COLOR4D( 1, 0, 0, 1 );
-        break;
-
-    case 2:
-        color = COLOR4D( 1, 1, 0, 1 );
-        break;
-
-    case 3:
-        color = COLOR4D( 0, 0, 1, 1 );
-        break;
-
-    case 4:
-        color = COLOR4D( 1, 1, 1, 1 );
-        break;
-
-    case 5:
-        color = COLOR4D( 1, 1, 0, 1 );
-        break;
-
-    case 6:
-        color = COLOR4D( 0, 1, 1, 1 );
-        break;
-
-    case 32:
-        color = COLOR4D( 0, 0, 1, 1 );
-        break;
-
-    default:
-        color = COLOR4D( 0.4, 0.4, 0.4, 1 );
-        break;
-    }
-
-    return color;
-}
 
 PNS_TEST_DEBUG_DECORATOR::STAGE* PNS_LOG_VIEWER_FRAME::getCurrentStage()
 {
@@ -333,7 +288,7 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 
         for( auto& sh : ent->m_shapes )
         {
-            COLOR4D color = assignColor( ent->m_color );
+            COLOR4D color = ent->m_color;
             int lineWidth = ent->m_width;
 
             m_overlay->SetIsStroke( true );
@@ -374,7 +329,6 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
                     auto s = lc->CSegment( i );
                     m_overlay->Line( s.A, s.B );
                 }
-
 
                 if( ent->m_hasLabels)
                     labelMgr.Add( *lc, color );
@@ -642,6 +596,10 @@ void PNS_LOG_VIEWER_FRAME::buildListTree( wxTreeListItem                       i
         m_itemList->SetItemText( ritem, 0, "Shapes" );
         m_itemList->SetItemText( ritem, 1, ent->m_name );
     }
+
+    m_itemList->SetItemText( ritem, 2, wxFileNameFromPath( ent->m_srcLoc.fileName ) );
+    m_itemList->SetItemText( ritem, 3, ent->m_srcLoc.funcName );
+    m_itemList->SetItemText( ritem, 4, wxString::Format("%d", ent->m_srcLoc.line ) );
 
     m_itemList->SetItemData( ritem, new WX_SHAPE_TREE_ITEM_DATA( ent ) );
 
