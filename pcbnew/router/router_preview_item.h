@@ -60,7 +60,7 @@ public:
 
     void Update( const PNS::ITEM* aItem );
 
-    void Line( const SHAPE_LINE_CHAIN& aLine, int aWidth = 0, int aStyle = 0 );
+    void Line( const SHAPE_LINE_CHAIN& aLine, int aWidth = 0, int aStyle = -1 );
     void Box( const BOX2I& aBox, int aStyle = 0 );
     void Point ( const VECTOR2I& aPos, int aStyle = 0);
 

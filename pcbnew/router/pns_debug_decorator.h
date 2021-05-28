@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2013-2021 CERN
  * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Christian Gagneraud <chgans@gna.org>
  *
@@ -27,30 +27,70 @@
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
 
+#include <gal/color4d.h>
+
 namespace PNS {
 
 class DEBUG_DECORATOR
 {
 public:
-    DEBUG_DECORATOR()
-    {}
+    DEBUG_DECORATOR() : m_debugEnabled( false ) {}
 
-    virtual ~DEBUG_DECORATOR()
-    {}
+    struct SRC_LOCATION_INFO
+    {
+        SRC_LOCATION_INFO( std::string aFileName = "", std::string aFuncName = "", int aLine = 0 ) :
+                fileName( aFileName ), funcName( aFuncName ), line( aLine )
+        {
+        }
 
-    virtual void SetIteration( int iter ) {};
-    virtual void Message( const wxString msg ) {};
-    virtual void NewStage( const std::string& name, int iter ) {};
-    virtual void BeginGroup( const std::string name ) {};
-    virtual void EndGroup( ) {};
-    virtual void AddPoint( VECTOR2I aP, int aColor, int aSize = 100000, const std::string aName = "" ) {};
-    virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, int aType = 0, int aWidth = 0, const std::string aName = "" ) {};
-    virtual void AddSegment( SEG aS, int aColor, const std::string aName = "" ) {};
-    virtual void AddBox( BOX2I aB, int aColor, const std::string aName = "" ) {};
-    virtual void AddDirections( VECTOR2D aP, int aMask, int aColor, const std::string aName = "" ) {};
-    virtual void Clear() {};
+        std::string fileName;
+        std::string funcName;
+        int         line;
+    };
+
+    virtual ~DEBUG_DECORATOR() {}
+
+    void SetDebugEnabled( bool aEnabled ) { m_debugEnabled = aEnabled;}
+    bool IsDebugEnabled() const { return m_debugEnabled; }
+
+    virtual void SetIteration( int iter ){};
+    virtual void Message( const wxString           msg,
+                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
+    virtual void NewStage( const std::string& name, int iter,
+                           const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
+    virtual void BeginGroup( const std::string        name,
+                             const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
+    virtual void EndGroup( const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
+    virtual void AddPoint( VECTOR2I aP, const KIGFX::COLOR4D& aColor, int aSize,
+                           const std::string        aName,
+                           const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
+    virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, const KIGFX::COLOR4D& aColor,
+                          int aWidth, const std::string aName,
+                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
+    virtual void AddSegment( SEG aS, const KIGFX::COLOR4D& aColor,
+                             const std::string        aName,
+                             const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
+    virtual void AddBox( BOX2I aB, const KIGFX::COLOR4D& aColor,
+                         const std::string        aName,
+                         const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
+    virtual void Clear(){};
+
+private:
+
+    bool m_debugEnabled;
 };
 
-}
+/* WARNING! The marco below is a remarkably ugly hack, intented to log the
+   call location of the debug calls without having to create the SRC_LOCATION_INFOs every time
+   DEBUG_DECORATOR::Something() is called.
+
+   Also checks if debug is enabled at all prior to calling decorator methods, thus saving some 
+   time wasted otherwise for string formatting and copying the geometry. */
+
+#define PNS_DBG(dbg,method,...) \
+    if( dbg && dbg->IsDebugEnabled() ) \
+        dbg->method( __VA_ARGS__, PNS::DEBUG_DECORATOR::SRC_LOCATION_INFO( __FILE__, __FUNCTION__, __LINE__ ) );
+
+} // namespace PNS
 
 #endif

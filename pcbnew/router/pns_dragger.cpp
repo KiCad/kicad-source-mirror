@@ -188,7 +188,7 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 
     startItem->Unmark( MK_LOCKED );
 
-    wxLogTrace( "PNS", "StartDragging: item %p [kind %d]", startItem, (int) startItem->Kind() );
+    PNS_DBG( Dbg(), Message, wxString::Format( "StartDragging: item %p [kind %d]", startItem, (int) startItem->Kind() ) );
 
     switch( startItem->Kind() )
     {
@@ -420,15 +420,16 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
     else if( !affectedArea )
         affectedArea = BOX2I( aP ); // No valid area yet? set to minimum to disable optimization
 
-    Dbg()->AddPoint( anchor, 3 );
-    Dbg()->AddBox( *affectedArea, 2 );
+    PNS_DBG( Dbg(), AddPoint, anchor, YELLOW, 100000, "drag-anchor" );
+    PNS_DBG( Dbg(), AddBox, *affectedArea, RED, "drag-affected-area" );
+
     optimizer.SetRestrictArea( *affectedArea );
     optimizer.Optimize( &aDragged );
 
     OPT_BOX2I optArea = aDragged.ChangedArea( &aOrig );
 
     if( optArea )
-        Dbg()->AddBox( *optArea, 4 );
+        PNS_DBG( Dbg(), AddBox, *optArea, BLUE, "drag-opt-area" );
 
     m_lastNode->Add( aDragged );
     m_draggedItems.Clear();
@@ -511,8 +512,8 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
 
         if( ok )
         {
-            Dbg()->AddLine( origLine.CLine(), 5, 50000 );
-            Dbg()->AddLine( draggedWalk.CLine(), 6, 75000 );
+            PNS_DBG( Dbg(), AddLine, origLine.CLine(), BLUE, 50000, "drag-orig-line" );
+            PNS_DBG( Dbg(), AddLine, draggedWalk.CLine(), CYAN, 75000, "drag-walk" );
             m_lastNode->Remove( origLine );
             optimizeAndUpdateDraggedLine( draggedWalk, origLine, aP );
         }
@@ -556,7 +557,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         else
             dragged.DragCorner( aP, m_draggedSegmentIndex );
 
-        Dbg()->AddLine( dragged.CLine(), 5, 5000 );
+        PNS_DBG( Dbg(), AddLine, dragged.CLine(), BLUE, 5000, "drag-shove-line" );
 
         SHOVE::SHOVE_STATUS st = m_shove->ShoveLines( dragged );
 

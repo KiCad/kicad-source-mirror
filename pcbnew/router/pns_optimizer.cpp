@@ -40,7 +40,6 @@
 namespace PNS {
 
 
-static DEBUG_DECORATOR *g_dbg;
 /**
  *  Cost Estimator Methods
  */
@@ -604,11 +603,11 @@ bool OPTIMIZER::mergeColinear( LINE* aLine )
 
 bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult, LINE* aRoot )
 {
-    g_dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+    DEBUG_DECORATOR* dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
 
     if( aRoot )
     {
-        g_dbg->AddLine( aRoot->CLine(), 3, 100000 );
+        PNS_DBG( dbg, AddLine, aRoot->CLine(), BLUE, 100000, "root-line" );
     }
 
 
@@ -1080,8 +1079,6 @@ bool OPTIMIZER::runSmartPads( LINE* aLine )
 bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VECTOR2I aV )
 {
     OPTIMIZER opt( aWorld );
-
-    g_dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
 
     opt.SetEffortLevel( aEffortLevel );
     opt.SetCollisionMask( -1 );

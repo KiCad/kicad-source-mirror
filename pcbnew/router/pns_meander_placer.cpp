@@ -152,7 +152,7 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
         {
-            Dbg()->AddLine( l->CLine(), 5, 30000 );
+            PNS_DBG( Dbg(), AddLine, l->CLine(), BLUE, 30000, "tuned-line" );
         }
     }
 

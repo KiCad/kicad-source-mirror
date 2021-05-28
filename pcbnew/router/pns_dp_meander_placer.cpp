@@ -192,12 +192,6 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     if( coupledSegments.size() == 0 )
         return false;
 
-    //Router()->DisplayDebugLine( tuned.CP(), 5, 20000 );
-    //Router()->DisplayDebugLine( tuned.CN(), 4, 20000 );
-
-    //Router()->DisplayDebugLine( m_originPair.CP(), 5, 20000 );
-    //Router()->DisplayDebugLine( m_originPair.CN(), 4, 20000 );
-
     m_result = MEANDERED_LINE( this, true );
     m_result.SetWidth( tuned.Width() );
 
@@ -211,13 +205,13 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     for( const ITEM* item : m_tunedPathP.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
-            Dbg()->AddLine( l->CLine(), 5, 10000 );
+            PNS_DBG( Dbg(), AddLine, l->CLine(), YELLOW, 10000, "tuned-path-p" );
     }
 
     for( const ITEM* item : m_tunedPathN.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
-            Dbg()->AddLine( l->CLine(), 5, 10000 );
+            PNS_DBG( Dbg(), AddLine, l->CLine(), YELLOW, 10000, "tuned-path-n" );
     }
 
     int curIndexP = 0, curIndexN = 0;
@@ -226,7 +220,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     {
         SEG base = baselineSegment( sp );
 
-        Dbg()->AddSegment( base, 3 );
+        PNS_DBG( Dbg(), AddSegment, base, GREEN, "dp-baseline" );
 
         while( sp.indexP >= curIndexP )
         {

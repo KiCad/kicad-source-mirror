@@ -725,23 +725,27 @@ public:
         m_view->Add( m_items );
     }
 
-    virtual void AddPoint( VECTOR2I aP, int aColor, int aSize, const std::string aName ) override
-    {
+    virtual void AddPoint( VECTOR2I aP, const COLOR4D& aColor, int aSize,
+                           const std::string        aName,
+                           const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
+        {
         SHAPE_LINE_CHAIN l;
 
         l.Append( aP - VECTOR2I( -aSize, -aSize ) );
         l.Append( aP + VECTOR2I( -aSize, -aSize ) );
 
-        AddLine( l, aColor, 10000 );
+        AddLine( l, aColor, 10000, aName );
 
         l.Clear();
         l.Append( aP - VECTOR2I( aSize, -aSize ) );
         l.Append( aP + VECTOR2I( aSize, -aSize ) );
 
-        AddLine( l, aColor, 10000 );
+        AddLine( l, aColor, 10000, aName );
     }
 
-    void AddBox( BOX2I aB, int aColor, const std::string aName = "" ) override
+    virtual void AddBox( BOX2I aB, const COLOR4D& aColor,
+                         const std::string        aName,
+                         const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         SHAPE_LINE_CHAIN l;
 
@@ -754,44 +758,33 @@ public:
         l.Append( o.x, o.y + s.y );
         l.Append( o );
 
-        AddLine( l, aColor, 10000 );
+        AddLine( l, aColor, 10000, aName, aSrcLoc );
     }
 
-    void AddSegment( SEG aS, int aColor, const std::string aName = "" ) override
+    virtual void AddSegment( SEG aS, const COLOR4D& aColor,
+                             const std::string        aName,
+                             const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         SHAPE_LINE_CHAIN l;
 
         l.Append( aS.A );
         l.Append( aS.B );
 
-        AddLine( l, aColor, 10000 );
+        AddLine( l, aColor, 10000, aName, aSrcLoc );
     }
 
-    void AddDirections( VECTOR2D aP, int aMask, int aColor,
-                        const std::string aName = "" ) override
-    {
-        BOX2I b( aP - VECTOR2I( 10000, 10000 ), VECTOR2I( 20000, 20000 ) );
 
-        AddBox( b, aColor );
-        for( int i = 0; i < 8; i++ )
-        {
-            if( ( 1 << i ) & aMask )
-            {
-                VECTOR2I v = DIRECTION_45( ( DIRECTION_45::Directions ) i ).ToVector() * 100000;
-                AddSegment( SEG( aP, aP + v ), aColor );
-            }
-        }
-    }
-
-    void AddLine( const SHAPE_LINE_CHAIN& aLine, int aType, int aWidth,
-                  const std::string aName = "" ) override
+    virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, const COLOR4D& aColor,
+                          int aWidth, const std::string aName,
+                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         if( !m_view )
             return;
 
         ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( NULL, m_view );
 
-        pitem->Line( aLine, aWidth, aType );
+        pitem->SetColor( aColor );
+        pitem->Line( aLine, aWidth );
         m_items->Add( pitem ); // Should not be needed, as m_items has been passed as a parent group in alloc;
         m_view->Update( m_items );
     }
@@ -1675,8 +1668,8 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
     auto dec = new PNS_PCBNEW_DEBUG_DECORATOR();
     m_debugDecorator = dec;
 
-    if( ADVANCED_CFG::GetCfg().m_ShowRouterDebugGraphics )
-        dec->SetView( m_view );
+    dec->SetDebugEnabled( ADVANCED_CFG::GetCfg().m_ShowRouterDebugGraphics );
+    dec->SetView( m_view );
 }
 
 

@@ -145,7 +145,7 @@ bool COMPONENT_DRAGGER::Drag( const VECTOR2I& aP )
         l_new.ClearLinks();
         l_new.DragCorner( cn.p_next, cn.origLine.CLine().Find( cn.p_orig ) );
 
-        Dbg()->AddLine( l_new.CLine(), 4, 100000 );
+        PNS_DBG( Dbg(), AddLine, l_new.CLine(), BLUE, 100000, "cdrag-new-fanout" );
         m_draggedItems.Add( l_new );
 
         auto l_orig( cn.origLine );

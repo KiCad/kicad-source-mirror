@@ -467,8 +467,6 @@ bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, IT
 {
     int netP, netN;
 
-    wxLogTrace( "PNS", "world %p", aWorld );
-
     bool result = aWorld->GetRuleResolver()->DpNetPair( aItem, netP, netN );
 
     if( !result )
@@ -485,12 +483,8 @@ bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, IT
     int refNet = aItem->Net();
     int coupledNet = ( refNet == netP ) ? netN : netP;
 
-    wxLogTrace( "PNS", "result %d", !!result );
-
     OPT_VECTOR2I refAnchor = getDanglingAnchor( aWorld, aItem );
     ITEM* primRef = aItem;
-
-    wxLogTrace( "PNS", "refAnchor %p", aItem );
 
     if( !refAnchor )
     {

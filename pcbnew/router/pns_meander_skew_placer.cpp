@@ -140,13 +140,13 @@ bool MEANDER_SKEW_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     for( const ITEM* item : m_tunedPathP.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
-            Dbg()->AddLine( l->CLine(), 5, 10000 );
+            PNS_DBG( Dbg(), AddLine, l->CLine(), BLUE, 10000, "tuned-path-skew-p" );
     }
 
     for( const ITEM* item : m_tunedPathN.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
-            Dbg()->AddLine( l->CLine(), 4, 10000 );
+            PNS_DBG( Dbg(), AddLine, l->CLine(), YELLOW, 10000, "tuned-path-skew-n" );
     }
 
     return doMove( aP, aEndItem, m_coupledLength + m_settings.m_targetSkew );

@@ -408,7 +408,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
     if( nearest.m_distFirst == INT_MAX )
         nearest.m_item = obstacleList[0].m_item;
 
-    debugDecorator->AddLine( nearest.m_hull, 2, 60000, "obstacle-nearest-hull" );
+    // debugDecorator->AddLine( nearest.m_hull, YELLOW, 60000, "obstacle-nearest-hull" );
 
     return nearest;
 }

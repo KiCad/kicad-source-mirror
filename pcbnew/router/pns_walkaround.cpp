@@ -70,11 +70,11 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWinding
         Dbg()->BeginGroup("hull/walk");
         char name[128];
         snprintf(name, sizeof(name), "hull-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
-        Dbg()->AddLine( current_obs->m_hull, 1, 1, name);
+        Dbg()->AddLine( current_obs->m_hull, RED, 1, name);
         snprintf(name, sizeof(name), "path-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
-        Dbg()->AddLine( aPath.CLine(), 2, 1, name );
+        Dbg()->AddLine( aPath.CLine(), GREEN, 1, name );
         snprintf(name, sizeof(name), "result-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
-        Dbg()->AddLine( path_walk, 3, 10000, name );
+        Dbg()->AddLine( path_walk, BLUE, 10000, name );
         Dbg()->Message( wxString::Format( "Stat cw %d", !!s_cw ) );
         Dbg()->EndGroup();
     }

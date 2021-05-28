@@ -552,8 +552,8 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
             int len_cw = wr.statusCw == WALKAROUND::DONE ? l_cw.Length() : INT_MAX;
             int len_ccw = wr.statusCcw == WALKAROUND::DONE ? l_ccw.Length() : INT_MAX;
 
-            Dbg()->AddLine( wr.lineCw.CLine(), 6, 10000, "wf-result-cw" );
-            Dbg()->AddLine( wr.lineCcw.CLine(), 5, 20000, "wf-result-ccw" );
+            Dbg()->AddLine( wr.lineCw.CLine(), CYAN, 10000, "wf-result-cw" );
+            Dbg()->AddLine( wr.lineCcw.CLine(), BLUE, 20000, "wf-result-ccw" );
 
             int bestLength = len_cw < len_ccw ? len_cw : len_ccw;
 
@@ -580,8 +580,8 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
                 {
                     int idx_ccw = l_ccw.Split( p_ccw );
                     l_ccw = l_ccw.Slice( 0, idx_ccw );
-                    Dbg()->AddPoint( p_ccw, 5, 500000, "hug-target-ccw" );
-//                    Dbg()->AddLine( l_ccw, 5, 200000, "wh-result-ccw" );
+                    Dbg()->AddPoint( p_ccw, BLUE, 500000, "hug-target-ccw" );
+                    Dbg()->AddLine( l_ccw, MAGENTA, 200000, "wh-result-ccw" );
                 }
             }
             if( wr.statusCw == WALKAROUND::ALMOST_DONE )
@@ -591,8 +591,8 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
                 {
                     int idx_cw = l_cw.Split( p_cw );
                     l_cw = l_cw.Slice( 0, idx_cw );
-                    Dbg()->AddPoint( p_cw, 4, 500000, "hug-target-cw" );
-                  //  Dbg()->AddLine( l_cw, 6, 200000, "wh-result-cw" );
+                    Dbg()->AddPoint( p_cw, YELLOW, 500000, "hug-target-cw" );
+                    Dbg()->AddLine( l_cw, BLUE, 200000, "wh-result-cw" );
                 }
             }
 
@@ -619,7 +619,7 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
         round++;
     } while( round < 2 && m_placingVia );
 
-    Dbg()->AddLine( walkFull.CLine(), 2, 200000, "walk-full" );
+    Dbg()->AddLine( walkFull.CLine(), GREEN, 200000, "walk-full" );
 
     switch( Settings().OptimizerEffort() )
     {
@@ -650,7 +650,6 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
     }
 
     aNewHead = walkFull;
-    Dbg()->AddLine( walkFull.CLine(), 2, 200000, "walk-full" );
 
     return true;
 }
