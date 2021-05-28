@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2017 jp.charras at wanadoo.fr
  * Copyright (C) 2013-2017 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,7 +119,9 @@ static bool sortPinsByNum( PIN_INFO& aPin1, PIN_INFO& aPin2 )
 }
 
 
-void NETLIST_EXPORTER_BASE::CreatePinList( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aSheetPath )
+void NETLIST_EXPORTER_BASE::CreatePinList( SCH_COMPONENT* aSymbol,
+                                           SCH_SHEET_PATH* aSheetPath,
+                                           bool aKeepUnconnectedPins )
 {
     wxString ref( aSymbol->GetRef( aSheetPath ) );
 
@@ -145,7 +147,8 @@ void NETLIST_EXPORTER_BASE::CreatePinList( SCH_COMPONENT* aSymbol, SCH_SHEET_PAT
         // Collect all pins for this reference designator by searching the entire design for
         // other parts with the same reference designator.
         // This is only done once, it would be too expensive otherwise.
-        findAllUnitsOfSymbol( aSymbol, aSymbol->GetPartRef().get(), aSheetPath );
+        findAllUnitsOfSymbol( aSymbol, aSymbol->GetPartRef().get(),
+                              aSheetPath, aKeepUnconnectedPins );
     }
 
     else // GetUnitCount() <= 1 means one part per package
@@ -158,11 +161,13 @@ void NETLIST_EXPORTER_BASE::CreatePinList( SCH_COMPONENT* aSymbol, SCH_SHEET_PAT
             {
                 const wxString& netName = conn->Name();
 
-                // Skip unconnected pins
-                CONNECTION_SUBGRAPH* sg = graph->FindSubgraphByName( netName, *aSheetPath );
+                if( !aKeepUnconnectedPins )     // Skip unconnected pins if requested
+                {
+                    CONNECTION_SUBGRAPH* sg = graph->FindSubgraphByName( netName, *aSheetPath );
 
-                if( !sg || sg->m_no_connect || sg->m_items.size() < 2 )
+                    if( !sg || sg->m_no_connect || sg->m_items.size() < 2 )
                     continue;
+                }
 
                 m_sortedSymbolPinList.emplace_back( pin->GetNumber(), netName );
             }
@@ -214,7 +219,8 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins()
 
 
 void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_COMPONENT* aSymbol,
-                                                  LIB_PART* aPart, SCH_SHEET_PATH* aSheetPath )
+                                                  LIB_PART* aPart, SCH_SHEET_PATH* aSheetPath,
+                                                  bool aKeepUnconnectedPins )
 {
     wxString    ref = aSymbol->GetRef( aSheetPath );
     wxString    ref2;
@@ -241,11 +247,13 @@ void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_COMPONENT* aSymbol,
                 {
                     const wxString& netName = conn->Name();
 
-                    // Skip unconnected pins
-                    CONNECTION_SUBGRAPH* sg = graph->FindSubgraphByName( netName, sheet );
+                    if( !aKeepUnconnectedPins )     // Skip unconnected pins if requested
+                    {
+                        CONNECTION_SUBGRAPH* sg = graph->FindSubgraphByName( netName, sheet );
 
-                    if( !sg || sg->m_no_connect || sg->m_items.size() < 2 )
-                        continue;
+                        if( !sg || sg->m_no_connect || sg->m_items.size() < 2 )
+                            continue;
+                    }
 
                     m_sortedSymbolPinList.emplace_back( pin->GetNumber(), netName );
                 }

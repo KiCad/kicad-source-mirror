@@ -115,8 +115,10 @@ protected:
      * This list is sorted by pin number. The symbol is the next actual symbol after \a aSymbol.
      * Power symbols and virtual symbols that have their reference designators starting with
      * '#' are skipped.
+     * if aKeepUnconnectedPins = false, unconnected pins will be removed from list
+     * but usually we need all pins in netlists.
      */
-    void CreatePinList( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aSheetPath );
+    void CreatePinList( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aSheetPath, bool aKeepUnconnectedPins );
 
     /**
      * Check if the given symbol should be processed for netlisting.
@@ -147,9 +149,11 @@ protected:
      * Search the entire design for all units of \a aSymbol based on matching reference
      * designator, and for each unit, add all its pins to the temporary sorted pin list,
      * m_sortedSymbolPinList.
+     * if aKeepUnconnectedPins = false, unconnected pins will be removed from list
+     * but usually we need all pins in netlists.
      */
     void findAllUnitsOfSymbol( SCH_COMPONENT* aSymbol, LIB_PART* aPart,
-                               SCH_SHEET_PATH* aSheetPath );
+                               SCH_SHEET_PATH* aSheetPath, bool aKeepUnconnectedPins );
 
 public:
     /**

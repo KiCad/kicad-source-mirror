@@ -287,7 +287,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             if( !symbol )
                 continue;
 
-            CreatePinList( symbol, &sheet );
+            CreatePinList( symbol, &sheet, true );
             SPICE_ITEM spiceItem;
             spiceItem.m_parent = symbol;
 
