@@ -2764,7 +2764,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_PART* aPartToFix, int aGa
         auto setPinOrientation =
             [&]( double aAngleRad )
             {
-                int oDeg = (int) NormalizeAngle180( wxRadToDeg( aAngleRad ) );
+                int oDeg = (int) NormalizeAngle180( RAD2DEG( aAngleRad ) );
 
                 if( oDeg >= -45 && oDeg <= 45 )
                     pin->SetOrientation( 'R' ); // 0 degrees
@@ -2789,7 +2789,6 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_PART* aPartToFix, int aGa
 
             pin->SetLength( vec.EuclideanNorm() );
             setPinOrientation( vec.Angle() );
-            int i = 0;
         }
     }
 }
