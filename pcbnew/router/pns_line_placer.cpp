@@ -532,6 +532,10 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
 {
     LINE initTrack( m_head );
     LINE walkFull( m_head );
+
+    initTrack.RemoveVia();
+    walkFull.RemoveVia();
+
     int effort = 0;
     bool viaOk = false;
 
