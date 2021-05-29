@@ -165,6 +165,21 @@ public:
     }
 
     /**
+     * Turns on highlighting and highlights multiple nets
+     * @param aHighlight is a set of netcodes to highlight
+     * @param aEnabled tells if highlighting should be enabled.
+     */
+    inline void SetHighlight( std::set<int>& aHighlight, bool aEnabled = true )
+    {
+        m_highlightEnabled  = aEnabled;
+
+        if( aEnabled )
+            m_highlightNetcodes = aHighlight;
+        else
+            m_highlightNetcodes.clear();
+    }
+
+    /**
      * Turns on/off high contrast display mode.
      */
     void SetHighContrast( bool aEnabled ) { m_hiContrastEnabled = aEnabled; }

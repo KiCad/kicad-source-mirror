@@ -445,14 +445,13 @@ public:
     static TOOL_ACTION inspectClearance;
     static TOOL_ACTION inspectConstraints;
 
-
     // Appearance controls
-    static TOOL_ACTION clearHighlight;
-    static TOOL_ACTION highlightNet;
-    static TOOL_ACTION toggleLastNetHighlight;
-    static TOOL_ACTION highlightNetTool;
-    static TOOL_ACTION highlightNetSelection;
-    static TOOL_ACTION highlightItem;
+    static TOOL_ACTION clearHighlight;          // Turns off highlight and resets previous highlight
+    static TOOL_ACTION highlightNet;            // Highlights a net by code (cross-probe highlight)
+    static TOOL_ACTION toggleLastNetHighlight;  // Toggles between current and previous highlight
+    static TOOL_ACTION toggleNetHighlight;      // Toggles between highlight off and highlight on
+    static TOOL_ACTION highlightNetSelection;   // Turns on highlight and takes net from selection
+    static TOOL_ACTION highlightItem;           // Select component via cross-probe
     static TOOL_ACTION hideNet;
     static TOOL_ACTION showNet;
 

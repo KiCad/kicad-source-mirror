@@ -353,6 +353,10 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( PCB_ACTIONS::ratsnestLineMode,     ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddScaledSeparator( this );
+    m_optionsToolBar->Add( ACTIONS::highContrastMode,         ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::toggleNetHighlight,   ACTION_TOOLBAR::TOGGLE );
+
+    m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayEnable,    ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayDisable,   ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayOutlines,  ACTION_TOOLBAR::TOGGLE );
@@ -361,7 +365,6 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,       ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::viaDisplayMode,       ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::trackDisplayMode,     ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::highContrastMode,         ACTION_TOOLBAR::TOGGLE );
 
     // Tools to show/hide toolbars:
     m_optionsToolBar->AddScaledSeparator( this );
@@ -429,7 +432,6 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     }
 
     m_drawToolBar->Add( ACTIONS::selectionTool,            ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::highlightNetTool,     ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::localRatsnestTool,    ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->AddScaledSeparator( this );

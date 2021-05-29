@@ -13,7 +13,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="contrast_mode.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   inkscape:version="1.0.2 (1.0.2+r75+1)"
    inkscape:export-filename="/home/seth/code/kicad/kicad_bitmaps/bitmaps_png/sources/contrast_mode.png"
    inkscape:export-xdpi="1890.4615"
    inkscape:export-ydpi="1890.4615">
@@ -55,15 +55,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="995"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview3143"
      showgrid="true"
-     inkscape:zoom="24.408623"
-     inkscape:cx="11.458471"
-     inkscape:cy="13.139804"
-     inkscape:window-x="1280"
-     inkscape:window-y="23"
+     inkscape:zoom="45.254834"
+     inkscape:cx="7.8087159"
+     inkscape:cy="9.3949822"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
@@ -74,7 +74,8 @@
        spacingy="0.5"
        color="#c1c1ff"
        opacity="0.1254902"
-       empspacing="2" />
+       empspacing="2"
+       enabled="true" />
   </sodipodi:namedview>
   <defs
      id="defs3124">
@@ -93,10 +94,10 @@
          offset="1"
          stop-color="#c6c6c5"
          id="stop6191"
-         style="stop-color:#545454;stop-opacity:1" />
+         style="stop-color:#DED3DD;stop-opacity:1" />
     </linearGradient>
     <style
-       id="style3116">.cls-1,.cls-2,.cls-3,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-2,.cls-3{stroke-width:2px;}.cls-1{stroke:url(#Безымянный_градиент_19);}.cls-2{stroke:#1a81c4;}.cls-3{stroke:url(#Безымянный_градиент_19-2);}.cls-4{fill:#bf2641;}.cls-5{stroke:#545454;}</style>
+       id="style3116">.cls-1,.cls-2,.cls-3,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-2,.cls-3{stroke-width:2px;}.cls-1{stroke:url(#Безымянный_градиент_19);}.cls-2{stroke:#42B8EB;}.cls-3{stroke:url(#Безымянный_градиент_19-2);}.cls-4{fill:#f2647e;}.cls-5{stroke:#DED3DD;}</style>
     <linearGradient
        id="Безымянный_градиент_19"
        x1="18"
@@ -113,7 +114,7 @@
          offset="1"
          stop-color="#c6c6c5"
          id="stop3120"
-         style="stop-color:#545454;stop-opacity:1" />
+         style="stop-color:#DED3DD;stop-opacity:1" />
     </linearGradient>
     <linearGradient
        id="Безымянный_градиент_19-2"
@@ -126,47 +127,30 @@
   <title
      id="title3126">contrast_mode</title>
   <path
-     id="polyline3128"
-     style="fill:none;stroke:#848484;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 16.5,22.5 14,17.491366 H 5.118"
+     style="fill:none;stroke:#bf2641;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 10.166667,12 h 5.5 l 9,9"
+     id="path1554"
      sodipodi:nodetypes="ccc" />
   <path
-     id="polyline3130"
-     style="fill:none;stroke:#bf2641;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 11.092,12.505366 H 17 l 5,9"
-     sodipodi:nodetypes="ccc" />
-  <polyline
-     class="cls-2"
-     points="3 3 7 14 12.092 14"
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 1,3.4946319 2,2 8,8.0000001"
      id="polyline3132"
-     transform="translate(-1,-1.4946319)"
-     style="stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke:#bf2641;stroke-opacity:1" />
-  <line
-     class="cls-3"
-     x1="15.160109"
-     y1="7.5238228"
-     x2="22.5"
-     y2="7.5238228"
-     id="line3134"
-     style="stroke:#848484;stroke-width:3.09707;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+     sodipodi:nodetypes="ccc"
+     transform="translate(-1,-1.4946319)" />
   <path
-     class="cls-4"
-     d="m 15.047108,8.4818142 -5,-0.0049 C 9.6167807,8.4771034 9.2347098,8.2016514 9.0989078,7.7933142 l -2,-5.9951 c -0.4710159,-1.28838267 1.4993519,-1.94586453 1.8964,-0.6328 l 1.7725002,5.3115 6.476528,0.025711 C 17.797031,6.5048193 16.5,6.9764461 16,7.4764461 15.792741,7.8304469 15.314225,8.1704919 15.047108,8.4818142 Z"
-     id="path3136"
-     style="stroke:#1a81c4;stroke-opacity:1;fill:#1a81c4;fill-opacity:1"
-     sodipodi:nodetypes="ccccccscc" />
+     id="polyline3132-3"
+     style="fill:none;stroke:#bf2641;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 5,-1 6,6 m 0,0 h 5 l 8,8"
+     sodipodi:nodetypes="ccccc" />
   <path
-     class="cls-4"
-     d="m 4.490928,18.517313 -4.52339084,-0.01728 c -1.33332286,-0.0051 -1.28238706,-1.953388 0.05088291,-1.96632 l 7.06634683,-0.06854 c 0.5526746,-0.0054 -2.041143,2.054254 -2.5938389,2.052142 z"
-     id="path3138"
-     sodipodi:nodetypes="sssss"
-     style="fill:#1a81c4;fill-opacity:1;stroke:#1a81c4;stroke-linecap:square;stroke-opacity:1" />
-  <line
-     class="cls-3"
-     x1="0.5"
-     y1="23.5"
-     x2="23.5"
-     y2="0.5"
-     id="line158655"
-     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+     id="polyline3132-3-6"
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 0,13 6,6 m 0,0 h 9 l 5,5"
+     sodipodi:nodetypes="ccccc" />
+  <circle
+     style="fill:#ffffff;fill-opacity:1;stroke:#f29100;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     id="path991"
+     cy="12"
+     cx="10"
+     r="1.5" />
 </svg>

@@ -30,8 +30,8 @@
      id="namedview34"
      showgrid="true"
      inkscape:zoom="37.889139"
-     inkscape:cx="2.5768824"
-     inkscape:cy="10.805587"
+     inkscape:cx="2.8153171"
+     inkscape:cy="12.582575"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -117,39 +117,33 @@
   <title
      id="title17">net_highlight</title>
   <path
-     id="polyline19"
-     style="fill:none;stroke:#42B8EB;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
-     d="M 24,11 H 16 6"
+     id="polyline21"
+     style="fill:none;stroke:#f2647e;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 6.5,11.5 V 24 Z"
      sodipodi:nodetypes="ccc"
      inkscape:connector-curvature="0" />
   <path
-     id="polyline21"
-     style="fill:none;stroke:#f2647e;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
-     d="m 6,10.293247 v 8 8 -8 z"
-     sodipodi:nodetypes="ccccc"
-     inkscape:connector-curvature="0" />
-  <path
-     class="cls-4"
-     d="M 8.2315,11.0001 A 2.2400001,2.24 0 1 1 5.9915011,8.7600997 2.2403945,2.2403944 0 0 1 8.2315,11.0001 Z"
-     id="path25"
-     style="fill:#f29100;stroke-width:0.63999999"
-     inkscape:connector-curvature="0" />
-  <path
-     class="cls-3"
-     d="M 7.122252,11.00002 A 1.130752,1.130752 0 1 1 5.9915,9.8692679 1.130752,1.130752 0 0 1 7.122252,11.00002 Z"
-     id="path27"
-     inkscape:connector-curvature="0"
-     style="fill:#ffffff;stroke-width:0.51199996;fill-opacity:1" />
-  <path
      id="polyline29"
-     style="fill:none;stroke:#c0c0c0;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-     d="M -0.5250758,3.007 9,3 14,8 v 17"
+     style="fill:none;stroke:#c0c0c0;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 0,4 h 10 l 5,5 v 14.5"
      sodipodi:nodetypes="cccc"
      inkscape:connector-curvature="0" />
   <path
      inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccc"
-     d="M 3.4749242,-0.993 12,-1 19,5.6049767 V 24.583204"
-     style="fill:none;stroke:#c0c0c0;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     sodipodi:nodetypes="ccc"
+     d="m 14,0 6,6 v 18"
+     style="fill:none;stroke:#c0c0c0;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="path856" />
+  <path
+     id="polyline19"
+     style="fill:none;stroke:#42b8eb;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 24,11.5 H 5.5"
+     sodipodi:nodetypes="cc"
+     inkscape:connector-curvature="0" />
+  <circle
+     style="fill:#ffffff;stroke:#f29100;stroke-width:4;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     id="path1564"
+     cx="6.5"
+     cy="11.5"
+     r="1.5" />
 </svg>

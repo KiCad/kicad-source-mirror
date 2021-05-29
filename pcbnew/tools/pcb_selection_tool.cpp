@@ -440,9 +440,6 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 ExitGroup();
 
             ClearSelection();
-
-            if( evt->FirstResponder() == this )
-                m_toolMgr->RunAction( PCB_ACTIONS::clearHighlight );
         }
         else
         {

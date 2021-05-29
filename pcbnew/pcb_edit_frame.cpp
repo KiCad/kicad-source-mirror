@@ -46,6 +46,7 @@
 #include <wildcards_and_files_ext.h>
 #include <pcb_draw_panel_gal.h>
 #include <functional>
+#include <pcb_painter.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <project/net_settings.h>
@@ -624,11 +625,27 @@ void PCB_EDIT_FRAME::setupUIConditions()
             return GetDisplayOptions().m_DisplayRatsnestLinesCurved;
         };
 
+    auto netHighlightCond =
+        [this]( const SELECTION& )
+        {
+            KIGFX::RENDER_SETTINGS* settings = GetCanvas()->GetView()->GetPainter()->GetSettings();
+            return !settings->GetHighlightNetCodes().empty();
+        };
+
+    auto enableNetHighlightCond =
+        [this]( const SELECTION& )
+        {
+            BOARD_INSPECTION_TOOL* tool = m_toolManager->GetTool<BOARD_INSPECTION_TOOL>();
+            return tool->IsNetHighlightSet();
+        };
+
     mgr->SetConditions( ACTIONS::highContrastMode,         CHECK( highContrastCond ) );
     mgr->SetConditions( PCB_ACTIONS::flipBoard,            CHECK( boardFlippedCond ) );
     mgr->SetConditions( PCB_ACTIONS::showLayersManager,    CHECK( layerManagerCond ) );
     mgr->SetConditions( PCB_ACTIONS::showRatsnest,         CHECK( globalRatsnestCond ) );
     mgr->SetConditions( PCB_ACTIONS::ratsnestLineMode,     CHECK( curvedRatsnestCond ) );
+    mgr->SetConditions( PCB_ACTIONS::toggleNetHighlight,
+                        CHECK( netHighlightCond ).Enable( enableNetHighlightCond ) );
     mgr->SetConditions( PCB_ACTIONS::boardSetup ,          ENABLE( enableBoardSetupCondition ) );
 
 
@@ -706,7 +723,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( ACTIONS::zoomTool );
     CURRENT_TOOL( ACTIONS::measureTool );
     CURRENT_TOOL( ACTIONS::selectionTool );
-    CURRENT_TOOL( PCB_ACTIONS::highlightNetTool );
     CURRENT_TOOL( PCB_ACTIONS::localRatsnestTool );
 
 

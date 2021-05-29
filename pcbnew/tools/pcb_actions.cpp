@@ -701,19 +701,19 @@ TOOL_ACTION PCB_ACTIONS::toggleLastNetHighlight( "pcbnew.EditorControl.toggleLas
         _( "Toggle Last Net Highlight" ), _( "Toggle between last two highlighted nets" ) );
 
 TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
-        AS_GLOBAL, 0, "",
+        AS_GLOBAL, '~', "",
         _( "Clear Net Highlighting" ), _( "Clear any existing net highlighting" ) );
 
-TOOL_ACTION PCB_ACTIONS::highlightNetTool( "pcbnew.EditorControl.highlightNetTool",
-        AS_GLOBAL, 0, "",
-        _( "Highlight Nets" ), _( "Highlight all copper items of a net" ),
-        BITMAPS::net_highlight, AF_ACTIVATE );
+TOOL_ACTION PCB_ACTIONS::toggleNetHighlight( "pcbnew.EditorControl.toggleNetHighlight",
+        AS_GLOBAL, MD_CTRL + '`', "",
+        _( "Toggle Net Highlight" ), _( "Toggle net highlighting" ),
+        BITMAPS::net_highlight );
 
 TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightNetSelection",
         AS_GLOBAL,
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         '`', LEGACY_HK_NAME( "Toggle Highlight of Selected Net (Modern Toolset only)" ),
-        _( "Highlight Net" ), _( "Highlight all copper items of a net" ),
+        _( "Highlight Net" ), _( "Highlight all copper items on the selected net(s)" ),
         BITMAPS::net_highlight );
 
 TOOL_ACTION PCB_ACTIONS::highlightItem( "pcbnew.EditorControl.highlightItem",

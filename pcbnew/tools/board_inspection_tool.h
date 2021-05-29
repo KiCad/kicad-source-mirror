@@ -119,6 +119,14 @@ public:
 
     int InspectConstraints( const TOOL_EVENT& aEvent );
 
+    /**
+     * @return true if a net or nets to highlight have been set
+     */
+    bool IsNetHighlightSet() const
+    {
+        return !m_currentlyHighlighted.empty();
+    }
+
 private:
     ///< Event handler to recalculate dynamic ratsnest.
     void ratsnestTimer( wxTimerEvent& aEvent );
@@ -155,7 +163,8 @@ private:
     PCB_EDIT_FRAME* m_frame;    // Pointer to the currently used edit frame.
 
     bool m_probingSchToPcb;     // Recursion guard when cross-probing to Eeschema
-    int  m_lastNetcode;         // Used for toggling between last two highlighted nets
+    std::set<int> m_currentlyHighlighted; // Active net being highlighted, or -1 when off
+    std::set<int> m_lastHighlighted;      // Used for toggling between last two highlighted nets
 
     CONNECTIVITY_DATA* m_dynamicData;      // Cached connectivity data from the selection
 
