@@ -42,15 +42,15 @@ class DIALOG_LOCKED_ITEMS_QUERY_BASE : public DIALOG_SHIM
 		wxStaticText* m_messageLine2;
 		wxCheckBox* m_doNotShowBtn;
 		wxButton* m_overrideBtn;
-		wxButton* m_removeBtn;
 		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void onOverrideLocks( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onOkClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onOkClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

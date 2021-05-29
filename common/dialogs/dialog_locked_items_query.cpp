@@ -31,8 +31,12 @@ DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, int aLo
 
     m_messageLine1->SetLabel( wxString::Format( m_messageLine1->GetLabel(), aLockedItemCount ) );
 
-    m_removeBtn->SetDefault();
-    m_removeBtn->SetFocus();
+    m_sdbSizerOK->SetLabel( _( "Skip Locked Items" ) );
+    m_sdbSizerOK->SetToolTip( _( "Remove locked items from the selection and only apply the "
+                                 "operation to the unlocked items (if any)." ) );
+    m_sdbSizerOK->SetDefault();
+    m_sdbSizerOK->SetFocus();
+
     Layout();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
