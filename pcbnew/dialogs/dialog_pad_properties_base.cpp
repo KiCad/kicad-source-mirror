@@ -781,7 +781,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_localSettingsPanel->SetSizer( bSizerPanelClearance );
 	m_localSettingsPanel->Layout();
 	bSizerPanelClearance->Fit( m_localSettingsPanel );
-	m_notebook->AddPage( m_localSettingsPanel, _("Local Clearance and Settings"), false );
+	m_notebook->AddPage( m_localSettingsPanel, _("Clearance Overrides and Settings"), false );
 	m_panelCustomShapePrimitives = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_bSizerPanelPrimitives = new wxBoxSizer( wxVERTICAL );
 
