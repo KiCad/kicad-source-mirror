@@ -470,33 +470,43 @@ static bool cursorDistMinimum( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aCurs
     int minDistGlob = std::numeric_limits<int>::max();
     int minPGlob = -1;
 
-    for( int i = 0; i < dists.size() - 3; i++ )
-    {
-        if( dists[i + 2] > dists[i + 1] && dists[i] > dists[i + 1] )
-        {
-            int d = dists[i + 1];
-            if( d < minDistLoc )
-            {
-                minDistLoc = d;
-                minPLoc = i + 1;
-            }
-        }
-    }
-
-    if ( dists.back() < minDistLoc && minPLoc >= 0 )
-    {
-        minDistLoc = dists.back();
-        minPLoc = dists.size() - 1;
-    }
-
     for( int i = 0; i < dists.size(); i++ )
     {
         int d = dists[i];
+
         if( d < minDistGlob )
         {
             minDistGlob = d;
             minPGlob = i;
         }
+    }
+
+    if( dists.size() >= 3 )
+    {
+        for( int i = 0; i < dists.size() - 3; i++ )
+        {
+            if( dists[i + 2] > dists[i + 1] && dists[i] > dists[i + 1] )
+            {
+                int d = dists[i + 1];
+                if( d < minDistLoc )
+                {
+                    minDistLoc = d;
+                    minPLoc    = i + 1;
+                }
+            }
+        }
+
+        if( dists.back() < minDistLoc && minPLoc >= 0 )
+        {
+            minDistLoc = dists.back();
+            minPLoc    = dists.size() - 1;
+        }
+    }
+    else
+    {
+        // Too few points: just use the global
+        minDistLoc = minDistGlob;
+        minPLoc    = minPGlob;
     }
 
 // fixme: I didn't make my mind yet if local or global minimum feels better. I'm leaving both
