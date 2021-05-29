@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-05-18 06:32+0000\n"
+"PO-Revision-Date: 2021-05-29 08:45+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
-"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ro/>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -146,8 +146,8 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Schița amprentei lipsește sau este greșită. Rulați Footprint Checker pentru "
-"o analiză completă."
+"Schița amprentei lipsește sau este greșită. Rulați Verificator de amprentă "
+"pentru o analiză completă."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:496
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
@@ -2229,13 +2229,16 @@ msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr ""
+msgstr "Rețineți decizia pentru această sesiune."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"Rețineți opțiunea selectată pentru restul sesiunii.\n"
+"Această fereastră de dialog nu va fi afișată din nou până când KiCad nu este "
+"repornit."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -2246,6 +2249,9 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"Suprascrieți încuietorile și aplicați operațiunea la toate elementele "
+"selectate.\n"
+"Orice element blocat va rămâne blocat și după finalizarea operațiunii."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:60
 #, fuzzy
@@ -2257,6 +2263,8 @@ msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"Eliminați elementele blocate din selecție și aplicați operația numai "
+"elementelor deblocate (dacă există)."
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
 msgid "Locked Items"
@@ -2658,19 +2666,21 @@ msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
 msgstr ""
+"Găsește următorul indicativ de referință disponibil pentru orice indicativ "
+"care există deja în proiect."
 
 #: common/dialogs/dialog_paste_special.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Trasați desemnatori de referință"
+msgstr "Înlocuiește desemnatori de referință cu \"%s\"."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr ""
+msgstr "Alocați indicativ de referință unici simbolurilor lipite"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr ""
+msgstr "Păstrați indicativele de referință existente, chiar dacă sunt duplicate"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
@@ -2679,11 +2689,11 @@ msgstr "Trasați desemnatori de referință"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
-msgstr ""
+msgstr "Opțiuni de lipire"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
-msgstr ""
+msgstr "Lipire specială"
 
 #: common/dialogs/dialog_print_generic.cpp:44
 #: common/dialogs/dialog_print_generic.cpp:248
@@ -3505,11 +3515,11 @@ msgstr "Diametrul microvia placate"
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
 msgid "Differential pair track width"
-msgstr ""
+msgstr "Lățimea liniei perechii diferențiale"
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
 msgid "Differential pair gap"
-msgstr ""
+msgstr "Decalajul perechii diferențiale"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
 msgid "Schematic wire thickness"
@@ -3651,8 +3661,9 @@ msgid "Ignore"
 msgstr "Ignoră"
 
 #: common/dialogs/panel_setup_severities.cpp:105
+#, fuzzy
 msgid "From Pin Conflicts Map"
-msgstr ""
+msgstr "Din harta conflictului pin"
 
 #: common/dialogs/panel_text_variables.cpp:114
 #: common/dialogs/panel_text_variables.cpp:142
@@ -3820,11 +3831,11 @@ msgstr "Repetați numărul"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "Repeat Label Increment"
-msgstr ""
+msgstr "Repetați incrementului etichetei"
 
 #: common/drawing_sheet/ds_draw_item.cpp:153
 msgid "Repeat Position Increment"
-msgstr ""
+msgstr "Repetați poziția de incrementare"
 
 #: common/drawing_sheet/ds_draw_item.cpp:155
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
@@ -3886,11 +3897,12 @@ msgstr "e nevoie de un număr pentru '%s'"
 
 #: common/dsnlexer.cpp:673 common/dsnlexer.cpp:734
 msgid "Un-terminated delimited string"
-msgstr ""
+msgstr "Șir delimitat fără terminație"
 
 #: common/dsnlexer.cpp:696
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr ""
+"Delimitatorul de șir trebuie să fie un singur caracter de tipul ', \", sau $"
 
 #: common/eda_base_frame.cpp:431
 msgid "&About KiCad"
@@ -4425,10 +4437,11 @@ msgstr ""
 #: common/env_vars.cpp:73
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
 msgstr ""
+"Calea de bază a formelor 3D de amprentă a sistemului (folderele .3Dshapes)."
 
 #: common/env_vars.cpp:75
 msgid "The base path of the locally installed symbol libraries."
-msgstr ""
+msgstr "Calea de bază a bibliotecilor de simboluri instalate local."
 
 #: common/env_vars.cpp:77
 msgid "A directory containing project templates installed with KiCad."
@@ -4578,6 +4591,8 @@ msgid ""
 "Duplicate library nickname \"%s\" found in footprint library table file line "
 "%d"
 msgstr ""
+"A fost găsită o poreclă de bibliotecă duplicată \"%s\" în linia de fișier "
+"tabel de bibliotecă de amprentă %d"
 
 #: common/fp_lib_table.cpp:300
 #, c-format
@@ -4588,7 +4603,7 @@ msgstr "Fișierele fp-lib-table nu conțin nicio bibliotecă cu numele \"%s\"."
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:109
 #, c-format
 msgid "Cannot create global library table path \"%s\"."
-msgstr ""
+msgstr "Nu se poate crea calea globală a tabelului bibliotecii \"%s\"."
 
 #: common/gestfich.cpp:190
 #, c-format
@@ -4634,7 +4649,7 @@ msgstr "Decupează"
 
 #: common/grid_tricks.cpp:241
 msgid "Clear selected cells placing original contents on clipboard"
-msgstr ""
+msgstr "Ștergeți celulele selectate plasând conținutul original în mapă"
 
 #: common/grid_tricks.cpp:242 common/tool/actions.cpp:158
 #: eeschema/tools/ee_actions.cpp:153
@@ -4643,7 +4658,7 @@ msgstr "Copiază"
 
 #: common/grid_tricks.cpp:242
 msgid "Copy selected cells to clipboard"
-msgstr ""
+msgstr "Copiați celulele selectate în mapă"
 
 #: common/grid_tricks.cpp:243 common/tool/actions.cpp:164
 msgid "Paste"
@@ -4651,7 +4666,7 @@ msgstr "Lipește"
 
 #: common/grid_tricks.cpp:243
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr ""
+msgstr "Lipiți celulele din mapă la matricea celulelor curentă"
 
 #: common/grid_tricks.cpp:244 common/tool/actions.cpp:190
 #: kicad/project_tree_pane.cpp:784 pcbnew/plugins/kicad/pcb_parser.cpp:681
@@ -4679,11 +4694,11 @@ msgstr "Selectați toate celulele"
 
 #: common/hotkey_store.cpp:43
 msgid "Pan Left/Right"
-msgstr ""
+msgstr "Deplasare Stânga/Dreapta"
 
 #: common/hotkey_store.cpp:44
 msgid "Pan Up/Down"
-msgstr ""
+msgstr "Deplasare Sus/Jos"
 
 #: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:255
 msgid "Finish Drawing"
@@ -4691,7 +4706,7 @@ msgstr "Finalizați desenul"
 
 #: common/hotkey_store.cpp:47 common/hotkey_store.cpp:52
 msgid "Show Clarify Selection Menu"
-msgstr ""
+msgstr "Afișați meniul Clarificare selecție"
 
 #: common/hotkey_store.cpp:48 common/hotkey_store.cpp:53
 msgid "Add to Selection"
@@ -4707,11 +4722,11 @@ msgstr "Eliminați din selecție"
 
 #: common/hotkey_store.cpp:57
 msgid "Ignore Grid Snaps"
-msgstr ""
+msgstr "Ignorați fixare grilă"
 
 #: common/hotkey_store.cpp:58
 msgid "Ignore Other Snaps"
-msgstr ""
+msgstr "Ignorați alte grile"
 
 #: common/hotkey_store.cpp:59
 #, fuzzy
@@ -4743,7 +4758,7 @@ msgstr "Editor PCB"
 #: pagelayout_editor/menubar.cpp:86 pagelayout_editor/pl_editor_frame.cpp:471
 #: pagelayout_editor/pl_editor_frame.cpp:539
 msgid "Drawing Sheet Editor"
-msgstr ""
+msgstr "Editor foi de desen"
 
 #: common/hotkey_store.cpp:154
 msgid "Gestures"
@@ -4759,6 +4774,8 @@ msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
 msgid ""
 "Could not read instance name and version symbol from kiface library \"%s\"."
 msgstr ""
+"Nu s-a putut citi numele instanței și simbolul versiunii din biblioteca "
+"kiface \"%s\"."
 
 #: common/kiway.cpp:295
 #, c-format
@@ -5082,23 +5099,23 @@ msgstr "Numele pinilor"
 
 #: common/layer_id.cpp:114
 msgid "Symbol references"
-msgstr ""
+msgstr "Simboluri de referință"
 
 #: common/layer_id.cpp:115
 msgid "Symbol values"
-msgstr ""
+msgstr "Valorile simbolului"
 
 #: common/layer_id.cpp:116
 msgid "Symbol fields"
-msgstr ""
+msgstr "Câmpuri simbol"
 
 #: common/layer_id.cpp:117
 msgid "Symbol body outlines"
-msgstr ""
+msgstr "Contururile corpului simbolului"
 
 #: common/layer_id.cpp:118
 msgid "Symbol body fills"
-msgstr ""
+msgstr "Umplerea corpului simbolului"
 
 #: common/layer_id.cpp:119
 msgid "Notes"
@@ -5114,7 +5131,7 @@ msgstr "Marginile foilor"
 
 #: common/layer_id.cpp:122
 msgid "Sheet backgrounds"
-msgstr ""
+msgstr "Fundaluri foi"
 
 #: common/layer_id.cpp:123
 msgid "Sheet names"
@@ -5122,11 +5139,11 @@ msgstr "Numele foilor"
 
 #: common/layer_id.cpp:124
 msgid "Sheet fields"
-msgstr ""
+msgstr "Câmpuri foi"
 
 #: common/layer_id.cpp:125
 msgid "Sheet file names"
-msgstr ""
+msgstr "Nume fișiere foaie"
 
 #: common/layer_id.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
@@ -5186,7 +5203,7 @@ msgstr "Foaie de desen"
 
 #: common/layer_id.cpp:142
 msgid "Footprints front"
-msgstr "Față amprentelor"
+msgstr "Fața amprentelor"
 
 #: common/layer_id.cpp:143
 msgid "Footprints back"
@@ -5210,11 +5227,11 @@ msgstr "Indicatori de referință"
 
 #: common/layer_id.cpp:146
 msgid "Footprint text front"
-msgstr ""
+msgstr "Text de amprentă față"
 
 #: common/layer_id.cpp:147
 msgid "Footprint text back"
-msgstr ""
+msgstr "Text de amprentă spate"
 
 #: common/layer_id.cpp:148
 msgid "Hidden text"
@@ -5229,8 +5246,9 @@ msgid "Pads back"
 msgstr "Spate Pad"
 
 #: common/layer_id.cpp:151
+#, fuzzy
 msgid "Through-hole pads"
-msgstr ""
+msgstr "Pad-uri prin gaură"
 
 #: common/layer_id.cpp:152
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
@@ -5247,7 +5265,7 @@ msgstr "Prin via-uri"
 
 #: common/layer_id.cpp:154
 msgid "Bl/Buried vias"
-msgstr ""
+msgstr "Bl/Via-uri îngropate"
 
 #: common/layer_id.cpp:155
 msgid "Micro-vias"
@@ -5259,7 +5277,7 @@ msgstr "Găuri via"
 
 #: common/layer_id.cpp:157
 msgid "Via hole walls"
-msgstr ""
+msgstr "Pereții găurilor Via"
 
 #: common/layer_id.cpp:158
 msgid "Plated holes"
@@ -5267,7 +5285,7 @@ msgstr "Găuri placate"
 
 #: common/layer_id.cpp:159
 msgid "Plated hole walls"
-msgstr ""
+msgstr "Pereți de găuri placate"
 
 #: common/layer_id.cpp:160
 msgid "Non-plated holes"
@@ -5342,11 +5360,11 @@ msgstr "Caracter nerecunoscut \"%c"
 
 #: common/libeval_compiler/libeval_compiler.cpp:830
 msgid "Unknown parent of function parameters"
-msgstr ""
+msgstr "Părintele necunoscut al parametrilor funcției"
 
 #: common/libeval_compiler/libeval_compiler.cpp:849
 msgid "Unknown parent of property"
-msgstr ""
+msgstr "Părinte necunoscut al proprietății"
 
 #: common/libeval_compiler/libeval_compiler.cpp:872
 #: common/libeval_compiler/libeval_compiler.cpp:900
@@ -5656,7 +5674,7 @@ msgstr "Afișați meniul contextual"
 
 #: common/tool/actions.cpp:126
 msgid "Perform the right-mouse-button action"
-msgstr ""
+msgstr "Efectuați acțiunii butonului din dreapta al mouse-ului"
 
 #: common/tool/actions.cpp:135
 msgid "Undo"
@@ -5676,15 +5694,15 @@ msgstr "Refaceți ultima modificare"
 
 #: common/tool/actions.cpp:152
 msgid "Cut selected item(s) to clipboard"
-msgstr ""
+msgstr "Tăiați elementul (elementele) selectat(e) în mapă"
 
 #: common/tool/actions.cpp:158
 msgid "Copy selected item(s) to clipboard"
-msgstr ""
+msgstr "Copiați elementul (elementele) selectat(e) în mapă"
 
 #: common/tool/actions.cpp:164
 msgid "Paste items(s) from clipboard"
-msgstr ""
+msgstr "Lipiți elementul (elementele) selectat(e) în mapă"
 
 #: common/tool/actions.cpp:170
 msgid "Select all items on screen"
@@ -5692,11 +5710,11 @@ msgstr "Selectați toate elementele de pe ecran"
 
 #: common/tool/actions.cpp:174
 msgid "Paste Special..."
-msgstr ""
+msgstr "Lipiți special ..."
 
 #: common/tool/actions.cpp:174
 msgid "Paste item(s) from clipboard with options"
-msgstr ""
+msgstr "Lipiți elementul (elementele) din mapă cu opțiuni"
 
 #: common/tool/actions.cpp:179
 msgid "Duplicate"
@@ -5773,27 +5791,27 @@ msgstr "Înlocuiți toate potrivirile"
 
 #: common/tool/actions.cpp:248
 msgid "Previous Marker"
-msgstr ""
+msgstr "Marcator anterior"
 
 #: common/tool/actions.cpp:248
 msgid "Go to previous marker in Checker window"
-msgstr ""
+msgstr "Accesați marcatorul anterior din fereastra Verificator"
 
 #: common/tool/actions.cpp:253
 msgid "Next Marker"
-msgstr ""
+msgstr "Următorul marcaj"
 
 #: common/tool/actions.cpp:253
 msgid "Go to next marker in Checker window"
-msgstr ""
+msgstr "Accesați marcatorul următor din fereastra Verificator"
 
 #: common/tool/actions.cpp:258
 msgid "Exclude Marker"
-msgstr ""
+msgstr "Excludeți marcator"
 
 #: common/tool/actions.cpp:258
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
+msgstr "Marcarea încălcării curente în fereastra Verificator ca excludere"
 
 #: common/tool/actions.cpp:269
 msgid "Refresh"
@@ -5801,19 +5819,19 @@ msgstr "Actualizează"
 
 #: common/tool/actions.cpp:280
 msgid "Zoom to Fit"
-msgstr ""
+msgstr "Potrivire zoom"
 
 #: common/tool/actions.cpp:285
 msgid "Zoom to Objects"
-msgstr ""
+msgstr "Măriți obiectele"
 
 #: common/tool/actions.cpp:296
 msgid "Zoom In at Cursor"
-msgstr ""
+msgstr "Măriți la cursor"
 
 #: common/tool/actions.cpp:307
 msgid "Zoom Out at Cursor"
-msgstr ""
+msgstr "Micșorați la cursor"
 
 #: common/tool/actions.cpp:313 common/widgets/mathplot.cpp:1761
 #: eeschema/sim/sim_plot_frame_base.cpp:83
@@ -5827,7 +5845,7 @@ msgstr "Micșorează"
 
 #: common/tool/actions.cpp:331
 msgid "Zoom to Selection"
-msgstr ""
+msgstr "Măriți la selecție"
 
 #: common/tool/actions.cpp:344
 msgid "Cursor Up"
@@ -5867,7 +5885,7 @@ msgstr "Clic"
 
 #: common/tool/actions.cpp:393
 msgid "Performs left mouse button click"
-msgstr ""
+msgstr "Efectuează clic cu butonul stâng al mouse-ului"
 
 #: common/tool/actions.cpp:399
 msgid "Double-click"
@@ -5875,7 +5893,7 @@ msgstr "Clic dublu"
 
 #: common/tool/actions.cpp:399
 msgid "Performs left mouse button double-click"
-msgstr ""
+msgstr "Efectuează dublu clic cu butonul stâng al mouse-ului"
 
 #: common/tool/actions.cpp:405
 msgid "Pin Library"
@@ -5883,7 +5901,7 @@ msgstr "Fixează biblioteca"
 
 #: common/tool/actions.cpp:406
 msgid "Keep the library at the top of the list"
-msgstr ""
+msgstr "Păstrați biblioteca în fruntea listei"
 
 #: common/tool/actions.cpp:409
 msgid "Unpin Library"
@@ -5891,23 +5909,23 @@ msgstr "Anulați fixarea bibliotecii"
 
 #: common/tool/actions.cpp:410
 msgid "No longer keep the library at the top of the list"
-msgstr ""
+msgstr "Nu mai păstrați biblioteca în fruntea listei"
 
 #: common/tool/actions.cpp:415
 msgid "Pan Up"
-msgstr ""
+msgstr "Deplasare sus"
 
 #: common/tool/actions.cpp:421
 msgid "Pan Down"
-msgstr ""
+msgstr "Deplasare jos"
 
 #: common/tool/actions.cpp:427
 msgid "Pan Left"
-msgstr ""
+msgstr "Deplasare stânga"
 
 #: common/tool/actions.cpp:433
 msgid "Pan Right"
-msgstr ""
+msgstr "Deplasare dreapta"
 
 #: common/tool/actions.cpp:440
 msgid "Switch to Fast Grid 1"
@@ -6001,17 +6019,16 @@ msgid "Always Show Cursor"
 msgstr "Arată întotdeauna cursorul"
 
 #: common/tool/actions.cpp:518
-#, fuzzy
 msgid "Display crosshairs even in selection tool"
-msgstr "Afișați reticulele chiar și în instrumentul de selecție"
+msgstr "Afișați crucea chiar și în instrumentul de selecție"
 
 #: common/tool/actions.cpp:523
 msgid "Full-Window Crosshairs"
-msgstr ""
+msgstr "Crucea pe tot ecranul"
 
 #: common/tool/actions.cpp:523
 msgid "Switch display of full-window crosshairs"
-msgstr ""
+msgstr "Comutarea afișajului cruce pe tot ecranul"
 
 #: common/tool/actions.cpp:528
 msgid "Single Layer View Mode"
@@ -6019,15 +6036,15 @@ msgstr "Modul de vizualizare a unui singur strat"
 
 #: common/tool/actions.cpp:528
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr ""
+msgstr "Comutați straturilor inactive între normal și atenuat"
 
 #: common/tool/actions.cpp:532
 msgid "Single Layer View Mode (3-state)"
-msgstr ""
+msgstr "Mod vizualizare cu un singur strat (3 stări)"
 
 #: common/tool/actions.cpp:533
 msgid "Toggle inactive layers between normal, dimmed, and hidden"
-msgstr ""
+msgstr "Comutați straturile inactive între normal, atenuat și ascuns"
 
 #: common/tool/actions.cpp:537
 msgid "Select item(s)"
@@ -6035,11 +6052,11 @@ msgstr "Selectați articolele"
 
 #: common/tool/actions.cpp:544
 msgid "Measure Tool"
-msgstr ""
+msgstr "Instrument măsurare"
 
 #: common/tool/actions.cpp:544
 msgid "Interactively measure distance between points"
-msgstr ""
+msgstr "Măsurați interactiv distanța dintre puncte"
 
 #: common/tool/actions.cpp:553
 msgid "Show 3D viewer window"
@@ -6052,17 +6069,17 @@ msgstr "Explorator de biblioteci de simboluri"
 
 #: common/tool/actions.cpp:558
 msgid "Browse symbol libraries"
-msgstr ""
+msgstr "Răsfoiți bibliotecile de simboluri"
 
 #: common/tool/actions.cpp:563 eeschema/eeschema_config.cpp:223
 #: eeschema/symbol_editor/symbol_editor.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:70
 msgid "Symbol Editor"
-msgstr ""
+msgstr "Editor de simboluri"
 
 #: common/tool/actions.cpp:563
 msgid "Create, delete and edit symbols"
-msgstr ""
+msgstr "Crearea, ștergerea și modificarea simbolurilor"
 
 #: common/tool/actions.cpp:568 pcbnew/footprint_viewer_frame.cpp:107
 #: pcbnew/footprint_viewer_frame.cpp:1027
@@ -6103,19 +6120,19 @@ msgstr "Actualizați schema cu modificările aduse PCB-ului"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:490
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:389
 msgid "Configure Paths..."
-msgstr ""
+msgstr "Configurați căi..."
 
 #: common/tool/actions.cpp:589
 msgid "Edit path configuration environment variables"
-msgstr ""
+msgstr "Editați variabilele de mediu de configurare a căii"
 
 #: common/tool/actions.cpp:594
 msgid "Manage Symbol Libraries..."
-msgstr ""
+msgstr "Gestionați bibliotecile de simboluri..."
 
 #: common/tool/actions.cpp:595
 msgid "Edit the global and project symbol library lists"
-msgstr ""
+msgstr "Editați listele bibliotecii de simboluri globale și de proiect"
 
 #: common/tool/actions.cpp:600
 msgid "Manage Footprint Libraries..."
@@ -6123,15 +6140,15 @@ msgstr "Gestionați bibliotecile de amprente..."
 
 #: common/tool/actions.cpp:601
 msgid "Edit the global and project footprint library lists"
-msgstr ""
+msgstr "Editați listele de biblioteci de amprentă globală și de proiect"
 
 #: common/tool/actions.cpp:606
 msgid "Getting Started with KiCad"
-msgstr ""
+msgstr "Introducere în KiCad"
 
 #: common/tool/actions.cpp:607
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr ""
+msgstr "Deschideți ghidul \"Introducere în KiCad\" pentru începători"
 
 #: common/tool/actions.cpp:612
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:598
@@ -6161,7 +6178,7 @@ msgstr "Deschideți „Contribuiți la KiCad” într-un browser web"
 
 #: common/tool/actions.cpp:631
 msgid "Donate"
-msgstr ""
+msgstr "Donaţi"
 
 #: common/tool/actions.cpp:632
 #, fuzzy
@@ -6170,7 +6187,7 @@ msgstr "Deschideți „Contribuiți la KiCad” într-un browser web"
 
 #: common/tool/actions.cpp:636
 msgid "Report Bug"
-msgstr ""
+msgstr "Raportați eroarea"
 
 #: common/tool/common_control.cpp:205
 #, c-format
@@ -6179,18 +6196,22 @@ msgid ""
 "\"%s\" could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
+"Fișierul de ajutor \"%s\" sau\n"
+"\"%s\" nu a putut fi găsit.\n"
+"Doriți să accesați ajutorul online KiCad?"
 
 #: common/tool/common_control.cpp:208 common/tool/common_control.cpp:228
-#, fuzzy
 msgid "File Not Found"
-msgstr "Nu s-a gasit fisierul:"
+msgstr "Nu s-a gasit fisierul"
 
 #: common/tool/common_control.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file \"%s\" could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "Fișierul de ajutor \"%s\" nu a putut fi găsit."
+msgstr ""
+"Fișierul de ajutor \"%s\" nu a putut fi găsit.\n"
+"Doriți să accesați ajutorul online KiCad?"
 
 #: common/tool/common_control.cpp:255
 #, c-format
@@ -6340,7 +6361,7 @@ msgstr "Distanța minimă a grilei:"
 
 #: common/widgets/gal_options_panel.cpp:154
 msgid "Snap to Grid:"
-msgstr ""
+msgstr "Fixare la grilă:"
 
 #: common/widgets/gal_options_panel.cpp:158
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:358
@@ -6368,11 +6389,11 @@ msgstr "Opțiuni cursor"
 
 #: common/widgets/gal_options_panel.cpp:190
 msgid "Small crosshair"
-msgstr ""
+msgstr "Crucea mică"
 
 #: common/widgets/gal_options_panel.cpp:191
 msgid "Full window crosshair"
-msgstr ""
+msgstr "Crucea pe tot ecranul"
 
 #: common/widgets/gal_options_panel.cpp:196
 msgid "Cursor Shape"
@@ -6384,7 +6405,7 @@ msgstr "Forma cursorului pentru instrumentele de desen, plasare și mișcare"
 
 #: common/widgets/gal_options_panel.cpp:204
 msgid "Always show crosshairs"
-msgstr ""
+msgstr "Afișează întotdeauna crucea"
 
 #: common/widgets/grid_text_button_helpers.cpp:369
 msgid "Select a File"
@@ -6396,7 +6417,7 @@ msgstr "Centrează trasarea în această poziție"
 
 #: common/widgets/mathplot.cpp:1760 eeschema/sim/sim_plot_frame_base.cpp:91
 msgid "Fit on Screen"
-msgstr ""
+msgstr "Incadrat in ecran"
 
 #: common/widgets/mathplot.cpp:1760
 msgid "Set plot view to show all items"
@@ -7356,9 +7377,8 @@ msgid "Current sheet only"
 msgstr ""
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
-#, fuzzy
 msgid "Selection only"
-msgstr "Culoare selectie:"
+msgstr "Doar selecție"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:23
@@ -8309,9 +8329,8 @@ msgid "Align top"
 msgstr ""
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:122 eeschema/sch_text.cpp:674
-#, fuzzy
 msgid "Justification"
-msgstr "Justificare:"
+msgstr "Justificare"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
 msgid "Bold and italic"
@@ -8607,7 +8626,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc_base.h:87 eeschema/tools/ee_actions.cpp:45
 msgid "Electrical Rules Checker"
-msgstr ""
+msgstr "Verificator de reguli electrice"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:85
 #: eeschema/fields_grid_table.cpp:596
@@ -9856,9 +9875,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1277
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1317
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "Nu se poate deschide fișierul '%s'."
+msgstr "Nu se poate normaliza calea \"%s%s\"."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1303
 msgid "No project or path defined for the current schematic."
@@ -10503,9 +10522,8 @@ msgid "TEMP"
 msgstr "TEMP"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:115
-#, fuzzy
 msgid "Source:"
-msgstr "Sursă"
+msgstr "Sursă:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:119
 msgid "Sweep type:"
@@ -12341,18 +12359,14 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic file \"%s\""
-msgstr ""
-"Eroare la încărcarea schemei.\n"
-"%s"
+msgstr "Eroare la încărcarea fișierului schematic \"%s\""
 
 #: eeschema/files-io.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading schematic file \"%s\""
-msgstr ""
-"Eroare la încărcarea schemei.\n"
-"%s"
+msgstr "Memorie epuizată încărcând fișierul schematic \"%s\""
 
 #: eeschema/files-io.cpp:433 eeschema/files-io.cpp:1062
 #, c-format
@@ -12730,9 +12744,9 @@ msgid "Failed to create file \"%s\""
 msgstr ""
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file %s."
-msgstr "Nu s-a putut deschide fișierul de arhivă\n"
+msgstr "Nu s-a putut găsi fișierul de bibliotecă %s."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:123
 msgid "Run command:"
@@ -12744,9 +12758,8 @@ msgid "Command error. Return code %d."
 msgstr ""
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:133
-#, fuzzy
 msgid "Success."
-msgstr "Succes"
+msgstr "Succes."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:139
 msgid "Info messages:"
@@ -15331,11 +15344,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Symbol Checker"
-msgstr ""
+msgstr "Verificator de simboluri"
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Show the symbol checker window"
-msgstr ""
+msgstr "Afișarea ferestrei verificatorului de simboluri"
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulator..."
@@ -16291,9 +16304,8 @@ msgid "No symbol issues found."
 msgstr ""
 
 #: eeschema/tools/ee_inspection_tool.cpp:494
-#, fuzzy
 msgid "No datasheet defined."
-msgstr "Afișați fișa tehnică în browser"
+msgstr "Nu este definită nicio fișă tehnică."
 
 #: eeschema/tools/ee_selection_tool.cpp:1586
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
@@ -19221,9 +19233,8 @@ msgid "Conductor length:"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1542
-#, fuzzy
 msgid "Copper resistivity:"
-msgstr "Sensibilitate"
+msgstr "Rezistivitatea cuprului:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1569
 msgid "External Layer Traces"
@@ -22597,7 +22608,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:71
 #: pcbnew/tools/pcb_actions.cpp:396
 msgid "Footprint Checker"
-msgstr ""
+msgstr "Verificator de amprentă"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:331
 msgid "Footprint can be freely moved and oriented on the canvas."
@@ -32302,11 +32313,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:230
 msgid "Design Rules Checker"
-msgstr ""
+msgstr "Verificator de reguli de proiectare"
 
 #: pcbnew/tools/pcb_actions.cpp:230
 msgid "Show the design rules checker window"
-msgstr ""
+msgstr "Afișați fereastra de verificare reguli de proiectare"
 
 #: pcbnew/tools/pcb_actions.cpp:239
 msgid "Open in Footprint Editor"
@@ -32472,7 +32483,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:396
 msgid "Show the footprint checker window"
-msgstr ""
+msgstr "Afișați fereastra de verificare a amprentei"
 
 #: pcbnew/tools/pcb_actions.cpp:403
 msgid "Update Footprint..."
