@@ -69,20 +69,7 @@ bool SCRIPTING_TOOL::Init()
         Py_DECREF( mod );
     }
 
-    // Load pcbnew inside Python and load all the user plugins and package-based plugins
-    {
-        using namespace pybind11::literals;
-
-        auto locals = pybind11::dict( "sys_path"_a = TO_UTF8( SCRIPTING::PyScriptingPath( false ) ),
-                                      "user_path"_a = TO_UTF8( SCRIPTING::PyScriptingPath( true ) ) );
-
-        pybind11::exec( R"(
-import sys
-import pcbnew
-pcbnew.LoadPlugins( sys_path, user_path )
-        )", pybind11::globals(), locals );
-
-    }
+    callLoadPlugins();
 
     return true;
 }
@@ -97,18 +84,7 @@ int SCRIPTING_TOOL::reloadPlugins( const TOOL_EVENT& aEvent )
 
     {
         PyLOCK      lock;
-        std::string sys_path = SCRIPTING::PyScriptingPath( false ).ToStdString();
-        std::string user_path = SCRIPTING::PyScriptingPath( true ).ToStdString();
-
-        using namespace pybind11::literals;
-        auto locals = pybind11::dict( "sys_path"_a = sys_path,
-                                      "user_path"_a = user_path );
-
-        pybind11::exec( R"(
-import sys
-import pcbnew
-pcbnew.LoadPlugins( sys_path, user_path )
-       )", pybind11::globals(), locals );
+        callLoadPlugins();
     }
 
     if( !m_isFootprintEditor )
@@ -123,9 +99,29 @@ pcbnew.LoadPlugins( sys_path, user_path )
 }
 
 
+void SCRIPTING_TOOL::callLoadPlugins()
+{
+    // Load pcbnew inside Python and load all the user plugins and package-based plugins
+    using namespace pybind11::literals;
+
+    auto locals = pybind11::dict( "sys_path"_a = TO_UTF8( SCRIPTING::PyScriptingPath(
+                                            SCRIPTING::PATH_TYPE::STOCK ) ),
+                                    "user_path"_a = TO_UTF8( SCRIPTING::PyScriptingPath(
+                                            SCRIPTING::PATH_TYPE::USER ) ),
+                                    "third_party_path"_a = TO_UTF8( SCRIPTING::PyPluginsPath(
+                                            SCRIPTING::PATH_TYPE::THIRDPARTY ) ) );
+
+    pybind11::exec( R"(
+import sys
+import pcbnew
+pcbnew.LoadPlugins( sys_path, user_path, third_party_path )
+    )", pybind11::globals(), locals );
+}
+
+
 int SCRIPTING_TOOL::showPluginFolder( const TOOL_EVENT& aEvent )
 {
-    wxString pluginpath( SCRIPTING::PyPluginsPath( true ) );
+    wxString pluginpath( SCRIPTING::PyPluginsPath( SCRIPTING::PATH_TYPE::USER ) );
     LaunchExternal( pluginpath );
 
     return 0;

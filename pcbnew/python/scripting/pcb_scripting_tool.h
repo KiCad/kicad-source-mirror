@@ -49,6 +49,10 @@ private:
     ///< Reload Python plugins and reset toolbar (if in pcbnew)
     int reloadPlugins( const TOOL_EVENT& aEvent );
 
+    ///< Call LoadPlugins method of the scripting module with apropriate paths
+    ///< Must be called under PyLOCK
+    void callLoadPlugins();
+
     ///< Open the user's plugin folder in the system browser
     int showPluginFolder( const TOOL_EVENT& aEvent );
 

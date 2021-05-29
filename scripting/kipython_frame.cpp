@@ -38,7 +38,7 @@ void KIPYTHON_FRAME::SetupPythonEditor()
     PyLOCK lock;
 
     // Make sure the kicad_pyshell module is in the path
-    wxString sysPath = SCRIPTING::PyScriptingPath( false );
+    wxString sysPath = SCRIPTING::PyScriptingPath( SCRIPTING::PATH_TYPE::STOCK );
     auto     locals  = pybind11::dict( "stock_path"_a = sysPath.ToStdString() );
 
     pybind11::exec( R"(

@@ -59,8 +59,15 @@ public:
 
     static bool IsModuleLoaded( std::string& aModule );
 
-    static wxString PyScriptingPath( bool aUserPath = false );
-    static wxString PyPluginsPath( bool aUserPath = false );
+    enum PATH_TYPE
+    {
+        STOCK,
+        USER,
+        THIRDPARTY
+    };
+
+    static wxString PyScriptingPath( PATH_TYPE aPathType = STOCK );
+    static wxString PyPluginsPath( PATH_TYPE aPathType = STOCK );
 
 private:
 

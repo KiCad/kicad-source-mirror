@@ -209,7 +209,7 @@ bool SCRIPTING::scriptingSetup()
 
 #endif
 
-    wxFileName path( PyPluginsPath( true ) + wxT( "/" ) );
+    wxFileName path( PyPluginsPath( SCRIPTING::PATH_TYPE::USER ) + wxT( "/" ) );
 
     // Ensure the user plugin path exists, and create it if not.
     // However, if it cannot be created, this is not a fatal error.
@@ -452,18 +452,25 @@ wxString PyErrStringWithTraceback()
 /**
  * Find the Python scripting path.
  */
-wxString SCRIPTING::PyScriptingPath( bool aUserPath )
+wxString SCRIPTING::PyScriptingPath( PATH_TYPE aPathType )
 {
     wxString path;
 
     //@todo This should this be a user configurable variable eg KISCRIPT?
-    if( aUserPath )
+    switch( aPathType )
     {
-        path = PATHS::GetUserScriptingPath();
-    }
-    else
-    {
-        path = PATHS::GetStockScriptingPath();
+    case STOCK: path = PATHS::GetStockScriptingPath(); break;
+    case USER: path = PATHS::GetUserScriptingPath(); break;
+    case THIRDPARTY:
+        const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
+        auto               it = env.find( "KICAD6_3RD_PARTY" );
+
+        if( it != env.end() && !it->second.GetValue().IsEmpty() )
+            path = it->second.GetValue();
+        else
+            path = PATHS::GetDefault3rdPartyPath();
+
+        break;
     }
 
     wxFileName scriptPath( path );
@@ -479,9 +486,9 @@ wxString SCRIPTING::PyScriptingPath( bool aUserPath )
 }
 
 
-wxString SCRIPTING::PyPluginsPath( bool aUserPath )
+wxString SCRIPTING::PyPluginsPath( PATH_TYPE aPathType )
 {
     // Note we are using unix path separator, because window separator sometimes
     // creates issues when passing a command string to a python method by PyRun_SimpleString
-    return PyScriptingPath( aUserPath ) + '/' + "plugins";
+    return PyScriptingPath( aPathType ) + '/' + "plugins";
 }

@@ -165,7 +165,7 @@ def LoadPluginModule(Dirname, ModuleName, FileName):
         FULL_BACK_TRACE += traceback.format_exc()
 
 
-def LoadPlugins(bundlepath=None, userpath=None):
+def LoadPlugins(bundlepath=None, userpath=None, thirdpartypath=None):
     """
     Initialise Scripting/Plugin python environment and load plugins.
 
@@ -192,6 +192,8 @@ def LoadPlugins(bundlepath=None, userpath=None):
             <userpath>/
             <userpath>/plugins/
 
+        The plugins from 3rd party packages:
+            $KICAD_3RD_PARTY/plugins/
     """
     import os
     import sys
@@ -207,8 +209,9 @@ def LoadPlugins(bundlepath=None, userpath=None):
     So convert these utf8 encoding to unicode strings to avoid any encoding issue.
     """
     try:
-        bundlepath = bundlepath.decode( 'UTF-8' );
-        userpath = userpath.decode( 'UTF-8' );
+        bundlepath = bundlepath.decode( 'UTF-8' )
+        userpath = userpath.decode( 'UTF-8' )
+        thirdpartypath = thirdpartypath.decode( 'UTF-8' )
     except AttributeError:
         pass
 
@@ -220,7 +223,10 @@ def LoadPlugins(bundlepath=None, userpath=None):
     to the windows separator, although using '/' works
     """
     if sys.platform.startswith('win32'):
-        bundlepath = bundlepath.replace("/","\\")
+        if bundlepath:
+            bundlepath = bundlepath.replace("/","\\")
+        if thirdpartypath:
+            thirdpartypath = thirdpartypath.replace("/","\\")
 
     if bundlepath:
         plugin_directories.append(bundlepath)
@@ -233,6 +239,9 @@ def LoadPlugins(bundlepath=None, userpath=None):
     if userpath:
         plugin_directories.append(userpath)
         plugin_directories.append(os.path.join(userpath, 'plugins'))
+
+    if thirdpartypath:
+        plugin_directories.append(thirdpartypath)
 
     global PLUGIN_DIRECTORIES_SEARCH
     PLUGIN_DIRECTORIES_SEARCH=""
