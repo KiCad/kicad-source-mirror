@@ -1,15 +1,19 @@
+# 킴슨김랑기 <korearf@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2007-12-17 15:07+0900\n"
-"Last-Translator: \n"
-"Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
-"Language: \n"
+"PO-Revision-Date: 2021-05-29 08:45+0000\n"
+"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -25,28 +29,25 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
-msgstr ""
+msgstr "모든 파일 (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:100
 #, c-format
 msgid "All supported files (%s)"
-msgstr ""
+msgstr "지원되는 모든 파일 (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
-#, fuzzy
 msgid "Available paths:"
-msgstr "파일 이름:"
+msgstr "사용 가능한 경로 :"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
-#, fuzzy
 msgid "Configure Paths"
-msgstr "설정"
+msgstr "경로 구성"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.h:63
-#, fuzzy
 msgid "Select 3D Model"
-msgstr "모듈 삭제"
+msgstr "3D모델선택"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
@@ -72,9 +73,8 @@ msgstr "스케일"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1222
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1332
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:61
-#, fuzzy
 msgid "X:"
-msgstr " X"
+msgstr "X:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:39
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:84
@@ -98,9 +98,8 @@ msgstr " X"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1233
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1343
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:78
-#, fuzzy
 msgid "Y:"
-msgstr " Y"
+msgstr "Y:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:49
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:94
@@ -108,12 +107,11 @@ msgstr " Y"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1012
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1024
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:701 pcbnew/footprint.cpp:868
 #: pcbnew/pad.cpp:915
-#, fuzzy
 msgid "Rotation"
 msgstr "회전"
 
@@ -123,165 +121,153 @@ msgstr "옵셋"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
 msgid "Opacity"
-msgstr ""
+msgstr "불투명도"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
 #: eeschema/dialogs/dialog_print_using_printer.cpp:144
 #: eeschema/dialogs/dialog_print_using_printer.cpp:271
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:254
-#, fuzzy
 msgid "Preview"
-msgstr "미리 보기 (&V)"
+msgstr "미리보기"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:192
 msgid "Change to isometric perspective"
-msgstr ""
+msgstr "등각 투시로 변경"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:221
-#, fuzzy
 msgid "Reload board and 3D models"
-msgstr "3D 모드로 보드 보이기"
+msgstr "보드와 3D 모델 다시 로드"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:278
-#, fuzzy
 msgid "Build board outline"
-msgstr "보드 파일:"
+msgstr "보드 외곽선 생성"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:449
-#, fuzzy
 msgid "Create layers"
-msgstr "Draft layer"
+msgstr "레이어 만들기"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:471
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:103
-#, fuzzy
 msgid "No footprint loaded."
-msgstr "라이브러리가 정의되지 않았습니다."
+msgstr "로드 된 풋 프린트 없음."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:487
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
-msgstr ""
+msgstr "풋프린트 윤곽이 없거나 잘못되었음. 전체 분석을 위해 풋프린트 검사기를 실행합니다."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:496
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr ""
+msgstr "보드 외곽선이 없거나 잘못되었음. 전체 분석을 위해 DRC를 실행합니다."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
-#, fuzzy
 msgid "Create tracks and vias"
-msgstr "비아 및 트랙 추가"
+msgstr "트랙 및 비아 생성"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:682
-#, fuzzy
 msgid "Create zones"
-msgstr "영역 삭제"
+msgstr "영역 만들기"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:752
 msgid "Simplifying copper layers polygons"
-msgstr ""
+msgstr "구리 층 다각형 단순화"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:831
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "구멍 윤곽 단순화"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:860
-#, fuzzy
 msgid "Build Tech layers"
-msgstr "Tech Layers"
+msgstr "기술 계층 생성"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1035
 msgid "Build BVH for holes and vias"
-msgstr ""
+msgstr "구멍과 비아용 BVH 생성"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:413
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "OpenGL 1.5 버전 이상만 지원됩니다"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:534
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr ""
+msgstr "마지막 렌더링 시간 %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:724
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr ""
+msgstr "Net %s\tNetClass %s\tPadName %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:749
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "네트 코드"
+msgstr "Net %s\tNetClass %s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:439
-#, fuzzy
 msgid "Load Raytracing: board"
-msgstr "보드 다시 열기"
+msgstr "레이트 레이싱 로드: 보드"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:638
 msgid "Load Raytracing: layers"
-msgstr ""
+msgstr "레이트 레이싱 로드 : 레이어"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:881
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:644
-#, fuzzy
 msgid "Loading 3D models"
-msgstr "D-Codes 열기"
+msgstr "3D 모델 로딩"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:1021
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:654
 #, c-format
 msgid "Reload time %.3f s"
-msgstr ""
+msgstr "로딩 시간 %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:178
 #: 3d-viewer/3d_rendering/legacy/render_3d_legacy.cpp:559
-#, fuzzy
 msgid "Loading..."
-msgstr "열기: "
+msgstr "로드 중..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:343
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr ""
+msgstr "렌더링 시간 %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:397
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr ""
+msgstr "렌더링: %.0f %%"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:848
 msgid "Rendering: Post processing shader"
-msgstr ""
+msgstr "렌더링: 후 처리 셰이더"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:448
-#, fuzzy
 msgid "Load OpenGL: board"
-msgstr "보드 다시 열기"
+msgstr "OpenGL 로드: 보드"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:481
 msgid "Load OpenGL: holes and vias"
-msgstr ""
+msgstr "OpenGL 로드: 구멍 및 비아"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:547
 msgid "Load OpenGL: layers"
-msgstr ""
+msgstr "OpenGL 로드: 레이어"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:885
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s"
-msgstr "열기: "
+msgstr "로딩 %s"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
-msgstr ""
+msgstr "현재 보기를 PNG로 내보내기..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 msgid "Export Current View as JPEG..."
-msgstr ""
+msgstr "현재보기를 JPEG로 내보내기 ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/hotkey_store.cpp:83
 #: common/tool/actions.cpp:553 pcbnew/footprint_viewer_frame.cpp:979
@@ -290,9 +276,8 @@ msgid "3D Viewer"
 msgstr "3D 뷰어"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:69
-#, fuzzy
 msgid "Copy 3D Image"
-msgstr "클립보드로 3D 이미지 복사"
+msgstr "3D 이미지 복사"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:157
@@ -300,81 +285,70 @@ msgstr "클립보드로 3D 이미지 복사"
 #: gerbview/gerbview_frame.cpp:1009 pagelayout_editor/pl_editor_frame.cpp:472
 #: pcbnew/footprint_edit_frame.cpp:910 pcbnew/pcbnew_config.cpp:55
 msgid "Display Options"
-msgstr "표시 설정"
+msgstr "디스플레이 옵션"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:111
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:595
 msgid "Raytracing"
-msgstr ""
+msgstr "레이트레이싱"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:118
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:79
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:356
-#, fuzzy
 msgid "Render Options"
-msgstr "일반 설정"
+msgstr "렌더링 옵션"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:123
-#, fuzzy
 msgid "Material Properties"
-msgstr "라벨 속성"
+msgstr "재료 속성"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
-#, fuzzy
 msgid "Raytracing Options"
-msgstr "호 설정"
+msgstr "레이트레이싱 옵션"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:152
-#, fuzzy
 msgid "Choose Colors"
-msgstr "색상"
+msgstr "색상 선택"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:155
-#, fuzzy
 msgid "Background Top Color..."
-msgstr "배경색:"
+msgstr "배경 색상 Top ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:159
-#, fuzzy
 msgid "Background Bottom Color..."
-msgstr "배경색:"
+msgstr "배경 색상 Bottom ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:163
-#, fuzzy
 msgid "Silkscreen Color..."
-msgstr "Silkscreen Copper"
+msgstr "실크 스크린 색상 ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:167
-#, fuzzy
 msgid "Solder Mask Color..."
-msgstr "Solder mask Copper"
+msgstr "솔더 마스크 색상..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:171
-#, fuzzy
 msgid "Solder Paste Color..."
-msgstr "Solder paste Copper"
+msgstr "솔더 페이스트 색상 ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:175
 msgid "Copper/Surface Finish Color..."
-msgstr ""
+msgstr "구리 / 표면 마감 색상 ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:179
-#, fuzzy
 msgid "Board Body Color..."
-msgstr "배경색:"
+msgstr "보드 본체 색상..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:186
 msgid "Get colors from physical stackup"
-msgstr ""
+msgstr "물리적 스택에서 색상 가져오기"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:197
-#, fuzzy
 msgid "3D Grid"
-msgstr "그리드"
+msgstr "3D 그리드"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:209
 msgid "Reset to Default Settings"
-msgstr ""
+msgstr "기본 설정으로 재설정"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:212 cvpcb/menubar.cpp:71
 #: eeschema/menubar.cpp:269
@@ -382,9 +356,8 @@ msgstr ""
 #: gerbview/menubar.cpp:209 kicad/menubar.cpp:166
 #: pagelayout_editor/menubar.cpp:154 pcbnew/menubar_footprint_editor.cpp:228
 #: pcbnew/menubar_pcb_editor.cpp:452
-#, fuzzy
 msgid "Preferences..."
-msgstr "설정 (&P)"
+msgstr "환경 설정 ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:213 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:270
@@ -393,7 +366,7 @@ msgstr "설정 (&P)"
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:229
 #: pcbnew/menubar_pcb_editor.cpp:453
 msgid "Show preferences for all open tools"
-msgstr ""
+msgstr "열려있는 모든 도구에 대한 환경 설정 표시"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:220 cvpcb/menubar.cpp:84
 #: eeschema/menubar.cpp:280
@@ -419,108 +392,94 @@ msgstr "편집 (&E)"
 #: kicad/menubar.cpp:178 pagelayout_editor/menubar.cpp:166
 #: pcbnew/menubar_footprint_editor.cpp:240 pcbnew/menubar_pcb_editor.cpp:465
 #: pcbnew/toolbars_footprint_viewer.cpp:177
-#, fuzzy
 msgid "&View"
-msgstr "ViewLogic (&V)"
+msgstr "보기 (&V)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:223 cvpcb/menubar.cpp:86
 #: gerbview/menubar.cpp:223 kicad/menubar.cpp:180
 msgid "&Preferences"
-msgstr "설정 (&P)"
+msgstr "환경설정 (&P)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
 msgstr "보드 다시 열기"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:60
-#, fuzzy
 msgid "Copy 3D image to clipboard"
-msgstr "클립보드로 3D 이미지 복사"
+msgstr "클립보드에 3D 이미지 복사"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 msgid "Set display options, and some layers visibility"
-msgstr ""
+msgstr "디스플레이 옵션 및 레이어 가시성 설정"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:70
 msgid "Render current view using Raytracing"
-msgstr ""
+msgstr "레이트레이싱으로 현재 뷰 렌더링"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
-#, fuzzy
 msgid "3D Model Visibility"
-msgstr "두께 바꾸기"
+msgstr "3D 모델 가시성"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:30
 msgid "Show 3D through hole models"
-msgstr ""
+msgstr "3D 관통 구멍 모델 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:33
-#, fuzzy
 msgid "Show 3D SMD models"
-msgstr "D-Code 보이기"
+msgstr "3D SMD 모델 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:36
-#, fuzzy
 msgid "Show 3D virtual models"
-msgstr "D-Code 보이기"
+msgstr "3D 가상 모델 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:43
-#, fuzzy
 msgid "Board Layers"
-msgstr "보드 파일:"
+msgstr "보드 레이어"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:45
-#, fuzzy
 msgid "Show silkscreen layers"
-msgstr "Silkscreen Copper"
+msgstr "실크스크린 레이어 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:48
-#, fuzzy
 msgid "Show solder mask layers"
-msgstr "Solder mask Copper"
+msgstr "솔더 마스크 레이어 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:51
-#, fuzzy
 msgid "Show solder paste layers"
-msgstr "Solder paste Copper"
+msgstr "솔더 페이스트 레이어 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:54
-#, fuzzy
 msgid "Show adhesive layers"
-msgstr "레이어 저장 (&S)"
+msgstr "접착제 레이어 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:61
 msgid "User Layers (not shown in realistic mode)"
-msgstr ""
+msgstr "사용자 계층(실제 모드에는 표시되지 않음)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:63
 msgid "Show comments and drawings layers"
-msgstr ""
+msgstr "설명 및 도면층 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:66
-#, fuzzy
 msgid "Show ECO layers"
-msgstr "레이어 스왑 (&S)"
+msgstr "ECO 레이어 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:81
-#, fuzzy
 msgid "Realistic mode"
-msgstr "플로트 모드"
+msgstr "현실적인 모드"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:84
-#, fuzzy
 msgid "Show board body"
-msgstr "3D 모드로 보드 보이기"
+msgstr "보드 본체 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
-#, fuzzy
 msgid "Show filled areas in zones"
-msgstr "모듈 연결선 보이기"
+msgstr "구역에 채워진 영역 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:90
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr ""
+msgstr "실크스크린에서 솔더 마스크 빼기"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:93
 msgid "Clip silkscreen at via annulus"
@@ -1864,14 +1823,8 @@ msgid "Packagers"
 msgstr ""
 
 #: common/dialog_about/dialog_about.cpp:140
-#, fuzzy
 msgid "License"
-msgstr ""
-"\n"
-"\n"
-"GPL 라이센스를 준수합니다.\n"
-"\n"
-"한국어 번역: 박찬규(sushizang@empal.com)"
+msgstr "라이센스"
 
 #: common/dialog_about/dialog_about.cpp:478
 msgid "Could not open clipboard to write version information."
@@ -7575,16 +7528,16 @@ msgid ""
 msgstr ""
 
 #: cvpcb/readwrite_dlgs.cpp:145
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Component \"%s\" footprint \"%s\" was <b>not found</b> in any library.\n"
-msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없습니다."
+msgstr "라이브러리에서 구성 요소 \"%s\"풋 프린트 \"%s\"을 <b> 찾을 수 없습니다 </b>.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Component \"%s\" footprint \"%s\" was found in <b>multiple</b> libraries.\n"
-msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없습니다."
+msgstr "구성 요소 %s\" 풋프린트 %s\"가 <b> 여러 </b> 라이브러리에서 발견되었습니다.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:166
 #, fuzzy
@@ -17805,9 +17758,9 @@ msgid "Info: skip file \"%s\" (gerber job file)\n"
 msgstr ""
 
 #: gerbview/files.cpp:560
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file \"%s\"</b>\n"
-msgstr "임시 파일을 만들 수 없습니다."
+msgstr "<b> 임시 파일 \"%s\"을 만들 수 없습니다. </b>\n"
 
 #: gerbview/files.cpp:590
 #, c-format
@@ -36831,9 +36784,8 @@ msgstr "GERBVIEW 종료"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
-#, fuzzy
 msgid "KiCad"
-msgstr "KiCad 종료"
+msgstr "키캐드"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 msgid "EDA Suite"
