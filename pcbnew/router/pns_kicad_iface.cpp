@@ -1669,7 +1669,9 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
     m_debugDecorator = dec;
 
     dec->SetDebugEnabled( ADVANCED_CFG::GetCfg().m_ShowRouterDebugGraphics );
-    dec->SetView( m_view );
+
+    if( ADVANCED_CFG::GetCfg().m_ShowRouterDebugGraphics )
+        dec->SetView( m_view );
 }
 
 
