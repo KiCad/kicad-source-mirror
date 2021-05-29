@@ -65,19 +65,16 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWinding
     bool s_cw = aPath.Walkaround( current_obs->m_hull, path_walk,
                       aWindingDirection );
 
-    if ( Dbg() )
-    {
-        Dbg()->BeginGroup("hull/walk");
-        char name[128];
-        snprintf(name, sizeof(name), "hull-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
-        Dbg()->AddLine( current_obs->m_hull, RED, 1, name);
-        snprintf(name, sizeof(name), "path-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
-        Dbg()->AddLine( aPath.CLine(), GREEN, 1, name );
-        snprintf(name, sizeof(name), "result-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
-        Dbg()->AddLine( path_walk, BLUE, 10000, name );
-        Dbg()->Message( wxString::Format( "Stat cw %d", !!s_cw ) );
-        Dbg()->EndGroup();
-    }
+    PNS_DBG( Dbg(), BeginGroup, "hull/walk" );
+    char name[128];
+    snprintf(name, sizeof(name), "hull-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
+    PNS_DBG( Dbg(), AddLine, current_obs->m_hull, RED, 1, name);
+    snprintf(name, sizeof(name), "path-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
+    PNS_DBG( Dbg(), AddLine, aPath.CLine(), GREEN, 1, name );
+    snprintf(name, sizeof(name), "result-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
+    PNS_DBG( Dbg(), AddLine, path_walk, BLUE, 10000, name );
+    PNS_DBG( Dbg(), Message, wxString::Format( "Stat cw %d", !!s_cw ) );
+    PNS_DBGN( Dbg(), EndGroup );
 
     current_obs = nearestObstacle( LINE( aPath, path_walk ) );
 

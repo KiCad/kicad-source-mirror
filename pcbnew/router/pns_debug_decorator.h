@@ -91,6 +91,10 @@ private:
     if( dbg && dbg->IsDebugEnabled() ) \
         dbg->method( __VA_ARGS__, PNS::DEBUG_DECORATOR::SRC_LOCATION_INFO( __FILE__, __FUNCTION__, __LINE__ ) );
 
+#define PNS_DBGN(dbg,method) \
+    if( dbg && dbg->IsDebugEnabled() ) \
+        dbg->method( PNS::DEBUG_DECORATOR::SRC_LOCATION_INFO( __FILE__, __FUNCTION__, __LINE__ ) );
+
 } // namespace PNS
 
 #endif
