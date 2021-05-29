@@ -384,7 +384,7 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
             };
 
     auto processPad =
-            [&]( PAD* aPad )
+            [&]( JOINT* aJoint, PAD* aPad )
             {
                 const std::shared_ptr<SHAPE_POLY_SET>& shape = aPad->GetEffectivePolygon();
 
@@ -394,6 +394,14 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
                         continue;
 
                     LINE* line = static_cast<LINE*>( initialPath[idx] );
+
+                    if( !aPad->FlashLayer( line->Layer() ) )
+                        continue;
+
+                    const std::vector<VECTOR2I>& points = line->CLine().CPoints();
+
+                    if( points.front() != aJoint->Pos() && points.back() != aJoint->Pos() )
+                        continue;
 
                     SHAPE_LINE_CHAIN& slc = line->Line();
 
@@ -405,10 +413,10 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
             };
 
     if( padA )
-        processPad( padA );
+        processPad( joints.first, padA );
 
     if( padB )
-        processPad( padB );
+        processPad( joints.second, padB );
 
     return initialPath;
 }
