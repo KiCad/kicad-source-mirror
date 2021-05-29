@@ -407,7 +407,15 @@ class comp():
         return ret
 
     def getTimestamp(self):
-        return self.element.get("tstamp")
+        """
+        Kicad 5 uses tstamp keyword for time stamp (8 digits) as UUID
+        Kicad 6 uses tstamps keyword for UUID and a multi unit symbol has more than one UUID
+        (UUIDs are separed by spaces)
+        """
+        ret = self.element.get("tstamp")
+        if ret == "":
+            ret = self.element.get("tstamps")
+        return ret
 
     def getDescription(self):
         return self.element.get("libsource", "description")
