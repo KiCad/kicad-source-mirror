@@ -1018,12 +1018,14 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         }
 
         // Dispatch TOOL_ACTIONs
-        else if( evt->IsAction( &ACTIONS::doDelete ) )
+        else if( evt->IsAction( &ACTIONS::doDelete ) || evt->IsAction( &ACTIONS::cut ) )
         {
+            evt->SetPassEvent();
             break; // finish -- there is no further processing for removed items
         }
         else if( evt->IsAction( &ACTIONS::duplicate ) )
         {
+            evt->SetPassEvent();
             break; // finish -- Duplicate tool will start a new Move with the dup'ed items
         }
         else if( evt->IsAction( &PCB_ACTIONS::moveExact ) )
