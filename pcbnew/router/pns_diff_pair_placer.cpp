@@ -586,6 +586,7 @@ bool DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_chainedPlacement = false;
     m_currentTraceOk = false;
     m_currentTrace = DIFF_PAIR();
+    m_currentTrace.SetNets( m_netP, m_netN );
 
     initPlacement();
 
