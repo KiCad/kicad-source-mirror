@@ -43,9 +43,21 @@ public:
     void SetUnits( EDA_UNITS aUnits ) { m_units = aUnits; }
     EDA_UNITS GetUnits() const override { return m_units; }
 
+    /**
+     * In immediate mode, messages are flushed as they are added.
+     * Required for progress-related reports, but can be very slow for larger reports.
+     */
     void SetImmediateMode() { m_immediateMode = true; }
 
+    /**
+     * Build the HTML messages page.
+     * Call it if the immediate mode is not actived to be able to display them
+     */
     void Flush();
+
+    /**
+     * Delete the stored messages
+     */
     void Clear();
 
 private:

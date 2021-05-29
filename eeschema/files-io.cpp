@@ -1118,7 +1118,10 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             Schematic().SetRoot( pi->Load( aFileName, &Schematic() ) );
 
             if( reporter->m_Reporter->HasMessage() )
+            {
+                reporter->m_Reporter->Flush();  // Build HTML messages
                 reporter->ShowModal();
+            }
 
             pi->SetReporter( &WXLOG_REPORTER::GetInstance() );
             delete reporter;
