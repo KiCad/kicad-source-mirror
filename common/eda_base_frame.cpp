@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,6 @@ static const wxSize defaultSize( FRAME_T aFrameType )
 
 BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::OnKicadAbout )
-    EVT_MENU( wxID_PREFERENCES, EDA_BASE_FRAME::OnPreferences )
 
     EVT_CHAR_HOOK( EDA_BASE_FRAME::OnCharHook )
     EVT_MENU_OPEN( EDA_BASE_FRAME::OnMenuEvent )
@@ -900,7 +899,7 @@ void EDA_BASE_FRAME::OnKicadAbout( wxCommandEvent& event )
 }
 
 
-void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
+void EDA_BASE_FRAME::OnPreferences()
 {
     PAGED_DIALOG dlg( this, _( "Preferences" ), true );
     wxTreebook* book = dlg.GetTreebook();

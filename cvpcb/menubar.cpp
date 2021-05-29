@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,10 +68,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     prefsMenu->Add( ACTIONS::configurePaths );
     prefsMenu->Add( ACTIONS::showFootprintLibTable );
-    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
-                    _( "Show preferences for all open tools" ),
-                    wxID_PREFERENCES,
-                    BITMAPS::preference );
+    prefsMenu->Add( ACTIONS::openPreferences );
 
     prefsMenu->AppendSeparator();
     prefsMenu->Add( CVPCB_ACTIONS::showEquFileTable);

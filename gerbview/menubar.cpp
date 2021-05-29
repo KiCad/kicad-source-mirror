@@ -206,10 +206,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     //
     ACTION_MENU* preferencesMenu = new ACTION_MENU( false, selTool );
 
-    preferencesMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
-                          _( "Show preferences for all open tools" ),
-                          wxID_PREFERENCES,
-                          BITMAPS::preference );
+    preferencesMenu->Add( ACTIONS::openPreferences );
 
     preferencesMenu->AppendSeparator();
     AddMenuLanguageList( preferencesMenu, selTool );

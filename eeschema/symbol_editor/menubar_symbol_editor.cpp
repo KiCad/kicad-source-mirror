@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -160,10 +160,7 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
 
     prefsMenu->Add( ACTIONS::configurePaths );
     prefsMenu->Add( ACTIONS::showSymbolLibTable );
-    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
-                    _( "Show preferences for all open tools" ),
-                    wxID_PREFERENCES,
-                    BITMAPS::preference );
+    prefsMenu->Add( ACTIONS::openPreferences );
 
     prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, selTool );

@@ -151,10 +151,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     //
     ACTION_MENU* preferencesMenu = new ACTION_MENU( false, selTool );
 
-    preferencesMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
-                          _( "Show preferences for all open tools" ),
-                          wxID_PREFERENCES,
-                          BITMAPS::preference );
+    preferencesMenu->Add( ACTIONS::openPreferences );
 
     // Language submenu
     AddMenuLanguageList( preferencesMenu, selTool );

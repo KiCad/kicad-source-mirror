@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2014-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,6 +75,13 @@ wxString COMMON_CONTROL::m_bugReportTemplate =
 void COMMON_CONTROL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<EDA_BASE_FRAME>();
+}
+
+
+int COMMON_CONTROL::OpenPreferences( const TOOL_EVENT& aEvent )
+{
+    m_frame->OnPreferences();
+    return 0;
 }
 
 
@@ -294,6 +302,7 @@ int COMMON_CONTROL::ReportBug( const TOOL_EVENT& aEvent )
 
 void COMMON_CONTROL::setTransitions()
 {
+    Go( &COMMON_CONTROL::OpenPreferences,    ACTIONS::openPreferences.MakeEvent() );
     Go( &COMMON_CONTROL::ConfigurePaths,     ACTIONS::configurePaths.MakeEvent() );
     Go( &COMMON_CONTROL::ShowLibraryTable,   ACTIONS::showSymbolLibTable.MakeEvent() );
     Go( &COMMON_CONTROL::ShowLibraryTable,   ACTIONS::showFootprintLibTable.MakeEvent() );

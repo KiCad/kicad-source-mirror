@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -163,10 +163,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     prefsMenu->Add( ACTIONS::configurePaths );
     prefsMenu->Add( ACTIONS::showSymbolLibTable );
     prefsMenu->Add( ACTIONS::showFootprintLibTable );
-    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
-                    _( "Show preferences for all open tools" ),
-                    wxID_PREFERENCES,
-                    BITMAPS::preference );
+    prefsMenu->Add( ACTIONS::openPreferences );
 
     prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, controlTool );

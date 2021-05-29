@@ -202,7 +202,11 @@ public:
     virtual wxString help_name();
 
     void OnKicadAbout( wxCommandEvent& event );
-    void OnPreferences( wxCommandEvent& event );
+
+    /**
+     * Displays the preferences and settings of all opened editors paged dialog
+     */
+    void OnPreferences();
 
     void PrintMsg( const wxString& text );
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -583,6 +583,11 @@ TOOL_ACTION ACTIONS::updateSchematicFromPcb( "common.Control.updateSchematicFrom
         AS_GLOBAL, 0, "",
         _( "Update Schematic from PCB..." ), _( "Update schematic with changes made to PCB" ),
         BITMAPS::update_sch_from_pcb );
+
+TOOL_ACTION ACTIONS::openPreferences( "common.SuiteControl.openPreferences",
+        AS_GLOBAL, MD_CTRL + ',', "",
+        _( "Preferences..." ), _( "Show preferences for all open tools" ),
+        BITMAPS::preference );
 
 TOOL_ACTION ACTIONS::configurePaths( "common.SuiteControl.configurePaths",
         AS_GLOBAL, 0, "",
