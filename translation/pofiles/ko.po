@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-05-29 08:45+0000\n"
+"PO-Revision-Date: 2021-05-31 11:32+0000\n"
 "Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -198,13 +198,13 @@ msgstr "마지막 렌더링 시간 %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:724
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "Net %s\tNetClass %s\tPadName %s"
+msgstr "Net %s\tNet클래스 %s\t패드이름 %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:749
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:762
 #, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "Net %s\tNetClass %s"
+msgstr "Net %s\tNet클래스 %s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:439
 msgid "Load Raytracing: board"
@@ -483,25 +483,23 @@ msgstr "실크스크린에서 솔더 마스크 빼기"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:93
 msgid "Clip silkscreen at via annulus"
-msgstr ""
+msgstr "고리를 통해 실크 스크린 클립"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "도금되지 않은 구리에는 베어 구리 색상 사용"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "도금 된 구리와 도금되지 않은 구리에 다른 색상을 사용합니다. (느림)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
-#, fuzzy
 msgid "Camera Options"
-msgstr "패드 설정"
+msgstr "카메라 옵션"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:110
-#, fuzzy
 msgid "Rotation Increment:"
-msgstr "텍스트 방향"
+msgstr "회전 증분 :"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:118
 #: common/base_units.cpp:463 pcb_calculator/widgets/unit_selector.cpp:130
@@ -512,135 +510,114 @@ msgstr "텍스트 방향"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:347
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1364
 #: pcbnew/dialogs/panel_edit_options_base.cpp:68
-#, fuzzy
 msgid "deg"
-msgstr "세그먼트"
+msgstr "deg"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:128
-#, fuzzy
 msgid "Enable animation"
-msgstr "시뮬레이터 실행 (&R)"
+msgstr "애니메이션 활성화"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:135
-#, fuzzy
 msgid "Animation speed:"
-msgstr "치수 속성"
+msgstr "애니메이션 속도:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:163
-#, fuzzy
 msgid "OpenGL Render Options"
-msgstr "일반 설정"
+msgstr "OpenGL 렌더 옵션"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:165
 msgid "Show model bounding boxes"
-msgstr ""
+msgstr "모델 경계 상자 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:168
-#, fuzzy
 msgid "Show copper thickness"
-msgstr "핀 보이기"
+msgstr "구리 두께 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:171
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "네트 높이"
+msgstr "롤오버 시 항목 강조"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:178
-#, fuzzy
 msgid "Other Options"
-msgstr "설정"
+msgstr "다른 옵션"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
-#, fuzzy
 msgid "Anti-aliasing:"
-msgstr "이탈리아어"
+msgstr "안티앨리어싱:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "Disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
-#, fuzzy
 msgid "2x"
-msgstr "&2"
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
-#, fuzzy
 msgid "4x"
-msgstr "&4"
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
-#, fuzzy
 msgid "8x"
-msgstr "&8"
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:193
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr ""
+msgstr "이 설정을 적용하려면 3D 뷰어를 닫았다가 다시 열어야 함"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:197
-#, fuzzy
 msgid "Selection color:"
-msgstr "시트 파일"
+msgstr "선택 색상 :"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "While Moving"
-msgstr ""
+msgstr "이동 중"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:213
-#, fuzzy
 msgid "Disable anti-aliasing"
-msgstr "이탈리아어"
+msgstr "앤티 앨리어싱 비활성화"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:216
-#, fuzzy
 msgid "Disable thickness"
-msgstr "선 설정"
+msgstr "두께 비활성화"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:219
 msgid "Disable vias"
-msgstr ""
+msgstr "vias 사용 안 함"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:222
 msgid "Disable holes"
-msgstr ""
+msgstr "홀 사용 안 함"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:232
-#, fuzzy
 msgid "OpenGL"
-msgstr "열기 (&O)"
+msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:243
-#, fuzzy
 msgid "Raytracing Render Options"
-msgstr "호 설정"
+msgstr "레이트 레이싱 렌더 옵션"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:249
-#, fuzzy
 msgid "Procedural textures"
-msgstr "모듈 텍스트"
+msgstr "절차적 질감"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:253
-#, fuzzy
 msgid "Add floor"
-msgstr "필드 추가"
+msgstr "층 추가"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:257
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
-#, fuzzy
 msgid "Anti-aliasing"
-msgstr "이탈리아어"
+msgstr "안티 앨리어싱"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:261
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
-#, fuzzy
 msgid "Post-processing"
-msgstr "후공정 (&O)"
+msgstr "후 처리"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:276
-#, fuzzy
 msgid "Number of Samples"
-msgstr "레이어 수"
+msgstr "샘플 수"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:280
 msgid "Spread Factor %"
@@ -1259,7 +1236,7 @@ msgstr "mm"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:757
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Inch"
-msgstr "Inch"
+msgstr "인치"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:159
 msgid "DPI"
@@ -3259,11 +3236,8 @@ msgid "Warp mouse to origin of moved object"
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:227
-#, fuzzy
 msgid "First hotkey selects tool"
-msgstr ""
-"현재 단축키 목록:\n"
-"\n"
+msgstr "첫 번째 단축키 선택 도구"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
 msgid ""
@@ -3840,9 +3814,8 @@ msgid "Variable Name"
 msgstr "네트 이름"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
-#, fuzzy
 msgid "Text Substitution"
-msgstr " 텍스트 설정"
+msgstr "텍스트 대체"
 
 #: common/dialogs/wx_html_report_panel.cpp:184
 #: common/dialogs/wx_html_report_panel.cpp:209
@@ -5401,9 +5374,8 @@ msgid "ERC warnings"
 msgstr "ERC 경고"
 
 #: common/layer_id.cpp:129
-#, fuzzy
 msgid "ERC errors"
-msgstr " 에러"
+msgstr "ERC 에러"
 
 #: common/layer_id.cpp:130 common/layer_id.cpp:170
 #, fuzzy
@@ -5665,7 +5637,7 @@ msgstr "풋프린트: %d"
 
 #: common/pgm_base.cpp:168
 msgid "No default editor found, you must choose it"
-msgstr "기본 에디터를 찾을 수 없습니다. 최소한 한 가지를 선택해야 합니다."
+msgstr "기본 편집기를 선택해야 합니다"
 
 #: common/pgm_base.cpp:188
 msgid "Executable file (*.exe)|*.exe"
@@ -5757,38 +5729,36 @@ msgid "Error loading project footprint library table"
 msgstr ""
 
 #: common/project/project_archiver.cpp:91
-#, fuzzy
 msgid "Could not open archive file\n"
-msgstr "라이브러리 파일이 아닙니다."
+msgstr "아카이브 파일을 열 수 없음\n"
 
 #: common/project/project_archiver.cpp:100
 msgid "Invalid archive file format\n"
 msgstr ""
 
 #: common/project/project_archiver.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file \"%s\"\n"
-msgstr "파일 추출: "
+msgstr "\"%s\" 파일을 추출하는 중\n"
 
 #: common/project/project_archiver.cpp:147
-#, fuzzy
 msgid "Error extracting file!\n"
-msgstr "%d 에러: [%s] 거버 파일을 읽는 중 발생"
+msgstr "파일 추출 오류!\n"
 
 #: common/project/project_archiver.cpp:204
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create archive file \"%s\"\n"
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "%s 아카이브 파일을 생성할 수 없음\n"
 
 #: common/project/project_archiver.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "Archive file \"%s\"\n"
-msgstr "프로젝트 파일 압축:"
+msgstr "\"%s\" 아카이브 파일\n"
 
 #: common/project/project_archiver.cpp:260
-#, fuzzy, c-format
+#, c-format
 msgid "Archive file \"%s\": Failed!\n"
-msgstr "프로젝트 파일 압축:"
+msgstr "%s 아카이브 파일: 실패!\n"
 
 #: common/project/project_archiver.cpp:286
 #, c-format
@@ -7762,14 +7732,14 @@ msgid ""
 msgstr ""
 
 #: eeschema/component_references_lister.cpp:602
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
-msgstr "애노테이션 되지 않은 항목: %s%s"
+msgstr "주석이 없는 항목: %s%s (unit %d)\n"
 
 #: eeschema/component_references_lister.cpp:609
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s\n"
-msgstr "애노테이션 되지 않은 항목: %s%s"
+msgstr "주석이 없는 항목: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:629
 #, c-format
@@ -7778,15 +7748,15 @@ msgstr ""
 
 #: eeschema/component_references_lister.cpp:666
 #: eeschema/component_references_lister.cpp:696
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "복수 항목 %s%s"
+msgstr "중복항목 %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:673
 #: eeschema/component_references_lister.cpp:703
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s\n"
-msgstr "복수 항목 %s%s"
+msgstr "중복 항목 %s%s\n"
 
 #: eeschema/component_references_lister.cpp:717
 #, fuzzy, c-format
@@ -8957,9 +8927,9 @@ msgid "Violation Severity"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:755
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created\n"
-msgstr "만들기 중 에러"
+msgstr "보고서 파일 '%s' 생성됨\n"
 
 #: eeschema/dialogs/dialog_erc.cpp:760
 #, fuzzy, c-format
@@ -9838,9 +9808,8 @@ msgid "Check this option if the symbol has an alternate body style (De Morgan)"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:173
-#, fuzzy
 msgid "Define as power symbol"
-msgstr "  (전원 심볼)"
+msgstr "전원 심볼로 정의"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:174
 msgid ""
@@ -10374,14 +10343,14 @@ msgstr "플로트: %s\n"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:693
 #: eeschema/dialogs/dialog_plot_schematic.cpp:845
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1048
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create file \"%s\".\n"
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "%s 파일을 만들 수 없음.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1168
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create file \"%s\".\n"
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "%s 파일을 만들 수 없음.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1256
 #, c-format
@@ -11730,7 +11699,7 @@ msgstr "회로도 파일:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:126
 msgid "Unit:"
-msgstr "유닛"
+msgstr "유닛:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
 msgid "Alternate symbol (DeMorgan)"
@@ -11768,7 +11737,7 @@ msgstr "180"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:152
 msgid "Mirror:"
-msgstr "미러"
+msgstr "미러:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:156
 #, fuzzy
@@ -11967,14 +11936,14 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_remap.cpp:454
 #: eeschema/dialogs/dialog_symbol_remap.cpp:470
 #: eeschema/dialogs/dialog_symbol_remap.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to back up file \"%s\".\n"
-msgstr "파일 열기 실패"
+msgstr "%s 파일을 백업하지 못함.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create backup folder \"%s\"\n"
-msgstr "파일 만들기 실패"
+msgstr "\"%s\" 백업 폴더를 만들지 못함\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:492
 msgid "Some of the project files could not be backed up."
@@ -12394,9 +12363,8 @@ msgid "Default text size:"
 msgstr "기본 라벨 크기"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Text offset ratio:"
-msgstr " 텍스트 설정"
+msgstr "텍스트 오프셋 비율:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 msgid "Percentage of the text size to offset text above or below wire or bus"
@@ -12674,11 +12642,8 @@ msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:768
-#, fuzzy
 msgid "Migrate Library"
-msgstr ""
-"\n"
-"모든 라이브러리를 탐색하시겠습니까?"
+msgstr "라이브러리 이동"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:792
 #, fuzzy, c-format
@@ -12759,11 +12724,8 @@ msgid "Remove library from table"
 msgstr "새 라이브러리"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:135
-#, fuzzy
 msgid "Migrate Libraries..."
-msgstr ""
-"\n"
-"모든 라이브러리를 탐색하시겠습니까?"
+msgstr "라이브러리 이동 ..."
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:145
 msgid "Path Substitutions:"
@@ -13064,7 +13026,7 @@ msgstr "빈 파일입니다."
 
 #: eeschema/files-io.cpp:200
 msgid "File write operation failed."
-msgstr "파일 쓰기 실패"
+msgstr "파일 쓰기 작업 실패함."
 
 #: eeschema/files-io.cpp:263 eeschema/files-io.cpp:991
 #, c-format
@@ -15155,13 +15117,16 @@ msgid "You need to run plot-providing simulation first."
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:1677
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Simulation results:\n"
 "\n"
-msgstr "3D 설정"
+msgstr ""
+"\n"
+"\n"
+"시뮬레이션 결과:\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1744
 msgid "Hide Signal"
@@ -15351,17 +15316,20 @@ msgid "\"%s\" is not a valid Spice value"
 msgstr ""
 
 #: eeschema/symbol_async_loader.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
 "%s\n"
-msgstr "라이브러리 파일 저장 중 에러"
+msgstr ""
+"%s 심볼 라이브러리 로딩 오류.\n"
+"\n"
+"%s\n"
 
 #: eeschema/symbol_async_loader.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library \"%s\""
-msgstr " 라이브러리: "
+msgstr "라이브러리 로딩 \"%s\""
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:71
 #, fuzzy
@@ -15432,11 +15400,9 @@ msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:754
-#, fuzzy, c-format
+#, c-format
 msgid "Open %s"
-msgstr ""
-"\n"
-"열기 "
+msgstr "열기 %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:825
 #, fuzzy, c-format
@@ -15457,9 +15423,9 @@ msgid "Could not open the library file."
 msgstr "라이브러리 파일이 아닙니다."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'"
-msgstr " 라이브러리: "
+msgstr "라이브러리 로딩 '%s'"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:987
 #: pcbnew/footprint_libraries_utils.cpp:487
@@ -15652,9 +15618,8 @@ msgstr "전원 심볼"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:606
 #: pcbnew/footprint_libraries_utils.cpp:955
-#, fuzzy
 msgid "Save in library:"
-msgstr " 라이브러리: "
+msgstr "라이브러리에 저장:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:638
 #, fuzzy
@@ -18512,22 +18477,22 @@ msgid "Unzip Project"
 msgstr "프로젝트 압축 해제:"
 
 #: kicad/files-io.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open \"%s\"\n"
 msgstr ""
 "\n"
-"열기 "
+"열기 \"%s\"\n"
 
 #: kicad/files-io.cpp:77
 msgid "Target Directory"
 msgstr "타겟 디렉토리"
 
 #: kicad/files-io.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Unzipping project in \"%s\"\n"
-msgstr "프로젝트 압축 해제:"
+msgstr "\"%s\" 에서 프로젝트 압축 해제 중\n"
 
 #: kicad/files-io.cpp:118
 #, fuzzy
@@ -18593,11 +18558,9 @@ msgid "Load File to Edit"
 msgstr "편집할 필드가 없습니다."
 
 #: kicad/kicad_manager_frame.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr ""
-"\n"
-"프로젝트: "
+msgstr "프로젝트: %s"
 
 #: kicad/kicad_manager_frame.cpp:698
 msgid "Restoring session"
@@ -19277,7 +19240,7 @@ msgstr "주석1:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:190
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:105
 msgid "Position"
-msgstr "위치 "
+msgstr "위치"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:220
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:273
@@ -19362,9 +19325,8 @@ msgstr "선 설정"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:466
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:206
-#, fuzzy
 msgid "Text thickness:"
-msgstr " 텍스트 설정"
+msgstr "텍스트 두께:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:486
 #, fuzzy
@@ -21003,9 +20965,8 @@ msgstr "컴파일"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:79
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:67
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:99
-#, fuzzy
 msgid "inch"
-msgstr "inch"
+msgstr "인치"
 
 #: pcb_calculator/widgets/unit_selector.cpp:100
 msgid "GHz"
@@ -21319,9 +21280,8 @@ msgstr "커퍼 텍스트 두께"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:634
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:173
-#, fuzzy
 msgid "Copper"
-msgstr "Copper"
+msgstr "구리"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:932
 msgid ""
@@ -21722,11 +21682,13 @@ msgid "PCB and schematic successfully reannotated"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "%s footprints will be reannotated."
-msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없습니다."
+msgstr ""
+"\n"
+"%s 풋프린트 주석을 다시답니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:287
 #, c-format
@@ -21736,11 +21698,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:292
-#, fuzzy
 msgid ""
 "\n"
 "Locked footprints will not be annotated"
-msgstr "현재 보드로부터 모듈 열기"
+msgstr ""
+"\n"
+"잠긴 풋프린트에는 주석이 달리지 않습니다"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:296
 #, c-format
@@ -21750,11 +21713,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Back footprints will start at %s."
-msgstr "풋프린트 압축 만들기"
+msgstr ""
+"\n"
+"백 풋프린트는 %s에서 시작합니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:306
 #, fuzzy
@@ -21817,12 +21782,15 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:503
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Excluding: %s from reannotation\n"
 "\n"
-msgstr "EESchema 애노테이션"
+msgstr ""
+"\n"
+"재 주석에서 제외 : %s\n"
+"\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:506
 msgid ""
@@ -21836,11 +21804,12 @@ msgid " will be ignored"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:526
-#, fuzzy
 msgid ""
 "\n"
 "No footprints"
-msgstr "풋프린트 이동"
+msgstr ""
+"\n"
+"풋프린트 없음"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:532
 #, c-format
@@ -21860,11 +21829,13 @@ msgid "Reference Designator Coordinates"
 msgstr "사용자 지정 에디터:"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Sort Code %d"
-msgstr "D-Codes 아이디"
+msgstr ""
+"\n"
+"정렬 코드 %d"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:540
 #, c-format
@@ -21898,20 +21869,24 @@ msgid "Aborted: too many errors"
 msgstr "이미 사용 중입니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Front Footprints"
-msgstr "풋프린트"
+msgstr ""
+"\n"
+"\n"
+"전면 풋프린트"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:808
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Back Footprints"
-msgstr "풋프린트"
+msgstr ""
+"\n"
+"\n"
+"후면 풋프린트"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:879
 #, fuzzy
@@ -22485,7 +22460,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:36
 msgid "merge aligned track segments, and remove null segments"
-msgstr "할당된 트랙 세그먼트를 병합하고 빈 세그먼트를 제거합니다."
+msgstr "할당된 트랙 세그먼트를 병합하고 빈 세그먼트 제거"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:40
 #, fuzzy
@@ -23144,9 +23119,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
-#, fuzzy
 msgid "1234 (mm)"
-msgstr " (밀리미터)"
+msgstr "1234 (밀리미터)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:160
@@ -23222,9 +23196,8 @@ msgstr "두께 설정"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:178
-#, fuzzy
 msgid "Text pos X"
-msgstr " 텍스트 설정"
+msgstr "텍스트 위치 X"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:248
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:129
@@ -23234,9 +23207,8 @@ msgstr "텍스트 에디터"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:261
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:199
-#, fuzzy
 msgid "Text pos Y"
-msgstr " 텍스트 설정"
+msgstr "텍스트 위치 Y"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
@@ -23246,9 +23218,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:274
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:152
-#, fuzzy
 msgid "Text thickness"
-msgstr " 텍스트 설정"
+msgstr "텍스트 두께"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:287
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:165
@@ -24626,9 +24597,9 @@ msgstr "드릴 리포트:"
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:116
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:343
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "** Unable to create %s **\n"
-msgstr "<%s>을(를) 생성할 수 없습니다."
+msgstr "**%s 을(를) 생성할 수 없음**\n"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:464
 #, fuzzy, c-format
@@ -24952,9 +24923,8 @@ msgstr "레이어"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:214
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:56
-#, fuzzy
 msgid "Copper Layers"
-msgstr "Copper Layers"
+msgstr "구리층"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:215
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
@@ -25007,9 +24977,8 @@ msgstr "텍스트 에디터"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:240
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:128
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:47
-#, fuzzy
 msgid "Text Thickness"
-msgstr " 텍스트 설정"
+msgstr "텍스트 두께"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:252
 #, fuzzy
@@ -26145,9 +26114,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:412
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:462
-#, fuzzy
 msgid ":"
-msgstr " X"
+msgstr ":"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:459
 #, fuzzy
@@ -27204,7 +27172,7 @@ msgstr "레이어가 선택되지 않았습니다."
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:25
 msgid "Layers:"
-msgstr "레이어"
+msgstr "레이어:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:41
 #, fuzzy
@@ -27319,7 +27287,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:54
 msgid "X"
-msgstr " X"
+msgstr "X"
 
 #: pcbnew/dialogs/dialog_target_properties_base.h:54
 #, fuzzy
@@ -27942,9 +27910,8 @@ msgid "Add Existing"
 msgstr "치수 (&D)"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:138
-#, fuzzy
 msgid "Path Substitutions"
-msgstr " 텍스트 설정"
+msgstr "경로 대체"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
 msgid "Icon"
@@ -28711,9 +28678,8 @@ msgid "Edge_Cuts setback"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:670
-#, fuzzy
 msgid "Eco1"
-msgstr "ECO1     "
+msgstr "ECO1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:673
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:683
@@ -28724,9 +28690,8 @@ msgid "Auxiliary"
 msgstr "보조축"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:680
-#, fuzzy
 msgid "Eco2"
-msgstr "ECO2     "
+msgstr "ECO2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:688
 msgid "If you want a separate layer for comments or notes"
@@ -28888,9 +28853,8 @@ msgstr "DRC 제어"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:358
 #: pcbnew/drc/drc_rule_condition.cpp:62
-#, fuzzy
 msgid "ERROR:"
-msgstr " *에러*\n"
+msgstr "에러:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:419
 msgid "Design rules cannot be added without a project"
@@ -29125,9 +29089,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:96
-#, fuzzy
 msgid "Text position:"
-msgstr " 텍스트 설정"
+msgstr "텍스트 위치:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:104
 msgid "Where to position the dimension text relative to the dimension line"
@@ -30140,7 +30103,7 @@ msgstr "현재 작업 데이터가 손실됩니다. 그래도 계속 하시겠�
 
 #: pcbnew/files.cpp:424
 msgid "noname"
-msgstr "noname"
+msgstr "이름 없음"
 
 #: pcbnew/files.cpp:539
 msgid ""
@@ -31080,7 +31043,7 @@ msgstr ""
 
 #: pcbnew/microwave/microwave_inductor.cpp:382
 msgid "Requested length < minimum length"
-msgstr "입력된 길이가 최소 길이보다 작습니다."
+msgstr "요청 된 길이 < 최소 길이"
 
 #: pcbnew/microwave/microwave_inductor.cpp:396
 #, fuzzy
@@ -31122,11 +31085,11 @@ msgstr "형상 설정"
 
 #: pcbnew/microwave/microwave_polygon.cpp:168
 msgid "Read descr shape file"
-msgstr "형상 파일 읽기:"
+msgstr "모양 파일 설명 읽기"
 
 #: pcbnew/microwave/microwave_polygon.cpp:183
 msgid "File not found"
-msgstr "파일을 찾을 수 없습니다."
+msgstr "파일을 찾을 수 없음"
 
 #: pcbnew/microwave/microwave_polygon.cpp:272
 #, fuzzy
