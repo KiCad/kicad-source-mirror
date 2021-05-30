@@ -146,11 +146,11 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 m_selectionTool->AddItemToSel( aSymbol );
 
                 aSymbol->SetParent( m_frame->GetScreen() );
-                aSymbol->SetFlags( IS_NEW | IS_MOVED );
+                aSymbol->SetFlags( IS_NEW | IS_MOVING );
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), aSymbol, false );
 
-                // Set IS_MOVED again, as AddItemToScreenAndUndoList() will have cleared it.
-                aSymbol->SetFlags( IS_MOVED );
+                // Set IS_MOVING again, as AddItemToScreenAndUndoList() will have cleared it.
+                aSymbol->SetFlags( IS_MOVING );
                 m_toolMgr->RunAction( ACTIONS::refreshPreview );
             };
 
@@ -516,7 +516,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                     continue;
                 }
 
-                image->SetFlags( IS_NEW | IS_MOVED );
+                image->SetFlags( IS_NEW | IS_MOVING );
 
                 m_frame->SaveCopyForRepeatItem( image );
 
@@ -890,7 +890,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     textItem->SetItalic( m_lastTextItalic );
     textItem->SetLabelSpinStyle( m_lastTextOrientation );
     textItem->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
-    textItem->SetFlags( IS_NEW | IS_MOVED );
+    textItem->SetFlags( IS_NEW | IS_MOVING );
 
     DIALOG_LABEL_EDITOR dlg( m_frame, textItem );
 
@@ -1158,7 +1158,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                 if( item )
                 {
-                    item->SetFlags( IS_NEW | IS_MOVED );
+                    item->SetFlags( IS_NEW | IS_MOVING );
                     item->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
                     updatePreview();
 
@@ -1174,7 +1174,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             // ... and second click places:
             else
             {
-                item->ClearFlags( IS_MOVED );
+                item->ClearFlags( IS_MOVING );
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item, false );
                 item = nullptr;
 
@@ -1327,7 +1327,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(),
                                    static_cast<wxPoint>( cursorPos ) );
-            sheet->SetFlags( IS_NEW | IS_RESIZED );
+            sheet->SetFlags( IS_NEW | IS_RESIZING );
             sheet->SetScreen( NULL );
             sheet->SetBorderWidth( cfg->m_Drawing.default_line_thickness );
             sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );

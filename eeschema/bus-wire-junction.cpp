@@ -48,7 +48,7 @@ std::vector<wxPoint> SCH_EDIT_FRAME::GetSchematicConnections()
     for( SCH_ITEM* item : GetScreen()->Items() )
     {
         // Avoid items that are changing
-        if( !( item->GetEditFlags() & ( IS_DRAGGED | IS_MOVED | IS_DELETED ) ) )
+        if( !( item->GetEditFlags() & ( IS_DRAGGING | IS_MOVING | IS_DELETED ) ) )
         {
             std::vector<wxPoint> pts = item->GetConnectionPoints();
             retval.insert( retval.end(), pts.begin(), pts.end() );
@@ -104,7 +104,7 @@ bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd )
     for( SCH_LINE* line : wires )
     {
         // Don't remove wires that are already deleted or are currently being dragged
-        if( line->GetEditFlags() & ( STRUCT_DELETED | IS_DRAGGED | IS_MOVED | SKIP_STRUCT ) )
+        if( line->GetEditFlags() & ( STRUCT_DELETED | IS_DRAGGING | IS_MOVING | SKIP_STRUCT ) )
             continue;
 
         if( !IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), aStart ) ||

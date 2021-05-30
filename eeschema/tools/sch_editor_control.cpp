@@ -1693,11 +1693,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             const_cast<KIID&>( item->m_Uuid ) = KIID();
         }
 
-        item->SetFlags( IS_NEW | IS_PASTED | IS_MOVED );
+        item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );
         m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item, i > 0 );
 
         // Reset flags for subsequent move operation
-        item->SetFlags( IS_NEW | IS_PASTED | IS_MOVED );
+        item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );
         // Start out hidden so the pasted items aren't "ghosted" in their original location
         // before being moved to the current location.
         getView()->Hide( item, true );

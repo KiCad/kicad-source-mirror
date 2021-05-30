@@ -103,10 +103,10 @@ typedef const INSPECTOR_FUNC& INSPECTOR;
 #define IS_CHANGED     (1 << 0)    ///< Item was edited, and modified
 #define IS_LINKED      (1 << 1)    ///< Used in calculation to mark linked items (temporary use)
 #define IN_EDIT        (1 << 2)    ///< Item currently edited
-#define IS_MOVED       (1 << 3)    ///< Item being moved
+#define IS_MOVING      (1 << 3)    ///< Item being moved
 #define IS_NEW         (1 << 4)    ///< New item, just created
-#define IS_RESIZED     (1 << 5)    ///< Item being resized
-#define IS_DRAGGED     (1 << 6)    ///< Item being dragged
+#define IS_RESIZING    (1 << 5)    ///< Item being resized
+#define IS_DRAGGING    (1 << 6)    ///< Item being dragged
 #define IS_DELETED     (1 << 7)
 #define IS_WIRE_IMAGE  (1 << 8)    ///< Item to be drawn as wireframe while editing
 #define STARTPOINT     (1 << 9)    ///< When a line is selected, these flags indicate which
@@ -167,12 +167,12 @@ public:
 
     inline bool IsModified() const { return m_flags & IS_CHANGED; }
     inline bool IsNew() const { return m_flags & IS_NEW; }
-    inline bool IsMoving() const { return m_flags & IS_MOVED; }
-    inline bool IsDragging() const { return m_flags & IS_DRAGGED; }
+    inline bool IsMoving() const { return m_flags & IS_MOVING; }
+    inline bool IsDragging() const { return m_flags & IS_DRAGGING; }
     inline bool IsWireImage() const { return m_flags & IS_WIRE_IMAGE; }
     inline bool IsSelected() const { return m_flags & SELECTED; }
     inline bool IsEntered() const { return m_flags & ENTERED; }
-    inline bool IsResized() const { return m_flags & IS_RESIZED; }
+    inline bool IsResized() const { return m_flags & IS_RESIZING; }
     inline bool IsBrightened() const { return m_flags & BRIGHTENED; }
 
     inline void SetWireImage() { SetFlags( IS_WIRE_IMAGE ); }
@@ -207,8 +207,8 @@ public:
 
     STATUS_FLAGS GetEditFlags() const
     {
-        constexpr int mask = ( IS_NEW | IS_PASTED | IS_MOVED | IS_RESIZED | IS_DRAGGED |
-                               IS_WIRE_IMAGE | STRUCT_DELETED );
+        constexpr int mask = ( IS_NEW | IS_PASTED | IS_MOVING | IS_RESIZING | IS_DRAGGING
+                               | IS_WIRE_IMAGE | STRUCT_DELETED );
 
         return m_flags & mask;
     }

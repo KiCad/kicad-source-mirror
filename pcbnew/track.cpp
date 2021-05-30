@@ -1033,8 +1033,8 @@ wxString TRACK::ShowState( int stateBits )
     if( stateBits & IN_EDIT )
         ret << wxT( " | IN_EDIT" );
 
-    if( stateBits & IS_DRAGGED )
-        ret << wxT( " | IS_DRAGGED" );
+    if( stateBits & IS_DRAGGING )
+        ret << wxT( " | IS_DRAGGING" );
 
     if( stateBits & DO_NOT_DRAW )
         ret << wxT( " | DO_NOT_DRAW" );

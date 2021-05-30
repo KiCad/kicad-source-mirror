@@ -776,7 +776,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
     }
 
     getView()->Hide( aItem, false );
-    aItem->SetFlags( IS_MOVED );
+    aItem->SetFlags( IS_MOVING );
 }
 
 
@@ -832,7 +832,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                         append_undo = true;
 
                         moveItem( dragItem, gridpt );
-                        dragItem->ClearFlags( IS_MOVED );
+                        dragItem->ClearFlags( IS_MOVING );
                         updateItem( dragItem, true );
                     }
                 }
@@ -849,7 +849,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 
                 moveItem( item, gridpt );
                 updateItem( item, true );
-                item->ClearFlags( IS_MOVED );
+                item->ClearFlags( IS_MOVING );
             }
         }
         else
@@ -889,7 +889,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                     append_undo = true;
 
                     moveItem( dragItem, most_common );
-                    dragItem->ClearFlags( IS_MOVED );
+                    dragItem->ClearFlags( IS_MOVING );
                     updateItem( dragItem, true );
                 }
             }

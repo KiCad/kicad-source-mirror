@@ -193,7 +193,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                 if( item )
                 {
-                    item->SetFlags( IS_NEW | IS_MOVED );
+                    item->SetFlags( IS_NEW | IS_MOVING );
                     m_view->ClearPreview();
                     m_view->AddToPreview( item->Clone() );
                     m_selectionTool->AddItemToSel( item );

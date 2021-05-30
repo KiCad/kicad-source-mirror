@@ -89,7 +89,7 @@ public:
      * @param unit is unit for symbols that have multiple parts per package.
      * @param convert is the alternate body style for the schematic symbols.
      * @param pos is the position of the symbol.
-     * @param setNewItemFlag is used to set the symbol #IS_NEW and #IS_MOVED flags.
+     * @param setNewItemFlag is used to set the symbol #IS_NEW and #IS_MOVING flags.
      */
     SCH_COMPONENT( const LIB_PART& aPart, const LIB_ID& aLibId, const SCH_SHEET_PATH* aSheet,
                    int unit = 0, int convert = 0,

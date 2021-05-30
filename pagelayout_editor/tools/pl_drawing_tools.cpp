@@ -160,7 +160,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
                     item = dataItem->GetDrawItems()[0];
-                    item->SetFlags( IS_NEW | IS_MOVED );
+                    item->SetFlags( IS_NEW | IS_MOVING );
 
                     // Select the item but don't inform other tools (to prevent the Properties
                     // panel from updating the item before it has been placed)

@@ -375,7 +375,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, wxPoint aPo
     m_busUnfold.label->SetTextSize( wxSize( cfg.m_DefaultTextSize, cfg.m_DefaultTextSize ) );
     m_busUnfold.label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
     m_busUnfold.label->SetParent( m_frame->GetScreen() );
-    m_busUnfold.label->SetFlags( IS_NEW | IS_MOVED );
+    m_busUnfold.label->SetFlags( IS_NEW | IS_MOVING );
 
     m_busUnfold.in_progress = true;
     m_busUnfold.origin = aPos;
@@ -651,7 +651,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
 
                     // Create a new segment, and chain it after the current segment.
                     segment = new SCH_LINE( *segment );
-                    segment->SetFlags( IS_NEW | IS_MOVED );
+                    segment->SetFlags( IS_NEW | IS_MOVING );
                     segment->SetStartPoint( cursorPos );
                     m_wires.push_back( segment );
 
@@ -790,7 +790,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos
 
     // Give segments a parent so they find the default line/wire/bus widths
     segment->SetParent( &m_frame->Schematic() );
-    segment->SetFlags( IS_NEW | IS_MOVED );
+    segment->SetFlags( IS_NEW | IS_MOVING );
     m_wires.push_back( segment );
 
     m_selectionTool->AddItemToSel( segment, true /*quiet mode*/ );
@@ -800,7 +800,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos
     if( m_frame->eeconfig()->m_Drawing.hv_lines_only )
     {
         segment = new SCH_LINE( *segment );
-        segment->SetFlags( IS_NEW | IS_MOVED );
+        segment->SetFlags( IS_NEW | IS_MOVING );
         m_wires.push_back( segment );
 
         m_selectionTool->AddItemToSel( segment, true /*quiet mode*/ );
@@ -908,7 +908,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     // Add the new wires
     for( SCH_LINE* wire : m_wires )
     {
-        wire->ClearFlags( IS_NEW | IS_MOVED );
+        wire->ClearFlags( IS_NEW | IS_MOVING );
         m_frame->AddToScreen( wire, screen );
     }
 

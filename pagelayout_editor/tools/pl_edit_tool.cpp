@@ -279,7 +279,7 @@ void PL_EDIT_TOOL::moveItem( DS_DATA_ITEM* aItem, VECTOR2I aDelta )
     for( DS_DRAW_ITEM_BASE* item : aItem->GetDrawItems() )
     {
         getView()->Update( item );
-        item->SetFlags( IS_MOVED );
+        item->SetFlags( IS_MOVING );
     }
 }
 
