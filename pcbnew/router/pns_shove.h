@@ -100,6 +100,7 @@ private:
     {
         SPRINGBACK_TAG() :
             m_length( 0 ),
+            m_draggedVia(),
             m_node( nullptr ),
             m_seq( 0 ),
             m_locked( false )

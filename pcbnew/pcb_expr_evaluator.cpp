@@ -1073,10 +1073,14 @@ PCB_EXPR_COMPILER::PCB_EXPR_COMPILER()
 }
 
 
-PCB_EXPR_EVALUATOR::PCB_EXPR_EVALUATOR()
+PCB_EXPR_EVALUATOR::PCB_EXPR_EVALUATOR() :
+    m_result( 0 ),
+    m_compiler(),
+    m_ucode(),
+    m_errorStatus()
 {
-    m_result = 0;
 }
+
 
 PCB_EXPR_EVALUATOR::~PCB_EXPR_EVALUATOR()
 {

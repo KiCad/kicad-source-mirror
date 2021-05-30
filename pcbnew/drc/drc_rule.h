@@ -107,6 +107,7 @@ class DRC_CONSTRAINT
     DRC_CONSTRAINT( DRC_CONSTRAINT_T aType = NULL_CONSTRAINT,
                     const wxString& aName = wxEmptyString ) :
             m_Type( aType ),
+            m_Value(),
             m_DisallowFlags( 0 ),
             m_name( aName ),
             m_parentRule( nullptr )

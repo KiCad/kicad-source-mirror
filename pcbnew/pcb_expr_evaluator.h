@@ -83,7 +83,7 @@ private:
 class PCB_EXPR_VAR_REF : public LIBEVAL::VAR_REF
 {
 public:
-    PCB_EXPR_VAR_REF( int aItemIndex ) : 
+    PCB_EXPR_VAR_REF( int aItemIndex ) :
         m_itemIndex( aItemIndex ),
         m_type( LIBEVAL::VT_UNDEFINED ),
         m_isEnum( false )

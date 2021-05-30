@@ -34,11 +34,11 @@
 const int gerbviewSchemaVersion = 0;
 
 
-GERBVIEW_SETTINGS::GERBVIEW_SETTINGS() : APP_SETTINGS_BASE( "gerbview", gerbviewSchemaVersion )
+GERBVIEW_SETTINGS::GERBVIEW_SETTINGS() :
+        APP_SETTINGS_BASE( "gerbview", gerbviewSchemaVersion ),
+        m_BoardLayersCount( 2 ),
+        m_Appearance()
 {
-    // Make Coverity happy
-    m_BoardLayersCount = 2;
-
     // Init settings:
     m_params.emplace_back( new PARAM<bool>( "appearance.show_border_and_titleblock",
             &m_Appearance.show_border_and_titleblock, false ) );

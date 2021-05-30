@@ -67,7 +67,7 @@ public:
     };
 
     JOINT() :
-        ITEM( JOINT_T ), m_locked( false ) {}
+        ITEM( JOINT_T ), m_tag(), m_locked( false ) {}
 
     JOINT( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aNet = -1 ) :
         ITEM( JOINT_T )

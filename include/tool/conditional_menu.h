@@ -153,6 +153,7 @@ private:
         // Separator
         ENTRY( SELECTION_CONDITION aCondition, int aOrder ) :
             m_type( SEPARATOR ), m_icon( static_cast<BITMAPS>( 0 ) ),
+            m_data(),
             m_condition( aCondition ),
             m_order( aOrder ),
             m_isCheckmarkEntry( false )

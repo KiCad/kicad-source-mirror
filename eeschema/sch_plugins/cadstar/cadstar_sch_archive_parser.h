@@ -36,7 +36,7 @@ class CADSTAR_SCH_ARCHIVE_PARSER : public CADSTAR_ARCHIVE_PARSER
 {
 public:
     explicit CADSTAR_SCH_ARCHIVE_PARSER( wxString aFilename )
-            : CADSTAR_ARCHIVE_PARSER(), Filename( aFilename ), KiCadUnitDivider( 10 )
+            : CADSTAR_ARCHIVE_PARSER(), Filename( aFilename ), Header(), Assignments(), KiCadUnitDivider( 10 )
     {
     }
 
