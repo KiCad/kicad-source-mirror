@@ -98,11 +98,16 @@ public:
     void SetFillColor( const COLOR4D& aColor );
     void SetStrokeColor( const COLOR4D& aColor );
     void SetGlyphSize( const VECTOR2D aSize );
-
     void SetLineWidth( double aLineWidth );
+
+    const COLOR4D& GetStrokeColor() const { return m_strokeColor; }
+    const COLOR4D& GetFillColor() const { return m_fillColor; }
 
 private:
     void releaseCommands();
+
+    COLOR4D m_strokeColor;
+    COLOR4D m_fillColor;
 
     std::vector<COMMAND*> m_commands;
 };

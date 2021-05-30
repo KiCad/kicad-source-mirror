@@ -393,12 +393,14 @@ void VIEW_OVERLAY::SetIsStroke( bool aIsStrokeEnabled )
 
 void VIEW_OVERLAY::SetFillColor( const COLOR4D& aColor )
 {
+    m_fillColor = aColor;
     m_commands.push_back( new COMMAND_SET_COLOR( false, aColor ) );
 }
 
 
 void VIEW_OVERLAY::SetStrokeColor( const COLOR4D& aColor )
 {
+    m_strokeColor = aColor;
     m_commands.push_back( new COMMAND_SET_COLOR( true, aColor ) );
 }
 
