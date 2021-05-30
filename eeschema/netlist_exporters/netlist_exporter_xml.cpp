@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013-2017 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -347,7 +347,16 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             // Output a series of children with all UUIDs associated with the REFDES
             for( auto it = range.first; it != range.second; ++it )
-                xunits->AddChild( new XNODE( wxXML_TEXT_NODE, wxEmptyString, ( *it )->m_Uuid.AsString() ) );
+            {
+                wxString uuid = ( *it )->m_Uuid.AsString();
+
+                // Add a space between UUIDs, if not in KICAD mode (i.e. using wxXmlDocument::Save()).
+                // KICAD MODE has its own XNODE::Format function.
+                if( !( aCtl & GNL_OPT_KICAD ) )     // i.e. for .xml format
+                    uuid += ' ';
+
+                xunits->AddChild( new XNODE( wxXML_TEXT_NODE, wxEmptyString, uuid ) );
+            }
 
             // Output the primary UUID
             xunits->AddChild(
