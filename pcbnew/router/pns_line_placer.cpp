@@ -820,6 +820,8 @@ bool LINE_PLACER::optimizeTailHeadTransition()
 {
     LINE linetmp = Trace();
 
+    PNS_DBG( Dbg(), Message, "optimize HT" );
+
     if( OPTIMIZER::Optimize( &linetmp, OPTIMIZER::FANOUT_CLEANUP, m_currentNode ) )
     {
         if( linetmp.SegmentCount() < 1 )
@@ -829,6 +831,9 @@ bool LINE_PLACER::optimizeTailHeadTransition()
         m_p_start = linetmp.CLine().CPoint( 0 );
         m_direction = DIRECTION_45( linetmp.CSegment( 0 ) );
         m_tail.Line().Clear();
+
+        PNS_DBG( Dbg(), Message, wxString::Format( "Placer: optimize fanout-cleanup" ) );
+
 
         return true;
     }
@@ -859,11 +864,14 @@ bool LINE_PLACER::optimizeTailHeadTransition()
     // If so, replace the (threshold) last tail points and the head with
     // the optimized line
 
-    if( OPTIMIZER::Optimize( &new_head, OPTIMIZER::MERGE_OBTUSE, m_currentNode ) )
+
+    PNS_DBG( Dbg(), AddLine, new_head.CLine(), LIGHTCYAN, 10000, "ht-newline" );
+
+    if( OPTIMIZER::Optimize( &new_head, OPTIMIZER::MERGE_SEGMENTS, m_currentNode ) )
     {
         LINE tmp( m_tail, opt_line );
 
-        wxLogTrace( "PNS", "Placer: optimize tail-head [%d]", threshold );
+        PNS_DBG( Dbg(), Message, wxString::Format( "Placer: optimize tail-head [%d]", threshold ) );
 
         head.Clear();
         tail.Replace( -threshold, -1, new_head.CLine() );
@@ -893,10 +901,18 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
                 m_head.ShapeCount(),
                 m_tail.ShapeCount() );
 
+    PNS_DBG( Dbg(), BeginGroup, "route-step" );
+
+    PNS_DBG( Dbg(), AddLine, m_tail.CLine(), WHITE, 10000, "tail-init" );
+    PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 10000, "head-init" );
+
     for( i = 0; i < n_iter; i++ )
     {
         if( !go_back && Settings().FollowMouse() )
             reduceTail( aP );
+
+        PNS_DBG( Dbg(), AddLine, m_tail.CLine(), WHITE, 10000, "tail-after-reduce" );
+        PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 10000, "head-after-reduce" );
 
         go_back = false;
 
@@ -907,12 +923,11 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
             fail = true;
 
         if( fail )
-            return;
+            break;
 
         m_head = new_head;
 
-        if( !Settings().FollowMouse() )
-            return;
+        PNS_DBG( Dbg(), AddLine, m_head.CLine(), LIGHTGREEN, 100000, "head-new" );
 
         if( handleSelfIntersections() )
         {
@@ -920,20 +935,40 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
             go_back = true;
         }
 
+        PNS_DBG( Dbg(), AddLine, m_tail.CLine(), WHITE, 10000, "tail-after-si" );
+        PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 10000, "head-after-si" );
+
         if( !go_back && handlePullback() )
         {
             n_iter++;
             go_back = true;
         }
+
+        PNS_DBG( Dbg(), AddLine, m_tail.CLine(), WHITE, 100000, "tail-after-pb" );
+        PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 100000, "head-after-pb" );
     }
 
-    if( !fail )
+    if( fail )
     {
-        if( optimizeTailHeadTransition() )
-            return;
-
-        mergeHead();
+        m_head.RemoveVia();
+        m_head.Clear();
     }
+
+    if( !fail && Settings().FollowMouse() )
+    {
+        PNS_DBG( Dbg(), AddLine, m_tail.CLine(), WHITE, 10000, "tail-pre-merge" );
+        PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 10000, "head-pre-merge" );
+
+        if( !optimizeTailHeadTransition() )
+        {
+            mergeHead();
+        }
+
+        PNS_DBG( Dbg(), AddLine, m_tail.CLine(), WHITE, 100000, "tail-post-merge" );
+        PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 100000, "head-post-merge" );
+    }
+
+    PNS_DBGN( Dbg(), EndGroup );
 }
 
 
