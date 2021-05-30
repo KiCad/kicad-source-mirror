@@ -146,9 +146,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 m_selectionTool->AddItemToSel( aSymbol );
 
                 aSymbol->SetParent( m_frame->GetScreen() );
-                aSymbol->SetFlags( IS_NEW );
+                aSymbol->SetFlags( IS_NEW | IS_MOVED );
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), aSymbol, false );
 
+                // Set IS_MOVED again, as AddItemToScreenAndUndoList() will have cleared it.
                 aSymbol->SetFlags( IS_MOVED );
                 m_toolMgr->RunAction( ACTIONS::refreshPreview );
             };
