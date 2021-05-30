@@ -266,6 +266,9 @@ void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& lin
 {
     SHAPE_LINE_CHAIN::INTERSECTIONS ips_raw;
 
+    if( line.PointCount() < 2 )
+        return;
+
     hull.Intersect( line, ips_raw );
 
     for( const auto& p : ips_raw )
