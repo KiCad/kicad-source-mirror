@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-05-24 19:21+0000\n"
-"Last-Translator: Radek Kuznik <radek.kzn@gmail.com>\n"
+"PO-Revision-Date: 2021-05-31 11:32+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -2674,9 +2674,8 @@ msgid "Keep existing reference designators, even if they are duplicated"
 msgstr "Zachovat stávající číslování, i když existují duplikáty"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Nepovolená hodnota označení reference!"
+msgstr "Vyčištění označení reference na všech vložených symbolech"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -8315,9 +8314,8 @@ msgid "Align top"
 msgstr "Zarovnat nahoru"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:122 eeschema/sch_text.cpp:674
-#, fuzzy
 msgid "Justification"
-msgstr "Propojení:"
+msgstr "Zarovnání"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
 msgid "Bold and italic"
@@ -12476,9 +12474,9 @@ msgid "Error loading schematic file \"%s\""
 msgstr "Chyba při načítání souboru schématu \"%s\""
 
 #: eeschema/files-io.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading schematic file \"%s\""
-msgstr "Chyba při načítání souboru schématu \"%s\"."
+msgstr "Vyčerpaná paměť při načítání souboru schématu \"%s\""
 
 #: eeschema/files-io.cpp:433 eeschema/files-io.cpp:1062
 #, c-format
@@ -12887,9 +12885,9 @@ msgid "Run command:"
 msgstr "Spustit příkaz:"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:128
-#, fuzzy, c-format
+#, c-format
 msgid "Command error. Return code %d."
-msgstr "Chyba příkazu. Návratový kód %d"
+msgstr "Chyba příkazu. Návratový kód %d."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:133
 msgid "Success."
@@ -17585,9 +17583,8 @@ msgid "Show polygons in outline mode"
 msgstr "Zobrazit zóny jako obrys"
 
 #: gerbview/tools/gerbview_actions.cpp:162
-#, fuzzy
 msgid "Ghost Negative Objects"
-msgstr "Zobrazit &Negativní objekty"
+msgstr "Skrýt negativní objekty"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Show negative objects in ghost color"
@@ -20822,34 +20819,28 @@ msgid "Remove via connected on fewer than two layers"
 msgstr ""
 
 #: pcbnew/cleanup_item.cpp:54
-#, fuzzy
 msgid "Remove zero-length track"
-msgstr "Smazat nadbytečné spoje"
+msgstr "Smazat spoje s nulovou délkou"
 
 #: pcbnew/cleanup_item.cpp:55
-#, fuzzy
 msgid "Remove track inside pad"
-msgstr "Smazat segmenty &spoje spojující různé sítě"
+msgstr "Smazat spoj uvnitř plošky"
 
 #: pcbnew/cleanup_item.cpp:58
-#, fuzzy
 msgid "Remove zero-size graphic"
-msgstr "Smazat nadbytečné spoje"
+msgstr "Smazat grafiku s nulovou velikostí"
 
 #: pcbnew/cleanup_item.cpp:59
-#, fuzzy
 msgid "Remove duplicated graphic"
-msgstr "Smazat duplicitní spoje"
+msgstr "Smazat duplikovanou grafiku"
 
 #: pcbnew/cleanup_item.cpp:60
-#, fuzzy
 msgid "Convert lines to rectangle"
-msgstr "Zkosený obdélník"
+msgstr "Převést linku do obdélníku"
 
 #: pcbnew/cleanup_item.cpp:64
-#, fuzzy
 msgid "Unknown cleanup action"
-msgstr "Neznámé porušení ERC"
+msgstr "Neznámá metoda čištění"
 
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:413
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:565
@@ -20955,9 +20946,8 @@ msgstr ""
 "Pouzdra vzadu začínají na %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:306
-#, fuzzy
 msgid "the last front footprint + 1"
-msgstr "Z nadřazeného pouzdra"
+msgstr "Poslední pouzdro nahoře + 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:314
 #, c-format
@@ -21000,9 +20990,8 @@ msgid "footprint location"
 msgstr "umístění pouzdra"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:347
-#, fuzzy
 msgid "reference designator location"
-msgstr "Referenční označení"
+msgstr "Umístění označení reference"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:489
 #, c-format
@@ -21057,9 +21046,8 @@ msgid "Footprint Coordinates"
 msgstr "Souřadnice pouzdra"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:534
-#, fuzzy
 msgid "Reference Designator Coordinates"
-msgstr "Referenční identifikátory"
+msgstr "Souřadnice označení reference"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:536
 #, c-format
@@ -21125,9 +21113,8 @@ msgid "Footprint not found in changelist"
 msgstr "Pouzdro nenalezeno v seznamu změn"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:30
-#, fuzzy
 msgid "Footprint Order"
-msgstr "Editor pouzder"
+msgstr "Provedení pouzdra"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:45
 msgid "Horizontally: top left to bottom right"
@@ -21207,9 +21194,8 @@ msgid "Front reference start:"
 msgstr "Výchozí označení reference:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
-#, fuzzy
 msgid "Starting reference designation for front."
-msgstr "Změna %s reference na %s."
+msgstr "Počátek označení reference pro horní vrstvu."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
 #: pcbnew/dialogs/dialog_create_array_base.cpp:93
@@ -21754,12 +21740,10 @@ msgid "A unique name for this zone to identify it for DRC"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
-#, fuzzy
 msgid "Zone priority level:"
 msgstr "Úroveň priority zóny:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:122
-#, fuzzy
 msgid ""
 "Zones are filled by priority level, level 3 has higher priority than level "
 "2.\n"
@@ -21767,10 +21751,11 @@ msgid ""
 "* If its priority is higher, its outlines are removed from the other zone.\n"
 "* If its priority is equal, a DRC error is set."
 msgstr ""
-"Na každé vrstvě mědi jsou zóny vyplněny podle pořadí priorit.\n"
+"Zóny jsou vyplněny v pořadí priority, úroveň 3 má vyšší prioritu než úroveň "
+"2.\n"
 "Když je zóna uvnitř jiné zóny:\n"
-"* Pokud je priorita větší: její obrysy jsou odstraněny z dalších vrstev.\n"
-"* Pokud je priorita stejná: je hlášena chyba DRC."
+"* Pokud je jeho priorita vyšší, jeho obrys je odstraněn ze zbývající zóny.\n"
+"* Pokud je priorita stejná, je nastavena chyba DRC."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:51
@@ -21850,9 +21835,8 @@ msgid "Thermal clearance:"
 msgstr "Termální izolační mezera:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
-#, fuzzy
 msgid "Clearance between pads in the same net and filled areas."
-msgstr "Vzdálenost mezi ploškami a vyplněnou plochou."
+msgstr "Izolační mezera mezi ploškami stejné sítě a vyplněnou oblastí."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:261
 msgid "Thermal spoke width:"
@@ -22116,9 +22100,8 @@ msgstr "Začátek číslování plošek:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:173
 #: pcbnew/dialogs/dialog_create_array_base.cpp:309
-#, fuzzy
 msgid "Pad numbering skip:"
-msgstr "Začátek číslování plošek:"
+msgstr "Přeskočit číslování plošek:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
 #, fuzzy
@@ -22157,11 +22140,10 @@ msgid "Rotate:"
 msgstr "Otočit:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:269
-#, fuzzy
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
-msgstr "Otočit nebo posunout prvek - vícenásobný výběr bude proveden společně"
+msgstr "Otočit prvek i při pohybu, multi-výběry se otočí společně"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:279
 msgid "Numbering Options"
