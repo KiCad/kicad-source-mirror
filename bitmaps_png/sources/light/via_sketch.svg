@@ -11,7 +11,7 @@
    data-name="Слой 1"
    viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="via_sketch.svg"
+   sodipodi:docname="pad_sketch.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -24,23 +24,23 @@
      inkscape:pageshadow="2"
      inkscape:window-width="1280"
      inkscape:window-height="755"
-     id="namedview24"
+     id="namedview30"
      showgrid="true"
-     inkscape:zoom="14.848486"
-     inkscape:cx="-5.3656549"
-     inkscape:cy="8.0019311"
-     inkscape:window-x="1535"
-     inkscape:window-y="147"
+     inkscape:zoom="20.99893"
+     inkscape:cx="7.6893282"
+     inkscape:cy="13"
+     inkscape:window-x="1471"
+     inkscape:window-y="179"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1"
-     inkscape:document-rotation="0">
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
     <inkscape:grid
        type="xygrid"
-       id="grid846"
+       id="grid_kicad"
        spacingx="0.5"
        spacingy="0.5"
-       color="#9898ff"
-       opacity="0.1254902"
+       color="#9999ff"
+       opacity="0.13"
        empspacing="2" />
   </sodipodi:namedview>
   <metadata
@@ -73,38 +73,28 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs5">
+     id="defs158809">
     <style
-       id="style3">.cls-1{fill:#bf2641;}.cls-2{fill:#b9b9b9;}.cls-3{fill:#1a81c4;}.cls-4{fill:#f29100;}.cls-5{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}</style>
+       id="style158807">.cls-1{fill:#b9b9b9;}.cls-2{fill:#f29100;}.cls-3{fill:#545454;}</style>
   </defs>
   <title
-     id="title7">via_sketch</title>
+     id="title158811">pad_sketch</title>
   <path
-     id="line27481"
-     style="fill:none;stroke:#1a81c4;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     d="M 10,10 2.0000001,2.0000002"
-     sodipodi:nodetypes="cc" />
+     class="cls-1"
+     d="M 11.9844,24.019 A 11.9552,11.9552 0 0 1 3.4736,20.499 L 4.1807,19.792 A 11.036275,11.036275 0 0 0 19.7881,4.1841 l 0.707,-0.707 A 12.0312,12.0312 0 0 1 11.9844,24.019 Z"
+     id="path158813" />
   <path
-     class="cls-2"
-     d="m 13.7532,10.8209 -3.0272,2.8628 a 2.1118,2.1118 0 0 0 3.0272,-2.8628 m -0.08,-1.3009 0.5289,0.2821 a 3.1112698,3.1112698 0 1 1 -4.4,4.4 L 9.3557,13.6032 13.6729,9.5205 Z"
-     id="path13" />
-  <path
-     id="line27479"
-     style="fill:none;stroke:#bf2641;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     d="M 12,12 22,22"
-     sodipodi:nodetypes="cc" />
+     class="cls-1"
+     d="M 11.9844,21.2983 A 9.2885,9.2885 0 0 1 5.3975,18.5747 l 0.707,-0.707 a 8.3155757,8.3155757 0 0 0 11.76,-11.76 l 0.707,-0.707 a 9.3105,9.3105 0 0 1 -6.5869,15.8974 z m 0,-3.042 A 6.2513,6.2513 0 0 1 7.55,16.4224 L 8.257,15.7153 A 5.2715518,5.2715518 0 0 0 15.7119,8.26 l 0.707,-0.7071 A 6.2685,6.2685 0 0 1 11.9844,18.256 Z"
+     id="path158815" />
   <path
      class="cls-2"
-     d="m 15.6041,7.8601 -8.0469,7.6648 0.3441,0.8565 a 6,6 0 0 0 8.5628,-8.3917 l -0.86,-0.13 m -0.3352,-1.0618 1.6832,0.2542 a 7.000145,7.000145 0 1 1 -9.9,9.8994 l -0.6763,-1.6828 8.8925,-8.47 z"
-     id="path11" />
-  <path
-     class="cls-4"
-     d="m 16.9521,7.0521 a 7.0003571,7.0003571 0 0 0 -9.9,9.9"
-     id="path17" />
+     d="m 11.9844,-0.0122 a 11.9942,11.9942 0 0 0 -8.67,20.2879 c 0.0374,0.0391 0.113,0.1166 0.113,0.1166 L 20.4657,3.5066 c 0,0 -0.1065,-0.1055 -0.16,-0.1575 A 11.9591,11.9591 0 0 0 11.9844,-0.0122 Z M 4.21,19.7626 c 0,0 -0.0971,-0.098 -0.1449,-0.1477 A 10.995,10.995 0 0 1 19.43,3.8973 c 0.0451,0.0416 0.1345,0.1259 0.1345,0.1259 z"
+     id="path158817" />
   <path
      class="cls-2"
-     d="m 14.2021,9.8021 a 3.1112698,3.1112698 0 0 0 -4.4,4.4"
-     id="path19" />
+     d="M 11.9844,2.7122 A 9.2712,9.2712 0 0 0 5.2323,18.3415 c 0.0682,0.0724 0.2078,0.2138 0.2078,0.2138 L 18.5871,5.4791 c 0,0 -0.1768,-0.1758 -0.2678,-0.261 A 9.2415,9.2415 0 0 0 11.9844,2.7122 Z m -3.7173,13.016 c 0,0 -0.1383,-0.1414 -0.2045,-0.2149 a 5.2733,5.2733 0 0 1 7.4431,-7.451 c 0.0627,0.0562 0.1838,0.1731 0.1838,0.1731 z"
+     id="path158819" />
   <line
      class="cls-3"
      x1="0.5"
