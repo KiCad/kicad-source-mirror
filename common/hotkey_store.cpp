@@ -223,6 +223,15 @@ bool HOTKEY_STORE::CheckKeyConflicts( TOOL_ACTION* aAction, long aKey, HOTKEY** 
 
             if( hotkey.m_EditKeycode == aKey )
             {
+                // We can use the same key for a different action if both actions are contextual and
+                // for different tools.
+                if( hotkey.m_Actions[0]->GetScope() == AS_CONTEXT &&
+                    aAction->GetScope() == AS_CONTEXT &&
+                    hotkey.m_Actions[0]->GetToolName() != aAction->GetToolName() )
+                {
+                    continue;
+                }
+
                 *aConflict = &hotkey;
                 return true;
             }
