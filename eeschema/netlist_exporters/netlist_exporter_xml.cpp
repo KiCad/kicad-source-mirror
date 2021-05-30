@@ -347,10 +347,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             // Output a series of children with all UUIDs associated with the REFDES
             for( auto it = range.first; it != range.second; ++it )
-            {
-                wxString uuid = ( *it )->m_Uuid.AsString() + " ";
-                xunits->AddChild( new XNODE( wxXML_TEXT_NODE, wxEmptyString, uuid ) );
-            }
+                xunits->AddChild( new XNODE( wxXML_TEXT_NODE, wxEmptyString, ( *it )->m_Uuid.AsString() ) );
 
             // Output the primary UUID
             xunits->AddChild(
