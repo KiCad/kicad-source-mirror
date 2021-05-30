@@ -515,7 +515,7 @@ bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, IT
 
             bool shapeMatches = true;
 
-            if( item->OfKind( ITEM::SOLID_T ) && item->Layers() != aItem->Layers() )
+            if( item->OfKind( ITEM::SOLID_T | ITEM::VIA_T ) && item->Layers() != aItem->Layers() )
             {
                 shapeMatches = false;
             }
