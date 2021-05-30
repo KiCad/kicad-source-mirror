@@ -155,7 +155,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_assignLabel->Wrap( -1 );
 	m_assignLabel->SetMinSize( wxSize( 120,-1 ) );
 
-	bSizer11->Add( m_assignLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer11->Add( m_assignLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_assignNetClassChoices;
 	m_assignNetClass = new wxChoice( sbEdit->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_assignNetClassChoices, 0 );

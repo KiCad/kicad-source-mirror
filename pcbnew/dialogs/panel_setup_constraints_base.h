@@ -39,7 +39,6 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 	private:
 
 	protected:
-		wxScrolledWindow* m_scrolledWindow1;
 		wxStaticText* m_staticText26;
 		wxStaticBitmap* m_bitmapBlindBuried;
 		wxCheckBox* m_OptAllowBlindBuriedVias;
@@ -127,6 +126,7 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 
 
 	public:
+		wxScrolledWindow* m_scrolledWindow;
 
 		PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_SETUP_CONSTRAINTS_BASE();

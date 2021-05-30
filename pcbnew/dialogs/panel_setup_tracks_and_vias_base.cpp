@@ -74,10 +74,10 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizer3->Add( m_trackWidthsRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
 
 
-	sbSizer4->Add( bSizer3, 0, wxEXPAND|wxTOP, 2 );
+	sbSizer4->Add( bSizer3, 0, wxBOTTOM|wxEXPAND|wxTOP, 2 );
 
 
-	bSizerLower->Add( sbSizer4, 0, wxEXPAND, 5 );
+	bSizerLower->Add( sbSizer4, 0, wxEXPAND|wxRIGHT, 10 );
 
 	wxStaticBoxSizer* sbSizer5;
 	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Vias") ), wxVERTICAL );
@@ -131,10 +131,10 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizer4->Add( m_viaSizesRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
 
 
-	sbSizer5->Add( bSizer4, 0, wxEXPAND|wxTOP, 2 );
+	sbSizer5->Add( bSizer4, 0, wxBOTTOM|wxEXPAND|wxTOP, 2 );
 
 
-	bSizerLower->Add( sbSizer5, 0, wxEXPAND, 5 );
+	bSizerLower->Add( sbSizer5, 0, wxEXPAND|wxRIGHT, 10 );
 
 	wxStaticBoxSizer* sbSizer6;
 	sbSizer6 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Differential Pairs") ), wxVERTICAL );
@@ -190,7 +190,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizer5->Add( m_diffPairsRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
 
 
-	sbSizer6->Add( bSizer5, 0, wxEXPAND|wxTOP, 2 );
+	sbSizer6->Add( bSizer5, 0, wxBOTTOM|wxEXPAND|wxTOP, 2 );
 
 
 	bSizerLower->Add( sbSizer6, 0, wxEXPAND, 5 );
