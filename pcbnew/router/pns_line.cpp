@@ -234,7 +234,10 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
     // corner case for loopy tracks: insert the end loop point back into the hull
     if( auto isect = pnew.SelfIntersecting() )
     {
-        pnew.Split( isect->p );
+        if( isect->p != pnew.CPoint( -1 ) )
+        {
+            pnew.Split( isect->p );
+        }
     }
 
     // insert all intersections found into the new hull/path SLCs
