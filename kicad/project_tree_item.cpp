@@ -214,7 +214,7 @@ void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
         toolMgr->RunAction( KICAD_MANAGER_ACTIONS::openTextEditor, true, &fullFileName );
         break;
 
-    case TREE_FILE_TYPE::PAGE_LAYOUT_DESCR:
+    case TREE_FILE_TYPE::DRAWING_SHEET:
         toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editDrawingSheet, true, &fullFileName );
         break;
 

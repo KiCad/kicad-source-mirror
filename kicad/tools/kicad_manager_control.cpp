@@ -393,7 +393,7 @@ public:
             pcbnew->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
                                 m_newProjectName, aSrcFilePath, m_errors );
         }
-        else if( ext == PageLayoutDescrFileExtension )
+        else if( ext == DrawingSheetFileExtension )
         {
             KIFACE* pleditor = m_frame->Kiway().KiFACE( KIWAY::FACE_PL_EDITOR );
             pleditor->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,

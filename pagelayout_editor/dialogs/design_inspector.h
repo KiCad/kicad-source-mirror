@@ -43,7 +43,7 @@ private:
     wxGrid* GetGridList() const { return m_gridListItems; }
 	void onCellClicked( wxGridEvent& event ) override;
 
-    // The list of DS_DATA_ITEM found in page layout
+    // The list of DS_DATA_ITEM found in drawing sheet
     std::vector<DS_DATA_ITEM*> m_itemsList;
     PL_EDITOR_FRAME* m_editorFrame;
 

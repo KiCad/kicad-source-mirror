@@ -79,7 +79,7 @@ public:
     void SetIsFirstPage( bool aIsFirstPage ) { m_isFirstPage = aIsFirstPage; }
 
     /**
-     * Can be used to override which layer ID is used for worksheet item colors
+     * Can be used to override which layer ID is used for drawing sheet item colors
      * @param aLayerId is the color to use (defaults to LAYER_DRAWINGSHEET if this is not called)
      */
     void SetColorLayer( int aLayerId )
@@ -114,7 +114,7 @@ public:
 #endif
 
     /** Get class name
-     * @return  string "WORKSHEET_VIEWITEM"
+     * @return  string "DS_PROXY_VIEW_ITEM"
      */
     virtual wxString GetClass() const override
     {
@@ -126,7 +126,7 @@ public:
 protected:
     void buildDrawList( KIGFX::VIEW* aView, DS_DRAW_ITEM_LIST* aDrawList ) const;
 
-    /// the factor between mils (units used in worksheet and internal units)
+    /// the factor between mils (units used in drawing sheet and internal units)
     /// it is the value IU_PER_MILS used in the caller
     int                m_mils2IUscalefactor;
 
@@ -139,7 +139,7 @@ protected:
     bool               m_isFirstPage;
     const PROJECT*     m_project;
 
-    /// Layer that is used for worksheet color (LAYER_DRAWINGSHEET is always used for visibility)
+    /// Layer that is used for drawing sheet color (LAYER_DRAWINGSHEET is always used for visibility)
     int                m_colorLayer;
 
     /// Layer that is used for page border color

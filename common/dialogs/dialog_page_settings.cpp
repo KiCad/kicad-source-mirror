@@ -131,8 +131,8 @@ bool DIALOG_PAGES_SETTINGS::TransferDataToWindow()
         m_paperSizeComboBox->Append( wxGetTranslation( pageFmt ) );
     }
 
-    // initialize the page layout descr filename
-    SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
+    // initialize the drawing sheet filename
+    SetWksFileName( BASE_SCREEN::m_DrawingSheetFileName );
 
     m_pageInfo = m_parent->GetPageSettings();
     SetCurrentPageSizeSelection( m_pageInfo.GetType() );
@@ -188,7 +188,7 @@ bool DIALOG_PAGES_SETTINGS::TransferDataToWindow()
     onTransferDataToWindow();
 
     GetPageLayoutInfoFromDialog();
-    UpdatePageLayoutExample();
+    UpdateDrawingSheetExample();
 
     GetSizer()->SetSizeHints( this );
 
@@ -258,7 +258,7 @@ void DIALOG_PAGES_SETTINGS::OnPaperSizeChoice( wxCommandEvent& event )
     }
 
     GetPageLayoutInfoFromDialog();
-    UpdatePageLayoutExample();
+    UpdateDrawingSheetExample();
 }
 
 
@@ -267,7 +267,7 @@ void DIALOG_PAGES_SETTINGS::OnUserPageSizeXTextUpdated( wxCommandEvent& event )
     if( m_initialized )
     {
         GetPageLayoutInfoFromDialog();
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -277,7 +277,7 @@ void DIALOG_PAGES_SETTINGS::OnUserPageSizeYTextUpdated( wxCommandEvent& event )
     if( m_initialized )
     {
         GetPageLayoutInfoFromDialog();
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -287,7 +287,7 @@ void DIALOG_PAGES_SETTINGS::OnPageOrientationChoice( wxCommandEvent& event )
     if( m_initialized )
     {
         GetPageLayoutInfoFromDialog();
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -298,7 +298,7 @@ void DIALOG_PAGES_SETTINGS::OnRevisionTextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetRevision( m_TextRevision->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -309,7 +309,7 @@ void DIALOG_PAGES_SETTINGS::OnDateTextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetDate( m_TextDate->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -320,7 +320,7 @@ void DIALOG_PAGES_SETTINGS::OnTitleTextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetTitle( m_TextTitle->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -331,7 +331,7 @@ void DIALOG_PAGES_SETTINGS::OnCompanyTextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetCompany( m_TextCompany->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -342,7 +342,7 @@ void DIALOG_PAGES_SETTINGS::OnComment1TextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetComment( 0, m_TextComment1->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -353,7 +353,7 @@ void DIALOG_PAGES_SETTINGS::OnComment2TextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetComment( 1, m_TextComment2->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -364,7 +364,7 @@ void DIALOG_PAGES_SETTINGS::OnComment3TextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetComment( 2, m_TextComment3->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -375,7 +375,7 @@ void DIALOG_PAGES_SETTINGS::OnComment4TextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetComment( 3, m_TextComment4->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -386,7 +386,7 @@ void DIALOG_PAGES_SETTINGS::OnComment5TextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetComment( 4, m_TextComment5->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -397,7 +397,7 @@ void DIALOG_PAGES_SETTINGS::OnComment6TextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetComment( 5, m_TextComment6->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -408,7 +408,7 @@ void DIALOG_PAGES_SETTINGS::OnComment7TextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetComment( 6, m_TextComment7->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -419,7 +419,7 @@ void DIALOG_PAGES_SETTINGS::OnComment8TextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetComment( 7, m_TextComment8->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -430,7 +430,7 @@ void DIALOG_PAGES_SETTINGS::OnComment9TextUpdated( wxCommandEvent& event )
     {
         GetPageLayoutInfoFromDialog();
         m_tb.SetComment( 8, m_TextComment9->GetValue() );
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }
 
@@ -456,19 +456,19 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
     wxString fileName = GetWksFileName();
 
-    if( fileName != BASE_SCREEN::m_PageLayoutDescrFileName )
+    if( fileName != BASE_SCREEN::m_DrawingSheetFileName )
     {
         wxString fullFileName = DS_DATA_MODEL::MakeFullFileName( fileName, m_projectPath );
 
         if( !fullFileName.IsEmpty() && !wxFileExists( fullFileName ) )
         {
             wxString msg;
-            msg.Printf( _( "Page layout description file \"%s\" not found." ), fullFileName );
+            msg.Printf( _( "Drawing sheet file \"%s\" not found." ), fullFileName );
             wxMessageBox( msg );
             return false;
         }
 
-        BASE_SCREEN::m_PageLayoutDescrFileName = fileName;
+        BASE_SCREEN::m_DrawingSheetFileName = fileName;
         DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( fullFileName );
         m_localPrjConfigChanged = true;
     }
@@ -580,7 +580,7 @@ void DIALOG_PAGES_SETTINGS::SetCurrentPageSizeSelection( const wxString& aPaperS
 }
 
 
-void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
+void DIALOG_PAGES_SETTINGS::UpdateDrawingSheetExample()
 {
     int lyWidth, lyHeight;
 
@@ -660,8 +660,8 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
                 || m_parent->IsType( FRAME_SCH_VIEWER )
                 || m_parent->IsType( FRAME_SCH_VIEWER_MODAL ) )
             {
-                COLOR4D worksheetColor = renderSettings.GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET );
-                renderSettings.SetLayerColor( LAYER_DRAWINGSHEET, worksheetColor );
+                COLOR4D color = renderSettings.GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET );
+                renderSettings.SetLayerColor( LAYER_DRAWINGSHEET, color );
             }
 
             GRFilledRect( NULL, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, bgColor, bgColor );
@@ -778,8 +778,8 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     }
 
     // Display a file picker dialog
-    wxFileDialog fileDialog( this, _( "Select Page Layout Description File" ),
-                             path, name, PageLayoutDescrFileWildcard(),
+    wxFileDialog fileDialog( this, _( "Select Drawing Sheet File" ),
+                             path, name, DrawingSheetFileWildcard(),
                              wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 
     if( fileDialog.ShowModal() != wxID_OK )
@@ -794,7 +794,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     // For Win/Linux/macOS compatibility, a relative path is a good idea
     if( shortFileName != GetWksFileName() && shortFileName != fileName )
     {
-        wxString msg = wxString::Format( _( "The page layout description file name has changed.\n"
+        wxString msg = wxString::Format( _( "The drawing sheet file name has changed.\n"
                                             "Do you want to use the relative path:\n"
                                             "\"%s\"\n"
                                             "instead of\n"
@@ -820,6 +820,6 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
         SetWksFileName( shortFileName );
 
         GetPageLayoutInfoFromDialog();
-        UpdatePageLayoutExample();
+        UpdateDrawingSheetExample();
     }
 }

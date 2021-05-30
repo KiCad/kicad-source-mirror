@@ -305,7 +305,7 @@ bool PL_EDIT_TOOL::updateModificationPoint( PL_SELECTION& aSelection )
 }
 
 
-int PL_EDIT_TOOL::ImportWorksheetContent( const TOOL_EVENT& aEvent )
+int PL_EDIT_TOOL::ImportDrawingSheetContent( const TOOL_EVENT& aEvent )
 {
     m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
 
@@ -515,17 +515,17 @@ int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
 void PL_EDIT_TOOL::setTransitions()
 {
-    Go( &PL_EDIT_TOOL::Main,                   PL_ACTIONS::move.MakeEvent() );
+    Go( &PL_EDIT_TOOL::Main,                      PL_ACTIONS::move.MakeEvent() );
 
-    Go( &PL_EDIT_TOOL::ImportWorksheetContent, PL_ACTIONS::appendImportedWorksheet.MakeEvent() );
+    Go( &PL_EDIT_TOOL::ImportDrawingSheetContent, PL_ACTIONS::appendImportedDrawingSheet.MakeEvent() );
 
-    Go( &PL_EDIT_TOOL::Undo,                   ACTIONS::undo.MakeEvent() );
-    Go( &PL_EDIT_TOOL::Redo,                   ACTIONS::redo.MakeEvent() );
+    Go( &PL_EDIT_TOOL::Undo,                      ACTIONS::undo.MakeEvent() );
+    Go( &PL_EDIT_TOOL::Redo,                      ACTIONS::redo.MakeEvent() );
 
-    Go( &PL_EDIT_TOOL::Cut,                    ACTIONS::cut.MakeEvent() );
-    Go( &PL_EDIT_TOOL::Copy,                   ACTIONS::copy.MakeEvent() );
-    Go( &PL_EDIT_TOOL::Paste,                  ACTIONS::paste.MakeEvent() );
-    Go( &PL_EDIT_TOOL::DoDelete,               ACTIONS::doDelete.MakeEvent() );
+    Go( &PL_EDIT_TOOL::Cut,                       ACTIONS::cut.MakeEvent() );
+    Go( &PL_EDIT_TOOL::Copy,                      ACTIONS::copy.MakeEvent() );
+    Go( &PL_EDIT_TOOL::Paste,                     ACTIONS::paste.MakeEvent() );
+    Go( &PL_EDIT_TOOL::DoDelete,                  ACTIONS::doDelete.MakeEvent() );
 
-    Go( &PL_EDIT_TOOL::DeleteItemCursor,       ACTIONS::deleteTool.MakeEvent() );
+    Go( &PL_EDIT_TOOL::DeleteItemCursor,          ACTIONS::deleteTool.MakeEvent() );
 }

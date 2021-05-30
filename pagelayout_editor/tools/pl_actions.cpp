@@ -68,7 +68,7 @@ TOOL_ACTION PL_ACTIONS::move( "plEditor.InteractiveMove.move",
         _( "Move" ), _( "Moves the selected item(s)" ),
         BITMAPS::move, AF_ACTIVATE );
 
-TOOL_ACTION PL_ACTIONS::appendImportedWorksheet( "plEditor.InteractiveEdit.appendWorksheet",
+TOOL_ACTION PL_ACTIONS::appendImportedDrawingSheet( "plEditor.InteractiveEdit.appendWorksheet",
         AS_GLOBAL, 0, "",
         _( "Append Existing Drawing Sheet..." ),
         _( "Append an existing drawing sheet file to current file" ),
@@ -79,7 +79,7 @@ TOOL_ACTION PL_ACTIONS::appendImportedWorksheet( "plEditor.InteractiveEdit.appen
 //
 TOOL_ACTION PL_ACTIONS::showInspector( "plEditor.EditorControl.ShowInspector",
         AS_GLOBAL, 0, "",
-        _( "Show Design Inspector" ), _( "Show the list of items in page layout" ),
+        _( "Show Design Inspector" ), _( "Show the list of items in the drawing sheet" ),
         BITMAPS::spreadsheet );
 
 TOOL_ACTION PL_ACTIONS::previewSettings( "plEditor.EditorControl.PreviewSettings",

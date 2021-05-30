@@ -123,8 +123,7 @@ private:
     void exportPostScriptFormat();
 
     /**
-     * Generate a file suitable to be copied into a page layout
-     * description file (.kicad_wks file
+     * Generate a file suitable to be copied into a drawing sheet (.kicad_wks) file
      */
     void OnExportLogo();
 

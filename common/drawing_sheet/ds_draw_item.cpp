@@ -25,7 +25,7 @@
 
 /*
  * the class DS_DATA_ITEM (and DS_DATA_ITEM_TEXT) defines
- * a basic shape of a page layout ( frame references and title block )
+ * a basic shape of a drawing sheet (frame references and title block)
  * Basic shapes are line, rect and texts
  * the DS_DATA_ITEM coordinates units is the mm, and are relative to
  * one of 4 page corners.
@@ -42,10 +42,10 @@
  *  Items with m_RepeatCount > 1 are created m_RepeatCount times
  *
  * the DS_DATA_MODEL is created only once.
- * the DS_DRAW_ITEM_LIST is created each time the page layout is plotted/drawn
+ * the DS_DRAW_ITEM_LIST is created each time the drawing sheet is plotted/drawn
  *
  * the DS_DATA_MODEL instance is created from a S expression which
- * describes the page layout (can be the default page layout or a custom file).
+ * describes the drawing sheet (can be the default drawing sheet or a custom file).
  */
 
 #include <eda_rect.h>

@@ -194,14 +194,14 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxPoint originCoord = ReturnCoordOriginCorner();
     SetGridOrigin( originCoord );
 
-    // Initialize the current page layout
+    // Initialize the current drawing sheet
 #if 0       //start with empty layout
     DS_DATA_MODEL::GetTheInstance().AllowVoidList( true );
     DS_DATA_MODEL::GetTheInstance().ClearList();
 #else       // start with the default Kicad layout
     DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet();
 #endif
-    OnNewPageLayout();
+    OnNewDrawingSheet();
 
     // Ensure the window is on top
     Raise();
@@ -289,7 +289,7 @@ void PL_EDITOR_FRAME::setupUIConditions()
     mgr->SetConditions( PL_ACTIONS::placeImage,     CHECK( cond.CurrentTool( PL_ACTIONS::placeImage ) ) );
 
     // Not a tool, just a way to activate the action
-    mgr->SetConditions( PL_ACTIONS::appendImportedWorksheet, CHECK( SELECTION_CONDITIONS::ShowNever ) );
+    mgr->SetConditions( PL_ACTIONS::appendImportedDrawingSheet, CHECK( SELECTION_CONDITIONS::ShowNever ) );
 
     auto titleBlockNormalMode =
         [] ( const SELECTION& )
@@ -315,14 +315,14 @@ bool PL_EDITOR_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 {
     wxString fn = aFileSet[0];
 
-    if( !LoadPageLayoutDescrFile( fn ) )
+    if( !LoadDrawingSheetFile( fn ) )
     {
         wxMessageBox( wxString::Format( _( "Error when loading file \"%s\"" ), fn ) );
         return false;
     }
     else
     {
-        OnNewPageLayout();
+        OnNewDrawingSheet();
         return true;
     }
 }
@@ -406,7 +406,7 @@ void PL_EDITOR_FRAME::OnSelectCoordOriginCorner( wxCommandEvent& event )
 {
     m_originSelectChoice = m_originSelectBox->GetSelection();
     UpdateStatusBar();  // Update grid origin
-    GetCanvas()->DisplayWorksheet();
+    GetCanvas()->DisplayDrawingSheet();
     GetCanvas()->Refresh();
 }
 
@@ -544,13 +544,13 @@ void PL_EDITOR_FRAME::UpdateTitleAndInfo()
 
 wxString PL_EDITOR_FRAME::GetCurrentFileName() const
 {
-    return BASE_SCREEN::m_PageLayoutDescrFileName;
+    return BASE_SCREEN::m_DrawingSheetFileName;
 }
 
 
 void PL_EDITOR_FRAME::SetCurrentFileName( const wxString& aName )
 {
-    BASE_SCREEN::m_PageLayoutDescrFileName = aName;
+    BASE_SCREEN::m_DrawingSheetFileName = aName;
 }
 
 
@@ -770,7 +770,7 @@ void PL_EDITOR_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 
     PrintDrawingSheet( aSettings, GetScreen(), IU_PER_MILS, wxEmptyString );
 
-    GetCanvas()->DisplayWorksheet();
+    GetCanvas()->DisplayDrawingSheet();
     GetCanvas()->Refresh();
 }
 
@@ -789,7 +789,7 @@ SELECTION& PL_EDITOR_FRAME::GetCurrentSelection()
 
 void PL_EDITOR_FRAME::HardRedraw()
 {
-    GetCanvas()->DisplayWorksheet();
+    GetCanvas()->DisplayDrawingSheet();
 
     PL_SELECTION_TOOL*  selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
     PL_SELECTION&       selection = selTool->GetSelection();
@@ -804,7 +804,7 @@ void PL_EDITOR_FRAME::HardRedraw()
 }
 
 
-DS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
+DS_DATA_ITEM* PL_EDITOR_FRAME::AddDrawingSheetItem( int aType )
 {
     DS_DATA_ITEM * item = NULL;
 
@@ -869,11 +869,11 @@ DS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
 }
 
 
-void PL_EDITOR_FRAME::OnNewPageLayout()
+void PL_EDITOR_FRAME::OnNewDrawingSheet()
 {
     ClearUndoRedoList();
     GetScreen()->SetContentModified( false );
-    GetCanvas()->DisplayWorksheet();
+    GetCanvas()->DisplayDrawingSheet();
 
     m_propertiesPagelayout->CopyPrmsFromItemToPanel( nullptr );
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
@@ -885,11 +885,11 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
     if( GetCurrentFileName().IsEmpty() )
     {
         // Default shutdown reason until a file is loaded
-        KIPLATFORM::APP::SetShutdownBlockReason( this, _( "New page layout file is unsaved" ) );
+        KIPLATFORM::APP::SetShutdownBlockReason( this, _( "New drawing sheet file is unsaved" ) );
     }
     else
     {
-        KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Page layout changes are unsaved" ) );
+        KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Drawing sheet changes are unsaved" ) );
     }
 }
 

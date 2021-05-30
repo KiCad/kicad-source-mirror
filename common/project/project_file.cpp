@@ -61,7 +61,7 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
             new PARAM_PATH_LIST( "cvpcb.equivalence_files", &m_EquivalenceFiles, {} ) );
 
     m_params.emplace_back(
-            new PARAM_PATH( "pcbnew.page_layout_descr_file", &m_BoardPageLayoutDescrFile, "" ) );
+            new PARAM_PATH( "pcbnew.page_layout_descr_file", &m_BoardDrawingSheetFile, "" ) );
 
     m_params.emplace_back(
             new PARAM_PATH( "pcbnew.last_paths.netlist", &m_PcbLastPath[LAST_PATH_NETLIST], "" ) );

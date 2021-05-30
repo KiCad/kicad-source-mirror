@@ -107,7 +107,7 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
     m_frame->SaveCopyInUndoList( undoCmd, UNDO_REDO::PAGESETTINGS, false );
 
     DIALOG_EESCHEMA_PAGE_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_MILS, MAX_PAGE_SIZE_MILS ) );
-    dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
+    dlg.SetWksFileName( BASE_SCREEN::m_DrawingSheetFileName );
 
     if( dlg.ShowModal() != wxID_OK )
         m_frame->RollbackSchematicFromUndo();

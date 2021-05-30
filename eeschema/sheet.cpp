@@ -516,7 +516,7 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
     dc.SetUserScale( scale, scale );
 
     GetRenderSettings()->SetPrintDC( &dc );
-    // Init the color of the layer actually used to print the worksheet:
+    // Init the color of the layer actually used to print the drawing sheet:
     GetRenderSettings()->SetLayerColor( LAYER_DRAWINGSHEET,
                 GetRenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
 

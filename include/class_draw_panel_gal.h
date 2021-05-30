@@ -195,7 +195,7 @@ public:
 
     /**
      * Return the bounding box of the view that should be used if model is not valid.
-     * For example, the worksheet bounding box for an empty PCB
+     * For example, the drawing sheet bounding box for an empty PCB
      *
      * @return the default bounding box for the panel.
      */

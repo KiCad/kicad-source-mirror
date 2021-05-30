@@ -46,7 +46,7 @@ static const char* getTokenName( T aTok )
     return DRAWING_SHEET_READER_LEXER::TokenName( aTok );
 }
 
-// A basic helper class to write a page layout description
+// A basic helper class to write a drawing sheet file
 // Not used alone, a file writer or a string writer should be derived to use it.
 // Therefore the constructor is protected.
 class DS_DATA_MODEL_IO
@@ -58,7 +58,7 @@ protected:
     virtual ~DS_DATA_MODEL_IO() {}
 
 public:
-    void Format( DS_DATA_MODEL* aModel ) const;
+    void Format( DS_DATA_MODEL* aDrawingSheet ) const;
 
     void Format( DS_DATA_MODEL* aModel, DS_DATA_ITEM* aItem, int aNestLevel ) const;
 
@@ -74,7 +74,7 @@ private:
 };
 
 
-// A helper class to write a page layout description to a file
+// A helper class to write a drawing sheet to a file
 class DS_DATA_MODEL_FILEIO : public DS_DATA_MODEL_IO
 {
     FILE_OUTPUTFORMATTER * m_fileout;
@@ -90,7 +90,7 @@ public:
         }
         catch( const IO_ERROR& ioe )
         {
-            wxMessageBox( ioe.What(), _( "Error writing page layout design file" ) );
+            wxMessageBox( ioe.What(), _( "Error writing drawing sheet file" ) );
         }
     }
 
@@ -101,7 +101,7 @@ public:
 };
 
 
-// A helper class to write a page layout description to a string
+// A helper class to write a drawing sheet to a string
 class DS_DATA_MODEL_STRINGIO : public DS_DATA_MODEL_IO
 {
     STRING_FORMATTER * m_writer;
@@ -118,7 +118,7 @@ public:
         }
         catch( const IO_ERROR& ioe )
         {
-            wxMessageBox( ioe.What(), _( "Error writing page layout design file" ) );
+            wxMessageBox( ioe.What(), _( "Error writing drawing sheet file" ) );
         }
     }
 
@@ -187,7 +187,7 @@ void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aModel, DS_DATA_ITEM* aItem, int a
 }
 
 
-void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aPageLayout ) const
+void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aDrawingSheet ) const
 {
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
@@ -198,30 +198,30 @@ void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aPageLayout ) const
     // Write default values:
     m_out->Print( nestLevel, "(%s ", getTokenName( T_setup ) );
     m_out->Print( 0, "(textsize %s %s)",
-                  double2Str( aPageLayout->m_DefaultTextSize.x ).c_str(),
-                  double2Str( aPageLayout->m_DefaultTextSize.y ).c_str() );
+                  double2Str( aDrawingSheet->m_DefaultTextSize.x ).c_str(),
+                  double2Str( aDrawingSheet->m_DefaultTextSize.y ).c_str() );
     m_out->Print( 0, "(linewidth %s)",
-                  double2Str( aPageLayout->m_DefaultLineWidth ).c_str() );
+                  double2Str( aDrawingSheet->m_DefaultLineWidth ).c_str() );
     m_out->Print( 0, "(textlinewidth %s)",
-                  double2Str( aPageLayout->m_DefaultTextThickness ).c_str() );
+                  double2Str( aDrawingSheet->m_DefaultTextThickness ).c_str() );
     m_out->Print( 0, "\n" );
 
     // Write margin values
     m_out->Print( nestLevel, "(%s %s)", getTokenName( T_left_margin ),
-                  double2Str( aPageLayout->GetLeftMargin() ).c_str() );
+                  double2Str( aDrawingSheet->GetLeftMargin() ).c_str() );
     m_out->Print( 0, "(%s %s)", getTokenName( T_right_margin ),
-                  double2Str( aPageLayout->GetRightMargin() ).c_str() );
+                  double2Str( aDrawingSheet->GetRightMargin() ).c_str() );
     m_out->Print( 0, "(%s %s)", getTokenName( T_top_margin ),
-                  double2Str( aPageLayout->GetTopMargin() ).c_str() );
+                  double2Str( aDrawingSheet->GetTopMargin() ).c_str() );
     m_out->Print( 0, "(%s %s)", getTokenName( T_bottom_margin ),
-                  double2Str( aPageLayout->GetBottomMargin() ).c_str() );
+                  double2Str( aDrawingSheet->GetBottomMargin() ).c_str() );
     m_out->Print( 0, ")\n" );
 
-    // Save the graphical items on the page layout
-    for( unsigned ii = 0; ii < aPageLayout->GetCount(); ii++ )
+    // Save the graphical items on the drawing sheet
+    for( unsigned ii = 0; ii < aDrawingSheet->GetCount(); ii++ )
     {
-        DS_DATA_ITEM* item = aPageLayout->GetItem( ii );
-        Format( aPageLayout, item, nestLevel );
+        DS_DATA_ITEM* item = aDrawingSheet->GetItem( ii );
+        Format( aDrawingSheet, item, nestLevel );
     }
 
     m_out->Print( 0, ")\n" );

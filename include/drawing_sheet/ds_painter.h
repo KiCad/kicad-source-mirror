@@ -93,7 +93,7 @@ private:
 
 
 /**
- * Methods for drawing worksheet items.
+ * Methods for painting drawing sheet items.
  */
 class DS_PAINTER : public PAINTER
 {
@@ -140,9 +140,9 @@ private:
  * @param aIsFirstPage True when this is the first page.  This only has meaning for schematics.
  *
  * Parameters used in aPageInfo
- * - the size of the page layout.
- * - the LTmargin The left top margin of the page layout.
- * - the RBmargin The right bottom margin of the page layout.
+ * - the size of the drawing sheet.
+ * - the LTmargin The left top margin of the drawing sheet.
+ * - the RBmargin The right bottom margin of the drawing sheet.
  */
 void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
                         const wxString& aFullSheetName, const wxString& aFileName,

@@ -41,7 +41,7 @@ public:
     /**
      * Build and update the list of WS_DRAW_ITEM_xxx showing the frame layout
      */
-    void DisplayWorksheet();
+    void DisplayDrawingSheet();
 
     ///< @copydoc EDA_DRAW_PANEL_GAL::SwitchBackend
     bool SwitchBackend( GAL_TYPE aGalType ) override;
@@ -53,8 +53,8 @@ protected:
     ///< Set rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
 
-    ///< Currently used worksheet
-    std::unique_ptr<DS_PROXY_VIEW_ITEM> m_worksheet;
+    ///< Currently used drawing sheet
+    std::unique_ptr<DS_PROXY_VIEW_ITEM> m_drawingSheet;
 
     std::unique_ptr<DS_DRAW_ITEM_PAGE> m_pageDrawItem;
 };

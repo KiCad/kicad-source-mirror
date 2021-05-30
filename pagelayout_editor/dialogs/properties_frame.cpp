@@ -358,7 +358,7 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
     m_parent->OnModify();
 
     // Rebuild the draw list with the new parameters
-    m_parent->GetCanvas()->DisplayWorksheet();
+    m_parent->GetCanvas()->DisplayDrawingSheet();
     m_parent->GetCanvas()->Refresh();
 }
 
@@ -374,7 +374,7 @@ void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
     CopyPrmsFromGeneralToPanel();
 
     // Rebuild the draw list with the new parameters
-    m_parent->GetCanvas()->DisplayWorksheet();
+    m_parent->GetCanvas()->DisplayDrawingSheet();
     m_parent->GetCanvas()->Refresh();
 }
 

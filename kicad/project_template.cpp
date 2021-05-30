@@ -195,8 +195,8 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
         // Do not rename project specific symbol libraries.  This will break the symbol library
         // table which will cause broken symbol library links in the schematic.
-        if( !( destFile.GetExt() == PageLayoutDescrFileExtension ) && !( destFile.GetExt() == "dcm"
-               || ( destFile.GetExt() == "lib" && !destFile.GetName().EndsWith( "-cache" ) ) ) )
+        if( !( destFile.GetExt() == DrawingSheetFileExtension ) && !( destFile.GetExt() == "dcm"
+                                                                      || ( destFile.GetExt() == "lib" && !destFile.GetName().EndsWith( "-cache" ) ) ) )
         {
             currname.Replace( basename, aNewProjectPath.GetName() );
         }

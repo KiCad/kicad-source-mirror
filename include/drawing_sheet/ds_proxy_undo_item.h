@@ -36,9 +36,9 @@ public:
     DS_PROXY_UNDO_ITEM( const EDA_DRAW_FRAME* aFrame );
 
     /*
-     * Restores the saved worksheet layout to the global worksheet record, and the saved
-     * page info and title blocks to the given frame.  The WS_DRAW_ITEMs are rehydrated
-     * and installed in aView if it is not null (ie: if we're in the PageLayout Editor).
+     * Restores the saved drawing sheet layout to the global drawing sheet record, and the saved
+     * page info and title blocks to the given frame.  The WS_DRAW_ITEMs are rehydrated and
+     * installed in aView if it is not null (ie: if we're in the PageLayout Editor).
      */
     void Restore( EDA_DRAW_FRAME* aFrame, KIGFX::VIEW* aView = nullptr );
 

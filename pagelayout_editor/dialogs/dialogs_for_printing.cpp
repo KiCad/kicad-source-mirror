@@ -216,7 +216,7 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
 
     // PrintDrawingSheet clears the current display list when calling BuildDrawItemsList()
     // So rebuild and redraw it.
-    m_parent->GetCanvas()->DisplayWorksheet();
+    m_parent->GetCanvas()->DisplayDrawingSheet();
 }
 
 
@@ -232,12 +232,12 @@ int InvokeDialogPrint( PL_EDITOR_FRAME* aCaller, wxPrintData* aPrintData,
         printDialogData.EnablePageNumbers( true );
 
     wxPrinter printer( &printDialogData );
-    PLEDITOR_PRINTOUT printout( aCaller, _( "Print Page Layout" ) );
+    PLEDITOR_PRINTOUT printout( aCaller, _( "Print Drawing Sheet" ) );
 
     if( !printer.Print( aCaller, &printout, true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
-            wxMessageBox( _( "An error occurred attempting to print the page layout." ),
+            wxMessageBox( _( "An error occurred attempting to print the drawing sheet." ),
                           _( "Printing" ), wxOK );
         return 0;
     }

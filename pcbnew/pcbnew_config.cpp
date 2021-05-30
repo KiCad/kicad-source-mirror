@@ -69,12 +69,12 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     PROJECT_FILE&           project       = Prj().GetProjectFile();
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
 
-    BASE_SCREEN::m_PageLayoutDescrFileName = project.m_BoardPageLayoutDescrFile;
+    BASE_SCREEN::m_DrawingSheetFileName = project.m_BoardDrawingSheetFile;
 
     // Load the drawing sheet description file, from the filename stored in
-    // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
+    // BASE_SCREEN::m_DrawingSheetFileName, read in config project file
     // If empty, or not existing, the default descr is loaded
-    wxString filename = DS_DATA_MODEL::MakeFullFileName( BASE_SCREEN::m_PageLayoutDescrFileName,
+    wxString filename = DS_DATA_MODEL::MakeFullFileName( BASE_SCREEN::m_DrawingSheetFileName,
                                                          Prj().GetProjectPath() );
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
@@ -166,7 +166,7 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
 
     // TODO: Can this be pulled out of BASE_SCREEN?
-    project.m_BoardPageLayoutDescrFile = BASE_SCREEN::m_PageLayoutDescrFileName;
+    project.m_BoardDrawingSheetFile = BASE_SCREEN::m_DrawingSheetFileName;
 
     project.m_LayerPresets = m_appearancePanel->GetUserLayerPresets();
 

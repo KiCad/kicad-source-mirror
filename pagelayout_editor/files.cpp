@@ -51,13 +51,13 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
 {
     wxString filename;
 
-    filename = GetFileFromHistory( event.GetId(), _( "Page Layout Description File" ) );
+    filename = GetFileFromHistory( event.GetId(), _( "Drawing Sheet File" ) );
 
     if( filename != wxEmptyString )
     {
         if( IsContentModified() )
         {
-            if( !HandleUnsavedChanges( this, _( "The current page layout has been modified. "
+            if( !HandleUnsavedChanges( this, _( "The current drawing sheet has been modified. "
                                                 "Save changes?" ),
                                        [&]()->bool { return saveCurrentPageLayout(); } ) )
             {
@@ -67,14 +67,14 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
 
         ::wxSetWorkingDirectory( ::wxPathOnly( filename ) );
 
-        if( LoadPageLayoutDescrFile( filename ) )
+        if( LoadDrawingSheetFile( filename ) )
         {
             wxString msg;
             msg.Printf( _( "File \"%s\" loaded"), filename );
             SetStatusText( msg );
         }
 
-        OnNewPageLayout();
+        OnNewDrawingSheet();
     }
 }
 
@@ -98,7 +98,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
     if( ( id == wxID_NEW || id == wxID_OPEN ) && IsContentModified() )
     {
-        if( !HandleUnsavedChanges( this, _( "The current page layout has been modified.  "
+        if( !HandleUnsavedChanges( this, _( "The current drawing sheet has been modified.  "
                                             "Save changes?" ),
                                    [&]()->bool { return saveCurrentPageLayout(); } ) )
         {
@@ -112,21 +112,21 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         pglayout.AllowVoidList( true );
         SetCurrentFileName( wxEmptyString );
         pglayout.ClearList();
-        OnNewPageLayout();
+        OnNewDrawingSheet();
         break;
 
     case ID_APPEND_DESCR_FILE:
     {
          wxFileDialog openFileDialog( this, _( "Append Existing Drawing Sheet" ),
                                       wxEmptyString, wxEmptyString,
-                                      PageLayoutDescrFileWildcard(), wxFD_OPEN );
+                                      DrawingSheetFileWildcard(), wxFD_OPEN );
 
         if( openFileDialog.ShowModal() == wxID_CANCEL )
             return;
 
         filename = openFileDialog.GetPath();
 
-        if( ! InsertPageLayoutDescrFile( filename ) )
+        if( !InsertDrawingSheetFile( filename ) )
         {
             msg.Printf( _( "Unable to load %s file" ), filename );
             DisplayErrorMessage( this, msg );
@@ -144,21 +144,21 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     case wxID_OPEN:
     {
          wxFileDialog openFileDialog( this, _( "Open" ), wxEmptyString, wxEmptyString,
-                                      PageLayoutDescrFileWildcard(), wxFD_OPEN );
+                                      DrawingSheetFileWildcard(), wxFD_OPEN );
 
         if( openFileDialog.ShowModal() == wxID_CANCEL )
             return;
 
         filename = openFileDialog.GetPath();
 
-        if( ! LoadPageLayoutDescrFile( filename ) )
+        if( !LoadDrawingSheetFile( filename ) )
         {
             msg.Printf( _( "Unable to load %s file" ), filename );
             DisplayErrorMessage( this, msg );
         }
         else
         {
-            OnNewPageLayout();
+            OnNewDrawingSheet();
             msg.Printf( _( "File \"%s\" saved." ), filename );
             SetStatusText( msg );
         }
@@ -166,7 +166,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         break;
 
     case wxID_SAVE:
-        if( !SavePageLayoutDescrFile( filename ) )
+        if( !SaveDrawingSheetFile( filename ) )
         {
             msg.Printf( _( "Unable to write \"%s\"" ), filename );
             DisplayErrorMessage( this, msg );
@@ -182,7 +182,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     {
         wxString dir = PATHS::GetUserTemplatesPath();
         wxFileDialog openFileDialog( this, _( "Save As" ), dir, wxEmptyString,
-                                     PageLayoutDescrFileWildcard(),
+                                     DrawingSheetFileWildcard(),
                                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( openFileDialog.ShowModal() == wxID_CANCEL )
@@ -195,10 +195,10 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         // extension
         wxFileName fn(filename);
 
-        if( fn.GetExt() != PageLayoutDescrFileExtension )
-            filename << wxT(".") << PageLayoutDescrFileExtension;
+        if( fn.GetExt() != DrawingSheetFileExtension )
+            filename << wxT(".") << DrawingSheetFileExtension;
 
-        if( !SavePageLayoutDescrFile( filename ) )
+        if( !SaveDrawingSheetFile( filename ) )
         {
             msg.Printf( _( "Unable to create \"%s\"" ), filename );
             DisplayErrorMessage( this, msg );
@@ -221,7 +221,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 }
 
 
-bool PL_EDITOR_FRAME::LoadPageLayoutDescrFile( const wxString& aFullFileName )
+bool PL_EDITOR_FRAME::LoadDrawingSheetFile( const wxString& aFullFileName )
 {
     if( wxFileExists( aFullFileName ) )
     {
@@ -254,7 +254,7 @@ bool PL_EDITOR_FRAME::LoadPageLayoutDescrFile( const wxString& aFullFileName )
 }
 
 
-bool PL_EDITOR_FRAME::InsertPageLayoutDescrFile( const wxString& aFullFileName )
+bool PL_EDITOR_FRAME::InsertDrawingSheetFile( const wxString& aFullFileName )
 {
     if( wxFileExists( aFullFileName ) )
     {
@@ -268,7 +268,7 @@ bool PL_EDITOR_FRAME::InsertPageLayoutDescrFile( const wxString& aFullFileName )
 }
 
 
-bool PL_EDITOR_FRAME::SavePageLayoutDescrFile( const wxString& aFullFileName )
+bool PL_EDITOR_FRAME::SaveDrawingSheetFile( const wxString& aFullFileName )
 {
     if( !aFullFileName.IsEmpty() )
     {

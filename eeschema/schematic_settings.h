@@ -60,8 +60,6 @@ public:
     wxString  m_IntersheetRefsPrefix;
     wxString  m_IntersheetRefsSuffix;
 
-    wxString  m_PageLayoutDescrFile;
-
     wxString  m_PlotDirectoryName;
 
     wxString  m_NetFormatName;

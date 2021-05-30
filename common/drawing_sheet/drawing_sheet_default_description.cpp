@@ -23,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/* keyword used in page layout description are listed
- * in drawing_sheet_reader.keywords file
+/*
+ * keyword used in drawing sheet are listed in drawing_sheet_reader.keywords file
  */
 
 /*
@@ -118,7 +118,7 @@
 // default line width 0.15 mm
 // frame ref pitch 50 mm
 
-// Default page layout (sizes are in mm)
+// Default drawing sheet (sizes are in mm)
 extern const char defaultDrawingSheet[] =
     "(drawing_sheet\n"
     "(setup (textsize 1.5 1.5) (linewidth 0.15) (textlinewidth 0.15)\n"

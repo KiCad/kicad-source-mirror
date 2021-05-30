@@ -760,7 +760,7 @@ double DRAWING_SHEET_READER_PARSER::parseDouble()
     return val;
 }
 
-// defaultDrawingSheet is the default page layout description using the S expr.
+// defaultDrawingSheet is the default drawing sheet using the S expr.
 extern const char defaultDrawingSheet[];
 
 void DS_DATA_MODEL::SetDefaultLayout()
@@ -774,7 +774,7 @@ wxString DS_DATA_MODEL::DefaultLayout()
     return wxString( defaultDrawingSheet );
 }
 
-// emptyDrawingSheet is a "empty" page layout description using the S expr.
+// emptyDrawingSheet is a "empty" drawing sheet using the S expr.
 // there is a 0 length line to fool something somewhere.
 extern const char emptyDrawingSheet[];
 

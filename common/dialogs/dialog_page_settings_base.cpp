@@ -335,7 +335,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerFilename;
 	bSizerFilename = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextfilename = new wxStaticText( this, wxID_ANY, _("Page layout description file"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextfilename = new wxStaticText( this, wxID_ANY, _("Drawing sheet file"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextfilename->Wrap( -1 );
 	bSizerFilename->Add( m_staticTextfilename, 0, wxRIGHT|wxLEFT, 5 );
 

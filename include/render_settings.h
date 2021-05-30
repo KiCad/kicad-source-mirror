@@ -271,7 +271,7 @@ public:
     void SetSelectFactor( float aFactor ) { m_selectFactor = aFactor; }
     void SetHighContrastFactor( float aFactor ) { m_hiContrastFactor = aFactor; }
 
-    // TODO: these can go away once the worksheet is moved to Cairo-based printing
+    // TODO: these can go away once the drawing sheet is moved to Cairo-based printing
     wxDC* GetPrintDC() const { return m_printDC; }
     void SetPrintDC( wxDC* aDC ) { m_printDC = aDC; }
 
@@ -312,7 +312,7 @@ protected:
     bool          m_showPageLimits;
     bool          m_isPrinting;
 
-    wxDC*         m_printDC;              // This can go away once the worksheet is moved to
+    wxDC*         m_printDC;              // This can go away once the drawing sheet is moved to
                                           // Cairo-based printing.
 };
 

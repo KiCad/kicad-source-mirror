@@ -63,7 +63,7 @@ public:
     static TOOL_ACTION placeImage;
     static TOOL_ACTION drawRectangle;
     static TOOL_ACTION drawLine;
-    static TOOL_ACTION appendImportedWorksheet;
+    static TOOL_ACTION appendImportedDrawingSheet;
 
     // Editing
     static TOOL_ACTION move;

@@ -83,7 +83,7 @@ void PL_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 }
 
 
-void PL_DRAW_PANEL_GAL::DisplayWorksheet()
+void PL_DRAW_PANEL_GAL::DisplayDrawingSheet()
 {
     PL_SELECTION_TOOL* selTool = m_edaFrame->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
     DS_DATA_MODEL&     model = DS_DATA_MODEL::GetTheInstance();
@@ -124,7 +124,7 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
 
     // Gives a reasonable boundary to the view area
     // Otherwise scroll bars are not usable
-    // A full size = 2 * page size allows a margin around the worksheet.
+    // A full size = 2 * page size allows a margin around the drawing sheet.
     // (Note: no need to have a large working area: nothing can be drawn outside th page size).
     double size_x = m_edaFrame->GetPageSizeIU().x;
     double size_y = m_edaFrame->GetPageSizeIU().y;

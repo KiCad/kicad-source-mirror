@@ -143,7 +143,7 @@ const std::string ArchiveFileExtension( "zip" );
 
 const std::string LegacyPcbFileExtension( "brd" );
 const std::string KiCadPcbFileExtension( "kicad_pcb" );
-const std::string PageLayoutDescrFileExtension( "kicad_wks" );
+const std::string DrawingSheetFileExtension( "kicad_wks" );
 const std::string DesignRulesFileExtension( "kicad_dru" );
 
 const std::string PdfFileExtension( "pdf" );
@@ -353,9 +353,9 @@ wxString GedaPcbFootprintLibFileWildcard()
 }
 
 
-wxString PageLayoutDescrFileWildcard()
+wxString DrawingSheetFileWildcard()
 {
-    return _( "Page layout design files" ) + AddFileExtListToFilter( { "kicad_wks" } );
+    return _( "Drawing sheet files" ) + AddFileExtListToFilter( { "kicad_wks" } );
 }
 
 

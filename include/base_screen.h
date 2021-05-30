@@ -82,8 +82,8 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
-    static wxString m_PageLayoutDescrFileName;  ///< the name of the page layout descr file,
-                                                ///< or emty to used the default pagelayout
+    static wxString m_DrawingSheetFileName;  ///< the name of the drawing sheet file, or empty
+                                             ///< to use the default drawing sheet
 
     wxPoint     m_DrawOrg;          ///< offsets for drawing the circuit on the screen
 

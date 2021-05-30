@@ -76,28 +76,28 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl ) override;
 
     /**
-     * Function LoadPageLayoutDescrFile
-     * Loads a .kicad_wks page layout descr file
+     * Function LoadDrawingSheetFile
+     * Loads a .kicad_wks drawing sheet file
      * @param aFullFileName = the filename.
      */
-    bool LoadPageLayoutDescrFile( const wxString& aFullFileName );
+    bool LoadDrawingSheetFile( const wxString& aFullFileName );
 
     /**
-     * Function SavePageLayoutDescrFile
-     * Save the current layout in a .kicad_wks page layout descr file
+     * Function SaveDrawingSheetFile
+     * Save the current layout in a .kicad_wks drawing sheet file
      * @param aFullFileName = the filename.
      */
-    bool SavePageLayoutDescrFile( const wxString& aFullFileName );
+    bool SaveDrawingSheetFile( const wxString& aFullFileName );
 
     /**
-     * Function InsertPageLayoutDescrFile
-     * Loads a .kicad_wks page layout descr file, and add items to the current layout list
+     * Function InsertDrawingSheetFile
+     * Loads a .kicad_wks drawing sheet file, and add items to the current layout list
      * @param aFullFileName = the filename.
      */
-    bool InsertPageLayoutDescrFile( const wxString& aFullFileName );
+    bool InsertDrawingSheetFile( const wxString& aFullFileName );
 
     /**
-     * Get if the page layout has been modified but not saved.
+     * Get if the drawing sheet has been modified but not saved.
      *
      * @return true if the any changes have not been saved
      */
@@ -145,9 +145,9 @@ public:
     void UpdateStatusBar() override;
 
     /**
-     * Must be called to initialize parameters when a new page layout description is loaded
+     * Must be called to initialize parameters when a new drawing sheet is loaded
      */
-    void OnNewPageLayout();
+    void OnNewDrawingSheet();
 
     /**
      * creates or updates the right vertical toolbar.
@@ -241,14 +241,14 @@ public:
     void HardRedraw() override;
 
     /**
-     * Function AddPageLayoutItem
-     * Add a new item to the page layout item list.
+     * Function AddDrawingSheetItem
+     * Add a new item to the drawing sheet item list.
      * @param aType = the type of item:
      *  DS_TEXT, DS_SEGMENT, DS_RECT, DS_POLYPOLYGON
      * @param aIdx = the position in list to insert the new item.
      * @return a reference to the new item
      */
-    DS_DATA_ITEM* AddPageLayoutItem( int aType );
+    DS_DATA_ITEM* AddDrawingSheetItem( int aType );
 
     /**
      * Must be called after a change in order to set the "modify" flag

@@ -39,9 +39,9 @@
  * The WS_DRAW_ITEM_*s are created and maintained by the PlEditor, but are created each time
  * they're needed for drawing by the clients (Eeschema, Pcbnew, etc.)
  *
- * The DS_DATA_MODEL instance is created from a S expression which describes the page
- * layout (can be the default page layout or a custom file).  This format is also used
- * for undo/redo storage (wrapped in a DS_PROXY_UNDO_ITEM).
+ * The DS_DATA_MODEL instance is created from a S expression which describes the drawing sheet
+ * (can be the default drawing sheet or a custom file).  This format is also used for undo/redo
+ * storage (wrapped in a DS_PROXY_UNDO_ITEM).
  */
 
 #include <kiface_i.h>
@@ -86,8 +86,8 @@ DS_DATA_MODEL& DS_DATA_MODEL::GetTheInstance()
 /**
  * static function: Set an alternate instance of DS_DATA_MODEL
  * mainly used in page setting dialog
- * @param aLayout = the alternate page layout.
- * if null, restore the basic page layout
+ * @param aLayout = the alternate drawing sheet.
+ * if null, restore the basic drawing sheet
  */
 void DS_DATA_MODEL::SetAltInstance( DS_DATA_MODEL* aLayout )
 {

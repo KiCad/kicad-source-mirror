@@ -53,7 +53,7 @@ public:
     /**
      * Set an alternate instance of DS_DATA_MODEL.
      *
-     * @param aLayout the alternate page layout; if null restore the basic page layout
+     * @param aLayout the alternate drawing sheet; if null restore the default drawing sheet
      */
     static void SetAltInstance( DS_DATA_MODEL* aLayout = NULL );
 
@@ -72,9 +72,8 @@ public:
     void SetupDrawEnvironment( const PAGE_INFO& aPageInfo, double aMilsToIU );
 
     /**
-     * In KiCad applications, a page layout description is needed
-     * So if the list is empty, a default description is loaded,
-     * the first time a page layout is drawn.
+     * In KiCad applications, a drawing sheet is needed
+     * So if the list is empty, a default drawing sheet is loaded, the first time it is drawn.
      * However, in drawing sheet editor an empty list is acceptable.
      * AllowVoidList allows or not the empty list
      */
@@ -149,9 +148,9 @@ public:
      * Populates the list with a custom layout or the default layout if no custom layout
      * is  available.
      *
-     * @param aFullFileName is the custom page layout description file. If empty, load the
-     *                      file defined by KICAD_WKSFILE and if its is not defined use the
-     *                      default internal description.
+     * @param aFullFileName is the custom drawing sheet file. If empty, load the file defined by
+     *                      KICAD_WKSFILE and if its not defined, the default internal drawing
+     *                      sheet.
      * @param Append if true: do not delete old layout, and load only \a aFullFileName.
      */
     bool LoadDrawingSheet( const wxString& aFullFileName = wxEmptyString, bool Append = false );
@@ -206,9 +205,9 @@ public:
 
 private:
     std::vector <DS_DATA_ITEM*> m_list;
-    bool   m_allowVoidList;         // If false, the default page layout will be loaded the
-                                    // first time DS_DRAW_ITEM_LIST::BuildDrawItemsList
-                                    // is run (useful mainly for drawing sheet editor)
+    bool   m_allowVoidList;         // If false, the default drawing sheet will be loaded the
+                                    // first time DS_DRAW_ITEM_LIST::BuildDrawItemsList is run
+                                    // (useful mainly for drawing sheet editor)
     double m_leftMargin;            // the left page margin in mm
     double m_rightMargin;           // the right page margin in mm
     double m_topMargin;             // the top page margin in mm

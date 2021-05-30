@@ -97,8 +97,8 @@ private:
 
     void SetCurrentPageSizeSelection( const wxString& aPaperSize );
 
-    // Update page layout example
-    void UpdatePageLayoutExample();
+    // Update drawing sheet example
+    void UpdateDrawingSheetExample();
 
     // Get page layout info from selected dialog items
     void GetPageLayoutInfoFromDialog();
@@ -107,7 +107,7 @@ private:
     void GetCustomSizeMilsFromDialog();
 
     /// @return true if the local prj config is chande
-    /// i.e. if the page layout descr file has chnaged
+    /// i.e. if the drawing sheet file has chnaged
     bool LocalPrjConfigChanged() { return m_localPrjConfigChanged; }
 
 protected:
@@ -117,14 +117,14 @@ protected:
     wxArrayString   m_pageFmt;     /// list of page sizes (not translated)
     bool            m_initialized;
     bool            m_localPrjConfigChanged; /// the page layuout filename was changed
-    wxBitmap*       m_pageBitmap;            /// Temporary bitmap for the page layout example.
-    wxSize          m_layout_size;           /// Logical page layout size.
+    wxBitmap*       m_pageBitmap;            /// Temporary bitmap for the drawing sheet example.
+    wxSize          m_layout_size;           /// Logical drawing sheet size.
     wxSize          m_maxPageSizeMils;       /// The max page size allowed by the caller frame
     PAGE_INFO       m_pageInfo;              /// Temporary page info.
     bool            m_customFmt;             /// true if the page selection is custom
     TITLE_BLOCK     m_tb;                    /// Temporary title block (basic inscriptions).
-    DS_DATA_MODEL*  m_drawingSheet; // the alternate and temporary page layout shown by the dialog
-                                    // when the initial one is replaced by a new one
+    DS_DATA_MODEL*  m_drawingSheet; // the alternate and temporary drawing sheet shown by the
+                                    // dialog when the initial one is replaced by a new one
     double          m_iuPerMils;
 
 private:

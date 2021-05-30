@@ -213,7 +213,7 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
     wxFileName     fn( static_cast<PL_EDITOR_FRAME*>( GetParent() )->GetCurrentFileName() );
 
     if( fn.GetName().IsEmpty() )
-        SetTitle( "<default page layout>" );
+        SetTitle( "<default drawing sheet>" );
     else
         SetTitle( fn.GetName() );
 
@@ -318,7 +318,7 @@ void DIALOG_INSPECTOR::SelectRow( DS_DATA_ITEM* aItem )
     }
 }
 
-//return the page layout item managed by the cell
+//return the drawing sheet item managed by the cell
 DS_DATA_ITEM* DIALOG_INSPECTOR::GetDrawingSheetDataItem( int aRow ) const
 {
         return ( aRow >= 0 && aRow < (int)m_itemsList.size() ) ? m_itemsList[aRow]: nullptr;

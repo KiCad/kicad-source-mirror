@@ -438,11 +438,10 @@ public:
     /**
      * Returns bbox of document with option to not include some items.
      *
-     * Used most commonly by "Zoom to Fit" and "Zoom to Objects".  In Eeschema
-     * for "Zoom to Fit", it's passed "true" to include worksheet border.  It's
-     * passed false by "Zoom To Objects" to ignore worksheet border.  In Pcbnew,
-     * false makes it ignore any items outside the PCB edge such as fabrication
-     * notes.
+     * Used most commonly by "Zoom to Fit" and "Zoom to Objects".  In Eeschema for "Zoom to Fit"
+     * it's passed "true" to include drawing sheet border, and "false" by "Zoom To Objects" to
+     * ignore drawing sheet border.  In Pcbnew, false makes it ignore any items outside the PCB
+     * edge such as fabrication notes.
      *
      * @param aIncludeAllVisible True to include everything visible in bbox calculations,
      *                           false to ignore some visible items (program dependent).
@@ -500,7 +499,7 @@ protected:
                                             // to screens
     bool               m_polarCoords;       // For those frames that support polar coordinates
 
-    bool               m_showBorderAndTitleBlock;  // Show the worksheet (border and title block).
+    bool               m_showBorderAndTitleBlock;  // Show the drawing sheet (border & title block).
     long               m_firstRunDialogSetting;    // Show first run dialog on startup
 
     wxChoice*          m_gridSelectBox;
