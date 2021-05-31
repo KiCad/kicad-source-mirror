@@ -385,12 +385,6 @@ void SCH_EDIT_FRAME::setupUIConditions()
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    auto idleCond =
-            [&]( const SELECTION& aSel )
-            {
-                return SELECTION_CONDITIONS::Idle( aSel );
-            };
-
     mgr->SetConditions( ACTIONS::save,                ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( ACTIONS::undo,                ENABLE( cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                ENABLE( cond.RedoAvailable() ) );
@@ -403,8 +397,8 @@ void SCH_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::cut,                 ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::copy,                ENABLE( hasElements ) );
-    mgr->SetConditions( ACTIONS::paste,               ENABLE( idleCond ) );
-    mgr->SetConditions( ACTIONS::pasteSpecial,        ENABLE( idleCond ) );
+    mgr->SetConditions( ACTIONS::paste,               ENABLE( SELECTION_CONDITIONS::Idle ) );
+    mgr->SetConditions( ACTIONS::pasteSpecial,        ENABLE( SELECTION_CONDITIONS::Idle ) );
     mgr->SetConditions( ACTIONS::doDelete,            ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::duplicate,           ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::selectAll,           ENABLE( hasElements ) );
