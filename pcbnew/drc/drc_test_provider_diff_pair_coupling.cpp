@@ -410,19 +410,25 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
             {
                 auto val = gapConstraint->GetValue();
                 bool insideRange = true;
-                if ( val.HasMin() && gap < val.Min() )
+
+                if( val.HasMin() && gap < val.Min() )
                     insideRange = false;
-                if ( val.HasMax() && gap > val.Max() )
+
+                if( val.HasMax() && gap > val.Max() )
                     insideRange = false;
 
 //                if(val.HasMin() && val.HasMax() )
   //                  drc_dbg(10, "Vmin %d vmax %d\n", val.Min(), val.Max() );
 
                 cpair.couplingOK = insideRange;
-
-                if( insideRange )
-                    it.second.totalCoupled += length;
             }
+            else
+            {
+                cpair.couplingOK = true;
+            }
+
+            if( cpair.couplingOK )
+                it.second.totalCoupled += length;
         }
 
         int totalLen = std::max( it.second.totalLengthN, it.second.totalLengthP );
