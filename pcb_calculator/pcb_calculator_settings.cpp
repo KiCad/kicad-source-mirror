@@ -33,13 +33,17 @@ const int pcbCalculatorSchemaVersion = 0;
 
 
 PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
-        APP_SETTINGS_BASE( "pcb_calculator", pcbCalculatorSchemaVersion )
+        APP_SETTINGS_BASE( "pcb_calculator", pcbCalculatorSchemaVersion ),
+        m_Attenuators(),
+        m_BoardClassUnits( 0 ),
+        m_ColorCodeTolerance( 0 ),
+        m_Electrical(),
+        m_LastPage( 0 ),
+        m_Regulators(),
+        m_TrackWidth(),
+        m_TransLine(),
+        m_ViaSize()
 {
-    // Make Coverity happy:
-    m_BoardClassUnits = 0;
-    m_ColorCodeTolerance = 0;
-    m_LastPage = 0;
-
     // Build settings:
     m_params.emplace_back( new PARAM<int>( "board_class_units", &m_BoardClassUnits, 0 ) );
 

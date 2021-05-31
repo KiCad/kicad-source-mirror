@@ -43,7 +43,7 @@ class CADSTAR_PCB_ARCHIVE_PARSER : public CADSTAR_ARCHIVE_PARSER
 {
 public:
     explicit CADSTAR_PCB_ARCHIVE_PARSER( wxString aFilename )
-            : Filename( aFilename ), CADSTAR_ARCHIVE_PARSER()
+            : Filename( aFilename ), Header(), Assignments(), CADSTAR_ARCHIVE_PARSER()
     {
         KiCadUnitMultiplier = 10; // assume hundredth micron
     }
