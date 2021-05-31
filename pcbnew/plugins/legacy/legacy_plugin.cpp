@@ -382,14 +382,21 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
 
     init( aProperties );
 
-    m_board = aAppendToMe ? aAppendToMe : new BOARD();
+    std::unique_ptr<BOARD> boardDeleter;
+
+    if( aAppendToMe )
+    {
+        m_board = aAppendToMe;
+    }
+    else
+    {
+        boardDeleter = std::make_unique<BOARD>();
+        m_board = boardDeleter.get();
+    }
 
     // Give the filename to the board if it's new
     if( !aAppendToMe )
         m_board->SetFileName( aFileName );
-
-    // delete on exception, iff I own m_board, according to aAppendToMe
-    std::unique_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
 
     FILE_LINE_READER    reader( aFileName );
 
@@ -399,7 +406,7 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
 
     loadAllSections( bool( aAppendToMe ) );
 
-    deleter.release();
+    (void)boardDeleter.release(); // give it up so we dont delete it on exit
     return m_board;
 }
 
