@@ -128,4 +128,7 @@ for group in grouped:
     html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 
 # Print the formatted html to output file
-print(html, file=f)
+try:
+    print(html.encode('utf-8').decode('cp1252'), file=f)
+except:
+    print(html, file=f)

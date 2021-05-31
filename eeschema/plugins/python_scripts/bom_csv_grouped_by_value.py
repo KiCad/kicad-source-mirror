@@ -24,6 +24,14 @@ import kicad_netlist_reader
 import csv
 import sys
 
+# A helper function to convert a UTF8/Unicode/locale string read in netlist
+# for python2 or python3
+def fromNetlistText( aText ):
+    try:
+        return aText.encode('utf-8').decode('cp1252')
+    except UnicodeDecodeError:
+        return aText
+
 def myEqu(self, other):
     """myEqu is a more advanced equivalence function for components which is
     used by component grouping. Normal operation is to group components based
@@ -87,7 +95,7 @@ out = csv.writer( f, lineterminator='\n', delimiter=',', quotechar='\"', quoting
 def writerow( acsvwriter, columns ):
     utf8row = []
     for col in columns:
-        utf8row.append( str(col) )  # currently, no change
+        utf8row.append( fromNetlistText( str(col) ) )
     acsvwriter.writerow( utf8row )
 
 # Output a set of rows as a header providing general information

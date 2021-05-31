@@ -63,7 +63,8 @@ html = html.replace('<!--TOOL-->', net.getTool())
 html = html.replace('<!--COMPCOUNT-->', "<b>Component Count:</b>" + \
     str(len(components)))
 
-row = "<tr><th style='width:640px'>Ref</th>"
+row =""
+row += "<tr><th>Ref</th>"
 row += "<th>Qnty</th>"
 row += "<th>Value</th>" + "<th>Part</th>" + "<th>Datasheet</th>"
 row += "<th>Description</th>" + "<th>Vendor</th></tr>"
@@ -92,8 +93,12 @@ for group in grouped:
     row += "</td><td>" + c.getDatasheet()
     row += "</td><td>" + c.getDescription()
     row += "</td><td>" + c.getField("Vendor")+ "</td></tr>"
+    row += "\n"
 
     html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 
 # Print the formatted html to the file
-print(html, file=f)
+try:
+    print(html.encode('utf-8').decode('cp1252'), file=f)
+except:
+    print(html, file=f)
