@@ -357,10 +357,10 @@ bool SCH_SHEET::IsVerticalOrientation() const
     {
         switch( pin->GetEdge() )
         {
-        case SHEET_LEFT_SIDE:   leftRight++; break;
-        case SHEET_RIGHT_SIDE:  leftRight++; break;
-        case SHEET_TOP_SIDE:    topBottom++; break;
-        case SHEET_BOTTOM_SIDE: topBottom++; break;
+        case SHEET_SIDE::LEFT: leftRight++; break;
+        case SHEET_SIDE::RIGHT: leftRight++; break;
+        case SHEET_SIDE::TOP: topBottom++; break;
+        case SHEET_SIDE::BOTTOM: topBottom++; break;
         default:                             break;
         }
     }
@@ -407,9 +407,9 @@ int SCH_SHEET::GetMinWidth( bool aFromLeft ) const
 
     for( size_t i = 0; i < m_pins.size();  i++ )
     {
-        int edge = m_pins[i]->GetEdge();
+        SHEET_SIDE edge = m_pins[i]->GetEdge();
 
-        if( edge == SHEET_TOP_SIDE || edge == SHEET_BOTTOM_SIDE )
+        if( edge == SHEET_SIDE::TOP || edge == SHEET_SIDE::BOTTOM )
         {
             EDA_RECT pinRect = m_pins[i]->GetBoundingBox();
 
@@ -441,9 +441,9 @@ int SCH_SHEET::GetMinHeight( bool aFromTop ) const
 
     for( size_t i = 0; i < m_pins.size();  i++ )
     {
-        int edge = m_pins[i]->GetEdge();
+        SHEET_SIDE edge = m_pins[i]->GetEdge();
 
-        if( edge == SHEET_RIGHT_SIDE || edge == SHEET_LEFT_SIDE )
+        if( edge == SHEET_SIDE::RIGHT || edge == SHEET_SIDE::LEFT )
         {
             EDA_RECT pinRect = m_pins[i]->GetBoundingBox();
 

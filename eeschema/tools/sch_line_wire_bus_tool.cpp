@@ -420,13 +420,13 @@ void SCH_LINE_WIRE_BUS_TOOL::computeBreakPoint( const std::pair<SCH_LINE*, SCH_L
     int iDy = segment->GetEndPoint().y - segment->GetStartPoint().y;
 
     const SCH_SHEET_PIN* connectedPin = getSheetPin( segment->GetStartPoint() );
-    SHEET_SIDE           force = connectedPin ? connectedPin->GetEdge() : SHEET_UNDEFINED_SIDE;
+    SHEET_SIDE force = connectedPin ? connectedPin->GetEdge() : SHEET_SIDE::UNDEFINED;
 
-    if( force == SHEET_LEFT_SIDE || force == SHEET_RIGHT_SIDE )
+    if( force == SHEET_SIDE::LEFT || force == SHEET_SIDE::RIGHT )
     {
         if( aPosition.x == connectedPin->GetPosition().x )  // push outside sheet boundary
         {
-            int direction = ( force == SHEET_LEFT_SIDE ) ? -1 : 1;
+            int direction = ( force == SHEET_SIDE::LEFT ) ? -1 : 1;
             aPosition.x += KiROUND( getView()->GetGAL()->GetGridSize().x * direction );
         }
 

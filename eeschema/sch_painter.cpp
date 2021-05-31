@@ -1691,10 +1691,10 @@ void SCH_PAINTER::draw( const SCH_SHEET *aSheet, int aLayer )
             // For aesthetic reasons, the SHEET_PIN is drawn with a small offset of width / 2
             switch( sheetPin->GetEdge() )
             {
-            case SHEET_TOP_SIDE:    offset_pos.y += KiROUND( width / 2.0 ); break;
-            case SHEET_BOTTOM_SIDE: offset_pos.y -= KiROUND( width / 2.0 ); break;
-            case SHEET_RIGHT_SIDE:  offset_pos.x -= KiROUND( width / 2.0 ); break;
-            case SHEET_LEFT_SIDE:   offset_pos.x += KiROUND( width / 2.0 ); break;
+            case SHEET_SIDE::TOP: offset_pos.y += KiROUND( width / 2.0 ); break;
+            case SHEET_SIDE::BOTTOM: offset_pos.y -= KiROUND( width / 2.0 ); break;
+            case SHEET_SIDE::RIGHT: offset_pos.x -= KiROUND( width / 2.0 ); break;
+            case SHEET_SIDE::LEFT: offset_pos.x += KiROUND( width / 2.0 ); break;
             default: break;
             }
 

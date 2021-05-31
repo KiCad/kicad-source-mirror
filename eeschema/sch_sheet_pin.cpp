@@ -40,7 +40,7 @@
 
 SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :
     SCH_HIERLABEL( pos, text, SCH_SHEET_PIN_T ),
-    m_edge( SHEET_UNDEFINED_SIDE )
+    m_edge( SHEET_SIDE::UNDEFINED )
 {
     SetParent( parent );
     wxASSERT( parent );
@@ -49,9 +49,9 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
     SetTextPos( pos );
 
     if( parent->IsVerticalOrientation() )
-        SetEdge( SHEET_TOP_SIDE );
+        SetEdge( SHEET_SIDE::TOP );
     else
-        SetEdge( SHEET_LEFT_SIDE );
+        SetEdge( SHEET_SIDE::LEFT );
 
     m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
     m_isDangling = true;
@@ -117,25 +117,25 @@ void SCH_SHEET_PIN::SetEdge( SHEET_SIDE aEdge )
 
     switch( aEdge )
     {
-    case SHEET_LEFT_SIDE:
+    case SHEET_SIDE::LEFT:
         m_edge = aEdge;
         SetTextX( Sheet->m_pos.x );
         SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT ); // Orientation horiz inverse
         break;
 
-    case SHEET_RIGHT_SIDE:
+    case SHEET_SIDE::RIGHT:
         m_edge = aEdge;
         SetTextX( Sheet->m_pos.x + Sheet->m_size.x );
         SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT ); // Orientation horiz normal
         break;
 
-    case SHEET_TOP_SIDE:
+    case SHEET_SIDE::TOP:
         m_edge = aEdge;
         SetTextY( Sheet->m_pos.y );
         SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM ); // Orientation vert BOTTOM
         break;
 
-    case SHEET_BOTTOM_SIDE:
+    case SHEET_SIDE::BOTTOM:
         m_edge = aEdge;
         SetTextY( Sheet->m_pos.y + Sheet->m_size.y );
         SetLabelSpinStyle( LABEL_SPIN_STYLE::UP ); // Orientation vert UP
@@ -175,17 +175,17 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 
     switch( sheetEdge.NearestSegment( Pos ) )
     {
-    case 0: SetEdge( SHEET_TOP_SIDE );    break;
-    case 1: SetEdge( SHEET_RIGHT_SIDE );  break;
-    case 2: SetEdge( SHEET_BOTTOM_SIDE ); break;
-    case 3: SetEdge( SHEET_LEFT_SIDE );   break;
+    case 0: SetEdge( SHEET_SIDE::TOP ); break;
+    case 1: SetEdge( SHEET_SIDE::RIGHT ); break;
+    case 2: SetEdge( SHEET_SIDE::BOTTOM ); break;
+    case 3: SetEdge( SHEET_SIDE::LEFT ); break;
     default: wxASSERT( "Invalid segment number" );
     }
 
     switch( GetEdge() )
     {
-    case SHEET_RIGHT_SIDE:
-    case SHEET_LEFT_SIDE:
+    case SHEET_SIDE::RIGHT:
+    case SHEET_SIDE::LEFT:
         SetTextY( Pos.y );
 
         if( GetTextPos().y < topSide )
@@ -196,8 +196,8 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 
         break;
 
-    case SHEET_BOTTOM_SIDE:
-    case SHEET_TOP_SIDE:
+    case SHEET_SIDE::BOTTOM:
+    case SHEET_SIDE::TOP:
         SetTextX( Pos.x );
 
         if( GetTextPos().x < leftSide )
@@ -208,7 +208,7 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 
         break;
 
-    case SHEET_UNDEFINED_SIDE:
+    case SHEET_SIDE::UNDEFINED:
         wxASSERT( "Undefined sheet side" );
     }
 }
@@ -222,8 +222,8 @@ void SCH_SHEET_PIN::MirrorVertically( int aCenter )
 
     switch( m_edge )
     {
-    case SHEET_TOP_SIDE:    SetEdge( SHEET_BOTTOM_SIDE ); break;
-    case SHEET_BOTTOM_SIDE: SetEdge( SHEET_TOP_SIDE );    break;
+    case SHEET_SIDE::TOP: SetEdge( SHEET_SIDE::BOTTOM ); break;
+    case SHEET_SIDE::BOTTOM: SetEdge( SHEET_SIDE::TOP ); break;
     default: break;
     }
 }
@@ -237,8 +237,8 @@ void SCH_SHEET_PIN::MirrorHorizontally( int aCenter )
 
     switch( m_edge )
     {
-    case SHEET_LEFT_SIDE:  SetEdge( SHEET_RIGHT_SIDE ); break;
-    case SHEET_RIGHT_SIDE: SetEdge( SHEET_LEFT_SIDE );  break;
+    case SHEET_SIDE::LEFT: SetEdge( SHEET_SIDE::RIGHT ); break;
+    case SHEET_SIDE::RIGHT: SetEdge( SHEET_SIDE::LEFT ); break;
     default: break;
     }
 }

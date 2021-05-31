@@ -591,11 +591,11 @@ void EE_POINT_EDITOR::updateParentItem() const
 
             switch( pin->GetEdge() )
             {
-            case SHEET_LEFT_SIDE:      pos.x = topLeft.x;  break;
-            case SHEET_RIGHT_SIDE:     pos.x = topRight.x; break;
-            case SHEET_TOP_SIDE:       pos.y = topLeft.y;  break;
-            case SHEET_BOTTOM_SIDE:    pos.y = botLeft.y;  break;
-            case SHEET_UNDEFINED_SIDE: break;
+            case SHEET_SIDE::LEFT: pos.x = topLeft.x; break;
+            case SHEET_SIDE::RIGHT: pos.x = topRight.x; break;
+            case SHEET_SIDE::TOP: pos.y = topLeft.y; break;
+            case SHEET_SIDE::BOTTOM: pos.y = botLeft.y; break;
+            case SHEET_SIDE::UNDEFINED: break;
             }
 
             pin->SetPosition( pos );

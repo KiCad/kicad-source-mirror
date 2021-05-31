@@ -42,13 +42,13 @@ class SCH_SHEET;
  *
  * For compatibility reasons, this does not follow same values as text orientation.
  */
-enum SHEET_SIDE
+enum class SHEET_SIDE
 {
-    SHEET_LEFT_SIDE = 0,
-    SHEET_RIGHT_SIDE,
-    SHEET_TOP_SIDE,
-    SHEET_BOTTOM_SIDE,
-    SHEET_UNDEFINED_SIDE
+    LEFT = 0,
+    RIGHT,
+    TOP,
+    BOTTOM,
+    UNDEFINED
 };
 
 

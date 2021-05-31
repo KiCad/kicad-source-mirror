@@ -213,12 +213,12 @@ static double getSheetPinAngle( SHEET_SIDE aSide )
 
     switch( aSide )
     {
-    case SHEET_UNDEFINED_SIDE:
-    case SHEET_LEFT_SIDE:       retv = 180.0;  break;
-    case SHEET_RIGHT_SIDE:      retv = 0.0;    break;
-    case SHEET_TOP_SIDE:        retv = 90.0;   break;
-    case SHEET_BOTTOM_SIDE:     retv = 270.0;  break;
-    default:   wxFAIL;          retv = 0.0;    break;
+    case SHEET_SIDE::UNDEFINED:
+    case SHEET_SIDE::LEFT:     retv = 180.0; break;
+    case SHEET_SIDE::RIGHT:    retv = 0.0; break;
+    case SHEET_SIDE::TOP:      retv = 90.0; break;
+    case SHEET_SIDE::BOTTOM:   retv = 270.0; break;
+    default:   wxFAIL;              retv = 0.0;    break;
     }
 
     return retv;

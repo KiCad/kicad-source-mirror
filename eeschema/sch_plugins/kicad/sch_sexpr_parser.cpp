@@ -1820,13 +1820,13 @@ SCH_SHEET_PIN* SCH_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
             double angle = parseDouble( "sheet pin angle (side)" );
 
             if( angle == 0.0 )
-                sheetPin->SetEdge( SHEET_RIGHT_SIDE );
+                sheetPin->SetEdge( SHEET_SIDE::RIGHT );
             else if( angle == 90.0 )
-                sheetPin->SetEdge( SHEET_TOP_SIDE );
+                sheetPin->SetEdge( SHEET_SIDE::TOP );
             else if( angle == 180.0 )
-                sheetPin->SetEdge( SHEET_LEFT_SIDE );
+                sheetPin->SetEdge( SHEET_SIDE::LEFT );
             else if( angle == 270.0 )
-                sheetPin->SetEdge( SHEET_BOTTOM_SIDE );
+                sheetPin->SetEdge( SHEET_SIDE::BOTTOM );
             else
                 Expecting( "0, 90, 180, or 270" );
 
