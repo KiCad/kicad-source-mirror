@@ -508,7 +508,6 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         wxLogTrace( kicadTraceKeyEvent, "TOOL_DISPATCHER::DispatchWxEvent %s", dump( *ke ) );
 
-#ifdef __WXGTK__
         // Do not process wxEVT_CHAR_HOOK for a shift-modified key, as ACTION_MANAGER::RunHotKey
         // will run the un-shifted key and that's not what we want.  Wait to get the translated
         // key from wxEVT_CHAR.
@@ -518,7 +517,6 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
             aEvent.Skip();
             return;
         }
-#endif
 
         keyIsEscape = ( ke->GetKeyCode() == WXK_ESCAPE );
 
