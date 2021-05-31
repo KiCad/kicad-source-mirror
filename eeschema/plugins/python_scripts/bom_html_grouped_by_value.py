@@ -21,6 +21,17 @@ from __future__ import print_function
 import kicad_netlist_reader
 import sys
 
+# A helper function to convert a UTF8/Unicode/locale string read in netlist
+# for python2 or python3
+def fromNetlistText( aText ):
+    if sys.platform.startswith('win32'):
+        try:
+            return aText.encode('utf-8').decode('cp1252')
+        except UnicodeDecodeError:
+            return aText
+    else:
+        return aText
+
 # Start with a basic html template
 html = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -98,7 +109,4 @@ for group in grouped:
     html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 
 # Print the formatted html to the file
-try:
-    print(html.encode('utf-8').decode('cp1252'), file=f)
-except:
-    print(html, file=f)
+print(fromNetlistText(html), file=f)
