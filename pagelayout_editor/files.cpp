@@ -98,7 +98,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
     if( ( id == wxID_NEW || id == wxID_OPEN ) && IsContentModified() )
     {
-        if( !HandleUnsavedChanges( this, _( "The current drawing sheet has been modified.  "
+        if( !HandleUnsavedChanges( this, _( "The current drawing sheet has been modified. "
                                             "Save changes?" ),
                                    [&]()->bool { return saveCurrentPageLayout(); } ) )
         {
