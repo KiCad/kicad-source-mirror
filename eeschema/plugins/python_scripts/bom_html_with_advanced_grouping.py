@@ -1,5 +1,6 @@
 #
 # Example python script to generate a BOM from a KiCad generic netlist
+# The KiCad generic xml netlist is expected to be encoded UTF-8
 #
 # Example: Sorted and Grouped HTML BOM with advanced grouping
 #
@@ -21,16 +22,6 @@ from __future__ import print_function
 import kicad_netlist_reader
 import sys
 
-# A helper function to convert a UTF8/Unicode/locale string read in netlist
-# for python2 or python3
-def fromNetlistText( aText ):
-    if sys.platform.startswith('win32'):
-        try:
-            return aText.encode('utf-8').decode('cp1252')
-        except UnicodeDecodeError:
-            return aText
-    else:
-        return aText
 
 # Start with a basic html template
 html = """
@@ -92,7 +83,7 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 # Open a file to write to, if the file cannot be opened output to stdout
 # instead
 try:
-    f = open(sys.argv[2], 'w')
+    f = open(sys.argv[2], 'wb')
 except IOError:
     e = "Can't open output file for writing: " + sys.argv[2]
     print(__file__, ":", e, file=sys.stderr)
@@ -138,5 +129,9 @@ for group in grouped:
 
     html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 
-# Print the formatted html to output file
-print(fromNetlistText(html), file=f)
+# Write the formatted html to the file
+if sys.version_info[0] < 3:
+    f.write(html)
+else:
+    f.write(html.encode('utf-8'))
+f.close
