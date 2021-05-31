@@ -361,6 +361,8 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* a
     Format( aBoard, 1 );
 
     m_out->Print( 0, ")\n" );
+
+    m_out = nullptr;
 }
 
 
