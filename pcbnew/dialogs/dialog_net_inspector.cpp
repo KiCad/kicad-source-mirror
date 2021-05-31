@@ -203,7 +203,7 @@ public:
 
     bool TotalLengthChanged() const
     {
-        return BoardWireLengthChanged() | ViaLengthChanged() | ChipWireLengthChanged();
+        return BoardWireLengthChanged() || ViaLengthChanged() || ChipWireLengthChanged();
     }
 
     LIST_ITEM* Parent() const
