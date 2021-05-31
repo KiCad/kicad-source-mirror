@@ -322,7 +322,8 @@ void SIM_PLOT_FRAME::initWorkbook()
 
 void SIM_PLOT_FRAME::updateTitle()
 {
-    wxFileName filename = m_simulator->Settings()->GetWorkbookFilename();
+    wxFileName filename = Prj().AbsolutePath(
+            m_simulator->Settings()->GetWorkbookFilename() );
 
     bool readOnly = false;
     bool unsaved = false;
