@@ -385,6 +385,12 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
         };
 
+    auto haveNoToolIdleCond =
+            [&]( const SELECTION& aSel )
+            {
+                return isEditableCond( aSel ) && SELECTION_CONDITIONS::Idle( aSel );
+            };
+
     mgr->SetConditions( ACTIONS::saveAll,           ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( ACTIONS::save,              ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( EE_ACTIONS::saveLibraryAs,  ENABLE( libSelectedCondition ) );
@@ -404,7 +410,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::cut,               ENABLE( isEditableCond ) );
     mgr->SetConditions( ACTIONS::copy,              ENABLE( haveSymbolCond ) );
-    mgr->SetConditions( ACTIONS::paste,             ENABLE( isEditableCond && SELECTION_CONDITIONS::Idle ) );
+    mgr->SetConditions( ACTIONS::paste,             ENABLE( haveNoToolIdleCond ) );
     mgr->SetConditions( ACTIONS::doDelete,          ENABLE( isEditableCond ) );
     mgr->SetConditions( ACTIONS::duplicate,         ENABLE( isEditableCond ) );
     mgr->SetConditions( ACTIONS::selectAll,         ENABLE( haveSymbolCond ) );

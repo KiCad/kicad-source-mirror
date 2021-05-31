@@ -264,6 +264,22 @@ void PL_EDITOR_FRAME::setupUIConditions()
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
+    auto idleCond =
+            [&]( const SELECTION& aSel )
+            {
+                return SELECTION_CONDITIONS::Idle( aSel );
+            };
+
+    auto notEmptyCond =
+            [&]( const SELECTION& aSel )
+            {
+                return SELECTION_CONDITIONS::NotEmpty( aSel );
+            };
+
+    auto neverCond = [&]( const SELECTION& aSel ) {
+        return SELECTION_CONDITIONS::ShowNever( aSel );
+    };
+
     mgr->SetConditions( ACTIONS::save,              ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( ACTIONS::undo,              ENABLE( cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,              ENABLE( cond.RedoAvailable() ) );
@@ -274,10 +290,10 @@ void PL_EDITOR_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::inchesUnits,       CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
     mgr->SetConditions( ACTIONS::milsUnits,         CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
-    mgr->SetConditions( ACTIONS::cut,               ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( ACTIONS::copy,              ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( ACTIONS::paste,             ENABLE( SELECTION_CONDITIONS::Idle ) );
-    mgr->SetConditions( ACTIONS::doDelete,          ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::cut,               ENABLE( notEmptyCond ) );
+    mgr->SetConditions( ACTIONS::copy,              ENABLE( notEmptyCond ) );
+    mgr->SetConditions( ACTIONS::paste,             ENABLE( idleCond ) );
+    mgr->SetConditions( ACTIONS::doDelete,          ENABLE( notEmptyCond ) );
 
     mgr->SetConditions( ACTIONS::zoomTool,          CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,     CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
@@ -289,7 +305,7 @@ void PL_EDITOR_FRAME::setupUIConditions()
     mgr->SetConditions( PL_ACTIONS::placeImage,     CHECK( cond.CurrentTool( PL_ACTIONS::placeImage ) ) );
 
     // Not a tool, just a way to activate the action
-    mgr->SetConditions( PL_ACTIONS::appendImportedWorksheet, CHECK( SELECTION_CONDITIONS::ShowNever ) );
+    mgr->SetConditions( PL_ACTIONS::appendImportedWorksheet, CHECK( neverCond ) );
 
     auto titleBlockNormalMode =
         [] ( const SELECTION& )

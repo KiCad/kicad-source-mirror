@@ -523,6 +523,12 @@ void PCB_EDIT_FRAME::setupUIConditions()
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
+    auto haveNoToolIdleCond =
+            [&]( const SELECTION& aSel )
+            {
+                return SELECTION_CONDITIONS::Idle( aSel ) && cond.NoActiveTool();
+            };
+
     mgr->SetConditions( ACTIONS::save, ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( ACTIONS::undo, ENABLE( cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo, ENABLE( cond.RedoAvailable() ) );
@@ -536,10 +542,8 @@ void PCB_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::cut, ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::copy, ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( ACTIONS::paste,
-                        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
-    mgr->SetConditions( ACTIONS::pasteSpecial,
-                        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::paste, ENABLE( haveNoToolIdleCond ) );
+    mgr->SetConditions( ACTIONS::pasteSpecial, ENABLE( haveNoToolIdleCond ) );
     mgr->SetConditions( ACTIONS::selectAll, ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::doDelete, ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::duplicate, ENABLE( cond.HasItems() ) );
