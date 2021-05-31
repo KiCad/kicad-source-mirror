@@ -35,21 +35,26 @@ class CLEANUP_ITEM;
 class TRACKS_CLEANER
 {
 public:
+
+    enum CLEANUP_FLAGS
+    {
+        CF_STACKED_VIAS         = ( 1 << 0 ),  ///< Remove superimposed vias
+        CF_DANGLING_VIAS        = ( 1 << 1 ),  ///< Remove vias that only connect on one layer
+        CF_SHORTING_SEGMENTS    = ( 1 << 2 ),  ///< Remove segments that short two nets
+        CF_COLLINEAR_SEGMENTS   = ( 1 << 3 ),  ///< Merge co-linear segments
+        CF_DANGLING_SEGMENTS    = ( 1 << 4 ),  ///< Remove unconnected segments
+        CF_SEGMENTS_INSIDE_PADS = ( 1 << 5 )   ///< Remove segments fully inside a pad
+    };
+
     TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit );
 
     /**
      * the cleanup function.
-     * @param aCleanVias = true to remove superimposed vias
-     * @param aRemoveMisConnected = true to remove segments connecting 2 different nets
-     *                              (short circuits)
-     * @param aMergeSegments = true to merge collinear segmenst and remove 0 len segm
-     * @param aDeleteUnconnected = true to remove dangling tracks
-     * @param aDeleteTracksinPad = true to remove tracks fully inside pads
-     * @param aDeleteDanglingVias = true to remove a via that is only connected to a single layer
+     * @param aFlags controls which cleaning operations to run: @see CLEANUP_FLAGS
+     * @param aIncludeNewTracksInCommit will include to-be-committed tracks when merging segments
      */
-    void CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList, bool aCleanVias,
-                       bool aRemoveMisConnected, bool aMergeSegments, bool aDeleteUnconnected,
-                       bool aDeleteTracksinPad, bool aDeleteDanglingVias );
+    void CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList,
+                       int aFlags, bool aIncludeNewTracksInCommit = false );
 
 private:
     /*
@@ -97,6 +102,7 @@ private:
     BOARD*                      m_brd;
     BOARD_COMMIT&               m_commit;
     bool                        m_dryRun;
+    bool                        m_includeNewTracks;
     std::vector<std::shared_ptr<CLEANUP_ITEM> >* m_itemsList;
 };
 

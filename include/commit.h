@@ -130,6 +130,12 @@ public:
     virtual COMMIT& Stage( const PICKED_ITEMS_LIST& aItems,
                            UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED );
 
+    /**
+     * Removes an item that was previously staged to this commit from the commit.
+     * Use this with care:
+     */
+    virtual COMMIT& Unstage( EDA_ITEM* aItem );
+
     ///< Execute the changes.
     virtual void Push( const wxString& aMessage = wxT( "A commit" ),
                        bool aCreateUndoEntry = true, bool aSetDirtyBit = true ) = 0;
@@ -144,6 +150,11 @@ public:
 
     ///< Returns status of an item.
     int GetStatus( EDA_ITEM* aItem );
+
+    /**
+     * @return a list of items added by this commit
+     */
+    std::vector<EDA_ITEM*> GetAddedItems() const;
 
 protected:
     struct COMMIT_LINE

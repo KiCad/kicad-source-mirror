@@ -131,12 +131,20 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     // Old model has to be refreshed, GAL normally does not keep updating it
     m_parentFrame->Compile_Ratsnest( false );
 
-    cleaner.CleanupBoard( aDryRun, &m_items, m_cleanShortCircuitOpt->GetValue(),
-                                             m_cleanViasOpt->GetValue(),
-                                             m_mergeSegmOpt->GetValue(),
-                                             m_deleteUnconnectedOpt->GetValue(),
-                                             m_deleteTracksInPadsOpt->GetValue(),
-                                             m_deleteDanglingViasOpt->GetValue() );
+    int flags = ( m_cleanShortCircuitOpt->GetValue() ?
+                  TRACKS_CLEANER::CF_SHORTING_SEGMENTS : 0 ) |
+                ( m_cleanViasOpt->GetValue() ?
+                  TRACKS_CLEANER::CF_STACKED_VIAS : 0 ) |
+                ( m_mergeSegmOpt->GetValue() ?
+                  TRACKS_CLEANER::CF_COLLINEAR_SEGMENTS : 0 ) |
+                ( m_deleteUnconnectedOpt->GetValue() ?
+                  TRACKS_CLEANER::CF_DANGLING_SEGMENTS : 0 ) |
+                ( m_deleteTracksInPadsOpt->GetValue() ?
+                  TRACKS_CLEANER::CF_SEGMENTS_INSIDE_PADS : 0 ) |
+                ( m_deleteDanglingViasOpt->GetValue() ?
+                  TRACKS_CLEANER::CF_DANGLING_VIAS : 0 );
+
+    cleaner.CleanupBoard( aDryRun, &m_items, flags );
 
     if( aDryRun )
     {

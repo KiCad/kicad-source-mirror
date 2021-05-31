@@ -127,6 +127,8 @@ public:
 
     void UpdateNet( int aNetCode ) override;
 
+    BOARD_COMMIT* GetCommit() const { return m_commit.get(); }
+
 private:
     struct OFFSET
     {
