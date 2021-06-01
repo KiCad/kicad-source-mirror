@@ -71,75 +71,19 @@ public:
         return static_cast<int>( m_spin );
     }
 
-    LABEL_SPIN_STYLE RotateCW()
-    {
-        SPIN newSpin = m_spin;
+    LABEL_SPIN_STYLE RotateCW();
 
-        switch( m_spin )
-        {
-        case LABEL_SPIN_STYLE::LEFT:   newSpin = LABEL_SPIN_STYLE::UP;     break;
-        case LABEL_SPIN_STYLE::UP:     newSpin = LABEL_SPIN_STYLE::RIGHT;  break;
-        case LABEL_SPIN_STYLE::RIGHT:  newSpin = LABEL_SPIN_STYLE::BOTTOM; break;
-        case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::LEFT;   break;
-        default: break;
-        }
-
-        return LABEL_SPIN_STYLE( newSpin );
-    }
-
-    LABEL_SPIN_STYLE RotateCCW()
-    {
-        SPIN newSpin = m_spin;
-
-        switch( m_spin )
-        {
-        case LABEL_SPIN_STYLE::LEFT:   newSpin = LABEL_SPIN_STYLE::BOTTOM; break;
-        case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::RIGHT;  break;
-        case LABEL_SPIN_STYLE::RIGHT:  newSpin = LABEL_SPIN_STYLE::UP;     break;
-        case LABEL_SPIN_STYLE::UP:     newSpin = LABEL_SPIN_STYLE::LEFT;   break;
-        default:  break;
-        }
-
-        return LABEL_SPIN_STYLE( newSpin );
-    }
+    LABEL_SPIN_STYLE RotateCCW();
 
     /*
      * Mirrors the label spin style across the X axis or simply swaps up and bottom
      */
-    LABEL_SPIN_STYLE MirrorX()
-    {
-        SPIN newSpin = m_spin;
-
-        switch( m_spin )
-        {
-        case LABEL_SPIN_STYLE::UP:     newSpin = LABEL_SPIN_STYLE::BOTTOM; break;
-        case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::UP;     break;
-        case LABEL_SPIN_STYLE::LEFT:                                       break;
-        case LABEL_SPIN_STYLE::RIGHT:                                      break;
-        default: break;
-        }
-
-        return LABEL_SPIN_STYLE( newSpin );
-    }
+    LABEL_SPIN_STYLE MirrorX();
 
     /*
      * Mirrors the label spin style across the Y axis or simply swaps left and right
      */
-    LABEL_SPIN_STYLE MirrorY()
-    {
-        SPIN newSpin = m_spin;
-
-        switch( m_spin )
-        {
-        case LABEL_SPIN_STYLE::LEFT:  newSpin = LABEL_SPIN_STYLE::RIGHT; break;
-        case LABEL_SPIN_STYLE::RIGHT: newSpin = LABEL_SPIN_STYLE::LEFT;  break;
-        case LABEL_SPIN_STYLE::UP:                                       break;
-        case LABEL_SPIN_STYLE::BOTTOM:                                   break;
-        default: break;
-        }
-
-        return LABEL_SPIN_STYLE( newSpin );
-    }
+    LABEL_SPIN_STYLE MirrorY();
 
 private:
     SPIN m_spin;
