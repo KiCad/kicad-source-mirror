@@ -314,7 +314,7 @@ size_t FABMASTER::processPadStackLayers( size_t aRow )
     if( rownum >= rows.size() )
         return -1;
 
-    const auto header = rows[aRow];
+    const single_row& header = rows[aRow];
 
     int pad_name_col        = getColFromName( aRow, "PADNAME" );
     int pad_num_col         = getColFromName( aRow, "RECNUMBER" );
@@ -331,7 +331,7 @@ size_t FABMASTER::processPadStackLayers( size_t aRow )
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
-        auto row = rows[rownum];
+        const single_row& row = rows[rownum];
 
         if( row.size() != header.size() )
         {
@@ -390,7 +390,7 @@ size_t FABMASTER::processPadStacks( size_t aRow )
     if( rownum >= rows.size() )
         return -1;
 
-    const auto header = rows[aRow];
+    const single_row& header = rows[aRow];
     double scale_factor = processScaleFactor( aRow + 1 );
 
     if( scale_factor <= 0.0 )
@@ -411,7 +411,7 @@ size_t FABMASTER::processPadStacks( size_t aRow )
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
-        auto row = rows[rownum];
+        const single_row& row = rows[rownum];
         FM_PAD* pad;
 
         if( row.size() != header.size() )
@@ -642,7 +642,7 @@ size_t FABMASTER::processSimpleLayers( size_t aRow )
 
      for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
      {
-         auto row = rows[rownum];
+         const single_row& row = rows[rownum];
 
          if( row.size() != header.size() )
          {
@@ -791,7 +791,7 @@ size_t FABMASTER::processLayers( size_t aRow )
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
-        auto row = rows[rownum];
+        const single_row& row = rows[rownum];
 
         if( row.size() != header.size() )
         {
@@ -876,7 +876,7 @@ size_t FABMASTER::processCustomPads( size_t aRow )
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
-        auto row = rows[rownum];
+        const single_row& row = rows[rownum];
 
         if( row.size() != header.size() )
         {
@@ -985,11 +985,11 @@ FABMASTER::GRAPHIC_LINE* FABMASTER::processLine( const FABMASTER::GRAPHIC_DATA& 
     GRAPHIC_LINE* new_line = new GRAPHIC_LINE ;
 
     new_line->shape   = GR_SHAPE_LINE;
-    new_line->start_x = KiROUND( readDouble( aData.graphic_data1.c_str() ) * aScale );
-    new_line->start_y = -KiROUND( readDouble( aData.graphic_data2.c_str() ) * aScale );
-    new_line->end_x   = KiROUND( readDouble( aData.graphic_data3.c_str() ) * aScale );
-    new_line->end_y   = -KiROUND( readDouble( aData.graphic_data4.c_str() ) * aScale );
-    new_line->width   = KiROUND( readDouble( aData.graphic_data5.c_str() ) * aScale );
+    new_line->start_x = KiROUND( readDouble( aData.graphic_data1 ) * aScale );
+    new_line->start_y = -KiROUND( readDouble( aData.graphic_data2 ) * aScale );
+    new_line->end_x   = KiROUND( readDouble( aData.graphic_data3 ) * aScale );
+    new_line->end_y   = -KiROUND( readDouble( aData.graphic_data4 ) * aScale );
+    new_line->width   = KiROUND( readDouble( aData.graphic_data5 ) * aScale );
 
     return new_line;
 }
@@ -999,14 +999,14 @@ FABMASTER::GRAPHIC_ARC* FABMASTER::processArc( const FABMASTER::GRAPHIC_DATA& aD
     GRAPHIC_ARC* new_arc = new GRAPHIC_ARC ;
 
     new_arc->shape    = GR_SHAPE_ARC;
-    new_arc->start_x  = KiROUND( readDouble( aData.graphic_data1.c_str() ) * aScale );
-    new_arc->start_y  = -KiROUND( readDouble( aData.graphic_data2.c_str() ) * aScale );
-    new_arc->end_x    = KiROUND( readDouble( aData.graphic_data3.c_str() ) * aScale );
-    new_arc->end_y    = -KiROUND( readDouble( aData.graphic_data4.c_str() ) * aScale );
-    new_arc->center_x = KiROUND( readDouble( aData.graphic_data5.c_str() ) * aScale );
-    new_arc->center_y = -KiROUND( readDouble( aData.graphic_data6.c_str() ) * aScale );
-    new_arc->radius   = KiROUND( readDouble( aData.graphic_data7.c_str() ) * aScale );
-    new_arc->width    = KiROUND( readDouble( aData.graphic_data8.c_str() ) * aScale );
+    new_arc->start_x  = KiROUND( readDouble( aData.graphic_data1 ) * aScale );
+    new_arc->start_y  = -KiROUND( readDouble( aData.graphic_data2 ) * aScale );
+    new_arc->end_x    = KiROUND( readDouble( aData.graphic_data3 ) * aScale );
+    new_arc->end_y    = -KiROUND( readDouble( aData.graphic_data4 ) * aScale );
+    new_arc->center_x = KiROUND( readDouble( aData.graphic_data5 ) * aScale );
+    new_arc->center_y = -KiROUND( readDouble( aData.graphic_data6 ) * aScale );
+    new_arc->radius   = KiROUND( readDouble( aData.graphic_data7 ) * aScale );
+    new_arc->width    = KiROUND( readDouble( aData.graphic_data8 ) * aScale );
 
     new_arc->clockwise = ( aData.graphic_data9 != "COUNTERCLOCKWISE" );
 
@@ -1045,10 +1045,10 @@ FABMASTER::GRAPHIC_RECTANGLE* FABMASTER::processRectangle( const FABMASTER::GRAP
     GRAPHIC_RECTANGLE* new_rect = new GRAPHIC_RECTANGLE;
 
     new_rect->shape   = GR_SHAPE_RECTANGLE;
-    new_rect->start_x = KiROUND( readDouble( aData.graphic_data1.c_str() ) * aScale );
-    new_rect->start_y = -KiROUND( readDouble( aData.graphic_data2.c_str() ) * aScale );
-    new_rect->end_x   = KiROUND( readDouble( aData.graphic_data3.c_str() ) * aScale );
-    new_rect->end_y   = -KiROUND( readDouble( aData.graphic_data4.c_str() ) * aScale );
+    new_rect->start_x = KiROUND( readDouble( aData.graphic_data1 ) * aScale );
+    new_rect->start_y = -KiROUND( readDouble( aData.graphic_data2 ) * aScale );
+    new_rect->end_x   = KiROUND( readDouble( aData.graphic_data3 ) * aScale );
+    new_rect->end_y   = -KiROUND( readDouble( aData.graphic_data4 ) * aScale );
     new_rect->fill    = aData.graphic_data5 == "1";
     new_rect->width   = 0;
 
@@ -1060,9 +1060,9 @@ FABMASTER::GRAPHIC_TEXT* FABMASTER::processText( const FABMASTER::GRAPHIC_DATA& 
     GRAPHIC_TEXT* new_text = new GRAPHIC_TEXT;
 
     new_text->shape    = GR_SHAPE_TEXT;
-    new_text->start_x  = KiROUND( readDouble( aData.graphic_data1.c_str() ) * aScale );
-    new_text->start_y  = -KiROUND( readDouble( aData.graphic_data2.c_str() ) * aScale );
-    new_text->rotation = KiROUND( readDouble( aData.graphic_data3.c_str() ) );
+    new_text->start_x  = KiROUND( readDouble( aData.graphic_data1 ) * aScale );
+    new_text->start_y  = -KiROUND( readDouble( aData.graphic_data2 ) * aScale );
+    new_text->rotation = KiROUND( readDouble( aData.graphic_data3 ) );
     new_text->mirror   = ( aData.graphic_data4 == "YES" );
 
     if( aData.graphic_data5 == "RIGHT" )
@@ -1088,12 +1088,12 @@ FABMASTER::GRAPHIC_TEXT* FABMASTER::processText( const FABMASTER::GRAPHIC_DATA& 
     {
         // 0 = size
         // 1 = font
-        new_text->height = KiROUND( readDouble( toks[2].c_str() ) * aScale );
-        new_text->width  = KiROUND( readDouble( toks[3].c_str() ) * aScale );
-        new_text->ital   = readDouble( toks[4].c_str() ) != 0.0;
+        new_text->height = KiROUND( readDouble( toks[2] ) * aScale );
+        new_text->width  = KiROUND( readDouble( toks[3] ) * aScale );
+        new_text->ital   = readDouble( toks[4] ) != 0.0;
         // 5 = character spacing
         // 6 = line spacing
-        new_text->thickness = KiROUND( readDouble( toks[7].c_str() ) * aScale );
+        new_text->thickness = KiROUND( readDouble( toks[7] ) * aScale );
     }
 
     new_text->text = aData.graphic_data7;
@@ -1146,7 +1146,7 @@ size_t FABMASTER::processGeometry( size_t aRow )
     if( rownum >= rows.size() )
         return -1;
 
-    const auto header = rows[aRow];
+    const single_row& header = rows[aRow];
     double scale_factor = processScaleFactor( aRow + 1 );
 
     if( scale_factor <= 0.0 )
@@ -1177,7 +1177,7 @@ size_t FABMASTER::processGeometry( size_t aRow )
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
-        auto row = rows[rownum];
+        const single_row& row = rows[rownum];
 
         if( row.size() != header.size() )
         {
@@ -1281,7 +1281,7 @@ size_t FABMASTER::processVias( size_t aRow )
     if( rownum >= rows.size() )
         return -1;
 
-    const auto header = rows[aRow];
+    const single_row& header = rows[aRow];
     double scale_factor = processScaleFactor( aRow + 1 );
 
     if( scale_factor <= 0.0 )
@@ -1299,7 +1299,7 @@ size_t FABMASTER::processVias( size_t aRow )
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
-        auto row = rows[rownum];
+        const single_row& row = rows[rownum];
 
         if( row.size() != header.size() )
         {
@@ -1334,7 +1334,7 @@ size_t FABMASTER::processTraces( size_t aRow )
     if( rownum >= rows.size() )
         return -1;
 
-    const auto header = rows[aRow];
+    const single_row& header = rows[aRow];
     double scale_factor = processScaleFactor( aRow + 1 );
 
     if( scale_factor <= 0.0 )
@@ -1364,7 +1364,7 @@ size_t FABMASTER::processTraces( size_t aRow )
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
-        auto row = rows[rownum];
+        const single_row& row = rows[rownum];
 
         if( row.size() != header.size() )
         {
@@ -1386,7 +1386,7 @@ size_t FABMASTER::processTraces( size_t aRow )
         gr_data.graphic_data8 = row[grdata8_col];
         gr_data.graphic_data9 = row[grdata9_col];
 
-        auto geo_tag = row[tag_col];
+        const std::string& geo_tag = row[tag_col];
         // Grouped graphics are a series of records with the same record ID but incrementing
         // Sequence numbers.
         int id          = -1;
@@ -1497,7 +1497,7 @@ size_t FABMASTER::processFootprints( size_t aRow )
     if( rownum >= rows.size() )
         return -1;
 
-    const auto header = rows[aRow];
+    const single_row& header = rows[aRow];
     double scale_factor = processScaleFactor( aRow + 1 );
 
     if( scale_factor <= 0.0 )
@@ -1527,7 +1527,7 @@ size_t FABMASTER::processFootprints( size_t aRow )
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
-        auto row = rows[rownum];
+        const single_row& row = rows[rownum];
 
         if( row.size() != header.size() )
         {
@@ -1580,7 +1580,7 @@ size_t FABMASTER::processPins( size_t aRow )
     if( rownum >= rows.size() )
         return -1;
 
-    const auto header = rows[aRow];
+    const single_row& header = rows[aRow];
     double scale_factor = processScaleFactor( aRow + 1 );
 
     if( scale_factor <= 0.0 )
@@ -1604,7 +1604,7 @@ size_t FABMASTER::processPins( size_t aRow )
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
-        auto row = rows[rownum];
+        const single_row& row = rows[rownum];
 
         if( row.size() != header.size() )
         {
@@ -1650,7 +1650,7 @@ size_t FABMASTER::processNets( size_t aRow )
     if( rownum >= rows.size() )
         return -1;
 
-    const auto header = rows[aRow];
+    const single_row& header = rows[aRow];
     double scale_factor = processScaleFactor( aRow + 1 );
 
     if( scale_factor <= 0.0 )
@@ -1669,7 +1669,7 @@ size_t FABMASTER::processNets( size_t aRow )
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
-        auto row = rows[rownum];
+        const single_row& row = rows[rownum];
 
         if( row.size() != header.size() )
         {
