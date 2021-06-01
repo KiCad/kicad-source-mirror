@@ -36,8 +36,8 @@ const int gerbviewSchemaVersion = 0;
 
 GERBVIEW_SETTINGS::GERBVIEW_SETTINGS() :
         APP_SETTINGS_BASE( "gerbview", gerbviewSchemaVersion ),
-        m_BoardLayersCount( 2 ),
-        m_Appearance()
+        m_Appearance(),
+        m_BoardLayersCount( 2 )
 {
     // Init settings:
     m_params.emplace_back( new PARAM<bool>( "appearance.show_border_and_titleblock",

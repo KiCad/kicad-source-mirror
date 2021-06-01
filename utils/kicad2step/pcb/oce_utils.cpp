@@ -1027,7 +1027,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
             {
                 ReportMessage( wxString::Format( "readSTEP() failed on filename %s\n",
                                                  aFileName ) );
-                    return false;
+                return false;
             }
 
             {
@@ -1073,8 +1073,6 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
 
                 return success;
             }
-
-            return getModelLabel( outFile.GetFullPath().ToStdString(), aScale, aLabel );
 
             break;
         }
