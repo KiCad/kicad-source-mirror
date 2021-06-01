@@ -440,6 +440,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
 
     BOARD*                 board = item->GetBoard();
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
     EDA_RECT               itemBBox;
     std::shared_ptr<SHAPE> shape;
 
@@ -448,17 +449,17 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
     else
         itemBBox = item->GetBoundingBox();
 
-    auto realInsideZone =
-            [&]( ZONE* zone ) -> bool
+    auto itemIsInsideArea =
+            [&]( ZONE* area ) -> bool
             {
-                if( !zone->GetCachedBoundingBox().Intersects( itemBBox ) )
+                if( !area->GetCachedBoundingBox().Intersects( itemBBox ) )
                     return false;
 
                 // Collisions include touching, so we need to deflate outline by enough to
                 // exclude touching.  This is particularly important for detecting copper fills
                 // as they will be exactly touching along the entire border.
-                SHAPE_POLY_SET zoneOutline = *zone->Outline();
-                zoneOutline.Deflate( Millimeter2iu( 0.001 ), 4 );
+                SHAPE_POLY_SET areaOutline = *area->Outline();
+                areaOutline.Deflate( bds.GetDRCEpsilon(), 0, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
 
                 if( item->GetFlags() & HOLE_PROXY )
                 {
@@ -467,14 +468,14 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                         PAD*                 pad = static_cast<PAD*>( item );
                         const SHAPE_SEGMENT* holeShape = pad->GetEffectiveHoleShape();
 
-                        return zoneOutline.Collide( holeShape );
+                        return areaOutline.Collide( holeShape );
                     }
                     else if( item->Type() == PCB_VIA_T )
                     {
                         VIA*               via = static_cast<VIA*>( item );
                         const SHAPE_CIRCLE holeShape( via->GetPosition(), via->GetDrillValue() );
 
-                        return zoneOutline.Collide( &holeShape );
+                        return areaOutline.Collide( &holeShape );
                     }
 
                     return false;
@@ -492,7 +493,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                         return false;
                     }
 
-                    if( ( zone->GetLayerSet() & LSET::FrontMask() ).any() )
+                    if( ( area->GetLayerSet() & LSET::FrontMask() ).any() )
                     {
                         SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyardFront();
 
@@ -505,11 +506,11 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                         }
                         else
                         {
-                            return zoneOutline.Collide( &courtyard.Outline( 0 ) );
+                            return areaOutline.Collide( &courtyard.Outline( 0 ) );
                         }
                     }
 
-                    if( ( zone->GetLayerSet() & LSET::BackMask() ).any() )
+                    if( ( area->GetLayerSet() & LSET::BackMask() ).any() )
                     {
                         SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyardBack();
 
@@ -522,7 +523,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                         }
                         else
                         {
-                            return zoneOutline.Collide( &courtyard.Outline( 0 ) );
+                            return areaOutline.Collide( &courtyard.Outline( 0 ) );
                         }
                     }
 
@@ -531,18 +532,18 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
                 if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
                 {
-                    ZONE* itemZone = static_cast<ZONE*>( item );
+                    ZONE* zone = static_cast<ZONE*>( item );
 
-                    if( !itemZone->IsFilled() )
+                    if( !zone->IsFilled() )
                         return false;
 
-                    DRC_RTREE* itemRTree = board->m_CopperZoneRTrees[ itemZone ].get();
+                    DRC_RTREE* zoneRTree = board->m_CopperZoneRTrees[ zone ].get();
 
-                    if( itemRTree )
+                    if( zoneRTree )
                     {
-                        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                        for( PCB_LAYER_ID layer : area->GetLayerSet().Seq() )
                         {
-                            if( itemRTree->QueryColliding( itemBBox,  &zoneOutline, layer, 0 ) )
+                            if( zoneRTree->QueryColliding( itemBBox, &areaOutline, layer, 0 ) )
                                 return true;
                         }
                     }
@@ -554,24 +555,24 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                     if( !shape )
                         shape = item->GetEffectiveShape( context->GetLayer() );
 
-                    return zoneOutline.Collide( shape.get() );
+                    return areaOutline.Collide( shape.get() );
                 }
             };
 
-    auto insideZone =
-            [&]( ZONE* zone ) -> bool
+    auto checkArea =
+            [&]( ZONE* area ) -> bool
             {
-                if( !zone || zone == item || zone->GetParent() == item )
+                if( !area || area == item || area->GetParent() == item )
                     return false;
 
                 std::unique_lock<std::mutex>        cacheLock( board->m_CachesMutex );
-                std::pair<BOARD_ITEM*, BOARD_ITEM*> key( zone, item );
+                std::pair<BOARD_ITEM*, BOARD_ITEM*> key( area, item );
                 auto                                i = board->m_InsideAreaCache.find( key );
 
                 if( i != board->m_InsideAreaCache.end() )
                     return i->second;
 
-                bool isInside = realInsideZone( zone );
+                bool isInside = itemIsInsideArea( area );
 
                 board->m_InsideAreaCache[ key ] = isInside;
                 return isInside;
@@ -579,25 +580,25 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
     if( arg->AsString() == "A" )
     {
-        if( insideZone( dynamic_cast<ZONE*>( context->GetItem( 0 ) ) ) )
+        if( checkArea( dynamic_cast<ZONE*>( context->GetItem( 0 ) ) ) )
             result->Set( 1.0 );
     }
     else if( arg->AsString() == "B" )
     {
-        if( insideZone( dynamic_cast<ZONE*>( context->GetItem( 1 ) ) ) )
+        if( checkArea( dynamic_cast<ZONE*>( context->GetItem( 1 ) ) ) )
             result->Set( 1.0 );
     }
     else if( KIID::SniffTest( arg->AsString() ) )
     {
         KIID target( arg->AsString() );
 
-        for( ZONE* candidate : board->Zones() )
+        for( ZONE* area : board->Zones() )
         {
             // Only a single zone can match the UUID; exit once we find a match whether
             // "inside" or not
-            if( candidate->m_Uuid == target )
+            if( area->m_Uuid == target )
             {
-                if( insideZone( candidate ) )
+                if( checkArea( area ) )
                     result->Set( 1.0 );
 
                 return;
@@ -606,13 +607,13 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
         for( FOOTPRINT* footprint : board->Footprints() )
         {
-            for( ZONE* candidate : footprint->Zones() )
+            for( ZONE* area : footprint->Zones() )
             {
                 // Only a single zone can match the UUID; exit once we find a match whether
                 // "inside" or not
-                if( candidate->m_Uuid == target )
+                if( area->m_Uuid == target )
                 {
-                    if( insideZone( candidate ) )
+                    if( checkArea( area ) )
                         result->Set( 1.0 );
 
                     return;
@@ -622,12 +623,12 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
     }
     else  // Match on zone name
     {
-        for( ZONE* candidate : board->Zones() )
+        for( ZONE* area : board->Zones() )
         {
-            if( candidate->GetZoneName().Matches( arg->AsString() ) )
+            if( area->GetZoneName().Matches( arg->AsString() ) )
             {
                 // Many zones can match the name; exit only when we find an "inside"
-                if( insideZone( candidate ) )
+                if( checkArea( area ) )
                 {
                     result->Set( 1.0 );
                     return;
@@ -637,12 +638,12 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
         for( FOOTPRINT* footprint : board->Footprints() )
         {
-            for( ZONE* candidate : footprint->Zones() )
+            for( ZONE* area : footprint->Zones() )
             {
                 // Many zones can match the name; exit only when we find an "inside"
-                if( candidate->GetZoneName().Matches( arg->AsString() ) )
+                if( area->GetZoneName().Matches( arg->AsString() ) )
                 {
-                    if( insideZone( candidate ) )
+                    if( checkArea( area ) )
                     {
                         result->Set( 1.0 );
                         return;
