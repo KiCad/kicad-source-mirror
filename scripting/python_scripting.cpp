@@ -56,9 +56,6 @@
 
 SCRIPTING::SCRIPTING()
 {
-    int  retv;
-    char cmd[1024];
-
     scriptingSetup();
 
 #ifdef _MSC_VER
