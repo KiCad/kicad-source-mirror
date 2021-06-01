@@ -38,8 +38,7 @@ int sgn( T aVal )
 
 SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
 {
-    // fixme: rather inefficient....
-    if( Intersect( aSeg ) )
+    if( Intersects( aSeg ) )
         return 0;
 
     const VECTOR2I pts[4] =
@@ -53,9 +52,7 @@ SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
     ecoord m = VECTOR2I::ECOORD_MAX;
 
     for( int i = 0; i < 4; i++ )
-    {
         m = std::min( m, pts[i].SquaredEuclideanNorm() );
-    }
 
     return m;
 }
@@ -81,27 +78,27 @@ const VECTOR2I SEG::NearestPoint( const SEG& aSeg ) const
 
     const VECTOR2I pts_origin[4] =
     {
-            aSeg.NearestPoint( A ),
-            aSeg.NearestPoint( B ),
-            NearestPoint( aSeg.A ),
-            NearestPoint( aSeg.B )
+        aSeg.NearestPoint( A ),
+        aSeg.NearestPoint( B ),
+        NearestPoint( aSeg.A ),
+        NearestPoint( aSeg.B )
     };
 
 
     const VECTOR2I* pts_out[4] =
     {
-            &A,
-            &B,
-            &pts_origin[2],
-            &pts_origin[3]
+        &A,
+        &B,
+        &pts_origin[2],
+        &pts_origin[3]
     };
 
     const ecoord pts_dist[4] =
     {
-            ( pts_origin[0] - A ).SquaredEuclideanNorm(),
-            ( pts_origin[1] - B ).SquaredEuclideanNorm(),
-            ( pts_origin[2] - aSeg.A ).SquaredEuclideanNorm(),
-            ( pts_origin[3] - aSeg.B ).SquaredEuclideanNorm()
+        ( pts_origin[0] - A ).SquaredEuclideanNorm(),
+        ( pts_origin[1] - B ).SquaredEuclideanNorm(),
+        ( pts_origin[2] - aSeg.A ).SquaredEuclideanNorm(),
+        ( pts_origin[3] - aSeg.B ).SquaredEuclideanNorm()
     };
 
     int min_i = 0;
@@ -116,7 +113,7 @@ const VECTOR2I SEG::NearestPoint( const SEG& aSeg ) const
 }
 
 
-OPT_VECTOR2I SEG::Intersect( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines ) const
+bool SEG::intersects( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines, VECTOR2I* aPt ) const
 {
     const VECTOR2I  e( B - A );
     const VECTOR2I  f( aSeg.B - aSeg.A );
@@ -127,21 +124,41 @@ OPT_VECTOR2I SEG::Intersect( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines
     ecoord q = e.Cross( ac );
 
     if( d == 0 )
-        return OPT_VECTOR2I();
+        return false;
 
     if( !aLines && d > 0 && ( q < 0 || q > d || p < 0 || p > d ) )
-        return OPT_VECTOR2I();
+        return false;
 
     if( !aLines && d < 0 && ( q < d || p < d || p > 0 || q > 0 ) )
-        return OPT_VECTOR2I();
+        return false;
 
     if( !aLines && aIgnoreEndpoints && ( q == 0 || q == d ) && ( p == 0 || p == d ) )
+        return false;
+
+    if( aPt )
+    {
+        *aPt = VECTOR2I( aSeg.A.x + rescale( q, (ecoord) f.x, d ),
+                         aSeg.A.y + rescale( q, (ecoord) f.y, d ) );
+    }
+
+    return true;
+}
+
+
+bool SEG::Intersects( const SEG& aSeg ) const
+{
+    return intersects( aSeg );
+}
+
+
+OPT_VECTOR2I SEG::Intersect( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines ) const
+{
+    VECTOR2I ip;
+
+    if( intersects( aSeg, aIgnoreEndpoints, aLines, &ip ) )
+        return ip;
+    else
         return OPT_VECTOR2I();
-
-    VECTOR2I ip( aSeg.A.x + rescale( q, (ecoord) f.x, d ),
-                 aSeg.A.y + rescale( q, (ecoord) f.y, d ) );
-
-     return ip;
 }
 
 
@@ -203,5 +220,5 @@ bool SEG::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
 
 bool SEG::Contains( const VECTOR2I& aP ) const
 {
-    return Distance( aP ) <= 1;       // 1 * 1 to be pedantic
+    return Distance( aP ) <= 1;
 }

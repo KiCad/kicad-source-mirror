@@ -199,6 +199,8 @@ public:
     OPT_VECTOR2I Intersect( const SEG& aSeg, bool aIgnoreEndpoints = false,
                             bool aLines = false ) const;
 
+    bool Intersects( const SEG& aSeg ) const;
+
     /**
      * Compute the intersection point of lines passing through ends of (this) and \a aSeg.
      *
@@ -395,6 +397,9 @@ public:
 
 private:
     bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I &aC ) const;
+
+    bool intersects( const SEG& aSeg, bool aIgnoreEndpoints = false, bool aLines = false,
+                     VECTOR2I* aPt = nullptr ) const;
 
 private:
     ///< index withing the parent shape (used when m_is_local == false)

@@ -173,7 +173,7 @@ bool SHAPE_LINE_CHAIN_BASE::Collide( const SEG& aSeg, int aClearance, int* aActu
     for( size_t i = 0; i < GetSegmentCount(); i++ )
     {
         const SEG& s = GetSegment( i );
-        SEG::ecoord dist_sq =s.SquaredDistance( aSeg );
+        SEG::ecoord dist_sq = s.SquaredDistance( aSeg );
 
         if( dist_sq < closest_dist_sq )
         {
