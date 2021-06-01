@@ -50,6 +50,9 @@ struct CommonTestData
                                           ///< Holes and outline contain arcs
     SHAPE_POLY_SET holeyCurvedPolyMulti;  ///< Polygon with a multiple outlines + multiple holes.
                                           ///< Holes and outlines contain arcs
+    SHAPE_POLY_SET holeyCurvedPolyInter;  ///< Polygon with a single outlines + multiple holes.
+                                          ///< Holes and outlines contain arcs. Intersects with above
+                                          ///< two polysets
 
     // Vectors containing the information with which the polygons are populated.
     std::vector<VECTOR2I> uniquePoints;
@@ -191,6 +194,20 @@ struct CommonTestData
         o1h2.Append( SHAPE_ARC( { 760000, 258000 }, { 746000, 222000 }, { 686000, 260000 }, 0 ) );
         o1h2.SetClosed( true );
         holeyCurvedPolyMulti.AddHole( o1h2 );
+
+        // Intersecting shape:
+        SHAPE_LINE_CHAIN oline2;
+        oline2.Append( { 340000, 540000 } );
+        oline2.Append( SHAPE_ARC( { 629000, 659000 }, { 790000, 436000 }, { 751000, 161000 }, 0 ) );
+        oline2.Append( SHAPE_ARC( { 651000, 161000 }, { 300000, 272000 }, { 320000, 426000 }, 0 ) );
+        oline2.SetClosed( true );
+        holeyCurvedPolyInter.AddOutline( oline2 );
+
+        SHAPE_LINE_CHAIN o2h2;
+        o2h2.Append( SHAPE_ARC( { 680000, 486000 }, { 728000, 506000 }, { 760000, 458000 }, 0 ) );
+        o2h2.Append( SHAPE_ARC( { 760000, 458000 }, { 746000, 422000 }, { 686000, 460000 }, 0 ) );
+        o2h2.SetClosed( true );
+        holeyCurvedPolyInter.AddHole( o2h2 );
     }
 
     ~CommonTestData()

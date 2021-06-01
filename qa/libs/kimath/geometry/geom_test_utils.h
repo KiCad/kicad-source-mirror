@@ -221,6 +221,81 @@ inline SHAPE_POLY_SET FilletPolySet( SHAPE_POLY_SET& aPolySet, int aRadius, int 
     return filletedPolySet;
 }
 
+/**
+ * Verify that a SHAPE_LINE_CHAIN has been assembled correctly by ensuring that the
+ * arc start and end points match points on the chain and that any points inside the arcs
+ * actually collide with the arc segments (with an error margin of 5000 IU)
+ *
+ * @param aChain to test
+ * @return true if outline is valid
+*/
+inline bool IsOutlineValid( const SHAPE_LINE_CHAIN& aChain )
+{
+    bool      areWeOnArc = false;
+    SHAPE_ARC currentArc;
+
+    for( int i = 0; i < aChain.PointCount(); i++ )
+    {
+        if( !aChain.IsSharedPt( i ) && aChain.IsArcStart( i ) )
+        {
+            currentArc = aChain.Arc( aChain.ArcIndex( i ) );
+            areWeOnArc = true;
+
+            if( currentArc.GetP0() != aChain.CPoint( i ) )
+                return false;
+        }
+
+        if( areWeOnArc )
+        {
+            if( !currentArc.Collide( aChain.CPoint( i ), 5000 ) )
+                return false;
+        }
+
+        if( aChain.IsArcEnd( i ) )
+        {
+            areWeOnArc = false;
+
+            if( currentArc.GetP1() != aChain.CPoint( i ) )
+                return false;
+        }
+
+        if( aChain.IsSharedPt( i ) )
+        {
+            currentArc = aChain.Arc( aChain.ArcIndex( i ) );
+            areWeOnArc = true;
+
+            if( currentArc.GetP0() != aChain.CPoint( i ) )
+                return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Verify that a SHAPE_POLY_SET has been assembled correctly by verifying each of the outlines
+ * and holes contained within
+ *
+ * @param aSet to test
+ * @return true if the poly set is valid
+*/
+inline bool IsPolySetValid( const SHAPE_POLY_SET& aSet )
+{
+    for( int i = 0; i < aSet.OutlineCount(); i++ )
+    {
+        if( !IsOutlineValid( aSet.Outline( i ) ) )
+            return false;
+
+        for( int j = 0; j < aSet.HoleCount( i ); j++ )
+        {
+            if( !IsOutlineValid( aSet.CHole( i, j ) ) )
+                return false;
+        }
+    }
+
+    return true;
+}
+
 } // namespace GEOM_TEST
 
 namespace BOOST_TEST_PRINT_NAMESPACE_OPEN

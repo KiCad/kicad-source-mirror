@@ -33,6 +33,7 @@
 #include <cstdio>
 #include <istream>                           // for operator<<, operator>>
 #include <limits>                            // for numeric_limits
+#include <map>
 #include <memory>
 #include <set>
 #include <string>                            // for char_traits, operator!=
@@ -518,6 +519,7 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
 
     std::vector<CLIPPER_Z_VALUE> zValues;
     std::vector<SHAPE_ARC> arcBuffer;
+    std::map<VECTOR2I, CLIPPER_Z_VALUE> newIntersectPoints;
 
     for( const POLYGON& poly : aShape.m_polys )
     {
@@ -540,12 +542,62 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
     ClipperLib::PolyTree solution;
 
     ClipperLib::ZFillCallback callback =
-            []( ClipperLib::IntPoint & e1bot, ClipperLib::IntPoint & e1top,
+            [&]( ClipperLib::IntPoint & e1bot, ClipperLib::IntPoint & e1top,
                 ClipperLib::IntPoint & e2bot, ClipperLib::IntPoint & e2top,
                 ClipperLib::IntPoint & pt )
             {
-                //@todo write callback to handle arc intersections
-                int i = 0;
+                auto arcIndex =
+                    [&]( const ssize_t& aZvalue, const ssize_t& aCompareVal = -1 ) -> ssize_t
+                    {
+                        ssize_t retval;
+
+                        retval = zValues.at( aZvalue ).m_SecondArcIdx;
+
+                        if( retval == -1 || ( aCompareVal > 0 && retval != aCompareVal ) )
+                            retval = zValues.at( aZvalue ).m_FirstArcIdx;
+
+                        return retval;
+                    };
+
+                auto arcSegment =
+                    [&]( const ssize_t& aBottomZ, const ssize_t aTopZ ) -> ssize_t
+                    {
+                        ssize_t retval = arcIndex( aBottomZ );
+
+                        if( retval != -1 )
+                        {
+                            if( retval != arcIndex( aTopZ, retval ) )
+                                retval = -1; // Not an arc segment as the two indices do not match
+                        }
+
+                        return retval;
+                    };
+
+                ssize_t e1ArcSegmentIndex = arcSegment( e1bot.Z, e1top.Z );
+                ssize_t e2ArcSegmentIndex = arcSegment( e2bot.Z, e2top.Z );
+
+                CLIPPER_Z_VALUE newZval;
+
+                if( e1ArcSegmentIndex != -1 )
+                {
+                    newZval.m_FirstArcIdx = e1ArcSegmentIndex;
+                    newZval.m_SecondArcIdx = e2ArcSegmentIndex;
+                }
+                else
+                {
+                    newZval.m_FirstArcIdx = e2ArcSegmentIndex;
+                    newZval.m_SecondArcIdx = -1;
+                }
+
+                size_t z_value_ptr = zValues.size();
+                zValues.push_back( newZval );
+
+                // Only worry about arc segments for later processing
+                if( newZval.m_FirstArcIdx != -1 )
+                    newIntersectPoints.insert( { VECTOR2I( pt.X, pt.Y ), newZval } );
+
+                pt.Z = z_value_ptr;
+                //@todo ammend X,Y values to true intersection between arcs or arc and segment
             };
 
     c.ZFillFunction( callback ); // register callback
@@ -553,6 +605,45 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
     c.Execute( aType, solution, ClipperLib::pftNonZero, ClipperLib::pftNonZero );
 
     importTree( &solution, zValues, arcBuffer );
+
+    // Ammend arcs for the intersection points
+    for( auto& poly : m_polys )
+    {
+        for( size_t i = 0; i < poly.size(); i++ )
+        {
+            for( int j = 0; j < poly[i].PointCount(); j++ )
+            {
+                const VECTOR2I& pt = poly[i].CPoint( j );
+
+                if( newIntersectPoints.find( pt ) != newIntersectPoints.end() )
+                {
+                    const std::pair<ssize_t, ssize_t>& shape = poly[i].CShapes()[j];
+                    CLIPPER_Z_VALUE                    zval = newIntersectPoints.at( pt );
+
+                    // Fixup arc end points to match the new intersection points found in clipper
+                    //@todo consider editing the intersection point to be the "true" arc intersection
+                    if( poly[i].IsSharedPt( j ) )
+                    {
+                        poly[i].ammendArcEnd( shape.first, pt );
+                        poly[i].ammendArcStart( shape.second, pt );
+                    }
+                    else if( poly[i].IsArcStart( j ) )
+                    {
+                        poly[i].ammendArcStart( shape.first, pt );
+                    }
+                    else if( poly[i].IsArcEnd( j ) )
+                    {
+                        poly[i].ammendArcEnd( shape.first, pt );
+                    }
+                    else
+                    {
+                        poly[i].splitArc( j );
+                    }
+                }
+            }
+        }
+
+    }
 }
 
 

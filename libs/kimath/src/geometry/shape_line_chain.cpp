@@ -151,7 +151,8 @@ void SHAPE_LINE_CHAIN::convertArc( ssize_t aArcIndex )
 }
 
 
-void SHAPE_LINE_CHAIN::ammendArc( size_t aArcIndex, VECTOR2I aNewStart, VECTOR2I aNewEnd )
+void SHAPE_LINE_CHAIN::ammendArc( size_t aArcIndex, const VECTOR2I& aNewStart,
+                                  const VECTOR2I& aNewEnd )
 {
     wxCHECK_MSG( aArcIndex <  m_arcs.size(), /* void */,
                  "Invalid arc index requested." );

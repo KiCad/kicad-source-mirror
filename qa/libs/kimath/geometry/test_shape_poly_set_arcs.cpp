@@ -20,12 +20,13 @@
 
 #include <string>
 #include <tuple>
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
 
 #include "fixtures_geometry.h"
+#include "geom_test_utils.h"
 
 
 BOOST_AUTO_TEST_SUITE( CurvedPolys )
@@ -79,5 +80,52 @@ BOOST_AUTO_TEST_CASE( TestSimplify )
         }
     }
 }
+
+
+/**
+ * Check intersection and union between two polygons
+ */
+BOOST_AUTO_TEST_CASE( TestIntersectUnion )
+{
+    KI_TEST::CommonTestData testData;
+
+    std::map<std::string, SHAPE_POLY_SET> polysToTest = {
+        { "Case 1: Single polygon", testData.holeyCurvedPolySingle },
+        //{ "Case 2: Multi polygon", testData.holeyCurvedPolyMulti } // This test fails right now:
+                                                                     // multiple polys unsupported
+    };
+
+    for( std::pair<std::string, SHAPE_POLY_SET> testCase : polysToTest )
+    {
+        BOOST_TEST_CONTEXT( testCase.first )
+        {
+            SHAPE_POLY_SET testPoly = testCase.second;
+            SHAPE_POLY_SET opPoly = testData.holeyCurvedPolyInter;
+
+            BOOST_CHECK( GEOM_TEST::IsPolySetValid( testPoly ) );
+            BOOST_CHECK( GEOM_TEST::IsPolySetValid( opPoly ) );
+
+            double testPolyArea = testPoly.Area();
+            double opPolyArea = opPoly.Area();
+
+            SHAPE_POLY_SET intersectionPoly = testPoly;
+            intersectionPoly.BooleanIntersection( opPoly, SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
+            double intersectArea = intersectionPoly.Area();
+
+            BOOST_CHECK( GEOM_TEST::IsPolySetValid( intersectionPoly ) );
+
+
+            SHAPE_POLY_SET unionPoly = testPoly;
+            unionPoly.BooleanAdd( opPoly, SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
+            double unionArea = unionPoly.Area();
+
+            BOOST_CHECK( GEOM_TEST::IsPolySetValid( unionPoly ) );
+
+            // Acceptable error of 0.01% (fails at 0.001% for some - this is a Clipper limitation)
+            BOOST_CHECK_CLOSE( testPolyArea + opPolyArea - intersectArea, unionArea, 0.01 );
+        }
+    }
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

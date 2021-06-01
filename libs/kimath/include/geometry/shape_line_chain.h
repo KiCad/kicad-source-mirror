@@ -39,6 +39,12 @@
  */
 struct CLIPPER_Z_VALUE
 {
+    CLIPPER_Z_VALUE()
+    {
+        m_FirstArcIdx = -1;
+        m_SecondArcIdx = -1;
+    }
+
     CLIPPER_Z_VALUE( const std::pair<ssize_t, ssize_t> aShapeIndices, ssize_t aOffset = 0 )
     {
         m_FirstArcIdx = aShapeIndices.first;
@@ -836,7 +842,19 @@ protected:
     void splitArc( ssize_t aPtIndex, bool aCoincident = false );
 
 
-    void ammendArc( size_t aArcIndex, VECTOR2I aNewStart, VECTOR2I aNewEnd );
+    void ammendArc( size_t aArcIndex, const VECTOR2I& aNewStart, const VECTOR2I& aNewEnd );
+
+
+    void ammendArcStart( size_t aArcIndex, const VECTOR2I& aNewStart )
+    {
+        ammendArc( aArcIndex, aNewStart, m_arcs[aArcIndex].GetP1() );
+    }
+
+
+    void ammendArcEnd( size_t aArcIndex, const VECTOR2I& aNewEnd )
+    {
+        ammendArc( aArcIndex, m_arcs[aArcIndex].GetP0(), aNewEnd );
+    }
 
     /**
      * Create a new Clipper path from the SHAPE_LINE_CHAIN in a given orientation
