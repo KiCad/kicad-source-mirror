@@ -144,21 +144,6 @@ void eraseIf( Container& c, F&& f )
 }
 
 
-COMMIT& COMMIT::Unstage( EDA_ITEM* aItem )
-{
-    if( m_changedItems.find( aItem ) != m_changedItems.end() )
-    {
-        eraseIf( m_changes,
-                [aItem] ( const COMMIT_LINE& aEnt )
-                {
-                    return aEnt.m_item == aItem;
-                } );
-    }
-
-    return *this;
-}
-
-
 COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlags )
 {
     EDA_ITEM* parent = parentObject( aItem );
@@ -230,16 +215,3 @@ CHANGE_TYPE COMMIT::convert( UNDO_REDO aType ) const
     }
 }
 
-
-std::vector<EDA_ITEM*> COMMIT::GetAddedItems() const
-{
-    std::vector<EDA_ITEM*> ret;
-
-    for( const COMMIT_LINE& change : m_changes )
-    {
-        if( change.m_type == CHT_ADD )
-            ret.emplace_back( change.m_item );
-    }
-
-    return ret;
-}

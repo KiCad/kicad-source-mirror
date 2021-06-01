@@ -31,7 +31,6 @@
 #include <layers_id_colors_and_visibility.h>
 #include <geometry/convex_hull.h>
 #include <confirm.h>
-#include <tracks_cleaner.h>
 
 #include <pcb_painter.h>
 
@@ -1641,15 +1640,6 @@ void PNS_KICAD_IFACE::Commit()
     }
 
     m_fpOffsets.clear();
-
-    // If we have added routes, those may result in co-linear segments if we completed a route on
-    // top of an existing stub.  These won't be cleaned by the optimizer as the stub won't be pulled
-    // in to the newly-routed line, so we have to post-process them.
-    TRACKS_CLEANER cleaner( m_board, *m_commit.get() );
-    std::vector<std::shared_ptr<CLEANUP_ITEM>> items;
-
-    // Cleanup: only merge segments
-    cleaner.CleanupBoard( false, &items, TRACKS_CLEANER::CF_COLLINEAR_SEGMENTS, true );
 
     m_commit->Push( _( "Interactive Router" ) );
     m_commit = std::make_unique<BOARD_COMMIT>( m_tool );

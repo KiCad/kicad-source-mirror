@@ -38,39 +38,37 @@ TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit ) :
         m_brd( aPcb ),
         m_commit( aCommit ),
         m_dryRun( true ),
-        m_includeNewTracks( false ),
         m_itemsList( nullptr )
 {
 }
 
 
-void TRACKS_CLEANER::CleanupBoard( bool aDryRun,
-                                   std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList,
-                                   int aFlags, bool aIncludeNewTracksInCommit )
+/* Main cleaning function.
+ *  Delete
+ * - Redundant points on tracks (merge aligned segments)
+ * - vias on pad
+ * - null length segments
+ */
+void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList,
+                                   bool aRemoveMisConnected, bool aCleanVias, bool aMergeSegments,
+                                   bool aDeleteUnconnected, bool aDeleteTracksinPad, bool aDeleteDanglingVias )
 {
     bool has_deleted = false;
 
-    m_dryRun           = aDryRun;
-    m_itemsList        = aItemsList;
-    m_includeNewTracks = aIncludeNewTracksInCommit;
+    m_dryRun = aDryRun;
+    m_itemsList = aItemsList;
 
-    bool stackedVias      = ( aFlags & CF_STACKED_VIAS );
-    bool mergeSegments    = ( aFlags & CF_COLLINEAR_SEGMENTS );
-    bool shortingSegments = ( aFlags & CF_SHORTING_SEGMENTS );
-    bool danglingSegments = ( aFlags & CF_DANGLING_SEGMENTS );
-    bool danglingVias     = ( aFlags & CF_DANGLING_VIAS );
+    cleanup( aCleanVias, aMergeSegments || aRemoveMisConnected, aMergeSegments, aMergeSegments );
 
-    cleanup( stackedVias, mergeSegments || shortingSegments, mergeSegments, mergeSegments );
-
-    if( shortingSegments )
+    if( aRemoveMisConnected )
         removeShortingTrackSegments();
 
-    if( aFlags & CF_SEGMENTS_INSIDE_PADS )
+    if( aDeleteTracksinPad )
         deleteTracksInPads();
 
-    has_deleted = deleteDanglingTracks( danglingSegments, danglingVias );
+    has_deleted = deleteDanglingTracks( aDeleteUnconnected, aDeleteDanglingVias );
 
-    if( has_deleted && mergeSegments )
+    if( has_deleted && aMergeSegments )
         cleanup( false, false, false, true );
 }
 
@@ -397,21 +395,6 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
     if( aMergeSegments )
     {
         bool merged;
-        std::vector<TRACK*> addedTracks;
-
-        // We need to add any tracks that were added in the commit, to handle the case where this is
-        // called from the router and we are cleaning up right before the router commit is pushed.
-        if( m_includeNewTracks )
-        {
-            for( EDA_ITEM* item : m_commit.GetAddedItems() )
-            {
-                if( item->Type() == PCB_TRACE_T )
-                {
-                    m_brd->Add( static_cast<TRACK*>( item ), ADD_MODE::BULK_APPEND );
-                    addedTracks.emplace_back( static_cast<TRACK*>( item ) );
-                }
-            }
-        }
 
         do
         {
@@ -459,14 +442,6 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                 }
             }
         } while( merged );
-
-        // Remove any temporary tracks that still exist that were added above; they will be
-        // re-added by the commit
-        for( TRACK* track : addedTracks )
-        {
-            if( m_commit.GetStatus( track ) != 0 )
-                m_brd->Remove( track, REMOVE_MODE::BULK );
-        }
     }
 
     for( TRACK* track : m_brd->Tracks() )
@@ -528,9 +503,7 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
 
     if( !m_dryRun )
     {
-        if( m_commit.GetStatus( aSeg1 ) == 0 )
-            m_commit.Modify( aSeg1 );
-
+        m_commit.Modify( aSeg1 );
         *aSeg1 = dummy_seg;
 
         connectivity->Update( aSeg1 );
@@ -544,18 +517,7 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
 
         // Merge succesful, seg2 has to go away
         m_brd->Remove( aSeg2 );
-
-        if( m_commit.GetStatus( aSeg2 ) == 0 )
-        {
-            m_commit.Removed( aSeg2 );
-        }
-        else
-        {
-            // This track was a temporary item about to be added to the board by the router.  It's
-            // no longer needed, so let's actually get rid of it.
-            m_commit.Unstage( aSeg2 );
-            delete aSeg2;
-        }
+        m_commit.Removed( aSeg2 );
     }
 
     return true;
