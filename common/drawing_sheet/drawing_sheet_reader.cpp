@@ -31,6 +31,7 @@
 #include <drawing_sheet/ds_painter.h>
 #include <drawing_sheet/drawing_sheet_reader_lexer.h>
 #include <wx/ffile.h>
+#include <wx/log.h>
 
 #include <wx/file.h>
 #include <wx/mstream.h>

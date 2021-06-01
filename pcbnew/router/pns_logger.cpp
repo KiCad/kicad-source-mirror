@@ -23,6 +23,8 @@
 #include "pns_item.h"
 #include "pns_via.h"
 
+#include <wx/log.h>
+
 namespace PNS {
 
 LOGGER::LOGGER( )

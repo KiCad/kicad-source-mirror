@@ -28,6 +28,8 @@
 #include <geometry/shape_simple.h>
 #include <geometry/shape_compound.h>
 
+#include <wx/log.h>
+
 #include "pns_router.h"
 #include "pns_solid.h"
 #include "pns_utils.h"

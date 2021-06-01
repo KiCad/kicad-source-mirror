@@ -23,6 +23,7 @@
  */
 
 #include <wx/clipbrd.h>
+#include <wx/log.h>
 
 #include <build_version.h>
 #include <board.h>

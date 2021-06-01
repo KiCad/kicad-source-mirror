@@ -23,7 +23,7 @@
 #include <template_fieldnames.h>
 #include <lib_symbol.h>
 #include <symbol_lib_table.h>
-
+#include <wx/log.h>
 
 static const wxString DescriptionFormat =
     "<b>__NAME__</b>"

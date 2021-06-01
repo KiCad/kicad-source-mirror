@@ -23,6 +23,7 @@
 #include <settings/color_settings.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
+#include <wx/log.h>
 
 #include "builtin_color_themes.h"
 

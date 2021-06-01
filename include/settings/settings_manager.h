@@ -114,7 +114,6 @@ public:
             }
             catch( ... )
             {
-                wxLogTrace( traceSettings, "Unable to create application settings object" );
             }
 
         }

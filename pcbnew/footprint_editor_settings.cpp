@@ -28,6 +28,7 @@
 #include <wx/config.h>
 #include <base_units.h>
 #include <widgets/ui_common.h>
+#include <wx/log.h>
 
 
 ///! Update the schema version whenever a migration is required

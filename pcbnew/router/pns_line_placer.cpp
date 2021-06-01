@@ -33,6 +33,8 @@
 #include "pns_walkaround.h"
 #include "pns_mouse_trail_tracer.h"
 
+#include <wx/log.h>
+
 namespace PNS {
 
 LINE_PLACER::LINE_PLACER( ROUTER* aRouter ) :

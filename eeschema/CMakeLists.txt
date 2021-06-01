@@ -138,6 +138,7 @@ set( EESCHEMA_WIDGETS
 
 
 set ( EESCHEMA_LIBEDIT_SRCS
+    symbol_editor/lib_logger.cpp
     symbol_editor/symbol_editor.cpp
     symbol_editor/symbol_editor_plotter.cpp
     symbol_editor/symbol_editor_settings.cpp

@@ -30,6 +30,7 @@
 #include <trace_helpers.h>
 #include <trigo.h>
 #include <i18n_utility.h>
+#include <wx/log.h>
 
 #include <wx/fdrepdlg.h>
 

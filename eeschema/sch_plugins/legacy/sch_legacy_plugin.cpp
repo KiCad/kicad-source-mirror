@@ -28,6 +28,7 @@
 
 #include <wx/mstream.h>
 #include <wx/filename.h>
+#include <wx/log.h>
 #include <wx/textfile.h>
 #include <wx/tokenzr.h>
 

@@ -81,7 +81,7 @@ public:
         case LABEL_SPIN_STYLE::UP:     newSpin = LABEL_SPIN_STYLE::RIGHT;  break;
         case LABEL_SPIN_STYLE::RIGHT:  newSpin = LABEL_SPIN_STYLE::BOTTOM; break;
         case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::LEFT;   break;
-        default: wxLogWarning( "RotateCCW encountered unknown current spin style" ); break;
+        default: break;
         }
 
         return LABEL_SPIN_STYLE( newSpin );
@@ -97,7 +97,7 @@ public:
         case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::RIGHT;  break;
         case LABEL_SPIN_STYLE::RIGHT:  newSpin = LABEL_SPIN_STYLE::UP;     break;
         case LABEL_SPIN_STYLE::UP:     newSpin = LABEL_SPIN_STYLE::LEFT;   break;
-        default: wxLogWarning( "RotateCCW encountered unknown current spin style" ); break;
+        default:  break;
         }
 
         return LABEL_SPIN_STYLE( newSpin );
@@ -116,7 +116,7 @@ public:
         case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::UP;     break;
         case LABEL_SPIN_STYLE::LEFT:                                       break;
         case LABEL_SPIN_STYLE::RIGHT:                                      break;
-        default: wxLogWarning( "MirrorVertically encountered unknown current spin style" ); break;
+        default: break;
         }
 
         return LABEL_SPIN_STYLE( newSpin );
@@ -135,7 +135,7 @@ public:
         case LABEL_SPIN_STYLE::RIGHT: newSpin = LABEL_SPIN_STYLE::LEFT;  break;
         case LABEL_SPIN_STYLE::UP:                                       break;
         case LABEL_SPIN_STYLE::BOTTOM:                                   break;
-        default: wxLogWarning( "MirrorHorizontally encountered unknown current spin style" ); break;
+        default: break;
         }
 
         return LABEL_SPIN_STYLE( newSpin );

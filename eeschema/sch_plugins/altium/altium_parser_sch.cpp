@@ -27,6 +27,8 @@
 #include <convert_to_biu.h>
 #include <ki_exception.h>
 
+#include <wx/log.h>
+
 #include "plugins/altium/altium_parser.h"
 #include "sch_plugins/altium/altium_parser_sch.h"
 

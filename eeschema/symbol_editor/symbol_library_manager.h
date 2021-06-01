@@ -44,55 +44,7 @@ class SCH_PLUGIN;
 class SYMBOL_EDIT_FRAME;
 class SYMBOL_LIB_TABLE;
 class SYMBOL_LIB_TABLE_ROW;
-
-
-class LIB_LOGGER : public wxLogGui
-{
-public:
-    LIB_LOGGER() :
-            m_previousLogger( nullptr ),
-            m_activated( false )
-    { }
-
-    ~LIB_LOGGER() override
-    {
-        Deactivate();
-    }
-
-    void Activate()
-    {
-        if( !m_activated )
-        {
-            m_previousLogger = wxLog::GetActiveTarget();
-            wxLog::SetActiveTarget( this );
-            m_activated = true;
-        }
-    }
-
-    void Deactivate()
-    {
-        if( m_activated )
-        {
-            Flush();
-            m_activated = false;
-            wxLog::SetActiveTarget( m_previousLogger );
-        }
-    }
-
-    void Flush() override
-    {
-        if( m_bHasMessages )
-        {
-            wxLogMessage( _( "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
-                             "Libraries dialog to adjust paths and add or remove libraries." ) );
-            wxLogGui::Flush();
-        }
-    }
-
-private:
-    wxLog* m_previousLogger;
-    bool   m_activated;
-};
+class LIB_LOGGER;
 
 
 /**
@@ -102,6 +54,7 @@ class SYMBOL_LIBRARY_MANAGER
 {
 public:
     SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame );
+    ~SYMBOL_LIBRARY_MANAGER();
 
     /**
      * Updates the #SYMBOL_LIBRARY_MANAGER data to synchronize with Symbol Library Table.
@@ -469,7 +422,7 @@ private:
     std::map<wxString, LIB_BUFFER> m_libs;
 
     SYMBOL_EDIT_FRAME& m_frame;        ///< Parent frame
-    LIB_LOGGER         m_logger;
+    LIB_LOGGER*        m_logger;
     int                m_syncHash;     ///< Symbol lib table hash value from last synchronization
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;

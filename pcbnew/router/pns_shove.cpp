@@ -25,6 +25,8 @@
 
 #include <geometry/shape_compound.h>
 
+#include <wx/log.h>
+
 #include "pns_arc.h"
 #include "pns_line.h"
 #include "pns_node.h"
@@ -962,7 +964,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 #endif
 
         lineCollision = aObstacleVia->Shape()->Collide( currentLine->Shape(), clearance + currentLine->Width() / 2, &mtvLine );
- 
+
         // Check the via if present. Via takes priority.
         if( currentLine->EndsWithVia() )
         {

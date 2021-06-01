@@ -29,6 +29,8 @@
 #include <geometry/geometry_utils.h>
 #include <board_commit.h>
 
+#include <wx/log.h>
+
 #include <thread>
 #include <mutex>
 #include <algorithm>

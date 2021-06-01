@@ -29,6 +29,8 @@
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
 
+#include <wx/log.h>
+
 #include "pns_arc.h"
 #include "pns_item.h"
 #include "pns_line.h"
@@ -320,7 +322,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
     std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersectingPts;
     int layer = aLine->Layer();
 
-    
+
     for( const OBSTACLE& obstacle : obstacleList )
     {
         if( aRestrictedSet && aRestrictedSet->find( obstacle.m_item ) == aRestrictedSet->end() )

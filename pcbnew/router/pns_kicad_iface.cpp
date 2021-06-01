@@ -42,6 +42,8 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_engine.h>
 
+#include <wx/log.h>
+
 #include <memory>
 
 #include <advanced_config.h>

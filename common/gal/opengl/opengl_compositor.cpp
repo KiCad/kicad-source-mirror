@@ -38,6 +38,7 @@
 #include <cassert>
 #include <memory>
 #include <stdexcept>
+#include <wx/log.h>
 
 using namespace KIGFX;
 

@@ -29,6 +29,8 @@
 #include <macros.h>
 #include <connectivity/connectivity_items.h>
 
+#include <wx/log.h>
+
 int CN_ITEM::AnchorCount() const
 {
     if( !m_valid )

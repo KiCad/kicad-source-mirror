@@ -24,6 +24,7 @@
 #include <algorithm>
 
 #include <kicad_string.h>
+#include <wx/log.h>
 
 #ifdef DEBUG
 #include <cstdarg>

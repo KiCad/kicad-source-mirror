@@ -54,6 +54,7 @@
 #include <plugins/kicad/pcb_parser.h>
 #include <convert_basic_shapes_to_polygon.h>    // for RECT_CHAMFER_POSITIONS definition
 #include <template_fieldnames.h>
+#include <wx/log.h>
 
 using namespace PCB_KEYS_T;
 

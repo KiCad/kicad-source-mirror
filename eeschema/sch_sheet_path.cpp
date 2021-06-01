@@ -37,6 +37,7 @@
 
 #include <boost/functional/hash.hpp>
 #include <wx/filename.h>
+#include <wx/log.h>
 #include "erc_item.h"
 
 

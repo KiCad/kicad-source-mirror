@@ -38,6 +38,8 @@
 #include <widgets/progress_reporter.h>
 #include <list>
 #include <locale_io.h>
+#include <wx/log.h>
+#include "lib_logger.h"
 
 
 SYMBOL_LIBRARY_MANAGER::SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame ) :
@@ -46,6 +48,13 @@ SYMBOL_LIBRARY_MANAGER::SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame ) :
 {
     m_adapter = SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( &m_frame, this );
     m_adapter->ShowUnits( false );
+    m_logger = new LIB_LOGGER();
+}
+
+
+SYMBOL_LIBRARY_MANAGER::~SYMBOL_LIBRARY_MANAGER()
+{
+    delete m_logger;
 }
 
 
@@ -53,12 +62,12 @@ void SYMBOL_LIBRARY_MANAGER::Sync( const wxString& aForceRefresh,
                                    std::function<void( int, int,
                                                        const wxString& )> aProgressCallback )
 {
-    m_logger.Activate();
+    m_logger->Activate();
     {
         getAdapter()->Sync( aForceRefresh, aProgressCallback );
         m_syncHash = symTable()->GetModifyHash();
     }
-    m_logger.Deactivate();
+    m_logger->Deactivate();
 }
 
 

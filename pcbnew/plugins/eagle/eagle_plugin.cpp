@@ -55,6 +55,7 @@ Load() TODO's
 #include <wx/string.h>
 #include <wx/xml/xml.h>
 #include <wx/filename.h>
+#include <wx/log.h>
 #include <wx/wfstream.h>
 
 #include <convert_basic_shapes_to_polygon.h>

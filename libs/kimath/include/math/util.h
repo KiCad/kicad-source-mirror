@@ -30,8 +30,6 @@
 #include <cstdint>
 #include <limits>
 #include <typeinfo>
-#include <wx/debug.h>
-#include <wx/log.h>
 
 /**
  * Function Clamp
@@ -45,7 +43,6 @@
  */
 template <typename T> inline const T& Clamp( const T& lower, const T& value, const T& upper )
 {
-    wxASSERT( lower <= upper );
     if( value < lower )
         return lower;
     else if( upper < value )
@@ -73,8 +70,6 @@ constexpr ret_type KiROUND( fp_type v )
     if( std::numeric_limits<ret_type>::max() < ret ||
         std::numeric_limits<ret_type>::lowest() > ret )
     {
-        wxLogDebug
-        ( "Overflow KiROUND converting value %f to %s", double( v ), typeid(ret_type).name() );
         return 0;
     }
 

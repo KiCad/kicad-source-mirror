@@ -33,6 +33,7 @@
 #include <wx/debug.h>
 #include <wx/fileconf.h>
 #include <wx/filename.h>
+#include <wx/log.h>
 #include <wx/wfstream.h>
 
 

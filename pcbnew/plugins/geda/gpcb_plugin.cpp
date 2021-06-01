@@ -42,6 +42,7 @@
 #include <wx_filename.h>
 
 #include <wx/dir.h>
+#include <wx/log.h>
 #include <wx/filename.h>
 #include <wx/wfstream.h>
 #include <boost/ptr_container/ptr_map.hpp>

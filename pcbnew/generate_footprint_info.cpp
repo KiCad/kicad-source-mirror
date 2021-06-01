@@ -22,6 +22,7 @@
 #include <kicad_string.h>
 #include <footprint.h>
 #include <fp_lib_table.h>
+#include <wx/log.h>
 
 
 static const wxString DescriptionFormat =

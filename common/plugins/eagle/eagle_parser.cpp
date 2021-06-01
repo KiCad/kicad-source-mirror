@@ -29,6 +29,7 @@
 
 #include <kicad_string.h>
 #include <richio.h>
+#include <wx/log.h>
 
 #include <functional>
 #include <cstdio>

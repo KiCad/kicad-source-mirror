@@ -28,6 +28,7 @@
 #include <track.h>
 #include <zone.h>
 #include <netinfo.h>
+#include <wx/log.h>
 
 
 // Constructor and destructor

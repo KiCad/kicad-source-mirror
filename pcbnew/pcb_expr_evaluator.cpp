@@ -28,6 +28,7 @@
 #include <track.h>
 #include <geometry/shape_segment.h>
 #include <pcb_expr_evaluator.h>
+#include <wx/log.h>
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>

@@ -27,6 +27,8 @@
 #include <ki_exception.h>
 #include <math/util.h>
 
+#include <wx/log.h>
+
 #include "altium_parser_pcb.h"
 #include "plugins/altium/altium_parser.h"
 

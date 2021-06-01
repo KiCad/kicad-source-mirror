@@ -46,6 +46,7 @@
 #include <track.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/dir.h>
+#include <wx/log.h>
 #include <wx_filename.h>
 #include <zone.h>
 #include <zones.h>
