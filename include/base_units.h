@@ -36,7 +36,6 @@
 
 #include <eda_units.h>
 #include <convert_to_biu.h>
-#include <math/util.h>      // for KiROUND
 #include <math/vector2d.h>
 
 //TODO: Abstract Base Units to a single class
@@ -57,12 +56,15 @@
 #define ALLOW_BOLD_THICKNESS IsBold()
 #endif
 
+/**
+ *  Convert mm to mils.
+ */
+int Mm2mils( double x );
 
-/// Convert mm to mils.
-inline int Mm2mils( double x ) { return KiROUND( x * 1000./25.4 ); }
-
-/// Convert mils to mm.
-inline int Mils2mm( double x ) { return KiROUND( x * 25.4 / 1000. ); }
+/**
+ *  Convert mils to mm.
+ */
+int Mils2mm( double x );
 
 /**
  * Function To_User_Unit

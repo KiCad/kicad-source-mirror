@@ -53,6 +53,18 @@
 #endif
 
 
+int Mm2mils( double x )
+{
+    return KiROUND( x * 1000. / 25.4 );
+}
+
+
+int Mils2mm( double x )
+{
+    return KiROUND( x * 25.4 / 1000. );
+}
+
+
 double To_User_Unit( EDA_UNITS aUnit, double aValue )
 {
     switch( aUnit )
@@ -73,6 +85,7 @@ double To_User_Unit( EDA_UNITS aUnit, double aValue )
         return aValue;
     }
 }
+
 
 /**
  * Convert a value to a string using double notation.
