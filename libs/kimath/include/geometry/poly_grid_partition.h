@@ -35,7 +35,6 @@
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
-#include <math/util.h>
 #include <math/vector2d.h>
 
 /**
@@ -62,21 +61,9 @@
 class POLY_GRID_PARTITION
 {
 public:
-    POLY_GRID_PARTITION( const SHAPE_LINE_CHAIN& aPolyOutline, int gridSize )
-    {
-        build( aPolyOutline, gridSize );
-    }
+    POLY_GRID_PARTITION( const SHAPE_LINE_CHAIN& aPolyOutline, int gridSize );
 
-    int ContainsPoint( const VECTOR2I& aP, int aClearance = 0 )    // const
-    {
-        if( containsPoint(aP) )
-            return 1;
-
-        if( aClearance > 0 )
-            return checkClearance ( aP, aClearance );
-
-        return 0;
-    }
+    int ContainsPoint( const VECTOR2I& aP, int aClearance = 0 );
 
     const BOX2I& BBox() const
     {
@@ -115,328 +102,28 @@ private:
         }
     };
 
-    int containsPoint( const VECTOR2I& aP, bool debug = false ) const
-    {
-        const auto gridPoint = poly2grid( aP );
+    int containsPoint( const VECTOR2I& aP, bool debug = false ) const;
 
-        if( !m_bbox.Contains( aP ) )
-            return 0;
+    bool checkClearance( const VECTOR2I& aP, int aClearance );
 
-        SCAN_STATE state;
-        const EDGE_LIST& cell = m_grid[ m_gridSize * gridPoint.y + gridPoint.x ];
-
-        scanCell( state, cell, aP, gridPoint.x, gridPoint.y );
-
-        if( state.nearest < 0 )
-        {
-            state = SCAN_STATE();
-
-            for( int d = 1; d <= m_gridSize; d++ )
-            {
-                int xl  = gridPoint.x - d;
-                int xh  = gridPoint.x + d;
-
-                if( xl >= 0 )
-                {
-                    const EDGE_LIST& cell2 = m_grid[ m_gridSize * gridPoint.y + xl ];
-                    scanCell( state, cell2, aP, xl, gridPoint.y );
-
-                    if( state.nearest >= 0 )
-                        break;
-                }
-
-                if( xh < m_gridSize )
-                {
-                    const EDGE_LIST& cell2 = m_grid[ m_gridSize * gridPoint.y + xh ];
-                    scanCell( state, cell2, aP, xh, gridPoint.y );
-
-                    if( state.nearest >= 0 )
-                        break;
-                }
-            }
-        }
-
-        #ifdef TOM_EXTRA_VERBOSE
-        printf("Nearest: %d prev: %d dmax %d\n", state.nearest, state.nearest_prev, state.dist_max );
-        #endif
-
-        if( state.nearest < 0 )
-            return 0;
-
-        if( state.dist_max == 0 )
-            return 1;
-
-
-        // special case for diagonal 'slits', e.g. two segments that partially overlap each other.
-        // Just love handling degeneracy... As I can't find any reliable way of fixing it for the moment,
-        // let's fall back to the good old O(N) point-in-polygon test
-        if( state.nearest_prev >= 0 && state.dist_max == state.dist_prev )
-        {
-            int d = std::abs( state.nearest_prev - state.nearest );
-
-            if( (d == 1) && ( (m_flags[state.nearest_prev] & m_flags[state.nearest]) == 0 ) )
-            {
-                return m_outline.PointInside( aP );
-            }
-        }
-
-        if( state.dist_max > 0 )
-        {
-            return m_flags[state.nearest] & LEAD_EDGE ? 1 : 0;
-        }
-        else
-        {
-            return m_flags[state.nearest] & TRAIL_EDGE ? 1 : 0;
-        }
-    }
-
-    bool checkClearance( const VECTOR2I& aP, int aClearance )
-    {
-        int gx0 = poly2gridX( aP.x - aClearance - 1);
-        int gx1 = poly2gridX( aP.x + aClearance + 1);
-        int gy0 = poly2gridY( aP.y - aClearance - 1);
-        int gy1 = poly2gridY( aP.y + aClearance + 1);
-
-        using ecoord = VECTOR2I::extended_type;
-
-        ecoord dist = (ecoord) aClearance * aClearance;
-
-        for ( int gx = gx0; gx <= gx1; gx++ )
-        {
-            for ( int gy = gy0; gy <= gy1; gy++ )
-            {
-                const auto& cell = m_grid [ m_gridSize * gy + gx];
-                for ( auto index : cell )
-                {
-                    const auto& seg = m_outline.Segment( index );
-
-                    if ( seg.SquaredDistance(aP) <= dist )
-                        return true;
-
-                }
-            }
-
-        }
-        return false;
-    }
-
-    int rescale_trunc( int aNumerator, int aValue, int aDenominator ) const
-    {
-        int64_t numerator = (int64_t) aNumerator * (int64_t) aValue;
-        return numerator / aDenominator;
-    }
-
+    int rescale_trunc( int aNumerator, int aValue, int aDenominator ) const;
 
     // convertes grid cell coordinates to the polygon coordinates
-    const VECTOR2I grid2poly( const VECTOR2I& p ) const
-    {
-        int px  = rescale_trunc( p.x, m_bbox.GetWidth(), m_gridSize ) + m_bbox.GetPosition().x;
-        int py  = rescale_trunc( p.y, m_bbox.GetHeight(), m_gridSize ) + m_bbox.GetPosition().y; 
-        return VECTOR2I( px, py );
-    }
+    const VECTOR2I grid2poly( const VECTOR2I& p ) const;
 
-    void stupid_test() const
-    {
-        for(int i = 0; i < 16;i++)
-        assert( poly2gridX(grid2polyX(i)) == i);
-    }
+    int grid2polyX( int x ) const;
 
-    int grid2polyX( int x ) const
-    {
-        return rescale_trunc( x, m_bbox.GetWidth(), m_gridSize ) + m_bbox.GetPosition().x;
-    }
+    int grid2polyY( int y ) const;
 
-    int grid2polyY( int y ) const
-    {
-        return rescale_trunc( y, m_bbox.GetHeight(), m_gridSize ) + m_bbox.GetPosition().y;
-    }
+    const VECTOR2I poly2grid( const VECTOR2I& p ) const;
 
-    const VECTOR2I poly2grid( const VECTOR2I& p ) const
-    {
-        int px  = rescale_trunc( p.x - m_bbox.GetPosition().x, m_gridSize, m_bbox.GetWidth() );
-        int py  = rescale_trunc( p.y - m_bbox.GetPosition().y, m_gridSize, m_bbox.GetHeight() );
+    int poly2gridX( int x ) const;
 
-        if( px < 0 )
-            px = 0;
+    int poly2gridY( int y ) const;
 
-        if( px >= m_gridSize )
-            px = m_gridSize - 1;
+    void build( const SHAPE_LINE_CHAIN& aPolyOutline, int gridSize );
 
-        if( py < 0 )
-            py = 0;
-
-        if( py >= m_gridSize )
-            py = m_gridSize - 1;
-
-        return VECTOR2I( px, py );
-    }
-
-    int poly2gridX( int x ) const
-    {
-        int px = rescale_trunc( x - m_bbox.GetPosition().x, m_gridSize, m_bbox.GetWidth() );
-
-        if( px < 0 )
-            px = 0;
-
-        if( px >= m_gridSize )
-            px = m_gridSize - 1;
-
-        return px;
-    }
-
-    int poly2gridY( int y ) const
-    {
-        int py = rescale_trunc( y - m_bbox.GetPosition().y, m_gridSize, m_bbox.GetHeight() );
-
-        if( py < 0 )
-            py = 0;
-
-        if( py >= m_gridSize )
-            py = m_gridSize - 1;
-
-        return py;
-    }
-
-    void build( const SHAPE_LINE_CHAIN& aPolyOutline, int gridSize )
-    {
-        m_outline = aPolyOutline;
-
-        //if (orientation(m_outline) < 0)
-        //    m_outline = m_outline.Reverse();
-
-        m_bbox = m_outline.BBox();
-        m_gridSize = gridSize;
-
-        m_outline.SetClosed( true );
-
-        m_grid.reserve( gridSize * gridSize );
-
-        for( int y = 0; y < gridSize; y++ )
-        {
-            for( int x = 0; x < gridSize; x++ )
-            {
-                m_grid.emplace_back( );
-            }
-        }
-
-        VECTOR2I    ref_v( 0, 1 );
-        VECTOR2I    ref_h( 0, 1 );
-
-        m_flags.reserve( m_outline.SegmentCount() );
-
-        std::unordered_map<SEG, int, segHash, segsEqual> edgeSet;
-
-        for( int i = 0; i<m_outline.SegmentCount(); i++ )
-        {
-            SEG edge = m_outline.Segment( i );
-
-            if( edgeSet.find( edge ) == edgeSet.end() )
-            {
-                edgeSet[edge] = 1;
-            }
-            else
-            {
-                edgeSet[edge]++;
-            }
-        }
-
-        for( int i = 0; i<m_outline.SegmentCount(); i++ )
-        {
-            auto    edge = m_outline.Segment( i );
-            auto    dir     = edge.B - edge.A;
-            int     flags   = 0;
-
-
-            if ( dir.y == 0 )
-            {
-                flags = 0;
-            }
-            else if( edgeSet[edge] == 1 )
-            {
-                if( dir.Dot( ref_h ) < 0 )
-                {
-                    flags |= LEAD_EDGE;
-                }
-                else if( dir.Dot( ref_h ) > 0 )
-                {
-                    flags |= TRAIL_EDGE;
-                }
-
-            }
-
-            m_flags.push_back( flags );
-
-            if( edge.A.y == edge.B.y )
-                continue;
-
-            std::set<int> indices;
-
-            indices.insert( m_gridSize * poly2gridY( edge.A.y ) + poly2gridX( edge.A.x ) );
-            indices.insert( m_gridSize * poly2gridY( edge.B.y ) + poly2gridX( edge.B.x ) );
-
-            if( edge.A.x > edge.B.x )
-                std::swap( edge.A, edge.B );
-
-            dir = edge.B - edge.A;
-
-            if( dir.x != 0 )
-            {
-                int gx0 = poly2gridX( edge.A.x );
-                int gx1 = poly2gridX( edge.B.x );
-
-                for( int x = gx0; x <= gx1; x++ )
-                {
-                    int px  = grid2polyX( x );
-                    int py  = ( edge.A.y + rescale_trunc( dir.y, px - edge.A.x, dir.x ) );
-                    int yy  = poly2gridY( py );
-
-                    indices.insert( m_gridSize * yy + x );
-
-                    if( x > 0 )
-                        indices.insert( m_gridSize * yy + x - 1 );
-
-                }
-            }
-
-            if( edge.A.y > edge.B.y )
-                std::swap( edge.A, edge.B );
-
-            dir = edge.B - edge.A;
-
-            if( dir.y != 0 )
-            {
-                int gy0 = poly2gridY( edge.A.y );
-                int gy1 = poly2gridY( edge.B.y );
-
-                for( int y = gy0; y <= gy1; y++ )
-                {
-                    int py  = grid2polyY( y );
-                    int px  = ( edge.A.x + rescale_trunc( dir.x, py - edge.A.y, dir.y ) );
-                    int xx  = poly2gridX( px );
-
-                    indices.insert( m_gridSize * y + xx );
-
-                    if( y > 0 )
-                        indices.insert( m_gridSize * (y - 1) + xx );
-                }
-            }
-
-            for( auto idx : indices )
-                m_grid[idx].push_back( i );
-        }
-
-    }
-
-
-    bool inRange( int v1, int v2, int x ) const
-    {
-        if( v1 < v2 )
-        {
-            return x >= v1 && x <= v2;
-        }
-
-        return x >= v2 && x <= v1;
-    }
+    bool inRange( int v1, int v2, int x ) const;
 
     struct SCAN_STATE
     {
@@ -454,92 +141,8 @@ private:
         int nearest;
     };
 
-    void scanCell( SCAN_STATE& state, const EDGE_LIST& cell, const VECTOR2I& aP, int cx, int cy  ) const
-    {
-        int cx0 = grid2polyX(cx);
-        int cx1 = grid2polyX(cx + 1);
-
-        #ifdef TOM_EXTRA_VERBOSE
-        printf("Scan %d %d\n", cx, cy );
-        #endif
-
-        for( auto index : cell )
-        {
-            const SEG& edge = m_outline.CSegment( index );
-
-
-            if( m_flags[index] == 0 )
-            {
-                if ( aP.y == edge.A.y && inRange( edge.A.x, edge.B.x, aP.x ) ) // we belong to the outline
-                {
-                    state.nearest = index;
-                    state.dist_max = 0;
-                    return;
-                } else {
-                    continue;
-                }
-            }
-
-            if( inRange( edge.A.y, edge.B.y, aP.y ) )
-            {
-                #ifdef TOM_EXTRA_VERBOSE
-                printf("Test edge: %d [%d %d %d %d] p %d %d flags %d\n", index, edge.A.x, edge.A.y, edge.B.x, edge.B.y, aP.x, aP.y );
-                #endif
-                int dist = 0;
-                int x0;
-                if( edge.A.y == aP.y )
-                {
-                    x0 = edge.A.x;
-                }
-                else if( edge.B.y == aP.y )
-                {
-                    x0 = edge.B.x;
-                }
-                else
-                {
-                    x0 = edge.A.x + rescale( ( edge.B.x - edge.A.x ), (aP.y - edge.A.y), (edge.B.y - edge.A.y ) );
-                }
-
-
-                dist = aP.x - x0;
-
-                #ifdef TOM_EXTRA_VERBOSE
-                printf("    x0 %d dist %d [%s]\n", x0, dist, x0 < cx0 || x0 > cx1 ? "outside" : "inside" );
-                #endif
-
-                if( x0 < cx0 || x0 > cx1 )
-                {
-                    continue;
-                }
-
-
-                if( dist == 0 )
-                {
-                    if( state.nearest_prev < 0 || state.nearest != index )
-                    {
-                        state.dist_prev = state.dist_max;
-                        state.nearest_prev = state.nearest;
-                    }
-
-                    state.nearest   = index;
-                    state.dist_max  = 0;
-                    return;
-                }
-
-                if( dist != 0 && std::abs( dist ) <= std::abs( state.dist_max ) )
-                {
-                    if( state.nearest_prev < 0 || state.nearest != index )
-                    {
-                        state.dist_prev = state.dist_max;
-                        state.nearest_prev = state.nearest;
-                    }
-
-                    state.dist_max  = dist;
-                    state.nearest   = index;
-                }
-            }
-        }
-    }
+    void scanCell( SCAN_STATE& state, const EDGE_LIST& cell, const VECTOR2I& aP, int cx,
+                   int cy ) const;
 
 private:
     int                    m_gridSize;
