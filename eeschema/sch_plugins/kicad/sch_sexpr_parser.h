@@ -32,7 +32,6 @@
 #define __SCH_SEXPR_PARSER_H__
 
 #include <convert_to_biu.h>                      // IU_PER_MM
-#include <math/util.h>                           // KiROUND, Clamp
 
 #include <class_library.h>
 #include <schematic_lexer.h>
@@ -123,26 +122,9 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
         return parseDouble( GetTokenText( aToken ) );
     }
 
-    inline int parseInternalUnits()
-    {
-        auto retval = parseDouble() * IU_PER_MM;
+    int parseInternalUnits();
 
-        // Schematic internal units are represented as integers.  Any values that are
-        // larger or smaller than the schematic units represent undefined behavior for
-        // the system.  Limit values to the largest that can be displayed on the screen.
-        double int_limit = std::numeric_limits<int>::max() * 0.7071; // 0.7071 = roughly 1/sqrt(2)
-
-        return KiROUND( Clamp<double>( -int_limit, retval, int_limit ) );
-    }
-
-    inline int parseInternalUnits( const char* aExpected )
-    {
-        auto retval = parseDouble( aExpected ) * IU_PER_MM;
-
-        double int_limit = std::numeric_limits<int>::max() * 0.7071;
-
-        return KiROUND( Clamp<double>( -int_limit, retval, int_limit ) );
-    }
+    int parseInternalUnits( const char* aExpected );
 
     inline int parseInternalUnits( TSCHEMATIC_T::T aToken )
     {

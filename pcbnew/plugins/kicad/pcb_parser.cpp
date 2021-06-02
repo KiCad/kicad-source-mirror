@@ -54,6 +54,7 @@
 #include <plugins/kicad/pcb_parser.h>
 #include <convert_basic_shapes_to_polygon.h>    // for RECT_CHAMFER_POSITIONS definition
 #include <template_fieldnames.h>
+#include <math/util.h>                           // KiROUND, Clamp
 #include <wx/log.h>
 
 using namespace PCB_KEYS_T;
@@ -164,6 +165,40 @@ double PCB_PARSER::parseDouble()
     }
 
     return fval;
+}
+
+
+int PCB_PARSER::parseBoardUnits()
+{
+    // There should be no major rounding issues here, since the values in
+    // the file are in mm and get converted to nano-meters.
+    // See test program tools/test-nm-biu-to-ascii-mm-round-tripping.cpp
+    // to confirm or experiment.  Use a similar strategy in both places, here
+    // and in the test program. Make that program with:
+    // $ make test-nm-biu-to-ascii-mm-round-tripping
+    auto retval = parseDouble() * IU_PER_MM;
+
+    // N.B. we currently represent board units as integers.  Any values that are
+    // larger or smaller than those board units represent undefined behavior for
+    // the system.  We limit values to the largest that is visible on the screen
+    // This is the diagonal distance of the full screen ~1.5m
+    double int_limit = std::numeric_limits<int>::max() * 0.7071; // 0.7071 = roughly 1/sqrt(2)
+    return KiROUND( Clamp<double>( -int_limit, retval, int_limit ) );
+}
+
+
+int PCB_PARSER::parseBoardUnits( const char* aExpected )
+{
+    auto retval = parseDouble( aExpected ) * IU_PER_MM;
+
+    // N.B. we currently represent board units as integers.  Any values that are
+    // larger or smaller than those board units represent undefined behavior for
+    // the system.  We limit values to the largest that is visible on the screen
+    double int_limit = std::numeric_limits<int>::max() * 0.7071;
+
+    // Use here #KiROUND, not EKIROUND (see comments about them) when having a function as
+    // argument, because it will be called twice with #KIROUND.
+    return KiROUND( Clamp<double>( -int_limit, retval, int_limit ) );
 }
 
 

@@ -41,6 +41,7 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <i18n_utility.h>
+#include <math/util.h>      // for KiROUND
 
 
 PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T idtype ) :
@@ -437,6 +438,15 @@ double PCB_SHAPE::GetArcAngleEnd() const
     NORMALIZE_ANGLE_POS( angleStart );
 
     return angleStart;
+}
+
+
+int PCB_SHAPE::GetRadius() const
+{
+    double radius = GetLineLength( m_start, m_end );
+
+    // don't allow degenerate arcs
+    return std::max( 1, KiROUND( radius ) );
 }
 
 

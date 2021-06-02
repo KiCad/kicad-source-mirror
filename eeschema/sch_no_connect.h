@@ -31,7 +31,6 @@
 
 
 #include <sch_item.h>
-#include <math/util.h>      // for KiROUND
 
 
 class NETLIST_OBJECT_LIST;

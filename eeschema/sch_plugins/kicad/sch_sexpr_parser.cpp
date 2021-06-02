@@ -40,6 +40,7 @@
 #include <lib_polyline.h>
 #include <lib_rectangle.h>
 #include <lib_text.h>
+#include <math/util.h>                           // KiROUND, Clamp
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>
@@ -447,6 +448,29 @@ double SCH_SEXPR_PARSER::parseDouble()
     }
 
     return fval;
+}
+
+
+int SCH_SEXPR_PARSER::parseInternalUnits()
+{
+    auto retval = parseDouble() * IU_PER_MM;
+
+    // Schematic internal units are represented as integers.  Any values that are
+    // larger or smaller than the schematic units represent undefined behavior for
+    // the system.  Limit values to the largest that can be displayed on the screen.
+    double int_limit = std::numeric_limits<int>::max() * 0.7071; // 0.7071 = roughly 1/sqrt(2)
+
+    return KiROUND( Clamp<double>( -int_limit, retval, int_limit ) );
+}
+
+
+int SCH_SEXPR_PARSER::parseInternalUnits( const char* aExpected )
+{
+    auto retval = parseDouble( aExpected ) * IU_PER_MM;
+
+    double int_limit = std::numeric_limits<int>::max() * 0.7071;
+
+    return KiROUND( Clamp<double>( -int_limit, retval, int_limit ) );
 }
 
 

@@ -25,6 +25,7 @@
 
 #include <compoundfilereader.h>
 #include <ki_exception.h>
+#include <math/util.h>
 #include <sstream>
 #include <utf.h>
 #include <wx/wx.h>
@@ -149,12 +150,36 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
     return kv;
 }
 
+
+int32_t ALTIUM_PARSER::ConvertToKicadUnit( const double aValue )
+{
+    const double int_limit = ( std::numeric_limits<int>::max() - 1 ) / 2.54;
+
+    int32_t iu = KiROUND( Clamp<double>( -int_limit, aValue, int_limit ) * 2.54 );
+
+    // Altium stores metric units up to 0.001mm (1000nm) in accuracy. This code fixes rounding errors.
+    // Because imperial units > 0.01mil are always even, this workaround should never trigger for them.
+    switch( iu % 1000 )
+    {
+    case 1:
+    case -999:
+        return iu - 1;
+    case 999:
+    case -1:
+        return iu + 1;
+    default:
+        return iu;
+    }
+}
+
+
 int ALTIUM_PARSER::PropertiesReadInt(
         const std::map<wxString, wxString>& aProperties, const wxString& aKey, int aDefault )
 {
     const std::map<wxString, wxString>::const_iterator& value = aProperties.find( aKey );
     return value == aProperties.end() ? aDefault : wxAtoi( value->second );
 }
+
 
 double ALTIUM_PARSER::PropertiesReadDouble(
         const std::map<wxString, wxString>& aProperties, const wxString& aKey, double aDefault )

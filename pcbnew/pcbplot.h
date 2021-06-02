@@ -30,7 +30,6 @@
 #define PCBPLOT_H_
 
 #include <layers_id_colors_and_visibility.h>
-#include <math/util.h> // for KiROUND
 #include <pad_shapes.h>
 #include <pcb_plot_params.h>
 #include <pgm_base.h>

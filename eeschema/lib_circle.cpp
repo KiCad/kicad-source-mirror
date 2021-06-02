@@ -265,6 +265,12 @@ void LIB_CIRCLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList
 }
 
 
+int LIB_CIRCLE::GetRadius() const
+{
+    return KiROUND( GetLineLength( m_EndPos, m_Pos ) );
+}
+
+
 wxString LIB_CIRCLE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Circle, radius %s" ),

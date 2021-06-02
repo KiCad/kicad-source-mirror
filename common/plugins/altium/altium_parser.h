@@ -28,7 +28,6 @@
 #include <map>
 #include <memory>
 
-#include <math/util.h>
 #include <wx/gdicmn.h>
 #include <vector>
 
@@ -138,26 +137,7 @@ public:
 
     std::map<wxString, wxString> ReadProperties();
 
-    static int32_t ConvertToKicadUnit( const double aValue )
-    {
-        const double int_limit = ( std::numeric_limits<int>::max() - 1 ) / 2.54;
-
-        int32_t iu = KiROUND( Clamp<double>( -int_limit, aValue, int_limit ) * 2.54 );
-
-        // Altium stores metric units up to 0.001mm (1000nm) in accuracy. This code fixes rounding errors.
-        // Because imperial units > 0.01mil are always even, this workaround should never trigger for them.
-        switch( iu % 1000 )
-        {
-        case 1:
-        case -999:
-            return iu - 1;
-        case 999:
-        case -1:
-            return iu + 1;
-        default:
-            return iu;
-        }
-    }
+    static int32_t ConvertToKicadUnit( const double aValue );
 
     static int PropertiesReadInt(
             const std::map<wxString, wxString>& aProperties, const wxString& aKey, int aDefault );

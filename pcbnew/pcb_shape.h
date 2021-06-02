@@ -28,7 +28,6 @@
 #include <board_item.h>
 #include <eda_units.h>
 #include <convert_to_biu.h>
-#include <math/util.h>      // for KiROUND
 #include <math_for_graphics.h>
 #include <trigo.h>
 #include <geometry/shape_poly_set.h>
@@ -198,13 +197,7 @@ public:
      * returns the radius of this item
      * Has meaning only for arc and circle
      */
-    int GetRadius() const
-    {
-        double radius = GetLineLength( m_start, m_end );
-
-        // don't allow degenerate arcs
-        return std::max( 1, KiROUND( radius ) );
-    }
+    int GetRadius() const;
 
     /**
      * Initialize the start arc point. can be used for circles

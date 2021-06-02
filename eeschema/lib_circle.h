@@ -26,7 +26,6 @@
 #define LIB_CIRCLE_H
 
 #include <lib_item.h>
-#include <math/util.h>      // for KiROUND
 #include <trigo.h>          // for GetLineLength
 
 
@@ -81,7 +80,7 @@ public:
     void SetWidth( int aWidth ) override { m_Width = aWidth; }
 
     void SetRadius( int aRadius ) { m_EndPos = wxPoint( m_Pos.x + aRadius, m_Pos.y ); }
-    int GetRadius() const { return KiROUND( GetLineLength( m_EndPos, m_Pos ) ); }
+    int  GetRadius() const;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
