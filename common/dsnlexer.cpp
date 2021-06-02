@@ -30,6 +30,7 @@
 #include <cctype>
 
 #include <dsnlexer.h>
+#include <wx/translation.h>
 
 #define FMT_CLIPBOARD       _( "clipboard" )
 

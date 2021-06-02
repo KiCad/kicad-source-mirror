@@ -30,7 +30,6 @@
 #include <deque>
 
 #include <core/typeinfo.h>
-#include <wx/fdrepdlg.h>
 #include <view/view_item.h>
 #include <kiid.h>
 

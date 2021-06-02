@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <bitmaps.h>
 #include <hotkeys_basic.h>
+#include <wx/translation.h>
 
 TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
                           int aDefaultHotKey, const std::string& aLegacyHotKeyName,

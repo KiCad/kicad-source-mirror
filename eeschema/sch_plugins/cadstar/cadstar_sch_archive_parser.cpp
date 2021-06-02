@@ -26,6 +26,7 @@
 #include <convert_to_biu.h> // SCH_IU_PER_MM
 #include <macros.h>
 #include <sch_plugins/cadstar/cadstar_sch_archive_parser.h>
+#include <wx/translation.h>
 
 
 void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
