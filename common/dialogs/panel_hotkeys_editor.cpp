@@ -243,9 +243,14 @@ void PANEL_HOTKEYS_EDITOR::dumpHotkeys()
             stream << wxT( "| " ) << hk.m_Actions[0]->GetLabel() << endl;
 
             if( hk.m_EditKeycode > 0 )
-                stream << wxT( "  | `" ) << KeyNameFromKeyCode( hk.m_EditKeycode ) << '`' << endl;
+            {
+                stream << wxT( "  | kbd:[" ) << KeyNameFromKeyCode( hk.m_EditKeycode ) << ']'
+                       << endl;
+            }
             else
+            {
                 stream << wxT( "  |" ) << endl;
+            }
 
             stream << wxT( "  | " ) << hk.m_Actions[0]->GetDescription( false ) << endl;
         }
