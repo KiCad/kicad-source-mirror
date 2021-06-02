@@ -163,8 +163,16 @@ bool SCRIPTING::scriptingSetup()
 #else
     wxString pypath;
 
-    // PYTHON_DEST is the scripts install dir as determined by the build system.
-    pypath = Pgm().GetExecutablePath() + wxT( "../" PYTHON_DEST );
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        // When running from build dir, python module gets built next to pcbnew binary
+        pypath = Pgm().GetExecutablePath() + wxT( "../pcbnew" );
+    }
+    else
+    {
+        // PYTHON_DEST is the scripts install dir as determined by the build system.
+        pypath = Pgm().GetExecutablePath() + wxT( "../" PYTHON_DEST );
+    }
 
     if( !wxIsEmpty( wxGetenv( wxT( "PYTHONPATH" ) ) ) )
         pypath = wxString( wxGetenv( wxT( "PYTHONPATH" ) ) ) + wxT( ":" ) + pypath;
