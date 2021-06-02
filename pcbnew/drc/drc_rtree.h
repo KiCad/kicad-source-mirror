@@ -263,6 +263,10 @@ public:
                             actual = curActual;
                             pos = curPos;
                         }
+
+                        // Stop looking after we have a true collision
+                        if( actual <= 0 )
+                            return false;
                     }
 
                     return true;
