@@ -28,7 +28,7 @@
 #define EDIT_CONSTRAINTS_H_
 
 #include <math/vector2d.h>
-#include <boost/function.hpp>
+#include <functional>
 
 class EDIT_POINT;
 class EDIT_LINE;
@@ -232,7 +232,7 @@ class EC_SNAPLINE : public EDIT_CONSTRAINT<EDIT_LINE>
 {
 public:
     ///< Typedef for a function that determines snapping point.
-    typedef boost::function<VECTOR2D (const VECTOR2D&)> V2D_TRANSFORM_FUN;
+    typedef std::function<VECTOR2D( const VECTOR2D& )> V2D_TRANSFORM_FUN;
 
     EC_SNAPLINE( EDIT_LINE& aLine, V2D_TRANSFORM_FUN aSnapFun );
 

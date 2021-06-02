@@ -26,7 +26,7 @@
 #ifndef DIALOG_FIND_BASE_H
 #define DIALOG_FIND_BASE_H
 
-#include <boost/function.hpp>
+#include <functional>
 #include <sys/types.h>
 #include <wx/event.h>
 #include <deque>
@@ -59,7 +59,7 @@ public:
      * case where no item is found
      * @param aCallback
      */
-    void SetCallback( boost::function<void( BOARD_ITEM* )> aCallback )
+    void SetCallback( std::function<void( BOARD_ITEM* )> aCallback )
     {
         m_highlightCallback = aCallback;
     }
@@ -71,7 +71,7 @@ private:
     std::deque<BOARD_ITEM*>::iterator   m_it;
     bool                                m_upToDate;
 
-    boost::function<void( BOARD_ITEM* )> m_highlightCallback;
+    std::function<void( BOARD_ITEM* )> m_highlightCallback;
 
     void onTextEnter( wxCommandEvent& event ) override;
     void onFindNextClick( wxCommandEvent& event ) override;
