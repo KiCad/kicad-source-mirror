@@ -239,7 +239,7 @@ public:
      */
     int Distance( const SEG& aSeg ) const
     {
-        return sqrt( SquaredDistance( aSeg ) );
+        return KiROUND( sqrt( SquaredDistance( aSeg ) ) );
     }
 
     ecoord SquaredDistance( const VECTOR2I& aP ) const
@@ -255,7 +255,7 @@ public:
      */
     int Distance( const VECTOR2I& aP ) const
     {
-        return sqrt( SquaredDistance( aP ) );
+        return KiROUND( sqrt( SquaredDistance( aP ) ) );
     }
 
     void CanonicalCoefs( ecoord& qA, ecoord& qB, ecoord& qC ) const
@@ -411,7 +411,7 @@ inline int SEG::LineDistance( const VECTOR2I& aP, bool aDetermineSide ) const
     ecoord q = ecoord{ B.x } - A.x;
     ecoord r = -p * A.x - q * A.y;
 
-    ecoord dist = ( p * aP.x + q * aP.y + r ) / sqrt( p * p + q * q );
+    ecoord dist = KiROUND( ( p * aP.x + q * aP.y + r ) / sqrt( p * p + q * q ) );
 
     return aDetermineSide ? dist : std::abs( dist );
 }
