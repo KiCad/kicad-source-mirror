@@ -205,7 +205,7 @@
                         <property name="label">Run Simulation</property>
                         <property name="name">m_runSimulation</property>
                         <property name="permission">protected</property>
-                        <property name="shortcut">R</property>
+                        <property name="shortcut">Ctrl+R</property>
                         <property name="unchecked_bitmap"></property>
                     </object>
                     <object class="separator" expanded="0">
@@ -222,7 +222,7 @@
                         <property name="label">Add Signals...</property>
                         <property name="name">m_addSignals</property>
                         <property name="permission">protected</property>
-                        <property name="shortcut">A</property>
+                        <property name="shortcut">Ctrl+A</property>
                         <property name="unchecked_bitmap"></property>
                     </object>
                     <object class="wxMenuItem" expanded="0">
@@ -235,7 +235,7 @@
                         <property name="label">Probe from schematics</property>
                         <property name="name">m_probeSignals</property>
                         <property name="permission">protected</property>
-                        <property name="shortcut">P</property>
+                        <property name="shortcut">Ctrl+P</property>
                         <property name="unchecked_bitmap"></property>
                     </object>
                     <object class="wxMenuItem" expanded="0">
@@ -248,7 +248,7 @@
                         <property name="label">Tune Component Value</property>
                         <property name="name">m_tuneValue</property>
                         <property name="permission">protected</property>
-                        <property name="shortcut">T</property>
+                        <property name="shortcut">Ctrl+T</property>
                         <property name="unchecked_bitmap"></property>
                     </object>
                     <object class="separator" expanded="0">

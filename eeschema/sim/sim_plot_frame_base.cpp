@@ -52,18 +52,18 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_mainMenu->Append( m_fileMenu, _("File") );
 
 	m_simulationMenu = new wxMenu();
-	m_runSimulation = new wxMenuItem( m_simulationMenu, ID_MENU_RUN_SIM, wxString( _("Run Simulation") ) + wxT('\t') + wxT("R"), wxEmptyString, wxITEM_NORMAL );
+	m_runSimulation = new wxMenuItem( m_simulationMenu, ID_MENU_RUN_SIM, wxString( _("Run Simulation") ) + wxT('\t') + wxT("Ctrl+R"), wxEmptyString, wxITEM_NORMAL );
 	m_simulationMenu->Append( m_runSimulation );
 
 	m_simulationMenu->AppendSeparator();
 
-	m_addSignals = new wxMenuItem( m_simulationMenu, ID_MENU_ADD_SIGNAL, wxString( _("Add Signals...") ) + wxT('\t') + wxT("A"), wxEmptyString, wxITEM_NORMAL );
+	m_addSignals = new wxMenuItem( m_simulationMenu, ID_MENU_ADD_SIGNAL, wxString( _("Add Signals...") ) + wxT('\t') + wxT("Ctrl+A"), wxEmptyString, wxITEM_NORMAL );
 	m_simulationMenu->Append( m_addSignals );
 
-	m_probeSignals = new wxMenuItem( m_simulationMenu, ID_MENU_PROBE_SIGNALS, wxString( _("Probe from schematics") ) + wxT('\t') + wxT("P"), wxEmptyString, wxITEM_NORMAL );
+	m_probeSignals = new wxMenuItem( m_simulationMenu, ID_MENU_PROBE_SIGNALS, wxString( _("Probe from schematics") ) + wxT('\t') + wxT("Ctrl+P"), wxEmptyString, wxITEM_NORMAL );
 	m_simulationMenu->Append( m_probeSignals );
 
-	m_tuneValue = new wxMenuItem( m_simulationMenu, ID_MENU_TUNE_SIGNALS, wxString( _("Tune Component Value") ) + wxT('\t') + wxT("T"), wxEmptyString, wxITEM_NORMAL );
+	m_tuneValue = new wxMenuItem( m_simulationMenu, ID_MENU_TUNE_SIGNALS, wxString( _("Tune Component Value") ) + wxT('\t') + wxT("Ctrl+T"), wxEmptyString, wxITEM_NORMAL );
 	m_simulationMenu->Append( m_tuneValue );
 
 	m_simulationMenu->AppendSeparator();
