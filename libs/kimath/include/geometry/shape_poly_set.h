@@ -962,13 +962,13 @@ public:
      * the outline.
      *
      * @param aAmount is the number of units to offset edges.
-     * @param aCircleSegmentsCount is the number of segments per 360 degrees to use in curve approx
+     * @param aCircleSegCount is the number of segments per 360 degrees to use in curve approx
      * @param aCornerStrategy #ALLOW_ACUTE_CORNERS to preserve all angles,
      *                        #CHAMFER_ACUTE_CORNERS to chop angles less than 90°,
      *                        #ROUND_ACUTE_CORNERS to round off angles less than 90°,
      *                        #ROUND_ALL_CORNERS to round regardless of angles
      */
-    void Inflate( int aAmount, int aCircleSegmentsCount,
+    void Inflate( int aAmount, int aCircleSegCount,
                   CORNER_STRATEGY aCornerStrategy = ROUND_ALL_CORNERS );
 
     void Deflate( int aAmount, int aCircleSegmentsCount,
