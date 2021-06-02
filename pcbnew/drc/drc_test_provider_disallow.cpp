@@ -68,6 +68,12 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     if( !reportPhase( _( "Checking keepouts & disallow constraints..." ) ) )
         return false;   // DRC cancelled
 
+    // Zones can be expensive (particularly when multi-layer), so we run the progress bar on them
+    BOARD* board = m_drcEngine->GetBoard();
+    int    boardZoneCount = board->Zones().size();
+    int    delta = std::max( 1, boardZoneCount / board->GetCopperLayerCount() );
+    int    ii = 0;
+
     auto doCheckItem =
             [&]( BOARD_ITEM* item )
             {
@@ -123,6 +129,12 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
 
                     if( zone->GetIsRuleArea() )
                         return true;
+
+                    if( item->Type() == PCB_ZONE_T )
+                    {
+                        if( !reportProgress( ii++, boardZoneCount, delta ) )
+                            return false;   // DRC cancelled
+                    }
                 }
 
                 item->ClearFlags( HOLE_PROXY );

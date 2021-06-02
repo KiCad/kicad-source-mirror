@@ -736,7 +736,7 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 
         m_board->m_CopperZoneRTrees[ zone ] = std::make_unique<DRC_RTREE>();
 
-        for( int layer : zone->GetLayerSet().Seq() )
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
             if( IsCopperLayer( layer ) )
                 m_board->m_CopperZoneRTrees[ zone ]->Insert( zone, layer );

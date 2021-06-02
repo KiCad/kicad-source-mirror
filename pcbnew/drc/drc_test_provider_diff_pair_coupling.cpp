@@ -329,7 +329,12 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
     auto addToTree =
             [&copperTree]( BOARD_ITEM *item ) -> bool
             {
-                copperTree.Insert( item );
+                for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                {
+                    if( IsCopperLayer( layer ) )
+                        copperTree.Insert( item, layer );
+                }
+
                 return true;
             };
 

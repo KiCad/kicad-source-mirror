@@ -151,7 +151,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
 
                     // We only care about drilled (ie: round) holes
                     if( pad->GetDrillSize().x && pad->GetDrillSize().x == pad->GetDrillSize().y )
-                        m_holeTree.Insert( item, m_largestClearance, F_Cu );
+                        m_holeTree.Insert( item, F_Cu, m_largestClearance );
                 }
                 else if( item->Type() == PCB_VIA_T )
                 {
@@ -159,7 +159,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
 
                     // We only care about mechanically drilled (ie: non-laser) holes
                     if( via->GetViaType() == VIATYPE::THROUGH )
-                        m_holeTree.Insert( item, m_largestClearance, F_Cu );
+                        m_holeTree.Insert( item, F_Cu, m_largestClearance );
                 }
 
                 return true;

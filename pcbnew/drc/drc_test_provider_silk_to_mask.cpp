@@ -104,14 +104,24 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
     auto addMaskToTree =
             [&maskTree]( BOARD_ITEM *item ) -> bool
             {
-                maskTree.Insert( item );
+                for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
+                {
+                    if( item->IsOnLayer( layer ) )
+                        maskTree.Insert( item, layer );
+                }
+
                 return true;
             };
 
     auto addSilkToTree =
             [&silkTree]( BOARD_ITEM *item ) -> bool
             {
-                silkTree.Insert( item );
+                for( PCB_LAYER_ID layer : { F_SilkS, B_SilkS } )
+                {
+                    if( item->IsOnLayer( layer ) )
+                        silkTree.Insert( item, layer );
+                }
+
                 return true;
             };
 

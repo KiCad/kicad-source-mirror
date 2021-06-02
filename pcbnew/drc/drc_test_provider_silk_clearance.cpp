@@ -112,7 +112,12 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     auto addToSilkTree =
             [&silkTree]( BOARD_ITEM* item ) -> bool
             {
-                silkTree.Insert( item );
+                for( PCB_LAYER_ID layer : { F_SilkS, B_SilkS } )
+                {
+                    if( item->IsOnLayer( layer ) )
+                        silkTree.Insert( item, layer );
+                }
+
                 return true;
             };
 
@@ -129,7 +134,9 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 if( !reportProgress( ii++, targets, delta ) )
                     return false;
 
-                targetTree.Insert( item );
+                for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                    targetTree.Insert( item, layer );
+
                 return true;
             };
 

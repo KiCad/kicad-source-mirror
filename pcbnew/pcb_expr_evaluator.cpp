@@ -540,11 +540,13 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
                     DRC_RTREE* zoneRTree = board->m_CopperZoneRTrees[ zone ].get();
 
+                    std::vector<SHAPE*> shapes;
+
                     if( zoneRTree )
                     {
                         for( PCB_LAYER_ID layer : area->GetLayerSet().Seq() )
                         {
-                            if( zoneRTree->QueryColliding( itemBBox, &areaOutline, layer, 0 ) )
+                            if( zoneRTree->QueryColliding( itemBBox, &areaOutline, layer ) )
                                 return true;
                         }
                     }

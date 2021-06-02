@@ -165,7 +165,23 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
                 if( !reportProgress( ii++, count, delta ) )
                     return false;
 
-                m_copperTree.Insert( item, m_largestClearance );
+                LSET layers = item->GetLayerSet();
+
+                // Special-case pad holes which pierce all the copper layers
+                if( item->Type() == PCB_PAD_T )
+                {
+                    PAD* pad = static_cast<PAD*>( item );
+
+                    if( pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
+                        layers |= LSET::AllCuMask();
+                }
+
+                for( PCB_LAYER_ID layer : layers.Seq() )
+                {
+                    if( IsCopperLayer( layer ) )
+                        m_copperTree.Insert( item, layer, m_largestClearance );
+                }
+
                 return true;
             };
 

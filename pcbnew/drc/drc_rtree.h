@@ -81,60 +81,36 @@ public:
 
     /**
      * Function Insert()
-     * Inserts an item into the tree.
+     * Inserts an item into the tree on a particular layer with an optional worst clearance.
      */
-    void Insert( BOARD_ITEM* aItem, int aWorstClearance = 0, int aLayer = UNDEFINED_LAYER )
+    void Insert( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aWorstClearance = 0 )
     {
-        std::vector<SHAPE*> subshapes;
-
-        auto addLayer =
-                [&]( PCB_LAYER_ID layer )
-                {
-                    std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( layer );
-                    subshapes.clear();
-
-                    if( shape->HasIndexableSubshapes() )
-                        shape->GetIndexableSubshapes( subshapes );
-                    else
-                        subshapes.push_back( shape.get() );
-
-                    for( SHAPE* subshape : subshapes )
-                    {
-                        BOX2I bbox = subshape->BBox();
-
-                        bbox.Inflate( aWorstClearance );
-
-                        const int mmin[2] = { bbox.GetX(), bbox.GetY() };
-                        const int mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
-
-                        m_tree[layer]->Insert( mmin, mmax, new ITEM_WITH_SHAPE( aItem, subshape,
-                                                                                shape ) );
-                        m_count++;
-                    }
-                };
+        wxASSERT( aLayer != UNDEFINED_LAYER );
 
         if( aItem->Type() == PCB_FP_TEXT_T && !static_cast<FP_TEXT*>( aItem )->IsVisible() )
             return;
 
-        if( aLayer != UNDEFINED_LAYER )
-        {
-            addLayer( (PCB_LAYER_ID) aLayer );
-        }
+        std::vector<SHAPE*> subshapes;
+        std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( ToLAYER_ID( aLayer ) );
+        subshapes.clear();
+
+        if( shape->HasIndexableSubshapes() )
+            shape->GetIndexableSubshapes( subshapes );
         else
+            subshapes.push_back( shape.get() );
+
+        for( SHAPE* subshape : subshapes )
         {
-            LSET layers = aItem->GetLayerSet();
+            BOX2I bbox = subshape->BBox();
 
-            // Special-case pad holes which pierce all the copper layers
-            if( aItem->Type() == PCB_PAD_T )
-            {
-                PAD* pad = static_cast<PAD*>( aItem );
+            bbox.Inflate( aWorstClearance );
 
-                if( pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
-                    layers |= LSET::AllCuMask();
-            }
+            const int        mmin[2] = { bbox.GetX(), bbox.GetY() };
+            const int        mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+            ITEM_WITH_SHAPE* itemShape = new ITEM_WITH_SHAPE( aItem, subshape, shape );
 
-            for( int layer : layers.Seq() )
-                addLayer( (PCB_LAYER_ID) layer );
+            m_tree[aLayer]->Insert( mmin, mmax, itemShape );
+            m_count++;
         }
     }
 
@@ -261,7 +237,7 @@ public:
      * position.
      */
     bool QueryColliding( EDA_RECT aBox, SHAPE* aRefShape, PCB_LAYER_ID aLayer, int aClearance,
-                         int* aActual = nullptr, VECTOR2I* aPos = nullptr ) const
+                         int* aActual, VECTOR2I* aPos ) const
     {
         aBox.Inflate( aClearance );
 
@@ -306,6 +282,32 @@ public:
         }
 
         return false;
+    }
+
+    /**
+     * Quicker version of above that just reports a raw yes/no.
+     */
+    bool QueryColliding( EDA_RECT aBox, SHAPE* aRefShape, PCB_LAYER_ID aLayer ) const
+    {
+        int  min[2] = { aBox.GetX(), aBox.GetY() };
+        int  max[2] = { aBox.GetRight(), aBox.GetBottom() };
+        bool collision = false;
+
+        auto visit =
+                [&]( ITEM_WITH_SHAPE* aItem ) -> bool
+                {
+                    if( aRefShape->Collide( aItem->shape, 0 ) )
+                    {
+                        collision = true;
+                        return false;
+                    }
+
+                    return true;
+                };
+
+        this->m_tree[aLayer]->Search( min, max, visit );
+
+        return collision;
     }
 
     typedef std::pair<PCB_LAYER_ID, PCB_LAYER_ID> LAYER_PAIR;

@@ -208,7 +208,13 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     forEachGeometryItem( s_allBasicItemsButZones, LSET::AllCuMask(), queryBoardGeometryItems );
 
     for( const std::unique_ptr<PCB_SHAPE>& edge : edges )
-        edgesTree.Insert( edge.get(), m_largestClearance );
+    {
+        for( PCB_LAYER_ID layer : { Edge_Cuts, Margin } )
+        {
+            if( edge->IsOnLayer( layer ) )
+                edgesTree.Insert( edge.get(), layer, m_largestClearance );
+        }
+    }
 
     wxString val;
     wxGetEnv( "WXTRACE", &val );
