@@ -27,6 +27,21 @@
 #include <cstdlib>
 #include <climits>
 #include <math/util.h>
+#include <wx/log.h>
+
+void kimathLogDebug( const char* aFormatString, ... )
+{
+    if( wxLog::IsLevelEnabled( wxLOG_Debug, wxASCII_STR( wxLOG_COMPONENT ) ) )
+    {
+        va_list argList;
+        va_start( argList, aFormatString );
+
+        wxVLogWarning( aFormatString, argList );
+
+        va_end( argList );
+    }
+}
+
 
 template<>
 int rescale( int aNumerator, int aValue, int aDenominator )

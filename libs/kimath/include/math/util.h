@@ -32,6 +32,11 @@
 #include <typeinfo>
 
 /**
+ * Helper to avoid directly including wx/log.h for the templated functions in kimath
+ */
+void kimathLogDebug( const char* aFormatString, ... );
+
+/**
  * Function Clamp
  * limits @a value within the range @a lower <= @a value <= @a upper.  It will work
  * on temporary expressions, since they are evaluated only once, and it should work
@@ -70,6 +75,8 @@ constexpr ret_type KiROUND( fp_type v )
     if( std::numeric_limits<ret_type>::max() < ret ||
         std::numeric_limits<ret_type>::lowest() > ret )
     {
+        kimathLogDebug( "Overflow KiROUND converting value %f to %s", double( v ),
+                        typeid( ret_type ).name() );
         return 0;
     }
 
