@@ -222,3 +222,61 @@ bool SEG::Contains( const VECTOR2I& aP ) const
 {
     return Distance( aP ) <= 1;
 }
+
+
+const VECTOR2I SEG::NearestPoint( const VECTOR2I& aP ) const
+{
+    VECTOR2I d = B - A;
+    ecoord   l_squared = d.Dot( d );
+
+    if( l_squared == 0 )
+        return A;
+
+    ecoord t = d.Dot( aP - A );
+
+    if( t < 0 )
+        return A;
+    else if( t > l_squared )
+        return B;
+
+    int xp = rescale( t, (ecoord) d.x, l_squared );
+    int yp = rescale( t, (ecoord) d.y, l_squared );
+
+    return A + VECTOR2I( xp, yp );
+}
+
+
+const VECTOR2I SEG::ReflectPoint( const VECTOR2I& aP ) const
+{
+    VECTOR2I                d = B - A;
+    VECTOR2I::extended_type l_squared = d.Dot( d );
+    VECTOR2I::extended_type t = d.Dot( aP - A );
+    VECTOR2I                c;
+
+    if( !l_squared )
+        c = aP;
+    else
+    {
+        c.x = A.x + rescale( t, static_cast<VECTOR2I::extended_type>( d.x ), l_squared );
+        c.y = A.y + rescale( t, static_cast<VECTOR2I::extended_type>( d.y ), l_squared );
+    }
+
+    return 2 * c - aP;
+}
+
+
+VECTOR2I SEG::LineProject( const VECTOR2I& aP ) const
+{
+    VECTOR2I d = B - A;
+    ecoord   l_squared = d.Dot( d );
+
+    if( l_squared == 0 )
+        return A;
+
+    ecoord t = d.Dot( aP - A );
+
+    int xp = rescale( t, ecoord{ d.x }, l_squared );
+    int yp = rescale( t, ecoord{ d.y }, l_squared );
+
+    return A + VECTOR2I( xp, yp );
+}
