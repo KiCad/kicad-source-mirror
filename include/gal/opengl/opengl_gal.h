@@ -336,6 +336,7 @@ private:
     GLint                   ufm_worldPixelSize;
     GLint                   ufm_screenPixelSize;
     GLint                   ufm_pixelSizeMultiplier;
+    GLint                   ufm_antialiasingOffset;
 
     wxCursor                m_currentwxCursor;          ///< wxCursor showing the current native cursor
 

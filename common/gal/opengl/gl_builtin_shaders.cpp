@@ -83,6 +83,7 @@ uniform float worldPixelSize;
 uniform vec2 screenPixelSize;
 uniform float pixelSizeMultiplier;
 uniform float minLinePixelWidth;
+uniform vec2 antialiasingOffset;
 
 
 float roundr( float f, float r )
@@ -239,6 +240,7 @@ void main()
 
     }
 
+    gl_Position.xy += antialiasingOffset;
 }
 
 )SHADER_SOURCE";

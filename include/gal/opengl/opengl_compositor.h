@@ -94,6 +94,7 @@ public:
     OPENGL_ANTIALIASING_MODE GetAntialiasingMode() const;
 
     int GetAntialiasSupersamplingFactor() const;
+    VECTOR2D GetAntialiasRenderingOffset() const;
 
 protected:
     /// Binds a specific Framebuffer Object.

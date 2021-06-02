@@ -281,6 +281,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     ufm_worldPixelSize = 1;
     ufm_screenPixelSize = 1;
     ufm_pixelSizeMultiplier = 1;
+    ufm_antialiasingOffset = 1;
 }
 
 
@@ -528,6 +529,7 @@ void OPENGL_GAL::beginDrawing()
         ufm_worldPixelSize = m_shader->AddParameter( "worldPixelSize" );
         ufm_screenPixelSize = m_shader->AddParameter( "screenPixelSize" );
         ufm_pixelSizeMultiplier = m_shader->AddParameter( "pixelSizeMultiplier" );
+        ufm_antialiasingOffset = m_shader->AddParameter( "antialiasingOffset" );
 
         m_shader->Use();
         m_shader->SetParameter( ufm_fontTexture, (int) FONT_TEXTURE_UNIT );
@@ -541,9 +543,14 @@ void OPENGL_GAL::beginDrawing()
     m_shader->Use();
     m_shader->SetParameter( ufm_worldPixelSize,
                             (float) ( getWorldPixelSize() / GetScaleFactor() ) );
-    m_shader->SetParameter( ufm_screenPixelSize, getScreenPixelSize() );
+    const VECTOR2D& screenPixelSize = getScreenPixelSize();
+    m_shader->SetParameter( ufm_screenPixelSize, screenPixelSize );
     double pixelSizeMultiplier = m_compositor->GetAntialiasSupersamplingFactor();
     m_shader->SetParameter( ufm_pixelSizeMultiplier, (float) pixelSizeMultiplier );
+    VECTOR2D renderingOffset = m_compositor->GetAntialiasRenderingOffset();
+    renderingOffset.x *= screenPixelSize.x;
+    renderingOffset.y *= screenPixelSize.y;
+    m_shader->SetParameter( ufm_antialiasingOffset, renderingOffset );
     m_shader->Deactivate();
 
     // Something betreen BeginDrawing and EndDrawing seems to depend on
@@ -2321,18 +2328,20 @@ void OPENGL_GAL::EnableDepthTest( bool aEnabled )
 }
 
 
-static double roundr( double f, double r )
+inline double round_to_half_pixel( double f, double r )
 {
-    return floor( f / r + 0.5 ) * r;
+    return ( ceil( f / r ) - 0.5 ) * r;
 }
-
 
 void OPENGL_GAL::ComputeWorldScreenMatrix()
 {
+    computeWorldScale();
     auto pixelSize = m_worldScale;
 
-    m_lookAtPoint.x = roundr( m_lookAtPoint.x, pixelSize );
-    m_lookAtPoint.y = roundr( m_lookAtPoint.y, pixelSize );
+    // we need -m_lookAtPoint == -k * pixelSize + 0.5 * pixelSize for OpenGL
+    // meaning m_lookAtPoint = (k-0.5)*pixelSize with integer k
+    m_lookAtPoint.x = round_to_half_pixel( m_lookAtPoint.x, pixelSize );
+    m_lookAtPoint.y = round_to_half_pixel( m_lookAtPoint.y, pixelSize );
 
     GAL::ComputeWorldScreenMatrix();
 }

@@ -439,3 +439,13 @@ int OPENGL_COMPOSITOR::GetAntialiasSupersamplingFactor() const
     default: return 1;
     }
 }
+
+VECTOR2D OPENGL_COMPOSITOR::GetAntialiasRenderingOffset() const
+{
+    switch( m_currentAntialiasingMode )
+    {
+    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2: return VECTOR2D( 0.5, -0.5 );
+    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4: return VECTOR2D( 0.25, -0.25 );
+    default: return VECTOR2D( 0, 0 );
+    }
+}

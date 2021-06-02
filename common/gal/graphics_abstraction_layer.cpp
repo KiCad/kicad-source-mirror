@@ -189,7 +189,8 @@ void GAL::ComputeWorldScreenMatrix()
 
     MATRIX3x3D translation;
     translation.SetIdentity();
-    translation.SetTranslation( 0.5 * VECTOR2D( m_screenSize ) );
+    // We're deliberately dividing integers to avoid fractional pixel offsets.
+    translation.SetTranslation( VECTOR2D( m_screenSize.x/2, m_screenSize.y/2 ) );
 
     MATRIX3x3D rotate;
     rotate.SetIdentity();
