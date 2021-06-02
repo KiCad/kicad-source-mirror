@@ -1908,7 +1908,13 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
             {
                 SCH_CONNECTION* member = matchBusMember( subgraph->m_driver_connection,
                                                          stale_member );
-                wxASSERT( member );
+
+                if( !member )
+                {
+                    wxLogTrace( ConnTrace, "WARNING: failed to match stale member %s in %s.",
+                                stale_member->Name(), subgraph->m_driver_connection->Name() );
+                    continue;
+                }
 
                 wxLogTrace( ConnTrace, "Updating %lu (%s) member %s to %s", subgraph->m_code,
                             subgraph->m_driver_connection->Name(), member->LocalName(),
