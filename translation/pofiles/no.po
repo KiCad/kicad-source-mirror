@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-05-09 22:09+0000\n"
+"PO-Revision-Date: 2021-06-05 08:33+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
@@ -2679,9 +2679,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_paste_special.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Endre '%s' referansebetegnelse til '%s'."
+msgstr "Erstatter referansebetegnelse med «%s»."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
@@ -10064,9 +10064,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1277
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1317
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "Kan ikke åpne filen '%s'"
+msgstr "Kan ikke normalisere sti «%s%s»."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1303
 #, fuzzy
