@@ -25,7 +25,6 @@
 #ifndef EE_INSPECTION_TOOL_H
 #define EE_INSPECTION_TOOL_H
 
-#include <boost/optional/optional.hpp>
 #include <tools/ee_tool_base.h>
 #include <sch_base_frame.h>
 
