@@ -22,6 +22,7 @@
  */
 
 #include <bitmaps.h>
+#include <cstddef>
 #include <core/arraydim.h>
 #include <lib_pin.h>
 #include <pin_type.h>

@@ -32,12 +32,18 @@
 class wxBitmap;     // only to define wxBitmap
 class EDA_DRAW_FRAME;
 class wxWindow;
+class wxString;
 struct BITMAP_OPAQUE;
 class BITMAP_STORE;
 
 enum class BITMAPS : unsigned int;
 
-#include <wx/gdicmn.h>  // wxBitmapType
+enum class BITMAP_TYPE
+{
+    PNG,
+    JPG,
+    BMP
+};
 
 BITMAP_STORE* GetBitmapStore();
 
@@ -103,6 +109,6 @@ wxBitmap* KiBitmapNew( BITMAPS aBitmap );
  * @return True if the file was successfully saved or false if the file failed to be saved.
  */
 bool SaveCanvasImageToFile( EDA_DRAW_FRAME* aFrame, const wxString& aFileName,
-                            wxBitmapType aBitmapType = wxBITMAP_TYPE_PNG );
+                            BITMAP_TYPE aBitmapType = BITMAP_TYPE::PNG );
 
 #endif  // BITMAP_TYPES_H_
