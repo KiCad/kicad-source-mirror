@@ -31,6 +31,7 @@
 #include <tool/tool_action.h>
 #include <dialog_shim.h>
 #include <wx/dcclient.h>
+#include <wx/stattext.h>
 
 /**
  * Menu IDs for the hotkey context menu

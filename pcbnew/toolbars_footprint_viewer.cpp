@@ -31,6 +31,7 @@
 #include "footprint_viewer_frame.h"
 #include "pcbnew_id.h"
 #include <widgets/wx_menubar.h>
+#include <wx/choice.h>
 
 
 void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()

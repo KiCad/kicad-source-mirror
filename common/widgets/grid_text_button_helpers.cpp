@@ -25,6 +25,7 @@
 #include <wx/combo.h>
 #include <wx/filedlg.h>
 #include <wx/dirdlg.h>
+#include <wx/textctrl.h>
 
 #include <bitmaps.h>
 #include <kiway.h>

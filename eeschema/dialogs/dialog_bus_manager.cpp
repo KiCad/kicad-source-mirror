@@ -27,6 +27,7 @@
 #include "dialog_bus_manager.h"
 
 #include <wx/button.h>
+#include <wx/stattext.h>
 #include <wx/valtext.h>
 
 

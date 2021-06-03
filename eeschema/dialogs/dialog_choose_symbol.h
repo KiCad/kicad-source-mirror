@@ -28,6 +28,7 @@
 #include <symbol_tree_model_adapter.h>
 #include <footprint_info.h>
 
+class wxCheckBox;
 class wxStaticBitmap;
 class wxTextCtrl;
 class wxStdDialogButtonSizer;
@@ -38,6 +39,7 @@ class wxPanel;
 class wxChoice;
 class wxButton;
 class wxTimer;
+class wxSplitterWindow;
 
 class LIB_TREE;
 class SYMBOL_PREVIEW_WIDGET;
@@ -130,7 +132,7 @@ public:
      *
      * @return The value of the dialog preference checkbox.
      */
-    bool GetUseAllUnits() const { return m_useUnits->GetValue(); }
+    bool GetUseAllUnits() const;
 
     /**
      * To be called after this dialog returns from ShowModal()
@@ -140,7 +142,7 @@ public:
      *
      * @return The value of the keep symbol preference checkbox.
      */
-    bool GetKeepSymbol() const { return m_keepSymbol->GetValue(); }
+    bool GetKeepSymbol() const;
 
     /**
      * Get a list of fields edited by the user.

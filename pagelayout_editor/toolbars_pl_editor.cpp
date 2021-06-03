@@ -21,6 +21,7 @@
 
 #include <bitmaps.h>
 #include <tool/action_toolbar.h>
+#include <wx/choice.h>
 
 #include "pl_editor_id.h"
 #include "pl_editor_frame.h"

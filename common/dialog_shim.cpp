@@ -35,6 +35,7 @@
 #include <wx/event.h>
 #include <wx/grid.h>
 #include <wx/bmpbuttn.h>
+#include <wx/textctrl.h>
 
 #include <algorithm>
 

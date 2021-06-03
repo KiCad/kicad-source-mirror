@@ -919,3 +919,9 @@ void PL_EDITOR_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCo
         delete curr_cmd;    // Delete command
     }
 }
+
+
+bool PL_EDITOR_FRAME::GetPageNumberOption() const
+{
+    return m_pageSelectBox->GetSelection() == 0;
+}

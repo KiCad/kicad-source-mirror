@@ -27,6 +27,7 @@
 #include <eda_draw_frame.h>
 #include <eeschema_settings.h>
 #include <settings/settings_manager.h>
+#include <wx/stattext.h>
 
 
 SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,

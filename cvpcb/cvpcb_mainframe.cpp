@@ -41,6 +41,7 @@
 #include <tool/tool_manager.h>
 #include <widgets/progress_reporter.h>
 #include <wx/statline.h>
+#include <wx/stattext.h>
 
 #include <cvpcb_association.h>
 #include <cvpcb_id.h>

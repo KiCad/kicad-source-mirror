@@ -30,6 +30,7 @@
 #include <tools/kicad_manager_control.h>
 #include <dialogs/dialog_template_selector.h>
 #include <gestfich.h>
+#include <wx/checkbox.h>
 #include <wx/dir.h>
 #include <wx/filedlg.h>
 

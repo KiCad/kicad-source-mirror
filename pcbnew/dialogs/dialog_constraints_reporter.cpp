@@ -26,6 +26,7 @@
 #include <tool/tool_manager.h>
 #include <wx_html_report_box.h>
 #include <tools/pcb_actions.h>
+#include <wx/wxhtml.h>
 
 DIALOG_CONSTRAINTS_REPORTER::DIALOG_CONSTRAINTS_REPORTER( PCB_EDIT_FRAME* aParent ) :
         DIALOG_CONSTRAINTS_REPORTER_BASE( aParent ),

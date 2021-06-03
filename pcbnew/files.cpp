@@ -42,6 +42,7 @@
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>
 #include <board.h>
+#include <wx/checkbox.h>
 #include <wx/stdpaths.h>
 #include <ratsnest/ratsnest_data.h>
 #include <kiplatform/app.h>

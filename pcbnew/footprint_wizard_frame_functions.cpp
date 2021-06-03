@@ -36,6 +36,7 @@
 #include <dialogs/dialog_footprint_wizard_list.h>
 #include <base_units.h>
 #include <widgets/wx_grid.h>
+#include <wx/listbox.h>
 
 #include <tool/tool_manager.h>
 

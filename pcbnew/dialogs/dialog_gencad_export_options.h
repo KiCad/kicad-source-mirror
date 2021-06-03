@@ -31,6 +31,7 @@
 
 class PCB_EDIT_FRAME;
 class wxFilePickerCtrl;
+class wxCheckBox;
 
 ///< Settings for GenCAD exporter
 enum GENCAD_EXPORT_OPT

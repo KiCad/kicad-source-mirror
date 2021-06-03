@@ -27,6 +27,7 @@
 #include <track.h>
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
+#include <wx/choice.h>
 
 void PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
                                            PICKED_ITEMS_LIST* aItemsListPicker,

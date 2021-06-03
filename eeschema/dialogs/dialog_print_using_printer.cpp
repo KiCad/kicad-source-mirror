@@ -34,6 +34,7 @@
 #include <sch_sheet_path.h>
 #include <dialog_print_using_printer_base.h>
 #include <sch_painter.h>
+#include <wx/printdlg.h>
 
 class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
 {

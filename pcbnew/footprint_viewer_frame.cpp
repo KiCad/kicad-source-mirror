@@ -56,6 +56,7 @@
 #include <tools/pcb_picker_tool.h>
 #include <tools/pcb_selection_tool.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/listbox.h>
 #include <wx/tokenzr.h>
 
 using namespace std::placeholders;

@@ -48,9 +48,10 @@
 #include <paths.h>
 
 #include <eeschema_id.h>
-#include <wx/regex.h>
+#include <wx/checkbox.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+#include <wx/regex.h>
 
 
 

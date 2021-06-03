@@ -36,6 +36,7 @@
 class PL_DRAW_PANEL_GAL;
 class PROPERTIES_FRAME;
 class DS_DATA_ITEM;
+class wxChoice;
 
 
 /**
@@ -173,10 +174,7 @@ public:
      * looks like word processing option "page 1 differs from other pages").
      * @return true if the page 1 is selected, and false if not
      */
-    bool GetPageNumberOption() const
-    {
-        return m_pageSelectBox->GetSelection() == 0;
-    }
+    bool GetPageNumberOption() const;
 
     /**
      * Displays the short filename (if exists) loaded file on the caption of the main window

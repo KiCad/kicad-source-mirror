@@ -30,6 +30,7 @@
 #include <cvpcb_id.h>
 #include <cvpcb_mainframe.h>
 #include <tools/cvpcb_actions.h>
+#include <wx/stattext.h>
 
 
 void CVPCB_MAINFRAME::ReCreateHToolbar()

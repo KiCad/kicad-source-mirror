@@ -52,6 +52,7 @@
 #include <tools/symbol_editor_control.h>
 #include <tools/ee_inspection_tool.h>
 #include <view/view_controls.h>
+#include <wx/listbox.h>
 
 #include <default_values.h>
 

@@ -22,6 +22,7 @@
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
 #include <widgets/bitmap_button.h>
+#include <wx/stattext.h>
 
 #include "panel_kicad_launcher.h"
 

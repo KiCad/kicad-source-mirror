@@ -30,6 +30,7 @@
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 #include <wx/timer.h>
+#include <wx/wxhtml.h>
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>

@@ -31,6 +31,7 @@
 #include <project.h>
 #include <confirm.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/checkbox.h>
 #include <wx/filepicker.h>
 #include <wx/statline.h>
 

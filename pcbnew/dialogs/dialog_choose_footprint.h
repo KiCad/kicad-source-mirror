@@ -39,6 +39,7 @@ class wxPanel;
 class wxChoice;
 class wxButton;
 class wxTimer;
+class wxSplitterWindow;
 
 class PCB_BASE_FRAME;
 class LIB_TREE;
