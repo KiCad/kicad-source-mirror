@@ -407,15 +407,12 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_SEGMENT& aB, int a
                                            aA.Type(),
                                            aB.Type() ) );
 
-    if( aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation ) )
-    {
-        if( aActual )
-            *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
+    bool rv = aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation );
 
-        return true;
-    }
+    if( aActual )
+        *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
 
-    return false;
+    return rv;
 }
 
 
@@ -426,15 +423,12 @@ static inline bool Collide( const SHAPE_SEGMENT& aA, const SHAPE_SEGMENT& aB, in
                                            aA.Type(),
                                            aB.Type() ) );
 
-    if( aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation ) )
-    {
-        if( aActual )
-            *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
+    bool rv = aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation );
 
-        return true;
-    }
+    if( aActual )
+        *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
 
-    return false;
+    return rv;
 }
 
 
@@ -445,15 +439,12 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_SEGMENT
                                            aA.Type(),
                                            aB.Type() ) );
 
-    if( aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation ) )
-    {
-        if( aActual )
-            *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
+    bool rv = aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation );
 
-        return true;
-    }
+    if( aActual )
+        *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
 
-    return false;
+    return rv;
 }
 
 
@@ -467,22 +458,34 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_RECT& aB, int aCle
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_RECT& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    int clearance = aClearance + ( aA.GetWidth() / 2 );
+    wxASSERT_MSG( !aMTV, wxString::Format( "MTV not implemented for %s : %s collisions",
+                                           aA.Type(),
+                                           aB.Type() ) );
+
     const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
 
-    return Collide( lc, aB.Outline(), clearance, aActual, aLocation, aMTV );
+    bool rv = Collide( lc, aB.Outline(), aClearance + aA.GetWidth() / 2, aActual, aLocation, aMTV );
+
+    if( rv && aActual )
+        *aActual = std::max( 0, *aActual - aA.GetWidth() / 2 );
+
+    return rv;
 }
 
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_CIRCLE& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
-    int clearance = aClearance + ( aA.GetWidth() / 2 );
-    bool rv = Collide( aB, lc, clearance, aActual, aLocation, aMTV );
+    wxASSERT_MSG( !aMTV, wxString::Format( "MTV not implemented for %s : %s collisions",
+                                           aA.Type(),
+                                           aB.Type() ) );
 
-    if( rv && aMTV )
-        *aMTV = - *aMTV ;
+    const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
+
+    bool rv = Collide( aB, lc, aClearance + aA.GetWidth() / 2, aActual, aLocation, aMTV );
+
+    if( rv && aActual )
+        *aActual = std::max( 0, *aActual - aA.GetWidth() / 2 );
 
     return rv;
 }
@@ -491,41 +494,74 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_CIRCLE& aB, int aCl
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    int clearance = aClearance + ( aA.GetWidth() / 2 );
+    wxASSERT_MSG( !aMTV, wxString::Format( "MTV not implemented for %s : %s collisions",
+                                           aA.Type(),
+                                           aB.Type() ) );
+
     const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
 
-    return Collide( lc, aB, clearance, aActual, aLocation, aMTV );
+    bool rv = Collide( lc, aB, aClearance + aA.GetWidth() / 2, aActual, aLocation, aMTV );
+
+    if( rv && aActual )
+        *aActual = std::max( 0, *aActual - aA.GetWidth() / 2 );
+
+    return rv;
 }
 
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_SEGMENT& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    int clearance = aClearance + ( aA.GetWidth() / 2 );
+    wxASSERT_MSG( !aMTV, wxString::Format( "MTV not implemented for %s : %s collisions",
+                                           aA.Type(),
+                                           aB.Type() ) );
+
     const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
 
-    return Collide( lc, aB, clearance, aActual, aLocation, aMTV );
+    bool rv = Collide( lc, aB, aClearance + aA.GetWidth() / 2, aActual, aLocation, aMTV );
+
+    if( rv && aActual )
+        *aActual = std::max( 0, *aActual - aA.GetWidth() / 2 );
+
+    return rv;
 }
 
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN_BASE& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    int clearance = aClearance + ( aA.GetWidth() / 2 );
+    wxASSERT_MSG( !aMTV, wxString::Format( "MTV not implemented for %s : %s collisions",
+                                           aA.Type(),
+                                           aB.Type() ) );
+
     const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
 
-    return Collide( lc, aB, clearance, aActual, aLocation, aMTV );
+    bool rv = Collide( lc, aB, aClearance + aA.GetWidth() / 2, aActual, aLocation, aMTV );
+
+    if( rv && aActual )
+        *aActual = std::max( 0, *aActual - aA.GetWidth() / 2 );
+
+    return rv;
 }
 
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_ARC& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
+    wxASSERT_MSG( !aMTV, wxString::Format( "MTV not implemented for %s : %s collisions",
+                                           aA.Type(),
+                                           aB.Type() ) );
+
     const SHAPE_LINE_CHAIN lcA = aA.ConvertToPolyline();
     const SHAPE_LINE_CHAIN lcB = aB.ConvertToPolyline();
-    int clearance = aClearance + ( aA.GetWidth() / 2 ) + ( aB.GetWidth() / 2 );
+    int                    widths = ( aA.GetWidth() / 2 ) + ( aB.GetWidth() / 2 );
 
-    return Collide( lcA, lcB, clearance, aActual, aLocation, aMTV );
+    bool rv = Collide( lcA, lcB, aClearance + widths, aActual, aLocation, aMTV );
+
+    if( rv && aActual )
+        *aActual = std::max( 0, *aActual - widths );
+
+    return rv;
 }
 
 
