@@ -51,7 +51,7 @@ public:
     struct EVENT_ENTRY {
         VECTOR2I p;
         EVENT_TYPE type;
-        const ITEM* item;
+        wxString uuid;
     };
 
     LOGGER();

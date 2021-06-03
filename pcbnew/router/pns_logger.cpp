@@ -53,11 +53,7 @@ void LOGGER::Save( const std::string& aFilename )
     {
         uint64_t id = 0;
 
-        if( evt.item && evt.item->Parent() )
-        {
-            const char* idString = evt.item->Parent()->m_Uuid.AsString().c_str();
-            fprintf( f, "event %d %d %d %s\n", evt.type, evt.p.x, evt.p.y, idString );
-        }
+        fprintf( f, "event %d %d %d %s\n", evt.type, evt.p.x, evt.p.y, (const char *) evt.uuid );
     }
 
     fclose( f );
@@ -70,10 +66,13 @@ void LOGGER::Log( LOGGER::EVENT_TYPE evt, VECTOR2I pos, const ITEM* item )
 
     ent.type = evt;
     ent.p = pos;
-    ent.item = item;
+    ent.uuid = "null";
+
+
+    if( item && item->Parent() )
+        ent.uuid = item->Parent()->m_Uuid.AsString();
 
     m_events.push_back( ent );
-
 }
 
 }
