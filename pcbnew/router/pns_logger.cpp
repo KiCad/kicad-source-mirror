@@ -53,7 +53,8 @@ void LOGGER::Save( const std::string& aFilename )
     {
         uint64_t id = 0;
 
-        fprintf( f, "event %d %d %d %s\n", evt.type, evt.p.x, evt.p.y, evt.uuid.char_str() );
+        fprintf( f, "event %d %d %d %s\n", evt.type, evt.p.x, evt.p.y,
+                 (const char*) evt.uuid.c_str() );
     }
 
     fclose( f );
