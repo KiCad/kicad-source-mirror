@@ -55,6 +55,7 @@ public:
         m_drill    = 0;
         m_viaType  = VIATYPE::THROUGH;
         m_isFree   = false;
+        m_isVirtual = false;
     }
 
     VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill,
@@ -70,6 +71,7 @@ public:
         m_hole = SHAPE_CIRCLE( m_pos, aDrill / 2 );
         m_viaType = aViaType;
         m_isFree = false;
+        m_isVirtual = false;
     }
 
     VIA( const VIA& aB ) :
@@ -86,6 +88,7 @@ public:
         m_drill = aB.m_drill;
         m_viaType = aB.m_viaType;
         m_isFree = aB.m_isFree;
+        m_isVirtual = aB.m_isVirtual;
     }
 
     static inline bool ClassOf( const ITEM* aItem )
@@ -154,6 +157,19 @@ private:
     SHAPE_CIRCLE m_hole;
     VIATYPE      m_viaType;
     bool         m_isFree;
+
+};
+
+
+class VVIA : public VIA
+{
+public:
+    VVIA( const VECTOR2I& aPos, int aLayer, int aDiameter, int aNet ) :
+        VIA( aPos, LAYER_RANGE( aLayer, aLayer ), aDiameter, aDiameter / 2, aNet )
+    {
+        m_isVirtual = true;
+        SetHole( SHAPE_CIRCLE( Pos(), 1 ) );
+    }
 };
 
 }

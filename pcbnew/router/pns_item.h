@@ -80,6 +80,7 @@ public:
         m_marker = 0;
         m_rank = -1;
         m_routable = true;
+        m_isVirtual = false;
     }
 
     ITEM( const ITEM& aOther )
@@ -93,6 +94,7 @@ public:
         m_marker = aOther.m_marker;
         m_rank = aOther.m_rank;
         m_routable = aOther.m_routable;
+        m_isVirtual = aOther.m_isVirtual;
     }
 
     virtual ~ITEM();
@@ -228,6 +230,11 @@ public:
     void SetRoutable( bool aRoutable ) { m_routable = aRoutable; }
     bool IsRoutable() const { return m_routable; }
 
+    bool IsVirtual() const
+    {
+        return m_isVirtual;
+    }
+
 private:
     bool collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly ) const;
 
@@ -243,6 +250,7 @@ protected:
     mutable int   m_marker;
     int           m_rank;
     bool          m_routable;
+    bool          m_isVirtual;
 };
 
 template<typename T, typename S>
