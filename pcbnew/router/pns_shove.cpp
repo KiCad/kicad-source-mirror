@@ -270,13 +270,16 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
         bool clockwise = attempt % 2;
         int vFirst = -1, vLast = -1;
 
-        SHAPE_LINE_CHAIN path;
         LINE l( aObstacleLine );
+        SHAPE_LINE_CHAIN path( l.CLine() );
 
         for( int i = 0; i < (int) aHulls.size(); i++ )
         {
             const SHAPE_LINE_CHAIN& hull = aHulls[invertTraversal ? aHulls.size() - 1 - i : i];
 
+            PNS_DBG( Dbg(), AddLine, hull, YELLOW, 10000, "hull" );
+            PNS_DBG( Dbg(), AddLine, path, WHITE, l.Width(), "path" );
+            PNS_DBG( Dbg(), AddLine, obs, LIGHTGRAY, aObstacleLine.Width(), "obs" );
             if( ! l.Walkaround( hull, path, clockwise ) )
             {
                 PNS_DBG( Dbg(), Message, wxString::Format( "Fail-Walk %s %s %d\n", hull.Format().c_str(), l.CLine().Format().c_str(), clockwise? 1:0) );
@@ -823,6 +826,8 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
     JOINT* jt = m_currentNode->FindJoint( p0, aVia );
     VECTOR2I p0_pushed( p0 + aForce );
 
+    PNS_DBG( Dbg(), Message, wxString::Format( "via force [%d %d]\n", aForce.x, aForce.y ) );
+
     // nothing to do...
     if ( aForce.x == 0 && aForce.y == 0 )
         return SH_OK;
@@ -880,15 +885,9 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
         }
     }
 
-#if 0
-    m_logger.Log( aVia, 0, "obstacle-via" );
-#endif
 
     pushedVia->SetRank( aCurrentRank - 1 );
 
-#if 0
-    m_logger.Log( pushedVia.get(), 1, "pushed-via" );
-#endif
 
     if( aVia->Marker() & MK_HEAD )      // push
     {
@@ -899,6 +898,10 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
         if( jt->IsStitchingVia() )
             pushLineStack( LINE( *pushedVia ) );
     }
+
+
+    PNS_DBG( Dbg(), AddPoint, aVia->Pos(), LIGHTGREEN, 100000, "via-pre" );
+    PNS_DBG( Dbg(), AddPoint, pushedVia->Pos(), LIGHTRED, 100000, "via-post" );
 
     replaceItems( aVia, std::move( pushedVia ) );
 
@@ -929,10 +932,8 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
             m_currentNode->Remove( lp.first );
         }
 
-#if 0
-        m_logger.Log( &lp.first, 2, "fan-pre" );
-        m_logger.Log( &lp.second, 3, "fan-post" );
-#endif
+        PNS_DBG( Dbg(), AddLine, lp.first.CLine(), LIGHTGREEN, 10000, "fan-pre" );
+        PNS_DBG( Dbg(), AddLine, lp.second.CLine(), LIGHTRED, 10000, "fan-post" );
     }
 
     return SH_OK;
@@ -953,6 +954,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
     bool viaCollision = false;
     VECTOR2I mtvLine, mtvVia;
 
+    PNS_DBG( Dbg(), BeginGroup, "push-via-by-line" );
 
     if( aCurrent->OfKind( ITEM::LINE_T ) )
     {
@@ -988,7 +990,11 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
     else
         mtv = VECTOR2I(0, 0);
 
-    return pushOrShoveVia( aObstacleVia, -mtv, rank );
+    SHOVE::SHOVE_STATUS st = pushOrShoveVia( aObstacleVia, -mtv, rank );
+
+    PNS_DBGN( Dbg(), EndGroup );
+
+    return st;
 }
 
 
@@ -1173,6 +1179,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     for( ITEM::PnsKind search_order : { ITEM::SOLID_T, ITEM::VIA_T, ITEM::SEGMENT_T } )
     {
          nearest = m_currentNode->NearestObstacle( &currentLine, search_order );
+         if (nearest)
+            PNS_DBG( Dbg(), Message, wxString::Format( "nearest %p %s", nearest->m_item, nearest->m_item->KindStr() ) );
 
          if( nearest )
             break;
@@ -1181,6 +1189,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     if( !nearest )
     {
         m_lineStack.pop_back();
+        PNS_DBG( Dbg(), Message, "no-nearest-item ");
         return SH_OK;
     }
 
@@ -1322,6 +1331,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveMainLoop()
 
     while( !m_lineStack.empty() )
     {
+        PNS_DBG( Dbg(), Message, wxString::Format( "iter %d: node %p stack %d ", m_iter, m_currentNode, (int) m_lineStack.size() ) );
+
         st = shoveIteration( m_iter );
 
         m_iter++;
