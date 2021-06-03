@@ -237,10 +237,7 @@ public:
      * @param aSeg other segment
      * @return minimum distance
      */
-    int Distance( const SEG& aSeg ) const
-    {
-        return KiROUND( sqrt( SquaredDistance( aSeg ) ) );
-    }
+    int Distance( const SEG& aSeg ) const;
 
     ecoord SquaredDistance( const VECTOR2I& aP ) const
     {
@@ -253,10 +250,7 @@ public:
      * @param aP the point
      * @return minimum distance
      */
-    int Distance( const VECTOR2I& aP ) const
-    {
-        return KiROUND( sqrt( SquaredDistance( aP ) ) );
-    }
+    int Distance( const VECTOR2I& aP ) const;
 
     void CanonicalCoefs( ecoord& qA, ecoord& qB, ecoord& qC ) const
     {
@@ -404,17 +398,6 @@ private:
     ///< index withing the parent shape (used when m_is_local == false)
     int m_index;
 };
-
-inline int SEG::LineDistance( const VECTOR2I& aP, bool aDetermineSide ) const
-{
-    ecoord p = ecoord{ A.y } - B.y;
-    ecoord q = ecoord{ B.x } - A.x;
-    ecoord r = -p * A.x - q * A.y;
-
-    ecoord dist = KiROUND( ( p * aP.x + q * aP.y + r ) / sqrt( p * p + q * q ) );
-
-    return aDetermineSide ? dist : std::abs( dist );
-}
 
 inline SEG::ecoord SEG::TCoef( const VECTOR2I& aP ) const
 {

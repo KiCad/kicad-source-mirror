@@ -280,3 +280,28 @@ VECTOR2I SEG::LineProject( const VECTOR2I& aP ) const
 
     return A + VECTOR2I( xp, yp );
 }
+
+
+int SEG::Distance( const SEG& aSeg ) const
+{
+    return KiROUND( sqrt( SquaredDistance( aSeg ) ) );
+}
+
+
+int SEG::Distance( const VECTOR2I& aP ) const
+{
+    return KiROUND( sqrt( SquaredDistance( aP ) ) );
+}
+
+
+int SEG::LineDistance( const VECTOR2I& aP, bool aDetermineSide ) const
+{
+    ecoord p = ecoord{ A.y } - B.y;
+    ecoord q = ecoord{ B.x } - A.x;
+    ecoord r = -p * A.x - q * A.y;
+
+    ecoord dist = KiROUND( ( p * aP.x + q * aP.y + r ) / sqrt( p * p + q * q ) );
+
+    return aDetermineSide ? dist : std::abs( dist );
+}
+
