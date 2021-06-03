@@ -44,6 +44,7 @@ class GERBER_FILE_IMAGE;
 class GERBER_FILE_IMAGE_LIST;
 class REPORTER;
 class SELECTION;
+class wxStaticText;
 
 
 /**

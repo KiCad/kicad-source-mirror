@@ -38,6 +38,7 @@ class ACTION_TOOLBAR;
 class ACTION_MENU;
 class TOOL_DISPATCHER;
 class wxAuiToolBar;
+class wxStaticText;
 class DISPLAY_FOOTPRINTS_FRAME;
 
 namespace CV { struct IFACE; }

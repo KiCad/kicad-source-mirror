@@ -25,6 +25,9 @@
 
 class EDA_DRAW_FRAME;
 struct PRINTOUT_SETTINGS;
+class wxPageSetupDialogData;
+class wxPrintout;
+class wxPrintData;
 
 class DIALOG_PRINT_GENERIC : public DIALOG_PRINT_GENERIC_BASE
 {

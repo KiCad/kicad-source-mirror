@@ -63,6 +63,7 @@
 #include <zoom_defines.h>
 
 #include <wx/filedlg.h>
+#include <wx/print.h>
 #include <wx/treebook.h>
 
 

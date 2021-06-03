@@ -22,6 +22,7 @@
  * @file design_inspector.cpp
  */
 
+#include <wx/dc.h>
 #include <wx/imaglist.h>
 #include <wx/wupdlock.h>
 

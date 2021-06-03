@@ -43,6 +43,7 @@
 #include "pl_editor_id.h"
 
 #include <wx/msgdlg.h>
+#include <wx/print.h>
 
 /**
  * Custom print out for printing schematics.

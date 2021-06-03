@@ -35,7 +35,6 @@
 #include <vector>
 
 #include <wx/aui/aui.h>
-#include <wx/docview.h>
 #include <wx/event.h>
 #include <layers_id_colors_and_visibility.h>
 #include <frame_type.h>
@@ -52,7 +51,8 @@
 
 #define KICAD_MANAGER_FRAME_NAME   wxT( "KicadFrame" )
 
-
+class wxChoice;
+class wxFileName;
 class EDA_ITEM;
 class EDA_RECT;
 class EDA_DRAW_PANEL_GAL;

@@ -26,6 +26,7 @@
 #include <settings/color_settings.h>
 #include <dialogs/dialog_color_picker.h>
 #include <wx/checkbox.h>
+#include <wx/dc.h>
 
 
 //-------- Custom wxGridCellRenderers --------------------------------------------------
