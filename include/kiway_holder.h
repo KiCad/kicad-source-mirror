@@ -24,12 +24,9 @@
 #ifndef KIWAY_HOLDER_H_
 #define KIWAY_HOLDER_H_
 
-#include <wx/frame.h>
-
-
 class KIWAY;
 class PROJECT;
-
+class wxWindow;
 
 /**
  * A mix in class which holds the location of a wxWindow's KIWAY.
