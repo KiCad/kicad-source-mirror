@@ -237,9 +237,6 @@ struct APP_TEST : public wxApp
 
 bool PGM_TEST_FRAME::OnPgmInit()
 {
-    if( !InitPgm() )
-        return false;
-
     return true;
 }
 
