@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2018 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,17 +47,11 @@
 #include <wx/arrstr.h>
 
 /**
- * X2_ATTRIBUTE
  * The attribute value consists of a number of substrings separated by a comma
 */
 
 class X2_ATTRIBUTE
 {
-protected:
-    wxArrayString m_Prms;   ///< the list of parameters (after TF) in gbr file
-                            ///< the first one is the attribute name,
-                            ///< if starting by '.'
-
 public:
     X2_ATTRIBUTE();
     ~X2_ATTRIBUTE();
@@ -88,8 +82,8 @@ public:
     int GetPrmCount() { return int( m_Prms.GetCount() ); }
 
     /**
-     * parse a TF command terminated with a % and fill m_Prms
-     * by the parameters found.
+     * Parse a TF command terminated with a % and fill m_Prms by the parameters found.
+     *
      * @param aFile = a FILE* ptr to the current Gerber file.
      * @param aBuffer = the buffer containing current Gerber data (can be null)
      * @param aBuffSize = the size of the buffer
@@ -102,12 +96,12 @@ public:
     bool ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, char* &aText, int& aLineNum );
 
     /**
-     * Debug function: pring using wxLogMessage le list of parameters
+     * Debug function: print using wxLogMessage le list of parameters
      */
     void DbgListPrms();
 
     /**
-     * return true if the attribute is .FileFunction
+     * Return true if the attribute is .FileFunction
      */
     bool IsFileFunction()
     {
@@ -115,7 +109,7 @@ public:
     }
 
     /**
-     * return true if the attribute is .MD5
+     * Return true if the attribute is .MD5
      */
     bool IsFileMD5()
     {
@@ -123,12 +117,17 @@ public:
     }
 
     /**
-     * return true if the attribute is .Part
+     * Return true if the attribute is .Part
      */
     bool IsFilePart()
     {
         return GetAttribute().IsSameAs( wxT(".Part"), false );
     }
+
+protected:
+    wxArrayString m_Prms;   ///< the list of parameters (after TF) in gbr file
+                            ///< the first one is the attribute name,
+                            ///< if starting by '.'
 };
 
 /**
@@ -149,9 +148,6 @@ public:
 
 class X2_ATTRIBUTE_FILEFUNCTION : public X2_ATTRIBUTE
 {
-    int m_z_order;              // the z order of the layer for a board
-    int m_z_sub_order;          // the z sub_order of the copper layer for a board
-
 public:
     X2_ATTRIBUTE_FILEFUNCTION( X2_ATTRIBUTE& aAttributeBase );
 
@@ -199,6 +195,9 @@ private:
      * Initialize the z order priority of the current file, from its attributes
      */
     void set_Z_Order();
+
+    int m_z_order;              // the z order of the layer for a board
+    int m_z_sub_order;          // the z sub_order of the copper layer for a board
 };
 
 #endif      // X2_GERBER_ATTRIBUTE_H

@@ -44,11 +44,6 @@ class GERBER_FILE_IMAGE_LIST;
  */
 class GBR_LAYOUT : public EDA_ITEM
 {
-private:
-    mutable EDA_RECT    m_BoundingBox;
-    TITLE_BLOCK         m_titles;
-    wxPoint             m_originAxisPosition;
-
 public:
     GBR_LAYOUT();
     ~GBR_LAYOUT();
@@ -88,6 +83,11 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+private:
+    mutable EDA_RECT    m_BoundingBox;
+    TITLE_BLOCK         m_titles;
+    wxPoint             m_originAxisPosition;
 };
 
 #endif      // #ifndef GBR_LAYOUT_H

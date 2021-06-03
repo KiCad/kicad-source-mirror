@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,9 +31,6 @@ class GERBVIEW_FRAME;
 
 class PANEL_GERBVIEW_SETTINGS : public PANEL_GERBVIEW_SETTINGS_BASE
 {
-private:
-    GERBVIEW_FRAME*    m_Parent;
-
 public:
     PANEL_GERBVIEW_SETTINGS( GERBVIEW_FRAME* aFrame, wxWindow* aWindow );
     ~PANEL_GERBVIEW_SETTINGS() {};
@@ -41,6 +38,8 @@ public:
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    GERBVIEW_FRAME*    m_Parent;
 };
 
 #endif //KICAD_PANEL_GERBVIEW_SETTINGS_H

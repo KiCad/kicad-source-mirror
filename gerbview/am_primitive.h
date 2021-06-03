@@ -10,7 +10,7 @@
  *
  * Copyright (C) 1992-2010 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2010 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,10 +44,10 @@ class SHAPE_POLY_SET;
  *  Inside a given aperture primitive, a fixed list of parameters defines info
  *  about the shape: size, thickness, number of vertex ...
  *
- *  Each parameter can be an immediate value or a defered value.
- *  When value is defered, it is defined when the aperture macro is instancied by
+ *  Each parameter can be an immediate value or a deferred value.
+ *  When value is deferred, it is defined when the aperture macro is instanced by
  *  an ADD macro command
- *  Note also a defered parameter can be defined in aperture macro,
+ *  Note also a deferred parameter can be defined in aperture macro,
  *  but outside aperture primitives. Example
  *  %AMRECTHERM*
  *  $4=$3/2*    parameter $4 is half value of parameter $3
@@ -61,31 +61,33 @@ class SHAPE_POLY_SET;
  */
 
 /**
- * Enum AM_PRIMITIVE_ID
- * is the set of all "aperture macro primitives" (primitive numbers).  See
- * Table 3 in http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf
- * aperture macro primitives are basic shapes which can be combined to create a complex shape
- * This complex shape is flashed.
+ * The set of all "aperture macro primitives" (primitive numbers).
+ *
+ * See Table 3 in http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf aperture macro primitives
+ * are basic shapes which can be combined to create a complex shape.  This complex shape is
+ * flashed.
  */
 enum AM_PRIMITIVE_ID {
     AMP_UNKNOWN = -1,           // A value for uninitialized AM_PRIMITIVE.
-    AMP_COMMENT = 0,            // A primitive description is not really a primitive, this is a comment
+    AMP_COMMENT = 0,            // A primitive description is not really a primitive, this is a
+                                // comment
     AMP_CIRCLE  = 1,            // Circle. (diameter and position)
     AMP_LINE2   = 2,            // Line with rectangle ends. (Width, start and end pos + rotation)
     AMP_LINE20  = 20,           // Same as AMP_LINE2
     AMP_LINE_CENTER = 21,       // Rectangle. (height, width and center pos + rotation)
     AMP_LINE_LOWER_LEFT = 22,   // Rectangle. (height, width and left bottom corner pos + rotation)
-    AMP_EOF     = 3,            // End Of File marquer: not really a shape
+    AMP_EOF     = 3,            // End Of File marker: not really a shape
     AMP_OUTLINE = 4,            // Free polyline (n corners + rotation)
-    AMP_POLYGON = 5,            // Closed regular polygon(diameter, number of vertices (3 to 10), rotation)
+    AMP_POLYGON = 5,            // Closed regular polygon(diameter, number of vertices (3 to 10),
+                                // rotation)
     AMP_MOIRE   = 6,            // A cross hair with n concentric circles + rotation
-    AMP_THERMAL = 7             // Thermal shape (pos, outer and inner diameter, cross hair thickness + rotation)
+    AMP_THERMAL = 7             // Thermal shape (pos, outer and inner diameter, cross hair
+                                // thickness + rotation)
 };
 
 
 /**
- * Struct AM_PRIMITIVE
- * holds an aperture macro primitive as given in Table 3 of
+ * An aperture macro primitive as given in Table 3 of
  * http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf
  */
 class AM_PRIMITIVE
@@ -96,7 +98,8 @@ public:
                                         //   the primitive
     bool            m_GerbMetric;       // units for this primitive:
                                         // false = Inches, true = metric
-public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
+
+    AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
     {
         primitive_id = aId;
         m_GerbMetric = aGerbMetric;
@@ -106,7 +109,6 @@ public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
     ~AM_PRIMITIVE() {}
 
     /**
-     * Function IsAMPrimitiveExposureOn
      * @return true if the first parameter is not 0 (it can be only 0 or 1).
      * Some but not all primitives use the first parameter as an exposure control.
      * Others are always ON.
@@ -117,127 +119,129 @@ public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
 
     /* Draw functions: */
 
-    /** GetShapeDim
-     * Calculate a value that can be used to evaluate the size of text
-     * when displaying the D-Code of an item
-     * due to the complexity of the shape of some primitives
-     * one cannot calculate the "size" of a shape (only a bounding box)
-     * but here, the "dimension" of the shape is the diameter of the primitive
-     * or for lines the width of the line
-     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
+    /**
+     * Calculate a value that can be used to evaluate the size of text when displaying the
+     * D-Code of an item.
+     *
+     * Due to the complexity of the shape of some primitives one cannot calculate the "size"
+     * of a shape (only a bounding box) but here, the "dimension" of the shape is the diameter
+     * of the primitive or for lines the width of the line.
+     *
+     * @param aParent is the parent GERBER_DRAW_ITEM which is actually drawn
      * @return a dimension, or -1 if no dim to calculate
      */
     int  GetShapeDim( const GERBER_DRAW_ITEM* aParent );
 
     /**
-     * Function drawBasicShape
-     * Draw (in fact generate the actual polygonal shape of) the primitive shape of an aperture macro instance.
-     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
-     * @param aShapeBuffer = a SHAPE_POLY_SET to put the shape converted to a polygon
-     * @param aShapePos = the actual shape position
+     * Draw (in fact generate the actual polygonal shape of) the primitive shape of an aperture
+     * macro instance.
+     *
+     * @param aParent is the parent GERBER_DRAW_ITEM which is actually drawn.
+     * @param aShapeBuffer is a SHAPE_POLY_SET to put the shape converted to a polygon.
+     * @param aShapePos is the actual shape position.
      */
     void DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
                          SHAPE_POLY_SET& aShapeBuffer,
                          wxPoint aShapePos );
-private:
 
+private:
     /**
-     * Function ConvertShapeToPolygon
-     * convert a shape to an equivalent polygon.
-     * Arcs and circles are approximated by segments
-     * Useful when a shape is not a graphic primitive (shape with hole,
-     * rotated shape ... ) and cannot be easily drawn.
+     * Convert a shape to an equivalent polygon.
+     *
+     * Arcs and circles are approximated by segments.  Useful when a shape is not a graphic
+     * primitive (shape with hole, rotated shape ... ) and cannot be easily drawn.
      */
-    void ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
-                                std::vector<wxPoint>& aBuffer );
+    void ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent, std::vector<wxPoint>& aBuffer );
 };
 
 
 typedef std::vector<AM_PRIMITIVE> AM_PRIMITIVES;
 
 /**
- * Struct APERTURE_MACRO
- * helps support the "aperture macro" defined within standard RS274X.
+ * Support the "aperture macro" defined within standard RS274X.
  */
 struct APERTURE_MACRO
 {
-    wxString      name;             ///< The name of the aperture macro
-    AM_PRIMITIVES primitives;       ///< A sequence of AM_PRIMITIVEs
-
-    /*  A defered parameter can be defined in aperture macro,
-     *  but outside aperture primitives. Example
-     *  %AMRECTHERM*
-     *  $4=$3/2*    parameter $4 is half value of parameter $3
-     * m_localparamStack handle a list of local defered parameters
-     */
-    AM_PARAMS m_localparamStack;
-
-    SHAPE_POLY_SET m_shape;     ///< The shape of the item, calculated by GetApertureMacroShape
-    EDA_RECT m_boundingBox;     ///< The bounding box of the item, calculated by GetApertureMacroShape
-
     /**
-     * function GetLocalParam
-     * Usually, parameters are defined inside the aperture primitive
-     * using immediate mode or defered mode.
-     * in defered mode the value is defined in a DCODE that want to use the aperture macro.
-     * But some parameters are defined outside the aperture primitive
-     * and are local to the aperture macro
-     * @return the value of a defered parameter defined inside the aperture macro
-     * @param aDcode = the D_CODE that uses this apertur macro and define defered parameters
-     * @param aParamId = the param id (defined by $3 or $5 ..) to evaluate
+     * Usually, parameters are defined inside the aperture primitive using immediate mode or
+     * deferred mode.
+     *
+     * In deferred mode the value is defined in a DCODE that want to use the aperture macro.
+     * Some parameters are defined outside the aperture primitive and are local to the aperture
+     * macro.
+     *
+     * @return the value of a deferred parameter defined inside the aperture macro.
+     * @param aDcode is the D_CODE that uses this aperture macro and define deferred parameters.
+     * @param aParamId is the param id (defined by $3 or $5 ..) to evaluate.
      */
     double GetLocalParam( const D_CODE* aDcode, unsigned aParamId ) const;
 
 
     /**
-     * Function GetApertureMacroShape
      * Calculate the primitive shape for flashed items.
-     * When an item is flashed, this is the shape of the item
-     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
-     * @return The shape of the item
+     *
+     * When an item is flashed, this is the shape of the item.
+     *
+     * @param aParent is the parent #GERBER_DRAW_ITEM which is actually drawn.
+     * @return the shape of the item.
      */
     SHAPE_POLY_SET* GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent, wxPoint aShapePos );
 
    /**
-     * Function DrawApertureMacroShape
      * Draw the primitive shape for flashed items.
-     * When an item is flashed, this is the shape of the item
-     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
-     * @param aClipBox = DC clip box (NULL is no clip)
-     * @param aDC = device context
-     * @param aColor = the color of shape
-     * @param aShapePos = the actual shape position
-     * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
+     *
+     * When an item is flashed, this is the shape of the item.
+     *
+     * @param aParent is the parent GERBER_DRAW_ITEM which is actually drawn.
+     * @param aClipBox is DC clip box (NULL is no clip).
+     * @param aDC is the device context.
+     * @param aColor is the color of shape.
+     * @param aShapePos is the actual shape position.
+     * @param aFilledShape set to true to draw in filled mode, false to draw in sketch mode.
      */
     void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
                                  COLOR4D aColor, wxPoint aShapePos, bool aFilledShape );
 
     /**
-     * Function GetShapeDim
-     * Calculate a value that can be used to evaluate the size of text
-     * when displaying the D-Code of an item
-     * due to the complexity of a shape using many primitives
-     * one cannot calculate the "size" of a shape (only abounding box)
-     * but most of aperture macro are using one or few primitives
-     * and the "dimension" of the shape is the diameter of the primitive
-     * (or the max diameter of primitives)
-     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
-     * @return a dimension, or -1 if no dim to calculate
+     * Calculate a value that can be used to evaluate the size of text when displaying the
+     * D-Code of an item.
+     *
+     * Due to the complexity of a shape using many primitives one cannot calculate the "size" of
+     * a shape (only abounding box) but most of aperture macro are using one or few primitives
+     * and the "dimension" of the shape is the diameter of the primitive (or the max diameter of
+     * primitives).
+     *
+     * @param aParent is the parent #GERBER_DRAW_ITEM which is actually drawn.
+     * @return a dimension, or -1 if no dim to calculate.
      */
     int  GetShapeDim( GERBER_DRAW_ITEM* aParent );
 
-    /// Returns the bounding box of the shape
+    /// Return the bounding box of the shape.
     EDA_RECT GetBoundingBox() const
     {
         return m_boundingBox;
     }
+
+    wxString      name;             ///< The name of the aperture macro
+    AM_PRIMITIVES primitives;       ///< A sequence of AM_PRIMITIVEs
+
+    /*  A deferred parameter can be defined in aperture macro,
+     *  but outside aperture primitives. Example
+     *  %AMRECTHERM*
+     *  $4=$3/2*    parameter $4 is half value of parameter $3
+     * m_localparamStack handle a list of local deferred parameters
+     */
+    AM_PARAMS m_localparamStack;
+
+    SHAPE_POLY_SET m_shape;     ///< The shape of the item, calculated by GetApertureMacroShape
+    EDA_RECT m_boundingBox;     ///< The bounding box of the item, calculated by
+                                ///< GetApertureMacroShape.
+
 };
 
 
 /**
- * Struct APERTURE_MACRO_less_than
- * is used by std:set<APERTURE_MACRO> instantiation which uses
- * APERTURE_MACRO.name as its key.
+ * Used by std:set<APERTURE_MACRO> instantiation which uses APERTURE_MACRO.name as its key.
  */
 struct APERTURE_MACRO_less_than
 {
@@ -250,9 +254,7 @@ struct APERTURE_MACRO_less_than
 
 
 /**
- * Type APERTURE_MACRO_SET
- * is a sorted collection of APERTURE_MACROS whose key is the name field in
- * the APERTURE_MACRO.
+ * A sorted collection of APERTURE_MACROS whose key is the name field in the APERTURE_MACRO.
  */
 typedef std::set<APERTURE_MACRO, APERTURE_MACRO_less_than> APERTURE_MACRO_SET;
 typedef std::pair<APERTURE_MACRO_SET::iterator, bool>      APERTURE_MACRO_SET_PAIR;

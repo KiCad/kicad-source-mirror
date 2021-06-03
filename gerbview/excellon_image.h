@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ enum drill_G_code_t {
     DRILL_G_CCWMOVE
 };
 
-// Helper struct to analyse Excellon commands
+// Helper struct to analyze Excellon commands
 struct EXCELLON_CMD
 {
     std::string m_Name;     // key string
@@ -123,27 +123,14 @@ struct EXCELLON_ROUTE_COORD
     wxPoint GetPos() { return wxPoint( m_x, m_y ); }
 };
 
-/* EXCELLON_IMAGE handle a drill image
- *  It is derived from GERBER_FILE_IMAGE because there is a lot of likeness
- *  between EXCELLON files and GERBER files
- *  DCode aperture are also similat to T Codes.
- *  So we can reuse GERBER_FILE_IMAGE to handle EXCELLON_IMAGE with very few new functions
+/**
+ * Handle a drill image.
+ *
+ * It is derived from #GERBER_FILE_IMAGE because there is a lot of likeness between EXCELLON
+ * files and GERBER files.   DCode aperture are also similar to T Codes.
  */
-
 class EXCELLON_IMAGE : public GERBER_FILE_IMAGE
 {
-private:
-    enum excellon_state {
-        READ_HEADER_STATE,          // When we are in this state, we are reading header
-        READ_PROGRAM_STATE          // When we are in this state, we are reading drill data
-    };
-
-    excellon_state m_State;         // state of excellon file analysis
-    bool           m_SlotOn;        // true during an oblong drill definition
-                                    // by G85 (canned slot) command
-    bool           m_RouteModeOn;   // true during a route mode (for instance a oval hole) or a cutout
-    std::vector<EXCELLON_ROUTE_COORD> m_RoutePositions;  // The list of points in a route mode
-
 public: EXCELLON_IMAGE( int layer ) :
         GERBER_FILE_IMAGE( layer )
     {
@@ -164,10 +151,11 @@ public: EXCELLON_IMAGE( int layer ) :
 
     /**
      * Read and load a drill (EXCELLON format) file.
-     * @param aFullFileName = the full filename of the Gerber file
-     * when the file cannot be loaded
-     * Warning and info messages are stored in m_Messages
-     * @return bool if OK, false if the gerber file was not loaded
+     *
+     * When the file cannot be loaded, warning and info messages are stored in m_Messages.
+     *
+     * @param aFullFileName is the full filename of the Gerber file.
+     * @return true if OK, false if the gerber file was not loaded.
      */
     bool LoadFile( const wxString& aFullFileName );
 
@@ -177,8 +165,9 @@ private:
     bool Execute_EXCELLON_G_Command( char*& text );
     bool Execute_Drill_Command( char*& text );
 
-    /** Read a tool definition like T1C0.02 or T1F00S00C0.02 or T1C0.02F00S00
-     * and enter params in TCODE list
+    /**
+     * Read a tool definition like T1C0.02 or T1F00S00C0.02 or T1C0.02F00S00
+     * and enter params in TCODE list.
      */
     bool readToolInformation( char*& aText );
 
@@ -187,11 +176,25 @@ private:
         return DCodeNumber( aText );
     }
 
-    /** Ends a route command started by M15 ot G01, G02 or G03 command
+    /**
+     * End a route command started by M15 ot G01, G02 or G03 command.
      */
     void FinishRouteCommand();
 
     void SelectUnits( bool aMetric );
+
+private:
+    enum excellon_state {
+        READ_HEADER_STATE,          // When we are in this state, we are reading header
+        READ_PROGRAM_STATE          // When we are in this state, we are reading drill data
+    };
+
+    excellon_state m_State;         // state of excellon file analysis
+    bool           m_SlotOn;        // true during an oblong drill definition
+                                    // by G85 (canned slot) command
+    bool           m_RouteModeOn;   // true during a route mode (for instance a oval hole) or
+                                    // a cutout.
+    std::vector<EXCELLON_ROUTE_COORD> m_RoutePositions;  // The list of points in a route mode
 };
 
 

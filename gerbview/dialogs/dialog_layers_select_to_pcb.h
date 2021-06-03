@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2018 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,15 +39,6 @@ class GERBVIEW_FRAME;
  */
 class LAYERS_MAP_DIALOG : public LAYERS_MAP_DIALOG_BASE
 {
-private:
-    GERBVIEW_FRAME* m_Parent;
-    int m_gerberActiveLayersCount;                  // Number of initialized gerber layers
-    static int m_exportBoardCopperLayersCount;
-    LAYER_NUM m_layersLookUpTable[GERBER_DRAWLAYERS_COUNT]; // Indexes Gerber layers to PCB file layers
-                                                    // the last value in table is the number of copper layers
-    int    m_buttonTable[int(GERBER_DRAWLAYERS_COUNT)+1];       // Indexes buttons to Gerber layers
-    wxStaticText* m_layersList[int(GERBER_DRAWLAYERS_COUNT)+1]; // Indexes text strings to buttons
-
 public: LAYERS_MAP_DIALOG( GERBVIEW_FRAME* parent );
     ~LAYERS_MAP_DIALOG() {};
 
@@ -74,9 +65,9 @@ private:
      * number.  Gerbers that can be identified or which don't map to an
      * equivalent KiCad PCB layer will be set to UNSELECTED_LAYER.
      *
-     * @param aGerber2KicadMapping passed to return KiCad PCB layer number for each Gerber
+     * @param aGerber2KicadMapping passed to return KiCad PCB layer number for each Gerber.
      *
-     * @return int - The number of loaded Gerbers that have Altium extensions
+     * @return The number of loaded Gerbers that have Altium extensions.
      */
     int findKnownGerbersLoaded( std::vector<int>& aGerber2KicadMapping );
 
@@ -89,9 +80,9 @@ private:
      * number.  Gerbers that aren't using Altium extensions or which don't map to an
      * equivalent KiCad PCB layer will be set to UNSELECTED_LAYER.
      *
-     * @param aGerber2KicadMapping passed to return KiCad PCB layer number for each Gerber
+     * @param aGerber2KicadMapping passed to return KiCad PCB layer number for each Gerber.
      *
-     * @return int - The number of loaded Gerbers that have Altium extensions
+     * @return The number of loaded Gerbers that have Altium extensions.
      */
     int findNumAltiumGerbersLoaded( std::vector<int>& aGerber2KicadMapping );
 
@@ -104,9 +95,9 @@ private:
      * number.  Gerbers that aren't using KiCad naming or which don't map to an
      * equivalent KiCad PCB layer will be set to UNSELECTED_LAYER.
      *
-     * @param aGerber2KicadMapping passed to return KiCad PCB layer number for each Gerber
+     * @param aGerber2KicadMapping passed to return KiCad PCB layer number for each Gerber.
      *
-     * @return int - The number of loaded Gerbers using KiCad naming conventions
+     * @return The number of loaded Gerbers using KiCad naming conventions.
      */
     int findNumKiCadGerbersLoaded( std::vector<int>& aGerber2KicadMapping );
 
@@ -119,14 +110,24 @@ private:
      * number.  Gerbers that aren't using X2 File functions or which don't map to an
      * equivalent KiCad PCB layer will be set to UNSELECTED_LAYER.
      *
-     * @param aGerber2KicadMapping passed to return KiCad PCB layer number for each Gerber
+     * @param aGerber2KicadMapping passed to return KiCad PCB layer number for each Gerber.
      *
-     * @return int - The number of loaded Gerbers with X2 File Functions
+     * @return The number of loaded Gerbers with X2 File Functions.
      */
     int findNumX2GerbersLoaded( std::vector<int>& aGerber2KicadMapping );
 
-
     DECLARE_EVENT_TABLE()
+
+private:
+    GERBVIEW_FRAME* m_Parent;
+    int m_gerberActiveLayersCount;                  // Number of initialized gerber layers
+    static int m_exportBoardCopperLayersCount;
+
+    // Indexes Gerber layers to PCB file layers the last value in table is the number of
+    // copper layers.
+    LAYER_NUM m_layersLookUpTable[GERBER_DRAWLAYERS_COUNT];
+    int    m_buttonTable[int(GERBER_DRAWLAYERS_COUNT)+1];       // Indexes buttons to Gerber layers
+    wxStaticText* m_layersList[int(GERBER_DRAWLAYERS_COUNT)+1]; // Indexes text strings to buttons
 };
 
 #endif      // DIALOG_LAYERS_SELECT_TO_PCB_H_

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,10 +33,6 @@ class GAL_OPTIONS_PANEL;
 
 class PANEL_GERBVIEW_DISPLAY_OPTIONS : public PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE
 {
-private:
-    GERBVIEW_FRAME*    m_Parent;
-    GAL_OPTIONS_PANEL* m_galOptsPanel;
-
 public:
     PANEL_GERBVIEW_DISPLAY_OPTIONS( GERBVIEW_FRAME* aFrame, wxWindow* aWindow );
     ~PANEL_GERBVIEW_DISPLAY_OPTIONS() {};
@@ -44,6 +40,9 @@ public:
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    GERBVIEW_FRAME*    m_Parent;
+    GAL_OPTIONS_PANEL* m_galOptsPanel;
 };
 
 

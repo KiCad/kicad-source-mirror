@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,11 +54,6 @@
  * DCode min = D10
  * DCode max = 999
  */
-
-
-/***************/
-/* Class DCODE */
-/***************/
 
 
 D_CODE::D_CODE( int num_dcode )
@@ -117,9 +112,11 @@ const wxChar* D_CODE::ShowApertureType( APERTURE_T aType )
     return ret;
 }
 
+
 int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 {
     int dim = -1;
+
     switch( m_Shape )
     {
     case APT_CIRCLE:
@@ -148,9 +145,8 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 }
 
 
-void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
-                                EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor,
-                                wxPoint aShapePos, bool aFilledShape )
+void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
+                               COLOR4D aColor, const wxPoint& aShapePos, bool aFilledShape )
 {
     int radius;
 
@@ -264,10 +260,8 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
 }
 
 
-void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
-                                 EDA_RECT* aClipBox, wxDC* aDC,
-                                 COLOR4D aColor, bool aFilled,
-                                 const wxPoint& aPosition )
+void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
+                                 COLOR4D aColor, bool aFilled, const wxPoint& aPosition )
 {
     if( m_Polygon.OutlineCount() == 0 )
         return;
@@ -286,6 +280,7 @@ void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
     GRClosedPoly( aClipBox, aDC, pointCount, &points[0], aFilled, aColor, aColor );
 }
 
+
 // TODO(snh): Remove the hard-coded count
 #define SEGS_CNT 64     // number of segments to approximate a circle
 
@@ -293,8 +288,8 @@ void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
 // A helper function for D_CODE::ConvertShapeToPolygon().   Add a hole to a polygon
 static void addHoleToPolygon( SHAPE_POLY_SET*       aPolygon,
                               APERTURE_DEF_HOLETYPE aHoleShape,
-                              wxSize                aSize,
-                              wxPoint               aAnchorPos );
+                              const wxSize&         aSize,
+                              const wxPoint&        aAnchorPos );
 
 
 void D_CODE::ConvertShapeToPolygon()
@@ -422,8 +417,8 @@ void D_CODE::ConvertShapeToPolygon()
 // Add a hole to a polygon
 static void addHoleToPolygon( SHAPE_POLY_SET*       aPolygon,
                               APERTURE_DEF_HOLETYPE aHoleShape,
-                              wxSize                aSize,
-                              wxPoint               aAnchorPos )
+                              const wxSize&         aSize,
+                              const wxPoint&        aAnchorPos )
 {
     wxPoint currpos;
     SHAPE_POLY_SET holeBuffer;

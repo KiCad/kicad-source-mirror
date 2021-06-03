@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2010 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,8 +43,7 @@ class EDA_RECT;
 
 
 /**
- * Enum APERTURE_T
- * is the set of all gerber aperture types allowed, according to page 16 of
+ * The set of all gerber aperture types allowed, according to page 16 of
  * http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf
  */
 enum APERTURE_T {
@@ -76,48 +75,19 @@ struct APERTURE_MACRO;
 
 
 /**
- * D_CODE
- * holds a gerber DCODE (also called Aperture) definition.
+ * A gerber DCODE (also called Aperture) definition.
  */
 class D_CODE
 {
-private:
-    APERTURE_MACRO* m_Macro;    ///< no ownership, points to
-                                //   GERBER.m_aperture_macros element
-    /**
-     * parameters used only when this D_CODE holds a reference to an aperture
-     * macro, and these parameters would customize the macro.
-     */
-    std::vector<double>   m_am_params;
-
-public:
-    wxSize                m_Size;           ///< Horizontal and vertical dimensions.
-    APERTURE_T            m_Shape;          ///< shape ( Line, rectangle, circle , oval .. )
-    int                   m_Num_Dcode;      ///< D code value ( >= 10 )
-    wxSize                m_Drill;          ///< dimension of the hole (if any) (draill file)
-    APERTURE_DEF_HOLETYPE m_DrillShape;     ///< shape of the hole (0 = no hole, round = 1, rect = 2) */
-    double                m_Rotation;       ///< shape rotation in degrees
-    int                   m_EdgesCount;     ///< in aperture definition Polygon only:
-                                            ///< number of edges for the polygon
-    bool                  m_InUse;          ///< false if the aperure (previously defined)
-                                            ///< is not used to draw something
-    bool                  m_Defined;        ///< false if the aperture is not defined in the header
-    wxString              m_AperFunction;   ///< the aperture attribute (created by a %TA.AperFunction command)
-                                            ///< attached to the D_CODE
-    SHAPE_POLY_SET        m_Polygon;        /* Polygon used to draw APT_POLYGON shape and some other
-                                             * complex shapes which are converted to polygon
-                                             * (shapes with hole )
-                                             */
-
 public:
     D_CODE( int num_dcode );
     ~D_CODE();
     void Clear_D_CODE_Data();
 
     /**
-     * AppendParam()
      * Add a parameter to the D_CODE parameter list.
-     * used to customize the corresponding aperture macro
+     *
+     * Used to customize the corresponding aperture macro.
      */
     void AppendParam( double aValue )
     {
@@ -125,8 +95,7 @@ public:
     }
 
     /**
-     * GetParamCount()
-     * Returns the number of parameters stored in parameter list.
+     * Return the number of parameters stored in parameter list.
      */
     unsigned GetParamCount() const
     {
@@ -134,88 +103,116 @@ public:
     }
 
     /**
-     * GetParam()
-     * Returns a parameter stored in parameter list.
-     * @param aIdx = index of parameter
+     * Return a parameter stored in parameter list.
+     *
+     * @param aIdx is the index of parameter.
      */
     double GetParam( unsigned aIdx ) const
     {
         wxASSERT( aIdx <= m_am_params.size() );
+
         if( aIdx <= m_am_params.size() )
             return  m_am_params[aIdx - 1];
         else
             return 0;
     }
 
-
     void SetMacro( APERTURE_MACRO* aMacro )
     {
         m_Macro = aMacro;
     }
 
-
     APERTURE_MACRO* GetMacro() const { return m_Macro; }
 
     /**
-     * Function ShowApertureType
-     * returns a character string telling what type of aperture type \a aType is.
-     * @param aType The aperture type to show.
+     * Return a character string telling what type of aperture type \a aType is.
+     *
+     * @param aType is the aperture type to show.
      */
     static const wxChar* ShowApertureType( APERTURE_T aType );
 
     /**
-     * Function DrawFlashedShape
      * Draw the dcode shape for flashed items.
-     * When an item is flashed, the DCode shape is the shape of the item
-     * @param aParent = the GERBER_DRAW_ITEM being drawn
-     * @param aClipBox = DC clip box (NULL is no clip)
-     * @param aDC = device context
-     * @param aColor = the normal color to use
-     * @param aShapePos = the actual shape position
-     * @param aFilledShape = true to draw in filled mode, false to draw in sketch mode
+     *
+     * When an item is flashed, the DCode shape is the shape of the item.
+     *
+     * @param aParent is the #GERBER_DRAW_ITEM being drawn.
+     * @param aClipBox is the device context clip box (NULL is no clip).
+     * @param aDC is the device context.
+     * @param aColor is the normal color to use.
+     * @param aShapePos is the actual shape position
+     * @param aFilledShape set to true to draw in filled mode, false to draw in sketch mode
      */
-    void DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox,
-                           wxDC* aDC, COLOR4D aColor,
-                           wxPoint aShapePos, bool aFilledShape );
+    void DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
+                           COLOR4D aColor, const wxPoint& aShapePos, bool aFilledShape );
 
     /**
-     * Function DrawFlashedPolygon
-     * a helper function used to draw the polygon stored ion m_PolyCorners
-     * Draw some Apertures shapes when they are defined as filled polygons.
-     * APT_POLYGON is always a polygon, but some complex shapes are also converted to
-     * polygons (shapes with holes, some rotated shapes)
-     * @param aParent = the GERBER_DRAW_ITEM being drawn
-     * @param aClipBox = DC clip box (NULL is no clip)
-     * @param aDC = device context
-     * @param aColor = the normal color to use
-     * @param aFilled = true to draw in filled mode, false to draw in sketch mode
-     * @param aPosition = the actual shape position
+     * A helper function used to draw the polygon stored in m_PolyCorners.
+     *
+     * Draw some Apertures shapes when they are defined as filled polygons. APT_POLYGON is
+     * always a polygon, but some complex shapes are also converted to polygons (shapes with
+     * holes, some rotated shapes).
+     *
+     * @param aParent is the #GERBER_DRAW_ITEM being drawn.
+     * @param aClipBox is the device context clip box (NULL is no clip).
+     * @param aDC is the device context.
+     * @param aColor is the normal color to use.
+     * @param aFilled set to true to draw in filled mode, false to draw in sketch mode.
+     * @param aPosition is the actual shape position.
      */
-    void DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
-                             EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor,
-                             bool aFilled, const wxPoint& aPosition );
+    void DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
+                             COLOR4D aColor, bool aFilled, const wxPoint& aPosition );
 
     /**
-     * Function ConvertShapeToPolygon
-     * convert a shape to an equivalent polygon.
-     * Arcs and circles are approximated by segments
-     * Useful when a shape is not a graphic primitive (shape with hole,
-     * rotated shape ... ) and cannot be easily drawn.
+     * Convert a shape to an equivalent polygon.
+     *
+     * Arcs and circles are approximated by segments.  Useful when a shape is not a graphic
+     * primitive (shape with hole, rotated shape ... ) and cannot be easily drawn.
      */
     void ConvertShapeToPolygon();
 
     /**
-     * Function GetShapeDim
-     * calculates a value that can be used to evaluate the size of text
-     * when displaying the D-Code of an item
-     * due to the complexity of some shapes,
-     * one cannot calculate the "size" of a shape (only a bounding box)
-     * but here, the "dimension" of the shape is the diameter of the primitive
-     * or for lines the width of the line if the shape is a line
-     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
-     * @return a dimension, or -1 if no dim to calculate
+     * Calculate a value that can be used to evaluate the size of text when displaying the
+     * D-Code of an item.
+     *
+     * Due to the complexity of some shapes, one cannot calculate the "size" of a shape (only
+     * a bounding box) but here, the "dimension" of the shape is the diameter of the primitive
+     * or for lines the width of the line if the shape is a line.
+     *
+     * @param aParent is the parent GERBER_DRAW_ITEM which is actually drawn.
+     * @return a dimension, or -1 if no dim to calculate.
      */
     int GetShapeDim( GERBER_DRAW_ITEM* aParent );
+
+public:
+    wxSize                m_Size;           ///< Horizontal and vertical dimensions.
+    APERTURE_T            m_Shape;          ///< shape ( Line, rectangle, circle , oval .. )
+    int                   m_Num_Dcode;      ///< D code value ( >= 10 )
+    wxSize                m_Drill;          ///< dimension of the hole (if any) (drill file)
+    APERTURE_DEF_HOLETYPE m_DrillShape;     ///< shape of the hole (0 = no hole, round = 1,
+                                            ///< rect = 2).
+    double                m_Rotation;       ///< shape rotation in degrees
+    int                   m_EdgesCount;     ///< in aperture definition Polygon only:
+                                            ///< number of edges for the polygon
+    bool                  m_InUse;          ///< false if the aperture (previously defined)
+                                            ///< is not used to draw something
+    bool                  m_Defined;        ///< false if the aperture is not defined in the header
+    wxString              m_AperFunction;   ///< the aperture attribute (created by a
+                                            ///< %TA.AperFunction command).
+                                            ///< attached to the D_CODE
+    SHAPE_POLY_SET        m_Polygon;        /* Polygon used to draw APT_POLYGON shape and some other
+                                             * complex shapes which are converted to polygon
+                                             * (shapes with hole )
+                                             */
+
+private:
+    APERTURE_MACRO* m_Macro;    ///< no ownership, points to GERBER.m_aperture_macros element.
+
+    /**
+     * parameters used only when this D_CODE holds a reference to an aperture
+     * macro, and these parameters would customize the macro.
+     */
+    std::vector<double>   m_am_params;
 };
 
 

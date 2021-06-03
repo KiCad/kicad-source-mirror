@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,53 +34,22 @@
 #include "layer_widget.h"
 
 /**
- * GERBER_LAYER_WIDGET
- * is here to implement the abtract functions of LAYER_WIDGET so they
- * may be tied into the GERBVIEW_FRAME's data and so we can add a popup
- * menu which is specific to Pcbnew's needs.
+ * Abstract functions of LAYER_WIDGET so they may be tied into the GERBVIEW_FRAME's data and
+ * we can add a popup menu which is specific to Pcbnew's needs.
  */
 class GERBER_LAYER_WIDGET : public LAYER_WIDGET
 {
-    GERBVIEW_FRAME*    myframe;
-    bool m_alwaysShowActiveLayer;   // If true: Only shows the current active layer
-                                    // even if it is changed
-
-
-    /**
-     * Function OnRightDownLayers
-     * puts up a popup menu for the layer panel.
-     */
-    void onRightDownLayers( wxMouseEvent& event );
-
-    void onPopupSelection( wxCommandEvent& event );
-
-    /// this is for the popup menu, the right click handler has to be installed
-    /// on every child control within the layer panel.
-    void installRightLayerClickHandler();
-
-    /**
-     * Virtual Function useAlternateBitmap
-     * @return true if bitmaps shown in Render layer list
-     * are alternate bitmaps, or false if they are "normal" bitmaps
-     */
-    virtual bool useAlternateBitmap(int aRow) override;
-
-    GERBER_FILE_IMAGE_LIST* GetImagesList();
-
 public:
-
     /**
-     * Constructor
-     * @param aParent : the parent frame
-     * @param aFocusOwner : the window that has the keyboard focus.
+     * @param aParent is the parent frame.
+     * @param aFocusOwner is the window that has the keyboard focus.
      */
     GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFocusOwner );
 
     void ReFill();
 
     /**
-     * Function ReFillRender
-     * Rebuild Render for instance after the config is read
+     * Rebuild Render for instance after the config is read.
      */
     void ReFillRender();
 
@@ -93,30 +62,28 @@ public:
     void OnRenderEnable( int aId, bool isEnabled ) override;
 
     /**
-     * Function SetLayersManagerTabsText
-     * Update the layer manager tabs labels
-     * Useful when changing Language or to set labels to a non default value
+     * Update the layer manager tabs labels.
+     *
+     * Useful when changing Language or to set labels to a non default value.
      */
     void SetLayersManagerTabsText( );
     //-----</implement LAYER_WIDGET abstract callback functions>----------
 
     /**
-     * Function OnLayerSelected
-     * ensure the active layer is visible, and other layers not visible
-     * when m_alwaysShowActiveLayer is true
-     * Otherwise do nothing.
-     * @return true m_alwaysShowActiveLayer is true and the canvas is refreshed,
-     * and false if do nothing
+     * Ensure the active layer is visible, and other layers not visible when
+     * m_alwaysShowActiveLayer is true.
+     *
+     * @return true m_alwaysShowActiveLayer is true and the canvas is refreshed else false
+     *         if do nothing.
      */
     bool OnLayerSelected();     // postprocess after an active layer selection
                                 // ensure active layer visible if
                                 // m_alwaysShowActiveCopperLayer is true;
 
     /**
-     * Function addRightClickMenuItems
-     * add menu items to a menu that should be shown when right-clicking
-     * the Gerber layer widget.
-     * @param aMenu is the menu to modify: menuitems will be added to aMenu
+     * Add menu items to a menu that should be shown when right-clicking the Gerber layer widget.
+     *
+     * @param aMenu is the menu to modify: menuitems will be added to aMenu.
      */
     void AddRightClickMenuItems( wxMenu* aMenu );
 
@@ -132,6 +99,31 @@ protected:
         ID_SORT_GBR_LAYERS,
         ID_LAYER_MANAGER_END = ID_SORT_GBR_LAYERS,
     };
+
+private:
+    /**
+     * Put up a popup menu for the layer panel.
+     */
+    void onRightDownLayers( wxMouseEvent& event );
+
+    void onPopupSelection( wxCommandEvent& event );
+
+    /// this is for the popup menu, the right click handler has to be installed
+    /// on every child control within the layer panel.
+    void installRightLayerClickHandler();
+
+    /**
+     * @return true if bitmaps shown in Render layer list are alternate bitmaps else false if
+     *         they are "normal" bitmaps.
+     */
+    virtual bool useAlternateBitmap( int aRow ) override;
+
+    GERBER_FILE_IMAGE_LIST* GetImagesList();
+
+    GERBVIEW_FRAME* myframe;
+
+    bool m_alwaysShowActiveLayer;   // If true: Only shows the current active layer
+                                    // even if it is changed
 };
 
 #endif  // GERBER_LAYER_WIDGET_H
