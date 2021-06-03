@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-05-21 08:32+0000\n"
+"PO-Revision-Date: 2021-06-05 08:33+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -1677,7 +1677,7 @@ msgstr "文件人員"
 
 #: common/dialog_about/dialog_about.cpp:130
 msgid "Librarians"
-msgstr "庫人員"
+msgstr "制庫人員"
 
 #: common/dialog_about/dialog_about.cpp:133
 msgid "Artists"
@@ -28184,7 +28184,7 @@ msgstr "焊盤網路與原理圖不匹配"
 
 #: pcbnew/drc/drc_item.cpp:169
 msgid "Silkscreen clipped by solder mask"
-msgstr "用阻焊剪下的絲印"
+msgstr "與開窗區域相交的絲印"
 
 #: pcbnew/drc/drc_item.cpp:173
 msgid "Silkscreen overlap"
