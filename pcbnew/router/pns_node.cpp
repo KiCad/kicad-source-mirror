@@ -1051,6 +1051,58 @@ int NODE::FindLinesBetweenJoints( const JOINT& aA, const JOINT& aB, std::vector<
 }
 
 
+void NODE::FixupVirtualVias()
+{
+    int n;
+
+    std::vector<VVIA*> vvias;
+
+    for( auto& joint : m_joints )
+    {
+        if( joint.second.Layers().IsMultilayer() )
+            continue;
+
+        int  n_seg = 0, n_solid = 0, n_vias = 0;
+        int  prev_w = -1;
+        int  max_w = -1;
+        bool is_width_change = false;
+
+        for( const auto& lnk : joint.second.LinkList() )
+        {
+            if( lnk.item->OfKind( ITEM::VIA_T ) )
+                n_vias++;
+            else if( lnk.item->OfKind( ITEM::SOLID_T ) )
+                n_solid++;
+            else if( const auto t = dyn_cast<PNS::SEGMENT*>( lnk.item ) )
+            {
+                int w = t->Width();
+
+                if( prev_w >= 0 && w != prev_w )
+                {
+                    is_width_change = true;
+                }
+
+                max_w = std::max( w, max_w );
+                prev_w = w;
+            }
+        }
+
+        if( ( is_width_change || n_seg >= 3 ) && n_solid == 0 && n_vias == 0 )
+        {
+            // fixme: the hull margin here is an ugly temporary workaround. The real fix
+            // is to use octagons for via force propagation.
+            vvias.push_back( new VVIA( joint.second.Pos(), joint.second.Layers().Start(),
+                                       max_w + 2 * PNS_HULL_MARGIN, joint.second.Net() ) );
+        }
+    }
+
+    for( auto vvia : vvias )
+    {
+        Add( ItemCast<VIA>( std::move( std::unique_ptr<VVIA>( vvia ) ) ) );
+    }
+}
+
+
 JOINT* NODE::FindJoint( const VECTOR2I& aPos, int aLayer, int aNet )
 {
     JOINT::HASH_TAG tag;

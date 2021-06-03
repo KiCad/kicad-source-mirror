@@ -70,11 +70,14 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
 {
     m_originLayer = aItem->Layers().Start();
 
-    if( aItem->OfKind( PNS::ITEM::LINE_T ) )
+    if( const auto l = dyn_cast<const PNS::LINE*>( aItem ) )
     {
-        const PNS::LINE* l = static_cast<const PNS::LINE*>( aItem );
-
         if( !l->SegmentCount() )
+            return;
+    }
+    else if( const auto v = dyn_cast<const PNS::VIA*>( aItem ) )
+    {
+        if( v->IsVirtual() )
             return;
     }
 

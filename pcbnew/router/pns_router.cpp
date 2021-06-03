@@ -96,8 +96,9 @@ void ROUTER::SyncWorld()
 
     m_world = std::make_unique<NODE>( );
     m_iface->SyncWorld( m_world.get() );
-
+    m_world->FixupVirtualVias();
 }
+
 
 void ROUTER::ClearWorld()
 {
@@ -612,15 +613,25 @@ void ROUTER::CommitRouting( NODE* aNode )
             }
         }
 
-        if( !is_changed )
+        if( !is_changed && !item->IsVirtual() )
             m_iface->RemoveItem( item );
     }
 
     for( ITEM* item : added )
-        m_iface->AddItem( item );
+    {
+        if( !item->IsVirtual() )
+        {
+            m_iface->AddItem( item );
+        }
+    }
 
     for( ITEM* item : changed )
-        m_iface->UpdateItem( item );
+    {
+        if( !item->IsVirtual() )
+        {
+            m_iface->UpdateItem( item );
+        }
+    }
 
     m_iface->Commit();
     m_world->Commit( aNode );

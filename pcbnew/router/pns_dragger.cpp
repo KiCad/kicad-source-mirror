@@ -67,6 +67,48 @@ bool DRAGGER::propagateViaForces( NODE* node, std::set<VIA*>& vias )
     return false;
 }
 
+
+VVIA* DRAGGER::checkVirtualVia( const VECTOR2D& aP, SEGMENT* aSeg )
+{
+    int w2 = aSeg->Width() / 2;
+
+    auto distA = ( aP - aSeg->Seg().A ).EuclideanNorm();
+    auto distB = ( aP - aSeg->Seg().B ).EuclideanNorm();
+
+    VECTOR2I psnap;
+
+    if( distA <= w2 )
+    {
+        psnap = aSeg->Seg().A;
+    }
+    else if( distB <= w2 )
+    {
+        psnap = aSeg->Seg().B;
+    }
+    else
+    {
+        return nullptr;
+    }
+
+    JOINT *jt = m_world->FindJoint( psnap, aSeg );
+
+    if ( !jt )
+    {
+        return nullptr;
+    }
+
+    for( auto lnk : jt->LinkList() )
+    {
+        if( lnk.item->IsVirtual() && lnk.item->OfKind( ITEM::VIA_T ))
+        {
+            return static_cast<VVIA*>( lnk.item );
+        }
+    }
+
+    return nullptr;
+}
+
+
 bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
 {
     int w2 = aSeg->Width() / 2;
@@ -109,7 +151,6 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
 
     return true;
 }
-
 
 
 bool DRAGGER::startDragArc( const VECTOR2D& aP, ARC* aArc )
@@ -193,8 +234,19 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
     switch( startItem->Kind() )
     {
     case ITEM::SEGMENT_T:
-        return startDragSegment( aP, static_cast<SEGMENT*>( startItem ) );
+    {
+        SEGMENT* seg = static_cast<SEGMENT*>( startItem );
+        VVIA* vvia = checkVirtualVia( aP, seg );
 
+        if( vvia )
+        {
+            return startDragVia( vvia );
+        }
+        else
+        {
+            return startDragSegment( aP, seg );
+        }
+    }
     case ITEM::VIA_T:
         return startDragVia( static_cast<VIA*>( startItem ) );
 

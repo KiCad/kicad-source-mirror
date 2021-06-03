@@ -380,6 +380,8 @@ public:
         return m_override.find( aItem ) != m_override.end();
     }
 
+    void FixupVirtualVias();
+
 private:
     void Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant = false );
 

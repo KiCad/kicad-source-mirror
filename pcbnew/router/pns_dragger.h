@@ -126,6 +126,7 @@ private:
     void optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, const VECTOR2I& aP );
     bool propagateViaForces( NODE* node, std::set<VIA*>& vias );
     bool tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk );
+    VVIA* checkVirtualVia( const VECTOR2D& aP, SEGMENT* aSeg );
 
 
     VIA_HANDLE             m_initialVia;
