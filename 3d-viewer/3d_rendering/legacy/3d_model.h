@@ -37,6 +37,8 @@
 #include "../3d_render_raytracing/shapes3D/bbox_3d.h"
 #include "../../3d_enums.h"
 
+#include <wx/chartype.h>
+
 class MODEL_3D
 {
 public:

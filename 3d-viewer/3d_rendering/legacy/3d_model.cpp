@@ -35,6 +35,7 @@
 #include "../common_ogl/ogl_utils.h"
 #include "../3d_math.h"
 #include <wx/debug.h>
+#include <wx/log.h>
 #include <chrono>
 #include <memory>
 
