@@ -38,57 +38,16 @@
 #define ID_LIST_SHOW_ALL 10002
 #define ID_LIST_SHOW_NONE 10003
 
+class PNS_LOG_VIEWER_OVERLAY;
+
 class PNS_LOG_VIEWER_FRAME : public PNS_LOG_VIEWER_FRAME_BASE, public PCB_TEST_FRAME_BASE
 {
 public:
-    PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FRAME_BASE( frame )
-    {
-        LoadSettings();
-        createView( this, PCB_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-
-        m_viewSizer->Add( m_galPanel.get(), 1, wxEXPAND, 5 );
-
-        Layout();
-
-        Show( true );
-        Maximize();
-        Raise();
-
-        auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
-                m_galPanel->GetView()->GetPainter()->GetSettings() );
-
-        settings->SetZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE );
-
-        m_listPopupMenu = new wxMenu( wxT( "" ) );
-        m_listPopupMenu->Append( ID_LIST_COPY, wxT( "Copy selected geometry" ), wxT( "" ),
-                                 wxITEM_NORMAL );
-        m_listPopupMenu->Append( ID_LIST_SHOW_ALL, wxT( "Show all" ), wxT( "" ), wxITEM_NORMAL );
-        m_listPopupMenu->Append( ID_LIST_SHOW_NONE, wxT( "Show none" ), wxT( "" ), wxITEM_NORMAL );
-
-        m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_ITEM_CONTEXT_MENU,
-                             wxMouseEventHandler( PNS_LOG_VIEWER_FRAME::onListRightClick ), NULL,
-                             this );
-        //m_itemList->Connect(m_itemList->GetId(),wxEVT_LISTBOX,wxCommandEventHandler(PNS_LOG_VIEWER_FRAME::onListSelect),NULL,this);
-        m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_SELECTION_CHANGED,
-                             wxCommandEventHandler( PNS_LOG_VIEWER_FRAME::onListSelect ), NULL,
-                             this );
-        m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_ITEM_CHECKED,
-                             wxCommandEventHandler( PNS_LOG_VIEWER_FRAME::onListChecked ), NULL,
-                             this );
-
-        m_itemList->AppendColumn( "Type" );
-        m_itemList->AppendColumn( "Value" );
-        m_itemList->AppendColumn( "File" );
-        m_itemList->AppendColumn( "Method" );
-        m_itemList->AppendColumn( "Line" );
-    }
-
-    virtual ~PNS_LOG_VIEWER_FRAME() 
-    {
-        m_overlay = nullptr;
-    }
+    PNS_LOG_VIEWER_FRAME( wxFrame* frame );
+    virtual ~PNS_LOG_VIEWER_FRAME();
 
     void SetLogFile( PNS_LOG_FILE* aLog );
+    std::shared_ptr<PNS_LOG_VIEWER_OVERLAY> GetOverlay() const { return m_overlay; }
 
 private:
     void         drawLoggedItems( int iter );
@@ -109,11 +68,24 @@ private:
     virtual void onBtnRewindRight( wxCommandEvent& event ) override;
     virtual void onListChecked( wxCommandEvent& event );
 
-    std::shared_ptr<KIGFX::VIEW_OVERLAY>  m_overlay;
+    std::shared_ptr<PNS_LOG_VIEWER_OVERLAY>  m_overlay;
     std::shared_ptr<PNS_LOG_FILE>         m_logFile;
     std::shared_ptr<PNS_TEST_ENVIRONMENT> m_env;
     int                                   m_rewindIter;
     wxMenu*                               m_listPopupMenu;
+};
+
+class LABEL_MANAGER;
+
+class PNS_LOG_VIEWER_OVERLAY : public KIGFX::VIEW_OVERLAY
+{
+    public:
+        PNS_LOG_VIEWER_OVERLAY( KIGFX::GAL* aGal );
+        void AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std::string name, bool aShowVertexNumbers = false );
+        void DrawAnnotations();
+
+    private:
+        std::unique_ptr<LABEL_MANAGER> m_labelMgr;
 };
 
 #endif

@@ -42,193 +42,170 @@
 
 #include "qa/drc_proto/drc_proto.h"
 
+#include "label_manager.h"
 #define TOM_EXTRA_DEBUG
 
-class LABEL_MANAGER
+LABEL_MANAGER::LABEL_MANAGER( KIGFX::GAL* aGal ) : m_gal( aGal )
 {
-public:
-    struct LABEL
-    {
-        COLOR4D     m_color;
-        std::string m_msg;
-        VECTOR2I    m_target;
-        BOX2I    m_bbox;
-    };
 
-    LABEL_MANAGER( KIGFX::GAL* aGal ) :
-        m_gal( aGal ) {};
-
-
-    void Add( VECTOR2I target, std::string msg, COLOR4D color )
-    {
-        LABEL lbl;
-
-        lbl.m_target = target;
-        lbl.m_msg = msg;
-        lbl.m_color = color;
-        m_gal->SetGlyphSize( VECTOR2D(m_textSize, m_textSize) );
-
-        VECTOR2I textDims = m_gal->GetTextLineSize( msg );
-
-        lbl.m_bbox.SetOrigin( lbl.m_target - textDims - VECTOR2I( m_textSize, m_textSize ) );
-        lbl.m_bbox.SetSize( textDims );
-        m_labels.push_back( lbl );
-    }
-
-    void Add( const SHAPE_LINE_CHAIN& aL, COLOR4D color )
-    {
-        for( int i = 0; i < aL.PointCount(); i++ )
-        {
-            char msg[1024];
-            snprintf(msg, sizeof(msg), "%d", i );
-            Add( aL.CPoint(i), msg, color );
-        }
-    }
-
-    void Redraw( std::shared_ptr<KIGFX::VIEW_OVERLAY> aOvl )
-    {
-        recalculate();
-        for ( auto & lbl : m_labels )
-        {
-            //printf("Draw lbl %d %d '%s'\n", lbl.m_bbox.GetOrigin().x, lbl.m_bbox.GetOrigin().y, lbl.m_msg.c_str() );
-            aOvl->SetIsFill( false );
-            aOvl->SetIsStroke( true );
-            aOvl->SetLineWidth( 10000 );
-            aOvl->SetStrokeColor( lbl.m_color.Brighten( 0.7 ) );
-            aOvl->Rectangle( lbl.m_bbox.GetOrigin(), lbl.m_bbox.GetEnd() );
-            aOvl->BitmapText( lbl.m_msg, lbl.m_bbox.Centre(), 0.0 );
-            VECTOR2I nearest = nearestBoxCorner( lbl.m_bbox, lbl.m_target );
-            aOvl->Line( lbl.m_target, nearest );
-        }
-    }
-
-private:
-
-    VECTOR2I nearestBoxCorner( BOX2I b, VECTOR2I p )
-    {
-        VECTOR2I ptest[4] =
-        {
-            b.GetPosition(),
-            b.GetPosition() + VECTOR2I( b.GetWidth(), 0 ),
-            b.GetPosition() + VECTOR2I( b.GetWidth(), b.GetHeight() ),
-            b.GetPosition() + VECTOR2I( 0, b.GetHeight() )
-        };
-
-        int bestDist = INT_MAX;
-        VECTOR2I rv;
-
-        for(int i = 0; i< 4;i++)
-        {
-            int dist = ( ptest[i] - p ).EuclideanNorm();
-            if(dist < bestDist)
-            {
-                bestDist = dist;
-                rv = ptest[i];
-            }
-        }
-
-        return rv;
-    }
-
-    VECTOR2I boxMtv( BOX2I b1, BOX2I b2 )
-    {
-        VECTOR2I rv(0, 0);
-
-        b1.Normalize();
-        b2.Normalize();
-
-        if( !b1.Intersects(b2) )
-            return rv;
-
-        int bestDist = INT_MAX;
-
-        VECTOR2I p[4] =
-        {
-            b2.GetPosition(),
-            b2.GetPosition() + VECTOR2I( b2.GetWidth(), 0 ),
-            b2.GetPosition() + VECTOR2I( b2.GetWidth(), b2.GetHeight() ),
-            b2.GetPosition() + VECTOR2I( 0, b2.GetHeight() )
-        };
-
-        for (int i = 0; i < 4 ; i++ )
-        {
-            if ( b1.Contains( p[i] ))
-            {
-             //   printf("CONT %d\n", i );
-                VECTOR2I dp[4] = 
-                {
-                    VECTOR2I( b1.GetEnd().x - p[i].x + 1, 0 ),
-                    VECTOR2I( b1.GetPosition().x - p[i].x - 1, 0 ),
-                    VECTOR2I( 0, b1.GetEnd().y - p[i].y + 1  ),
-                    VECTOR2I( 0, b1.GetPosition().y - p[i].y - 1 )
-                };
-
-                for(int j = 0; j < 4; j++ )
-                {
-                    BOX2I btest(b2);
-                    btest.Move( dp[j] );
-                    if( !b1.Intersects(btest) )
-                    {
-                        int dist = dp[j].EuclideanNorm();
-                        if( dist < bestDist )
-                        {
-                            bestDist = dist;
-                            rv = dp[j];
-                        }
-                    }
-                }
-            }
-        }
-
-        return rv;
-    }
-
-    void recalculate()
-    {
-        int iterLimit = 5;
-        while ( iterLimit > 0 )
-        {
-            printf("Iter %d\n", iterLimit );
-            bool collisionsFound = false;
-            for(int i = 0; i < m_labels.size(); i++ )
-            {
-                for(int j = 0; j < m_labels.size(); j++ )
-                {
-                    if (i == j )
-                        continue;
-
-
-                    auto bb_i = m_labels[i].m_bbox;
-                    auto bb_j = m_labels[j].m_bbox;
-
-                    bb_i.Inflate(100000);
-                    bb_j.Inflate(100000);
-                    VECTOR2I mtv = boxMtv(bb_i, bb_j);
-
-
-                    if( mtv.x || mtv.y )
-                    {
-//                        printf("%d %d mtv %d %d\n", i, j, mtv.x, mtv.y );
-
-                        m_labels[i].m_bbox.Move( -mtv );
-                        collisionsFound = true;
-                    }
-                }
-            }
-
-            if( ! collisionsFound )
-                break;
-
-            iterLimit--;
-        }
-    }
-
-    KIGFX::GAL* m_gal;
-    int m_textSize = 100000;
-    std::vector<LABEL> m_labels;
 };
 
+LABEL_MANAGER::~LABEL_MANAGER()
+{
+}
 
+
+void LABEL_MANAGER::Add( VECTOR2I target, std::string msg, COLOR4D color )
+{
+    LABEL lbl;
+
+    lbl.m_target = target;
+    lbl.m_msg = msg;
+    lbl.m_color = color;
+    m_gal->SetGlyphSize( VECTOR2D( m_textSize, m_textSize ) );
+
+    VECTOR2I textDims = m_gal->GetTextLineSize( msg );
+
+    lbl.m_bbox.SetOrigin( lbl.m_target - textDims - VECTOR2I( m_textSize, m_textSize ) );
+    lbl.m_bbox.SetSize( textDims );
+    m_labels.push_back( lbl );
+}
+
+void LABEL_MANAGER::Add( const SHAPE_LINE_CHAIN& aL, COLOR4D color )
+{
+    for( int i = 0; i < aL.PointCount(); i++ )
+    {
+        char msg[1024];
+        snprintf( msg, sizeof( msg ), "%d", i );
+        Add( aL.CPoint( i ), msg, color );
+    }
+}
+
+void LABEL_MANAGER::Redraw( KIGFX::VIEW_OVERLAY* aOvl )
+{
+    recalculate();
+    for( auto& lbl : m_labels )
+    {
+        //printf("Draw lbl %d %d '%s'\n", lbl.m_bbox.GetOrigin().x, lbl.m_bbox.GetOrigin().y, lbl.m_msg.c_str() );
+        aOvl->SetIsFill( false );
+        aOvl->SetIsStroke( true );
+        aOvl->SetLineWidth( 10000 );
+        aOvl->SetStrokeColor( lbl.m_color.Brighten( 0.7 ) );
+        aOvl->Rectangle( lbl.m_bbox.GetOrigin(), lbl.m_bbox.GetEnd() );
+        aOvl->BitmapText( lbl.m_msg, lbl.m_bbox.Centre(), 0.0 );
+        VECTOR2I nearest = nearestBoxCorner( lbl.m_bbox, lbl.m_target );
+        aOvl->Line( lbl.m_target, nearest );
+    }
+}
+
+
+VECTOR2I LABEL_MANAGER::nearestBoxCorner( BOX2I b, VECTOR2I p )
+{
+    VECTOR2I ptest[4] = { b.GetPosition(), b.GetPosition() + VECTOR2I( b.GetWidth(), 0 ),
+                          b.GetPosition() + VECTOR2I( b.GetWidth(), b.GetHeight() ),
+                          b.GetPosition() + VECTOR2I( 0, b.GetHeight() ) };
+
+    int      bestDist = INT_MAX;
+    VECTOR2I rv;
+
+    for( int i = 0; i < 4; i++ )
+    {
+        int dist = ( ptest[i] - p ).EuclideanNorm();
+        if( dist < bestDist )
+        {
+            bestDist = dist;
+            rv = ptest[i];
+        }
+    }
+
+    return rv;
+}
+
+VECTOR2I LABEL_MANAGER::boxMtv( BOX2I b1, BOX2I b2 )
+{
+    VECTOR2I rv( 0, 0 );
+
+    b1.Normalize();
+    b2.Normalize();
+
+    if( !b1.Intersects( b2 ) )
+        return rv;
+
+    int bestDist = INT_MAX;
+
+    VECTOR2I p[4] = { b2.GetPosition(), b2.GetPosition() + VECTOR2I( b2.GetWidth(), 0 ),
+                      b2.GetPosition() + VECTOR2I( b2.GetWidth(), b2.GetHeight() ),
+                      b2.GetPosition() + VECTOR2I( 0, b2.GetHeight() ) };
+
+    for( int i = 0; i < 4; i++ )
+    {
+        if( b1.Contains( p[i] ) )
+        {
+            //   printf("CONT %d\n", i );
+            VECTOR2I dp[4] = { VECTOR2I( b1.GetEnd().x - p[i].x + 1, 0 ),
+                               VECTOR2I( b1.GetPosition().x - p[i].x - 1, 0 ),
+                               VECTOR2I( 0, b1.GetEnd().y - p[i].y + 1 ),
+                               VECTOR2I( 0, b1.GetPosition().y - p[i].y - 1 ) };
+
+            for( int j = 0; j < 4; j++ )
+            {
+                BOX2I btest( b2 );
+                btest.Move( dp[j] );
+                if( !b1.Intersects( btest ) )
+                {
+                    int dist = dp[j].EuclideanNorm();
+                    if( dist < bestDist )
+                    {
+                        bestDist = dist;
+                        rv = dp[j];
+                    }
+                }
+            }
+        }
+    }
+
+    return rv;
+}
+
+void LABEL_MANAGER::recalculate()
+{
+    int iterLimit = 5;
+    while( iterLimit > 0 )
+    {
+        printf( "Iter %d\n", iterLimit );
+        bool collisionsFound = false;
+        for( int i = 0; i < m_labels.size(); i++ )
+        {
+            for( int j = 0; j < m_labels.size(); j++ )
+            {
+                if( i == j )
+                    continue;
+
+
+                auto bb_i = m_labels[i].m_bbox;
+                auto bb_j = m_labels[j].m_bbox;
+
+                bb_i.Inflate( 100000 );
+                bb_j.Inflate( 100000 );
+                VECTOR2I mtv = boxMtv( bb_i, bb_j );
+
+
+                if( mtv.x || mtv.y )
+                {
+                    //                        printf("%d %d mtv %d %d\n", i, j, mtv.x, mtv.y );
+
+                    m_labels[i].m_bbox.Move( -mtv );
+                    collisionsFound = true;
+                }
+            }
+        }
+
+        if( !collisionsFound )
+            break;
+
+        iterLimit--;
+    }
+}
 
 
 class WX_SHAPE_TREE_ITEM_DATA : public wxClientData
@@ -239,11 +216,79 @@ public:
     PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* m_item;
 };
 
+
+PNS_LOG_VIEWER_OVERLAY::PNS_LOG_VIEWER_OVERLAY( KIGFX::GAL* aGal )
+{
+    m_labelMgr.reset( new LABEL_MANAGER( aGal ) );
+}
+
+void PNS_LOG_VIEWER_OVERLAY::AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std::string name, bool aShowVertexNumbers )
+{
+    Polyline( aL );
+    if( aShowVertexNumbers)
+        m_labelMgr->Add( aL, GetStrokeColor() );
+}
+
+
+void PNS_LOG_VIEWER_OVERLAY::DrawAnnotations()
+{
+    m_labelMgr->Redraw( this );
+}
+
+
+PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FRAME_BASE( frame )
+{
+    LoadSettings();
+    createView( this, PCB_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+
+    m_viewSizer->Add( m_galPanel.get(), 1, wxEXPAND, 5 );
+
+    Layout();
+
+    Show( true );
+    Maximize();
+    Raise();
+
+    auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
+            m_galPanel->GetView()->GetPainter()->GetSettings() );
+
+    settings->SetZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE );
+
+    m_listPopupMenu = new wxMenu( wxT( "" ) );
+    m_listPopupMenu->Append( ID_LIST_COPY, wxT( "Copy selected geometry" ), wxT( "" ),
+                             wxITEM_NORMAL );
+    m_listPopupMenu->Append( ID_LIST_SHOW_ALL, wxT( "Show all" ), wxT( "" ), wxITEM_NORMAL );
+    m_listPopupMenu->Append( ID_LIST_SHOW_NONE, wxT( "Show none" ), wxT( "" ), wxITEM_NORMAL );
+
+    m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_ITEM_CONTEXT_MENU,
+                         wxMouseEventHandler( PNS_LOG_VIEWER_FRAME::onListRightClick ), NULL,
+                         this );
+    //m_itemList->Connect(m_itemList->GetId(),wxEVT_LISTBOX,wxCommandEventHandler(PNS_LOG_VIEWER_FRAME::onListSelect),NULL,this);
+    m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_SELECTION_CHANGED,
+                         wxCommandEventHandler( PNS_LOG_VIEWER_FRAME::onListSelect ), NULL, this );
+    m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_ITEM_CHECKED,
+                         wxCommandEventHandler( PNS_LOG_VIEWER_FRAME::onListChecked ), NULL, this );
+
+    m_itemList->AppendColumn( "Type" );
+    m_itemList->AppendColumn( "Value" );
+    m_itemList->AppendColumn( "File" );
+    m_itemList->AppendColumn( "Method" );
+    m_itemList->AppendColumn( "Line" );
+
+    m_overlay.reset( new PNS_LOG_VIEWER_OVERLAY ( m_galPanel->GetGAL() ) );
+    m_galPanel->GetView()->Add( m_overlay.get() );
+}
+
+PNS_LOG_VIEWER_FRAME::~PNS_LOG_VIEWER_FRAME()
+{
+    m_overlay = nullptr;
+}
+
+
 void PNS_LOG_VIEWER_FRAME::createUserTools()
 {
 
 }
-
 
 
 PNS_TEST_DEBUG_DECORATOR::STAGE* PNS_LOG_VIEWER_FRAME::getCurrentStage()
@@ -270,15 +315,15 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
     if( !m_env )
         return;
 
-    m_overlay = m_galPanel->DebugOverlay();
-    m_overlay->Clear();
-
     PNS_TEST_DEBUG_DECORATOR::STAGE* st = getCurrentStage();
 
     if( !st )
         return;
-
-    LABEL_MANAGER labelMgr( m_galPanel->GetGAL() );
+    
+    m_overlay.reset( new PNS_LOG_VIEWER_OVERLAY ( m_galPanel->GetGAL() ) );
+    m_galPanel->GetView()->Add( m_overlay.get() );
+//  
+    printf("draw %d\n", iter);
 
     auto drawShapes = [&]( PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* ent ) -> bool {
         bool isEnabled = ent->IsVisible();
@@ -296,10 +341,8 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 
             if( isSelected )
             {
-                color = COLOR4D( 1.0, 1.0, 1.0, 1.0 );
-                lineWidth *= 2;
+                color.Brighten( 0.5 );
             }
-
 
             m_overlay->SetStrokeColor( color );
             m_overlay->SetLineWidth( ent->m_width );
@@ -323,15 +366,7 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
             case SH_LINE_CHAIN:
             {
                 auto lc = static_cast<SHAPE_LINE_CHAIN*>( sh );
-
-                for( int i = 0; i < lc->SegmentCount(); i++ )
-                {
-                    auto s = lc->CSegment( i );
-                    m_overlay->Line( s.A, s.B );
-                }
-
-                if( ent->m_hasLabels)
-                    labelMgr.Add( *lc, color );
+            m_overlay->AnnotatedPolyline( *lc, ent->m_name, ent->m_hasLabels && isSelected );
 
                 break;
 
@@ -346,7 +381,7 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 
     st->m_entries->IterateTree( drawShapes );
 
-    labelMgr.Redraw( m_overlay );
+    m_overlay->DrawAnnotations();
 
     m_galPanel->GetView()->MarkDirty();
     m_galPanel->GetParent()->Refresh();
