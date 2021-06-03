@@ -33,6 +33,7 @@
 #include <plotter.h>
 #include "gbr_plotter_apertures.h"
 
+class SHAPE_ARC;
 
 class GERBER_PLOTTER : public PLOTTER
 {
@@ -96,6 +97,9 @@ public:
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
                            void* aData = nullptr ) override;
+
+    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_TYPE aFill,
+                           int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL ) override;
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;
 
@@ -164,6 +168,9 @@ public:
      * after plotting
      */
     void PlotGerberRegion( const std::vector< wxPoint >& aCornerList,
+                           void * aData = NULL );
+
+    void PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly,
                            void * aData = NULL );
 
     /**
@@ -262,6 +269,7 @@ protected:
      */
     void plotArc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
                       int aRadius, bool aPlotInRegion );
+    void plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion );
 
     /**
      * Pick an existing aperture or create a new one, matching the

@@ -826,6 +826,35 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAn
 }
 
 
+void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
+{
+    wxPoint start( aArc.GetP0() );
+    wxPoint end( aArc.GetP1() );
+    wxPoint center( aArc.GetCenter() );
+    double start_angle = aArc.GetStartAngle();
+    double end_angle = aArc.GetEndAngle();
+
+    if( !aPlotInRegion )
+        MoveTo( start);
+    else
+        LineTo( start );
+
+    DPOINT devEnd = userToDeviceCoordinates( end );
+    DPOINT devCenter = userToDeviceCoordinates( center ) - userToDeviceCoordinates( start );
+
+    if( start_angle < end_angle )
+        fprintf( m_outputFile, "G03*\n" );    // Active circular interpolation, CCW
+    else
+        fprintf( m_outputFile, "G02*\n" );    // Active circular interpolation, CW
+
+    fprintf( m_outputFile, "X%dY%dI%dJ%dD01*\n",
+             KiROUND( devEnd.x ), KiROUND( devEnd.y ),
+             KiROUND( devCenter.x ), KiROUND( devCenter.y ) );
+
+    fprintf( m_outputFile, "G01*\n" ); // Back to linear interpol (perhaps useless here).
+}
+
+
 void GERBER_PLOTTER::plotArc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
                   int aRadius, bool aPlotInRegion )
 {
@@ -858,8 +887,46 @@ void GERBER_PLOTTER::plotArc( const wxPoint& aCenter, double aStAngle, double aE
 }
 
 
+void GERBER_PLOTTER::PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly,
+                                 void* aData )
+{
+    if( aPoly.PointCount() <= 2 )
+        return;
+
+    GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
+
+    bool clearTA_AperFunction = false;     // true if a TA.AperFunction is used
+
+    if( gbr_metadata )
+    {
+        std::string attrib = gbr_metadata->m_ApertureMetadata.FormatAttribute( !m_useX2format );
+
+        if( !attrib.empty() )
+        {
+            fputs( attrib.c_str(), m_outputFile );
+            clearTA_AperFunction = true;
+        }
+    }
+
+    PlotPoly( aPoly, FILL_TYPE::FILLED_SHAPE, 0 , gbr_metadata );
+
+    // Clear the TA attribute, to avoid the next item to inherit it:
+    if( clearTA_AperFunction )
+    {
+        if( m_useX2format )
+        {
+            fputs( "%TD.AperFunction*%\n", m_outputFile );
+        }
+        else
+        {
+            fputs( "G04 #@! TD.AperFunction*\n", m_outputFile );
+        }
+    }
+}
+
+
 void GERBER_PLOTTER::PlotGerberRegion( const std::vector< wxPoint >& aCornerList,
-                                 void * aData )
+                                 void* aData )
 {
     if( aCornerList.size() <= 2 )
         return;
@@ -892,6 +959,84 @@ void GERBER_PLOTTER::PlotGerberRegion( const std::vector< wxPoint >& aCornerList
         {
             fputs( "G04 #@! TD.AperFunction*\n", m_outputFile );
         }
+    }
+}
+
+void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly,
+                               FILL_TYPE aFill, int aWidth, void* aData )
+{
+    if( aPoly.CPoints().size() <= 1 )
+        return;
+
+    // Gerber format does not know filled polygons with thick outline
+    // Therefore, to plot a filled polygon with outline having a thickness,
+    // one should plot outline as thick segments
+    GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
+
+    if( gbr_metadata )
+        formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
+
+    if( aFill != FILL_TYPE::NO_FILL )
+    {
+        fputs( "G36*\n", m_outputFile );
+
+        MoveTo( wxPoint( aPoly.CPoint( 0 ) ) );
+
+        fputs( "G01*\n", m_outputFile );      // Set linear interpolation.
+
+        for( int ii = 1; ii < aPoly.PointCount(); ii++ )
+        {
+            int arcindex = aPoly.ArcIndex( ii );
+
+            if( arcindex < 0 )
+            {
+                /// Plain point
+                LineTo( wxPoint( aPoly.CPoint( ii ) ) );
+            }
+            else
+            {
+                const SHAPE_ARC& arc = aPoly.Arc( arcindex );
+
+                plotArc( arc, ii > 0 );
+            }
+        }
+
+        // If the polygon is not closed, close it:
+        if( aPoly.CPoint( 0 ) != aPoly.CPoint( -1 ) )
+            FinishTo( wxPoint( aPoly.CPoint( 0 ) ) );
+
+        fputs( "G37*\n", m_outputFile );
+    }
+
+    if( aWidth > 0 )    // Draw the polyline/polygon outline
+    {
+        SetCurrentLineWidth( aWidth, gbr_metadata );
+
+        MoveTo( wxPoint( aPoly.CPoint( 0 ) ) );
+
+        for( int ii = 1; ii < aPoly.PointCount(); ii++ )
+        {
+            int arcindex = aPoly.ArcIndex( ii );
+
+            if( arcindex < 0 )
+            {
+                /// Plain point
+                LineTo( wxPoint( aPoly.CPoint( ii ) ) );
+            }
+            else
+            {
+                const SHAPE_ARC& arc = aPoly.Arc( arcindex );
+
+                plotArc( arc, ii > 0 );
+            }
+        }
+
+        // Ensure the thick outline is closed for filled polygons
+        // (if not filled, could be only a polyline)
+        if( aFill != FILL_TYPE::NO_FILL && ( aPoly.CPoint( 0 ) != aPoly.CPoint( -1 ) ) )
+            LineTo( wxPoint( aPoly.CPoint( 0 ) ) );
+
+        PenFinish();
     }
 }
 

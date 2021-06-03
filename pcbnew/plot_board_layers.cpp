@@ -657,14 +657,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 cornerList.clear();
                 const SHAPE_LINE_CHAIN& path = (kk == 0) ? outlines.COutline( ii ) : outlines.CHole( ii, kk - 1 );
 
-                for( int jj = 0; jj < path.PointCount(); jj++ )
-                    cornerList.emplace_back( (wxPoint) path.CPoint( jj ) );
-
-                // Ensure the polygon is closed
-                if( cornerList[0] != cornerList[cornerList.size() - 1] )
-                    cornerList.push_back( cornerList[0] );
-
-                aPlotter->PlotPoly( cornerList, FILL_TYPE::NO_FILL );
+                aPlotter->PlotPoly( path, FILL_TYPE::NO_FILL );
             }
         }
 
@@ -905,12 +898,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     // Plot each initial shape (pads and polygons on mask layer), with suitable attributes:
     PlotStandardLayer( aBoard, aPlotter, aLayerMask, aPlotOpt );
 
-    // Add shapes corresponding to areas having too small thickness.
-    std::vector<wxPoint> cornerList;
-
     for( int ii = 0; ii < areas.OutlineCount(); ii++ )
     {
-        cornerList.clear();
         const SHAPE_LINE_CHAIN& path = areas.COutline( ii );
 
         // polygon area in mm^2 :
@@ -924,14 +913,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( curr_area < poly_min_area_mm2 )
             continue;
 
-        for( int jj = 0; jj < path.PointCount(); jj++ )
-            cornerList.emplace_back( (wxPoint) path.CPoint( jj ) );
-
-        // Ensure the polygon is closed
-        if( cornerList[0] != cornerList[cornerList.size() - 1] )
-            cornerList.push_back( cornerList[0] );
-
-        aPlotter->PlotPoly( cornerList, FILL_TYPE::FILLED_SHAPE );
+        aPlotter->PlotPoly( path, FILL_TYPE::FILLED_SHAPE );
     }
 #endif
 }
