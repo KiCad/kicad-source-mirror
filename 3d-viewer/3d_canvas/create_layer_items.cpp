@@ -49,6 +49,7 @@
 #include <core/arraydim.h>
 #include <algorithm>
 #include <atomic>
+#include <wx/log.h>
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
 #include <profile.h>

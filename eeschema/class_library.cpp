@@ -44,6 +44,7 @@
 #include <class_library.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 
+#include <wx/log.h>
 #include <wx/progdlg.h>
 #include <wx/tokenzr.h>
 #include <wx/regex.h>

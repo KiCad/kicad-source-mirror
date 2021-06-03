@@ -37,6 +37,7 @@
 #include <wx/checkbox.h>
 #include <wx/clipbrd.h>
 #include <wx/dataview.h>
+#include <wx/log.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>

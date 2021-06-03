@@ -37,6 +37,7 @@
 #include <convert_to_biu.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <wx/log.h>
 
 /**
  *  Trace mask used to enable or disable the trace output of this class.

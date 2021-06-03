@@ -28,6 +28,7 @@
 #include <tool/tool_action.h>
 #include <tool/tool_manager.h>
 #include <trace_helpers.h>
+#include <wx/log.h>
 
 #include <hotkeys_basic.h>
 #include <cctype>

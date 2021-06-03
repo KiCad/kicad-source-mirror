@@ -27,6 +27,7 @@ using namespace std::placeholders;
 #include <pcbnew_settings.h>
 
 #include <tools/pcb_grid_helper.h>
+#include <wx/log.h>
 
 #include "pns_kicad_iface.h"
 #include "pns_tool_base.h"

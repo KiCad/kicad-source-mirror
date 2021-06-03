@@ -29,6 +29,7 @@
 
 
 #include "render_3d_base.h"
+#include <wx/log.h>
 
 
 /**

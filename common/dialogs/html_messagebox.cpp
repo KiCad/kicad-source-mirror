@@ -23,6 +23,7 @@
  */
 
 #include <wx/clipbrd.h>
+#include <wx/log.h>
 #include <kicad_string.h>
 #include <dialogs/html_messagebox.h>
 

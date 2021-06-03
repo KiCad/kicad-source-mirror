@@ -35,6 +35,7 @@
 #include <trace_helpers.h>
 #include <trigo.h>
 #include <refdes_utils.h>
+#include <wx/log.h>
 
 /**
  * Convert a wxString to UTF8 and replace any control characters with a ~,

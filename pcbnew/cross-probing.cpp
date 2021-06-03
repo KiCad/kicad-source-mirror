@@ -48,6 +48,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <netlist_reader/netlist_reader.h>
+#include <wx/log.h>
 
 /* Execute a remote command send by Eeschema via a socket,
  * port KICAD_PCB_PORT_SERVICE_NUMBER

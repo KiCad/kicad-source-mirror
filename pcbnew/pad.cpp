@@ -44,6 +44,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <widgets/msgpanel.h>
 #include <pcb_painter.h>
+#include <wx/log.h>
 
 #include <memory>
 

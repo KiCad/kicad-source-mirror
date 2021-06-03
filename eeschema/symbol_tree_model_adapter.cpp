@@ -19,6 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/log.h>
 #include <wx/tokenzr.h>
 #include <wx/window.h>
 #include <widgets/progress_reporter.h>

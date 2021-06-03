@@ -27,6 +27,7 @@
 #include <ee_actions.h>
 #include <bitmaps.h>
 #include <eda_item.h>
+#include <wx/log.h>
 #include "symbol_editor_move_tool.h"
 #include "symbol_editor_pin_tool.h"
 

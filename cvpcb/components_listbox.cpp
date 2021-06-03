@@ -30,6 +30,7 @@
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>
 #include <cvpcb_id.h>
+#include <wx/log.h>
 
 
 COMPONENTS_LISTBOX::COMPONENTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id ) :

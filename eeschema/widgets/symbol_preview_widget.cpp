@@ -27,6 +27,7 @@
 #include <eda_draw_frame.h>
 #include <eeschema_settings.h>
 #include <settings/settings_manager.h>
+#include <wx/log.h>
 #include <wx/stattext.h>
 
 

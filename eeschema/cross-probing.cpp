@@ -38,6 +38,7 @@
 #include <tools/sch_editor_control.h>
 #include <advanced_config.h>
 #include <netclass.h>
+#include <wx/log.h>
 
 SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
                                                  bool            aSearchHierarchy,

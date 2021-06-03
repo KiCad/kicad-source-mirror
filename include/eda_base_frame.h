@@ -35,7 +35,6 @@
 #include <vector>
 
 #include <wx/socket.h>
-#include <wx/log.h>
 #include <wx/laywin.h>
 #include <wx/aui/aui.h>
 #include <wx/docview.h>

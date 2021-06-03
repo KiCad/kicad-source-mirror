@@ -31,6 +31,7 @@
 #include <math/util.h>      // for KiROUND
 #include <render_settings.h>
 #include <trigo.h>
+#include <wx/log.h>
 
 #include <build_version.h>
 

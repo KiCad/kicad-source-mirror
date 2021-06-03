@@ -26,6 +26,7 @@
 // base64 code.
 #define wxUSE_BASE64 1
 #include <wx/base64.h>
+#include <wx/log.h>
 #include <wx/mstream.h>
 #include <advanced_config.h>
 #include <pgm_base.h>

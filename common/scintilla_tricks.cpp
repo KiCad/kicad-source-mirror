@@ -28,6 +28,7 @@
 #include <gal/color4d.h>
 #include <dialog_shim.h>
 #include <wx/clipbrd.h>
+#include <wx/log.h>
 #include <wx/settings.h>
 #include <confirm.h>
 

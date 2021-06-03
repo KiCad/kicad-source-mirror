@@ -36,6 +36,7 @@
 #include <kiface_i.h>
 #include <wildcards_and_files_ext.h>
 #include <connection_graph.h>
+#include <wx/log.h>
 
 
 BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,

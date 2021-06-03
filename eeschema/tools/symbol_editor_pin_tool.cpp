@@ -31,6 +31,7 @@
 #include <settings/settings_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <pgm_base.h>
+#include <wx/log.h>
 #include "symbol_editor_pin_tool.h"
 
 

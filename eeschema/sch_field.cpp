@@ -30,6 +30,7 @@
  * Fields 4+ are user fields.  They can be renamed and can appear in reports.
  */
 
+#include <wx/log.h>
 #include <wx/menu.h>
 #include <common.h>     // for ExpandTextVars
 #include <eda_item.h>

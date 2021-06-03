@@ -66,6 +66,7 @@
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <footprint_edit_frame.h>
 #include <wx/filedlg.h>
+#include <wx/log.h>
 
 using namespace std::placeholders;
 

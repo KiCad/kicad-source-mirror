@@ -43,6 +43,7 @@
 #include <dialog_helpers.h>
 #include <wx/clipbrd.h>
 #include <wx/filedlg.h>
+#include <wx/log.h>
 
 
 

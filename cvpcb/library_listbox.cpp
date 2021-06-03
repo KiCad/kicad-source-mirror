@@ -31,6 +31,7 @@
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>
 #include <cvpcb_id.h>
+#include <wx/log.h>
 
 
 /***************************************/

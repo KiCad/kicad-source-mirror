@@ -53,6 +53,7 @@
 #include <gr_text.h>
 #include <utility>
 #include <vector>
+#include <wx/log.h>
 
 
 // These variables are parameters used in addTextSegmToContainer.

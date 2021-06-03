@@ -30,6 +30,7 @@
 #include <footprint.h>
 #include <3d_math.h>
 #include <math/util.h>      // for KiROUND
+#include <wx/log.h>
 
 #include <base_units.h>
 

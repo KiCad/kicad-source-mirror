@@ -27,6 +27,7 @@
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <wx/clipbrd.h>
+#include <wx/log.h>
 
 #include <cvpcb_association.h>
 #include <cvpcb_mainframe.h>

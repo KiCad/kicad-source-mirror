@@ -53,6 +53,7 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_data.h>
 #include <footprint_viewer_frame.h>
 #include <id.h>
+#include <wx/log.h>
 #include "tool_event_utils.h"
 #include "pcb_selection_tool.h"
 #include "pcb_actions.h"

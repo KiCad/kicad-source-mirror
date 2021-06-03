@@ -25,6 +25,7 @@
 #include <footprint_filter.h>
 #include <tool/tool_manager.h>
 #include <trace_helpers.h>
+#include <wx/log.h>
 #include <wx/wupdlock.h>
 
 #include <cvpcb_id.h>

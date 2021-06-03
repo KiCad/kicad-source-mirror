@@ -39,6 +39,7 @@
 #include <wx/rawbmp.h>
 #include <wx/msgdlg.h>
 #include <wx/dcclient.h>
+#include <wx/log.h>
 
 
 #include "bitmap2cmp_gui_base.h"

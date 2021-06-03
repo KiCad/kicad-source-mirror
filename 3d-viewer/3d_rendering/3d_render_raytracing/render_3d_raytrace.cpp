@@ -41,6 +41,7 @@
 #include "3d_math.h"
 #include "../common_ogl/ogl_utils.h"
 #include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
+#include <wx/log.h>
 
 
 RENDER_3D_RAYTRACE::RENDER_3D_RAYTRACE( BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :

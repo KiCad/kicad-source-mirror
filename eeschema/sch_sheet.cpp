@@ -41,6 +41,7 @@
 #include <settings/color_settings.h>
 #include <trace_helpers.h>
 #include <pgm_base.h>
+#include <wx/log.h>
 
 
 const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx )

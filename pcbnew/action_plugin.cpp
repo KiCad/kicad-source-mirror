@@ -27,6 +27,8 @@
  * @brief Class ACTION_PLUGIN and ACTION_PLUGINS
  */
 
+#include <wx/log.h>
+
 #include "action_plugin.h"
 #include "bitmaps.h"
 #include "bitmap_store.h"
