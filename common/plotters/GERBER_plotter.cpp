@@ -816,6 +816,7 @@ void GERBER_PLOTTER::Circle( const wxPoint& aCenter, int aDiameter, FILL_TYPE aF
 }
 
 
+
 void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
                           int aRadius, FILL_TYPE aFill, int aWidth )
 {
@@ -823,6 +824,14 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAn
 
     // aFill is not used here.
     plotArc( aCenter, aStAngle, aEndAngle, aRadius, false );
+}
+
+void GERBER_PLOTTER::Arc( const SHAPE_ARC& aArc )
+{
+    SetCurrentLineWidth( aArc.GetWidth() );
+
+    // aFill is not used here.
+    plotArc( aArc, false );
 }
 
 

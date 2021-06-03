@@ -42,6 +42,7 @@
 #include <render_settings.h>
 
 class COLOR_SETTINGS;
+class SHAPE_ARC;
 class SHAPE_POLY_SET;
 class SHAPE_LINE_CHAIN;
 class GBR_NETLIST_METADATA;
@@ -233,6 +234,7 @@ public:
      */
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH );
+    virtual void Arc(  const SHAPE_ARC& aArc );
 
     /**
      * Generic fallback: Cubic Bezier curve rendered as a polyline

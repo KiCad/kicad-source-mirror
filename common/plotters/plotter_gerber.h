@@ -77,6 +77,8 @@ public:
     virtual void Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
                       int aRadius, FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
+    virtual void Arc( const SHAPE_ARC& aArc ) override;
+
     // These functions plot an item and manage X2 gerber attributes
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                OUTLINE_MODE tracemode, void* aData ) override;
