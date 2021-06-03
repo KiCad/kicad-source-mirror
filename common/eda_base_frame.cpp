@@ -53,6 +53,7 @@
 #include <widgets/infobar.h>
 #include <widgets/wx_aui_art_providers.h>
 #include <wx/app.h>
+#include <wx/config.h>
 #include <wx/display.h>
 #include <wx/msgdlg.h>
 #include <wx/stdpaths.h>
