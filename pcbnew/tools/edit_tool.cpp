@@ -62,6 +62,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_track_via_properties.h>
 #include <dialogs/dialog_unit_entry.h>
 #include <board_commit.h>
+#include <pcb_group.h>
 #include <pcb_target.h>
 #include <zone_filler.h>
 

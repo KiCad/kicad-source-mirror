@@ -36,6 +36,7 @@
 #include <kiface_i.h>
 #include <locale_io.h>
 #include <macros.h>
+#include <pcb_group.h>
 #include <pcb_shape.h>
 #include <pcb_target.h>
 #include <pcb_text.h>

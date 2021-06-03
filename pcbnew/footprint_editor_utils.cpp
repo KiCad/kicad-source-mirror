@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <board_commit.h>
 #include <confirm.h>
 #include <dialog_footprint_properties_fp_editor.h>
 #include <footprint_edit_frame.h>

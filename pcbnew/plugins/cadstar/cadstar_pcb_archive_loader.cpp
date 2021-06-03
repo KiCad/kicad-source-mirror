@@ -31,6 +31,7 @@
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <footprint.h>
+#include <pcb_group.h>
 #include <pcb_text.h>
 #include <project.h>
 #include <track.h>

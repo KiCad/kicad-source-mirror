@@ -37,6 +37,7 @@
 #include <dialogs/dialog_paste_special.h>
 #include <dimension.h>
 #include <footprint.h>
+#include <pcb_group.h>
 #include <track.h>
 #include <zone.h>
 #include <fp_shape.h>

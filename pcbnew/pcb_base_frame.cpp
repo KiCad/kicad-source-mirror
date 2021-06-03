@@ -48,6 +48,7 @@
 #include <collectors.h>
 #include <pcb_draw_panel_gal.h>
 #include <math/vector2d.h>
+#include <pcb_group.h>
 
 #include <pcb_painter.h>
 #include <settings/settings_manager.h>

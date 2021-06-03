@@ -19,6 +19,7 @@
  */
 
 #include <board.h>
+#include <board_commit.h>
 #include <dimension.h>
 #include <pcb_base_edit_frame.h>
 #include <pcb_layer_box_selector.h>

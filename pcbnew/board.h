@@ -27,7 +27,6 @@
 
 #include <board_design_settings.h>
 #include <board_item_container.h>
-#include <pcb_group.h>
 #include <footprint.h>
 #include <common.h> // Needed for stl hash extensions
 #include <layers_id_colors_and_visibility.h>
@@ -45,6 +44,7 @@ class BOARD;
 class ZONE;
 class TRACK;
 class PAD;
+class PCB_GROUP;
 class PCB_MARKER;
 class MSG_PANEL_ITEM;
 class NETLIST;

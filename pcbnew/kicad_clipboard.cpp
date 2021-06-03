@@ -28,6 +28,7 @@
 #include <build_version.h>
 #include <board.h>
 #include <track.h>
+#include <pcb_group.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <fp_text.h>

@@ -33,6 +33,7 @@ using namespace std::placeholders;
 #include <clipper.hpp>
 #include <track.h>
 #include <footprint.h>
+#include <pcb_group.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_marker.h>

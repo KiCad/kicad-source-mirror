@@ -459,6 +459,7 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
     DEPENDS python/swig/footprint.i
     DEPENDS python/swig/netinfo.i
     DEPENDS python/swig/pad.i
+    DEPENDS python/swig/pcb_group.i
     DEPENDS python/swig/pcb_text.i
     DEPENDS python/swig/pcb_group.i
     DEPENDS python/swig/plugins.i

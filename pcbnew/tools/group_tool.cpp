@@ -30,6 +30,7 @@
 #include <board_commit.h>
 #include <bitmaps.h>
 #include <dialogs/dialog_group_properties.h>
+#include <pcb_group.h>
 
 
 class GROUP_CONTEXT_MENU : public ACTION_MENU

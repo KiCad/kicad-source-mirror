@@ -24,6 +24,7 @@
 #include "pcbnew_action_plugins.h"
 #include <bitmaps.h>
 #include <board.h>
+#include <board_commit.h>
 #include <footprint.h>
 #include <track.h>
 #include <zone.h>

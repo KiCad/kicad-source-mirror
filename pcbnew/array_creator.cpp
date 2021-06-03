@@ -26,6 +26,7 @@
 
 #include <array_pad_name_provider.h>
 #include <board_commit.h>
+#include <pcb_group.h>
 #include <pad_naming.h>
 
 #include <dialogs/dialog_create_array.h>

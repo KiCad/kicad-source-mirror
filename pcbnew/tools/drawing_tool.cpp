@@ -47,6 +47,7 @@
 #include <preview_items/arc_assistant.h>
 #include <board.h>
 #include <fp_shape.h>
+#include <pcb_group.h>
 #include <pcb_text.h>
 #include <dimension.h>
 #include <zone.h>

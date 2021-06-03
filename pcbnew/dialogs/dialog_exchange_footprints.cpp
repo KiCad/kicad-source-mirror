@@ -33,6 +33,7 @@
 #include <kiway.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
+#include <pcb_group.h>
 #include <pcbnew_settings.h>
 #include <project.h>
 #include <wx_html_report_panel.h>

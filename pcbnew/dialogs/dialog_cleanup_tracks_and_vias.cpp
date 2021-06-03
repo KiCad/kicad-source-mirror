@@ -22,6 +22,7 @@
  */
 
 #include <dialog_cleanup_tracks_and_vias.h>
+#include <board_commit.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
