@@ -24,6 +24,8 @@
 
 #include <widgets/bitmap_toggle.h>
 
+#include <wx/sizer.h>
+#include <wx/statbmp.h>
 
 wxDEFINE_EVENT( TOGGLE_CHANGED, wxCommandEvent );
 

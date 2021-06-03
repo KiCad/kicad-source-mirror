@@ -44,6 +44,7 @@
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <sch_base_frame.h>
 #include <widgets/color_swatch.h>
+#include <wx/msgdlg.h>
 
 
 PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aFrame,

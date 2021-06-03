@@ -31,6 +31,8 @@
 #include <validators.h>
 #include <widgets/color_swatch.h>
 
+#include <wx/msgdlg.h>
+#include <wx/textdlg.h>
 
 // Button ID starting point
 constexpr int FIRST_BUTTON_ID = 1800;

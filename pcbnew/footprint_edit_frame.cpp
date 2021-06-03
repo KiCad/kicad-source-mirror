@@ -77,6 +77,7 @@
 #include <widgets/panel_selection_filter.h>
 #include <widgets/progress_reporter.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/filedlg.h>
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )

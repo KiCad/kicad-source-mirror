@@ -33,6 +33,8 @@
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 
+#include <wx/filedlg.h>
+
 static constexpr int dpi_scaling_precision = 1;
 static constexpr double dpi_scaling_increment = 0.5;
 

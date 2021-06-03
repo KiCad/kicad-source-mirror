@@ -20,7 +20,7 @@
 #ifndef RESETTABLE_PANEL_H_
 #define RESETTABLE_PANEL_H_
 
-#include <wx/wx.h>
+#include <wx/panel.h>
 
 class PAGED_DIALOG;
 

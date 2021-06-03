@@ -24,13 +24,16 @@
 #ifndef ROW_INDICATOR__H_
 #define ROW_INDICATOR__H_
 
-#include <wx/wx.h>
+#include <wx/bitmap.h>
+#include <wx/panel.h>
+
+class wxStaticBitmap;
 
 /**
  * representing a row indicator icon for use in
  * places like the layer widget
  */
-class INDICATOR_ICON: public wxPanel
+class INDICATOR_ICON : public wxPanel
 {
 public:
 

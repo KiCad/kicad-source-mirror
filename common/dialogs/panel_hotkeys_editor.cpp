@@ -30,6 +30,7 @@
 #include <tool/tool_manager.h>
 #include <widgets/button_row_panel.h>
 #include <widgets/ui_common.h>
+#include <wx/filedlg.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/srchctrl.h>

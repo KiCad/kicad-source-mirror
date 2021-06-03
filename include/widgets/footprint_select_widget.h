@@ -24,7 +24,6 @@
 #include <footprint_info.h>
 #include <vector>
 #include <wx/panel.h>
-#include <wx/wx.h>
 
 class KIWAY;
 class PROJECT;

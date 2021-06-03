@@ -52,7 +52,9 @@
 #include <widgets/paged_dialog.h>
 #include <widgets/infobar.h>
 #include <widgets/wx_aui_art_providers.h>
+#include <wx/app.h>
 #include <wx/display.h>
+#include <wx/msgdlg.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 #include <kiplatform/app.h>

@@ -25,10 +25,12 @@
 #ifndef _BITMAP_TOGGLE_H
 #define _BITMAP_TOGGLE_H
 
-#include <wx/wx.h>
+#include <wx/bitmap.h>
+#include <wx/panel.h>
 
 #include <gal/color4d.h>
 
+class wxStaticBitmap;
 
 wxDECLARE_EVENT( TOGGLE_CHANGED, wxCommandEvent );
 

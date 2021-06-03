@@ -50,6 +50,7 @@
 #include <wildcards_and_files_ext.h>
 #include <widgets/app_progress_dialog.h>
 #include <wx/ffile.h>
+#include <wx/filedlg.h>
 #include <atomic>
 
 

@@ -19,10 +19,12 @@
 
 #include <confirm.h>
 #include <widgets/resettable_panel.h>
+#include <wx/button.h>
+#include <wx/grid.h>
+#include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/treebook.h>
 #include <wx/treectrl.h>
-#include <wx/grid.h>
-#include <wx/statline.h>
 
 #include <widgets/infobar.h>
 #include <widgets/paged_dialog.h>

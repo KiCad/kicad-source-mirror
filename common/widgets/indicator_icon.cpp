@@ -22,7 +22,10 @@
  */
 
 #include <widgets/indicator_icon.h>
-
+#include <wx/event.h>
+#include <wx/settings.h>
+#include <wx/sizer.h>
+#include <wx/statbmp.h>
 
 INDICATOR_ICON::INDICATOR_ICON( wxWindow* aParent, ICON_PROVIDER& aIconProvider,
                                 ICON_ID aInitialIcon, int aID ):
@@ -30,7 +33,7 @@ INDICATOR_ICON::INDICATOR_ICON( wxWindow* aParent, ICON_PROVIDER& aIconProvider,
         m_iconProvider( aIconProvider ),
         m_currentId( aInitialIcon )
 {
-    auto sizer = new wxBoxSizer( wxHORIZONTAL );
+    wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
 
     const wxBitmap& icon = m_iconProvider.GetIndicatorIcon( m_currentId );

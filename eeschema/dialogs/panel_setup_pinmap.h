@@ -33,6 +33,7 @@
 
 class SCH_EDIT_FRAME;
 class SCHEMATIC;
+class wxBitmapButton;
 
 
 class PANEL_SETUP_PINMAP : public PANEL_SETUP_PINMAP_BASE

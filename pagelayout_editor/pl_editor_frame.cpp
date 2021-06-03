@@ -62,6 +62,8 @@
 #include "tools/pl_editor_control.h"
 #include <zoom_defines.h>
 
+#include <wx/filedlg.h>
+
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_CLOSE, PL_EDITOR_FRAME::OnExit )
