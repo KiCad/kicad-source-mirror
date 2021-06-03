@@ -165,9 +165,9 @@ static int areNeighbours( int x, int y, int max = 0 )
 }
 
 
-#ifdef TOM_EXTRA_DEBUG
+//#ifdef TOM_EXTRA_DEBUG
 SHAPE_LINE_CHAIN g_pnew, g_hnew;
-#endif
+//#endif
 
 bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPath, bool aCw ) const
 {
