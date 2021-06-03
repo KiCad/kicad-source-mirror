@@ -27,8 +27,6 @@
 #include "undo_redo_container.h"
 #include "zones.h"
 #include <mail_type.h>
-#include <map>
-#include <unordered_map>
 
 class ACTION_PLUGIN;
 class PCB_SCREEN;
