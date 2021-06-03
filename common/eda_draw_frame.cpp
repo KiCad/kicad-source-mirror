@@ -857,7 +857,7 @@ void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos )
         // If a dialog partly obscures the window, then center on the uncovered area.
         if( dialog )
         {
-            wxRect dialogRect( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
+            BOX2D dialogRect( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
                                dialog->GetSize() );
             GetCanvas()->GetView()->SetCenter( aPos, dialogRect );
         }

@@ -60,16 +60,6 @@ public:
         Normalize();
     }
 
-#ifdef WX_COMPATIBILITY
-    /// Constructor with a wxRect as argument
-    BOX2( const wxRect& aRect ) :
-        m_Pos( aRect.GetPosition() ),
-        m_Size( aRect.GetSize() )
-    {
-        Normalize();
-    }
-#endif
-
     void SetMaximum()
     {
         m_Pos.x  = m_Pos.y = coord_limits::lowest() / 2 + coord_limits::epsilon();
