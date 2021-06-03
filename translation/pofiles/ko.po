@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-05-31 11:32+0000\n"
+"PO-Revision-Date: 2021-06-05 08:32+0000\n"
 "Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -6557,11 +6557,13 @@ msgid "File Not Found"
 msgstr "파일을 찾을 수 없습니다."
 
 #: common/tool/common_control.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file \"%s\" could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "도움말 파일을 찾을 수 없습니다."
+msgstr ""
+"도움말 파일 \"%s\"을 찾을 수 없습니다.\n"
+"KiCad 온라인 도움말에 접속 하시겠습니까?"
 
 #: common/tool/common_control.cpp:255
 #, c-format
@@ -7656,9 +7658,8 @@ msgid "Filter footprint list by library"
 msgstr "라이브러리 파일이 아닙니다."
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:256
-#, fuzzy
 msgid "Delete all associations?"
-msgstr "모든 연결 삭제"
+msgstr "모든 연결을 삭제 하시겠습니까?"
 
 #: eeschema/annotate.cpp:159
 #, c-format
@@ -8768,9 +8769,8 @@ msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:194
-#, fuzzy
 msgid "Delete exclusions too?"
-msgstr "삭제 선택"
+msgstr "제외 항목도 삭제 하시겠습니까?"
 
 #: eeschema/dialogs/dialog_erc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:866
 #: pcbnew/dialogs/dialog_drc_base.cpp:195
@@ -9083,9 +9083,8 @@ msgstr "%s 라이브러리의 %s 컴포넌트가 삭제되었습니다."
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:1204
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:754
-#, fuzzy
 msgid "Save changes?"
-msgstr "설정 저장 (&S)"
+msgstr "변경 내용을 저장 할까요?"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:31
 msgid "Group symbols"
@@ -9665,9 +9664,8 @@ msgid "Aliased symbol must have a parent selected"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:276
-#, fuzzy
 msgid "Delete extra units from symbol?"
-msgstr "다음의 자유 컴포넌트를 선택"
+msgstr "심볼에서 추가 유닛을 삭제 하겠습니까?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:282
 msgid "Add new pins for alternate body style (DeMorgan) to symbol?"
@@ -13185,9 +13183,8 @@ msgid ""
 msgstr "회로도 라이브러리 열기 시작"
 
 #: eeschema/files-io.cpp:1085
-#, fuzzy
 msgid "The current schematic has been modified.  Save changes?"
-msgstr "현재 시트만 저장"
+msgstr "현재 회로도가 수정되었습니다.\t변경 사항을 저장할까요?"
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1379
 #, fuzzy
@@ -15367,9 +15364,8 @@ msgid "Library changes are unsaved"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:515
-#, fuzzy
 msgid "Save changes to schematic before closing?"
-msgstr "회로도 인쇄"
+msgstr "회로도를 닫기 전에 변경 내용을 저장 하겠습니까?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:564
 #: eeschema/tools/sch_edit_tool.cpp:118
@@ -15429,9 +15425,8 @@ msgstr "라이브러리 로딩 '%s'"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:987
 #: pcbnew/footprint_libraries_utils.cpp:487
-#, fuzzy
 msgid "Add the library to the global library table?"
-msgstr "새 디렉토리 만들기"
+msgstr "글로벌 라이브러리 표에 라이브러리를 추가 하겠습니까?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
 #: pcbnew/footprint_libraries_utils.cpp:488
@@ -17189,9 +17184,8 @@ msgid "There are no unreferenced pins in this sheet to remove."
 msgstr ""
 
 #: eeschema/tools/sch_edit_tool.cpp:1763
-#, fuzzy
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
-msgstr "이 시트를 비웁니다."
+msgstr "참조되지 않은 핀을 이 시트에서 삭제하겠습니까?"
 
 #: eeschema/tools/sch_edit_tool.cpp:1823
 #, c-format
@@ -17323,9 +17317,9 @@ msgid "Current data will be lost?"
 msgstr "현재 작업 데이터가 손실됩니다. 그래도 계속 하시겠습니까?"
 
 #: gerbview/clear_gbr_drawlayers.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid "Clear layer %d?"
-msgstr "모든 레이어 지우기"
+msgstr "%d 레이어를 지울까요?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:154
 #, fuzzy, c-format
@@ -18809,14 +18803,14 @@ msgid "Delete File"
 msgstr "파일 삭제"
 
 #: kicad/project_tree_pane.cpp:840
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete '%s'?"
-msgstr "다음을 정말 삭제하시겠습니까: "
+msgstr "'%s'를 삭제하겠습니까?"
 
 #: kicad/project_tree_pane.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete %d items?"
-msgstr "다음을 정말 삭제하시겠습니까: "
+msgstr "%d 항목을 삭제하겠습니까?"
 
 #: kicad/project_tree_pane.cpp:847
 #, fuzzy
@@ -19367,9 +19361,8 @@ msgid "Page Layout Description File"
 msgstr ""
 
 #: pagelayout_editor/files.cpp:60
-#, fuzzy
 msgid "The current page layout has been modified. Save changes?"
-msgstr "현재 로드된 라이브러리를 디스크에 저장 (파일 업데이트)"
+msgstr "현재 페이지 레이아웃이 수정되었습니다. 변경 내용을 저장할까요?"
 
 #: pagelayout_editor/files.cpp:73
 #, fuzzy, c-format
@@ -19377,9 +19370,8 @@ msgid "File \"%s\" loaded"
 msgstr "%s 파일을 찾을 수 없습니다."
 
 #: pagelayout_editor/files.cpp:101
-#, fuzzy
 msgid "The current page layout has been modified.  Save changes?"
-msgstr "현재 로드된 라이브러리를 디스크에 저장 (파일 업데이트)"
+msgstr "현재 페이지 레이아웃이 수정되었습니다.  변경 내용을 저장할까요?"
 
 #: pagelayout_editor/files.cpp:120
 #, fuzzy
@@ -24602,9 +24594,9 @@ msgid "** Unable to create %s **\n"
 msgstr "**%s 을(를) 생성할 수 없음**\n"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:464
-#, fuzzy, c-format
+#, c-format
 msgid "Report file %s created\n"
-msgstr "만들기 중 에러"
+msgstr "%s 보고서 파일이 생성됨\n"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:22
 #, fuzzy
@@ -24799,14 +24791,12 @@ msgid "Get and Move Footprint"
 msgstr "풋프린트 이동"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:110
-#, fuzzy
 msgid "Are you sure you want to delete the entire board?"
-msgstr "다음을 정말 삭제하시겠습니까: "
+msgstr "전체 보드를 삭제 하겠습니까?"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:115
-#, fuzzy
 msgid "Are you sure you want to delete the selected items?"
-msgstr "다음을 정말 삭제하시겠습니까: "
+msgstr "선택한 항목을 삭제 하겠습니까?"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
 #, fuzzy
@@ -25551,14 +25541,13 @@ msgid "Changes Applied to PCB"
 msgstr "라벨로 바꾸기"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Reading netlist file \"%s\".\n"
-msgstr "파일 읽기 또는 편집"
+msgstr "\"%s\" 네트리스트 파일을 읽고 있습니다.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:229
-#, fuzzy
 msgid "Using reference designators to match symbols and footprints.\n"
-msgstr "사용자 지정 에디터:"
+msgstr "참조 지정자를 사용하여 심볼과 풋프린트를 일치시킵니다.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:231
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
@@ -27466,9 +27455,8 @@ msgid "Start layer:"
 msgstr "Draft layer"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:266
-#, fuzzy
 msgid "End layer:"
-msgstr "#라벨 마침\n"
+msgstr "끝 레이어:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:113
 #, fuzzy
@@ -27692,9 +27680,8 @@ msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:75
-#, fuzzy
 msgid "Allow free pads"
-msgstr "허용된 키:\n"
+msgstr "자유 패드 허용"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:76
 msgid ""
@@ -27994,9 +27981,8 @@ msgid "Select which the direction on the screen in which the Y axis increases."
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:25
-#, fuzzy
 msgid "Allowed features"
-msgstr "허용된 키:\n"
+msgstr "허용 기능"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:37
 msgid "Allow blind/buried vias"
@@ -28842,9 +28828,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:83
-#, fuzzy
 msgid "Cancel Changes?"
-msgstr "설정 저장 (&S)"
+msgstr "변경을 취소 하겠습니까?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:351
 #, fuzzy
@@ -29949,9 +29934,8 @@ msgstr ""
 
 #: pcbnew/exporters/export_idf.cpp:638 pcbnew/exporters/export_idf.cpp:647
 #: pcbnew/exporters/export_idf.cpp:655 pcbnew/exporters/export_vrml.cpp:1006
-#, fuzzy
 msgid "IDF Export Failed:\n"
-msgstr "모듈 내보내기"
+msgstr "IDF 내보내기 실패:\n"
 
 #: pcbnew/exporters/export_vrml.cpp:593
 msgid "VRML Export Failed: Could not add holes to contours."
@@ -29990,9 +29974,9 @@ msgstr "컴포넌트 사이드 배치 파일:"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:306
 #: pcbnew/exporters/gen_footprints_placefile.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Full component count: %d\n"
-msgstr "컴포넌트를 찾을 수 없습니다."
+msgstr "전체 컴포넌트 수: %d\n"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:309
 #: pcbnew/exporters/gen_footprints_placefile.cpp:402
@@ -30026,9 +30010,9 @@ msgstr "풋프린트 텍스트"
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:125
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:353
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Create file %s\n"
-msgstr "파일 만들기"
+msgstr "파일 민들기 %s\n"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:150
 #, fuzzy, c-format
@@ -30445,9 +30429,9 @@ msgid "Library '%s' is read only."
 msgstr "%s 라이브러리를 찾을 수 없습니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:627
-#, fuzzy, c-format
+#, c-format
 msgid "Delete footprint '%s' from library '%s'?"
-msgstr "풋프린트 압축 만들기"
+msgstr "풋프린트 '%s' 를 '%s'라이브러리에서 삭제하겠습니까?"
 
 #: pcbnew/footprint_libraries_utils.cpp:644
 #, fuzzy, c-format
