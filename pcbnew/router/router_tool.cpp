@@ -532,7 +532,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
     for( auto evt : events)
     {
         fprintf( f, "event %d %d %d %s\n", evt.p.x, evt.p.y, evt.type,
-                   (const char*) evt.uuid );
+                   evt.uuid.c_str() );
     }
 
     fclose( f );
