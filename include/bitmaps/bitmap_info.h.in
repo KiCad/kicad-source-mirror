@@ -28,6 +28,8 @@
 #include <vector>
 #include <bitmaps/bitmaps_list.h>
 
+#include <wx/string.h> // wxT
+
 struct BITMAP_INFO
 {
     BITMAPS  id;
