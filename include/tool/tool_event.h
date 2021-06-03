@@ -34,12 +34,6 @@
 #include <math/vector2d.h>
 #include <core/optional.h>
 
-#ifdef WX_COMPATIBILITY
-#include <wx/debug.h>
-#else
-#include <cassert>
-#endif
-
 
 class TOOL_ACTION;
 class TOOL_MANAGER;
@@ -520,17 +514,7 @@ private:
      * @param aPos the position to return if the event is valid
      * @return the checked position
      */
-    VECTOR2D returnCheckedPosition( const VECTOR2D& aPos ) const
-    {
-    #ifdef WX_COMPATIBILITY
-        wxCHECK_MSG( HasPosition(), VECTOR2D(),
-            "Attempted to get position from non-position event" );
-    #else
-        assert( HasPosition() );
-    #endif
-
-        return aPos;
-    }
+    VECTOR2D returnCheckedPosition( const VECTOR2D& aPos ) const;
 
     TOOL_EVENT_CATEGORY m_category;
     TOOL_ACTIONS m_actions;
