@@ -271,7 +271,7 @@ void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& lin
 
     hull.Intersect( line, ips_raw );
 
-    for( const auto& p : ips_raw )
+    for( auto& p : ips_raw )
     {
         SHAPE_LINE_CHAIN::INTERSECTION ipp;
 
@@ -288,6 +288,9 @@ void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& lin
             ips.push_back( ipp );
             continue;
         }
+
+        if( p.index_our >= hull.SegmentCount() )
+            p.index_our -= hull.SegmentCount();
 
         if( p.is_corner_our )
         {
