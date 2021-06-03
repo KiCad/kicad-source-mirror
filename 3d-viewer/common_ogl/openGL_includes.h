@@ -37,6 +37,13 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #else
+
+#ifdef _WIN32
+// required for the windows gl.h to work
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
