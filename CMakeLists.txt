@@ -830,7 +830,7 @@ if( KICAD_SCRIPTING_WXPYTHON )
 endif()
 
 # GTK3 is required on Linux
-if( UNIX AND NOT APPLE )
+if( UNIX AND NOT APPLE AND KICAD_SCRIPTING_WXPYTHON )
     if( NOT "${WXPYTHON_TOOLKIT}" STREQUAL "gtk3" )
         message( FATAL_ERROR "GTK3-based wxPython/Phoenix toolkit is required.")
     endif()
