@@ -30,11 +30,12 @@
 #ifndef FOOTPRINT_WIZARD_FRAME_H_
 #define FOOTPRINT_WIZARD_FRAME_H_
 
-
 #include <wx/gdicmn.h>
 #include <footprint_wizard.h>
 #include <pcb_base_edit_frame.h>
+
 class wxSashLayoutWindow;
+class wxSashEvent;
 class wxListBox;
 class WX_GRID;
 class wxGridEvent;

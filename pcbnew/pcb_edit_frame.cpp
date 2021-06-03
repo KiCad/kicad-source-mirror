@@ -90,6 +90,7 @@
 #include <netlist_reader/board_netlist_updater.h>
 #include <netlist_reader/netlist_reader.h>
 #include <netlist_reader/pcb_netlist.h>
+#include <wx/socket.h>
 #include <wx/wupdlock.h>
 #include <dialog_drc.h>     // for DIALOG_DRC_WINDOW_NAME definition
 #include <ratsnest/ratsnest_view_item.h>

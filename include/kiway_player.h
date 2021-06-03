@@ -44,6 +44,7 @@ class WX_EVENT_LOOP;
 
 class wxSocketServer;
 class wxSocketBase;
+class wxSocketEvent;
 
 
 /**

@@ -62,6 +62,7 @@
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+#include <wx/socket.h>
 
 #include <wx/snglinst.h>
 #include <wx/fdrepdlg.h>
