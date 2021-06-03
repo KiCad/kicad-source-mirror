@@ -22,6 +22,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/app.h>
+#include <wx/msgdlg.h>
+
 #include <build_version.h>
 #include <class_regulator_data.h>
 #include <common.h>

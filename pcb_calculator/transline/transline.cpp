@@ -25,6 +25,9 @@
 #include <cmath>
 #include <limits>
 
+#include <wx/colour.h>
+#include <wx/settings.h>
+
 #include "transline.h"
 #include "units.h"
 

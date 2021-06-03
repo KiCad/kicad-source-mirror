@@ -19,7 +19,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <wx/wx.h>
 #include <pcb_calculator_datafile_lexer.h>
 #include <eda_item.h>
 

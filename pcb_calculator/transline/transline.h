@@ -25,7 +25,6 @@
 #define __TRANSLINE_H
 
 #include <gal/color4d.h>
-#include <wx/wx.h>
 
 #define TRANSLINE_OK 0
 #define TRANSLINE_WARNING 1

@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/msgdlg.h>
+
 #include "class_regulator_data.h"
 #include "pcb_calculator_frame.h"
 #include "dialog_regulator_form.h"
