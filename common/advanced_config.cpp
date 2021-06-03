@@ -26,6 +26,7 @@
 #include <config_params.h>
 #include <settings/settings_manager.h>
 
+#include <wx/app.h>
 #include <wx/config.h>
 #include <wx/filename.h>
 #include <wx/log.h>
@@ -278,6 +279,10 @@ const ADVANCED_CFG& ADVANCED_CFG::GetCfg()
 void ADVANCED_CFG::loadFromConfigFile()
 {
     const wxFileName k_advanced = getAdvancedCfgFilename();
+
+    // If we are running headless, use the class defaults because we cannot instantiate wxConfig
+    if( !wxTheApp )
+        return;
 
     if( !k_advanced.FileExists() )
     {
