@@ -40,6 +40,7 @@
 #include <dialogs/dialog_grid_settings.h>
 #include <dialogs/eda_view_switcher.h>
 #include <wildcards_and_files_ext.h>
+#include <collectors.h>
 
 
 PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,

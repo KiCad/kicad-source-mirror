@@ -34,6 +34,7 @@
 #include <connectivity/connectivity_data.h>
 #include <connectivity/from_to_cache.h>
 
+#include <view/view_overlay.h>
 
 /*
     Differential pair gap/coupling test.

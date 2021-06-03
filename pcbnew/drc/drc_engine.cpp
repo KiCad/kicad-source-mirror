@@ -27,12 +27,14 @@
 #include <widgets/progress_reporter.h>
 #include <kicad_string.h>
 #include <drc/drc_engine.h>
+#include <drc/drc_rtree.h>
 #include <drc/drc_rule_parser.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_rule_condition.h>
 #include <drc/drc_test_provider.h>
-#include <track.h>
 #include <footprint.h>
+#include <track.h>
+#include <zone.h>
 #include <geometry/shape.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_null.h>

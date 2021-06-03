@@ -22,6 +22,7 @@
  */
 
 #include <common.h>
+#include <footprint.h>
 #include <pad.h>
 #include <track.h>
 #include <geometry/shape_segment.h>

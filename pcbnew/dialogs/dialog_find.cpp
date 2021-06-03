@@ -28,6 +28,7 @@
 #include <footprint.h>
 #include <pcb_text.h>
 #include <fp_text.h>
+#include <zone.h>
 #include <dialog_find.h>
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>

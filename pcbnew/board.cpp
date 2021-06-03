@@ -27,6 +27,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <drc/drc_rtree.h>
 #include <pcb_base_frame.h>
 #include <reporter.h>
 #include <board_commit.h>
@@ -185,6 +186,21 @@ void BOARD::ClearProject()
     m_project = nullptr;
 }
 
+
+void BOARD::IncrementTimeStamp()
+{
+    m_timeStamp++;
+
+    {
+        std::unique_lock<std::mutex> cacheLock( m_CachesMutex );
+        m_InsideAreaCache.clear();
+        m_InsideCourtyardCache.clear();
+        m_InsideFCourtyardCache.clear();
+        m_InsideBCourtyardCache.clear();
+    }
+
+    m_CopperZoneRTrees.clear();
+}
 
 std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions()
 {
@@ -810,6 +826,15 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
     }
 
     m_markers = remaining;
+}
+
+
+void BOARD::DeleteAllFootprints()
+{
+    for( FOOTPRINT* footprint : m_footprints )
+        delete footprint;
+
+    m_footprints.clear();
 }
 
 

@@ -23,6 +23,7 @@
 
 #include <dialog_cleanup_graphics.h>
 #include <board_commit.h>
+#include <footprint.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <graphics_cleaner.h>

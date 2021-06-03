@@ -34,6 +34,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <track.h>
+#include <zone.h>
 #include <collectors.h>
 #include <eda_dde.h>
 #include <kiface_i.h>

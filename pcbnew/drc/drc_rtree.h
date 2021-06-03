@@ -27,7 +27,9 @@
 
 #include <eda_rect.h>
 #include <board_item.h>
+#include <fp_text.h>
 #include <track.h>
+#include <memory>
 #include <unordered_set>
 #include <set>
 #include <vector>

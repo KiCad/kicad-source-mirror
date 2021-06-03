@@ -27,6 +27,7 @@
 #include <dialogs/dialog_track_via_properties.h>
 #include <pcb_layer_box_selector.h>
 #include <tools/pcb_selection_tool.h>
+#include <footprint.h>
 #include <track.h>
 #include <pcb_edit_frame.h>
 #include <confirm.h>

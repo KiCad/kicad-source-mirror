@@ -36,6 +36,7 @@
 #include <pcb_edit_frame.h>
 #include <pgm_base.h>
 #include <board.h>
+#include <footprint.h>
 #include <track.h>
 #include <pcbplot.h>
 #include <gendrill_gerber_writer.h>

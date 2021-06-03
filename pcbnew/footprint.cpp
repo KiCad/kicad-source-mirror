@@ -37,7 +37,9 @@
 #include <pcb_text.h>
 #include <pcb_marker.h>
 #include <pcb_group.h>
+#include <track.h>
 #include <footprint.h>
+#include <zone.h>
 #include <view/view.h>
 #include <geometry/shape_null.h>
 #include <i18n_utility.h>

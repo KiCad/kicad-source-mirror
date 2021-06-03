@@ -35,6 +35,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <track.h>
+#include <zone.h>
 
 
 void process( const BOARD_CONNECTED_ITEM* item, int net )

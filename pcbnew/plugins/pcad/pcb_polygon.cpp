@@ -33,6 +33,7 @@
 #include <math/util.h>      // for KiROUND
 #include <fp_shape.h>
 #include <pcb_polygon.h>
+#include <zone.h>
 
 namespace PCAD2KICAD {
 

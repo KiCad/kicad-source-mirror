@@ -23,9 +23,11 @@
 
 #include <common.h>
 #include <board.h>
+#include <footprint.h>
 #include <pcb_shape.h>
 #include <pad.h>
 #include <track.h>
+#include <zone.h>
 
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>

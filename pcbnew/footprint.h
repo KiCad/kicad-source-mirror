@@ -37,8 +37,8 @@
 
 #include <zones.h>
 #include <convert_drawsegment_list_to_polygon.h>
+#include <pcb_item_containers.h>
 #include <fp_text.h>
-#include <zone.h>
 #include <functional>
 
 class LINE_READER;
@@ -98,11 +98,6 @@ public:
     bool     m_Show;        ///< Include model in rendering
 };
 
-DECL_DEQ_FOR_SWIG( PADS, PAD* )
-DECL_DEQ_FOR_SWIG( DRAWINGS, BOARD_ITEM* )
-DECL_VEC_FOR_SWIG( FP_ZONES, FP_ZONE* )
-DECL_VEC_FOR_SWIG( FP_GROUPS, PCB_GROUP* )
-DECL_DEQ_FOR_SWIG( FOOTPRINTS, FOOTPRINT* )
 
 class FOOTPRINT : public BOARD_ITEM_CONTAINER
 {

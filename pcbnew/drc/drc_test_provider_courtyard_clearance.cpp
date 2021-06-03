@@ -25,6 +25,7 @@
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
+#include <footprint.h>
 
 /*
     Couartyard clearance. Tests for malformed component courtyards and overlapping footprints.

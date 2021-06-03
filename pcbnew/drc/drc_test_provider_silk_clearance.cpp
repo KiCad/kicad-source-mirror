@@ -23,6 +23,7 @@
 
 #include <common.h>
 #include <board.h>
+#include <footprint.h>
 #include <pcb_shape.h>
 
 #include <geometry/seg.h>

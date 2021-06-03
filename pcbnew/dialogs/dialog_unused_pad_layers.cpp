@@ -26,6 +26,7 @@
 
 #include <bitmaps.h>
 #include <board_commit.h>
+#include <footprint.h>
 #include <track.h>
 #include <pad.h>
 #include <pcb_edit_frame.h>

@@ -35,6 +35,7 @@
 
 #include <fp_shape.h>
 #include <fp_text.h>
+#include <zone.h>
 
 #include <board_stackup_manager/stackup_predefined_prms.h>
 

@@ -29,6 +29,7 @@
 
 #include <base_units.h>
 #include <board.h>
+#include <footprint.h>
 #include <track.h>
 #include <confirm.h>
 #include <dialog_board_statistics_base.h>

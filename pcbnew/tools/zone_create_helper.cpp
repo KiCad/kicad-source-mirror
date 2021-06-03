@@ -27,6 +27,7 @@
 #include <tool/tool_manager.h>
 #include <zone.h>
 #include <pcb_shape.h>
+#include <footprint.h>
 #include <fp_shape.h>
 #include <board_commit.h>
 #include <pcb_painter.h>

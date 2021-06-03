@@ -30,6 +30,7 @@ using namespace std::placeholders;
 #include <footprint.h>
 #include <fp_shape.h>
 #include <pad.h>
+#include <zone.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
 #include <dialogs/dialog_pns_settings.h>

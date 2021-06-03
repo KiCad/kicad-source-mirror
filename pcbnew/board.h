@@ -27,20 +27,22 @@
 
 #include <board_design_settings.h>
 #include <board_item_container.h>
-#include <footprint.h>
 #include <common.h> // Needed for stl hash extensions
+#include <convert_drawsegment_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
 #include <layers_id_colors_and_visibility.h>
 #include <netinfo.h>
+#include <pcb_item_containers.h>
 #include <pcb_plot_params.h>
 #include <title_block.h>
 #include <tools/pcb_selection.h>
-#include <drc/drc_rtree.h>
 
 class BOARD_COMMIT;
+class DRC_RTREE;
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
 class PICKED_ITEMS_LIST;
 class BOARD;
+class FOOTPRINT;
 class ZONE;
 class TRACK;
 class PAD;
@@ -168,12 +170,6 @@ public:
 };
 
 
-DECL_VEC_FOR_SWIG( MARKERS, PCB_MARKER* )
-DECL_VEC_FOR_SWIG( ZONES, ZONE* )
-DECL_DEQ_FOR_SWIG( TRACKS, TRACK* )
-// Dequeue rather than Vector just so we can use moveUnflaggedItems in pcbnew_control.cpp
-DECL_DEQ_FOR_SWIG( GROUPS, PCB_GROUP* )
-
 /**
  * Flags to specify how the board is being used.
  */
@@ -268,20 +264,7 @@ public:
      */
     BOARD_USE GetBoardUse() const { return m_boardUse; }
 
-    void IncrementTimeStamp()
-    {
-        m_timeStamp++;
-
-        {
-            std::unique_lock<std::mutex> cacheLock( m_CachesMutex );
-            m_InsideAreaCache.clear();
-            m_InsideCourtyardCache.clear();
-            m_InsideFCourtyardCache.clear();
-            m_InsideBCourtyardCache.clear();
-        }
-
-        m_CopperZoneRTrees.clear();
-    }
+    void IncrementTimeStamp();
 
     int GetTimeStamp() { return m_timeStamp; }
 
@@ -387,13 +370,7 @@ public:
     /**
      * Removes all footprints from the deque and frees the memory associated with them
      */
-    void DeleteAllFootprints()
-    {
-        for( FOOTPRINT* footprint : m_footprints )
-            delete footprint;
-
-        m_footprints.clear();
-    }
+    void DeleteAllFootprints();
 
     /**
      * @return null if aID is null. Returns an object of Type() == NOT_USED if

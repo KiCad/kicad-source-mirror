@@ -41,11 +41,13 @@
 #include <board.h>
 #include <board_item.h>
 #include <convert_to_biu.h>
+#include <footprint.h>
 #include <fp_shape.h>
 #include <pad_shapes.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <track.h>
+#include <zone.h>
 #include <common.h>
 #include <geometry/shape_arc.h>
 #include <kicad_string.h>
