@@ -21,7 +21,6 @@
  */
 
 #include <tool/actions.h>
-#include <board.h>
 #include <footprint_edit_frame.h>
 #include <dialog_helpers.h>
 #include <pcbnew_id.h>
@@ -31,6 +30,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <pcb_layer_box_selector.h>
+#include <wx/choice.h>
 
 void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 {

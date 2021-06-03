@@ -47,6 +47,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <wx/wupdlock.h>
 #include <wx/dcmemory.h>
+#include <wx/choice.h>
 
 #include "../scripting/python_scripting.h"
 
