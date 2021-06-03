@@ -340,7 +340,7 @@ static const std::vector<SEG_VECTOR_DISTANCE_CASE> seg_vec_dist_cases = {
         "At end (not collinear)",
         { { 0, 0 }, { 1000, 0 } },
         { 1000 + 200, 200 },
-        282, // sqrt(200^2 + 200^2), rounded down
+        283, // sqrt(200^2 + 200^2) = 282.8, rounded to nearest
     },
 };
 // clang-format on
