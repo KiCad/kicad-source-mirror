@@ -27,6 +27,7 @@
 #include <dialogs/panel_setup_severities.h>
 #include <wx/radiobut.h>
 #include <wx/stattext.h>
+#include <wx/treebook.h>
 
 
 PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,

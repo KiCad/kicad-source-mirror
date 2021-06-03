@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,15 +31,11 @@
 
 using KIGFX::COLOR4D;
 
-/* Basic class to build a layer list.
- * this is an basic abstract class to build a layer list selector.
- * To display this list, you should therefore derive this class
+/**
+ * Base class to build a layer list.
  */
 class LAYER_SELECTOR
 {
-protected:
-    bool m_layerhotkeys;
-
 public:
     LAYER_SELECTOR();
 
@@ -49,22 +45,25 @@ public:
 
     bool SetLayersHotkeys( bool value );
 
-    // Fills the layer bitmap aLayerbmp with the layer color
+    // Fill the layer bitmap aLayerbmp with the layer color
     static void DrawColorSwatch( wxBitmap& aLayerbmp, COLOR4D aBackground, COLOR4D aColor );
 
 protected:
-    // Returns a color index from the layer id
+    // Return a color index from the layer id
     virtual COLOR4D getLayerColor( LAYER_NUM aLayer ) const = 0;
 
-    // Returns the name of the layer id
+    // Return the name of the layer id
     virtual wxString getLayerName( LAYER_NUM aLayer ) const = 0;
 
-    // Returns true if the layer id is enabled (i.e. is it should be displayed)
+    // Return true if the layer id is enabled (i.e. is it should be displayed)
     virtual bool isLayerEnabled( LAYER_NUM aLayer ) const = 0;
+
+    bool m_layerhotkeys;
 };
 
 
-/* class to display a layer list in a wxBitmapComboBox.
+/*
+ * Display a layer list in a wxBitmapComboBox.
  */
 class LAYER_BOX_SELECTOR : public wxBitmapComboBox, public LAYER_SELECTOR
 {

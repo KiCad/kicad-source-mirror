@@ -44,6 +44,7 @@
 #include <wx/richmsgdlg.h>
 #include <wx/choicdlg.h>
 #include <wx/dcclient.h>
+#include <wx/treebook.h>
 
 #include <locale_io.h>
 

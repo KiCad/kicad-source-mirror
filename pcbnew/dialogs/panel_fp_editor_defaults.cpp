@@ -31,6 +31,8 @@
 #include <grid_layer_box_helpers.h>
 #include <bitmaps.h>
 
+#include <wx/treebook.h>
+
 class TEXT_ITEMS_GRID_TABLE : public wxGridTableBase
 {
     std::vector<TEXT_ITEM_INFO> m_items;

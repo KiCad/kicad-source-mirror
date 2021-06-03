@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Isaac Marino Bavaresco, isaacbavaresco@yahoo.com.br
  * Copyright (C) 2009 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2009-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #include <board_stackup_manager/panel_board_stackup.h>
 
 #include <wx/choicdlg.h>
+#include <wx/treebook.h>
 
 
 // some define to choose how copper layers widgets are shown

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,28 +22,13 @@
 #define PAGED_DIALOG_H
 
 #include <dialog_shim.h>
-#include <wx/treebook.h>
 
 
 class WX_INFOBAR;
-
+class wxTreebook;
 
 class PAGED_DIALOG : public DIALOG_SHIM
 {
-private:
-    wxString    m_title;
-
-    bool        m_dirty;
-
-    wxString    m_errorMessage;
-    wxWindow*   m_errorCtrl;    // the control associated with m_errorMessage
-    int         m_errorRow;     // the row if m_errorCtrl is a grid
-    int         m_errorCol;     // the column if m_errorCtrl is a grid
-
-    wxBoxSizer* m_buttonsSizer;
-
-    std::vector<bool> m_macHack;
-
 public:
     PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aShowReset,
                   const wxString& aAuxiliaryAction = wxEmptyString );
@@ -79,6 +64,20 @@ protected:
     wxButton*   m_resetButton;
     wxButton*   m_cancelButton;
     WX_INFOBAR* m_infoBar;
+
+private:
+    wxString    m_title;
+
+    bool        m_dirty;
+
+    wxString    m_errorMessage;
+    wxWindow*   m_errorCtrl;    // the control associated with m_errorMessage
+    int         m_errorRow;     // the row if m_errorCtrl is a grid
+    int         m_errorCol;     // the column if m_errorCtrl is a grid
+
+    wxBoxSizer* m_buttonsSizer;
+
+    std::vector<bool> m_macHack;
 };
 
 

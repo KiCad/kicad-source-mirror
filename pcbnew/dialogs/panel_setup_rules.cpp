@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include <tool/tool_manager.h>
 #include <panel_setup_rules.h>
 #include <wx_html_report_box.h>
+#include <wx/treebook.h>
 #include <dialogs/html_messagebox.h>
 #include <scintilla_tricks.h>
 #include <drc/drc_rule_parser.h>

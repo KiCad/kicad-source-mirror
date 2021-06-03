@@ -58,6 +58,7 @@
 #include <wx/msgdlg.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
+#include <wx/treebook.h>
 #include <kiplatform/app.h>
 #include <kiplatform/ui.h>
 

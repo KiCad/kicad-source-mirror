@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011-2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2012 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,20 +48,10 @@ class EDA_MSG_PANEL;
 
 
 /**
- * EDA_MSG_ITEM
- * is used EDA_MSG_PANEL as the item type for displaying messages.
+ * #EDA_MSG_PANEL items for displaying messages.
  */
 class MSG_PANEL_ITEM
 {
-    int         m_X;
-    int         m_UpperY;
-    int         m_LowerY;
-    wxString    m_UpperText;
-    wxString    m_LowerText;
-    int         m_Padding;
-
-    friend class EDA_MSG_PANEL;
-
 public:
     MSG_PANEL_ITEM( const wxString& aUpperText, const wxString& aLowerText,
                     int aPadding = MSG_PANEL_DEFAULT_PAD ) :
@@ -91,6 +81,16 @@ public:
 
     void SetPadding( int aPadding )  { m_Padding = aPadding; }
     int GetPadding() const { return m_Padding; }
+
+private:
+    friend class EDA_MSG_PANEL;
+
+    int         m_X;
+    int         m_UpperY;
+    int         m_LowerY;
+    wxString    m_UpperText;
+    wxString    m_LowerText;
+    int         m_Padding;
 };
 
 
@@ -98,31 +98,10 @@ typedef std::vector<MSG_PANEL_ITEM>      MSG_PANEL_ITEMS;
 
 
 /**
- * EDA_MSG_PANEL
- * is a panel to display various information messages.
+ * A panel to display various information messages.
  */
 class EDA_MSG_PANEL : public wxPanel
 {
-protected:
-    MSG_PANEL_ITEMS        m_Items;
-    int                    m_last_x;      ///< the last used x coordinate
-    wxSize                 m_fontSize;
-
-    void showItem( wxDC& dc, const MSG_PANEL_ITEM& aItem );
-
-    void erase( wxDC* DC );
-
-    /**
-     * Function getFontSize
-     * computes the height and width of a 'W' in the system font.
-     */
-    static wxSize computeFontSize();
-
-    /**
-     * Calculate the width and height of a text string using the system UI font.
-     */
-    wxSize computeTextSize( const wxString& text ) const;
-
 public:
     EDA_MSG_PANEL( wxWindow* aParent, int aId,
                    const wxPoint& aPosition, const wxSize& aSize,
@@ -130,9 +109,9 @@ public:
     ~EDA_MSG_PANEL();
 
     /**
-     * Function GetRequiredHeight
-     * returns the required height (in pixels) of a EDA_MSG_PANEL.  This takes
-     * into consideration the system gui font, wxSYS_DEFAULT_GUI_FONT.
+     * Return the required height (in pixels) of a EDA_MSG_PANEL.
+     *
+     * This takes into consideration the system gui font, wxSYS_DEFAULT_GUI_FONT.
      */
     static int GetRequiredHeight();
 
@@ -140,8 +119,7 @@ public:
     void EraseMsgBox();
 
     /**
-     * Function SetMessage
-     * sets a message at \a aXPosition to \a aUpperText and \a aLowerText in the message panel.
+     * Set a message at \a aXPosition to \a aUpperText and \a aLowerText in the message panel.
      *
      * @param aXPosition The horizontal position to display the message or less than zero
      *                   to set the message using the last message position.
@@ -151,8 +129,7 @@ public:
     void SetMessage( int aXPosition, const wxString& aUpperText, const wxString& aLowerText );
 
    /**
-    * Function AppendMessage
-    * appends a message to the message panel.
+    * Append a message to the message panel.
     *
     * This method automatically adjusts for the width of the text string.
     * Making consecutive calls to AppendMessage will append each message
@@ -166,8 +143,7 @@ public:
     void AppendMessage( const wxString& aUpperText, const wxString& aLowerText, int aPadding = 6 );
 
    /**
-    * Function AppendMessage
-    * appends \a aMessageItem to the message panel.
+    * Append \a aMessageItem to the message panel.
     *
     * @param aMessageItem is a reference to an #MSG_PANEL_ITEM containing the message to
     *                     append to the panel.
@@ -179,6 +155,25 @@ public:
     }
 
     DECLARE_EVENT_TABLE()
+
+protected:
+    void showItem( wxDC& dc, const MSG_PANEL_ITEM& aItem );
+
+    void erase( wxDC* DC );
+
+    /**
+     * Compute the height and width of a 'W' in the system font.
+     */
+    static wxSize computeFontSize();
+
+    /**
+     * Calculate the width and height of a text string using the system UI font.
+     */
+    wxSize computeTextSize( const wxString& text ) const;
+
+    MSG_PANEL_ITEMS        m_Items;
+    int                    m_last_x;      ///< the last used x coordinate
+    wxSize                 m_fontSize;
 };
 
 

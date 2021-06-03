@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
 #include <board_design_settings.h>
 #include <bitmaps.h>
 #include <widgets/wx_grid.h>
+#include <wx/treebook.h>
 #include <grid_tricks.h>
 
 #include <panel_setup_tracks_and_vias.h>

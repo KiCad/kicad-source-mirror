@@ -28,6 +28,8 @@
 #include <grid_tricks.h>
 #include <panel_setup_text_and_graphics.h>
 
+#include <wx/treebook.h>
+
 
 // Columns of layer classes grid
 enum

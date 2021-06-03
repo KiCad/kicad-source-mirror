@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,8 @@
 #include <ratsnest/ratsnest_view_item.h>
 #include <widgets/paged_dialog.h>
 #include <footprint_edit_frame.h>
+#include <wx/treebook.h>
+
 
 PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( PCB_BASE_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent ) :
         PANEL_EDIT_OPTIONS_BASE( aParent->GetTreebook() ), m_frame( aFrame )

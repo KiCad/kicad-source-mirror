@@ -57,6 +57,7 @@
 #include <dialogs/panel_gerbview_display_options.h>
 #include <panel_hotkeys_editor.h>
 #include <wx/wupdlock.h>
+#include <wx/treebook.h>
 
 #include "widgets/gbr_layer_box_selector.h"
 #include "widgets/gerbview_layer_widget.h"
