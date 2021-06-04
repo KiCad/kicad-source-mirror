@@ -123,7 +123,7 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
     mgr->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     // Notify GAL
-    mgr->RunAction( ACTIONS::gridPreset, true, gridCfg.last_size_idx );
+    mgr->RunAction( ACTIONS::gridPreset, true, static_cast<intptr_t>( gridCfg.last_size_idx ) );
     mgr->RunAction( ACTIONS::gridSetOrigin, true, new VECTOR2D( m_parent->GetGridOrigin() ) );
 
     m_parent->UpdateGridSelectBox();

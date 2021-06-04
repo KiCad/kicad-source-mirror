@@ -253,7 +253,8 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
 
     if( theRouter->CanInlineDrag( aDragMode ) )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::routerInlineDrag, true, aDragMode );
+        m_toolMgr->RunAction( PCB_ACTIONS::routerInlineDrag, true,
+                              static_cast<intptr_t>( aDragMode ) );
         return true;
     }
 

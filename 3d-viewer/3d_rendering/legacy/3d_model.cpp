@@ -455,7 +455,8 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
         }
 
         glDrawElements( GL_TRIANGLES, mat.m_render_idx_count, m_index_buffer_type,
-                        reinterpret_cast<const void*>( mat.m_render_idx_buffer_offset ) );
+                        reinterpret_cast<const void*>(
+                                static_cast<uintptr_t>( mat.m_render_idx_buffer_offset ) ) );
     }
 }
 
@@ -509,6 +510,7 @@ void MODEL_3D::DrawBboxes() const
                             ? sizeof( GLushort ) : sizeof( GLuint );
 
     glDrawElements( GL_LINES, bbox_idx_count * m_meshes_bbox.size(), m_bbox_index_buffer_type,
-                    reinterpret_cast<const void*>( bbox_idx_count * idx_size ) );
+                    reinterpret_cast<const void*>( 
+                        static_cast<uintptr_t>( bbox_idx_count * idx_size ) ) );
 }
 

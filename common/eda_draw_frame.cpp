@@ -348,7 +348,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     }
     else
     {
-        m_toolManager->RunAction( ACTIONS::gridPreset, true, idx );
+        m_toolManager->RunAction( ACTIONS::gridPreset, true, static_cast<intptr_t>( idx ) );
     }
 
     UpdateStatusBar();
@@ -453,7 +453,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     if( id < 0 || !( id < (int)m_zoomSelectBox->GetCount() ) )
         return;
 
-    m_toolManager->RunAction( "common.Control.zoomPreset", true, id );
+    m_toolManager->RunAction( ACTIONS::zoomPreset, true, static_cast<intptr_t>( id ) );
     UpdateStatusBar();
     m_canvas->Refresh();
 }
