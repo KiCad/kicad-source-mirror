@@ -27,7 +27,7 @@
  * @file  c_ogl_3dmodel.cpp
  * @brief
  */
-
+#include <stdexcept>
 #include <gal/opengl/kiglew.h>    // Must be included first
 
 #include "3d_model.h"
