@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    height="24"
    width="24"
    version="1.1"
    id="svg2"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
    sodipodi:docname="curved_ratsnest.svg"
    inkscape:export-filename="E:\Projects\kicad\bitmaps_png\sources\curved_ratsnest.png"
    inkscape:export-xdpi="193"
-   inkscape:export-ydpi="193">
+   inkscape:export-ydpi="193"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <metadata
      id="metadata40">
     <rdf:RDF>
@@ -24,7 +24,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
@@ -54,18 +54,18 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="755"
+     inkscape:window-width="2560"
+     inkscape:window-height="1361"
      id="namedview38"
      showgrid="true"
      inkscape:snap-to-guides="false"
      inkscape:snap-grids="true"
-     inkscape:zoom="22.791667"
-     inkscape:cx="12"
-     inkscape:cy="12"
-     inkscape:window-x="1513"
-     inkscape:window-y="23"
-     inkscape:window-maximized="0"
+     inkscape:zoom="2.0145178"
+     inkscape:cx="272.27359"
+     inkscape:cy="-39.463538"
+     inkscape:window-x="2551"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
      inkscape:current-layer="layer2"
      showguides="false"
      inkscape:guide-bbox="true"
@@ -75,7 +75,8 @@
      inkscape:object-nodes="false"
      inkscape:object-paths="false"
      inkscape:snap-bbox="false"
-     inkscape:document-rotation="0">
+     inkscape:document-rotation="0"
+     inkscape:pagecheckerboard="0">
     <inkscape:grid
        type="xygrid"
        id="grid3017"
@@ -90,6 +91,13 @@
   </sodipodi:namedview>
   <defs
      id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 12 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="24 : 12 : 1"
+       inkscape:persp3d-origin="12 : 8 : 1"
+       id="perspective863" />
     <filter
        id="c"
        height="1.3651"
@@ -119,63 +127,45 @@
      inkscape:label="Bottom"
      style="display:inline">
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#545454;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 19.962567,4.3484557 c 3,8.0000003 3,8.0000003 0,16.0000003"
+       style="fill:none;fill-rule:evenodd;stroke:#545454;stroke-width:1.0116px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 20.986176,9.9980993 C 20,17 17,20 10.000633,21.023401"
        id="path4198"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#545454;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 19.962567,20.348456 c -8,3 -8,3 -16,0"
-       id="path4200"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#545454;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 19.962567,20.348456 C 14.943023,17.336729 12.443061,15.836752 10.439137,13.82498"
-       id="path4202"
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#545454;stroke-width:1.0116px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 13.027122,2.9997132 2.9852825,13.016303"
+       id="path4198-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <circle
        id="path2992-3"
        style="fill:#ffffff;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       cx="-20.5"
-       cy="-20.5"
-       transform="scale(-1)"
-       r="2" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#545454;stroke-width:0.999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 12.353449,12.353554 4.3535513,4.3535489"
-       id="path4204"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#545454;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 3.5,19.5 v -16 h 16"
-       id="path4206"
-       inkscape:connector-curvature="0" />
-    <circle
-       id="path2992-3-1"
-       style="fill:#ffffff;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       cx="-3.5"
-       cy="-20.5"
+       cx="-10.002742"
+       cy="-20.993603"
        transform="scale(-1)"
        r="2" />
     <circle
        id="path2992-3-3"
        style="fill:#ffffff;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       cx="-20.5"
-       cy="-3.5"
+       cx="-20.993601"
+       cy="-9.9936018"
        transform="scale(-1)"
        r="2" />
-    <ellipse
-       id="path2992-3-1-4"
+    <circle
+       id="path2992-3-3-4"
        style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       cx="-3.5"
-       cy="-3.5"
+       cx="-12.991773"
+       cy="-3.0000005"
        transform="scale(-1)"
-       rx="2"
-       ry="2" />
+       r="2" />
+    <circle
+       id="path2992-3-3-4-8"
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       cx="-2.997257"
+       cy="-12.99543"
+       transform="scale(-1)"
+       r="2" />
   </g>
   <g
      inkscape:groupmode="layer"
