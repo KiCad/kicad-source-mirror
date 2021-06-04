@@ -534,7 +534,7 @@ TOOL_ACTION ACTIONS::highContrastModeCycle( "common.Control.highContrastModeCycl
 
 TOOL_ACTION ACTIONS::selectionTool( "common.InteractiveSelection.selectionTool",
         AS_GLOBAL, 0, "",
-        _( "Select item(s)" ), "",
+        _( "Select item(s)" ), _( "Select item(s)" ),
         BITMAPS::cursor, AF_ACTIVATE );
 
 TOOL_ACTION ACTIONS::measureTool( "common.InteractiveEdit.measureTool",
