@@ -20,6 +20,7 @@
 
 #include <project.h>
 #include <project/project_local_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 
 const int projectLocalSettingsVersion = 3;
@@ -230,18 +231,18 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                  * LAYER_PADS and LAYER_ZONES added to visibility controls
                  */
 
-                nlohmann::json::json_pointer ptr( "/board/visible_items"_json_pointer );
+                std::string ptr( "board.visible_items" );
 
-                if( contains( ptr ) )
+                if( Contains( ptr ) )
                 {
-                    if( ( *this )[ptr].is_array() )
+                    if( At( ptr ).is_array() )
                     {
-                        ( *this )[ptr].push_back( LAYER_PADS );
-                        ( *this )[ptr].push_back( LAYER_ZONES );
+                        At( ptr ).push_back( LAYER_PADS );
+                        At( ptr ).push_back( LAYER_ZONES );
                     }
                     else
                     {
-                        at( "board" ).erase( "visible_items" );
+                        At( "board" ).erase( "visible_items" );
                     }
                 }
 
@@ -277,13 +278,13 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                         { 40, 33 },    // LAYER_ZONES
                     };
 
-                nlohmann::json::json_pointer ptr( "/board/visible_items"_json_pointer );
+                std::string ptr( "board.visible_items" );
 
-                if( contains( ptr ) && at( ptr ).is_array() )
+                if( Contains( ptr ) && At( ptr ).is_array() )
                 {
                     nlohmann::json visible = nlohmann::json::array();
 
-                    for( const nlohmann::json& val : at( ptr ) )
+                    for( const nlohmann::json& val : At( ptr ) )
                     {
                         try
                         {
@@ -300,7 +301,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                         }
                     }
 
-                    at( "board" )["visible_items"] = visible;
+                    At( "board" )["visible_items"] = visible;
                 }
 
                 return true;
@@ -323,8 +324,7 @@ bool PROJECT_LOCAL_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce
 {
     wxASSERT( m_project );
 
-    ( *this )[PointerFromString( "meta.filename" )] =
-            m_project->GetProjectName() + "." + ProjectLocalSettingsFileExtension;
+    Set( "meta.filename", m_project->GetProjectName() + "." + ProjectLocalSettingsFileExtension );
 
     return JSON_SETTINGS::SaveToFile( aDirectory, aForce );
 }

@@ -457,6 +457,7 @@ set( COMMON_SRCS
     settings/common_settings.cpp
     settings/json_settings.cpp
     settings/nested_settings.cpp
+    settings/parameters.cpp
     settings/settings_manager.cpp
 
     project/board_project_settings.cpp

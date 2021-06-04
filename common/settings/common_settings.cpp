@@ -23,6 +23,7 @@
 #include <paths.h>
 #include <search_stack.h>
 #include <settings/common_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <systemdirsappend.h>
 #include <trace_helpers.h>
@@ -300,8 +301,8 @@ bool COMMON_SETTINGS::migrateSchema0to1()
 
     try
     {
-        mwp = at( mwp_pointer );
-        at( nlohmann::json::json_pointer( "/input"_json_pointer ) ).erase( "mousewheel_pan" );
+        mwp = m_internals->at( mwp_pointer );
+        m_internals->At( "input" ).erase( "mousewheel_pan" );
     }
     catch( ... )
     {
@@ -310,19 +311,19 @@ bool COMMON_SETTINGS::migrateSchema0to1()
 
     if( mwp )
     {
-        ( *this )[nlohmann::json::json_pointer( "/input/horizontal_pan" )] = true;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/horizontal_pan" )] = true;
 
-        ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] = WXK_SHIFT;
-        ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] = 0;
-        ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )]  = WXK_CONTROL;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] = WXK_SHIFT;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] = 0;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )]  = WXK_CONTROL;
     }
     else
     {
-        ( *this )[nlohmann::json::json_pointer( "/input/horizontal_pan" )] = false;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/horizontal_pan" )] = false;
 
-        ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] = WXK_CONTROL;
-        ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] = WXK_SHIFT;
-        ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )]  = 0;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] = WXK_CONTROL;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] = WXK_SHIFT;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )]  = 0;
     }
 
     return true;
@@ -337,8 +338,8 @@ bool COMMON_SETTINGS::migrateSchema1to2()
 
     try
     {
-        prefer_selection = at( v1_pointer );
-        at( nlohmann::json::json_pointer( "/input"_json_pointer ) ).erase( "prefer_select_to_drag" );
+        prefer_selection = m_internals->at( v1_pointer );
+        m_internals->at( nlohmann::json::json_pointer( "/input"_json_pointer ) ).erase( "prefer_select_to_drag" );
     }
     catch( ... )
     {
@@ -346,9 +347,9 @@ bool COMMON_SETTINGS::migrateSchema1to2()
     }
 
     if( prefer_selection )
-        ( *this )[nlohmann::json::json_pointer( "/input/mouse_left" )] = MOUSE_DRAG_ACTION::SELECT;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/mouse_left" )] = MOUSE_DRAG_ACTION::SELECT;
     else
-        ( *this )[nlohmann::json::json_pointer( "/input/mouse_left" )] = MOUSE_DRAG_ACTION::DRAG_ANY;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/mouse_left" )] = MOUSE_DRAG_ACTION::DRAG_ANY;
 
     return true;
 }
@@ -374,10 +375,10 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     auto load_env_vars = [&] () {
           wxString key, value;
           long index = 0;
-          nlohmann::json::json_pointer ptr = PointerFromString( "environment.vars" );
+          nlohmann::json::json_pointer ptr = m_internals->PointerFromString( "environment.vars" );
 
           aCfg->SetPath( "EnvironmentVariables" );
-          ( *this )[ptr] = nlohmann::json( {} );
+          ( *m_internals )[ptr] = nlohmann::json( {} );
 
           while( aCfg->GetNextEntry( key, index ) )
           {
@@ -394,7 +395,7 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                   ptr.push_back( key.ToStdString() );
 
                   wxLogTrace( traceSettings, "Migrate Env: %s=%s", ptr.to_string(), value );
-                  ( *this )[ptr] = value.ToUTF8();
+                  ( *m_internals )[ptr] = value.ToUTF8();
 
                   ptr.pop_back();
               }
@@ -409,11 +410,10 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     if( aCfg->Read( "MousewheelPAN", &mousewheel_pan ) && mousewheel_pan )
     {
-        ( *this )[PointerFromString( "input.horizontal_pan" )] = true;
-
-        ( *this )[PointerFromString( "input.scroll_modifier_pan_h" )] = WXK_SHIFT;
-        ( *this )[PointerFromString( "input.scroll_modifier_pan_v" )] = 0;
-        ( *this )[PointerFromString( "input.scroll_modifier_zoom" )]  = WXK_CONTROL;
+        Set( "input.horizontal_pan", true );
+        Set( "input.scroll_modifier_pan_h", static_cast<int>( WXK_SHIFT ) );
+        Set( "input.scroll_modifier_pan_v", 0 );
+        Set( "input.scroll_modifier_zoom",  static_cast<int>( WXK_CONTROL ) );
     }
 
     ret &= fromLegacy<bool>( aCfg, "AutoPAN",                   "input.auto_pan" );
@@ -423,11 +423,8 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, "ZoomNoCenter",              "input.center_on_zoom" );
 
     // This was stored inverted in legacy config
-    if( ret )
-    {
-        auto p = PointerFromString( "input.center_on_zoom" );
-        ( *this )[p] = !( *this )[p];
-    }
+    if( OPT<bool> value = Get<bool>( "input.center_on_zoom" ) )
+        Set( "input.center_on_zoom", !( *value ) );
 
     ret &= fromLegacy<int>( aCfg, "OpenGLAntialiasingMode", "graphics.opengl_antialiasing_mode" );
     ret &= fromLegacy<int>( aCfg, "CairoAntialiasingMode",  "graphics.cairo_antialiasing_mode" );

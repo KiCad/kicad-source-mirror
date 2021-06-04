@@ -608,7 +608,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                 js.push_back( i );
         }
 
-        ( *this )[PointerFromString( "export_svg.layers" ) ] = js;
+        Set( "export_svg.layers", js );
     }
 
     {
@@ -639,7 +639,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
             }
         }
 
-        ( *this )[PointerFromString( "action_plugins" ) ] = js;
+        Set( "action_plugins", js );
     }
 
     //
@@ -706,10 +706,10 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     const std::string p = "pcbnew.InteractiveRouter.";
 
-    ( *this )[PointerFromString( "tools.pns.meta" )] = nlohmann::json( {
-                                                                           { "filename", "pns" },
-                                                                           { "version", 0 }
-                                                                       } );
+    Set( "tools.pns.meta", nlohmann::json( {
+                                               { "filename", "pns" },
+                                               { "version", 0 }
+                                           } ) );
 
     ret &= fromLegacy<int>(  aCfg, p + "Mode",                  "tools.pns.mode" );
     ret &= fromLegacy<int>(  aCfg, p + "OptimizerEffort",       "tools.pns.effort" );
@@ -728,7 +728,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, p + "InlineDragEnabled",     "tools.pns.inline_drag" );
 
     // Initialize some new PNS settings to legacy behaviors if coming from legacy
-    ( *this )[PointerFromString( "tools.pns.fix_all_segments" )] = false;
+    Set( "tools.pns.fix_all_segments", false );
 
     // Migrate color settings that were stored in the pcbnew config file
 
@@ -766,7 +766,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     Pgm().GetSettingsManager().SaveColorSettings( cs, "board" );
 
-    ( *this )[PointerFromString( "appearance.color_theme" )] = cs->GetFilename();
+    Set( "appearance.color_theme", cs->GetFilename() );
 
     double x, y;
 
@@ -779,8 +779,8 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
         x = From_User_Unit( u, x );
         y = From_User_Unit( u, y );
 
-        ( *this )[PointerFromString( "window.grid.user_grid_x" )] = StringFromValue( u, x );
-        ( *this )[PointerFromString( "window.grid.user_grid_y" )] = StringFromValue( u, y );
+        Set( "window.grid.user_grid_x", StringFromValue( u, x ) );
+        Set( "window.grid.user_grid_y", StringFromValue( u, y ) );
     }
 
     // Footprint editor settings were stored in pcbnew config file.  Migrate them here.

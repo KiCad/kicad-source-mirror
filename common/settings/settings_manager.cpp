@@ -41,6 +41,7 @@
 #include <project/project_local_settings.h>
 #include <settings/color_settings.h>
 #include <settings/common_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 
@@ -325,7 +326,8 @@ void SETTINGS_MANAGER::SaveColorSettings( COLOR_SETTINGS* aSettings, const std::
                             }
                             ) != m_color_settings.end() );
 
-    nlohmann::json::json_pointer ptr = JSON_SETTINGS::PointerFromString( aNamespace );
+    if( aSettings->IsReadOnly() )
+        return;
 
     if( !aSettings->Store() )
     {
@@ -334,17 +336,17 @@ void SETTINGS_MANAGER::SaveColorSettings( COLOR_SETTINGS* aSettings, const std::
         return;
     }
 
-    wxASSERT( aSettings->contains( ptr ) );
+    wxASSERT( aSettings->Contains( aNamespace ) );
 
     wxLogTrace( traceSettings, "Saving color scheme %s, preserving %s", aSettings->GetFilename(),
-            aNamespace );
+                aNamespace );
 
-    nlohmann::json backup = aSettings->at( ptr );
+    nlohmann::json backup = aSettings->At( aNamespace );
     wxString path = GetColorSettingsPath();
 
     aSettings->LoadFromFile( path );
 
-    ( *aSettings )[ptr].update( backup );
+    ( *aSettings->Internals() )[aNamespace].update( backup );
     aSettings->Load();
 
     aSettings->SaveToFile( path, true );

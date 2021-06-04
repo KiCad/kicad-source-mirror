@@ -21,6 +21,7 @@
 #ifndef _SETTINGS_MANAGER_H
 #define _SETTINGS_MANAGER_H
 
+#include <algorithm>
 #include <typeinfo>
 #include <core/wx_stl_compat.h> // for wxString hash
 #include <settings/color_settings.h>

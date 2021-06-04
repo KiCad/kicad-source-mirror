@@ -240,7 +240,7 @@ bool EDA_3D_VIEWER_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                 if( aCfg->Read( k_r, &color.r ) &&
                     aCfg->Read( k_g, &color.g ) && aCfg->Read( k_b, &color.b ) )
                 {
-                    ( *this )[PointerFromString( destKey )] = color;
+                    Set( destKey, color );
                 }
             };
 

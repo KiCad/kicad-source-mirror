@@ -92,16 +92,16 @@ bool SYMBOL_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     // Now modify the loaded grid selection, because in earlier versions the grids index was shared
     // between all applications and started at 1000 mils.  There is a 4-position offset between
     // this index and the possible eeschema grids list that we have to subtract.
-    nlohmann::json::json_pointer gridSizePtr = PointerFromString( "window.grid.last_size" );
+    std::string gridSizePtr = "window.grid.last_size";
 
-    try
+    if( OPT<int> currentSize = Get<int>( gridSizePtr ) )
     {
-        ( *this )[gridSizePtr] = ( *this )[gridSizePtr].get<int>() - 4;
+        Set( gridSizePtr, *currentSize - 4 );
     }
-    catch( ... )
+    else
     {
         // Otherwise, default grid size should be 50 mils; index 1
-        ( *this )[gridSizePtr] = 1;
+        Set( gridSizePtr,  1 );
     }
 
     ret &= fromLegacy<int>( aCfg, "DefaultWireWidth",      "defaults.line_width" );

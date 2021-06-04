@@ -23,11 +23,11 @@
 
 #include <core/wx_stl_compat.h>
 
-#include <nlohmann/json.hpp>
 #include <utility>
 #include <wx/string.h>
 
 #include <core/optional.h>
+#include <nlohmann/json_fwd.hpp>
 
 class wxConfigBase;
 class NESTED_SETTINGS;
@@ -52,9 +52,14 @@ enum class SETTINGS_LOC {
 };
 
 
-class JSON_SETTINGS : public nlohmann::json
+/// pimpl to allow hiding json.hpp
+class JSON_SETTINGS_INTERNALS;
+
+class JSON_SETTINGS
 {
 public:
+    friend class NESTED_SETTINGS;
+
     JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation, int aSchemaVersion ) :
             JSON_SETTINGS( aFilename, aLocation, aSchemaVersion, true, true, true ) {}
 
@@ -75,6 +80,17 @@ public:
 
     bool IsReadOnly() const { return !m_writeFile; }
     void SetReadOnly( bool aReadOnly ) { m_writeFile = !aReadOnly; }
+
+    /**
+     * Wrappers for the underlying JSON API so that most consumers don't need json.hpp
+     * All of these functions take a string that is passed to PointerFromString internally.
+     */
+
+    nlohmann::json& At( const std::string& aPath );
+    bool Contains( const std::string& aPath ) const;
+    size_t Count( const std::string& aPath ) const;
+
+    JSON_SETTINGS_INTERNALS* Internals();
 
     /**
      * Updates the parameters of this object based on the current JSON document contents
@@ -130,21 +146,7 @@ c     * @return true if the file was saved
      * @return a value from within this document
      */
     template<typename ValueType>
-    OPT<ValueType> Get( const std::string& aPath ) const
-    {
-        if( OPT<nlohmann::json> ret = GetJson( aPath ) )
-        {
-            try
-            {
-                return ret->get<ValueType>();
-            }
-            catch( ... )
-            {
-            }
-        }
-
-        return NULLOPT;
-    }
+    OPT<ValueType> Get( const std::string& aPath ) const;
 
     /**
      * Stores a value into the JSON document
@@ -154,10 +156,7 @@ c     * @return true if the file was saved
      * @param aVal is the value to store
      */
     template<typename ValueType>
-    void Set( const std::string& aPath, ValueType aVal )
-    {
-        ( *this )[PointerFromString( aPath ) ] = aVal;
-    }
+    void Set( const std::string& aPath, ValueType aVal );
 
     /**
      * Migrates the schema of this settings from the version in the file to the latest version
@@ -198,13 +197,6 @@ c     * @return true if the file was saved
     {
         m_manager = aManager;
     }
-
-    /**
-    * Builds a JSON pointer based on a given string
-    * @param aPath is the path in the form "key1.key2.key3"
-    * @return a JSON pointer that can be used to index into a JSON object
-    */
-    static nlohmann::json::json_pointer PointerFromString( std::string aPath );
 
     /**
     * Sets the given string if the given key/path is present
@@ -329,11 +321,10 @@ protected:
     /// A pointer to the settings manager managing this file (may be null)
     SETTINGS_MANAGER* m_manager;
 
-    /// A list of JSON pointers that are preserved during a read-update-write to disk
-    std::vector<nlohmann::json::json_pointer> m_preserved_paths;
-
     /// A map of starting schema version to a pair of <ending version, migrator function>
     std::map<int, std::pair<int, std::function<bool()>>> m_migrators;
+
+    std::unique_ptr<JSON_SETTINGS_INTERNALS> m_internals;
 };
 
 // Specializations to allow conversion between wxString and std::string via JSON_SETTINGS API

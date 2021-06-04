@@ -23,6 +23,7 @@
 #include <schematic.h>
 #include <sch_marker.h>
 #include <sch_screen.h>
+#include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 
 

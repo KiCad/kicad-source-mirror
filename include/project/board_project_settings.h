@@ -24,6 +24,9 @@
 #include <layers_id_colors_and_visibility.h>
 #include <settings/parameters.h>
 
+// Can be removed by refactoring PARAM_LAYER_PRESET
+#include <nlohmann/json.hpp>
+
 /**
  * This file contains data structures that are saved in the project file or project local settings
  * file that are specific to PcbNew.  This is done so that these structures are available in common.

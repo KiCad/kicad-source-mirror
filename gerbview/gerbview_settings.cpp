@@ -25,6 +25,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 #include <wx/config.h>
@@ -99,7 +100,7 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
         aCfg->SetPath( ".." );
 
-        ( *this )[PointerFromString( aDest )] = js;
+        Set( aDest, js );
     };
 
     migrate_files( "drl_files", "system.drill_file_history" );
@@ -109,15 +110,14 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     {
         wxString key;
         int value = 0;
-        nlohmann::json::json_pointer ptr = PointerFromString( "gerber_to_pcb_layers" );
 
-        ( *this )[ptr] = nlohmann::json::array();
+        At( "gerber_to_pcb_layers" ) = nlohmann::json::array();
 
         for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
         {
             key.Printf( "GbrLyr%dToPcb", i );
             aCfg->Read( key, &value, UNSELECTED_LAYER );
-            ( *this )[ptr].emplace_back( value );
+            At( "gerber_to_pcb_layers" ).emplace_back( value );
         }
     }
 
@@ -147,7 +147,7 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     Pgm().GetSettingsManager().SaveColorSettings( cs, "gerbview" );
 
-    ( *this )[PointerFromString( "appearance.color_theme" )] = cs->GetFilename();
+    Set( "appearance.color_theme", cs->GetFilename() );
 
     return ret;
 }

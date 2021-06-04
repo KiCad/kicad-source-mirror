@@ -23,6 +23,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 #include <wx/config.h>
@@ -317,7 +318,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                                                           { "", true, F_Fab }
                                                       } );
 
-    ( *this )[PointerFromString( "design_settings.default_footprint_text_items" )] = textItems;
+    Set( "design_settings.default_footprint_text_items", textItems );
 
     ret &= fromLegacyString( aCfg, "FpEditorRefDefaultText",         "design_settings.default_footprint_text_items.0.0" );
     ret &= fromLegacy<bool>( aCfg, "FpEditorRefDefaultVisibility",   "design_settings.default_footprint_text_items.0.1" );
@@ -371,7 +372,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     manager.SaveColorSettings( cs, "board" );
 
-    ( *this )[PointerFromString( "appearance.color_theme" )] = "user_footprints";
+    ( *m_internals )[m_internals->PointerFromString( "appearance.color_theme" )] = "user_footprints";
 
     double x, y;
     f = "ModEditFrame";
@@ -385,8 +386,8 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
         x = From_User_Unit( u, x );
         y = From_User_Unit( u, y );
 
-        ( *this )[PointerFromString( "window.grid.user_grid_x" )] = StringFromValue( u, x );
-        ( *this )[PointerFromString( "window.grid.user_grid_y" )] = StringFromValue( u, y );
+        Set( "window.grid.user_grid_x", StringFromValue( u, x ) );
+        Set( "window.grid.user_grid_y", StringFromValue( u, y ) );
     }
 
     return ret;
@@ -409,12 +410,12 @@ bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema0to1()
         return false;
     }
 
-    nlohmann::json::json_pointer theme_ptr( "/appearance/color_theme" );
+    std::string theme_ptr( "appearance.color_theme" );
 
-    if( !count( theme_ptr ) )
+    if( !Count( theme_ptr ) )
         return true;
 
-    wxString selected = at( theme_ptr ).get<wxString>();
+    wxString selected = At( theme_ptr ).get<wxString>();
     wxString search   = selected + wxT( "_footprints" );
 
     for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
@@ -423,7 +424,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema0to1()
         {
             wxLogTrace( traceSettings, "Updating footprint editor theme from %s to %s",
                         selected, search );
-            ( *this )[theme_ptr] = search;
+            Set( theme_ptr, search );
             return true;
         }
     }

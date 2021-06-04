@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <nlohmann/json.hpp>
+
 #include <project/net_settings.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>

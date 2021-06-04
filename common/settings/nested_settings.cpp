@@ -20,6 +20,7 @@
 
 #include <wx/log.h>
 
+#include <settings/json_settings_internals.h>
 #include <settings/nested_settings.h>
 
 NESTED_SETTINGS::NESTED_SETTINGS( const std::string& aName, int aVersion, JSON_SETTINGS* aParent,
@@ -40,18 +41,18 @@ NESTED_SETTINGS::~NESTED_SETTINGS()
 
 bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
 {
-    clear();
+    m_internals->clear();
     bool success = false;
 
     if( m_parent )
     {
-        nlohmann::json::json_pointer ptr = PointerFromString( m_path );
+        nlohmann::json::json_pointer ptr = m_internals->PointerFromString( m_path );
 
-        if( m_parent->contains( ptr ) )
+        if( m_parent->m_internals->contains( ptr ) )
         {
             try
             {
-                update( ( *m_parent )[ptr] );
+                m_internals->update( ( *m_parent->m_internals )[ptr] );
 
                 wxLogTrace( traceSettings, "Loaded NESTED_SETTINGS %s", GetFilename() );
 
@@ -71,7 +72,7 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
 
         try
         {
-            filever = at( PointerFromString( "meta.version" ) ).get<int>();
+            filever = m_internals->Get<int>( "meta.version" );
         }
         catch( ... )
         {
@@ -118,8 +119,9 @@ bool NESTED_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 
     try
     {
-        nlohmann::json patch =
-                nlohmann::json::diff( *this, ( *m_parent )[PointerFromString( m_path )] );
+        nlohmann::json patch = nlohmann::json::diff( *m_internals,
+                m_parent->m_internals->Get<nlohmann::json>( m_path ) );
+
         modified |= !patch.empty();
     }
     catch( ... )
@@ -132,7 +134,7 @@ bool NESTED_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 
     try
     {
-        ( *m_parent )[PointerFromString( m_path ) ].update( *this );
+        m_parent->m_internals->At( m_path ).update( *m_internals );
 
         wxLogTrace( traceSettings, "Stored NESTED_SETTINGS %s with schema %d",
                     GetFilename(), m_schemaVersion );

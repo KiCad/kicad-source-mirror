@@ -23,6 +23,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <pgm_base.h>
 #include <settings/app_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
 #include <base_units.h>
@@ -175,7 +176,7 @@ bool APP_SETTINGS_BASE::MigrateFromLegacy( wxConfigBase* aCfg )
                 js.push_back( i );
         }
 
-        ( *this )[PointerFromString( "printing.layers" ) ] = js;
+        Set( "printing.layers", js );
     }
 
     ret &= fromLegacy<bool>(   aCfg, f + "FirstRunShown",       "system.first_run_shown" );
@@ -196,7 +197,7 @@ bool APP_SETTINGS_BASE::MigrateFromLegacy( wxConfigBase* aCfg )
                 js.push_back( file.ToStdString() );
         }
 
-        ( *this )[PointerFromString( "system.file_history" )] = js;
+        Set( "system.file_history", js );
     }
 
     ret &= migrateWindowConfig( aCfg, f, "window" );
@@ -224,8 +225,8 @@ void APP_SETTINGS_BASE::migrateFindReplace( wxConfigBase* aCfg )
             replace_history.push_back( tmp.ToStdString() );
     }
 
-    ( *this )[PointerFromString( "find_replace.find_history" )] = find_history;
-    ( *this )[PointerFromString( "find_replace.replace_history" )] = replace_history;
+    Set( "find_replace.find_history", find_history );
+    Set( "find_replace.replace_history", replace_history );
 }
 
 

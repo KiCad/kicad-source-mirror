@@ -21,6 +21,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <pgm_base.h>
 #include <settings/color_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 #include <wx/log.h>
@@ -223,7 +224,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
                 // Fix LAYER_VIA_HOLES color - before version 2, this setting had no effect
                 nlohmann::json::json_pointer ptr( "/board/via_hole");
 
-                ( *this )[ptr] = COLOR4D( 0.5, 0.4, 0, 0.8 ).ToWxString( wxC2S_CSS_SYNTAX );
+                ( *m_internals )[ptr] = COLOR4D( 0.5, 0.4, 0, 0.8 ).ToWxString( wxC2S_CSS_SYNTAX );
 
                 return true;
             } );
@@ -285,10 +286,7 @@ bool COLOR_SETTINGS::migrateSchema0to1()
         return false;
     }
 
-    nlohmann::json::json_pointer board( "/board" );
-    nlohmann::json::json_pointer fpedit( "/fpedit" );
-
-    if( !contains( fpedit ) )
+    if( !Contains( "fpedit" ) )
     {
         wxLogTrace( traceSettings, "migrateSchema0to1: %s doesn't have fpedit settings; skipping.",
                     m_filename );
@@ -300,19 +298,18 @@ bool COLOR_SETTINGS::migrateSchema0to1()
     COLOR_SETTINGS* fpsettings = m_manager->AddNewColorSettings( filename );
 
     // Start out with a clone
-    nlohmann::json::json_pointer root( "" );
-    ( *fpsettings )[root] = at( root );
+    fpsettings->Set( "", At( "" ) );
 
     // Footprint editor now just looks at the "board" namespace
-    ( *fpsettings )[board] = fpsettings->at( fpedit );
+    fpsettings->Set( "board", fpsettings->At( "fpedit" ) );
 
-    fpsettings->erase( "fpedit" );
+    fpsettings->Internals()->erase( "fpedit" );
     fpsettings->Load();
     fpsettings->SetName( fpsettings->GetName() + wxS( " " ) + _( "(Footprints)" ) );
     m_manager->Save( fpsettings );
 
     // Now we can get rid of our own copy
-    erase( "fpedit" );
+    m_internals->erase( "fpedit" );
 
     return true;
 }

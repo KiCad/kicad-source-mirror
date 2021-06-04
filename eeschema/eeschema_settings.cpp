@@ -30,6 +30,7 @@
 #include <macros.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 #include <wx/config.h>
@@ -405,16 +406,16 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     // Now modify the loaded grid selection, because in earlier versions the grids index was shared
     // between all applications and started at 1000 mils.  There is a 4-position offset between
     // this index and the possible eeschema grids list that we have to subtract.
-    nlohmann::json::json_pointer gridSizePtr = PointerFromString( "window.grid.last_size" );
+    std::string gridSizePtr = "window.grid.last_size";
 
-    try
+    if( OPT<int> currentSize = Get<int>( gridSizePtr ) )
     {
-        ( *this )[gridSizePtr] = ( *this )[gridSizePtr].get<int>() - 4;
+        Set( gridSizePtr, *currentSize - 4 );
     }
-    catch( ... )
+    else
     {
         // Otherwise, default grid size should be 50 mils; index 1
-        ( *this )[gridSizePtr] = 1;
+        Set( gridSizePtr,  1 );
     }
 
     ret &= fromLegacy<bool>( aCfg, "FootprintPreview",   "appearance.footprint_preview" );
@@ -497,8 +498,8 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
             }
         }
 
-        ( *this )[PointerFromString( "netlist.custom_command_titles" )] = js_title;
-        ( *this )[PointerFromString( "netlist.custom_command_paths" )]  = js_cmd;
+        Set( "netlist.custom_command_titles", js_title );
+        Set( "netlist.custom_command_paths", js_cmd );
     }
 
     {
@@ -518,11 +519,11 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
             if( aCfg->Read( key, &value ) )
             {
                 std::string key_utf( key.ToUTF8() );
-                js[PointerFromString( key_utf )] = value;
+                js[JSON_SETTINGS_INTERNALS::PointerFromString( key_utf )] = value;
             }
         }
 
-        ( *this )[PointerFromString( "field_editor.fields_show" ) ] = js;
+        Set( "field_editor.fields_show", js );
 
         aCfg->SetPath( "../GroupBy" );
 
@@ -531,11 +532,11 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
             if( aCfg->Read( key, &value ) )
             {
                 std::string key_utf( key.ToUTF8() );
-                js[PointerFromString( key_utf )] = value;
+                js[JSON_SETTINGS_INTERNALS::PointerFromString( key_utf )] = value;
             }
         }
 
-        ( *this )[PointerFromString( "field_editor.fields_group_by" ) ] = js;
+        Set( "field_editor.fields_group_by", js );
 
         aCfg->SetPath( "../.." );
     }
@@ -628,7 +629,7 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     Pgm().GetSettingsManager().SaveColorSettings( cs, "schematic" );
 
-    ( *this )[PointerFromString( "appearance.color_theme" )] = cs->GetFilename();
+    Set( "appearance.color_theme", cs->GetFilename() );
 
     // LibEdit settings were stored with eeschema.  If eeschema is the first app to run,
     // we need to migrate the LibEdit settings here
@@ -668,12 +669,10 @@ std::vector<EESCHEMA_SETTINGS::BOM_PLUGIN_SETTINGS> EESCHEMA_SETTINGS::DefaultBo
 
 bool EESCHEMA_SETTINGS::migrateBomSettings()
 {
-    nlohmann::json::json_pointer ptr = PointerFromString( "bom.plugins" );
-
-    if( !contains( ptr ) )
+    if( !Contains( "bom.plugins" ) )
         return false;
 
-    wxString list = at( ptr ).get<wxString>();
+    wxString list = Get<wxString>( "bom.plugins" ).value();
 
     BOM_CFG_PARSER cfg_parser( &m_BomPanel.plugins, TO_UTF8( list ), wxT( "plugins" ) );
 
@@ -687,7 +686,7 @@ bool EESCHEMA_SETTINGS::migrateBomSettings()
     }
 
     // Parser will have loaded up our array, let's dump it out to JSON
-    at( ptr ) = bomSettingsToJson();
+    At( "bom.plugins" ) = bomSettingsToJson();
 
     return true;
 }

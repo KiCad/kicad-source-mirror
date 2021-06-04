@@ -27,6 +27,7 @@
 #include <locale_io.h>
 #include <gal/color4d.h>
 #include <settings/json_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/nested_settings.h>
 #include <settings/parameters.h>
 #include <wx/config.h>
@@ -36,13 +37,32 @@
 #include <wx/log.h>
 #include <wx/wfstream.h>
 
-
 const wxChar* const traceSettings = wxT( "KICAD_SETTINGS" );
+
+
+nlohmann::json::json_pointer JSON_SETTINGS_INTERNALS::PointerFromString( std::string aPath )
+{
+    std::replace( aPath.begin(), aPath.end(), '.', '/' );
+    aPath.insert( 0, "/" );
+
+    nlohmann::json::json_pointer p;
+
+    try
+    {
+        p = nlohmann::json::json_pointer( aPath );
+    }
+    catch( ... )
+    {
+        wxASSERT_MSG( false, wxT( "Invalid pointer path in PointerFromString!" ) );
+    }
+
+    return p;
+}
+
 
 JSON_SETTINGS::JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation,
                               int aSchemaVersion, bool aCreateIfMissing, bool aCreateIfDefault,
                               bool aWriteFile ) :
-        nlohmann::json(),
         m_filename( aFilename ),
         m_legacy_filename( "" ),
         m_location( aLocation ),
@@ -54,9 +74,11 @@ JSON_SETTINGS::JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation,
         m_schemaVersion( aSchemaVersion ),
         m_manager( nullptr )
 {
+    m_internals = std::make_unique<JSON_SETTINGS_INTERNALS>();
+
     try
     {
-        ( *this )[PointerFromString( "meta.filename" )] = GetFullFilename();
+        m_internals->SetFromString( "meta.filename", GetFullFilename() );
     }
     catch( ... )
     {
@@ -85,6 +107,30 @@ wxString JSON_SETTINGS::GetFullFilename() const
 }
 
 
+nlohmann::json& JSON_SETTINGS::At( const std::string& aPath )
+{
+    return m_internals->At( aPath );
+}
+
+
+bool JSON_SETTINGS::Contains( const std::string& aPath ) const
+{
+    return m_internals->contains( JSON_SETTINGS_INTERNALS::PointerFromString( aPath ) );
+}
+
+
+size_t JSON_SETTINGS::Count( const std::string& aPath ) const
+{
+    return m_internals->count( JSON_SETTINGS_INTERNALS::PointerFromString( aPath ) );
+}
+
+
+JSON_SETTINGS_INTERNALS* JSON_SETTINGS::Internals()
+{
+    return m_internals.get();
+}
+
+
 void JSON_SETTINGS::Load()
 {
     for( auto param : m_params )
@@ -105,7 +151,7 @@ void JSON_SETTINGS::Load()
 bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
 {
     // First, load all params to default values
-    clear();
+    m_internals->clear();
     Load();
 
     bool success         = true;
@@ -220,16 +266,17 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
 
             if( fp )
             {
-                *static_cast<nlohmann::json*>( this ) = nlohmann::json::parse( fp, nullptr,
-                                                      /* allow_exceptions = */ true,
-                                                      /* ignore_comments  = */ true );
+                *static_cast<nlohmann::json*>( m_internals.get() ) =
+                        nlohmann::json::parse( fp, nullptr,
+                                               /* allow_exceptions = */ true,
+                                               /* ignore_comments  = */ true );
 
                 // If parse succeeds, check if schema migration is required
                 int filever = -1;
 
                 try
                 {
-                    filever = at( PointerFromString( "meta.version" ) ).get<int>();
+                    filever = m_internals->Get<int>( "meta.version" );
                 }
                 catch( ... )
                 {
@@ -407,7 +454,7 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
     try
     {
         std::stringstream buffer;
-        buffer << std::setw( 2 ) << *this << std::endl;
+        buffer << std::setw( 2 ) << *m_internals << std::endl;
 
         wxFFileOutputStream fileStream( path.GetFullPath(), "wb" );
 
@@ -436,13 +483,13 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 
 OPT<nlohmann::json> JSON_SETTINGS::GetJson( const std::string& aPath ) const
 {
-    nlohmann::json::json_pointer ptr = PointerFromString( aPath );
+    nlohmann::json::json_pointer ptr = m_internals->PointerFromString( aPath );
 
-    if( contains( ptr ) )
+    if( m_internals->contains( ptr ) )
     {
         try
         {
-            return OPT<nlohmann::json>{ at( ptr ) };
+            return OPT<nlohmann::json>{ m_internals->at( ptr ) };
         }
         catch( ... )
         {
@@ -451,6 +498,55 @@ OPT<nlohmann::json> JSON_SETTINGS::GetJson( const std::string& aPath ) const
 
     return OPT<nlohmann::json>{};
 }
+
+
+template<typename ValueType>
+OPT<ValueType> JSON_SETTINGS::Get( const std::string& aPath ) const
+{
+    if( OPT<nlohmann::json> ret = GetJson( aPath ) )
+    {
+        try
+        {
+            return ret->get<ValueType>();
+        }
+        catch( ... )
+        {
+        }
+    }
+
+    return NULLOPT;
+}
+
+
+// Instantiate all required templates here to allow reducing scope of json.hpp
+template OPT<bool> JSON_SETTINGS::Get<bool>( const std::string& aPath ) const;
+template OPT<double> JSON_SETTINGS::Get<double>( const std::string& aPath ) const;
+template OPT<float> JSON_SETTINGS::Get<float>( const std::string& aPath ) const;
+template OPT<unsigned int> JSON_SETTINGS::Get<unsigned int>( const std::string& aPath ) const;
+template OPT<unsigned long long> JSON_SETTINGS::Get<unsigned long long>( const std::string& aPath ) const;
+template OPT<std::string> JSON_SETTINGS::Get<std::string>( const std::string& aPath ) const;
+template OPT<nlohmann::json> JSON_SETTINGS::Get<nlohmann::json>( const std::string& aPath ) const;
+template OPT<KIGFX::COLOR4D> JSON_SETTINGS::Get<KIGFX::COLOR4D>( const std::string& aPath ) const;
+
+
+template<typename ValueType>
+void JSON_SETTINGS::Set( const std::string& aPath, ValueType aVal )
+{
+    m_internals->SetFromString( aPath, aVal );
+}
+
+
+// Instantiate all required templates here to allow reducing scope of json.hpp
+template void JSON_SETTINGS::Set<bool>( const std::string& aPath, bool aValue );
+template void JSON_SETTINGS::Set<double>( const std::string& aPath, double aValue );
+template void JSON_SETTINGS::Set<float>( const std::string& aPath, float aValue );
+template void JSON_SETTINGS::Set<int>( const std::string& aPath, int aValue );
+template void JSON_SETTINGS::Set<unsigned int>( const std::string& aPath, unsigned int aValue );
+template void JSON_SETTINGS::Set<unsigned long long>( const std::string& aPath, unsigned long long aValue );
+template void JSON_SETTINGS::Set<const char*>( const std::string& aPath, const char* aValue );
+template void JSON_SETTINGS::Set<std::string>( const std::string& aPath, std::string aValue );
+template void JSON_SETTINGS::Set<nlohmann::json>( const std::string& aPath, nlohmann::json aValue );
+template void JSON_SETTINGS::Set<KIGFX::COLOR4D>( const std::string& aPath, KIGFX::COLOR4D aValue );
 
 
 void JSON_SETTINGS::registerMigration( int aOldSchemaVersion, int aNewSchemaVersion,
@@ -464,7 +560,7 @@ void JSON_SETTINGS::registerMigration( int aOldSchemaVersion, int aNewSchemaVers
 
 bool JSON_SETTINGS::Migrate()
 {
-    int filever = at( PointerFromString( "meta.version" ) ).get<int>();
+    int filever = m_internals->Get<int>( "meta.version" );
 
     while( filever < m_schemaVersion )
     {
@@ -482,7 +578,7 @@ bool JSON_SETTINGS::Migrate()
             wxLogTrace( traceSettings, "Migrated %s from %d to %d", typeid( *this ).name(),
                         filever, pair.first );
             filever = pair.first;
-            ( *this )[PointerFromString( "meta.version" )] = filever;
+            m_internals->At( "meta.version" ) = filever;
         }
         else
         {
@@ -504,30 +600,10 @@ bool JSON_SETTINGS::MigrateFromLegacy( wxConfigBase* aLegacyConfig )
 }
 
 
-nlohmann::json::json_pointer JSON_SETTINGS::PointerFromString( std::string aPath )
-{
-    std::replace( aPath.begin(), aPath.end(), '.', '/' );
-    aPath.insert( 0, "/" );
-
-    nlohmann::json::json_pointer p;
-
-    try
-    {
-        p = nlohmann::json::json_pointer( aPath );
-    }
-    catch( ... )
-    {
-        wxASSERT_MSG( false, wxT( "Invalid pointer path in PointerFromString!" ) );
-    }
-
-    return p;
-}
-
-
 bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
                                   wxString& aTarget )
 {
-    nlohmann::json::json_pointer ptr = PointerFromString( aPath );
+    nlohmann::json::json_pointer ptr = JSON_SETTINGS_INTERNALS::PointerFromString( aPath );
 
     if( aObj.contains( ptr ) && aObj.at( ptr ).is_string() )
     {
@@ -542,7 +618,7 @@ bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string&
 bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
                                   bool& aTarget )
 {
-    nlohmann::json::json_pointer ptr = PointerFromString( aPath );
+    nlohmann::json::json_pointer ptr = JSON_SETTINGS_INTERNALS::PointerFromString( aPath );
 
     if( aObj.contains( ptr ) && aObj.at( ptr ).is_boolean() )
     {
@@ -557,7 +633,7 @@ bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string&
 bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
                                   int& aTarget )
 {
-    nlohmann::json::json_pointer ptr = PointerFromString( aPath );
+    nlohmann::json::json_pointer ptr = JSON_SETTINGS_INTERNALS::PointerFromString( aPath );
 
     if( aObj.contains( ptr ) && aObj.at( ptr ).is_number_integer() )
     {
@@ -572,7 +648,7 @@ bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string&
 bool JSON_SETTINGS::SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
                                   unsigned int& aTarget )
 {
-    nlohmann::json::json_pointer ptr = PointerFromString( aPath );
+    nlohmann::json::json_pointer ptr = JSON_SETTINGS_INTERNALS::PointerFromString( aPath );
 
     if( aObj.contains( ptr ) && aObj.at( ptr ).is_number_unsigned() )
     {
@@ -594,7 +670,7 @@ bool JSON_SETTINGS::fromLegacy( wxConfigBase* aConfig, const std::string& aKey,
     {
         try
         {
-            ( *this )[PointerFromString( aDest )] = val;
+            ( *m_internals )[aDest] = val;
         }
         catch( ... )
         {
@@ -630,7 +706,7 @@ bool JSON_SETTINGS::fromLegacyString( wxConfigBase* aConfig, const std::string& 
     {
         try
         {
-            ( *this )[PointerFromString( aDest )] = str.ToUTF8();
+            ( *m_internals )[aDest] = str.ToUTF8();
         }
         catch( ... )
         {
@@ -658,7 +734,7 @@ bool JSON_SETTINGS::fromLegacyColor( wxConfigBase* aConfig, const std::string& a
         try
         {
             nlohmann::json js = nlohmann::json::array( { color.r, color.g, color.b, color.a } );
-            ( *this )[PointerFromString( aDest )] = js;
+            ( *m_internals )[aDest] = js;
         }
         catch( ... )
         {
@@ -714,7 +790,7 @@ template<> OPT<wxString> JSON_SETTINGS::Get( const std::string& aPath ) const
 
 template<> void JSON_SETTINGS::Set<wxString>( const std::string& aPath, wxString aVal )
 {
-    ( *this )[PointerFromString( std::move( aPath ) ) ] = aVal.ToUTF8();
+    ( *m_internals )[aPath] = aVal.ToUTF8();
 }
 
 // Specializations to allow directly reading/writing wxStrings from JSON

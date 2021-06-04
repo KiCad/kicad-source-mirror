@@ -24,6 +24,7 @@
 #include <array>
 #include <pcb_calculator_settings.h>
 #include <settings/common_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <wx/config.h>
 
@@ -214,7 +215,9 @@ bool PCB_CALCULATOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>(  aCfg, "Att_selection",     "attenuators.type" );
 
     {
-        nlohmann::json::json_pointer ptr = PointerFromString( "attenuators" );
+        nlohmann::json::json_pointer ptr =
+                JSON_SETTINGS_INTERNALS::PointerFromString( "attenuators" );
+
         const std::array<std::string, 4> att_names = { "att_pi", "att_tee",
                                                        "att_bridge", "att_splitter" };
         double val = 0;
@@ -225,13 +228,13 @@ bool PCB_CALCULATOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
             ptr.push_back( att );
 
             if( aCfg->Read( "Attenuation", &val ) )
-                ( *this )[ptr]["attenuation"] = val;
+                ( *m_internals )[ptr]["attenuation"] = val;
 
             if( aCfg->Read( "Zin", &val ) )
-                ( *this )[ptr]["zin"] = val;
+                ( *m_internals )[ptr]["zin"] = val;
 
             if( aCfg->Read( "Zout", &val ) )
-                ( *this )[ptr]["zout"] = val;
+                ( *m_internals )[ptr]["zout"] = val;
 
             ptr.pop_back();
             aCfg->SetPath( "../.." );
@@ -269,7 +272,9 @@ bool PCB_CALCULATOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>(  aCfg, "Transline_selection",    "trans_line.selection" );
 
     {
-        nlohmann::json::json_pointer ptr = PointerFromString( "trans_line" );
+        nlohmann::json::json_pointer ptr =
+                JSON_SETTINGS_INTERNALS::PointerFromString( "trans_line" );
+
         wxString key;
         double   value    = 0;
         int      units    = 0;
@@ -295,7 +300,7 @@ bool PCB_CALCULATOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                     aCfg->Read( key, &units );
                     ptr.push_back( "units" );
 
-                    ( *this )[ptr].push_back( { { dest.ToStdString(), units } } );
+                    ( *m_internals )[ptr].push_back( { { dest.ToStdString(), units } } );
 
                     ptr.pop_back();
                 }
@@ -304,7 +309,7 @@ bool PCB_CALCULATOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                     aCfg->Read( key, &value );
                     ptr.push_back( "values" );
 
-                    ( *this )[ptr].push_back( { { dest.ToStdString(), value } } );
+                    ( *m_internals )[ptr].push_back( { { dest.ToStdString(), value } } );
 
                     ptr.pop_back();
                 }

@@ -28,6 +28,7 @@
 #include <kiface_i.h>
 #include <macros.h>
 #include <schematic_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <sim/spice_settings.h>
 

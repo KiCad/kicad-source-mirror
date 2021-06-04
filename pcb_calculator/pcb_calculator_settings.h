@@ -25,6 +25,7 @@
 #define _PCB_CALCULATOR_SETTINGS_H
 
 #include <array>
+#include <unordered_map>
 #include <settings/app_settings.h>
 
 class PCB_CALCULATOR_SETTINGS : public APP_SETTINGS_BASE

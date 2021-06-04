@@ -21,6 +21,8 @@
 #ifndef _COLOR_SETTINGS_H
 #define _COLOR_SETTINGS_H
 
+#include <unordered_map>
+
 #include <gal/color4d.h>
 #include <settings/json_settings.h>
 #include <settings/parameters.h>
