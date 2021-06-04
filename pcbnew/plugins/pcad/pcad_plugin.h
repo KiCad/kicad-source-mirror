@@ -30,12 +30,14 @@
 #ifndef PCAD_PLUGIN_H_
 #define PCAD_PLUGIN_H_
 
-
 #include <io_mgr.h>
 
 class PCAD_PLUGIN : public PLUGIN
 {
 public:
+    PCAD_PLUGIN();
+    ~PCAD_PLUGIN();
+
     const wxString  PluginName() const override;
 
     BOARD*          Load( const wxString&   aFileName,
@@ -50,9 +52,6 @@ public:
         // No support for libraries....
         return 0;
     }
-
-    PCAD_PLUGIN();
-    ~PCAD_PLUGIN();
 
 private:
     const PROPERTIES*   m_props;

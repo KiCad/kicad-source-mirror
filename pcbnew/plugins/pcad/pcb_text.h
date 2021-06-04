@@ -23,16 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_text.h
- */
-
 #ifndef PCB_TEXT_H_
 #define PCB_TEXT_H_
 
-#include <wx/wx.h>
+#include <pcad/pcb_component.h>
 
-#include <pcb_component.h>
+class BOARD;
+class FOOTPRINT;
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD {
 
@@ -40,7 +39,6 @@ namespace PCAD2KICAD {
 class PCB_TEXT : public PCB_COMPONENT
 {
 public:
-
     PCB_TEXT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_TEXT();
 

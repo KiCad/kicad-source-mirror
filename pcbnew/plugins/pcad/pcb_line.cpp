@@ -23,16 +23,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_line.cpp
- */
+#include <pcad/pcb_line.h>
 
-#include <wx/wx.h>
-
+#include <board.h>
 #include <common.h>
+#include <footprint.h>
 #include <fp_shape.h>
 #include <pcb_shape.h>
-#include <pcb_line.h>
+#include <track.h>
+#include <xnode.h>
+
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 

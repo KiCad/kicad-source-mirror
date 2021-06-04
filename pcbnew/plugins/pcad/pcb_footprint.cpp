@@ -23,20 +23,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
+#include <pcad/pcb_arc.h>
+#include <pcad/pcb_copper_pour.h>
+#include <pcad/pcb_cutout.h>
+#include <pcad/pcb_plane.h>
+#include <pcad/pcb_line.h>
+#include <pcad/pcb_footprint.h>
+#include <pcad/pcb_pad.h>
+#include <pcad/pcb_polygon.h>
+#include <pcad/pcb_text.h>
+#include <pcad/pcb_via.h>
 
-#include <pcb_arc.h>
-#include <pcb_copper_pour.h>
-#include <pcb_cutout.h>
-#include <pcb_plane.h>
-#include <pcb_line.h>
-#include <pcb_footprint.h>
-#include <pcb_pad.h>
-#include <pcb_polygon.h>
-#include <plugins/pcad/pcb_text.h>
-#include <pcb_via.h>
-
+#include <board.h>
+#include <footprint.h>
 #include <trigo.h>
+#include <xnode.h>
+
+#include <wx/gdicmn.h>
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 

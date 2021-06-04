@@ -22,15 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file s_expr_loader.cpp
- */
-
-#include <s_expr_loader.h>
+#include <pcad/s_expr_loader.h>
 
 #include <dsnlexer.h>
 #include <macros.h>
 #include <xnode.h>
+
+#include <wx/string.h>
+#include <wx/xml/xml.h>
 
 namespace PCAD2KICAD {
 

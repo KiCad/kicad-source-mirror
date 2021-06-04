@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,28 +23,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_KEEPOUT_H_
-#define PCB_KEEPOUT_H_
+#ifndef PCAD_ITEM_TYPES_H_
+#define PCAD_ITEM_TYPES_H_
 
-#include <pcad/pcb_polygon.h>
+#include <wx/dynarray.h>
 
-class BOARD;
-class wxString;
-class XNODE;
+class wxRealPoint;
+
+WX_DEFINE_ARRAY( wxRealPoint*, VERTICES_ARRAY );
+WX_DEFINE_ARRAY( VERTICES_ARRAY*, ISLANDS_ARRAY );
 
 namespace PCAD2KICAD {
 
-class PCB_KEEPOUT : public PCB_POLYGON
-{
-public:
-    PCB_KEEPOUT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
-    ~PCB_KEEPOUT();
+class PCB_COMPONENT;
+class PCB_NET;
+class PCB_NET_NODE;
+class PCB_PAD_SHAPE;
 
-    virtual bool Parse( XNODE*          aNode,
-                        const wxString& aDefaultMeasurementUnit,
-                        const wxString& aActualConversion ) override;
-};
+WX_DEFINE_ARRAY( PCB_COMPONENT*, PCB_COMPONENTS_ARRAY );
+WX_DEFINE_ARRAY( PCB_NET*, PCB_NETS_ARRAY );
+WX_DEFINE_ARRAY( PCB_NET_NODE*, PCB_NET_NODES_ARRAY );
+WX_DEFINE_ARRAY( PCB_PAD_SHAPE*, PCB_PAD_SHAPES_ARRAY );
+}
 
-} // namespace PCAD2KICAD
-
-#endif    // PCB_KEEPOUT_H_
+#endif

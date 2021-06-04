@@ -27,15 +27,16 @@
  * @file pcad2kicad_common.cpp
  */
 
-#include <wx/wx.h>
-#include <wx/regex.h>
+#include <pcad/pcad2kicad_common.h>
 
 #include <common.h>
 #include <convert_to_biu.h>
 #include <math/util.h>      // for KiROUND
 #include <trigo.h>
+#include <xnode.h>
 
-#include <pcad2kicad_common.h>
+#include <wx/wx.h>
+#include <wx/regex.h>
 
 namespace PCAD2KICAD {
 

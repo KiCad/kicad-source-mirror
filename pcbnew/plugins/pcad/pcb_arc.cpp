@@ -23,17 +23,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_arc.cpp
- */
+#include <pcad/pcb_arc.h>
 
-#include <wx/wx.h>
-
-#include <math/util.h>      // for KiROUND
-#include <trigo.h>
+#include <board.h>
+#include <footprint.h>
 #include <fp_shape.h>
-#include <pcb_arc.h>
+#include <math/util.h>      // for KiROUND
 #include <pcb_shape.h>
+#include <trigo.h>
+#include <xnode.h>
+
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 

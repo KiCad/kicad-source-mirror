@@ -23,17 +23,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_polygon.cpp
- */
+#include <pcad/pcb_polygon.h>
 
-#include <wx/wx.h>
-
+#include <board.h>
 #include <common.h>
-#include <math/util.h>      // for KiROUND
+#include <footprint.h>
 #include <fp_shape.h>
-#include <pcb_polygon.h>
+#include <math/util.h>      // for KiROUND
+#include <xnode.h>
 #include <zone.h>
+
+#include <wx/gdicmn.h>
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 

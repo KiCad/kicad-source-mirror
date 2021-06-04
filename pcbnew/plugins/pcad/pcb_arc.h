@@ -23,27 +23,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_arc.h
- */
-
 #ifndef PCB_ARC_H_
 #define PCB_ARC_H_
 
-#include <wx/wx.h>
+#include <pcad/pcb_component.h>
 
-#include <pcb_component.h>
+class BOARD;
+class FOOTPRINT;
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD {
 
 class PCB_ARC : public PCB_COMPONENT
 {
 public:
-    int    m_StartX;
-    int    m_StartY;
-    double m_Angle;
-    int    m_Width;
-
     PCB_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_ARC();
 
@@ -56,6 +50,11 @@ public:
 
     void AddToFootprint( FOOTPRINT* aFootprint ) override;
     void AddToBoard() override;
+
+    int    m_StartX;
+    int    m_StartY;
+    double m_Angle;
+    int    m_Width;
 
 private:
     bool IsCircle();

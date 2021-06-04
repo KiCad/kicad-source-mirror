@@ -23,31 +23,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_polygon.h
- */
-
 #ifndef PCB_POLYGON_H_
 #define PCB_POLYGON_H_
 
-#include <wx/wx.h>
+#include <pcad/pcad_item_types.h>
+#include <pcad/pcb_component.h>
 
-#include <pcb_component.h>
+class BOARD;
+class FOOTPRINT;
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD {
-
-//WX_DEFINE_ARRAY( wxRealPoint*, VERTICES_ARRAY );
-WX_DEFINE_ARRAY( VERTICES_ARRAY*, ISLANDS_ARRAY );
 
 class PCB_POLYGON : public PCB_COMPONENT
 {
 public:
-    int             m_width;
-    int             m_priority;
-    VERTICES_ARRAY  m_outline; // collection of boundary/outline lines - objects
-    ISLANDS_ARRAY   m_islands;
-    ISLANDS_ARRAY   m_cutouts;
-
     PCB_POLYGON( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
     ~PCB_POLYGON();
 
@@ -69,6 +60,13 @@ public:
 
     void FormPolygon( XNODE* aNode, VERTICES_ARRAY* aPolygon,
                       const wxString& aDefaultMeasurementUnit, const wxString& actualConversion );
+
+    int             m_width;
+    int             m_priority;
+    VERTICES_ARRAY  m_outline; // collection of boundary/outline lines - objects
+    ISLANDS_ARRAY   m_islands;
+    ISLANDS_ARRAY   m_cutouts;
+
 protected:
     bool            m_filled;
 };

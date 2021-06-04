@@ -22,15 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_keepout.cpp
- */
-
-#include <wx/wx.h>
+#include <pcad/pcb_keepout.h>
 
 #include <common.h>
+#include <xnode.h>
 
-#include <pcb_keepout.h>
+#include <wx/gdicmn.h>
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 

@@ -27,9 +27,12 @@
  * @file pcb_cutout.cpp
  */
 
-#include <wx/wx.h>
+#include <pcad/pcb_cutout.h>
 
-#include <pcb_cutout.h>
+#include <xnode.h>
+
+#include <wx/gdicmn.h>
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 

@@ -30,8 +30,9 @@
 #ifndef PCB_CALLBACKS_H_
 #define PCB_CALLBACKS_H_
 
-#include <wx/wx.h>
 #include <layers_id_colors_and_visibility.h>
+
+class wxString;
 
 enum LAYER_TYPE_T
 {

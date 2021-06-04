@@ -23,29 +23,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_cutout.h
- */
-
 #ifndef PCB_CUTOUT_H_
 #define PCB_CUTOUT_H_
 
-#include <wx/wx.h>
+#include <pcad/pcb_polygon.h>
 
-#include <pcb_polygon.h>
+class BOARD;
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD {
 
 class PCB_CUTOUT : public PCB_POLYGON
 {
 public:
-
     PCB_CUTOUT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
     ~PCB_CUTOUT();
 
-    virtual bool    Parse( XNODE*          aNode,
-                           const wxString& aDefaultMeasurementUnit,
-                           const wxString& actualConversion ) override;
+    virtual bool Parse( XNODE*          aNode,
+                        const wxString& aDefaultMeasurementUnit,
+                        const wxString& actualConversion ) override;
 };
 
 } // namespace PCAD2KICAD

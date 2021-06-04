@@ -23,27 +23,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_pad_shape.h
- */
-
 #ifndef PCB_PAD_SHAPE_H_
 #define PCB_PAD_SHAPE_H_
 
-#include <wx/wx.h>
-#include <wx/dynarray.h>
+#include <pcad/pcb_component.h>
 
-#include <pcb_component.h>
+class BOARD;
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD {
 
 class PCB_PAD_SHAPE : public PCB_COMPONENT
 {
 public:
-    wxString    m_Shape;
-    int         m_Width;
-    int         m_Height;
-
     PCB_PAD_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_PAD_SHAPE();
 
@@ -51,9 +44,11 @@ public:
                         const wxString& aActualConversion );
 
     void AddToBoard() override;
-};
 
-WX_DEFINE_ARRAY( PCB_PAD_SHAPE*, PCB_PAD_SHAPES_ARRAY );
+    wxString    m_Shape;
+    int         m_Width;
+    int         m_Height;
+};
 
 } // namespace PCAD2KICAD
 

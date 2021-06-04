@@ -23,11 +23,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
+#include <pcad/pcb_text.h>
 
 #include <common.h>
+#include <board.h>
 #include <pcb_text.h>
-#include <plugins/pcad/pcb_text.h>
+#include <xnode.h>
+
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 

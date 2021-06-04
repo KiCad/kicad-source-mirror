@@ -26,21 +26,18 @@
 #ifndef PCB_PAD_H_
 #define PCB_PAD_H_
 
-#include <wx/wx.h>
+#include <pcad/pcb_component.h>
 
-#include <pcb_component.h>
-#include <pcb_pad_shape.h>
+class BOARD;
+class FOOTPRINT;
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD {
 
 class PCB_PAD : public PCB_COMPONENT
 {
 public:
-    int                  m_Number;
-    int                  m_Hole;
-    bool                 m_IsHolePlated;
-    PCB_PAD_SHAPES_ARRAY m_Shapes;
-
     PCB_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_PAD();
 
@@ -57,6 +54,11 @@ public:
     void AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncapsulatedPad );
 
     void AddToBoard() override;
+
+    int                  m_Number;
+    int                  m_Hole;
+    bool                 m_IsHolePlated;
+    PCB_PAD_SHAPES_ARRAY m_Shapes;
 
 private:
     wxString m_defaultPinDes;

@@ -23,32 +23,29 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb.h
- */
+#ifndef PCB_H_
+#define PCB_H_
 
-#ifndef pcb_H_
-#define pcb_H_
+#include <pcad/pcad2kicad_common.h>
+#include <pcad/pcad_item_types.h>
+#include <pcad/pcb_callbacks.h>
+#include <pcad/pcb_footprint.h>
 
 #include <map>
-#include <wx/wx.h>
-#include <xnode.h>
+#include <wx/arrstr.h>
 
-#include <pcb_footprint.h>
-#include <pcb_net.h>
+class BOARD;
+class XNODE;
+class wxStatusBar;
+class wxString;
+class wxRealPoint;
+class wxXmlDocument;
 
 namespace PCAD2KICAD {
 
 class PCB : public PCB_FOOTPRINT, public PCB_CALLBACKS
 {
 public:
-    PCB_COMPONENTS_ARRAY    m_PcbComponents;    // PCB footprints,Lines,Routes,Texts, .... and so on
-    PCB_NETS_ARRAY          m_PcbNetlist;       // net objects collection
-    wxString                m_DefaultMeasurementUnit;
-    std::map<int, TLAYER>   m_LayersMap;        // flexible layers mapping
-    int                     m_SizeX;
-    int                     m_SizeY;
-
     PCB( BOARD* aBoard );
     ~PCB();
 
@@ -62,9 +59,14 @@ public:
 
     void AddToBoard() override;
 
-private:
-    wxArrayString   m_layersStackup;
+    PCB_COMPONENTS_ARRAY    m_PcbComponents;    // PCB footprints,Lines,Routes,Texts, .... and so on
+    PCB_NETS_ARRAY          m_PcbNetlist;       // net objects collection
+    wxString                m_DefaultMeasurementUnit;
+    std::map<int, TLAYER>   m_LayersMap;        // flexible layers mapping
+    int                     m_SizeX;
+    int                     m_SizeY;
 
+private:
     XNODE* FindCompDefName( XNODE* aNode, const wxString& aName ) const;
 
     void SetTextProperty( XNODE* aNode, TTEXTVALUE* aTextValue, const wxString& aPatGraphRefName,
@@ -80,6 +82,8 @@ private:
     int FindOutlinePoint( const VERTICES_ARRAY* aOutline, wxRealPoint aPoint ) const;
     double GetDistance( const wxRealPoint* aPoint1, const wxRealPoint* aPoint2 ) const;
     void GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConversion );
+
+    wxArrayString   m_layersStackup;
 };
 
 } // namespace PCAD2KICAD

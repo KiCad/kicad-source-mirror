@@ -23,14 +23,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_via.cpp
- */
+#include <pcad/pcb_via.h>
+#include <pcad/pcb_via_shape.h>
 
-#include <wx/wx.h>
+#include <xnode.h>
 
-#include <pcb_via.h>
-#include <pcb_via_shape.h>
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 

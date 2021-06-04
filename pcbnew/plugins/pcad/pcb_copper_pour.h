@@ -23,23 +23,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_copper_pour.h
- */
-
 #ifndef PCB_COPPER_POUR_H_
 #define PCB_COPPER_POUR_H_
 
-#include <wx/wx.h>
+#include <pcad/pcb_polygon.h>
 
-#include <pcb_polygon.h>
+class BOARD;
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD {
 
 class PCB_COPPER_POUR : public PCB_POLYGON
 {
 public:
-
     PCB_COPPER_POUR( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
     ~PCB_COPPER_POUR();
 

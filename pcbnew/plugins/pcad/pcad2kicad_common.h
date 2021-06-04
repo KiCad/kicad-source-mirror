@@ -30,11 +30,10 @@
 #ifndef PCAD2KICAD_COMMON_H_
 #define PCAD2KICAD_COMMON_H_
 
-#include <wx/wx.h>
-#include <wx/xml/xml.h>
-#include <xnode.h>
-
 #include <eda_text.h>
+
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD
 {

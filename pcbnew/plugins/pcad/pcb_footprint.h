@@ -26,21 +26,21 @@
 #ifndef PCB_FOOTPRINT_H
 #define PCB_FOOTPRINT_H
 
-#include <wx/wx.h>
+#include <pcad/pcad2kicad_common.h>
+#include <pcad/pcad_item_types.h>
+#include <pcad/pcb_component.h>
 
-#include <pcad2kicad_common.h>
-#include <pcb_component.h>
+class BOARD;
+class FOOTPRINT;
+class wxStatusBar;
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD {
 
 class PCB_FOOTPRINT : public PCB_COMPONENT
 {
 public:
-    TTEXTVALUE            m_Value;           // has reference (Name from parent) and value
-    PCB_COMPONENTS_ARRAY  m_FootprintItems;  // set of objects like PCB_LINE, PCB_PAD, PCB_VIA....
-    int                   m_Mirror;
-    VERTICES_ARRAY        m_BoardOutline;
-
     PCB_FOOTPRINT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_FOOTPRINT();
 
@@ -60,9 +60,14 @@ public:
     virtual void Flip() override;
     void AddToBoard() override;
 
+    TTEXTVALUE            m_Value;           // has reference (Name from parent) and value
+    PCB_COMPONENTS_ARRAY  m_FootprintItems;  // set of objects like PCB_LINE, PCB_PAD, PCB_VIA....
+    int                   m_Mirror;
+    VERTICES_ARRAY        m_BoardOutline;
+
 private:
-    XNODE*          FindPatternMultilayerSection( XNODE* aNode, wxString* aPatGraphRefName );
-    wxString        ModuleLayer( int aMirror );
+    XNODE*   FindPatternMultilayerSection( XNODE* aNode, wxString* aPatGraphRefName );
+    wxString ModuleLayer( int aMirror );
 };
 
 } // namespace PCAD2KICAD

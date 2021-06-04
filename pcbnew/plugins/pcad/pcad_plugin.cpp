@@ -27,16 +27,17 @@
  * @brief Pcbnew PLUGIN for P-Cad 200x ASCII *.pcb format.
  */
 
-#include <cerrno>
+#include <pcad/pcad_plugin.h>
+#include <pcad/pcb.h>
+#include <pcad/s_expr_loader.h>
 
+#include <board.h>
+#include <locale_io.h>
+
+#include <cerrno>
 #include <wx/string.h>
 #include <wx/filename.h>
 #include <wx/xml/xml.h>
-
-#include <locale_io.h>
-#include <pcad_plugin.h>
-#include <s_expr_loader.h>
-#include <pcb.h>
 
 using namespace PCAD2KICAD;
 

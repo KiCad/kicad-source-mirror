@@ -23,15 +23,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_copper_pour.cpp
- */
-
-#include <wx/wx.h>
+#include <pcad/pcb_copper_pour.h>
 
 #include <common.h>
+#include <xnode.h>
 
-#include <pcb_copper_pour.h>
+#include <wx/gdicmn.h>
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 

@@ -29,8 +29,8 @@
 #ifndef S_EXPR_LOADER_H_
 #define S_EXPR_LOADER_H_
 
-#include <wx/wx.h>
-#include <wx/xml/xml.h>
+class wxString;
+class wxXmlDocument;
 
 namespace PCAD2KICAD
 {

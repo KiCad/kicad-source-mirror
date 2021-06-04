@@ -23,14 +23,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_pad.cpp
- */
+#include <pcad/pcb_pad.h>
+#include <pcad/pcb_pad_shape.h>
 
-#include <wx/wx.h>
+#include <board.h>
+#include <footprint.h>
+#include <pad.h>
+#include <track.h>
 #include <trigo.h>
+#include <xnode.h>
 
-#include <pcb_pad.h>
+#include <wx/gdicmn.h>
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 

@@ -23,45 +23,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_net.h
- */
-
 #ifndef PCB_NET_H_
 #define PCB_NET_H_
 
-#include <wx/wx.h>
 
-#include <pcad2kicad_common.h>
+#include <pcad/pcad2kicad_common.h>
+#include <pcad/pcad_item_types.h>
+
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD {
 
 class PCB_NET_NODE : public wxObject
 {
 public:
-    wxString    m_CompRef;
-    wxString    m_PinRef;
-
     PCB_NET_NODE();
     ~PCB_NET_NODE();
-};
 
-WX_DEFINE_ARRAY( PCB_NET_NODE*, PCB_NET_NODES_ARRAY );
+    wxString    m_CompRef;
+    wxString    m_PinRef;
+};
 
 class PCB_NET : public wxObject
 {
 public:
-    wxString            m_Name;
-    int                 m_NetCode;
-    PCB_NET_NODES_ARRAY m_NetNodes;
-
     PCB_NET( int aNetCode );
     ~PCB_NET();
 
     void Parse( XNODE* aNode );
-};
 
-WX_DEFINE_ARRAY( PCB_NET*, PCB_NETS_ARRAY );
+    wxString            m_Name;
+    int                 m_NetCode;
+    PCB_NET_NODES_ARRAY m_NetNodes;
+};
 
 } // namespace PCAD2KICAD
 

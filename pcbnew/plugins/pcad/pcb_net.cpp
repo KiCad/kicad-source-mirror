@@ -23,13 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_net.cpp
- */
+#include <pcad/pcb_net.h>
 
-#include <wx/wx.h>
+#include <xnode.h>
 
-#include <pcb_net.h>
+#include <wx/string.h>
 
 namespace PCAD2KICAD {
 

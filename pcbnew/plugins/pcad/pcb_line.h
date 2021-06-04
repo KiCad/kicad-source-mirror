@@ -23,16 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_line.h
- */
-
 #ifndef PCB_LINE_H_
 #define PCB_LINE_H_
 
-#include <wx/wx.h>
+#include <pcad/pcb_component.h>
 
-#include <pcb_component.h>
+class BOARD;
+class FOOTPRINT;
+class wxString;
+class XNODE;
 
 namespace PCAD2KICAD {
 
@@ -40,10 +39,6 @@ namespace PCAD2KICAD {
 class PCB_LINE : public PCB_COMPONENT
 {
 public:
-    int m_Width;
-    int m_ToX;
-    int m_ToY;
-
     PCB_LINE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_LINE();
 
@@ -56,6 +51,10 @@ public:
 
     void AddToFootprint( FOOTPRINT* aFootprint ) override;
     void AddToBoard() override;
+
+    int m_Width;
+    int m_ToX;
+    int m_ToY;
 };
 
 } // namespace PCAD2KICAD

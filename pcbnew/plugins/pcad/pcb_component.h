@@ -23,21 +23,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_component.h
- */
-
 #ifndef PCB_COMPONENT_H_
 #define PCB_COMPONENT_H_
 
-#include <wx/wx.h>
-#include <wx/file.h>
+#include <pcad/pcad2kicad_common.h>
+#include <pcad/pcad_item_types.h>
+#include <pcad/pcb_callbacks.h>
 
-#include <pcad2kicad_common.h>
-#include <pcb_callbacks.h>
-#include <board.h>
-#include <footprint.h>
-#include <track.h>
+#include <kiid.h>
+#include <layers_id_colors_and_visibility.h>
+#include <wx/object.h>
+
+class BOARD;
+class FOOTPRINT;
+class wxString;
+class wxRealPoint;
 
 namespace PCAD2KICAD {
 
@@ -45,6 +45,17 @@ namespace PCAD2KICAD {
 class PCB_COMPONENT : public wxObject
 {
 public:
+    PCB_COMPONENT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    ~PCB_COMPONENT();
+
+    virtual void SetPosOffset( int aX_offs, int aY_offs );
+    virtual void Flip();
+    virtual void AddToFootprint( FOOTPRINT* aFootprint );
+    virtual void AddToBoard() = 0;
+
+    PCB_LAYER_ID GetKiCadLayer() const { return m_callbacks->GetKiCadLayer( m_PCadLayer ); }
+    int          GetNetCode( wxString aNetName ) const { return m_callbacks->GetNetCode( aNetName ); }
+
     int          m_tag;
     char         m_objType;
     int          m_PCadLayer;
@@ -59,24 +70,10 @@ public:
     wxString     m_compRef;          // internal usage for XL parsing
     wxString     m_patGraphRefName;  // internal usage for XL parsing
 
-    PCB_COMPONENT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
-    ~PCB_COMPONENT();
-
-    virtual void    SetPosOffset( int aX_offs, int aY_offs );
-    virtual void    Flip();
-    virtual void    AddToFootprint( FOOTPRINT* aFootprint );
-    virtual void    AddToBoard() = 0;
-
-    PCB_LAYER_ID        GetKiCadLayer() const { return m_callbacks->GetKiCadLayer( m_PCadLayer ); }
-    int GetNetCode( wxString aNetName ) const { return m_callbacks->GetNetCode( aNetName ); }
-
 protected:
     PCB_CALLBACKS*  m_callbacks;
     BOARD*          m_board;
 };
-
-WX_DEFINE_ARRAY( PCB_COMPONENT*, PCB_COMPONENTS_ARRAY );
-WX_DEFINE_ARRAY( wxRealPoint*, VERTICES_ARRAY );
 
 } // namespace PCAD2KICAD
 
