@@ -40,7 +40,8 @@ namespace KIGFX {
         extern const char smaa_base_shader_p4[];
 
         extern const char smaa_pass_1_vertex_shader[];
-        extern const char smaa_pass_1_fragment_shader[];
+        extern const char smaa_pass_1_fragment_shader_luma[];
+        extern const char smaa_pass_1_fragment_shader_color[];
         extern const char smaa_pass_2_vertex_shader[];
         extern const char smaa_pass_2_fragment_shader[];
         extern const char smaa_pass_3_vertex_shader[];

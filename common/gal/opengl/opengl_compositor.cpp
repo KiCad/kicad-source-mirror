@@ -96,11 +96,11 @@ void OPENGL_COMPOSITOR::Initialize()
     case OPENGL_ANTIALIASING_MODE::NONE:
         m_antialiasing = std::make_unique<ANTIALIASING_NONE>( this );
         break;
-    case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH:
-        m_antialiasing = std::make_unique<ANTIALIASING_SMAA>( this, SMAA_QUALITY::HIGH );
+    case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_CONSERVATIVE:
+        m_antialiasing = std::make_unique<ANTIALIASING_SMAA>( this, SMAA_QUALITY::CONSERVATIVE );
         break;
-    case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA:
-        m_antialiasing = std::make_unique<ANTIALIASING_SMAA>( this, SMAA_QUALITY::ULTRA );
+    case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_AGGRESSIVE:
+        m_antialiasing = std::make_unique<ANTIALIASING_SMAA>( this, SMAA_QUALITY::AGGRESSIVE );
         break;
     case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
         m_antialiasing =

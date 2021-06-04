@@ -102,9 +102,10 @@ namespace KIGFX {
         std::unique_ptr<SHADER> x4_shader;
     };
 
-    enum class SMAA_QUALITY {
-        HIGH,
-        ULTRA
+    enum class SMAA_QUALITY
+    {
+        CONSERVATIVE,
+        AGGRESSIVE
     };
 
     class ANTIALIASING_SMAA : public OPENGL_PRESENTOR

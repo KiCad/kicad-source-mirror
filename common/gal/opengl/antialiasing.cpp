@@ -288,15 +288,39 @@ void ANTIALIASING_SMAA::loadShaders()
                   GL_UNSIGNED_BYTE, searchTexBytes );
     checkGlError( "loading smaa search tex", __FILE__, __LINE__ );
 
+    // Quality settings:
+    // THRESHOLD: intended to exclude spurious edges in photorealistic game graphics
+    //            but in a high-contrast CAD application, all edges are intentional
+    //            should be set fairly low, so user color choices do not affect antialiasing
+    // MAX_SEARCH_STEPS: steps of 2px, searched in H/V direction to discover true angle of edges
+    //                   improves AA for lines close H/V but creates fuzzyness at junctions
+    // MAX_SEARCH_STEPS_DIAG: steps of 2px, searched in diagonal direction
+    //                        improves lines close to 45deg but turns small circles into octagons
+    // CORNER_ROUNDING: SMAA can distinguish actual corners from aliasing jaggies,
+    //                  we want to preserve those as much as possible
+    // Edge Detection: In Eeschema, when a single pixel line changes color, edge detection using
+    //                 color is too aggressive and leads to a white spot at the transition point
     std::string quality_string;
+    const char* edge_detect_shader;
 
-    if( quality == SMAA_QUALITY::HIGH )
+    if( quality == SMAA_QUALITY::CONSERVATIVE )
     {
-        quality_string = "#define SMAA_PRESET_HIGH\n";
+        // trades imperfect AA of shallow angles for a near artifact-free reproduction of fine features
+        // jaggies are smoothed over max 5px (original step + 2px in both directions)
+        quality_string = "#define SMAA_THRESHOLD 0.05\n"
+                         "#define SMAA_MAX_SEARCH_STEPS 1\n"
+                         "#define SMAA_MAX_SEARCH_STEPS_DIAG 2\n"
+                         "#define SMAA_CORNER_ROUNDING 0\n";
+        edge_detect_shader = BUILTIN_SHADERS::smaa_pass_1_fragment_shader_luma;
     }
     else
     {
-        quality_string = "#define SMAA_PRESET_ULTRA\n";
+        // jaggies are smoothed over max 17px (original step + 8px in both directions)
+        quality_string = "#define SMAA_THRESHOLD 0.05\n"
+                         "#define SMAA_MAX_SEARCH_STEPS 4\n"
+                         "#define SMAA_MAX_SEARCH_STEPS_DIAG 2\n"
+                         "#define SMAA_CORNER_ROUNDING 0\n";
+        edge_detect_shader = BUILTIN_SHADERS::smaa_pass_1_fragment_shader_color;
     }
 
 
@@ -329,8 +353,7 @@ uniform vec4 SMAA_RT_METRICS;
     pass_1_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX, vert_preamble, quality_string,
                                           smaa_source, BUILTIN_SHADERS::smaa_pass_1_vertex_shader );
     pass_1_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT, frag_preamble,
-                                          quality_string, smaa_source,
-                                          BUILTIN_SHADERS::smaa_pass_1_fragment_shader );
+                                          quality_string, smaa_source, edge_detect_shader );
     pass_1_shader->Link();
     checkGlError( "linking pass 1 shader", __FILE__, __LINE__ );
 

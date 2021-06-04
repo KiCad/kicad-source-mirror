@@ -694,7 +694,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;No Antialiasing&quot; &quot;Subpixel Antialiasing (High Quality)&quot; &quot;Subpixel Antialiasing (Ultra Quality)&quot; &quot;Supersampling (2x)&quot; &quot;Supersampling (4x)&quot;</property>
+                                        <property name="choices">&quot;No Antialiasing&quot; &quot;Smoothing (1x, Conservative)&quot; &quot;Smoothing (1x, Aggressive)&quot; &quot;Supersampling (2x)&quot; &quot;Supersampling (4x)&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>

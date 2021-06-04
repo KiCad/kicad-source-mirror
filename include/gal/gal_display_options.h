@@ -48,8 +48,8 @@ namespace KIGFX
     enum class OPENGL_ANTIALIASING_MODE
     {
         NONE,
-        SUBSAMPLE_HIGH,
-        SUBSAMPLE_ULTRA,
+        SUBSAMPLE_CONSERVATIVE,
+        SUBSAMPLE_AGGRESSIVE,
         SUPERSAMPLING_X2,
         SUPERSAMPLING_X4,
     };
