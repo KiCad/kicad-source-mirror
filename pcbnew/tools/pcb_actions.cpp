@@ -754,7 +754,7 @@ TOOL_ACTION PCB_ACTIONS::showEeschema( "pcbnew.EditorControl.showEeschema",
 
 TOOL_ACTION PCB_ACTIONS::localRatsnestTool( "pcbnew.Control.localRatsnestTool",
         AS_GLOBAL, 0, "",
-        _( "Highlight Ratsnest" ), _( "Show ratsnest of selected item(s)" ),
+        _( "Local Ratsnest" ), _( "Toggle ratsnest display of selected item(s)" ),
         BITMAPS::tool_ratsnest, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::hideDynamicRatsnest( "pcbnew.Control.hideDynamicRatsnest",
