@@ -695,7 +695,7 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
 
     aNewHead = m_head;
 
-    return static_cast<bool>( m_currentNode->CheckColliding( &m_head ) );
+    return true;
 }
 
 
