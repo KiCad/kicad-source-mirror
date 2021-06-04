@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,15 +38,17 @@ class BOARD_DESIGN_SETTINGS;
 
 class PANEL_SETUP_TRACKS_AND_VIAS : public PANEL_SETUP_TRACKS_AND_VIAS_BASE
 {
-private:
-    PAGED_DIALOG*            m_Parent;
-    PCB_EDIT_FRAME*          m_Frame;
-    BOARD*                   m_Pcb;
-    BOARD_DESIGN_SETTINGS*   m_BrdSettings;
+public:
+    PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
+                                 PANEL_SETUP_CONSTRAINTS* aConstraintsPanel );
+    ~PANEL_SETUP_TRACKS_AND_VIAS() override;
 
-    // We must validate against the current m_BrdSettings as they may have been
-    // changed but not yet committed.  Fetch them from the constraints panel.
-    PANEL_SETUP_CONSTRAINTS* m_ConstraintsPanel;
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
+    bool Validate() override;
+
+    void ImportSettingsFrom( BOARD* aBoard );
 
 protected:
     void OnAddTrackWidthsClick( wxCommandEvent& event ) override;
@@ -60,17 +62,15 @@ protected:
     void AppendViaSize( const int aSize, const int aDrill );
     void AppendDiffPairs( const int aWidth, const int aGap, const int aViaGap );
 
-public:
-    PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
-                                 PANEL_SETUP_CONSTRAINTS* aConstraintsPanel );
-    ~PANEL_SETUP_TRACKS_AND_VIAS() override;
+private:
+    PAGED_DIALOG*            m_Parent;
+    PCB_EDIT_FRAME*          m_Frame;
+    BOARD*                   m_Pcb;
+    BOARD_DESIGN_SETTINGS*   m_BrdSettings;
 
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
-    bool Validate() override;
-
-    void ImportSettingsFrom( BOARD* aBoard );
+    // We must validate against the current m_BrdSettings as they may have been
+    // changed but not yet committed.  Fetch them from the constraints panel.
+    PANEL_SETUP_CONSTRAINTS* m_ConstraintsPanel;
 };
 
 #endif //PANEL_SETUP_TRACKS_AND_VIAS_H

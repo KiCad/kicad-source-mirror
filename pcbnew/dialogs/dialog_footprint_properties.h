@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2015 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,37 +52,6 @@ public:
         FP_PROPS_EDIT_LIBRARY_FP
     };
 
-private:
-    PCB_EDIT_FRAME*                  m_frame;
-    FOOTPRINT*                       m_footprint;
-
-    static int                       m_page;       // remember the last open page during session
-
-    FP_TEXT_GRID_TABLE*              m_texts;
-    UNIT_BINDER                      m_posX;
-    UNIT_BINDER                      m_posY;
-    wxFloatingPointValidator<double> m_OrientValidator;
-    double                           m_OrientValue;
-
-    UNIT_BINDER                      m_netClearance;
-    UNIT_BINDER                      m_solderMask;
-    UNIT_BINDER                      m_solderPaste;
-
-    std::vector<FP_3DMODEL>          m_shapes3D_list;
-    PANEL_PREV_3D*                   m_PreviewPane;
-
-    wxString                         m_delayedErrorMessage;
-    wxGrid*                          m_delayedFocusGrid;
-    int                              m_delayedFocusRow;
-    int                              m_delayedFocusColumn;
-    bool                             m_initialFocus;
-
-    bool                             m_inSelect;
-    std::vector<bool>                m_macHack;
-    enum FP_PROPS_RETVALUE           m_returnValue; // the option that closed the dialog
-
-public:
-    // Constructor and destructor
     DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParent, FOOTPRINT* aFootprint );
     ~DIALOG_FOOTPRINT_PROPERTIES() override;
 
@@ -91,7 +60,7 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    /// @return the value depending on the way the dialog was closed:
+    ///< @return the value depending on the way the dialog was closed.
     enum FP_PROPS_RETVALUE GetReturnValue() { return m_returnValue; }
 
 private:
@@ -123,6 +92,34 @@ private:
      * event on the control (which would update the radio buttons)
      */
     void updateOrientationControl();
+
+    PCB_EDIT_FRAME*                  m_frame;
+    FOOTPRINT*                       m_footprint;
+
+    static int                       m_page;       // remember the last open page during session
+
+    FP_TEXT_GRID_TABLE*              m_texts;
+    UNIT_BINDER                      m_posX;
+    UNIT_BINDER                      m_posY;
+    wxFloatingPointValidator<double> m_OrientValidator;
+    double                           m_OrientValue;
+
+    UNIT_BINDER                      m_netClearance;
+    UNIT_BINDER                      m_solderMask;
+    UNIT_BINDER                      m_solderPaste;
+
+    std::vector<FP_3DMODEL>          m_shapes3D_list;
+    PANEL_PREV_3D*                   m_PreviewPane;
+
+    wxString                         m_delayedErrorMessage;
+    wxGrid*                          m_delayedFocusGrid;
+    int                              m_delayedFocusRow;
+    int                              m_delayedFocusColumn;
+    bool                             m_initialFocus;
+
+    bool                             m_inSelect;
+    std::vector<bool>                m_macHack;
+    enum FP_PROPS_RETVALUE           m_returnValue; // the option that closed the dialog
 };
 
 

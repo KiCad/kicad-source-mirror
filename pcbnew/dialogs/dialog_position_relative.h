@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,21 +34,6 @@
 
 class DIALOG_POSITION_RELATIVE : public DIALOG_POSITION_RELATIVE_BASE
 {
-private:
-
-    TOOL_MANAGER* m_toolMgr;
-    wxPoint&      m_translation;
-    wxPoint&      m_anchor_position;
-
-    UNIT_BINDER   m_xOffset;
-    UNIT_BINDER   m_yOffset;
-
-    double m_stateX;
-    double m_stateY;
-    double m_stateRadius;
-    double m_stateTheta;
-
-
 public:
     // Constructor and destructor
     DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, wxPoint& translation, wxPoint& anchor );
@@ -57,9 +42,8 @@ public:
     void UpdateAnchor( EDA_ITEM* aItem );
 
 private:
-
-    /*!
-     * Reset a text field to be 0 if it was exited while blank
+    /**
+     * Reset a text field to be 0 if it was exited while blank.
      */
     void OnTextFocusLost( wxFocusEvent& event ) override;
 
@@ -80,10 +64,11 @@ private:
     void ToPolarDeg( double x, double y, double& r, double& q );
 
     /**
-     * Get the (Cartesian) translation described by the text entries
-     * @param val output translation vector
-     * @param polar interpret as polar coords
-     * @return false if error (though the text conversion functions don't report errors)
+     * Get the (Cartesian) translation described by the text entries.
+     *
+     * @param val is the output translation vector.
+     * @param set to true to interpret as polar coordinates.
+     * @return false if error (though the text conversion functions don't report errors).
      */
     bool GetTranslationInIU( wxRealPoint& val, bool polar );
 
@@ -91,7 +76,7 @@ private:
     void updateDialogControls( bool aPolar );
 
     /**
-     * Persistent dialog options
+     * Persistent dialog options.
      */
     struct POSITION_RELATIVE_OPTIONS
     {
@@ -109,6 +94,18 @@ private:
 
     // persistent settings
     static POSITION_RELATIVE_OPTIONS m_options;
+
+    TOOL_MANAGER* m_toolMgr;
+    wxPoint&      m_translation;
+    wxPoint&      m_anchor_position;
+
+    UNIT_BINDER   m_xOffset;
+    UNIT_BINDER   m_yOffset;
+
+    double m_stateX;
+    double m_stateY;
+    double m_stateRadius;
+    double m_stateTheta;
 };
 
 #endif      // __DIALOG_POSITION_RELATIVE__

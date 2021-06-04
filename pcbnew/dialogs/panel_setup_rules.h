@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,17 +37,6 @@ class HTML_MESSAGE_BOX;
 
 class PANEL_SETUP_RULES : public PANEL_SETUP_RULES_BASE
 {
-private:
-    PAGED_DIALOG*     m_Parent;
-    PCB_EDIT_FRAME*   m_frame;
-    SCINTILLA_TRICKS* m_scintillaTricks;
-    wxString          m_originalText;
-
-    wxRegEx           m_netClassRegex;
-    wxRegEx           m_netNameRegex;
-
-    HTML_MESSAGE_BOX* m_helpWindow;
-
 public:
     PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
     ~PANEL_SETUP_RULES( ) override;
@@ -62,6 +51,16 @@ private:
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    PAGED_DIALOG*     m_Parent;
+    PCB_EDIT_FRAME*   m_frame;
+    SCINTILLA_TRICKS* m_scintillaTricks;
+    wxString          m_originalText;
+
+    wxRegEx           m_netClassRegex;
+    wxRegEx           m_netNameRegex;
+
+    HTML_MESSAGE_BOX* m_helpWindow;
 };
 
 #endif //PANEL_SETUP_RULES_H

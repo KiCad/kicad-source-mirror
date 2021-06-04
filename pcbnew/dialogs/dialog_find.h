@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Marco Mattila <marcom99@gmail.com>
  * Copyright (C) 2006 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
- * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,8 +43,7 @@ public:
     DIALOG_FIND( PCB_BASE_FRAME* aParent );
 
     /**
-     * Returns the currently found item or nullptr in the case of no items found
-     * @return
+     * Return the currently found item or nullptr in the case of no items found.
      */
     inline BOARD_ITEM* GetItem() const
     {
@@ -55,9 +54,9 @@ public:
     }
 
     /**
-     * Function to be called on each found event.  Must be able to handle nullptr in the
-     * case where no item is found
-     * @param aCallback
+     * Function to be called on each found event.
+     *
+     * The callback function must be able to handle nullptr in the case where no item is found.
      */
     void SetCallback( std::function<void( BOARD_ITEM* )> aCallback )
     {
@@ -66,19 +65,19 @@ public:
 
 
 private:
-    PCB_BASE_FRAME*                     m_frame;
-    std::deque<BOARD_ITEM*>             m_hitList;
-    std::deque<BOARD_ITEM*>::iterator   m_it;
-    bool                                m_upToDate;
-
-    std::function<void( BOARD_ITEM* )> m_highlightCallback;
-
     void onTextEnter( wxCommandEvent& event ) override;
     void onFindNextClick( wxCommandEvent& event ) override;
     void onFindPreviousClick( wxCommandEvent& event ) override;
     void onSearchAgainClick( wxCommandEvent& event ) override;
     void onClose( wxCommandEvent& event ) override;
     void search( bool direction );
+
+    PCB_BASE_FRAME*                     m_frame;
+    std::deque<BOARD_ITEM*>             m_hitList;
+    std::deque<BOARD_ITEM*>::iterator   m_it;
+    bool                                m_upToDate;
+
+    std::function<void( BOARD_ITEM* )> m_highlightCallback;
 };
 
 #endif /* DIALOG_FIND_BASE_H */

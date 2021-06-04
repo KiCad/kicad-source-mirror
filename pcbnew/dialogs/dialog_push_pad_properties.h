@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,14 +28,15 @@
 
 class PAD;
 class PCB_BASE_FRAME;
-/************************************/
-/* class DIALOG_PUSH_PAD_PROPERTIES */
-/************************************/
+
 
 class DIALOG_PUSH_PAD_PROPERTIES : public DIALOG_PUSH_PAD_PROPERTIES_BASE
 {
+public:
+    DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent );
+
 private:
-    PCB_BASE_FRAME* m_parent;
+    void PadPropertiesAccept( wxCommandEvent& event ) override;
 
 public:
     static bool m_Pad_Shape_Filter;
@@ -43,11 +44,8 @@ public:
     static bool m_Pad_Orient_Filter;
     static bool m_Pad_Type_Filter;
 
-public:
-    DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent );
-
 private:
-    void PadPropertiesAccept( wxCommandEvent& event ) override;
+    PCB_BASE_FRAME* m_parent;
 };
 
 

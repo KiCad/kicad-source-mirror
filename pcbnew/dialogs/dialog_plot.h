@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +34,7 @@
 #define DLG_WINDOW_NAME "plot_dialog-window"
 
 /**
- * DIALOG_PLOT is the dialog to set the plot options, and create plot files
- * in various formats.
+ * A dialog to set the plot options and create plot files in various formats.
  */
 class DIALOG_PLOT : public DIALOG_PLOT_BASE
 {
@@ -43,26 +42,6 @@ public:
     DIALOG_PLOT( PCB_EDIT_FRAME* parent );
 
 private:
-    PCB_EDIT_FRAME*     m_parent;
-    LSEQ                m_layerList;                // List to hold CheckListBox layer numbers
-    double              m_XScaleAdjust;             // X scale factor adjust to compensate
-                                                    // plotter X scaling error
-    double              m_YScaleAdjust;             // X scale factor adjust to compensate
-                                                    // plotter Y scaling error
-    int                 m_PSWidthAdjust;            // Global width correction for exact line width
-                                                    // in postscript output.
-                                                    // this is a correction factor for tracks width
-                                                    // when plotted
-    int                 m_widthAdjustMinValue;      // Global track width limits
-    int                 m_widthAdjustMaxValue;      // tracks width will be "clipped" whenever the
-                                                    // m_PSWidthAdjust to these limits.
-    UNIT_BINDER         m_defaultPenSize;
-    UNIT_BINDER         m_trackWidthCorrection;
-
-    wxString            m_DRCWarningTemplate;
-
-    PCB_PLOT_PARAMS     m_plotOpts;
-
     // Event called functions
     void        Plot( wxCommandEvent& event ) override;
     void        OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
@@ -86,4 +65,24 @@ private:
     {
         m_plotModeOpt->SetSelection( aPlotMode == SKETCH ? 1 : 0 );
     }
+
+    PCB_EDIT_FRAME*     m_parent;
+    LSEQ                m_layerList;                // List to hold CheckListBox layer numbers
+    double              m_XScaleAdjust;             // X scale factor adjust to compensate
+                                                    // plotter X scaling error
+    double              m_YScaleAdjust;             // X scale factor adjust to compensate
+                                                    // plotter Y scaling error
+    int                 m_PSWidthAdjust;            // Global width correction for exact line width
+                                                    // in postscript output.
+                                                    // this is a correction factor for tracks width
+                                                    // when plotted
+    int                 m_widthAdjustMinValue;      // Global track width limits
+    int                 m_widthAdjustMaxValue;      // tracks width will be "clipped" whenever the
+                                                    // m_PSWidthAdjust to these limits.
+    UNIT_BINDER         m_defaultPenSize;
+    UNIT_BINDER         m_trackWidthCorrection;
+
+    wxString            m_DRCWarningTemplate;
+
+    PCB_PLOT_PARAMS     m_plotOpts;
 };

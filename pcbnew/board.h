@@ -171,13 +171,6 @@ public:
 };
 
 
-DECL_VEC_FOR_SWIG( MARKERS, PCB_MARKER* )
-DECL_VEC_FOR_SWIG( ZONES, ZONE* )
-DECL_DEQ_FOR_SWIG( TRACKS, TRACK* )
-
-// Dequeue rather than Vector just so we can use moveUnflaggedItems in pcbnew_control.cpp
-DECL_DEQ_FOR_SWIG( GROUPS, PCB_GROUP* )
-
 /**
  * Flags to specify how the board is being used.
  */

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -59,18 +59,17 @@ protected:
     };
 
 private:
-    PCB_EDIT_FRAME*          m_frame;
-
-    FOOTPRINT_PREVIEW_PANEL* m_preview;
-    PAGE_INFO*               m_page;
-    TITLE_BLOCK*             m_titleBlock;
-
-private:
     void createPreviewItems();
     void createSwatches();
 
     void updatePreview();
     void zoomFitPreview();
+
+    PCB_EDIT_FRAME*          m_frame;
+
+    FOOTPRINT_PREVIEW_PANEL* m_preview;
+    PAGE_INFO*               m_page;
+    TITLE_BLOCK*             m_titleBlock;
 };
 
 

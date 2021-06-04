@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,13 +35,6 @@ class LIB_ID;
 
 class DIALOG_EXCHANGE_FOOTPRINTS : public DIALOG_EXCHANGE_FOOTPRINTS_BASE
 {
-private:
-    BOARD_COMMIT    m_commit;
-    PCB_EDIT_FRAME* m_parent;
-    FOOTPRINT*      m_currentFootprint;
-    bool            m_updateMode;
-    int*            m_matchMode;
-
 public:
     DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, FOOTPRINT* aFootprint, bool updateMode,
                                 bool selectedMode );
@@ -62,6 +55,12 @@ private:
     bool isMatch( FOOTPRINT* );
     bool processMatchingFootprints();
     bool processFootprint( FOOTPRINT* aFootprint, const LIB_ID& aNewFPID );
+
+    BOARD_COMMIT    m_commit;
+    PCB_EDIT_FRAME* m_parent;
+    FOOTPRINT*      m_currentFootprint;
+    bool            m_updateMode;
+    int*            m_matchMode;
 };
 
 #endif // DIALOG_EXCHANGE_FOOTPRINTS_H_

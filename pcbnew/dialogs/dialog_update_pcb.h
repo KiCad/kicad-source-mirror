@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,13 +31,6 @@ class PCB_EDIT_FRAME;
 
 class DIALOG_UPDATE_PCB : public DIALOG_UPDATE_PCB_BASE
 {
-private:
-    PCB_EDIT_FRAME* m_frame;
-    NETLIST*        m_netlist;
-    bool            m_initialized;
-    bool            m_runDragCommand;
-    static bool     m_warnForNoNetPads;
-
 public:
     DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST *aNetlist );
     ~DIALOG_UPDATE_PCB();
@@ -45,10 +38,14 @@ public:
     void PerformUpdate( bool aDryRun );
 
 private:
-
     void OnOptionChanged( wxCommandEvent& event ) override;
     void OnUpdateClick( wxCommandEvent& event ) override;
 
+    PCB_EDIT_FRAME* m_frame;
+    NETLIST*        m_netlist;
+    bool            m_initialized;
+    bool            m_runDragCommand;
+    static bool     m_warnForNoNetPads;
 };
 
 #endif

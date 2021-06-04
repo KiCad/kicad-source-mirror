@@ -38,33 +38,7 @@ class FOOTPRINT_EDIT_FRAME;
 
 class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR : public DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE
 {
-private:
-    FOOTPRINT_EDIT_FRAME*    m_frame;
-    FOOTPRINT*               m_footprint;
-
-    static int               m_page;       // remember the last open page during session
-
-    FP_TEXT_GRID_TABLE*     m_texts;
-
-    UNIT_BINDER              m_netClearance;
-    UNIT_BINDER              m_solderMask;
-    UNIT_BINDER              m_solderPaste;
-
-    std::vector<FP_3DMODEL>  m_shapes3D_list;
-    PANEL_PREV_3D*           m_PreviewPane;
-
-    wxControl*               m_delayedFocusCtrl;
-    int                      m_delayedFocusPage;
-
-    WX_GRID*                 m_delayedFocusGrid;
-    int                      m_delayedFocusRow;
-    int                      m_delayedFocusColumn;
-    wxString                 m_delayedErrorMessage;
-
-    bool                     m_inSelect;
-
 public:
-    // Constructor and destructor
     DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent, FOOTPRINT* aFootprint );
     ~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR() override;
 
@@ -93,6 +67,30 @@ private:
     void select3DModel( int aModelIdx );
 
     void adjustGridColumns( int aWidth );
+
+    FOOTPRINT_EDIT_FRAME*    m_frame;
+    FOOTPRINT*               m_footprint;
+
+    static int               m_page;       // remember the last open page during session
+
+    FP_TEXT_GRID_TABLE*     m_texts;
+
+    UNIT_BINDER              m_netClearance;
+    UNIT_BINDER              m_solderMask;
+    UNIT_BINDER              m_solderPaste;
+
+    std::vector<FP_3DMODEL>  m_shapes3D_list;
+    PANEL_PREV_3D*           m_PreviewPane;
+
+    wxControl*               m_delayedFocusCtrl;
+    int                      m_delayedFocusPage;
+
+    WX_GRID*                 m_delayedFocusGrid;
+    int                      m_delayedFocusRow;
+    int                      m_delayedFocusColumn;
+    wxString                 m_delayedErrorMessage;
+
+    bool                     m_inSelect;
 };
 
 

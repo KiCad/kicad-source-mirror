@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,16 +37,6 @@ class BOARD_DESIGN_SETTINGS;
 
 class PANEL_SETUP_TEXT_AND_GRAPHICS : public PANEL_SETUP_TEXT_AND_GRAPHICS_BASE
 {
-private:
-    PAGED_DIALOG*           m_Parent;
-    PCB_EDIT_FRAME*         m_Frame;
-    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
-    UNIT_BINDER             m_arrowLength;
-    UNIT_BINDER             m_extensionOffset;
-
-private:
-    int getGridValue( int aRow, int aCol );
-
 public:
     PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
     ~PANEL_SETUP_TEXT_AND_GRAPHICS( ) override;
@@ -55,6 +45,15 @@ public:
     bool TransferDataFromWindow() override;
 
     void ImportSettingsFrom( BOARD* aBoard );
+
+private:
+    int getGridValue( int aRow, int aCol );
+
+    PAGED_DIALOG*           m_Parent;
+    PCB_EDIT_FRAME*         m_Frame;
+    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
+    UNIT_BINDER             m_arrowLength;
+    UNIT_BINDER             m_extensionOffset;
 };
 
 #endif //PANEL_SETUP_TEXT_AND_GRAPHICS_H

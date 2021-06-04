@@ -64,11 +64,6 @@ private:
     /// by examining all the full_uri columns.
     void populateEnvironReadOnlyTable();
 
-    // caller's tables are modified only on OK button and successful verification.
-    FP_LIB_TABLE*    m_global;
-    FP_LIB_TABLE*    m_project;
-    wxString         m_projectBasePath;
-
     FP_LIB_TABLE_GRID* global_model() const
     {
         return (FP_LIB_TABLE_GRID*) m_global_grid->GetTable();
@@ -84,12 +79,18 @@ private:
         return (FP_LIB_TABLE_GRID*) m_cur_grid->GetTable();
     }
 
+    // caller's tables are modified only on OK button and successful verification.
+    FP_LIB_TABLE*    m_global;
+    FP_LIB_TABLE*    m_project;
+    wxString         m_projectBasePath;
+
     DIALOG_EDIT_LIBRARY_TABLES* m_parent;
 
     WX_GRID*         m_cur_grid;      // changed based on tab choice
     static size_t    m_pageNdx;       // Remember last notebook page selected during a session
 
-    wxString         m_lastProjectLibDir;   //< Transient (unsaved) last browsed folder when adding a project level library
+    //< Transient (unsaved) last browsed folder when adding a project level library.
+    wxString         m_lastProjectLibDir;
 };
 
 #endif    // PANEL_FP_LIB_TABLE_H

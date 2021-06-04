@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,9 +37,18 @@ class wxCommandEvent;
 
 class PANEL_SETUP_CONSTRAINTS : public PANEL_SETUP_CONSTRAINTS_BASE
 {
+public:
+    PANEL_SETUP_CONSTRAINTS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
+    ~PANEL_SETUP_CONSTRAINTS( ) override { };
+
+    void ImportSettingsFrom( BOARD* aBoard );
+
 private:
-    PCB_EDIT_FRAME*         m_Frame;
-    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
+    bool Show( bool aShow ) override;
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
+    void onChangeOutlineOpt( wxCommandEvent& event ) override;
 
 public:
     UNIT_BINDER             m_minClearance;
@@ -55,18 +64,9 @@ public:
     UNIT_BINDER             m_silkClearance;
     UNIT_BINDER             m_maxError;
 
-public:
-    PANEL_SETUP_CONSTRAINTS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
-    ~PANEL_SETUP_CONSTRAINTS( ) override { };
-
-    void ImportSettingsFrom( BOARD* aBoard );
-
 private:
-    bool Show( bool aShow ) override;
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
-    void onChangeOutlineOpt( wxCommandEvent& event ) override;
+    PCB_EDIT_FRAME*         m_Frame;
+    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 };
 
 #endif //PANEL_SETUP_CONSTRAINTS_H

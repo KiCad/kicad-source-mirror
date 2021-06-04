@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,11 +33,6 @@ class PCB_GROUP;
 
 class DIALOG_GROUP_PROPERTIES : public DIALOG_GROUP_PROPERTIES_BASE
 {
-private:
-    PCB_BASE_EDIT_FRAME* m_brdEditor;
-    TOOL_MANAGER*        m_toolMgr;
-    PCB_GROUP*           m_group;
-
 public:
     DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_GROUP* aTarget );
     ~DIALOG_GROUP_PROPERTIES();
@@ -51,6 +46,10 @@ public:
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    PCB_BASE_EDIT_FRAME* m_brdEditor;
+    TOOL_MANAGER*        m_toolMgr;
+    PCB_GROUP*           m_group;
 };
 
 #endif  // DIALOG_GROUP_PROPERTIES_H

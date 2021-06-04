@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,17 +33,6 @@ class PCB_EDIT_FRAME;
 
 class DIALOG_IMPORT_SETTINGS : public DIALOG_IMPORT_SETTINGS_BASE
 {
-protected:
-    PCB_EDIT_FRAME* m_frame;
-    static wxString m_filePath;
-
-private:
-
-    /**
-     * Stores state used to toggle button between "Select All" and "Deselect All"
-    */
-    bool m_showSelectAllOnBtn;
-
 public:
     DIALOG_IMPORT_SETTINGS( wxWindow* aParent, PCB_EDIT_FRAME* aFrame );
 
@@ -55,13 +44,13 @@ public:
     bool TransferDataFromWindow() override;
 
     /**
-     * Enables/Disables "Import Settings" button
+     * Enable or disable the "Import Settings" button.
      *
      * This dialog defaults to all import selections cleared, and the "Import
      * Settings" button disabled.  The user must check at least one of the import
      * selection checkboxes for the "Import Settings" button to be enabled.
      *
-     * @return bool - "Import Settings" button enable state
+     * @return the "Import Settings" button enable state.
      */
     bool UpdateImportSettingsButton();
 
@@ -71,6 +60,16 @@ public:
     void UpdateSelectAllButton();
 
     wxString GetFilePath() { return m_filePath; }
+
+protected:
+    PCB_EDIT_FRAME* m_frame;
+    static wxString m_filePath;
+
+private:
+    /**
+     * Store state used to toggle button between "Select All" and "Deselect All"
+     */
+    bool m_showSelectAllOnBtn;
 };
 
 #endif //KICAD_DIALOG_IMPORT_SETTINGS_H

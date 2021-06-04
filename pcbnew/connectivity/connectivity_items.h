@@ -68,7 +68,6 @@ public:
 
     bool Valid() const;
 
-
     CN_ITEM* Item() const
     {
         return m_item;

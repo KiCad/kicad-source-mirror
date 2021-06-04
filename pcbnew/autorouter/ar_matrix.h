@@ -3,9 +3,9 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  *
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,8 +43,7 @@ class FOOTPRINT;
 #define AR_SIDE_BOTTOM 1
 
 /**
- * AR_MATRIX
- * handle the matrix routing that describes the actual board
+ * Handle the matrix routing that describes the actual board.
  */
 class AR_MATRIX
 {
@@ -52,24 +51,6 @@ public:
     typedef unsigned char MATRIX_CELL;
     typedef int           DIST_CELL;
 
-    MATRIX_CELL* m_BoardSide[AR_MAX_ROUTING_LAYERS_COUNT]; // the image map of 2 board sides
-    DIST_CELL*   m_DistSide[AR_MAX_ROUTING_LAYERS_COUNT];  // the image map of 2 board sides:
-                                                           // distance to cells
-    int      m_RoutingLayersCount; // Number of layers for autorouting (0 or 1)
-    int      m_GridRouting;        // Size of grid for autoplace/autoroute
-    EDA_RECT m_BrdBox;             // Actual board bounding box
-    int      m_Nrows, m_Ncols;     // Matrix size
-    int      m_MemSize;            // Memory requirement, just for statistics
-    int      m_RouteCount;         // Number of routes
-
-    PCB_LAYER_ID m_routeLayerTop;
-    PCB_LAYER_ID m_routeLayerBottom;
-
-private:
-    // a pointer to the current selected cell operation
-    void ( AR_MATRIX::*m_opWriteCell )( int aRow, int aCol, int aSide, MATRIX_CELL aCell );
-
-public:
     enum CELL_OP
     {
         WRITE_CELL = 0,
@@ -88,9 +69,8 @@ public:
     }
 
     /**
-     * function GetBrdCoordOrigin
-     * @return the board coordinate corresponding to the
-     * routing matrix origin ( board coordinate offset )
+     * @return the board coordinate corresponding to the routing matrix origin ( board
+     *         coordinate offset ).
      */
     wxPoint GetBrdCoordOrigin()
     {
@@ -98,18 +78,17 @@ public:
     }
 
     /**
-     * Function ComputeMatrixSize
-     * calculates the number of rows and columns of dimensions of \a aPcb for routing and
+     * Calculate the number of rows and columns of dimensions of \a aPcb for routing and
      * automatic calculation of area.
-     * @param aPcb = the physical board
-     * @param aUseBoardEdgesOnly = true to use board edges only,
-     *                           = false to use the full board bounding box (default)
+     *
+     * @param aPcb is the physical board.
+     * @param aUseBoardEdgesOnly set to true to use board edges only or false to use the full
+     *                           board bounding box (default).
      */
     bool ComputeMatrixSize( const EDA_RECT& aBoundingBox );
 
     /**
-     * Function InitBoard
-     * initializes the data structures.
+     * Initialize the data structures.
      *
      * @return the amount of memory used or -1 if default.
      */
@@ -155,6 +134,24 @@ private:
 
     void traceArc( int ux0, int uy0, int ux1, int uy1, double ArcAngle, int lg, LAYER_NUM layer,
                    int color, AR_MATRIX::CELL_OP op_logic );
+
+public:
+    MATRIX_CELL* m_BoardSide[AR_MAX_ROUTING_LAYERS_COUNT]; // the image map of 2 board sides
+    DIST_CELL*   m_DistSide[AR_MAX_ROUTING_LAYERS_COUNT];  // the image map of 2 board sides:
+                                                           // distance to cells
+    int      m_RoutingLayersCount; // Number of layers for autorouting (0 or 1)
+    int      m_GridRouting;        // Size of grid for autoplace/autoroute
+    EDA_RECT m_BrdBox;             // Actual board bounding box
+    int      m_Nrows, m_Ncols;     // Matrix size
+    int      m_MemSize;            // Memory requirement, just for statistics
+    int      m_RouteCount;         // Number of routes
+
+    PCB_LAYER_ID m_routeLayerTop;
+    PCB_LAYER_ID m_routeLayerBottom;
+
+private:
+    // a pointer to the current selected cell operation
+    void ( AR_MATRIX::*m_opWriteCell )( int aRow, int aCol, int aSide, MATRIX_CELL aCell );
 };
 
 #endif

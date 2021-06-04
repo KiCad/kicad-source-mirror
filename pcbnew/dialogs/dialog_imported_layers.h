@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,14 +27,26 @@
 
 class DIALOG_IMPORTED_LAYERS : public DIALOG_IMPORTED_LAYERS_BASE
 {
+public:
+    DIALOG_IMPORTED_LAYERS( wxWindow* aParent, const std::vector<INPUT_LAYER_DESC>& aLayerDesc );
+
+    /**
+     * Return a list of layers names that are required, but they are not mapped.
+     */
+    std::vector<wxString> GetUnmappedRequiredLayers() const;
+
+    /**
+     * Create and show a dialog (modal) and returns the data from it after completion. If the
+     * dialog is closed or cancel is pressed, returns an empty map.
+     *
+     * @param aParent Parent window for the invoked dialog.
+     * @param aLayerDesc
+     * @return Mapped layers
+     */
+    static std::map<wxString, PCB_LAYER_ID> GetMapModal( wxWindow* aParent,
+                                  const std::vector<INPUT_LAYER_DESC>& aLayerDesc );
+
 private:
-    const int selected = wxLIST_STATE_SELECTED;
-    const int allitems = wxLIST_STATE_DONTCARE;
-
-    std::vector<INPUT_LAYER_DESC>    m_input_layers;
-    std::vector<wxString>            m_unmatched_layer_names;
-    std::map<wxString, PCB_LAYER_ID> m_matched_layers_map;
-
     //Helper functions
     PCB_LAYER_ID GetSelectedLayerID();
     PCB_LAYER_ID GetAutoMatchLayerID( wxString aInputLayerName );
@@ -57,24 +69,12 @@ private:
     void OnRemoveClicked( wxCommandEvent& event ) override      { RemoveMappings( selected ); }
     void OnRemoveAllClicked( wxCommandEvent& event ) override   { RemoveMappings( allitems ); }
 
-public:
-    DIALOG_IMPORTED_LAYERS( wxWindow* aParent, const std::vector<INPUT_LAYER_DESC>& aLayerDesc );
+    const int selected = wxLIST_STATE_SELECTED;
+    const int allitems = wxLIST_STATE_DONTCARE;
 
-    /**
-     * @brief Return a list of layers names that are required, but they are not mapped
-     */
-    std::vector<wxString> GetUnmappedRequiredLayers() const;
-
-    /**
-     * @brief Creates and shows a dialog (modal) and returns the data from it
-     * after completion. If the dialog is closed or cancel is pressed, returns
-     * an empty map
-     * @param aParent Parent window for the invoked dialog.
-     * @param aLayerDesc
-     * @return Mapped layers
-     */
-    static std::map<wxString, PCB_LAYER_ID> GetMapModal( wxWindow* aParent,
-                                  const std::vector<INPUT_LAYER_DESC>& aLayerDesc );
+    std::vector<INPUT_LAYER_DESC>    m_input_layers;
+    std::vector<wxString>            m_unmatched_layer_names;
+    std::map<wxString, PCB_LAYER_ID> m_matched_layers_map;
 };
 
 #endif // DIALOG_IMPORTED_LAYERS_H

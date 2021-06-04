@@ -156,32 +156,6 @@ public:
         std::list<CN_ITEM*> m_items;
     };
 
-private:
-    CN_LIST m_itemList;
-
-    std::unordered_map<const BOARD_ITEM*, ITEM_MAP_ENTRY> m_itemMap;
-
-    CLUSTERS m_connClusters;
-    CLUSTERS m_ratsnestClusters;
-    std::vector<bool> m_dirtyNets;
-    PROGRESS_REPORTER* m_progressReporter = nullptr;
-
-    void    searchConnections();
-
-    void    propagateConnections( BOARD_COMMIT* aCommit = nullptr,
-                                  PROPAGATE_MODE aMode = PROPAGATE_MODE::SKIP_CONFLICTS );
-
-    template <class Container, class BItem>
-    void add( Container& c, BItem brditem )
-    {
-        auto item = c.Add( brditem );
-
-        m_itemMap[ brditem ] = ITEM_MAP_ENTRY( item );
-    }
-
-    void markItemNetAsDirty( const BOARD_ITEM* aItem );
-
-public:
     CN_CONNECTIVITY_ALGO() {}
     ~CN_CONNECTIVITY_ALGO() { Clear(); }
 
@@ -238,9 +212,9 @@ public:
     const CLUSTERS SearchClusters( CLUSTER_SEARCH_MODE aMode );
 
     /**
-     * Propagates nets from pads to other items in clusters
-     * @param aCommit is used to store undo information for items modified by the call
-     * @param aMode controls how clusters with conflicting nets are resolved
+     * Propagate nets from pads to other items in clusters.
+     * @param aCommit is used to store undo information for items modified by the call.
+     * @param aMode controls how clusters with conflicting nets are resolved.
      */
     void PropagateNets( BOARD_COMMIT* aCommit = nullptr,
                         PROPAGATE_MODE aMode = PROPAGATE_MODE::SKIP_CONFLICTS );
@@ -248,10 +222,12 @@ public:
     void FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID aLayer, std::vector<int>& aIslands );
 
     /**
-     * Finds the copper islands that are not connected to a net.  These are added to
-     * the m_islands vector.
+     * Find the copper islands that are not connected to a net.
+     *
+     * These are added to the m_islands vector.
      * N.B. This must be called after aZones has been refreshed.
-     * @param: aZones The set of zones to search for islands
+     *
+     * @param: aZones is the set of zones to search for islands.
      */
     void FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones );
 
@@ -279,9 +255,34 @@ public:
             aFunc( *item );
     }
 
-
     void MarkNetAsDirty( int aNet );
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
+
+private:
+    void searchConnections();
+
+    void propagateConnections( BOARD_COMMIT* aCommit = nullptr,
+                               PROPAGATE_MODE aMode = PROPAGATE_MODE::SKIP_CONFLICTS );
+
+    template <class Container, class BItem>
+    void add( Container& c, BItem brditem )
+    {
+        auto item = c.Add( brditem );
+
+        m_itemMap[ brditem ] = ITEM_MAP_ENTRY( item );
+    }
+
+    void markItemNetAsDirty( const BOARD_ITEM* aItem );
+
+    CN_LIST m_itemList;
+
+    std::unordered_map<const BOARD_ITEM*, ITEM_MAP_ENTRY> m_itemMap;
+
+    CLUSTERS m_connClusters;
+    CLUSTERS m_ratsnestClusters;
+    std::vector<bool> m_dirtyNets;
+    PROGRESS_REPORTER* m_progressReporter = nullptr;
+
 };
 
 class CN_VISITOR

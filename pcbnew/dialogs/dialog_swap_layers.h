@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,12 +32,6 @@ class LAYER_GRID_TABLE;
 
 class DIALOG_SWAP_LAYERS : public DIALOG_SWAP_LAYERS_BASE
 {
-private:
-    PCB_BASE_EDIT_FRAME* m_parent;
-    PCB_LAYER_ID*        m_layerDestinations;
-
-    LAYER_GRID_TABLE*    m_gridTable;
-
 public:
     DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent, PCB_LAYER_ID* aArray );
     ~DIALOG_SWAP_LAYERS() override;
@@ -49,6 +43,11 @@ private:
     void OnSize( wxSizeEvent& event ) override;
 
     void adjustGridColumns( int aWidth );
+
+    PCB_BASE_EDIT_FRAME* m_parent;
+    PCB_LAYER_ID*        m_layerDestinations;
+
+    LAYER_GRID_TABLE*    m_gridTable;
 };
 
 #endif

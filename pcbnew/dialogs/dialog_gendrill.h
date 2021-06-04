@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2019 Jean_Pierre Charras <jp.charras@ujf-grenoble.fr>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,9 +32,8 @@ class DIALOG_GENDRILL : public DIALOG_GENDRILL_BASE
 {
 public:
     /**
-     * Ctor
-     * @param aPcbEditFrame is the board edit frame
-     * @param aParent is the parent window caller ( the board edit frame or a dialog )
+     * @param aPcbEditFrame is the board edit frame.
+     * @param aParent is the parent window caller ( the board edit frame or a dialog ).
      */
     DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aParent );
     ~DIALOG_GENDRILL();
@@ -44,32 +43,7 @@ public:
      */
     void             UpdateDrillParams();
 
-    static int       m_UnitDrillIsInch;
-    static int       m_ZerosFormat;
-    static bool      m_MinimalHeader;
-    static bool      m_Mirror;
-    static bool      m_Merge_PTH_NPTH;
-    DRILL_PRECISION  m_Precision;                // Precision for drill files, in non decimal format
-    wxPoint          m_FileDrillOffset;          // Drill offset: 0,0 for absolute coordinates,
-                                                 // or origin of the auxiliary axis
-    static bool      m_UseRouteModeForOvalHoles; // True to use a G00 route command for oval holes
-                                                 // False to use a G85 canned mode for oval holes
-
 private:
-    PCB_EDIT_FRAME*  m_pcbEditFrame;
-    BOARD*           m_board;
-    PCB_PLOT_PARAMS  m_plotOpts;
-    bool             m_drillOriginIsAuxAxis;     // Axis selection (main / auxiliary)
-                                                 // for drill origin coordinates
-    int              m_platedPadsHoleCount;
-    int              m_notplatedPadsHoleCount;
-    int              m_throughViasCount;
-    int              m_microViasCount;
-    int              m_blindOrBuriedViasCount;
-
-    static int       m_mapFileType;              // format of map file: HPGL, PS ...
-    static int       m_drillFileType;            // for Excellon, Gerber
-
     void initDialog();
     void InitDisplayParams();
 
@@ -106,19 +80,44 @@ private:
 
     // Specific functions:
     /**
-     * Function GenDrillAndMapFiles
-     * Calls the functions to create EXCELLON drill files and/or drill map files
-     * >When all holes are through holes, only one excellon file is created.
-     * >When there are some partial holes (some blind or buried vias),
-     *  one excellon file is created, for all plated through holes,
-     *  and one file per layer pair, which have one or more holes, excluding
-     *  through holes, already in the first file.
-     *  one file for all Not Plated through holes
+     * Call the functions to create EXCELLON drill files and/or drill map files.
+     *
+     * When all holes are through holes, only one excellon file is created.  When there are
+     * some partial holes (some blind or buried vias), one excellon file is created, for all
+     * plated through holes, and one file per layer pair, which have one or more holes, excluding
+     * through holes, already in the first file.  One file for all Not Plated through holes.
      */
     void GenDrillAndMapFiles( bool aGenDrill, bool aGenMap );
 
     void UpdatePrecisionOptions();
     void UpdateConfig();
+
+public:
+    static int       m_UnitDrillIsInch;
+    static int       m_ZerosFormat;
+    static bool      m_MinimalHeader;
+    static bool      m_Mirror;
+    static bool      m_Merge_PTH_NPTH;
+    DRILL_PRECISION  m_Precision;                // Precision for drill files, in non decimal format
+    wxPoint          m_FileDrillOffset;          // Drill offset: 0,0 for absolute coordinates,
+                                                 // or origin of the auxiliary axis
+    static bool      m_UseRouteModeForOvalHoles; // True to use a G00 route command for oval holes
+                                                 // False to use a G85 canned mode for oval holes
+
+private:
+    PCB_EDIT_FRAME*  m_pcbEditFrame;
+    BOARD*           m_board;
+    PCB_PLOT_PARAMS  m_plotOpts;
+    bool             m_drillOriginIsAuxAxis;     // Axis selection (main / auxiliary)
+                                                 // for drill origin coordinates
+    int              m_platedPadsHoleCount;
+    int              m_notplatedPadsHoleCount;
+    int              m_throughViasCount;
+    int              m_microViasCount;
+    int              m_blindOrBuriedViasCount;
+
+    static int       m_mapFileType;              // format of map file: HPGL, PS ...
+    static int       m_drillFileType;            // for Excellon, Gerber
 };
 
 #endif      // DIALOG_GENDRILL_H_

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,11 +29,6 @@ class FOOTPRINT_EDIT_FRAME;
 
 class PANEL_FP_EDITOR_DEFAULTS : public PANEL_FP_EDITOR_DEFAULTS_BASE
 {
-    BOARD_DESIGN_SETTINGS   m_brdSettings;
-    FOOTPRINT_EDIT_FRAME*   m_frame;
-    PAGED_DIALOG*           m_parent;
-    bool                    m_firstShow = true;
-
 public:
     PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent );
     ~PANEL_FP_EDITOR_DEFAULTS() override;
@@ -50,6 +45,11 @@ private:
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    BOARD_DESIGN_SETTINGS   m_brdSettings;
+    FOOTPRINT_EDIT_FRAME*   m_frame;
+    PAGED_DIALOG*           m_parent;
+    bool                    m_firstShow = true;
 };
 
 

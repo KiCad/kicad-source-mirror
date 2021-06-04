@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,43 +54,6 @@ public:
     ~DIALOG_PAD_PROPERTIES();
 
 private:
-    PCB_BASE_FRAME* m_parent;
-    PAD*    m_currentPad;           // pad currently being edited
-    PAD*    m_dummyPad;             // a working copy used to show changes
-    PAD*    m_padMaster;            // pad used to create new pads in board or footprint editor
-    BOARD*  m_board;                // the main board: this is the board handled by the PCB
-                                    //    editor or the dummy board used by the footprint editor
-    bool    m_isFlipped;            // indicates the parent footprint is flipped (mirrored) in
-                                    //    which case some Y coordinates values must be negated
-    bool    m_canUpdate;
-    bool    m_canEditNetName;       // true only if the caller is the board editor
-    bool    m_isFpEditor;           // true if the caller is the footprint editor
-
-    std::vector<std::shared_ptr<PCB_SHAPE>> m_primitives;     // the custom shape primitives in
-                                                              // local coords, orient 0
-                                                              // must define a single copper area
-    COLOR4D                       m_selectedColor; // color used to draw selected primitives when
-                                                   //     editing a custom pad shape
-
-    std::vector<PCB_SHAPE*>       m_highlight;     // shapes highlighted in GAL mode
-    PCB_DRAW_PANEL_GAL*           m_padPreviewGAL;
-    KIGFX::ORIGIN_VIEWITEM*       m_axisOrigin;    // origin of the preview canvas
-    static bool                   m_sketchPreview; // session storage
-
-    UNIT_BINDER m_posX, m_posY;
-    UNIT_BINDER m_sizeX, m_sizeY;
-    UNIT_BINDER m_offsetX, m_offsetY;
-    UNIT_BINDER m_padToDie;
-    UNIT_BINDER m_trapDelta;
-    UNIT_BINDER m_cornerRadius;
-    UNIT_BINDER m_holeX, m_holeY;
-    wxFloatingPointValidator<double>    m_OrientValidator;
-    double      m_OrientValue;
-    UNIT_BINDER m_clearance;
-    UNIT_BINDER m_maskClearance, m_pasteClearance;
-    UNIT_BINDER m_spokeWidth, m_thermalGap;
-
-private:
     void prepareCanvas();       // Initialize the canvases (legacy or gal) to display the pad
     void initValues();
     void displayPrimitivesList();
@@ -101,9 +64,8 @@ private:
     void enablePrimitivePage( bool aEnable );   ///< enable (or disable) the primitive page editor
 
     /**
-     * Function updatePadLayersList
-     * updates the CheckBox states in pad layers list, based on the layer_mask (if non-empty)
-     * or the default layers for the current pad type
+     * Updates the CheckBox states in pad layers list, based on the layer_mask (if non-empty)
+     * or the default layers for the current pad type.
      */
     void updatePadLayersList( LSET layer_mask, bool remove_unconnected, bool keep_top_bottom );
 
@@ -165,11 +127,49 @@ private:
 
     /// Return the pad property currently selected
     PAD_PROP getSelectedProperty();
+
+private:
+    PCB_BASE_FRAME* m_parent;
+    PAD*    m_currentPad;           // pad currently being edited
+    PAD*    m_dummyPad;             // a working copy used to show changes
+    PAD*    m_padMaster;            // pad used to create new pads in board or footprint editor
+    BOARD*  m_board;                // the main board: this is the board handled by the PCB
+                                    //    editor or the dummy board used by the footprint editor
+    bool    m_isFlipped;            // indicates the parent footprint is flipped (mirrored) in
+                                    //    which case some Y coordinates values must be negated
+    bool    m_canUpdate;
+    bool    m_canEditNetName;       // true only if the caller is the board editor
+    bool    m_isFpEditor;           // true if the caller is the footprint editor
+
+    std::vector<std::shared_ptr<PCB_SHAPE>> m_primitives;     // the custom shape primitives in
+                                                              // local coords, orient 0
+                                                              // must define a single copper area
+    COLOR4D                       m_selectedColor; // color used to draw selected primitives when
+                                                   //     editing a custom pad shape
+
+    std::vector<PCB_SHAPE*>       m_highlight;     // shapes highlighted in GAL mode
+    PCB_DRAW_PANEL_GAL*           m_padPreviewGAL;
+    KIGFX::ORIGIN_VIEWITEM*       m_axisOrigin;    // origin of the preview canvas
+    static bool                   m_sketchPreview; // session storage
+
+    UNIT_BINDER m_posX, m_posY;
+    UNIT_BINDER m_sizeX, m_sizeY;
+    UNIT_BINDER m_offsetX, m_offsetY;
+    UNIT_BINDER m_padToDie;
+    UNIT_BINDER m_trapDelta;
+    UNIT_BINDER m_cornerRadius;
+    UNIT_BINDER m_holeX, m_holeY;
+    wxFloatingPointValidator<double>    m_OrientValidator;
+    double      m_OrientValue;
+    UNIT_BINDER m_clearance;
+    UNIT_BINDER m_maskClearance, m_pasteClearance;
+    UNIT_BINDER m_spokeWidth, m_thermalGap;
 };
 
 /**
- * a dialog to edit basics shapes parameters.
- * Polygonal shape is not handles by this dialog
+ * A dialog to edit basic shape parameters.
+ *
+ * Polygonal shape is not handled by this dialog.
  */
 class DIALOG_PAD_PRIMITIVES_PROPERTIES: public DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE
 {
@@ -178,7 +178,6 @@ public:
                                       PCB_SHAPE* aShape );
 
     /**
-     * Function TransferDataFromWindow
      * Transfer data out of the GUI.
      */
     bool TransferDataFromWindow() override;
@@ -207,38 +206,28 @@ private:
 
 
 /**
- * a dialog to edit basic polygonal shape parameters
+ * A dialog to edit basic polygonal shape parameters.
  */
 class DIALOG_PAD_PRIMITIVE_POLY_PROPS: public DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE
 {
-    // The basic shape currently edited
-    PCB_SHAPE*           m_shape;
-
-    // The working copy of the basic shape currently edited
-    std::vector<wxPoint> m_currPoints;
-
-    UNIT_BINDER          m_thickness;
-
 public:
     DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
                                      PCB_SHAPE* aShape );
     ~DIALOG_PAD_PRIMITIVE_POLY_PROPS();
 
     /**
-     * Function TransferDataFromWindow
      * Transfer data out of the GUI.
      */
     bool TransferDataFromWindow() override;
 
 private:
     /**
-     * Function TransferDataToWindow
      * Transfer data into the GUI.
      */
     bool TransferDataToWindow() override;
 
     /**
-     * test for a valid polygon (a not self intersectiong polygon)
+     * Test for a valid polygon (a not self intersectiong polygon).
      */
     bool Validate() override;
 
@@ -256,14 +245,21 @@ private:
 
     bool doValidate( bool aRemoveRedundantCorners );
 
+    // The basic shape currently edited
+    PCB_SHAPE*           m_shape;
+
+    // The working copy of the basic shape currently edited
+    std::vector<wxPoint> m_currPoints;
+
+    UNIT_BINDER          m_thickness;
 };
 
 
-/** A dialog to apply geometry transforms to a shape or set of shapes
- * (move, rotate around origin, scaling factor, duplication).
- * shapes are scaled, then moved then rotated.
- * aList is a list of shapes to transform or duplicate
- * if aShowDuplicate == false, the parameter "Duplicate count" is disabled
+/**
+ * A dialog to apply geometry transforms to a shape or set of shapes (move, rotate around
+ * origin, scaling factor, duplication).
+ *
+ * Shapes are scaled then moved then rotated.
  */
 
 class DIALOG_PAD_PRIMITIVES_TRANSFORM : public DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE
@@ -284,7 +280,7 @@ public:
                     int aDuplicateCount = 0 );
 
     /**
-     * @return the number of duplicate, chosen by user
+     * @return the number of duplicate, chosen by user.
      */
     int GetDuplicateCount() { return m_spinCtrlDuplicateCount->GetValue(); }
 

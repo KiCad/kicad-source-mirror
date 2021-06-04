@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,16 +37,6 @@ class NETLIST;
 
 class DIALOG_NETLIST : public DIALOG_NETLIST_BASE
 {
-private:
-    PCB_EDIT_FRAME* m_parent;
-    wxString&       m_netlistPath;
-    bool            m_initialized;
-    bool            m_runDragCommand;
-    static bool     m_warnForNoNetPads;
-    static bool     m_matchByUUID;      // True to use UUID as link between symbol and footprint
-                                        // False to use reference designator as link
-                                        // between symbol and footprint
-
 public:
     DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename );
     ~DIALOG_NETLIST();
@@ -56,14 +46,22 @@ private:
 
     void loadNetlist( bool aDryRun );
 
-
-
     // Virtual event handlers:
     void OnOpenNetlistClick( wxCommandEvent& event ) override;
     void OnUpdatePCB( wxCommandEvent& event ) override;
     void OnFilenameKillFocus( wxFocusEvent& event ) override;
     void OnMatchChanged( wxCommandEvent& event ) override;
     void OnOptionChanged( wxCommandEvent& event ) override;
+
+    PCB_EDIT_FRAME* m_parent;
+    wxString&       m_netlistPath;
+    bool            m_initialized;
+    bool            m_runDragCommand;
+    static bool     m_warnForNoNetPads;
+    static bool     m_matchByUUID;      // True to use UUID as link between symbol and footprint
+                                        // False to use reference designator as link
+                                        // between symbol and footprint
+
 };
 
 
