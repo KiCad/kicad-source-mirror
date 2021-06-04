@@ -26,6 +26,7 @@
 #include <rc_item.h>
 #include <dialogs/panel_setup_severities.h>
 #include <wx/radiobut.h>
+#include <wx/scrolwin.h>
 #include <wx/stattext.h>
 #include <wx/treebook.h>
 
