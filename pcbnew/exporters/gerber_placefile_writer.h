@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,7 +34,7 @@ class FOOTPRINT;
 class PAD;
 
 /**
- * PLACEFILE_GERBER_WRITER is a class mainly used to create Gerber drill files
+ * PLACEFILE_GERBER_WRITER is a class mainly used to create Gerber drill files.
  */
 class PLACEFILE_GERBER_WRITER
 {
@@ -47,10 +47,11 @@ public:
 
 
     /**
-     * Function SetOptions
      * Initialize internal parameters to match drill options
-     * note: PTH and NPTH are always separate files in Gerber format
-     * @param aOffset = drill coordinates offset
+     *
+     * @note PTH and NPTH are always separate files in Gerber format.
+     *
+     * @param aOffset is the drill coordinates offset.
      */
     void SetOptions( wxPoint aOffset )
     {
@@ -58,24 +59,40 @@ public:
     }
 
     /**
-     * Creates an pnp gerber file
-     * @param aFullFilename = the full filename
-     * @param aLayer = layer (F_Cu or B_Cu) to generate
-     * @param aIncludeBrdEdges = true to include board outlines
-     * @return component count, or -1 if the file cannot be created
+     * Create an pnp gerber file.
+     *
+     * @param aFullFilename is the full filename.
+     * @param aLayer is the layer (F_Cu or B_Cu) to generate.
+     * @param aIncludeBrdEdges use true to include board outlines.
+     * @return component count, or -1 if the file cannot be created.
      */
     int CreatePlaceFile( wxString& aFullFilename, PCB_LAYER_ID aLayer, bool aIncludeBrdEdges );
 
     /**
-     * @return a filename which identify the drill file function.
      * @param aFullBaseFilename = a full filename. it will be modified
      * to add "-pnp" and set the extension
      * @param aLayer = layer (F_Cu or B_Cu) to generate
+     * @return a filename which identify the drill file function.
      */
     const wxString GetPlaceFileName( const wxString& aFullBaseFilename,
                                      PCB_LAYER_ID aLayer ) const;
 
 private:
+    /**
+     * Convert a KiCad footprint orientation to gerber rotation both are in degrees.
+     */
+    double mapRotationAngle( double aAngle );
+
+    /**
+     * Find the pad(s) 1 (or pad "A1") of a footprint.
+     *
+     * Useful to plot a marker at this (these) position(s).
+     *
+     * @param aPadList is the list to fill.
+     * @param aFootprint is the footprint to test,
+     */
+    void findPads1( std::vector<PAD*>& aPadList, FOOTPRINT* aFootprint ) const;
+
     BOARD*       m_pcb;
     PCB_LAYER_ID m_layer;            // The board layer currently used (typically F_Cu or B_Cu)
     wxPoint      m_offset;           // Drill offset coordinates
@@ -83,20 +100,6 @@ private:
     bool         m_plotPad1Marker;       // True to plot a flashed marker shape at pad 1 position
     bool         m_plotOtherPadsMarker;  // True to plot a marker shape at other pads position
                                          // This is a flashed 0 sized round pad
-
-    /**
-     * convert a kicad footprint orientation to gerber rotation
-     * both are in degrees
-     */
-    double mapRotationAngle( double aAngle );
-
-    /**
-     * Find the pad(s) 1 (or pad "A1") of a footprint
-     * Usefull to plot a marker at this (these) position(s)
-     * @param aPadList is the list to fill
-     * @param aFootprint is the footprint to test
-     */
-    void findPads1( std::vector<PAD*>& aPadList, FOOTPRINT* aFootprint ) const;
 };
 
 #endif  //  #ifndef PLACEFILE_GERBER_WRITER_H

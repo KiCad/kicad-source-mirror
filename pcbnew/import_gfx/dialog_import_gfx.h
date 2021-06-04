@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,24 +67,6 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    PCB_BASE_FRAME*      m_parent;
-    std::unique_ptr<GRAPHICS_IMPORTER_PCBNEW> m_importer;
-    std::unique_ptr<GRAPHICS_IMPORT_MGR>      m_gfxImportMgr;
-    static int           m_originUnits;
-    VECTOR2D             m_origin;              // This is the offset to add to imported coordinates
-                                                // Always in mm
-
-    static wxString      m_filename;
-    static bool          m_shouldGroupItems;
-    static bool          m_placementInteractive;
-    static LAYER_NUM     m_layer;
-    double               m_lineWidth;           // always in mm: line width when a line width
-                                                // is not specified
-    static int           m_lineWidthUnits;
-    static double        m_scaleImport;         // a scale factor to change the size of imported
-                                                // items m_scaleImport =1.0 means keep original size
-    static int           m_dxfUnits;
-
     // Virtual event handlers
     void onUnitPositionSelection( wxCommandEvent& event ) override;
     void onUnitWidthSelection( wxCommandEvent& event ) override;
@@ -110,6 +92,24 @@ private:
     double getPCBdefaultLineWidthMM();
     void showPCBdefaultLineWidth();
     void showPcbImportOffsets();
+
+    PCB_BASE_FRAME*      m_parent;
+    std::unique_ptr<GRAPHICS_IMPORTER_PCBNEW> m_importer;
+    std::unique_ptr<GRAPHICS_IMPORT_MGR>      m_gfxImportMgr;
+    static int           m_originUnits;
+    VECTOR2D             m_origin;              // This is the offset to add to imported coordinates
+                                                // Always in mm
+
+    static wxString      m_filename;
+    static bool          m_shouldGroupItems;
+    static bool          m_placementInteractive;
+    static LAYER_NUM     m_layer;
+    double               m_lineWidth;           // always in mm: line width when a line width
+                                                // is not specified
+    static int           m_lineWidthUnits;
+    static double        m_scaleImport;         // a scale factor to change the size of imported
+                                                // items m_scaleImport =1.0 means keep original size
+    static int           m_dxfUnits;
 };
 
 #endif    //  __DIALOG_IMPORT_GFX_H__

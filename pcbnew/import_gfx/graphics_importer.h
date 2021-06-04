@@ -255,6 +255,12 @@ protected:
         m_items.emplace_back( std::move( aItem ) );
     }
 
+    ///< factor to convert millimeters to Internal Units
+    double m_millimeterToIu;
+
+    ///< Offset (in mm) for imported coordinates
+    VECTOR2D m_offsetCoordmm;
+
 private:
     ///< List of imported items
     std::list<std::unique_ptr<EDA_ITEM>> m_items;
@@ -277,13 +283,6 @@ private:
 
     ///< Default line thickness for the imported graphics
     double m_lineWidth;
-
-protected:
-    ///< factor to convert millimeters to Internal Units
-    double m_millimeterToIu;
-
-    ///< Offset (in mm) for imported coordinates
-    VECTOR2D m_offsetCoordmm;
 };
 
 #endif /* GRAPHICS_IMPORTER_H */

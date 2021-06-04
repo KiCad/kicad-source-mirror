@@ -102,60 +102,7 @@ struct VRML_COLOR
 // Handle the board ans its board items to convert them to a VRML representation:
 class EXPORTER_PCB_VRML
 {
-private:
-    VRML_COLOR  vrml_colors_list[VRML_COLOR_LAST];
-    double      m_layer_z[PCB_LAYER_ID_COUNT];
-    SHAPE_POLY_SET  m_pcbOutlines;          // stores the board main outlines
-
-    int         m_precision;                // precision factor when exportin fp shapes
-                                            // to separate files
-    SGNODE*     m_sgmaterial[VRML_COLOR_LAST];
-
 public:
-    IFSG_TRANSFORM m_OutputPCB;
-    VRML_LAYER  m_holes;
-    VRML_LAYER  m_3D_board;
-    VRML_LAYER  m_top_copper;
-    VRML_LAYER  m_bot_copper;
-    VRML_LAYER  m_top_silk;
-    VRML_LAYER  m_bot_silk;
-    VRML_LAYER  m_top_soldermask;
-    VRML_LAYER  m_bot_soldermask;
-    VRML_LAYER  m_top_paste;
-    VRML_LAYER  m_bot_paste;
-    VRML_LAYER  m_plated_holes;
-
-    std::list< SGNODE* > m_components;
-    S3D_CACHE* m_Cache3Dmodels;
-    BOARD*     m_Pcb;
-
-    /* true to use VRML inline{} syntax for footprint 3D models, like:
-     * Inline { url "F:/tmp/pic_programmer/shapes3D/DIP-18_W7.62mm_Socket.wrl"  }
-     * false to merge VRML 3D modeles in the .wrl board file
-     */
-    bool m_UseInlineModelsInBrdfile;
-
-    // 3D subdirectory to copy footprint vrml 3D models when not merged in board file
-    wxString m_Subdir3DFpModels;
-
-    // true to use relative paths in VRML inline{} for footprint 3D models
-    // used only if m_UseInlineModelsInBrdfile = true
-    bool m_UseRelPathIn3DModelFilename;
-
-    // true to reuse component definitions
-    bool m_ReuseDef;
-
-    // scaling from 0.1 inch to desired VRML unit
-    double m_WorldScale = 1.0;
-
-    // scaling from mm to desired VRML world scale
-    double m_BoardToVrmlScale;
-
-    double  m_tx;             // global translation along X
-    double  m_ty;             // global translation along Y
-
-    double m_brd_thickness; // depth of the PCB
-
     EXPORTER_PCB_VRML();
     ~EXPORTER_PCB_VRML();
 
@@ -202,7 +149,7 @@ public:
 
     void ExportVrmlPadHole( PAD* aPad );
 
-    // Exoprt a set of polygons without holes.
+    // Export a set of polygons without holes.
     // Polygons in SHAPE_POLY_SET must be without hole, i.e. holes must be linked
     // previously to their main outline.
     void ExportVrmlPolygonSet( VRML_LAYER* aVlayer, const SHAPE_POLY_SET& aOutlines );
@@ -228,4 +175,58 @@ private:
                                VRML_LAYER* layer, double aHeight, bool aTopPlane );
 
     SGNODE* getSGColor( VRML_COLOR_INDEX colorIdx );
+
+public:
+    IFSG_TRANSFORM m_OutputPCB;
+    VRML_LAYER  m_holes;
+    VRML_LAYER  m_3D_board;
+    VRML_LAYER  m_top_copper;
+    VRML_LAYER  m_bot_copper;
+    VRML_LAYER  m_top_silk;
+    VRML_LAYER  m_bot_silk;
+    VRML_LAYER  m_top_soldermask;
+    VRML_LAYER  m_bot_soldermask;
+    VRML_LAYER  m_top_paste;
+    VRML_LAYER  m_bot_paste;
+    VRML_LAYER  m_plated_holes;
+
+    std::list< SGNODE* > m_components;
+    S3D_CACHE* m_Cache3Dmodels;
+    BOARD*     m_Pcb;
+
+    /* true to use VRML inline{} syntax for footprint 3D models, like:
+     * Inline { url "F:/tmp/pic_programmer/shapes3D/DIP-18_W7.62mm_Socket.wrl"  }
+     * false to merge VRML 3D modules in the .wrl board file
+     */
+    bool m_UseInlineModelsInBrdfile;
+
+    // 3D subdirectory to copy footprint vrml 3D models when not merged in board file
+    wxString m_Subdir3DFpModels;
+
+    // true to use relative paths in VRML inline{} for footprint 3D models
+    // used only if m_UseInlineModelsInBrdfile = true
+    bool m_UseRelPathIn3DModelFilename;
+
+    // true to reuse component definitions
+    bool m_ReuseDef;
+
+    // scaling from 0.1 inch to desired VRML unit
+    double m_WorldScale = 1.0;
+
+    // scaling from mm to desired VRML world scale
+    double m_BoardToVrmlScale;
+
+    double  m_tx;             // global translation along X
+    double  m_ty;             // global translation along Y
+
+    double m_brd_thickness; // depth of the PCB
+
+private:
+    VRML_COLOR  vrml_colors_list[VRML_COLOR_LAST];
+    double      m_layer_z[PCB_LAYER_ID_COUNT];
+    SHAPE_POLY_SET  m_pcbOutlines;          // stores the board main outlines
+
+    int         m_precision;                // precision factor when exporting fp shapes
+                                            // to separate files
+    SGNODE*     m_sgmaterial[VRML_COLOR_LAST];
 };

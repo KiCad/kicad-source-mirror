@@ -74,30 +74,15 @@ public:
 };
 
 
-/* the HOLE_INFO class handle hole which must be drilled (diameter, position and layers)
- * For buried or micro vias, the hole is not on all layers.
- * So we must generate a drill file for each layer pair (adjacent layers)
- * Not plated holes are always through holes, and must be output on a specific drill file
- * because they are drilled after the Pcb process is finished.
+/**
+ * Handle hole which must be drilled (diameter, position and layers).
+ *
+ * For buried or micro vias, the hole is not on all layers.  So we must generate a drill file
+ * for each layer pair (adjacent layers).  Not plated holes are always through holes, and must
+ * be output on a specific drill file because they are drilled after the PCB process is finished.
  */
-
 class HOLE_INFO
 {
-public:
-    BOARD_ITEM*  m_ItemParent;           // The pad or via parent of this hole
-    int          m_Hole_Diameter;        // hole value, and for oblong: min(hole size x, hole size y)
-    int          m_Tool_Reference;       // Tool reference for this hole = 1 ... n (values <=0 must not be used)
-    wxSize       m_Hole_Size;            // hole size for oblong holes
-    double       m_Hole_Orient;          // Hole rotation (= pad rotation) for oblong holes
-    int          m_Hole_Shape;           // hole shape: round (0) or oval (1)
-    wxPoint      m_Hole_Pos;             // hole position
-    PCB_LAYER_ID m_Hole_Bottom_Layer;    // hole ending layer (usually back layer)
-    PCB_LAYER_ID m_Hole_Top_Layer;       // hole starting layer (usually front layer):
-                                         // m_Hole_Top_Layer < m_Hole_Bottom_Layer
-    bool         m_Hole_NotPlated;       // hole not plated. Must be in a specific drill file or section
-    HOLE_ATTRIBUTE m_HoleAttribute;      // Attribute, used in Excellon drill file and to sort holes
-                                         // by type.
-
 public:
     HOLE_INFO()
     {
@@ -111,17 +96,32 @@ public:
         m_Hole_Top_Layer = F_Cu;
         m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_UNKNOWN;
     }
+
+public:
+    BOARD_ITEM*  m_ItemParent;           // The pad or via parent of this hole
+    int          m_Hole_Diameter;        // hole value, and for oblong: min(hole size x, hole
+                                         // size y).
+    int          m_Tool_Reference;       // Tool reference for this hole = 1 ... n (values <=0
+                                         // must not be used).
+    wxSize       m_Hole_Size;            // hole size for oblong holes
+    double       m_Hole_Orient;          // Hole rotation (= pad rotation) for oblong holes
+    int          m_Hole_Shape;           // hole shape: round (0) or oval (1)
+    wxPoint      m_Hole_Pos;             // hole position
+    PCB_LAYER_ID m_Hole_Bottom_Layer;    // hole ending layer (usually back layer)
+    PCB_LAYER_ID m_Hole_Top_Layer;       // hole starting layer (usually front layer):
+                                         // m_Hole_Top_Layer < m_Hole_Bottom_Layer
+    bool         m_Hole_NotPlated;       // hole not plated. Must be in a specific drill file or
+                                         // section.
+    HOLE_ATTRIBUTE m_HoleAttribute;      // Attribute, used in Excellon drill file and to sort holes
+                                         // by type.
 };
 
 
-/* the DRILL_PRECISION helper class to handle drill precision format in excellon files
+/**
+ * Helper to handle drill precision format in excellon files.
  */
 class DRILL_PRECISION
 {
-public:
-    int m_Lhs;      // Left digit number (integer value of coordinates)
-    int m_Rhs;      // Right digit number (decimal value of coordinates)
-
 public:
     DRILL_PRECISION( int l = 2, int r = 4 )
     {
@@ -136,16 +136,18 @@ public:
         text << m_Lhs << wxT( ":" ) << m_Rhs;
         return text;
     }
+
+    int m_Lhs;      // Left digit number (integer value of coordinates)
+    int m_Rhs;      // Right digit number (decimal value of coordinates)
 };
 
 
 typedef std::pair<PCB_LAYER_ID, PCB_LAYER_ID>   DRILL_LAYER_PAIR;
 
 /**
- * GENDRILL_WRITER_BASE is a class to create drill maps and drill report,
- * and a helper class to created drill files.
- * drill files are created by specialized derived classes, depenfing on the
- * file format.
+ * Create drill maps and drill reports and drill files.
+ *
+ * Drill files are created by specialized derived classes, depending on the file format.
  */
 class GENDRILL_WRITER_BASE
 {
@@ -153,7 +155,7 @@ public:
     enum ZEROS_FMT {            // Zero format in coordinates
         DECIMAL_FORMAT,         // Floating point coordinates
         SUPPRESS_LEADING,       // Suppress leading zeros
-        SUPPRESS_TRAILING,      // Suppress trainling zeros
+        SUPPRESS_TRAILING,      // Suppress trailing zeros
         KEEP_ZEROS              // keep zeros
     };
 
@@ -163,67 +165,38 @@ public:
         MIXED_FILE              // PHT+NPTH (mixed)
     };
 
-protected:
-    BOARD*                   m_pcb;
-    wxString                 m_drillFileExtension;      // .drl or .gbr, depending on format
-    bool                     m_unitsMetric;             // true = mm, false = inches
-    ZEROS_FMT                m_zeroFormat;              // the zero format option for output file
-    DRILL_PRECISION          m_precision;               // The current coordinate precision (not used in decimal format)
-    double                   m_conversionUnits;         // scaling factor to convert the board unites to
-                                                        // Excellon/Gerber units (i.e inches or mm)
-    wxPoint                  m_offset;                  // Drill offset coordinates
-    bool                     m_merge_PTH_NPTH;          // True to generate only one drill file
-    std::vector<HOLE_INFO>   m_holeListBuffer;          // Buffer containing holes
-    std::vector<DRILL_TOOL>  m_toolListBuffer;          // Buffer containing tools
-
-    PLOT_FORMAT m_mapFileFmt;                           // the format of the map drill file,
-                                                        // if this map is needed
-    const PAGE_INFO*         m_pageInfo;                // the page info used to plot drill maps
-                                                        // If NULL, use a A4 page format
-    // This Ctor is protected.
-    // Use derived classes to build a fully initialized GENDRILL_WRITER_BASE class.
-    GENDRILL_WRITER_BASE( BOARD* aPcb )
-    {
-        m_pcb             = aPcb;
-        m_conversionUnits = 1.0;
-        m_unitsMetric     = true;
-        m_mapFileFmt      = PLOT_FORMAT::PDF;
-        m_pageInfo        = NULL;
-        m_merge_PTH_NPTH  = false;
-        m_zeroFormat      = DECIMAL_FORMAT;
-    }
-
-public:
     virtual ~GENDRILL_WRITER_BASE()
     {
     }
 
     /**
-     * set the option to make separate drill files for PTH and NPTH
-     * @param aMerge = true to make only one file containing PTH and NPTH
-     * = false to create 2 separate files
+     * Set the option to make separate drill files for PTH and NPTH.
+     *
+     * @param aMerge set to true to make only one file containing PTH and NPTH or false to
+     *               create 2 separate files.
      */
     void SetMergeOption( bool aMerge ) { m_merge_PTH_NPTH = aMerge; }
 
     /**
-     * Return the plot offset (usually the position
-     * of the auxiliary axis
+     * Return the plot offset (usually the position of the auxiliary axis.
      */
     wxPoint GetOffset() { return m_offset; }
 
     /**
-     * Sets the page info used to plot drill maps
-     * If NULL, a A4 page format will be used
-     * @param aPageInfo = a reference to the page info, usually used to plot/display the board
+     * Set the page info used to plot drill maps.
+     *
+     * If NULL, a A4 page format will be used.
+     *
+     * @param aPageInfo is a reference to the page info, usually used to plot/display the board.
      */
     void SetPageInfo( const PAGE_INFO* aPageInfo ) { m_pageInfo = aPageInfo; }
 
     /**
-     * Initialize the format for the drill map file
-     * @param aMapFmt = a PlotFormat value (one of
-     * PLOT_FORMAT_HPGL, PLOT_FORMAT_POST, PLOT_FORMAT_GERBER,
-     * PLOT_FORMAT_DXF, PLOT_FORMAT_SVG, PLOT_FORMAT_PDF
-     * the most useful are PLOT_FORMAT_PDF and PLOT_FORMAT_POST
+     * Initialize the format for the drill map file.
+     *
+     * @param aMapFmt a PlotFormat value (one of PLOT_FORMAT_HPGL, PLOT_FORMAT_POST,
+     *                PLOT_FORMAT_GERBER, PLOT_FORMAT_DXF, PLOT_FORMAT_SVG, PLOT_FORMAT_PDF
+     *                the most useful are PLOT_FORMAT_PDF and PLOT_FORMAT_POST.
      */
     void SetMapFileFormat( PLOT_FORMAT aMapFmt )
     {
@@ -231,21 +204,20 @@ public:
     }
 
     /**
-     * Function CreateMapFilesSet
-     * Creates the full set of map files for the board, in PS, PDF ... format
-     * (use SetMapFileFormat() to select the format)
-     * filenames are computed from the board name, and layers id
-     * @param aPlotDirectory = the output folder
-     * @param aReporter = a REPORTER to return activity or any message (can be NULL)
+     * Create the full set of map files for the board, in PS, PDF ... format
+     * (use SetMapFileFormat() to select the format).
+     *
+     * File names are computed from the board name and layer ID.
+     *
+     * @param aPlotDirectory is the output folder.
+     * @param aReporter is a REPORTER to return activity or any message (can be NULL)
      */
-    void CreateMapFilesSet( const wxString& aPlotDirectory, REPORTER* aReporter = NULL );
+    void CreateMapFilesSet( const wxString& aPlotDirectory, REPORTER* aReporter = nullptr );
 
     /**
-     * Function GenDrillReportFile
-     *  Create a plain text report file giving a list of drill values and drill count
-     *  for through holes, oblong holes, and for buried vias,
-     *  drill values and drill count per layer pair
-     *  there is only one report for all drill files even when buried or blinds vias exist
+     * Create a plain text report file giving a list of drill values and drill count for through
+     * holes, oblong holes, and for buried vias, drill values and drill count per layer pair
+     * there is only one report for all drill files even when buried or blinds vias exist.
      *
      * Here is a sample created by this function:
      *  Drill report for F:/tmp/interf_u/interf_u.brd
@@ -287,51 +259,49 @@ public:
      *
      *  Total unplated holes count 1
      *
-     * @param aFullFileName : the name of the file to create
-     *
-     * @return true if the file is created
+     * @param aFullFileName is the name of the file to create.
+     * @return true if the file is created.
      */
     bool GenDrillReportFile( const wxString& aFullFileName );
 
 protected:
     /**
-     * Function GenDrillMapFile
      * Plot a map of drill marks for holes.
-     * Hole list must be created before calling this function, by buildHolesList()
-     * for the right holes set (PTH, NPTH, buried/blind vias ...)
-     * the paper sheet to use to plot the map is set in m_pageInfo
-     * ( calls SetPageInfo() to set it )
-     * if NULL, A4 format will be used
-     * @param aFullFileName : the full filename of the map file to create,
-     * @param aFormat : one of the supported plot formats (see enum PlotFormat )
+     *
+     * Hole list must be created before calling this function, by buildHolesList() for the
+     * right holes set (PTH, NPTH, buried/blind vias ...) the paper sheet to use to plot the
+     * map is set in m_pageInfo ( calls SetPageInfo() to set it ).  If NULL, A4 format will
+     * be used.
+     *
+     * @param aFullFileName is the full filename of the map file to create.
+     * @param aFormat is one of the supported plot formats (see enum PlotFormat ).
      */
     bool genDrillMapFile( const wxString& aFullFileName, PLOT_FORMAT aFormat );
 
     /**
-     * Function BuildHolesList
-     * Create the list of holes and tools for a given board
-     * The list is sorted by increasing drill size.
-     * Only holes included within aLayerPair are listed.
-     * If aLayerPair identifies with [F_Cu, B_Cu], then
-     * pad holes are always included also.
+     * Create the list of holes and tools for a given board.
+     *
+     * The list is sorted by increasing drill size.   Only holes included within aLayerPair
+     * are listed.  If aLayerPair identifies with [F_Cu, B_Cu], then pad holes are always
+     * included also.
      *
      * @param aLayerPair is an inclusive range of layers.
      * @param aGenerateNPTH_list :
      *       true to create NPTH only list (with no plated holes)
      *       false to created plated holes list (with no NPTH )
      */
-    void buildHolesList( DRILL_LAYER_PAIR aLayerPair,
-                         bool aGenerateNPTH_list );
+    void buildHolesList( DRILL_LAYER_PAIR aLayerPair, bool aGenerateNPTH_list );
 
     int  getHolesCount() const { return m_holeListBuffer.size(); }
 
-    /** Helper function.
-     * Writes the drill marks in HPGL, POSTSCRIPT or other supported formats
-     * Each hole size has a symbol (circle, cross X, cross + ...) up to
-     * PLOTTER::MARKER_COUNT different values.
-     * If more than PLOTTER::MARKER_COUNT different values,
-     * these other values share the same mark shape
-     * @param aPlotter = a PLOTTER instance (HPGL, POSTSCRIPT ... plotter).
+    /**
+     * Write the drill marks in HPGL, POSTSCRIPT or other supported formats/
+     *
+     * Each hole size has a symbol (circle, cross X, cross + ...) up to PLOTTER::MARKER_COUNT
+     * different values.  If more than PLOTTER::MARKER_COUNT different values, these other
+     * values share the same mark shape.
+     *
+     * @param aPlotter is a PLOTTER instance (HPGL, POSTSCRIPT ... plotter).
      */
     bool plotDrillMarks( PLOTTER* aPlotter );
 
@@ -339,15 +309,14 @@ protected:
     std::vector<DRILL_LAYER_PAIR> getUniqueLayerPairs() const;
 
     /**
-     * Function printToolSummary
-     * prints m_toolListBuffer[] tools to aOut and returns total hole count.
-     * @param aOut = the current OUTPUTFORMATTER to print summary
-     * @param aSummaryNPTH = true to print summary for NPTH, false for PTH
+     * Print m_toolListBuffer[] tools to aOut and returns total hole count.
+     *
+     * @param aOut is the current OUTPUTFORMATTER to print summary.
+     * @param aSummaryNPTH is true to print summary for NPTH, false for PTH.
      */
     unsigned printToolSummary( OUTPUTFORMATTER& aOut, bool aSummaryNPTH ) const;
 
     /**
-     * minor helper function.
      * @return a string from aPair to identify the layer layer pair.
      * string is "<layer1Name>"-"<layer2Name>"
      * used to generate a filename for drill files and drill maps
@@ -355,39 +324,71 @@ protected:
     const std::string layerPairName( DRILL_LAYER_PAIR aPair ) const;
 
     /**
-     * minor helper function.
      * @return a string from aLayer to identify the layer.
      * string are "front" "back" or "in<aLayer>"
      */
     const std::string layerName( PCB_LAYER_ID aLayer ) const;
 
     /**
+     * @param aPair is the layer pair.
+     * @param aNPTH use true to generate the filename of NPTH holes.
+     * @param aMerge_PTH_NPTH use true to generate the filename of a file which containd both
+     *                        NPH and NPTH holes.
      * @return a filename which identify the drill file function.
      * it is the board name with the layer pair names added, and for separate
      * (PTH and NPTH) files, "-NPH" or "-NPTH" added
-     * @param aPair = the layer pair
-     * @param aNPTH = true to generate the filename of NPTH holes
-     * @param aMerge_PTH_NPTH = true to generate the filename of a file which containd both
-     * NPH and NPTH holes
      */
     virtual const wxString getDrillFileName( DRILL_LAYER_PAIR aPair, bool aNPTH,
                                              bool aMerge_PTH_NPTH ) const;
 
 
     /**
-     * @return a wxString containing the .FileFunction attribute.
-     * the standard X2 FileFunction for drill files is
-     * %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],Drill[Route][Mixed]*%
-     * There is no X1 version, as the Gerber drill files uses only X2 format
-     * There is a compatible NC drill version.
      * @param aLayerPair is the layer pair (Drill from rom first layer to second layer)
      * @param aHoleType is type of drill file (PTH, NPTH, mixed)
      * @param aCompatNCdrill is true when generating NC (Excellon) compatible drill file
+     * @return a wxString containing the .FileFunction attribute.
+     * the standard X2 FileFunction for drill files is
+     * %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],
+     * Drill[Route][Mixed]*%
+     * There is no X1 version, as the Gerber drill files uses only X2 format
+     * There is a compatible NC drill version.
      */
     const wxString BuildFileFunctionAttributeString( DRILL_LAYER_PAIR aLayerPair,
                                                      TYPE_FILE aHoleType,
                                                      bool aCompatNCdrill = false ) const;
+
+
+protected:
+    // Use derived classes to build a fully initialized GENDRILL_WRITER_BASE class.
+    GENDRILL_WRITER_BASE( BOARD* aPcb )
+    {
+        m_pcb             = aPcb;
+        m_conversionUnits = 1.0;
+        m_unitsMetric     = true;
+        m_mapFileFmt      = PLOT_FORMAT::PDF;
+        m_pageInfo        = nullptr;
+        m_merge_PTH_NPTH  = false;
+        m_zeroFormat      = DECIMAL_FORMAT;
+    }
+
+    BOARD*                   m_pcb;
+    wxString                 m_drillFileExtension;      // .drl or .gbr, depending on format
+    bool                     m_unitsMetric;             // true = mm, false = inches
+    ZEROS_FMT                m_zeroFormat;              // the zero format option for output file
+    DRILL_PRECISION          m_precision;               // The current coordinate precision (not
+                                                        // used in decimal format).
+    double                   m_conversionUnits;         // scaling factor to convert the board
+                                                        // unites to Excellon/Gerber units (i.e
+                                                        // inches or mm)
+    wxPoint                  m_offset;                  // Drill offset coordinates
+    bool                     m_merge_PTH_NPTH;          // True to generate only one drill file
+    std::vector<HOLE_INFO>   m_holeListBuffer;          // Buffer containing holes
+    std::vector<DRILL_TOOL>  m_toolListBuffer;          // Buffer containing tools
+
+    PLOT_FORMAT m_mapFileFmt;                           // the format of the map drill file,
+                                                        // if this map is needed
+    const PAGE_INFO*         m_pageInfo;                // the page info used to plot drill maps
+                                                        // If NULL, use a A4 page format
 };
 
 #endif      // #define GENDRILL_FILE_WRITER_BASE_H
-

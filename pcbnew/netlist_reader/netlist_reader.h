@@ -10,7 +10,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras.
  * Copyright (C) 2013-2017 Wayne Stambaugh <stambaughw@gmail.com>.
- * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,16 +43,12 @@ class COMPONENT;
 
 
 /**
- * CMP_READER
- * reads a component footprint link file (*.cmp) format.
+ * Read a component footprint link file (*.cmp) format.
  */
 class CMP_READER
 {
-    LINE_READER* m_lineReader;            ///< The line reader to read.
-
 public:
     /**
-     * CMP_READER constructor.
      * @param aLineReader is a LINE_READER (in fact a FILE_LINE_READER)
      * which is owned by me ( and deleted by me) to read
      * the component footprint link file.
@@ -67,20 +63,13 @@ public:
         if( m_lineReader )
         {
             delete m_lineReader;
-            m_lineReader = NULL;
+            m_lineReader = nullptr;
         }
     }
 
     /**
-     * Function Load
-     * read the *.cmp file format contains the component footprint assignments created by CvPcb
+     * Read the *.cmp file format contains the component footprint assignments created by CvPcb
      * into \a aNetlist.
-     *
-     * @param aNetlist is the #NETLIST to read into.
-     *
-     * @todo At some point in the future, use the footprint field in the new s-expression
-     *       netlist file to assign a footprint to a component instead of using a secondary
-     *       (*.cmp) file.
      *
      * Sample file footprint assignment entry:
      *
@@ -92,6 +81,11 @@ public:
      *  IdModule  = CP6;
      *  EndCmp
      *
+     * @todo At some point in the future, use the footprint field in the new s-expression
+     *       netlist file to assign a footprint to a component instead of using a secondary
+     *       (*.cmp) file.
+     *
+     * @param aNetlist is the #NETLIST to read into.
      * @throw IO_ERROR if a the #LINE_READER IO error occurs.
      * @throw PARSE_ERROR if an error occurs while parsing the file.
      * @return true if OK, false if a component reference found in the
@@ -100,12 +94,14 @@ public:
      * print a warning in Pcbnew.
      */
     bool Load( NETLIST* aNetlist );
+
+private:
+    LINE_READER* m_lineReader;            ///< The line reader to read.
 };
 
 
 /**
- * NETLIST_READER
- * is a pure virtual class to derive a specific type of netlist reader from.
+ * A pure virtual class to derive a specific type of netlist reader from.
  */
 class NETLIST_READER
 {
@@ -123,18 +119,16 @@ public:
         // function.
     };
 
-
     /**
-     * Constructor
      * @param aLineReader ownership is taken of this #LINE_READER.
      * @param aNetlist the #NETLIST object to read into.
      * @param aFootprintLinkReader ownership is taken of this #CMP_READER.
      */
     NETLIST_READER( LINE_READER*  aLineReader,
                     NETLIST*      aNetlist,
-                    CMP_READER*   aFootprintLinkReader = NULL )
+                    CMP_READER*   aFootprintLinkReader = nullptr )
     {
-        wxASSERT( aLineReader != NULL );
+        wxASSERT( aLineReader != nullptr );
 
         m_lineReader           = aLineReader;
         m_footprintReader      = aFootprintLinkReader;
@@ -146,8 +140,7 @@ public:
     virtual ~NETLIST_READER();
 
     /**
-     * Function GuessNetlistFileType
-     * looks at \a aFileHeaderLine to see if it matches any of the netlist file types it
+     * Look at \a aFileHeaderLine to see if it matches any of the netlist file types it
      * knows about.
      *
      * @param aLineReader is the #LINE_READER object containing lines from the netlist to test.
@@ -156,8 +149,7 @@ public:
     static NETLIST_FILE_T GuessNetlistFileType( LINE_READER* aLineReader );
 
     /**
-     * Function GetNetlistReader
-     * attempts to determine the net list file type of \a aNetlistFileName and return the
+     * Attempt to determine the net list file type of \a aNetlistFileName and return the
      * appropriate NETLIST_READER type.
      *
      * @param aNetlist is the netlist to load \a aNetlistFileName into.
@@ -173,8 +165,7 @@ public:
                                              const wxString& aCompFootprintFileName = wxEmptyString );
 
     /**
-     * Function LoadNetlist
-     * loads the contents of the netlist file into \a aNetlist.
+     * Load the contents of the netlist file into \a aNetlist.
      *
      * @throw IO_ERROR if a file IO error occurs.
      * @throw PARSE_ERROR if an error occurs while parsing the file.
@@ -182,7 +173,6 @@ public:
     virtual void LoadNetlist() = 0;
 
     /**
-     * Function GetLineReader()
      * @return the #LINE_READER associated with the #NETLIST_READER.
      */
     LINE_READER* GetLineReader();
@@ -199,8 +189,7 @@ protected:
 
 
 /**
- * LEGACY_NETLIST_READER
- * reads the KiCad legacy and the old Orcad netlist formats.
+ * Read the KiCad legacy and the old Orcad netlist formats.
  *
  * The KiCad legacy netlist format was derived directly from an old Orcad netlist format.  The
  * primary difference is the header was changed so this reader can read both formats.
@@ -208,22 +197,20 @@ protected:
 class LEGACY_NETLIST_READER : public NETLIST_READER
 {
     /**
-     * Function loadSymbol
-     * read the \a aLine containing the description of a component from a legacy format
+     * Read the \a aLine containing the description of a component from a legacy format
      * netlist and add it to the netlist.
      *
      * Analyze the first line of a component description in netlist:
      * ( /40C08647 $noname R20 4.7K {Lib=R}
      *
-     * @param  aText contains the first line of description
-     * @return the new component created by parsing \a aLine
+     * @param  aText contains the first line of description.
+     * @return the new component created by parsing \a aLine.
      * @throw PARSE_ERROR when \a aLine is not a valid component description.
      */
     COMPONENT* loadComponent( char* aText );
 
     /**
-     * Function loadFootprintFilters
-     * loads the footprint filter section of netlist file.
+     * Load the footprint filter section of netlist file.
      *
      * Sample legacy footprint filter section:
      *  { Allowed footprints by component:
@@ -256,14 +243,13 @@ public:
 
     LEGACY_NETLIST_READER( LINE_READER*  aLineReader,
                            NETLIST*      aNetlist,
-                           CMP_READER*   aFootprintLinkReader = NULL ) :
+                           CMP_READER*   aFootprintLinkReader = nullptr ) :
         NETLIST_READER( aLineReader, aNetlist, aFootprintLinkReader )
     {
     }
 
     /**
-     * Function LoadNetlist
-     * read the netlist file in the legacy format into \a aNetlist.
+     * Read the netlist file in the legacy format into \a aNetlist.
      *
      * The legacy netlist format is:
      * \# EESchema Netlist Version 1.0 generee le  18/5/2005-12:30:22
@@ -287,26 +273,38 @@ public:
 
 
 /**
- * KICAD_NETLIST_PARSER
- * is the parser for reading the KiCad s-expression netlist format.
+ * The parser for reading the KiCad s-expression netlist format.
  */
 class KICAD_NETLIST_PARSER : public NETLIST_LEXER
 {
-private:
-    NL_T::T      token;
-    LINE_READER* m_lineReader;  ///< The line reader used to parse the netlist.  Not owned.
-    NETLIST*     m_netlist;     ///< The netlist to parse into.  Not owned.
+public:
+    KICAD_NETLIST_PARSER( LINE_READER* aReader, NETLIST* aNetlist );
+
+    void SetLineReader( LINE_READER* aLineReader );
+
+    void SetNetlist( NETLIST* aNetlist ) { m_netlist = aNetlist; }
 
     /**
-     * Function skipCurrent
+     * Function Parse
+     * parse the full netlist
+     */
+    void Parse();
+
+    // Useful for debug only:
+    const char* getTokenName( NL_T::T aTok )
+    {
+        return NETLIST_LEXER::TokenName( aTok );
+    }
+
+private:
+    /**
      * Skip the current token level, i.e
-     * search for the RIGHT parenthesis which closes the current description
+     * search for the RIGHT parenthesis which closes the current description.
      */
     void skipCurrent();
 
     /**
-     * Function parseComponent
-     * parse a component description:
+     * Parse a component description:
      * (comp (ref P1)
      *   (value DB25FEMELLE)
      *   (footprint DB25FC)
@@ -318,8 +316,7 @@ private:
     void parseComponent();
 
     /**
-     * Function parseNet
-     * Parses a section like
+     * Parse a net section
      * (net (code 20) (name /PC-A0)
      *   (node (ref BUS1) (pin 62))
      *   (node (ref U3) (pin 3))
@@ -330,8 +327,7 @@ private:
     void parseNet();
 
     /**
-     * Function parseLibPartList
-     * reads the section "libparts" in the netlist:
+     * Read the section "libparts" in the netlist:
      * (libparts
      *   (libpart (lib device) (part C)
      *     (description "Condensateur non polarise")
@@ -353,40 +349,21 @@ private:
      */
     void parseLibPartList();
 
-
-public:
-    KICAD_NETLIST_PARSER( LINE_READER* aReader, NETLIST* aNetlist );
-
-    void SetLineReader( LINE_READER* aLineReader );
-
-    void SetNetlist( NETLIST* aNetlist ) { m_netlist = aNetlist; }
-
-    /**
-     * Function Parse
-     * parse the full netlist
-     */
-    void Parse();
-
-    // Useful for debug only:
-    const char* getTokenName( NL_T::T aTok )
-    {
-        return NETLIST_LEXER::TokenName( aTok );
-    }
+    NL_T::T      token;
+    LINE_READER* m_lineReader;  ///< The line reader used to parse the netlist.  Not owned.
+    NETLIST*     m_netlist;     ///< The netlist to parse into.  Not owned.
 };
 
 
 /**
- * KICAD_NETLIST_READER
- * read the new s-expression based KiCad netlist format.
+ * Read the new s-expression based KiCad netlist format.
  */
 class KICAD_NETLIST_READER : public NETLIST_READER
 {
-    KICAD_NETLIST_PARSER* m_parser;     ///< The s-expression format parser.
-
 public:
     KICAD_NETLIST_READER( LINE_READER*  aLineReader,
                           NETLIST*      aNetlist,
-                          CMP_READER*   aFootprintLinkReader = NULL ) :
+                          CMP_READER*   aFootprintLinkReader = nullptr ) :
         NETLIST_READER( aLineReader, aNetlist, aFootprintLinkReader ),
         m_parser( new KICAD_NETLIST_PARSER( aLineReader, aNetlist ) )
     {
@@ -398,6 +375,9 @@ public:
     }
 
     virtual void LoadNetlist() override;
+
+private:
+    KICAD_NETLIST_PARSER* m_parser;     ///< The s-expression format parser.
 };
 
 

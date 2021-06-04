@@ -42,11 +42,6 @@ class REPORTER;
  */
 class COMPONENT_NET
 {
-    wxString m_pinName;
-    wxString m_netName;
-    wxString m_pinFunction;
-    wxString m_pinType;
-
 public:
     COMPONENT_NET() {}
 
@@ -72,6 +67,12 @@ public:
     }
 
     int Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl );
+
+private:
+    wxString m_pinName;
+    wxString m_netName;
+    wxString m_pinFunction;
+    wxString m_pinType;
 };
 
 
@@ -227,7 +228,7 @@ public:
     unsigned GetCount() const { return m_components.size(); }
 
     /**
-     * Returns the #COMPONENT at \a aIndex.
+     * Return the #COMPONENT at \a aIndex.
      *
      * @param aIndex the index in #m_components to fetch.
      * @return a pointer to the #COMPONENT at \a Index.

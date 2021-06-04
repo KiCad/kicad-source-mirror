@@ -39,19 +39,10 @@ class OUTPUTFORMATTER;
 
 
 /**
- * EXCELLON_WRITER is a class mainly used to create Excellon drill files
- * However, this class is also used to create drill maps and drill report
+ * Create Excellon drill, drill map, and drill report files.
  */
 class EXCELLON_WRITER: public GENDRILL_WRITER_BASE
 {
-private:
-    FILE*     m_file;                    // The output file
-    bool      m_minimalHeader;           // True to use minimal header
-    bool      m_mirror;
-    bool      m_useRouteModeForOval;     // True to use a route command for oval holes
-                                         // False to use a G85 canned mode for oval holes
-
-
 public:
     EXCELLON_WRITER( BOARD* aPcb );
 
@@ -60,8 +51,7 @@ public:
     }
 
     /**
-     * Return the plot offset (usually the position
-     * of the auxiliary axis
+     * Return the plot offset (usually the position of the auxiliary axis.
      */
     wxPoint GetOffset() { return m_offset; }
 
@@ -74,28 +64,27 @@ public:
     }
 
     /**
-     * Function SetFormat
-     * Initialize internal parameters to match the given format
-     * @param aMetric = true for metric coordinates, false for imperial units
-     * @param aZerosFmt =  DECIMAL_FORMAT, SUPPRESS_LEADING, SUPPRESS_TRAILING, KEEP_ZEROS
-     * @param aLeftDigits = number of digits for integer part of coordinates
-     *          if <= 0 (default), a suitable value will be used, depending on units
-     * @param aRightDigits = number of digits for mantissa part of coordinates
-     *          if <= 0 (default), a suitable value will be used, depending on units
+     * Initialize internal parameters to match the given format.
+     *
+     * @param aMetric set to true for metric coordinates, false for imperial units.
+     * @param aZerosFmt is the zero format DECIMAL_FORMAT, SUPPRESS_LEADING, SUPPRESS_TRAILING,
+     *                  or KEEP_ZEROS.
+     * @param aLeftDigits is the number of digits for integer part of coordinates
+     *                    if <= 0 (default), a suitable value will be used, depending on units.
+     * @param aRightDigits is number of digits for mantissa part of coordinates
+     *                     if <= 0 (default), a suitable value will be used, depending on units.
      */
     void SetFormat( bool aMetric, ZEROS_FMT aZerosFmt = DECIMAL_FORMAT,
                     int aLeftDigits = 0, int aRightDigits = 0 );
 
-
-
     /**
-     * Function SetOptions
-     * Initialize internal parameters to match drill options
-     * @param aMirror = true to create mirrored coordinates (Y coordinates negated)
-     * @param aMinimalHeader = true to use a minimal header (no comments, no info)
-     * @param aOffset = drill coordinates offset
-     * @param aMerge_PTH_NPTH = true to create only one file containing PTH and NPTH
-     * false to create 2 separate files : one for PTH and one for NPTH
+     * Initialize internal parameters to match drill options.
+     *
+     * @param aMirror set to true to create mirrored coordinates (Y coordinates negated).
+     * @param aMinimalHeader set to true to use a minimal header (no comments, no info).
+     * @param aOffset is the drill coordinates offset.
+     * @param aMerge_PTH_NPTH set to true to create only one file containing PTH and NPTH
+     *                        false to create 2 separate files : one for PTH and one for NPTH.
      */
     void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset, bool aMerge_PTH_NPTH )
     {
@@ -106,33 +95,34 @@ public:
     }
 
     /**
-     * Function CreateDrillandMapFilesSet
-     * Creates the full set of Excellon drill file for the board
-     * filenames are computed from the board name, and layers id
-     * @param aPlotDirectory = the output folder
-     * @param aGenDrill = true to generate the EXCELLON drill file
-     * @param aGenMap = true to generate a drill map file
-     * @param aReporter = a REPORTER to return activity or any message (can be NULL)
+     * Create the full set of Excellon drill file for the board.
+     *
+     * File names are computed from the board name and layer ID.
+     *
+     * @param aPlotDirectory is the output folder.
+     * @param aGenDrill set to true to generate the EXCELLON drill file.
+     * @param aGenMap set to true to generate a drill map file.
+     * @param aReporter is a #REPORTER to return activity or any message (can be NULL)
      */
-    void CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
-                                    bool aGenDrill, bool aGenMap,
-                                    REPORTER * aReporter = NULL );
-
+    void CreateDrillandMapFilesSet( const wxString& aPlotDirectory, bool aGenDrill, bool aGenMap,
+                                    REPORTER* aReporter = nullptr );
 
 private:
     /**
-     * Function CreateDrillFile
-     * Creates an Excellon drill file
-     * @param aFile = an opened file to write to will be closed by CreateDrillFile
-     * @param aLayerPair = the layer pair for the current holes
-     * @param aHolesType = the holes type (PTH, NPTH, mixed)
-     * @return hole count
+     * Create an Excellon drill file.
+     *
+     * @param aFile is an opened file to write to will be closed by CreateDrillFile.
+     * @param aLayerPair is the layer pair for the current holes.
+     * @param aHolesType is the holes type (PTH, NPTH, mixed).
+     * @return the hole count.
      */
-    int  createDrillFile( FILE * aFile, DRILL_LAYER_PAIR aLayerPair,
-                          TYPE_FILE aHolesType );
+    int createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair, TYPE_FILE aHolesType );
 
 
-    /** Print the DRILL file header. The full header is somethink like:
+    /**
+     * Print the DRILL file header.
+     *
+     * The full header is something like:
      * M48
      * ;DRILL file {PCBNEW (2007-11-29-b)} date 17/1/2008-21:02:35
      * ;FORMAT={ <precision> / absolute / <units> / <numbers format>}
@@ -141,25 +131,31 @@ private:
      * ; #@! TF.GenerationSoftware,Kicad,Pcbnew,2017.04
      * FMAT,2
      * INCH,TZ
-     * @param aLayerPair = the layer pair for the current holes
-     * @param aHolesType = the holes type in file (PTH, NPTH, mixed)
+     *
+     * @param aLayerPair is the layer pair for the current holes.
+     * @param aHolesType is the holes type in file (PTH, NPTH, mixed).
      */
     void writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair, TYPE_FILE aHolesType );
 
     void writeEXCELLONEndOfFile();
 
-    /** Created a line like:
-     * X48000Y19500
-     * According to the selected format
+    /**
+     * Create a line like according to the selected format.
      */
     void writeCoordinates( char* aLine, double aCoordX, double aCoordY );
 
     /**
-     * write a comment string giving the hole attribute like
-     * "; #@! TO.P,viatype\n"
-     * @param aAttribute is the hole attribute
+     * Write a comment string giving the hole attribute.
+     *
+     * @param aAttribute is the hole attribute.
      */
     void writeHoleAttribute( HOLE_ATTRIBUTE aAttribute );
+
+    FILE*     m_file;                    // The output file
+    bool      m_minimalHeader;           // True to use minimal header
+    bool      m_mirror;
+    bool      m_useRouteModeForOval;     // True to use a route command for oval holes
+                                         // False to use a G85 canned mode for oval holes
 };
 
 #endif  //  #ifndef _GENDRILL_EXCELLON_WRITER_
