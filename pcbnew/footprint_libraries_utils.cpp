@@ -47,6 +47,8 @@
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>
 #include "footprint_viewer_frame.h"
+#include <wx/choicdlg.h>
+#include <wx/filedlg.h>
 
 
 // unique, "file local" translations:
