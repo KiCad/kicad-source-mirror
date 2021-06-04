@@ -31,12 +31,10 @@ class COLOR_SETTINGS;
 class PCB_PLOT_PARAMS_PARSER;
 
 /**
- * PCB_PLOT_PARAMS
- * handles plot parameters and options when plotting/printing a board.
+ * Parameters and options when plotting/printing a board.
  */
 class PCB_PLOT_PARAMS
 {
-    friend class PCB_PLOT_PARAMS_PARSER;
 public:
     enum DrillMarksType {
         NO_DRILL_SHAPE    = 0,
@@ -44,149 +42,6 @@ public:
         FULL_DRILL_SHAPE  = 2
     };
 
-private:
-    // If true, do not plot NPTH pads
-    // (mainly used to disable NPTH pads plotting on copper layers)
-    bool        m_skipNPTH_Pads;
-
-    /** FILLED or SKETCH selects how to plot filled objects.
-     *  FILLED or SKETCH not available with all drivers: some have fixed mode
-     */
-    OUTLINE_MODE m_plotMode;
-
-    /** DXF format: Plot items in outline (polygon) mode
-     * In polygon mode, each item to plot is converted to a polygon, and all
-     * polygons are merged.
-     */
-    bool        m_DXFplotPolygonMode;
-
-    /**
-     * DXF format: Units to use when plotting the DXF
-     */
-    DXF_UNITS m_DXFplotUnits;
-
-    /// Plot format type (chooses the driver to be used)
-    PLOT_FORMAT m_format;
-
-    /// Holes can be not plotted, have a small mark or plotted in actual size
-    DrillMarksType m_drillMarks;
-
-    /// Choose how represent text with PS, PDF and DXF drivers
-    PLOT_TEXT_MODE m_textMode;
-
-    /// When true set the scale to fit the board in the page
-    bool        m_autoScale;
-
-    /// Global scale factor, 1.0 plots a board with its actual size.
-    double      m_scale;
-
-    /// Mirror the plot around the X axis
-    bool        m_mirror;
-
-    /// Plot in negative color (supported only by some drivers)
-    bool        m_negative;
-
-    /// True if vias are drawn on Mask layer (ie untented, *exposed* by mask)
-    bool        m_plotViaOnMaskLayer;
-
-    /// True to plot/print frame references
-    bool        m_plotFrameRef;
-
-    /// If false always plot (merge) the pcb edge layer on other layers
-    bool        m_excludeEdgeLayer;
-
-    /// Set of layers to plot
-    LSET        m_layerSelection;
-
-    /** When plotting gerber files, use a conventional set of Protel extensions
-     * instead of .gbr, that is now the offical gerber file extension
-     * this is a deprecated feature
-     */
-    bool        m_useGerberProtelExtensions;
-
-    /// Include attributes from the Gerber X2 format (chapter 5 in revision J2)
-    bool        m_useGerberX2format;
-
-    /// Disable aperure macros in Gerber format (only for broken Gerber readers)
-    /// Ideally, should be never selected.
-    bool        m_gerberDisableApertMacros;
-
-    /// Include netlist info (only in Gerber X2 format) (chapter ? in revision ?)
-    bool        m_includeGerberNetlistInfo;
-
-    /// generate the auxiliary "job file" in gerber format
-    bool        m_createGerberJobFile;
-
-    /// precision of coordinates in Gerber files: accepted 5 or 6
-    /// when units are in mm (6 or 7 in inches, but Pcbnew uses mm).
-    /// 6 is the internal resolution of Pcbnew, but not alwys accepted by board maker
-    /// 5 is the minimal value for professional boards.
-    int         m_gerberPrecision;
-
-    /// precision of coordinates in SVG files: accepted 3 - 6
-    /// 6 is the internal resolution of Pcbnew
-    unsigned    m_svgPrecision;
-
-    /// units for SVG plot
-    /// false for metric, true for inch/mils
-    bool        m_svgUseInch;
-
-    /// Plot gerbers using auxiliary (drill) origin instead of absolue coordinates
-    bool        m_useAuxOrigin;
-
-    /// On gerbers 'scrape' away the solder mask from silkscreen (trim silks)
-    bool        m_subtractMaskFromSilk;
-
-    /// Autoscale the plot to fit an A4 (landscape?) sheet
-    bool        m_A4Output;
-
-    /// Scale ratio index (UI only)
-    int         m_scaleSelection;
-
-    /// Output directory for plot files (usually relative to the board file)
-    wxString    m_outputDirectory;
-
-    /// Enable plotting of part references
-    bool        m_plotReference;
-
-    /// Enable plotting of part values
-    bool        m_plotValue;
-
-    /// Force plotting of fields marked invisible
-    bool        m_plotInvisibleText;
-
-    /// Plots pads outlines on fab layers
-    bool        m_sketchPadsOnFabLayers;
-    int         m_sketchPadLineWidth;
-
-    /* These next two scale factors are intended to compensate plotters
-     * (mainly printers) X and Y scale error. Therefore they are expected very
-     * near 1.0; only X and Y dimensions are adjusted: circles are plotted as
-     * circles, even if X and Y fine scale differ; because of this it is mostly
-     * useful for printers: postscript plots would be best adjusted using
-     * the prologue (that would change the whole output matrix
-     */
-
-    double      m_fineScaleAdjustX;     ///< fine scale adjust X axis
-    double      m_fineScaleAdjustY;     ///< fine scale adjust Y axis
-
-    /** This width factor is intended to compensate PS printers/ plotters that do
-     *  not strictly obey line width settings. Only used to plot pads and tracks
-     */
-    int         m_widthAdjust;
-
-    int         m_HPGLPenNum;           ///< HPGL only: pen number selection(1 to 9)
-    int         m_HPGLPenSpeed;         ///< HPGL only: pen speed, always in cm/s (1 to 99 cm/s)
-    double      m_HPGLPenDiam;          ///< HPGL only: pen diameter in MILS, useful to fill areas
-                                        ///< However, it is in mm in hpgl files.
-
-    /// Pointer to active color settings to be used for plotting
-    COLOR_SETTINGS* m_colors;
-
-    /// Dummy colors object that can be created if there is no Pgm context
-    std::shared_ptr<COLOR_SETTINGS> m_default_colors;
-
-public:
     PCB_PLOT_PARAMS();
 
     void        SetSkipPlotNPTH_Pads( bool aSkip ) { m_skipNPTH_Pads = aSkip; }
@@ -196,11 +51,12 @@ public:
     void        Parse( PCB_PLOT_PARAMS_PARSER* aParser );
 
     /**
-     * Compare current settings to aPcbPlotParams, including not saved parameters in brd file
-     * @param aPcbPlotParams = the PCB_PLOT_PARAMS to compare
-     * @param aCompareOnlySavedPrms = true to compare only saved in file parameters,
-     * and false to compare the full set of parameters.
-     * @return true is parameters are same, false if one (or more) parameter does not match
+     * Compare current settings to aPcbPlotParams, including not saved parameters in brd file.
+     *
+     * @param aPcbPlotParams is the #PCB_PLOT_PARAMS to compare/
+     * @param aCompareOnlySavedPrms set to true to compare only saved in file parameters,
+     *        or false to compare the full set of parameters.
+     * @return true is parameters are same, false if one (or more) parameter does not match.
      */
     bool        IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
 
@@ -305,9 +161,11 @@ public:
     unsigned    GetSvgPrecision() const { return m_svgPrecision; }
     bool        GetSvgUseInch() const { return m_svgUseInch; }
 
-    /** Default precision of coordinates in Gerber files.
-     * when units are in mm (7 in inches, but Pcbnew uses mm).
-     * 6 is the internal resolution of Pcbnew, so the default is 6
+    /**
+     * Default precision of coordinates in Gerber files.
+     *
+     * When units are in mm (7 in inches, but Pcbnew uses mm).
+     * 6 is the internal resolution of Pcbnew, so the default is 6.
      */
     static int  GetGerberDefaultPrecision() { return 6; }
 
@@ -337,6 +195,154 @@ public:
 
     void        SetHPGLPenNum( int aVal ) { m_HPGLPenNum = aVal; }
     int         GetHPGLPenNum() const { return m_HPGLPenNum; }
+
+private:
+    friend class PCB_PLOT_PARAMS_PARSER;
+
+    // If true, do not plot NPTH pads
+    // (mainly used to disable NPTH pads plotting on copper layers)
+    bool        m_skipNPTH_Pads;
+
+    /**
+     * FILLED or SKETCH selects how to plot filled objects.
+     *
+     * FILLED or SKETCH not available with all drivers: some have fixed mode
+     */
+    OUTLINE_MODE m_plotMode;
+
+    /**
+     * DXF format: Plot items in outline (polygon) mode.
+     *
+     * In polygon mode, each item to plot is converted to a polygon and all polygons are merged.
+     */
+    bool        m_DXFplotPolygonMode;
+
+    /**
+     * DXF format: Units to use when plotting the DXF
+     */
+    DXF_UNITS m_DXFplotUnits;
+
+    /// Plot format type (chooses the driver to be used)
+    PLOT_FORMAT m_format;
+
+    /// Holes can be not plotted, have a small mark or plotted in actual size
+    DrillMarksType m_drillMarks;
+
+    /// Choose how represent text with PS, PDF and DXF drivers
+    PLOT_TEXT_MODE m_textMode;
+
+    /// When true set the scale to fit the board in the page
+    bool        m_autoScale;
+
+    /// Global scale factor, 1.0 plots a board with its actual size.
+    double      m_scale;
+
+    /// Mirror the plot around the X axis
+    bool        m_mirror;
+
+    /// Plot in negative color (supported only by some drivers)
+    bool        m_negative;
+
+    /// True if vias are drawn on Mask layer (ie untented, *exposed* by mask)
+    bool        m_plotViaOnMaskLayer;
+
+    /// True to plot/print frame references
+    bool        m_plotFrameRef;
+
+    /// If false always plot (merge) the pcb edge layer on other layers
+    bool        m_excludeEdgeLayer;
+
+    /// Set of layers to plot
+    LSET        m_layerSelection;
+
+    /** When plotting gerber files, use a conventional set of Protel extensions
+     * instead of .gbr, that is now the official gerber file extension
+     * this is a deprecated feature
+     */
+    bool        m_useGerberProtelExtensions;
+
+    /// Include attributes from the Gerber X2 format (chapter 5 in revision J2)
+    bool        m_useGerberX2format;
+
+    /// Disable aperture macros in Gerber format (only for broken Gerber readers)
+    /// Ideally, should be never selected.
+    bool        m_gerberDisableApertMacros;
+
+    /// Include netlist info (only in Gerber X2 format) (chapter ? in revision ?)
+    bool        m_includeGerberNetlistInfo;
+
+    /// generate the auxiliary "job file" in gerber format
+    bool        m_createGerberJobFile;
+
+    /// precision of coordinates in Gerber files: accepted 5 or 6
+    /// when units are in mm (6 or 7 in inches, but Pcbnew uses mm).
+    /// 6 is the internal resolution of Pcbnew, but not always accepted by board maker
+    /// 5 is the minimal value for professional boards.
+    int         m_gerberPrecision;
+
+    /// precision of coordinates in SVG files: accepted 3 - 6
+    /// 6 is the internal resolution of Pcbnew
+    unsigned    m_svgPrecision;
+
+    /// units for SVG plot
+    /// false for metric, true for inch/mils
+    bool        m_svgUseInch;
+
+    /// Plot gerbers using auxiliary (drill) origin instead of absolute coordinates
+    bool        m_useAuxOrigin;
+
+    /// On gerbers 'scrape' away the solder mask from silkscreen (trim silks)
+    bool        m_subtractMaskFromSilk;
+
+    /// Autoscale the plot to fit an A4 (landscape?) sheet
+    bool        m_A4Output;
+
+    /// Scale ratio index (UI only)
+    int         m_scaleSelection;
+
+    /// Output directory for plot files (usually relative to the board file)
+    wxString    m_outputDirectory;
+
+    /// Enable plotting of part references
+    bool        m_plotReference;
+
+    /// Enable plotting of part values
+    bool        m_plotValue;
+
+    /// Force plotting of fields marked invisible
+    bool        m_plotInvisibleText;
+
+    /// Plots pads outlines on fab layers
+    bool        m_sketchPadsOnFabLayers;
+    int         m_sketchPadLineWidth;
+
+    /* These next two scale factors are intended to compensate plotters
+     * (mainly printers) X and Y scale error. Therefore they are expected very
+     * near 1.0; only X and Y dimensions are adjusted: circles are plotted as
+     * circles, even if X and Y fine scale differ; because of this it is mostly
+     * useful for printers: postscript plots would be best adjusted using
+     * the prologue (that would change the whole output matrix
+     */
+
+    double      m_fineScaleAdjustX;     ///< fine scale adjust X axis
+    double      m_fineScaleAdjustY;     ///< fine scale adjust Y axis
+
+    /**
+     * This width factor is intended to compensate PS printers/ plotters that do
+     * not strictly obey line width settings. Only used to plot pads and tracks.
+     */
+    int         m_widthAdjust;
+
+    int         m_HPGLPenNum;           ///< HPGL only: pen number selection(1 to 9)
+    int         m_HPGLPenSpeed;         ///< HPGL only: pen speed, always in cm/s (1 to 99 cm/s)
+    double      m_HPGLPenDiam;          ///< HPGL only: pen diameter in MILS, useful to fill areas
+                                        ///< However, it is in mm in hpgl files.
+
+    /// Pointer to active color settings to be used for plotting
+    COLOR_SETTINGS* m_colors;
+
+    /// Dummy colors object that can be created if there is no Pgm context
+    std::shared_ptr<COLOR_SETTINGS> m_default_colors;
 };
 
 

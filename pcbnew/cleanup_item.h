@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,32 +48,27 @@ enum CLEANUP_RC_CODE {
 
 class CLEANUP_ITEM : public RC_ITEM
 {
-private:
-    wxString m_errorMessage;
-
 public:
     CLEANUP_ITEM( int aErrorCode );
 
     /**
-     * Function GetErrorText
-     * returns the string form of a drc error code.
+     * Return the string form of a drc error code.
      */
     wxString GetErrorText( int aErrorCode = -1, bool aTranslate = true ) const;
+
+private:
+    wxString m_errorMessage;
 };
 
 
 /**
- * VECTOR_CLEANUP_ITEMS_PROVIDER
- * is an implementation of the interface named RC_ITEMS_PROVIDER which uses a vector
+ * An implementation of the interface named RC_ITEMS_PROVIDER which uses a vector
  * of pointers to CLEANUP_ITEMs to fulfill the interface.  No ownership is taken of the
  * vector.
  */
 class VECTOR_CLEANUP_ITEMS_PROVIDER : public RC_ITEMS_PROVIDER
 {
-    std::vector<std::shared_ptr<CLEANUP_ITEM> >* m_sourceVector;     // owns its CLEANUP_ITEMs
-
 public:
-
     VECTOR_CLEANUP_ITEMS_PROVIDER( std::vector<std::shared_ptr<CLEANUP_ITEM> >* aList ) :
             m_sourceVector( aList )
     {
@@ -115,6 +110,9 @@ public:
             m_sourceVector->clear();
         }
     }
+
+private:
+    std::vector<std::shared_ptr<CLEANUP_ITEM> >* m_sourceVector;     // owns its CLEANUP_ITEMs
 };
 
 

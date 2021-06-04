@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 NBEE Embedded Systems SL, Miguel Angel Ajo <miguelangel@ajo.es>
- * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,8 +46,7 @@ const wxString WIZARD_PARAM_UNITS_PERCENT   = "%";           // Percent (0% -> 1
 const wxString WIZARD_PARAM_UNITS_STRING    = "string";      // String
 
 /**
- * FOOTPRINT_WIZARD
- * This is the parent class from where any footprint wizard class must derive
+ * The parent class from where any footprint wizard class must derive.
  */
 class FOOTPRINT_WIZARD
 {
@@ -56,113 +55,98 @@ public:
     virtual ~FOOTPRINT_WIZARD();
 
     /**
-     * Function GetName
-     * @return the name of the wizard
+     * @return the name of the wizard.
      */
     virtual wxString GetName() = 0;
 
     /**
-     * Function GetImage
-     * @return an svg image of the wizard to be rendered
+     * @return an svg image of the wizard to be rendered.
      */
     virtual wxString GetImage() = 0;
 
     /**
-     * Function GetDescription
-     * @return a description of the footprint wizard
+     * @return a description of the footprint wizard.
      */
     virtual wxString GetDescription() = 0;
 
     /**
-     * Function GetNumParameterPages
-     * @return the number of parameter pages that this wizard will show to the user
+     * @return the number of parameter pages that this wizard will show to the user.
      */
     virtual int GetNumParameterPages() = 0;
 
     /**
-     * Function GetParameterPageName
-     * @param aPage is the page we want the name of
-     * @return a string with the page name
+     * @param aPage is the page we want the name of.
+     * @return a string with the page name.
      */
     virtual wxString GetParameterPageName( int aPage ) = 0;
 
     /**
-     * Function GetParameterNames
-     * @param aPage is the page we want the parameter names of
-     * @return an array string with the parameter names on a certain page
+     * @param aPage is the page we want the parameter names of.
+     * @return an array string with the parameter names on a certain page.
      */
     virtual wxArrayString GetParameterNames( int aPage ) = 0;
 
     /**
-     * Function GetParameterTypes
-     * @param aPage is the page we want the parameter types of
+     * @param aPage is the page we want the parameter types of.
      * @return an array string with the parameter types on a certain page
-     *          "IU" for internal units, "UNITS" for units (0,1,2,3...,N)
+     *          "IU" for internal units, "UNITS" for units (0,1,2,3...,N).
      */
     virtual wxArrayString GetParameterTypes( int aPage ) = 0;
 
 
     /**
-     * Function GetParameterValues
-     * @param aPage is the page we want the parameter values of
-     * @return an array of parameter values
+     * @param aPage is the page we want the parameter values of.
+     * @return an array of parameter values.
      */
     virtual wxArrayString GetParameterValues( int aPage ) = 0;
 
     /**
-     * Function GetParameterErrors
-     * @param aPage is the page we want to know the errors of
-     * @return an array of errors (if any) for the parameters, empty strings for OK parameters
+     * @param aPage is the page we want to know the errors of.
+     * @return an array of errors (if any) for the parameters, empty strings for OK parameters.
      */
     virtual wxArrayString GetParameterErrors( int aPage ) = 0;
 
     /**
-     * Function GetParameterHints
-     * @param aPage is the page we want to know the hints of
-     * @return an array of hints (if any) for the parameters, empty string for no hints
+     * @param aPage is the page we want to know the hints of.
+     * @return an array of hints (if any) for the parameters, empty string for no hints.
      */
     virtual wxArrayString GetParameterHints( int aPage ) = 0;
 
     /**
-     * Function GetParamaterDesignators
-     * @param aPage is the page we want to know the designators of
-     * @return an array of designators (blank strings for no designators
+     * @param aPage is the page we want to know the designators of.
+     * @return an array of designators (blank strings for no designators.
      */
     virtual wxArrayString GetParameterDesignators( int aPage ) = 0;
 
     /**
-     * Function SetParameterValues
-     * @param aPage is the page we want to set the parameters in
-     * @param aValues are the values we want to set into the parameters
-     * @return an array of parameter values
+     * @param aPage is the page we want to set the parameters in.
+     * @param aValues are the values we want to set into the parameters.
+     * @return an array of parameter values.
      */
     virtual wxString SetParameterValues( int aPage, wxArrayString& aValues ) = 0;
 
     /**
-     * Function ResetParameters
-     * Reset all wizard parameters to default values
+     * Reset all wizard parameters to default values.
      */
     virtual void ResetParameters() = 0;
 
     /**
-     * Function GetFootprint
-     * This method builds the footprint itself and returns it to the caller function
-     * @return  PCB footprint built from the parameters given to the class
-     * @param aMessage a wxString to store messages (if any) generated by the
-     * footprint generator
+     * Build the footprint itself and returns it to the caller function.
+     *
+     * @param aMessage is storage for messages (if any) generated by the footprint generator.
+     * @return a footprint built from the parameters given to the class.
      */
     virtual FOOTPRINT* GetFootprint( wxString* aMessage ) = 0;
 
     /**
-     * Function GetObject
-     * This method gets the pointer to the object from where this wizard constructs
-     * @return  it's a void pointer, as it could be a PyObject or any other
+     * Get the object from where this wizard constructs.
+     *
+     * @return it's a void pointer as it could be a PyObject or any other.
      */
     virtual void* GetObject() = 0;
 
     /**
-     * Function register_wizard
-     * It's the standard method of a "FOOTPRINT_WIZARD" to register itself into
+     * The standard method of a "FOOTPRINT_WIZARD" to register itself into
      * the FOOTPRINT_WIZARD_LIST singleton manager
      */
     void register_wizard();
@@ -171,54 +155,50 @@ public:
 
 class FOOTPRINT_WIZARD_LIST
 {
-private:
-    /**
-     * FOOTPRINT_WIZARD system wide static list
-     */
-    static std::vector<FOOTPRINT_WIZARD*> m_FootprintWizards;
-
 public:
 
     /**
-     * Function register_wizard
      * A footprint wizard calls this static method when it wants to register itself
-     * into the system wizards
-     * Note: if it is already registered, this function do nothing
-     * if n existing wizard with the same name exists, this existing wizard will be
-     * unregistered.
-     * @param aWizard is the footprint wizard to be registered
+     * into the system wizards.
+     *
+     * @note If it is already registered, this function does nothing if an existing wizard
+     * with the same name exists, this existing wizard will be unregistered.
+     *
+     * @param aWizard is the footprint wizard to be registered.
      */
     static void                 register_wizard( FOOTPRINT_WIZARD* aWizard );
 
     /**
-     * Function deregister_object
-     * Anyone calls this method to deregister an object which builds a wizard,
-     * it will lookup on the vector calling GetObject until find, then removed
-     * and deleted
+     * Unregister an object which builds a wizard.
      *
-     * @param aObject is the footprint wizard object to be deregistered
+     * Lookup in the vector calling GetObject until find, then removed and deleted.
+     *
+     * @param aObject is the footprint wizard object to be unregistered.
      */
     static bool                 deregister_object( void* aObject );
 
     /**
-     * Function GetWizard
-     * @param aName is the footprint wizard name
+     * @param aName is the footprint wizard name.
      * @return a wizard object by it's name or NULL if it isn't available.
      */
     static FOOTPRINT_WIZARD*    GetWizard( const wxString& aName );
 
     /**
-     * Function GetWizard
+     * @param aIndex is the wizard index in list.
      * @return a wizard object by it's number or NULL if it isn't available.
-     * @param  aIndex is the wizard index in list
      */
     static FOOTPRINT_WIZARD*    GetWizard( int aIndex );
 
     /**
-     * Function GetWizardsCount
      * @return the number of wizards available into the system
      */
     static int                  GetWizardsCount();
+
+private:
+    /**
+     * FOOTPRINT_WIZARD system wide static list
+     */
+    static std::vector<FOOTPRINT_WIZARD*> m_FootprintWizards;
 };
 
 #endif /* PCBNEW_FOOTPRINT_WIZARDS_H */

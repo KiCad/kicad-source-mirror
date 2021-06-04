@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,96 +59,95 @@
  */
 class COLLECTORS_GUIDE
 {
-
 public:
     virtual     ~COLLECTORS_GUIDE() {}
 
     /**
-     * @return bool - true if the given layer is locked, else false.
+     * @return true if the given layer is locked, else false.
      */
     virtual     bool IsLayerLocked( PCB_LAYER_ID layer ) const = 0;
 
     /**
-     * @return bool - true if the given layer is visible, else false.
+     * @return true if the given layer is visible, else false.
      */
     virtual     bool IsLayerVisible( PCB_LAYER_ID layer ) const = 0;
 
     /**
-     * @return bool - true if should ignore locked layers, else false.
+     * @return true if should ignore locked layers, else false.
      */
     virtual     bool IgnoreLockedLayers() const = 0;
 
     /**
-     * @return bool - true if should ignore non-visible layers, else false.
+     * @return true if should ignore non-visible layers, else false.
      */
     virtual     bool IgnoreNonVisibleLayers() const = 0;
 
     /**
-     * @return int - the preferred layer for HitTest()ing.
+     * @return the preferred layer for HitTest()ing.
      */
     virtual     PCB_LAYER_ID GetPreferredLayer() const = 0;
 
     /**
      * Provide wildcard behavior regarding the preferred layer.
      *
-     * @return bool - true if should ignore preferred layer, else false.
+     * @return true if should ignore preferred layer, else false.
      */
     virtual     bool IgnorePreferredLayer() const = 0;
 
     /**
-     * @return bool - true if should ignore locked items, else false.
+     * @return true if should ignore locked items, else false.
      */
     virtual     bool IgnoreLockedItems() const = 0;
 
     /**
      * Determine if the secondary criteria or 2nd choice items should be included.
      *
-     * @return bool - true if should include, else false.
+     * @return true if should include, else false.
      */
     virtual     bool IncludeSecondary() const = 0;
 
     /**
-     * @return bool - true if footprint texts marked as "no show" should be ignored.
+     * @return true if footprint texts marked as "no show" should be ignored.
      */
     virtual     bool IgnoreHiddenFPText() const = 0;
 
     /**
-     * @return bool - true if should ignore footprint text on back layers
+     * @return true if should ignore footprint text on back layers
      */
     virtual     bool IgnoreFPTextOnBack() const = 0;
 
     /**
-     * @return bool - true if should ignore footprint text on front layers.
+     * @return true if should ignore footprint text on front layers.
      */
     virtual     bool IgnoreFPTextOnFront() const = 0;
 
     /**
-     * @return bool - true if should ignore FOOTPRINTs on Back Side.
+     * @return true if should ignore FOOTPRINTs on Back Side.
      */
     virtual     bool IgnoreFootprintsOnBack() const = 0;
 
     /**
-     * @return bool - ture if should ignore FOOTPRINTs on Front Side.
+     * @return true if should ignore FOOTPRINTs on Front Side.
      */
     virtual     bool IgnoreFootprintsOnFront() const = 0;
 
     /**
-     * @return bool - true if should ignore Pads on Back Side.
+     * @return true if should ignore Pads on Back Side.
      */
     virtual     bool IgnorePadsOnBack() const = 0;
 
     /**
-     * @return bool - ture if should ignore PADSs on Front Side.
+     * @return true if should ignore PADSs on Front Side.
      */
     virtual     bool IgnorePadsOnFront() const = 0;
 
     /**
-     * @return bool - ture if should ignore through-hole PADSs.
+     * @return true if should ignore through-hole PADSs.
      */
     virtual     bool IgnoreThroughHolePads() const = 0;
 
     /**
-     * @return bool - true if should ignore PADSs on Front side and Back side.
+     * @return true if should ignore PADSs on Front side and Back side.
      */
     virtual     bool IgnorePads() const
     {
@@ -156,12 +155,12 @@ public:
     }
 
     /**
-     * @return bool - true if should ignore footprint values.
+     * @return true if should ignore footprint values.
      */
     virtual     bool IgnoreFPValues() const = 0;
 
     /**
-     * @return bool - true if should ignore footprint references.
+     * @return true if should ignore footprint references.
      */
     virtual     bool IgnoreFPReferences() const = 0;
 
@@ -193,8 +192,8 @@ public:
     virtual     double OnePixelInIU() const = 0;
 
     /**
-     * @return bool - true if Inspect() should use BOARD_ITEM::HitTest()
-     *             or false if Inspect() should use BOARD_ITEM::BoundsTest().
+     * @return true if Inspect() should use BOARD_ITEM::HitTest()
+     *         or false if Inspect() should use BOARD_ITEM::BoundsTest().
     virtual     bool UseHitTesting() const = 0;
      */
 };
@@ -217,14 +216,14 @@ public:
      * Overload the COLLECTOR::operator[](int) to return a #BOARD_ITEM instead of an #EDA_ITEM.
      *
      * @param ndx The index into the list.
-     * @return BOARD_ITEM* - or something derived from it, or NULL.
+     * @return a board item or NULL.
      */
     BOARD_ITEM* operator[]( int ndx ) const override
     {
         if( (unsigned)ndx < (unsigned)GetCount() )
             return (BOARD_ITEM*) m_list[ ndx ];
 
-        return NULL;
+        return nullptr;
     }
 };
 
@@ -250,7 +249,7 @@ protected:
     std::vector<BOARD_ITEM*>    m_List2nd;
 
     /**
-     * Determines which items are to be collected by Inspect()
+     * Determine which items are to be collected by Inspect().
      */
     const COLLECTORS_GUIDE*     m_Guide;
 
@@ -313,12 +312,9 @@ public:
      */
     static const KICAD_T DraggableItems[];
 
-    /**
-     * Constructor GENERALCOLLECTOR
-     */
     GENERAL_COLLECTOR()
     {
-        m_Guide = NULL;
+        m_Guide = nullptr;
         m_PrimaryLength = 0;
         SetScanTypes( AllBoardItems );
     }
@@ -343,19 +339,19 @@ public:
     const COLLECTORS_GUIDE* GetGuide() const { return m_Guide; }
 
     /**
-     * @return int - The number if items which met the primary search criteria
+     * @return The number of items which met the primary search criteria
      */
     int GetPrimaryCount() { return m_PrimaryLength; }
 
     /**
      * The examining function within the INSPECTOR which is passed to the Iterate function.
      *
-     * Searches and collects all the objects which match the test data.
+     * Search and collect all the objects which match the test data.
      *
      * @param testItem An EDA_ITEM to examine.
      * @param testData is not used in this class.
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *   else SCAN_CONTINUE;
+     *         else SCAN_CONTINUE;
      */
     SEARCH_RESULT Inspect( EDA_ITEM* testItem, void* testData )  override;
 
@@ -370,7 +366,7 @@ public:
      * @param aGuide The COLLECTORS_GUIDE to use in collecting items.
      */
     void Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
-                 const wxPoint& aRefPos, const COLLECTORS_GUIDE& aGuide );
+                  const wxPoint& aRefPos, const COLLECTORS_GUIDE& aGuide );
 };
 
 
@@ -380,40 +376,6 @@ public:
  */
 class GENERAL_COLLECTORS_GUIDE : public COLLECTORS_GUIDE
 {
-private:
-    // the storage architecture here is not important, since this is only
-    // a carrier object and its functions are what is used, and data only indirectly.
-
-    PCB_LAYER_ID m_preferredLayer;
-    bool    m_ignorePreferredLayer;
-
-    LSET    m_lockedLayers;                  ///< bit-mapped layer locked bits
-    bool    m_ignoreLockedLayers;
-
-    LSET    m_visibleLayers;                 ///< bit-mapped layer visible bits
-    bool    m_ignoreNonVisibleLayers;
-
-    bool    m_ignoreLockedItems;
-    bool    m_includeSecondary;
-
-    bool    m_ignoreHiddenFPText;
-    bool    m_ignoreFPTextOnBack;
-    bool    m_ignoreFPTextOnFront;
-    bool    m_ignoreFootprintsOnBack;
-    bool    m_ignoreFootprintsOnFront;
-    bool    m_ignorePadsOnFront;
-    bool    m_ignorePadsOnBack;
-    bool    m_ignoreThroughHolePads;
-    bool    m_ignoreFPValues;
-    bool    m_ignoreFPReferences;
-    bool    m_ignoreThroughVias;
-    bool    m_ignoreBlindBuriedVias;
-    bool    m_ignoreMicroVias;
-    bool    m_ignoreTracks;
-    bool    m_ignoreZoneFills;
-
-    double  m_onePixelInIU;
-
 public:
 
     /**
@@ -421,8 +383,8 @@ public:
      *
      * Add more constructors as needed.
      *
-     * @param aVisibleLayerMask = current visible layers (bit mask)
-     * @param aPreferredLayer = the layer to search first
+     * @param aVisibleLayerMask is the current visible layers (bit mask).
+     * @param aPreferredLayer is the layer to search first.
      */
     GENERAL_COLLECTORS_GUIDE( LSET aVisibleLayerMask, PCB_LAYER_ID aPreferredLayer,
                               KIGFX::VIEW* aView )
@@ -465,7 +427,7 @@ public:
     }
 
     /**
-     * @return bool - true if the given layer is locked, else false.
+     * @return true if the given layer is locked, else false.
      */
     bool IsLayerLocked( PCB_LAYER_ID aLayerId ) const override
     {
@@ -478,7 +440,7 @@ public:
     }
 
     /**
-     * @return bool - true if the given layer is visible, else false.
+     * @return true if the given layer is visible, else false.
      */
     bool IsLayerVisible( PCB_LAYER_ID aLayerId ) const override
     {
@@ -491,13 +453,13 @@ public:
     void SetLayerVisibleBits( LSET aLayerBits ) { m_visibleLayers = aLayerBits; }
 
     /**
-     * @return bool - true if should ignore locked layers, else false.
+     * @return true if should ignore locked layers, else false.
      */
     bool IgnoreLockedLayers() const override        { return m_ignoreLockedLayers; }
     void SetIgnoreLockedLayers( bool ignore )       { m_ignoreLockedLayers = ignore; }
 
     /**
-     * @return bool - true if should ignore non-visible layers, else false.
+     * @return true if should ignore non-visible layers, else false.
      */
     bool IgnoreNonVisibleLayers() const override    { return m_ignoreNonVisibleLayers; }
     void SetIgnoreNonVisibleLayers( bool ignore )   { m_ignoreLockedLayers = ignore; }
@@ -511,13 +473,13 @@ public:
     /**
      * Provide wildcard behavior regarding the preferred layer.
      *
-     * @return bool - true if should ignore preferred layer, else false.
+     * @return true if should ignore preferred layer, else false.
      */
     bool IgnorePreferredLayer() const override      { return  m_ignorePreferredLayer; }
     void SetIgnorePreferredLayer( bool ignore )     { m_ignorePreferredLayer = ignore; }
 
     /**
-     * @return bool - true if should ignore locked items, else false.
+     * @return true if should ignore locked items, else false.
      */
     bool IgnoreLockedItems() const override         { return m_ignoreLockedItems; }
     void SetIgnoreLockedItems( bool ignore )        { m_ignoreLockedItems = ignore; }
@@ -525,67 +487,67 @@ public:
     /**
      * Determine if the secondary criteria, or 2nd choice items should be included.
      *
-     * @return bool - true if should include, else false.
+     * @return true if should include, else false.
      */
     bool IncludeSecondary() const override { return m_includeSecondary; }
     void SetIncludeSecondary( bool include ) { m_includeSecondary = include; }
 
     /**
-     * @return bool - true if MTexts marked as "no show" should be ignored.
+     * @return true if MTexts marked as "no show" should be ignored.
      */
     bool IgnoreHiddenFPText() const override { return m_ignoreHiddenFPText; }
     void SetIgnoreMTextsMarkedNoShow( bool ignore ) { m_ignoreHiddenFPText = ignore; }
 
     /**
-     * @return bool - true if should ignore MTexts on back layers
+     * @return true if should ignore MTexts on back layers
      */
     bool IgnoreFPTextOnBack() const override { return m_ignoreFPTextOnBack; }
     void SetIgnoreMTextsOnBack( bool ignore ) { m_ignoreFPTextOnBack = ignore; }
 
     /**
-     * @return bool - true if should ignore MTexts on front layers
+     * @return true if should ignore MTexts on front layers
      */
     bool IgnoreFPTextOnFront() const override { return m_ignoreFPTextOnFront; }
     void SetIgnoreMTextsOnFront( bool ignore ) { m_ignoreFPTextOnFront = ignore; }
 
     /**
-     * @return bool - true if should ignore MODULEs on the back side
+     * @return true if should ignore MODULEs on the back side
      */
     bool IgnoreFootprintsOnBack() const override { return m_ignoreFootprintsOnBack; }
     void SetIgnoreModulesOnBack( bool ignore ) { m_ignoreFootprintsOnBack = ignore; }
 
     /**
-     * @return bool - true if should ignore MODULEs on component layer.
+     * @return true if should ignore MODULEs on component layer.
      */
     bool IgnoreFootprintsOnFront() const override { return m_ignoreFootprintsOnFront; }
     void SetIgnoreModulesOnFront( bool ignore ) { m_ignoreFootprintsOnFront = ignore; }
 
     /**
-     * @return bool - true if should ignore Pads on Back Side.
+     * @return true if should ignore Pads on Back Side.
      */
     bool IgnorePadsOnBack() const override { return m_ignorePadsOnBack; }
     void SetIgnorePadsOnBack(bool ignore) { m_ignorePadsOnBack = ignore; }
 
     /**
-     * @return bool - true if should ignore PADSs on Front Side.
+     * @return true if should ignore PADSs on Front Side.
      */
     bool IgnorePadsOnFront() const override { return m_ignorePadsOnFront; }
     void SetIgnorePadsOnFront(bool ignore) { m_ignorePadsOnFront = ignore; }
 
     /**
-     * @return bool - true if should ignore through-hole PADSs.
+     * @return true if should ignore through-hole PADSs.
      */
     bool IgnoreThroughHolePads() const override { return m_ignoreThroughHolePads; }
     void SetIgnoreThroughHolePads(bool ignore) { m_ignoreThroughHolePads = ignore; }
 
     /**
-     * @return bool - true if should ignore footprints values.
+     * @return true if should ignore footprints values.
      */
     bool IgnoreFPValues() const override { return m_ignoreFPValues; }
     void SetIgnoreModulesVals(bool ignore) { m_ignoreFPValues = ignore; }
 
     /**
-     * @return bool - true if should ignore footprints references.
+     * @return true if should ignore footprints references.
      */
     bool IgnoreFPReferences() const override { return m_ignoreFPReferences; }
     void SetIgnoreModulesRefs(bool ignore) { m_ignoreFPReferences = ignore; }
@@ -607,6 +569,40 @@ public:
 
     double OnePixelInIU() const override { return m_onePixelInIU; }
     void SetOnePixelInIU( double aValue ) { m_onePixelInIU = aValue; }
+
+private:
+    // the storage architecture here is not important, since this is only
+    // a carrier object and its functions are what is used, and data only indirectly.
+
+    PCB_LAYER_ID m_preferredLayer;
+    bool    m_ignorePreferredLayer;
+
+    LSET    m_lockedLayers;                  ///< bit-mapped layer locked bits
+    bool    m_ignoreLockedLayers;
+
+    LSET    m_visibleLayers;                 ///< bit-mapped layer visible bits
+    bool    m_ignoreNonVisibleLayers;
+
+    bool    m_ignoreLockedItems;
+    bool    m_includeSecondary;
+
+    bool    m_ignoreHiddenFPText;
+    bool    m_ignoreFPTextOnBack;
+    bool    m_ignoreFPTextOnFront;
+    bool    m_ignoreFootprintsOnBack;
+    bool    m_ignoreFootprintsOnFront;
+    bool    m_ignorePadsOnFront;
+    bool    m_ignorePadsOnBack;
+    bool    m_ignoreThroughHolePads;
+    bool    m_ignoreFPValues;
+    bool    m_ignoreFPReferences;
+    bool    m_ignoreThroughVias;
+    bool    m_ignoreBlindBuriedVias;
+    bool    m_ignoreMicroVias;
+    bool    m_ignoreTracks;
+    bool    m_ignoreZoneFills;
+
+    double  m_onePixelInIU;
 };
 
 
@@ -624,8 +620,7 @@ public:
      *
      * @param testItem An EDA_ITEM to examine.
      * @param testData is not used in this class.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *   else SCAN_CONTINUE;
+     * @return SEARCH_QUIT if the Iterator is to stop the scan, else SCAN_CONTINUE;
      */
     SEARCH_RESULT Inspect( EDA_ITEM* testItem, void* testData ) override;
 
@@ -646,8 +641,6 @@ public:
  */
 class PCB_LAYER_COLLECTOR : public PCB_COLLECTOR
 {
-    PCB_LAYER_ID m_layer_id;
-
 public:
     PCB_LAYER_COLLECTOR( PCB_LAYER_ID aLayerId = UNDEFINED_LAYER ) :
         m_layer_id( aLayerId )
@@ -667,12 +660,15 @@ public:
     SEARCH_RESULT Inspect( EDA_ITEM* testItem, void* testData ) override;
 
     /**
-     * Tests a BOARD_ITEM using this class's Inspector method, which does the collection.
+     * Test a BOARD_ITEM using this class's Inspector method, which does the collection.
      *
      * @param aBoard The BOARD_ITEM to scan.
      * @param aScanList The KICAD_Ts to gather up.
      */
     void Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] );
+
+private:
+    PCB_LAYER_ID m_layer_id;
 };
 
 #endif // COLLECTORS_H

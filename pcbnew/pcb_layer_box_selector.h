@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2015 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,27 +34,18 @@ class PCB_BASE_FRAME;
  */
 class PCB_LAYER_BOX_SELECTOR : public LAYER_BOX_SELECTOR
 {
-    PCB_BASE_FRAME* m_boardFrame;
-
-    LSET     m_layerMaskDisable;        // A mask to remove some (not allowed) layers
-                                        // from layer list
-    bool     m_showNotEnabledBrdlayers; // true to list all allowed layers
-                                        // (with not activated layers flagged)
-    wxString m_undefinedLayerName;      // if not empty add an item with this name which sets
-                                        // the layer to UNDEFINED_LAYER
-
 public:
     // If you are thinking the constructor is a bit curious, just remember it is automatically
     // generated when used in wxFormBuilder files, and so must have the same signature as the
     // wxBitmapComboBox constructor.  In particular, value and style are not used by this class.
     PCB_LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
-                        const wxString& value = wxEmptyString,
-                        const wxPoint& pos = wxDefaultPosition,
-                        const wxSize& size = wxDefaultSize,
-                        int n = 0, const wxString choices[] = NULL, int style = 0 ) :
+                            const wxString& value = wxEmptyString,
+                            const wxPoint& pos = wxDefaultPosition,
+                            const wxSize& size = wxDefaultSize,
+                            int n = 0, const wxString choices[] = nullptr, int style = 0 ) :
         LAYER_BOX_SELECTOR( parent, id, pos, size, n, choices )
     {
-        m_boardFrame = NULL;
+        m_boardFrame = nullptr;
         m_showNotEnabledBrdlayers = false;
     }
 
@@ -63,7 +54,7 @@ public:
     // use with wxFormBuilder.
     void SetBoardFrame( PCB_BASE_FRAME* aFrame ) { m_boardFrame = aFrame; };
 
-    // SetLayerSet allows disableing some layers, which are not shown in list
+    // SetLayerSet allows disabling some layers, which are not shown in list
     void SetNotAllowedLayerSet( LSET aMask ) { m_layerMaskDisable = aMask; }
 
     // If the UNDEFINED_LAYER should be selectable, give it a name here.  Usually either
@@ -74,7 +65,7 @@ public:
     void Resync() override;
 
     // Allow (or not) the layers not activated for the current board to be shown in layer
-    // selector. Not actavated layers have their names appended with "(not activated)".
+    // selector. Not activated layers have their names appended with "(not activated)".
     void ShowNonActivatedLayers( bool aShow ) { m_showNotEnabledBrdlayers = aShow; }
 
 private:
@@ -88,6 +79,15 @@ private:
     wxString getLayerName( LAYER_NUM aLayer ) const override;
 
     LSET getEnabledLayers() const;
+
+    PCB_BASE_FRAME* m_boardFrame;
+
+    LSET     m_layerMaskDisable;        // A mask to remove some (not allowed) layers
+                                        // from layer list
+    bool     m_showNotEnabledBrdlayers; // true to list all allowed layers
+                                        // (with not activated layers flagged)
+    wxString m_undefinedLayerName;      // if not empty add an item with this name which sets
+                                        // the layer to UNDEFINED_LAYER
 };
 
 #endif // PCB_LAYER_BOX_SELECTOR_H

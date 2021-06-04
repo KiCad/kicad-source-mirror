@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,11 +34,6 @@ class LINE_READER;
 
 class PCB_TARGET : public BOARD_ITEM
 {
-    int     m_shape;            // bit 0 : 0 = draw +, 1 = draw X
-    int     m_size;
-    int     m_lineWidth;
-    wxPoint m_pos;
-
 public:
     PCB_TARGET( BOARD_ITEM* aParent );
 
@@ -104,6 +99,12 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+private:
+    int     m_shape;            // bit 0 : 0 = draw +, 1 = draw X
+    int     m_size;
+    int     m_lineWidth;
+    wxPoint m_pos;
 };
 
 

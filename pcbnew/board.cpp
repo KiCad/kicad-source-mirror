@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  *
  * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -60,15 +60,15 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
 BOARD::BOARD() :
         BOARD_ITEM_CONTAINER( (BOARD_ITEM*) nullptr, PCB_T ),
+        m_LegacyDesignSettingsLoaded( false ),
+        m_LegacyCopperEdgeClearanceLoaded( false ),
+        m_LegacyNetclassesLoaded( false ),
         m_boardUse( BOARD_USE::NORMAL ),
         m_timeStamp( 1 ),
         m_paper( PAGE_INFO::A4 ),
         m_project( nullptr ),
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
-        m_NetInfo( this ),
-        m_LegacyDesignSettingsLoaded( false ),
-        m_LegacyCopperEdgeClearanceLoaded( false ),
-        m_LegacyNetclassesLoaded( false )
+        m_NetInfo( this )
 {
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;

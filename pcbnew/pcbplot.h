@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,10 +60,6 @@ class wxFileName;
 // A helper class to plot board items
 class BRDITEMS_PLOTTER : public PCB_PLOT_PARAMS
 {
-    PLOTTER*    m_plotter;
-    BOARD*      m_board;
-    LSET        m_layerMask;
-
 public:
     BRDITEMS_PLOTTER( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS& aPlotOpts )
             : PCB_PLOT_PARAMS( aPlotOpts )
@@ -105,45 +101,48 @@ public:
 
     /**
      * Plot a pad.
-     * unlike other items, a pad had not a specific color,
-     * and be drawn as a non filled item although the plot mode is filled
-     * color and plot mode are needed by this function
+     *
+     * Unlike other items, a pad had not a specific color and be drawn as a non filled item
+     * although the plot mode is filled color and plot mode are needed by this function.
      */
     void PlotPad( const PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMode );
 
     /**
-     * plot items like text and graphics,
-     *  but not tracks and footprints
+     * Plot items like text and graphics but not tracks and footprints.
      */
     void PlotBoardGraphicItems();
 
-    /** Function PlotDrillMarks
+    /**
      * Draw a drill mark for pads and vias.
-     * Must be called after all drawings, because it
-     * redraw the drill mark on a pad or via, as a negative (i.e. white) shape in
-     * FILLED plot mode (for PS and PDF outputs)
+     *
+     * Must be called after all drawings, because it redraws the drill mark on a pad or via, as
+     * a negative (i.e. white) shape in FILLED plot mode (for PS and PDF outputs).
      */
     void PlotDrillMarks();
 
     /**
-     * Function getColor
-     * @return the layer color
-     * @param aLayer = the layer id
-     * White color is special: cannot be seen on a white paper
-     * and in B&W mode, is plotted as white but other colors are plotted in BLACK
-     * so the returned color is LIGHTGRAY when the layer color is WHITE
+     * White color is special because it cannot be seen on a white paper in B&W mode. It is
+     * plotted as white but other colors are plotted in BLACK so the returned color is LIGHTGRAY
+     * when the layer color is WHITE.
+     *
+     * @param aLayer is the layer id.
+     * @return the layer color.
      */
     COLOR4D getColor( LAYER_NUM aLayer ) const;
 
 private:
-    /** Helper function to plot a single drill mark. It compensate and clamp
-     * the drill mark size depending on the current plot options
+    /**
+     * Helper function to plot a single drill mark.
+     *
+     * It compensate and clamp the drill mark size depending on the current plot options.
      */
-    void plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape,
-                           const wxPoint& aDrillPos, wxSize aDrillSize,
-                           const wxSize& aPadSize,
+    void plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const wxPoint& aDrillPos,
+                           wxSize aDrillSize, const wxSize& aPadSize,
                            double aOrientation, int aSmallDrill );
 
+    PLOTTER*    m_plotter;
+    BOARD*      m_board;
+    LSET        m_layerMask;
 };
 
 PLOTTER* StartPlotBoard( BOARD* aBoard,
@@ -153,27 +152,28 @@ PLOTTER* StartPlotBoard( BOARD* aBoard,
                          const wxString& aSheetDesc );
 
 /**
- * Function PlotOneBoardLayer
- * main function to plot one copper or technical layer.
- * It prepare options and calls the specialized plot function,
- * according to the layer type
- * @param aBoard = the board to plot
- * @param aPlotter = the plotter to use
- * @param aLayer = the layer id to plot
- * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
+ * Plot one copper or technical layer.
+ *
+ * It prepares options and calls the specialized plot function according to the layer type.
+ *
+ * @param aBoard is the board to plot.
+ * @param aPlotter is the plotter to use.
+ * @param aLayer is the layer id to plot.
+ * @param aPlotOpt is the plot options (files, sketch). Has meaning for some formats only.
  */
 void PlotOneBoardLayer( BOARD* aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                         const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
- * Function PlotStandardLayer
- * plot copper or technical layers.
- * not used for silk screen layers, because these layers have specific
- * requirements, mainly for pads
- * @param aBoard = the board to plot
- * @param aPlotter = the plotter to use
- * @param aLayerMask = the mask to define the layers to plot
- * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
+ * Plot copper or technical layers.
+ *
+ * This is not used for silk screen layers because these layers have specific requirements.
+ * This is  mainly for pads.
+ *
+ * @param aBoard is the board to plot.
+ * @param aPlotter is the plotter to use.
+ * @param aLayerMask is the mask to define the layers to plot.
+ * @param aPlotOpt is the plot options (files, sketch). Has meaning for some formats only.
  *
  * aPlotOpt has 3 important options to control this plot,
  * which are set, depending on the layer type to plot
@@ -183,34 +183,34 @@ void PlotOneBoardLayer( BOARD* aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
  *      SetSkipPlotNPTH_Pads( bool aSkip )
  *          aSkip = true to skip NPTH Pads, when the pad size and the pad hole
  *                  have the same size. Used in GERBER format only.
- *      SetDrillMarksType( DrillMarksType aVal ) controle the actual hole:
+ *      SetDrillMarksType( DrillMarksType aVal ) control the actual hole:
  *              no hole, small hole, actual hole
  */
 void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                         const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
- * Function PlotLayerOutlines
- * plot copper outline of a copper layer.
- * @param aBoard = the board to plot
- * @param aPlotter = the plotter to use
- * @param aLayerMask = the mask to define the layers to plot
- * @param aPlotOpt = the plot options. Has meaning for some formats only
+ * Plot copper outline of a copper layer.
+ *
+ * @param aBoard is the board to plot.
+ * @param aPlotter is the plotter to use.
+ * @param aLayerMask is the mask to define the layers to plot.
+ * @param aPlotOpt is the plot options. Has meaning for some formats only.
  */
 void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
                         LSET aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
- * Function BuildPlotFileName (helper function)
- * Complete a plot filename: forces the output directory,
- * add a suffix to the name and sets the specified extension
- * the suffix is usually the layer name
- * replaces not allowed chars in suffix by '_'
- * @param aFilename = the wxFileName to initialize
- *                  Contains the base filename
- * @param aOutputDir = the path
- * @param aSuffix = the suffix to add to the base filename
- * @param aExtension = the file extension
+ * Complete a plot filename.
+ *
+ * It forces the output directory, adds a suffix to the name, and sets the specified extension.
+ * The suffix is usually the layer name and replaces illegal file name character in the suffix
+ * with an underscore character.
+ *
+ * @param aFilename is the file name to initialize that contains the base filename.
+ * @param aOutputDir is the path.
+ * @param aSuffix is the suffix to add to the base filename.
+ * @param aExtension is the file extension.
  */
 void BuildPlotFileName( wxFileName*     aFilename,
                         const wxString& aOutputDir,
@@ -219,56 +219,56 @@ void BuildPlotFileName( wxFileName*     aFilename,
 
 
 /**
- * Function GetGerberProtelExtension
  * @return the appropriate Gerber file extension for \a aLayer
- * used by Protel, and still sometimes in use (although the
- * official Gerber Ext is now .gbr)
  */
 const wxString GetGerberProtelExtension( LAYER_NUM aLayer );
 
 /**
- * Function GetGerberFileFunctionAttribute
- * Returns the "file function" attribute for \a aLayer, as defined in the
- * Gerber file format specification J1 (chapter 5). The returned string includes
- * the "%TF.FileFunction" attribute prefix and the "*%" suffix.
- * @param aBoard = the board, needed to get the total count of copper layers
- * @param aLayer = the layer number to create the attribute for
+ * Return the "file function" attribute for \a aLayer, as defined in the
+ * Gerber file format specification J1 (chapter 5).
+ *
+ * The returned string includes the "%TF.FileFunction" attribute prefix and the "*%" suffix.
+ *
+ * @param aBoard is the board, needed to get the total count of copper layers.
+ * @param aLayer is the layer number to create the attribute for.
  * @return The attribute, as a text string
  */
 const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, LAYER_NUM aLayer );
 
 /**
- * Calculates some X2 attributes, as defined in the
- * Gerber file format specification J4 (chapter 5) and add them
- * the to the gerber file header:
+ * Calculate some X2 attributes as defined in the Gerber file format specification J4
+ * (chapter 5) and add them the to the gerber file header.
+ *
  * TF.GenerationSoftware
  * TF.CreationDate
  * TF.ProjectId
  * file format attribute is not added
- * @param aPlotter = the current plotter.
- * @param aBoard = the board, needed to extract some info
- * @param aUseX1CompatibilityMode = false to generate X2 attributes, true to
- * use X1 compatibility (X2 attributes added as structured comments,
- * starting by "G04 #@! " followed by the X2 attribute
+ *
+ * @param aPlotter is the current plotter.
+ * @param aBoard is the board, needed to extract some info.
+ * @param aUseX1CompatibilityMode set to false to generate X2 attributes, true to
+ *        use X1 compatibility (X2 attributes added as structured comments,
+ *        starting by "G04 #@! " followed by the X2 attribute
  */
-void AddGerberX2Header( PLOTTER* aPlotter,
-            const BOARD* aBoard, bool aUseX1CompatibilityMode = false );
+void AddGerberX2Header( PLOTTER* aPlotter, const BOARD* aBoard,
+                        bool aUseX1CompatibilityMode = false );
 
 /**
- * Calculates some X2 attributes, as defined in the Gerber file format
- * specification and add them to the gerber file header:
+ * Calculate some X2 attributes as defined in the Gerber file format specification and add them
+ * to the gerber file header.
+ *
  * TF.GenerationSoftware
  * TF.CreationDate
  * TF.ProjectId
  * TF.FileFunction
  * TF.FilePolarity
  *
- * @param aPlotter = the current plotter.
- * @param aBoard = the board, needed to extract some info
- * @param aLayer = the layer number to create the attribute for
- * @param aUseX1CompatibilityMode = false to generate X2 attributes, true to
- * use X1 compatibility (X2 attributes added as structured comments,
- * starting by "G04 #@! " followed by the X2 attribute
+ * @param aPlotter is the current plotter.
+ * @param aBoard is the board, needed to extract some info.
+ * @param aLayer is the layer number to create the attribute for.
+ * @param aUseX1CompatibilityMode set to false to generate X2 attributes, true to use X1
+ *        compatibility (X2 attributes added as structured comments, starting by "G04 #@! "
+ *        followed by the X2 attribute.
  */
 void AddGerberX2Attribute( PLOTTER* aPlotter, const BOARD* aBoard,
                            LAYER_NUM aLayer, bool aUseX1CompatibilityMode );

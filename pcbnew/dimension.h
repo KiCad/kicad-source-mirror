@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,7 +141,7 @@ public:
     wxString GetValueText() const;
 
     /**
-     * Updates the dimension's cached text and geometry
+     * Update the dimension's cached text and geometry.
      */
     void Update()
     {
@@ -195,14 +195,16 @@ public:
     }
 
     /**
-     * Sets the override text - has no effect if m_overrideValue == false
-     * @param aNewText is the text to use as the value
+     * Set the override text - has no effect if m_overrideValue == false.
+     *
+     * @param aNewText is the text to use as the value.
      */
     void           SetText( const wxString& aNewText );
 
     /**
-     * Retrieves the value text or override text, not including prefix or suffix
-     * @return the value portion of the dimension text (either overridden or not)
+     * Retrieve the value text or override text, not including prefix or suffix.
+     *
+     * @return the value portion of the dimension text (either overridden or not).
      */
     const wxString GetText() const;
 
@@ -210,7 +212,7 @@ public:
     const PCB_TEXT& Text() const { return m_text; }
 
     /**
-     * @return a list of line segments that make up this dimension (for drawing, plotting, etc)
+     * @return a list of line segments that make up this dimension (for drawing, plotting, etc).
      */
     const std::vector<std::shared_ptr<SHAPE>>& GetShapes() const { return m_shapes; }
 
@@ -221,10 +223,12 @@ public:
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
     /**
-     * Mirror the Dimension , relative to a given horizontal axis
-     * the text is not mirrored. only its position (and angle) is mirrored
-     * the layer is not changed
-     * @param axis_pos : vertical axis position
+     * Mirror the dimension relative to a given horizontal axis.
+     *
+     * The text is not mirrored.  Only its position (and angle) is mirrored.  The layer is not
+     * changed.
+     *
+     * @param axis_pos is the vertical axis position to mirror around.
      */
     void Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight = false );
 
@@ -252,12 +256,12 @@ public:
 protected:
 
     /**
-     * Updates the cached geometry of the dimension after changing any of its properties
+     * Update the cached geometry of the dimension after changing any of its properties.
      */
     virtual void updateGeometry() = 0;
 
     /**
-     * Updates the text field value from the current geometry (called by updateGeometry normally)
+     * Update the text field value from the current geometry (called by updateGeometry normally).
      */
     virtual void updateText();
 
@@ -265,15 +269,17 @@ protected:
     void addShape( const ShapeType& aShape );
 
     /**
-     * Finds the intersection between a given segment and polygon outline
-     * @param aPoly is the polygon to collide
-     * @param aSeg is the segment to collide
-     * @param aStart if true will start from aSeg.A, otherwise aSeg.B
-     * @return a point on aSeg that collides with aPoly closest to the start, if one exists
+     * Find the intersection between a given segment and polygon outline.
+     *
+     * @param aPoly is the polygon to collide.
+     * @param aSeg is the segment to collide.
+     * @param aStart if true will start from aSeg.A, otherwise aSeg.B.
+     * @return a point on aSeg that collides with aPoly closest to the start, if one exists.
      */
-    static OPT_VECTOR2I segPolyIntersection( const SHAPE_POLY_SET& aPoly, const SEG& aSeg, bool aStart = true );
+    static OPT_VECTOR2I segPolyIntersection( const SHAPE_POLY_SET& aPoly, const SEG& aSeg,
+                                             bool aStart = true );
     static OPT_VECTOR2I segCircleIntersection( CIRCLE& aCircle, SEG& aSeg, bool aStart = true );
-    
+
     // Value format
     bool              m_overrideTextEnabled;   ///< Manually specify the displayed measurement value
     wxString          m_valueString;     ///< Displayed value when m_overrideValue = true
@@ -304,6 +310,7 @@ protected:
     static constexpr float s_arrowAngle = 27.5;
 };
 
+
 /**
  * For better understanding of the points that make a dimension:
  *
@@ -333,14 +340,6 @@ protected:
  */
 class ALIGNED_DIMENSION : public DIMENSION_BASE
 {
-protected:
-    // Geometry
-    int          m_height;           ///< Perpendicular distance from features to crossbar
-    int          m_extensionHeight;  ///< Length of extension lines past the crossbar
-
-    wxPoint      m_crossBarStart;    ///< Crossbar start control point
-    wxPoint      m_crossBarEnd;      ///< Crossbar end control point
-
 public:
     ALIGNED_DIMENSION( BOARD_ITEM* aParent, KICAD_T aType = PCB_DIM_ALIGNED_T );
 
@@ -365,15 +364,17 @@ public:
     const wxPoint& GetCrossbarEnd() const { return m_crossBarEnd; }
 
     /**
-     * Sets the distance from the feature points to the crossbar line
+     * Set the distance from the feature points to the crossbar line.
+     *
      * @param aHeight is the new height.
      */
     void SetHeight( int aHeight ) { m_height = aHeight; }
     int GetHeight() const {  return m_height; }
 
     /**
-     * Updates stored height basing on points coordinates.
-     * @param aCrossbarStart is the start point of the crossbar
+     * Update the stored height basing on points coordinates.
+     *
+     * @param aCrossbarStart is the start point of the crossbar.
      */
     void UpdateHeight( const wxPoint& aCrossbarStart, const wxPoint& aCrossbarEnd );
 
@@ -381,8 +382,8 @@ public:
     int GetExtensionHeight() const { return m_extensionHeight; }
 
     /**
-     * Function GetAngle
-     * Returns angle of the crossbar.
+     * Return the angle of the crossbar.
+     *
      * @return Angle of the crossbar line expressed in radians.
      */
     double GetAngle() const
@@ -400,10 +401,17 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 protected:
-
     void updateGeometry() override;
 
     void updateText() override;
+
+    // Geometry
+    int          m_height;           ///< Perpendicular distance from features to crossbar
+    int          m_extensionHeight;  ///< Length of extension lines past the crossbar
+
+    wxPoint      m_crossBarStart;    ///< Crossbar start control point
+    wxPoint      m_crossBarEnd;      ///< Crossbar end control point
+
 };
 
 
@@ -420,11 +428,6 @@ public:
         VERTICAL    // Aligned with y-axis
     };
 
-private:
-    // Geometry
-    DIR      m_orientation;     ///< What axis to lock the dimension line to
-
-public:
     ORTHOGONAL_DIMENSION( BOARD_ITEM* aParent );
 
     ~ORTHOGONAL_DIMENSION() = default;
@@ -441,8 +444,9 @@ public:
     BITMAPS GetMenuImage() const override;
 
     /**
-     * Sets the orientation of the dimension line (so, perpendicular to the feature lines)
-     * @param aOrientation is the orientation the dimension should take
+     * Set the orientation of the dimension line (so, perpendicular to the feature lines).
+     *
+     * @param aOrientation is the orientation the dimension should take.
      */
     void SetOrientation( DIR aOrientation ) { m_orientation = aOrientation; }
     DIR GetOrientation() const { return m_orientation; }
@@ -454,10 +458,14 @@ public:
     void     Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
 protected:
-
     void updateGeometry() override;
 
     void updateText() override;
+
+private:
+    // Geometry
+    DIR      m_orientation;     ///< What axis to lock the dimension line to.
+
 };
 
 
@@ -477,8 +485,6 @@ protected:
  */
 class LEADER : public DIMENSION_BASE
 {
-    DIM_TEXT_FRAME m_textFrame;
-
 public:
     LEADER( BOARD_ITEM* aParent );
 
@@ -504,19 +510,21 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 protected:
-
     void updateGeometry() override;
+
+private:
+    DIM_TEXT_FRAME m_textFrame;
 };
 
 
 /**
- * Marks the center of a circle or arc with a cross shape
+ * Mark the center of a circle or arc with a cross shape.
+ *
  * The size and orientation of the cross is adjustable.
  * m_start always marks the center being measured; m_end marks the end of one leg of the cross.
  */
 class CENTER_DIMENSION : public DIMENSION_BASE
 {
-
 public:
     CENTER_DIMENSION( BOARD_ITEM* aParent );
 
@@ -541,7 +549,6 @@ public:
     const BOX2I ViewBBox() const override;
 
 protected:
-
     void updateGeometry() override;
 };
 

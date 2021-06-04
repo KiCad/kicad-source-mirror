@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ enum LAYER_T
 
 
 /**
- * Container to hold  information pertinent to a layer of a BOARD.
+ * Container to hold information pertinent to a layer of a BOARD.
  */
 struct LAYER
 {
@@ -112,16 +112,16 @@ struct LAYER
      * Convert a #LAYER_T enum to a string representation of the layer type.
      *
      * @param aType The #LAYER_T to convert
-     * @return const char* - The string representation of the layer type.
+     * @return The string representation of the layer type.
      */
     static const char* ShowType( LAYER_T aType );
 
     /**
      * Convert a string to a #LAYER_T
      *
-     * @param aType The const char* to convert
-     * @return LAYER_T - The binary representation of the layer type, or
-     *   LAYER_T(-1) if the string is invalid
+     * @param aType The layer name to convert.
+     * @return The binary representation of the layer type, or
+     *         LAYER_T(-1) if the string is invalid.
      */
     static LAYER_T     ParseType( const char* aType );
 };
@@ -130,8 +130,6 @@ struct LAYER
 // Helper class to handle high light nets
 class HIGH_LIGHT_INFO
 {
-    friend class BOARD;
-
 protected:
     std::set<int> m_netCodes;    // net(s) selected for highlight (-1 when no net selected )
     bool          m_highLightOn; // highlight active
@@ -146,10 +144,13 @@ protected:
     {
         Clear();
     }
+
+private:
+    friend class BOARD;
 };
 
 /**
- * Provides an interface to hook into board modifications and get callbacks
+ * Provide an interface to hook into board modifications and get callbacks
  * on certain modifications that are made to the board.  This allows updating
  * auxiliary views other than the primary board editor view.
  */
@@ -170,6 +171,13 @@ public:
 };
 
 
+DECL_VEC_FOR_SWIG( MARKERS, PCB_MARKER* )
+DECL_VEC_FOR_SWIG( ZONES, ZONE* )
+DECL_DEQ_FOR_SWIG( TRACKS, TRACK* )
+
+// Dequeue rather than Vector just so we can use moveUnflaggedItems in pcbnew_control.cpp
+DECL_DEQ_FOR_SWIG( GROUPS, PCB_GROUP* )
+
 /**
  * Flags to specify how the board is being used.
  */
@@ -185,65 +193,6 @@ enum class BOARD_USE
  */
 class BOARD : public BOARD_ITEM_CONTAINER
 {
-    friend class PCB_EDIT_FRAME;
-
-private:
-    /// What is this board being used for
-    BOARD_USE           m_boardUse;
-    int                 m_timeStamp;                // actually a modification counter
-
-    wxString            m_fileName;
-    MARKERS             m_markers;
-    DRAWINGS            m_drawings;
-    FOOTPRINTS          m_footprints;
-    TRACKS              m_tracks;
-    GROUPS              m_groups;
-    ZONES               m_zones;
-
-    LAYER               m_layers[PCB_LAYER_ID_COUNT];
-
-    HIGH_LIGHT_INFO     m_highLight;                // current high light data
-    HIGH_LIGHT_INFO     m_highLightPrevious;        // a previously stored high light data
-
-    int                 m_fileFormatVersionAtLoad;  // the version loaded from the file
-
-    std::map<wxString, wxString>        m_properties;
-    std::shared_ptr<CONNECTIVITY_DATA>  m_connectivity;
-
-    PAGE_INFO           m_paper;
-    TITLE_BLOCK         m_titles;                   // text in lower right of screen and plots
-    PCB_PLOT_PARAMS     m_plotOptions;
-    PROJECT*            m_project;                  // project this board is a part of
-
-    /**
-     * All of the board design settings are stored as a JSON object inside the project file.  The
-     * object itself is located here because the alternative is to require a valid project be
-     * passed in when constructing a BOARD, since things in the BOARD constructor rely on access
-     * to the BOARD_DESIGN_SETTINGS object.
-     *
-     * A reference to this object is set up in the PROJECT_FILE for the PROJECT this board is
-     * part of, so that the JSON load/store operations work.  This link is established when
-     * boards are loaded from disk.
-     */
-    std::unique_ptr<BOARD_DESIGN_SETTINGS> m_designSettings;
-
-    NETINFO_LIST                 m_NetInfo;         // net info list (name, design constraints...
-
-    std::vector<BOARD_LISTENER*> m_listeners;
-
-    // The default copy constructor & operator= are inadequate,
-    // either write one or do not use it at all
-    BOARD( const BOARD& aOther ) = delete;
-
-    BOARD& operator=( const BOARD& aOther ) = delete;
-
-    template <typename Func, typename... Args>
-    void InvokeListeners( Func&& aFunc, Args&&... args )
-    {
-        for( auto&& l : m_listeners )
-            ( l->*aFunc )( std::forward<Args>( args )... );
-    }
-
 public:
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -303,7 +252,7 @@ public:
      *   - An item may appear in at most one group
      *   - Each group must contain at least one item
      *   - If a group specifies a name, it must be unique
-     *   - The graph of groups containing subgroups must be acyclic.
+     *   - The graph of groups containing subgroups must be cyclic.
      */
     GROUPS& Groups() { return m_groups; }
     const GROUPS& Groups() const { return m_groups; }
@@ -348,18 +297,22 @@ public:
     void Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode = REMOVE_MODE::NORMAL ) override;
 
     /**
-     * Must be used if Add() is used using a BULK_x ADD_MODE to generate a change event for listeners
+     * Must be used if Add() is used using a BULK_x ADD_MODE to generate a change event for
+     * listeners.
      */
     void FinalizeBulkAdd( std::vector<BOARD_ITEM*>& aNewItems );
 
     /**
-     * Must be used if Remove() is used using a BULK_x REMOVE_MODE to generate a change event for listeners
+     * Must be used if Remove() is used using a BULK_x REMOVE_MODE to generate a change event
+     * for listeners.
      */
     void FinalizeBulkRemove( std::vector<BOARD_ITEM*>& aRemovedItems );
 
     /**
-     * Gets the first footprint on the board or nullptr.
+     * Get the first footprint on the board or nullptr.
+     *
      * This is used primarily by the footprint editor which knows there is only one.
+     *
      * @return first footprint or null pointer
      */
     FOOTPRINT* GetFirstFootprint() const
@@ -368,13 +321,12 @@ public:
     }
 
     /**
-     * Removes all footprints from the deque and frees the memory associated with them
+     * Remove all footprints from the deque and free the memory associated with them.
      */
     void DeleteAllFootprints();
 
     /**
-     * @return null if aID is null. Returns an object of Type() == NOT_USED if
-     * the aID is not found.
+     * @return null if aID is null. Returns an object of Type() == NOT_USED if the aID is not found.
      */
     BOARD_ITEM* GetItem( const KIID& aID ) const;
 
@@ -393,7 +345,7 @@ public:
     std::shared_ptr<CONNECTIVITY_DATA> GetConnectivity() const { return m_connectivity; }
 
     /**
-     * Builds or rebuilds the board connectivity database for the board,
+     * Build or rebuild the board connectivity database for the board,
      * especially the list of connected items, list of nets and rastnest data
      * Needed after loading a board to have the connectivity database updated.
      */
@@ -409,9 +361,11 @@ public:
     PROJECT* GetProject() const { return m_project; }
 
     /**
-     * Links a board to a given project.  Should be called immediately after loading board in
-     * order for everything to work
-     * @param aProject is a loaded project to link to
+     * Link a board to a given project.
+     *
+     * Should be called immediately after loading board in order for everything to work.
+     *
+     * @param aProject is a loaded project to link to.
      */
     void SetProject( PROJECT* aProject );
 
@@ -437,8 +391,9 @@ public:
 
     /**
       * Select the netcode to be highlighted.
-      * @param aNetCode is the net to highlight
-      * @param aMulti is true if you want to add a highlighted net without clearing the old one
+      *
+      * @param aNetCode is the net to highlight.
+      * @param aMulti is true if you want to add a highlighted net without clearing the old one.
       */
     void SetHighLightNet( int aNetCode, bool aMulti = false );
 
@@ -448,9 +403,10 @@ public:
     bool IsHighLightNetON() const { return m_highLight.m_highLightOn; }
 
     /**
-     * Enable or disable net highlighting.  If a netcode >= 0 has been set
-     * with SetHighLightNet and aValue is true, the net will be highlighted.
-     * If aValue is false, net highlighting will be disabled regardless of
+     * Enable or disable net highlighting.
+     *
+     * If a netcode >= 0 has been set with SetHighLightNet and aValue is true, the net will be
+     * highlighted.  If aValue is false, net highlighting will be disabled regardless of
      * the highlight netcode being set.
      */
     void HighLightON( bool aValue = true );
@@ -464,22 +420,22 @@ public:
     }
 
     /**
-     * @return int - The number of copper layers in the BOARD.
+     * @return The number of copper layers in the BOARD.
      */
     int  GetCopperLayerCount() const;
     void SetCopperLayerCount( int aCount );
 
     /**
-     * A proxy function that calls the corresponding function in m_BoardSettings
-     * Returns a bit-mask of all the layers that are enabled
-     * @return int - the enabled layers in bit-mapped form.
+     * A proxy function that calls the corresponding function in m_BoardSettings.
+     *
+     * @return the enabled layers in bit-mapped form.
      */
     LSET GetEnabledLayers() const;
 
     /**
-     * A proxy function that calls the correspondent function in m_BoardSettings
-     * Changes the bit-mask of enabled layers
-     * @param aLayerMask = The new bit-mask of enabled layers
+     * A proxy function that calls the correspondent function in m_BoardSettings.
+     *
+     * @param aLayerMask the new bit-mask of enabled layers.
      */
     void SetEnabledLayers( LSET aLayerMask );
 
@@ -487,7 +443,7 @@ public:
      * A proxy function that calls the correspondent function in m_BoardSettings
      * tests whether a given layer is enabled
      * @param aLayer = The layer to be tested
-     * @return bool - true if the layer is visible.
+     * @return true if the layer is visible.
      */
     bool IsLayerEnabled( PCB_LAYER_ID aLayer ) const
     {
@@ -497,22 +453,24 @@ public:
     /**
      * A proxy function that calls the correspondent function in m_BoardSettings
      * tests whether a given layer is visible
-     * @param aLayer = The layer to be tested
-     * @return bool - true if the layer is visible.
+     *
+     * @param aLayer is the layer to be tested.
+     * @return  true if the layer is visible otherwise false.
      */
     bool IsLayerVisible( PCB_LAYER_ID aLayer ) const;
 
     /**
-     * A proxy function that calls the correspondent function in m_BoardSettings
-     * Returns a bit-mask of all the layers that are visible
-     * @return int - the visible layers in bit-mapped form.
+     * A proxy function that calls the correspondent function in m_BoardSettings.
+     *
+     * @return the visible layers in bit-mapped form.
      */
     LSET  GetVisibleLayers() const;
 
     /**
      * A proxy function that calls the correspondent function in m_BoardSettings
-     * changes the bit-mask of visible layers
-     * @param aLayerMask = The new bit-mask of visible layers
+     * changes the bit-mask of visible layers.
+     *
+     * @param aLayerMask is the new bit-mask of visible layers.
      */
     void SetVisibleLayers( LSET aLayerMask );
 
@@ -520,38 +478,42 @@ public:
     // are not stored in the bitmap.
 
     /**
-     * Returns a set of all the element categories that are visible
-     * @return the set of visible GAL layers
+     * Return a set of all the element categories that are visible.
+     *
+     * @return the set of visible GAL layers.
      * @see enum GAL_LAYER_ID
      */
     GAL_SET GetVisibleElements() const;
 
     /**
-     * A proxy function that calls the correspondent function in m_BoardSettings
-     * changes the bit-mask of visible element categories
-     * @param aMask = The new bit-mask of visible element bitmap or-ed from enum GAL_LAYER_ID
+     * A proxy function that calls the correspondent function in m_BoardSettings.
+     *
+     * @param aMask is the new bit-mask of visible element bitmap or-ed from enum GAL_LAYER_ID
      * @see enum GAL_LAYER_ID
      */
     void SetVisibleElements( const GAL_SET& aMask );
 
     /**
-     * Change the bit-mask of visible element categories and layers
+     * Change the bit-mask of visible element categories and layers.
+     *
      * @see enum GAL_LAYER_ID
      */
     void SetVisibleAlls();
 
     /**
-     * Test whether a given element category is visible. Keep this as an inline function.
-     * @param aLayer is from the enum by the same name
-     * @return bool - true if the element is visible.
+     * Test whether a given element category is visible.
+     *
+     * @param aLayer is from the enum by the same name.
+     * @return true if the element is visible otherwise false.
      * @see enum GAL_LAYER_ID
      */
     bool IsElementVisible( GAL_LAYER_ID aLayer ) const;
 
     /**
      * Change the visibility of an element category.
-     * @param aLayer is from the enum by the same name
-     * @param aNewState = The new visibility state of the element category
+     *
+     * @param aLayer is from the enum by the same name.
+     * @param aNewState is the new visibility state of the element category.
      * @see enum GAL_LAYER_ID
      */
     void SetElementVisibility( GAL_LAYER_ID aLayer, bool aNewState );
@@ -559,8 +521,9 @@ public:
     /**
      * Expect either of the two layers on which a footprint can reside, and returns
      * whether that layer is visible.
-     * @param aLayer One of the two allowed layers for footprints: F_Cu or B_Cu
-     * @return bool - true if the layer is visible, else false.
+     *
+     * @param aLayer is one of the two allowed layers for footprints: F_Cu or B_Cu
+     * @return true if the layer is visible, otherwise false.
      */
     bool IsFootprintLayerVisible( PCB_LAYER_ID aLayer ) const;
 
@@ -595,13 +558,14 @@ public:
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     /**
-     * Extract the board outlines and build a closed polygon
-     * from lines, arcs and circle items on edge cut layer
-     * Any closed outline inside the main outline is a hole
-     * All contours should be closed, i.e. have valid vertices to build a closed polygon
-     * @param aOutlines The SHAPE_POLY_SET to fill in with outlines/holes.
-     * @param aErrorHandler = an optional DRC_ITEM error handler
+     * Extract the board outlines and build a closed polygon from lines, arcs and circle items
+     * on edge cut layer.
      *
+     * Any closed outline inside the main outline is a hole.  All contours should be closed,
+     * i.e. have valid vertices to build a closed polygon.
+     *
+     * @param aOutlines is the #SHAPE_POLY_SET to fill in with outlines/holes.
+     * @param aErrorHandler is an optional DRC_ITEM error handler.
      * @return true if success, false if a contour is not valid
      */
     bool GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
@@ -609,10 +573,13 @@ public:
 
     /**
      * Build a set of polygons which are the outlines of copper items (pads, tracks, vias, texts,
-     * zones).  Holes in vias or pads are ignored.  The polygons are not merged.
-     * Useful to export the shape of copper layers to dxf polygons or 3D viewer
-     * @param aLayer = A copper layer, like B_Cu, etc.
-     * @param aOutlines The SHAPE_POLY_SET to fill in with items outline.
+     * zones).
+     *
+     * Holes in vias or pads are ignored.  The polygons are not merged. This is useful to
+     * export the shape of copper layers to dxf polygons or 3D viewer/
+     *
+     * @param aLayer is a copper layer, like B_Cu, etc.
+     * @param aOutlines is the SHAPE_POLY_SET to fill in with items outline.
      */
     void ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines ) const;
 
@@ -625,30 +592,28 @@ public:
      * Return the name of a \a aLayer.
      *
      * @param aLayer is the #PCB_LAYER_ID of the layer.
-     *
-     * @return a string containing the appropriate layer type.
+     * @return a string containing the name of the layer.
      */
     const wxString GetLayerName( PCB_LAYER_ID aLayer ) const;
 
     /**
      * Changes the name of the layer given by aLayer.
-     *
      * @param aLayer A layer, like B_Cu, etc.
      * @param aLayerName The new layer name
-     * @return bool - true if aLayerName was legal and unique among other
-     *   layer names at other layer indices and aLayer was within range, else false.
+     * @return true if aLayerName was legal and unique among other layer names at other layer
+     *         indices and aLayer was within range, else false.
      */
     bool SetLayerName( PCB_LAYER_ID aLayer, const wxString& aLayerName );
 
     /**
      * Return an "English Standard" name of a PCB layer when given \a aLayerNumber.
+     *
      * This function is static so it can be called without a BOARD instance.  Use
      * GetLayerName() if want the layer names of a specific BOARD, which could
      * be different than the default if the user has renamed any copper layers.
      *
-     * @param  aLayerId is the layer identifier (index) to fetch
-     * @return const wxString - containing the layer name or "BAD INDEX" if aLayerId
-     *                      is not legal
+     * @param  aLayerId is the layer identifier (index) to fetch.
+     * @return a string containing the layer name or "BAD INDEX" if aLayerId is not legal.
      */
     static wxString GetStandardLayerName( PCB_LAYER_ID aLayerId )
     {
@@ -669,8 +634,7 @@ public:
      * Return the type of the copper layer given by aLayer.
      *
      * @param aLayer A layer index, like B_Cu, etc.
-     * @return LAYER_T - the layer type, or LAYER_T(-1) if the
-     *  index was out of range.
+     * @return the layer type, or LAYER_T(-1) if the index was out of range.
      */
     LAYER_T GetLayerType( PCB_LAYER_ID aLayer ) const;
 
@@ -679,13 +643,13 @@ public:
      *
      * @param aLayer A layer index, like B_Cu, etc.
      * @param aLayerType The new layer type.
-     * @return bool - true if aLayerType was legal and aLayer was within range, else false.
+     * @return true if aLayerType was legal and aLayer was within range, else false.
      */
     bool SetLayerType( PCB_LAYER_ID aLayer, LAYER_T aLayerType );
 
     /**
-     * @param aNet Only count nodes belonging to this net
-     * @return the number of pads members of nets (i.e. with netcode > 0)
+     * @param aNet Only count nodes belonging to this net.
+     * @return the number of pads members of nets (i.e. with netcode > 0).
      */
     unsigned GetNodesCount( int aNet = -1 ) const;
 
@@ -695,7 +659,7 @@ public:
     unsigned GetUnconnectedNetCount() const;
 
     /**
-     * @return the number of pads in board
+     * @return the number of pads in board.
      */
     unsigned GetPadCount() const;
 
@@ -705,7 +669,7 @@ public:
      * The returned list is not sorted and contains pointers to PADS, but those pointers do
      * not convey ownership of the respective PADs.
      *
-     * @return D_PADS - a full list of pads
+     * @return a full list of pads.
      */
     const std::vector<PAD*> GetPads() const;
 
@@ -716,15 +680,17 @@ public:
 
     /**
      * Search for a net with the given netcode.
+     *
      * @param aNetcode A netcode to search for.
-     * @return NETINFO_ITEM_ITEM* - the net or NULL if not found.
+     * @return the net if found or NULL if not found.
      */
     NETINFO_ITEM* FindNet( int aNetcode ) const;
 
     /**
      * Search for a net with the given name.
+     *
      * @param aNetname A Netname to search for.
-     * @return NETINFO_ITEM* - the net or NULL if not found.
+     * @return the net if found or NULL if not found.
      */
     NETINFO_ITEM* FindNet( const wxString& aNetname ) const;
 
@@ -740,7 +706,7 @@ public:
 
 #ifndef SWIG
     /**
-     * @return iterator to the first element of the NETINFO_ITEMs list
+     * @return iterator to the first element of the NETINFO_ITEMs list.
      */
     NETINFO_LIST::iterator BeginNets() const
     {
@@ -748,7 +714,7 @@ public:
     }
 
     /**
-     * @return iterator to the last element of the NETINFO_ITEMs list
+     * @return iterator to the last element of the NETINFO_ITEMs list.
      */
     NETINFO_LIST::iterator EndNets() const
     {
@@ -757,7 +723,7 @@ public:
 #endif
 
     /**
-     * @return the number of nets (NETINFO_ITEM)
+     * @return the number of nets (NETINFO_ITEM).
      */
     unsigned GetNetCount() const
     {
@@ -768,7 +734,7 @@ public:
      * Calculate the bounding box containing all board items (or board edge segments).
      *
      * @param aBoardEdgesOnly is true if we are interested in board edge segments only.
-     * @return EDA_RECT - the board's bounding box
+     * @return the board's bounding box.
      */
     EDA_RECT ComputeBoundingBox( bool aBoardEdgesOnly = false ) const;
 
@@ -778,7 +744,7 @@ public:
     }
 
     /**
-     * Returns the board bounding box calculated using exclusively the board edges (graphics
+     * Return the board bounding box calculated using exclusively the board edges (graphics
      * on Edge.Cuts layer).
      *
      * If there are items outside of the area limited by Edge.Cuts graphics, the items will
@@ -802,8 +768,8 @@ public:
      * @param testData Arbitrary data used by the inspector.
      * @param scanTypes Which KICAD_T types are of interest and the order
      *  is significant too, terminated by EOT.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *  else SCAN_CONTINUE, and determined by the inspector.
+     * @return SEARCH_QUIT if the Iterator is to stop the scan, else SCAN_CONTINUE, and
+     *         determined by the inspector.
      */
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
@@ -813,8 +779,7 @@ public:
      * Finds only the first one, if there is more than one such FOOTPRINT.
      *
      * @param aReference The reference designator of the FOOTPRINT to find.
-     * @return FOOTPRINT* - If found, the FOOTPRINT having the given reference designator, else
-     *                      nullptr.
+     * @return If found the FOOTPRINT having the given reference designator, else nullptr.
      */
     FOOTPRINT* FindFootprintByReference( const wxString& aReference ) const;
 
@@ -822,15 +787,15 @@ public:
      * Search for a FOOTPRINT within this board with the given path.
      *
      * @param aPath The path ([sheetUUID, .., symbolUUID]) to search for.
-     * @return FOOTPRINT* - If found, the FOOTPRINT having the given uuid, else NULL.
+     * @return If found, the FOOTPRINT having the given uuid, else NULL.
      */
     FOOTPRINT* FindFootprintByPath( const KIID_PATH& aPath ) const;
 
     /**
      * @param aNames An array string to fill with net names.
-     * @param aSortbyPadsCount  true = sort by active pads count, false = no sort (i.e.
-     *                          leave the sort by net names)
-     * @return int - net names count.
+     * @param aSortbyPadsCount  set to true to sort by active pads count, false = no sort (i.e.
+     *                          leave the sort by net names).
+     * @return net names count.
      */
     int SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount );
 
@@ -885,14 +850,14 @@ public:
      * Return the Zone at a given index.
      *
      * @param index The array type index into a collection of ZONE *.
-     * @return ZONE* - a pointer to the Area or NULL if index out of range.
+     * @return a pointer to the Area or NULL if index out of range.
      */
     ZONE* GetArea( int index ) const
     {
         if( (unsigned) index < m_zones.size() )
             return m_zones[index];
 
-        return NULL;
+        return nullptr;
     }
 
     /**
@@ -913,13 +878,14 @@ public:
     /**
      * Add an empty copper area to board areas list.
      *
-     * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas  pickers (useful
-     *                        in undo commands) can be NULL
-     * @param aNetcode = the netcode of the copper area (0 = no net)
-     * @param aLayer = the layer of area
-     * @param aStartPointPosition = position of the first point of the polygon outline of this area
-     * @param aHatch = hatch option
-     * @return a reference to the new area
+     * @param aNewZonesList is a PICKED_ITEMS_LIST * where to store new areas  pickers (useful
+     *                      in undo commands) can be NULL.
+     * @param aNetcode is the netcode of the copper area (0 = no net).
+     * @param aLayer is the layer of area.
+     * @param aStartPointPosition is position of the first point of the polygon outline of this
+     *        area.
+     * @param aHatch is the hatch option.
+     * @return a reference to the new area.
      */
     ZONE* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
                    wxPoint aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch );
@@ -927,29 +893,34 @@ public:
     /**
      * Process an area that has been modified, by normalizing its polygon against itself.
      * i.e. convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
+     *
      * This may change the number and order of copper areas in the net.
-     * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new created areas pickers
-     * @param aCurrArea = the zone to process
-     * @return true if changes are made
+     *
+     * @param aNewZonesList is a PICKED_ITEMS_LIST where to store new created areas pickers.
+     * @param aCurrArea is the zone to process.
+     * @return true if changes are made.
      */
     bool NormalizeAreaPolygon( PICKED_ITEMS_LIST* aNewZonesList, ZONE* aCurrArea );
 
     /**
      * Process an area that has been modified, by normalizing its polygon
      * and merging the intersecting polygons for any other areas on the same net.
+     *
      * This may change the number and order of copper areas in the net.
-     * @param aModifiedZonesList = a PICKED_ITEMS_LIST * where to store deleted or added areas
-     *                             (useful in undo commands can be NULL
-     * @param modified_area = area to test
-     * @return true if some areas modified
+     *
+     * @param aModifiedZonesList is a #PICKED_ITEMS_LIST where to store deleted or added areas
+     *                           (useful in undo commands can be NULL).
+     * @param modified_area is the area to test.
+     * @return true if some areas modified.
     */
     bool OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList, ZONE* modified_area );
 
     /**
-     * Test for intersection of 2 copper areas
-     * @param aZone1 = area reference
-     * @param aZone2 = area to compare for intersection calculations
-     * @return : false if no intersection, true if intersection
+     * Test for intersection of 2 copper areas.
+     *
+     * @param aZone1 is the area reference.
+     * @param aZone2 is the area to compare for intersection calculations.
+     * @return false if no intersection, true if intersection.
      */
     bool TestZoneIntersection( ZONE* aZone1, ZONE* aZone2 );
 
@@ -995,7 +966,7 @@ public:
      * function.
      * </p>
      * @note The normal pad list is sorted by increasing netcodes.
-     * @param aPadList = the list of pads candidates (a std::vector<PAD*>)
+     * @param aPadList is the list of pads candidates (a std::vector<PAD*>).
      * @param aPosition A wxPoint object containing the position to test.
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return a PAD object pointer to the connected pad.
@@ -1005,6 +976,7 @@ public:
     /**
      * Delete a given pad from the BOARD by removing it from its footprint and from the
      * m_NetInfo.  Makes no UI calls.
+     *
      * @param aPad is the pad to delete.
      */
     void PadDelete( PAD* aPad );
@@ -1014,6 +986,7 @@ public:
      * coordinate, and for increasing y coordinate for same values of x coordinates.  The vector
      * only holds pointers to the pads and those pointers are only references to pads which are
      * owned by the BOARD through other links.
+     *
      * @param aVector Where to put the pad pointers.
      * @param aNetCode = the netcode filter:
      *                  = -1 to build the full pad list.
@@ -1022,7 +995,7 @@ public:
     void GetSortedPadListByXthenYCoord( std::vector<PAD*>& aVector, int aNetCode = -1 ) const;
 
     /**
-     * Returns data on the length and number of track segments connected to a given track.
+     * Return data on the length and number of track segments connected to a given track.
      * This uses the connectivity data for the board to calculate connections
      *
      * @param aTrack Starting track (can also be a via) to check against for connection.
@@ -1033,14 +1006,15 @@ public:
     /**
      * Collect all the TRACKs and VIAs that are members of a net given by aNetCode.
      * Used from python.
+     *
      * @param aNetCode gives the id of the net.
-     * @return TRACKS - which are in the net identified by @a aNetCode.
+     * @return list of track which are in the net identified by @a aNetCode.
      */
     TRACKS TracksInNet( int aNetCode );
 
     /**
      * Get a footprint by its bounding rectangle at \a aPosition on \a aLayer.
-     * <p>
+     *
      * If more than one footprint is at \a aPosition, then the closest footprint on the
      * active layer is returned.  The distance is calculated via manhattan distance from
      * the center of the bounding rectangle to \a aPosition.
@@ -1095,14 +1069,15 @@ public:
       */
     void OnItemsChanged( std::vector<BOARD_ITEM*>& aItems );
 
-    /*
+    /**
      * Consistency check of internal m_groups structure.
+     *
      * @param repair if true, modify groups structure until it passes the sanity check.
      * @return empty string on success.  Or error description if there's a problem.
      */
     wxString GroupsSanityCheck( bool repair = false );
 
-    /*
+    /**
      * @param repair if true, make one modification to groups structure that brings it
      *        closer to passing the sanity check.
      * @return empty string on success.  Or error description if there's a problem.
@@ -1117,15 +1092,14 @@ public:
         bool enter       : 1;
     };
 
-    /*
+    /**
      * Check which selection tool group operations are legal given the selection.
+     *
      * @return bit field of legal ops.
      */
     GroupLegalOpsField GroupLegalOps( const PCB_SELECTION& selection ) const;
 
-public:
     // ------------ Run-time caches -------------
-
     std::mutex                                            m_CachesMutex;
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideCourtyardCache;
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideFCourtyardCache;
@@ -1133,5 +1107,65 @@ public:
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideAreaCache;
 
     std::map< ZONE*, std::unique_ptr<DRC_RTREE> >         m_CopperZoneRTrees;
+
+private:
+    // The default copy constructor & operator= are inadequate,
+    // either write one or do not use it at all
+    BOARD( const BOARD& aOther ) = delete;
+
+    BOARD& operator=( const BOARD& aOther ) = delete;
+
+    template <typename Func, typename... Args>
+    void InvokeListeners( Func&& aFunc, Args&&... args )
+    {
+        for( auto&& l : m_listeners )
+            ( l->*aFunc )( std::forward<Args>( args )... );
+    }
+
+    friend class PCB_EDIT_FRAME;
+
+    /// What is this board being used for
+    BOARD_USE           m_boardUse;
+    int                 m_timeStamp;                // actually a modification counter
+
+    wxString            m_fileName;
+    MARKERS             m_markers;
+    DRAWINGS            m_drawings;
+    FOOTPRINTS          m_footprints;
+    TRACKS              m_tracks;
+    GROUPS              m_groups;
+    ZONES               m_zones;
+
+    LAYER               m_layers[PCB_LAYER_ID_COUNT];
+
+    HIGH_LIGHT_INFO     m_highLight;                // current high light data
+    HIGH_LIGHT_INFO     m_highLightPrevious;        // a previously stored high light data
+
+    int                 m_fileFormatVersionAtLoad;  // the version loaded from the file
+
+    std::map<wxString, wxString>        m_properties;
+    std::shared_ptr<CONNECTIVITY_DATA>  m_connectivity;
+
+    PAGE_INFO           m_paper;
+    TITLE_BLOCK         m_titles;                   // text in lower right of screen and plots
+    PCB_PLOT_PARAMS     m_plotOptions;
+    PROJECT*            m_project;                  // project this board is a part of
+
+    /**
+     * All of the board design settings are stored as a JSON object inside the project file.  The
+     * object itself is located here because the alternative is to require a valid project be
+     * passed in when constructing a BOARD, since things in the BOARD constructor rely on access
+     * to the BOARD_DESIGN_SETTINGS object.
+     *
+     * A reference to this object is set up in the PROJECT_FILE for the PROJECT this board is
+     * part of, so that the JSON load/store operations work.  This link is established when
+     * boards are loaded from disk.
+     */
+    std::unique_ptr<BOARD_DESIGN_SETTINGS> m_designSettings;
+
+    NETINFO_LIST                 m_NetInfo;         // net info list (name, design constraints...
+
+    std::vector<BOARD_LISTENER*> m_listeners;
 };
+
 #endif      // CLASS_BOARD_H_
