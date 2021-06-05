@@ -132,7 +132,14 @@ void PROJECT_TREE_ITEM::Delete()
 
     if( !KIPLATFORM::ENV::MoveToTrash( GetFileName(), errMsg ) )
     {
-        wxString dialogMsg = wxString::Format( _( "Failed to delete '%s'"), GetFileName() );
+#ifdef __WINDOWS__
+        wxString dialogMsg = wxString::Format( _( "Can not move '%s' to recycle bin."),
+                                               GetFileName() );
+#else
+        wxString dialogMsg = wxString::Format( _( "Can not move '%s' to trash."),
+                                               GetFileName() );
+#endif
+
         DisplayErrorMessage( m_parent, dialogMsg, errMsg );
         return;
     }

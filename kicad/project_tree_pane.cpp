@@ -786,8 +786,13 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
             popup_menu.AppendSeparator();
         }
 
+#ifdef __WINDOWS__
         AddMenuItem( &popup_menu, ID_PROJECT_DELETE, _( "Delete" ), help_text,
                      KiBitmap( BITMAPS::trash ) );
+#else
+        AddMenuItem( &popup_menu, ID_PROJECT_DELETE, _( "Move to Trash" ), help_text,
+                     KiBitmap( BITMAPS::trash ) );
+#endif
     }
 
     if( can_print )
@@ -836,29 +841,9 @@ void PROJECT_TREE_PANE::onOpenSelectedFileWithTextEditor( wxCommandEvent& event 
 void PROJECT_TREE_PANE::onDeleteFile( wxCommandEvent& event )
 {
     std::vector<PROJECT_TREE_ITEM*> tree_data = GetSelectedData();
-    wxString                        msg, caption;
 
-    if( tree_data.size() == 1 )
-    {
-        bool is_directory = wxDirExists( tree_data[0]->GetFileName() );
-        caption = is_directory ? _( "Delete Directory" ) : _( "Delete File" );
-        msg = wxString::Format( _( "Are you sure you want to delete '%s'?" ),
-                                tree_data[0]->GetFileName() );
-    }
-    else
-    {
-        msg = wxString::Format( _( "Are you sure you want to delete %d items?" ),
-                                (int)tree_data.size() );
-        caption = _( "Delete Multiple Items" );
-    }
-
-    wxMessageDialog dialog( m_parent, msg, caption, wxYES_NO | wxICON_QUESTION );
-
-    if( dialog.ShowModal() == wxID_YES )
-    {
-        for( PROJECT_TREE_ITEM* item_data : tree_data )
-            item_data->Delete();
-    }
+    for( PROJECT_TREE_ITEM* item_data : tree_data )
+        item_data->Delete();
 }
 
 
