@@ -272,9 +272,9 @@ const wxString& NET_SETTINGS::GetNetclassName( const wxString& aNetName ) const
 }
 
 
-static bool isSuperSub( wxChar c )
+static bool isSuperSubOverbar( wxChar c )
 {
-    return c == '_' || c == '^';
+    return c == '_' || c == '^' || c == '~';
 }
 
 
@@ -304,7 +304,7 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
     {
         if( aBus[i] == '{' )
         {
-            if( i > 0 && isSuperSub( aBus[i-1] ) )
+            if( i > 0 && isSuperSubOverbar( aBus[i-1] ) )
                 braceNesting++;
             else
                 return false;
@@ -376,10 +376,6 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
             braceNesting--;
             suffix += aBus[i];
         }
-        else if( aBus[i] == '~' )
-        {
-            suffix += aBus[i];
-        }
         else
         {
             return false;
@@ -431,7 +427,7 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
     {
         if( aGroup[i] == '{' )
         {
-            if( i > 0 && isSuperSub( aGroup[i-1] ) )
+            if( i > 0 && isSuperSubOverbar( aGroup[i-1] ) )
                 braceNesting++;
             else
                 break;
@@ -464,7 +460,7 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
     {
         if( aGroup[i] == '{' )
         {
-            if( i > 0 && isSuperSub( aGroup[i-1] ) )
+            if( i > 0 && isSuperSubOverbar( aGroup[i-1] ) )
                 braceNesting++;
             else
                 return false;

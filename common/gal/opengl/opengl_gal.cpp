@@ -1303,52 +1303,54 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
         break;
     }
 
-    int i = 0;
+    int overbarDepth = -1;
+    int braceNesting = 0;
 
     for( UTF8::uni_iter chIt = text.ubegin(), end = text.uend(); chIt < end; ++chIt )
     {
-        unsigned int c = *chIt;
-        wxASSERT_MSG( c != '\n' && c != '\r', wxT( "No support for multiline bitmap text yet" ) );
+        wxASSERT_MSG( *chIt != '\n' && *chIt != '\r',
+                wxT( "No support for multiline bitmap text yet" ) );
 
-        bool wasOverbar = overbar;
+        bool wasOverbar = overbarDepth == -1;
 
-        if( c == '~' )
+        if( *chIt == '~' && overbarDepth == -1 )
         {
-            if( ++chIt == end )
-                break;
+            UTF8::uni_iter lookahead = chIt;
 
-            c = *chIt;
-
-            if( c == '~' )
+            if( ++lookahead != end && *lookahead == '{' )
             {
-                // double ~ is really a ~ so go ahead and process the second one
-
-                // so what's a triple ~?  It could be a real ~ followed by an overbar, or
-                // it could be an overbar followed by a real ~.  The old algorithm did the
-                // former so we will too....
-            }
-            else
-            {
-                overbar = !overbar;
+                chIt = lookahead;
+                overbarDepth = braceNesting;
+                braceNesting++;
+                continue;
             }
         }
-        else if( c == ' ' || c == '}' || c == ')' )
+        else if( *chIt == '{' )
         {
-            overbar = false;
+            braceNesting++;
+        }
+        else if( *chIt == '}' )
+        {
+            if( braceNesting > 0 )
+                braceNesting--;
+
+            if( braceNesting == overbarDepth )
+            {
+                overbarDepth = -1;
+                continue;
+            }
         }
 
-        if( wasOverbar && !overbar )
+        if( wasOverbar && overbarDepth == -1 )
         {
             drawBitmapOverbar( overbarLength, overbarHeight );
             overbarLength = 0;
         }
 
         if( overbar )
-            overbarLength += drawBitmapChar( c );
+            overbarLength += drawBitmapChar( *chIt );
         else
-            drawBitmapChar( c );
-
-        ++i;
+            drawBitmapChar( *chIt );
     }
 
     // Handle the case when overbar is active till the end of the drawn text
@@ -2064,33 +2066,38 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
 
     VECTOR2D textSize( 0, 0 );
     float    commonOffset = std::numeric_limits<float>::max();
-    bool     in_overbar = false;
-    float    char_height = font_information.max_y - defaultGlyph->miny;
+    float    charHeight = font_information.max_y - defaultGlyph->miny;
+    int      overbarDepth = -1;
+    int braceNesting = 0;
 
     for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
     {
-        if( *chIt == '~' )
+        if( *chIt == '~' && overbarDepth == -1 )
         {
-            if( ++chIt == end )
-                break;
+            UTF8::uni_iter lookahead = chIt;
 
-            if( *chIt == '~' )
+            if( ++lookahead != end && *lookahead == '{' )
             {
-                // double ~ is really a ~ so go ahead and process the second one
-
-                // so what's a triple ~?  It could be a real ~ followed by an overbar, or
-                // it could be an overbar followed by a real ~.  The old algorithm did the
-                // former so we will too....
-            }
-            else
-            {
-                // single ~ toggles overbar
-                in_overbar = !in_overbar;
+                chIt = lookahead;
+                overbarDepth = braceNesting;
+                braceNesting++;
+                continue;
             }
         }
-        else if( in_overbar && ( *chIt == ' ' || *chIt == '}' || *chIt == ')' ) )
+        else if( *chIt == '{' )
         {
-            in_overbar = false;
+            braceNesting++;
+        }
+        else if( *chIt == '}' )
+        {
+            if( braceNesting > 0 )
+                braceNesting--;
+
+            if( braceNesting == overbarDepth )
+            {
+                overbarDepth = -1;
+                continue;
+            }
         }
 
         const FONT_GLYPH_TYPE* glyph = LookupGlyph( *chIt );
@@ -2105,15 +2112,15 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
         {
             textSize.x += glyph->advance;
 
-            if( in_overbar )
+            if( overbarDepth != -1 )
             {
                 const float H = lineGlyph->maxy - lineGlyph->miny;
-                textSize.y = std::max<float>( textSize.y, char_height + 1.5 * H );
+                textSize.y = std::max<float>( textSize.y, charHeight + 1.5 * H );
             }
         }
     }
 
-    textSize.y = std::max<float>( textSize.y, char_height );
+    textSize.y = std::max<float>( textSize.y, charHeight );
     commonOffset = std::min<float>( font_information.max_y - defaultGlyph->maxy, commonOffset );
     textSize.y -= commonOffset;
 

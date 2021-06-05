@@ -965,11 +965,12 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
            in no more details...
          */
 
-        bool overlining = false;
+        int braceNesting = 0;
+        int overbarDepth = -1;
 
         fputs( "  1\n", m_outputFile );
 
-        for( unsigned i = 0; i < aText.length(); i++ )
+        for( unsigned int i = 0; i < aText.length(); i++ )
         {
             /* Here I do a bad thing: writing the output one byte at a time!
                but today I'm lazy and I have no idea on how to coerce a Unicode
@@ -986,31 +987,30 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
             }
             else
             {
-                if( ch == '~' )
+                if( aText[i] == '~' && i+1 < aText.length() && aText[i+1] == '{' )
                 {
-                    if( ++i == aText.length() )
-                        break;
+                    fputs( "%%o", m_outputFile );
+                    overbarDepth = braceNesting;
 
-                    ch = aText[i];
-
-                    if( ch == '~' )
-                    {
-                        // double ~ is really a ~ so go ahead and process the second one
-
-                        // so what's a triple ~?  It could be a real ~ followed by an overbar,
-                        // or it could be an overbar followed by a real ~.  The old algorithm
-                        // did the former so we will too....
-                    }
-                    else
-                    {
-                        // Handle the overline toggle
-                        fputs( overlining ? "%%o" : "%%O", m_outputFile );
-                        overlining = !overlining;
-                    }
+                    // Skip the '{'
+                    i++;
+                    continue;
                 }
-                else if( ch == ' ' || ch == '}' || ch == ')' )
+                else if( aText[i] == '{' )
                 {
-                    overlining = false;
+                    braceNesting++;
+                }
+                else if( aText[i] == '}' )
+                {
+                    if( braceNesting > 0 )
+                        braceNesting--;
+
+                    if( braceNesting == overbarDepth )
+                    {
+                        fputs( "%%O", m_outputFile );
+                        overbarDepth = -1;
+                        continue;
+                    }
                 }
 
                 putc( ch, m_outputFile );

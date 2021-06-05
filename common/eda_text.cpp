@@ -248,7 +248,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     // because only this line can change the bounding box
     for( unsigned ii = 1; ii < text.size(); ii++ )
     {
-        if( text[ii-1] == '~' && text[ii] != '~' )
+        if( text[ii-1] == '~' && text[ii] == '{' )
         {
             hasOverBar = true;
             break;

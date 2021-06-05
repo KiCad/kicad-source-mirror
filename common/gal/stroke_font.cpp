@@ -329,9 +329,10 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
     // The overbar is indented inward at the beginning of an italicized section, but
     // must not be indented on subsequent letters to ensure that the bar segments
     // overlap.
-    bool     last_had_overbar = false;
-    bool     in_overbar = false;
-    bool     in_super_or_subscript = false;
+    bool     lastHadOverbar = false;
+    int overbarDepth = -1;
+    int superSubDepth = -1;
+    int braceNesting = 0;
     VECTOR2D glyphSize = baseGlyphSize;
 
     // Allocate only once (for performance)
@@ -354,67 +355,72 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 
             glyphSize = baseGlyphSize;
             yOffset = 0;
-
-            // Tab ends an overbar
-            in_overbar = false;
         }
-        else if( *chIt == '~' )
+        else if( *chIt == '^' && superSubDepth == -1 )
         {
-            if( ++chIt == end )
-                break;
-
-            if( *chIt == '~' )
-            {
-                // double ~ is really a ~ so go ahead and process the second one
-
-                // so what's a triple ~?  It could be a real ~ followed by an overbar, or
-                // it could be an overbar followed by a real ~.  The old algorithm did the
-                // former so we will too....
-            }
-            else
-            {
-                in_overbar = !in_overbar;
-            }
-        }
-        else if( *chIt == '^' )
-        {
-            auto lookahead = chIt;
+            UTF8::uni_iter lookahead = chIt;
 
             if( ++lookahead != end && *lookahead == '{' )
             {
-                //  process superscript
                 chIt = lookahead;
-                in_super_or_subscript = true;
+                superSubDepth = braceNesting;
+                braceNesting++;
+
                 glyphSize = baseGlyphSize * 0.8;
                 yOffset = -baseGlyphSize.y * 0.3;
                 continue;
             }
         }
-        else if( *chIt == '_' )
+        else if( *chIt == '_' && superSubDepth == -1 )
         {
-            auto lookahead = chIt;
+            UTF8::uni_iter lookahead = chIt;
 
             if( ++lookahead != end && *lookahead == '{' )
             {
-                //  process subscript
                 chIt = lookahead;
-                in_super_or_subscript = true;
+                superSubDepth = braceNesting;
+                braceNesting++;
+
                 glyphSize = baseGlyphSize * 0.8;
                 yOffset = baseGlyphSize.y * 0.1;
                 continue;
             }
         }
-        else if( *chIt == '}' && in_super_or_subscript )
+        else if( *chIt == '~' && overbarDepth == -1 )
         {
-            in_super_or_subscript = false;
-            glyphSize = baseGlyphSize;
-            yOffset = 0;
-            continue;
+            UTF8::uni_iter lookahead = chIt;
+
+            if( ++lookahead != end && *lookahead == '{' )
+            {
+                chIt = lookahead;
+                overbarDepth = braceNesting;
+                braceNesting++;
+                continue;
+            }
         }
-        // Overbar syntax is less precise so we have to have some special cases
-        else if( in_overbar && ( *chIt == ' ' || *chIt == '}' || *chIt == ')' ) )
+        else if( *chIt == '{' )
         {
-            in_overbar = false;
+            braceNesting++;
+        }
+        else if( *chIt == '}' )
+        {
+            if( braceNesting > 0 )
+                braceNesting--;
+
+            if( braceNesting == superSubDepth )
+            {
+                superSubDepth = -1;
+
+                glyphSize = baseGlyphSize;
+                yOffset = 0;
+                continue;
+            }
+
+            if( braceNesting == overbarDepth )
+            {
+                overbarDepth = -1;
+                continue;
+            }
         }
 
         // Index into bounding boxes table
@@ -429,19 +435,19 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         const GLYPH* glyph = m_glyphs->at( dd );
         const BOX2D& bbox  = m_glyphBoundingBoxes->at( dd );
 
-        if( in_overbar )
+        if( overbarDepth != -1 )
         {
             double overbar_start_x = xOffset;
             double overbar_start_y = - computeOverbarVerticalPosition();
             double overbar_end_x = xOffset + glyphSize.x * bbox.GetEnd().x;
             double overbar_end_y = overbar_start_y;
 
-            if( !last_had_overbar )
+            if( !lastHadOverbar )
             {
                 if( m_gal->IsFontItalic() )
                     overbar_start_x += overbar_italic_comp;
 
-                last_had_overbar = true;
+                lastHadOverbar = true;
             }
 
             VECTOR2D startOverbar( overbar_start_x, overbar_start_y );
@@ -451,7 +457,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         }
         else
         {
-            last_had_overbar = false;
+            lastHadOverbar = false;
         }
 
         if( m_gal->IsFontUnderlined() )
@@ -534,12 +540,13 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
     double   maxX = 0.0, curX = 0.0;
 
     double curScale = 1.0;
-    bool   in_overbar = false;
-    bool   in_super_or_subscript = false;
+    int overbarDepth = -1;
+    int superSubDepth = -1;
+    int braceNesting = 0;
 
-    for( UTF8::uni_iter it = aText.ubegin(), end = aText.uend(); it < end; ++it )
+    for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
     {
-        if( *it == '\n' )
+        if( *chIt == '\n' )
         {
             curX = 0.0;
             maxX = std::max( maxX, curX );
@@ -549,67 +556,52 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
 
         // Handle tabs as locked to the nearest 4th column (counting in spaces)
         // The choice of spaces is somewhat arbitrary but sufficient for aligning text
-        if( *it == '\t' )
+        if( *chIt == '\t' )
         {
             double spaces = m_glyphBoundingBoxes->at( 0 ).GetEnd().x;
             double addlSpace = 3.0 * spaces - std::fmod( curX, 4.0 * spaces );
 
             // Add the remaining space (between 0 and 3 spaces)
             curX += addlSpace;
-
-            // Tab ends an overbar
-            in_overbar = false;
         }
-        else if( *it == '~' )
+        else if( (*chIt == '^' || *chIt == '_') && superSubDepth == -1 )
         {
-            if( ++it == end )
-                break;
-
-            if( *it == '~' )
-            {
-                // double ~ is really a ~ so go ahead and process the second one
-
-                // so what's a triple ~?  It could be a real ~ followed by an overbar, or
-                // it could be an overbar followed by a real ~.  The old algorithm did the
-                // former so we will too....
-            }
-            else
-            {
-                // single ~ toggles overbar
-                in_overbar = !in_overbar;
-            }
-        }
-        else if( *it == '^' || *it == '_' )
-        {
-            auto lookahead = it;
+            auto lookahead = chIt;
 
             if( ++lookahead != end && *lookahead == '{' )
             {
                 //  process superscript
-                it = lookahead;
-                in_super_or_subscript = true;
+                chIt = lookahead;
+                superSubDepth = braceNesting;
+
                 curScale = 0.8;
                 continue;
             }
         }
-        else if( *it == '}' && in_super_or_subscript )
+        else if( *chIt == '{' )
         {
-            in_super_or_subscript = false;
-            curScale = 1.0;
-            continue;
+            braceNesting++;
         }
-        // Overbar syntax is less precise so we have to have some special cases
-        else if( in_overbar && ( *it == ' ' || *it == '}' || *it == ')' ) )
+        else if( *chIt == '}' )
         {
-            in_overbar = false;
+            if( braceNesting > 0 )
+                braceNesting--;
+
+            if( braceNesting == superSubDepth )
+            {
+                superSubDepth = -1;
+
+                curScale = 1.0;
+                continue;
+            }
         }
 
         // Index in the bounding boxes table
-        int dd = (signed) *it - ' ';
+        int dd = (signed) *chIt - ' ';
 
         if( dd >= (int) m_glyphBoundingBoxes->size() || dd < 0 )
         {
-            int substitute = *it == '\t' ? ' ' : '?';
+            int substitute = *chIt == '\t' ? ' ' : '?';
             dd = substitute - ' ';
         }
 
