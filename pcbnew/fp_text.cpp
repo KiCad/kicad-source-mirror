@@ -361,8 +361,6 @@ void FP_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 double FP_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = (double)std::numeric_limits<double>::max();
-    RENDER_SETTINGS* renderSettings = aView->GetPainter()->GetSettings();
-    COLOR4D          backgroundColor = renderSettings->GetLayerColor( LAYER_PCB_BACKGROUND );
 
     if( !aView )
         return 0.0;
@@ -371,6 +369,9 @@ double FP_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     // should only render if its native layer is visible.
     if( !aView->IsLayerVisible( GetLayer() ) )
         return HIDE;
+
+    RENDER_SETTINGS* renderSettings = aView->GetPainter()->GetSettings();
+    COLOR4D          backgroundColor = renderSettings->GetLayerColor( LAYER_PCB_BACKGROUND );
 
     // Handle Render tab switches
     if( m_Type == TEXT_is_VALUE || GetText() == wxT( "${VALUE}" ) )
