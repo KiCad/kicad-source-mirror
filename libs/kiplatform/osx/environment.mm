@@ -47,7 +47,16 @@ bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )
     if( result == NO )
     {
         NSString* errmsg;
-        errmsg = [err.localizedFailureReason stringByAppendingFormat:@"\n\n%@", err.localizedRecoverySuggestion];
+
+        if( err.localizedRecoverySuggestion == nil )
+        {
+            errmsg = err.localizedFailureReason;
+        }
+        else
+        {
+            errmsg = [err.localizedFailureReason stringByAppendingFormat:@"\n\n%@", err.localizedRecoverySuggestion];    
+        }
+
         aError = wxCFStringRef::AsString( (CFStringRef) errmsg );
         return false;
     }
