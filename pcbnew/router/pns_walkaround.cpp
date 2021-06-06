@@ -60,10 +60,11 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWinding
     if( !current_obs )
         return DONE;
 
+    VECTOR2I initialLast = aPath.CPoint( -1 );
+
     SHAPE_LINE_CHAIN path_walk;
 
-    bool s_cw = aPath.Walkaround( current_obs->m_hull, path_walk,
-                      aWindingDirection );
+    bool s_cw = aPath.Walkaround( current_obs->m_hull, path_walk, aWindingDirection );
 
     PNS_DBG( Dbg(), BeginGroup, "hull/walk" );
     char name[128];
@@ -76,10 +77,20 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWinding
     PNS_DBG( Dbg(), Message, wxString::Format( "Stat cw %d", !!s_cw ) );
     PNS_DBGN( Dbg(), EndGroup );
 
-    current_obs = nearestObstacle( LINE( aPath, path_walk ) );
-
     path_walk.Simplify();
     aPath.SetShape( path_walk );
+
+    // If the end of the line is inside an obstacle, additional walkaround iterations are not
+    // going to help.  Also, if one walkaround step didn't produce a new last point, additional
+    // steps won't either. Exit now to prevent pegging the iteration limiter and causing lag.
+    if( initialLast == path_walk.CLastPoint() ||
+        ( current_obs && current_obs->m_hull.PointInside( initialLast ) &&
+         !current_obs->m_hull.PointOnEdge( initialLast ) ) )
+    {
+        return ALMOST_DONE;
+    }
+
+    current_obs = nearestObstacle( LINE( aPath, path_walk ) );
 
     return IN_PROGRESS;
 }
