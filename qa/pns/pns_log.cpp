@@ -23,8 +23,10 @@
 
 #include "pns_log.h"
 
-#include <qa/common/console_log.h>  
+#include <qa/drc_proto/drc_proto.h>
 
+#include <board_design_settings.h>
+#include <pcbnew/drc/drc_engine.h>
 #include <pcbnew/drc/drc_test_provider.h>
 
 using namespace PNS;
