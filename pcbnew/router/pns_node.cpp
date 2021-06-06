@@ -1053,8 +1053,6 @@ int NODE::FindLinesBetweenJoints( const JOINT& aA, const JOINT& aB, std::vector<
 
 void NODE::FixupVirtualVias()
 {
-    int n;
-
     std::vector<VVIA*> vvias;
 
     for( auto& joint : m_joints )

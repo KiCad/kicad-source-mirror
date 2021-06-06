@@ -542,15 +542,15 @@ void IMAGE::EfxFilter_SkipCenter( IMAGE* aInImg, IMAGE_FILTER aFilterType, unsig
     {
         int yc = iy - yCenter;
 
-        yc = yc * yc;
+        unsigned int ycsq = yc * yc;
 
         for( size_t ix = 0; ix < m_width; ix++ )
         {
             int xc = ix - xCenter;
 
-            xc = xc * xc;
+            unsigned int xcsq = xc * xc;
 
-            if( ( xc + yc ) < radiusSquared )
+            if( ( xcsq + ycsq ) < radiusSquared )
             {
                 const unsigned int offset = ix + iy * m_width;
 
