@@ -1539,13 +1539,6 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
 
 void LINE_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 {
-    // initPlacement will kill the tail, don't do that unless the track size has changed
-    if( !m_idle && aSizes.TrackWidth() != m_sizes.TrackWidth() )
-    {
-        m_sizes = aSizes;
-        initPlacement();
-    }
-
     m_sizes = aSizes;
 
     if( !m_idle )
