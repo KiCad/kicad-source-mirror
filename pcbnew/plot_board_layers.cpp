@@ -36,10 +36,12 @@
 #include <math/util.h>      // for KiROUND
 
 #include <board.h>
+#include <board_design_settings.h>
 #include <core/arraydim.h>
 #include <footprint.h>
 #include <track.h>
 #include <fp_shape.h>
+#include <pad.h>
 #include <pcb_text.h>
 #include <zone.h>
 #include <pcb_shape.h>

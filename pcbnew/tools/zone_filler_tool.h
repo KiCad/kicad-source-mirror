@@ -31,6 +31,7 @@
 
 
 class PCB_EDIT_FRAME;
+class PROGRESS_REPORTER;
 class WX_PROGRESS_REPORTER;
 
 

@@ -22,6 +22,7 @@
 
 #include <bitmaps.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <dialog_helpers.h>
 #include <footprint_edit_frame.h>
 #include <menus_helpers.h>

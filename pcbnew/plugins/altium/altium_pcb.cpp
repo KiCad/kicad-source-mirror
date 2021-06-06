@@ -27,7 +27,9 @@
 #include <plugins/altium/altium_parser_utils.h>
 
 #include <board.h>
+#include <board_design_settings.h>
 #include <dimension.h>
+#include <pad.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <track.h>

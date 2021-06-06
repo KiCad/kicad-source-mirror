@@ -33,6 +33,7 @@
 #include <set>
 
 class BOARD;
+class BOARD_STACKUP_ITEM;
 class DIMENSION_BASE;
 
 class CADSTAR_PCB_ARCHIVE_LOADER : public CADSTAR_PCB_ARCHIVE_PARSER

@@ -25,6 +25,7 @@
 #include <advanced_config.h>
 #include <base_units.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
@@ -36,6 +37,7 @@
 #include <kiface_i.h>
 #include <locale_io.h>
 #include <macros.h>
+#include <pad.h>
 #include <pcb_group.h>
 #include <pcb_shape.h>
 #include <pcb_target.h>

@@ -72,7 +72,9 @@
 #include <zones.h>
 
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
+#include <pad.h>
 #include <track.h>
 #include <pcb_text.h>
 #include <zone.h>
@@ -1067,13 +1069,13 @@ void LEGACY_PLUGIN::loadSETUP()
             BIU x = biuParse( line + SZ( "PadSize" ), &data );
             BIU y = biuParse( data );
 
-            bds.m_Pad_Master.SetSize( wxSize( x, y ) );
+            bds.m_Pad_Master->SetSize( wxSize( x, y ) );
         }
 
         else if( TESTLINE( "PadDrill" ) )
         {
             BIU tmp = biuParse( line + SZ( "PadDrill" ) );
-            bds.m_Pad_Master.SetDrillSize( wxSize( tmp, tmp ) );
+            bds.m_Pad_Master->SetDrillSize( wxSize( tmp, tmp ) );
         }
 
         else if( TESTLINE( "Pad2MaskClearance" ) )

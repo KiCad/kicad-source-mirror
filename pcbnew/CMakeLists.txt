@@ -226,6 +226,7 @@ set( PCBNEW_MICROWAVE_SRCS
     )
 
 set( PCBNEW_DRC_SRCS
+    drc/drc_results_provider.cpp
     drc/drc_test_provider.cpp
     drc/drc_test_provider_annulus.cpp
     drc/drc_test_provider_disallow.cpp

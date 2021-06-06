@@ -28,6 +28,7 @@
 #include <pcb_layer_box_selector.h>
 #include <pcbnew.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <dimension.h>
 #include <fp_shape.h>

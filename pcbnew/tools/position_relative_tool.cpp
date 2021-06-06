@@ -36,6 +36,7 @@ using namespace std::placeholders;
 #include <bitmaps.h>
 #include <confirm.h>
 #include <collectors.h>
+#include <pad.h>
 
 
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :

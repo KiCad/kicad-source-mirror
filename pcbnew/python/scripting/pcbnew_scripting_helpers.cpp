@@ -34,6 +34,7 @@
 
 #include <action_plugin.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <pcb_marker.h>
 #include <cstdlib>
 #include <drc/drc_engine.h>

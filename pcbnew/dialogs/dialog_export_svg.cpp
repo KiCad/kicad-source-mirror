@@ -27,6 +27,7 @@
 #include <pcbnew_settings.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
+#include <board_design_settings.h>
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <core/kicad_algo.h>

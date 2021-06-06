@@ -31,6 +31,7 @@
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <dimension.h>
 #include <footprint_info_impl.h>
 #include <project.h>

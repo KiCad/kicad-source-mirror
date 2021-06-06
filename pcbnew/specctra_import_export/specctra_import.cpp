@@ -38,6 +38,7 @@
 #include <locale_io.h>
 #include <macros.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <track.h>
 #include <connectivity/connectivity_data.h>

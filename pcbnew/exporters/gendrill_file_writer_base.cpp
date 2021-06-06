@@ -25,6 +25,7 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <pad.h>
 #include <track.h>
 #include <collectors.h>
 #include <reporter.h>

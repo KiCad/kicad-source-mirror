@@ -33,6 +33,7 @@
 #include <locale_io.h>
 #include <reporter.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <plotcontroller.h>
 #include <pcb_plot_params.h>
 #include <wx/ffile.h>

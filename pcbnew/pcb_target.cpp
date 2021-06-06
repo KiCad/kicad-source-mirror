@@ -26,6 +26,7 @@
 
 #include <bitmaps.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <pcb_target.h>
 #include <base_units.h>
 #include <settings/color_settings.h>

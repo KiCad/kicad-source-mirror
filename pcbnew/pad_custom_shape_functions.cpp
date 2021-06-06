@@ -23,6 +23,7 @@
  */
 
 #include <board.h>
+#include <board_design_settings.h>
 #include <board_item.h>
 #include <pcb_shape.h>
 #include <pad.h>

@@ -25,6 +25,7 @@
 #include <track.h>
 #include <layers_id_colors_and_visibility.h>
 #include <kiface_i.h>
+#include <pad.h>
 #include <board_design_settings.h>
 #include <drc/drc_item.h>
 #include <drc/drc_engine.h>
@@ -32,14 +33,14 @@
 #include <settings/parameters.h>
 #include <project/project_file.h>
 #include <advanced_config.h>
+#include <board_design_settings.h>
 #include <pcbnew.h>
 
 const int bdsSchemaVersion = 2;
 
 
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
-        NESTED_SETTINGS( "board_design_settings", bdsSchemaVersion, aParent, aPath ),
-        m_Pad_Master( NULL )
+        NESTED_SETTINGS( "board_design_settings", bdsSchemaVersion, aParent, aPath )
 {
     // We want to leave alone parameters that aren't found in the project JSON as they may be
     // initialized by the board file parser before NESTED_SETTINGS::LoadFromFile is called.
@@ -52,6 +53,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_netClasses = &m_internalNetClasses;
 
     m_HasStackup = false;                   // no stackup defined by default
+
+    m_Pad_Master = std::make_unique<PAD>( nullptr );
 
     LSET all_set = LSET().set();
     m_enabledLayers = all_set;              // All layers enabled at first.
@@ -560,9 +563,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             {
                 nlohmann::json ret =
                         {
-                            { "width",  Iu2Millimeter( m_Pad_Master.GetSize().x ) },
-                            { "height", Iu2Millimeter( m_Pad_Master.GetSize().y ) },
-                            { "drill",  Iu2Millimeter( m_Pad_Master.GetDrillSize().x ) }
+                            { "width",  Iu2Millimeter( m_Pad_Master->GetSize().x ) },
+                            { "height", Iu2Millimeter( m_Pad_Master->GetSize().y ) },
+                            { "drill",  Iu2Millimeter( m_Pad_Master->GetDrillSize().x ) }
                         };
 
                 return ret;
@@ -576,11 +579,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     sz.SetWidth( Millimeter2iu( aJson["width"].get<double>() ) );
                     sz.SetHeight( Millimeter2iu( aJson["height"].get<double>() ) );
 
-                    m_Pad_Master.SetSize( sz );
+                    m_Pad_Master->SetSize( sz );
 
                     int drill = Millimeter2iu( aJson["drill"].get<double>() );
 
-                    m_Pad_Master.SetDrillSize( wxSize( drill, drill ) );
+                    m_Pad_Master->SetDrillSize( wxSize( drill, drill ) );
                 }
             }, {} ) );
 

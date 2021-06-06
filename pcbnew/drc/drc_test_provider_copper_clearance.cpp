@@ -23,6 +23,7 @@
 
 #include <common.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <pcb_shape.h>
 #include <pad.h>
@@ -34,6 +35,7 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 
+#include <drc/drc_engine.h>
 #include <drc/drc_rtree.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>

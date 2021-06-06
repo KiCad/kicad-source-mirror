@@ -35,6 +35,7 @@
 #include <bitmaps.h>
 #include <painter.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <fp_shape.h>
 #include <pcb_group.h>

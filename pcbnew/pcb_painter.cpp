@@ -24,6 +24,7 @@
  */
 
 #include <board.h>
+#include <board_design_settings.h>
 #include <track.h>
 #include <pcb_group.h>
 #include <footprint.h>

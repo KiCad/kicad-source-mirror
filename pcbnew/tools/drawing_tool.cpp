@@ -60,6 +60,7 @@
 #include <kicad_string.h>
 #include <macros.h>
 #include <widgets/infobar.h>
+#include <board_design_settings.h>
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 

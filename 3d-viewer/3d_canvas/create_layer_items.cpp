@@ -37,6 +37,7 @@
 #include "../3d_rendering/3d_render_raytracing/shapes3D/cylinder_3d.h"
 
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_text.h>

@@ -25,6 +25,7 @@
 #include <cstdio>
 #include <memory>
 #include <board.h>
+#include <board_design_settings.h>
 #include <drc/drc_rtree.h>
 #include <track.h>
 #include <pcb_group.h>

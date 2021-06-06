@@ -25,6 +25,7 @@
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <track.h>

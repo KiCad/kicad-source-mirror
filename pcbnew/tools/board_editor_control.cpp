@@ -31,10 +31,12 @@
 #include "edit_tool.h"
 #include "tool/tool_event.h"
 #include <bitmaps.h>
-#include <board_commit.h>
 #include <board.h>
+#include <board_commit.h>
+#include <board_design_settings.h>
 #include <pcb_group.h>
 #include <footprint.h>
+#include <pad.h>
 #include <pcb_target.h>
 #include <track.h>
 #include <zone.h>

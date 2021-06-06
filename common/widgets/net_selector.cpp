@@ -24,6 +24,7 @@
 #include <kicad_string.h>
 #include <kiplatform/ui.h>
 
+#include <widgets/ui_common.h>
 #include <widgets/net_selector.h>
 
 #include <board.h>

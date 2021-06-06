@@ -38,6 +38,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <track.h>
+#include <pad.h>
 #include <pcbplot.h>
 #include <gendrill_gerber_writer.h>
 #include <reporter.h>

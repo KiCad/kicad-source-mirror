@@ -43,9 +43,11 @@
 #include <map>                  // std::map
 
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <fp_shape.h>
 #include <track.h>
+#include <pad.h>
 #include <zone.h>
 #include <base_units.h>
 #include <collectors.h>

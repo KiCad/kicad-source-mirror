@@ -31,8 +31,10 @@
 
 #include <build_version.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <fp_shape.h>
 #include <footprint.h>
+#include <pad.h>
 #include <track.h>
 #include <confirm.h>
 #include <core/arraydim.h>

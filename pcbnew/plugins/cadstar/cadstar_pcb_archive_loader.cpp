@@ -25,12 +25,15 @@
 
 #include <cadstar_pcb_archive_loader.h>
 
+#include <board_stackup_manager/board_stackup.h>
 #include <board_stackup_manager/stackup_predefined_prms.h> // KEY_COPPER, KEY_CORE, KEY_PREPREG
 #include <board.h>
+#include <board_design_settings.h>
 #include <dimension.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <footprint.h>
+#include <pad.h>
 #include <pcb_group.h>
 #include <pcb_text.h>
 #include <project.h>

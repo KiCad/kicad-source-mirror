@@ -40,6 +40,7 @@
 #include <footprint.h>
 #include <fp_shape.h>
 #include <microwave/microwave_tool.h>
+#include <pad.h>
 #include <pcbnew.h>
 #include <math/util.h>      // for KiROUND
 

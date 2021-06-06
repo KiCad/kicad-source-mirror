@@ -39,6 +39,7 @@
 #include <pcbnew_settings.h>
 #include <widgets/appearance_controls.h>
 #include <drc/drc_item.h>
+#include <pad.h>
 
 void DIALOG_INSPECTION_REPORTER::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 {

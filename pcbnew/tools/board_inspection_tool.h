@@ -28,6 +28,7 @@
 #include <dialogs/dialog_net_inspector.h>
 #include <dialogs/dialog_HTML_reporter_base.h>
 #include <dialogs/dialog_constraints_reporter.h>
+#include <drc/drc_rule.h>
 #include <pcb_edit_frame.h>
 #include <rc_item.h>
 #include <tools/pcb_actions.h>

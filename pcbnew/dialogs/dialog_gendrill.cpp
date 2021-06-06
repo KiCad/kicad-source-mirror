@@ -32,8 +32,10 @@
 #include <bitmaps.h>
 #include <tools/board_editor_control.h>
 #include <board.h>
-#include <track.h>
+#include <board_design_settings.h>
 #include <footprint.h>
+#include <pad.h>
+#include <track.h>
 #include <paths.h>
 #include <dialog_gendrill.h>
 #include <wildcards_and_files_ext.h>

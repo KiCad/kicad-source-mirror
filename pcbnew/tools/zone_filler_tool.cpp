@@ -27,6 +27,7 @@
 #include <zone.h>
 #include <connectivity/connectivity_data.h>
 #include <board_commit.h>
+#include <board_design_settings.h>
 #include <widgets/progress_reporter.h>
 #include <widgets/infobar.h>
 #include <wx/event.h>

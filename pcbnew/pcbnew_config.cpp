@@ -33,6 +33,7 @@
 #include <panel_pcbnew_display_origin.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
+#include <board_design_settings.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <pcbplot.h>
 #include <pcb_painter.h>

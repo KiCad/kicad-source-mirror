@@ -28,6 +28,7 @@
 #include <board_commit.h>
 #include <board.h>
 #include <footprint.h>
+#include <pad.h>
 #include <dialog_exchange_footprints.h>
 #include <kicad_string.h>
 #include <kiway.h>

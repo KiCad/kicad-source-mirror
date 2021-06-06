@@ -34,6 +34,7 @@ using namespace std::placeholders;
 #include <pcb_group.h>
 #include <pcb_target.h>
 #include <footprint.h>
+#include <pad.h>
 #include <dimension.h>
 #include <origin_viewitem.h>
 #include <connectivity/connectivity_data.h>

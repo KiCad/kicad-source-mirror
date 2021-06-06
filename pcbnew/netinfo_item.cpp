@@ -32,6 +32,7 @@
 #include <widgets/msgpanel.h>
 #include <base_units.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <track.h>
 #include <pad.h>

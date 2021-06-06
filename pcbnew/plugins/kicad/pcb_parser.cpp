@@ -36,6 +36,7 @@
 
 #include <advanced_config.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <dimension.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
@@ -1845,7 +1846,7 @@ void PCB_PARSER::parseSetup()
                 wxSize sz;
                 sz.SetWidth( parseBoardUnits( "master pad width" ) );
                 sz.SetHeight( parseBoardUnits( "master pad height" ) );
-                designSettings.m_Pad_Master.SetSize( sz );
+                designSettings.m_Pad_Master->SetSize( sz );
                 m_board->m_LegacyDesignSettingsLoaded = true;
                 NeedRIGHT();
             }
@@ -1854,7 +1855,7 @@ void PCB_PARSER::parseSetup()
         case T_pad_drill:
             {
                 int drillSize = parseBoardUnits( T_pad_drill );
-                designSettings.m_Pad_Master.SetDrillSize( wxSize( drillSize, drillSize ) );
+                designSettings.m_Pad_Master->SetDrillSize( wxSize( drillSize, drillSize ) );
                 m_board->m_LegacyDesignSettingsLoaded = true;
                 NeedRIGHT();
             }

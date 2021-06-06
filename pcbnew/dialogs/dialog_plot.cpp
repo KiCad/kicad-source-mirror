@@ -35,6 +35,7 @@
 #include <locale_io.h>
 #include <bitmaps.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <dialog_plot.h>
 #include <dialog_gendrill.h>
 #include <wx_html_report_panel.h>

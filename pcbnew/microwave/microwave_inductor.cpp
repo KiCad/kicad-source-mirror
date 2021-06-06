@@ -23,6 +23,7 @@
 
 #include <base_units.h>
 #include <board_commit.h>
+#include <board_design_settings.h>
 #include <pad.h>
 #include <fp_shape.h>
 #include <footprint.h>

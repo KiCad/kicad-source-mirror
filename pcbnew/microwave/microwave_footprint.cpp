@@ -22,7 +22,9 @@
  */
 
 
+#include <board_design_settings.h>
 #include <footprint.h>
+#include <pad.h>
 #include <confirm.h>
 #include <dialogs/dialog_text_entry.h>
 #include <microwave/microwave_tool.h>

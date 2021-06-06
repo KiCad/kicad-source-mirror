@@ -29,6 +29,7 @@
 #include <math/vector2d.h>
 #include <pcb_shape.h>
 #include <footprint.h>
+#include <pad.h>
 #include <base_units.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_poly_set.h>

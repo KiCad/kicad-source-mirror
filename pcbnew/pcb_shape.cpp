@@ -29,6 +29,7 @@
 #include <bitmaps.h>
 #include <pcb_edit_frame.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <pcb_shape.h>
 #include <base_units.h>

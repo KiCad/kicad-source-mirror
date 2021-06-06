@@ -69,10 +69,13 @@ Load() TODO's
 #include <math/util.h>      // for KiROUND
 
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
+#include <pad.h>
 #include <track.h>
 #include <fp_shape.h>
 #include <zone.h>
+#include <pad_shapes.h>
 #include <pcb_text.h>
 #include <dimension.h>
 

@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <bezier_curves.h>
+#include <board_design_settings.h>
 #include <trigo.h>
 #include <board.h>
 #include <pad.h>

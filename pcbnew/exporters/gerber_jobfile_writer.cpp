@@ -37,7 +37,9 @@
 #include <plotter.h>
 
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
+#include <pad.h>
 #include <track.h>
 #include <zone.h>
 

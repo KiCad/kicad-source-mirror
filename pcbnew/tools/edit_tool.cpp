@@ -27,6 +27,7 @@
 #include <advanced_config.h>
 #include <limits>
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <fp_shape.h>
 #include <collectors.h>

@@ -25,8 +25,10 @@
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <board_item.h>
 #include <footprint.h>
+#include <pad.h>
 #include <track.h>
 #include <zone.h>
 #include <cstdio>

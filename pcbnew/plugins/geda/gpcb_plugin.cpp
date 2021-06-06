@@ -33,6 +33,7 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <pad.h>
 #include <locale_io.h>
 #include <macros.h>
 #include <pcb_text.h>

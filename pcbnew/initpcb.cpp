@@ -33,6 +33,7 @@
 #include <project/project_file.h>
 
 #include <board.h>
+#include <board_design_settings.h>
 
 #include <pcbnew.h>
 #include <footprint_edit_frame.h>

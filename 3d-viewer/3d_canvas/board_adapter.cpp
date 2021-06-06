@@ -29,6 +29,7 @@
 
 #include "../3d_rendering/camera.h"
 #include "board_adapter.h"
+#include <board_design_settings.h>
 #include <3d_rendering/3d_render_raytracing/shapes2D/polygon_2d.h>
 #include <board.h>
 #include <3d_math.h>

@@ -30,6 +30,7 @@
 #include <footprint.h>
 #include <fp_shape.h>
 #include <board_commit.h>
+#include <board_design_settings.h>
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
 #include <tools/pcb_actions.h>

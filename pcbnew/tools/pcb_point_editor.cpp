@@ -41,6 +41,7 @@ using namespace std::placeholders;
 #include <pcb_edit_frame.h>
 #include <fp_shape.h>
 #include <dimension.h>
+#include <pad.h>
 #include <zone.h>
 #include <connectivity/connectivity_data.h>
 #include <widgets/progress_reporter.h>

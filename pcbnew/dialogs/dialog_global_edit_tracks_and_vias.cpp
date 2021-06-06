@@ -24,6 +24,7 @@
 
 #include <pcb_edit_frame.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <track.h>
 #include <connectivity/connectivity_data.h>
 #include <pcb_layer_box_selector.h>

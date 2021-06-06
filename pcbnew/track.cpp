@@ -27,6 +27,7 @@
 #include <pcb_base_frame.h>
 #include <connectivity/connectivity_data.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <track.h>
 #include <base_units.h>
 #include <bitmaps.h>

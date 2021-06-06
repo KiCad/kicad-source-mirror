@@ -31,6 +31,7 @@
 #include "pns_topology.h"
 
 #include <board.h>
+#include <pad.h>
 
 namespace PNS {
 

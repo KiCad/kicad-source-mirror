@@ -38,7 +38,9 @@
 #include <locale_io.h>
 #include <pcbnew.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
+#include <pad.h>
 #include <track.h>
 #include <vector>
 #include <cctype>

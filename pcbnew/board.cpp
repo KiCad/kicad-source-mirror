@@ -29,6 +29,7 @@
 #include <iterator>
 #include <drc/drc_rtree.h>
 #include <pcb_base_frame.h>
+#include <board_design_settings.h>
 #include <reporter.h>
 #include <board_commit.h>
 #include <board.h>
@@ -487,6 +488,12 @@ void BOARD::SetEnabledLayers( LSET aLayerSet )
 }
 
 
+bool BOARD::IsLayerEnabled( PCB_LAYER_ID aLayer ) const
+{
+    return GetDesignSettings().IsLayerEnabled( aLayer );
+}
+
+
 void BOARD::SetVisibleLayers( LSET aLayerSet )
 {
     if( m_project )
@@ -574,6 +581,25 @@ bool BOARD::IsFootprintLayerVisible( PCB_LAYER_ID aLayer ) const
         wxFAIL_MSG( wxT( "BOARD::IsModuleLayerVisible() param error: bad layer" ) );
         return true;
     }
+}
+
+
+
+BOARD_DESIGN_SETTINGS& BOARD::GetDesignSettings() const
+{
+    return *m_designSettings;
+}
+
+
+const ZONE_SETTINGS& BOARD::GetZoneSettings() const
+{
+    return GetDesignSettings().GetDefaultZoneSettings();
+}
+
+
+void BOARD::SetZoneSettings( const ZONE_SETTINGS& aSettings )
+{
+    GetDesignSettings().SetDefaultZoneSettings( aSettings );
 }
 
 

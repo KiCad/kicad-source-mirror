@@ -22,6 +22,7 @@
  */
 
 #include <board.h>
+#include <pad.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>

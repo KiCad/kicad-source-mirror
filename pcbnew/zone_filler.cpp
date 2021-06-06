@@ -29,8 +29,10 @@
 
 #include <advanced_config.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <zone.h>
 #include <footprint.h>
+#include <pad.h>
 #include <pcb_shape.h>
 #include <pcb_target.h>
 #include <track.h>

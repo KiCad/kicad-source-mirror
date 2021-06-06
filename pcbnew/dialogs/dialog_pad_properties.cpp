@@ -28,6 +28,7 @@
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <confirm.h>
 #include <core/arraydim.h>
@@ -37,6 +38,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <dialogs/html_messagebox.h>
 #include <macros.h>
+#include <pad.h>
 #include <pcb_base_frame.h>
 #include <footprint_edit_frame.h>
 #include <pcb_painter.h>
@@ -161,7 +163,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_FlippedWarningIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
     m_nonCopperWarningIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
 
-    m_padMaster  = &m_parent->GetDesignSettings().m_Pad_Master;
+    m_padMaster  = m_parent->GetDesignSettings().m_Pad_Master.get();
     m_dummyPad   = new PAD( (FOOTPRINT*) NULL );
 
     if( aPad )
@@ -1069,6 +1071,13 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_stackupImagesBook->SetSelection( 3 );
         break;
     }
+}
+
+
+void DIALOG_PAD_PROPERTIES::OnUpdateUINonCopperWarning( wxUpdateUIEvent& event )
+{
+    bool isOnCopperLayer = ( m_dummyPad->GetLayerSet() & LSET::AllCuMask() ).any();
+    m_nonCopperWarningBook->SetSelection( isOnCopperLayer ? 0 : 1 );
 }
 
 

@@ -26,6 +26,7 @@
 #include <macros.h>             // arrayDim definition
 #include <pcb_edit_frame.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <dialogs/dialog_color_picker.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/layer_box_selector.h>

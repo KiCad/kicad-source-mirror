@@ -29,10 +29,12 @@
 using namespace std::placeholders;
 #include <core/kicad_algo.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <board_item.h>
 #include <clipper.hpp>
 #include <track.h>
 #include <footprint.h>
+#include <pad.h>
 #include <pcb_group.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>

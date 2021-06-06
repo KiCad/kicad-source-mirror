@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,52 +53,9 @@ public:
     {
     }
 
-    void SetSeverities( int aSeverities ) override
-    {
-        m_severities = aSeverities;
+    void SetSeverities( int aSeverities ) override;
 
-        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-
-        m_filteredMarkers.clear();
-
-        for( PCB_MARKER* marker : m_board->Markers() )
-        {
-            SEVERITY markerSeverity;
-
-            if( marker->IsExcluded() )
-                markerSeverity = RPT_SEVERITY_EXCLUSION;
-            else
-                markerSeverity = bds.GetSeverity( marker->GetRCItem()->GetErrorCode() );
-
-            if( markerSeverity & m_severities )
-                m_filteredMarkers.push_back( marker );
-        }
-    }
-
-    int GetCount( int aSeverity = -1 ) const override
-    {
-        if( aSeverity < 0 )
-            return m_filteredMarkers.size();
-
-        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-
-        int count = 0;
-
-        for( PCB_MARKER* marker : m_board->Markers() )
-        {
-            SEVERITY markerSeverity;
-
-            if( marker->IsExcluded() )
-                markerSeverity = RPT_SEVERITY_EXCLUSION;
-            else
-                markerSeverity = bds.GetSeverity( marker->GetRCItem()->GetErrorCode() );
-
-            if( markerSeverity == aSeverity )
-                count++;
-        }
-
-        return count;
-    }
+    int GetCount( int aSeverity = -1 ) const override;
 
     std::shared_ptr<RC_ITEM> GetItem( int aIndex ) const override
     {
@@ -149,43 +106,9 @@ public:
     {
     }
 
-    void SetSeverities( int aSeverities ) override
-    {
-        m_severities = aSeverities;
+    void SetSeverities( int aSeverities ) override;
 
-        BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
-
-        m_filteredVector.clear();
-
-        if( m_sourceVector )
-        {
-            for( const std::shared_ptr<DRC_ITEM>& item : *m_sourceVector )
-            {
-                if( bds.GetSeverity( item->GetErrorCode() ) & aSeverities )
-                    m_filteredVector.push_back( item );
-            }
-        }
-    }
-
-    int GetCount( int aSeverity = -1 ) const override
-    {
-        if( aSeverity < 0 )
-            return m_filteredVector.size();
-
-        int count = 0;
-        BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
-
-        if( m_sourceVector )
-        {
-            for( const std::shared_ptr<DRC_ITEM>& item : *m_sourceVector )
-            {
-                if( bds.GetSeverity( item->GetErrorCode() ) == aSeverity )
-                    count++;
-            }
-        }
-
-        return count;
-    }
+    int GetCount( int aSeverity = -1 ) const override;
 
     std::shared_ptr<RC_ITEM> GetItem( int aIndex ) const override
     {

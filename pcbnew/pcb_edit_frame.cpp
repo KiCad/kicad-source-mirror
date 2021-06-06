@@ -40,6 +40,7 @@
 #include <convert_to_biu.h>
 #include <invoke_pcb_dialog.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <connectivity/connectivity_data.h>

@@ -27,12 +27,14 @@
 #include <base_units.h>
 #include <bitmaps.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <core/mirror.h>
 #include <footprint.h>
 #include <settings/settings_manager.h>
 #include <trigo.h>
 #include <kicad_string.h>
 #include <painter.h>
+#include <geometry/shape_compound.h>
 
 FP_TEXT::FP_TEXT( FOOTPRINT* aParentFootprint, TEXT_TYPE text_type ) :
     BOARD_ITEM( aParentFootprint, PCB_FP_TEXT_T ),

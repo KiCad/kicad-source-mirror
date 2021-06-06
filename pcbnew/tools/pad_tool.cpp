@@ -28,9 +28,11 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <bitmaps.h>
+#include <board_design_settings.h>
 #include <board_item.h>
 #include <footprint.h>
 #include <fp_shape.h>
+#include <pad.h>
 #include <board_commit.h>
 #include <dialogs/dialog_push_pad_properties.h>
 #include <tools/pcb_actions.h>
@@ -125,7 +127,7 @@ int PAD_TOOL::pastePadProperties( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     const PCB_SELECTION& selection = selTool->GetSelection();
-    const PAD&           masterPad = frame()->GetDesignSettings().m_Pad_Master;
+    const PAD*           masterPad = frame()->GetDesignSettings().m_Pad_Master.get();
 
     BOARD_COMMIT commit( frame() );
 
@@ -135,7 +137,7 @@ int PAD_TOOL::pastePadProperties( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_PAD_T )
         {
             commit.Modify( item );
-            static_cast<PAD&>( *item ).ImportSettingsFrom( masterPad );
+            static_cast<PAD&>( *item ).ImportSettingsFrom( *masterPad );
         }
     }
 
@@ -152,7 +154,6 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     const PCB_SELECTION& selection = selTool->GetSelection();
-    PAD&                 masterPad = frame()->GetDesignSettings().m_Pad_Master;
 
     // can only copy from a single pad
     if( selection.Size() == 1 )
@@ -162,7 +163,7 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_PAD_T )
         {
             const PAD& selPad = static_cast<const PAD&>( *item );
-            masterPad.ImportSettingsFrom( selPad );
+            frame()->GetDesignSettings().m_Pad_Master->ImportSettingsFrom( selPad );
             m_padCopied = true;
         }
     }
@@ -481,7 +482,7 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
         {
             PAD* pad = new PAD( m_board->GetFirstFootprint() );
 
-            pad->ImportSettingsFrom( m_frame->GetDesignSettings().m_Pad_Master );
+            pad->ImportSettingsFrom( *(m_frame->GetDesignSettings().m_Pad_Master.get()) );
 
             if( PAD_NAMING::PadCanHaveName( *pad ) )
             {
@@ -500,7 +501,7 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
             if( pad )
             {
-                m_frame->GetDesignSettings().m_Pad_Master.ImportSettingsFrom( *pad );
+                m_frame->GetDesignSettings().m_Pad_Master->ImportSettingsFrom( *pad );
                 pad->SetLocalCoord();
                 aCommit.Add( aItem );
                 return true;

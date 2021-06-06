@@ -33,6 +33,7 @@
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <board_item.h>
 #include <dialogs/dialog_paste_special.h>
 #include <dimension.h>

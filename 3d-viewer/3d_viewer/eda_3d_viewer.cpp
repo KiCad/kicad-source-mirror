@@ -36,6 +36,7 @@
 #include <3d_viewer/tools/3d_controller.h>
 #include <3d_viewer/tools/3d_conditions.h>
 #include <bitmaps.h>
+#include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
 #include <board.h>

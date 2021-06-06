@@ -21,8 +21,10 @@
 
 #include <board.h>
 #include <board_connected_item.h>
+#include <board_design_settings.h>
 #include <fp_text.h>
 #include <footprint.h>
+#include <pad.h>
 #include <track.h>
 #include <zone.h>
 #include <pcb_shape.h>

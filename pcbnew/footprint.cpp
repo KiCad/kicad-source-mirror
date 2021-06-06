@@ -32,8 +32,10 @@
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <fp_shape.h>
 #include <macros.h>
+#include <pad.h>
 #include <pcb_text.h>
 #include <pcb_marker.h>
 #include <pcb_group.h>

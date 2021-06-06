@@ -26,6 +26,7 @@
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
+#include <pad.h>
 #include <zone.h>
 
 /*

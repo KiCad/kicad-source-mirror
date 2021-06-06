@@ -25,7 +25,6 @@
 #ifndef CLASS_BOARD_H_
 #define CLASS_BOARD_H_
 
-#include <board_design_settings.h>
 #include <board_item_container.h>
 #include <common.h> // Needed for stl hash extensions
 #include <convert_drawsegment_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
@@ -35,7 +34,10 @@
 #include <pcb_plot_params.h>
 #include <title_block.h>
 #include <tools/pcb_selection.h>
+#include <mutex>
 
+class BOARD_DESIGN_SETTINGS;
+class BOARD_CONNECTED_ITEM;
 class BOARD_COMMIT;
 class DRC_RTREE;
 class PCB_BASE_FRAME;
@@ -438,10 +440,7 @@ public:
      * @param aLayer = The layer to be tested
      * @return true if the layer is visible.
      */
-    bool IsLayerEnabled( PCB_LAYER_ID aLayer ) const
-    {
-        return GetDesignSettings().IsLayerEnabled( aLayer );
-    }
+    bool IsLayerEnabled( PCB_LAYER_ID aLayer ) const;
 
     /**
      * A proxy function that calls the correspondent function in m_BoardSettings
@@ -523,20 +522,11 @@ public:
     /**
      * @return the BOARD_DESIGN_SETTINGS for this BOARD
      */
-    BOARD_DESIGN_SETTINGS& GetDesignSettings() const
-    {
-        return *m_designSettings;
-    }
+    BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
 
-    const ZONE_SETTINGS& GetZoneSettings() const override
-    {
-        return GetDesignSettings().GetDefaultZoneSettings();
-    }
+    const ZONE_SETTINGS& GetZoneSettings() const override;
 
-    void SetZoneSettings( const ZONE_SETTINGS& aSettings ) override
-    {
-        GetDesignSettings().SetDefaultZoneSettings( aSettings );
-    }
+    void SetZoneSettings( const ZONE_SETTINGS& aSettings ) override;
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }

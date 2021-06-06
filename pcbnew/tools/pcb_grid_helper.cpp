@@ -28,6 +28,7 @@
 #include <dimension.h>
 #include <fp_shape.h>
 #include <footprint.h>
+#include <pad.h>
 #include <pcb_group.h>
 #include <track.h>
 #include <zone.h>

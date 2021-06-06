@@ -25,6 +25,7 @@
 
 #include "dialog_board_statistics.h"
 #include "base_units.h"
+#include <pad.h>
 #include <macros.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
