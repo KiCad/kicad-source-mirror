@@ -28,11 +28,11 @@
 
 #include <eda_units.h>
 #include <base_units.h>
-#include <eda_item.h>
 #include <origin_transforms.h>
 #include <libeval/numeric_evaluator.h>
+#include <wx/event.h>
 
-
+class EDA_DRAW_FRAME;
 class wxTextEntry;
 class wxSpinButton;
 class wxStaticText;
