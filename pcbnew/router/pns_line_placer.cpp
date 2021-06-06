@@ -960,8 +960,19 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
 
     if( fail )
     {
-        m_head.RemoveVia();
-        m_head.Clear();
+        if( m_last_head.PointCount() > 0 )
+        {
+            m_head = m_last_head;
+        }
+        else
+        {
+            m_head.RemoveVia();
+            m_head.Clear();
+        }
+    }
+    else
+    {
+        m_last_head = m_head;
     }
 
     if( !fail && Settings().FollowMouse() )
