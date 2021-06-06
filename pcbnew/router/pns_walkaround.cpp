@@ -127,6 +127,13 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
         m_forceSingleDirection = false;
     }
 
+    // In some situations, there isn't a trivial path (or even a path at all).  Hitting the
+    // iteration limit causes lag, so we can exit out early if the walkaround path gets very long
+    // compared with the initial path.  If the length exceeds the initial length times this factor,
+    // fail out.
+    const int maxWalkDistFactor = 10;
+    long long lengthLimit       = aInitialPath.CLine().Length() * maxWalkDistFactor;
+
     while( m_iteration < m_iterationLimit )
     {
         if( s_cw != STUCK && s_cw != ALMOST_DONE )
@@ -148,6 +155,10 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
         }
 
         if( s_cw != IN_PROGRESS && s_ccw != IN_PROGRESS )
+            break;
+
+        // Safety valve
+        if( path_cw.Line().Length() > lengthLimit && path_ccw.Line().Length() > lengthLimit )
             break;
 
         m_iteration++;
