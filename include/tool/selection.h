@@ -154,11 +154,9 @@ public:
     template<class T>
     T* FirstOfKind() const
     {
-        auto refType = T( nullptr ).Type();
-
         for( auto item : m_items )
         {
-            if( item->Type() == refType )
+            if( IsA<T, EDA_ITEM>( item ) )
                 return static_cast<T*> ( item );
         }
 
