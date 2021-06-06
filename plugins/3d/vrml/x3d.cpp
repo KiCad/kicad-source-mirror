@@ -34,6 +34,7 @@
 #include <vector>
 #include <wx/tokenzr.h>
 #include <wx/wfstream.h>
+#include <wx/xml/xml.h>
 #include <iostream>
 
 #include "x3d.h"

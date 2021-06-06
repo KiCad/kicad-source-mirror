@@ -25,12 +25,12 @@
 #define S3D_X3D_H
 
 #include <map>
-#include <wx/string.h>
-#include <wx/xml/xml.h>
 
 
 class SCENEGRAPH;
 class SGNODE;
+class wxXmlNode;
+class wxString;
 
 class X3DPARSER
 {
