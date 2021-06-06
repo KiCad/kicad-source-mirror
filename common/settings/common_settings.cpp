@@ -367,7 +367,7 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 // and was set to 1.0. In v6, the setting is now used by OSX and should default to automatic
 // scaling.
 #ifdef __WXMAC__
-    ( *this )[PointerFromString( "appearance.canvas_scale" )] = 0.0;
+    Set( "appearance.canvas_scale", 0.0 );
 #endif
 
     ret &= fromLegacy<bool>( aCfg, "ShowEnvVarWarningDialog", "environment.show_warning_dialog" );
