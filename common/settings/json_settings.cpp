@@ -522,6 +522,7 @@ OPT<ValueType> JSON_SETTINGS::Get( const std::string& aPath ) const
 template OPT<bool> JSON_SETTINGS::Get<bool>( const std::string& aPath ) const;
 template OPT<double> JSON_SETTINGS::Get<double>( const std::string& aPath ) const;
 template OPT<float> JSON_SETTINGS::Get<float>( const std::string& aPath ) const;
+template OPT<int> JSON_SETTINGS::Get<int>( const std::string& aPath ) const;
 template OPT<unsigned int> JSON_SETTINGS::Get<unsigned int>( const std::string& aPath ) const;
 template OPT<unsigned long long> JSON_SETTINGS::Get<unsigned long long>( const std::string& aPath ) const;
 template OPT<std::string> JSON_SETTINGS::Get<std::string>( const std::string& aPath ) const;
