@@ -326,12 +326,12 @@ void writeLeaded( FILE* fp, double width, double length,
         int x1, x2, x3;
         int y1, y2;
 
-        x1 = pitch / 2.0;
-        x2 = width / 2.0 - x1;
-        x3 = x2 - width;
+        x1 = static_cast<int>( pitch / 2.0 );
+        x2 = static_cast<int>( width / 2.0 - x1 );
+        x3 = static_cast<int>( x2 - width );
 
-        y1 = wireDia / 2.0;
-        y2 = length / 2.0;
+        y1 = static_cast<int>( wireDia / 2.0 );
+        y2 = static_cast<int>( length / 2.0 );
 
         fprintf( fp, "0 %d %d 0\n", x1, y1 );
         fprintf( fp, "0 %d %d 0\n", x2, y1 );
@@ -376,8 +376,8 @@ void writeLeadless( FILE* fp, double width, double length,
     {
         if( inch )
         {
-            int x = width / 2.0;
-            int y = length / 2.0;
+            int x = static_cast<int>( width / 2.0 );
+            int y = static_cast<int>( length / 2.0 );
 
             fprintf( fp, "0 %d %d 0\n", x, y );
             fprintf( fp, "0 %d %d 0\n", -x, y );
@@ -402,10 +402,10 @@ void writeLeadless( FILE* fp, double width, double length,
 
     if( inch )
     {
-        int x = width / 2.0;
-        int y = length / 2.0;
-        int x1 = x - chamfer;
-        int y1 = y - chamfer;
+        int x = static_cast<int>( width / 2.0 );
+        int y = static_cast<int>( length / 2.0 );
+        int x1 = static_cast<int>( x - chamfer );
+        int y1 = static_cast<int>( y - chamfer );
 
         fprintf( fp, "0 %d %d 0\n", x, y );
         fprintf( fp, "0 %d %d 0\n", -x1, y );
