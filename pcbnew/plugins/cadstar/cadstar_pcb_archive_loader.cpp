@@ -39,6 +39,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
 #include <macros.h>
+#include <wx/log.h>
 
 #include <limits> // std::numeric_limits
 

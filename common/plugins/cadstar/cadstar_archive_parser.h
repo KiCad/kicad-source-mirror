@@ -28,8 +28,6 @@
 
 #include <dsnlexer.h>
 #include <vector>
-#include <wx/log.h>
-#include <wx/xml/xml.h>
 #include <xnode.h>
 
 // THROW_IO_ERROR definitions to ensure consistent wording is used in the error messages
@@ -75,6 +73,7 @@
 #define PART_NAME_ATTRID ( ATTRIBUTE_ID ) wxT( "__PART_NAME__" )
 
 class EDA_TEXT;
+class wxXmlAttribute;
 
 /**
  * @brief Helper functions and common structures for CADSTAR PCB and Schematic archive files.
