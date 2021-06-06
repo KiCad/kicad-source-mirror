@@ -1058,6 +1058,9 @@ bool ROUTER_TOOL::finishInteractive()
 {
     m_router->StopRouting();
 
+    m_startItem = nullptr;
+    m_endItem   = nullptr;
+
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
