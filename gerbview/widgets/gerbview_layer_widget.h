@@ -120,7 +120,7 @@ private:
 
     GERBER_FILE_IMAGE_LIST* GetImagesList();
 
-    GERBVIEW_FRAME* myframe;
+    GERBVIEW_FRAME* m_frame;
 
     bool m_alwaysShowActiveLayer;   // If true: Only shows the current active layer
                                     // even if it is changed
