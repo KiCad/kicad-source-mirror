@@ -34,6 +34,7 @@
 #include <math/vector2d.h>
 #include <core/optional.h>
 
+#include <tool/tool_action.h>
 
 class TOOL_ACTION;
 class TOOL_MANAGER;
@@ -135,22 +136,6 @@ enum TOOL_MODIFIERS
     MD_CTRL         = 0x2000,
     MD_ALT          = 0x4000,
     MD_MODIFIER_MASK = MD_SHIFT | MD_CTRL | MD_ALT,
-};
-
-/// Scope of tool actions
-enum TOOL_ACTION_SCOPE
-{
-    AS_CONTEXT = 1,  ///< Action belongs to a particular tool (i.e. a part of a pop-up menu)
-    AS_ACTIVE,       ///< All active tools
-    AS_GLOBAL        ///< Global action (toolbar/main menu event, global shortcut)
-};
-
-/// Flags for tool actions
-enum TOOL_ACTION_FLAGS
-{
-    AF_NONE     = 0,
-    AF_ACTIVATE = 1,    ///< Action activates a tool
-    AF_NOTIFY   = 2     ///< Action is a notification (it is by default passed to all tools)
 };
 
 /// Defines when a context menu is opened.

@@ -33,12 +33,11 @@
 #include <wx/popupwin.h>
 #include <wx/panel.h>
 #include <tool/action_manager.h>
-#include <tool/tool_action.h>
-#include <tool/tool_event.h>
 
 class ACTION_MENU;
 class BITMAP_BUTTON;
 class EDA_BASE_FRAME;
+class TOOL_ACTION;
 class TOOL_MANAGER;
 
 /**
@@ -75,12 +74,12 @@ public:
     /**
      * Get the ID used in the UI to reference this group
      */
-    int GetUIId() const { return m_id + TOOL_ACTION::GetBaseUIId(); }
+    int GetUIId() const;
 
     /**
      * Get a vector of all the actions contained inside this group.
      */
-    const std::vector< const TOOL_ACTION*>& GetActions() const { return m_actions; }
+    const std::vector<const TOOL_ACTION*>& GetActions() const { return m_actions; }
 
 protected:
     ///< The action ID for this action group

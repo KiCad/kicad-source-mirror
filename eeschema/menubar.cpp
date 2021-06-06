@@ -30,6 +30,7 @@
 #include <menus_helpers.h>
 #include <pgm_base.h>
 #include <schematic.h>
+#include <tool/action_manager.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>

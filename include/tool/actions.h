@@ -27,10 +27,7 @@
 #define __ACTIONS_H
 
 #include <tool/tool_action.h>
-#include <core/optional.h>
-
-class TOOL_EVENT;
-class TOOL_MANAGER;
+#include <tool/tool_event.h>
 
 #define LEGACY_HK_NAME( x ) x
 

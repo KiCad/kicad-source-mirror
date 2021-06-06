@@ -30,9 +30,10 @@
 #include <tool/selection.h>
 #include <tool/tool_action.h>
 
+#include <pcb_base_frame.h>
+
 class EDA_BASE_FRAME;
 class EDA_DRAW_FRAME;
-class PCB_BASE_FRAME;
 
 /**
  * Group generic conditions for PCB editor states.

@@ -28,7 +28,6 @@
 
 #include <string>
 
-#include <tool/tool_event.h>
 #include <tool/tool_interactive.h>
 #include <pcb_edit_frame.h>
 #include <board.h>

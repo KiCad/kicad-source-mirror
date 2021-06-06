@@ -27,10 +27,6 @@
 
 #include <tool/tool_action.h>
 #include <tool/actions.h>
-#include <core/optional.h>
-
-class TOOL_EVENT;
-class TOOL_MANAGER;
 
 /**
  * Gather all the actions that are shared by tools. The instance of PL_ACTIONS is created

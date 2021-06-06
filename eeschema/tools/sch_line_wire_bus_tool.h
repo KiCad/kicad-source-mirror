@@ -31,12 +31,12 @@
 #include <vector>
 
 #include <math/vector2d.h>
-#include <tool/tool_event.h>
 #include <sch_edit_frame.h>
 #include <sch_line.h>
 
 #include <ee_tool_base.h>
 
+class TOOL_EVENT;
 
 class SCH_BUS_WIRE_ENTRY;
 class SCH_LABEL;

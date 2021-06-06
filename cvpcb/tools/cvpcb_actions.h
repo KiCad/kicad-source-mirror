@@ -26,10 +26,7 @@
 #ifndef CVPCB_ACTIONS_H
 #define CVPCB_ACTIONS_H
 
-#include <core/optional.h>
 #include <tool/actions.h>
-#include <tool/tool_event.h>
-class TOOL_ACTION;
 
 /**
  * Gather all the actions that are shared by tools.

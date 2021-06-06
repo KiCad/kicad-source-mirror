@@ -34,9 +34,11 @@
 #include <stack>
 
 #include <tool/tool_base.h>
+#include <tool/tool_event.h>
 #include <view/view_controls.h>
 
 class TOOLS_HOLDER;
+class TOOL_ACTION;
 class TOOL_BASE;
 class ACTION_MANAGER;
 class ACTION_MENU;
@@ -264,15 +266,7 @@ public:
      *
      * @param aEvent is the event to be put into the queue.
      */
-    inline void PostEvent( const TOOL_EVENT& aEvent )
-    {
-        // Horrific hack, but it's a crash bug.  Don't let inter-frame commands stack up
-        // waiting to be processed.
-        if( aEvent.IsSimulator() && m_eventQueue.size() > 0 && m_eventQueue.back().IsSimulator() )
-            m_eventQueue.pop_back();
-
-        m_eventQueue.push_back( aEvent );
-    }
+    void PostEvent( const TOOL_EVENT& aEvent );
 
     /**
      * Set the work environment (model, view, view controls and the parent window).

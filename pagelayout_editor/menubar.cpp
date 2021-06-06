@@ -28,6 +28,7 @@
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
+#include <tool/action_manager.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <widgets/wx_menubar.h>

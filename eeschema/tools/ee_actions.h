@@ -27,7 +27,6 @@
 
 #include <tool/tool_action.h>
 #include <tool/actions.h>
-#include <core/optional.h>
 
 class TOOL_EVENT;
 class TOOL_MANAGER;
@@ -217,27 +216,5 @@ public:
     static TOOL_ACTION updateNetHighlighting;
     static TOOL_ACTION highlightNetTool;
 };
-
-
-//
-// For LibEdit
-//
-inline VECTOR2I mapCoords( const wxPoint& aCoord )
-{
-    return VECTOR2I( aCoord.x, -aCoord.y );
-}
-
-inline wxPoint mapCoords( const VECTOR2I& aCoord )
-{
-    return wxPoint( aCoord.x, -aCoord.y );
-}
-
-inline wxPoint mapCoords( const int x, const int y )
-{
-    return wxPoint( x, -y );
-}
-
-
-
 
 #endif

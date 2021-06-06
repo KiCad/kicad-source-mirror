@@ -29,7 +29,7 @@
 
 #include <string>
 #include <tool/tool_menu.h>
-#include <tool/tool_event.h>
+#include <tool/tool_event.h>    // Needed for CONTEXT_MENU_TRIGGER
 #include <tool/tool_base.h>
 
 class ACTION_MENU;

@@ -25,6 +25,7 @@
 #ifndef EE_TOOL_BASE_H
 #define EE_TOOL_BASE_H
 
+#include <math/vector2d.h>
 #include <tool/tool_event.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
@@ -176,5 +177,22 @@ protected:
     EE_SELECTION_TOOL* m_selectionTool;
     bool               m_isSymbolEditor;
 };
+
+
+// For LibEdit
+inline VECTOR2I mapCoords( const wxPoint& aCoord )
+{
+    return VECTOR2I( aCoord.x, -aCoord.y );
+}
+
+inline wxPoint mapCoords( const VECTOR2I& aCoord )
+{
+    return wxPoint( aCoord.x, -aCoord.y );
+}
+
+inline wxPoint mapCoords( const int x, const int y )
+{
+    return wxPoint( x, -y );
+}
 
 #endif

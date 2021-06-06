@@ -29,10 +29,10 @@
 #include <functional>
 #include <tool/selection.h>
 #include <tool/selection_conditions.h>
-#include <tool/tool_action.h>
 
 class EDA_BASE_FRAME;
 class EDA_DRAW_FRAME;
+class TOOL_ACTION;
 
 /**
  * Class that groups generic conditions for editor states.

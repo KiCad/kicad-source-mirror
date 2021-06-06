@@ -23,6 +23,7 @@
  */
 
 #include <tool/tool_action.h>
+#include <tool/tool_event.h>
 #include <tool/action_manager.h>
 
 #include <algorithm>
@@ -65,6 +66,17 @@ TOOL_ACTION::TOOL_ACTION() :
 TOOL_ACTION::~TOOL_ACTION()
 {
     ACTION_MANAGER::GetActionList().remove( this );
+}
+
+
+TOOL_EVENT TOOL_ACTION::MakeEvent() const
+{
+    if( IsActivation() )
+        return TOOL_EVENT( TC_COMMAND, TA_ACTIVATE, m_name, m_scope, m_param );
+    else if( IsNotification() )
+        return TOOL_EVENT( TC_MESSAGE, TA_NONE, m_name, m_scope, m_param );
+    else
+        return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope, m_param );
 }
 
 

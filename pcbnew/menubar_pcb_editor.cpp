@@ -33,6 +33,7 @@
 #include <pcbnew_id.h>
 #include <pgm_base.h>
 #include <python_scripting.h>
+#include <tool/action_manager.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>

@@ -29,6 +29,7 @@
 #include "gerbview_id.h"
 #include <kiface_i.h>
 #include <menus_helpers.h>
+#include <tool/action_manager.h>
 #include <tool/action_menu.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>

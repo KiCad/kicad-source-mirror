@@ -25,12 +25,12 @@
 #define TOOLS_TOOL_MENU__H_
 
 #include <tool/conditional_menu.h>
-#include <tool/tool_event.h>
 
 #include <vector>
 #include <memory>
 
 class ACTION_MENU;
+class TOOL_INTERACTIVE;
 
 /**
  * Manage a #CONDITIONAL_MENU and some number of CONTEXT_MENUs as sub-menus.

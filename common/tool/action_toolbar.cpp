@@ -34,6 +34,7 @@
 #include <settings/common_settings.h>
 #include <tool/action_toolbar.h>
 #include <tool/actions.h>
+#include <tool/tool_action.h>
 #include <tool/tool_event.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
@@ -62,6 +63,12 @@ ACTION_GROUP::ACTION_GROUP( std::string aName, const std::vector<const TOOL_ACTI
 
     m_name = aName;
     m_id   = ACTION_MANAGER::MakeActionId( m_name );
+}
+
+
+int ACTION_GROUP::GetUIId() const
+{
+    return m_id + TOOL_ACTION::GetBaseUIId();
 }
 
 

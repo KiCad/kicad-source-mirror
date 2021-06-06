@@ -31,9 +31,27 @@
 #include <string>
 #include <cassert>
 
-#include <tool/tool_event.h>
+#include <wx/string.h>
+
+class TOOL_EVENT;
 
 enum class BITMAPS : unsigned int;
+
+/// Scope of tool actions
+enum TOOL_ACTION_SCOPE
+{
+    AS_CONTEXT = 1,  ///< Action belongs to a particular tool (i.e. a part of a pop-up menu)
+    AS_ACTIVE,       ///< All active tools
+    AS_GLOBAL        ///< Global action (toolbar/main menu event, global shortcut)
+};
+
+/// Flags for tool actions
+enum TOOL_ACTION_FLAGS
+{
+    AF_NONE     = 0,
+    AF_ACTIVATE = 1,    ///< Action activates a tool
+    AF_NOTIFY   = 2     ///< Action is a notification (it is by default passed to all tools)
+};
 
 /**
  * Represent a single user action.
@@ -120,15 +138,7 @@ public:
      * Return the event associated with the action (i.e. the event that will be sent after
      * activating the action).
      */
-    TOOL_EVENT MakeEvent() const
-    {
-        if( IsActivation() )
-            return TOOL_EVENT( TC_COMMAND, TA_ACTIVATE, m_name, m_scope, m_param );
-        else if( IsNotification() )
-            return TOOL_EVENT( TC_MESSAGE, TA_NONE, m_name, m_scope, m_param );
-        else
-            return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope, m_param );
-    }
+    TOOL_EVENT MakeEvent() const;
 
     wxString GetLabel() const;
     wxString GetMenuItem() const;

@@ -30,11 +30,10 @@
 #include <cassert>
 #include <eda_item.h>    // for KICAD_T
 
-#include <tool/tool_event.h>
-
 #include <functional>
 
 class EDA_ITEM;
+class TOOL_EVENT;
 class TOOL_MANAGER;
 class TOOLS_HOLDER;
 

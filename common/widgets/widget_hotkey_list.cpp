@@ -28,7 +28,7 @@
 #include <wx/treelist.h>
 #include <wx/msgdlg.h>
 #include <wx/menu.h>
-#include <tool/tool_action.h>
+#include <tool/tool_event.h>
 #include <dialog_shim.h>
 #include <wx/dcclient.h>
 #include <wx/stattext.h>

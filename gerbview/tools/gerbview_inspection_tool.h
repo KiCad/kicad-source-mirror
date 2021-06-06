@@ -20,9 +20,10 @@
 #ifndef GERBVIEW_INSPECTION_TOOL_H
 #define GERBVIEW_INSPECTION_TOOL_H
 
-#include <tool/tool_event.h>
 #include <tool/tool_interactive.h>
 #include <gerbview_frame.h>
+
+class TOOL_EVENT;
 
 class GERBVIEW_INSPECTION_TOOL : public TOOL_INTERACTIVE
 {

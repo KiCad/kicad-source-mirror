@@ -362,6 +362,17 @@ void TOOL_MANAGER::PrimeTool( const VECTOR2D& aPosition )
 }
 
 
+void TOOL_MANAGER::PostEvent( const TOOL_EVENT& aEvent )
+{
+    // Horrific hack, but it's a crash bug.  Don't let inter-frame commands stack up
+    // waiting to be processed.
+    if( aEvent.IsSimulator() && m_eventQueue.size() > 0 && m_eventQueue.back().IsSimulator() )
+        m_eventQueue.pop_back();
+
+    m_eventQueue.push_back( aEvent );
+}
+
+
 const std::map<std::string, TOOL_ACTION*>& TOOL_MANAGER::GetActions() const
 {
     return m_actionMgr->GetActions();

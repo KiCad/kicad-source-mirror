@@ -29,7 +29,7 @@
 
 #include <vector>
 #include <wx/event.h>
-#include <tool/tool_event.h>
+#include <tool/tool_event.h>   // Needed for MD_ constants
 
 class TOOL_MANAGER;
 class PCB_BASE_FRAME;

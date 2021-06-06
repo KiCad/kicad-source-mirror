@@ -27,11 +27,6 @@
 
 #include <tool/tool_action.h>
 #include <tool/actions.h>
-#include <core/optional.h>
-
-class TOOL_EVENT;
-class TOOL_MANAGER;
-
 
 class KICAD_MANAGER_ACTIONS : public ACTIONS
 {

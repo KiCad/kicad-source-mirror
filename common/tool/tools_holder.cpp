@@ -23,6 +23,7 @@
 
 #include <pgm_base.h>
 #include <settings/common_settings.h>
+#include <tool/action_manager.h>
 #include <tool/action_menu.h>
 #include <tool/actions.h>
 #include <tool/tools_holder.h>
