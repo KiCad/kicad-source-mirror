@@ -29,12 +29,12 @@
 #include <netlist_exporter_base.h>
 
 #include <project.h>
-#include <xnode.h>      // also nests: <wx/xml/xml.h>
 
 #include <sch_edit_frame.h>
 
 class CONNECTION_GRAPH;
 class SYMBOL_LIB_TABLE;
+class XNODE;
 
 #define GENERIC_INTERMEDIATE_NETLIST_EXT wxT( "xml" )
 

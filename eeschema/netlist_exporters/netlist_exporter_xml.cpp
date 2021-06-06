@@ -33,6 +33,7 @@
 #include <connection_graph.h>
 #include <refdes_utils.h>
 #include <wx/wfstream.h>
+#include <xnode.h>      // also nests: <wx/xml/xml.h>
 
 #include <symbol_lib_table.h>
 
