@@ -35,7 +35,6 @@
 #include <wx/string.h>
 
 #include <base_screen.h>
-#include <eda_item.h>
 #include <core/typeinfo.h>
 #include <kiid.h>
 #include <kiway_holder.h>
@@ -53,7 +52,7 @@
 #include <sch_sheet_path.h>
 
 class BUS_ALIAS;
-
+class EDA_ITEM;
 class LIB_PART;
 class LIB_PIN;
 class SCH_COMPONENT;
@@ -112,10 +111,7 @@ public:
 
     bool HasSheets() const { return HasItems( SCH_SHEET_T ); }
 
-    static inline bool ClassOf( const EDA_ITEM* aItem )
-    {
-        return aItem && SCH_SCREEN_T == aItem->Type();
-    }
+    static bool ClassOf( const EDA_ITEM* aItem );
 
     virtual wxString GetClass() const override
     {

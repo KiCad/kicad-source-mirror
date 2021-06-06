@@ -31,7 +31,6 @@
 #ifndef CLASS_DRAWSHEET_PATH_H
 #define CLASS_DRAWSHEET_PATH_H
 
-#include <eda_item.h>
 #include <erc_item.h>
 
 #include <map>
@@ -104,6 +103,7 @@ struct SCH_SHEET_INSTANCE
 
 
 class wxFindReplaceData;
+class EDA_ITEM;
 class SCH_SHEET;
 class SCH_SCREEN;
 class SCH_MARKER;

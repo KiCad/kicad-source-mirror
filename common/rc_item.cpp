@@ -29,6 +29,7 @@
 #include <marker_base.h>
 #include <eda_draw_frame.h>
 #include <rc_item.h>
+#include <eda_item.h>
 #include <base_units.h>
 
 #define WX_DATAVIEW_WINDOW_PADDING 6
@@ -48,6 +49,30 @@ wxString RC_ITEM::ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos )
     return wxString::Format( "@(%s, %s)",
                              MessageTextFromValue( aUnits, aPos.x ),
                              MessageTextFromValue( aUnits, aPos.y ) );
+}
+
+
+void RC_ITEM::AddItem( EDA_ITEM* aItem )
+{
+    m_ids.push_back( aItem->m_Uuid );
+}
+
+
+void RC_ITEM::SetItems( const EDA_ITEM* aItem, const EDA_ITEM* bItem,
+                        const EDA_ITEM* cItem, const EDA_ITEM* dItem )
+{
+    m_ids.clear();
+
+    m_ids.push_back( aItem->m_Uuid );
+
+    if( bItem )
+        m_ids.push_back( bItem->m_Uuid );
+
+    if( cItem )
+        m_ids.push_back( cItem->m_Uuid );
+
+    if( dItem )
+        m_ids.push_back( dItem->m_Uuid );
 }
 
 

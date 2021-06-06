@@ -31,6 +31,7 @@
 
 #include <wx/filefn.h>
 
+#include <eda_item.h>
 #include <eda_rect.h>
 #include <id.h>
 #include <kicad_string.h>
@@ -132,6 +133,12 @@ bool SCH_SCREEN::HasItems( KICAD_T aItemType ) const
     EE_RTREE::EE_TYPE sheets = m_rtree.OfType( aItemType );
 
     return sheets.begin() != sheets.end();
+}
+
+
+bool SCH_SCREEN::ClassOf( const EDA_ITEM* aItem )
+{
+    return aItem && SCH_SCREEN_T == aItem->Type();
 }
 
 

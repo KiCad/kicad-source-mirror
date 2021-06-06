@@ -26,9 +26,6 @@
 #define SCH_PREVIEW_PANEL_H
 
 #include <class_draw_panel_gal.h>
-#include <eda_item.h>
-#include <gr_basic.h>
-#include <eda_rect.h>
 
 
 namespace KIGFX {

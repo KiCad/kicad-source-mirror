@@ -25,12 +25,14 @@
 #define RC_ITEM_H
 
 #include <wx/dataview.h>
-#include <eda_item.h>
+#include <kiid.h>
 #include <reporter.h>
 
 class MARKER_BASE;
 class EDA_BASE_FRAME;
 class RC_ITEM;
+class EDA_ITEM;
+class EDA_DRAW_FRAME;
 
 
 /**
@@ -99,27 +101,10 @@ public:
         m_ids = aIds;
     }
 
-    void AddItem( EDA_ITEM* aItem )
-    {
-        m_ids.push_back( aItem->m_Uuid );
-    }
+    void AddItem( EDA_ITEM* aItem );
 
     void SetItems( const EDA_ITEM* aItem, const EDA_ITEM* bItem = nullptr,
-                   const EDA_ITEM* cItem = nullptr, const EDA_ITEM* dItem = nullptr )
-    {
-        m_ids.clear();
-
-        m_ids.push_back( aItem->m_Uuid );
-
-        if( bItem )
-            m_ids.push_back( bItem->m_Uuid );
-
-        if( cItem )
-            m_ids.push_back( cItem->m_Uuid );
-
-        if( dItem )
-            m_ids.push_back( dItem->m_Uuid );
-    }
+                   const EDA_ITEM* cItem = nullptr, const EDA_ITEM* dItem = nullptr );
 
     void SetItems( const KIID& aItem, const KIID& bItem = niluuid, const KIID& cItem = niluuid,
                    const KIID& dItem = niluuid )
