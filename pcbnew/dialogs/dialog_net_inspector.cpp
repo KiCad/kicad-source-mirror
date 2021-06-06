@@ -27,6 +27,7 @@
 #include <tools/board_inspection_tool.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <confirm.h>
 #include <track.h>
 #include <dialog_net_inspector.h>
 #include <eda_pattern_match.h>

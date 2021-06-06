@@ -31,7 +31,6 @@
 #include <board.h>
 #include <footprint.h>
 #include <track.h>
-#include <confirm.h>
 #include <dialog_board_statistics_base.h>
 #include <pad_shapes.h>
 #include <pcb_base_frame.h>
