@@ -26,7 +26,6 @@
 #define __dialog_lib_edit_pin__
 
 #include <wx/bmpcbox.h>
-#include <wx/msgdlg.h>
 #include <wx/dcclient.h>
 
 #include <pin_shape_combobox.h>
