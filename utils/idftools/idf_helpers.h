@@ -24,7 +24,7 @@
 #ifndef IDF_HELPERS_H
 #define IDF_HELPERS_H
 
-#include <wx/wx.h>
+#include <wx/string.h>
 #include <iostream>
 #include <string>
 #include <idf_common.h>
