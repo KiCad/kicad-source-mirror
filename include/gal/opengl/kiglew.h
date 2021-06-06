@@ -40,7 +40,7 @@
 
     #ifdef KICAD_USE_EGL
 
-        #ifdef wxUSE_GLCANVAS_EGL
+        #if wxUSE_GLCANVAS_EGL
             // wxWidgets was compiled with the EGL canvas, so use the EGL header for GLEW
             #include <GL/eglew.h>
         #else
@@ -49,7 +49,7 @@
 
     #else   // KICAD_USE_EGL
 
-        #ifdef wxUSE_GLCANVAS_EGL
+        #if wxUSE_GLCANVAS_EGL
             #error "KICAD_USE_EGL must be defined since wxWidgets has been compiled with the EGL canvas"
         #else
             // wxWidgets wasn't compiled with the EGL canvas, so use the X11 GLEW
