@@ -52,7 +52,7 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
         {
             try
             {
-                m_internals->update( ( *m_parent->m_internals )[ptr] );
+                m_internals->update( m_parent->m_internals->at( ptr ) );
 
                 wxLogTrace( traceSettings, "Loaded NESTED_SETTINGS %s", GetFilename() );
 
