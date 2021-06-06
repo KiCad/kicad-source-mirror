@@ -26,7 +26,8 @@
 #ifndef CADSTAR_ARCHIVE_PARSER_H_
 #define CADSTAR_ARCHIVE_PARSER_H_
 
-#include <dsnlexer.h>
+#include <richio.h>
+#include <wx/gdicmn.h>
 #include <map>
 #include <set>
 #include <vector>
