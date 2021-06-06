@@ -32,6 +32,7 @@
 #include <wx/filename.h>
 #include <wx/tokenzr.h>
 #include <wx/wfstream.h>
+#include <wx/xml/xml.h>
 
 #include <class_library.h>
 #include <plugins/eagle/eagle_parser.h>

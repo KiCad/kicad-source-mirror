@@ -25,8 +25,6 @@
 #ifndef _SCH_EAGLE_PLUGIN_H_
 #define _SCH_EAGLE_PLUGIN_H_
 
-#include <wx/xml/xml.h>
-
 #include <sch_line.h>
 #include <sch_io_mgr.h>
 #include <plugins/eagle/eagle_parser.h>
@@ -59,6 +57,7 @@ class LIB_RECTANGLE;
 class LIB_POLYLINE;
 class LIB_PIN;
 class LIB_TEXT;
+class wxXmlNode;
 
 
 typedef struct EAGLE_LIBRARY
