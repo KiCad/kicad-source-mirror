@@ -578,8 +578,14 @@ public:
         m_events.push_back( aSingleEvent );
     }
 
-    ///<y Copy an existing TOOL_EVENT_LIST
-    TOOL_EVENT_LIST( const TOOL_EVENT_LIST& aEventList ) = default;
+    ///< Copy an existing TOOL_EVENT_LIST
+    TOOL_EVENT_LIST( const TOOL_EVENT_LIST& aEventList )
+    {
+        m_events.clear();
+
+        for( const TOOL_EVENT& event : aEventList.m_events )
+            m_events.push_back( event );
+    }
 
     /**
      * Function Format()
