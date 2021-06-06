@@ -37,6 +37,7 @@
 #include <base_units.h>
 #include <widgets/wx_grid.h>
 #include <wx/listbox.h>
+#include <wx/msgdlg.h>
 
 #include <tool/tool_manager.h>
 

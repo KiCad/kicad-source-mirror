@@ -30,6 +30,7 @@
 #include "pcbnew_footprint_wizards.h"
 #include <cstdio>
 #include <macros.h>
+#include <wx/msgdlg.h>
 #include "../../scripting/python_scripting.h"
 
 

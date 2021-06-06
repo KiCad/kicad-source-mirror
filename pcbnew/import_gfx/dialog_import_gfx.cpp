@@ -34,6 +34,7 @@
 #include <map>
 #include "dxf_import_plugin.h"
 #include <wx/filedlg.h>
+#include <wx/msgdlg.h>
 
 #include <memory>
 

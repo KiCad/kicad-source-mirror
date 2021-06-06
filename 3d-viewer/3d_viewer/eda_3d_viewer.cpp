@@ -25,6 +25,7 @@
 #include <wx/colordlg.h>
 #include <wx/colour.h>
 #include <wx/filename.h>
+#include <wx/msgdlg.h>
 #include <wx/string.h>
 #include <wx/wupdlock.h>
 #include <wx/clipbrd.h>

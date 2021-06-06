@@ -40,6 +40,7 @@
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>
 #include <project/project_file.h>
+#include <wx/msgdlg.h>
 
 #define QUOTE   '\''
 

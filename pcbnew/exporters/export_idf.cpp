@@ -35,6 +35,7 @@
 #include <fp_shape.h>
 #include <idf_parser.h>
 #include <build_version.h>
+#include <wx/msgdlg.h>
 #include "project.h"
 #include "kiway.h"
 #include "3d_cache/3d_cache.h"

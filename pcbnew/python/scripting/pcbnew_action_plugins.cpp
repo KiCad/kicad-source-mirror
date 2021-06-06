@@ -32,6 +32,7 @@
 #include <pcbnew_settings.h>
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
+#include <wx/msgdlg.h>
 #include "../../scripting/python_scripting.h"
 
 PYTHON_ACTION_PLUGIN::PYTHON_ACTION_PLUGIN( PyObject* aAction )

@@ -46,6 +46,7 @@ using namespace std::placeholders;
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
+#include <wx/msgdlg.h>
 
 
 extern void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, wxPoint aSpreadAreaPosition );

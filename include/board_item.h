@@ -33,8 +33,6 @@
 #include <layers_id_colors_and_visibility.h>
 #include <geometry/geometry_utils.h>
 
-#include <wx/msgdlg.h>
-
 class BOARD;
 class BOARD_ITEM_CONTAINER;
 class SHAPE_POLY_SET;
@@ -291,10 +289,7 @@ public:
      * @param aRotCentre the rotation point.
      * @param aAngle the rotation angle in 0.1 degree.
      */
-    virtual void Rotate( const wxPoint& aRotCentre, double aAngle )
-    {
-        wxMessageBox( wxT( "virtual BOARD_ITEM::Rotate used, should not occur" ), GetClass() );
-    }
+    virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
 
     void Rotate( const VECTOR2I& aRotCentre, double aAngle )
     {
@@ -307,10 +302,7 @@ public:
      * @param aCentre the rotation point.
      * @param aFlipLeftRight mirror across Y axis instead of X (the default).
      */
-    virtual void Flip( const wxPoint& aCentre, bool aFlipLeftRight )
-    {
-        wxMessageBox( wxT( "virtual BOARD_ITEM::Flip used, should not occur" ), GetClass() );
-    }
+    virtual void Flip( const wxPoint& aCentre, bool aFlipLeftRight );
 
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     {

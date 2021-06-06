@@ -28,6 +28,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <pcb_edit_frame.h>
+#include <wx/msgdlg.h>
 
 #include <boost/algorithm/string/join.hpp>
 

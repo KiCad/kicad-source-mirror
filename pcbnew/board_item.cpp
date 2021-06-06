@@ -29,6 +29,8 @@
 #include <i18n_utility.h>
 #include <board.h>
 #include <string>
+#include <wx/msgdlg.h>
+
 
 wxString BOARD_ITEM::ShowShape( PCB_SHAPE_TYPE aShape )
 {
@@ -159,6 +161,18 @@ std::shared_ptr<SHAPE> BOARD_ITEM::GetEffectiveShape( PCB_LAYER_ID aLayer ) cons
     wxFAIL_MSG( "GetEffectiveShape() not implemented for " + GetClass() );
 
     return shape;
+}
+
+
+void BOARD_ITEM::Rotate( const wxPoint& aRotCentre, double aAngle )
+{
+    wxMessageBox( wxT( "virtual BOARD_ITEM::Rotate used, should not occur" ), GetClass() );
+}
+
+
+void BOARD_ITEM::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+{
+    wxMessageBox( wxT( "virtual BOARD_ITEM::Flip used, should not occur" ), GetClass() );
 }
 
 

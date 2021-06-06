@@ -24,6 +24,7 @@
 #include <pcb_base_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <widgets/unit_binder.h>
+#include <wx/msgdlg.h>
 
 #include "dialog_dimension_properties.h"
 

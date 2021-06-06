@@ -29,6 +29,7 @@
 #include <iomanip>
 #include <vector>
 #include <wx/dir.h>
+#include <wx/msgdlg.h>
 
 #include "3d_cache/3d_cache.h"
 #include "3d_cache/3d_info.h"
