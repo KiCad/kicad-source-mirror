@@ -81,11 +81,9 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWinding
     aPath.SetShape( path_walk );
 
     // If the end of the line is inside an obstacle, additional walkaround iterations are not
-    // going to help.  Also, if one walkaround step didn't produce a new last point, additional
-    // steps won't either. Exit now to prevent pegging the iteration limiter and causing lag.
-    if( initialLast == path_walk.CLastPoint() ||
-        ( current_obs && current_obs->m_hull.PointInside( initialLast ) &&
-         !current_obs->m_hull.PointOnEdge( initialLast ) ) )
+    // going to help.  Exit now to prevent pegging the iteration limiter and causing lag.
+    if( current_obs && current_obs->m_hull.PointInside( initialLast ) &&
+        !current_obs->m_hull.PointOnEdge( initialLast ) )
     {
         return ALMOST_DONE;
     }
