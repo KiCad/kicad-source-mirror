@@ -118,10 +118,30 @@ bool ROUTER::RoutingInProgress() const
 }
 
 
-const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP )
+const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, bool aUseClearance )
 {
     if( m_state == IDLE || m_placer == nullptr )
-        return m_world->HitTest( aP );
+    {
+        if( aUseClearance )
+        {
+            SEGMENT test( SEG( aP, aP ), -1 );
+            test.SetWidth( 1 );
+            test.SetLayers( LAYER_RANGE::All() );
+            NODE::OBSTACLES obs;
+            m_world->QueryColliding( &test, obs, ITEM::ANY_T, -1, false );
+
+            PNS::ITEM_SET ret;
+
+            for( OBSTACLE& obstacle : obs )
+                ret.Add( obstacle.m_item, false );
+
+            return ret;
+        }
+        else
+        {
+            return m_world->HitTest( aP );
+        }
+    }
     else
         return m_placer->CurrentNode()->HitTest( aP );
 }
