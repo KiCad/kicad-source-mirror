@@ -34,8 +34,8 @@
 #include <list>
 #include <cassert>
 
-#ifdef KICAD_GAL_PROFILE
 #include <wx/log.h>
+#ifdef KICAD_GAL_PROFILE
 #include <profile.h>
 #endif /* KICAD_GAL_PROFILE */
 

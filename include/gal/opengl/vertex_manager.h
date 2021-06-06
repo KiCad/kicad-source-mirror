@@ -38,7 +38,6 @@
 #include <gal/color4d.h>
 #include <stack>
 #include <memory>
-#include <wx/log.h>
 
 namespace KIGFX
 {
