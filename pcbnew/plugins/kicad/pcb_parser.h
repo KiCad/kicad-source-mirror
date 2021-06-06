@@ -34,6 +34,7 @@
 #include <hashtables.h>
 #include <layers_id_colors_and_visibility.h>     // PCB_LAYER_ID
 #include <pcb_lexer.h>
+#include <kiid.h>
 
 #include <unordered_map>
 

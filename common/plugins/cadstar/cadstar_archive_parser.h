@@ -27,6 +27,8 @@
 #define CADSTAR_ARCHIVE_PARSER_H_
 
 #include <dsnlexer.h>
+#include <map>
+#include <set>
 #include <vector>
 #include <xnode.h>
 

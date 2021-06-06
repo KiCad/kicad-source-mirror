@@ -27,6 +27,7 @@
 #include <wx/xml/xml.h>
 
 #include <plugins/cadstar/cadstar_archive_parser.h>
+#include <eda_item.h>
 #include <eda_text.h>
 #include <macros.h>
 #include <trigo.h>

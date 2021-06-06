@@ -27,7 +27,7 @@
 
 #include <unordered_map>
 
-#include <eda_item.h>
+#include <eda_rect.h>
 #include <wx/string.h>
 
 // First some utility classes and functions
