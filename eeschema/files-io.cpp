@@ -109,6 +109,18 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
             schematicFileName.SetExt( KiCadSchematicFileExtension );
     }
 
+#ifndef __WINDOWS__
+    // Write through symlinks, don't replace them
+    if( schematicFileName.Exists( wxFILE_EXISTS_SYMLINK ) )
+    {
+        char buffer[ PATH_MAX ];
+        char *realPath = realpath( TO_UTF8( schematicFileName.GetFullPath() ), buffer );
+
+        if( realPath )
+            schematicFileName.Assign( wxString::FromUTF8( realPath ) );
+    }
+#endif
+
     if( !IsWritable( schematicFileName ) )
         return false;
 
