@@ -32,6 +32,7 @@
 #include <settings/parameters.h>
 #include <project/project_file.h>
 #include <advanced_config.h>
+#include <pcbnew.h>
 
 const int bdsSchemaVersion = 2;
 

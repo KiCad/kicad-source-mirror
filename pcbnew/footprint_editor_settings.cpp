@@ -30,6 +30,7 @@
 #include <base_units.h>
 #include <widgets/ui_common.h>
 #include <wx/log.h>
+#include <pcbnew.h>
 
 
 ///! Update the schema version whenever a migration is required

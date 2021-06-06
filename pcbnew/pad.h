@@ -33,7 +33,6 @@
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_compound.h>
 #include <pad_shapes.h>
-#include <pcbnew.h>
 
 class PCB_SHAPE;
 class PARAM_CFG;

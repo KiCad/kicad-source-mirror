@@ -27,7 +27,6 @@
 #ifndef _DIALOG_PAD_PROPERTIES_H_
 #define _DIALOG_PAD_PROPERTIES_H_
 
-#include <pcbnew.h>
 #include <pcb_base_frame.h>
 #include <base_units.h>
 #include <wx/valnum.h>

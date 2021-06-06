@@ -31,6 +31,7 @@
 #include <kicad_string.h>
 #include <pcb_text.h>
 #include <fp_text.h>
+#include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <wx/valnum.h>

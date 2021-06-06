@@ -41,7 +41,6 @@
 #include <board_item.h>
 #include <convert_to_biu.h>
 #include <pcb_display_options.h>
-#include <pcbnew.h>
 
 #include <geometry/seg.h>
 #include <geometry/shape_arc.h>
