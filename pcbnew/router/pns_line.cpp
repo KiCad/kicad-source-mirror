@@ -355,6 +355,13 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
             vc->neighbours.push_back(vnext);
     }
 
+    // In the case that the initial path ends *inside* the current obstacle (i.e. the mouse cursor
+    // is somewhere inside the hull for the current obstacle) we want to end the walkaround at the
+    // point closest to the cursor
+    bool inLast  = aObstacle.PointInside( CPoint( -1 ) ) && !aObstacle.PointOnEdge( CPoint( -1 ) );
+    bool appendV = true;
+    int  lastDst = INT_MAX;
+
     int i = 0;
 #ifdef TOM_EXTRA_DEBUG
     for(auto &v: vts)
@@ -373,7 +380,7 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
     int iterLimit = 1000;
 
     // keep scanning the graph until we reach the end point of the path
-    while ( v->indexp != (pnew.PointCount() - 1) )
+    while( v->indexp != ( pnew.PointCount() - 1 ) )
     {
         iterLimit--;
 
@@ -384,7 +391,7 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
             return false;
         }
 
-        if(v->visited)
+        if( v->visited )
         {
             // loop found? stop walking
             break;
@@ -396,17 +403,18 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
 
         VERTEX* v_next = nullptr;
 
-        if (v->type == OUTSIDE)
+        if( v->type == OUTSIDE )
         {
             // current vertex is outside? first look for any vertex further down the path
             // that is not inside the hull
-            out.Append(v->pos);
+            out.Append( v->pos );
             VERTEX* v_next_fallback = nullptr;
             for( auto vn : v->neighbours )
             {
-                if( areNeighbours( vn->indexp , v->indexp, pnew.PointCount() ) && vn->type != INSIDE )
+                if( areNeighbours( vn->indexp , v->indexp, pnew.PointCount() ) &&
+                    vn->type != INSIDE )
                 {
-                    if( !vn->visited)
+                    if( !vn->visited )
                     {
                         v_next = vn;
                         break;
@@ -416,11 +424,11 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
                 }
             }
 
-            if(!v_next)
+            if( !v_next )
                 v_next = v_next_fallback;
 
             // such a vertex must always be present, if not, bummer.
-            if (!v_next)
+            if( !v_next )
             {
                 #ifdef TOM_EXTRA_DEBUG
                 printf("FAIL VN fallback %p\n", v_next_fallback );
@@ -429,7 +437,7 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
             }
 
         }
-        else if (v->type == ON_EDGE)
+        else if( v->type == ON_EDGE )
         {
             // look first for the first vertex outside the hull
             for( VERTEX* vn : v->neighbours )
@@ -448,12 +456,12 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
             // no outside vertices found? continue traversing the hull
             if( !v_next )
             {
-                for( VERTEX* vn: v->neighbours)
+                for( VERTEX* vn : v->neighbours )
                 {
                     #ifdef TOM_EXTRA_DEBUG
                     printf("- scan ip %d ih %d type %d\n", vn->indexp, vn->indexh, vn->type );
                     #endif
-                    if( vn->type == ON_EDGE &&
+                    if( vn->type == ON_EDGE && !vn->isHull &&
                         areNeighbours( vn->indexp, v->indexp, pnew.PointCount() ) &&
                         ( vn->indexh == ( ( v->indexh + 1 ) % hnew.PointCount() ) ) )
                     {
@@ -467,16 +475,35 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
             // we should never reach this part of the code, but who really knows?
             if( !v_next )
             {
-                for( VERTEX* vn: v->neighbours)
+                for( VERTEX* vn : v->neighbours )
                 {
-                    if ( vn->type == ON_EDGE )
+                    if( vn->type == ON_EDGE )
                     {
-                        if( vn->indexh == ( (v->indexh + 1) % hnew.PointCount() ) )
+                        if( vn->indexh == ( ( v->indexh + 1 ) % hnew.PointCount() ) )
                         {
                             v_next = vn;
-
                             break;
                         }
+                    }
+                }
+
+                // Did we get the next hull point but the end of the line is inside?  Instead of walking
+                // around the hull some more (which will just end up taking us back to the start), lets
+                // just project the normal of the endpoint onto this next segment and call it quits.
+                if( inLast && v_next )
+                {
+                    int d = ( v_next->pos - CPoint( -1 ) ).SquaredEuclideanNorm();
+
+                    if( d < lastDst )
+                    {
+                        lastDst = d;
+                    }
+                    else
+                    {
+                        VECTOR2I proj = SEG( v->pos, v_next->pos ).NearestPoint( CPoint( -1 ) );
+                        out.Append( proj );
+                        appendV = false;
+                        break;
                     }
                 }
             }
@@ -486,15 +513,15 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
         v_prev = v;
         v = v_next;
 
-        
-
         if( !v )
         {
             return false;
         }
     }
 
-    out.Append( v->pos );
+    if( appendV )
+        out.Append( v->pos );
+
     aPath = out;
 
     return true;
