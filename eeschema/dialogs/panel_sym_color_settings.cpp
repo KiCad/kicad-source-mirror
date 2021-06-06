@@ -24,7 +24,6 @@
 #include <eeschema_settings.h>
 #include <symbol_edit_frame.h>
 #include <symbol_editor_settings.h>
-#include <pgm_base.h>
 #include <sch_painter.h>
 #include <settings/settings_manager.h>
 #include <view/view.h>
@@ -41,11 +40,11 @@ PANEL_SYM_COLOR_SETTINGS::PANEL_SYM_COLOR_SETTINGS( SYMBOL_EDIT_FRAME* aFrame,
 
 bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 {
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* cfg = m_frame->GetSettings();
 
     m_useEeschemaTheme->SetValue( cfg->m_UseEeschemaColorSettings );
 
-    COLOR_SETTINGS* current = Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
+    COLOR_SETTINGS* current = m_frame->GetSettingsManager()->GetColorSettings( cfg->m_ColorTheme );
 
     int width    = 0;
     int height   = 0;
@@ -53,7 +52,7 @@ bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 
     m_themeSelection->Clear();
 
-    for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
+    for( COLOR_SETTINGS* settings : m_frame->GetSettingsManager()->GetColorSettingsList() )
     {
         int pos = m_themeSelection->Append( settings->GetName(), static_cast<void*>( settings ) );
 
@@ -77,12 +76,12 @@ bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 
 bool PANEL_SYM_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    SETTINGS_MANAGER* mgr = m_frame->GetSettingsManager();
 
     auto selected = static_cast<COLOR_SETTINGS*>(
             m_themeSelection->GetClientData( m_themeSelection->GetSelection() ) );
 
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr->GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
     cfg->m_UseEeschemaColorSettings = m_useEeschemaTheme->GetValue();
 
@@ -91,8 +90,8 @@ bool PANEL_SYM_COLOR_SETTINGS::TransferDataFromWindow()
 
     if( cfg->m_UseEeschemaColorSettings )
     {
-        EESCHEMA_SETTINGS* eecfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
-        selected                 = mgr.GetColorSettings( eecfg->m_ColorTheme );
+        EESCHEMA_SETTINGS* eecfg = mgr->GetAppSettings<EESCHEMA_SETTINGS>();
+        selected = mgr->GetColorSettings( eecfg->m_ColorTheme );
     }
 
     auto settings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();

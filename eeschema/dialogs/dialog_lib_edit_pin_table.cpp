@@ -31,7 +31,6 @@
 #include <symbol_editor_settings.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/wx_grid.h>
-#include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <kicad_string.h>
 
@@ -605,7 +604,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
 
         wxPoint pos = last->GetPosition();
 
-        auto* cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+        SYMBOL_EDITOR_SETTINGS* cfg = m_editFrame->GetSettings();
 
         if( last->GetOrientation() == PIN_LEFT || last->GetOrientation() == PIN_RIGHT )
             pos.y -= Mils2iu(cfg->m_Repeat.pin_step);

@@ -26,7 +26,6 @@
 #include <gal/gal_display_options.h>
 #include <layers_id_colors_and_visibility.h>
 #include <panel_fp_editor_color_settings.h>
-#include <pgm_base.h>
 #include <settings/settings_manager.h>
 
 
@@ -42,20 +41,20 @@ PANEL_FP_EDITOR_COLOR_SETTINGS::PANEL_FP_EDITOR_COLOR_SETTINGS( FOOTPRINT_EDIT_F
 
     m_colorNamespace = "board";
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    SETTINGS_MANAGER* mgr = m_frame->GetSettingsManager();
 
-    FOOTPRINT_EDITOR_SETTINGS* settings = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
-    COLOR_SETTINGS*            current  = mgr.GetColorSettings( settings->m_ColorTheme );
+    FOOTPRINT_EDITOR_SETTINGS* settings = mgr->GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    COLOR_SETTINGS*            current  = mgr->GetColorSettings( settings->m_ColorTheme );
 
     // Store the current settings before reloading below
     current->Store();
-    mgr.SaveColorSettings( current, "board" );
+    mgr->SaveColorSettings( current, "board" );
 
     m_optOverrideColors->SetValue( current->GetOverrideSchItemColors() );
 
     m_currentSettings = new COLOR_SETTINGS( *current );
 
-    mgr.ReloadColorSettings();
+    mgr->ReloadColorSettings();
     createThemeList( settings->m_ColorTheme );
 
     m_validLayers.push_back( F_Cu );
@@ -94,8 +93,8 @@ PANEL_FP_EDITOR_COLOR_SETTINGS::~PANEL_FP_EDITOR_COLOR_SETTINGS()
 
 bool PANEL_FP_EDITOR_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
-    FOOTPRINT_EDITOR_SETTINGS* settings = settingsMgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    SETTINGS_MANAGER*          settingsMgr = m_frame->GetSettingsManager();
+    FOOTPRINT_EDITOR_SETTINGS* settings = settingsMgr->GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
     settings->m_ColorTheme = m_currentSettings->GetFilename();
 
     return true;

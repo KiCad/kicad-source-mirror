@@ -93,12 +93,13 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
     m_modelsGrid->PushEventHandler( new GRID_TRICKS( m_modelsGrid ) );
 
+    PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
+
     // Show/hide text item columns according to the user's preference
-    m_itemsGrid->ShowHideColumns( m_frame->GetPcbNewSettings()->m_FootprintTextShownColumns );
+    m_itemsGrid->ShowHideColumns( cfg->m_FootprintTextShownColumns );
 
     // Set up the 3D models grid
     // Path selector
-    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
     if( cfg->m_lastFootprint3dDir.IsEmpty() )
     {
         wxGetEnv( KICAD6_3DMODEL_DIR, &cfg->m_lastFootprint3dDir );

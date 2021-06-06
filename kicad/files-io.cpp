@@ -33,7 +33,6 @@
 #include <confirm.h>
 #include <dialogs/panel_kicad_launcher.h>
 #include <kiway.h>
-#include <pgm_kicad.h>
 #include <project/project_archiver.h>
 #include <reporter.h>
 #include <settings/settings_manager.h>
@@ -99,10 +98,10 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     {
         wxString prjPath = Prj().GetProjectFullName();
 
-        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+        SETTINGS_MANAGER* mgr = GetSettingsManager();
 
-        mgr.UnloadProject( &Prj(), false );
-        mgr.LoadProject( prjPath );
+        mgr->UnloadProject( &Prj(), false );
+        mgr->LoadProject( prjPath );
 
         RefreshProjectTree();
     }

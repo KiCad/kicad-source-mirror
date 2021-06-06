@@ -26,6 +26,7 @@
 #include <bitmaps.h>
 #include <menus_helpers.h>
 #include <gerbview.h>
+#include "gerbview_draw_panel_gal.h"
 #include <gerbview_frame.h>
 #include <gerber_file_image_list.h>
 #include <core/arraydim.h>
@@ -255,7 +256,7 @@ void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
     myframe->m_SelLayerBox->ResyncBitmapOnly();
 
     KIGFX::VIEW* view = myframe->GetCanvas()->GetView();
-    auto settings = Pgm().GetSettingsManager().GetColorSettings();
+    auto settings = myframe->GetSettingsManager()->GetColorSettings();
     view->GetPainter()->GetSettings()->LoadColors( settings );
     view->UpdateLayerColor( GERBER_DRAW_LAYER( aLayer ) );
 
@@ -301,13 +302,13 @@ void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFin
         myframe->GetCanvas()->Refresh();
 }
 
-#include "gerbview_draw_panel_gal.h"
+
 void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 {
     myframe->SetVisibleElementColor( aId, aColor );
 
     auto view = myframe->GetCanvas()->GetView();
-    COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
+    COLOR_SETTINGS* settings = myframe->GetSettingsManager()->GetColorSettings();
 
     view->GetPainter()->GetSettings()->LoadColors( settings );
     view->UpdateLayerColor( aId );

@@ -28,7 +28,6 @@
 #include <symbol_edit_frame.h>
 #include <symbol_library_manager.h>
 #include <math/util.h> // for KiROUND
-#include <pgm_base.h>
 #include <sch_symbol.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
@@ -67,7 +66,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this ) );
 
     // Show/hide columns according to the user's preference
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* cfg = m_Parent->GetSettings();
     m_grid->ShowHideColumns( cfg->m_EditComponentVisibleColumns );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
@@ -129,7 +128,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::~DIALOG_LIB_SYMBOL_PROPERTIES()
 {
     m_lastOpenedPage = m_NoteBook->GetSelection( );
 
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* cfg = m_Parent->GetSettings();
     cfg->m_EditComponentVisibleColumns = m_grid->GetShownColumns();
 
     // Prevents crash bug in wxGrid's d'tor
@@ -465,7 +464,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    auto*     settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* settings = m_Parent->GetSettings();
     int       fieldID = m_fields->size();
     LIB_FIELD newField( m_libEntry, fieldID );
 

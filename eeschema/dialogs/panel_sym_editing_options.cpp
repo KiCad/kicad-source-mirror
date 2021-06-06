@@ -24,7 +24,6 @@
 
 #include <symbol_edit_frame.h>
 #include <sch_painter.h>
-#include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
 
@@ -47,7 +46,7 @@ PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( SYMBOL_EDIT_FRAME* aFrame,
 
 bool PANEL_SYM_EDITING_OPTIONS::TransferDataToWindow()
 {
-    auto* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* settings = m_frame->GetSettings();
 
     m_lineWidth.SetValue( Mils2iu( settings->m_Defaults.line_width ) );
     m_textSize.SetValue( Mils2iu( settings->m_Defaults.text_size ) );
@@ -67,7 +66,7 @@ bool PANEL_SYM_EDITING_OPTIONS::TransferDataToWindow()
 
 bool PANEL_SYM_EDITING_OPTIONS::TransferDataFromWindow()
 {
-    auto* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* settings = m_frame->GetSettings();
 
     settings->m_Defaults.line_width = Iu2Mils( (int) m_lineWidth.GetValue() );
     settings->m_Defaults.text_size = Iu2Mils( (int) m_textSize.GetValue() );

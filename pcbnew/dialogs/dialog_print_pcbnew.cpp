@@ -165,7 +165,7 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
 
     wxString target = cfg->m_Printing.use_theme ? cfg->m_Printing.color_theme : cfg->m_ColorTheme;
 
-    for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
+    for( COLOR_SETTINGS* settings : m_parent->GetSettingsManager()->GetColorSettingsList() )
     {
         int pos = m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
 
