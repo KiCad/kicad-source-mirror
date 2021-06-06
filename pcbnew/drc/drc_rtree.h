@@ -35,6 +35,7 @@
 #include <vector>
 
 #include <geometry/rtree.h>
+#include <geometry/shape.h>
 #include <math/vector2d.h>
 
 /**

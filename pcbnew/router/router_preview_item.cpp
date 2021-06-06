@@ -25,6 +25,7 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_simple.h>
 #include <pcb_painter.h>
+#include <trigo.h>
 
 #include "router_preview_item.h"
 

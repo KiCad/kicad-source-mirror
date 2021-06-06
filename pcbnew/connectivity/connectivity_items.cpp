@@ -28,6 +28,7 @@
 #include <core/kicad_algo.h>
 #include <macros.h>
 #include <connectivity/connectivity_items.h>
+#include <trigo.h>
 
 #include <wx/log.h>
 
