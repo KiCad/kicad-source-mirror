@@ -26,6 +26,7 @@
 
 #include <gerbview_frame.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <pgm_base.h>
 #include <settings/settings_manager.h>
 
 #include <gerber_file_image.h>

@@ -29,6 +29,7 @@
 #include "gerbview_inspection_tool.h"
 #include "gerbview_actions.h"
 #include <painter.h>
+#include <pgm_base.h>
 #include <preview_items/ruler_item.h>
 #include <preview_items/selection_area.h>
 #include <tool/tool_event.h>

@@ -23,7 +23,6 @@
 #define  WX_GERBER_STRUCT_H
 
 #include <filehistory.h>
-#include <pgm_base.h>
 #include <config_params.h>
 #include <eda_draw_frame.h>
 #include <layers_id_colors_and_visibility.h>
