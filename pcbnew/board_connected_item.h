@@ -28,7 +28,6 @@
 
 #include <board_item.h>
 #include <netinfo.h>
-#include <reporter.h>
 
 class NETCLASS;
 class TRACK;
