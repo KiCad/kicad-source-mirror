@@ -26,12 +26,13 @@
 #ifndef SELECTION_H
 #define SELECTION_H
 
-#include <algorithm>
 #include <core/optional.h>
+#include <core/typeinfo.h>
 #include <deque>
 #include <eda_rect.h>
-#include <eda_item.h>
 #include <view/view_group.h>
+
+class EDA_ITEM;
 
 class SELECTION : public KIGFX::VIEW_GROUP
 {
@@ -74,24 +75,9 @@ public:
         return m_isHover;
     }
 
-    virtual void Add( EDA_ITEM* aItem )
-    {
-        // We're not sorting here; this is just a time-optimized way to do an
-        // inclusion check.  std::lower_bound will return the first i >= aItem
-        // and the second i > aItem check rules out i == aItem.
-        ITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
+    virtual void Add( EDA_ITEM* aItem );
 
-        if( i == m_items.end() || *i > aItem )
-            m_items.insert( i, aItem );
-    }
-
-    virtual void Remove( EDA_ITEM *aItem )
-    {
-        ITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
-
-        if( !( i == m_items.end() || *i > aItem  ) )
-            m_items.erase( i );
-    }
+    virtual void Remove( EDA_ITEM *aItem );
 
     virtual void Clear() override
     {
@@ -103,20 +89,9 @@ public:
         return m_items.size();
     }
 
-    virtual KIGFX::VIEW_ITEM* GetItem( unsigned int aIdx ) const override
-    {
-        if( aIdx < m_items.size() )
-            return m_items[ aIdx ];
+    virtual KIGFX::VIEW_ITEM* GetItem( unsigned int aIdx ) const override;
 
-        return nullptr;
-    }
-
-    bool Contains( EDA_ITEM* aItem ) const
-    {
-        CITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
-
-        return !( i == m_items.end() || *i > aItem  );
-    }
+    bool Contains( EDA_ITEM* aItem ) const;
 
     /// Checks if there is anything selected
     bool Empty() const
@@ -136,33 +111,7 @@ public:
     }
 
     /// Returns the center point of the selection area bounding box.
-    virtual VECTOR2I GetCenter() const
-    {
-        KICAD_T labelTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
-        bool includeLabels = true;
-
-        // If the selection contains at least one non-label then don't include labels when
-        // calculating the centerpoint.
-
-        for( EDA_ITEM* item : m_items )
-        {
-            if( !item->IsType( labelTypes ) )
-            {
-                includeLabels = false;
-                break;
-            }
-        }
-
-        EDA_RECT bbox;
-
-        for( EDA_ITEM* item : m_items )
-        {
-            if( !item->IsType( labelTypes ) || includeLabels )
-                bbox.Merge( item->GetBoundingBox() );
-        }
-
-        return static_cast<VECTOR2I>( bbox.Centre() );
-    }
+    virtual VECTOR2I GetCenter() const;
 
     virtual const BOX2I ViewBBox() const override
     {
@@ -177,15 +126,7 @@ public:
         return static_cast<VECTOR2I>( GetBoundingBox().GetPosition() );
     }
 
-    virtual EDA_RECT GetBoundingBox() const
-    {
-        EDA_RECT bbox;
-
-        for( EDA_ITEM* item : m_items )
-            bbox.Merge( item->GetBoundingBox() );
-
-        return bbox;
-    }
+    virtual EDA_RECT GetBoundingBox() const;
 
     virtual EDA_ITEM* GetTopLeftItem( bool onlyModules = false ) const
     {
@@ -230,26 +171,9 @@ public:
      * @param aType is the type to check for.
      * @return True if there is at least one item of such kind.
      */
-    bool HasType( KICAD_T aType ) const
-    {
-        for( auto item : m_items )
-        {
-            if( item->Type() == aType )
-                return true;
-        }
+    bool HasType( KICAD_T aType ) const;
 
-        return false;
-    }
-
-    virtual const VIEW_GROUP::ITEMS updateDrawList() const override
-    {
-        std::vector<VIEW_ITEM*> items;
-
-        for( auto item : m_items )
-            items.push_back( item );
-
-        return items;
-    }
+    virtual const VIEW_GROUP::ITEMS updateDrawList() const override;
 
     bool HasReferencePoint() const
     {
@@ -276,14 +200,7 @@ public:
      *
      * @return True if all items are the same type, this includes zero or single items
      */
-    bool AreAllItemsIdentical() const
-    {
-        return ( std::all_of( m_items.begin() + 1, m_items.end(),
-                        [&]( const EDA_ITEM* r )
-                        {
-                            return r->Type() == m_items.front()->Type();
-                        } ) );
-    }
+    bool AreAllItemsIdentical() const;
 
 protected:
     OPT<VECTOR2I>         m_referencePoint;

@@ -27,6 +27,7 @@
 #include <tool/selection_conditions.h>
 
 #include <functional>
+#include <eda_item.h>
 
 using namespace std::placeholders;
 

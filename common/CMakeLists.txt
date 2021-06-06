@@ -440,6 +440,7 @@ set( COMMON_SRCS
     tool/grid_helper.cpp
     tool/grid_menu.cpp
     tool/picker_tool.cpp
+    tool/selection.cpp
     tool/selection_conditions.cpp
     tool/tool_action.cpp
     tool/tool_base.cpp

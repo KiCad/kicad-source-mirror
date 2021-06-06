@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <eda_item.h>
 #include "tools/pl_selection.h"
 
 
