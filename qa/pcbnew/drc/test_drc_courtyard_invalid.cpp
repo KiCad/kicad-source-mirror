@@ -26,6 +26,7 @@
 #include <pcbnew_utils/board_construction_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <pcb_marker.h>
 #include <drc/drc_engine.h>
