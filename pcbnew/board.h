@@ -35,6 +35,7 @@
 #include <title_block.h>
 #include <tools/pcb_selection.h>
 #include <mutex>
+#include <list>
 
 class BOARD_DESIGN_SETTINGS;
 class BOARD_CONNECTED_ITEM;
