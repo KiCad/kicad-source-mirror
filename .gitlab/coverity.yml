@@ -7,7 +7,7 @@
        --form token=$COVERITY_SCAN_TOKEN \
        --form md5=1
   echo " *cov-analysis-linux64.tgz" >> cov-analysis-linux64.md5
-  test "$(md5sum --ignore-missing -c cov-analysis-linux64.md5)" || (
+  (md5sum --ignore-missing -c cov-analysis-linux64.md5) || (
     echo "Downloading new Coverity Scan version"
     curl --output cov-analysis-linux64.tgz https://scan.coverity.com/download/linux64 \
          --form project=$COVERITY_SCAN_PROJECT_NAME \
