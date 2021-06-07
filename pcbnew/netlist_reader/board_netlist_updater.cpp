@@ -149,7 +149,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
 
     if( footprint == nullptr )
     {
-        msg.Printf( _( "Cannot add %s (footprint \"%s\" not found)." ),
+        msg.Printf( _( "Cannot add %s (footprint '%s' not found)." ),
                     aComponent->GetReference(),
                     aComponent->GetFPID().Format().wx_str() );
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
@@ -159,7 +159,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
 
     if( m_isDryRun )
     {
-        msg.Printf( _( "Add %s (footprint \"%s\")." ),
+        msg.Printf( _( "Add %s (footprint '%s')." ),
                     aComponent->GetReference(),
                     aComponent->GetFPID().Format().wx_str() );
 
@@ -183,7 +183,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
         m_addedFootprints.push_back( footprint );
         m_commit.Add( footprint );
 
-        msg.Printf( _( "Added %s (footprint \"%s\")." ),
+        msg.Printf( _( "Added %s (footprint '%s')." ),
                     aComponent->GetReference(),
                     aComponent->GetFPID().Format().wx_str() );
     }
@@ -213,7 +213,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT
 
     if( newFootprint == nullptr )
     {
-        msg.Printf( _( "Cannot update %s (footprint \"%s\" not found)." ),
+        msg.Printf( _( "Cannot update %s (footprint '%s' not found)." ),
                     aNewComponent->GetReference(),
                     aNewComponent->GetFPID().Format().wx_str() );
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
@@ -1008,7 +1008,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         }
         else if( matchCount > 1 )
         {
-            msg.Printf( _( "Multiple footprints found for \"%s\"." ),
+            msg.Printf( _( "Multiple footprints found for '%s'." ),
                         component->GetReference() );
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         }

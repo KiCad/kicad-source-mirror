@@ -821,7 +821,7 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     if( IsContentModified() )
     {
         wxFileName fileName = GetBoard()->GetFileName();
-        wxString msg = _( "Save changes to \"%s\" before closing?" );
+        wxString msg = _( "Save changes to '%s' before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
                                    [&]() -> bool
@@ -872,7 +872,7 @@ void PCB_EDIT_FRAME::doCloseWindow()
     // Remove the auto save file on a normal close of Pcbnew.
     if( fn.FileExists() && !wxRemoveFile( fn.GetFullPath() ) )
     {
-        wxString msg = wxString::Format( _( "The auto save file \"%s\" could not be removed!" ),
+        wxString msg = wxString::Format( _( "The auto save file '%s' could not be removed!" ),
                                          fn.GetFullPath() );
         wxMessageBox( msg, Pgm().App().GetAppName(), wxOK | wxICON_ERROR, this );
     }
@@ -1443,7 +1443,7 @@ void PCB_EDIT_FRAME::RunEeschema()
         }
         else
         {
-            msg.Printf( _( "Schematic file \"%s\" not found." ), schematic.GetFullPath() );
+            msg.Printf( _( "Schematic file '%s' not found." ), schematic.GetFullPath() );
             wxMessageBox( msg, _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
             return;
         }
