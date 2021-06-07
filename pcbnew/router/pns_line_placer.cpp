@@ -1520,6 +1520,63 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
 void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
 {
     wxASSERT( aLatest->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) );
+
+    // Before we assemble the final line and run the optimizer, do a separate pass to clean up
+    // colinear segments that exist on non-line-corner joints, as these will prevent proper assembly
+    // of the line and won't get cleaned up by the optimizer.
+    NODE::ITEM_VECTOR removed, added;
+    aNode->GetUpdatedItems( removed, added );
+
+    std::set<ITEM*> cleanup;
+
+    auto processJoint =
+            [&]( JOINT* aJoint, ITEM* aItem )
+            {
+                if( !aJoint || aJoint->IsLineCorner() )
+                    return;
+
+                SEG refSeg = static_cast<SEGMENT*>( aItem )->Seg();
+
+                NODE::ITEM_VECTOR toRemove;
+
+                for( ITEM* neighbor : aJoint->Links() )
+                {
+                    if( neighbor == aItem || !neighbor->LayersOverlap( aItem ) )
+                        continue;
+
+                    const SEG& testSeg = static_cast<SEGMENT*>( neighbor )->Seg();
+
+                    if( refSeg.Contains( testSeg ) )
+                    {
+                        JOINT* nA = aNode->FindJoint( neighbor->Anchor( 0 ), neighbor );
+                        JOINT* nB = aNode->FindJoint( neighbor->Anchor( 1 ), neighbor );
+
+                        if( ( nA == aJoint && nB->LinkCount() == 1 ) ||
+                            ( nB == aJoint && nA->LinkCount() == 1 ) )
+                        {
+                            cleanup.insert( neighbor );
+                        }
+                    }
+                }
+            };
+
+    for( ITEM* item : added )
+    {
+        if( !item->OfKind( ITEM::SEGMENT_T ) || cleanup.count( item ) )
+            continue;
+
+        JOINT* jA = aNode->FindJoint( item->Anchor( 0 ), item );
+        JOINT* jB = aNode->FindJoint( item->Anchor( 1 ), item );
+
+        processJoint( jA, item );
+        processJoint( jB, item );
+    }
+
+    for( ITEM* seg : cleanup )
+        aNode->Remove( seg );
+
+    // And now we can proceed with assembling the final line and optimizing it.
+
     LINE l = aNode->AssembleLine( aLatest );
 
     bool optimized = OPTIMIZER::Optimize( &l, OPTIMIZER::MERGE_COLINEAR, aNode );
