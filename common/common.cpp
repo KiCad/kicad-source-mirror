@@ -29,11 +29,12 @@
 #include <reporter.h>
 #include <macros.h>
 #include <mutex>
-#include <wx/process.h>
 #include <wx/config.h>
-#include <wx/utils.h>
+#include <wx/log.h>
+#include <wx/process.h>
 #include <wx/stdpaths.h>
 #include <wx/url.h>
+#include <wx/utils.h>
 
 #ifdef _WIN32
 #include <Windows.h>
