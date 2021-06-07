@@ -294,7 +294,7 @@ void ANTIALIASING_SMAA::loadShaders()
     //            should be set fairly low, so user color choices do not affect antialiasing
     // MAX_SEARCH_STEPS: steps of 2px, searched in H/V direction to discover true angle of edges
     //                   improves AA for lines close H/V but creates fuzzyness at junctions
-    // MAX_SEARCH_STEPS_DIAG: steps of 2px, searched in diagonal direction
+    // MAX_SEARCH_STEPS_DIAG: steps of 1px, searched in diagonal direction
     //                        improves lines close to 45deg but turns small circles into octagons
     // CORNER_ROUNDING: SMAA can distinguish actual corners from aliasing jaggies,
     //                  we want to preserve those as much as possible
@@ -307,10 +307,10 @@ void ANTIALIASING_SMAA::loadShaders()
     {
         // trades imperfect AA of shallow angles for a near artifact-free reproduction of fine features
         // jaggies are smoothed over max 5px (original step + 2px in both directions)
-        quality_string = "#define SMAA_THRESHOLD 0.05\n"
+        quality_string = "#define SMAA_THRESHOLD 0.1\n"
                          "#define SMAA_MAX_SEARCH_STEPS 1\n"
                          "#define SMAA_MAX_SEARCH_STEPS_DIAG 2\n"
-                         "#define SMAA_CORNER_ROUNDING 0\n";
+                         "#define SMAA_DISABLE_CORNER_DETECTION\n";
         edge_detect_shader = BUILTIN_SHADERS::smaa_pass_1_fragment_shader_luma;
     }
     else
@@ -318,8 +318,9 @@ void ANTIALIASING_SMAA::loadShaders()
         // jaggies are smoothed over max 17px (original step + 8px in both directions)
         quality_string = "#define SMAA_THRESHOLD 0.05\n"
                          "#define SMAA_MAX_SEARCH_STEPS 4\n"
-                         "#define SMAA_MAX_SEARCH_STEPS_DIAG 2\n"
-                         "#define SMAA_CORNER_ROUNDING 0\n";
+                         "#define SMAA_MAX_SEARCH_STEPS_DIAG 4\n"
+                         "#define SMAA_LOCAL_CONTRAST_ADAPTATION_FACTOR 1.5\n"
+                         "#define SMAA_CORNER_ROUNDING 10\n";
         edge_detect_shader = BUILTIN_SHADERS::smaa_pass_1_fragment_shader_color;
     }
 
