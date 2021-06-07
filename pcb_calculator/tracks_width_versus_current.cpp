@@ -26,7 +26,6 @@
 
 #include <cassert>
 #include <cmath>
-#include <wx/wx.h>
 #include <kiface_i.h>
 #include <dialog_helpers.h>
 

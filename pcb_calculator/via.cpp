@@ -43,7 +43,7 @@
  */
 
 #include <cmath>
-#include <wx/wx.h>
+#include <wx/choicdlg.h>
 
 #include <kiface_i.h>
 

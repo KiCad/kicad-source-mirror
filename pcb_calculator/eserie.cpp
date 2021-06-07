@@ -27,7 +27,6 @@
 #include <dialog_helpers.h>
 #include "class_regulator_data.h"
 #include "pcb_calculator_frame.h"
-#include <wx/wx.h>
 
 #ifdef BENCHMARK
 #include <sys/time.h>

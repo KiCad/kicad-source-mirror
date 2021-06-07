@@ -17,9 +17,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <wx/choicdlg.h>
 #include <wx/filename.h>
 #include <wx/settings.h>
-#include <wx/wx.h>
 
 #include <bitmaps.h>
 #include "common_data.h"

@@ -23,9 +23,12 @@
  * Contains the partial functions of PCB_CALCULATOR_FRAME related to regulators
  */
 
-#include <wx/wx.h>
 
 #include <macros.h>
+
+#include <wx/choicdlg.h>
+#include <wx/filedlg.h>
+#include <wx/msgdlg.h>
 
 #include "class_regulator_data.h"
 #include "pcb_calculator_frame.h"
