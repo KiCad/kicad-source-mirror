@@ -60,19 +60,29 @@ public:
     /// Set whether the user coordinate system is fit to content
     void SetUserCoordsFit( bool user_coords_fit ) { fitUserCoords = user_coords_fit; }
 
+    /**
+     * At the start of the HPGL plot pen speed and number are requested.
+     */
     virtual bool StartPlot() override;
+
+    /**
+     * HPGL end of plot: sort and emit graphics, pen return and release.
+     */
     virtual bool EndPlot() override;
 
     /// HPGL doesn't handle line thickness or color
-    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override
+    virtual void SetCurrentLineWidth( int width, void* aData = nullptr ) override
     {
         // This is the truth
         m_currentPenWidth = userToDeviceSize( penDiameter );
     }
 
+    /**
+     * HPGL supports dashed lines.
+     */
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
-    virtual void SetColor( COLOR4D color ) override {}
+    virtual void SetColor( const COLOR4D& color ) override {}
 
     virtual void SetPenSpeed( int speed )
     {
@@ -94,10 +104,23 @@ public:
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
-                           void * aData = NULL ) override;
+                           void* aData = nullptr ) override;
 
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                OUTLINE_MODE tracemode, void* aData ) override;
+
+    /**
+     * Plot an arc.
+     *
+     * Command
+     * PU PY x, y; PD start_arc_X AA, start_arc_Y, angle, NbSegm; PU;
+     * Or PU PY x, y; PD start_arc_X AA, start_arc_Y, angle, PU;
+     *
+     * center is the center of the arc.
+     * StAngled is the start angle of the arc.
+     * EndAngle is end angle the arc.
+     * Radius is the radius of the arc.
+     */
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void PenTo( const wxPoint& pos, char plume ) override;
@@ -123,9 +146,9 @@ public:
 protected:
     /// Start a new HPGL_ITEM if necessary, keeping the current one if it exists.
     ///
-    /// @param location - location of the item
+    /// @param location is the location of the item.
     ///
-    /// @return whether a new item was made
+    /// @return whether a new item was made.
     bool startItem( DPOINT location );
 
     /// Flush the current HPGL_ITEM and clear out the current item pointer.
@@ -134,8 +157,8 @@ protected:
     /// Start a new HPGL_ITEM with the given string if necessary, or append the
     /// string to the current item.
     ///
-    /// @param location - location of the item, if a new one is made
-    /// @param content - content substring
+    /// @param location is the location of the item, if a new one is made.
+    /// @param content is the content substring.
     ///
     /// @return whether a new item was made
     bool startOrAppendItem( DPOINT location, wxString const& content );

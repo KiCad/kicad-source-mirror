@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -239,6 +239,7 @@ void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     m_plotScale       = aScale;
     m_IUsPerDecimil   = aIusPerDecimil;
     m_iuPerDeviceUnit = PLUsPERDECIMIL / aIusPerDecimil;
+
     /* Compute the paper size in IUs */
     m_paperSize   = m_pageInfo.GetSizeMils();
     m_paperSize.x *= 10.0 * aIusPerDecimil;
@@ -253,9 +254,6 @@ void HPGL_PLOTTER::SetTargetChordLength( double chord_len )
 }
 
 
-/**
- * At the start of the HPGL plot pen speed and number are requested
- */
 bool HPGL_PLOTTER::StartPlot()
 {
     wxASSERT( m_outputFile );
@@ -269,9 +267,6 @@ bool HPGL_PLOTTER::StartPlot()
 }
 
 
-/**
- * HPGL end of plot: sort and emit graphics, pen return and release
- */
 bool HPGL_PLOTTER::EndPlot()
 {
     wxASSERT( m_outputFile );
@@ -368,13 +363,14 @@ bool HPGL_PLOTTER::EndPlot()
             {
                 loc = item.loc_end;
             }
+
             fputs( "\n", m_outputFile );
         }
     }
 
     fputs( "PU;PA;SP0;\n", m_outputFile );
     fclose( m_outputFile );
-    m_outputFile = NULL;
+    m_outputFile = nullptr;
     return true;
 }
 
@@ -383,6 +379,7 @@ void HPGL_PLOTTER::SetPenDiameter( double diameter )
 {
     penDiameter = diameter;
 }
+
 
 void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int width )
 {
@@ -406,9 +403,7 @@ void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, i
 }
 
 
-// HPGL circle
-void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill,
-                           int width )
+void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill, int width )
 {
     wxASSERT( m_outputFile );
     double radius = userToDeviceSize( diameter / 2 );
@@ -454,12 +449,8 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill,
 }
 
 
-/**
- * HPGL polygon:
- */
-
-void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
-                             FILL_TYPE aFill, int aWidth, void * aData )
+void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_TYPE aFill,
+                             int aWidth, void* aData )
 {
     if( aCornerList.size() <= 1 )
         return;
@@ -551,9 +542,6 @@ void HPGL_PLOTTER::PenTo( const wxPoint& pos, char plume )
 }
 
 
-/**
- * HPGL supports dashed lines
- */
 void HPGL_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 {
     dashType = dashed;
@@ -579,14 +567,6 @@ void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end,
 }
 
 
-/* Plot an arc:
- * Center = center coord
- * Stangl, endAngle = angle of beginning and end
- * Radius = radius of the arc
- * Command
- * PU PY x, y; PD start_arc_X AA, start_arc_Y, angle, NbSegm; PU;
- * Or PU PY x, y; PD start_arc_X AA, start_arc_Y, angle, PU;
- */
 void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
                         FILL_TYPE fill, int width )
 {
@@ -637,8 +617,6 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
 }
 
 
-/* Plot oval pad.
- */
 void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
                                  OUTLINE_MODE trace_mode, void* aData )
 {
@@ -646,9 +624,7 @@ void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double
     int     deltaxy, cx, cy;
     wxSize  size( aSize );
 
-    /* The pad will be drawn as an oblong shape with size.y > size.x
-     * (Oval vertical orientation 0)
-     */
+    // The pad will be drawn as an oblong shape with size.y > size.x (Oval vertical orientation 0).
     if( size.x > size.y )
     {
         std::swap( size.x, size.y );
@@ -675,8 +651,6 @@ void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double
 }
 
 
-/* Plot round pad or via.
- */
 void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
                                    OUTLINE_MODE trace_mode, void* aData )
 {
@@ -759,8 +733,8 @@ void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
 
 
 void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
-                                        int aCornerRadius, double aOrient,
-                                        OUTLINE_MODE aTraceMode, void* aData )
+                                      int aCornerRadius, double aOrient,
+                                      OUTLINE_MODE aTraceMode, void* aData )
 {
     SHAPE_POLY_SET outline;
 
@@ -841,9 +815,8 @@ void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorne
 }
 
 
-void HPGL_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
-                            int aRadius, int aCornerCount,
-                            double aOrient, OUTLINE_MODE aTraceMode, void* aData )
+void HPGL_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos, int aRadius, int aCornerCount,
+                                        double aOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     // Do nothing
     wxASSERT( 0 );
@@ -883,6 +856,7 @@ bool HPGL_PLOTTER::startOrAppendItem( DPOINT location, wxString const& content )
         return false;
     }
 }
+
 
 void HPGL_PLOTTER::sortItems( std::list<HPGL_ITEM>& items )
 {
@@ -932,6 +906,7 @@ void HPGL_PLOTTER::sortItems( std::list<HPGL_ITEM>& items )
             }
 
             double const dist = dpoint_dist( last_item.loc_end, search_it->loc_start );
+
             if( dist < best_dist )
             {
                 best_it   = search_it;
@@ -947,6 +922,7 @@ void HPGL_PLOTTER::sortItems( std::list<HPGL_ITEM>& items )
 
     items.splice( items.begin(), target );
 }
+
 
 const char* HPGL_PLOTTER::lineTypeCommand( PLOT_DASH_TYPE linetype )
 {
@@ -966,6 +942,7 @@ const char* HPGL_PLOTTER::lineTypeCommand( PLOT_DASH_TYPE linetype )
         break;
     }
 }
+
 
 static double dpoint_dist( DPOINT a, DPOINT b )
 {

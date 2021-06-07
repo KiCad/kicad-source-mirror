@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,8 +106,7 @@
 
 
 /**
- * Function XmlEsc
- * translates '<' to "&lt;", '>' to "&gt;" and so on, according to the spec:
+ * Translates '<' to "&lt;", '>' to "&gt;" and so on, according to the spec:
  * http://www.w3.org/TR/2000/WD-xml-c14n-20000119.html#charescaping
  * May be moved to a library if needed generally, but not expecting that.
  */
@@ -171,7 +170,7 @@ SVG_PLOTTER::SVG_PLOTTER()
     m_brush_rgb_color = 0;       // current color value (black)
     m_dashed          = PLOT_DASH_TYPE::SOLID;
     m_useInch         = true; // decimils is the default
-    m_precision       = 4;    // because there where used before it was changable
+    m_precision       = 4;    // because there where used before it was changeable
 }
 
 
@@ -190,7 +189,7 @@ void SVG_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     m_paperSize.y *= 10.0 * aIusPerDecimil;
 
     // set iuPerDeviceUnit, in 0.1mils ( 2.54um )
-    // this was used before the format was changable, so we set is as default
+    // this was used before the format was changeable, so we set is as default
     SetSvgCoordinatesFormat( 4, true );
 }
 
@@ -208,7 +207,7 @@ void SVG_PLOTTER::SetSvgCoordinatesFormat( unsigned aResolution, bool aUseInches
 }
 
 
-void SVG_PLOTTER::SetColor( COLOR4D color )
+void SVG_PLOTTER::SetColor( const COLOR4D& color )
 {
     PSLIKE_PLOTTER::SetColor( color );
 
@@ -273,7 +272,8 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
         fprintf( m_outputFile, "stroke-dasharray:%f,%f;", GetDotMarkLenIU(), GetDashGapLenIU() );
         break;
     case PLOT_DASH_TYPE::DASHDOT:
-        fprintf( m_outputFile, "stroke-dasharray:%f,%f,%f,%f;", GetDashMarkLenIU(), GetDashGapLenIU(),
+        fprintf( m_outputFile, "stroke-dasharray:%f,%f,%f,%f;",
+                 GetDashMarkLenIU(), GetDashGapLenIU(),
                  GetDotMarkLenIU(), GetDashGapLenIU() );
         break;
     case PLOT_DASH_TYPE::DEFAULT:
@@ -299,8 +299,7 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
     fputs( "\n", m_outputFile );
 }
 
-/* Set the current line width (in IUs) for the next plot
- */
+
 void SVG_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
     if( aWidth == DO_NOT_SET_LINE_WIDTH )
@@ -344,9 +343,6 @@ void SVG_PLOTTER::EndBlock( void* aData )
 }
 
 
-/* initialize m_red, m_green, m_blue ( 0 ... 255)
- * from reduced values r, g ,b ( 0.0 to 1.0 )
- */
 void SVG_PLOTTER::emitSetRGBColor( double r, double g, double b )
 {
     int red     = (int) ( 255.0 * r );
@@ -366,9 +362,6 @@ void SVG_PLOTTER::emitSetRGBColor( double r, double g, double b )
 }
 
 
-/**
- * SVG supports dashed lines
- */
 void SVG_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 {
     if( m_dashed != dashed )
@@ -398,7 +391,7 @@ void SVG_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, in
     setFillMode( fill );
     SetCurrentLineWidth( width );
 
-    // Rectangles having a 0 size value for height or width are just not drawn on Inscape,
+    // Rectangles having a 0 size value for height or width are just not drawn on Inkscape,
     // so use a line when happens.
     if( rect_dev.GetSize().x == 0.0 || rect_dev.GetSize().y == 0.0 )    // Draw a line
     {
@@ -444,7 +437,7 @@ void SVG_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_TYPE fill, int 
 void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
                        FILL_TYPE fill, int width )
 {
-    /* Draws an arc of a circle, centred on (xc,yc), with starting point
+    /* Draws an arc of a circle, centered on (xc,yc), with starting point
      *  (x1, y1) and ending at (x2, y2). The current pen is used for the outline
      *  and the current brush for filling the shape.
      *
@@ -523,7 +516,7 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
     // end point
     if( fill != FILL_TYPE::NO_FILL )
     {
-        // Filled arcs (in eeschema) consist of the pie wedge and a stroke only on the arc
+        // Filled arcs (in Eeschema) consist of the pie wedge and a stroke only on the arc
         // This needs to be drawn in two steps.
         setFillMode( fill );
         SetCurrentLineWidth( 0 );
@@ -544,8 +537,8 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 
 
 void SVG_PLOTTER::BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
-                           const wxPoint& aControl2, const wxPoint& aEnd,
-                           int aTolerance, int aLineThickness )
+                               const wxPoint& aControl2, const wxPoint& aEnd,
+                               int aTolerance, int aLineThickness )
 {
 #if 1
     setFillMode( FILL_TYPE::NO_FILL );
@@ -566,8 +559,8 @@ void SVG_PLOTTER::BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
 }
 
 
-void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
-                            FILL_TYPE aFill, int aWidth, void * aData )
+void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_TYPE aFill,
+                            int aWidth, void* aData )
 {
     if( aCornerList.size() <= 1 )
         return;
@@ -601,9 +594,11 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
         fprintf( m_outputFile, "%f,%f\n", pos.x, pos.y );
     }
 
-    // If the cornerlist ends where it begins, then close the poly
+    // If the corner list ends where it begins, then close the poly
     if( aCornerList.front() == aCornerList.back() )
+    {
         fprintf( m_outputFile, "Z\" /> \n" );
+    }
     else
     {
         pos = userToDeviceCoordinates( aCornerList.back() );
@@ -612,23 +607,17 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
 }
 
 
-/**
- * PostScript-likes at the moment are the only plot engines supporting bitmaps...
- */
-void SVG_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos,
-                             double aScaleFactor )
+void SVG_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos, double aScaleFactor )
 {
     wxSize pix_size( aImage.GetWidth(), aImage.GetHeight() );
 
     // Requested size (in IUs)
-    DPOINT drawsize( aScaleFactor * pix_size.x,
-                     aScaleFactor * pix_size.y );
+    DPOINT drawsize( aScaleFactor * pix_size.x, aScaleFactor * pix_size.y );
 
     // calculate the bitmap start position
-    wxPoint start( aPos.x - drawsize.x / 2,
-                   aPos.y - drawsize.y / 2);
+    wxPoint start( aPos.x - drawsize.x / 2, aPos.y - drawsize.y / 2);
 
-    // Rectangles having a 0 size value for height or width are just not drawn on Inscape,
+    // Rectangles having a 0 size value for height or width are just not drawn on Inkscape,
     // so use a line when happens.
     if( drawsize.x == 0.0 || drawsize.y == 0.0 )    // Draw a line
     {
@@ -648,8 +637,7 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos,
 
         fprintf( m_outputFile,
                  "<image x=\"%f\" y=\"%f\" xlink:href=\"data:image/png;base64,",
-                 userToDeviceSize( start.x ), userToDeviceSize( start.y )
-                 );
+                 userToDeviceSize( start.x ), userToDeviceSize( start.y ) );
 
         for( size_t i = 0; i < encoded.size(); i++ )
         {
@@ -684,7 +672,7 @@ void SVG_PLOTTER::PenTo( const wxPoint& pos, char plume )
     {
         DPOINT pos_dev = userToDeviceCoordinates( pos );
 
-        // Ensure we do not use a fill mode when moving tne pen,
+        // Ensure we do not use a fill mode when moving the pen,
         // in SVG mode (i;e. we are plotting only basic lines, not a filled area
         if( m_fillMode != FILL_TYPE::NO_FILL )
         {
@@ -692,14 +680,12 @@ void SVG_PLOTTER::PenTo( const wxPoint& pos, char plume )
             setSVGPlotStyle();
         }
 
-        fprintf( m_outputFile, "<path d=\"M%d %d\n",
-                 (int) pos_dev.x, (int) pos_dev.y );
+        fprintf( m_outputFile, "<path d=\"M%d %d\n", (int) pos_dev.x, (int) pos_dev.y );
     }
     else if( m_penState != plume || pos != m_penLastpos )
     {
         DPOINT pos_dev = userToDeviceCoordinates( pos );
-        fprintf( m_outputFile, "L%d %d\n",
-                 (int) pos_dev.x, (int) pos_dev.y );
+        fprintf( m_outputFile, "L%d %d\n", (int) pos_dev.x, (int) pos_dev.y );
     }
 
     m_penState    = plume;
@@ -707,10 +693,6 @@ void SVG_PLOTTER::PenTo( const wxPoint& pos, char plume )
 }
 
 
-/**
- * The code within this function
- * creates SVG files header
- */
 bool SVG_PLOTTER::StartPlot()
 {
     wxASSERT( m_outputFile );
@@ -726,11 +708,11 @@ bool SVG_PLOTTER::StartPlot()
         "  xmlns=\"http://www.w3.org/2000/svg\"\n",
         "  xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n",
         "  version=\"1.1\"\n",
-        NULL
+        nullptr
     };
 
     // Write header.
-    for( int ii = 0; header[ii] != NULL; ii++ )
+    for( int ii = 0; header[ii] != nullptr; ii++ )
     {
         fputs( header[ii], m_outputFile );
     }
@@ -740,17 +722,18 @@ bool SVG_PLOTTER::StartPlot()
     fprintf( m_outputFile, "  width=\"%fcm\" height=\"%fcm\" viewBox=\"%d %d %d %d\">\n",
              (double) m_paperSize.x / m_IUsPerDecimil * 2.54 / 10000,
              (double) m_paperSize.y / m_IUsPerDecimil * 2.54 / 10000, origin.x, origin.y,
-             (int) ( m_paperSize.x * m_iuPerDeviceUnit ), (int) ( m_paperSize.y * m_iuPerDeviceUnit) );
+             (int) ( m_paperSize.x * m_iuPerDeviceUnit ),
+             (int) ( m_paperSize.y * m_iuPerDeviceUnit) );
 
     // Write title
     char    date_buf[250];
-    time_t  ltime = time( NULL );
-    strftime( date_buf, 250, "%Y/%m/%d %H:%M:%S",
-              localtime( &ltime ) );
+    time_t  ltime = time( nullptr );
+    strftime( date_buf, 250, "%Y/%m/%d %H:%M:%S", localtime( &ltime ) );
 
     fprintf( m_outputFile,
              "<title>SVG Picture created as %s date %s </title>\n",
              TO_UTF8( XmlEsc( wxFileName( m_filename ).GetFullName() ) ), date_buf );
+
     // End of header
     fprintf( m_outputFile, "  <desc>Picture generated by %s </desc>\n",
              TO_UTF8( XmlEsc( m_creator ) ) );
@@ -772,14 +755,14 @@ bool SVG_PLOTTER::EndPlot()
 {
     fputs( "</g> \n</svg>\n", m_outputFile );
     fclose( m_outputFile );
-    m_outputFile = NULL;
+    m_outputFile = nullptr;
 
     return true;
 }
 
 
 void SVG_PLOTTER::Text( const wxPoint&              aPos,
-                        const COLOR4D               aColor,
+                        const COLOR4D&              aColor,
                         const wxString&             aText,
                         double                      aOrient,
                         const wxSize&               aSize,
@@ -829,7 +812,7 @@ void SVG_PLOTTER::Text( const wxPoint&              aPos,
 
     wxSize text_size;
     // aSize.x or aSize.y is < 0 for mirrored texts.
-    // The actual text size value is the absolue value
+    // The actual text size value is the absolute value
     text_size.x = std::abs( GraphicTextWidth( aText, aSize, aItalic, aWidth ) );
     text_size.y = std::abs( aSize.x * 4/3 ); // Hershey font height to em size conversion
     DPOINT anchor_pos_dev = userToDeviceCoordinates( aPos );

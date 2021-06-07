@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2012 Lorenzo Marcantonio, l.marcantonio@logossrl.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,7 +123,7 @@ bool PDF_PLOTTER::OpenFile( const wxString& aFullFilename )
 
 
 void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-                              double aScale, bool aMirror )
+                               double aScale, bool aMirror )
 {
     m_plotMirror    = aMirror;
     m_plotOffset    = aOffset;
@@ -162,8 +162,7 @@ void PDF_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 void PDF_PLOTTER::emitSetRGBColor( double r, double g, double b )
 {
     wxASSERT( workFile );
-    fprintf( workFile, "%g %g %g rg %g %g %g RG\n",
-             r, g, b, r, g, b );
+    fprintf( workFile, "%g %g %g rg %g %g %g RG\n", r, g, b, r, g, b );
 }
 
 
@@ -257,7 +256,7 @@ void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_TYPE aFill, int
 
 
 void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
-                      FILL_TYPE fill, int width )
+                       FILL_TYPE fill, int width )
 {
     wxASSERT( workFile );
 
@@ -282,6 +281,7 @@ void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
     start.y = centre.y + KiROUND( sindecideg( radius, -StAngle ) );
     DPOINT pos_dev = userToDeviceCoordinates( start );
     fprintf( workFile, "%g %g m ", pos_dev.x, pos_dev.y );
+
     for( int ii = StAngle + delta; ii < EndAngle; ii += delta )
     {
         end.x = centre.x + KiROUND( cosdecideg( radius, -ii ) );
@@ -310,7 +310,7 @@ void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 
 
 void PDF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_TYPE aFill, int aWidth, void * aData )
+                            FILL_TYPE aFill, int aWidth, void* aData )
 {
     wxASSERT( workFile );
 
@@ -363,19 +363,16 @@ void PDF_PLOTTER::PenTo( const wxPoint& pos, char plume )
 }
 
 
-void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
-                            double aScaleFactor )
+void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos, double aScaleFactor )
 {
     wxASSERT( workFile );
     wxSize pix_size( aImage.GetWidth(), aImage.GetHeight() );
 
     // Requested size (in IUs)
-    DPOINT drawsize( aScaleFactor * pix_size.x,
-                     aScaleFactor * pix_size.y );
+    DPOINT drawsize( aScaleFactor * pix_size.x, aScaleFactor * pix_size.y );
 
     // calculate the bitmap start position
-    wxPoint start( aPos.x - drawsize.x / 2,
-                   aPos.y + drawsize.y / 2);
+    wxPoint start( aPos.x - drawsize.x / 2, aPos.y + drawsize.y / 2);
 
     DPOINT dev_start = userToDeviceCoordinates( start );
 
@@ -390,9 +387,9 @@ void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
        4) profit
      */
     fprintf( workFile, "q %g 0 0 %g %g %g cm\n", // Step 1
-            userToDeviceSize( drawsize.x ),
-            userToDeviceSize( drawsize.y ),
-            dev_start.x, dev_start.y );
+             userToDeviceSize( drawsize.x ),
+             userToDeviceSize( drawsize.y ),
+             dev_start.x, dev_start.y );
 
     /* An inline image is a cross between a dictionary and a stream.
        A real ugly construct (compared with the elegance of the PDF
@@ -756,8 +753,7 @@ bool PDF_PLOTTER::EndPlot()
     int infoDictHandle = startPdfObject();
     char date_buf[250];
     time_t ltime = time( NULL );
-    strftime( date_buf, 250, "D:%Y%m%d%H%M%S",
-              localtime( &ltime ) );
+    strftime( date_buf, 250, "D:%Y%m%d%H%M%S", localtime( &ltime ) );
 
     if( m_title.IsEmpty() )
     {
@@ -822,7 +818,7 @@ bool PDF_PLOTTER::EndPlot()
 
 
 void PDF_PLOTTER::Text( const wxPoint&              aPos,
-                        const COLOR4D               aColor,
+                        const COLOR4D&              aColor,
                         const wxString&             aText,
                         double                      aOrient,
                         const wxSize&               aSize,

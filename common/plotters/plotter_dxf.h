@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -61,37 +61,80 @@ public:
             m_textAsLines = ( mode != PLOT_TEXT_MODE::NATIVE );
     }
 
+    /**
+     * Opens the DXF plot with a skeleton header.
+     */
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
 
     // For now we don't use 'thick' primitives, so no line width
-    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override
+    virtual void SetCurrentLineWidth( int width, void* aData = nullptr ) override
     {
         m_currentPenWidth = 0;
     }
 
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
-    virtual void SetColor( COLOR4D color ) override;
+    /**
+     * The DXF exporter handles 'colors' as layers...
+     */
+    virtual void SetColor( const COLOR4D& color ) override;
 
+    /**
+     * Set the scale/position for the DXF plot.
+     *
+     * The DXF engine doesn't support line widths and mirroring. The output
+     * coordinate system is in the first quadrant (in mm).
+     */
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-                  double aScale, bool aMirror ) override;
+                              double aScale, bool aMirror ) override;
+
+    /**
+     * DXF rectangle: fill not supported.
+     */
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
+
+    /**
+     * DXF circle: full functionality; it even does 'fills' drawing a
+     * circle with a dual-arc polyline wide as the radius.
+     *
+     * I could use this trick to do other filled primitives.
+     */
     virtual void Circle( const wxPoint& pos, int diametre, FILL_TYPE fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL ) override;
+
+    /**
+     * DXF polygon: doesn't fill it but at least it close the filled ones
+     * DXF does not know thick outline.
+     *
+     * It does not know thick segments, therefore filled polygons with thick outline
+     * are converted to inflated polygon by aWidth/2.
+     */
+    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_TYPE aFill,
+                           int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                OUTLINE_MODE tracemode, void* aData ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void PenTo( const wxPoint& pos, char plume ) override;
 
+    /**
+     * DXF round pad: always done in sketch mode; it could be filled but it isn't
+     * pretty if other kinds of pad aren't...
+     */
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  OUTLINE_MODE trace_mode, void* aData ) override;
+
+    /**
+     * DXF oval pad: always done in sketch mode.
+     */
     virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
                                OUTLINE_MODE trace_mode, void* aData ) override;
+
+    /**
+     * DXF rectangular pad: always done in sketch mode.
+     */
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
                                double orient, OUTLINE_MODE trace_mode, void* aData ) override;
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
@@ -100,13 +143,17 @@ public:
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize, double aOrient,
                                  SHAPE_POLY_SET* aPolygons,
                                  OUTLINE_MODE aTraceMode, void* aData ) override;
+
+    /**
+     * DXF trapezoidal pad: only sketch mode is supported.
+     */
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                                  double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
                             double aOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
 
     virtual void Text( const wxPoint&              aPos,
-                       const COLOR4D               aColor,
+                       const COLOR4D&              aColor,
                        const wxString&             aText,
                        double                      aOrient,
                        const wxSize&               aSize,
@@ -116,7 +163,7 @@ public:
                        bool                        aItalic,
                        bool                        aBold,
                        bool                        aMultilineAllowed = false,
-                       void* aData = NULL ) override;
+                       void* aData = nullptr ) override;
 
 
     /**

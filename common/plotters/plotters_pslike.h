@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,9 +32,8 @@
 
 
 /**
- * The PSLIKE_PLOTTER class is an intermediate class to handle common
- * routines for engines working more or less with the postscript imaging
- * model
+ * The PSLIKE_PLOTTER class is an intermediate class to handle common routines for engines
+ * working more or less with the postscript imaging model.
  */
 class PSLIKE_PLOTTER : public PLOTTER
 {
@@ -69,9 +68,8 @@ public:
                                  OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
                                OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
-                               double aPadOrient, OUTLINE_MODE aTraceMode,
-                               void* aData ) override;
+    virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
+                               OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
                                     OUTLINE_MODE aTraceMode, void* aData ) override;
@@ -81,16 +79,25 @@ public:
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                                  double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
-                            double aOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
+                                      double aOrient, OUTLINE_MODE aTraceMode,
+                                      void* aData ) override;
 
     /**
      * The SetColor implementation is split with the subclasses:
      * The PSLIKE computes the rgb values, the subclass emits the
      * operator to actually do it
      */
-    virtual void SetColor( COLOR4D color ) override;
+    virtual void SetColor( const COLOR4D& color ) override;
 
 protected:
+    /**
+     * This is the core for postscript/PDF text alignment.
+     *
+     * It computes the transformation matrix to generate a user space
+     * system aligned with the text. Even the PS uses the concat
+     * operator to simplify PDF generation (concat is everything PDF
+     * has to modify the CTM. Lots of parameters, both in and out.
+     */
     void computeTextParameters( const wxPoint&           aPos,
                                 const wxString&          aText,
                                 int                      aOrient,
@@ -109,8 +116,14 @@ protected:
                                 double                   *ctm_e,
                                 double                   *ctm_f,
                                 double                   *heightFactor );
-    void postscriptOverlinePositions( const wxString& aText, int aXSize,
-                                      bool aItalic, bool aBold,
+
+    /**
+     * Computes the x coordinates for the overlining in a string of text.
+     * Fills the passed vector with couples of (start, stop) values to be
+     * used in the text coordinate system (use computeTextParameters to
+     * obtain the parameters to establish such a system)
+     */
+    void postscriptOverlinePositions( const wxString& aText, int aXSize, bool aItalic, bool aBold,
                                       std::vector<int> *pos_pairs );
 
     /// convert a wxString unicode string to a char string compatible with the accepted
@@ -123,8 +136,13 @@ protected:
     /// Height of the postscript font (from the AFM)
     static const double postscriptTextAscent; // = 0.718;
 
-    int returnPostscriptTextWidth( const wxString& aText, int aXSize,
-                                   bool aItalic, bool aBold );
+    /**
+     * Sister function for the GraphicTextWidth in drawtxt.cpp
+     * Does the same processing (i.e. calculates a text string width) but
+     * using postscript metrics for the Helvetica font (optionally used for
+     * PS and PDF plotting
+     */
+    int returnPostscriptTextWidth( const wxString& aText, int aXSize, bool aItalic, bool aBold );
 
     /// Fine user scale adjust ( = 1.0 if no correction)
     double plotScaleAdjX, plotScaleAdjY;
@@ -154,13 +172,34 @@ public:
         return PLOT_FORMAT::POST;
     }
 
+    /**
+     * The code within this function (and the CloseFilePS function)
+     * creates postscript files whose contents comply with Adobe's
+     * Document Structuring Convention, as documented by assorted
+     * details described within the following URLs:
+     *
+     * http://en.wikipedia.org/wiki/Document_Structuring_Conventions
+     * http://partners.adobe.com/public/developer/en/ps/5001.DSC_Spec.pdf
+     *
+     *
+     * BBox is the boundary box (position and size of the "client rectangle"
+     * for drawings (page - margins) in mils (0.001 inch)
+     */
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
-    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
+
+    /**
+     * Set the current line width (in IUs) for the next plot.
+     */
+    virtual void SetCurrentLineWidth( int width, void* aData = nullptr ) override;
+
+    /**
+     * PostScript supports dashed lines.
+     */
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-                  double aScale, bool aMirror ) override;
+                              double aScale, bool aMirror ) override;
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const wxPoint& pos, int diametre, FILL_TYPE fill,
@@ -168,16 +207,18 @@ public:
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
 
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
-                           void * aData = NULL ) override;
+    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_TYPE aFill,
+                           int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
+    /**
+     * PostScript-likes at the moment are the only plot engines supporting bitmaps.
+     */
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
                             double aScaleFactor ) override;
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;
     virtual void Text( const wxPoint&              aPos,
-                       const COLOR4D               aColor,
+                       const COLOR4D&              aColor,
                        const wxString&             aText,
                        double                      aOrient,
                        const wxSize&               aSize,
@@ -187,7 +228,7 @@ public:
                        bool                        aItalic,
                        bool                        aBold,
                        bool                        aMultilineAllowed = false,
-                       void* aData = NULL ) override;
+                       void* aData = nullptr ) override;
 protected:
     virtual void emitSetRGBColor( double r, double g, double b ) override;
 };
@@ -216,31 +257,30 @@ public:
     }
 
     /**
-     * Open or create the plot file aFullFilename
+     * Open or create the plot file aFullFilename.
      *
      * The base class open the file in text mode, so we should have this
-     * function overlaid for PDF files, which are binary files
+     * function overlaid for PDF files, which are binary files.
      *
-     * @param aFullFilename = the full file name of the file to create
-     * @return true if success, false if the file cannot be created/opened
+     * @param aFullFilename is the full file name of the file to create.
+     * @return true if success, false if the file cannot be created/opened.
      */
     virtual bool OpenFile( const wxString& aFullFilename ) override;
 
     /**
-     * The PDF engine supports multiple pages; the first one is opened
-     * 'for free' the following are to be closed and reopened. Between
-     * each page parameters can be set
+     * The PDF engine supports multiple pages; the first one is opened 'for free' the following
+     * are to be closed and reopened. Between each page parameters can be set.
      */
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
 
     /**
-     * Starts a new page in the PDF document
+     * Start a new page in the PDF document.
      */
     virtual void StartPage();
 
     /**
-     * Close the current page in the PDF document (and emit its compressed stream)
+     * Close the current page in the PDF document (and emit its compressed stream).
      */
     virtual void ClosePage();
 
@@ -252,7 +292,7 @@ public:
      * Note pen width = 0 is used in plot polygons to plot filled polygons with no outline
      * thickness.  Use in this case pen width = 1 does not actually change the polygon.
      */
-    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
+    virtual void SetCurrentLineWidth( int width, void* aData = nullptr ) override;
 
     /**
      * PDF supports dashed lines
@@ -264,10 +304,10 @@ public:
      * with the outputFile open (but not inside a page stream!)
      */
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-                  double aScale, bool aMirror ) override;
+                              double aScale, bool aMirror ) override;
 
     /**
-     * Rectangles in PDF. Supported by the native operator
+     * Rectangles in PDF. Supported by the native operator.
      */
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
@@ -288,14 +328,13 @@ public:
     /**
      * Polygon plotting for PDF. Everything is supported
      */
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
-                           void * aData = NULL ) override;
+    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_TYPE aFill,
+                           int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;
 
     virtual void Text( const wxPoint&              aPos,
-                       const COLOR4D               aColor,
+                       const COLOR4D&              aColor,
                        const wxString&             aText,
                        double                      aOrient,
                        const wxSize&               aSize,
@@ -305,7 +344,7 @@ public:
                        bool                        aItalic,
                        bool                        aBold,
                        bool                        aMultilineAllowed = false,
-                       void* aData = NULL ) override;
+                       void* aData = nullptr ) override;
     /**
      * PDF images are handles as inline, not XObject streams...
      */
@@ -360,13 +399,13 @@ protected:
      */
     void closePdfStream();
 
-    int pageTreeHandle;		 /// Handle to the root of the page tree object
-    int fontResDictHandle;	 /// Font resource dictionary
+    int pageTreeHandle;      /// Handle to the root of the page tree object
+    int fontResDictHandle;   /// Font resource dictionary
     std::vector<int> pageHandles;/// Handles to the page objects
-    int pageStreamHandle;	 /// Handle of the page content object
+    int pageStreamHandle;    /// Handle of the page content object
     int streamLengthHandle;      /// Handle to the deferred stream length
     wxString workFilename;
-    FILE* workFile;  	         /// Temporary file to construct the stream before zipping
+    FILE* workFile;              /// Temporary file to construct the stream before zipping
     std::vector<long> xrefTable; /// The PDF xref offset table
 };
 
@@ -386,10 +425,22 @@ public:
         return PLOT_FORMAT::SVG;
     }
 
-    virtual void SetColor( COLOR4D color ) override;
+    virtual void SetColor( const COLOR4D& color ) override;
+
+    /**
+     * Create SVG file header.
+     */
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
-    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
+
+    /**
+     * Set the current line width (in IUs) for the next plot.
+     */
+    virtual void SetCurrentLineWidth( int width, void* aData = nullptr ) override;
+
+    /**
+     * SVG supports dashed lines.
+     */
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
@@ -408,8 +459,11 @@ public:
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
-                           void * aData = NULL ) override;
+                           void * aData = nullptr ) override;
 
+    /**
+     * PostScript-likes at the moment are the only plot engines supporting bitmaps.
+     */
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
                             double aScaleFactor ) override;
 
@@ -443,7 +497,7 @@ public:
     virtual void EndBlock( void* aData ) override;
 
     virtual void Text( const wxPoint&              aPos,
-                       const COLOR4D               aColor,
+                       const COLOR4D&              aColor,
                        const wxString&             aText,
                        double                      aOrient,
                        const wxSize&               aSize,
@@ -453,9 +507,28 @@ public:
                        bool                        aItalic,
                        bool                        aBold,
                        bool                        aMultilineAllowed = false,
-                       void* aData = NULL ) override;
+                       void* aData = nullptr ) override;
 
 protected:
+    /**
+     * Initialize m_pen_rgb_color from reduced values r, g ,b
+     * ( reduced values are 0.0 to 1.0 )
+     */
+    virtual void emitSetRGBColor( double r, double g, double b ) override;
+
+    /**
+     * Output the string which define pen and brush color, shape, transparency
+     *
+     * @param aIsGroup If false, do not form a new group for the style.
+     * @param aExtraStyle If given, the string will be added into the style string before closing
+     */
+    void setSVGPlotStyle( bool aIsGroup = true, const std::string& aExtraStyle = {} );
+
+    /**
+     * Prepare parameters for setSVGPlotStyle()
+     */
+    void setFillMode( FILL_TYPE fill );
+
     FILL_TYPE      m_fillMode;          // true if the current contour
                                         // rect, arc, circle, polygon must be filled
     long           m_pen_rgb_color;     // current rgb color value: each color has
@@ -475,23 +548,4 @@ protected:
                                         // Use 3-6 (3 means um precision, 6 nm precision) in PcbNew
                                         // 3-4 in other modules (avoid values >4 to avoid overflow)
                                         // see also comment for m_useInch.
-
-    /**
-     * Initialize m_pen_rgb_color from reduced values r, g ,b
-     * ( reduced values are 0.0 to 1.0 )
-     */
-    virtual void emitSetRGBColor( double r, double g, double b ) override;
-
-    /**
-     * Output the string which define pen and brush color, shape, transparency
-     *
-     * @param aIsGroup If false, do not form a new group for the style.
-     * @param aExtraStyle If given, the string will be added into the style string before closing
-     */
-    void setSVGPlotStyle( bool aIsGroup = true, const std::string& aExtraStyle = {} );
-
-    /**
-     * Prepare parameters for setSVGPlotStyle()
-     */
-    void setFillMode( FILL_TYPE fill );
 };

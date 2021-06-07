@@ -8,8 +8,8 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,9 +41,8 @@
 
 
 /**
- * Function GetPensizeForBold
- * @return the "best" value for a pen size to draw/plot a bold text
- * @param aTextSize = the char size (height or width)
+ * @param aTextSize is the char size (height or width).
+ * @return the "best" value for a pen size to draw/plot a bold text.
  */
 int GetPenSizeForBold( int aTextSize )
 {
@@ -58,13 +57,13 @@ int GetPenSizeForNormal( int aTextSize )
 
 
 /**
- * Function  Clamp_Text_PenSize
  * Don't allow text to become cluttered up in its own fatness.  Bold fonts are generally around
  * aSize/5 in width, so we limit them to aSize/4, and normal text to aSize/6.
- * @param aPenSize = the pen size to clamp
- * @param aSize the char size (height or width)
- * @param aBold = true if text accept bold pen size
- * @return the max pen size allowed
+ *
+ * @param aPenSize is the pen size to clamp.
+ * @param aSize is the character size (height or width).
+ * @param aBold use true if text accept bold pen size.
+ * @return the max pen size allowed.
  */
 int Clamp_Text_PenSize( int aPenSize, int aSize, bool aBold )
 {
@@ -105,27 +104,27 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool aItalic, 
 
 
 /**
- * Function GRText
- * Draw a graphic text (like footprint texts)
- *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
- *  @param aPos = text position (according to h_justify, v_justify)
- *  @param aColor (COLOR4D) = text color
- *  @param aText = text to draw
- *  @param aOrient = angle in 0.1 degree
- *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
- *  @param aH_justify = horizontal justification (Left, center, right)
- *  @param aV_justify = vertical justification (bottom, center, top)
- *  @param aWidth = line width (pen width) (use default width if aWidth = 0)
+ * Draw a graphic text (like footprint texts).
+ *
+ *  @param aDC is the current Device Context. NULL if draw within a 3D GL Canvas.
+ *  @param aPos is the text position (according to h_justify, v_justify).
+ *  @param aColor is the text color.
+ *  @param aText is the text to draw.
+ *  @param aOrient is the angle in 0.1 degree.
+ *  @param aSize is the text size (size.x or size.y can be < 0 for mirrored texts).
+ *  @param aH_justify is the horizontal justification (Left, center, right).
+ *  @param aV_justify is the vertical justification (bottom, center, top).
+ *  @param aWidth is the line width (pen width) (use default width if aWidth = 0).
  *      if width < 0 : draw segments in sketch mode, width = abs(width)
- *      Use a value min(aSize.x, aSize.y) / 5 for a bold text
- *  @param aItalic = true to simulate an italic font
- *  @param aBold = true to use a bold font. Useful only with default width value (aWidth = 0)
+ *      Use a value min(aSize.x, aSize.y) / 5 for a bold text.
+ *  @param aItalic is the true to simulate an italic font.
+ *  @param aBold use true to use a bold font. Useful only with default width value (aWidth = 0).
  *  @param aCallback( int x0, int y0, int xf, int yf, void* aData ) is a function called
  *                  (if non null) to draw each segment. used to draw 3D texts or for plotting.
  *                  NULL for normal drawings
- *  @param aCallbackData = is the auxiliary parameter aData for the callback function.
- *                         can be nullptr if no auxiliary parameter is needed
- *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
+ *  @param aCallbackData is the auxiliary parameter aData for the callback function.
+ *                       can be nullptr if no auxiliary parameter is needed
+ *  @param aPlotter is a PLOTTER instance, when this function is used to plot
  *                  the text. NULL to draw this text.
  */
 void GRText( wxDC* aDC, const wxPoint& aPos, COLOR4D aColor, const wxString& aText,
@@ -168,12 +167,11 @@ void GRText( wxDC* aDC, const wxPoint& aPos, COLOR4D aColor, const wxString& aTe
     basic_gal.m_DC = aDC;
     basic_gal.m_Color = aColor;
     basic_gal.SetClipBox( nullptr );
-
     basic_gal.StrokeText( aText, VECTOR2D( aPos ), aOrient * M_PI/1800 );
 }
 
 
-void GRHaloText( wxDC * aDC, const wxPoint &aPos, COLOR4D aBgColor, COLOR4D aColor1,
+void GRHaloText( wxDC* aDC, const wxPoint &aPos, COLOR4D aBgColor, COLOR4D aColor1,
                  COLOR4D aColor2, const wxString &aText, double aOrient, const wxSize &aSize,
                  enum EDA_TEXT_HJUSTIFY_T aH_justify, enum EDA_TEXT_VJUSTIFY_T aV_justify,
                  int aWidth, bool aItalic, bool aBold,
@@ -200,24 +198,24 @@ void GRHaloText( wxDC * aDC, const wxPoint &aPos, COLOR4D aBgColor, COLOR4D aCol
 
 
 /**
- * Function PLOTTER::Text
- * same as GRText, but plot graphic text instead of draw it
- *  @param aPos = text position (according to aH_justify, aV_justify)
- *  @param aColor (COLOR4D) = text color
- *  @param aText = text to draw
- *  @param aOrient = angle in 0.1 degree
- *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
- *  @param aH_justify = horizontal justification (Left, center, right)
- *  @param aV_justify = vertical justification (bottom, center, top)
- *  @param aPenWidth = line width (if = 0, use plot default line width)
- *  @param aItalic = true to simulate an italic font
- *  @param aBold = true to use a bold font Useful only with default width value (aWidth = 0)
- *  @param aMultilineAllowed = true to plot text as multiline, otherwise single line
- *  @param aData = a parameter used by some plotters in SetCurrentLineWidth(),
- * not directly used here.
+ * Same as GRText, but plot graphic text instead of draw it.
+ *
+ * @param aPos is the text position (according to aH_justify, aV_justify).
+ * @param aColor is the text color.
+ * @param aText is the text to draw.
+ * @param aOrient is the angle in 0.1 degree.
+ * @param aSize is the text size (size.x or size.y can be < 0 for mirrored texts).
+ * @param aH_justify is the horizontal justification (Left, center, right).
+ * @param aV_justify is the vertical justification (bottom, center, top).
+ * @param aPenWidth is the line width (if = 0, use plot default line width).
+ * @param aItalic is the true to simulate an italic font.
+ * @param aBold use true to use a bold font Useful only with default width value (aWidth = 0).
+ * @param aMultilineAllowed use true to plot text as multiline, otherwise single line.
+ * @param aData is a parameter used by some plotters in SetCurrentLineWidth(),
+ *              not directly used here.
  */
 void PLOTTER::Text( const wxPoint&              aPos,
-                    const COLOR4D               aColor,
+                    const COLOR4D&              aColor,
                     const wxString&             aText,
                     double                      aOrient,
                     const wxSize&               aSize,

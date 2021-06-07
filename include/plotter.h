@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -147,7 +147,8 @@ public:
 
     /**
      * Plot in B/W or color.
-     * @param aColorMode = true to plot in color, false to plot in black and white
+     *
+     * @param aColorMode use true to plot in color, false to plot in black and white.
      */
     virtual void SetColorMode( bool aColorMode ) { m_colorMode = aColorMode; }
     bool GetColorMode() const { return m_colorMode; }
@@ -160,13 +161,14 @@ public:
 
     /**
      * Set the line width for the next drawing.
-     * @param width is specified in IUs
-     * @param aData is an auxiliary parameter, mainly used in gerber plotter
+     *
+     * @param width is specified in IUs.
+     * @param aData is an auxiliary parameter, mainly used in gerber plotter.
      */
-    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) = 0;
+    virtual void SetCurrentLineWidth( int width, void* aData = nullptr ) = 0;
     virtual int GetCurrentLineWidth() const  { return m_currentPenWidth; }
 
-    virtual void SetColor( COLOR4D color ) = 0;
+    virtual void SetColor( const COLOR4D& color ) = 0;
 
     virtual void SetDash( PLOT_DASH_TYPE dashed ) = 0;
 
@@ -175,7 +177,8 @@ public:
     virtual void SetTitle( const wxString& aTitle ) { m_title = aTitle; }
 
     /**
-     * Add a line to the list of free lines to print at the beginning of the file
+     * Add a line to the list of free lines to print at the beginning of the file.
+     *
      * @param aExtraString is the string to print
      */
     void AddLineToHeader( const wxString& aExtraString )
@@ -193,20 +196,22 @@ public:
 
     /**
      * Set the plot offset and scaling for the current plot
-     * @param aOffset is the plot offset
+     *
+     * @param aOffset is the plot offset.
      * @param aIusPerDecimil gives the scaling factor from IUs to device units
      * @param aScale is the user set plot scaling factor (either explicitly
-     * 		or using 'fit to A4')
+     *      or using 'fit to A4').
      * @param aMirror flips the plot in the Y direction (useful for toner
-     * 		transfers or some kind of film)
+     *      transfers or some kind of film).
      */
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-        double aScale, bool aMirror ) = 0;
+                              double aScale, bool aMirror ) = 0;
 
     /**
-     * Open or create the plot file aFullFilename
-     * @param aFullFilename = the full file name of the file to create
-     * @return true if success, false if the file cannot be created/opened
+     * Open or create the plot file \a aFullFilename.
+     *
+     * @param aFullFilename is the full file name of the file to create.
+     * @return true if success, false if the file cannot be created/opened.
      *
      * Virtual because some plotters use ascii files, some others binary files (PDF)
      * The base class open the file in text mode
@@ -230,7 +235,7 @@ public:
                          int width = USE_DEFAULT_LINE_WIDTH ) = 0;
 
     /**
-     * Generic fallback: arc rendered as a polyline
+     * Generic fallback: arc rendered as a polyline.
      */
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH );
@@ -243,15 +248,15 @@ public:
      */
     virtual void BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
                               const wxPoint& aControl2, const wxPoint& aEnd,
-                              int aTolerance,
-                              int aLineThickness = USE_DEFAULT_LINE_WIDTH );
+                              int aTolerance, int aLineThickness = USE_DEFAULT_LINE_WIDTH );
 
     /**
-     * moveto/lineto primitive, moves the 'pen' to the specified direction
-     * @param pos is the target position
+     * Moveto/lineto primitive, moves the 'pen' to the specified direction.
+     *
+     * @param pos is the target position.
      * @param plume specifies the kind of motion: 'U' only moves the pen,
-     * 		'D' draw a line from the current position and 'Z' finish
-     *		the drawing and returns the 'pen' to rest (flushes the trace)
+     *      'D' draw a line from the current position and 'Z' finish
+     *      the drawing and returns the 'pen' to rest (flushes the trace).
      */
     virtual void PenTo( const wxPoint& pos, char plume ) = 0;
 
@@ -279,39 +284,38 @@ public:
     }
 
     /**
-     * Draw a polygon ( filled or not )
-     * @param aCornerList = corners list (a std::vector< wxPoint >)
-     * @param aFill = type of fill
-     * @param aWidth = line width
-     * @param aData an auxiliary info (mainly for gerber format)
+     * Draw a polygon ( filled or not ).
+     *
+     * @param aCornerList is the corners list (a std::vector< wxPoint >).
+     * @param aFill is the type of fill.
+     * @param aWidth is the line width.
+     * @param aData is an auxiliary info (mainly for gerber format).
      */
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_TYPE aFill,
-               int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL ) = 0;
+                           int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) = 0;
 
     /**
-     * Draw a polygon ( filled or not )
-     * @param aCornerList = corners list (a SHAPE_LINE_CHAIN).
-     * must be closed (IsClosed() == true) for a polygon. Otherwise this is a polyline
-     * @param aFill = type of fill
-     * @param aWidth = line width
-     * @param aData an auxiliary info (mainly for gerber format)
+     * Draw a polygon ( filled or not ).
+     * @param aCornerList is the corners list (a SHAPE_LINE_CHAIN).
+     *        must be closed (IsClosed() == true) for a polygon. Otherwise this is a polyline.
+     * @param aFill is the type of fill.
+     * @param aWidth is the line width.
+     * @param aData is an auxiliary info (mainly for gerber format).
      */
     virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_TYPE aFill,
-               int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL );
+                           int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr );
 
     /**
      * Only PostScript plotters can plot bitmaps.
      *
      * A rectangle is plotted for plotters that cannot plot a bitmap.
      *
-     * @brief Draw an image bitmap
-     * @param aImage = the bitmap
-     * @param aPos = position of the center of the bitmap
-     * @param aScaleFactor = the scale factor to apply to the bitmap size
-     *                      (this is not the plot scale factor)
+     * @param aImage is the bitmap.
+     * @param aPos is position of the center of the bitmap.
+     * @param aScaleFactor is the scale factor to apply to the bitmap size
+     *                      (this is not the plot scale factor).
      */
-    virtual void PlotImage( const wxImage & aImage, const wxPoint& aPos,
-                            double aScaleFactor );
+    virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos, double aScaleFactor );
 
     // Higher level primitives -- can be drawn as line, sketch or 'filled'
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
@@ -329,89 +333,93 @@ public:
     // Flash primitives
 
     /**
-     * @param aPadPos Position of the shape (center of the rectangle
-     * @param aDiameter diameter of round pad
-     * @param aTraceMode FILLED or SKETCH
-     * @param aData an auxiliary info (mainly for gerber format attributes)
+     * @param aPadPos Position of the shape (center of the rectangle.
+     * @param aDiameter is the diameter of round pad.
+     * @param aTraceMode is the drawing mode, FILLED or SKETCH.
+     * @param aData is an auxiliary info (mainly for gerber format attributes).
      */
     virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
                                  OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
-     * @param aPadPos Position of the shape (center of the rectangle
-     * @param aSize = size of oblong shape
-     * @param aPadOrient The rotation of the shape
-     * @param aTraceMode FILLED or SKETCH
-     * @param aData an auxiliary info (mainly for gerber format attributes)
+     * @param aPadPos Position of the shape (center of the rectangle.
+     * @param aSize is the size of oblong shape.
+     * @param aPadOrient The rotation of the shape.
+     * @param aTraceMode is the drawing mode, FILLED or SKETCH.
+     * @param aData an auxiliary info (mainly for gerber format attributes).
      */
     virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
                                OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
-     * @param aPadPos Position of the shape (center of the rectangle
-     * @param aSize = size of rounded rect
-     * @param aPadOrient The rotation of the shape
-     * @param aTraceMode FILLED or SKETCH
-     * @param aData an auxiliary info (mainly for gerber format attributes)
+     * @param aPadPos Position of the shape (center of the rectangle).
+     * @param aSize is the size of rounded rect.
+     * @param aPadOrient The rotation of the shape.
+     * @param aTraceMode is the drawing mode, FILLED or SKETCH.
+     * @param aData an auxiliary info (mainly for gerber format attributes).
      */
     virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
                                double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
-     * @param aPadPos Position of the shape (center of the rectangle
-     * @param aSize = size of rounded rect
-     * @param aCornerRadius Radius of the rounded corners
-     * @param aOrient The rotation of the shape
-     * @param aTraceMode FILLED or SKETCH
-     * @param aData an auxiliary info (mainly for gerber format attributes)
+     * @param aPadPos Position of the shape (center of the rectangle.
+     * @param aSize is the size of rounded rect.
+     * @param aCornerRadius Radius of the rounded corners.
+     * @param aOrient The rotation of the shape.
+     * @param aTraceMode is the drawing mode, FILLED or SKETCH.
+     * @param aData an auxiliary info (mainly for gerber format attributes).
      */
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
                                     OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
-     * @param aPadPos Position of the shape
-     * @param aSize = size of round reference pad
-     * @param aPadOrient = pad rotation, used only with aperture macros (Gerber plotter)
-     * @param aPolygons the shape as polygon set
-     * @param aTraceMode FILLED or SKETCH
-     * @param aData an auxiliary info (mainly for gerber format attributes)
+     * @param aPadPos Position of the shape.
+     * @param aSize is the size of round reference pad.
+     * @param aPadOrient is the pad rotation, used only with aperture macros (Gerber plotter).
+     * @param aPolygons the shape as polygon set.
+     * @param aTraceMode is the drawing mode, FILLED or SKETCH.
+     * @param aData an auxiliary info (mainly for gerber format attributes).
      */
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                  double aPadOrient, SHAPE_POLY_SET* aPolygons,
                                  OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
-     * Flash a trapezoidal pad
-     * @param aPadPos = the position of the shape
-     * @param aCorners = the list of 4 corners positions,
-     * 		relative to the shape position, pad orientation 0
-     * @param aPadOrient = the rotation of the shape
-     * @param aTraceMode = FILLED or SKETCH
-     * @param aData an auxiliary info (mainly for gerber format attributes)
+     * Flash a trapezoidal pad.
+     *
+     * @param aPadPos is the the position of the shape.
+     * @param aCorners is the list of 4 corners positions, relative to the shape position,
+     *                 pad orientation 0.
+     * @param aPadOrient is the rotation of the shape.
+     * @param aTraceMode is the drawing mode, FILLED or SKETCH.
+     * @param aData an auxiliary info (mainly for gerber format attributes).
      */
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                                  double aPadOrient, OUTLINE_MODE aTraceMode,
                                  void* aData ) = 0;
 
     /**
-     * Flash a regular polygon. Useful only in Gerber files to flash a regular polygon
-     * @param aShapePos is the center of the circle containing the polygon
-     * @param aRadius is the radius of the circle containing the polygon
-     * @param aCornerCount is the number of vertices
-     * @param aOrient is the polygon rotation in degrees
+     * Flash a regular polygon. Useful only in Gerber files to flash a regular polygon.
+     *
+     * @param aShapePos is the center of the circle containing the polygon.
+     * @param aRadius is the radius of the circle containing the polygon.
+     * @param aCornerCount is the number of vertices.
+     * @param aOrient is the polygon rotation in degrees.
      * @param aData is a auxiliary parameter used (if needed) to handle extra info
-     * specific to the plotter
+     *              specific to the plotter.
      */
     virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
-                            double aOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0 ;
+                                      double aOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0 ;
 
     /**
-     * Draws text with the plotter. For convenience it accept the color to use
-     * for specific plotters (GERBER) aData is used to pass extra parameters
+     * Draw text with the plotter.
+     *
+     * For convenience it accept the color to use for specific plotters (GERBER) aData is used
+     * to pass extra parameters.
      */
     virtual void Text( const wxPoint&              aPos,
-                       const COLOR4D               aColor,
+                       const COLOR4D&              aColor,
                        const wxString&             aText,
                        double                      aOrient,
                        const wxSize&               aSize,
@@ -421,17 +429,19 @@ public:
                        bool                        aItalic,
                        bool                        aBold,
                        bool                        aMultilineAllowed = false,
-                       void* aData = NULL );
+                       void* aData = nullptr );
 
     /**
-     * Draw a marker (used for the drill map)
+     * Draw a marker (used for the drill map).
      */
     static const unsigned MARKER_COUNT = 58;
 
     /**
      * Draw a pattern shape number aShapeId, to coord position.
-     * Diameter diameter = (coord table) hole
-     * AShapeId = index (used to generate forms characters)
+     *
+     * @param aPosition is the position of the marker.
+     * @param aDiameter is the diameter of the marker.
+     * @param aShapeId is the index (used to generate forms characters).
      */
     void Marker( const wxPoint& position, int diametre, unsigned aShapeId );
 
@@ -439,6 +449,7 @@ public:
      * Set the current Gerber layer polarity to positive or negative
      * by writing \%LPD*\% or \%LPC*\% to the Gerber file, respectively.
      * (obviously starts a new Gerber layer, too)
+     *
      * @param aPositive is the layer polarity and true for positive.
      * It's not useful with most other plotter since they can't 'scratch'
      * the film like photoplotter imagers do
@@ -450,7 +461,7 @@ public:
 
     /**
      * Change the current text mode. See the PlotTextMode
-     * explanation at the beginning of the file
+     * explanation at the beginning of the file.
      */
     virtual void SetTextMode( PLOT_TEXT_MODE mode )
     {
@@ -536,21 +547,19 @@ protected:
     // Coordinate and scaling conversion functions
 
     /**
-     * Modifies coordinates according to the orientation,
-     * scale factor, and offsets trace. Also convert from a wxPoint to DPOINT,
-     * since some output engines needs floating point coordinates.
+     * Modify coordinates according to the orientation, scale factor, and offsets trace. Also
+     * convert from a wxPoint to DPOINT, since some output engines needs floating point
+     * coordinates.
      */
     virtual DPOINT userToDeviceCoordinates( const wxPoint& aCoordinate );
 
     /**
-     * Modifies size according to the plotter scale factors
-     * (wxSize version, returns a DPOINT)
+     * Modify size according to the plotter scale factors (wxSize version, returns a DPOINT).
      */
     virtual DPOINT userToDeviceSize( const wxSize& size );
 
     /**
-     * Modifies size according to the plotter scale factors
-     * (simple double version)
+     * Modify size according to the plotter scale factors (simple double version).
      */
     virtual double userToDeviceSize( double size ) const;
 

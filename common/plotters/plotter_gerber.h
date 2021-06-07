@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -51,23 +51,22 @@ public:
     }
 
     /**
-     * Function StartPlot
-     * Write GERBER header to file
-     * initialize global variable g_Plot_PlotOutputFile
+     * Write GERBER header to file initialize global variable g_Plot_PlotOutputFile.
      */
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
-    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
+    virtual void SetCurrentLineWidth( int width, void* aData = nullptr ) override;
 
-    // RS274X has no dashing, nor colours
+    // RS274X has no dashing, nor colors
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override
     {
     }
 
-    virtual void SetColor( COLOR4D color ) override {}
+    virtual void SetColor( const COLOR4D& color ) override {}
+
     // Currently, aScale and aMirror are not used in gerber plotter
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-                          double aScale, bool aMirror ) override;
+                              double aScale, bool aMirror ) override;
 
     // Basic plot primitives
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
@@ -96,17 +95,16 @@ public:
      * Gerber polygon: they can (and *should*) be filled with the
      * appropriate G36/G37 sequence
      */
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
-                           void* aData = nullptr ) override;
+    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_TYPE aFill,
+                           int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
     virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_TYPE aFill,
-                           int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL ) override;
+                           int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;
 
     virtual void Text( const wxPoint&              aPos,
-                       const COLOR4D               aColor,
+                       const COLOR4D&              aColor,
                        const wxString&             aText,
                        double                      aOrient,
                        const wxSize&               aSize,
@@ -116,7 +114,7 @@ public:
                        bool                        aItalic,
                        bool                        aBold,
                        bool                        aMultilineAllowed = false,
-                       void* aData = NULL ) override;
+                       void* aData = nullptr ) override;
 
     /**
      * Filled circular flashes are stored as apertures
@@ -144,146 +142,154 @@ public:
                             double aOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
 
     /**
-     * flash a chamfered round rect pad.
-     * @param aShapePos = position of the pad shape
-     * @param aPadSize = size of the rectangle
-     * @param aCornerRadius = radius of rounded corners
-     * @param aChamferRatio = chamfer value (ratio < 0.5 between smallest size and chamfer)
-     * @param aChamferPositions = identifier of the corners to chamfer:
+     * Flash a chamfered round rect pad.
+     *
+     * @param aShapePos is the position of the pad shape.
+     * @param aPadSize is the size of the rectangle.
+     * @param aCornerRadius is the radius of rounded corners.
+     * @param aChamferRatio is the chamfer value (ratio < 0.5 between smallest size and chamfer).
+     * @param aChamferPositions is the identifier of the corners to chamfer:
      *  0 = no chamfer
      *  1 = TOP_LEFT
      *  2 = TOP_RIGHT
      *  4 = BOTTOM_LEFT
      *  8 = BOTTOM_RIGHT
-     * @param aPadOrient = rotation in 0.1 degrees of the shape
-     * @param aPlotMode = FILLED or SKETCH
-     * @param aData = a reference to Gerber attributes descr
+     * @param aPadOrient is the rotation in 0.1 degrees of the shape.
+     * @param aPlotMode is the drawing mode, FILLED or SKETCH.
+     * @param aData is the a reference to Gerber attributes descr.
      */
     void FlashPadChamferRoundRect( const wxPoint& aShapePos, const wxSize& aPadSize,
                                    int aCornerRadius, double aChamferRatio,
-                                   int aChamferPositions,
-                                   double aPadOrient, OUTLINE_MODE aPlotMode, void* aData );
+                                   int aChamferPositions, double aPadOrient,
+                                   OUTLINE_MODE aPlotMode, void* aData );
 
     /**
      * Plot a Gerber region: similar to PlotPoly but plot only filled polygon,
      * and add the TA.AperFunction if aData contains this attribute, and clear it
-     * after plotting
+     * after plotting.
      */
-    void PlotGerberRegion( const std::vector< wxPoint >& aCornerList,
-                           void * aData = NULL );
+    void PlotGerberRegion( const std::vector< wxPoint >& aCornerList, void* aData = nullptr );
 
-    void PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly,
-                           void * aData = NULL );
+    void PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly, void* aData = nullptr );
 
     /**
-     * Change the plot polarity and begin a new layer
-     * Used to 'scratch off' silk screen away from solder mask
+     * Change the plot polarity and begin a new layer.
+     *
+     * Used to 'scratch off' silk screen away from solder mask.
      */
     virtual void SetLayerPolarity( bool aPositive ) override;
 
     /**
-     * Function SetGerberCoordinatesFormat
-     * selection of Gerber units and resolution (number of digits in mantissa)
-     * @param aResolution = number of digits in mantissa of coordinate
-     *                      use 5 or 6 for mm and 6 or 7 for inches
-     *                      do not use value > 6 (mm) or > 7 (in) to avoid overflow
-     * @param aUseInches = true to use inches, false to use mm (default)
+     * Selection of Gerber units and resolution (number of digits in mantissa).
      *
-     * Should be called only after SetViewport() is called
+     * Should be called only after SetViewport() is called.
+     *
+     * @param aResolution is the number of digits in mantissa of coordinate
+     *                    use 5 or 6 for mm and 6 or 7 for inches
+     *                    do not use value > 6 (mm) or > 7 (in) to avoid overflow.
+     * @param aUseInches use true to use inches, false to use mm (default).
      */
     virtual void SetGerberCoordinatesFormat( int aResolution, bool aUseInches = false ) override;
 
     void UseX2format( bool aEnable ) { m_useX2format = aEnable; }
     void UseX2NetAttributes( bool aEnable ) { m_useNetAttributes = aEnable; }
 
-    /** Disable Aperture Macro (AM) command, only for broken Gerber Readers
-     * Regions will be used instead of AM shapes to draw complex shapes
-     * @param aDisable = true to disable Aperture Macro (AM) command.
+    /**
+     * Disable Aperture Macro (AM) command, only for broken Gerber Readers.
+     *
+     * Regions will be used instead of AM shapes to draw complex shapes.
+     *
+     * @param aDisable use true to disable Aperture Macro (AM) command.
      */
     void DisableApertMacros( bool aDisable ) { m_gerberDisableApertMacros = aDisable; }
 
     /**
-     * calling this function allows one to define the beginning of a group
-     * of drawing items (used in X2 format with netlist attributes)
-     * @param aData can define any parameter
+     * Calling this function allows one to define the beginning of a group
+     * of drawing items (used in X2 format with netlist attributes).
+     *
+     * @param aData can define any parameter.
      */
     virtual void StartBlock( void* aData ) override;
 
     /**
-     * calling this function allows one to define the end of a group of drawing
-     * items the group is started by StartBlock()
-     * (used in X2 format with netlist attributes)
+     * Define the end of a group of drawing items the group is started by StartBlock().
+     *
+     * Used in X2 format with netlist attributes.
+     *
      * @param aData can define any parameter
      */
     virtual void EndBlock( void* aData ) override;
 
-    /** Remove (clear) all attributes from object attributes dictionary (TO. and TA commands)
-     * similar to clearNetAttribute(), this is an unconditional reset of TO. and TA. attributes
+    /**
+     * Remove (clear) all attributes from object attributes dictionary (TO. and TA commands)
+     * similar to clearNetAttribute(), this is an unconditional reset of TO. and TA. attributes.
      */
     void ClearAllAttributes();
 
     /**
-     * @return a index to the aperture in aperture list which meets the size and type of tool
-     * if the aperture does not exist, it is created and entered in aperture list
-     * @param aSize = the size of tool
-     * @param aRadius = the radius used for some shapes tool (oval, roundrect macros)
-     * @param aRotDegree = the rotation of tool (primitives round, oval rect accept only 0.0)
-     * @param aType = the type ( shape ) of tool
-     * @param aApertureAttribute = an aperture attribute of the tool (a tool can have only one attribute)
-     * 0 = no specific attribute
+     * @param aSize is the size of tool.
+     * @param aRadius is the radius used for some shapes tool (oval, roundrect macros).
+     * @param aRotDegree is the rotation of tool (primitives round, oval rect accept only 0.0).
+     * @param aType is the type ( shape ) of tool.
+     * @param aApertureAttribute is an aperture attribute of the tool (a tool can have only one
+     *                           attribute) 0 = no specific attribute.
+     * @return an index to the aperture in aperture list which meets the size and type of tool
+     *         if the aperture does not exist, it is created and entered in aperture list.
      */
     int GetOrCreateAperture( const wxSize& aSize, int aRadius, double aRotDegree,
-                    APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
+                             APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
     /**
-     * @return a index to the aperture in aperture list which meets the data and type of tool
-     * if the aperture does not exist, it is created and entered in aperture list
-     * @param aCorners = the corner list
-     * @param aRotDegree = the rotation of tool
-     * @param aType = the type ( shape ) of tool that can manage a list of corners (polygon)
-     * @param aApertureAttribute = an aperture attribute of the tool (a tool can have only one attribute)
-     * 0 = no specific attribute
+     * @param aCorners is the corner list.
+     * @param aRotDegree is the rotation of tool.
+     * @param aType is the type ( shape ) of tool that can manage a list of corners (polygon).
+     * @param aApertureAttribute is an aperture attribute of the tool (a tool can have only one
+     *        attribute) 0 = no specific attribute.
+     * @return an index to the aperture in aperture list which meets the data and type of tool
+     *         if the aperture does not exist, it is created and entered in aperture list.
      */
     int GetOrCreateAperture( const std::vector<wxPoint>& aCorners, double aRotDegree,
-                    APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
+                             APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
 protected:
-    /** Plot a round rect (a round rect shape in fact) as a Gerber region
-     * using lines and arcs for corners
-     * @param aRectCenter is the center of the rectangle
-     * @param aSize is the size of the rectangle
-     * @param aCornerRadius is the radius of the corners
-     * @param aOrient is the rotation of the rectangle
-     * Note: only the G36 ... G37 region is created.
+    /**
+     * Plot a round rect (a round rect shape in fact) as a Gerber region using lines and arcs
+     * for corners.
+     *
+     * @note Only the G36 ... G37 region is created.
+     *
+     * @param aRectCenter is the center of the rectangle.
+     * @param aSize is the size of the rectangle.
+     * @param aCornerRadius is the radius of the corners.
+     * @param aOrient is the rotation of the rectangle.
      */
     void plotRoundRectAsRegion( const wxPoint& aRectCenter, const wxSize& aSize,
                                 int aCornerRadius, double aOrient );
     /**
      * Plot a Gerber arc.
-     * if aPlotInRegion = true, the current pen position will not be
-     * initialized to the arc start position, and therefore the arc can be used
-     * to define a region outline item
-     * a line will be created from current ^position to arc start point
-     * if aPlotInRegion = false, the current pen position will be initialized
-     * to the arc start position, to plot an usual arc item
-     * The line thickness is not initialized in plotArc, and must be initialized
-     * before calling it if needed.
+     *
+     * If aPlotInRegion = true, the current pen position will not be initialized to the arc
+     * start position, and therefore the arc can be used to define a region outline item
+     * a line will be created from current position to arc start point.  If aPlotInRegion
+     * = false, the current pen position will be initialized to the arc start position, to
+     * plot an usual arc item.  The line thickness is not initialized in plotArc, and must
+     * be initialized before calling it if needed.
      */
     void plotArc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
-                      int aRadius, bool aPlotInRegion );
+                  int aRadius, bool aPlotInRegion );
     void plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion );
 
     /**
-     * Pick an existing aperture or create a new one, matching the
-     * size, type and attributes.
-     * write the DCode selection on gerber file
+     * Pick an existing aperture or create a new one, matching the size, type and attributes.
+     *
+     * Write the DCode selection on gerber file.
      */
     void selectAperture( const wxSize& aSize, int aRadius, double aRotDegree,
-                         APERTURE::APERTURE_TYPE aType,
-                         int aApertureAttribute );
+                         APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
     /**
-     * Pick an existing aperture or create a new one, matching the
-     * aDiameter, aPolygonRotation, type and attributes.
+     * Pick an existing aperture or create a new one, matching the aDiameter, aPolygonRotation,
+     * type and attributes.
+     *
      * It apply only to apertures with type = AT_REGULAR_POLY3 to AT_REGULAR_POLY12
      * write the DCode selection on gerber file
      */
@@ -291,35 +297,39 @@ protected:
                          APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
     /**
-     * Pick an existing aperture or create a new one, matching the
-     * corner list, aRotDegree, type and attributes.
-     * It apply only to apertures managing a polygon that differs from AT_REGULAR_POLY3
-     * to AT_REGULAR_POLY12 (for instance APER_MACRO_TRAPEZOID )
-     * write the DCode selection on gerber file
+     * Pick an existing aperture or create a new one, matching the corner list, aRotDegree,
+     * type and attributes.
+     *
+     * It only applies to apertures managing a polygon that differs from AT_REGULAR_POLY3
+     * to AT_REGULAR_POLY12 (for instance APER_MACRO_TRAPEZOID ) write the DCode selection
+     * on gerber file.
      */
     void selectAperture( int aDiameter, double aRotDegree,
                          APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
     /**
-     * Emit a D-Code record, using proper conversions
-     * to format a leading zero omitted gerber coordinate
-     * (for n decimal positions, see header generation in start_plot
+     * Emit a D-Code record, using proper conversions to format a leading zero omitted gerber
+     * coordinate.
+     *
+     * For n decimal positions, see header generation in start_plot.
      */
     void emitDcode( const DPOINT& pt, int dcode );
 
     /**
-     * print a Gerber net attribute object record.
-     * In a gerber file, a net attribute is owned by a graphic object
-     * formatNetAttribute must be called before creating the object
+     * Print a Gerber net attribute object record.
+     *
+     * In a gerber file, a net attribute is owned by a graphic object formatNetAttribute must
+     * be called before creating the object.  The generated string depends on the type of
+     * netlist info.
+     *
      * @param aData contains the data to format.
-     * the generated string depends on the type of netlist info
      */
     void formatNetAttribute( GBR_NETLIST_METADATA* aData );
 
     /**
-     * clear a Gerber net attribute record (clear object attribute dictionary)
+     * Clear a Gerber net attribute record (clear object attribute dictionary)
      * and output the clear object attribute dictionary command to gerber file
-     * has effect only if a net attribute is stored in m_objectAttributesDictionary
+     * has effect only if a net attribute is stored in m_objectAttributesDictionary.
      */
     void clearNetAttribute();
 
