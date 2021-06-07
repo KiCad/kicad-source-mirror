@@ -43,7 +43,6 @@
 #include "eeschema_settings.h"
 
 #include <wx/object.h>
-#include <wx/wx.h>
 
 class HIERARCHY_NAVIG_DLG;
 
