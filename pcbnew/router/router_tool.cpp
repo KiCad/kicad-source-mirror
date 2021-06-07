@@ -1873,7 +1873,7 @@ int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
 
     if( !m_router->GetCurrentNets().empty() )
-        m_iface->ImportSizes( sizes, nullptr, m_router->GetCurrentNets()[0] );
+        m_iface->ImportSizes( sizes, m_startItem, m_router->GetCurrentNets()[0] );
 
     m_router->UpdateSizes( sizes );
 

@@ -40,6 +40,7 @@ public:
     SIZES_SETTINGS() :
             m_minClearance( 0 ),
             m_trackWidth( 155000 ),
+            m_trackWidthIsExplicit( true ),
             m_viaType( VIATYPE::THROUGH ),
             m_viaDiameter( 600000 ),
             m_viaDrill( 250000 ),
@@ -60,6 +61,9 @@ public:
 
     int TrackWidth() const { return m_trackWidth; }
     void SetTrackWidth( int aWidth ) { m_trackWidth = aWidth; }
+
+    bool TrackWidthIsExplicit() const { return m_trackWidthIsExplicit; }
+    void SetTrackWidthIsExplicit( bool aIsExplicit ) { m_trackWidthIsExplicit = aIsExplicit; }
 
     int DiffPairWidth() const { return m_diffPairWidth; }
     int DiffPairGap() const { return m_diffPairGap; }
@@ -102,6 +106,7 @@ public:
 private:
     int     m_minClearance;
     int     m_trackWidth;
+    bool    m_trackWidthIsExplicit;
 
     VIATYPE m_viaType;
     int     m_viaDiameter;
