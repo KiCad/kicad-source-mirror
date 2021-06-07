@@ -2821,7 +2821,8 @@ void APPEARANCE_CONTROLS::onReadOnlySwatch()
     button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
             [&]( wxHyperlinkEvent& aEvent )
             {
-                m_frame->OnPreferences();
+                 wxCommandEvent dummy;
+                 m_frame->OnPreferences( dummy );
             } ) );
 
     infobar->RemoveAllButtons();

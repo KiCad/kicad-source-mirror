@@ -204,7 +204,7 @@ public:
     /**
      * Displays the preferences and settings of all opened editors paged dialog
      */
-    void OnPreferences();
+    void OnPreferences( wxCommandEvent& event );
 
     void PrintMsg( const wxString& text );
 

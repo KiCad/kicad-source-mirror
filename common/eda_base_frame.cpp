@@ -95,6 +95,7 @@ static const wxSize defaultSize( FRAME_T aFrameType )
 
 BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::OnKicadAbout )
+    EVT_MENU( wxID_PREFERENCES, EDA_BASE_FRAME::OnPreferences )
 
     EVT_CHAR_HOOK( EDA_BASE_FRAME::OnCharHook )
     EVT_MENU_OPEN( EDA_BASE_FRAME::OnMenuEvent )
@@ -918,7 +919,7 @@ void EDA_BASE_FRAME::OnKicadAbout( wxCommandEvent& event )
 }
 
 
-void EDA_BASE_FRAME::OnPreferences()
+void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 {
     PAGED_DIALOG dlg( this, _( "Preferences" ), true );
     wxTreebook* book = dlg.GetTreebook();

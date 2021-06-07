@@ -436,7 +436,12 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->Add( ACTIONS::configurePaths );
     prefsMenu->Add( ACTIONS::showFootprintLibTable );
 
-    prefsMenu->Add( ACTIONS::openPreferences );
+    // We can't use ACTIONS::showPreferences yet because wxWidgets moves this on
+    // Mac, and it needs the wxID_PREFERENCES id to find it.
+    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
+                    _( "Show preferences for all open tools" ),
+                    wxID_PREFERENCES,
+                    BITMAPS::preference );
 
     prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, selTool );
