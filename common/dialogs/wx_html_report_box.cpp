@@ -20,6 +20,7 @@
 
 #include <math/util.h>
 #include <common.h>
+#include <wx/settings.h>
 #include "wx_html_report_box.h"
 
 
