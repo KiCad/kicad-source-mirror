@@ -23,8 +23,8 @@
  */
 
 #include <kiway_express.h>
-#include <wx/wx.h>
 
+#include <wx/window.h>
 
 //IMPLEMENT_DYNAMIC_CLASS( KIWAY_EXPRESS, wxEvent )
 

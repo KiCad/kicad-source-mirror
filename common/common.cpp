@@ -34,7 +34,10 @@
 #include <wx/utils.h>
 #include <wx/stdpaths.h>
 #include <wx/url.h>
-#include <wx/wx.h>
+
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 
 
 int ProcessExecute( const wxString& aCommandLine, int aFlags, wxProcess *callback )

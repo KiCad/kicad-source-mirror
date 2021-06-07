@@ -25,7 +25,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <bitmaps.h>
 
-#include <wx/wx.h>
+#include <wx/dcmemory.h>
 #include <wx/odcombo.h>
 #include <wx/menuitem.h>
 

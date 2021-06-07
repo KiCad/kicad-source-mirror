@@ -28,8 +28,7 @@
 #include <math/util.h>
 #include <sstream>
 #include <utf.h>
-#include <wx/wx.h>
-
+#include <wx/log.h>
 
 const CFB::COMPOUND_FILE_ENTRY* FindStream(
         const CFB::CompoundFileReader& aReader, const char* aStreamName )

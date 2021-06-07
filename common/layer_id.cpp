@@ -18,7 +18,7 @@
  */
 
 #include <layers_id_colors_and_visibility.h>
-#include <wx/wx.h>
+#include <wx/translation.h>
 
 /**
  * Returns the default display name for a given layer.  These are not the same as the canonical

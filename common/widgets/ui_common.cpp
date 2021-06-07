@@ -17,7 +17,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <wx/wx.h>
+#include <wx/dcclient.h>
+#include <wx/listbox.h>
 #include <wx/dataview.h>
 #include <wx/stc/stc.h>
 #include <widgets/ui_common.h>

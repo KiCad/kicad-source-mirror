@@ -20,7 +20,6 @@
 
 #include <gestfich.h>
 #include <launch_ext.h>
-#include <wx/wx.h>
 
 
 void LaunchExternal( const wxString& aPath )

@@ -29,9 +29,9 @@
  */
 #include <regex>
 #include <wildcards_and_files_ext.h>
+#include <wx/filedlg.h>
 #include <wx/regex.h>
-#include <wx/wx.h>
-
+#include <wx/translation.h>
 
 bool compareFileExtensions( const std::string& aExtension,
         const std::vector<std::string>& aReference, bool aCaseSensitive )

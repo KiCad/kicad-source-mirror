@@ -30,7 +30,6 @@
 #include <math/util.h>             // for KiROUND
 #include <wx/config.h>           // for wxConfigBase
 #include <wx/debug.h>            // for wxASSERT
-#include <wx/wx.h>               // for wxString, operator!=, operator==
 
 void wxConfigLoadParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList,
                          const wxString& aGroup )

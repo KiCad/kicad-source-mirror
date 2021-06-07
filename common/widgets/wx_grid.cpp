@@ -23,7 +23,6 @@
 
 #include <wx/tokenzr.h>
 #include <wx/dc.h>
-#include <wx/wx.h>
 #include <widgets/wx_grid.h>
 
 #include <algorithm>

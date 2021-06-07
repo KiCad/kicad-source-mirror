@@ -30,7 +30,8 @@
 #include <kiway_player.h>
 #include <id.h>
 
-#include <wx/wx.h>
+#include <wx/crt.h>
+
 
 static const wxString HOSTNAME( wxT( "localhost" ) );
 
