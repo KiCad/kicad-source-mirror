@@ -66,7 +66,7 @@
 #include <zone.h>
 
 #include <wx/debug.h>                         // for wxASSERT_MSG
-#include <wx/wx.h>                            // for wxPoint, wxSize, wxArra...
+#include <wx/gdicmn.h>
 
 
 /* class BRDITEMS_PLOTTER is a helper class to plot board items

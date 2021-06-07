@@ -35,7 +35,6 @@
 #include <trigo.h>
 #include <xnode.h>
 
-#include <wx/wx.h>
 #include <wx/regex.h>
 
 namespace PCAD2KICAD {
