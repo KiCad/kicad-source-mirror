@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -74,7 +74,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	antialiasingLabel->Wrap( -1 );
 	gbSizer1->Add( antialiasingLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	wxString m_antialiasingChoices[] = { _("No Antialiasing"), _("Smoothing (1x, Conservative)"), _("Smoothing (1x, Aggressive)"), _("Supersampling (2x)"), _("Supersampling (4x)") };
+	wxString m_antialiasingChoices[] = { _("No Antialiasing"), _("Fast Antialiasing"), _("Balanced Antialiasing"), _("High Quality Antialiasing") };
 	int m_antialiasingNChoices = sizeof( m_antialiasingChoices ) / sizeof( wxString );
 	m_antialiasing = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_antialiasingNChoices, m_antialiasingChoices, 0 );
 	m_antialiasing->SetSelection( 0 );
