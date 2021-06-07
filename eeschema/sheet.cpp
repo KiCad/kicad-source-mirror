@@ -123,7 +123,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
     if( !fileName.IsAbsolute() && !fileName.MakeAbsolute() )
     {
-        wxFAIL_MSG( wxString::Format( "Cannot make file name \"%s\" path absolute.", aFileName ) );
+        wxFAIL_MSG( wxString::Format( "Cannot make file name '%s' path absolute.", aFileName ) );
         return false;
     }
 
@@ -212,7 +212,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         // It's possible the user copied this schematic from another project so the library
         // links may not be available.  Even this is check is no guarantee that all symbol
         // library links are valid but it's better than nothing.
-        for( const auto& name : names )
+        for( const wxString& name : names )
         {
             if( !Prj().SchSymbolLibTable()->HasLibrary( name ) )
                 newLibNames.Add( name );
@@ -242,7 +242,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         // library table.
         wxArrayString    duplicateLibNames;
 
-        for( const auto& name : names )
+        for( const wxString& name : names )
         {
             if( !Prj().SchSymbolLibTable()->HasLibrary( name ) )
                 newLibNames.Add( name );
@@ -297,7 +297,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
             if( !missingLibNames )
             {
-                for( const auto& newLibName : newLibNames )
+                for( const wxString& newLibName : newLibNames )
                 {
                     if( !table.HasLibrary( newLibName ) )
                     {
@@ -330,7 +330,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         {
             bool libNameConflict = false;
 
-            for( const auto& duplicateLibName : duplicateLibNames )
+            for( const wxString& duplicateLibName : duplicateLibNames )
             {
                 const SYMBOL_LIB_TABLE_ROW* thisRow = nullptr;
                 const SYMBOL_LIB_TABLE_ROW* otherRow = nullptr;
