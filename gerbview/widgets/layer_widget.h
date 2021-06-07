@@ -26,7 +26,6 @@
 #define LAYERWIDGET_H_
 
 #include <wx/intl.h>
-#include <wx/wx.h>
 #include <wx/statbmp.h>
 #include <wx/string.h>
 #include <wx/aui/auibook.h>

@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/checkbox.h>
+#include <wx/filedlg.h>
 #include <bitmaps.h>
 #include <menus_helpers.h>
 #include <gerbview.h>
