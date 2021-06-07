@@ -22,12 +22,10 @@
 #ifndef __WX_HTML_REPORT_PANEL_H__
 #define __WX_HTML_REPORT_PANEL_H__
 
-#include <wx/wx.h>
 #include <reporter.h>
 #include <vector>
 
 #include "wx_html_report_panel_base.h"
-
 
 /**
  * A widget for browsing a rich text error/status report. Used in numerous

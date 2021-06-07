@@ -39,6 +39,7 @@
 #include <bitmaps.h>
 #include <widgets/unit_binder.h>
 #include <plotters/plotters_pslike.h>
+#include <wx/dirdlg.h>
 
 class DIALOG_EXPORT_SVG : public DIALOG_EXPORT_SVG_BASE
 {

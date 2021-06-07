@@ -44,6 +44,8 @@
 #include <export_footprints_placefile.h>
 #include "gerber_placefile_writer.h"
 
+#include <wx/dirdlg.h>
+
 
 /**
  * The dialog to create footprint position files and choose options (one or 2 files, units

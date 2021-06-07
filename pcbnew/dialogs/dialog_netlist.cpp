@@ -41,6 +41,7 @@
 #include <dialog_netlist.h>
 
 #include <wx_html_report_panel.h>
+#include <wx/filedlg.h>
 
 
 void PCB_EDIT_FRAME::InstallNetlistFrame()

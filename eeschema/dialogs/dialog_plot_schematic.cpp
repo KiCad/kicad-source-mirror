@@ -45,6 +45,7 @@
 #include <wx/dirdlg.h>
 #include <wx/msgdlg.h>
 #include <wx/stdpaths.h>
+#include <wx/log.h>
 
 
 // static members (static to remember last state):

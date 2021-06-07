@@ -37,6 +37,7 @@
 #include <sstream>
 #include <tool/tool_manager.h>
 #include <tool/grid_menu.h>
+#include <wx/valtext.h>
 
 
 bool SortYFirst;

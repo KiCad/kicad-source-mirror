@@ -28,6 +28,10 @@
 #include <wx/clipbrd.h>
 #include <kicad_string.h>
 #include <wx/ffile.h>
+#include <wx/log.h>
+#include <wx/filedlg.h>
+#include <wx/msgdlg.h>
+#include <wx/menu.h>
 
 WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent,
                                             wxWindowID id,

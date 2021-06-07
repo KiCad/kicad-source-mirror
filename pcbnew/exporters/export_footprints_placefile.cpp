@@ -34,6 +34,8 @@
 #include <export_footprints_placefile.h>
 #include <pad.h>
 
+#include <wx/dirdlg.h>
+
 class LIST_MOD      // An helper class used to build a list of useful footprints.
 {
 public:

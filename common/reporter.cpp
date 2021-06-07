@@ -29,6 +29,9 @@
 #include <reporter.h>
 #include <widgets/infobar.h>
 #include <wx_html_report_panel.h>
+#include <wx/log.h>
+#include <wx/textctrl.h>
+#include <wx/statusbr.h>
 
 REPORTER& REPORTER::Report( const char* aText, SEVERITY aSeverity )
 {

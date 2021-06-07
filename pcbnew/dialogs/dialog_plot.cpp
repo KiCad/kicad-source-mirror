@@ -45,6 +45,9 @@
 #include <math/util.h>      // for KiROUND
 #include <macros.h>
 
+#include <wx/dirdlg.h>
+
+
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     DIALOG_PLOT_BASE( aParent ), m_parent( aParent ),

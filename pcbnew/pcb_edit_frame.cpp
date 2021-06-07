@@ -104,6 +104,8 @@
 #include <action_plugin.h>
 #include "../scripting/python_scripting.h"
 
+#include <wx/filedlg.h>
+
 
 using namespace std::placeholders;
 
