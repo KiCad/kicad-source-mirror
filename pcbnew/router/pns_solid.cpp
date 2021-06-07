@@ -49,7 +49,7 @@ static const SHAPE_LINE_CHAIN buildHullForPrimitiveShape( const SHAPE* aShape, i
         return OctagonalHull( rect->GetPosition(),
                               rect->GetSize(),
                               cl + 1,
-                              0.2 * cl );
+                              0 );
     }
 
     case SH_CIRCLE:
@@ -59,7 +59,7 @@ static const SHAPE_LINE_CHAIN buildHullForPrimitiveShape( const SHAPE* aShape, i
         return OctagonalHull( circle->GetCenter() - VECTOR2I( r, r ),
                               VECTOR2I( 2 * r, 2 * r ),
                               cl + 1,
-                              0.585 * ( r + cl ) );
+                              2.0 * ( 1.0 - M_SQRT1_2 ) * ( r + cl ) );
     }
 
     case SH_SEGMENT:

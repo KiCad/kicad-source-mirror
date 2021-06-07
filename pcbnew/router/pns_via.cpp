@@ -82,7 +82,7 @@ const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int 
     // Chamfer = width * ( 1 - sqrt(2)/2 ) for equilateral octagon
     return OctagonalHull( m_pos - VECTOR2I( width / 2, width / 2 ),
                          VECTOR2I( width, width ),
-                         cl + 1, ( 2 * cl + width ) * 0.2928 );
+                         cl + 1, ( 2 * cl + width ) * ( 1.0 - M_SQRT1_2 ) );
 }
 
 
