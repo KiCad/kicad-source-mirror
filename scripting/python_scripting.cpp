@@ -98,6 +98,23 @@ bool SCRIPTING::IsWxAvailable()
 #endif
 }
 
+bool SCRIPTING::IsModuleLoaded( std::string& aModule )
+{
+    PyLOCK    lock;
+    using namespace pybind11::literals;
+    auto locals = pybind11::dict( "modulename"_a = aModule );
+
+    pybind11::exec( R"(
+import sys
+loaded = False
+if modulename in sys.modules:
+    loaded = True
+
+    )", pybind11::globals(), locals );
+
+    return locals["loaded"].cast<bool>();
+}
+
 bool SCRIPTING::scriptingSetup()
 {
 #if defined( __WINDOWS__ )

@@ -55,24 +55,18 @@ void SCRIPTING_TOOL::Reset( RESET_REASON aReason )
 bool SCRIPTING_TOOL::Init()
 {
     PyLOCK    lock;
-    PyObject* mod_name = PyUnicode_FromString( "_pcbnew" );
+    std::string pymodule( "_pcbnew" );
 
-    if( PyObject* existing_mod = PyImport_GetModule( mod_name ) )
-    {
-        Py_DecRef( existing_mod );
-    }
-    else
+    if( !SCRIPTING::IsModuleLoaded( pymodule ) )
     {
         KIFACE* kiface = frame()->Kiway().KiFACE( KIWAY::FACE_PCB );
         initfunc pcbnew_init = reinterpret_cast<initfunc>( kiface->IfaceOrAddress( KIFACE_SCRIPTING_LEGACY ) );
-        PyImport_AddModule( "_pcbnew" );
+        PyImport_AddModule( pymodule.c_str() );
         PyObject* mod = pcbnew_init();
         PyObject* sys_mod = PyImport_GetModuleDict();
         PyDict_SetItemString( sys_mod, "_pcbnew", mod );
         Py_DECREF( mod );
     }
-
-    Py_DecRef( mod_name );
 
     // Load pcbnew inside Python and load all the user plugins and package-based plugins
     {

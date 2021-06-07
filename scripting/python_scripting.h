@@ -57,6 +57,8 @@ public:
 
     static bool IsWxAvailable();
 
+    static bool IsModuleLoaded( std::string& aModule );
+
     static wxString PyScriptingPath( bool aUserPath = false );
     static wxString PyPluginsPath( bool aUserPath = false );
 
