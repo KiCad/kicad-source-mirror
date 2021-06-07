@@ -832,12 +832,6 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 }
 
 
-bool isImplicitNet( const wxString& aNetName )
-{
-    return aNetName.StartsWith( wxT( "Net-(" ) ) || aNetName.StartsWith( wxT( "unconnected-(" ) );
-}
-
-
 void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 {
     BOARD*                 board = aPad->GetBoard();
@@ -914,7 +908,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
                 if( pinType == wxT( "no_connect" ) || pinType.EndsWith( wxT( "+no_connect" ) ) )
                     netname = "x";
-                else if( pinType == wxT( "free" ) && isImplicitNet( netname ) )
+                else if( pinType == wxT( "free" ) && netname.StartsWith( wxT( "unconnected-(" ) ) )
                     netname = "*";
 
                 // calculate the size of net name text:
