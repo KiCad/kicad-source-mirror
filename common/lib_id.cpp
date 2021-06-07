@@ -25,7 +25,7 @@
 
 #include <cstring>
 #include <memory>
-#include <wx/wx.h>      // _()
+#include <wx/translation.h>
 
 #include <macros.h>     // TO_UTF8()
 #include <lib_id.h>

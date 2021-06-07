@@ -40,10 +40,10 @@
 
 #include <core/arraydim.h>
 #include <core/optional.h>
+#include <wx/log.h>
 #include <wx/stc/stc.h>
 #include <kiplatform/app.h>
-
-#include <wx/wx.h>      // for GetForegroundWindow() on wxMSW
+#include <kiplatform/ui.h>
 
 ///< Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
@@ -450,7 +450,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 #if defined( _WIN32 )
         // Mouse events may trigger regardless of window status (windows feature)
         // However we need to avoid focus fighting (especially modals)
-        if( holderWindow && holderWindow->GetHWND() == GetForegroundWindow() )
+        if( holderWindow && KIPLATFORM::UI::IsWindowActive( holderWindow ) )
 #else
         if( holderWindow )
 #endif

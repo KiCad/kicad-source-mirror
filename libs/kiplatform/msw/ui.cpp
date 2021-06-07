@@ -77,7 +77,7 @@ bool KIPLATFORM::UI::IsWindowActive( wxWindow* aWindow )
 {
     if(! aWindow )
     {
-	return false;
+	    return false;
     }
 
     return ( aWindow->GetHWND() == GetForegroundWindow() );
