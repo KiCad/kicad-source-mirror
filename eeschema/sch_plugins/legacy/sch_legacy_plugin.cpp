@@ -73,6 +73,7 @@
 #include <confirm.h>
 #include <tool/selection.h>
 #include <default_values.h>    // For some default values
+#include <wx_filename.h>       // For ::ResolvePossibleSymlinks()
 
 
 #define Mils2Iu( x ) Mils2iu( x )
@@ -2437,18 +2438,7 @@ SCH_LEGACY_PLUGIN_CACHE::~SCH_LEGACY_PLUGIN_CACHE()
 wxFileName SCH_LEGACY_PLUGIN_CACHE::GetRealFile() const
 {
     wxFileName fn( m_libFileName );
-
-#ifndef __WINDOWS__
-    if( fn.Exists( wxFILE_EXISTS_SYMLINK ) )
-    {
-        char buffer[ PATH_MAX ];
-        char *realPath = realpath( TO_UTF8( fn.GetFullPath() ), buffer );
-
-        if( realPath )
-            fn.Assign( wxString::FromUTF8( realPath ) );
-    }
-#endif
-
+    WX_FILENAME::ResolvePossibleSymlinks( fn );
     return fn;
 }
 

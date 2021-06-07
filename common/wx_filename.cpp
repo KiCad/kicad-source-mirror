@@ -22,6 +22,7 @@
  */
 
 #include <wx_filename.h>
+#include <macros.h>
 
 
 WX_FILENAME::WX_FILENAME( const wxString& aPath, const wxString& aFilename )
@@ -78,4 +79,19 @@ long long WX_FILENAME::GetTimestamp()
         return m_fn.GetModificationTime().GetValue().GetValue();
 
     return 0;
+}
+
+// Resolve possible symlink(s) in aFileName to an absolute path
+void WX_FILENAME::ResolvePossibleSymlinks( wxFileName& aFilename )
+{
+#ifndef __WINDOWS__
+    if( aFilename.Exists( wxFILE_EXISTS_SYMLINK ) )
+    {
+        char buffer[PATH_MAX];
+        char* realPath = realpath( TO_UTF8( aFilename.GetFullPath() ), buffer );
+
+        if( realPath )
+            aFilename.Assign( wxString::FromUTF8( realPath ) );
+    }
+#endif
 }

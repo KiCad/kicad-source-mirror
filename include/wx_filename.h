@@ -48,6 +48,9 @@ public:
     // Avoid multiple calls to stat() on POSIX kernels.
     long long GetTimestamp();
 
+    // Resolve possible symlink(s) to absolute path
+    static void ResolvePossibleSymlinks( wxFileName& aFilename );
+
 private:
     // Write cached values to the wrapped wxFileName.  MUST be called before using m_fn.
     void resolve();

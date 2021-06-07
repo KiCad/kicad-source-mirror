@@ -2407,17 +2407,8 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
     wxFileName fn( aLibraryPath, aFootprint->GetFPID().GetLibItemName(),
                    KiCadFootprintFileExtension );
 
-#ifndef __WINDOWS__
     // Write through symlinks, don't replace them
-    if( fn.Exists( wxFILE_EXISTS_SYMLINK ) )
-    {
-        char buffer[ PATH_MAX ];
-        char *realPath = realpath( TO_UTF8( fn.GetFullPath() ), buffer );
-
-        if( realPath )
-            fn.Assign( wxString::FromUTF8( realPath ) );
-    }
-#endif
+    WX_FILENAME::ResolvePossibleSymlinks( fn );
 
     if( !fn.IsOk() )
     {
