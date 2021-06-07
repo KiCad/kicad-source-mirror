@@ -36,6 +36,7 @@
 #include <tools/pcb_actions.h>
 #include <wildcards_and_files_ext.h>
 #include <pcb_marker.h>
+#include <wx/filedlg.h>
 #include <wx/wupdlock.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/ui_common.h>

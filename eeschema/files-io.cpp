@@ -58,6 +58,8 @@
 #include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <wx/ffile.h>
+#include <wx/filedlg.h>
+#include <wx/log.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_inspection_tool.h>
 #include <paths.h>

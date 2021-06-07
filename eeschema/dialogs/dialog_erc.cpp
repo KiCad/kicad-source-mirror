@@ -46,6 +46,7 @@
 #include <widgets/infobar.h>
 #include <dialogs/wx_html_report_box.h>
 #include <wx/ffile.h>
+#include <wx/filedlg.h>
 #include <wx/hyperlink.h>
 #include <erc_item.h>
 #include <eeschema_settings.h>

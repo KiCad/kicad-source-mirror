@@ -20,7 +20,6 @@
 #ifndef WX_HTML_REPORT_BOX_H
 #define WX_HTML_REPORT_BOX_H
 
-#include <wx/wx.h>
 #include <reporter.h>
 #include <vector>
 #include <wx/html/htmlwin.h>

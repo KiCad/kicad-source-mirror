@@ -22,8 +22,6 @@
 #ifndef __FOOTPRINT_PREVIEW_PANEL_H
 #define __FOOTPRINT_PREVIEW_PANEL_H
 
-#include <wx/wx.h>
-
 #include <map>
 #include <deque>
 #include <functional>

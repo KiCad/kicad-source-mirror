@@ -20,7 +20,8 @@
 #ifndef KICAD_COLLAPSIBLE_PANE_H
 #define KICAD_COLLAPSIBLE_PANE_H
 
-#include <wx/wx.h>
+#include <wx/control.h>
+#include <wx/containr.h>
 
 
 wxDECLARE_EVENT( WX_COLLAPSIBLE_PANE_HEADER_CHANGED, wxCommandEvent );

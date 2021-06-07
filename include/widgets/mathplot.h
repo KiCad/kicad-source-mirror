@@ -64,7 +64,6 @@
 
 #include <vector>
 
-// #include <wx/wx.h>
 #include <wx/defs.h>
 #include <wx/menu.h>
 #include <wx/scrolwin.h>

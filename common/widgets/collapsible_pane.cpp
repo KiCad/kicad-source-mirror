@@ -21,9 +21,17 @@
 #include <widgets/collapsible_pane.h>
 
 #include <wx/collpane.h>
+#include <wx/dc.h>
+#include <wx/dcclient.h>
+#include <wx/panel.h>
 #include <wx/renderer.h>
+#include <wx/sizer.h>
 #include <wx/toplevel.h>
 #include <wx/window.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 #include <algorithm>
 

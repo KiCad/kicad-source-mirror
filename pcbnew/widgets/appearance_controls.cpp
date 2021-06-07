@@ -43,8 +43,14 @@
 #include <widgets/indicator_icon.h>
 #include <widgets/infobar.h>
 #include <widgets/wx_grid.h>
+#include <wx/bmpbuttn.h>
+#include <wx/checkbox.h>
 #include <wx/hyperlink.h>
+#include <wx/radiobut.h>
+#include <wx/sizer.h>
+#include <wx/slider.h>
 #include <wx/statline.h>
+#include <wx/textdlg.h>
 
 
 NET_GRID_TABLE::NET_GRID_TABLE( PCB_BASE_FRAME* aFrame, wxColor aBackgroundColor ) :
