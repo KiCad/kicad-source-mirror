@@ -34,7 +34,8 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& 
                               const wxSize& aSize, int aStyles ) :
         wxPanel( aParent, aId, aPos, aSize, aStyles ),
         m_buttonState( 0 ),
-        m_padding( 0 )
+        m_padding( 0 ),
+        m_acceptDraggedInClicks( false )
 {
     if( aSize == wxDefaultSize )
         SetMinSize( wxButton::GetDefaultSize() );
@@ -42,10 +43,10 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& 
     Bind( wxEVT_PAINT,        &BITMAP_BUTTON::OnPaint,          this );
     Bind( wxEVT_LEFT_UP,      &BITMAP_BUTTON::OnLeftButtonUp,   this );
     Bind( wxEVT_LEFT_DOWN,    &BITMAP_BUTTON::OnLeftButtonDown, this );
-    Bind( wxEVT_LEAVE_WINDOW, &BITMAP_BUTTON::OnLeave,          this );
-    Bind( wxEVT_ENTER_WINDOW, &BITMAP_BUTTON::OnEnter,          this );
-    Bind( wxEVT_KILL_FOCUS,   &BITMAP_BUTTON::OnLeave,          this );
-    Bind( wxEVT_SET_FOCUS,    &BITMAP_BUTTON::OnEnter,          this );
+    Bind( wxEVT_LEAVE_WINDOW, &BITMAP_BUTTON::OnMouseLeave,     this );
+    Bind( wxEVT_ENTER_WINDOW, &BITMAP_BUTTON::OnMouseEnter,     this );
+    Bind( wxEVT_KILL_FOCUS,   &BITMAP_BUTTON::OnKillFocus,      this );
+    Bind( wxEVT_SET_FOCUS,    &BITMAP_BUTTON::OnSetFocus,       this );
 }
 
 
@@ -76,20 +77,40 @@ void BITMAP_BUTTON::SetDisabledBitmap( const wxBitmap& aBmp )
 }
 
 
-void BITMAP_BUTTON::OnLeave( wxEvent& aEvent )
+void BITMAP_BUTTON::AcceptDragInAsClick( bool aAcceptDragIn )
 {
-    clearFlag( wxCONTROL_CURRENT );
-    Refresh();
+    m_acceptDraggedInClicks = aAcceptDragIn;
+}
 
+
+void BITMAP_BUTTON::OnMouseLeave( wxEvent& aEvent )
+{
+    clearFlag( wxCONTROL_CURRENT | wxCONTROL_PRESSED );
+    Refresh();
     aEvent.Skip();
 }
 
 
-void BITMAP_BUTTON::OnEnter( wxEvent& aEvent )
+void BITMAP_BUTTON::OnMouseEnter( wxEvent& aEvent )
 {
     setFlag( wxCONTROL_CURRENT );
     Refresh();
+    aEvent.Skip();
+}
 
+
+void BITMAP_BUTTON::OnKillFocus( wxEvent& aEvent )
+{
+    clearFlag( wxCONTROL_FOCUSED );
+    Refresh();
+    aEvent.Skip();
+}
+
+
+void BITMAP_BUTTON::OnSetFocus( wxEvent& aEvent )
+{
+    setFlag( wxCONTROL_FOCUSED );
+    Refresh();
     aEvent.Skip();
 }
 
@@ -97,7 +118,9 @@ void BITMAP_BUTTON::OnEnter( wxEvent& aEvent )
 void BITMAP_BUTTON::OnLeftButtonUp( wxMouseEvent& aEvent )
 {
     // Only create a button event when the control is enabled
-    if( !hasFlag( wxCONTROL_DISABLED ) )
+    // and only accept clicks that came without prior mouse-down if configured
+    if( !hasFlag( wxCONTROL_DISABLED ) &&
+       ( m_acceptDraggedInClicks || hasFlag( wxCONTROL_PRESSED | wxCONTROL_FOCUSED ) ) )
     {
         wxEvtHandler* pEventHandler = GetEventHandler();
         wxASSERT( pEventHandler );
@@ -145,7 +168,7 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
             dc.SetBrush( wxBrush( highlightColor.ChangeLightness( darkMode ? 20 : 150 ) ) );
             dc.DrawRectangle( rect );
         }
-        else if( hasFlag( wxCONTROL_CURRENT ) )
+        else if( hasFlag( wxCONTROL_CURRENT | wxCONTROL_FOCUSED ) )
         {
             dc.SetPen( wxPen( highlightColor ) );
             dc.SetBrush( wxBrush( highlightColor.ChangeLightness( darkMode ? 40 : 170 ) ) );

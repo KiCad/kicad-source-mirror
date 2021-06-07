@@ -80,9 +80,18 @@ public:
      */
     void Check( bool aCheck = true );
 
+    /**
+     * Accept mouse-up as click even if mouse-down happened outside of the control
+     *
+     * @param aAcceptDragIn is true to allow drag in, false to ignore lone mouse-up events
+     */
+    void AcceptDragInAsClick( bool aAcceptDragIn = true );
+
 protected:
-    void OnLeave( wxEvent& aEvent );
-    void OnEnter( wxEvent& aEvent );
+    void OnMouseLeave( wxEvent& aEvent );
+    void OnMouseEnter( wxEvent& aEvent );
+    void OnKillFocus( wxEvent& aEvent );
+    void OnSetFocus( wxEvent& aEvent );
     void OnLeftButtonUp( wxMouseEvent& aEvent );
     void OnLeftButtonDown( wxMouseEvent& aEvent );
     void OnPaint( wxPaintEvent& aEvent );
@@ -117,6 +126,9 @@ private:
 
     ///< Size without the padding
     wxSize    m_unadjustedMinSize;
+
+    ///< Accept mouse-up as click even if mouse-down happened outside of the control
+    bool      m_acceptDraggedInClicks;
 };
 
 #endif /*BITMAP_BUTTON_H_*/

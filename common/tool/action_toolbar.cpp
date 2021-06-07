@@ -130,6 +130,7 @@ void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
     button->SetDisabledBitmap( disabledBmp );
     button->SetPadding( padding );
     button->SetToolTip( aAction.GetDescription() );
+    button->AcceptDragInAsClick();
 
     m_buttons[aAction.GetUIId()] = button;
 
