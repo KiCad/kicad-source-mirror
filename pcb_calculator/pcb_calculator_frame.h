@@ -34,17 +34,61 @@ class KIWAY;
 class PCB_CALCULATOR_SETTINGS;
 
 
-/*
- * Class PCB_CALCULATOR_FRAME_BASE
- * This is the main frame for this application
+/**
+ * PCB calculator the main frame.
  */
 class PCB_CALCULATOR_FRAME : public PCB_CALCULATOR_FRAME_BASE
 {
 public:
-    REGULATOR_LIST m_RegulatorList;      // the list of known regulator
-
     PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~PCB_CALCULATOR_FRAME();
+
+    /**
+     * Read/write params values and results.
+     *
+     * @param aPrmId is the parameter id to write.
+     * @param aValue is the value to write.
+     */
+    void SetPrmValue( enum PRMS_ID aPrmId, double aValue );
+
+    /**
+     * Put the text into the given result line.
+     *
+     * @param aLineNumber is the line (0 to 5) where to display the text.
+     * @param aText is the text to display.
+     */
+    void SetResult( int aLineNumber, const wxString& aText );
+
+    /**
+     *  Set the background color of a parameter.
+     *
+     *  @param aPrmId is the parameter id to set.
+     *  @param aCol is the new color.
+     */
+    void SetPrmBgColor( enum PRMS_ID aPrmId, const KIGFX::COLOR4D* aCol );
+
+    /**
+     * Return a param value.
+     *
+     * @param aPrmId is the parameter id to write.
+     * @return the value always in normalized unit (meter, Hz, Ohm, radian).
+     */
+    double GetPrmValue( enum PRMS_ID aPrmId ) const;
+
+    /**
+     * @return true if the parameter aPrmId is selected.
+     */
+    bool IsPrmSelected( enum PRMS_ID aPrmId ) const;
+
+    // Board classes panel:
+    void OnBoardClassesUnitsSelection( wxCommandEvent& event ) override;
+    void BoardClassesUpdateData( double aUnitScale );
+
+    // Calculator doesn't host a tool framework
+    wxWindow* GetToolCanvas() const override
+    {
+        return nullptr;
+    }
 
 private:
     // Event handlers
@@ -67,8 +111,9 @@ private:
 
     /**
      * Initialize the full filename of the selected pcb_calculator data file
-     * force the standard extension of the file (.pcbcalc)
-     * @param aFilename = the full filename, with or without extension
+     * force the standard extension of the file (.pcbcalc).
+     *
+     * @param aFilename is the full filename, with or without extension.
      */
     void SetDataFilename( const wxString& aFilename );
 
@@ -86,117 +131,93 @@ private:
     void OnCalculateESeries( wxCommandEvent& event ) override;
 
     /**
-     * Radio Buttons to select the E-serie for the resistor calculator
-     * @param event contains the radio button state
+     * Radio Buttons to select the E-serie for the resistor calculator.
+     *
+     * @param event contains the radio button state.
      */
     void OnESeriesSelection( wxCommandEvent& event ) override;
 
     /**
-     * Function writeTrackWidthConfig
-     * Write Track width parameters in config
+     * Write track width parameters in configuration.
      */
     void writeTrackWidthConfig();
 
     /**
-     * Function OnTWParametersChanged
-     * Called when the user changes the general parameters (i.e., anything that
-     * is not one of the controlling values). This update the calculations.
+     * Update the calculations the user changes the general parameters.
      */
     void OnTWParametersChanged( wxCommandEvent& event ) override;
 
     /**
-     * Function OnTWCalculateFromCurrent
-     * Called when the user changes the desired maximum current. This sets the
-     * current as the controlling value and performs the calculations.
+     * Update the calculations when the user changes the desired maximum current.
      */
     void OnTWCalculateFromCurrent( wxCommandEvent& event ) override;
 
     /**
-     * Function OnTWCalculateFromExtWidth
-     * Called when the user changes the desired external trace width. This sets
-     * the external width as the controlling value and performs the calculations.
+     * Update the calculations when the user changes the desired external trace width.
      */
     void OnTWCalculateFromExtWidth( wxCommandEvent& event ) override;
 
     /**
-     * Function OnTWCalculateFromIntWidth
-     * Called when the user changes the desired internal trace width. This sets
-     * the internal width as the controlling value and performs the calculations.
+     * Update the calculations when the user changes the desired internal trace width.
      */
     void OnTWCalculateFromIntWidth( wxCommandEvent& event ) override;
 
     /**
-     * Function OnTWResetButtonClick
-     * Called when the user clicks the reset button. This sets
-     * the parameters to their default values.
+     * Update the calculations when the user clicks the reset button.
      */
     void OnTWResetButtonClick( wxCommandEvent& event ) override;
 
     /**
-     * Function TWCalculateWidth
      * Calculate track width required based on given current and temperature rise.
      */
     double TWCalculateWidth( double aCurrent, double aThickness, double aDeltaT_C,
                              bool aUseInternalLayer );
 
     /**
-     * Function TWCalculateCurrent
      * Calculate maximum current based on given width and temperature rise.
      */
     double TWCalculateCurrent( double aWidth, double aThickness, double aDeltaT_C,
                                bool aUseInternalLayer );
 
     /**
-     * Function TWDisplayValues
-     * Displays the results of a calculation (including resulting values such
+     * Display the results of a calculation (including resulting values such
      * as the resistance and power loss).
      */
     void TWDisplayValues( double aCurrent, double aExtWidth, double aIntWidth,
                           double aExtThickness, double aIntThickness );
 
     /**
-     * Function TWUpdateModeDisplay
-     * Updates the fields to show whether the maximum current, external trace
+     * Update the fields to show whether the maximum current, external trace
      * width, or internal trace width is currently the controlling parameter.
      */
     void TWUpdateModeDisplay();
 
     /**
-     * Function writeViaSizeConfig
-     * Write Via Size parameters in config
+     * Write via size parameters in configuration.
      */
     void writeViaSizeConfig();
 
     /**
-     * Function OnViaCalculate
-     * Called when the user changes any value in the via calcultor.
+     * Called when the user changes any value in the via calculator.
      */
     void OnViaCalculate( wxCommandEvent& event ) override;
 
-    /**
-     * Function OnViaEpsilonR_Button
-     */
     void OnViaEpsilonR_Button( wxCommandEvent& event ) override;
 
-    /**
-     * Function OnViaRho_Button
-     */
     void OnViaRho_Button( wxCommandEvent& event ) override;
 
     /**
-     * Update the Error message in Via calculation panel
+     * Update the Error message in via calculation panel.
      */
     void onUpdateViaCalcErrorText( wxUpdateUIEvent& event ) override;
 
     /**
-     * Function OnViaResetButtonClick
      * Called when the user clicks the reset button; sets the parameters to their default values.
      */
     void OnViaResetButtonClick( wxCommandEvent& event ) override;
 
     /**
-     * Function VSDisplayValues
-     * Displays the results of the calculation.
+     * Display the results of the calculation.
      */
     void VSDisplayValues( double aViaResistance, double aVoltageDrop, double aPowerLoss,
                           double aEstimatedAmpacity, double aThermalResistance,
@@ -209,64 +230,58 @@ private:
     void ElectricalSpacingUpdateData( double aUnitScale );
 
     /**
-     * Function OnTranslineSelection
-     * Called on new transmission line selection
+     * Called on new transmission line selection.
      */
     void OnTranslineSelection( wxCommandEvent& event ) override;
 
     /**
-     * Function OnTransLineResetButtonClick
      * Called when the user clicks the reset button; sets the parameters to their default values.
      */
     void OnTransLineResetButtonClick( wxCommandEvent& event ) override;
 
     /**
-     * Function OnTranslineAnalyse
-     * Run a new analyse for the current transline with current parameters and displays the
-     * electrical parameters
+     * Run a new analyze for the current transline with current parameters and displays the
+     * electrical parameters.
      */
     void OnTranslineAnalyse( wxCommandEvent& event ) override;
 
     /**
-     * Function OnTranslineSynthetize
-     * Run a new synthezis for the current transline with current parameters and displays the
-     * geometrical parameters
+     * Run a new synthesis for the current transline with current parameters and displays the
+     * geometrical parameters.
      */
     void OnTranslineSynthetize( wxCommandEvent& event ) override;
 
     /**
-     * Function OnTranslineEpsilonR_Button
      * Shows a list of current relative dielectric constant(Er) and set the selected value in
-     * main dialog frame
+     * main dialog frame.
      */
     void OnTranslineEpsilonR_Button( wxCommandEvent& event ) override;
 
     /**
-     * Function OnTranslineTanD_Button
-     * Shows a list of current dielectric loss factor (tangent delta) and set the selected value
-     * in main dialog frame
+     * Show a list of current dielectric loss factor (tangent delta) and set the selected value
+     * in main dialog frame.
      */
     void OnTranslineTanD_Button( wxCommandEvent& event ) override;
 
     /**
-     * Function OnTranslineRho_Button
-     * Shows a list of current Specific resistance list (rho) and set the selected value in main
-     * dialog frame
+     * Show a list of current Specific resistance list (rho) and set the selected value in main
+     * dialog frame.
      */
     void OnTranslineRho_Button( wxCommandEvent& event ) override;
 
     /**
-     * Function TranslineTypeSelection
-     * Must be called after selection of a new transline. Update all values, labels and tool
-     * tips of parameters needed by the new transline; irrelevant parameters are blanked.
-     * @param aType = the TRANSLINE_TYPE_ID of the new selected transline
+     * Must be called after selection of a new transline.
+     *
+     * Update all values, labels and tool tips of parameters needed by the new transline;
+     * irrelevant parameters are blanked.
+     *
+     * @param aType is the #TRANSLINE_TYPE_ID of the new selected transmission line.
     */
     void TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType );
 
     /**
-     * Function TransfDlgDataToTranslineParams
-     * Read values entered in dialog frame, and transfert these values in current transline
-     * parameters, converted in normalized units
+     * Read values entered in dialog frame, and transfer these values in current transline
+     * parameters, converted in normalized units.
      */
     void TransfDlgDataToTranslineParams();
 
@@ -293,14 +308,13 @@ private:
     void OnRemoveRegulator( wxCommandEvent& event ) override;
 
     /**
-     * Function RegulatorPageUpdate:
-     * Update the regulator page dialog display:
-     * enable the current regulator drawings and the formula used for calculations
+     * Update the regulator page dialog display.
+     *
+     * Enable the current regulator drawings and the formula used for calculations.
      */
     void RegulatorPageUpdate();
 
     /**
-     * Function SelectLastSelectedRegulator
      * If m_lastSelectedRegulatorName is empty, just calls RegulatorPageUpdate()
      */
     void SelectLastSelectedRegulator();
@@ -308,63 +322,17 @@ private:
     void RegulatorsSolve();
 
     /**
-     * Write regulators parameters in config
-     * @param aCfg is the config settings
+     * Write regulators parameters in configuration.
+     *
+     * @param aCfg is the configuration settings.
      */
     void Regulators_WriteConfig( PCB_CALCULATOR_SETTINGS* aCfg );
 
 public:
-    // Read/write params values and results
-
-    /**
-     * Function SetPrmValue
-     * Read/write params values and results
-     * @param aPrmId = param id to write
-     * @param aValue = valmue to write
-     */
-    void SetPrmValue( enum PRMS_ID aPrmId, double aValue );
-
-    /**
-     * Function SetResult
-     * Puts the text into the given result line.
-     * @param aLineNumber = the line (0 to 5) wher to display the text
-     * @param aText = the text to display
-     */
-    void SetResult( int aLineNumber, const wxString& aText );
-
-    /** Function SetPrgmBgColor
-     *  Set the background color of a parameter
-     *  @param aPrmId = param id to set
-     *  @param aCol = new color
-     */
-    void SetPrmBgColor( enum PRMS_ID aPrmId, const KIGFX::COLOR4D* aCol );
-    /**
-     * Function GetPrmValue
-     * Returns a param value.
-     * @param aPrmId = param id to write
-     * @return the value always in normalized unit (meter, Hz, Ohm, radian)
-     */
-    double GetPrmValue( enum PRMS_ID aPrmId ) const;
-
-    /**
-     * Function IsPrmSelected
-     * @return true if the param aPrmId is selected
-     * Has meaning only for params that have a radio button
-     */
-    bool IsPrmSelected( enum PRMS_ID aPrmId ) const;
-
-    // Board classes panel:
-    void OnBoardClassesUnitsSelection( wxCommandEvent& event ) override;
-    void BoardClassesUpdateData( double aUnitScale );
-
-    // Calculator doesn't host a tool framework
-    wxWindow* GetToolCanvas() const override
-    {
-        return nullptr;
-    }
+    REGULATOR_LIST m_RegulatorList;      // the list of known regulator
 
 private:
-    bool m_RegulatorListChanged; // Set when m_RegulatorList is modified and the corresponging file
+    bool m_RegulatorListChanged; // Set when m_RegulatorList is modified and the corresponding file
                                  // must be rewritten
 
     enum                         // Which dimension is controlling the track width / current

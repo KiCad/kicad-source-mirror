@@ -5,6 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -33,18 +34,8 @@
 #include <drawing_sheet/ds_draw_item.h>
 
 
-/**
- * PL_EDITOR_LAYOUT
- */
 class PL_EDITOR_LAYOUT
 {
-private:
-    EDA_RECT                m_boundingBox;
-    PAGE_INFO               m_paper;
-    TITLE_BLOCK             m_titles;
-
-    DS_DRAW_ITEM_LIST       m_drawItemList;
-
 public:
     PL_EDITOR_LAYOUT();
     ~PL_EDITOR_LAYOUT();
@@ -69,15 +60,14 @@ public:
     }
 
     /**
-     * Function ComputeBoundingBox
-     * calculates the bounding box containing all Gerber items.
-     * @return EDA_RECT - the full item list bounding box
+     * Calculate the bounding box containing all Gerber items.
+     *
+     * @return the full item list bounding box.
      */
     EDA_RECT ComputeBoundingBox();
 
     /**
-     * Function GetBoundingBox
-     * may be called soon after ComputeBoundingBox() to return the same EDA_RECT,
+     * Called soon after ComputeBoundingBox() to return the same EDA_RECT,
      * as long as the CLASS_PL_EDITOR_LAYOUT has not changed.
      */
     const EDA_RECT GetBoundingBox() const { return m_boundingBox; }
@@ -89,6 +79,13 @@ public:
 #if defined(DEBUG)
     void    Show( int nestLevel, std::ostream& os ) const;
 #endif
+
+private:
+    EDA_RECT                m_boundingBox;
+    PAGE_INFO               m_paper;
+    TITLE_BLOCK             m_titles;
+
+    DS_DRAW_ITEM_LIST       m_drawItemList;
 };
 
 #endif      // #ifndef CLASS_PL_EDITOR_LAYOUT_H

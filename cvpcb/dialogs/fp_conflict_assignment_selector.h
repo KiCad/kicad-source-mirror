@@ -6,7 +6,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2014 Kicad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,49 +31,46 @@
 
 class DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR : public DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR_BASE
 {
-	private:
-        enum COL_ID
-        {
-            COL_REF, COL_FPSCH, COL_SELSCH, COL_SELCMP, COL_FPCMP,
-            COL_COUNT
-        };
+public:
+    DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR( wxWindow* parent );
 
-        int m_lineCount;
+    /**
+     * Add a line to the selection list.
+     *
+     * @param aRef is the component reference text.
+     * @param aFpSchName is the fpid text from the netlist.
+     * @param aFpCmpName is the fpid text from the .cmp file.
+     */
+    void Add( const wxString& aRef, const wxString& aFpSchName, const wxString& aFpCmpName );
 
-	public:
+    /**
+     * @param aReference is the compoent schematic reference.
+     * @return the selection option:
+     *      0 for fpid text from the netlist
+     *      1 for fpid text from the cmp file
+     *      -1 on error
+     */
+    int GetSelection( const wxString& aReference );
 
-		DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR( wxWindow* parent );
+private:
+    void OnSize( wxSizeEvent& event ) override;
 
-        /**
-         * Add a line to the selection list.
-         * @param aRef = component reference text
-         * @param aFpSchName = fpid text from the netlist
-         * @param aFpCmpName = fpid text from the .cmp file
-         */
-        void Add( const wxString& aRef, const wxString& aFpSchName,
-                  const wxString& aFpCmpName );
+    // Virtual: called when clicking on the column title:
+    // when it is a column choice, set all item choices.
+    void OnColumnClick( wxListEvent& event ) override;
 
-        /**
-         * @return the selection option:
-         *      0 for fpid text from the netlist
-         *      1 for fpid text from the cmp file
-         *      -1 on error
-         * @param aReference = the compoent schematic reference
-         */
-        int GetSelection( const wxString& aReference );
+    void OnItemClicked( wxMouseEvent& event ) override;
 
-    private:
-        void OnSize( wxSizeEvent& event ) override;
+    void OnCancelClick( wxCommandEvent& event ) override { EndModal( wxID_CANCEL ); }
+    void OnOKClick( wxCommandEvent& event ) override { EndModal( wxID_OK ); }
 
-        // Virtual: called when clicking on the column title:
-        // when it is a column choice, set all item choices.
-        void OnColumnClick( wxListEvent& event ) override;
+    void recalculateColumns();
 
-        void OnItemClicked( wxMouseEvent& event ) override;
+    enum COL_ID
+    {
+        COL_REF, COL_FPSCH, COL_SELSCH, COL_SELCMP, COL_FPCMP,
+        COL_COUNT
+    };
 
-        void OnCancelClick( wxCommandEvent& event ) override { EndModal( wxID_CANCEL ); }
-        void OnOKClick( wxCommandEvent& event ) override { EndModal( wxID_OK ); }
-
-        void recalculateColumns();
-
+    int m_lineCount;
 };

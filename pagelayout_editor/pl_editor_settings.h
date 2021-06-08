@@ -35,6 +35,10 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
+protected:
+    virtual std::string getLegacyFrameName() const override { return "PlEditorFrame"; }
+
+public:
     int      m_CornerOrigin;
     int      m_PropertiesFrameWidth;
     wxString m_LastPaperSize;
@@ -42,10 +46,6 @@ public:
     int      m_LastCustomHeight;
     bool     m_LastWasPortrait;
     bool     m_BlackBackground;
-
-
-protected:
-    virtual std::string getLegacyFrameName() const override { return "PlEditorFrame"; }
 };
 
 

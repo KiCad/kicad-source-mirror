@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,35 +60,6 @@ typedef std::vector< CVPCB_UNDO_REDO_ENTRIES > CVPCB_UNDO_REDO_LIST;
  */
 class CVPCB_MAINFRAME : public KIWAY_PLAYER
 {
-    friend struct CV::IFACE;
-
-    NETLIST                   m_netlist;
-    int                       m_filteringOptions;
-    ACTION_TOOLBAR*           m_mainToolBar;
-    FOOTPRINTS_LISTBOX*       m_footprintListBox;
-    LIBRARY_LISTBOX*          m_librariesListBox;
-    COMPONENTS_LISTBOX*       m_symbolsListBox;
-    wxTextCtrl*               m_tcFilterString;
-    wxStaticText*             m_statusLine1;
-    wxStaticText*             m_statusLine2;
-    wxStaticText*             m_statusLine3;
-    wxButton*                 m_saveAndContinue;
-
-public:
-    FOOTPRINT_LIST*           m_FootprintsList;
-
-protected:
-    bool                      m_modified;
-    bool                      m_skipComponentSelect;   // skip component selection event during
-                                                       // automatic selection/deletion of
-                                                       // associations
-
-    bool                      m_initialized;
-
-    CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent );
-
-    void setupUIConditions() override;
-
 public:
     ~CVPCB_MAINFRAME();
 
@@ -107,7 +78,7 @@ public:
     };
 
     /**
-     * The type of the controls present in the application
+     * The type of the controls present in the application.
      */
     enum CONTROL_TYPE
     {
@@ -118,7 +89,7 @@ public:
     };
 
     /**
-     * Directions to rotate the focus through the listboxes is
+     * Directions to rotate the focus through the listboxes is.
      */
     enum FOCUS_DIR
     {
@@ -127,7 +98,7 @@ public:
     };
 
     /**
-     * Directions to move when selecting items
+     * Directions to move when selecting items.
      */
     enum ITEM_DIR
     {
@@ -155,7 +126,7 @@ public:
     /**
      * Find out which control currently has focus.
      *
-     * @return the contorl that currently has focus
+     * @return the control that currently has focus
      */
     CVPCB_MAINFRAME::CONTROL_TYPE GetFocusedControl() const;
 
@@ -169,13 +140,12 @@ public:
     /**
      * Set the focus to a specific control.
      *
-     * @param aControl the contorl to set focus to
+     * @param aControl the control to set focus to
      */
     void SetFocusedControl( CVPCB_MAINFRAME::CONTROL_TYPE aControl );
 
     /**
-     * Function OnSelectComponent
-     * Called when clicking on a component in component list window
+     * Called when clicking on a component in component list window:
      * * Updates the filtered footprint list, if the filtered list option is selected
      * * Updates the current selected footprint in footprint list
      * * Updates the footprint shown in footprint display window (if opened)
@@ -204,21 +174,18 @@ public:
     void AutomaticFootprintMatching();
 
     /**
-     * Function SetFootprintFilter
      * Set a filter criteria to either on/off or toggle the criteria.
      *
      * @param aFilter The filter to modify
      * @param aAction What action (on, off or toggle) to take
      */
-    void SetFootprintFilter(
-            FOOTPRINTS_LISTBOX::FP_FILTER_T aFilter, CVPCB_MAINFRAME::CVPCB_FILTER_ACTION aAction );
+    void SetFootprintFilter( FOOTPRINTS_LISTBOX::FP_FILTER_T aFilter,
+                             CVPCB_MAINFRAME::CVPCB_FILTER_ACTION aAction );
 
     /**
-     * Function OnEnterFilteringText
-     * Is called each time the text of m_tcFilterString is changed.
+     * Called each time the text of m_tcFilterString is changed.
      */
     void OnEnterFilteringText( wxCommandEvent& event );
-
 
     /**
      * Undo the most recent associations that were performed.
@@ -226,7 +193,7 @@ public:
     void UndoAssociation();
 
     /**
-     * Redo the most recently undone association
+     * Redo the most recently undone association.
      */
     void RedoAssociation();
 
@@ -252,7 +219,7 @@ public:
      * @param aAddUndoItem specifies if an undo item should be created for this association
      */
     void AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation, bool aNewEntry = true,
-            bool aAddUndoItem = true );
+                             bool aAddUndoItem = true );
 
     /*
      * Functions to build the listboxes and their contents
@@ -262,26 +229,25 @@ public:
     void BuildLibrariesListBox();
 
     /**
-     * Function SaveFootprintAssociation
-     * saves the edits that the user has done by sending them back to eeschema
-     * via the kiway.
+     * Save the edits that the user has done by sending them back to Eeschema via the kiway.
+     *
      * Optionally saves the schematic to disk as well.
      */
     bool SaveFootprintAssociation( bool doSaveSchematic );
 
     /**
-     * Function ReadNetListAndFpFiles
-     * loads the netlist file built on the fly by Eeschema and loads
-     * footprint libraries from fp lib tables.
-     * @param aNetlist is the netlist from eeschema in kicad s-expr format.
+     * Load the netlist file built on the fly by Eeschema and loads footprint libraries from
+     * fp lib tables.
+     *
+     * @param aNetlist is the netlist from Eeschema in KiCad s-expr format.
      * (see CVPCB_MAINFRAME::KiwayMailIn() to know how to get this netlist)
      */
     bool ReadNetListAndFpFiles( const std::string& aNetlist );
 
     /**
-     * Function ReadSchematicNetlist
-     * read the netlist (.net) file built on the fly by Eeschema.
-     * @param aNetlist is the netlist buffer filled by eeschema, in kicad s-expr format.
+     * Read the netlist (.net) file built on the fly by Eeschema.
+     *
+     * @param aNetlist is the netlist buffer filled by Eeschema, in KiCad s-expr format.
      * It is the same netlist as the .net file created by Eeschema.
      * (This method is called by ReadNetListAndFpFiles)
      */
@@ -292,8 +258,7 @@ public:
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     /**
-     * Function DisplayStatus
-     * updates the information displayed on the status bar at bottom of the main frame.
+     * Update the information displayed on the status bar at bottom of the main frame.
      *
      * When the library or component list controls have the focus, the footprint assignment
      * status of the components is displayed in the first status bar pane and the list of
@@ -306,24 +271,25 @@ public:
     void DisplayStatus();
 
     /**
-     * Function LoadFootprintFiles
-     * reads the list of footprint (*.mod files) and generate the list of footprints.
-     * for each footprint are stored
-     *      the footprint name
-     *      documentation string
-     *      associated keywords
-     * fills m_footprints
+     * Read the list of footprint (*.mod files) and generate the list of footprints.
+     *
+     * For each footprint the following items are stored:
+     *  - the footprint name
+     *  - documentation string
+     *  - associated keywords
+     *
      * @return true if libraries are found, false otherwise.
      */
     bool LoadFootprintFiles();
 
     /**
-     * Function SendMessageToEESCHEMA
      * Send a remote command to Eeschema via a socket,
-     * Commands are
-     * $PART: "reference"   put cursor on component anchor
-     * @param aClearHighligntOnly = true if the message to send is only "clear highlight"
-     * (used when exiting Cvpcb)
+     *
+     * Commands are:
+     * $PART: "reference" put cursor on component anchor
+     *
+     * @param aClearHighligntOnly use true if the message to send is only "clear highlight"
+     *                            (used when exiting CvPcb)
      */
     void SendMessageToEESCHEMA( bool aClearHighligntOnly = false );
 
@@ -355,7 +321,7 @@ public:
 
     /**
      * Get the indices for all the components meeting the specified criteria in the components
-     *  listbox.
+     * listbox.
      *
      * @param aCriteria is the criteria to use for finding the indices
      * @return a vector containing all the indices
@@ -371,6 +337,11 @@ public:
 
     void SetStatusText( const wxString& aText, int aNumber = 0 ) override;
 
+protected:
+    CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent );
+
+    void setupUIConditions() override;
+
 private:
     /**
      * Setup the tool system for the CVPCB main frame.
@@ -383,15 +354,43 @@ private:
     void setupEventHandlers();
 
     /**
-     * read the .equ files and populate the list of equvalents
+     * Read the .equ files and populate the list of equivalents.
+     *
      * @param aList the list to populate
      * @param aErrorMessages is a pointer to a wxString to store error messages
      *  (can be NULL)
      * @return the error count ( 0 = no error)
      */
-    int buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages = NULL );
+    int buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList,
+                              wxString* aErrorMessages = nullptr );
 
     void refreshAfterSymbolSearch( COMPONENT* aSymbol );
+
+public:
+    FOOTPRINT_LIST*           m_FootprintsList;
+
+protected:
+    bool                      m_modified;
+    bool                      m_skipComponentSelect;   // skip component selection event during
+                                                       // automatic selection/deletion of
+                                                       // associations
+
+    bool                      m_initialized;
+
+private:
+    friend struct CV::IFACE;
+
+    NETLIST                   m_netlist;
+    int                       m_filteringOptions;
+    ACTION_TOOLBAR*           m_mainToolBar;
+    FOOTPRINTS_LISTBOX*       m_footprintListBox;
+    LIBRARY_LISTBOX*          m_librariesListBox;
+    COMPONENTS_LISTBOX*       m_symbolsListBox;
+    wxTextCtrl*               m_tcFilterString;
+    wxStaticText*             m_statusLine1;
+    wxStaticText*             m_statusLine2;
+    wxStaticText*             m_statusLine3;
+    wxButton*                 m_saveAndContinue;
 
     // Tool dispatcher
     TOOL_DISPATCHER* m_toolDispatcher;

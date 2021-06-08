@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras
- * Copyright (C) 2004-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,22 @@ enum PRM_TYPE {
 class TRANSLINE_PRM
 {
 public:
+    /**
+     * @param aKeywordCfg is the keyword used in config to identify the parameter
+     *                    only ASCII7 keyword is valid.
+     * @param aDlgLabel is a I18n string used to identify the parameter in dialog.
+     *                  usually aDlgLabel is same as aKeywordCfg, but translatable.
+     */
+    TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
+                   const char* aKeywordCfg = "",
+                   const wxString& aDlgLabel = wxEmptyString,
+                   const wxString& aToolTip = wxEmptyString,
+                   double aValue = 0.0,
+                   bool aConvUnit = false );
+
+    double ToUserUnit();
+    double FromUserUnit();
+
     PRM_TYPE m_Type;            // Type of parameter: substr, physical, elect
     PRMS_ID  m_Id;              // Id of parameter ( link to transline functions )
     std::string m_KeyWord;      // keyword for this parameter in json config file in ASCII7 only
@@ -67,42 +83,13 @@ public:
     void*    m_ValueCtrl;       // The text ctrl containing the value in dialog
     void*    m_UnitCtrl;        // The UNIT_SELECTOR containing the unit in dialog
     int      m_UnitSelection;   // last selection for units
-
-public:
-
-    /**
-     * TRANSLINE_PRM ctor.
-     * @param aKeywordCfg is the keyword used in config to identify the parameter
-     * only ASCII7 keyword is valid
-     * @param aDlgLabel is a I18n string used to identify the parameter in dialog.
-     * usually aDlgLabel is same as aKeywordCfg, but translatable
-     */
-    TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
-                   const char* aKeywordCfg = "",
-                   const wxString& aDlgLabel = wxEmptyString,
-                   const wxString& aToolTip = wxEmptyString,
-                   double aValue = 0.0,
-                   bool aConvUnit = false );
-
-    double ToUserUnit();
-    double FromUserUnit();
 };
 
 
-// A class to handle the list of availlable transm. lines
+// A class to handle the list of available transm. lines
 // with messages, tooptips ...
 class TRANSLINE_IDENT
 {
-public:
-    enum TRANSLINE_TYPE_ID m_Type;              // The type of transline handled
-    wxBitmap *             m_Icon;              // An icon to display in dialogs
-    TRANSLINE*             m_TLine;             // The TRANSLINE itself
-    wxArrayString          m_Messages;          // messages for results
-    bool m_HasPrmSelection;                     // true if selection of parameters must be enabled in dialog menu
-
-private:
-    std::vector <TRANSLINE_PRM*> m_prms_List;
-
 public:
     TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType );
     ~TRANSLINE_IDENT();
@@ -113,7 +100,6 @@ public:
         m_prms_List.push_back( aParam );
     }
 
-
     TRANSLINE_PRM* GetPrm( unsigned aIdx ) const
     {
         if( aIdx < m_prms_List.size() )
@@ -122,15 +108,25 @@ public:
             return NULL;
     }
 
-
     unsigned GetPrmsCount() const
     {
         return m_prms_List.size();
     }
 
-
     void ReadConfig();
     void WriteConfig();
+
+public:
+    enum TRANSLINE_TYPE_ID m_Type;              // The type of transline handled
+    wxBitmap *             m_Icon;              // An icon to display in dialogs
+    TRANSLINE*             m_TLine;             // The TRANSLINE itself
+    wxArrayString          m_Messages;          // messages for results
+
+    // true if selection of parameters must be enabled in dialog menu.
+    bool m_HasPrmSelection;
+
+private:
+    std::vector <TRANSLINE_PRM*> m_prms_List;
 };
 
 #endif      //  TRANSLINE_IDENT_H

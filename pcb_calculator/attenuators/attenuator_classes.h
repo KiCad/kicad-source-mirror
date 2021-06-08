@@ -1,12 +1,12 @@
 /**
- *     @file attenuator_classes.h
+ * @file attenuator_classes.h
  */
 
 /*
  *     Attenuator Synthesis
  *
  *     From Qucs
- *      Modified for Kicad
+ *      Modified for KiCad
  */
 
 #ifndef ATTENUATORFUNC_H
@@ -24,18 +24,40 @@ enum ATTENUATORS_TYPE {
 
 class ATTENUATOR
 {
-protected:
-    ATTENUATORS_TYPE m_Topology;
 public:
-    wxString         m_Name;                // Identifier for config
-    int m_ResultCount;                      // Number of value to calculate, and therefore display
-    bool             m_Error;               // Set to true if values acnnot be calculated
+    virtual ~ATTENUATOR();
+
+    /**
+     * Calculates the values of components in attenuator.
+     *
+     * @return true if OK, false if some values cannot be calculated.
+     */
+    virtual bool Calculate();
+
+    /**
+     * Read values stored in config for this attenuator.
+     */
+    void         ReadConfig();
+
+    /**
+     * Read values stored in config for this attenuator.
+     */
+    void         WriteConfig();
+
+protected:
+    // The constructor is protected, because this class is not intended to be instanciated.
+    ATTENUATOR( ATTENUATORS_TYPE Topology );
+
+public:
+    wxString         m_Name;                // Identifier for configuration.
+    int              m_ResultCount;         // Number of value to calculate, and therefore display
+    bool             m_Error;               // Set to true if values cannot be calculated
     double           m_Zin;                 // Impedance of source
     bool             m_Zin_Enable;          // Set to true when impedance of source has meaning
     double           m_Zout;                // Impedance of load
     double           m_Attenuation;         // Attenuation in dB
-    bool             m_Attenuation_Enable;  // Set to true when Attenuatiopn has meaning
-    double           m_MinimumATT;          // Minimun attenuation in dB from parameters
+    bool             m_Attenuation_Enable;  // Set to true when Attenuation has meaning
+    double           m_MinimumATT;          // Minimum attenuation in dB from parameters
     double           m_R1;                  // value of R1
     double           m_R2;                  // value of R2
     double           m_R3;                  // value of R3 (if any)
@@ -43,33 +65,8 @@ public:
     wxString*        m_FormulaName;         // The HTML/markdown text name of the formula
 
 protected:
-    double           Lmin, L, A; // internal variable for temporary use
-
-
-protected:
-    // The constructor is protected, because this class is not intended to be instancied
-    ATTENUATOR( ATTENUATORS_TYPE Topology );
-public:
-    virtual ~ATTENUATOR();
-
-    /**
-     * Function Calculate
-     * calculates the values of components in attenuator
-     * @return true if ok, false if some values cannot be calculated
-     */
-    virtual bool Calculate();
-
-    /**
-     * Function ReadConfig
-     * Read values stored in config for this attenuator
-     */
-    void         ReadConfig();
-
-    /**
-     * Function WriteConfig
-     * Read values stored in config for this attenuator
-     */
-    void         WriteConfig();
+    ATTENUATORS_TYPE m_Topology;
+    double           Lmin, L, A;            // internal variable for temporary use
 };
 
 class ATTENUATOR_PI : public ATTENUATOR

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,9 +35,6 @@ class FOOTPRINT_LIST;
 #define LISTBOX_STYLE     ( wxBORDER_NONE | wxLC_NO_HEADER | wxLC_REPORT | wxLC_VIRTUAL | \
                             wxVSCROLL | wxHSCROLL )
 
-/*********************************************************************/
-/* ListBox (base class) to display lists of components or footprints */
-/*********************************************************************/
 class ITEMS_LISTBOX_BASE : public wxListView
 {
 public:
@@ -60,8 +57,7 @@ public:
 
     virtual CVPCB_MAINFRAME* GetParent() const;
 
-    /* Function UpdateWidth
-     *
+    /**
      * Update the width of the column based on its contents.
      *
      * @param aLine is the line to calculate the width from. If positive, the
@@ -77,16 +73,9 @@ private:
 };
 
 
-/******************************************/
-/* ListBox showing the list of footprints */
-/******************************************/
 class FOOTPRINTS_LISTBOX : public ITEMS_LISTBOX_BASE
 {
-private:
-    wxArrayString  m_footprintList;
-
 public:
-
     /**
      * Filter setting constants. The filter type is a bitwise OR of these flags,
      * and only footprints matching all selected filter types are shown.
@@ -109,15 +98,14 @@ public:
     void     AppendLine( const wxString& text );
 
     /**
-     * Function SetFootprints
-     * populates the wxListCtrl with the footprints from \a aList that meet the filter
+     * Populate the wxListCtrl with the footprints from \a aList that meet the filter
      * criteria defined by \a aFilterType.
      *
      * @param aList is a #FOOTPRINT_LIST item containing the footprints.
      * @param aLibName is wxString containing the name of the selected library.  Can be
      *                 wxEmptyString.
      * @param aComponent is the #COMPONENT used by the filtering criteria.  Can be NULL.
-     * @param aFootPrintFilterPattern = a filter used to filter list by names
+     * @param aFootPrintFilterPattern is the filter used to filter list by names.
      * @param aFilterType defines the criteria to filter \a aList.
      */
     void     SetFootprints( FOOTPRINT_LIST& aList, const wxString& aLibName, COMPONENT* aComponent,
@@ -126,9 +114,8 @@ public:
     wxString GetSelectedFootprint();
 
     /**
-     * Function OnGetItemText
-     * this overloaded function MUST be provided for the wxLC_VIRTUAL mode
-     * because real data is not handled by ITEMS_LISTBOX_BASE
+     * This overloaded function MUST be provided for the wxLC_VIRTUAL mode
+     * because real data is not handled by ITEMS_LISTBOX_BASE.
      */
     wxString OnGetItemText( long item, long column ) const override;
 
@@ -137,17 +124,15 @@ public:
     void     OnLeftDClick( wxListEvent& event );
     void     OnChar( wxKeyEvent& event );
 
-    DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE();
+
+private:
+    wxArrayString  m_footprintList;
 };
 
 
-/******************************************/
-/* ListBox showing the list of library */
-/******************************************/
 class LIBRARY_LISTBOX : public ITEMS_LISTBOX_BASE
 {
-    wxArrayString  m_libraryList;
-
 public:
     LIBRARY_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id );
     ~LIBRARY_LISTBOX();
@@ -167,33 +152,28 @@ public:
     void     OnSelectLibrary( wxListEvent& event );
 
     /**
-     * Function OnChar
-     * called on a key pressed
-     * Call default handler for some special keys,
-     * and for "ascii" keys, select the first footprint
-     * that the name starts by the letter.
-     * This is the defaut behaviour of a listbox, but because we use
-     * virtual lists, the listbox does not know anything to what is displayed,
-     * we must handle this behaviour here.
-     * Furthermore the footprint name is not at the beginning of
-     * displayed lines (the first word is the line number)
+     * Called on a key press.
+     *
+     * Call default handler for some special keys, and for "ascii" keys, select the first
+     * footprint that the name starts by the letter.
+     *
+     * This is the default behavior of a listbox, but because we use virtual lists, the
+     * listbox does not know anything to what is displayed, we must handle this behavior
+     * here.  Furthermore the footprint name is not at the beginning of displayed lines
+     * (the first word is the line number).
      */
     void     OnChar( wxKeyEvent& event );
 
-    DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE();
+
+private:
+    wxArrayString  m_libraryList;
 };
 
 
-/****************************************************/
-/* ListBox showing the list of schematic components */
-/****************************************************/
 class COMPONENTS_LISTBOX : public ITEMS_LISTBOX_BASE
 {
 public:
-    wxArrayString      m_ComponentList;
-
-public:
-
     COMPONENTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id );
 
     ~COMPONENTS_LISTBOX();
@@ -202,9 +182,8 @@ public:
     int      GetCount();
 
     /**
-     * Function OnGetItemText
-     * this overloaded function MUST be provided for the wxLC_VIRTUAL mode
-     * because real data is not handled by ITEMS_LISTBOX_BASE
+     * This overloaded function MUST be provided for the wxLC_VIRTUAL mode
+     * because real data is not handled by #ITEMS_LISTBOX_BASE.
      */
     wxString OnGetItemText( long item, long column ) const override;
 
@@ -218,22 +197,24 @@ public:
     // Events functions:
 
     /**
-     * Function OnChar
-     * called on a key pressed
-     * Call default handler for some special keys,
-     * and for "ascii" keys, select the first component
-     * that the name starts by the letter.
-     * This is the default behavior of a listbox, but because we use
-     * virtual lists, the listbox does not know anything to what is displayed,
-     * we must handle this behavior here.
-     * Furthermore the reference of components is not at the beginning of
-     * displayed lines (the first word is the line number)
+     * Called on a key press.
+     *
+     * Call default handler for some special keys, and for "ascii" keys, select the first
+     * component that the name starts by the letter.
+     *
+     * This is the default behavior of a listbox, but because we use virtual lists, the
+     * listbox does not know anything to what is displayed, we must handle this behavior
+     * here.  Furthermore the reference of components is not at the beginning of displayed
+     * lines (the first word is the line number).
      */
     void     OnChar( wxKeyEvent& event );
 
     void     OnSelectComponent( wxListEvent& event );
 
-    DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE();
+
+public:
+    wxArrayString      m_ComponentList;
 };
 
 

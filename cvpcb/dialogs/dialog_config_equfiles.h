@@ -6,7 +6,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2010-2015 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2015 Kicad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,11 +33,9 @@
 
 class DIALOG_CONFIG_EQUFILES : public DIALOG_CONFIG_EQUFILES_BASE
 {
-private:
-    CVPCB_MAINFRAME* m_Parent;
-    wxString         m_UserLibDirBufferImg;
-
-    bool m_ListChanged;
+public:
+    DIALOG_CONFIG_EQUFILES( CVPCB_MAINFRAME* parent );
+    ~DIALOG_CONFIG_EQUFILES() {};
 
 private:
     void Init();
@@ -61,9 +59,10 @@ private:
         return m_rbPathOptionChoice->GetSelection() == 1;
     }
 
-public:
-    DIALOG_CONFIG_EQUFILES( CVPCB_MAINFRAME* parent );
-    ~DIALOG_CONFIG_EQUFILES() {};
+    CVPCB_MAINFRAME* m_Parent;
+    wxString         m_UserLibDirBufferImg;
+
+    bool m_ListChanged;
 };
 
 #endif      // _DIALOG_CONFIG_EQUFILES_H_

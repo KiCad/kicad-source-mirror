@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -123,6 +123,10 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
+protected:
+    virtual std::string getLegacyFrameName() const override { return "pcb_calculator"; }
+
+public:
     ATTENUATORS m_Attenuators;
 
     int m_BoardClassUnits;
@@ -140,10 +144,6 @@ public:
     TRANSMISSION_LINE m_TransLine;
 
     VIA_SIZE m_ViaSize;
-
-protected:
-
-    virtual std::string getLegacyFrameName() const override { return "pcb_calculator"; }
 };
 
 #endif

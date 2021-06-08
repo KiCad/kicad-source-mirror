@@ -3,7 +3,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,22 +30,23 @@ class PCB_CALCULATOR_DATAFILE_PARSER;
  */
 class PCB_CALCULATOR_DATAFILE
 {
-    friend class PCB_CALCULATOR_DATAFILE_PARSER;
-protected:
-     REGULATOR_LIST * m_list;
-
 public:
     PCB_CALCULATOR_DATAFILE( REGULATOR_LIST * aList );
 
     int         WriteHeader( OUTPUTFORMATTER* aFormatter ) const ;
     void        Format( OUTPUTFORMATTER* aFormatter, int aNestLevel ) const ;
     void        Parse( PCB_CALCULATOR_DATAFILE_PARSER* aParser );
+
+private:
+    friend class PCB_CALCULATOR_DATAFILE_PARSER;
+
+protected:
+     REGULATOR_LIST* m_list;
 };
 
 
 /**
- * PCB_CALCULATOR_DATAFILE_PARSER
- * is the parser class for PCB_CALCULATOR_DATAFILE.
+ * Parser for PCB_CALCULATOR_DATAFILE.
  */
 class PCB_CALCULATOR_DATAFILE_PARSER : public PCB_CALCULATOR_DATAFILE_LEXER
 {
