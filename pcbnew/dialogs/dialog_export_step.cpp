@@ -26,15 +26,18 @@
 #include <wx/stdpaths.h>
 #include <wx/process.h>
 
-#include "pcb_edit_frame.h"
-#include "kiface_i.h"
-#include "confirm.h"
-#include "reporter.h"
-#include "board.h"
-#include "dialog_export_step_base.h"
+
+#include <board.h>
+#include <confirm.h>
+#include <dialog_export_step_base.h>
+#include <footprint.h>
+#include <kiface_i.h>
 #include <locale_io.h>
+#include <math/vector3.h>
+#include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
+#include <reporter.h>
 #include <widgets/text_ctrl_eval.h>
 
 
@@ -178,6 +181,40 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     tmpStr << m_YOrg;
     m_STEP_Yorg->SetValue( tmpStr );
 
+    wxString bad_scales;
+    size_t   bad_count = 0;
+
+    for( auto& fp : aParent->GetBoard()->Footprints() )
+    {
+        for( auto& model : fp->Models() )
+        {
+
+            if( model.m_Scale.x != 1.0 ||
+                model.m_Scale.y != 1.0 ||
+                model.m_Scale.z != 1.0 )
+            {
+                bad_scales.Append( wxS("\n") );
+                bad_scales.Append( model.m_Filename );
+                bad_count++;
+            }
+        }
+
+        if( bad_count >= 5 )
+            break;
+    }
+
+    if( !bad_scales.empty() )
+    {
+        wxString extendedMsg = _( "Non-unity scaled models:" ) + "\n" + bad_scales;
+
+        KIDIALOG msgDlg( m_parent, _( "Scaled models detected.  "
+                "Model scaling is not reliable for mechanical export." ),
+                         _( "Model Scale Warning" ), wxOK | wxICON_WARNING );
+        msgDlg.SetExtendedMessage( extendedMsg );
+        msgDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+        msgDlg.ShowModal();
+    }
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
