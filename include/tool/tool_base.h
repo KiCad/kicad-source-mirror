@@ -28,9 +28,9 @@
 #define __TOOL_BASE_H
 
 #include <cassert>
-#include <eda_item.h>    // for KICAD_T
-
 #include <functional>
+#include <string>
+#include <wx/debug.h>
 
 class EDA_ITEM;
 class TOOL_EVENT;

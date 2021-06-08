@@ -31,8 +31,7 @@
 #include <view/view.h>
 #include <layers_id_colors_and_visibility.h>
 #include <gal/color4d.h>
-
-class EDA_ITEM;
+#include <eda_item.h>
 
 /**
  * View item to draw an origin marker.
