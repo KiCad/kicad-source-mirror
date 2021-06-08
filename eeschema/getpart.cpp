@@ -210,7 +210,7 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_COMPONENT* aSymbol, int aUnit )
     if( aUnit > unitCount )
         aUnit = unitCount;
 
-    STATUS_FLAGS savedFlags = aSymbol->GetFlags();
+    EDA_ITEM_FLAGS savedFlags = aSymbol->GetFlags();
 
     if( !aSymbol->GetEditFlags() )    // No command in progress: save in undo list
         SaveCopyInUndoList( GetScreen(), aSymbol, UNDO_REDO::CHANGED, false );
@@ -251,7 +251,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aSymbol )
         return;
     }
 
-    STATUS_FLAGS savedFlags = aSymbol->GetFlags();
+    EDA_ITEM_FLAGS savedFlags = aSymbol->GetFlags();
 
     aSymbol->SetConvert( aSymbol->GetConvert() + 1 );
 

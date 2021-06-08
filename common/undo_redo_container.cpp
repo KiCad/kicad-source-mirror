@@ -199,7 +199,7 @@ UNDO_REDO PICKED_ITEMS_LIST::GetPickedItemStatus( unsigned int aIdx ) const
 }
 
 
-STATUS_FLAGS PICKED_ITEMS_LIST::GetPickerFlags( unsigned aIdx ) const
+EDA_ITEM_FLAGS PICKED_ITEMS_LIST::GetPickerFlags( unsigned aIdx ) const
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].GetFlags();
@@ -257,7 +257,7 @@ bool PICKED_ITEMS_LIST::SetPickedItemStatus( UNDO_REDO aStatus, unsigned aIdx )
 }
 
 
-bool PICKED_ITEMS_LIST::SetPickerFlags( STATUS_FLAGS aFlags, unsigned aIdx )
+bool PICKED_ITEMS_LIST::SetPickerFlags( EDA_ITEM_FLAGS aFlags, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {

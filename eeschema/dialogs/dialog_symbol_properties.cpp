@@ -617,7 +617,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         GetParent()->SaveCopyInUndoList( currentScreen, m_comp, UNDO_REDO::CHANGED, false );
 
     // Save current flags which could be modified by next change settings
-    STATUS_FLAGS flags = m_comp->GetFlags();
+    EDA_ITEM_FLAGS flags = m_comp->GetFlags();
 
     // For symbols with multiple shapes (De Morgan representation) Set the selected shape:
     if( m_cbAlternateSymbol->IsEnabled() && m_cbAlternateSymbol->GetValue() )

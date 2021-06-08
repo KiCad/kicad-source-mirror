@@ -42,7 +42,7 @@ ORIGIN_VIEWITEM::ORIGIN_VIEWITEM( const COLOR4D& aColor, MARKER_STYLE aStyle, in
 }
 
 
-ORIGIN_VIEWITEM::ORIGIN_VIEWITEM( const VECTOR2D& aPosition, STATUS_FLAGS flags ) :
+ORIGIN_VIEWITEM::ORIGIN_VIEWITEM( const VECTOR2D& aPosition, EDA_ITEM_FLAGS flags ) :
     EDA_ITEM( nullptr, NOT_USED ),   // this item is never added to a BOARD/SCHEMATIC so it needs no type
     m_position( aPosition ),
     m_size( NOT_USED ),

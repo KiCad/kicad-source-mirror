@@ -204,9 +204,9 @@ int VIA::GetDrillValue() const
 }
 
 
-STATUS_FLAGS TRACK::IsPointOnEnds( const wxPoint& point, int min_dist ) const
+EDA_ITEM_FLAGS TRACK::IsPointOnEnds( const wxPoint& point, int min_dist ) const
 {
-    STATUS_FLAGS result = 0;
+    EDA_ITEM_FLAGS result = 0;
 
     if( min_dist < 0 )
         min_dist = m_Width / 2;

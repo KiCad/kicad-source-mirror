@@ -1973,8 +1973,8 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     const_cast<KIID&>( dseg->m_Uuid ) = KIID( data );
                     break;
                 case 4:
-                    STATUS_FLAGS state;
-                    state = static_cast<STATUS_FLAGS>( hexParse( data ) );
+                    EDA_ITEM_FLAGS state;
+                    state = static_cast<EDA_ITEM_FLAGS>( hexParse( data ) );
                     dseg->SetState( state, true );
                     break;
 
@@ -2249,7 +2249,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         char*   uuid           = strtok_r( (char*) data, delims, (char**) &data );
         int     flags_int      = intParse( data, (const char**) &data );
 
-        STATUS_FLAGS flags = static_cast<STATUS_FLAGS>( flags_int );
+        EDA_ITEM_FLAGS flags = static_cast<EDA_ITEM_FLAGS>( flags_int );
 
         if( aStructType == PCB_TRACE_T )
         {

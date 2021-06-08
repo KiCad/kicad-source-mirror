@@ -51,7 +51,7 @@ public:
                      MARKER_STYLE aStyle = CIRCLE_X, int aSize = 16,
                      const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) );
 
-    ORIGIN_VIEWITEM( const VECTOR2D& aPosition, STATUS_FLAGS flags );
+    ORIGIN_VIEWITEM( const VECTOR2D& aPosition, EDA_ITEM_FLAGS flags );
 
     ORIGIN_VIEWITEM* Clone() const override;
 

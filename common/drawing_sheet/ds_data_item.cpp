@@ -86,7 +86,7 @@ void DS_DATA_ITEM::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aV
     if( pensize == 0 )
         pensize = aCollector ? aCollector->GetDefaultPenSize() : 0;
 
-    std::map<int, STATUS_FLAGS> itemFlags;
+    std::map<size_t, EDA_ITEM_FLAGS> itemFlags;
     DS_DRAW_ITEM_BASE*          item = nullptr;
 
     for( size_t i = 0; i < m_drawItems.size(); ++i )
@@ -105,7 +105,7 @@ void DS_DATA_ITEM::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aV
 
     m_drawItems.clear();
 
-    for( int j = 0; j < m_RepeatCount; j++ )
+    for( size_t j = 0; j < m_RepeatCount; j++ )
     {
         if( j && ! IsInsidePage( j ) )
             continue;
@@ -387,7 +387,7 @@ DS_DATA_ITEM_POLYGONS::DS_DATA_ITEM_POLYGONS() :
 
 void DS_DATA_ITEM_POLYGONS::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
 {
-    std::map<int, STATUS_FLAGS> itemFlags;
+    std::map<int, EDA_ITEM_FLAGS> itemFlags;
     DS_DRAW_ITEM_BASE*          item = nullptr;
 
     for( size_t i = 0; i < m_drawItems.size(); ++i )
@@ -559,7 +559,7 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
     if( m_Bold )
         pensize = GetPenSizeForBold( std::min( textsize.x, textsize.y ) );
 
-    std::map<int, STATUS_FLAGS> itemFlags;
+    std::map<size_t, EDA_ITEM_FLAGS> itemFlags;
     DS_DRAW_ITEM_TEXT*          text = nullptr;
 
     for( size_t i = 0; i < m_drawItems.size(); ++i )
@@ -578,7 +578,7 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
 
     m_drawItems.clear();
 
-    for( int j = 0; j < m_RepeatCount; ++j )
+    for( size_t j = 0; j < m_RepeatCount; ++j )
     {
         if( j > 0 && !IsInsidePage( j ) )
             continue;
@@ -715,7 +715,7 @@ void DS_DATA_ITEM_TEXT::SetConstrainedTextSize()
 
 void DS_DATA_ITEM_BITMAP::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
 {
-    std::map<int, STATUS_FLAGS> itemFlags;
+    std::map<size_t, EDA_ITEM_FLAGS> itemFlags;
     DS_DRAW_ITEM_BASE*          item = nullptr;
 
     for( size_t i = 0; i < m_drawItems.size(); ++i )
@@ -740,7 +740,7 @@ void DS_DATA_ITEM_BITMAP::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::V
 
     m_drawItems.clear();
 
-    for( int j = 0; j < m_RepeatCount; j++ )
+    for( size_t j = 0; j < m_RepeatCount; j++ )
     {
         if( j && !IsInsidePage( j ) )
             continue;

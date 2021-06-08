@@ -27,14 +27,13 @@
 #define _CLASS_UNDOREDO_CONTAINER_H
 
 #include <core/typeinfo.h>
+#include <eda_item_flags.h>
 #include <vector>
 
 class EDA_ITEM;
 class PICKED_ITEMS_LIST;
 class BASE_SCREEN;
 
-// forward declaration to avoid eda_item.h for now
-typedef unsigned STATUS_FLAGS;
 
 /**
  * Undo Redo considerations:
@@ -92,9 +91,9 @@ public:
 
     UNDO_REDO GetStatus() const { return m_undoRedoStatus; }
 
-    void SetFlags( STATUS_FLAGS aFlags ) { m_pickerFlags = aFlags; }
+    void SetFlags( EDA_ITEM_FLAGS aFlags ) { m_pickerFlags = aFlags; }
 
-    STATUS_FLAGS GetFlags() const { return m_pickerFlags; }
+    EDA_ITEM_FLAGS GetFlags() const { return m_pickerFlags; }
 
     void SetLink( EDA_ITEM* aItem ) { m_link = aItem; }
 
@@ -103,7 +102,7 @@ public:
     BASE_SCREEN* GetScreen() const { return m_screen; }
 
 private:
-    STATUS_FLAGS   m_pickerFlags;      /* a copy of m_flags member. useful in mode/drag
+    EDA_ITEM_FLAGS m_pickerFlags;      /* a copy of m_flags member. useful in mode/drag
                                         * undo/redo commands */
     UNDO_REDO      m_undoRedoStatus;   /* type of operation to undo/redo for this item */
     EDA_ITEM*      m_pickedItem;       /* Pointer on the schematic or board item that is concerned
@@ -227,7 +226,7 @@ public:
      * @param aIdx Index of the picker in the picked list.
      * @return The value stored in the picker, if the picker exists, or 0 if does not exist.
      */
-    STATUS_FLAGS GetPickerFlags( unsigned aIdx ) const;
+    EDA_ITEM_FLAGS GetPickerFlags( unsigned aIdx ) const;
 
     /**
      * @param aItem A pointer to the item to pick.
@@ -269,7 +268,7 @@ public:
      * @param aIdx Index of the picker in the picked list.
      * @return True if the picker exists or false if does not exist.
      */
-    bool SetPickerFlags( STATUS_FLAGS aFlags, unsigned aIdx );
+    bool SetPickerFlags( EDA_ITEM_FLAGS aFlags, unsigned aIdx );
 
     /**
      * Remove one entry (one picker) from the list of picked items.

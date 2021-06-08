@@ -159,7 +159,7 @@ public:
      * (dist = min_dist) both ends, or 0 if none of the above.
      * if min_dist < 0: min_dist = track_width/2
      */
-    STATUS_FLAGS IsPointOnEnds( const wxPoint& point, int min_dist = 0 ) const;
+    EDA_ITEM_FLAGS IsPointOnEnds( const wxPoint& point, int min_dist = 0 ) const;
 
     /**
      * Function IsNull
