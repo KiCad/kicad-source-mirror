@@ -125,18 +125,20 @@ size_t PROJECT_TEMPLATE::GetDestinationFiles( const wxFileName& aNewProjectPath,
 
     // Find the template file name base. this is the name of the .pro template file
     wxString basename;
-    int      projectCount = 0;
+    bool     multipleProjectFilesFound = false;
 
     for( wxFileName& file : srcFiles )
     {
         if( file.GetExt() == ProjectFileExtension || file.GetExt() == LegacyProjectFileExtension )
         {
+            if( !basename.IsEmpty() && basename != file.GetName() )
+                multipleProjectFilesFound = true;
+
             basename = file.GetName();
-            projectCount++;
         }
     }
 
-    if( projectCount != 1 )
+    if( multipleProjectFilesFound )
         basename = GetPrjDirName();
 
     for( wxFileName& srcFile : srcFiles )
@@ -163,26 +165,29 @@ size_t PROJECT_TEMPLATE::GetDestinationFiles( const wxFileName& aNewProjectPath,
 
 bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aErrorMsg )
 {
-    // CreateProject copy the files from template to the new project folder
-    // and rename files which have the same name as the template .pro file
+    // CreateProject copy the files from template to the new project folder and renames files
+    // which have the same name as the template .kicad_pro file
     bool result = true;
 
     std::vector<wxFileName> srcFiles = GetFileList();
 
-    // Find the template file name base. this is the name of the .pro template file
+    // Find the template file name base. this is the name of the .kicad_pro (or .pro) template
+    // file
     wxString basename;
-    int      projectCount = 0;
+    bool     multipleProjectFilesFound = false;
 
     for( wxFileName& file : srcFiles )
     {
         if( file.GetExt() == ProjectFileExtension || file.GetExt() == LegacyProjectFileExtension )
         {
+            if( !basename.IsEmpty() && basename != file.GetName() )
+                multipleProjectFilesFound = true;
+
             basename = file.GetName();
-            projectCount++;
         }
     }
 
-    if( projectCount != 1 )
+    if( multipleProjectFilesFound )
         basename = GetPrjDirName();
 
     for( wxFileName& srcFile : srcFiles )
@@ -193,10 +198,20 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
         // Replace the template filename with the project filename for the new project creation
         wxString currname = destFile.GetName();
 
-        // Do not rename project specific symbol libraries.  This will break the symbol library
-        // table which will cause broken symbol library links in the schematic.
-        if( !( destFile.GetExt() == DrawingSheetFileExtension ) && !( destFile.GetExt() == "dcm"
-                                                                      || ( destFile.GetExt() == "lib" && !destFile.GetName().EndsWith( "-cache" ) ) ) )
+        if( destFile.GetExt() == DrawingSheetFileExtension )
+        {
+            // Skip these; they're often shared
+        }
+        if( destFile.GetName().EndsWith( "-cache" ) || destFile.GetName().EndsWith( "-rescue" ) )
+        {
+            currname.Replace( basename, aNewProjectPath.GetName() );
+        }
+        else if( destFile.GetExt() == "dcm" || destFile.GetExt() == "lib" )
+        {
+            // Don't rename project-specific symbol libraries.  This will break the symbol library
+            // table which will cause broken symbol library links in the schematic.
+        }
+        else
         {
             currname.Replace( basename, aNewProjectPath.GetName() );
         }
@@ -208,8 +223,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
         wxString destpath = destFile.GetPathWithSep();
         destpath.Replace( m_basePath.GetPathWithSep(), aNewProjectPath.GetPathWithSep() );
 
-        // Check to see if the path already exists, if not attempt to create it here. Don't worry
-        // about error checking, if the path isn't created the file copy will fail anyway
+        // Check to see if the path already exists, if not attempt to create it here.
         if( !wxFileName::DirExists( destpath ) )
         {
             if( !wxFileName::Mkdir( destpath, 0777, wxPATH_MKDIR_FULL ) )
@@ -221,7 +235,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
                     wxString msg;
 
-                    msg.Printf( _( "Cannot create folder \"%s\"." ), destpath );
+                    msg.Printf( _( "Cannot create folder '%s'." ), destpath );
                     *aErrorMsg += msg;
                 }
 
@@ -240,7 +254,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
                 wxString msg;
 
-                msg.Printf( _( "Cannot copy file \"%s\"." ), destFile.GetFullPath() );
+                msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
                 *aErrorMsg += msg;
             }
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,26 +21,26 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	bmainSizer->Add( m_notebook, 0, wxEXPAND | wxALL, 3 );
 
 	m_htmlWin = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxHW_SCROLLBAR_AUTO );
-	bmainSizer->Add( m_htmlWin, 1, wxALL|wxEXPAND, 3 );
-
-	m_staticTextTpath = new wxStaticText( this, wxID_ANY, _("Template path:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextTpath->Wrap( -1 );
-	bmainSizer->Add( m_staticTextTpath, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bmainSizer->Add( m_htmlWin, 1, wxALL|wxEXPAND, 10 );
 
 	wxBoxSizer* bsizerTemplateSelector;
 	bsizerTemplateSelector = new wxBoxSizer( wxHORIZONTAL );
 
+	m_staticTextTpath = new wxStaticText( this, wxID_ANY, _("Folder:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTpath->Wrap( -1 );
+	bsizerTemplateSelector->Add( m_staticTextTpath, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
 	m_tcTemplatePath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	bsizerTemplateSelector->Add( m_tcTemplatePath, 1, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bsizerTemplateSelector->Add( m_tcTemplatePath, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_buttonBrowse = new wxButton( this, wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bsizerTemplateSelector->Add( m_buttonBrowse, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	bsizerTemplateSelector->Add( m_buttonBrowse, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_buttonValidate = new wxButton( this, wxID_ANY, _("Validate"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bsizerTemplateSelector->Add( m_buttonValidate, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	bsizerTemplateSelector->Add( m_buttonValidate, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bmainSizer->Add( bsizerTemplateSelector, 0, wxEXPAND, 5 );
+	bmainSizer->Add( bsizerTemplateSelector, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bmainSizer->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );

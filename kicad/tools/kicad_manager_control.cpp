@@ -42,8 +42,7 @@ public:
     DIR_CHECKBOX( wxWindow* aParent )
             : wxPanel( aParent )
     {
-        m_cbCreateDir = new wxCheckBox( this, wxID_ANY,
-                                        _( "Create a new directory for the project" ) );
+        m_cbCreateDir = new wxCheckBox( this, wxID_ANY, _( "Create a new folder for the project" ) );
         m_cbCreateDir->SetValue( true );
 
         wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
@@ -116,8 +115,8 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
         if( !pro.Mkdir() )
         {
             wxString msg;
-            msg.Printf( _( "Directory \"%s\" could not be created.\n\n"
-                           "Please make sure you have write permissions and try again." ),
+            msg.Printf( _( "Folder '%s' could not be created.\n\n"
+                           "Make sure you have write permissions and try again." ),
                         pro.GetPath() );
             DisplayErrorMessage( m_frame, msg );
             return -1;
@@ -125,9 +124,9 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     }
     else if( directory.HasFiles() )
     {
-        wxString msg = _( "The selected directory is not empty.  It is recommended that you "
-                          "create projects in their own empty directory.\n\nDo you "
-                          "want to continue?" );
+        wxString msg = _( "The selected folder is not empty.  It is recommended that you "
+                          "create projects in their own empty folder.\n\n"
+                          "Do you want to continue?" );
 
         if( !IsOK( m_frame, msg ) )
             return -1;
@@ -191,8 +190,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 
     wxFileName fn( dlg.GetPath() );
 
-    // wxFileName automatically extracts an extension.  But if it isn't
-    // a .pro extension, we should keep it as part of the filename
+    // wxFileName automatically extracts an extension.  But if it isn't a .kicad_pro extension,
+    // we should keep it as part of the filename
     if( !fn.GetExt().IsEmpty() && fn.GetExt().ToStdString() != ProjectFileExtension )
         fn.SetName( fn.GetName() + wxT( "." ) + fn.GetExt() );
 
@@ -213,8 +212,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
         if( !fn.Mkdir() )
         {
             wxString msg;
-            msg.Printf( _( "Directory \"%s\" could not be created.\n\n"
-                           "Please make sure you have write permissions and try again." ),
+            msg.Printf( _( "Folder '%s' could not be created.\n\n"
+                           "Make sure you have write permissions and try again." ),
                         fn.GetPath() );
             DisplayErrorMessage( m_frame, msg );
             return -1;
@@ -225,10 +224,9 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     {
         wxString msg;
 
-        msg.Printf( _( "Cannot write to folder \"%s\"." ), fn.GetPath() );
-        wxMessageDialog msgDlg( m_frame, msg, _( "Error!" ), wxICON_ERROR | wxOK | wxCENTER );
-        msgDlg.SetExtendedMessage( _( "Please check your access permissions to this folder "
-                                      "and try again." ) );
+        msg.Printf( _( "Cannot write to folder '%s'." ), fn.GetPath() );
+        wxMessageDialog msgDlg( m_frame, msg, _( "Error" ), wxICON_ERROR | wxOK | wxCENTER );
+        msgDlg.SetExtendedMessage( _( "Make sure you have write permissions and try again." ) );
         msgDlg.ShowModal();
         return -1;
     }
@@ -271,8 +269,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     if( !ps->GetSelectedTemplate()->CreateProject( fn, &errorMsg ) )
     {
         wxMessageDialog createDlg( m_frame,
-                                   _( "A problem occurred creating new project from template!" ),
-                                   _( "Template Error" ),
+                                   _( "A problem occurred creating new project from template." ),
+                                   _( "Error" ),
                                    wxOK | wxICON_ERROR );
 
         if( !errorMsg.empty() )
