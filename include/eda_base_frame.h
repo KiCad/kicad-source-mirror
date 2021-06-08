@@ -98,6 +98,15 @@ wxDECLARE_EVENT( UNITS_CHANGED, wxCommandEvent );
 class EDA_BASE_FRAME : public wxFrame, public TOOLS_HOLDER, public KIWAY_HOLDER
 {
 public:
+    /**
+     * Specifies whether we are interacting with the undo or redo stacks
+     */
+    enum UNDO_REDO_LIST
+    {
+        UNDO_LIST,
+        REDO_LIST
+    };
+
     EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxString& aTitle,
                     const wxPoint& aPos, const wxSize& aSize, long aStyle,
                     const wxString& aFrameName, KIWAY* aKiway );
@@ -524,7 +533,6 @@ public:
      * @param aItemCount number of old commands to delete. -1 to remove all old commands
      *                   this will empty the list of commands.
      */
-    enum UNDO_REDO_LIST { UNDO_LIST, REDO_LIST };
     virtual void ClearUndoORRedoList( UNDO_REDO_LIST aList, int aItemCount = -1 )
     { }
 
