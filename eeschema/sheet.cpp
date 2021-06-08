@@ -161,7 +161,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         msg.Printf( _( "Error occurred loading schematic file \"%s\"." ), fullFilename );
         DisplayErrorMessage( this, msg, ioe.What() );
 
-        msg.Printf( _( "Failed to load schematic \"%s\"" ), fullFilename );
+        msg.Printf( _( "Failed to load '%s'." ), fullFilename );
         SetMsgPanel( wxEmptyString, msg );
 
         return false;
