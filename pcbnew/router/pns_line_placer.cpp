@@ -1344,8 +1344,11 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
             seg.SetWidth( pl.Width() );
             seg.SetLayer( m_currentLayer );
 
-            if( m_lastNode->Add( std::make_unique<SEGMENT>( seg ) ) )
-                lastItem = &seg;
+            std::unique_ptr<SEGMENT> sp = std::make_unique<SEGMENT>( seg );
+            lastItem = sp.get();
+
+            if( !m_lastNode->Add( std::move( sp ) ) )
+                lastItem = nullptr;
         }
         else
         {
@@ -1356,8 +1359,10 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
             arc.SetWidth( pl.Width() );
             arc.SetLayer( m_currentLayer );
 
-            m_lastNode->Add( std::make_unique<ARC>( arc ) );
-            lastItem = &arc;
+            std::unique_ptr<ARC> ap = std::make_unique<ARC>( arc );
+            lastItem = ap.get();
+
+            m_lastNode->Add( std::move( ap ) );
             lastArc  = arcIndex;
         }
     }
