@@ -27,6 +27,8 @@
 #ifndef EDA_ITEM_FLAGS_H
 #define EDA_ITEM_FLAGS_H
 
+#include <cstdint>
+
 // These define are used for the .m_flags and .m_UndoRedoStatus member of the
 // class EDA_ITEM
 //
