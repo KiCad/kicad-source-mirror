@@ -76,6 +76,7 @@ KICAD2MCAD_PRMS::KICAD2MCAD_PRMS()
     m_useGridOrigin = false;
     m_useDrillOrigin = false;
     m_includeVirtual = true;
+    m_substModels = false;
     m_xOrigin = 0.0;
     m_yOrigin = 0.0;
     m_minDistance = MIN_DISTANCE;
@@ -110,7 +111,10 @@ static const wxCmdLineEntryDesc cmdLineDesc[] =
             _( "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)" ).mb_str(),
             wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
         { wxCMD_LINE_SWITCH, NULL, "no-virtual",
-            _( "exclude 3D models for components with 'virtual' attribute" ).mb_str(),
+            _( "Exclude 3D models for components with 'virtual' attribute" ).mb_str(),
+            wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+        { wxCMD_LINE_SWITCH, NULL, "subst-models",
+            _( "Substitute STEP or IGS models with the same name in place of VRML models" ).mb_str(),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
         { wxCMD_LINE_OPTION, NULL, "min-distance",
             _( "Minimum distance between points to treat them as separate ones (default 0.01 mm)" ).mb_str(),
@@ -204,6 +208,9 @@ bool KICAD2MCAD_APP::OnCmdLineParsed( wxCmdLineParser& parser )
 
     if( parser.Found( "no-virtual" ) )
         m_params.m_includeVirtual = false;
+
+    if( parser.Found( "subst-models" ) )
+        m_params.m_substModels = true;
 
     wxString tstr;
 
@@ -388,7 +395,7 @@ int PANEL_KICAD2STEP::RunConverter()
         {
             ReportMessage( "Build STEP data\n" );
 
-            res = pcb.ComposePCB( m_params.m_includeVirtual );
+            res = pcb.ComposePCB( m_params.m_includeVirtual, m_params.m_substModels );
 
             if( !res )
             {

@@ -496,7 +496,7 @@ bool KICADPCB::parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType )
 }
 
 
-bool KICADPCB::ComposePCB( bool aComposeVirtual )
+bool KICADPCB::ComposePCB( bool aComposeVirtual, bool aSubstituteModels )
 {
     if( m_pcb_model )
         return true;
@@ -554,7 +554,7 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual )
     }
 
     for( auto i : m_footprints )
-        i->ComposePCB( m_pcb_model, &m_resolver, origin, aComposeVirtual );
+        i->ComposePCB( m_pcb_model, &m_resolver, origin, aComposeVirtual, aSubstituteModels );
 
     ReportMessage( "Create PCB solid model\n" );
 

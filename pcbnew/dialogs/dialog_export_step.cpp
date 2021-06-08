@@ -89,6 +89,11 @@ protected:
         return m_cbRemoveVirtual->GetValue();
     }
 
+    bool GetSubstOption()
+    {
+        return m_cbSubstModels->GetValue();
+    }
+
     bool GetOverwriteFile()
     {
         return m_cbOverwriteFile->GetValue();
@@ -310,6 +315,9 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     if( GetNoVirtOption() )
         cmdK2S.Append( " --no-virtual" );
+
+    if( GetSubstOption() )
+        cmdK2S.Append( " --subst-models" );
 
     switch( orgOpt )
     {

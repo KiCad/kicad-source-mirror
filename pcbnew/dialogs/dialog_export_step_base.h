@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,6 +57,7 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		TEXT_CTRL_EVAL* m_STEP_Yorg;
 		wxStaticText* m_staticText7;
 		wxCheckBox* m_cbRemoveVirtual;
+		wxCheckBox* m_cbSubstModels;
 		wxCheckBox* m_cbOverwriteFile;
 		wxStaticLine* m_staticline3;
 		wxStaticText* m_staticText9;
@@ -67,7 +68,7 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onUpdateUnits( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateXPos( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateYPos( wxUpdateUIEvent& event ) { event.Skip(); }

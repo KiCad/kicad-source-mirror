@@ -72,7 +72,7 @@ public:
     bool Read( SEXPR::SEXPR* aEntry );
 
     bool ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
-        DOUBLET aOrigin, bool aComposeVirtual = true );
+        DOUBLET aOrigin, bool aComposeVirtual = true, bool aSubstituteModels = true );
 };
 
 #endif  // KICADFOOTPRINT_H

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -135,6 +135,11 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	m_cbRemoveVirtual = new wxCheckBox( this, wxID_ANY, _("Ignore virtual components"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_cbRemoveVirtual, 0, wxALL, 5 );
+
+	m_cbSubstModels = new wxCheckBox( this, wxID_ANY, _("Substitute similarly named models"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbSubstModels->SetToolTip( _("Replace VRML models with STEP models of the same name") );
+
+	bSizer8->Add( m_cbSubstModels, 0, wxALL, 5 );
 
 	m_cbOverwriteFile = new wxCheckBox( this, wxID_ANY, _("Overwrite old file"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_cbOverwriteFile, 0, wxALL, 5 );

@@ -112,7 +112,7 @@ public:
     }
 
     bool ReadFile( const wxString& aFileName );
-    bool ComposePCB( bool aComposeVirtual = true );
+    bool ComposePCB( bool aComposeVirtual = true, bool aSubstituteModels = true );
     bool WriteSTEP( const wxString& aFileName );
     #ifdef SUPPORTS_IGES
     bool WriteIGES( const wxString& aFileName );

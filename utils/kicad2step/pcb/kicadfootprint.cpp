@@ -341,7 +341,7 @@ bool KICADFOOTPRINT::parsePad( SEXPR::SEXPR* data )
 
 
 bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
-                                 DOUBLET aOrigin, bool aComposeVirtual )
+                                 DOUBLET aOrigin, bool aComposeVirtual, bool aSubstituteModels )
 {
     // translate pads and curves to final position and append to PCB.
     double dlim = (double)std::numeric_limits< float >::epsilon();
@@ -423,7 +423,7 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
         try
         {
             if( aPCB->AddComponent( fname, m_refdes, LAYER_BOTTOM == m_side ? true : false,
-                newpos, m_rotation, i->m_offset, i->m_rotation, i->m_scale ) )
+                newpos, m_rotation, i->m_offset, i->m_rotation, i->m_scale, aSubstituteModels ) )
                 hasdata = true;
         }
         catch( const Standard_Failure& e)

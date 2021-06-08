@@ -603,7 +603,8 @@ bool PCBMODEL::AddPadHole( const KICADPAD* aPad )
 // add a component at the given position and orientation
 bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aRefDes,
     bool aBottom, DOUBLET aPosition, double aRotation,
-    TRIPLET aOffset, TRIPLET aOrientation, TRIPLET aScale )
+    TRIPLET aOffset, TRIPLET aOrientation, TRIPLET aScale,
+    bool aSubstituteModels )
 {
     if( aFileName.empty() )
     {
@@ -616,7 +617,7 @@ bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aR
     // first retrieve a label
     TDF_Label lmodel;
 
-    if( !getModelLabel( aFileName, aScale, lmodel ) )
+    if( !getModelLabel( aFileName, aScale, lmodel, aSubstituteModels ) )
     {
         ReportMessage( wxString::Format( "no model for filename %s\n", aFileName ) );
         return false;
@@ -972,7 +973,7 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
 }
 
 
-bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel )
+bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel, bool aSubstituteModels )
 {
     std::string model_key = aFileName + "_" + std::to_string( aScale.x )
                             + "_" + std::to_string( aScale.y ) + "_" + std::to_string( aScale.z );
@@ -1089,6 +1090,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
              * for THAT file will be associated with the .wrl file
              *
              */
+            if( aSubstituteModels )
             {
                 wxFileName wrlName( aFileName );
 
@@ -1128,7 +1130,13 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
                     {
                         std::string altFileName = altFile.GetFullPath().ToStdString();
 
-                        if( getModelLabel( altFileName, aScale, aLabel ) )
+                        // When substituting a STEP/IGS file for VRML, do not apply the VRML scaling
+                        // to the new STEP model.  This process of auto-substitution is janky as all heck
+                        // so let's not mix up un-displayed scale factors with potentially mis-matched
+                        // files.  And hope that the user doesn't have multiples files named "model.wrl" and
+                        // "model.stp" referring to different parts.
+                        // TODO: Fix model handling in v7.  Default models should only be STP.  Have option to override this in DISPLAY
+                        if( getModelLabel( altFileName, TRIPLET( 1.0, 1.0, 1.0 ), aLabel, false ) )
                         {
                             return true;
                         }

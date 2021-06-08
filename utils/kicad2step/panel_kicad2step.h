@@ -49,6 +49,7 @@ public:
     bool     m_useGridOrigin;
     bool     m_useDrillOrigin;
     bool     m_includeVirtual;
+    bool     m_substModels;
     wxString m_filename;
     wxString m_outputFile;
     double   m_xOrigin;
