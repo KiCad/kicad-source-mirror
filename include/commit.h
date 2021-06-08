@@ -30,7 +30,7 @@
 
 #include <set>
 #include <vector>
-
+#include <wx/string.h>
 #include <undo_redo_container.h>
 
 class EDA_ITEM;

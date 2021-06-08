@@ -58,9 +58,17 @@ ITEM_PICKER::ITEM_PICKER( BASE_SCREEN* aScreen, EDA_ITEM* aItem, UNDO_REDO aUndo
 }
 
 
+void ITEM_PICKER::SetItem( EDA_ITEM* aItem )
+{
+    m_pickedItem = aItem;
+    m_pickedItemType = aItem ? aItem->Type() : TYPE_NOT_INIT;
+}
+
+
 PICKED_ITEMS_LIST::PICKED_ITEMS_LIST()
 {
 }
+
 
 PICKED_ITEMS_LIST::~PICKED_ITEMS_LIST()
 {

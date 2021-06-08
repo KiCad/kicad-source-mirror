@@ -25,14 +25,16 @@
 
 #ifndef _CLASS_UNDOREDO_CONTAINER_H
 #define _CLASS_UNDOREDO_CONTAINER_H
+
+#include <core/typeinfo.h>
 #include <vector>
 
-#include <eda_item.h>
-
-
+class EDA_ITEM;
 class PICKED_ITEMS_LIST;
 class BASE_SCREEN;
 
+// forward declaration to avoid eda_item.h for now
+typedef unsigned STATUS_FLAGS;
 
 /**
  * Undo Redo considerations:
@@ -82,11 +84,7 @@ public:
 
     EDA_ITEM* GetItem() const { return m_pickedItem; }
 
-    void SetItem( EDA_ITEM* aItem )
-    {
-        m_pickedItem = aItem;
-        m_pickedItemType = aItem ? aItem->Type() : TYPE_NOT_INIT;
-    }
+    void SetItem( EDA_ITEM* aItem );
 
     KICAD_T GetItemType() const { return m_pickedItemType; }
 
