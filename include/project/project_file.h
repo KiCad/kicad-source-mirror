@@ -101,22 +101,10 @@ protected:
 
     wxString getLegacyFileExt() const override;
 
-private:
-
-    /// An list of schematic sheets in this project
-    std::vector<FILE_INFO_PAIR> m_sheets;
-
-    /// A list of board files in this project
-    std::vector<FILE_INFO_PAIR> m_boards;
-
-    /// A link to the owning PROJECT
-    PROJECT* m_project;
-
     /**
      * Below are project-level settings that have not been moved to a dedicated file
      */
 public:
-
     /**
      * Shared params, used by more than one application
      */
@@ -179,6 +167,16 @@ public:
 
     /// List of stored layer presets
     std::vector<LAYER_PRESET> m_LayerPresets;
+
+private:
+    /// An list of schematic sheets in this project
+    std::vector<FILE_INFO_PAIR> m_sheets;
+
+    /// A list of board files in this project
+    std::vector<FILE_INFO_PAIR> m_boards;
+
+    /// A link to the owning PROJECT
+    PROJECT* m_project;
 };
 
 // Specializations to allow directly reading/writing FILE_INFO_PAIRs from JSON

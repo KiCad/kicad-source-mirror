@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,12 +101,12 @@ public:
      *
      * @param aOutputString is a wxString to store the S expr string
      */
-    void SaveInString( wxString& aOutputString );
+    void SaveInString( const wxString& aOutputString );
 
     /**
      * Fill the given string with an S-expr serialization of the WS_DATA_ITEMs.
      */
-    void SaveInString( std::vector<DS_DATA_ITEM*> aItemsList, wxString& aOutputString );
+    void SaveInString( std::vector<DS_DATA_ITEM*>& aItemsList, const wxString& aOutputString );
 
     void Append( DS_DATA_ITEM* aItem );
     void Remove( DS_DATA_ITEM* aItem );
@@ -212,8 +212,6 @@ private:
     double m_rightMargin;           // the right page margin in mm
     double m_topMargin;             // the top page margin in mm
     double m_bottomMargin;          // the bottom page margin in mm
-
-
 };
 
 #endif      // DS_DATA_MODEL_H

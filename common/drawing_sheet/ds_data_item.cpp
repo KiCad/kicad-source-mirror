@@ -62,7 +62,6 @@
 using KIGFX::COLOR4D;
 
 
-// The constructor:
 DS_DATA_ITEM::DS_DATA_ITEM( DS_ITEM_TYPE aType )
 {
     m_pageOption = ALL_PAGES;
@@ -144,13 +143,7 @@ int DS_DATA_ITEM::GetPenSizeUi()
 }
 
 
-// move item to aPosition
-// starting point is moved to aPosition
-// the Ending point is moved to a position which keeps the item size
-// (if both coordinates have the same corner reference)
-// MoveToUi and MoveTo takes the graphic position (i.e relative to the left top
-// paper corner
-void DS_DATA_ITEM::MoveToUi( wxPoint aPosition )
+void DS_DATA_ITEM::MoveToUi( const wxPoint& aPosition )
 {
     DPOINT pos_mm;
     pos_mm.x = aPosition.x / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
@@ -160,7 +153,7 @@ void DS_DATA_ITEM::MoveToUi( wxPoint aPosition )
 }
 
 
-void DS_DATA_ITEM::MoveTo( DPOINT aPosition )
+void DS_DATA_ITEM::MoveTo( const DPOINT& aPosition )
 {
     DPOINT vector = aPosition - GetStartPos();
     DPOINT endpos = vector + GetEndPos();
@@ -176,10 +169,7 @@ void DS_DATA_ITEM::MoveTo( DPOINT aPosition )
 }
 
 
-/* move the starting point of the item to a new position
- * aPosition = the new position of the starting point, in mm
- */
-void DS_DATA_ITEM::MoveStartPointTo( DPOINT aPosition )
+void DS_DATA_ITEM::MoveStartPointTo( const DPOINT& aPosition )
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
     DPOINT         position;
@@ -212,10 +202,7 @@ void DS_DATA_ITEM::MoveStartPointTo( DPOINT aPosition )
 }
 
 
-/* move the starting point of the item to a new position
- * aPosition = the new position of the starting point in graphic units
- */
-void DS_DATA_ITEM::MoveStartPointToUi( wxPoint aPosition )
+void DS_DATA_ITEM::MoveStartPointToUi( const wxPoint& aPosition )
 {
     DPOINT pos_mm( aPosition.x / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu,
                    aPosition.y / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
@@ -224,13 +211,7 @@ void DS_DATA_ITEM::MoveStartPointToUi( wxPoint aPosition )
 }
 
 
-/**
- * move the ending point of the item to a new position
- * has meaning only for items defined by 2 points
- * (segments and rectangles)
- * aPosition = the new position of the ending point, in mm
- */
-void DS_DATA_ITEM::MoveEndPointTo( DPOINT aPosition )
+void DS_DATA_ITEM::MoveEndPointTo( const DPOINT& aPosition )
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
     DPOINT         position;
@@ -273,12 +254,7 @@ void DS_DATA_ITEM::MoveEndPointTo( DPOINT aPosition )
 }
 
 
-/* move the ending point of the item to a new position
- * has meaning only for items defined by 2 points
- * (segments and rectangles)
- * aPosition = the new position of the ending point in graphic units
- */
-void DS_DATA_ITEM::MoveEndPointToUi( wxPoint aPosition )
+void DS_DATA_ITEM::MoveEndPointToUi( const wxPoint& aPosition )
 {
     DPOINT pos_mm;
     pos_mm.x = aPosition.x / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;

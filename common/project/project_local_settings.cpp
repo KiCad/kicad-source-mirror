@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -30,8 +31,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         JSON_SETTINGS( aFilename, SETTINGS_LOC::PROJECT, projectLocalSettingsVersion,
                        /* aCreateIfMissing = */ true, /* aCreateIfDefault = */ false,
                        /* aWriteFile = */ true ),
-        m_project( aProject ),
-        m_SelectionFilter()
+        m_SelectionFilter(),
+        m_project( aProject )
 {
     m_params.emplace_back( new PARAM_LAMBDA<std::string>( "board.visible_layers",
             [&]() -> std::string

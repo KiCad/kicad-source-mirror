@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -372,14 +373,14 @@ void VIEW_OVERLAY::SetIsFill( bool aIsFillEnabled )
 }
 
 
-void VIEW_OVERLAY::SetGlyphSize( const VECTOR2D aSize )
+void VIEW_OVERLAY::SetGlyphSize( const VECTOR2D& aSize )
 {
     m_commands.push_back( new COMMAND_GLYPH_SIZE( aSize ) );
 }
 
 
 void VIEW_OVERLAY::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
-                             double aRotationAngle )
+                               double aRotationAngle )
 {
     m_commands.push_back( new COMMAND_BITMAP_TEXT( aText, aPosition, aRotationAngle ) );
 }

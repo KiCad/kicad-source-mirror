@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ class POINT_COORD
 public:
     POINT_COORD() { m_Anchor = RB_CORNER; }
 
-    POINT_COORD( DPOINT aPos, enum CORNER_ANCHOR aAnchor = RB_CORNER )
+    POINT_COORD( const DPOINT& aPos, enum CORNER_ANCHOR aAnchor = RB_CORNER )
     {
         m_Pos = aPos;
         m_Anchor = aAnchor;
@@ -103,7 +103,6 @@ public:
         DS_BITMAP
     };
 
-public:
     DS_DATA_ITEM( DS_ITEM_TYPE aType );
 
     virtual ~DS_DATA_ITEM();
@@ -147,28 +146,28 @@ public:
      *
      * @param aPosition the new position of item, in mm.
      */
-    void MoveTo( DPOINT aPosition );
+    void MoveTo( const DPOINT& aPosition );
 
     /**
      * Move item to a new position.
      *
      * @param aPosition the new position of the starting point in graphic units.
      */
-    void MoveToUi( wxPoint aPosition );
+    void MoveToUi( const wxPoint& aPosition );
 
     /**
      * Move the starting point of the item to a new position.
      *
      * @param aPosition the new position of the starting point, in mm.
      */
-    void MoveStartPointTo( DPOINT aPosition );
+    void MoveStartPointTo( const DPOINT& aPosition );
 
     /**
      * Move the starting point of the item to a new position.
      *
      * @param aPosition is the new position of item in graphic units.
      */
-    void MoveStartPointToUi( wxPoint aPosition );
+    void MoveStartPointToUi( const wxPoint& aPosition );
 
 
     /**
@@ -178,7 +177,7 @@ public:
      *
      * @param aPosition is the new position of the ending point, in mm.
      */
-    void MoveEndPointTo( DPOINT aPosition );
+    void MoveEndPointTo( const DPOINT& aPosition );
 
     /**
      * Move the ending point of the item to a new position.
@@ -187,7 +186,7 @@ public:
      *
      * @param aPosition is the new position of the ending point in graphic units
      */
-    void MoveEndPointToUi( wxPoint aPosition );
+    void MoveEndPointToUi( const wxPoint& aPosition );
 
     /**
      * @return true if the item is inside the rectangle defined by the 4 corners, false otherwise.
@@ -196,13 +195,6 @@ public:
 
     const wxString GetClassName() const;
 
-protected:
-    DS_ITEM_TYPE   m_type;
-    PAGE_OPTION    m_pageOption;
-
-    std::vector<DS_DRAW_ITEM_BASE*> m_drawItems;
-
-public:
     wxString       m_Name;               // a name used in drawing sheet editor to identify items
     wxString       m_Info;               // a comment, only useful in drawing sheet editor
     POINT_COORD    m_Pos;
@@ -211,6 +203,12 @@ public:
     int            m_RepeatCount;        // repeat count for duplicate items
     DPOINT         m_IncrementVector;    // for duplicate items: move vector for position increment
     int            m_IncrementLabel;
+
+protected:
+    DS_ITEM_TYPE   m_type;
+    PAGE_OPTION    m_pageOption;
+
+    std::vector<DS_DRAW_ITEM_BASE*> m_drawItems;
 };
 
 
@@ -234,7 +232,7 @@ public:
     }
 
     /**
-     * Closes the current contour, by storing the index of the last corner of the current
+     * Close the current contour, by storing the index of the last corner of the current
      * polygon in m_polyIndexEnd.
      */
     void CloseContour()
@@ -251,7 +249,7 @@ public:
      * @param aContour is the index of the contour.
      * @return the index of the first corner of the contour \a aCountour.
      */
-    unsigned GetPolyIndexStart( unsigned aContour) const
+    unsigned GetPolyIndexStart( unsigned aContour ) const
     {
         if( aContour == 0 )
             return 0;
@@ -263,7 +261,7 @@ public:
      * @param aContour is the index of the contour.
      * @return the index of the last corner of the contour \a aCountour.
      */
-    unsigned GetPolyIndexEnd( unsigned aContour) const
+    unsigned GetPolyIndexEnd( unsigned aContour ) const
     {
         return m_polyIndexEnd[aContour];
     }
@@ -325,7 +323,6 @@ public:
      * the corresponding text size is not constrained
      */
     void SetConstrainedTextSize();
-
 
     /**
      * Replace the '\''n' sequence by EOL and the sequence  '\''\' by only one '\'

@@ -323,7 +323,7 @@ public:
      * @param aCenter: the new center point, in world space coordinates.
      * @param occultingScreenRect: the occulting rect, in screen space coordinates.
      */
-    void SetCenter( VECTOR2D aCenter, const BOX2D& occultingScreenRect );
+    void SetCenter( const VECTOR2D& aCenter, const BOX2D& occultingScreenRect );
 
     /**
      * Return the center point of this VIEW (in world space coordinates).

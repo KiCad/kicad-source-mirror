@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -51,34 +51,32 @@ static const char* getTokenName( T aTok )
 // Therefore the constructor is protected.
 class DS_DATA_MODEL_IO
 {
-protected:
-    OUTPUTFORMATTER* m_out;
-
-    DS_DATA_MODEL_IO() { m_out = NULL; }
-    virtual ~DS_DATA_MODEL_IO() {}
-
 public:
     void Format( DS_DATA_MODEL* aDrawingSheet ) const;
 
     void Format( DS_DATA_MODEL* aModel, DS_DATA_ITEM* aItem, int aNestLevel ) const;
 
+protected:
+    DS_DATA_MODEL_IO() { m_out = NULL; }
+    virtual ~DS_DATA_MODEL_IO() {}
+
 private:
     void format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const;
     void format( DS_DATA_MODEL* aModel, DS_DATA_ITEM* aItem, int aNestLevel ) const;
-    void format( DS_DATA_ITEM_POLYGONS* aItem, int aNestLevel )
-                 const;
+    void format( DS_DATA_ITEM_POLYGONS* aItem, int aNestLevel ) const;
     void format( DS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) const;
-    void formatCoordinate( const char * aToken, POINT_COORD & aCoord ) const;
+    void formatCoordinate( const char* aToken, POINT_COORD& aCoord ) const;
     void formatRepeatParameters( DS_DATA_ITEM* aItem ) const;
     void formatOptions( DS_DATA_ITEM* aItem ) const;
+
+protected:
+    OUTPUTFORMATTER* m_out;
 };
 
 
 // A helper class to write a drawing sheet to a file
 class DS_DATA_MODEL_FILEIO : public DS_DATA_MODEL_IO
 {
-    FILE_OUTPUTFORMATTER * m_fileout;
-
 public:
     DS_DATA_MODEL_FILEIO( const wxString& aFilename ) :
             DS_DATA_MODEL_IO()
@@ -98,18 +96,19 @@ public:
     {
         delete m_fileout;
     }
+
+private:
+    FILE_OUTPUTFORMATTER* m_fileout;
 };
 
 
 // A helper class to write a drawing sheet to a string
 class DS_DATA_MODEL_STRINGIO : public DS_DATA_MODEL_IO
 {
-    STRING_FORMATTER * m_writer;
-    wxString & m_output;
-
 public:
-    DS_DATA_MODEL_STRINGIO( wxString& aOutputString ) :
-            DS_DATA_MODEL_IO(), m_output( aOutputString )
+    DS_DATA_MODEL_STRINGIO( const wxString& aOutputString ) :
+            DS_DATA_MODEL_IO(),
+            m_output( aOutputString )
     {
         try
         {
@@ -127,12 +126,13 @@ public:
         m_output = FROM_UTF8( m_writer->GetString().c_str() );
         delete m_writer;
     }
+
+private:
+    STRING_FORMATTER* m_writer;
+    wxString m_output;
 };
 
 
-/*
- * Save the description in a file
- */
 void DS_DATA_MODEL::Save( const wxString& aFullFileName )
 {
     DS_DATA_MODEL_FILEIO writer( aFullFileName );
@@ -140,16 +140,15 @@ void DS_DATA_MODEL::Save( const wxString& aFullFileName )
 }
 
 
-/* Save the description in a buffer
- */
-void DS_DATA_MODEL::SaveInString( wxString& aOutputString )
+void DS_DATA_MODEL::SaveInString( const wxString& aOutputString )
 {
     DS_DATA_MODEL_STRINGIO writer( aOutputString );
     writer.Format( this );
 }
 
 
-void DS_DATA_MODEL::SaveInString( std::vector<DS_DATA_ITEM*> aItemsList, wxString& aOutputString )
+void DS_DATA_MODEL::SaveInString( std::vector<DS_DATA_ITEM*>& aItemsList,
+                                  const wxString& aOutputString )
 {
     DS_DATA_MODEL_STRINGIO writer( aOutputString );
 
@@ -311,6 +310,7 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
     m_out->Print( 0, ")\n" );
 }
 
+
 void DS_DATA_MODEL_IO::format( DS_DATA_MODEL* aModel, DS_DATA_ITEM* aItem, int aNestLevel ) const
 {
     if( aItem->GetType() == DS_DATA_ITEM::DS_RECT )
@@ -421,8 +421,7 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) cons
 }
 
 
-void DS_DATA_MODEL_IO::formatCoordinate( const char * aToken,
-                                         POINT_COORD & aCoord ) const
+void DS_DATA_MODEL_IO::formatCoordinate( const char * aToken, POINT_COORD & aCoord ) const
 {
     m_out->Print( 0, " (%s %s %s", aToken,
                   double2Str( aCoord.m_Pos.x ).c_str(),

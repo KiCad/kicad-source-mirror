@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -46,7 +47,7 @@ public:
      * A map of fully-qualified net names to colors used in the board context.
      * Since these color overrides are for the board, buses are not included here.
      * Only nets that the user has assigned custom colors to will be in this list.
-     * Nets that no longer exist will be deleted during a netlist read in PcbNew.
+     * Nets that no longer exist will be deleted during a netlist read in Pcbnew.
      */
     std::map<wxString, KIGFX::COLOR4D> m_PcbNetColors;
 
@@ -54,8 +55,9 @@ public:
     const wxString& GetNetclassName( const wxString& aNetName ) const;
 
     /**
-     * Parses a bus vector (e.g. A[7..0]) into name, begin, and end.
-     * Ensures that begin and end are positive and that end > begin.
+     * Parse a bus vector (e.g. A[7..0]) into name, begin, and end.
+     *
+     * Ensure that begin and end are positive and that end > begin.
      *
      * @param aBus is a bus vector label string
      * @param aName out is the bus name, e.g. "A"
@@ -66,18 +68,18 @@ public:
                                 std::vector<wxString>* aMemberList );
 
     /**
-     * Parses a bus group label into the name and a list of components.
+     * Parse a bus group label into the name and a list of components.
      *
      * @param aGroup is the input label, e.g. "USB{DP DM}"
      * @param name is the output group name, e.g. "USB"
      * @param aMemberList is a list of member strings, e.g. "DP", "DM"
      * @return true if aGroup was successfully parsed
      */
-    static bool ParseBusGroup( wxString aGroup, wxString* name,
+    static bool ParseBusGroup( const wxString& aGroup, wxString* name,
                                std::vector<wxString>* aMemberList );
 
     /**
-     * Explodes the list of netclass assignments to include atomic members of composite labels
+     * Explode the list of netclass assignments to include atomic members of composite labels
      * (buses).
      *
      * @param aRebuildFromScratch indicates the assignments should be rebuilt from the netclass

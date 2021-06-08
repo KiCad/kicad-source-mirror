@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -26,15 +27,19 @@
 #include <kicad_string.h>
 #include <convert_to_biu.h>
 
+
 const int netSettingsSchemaVersion = 0;
 
-static OPT<int> getInPcbUnits( const nlohmann::json& aObj, const std::string& aKey, OPT<int> aDefault = OPT<int>() )
+
+static OPT<int> getInPcbUnits( const nlohmann::json& aObj, const std::string& aKey,
+                               OPT<int> aDefault = OPT<int>() )
 {
     if( aObj.contains( aKey ) && aObj[aKey].is_number() )
         return PcbMillimeter2iu( aObj[aKey].get<double>() );
     else
         return aDefault;
 };
+
 
 NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
         NESTED_SETTINGS( "net_settings", netSettingsSchemaVersion, aParent, aPath ),
@@ -69,31 +74,40 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
 
 
                     if( netclass->HasClearance() )
-                        netclassJson.push_back( { "clearance",         PcbIu2Millimeter( netclass->GetClearance() ) } );
+                        netclassJson.push_back( { "clearance",
+                                PcbIu2Millimeter( netclass->GetClearance() ) } );
 
                     if( netclass->HasTrackWidth() )
-                        netclassJson.push_back( { "track_width",       PcbIu2Millimeter( netclass->GetTrackWidth() ) } );
+                        netclassJson.push_back( { "track_width",
+                                PcbIu2Millimeter( netclass->GetTrackWidth() ) } );
 
                     if( netclass->HasViaDiameter() )
-                        netclassJson.push_back( { "via_diameter",      PcbIu2Millimeter( netclass->GetViaDiameter() ) } );
+                        netclassJson.push_back( { "via_diameter",
+                                PcbIu2Millimeter( netclass->GetViaDiameter() ) } );
 
                     if( netclass->HasViaDrill() )
-                        netclassJson.push_back( { "via_drill",         PcbIu2Millimeter( netclass->GetViaDrill() ) } );
+                        netclassJson.push_back( { "via_drill",
+                                PcbIu2Millimeter( netclass->GetViaDrill() ) } );
 
                     if( netclass->HasuViaDiameter() )
-                        netclassJson.push_back( { "microvia_diameter", PcbIu2Millimeter( netclass->GetuViaDiameter() ) } );
+                        netclassJson.push_back( { "microvia_diameter",
+                                PcbIu2Millimeter( netclass->GetuViaDiameter() ) } );
 
                     if( netclass->HasuViaDrill() )
-                        netclassJson.push_back( { "microvia_drill",    PcbIu2Millimeter( netclass->GetuViaDrill() ) } );
+                        netclassJson.push_back( { "microvia_drill",
+                                PcbIu2Millimeter( netclass->GetuViaDrill() ) } );
 
                     if( netclass->HasDiffPairWidth() )
-                        netclassJson.push_back( { "diff_pair_width",   PcbIu2Millimeter( netclass->GetDiffPairWidth() ) } );
+                        netclassJson.push_back( { "diff_pair_width",
+                                PcbIu2Millimeter( netclass->GetDiffPairWidth() ) } );
 
                     if( netclass->HasDiffPairGap() )
-                        netclassJson.push_back( { "diff_pair_gap",     PcbIu2Millimeter( netclass->GetDiffPairGap() ) } );
+                        netclassJson.push_back( { "diff_pair_gap",
+                                PcbIu2Millimeter( netclass->GetDiffPairGap() ) } );
 
                     if( netclass->HasDiffPairViaGap() )
-                        netclassJson.push_back( { "diff_pair_via_gap", PcbIu2Millimeter( netclass->GetDiffPairViaGap() ) } );
+                        netclassJson.push_back( { "diff_pair_via_gap",
+                                PcbIu2Millimeter( netclass->GetDiffPairViaGap() ) } );
 
                     if( idx > 0 )   // No need to store members of Default netclass
                     {
@@ -188,8 +202,10 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                     if( entry.contains( "pcb_color" ) && entry["pcb_color"].is_string() )
                         netclass->SetPcbColor( entry["pcb_color"].get<KIGFX::COLOR4D>() );
 
-                    if( entry.contains( "schematic_color" ) && entry["schematic_color"].is_string() )
-                        netclass->SetSchematicColor( entry["schematic_color"].get<KIGFX::COLOR4D>() );
+                    if( entry.contains( "schematic_color" )
+                      && entry["schematic_color"].is_string() )
+                        netclass->SetSchematicColor(
+                                entry["schematic_color"].get<KIGFX::COLOR4D>() );
 
                     if( netclass != defaultClass )
                         m_NetClasses.Add( netclass );
@@ -397,7 +413,7 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
 }
 
 
-bool NET_SETTINGS::ParseBusGroup( wxString aGroup, wxString* aName,
+bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
                                   std::vector<wxString>* aMemberList )
 {
     size_t   groupLen = aGroup.length();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +65,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    virtual void SetEnd( wxPoint aPos ) { /* not all types will need this */ }
+    virtual void SetEnd( const wxPoint& aPos ) { /* not all types will need this */ }
 
     virtual int GetPenWidth() const
     {
@@ -131,9 +131,9 @@ public:
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_LINE" ); }
 
     const wxPoint&  GetStart() const { return m_start; }
-    void SetStart( wxPoint aPos ) { m_start = aPos; }
+    void SetStart( const wxPoint& aPos ) { m_start = aPos; }
     const wxPoint&  GetEnd() const { return m_end; }
-    void SetEnd( wxPoint aPos ) override { m_end = aPos; }
+    void SetEnd( const wxPoint& aPos ) override { m_end = aPos; }
 
     wxPoint GetPosition() const override { return GetStart(); }
     void SetPosition( const wxPoint& aPos ) override { SetStart( aPos ); }
@@ -217,9 +217,9 @@ public:
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_RECT" ); }
 
     const wxPoint&  GetStart() const { return m_start; }
-    void SetStart( wxPoint aPos ) { m_start = aPos; }
+    void SetStart( const wxPoint& aPos ) { m_start = aPos; }
     const wxPoint&  GetEnd() const { return m_end; }
-    void SetEnd( wxPoint aPos ) override { m_end = aPos; }
+    void SetEnd( const wxPoint& aPos ) override { m_end = aPos; }
 
     wxPoint GetPosition() const override { return GetStart(); }
     void SetPosition( const wxPoint& aPos ) override { SetStart( aPos ); }
@@ -261,10 +261,10 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_PAGE" ); }
 
-    void SetPageSize( wxSize aSize ) { m_pageSize = aSize; }
+    void SetPageSize( const wxSize& aSize ) { m_pageSize = aSize; }
     wxSize GetPageSize() const { return m_pageSize; }
     const wxPoint& GetMarkerPos() const { return m_markerPos; }
-    void SetMarkerPos( wxPoint aPos ) { m_markerPos = aPos; }
+    void SetMarkerPos( const wxPoint& aPos ) { m_markerPos = aPos; }
     double GetMarkerSize() const { return m_markerSize; }
 
     wxPoint GetPosition() const override { return wxPoint( 0, 0 ); }
@@ -297,8 +297,8 @@ private:
 class DS_DRAW_ITEM_TEXT : public DS_DRAW_ITEM_BASE, public EDA_TEXT
 {
 public:
-    DS_DRAW_ITEM_TEXT( DS_DATA_ITEM* aPeer, int aIndex, wxString& aText, wxPoint aPos,
-                       wxSize aSize, int aPenWidth, bool aItalic = false,
+    DS_DRAW_ITEM_TEXT( DS_DATA_ITEM* aPeer, int aIndex, const wxString& aText, const wxPoint& aPos,
+                       const wxSize& aSize, int aPenWidth, bool aItalic = false,
                        bool aBold = false ) :
             DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_TEXT_T),
             EDA_TEXT( aText )

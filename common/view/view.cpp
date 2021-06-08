@@ -88,19 +88,6 @@ private:
         aCount = m_layers.size();
     }
 
-    VIEW*   m_view;             ///< Current dynamic view the item is assigned to.
-    int     m_flags;            ///< Visibility flags
-    int     m_requiredUpdate;   ///< Flag required for updating
-    int     m_drawPriority;     ///< Order to draw this item in a layer, lowest first
-
-    ///< Helper for storing cached items group ids
-    typedef std::pair<int, int> GroupPair;
-
-    ///< Indexes of cached GAL display lists corresponding to the item (for every layer it.
-    ///<  occupies)(in the std::pair "first" stores layer number, "second" stores group id).
-    GroupPair* m_groups;
-    int        m_groupsSize;
-
     /**
      * Return number of the group id for the given layer, or -1 in case it was not cached before.
      *
@@ -196,10 +183,6 @@ private:
         }
     }
 
-
-    /// Stores layer numbers used by the item.
-    std::vector<int> m_layers;
-
     /**
      * Save layers used by the item.
      *
@@ -242,6 +225,23 @@ private:
     {
         return m_flags == VISIBLE;
     }
+
+
+    VIEW*   m_view;             ///< Current dynamic view the item is assigned to.
+    int     m_flags;            ///< Visibility flags
+    int     m_requiredUpdate;   ///< Flag required for updating
+    int     m_drawPriority;     ///< Order to draw this item in a layer, lowest first
+
+    ///< Helper for storing cached items group ids
+    typedef std::pair<int, int> GroupPair;
+
+    ///< Indexes of cached GAL display lists corresponding to the item (for every layer it.
+    ///<  occupies)(in the std::pair "first" stores layer number, "second" stores group id).
+    GroupPair* m_groups;
+    int        m_groupsSize;
+
+    /// Stores layer numbers used by the item.
+    std::vector<int> m_layers;
 };
 
 
@@ -602,8 +602,9 @@ void VIEW::SetCenter( const VECTOR2D& aCenter )
 }
 
 
-void VIEW::SetCenter( VECTOR2D aCenter, const BOX2D& occultingScreenRect )
+void VIEW::SetCenter( const VECTOR2D& aCenter, const BOX2D& occultingScreenRect )
 {
+    VECTOR2D center( aCenter );
     BOX2D screenRect( VECTOR2D( 0, 0 ), m_gal->GetScreenPixelSize() );
 
     if( !screenRect.Intersects( occultingScreenRect ) )
@@ -621,19 +622,19 @@ void VIEW::SetCenter( VECTOR2D aCenter, const BOX2D& occultingScreenRect )
     if( std::max( topExposed, bottomExposed ) > std::max( leftExposed, rightExposed ) )
     {
         if( topExposed > bottomExposed )
-            aCenter.y += ToWorld( screenRect.GetHeight() / 2 - topExposed / 2 );
+            center.y += ToWorld( screenRect.GetHeight() / 2 - topExposed / 2 );
         else
-            aCenter.y -= ToWorld( screenRect.GetHeight() / 2 - bottomExposed / 2 );
+            center.y -= ToWorld( screenRect.GetHeight() / 2 - bottomExposed / 2 );
     }
     else
     {
         if( leftExposed > rightExposed )
-            aCenter.x += ToWorld( screenRect.GetWidth() / 2 - leftExposed / 2 );
+            center.x += ToWorld( screenRect.GetWidth() / 2 - leftExposed / 2 );
         else
-            aCenter.x -= ToWorld( screenRect.GetWidth() / 2 - rightExposed / 2 );
+            center.x -= ToWorld( screenRect.GetWidth() / 2 - rightExposed / 2 );
     }
 
-    SetCenter( aCenter );
+    SetCenter( center );
 }
 
 
