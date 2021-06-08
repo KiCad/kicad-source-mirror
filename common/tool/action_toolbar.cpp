@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see CHANGELOG.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,8 @@ wxBitmap MakeDisabledBitmap( const wxBitmap& aSource )
 }
 
 
-ACTION_GROUP::ACTION_GROUP( std::string aName, const std::vector<const TOOL_ACTION*>& aActions )
+ACTION_GROUP::ACTION_GROUP( const std::string& aName,
+                            const std::vector<const TOOL_ACTION*>& aActions )
 {
     wxASSERT_MSG( aActions.size() > 0, "Action groups must have at least one action" );
 
@@ -112,7 +113,7 @@ ACTION_TOOLBAR_PALETTE::ACTION_TOOLBAR_PALETTE( wxWindow* aParent, bool aVertica
     m_panel->SetSizer( m_mainSizer );
 
     Connect( wxEVT_CHAR_HOOK, wxCharEventHandler( ACTION_TOOLBAR_PALETTE::onCharHook ),
-             NULL, this );
+             nullptr, this );
 }
 
 
@@ -195,17 +196,16 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
 #endif
 
     Connect( wxEVT_COMMAND_TOOL_CLICKED, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolEvent ),
-             NULL, this );
-    Connect( wxEVT_AUITOOLBAR_RIGHT_CLICK, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolRightClick ),
-             NULL, this );
+             nullptr, this );
+    Connect( wxEVT_AUITOOLBAR_RIGHT_CLICK,
+             wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolRightClick ),
+             nullptr, this );
     Connect( wxEVT_AUITOOLBAR_BEGIN_DRAG, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onItemDrag ),
-             NULL, this );
-    Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ),
-             NULL, this );
-    Connect( wxEVT_LEFT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ),
-             NULL, this );
-    Connect( m_paletteTimer->GetId(), wxEVT_TIMER, wxTimerEventHandler( ACTION_TOOLBAR::onTimerDone ),
-             NULL, this );
+             nullptr, this );
+    Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ), nullptr, this );
+    Connect( wxEVT_LEFT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ), nullptr, this );
+    Connect( m_paletteTimer->GetId(), wxEVT_TIMER,
+             wxTimerEventHandler( ACTION_TOOLBAR::onTimerDone ), nullptr, this );
 }
 
 
@@ -371,10 +371,10 @@ void ACTION_TOOLBAR::UpdateControlWidth( int aID )
     if( wxSizerItem* szrItem = item->GetSizerItem() )
         szrItem->SetMinSize( bestSize );
 
-    // 2. The controls have a second sizer that allows for padding above/below the control with stretch
-    // space, so we also need to update the sizer item for the control in that sizer with the new size.
-    // We let wx do the search for us, since SetItemMinSize is recursive and will locate the control
-    // on that sizer.
+    // 2. The controls have a second sizer that allows for padding above/below the control with
+    // stretch space, so we also need to update the sizer item for the control in that sizer with
+    // the new size.  We let wx do the search for us, since SetItemMinSize is recursive and will
+    // locate the control on that sizer.
     if( m_sizer )
     {
         m_sizer->SetItemMinSize( control, bestSize );
@@ -404,8 +404,7 @@ void ACTION_TOOLBAR::SetToolBitmap( const TOOL_ACTION& aAction, const wxBitmap& 
     int toolId = aAction.GetUIId();
     wxAuiToolBar::SetToolBitmap( toolId, aBitmap );
 
-    // Set the disabled bitmap: we use the disabled bitmap version
-    // of aBitmap.
+    // Set the disabled bitmap: we use the disabled bitmap version of aBitmap.
     wxAuiToolBarItem* tb_item = wxAuiToolBar::FindTool( toolId );
 
     if( tb_item )
@@ -641,8 +640,8 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
     size_t  numActions = group->m_actions.size();
 
     // The size of the palette in the long dimension
-    int paletteLongDim =   ( 2 * PALETTE_BORDER )                  // The border on all sides of the buttons
-                         + ( BUTTON_BORDER )                       // The border on the start of the buttons
+    int paletteLongDim =   ( 2 * PALETTE_BORDER )      // The border on all sides of the buttons
+                         + ( BUTTON_BORDER )           // The border on the start of the buttons
                          + ( numActions * BUTTON_BORDER )          // The other button borders
                          + ( numActions * toolRect.GetHeight() );  // The size of the buttons
 
@@ -651,33 +650,38 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
     {
         case wxAUI_DOCK_TOP:
             // Top toolbars need to shift the palette window down by the toolbar padding
-            dir = true;                                            // Buttons are vertical in the palette
+            dir = true;                                 // Buttons are vertical in the palette
             pos = ClientToScreen( toolRect.GetBottomLeft() );
-            pos += wxPoint( -PALETTE_BORDER,                       // Shift left to align the button edges
-                            m_bottomPadding );                     // Shift down to move away from the toolbar
+            pos += wxPoint( -PALETTE_BORDER,            // Shift left to align the button edges
+                            m_bottomPadding );          // Shift down to move away from the toolbar
             break;
 
         case wxAUI_DOCK_BOTTOM:
-            // Bottom toolbars need to shift the palette window up by its height (all buttons + border + toolbar padding)
-            dir = true;                                            // Buttons are vertical in the palette
+            // Bottom toolbars need to shift the palette window up by its height (all buttons +
+            // border + toolbar padding)
+            dir = true;                                 // Buttons are vertical in the palette
             pos = ClientToScreen( toolRect.GetTopLeft() );
             pos += wxPoint( -PALETTE_BORDER,                       // Shift left to align the button
-                            -( paletteLongDim + m_topPadding ) );  // Shift up by the entire length of the palette
+                            // Shift up by the entire length of the palette.
+                            -( paletteLongDim + m_topPadding ) );
             break;
 
         case wxAUI_DOCK_LEFT:
             // Left toolbars need to shift the palette window up by the toolbar padding
-            dir = false;                                           // Buttons are horizontal in the palette
+            dir = false;                               // Buttons are horizontal in the palette
             pos = ClientToScreen( toolRect.GetTopRight() );
-            pos += wxPoint( m_rightPadding,                        // Shift right to move away from the toolbar
-                            -( PALETTE_BORDER ) );                 // Shift up to align the button tops
+            pos += wxPoint( m_rightPadding,            // Shift right to move away from the toolbar
+                            -( PALETTE_BORDER ) );     // Shift up to align the button tops
             break;
 
         case wxAUI_DOCK_RIGHT:
-            // Right toolbars need to shift the palette window left by its width (all buttons + border + toolbar padding)
-            dir = false;                                           // Buttons are horizontal in the palette
+            // Right toolbars need to shift the palette window left by its width (all buttons +
+            // border + toolbar padding)
+            dir = false;                                // Buttons are horizontal in the palette
             pos = ClientToScreen( toolRect.GetTopLeft() );
-            pos += wxPoint( -( paletteLongDim + m_leftPadding ),   // Shift left by the entire length of the palette
+
+            // Shift left by the entire length of the palette.
+            pos += wxPoint( -( paletteLongDim + m_leftPadding ),
                             -( PALETTE_BORDER  ) );                // Shift up to align the button
             break;
     }
@@ -688,7 +692,7 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
     m_palette->SetGroup( group );
     m_palette->SetButtonSize( toolRect );
     m_palette->Connect( wxEVT_BUTTON, wxCommandEventHandler( ACTION_TOOLBAR::onPaletteEvent ),
-                        NULL, this );
+                        nullptr, this );
 
 
     // Add the actions in the group to the palette and update their enabled state
@@ -725,8 +729,7 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
 }
 
 
-void ACTION_TOOLBAR::OnCustomRender(wxDC& aDc, const wxAuiToolBarItem& aItem,
-                                    const wxRect& aRect )
+void ACTION_TOOLBAR::OnCustomRender(wxDC& aDc, const wxAuiToolBarItem& aItem, const wxRect& aRect )
 {
     auto it = m_actionGroups.find( aItem.GetId() );
 
@@ -766,14 +769,16 @@ void ACTION_TOOLBAR::OnCustomRender(wxDC& aDc, const wxAuiToolBarItem& aItem,
 bool ACTION_TOOLBAR::KiRealize()
 {
     wxClientDC dc( this );
+
     if( !dc.IsOk() )
         return false;
 
     // calculate hint sizes for both horizontal and vertical
     // in the order that leaves toolbar in correct final state
 
-    // however, skip calculating alternate orientations if we dont need them due to window style
+    // however, skip calculating alternate orientations if we don't need them due to window style
     bool retval = true;
+
     if( m_orientation == wxHORIZONTAL )
     {
         if( !( GetWindowStyle() & wxAUI_TB_HORIZONTAL ) )

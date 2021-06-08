@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -46,8 +46,8 @@ class GRID_CELL_TEXT_EDITOR : public wxGridCellTextEditor
 public:
     GRID_CELL_TEXT_EDITOR();
 
-    virtual void SetValidator(const wxValidator& validator) override;
-    virtual void StartingKey(wxKeyEvent& event) override;
+    virtual void SetValidator( const wxValidator& validator ) override;
+    virtual void StartingKey( wxKeyEvent& event ) override;
 
 protected:
     wxScopedPtr<wxValidator> m_validator;
@@ -63,7 +63,7 @@ protected:
 class FOOTPRINT_NAME_VALIDATOR : public wxTextValidator
 {
 public:
-    FOOTPRINT_NAME_VALIDATOR( wxString* aValue = NULL );
+    FOOTPRINT_NAME_VALIDATOR( wxString* aValue = nullptr );
 };
 
 
@@ -76,7 +76,7 @@ public:
 class FILE_NAME_WITH_PATH_CHAR_VALIDATOR : public wxTextValidator
 {
 public:
-    FILE_NAME_WITH_PATH_CHAR_VALIDATOR( wxString* aValue = NULL );
+    FILE_NAME_WITH_PATH_CHAR_VALIDATOR( wxString* aValue = nullptr );
 };
 
 
@@ -91,12 +91,12 @@ public:
 class ENV_VAR_NAME_VALIDATOR : public wxTextValidator
 {
 public:
-    ENV_VAR_NAME_VALIDATOR( wxString* aValue = NULL );
+    ENV_VAR_NAME_VALIDATOR( wxString* aValue = nullptr );
     ENV_VAR_NAME_VALIDATOR( const ENV_VAR_NAME_VALIDATOR& val );
 
     virtual ~ENV_VAR_NAME_VALIDATOR();
 
-    // Make a clone of this validator (or return NULL) - currently necessary
+    // Make a clone of this validator (or return nullptr) - currently necessary
     // if you're passing a reference to a validator.
     virtual wxObject *Clone() const override
     {
@@ -120,7 +120,7 @@ public:
      * @param aRegEx is a regular expression to validate strings.
      * @param aValue is a pointer to a wxString containing the value to validate.
      */
-    REGEX_VALIDATOR( const wxString& aRegEx, wxString* aValue = NULL )
+    REGEX_VALIDATOR( const wxString& aRegEx, wxString* aValue = nullptr )
         : wxTextValidator( wxFILTER_NONE, aValue )
     {
         compileRegEx( aRegEx, wxRE_DEFAULT );
@@ -131,7 +131,7 @@ public:
      * @param aFlags are compilation flags (normally wxRE_DEFAULT).
      * @param aValue is a pointer to a wxString containing the value to validate.
      */
-    REGEX_VALIDATOR( const wxString& aRegEx, int aFlags, wxString* aValue = NULL )
+    REGEX_VALIDATOR( const wxString& aRegEx, int aFlags, wxString* aValue = nullptr )
         : wxTextValidator( wxFILTER_NONE, aValue )
     {
         compileRegEx( aRegEx, aFlags );
@@ -176,7 +176,7 @@ public:
      * @param aLibIdType is the type of #LIB_ID object to validate.
      * @param aValue is a pointer to a wxString containing the value to validate.
      */
-    LIB_ID_VALIDATOR( wxString* aValue = NULL ) :
+    LIB_ID_VALIDATOR( wxString* aValue = nullptr ) :
         wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
     {
         SetCharExcludes( "\r\n\t" );

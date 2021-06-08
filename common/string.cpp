@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,13 +68,6 @@ bool ConvertSmartQuotesAndDashes( wxString* aString )
 }
 
 
-/**
- * These Escape/Unescape routines use HTML-entity-reference-style encoding to handle
- * characters which are:
- *   (a) not legal in filenames
- *   (b) used as control characters in LIB_IDs
- *   (c) used to delineate hierarchical paths
- */
 wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
 {
     wxString converted;
@@ -326,11 +319,13 @@ int ReadDelimitedText( char* aDest, const char* aSource, int aDestSize )
 }
 
 
-std::string EscapedUTF8( wxString aString )
+std::string EscapedUTF8( const wxString& aString )
 {
+    wxString str = aString;
+
     // No new-lines allowed in quoted strings
-    aString.Replace( "\r\n", "\r" );
-    aString.Replace( "\n", "\r" );
+    str.Replace( "\r\n", "\r" );
+    str.Replace( "\n", "\r" );
 
     std::string utf8 = TO_UTF8( aString );
 
@@ -387,9 +382,11 @@ wxString EscapeHTML( const wxString& aString )
 }
 
 
-bool NoPrintableChars( wxString aString )
+bool NoPrintableChars( const wxString& aString )
 {
-    return aString.Trim( true ).Trim( false ).IsEmpty();
+    wxString tmp = aString;
+
+    return tmp.Trim( true ).Trim( false ).IsEmpty();
 }
 
 
@@ -673,7 +670,7 @@ int ValueStringCompare( wxString strFWord, wxString strSWord )
 }
 
 
-int SplitString( wxString  strToSplit,
+int SplitString( const wxString& strToSplit,
                  wxString* strBeginning,
                  wxString* strDigits,
                  wxString* strEnd )

@@ -409,7 +409,7 @@ wxString LIB_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-void LIB_FIELD::BeginEdit( const wxPoint aPosition )
+void LIB_FIELD::BeginEdit( const wxPoint& aPosition )
 {
     SetTextPos( aPosition );
 }

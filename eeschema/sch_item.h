@@ -233,7 +233,7 @@ public:
     virtual bool IsMovableFromAnchorPoint() const { return true; }
 
     wxPoint& GetStoredPos() { return m_storedPos; }
-    void     SetStoredPos( wxPoint aPos ) { m_storedPos = aPos; }
+    void     SetStoredPos( const wxPoint& aPos ) { m_storedPos = aPos; }
 
     /**
      * Searches the item hierarchy to find a SCHEMATIC.
@@ -316,7 +316,7 @@ public:
     /**
      * Rotate the item around \a aCenter 90 degrees in the clockwise direction.
      */
-    virtual void Rotate( wxPoint aCenter ) = 0;
+    virtual void Rotate( const wxPoint& aCenter ) = 0;
 
     /**
      * Add the schematic item end points to \a aItemList if the item has end points.

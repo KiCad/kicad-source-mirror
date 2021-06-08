@@ -170,9 +170,9 @@ public:
 
     void MirrorVertically( int aCenter ) override;
     void MirrorHorizontally( int aCenter ) override;
-    void Rotate( wxPoint aCenter ) override;
-    void RotateStart( wxPoint aCenter );
-    void RotateEnd( wxPoint aCenter );
+    void Rotate( const wxPoint& aCenter ) override;
+    void RotateStart( const wxPoint& aCenter );
+    void RotateEnd( const wxPoint& aCenter );
 
     /**
      * Check line against \a aLine to see if it overlaps and merge if it does.

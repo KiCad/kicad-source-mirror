@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,7 +142,7 @@ void SCH_BITMAP::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_BITMAP::Rotate( wxPoint aCenter )
+void SCH_BITMAP::Rotate( const wxPoint& aCenter )
 {
     RotatePoint( &m_pos, aCenter, 900 );
     m_image->Rotate( false );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -244,7 +244,7 @@ void SCH_SHEET_PIN::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_SHEET_PIN::Rotate( wxPoint aCenter )
+void SCH_SHEET_PIN::Rotate( const wxPoint& aCenter )
 {
     wxPoint pt = GetTextPos();
     RotatePoint( &pt, aCenter, 900 );

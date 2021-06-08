@@ -1466,7 +1466,7 @@ void SCH_COMPONENT::MirrorVertically( int aCenter )
 }
 
 
-void SCH_COMPONENT::Rotate( wxPoint aCenter )
+void SCH_COMPONENT::Rotate( const wxPoint& aCenter )
 {
     wxPoint prev = m_pos;
 

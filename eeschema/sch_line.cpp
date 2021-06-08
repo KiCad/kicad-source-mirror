@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -392,20 +392,20 @@ void SCH_LINE::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_LINE::Rotate( wxPoint aCenter )
+void SCH_LINE::Rotate( const wxPoint& aCenter )
 {
     RotatePoint( &m_start, aCenter, 900 );
     RotatePoint( &m_end, aCenter, 900 );
 }
 
 
-void SCH_LINE::RotateStart( wxPoint aCenter )
+void SCH_LINE::RotateStart( const wxPoint& aCenter )
 {
     RotatePoint( &m_start, aCenter, 900 );
 }
 
 
-void SCH_LINE::RotateEnd( wxPoint aCenter )
+void SCH_LINE::RotateEnd( const wxPoint& aCenter )
 {
     RotatePoint( &m_end, aCenter, 900 );
 }

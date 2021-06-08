@@ -53,6 +53,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 
+
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_ITEM* aParent,
                       const wxString& aName ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),
@@ -460,7 +461,7 @@ bool SCH_FIELD::Replace( const wxFindReplaceData& aSearchData, void* aAuxData )
 }
 
 
-void SCH_FIELD::Rotate( wxPoint aCenter )
+void SCH_FIELD::Rotate( const wxPoint& aCenter )
 {
     wxPoint pt = GetPosition();
     RotatePoint( &pt, aCenter, 900 );

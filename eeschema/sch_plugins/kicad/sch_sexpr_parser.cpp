@@ -53,6 +53,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_plugins/kicad/sch_sexpr_parser.h>
 #include <template_fieldnames.h>
+#include <trigo.h>
 
 
 using namespace TSCHEMATIC_T;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanoadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,7 +127,7 @@ void SCH_NO_CONNECT::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_NO_CONNECT::Rotate( wxPoint aCenter )
+void SCH_NO_CONNECT::Rotate( const wxPoint& aCenter )
 {
     RotatePoint( &m_pos, aCenter, 900 );
 }

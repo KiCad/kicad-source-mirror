@@ -78,7 +78,7 @@ public:
     void Move( const wxPoint& aMoveVector ) override {}
     void MirrorHorizontally( int aCenter ) override {}
     void MirrorVertically( int aCenter ) override {}
-    void Rotate( wxPoint aCenter ) override {}
+    void Rotate( const wxPoint& aCenter ) override {}
 
 #if defined(DEBUG)
     void Show( int , std::ostream&  ) const override {}

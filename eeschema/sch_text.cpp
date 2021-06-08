@@ -284,7 +284,7 @@ void SCH_TEXT::MirrorVertically( int aCenter )
 }
 
 
-void SCH_TEXT::Rotate( wxPoint aCenter )
+void SCH_TEXT::Rotate( const wxPoint& aCenter )
 {
     wxPoint pt = GetTextPos();
     RotatePoint( &pt, aCenter, 900 );
@@ -466,7 +466,6 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
             }
 
             break;
-
 
         case BUS_START_END:
             m_connectionType = CONNECTION_TYPE::BUS;
@@ -1048,7 +1047,7 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 }
 
 
-void SCH_GLOBALLABEL::Rotate( wxPoint aCenter )
+void SCH_GLOBALLABEL::Rotate( const wxPoint& aCenter )
 {
     wxPoint pt = GetTextPos();
     RotatePoint( &pt, aCenter, 900 );

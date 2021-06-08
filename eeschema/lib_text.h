@@ -83,7 +83,7 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    void BeginEdit( const wxPoint aStartPoint ) override;
+    void BeginEdit( const wxPoint& aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;
 
     void Offset( const wxPoint& aOffset ) override;

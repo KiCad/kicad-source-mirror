@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -161,10 +161,13 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect ) const
 
     // calculate the left common area coordinate:
     int left = std::max( me.m_pos.x, rect.m_pos.x );
+
     // calculate the right common area coordinate:
     int right = std::min( me.m_pos.x + me.m_size.x, rect.m_pos.x + rect.m_size.x );
+
     // calculate the upper common area coordinate:
     int top = std::max( me.m_pos.y, aRect.m_pos.y );
+
     // calculate the lower common area coordinate:
     int bottom = std::min( me.m_pos.y + me.m_size.y, rect.m_pos.y + rect.m_size.y );
 
@@ -229,7 +232,6 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
     wxPoint corners[4];
 
     /* Test A : Any corners exist in rotated rect? */
-
     corners[0] = m_pos;
     corners[1] = m_pos + wxPoint( m_size.x, 0 );
     corners[2] = m_pos + wxPoint( m_size.x, m_size.y );
@@ -272,7 +274,6 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
     }
 
     /* Test C : Any sides of rotated rect intersect this */
-
     if( Intersects( corners[0], corners[1] ) || Intersects( corners[1], corners[2] )
             || Intersects( corners[2], corners[3] ) || Intersects( corners[3], corners[0] ) )
     {
@@ -327,8 +328,8 @@ bool EDA_RECT::IntersectsCircle( const wxPoint& aCenter, const int aRadius ) con
 }
 
 
-bool EDA_RECT::IntersectsCircleEdge(
-        const wxPoint& aCenter, const int aRadius, const int aWidth ) const
+bool EDA_RECT::IntersectsCircleEdge( const wxPoint& aCenter, const int aRadius,
+                                     const int aWidth ) const
 {
     if( !m_init )
         return false;
@@ -469,6 +470,7 @@ void EDA_RECT::Merge( const wxPoint& aPoint )
     Normalize(); // ensure width and height >= 0
 
     wxPoint end = GetEnd();
+
     // Change origin and size in order to contain the given rect
     m_pos.x = std::min( m_pos.x, aPoint.x );
     m_pos.y = std::min( m_pos.y, aPoint.y );
@@ -508,7 +510,7 @@ EDA_RECT EDA_RECT::Common( const EDA_RECT& aRect ) const
 }
 
 
-const EDA_RECT EDA_RECT::GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle ) const
+const EDA_RECT EDA_RECT::GetBoundingBoxRotated( const wxPoint& aRotCenter, double aAngle ) const
 {
     wxPoint corners[4];
 

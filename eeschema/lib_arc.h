@@ -60,7 +60,7 @@ public:
 
     int GetPenWidth() const override;
 
-    void BeginEdit( const wxPoint aStartPoint ) override;
+    void BeginEdit( const wxPoint& aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;
     void SetEditState( int aState ) { m_editState = aState; }
 

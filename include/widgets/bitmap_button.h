@@ -40,42 +40,43 @@ class BITMAP_BUTTON : public wxPanel
 {
 public:
     BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos = wxDefaultPosition,
-                   const wxSize& aSize = wxDefaultSize, int aStyles = wxBORDER_NONE | wxTAB_TRAVERSAL );
+                   const wxSize& aSize = wxDefaultSize,
+                   int aStyles = wxBORDER_NONE | wxTAB_TRAVERSAL );
 
     ~BITMAP_BUTTON();
 
     /**
      * Set the amount of padding present on each side of the bitmap.
      *
-     * @param aPadding is the amount in px of padding for each side
+     * @param aPadding is the amount in px of padding for each side.
      */
     void SetPadding( int aPadding );
 
     /**
      * Set the bitmap shown when the button is enabled.
      *
-     * @param aBmp is the enabled bitmap
+     * @param aBmp is the enabled bitmap.
      */
     void SetBitmap( const wxBitmap& aBmp );
 
     /**
      * Set the bitmap shown when the button is disabled.
      *
-     * @param aBmp is the disabled bitmap
+     * @param aBmp is the disabled bitmap.
      */
     void SetDisabledBitmap( const wxBitmap& aBmp );
 
     /**
      * Enable the button.
      *
-     * @param aEnable is true to enable, false to disable
+     * @param aEnable is true to enable, false to disable.
      */
     bool Enable( bool aEnable = true ) override;
 
     /**
      * Check the control. This is the equivalent to toggling a toolbar button.
      *
-     * @param aCheck is true to check, false to uncheck
+     * @param aCheck is true to check, false to uncheck.
      */
     void Check( bool aCheck = true );
 
@@ -86,7 +87,7 @@ protected:
     void OnLeftButtonDown( wxMouseEvent& aEvent );
     void OnPaint( wxPaintEvent& aEvent );
 
-    void setFlag( int aFlag)
+    void setFlag( int aFlag )
     {
         m_buttonState |= aFlag;
     }

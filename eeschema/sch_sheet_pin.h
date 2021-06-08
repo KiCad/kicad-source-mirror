@@ -152,7 +152,7 @@ public:
 
     void MirrorVertically( int aCenter ) override;
     void MirrorHorizontally( int aCenter ) override;
-    void Rotate( wxPoint aCenter ) override;
+    void Rotate( const wxPoint& aCenter ) override;
 
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
     {

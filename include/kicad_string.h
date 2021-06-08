@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@
 
 
 /**
- * Converts curly quotes and em/en dashes to straight quotes and dashes.
+ * Convert curly quotes and em/en dashes to straight quotes and dashes.
  *
  * @return true if any characters required conversion.
  */
@@ -57,6 +57,13 @@ enum ESCAPE_CONTEXT
     CTX_FILENAME
 };
 
+/**
+ * The Escape/Unescape routines use HTML-entity-reference-style encoding to handle
+ * characters which are:
+ *   (a) not legal in filenames
+ *   (b) used as control characters in LIB_IDs
+ *   (c) used to delineate hierarchical paths
+ */
 wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext );
 
 wxString UnescapeString( const wxString& aSource );
@@ -105,7 +112,7 @@ int ReadDelimitedText( wxString* aDest, const char* aSource );
  * @param aString is the input string to convert.
  * @return the escaped input text, without the wrapping double quotes.
  */
-std::string EscapedUTF8( wxString aString );
+std::string EscapedUTF8( const wxString& aString );
 
 /**
  * Return a new wxString escaped for embedding in HTML.
@@ -122,7 +129,7 @@ char* GetLine( FILE* aFile, char* Line, int* LineNum = nullptr, int SizeLine = 2
 /**
  * Return true if the string is empty or contains only whitespace.
  */
-bool NoPrintableChars( wxString aString );
+bool NoPrintableChars( const wxString& aString );
 
 /**
  * Remove leading and training spaces, tabs and end of line chars in \a text
@@ -171,12 +178,12 @@ bool WildCompareString( const wxString& pattern,
 int ValueStringCompare( wxString strFWord, wxString strSWord );
 
 /**
- * Breaks a string into three parts: he alphabetic preamble, the numeric part, and any
+ * Break a string into three parts: he alphabetic preamble, the numeric part, and any
  * alphabetic ending.
  *
  * For example C10A is split to C 10 A
  */
-int SplitString( wxString  strToSplit,
+int SplitString( const wxString& strToSplit,
                  wxString* strBeginning,
                  wxString* strDigits,
                  wxString* strEnd );
@@ -224,7 +231,7 @@ extern "C" char* strtok_r( char* str, const char* delim, char** nextp );
  */
 struct rsort_wxString
 {
-    bool operator() (const wxString& strA, const wxString& strB ) const
+    bool operator() ( const wxString& strA, const wxString& strB ) const
     {
         wxString::const_reverse_iterator sA = strA.rbegin();
         wxString::const_reverse_iterator eA = strA.rend();
@@ -246,14 +253,14 @@ struct rsort_wxString
 
         while( sA != eA && sB != eB )
         {
-            if( (*sA) == (*sB) )
+            if( ( *sA ) == ( *sB ) )
             {
                 ++sA;
                 ++sB;
                 continue;
             }
 
-            if( (*sA) < (*sB) )
+            if( ( *sA ) < ( *sB ) )
                 return true;
             else
                 return false;
@@ -267,7 +274,7 @@ struct rsort_wxString
 };
 
 /**
- * Splits the input string into a vector of output strings
+ * Split the input string into a vector of output strings
  *
  * @note Multiple delimiters are considered to be separate records with empty strings
  *
@@ -309,7 +316,6 @@ inline void AccumulateDescription( wxString& aDesc, const wxString& aItem )
     aDesc << aItem;
 }
 
-
 /**
  * Split \a aString to a string list separated at \a aSplitter.
  *
@@ -328,18 +334,18 @@ void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSpli
 void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed = 1 );
 
 /**
- * Prints a float number without using scientific notation and no trailing 0
+ * Print a float number without using scientific notation and no trailing 0
  * We want to avoid scientific notation in S-expr files (not easy to read)
  * for floating numbers.
- * So we cannot always just use the %g or the %f format to print a fp number
+ *
+ * We cannot always just use the %g or the %f format to print a fp number
  * this helper function uses the %f format when needed, or %g when %f is
  * not well working and then removes trailing 0
  */
 std::string Double2Str( double aValue );
 
 /**
- * A helper to convert the \a double \a aAngle (in internal unit)
- * to a string in degrees
+ * A helper to convert the \a double \a aAngle (in internal unit) to a string in degrees.
  */
 wxString AngleToStringDegrees( double aAngle );
 

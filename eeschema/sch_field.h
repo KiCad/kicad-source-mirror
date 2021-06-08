@@ -150,7 +150,7 @@ public:
         Offset( aMoveVector );
     }
 
-    void Rotate( wxPoint aCenter ) override;
+    void Rotate( const wxPoint& aCenter ) override;
 
     /**
      * @copydoc SCH_ITEM::MirrorVertically()

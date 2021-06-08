@@ -41,6 +41,7 @@
 #include <core/typeinfo.h>
 #include <properties.h>
 #include <trace_helpers.h>
+#include <trigo.h>
 
 #include <general.h>
 #include <sch_bitmap.h>

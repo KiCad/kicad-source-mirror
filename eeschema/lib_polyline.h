@@ -75,9 +75,9 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    void BeginEdit( const wxPoint aStartPoint ) override;
+    void BeginEdit( const wxPoint& aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;
-    bool ContinueEdit( const wxPoint aNextPoint ) override;
+    bool ContinueEdit( const wxPoint& aNextPoint ) override;
     void EndEdit() override;
 
     void Offset( const wxPoint& aOffset ) override;

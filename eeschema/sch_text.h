@@ -75,13 +75,13 @@ public:
 
     LABEL_SPIN_STYLE RotateCCW();
 
-    /*
-     * Mirrors the label spin style across the X axis or simply swaps up and bottom
+    /**
+     * Mirror the label spin style across the X axis or simply swaps up and bottom.
      */
     LABEL_SPIN_STYLE MirrorX();
 
-    /*
-     * Mirrors the label spin style across the Y axis or simply swaps left and right
+    /**
+     * Mirror the label spin style across the Y axis or simply swaps left and right.
      */
     LABEL_SPIN_STYLE MirrorY();
 
@@ -113,7 +113,7 @@ public:
               KICAD_T aType = SCH_TEXT_T );
 
     /**
-     * Clones \a aText into a new object.  All members are copied as is except
+     * Clone \a aText into a new object.  All members are copied as is except
      * for the #m_isDangling member which is set to false.  This prevents newly
      * copied objects derived from #SCH_TEXT from having their connection state
      * improperly set.
@@ -133,7 +133,7 @@ public:
     }
 
     /**
-     * Returns the set of contextual text variable tokens for this text item.
+     * Return the set of contextual text variable tokens for this text item.
      *
      * @param[out] aVars
      */
@@ -203,7 +203,7 @@ public:
 
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
-    void Rotate( wxPoint aCenter ) override;
+    void Rotate( const wxPoint& aCenter ) override;
 
     virtual void Rotate90( bool aClockwise );
     virtual void MirrorSpinStyle( bool aLeftRight );
@@ -354,7 +354,7 @@ public:
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
-    void Rotate( wxPoint aCenter ) override;
+    void Rotate( const wxPoint& aCenter ) override;
     void Rotate90( bool aClockwise ) override;
     void MirrorSpinStyle( bool aLeftRight ) override;
 

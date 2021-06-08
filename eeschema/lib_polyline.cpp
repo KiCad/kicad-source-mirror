@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -359,14 +359,14 @@ BITMAPS LIB_POLYLINE::GetMenuImage() const
 }
 
 
-void LIB_POLYLINE::BeginEdit( const wxPoint aPosition )
+void LIB_POLYLINE::BeginEdit( const wxPoint& aPosition )
 {
     m_PolyPoints.push_back( aPosition );    // Start point of first segment.
     m_PolyPoints.push_back( aPosition );    // End point of first segment.
 }
 
 
-bool LIB_POLYLINE::ContinueEdit( const wxPoint aPosition )
+bool LIB_POLYLINE::ContinueEdit( const wxPoint& aPosition )
 {
     // do not add zero length segments
     if( m_PolyPoints[m_PolyPoints.size() - 2] != m_PolyPoints.back() )

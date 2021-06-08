@@ -72,7 +72,7 @@ public:
 
     void MirrorHorizontally( int aCenter ) override {}
     void MirrorVertically( int aCenter ) override {}
-    void Rotate( wxPoint aCenter ) override {}
+    void Rotate( const wxPoint& aCenter ) override {}
 
     wxPoint GetPosition() const override { return GetTransformedPosition(); }
     const wxPoint GetLocalPosition() const { return m_position; }
