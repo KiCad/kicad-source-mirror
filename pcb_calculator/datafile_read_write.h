@@ -20,7 +20,6 @@
  */
 
 #include <pcb_calculator_datafile_lexer.h>
-#include <eda_item.h>
 
 class PCB_CALCULATOR_DATAFILE_PARSER;
 

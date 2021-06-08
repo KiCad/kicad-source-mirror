@@ -25,7 +25,6 @@
 #ifndef LIB_TREE_ITEM_H
 #define LIB_TREE_ITEM_H
 
-#include <eda_item.h>
 #include <lib_id.h>
 #include <import_export.h>
 

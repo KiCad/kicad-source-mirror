@@ -28,7 +28,6 @@
 
 #include <vector>
 #include <math/box2.h>
-#include <eda_item.h>       // FILL_TYPE
 
 #include <plotter.h>
 #include "gbr_plotter_apertures.h"

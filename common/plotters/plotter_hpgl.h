@@ -28,7 +28,6 @@
 #include <list>
 #include <vector>
 
-#include <eda_item.h>             // FILL_TYPE
 #include <math/box2.h>
 #include <plotter.h>
 
