@@ -42,7 +42,6 @@
 #include <sch_base_frame.h>
 #include <sch_text.h> // enum PINSHEETLABEL_SHAPE
 #include <template_fieldnames.h>
-#include <undo_redo_container.h>
 
 class STATUS_TEXT_POPUP;
 

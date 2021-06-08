@@ -24,7 +24,6 @@
 #include <unordered_map>
 #include <map>
 #include "pcb_base_edit_frame.h"
-#include "undo_redo_container.h"
 #include "zones.h"
 #include <mail_type.h>
 
