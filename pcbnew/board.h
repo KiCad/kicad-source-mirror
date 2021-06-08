@@ -286,7 +286,10 @@ public:
     void Move( const wxPoint& aMoveVector ) override;
 
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
-    int GetFileFormatVersionAtLoad()  const { return m_fileFormatVersionAtLoad; }
+    int GetFileFormatVersionAtLoad() const { return m_fileFormatVersionAtLoad; }
+
+    void SetGenerator( const wxString& aGenerator ) { m_generator = aGenerator; }
+    const wxString& GetGenerator() const { return m_generator; }
 
     void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT ) override;
 
@@ -1126,6 +1129,7 @@ private:
     HIGH_LIGHT_INFO     m_highLightPrevious;        // a previously stored high light data
 
     int                 m_fileFormatVersionAtLoad;  // the version loaded from the file
+    wxString            m_generator;                // the generator tag from the file
 
     std::map<wxString, wxString>        m_properties;
     std::shared_ptr<CONNECTIVITY_DATA>  m_connectivity;

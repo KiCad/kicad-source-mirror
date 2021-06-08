@@ -780,10 +780,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         else
             GetScreen()->SetContentModified( false );
 
-        if( ( pluginType == IO_MGR::LEGACY &&
-              loadedBoard->GetFileFormatVersionAtLoad() < LEGACY_BOARD_FILE_VERSION ) ||
-            ( pluginType == IO_MGR::KICAD_SEXP &&
-              loadedBoard->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION ) )
+        if( ( pluginType == IO_MGR::LEGACY )
+         || ( pluginType == IO_MGR::KICAD_SEXP
+                && loadedBoard->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION
+                && loadedBoard->GetGenerator().Lower() != "gerbview" ) )
         {
             m_infoBar->RemoveAllButtons();
             m_infoBar->AddCloseButton();

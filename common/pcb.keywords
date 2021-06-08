@@ -141,6 +141,7 @@ hatch_min_hole_area
 height
 hide
 hole_to_hole_min
+host
 id
 island
 island_removal_mode

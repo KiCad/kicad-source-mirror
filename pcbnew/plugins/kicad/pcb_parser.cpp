@@ -592,6 +592,23 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
 
         switch( token )
         {
+        case T_host:            // legacy token
+            NeedSYMBOL();
+            m_board->SetGenerator( FromUTF8() );
+
+            // Older formats included build data
+            if( m_requiredVersion < BOARD_FILE_HOST_VERSION )
+                NeedSYMBOL();
+
+            NeedRIGHT();
+            break;
+
+        case T_generator:
+            NeedSYMBOL();
+            m_board->SetGenerator( FromUTF8() );
+            NeedRIGHT();
+            break;
+
         case T_general:
             parseGeneralSection();
             break;
@@ -900,27 +917,12 @@ void PCB_PARSER::parseHeader()
         m_requiredVersion = parseInt( FromUTF8().mb_str( wxConvUTF8 ) );
         m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
         NeedRIGHT();
-
-        NeedLEFT();
-        NeedSYMBOL();
-        NeedSYMBOL();
-
-        // Older formats included build data
-        if( m_requiredVersion < BOARD_FILE_HOST_VERSION )
-            NeedSYMBOL();
-
-        NeedRIGHT();
     }
     else
     {
         m_requiredVersion = 20201115;   // Last version before we started writing version #s
                                         // in footprint files as well as board files.
         m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
-
-        // Skip the host name and host build version information.
-        NeedSYMBOL();
-        NeedSYMBOL();
-        NeedRIGHT();
     }
 
     m_board->SetFileFormatVersionAtLoad( m_requiredVersion );

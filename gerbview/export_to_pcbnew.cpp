@@ -437,8 +437,7 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aG
 
 void GBR_TO_PCB_EXPORTER::writePcbHeader( const LAYER_NUM* aLayerLookUpTable )
 {
-    fprintf( m_fp, "(kicad_pcb (version 4) (host Gerbview \"%s\")\n\n",
-             TO_UTF8( GetBuildVersion() ) );
+    fprintf( m_fp, "(kicad_pcb (version 4) (generator gerbview)\n\n" );
 
     // Write layers section
     fprintf( m_fp, "  (layers \n" );
