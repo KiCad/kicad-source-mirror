@@ -26,7 +26,6 @@
 #include <sstream>
 #include <string>
 #include <utility>
-#include <wx/wx.h>
 #include <wx/filename.h>
 #include <wx/filefn.h>
 #include <wx/stdpaths.h>

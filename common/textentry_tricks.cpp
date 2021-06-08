@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#include <wx/wx.h>
+#include <wx/event.h>
+#include <wx/gdicmn.h>
 #include <textentry_tricks.h>
 #include <dialog_shim.h>
 

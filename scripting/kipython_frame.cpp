@@ -28,7 +28,6 @@
 
 #include <pybind11/embed.h>
 #include <sstream>
-#include <wx/wx.h>
 #include <pybind11/embed.h>
 
 void KIPYTHON_FRAME::SetupPythonEditor()

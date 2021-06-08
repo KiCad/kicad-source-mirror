@@ -21,10 +21,11 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include "wx/wx.h"
+
 #include <wx/app.h>
 #include <wx/cmdline.h>
 #include <wx/log.h>
+#include <wx/msgdlg.h>
 #include <wx/string.h>
 #include <wx/filename.h>
 #include <sstream>
