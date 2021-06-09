@@ -26,7 +26,6 @@
 #define KIWAY_PLAYER_H_
 
 #include <wx/frame.h>
-#include <wx/cmdline.h>
 
 #include <vector>
 #include <kiway_holder.h>
@@ -45,6 +44,7 @@ class WX_EVENT_LOOP;
 class wxSocketServer;
 class wxSocketBase;
 class wxSocketEvent;
+class wxCmdLineParser;
 
 
 /**
