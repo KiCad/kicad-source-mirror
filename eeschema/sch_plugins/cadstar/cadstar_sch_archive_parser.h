@@ -366,7 +366,7 @@ public:
             void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
-        struct BUS_TERM : PARSER ///< "BUSTERM" nodename (represents a connetion to a bus)
+        struct BUS_TERM : PARSER ///< "BUSTERM" nodename (represents a connection to a bus)
         {
             NETELEMENT_ID ID; ///< First two characters "BT"
             BUS_ID        BusID;
@@ -378,7 +378,7 @@ public:
             void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
-        struct BLOCK_TERM : PARSER ///< "BLOCKTERM" nodename (represents a connetion to a block)
+        struct BLOCK_TERM : PARSER ///< "BLOCKTERM" nodename (represents a connection to a block)
         {
             NETELEMENT_ID ID; ///< First four characters "BLKT"
             BLOCK_ID      BlockID;

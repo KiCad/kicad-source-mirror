@@ -32,7 +32,7 @@
  * of the busy indicator is unspecified. It could be a "spinner" cursor in a GUI
  * context, for example.
  *
- * This base class provides a "null" implementation, and can be overriden for
+ * This base class provides a "null" implementation, and can be overridden for
  * specific behaviours.
  *
  * THe busy-ness semantics are defined by this object's lifetime.

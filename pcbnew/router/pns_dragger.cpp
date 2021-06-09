@@ -281,7 +281,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
     case DM_SEGMENT:
     case DM_CORNER:
     {
-        //TODO: Make threshhold configurable
+        //TODO: Make threshold configurable
         int  thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 4 : 0;
         LINE origLine( m_draggedLine );
         LINE dragged( m_draggedLine );
@@ -599,7 +599,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
     case DM_SEGMENT:
     case DM_CORNER:
     {
-        //TODO: Make threshhold configurable
+        //TODO: Make threshold configurable
         int  thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 2 : 0;
         LINE dragged( m_draggedLine );
         dragged.SetSnapThreshhold( thresh );

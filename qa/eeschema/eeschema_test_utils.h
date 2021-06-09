@@ -32,7 +32,7 @@ namespace KI_TEST
 /**
  * Get the configured location of Eeschema test data.
  *
- * By default, this is the test data in the source tree, but can be overriden
+ * By default, this is the test data in the source tree, but can be overridden
  * by the KICAD_TEST_EESCHEMA_DATA_DIR environment variable.
  *
  * @return a filename referring to the test data dir to use.

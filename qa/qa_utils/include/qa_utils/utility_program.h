@@ -99,7 +99,7 @@ class COMBINED_UTILITY
 public:
 
     /**
-     * Take in a a command line and:
+     * Take in a command line and:
      *
      * * Handle "top level" commands like -h and -l
      * * Delegate to sub-utilities

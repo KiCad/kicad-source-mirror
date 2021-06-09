@@ -74,7 +74,7 @@ public:
     /**
      * The list of flags used by the #compare function.
      *
-     * - NORMAL This compares everthing between two #LIB_ITEM objects.
+     * - NORMAL This compares everything between two #LIB_ITEM objects.
      * - UNIT This compare flag ignores unit and convert and pin number information when
      *        comparing #LIB_ITEM objects for unit comparison.
      */
@@ -285,7 +285,7 @@ protected:
      * @param aOther A reference to the other #LIB_ITEM to compare the arc against.
      * @param aCompareFlags The flags used to perform the comparison.
      *
-     * @return An integer value less than 0 if the object is less than \a aOther ojbect,
+     * @return An integer value less than 0 if the object is less than \a aOther object,
      *         zero if the object is equal to \a aOther object, or greater than 0 if the
      *         object is greater than \a aOther object.
      */

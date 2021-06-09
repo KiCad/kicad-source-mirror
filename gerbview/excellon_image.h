@@ -90,9 +90,9 @@ struct EXCELLON_ROUTE_COORD
     int m_x;        // X coordinate
     int m_y;        // y coordinate
     int m_cx;       // center X coordinate in circular routing mode
-                    // (when the IJ commad is used)
+                    // (when the IJ command is used)
     int m_cy;       // center y coordinate in circular routing mode
-                    // (when the IJ commad is used)
+                    // (when the IJ command is used)
     int m_radius;   // radius in circular routing mode (when the A## command is used)
     int m_rmode;    // routing mode: 0 = circular, ROUTE_CCW (1) = ccw, ROUTE_CW (-1) = cw
     int m_arc_type_info; // arc using radius or center coordinates

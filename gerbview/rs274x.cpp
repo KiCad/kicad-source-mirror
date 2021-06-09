@@ -44,7 +44,7 @@ extern double ReadDouble( char*& text, bool aSkipSeparator = true );
 // See rs274xrevd_e.pdf, table 1: RS-274X parameters order of entry
 // in gerber files, when a coordinate is given (like X78Y600 or I0J80):
 //      Y and Y are logical coordinates
-//      A and B are plotter coordiantes
+//      A and B are plotter coordinates
 //      Usually A = X, B = Y
 //      But we can have A = Y, B = X and/or offset, mirror, scale;
 // Also:
@@ -99,7 +99,7 @@ enum RS274X_PARAMETERS {
     REMOVE_APERTURE_ATTRIBUTE   = CODE( 'T', 'D' ),
 
     // Layer specific parameters
-    // May be used singly or may be layer specfic
+    // May be used singly or may be layer specific
     // These parameters are at the beginning of the file or layer
     // and reset some layer parameters (like interpolation)
     KNOCKOUT = CODE( 'K', 'O' ),                // Default: off

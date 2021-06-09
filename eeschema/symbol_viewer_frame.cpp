@@ -813,7 +813,7 @@ void SYMBOL_VIEWER_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 {
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );
 
-    // One CHOOSE_COMPONENT dialog at a time.  User probaby can't handle more anyway.
+    // One CHOOSE_COMPONENT dialog at a time.  User probably can't handle more anyway.
     if( !dialogLock.try_lock() )
         return;
 

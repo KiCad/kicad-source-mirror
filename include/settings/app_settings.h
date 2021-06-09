@@ -159,7 +159,7 @@ public:
      * By default, this returns the list of grids available in PcbNew-based applications.
      * Eeschema does not allow customization of the grid.  If it ever does, override this in
      * Eeschema settings to provide a different set of defaults.
-     * @return a default value for the the window.grid.sizes parameter
+     * @return a default value for the window.grid.sizes parameter
      */
     virtual const std::vector<wxString> DefaultGridSizeList() const;
 

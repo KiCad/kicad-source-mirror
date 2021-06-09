@@ -31,7 +31,7 @@ class text_by_date( pcbnew.ActionPlugin ):
     How to use:
     - Add a text on your board with the content '$date$'
     - Call the plugin
-    - Automaticaly the date will be added to the text (format YYYY-MM-DD)
+    - Automatically the date will be added to the text (format YYYY-MM-DD)
     """
 
     def defaults( self ):
@@ -44,7 +44,7 @@ class text_by_date( pcbnew.ActionPlugin ):
         """
         self.name = "Add date on PCB"
         self.category = "Modify PCB"
-        self.description = "Automaticaly add date on an existing PCB"
+        self.description = "Automatically add date on an existing PCB"
 
     def Run( self ):
         pcb = pcbnew.GetBoard()

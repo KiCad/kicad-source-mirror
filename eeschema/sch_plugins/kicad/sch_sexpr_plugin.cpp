@@ -57,7 +57,7 @@
 #include <sch_file_versions.h>
 #include <schematic_lexer.h>
 #include <sch_plugins/kicad/sch_sexpr_parser.h>
-#include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
+#include <symbol_lib_table.h>  // for PropPowerSymsOnly definition.
 #include <ee_selection.h>
 #include <kicad_string.h>
 #include <wx_filename.h>       // for ::ResolvePossibleSymlinks()
@@ -478,7 +478,7 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         if( !fileName.IsAbsolute() )
             fileName.MakeAbsolute( m_currentPath.top() );
 
-        // Save the current path so that it gets restored when decending and ascending the
+        // Save the current path so that it gets restored when descending and ascending the
         // sheet hierarchy which allows for sheet schematic files to be nested in folders
         // relative to the last path a schematic was loaded from.
         wxLogTrace( traceSchLegacyPlugin, "Saving path    \"%s\"", m_currentPath.top() );
@@ -1645,7 +1645,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
             saveField( field, aFormatter, nextFreeFieldId, aNestLevel + 1 );
 
         // @todo At some point in the future the lock status (all units interchangeable) should
-        // be set deterministically.  For now a custom lock propertery is used to preserve the
+        // be set deterministically.  For now a custom lock property is used to preserve the
         // locked flag state.
         if( aSymbol->UnitsLocked() )
         {

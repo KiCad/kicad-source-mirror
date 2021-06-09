@@ -13,7 +13,7 @@ import difflib
 class coding_checker(object):
     file_filter = ["cpp", "cxx", "h", "hpp", "c"]
 
-    # Function to call uncrustify, it returns the re-formated code and
+    # Function to call uncrustify, it returns the re-formatted code and
     # any errors
     #
 

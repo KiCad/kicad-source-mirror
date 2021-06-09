@@ -211,7 +211,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
                     gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_DRILL );
             }
 
-            // Add object attribute: component reference to pads (mainly usefull for users)
+            // Add object attribute: component reference to pads (mainly useful for users)
             wxString ref = pad->GetParent()->GetReference();
 
             gbr_metadata.SetCmpReference( ref );
@@ -285,7 +285,7 @@ void GERBER_WRITER::SetFormat( int aRightDigits )
     /* Set conversion scale depending on drill file units */
     m_conversionUnits = 1.0 / IU_PER_MM;        // Gerber units = mm
 
-    // Set precison (unit is mm).
+    // Set precision (unit is mm).
     m_precision.m_Lhs = 4;
     m_precision.m_Rhs = aRightDigits == 6 ? 6 : 5;
 }

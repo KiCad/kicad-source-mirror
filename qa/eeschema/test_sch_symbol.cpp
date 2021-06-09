@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
 
 
 /**
- * Test the orientation tranform changes.
+ * Test the orientation transform changes.
  */
 BOOST_AUTO_TEST_CASE( Orientation )
 {

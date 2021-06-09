@@ -124,7 +124,7 @@ protected:
      * current in, or else this method will prompt for the self-change.
      *
      * The method will do conflict resolution depending on aSectionTag.
-     * g_CommonSectionTag means the key code must only be checkd with the aSectionTag section
+     * g_CommonSectionTag means the key code must only be checked with the aSectionTag section
      * and g_CommonSectionTag section.
      *
      * @param aKey - key to check

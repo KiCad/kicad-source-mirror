@@ -69,7 +69,7 @@
 #include <lib_rectangle.h>
 #include <lib_text.h>
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
-#include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
+#include <symbol_lib_table.h>  // for PropPowerSymsOnly definition.
 #include <confirm.h>
 #include <tool/selection.h>
 #include <default_values.h>    // For some default values
@@ -92,8 +92,8 @@ const char* delims = " \t\r\n";
 
 // Tokens to read/save graphic lines style
 #define T_STYLE "style"
-#define T_COLOR "rgb"          // cannot be modifed (used by wxWidgets)
-#define T_COLORA "rgba"        // cannot be modifed (used by wxWidgets)
+#define T_COLOR "rgb"          // cannot be modified (used by wxWidgets)
+#define T_COLORA "rgba"        // cannot be modified (used by wxWidgets)
 #define T_WIDTH "width"
 
 
@@ -284,7 +284,7 @@ static double parseDouble( LINE_READER& aReader, const char* aLine,
  *                     the parsing is complete.
  * @return A valid ASCII character.
  * @throw IO_ERROR on an unexpected end of line.
- * @throw PARSE_ERROR if the parsed token is not a a single character token.
+ * @throw PARSE_ERROR if the parsed token is not a single character token.
  */
 static char parseChar( LINE_READER& aReader, const char* aCurrentToken,
                        const char** aNextToken = NULL )
@@ -686,7 +686,7 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         if( !fileName.IsAbsolute() )
             fileName.MakeAbsolute( m_currentPath.top() );
 
-        // Save the current path so that it gets restored when decending and ascending the
+        // Save the current path so that it gets restored when descending and ascending the
         // sheet hierarchy which allows for sheet schematic files to be nested in folders
         // relative to the last path a schematic was loaded from.
         wxLogTrace( traceSchLegacyPlugin, "Saving path    \"%s\"", m_currentPath.top() );
@@ -2694,7 +2694,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
         else
             symbol = it->second;
 
-        // Read the curent alias associated doc.
+        // Read the current alias associated doc.
         // if the alias does not exist, just skip the description
         // (Can happen if a .dcm is not synchronized with the corresponding .lib file)
         while( reader.ReadLine() )

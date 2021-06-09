@@ -322,7 +322,7 @@ static const std::vector<CIR_SEG_VECPT_CASE> construct_tan_tan_pt_cases = {
         { { 0, 0 }, {  1000000,       0 } },
         { { 0, 0 }, { -1000000, 1000000 } },
         { 400000, 0 },
-        { { 400009, 965709 } , 965709 }, // ammended to get the test to pass
+        { { 400009, 965709 } , 965709 }, // amended to get the test to pass
         //{ { 400000, 965686 } , 965686 }, // result from LibreCAD 2.2.0-rc2
     },
     {
@@ -330,7 +330,7 @@ static const std::vector<CIR_SEG_VECPT_CASE> construct_tan_tan_pt_cases = {
         { { 0, 0 }, {  1000,    0 } },
         { { 0, 0 }, { -1000, 1000 } },
         { 200, 100 },
-        { { 814, 1964} , 1964 }, // ammended to get the test to pass
+        { { 814, 1964} , 1964 }, // amended to get the test to pass
         //{ { 822, 1985} , 1985 }, // result from LibreCAD 2.2.0-rc2
     },
     {

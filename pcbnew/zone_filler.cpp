@@ -1030,7 +1030,7 @@ bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
     // It's unclear if ROUND_ACUTE_CORNERS would have the same issues, but is currently avoided
     // as a "less-safe" option.
     // ROUND_ALL_CORNERS produces the uniformly nicest shapes, but also a lot of segments.
-    // CHAMFER_ALL_CORNERS improves the segement count.
+    // CHAMFER_ALL_CORNERS improves the segment count.
     SHAPE_POLY_SET::CORNER_STRATEGY fastCornerStrategy = SHAPE_POLY_SET::CHAMFER_ALL_CORNERS;
     SHAPE_POLY_SET::CORNER_STRATEGY cornerStrategy = SHAPE_POLY_SET::ROUND_ALL_CORNERS;
 
@@ -1425,7 +1425,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
                                     * aZone->GetHatchSmoothingValue() / 2 );
 
         // Minimal optimization:
-        // make smoothing only for reasonnable smooth values, to avoid a lot of useless segments
+        // make smoothing only for reasonable smooth values, to avoid a lot of useless segments
         // and if the smooth value is small, use chamfer even if fillet is requested
         #define SMOOTH_MIN_VAL_MM 0.02
         #define SMOOTH_SMALL_VAL_MM 0.04

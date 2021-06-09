@@ -23,7 +23,7 @@
 
 
 /**
- * A KICAD version of wxTextEntryDialog which supports the various improvments/work-arounds
+ * A KICAD version of wxTextEntryDialog which supports the various improvements/work-arounds
  * from DIALOG_SHIM.
  */
 

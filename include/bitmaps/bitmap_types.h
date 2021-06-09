@@ -104,7 +104,7 @@ wxBitmap* KiBitmapNew( BITMAPS aBitmap );
  * Save the current view as an image file.
  *
  * @param aFrame The current draw frame view to save.
- * @param aFileName The file name to save the image.  This will overwrite an exisiting file.
+ * @param aFileName The file name to save the image.  This will overwrite an existing file.
  * @param aBitmapType The type of bitmap create as defined by wxImage.
  * @return True if the file was successfully saved or false if the file failed to be saved.
  */

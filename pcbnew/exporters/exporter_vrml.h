@@ -99,7 +99,7 @@ struct VRML_COLOR
 };
 
 
-// Handle the board ans its board items to convert them to a VRML representation:
+// Handle the board and its board items to convert them to a VRML representation:
 class EXPORTER_PCB_VRML
 {
 public:

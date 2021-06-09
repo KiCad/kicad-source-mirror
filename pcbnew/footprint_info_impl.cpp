@@ -370,7 +370,7 @@ void FOOTPRINT_LIST_IMPL::WriteCacheToFile( const wxString& aFilePath )
 
     if( !wxRenameFile( tmpFileName.GetFullPath(), aFilePath, true ) )
     {
-        // cleanup incase rename failed
+        // cleanup in case rename failed
         // its also not the end of the world since this is just a cache file
         wxRemoveFile( tmpFileName.GetFullPath() );
     }

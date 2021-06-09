@@ -85,7 +85,7 @@ int GetCircleToPolyCorrection( int aMaxError );
 /**
  * Snap a vector onto the nearest 0, 45 or 90 degree line.
  *
- * The magnitude of the vector is NOT kept, instead the co-ordinates are
+ * The magnitude of the vector is NOT kept, instead the coordinates are
  * set equal (and/or opposite) or to zero as needed. The effect of this is
  * that if the starting vector is on a square grid, the resulting snapped
  * vector will still be on the same grid.

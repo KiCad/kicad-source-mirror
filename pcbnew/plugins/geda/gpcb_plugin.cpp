@@ -60,13 +60,13 @@ static inline long parseInt( const wxString& aValue, double aScalar )
      *
      * Distinction between the even older format (mils, 1000 units per inch)
      * and the pre-2011 format is done in ::parseFOOTPRINT already; the
-     * distinction is by wether an object definition opens with '(' or '['.
-     * All values with explicite unit open with a '[' so there's no need to
+     * distinction is by whether an object definition opens with '(' or '['.
+     * All values with explicit unit open with a '[' so there's no need to
      * consider this distinction when parsing them.
      *
      * The solution here is to watch for a unit and, if present, convert the
      * value to centimils. All unit-less values are read unaltered. This way
-     * the code below can contine to consider all read values to be in mils or
+     * the code below can continue to consider all read values to be in mils or
      * centimils. It also matches the strategy gEDA/pcb uses for backwards
      * compatibility with its own layouts.
      *
@@ -108,7 +108,7 @@ static inline long parseInt( const wxString& aValue, double aScalar )
  */
 class GPCB_FPL_CACHE_ITEM
 {
-    WX_FILENAME m_filename; ///< The the full file name and path of the footprint to cache.
+    WX_FILENAME m_filename; ///< The full file name and path of the footprint to cache.
     std::unique_ptr<FOOTPRINT> m_footprint;
 
 public:

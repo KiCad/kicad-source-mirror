@@ -334,7 +334,7 @@ void AddGerberX2Header( PLOTTER* aPlotter, const BOARD* aBoard, bool aUseX1Compa
     // plot origin and use the same registration
     //
     // Currently the key is "Original" when using absolute Pcbnew coordinates,
-    // and te PY ans PY position od auxiliary axis, when using it.
+    // and the PY and PY position of auxiliary axis, when using it.
     // Please, if absolute Pcbnew coordinates, one day, are set by user, change the way
     // the key is built to ensure file only using the *same* axis have the same key.
     wxString registration_id = "Original";

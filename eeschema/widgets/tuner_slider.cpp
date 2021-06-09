@@ -82,7 +82,7 @@ bool TUNER_SLIDER::SetMin( const SPICE_VALUE& aVal )
 
     m_min = aVal;
 
-    if( m_value < aVal )      // Limit the curent value
+    if( m_value < aVal )      // Limit the current value
         SetValue( aVal );
 
     m_minText->SetValue( aVal.ToOrigString() );

@@ -419,7 +419,7 @@ public:
     const std::map<wxString, LIB_PART*>& GetLibSymbols() const { return m_libSymbols; }
 
     /**
-     * Add \a aLibSymbol to the the library symbol map.
+     * Add \a aLibSymbol to the library symbol map.
      *
      * The symbol is mapped to the result of #LIB_ID::Format().  If a symbol is already
      * mapped, the existing symbol is replaced with \a aLibSymbol.  The screen object takes

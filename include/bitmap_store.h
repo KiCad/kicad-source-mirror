@@ -38,7 +38,7 @@ namespace std
 }
 
 /**
- * Helper to retreive bitmaps while handling icon themes and scaling
+ * Helper to retrieve bitmaps while handling icon themes and scaling
  */
 class BITMAP_STORE
 {
@@ -48,7 +48,7 @@ public:
     ~BITMAP_STORE() = default;
 
     /**
-     * Retreives a bitmap from the given bitmap id
+     * Retrieves a bitmap from the given bitmap id
      * @param aBitmapId is from the BITMAPS enum in bitmaps_list.h
      * @param aHeight is the requested height in pixels of the source image, or -1 for any height
      */

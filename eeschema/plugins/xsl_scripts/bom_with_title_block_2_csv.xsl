@@ -8,7 +8,7 @@
     Arthur:
         Ronald Sousa HashDefineElectronics.com
 
-    Ouput Example:
+    Output Example:
         Source,
         Kicad Rev,  working director and file source
         Generated Date, date this file was generated
@@ -53,7 +53,7 @@
 
         <xsl:text>&nl;</xsl:text>
 
-        <!-- Ouput Root sheet project information -->
+        <!-- Output Root sheet project information -->
         <xsl:apply-templates select="/export/design/sheet[1]"/>
 
         <xsl:text>&nl;</xsl:text>

@@ -193,7 +193,7 @@ public:
      * All fields will be populated from the LIB_ALIAS, including children
      * (unit nodes will be generated automatically).  This does not keep
      * the pointer to the #LIB_ALIAS object because at any time, a #LIB_ALIAS
-     * can be remove from a libray which will result in an invalid pointer.
+     * can be remove from a library which will result in an invalid pointer.
      * The alias must be resolved at the time of use.  Anything else is a bug.
      *
      * @param aParent   parent node, should be a CMP_TREE_NODE_LIB

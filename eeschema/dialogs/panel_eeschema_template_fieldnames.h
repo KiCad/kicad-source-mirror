@@ -38,7 +38,7 @@ protected:
     /**
      * Adds a new template fieldname (with default values) to the template fieldnames data.
      *
-     * Process the wxWidgets @a event produced when the user presses the Add buton for the
+     * Process the wxWidgets @a event produced when the user presses the Add button for the
      * template fieldnames control.
      *
      * @param event The wxWidgets produced event information

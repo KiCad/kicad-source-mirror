@@ -24,7 +24,7 @@
 
 /**
  * @file  mortoncodes.h
- * @brief Implementes Morton Codes
+ * @brief Implements Morton Codes
  * https://fgiesen.wordpress.com/2009/12/13/decoding-morton-codes/
  * http://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/
  */

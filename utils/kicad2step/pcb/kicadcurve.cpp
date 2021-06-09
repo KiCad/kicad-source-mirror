@@ -99,7 +99,7 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
                     || ( aCurveType == CURVE_POLYGON && prms->GetNumberOfChildren() < 4 ) )
                 return false;
 
-            // Extract xy coordintes from pts list
+            // Extract xy coordinates from pts list
             SEXPR::SEXPR_VECTOR const* list = prms->GetChildren();
 
             // The first parameter is "pts", so skip it.

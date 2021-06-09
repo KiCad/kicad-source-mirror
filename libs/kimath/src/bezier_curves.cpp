@@ -82,7 +82,7 @@ void BEZIER_POLY::GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen )
                               + 3.0 * t2 * omt * m_ctrlPts[2]
                               + t3 * m_ctrlPts[3];
 
-            // a minimal filter on the lenght of the segment being created:
+            // a minimal filter on the length of the segment being created:
             // The offset from last point:
             VECTOR2D delta = vertex - aOutput.back();
             double dist = delta.EuclideanNorm();

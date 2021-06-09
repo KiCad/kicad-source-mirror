@@ -102,7 +102,7 @@ wxSize PROPERTIES_FRAME::GetMinSize() const
 }
 
 
-// Data transfert from general properties to widgets
+// Data transfer from general properties to widgets
 void PROPERTIES_FRAME::CopyPrmsFromGeneralToPanel()
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
@@ -126,7 +126,7 @@ void PROPERTIES_FRAME::CopyPrmsFromGeneralToPanel()
     m_textCtrlBottomMarginBinder.SetDoubleValue( From_User_Unit( EDA_UNITS::MILLIMETRES, model.GetBottomMargin() ) );
 }
 
-// Data transfert from widgets to general properties
+// Data transfer from widgets to general properties
 bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
@@ -149,7 +149,7 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
     model.SetBottomMargin(
             To_User_Unit( EDA_UNITS::MILLIMETRES, m_textCtrlBottomMarginBinder.GetValue() ) );
 
-    // cordinates of the left top corner are the left and top margins
+    // coordinates of the left top corner are the left and top margins
     model.SetLeftMargin(
             To_User_Unit( EDA_UNITS::MILLIMETRES, m_textCtrlLeftMarginBinder.GetValue() ) );
     model.SetTopMargin(
@@ -159,7 +159,7 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
 }
 
 
-// Data transfert from item to widgets in properties frame
+// Data transfer from item to widgets in properties frame
 void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
 {
     if( !aItem )
@@ -320,7 +320,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     m_swItemProperties->Layout();
 #ifdef __WXGTK__
     // This call is mandatory on wxGTK to initialize the right virtual size and therefore
-    // scrollbars, but for some reason, create issues on Windows (incorrect disply
+    // scrollbars, but for some reason, create issues on Windows (incorrect display
     // until the frame is resized). Joys of multiplatform dev.
     m_swItemProperties->Fit();
 #endif
@@ -379,7 +379,7 @@ void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
 }
 
 
-// Data transfert from  properties frame to item parameters
+// Data transfer from  properties frame to item parameters
 bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
 {
     if( aItem == NULL )

@@ -7,7 +7,7 @@
 
 #cmakedefine HAVE_STRNCASECMP
 
-#cmakedefine HAVE_STRTOKR       // spelled odly to differ from wx's similar test
+#cmakedefine HAVE_STRTOKR       // spelled oddly to differ from wx's similar test
 
 // Handle platform differences in math.h
 #cmakedefine HAVE_MATH_H

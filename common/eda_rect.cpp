@@ -94,7 +94,7 @@ bool EDA_RECT::Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2 ) cons
     point4.x = GetOrigin().x;
     point4.y = GetEnd().y;
 
-    //Only need to test 3 sides since a straight line cant enter and exit on same side
+    //Only need to test 3 sides since a straight line can't enter and exit on same side
     if( SegmentIntersectsSegment( aPoint1, aPoint2, GetOrigin(), point2 ) )
         return true;
 

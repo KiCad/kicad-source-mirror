@@ -44,7 +44,7 @@
 
 /*
  * GERBER_LAYER_WIDGET
- * is here to implement the abtract functions of LAYER_WIDGET so they
+ * is here to implement the abstract functions of LAYER_WIDGET so they
  * may be tied into the GERBVIEW_FRAME's data and so we can add a popup
  * menu which is specific to Pcbnew's needs.
  */
@@ -99,7 +99,7 @@ void GERBER_LAYER_WIDGET::ReFillRender()
     // on the stack.
     LAYER_WIDGET::ROW renderRows[6] = {
 
-#define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
+#define RR  LAYER_WIDGET::ROW   // Render Row abbreviation to reduce source width
 
              // text                 id                         color     tooltip                 checked
         RR( _( "DCodes" ),           LAYER_DCODES,                WHITE,    _( "Show DCodes identification" ) ),

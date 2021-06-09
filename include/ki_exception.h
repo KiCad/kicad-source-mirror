@@ -110,7 +110,7 @@ protected:
 
 /**
  * A filename or source description, a problem input line, a line number, a byte
- * offset, and an error message which contains the the caller's report and his call
+ * offset, and an error message which contains the caller's report and his call
  * site information: CPP source file, function, and line number.
  *
  * @author Dick Hollenbeck

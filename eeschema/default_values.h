@@ -57,7 +57,7 @@
 ///< The default junction diameter in mils. (can be changed in preference menu)
 #define DEFAULT_JUNCTION_DIAM 36
 
-///< The default bus and wire enty size in mils.
+///< The default bus and wire entry size in mils.
 #define DEFAULT_SCH_ENTRY_SIZE 100
 
 ///< The default text size in mils. (can be changed in preference menu)

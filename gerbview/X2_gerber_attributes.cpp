@@ -81,7 +81,7 @@ const wxString& X2_ATTRIBUTE::GetPrm( int aIdx)
     return dummy;
 }
 
-// Debug function: pring using wxLogMessage the list of parameters
+// Debug function: print using wxLogMessage the list of parameters
 void X2_ATTRIBUTE::DbgListPrms()
 {
     wxLogMessage( wxT("prms count %d"), GetPrmCount() );

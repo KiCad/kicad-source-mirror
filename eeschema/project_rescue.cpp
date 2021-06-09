@@ -837,7 +837,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     // Relaod the symbol library table.
     m_prj->SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
 
-    // This can only happen if the symbol library table file was currupted on write.
+    // This can only happen if the symbol library table file was corrupted on write.
     if( !m_prj->SchSymbolLibTable() )
         return false;
 

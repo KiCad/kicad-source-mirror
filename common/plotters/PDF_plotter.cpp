@@ -757,7 +757,7 @@ bool PDF_PLOTTER::EndPlot()
 
     if( m_title.IsEmpty() )
     {
-        // Windows uses '\' and other platforms ue '/' as separator
+        // Windows uses '\' and other platforms use '/' as separator
         m_title = m_filename.AfterLast( '\\');
         m_title = m_title.AfterLast( '/');
     }

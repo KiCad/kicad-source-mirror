@@ -766,7 +766,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
     {
         // last cursor move event came from keyboard cursor control. If auto-panning is enabled and
         // the next position is inside the autopan zone, check if it really came from a mouse event, otherwise
-        // disable autopan temporarily. Also temporaly disable autopan if the cursor is in the autopan zone
+        // disable autopan temporarily. Also temporarily disable autopan if the cursor is in the autopan zone
         // because the application warped the cursor.
 
         m_cursorWarped = false;

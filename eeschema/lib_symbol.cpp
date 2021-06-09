@@ -42,7 +42,7 @@ int LIB_PART::m_subpartIdSeparator = 0;
 
 // the ascii char value to calculate the subpart symbol id from the part number:
 // 'A' or '1' usually. (to print U1.A or U1.1)
-// if this a a digit, a number is used as id symbol
+// if this a digit, a number is used as id symbol
 int LIB_PART::m_subpartFirstId = 'A';
 
 
@@ -788,7 +788,7 @@ bool LIB_PART::PinsConflictWith( const LIB_PART& aOtherPart, bool aTestNums, boo
                 continue;
 
             foundMatch = true;
-            break;                    // Match found so seach is complete.
+            break;                    // Match found so search is complete.
         }
 
         if( !foundMatch )
@@ -1296,7 +1296,7 @@ std::vector<struct PART_UNITS> LIB_PART::GetUniqueUnits()
     std::vector<LIB_ITEM*> currentDrawItems;
     std::vector<struct PART_UNITS> uniqueUnits;
 
-    // The first unit is guarenteed to be unique so always include it.
+    // The first unit is guaranteed to be unique so always include it.
     unit.m_unit = 1;
     unit.m_convert = 1;
     unit.m_items = GetUnitItems( 1, 1 );

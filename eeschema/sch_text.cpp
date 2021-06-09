@@ -319,7 +319,7 @@ void SCH_TEXT::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
     m_spin_style = aSpinStyle;
 
     // Assume "Right" and Left" mean which side of the anchor the text will be on
-    // Thus we want to left justify text up agaisnt the anchor if we are on the right
+    // Thus we want to left justify text up against the anchor if we are on the right
     switch( aSpinStyle )
     {
     default:

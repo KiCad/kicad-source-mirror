@@ -202,7 +202,7 @@ public:
     EDA_ITEM* GetPickedItem( unsigned int aIdx ) const;
 
     /**
-     * @return A pointer to the picked item's sceen.
+     * @return A pointer to the picked item's screen.
      * @param aIdx Index of the picked item in the picked list.
      */
     BASE_SCREEN* GetScreenForItem( unsigned int aIdx ) const;

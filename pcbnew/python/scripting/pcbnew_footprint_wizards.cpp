@@ -377,6 +377,6 @@ void PYTHON_FOOTPRINT_WIZARD_LIST::register_wizard( PyObject* aPyWizard )
 
 void PYTHON_FOOTPRINT_WIZARD_LIST::deregister_wizard( PyObject* aPyWizard )
 {
-    // deregister also destroyes the previously created "PYTHON_FOOTPRINT_WIZARD object"
+    // deregister also destroys the previously created "PYTHON_FOOTPRINT_WIZARD object"
     FOOTPRINT_WIZARD_LIST::deregister_object( (void*) aPyWizard );
 }

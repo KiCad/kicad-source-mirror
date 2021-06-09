@@ -68,7 +68,7 @@ public:
 
     bool acceptPoint( const VECTOR2I& aPt ) override;
 
-    ///< The the arc to be clockwise from start
+    ///< The arc to be clockwise from start
     void SetClockwise( bool aCw );
 
     ///< Reverse the current are direction

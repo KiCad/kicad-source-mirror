@@ -107,7 +107,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
-        // Due to the fact ALT key modifier cannot be useed freely on Winows and Linux,
+        // Due to the fact ALT key modifier cannot be used freely on Winows and Linux,
         // actions are different on OSX and others OS
         // Especially, ALT key cannot be used to force showing the full selection choice
         // context menu (the menu is immediately closed on Windows )

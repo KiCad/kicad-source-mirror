@@ -230,7 +230,7 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
     // Be sure any event cannot be fired after frame deletion:
     GetCanvas()->SetEvtHandlerEnabled( false );
 
-    // Be sure a active tool (if exists) is desactivated:
+    // Be sure a active tool (if exists) is deactivated:
     if( m_toolManager )
         m_toolManager->DeactivateTool();
 

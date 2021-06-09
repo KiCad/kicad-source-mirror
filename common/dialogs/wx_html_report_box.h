@@ -50,7 +50,7 @@ public:
 
     /**
      * Build the HTML messages page.
-     * Call it if the immediate mode is not actived to be able to display them
+     * Call it if the immediate mode is not activated to be able to display them
      */
     void Flush();
 

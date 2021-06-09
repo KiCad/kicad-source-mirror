@@ -665,7 +665,7 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
         }
         catch( PARSE_ERROR& )
         {
-            wxFAIL_MSG( "Compiling implict rules failed." );
+            wxFAIL_MSG( "Compiling implicit rules failed." );
         }
 
         throw original_parse_error;

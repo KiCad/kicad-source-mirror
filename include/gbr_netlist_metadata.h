@@ -148,7 +148,7 @@ private:
 class GBR_NETLIST_METADATA
 {
 public:
-    // This enum enables the different net attributes attache to the object
+    // This enum enables the different net attributes attached to the object
     // the values can be ORed for items which can have more than one attribute
     // (A flashed pad has all allowed attributes)
     enum GBR_NETINFO_TYPE

@@ -134,7 +134,7 @@
 <xsl:template name="build_pin_list" match="pin">
     <xsl:param name="cmp_ref" select="0" />
 
-    <!-- write pin numner and separator -->
+    <!-- write pin number and separator -->
     <xsl:text>  ( </xsl:text>
     <xsl:value-of select="@num"/>
     <xsl:text> </xsl:text>

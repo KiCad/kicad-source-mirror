@@ -1458,7 +1458,7 @@ bool SHAPE_POLY_SET::CollideVertex( const VECTOR2I& aPoint,
     VECTOR2D    delta;
     double      distance, clearance;
 
-    // Convert clearance to double for precission when comparing distances
+    // Convert clearance to double for precision when comparing distances
     clearance = aClearance;
 
     for( CONST_ITERATOR iterator = CIterateWithHoles(); iterator; iterator++ )

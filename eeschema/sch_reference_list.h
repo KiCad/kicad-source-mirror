@@ -84,7 +84,7 @@ public:
     }
 
     /**
-     * Update the annotation of the symbol according the the current object state.
+     * Update the annotation of the symbol according the current object state.
      */
     void Annotate();
 

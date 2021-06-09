@@ -104,7 +104,7 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
     SetFocus();
 
     {
-        // We have to disable all frames but the the modal one.
+        // We have to disable all frames but the modal one.
         // wxWindowDisabler does that, but it also disables all top level windows
         // We do not want to disable top level windows which are child of the modal one,
         // if they are enabled.

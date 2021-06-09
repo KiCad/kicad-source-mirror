@@ -84,16 +84,16 @@ public:
     void OnSetDefaultValues( wxCommandEvent& event ) override;
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 
-    // Data transfert from general properties to widgets
+    // Data transfer from general properties to widgets
     void CopyPrmsFromGeneralToPanel();
 
-    // Data transfert from widgets to general properties
+    // Data transfer from widgets to general properties
     bool CopyPrmsFromPanelToGeneral();
 
-    // Data transfert from item to widgets in properties frame
+    // Data transfer from item to widgets in properties frame
     void CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem );
 
-    // Data transfert from widgets in properties frame to item
+    // Data transfer from widgets in properties frame to item
     bool CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem );
 
     wxSize GetMinSize() const override;

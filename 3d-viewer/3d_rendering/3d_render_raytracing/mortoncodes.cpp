@@ -24,7 +24,7 @@
 
 /**
  * @file  mortoncodes.cpp
- * @brief Implementes Morton Codes base on the implementation of Fabian “ryg” Giesen
+ * @brief Implements Morton Codes base on the implementation of Fabian “ryg” Giesen
  * https://fgiesen.wordpress.com/2009/12/13/decoding-morton-codes/
  */
 

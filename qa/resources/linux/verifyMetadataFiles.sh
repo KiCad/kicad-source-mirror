@@ -1,5 +1,5 @@
 #!/bin/bash
-# WARNING: This script will modify file assocations and MIME types on the system it
+# WARNING: This script will modify file associations and MIME types on the system it
 # runs on. Use at your own risk!
 
 # The root of the code directory is the first argument
@@ -17,7 +17,7 @@ KICAD_MIME_TEST_FILES=$KICAD_CODE_DIR/qa/resources/linux/mimeFiles
 
 ###################################################################
 # Verify the metainfo file
-# There are two different checkers we can use, and each distro perfers
+# There are two different checkers we can use, and each distro prefers
 # different ones - so lets just test using them both and make them both
 # happy.
 ###################################################################

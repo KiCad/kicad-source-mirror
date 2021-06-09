@@ -402,7 +402,7 @@ void BITMAPCONV_INFO::createOutputData( BMP2CMP_MOD_LAYER aModLayer )
 
     // The layer name has meaning only for .kicad_mod files.
     // For these files the header creates 2 invisible texts: value and ref
-    // (needed but not usefull) on silk screen layer
+    // (needed but not useful) on silk screen layer
     outputDataHeader( getBoardLayerName( MOD_LYR_FSILKS ) );
 
     bool main_outline = true;

@@ -189,7 +189,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                 }
             }, {} ) );
 
-    // TOOD(JE) get rid of this static
+    // TODO(JE) get rid of this static
     m_params.emplace_back( new PARAM<wxString>( "page_layout_descr_file",
             &BASE_SCREEN::m_DrawingSheetFileName, "" ) );
 

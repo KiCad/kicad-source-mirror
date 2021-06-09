@@ -68,7 +68,7 @@ void TWO_POINT_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     if( radVec.x == 0 && radVec.y == 0 )
     {
-        return; // text next to cursor jumps alot around in this corner case
+        return; // text next to cursor jumps around a lot in this corner case
     }
 
     gal.ResetTextAttributes();

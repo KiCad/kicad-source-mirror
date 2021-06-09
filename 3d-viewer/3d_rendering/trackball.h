@@ -45,13 +45,13 @@
  * the mouse, scaled so they are from (-1.0 ... 1.0).
  *
  * The resulting rotation is returned as a quaternion rotation in the
- * first paramater.
+ * first parameter.
  */
 void trackball( double q[4], double p1x, double p1y, double p2x, double p2y );
 
 /*
  * Given two quaternions, add them together to get a third quaternion.
- * Adding quaternions to get a compound rotation is analagous to adding
+ * Adding quaternions to get a compound rotation is analogous to adding
  * translations to get a compound translation.  When incrementally
  * adding rotations, the first argument here should be the new
  * rotation, the second and third the total rotation (which will be

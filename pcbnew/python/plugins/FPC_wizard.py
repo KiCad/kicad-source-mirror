@@ -118,7 +118,7 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
         max_y = max( max_y, posy )
         self.draw.Line(xstart, posy, xend, posy)
 
-        # around left mechanical pad (the outline around right pad is mirrored/y axix)
+        # around left mechanical pad (the outline around right pad is mirrored/y axis)
         yend = pad_s0_pos.y + shl_height/2 + margin
         max_y = max( max_y, yend )
         self.draw.Line(xstart, posy, xstart, yend)

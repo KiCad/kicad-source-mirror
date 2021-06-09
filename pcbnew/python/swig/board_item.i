@@ -31,7 +31,7 @@
 
 %include board_item.h         // generate code for this interface
 
-/* Only for compatibility with old python scipts: */
+/* Only for compatibility with old python scripts: */
 const int S_SEGMENT = (const int)PCB_SHAPE_TYPE::SEGMENT;
 const int S_RECT = (const int)PCB_SHAPE_TYPE::RECT;
 const int S_ARC = (const int)PCB_SHAPE_TYPE::ARC;
@@ -43,7 +43,7 @@ const int S_CURVE = (const int)PCB_SHAPE_TYPE::CURVE;
 
 %{
 #include <board_item.h>
-/* for compatibility with old python scipts: */
+/* for compatibility with old python scripts: */
 const int S_SEGMENT = (const int)PCB_SHAPE_TYPE::SEGMENT;
 const int S_RECT = (const int)PCB_SHAPE_TYPE::RECT;
 const int S_ARC = (const int)PCB_SHAPE_TYPE::ARC;
@@ -81,7 +81,7 @@ class ZONE;
 class FP_ZONE;
 class PCB_TARGET;
 
-// Anthing targeted to the %wrapper section is extern "C" whereas code targeted
+// Anything targeted to the %wrapper section is extern "C" whereas code targeted
 // to %header section is C++.
 #ifdef __cplusplus
 extern "C" {

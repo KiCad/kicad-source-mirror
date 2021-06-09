@@ -70,7 +70,7 @@ namespace KIPLATFORM
          * This is mainly intended for Windows platforms where this is a native feature.
          *
          * @param aWindow that will have a shutdown blocker message
-         * @param aReason to display why the shutdown block is occuring
+         * @param aReason to display why the shutdown block is occurring
          */
         void SetShutdownBlockReason( wxWindow* aWindow, const wxString& aReason );
 

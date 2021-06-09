@@ -46,8 +46,8 @@ Here we included the language, branch and sha of the kicad source at
 the time of updating.  Now make your translations and commit that and
 push the pull request.
 
-This is not mandatory, but it makes it easer for other people to
-review your changes when we seperate the automatic update from the
+This is not mandatory, but it makes it easier for other people to
+review your changes when we separate the automatic update from the
 human edits.
 
 

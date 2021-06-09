@@ -211,7 +211,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     finishDialogSettings();
 
     // On some window managers (Unity, XFCE) the dialog is not always raised, depending on
-    // how it is is run.
+    // how it is run.
     Raise();
 
     m_initialized = true;

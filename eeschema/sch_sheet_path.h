@@ -270,7 +270,7 @@ public:
     /**
      * Return the sheet path in a human readable form made from the sheet names.
      *
-     * The the "normal" path instead uses the #KIID objects in the path that do not change
+     * The "normal" path instead uses the #KIID objects in the path that do not change
      * even when editing sheet parameters.
      */
     wxString PathHumanReadable( bool aUseShortRootName = true ) const;

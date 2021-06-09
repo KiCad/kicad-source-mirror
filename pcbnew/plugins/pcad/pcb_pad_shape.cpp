@@ -94,7 +94,7 @@ void PCB_PAD_SHAPE::Parse( XNODE*          aNode,
     }
     else if( m_Shape == wxT( "Polygon" ) )
     {
-        // aproximation to simplier pad shape .....
+        // approximation to simpler pad shape .....
         lNode = FindNode( aNode, wxT( "shapeOutline" ) );
 
         if( lNode )

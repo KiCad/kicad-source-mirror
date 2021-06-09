@@ -2333,7 +2333,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks( const NET_ID&         aCadstarNe
     std::vector<PCB_SHAPE*> shapes;
     std::vector<NET_PCB::ROUTE_VERTEX> routeVertices = aCadstarRoute.RouteVertices;
 
-    // Add thin route at front so that route offseting works as expected
+    // Add thin route at front so that route offsetting works as expected
     if( aStartWidth < routeVertices.front().RouteWidth )
     {
         NET_PCB::ROUTE_VERTEX newFrontVertex = aCadstarRoute.RouteVertices.front();
@@ -2514,7 +2514,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
         break;
 
     default:
-        wxFAIL_MSG( "Unknown Aligment - needs review!" );
+        wxFAIL_MSG( "Unknown Alignment - needs review!" );
     }
 
     if( aMirrorInvert )
@@ -3055,7 +3055,7 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
             }
             else if( offsetAmount < 0 )
             {
-                // ammend the end of the previous track
+                // amend the end of the previous track
                 wxPoint newEnd = prevTrack->GetEnd();
                 applyRouteOffset( &newEnd, prevTrack->GetStart(), -offsetAmount );
                 prevTrack->SetEnd( newEnd );
@@ -3063,7 +3063,7 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
 
             // Add a synthetic track of the thinnest width between the tracks
             // to ensure KiCad features works as expected on the imported design
-            // (KiCad expects tracks are contigous segments)
+            // (KiCad expects tracks are contiguous segments)
             if( track->GetStart() != prevTrack->GetEnd() )
             {
                 int    minWidth = std::min( track->GetWidth(), prevTrack->GetWidth() );
@@ -3220,7 +3220,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
         break;
 
     default:
-        wxFAIL_MSG( "Unknown Aligment - needs review!" );
+        wxFAIL_MSG( "Unknown Alignment - needs review!" );
     }
 
     //TODO Handle different font types when KiCad can support it.
@@ -3532,7 +3532,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
     case UNITS::CENTIMETER:
     case UNITS::MICROMETRE:
         wxLogWarning( wxString::Format( _( "Dimension ID %s uses a type of unit that "
-                                           "is not supported in KiCad. Milimetres were "
+                                           "is not supported in KiCad. Millimetres were "
                                            "applied instead." ),
                                         aCadstarDim.ID ) );
         KI_FALLTHROUGH;

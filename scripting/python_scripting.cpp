@@ -302,7 +302,7 @@ void UpdatePythonEnvVar( const wxString& aVar, const wxString& aValue )
 {
     char cmd[1024];
 
-    // Ensure the interpreter is initalized before we try to interact with it
+    // Ensure the interpreter is initialized before we try to interact with it
     if( !Py_IsInitialized() )
         return;
 

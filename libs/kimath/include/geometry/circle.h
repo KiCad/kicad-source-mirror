@@ -43,7 +43,7 @@ public:
     CIRCLE( const CIRCLE& aOther );
 
     /**
-     * Constructs this circle such that it is tangent to the given segmetns and passes through the
+     * Constructs this circle such that it is tangent to the given segments and passes through the
      * given point, generating the solution which can be used to fillet both segments.
      *
      * The caller is responsible for ensuring it is providing a solvable problem. This function will

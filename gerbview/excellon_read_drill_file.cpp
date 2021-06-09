@@ -187,7 +187,7 @@ extern void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index,
 // Gerber X2 files have a file attribute which specify the type of image
 // (copper, solder paste ... and sides tpo, bottom or inner copper layers)
 // Excellon drill files do not have attributes, so, just to identify the image
-// In gerbview, we add this attribute, similat to a Gerber drill file
+// In gerbview, we add this attribute, similar to a Gerber drill file
 static const char file_attribute[] = ".FileFunction,Other,Drill*";
 
 static EXCELLON_CMD excellonHeaderCmdList[] =
@@ -308,7 +308,7 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 
 bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
 {
-    // Set the default parmeter values:
+    // Set the default parameter values:
     ResetDefaultValues();
     ClearMessageList();
 
@@ -538,7 +538,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
         break;
 
     case DRILL_M_TOOL_DOWN:      // tool down (starting a routed hole or polyline)
-        // Only the last position is usefull:
+        // Only the last position is useful:
         if( m_RoutePositions.size() > 1 )
             m_RoutePositions.erase( m_RoutePositions.begin(), m_RoutePositions.begin() + m_RoutePositions.size() - 1 );
 
@@ -870,7 +870,7 @@ void EXCELLON_IMAGE::SelectUnits( bool aMetric )
         m_GerbMetric = true;
         // number of digits in mantissa
         m_FmtScale.x = m_FmtScale.y = fmtMantissaMM;
-        // number of digits (mantissa+interger)
+        // number of digits (mantissa+integer)
         m_FmtLen.x = m_FmtLen.y = fmtIntegerMM+fmtMantissaMM;
     }
     else

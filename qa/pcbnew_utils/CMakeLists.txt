@@ -20,7 +20,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 # Pcbnew-related auxiliary functions that are useful for QA purposes
-# (both unit tests ans utility programs)
+# (both unit tests and utility programs)
 
 # This is a massive hack in the CMake as I have no idea how to get this to
 # link against pcbnew/pcbcommon/etc and still allow a dependency to also link

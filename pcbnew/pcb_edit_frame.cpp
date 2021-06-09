@@ -882,7 +882,7 @@ void PCB_EDIT_FRAME::doCloseWindow()
 
     // Do not show the layer manager during closing to avoid flicker
     // on some platforms (Windows) that generate useless redraw of items in
-    // the Layer Manger
+    // the Layer Manager
     if( m_show_layer_manager_tools )
         m_auimgr.GetPane( "LayersManager" ).Show( false );
 

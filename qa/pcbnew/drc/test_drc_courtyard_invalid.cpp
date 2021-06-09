@@ -236,7 +236,7 @@ static bool InvalidMatchesExpected( BOARD& aBoard, const PCB_MARKER& aMarker,
     auto reporter = std::static_pointer_cast<DRC_ITEM>( aMarker.GetRCItem() );
     const FOOTPRINT* item_a = dynamic_cast<FOOTPRINT*>( aBoard.GetItem( reporter->GetMainItemID() ) );
 
-    // This one is more than just a mis-match!
+    // This one is more than just a mismatch!
     if( reporter->GetAuxItemID() != niluuid )
     {
         BOOST_WARN_MESSAGE( false, "Expected no auxiliary item for invalid courtyard DRC." );

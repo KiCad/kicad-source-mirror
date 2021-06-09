@@ -94,7 +94,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );
     SYMBOL_LIB_TABLE*            libs = Prj().SchSymbolLibTable();
 
-    // One DIALOG_CHOOSE_SYMBOL dialog at a time.  User probaby can't handle more anyway.
+    // One DIALOG_CHOOSE_SYMBOL dialog at a time.  User probably can't handle more anyway.
     if( !dialogLock.try_lock() )
         return PICKED_SYMBOL();
 

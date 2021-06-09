@@ -70,9 +70,9 @@ typedef struct
 ///  1.0 unit ==  1.0 mm
 /// 10.0 unit == 10.0 mm
 ///
-/// To convert this units to pcbunits, use the convertion facto UNITS3D_TO_UNITSPCB
+/// To convert this units to pcbunits, use the conversion facto UNITS3D_TO_UNITSPCB
 ///
-/// m_Normals, m_Color and m_Texcoords are beween 0.0f and 1.0f
+/// m_Normals, m_Color and m_Texcoords are between 0.0f and 1.0f
 typedef struct
 {
     unsigned int    m_VertexSize;   ///< Number of vertex in the arrays

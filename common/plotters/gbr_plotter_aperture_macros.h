@@ -101,7 +101,7 @@
 4,1,4,$1,$2,$3,$4,$5,$6,$7,$8,$1,$2,$9*%\n"
 
 // A aperture macro to define a polygon by 5 corners
-// and a rotation angle (usefull for chamfered rect pads)
+// and a rotation angle (useful for chamfered rect pads)
 #define APER_MACRO_OUTLINE5P_NAME "Outline5P"
 
 #define APER_MACRO_OUTLINE5P_HEADER \
@@ -115,7 +115,7 @@
 4,1,5,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$1,$2,$11*%\n"
 
 // A aperture macro to define a polygon by 6 corners
-// and a rotation angle (usefull for chamfered rect pads)
+// and a rotation angle (useful for chamfered rect pads)
 #define APER_MACRO_OUTLINE6P_NAME "Outline6P"
 
 #define APER_MACRO_OUTLINE6P_HEADER \
@@ -129,7 +129,7 @@
 4,1,6,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$1,$2,$13*%\n"
 
 // A aperture macro to define a polygon by 7 corners
-// and a rotation angle (usefull for chamfered rect pads)
+// and a rotation angle (useful for chamfered rect pads)
 #define APER_MACRO_OUTLINE7P_NAME "Outline7P"
 
 #define APER_MACRO_OUTLINE7P_HEADER \
@@ -143,7 +143,7 @@
 4,1,7,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$1,$2,$15*%\n"
 
 // A aperture macro to define a polygon by 8 corners
-// and a rotation angle (usefull for chamfered rect pads)
+// and a rotation angle (useful for chamfered rect pads)
 #define APER_MACRO_OUTLINE8P_NAME "Outline8P"
 
 #define APER_MACRO_OUTLINE8P_HEADER \

@@ -109,7 +109,7 @@ public:
     void parseOk();
     void parseSetResult(double);
 
-    /* Check if previous invokation of process() was successful */
+    /* Check if previous invocation of process() was successful */
     inline bool IsValid() const { return !m_parseError; }
 
     /* Result of string processing. Undefined if !isValid() */

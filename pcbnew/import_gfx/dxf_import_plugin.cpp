@@ -66,9 +66,9 @@
         - Hatch
         - Image
         - Text
- *   5. Object coordinates must be run through the arbtirary axis
+ *   5. Object coordinates must be run through the arbitrary axis
  *      translation even though they are 2D drawings and most of the time
- *      the import is fine. Sometimes, agaisnt all logic, CAD tools like
+ *      the import is fine. Sometimes, against all logic, CAD tools like
  *      SolidWorks may randomly insert circles "mirror" that must be unflipped
  *      by following the object to world conversion
  *    6. Blocks are virtual groups, blocks must be placed by a INSERT entity

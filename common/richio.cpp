@@ -117,7 +117,7 @@ LINE_READER::LINE_READER( unsigned aMaxLineLength ) :
             m_capacity = aMaxLineLength+1;
 
         // Be sure there is room for a null EOL char, so reserve at least capacity+1 bytes
-        // to ensure capacity line lenght and avoid corner cases
+        // to ensure capacity line length and avoid corner cases
         // Use capacity+5 to cover and corner case
         m_line = new char[m_capacity+5];
 
@@ -145,7 +145,7 @@ void LINE_READER::expandCapacity( unsigned aNewsize )
 
         // resize the buffer, and copy the original data
         // Be sure there is room for the null EOL char, so reserve capacity+1 bytes
-        // to ensure capacity line lenght. Use capacity+5 to cover and corner case
+        // to ensure capacity line length. Use capacity+5 to cover and corner case
         char* bigger = new char[m_capacity+5];
 
         wxASSERT( m_capacity >= m_length+1 );
@@ -476,7 +476,7 @@ std::string OUTPUTFORMATTER::Quotes( const std::string& aWrapee ) const
 std::string OUTPUTFORMATTER::Quotew( const wxString& aWrapee ) const
 {
     // wxStrings are always encoded as UTF-8 as we convert to a byte sequence.
-    // The non-virutal function calls the virtual workhorse function, and if
+    // The non-virtual function calls the virtual workhorse function, and if
     // a different quoting or escaping strategy is desired from the standard,
     // a derived class can overload Quotes() above, but
     // should never be a reason to overload this Quotew() here.

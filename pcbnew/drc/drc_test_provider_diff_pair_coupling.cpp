@@ -259,7 +259,7 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp, DRC_RTREE& aTree 
             SHAPE_SEGMENT checkSegStart( bestCoupled->coupledP.A, bestCoupled->coupledN.A );
             SHAPE_SEGMENT checkSegEnd( bestCoupled->coupledP.B, bestCoupled->coupledN.B );
 
-            // check if there's anyting in between the segments suspected to be coupled. If
+            // check if there's anything in between the segments suspected to be coupled. If
             // there's nothing, assume they are really coupled.
 
             if( !aTree.CheckColliding( &checkSegStart, sp->GetLayer(), 0, excludeSelf )

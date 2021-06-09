@@ -138,7 +138,7 @@ public:
 
     /**
      * Moves the connectivity list anchors.  N.B., this does not move the bounding
-     * boxes for the the RTree, so the use of this function will invalidate the
+     * boxes for the RTree, so the use of this function will invalidate the
      * connectivity data for uses other than the dynamic ratsnest
      *
      * @param aDelta vector for movement of the tree

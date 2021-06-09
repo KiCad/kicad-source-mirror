@@ -55,7 +55,7 @@
 // a linear routing command (G01) is perhaps more usual for drill files
 //
 // set m_useRouteModeForOval to false to use a canned slot hole (old way)
-// set m_useRouteModeForOval to true (prefered mode) to use a linear routed hole (new way)
+// set m_useRouteModeForOval to true (preferred mode) to use a linear routed hole (new way)
 
 EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
     : GENDRILL_WRITER_BASE( aPcb )

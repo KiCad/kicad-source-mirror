@@ -113,7 +113,7 @@ bool PGM_KICAD::OnPgmInit()
     m_bm.Init();
 
     // Add search paths to feed the PGM_KICAD::SysSearch() function,
-    // currenly limited in support to only look for project templates
+    // currently limited in support to only look for project templates
     {
         SEARCH_STACK bases;
 

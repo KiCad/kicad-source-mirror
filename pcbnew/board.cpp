@@ -1798,7 +1798,7 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
 
                         segLen = trackSeg.Length();
 
-                        // Part 2: length from the interesection to the pad anchor
+                        // Part 2: length from the intersection to the pad anchor
                         segInPadLen += ( loc - pad->GetPosition() ).EuclideanNorm();
                     }
                 }

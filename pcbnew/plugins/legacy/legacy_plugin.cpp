@@ -1783,7 +1783,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
     BIU     thickn  = biuParse( data, &data );
 
     // read the quoted text before the first call to strtok() which introduces
-    // NULs into the string and chops it into mutliple C strings, something
+    // NULs into the string and chops it into multiple C strings, something
     // ReadDelimitedText() cannot traverse.
 
     // convert the "quoted, escaped, UTF8, text" to a wxString, find it by skipping

@@ -142,7 +142,7 @@ public:
     }
 
     /// Append a wide (unicode) char to the UTF8 string.
-    /// if this wide char is not a ASCII7 char, it will be added as a UTF8 multibyte seqence
+    /// if this wide char is not a ASCII7 char, it will be added as a UTF8 multibyte sequence
     /// @param w_ch is a UTF-16 value (can be a UTF-32 on Linux)
     UTF8& operator+=( unsigned w_ch );
 

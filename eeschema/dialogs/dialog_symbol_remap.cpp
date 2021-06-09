@@ -132,7 +132,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 
     PART_LIBS::LibNamesAndPaths( &Prj(), true, &paths, &libNames );
 
-    // Reload the the cache symbol library.
+    // Reload the cache symbol library.
     Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
     Prj().SchLibs();
 

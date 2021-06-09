@@ -40,7 +40,7 @@ class EDA_RECT;
  * This probably should be a base class with all pure virtual methods and a WXDC_TRANSFORM
  * derived class.  Then in the future if some new device context is used, a new transform could
  * be derived from the base class and all the drawable objects would have to do is provide
- * overloaded draw methods to use the new transorm.
+ * overloaded draw methods to use the new transform.
  */
 class TRANSFORM
 {

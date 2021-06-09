@@ -448,7 +448,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     int      filter = 0;
 
     // If the PROJECT::VIEWER_3D_PATH hasn't been set yet, use the KICAD6_3DMODEL_DIR environment
-    // varaible and fall back to the project path if necessary.
+    // variable and fall back to the project path if necessary.
     if( initialpath.IsEmpty() )
     {
         if( !wxGetEnv( "KICAD6_3DMODEL_DIR", &initialpath ) || initialpath.IsEmpty() )

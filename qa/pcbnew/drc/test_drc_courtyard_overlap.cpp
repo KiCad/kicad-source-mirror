@@ -393,7 +393,7 @@ static bool CollisionMatchesExpected( BOARD& aBoard, const PCB_MARKER& aMarker,
     const FOOTPRINT* item_a = dynamic_cast<FOOTPRINT*>( aBoard.GetItem( reporter->GetMainItemID() ) );
     const FOOTPRINT* item_b = dynamic_cast<FOOTPRINT*>( aBoard.GetItem( reporter->GetAuxItemID() ) );
 
-    // cant' find the items!
+    // can't find the items!
     if( !item_a || !item_b )
         return false;
 

@@ -391,7 +391,7 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( '[' != tok )
     {
-        // since there are no delimeters we expect a single child
+        // since there are no delimiters we expect a single child
         if( !aTopNode->ReadNode( proc, this, NULL ) )
             return false;
 

@@ -332,7 +332,7 @@ protected:
      */
     void clearNetAttribute();
 
-    // the attributes dictionary created/modifed by %TO, attached to objects, when they are created
+    // the attributes dictionary created/modified by %TO, attached to objects, when they are created
     // by D01, D03, G36/G37 commands
     // standard attributes are .P, .C and .N
     // this is used by gerber readers when creating a new object. Cleared by %TD command

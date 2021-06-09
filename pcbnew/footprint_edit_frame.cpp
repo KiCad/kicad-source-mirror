@@ -338,7 +338,7 @@ void FOOTPRINT_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasTyp
 
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
 
-    // The base class method *does not reinit* the layers manager. We must upate the layer
+    // The base class method *does not reinit* the layers manager. We must update the layer
     // widget to match board visibility states, both layers and render columns, and and some
     // settings dependent on the canvas.
     UpdateUserInterface();
@@ -644,7 +644,7 @@ void FOOTPRINT_EDIT_FRAME::doCloseWindow()
 
     // Do not show the layer manager during closing to avoid flicker
     // on some platforms (Windows) that generate useless redraw of items in
-    // the Layer Manger
+    // the Layer Manager
     m_auimgr.GetPane( "LayersManager" ).Show( false );
     m_auimgr.GetPane( "SelectionFilter" ).Show( false );
 

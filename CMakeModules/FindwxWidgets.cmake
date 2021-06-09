@@ -977,7 +977,7 @@ if (_wx_lib_missing)
 endif()
 
 
-# Check if a specfic version was requested by find_package().
+# Check if a specific version was requested by find_package().
 if(wxWidgets_FOUND)
   find_file(_filename wx/version.h PATHS ${wxWidgets_INCLUDE_DIRS} NO_DEFAULT_PATH)
   DBG_MSG("_filename:  ${_filename}")

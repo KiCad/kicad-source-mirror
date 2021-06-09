@@ -637,7 +637,7 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
         // the entire dictionary is cleared
         // If m_TryKeepPreviousAttributes is true, only the no longer existing attribute
         // is cleared.
-        // Note: to avoid interaction beteween clear attributes and set attributes
+        // Note: to avoid interaction between clear attributes and set attributes
         // the clear attribute is inserted first.
         bool clearDict = false;
 

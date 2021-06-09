@@ -19,7 +19,7 @@ if len(argv)<2:
     print("   fix_swig_imports.py file.py")
     print("")
     print("   will fix the swig import code for working inside KiCad")
-    print("   where it happended that the external _pcbnew.so/dll was")
+    print("   where it happened that the external _pcbnew.so/dll was")
     print("   loaded too -and the internal _pcbnew module was to be used")
     exit(1)
 

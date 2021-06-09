@@ -43,7 +43,7 @@ STATUS_POPUP::STATUS_POPUP( wxWindow* aParent ) :
 
 #ifdef __WXOSX_MAC__
     // Key events from popups don't get put through the wxWidgets event system on OSX,
-    // so we have to fall back to the CHAR_HOOK to forwared hotkeys from the popup to
+    // so we have to fall back to the CHAR_HOOK to forward hotkeys from the popup to
     // the canvas / frame.
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( STATUS_POPUP::onCharHook ), nullptr, this );
 #endif

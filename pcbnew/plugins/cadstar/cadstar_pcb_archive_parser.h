@@ -250,7 +250,7 @@ public:
          */
         SPACINGCODE_ID        ID;
         long                  Spacing;
-        std::vector<REASSIGN> Reassigns; ///< Can have different spacings on differnt layers
+        std::vector<REASSIGN> Reassigns; ///< Can have different spacings on different layers
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };

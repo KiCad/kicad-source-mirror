@@ -40,7 +40,7 @@
  * Function scaletoIU
  * converts a distance given in floating point to our internal units
  */
-extern int scaletoIU( double aCoord, bool isMetric );       // defined it rs274d_read_XY_and_IJ_coordiantes.cpp
+extern int scaletoIU( double aCoord, bool isMetric );       // defined it rs274d_read_XY_and_IJ_coordinates.cpp
 
 /**
  * Function mapPt
@@ -603,7 +603,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
     }
     break;
 
-    case AMP_MOIRE:     // A cross hair with n concentric circles. Only the cros is build as polygon
+    case AMP_MOIRE:     // A cross hair with n concentric circles. Only the cross is built as polygon
                         // because circles can be drawn easily
     {
         int crossHairThickness = scaletoIU( params[6].GetValue( tool ), m_GerbMetric );

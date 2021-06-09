@@ -326,7 +326,7 @@ std::string PSLIKE_PLOTTER::encodeStringForPlotter( const wxString& aUnicode )
 
     for( unsigned i = 0; i < aUnicode.Len(); i++ )
     {
-        // Lazyness made me use stdio buffering yet another time...
+        // Laziness made me use stdio buffering yet another time...
         wchar_t ch = aUnicode[i];
 
         if( ch < 256 )

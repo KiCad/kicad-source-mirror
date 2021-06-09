@@ -38,7 +38,7 @@
  * SHAPE_LINE_CHAIN
  *
  * Represents a polyline (an zero-thickness chain of connected line segments).
- * I purposedly didn't name it "polyline" to avoid confusion with the existing CPolyLine
+ * I purposely didn't name it "polyline" to avoid confusion with the existing CPolyLine
  * in pcbnew.
  *
  * SHAPE_LINE_CHAIN class shall not be used for polygons!
@@ -68,7 +68,7 @@ public:
         /// when true, the corner [index_their] of the 'their' line lies exactly on 'our' line.
         /// Note that when both is_corner_our and is_corner_their are set, the line chains touch with with corners
         bool is_corner_their;
-        /// auxillary flag to avoid copying intersection info to intersection refining code, used by the refining
+        /// auxiliary flag to avoid copying intersection info to intersection refining code, used by the refining
         /// code (e.g. hull handling stuff in the P&S) to reject false intersection points.
         bool valid;
     };
@@ -542,7 +542,7 @@ public:
      *
      * Searches for point aP.
      * @param aP the point to be looked for
-     * @return index of the correspoinding point in the line chain or negative when not found.
+     * @return index of the corresponding point in the line chain or negative when not found.
      */
     int Find( const VECTOR2I& aP, int aThreshold = 0 ) const;
 
@@ -551,7 +551,7 @@ public:
      *
      * Searches for segment containing point aP.
      * @param aP the point to be looked for
-     * @return index of the correspoinding segment in the line chain or negative when not found.
+     * @return index of the corresponding segment in the line chain or negative when not found.
      */
     int FindSegment( const VECTOR2I& aP, int aThreshold = 1 ) const;
 

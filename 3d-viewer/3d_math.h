@@ -38,7 +38,7 @@
  *
  * @param aInclination θ ∈ [0, π]
  * @param aAzimuth φ ∈ [0, 2π]
- * @return Cartesian cordinates
+ * @return Cartesian coordinates
  */
 inline SFVEC3F SphericalToCartesian( float aInclination, float aAzimuth )
 {

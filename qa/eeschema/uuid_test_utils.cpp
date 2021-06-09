@@ -39,7 +39,7 @@ bool IsUUID( const std::string& aStr )
 
 bool IsUUIDPathWithLevels( const std::string& aStr, unsigned aLevels )
 {
-    // A UUID is formated as 8-4-4-4-12
+    // A UUID is formatted as 8-4-4-4-12
     const unsigned tsLen = 36;
     const unsigned levelLen = tsLen + 1; // add the /
 

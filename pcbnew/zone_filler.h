@@ -102,7 +102,7 @@ private:
      * @param aRawPolys: A reference to a SHAPE_POLY_SET buffer to store
      * filled solid areas polygons (with holes)
      * @param aFinalPolys: A reference to a SHAPE_POLY_SET buffer to store polygons with no holes
-     * (holes are linked to main outline by overlapping segments, and these polygons are shrinked
+     * (holes are linked to main outline by overlapping segments, and these polygons are shrunk
      * by aZone->GetMinThickness() / 2 to be drawn with a outline thickness = aZone->GetMinThickness()
      * aFinalPolys are polygons that will be drawn on screen and plotted
      */

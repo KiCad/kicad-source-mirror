@@ -69,7 +69,7 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
     zoneInfo.SetIsRuleArea( m_params.m_keepout );
     zoneInfo.m_Zone_45_Only = ( m_params.m_leaderMode == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
 
-    // If we don't have a net from highlighing, maybe we can get one from the selection
+    // If we don't have a net from highlighting, maybe we can get one from the selection
     PCB_SELECTION_TOOL* selectionTool = m_tool.GetManager()->GetTool<PCB_SELECTION_TOOL>();
 
     if( selectionTool && !selectionTool->GetSelection().Empty()
@@ -266,7 +266,7 @@ bool ZONE_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
         {
             m_tool.GetManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-            // set up poperties from zone
+            // set up properties from zone
             const auto& settings = *m_parentView.GetPainter()->GetSettings();
             COLOR4D color = settings.GetColor( nullptr, m_zone->GetLayer() );
 

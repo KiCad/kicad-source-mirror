@@ -69,7 +69,7 @@ public:
                     const SFVEC3F& aN4 );
 
     /**
-     * Get the array of vertexes.
+     * Get the array of vertices.
      *
      * @return a pointer to the start of array vertex.
      */

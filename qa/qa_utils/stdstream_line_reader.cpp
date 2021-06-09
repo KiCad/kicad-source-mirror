@@ -36,7 +36,7 @@ STDISTREAM_LINE_READER::STDISTREAM_LINE_READER() :
 
 STDISTREAM_LINE_READER::~STDISTREAM_LINE_READER()
 {
-    // this is only a view into a string, it cant be deleted by the base
+    // this is only a view into a string, it can't be deleted by the base
     m_line = nullptr;
 }
 

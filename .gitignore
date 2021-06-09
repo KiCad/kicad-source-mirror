@@ -54,7 +54,7 @@ common/pcb_keywords.cpp
 include/pcb_lexer.h
 fp-info-cache
 
-# demo project auxillary files
+# demo project auxiliary files
 demos/**/*-bak
 demos/**/_autosave-*
 demos/**/fp-info-cache

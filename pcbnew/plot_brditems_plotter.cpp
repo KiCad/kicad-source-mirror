@@ -291,7 +291,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
     const FP_TEXT* textItem = &aFootprint->Reference();
     LAYER_NUM textLayer = textItem->GetLayer();
 
-    // Reference and value are specfic items, not in graphic items list
+    // Reference and value are specific items, not in graphic items list
     if( GetPlotReference() && m_layerMask[textLayer]
         && ( textItem->IsVisible() || GetPlotInvisibleText() ) )
     {

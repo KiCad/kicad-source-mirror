@@ -304,7 +304,7 @@ public:
     virtual int GetPenSizeUi() override;
 
     /**
-     * Try to build text wihich is an increment of m_TextBase
+     * Try to build text which is an increment of m_TextBase
      * has meaning only if m_TextBase is a basic text (one char)
      * If the basic char is a digit, build a number
      * If the basic char is a letter, use the letter with ASCII code

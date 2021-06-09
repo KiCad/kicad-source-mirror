@@ -62,19 +62,19 @@
  *  A simple definition, no parameters:
  *  %AMMOIRE10*
  *  6,0,0,0.350000,0.005,0.050,3,0.005,0.400000,0.0*%
- *  Example of instanciation:
+ *  Example of instantiation:
  *  %ADD19MOIRE10*%
  *
  *  A simple definition, one parameter:
  *  %AMCIRCLE*
  *  1,1,$1,0,0*
- *  Example of instanciation:
+ *  Example of instantiation:
  *  %ADD11CIRCLE,.5*%
  *
  *  A definition, with parameters and arithmetic operations:
  *  %AMVECTOR*
  *  2,1,$1,0,0,$2+1,$3,-135*%
- *  Example of instanciation:
+ *  Example of instantiation:
  *  %ADD12VECTOR,0.05X0X0*%
  *
  *  A more complicated aperture macro definition, with parameters and arithmetic operations:
@@ -86,7 +86,7 @@
  *  1,1,$3+$3,$3-$1,$2-$3*
  *  1,1,$3+$3,$1-$3,$3-$2*
  *  1,1,$3+$3,$3-$1,$3-$2*%
- *  Example of instanciation:
+ *  Example of instantiation:
  *
  *  A more complicated sample of aperture macro definition:
  *  G04 Rectangular Thermal Macro, params: W/2, H/2, T/2 *
@@ -96,7 +96,7 @@
  *  21,1,$1-$3,$2-$3,0-$1/2-$4,$2/2+$4,0*
  *  21,1,$1-$3,$2-$3,$1/2+$4,0-$2/2-$4,0*
  *  21,1,$1-$3,$2-$3,$1/2+$4,$2/2+$4,0*%
- *  Example of instanciation:
+ *  Example of instantiation:
  *  %ADD28RECTHERM,0.035591X0.041496X0.005000*%
  */
 

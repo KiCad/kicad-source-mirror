@@ -694,7 +694,7 @@ public:
     /**
      * Create a new entry in undo list of commands.
      *
-     * @param aItemsList is the the list of items modified by the command to undo/
+     * @param aItemsList is the list of items modified by the command to undo/
      * @param aTypeCommand is the command type (see enum UNDO_REDO).
      * @param aAppend set to true to add the item to the previous undo list.
      */

@@ -214,7 +214,7 @@ void PCB::SetTextProperty( XNODE*   aNode, TTEXTVALUE* aTextValue,
         }
     }
 
-    // old version and compatibile fr both from this point
+    // old version and compatible for both from this point
     tNode = FindNode( t1Node, wxT( "attr" ) );
 
     while( tNode )
@@ -681,7 +681,7 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxS
     wxString        compRef, pinRef, layerName, layerType;
     int             i, j, netCode;
 
-    // Defaut measurement units
+    // Default measurement units
     aNode = FindNode( (XNODE *)aXmlDoc->GetRoot(), wxT( "asciiHeader" ) );
 
     if( aNode )

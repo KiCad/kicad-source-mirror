@@ -427,7 +427,7 @@ BOOST_AUTO_TEST_CASE( SegSegCollision )
 
 
 /**
- * Struct to hold general cases for collinearity, paralellism and perpendicularity
+ * Struct to hold general cases for collinearity, parallelism and perpendicularity
  */
 struct SEG_SEG_BOOLEAN_CASE
 {
@@ -491,7 +491,7 @@ BOOST_AUTO_TEST_CASE( SegSegCollinear )
 
 // clang-format off
 /**
- * Test cases for paralellism
+ * Test cases for parallelism
  */
 static const std::vector<SEG_SEG_BOOLEAN_CASE> seg_vec_parallel_cases = {
     {

@@ -144,7 +144,7 @@ struct POINT
      * writes this object as ASCII out to an OUTPUTFORMATTER according to the
      * SPECCTRA DSN format.
      * @param out The formatter to write to.
-     * @param nestLevel A multiple of the number of spaces to preceed the output with.
+     * @param nestLevel A multiple of the number of spaces to precede the output with.
      * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const
@@ -166,7 +166,7 @@ struct PROPERTY
      * writes this object as ASCII out to an OUTPUTFORMATTER according to the
      * SPECCTRA DSN format.
      * @param out The formatter to write to.
-     * @param nestLevel A multiple of the number of spaces to preceed the output with.
+     * @param nestLevel A multiple of the number of spaces to precede the output with.
      * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const
@@ -200,7 +200,7 @@ protected:
 
     /**
      * Function makeHash
-     * returns a string which uniquely represents this ELEM amoung other
+     * returns a string which uniquely represents this ELEM among other
      * ELEMs of the same derived class as "this" one.
      * It is not useable for all derived classes, only those which plan for
      * it by implementing a FormatContents() function that captures all info
@@ -244,7 +244,7 @@ public:
      * writes this object as ASCII out to an OUTPUTFORMATTER according to the
      * SPECCTRA DSN format.
      * @param out The formatter to write to.
-     * @param nestLevel A multiple of the number of spaces to preceed the output with.
+     * @param nestLevel A multiple of the number of spaces to precede the output with.
      * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
     virtual void Format( OUTPUTFORMATTER* out, int nestLevel );
@@ -256,7 +256,7 @@ public:
      * SPECCTRA DSN format.  This is the same as Format() except that the outer
      * wrapper is not included.
      * @param out The formatter to write to.
-     * @param nestLevel A multiple of the number of spaces to preceed the output with.
+     * @param nestLevel A multiple of the number of spaces to precede the output with.
      * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
     virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel )
@@ -2458,7 +2458,7 @@ struct PIN_REF : public ELEM
 
     /**
      * Function FormatIt
-     * is like Format() but is not virual and returns the number of characters
+     * is like Format() but is not virtual and returns the number of characters
      * that were output.
      */
     int FormatIt( OUTPUTFORMATTER* out, int nestLevel )
@@ -3693,7 +3693,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * The caller should have already read in the first token comprizing the
      * pin_reference and it will be tested through CurTok().
      *
-     * @param component_id Where to put the text preceeding the '-' hyphen.
+     * @param component_id Where to put the text preceding the '-' hyphen.
      * @param pid_id Where to put the text which trails the '-'.
      * @throw IO_ERROR, if the next token or two do no make up a pin_reference,
      * or there is an error reading from the input stream.

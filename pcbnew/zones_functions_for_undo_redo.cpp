@@ -198,7 +198,7 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LA
  *  All pickers flagged NEWITEM are moved to aPickList
  * (the corresponding zones are zone that were created by the zone normalize and combine process,
  * mainly when adding cutout areas, or creating self intersecting contours)
- *  All pickers flagged DELETED are removed, and the coresponding zones actually deleted
+ *  All pickers flagged DELETED are removed, and the corresponding zones actually deleted
  * (the corresponding zones are new zone that were created by the zone normalize process,
  * when creating self intersecting contours, and after combined with an existing zone.
  * At the end of the update process the aAuxiliaryList must be void,

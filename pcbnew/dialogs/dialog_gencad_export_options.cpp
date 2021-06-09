@@ -65,7 +65,7 @@ DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aPar
     finishDialogSettings();
 
     // Set the path in m_filePicker, now the size is set
-    // (otherwize the text is truncated)
+    // (otherwise the text is truncated)
     m_filePicker->SetPath( aPath );
 
     Centre( wxBOTH );

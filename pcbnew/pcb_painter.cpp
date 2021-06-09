@@ -94,7 +94,7 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     {
         m_layerColors[i] = aSettings->GetColor( i );
 
-        // Guard: if the alpah channel is too small, the layer is not visible.
+        // Guard: if the alpha channel is too small, the layer is not visible.
         if( m_layerColors[i].a < 0.2 )
             m_layerColors[i].a = 0.2;
     }
@@ -1389,8 +1389,8 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             {
                 // On Opengl, a not convex filled polygon is usually drawn by using triangles
                 // as primitives. CacheTriangulation() can create basic triangle primitives to
-                // draw the polygon solid shape on Opengl.  GLU tesselation is much slower, so
-                // currently we are using our tesselation.
+                // draw the polygon solid shape on Opengl.  GLU tessellation is much slower, so
+                // currently we are using our tessellation.
                 if( m_gal->IsOpenGlEngine() && !shape.IsTriangulationUpToDate() )
                     shape.CacheTriangulation();
 

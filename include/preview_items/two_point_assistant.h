@@ -57,13 +57,13 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
-        aLayers[0] = LAYER_SELECT_OVERLAY;  // Assitant graphics
+        aLayers[0] = LAYER_SELECT_OVERLAY;  // Assistant graphics
         aLayers[1] = LAYER_GP_OVERLAY;      // Drop shadows
         aCount = 2;
     }
 
     /**
-     * Draw the assistance (with reference to the contstruction manager
+     * Draw the assistance (with reference to the construction manager
      */
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
 

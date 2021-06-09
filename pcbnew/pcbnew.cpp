@@ -117,7 +117,7 @@ static struct IFACE : public KIFACE_I
             DIALOG_CONFIGURE_PATHS dlg( aParent, aKiway->Prj().Get3DFilenameResolver() );
 
             // The dialog's constructor probably failed to set its Kiway because the
-            // dynamic_cast fails when aParent was allocated by a separate compiliation
+            // dynamic_cast fails when aParent was allocated by a separate compilation
             // module.  So set it directly.
             dlg.SetKiway( &dlg, aKiway );
 
@@ -323,7 +323,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
     }
     else if( ext == "rpt" )
     {
-        // DRC must be the "gold standard".  Since we can't gaurantee that there aren't
+        // DRC must be the "gold standard".  Since we can't guarantee that there aren't
         // any non-deterministic cases in the save-as algorithm, we don't want to certify
         // the result with the source's DRC report.  Therefore copy it under the old
         // name.

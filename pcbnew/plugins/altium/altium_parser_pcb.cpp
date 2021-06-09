@@ -482,7 +482,7 @@ APOLYGON6::APOLYGON6( ALTIUM_PARSER& aReader )
 
 ARULE6::ARULE6( ALTIUM_PARSER& aReader )
 {
-    // Initalize all variables and make Coverity happy
+    // Initialize all variables and make Coverity happy
     clearanceGap                       = 0;
     planeclearanceClearance            = 0;
     polygonconnectAirgapwidth          = 0;

@@ -395,7 +395,7 @@ private:
                      VECTOR2I* aPt = nullptr ) const;
 
 private:
-    ///< index withing the parent shape (used when m_is_local == false)
+    ///< index within the parent shape (used when m_is_local == false)
     int m_index;
 };
 

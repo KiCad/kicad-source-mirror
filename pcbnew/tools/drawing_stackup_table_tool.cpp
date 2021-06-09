@@ -68,7 +68,7 @@ static std::vector<BOARD_ITEM*> initTextTable( std::vector<std::vector<PCB_TEXT*
 
     std::vector<BOARD_ITEM*> table;
 
-    // xmargin and ymargin are margins between the text and the the table lines.
+    // xmargin and ymargin are margins between the text and the table lines.
     //
     //  +--------------------------------+
     //  |            ^                   |

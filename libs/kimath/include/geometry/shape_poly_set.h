@@ -986,7 +986,7 @@ public:
      */
     void InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCount, POLYGON_MODE aFastMode );
 
-    ///< Convert a set of polygons with holes to a singe outline with "slits"/"fractures"
+    ///< Convert a set of polygons with holes to a single outline with "slits"/"fractures"
     ///< connecting the outer ring to the inner holes
     ///< For \a aFastMode meaning, see function booleanOp
     void Fracture( POLYGON_MODE aFastMode );

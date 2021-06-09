@@ -22,7 +22,7 @@ extern double DoubleFromString( const wxString& TextValue );
 
 /**
  * If BENCHMARK is defined, any 4R E12 calculations will print its execution time to console
- * My Hasswell Enthusiast reports 225 mSec what are reproducable within plusminus 2 percent
+ * My Hasswell Enthusiast reports 225 mSec what are reproducible within plusminus 2 percent
  */
 
 //#define BENCHMARK
@@ -33,7 +33,7 @@ extern double DoubleFromString( const wxString& TextValue );
  * For this historical reason, rounding rules of some values are sometimes irregular.
  * Although all E-Values could be calculated at runtime, we initialize them in a lookup table
  * what seems the most easy way to consider any inconvenient irregular rules. Same table is
- * also used to lookup non calculatable but readable BOM value strings. Supported E-series are:
+ * also used to lookup non calculable but readable BOM value strings. Supported E-series are:
  */
 
 enum             { E1, E3, E6, E12 };

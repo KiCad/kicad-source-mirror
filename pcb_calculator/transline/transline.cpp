@@ -163,8 +163,8 @@ void TRANSLINE::getProperties( void )
  **/
 void TRANSLINE::checkProperties( void )
 {
-    // Do not check for values that are results of anylzing / synthesizing
-    // Do not check for transline specific incompatibilities ( like " conductor height sould be lesser than dielectric height")
+    // Do not check for values that are results of analyzing / synthesizing
+    // Do not check for transline specific incompatibilities ( like " conductor height should be lesser than dielectric height")
     if( !std::isfinite( m_parameters[EPSILONR_PRM] ) || m_parameters[EPSILONR_PRM] <= 0 )
         setErrorLevel( EPSILONR_PRM, TRANSLINE_WARNING );
 

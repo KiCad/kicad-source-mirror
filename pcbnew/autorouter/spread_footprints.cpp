@@ -28,7 +28,7 @@
 /**
  * @file spread_footprints.cpp
  * @brief functions to spread footprints on free areas outside a board.
- * this is usefull after reading a netlist, when new footprints are loaded
+ * this is useful after reading a netlist, when new footprints are loaded
  * and stacked at 0,0 coordinate.
  * Often, spread them on a free area near the board being edited make more easy
  * their selection.

@@ -111,7 +111,7 @@ const int* OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE aAntiAliasingMode 
         }
     }
 
-    // Disable antialising if it failed or was not requested
+    // Disable antialiasing if it failed or was not requested
     if( aAntiAliasingMode == ANTIALIASING_MODE::AA_NONE )
     {
         // Remove multisampling information

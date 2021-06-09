@@ -277,7 +277,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
 
     SetTarget( TARGET_NONCACHED );
 
-    // Avoid unitialized variables:
+    // Avoid uninitialized variables:
     ufm_worldPixelSize = 1;
     ufm_screenPixelSize = 1;
     ufm_pixelSizeMultiplier = 1;

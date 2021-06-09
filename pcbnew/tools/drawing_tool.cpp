@@ -1640,7 +1640,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
         }
     }
 
-    if( !isLocalOriginSet ) // reset the relative coordinte if it was not set before
+    if( !isLocalOriginSet ) // reset the relative coordinate if it was not set before
         m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
 
     m_view->Remove( &twoPointAsst );

@@ -530,7 +530,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
                 // In CADSTAR "GlobalSignal" is a special type of symbol which defines
                 // a Power Symbol. The "Alternate" name defines the default net name of
-                // the power symbol but this can be overriden in the design itself.
+                // the power symbol but this can be overridden in the design itself.
                 wxString libraryNetName = Library.SymbolDefinitions.at( symID ).Alternate;
 
                 // Name of the net that the symbol instance in CADSTAR refers to:
@@ -2579,7 +2579,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
         wxPoint  pos;
 
         // Change the anchor point of the text item to make it match the same bounding box
-        // And correct the error introduced by the text offseting in KiCad
+        // And correct the error introduced by the text offsetting in KiCad
         switch( spin )
         {
         case LABEL_SPIN_STYLE::BOTTOM: pos = { bb.GetRight() - off, bb.GetTop()          }; break;

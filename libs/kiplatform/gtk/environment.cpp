@@ -35,7 +35,7 @@ void KIPLATFORM::ENV::Init()
     if( wxGetEnv( wxT( "XDG_CURRENT_DESKTOP" ), &wm ) && wm.CmpNoCase( wxT( "Unity" ) ) == 0 )
         wxSetEnv ( wxT("UBUNTU_MENUPROXY" ), wxT( "0" ) );
 
-    // Force the use of X11 backend (or wayland-x11 compatibilty layer).  This is
+    // Force the use of X11 backend (or wayland-x11 compatibility layer).  This is
     // required until wxWidgets supports the Wayland compositors
     wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
 

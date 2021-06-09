@@ -162,7 +162,7 @@ bool CYLINDER::IntersectP(const RAY& aRay , float aMaxDistance ) const
 
 bool CYLINDER::Intersects( const BBOX_3D& aBBox ) const
 {
-    // !TODO: improove
+    // !TODO: improve
     return m_bbox.Intersects( aBBox );
 }
 

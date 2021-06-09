@@ -188,7 +188,7 @@ class DP_GATEWAYS
             m_gap( aGap ),
             m_viaGap( aGap )
         {
-            // Do not leave unitialized members, and keep static analyser quiet:
+            // Do not leave uninitialized members, and keep static analyser quiet:
             m_viaDiameter = 0;
             m_fitVias = true;
         }
@@ -341,7 +341,7 @@ public:
         m_p = aLineP.CLine();
         m_n = aLineN.CLine();
 
-        // Do not leave unitialized members, and keep static analyser quiet:
+        // Do not leave uninitialized members, and keep static analyser quiet:
         m_width  = 0;
         m_gap  = 0;
         m_viaGap  = 0;

@@ -201,7 +201,7 @@ static const unsigned int s_modulo[] = { 0, 1, 2, 0, 1 };
 
 bool TRIANGLE::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
 {
-    //!TODO: precalc this, improove it
+    //!TODO: precalc this, improve it
 #define ku s_modulo[m_k + 1]
 #define kv s_modulo[m_k + 2]
 
@@ -298,7 +298,7 @@ bool TRIANGLE::IntersectP( const RAY& aRay, float aMaxDistance ) const
 
 bool TRIANGLE::Intersects( const BBOX_3D& aBBox ) const
 {
-    //!TODO: improove
+    //!TODO: improve
     return m_bbox.Intersects( aBBox );
 }
 

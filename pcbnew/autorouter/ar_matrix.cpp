@@ -874,11 +874,11 @@ void AR_MATRIX::CreateKeepOutRectangle(
 
         for( col = col_min; col <= col_max; col++ )
         {
-            // RoutingMatrix Dist map containt the "cost" of the cell
+            // RoutingMatrix Dist map contained the "cost" of the cell
             // at position (row, col)
             // in autoplace this is the cost of the cell, when
             // a footprint overlaps it, near a "master" footprint
-            // this cost is hight near the "master" footprint
+            // this cost is high near the "master" footprint
             // and decrease with the distance
             cgain = 256;
             LocalKeepOut = aKeepOut;

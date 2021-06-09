@@ -595,7 +595,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
             continue;
         }
 
-        // LIB_TABLE_BASE::LoadSymbol() throws an IO_ERROR if the the library nickname
+        // LIB_TABLE_BASE::LoadSymbol() throws an IO_ERROR if the library nickname
         // is not found in the table so check if the library still exists in the table
         // before attempting to load the symbol.
         if( !libs->HasLibrary( symbol->GetLibId().GetLibNickname() ) && !legacyLibs )

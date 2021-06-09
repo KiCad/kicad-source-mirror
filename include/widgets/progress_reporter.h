@@ -63,12 +63,12 @@ public:
     virtual void BeginPhase( int aPhase );
 
     /**
-     * Uses the next vailable virtual zone of the dialog progress bar
+     * Uses the next available virtual zone of the dialog progress bar
      */
     virtual void AdvancePhase();
 
     /**
-     * Uses the next vailable virtual zone of the dialog progress bar and updates
+     * Uses the next available virtual zone of the dialog progress bar and updates
      * the message.
      */
     virtual void AdvancePhase( const wxString& aMessage );
@@ -84,7 +84,7 @@ public:
     virtual void SetCurrentProgress( double aProgress );
 
     /**
-     * Fix the value thar gives the 100 precent progress bar length
+     * Fix the value thar gives the 100 percent progress bar length
      * (inside the current virtual zone)
      */
     void SetMaxProgress( int aMaxProgress );

@@ -32,7 +32,7 @@
  * On exit, Text points the beginning of the sequence unread
  */
 
-// convertion scale from gerber file units to Gerbview internal units
+// conversion scale from gerber file units to Gerbview internal units
 // depending on the gerber file format
 // this scale list assumes gerber units are imperial.
 // for metric gerber units, the imperial to metric conversion is made in read functions

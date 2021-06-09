@@ -224,7 +224,7 @@ protected:
 };
 
 
-// psuedo code for OpenProjectFiles
+// pseudo code for OpenProjectFiles
 #if 0
 
 bool OpenProjectFiles( const std::vector<wxString>& aFileList, int aCtl = 0 )

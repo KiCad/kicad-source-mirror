@@ -275,7 +275,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
 
     m_padPreviewSizer->Add( m_padPreviewGAL, 12, wxEXPAND | wxALL, 5 );
 
-    // Show the X and Y axis. It is usefull because pad shape can have an offset
+    // Show the X and Y axis. It is useful because pad shape can have an offset
     // or be a complex shape.
     KIGFX::COLOR4D axis_color = LIGHTBLUE;
 
@@ -478,7 +478,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
             angle -= footprint->GetOrientation();
             m_dummyPad->SetOrientation( angle );
 
-            // Diplay parent footprint info
+            // Display parent footprint info
             msg.Printf( _("Footprint %s (%s), %s, rotated %g deg"),
                          footprint->Reference().GetShownText(),
                          footprint->Value().GetShownText(),
@@ -1292,7 +1292,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     }
 
     // Some pads need a positive solder paste clearance (mainly for BGA with small pads)
-    // Hovewer, a positive value can create issues if the resulting shape is too big.
+    // However, a positive value can create issues if the resulting shape is too big.
     // (like a solder paste creating a solder paste area on a neighbour pad or on the solder mask)
     // So we could ask for user to confirm the choice
     // For now we just check for disappearing paste
@@ -1830,7 +1830,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
     {
         // The pad custom has a "anchor pad" (a basic shape: round or rect pad)
-        // that is the minimal area of this pad, and is usefull to ensure a hole
+        // that is the minimal area of this pad, and is useful to ensure a hole
         // diameter is acceptable, and is used in Gerber files as flashed area
         // reference
         if( aPad->GetAnchorPadShape() == PAD_SHAPE::CIRCLE )

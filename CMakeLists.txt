@@ -426,7 +426,7 @@ if( MSVC )
     string( APPEND CMAKE_CXX_FLAGS " /bigobj" )
 
     # Exception handling
-    # Remove the potential default EHsc option cmake doesnt allow us to remove easily
+    # Remove the potential default EHsc option cmake doesn't allow us to remove easily
     string( REPLACE "/EHsc" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
     if( KICAD_WIN32_CONTEXT_WINFIBER )
     # /EHsc: ensure standard exception C++ unwinding is enabled, "extern C" can never throw exceptions

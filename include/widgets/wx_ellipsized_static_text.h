@@ -44,7 +44,7 @@ public:
 
     /**
      * Set the string that is used for determining the requested size of the control. The control
-     * will return this string length from GetBestSize(), irregardless of what string the control
+     * will return this string length from GetBestSize(), regardless of what string the control
      * is displaying.
      *
      * @param aString is the smallest string to display without ellipses

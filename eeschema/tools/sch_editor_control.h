@@ -140,7 +140,7 @@ public:
     void AssignFootprints( const std::string& aChangedSetOfReferences );
 
     /**
-     * Find a symbol in the schematic and an item in this symobl.
+     * Find a symbol in the schematic and an item in this symbol.
      *
      * @param aReference The symbol reference designator to find.
      * @param aSearchHierarchy If false, search the current sheet only.  Otherwise,

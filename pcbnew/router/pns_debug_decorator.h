@@ -80,7 +80,7 @@ private:
     bool m_debugEnabled;
 };
 
-/* WARNING! The marco below is a remarkably ugly hack, intented to log the
+/* WARNING! The marco below is a remarkably ugly hack, intended to log the
    call location of the debug calls without having to create the SRC_LOCATION_INFOs every time
    DEBUG_DECORATOR::Something() is called.
 

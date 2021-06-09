@@ -259,7 +259,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     fn = m_parent->GetBoard()->GetFileName();
     fn.SetPath( outputDir.GetPath() );
 
-    // Create the the Front and Top side placement files. Gerber P&P files are always separated.
+    // Create the Front and Top side placement files. Gerber P&P files are always separated.
     // Not also they include all footprints
     PLACEFILE_GERBER_WRITER exporter( brd );
     wxString filename = exporter.GetPlaceFileName( fn.GetFullPath(), F_Cu );
@@ -356,7 +356,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     fn = m_parent->GetBoard()->GetFileName();
     fn.SetPath( outputDir.GetPath() );
 
-    // Create the the Front or Top side placement file, or a single file
+    // Create the Front or Top side placement file, or a single file
     top_side = true;
     bottom_side = false;
 

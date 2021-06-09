@@ -129,7 +129,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         GBR_METADATA gbr_metadata;
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_POSITION );
 
-        // Add object attribute: component reference to flash (mainly usefull for users)
+        // Add object attribute: component reference to flash (mainly useful for users)
         // using quoted UTF8 string
         wxString ref = ConvertNotAllowedCharsInGerber( footprint->Reference().GetShownText(),
                                                        allowUtf8, true );
@@ -329,7 +329,7 @@ void PLACEFILE_GERBER_WRITER::findPads1( std::vector<PAD*>& aPadList, FOOTPRINT*
 {
     // Fint the pad "1" or pad "A1"
     // this is possible only if only one pad is found
-    // Usefull to place a marker in this position
+    // useful to place a marker in this position
 
     for( PAD* pad : aFootprint->Pads() )
     {

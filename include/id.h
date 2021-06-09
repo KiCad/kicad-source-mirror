@@ -37,7 +37,7 @@
  * Common command IDs shared by more than one of the KiCad applications.
  *
  * Only place command IDs used in base window class event tables or shared
- * across multple applications such as the zoom, grid, and language IDs.
+ * across multiple applications such as the zoom, grid, and language IDs.
  * Application specific IDs should be defined in the appropriate header
  * file to prevent the entire project from being rebuilt.
  *

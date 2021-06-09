@@ -266,7 +266,7 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     m_json["GeneralSpecs"]["ProjectId"]["GUID"] = guid;
     m_json["GeneralSpecs"]["ProjectId"]["Revision"] = rev.ToAscii();
 
-    // output the bord size in mm:
+    // output the board size in mm:
     EDA_RECT brect = m_pcb->GetBoardEdgesBoundingBox();
 
     m_json["GeneralSpecs"]["Size"]["X"] = mapValue( brect.GetWidth() );

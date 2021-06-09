@@ -318,7 +318,7 @@ void EE_SELECTION_TOOL::setModifiersState( bool aShiftState, bool aCtrlState, bo
     // from the state of modifier keys SHIFT, CTRL, ALT and the OS
 
     // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
-    // Due to the fact ALT key modifier cannot be useed freely on Windows and Linux,
+    // Due to the fact ALT key modifier cannot be used freely on Windows and Linux,
     // actions are different on OSX and others OS
     // Especially, ALT key cannot be used to force showing the full selection choice
     // context menu (the menu is immediately closed on Windows )

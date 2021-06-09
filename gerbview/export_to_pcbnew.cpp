@@ -298,7 +298,7 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, 
         // One can use a polygon or a zone to output a Gerber region.
         // none are perfect.
         // The current way is use a polygon, as the zone export
-        // is exprimental and only for tests.
+        // is experimental and only for tests.
 #if 1
         writePcbPolygon( aGbrItem->m_Polygon, aLayer );
 #else

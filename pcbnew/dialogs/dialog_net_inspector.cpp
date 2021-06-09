@@ -276,7 +276,7 @@ private:
     // primary container, sorted by netcode number.
     // groups have netcode < 0, so they always come first, in the order
     // of the filter strings as input by the user (group mode 0, 1) or
-    // in order of occurance (group mode 2, 3).
+    // in order of occurrence (group mode 2, 3).
     std::vector<std::unique_ptr<LIST_ITEM>> m_items;
 
 public:

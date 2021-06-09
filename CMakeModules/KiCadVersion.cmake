@@ -40,5 +40,5 @@
 set( KICAD_SEMANTIC_VERSION "5.99.0-unknown" )
 
 # Default the version to the semantic version.
-# This is overriden by the git repository tag though (if using git)
+# This is overridden by the git repository tag though (if using git)
 set( KICAD_VERSION "${KICAD_SEMANTIC_VERSION}" )

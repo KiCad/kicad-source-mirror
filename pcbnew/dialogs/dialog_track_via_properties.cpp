@@ -670,7 +670,7 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaEdit( wxCommandEvent& aEvent )
 
     if( m_vias )
     {
-        if( m_ViaTypeChoice->GetSelection() != 0 ) // check if selected type isnt through.
+        if( m_ViaTypeChoice->GetSelection() != 0 ) // check if selected type isn't through.
         {
             m_ViaStartLayer->Enable();
             m_ViaEndLayer->Enable();

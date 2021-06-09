@@ -306,7 +306,7 @@ void GRLineArray( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aLines,
         aClipBox->Inflate(-aWidth/2);
 }
 
-// Draw  the outline of a thick segment wih rounded ends
+// Draw the outline of a thick segment with rounded ends
 void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
               int width, int aPenSize, COLOR4D Color )
 {

@@ -103,7 +103,7 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts )
 
     files_filter << ")|*.";
 
-    // Add extensions to the filter list, using a formated string (GTK specific):
+    // Add extensions to the filter list, using a formatted string (GTK specific):
     bool first = true;
     for( const auto& ext : aExts )
     {

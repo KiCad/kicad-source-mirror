@@ -805,7 +805,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 /* Creates the section $COMPONENTS (Footprints placement)
  * Bottom side components are difficult to handle: shapes must be mirrored or
  * flipped, silk layers need to be handled correctly and so on. Also it seems
- * that *noone* follows the specs...
+ * that *no one* follows the specs...
  */
 static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 {

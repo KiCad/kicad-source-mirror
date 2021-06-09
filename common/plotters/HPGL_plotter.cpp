@@ -259,7 +259,7 @@ bool HPGL_PLOTTER::StartPlot()
     wxASSERT( m_outputFile );
     fprintf( m_outputFile, "IN;VS%d;PU;PA;SP%d;\n", penSpeed, penNumber );
 
-    // Set HPGL Pen Thickness (in mm) (usefull in polygon fill command)
+    // Set HPGL Pen Thickness (in mm) (useful in polygon fill command)
     double penThicknessMM = userToDeviceSize( penDiameter )/40;
     fprintf( m_outputFile, "PT %.1f;\n", penThicknessMM );
 

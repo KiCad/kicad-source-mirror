@@ -153,7 +153,7 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
-    // hidding it.
+    // hiding it.
     m_auimgr.Update();
 
     // We don't want the infobar displayed right away

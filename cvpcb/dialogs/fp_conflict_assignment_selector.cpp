@@ -76,8 +76,8 @@ int DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::GetSelection( const wxString& aRefer
 void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::OnColumnClick( wxListEvent& event )
 {
     // When clicking on the column title:
-    // when it is the COL_SELCMP column, set all item choices to cmp file assigment.
-    // when it is the COL_SELSCH column, set all item choices to schematic assigment.
+    // when it is the COL_SELCMP column, set all item choices to cmp file assignment.
+    // when it is the COL_SELSCH column, set all item choices to schematic assignment.
 
     int column = event.GetColumn();
     int colclr, colset;

@@ -31,7 +31,7 @@ class add_automatic_border( ActionPlugin ):
     How to use:
     - add all your modules/track/area/text...
     - Call the plugin
-    - An including PCB edge will be created automaticaly
+    - An including PCB edge will be created automatically
     """
 
     def defaults( self ):
@@ -44,7 +44,7 @@ class add_automatic_border( ActionPlugin ):
         """
         self.name = "Add or update automatic PCB edges"
         self.category = "Modify PCB"
-        self.description = "Automaticaly add or update edges on an existing PCB"
+        self.description = "Automatically add or update edges on an existing PCB"
         # Offset between existing elements and edge we will add/update (fixed at 2.54mm)
         self.offset = FromMM( 2.54 )
         # Attach to a grid step (fixed at 2.54mm)

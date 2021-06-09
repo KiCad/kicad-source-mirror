@@ -27,7 +27,7 @@
 
 /*
  * Return the value from a string,
- * Unlike standard string to double convertion,
+ * Unlike standard string to double conversion,
  * both point and comma F.P. separator are accepted
  * and values having units (like 4.7 K) are accepted
  * but units are ignored.

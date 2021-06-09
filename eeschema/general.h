@@ -39,7 +39,7 @@ class TRANSFORM;
  * transform matrix.  The default matrix is useful to draw lib entries with
  * using this default matrix ( no rotation, no mirror but Y axis is bottom to top, and
  * Y draw axis is to to bottom so we must have a default matrix that reverses
- * the Y coordinate and keeps the X coordiate
+ * the Y coordinate and keeps the X coordinate
  */
 extern TRANSFORM DefaultTransform;
 

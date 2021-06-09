@@ -119,7 +119,7 @@ public:
 
     /**
      * Function GetBuffer
-     * returns a const reference to the recevied data buffer
+     * returns a const reference to the received data buffer
      */
     const std::string& GetBuffer()
     {

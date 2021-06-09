@@ -1155,7 +1155,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     // Find the part in the list for the sheet.
     // Assign the component its value from the part entry
     // Calculate the unit number from the gate entry of the instance
-    // Assign the the LIB_ID from device set and device names
+    // Assign the LIB_ID from device set and device names
 
     auto part_it = m_partlist.find( einstance.part.Upper() );
 

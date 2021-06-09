@@ -81,7 +81,7 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
      * c is the centre of the arc to be constructed
      * rad is the radius of the arc to be constructed
      *
-     * We can create two vectors, betweeen point p and segA /segB
+     * We can create two vectors, between point p and segA /segB
      *    pToA = p - segA.B   //< note that segA.A would also be valid as it is colinear
      *    pToB = p - segB.B   //< note that segB.A would also be valid as it is colinear
      *

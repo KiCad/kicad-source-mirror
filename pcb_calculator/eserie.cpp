@@ -292,12 +292,12 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
     wxString es, fs;          // error and formula strings
 
     reqr = ( 1000 * DoubleFromString( m_ResRequired->GetValue() ) );
-    r.SetRequiredValue( reqr ); // keep a local copy of requred resistor value
+    r.SetRequiredValue( reqr ); // keep a local copy of required resistor value
     r.NewCalc();     // assume all values available
     /*
      * Exclude itself. For the case, a value from the available series is found as required value,
      * the calculator assumes this value needs a replacement for the reason of being not available.
-     * Two further exclude values can be entered to exclude and are skipped as not being availabe.
+     * Two further exclude values can be entered to exclude and are skipped as not being available.
      * All values entered in KiloOhms are converted to Ohm for internal calculation
      */
     r.Exclude( 1000 * DoubleFromString( m_ResRequired->GetValue()));

@@ -69,7 +69,7 @@ public:
 
     /**
      * @return the path name of the parameter used to store it in the json file
-     * mainly usefull in error messages
+     * mainly useful in error messages
      */
     const std::string& GetJsonPath() const { return m_path; }
 

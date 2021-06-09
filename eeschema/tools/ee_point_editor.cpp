@@ -375,7 +375,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 }
 
 /**
- * Update the coordinates of 4 corners of a rectangle, accordint to constraints
+ * Update the coordinates of 4 corners of a rectangle, according to constraints
  * and the moved corner
  * @param aEditedPointIndex is the corner id
  * @param minWidth is the minimal width constraint

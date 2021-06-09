@@ -36,7 +36,7 @@ excluded_fields = [
     ]
 
 
-# You may exlude components from the BOM by either:
+# You may exclude components from the BOM by either:
 #
 # 1) adding a custom field named "Installed" to your components and filling it
 # with a value of "NU" (Normally Uninstalled).
@@ -73,7 +73,7 @@ excluded_footprints = [
 
 class xmlElement():
     """xml element which can represent all nodes of the netlist tree.  It can be
-    used to easily generate various output formats by propogating format
+    used to easily generate various output formats by propagating format
     requests to children recursively.
     """
     def __init__(self, name, parent=None):
@@ -410,7 +410,7 @@ class comp():
         """
         Kicad 5 uses tstamp keyword for time stamp (8 digits) as UUID
         Kicad 6 uses tstamps keyword for UUID and a multi unit symbol has more than one UUID
-        (UUIDs are separed by spaces)
+        (UUIDs are separated by spaces)
         """
         ret = self.element.get("tstamp")
         if ret == "":
@@ -445,7 +445,7 @@ class netlist():
 
         self._curr_element = None
 
-        # component blacklist regexs, made from exluded_* above.
+        # component blacklist regexs, made from excluded_* above.
         self.excluded_references = []
         self.excluded_values = []
         self.excluded_footprints = []
@@ -491,7 +491,7 @@ class netlist():
     def endDocument(self):
         """Called when the netlist document has been fully parsed"""
         # When the document is complete, the library parts must be linked to
-        # the components as they are seperate in the tree so as not to
+        # the components as they are separate in the tree so as not to
         # duplicate library part information for every component
         for c in self.components:
             for p in self.libparts:
@@ -578,8 +578,8 @@ class netlist():
         """Return a subset of all components, those that should show up in the BOM.
         Omit those that should not, by consulting the blacklists:
         excluded_values, excluded_refs, and excluded_footprints, which hold one
-        or more regular expressions.  If any of the the regular expressions match
-        the corresponding field's value in a component, then the component is exluded.
+        or more regular expressions.  If any of the regular expressions match
+        the corresponding field's value in a component, then the component is excluded.
         """
 
         # pre-compile all the regex expressions:

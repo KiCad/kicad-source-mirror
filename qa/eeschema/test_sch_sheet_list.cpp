@@ -165,7 +165,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
     {
         SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
-        // Ammend Page numbers
+        // Amend Page numbers
         sheets.at( 0 ).SetPageNumber( "A" );
         sheets.at( 1 ).SetPageNumber( "B" );
         sheets.at( 2 ).SetPageNumber( "C" );

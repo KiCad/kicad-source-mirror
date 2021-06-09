@@ -403,7 +403,7 @@ public:
     void AddCorner( const VECTOR2I& aA, const VECTOR2I& aB = VECTOR2I( 0, 0 ) );
 
     /**
-     * Add a new meander shape the the meandered line.
+     * Add a new meander shape to the meandered line.
      *
      * @param aShape the meander shape to add
      */

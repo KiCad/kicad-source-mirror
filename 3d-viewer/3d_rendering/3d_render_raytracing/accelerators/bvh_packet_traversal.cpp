@@ -24,7 +24,7 @@
 
 /**
  * @file bvh_packet_traversal.cpp
- * @brief This file implementes packet traversal over the BVH PBRT implementation.
+ * @brief This file implements packet traversal over the BVH PBRT implementation.
  */
 
 #include "bvh_pbrt.h"

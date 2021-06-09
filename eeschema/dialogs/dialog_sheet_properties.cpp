@@ -549,7 +549,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
         {
             SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
-            // If the the associated screen is shared by more than one sheet, do not
+            // If the associated screen is shared by more than one sheet, do not
             // change the filename of the corresponding screen here.
             // (a new screen will be created later)
             // if it is not shared, update the filename
@@ -572,7 +572,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
                 return false;
             }
 
-            // If the the associated screen is shared by more than one sheet, remove the
+            // If the associated screen is shared by more than one sheet, remove the
             // screen and reload the file to a new screen.  Failure to do this will trash
             // the screen reference counting in complex hierarchies.
             if( m_sheet->GetScreenCount() > 1 )

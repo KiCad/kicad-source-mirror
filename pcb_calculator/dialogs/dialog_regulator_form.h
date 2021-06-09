@@ -63,7 +63,7 @@ public:
 
     /**
      * Function CopyRegulatorDataToDialog
-     * Transfert data from dialog to aItem
+     * Transfer data from dialog to aItem
      * @param aItem = a pointer to the REGULATOR_DATA
      */
     void CopyRegulatorDataToDialog( REGULATOR_DATA* aItem );
@@ -76,7 +76,7 @@ public:
     REGULATOR_DATA* BuildRegulatorFromData();
 
     /**
-     * Enable/disable Iadj realted widgets, according to
+     * Enable/disable Iadj related widgets, according to
      * the regulator type
      */
     void UpdateDialog();

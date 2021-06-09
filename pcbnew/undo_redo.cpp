@@ -191,7 +191,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
     // First, filter unnecessary stuff from the list (i.e. for multiple pads / labels modified),
-    // take the first occurence of the footprint (we save copies of footprints when one of its
+    // take the first occurrence of the footprint (we save copies of footprints when one of its
     // subitems is changed).
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {

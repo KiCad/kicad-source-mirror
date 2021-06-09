@@ -162,7 +162,7 @@ public:
     const TEMPLATE_FIELDNAMES& GetTemplateFieldNames( bool aGlobal );
 
     /**
-     * Search for \a aName in the the template field name list.
+     * Search for \a aName in the template field name list.
      *
      * @param aName A wxString object containing the field name to search for.
      * @return the template field name if found; NULL otherwise.

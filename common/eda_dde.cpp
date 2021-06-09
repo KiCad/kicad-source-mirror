@@ -218,7 +218,7 @@ private:
             wxSocketClient* sock_client;
             wxIPV4address   addr;
 
-            // Create a connexion
+            // Create a connection
             addr.Hostname( HOSTNAME );
             addr.Service( port );
 

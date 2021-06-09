@@ -573,7 +573,7 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
         // an upper corner is not allowed
         #define SCREEN_BORDER_REGION 0.10
 #else
-        // Windows uses a very rectangular clearly defined display region, there is no ambigious "screen border region"
+        // Windows uses a very rectangular clearly defined display region, there is no ambiguous "screen border region"
         // GetClientArea already accounts for the taskbar stealing display space
         #define SCREEN_BORDER_REGION 0
 #endif

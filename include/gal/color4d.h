@@ -178,7 +178,7 @@ public:
      * Unpack from a unsigned int in the legacy EDA_COLOR_T format.
      */
     void FromU32( unsigned int aPackedColor );
-#endif /* WX_COMPATIBLITY */
+#endif /* WX_COMPATIBILITY */
 
 
     /**

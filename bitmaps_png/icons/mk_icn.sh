@@ -36,7 +36,7 @@ do
 	echo "file $fl converted."
 done
 
-# covert .png files into .ico files using "icotool" from icoutils
+# convert .png files into .ico files using "icotool" from icoutils
 # (see http://www.nongnu.org/icoutils/)
 cd ../icons
 for fl in $ICON_FILES

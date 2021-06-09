@@ -207,8 +207,8 @@ enum GAL_LAYER_ID: int
     LAYER_NO_CONNECTS        = GAL_LAYER_ID_START + 14, ///< show a marker on pads with no nets
     LAYER_MOD_FR             = GAL_LAYER_ID_START + 15, ///< show footprints on front
     LAYER_MOD_BK             = GAL_LAYER_ID_START + 16, ///< show footprints on back
-    LAYER_MOD_VALUES         = GAL_LAYER_ID_START + 17, ///< show footprints values (when texts are visibles)
-    LAYER_MOD_REFERENCES     = GAL_LAYER_ID_START + 18, ///< show footprints references (when texts are visibles)
+    LAYER_MOD_VALUES         = GAL_LAYER_ID_START + 17, ///< show footprints values (when texts are visible)
+    LAYER_MOD_REFERENCES     = GAL_LAYER_ID_START + 18, ///< show footprints references (when texts are visible)
     LAYER_TRACKS             = GAL_LAYER_ID_START + 19,
     LAYER_PADS_TH            = GAL_LAYER_ID_START + 20, ///< multilayer pads, usually with holes
     LAYER_PAD_PLATEDHOLES    = GAL_LAYER_ID_START + 21, ///< to draw pad holes (plated)

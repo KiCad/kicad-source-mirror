@@ -368,7 +368,7 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
     {
         if( code )
         {
-            // Update the shape drawings and the bounding box coordiantes:
+            // Update the shape drawings and the bounding box coordinates:
             code->GetMacro()->GetApertureMacroShape( this, m_Start );
             // now the bounding box is valid:
             bbox = code->GetMacro()->GetBoundingBox();

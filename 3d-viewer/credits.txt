@@ -159,7 +159,7 @@ Etay Meiri, email: ogldev1 gmail
 mortoncodes.cpp
 ---------------
 
-Implementes Morton Codes base on the implementation of Fabian “ryg” Giesen
+Implements Morton Codes base on the implementation of Fabian “ryg” Giesen
 https://fgiesen.wordpress.com/2009/12/13/decoding-morton-codes/
 
 

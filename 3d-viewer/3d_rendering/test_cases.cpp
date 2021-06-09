@@ -290,7 +290,7 @@ void Run_3d_viewer_test_cases()
     bbox3d.Set( SFVEC3F(- 1.0f, -1.0f, 1.0f ), SFVEC3F( 0.0f, 0.0f, 2.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
-    // !TODO: The frustum alg is not excluse all the the situations
+    // !TODO: The frustum alg does not exclude all the situations
     //bbox3d.Set( SFVEC3F(-1.0f, -1.0f, z+1.0f), SFVEC3F(+1.0f,+1.0f, +z+2.0f) );
     //wxASSERT( frustum.Intersect( bbox3d ) == false );
 

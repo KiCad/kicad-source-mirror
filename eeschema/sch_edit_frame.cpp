@@ -504,7 +504,7 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
     int              sheet_number      = 1;
     const KIID_PATH& current_sheetpath = GetCurrentSheet().Path();
 
-    // @todo Remove all psuedo page number system is left over from prior to real page number
+    // @todo Remove all pseudo page number system is left over from prior to real page number
     //       implementation.
     for( const SCH_SHEET_PATH& sheet : Schematic().GetSheets() )
     {

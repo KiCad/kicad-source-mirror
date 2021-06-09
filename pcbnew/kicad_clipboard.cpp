@@ -96,7 +96,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
     {
         FOOTPRINT partialFootprint( m_board );
 
-        // Usefull to copy the selection to the board editor (if any), and provides
+        // Useful to copy the selection to the board editor (if any), and provides
         // a dummy lib id.
         // Perhaps not a good Id, but better than a empty id
         KIID dummy;

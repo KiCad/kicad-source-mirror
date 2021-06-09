@@ -128,7 +128,7 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent ) :
 
     SetClientSize( tree_size );
 
-    // manage the ESC key to close the dialog, because thre is no Cancel button
+    // manage the ESC key to close the dialog, because there is no Cancel button
     // in dialog
     m_Tree->Connect( wxEVT_CHAR, wxKeyEventHandler( HIERARCHY_TREE::onChar ) );
 

@@ -55,7 +55,7 @@ template <typename T> inline const T& Clamp( const T& lower, const T& value, con
     return value;
 }
 
-// Surpress an annoying warning that the explicit rounding we do is not precise
+// Suppress an annoying warning that the explicit rounding we do is not precise
 #ifdef HAVE_WIMPLICIT_FLOAT_CONVERSION
     _Pragma( "GCC diagnostic push" ) \
     _Pragma( "GCC diagnostic ignored \"-Wimplicit-int-float-conversion\"" )

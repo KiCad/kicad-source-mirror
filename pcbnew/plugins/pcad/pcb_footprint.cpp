@@ -177,7 +177,7 @@ XNODE* PCB_FOOTPRINT::FindPatternMultilayerSection( XNODE* aNode, wxString* aPat
         else if( pNode )
             lNode = FindNode( pNode, wxT( "patternGraphicsDef" ) );
 
-        if( *aPatGraphRefName == wxEmptyString )    // no patern delection, the first is actual...
+        if( *aPatGraphRefName == wxEmptyString )    // no pattern detection, the first is actual...
         {
             if( lNode )
             {

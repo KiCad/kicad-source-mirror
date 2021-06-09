@@ -52,12 +52,12 @@
     wx to handle something outside INT_MIN to INT_MAX, there are unreported
     problems in the non-Debug build because wxRound() goes silent.
 
-    Pcbnew uses nanometers because we ned to convert coordintes and size between
-    milimeters and inches. using a iu = 1 nm avoid rounding issues
+    Pcbnew uses nanometers because we need to convert coordinates and size between
+    millimeters and inches. using a iu = 1 nm avoid rounding issues
 
-    Gerbview uses iu = 10 nm because we can have coordintes far from origin, and
+    Gerbview uses iu = 10 nm because we can have coordinates far from origin, and
     1 nm is too small to avoid int overflow.
-    (Conversions between milimeters and inches are not critical)
+    (Conversions between millimeters and inches are not critical)
 */
 
 /**

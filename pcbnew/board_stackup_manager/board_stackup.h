@@ -280,7 +280,7 @@ public:
      * layers, and half the height of the given start and end layers.  This half-height calculation
      * allows this to be used for consistent length measurements when calculating net length through
      * a series of vias.  A more advanced algorithm would be possible once we have a good concept of
-     * the start and end for a length measurment, but for now this will do.
+     * the start and end for a length measurement, but for now this will do.
      * See https://gitlab.com/kicad/code/kicad/-/issues/8384 for more background.
      *
      * @param aFirstLayer is a copper layer

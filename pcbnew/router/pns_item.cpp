@@ -100,7 +100,7 @@ bool ITEM::Collide( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOn
         return true;
 
     // Special cases for "head" lines with vias attached at the end.  Note that this does not
-    // support head-line-via to head-line-via collisions, but you can't route two independant
+    // support head-line-via to head-line-via collisions, but you can't route two independent
     // tracks at once so it shouldn't come up.
 
     if( m_kind == LINE_T )

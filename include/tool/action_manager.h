@@ -96,7 +96,7 @@ public:
     ~ACTION_MANAGER();
 
     /**
-     * Add a tool action to the manager and sets it up. After that is is possible to invoke
+     * Add a tool action to the manager and sets it up. After that it is possible to invoke
      * the action using hotkeys or sending a command event with its name.
      *
      * @param aAction: action to be added. Ownership is not transferred.

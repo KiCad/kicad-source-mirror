@@ -29,7 +29,7 @@
 
 #include "frustum.h"
 
-// !TODO: optimize wih SSE
+// !TODO: optimize with SSE
 //#if(GLM_ARCH != GLM_ARCH_PURE)
 #if 0
 #error not implemented

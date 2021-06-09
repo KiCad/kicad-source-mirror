@@ -42,7 +42,7 @@
  * Function scaletoIU
  * converts a distance given in floating point to our internal units
  */
-extern int scaletoIU( double aCoord, bool isMetric );       // defined it rs274d_read_XY_and_IJ_coordiantes.cpp
+extern int scaletoIU( double aCoord, bool isMetric );       // defined it rs274d_read_XY_and_IJ_coordinates.cpp
 
 /* Format Gerber: NOTES:
  * Tools and D_CODES
@@ -55,7 +55,7 @@ extern int scaletoIU( double aCoord, bool isMetric );       // defined it rs274d
  *   D02 = light extinction (lift pen) when di placement
  *   D03 Flash
  *   D09 = VAPE Flash
- *   D10 ... = Indentification Tool (Opening)
+ *   D10 ... = Identification Tool (Opening)
  *
  * For tools:
  * DCode min = D10
@@ -188,7 +188,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_NoTrailingZeros = false;                      // true: trailing zeros deleted
     m_ImageOffset.x   = m_ImageOffset.y = 0;        // Coord Offset, from IO command
     m_ImageRotation = 0;                            // Allowed 0, 90, 180, 270 (in degree)
-    m_LocalRotation = 0.0;                          // Layer totation from RO command (in 0.1 degree)
+    m_LocalRotation = 0.0;                          // Layer rotation from RO command (in 0.1 degree)
     m_Offset.x = 0;
     m_Offset.y = 0;                                 // Coord Offset, from OF command
     m_Scale.x  = m_Scale.y = 1.0;                   // scale (A and B) this layer
@@ -205,7 +205,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Linear, 90 arc, Circ.
     m_360Arc_enbl  = false;                         // 360 deg circular
                                                     // interpolation disable
-    m_AsArcG74G75Cmd = false;                       // false untile a G74 or G75 comand is found
+    m_AsArcG74G75Cmd = false;                       // false until a G74 or G75 command is found
     m_Current_Tool = 0;                             // Current Dcode selected
     m_CommandState = 0;                             // State of the current command
     m_CurrentPos.x = m_CurrentPos.y = 0;            // current specified coord

@@ -139,8 +139,8 @@ private:
 
     /** add a control (a wxTextCtrl + a button) in m_fgGridSizer to select a material
      * @param aId is the wxControl id, used to know the event source
-     * @param aMaterialName is the the name of the currently selected material (can be null)
-     * @param aUiRowItem is the the BOARD_STACKUP_ROW_UI_ITEM to store the controls
+     * @param aMaterialName is the name of the currently selected material (can be null)
+     * @param aUiRowItem is the BOARD_STACKUP_ROW_UI_ITEM to store the controls
      * created
      */
     void addMaterialChooser( wxWindowID aId, const wxString * aMaterialName,
@@ -165,7 +165,7 @@ private:
 
     /** Show or do not show items in m_fgGridSizer according to the stackup of the
      * current board.
-     * The panel stackup stores all posible layers (because the number of layers is set
+     * The panel stackup stores all possible layers (because the number of layers is set
      * from an other panel), but only some of them must be actually shown on screen
      */
     void showOnlyActiveLayers();
@@ -214,7 +214,7 @@ private:
 
     /** creates a bitmap combobox to select a layer color
      * @return the created wxBitmapComboBox
-     * @param aStackupItem = the BOARD_STACKUP_ITEM realted to the bitmap combobox
+     * @param aStackupItem = the BOARD_STACKUP_ITEM related to the bitmap combobox
      * (to set the user color, if any)
      * can be nullptr
      * @param aRow = the row index in the wxFlexGridSizer (used to build a wxWidget unique id)

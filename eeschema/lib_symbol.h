@@ -66,7 +66,7 @@ struct PART_DRAW_OPTIONS
     bool draw_hidden_fields;        // Whether to draw "hidden" fields
     bool show_elec_type;            // Whether to show the pin electrical type
     bool show_connect_point;        // Whether to show the pin connect point marker (small circle)
-                                    // usefull in dialog pin properties
+                                    // useful in dialog pin properties
 
     PART_DRAW_OPTIONS()
     {

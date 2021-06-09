@@ -858,7 +858,7 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
     file.Open( filePath.GetFullPath() );
     int line_nr = 0;
 
-    // Stores the libray content. It will be displayed after reading the full library
+    // Stores the library content. It will be displayed after reading the full library
     wxString fullText;
 
     // Process the file, looking for components

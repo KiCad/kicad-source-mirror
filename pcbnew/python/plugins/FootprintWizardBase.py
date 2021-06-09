@@ -334,8 +334,8 @@ class FootprintWizardDrawingAids:
         This is performed by a translate-to-origin, flip, translate-
         back sequence.
 
-        @param x: the x co-ordinate of the flip point
-        @param y: the y co-ordinate of the flip point
+        @param x: the x coordinate of the flip point
+        @param y: the y coordinate of the flip point
         @param flip: one of flipNone, flipX, flipY, flipBoth
         @param push: add this transform to the current stack
         @return the generated transform matrix
@@ -379,8 +379,8 @@ class FootprintWizardDrawingAids:
         This is performed by a translate-to-origin, rotate, translate-
         back sequence
 
-        @param x: the x co-ordinate of the rotation centre
-        @param y: the y co-ordinate of the rotation centre
+        @param x: the x coordinate of the rotation centre
+        @param y: the y coordinate of the rotation centre
         @param rot: the rotation angle in degrees
         @param push: add this transform to the current stack
         @return the generated transform matrix
@@ -425,8 +425,8 @@ class FootprintWizardDrawingAids:
         Return a point (x, y) transformed by the given matrix, or if
         that is not given, the drawing context transform
 
-        @param x: the x co-ordinate of the point to transform
-        @param y: the y co-ordinate of the point to transform
+        @param x: the x coordinate of the point to transform
+        @param y: the y coordinate of the point to transform
         @param mat: the transform matrix to use or None to use the current DC's
         @return: the transformed point as a wxPoint
         """
@@ -496,8 +496,8 @@ class FootprintWizardDrawingAids:
         If filled is true, the thickness and radius of the line will be set
         such that the circle appears filled
 
-        @param x: the x co-ordinate of the arc centre
-        @param y: the y co-ordinate of the arc centre
+        @param x: the x coordinate of the arc centre
+        @param y: the y coordinate of the arc centre
         @param r: the circle's radius
         @param filled: True to draw a filled circle, False to use the current
                        DC line thickness
@@ -527,10 +527,10 @@ class FootprintWizardDrawingAids:
         Note that this won't work properly if the result is not a
         circular arc (e.g. a horizontal scale)
 
-        @param cx: the x co-ordinate of the arc centre
-        @param cy: the y co-ordinate of the arc centre
-        @param sx: the x co-ordinate of the arc start point
-        @param sy: the y co-ordinate of the arc start point
+        @param cx: the x coordinate of the arc centre
+        @param cy: the y coordinate of the arc centre
+        @param sx: the x coordinate of the arc start point
+        @param sy: the y coordinate of the arc start point
         @param a: the arc's central angle (in deci-degrees)
         """
         circle = pcbnew.FP_SHAPE(self.module)
@@ -554,8 +554,8 @@ class FootprintWizardDrawingAids:
         """!
         Draw a horizontal line from (x,y), rightwards
 
-        @param x: line start x co-ordinate
-        @param y: line start y co-ordinate
+        @param x: line start x coordinate
+        @param y: line start y coordinate
         @param l: line length
         """
         self.Line(x, y, x + l, y)
@@ -564,8 +564,8 @@ class FootprintWizardDrawingAids:
         """!
         Draw a vertical line from (x1,y1), downwards
 
-        @param x: line start x co-ordinate
-        @param y: line start y co-ordinate
+        @param x: line start x coordinate
+        @param y: line start y coordinate
         @param l: line length
         """
         self.Line(x, y, x, y + l)
@@ -575,8 +575,8 @@ class FootprintWizardDrawingAids:
         Draw a polyline, optionally mirroring around the given points
 
         @param pts: list of polyline vertices (list of (x, y))
-        @param mirrorX: x co-ordinate of mirror point (None for no x-flip)
-        @param mirrorY: y co-ordinate of mirror point (None for no y-flip)
+        @param mirrorX: x coordinate of mirror point (None for no x-flip)
+        @param mirrorY: y coordinate of mirror point (None for no y-flip)
         """
 
         def _PolyLineInternal(pts):
@@ -648,8 +648,8 @@ class FootprintWizardDrawingAids:
         Draw a rectangular box, centred at (x,y), with given width and
         height
 
-        @param x: the x co-ordinate of the box's centre
-        @param y: the y co-ordinate of the box's centre
+        @param x: the x coordinate of the box's centre
+        @param y: the y coordinate of the box's centre
         @param w: the width of the box
         @param h: the height of the box
         """
@@ -668,8 +668,8 @@ class FootprintWizardDrawingAids:
         at the top
         Notch height is measured from the top of the circle radius
 
-        @param x: the x co-ordinate of the circle's centre
-        @param y: the y co-ordinate of the circle's centre
+        @param x: the x coordinate of the circle's centre
+        @param y: the y coordinate of the circle's centre
         @param r: the radius of the circle
         @param notch_w: the width of the notch
         @param notch_h: the height of the notch
@@ -702,8 +702,8 @@ class FootprintWizardDrawingAids:
         """!
         Draw a box with a notch in the centre of the top edge
 
-        @param x: the x co-ordinate of the circle's centre
-        @param y: the y co-ordinate of the circle's centre
+        @param x: the x coordinate of the circle's centre
+        @param y: the y coordinate of the circle's centre
         @param w: the width of the box
         @param h: the height of the box
         @param notchW: the width of the notch
@@ -737,8 +737,8 @@ class FootprintWizardDrawingAids:
         """!
         Draw a box with a diagonal at the top left corner.
 
-        @param x: the x co-ordinate of the circle's centre
-        @param y: the y co-ordinate of the circle's centre
+        @param x: the x coordinate of the circle's centre
+        @param y: the y coordinate of the circle's centre
         @param w: the width of the box
         @param h: the height of the box
         @param setback: the set-back of the diagonal, in both x and y
@@ -764,8 +764,8 @@ class FootprintWizardDrawingAids:
         """!
         Draw a box with an opening at the top left corner
 
-        @param x: the x co-ordinate of the circle's centre
-        @param y: the y co-ordinate of the circle's centre
+        @param x: the x coordinate of the circle's centre
+        @param y: the y coordinate of the circle's centre
         @param w: the width of the box
         @param h: the height of the box
         @param setback: the set-back of the opening, in both x and y
@@ -790,8 +790,8 @@ class FootprintWizardDrawingAids:
         """!
         Draw a box with rounded corners (i.e. a 90-degree circular arc)
 
-        :param x: the x co-ordinate of the box's centre
-        :param y: the y co-ordinate of the box's centre
+        :param x: the x coordinate of the box's centre
+        :param y: the y coordinate of the box's centre
         :param w: the width of the box
         :param h: the height of the box
         :param rad: the radius of the corner rounds
@@ -825,8 +825,8 @@ class FootprintWizardDrawingAids:
         """!
         Draw a box with chamfered corners.
 
-        :param x: the x co-ordinate of the box's centre
-        :param y: the y co-ordinate of the box's centre
+        :param x: the x coordinate of the box's centre
+        :param y: the y coordinate of the box's centre
         :param w: the width of the box
         :param h: the height of the box
         :param chamfer_x: the size of the chamfer set-back in the x direction
@@ -836,7 +836,7 @@ class FootprintWizardDrawingAids:
         x_left = x - w / 2
         y_top = y - h / 2
 
-        # x and y co-ordinates of inner edges of chamfers
+        # x and y coordinates of inner edges of chamfers
         x_inner = x_left + chamfer_x
         y_inner = y_top + chamfer_y
 

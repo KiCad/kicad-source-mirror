@@ -1020,7 +1020,7 @@ bool SCH_SHEET_LIST::AllSheetPageNumbersEmpty() const
 
 void SCH_SHEET_LIST::SetInitialPageNumbers()
 {
-    // Don't accidently renumber existing sheets.
+    // Don't accidentally renumber existing sheets.
     wxCHECK( AllSheetPageNumbersEmpty(), /* void */ );
 
     wxString tmp;

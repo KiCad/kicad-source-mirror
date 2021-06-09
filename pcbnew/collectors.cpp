@@ -236,7 +236,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     {
     case PCB_PAD_T:
         // there are pad specific visibility controls.
-        // Criterias to select a pad is:
+        // Criteria to select a pad is:
         // for smd pads: the footprint parent must be visible, and pads on the corresponding
         // board side must be visible
         // if pad is a thru hole, then it can be visible when its parent footprint is not.
@@ -465,7 +465,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     else if( dimension )
                     {
                         // Dimensions feel particularly hard to select, probably due to their
-                        // noisy shape making it feel like they should have a larger bounary.
+                        // noisy shape making it feel like they should have a larger boundary.
                         if( dimension->HitTest( m_refPos, KiROUND( accuracy * 1.5 ) ) )
                         {
                             Append( dimension );
@@ -539,7 +539,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     else if( dimension )
                     {
                         // Dimensions feels particularly hard to select, probably due to their
-                        // noisy shape making it feel like they should have a larger bounary.
+                        // noisy shape making it feel like they should have a larger boundary.
                         if( dimension->HitTest( m_refPos, KiROUND( accuracy * 1.5 ) ) )
                         {
                             Append2nd( dimension );

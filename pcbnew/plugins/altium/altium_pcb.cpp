@@ -935,7 +935,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     {
         /**
          * Basically REFERENCE0POINT and REFERENCE1POINT are the two end points of the dimension.
-         * XY1 is the position of the arrow above REFERENCE0POINT. those three points are not necesarily
+         * XY1 is the position of the arrow above REFERENCE0POINT. those three points are not necessarily
          * in 90degree angle, but KiCad requires this to show the correct measurements.
          *
          * Therefore, we take the vector of REFERENCE0POINT -> XY1, calculate the normal, and intersect it with
@@ -1563,7 +1563,7 @@ void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
             PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
             if( klayer == UNDEFINED_LAYER )
             {
-                continue; // Just skip it for now. Users cann fill it themself.
+                continue; // Just skip it for now. Users can fill it themselves.
             }
 
             SHAPE_LINE_CHAIN linechain;

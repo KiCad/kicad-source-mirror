@@ -161,7 +161,7 @@ public:
     virtual bool HasBBox() const { return true; }
 
     /** Check whether the layer is an info box.
-     *  The default implementation returns \a false. It is overrided to \a true for mpInfoLayer
+     *  The default implementation returns \a false. It is overridden to \a true for mpInfoLayer
      *  class and its derivative. It is necessary to define mouse actions behaviour over
      *  info boxes.
      *  @return whether the layer is an info boxes
@@ -346,9 +346,9 @@ public:
     /** Destructor */
     virtual ~mpInfoLayer();
 
-    /** Updates the content of the info box. Should be overidden by derived classes.
+    /** Updates the content of the info box. Should be overridden by derived classes.
      *  Update may behave in different ways according to the type of event which called it.
-     *  @param w parent mpWindow from which to obtain informations
+     *  @param w parent mpWindow from which to obtain information
      *  @param event The event which called the update. */
     virtual void UpdateInfo( mpWindow& w, wxEvent& event );
 
@@ -356,7 +356,7 @@ public:
      *  @return always \a false */
     virtual bool HasBBox() const override { return false; }
 
-    /** Plot method. Can be overidden by derived classes.
+    /** Plot method. Can be overridden by derived classes.
      *  @param dc the device content where to plot
      *  @param w the window to plot
      *  @sa mpLayer::Plot */
@@ -1106,7 +1106,7 @@ public:
      *  @return Scale
      */
     double GetXscl() const { return m_scaleX; }
-    double GetScaleX( void ) const { return m_scaleX; };  // Schaling's method: maybe another method esists with the same name
+    double GetScaleX( void ) const { return m_scaleX; };  // Schaling's method: maybe another method exists with the same name
 
     /** Get current view's Y scale.
      *  See @ref mpLayer::Plot "rules for coordinate transformation"
@@ -1665,7 +1665,7 @@ public:
 /** Plot layer implementing a text string.
  *  The text is plotted using a percentage system 0-100%, so the actual
  *  coordinates for the location are not required, and the text stays
- *  on the plot reguardless of the other layers location and scaling
+ *  on the plot regardless of the other layers location and scaling
  *  factors.
  */
 class WXDLLIMPEXP_MATHPLOT mpText : public mpLayer

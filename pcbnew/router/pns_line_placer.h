@@ -245,7 +245,7 @@ private:
 
     /**
      * Assemble a line starting from segment or arc aLatest, removes collinear segments
-     * and redundant vertexes.  If a simplification has been found, replaces the old line
+     * and redundant vertices.  If a simplification has been found, replaces the old line
      * with the simplified one in \a aNode.
      */
     void simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest );

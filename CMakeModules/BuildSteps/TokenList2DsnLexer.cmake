@@ -110,7 +110,7 @@ set( includeFileHeader
  * C++ does not put enum _values_ in separate namespaces unless the enum itself
  * is in a separate namespace.  All the token enums must be in separate namespaces
  * otherwise the C++ compiler will eventually complain if it sees more than one
- * DSNLEXER in the same compilation unit, say by mutliple header file inclusion.
+ * DSNLEXER in the same compilation unit, say by multiple header file inclusion.
  * Plus this also enables re-use of the same enum name T.  A typedef can always be used
  * to clarify which enum T is in play should that ever be a problem.  This is
  * unlikely since Parse() functions will usually only be exposed to one header

@@ -633,7 +633,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
             return true;
         };
 
-    // Ammend the end points of the arc if we delete the joining tracks
+    // Amend the end points of the arc if we delete the joining tracks
     wxPoint newStart = trackOnStart->GetStart();
     wxPoint newEnd = trackOnEnd->GetStart();
 

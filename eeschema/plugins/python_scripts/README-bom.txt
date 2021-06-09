@@ -18,7 +18,7 @@ If the python comment
     @package
     some comments
 """
-is added to the begining of the python script, the comment will be displayed
+is added to the beginning of the python script, the comment will be displayed
 in Eescheam, in the BOM dialog
 
 For instance:

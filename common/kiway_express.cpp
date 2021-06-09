@@ -39,7 +39,7 @@
         // All things in due course.
 const wxEventType KIWAY_EXPRESS::wxEVENT_ID = wxNewEventType();
 #else
-const wxEventType KIWAY_EXPRESS::wxEVENT_ID = 30000;    // commmon accross all link images, hopefully unique.
+const wxEventType KIWAY_EXPRESS::wxEVENT_ID = 30000;    // common across all link images, hopefully unique.
 #endif
 
 

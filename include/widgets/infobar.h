@@ -47,7 +47,7 @@ wxDECLARE_EVENT( KIEVT_DISMISS_INFOBAR, wxCommandEvent );
  * A modified version of the wxInfoBar class that allows us to:
  *     * Show the close button along with the other buttons
  *     * Remove all user-provided buttons at once
- *     * Allow automaticly hiding the infobar after a time period
+ *     * Allow automatically hiding the infobar after a time period
  *     * Show/hide using events
  *     * Place it inside an AUI manager
  *
@@ -130,7 +130,7 @@ public:
 
     /**
      * Add a button with the provided ID and text.
-     * The new button is created on the right-most positon.
+     * The new button is created on the right-most position.
      *
      * @param aId is the ID to assign to the button
      * @param aLabel is the text for the button

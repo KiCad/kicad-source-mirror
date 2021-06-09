@@ -10,7 +10,7 @@
 #include <zone_filler.h>
 %}
 
-// Provide a compatiblity ctor for ZONE_FILLER that doesn't need a COMMIT
+// Provide a compatibility ctor for ZONE_FILLER that doesn't need a COMMIT
 %include zone_filler.h
 %extend ZONE_FILLER
 {

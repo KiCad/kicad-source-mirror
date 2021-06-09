@@ -382,7 +382,7 @@ void DIALOG_COLOR_PICKER::drawRGBPalette()
     // Reserve room to draw cursors inside the bitmap
     half_size -= m_cursorsSize/2;
 
-    // Draw the 3 RGB cursors, usiing white color to make them always visible:
+    // Draw the 3 RGB cursors, using white color to make them always visible:
     wxPen pen( wxColor( 255, 255, 255 ) );
     wxBrush brush( wxColor( 0, 0, 0 ), wxBRUSHSTYLE_TRANSPARENT );
     bitmapDC.SetPen( pen );

@@ -72,7 +72,7 @@ public:
      *
      * Commits the currently routed items to the parent node, taking
      * aP as the final end point and aEndItem as the final anchor (if provided).
-     * @return true, if route has been commited. May return false if the routing
+     * @return true, if route has been committed. May return false if the routing
      * result is violating design rules - in such case, the track is only committed
      * if Settings.CanViolateDRC() is on.
      */

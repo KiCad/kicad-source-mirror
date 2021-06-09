@@ -659,7 +659,7 @@ void C_MICROSTRIP::synth_width()
 
     syn_err_fun( &f1, &f2, s_h, w_h, e_r, w_h_se, w_h_so );
 
-    /* rather crude Newton-Rhapson; we need this beacuse the estimate of */
+    /* rather crude Newton-Rhapson; we need this because the estimate of */
     /* w_h is often quite far from the true value (see Akhtarzad S. et al.) */
     do
     {
@@ -682,7 +682,7 @@ void C_MICROSTRIP::synth_width()
         s_h += d_s_h;
         w_h += d_w_h;
 
-        /* chech the error */
+        /* check the error */
         syn_err_fun( &f1, &f2, s_h, w_h, e_r, w_h_se, w_h_so );
 
         err = sqrt( f1 * f1 + f2 * f2 );

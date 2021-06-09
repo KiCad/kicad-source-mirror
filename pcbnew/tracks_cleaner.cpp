@@ -515,7 +515,7 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
             aSeg1->SetState( END_ONPAD, pad->HitTest( aSeg1->GetEnd() ) );
         }
 
-        // Merge succesful, seg2 has to go away
+        // Merge successful, seg2 has to go away
         m_brd->Remove( aSeg2 );
         m_commit.Removed( aSeg2 );
     }

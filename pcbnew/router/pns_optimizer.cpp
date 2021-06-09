@@ -1258,7 +1258,7 @@ bool OPTIMIZER::mergeDpStep( DIFF_PAIR* aPair, bool aTryP, int step )
     int n_segs = currentPath.SegmentCount() - 1;
 
     int64_t clenPre = aPair->CoupledLength( currentPath, coupledPath );
-    int64_t budget = clenPre / 10; // fixme: come up with somethig more intelligent here...
+    int64_t budget = clenPre / 10; // fixme: come up with something more intelligent here...
 
     while( n < n_segs - step )
     {

@@ -46,7 +46,7 @@ class Uss39:
 
      def getBarCodePattern(self, text = None):
         text = text if not(text is None) else self.Text
-        # Reformated text with start and end characters
+        # Reformatted text with start and end characters
         return functools.reduce(lambda a1, a2: list(a1) + [0] + list(a2), [map(int, ptd[c]) for c in ("*%s*" % self.makePrintable(text))])
 
 class Uss39Wizard(FootprintWizardBase.FootprintWizard):

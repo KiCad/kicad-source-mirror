@@ -329,7 +329,7 @@ BOOST_AUTO_TEST_CASE( Compare )
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
     testPart.SetPinNameOffset( testPart.GetPinNameOffset() + 1 );
 
-    // Units locked flag comparision tests.
+    // Units locked flag comparison tests.
     testPart.LockUnits( true );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
     testPart.LockUnits( false );
@@ -398,7 +398,7 @@ BOOST_AUTO_TEST_CASE( GetUnitItems )
     pin1->SetConvert( 1 );
     BOOST_CHECK( m_part_no_data.GetUnitItems( 1, 1 ).size() == 1 );
 
-    // Two unique units with pin 1 assigned to unit 1 and body style 1 and pin 2 assinged to
+    // Two unique units with pin 1 assigned to unit 1 and body style 1 and pin 2 assigned to
     // unit 2 and body style 1.
     LIB_PIN* pin2 = new LIB_PIN( &m_part_no_data );
     m_part_no_data.SetUnitCount( 2 );

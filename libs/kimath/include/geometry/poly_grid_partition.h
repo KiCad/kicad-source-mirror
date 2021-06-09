@@ -55,7 +55,7 @@
  * - if the cell doesn't contain any edges, scan horizontal cells to the left and right (switching sides with each iteration)
  *   until an edge if found.
  * NOTE: the rescale_trunc() function is used for grid<->world coordinate conversion because it rounds towards 0 (not to nearest)
- * It's important as rouding to nearest (which the standard rescale() function does) will shift the grid by half a cell.
+ * It's important as rounding to nearest (which the standard rescale() function does) will shift the grid by half a cell.
  */
 
 class POLY_GRID_PARTITION

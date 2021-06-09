@@ -70,7 +70,7 @@ protected:
      * this function may need to be moved to the subclasses to access m_field and check for
      * the field type if more select actions are desired.
      *
-     * @param aEvent is the the wX event thrown when the button is clicked, this isn't used
+     * @param aEvent is the wX event thrown when the button is clicked, this isn't used
      */
     void OnTextValueSelectButtonClick( wxCommandEvent& aEvent ) override;
 

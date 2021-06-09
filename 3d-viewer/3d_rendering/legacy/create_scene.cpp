@@ -280,7 +280,7 @@ OPENGL_RENDER_LIST* RENDER_3D_LEGACY::generateHoles( const LIST_OBJECT2D& aListH
             }
         }
 
-        // Note: he can have a aListHolesObject2d whith holes but without countours
+        // Note: he can have a aListHolesObject2d with holes but without contours
         // eg: when there are only NPTH on the list and the contours were not added
         if( aPoly.OutlineCount() > 0 )
         {
