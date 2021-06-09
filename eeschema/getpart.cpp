@@ -30,7 +30,6 @@
 #include <general.h>
 #include <kiway.h>
 #include <symbol_viewer_frame.h>
-#include <pgm_base.h>
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>
 #include <symbol_lib_table.h>

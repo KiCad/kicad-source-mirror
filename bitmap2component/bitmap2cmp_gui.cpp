@@ -30,7 +30,6 @@
 #include <kiface_i.h>
 #include <math/util.h>      // for KiROUND
 #include <kiway.h>
-#include <pgm_base.h>
 #include <potracelib.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/clipbrd.h>

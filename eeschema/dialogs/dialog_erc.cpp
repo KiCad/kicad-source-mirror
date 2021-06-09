@@ -24,7 +24,6 @@
  */
 
 #include <gestfich.h>
-#include <pgm_base.h>
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>

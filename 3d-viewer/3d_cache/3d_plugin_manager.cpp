@@ -36,7 +36,6 @@
 
 #include <common.h>
 #include <paths.h>
-#include <pgm_base.h>
 #include "3d_plugin_manager.h"
 #include "plugins/3d/3d_plugin.h"
 #include "3d_cache/sg/scenegraph.h"

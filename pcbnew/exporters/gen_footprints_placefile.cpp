@@ -31,7 +31,6 @@
 #include <gestfich.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
-#include <pgm_base.h>
 #include <bitmaps.h>
 #include <reporter.h>
 #include <tools/board_editor_control.h>

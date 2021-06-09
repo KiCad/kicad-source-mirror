@@ -26,7 +26,6 @@
 #include <sch_line.h>
 #include <dialog_edit_line_style.h>
 #include <dialogs/dialog_color_picker.h>
-#include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <sch_edit_frame.h>
 #include <widgets/color_swatch.h>

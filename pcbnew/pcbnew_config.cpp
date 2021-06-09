@@ -37,6 +37,7 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <pcbplot.h>
 #include <pcb_painter.h>
+#include <project.h>
 #include <invoke_pcb_dialog.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/paged_dialog.h>

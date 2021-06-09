@@ -32,7 +32,6 @@
 #include <layers_id_colors_and_visibility.h>
 #include <pad_shapes.h>
 #include <pcb_plot_params.h>
-#include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 

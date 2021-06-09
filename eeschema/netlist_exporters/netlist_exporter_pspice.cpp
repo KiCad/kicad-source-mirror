@@ -35,6 +35,7 @@
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <env_paths.h>
+#include <pgm_base.h>
 
 #include <wx/tokenzr.h>
 #include <wx/regex.h>

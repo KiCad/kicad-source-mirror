@@ -34,7 +34,6 @@
 #include <sch_symbol.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
-#include <pgm_base.h>
 #include <symbol_lib_table.h>
 #include <trace_helpers.h>
 #include <widgets/wx_grid.h>

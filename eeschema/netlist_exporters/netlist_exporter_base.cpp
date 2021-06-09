@@ -25,7 +25,6 @@
 
 #include <netlist_exporter_base.h>
 
-#include <pgm_base.h>
 #include <refdes_utils.h>
 
 #include <class_library.h>

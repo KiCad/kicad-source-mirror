@@ -28,6 +28,7 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <pcbplot.h>
+#include <pgm_base.h>
 #include <gerber_jobfile_writer.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>

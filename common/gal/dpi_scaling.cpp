@@ -26,7 +26,6 @@
 #include <core/optional.h>
 
 #include <env_vars.h>
-#include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <kiplatform/ui.h>
 

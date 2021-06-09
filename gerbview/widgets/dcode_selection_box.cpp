@@ -23,7 +23,6 @@
  */
 
 #include <wx/aui/aui.h>
-#include <pgm_base.h>
 #include <dcode.h>
 
 #include "dcode_selection_box.h"

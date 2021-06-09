@@ -31,7 +31,6 @@
 #include <menus_helpers.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
-#include <pgm_base.h>
 #include <python_scripting.h>
 #include <tool/action_manager.h>
 #include <tool/actions.h>

@@ -33,7 +33,6 @@
 #include <locale_io.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
-#include <pgm_base.h>
 
 #include <board.h>
 #include <board_design_settings.h>

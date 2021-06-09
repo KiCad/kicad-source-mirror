@@ -22,7 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pgm_base.h>
 #include <eda_item.h>
 #include <gr_text.h>
 #include <kicad_string.h>

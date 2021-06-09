@@ -41,7 +41,6 @@
  * are really modified, and ones they are modified (changes, deletion or addition)
  */
 
-#include <pgm_base.h>
 #include <pcb_edit_frame.h>
 
 #include <board.h>

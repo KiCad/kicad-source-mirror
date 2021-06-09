@@ -27,7 +27,6 @@
 #include <view/view_group.h>
 #include <gal/graphics_abstraction_layer.h>
 
-#include <pgm_base.h>
 #include <settings/settings_manager.h>
 
 #include <pcb_painter.h>

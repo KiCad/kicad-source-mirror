@@ -40,7 +40,6 @@
 #include <kicad_string.h>
 #include <macros.h>
 #include <paths.h>
-#include <pgm_base.h>
 #include <settings/settings_manager.h>
 
 #include <kiplatform/environment.h>

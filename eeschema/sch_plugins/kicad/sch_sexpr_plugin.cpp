@@ -29,7 +29,6 @@
 #include <wx/log.h>
 #include <wx/mstream.h>
 #include <advanced_config.h>
-#include <pgm_base.h>
 #include <trace_helpers.h>
 #include <locale_io.h>
 #include <sch_bitmap.h>

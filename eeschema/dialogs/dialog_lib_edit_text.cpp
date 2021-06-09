@@ -27,7 +27,6 @@
 #include <settings/settings_manager.h>
 #include <dialog_lib_edit_text.h>
 #include <symbol_editor/symbol_editor_settings.h>
-#include <pgm_base.h>
 #include <tools/symbol_editor_drawing_tools.h>
 
 

@@ -26,7 +26,6 @@
 #include <settings/settings_manager.h>
 #include <settings/color_settings.h>
 #include <painter.h>
-#include <pgm_base.h>
 #include <eeschema_settings.h>
 #include "panel_eeschema_editing_options.h"
 

@@ -32,7 +32,6 @@
 #include <kiface_ids.h>
 #include <kiway.h>
 #include <macros.h>
-#include <pgm_base.h>
 #include <project.h>
 #include <project/project_file.h>
 #include <trace_helpers.h>

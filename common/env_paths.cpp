@@ -21,6 +21,8 @@
  */
 
 #include <env_paths.h>
+#include <project.h>
+#include <wx/filename.h>
 
 static bool normalizeAbsolutePaths( const wxFileName& aPathA, const wxFileName& aPathB,
                                     wxString* aResultPath )

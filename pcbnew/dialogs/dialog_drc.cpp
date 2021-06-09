@@ -31,7 +31,6 @@
 #include <pad.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
-#include <pgm_base.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <wildcards_and_files_ext.h>

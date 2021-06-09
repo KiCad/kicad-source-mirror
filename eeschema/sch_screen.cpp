@@ -36,7 +36,6 @@
 #include <id.h>
 #include <kicad_string.h>
 #include <kiway.h>
-#include <pgm_base.h>
 #include <plotter.h>
 #include <project.h>
 #include <reporter.h>

@@ -27,9 +27,9 @@
  * @brief build the standard menu to show the list of available translations
  */
 
-#include <pgm_base.h>
 #include <id.h>
 #include <menus_helpers.h>
+#include <pgm_base.h> // LanguagesList
 #include <tool/tool_interactive.h>
 #include <tool/action_menu.h>
 #include <tool/conditional_menu.h>

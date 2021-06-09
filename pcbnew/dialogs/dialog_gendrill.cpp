@@ -37,6 +37,7 @@
 #include <pad.h>
 #include <track.h>
 #include <paths.h>
+#include <project.h>
 #include <dialog_gendrill.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>

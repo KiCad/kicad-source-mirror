@@ -32,7 +32,6 @@
 #include <wx/textfile.h>
 #include <wx/tokenzr.h>
 
-#include <pgm_base.h>
 #include <gr_text.h>
 #include <kiway.h>
 #include <kicad_string.h>

@@ -30,7 +30,6 @@
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <3d_viewer/eda_3d_viewer.h>
-#include <pgm_base.h>
 #include <widgets/msgpanel.h>
 #include <fp_lib_table.h>
 #include <kiface_i.h>

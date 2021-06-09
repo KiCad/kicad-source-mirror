@@ -26,7 +26,11 @@
 #ifndef ENV_PATHS_H
 #define ENV_PATHS_H
 
-#include <pgm_base.h>
+#include <wx/string.h>
+#include <settings/environment.h>
+
+class wxFileName;
+class PROJECT;
 
 /**
  * Normalize a file path to an environmental variable, if possible.

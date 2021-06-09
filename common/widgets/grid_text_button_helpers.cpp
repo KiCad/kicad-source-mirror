@@ -33,6 +33,7 @@
 #include <dialog_shim.h>
 #include <common.h>
 #include <env_paths.h>
+#include <pgm_base.h>
 #include <widgets/wx_grid.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <eda_doc.h>
