@@ -36,6 +36,7 @@
 #include <settings/settings_manager.h>
 #include <logging.h>
 
+#include <wx/dynlib.h>
 #include <wx/stdpaths.h>
 #include <wx/debug.h>
 #include <wx/utils.h>

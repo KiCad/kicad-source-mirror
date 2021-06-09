@@ -96,7 +96,6 @@
 
 
 #include <wx/event.h>
-#include <wx/dynlib.h>
 #include <import_export.h>
 #include <search_stack.h>
 #include <project.h>
