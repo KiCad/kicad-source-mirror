@@ -26,6 +26,7 @@
 #include <wx/wx.h>
 #include <config.h>
 #include <boost/version.hpp>
+#include <kiplatform/app.h>
 
 // kicad_curl.h must be included before wx headers, to avoid
 // conflicts for some defines, at least on Windows
@@ -87,7 +88,8 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 #define OFF "OFF" << eol
 
     wxString version;
-    version << GetBuildVersion()
+    version << ( KIPLATFORM::APP::IsOperatingSystemUnsupported() ? "(UNSUPPORTED)"
+                                                                 : GetBuildVersion() )
 #ifdef DEBUG
             << ", debug"
 #else

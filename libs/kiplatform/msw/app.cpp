@@ -23,7 +23,6 @@
 #include <wx/log.h>
 #include <wx/string.h>
 #include <wx/window.h>
-#include <wx/msgdlg.h>
 
 #include <windows.h>
 #include <strsafe.h>
@@ -39,21 +38,23 @@ bool KIPLATFORM::APP::Init()
     _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF );
 #endif
 
+    return true;
+}
+
+
+bool KIPLATFORM::APP::IsOperatingSystemUnsupported()
+{
 #if defined( PYTHON_VERSION_MAJOR ) && ( ( PYTHON_VERSION_MAJOR == 3 && PYTHON_VERSION_MINOR >= 8 ) \
              || PYTHON_VERSION_MAJOR > 3 )
     // Python 3.8 switched to Windows 8+ API, we do not support Windows 7 and will not
-    // attempt to hack around it.  Gracefully inform the user and refuse to start (because
-    // python will crash us if we continue).
-    if( !IsWindows8OrGreater() )
-    {
-        wxMessageBox( _( "Windows 7 and older is no longer supported by KiCad and its "
-                         "dependencies." ), _( "Unsupported Operating System" ),
-                      wxOK | wxICON_ERROR );
-        return false;
-    }
+    // attempt to hack around it. A normal user will never get here because the Python DLL
+    // is missing dependencies - and because it is not dynamically loaded, KiCad will not even
+    // start without patching Python or its WinAPI dependency. This is just to create a nag dialog
+    // for those who run patched Python and prevent them from submitting bug reports.
+    return !IsWindows8OrGreater();
+#else
+    return false;
 #endif
-
-    return true;
 }
 
 

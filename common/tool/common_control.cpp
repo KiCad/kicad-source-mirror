@@ -288,6 +288,9 @@ int COMMON_CONTROL::Donate( const TOOL_EVENT& aEvent )
 
 int COMMON_CONTROL::ReportBug( const TOOL_EVENT& aEvent )
 {
+    if( WarnUserIfOperatingSystemUnsupported() )
+        return 0;
+
     wxString version = GetVersionInfoData( m_frame->GetAboutTitle(), false, true );
 
     wxString message;

@@ -37,6 +37,14 @@ namespace KIPLATFORM
         bool Init();
 
         /**
+         * Checks if the Operating System is explicitly unsupported and we want to prevent
+         * users from sending bug reports and show them a disclaimer on startup.
+         *
+         * @return true if unsupported
+         */
+        bool IsOperatingSystemUnsupported();
+
+        /**
          * Registers the application for restart with the OS with the given command line string to pass as args
          *
          * @param aCommandLine is string the OS will invoke the application with

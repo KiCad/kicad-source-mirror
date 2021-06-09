@@ -48,6 +48,13 @@ bool KIPLATFORM::APP::Init()
 }
 
 
+bool KIPLATFORM::APP::IsOperatingSystemUnsupported()
+{
+    // Not implemented on this platform
+    return false;
+}
+
+
 bool KIPLATFORM::APP::RegisterApplicationRestart( const wxString& aCommandLine )
 {
     // Not implemented on this platform

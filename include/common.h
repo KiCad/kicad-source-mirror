@@ -111,4 +111,12 @@ const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject );
 long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec );
 
 
+/**
+ * Checks if the operating system is explicitly unsupported and displays a disclaimer message box
+ *
+ * @return true if the operating system is unsupported
+ */
+bool WarnUserIfOperatingSystemUnsupported();
+
+
 #endif  // INCLUDE__COMMON_H_

@@ -36,6 +36,7 @@
 #include <bitmaps.h>
 #include <build_version.h>
 #include <common.h>
+#include <kiplatform/app.h>
 #include <pgm_base.h>
 #include <eda_base_frame.h>
 
@@ -67,7 +68,8 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     /* KiCad build version */
     wxString version;
-    version << GetBuildVersion()
+    version << ( KIPLATFORM::APP::IsOperatingSystemUnsupported() ? "(UNSUPPORTED)"
+                                                                 : GetBuildVersion() )
 #ifdef DEBUG
             << ", debug"
 #else

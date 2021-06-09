@@ -40,6 +40,7 @@
 #include <wx/filedlg.h>
 #include <wx/tooltip.h>
 
+#include <common.h>
 #include <config_params.h>
 #include <confirm.h>
 #include <core/arraydim.h>
@@ -281,6 +282,9 @@ bool PGM_BASE::InitPgm( bool aHeadless )
     // env vars could be incorrectly initialized on Linux
     // (if the value contains some non ASCII7 chars, the env var is not initialized)
     SetLanguage( tmp, true );
+
+    // Now that translations are available, inform the user if the OS is unsupported
+    WarnUserIfOperatingSystemUnsupported();
 
     loadCommonSettings();
 
