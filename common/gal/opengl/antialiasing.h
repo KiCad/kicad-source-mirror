@@ -70,16 +70,11 @@ namespace KIGFX {
         OPENGL_COMPOSITOR* compositor;
     };
 
-    enum class SUPERSAMPLING_MODE {
-        X2,
-        X4
-    };
-
 
     class ANTIALIASING_SUPERSAMPLING : public OPENGL_PRESENTOR
     {
     public:
-        ANTIALIASING_SUPERSAMPLING( OPENGL_COMPOSITOR* aCompositor, SUPERSAMPLING_MODE aMode );
+        ANTIALIASING_SUPERSAMPLING( OPENGL_COMPOSITOR* aCompositor );
 
         bool Init() override;
         unsigned int CreateBuffer() override;
@@ -93,25 +88,17 @@ namespace KIGFX {
 
     private:
         OPENGL_COMPOSITOR* compositor;
-        SUPERSAMPLING_MODE mode;
 
         unsigned int ssaaMainBuffer;
         bool areBuffersCreated;
 
         bool areShadersCreated;
-        std::unique_ptr<SHADER> x4_shader;
-    };
-
-    enum class SMAA_QUALITY
-    {
-        CONSERVATIVE,
-        AGGRESSIVE
     };
 
     class ANTIALIASING_SMAA : public OPENGL_PRESENTOR
     {
     public:
-        ANTIALIASING_SMAA( OPENGL_COMPOSITOR* aCompositor, SMAA_QUALITY aQuality );
+        ANTIALIASING_SMAA( OPENGL_COMPOSITOR* aCompositor );
 
         bool Init() override;
         unsigned int CreateBuffer () override;
@@ -148,7 +135,6 @@ namespace KIGFX {
         std::unique_ptr<SHADER> pass_3_shader;
         GLint pass_3_metrics;
 
-        SMAA_QUALITY quality;
         OPENGL_COMPOSITOR* compositor;
     };
 

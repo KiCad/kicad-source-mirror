@@ -93,22 +93,14 @@ void OPENGL_COMPOSITOR::Initialize()
 
     switch( m_currentAntialiasingMode )
     {
-    case OPENGL_ANTIALIASING_MODE::NONE:
+    case OPENGL_ANTIALIASING_MODE::SMAA:
+        m_antialiasing = std::make_unique<ANTIALIASING_SMAA>( this );
+        break;
+    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING:
+        m_antialiasing = std::make_unique<ANTIALIASING_SUPERSAMPLING>( this );
+        break;
+    default:
         m_antialiasing = std::make_unique<ANTIALIASING_NONE>( this );
-        break;
-    case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_CONSERVATIVE:
-        m_antialiasing = std::make_unique<ANTIALIASING_SMAA>( this, SMAA_QUALITY::CONSERVATIVE );
-        break;
-    case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_AGGRESSIVE:
-        m_antialiasing = std::make_unique<ANTIALIASING_SMAA>( this, SMAA_QUALITY::AGGRESSIVE );
-        break;
-    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
-        m_antialiasing =
-                std::make_unique<ANTIALIASING_SUPERSAMPLING>( this, SUPERSAMPLING_MODE::X2 );
-        break;
-    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
-        m_antialiasing =
-                std::make_unique<ANTIALIASING_SUPERSAMPLING>( this, SUPERSAMPLING_MODE::X4 );
         break;
     }
 
@@ -432,11 +424,12 @@ void OPENGL_COMPOSITOR::clean()
 
 int OPENGL_COMPOSITOR::GetAntialiasSupersamplingFactor() const
 {
-    switch( m_currentAntialiasingMode )
+    switch ( m_currentAntialiasingMode )
     {
-    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2: return 2;
-    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4: return 4;
-    default: return 1;
+    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING:
+        return 2;
+    default:
+        return 1;
     }
 }
 
@@ -444,8 +437,7 @@ VECTOR2D OPENGL_COMPOSITOR::GetAntialiasRenderingOffset() const
 {
     switch( m_currentAntialiasingMode )
     {
-    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2: return VECTOR2D( 0.5, -0.5 );
-    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4: return VECTOR2D( 0.25, -0.25 );
+    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING: return VECTOR2D( 0.5, -0.5 );
     default: return VECTOR2D( 0, 0 );
     }
 }

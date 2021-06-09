@@ -86,8 +86,6 @@ public:
             return CAIRO_ANTIALIASING_MODE::FAST;
         case CAIRO_ANTIALIAS_GOOD:
             return CAIRO_ANTIALIASING_MODE::GOOD;
-        case CAIRO_ANTIALIAS_BEST:
-            return CAIRO_ANTIALIASING_MODE::BEST;
         default:
             return CAIRO_ANTIALIASING_MODE::NONE;
         }

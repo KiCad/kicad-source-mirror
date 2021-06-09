@@ -48,10 +48,8 @@ namespace KIGFX
     enum class OPENGL_ANTIALIASING_MODE
     {
         NONE,
-        SUBSAMPLE_CONSERVATIVE,
-        SUBSAMPLE_AGGRESSIVE,
-        SUPERSAMPLING_X2,
-        SUPERSAMPLING_X4,
+        SMAA,
+        SUPERSAMPLING,
     };
 
     enum class CAIRO_ANTIALIASING_MODE
@@ -59,7 +57,6 @@ namespace KIGFX
         NONE,
         FAST,
         GOOD,
-        BEST,
     };
 
     enum class GRID_SNAPPING
