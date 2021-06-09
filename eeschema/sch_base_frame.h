@@ -27,8 +27,6 @@
 
 #include <eda_draw_frame.h>
 #include <frame_type.h>
-#include <lib_id.h>
-#include <page_info.h>
 #include <sch_draw_panel.h>
 #include <sch_screen.h>
 #include <schematic_settings.h>

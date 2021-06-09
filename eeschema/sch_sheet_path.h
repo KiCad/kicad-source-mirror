@@ -31,10 +31,9 @@
 #ifndef CLASS_DRAWSHEET_PATH_H
 #define CLASS_DRAWSHEET_PATH_H
 
-#include <erc_item.h>
-
 #include <map>
 
+#include <kiid.h>
 
 /**
  * A simple container for schematic symbol instance information.

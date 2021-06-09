@@ -30,7 +30,6 @@
 #include <eda_rect.h>
 #include <fill_type.h>
 #include <transform.h>
-#include <gr_basic.h>
 #include <render_settings.h>
 
 class LINE_READER;
