@@ -6,7 +6,7 @@
     <key>CFBundleExecutable</key>              <string>pcb_calculator</string>
     <key>CFBundleGetInfoString</key>           <string></string>
     <key>CFBundleIconFile</key>                <string>pcb_calculator.icns</string>
-    <key>CFBundleIdentifier</key>              <string>org.kicad-pcb.pcb_calculator</string>
+    <key>CFBundleIdentifier</key>              <string>org.kicad.pcb_calculator</string>
     <key>CFBundleInfoDictionaryVersion</key>   <string>6.0</string>
     <key>CFBundleLongVersionString</key>       <string>@KICAD_VERSION_FULL@</string>
     <key>CFBundleName</key>                    <string>PCB Calculator</string>
@@ -17,6 +17,6 @@
     <key>CSResourcesFileMapped</key>           <true/>
     <key>LSRequiresCarbon</key>                <true/>
     <key>NSHumanReadableCopyright</key>        <string>Copyright The KiCad Developers</string>
-    <key>NSHighResolutionCapable</key>         <string>True</string>
+    <key>NSHighResolutionCapable</key>         <true/>
 </dict>
 </plist>
