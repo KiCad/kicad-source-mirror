@@ -101,12 +101,12 @@ public:
      *
      * @param aOutputString is a wxString to store the S expr string
      */
-    void SaveInString( const wxString& aOutputString );
+    void SaveInString( wxString* aOutputString );
 
     /**
      * Fill the given string with an S-expr serialization of the WS_DATA_ITEMs.
      */
-    void SaveInString( std::vector<DS_DATA_ITEM*>& aItemsList, const wxString& aOutputString );
+    void SaveInString( std::vector<DS_DATA_ITEM*>& aItemsList, wxString* aOutputString );
 
     void Append( DS_DATA_ITEM* aItem );
     void Remove( DS_DATA_ITEM* aItem );

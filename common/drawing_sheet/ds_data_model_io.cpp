@@ -106,7 +106,7 @@ private:
 class DS_DATA_MODEL_STRINGIO : public DS_DATA_MODEL_IO
 {
 public:
-    DS_DATA_MODEL_STRINGIO( const wxString& aOutputString ) :
+    DS_DATA_MODEL_STRINGIO( wxString* aOutputString ) :
             DS_DATA_MODEL_IO(),
             m_output( aOutputString )
     {
@@ -123,13 +123,13 @@ public:
 
     ~DS_DATA_MODEL_STRINGIO()
     {
-        m_output = FROM_UTF8( m_writer->GetString().c_str() );
+        *m_output = FROM_UTF8( m_writer->GetString().c_str() );
         delete m_writer;
     }
 
 private:
     STRING_FORMATTER* m_writer;
-    wxString m_output;
+    wxString*         m_output;
 };
 
 
@@ -140,15 +140,14 @@ void DS_DATA_MODEL::Save( const wxString& aFullFileName )
 }
 
 
-void DS_DATA_MODEL::SaveInString( const wxString& aOutputString )
+void DS_DATA_MODEL::SaveInString( wxString* aOutputString )
 {
     DS_DATA_MODEL_STRINGIO writer( aOutputString );
     writer.Format( this );
 }
 
 
-void DS_DATA_MODEL::SaveInString( std::vector<DS_DATA_ITEM*>& aItemsList,
-                                  const wxString& aOutputString )
+void DS_DATA_MODEL::SaveInString( std::vector<DS_DATA_ITEM*>& aItemsList, wxString* aOutputString )
 {
     DS_DATA_MODEL_STRINGIO writer( aOutputString );
 

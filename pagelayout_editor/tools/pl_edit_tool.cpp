@@ -467,7 +467,7 @@ int PL_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 
     try
     {
-        model.SaveInString( items, sexpr );
+        model.SaveInString( items, &sexpr );
     }
     catch( const IO_ERROR& ioe )
     {

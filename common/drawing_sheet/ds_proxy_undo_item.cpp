@@ -42,7 +42,7 @@ DS_PROXY_UNDO_ITEM::DS_PROXY_UNDO_ITEM( const EDA_DRAW_FRAME* aFrame ) :
     }
 
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
-    model.SaveInString( m_layoutSerialization );
+    model.SaveInString( &m_layoutSerialization );
 
     for( size_t ii = 0; ii < model.GetItems().size(); ++ii )
     {
@@ -71,7 +71,7 @@ void DS_PROXY_UNDO_ITEM::Restore( EDA_DRAW_FRAME* aFrame, KIGFX::VIEW* aView )
         aFrame->SetTitleBlock( m_titleBlock );
     }
 
-    DS_DATA_MODEL::GetTheInstance().SetPageLayout(TO_UTF8( m_layoutSerialization ) );
+    DS_DATA_MODEL::GetTheInstance().SetPageLayout( TO_UTF8( m_layoutSerialization ) );
 
     if( aView )
     {
