@@ -82,6 +82,8 @@ class PNS_LOG_VIEWER_OVERLAY : public KIGFX::VIEW_OVERLAY
     public:
         PNS_LOG_VIEWER_OVERLAY( KIGFX::GAL* aGal );
         void AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std::string name, bool aShowVertexNumbers = false );
+        void AnnotatedPoint( const VECTOR2I p, int size, std::string name = "", bool aShowVertexNumbers = false );
+        void Arc( const SHAPE_ARC& arc );
         void DrawAnnotations();
 
     private:

@@ -238,6 +238,25 @@ void PNS_LOG_VIEWER_OVERLAY::AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std:
 }
 
 
+void PNS_LOG_VIEWER_OVERLAY::AnnotatedPoint( const VECTOR2I p, int size, std::string name, bool aShowVertexNumbers )
+{
+    Line( p + VECTOR2D( size, size ), p - VECTOR2D( size, size ) );
+    Line( p + VECTOR2D( -size, size ), p - VECTOR2D( -size, size ) );
+
+    //if( aShowVertexNumbers)
+      //  m_labelMgr->Add( aL, GetStrokeColor() );
+}
+
+
+void PNS_LOG_VIEWER_OVERLAY::Arc( const SHAPE_ARC& arc )
+{
+    double   radius = arc.GetRadius();
+    double   start_angle = DEG2RAD( arc.GetStartAngle() );
+    double   angle = DEG2RAD( arc.GetCentralAngle() );
+
+    KIGFX::VIEW_OVERLAY::Arc( arc.GetCenter(), radius, start_angle, start_angle + angle );
+}
+
 void PNS_LOG_VIEWER_OVERLAY::DrawAnnotations()
 {
     m_labelMgr->Redraw( this );
