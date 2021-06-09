@@ -231,5 +231,5 @@ private:
     std::array<r_data, S4R+1>   m_results;	            // 2R, 3R and 4R results
     uint32_t                    m_series = E6;		    // Radio Button State
     uint32_t                    m_enable_4R = false;    // Check Box 4R enable
-    double                      m_required_value;	    // required Resistor
+    double                      m_required_value =0.0;	// required Resistor
 };

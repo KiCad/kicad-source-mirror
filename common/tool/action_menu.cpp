@@ -45,6 +45,7 @@ using namespace std::placeholders;
 
 
 ACTION_MENU::ACTION_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
+    m_isForcedPosition( false ),
     m_dirty( true ),
     m_titleDisplayed( false ),
     m_isContextMenu( isContextMenu ),

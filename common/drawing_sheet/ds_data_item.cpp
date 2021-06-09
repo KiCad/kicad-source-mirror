@@ -105,7 +105,7 @@ void DS_DATA_ITEM::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aV
 
     m_drawItems.clear();
 
-    for( size_t j = 0; j < m_RepeatCount; j++ )
+    for( int j = 0; j < m_RepeatCount; j++ )
     {
         if( j && ! IsInsidePage( j ) )
             continue;
@@ -578,7 +578,7 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
 
     m_drawItems.clear();
 
-    for( size_t j = 0; j < m_RepeatCount; ++j )
+    for( int j = 0; j < m_RepeatCount; ++j )
     {
         if( j > 0 && !IsInsidePage( j ) )
             continue;
@@ -740,7 +740,7 @@ void DS_DATA_ITEM_BITMAP::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::V
 
     m_drawItems.clear();
 
-    for( size_t j = 0; j < m_RepeatCount; j++ )
+    for( int j = 0; j < m_RepeatCount; j++ )
     {
         if( j && !IsInsidePage( j ) )
             continue;
