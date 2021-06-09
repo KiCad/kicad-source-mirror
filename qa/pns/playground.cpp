@@ -31,9 +31,176 @@
 #include "pns_log_viewer_frame.h"
 #include "label_manager.h"
 
+#include <geometry/shape_arc.h>
+
 namespace PNS {
     extern SHAPE_LINE_CHAIN g_pnew, g_hnew;
 };
+
+
+
+template<class T>
+T within_range(T x, T minval, T maxval, T wrap)
+{
+    int rv;
+
+    while (maxval >= wrap)
+        maxval -= wrap;
+
+    while (maxval < 0)
+        maxval += wrap;
+
+    while (minval >= wrap)
+        minval -= wrap;
+
+    while (minval < 0)
+        minval += wrap;
+
+    while (x < 0)
+        x += wrap;
+
+    while (x >= wrap)
+        x -= wrap;
+
+    if (maxval > minval)
+        rv = (x >= minval && x <= maxval) ? 1 : 0;
+    else
+        rv = (x >= minval || x <= maxval) ? 1 : 0;
+
+    return rv;
+}
+
+bool arcContainsPoint( SHAPE_ARC a, VECTOR2D p )
+{
+    double phi = atan2( p.y - a.GetCenter().y, p.x - a.GetCenter().x );
+
+    return within_range( phi, a.GetStartAngle(), a.GetEndAngle(), 2.0 * M_PI );
+}
+
+int arclineIntersect( SHAPE_ARC a, SEG s, VECTOR2D* pts )
+{
+    double sa, sb, sc;
+
+    sa = s.A.y - s.B.y;
+    sb = s.B.x - s.A.x;
+    sc = -sa * s.A.x - sb * s.A.y;
+
+    VECTOR2D ac = a.GetCenter();
+    double rr = a.GetRadius();
+    int n = 0;
+
+    if( sb != 0.0 )
+    {
+        double aa = sa * sa / ( sb * sb ) + 1.0;
+        double bb = (2.0 * sa * ac.y / sb
+                    + 2.0 * sa * sc / (sb * sb)
+                    - 2.0 * ac.x );
+
+        double cc = ac.x * ac.x + ac.y * ac.y - rr * rr + 2.0*sc*ac.y/sb + (sc*sc) / ( sb*sb );
+
+        double delta = bb*bb - 4.0 * aa * cc;
+
+        if( delta < 0.0 )
+            return 0;
+        else
+        {
+            double x1 = -bb - sqrt(delta) / (2.0 * aa );
+            double x2 = -bb + sqrt(delta) / (2.0 * aa );
+
+            double y1 = (-sc - sa * x1) / sb;
+            double y2 = (-sc - sa * x2) / sb;
+
+            VECTOR2D p0( x1, y1 );
+            VECTOR2D p1( x1, y1 );
+            if( arcContainsPoint( a, p0 ) ) { pts[n] = p0; n++; }
+            if( arcContainsPoint( a, p1 ) ) { pts[n] = p1; n++; }
+
+            return n;
+        }
+    } else { // line is vertical
+
+        double aa = 1.0;
+        double bb = -2.0 * ac.y;
+        double cc = ac.x * ac.x + ac.y * ac.y - rr*rr + 2.0*sc*ac.x/sa + (sc * sc) / (sa * sa);
+
+        double delta = bb*bb - 4.0 * aa * cc;
+
+        if( delta < 0.0 )
+            return 0;
+        else
+        {
+            double y1 = -bb - sqrt(delta) / (2.0 * aa );
+            double y2 = -bb + sqrt(delta) / (2.0 * aa );
+
+            VECTOR2D p0( s.A.x, y1 );
+            VECTOR2D p1( s.A.y, y2 );
+            if( arcContainsPoint( a, p0 ) ) { pts[n] = p0; n++; }
+            if( arcContainsPoint( a, p1 ) ) { pts[n] = p1; n++; }
+            return n;
+        }
+    }
+
+    return 0;
+}
+
+bool collideArc2Arc( SHAPE_ARC a1, SHAPE_ARC a2, int clearance, SEG& minDistSeg )
+{
+    SEG mediatrix (a1.GetCenter(), a2.GetCenter() );
+
+    int nA = 0, nB = 0;
+    VECTOR2D ptsA[4];
+    VECTOR2D ptsB[4];
+
+    if (mediatrix.A.x != mediatrix.B.x || mediatrix.A.y != mediatrix.B.y )
+    {
+        // arcs don't have the same center point
+        nA = arclineIntersect( a1, mediatrix, ptsA );
+        nB = arclineIntersect( a2, mediatrix, ptsB );
+    }
+    else
+    {
+        // well well - check if the start/end angle ranges overlap. If they do ,the minumum distance is at one of the arc endpoints
+    }
+
+    ptsA[nA++] = a1.GetP0();
+    ptsA[nA++] = a1.GetP1();
+    ptsB[nB++] = a2.GetP0();
+    ptsB[nB++] = a2.GetP1();
+
+    printf("nA %d nB %d\n", nA, nB );
+
+    double minDist;
+    bool minDistFound = false;
+
+    for( int i = 0; i < nA; i++ )
+        for( int j = 0; j < nB; j++ )
+        {
+            double dist = (ptsA[i] - ptsB[j]).EuclideanNorm() - a1.GetWidth() / 2 - a2.GetWidth() / 2;
+
+            printf("dist %.1f\n", dist );
+
+            if( dist < clearance )
+            {
+
+                if( !minDistFound )
+                {
+                    minDist = dist;
+                    minDistSeg = SEG( ptsA[i], ptsB[j] );
+                }
+                else
+                {
+                    minDist = std::min( minDist, dist );
+                    minDistSeg = SEG( ptsA[i], ptsB[j] );
+                }
+
+                minDistFound = true;
+            }
+        }
+
+
+    return minDistFound;
+}
+
 
 int playground_main_func( int argc, char* argv[] )
 {
@@ -61,8 +228,10 @@ int playground_main_func( int argc, char* argv[] )
 
     SHAPE_LINE_CHAIN path_w;
 
-    BOX2D bb ( path.BBox().GetPosition(), path.BBox().GetSize() );
-
+    SHAPE_ARC a( VECTOR2I( 10000, 10000 ), VECTOR2I( -10000000, -500000 ), M_PI*1.5 );
+    BOX2D bb ( a.BBox().GetPosition(), a.BBox().GetSize() );
+    SHAPE_ARC a2( VECTOR2I( -10000, 10000 ), VECTOR2I( -400000, -100000 ), M_PI*0.75 );
+    
     LABEL_MANAGER labelMgr( frame->GetPanel()->GetGAL() );
 
     frame->GetPanel()->GetView()->SetViewport(bb);
@@ -73,6 +242,8 @@ int playground_main_func( int argc, char* argv[] )
 
     overlay->SetStrokeColor( WHITE );
     overlay->SetLineWidth( 10000.0 );
+ 
+ #if 0
     overlay->AnnotatedPolyline( PNS::g_pnew, "path", true );
     overlay->SetStrokeColor( RED );
     overlay->AnnotatedPolyline( PNS::g_hnew, "hull", true );
@@ -80,7 +251,40 @@ int playground_main_func( int argc, char* argv[] )
     overlay->SetStrokeColor( YELLOW );
     overlay->AnnotatedPolyline( path_w, "walk", "true" );
     overlay->DrawAnnotations();
+#endif
 
+    SEG s1 ( -1000000, -200000, 3000000, 200000 );
+    SEG s2 ( 0, -200000, 0, 200000 );
+
+    VECTOR2D pts1[2], pts2[2];
+//    int n1 = arclineIntersect( a, s1, pts1 );
+    //int n2 = arclineIntersect( a, s2, pts2 );
+
+    SEG closestDist;
+
+    bool isects = collideArc2Arc( a, a2, 100000000, closestDist );
+
+
+    overlay->SetStrokeColor( WHITE );
+    overlay->Arc( a.GetCenter(), a.GetRadius(), a.GetStartAngle(), a.GetEndAngle() );
+    overlay->Arc( a2.GetCenter(), a2.GetRadius(), a2.GetStartAngle(), a2.GetEndAngle() );
+
+    /*overlay->SetStrokeColor( RED );
+    overlay->Line( s1.A, s1.B );
+    for(int i = 0; i < n1; i++)
+        overlay->Circle( pts1[i], 200000 );
+    
+    overlay->SetStrokeColor( GREEN );
+    overlay->Line( s2.A, s2.B );
+    for(int i = 0; i < n2; i++)
+        overlay->Circle( pts2[i], 200000 );*/
+
+    if( isects )
+    {
+        overlay->SetStrokeColor( YELLOW );
+        overlay->Line(closestDist.A, closestDist.B);
+    }
+    
     overlay = nullptr;
 
     return 0;
