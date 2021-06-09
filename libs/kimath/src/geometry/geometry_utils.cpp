@@ -27,7 +27,7 @@
  * @brief a few functions useful in geometry calculations.
  */
 
-#include <stdint.h>          // for int64_t
+#include <cstdint>
 #include <algorithm>         // for max, min
 
 #include <eda_rect.h>
@@ -142,22 +142,22 @@ bool ClipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &y2 )
         if( thisoutcode & 1 ) // Clip the bottom
         {
             y = aClipBox->GetBottom();
-            x = x1 + (x2 - x1) * int64_t(y - y1) / (y2 - y1);
+            x = x1 + (x2 - x1) * std::int64_t(y - y1) / (y2 - y1);
         }
         else if( thisoutcode & 2 ) // Clip the top
         {
             y = aClipBox->GetY();
-            x = x1 + (x2 - x1) * int64_t(y - y1) / (y2 - y1);
+            x = x1 + ( x2 - x1 ) * std::int64_t( y - y1 ) / ( y2 - y1 );
         }
         else if( thisoutcode & 8 ) // Clip the right
         {
             x = aClipBox->GetRight();
-            y = y1 + (y2 - y1) * int64_t(x - x1) / (x2 - x1);
+            y = y1 + ( y2 - y1 ) * std::int64_t( x - x1 ) / ( x2 - x1 );
         }
         else // if( thisoutcode & 4), obviously, clip the left
         {
             x = aClipBox->GetX();
-            y = y1 + (y2 - y1) * int64_t(x - x1) / (x2 - x1);
+            y = y1 + ( y2 - y1 ) * std::int64_t( x - x1 ) / ( x2 - x1 );
         }
 
         // Put the result back and update the boundary code

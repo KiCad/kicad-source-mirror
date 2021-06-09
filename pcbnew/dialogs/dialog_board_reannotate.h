@@ -34,7 +34,6 @@
 #include <pcb_base_frame.h>
 #include <pcb_edit_frame.h>
 #include <project.h>
-#include <stdint.h>
 #include <wx_html_report_panel.h>
 
 #include <frame_type.h>

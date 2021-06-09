@@ -37,7 +37,6 @@
     #define KICAD_PLUGIN_EXPORT extern "C" __attribute__((__visibility__("default")))
     #endif
 #else
-    #include <stdint.h>
     #ifndef KICAD_PLUGIN_EXPORT
     #define KICAD_PLUGIN_EXPORT extern "C" __declspec( dllexport )
     #endif
