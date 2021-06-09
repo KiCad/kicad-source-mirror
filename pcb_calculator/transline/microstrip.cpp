@@ -49,9 +49,7 @@ MICROSTRIP::MICROSTRIP() : TRANSLINE(),
     l( 0.0 ),                // length of line
     Z0_0( 0.0 ),             // static characteristic impedance
     Z0( 0.0 ),               // characteristic impedance
-    ang_l( 0.0 ),            // Electrical length in angle
     er_eff_0( 0.0 ),         // Static effective dielectric constant
-    er_eff( 0.0 ),           // Effective dielectric constant
     mur_eff( 0.0 ),          // Effective mag. permeability
     w_eff( 0.0 ),            // Effective width of line
     atten_dielectric( 0.0 ), // Loss in dielectric (dB)

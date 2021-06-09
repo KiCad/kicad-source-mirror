@@ -43,8 +43,8 @@ private:
     double l;                // length of waveguide
     double Z0;               // characteristic impedance
     double Z0EH;             // characteristic impedance of field quantities*/
-    double ang_l;            // Electrical length in angle
-    double er_eff;           // Effective dielectric constant
+    // double ang_l;         Electrical length in angle defined in parent class
+    // double er_eff;        Effective dielectric constant defined in parent class
     double mur_eff;          // Effective mag. permeability
     double atten_dielectric; // Loss in dielectric (dB)
     double atten_cond;       // Loss in conductors (dB)

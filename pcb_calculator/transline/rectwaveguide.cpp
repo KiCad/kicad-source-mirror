@@ -35,8 +35,6 @@ RECTWAVEGUIDE::RECTWAVEGUIDE() : TRANSLINE(),
     l( 0.0 ),                   // length of waveguide
     Z0( 0.0 ),                  // characteristic impedance
     Z0EH( 0.0 ),                // characteristic impedance of field quantities*/
-    ang_l( 0.0 ),               // Electrical length in angle
-    er_eff( 0.0 ),              // Effective dielectric constant
     mur_eff( 0.0 ),             // Effective mag. permeability
     atten_dielectric( 0.0 ),    // Loss in dielectric (dB)
     atten_cond( 0.0 ),          // Loss in conductors (dB)
