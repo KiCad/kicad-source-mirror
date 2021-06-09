@@ -350,9 +350,6 @@ bool PGM_BASE::setExecutablePath()
 
 void PGM_BASE::loadCommonSettings()
 {
-    m_help_size.x = 500;
-    m_help_size.y = 400;
-
     m_show_env_var_dialog = GetCommonSettings()->m_Env.show_warning_dialog;
     m_editor_name = GetCommonSettings()->m_System.editor_name;
 

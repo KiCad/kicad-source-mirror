@@ -36,7 +36,6 @@
 #include <search_stack.h>
 #include <settings/environment.h>
 #include <wx/filename.h>
-#include <wx/gdicmn.h>
 
 #undef pid_t
 #include <pybind11/embed.h>
@@ -330,7 +329,6 @@ protected:
     /// The file name of the the program selected for browsing pdf files.
     wxString        m_pdf_browser;
     wxString        m_editor_name;
-    wxSize          m_help_size;
 
     /// Flag to indicate if the environment variable overwrite warning dialog should be shown.
     bool            m_show_env_var_dialog;
