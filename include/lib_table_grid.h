@@ -183,8 +183,8 @@ public:
         case COL_NICKNAME:  return _( "Nickname" );
         case COL_URI:       return _( "Library Path" );
 
-        // keep this "Plugin Type" text fairly long so column is sized wide enough
-        case COL_TYPE:      return _( "Plugin Type" );
+        // keep this "Library Format" text fairly long so column is sized wide enough
+        case COL_TYPE:      return _( "Library Format" );
         case COL_OPTIONS:   return _( "Options" );
         case COL_DESCR:     return _( "Description" );
         case COL_ENABLED:   return _( "Active" );

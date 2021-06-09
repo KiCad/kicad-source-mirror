@@ -720,22 +720,22 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
 
     if( legacyRows.size() <= 0 )
     {
-        wxMessageBox( _( "Select one or more table rows containing legacy libraries to save as "
-                         "current format (*.kicad_sym)." ) );
+        wxMessageBox( _( "Select one or more rows containing libraries in Legacy format (*.lib) "
+                         "to save as current KiCad format (*.kicad_sym)." ) );
         return;
     }
     else
     {
         if( legacyRows.size() == 1 )
         {
-            msg.Printf( _( "Save '%s' as current format (*.kicad_sym) and "
-                           "replace legacy entry in table?" ),
+            msg.Printf( _( "Save '%s' as current KiCad format (*.kicad_sym) "
+                           "and replace legacy entry in table?" ),
                         m_cur_grid->GetCellValue( legacyRows[0], COL_NICKNAME ) );
         }
         else
         {
-            msg.Printf( _( "Save %d legacy libraries as current format (*.kicad_sym) and "
-                           "replace legacy entries in table?" ),
+            msg.Printf( _( "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) "
+                           "and replace legacy entries in table?" ),
                         (int) legacyRows.size() );
         }
 

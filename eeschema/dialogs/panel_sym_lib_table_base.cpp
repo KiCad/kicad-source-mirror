@@ -132,7 +132,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 
 	bSizer51->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_convertLegacy = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Migrate Libraries..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_convertLegacy = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Migrate Libraries"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer51->Add( m_convertLegacy, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
