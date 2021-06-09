@@ -308,7 +308,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
             m_DesignRuleWidthsCtrl->Append( msg );
 
             if( widthSelection == wxNOT_FOUND && m_trackWidth.GetValue() == width )
-                widthSelection = ii;
+                widthSelection = ii - 1;
         }
 
         m_DesignRuleWidthsCtrl->SetSelection( widthSelection );
