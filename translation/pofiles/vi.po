@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-19 08:36-0700\n"
-"PO-Revision-Date: 2021-05-18 06:32+0000\n"
+"PO-Revision-Date: 2021-06-10 20:22+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2702,10 +2702,13 @@ msgid "Browse..."
 msgstr "Trình duyệt..."
 
 #: common/dialogs/dialog_paste_special.cpp:37
+#, fuzzy
 msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
 msgstr ""
+"Tìm bộ chỉ định tham chiếu có sẵn tiếp theo cho bất kỳ bộ chỉ định nào đã "
+"tồn tại trong thiết kế."
 
 #: common/dialogs/dialog_paste_special.cpp:44
 #, fuzzy, c-format
@@ -2718,8 +2721,9 @@ msgid "Assign unique reference designators to pasted symbols"
 msgstr "Gán cho các Net đã chọn"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
+#, fuzzy
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr ""
+msgstr "Giữ các chỉ định tham chiếu hiện có, ngay cả khi chúng bị trùng lặp"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
@@ -2728,11 +2732,11 @@ msgstr "Giá trị chỉ định tham chiếu bất hợp pháp!"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
-msgstr ""
+msgstr "Tùy chọn dán"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
-msgstr ""
+msgstr "Dán đặc biệt"
 
 #: common/dialogs/dialog_print_generic.cpp:44
 #: common/dialogs/dialog_print_generic.cpp:248
@@ -4912,7 +4916,7 @@ msgstr "Bỏ qua các bắt điễm khác"
 
 #: common/hotkey_store.cpp:59
 msgid "Ignore H/V/45 Constraints"
-msgstr ""
+msgstr "Bỏ qua các ràng buộc H / V / 45"
 
 #: common/hotkey_store.cpp:64 common/tool/action_menu.cpp:223
 #: common/tool/actions.cpp:113
@@ -6462,6 +6466,9 @@ msgid ""
 "\"%s\" could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
+"Tệp trợ giúp \"%s\" hoặc\n"
+"Không thể tìm thấy \"%s\".\n"
+"Bạn có muốn truy cập trợ giúp trực tuyến của KiCad không?"
 
 #: common/tool/common_control.cpp:208 common/tool/common_control.cpp:228
 #, fuzzy
@@ -8674,11 +8681,11 @@ msgstr "Xem mặt Dưới cùng"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:669
 msgid "Align left"
-msgstr ""
+msgstr "Căn trái"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:670
 msgid "Align top"
-msgstr ""
+msgstr "Căn trên cùng"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:122 eeschema/sch_text.cpp:674
 #, fuzzy
@@ -8897,49 +8904,50 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:461
 #, c-format
 msgid "Ignore all '%s' violations"
-msgstr ""
+msgstr "Bỏ qua tất cả các vi phạm '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:463
 msgid "Violations will not be checked or reported"
-msgstr ""
+msgstr "Vi phạm sẽ không được kiểm tra hoặc báo cáo"
 
 #: eeschema/dialogs/dialog_erc.cpp:531
+#, fuzzy
 msgid "Edit pin-to-pin conflict map..."
-msgstr ""
+msgstr "Chỉnh sửa bản đồ xung đột pin-to-pin ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:468
 msgid "Edit violation severities..."
-msgstr ""
+msgstr "Chỉnh sửa mức độ vi phạm ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:536
 msgid "Open the Schematic Setup... dialog"
-msgstr ""
+msgstr "Mở hộp thoại ... Thiết lập sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_erc.cpp:628
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 msgid "Pin Conflicts Map"
-msgstr ""
+msgstr "Bản đồ Xung đột Pin"
 
 #: eeschema/dialogs/dialog_erc.cpp:632
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: pcbnew/dialogs/dialog_board_setup.cpp:101 pcbnew/dialogs/dialog_drc.cpp:562
 msgid "Violation Severity"
-msgstr ""
+msgstr "Mức độ nghiêm trọng của vi phạm"
 
 #: eeschema/dialogs/dialog_erc.cpp:755
 #, c-format
 msgid "Report file '%s' created\n"
-msgstr ""
+msgstr "Tệp báo cáo '%s' đã được tạo\n"
 
 #: eeschema/dialogs/dialog_erc.cpp:760
-#, c-format
+#, c-format, fuzzy
 msgid "Unable to create report file '%s'"
-msgstr ""
+msgstr "Không thể tạo tệp báo cáo '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:773
 #, c-format
 msgid "ERC report (%s, Encoding UTF8)\n"
-msgstr ""
+msgstr "Báo cáo ERC (%s, Mã hóa UTF8)\n"
 
 #: eeschema/dialogs/dialog_erc.cpp:788
 #, c-format
@@ -8947,6 +8955,8 @@ msgid ""
 "\n"
 "***** Sheet %s\n"
 msgstr ""
+"\n"
+"***** Tờ %s\n"
 
 #: eeschema/dialogs/dialog_erc.cpp:812
 #, c-format
@@ -8954,6 +8964,8 @@ msgid ""
 "\n"
 " ** ERC messages: %d  Errors %d  Warnings %d\n"
 msgstr ""
+"\n"
+" ** Thông báo ERC: %d Lỗi %d Cảnh báo %d\n"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:44 gerbview/files.cpp:659
 #: gerbview/job_file_reader.cpp:239
@@ -8961,65 +8973,66 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:91
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:202
 msgid "Messages"
-msgstr ""
+msgstr "Tin nhắn"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:50
 #: pcbnew/dialogs/dialog_drc_base.cpp:97
 msgid "Click on items to highlight them on the board."
-msgstr ""
+msgstr "Nhấp vào các mục để nỗi bật chúng trên bảng."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:59
 msgid "Violations"
-msgstr ""
+msgstr "Vi phạm"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:88
 #: pcbnew/dialogs/dialog_drc_base.cpp:169
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:55
 msgid "Exclusions"
-msgstr ""
+msgstr "Loại trừ"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:111
 msgid "Delete Markers"
-msgstr ""
+msgstr "Xóa điểm đánh dấu"
 
 #: eeschema/dialogs/dialog_erc_base.h:87 eeschema/tools/ee_actions.cpp:45
 msgid "Electrical Rules Checker"
-msgstr ""
+msgstr "Trình kiểm tra các luật điện tử"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:85
 #: eeschema/fields_grid_table.cpp:596
 msgid "Select Footprint..."
-msgstr ""
+msgstr "Chọn Dấu chân ..."
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:86
 #: eeschema/fields_grid_table.cpp:597
 msgid "Browse for footprint"
-msgstr ""
+msgstr "Duyệt tìm dấu chân"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:91
 #: eeschema/fields_grid_table.cpp:602 eeschema/tools/ee_actions.cpp:61
 msgid "Show Datasheet"
-msgstr ""
+msgstr "Hiển thị Datasheet"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:92
 #: eeschema/fields_grid_table.cpp:603
 msgid "Show datasheet in browser"
-msgstr ""
+msgstr "Hiển thị Datasheet trong trình duyệt"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:126
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:1042
 msgid "The Reference column cannot be hidden."
-msgstr ""
+msgstr "cột giá trị Tham chiếu không thể bị ẩn."
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:221
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:231
+#, fuzzy
 msgid "Qty"
-msgstr ""
+msgstr "SL"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:683
 #: eeschema/lib_field.cpp:441 eeschema/lib_field.h:102
 msgid "Field"
-msgstr ""
+msgstr "Trường"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:684
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:57
@@ -9034,34 +9047,34 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:46
 #: pcbnew/fp_text_grid_table.cpp:90
 msgid "Show"
-msgstr ""
+msgstr "Hiển thị"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:686
 msgid "Group By"
-msgstr ""
+msgstr "Nhóm theo"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:958
 #: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/sch_symbol.cpp:1356
 #: eeschema/sch_symbol.cpp:1406 pcbnew/footprint.cpp:2073
 msgid "Reference"
-msgstr ""
+msgstr "Tham chiếu"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:961
 #: eeschema/symbol_editor/symbol_editor.cpp:1209
 msgid "Datasheet"
-msgstr ""
+msgstr "Bảng dữ liệu"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:983
 msgid "New field name:"
-msgstr ""
+msgstr "Tên trường mới:"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:983
 msgid "Add Field"
-msgstr ""
+msgstr "Thêm Trường"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:992
 msgid "Field must have a name."
-msgstr ""
+msgstr "Trường phải có tên."
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:1000
 #, c-format
