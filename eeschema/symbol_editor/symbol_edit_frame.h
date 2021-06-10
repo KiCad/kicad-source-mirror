@@ -338,7 +338,7 @@ public:
      *
      * @param aSymbol the symbol to edit.
      */
-    void LoadSymbolFromSchematic( SCH_COMPONENT* aSymbol );
+    void LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol );
 
     /**
      * Test if a symbol is loaded and can be edited.
@@ -531,7 +531,7 @@ private:
                                                  // copy could be.
     wxComboBox*             m_unitSelectBox;     // a ComboBox to select a unit to edit (if the
                                                  // part has multiple units)
-    SYMBOL_TREE_PANE*       m_treePane;          // component search tree widget
+    SYMBOL_TREE_PANE*       m_treePane;          // symbol search tree widget
     SYMBOL_LIBRARY_MANAGER* m_libMgr;            // manager taking care of temporary modifications
     SYMBOL_EDITOR_SETTINGS* m_settings;          // Handle to the settings
 

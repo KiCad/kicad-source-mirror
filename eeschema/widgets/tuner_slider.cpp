@@ -31,13 +31,13 @@
 #include <template_fieldnames.h>
 #include <sim/netlist_exporter_pspice_sim.h>
 
-TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_COMPONENT* aComponent )
-    : TUNER_SLIDER_BASE( aParent ), m_component( aComponent ),
+TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBOL* aSymbol )
+    : TUNER_SLIDER_BASE( aParent ), m_symbol( aSymbol ),
     m_min( 0.0 ), m_max( 0.0 ), m_value( 0.0 ), m_frame ( aFrame )
 {
-    const wxString compName = aComponent->GetField( REFERENCE_FIELD )->GetText();
+    const wxString compName = aSymbol->GetField( REFERENCE_FIELD )->GetText();
     m_name->SetLabel( compName );
-    m_value = SPICE_VALUE( aComponent->GetField( VALUE_FIELD )->GetText() );
+    m_value = SPICE_VALUE( aSymbol->GetField( VALUE_FIELD )->GetText() );
 
     m_changed = false;
     m_spiceName = aFrame->GetExporter()->GetSpiceDevice( compName ).Lower();
@@ -139,8 +139,8 @@ void TUNER_SLIDER::onClose( wxCommandEvent& event )
 
 void TUNER_SLIDER::onSave( wxCommandEvent& event )
 {
-    /// @todo it will crash when component is removed; completely remove m_component
-    m_component->GetField( VALUE_FIELD )->SetText( m_value.ToOrigString() );
+    /// @todo it will crash when component is removed; completely remove m_symbol
+    m_symbol->GetField( VALUE_FIELD )->SetText( m_value.ToOrigString() );
 }
 
 

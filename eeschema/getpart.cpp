@@ -117,7 +117,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
         adapter->AssignIntrinsicRanks();
 
         if( aFilter->GetFilterPowerParts() )
-            adapter->SetFilter( SYMBOL_TREE_MODEL_ADAPTER::CMP_FILTER_POWER );
+            adapter->SetFilter( SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER );
     }
 
     std::vector< LIB_TREE_ITEM* > history_list;
@@ -147,7 +147,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
 
     wxString dialogTitle;
 
-    if( adapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::CMP_FILTER_POWER )
+    if( adapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER )
         dialogTitle.Printf( _( "Choose Power Symbol (%d items loaded)" ), adapter->GetItemCount() );
     else
         dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
@@ -194,7 +194,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
 }
 
 
-void SCH_EDIT_FRAME::SelectUnit( SCH_COMPONENT* aSymbol, int aUnit )
+void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
 {
     LIB_PART* part = GetLibPart( aSymbol->GetLibId() );
 
@@ -233,7 +233,7 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_COMPONENT* aSymbol, int aUnit )
 }
 
 
-void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aSymbol )
+void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
 {
     if( !aSymbol || !aSymbol->GetPartRef() )
         return;

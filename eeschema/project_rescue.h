@@ -32,7 +32,7 @@
  *
  * bool SCH_EDIT_FRAME::RescueProject( bool aSilentIfNone );
  *
- * When this is called, a list of problematic components is compiled. If
+ * When this is called, a list of problematic symbols is compiled. If
  * this list is empty, then the function displays a notification and returns
  * (if aSilentIfNone is true, the notification is silenced).
  */
@@ -48,7 +48,7 @@
 
 
 class LIB_PART;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 class RESCUER;
 class SCH_EDIT_FRAME;
 class SCH_LEGACY_PLUGIN;
@@ -226,9 +226,9 @@ private:
 class RESCUE_LOG
 {
 public:
-    SCH_COMPONENT*  component;
-    wxString        old_name;
-    wxString        new_name;
+    SCH_SYMBOL*  symbol;
+    wxString     old_name;
+    wxString     new_name;
 };
 
 
@@ -285,7 +285,7 @@ public:
     /**
      * Get the list of symbols that need rescued.
      */
-    std::vector<SCH_COMPONENT*>* GetComponents() { return &m_components; }
+    std::vector<SCH_SYMBOL*>* GetSymbols() { return &m_symbols; }
 
     /**
      * Return the #SCH_PROJECT object for access to the symbol libraries.
@@ -297,8 +297,7 @@ public:
     /**
      * Used by individual #RESCUE_CANDIDATE objects to log a rescue for undoing.
      */
-    void LogRescue( SCH_COMPONENT *aComponent, const wxString& aOldName,
-                    const wxString& aNewName );
+    void LogRescue( SCH_SYMBOL *aSymbol, const wxString& aOldName, const wxString& aNewName );
 
     /**
      * Perform all chosen rescue actions, logging them to be undone if necessary.
@@ -317,7 +316,7 @@ public:
 protected:
     friend class DIALOG_RESCUE_EACH;
 
-    std::vector<SCH_COMPONENT*> m_components;
+    std::vector<SCH_SYMBOL*> m_symbols;
     PROJECT* m_prj;
     SCHEMATIC* m_schematic;
     EDA_DRAW_PANEL_GAL::GAL_TYPE m_galBackEndType;

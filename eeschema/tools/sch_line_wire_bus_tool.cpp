@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -926,7 +926,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
 
     std::vector<SCH_ITEM*> symbols;
 
-    for( SCH_ITEM* symbol : m_frame->GetScreen()->Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* symbol : m_frame->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
         symbols.push_back( symbol );
 
     for( SCH_ITEM* symbol : symbols )

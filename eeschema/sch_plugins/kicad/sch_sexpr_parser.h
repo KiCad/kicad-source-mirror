@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -49,7 +50,7 @@ class LIB_TEXT;
 class PAGE_INFO;
 class SCH_BITMAP;
 class SCH_BUS_WIRE_ENTRY;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 class SCH_FIELD;
 class SCH_JUNCTION;
 class SCH_LINE;
@@ -172,7 +173,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
 
     SCH_SHEET_PIN* parseSchSheetPin( SCH_SHEET* aSheet );
     SCH_FIELD* parseSchField( SCH_ITEM* aParent );
-    SCH_COMPONENT* parseSchematicSymbol();
+    SCH_SYMBOL* parseSchematicSymbol();
     SCH_BITMAP* parseImage();
     SCH_SHEET* parseSheet();
     SCH_JUNCTION* parseJunction();

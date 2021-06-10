@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_frame( aFrame ),
         m_userUnits( aDialog->GetUserUnits() ),
         m_grid( aGrid ),
-        m_parentType( SCH_COMPONENT_T ),
+        m_parentType( SCH_SYMBOL_T ),
         m_mandatoryFieldCount( MANDATORY_FIELDS ),
         m_part( aPart ),
         m_fieldNameValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_NAME ),
@@ -264,12 +264,12 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         }
 
     case FDC_VALUE:
-        if( m_parentType == SCH_COMPONENT_T && aRow == REFERENCE_FIELD )
+        if( m_parentType == SCH_SYMBOL_T && aRow == REFERENCE_FIELD )
         {
             m_referenceAttr->IncRef();
             return m_referenceAttr;
         }
-        else if( m_parentType == SCH_COMPONENT_T && aRow == VALUE_FIELD )
+        else if( m_parentType == SCH_SYMBOL_T && aRow == VALUE_FIELD )
         {
             // For power symbols, the value is not editable, because value and pin name must
             // be the same and can be edited only in library editor.
@@ -286,12 +286,12 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
                 return m_valueAttr;
             }
         }
-        else if( m_parentType == SCH_COMPONENT_T && aRow == FOOTPRINT_FIELD )
+        else if( m_parentType == SCH_SYMBOL_T && aRow == FOOTPRINT_FIELD )
         {
             m_footprintAttr->IncRef();
             return m_footprintAttr;
         }
-        else if( m_parentType == SCH_COMPONENT_T && aRow == DATASHEET_FIELD )
+        else if( m_parentType == SCH_SYMBOL_T && aRow == DATASHEET_FIELD )
         {
             m_urlAttr->IncRef();
             return m_urlAttr;
@@ -372,7 +372,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         // according to the current locale
         if( aRow < m_mandatoryFieldCount )
         {
-            if( m_parentType == SCH_COMPONENT_T )
+            if( m_parentType == SCH_SYMBOL_T )
                 return TEMPLATE_FIELDNAME::GetDefaultFieldName( aRow );
             else if( m_parentType == SCH_SHEET_T )
                 return SCH_SHEET::GetDefaultFieldName( aRow );

@@ -198,8 +198,8 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     {
         BOX2I box = item->GetBoundingBox();
 
-        if( item->Type() == SCH_COMPONENT_T )
-            box = static_cast<const SCH_COMPONENT*>( item )->GetBodyBoundingBox();
+        if( item->Type() == SCH_SYMBOL_T )
+            box = static_cast<const SCH_SYMBOL*>( item )->GetBodyBoundingBox();
 
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
@@ -220,7 +220,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     HANDLE_ITEM( LIB_FIELD_T, LIB_FIELD );
     HANDLE_ITEM( LIB_TEXT_T, LIB_TEXT );
     HANDLE_ITEM( LIB_BEZIER_T, LIB_BEZIER );
-    HANDLE_ITEM( SCH_COMPONENT_T, SCH_COMPONENT );
+    HANDLE_ITEM( SCH_SYMBOL_T, SCH_SYMBOL );
     HANDLE_ITEM( SCH_JUNCTION_T, SCH_JUNCTION );
     HANDLE_ITEM( SCH_LINE_T, SCH_LINE );
     HANDLE_ITEM( SCH_TEXT_T, SCH_TEXT );
@@ -1399,18 +1399,18 @@ static void orientPart( LIB_PART* part, int orientation )
     }
     orientations[] =
     {
-        { CMP_ORIENT_0,                  0, 0, 0 },
-        { CMP_ORIENT_90,                 1, 0, 0 },
-        { CMP_ORIENT_180,                2, 0, 0 },
-        { CMP_ORIENT_270,                3, 0, 0 },
-        { CMP_MIRROR_X + CMP_ORIENT_0,   0, 1, 0 },
-        { CMP_MIRROR_X + CMP_ORIENT_90,  1, 1, 0 },
-        { CMP_MIRROR_Y,                  0, 0, 1 },
-        { CMP_MIRROR_X + CMP_ORIENT_270, 3, 1, 0 },
-        { CMP_MIRROR_Y + CMP_ORIENT_0,   0, 0, 1 },
-        { CMP_MIRROR_Y + CMP_ORIENT_90,  1, 0, 1 },
-        { CMP_MIRROR_Y + CMP_ORIENT_180, 2, 0, 1 },
-        { CMP_MIRROR_Y + CMP_ORIENT_270, 3, 0, 1 }
+        { SYM_ORIENT_0,                  0, 0, 0 },
+        { SYM_ORIENT_90,                 1, 0, 0 },
+        { SYM_ORIENT_180,                2, 0, 0 },
+        { SYM_ORIENT_270,                3, 0, 0 },
+        { SYM_MIRROR_X + SYM_ORIENT_0,   0, 1, 0 },
+        { SYM_MIRROR_X + SYM_ORIENT_90,  1, 1, 0 },
+        { SYM_MIRROR_Y,                  0, 0, 1 },
+        { SYM_MIRROR_X + SYM_ORIENT_270, 3, 1, 0 },
+        { SYM_MIRROR_Y + SYM_ORIENT_0,   0, 0, 1 },
+        { SYM_MIRROR_Y + SYM_ORIENT_90,  1, 0, 1 },
+        { SYM_MIRROR_Y + SYM_ORIENT_180, 2, 0, 1 },
+        { SYM_MIRROR_Y + SYM_ORIENT_270, 3, 0, 1 }
     };
 
     ORIENT o = orientations[ 0 ];
@@ -1438,7 +1438,7 @@ static void orientPart( LIB_PART* part, int orientation )
 }
 
 
-void SCH_PAINTER::draw( SCH_COMPONENT *aSymbol, int aLayer )
+void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
 {
     int unit = aSymbol->GetUnitSelection( &m_schematic->CurrentSheet() );
     int convert = aSymbol->GetConvert();
@@ -1482,7 +1482,7 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aSymbol, int aLayer )
 
     draw( &tempPart, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert() );
 
-    // The fields are SCH_COMPONENT-specific so don't need to be copied/oriented/translated
+    // The fields are SCH_SYMBOL-specific so don't need to be copied/oriented/translated
     for( const SCH_FIELD& field : aSymbol->GetFields() )
         draw( &field, aLayer );
 }
@@ -1528,9 +1528,9 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
     // Calculate the text orientation according to the parent orientation.
     int orient = (int) aField->GetTextAngle();
 
-    if( aField->GetParent() && aField->GetParent()->Type() == SCH_COMPONENT_T )
+    if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
     {
-        if( static_cast<SCH_COMPONENT*>( aField->GetParent() )->GetTransform().y1 )
+        if( static_cast<SCH_SYMBOL*>( aField->GetParent() )->GetTransform().y1 )
         {
         // Rotate symbol 90 degrees.
         if( orient == TEXT_ANGLE_HORIZ )

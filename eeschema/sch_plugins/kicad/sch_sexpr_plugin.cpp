@@ -34,7 +34,7 @@
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>
-#include <sch_edit_frame.h>       // COMPONENT_ORIENTATION_T
+#include <sch_edit_frame.h>       // SYMBOL_ORIENTATION_T
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_no_connect.h>
@@ -299,7 +299,7 @@ class SCH_SEXPR_PLUGIN_CACHE
     bool            m_isWritable;
     bool            m_isModified;
     int             m_versionMajor;
-    SCH_LIB_TYPE    m_libType;      // Is this cache a component or symbol library.
+    SCH_LIB_TYPE    m_libType;      // Is this cache a symbol or symbol library.
 
     LIB_PART*       removeSymbol( LIB_PART* aAlias );
 
@@ -630,7 +630,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
         {
             itemType = item->Type();
 
-            if( itemType != SCH_COMPONENT_T
+            if( itemType != SCH_SYMBOL_T
               && itemType != SCH_JUNCTION_T
               && itemType != SCH_SHEET_T )
                 m_out->Print( 0, "\n" );
@@ -638,9 +638,9 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 
         switch( item->Type() )
         {
-        case SCH_COMPONENT_T:
+        case SCH_SYMBOL_T:
             m_out->Print( 0, "\n" );
-            saveSymbol( static_cast<SCH_COMPONENT*>( item ), nullptr, 1 );
+            saveSymbol( static_cast<SCH_SYMBOL*>( item ), nullptr, 1 );
             break;
 
         case SCH_BITMAP_T:
@@ -741,10 +741,10 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
 
         wxCHECK2( item, continue );
 
-        if( item->Type() != SCH_COMPONENT_T )
+        if( item->Type() != SCH_SYMBOL_T )
             continue;
 
-        SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
+        SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
         wxCHECK2( symbol, continue );
 
@@ -781,10 +781,10 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
 
         switch( item->Type() )
         {
-        case SCH_COMPONENT_T:
-            saveSymbol( static_cast<SCH_COMPONENT*>( item ), aSelectionPath, 0 );
+        case SCH_SYMBOL_T:
+            saveSymbol( static_cast<SCH_SYMBOL*>( item ), aSelectionPath, 0 );
 
-            aSelectionPath->AppendSymbol( selectedSymbols, static_cast<SCH_COMPONENT*>( item ),
+            aSelectionPath->AppendSymbol( selectedSymbols, static_cast<SCH_SYMBOL*>( item ),
                                           true, true );
             break;
 
@@ -861,7 +861,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
 }
 
 
-void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aSheetPath,
+void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPath,
                                    int aNestLevel )
 {
     wxCHECK_RET( aSymbol != nullptr && m_out != nullptr, "" );
@@ -883,13 +883,13 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aShee
     }
 
     double angle;
-    int orientation = aSymbol->GetOrientation() & ~( CMP_MIRROR_X | CMP_MIRROR_Y );
+    int orientation = aSymbol->GetOrientation() & ~( SYM_MIRROR_X | SYM_MIRROR_Y );
 
-    if( orientation == CMP_ORIENT_90 )
+    if( orientation == SYM_ORIENT_90 )
         angle = 90.0;
-    else if( orientation == CMP_ORIENT_180 )
+    else if( orientation == SYM_ORIENT_180 )
         angle = 180.0;
-    else if( orientation == CMP_ORIENT_270 )
+    else if( orientation == SYM_ORIENT_270 )
         angle = 270.0;
     else
         angle = 0.0;
@@ -908,8 +908,8 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aShee
                   FormatInternalUnits( aSymbol->GetPosition().y ).c_str(),
                   FormatAngle( angle * 10.0 ).c_str() );
 
-    bool mirrorX = aSymbol->GetOrientation() & CMP_MIRROR_X;
-    bool mirrorY = aSymbol->GetOrientation() & CMP_MIRROR_Y;
+    bool mirrorX = aSymbol->GetOrientation() & SYM_MIRROR_X;
+    bool mirrorY = aSymbol->GetOrientation() & SYM_MIRROR_Y;
 
     if( mirrorX || mirrorY )
     {
@@ -984,7 +984,7 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
 
     // For some reason (bug in legacy parser?) the field ID for non-mandatory fields is -1 so
     // check for this in order to correctly use the field name.
-    if( aField->GetParent()->Type() == SCH_COMPONENT_T )
+    if( aField->GetParent()->Type() == SCH_SYMBOL_T )
     {
         if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
             fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId(), false );
@@ -2110,7 +2110,7 @@ void SCH_SEXPR_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPERT
         m_cache = new SCH_SEXPR_PLUGIN_CACHE( aLibraryFileName );
 
         // Because m_cache is rebuilt, increment PART_LIBS::s_modify_generation
-        // to modify the hash value that indicate component to symbol links
+        // to modify the hash value that indicate symbol to symbol links
         // must be updated.
         PART_LIBS::IncrementModifyGeneration();
 

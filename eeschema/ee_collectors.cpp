@@ -48,7 +48,7 @@ const KICAD_T EE_COLLECTOR::EditableItems[] = {
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
     SCH_FIELD_T,
-    SCH_COMPONENT_T,
+    SCH_SYMBOL_T,
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
     SCH_BITMAP_T,
@@ -60,7 +60,7 @@ const KICAD_T EE_COLLECTOR::EditableItems[] = {
 
 
 const KICAD_T EE_COLLECTOR::ComponentsOnly[] = {
-    SCH_COMPONENT_T,
+    SCH_SYMBOL_T,
     EOT
 };
 
@@ -85,7 +85,7 @@ const KICAD_T EE_COLLECTOR::MovableItems[] =
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
     SCH_FIELD_T,
-    SCH_COMPONENT_T,
+    SCH_SYMBOL_T,
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
     EOT
@@ -99,7 +99,7 @@ const KICAD_T EE_COLLECTOR::WiresOnly[] = {
 
 
 const KICAD_T EE_COLLECTOR::FieldOwners[] = {
-    SCH_COMPONENT_T,
+    SCH_SYMBOL_T,
     SCH_SHEET_T,
     SCH_GLOBAL_LABEL_T,
     EOT
@@ -156,7 +156,7 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
         {
             for( SCH_ITEM* item : aScreen->Items().OfType( *filter ) )
             {
-                if( *filter == SCH_COMPONENT_T || *filter == SCH_LOCATE_ANY_T )
+                if( *filter == SCH_SYMBOL_T || *filter == SCH_LOCATE_ANY_T )
                     symbolsVisited = true;
 
                 if( *filter == SCH_SHEET_T || *filter == SCH_LOCATE_ANY_T )
@@ -171,7 +171,7 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
 
         if( !symbolsVisited )
         {
-            for( SCH_ITEM* item : aScreen->Items().OfType( SCH_COMPONENT_T ) )
+            for( SCH_ITEM* item : aScreen->Items().OfType( SCH_SYMBOL_T ) )
                 item->Visit( m_inspector, nullptr, m_scanTypes );
         }
 
@@ -232,7 +232,7 @@ bool EE_COLLECTOR::IsCorner() const
 
 
 void CollectOtherUnits( const wxString& aRef, int aUnit, const LIB_ID& aLibId,
-                        SCH_SHEET_PATH& aSheet, std::vector<SCH_COMPONENT*>* otherUnits )
+                        SCH_SHEET_PATH& aSheet, std::vector<SCH_SYMBOL*>* otherUnits )
 {
     SCH_REFERENCE_LIST symbols;
     aSheet.GetSymbols( symbols );

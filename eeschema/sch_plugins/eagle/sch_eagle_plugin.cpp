@@ -220,8 +220,8 @@ SCH_LAYER_ID SCH_EAGLE_PLUGIN::kiCadLayer( int aEagleLayer )
 }
 
 
-// Return the KiCad component orientation based on eagle rotation degrees.
-static COMPONENT_ORIENTATION_T kiCadComponentRotation( float eagleDegrees )
+// Return the KiCad symbol orientation based on eagle rotation degrees.
+static SYMBOL_ORIENTATION_T kiCadComponentRotation( float eagleDegrees )
 {
     int roti = int( eagleDegrees );
 
@@ -232,25 +232,25 @@ static COMPONENT_ORIENTATION_T kiCadComponentRotation( float eagleDegrees )
         KI_FALLTHROUGH;
 
     case 0:
-        return CMP_ORIENT_0;
+        return SYM_ORIENT_0;
 
     case 90:
-        return CMP_ORIENT_90;
+        return SYM_ORIENT_90;
 
     case 180:
-        return CMP_ORIENT_180;
+        return SYM_ORIENT_180;
 
     case 270:
-        return CMP_ORIENT_270;
+        return SYM_ORIENT_270;
     }
 
-    return CMP_ORIENT_0;
+    return SYM_ORIENT_0;
 }
 
 
 // Calculate text alignment based on the given Eagle text alignment parameters.
 static void eagleToKicadAlignment( EDA_TEXT* aText, int aEagleAlignment, int aRelDegress,
-        bool aMirror, bool aSpin, int aAbsDegress )
+                                   bool aMirror, bool aSpin, int aAbsDegress )
 {
     int align = aEagleAlignment;
 
@@ -637,11 +637,11 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
         }
     }
 
-    // Handle the missing component units that need to be instantiated
+    // Handle the missing symbol units that need to be instantiated
     // to create the missing implicit connections
 
     // Calculate the already placed items bounding box and the page size to determine
-    // placement for the new components
+    // placement for the new symbols
     wxSize   pageSizeIU = m_rootSheet->GetScreen()->GetPageSettings().GetSizeIU();
     EDA_RECT sheetBbox  = getSheetBbox( m_rootSheet );
     wxPoint  newCmpPosition( sheetBbox.GetLeft(), sheetBbox.GetBottom() );
@@ -652,27 +652,27 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
     for( auto& cmp : m_missingCmps )
     {
-        const SCH_COMPONENT* origCmp = cmp.second.cmp;
+        const SCH_SYMBOL* origSymbol = cmp.second.cmp;
 
         for( auto unitEntry : cmp.second.units )
         {
             if( unitEntry.second == false )
                 continue; // unit has been already processed
 
-            // Instantiate the missing component unit
+            // Instantiate the missing symbol unit
             int            unit      = unitEntry.first;
-            const wxString reference = origCmp->GetField( REFERENCE_FIELD )->GetText();
-            std::unique_ptr<SCH_COMPONENT> component( (SCH_COMPONENT*) origCmp->Duplicate() );
+            const wxString reference = origSymbol->GetField( REFERENCE_FIELD )->GetText();
+            std::unique_ptr<SCH_SYMBOL> symbol( (SCH_SYMBOL*) origSymbol->Duplicate() );
 
-            component->SetUnitSelection( &sheetpath, unit );
-            component->SetUnit( unit );
-            component->SetOrientation( 0 );
-            component->AddHierarchicalReference( sheetpath.Path(), reference, unit );
+            symbol->SetUnitSelection( &sheetpath, unit );
+            symbol->SetUnit( unit );
+            symbol->SetOrientation( 0 );
+            symbol->AddHierarchicalReference( sheetpath.Path(), reference, unit );
 
             // Calculate the placement position
-            EDA_RECT cmpBbox = component->GetBoundingBox();
+            EDA_RECT cmpBbox = symbol->GetBoundingBox();
             int      posY    = newCmpPosition.y + cmpBbox.GetHeight();
-            component->SetPosition( wxPoint( newCmpPosition.x, posY ) );
+            symbol->SetPosition( wxPoint( newCmpPosition.x, posY ) );
             newCmpPosition.x += cmpBbox.GetWidth();
             maxY = std::max( maxY, posY );
 
@@ -680,8 +680,8 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
                 newCmpPosition = wxPoint( sheetBbox.GetLeft(), maxY ); // then start a new row
 
             // Add the global net labels to recreate the implicit connections
-            addImplicitConnections( component.get(), m_rootSheet->GetScreen(), false );
-            m_rootSheet->GetScreen()->Append( component.release() );
+            addImplicitConnections( symbol.get(), m_rootSheet->GetScreen(), false );
+            m_rootSheet->GetScreen()->Append( symbol.release() );
         }
     }
 
@@ -840,9 +840,9 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     translation.y       = translation.y - translation.y % Mils2iu( 100 );
 
     // Add global net labels for the named power input pins in this sheet
-    for( auto item : m_currentSheet->GetScreen()->Items().OfType( SCH_COMPONENT_T ) )
-        addImplicitConnections(
-                static_cast<SCH_COMPONENT*>( item ), m_currentSheet->GetScreen(), true );
+    for( auto item : m_currentSheet->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        addImplicitConnections( static_cast<SCH_SYMBOL*>( item ), m_currentSheet->GetScreen(),
+                                true );
 
     m_connPoints.clear();
 
@@ -1153,7 +1153,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     SCH_SCREEN* screen = m_currentSheet->GetScreen();
 
     // Find the part in the list for the sheet.
-    // Assign the component its value from the part entry
+    // Assign the symbol its value from the part entry
     // Calculate the unit number from the gate entry of the instance
     // Assign the LIB_ID from device set and device names
 
@@ -1198,19 +1198,19 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         return;
     }
 
-    LIB_ID                         libId( getLibName(), kisymbolname );
-    std::unique_ptr<SCH_COMPONENT> component = std::make_unique<SCH_COMPONENT>();
-    component->SetLibId( libId );
-    component->SetUnit( unit );
-    component->SetPosition( wxPoint( einstance.x.ToSchUnits(), -einstance.y.ToSchUnits() ) );
-    component->GetField( FOOTPRINT_FIELD )->SetText( package );
+    LIB_ID                      libId( getLibName(), kisymbolname );
+    std::unique_ptr<SCH_SYMBOL> symbol = std::make_unique<SCH_SYMBOL>();
+    symbol->SetLibId( libId );
+    symbol->SetUnit( unit );
+    symbol->SetPosition( wxPoint( einstance.x.ToSchUnits(), -einstance.y.ToSchUnits() ) );
+    symbol->GetField( FOOTPRINT_FIELD )->SetText( package );
 
     if( einstance.rot )
     {
-        component->SetOrientation( kiCadComponentRotation( einstance.rot->degrees ) );
+        symbol->SetOrientation( kiCadComponentRotation( einstance.rot->degrees ) );
 
         if( einstance.rot->mirror )
-            component->MirrorHorizontally( einstance.x.ToSchUnits() );
+            symbol->MirrorHorizontally( einstance.x.ToSchUnits() );
     }
 
     std::vector<LIB_FIELD*> partFields;
@@ -1218,9 +1218,9 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     for( const LIB_FIELD* field : partFields )
     {
-        component->GetFieldById( field->GetId() )->ImportValues( *field );
-        component->GetFieldById( field->GetId() )->SetTextPos( component->GetPosition()
-                                                                    + field->GetTextPos() );
+        symbol->GetFieldById( field->GetId() )->ImportValues( *field );
+        symbol->GetFieldById( field->GetId() )->SetTextPos( symbol->GetPosition()
+                                                            + field->GetTextPos() );
     }
 
     // If there is no footprint assigned, then prepend the reference value
@@ -1235,23 +1235,24 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     SCH_SHEET_PATH sheetpath;
     m_rootSheet->LocatePathOfScreen( screen, &sheetpath );
-    wxString current_sheetpath = sheetpath.PathAsString() + component->m_Uuid.AsString();
+    wxString current_sheetpath = sheetpath.PathAsString() + symbol->m_Uuid.AsString();
 
-    component->GetField( REFERENCE_FIELD )->SetText( reference );
-    component->AddHierarchicalReference( current_sheetpath, reference, unit );
+    symbol->GetField( REFERENCE_FIELD )->SetText( reference );
+    symbol->AddHierarchicalReference( current_sheetpath, reference, unit );
 
     if( epart->value )
-        component->GetField( VALUE_FIELD )->SetText( *epart->value );
+        symbol->GetField( VALUE_FIELD )->SetText( *epart->value );
     else
-        component->GetField( VALUE_FIELD )->SetText( kisymbolname );
+        symbol->GetField( VALUE_FIELD )->SetText( kisymbolname );
 
     // Set the visibility of fields.
-    component->GetField( REFERENCE_FIELD )->SetVisible( part->GetFieldById( REFERENCE_FIELD )->IsVisible() );
-    component->GetField( VALUE_FIELD )->SetVisible( part->GetFieldById( VALUE_FIELD )->IsVisible() );
+    symbol->GetField( REFERENCE_FIELD )->SetVisible(
+            part->GetFieldById( REFERENCE_FIELD )->IsVisible() );
+    symbol->GetField( VALUE_FIELD )->SetVisible( part->GetFieldById( VALUE_FIELD )->IsVisible() );
 
     for( const auto& a : epart->attribute )
     {
-        auto field = component->AddField( *component->GetField( VALUE_FIELD ) );
+        auto field = symbol->AddField( *symbol->GetField( VALUE_FIELD ) );
         field->SetName( a.first );
         field->SetText( a.second );
         field->SetVisible( false );
@@ -1259,7 +1260,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     for( const auto& a : epart->variant )
     {
-        auto field = component->AddField( *component->GetField( VALUE_FIELD ) );
+        auto field = symbol->AddField( *symbol->GetField( VALUE_FIELD ) );
         field->SetName( "VARIANT_" + a.first );
         field->SetText( a.second );
         field->SetVisible( false );
@@ -1280,17 +1281,17 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
             if( attr.name.Lower() == "name" )
             {
-                field              = component->GetField( REFERENCE_FIELD );
+                field              = symbol->GetField( REFERENCE_FIELD );
                 nameAttributeFound = true;
             }
             else if( attr.name.Lower() == "value" )
             {
-                field               = component->GetField( VALUE_FIELD );
+                field               = symbol->GetField( VALUE_FIELD );
                 valueAttributeFound = true;
             }
             else
             {
-                field = component->FindField( attr.name );
+                field = symbol->FindField( attr.name );
 
                 if( field )
                     field->SetVisible( false );
@@ -1327,7 +1328,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
             if( attributeNode->GetAttribute( "name", &variant )
                     && attributeNode->GetAttribute( "value", &value ) )
             {
-                auto field = component->AddField( *component->GetField( VALUE_FIELD ) );
+                auto field = symbol->AddField( *symbol->GetField( VALUE_FIELD ) );
                 field->SetName( "VARIANT_" + variant );
                 field->SetText( value );
                 field->SetVisible( false );
@@ -1340,29 +1341,29 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     if( einstance.smashed && einstance.smashed.Get() )
     {
         if( !valueAttributeFound )
-            component->GetField( VALUE_FIELD )->SetVisible( false );
+            symbol->GetField( VALUE_FIELD )->SetVisible( false );
 
         if( !nameAttributeFound )
-            component->GetField( REFERENCE_FIELD )->SetVisible( false );
+            symbol->GetField( REFERENCE_FIELD )->SetVisible( false );
     }
 
     // Save the pin positions
     SYMBOL_LIB_TABLE& schLibTable = *m_schematic->Prj().SchSymbolLibTable();
-    LIB_PART* libSymbol = schLibTable.LoadSymbol( component->GetLibId() );
+    LIB_PART* libSymbol = schLibTable.LoadSymbol( symbol->GetLibId() );
 
     wxCHECK( libSymbol, /*void*/ );
 
-    component->SetLibSymbol( new LIB_PART( *libSymbol ) );
+    symbol->SetLibSymbol( new LIB_PART( *libSymbol ) );
 
     std::vector<LIB_PIN*> pins;
-    component->GetLibPins( pins );
+    symbol->GetLibPins( pins );
 
     for( const auto& pin : pins )
-        m_connPoints[component->GetPinPhysicalPosition( pin )].emplace( pin );
+        m_connPoints[symbol->GetPinPhysicalPosition( pin )].emplace( pin );
 
-    component->ClearFlags();
+    symbol->ClearFlags();
 
-    screen->Append( component.release() );
+    screen->Append( symbol.release() );
 }
 
 
@@ -2781,10 +2782,9 @@ const SEG* SCH_EAGLE_PLUGIN::SEG_DESC::LabelAttached( const SCH_TEXT* aLabel ) c
 
 // TODO could be used to place junctions, instead of IsJunctionNeeded()
 // (see SCH_EDIT_FRAME::importFile())
-bool SCH_EAGLE_PLUGIN::checkConnections(
-        const SCH_COMPONENT* aComponent, const LIB_PIN* aPin ) const
+bool SCH_EAGLE_PLUGIN::checkConnections( const SCH_SYMBOL* aSymbol, const LIB_PIN* aPin ) const
 {
-    wxPoint pinPosition = aComponent->GetPinPhysicalPosition( aPin );
+    wxPoint pinPosition = aSymbol->GetPinPhysicalPosition( aPin );
     auto    pointIt     = m_connPoints.find( pinPosition );
 
     if( pointIt == m_connPoints.end() )
@@ -2796,20 +2796,20 @@ bool SCH_EAGLE_PLUGIN::checkConnections(
 }
 
 
-void SCH_EAGLE_PLUGIN::addImplicitConnections(
-        SCH_COMPONENT* aComponent, SCH_SCREEN* aScreen, bool aUpdateSet )
+void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScreen,
+                                               bool aUpdateSet )
 {
-    wxCHECK( aComponent->GetPartRef(), /*void*/ );
+    wxCHECK( aSymbol->GetPartRef(), /*void*/ );
 
     // Normally power parts also have power input pins,
     // but they already force net names on the attached wires
-    if( aComponent->GetPartRef()->IsPower() )
+    if( aSymbol->GetPartRef()->IsPower() )
         return;
 
-    int                   unit      = aComponent->GetUnit();
-    const wxString        reference = aComponent->GetField( REFERENCE_FIELD )->GetText();
+    int                   unit      = aSymbol->GetUnit();
+    const wxString        reference = aSymbol->GetField( REFERENCE_FIELD )->GetText();
     std::vector<LIB_PIN*> pins;
-    aComponent->GetPartRef()->GetPins( pins );
+    aSymbol->GetPartRef()->GetPins( pins );
     std::set<int> missingUnits;
 
     // Search all units for pins creating implicit connections
@@ -2822,11 +2822,11 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections(
             // Create a global net label only if there are no other wires/pins attached
             if( pinInUnit )
             {
-                if( !checkConnections( aComponent, pin ) )
+                if( !checkConnections( aSymbol, pin ) )
                 {
                     // Create a net label to force the net name on the pin
                     SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
-                    netLabel->SetPosition( aComponent->GetPinPhysicalPosition( pin ) );
+                    netLabel->SetPosition( aSymbol->GetPinPhysicalPosition( pin ) );
                     netLabel->SetText( extractNetName( pin->GetName() ) );
                     netLabel->SetTextSize( wxSize( Mils2iu( 40 ), Mils2iu( 40 ) ) );
                     netLabel->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
@@ -2844,7 +2844,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections(
         }
     }
 
-    if( aUpdateSet && aComponent->GetPartRef()->GetUnitCount() > 1 )
+    if( aUpdateSet && aSymbol->GetPartRef()->GetUnitCount() > 1 )
     {
         auto cmpIt = m_missingCmps.find( reference );
 
@@ -2852,7 +2852,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections(
         if( cmpIt == m_missingCmps.end() )
         {
             EAGLE_MISSING_CMP& entry = m_missingCmps[reference];
-            entry.cmp                = aComponent;
+            entry.cmp                = aSymbol;
             entry.units.emplace( unit, false );
         }
         else
@@ -2864,7 +2864,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections(
         if( !missingUnits.empty() )        // Save the units that need later processing
         {
             EAGLE_MISSING_CMP& entry = m_missingCmps[reference];
-            entry.cmp                = aComponent;
+            entry.cmp                = aSymbol;
 
             // Add units that haven't already been processed.
             for( int i : missingUnits )

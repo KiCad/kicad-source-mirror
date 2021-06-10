@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,7 +30,7 @@
 
 
 class PART_LIB;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 class REPORTER;
 
 
@@ -65,7 +65,7 @@ private:
 
     void remapSymbolsToLibTable( REPORTER& aReporter );
 
-    bool remapSymbolToLibTable( SCH_COMPONENT* aSymbol );
+    bool remapSymbolToLibTable( SCH_SYMBOL* aSymbol );
 
     /**
      * Backup all of the files that could be modified by the remapping with a time stamp

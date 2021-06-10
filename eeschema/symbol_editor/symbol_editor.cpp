@@ -409,7 +409,7 @@ void SYMBOL_EDIT_FRAME::CreateNewPart()
     // Currently, symbol names cannot include a space, that breaks libraries:
     name.Replace( " ", "_" );
 
-    // Test if there is a component with this name already.
+    // Test if there is a symbol with this name already.
     if( !lib.empty() && m_libMgr->PartExists( name, lib ) )
     {
         wxString msg = wxString::Format( _( "Symbol \"%s\" already exists in library \"%s\"" ),
@@ -660,7 +660,7 @@ void SYMBOL_EDIT_FRAME::savePartAs()
             return;
         }
 
-        // Test if there is a component with this name already.
+        // Test if there is a symbol with this name already.
         if( m_libMgr->PartExists( new_name, new_lib ) )
         {
             wxString msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'" ),

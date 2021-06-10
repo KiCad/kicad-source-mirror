@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the

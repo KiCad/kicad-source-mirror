@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Oliver Walters
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -205,8 +205,9 @@ public:
 
         for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
         {
-            SCH_COMPONENT* symbol = m_symbolsList[ i ].GetSymbol();
-            m_dataStore[ symbol->m_Uuid ][ aFieldName ] = symbol->GetFieldText( aFieldName, m_frame );
+            SCH_SYMBOL* symbol = m_symbolsList[ i ].GetSymbol();
+            m_dataStore[ symbol->m_Uuid ][ aFieldName ] = symbol->GetFieldText( aFieldName,
+                                                                                m_frame );
         }
     }
 
@@ -589,8 +590,8 @@ public:
     {
         for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
         {
-            SCH_COMPONENT& symbol = *m_symbolsList[ i ].GetSymbol();
-            SCH_SCREEN*    screen = m_symbolsList[i].GetSheetPath().LastScreen();
+            SCH_SYMBOL& symbol = *m_symbolsList[ i ].GetSymbol();
+            SCH_SCREEN* screen = m_symbolsList[i].GetSheetPath().LastScreen();
 
             m_frame->SaveCopyInUndoList( screen, &symbol, UNDO_REDO::CHANGED, true );
 
@@ -840,16 +841,16 @@ bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataToWindow()
     TOOL_MANAGER*      toolMgr = m_parent->GetToolManager();
     EE_SELECTION_TOOL* selectionTool = toolMgr->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selectionTool->GetSelection();
-    SCH_COMPONENT*     symbol = nullptr;
+    SCH_SYMBOL*        symbol = nullptr;
 
     if( selection.GetSize() == 1 )
     {
         EDA_ITEM*      item = selection.Front();
 
-        if( item->Type() == SCH_COMPONENT_T )
-            symbol = (SCH_COMPONENT*) item;
-        else if( item->GetParent() && item->GetParent()->Type() == SCH_COMPONENT_T )
-            symbol = (SCH_COMPONENT*) item->GetParent();
+        if( item->Type() == SCH_SYMBOL_T )
+            symbol = (SCH_SYMBOL*) item;
+        else if( item->GetParent() && item->GetParent()->Type() == SCH_SYMBOL_T )
+            symbol = (SCH_SYMBOL*) item->GetParent();
     }
 
     if( symbol )
@@ -943,7 +944,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
 
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
-        SCH_COMPONENT* symbol = m_symbolsList[ i ].GetSymbol();
+        SCH_SYMBOL* symbol = m_symbolsList[ i ].GetSymbol();
 
         for( int j = MANDATORY_FIELDS; j < symbol->GetFieldCount(); ++j )
             userFieldNames.insert( symbol->GetFields()[j].GetName() );
@@ -1148,7 +1149,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
             SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
 
             editor->FindSymbolAndItem( refs[ 0 ].GetRef() + refs[ 0 ].GetRefNumber(), true,
-                                       HIGHLIGHT_COMPONENT, wxEmptyString );
+                                       HIGHLIGHT_SYMBOL, wxEmptyString );
         }
     }
     else

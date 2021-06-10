@@ -111,7 +111,7 @@ public:
         COLLISION collision;
     };
 
-    AUTOPLACER( SCH_COMPONENT* aSymbol, SCH_SCREEN* aScreen ) :
+    AUTOPLACER( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScreen ) :
             m_screen( aScreen ),
             m_symbol( aSymbol )
     {
@@ -265,7 +265,7 @@ protected:
 
         for( SCH_ITEM* item : m_screen->Items().Overlapping( m_symbol->GetBoundingBox() ) )
         {
-            if( SCH_COMPONENT* candidate = dynamic_cast<SCH_COMPONENT*>( item ) )
+            if( SCH_SYMBOL* candidate = dynamic_cast<SCH_SYMBOL*>( item ) )
             {
                 if( candidate == m_symbol )
                     continue;
@@ -293,7 +293,7 @@ protected:
         {
             EDA_RECT item_box;
 
-            if( SCH_COMPONENT* item_comp = dynamic_cast<SCH_COMPONENT*>( item ) )
+            if( SCH_SYMBOL* item_comp = dynamic_cast<SCH_SYMBOL*>( item ) )
                 item_box = item_comp->GetBodyBoundingBox();
             else
                 item_box = item->GetBoundingBox();
@@ -320,8 +320,8 @@ protected:
 
         int    orient = m_symbol->GetOrientation();
         int    orient_angle = orient & 0xff; // enum is a bitmask
-        bool   h_mirrored = ( ( orient & CMP_MIRROR_X )
-                             && ( orient_angle == CMP_ORIENT_0 || orient_angle == CMP_ORIENT_180 ) );
+        bool   h_mirrored = ( ( orient & SYM_MIRROR_X )
+                             && ( orient_angle == SYM_ORIENT_0 || orient_angle == SYM_ORIENT_180 ) );
         double w = double( m_symbol_bbox.GetWidth() );
         double h = double( m_symbol_bbox.GetHeight() );
 
@@ -333,21 +333,21 @@ protected:
             // For power symbols, we generally want the label at the top first.
             switch( orient_angle )
             {
-            case CMP_ORIENT_0:
+            case SYM_ORIENT_0:
                 std::swap( sides[0], sides[1] );
                 std::swap( sides[1], sides[3] );
                 // TOP, BOTTOM, RIGHT, LEFT
                 break;
-            case CMP_ORIENT_90:
+            case SYM_ORIENT_90:
                 std::swap( sides[0], sides[2] );
                 std::swap( sides[1], sides[2] );
                 // LEFT, RIGHT, TOP, BOTTOM
                 break;
-            case CMP_ORIENT_180:
+            case SYM_ORIENT_180:
                 std::swap( sides[0], sides[3] );
                 // BOTTOM, TOP, LEFT, RIGHT
                 break;
-            case CMP_ORIENT_270:
+            case SYM_ORIENT_270:
                 std::swap( sides[1], sides[2] );
                 // RIGHT, LEFT, TOP, BOTTOM
                 break;
@@ -657,7 +657,7 @@ protected:
 
 private:
     SCH_SCREEN*             m_screen;
-    SCH_COMPONENT*          m_symbol;
+    SCH_SYMBOL*             m_symbol;
     std::vector<SCH_FIELD*> m_fields;
     std::vector<SCH_ITEM*>  m_colliders;
     EDA_RECT                m_symbol_bbox;
@@ -674,7 +674,7 @@ const AUTOPLACER::SIDE AUTOPLACER::SIDE_LEFT( -1, 0 );
 const AUTOPLACER::SIDE AUTOPLACER::SIDE_RIGHT( 1, 0 );
 
 
-void SCH_COMPONENT::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
+void SCH_SYMBOL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 {
     if( aManual )
         wxASSERT_MSG( aScreen, "A SCH_SCREEN pointer must be given for manual autoplacement" );

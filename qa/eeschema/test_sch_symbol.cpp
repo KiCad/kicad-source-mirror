@@ -23,7 +23,7 @@
 
 /**
  * @file
- * Test suite for SCH_COMPONENT object.
+ * Test suite for SCH_SYMBOL object.
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -40,8 +40,8 @@ public:
     {
     }
 
-    ///> #SCH_COMPONENT object with no extra data set.
-    SCH_COMPONENT m_symbol;
+    ///< #SCH_SYMBOL object with no extra data set.
+    SCH_SYMBOL m_symbol;
 };
 
 
@@ -66,13 +66,13 @@ BOOST_AUTO_TEST_CASE( Orientation )
 {
     TRANSFORM t = m_symbol.GetTransform();
 
-    m_symbol.SetOrientation( CMP_ORIENT_90 );
+    m_symbol.SetOrientation( SYM_ORIENT_90 );
     t = m_symbol.GetTransform();
     m_symbol.SetTransform( TRANSFORM() );
-    m_symbol.SetOrientation( CMP_ORIENT_180 );
+    m_symbol.SetOrientation( SYM_ORIENT_180 );
     t = m_symbol.GetTransform();
     m_symbol.SetTransform( TRANSFORM() );
-    m_symbol.SetOrientation( CMP_ORIENT_270 );
+    m_symbol.SetOrientation( SYM_ORIENT_270 );
     t = m_symbol.GetTransform();
 }
 

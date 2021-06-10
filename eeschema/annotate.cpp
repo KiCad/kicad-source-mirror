@@ -43,7 +43,7 @@ void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
-        SCH_COMPONENT*  symbol = references[ i ].GetSymbol();
+        SCH_SYMBOL*     symbol = references[ i ].GetSymbol();
         SCH_SHEET_PATH* curr_sheetpath = &references[ i ].GetSheetPath();
         KIID_PATH       curr_full_uuid = curr_sheetpath->Path();
 
@@ -65,7 +65,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool* aA
     auto clearSymbolAnnotation =
         [&]( EDA_ITEM* aItem, SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet )
         {
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( aItem );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
 
             SaveCopyInUndoList( aScreen, symbol, UNDO_REDO::CHANGED, *aAppendUndo );
             *aAppendUndo = true;
@@ -75,7 +75,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool* aA
     auto clearSheetAnnotation =
             [&]( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet )
             {
-                for( SCH_ITEM* item : aScreen->Items().OfType( SCH_COMPONENT_T ) )
+                for( SCH_ITEM* item : aScreen->Items().OfType( SCH_SYMBOL_T ) )
                     clearSymbolAnnotation( item, aScreen, aSheet );
             };
 
@@ -104,7 +104,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool* aA
 
         for( EDA_ITEM* item : selection.Items() )
         {
-            if( item->Type() == SCH_COMPONENT_T )
+            if( item->Type() == SCH_SYMBOL_T )
                 clearSymbolAnnotation( item, screen, &currentSheet );
         }
         break;
@@ -256,7 +256,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
         SCH_REFERENCE&  ref = references[i];
-        SCH_COMPONENT*  symbol = ref.GetSymbol();
+        SCH_SYMBOL*     symbol = ref.GetSymbol();
         SCH_SHEET_PATH* sheet = &ref.GetSheetPath();
 
         SaveCopyInUndoList( sheet->LastScreen(), symbol, UNDO_REDO::CHANGED, appendUndo );

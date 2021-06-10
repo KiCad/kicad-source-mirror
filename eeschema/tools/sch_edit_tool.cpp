@@ -92,7 +92,7 @@ private:
     {
         EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
         EE_SELECTION&      selection = selTool->GetSelection();
-        SCH_COMPONENT*     symbol = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
+        SCH_SYMBOL*        symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
 
         Clear();
 
@@ -122,9 +122,9 @@ private:
             if( unit == ii + 1 )
                 item->Check(true);
 
-            // The ID max for these submenus is ID_POPUP_SCH_SELECT_UNIT_CMP_MAX
+            // The ID max for these submenus is ID_POPUP_SCH_SELECT_UNIT_SYM_MAX
             // See eeschema_id to modify this value.
-            if( ii >= (ID_POPUP_SCH_SELECT_UNIT_CMP_MAX - ID_POPUP_SCH_SELECT_UNIT1) )
+            if( ii >= (ID_POPUP_SCH_SELECT_UNIT_SYM_MAX - ID_POPUP_SCH_SELECT_UNIT1) )
                 break;      // We have used all IDs for these submenus
         }
     }
@@ -232,7 +232,7 @@ bool SCH_EDIT_TOOL::Init()
 
                 switch( firstItem->Type() )
                 {
-                case SCH_COMPONENT_T:
+                case SCH_SYMBOL_T:
                 case SCH_SHEET_T:
                 case SCH_SHEET_PIN_T:
                 case SCH_TEXT_T:
@@ -270,7 +270,7 @@ bool SCH_EDIT_TOOL::Init()
     static KICAD_T entryTypes[] = { SCH_BUS_WIRE_ENTRY_T, SCH_BUS_BUS_ENTRY_T, EOT };
     auto entryCondition = E_C::MoreThan( 0 ) && E_C::OnlyTypes( entryTypes );
 
-    static KICAD_T fieldParentTypes[] = { SCH_COMPONENT_T, SCH_SHEET_T, SCH_GLOBAL_LABEL_T, EOT };
+    static KICAD_T fieldParentTypes[] = { SCH_SYMBOL_T, SCH_SHEET_T, SCH_GLOBAL_LABEL_T, EOT };
     auto singleFieldParentCondition = E_C::Count( 1 ) && E_C::OnlyTypes( fieldParentTypes );
 
     auto singleSheetCondition =  E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T );
@@ -393,7 +393,7 @@ const KICAD_T rotatableItems[] = {
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
     SCH_FIELD_T,
-    SCH_COMPONENT_T,
+    SCH_SYMBOL_T,
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
     SCH_BITMAP_T,
@@ -445,14 +445,14 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
         switch( head->Type() )
         {
-        case SCH_COMPONENT_T:
+        case SCH_SYMBOL_T:
         {
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( head );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( head );
 
             if( clockwise )
-                symbol->SetOrientation( CMP_ROTATE_CLOCKWISE );
+                symbol->SetOrientation( SYM_ROTATE_CLOCKWISE );
             else
-                symbol->SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
+                symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
 
             if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                 symbol->AutoAutoplaceFields( m_frame->GetScreen() );
@@ -638,14 +638,14 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         switch( item->Type() )
         {
-        case SCH_COMPONENT_T:
+        case SCH_SYMBOL_T:
         {
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             if( vertical )
-                symbol->SetOrientation( CMP_MIRROR_X );
+                symbol->SetOrientation( SYM_MIRROR_X );
             else
-                symbol->SetOrientation( CMP_MIRROR_Y );
+                symbol->SetOrientation( SYM_MIRROR_Y );
 
             if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                 symbol->AutoAutoplaceFields( m_frame->GetScreen() );
@@ -808,7 +808,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     bool      performDrag = false;
 
     // If cloning a symbol then put into 'move' mode.
-    if( newItem->Type() == SCH_COMPONENT_T )
+    if( newItem->Type() == SCH_SYMBOL_T )
     {
         wxPoint cursorPos = (wxPoint) getViewControls()->GetCursorPosition( true );
         newItem->Move( cursorPos - newItem->GetPosition() );
@@ -894,7 +894,7 @@ static KICAD_T deletableItems[] =
     SCH_NO_CONNECT_T,
     SCH_SHEET_T,
     SCH_SHEET_PIN_T,
-    SCH_COMPONENT_T,
+    SCH_SYMBOL_T,
     SCH_BITMAP_T,
     EOT
 };
@@ -1087,9 +1087,9 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 {
     static KICAD_T Nothing[]        = { EOT };
-    static KICAD_T CmpOrReference[] = { SCH_FIELD_LOCATE_REFERENCE_T, SCH_COMPONENT_T, EOT };
-    static KICAD_T CmpOrValue[]     = { SCH_FIELD_LOCATE_VALUE_T,     SCH_COMPONENT_T, EOT };
-    static KICAD_T CmpOrFootprint[] = { SCH_FIELD_LOCATE_FOOTPRINT_T, SCH_COMPONENT_T, EOT };
+    static KICAD_T CmpOrReference[] = { SCH_FIELD_LOCATE_REFERENCE_T, SCH_SYMBOL_T, EOT };
+    static KICAD_T CmpOrValue[]     = { SCH_FIELD_LOCATE_VALUE_T,     SCH_SYMBOL_T, EOT };
+    static KICAD_T CmpOrFootprint[] = { SCH_FIELD_LOCATE_FOOTPRINT_T, SCH_SYMBOL_T, EOT };
 
     KICAD_T* filter = Nothing;
 
@@ -1107,9 +1107,9 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
     SCH_ITEM* item = (SCH_ITEM*) selection.Front();
 
-    if( item->Type() == SCH_COMPONENT_T )
+    if( item->Type() == SCH_SYMBOL_T )
     {
-        SCH_COMPONENT* symbol = (SCH_COMPONENT*) item;
+        SCH_SYMBOL* symbol = (SCH_SYMBOL*) item;
 
         if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
             editFieldText( symbol->GetField( REFERENCE_FIELD ) );
@@ -1156,11 +1156,11 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 {
-    SCH_COMPONENT* selectedSymbol = nullptr;
+    SCH_SYMBOL* selectedSymbol = nullptr;
     EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
 
     if( !selection.Empty() )
-        selectedSymbol = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
+        selectedSymbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
 
     DIALOG_CHANGE_SYMBOLS::MODE mode = DIALOG_CHANGE_SYMBOLS::MODE::UPDATE;
 
@@ -1185,7 +1185,7 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    SCH_COMPONENT* symbol = (SCH_COMPONENT*) selection.Front();
+    SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
 
     if( aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard )
             && symbol->GetConvert() == LIB_ITEM::LIB_CONVERT::BASE )
@@ -1258,9 +1258,9 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     switch( item->Type() )
     {
-    case SCH_COMPONENT_T:
+    case SCH_SYMBOL_T:
     {
-        SCH_COMPONENT*           symbol = (SCH_COMPONENT*) item;
+        SCH_SYMBOL*              symbol = (SCH_SYMBOL*) item;
         DIALOG_SYMBOL_PROPERTIES symbolPropsDialog( m_frame, symbol );
 
         // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
@@ -1279,7 +1279,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         }
         else if( retval == SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL )
         {
-            auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, true );
+            auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR,
+                                                                        true );
 
             editor->LoadSymbolFromSchematic( symbol );
 
@@ -1288,7 +1289,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         }
         else if( retval == SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL )
         {
-            auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, true );
+            auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR,
+                                                                        true );
 
             editor->LoadSymbol( symbol->GetLibId(), symbol->GetUnit(), symbol->GetConvert() );
 

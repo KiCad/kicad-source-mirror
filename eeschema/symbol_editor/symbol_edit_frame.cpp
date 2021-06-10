@@ -683,7 +683,7 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart, bool aUpdateZoom )
 
     m_my_part = aPart;
 
-    // select the current component in the tree widget
+    // select the current symbol in the tree widget
     if( !IsSymbolFromSchematic() && m_my_part )
         m_treePane->GetLibTree()->SelectLibId( m_my_part->GetLibId() );
     else
@@ -1272,7 +1272,7 @@ SELECTION& SYMBOL_EDIT_FRAME::GetCurrentSelection()
 }
 
 
-void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_COMPONENT* aSymbol )
+void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 {
     std::unique_ptr<LIB_PART> part = aSymbol->GetPartRef()->Flatten();
     wxCHECK( part, /* void */ );

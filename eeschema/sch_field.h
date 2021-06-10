@@ -32,7 +32,6 @@
 #include <general.h>
 
 class SCH_EDIT_FRAME;
-class SCH_COMPONENT;
 class LIB_FIELD;
 
 

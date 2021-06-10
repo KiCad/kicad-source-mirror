@@ -171,7 +171,7 @@ public:
      * The #EE_TYPE struct provides a type-specific auto-range iterator to the RTree.  Using
      * this struct, one can write lines like:
      *
-     * for( auto item : rtree.OfType( SCH_COMPONENT_T ) )
+     * for( auto item : rtree.OfType( SCH_SYMBOL_T ) )
      *
      * and iterate over the RTree items that are symbols only
      */

@@ -418,9 +418,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
-                && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
+                && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_SYM_MAX )
             {
-                SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
+                SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
                 int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
 
                 if( symbol )
@@ -594,7 +594,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         }
 
         case SCH_SHEET_T:
-        case SCH_COMPONENT_T:
+        case SCH_SYMBOL_T:
         case SCH_JUNCTION_T:
             if( test->IsConnected( aPoint ) )
             {
@@ -733,10 +733,10 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         SCH_ITEM* parent = (SCH_ITEM*) aItem->GetParent();
         wxPoint   delta( aDelta );
 
-        if( parent && parent->Type() == SCH_COMPONENT_T )
+        if( parent && parent->Type() == SCH_SYMBOL_T )
         {
-            SCH_COMPONENT* symbol = (SCH_COMPONENT*) aItem->GetParent();
-            TRANSFORM      transform = symbol->GetTransform().InverseTransform();
+            SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem->GetParent();
+            TRANSFORM   transform = symbol->GetTransform().InverseTransform();
 
             delta = transform.TransformCoordinate( delta );
         }

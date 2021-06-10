@@ -25,7 +25,7 @@
 
 /**
  * @file component_references_lister.cpp
- * @brief functions to create a component flat list and to annotate schematic.
+ * @brief functions to create a symbol flat list and to annotate schematic.
  */
 
 #include <sch_reference_list.h>
@@ -211,7 +211,7 @@ void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList, 
 
     sort( aIdList.begin(), aIdList.end() );
 
-    // Ensure each reference number appears only once.  If there are components with
+    // Ensure each reference number appears only once.  If there are symbols with
     // multiple parts per package the same number will be stored for each part.
     std::vector< int >::iterator it = unique( aIdList.begin(), aIdList.end() );
 
@@ -342,8 +342,8 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
 
     size_t originalSize = GetCount();
 
-    // For multi units components, store the list of already used full references.
-    // The algorithm tries to allocate the new reference to components having the same
+    // For multi units symbols, store the list of already used full references.
+    // The algorithm tries to allocate the new reference to symbols having the same
     // old reference.
     // This algo works fine as long as the previous annotation has no duplicates.
     // But when a hierarchy is reannotated with this option, the previous anotation can
@@ -371,8 +371,8 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
     int LastReferenceNumber = 0;
     int NumberOfUnits, Unit;
 
-    /* calculate index of the first component with the same reference prefix
-     * than the current component.  All components having the same reference
+    /* calculate index of the first symbol with the same reference prefix
+     * than the current symbol.  All symbols having the same reference
      * prefix will receive a reference number with consecutive values:
      * IC .. will be set to IC4, IC4, IC5 ...
      */
@@ -399,7 +399,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         if( ref_unit.m_flag )
             continue;
 
-        // Check whether this component is in aLockedUnitMap.
+        // Check whether this symbol is in aLockedUnitMap.
         SCH_REFERENCE_LIST* lockedList = NULL;
         for( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair : aLockedUnitMap )
         {
@@ -440,7 +440,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             GetRefsInUse( first, idList, minRefId );
         }
 
-        // Annotation of one part per package components (trivial case).
+        // Annotation of one part per package symbols (trivial case).
         if( ref_unit.GetLibPart()->GetUnitCount() <= 1 )
         {
             if( ref_unit.m_isNew )
@@ -465,8 +465,8 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             ref_unit.m_flag = 1;
         }
 
-        // If this component is in aLockedUnitMap, copy the annotation to all
-        // components that are not it
+        // If this symbol is in aLockedUnitMap, copy the annotation to all
+        // symbols that are not it
         if( lockedList != NULL )
         {
             unsigned n_refs = lockedList->GetCount();
@@ -477,7 +477,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
 
                 if( thisRef.IsSameInstance( ref_unit ) )
                 {
-                    // This is the component we're currently annotating. Hold the unit!
+                    // This is the symbol we're currently annotating. Hold the unit!
                     ref_unit.m_unit = thisRef.m_unit;
                     // lock this new full reference
                     inUseRefs.insert( buildFullReference( ref_unit ) );
@@ -489,7 +489,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 if( thisRef.CompareLibName( ref_unit ) != 0 )
                     continue;
 
-                // Find the matching component
+                // Find the matching symbol
                 for( unsigned jj = ii + 1; jj < flatList.size(); jj++ )
                 {
                     if( ! thisRef.IsSameInstance( flatList[jj] ) )
@@ -497,9 +497,9 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
 
                     wxString ref_candidate = buildFullReference( ref_unit, thisRef.m_unit );
 
-                    // propagate the new reference and unit selection to the "old" component,
+                    // propagate the new reference and unit selection to the "old" symbol,
                     // if this new full reference is not already used (can happens when initial
-                    // multiunits components have duplicate references)
+                    // multiunits symbols have duplicate references)
                     if( inUseRefs.find( ref_candidate ) == inUseRefs.end() )
                     {
                         flatList[jj].m_numRef = ref_unit.m_numRef;
@@ -514,7 +514,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         }
         else
         {
-            /* search for others units of this component.
+            /* search for others units of this symbol.
             * we search for others parts that have the same value and the same
             * reference prefix (ref without ref number)
             */
@@ -528,7 +528,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 if( found >= 0 )
                     continue; // this unit exists for this reference (unit already annotated)
 
-                // Search a component to annotate ( same prefix, same value, not annotated)
+                // Search a symbol to annotate ( same prefix, same value, not annotated)
                 for( unsigned jj = ii + 1; jj < flatList.size(); jj++ )
                 {
                     auto& cmp_unit = flatList[jj];
@@ -552,7 +552,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                     if( !cmp_unit.m_isNew )
                         continue;
 
-                    // Component without reference number found, annotate it if possible
+                    // Symbol without reference number found, annotate it if possible.
                     if( cmp_unit.m_unit == Unit )
                     {
                         cmp_unit.m_numRef = ref_unit.m_numRef;
@@ -617,7 +617,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
         }
 
         // Error if unit number selected does not exist (greater than the  number of units in
-        // the component).  This can happen if a component has changed in a library after a
+        // the symbol).  This can happen if a symbol has changed in a library after a
         // previous annotation.
         if( std::max( flatList[ii].GetLibPart()->GetUnitCount(), 1 ) < flatList[ii].m_unit )
         {
@@ -733,13 +733,13 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
 }
 
 
-SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aSymbol, LIB_PART* aLibPart,
+SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, LIB_PART* aLibPart,
                               const SCH_SHEET_PATH& aSheetPath )
 {
     wxASSERT( aSymbol != NULL );
 
     m_rootSymbol = aSymbol;
-    m_libPart    = aLibPart;     // Warning: can be nullptr for orphan components
+    m_libPart    = aLibPart;     // Warning: can be nullptr for orphan symbols
                                  // (i.e. with a symbol library not found)
     m_unit       = aSymbol->GetUnitSelection( &aSheetPath );
     m_footprint  = aSymbol->GetFootprint( &aSheetPath, true );

@@ -33,7 +33,7 @@
 
 
 class SCH_SHEET_PATH;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 
 
 /**
@@ -115,6 +115,6 @@ public:
 
 
 void CollectOtherUnits( const wxString& thisRef, int thisUnit, const LIB_ID& aLibId,
-                        SCH_SHEET_PATH& aSheet, std::vector<SCH_COMPONENT*>* otherUnits );
+                        SCH_SHEET_PATH& aSheet, std::vector<SCH_SYMBOL*>* otherUnits );
 
 #endif // EE_COLLECTORS_H

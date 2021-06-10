@@ -317,7 +317,7 @@ void BACK_ANNOTATE::applyChangelist()
     {
         SCH_REFERENCE& ref = item.first;
         PCB_FP_DATA&   fpData = *item.second;
-        SCH_COMPONENT* symbol = ref.GetSymbol();
+        SCH_SYMBOL*    symbol = ref.GetSymbol();
         SCH_SCREEN*    screen = ref.GetSheetPath().LastScreen();
         wxString       oldFootprint = ref.GetFootprint();
         wxString       oldValue = ref.GetValue();
@@ -438,23 +438,23 @@ static LABEL_SPIN_STYLE orientLabel( SCH_PIN* aPin )
     }
     orientations[] =
     {
-        { CMP_ORIENT_0,                  0, 0, 0 },
-        { CMP_ORIENT_90,                 1, 0, 0 },
-        { CMP_ORIENT_180,                2, 0, 0 },
-        { CMP_ORIENT_270,                3, 0, 0 },
-        { CMP_MIRROR_X + CMP_ORIENT_0,   0, 1, 0 },
-        { CMP_MIRROR_X + CMP_ORIENT_90,  1, 1, 0 },
-        { CMP_MIRROR_Y,                  0, 0, 1 },
-        { CMP_MIRROR_X + CMP_ORIENT_270, 3, 1, 0 },
-        { CMP_MIRROR_Y + CMP_ORIENT_0,   0, 0, 1 },
-        { CMP_MIRROR_Y + CMP_ORIENT_90,  1, 0, 1 },
-        { CMP_MIRROR_Y + CMP_ORIENT_180, 2, 0, 1 },
-        { CMP_MIRROR_Y + CMP_ORIENT_270, 3, 0, 1 }
+        { SYM_ORIENT_0,                  0, 0, 0 },
+        { SYM_ORIENT_90,                 1, 0, 0 },
+        { SYM_ORIENT_180,                2, 0, 0 },
+        { SYM_ORIENT_270,                3, 0, 0 },
+        { SYM_MIRROR_X + SYM_ORIENT_0,   0, 1, 0 },
+        { SYM_MIRROR_X + SYM_ORIENT_90,  1, 1, 0 },
+        { SYM_MIRROR_Y,                  0, 0, 1 },
+        { SYM_MIRROR_X + SYM_ORIENT_270, 3, 1, 0 },
+        { SYM_MIRROR_Y + SYM_ORIENT_0,   0, 0, 1 },
+        { SYM_MIRROR_Y + SYM_ORIENT_90,  1, 0, 1 },
+        { SYM_MIRROR_Y + SYM_ORIENT_180, 2, 0, 1 },
+        { SYM_MIRROR_Y + SYM_ORIENT_270, 3, 0, 1 }
     };
 
     ORIENT o = orientations[ 0 ];
 
-    SCH_COMPONENT* parentSymbol = aPin->GetParentSymbol();
+    SCH_SYMBOL* parentSymbol = aPin->GetParentSymbol();
 
     if( !parentSymbol )
         return spin;

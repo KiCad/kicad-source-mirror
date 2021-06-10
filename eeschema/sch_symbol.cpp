@@ -93,17 +93,16 @@ static LIB_PART* dummy()
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
-    SCH_ITEM( aParent, SCH_COMPONENT_T )
+SCH_SYMBOL::SCH_SYMBOL( const wxPoint& aPos, SCH_ITEM* aParent ) :
+    SCH_ITEM( aParent, SCH_SYMBOL_T )
 {
     Init( aPos );
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT( const LIB_PART& aPart, const LIB_ID& aLibId,
-                              const SCH_SHEET_PATH* aSheet,
-                              int unit, int convert, const wxPoint& pos ) :
-    SCH_ITEM( NULL, SCH_COMPONENT_T )
+SCH_SYMBOL::SCH_SYMBOL( const LIB_PART& aPart, const LIB_ID& aLibId, const SCH_SHEET_PATH* aSheet,
+                        int unit, int convert, const wxPoint& pos ) :
+    SCH_ITEM( NULL, SCH_SYMBOL_T )
 {
     Init( pos );
 
@@ -119,11 +118,11 @@ SCH_COMPONENT::SCH_COMPONENT( const LIB_PART& aPart, const LIB_ID& aLibId,
 
     // Copy fields from the library symbol
     UpdateFields( aSheet,
-                  true, /* update style */
-                  false, /* update ref */
-                  false, /* update other fields */
-                  true, /* reset ref */
-                  true /* reset other fields */ );
+                  true,   /* update style */
+                  false,  /* update ref */
+                  false,  /* update other fields */
+                  true,   /* reset ref */
+                  true    /* reset other fields */ );
 
     m_prefix = UTIL::GetRefDesPrefix( m_part->GetReferenceField().GetText() );
 
@@ -136,9 +135,9 @@ SCH_COMPONENT::SCH_COMPONENT( const LIB_PART& aPart, const LIB_ID& aLibId,
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT( const LIB_PART& aPart, const SCH_SHEET_PATH* aSheet,
-                              const PICKED_SYMBOL& aSel, const wxPoint& pos ) :
-    SCH_COMPONENT( aPart, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
+SCH_SYMBOL::SCH_SYMBOL( const LIB_PART& aPart, const SCH_SHEET_PATH* aSheet,
+                        const PICKED_SYMBOL& aSel, const wxPoint& pos ) :
+    SCH_SYMBOL( aPart, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
 {
     // Set any fields that were modified as part of the symbol selection
     for( const std::pair<int, wxString>& i : aSel.Fields )
@@ -151,7 +150,7 @@ SCH_COMPONENT::SCH_COMPONENT( const LIB_PART& aPart, const SCH_SHEET_PATH* aShee
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aSymbol ) :
+SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
     SCH_ITEM( aSymbol )
 {
     m_parent      = aSymbol.m_parent;
@@ -182,7 +181,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aSymbol ) :
 }
 
 
-void SCH_COMPONENT::Init( const wxPoint& pos )
+void SCH_SYMBOL::Init( const wxPoint& pos )
 {
     m_pos     = pos;
     m_unit    = 1;  // In multi unit chip - which unit to draw.
@@ -211,13 +210,13 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
 }
 
 
-EDA_ITEM* SCH_COMPONENT::Clone() const
+EDA_ITEM* SCH_SYMBOL::Clone() const
 {
-    return new SCH_COMPONENT( *this );
+    return new SCH_SYMBOL( *this );
 }
 
 
-void SCH_COMPONENT::ViewGetLayers( int aLayers[], int& aCount ) const
+void SCH_SYMBOL::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount      = 3;
     aLayers[0]  = LAYER_DEVICE;
@@ -226,7 +225,7 @@ void SCH_COMPONENT::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId )
+void SCH_SYMBOL::SetLibId( const LIB_ID& aLibId )
 {
     if( m_lib_id != aLibId )
     {
@@ -236,7 +235,7 @@ void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId )
 }
 
 
-wxString SCH_COMPONENT::GetSchSymbolLibraryName() const
+wxString SCH_SYMBOL::GetSchSymbolLibraryName() const
 {
     if( !m_schLibSymbolName.IsEmpty() )
         return m_schLibSymbolName;
@@ -245,7 +244,7 @@ wxString SCH_COMPONENT::GetSchSymbolLibraryName() const
 }
 
 
-void SCH_COMPONENT::SetLibSymbol( LIB_PART* aLibSymbol )
+void SCH_SYMBOL::SetLibSymbol( LIB_PART* aLibSymbol )
 {
     wxCHECK2( ( aLibSymbol == nullptr ) || ( aLibSymbol->IsRoot() ), aLibSymbol = nullptr );
 
@@ -254,7 +253,7 @@ void SCH_COMPONENT::SetLibSymbol( LIB_PART* aLibSymbol )
 }
 
 
-wxString SCH_COMPONENT::GetDescription() const
+wxString SCH_SYMBOL::GetDescription() const
 {
     if( m_part )
         return m_part->GetDescription();
@@ -263,7 +262,7 @@ wxString SCH_COMPONENT::GetDescription() const
 }
 
 
-wxString SCH_COMPONENT::GetDatasheet() const
+wxString SCH_SYMBOL::GetDatasheet() const
 {
     if( m_part )
         return m_part->GetDatasheetField().GetText();
@@ -272,7 +271,7 @@ wxString SCH_COMPONENT::GetDatasheet() const
 }
 
 
-void SCH_COMPONENT::UpdatePins()
+void SCH_SYMBOL::UpdatePins()
 {
     std::map<wxString, wxString> altPinMap;
     std::map<wxString, KIID>     pinUuidMap;
@@ -319,7 +318,7 @@ void SCH_COMPONENT::UpdatePins()
 }
 
 
-void SCH_COMPONENT::SetUnit( int aUnit )
+void SCH_SYMBOL::SetUnit( int aUnit )
 {
     if( m_unit != aUnit )
     {
@@ -329,13 +328,13 @@ void SCH_COMPONENT::SetUnit( int aUnit )
 }
 
 
-void SCH_COMPONENT::UpdateUnit( int aUnit )
+void SCH_SYMBOL::UpdateUnit( int aUnit )
 {
     m_unit = aUnit;
 }
 
 
-void SCH_COMPONENT::SetConvert( int aConvert )
+void SCH_SYMBOL::SetConvert( int aConvert )
 {
     if( m_convert != aConvert )
     {
@@ -348,7 +347,7 @@ void SCH_COMPONENT::SetConvert( int aConvert )
 }
 
 
-void SCH_COMPONENT::SetTransform( const TRANSFORM& aTransform )
+void SCH_SYMBOL::SetTransform( const TRANSFORM& aTransform )
 {
     if( m_transform != aTransform )
     {
@@ -358,7 +357,7 @@ void SCH_COMPONENT::SetTransform( const TRANSFORM& aTransform )
 }
 
 
-int SCH_COMPONENT::GetUnitCount() const
+int SCH_SYMBOL::GetUnitCount() const
 {
     if( m_part )
         return m_part->GetUnitCount();
@@ -367,7 +366,7 @@ int SCH_COMPONENT::GetUnitCount() const
 }
 
 
-void SCH_COMPONENT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     PART_DRAW_OPTIONS opts;
     opts.transform = m_transform;
@@ -388,9 +387,9 @@ void SCH_COMPONENT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOff
 }
 
 
-void SCH_COMPONENT::AddHierarchicalReference( const KIID_PATH& aPath, const wxString& aRef,
-                                              int aUnit, const wxString& aValue,
-                                              const wxString& aFootprint )
+void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxString& aRef,
+                                           int aUnit, const wxString& aValue,
+                                           const wxString& aFootprint )
 {
     // Search for an existing path and remove it if found (should not occur)
     for( unsigned ii = 0; ii < m_instanceReferences.size(); ii++ )
@@ -429,7 +428,7 @@ void SCH_COMPONENT::AddHierarchicalReference( const KIID_PATH& aPath, const wxSt
 }
 
 
-const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUnit ) const
+const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUnit ) const
 {
     KIID_PATH path = sheet->Path();
     wxString  ref;
@@ -449,7 +448,7 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aInclude
     // the same symbol references, but perhaps this is best.
     if( ref.IsEmpty() && !GetField( REFERENCE_FIELD )->GetText().IsEmpty() )
     {
-        const_cast<SCH_COMPONENT*>( this )->SetRef( sheet, GetField( REFERENCE_FIELD )->GetText() );
+        const_cast<SCH_SYMBOL*>( this )->SetRef( sheet, GetField( REFERENCE_FIELD )->GetText() );
         ref = GetField( REFERENCE_FIELD )->GetText();
     }
 
@@ -463,13 +462,13 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aInclude
 }
 
 
-bool SCH_COMPONENT::IsReferenceStringValid( const wxString& aReferenceString )
+bool SCH_SYMBOL::IsReferenceStringValid( const wxString& aReferenceString )
 {
     return !UTIL::GetRefDesPrefix( aReferenceString ).IsEmpty();
 }
 
 
-void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
+void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 {
     KIID_PATH path = sheet->Path();
     bool      notInArray = true;
@@ -505,7 +504,7 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 }
 
 
-bool SCH_COMPONENT::IsAnnotated( const SCH_SHEET_PATH* aSheet )
+bool SCH_SYMBOL::IsAnnotated( const SCH_SHEET_PATH* aSheet )
 {
     KIID_PATH path = aSheet->Path();
 
@@ -519,7 +518,7 @@ bool SCH_COMPONENT::IsAnnotated( const SCH_SHEET_PATH* aSheet )
 }
 
 
-int SCH_COMPONENT::GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const
+int SCH_SYMBOL::GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const
 {
     KIID_PATH path = aSheet->Path();
 
@@ -535,7 +534,7 @@ int SCH_COMPONENT::GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const
 }
 
 
-void SCH_COMPONENT::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelection )
+void SCH_SYMBOL::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelection )
 {
     KIID_PATH path = aSheet->Path();
 
@@ -554,14 +553,14 @@ void SCH_COMPONENT::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSel
 }
 
 
-void SCH_COMPONENT::SetUnitSelection( int aUnitSelection )
+void SCH_SYMBOL::SetUnitSelection( int aUnitSelection )
 {
     for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
         instance.m_Unit = aUnitSelection;
 }
 
 
-const wxString SCH_COMPONENT::GetValue( const SCH_SHEET_PATH* sheet, bool aResolve ) const
+const wxString SCH_SYMBOL::GetValue( const SCH_SHEET_PATH* sheet, bool aResolve ) const
 {
     KIID_PATH path = sheet->Path();
 
@@ -582,7 +581,7 @@ const wxString SCH_COMPONENT::GetValue( const SCH_SHEET_PATH* sheet, bool aResol
 }
 
 
-void SCH_COMPONENT::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValue )
+void SCH_SYMBOL::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValue )
 {
     if( sheet == nullptr )
     {
@@ -612,7 +611,7 @@ void SCH_COMPONENT::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValu
 }
 
 
-const wxString SCH_COMPONENT::GetFootprint( const SCH_SHEET_PATH* sheet, bool aResolve ) const
+const wxString SCH_SYMBOL::GetFootprint( const SCH_SHEET_PATH* sheet, bool aResolve ) const
 {
     KIID_PATH path = sheet->Path();
 
@@ -633,7 +632,7 @@ const wxString SCH_COMPONENT::GetFootprint( const SCH_SHEET_PATH* sheet, bool aR
 }
 
 
-void SCH_COMPONENT::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& aFootprint )
+void SCH_SYMBOL::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& aFootprint )
 {
     if( sheet == nullptr )
     {
@@ -663,19 +662,19 @@ void SCH_COMPONENT::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& a
 }
 
 
-SCH_FIELD* SCH_COMPONENT::GetField( MANDATORY_FIELD_T aFieldType )
+SCH_FIELD* SCH_SYMBOL::GetField( MANDATORY_FIELD_T aFieldType )
 {
     return &m_fields[aFieldType];
 }
 
 
-const SCH_FIELD* SCH_COMPONENT::GetField( MANDATORY_FIELD_T aFieldType ) const
+const SCH_FIELD* SCH_SYMBOL::GetField( MANDATORY_FIELD_T aFieldType ) const
 {
     return &m_fields[aFieldType];
 }
 
 
-SCH_FIELD* SCH_COMPONENT::GetFieldById( int aFieldId )
+SCH_FIELD* SCH_SYMBOL::GetFieldById( int aFieldId )
 {
     for( size_t ii = 0; ii < m_fields.size(); ++ii )
     {
@@ -687,7 +686,7 @@ SCH_FIELD* SCH_COMPONENT::GetFieldById( int aFieldId )
 }
 
 
-wxString SCH_COMPONENT::GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME* aFrame ) const
+wxString SCH_SYMBOL::GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME* aFrame ) const
 {
     for( const SCH_FIELD& field : m_fields )
     {
@@ -699,7 +698,7 @@ wxString SCH_COMPONENT::GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME
 }
 
 
-void SCH_COMPONENT::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly )
+void SCH_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly )
 {
     for( SCH_FIELD& field : m_fields )
     {
@@ -709,7 +708,7 @@ void SCH_COMPONENT::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOn
 }
 
 
-SCH_FIELD* SCH_COMPONENT::AddField( const SCH_FIELD& aField )
+SCH_FIELD* SCH_SYMBOL::AddField( const SCH_FIELD& aField )
 {
     int newNdx = m_fields.size();
 
@@ -718,7 +717,7 @@ SCH_FIELD* SCH_COMPONENT::AddField( const SCH_FIELD& aField )
 }
 
 
-void SCH_COMPONENT::RemoveField( const wxString& aFieldName )
+void SCH_SYMBOL::RemoveField( const wxString& aFieldName )
 {
     for( unsigned i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
     {
@@ -731,7 +730,7 @@ void SCH_COMPONENT::RemoveField( const wxString& aFieldName )
 }
 
 
-SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName, bool aIncludeDefaultFields )
+SCH_FIELD* SCH_SYMBOL::FindField( const wxString& aFieldName, bool aIncludeDefaultFields )
 {
     unsigned start = aIncludeDefaultFields ? 0 : MANDATORY_FIELDS;
 
@@ -745,8 +744,8 @@ SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName, bool aIncludeDe
 }
 
 
-void SCH_COMPONENT::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, bool aUpdateRef,
-                                  bool aUpdateOtherFields, bool aResetRef, bool aResetOtherFields )
+void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, bool aUpdateRef,
+                               bool aUpdateOtherFields, bool aResetRef, bool aResetOtherFields )
 {
     if( m_part )
     {
@@ -818,7 +817,7 @@ void SCH_COMPONENT::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle
 }
 
 
-void SCH_COMPONENT::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction )
+void SCH_SYMBOL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction )
 {
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
         aFunction( pin.get() );
@@ -828,7 +827,7 @@ void SCH_COMPONENT::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunc
 }
 
 
-SCH_PIN* SCH_COMPONENT::GetPin( const wxString& aNumber ) const
+SCH_PIN* SCH_SYMBOL::GetPin( const wxString& aNumber ) const
 {
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
@@ -840,21 +839,21 @@ SCH_PIN* SCH_COMPONENT::GetPin( const wxString& aNumber ) const
 }
 
 
-void SCH_COMPONENT::GetLibPins( std::vector<LIB_PIN*>& aPinsList ) const
+void SCH_SYMBOL::GetLibPins( std::vector<LIB_PIN*>& aPinsList ) const
 {
     if( m_part )
         m_part->GetPins( aPinsList, m_unit, m_convert );
 }
 
 
-SCH_PIN* SCH_COMPONENT::GetPin( LIB_PIN* aLibPin )
+SCH_PIN* SCH_SYMBOL::GetPin( LIB_PIN* aLibPin )
 {
     wxASSERT( m_pinMap.count( aLibPin ) );
     return m_pins[ m_pinMap.at( aLibPin ) ].get();
 }
 
 
-std::vector<SCH_PIN*> SCH_COMPONENT::GetPins( const SCH_SHEET_PATH* aSheet ) const
+std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) const
 {
     std::vector<SCH_PIN*> pins;
 
@@ -879,12 +878,12 @@ std::vector<SCH_PIN*> SCH_COMPONENT::GetPins( const SCH_SHEET_PATH* aSheet ) con
 }
 
 
-void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
+void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
 {
-    wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_COMPONENT_T),
+    wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_SYMBOL_T),
                  wxT( "Cannot swap data with invalid symbol." ) );
 
-    SCH_COMPONENT* symbol = (SCH_COMPONENT*) aItem;
+    SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem;
 
     std::swap( m_lib_id, symbol->m_lib_id );
 
@@ -916,7 +915,7 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 }
 
 
-void SCH_COMPONENT::GetContextualTextVars( wxArrayString* aVars ) const
+void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
 {
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
         aVars->push_back( m_fields[i].GetCanonicalName().Upper() );
@@ -930,7 +929,7 @@ void SCH_COMPONENT::GetContextualTextVars( wxArrayString* aVars ) const
 }
 
 
-bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
+bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
 {
     SCHEMATIC* schematic = Schematic();
 
@@ -1006,7 +1005,7 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
 }
 
 
-void SCH_COMPONENT::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath )
+void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath )
 {
     // Build a reference with no annotation, i.e. a reference ending with a single '?'
     wxString defRef = UTIL::GetRefDesUnannotated( m_prefix );
@@ -1038,7 +1037,7 @@ void SCH_COMPONENT::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath )
 }
 
 
-bool SCH_COMPONENT::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPath )
+bool SCH_SYMBOL::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPath )
 {
     // a empty sheet path is illegal:
     wxCHECK( aSheetPath.size() > 0, false );
@@ -1058,8 +1057,8 @@ bool SCH_COMPONENT::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheet
 }
 
 
-bool SCH_COMPONENT::ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath,
-                                              const KIID_PATH& aNewSheetPath )
+bool SCH_SYMBOL::ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath,
+                                           const KIID_PATH& aNewSheetPath )
 {
     auto it = std::find_if( m_instanceReferences.begin(), m_instanceReferences.end(),
                 [ aOldSheetPath ]( SYMBOL_INSTANCE_REFERENCE& r )->bool
@@ -1086,102 +1085,102 @@ bool SCH_COMPONENT::ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath,
 }
 
 
-void SCH_COMPONENT::SetOrientation( int aOrientation )
+void SCH_SYMBOL::SetOrientation( int aOrientation )
 {
     TRANSFORM temp = TRANSFORM();
     bool transform = false;
 
     switch( aOrientation )
     {
-    case CMP_ORIENT_0:
-    case CMP_NORMAL:                    // default transform matrix
+    case SYM_ORIENT_0:
+    case SYM_NORMAL:                    // default transform matrix
         m_transform.x1 = 1;
         m_transform.y2 = -1;
         m_transform.x2 = m_transform.y1 = 0;
         break;
 
-    case CMP_ROTATE_COUNTERCLOCKWISE:  // Rotate + (incremental rotation)
+    case SYM_ROTATE_COUNTERCLOCKWISE:  // Rotate + (incremental rotation)
         temp.x1   = temp.y2 = 0;
         temp.y1   = 1;
         temp.x2   = -1;
         transform = true;
         break;
 
-    case CMP_ROTATE_CLOCKWISE:          // Rotate - (incremental rotation)
+    case SYM_ROTATE_CLOCKWISE:          // Rotate - (incremental rotation)
         temp.x1   = temp.y2 = 0;
         temp.y1   = -1;
         temp.x2   = 1;
         transform = true;
         break;
 
-    case CMP_MIRROR_Y:                  // Mirror Y (incremental rotation)
+    case SYM_MIRROR_Y:                  // Mirror Y (incremental rotation)
         temp.x1   = -1;
         temp.y2   = 1;
         temp.y1   = temp.x2 = 0;
         transform = true;
         break;
 
-    case CMP_MIRROR_X:                  // Mirror X (incremental rotation)
+    case SYM_MIRROR_X:                  // Mirror X (incremental rotation)
         temp.x1   = 1;
         temp.y2   = -1;
         temp.y1   = temp.x2 = 0;
         transform = true;
         break;
 
-    case CMP_ORIENT_90:
-        SetOrientation( CMP_ORIENT_0 );
-        SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
+    case SYM_ORIENT_90:
+        SetOrientation( SYM_ORIENT_0 );
+        SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
         break;
 
-    case CMP_ORIENT_180:
-        SetOrientation( CMP_ORIENT_0 );
-        SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
-        SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
+    case SYM_ORIENT_180:
+        SetOrientation( SYM_ORIENT_0 );
+        SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
+        SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
         break;
 
-    case CMP_ORIENT_270:
-        SetOrientation( CMP_ORIENT_0 );
-        SetOrientation( CMP_ROTATE_CLOCKWISE );
+    case SYM_ORIENT_270:
+        SetOrientation( SYM_ORIENT_0 );
+        SetOrientation( SYM_ROTATE_CLOCKWISE );
         break;
 
-    case ( CMP_ORIENT_0 + CMP_MIRROR_X ):
-        SetOrientation( CMP_ORIENT_0 );
-        SetOrientation( CMP_MIRROR_X );
+    case ( SYM_ORIENT_0 + SYM_MIRROR_X ):
+        SetOrientation( SYM_ORIENT_0 );
+        SetOrientation( SYM_MIRROR_X );
         break;
 
-    case ( CMP_ORIENT_0 + CMP_MIRROR_Y ):
-        SetOrientation( CMP_ORIENT_0 );
-        SetOrientation( CMP_MIRROR_Y );
+    case ( SYM_ORIENT_0 + SYM_MIRROR_Y ):
+        SetOrientation( SYM_ORIENT_0 );
+        SetOrientation( SYM_MIRROR_Y );
         break;
 
-    case ( CMP_ORIENT_90 + CMP_MIRROR_X ):
-        SetOrientation( CMP_ORIENT_90 );
-        SetOrientation( CMP_MIRROR_X );
+    case ( SYM_ORIENT_90 + SYM_MIRROR_X ):
+        SetOrientation( SYM_ORIENT_90 );
+        SetOrientation( SYM_MIRROR_X );
         break;
 
-    case ( CMP_ORIENT_90 + CMP_MIRROR_Y ):
-        SetOrientation( CMP_ORIENT_90 );
-        SetOrientation( CMP_MIRROR_Y );
+    case ( SYM_ORIENT_90 + SYM_MIRROR_Y ):
+        SetOrientation( SYM_ORIENT_90 );
+        SetOrientation( SYM_MIRROR_Y );
         break;
 
-    case ( CMP_ORIENT_180 + CMP_MIRROR_X ):
-        SetOrientation( CMP_ORIENT_180 );
-        SetOrientation( CMP_MIRROR_X );
+    case ( SYM_ORIENT_180 + SYM_MIRROR_X ):
+        SetOrientation( SYM_ORIENT_180 );
+        SetOrientation( SYM_MIRROR_X );
         break;
 
-    case ( CMP_ORIENT_180 + CMP_MIRROR_Y ):
-        SetOrientation( CMP_ORIENT_180 );
-        SetOrientation( CMP_MIRROR_Y );
+    case ( SYM_ORIENT_180 + SYM_MIRROR_Y ):
+        SetOrientation( SYM_ORIENT_180 );
+        SetOrientation( SYM_MIRROR_Y );
         break;
 
-    case ( CMP_ORIENT_270 + CMP_MIRROR_X ):
-        SetOrientation( CMP_ORIENT_270 );
-        SetOrientation( CMP_MIRROR_X );
+    case ( SYM_ORIENT_270 + SYM_MIRROR_X ):
+        SetOrientation( SYM_ORIENT_270 );
+        SetOrientation( SYM_MIRROR_X );
         break;
 
-    case ( CMP_ORIENT_270 + CMP_MIRROR_Y ):
-        SetOrientation( CMP_ORIENT_270 );
-        SetOrientation( CMP_MIRROR_Y );
+    case ( SYM_ORIENT_270 + SYM_MIRROR_Y ):
+        SetOrientation( SYM_ORIENT_270 );
+        SetOrientation( SYM_MIRROR_Y );
         break;
 
     default:
@@ -1213,22 +1212,22 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
 }
 
 
-int SCH_COMPONENT::GetOrientation()
+int SCH_SYMBOL::GetOrientation()
 {
     int rotate_values[] =
     {
-        CMP_ORIENT_0,
-        CMP_ORIENT_90,
-        CMP_ORIENT_180,
-        CMP_ORIENT_270,
-        CMP_MIRROR_X + CMP_ORIENT_0,
-        CMP_MIRROR_X + CMP_ORIENT_90,
-        CMP_MIRROR_X + CMP_ORIENT_270,
-        CMP_MIRROR_Y,
-        CMP_MIRROR_Y + CMP_ORIENT_0,
-        CMP_MIRROR_Y + CMP_ORIENT_90,
-        CMP_MIRROR_Y + CMP_ORIENT_180,
-        CMP_MIRROR_Y + CMP_ORIENT_270
+        SYM_ORIENT_0,
+        SYM_ORIENT_90,
+        SYM_ORIENT_180,
+        SYM_ORIENT_270,
+        SYM_MIRROR_X + SYM_ORIENT_0,
+        SYM_MIRROR_X + SYM_ORIENT_90,
+        SYM_MIRROR_X + SYM_ORIENT_270,
+        SYM_MIRROR_Y,
+        SYM_MIRROR_Y + SYM_ORIENT_0,
+        SYM_MIRROR_Y + SYM_ORIENT_90,
+        SYM_MIRROR_Y + SYM_ORIENT_180,
+        SYM_MIRROR_Y + SYM_ORIENT_270
     };
 
     // Try to find the current transform option:
@@ -1246,13 +1245,13 @@ int SCH_COMPONENT::GetOrientation()
     wxFAIL_MSG( "Schematic symbol orientation matrix internal error." );
     m_transform = transform;
 
-    return CMP_NORMAL;
+    return SYM_NORMAL;
 }
 
 
 #if defined(DEBUG)
 
-void SCH_COMPONENT::Show( int nestLevel, std::ostream& os ) const
+void SCH_SYMBOL::Show( int nestLevel, std::ostream& os ) const
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
@@ -1282,7 +1281,7 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
+EDA_RECT SCH_SYMBOL::GetBodyBoundingBox() const
 {
     EDA_RECT    bBox;
 
@@ -1317,7 +1316,7 @@ EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
 }
 
 
-const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
+const EDA_RECT SCH_SYMBOL::GetBoundingBox() const
 {
     EDA_RECT bbox = GetBodyBoundingBox();
 
@@ -1328,7 +1327,7 @@ const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 }
 
 
-const EDA_RECT SCH_COMPONENT::GetBoundingBox( bool aIncludeInvisibleText ) const
+const EDA_RECT SCH_SYMBOL::GetBoundingBox( bool aIncludeInvisibleText ) const
 {
     EDA_RECT bbox = GetBodyBoundingBox();
 
@@ -1342,7 +1341,7 @@ const EDA_RECT SCH_COMPONENT::GetBoundingBox( bool aIncludeInvisibleText ) const
 }
 
 
-void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
@@ -1424,17 +1423,17 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
 }
 
 
-BITMAPS SCH_COMPONENT::GetMenuImage() const
+BITMAPS SCH_SYMBOL::GetMenuImage() const
 {
     return BITMAPS::add_component;
 }
 
 
-void SCH_COMPONENT::MirrorHorizontally( int aCenter )
+void SCH_SYMBOL::MirrorHorizontally( int aCenter )
 {
     int dx = m_pos.x;
 
-    SetOrientation( CMP_MIRROR_Y );
+    SetOrientation( SYM_MIRROR_Y );
     MIRROR( m_pos.x, aCenter );
     dx -= m_pos.x;     // dx,0 is the move vector for this transform
 
@@ -1448,11 +1447,11 @@ void SCH_COMPONENT::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_COMPONENT::MirrorVertically( int aCenter )
+void SCH_SYMBOL::MirrorVertically( int aCenter )
 {
     int dy = m_pos.y;
 
-    SetOrientation( CMP_MIRROR_X );
+    SetOrientation( SYM_MIRROR_X );
     MIRROR( m_pos.y, aCenter );
     dy -= m_pos.y;     // dy,0 is the move vector for this transform
 
@@ -1466,13 +1465,13 @@ void SCH_COMPONENT::MirrorVertically( int aCenter )
 }
 
 
-void SCH_COMPONENT::Rotate( const wxPoint& aCenter )
+void SCH_SYMBOL::Rotate( const wxPoint& aCenter )
 {
     wxPoint prev = m_pos;
 
     RotatePoint( &m_pos, aCenter, 900 );
 
-    SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
+    SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
 
     for( SCH_FIELD& field : m_fields )
     {
@@ -1485,7 +1484,7 @@ void SCH_COMPONENT::Rotate( const wxPoint& aCenter )
 }
 
 
-bool SCH_COMPONENT::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
+bool SCH_SYMBOL::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
 {
     wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 
@@ -1494,7 +1493,7 @@ bool SCH_COMPONENT::Matches( const wxFindReplaceData& aSearchData, void* aAuxDat
 }
 
 
-void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
+void SCH_SYMBOL::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
     for( auto& pin : m_pins )
     {
@@ -1509,8 +1508,8 @@ void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                                         const SCH_SHEET_PATH* aPath )
+bool SCH_SYMBOL::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
+                                      const SCH_SHEET_PATH* aPath )
 {
     bool changed = false;
 
@@ -1560,7 +1559,7 @@ bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemLi
 }
 
 
-wxPoint SCH_COMPONENT::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
+wxPoint SCH_SYMBOL::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 {
     wxCHECK_MSG( Pin != NULL && Pin->Type() == LIB_PIN_T, wxPoint( 0, 0 ),
                  wxT( "Cannot get physical position of pin." ) );
@@ -1569,7 +1568,7 @@ wxPoint SCH_COMPONENT::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 }
 
 
-std::vector<wxPoint> SCH_COMPONENT::GetConnectionPoints() const
+std::vector<wxPoint> SCH_SYMBOL::GetConnectionPoints() const
 {
     std::vector<wxPoint> retval;
 
@@ -1593,7 +1592,7 @@ std::vector<wxPoint> SCH_COMPONENT::GetConnectionPoints() const
 }
 
 
-LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
+LIB_ITEM* SCH_SYMBOL::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 {
     if( m_part )
     {
@@ -1607,7 +1606,7 @@ LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 }
 
 
-wxString SCH_COMPONENT::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString SCH_SYMBOL::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Symbol %s [%s]" ),
                              GetField( REFERENCE_FIELD )->GetShownText(),
@@ -1615,16 +1614,16 @@ wxString SCH_COMPONENT::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
-                                    const KICAD_T aFilterTypes[] )
+SEARCH_RESULT SCH_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
+                                 const KICAD_T aFilterTypes[] )
 {
     KICAD_T     stype;
 
     for( const KICAD_T* p = aFilterTypes; (stype = *p) != EOT; ++p )
     {
         if( stype == SCH_LOCATE_ANY_T
-                || ( stype == SCH_COMPONENT_T )
-                || ( stype == SCH_COMPONENT_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
+          || ( stype == SCH_SYMBOL_T )
+          || ( stype == SCH_SYMBOL_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
         {
             if( SEARCH_RESULT::QUIT == aInspector( this, aTestData ) )
                 return SEARCH_RESULT::QUIT;
@@ -1646,7 +1645,7 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
         }
 
         if( stype == SCH_FIELD_LOCATE_VALUE_T
-                || ( stype == SCH_COMPONENT_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
+                || ( stype == SCH_SYMBOL_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
         {
             if( SEARCH_RESULT::QUIT == aInspector( GetField( VALUE_FIELD ), (void*) this ) )
                 return SEARCH_RESULT::QUIT;
@@ -1689,29 +1688,29 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
 }
 
 
-bool SCH_COMPONENT::operator <( const SCH_ITEM& aItem ) const
+bool SCH_SYMBOL::operator <( const SCH_ITEM& aItem ) const
 {
     if( Type() != aItem.Type() )
         return Type() < aItem.Type();
 
-    auto component = static_cast<const SCH_COMPONENT*>( &aItem );
+    auto symbol = static_cast<const SCH_SYMBOL*>( &aItem );
 
     EDA_RECT rect = GetBodyBoundingBox();
 
-    if( rect.GetArea() != component->GetBodyBoundingBox().GetArea() )
-        return rect.GetArea() < component->GetBodyBoundingBox().GetArea();
+    if( rect.GetArea() != symbol->GetBodyBoundingBox().GetArea() )
+        return rect.GetArea() < symbol->GetBodyBoundingBox().GetArea();
 
-    if( m_pos.x != component->m_pos.x )
-        return m_pos.x < component->m_pos.x;
+    if( m_pos.x != symbol->m_pos.x )
+        return m_pos.x < symbol->m_pos.x;
 
-    if( m_pos.y != component->m_pos.y )
-        return m_pos.y < component->m_pos.y;
+    if( m_pos.y != symbol->m_pos.y )
+        return m_pos.y < symbol->m_pos.y;
 
     return m_Uuid < aItem.m_Uuid;       // Ensure deterministic sort
 }
 
 
-bool SCH_COMPONENT::operator==( const SCH_COMPONENT& aSymbol ) const
+bool SCH_SYMBOL::operator==( const SCH_SYMBOL& aSymbol ) const
 {
     if( GetFieldCount() !=  aSymbol.GetFieldCount() )
         return false;
@@ -1726,13 +1725,13 @@ bool SCH_COMPONENT::operator==( const SCH_COMPONENT& aSymbol ) const
 }
 
 
-bool SCH_COMPONENT::operator!=( const SCH_COMPONENT& aSymbol ) const
+bool SCH_SYMBOL::operator!=( const SCH_SYMBOL& aSymbol ) const
 {
     return !( *this == aSymbol );
 }
 
 
-SCH_COMPONENT& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
+SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_ITEM& aItem )
 {
     wxCHECK_MSG( Type() == aItem.Type(), *this,
                  wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +
@@ -1742,7 +1741,7 @@ SCH_COMPONENT& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
     {
         SCH_ITEM::operator=( aItem );
 
-        SCH_COMPONENT* c = (SCH_COMPONENT*) &aItem;
+        SCH_SYMBOL* c = (SCH_SYMBOL*) &aItem;
 
         m_lib_id    = c->m_lib_id;
 
@@ -1769,7 +1768,7 @@ SCH_COMPONENT& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
 }
 
 
-bool SCH_COMPONENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool SCH_SYMBOL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT bBox = GetBodyBoundingBox();
     bBox.Inflate( aAccuracy );
@@ -1781,7 +1780,7 @@ bool SCH_COMPONENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-bool SCH_COMPONENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_SYMBOL::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     if( m_flags & STRUCT_DELETED || m_flags & SKIP_STRUCT )
         return false;
@@ -1797,7 +1796,7 @@ bool SCH_COMPONENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccura
 }
 
 
-bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
+bool SCH_SYMBOL::doIsConnected( const wxPoint& aPosition ) const
 {
     wxPoint new_pos = m_transform.InverseTransform().TransformCoordinate( aPosition - m_pos );
 
@@ -1825,13 +1824,13 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
 }
 
 
-bool SCH_COMPONENT::IsInNetlist() const
+bool SCH_SYMBOL::IsInNetlist() const
 {
     return m_isInNetlist;
 }
 
 
-void SCH_COMPONENT::Plot( PLOTTER* aPlotter ) const
+void SCH_SYMBOL::Plot( PLOTTER* aPlotter ) const
 {
     if( m_part )
     {
@@ -1848,7 +1847,7 @@ void SCH_COMPONENT::Plot( PLOTTER* aPlotter ) const
 }
 
 
-bool SCH_COMPONENT::HasBrightenedPins()
+bool SCH_SYMBOL::HasBrightenedPins()
 {
     for( const auto& pin : m_pins )
     {
@@ -1860,14 +1859,14 @@ bool SCH_COMPONENT::HasBrightenedPins()
 }
 
 
-void SCH_COMPONENT::ClearBrightenedPins()
+void SCH_SYMBOL::ClearBrightenedPins()
 {
     for( auto& pin : m_pins )
         pin->ClearBrightened();
 }
 
 
-bool SCH_COMPONENT::IsPointClickableAnchor( const wxPoint& aPos ) const
+bool SCH_SYMBOL::IsPointClickableAnchor( const wxPoint& aPos ) const
 {
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {

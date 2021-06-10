@@ -485,9 +485,9 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
         if( selection.Empty() )
             return 0;
 
-        SCH_COMPONENT* component = (SCH_COMPONENT*) selection.Front();
+        SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
 
-        datasheet = component->GetField( DATASHEET_FIELD )->GetText();
+        datasheet = symbol->GetField( DATASHEET_FIELD )->GetText();
     }
 
     if( datasheet.IsEmpty() || datasheet == wxT( "~" ) )

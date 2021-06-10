@@ -509,8 +509,8 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
 
         wxCHECK( part->GetLibId().IsValid(), 0 );
 
-        SCH_COMPONENT* symbol = new SCH_COMPONENT( *part, libId, &schframe->GetCurrentSheet(),
-                                                   unit, convert );
+        SCH_SYMBOL* symbol = new SCH_SYMBOL( *part, libId, &schframe->GetCurrentSheet(),
+                                             unit, convert );
 
         symbol->SetParent( schframe->GetScreen() );
 

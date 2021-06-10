@@ -433,7 +433,7 @@ static void parseQuotedString( wxString& aString, LINE_READER& aReader,
 
             // Do not copy the escape byte if it is followed by \ or "
             if( *tmp != '"' && *tmp != '\\' )
-                    utf8 += '\\';
+                utf8 += '\\';
 
             utf8 += *tmp;
         }
@@ -488,7 +488,7 @@ class SCH_LEGACY_PLUGIN_CACHE
     bool            m_isModified;
     int             m_versionMajor;
     int             m_versionMinor;
-    SCH_LIB_TYPE    m_libType; // Is this cache a component or symbol library.
+    SCH_LIB_TYPE    m_libType;      // Is this cache a symbol or symbol library.
 
     void                  loadHeader( FILE_LINE_READER& aReader );
     static void           loadAliases( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader,
@@ -1492,13 +1492,13 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
 }
 
 
-SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
+SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
 {
     const char* line = aReader.Line();
 
     wxCHECK( strCompare( "$Comp", line, &line ), NULL );
 
-    std::unique_ptr<SCH_COMPONENT> symbol = std::make_unique<SCH_COMPONENT>();
+    std::unique_ptr<SCH_SYMBOL> symbol = std::make_unique<SCH_SYMBOL>();
 
     line = aReader.ReadLine();
 
@@ -1672,7 +1672,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
 
             if( index >= symbol->GetFieldCount() )
             {
-                // The first MANDATOR_FIELDS _must_ be constructed within the SCH_COMPONENT
+                // The first MANDATOR_FIELDS _must_ be constructed within the SCH_SYMBOL
                 // constructor.  This assert is simply here to guard against a change in that
                 // constructor.
                 wxASSERT( symbol->GetFieldCount() >= MANDATORY_FIELDS );
@@ -1920,8 +1920,8 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SHEET* aSheet )
     {
         switch( item->Type() )
         {
-        case SCH_COMPONENT_T:
-            saveComponent( static_cast<SCH_COMPONENT*>( item ) );
+        case SCH_SYMBOL_T:
+            saveSymbol( static_cast<SCH_SYMBOL*>( item ) );
             break;
         case SCH_BITMAP_T:
             saveBitmap( static_cast<SCH_BITMAP*>( item ) );
@@ -1967,8 +1967,8 @@ void SCH_LEGACY_PLUGIN::Format( SELECTION* aSelection, OUTPUTFORMATTER* aFormatt
 
         switch( item->Type() )
         {
-        case SCH_COMPONENT_T:
-            saveComponent( static_cast< SCH_COMPONENT* >( item ) );
+        case SCH_SYMBOL_T:
+            saveSymbol( static_cast< SCH_SYMBOL* >( item ) );
             break;
         case SCH_BITMAP_T:
             saveBitmap( static_cast< SCH_BITMAP* >( item ) );
@@ -2002,7 +2002,7 @@ void SCH_LEGACY_PLUGIN::Format( SELECTION* aSelection, OUTPUTFORMATTER* aFormatt
 }
 
 
-void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
+void SCH_LEGACY_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol )
 {
     std::string     name1;
     std::string     name2;
@@ -2010,20 +2010,20 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
     static wxString delimiters( wxT( " " ) );
 
     // This is redundant with the AR entries below, but it makes the files backwards-compatible.
-    if( aComponent->GetInstanceReferences().size() > 0 )
+    if( aSymbol->GetInstanceReferences().size() > 0 )
     {
-        const SYMBOL_INSTANCE_REFERENCE& instance = aComponent->GetInstanceReferences()[0];
+        const SYMBOL_INSTANCE_REFERENCE& instance = aSymbol->GetInstanceReferences()[0];
         name1 = toUTFTildaText( instance.m_Reference );
     }
     else
     {
-        if( aComponent->GetField( REFERENCE_FIELD )->GetText().IsEmpty() )
-            name1 = toUTFTildaText( aComponent->GetPrefix() );
+        if( aSymbol->GetField( REFERENCE_FIELD )->GetText().IsEmpty() )
+            name1 = toUTFTildaText( aSymbol->GetPrefix() );
         else
-            name1 = toUTFTildaText( aComponent->GetField( REFERENCE_FIELD )->GetText() );
+            name1 = toUTFTildaText( aSymbol->GetField( REFERENCE_FIELD )->GetText() );
     }
 
-    wxString part_name = aComponent->GetLibId().Format();
+    wxString part_name = aSymbol->GetLibId().Format();
 
     if( part_name.size() )
     {
@@ -2039,23 +2039,23 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
 
     // Generate unit number, conversion and timestamp
     m_out->Print( 0, "U %d %d %8.8X\n",
-                  aComponent->GetUnit(),
-                  aComponent->GetConvert(),
-                  aComponent->m_Uuid.AsLegacyTimestamp() );
+                  aSymbol->GetUnit(),
+                  aSymbol->GetConvert(),
+                  aSymbol->m_Uuid.AsLegacyTimestamp() );
 
     // Save the position
     m_out->Print( 0, "P %d %d\n",
-                  Iu2Mils( aComponent->GetPosition().x ),
-                  Iu2Mils( aComponent->GetPosition().y ) );
+                  Iu2Mils( aSymbol->GetPosition().x ),
+                  Iu2Mils( aSymbol->GetPosition().y ) );
 
     /* If this is a complex hierarchy; save hierarchical references.
      * but for simple hierarchies it is not necessary.
      * the reference inf is already saved
      * this is useful for old Eeschema version compatibility
      */
-    if( aComponent->GetInstanceReferences().size() > 1 )
+    if( aSymbol->GetInstanceReferences().size() > 1 )
     {
-        for( const SYMBOL_INSTANCE_REFERENCE& instance : aComponent->GetInstanceReferences() )
+        for( const SYMBOL_INSTANCE_REFERENCE& instance : aSymbol->GetInstanceReferences() )
         {
             /*format:
              * AR Path="/140/2" Ref="C99"   Part="1"
@@ -2071,36 +2071,36 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
                 path += instance.m_Path[i].AsLegacyTimestampString() + "/";
 
             m_out->Print( 0, "AR Path=\"%s\" Ref=\"%s\"  Part=\"%d\" \n",
-                          TO_UTF8( path + aComponent->m_Uuid.AsLegacyTimestampString() ),
+                          TO_UTF8( path + aSymbol->m_Uuid.AsLegacyTimestampString() ),
                           TO_UTF8( instance.m_Reference ),
                           instance.m_Unit );
         }
     }
 
     // update the ugly field id, which I would like to see go away someday soon.
-    for( int i = 0;  i < aComponent->GetFieldCount();  ++i )
-        aComponent->GetFields()[i].SetId( i );
+    for( int i = 0;  i < aSymbol->GetFieldCount();  ++i )
+        aSymbol->GetFields()[i].SetId( i );
 
     // Fixed fields:
     // Save mandatory fields even if they are blank,
     // because the visibility, size and orientation are set from library editor.
     for( unsigned i = 0; i < MANDATORY_FIELDS; ++i )
-        saveField( &aComponent->GetFields()[i] );
+        saveField( &aSymbol->GetFields()[i] );
 
     // User defined fields:
     // The *policy* about which user defined fields are part of a symbol is now
     // only in the dialog editors.  No policy should be enforced here, simply
     // save all the user defined fields, they are present because a dialog editor
     // thought they should be.  If you disagree, go fix the dialog editors.
-    for( int i = MANDATORY_FIELDS;  i < aComponent->GetFieldCount();  ++i )
-        saveField( &aComponent->GetFields()[i] );
+    for( int i = MANDATORY_FIELDS;  i < aSymbol->GetFieldCount();  ++i )
+        saveField( &aSymbol->GetFields()[i] );
 
     // Unit number, position, box ( old standard )
-    m_out->Print( 0, "\t%-4d %-4d %-4d\n", aComponent->GetUnit(),
-                  Iu2Mils( aComponent->GetPosition().x ),
-                  Iu2Mils( aComponent->GetPosition().y ) );
+    m_out->Print( 0, "\t%-4d %-4d %-4d\n", aSymbol->GetUnit(),
+                  Iu2Mils( aSymbol->GetPosition().x ),
+                  Iu2Mils( aSymbol->GetPosition().y ) );
 
-    TRANSFORM transform = aComponent->GetTransform();
+    TRANSFORM transform = aSymbol->GetTransform();
 
     m_out->Print( 0, "\t%-4d %-4d %-4d %-4d\n",
                   transform.x1, transform.y1, transform.x2, transform.y2 );
@@ -2581,7 +2581,7 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
         // Old .sym files (which are libraries with only one symbol, used to store and reuse shapes)
         // EESchema-LIB Version x.x SYMBOL. They are valid files.
         if( !strCompare( "EESchema-LIB Version", line, &line ) )
-            SCH_PARSE_ERROR( "file is not a valid component or symbol library file", reader, line );
+            SCH_PARSE_ERROR( "file is not a valid symbol or symbol library file", reader, line );
     }
 
     m_versionMajor = parseInt( reader, line, &line );
@@ -2596,7 +2596,7 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
     if( m_versionMajor < 1 || m_versionMinor < 0 || m_versionMinor > 99 )
         SCH_PARSE_ERROR( "invalid file version in header", reader, line );
 
-    // Check if this is a symbol library which is the same as a component library but without
+    // Check if this is a symbol library which is the same as a symbol library but without
     // any alias, documentation, footprint filters, etc.
     if( strCompare( "SYMBOL", line, &line ) )
     {
@@ -2895,7 +2895,7 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
         pos += tmp.size() + 1;
     }
 
-    // There is the optional power component flag.
+    // There is the optional power symbol flag.
     if( tokens.HasMoreTokens() )
     {
         tmp = tokens.GetNextToken();
@@ -3008,7 +3008,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
         field = aPart->GetFieldById( id );
 
         // this will fire only if somebody broke a constructor or editor.
-        // MANDATORY_FIELDS are always present in ram resident components, no
+        // MANDATORY_FIELDS are always present in ram resident symbols, no
         // exceptions, and they always have their names set, even fixed fields.
         wxASSERT( field );
     }
@@ -3198,7 +3198,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_PART>& aPart,
         line = aReader.ReadLine();
     }
 
-    SCH_PARSE_ERROR( "file ended prematurely loading component draw element", aReader, line );
+    SCH_PARSE_ERROR( "file ended prematurely loading symbol draw element", aReader, line );
 }
 
 
@@ -3362,7 +3362,7 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_PART>& aPart,
     // Here things are murky and not well defined.  At some point it appears the format
     // was changed to add text properties.  However rather than add the token to the end of
     // the text definition, it was added after the string and no mention if the file
-    // verion was bumped or not so this code make break on very old component libraries.
+    // verion was bumped or not so this code make break on very old symbol libraries.
     //
     // Update: apparently even in the latest version this can be different so added a test
     //         for end of line before checking for the text properties.
@@ -3771,7 +3771,7 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aF
 
     LIB_FIELD&  value = aSymbol->GetValueField();
 
-    // First line: it s a comment (component name for readers)
+    // First line: it s a comment (symbol name for readers)
     aFormatter.Print( 0, "#\n# %s\n#\n", TO_UTF8( value.GetText() ) );
 
     // Save data
@@ -4212,7 +4212,7 @@ void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPER
         m_cache = new SCH_LEGACY_PLUGIN_CACHE( aLibraryFileName );
 
         // Because m_cache is rebuilt, increment PART_LIBS::s_modify_generation
-        // to modify the hash value that indicate component to symbol links
+        // to modify the hash value that indicate symbol to symbol links
         // must be updated.
         PART_LIBS::IncrementModifyGeneration();
 

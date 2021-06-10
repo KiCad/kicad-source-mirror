@@ -37,7 +37,7 @@ class LIB_ID;
 class LIB_TABLE;
 
 /**
- * Widget displaying a tree of components with optional search text control and description panel.
+ * Widget displaying a tree of symbols with optional search text control and description panel.
  */
 class LIB_TREE : public wxPanel
 {
@@ -46,7 +46,7 @@ public:
     enum WIDGETS { NONE = 0x00, SEARCH = 0x01, DETAILS = 0x02, ALL = 0xFF };
 
     /**
-     * Construct a component tree.
+     * Construct a symbol tree.
      *
      * @param aParent parent window containing this tree widget
      * @param aLibTable table containing libraries and items to display
@@ -62,7 +62,7 @@ public:
     ~LIB_TREE() override;
 
     /**
-     * For multi-unit components, if the user selects the component itself
+     * For multi-unit symbols, if the user selects the symbol itself
      * rather than picking an individual unit, 0 will be returned in aUnit.
      * Beware that this is an invalid unit number - this should be replaced
      * with whatever default is desired (usually 1).
@@ -128,12 +128,12 @@ protected:
     void postPreselectEvent();
 
     /**
-     * Post COMPONENT_SELECTED event to notify the selection handler that a part has been selected.
+     * Post SYMBOL_SELECTED event to notify the selection handler that a part has been selected.
      */
     void postSelectEvent();
 
     /**
-     * Structure storing state of the component tree widget.
+     * Structure storing state of the symbol tree widget.
      */
     struct STATE
     {
@@ -146,12 +146,12 @@ protected:
     };
 
     /**
-     * Return the component tree widget state.
+     * Return the symbol tree widget state.
      */
     STATE getState() const;
 
     /**
-     * Restore the component tree widget state from an object.
+     * Restore the symbol tree widget state from an object.
      */
     void setState( const STATE& aState );
 
@@ -178,10 +178,10 @@ protected:
     LIB_ID           m_last_libid;
 };
 
-///< Custom event sent when a new component is preselected
-wxDECLARE_EVENT( COMPONENT_PRESELECTED, wxCommandEvent );
+///< Custom event sent when a new symbol is preselected
+wxDECLARE_EVENT( SYMBOL_PRESELECTED, wxCommandEvent );
 
-///< Custom event sent when a component is selected
-wxDECLARE_EVENT( COMPONENT_SELECTED, wxCommandEvent );
+///< Custom event sent when a symbol is selected
+wxDECLARE_EVENT( SYMBOL_SELECTED, wxCommandEvent );
 
 #endif /* LIB_TREE_H */

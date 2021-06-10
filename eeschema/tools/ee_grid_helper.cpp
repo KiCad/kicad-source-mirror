@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -266,7 +266,7 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
 {
     switch ( aItem->Type() )
     {
-    case SCH_COMPONENT_T:
+    case SCH_SYMBOL_T:
         case SCH_SHEET_T:
         addAnchor( aItem->GetPosition(), ORIGIN, aItem );
         KI_FALLTHROUGH;

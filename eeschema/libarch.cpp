@@ -83,10 +83,10 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
 
-        for( auto aItem : screen->Items().OfType( SCH_COMPONENT_T ) )
+        for( auto aItem : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            LIB_PART*      part = nullptr;
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( aItem );
+            LIB_PART*   part = nullptr;
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
 
             try
             {

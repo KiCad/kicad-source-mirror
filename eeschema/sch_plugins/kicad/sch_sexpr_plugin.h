@@ -5,6 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -40,7 +41,7 @@ class SCH_NO_CONNECT;
 class SCH_LINE;
 class SCH_BUS_ENTRY_BASE;
 class SCH_TEXT;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 class SCH_FIELD;
 struct SYMBOL_INSTANCE_REFERENCE;
 class PROPERTIES;
@@ -134,7 +135,7 @@ private:
     void loadHierarchy( SCH_SHEET* aSheet );
     void loadFile( const wxString& aFileName, SCH_SHEET* aSheet );
 
-    void saveSymbol( SCH_COMPONENT* aComponent, SCH_SHEET_PATH* aSheetPath, int aNestLevel );
+    void saveSymbol( SCH_SYMBOL* aComponent, SCH_SHEET_PATH* aSheetPath, int aNestLevel );
     void saveField( SCH_FIELD* aField, int aNestLevel );
     void saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel );
     void saveSheet( SCH_SHEET* aSheet, int aNestLevel );

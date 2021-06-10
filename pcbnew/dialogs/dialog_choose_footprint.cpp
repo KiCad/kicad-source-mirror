@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,10 +57,10 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
     wxHtmlWindow* details = nullptr;
 
     m_vsplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                         wxSP_LIVE_UPDATE );
+                                        wxSP_LIVE_UPDATE );
 
     m_hsplitter = new wxSplitterWindow( m_vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                         wxSP_LIVE_UPDATE );
+                                        wxSP_LIVE_UPDATE );
 
     //Avoid the splitter window being assigned as the Parent to additional windows
     m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
@@ -82,7 +82,7 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
     sizer->Add( m_vsplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_tree = new LIB_TREE( m_hsplitter, Prj().PcbFootprintLibs(), aAdapter,
-                                 LIB_TREE::WIDGETS::ALL, details );
+                           LIB_TREE::WIDGETS::ALL, details );
 
     m_hsplitter->SetSashGravity( 0.8 );
     m_hsplitter->SetMinimumPaneSize( 20 );
@@ -110,9 +110,10 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
     aAdapter->FinishTreeInitialization();
 
     Bind( wxEVT_TIMER, &DIALOG_CHOOSE_FOOTPRINT::OnCloseTimer, this, m_dbl_click_timer->GetId() );
-    Bind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentPreselected, this );
-    Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentSelected, this );
-    m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_FOOTPRINT::OnUseBrowser, this );
+    Bind( SYMBOL_PRESELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentPreselected, this );
+    Bind( SYMBOL_SELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentSelected, this );
+    m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_FOOTPRINT::OnUseBrowser,
+                            this );
 
     Layout();
 
@@ -145,9 +146,10 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
 DIALOG_CHOOSE_FOOTPRINT::~DIALOG_CHOOSE_FOOTPRINT()
 {
     Unbind( wxEVT_TIMER, &DIALOG_CHOOSE_FOOTPRINT::OnCloseTimer, this );
-    Unbind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentPreselected, this );
-    Unbind( COMPONENT_SELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentSelected, this );
-    m_browser_button->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_FOOTPRINT::OnUseBrowser, this );
+    Unbind( SYMBOL_PRESELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentPreselected, this );
+    Unbind( SYMBOL_SELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentSelected, this );
+    m_browser_button->Unbind( wxEVT_COMMAND_BUTTON_CLICKED,
+                              &DIALOG_CHOOSE_FOOTPRINT::OnUseBrowser, this );
 
     // I am not sure the following two lines are necessary,
     // but they will not hurt anyone

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,7 +106,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &LIB_TREE::onTreeSelect, this );
     m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onContextMenu, this );
 
-    Bind( COMPONENT_PRESELECTED, &LIB_TREE::onPreselect, this );
+    Bind( SYMBOL_PRESELECTED, &LIB_TREE::onPreselect, this );
 
     // If wxTextCtrl::SetHint() is called before binding wxEVT_TEXT, the event
     // handler will intermittently fire.
@@ -271,14 +271,14 @@ void LIB_TREE::expandIfValid( const wxDataViewItem& aTreeId )
 
 void LIB_TREE::postPreselectEvent()
 {
-    wxCommandEvent event( COMPONENT_PRESELECTED );
+    wxCommandEvent event( SYMBOL_PRESELECTED );
     wxPostEvent( this, event );
 }
 
 
 void LIB_TREE::postSelectEvent()
 {
-    wxCommandEvent event( COMPONENT_SELECTED );
+    wxCommandEvent event( SYMBOL_SELECTED );
     wxPostEvent( this, event );
 }
 
@@ -367,7 +367,7 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
             toggleExpand( sel );
             break;
         }
-        // Intentionally fall through, so the selected component will be treated as the selected one
+        // Intentionally fall through, so the selected symbol will be treated as the selected one
         KI_FALLTHROUGH;
 
     default:
@@ -448,5 +448,5 @@ void LIB_TREE::onContextMenu( wxDataViewEvent& aEvent )
 }
 
 
-wxDEFINE_EVENT( COMPONENT_PRESELECTED, wxCommandEvent );
-wxDEFINE_EVENT( COMPONENT_SELECTED, wxCommandEvent );
+wxDEFINE_EVENT( SYMBOL_PRESELECTED, wxCommandEvent );
+wxDEFINE_EVENT( SYMBOL_SELECTED, wxCommandEvent );

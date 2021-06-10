@@ -72,7 +72,7 @@ enum SPICE_PRIMITIVE {
 struct SPICE_ITEM
 {
     ///< Schematic component represented by this SPICE_ITEM.
-    SCH_COMPONENT* m_parent;
+    SCH_SYMBOL* m_parent;
 
     ///< Spice primitive type (@see SPICE_PRIMITIVE).
     wxChar m_primitive;
@@ -185,13 +185,12 @@ public:
     /**
      * Retrieve either the requested field value or the default value.
      */
-    static wxString GetSpiceField( SPICE_FIELD aField, SCH_COMPONENT* aSymbol, unsigned aCtl );
+    static wxString GetSpiceField( SPICE_FIELD aField, SCH_SYMBOL* aSymbol, unsigned aCtl );
 
     /**
      * Retrieve the default value for a given field.
      */
-    static wxString GetSpiceFieldDefVal( SPICE_FIELD aField, SCH_COMPONENT* aSymbol,
-                                         unsigned aCtl );
+    static wxString GetSpiceFieldDefVal( SPICE_FIELD aField, SCH_SYMBOL* aSymbol, unsigned aCtl );
 
     /**
      * Update the vector of Spice directives placed in the schematics.

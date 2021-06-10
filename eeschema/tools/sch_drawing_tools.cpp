@@ -108,7 +108,7 @@ EDA_RECT SCH_DRAWING_TOOLS::GetCanvasFreeAreaPixels()
 
 int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 {
-    SCH_COMPONENT*              symbol = aEvent.Parameter<SCH_COMPONENT*>();
+    SCH_SYMBOL*                 symbol = aEvent.Parameter<SCH_SYMBOL*>();
     SCHLIB_FILTER               filter;
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
 
@@ -138,7 +138,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     Activate();
 
     auto addSymbol =
-            [&]( SCH_COMPONENT* aSymbol )
+            [&]( SCH_SYMBOL* aSymbol )
             {
                 m_frame->SaveCopyForRepeatItem( aSymbol );
 
@@ -265,7 +265,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     continue;
 
                 wxPoint pos( cursorPos );
-                symbol = new SCH_COMPONENT( *part, &m_frame->GetCurrentSheet(), sel, pos );
+                symbol = new SCH_SYMBOL( *part, &m_frame->GetCurrentSheet(), sel, pos );
                 addSymbol( symbol );
 
                 // Update cursor now that we have a symbol
@@ -285,7 +285,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 m_frame->GetScreen()->Update( symbol );
                 m_frame->OnModify();
 
-                SCH_COMPONENT* nextSymbol = nullptr;
+                SCH_SYMBOL* nextSymbol = nullptr;
 
                 if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units
                         || m_frame->eeconfig()->m_SymChooserPanel.keep_symbol )
@@ -305,7 +305,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     // We are either stepping to the next unit or next symbol
                     if( m_frame->eeconfig()->m_SymChooserPanel.keep_symbol || new_unit > 1 )
                     {
-                        nextSymbol = static_cast<SCH_COMPONENT*>( symbol->Duplicate() );
+                        nextSymbol = static_cast<SCH_SYMBOL*>( symbol->Duplicate() );
                         nextSymbol->SetUnit( new_unit );
                         nextSymbol->SetUnitSelection( new_unit );
 
@@ -327,7 +327,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
-                && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
+                && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_SYM_MAX )
             {
                 int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
 

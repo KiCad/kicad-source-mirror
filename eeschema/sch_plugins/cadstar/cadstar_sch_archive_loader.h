@@ -39,7 +39,7 @@ class EDA_TEXT;
 class LABEL_SPIN_STYLE;
 class LIB_FIELD;
 class LIB_PART;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 class SCH_ITEM;
 class SCH_FIELD;
 class SCH_GLOBALLABEL;
@@ -103,7 +103,7 @@ private:
                                                         ///  for a particular PART_ID and GATE_ID
     std::map<PART_ID, TERMINAL_TO_PINNUM_MAP> m_pinNumsMap; ///< Map of pin numbers in CADSTAR parts
     std::map<wxString, LIB_PART*> m_powerSymLibMap; ///< Map of KiCad Power Symbol Library items
-    std::map<SYMBOL_ID, SCH_COMPONENT*>
+    std::map<SYMBOL_ID, SCH_SYMBOL*>
             m_powerSymMap; ///< Map between Cadstar and KiCad Power Symbols
     std::map<SYMBOL_ID, SCH_GLOBALLABEL*>
             m_globalLabelsMap; ///< Map between Cadstar and KiCad Global Labels
@@ -143,7 +143,7 @@ private:
             wxPoint aSymbolOrigin, LIB_FIELD* aKiCadField );
 
     //Helper Functions for loading symbols in schematic
-    SCH_COMPONENT* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, const LIB_PART& aKiCadPart,
+    SCH_SYMBOL* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, const LIB_PART& aKiCadPart,
             double& aComponentOrientationDeciDeg );
 
     void loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,

@@ -611,9 +611,9 @@ int SCH_SHEET::SymbolCount() const
 
     if( m_screen )
     {
-        for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_COMPONENT* symbol = (SCH_COMPONENT*) aItem;
+            SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem;
 
             if( symbol->GetField( VALUE_FIELD )->GetText().GetChar( 0 ) != '#' )
                 n++;

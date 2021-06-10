@@ -193,9 +193,9 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
         for( SCH_ITEM* item : screen->Items().OfType( SCH_LOCATE_ANY_T ) )
         {
-            if( item->Type() == SCH_COMPONENT_T )
+            if( item->Type() == SCH_SYMBOL_T )
             {
-                SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
                 for( SCH_FIELD& field : symbol->GetFields() )
                 {
@@ -205,7 +205,8 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                         pos = symbol->GetTransform().TransformCoordinate( pos );
                         pos += symbol->GetPosition();
 
-                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                        std::shared_ptr<ERC_ITEM> ercItem =
+                                ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( &field );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
@@ -221,7 +222,8 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 {
                     if( unresolved( field.GetShownText() ) )
                     {
-                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                        std::shared_ptr<ERC_ITEM> ercItem =
+                                ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( &field );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, field.GetPosition() );
@@ -233,7 +235,8 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 {
                     if( pin->GetShownText().Matches( wxT( "*${*}*" ) ) )
                     {
-                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                        std::shared_ptr<ERC_ITEM> ercItem =
+                                ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( pin );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
@@ -245,7 +248,8 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
             {
                 if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
-                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                    std::shared_ptr<ERC_ITEM> ercItem =
+                            ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetItems( text );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
@@ -260,7 +264,8 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
             {
                 if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
-                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                    std::shared_ptr<ERC_ITEM> ercItem =
+                            ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetErrorMessage( _( "Unresolved text variable in drawing sheet." ) );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
@@ -335,9 +340,9 @@ int ERC_TESTER::TestMultiunitFootprints()
         }
 
         // Reference footprint
-        SCH_COMPONENT* unit = nullptr;
-        wxString       unitName;
-        wxString       unitFP;
+        SCH_SYMBOL* unit = nullptr;
+        wxString    unitName;
+        wxString    unitFP;
 
         for( unsigned i = 0; i < refList.GetCount(); ++i )
         {
@@ -355,7 +360,7 @@ int ERC_TESTER::TestMultiunitFootprints()
         for( unsigned i = 0; i < refList.GetCount(); ++i )
         {
             SCH_REFERENCE& secondRef = refList.GetItem( i );
-            SCH_COMPONENT* secondUnit = secondRef.GetSymbol();
+            SCH_SYMBOL*    secondUnit = secondRef.GetSymbol();
             wxString       secondName = secondUnit->GetRef( &secondRef.GetSheetPath(), true );
             const wxString secondFp = secondRef.GetFootprint();
             wxString       msg;
@@ -389,9 +394,9 @@ int ERC_TESTER::TestNoConnectPins()
     {
         std::map<wxPoint, std::vector<SCH_PIN*>> pinMap;
 
-        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
             {
@@ -679,9 +684,9 @@ int ERC_TESTER::TestLibSymbolIssues()
     {
         std::vector<SCH_MARKER*> markers;
 
-        for( SCH_ITEM* item : screen->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
+            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
             wxCHECK2( symbol, continue );
 

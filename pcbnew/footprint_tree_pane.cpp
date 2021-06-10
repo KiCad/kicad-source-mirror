@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     m_frame->GetLibTreeAdapter()->FinishTreeInitialization();
 
     // Event handlers
-    Bind( COMPONENT_SELECTED, &FOOTPRINT_TREE_PANE::onComponentSelected, this );
+    Bind( SYMBOL_SELECTED, &FOOTPRINT_TREE_PANE::onComponentSelected, this );
     m_tree->Bind( wxEVT_UPDATE_UI, &FOOTPRINT_TREE_PANE::onUpdateUI, this );
 }
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,7 +280,7 @@ static struct EDA_ITEM_DESC
             .Map( SCH_GLOBAL_LABEL_T,   _HKI( "Global Label" ) )
             .Map( SCH_HIER_LABEL_T,     _HKI( "Hierarchical Label" ) )
             .Map( SCH_FIELD_T,          _HKI( "Schematic Field" ) )
-            .Map( SCH_COMPONENT_T,      _HKI( "Component" ) )
+            .Map( SCH_SYMBOL_T,         _HKI( "Schematic Symbol" ) )
             .Map( SCH_SHEET_PIN_T,      _HKI( "Sheet Pin" ) )
             .Map( SCH_SHEET_T,          _HKI( "Sheet" ) )
 

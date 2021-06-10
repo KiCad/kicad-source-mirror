@@ -316,11 +316,11 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             switch( status )
             {
             case UNDO_REDO::CHANGED:
-                if( item->Type() == SCH_COMPONENT_T )
+                if( item->Type() == SCH_SYMBOL_T )
                 {
                     // Update the schematic library cache in case that was the change.
-                    SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
-                    SCH_COMPONENT* altSymbol = dynamic_cast<SCH_COMPONENT*>( alt_item );
+                    SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
+                    SCH_SYMBOL* altSymbol = dynamic_cast<SCH_SYMBOL*>( alt_item );
 
                     wxCHECK( symbol && altSymbol, /* void */ );
 
@@ -329,8 +329,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
                 item->SwapData( alt_item );
 
-                if( item->Type() == SCH_COMPONENT_T )
-                    static_cast<SCH_COMPONENT*>( item )->UpdatePins();
+                if( item->Type() == SCH_SYMBOL_T )
+                    static_cast<SCH_SYMBOL*>( item )->UpdatePins();
 
                 break;
 

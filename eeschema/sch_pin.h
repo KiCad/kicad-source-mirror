@@ -30,14 +30,14 @@
 #include <mutex>
 #include <map>
 
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 
 class SCH_PIN : public SCH_ITEM
 {
 public:
-    SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentSymbol );
+    SCH_PIN( LIB_PIN* aLibPin, SCH_SYMBOL* aParentSymbol );
 
-    SCH_PIN( SCH_COMPONENT* aParentSymbol, const wxString& aNumber, const wxString& aAlt );
+    SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxString& aAlt );
 
     SCH_PIN( const SCH_PIN& aPin );
 
@@ -53,7 +53,7 @@ public:
         return wxT( "SCH_PIN" );
     }
 
-    SCH_COMPONENT* GetParentSymbol() const;
+    SCH_SYMBOL* GetParentSymbol() const;
 
     LIB_PIN* GetLibPin() const { return m_libPin; }
 

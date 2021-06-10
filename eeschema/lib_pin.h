@@ -27,8 +27,6 @@
 #ifndef CLASS_PIN_H
 #define CLASS_PIN_H
 
-class SCH_COMPONENT;
-
 #include <eda_rect.h>
 #include <lib_item.h>
 #include <pin_type.h>

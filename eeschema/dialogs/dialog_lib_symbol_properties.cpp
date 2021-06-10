@@ -222,7 +222,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
 
     // Alias symbol reference can be empty because it inherits from the parent symbol.
     if( m_libEntry->IsRoot() &&
-        !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE_FIELD ).GetText() ) )
+        !SCH_SYMBOL::IsReferenceStringValid( m_fields->at( REFERENCE_FIELD ).GetText() ) )
     {
         if( m_NoteBook->GetSelection() != 0 )
             m_NoteBook->SetSelection( 0 );
@@ -564,9 +564,9 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 {
 #ifdef KICAD_SPICE
     int diff = m_fields->size();
-    auto cmp = SCH_COMPONENT( *m_libEntry, m_libEntry->GetLibId(), nullptr );
+    auto symbol = SCH_SYMBOL( *m_libEntry, m_libEntry->GetLibId(), nullptr );
 
-    DIALOG_SPICE_MODEL dialog( this, cmp, m_fields );
+    DIALOG_SPICE_MODEL dialog( this, symbol, m_fields );
 
     if( dialog.ShowModal() != wxID_OK )
         return;

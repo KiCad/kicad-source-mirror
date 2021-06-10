@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,7 +94,7 @@ ASCH_STORAGE_FILE::ASCH_STORAGE_FILE( ALTIUM_PARSER& aReader )
 }
 
 
-ASCH_COMPONENT::ASCH_COMPONENT( const std::map<wxString, wxString>& aProperties )
+ASCH_SYMBOL::ASCH_SYMBOL( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::COMPONENT );
 

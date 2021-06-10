@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@
 
 #include <default_values.h>
 
-// Save previous component library viewer state.
+// Save previous symbol library viewer state.
 wxString SYMBOL_VIEWER_FRAME::m_libraryName;
 wxString SYMBOL_VIEWER_FRAME::m_entryName;
 
@@ -77,8 +77,8 @@ BEGIN_EVENT_TABLE( SYMBOL_VIEWER_FRAME, EDA_DRAW_FRAME )
 
     // listbox events
     EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, SYMBOL_VIEWER_FRAME::ClickOnLibList )
-    EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, SYMBOL_VIEWER_FRAME::ClickOnCmpList )
-    EVT_LISTBOX_DCLICK( ID_LIBVIEW_CMP_LIST, SYMBOL_VIEWER_FRAME::DClickOnCmpList )
+    EVT_LISTBOX( ID_LIBVIEW_SYM_LIST, SYMBOL_VIEWER_FRAME::ClickOnCmpList )
+    EVT_LISTBOX_DCLICK( ID_LIBVIEW_SYM_LIST, SYMBOL_VIEWER_FRAME::DClickOnCmpList )
 
     // Menu (and/or hotkey) events
     EVT_MENU( wxID_CLOSE, SYMBOL_VIEWER_FRAME::CloseLibraryViewer )
@@ -155,7 +155,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     m_libList = new wxListBox( this, ID_LIBVIEW_LIB_LIST, wxDefaultPosition, wxDefaultSize,
                                0, NULL, wxLB_HSCROLL | wxNO_BORDER );
 
-    m_symbolList = new wxListBox( this, ID_LIBVIEW_CMP_LIST, wxDefaultPosition, wxDefaultSize,
+    m_symbolList = new wxListBox( this, ID_LIBVIEW_SYM_LIST, wxDefaultPosition, wxDefaultSize,
                                   0, NULL, wxLB_HSCROLL | wxNO_BORDER );
 
     if( aLibraryName.empty() )
@@ -490,7 +490,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
         }
     }
 
-    // Remove libs which have no power components, if this filter is activated
+    // Remove libs which have no power symbols, if this filter is activated
     if( m_listPowerCmpOnly )
     {
         for( unsigned ii = 0; ii < libs.size(); )
@@ -584,7 +584,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
 
     m_symbolList->SetSelection( index, true );
 
-    wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
+    wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_SYM_LIST );
     ProcessEvent( evt );
 
     return changed;
@@ -813,13 +813,14 @@ void SYMBOL_VIEWER_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 {
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );
 
-    // One CHOOSE_COMPONENT dialog at a time.  User probably can't handle more anyway.
+    // One CHOOSE_SYMBOL dialog at a time.  User probably can't handle more anyway.
     if( !dialogLock.try_lock() )
         return;
 
     // Container doing search-as-you-type.
     SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
-    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> adapter = SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> adapter =
+            SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
 
     const auto libNicknames = libs->GetLogicalLibs();
     static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapter.get() )->AddLibraries( libNicknames, this );
@@ -855,7 +856,7 @@ void SYMBOL_VIEWER_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 
 void SYMBOL_VIEWER_FRAME::onSelectNextSymbol( wxCommandEvent& aEvent )
 {
-    wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
+    wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_SYM_LIST );
     int            ii = m_symbolList->GetSelection();
 
     // Select the next symbol or stop at the end of the list.
@@ -869,7 +870,7 @@ void SYMBOL_VIEWER_FRAME::onSelectNextSymbol( wxCommandEvent& aEvent )
 
 void SYMBOL_VIEWER_FRAME::onSelectPreviousSymbol( wxCommandEvent& aEvent )
 {
-    wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
+    wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_SYM_LIST );
     int            ii = m_symbolList->GetSelection();
 
     // Select the previous symbol or stop at the beginning of list.

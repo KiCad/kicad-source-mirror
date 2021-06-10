@@ -41,11 +41,11 @@
 #include <map>
 
 
-typedef std::pair<SCH_COMPONENT*, wxString> COMPONENT_NAME_PAIR;
+typedef std::pair<SCH_SYMBOL*, wxString> SYMBOL_NAME_PAIR;
 
 
-// Helper sort function, used in get_components, to sort a component list by lib_id
-static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
+// Helper sort function, used in getSymbols, to sort a symbol list by lib_id
+static bool sort_by_libid( const SCH_SYMBOL* ref, SCH_SYMBOL* cmp )
 {
     return ref->GetLibId() < cmp->GetLibId();
 }
@@ -54,39 +54,39 @@ static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
 /**
  * Fill a vector with all of the project's symbols, to ease iterating over them.
  *
- * The list is sorted by #LIB_ID, therefore components using the same library
+ * The list is sorted by #LIB_ID, therefore symbols using the same library
  * symbol are grouped, allowing later faster calculations (one library search by group
  * of symbols)
  *
- * @param aComponents - a vector that will take the symbols
+ * @param aSymbols is a vector that will take the symbols.
  */
-static void get_components( SCHEMATIC* aSchematic, std::vector<SCH_COMPONENT*>& aComponents )
+static void getSymbols( SCHEMATIC* aSchematic, std::vector<SCH_SYMBOL*>& aSymbols )
 {
     SCH_SCREENS screens( aSchematic->Root() );
 
     // Get the full list
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
-        for( auto aItem : screen->Items().OfType( SCH_COMPONENT_T ) )
-            aComponents.push_back( static_cast<SCH_COMPONENT*>( aItem ) );
+        for( auto aItem : screen->Items().OfType( SCH_SYMBOL_T ) )
+            aSymbols.push_back( static_cast<SCH_SYMBOL*>( aItem ) );
     }
 
-    if( aComponents.empty() )
+    if( aSymbols.empty() )
         return;
 
-    // sort aComponents by lib part. Components will be grouped by same lib part.
-    std::sort( aComponents.begin(), aComponents.end(), sort_by_libid );
+    // sort aSymbols by lib part. symbols will be grouped by same lib part.
+    std::sort( aSymbols.begin(), aSymbols.end(), sort_by_libid );
 }
 
 
 /**
- * Search the libraries for the first component with a given name.
+ * Search the libraries for the first symbol with a given name.
  *
  * @param aName - name to search for
  * @param aLibs - the loaded PART_LIBS
  * @param aCached - whether we are looking for the cached part
  */
-static LIB_PART* find_component( const wxString& aName, PART_LIBS* aLibs, bool aCached )
+static LIB_PART* findSymbol( const wxString& aName, PART_LIBS* aLibs, bool aCached )
 {
     LIB_PART *part = NULL;
     wxString new_name = LIB_ID::FixIllegalChars( aName );
@@ -137,7 +137,8 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 {
     typedef std::map<wxString, RESCUE_CASE_CANDIDATE> candidate_map_t;
     candidate_map_t candidate_map;
-    // Remember the list of components is sorted by part name.
+
+    // Remember the list of symbols is sorted by part name.
     // So a search in libraries is made only once by group
     LIB_PART* case_sensitive_match = nullptr;
     std::vector<LIB_PART*> case_insensitive_matches;
@@ -146,9 +147,9 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     wxString search_name;
     wxString last_part_name;
 
-    for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
+    for( SCH_SYMBOL* eachSymbol : *( aRescuer.GetSymbols() ) )
     {
-        part_name = each_component->GetLibId().GetLibItemName();
+        part_name = eachSymbol->GetLibId().GetLibItemName();
         search_name = LIB_ID::FixIllegalChars( part_name );
 
         if( last_part_name != part_name )
@@ -173,8 +174,8 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 
         RESCUE_CASE_CANDIDATE candidate( part_name, case_insensitive_matches[0]->GetName(),
                                          case_insensitive_matches[0],
-                                         each_component->GetUnit(),
-                                         each_component->GetConvert() );
+                                         eachSymbol->GetUnit(),
+                                         eachSymbol->GetConvert() );
 
         candidate_map[part_name] = candidate;
     }
@@ -197,17 +198,17 @@ wxString RESCUE_CASE_CANDIDATE::GetActionDescription() const
 
 bool RESCUE_CASE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 {
-    for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
+    for( SCH_SYMBOL* eachSymbol : *aRescuer->GetSymbols() )
     {
-        if( each_component->GetLibId().GetLibItemName() != UTF8( m_requested_name ) )
+        if( eachSymbol->GetLibId().GetLibItemName() != UTF8( m_requested_name ) )
             continue;
 
         LIB_ID libId;
 
         libId.SetLibItemName( m_new_name, false );
-        each_component->SetLibId( libId );
-        each_component->ClearFlags();
-        aRescuer->LogRescue( each_component, m_requested_name, m_new_name );
+        eachSymbol->SetLibId( libId );
+        eachSymbol->ClearFlags();
+        aRescuer->LogRescue( eachSymbol, m_requested_name, m_new_name );
     }
 
     return true;
@@ -243,7 +244,7 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     typedef std::map<wxString, RESCUE_CACHE_CANDIDATE> candidate_map_t;
     candidate_map_t candidate_map;
 
-    // Remember the list of components is sorted by part name.
+    // Remember the list of symbols is sorted by part name.
     // So a search in libraries is made only once by group
     LIB_PART* cache_match = nullptr;
     LIB_PART* lib_match = nullptr;
@@ -251,9 +252,9 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     wxString search_name;
     wxString old_part_name;
 
-    for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
+    for( SCH_SYMBOL* eachSymbol : *( aRescuer.GetSymbols() ) )
     {
-        part_name = each_component->GetLibId().GetLibItemName();
+        part_name = eachSymbol->GetLibId().GetLibItemName();
         search_name = LIB_ID::FixIllegalChars( part_name );
 
         if( old_part_name != part_name )
@@ -261,8 +262,8 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             // A new part name is found (a new group starts here).
             // Search the symbol names candidates only once for this group:
             old_part_name = part_name;
-            cache_match = find_component( search_name, aRescuer.GetPrj()->SchLibs(), true );
-            lib_match = find_component( search_name, aRescuer.GetPrj()->SchLibs(), false );
+            cache_match = findSymbol( search_name, aRescuer.GetPrj()->SchLibs(), true );
+            lib_match = findSymbol( search_name, aRescuer.GetPrj()->SchLibs(), false );
 
             if( !cache_match && !lib_match )
                 continue;
@@ -278,8 +279,8 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 
             // Check if the symbol has already been rescued.
             RESCUE_CACHE_CANDIDATE candidate( part_name, search_name, cache_match, lib_match,
-                                              each_component->GetUnit(),
-                                              each_component->GetConvert() );
+                                              eachSymbol->GetUnit(),
+                                              eachSymbol->GetConvert() );
 
             candidate_map[part_name] = candidate;
         }
@@ -321,17 +322,17 @@ bool RESCUE_CACHE_CANDIDATE::PerformAction( RESCUER* aRescuer )
     new_part->SetName( m_new_name );
     aRescuer->AddPart( new_part.get() );
 
-    for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
+    for( SCH_SYMBOL* eachSymbol : *aRescuer->GetSymbols() )
     {
-        if( each_component->GetLibId().GetLibItemName() != UTF8( m_requested_name ) )
+        if( eachSymbol->GetLibId().GetLibItemName() != UTF8( m_requested_name ) )
             continue;
 
         LIB_ID libId;
 
         libId.SetLibItemName( m_new_name, false );
-        each_component->SetLibId( libId );
-        each_component->ClearFlags();
-        aRescuer->LogRescue( each_component, m_requested_name, m_new_name );
+        eachSymbol->SetLibId( libId );
+        eachSymbol->ClearFlags();
+        aRescuer->LogRescue( eachSymbol, m_requested_name, m_new_name );
     }
 
     return true;
@@ -371,15 +372,15 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
 
     candidate_map_t candidate_map;
 
-    // Remember the list of components is sorted by LIB_ID.
+    // Remember the list of symbols is sorted by LIB_ID.
     // So a search in libraries is made only once by group
     LIB_PART* cache_match = nullptr;
     LIB_PART* lib_match = nullptr;
     LIB_ID old_part_id;
 
-    for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
+    for( SCH_SYMBOL* eachSymbol : *( aRescuer.GetSymbols() ) )
     {
-        const LIB_ID& part_id = each_component->GetLibId();
+        const LIB_ID& part_id = eachSymbol->GetLibId();
 
         if( old_part_id != part_id )
         {
@@ -389,8 +390,8 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
 
             // Get the library symbol from the cache library.  It will be a flattened
             // symbol by default (no inheritance).
-            cache_match = find_component( part_id.Format().wx_str(), aRescuer.GetPrj()->SchLibs(),
-                                          true );
+            cache_match = findSymbol( part_id.Format().wx_str(), aRescuer.GetPrj()->SchLibs(),
+                                      true );
 
             // Get the library symbol from the symbol library table.
             lib_match = SchGetLibPart( part_id, aRescuer.GetPrj()->SchSymbolLibTable() );
@@ -439,8 +440,8 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             LIB_ID new_id( libNickname, new_name + "-" + part_id.GetLibNickname().wx_str() );
 
             RESCUE_SYMBOL_LIB_TABLE_CANDIDATE candidate( part_id, new_id, cache_match, lib_match,
-                                                         each_component->GetUnit(),
-                                                         each_component->GetConvert() );
+                                                         eachSymbol->GetUnit(),
+                                                         eachSymbol->GetConvert() );
 
             candidate_map[part_id] = candidate;
         }
@@ -483,14 +484,14 @@ bool RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::PerformAction( RESCUER* aRescuer )
     new_part->SetName( m_new_id.GetLibItemName() );
     aRescuer->AddPart( new_part.get() );
 
-    for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
+    for( SCH_SYMBOL* eachSymbol : *aRescuer->GetSymbols() )
     {
-        if( each_component->GetLibId() != m_requested_id )
+        if( eachSymbol->GetLibId() != m_requested_id )
             continue;
 
-        each_component->SetLibId( m_new_id );
-        each_component->ClearFlags();
-        aRescuer->LogRescue( each_component, m_requested_id.Format(), m_new_id.Format() );
+        eachSymbol->SetLibId( m_new_id );
+        eachSymbol->ClearFlags();
+        aRescuer->LogRescue( eachSymbol, m_requested_id.Format(), m_new_id.Format() );
     }
 
     return true;
@@ -505,7 +506,7 @@ RESCUER::RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic, SCH_SHEET_PATH* aCur
     wxASSERT( m_schematic );
 
     if( m_schematic )
-        get_components( m_schematic, m_components );
+        getSymbols( m_schematic, m_symbols );
 
     m_prj = &aProject;
     m_currentSheet = aCurrentSheet;
@@ -513,11 +514,11 @@ RESCUER::RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic, SCH_SHEET_PATH* aCur
 }
 
 
-void RESCUER::LogRescue( SCH_COMPONENT *aComponent, const wxString &aOldName,
+void RESCUER::LogRescue( SCH_SYMBOL* aSymbol, const wxString &aOldName,
                          const wxString &aNewName )
 {
     RESCUE_LOG logitem;
-    logitem.component = aComponent;
+    logitem.symbol = aSymbol;
     logitem.old_name = aOldName;
     logitem.new_name = aNewName;
     m_rescue_log.push_back( logitem );
@@ -543,8 +544,8 @@ void RESCUER::UndoRescues()
         LIB_ID libId;
 
         libId.SetLibItemName( each_logitem.old_name, false );
-        each_logitem.component->SetLibId( libId );
-        each_logitem.component->ClearFlags();
+        each_logitem.symbol->SetLibId( libId );
+        each_logitem.symbol->ClearFlags();
     }
 }
 

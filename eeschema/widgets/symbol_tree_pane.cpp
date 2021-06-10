@@ -49,7 +49,7 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_M
     m_libMgr->GetAdapter()->FinishTreeInitialization();
 
     // Event handlers
-    Bind( COMPONENT_SELECTED, &SYMBOL_TREE_PANE::onComponentSelected, this );
+    Bind( SYMBOL_SELECTED, &SYMBOL_TREE_PANE::onComponentSelected, this );
     m_tree->Bind( wxEVT_UPDATE_UI, &SYMBOL_TREE_PANE::onUpdateUI, this );
 }
 

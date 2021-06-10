@@ -242,33 +242,33 @@ int GRIDCELL_AUTOWRAP_STRINGRENDERER::GetHeight( wxDC& aDC, wxGrid* aGrid, int a
 /**
  * A helper to handle symbols to edit.
  */
-class CMP_CANDIDATE
+class SYM_CANDIDATE
 {
 public:
-    CMP_CANDIDATE( SCH_COMPONENT* aComponent )
+    SYM_CANDIDATE( SCH_SYMBOL* aSymbol )
     {
-        m_Component = aComponent;
-        m_InitialLibId = m_Component->GetLibId().Format();
+        m_Symbol = aSymbol;
+        m_InitialLibId = m_Symbol->GetLibId().Format();
         m_Row = -1;
         m_IsOrphan = false;
         m_Screen = nullptr;
     }
 
-    // Return a string like mylib:symbol_name from the #LIB_ID of the component.
+    // Return a string like mylib:symbol_name from the #LIB_ID of the symbol.
     wxString GetStringLibId()
     {
-        return m_Component->GetLibId().GetUniStringLibId();
+        return m_Symbol->GetLibId().GetUniStringLibId();
     }
 
-    // Return a string containing the reference of the component.
+    // Return a string containing the reference of the symbol.
     wxString GetSchematicReference()
     {
         return m_Reference;
     }
 
-    SCH_COMPONENT* m_Component; // the schematic component
+    SCH_SYMBOL* m_Symbol;       // the schematic symbol
     int         m_Row;          // the row index in m_grid
-    SCH_SCREEN* m_Screen;       // the screen where m_Component lives
+    SCH_SCREEN* m_Screen;       // the screen where m_Symbol lives
     wxString    m_Reference;    // the schematic reference, only to display it in list
     wxString    m_InitialLibId; // the Lib Id of the component before any change
     bool        m_IsOrphan;     // true if a component has no corresponding symbol found in libs
@@ -344,7 +344,7 @@ private:
     bool             m_isModified;          // set to true if the schematic is modified
     std::vector<int> m_OrphansRowIndexes;   // list of rows containing orphan lib_id
 
-    std::vector<CMP_CANDIDATE> m_components;
+    std::vector<SYM_CANDIDATE> m_symbols;
 
     GRIDCELL_AUTOWRAP_STRINGRENDERER* m_autoWrapRenderer;
 };
@@ -373,12 +373,12 @@ DIALOG_EDIT_COMPONENTS_LIBID::~DIALOG_EDIT_COMPONENTS_LIBID()
 
 
 // A sort compare function to sort components list by LIB_ID and then reference
-static bool sort_by_libid( const CMP_CANDIDATE& cmp1, const CMP_CANDIDATE& cmp2 )
+static bool sort_by_libid( const SYM_CANDIDATE& cmp1, const SYM_CANDIDATE& cmp2 )
 {
-    if( cmp1.m_Component->GetLibId() == cmp2.m_Component->GetLibId() )
+    if( cmp1.m_Symbol->GetLibId() == cmp2.m_Symbol->GetLibId() )
         return cmp1.m_Reference.Cmp( cmp2.m_Reference ) < 0;
 
-    return cmp1.m_Component->GetLibId() < cmp2.m_Component->GetLibId();
+    return cmp1.m_Symbol->GetLibId() < cmp2.m_Symbol->GetLibId();
 }
 
 
@@ -404,29 +404,29 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
     for( unsigned ii = 0; ii < references.GetCount(); ii++ )
     {
         SCH_REFERENCE& item = references[ii];
-        CMP_CANDIDATE candidate( item.GetSymbol() );
+        SYM_CANDIDATE candidate( item.GetSymbol() );
         candidate.m_Screen = item.GetSheetPath().LastScreen();
         SCH_SHEET_PATH sheetpath = item.GetSheetPath();
-        candidate.m_Reference = candidate.m_Component->GetRef( &sheetpath );
-        int unitcount = candidate.m_Component->GetUnitCount();
+        candidate.m_Reference = candidate.m_Symbol->GetRef( &sheetpath );
+        int unitcount = candidate.m_Symbol->GetUnitCount();
         candidate.m_IsOrphan = ( unitcount == 0 );
-        m_components.push_back( candidate );
+        m_symbols.push_back( candidate );
     }
 
-    if( m_components.size() == 0 )
+    if( m_symbols.size() == 0 )
         return;
 
     // now sort by lib id to create groups of items having the same lib id
-    std::sort( m_components.begin(), m_components.end(), sort_by_libid );
+    std::sort( m_symbols.begin(), m_symbols.end(), sort_by_libid );
 
     // Now, fill m_grid
-    wxString last_str_libid = m_components.front().GetStringLibId();
+    wxString last_str_libid = m_symbols.front().GetStringLibId();
     int row = 0;
     wxString refs;
     wxString last_ref;
-    bool mark_cell = m_components.front().m_IsOrphan;
+    bool mark_cell = m_symbols.front().m_IsOrphan;
 
-    for( auto& cmp : m_components )
+    for( auto& cmp : m_symbols )
     {
         wxString str_libid = cmp.GetStringLibId();
 
@@ -709,7 +709,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
         LIB_ID id;
         id.Parse( new_libid, true );
 
-        for( CMP_CANDIDATE& cmp : m_components )
+        for( SYM_CANDIDATE& cmp : m_symbols )
         {
             if( cmp.m_Row != row )
                 continue;
@@ -735,30 +735,30 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
             if( symbol == nullptr )
                 continue;
 
-            GetParent()->SaveCopyInUndoList( cmp.m_Screen, cmp.m_Component, UNDO_REDO::CHANGED,
+            GetParent()->SaveCopyInUndoList( cmp.m_Screen, cmp.m_Symbol, UNDO_REDO::CHANGED,
                                              m_isModified );
             m_isModified = true;
 
-            cmp.m_Screen->Remove( cmp.m_Component );
-            SCH_FIELD* value = cmp.m_Component->GetField( VALUE_FIELD );
+            cmp.m_Screen->Remove( cmp.m_Symbol );
+            SCH_FIELD* value = cmp.m_Symbol->GetField( VALUE_FIELD );
 
             // If value is a proxy for the itemName then make sure it gets updated
-            if( cmp.m_Component->GetLibId().GetLibItemName().wx_str() == value->GetText() )
-                cmp.m_Component->SetValue( id.GetLibItemName().wx_str() );
+            if( cmp.m_Symbol->GetLibId().GetLibItemName().wx_str() == value->GetText() )
+                cmp.m_Symbol->SetValue( id.GetLibItemName().wx_str() );
 
-            cmp.m_Component->SetLibId( id );
-            cmp.m_Component->SetLibSymbol( symbol->Flatten().release() );
-            cmp.m_Screen->Append( cmp.m_Component );
+            cmp.m_Symbol->SetLibId( id );
+            cmp.m_Symbol->SetLibSymbol( symbol->Flatten().release() );
+            cmp.m_Screen->Append( cmp.m_Symbol );
             cmp.m_Screen->SetContentModified();
 
             if ( m_checkBoxUpdateFields->IsChecked() )
             {
-                cmp.m_Component->UpdateFields( nullptr,
-                                               false, /* update style */
-                                               false, /* update ref */
-                                               false, /* update other fields */
-                                               false, /* reset ref */
-                                               true /* reset other fields */ );
+                cmp.m_Symbol->UpdateFields( nullptr,
+                                            false, /* update style */
+                                            false, /* update ref */
+                                            false, /* update other fields */
+                                            false, /* reset ref */
+                                            true /* reset other fields */ );
             }
         }
     }

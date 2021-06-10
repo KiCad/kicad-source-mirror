@@ -47,7 +47,7 @@
 #include <map>
 
 class SCH_EDIT_FRAME;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 
 class SPICE_SIMULATOR;
 class SPICE_SIMULATOR_SETTINGS;
@@ -97,9 +97,9 @@ public:
     void AddCurrentPlot( const wxString& aDeviceName, const wxString& aParam );
 
     /**
-     * Add a tuner for a component.
+     * Add a tuner for a symbol.
      */
-    void AddTuner( SCH_COMPONENT* aComponent );
+    void AddTuner( SCH_SYMBOL* aSymbol );
 
     /**
      * Remove an existing tuner.

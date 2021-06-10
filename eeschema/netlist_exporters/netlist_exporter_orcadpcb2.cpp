@@ -70,9 +70,9 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
         SCH_SHEET_PATH sheet = sheetList[i];
 
         // Process component attributes
-        for( auto item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        for( auto item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_COMPONENT* symbol = findNextSymbol( item, &sheet );
+            SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
 
             if( !symbol )
                 continue;

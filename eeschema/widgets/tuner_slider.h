@@ -34,7 +34,7 @@
 #include <wx/timer.h>
 
 class SIM_PLOT_FRAME;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 
 /**
  * Custom widget to handle quick component values modification and simulation on the fly.
@@ -42,7 +42,7 @@ class SCH_COMPONENT;
 class TUNER_SLIDER : public TUNER_SLIDER_BASE
 {
 public:
-    TUNER_SLIDER( SIM_PLOT_FRAME *aFrame, wxWindow* aParent, SCH_COMPONENT* aComponent );
+    TUNER_SLIDER( SIM_PLOT_FRAME *aFrame, wxWindow* aParent, SCH_SYMBOL* aComponent );
 
     wxString GetComponentName() const
     {
@@ -93,7 +93,7 @@ private:
     ///< Timer that restarts the simulation after the slider value has changed
     wxTimer m_simTimer;
 
-    SCH_COMPONENT* m_component;
+    SCH_SYMBOL* m_symbol;
 
     SPICE_VALUE m_min, m_max, m_value;
     bool m_changed;

@@ -118,7 +118,8 @@ protected:
      * if aKeepUnconnectedPins = false, unconnected pins will be removed from list
      * but usually we need all pins in netlists.
      */
-    void CreatePinList( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aSheetPath, bool aKeepUnconnectedPins );
+    void CreatePinList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPath,
+                        bool aKeepUnconnectedPins );
 
     /**
      * Check if the given symbol should be processed for netlisting.
@@ -129,7 +130,7 @@ protected:
      * @param aSheetPath is the sheet to check the symbol for
      * @return the symbol if it should be processed, or nullptr
      */
-    SCH_COMPONENT* findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
+    SCH_SYMBOL* findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Erase duplicate pins from m_sortedSymbolPinList (i.e. set pointer in this list to NULL).
@@ -152,7 +153,7 @@ protected:
      * if aKeepUnconnectedPins = false, unconnected pins will be removed from list
      * but usually we need all pins in netlists.
      */
-    void findAllUnitsOfSymbol( SCH_COMPONENT* aSymbol, LIB_PART* aPart,
+    void findAllUnitsOfSymbol( SCH_SYMBOL* aSymbol, LIB_PART* aPart,
                                SCH_SHEET_PATH* aSheetPath, bool aKeepUnconnectedPins );
 
 public:

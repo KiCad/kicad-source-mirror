@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,7 +106,7 @@ enum class ASCH_RECORD_ORIENTATION
 };
 
 
-struct ASCH_COMPONENT
+struct ASCH_SYMBOL
 {
     int      currentpartid;
     wxString libreference;
@@ -120,7 +121,7 @@ struct ASCH_COMPONENT
     int displaymodecount;
     int displaymode;
 
-    explicit ASCH_COMPONENT( const std::map<wxString, wxString>& aProperties );
+    explicit ASCH_SYMBOL( const std::map<wxString, wxString>& aProperties );
 };
 
 

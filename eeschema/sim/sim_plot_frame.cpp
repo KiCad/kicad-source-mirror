@@ -545,7 +545,7 @@ void SIM_PLOT_FRAME::AddCurrentPlot( const wxString& aDeviceName, const wxString
 }
 
 
-void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
+void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
 {
     SIM_PANEL_BASE* plotPanel = currentPlotWindow();
 
@@ -553,13 +553,13 @@ void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
         return;
 
     // For now limit the tuner tool to RLC components
-    char primitiveType = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, aComponent, 0 )[0];
+    char primitiveType = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, aSymbol, 0 )[0];
 
     if( primitiveType != SP_RESISTOR && primitiveType != SP_CAPACITOR
       && primitiveType != SP_INDUCTOR )
         return;
 
-    const wxString componentName = aComponent->GetField( REFERENCE_FIELD )->GetText();
+    const wxString componentName = aSymbol->GetField( REFERENCE_FIELD )->GetText();
 
     // Do not add multiple instances for the same component
     auto tunerIt = std::find_if( m_tuners.begin(), m_tuners.end(), [&]( const TUNER_SLIDER* t )
@@ -573,7 +573,7 @@ void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
 
     try
     {
-        TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_tunePanel, aComponent );
+        TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_tunePanel, aSymbol );
         m_tuneSizer->Add( tuner );
         m_tuners.push_back( tuner );
         m_tunePanel->Layout();

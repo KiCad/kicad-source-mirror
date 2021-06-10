@@ -161,7 +161,7 @@ private:
 
     void doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aForce );
 
-    void updatePastedSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* aPasteScreen,
+    void updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aPasteScreen,
                              const SCH_SHEET_PATH& aPastePath, const KIID_PATH& aClipPath,
                              bool aForceKeepAnnotations );
 

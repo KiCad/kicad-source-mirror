@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -36,12 +37,12 @@ const int projectFileSchemaVersion = 1;
 
 PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
         JSON_SETTINGS( aFullPath, SETTINGS_LOC::PROJECT, projectFileSchemaVersion ),
-        m_sheets(),
-        m_boards(),
-        m_project( nullptr ),
         m_ErcSettings( nullptr ),
         m_SchematicSettings( nullptr ),
-        m_BoardSettings()
+        m_BoardSettings(),
+        m_sheets(),
+        m_boards(),
+        m_project( nullptr )
 {
     // Keep old files around
     m_deleteLegacyAfterMigration = false;

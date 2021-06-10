@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -302,7 +302,7 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             if( m_treePane )
             {
                 m_treePane->GetLibTree()->SelectLibId( fpId );
-                wxCommandEvent event( COMPONENT_SELECTED );
+                wxCommandEvent event( SYMBOL_SELECTED );
                 wxPostEvent( m_treePane, event );
             }
         }

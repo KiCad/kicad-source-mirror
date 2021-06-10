@@ -70,15 +70,15 @@ wxString NETLIST_EXPORTER_BASE::MakeCommandLine( const wxString& aFormatString,
 }
 
 
-SCH_COMPONENT* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath )
+SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref;
 
-    if( aItem->Type() != SCH_COMPONENT_T )
+    if( aItem->Type() != SCH_SYMBOL_T )
         return nullptr;
 
     // found next component
-    SCH_COMPONENT* symbol = (SCH_COMPONENT*) aItem;
+    SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem;
 
     // Power symbols and other symbols which have the reference starting with "#" are not
     // included in netlist (pseudo or virtual symbols)
@@ -118,7 +118,7 @@ static bool sortPinsByNum( PIN_INFO& aPin1, PIN_INFO& aPin2 )
 }
 
 
-void NETLIST_EXPORTER_BASE::CreatePinList( SCH_COMPONENT* aSymbol,
+void NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
                                            SCH_SHEET_PATH* aSheetPath,
                                            bool aKeepUnconnectedPins )
 {
@@ -217,7 +217,7 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins()
 }
 
 
-void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_COMPONENT* aSymbol,
+void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSymbol,
                                                   LIB_PART* aPart, SCH_SHEET_PATH* aSheetPath,
                                                   bool aKeepUnconnectedPins )
 {
@@ -231,9 +231,9 @@ void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_COMPONENT* aSymbol,
     {
         SCH_SHEET_PATH& sheet = sheetList[i];
 
-        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_COMPONENT* comp2 = static_cast<SCH_COMPONENT*>( item );
+            SCH_SYMBOL* comp2 = static_cast<SCH_SYMBOL*>( item );
 
             ref2 = comp2->GetRef( &sheet );
 

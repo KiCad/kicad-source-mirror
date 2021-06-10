@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,10 +32,10 @@
 #include <set>
 
 /**
- * Adapter class in the component selector Model-View-Adapter (mediated MVC)
+ * Adapter class in the symbol selector Model-View-Adapter (mediated MVC)
  * architecture. The other pieces are in:
  *
- * - Model: CMP_TREE_NODE and descendants in eeschema/cmp_tree_model.h
+ * - Model: SYM_TREE_NODE and descendants in eeschema/cmp_tree_model.h
  * - View:
  *   - DIALOG_CHOOSE_COMPONENT in eeschema/dialogs/dialog_choose_component.h
  *   - wxDataViewCtrl
@@ -104,12 +104,12 @@ public:
     ~LIB_TREE_MODEL_ADAPTER();
 
     /**
-     * This enum allows a selective filtering of components to list
+     * This enum allows a selective filtering of symbols to list
      */
-    enum CMP_FILTER_TYPE
+    enum SYM_FILTER_TYPE
     {
-        CMP_FILTER_NONE,        ///< no filtering
-        CMP_FILTER_POWER,       ///< list components flagged PWR
+        SYM_FILTER_NONE,        ///< no filtering
+        SYM_FILTER_POWER,       ///< list symbols flagged PWR
     };
 
     /**
@@ -130,16 +130,16 @@ public:
     void SavePinnedItems();
 
     /**
-     * Set the component filter type. Must be set before adding libraries
+     * Set the symbol filter type. Must be set before adding libraries
      *
-     * @param aFilter   if CMP_FILTER_POWER, only power parts are loaded
+     * @param aFilter   if SYM_FILTER_POWER, only power parts are loaded
      */
-    void SetFilter( CMP_FILTER_TYPE aFilter );
+    void SetFilter( SYM_FILTER_TYPE aFilter );
 
     /**
      * Return the active filter.
      */
-    CMP_FILTER_TYPE GetFilter() const { return m_filter; }
+    SYM_FILTER_TYPE GetFilter() const { return m_filter; }
 
     /**
      * Whether or not to show units. May be set at any time; updates at the next
@@ -150,7 +150,7 @@ public:
     void ShowUnits( bool aShow );
 
     /**
-     * Set the component name to be selected if there are no search results.
+     * Set the symbol name to be selected if there are no search results.
      * May be set at any time; updates at the next UpdateSearchString().
      *
      * @param aLibId    symbol #LIB_ID to be selected
@@ -159,12 +159,12 @@ public:
     void SetPreselectNode( LIB_ID const& aLibId, int aUnit );
 
     /**
-     * Add the given list of components by alias. To be called in the setup
+     * Add the given list of symbols by alias. To be called in the setup
      * phase.
      *
-     * @param aNodeName    the parent node the components will appear under
+     * @param aNodeName    the parent node the symbols will appear under
      * @param aDesc        the description field of the parent node
-     * @param aItemList    list of components
+     * @param aItemList    list of symbols
      */
     void DoAddLibrary( wxString const& aNodeName, wxString const& aDesc,
                        std::vector<LIB_TREE_ITEM*> const& aItemList, bool presorted );
@@ -187,7 +187,7 @@ public:
      * Attach to a wxDataViewCtrl and initialize it. This will set up columns
      * and associate the model via the adapter.
      *
-     * @param aDataViewCtrl the view component in the dialog
+     * @param aDataViewCtrl the view symbol in the dialog
      */
     void AttachTo( wxDataViewCtrl* aDataViewCtrl );
 
@@ -233,7 +233,7 @@ public:
     virtual wxString GenerateInfo( LIB_ID const& aLibId, int aUnit ) { return wxEmptyString; };
 
     /**
-     * Return the number of components loaded in the tree.
+     * Return the number of symbols loaded in the tree.
      */
     int GetItemCount() const;
 
@@ -274,12 +274,24 @@ public:
     virtual TOOL_INTERACTIVE* GetContextMenuTool() { return nullptr; }
 
 protected:
+    /**
+     * Convert #SYM_TREE_NODE -> wxDataViewItem.
+     */
     static wxDataViewItem ToItem( LIB_TREE_NODE const* aNode );
+
+    /**
+     * Convert wxDataViewItem -> #SYM_TREE_NODE.
+     */
     static LIB_TREE_NODE* ToNode( wxDataViewItem aItem );
+
+    /**
+     * Convert SYM_TREE_NODE's children to wxDataViewItemArray.
+     */
     static unsigned int IntoArray( LIB_TREE_NODE const& aNode, wxDataViewItemArray& aChildren );
 
     /**
-     * Creates the adapter
+     * Create the adapter.
+     *
      * @param aParent is the parent frame
      * @param aPinnedKey is the key to load the pinned libraries list from the project file
      */
@@ -381,7 +393,7 @@ protected:
 private:
     EDA_BASE_FRAME*         m_parent;
 
-    CMP_FILTER_TYPE         m_filter;
+    SYM_FILTER_TYPE         m_filter;
     bool                    m_show_units;
     LIB_ID                  m_preselect_lib_id;
     int                     m_preselect_unit;

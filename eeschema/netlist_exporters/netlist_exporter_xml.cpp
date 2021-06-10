@@ -69,7 +69,7 @@ XNODE* NETLIST_EXPORTER_XML::makeRoot( unsigned aCtl )
         // add the "design" header
         xroot->AddChild( makeDesignHeader() );
 
-    if( aCtl & GNL_COMPONENTS )
+    if( aCtl & GNL_SYMBOLS )
         xroot->AddChild( makeSymbols( aCtl ) );
 
     if( aCtl & GNL_PARTS )
@@ -86,7 +86,7 @@ XNODE* NETLIST_EXPORTER_XML::makeRoot( unsigned aCtl )
 }
 
 
-/// Holder for multi-unit component fields
+/// Holder for multi-unit symbol fields
 struct COMP_FIELDS
 {
     wxString value;
@@ -97,14 +97,14 @@ struct COMP_FIELDS
 };
 
 
-void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_COMPONENT* aSymbol,
+void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                                             SCH_SHEET_PATH* aSheet )
 {
     COMP_FIELDS fields;
 
     if( aSymbol->GetUnitCount() > 1 )
     {
-        // Sadly, each unit of a component can have its own unique fields. This
+        // Sadly, each unit of a symbol can have its own unique fields. This
         // block finds the unit with the lowest number having a non blank field
         // value and records it.  Therefore user is best off setting fields
         // into only the first unit.  But this scavenger algorithm will find
@@ -118,44 +118,44 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_COMPONENT* aSymbol
 
         for( unsigned i = 0;  i < sheetList.size();  i++ )
         {
-            for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+            for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
             {
-                SCH_COMPONENT*  comp2 = (SCH_COMPONENT*) item;
+                SCH_SYMBOL* symbol2 = (SCH_SYMBOL*) item;
 
-                wxString ref2 = comp2->GetRef( &sheetList[i] );
+                wxString ref2 = symbol2->GetRef( &sheetList[i] );
 
                 if( ref2.CmpNoCase( ref ) != 0 )
                     continue;
 
-                int unit = comp2->GetUnit();
+                int unit = symbol2->GetUnit();
 
                 // The lowest unit number wins.  User should only set fields in any one unit.
                 // remark: IsVoid() returns true for empty strings or the "~" string (empty
                 // field value)
-                if( !comp2->GetValue( &sheetList[i], m_resolveTextVars ).IsEmpty()
+                if( !symbol2->GetValue( &sheetList[i], m_resolveTextVars ).IsEmpty()
                         && ( unit < minUnit || fields.value.IsEmpty() ) )
                 {
-                    fields.value = comp2->GetValue( &sheetList[i], m_resolveTextVars );
+                    fields.value = symbol2->GetValue( &sheetList[i], m_resolveTextVars );
                 }
 
-                if( !comp2->GetFootprint( &sheetList[i], m_resolveTextVars ).IsEmpty()
+                if( !symbol2->GetFootprint( &sheetList[i], m_resolveTextVars ).IsEmpty()
                         && ( unit < minUnit || fields.footprint.IsEmpty() ) )
                 {
-                    fields.footprint = comp2->GetFootprint( &sheetList[i], m_resolveTextVars );
+                    fields.footprint = symbol2->GetFootprint( &sheetList[i], m_resolveTextVars );
                 }
 
-                if( !comp2->GetField( DATASHEET_FIELD )->IsVoid()
+                if( !symbol2->GetField( DATASHEET_FIELD )->IsVoid()
                         && ( unit < minUnit || fields.datasheet.IsEmpty() ) )
                 {
                     if( m_resolveTextVars )
-                        fields.datasheet = comp2->GetField( DATASHEET_FIELD )->GetShownText();
+                        fields.datasheet = symbol2->GetField( DATASHEET_FIELD )->GetShownText();
                     else
-                        fields.datasheet = comp2->GetField( DATASHEET_FIELD )->GetText();
+                        fields.datasheet = symbol2->GetField( DATASHEET_FIELD )->GetText();
                 }
 
-                for( int ii = MANDATORY_FIELDS; ii < comp2->GetFieldCount(); ++ii )
+                for( int ii = MANDATORY_FIELDS; ii < symbol2->GetFieldCount(); ++ii )
                 {
-                    const SCH_FIELD& f = comp2->GetFields()[ ii ];
+                    const SCH_FIELD& f = symbol2->GetFields()[ ii ];
 
                     if( f.GetText().size()
                         && ( unit < minUnit || fields.f.count( f.GetName() ) == 0 ) )
@@ -241,19 +241,19 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
         SCH_SHEET_PATH sheet = sheetList[ii];
         m_schematic->SetCurrentSheet( sheet );
 
-        auto cmp = [sheet]( SCH_COMPONENT* a, SCH_COMPONENT* b )
+        auto cmp = [sheet]( SCH_SYMBOL* a, SCH_SYMBOL* b )
                    {
                        return ( UTIL::RefDesStringCompare( a->GetRef( &sheet ),
                                                            b->GetRef( &sheet ) ) < 0 );
                    };
 
-        std::set<SCH_COMPONENT*, decltype( cmp )> ordered_symbols( cmp );
-        std::multiset<SCH_COMPONENT*, decltype( cmp )> extra_units( cmp );
+        std::set<SCH_SYMBOL*, decltype( cmp )> ordered_symbols( cmp );
+        std::multiset<SCH_SYMBOL*, decltype( cmp )> extra_units( cmp );
 
-        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
-            auto           test = ordered_symbols.insert( symbol );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            auto        test = ordered_symbols.insert( symbol );
 
             if( !test.second )
             {
@@ -272,7 +272,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
         for( EDA_ITEM* item : ordered_symbols )
         {
-            SCH_COMPONENT* symbol = findNextSymbol( item, &sheet );
+            SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
 
             if( !symbol
                || ( ( aCtl & GNL_OPT_BOM ) && !symbol->GetIncludeInBom() )
@@ -285,7 +285,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             // not always look best, but it will allow faster execution under XSL processing
             // systems which do sequential searching within an element.
 
-            XNODE* xcomp;  // current component being constructed
+            XNODE* xcomp;  // current symbol being constructed
             xcomps->AddChild( xcomp = node( "comp" ) );
 
             xcomp->AddAttribute( "ref", symbol->GetRef( &sheet ) );
@@ -298,7 +298,8 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             // for parts based on "logical_lib.part" and where logical_lib is merely the library
             // name minus path and extension.
             if( symbol->GetPartRef() )
-                xlibsource->AddAttribute( "lib", symbol->GetPartRef()->GetLibId().GetLibNickname() );
+                xlibsource->AddAttribute( "lib",
+                                          symbol->GetPartRef()->GetLibId().GetLibNickname() );
 
             // We only want the symbol name, not the full LIB_ID.
             xlibsource->AddAttribute( "part", symbol->GetLibId().GetLibItemName() );
@@ -351,8 +352,8 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             {
                 wxString uuid = ( *it )->m_Uuid.AsString();
 
-                // Add a space between UUIDs, if not in KICAD mode (i.e. using wxXmlDocument::Save()).
-                // KICAD MODE has its own XNODE::Format function.
+                // Add a space between UUIDs, if not in KICAD mode (i.e.
+                // using wxXmlDocument::Save()).  KICAD MODE has its own XNODE::Format function.
                 if( !( aCtl & GNL_OPT_KICAD ) )     // i.e. for .xml format
                     uuid += ' ';
 
@@ -509,7 +510,7 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
 
         // The library nickname will be empty if the cache library is used.
         if( !libNickname.IsEmpty() )
-            m_libraries.insert( libNickname );  // inserts component's library if unique
+            m_libraries.insert( libNickname );  // inserts symbol's library if unique
 
         XNODE* xlibpart;
         xlibparts->AddChild( xlibpart = node( "libpart" ) );
@@ -556,7 +557,7 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
 
         /* we must erase redundant Pins references in pinList
          * These redundant pins exist because some pins
-         * are found more than one time when a component has
+         * are found more than one time when a symbol has
          * multiple parts per package or has 2 representations (DeMorgan conversion)
          * For instance, a 74ls00 has DeMorgan conversion, with different pin shapes,
          * and therefore each pin  appears 2 times in the list.
@@ -657,8 +658,8 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             {
                 if( item->Type() == SCH_PIN_T )
                 {
-                    SCH_PIN*       pin = static_cast<SCH_PIN*>( item );
-                    SCH_COMPONENT* symbol = pin->GetParentSymbol();
+                    SCH_PIN*    pin = static_cast<SCH_PIN*>( item );
+                    SCH_SYMBOL* symbol = pin->GetParentSymbol();
 
                     if( !symbol
                        || ( ( aCtl & GNL_OPT_BOM ) && !symbol->GetIncludeInBom() )
@@ -718,7 +719,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             wxString refText = netNode.m_Pin->GetParentSymbol()->GetRef( &netNode.m_Sheet );
             wxString pinText = netNode.m_Pin->GetNumber();
 
-            // Skip power symbols and virtual components
+            // Skip power symbols and virtual symbols
             if( refText[0] == wxChar( '#' ) )
                 continue;
 

@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef CMP_TREE_PANE_H
-#define CMP_TREE_PANE_H
+#ifndef SYM_TREE_PANE_H
+#define SYM_TREE_PANE_H
 
 #include <wx/panel.h>
 #include <wx/dataview.h>
@@ -57,4 +57,4 @@ protected:
     SYMBOL_LIBRARY_MANAGER* m_libMgr;
 };
 
-#endif /* CMP_TREE_PANE_H */
+#endif /* SYM_TREE_PANE_H */

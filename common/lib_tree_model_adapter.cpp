@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,27 +36,18 @@
 static const int kDataViewIndent = 20;
 
 
-/**
- * Convert CMP_TREE_NODE -> wxDataViewItem
- */
 wxDataViewItem LIB_TREE_MODEL_ADAPTER::ToItem( LIB_TREE_NODE const* aNode )
 {
     return wxDataViewItem( const_cast<void*>( static_cast<void const*>( aNode ) ) );
 }
 
 
-/**
- * Convert wxDataViewItem -> CMP_TREE_NODE
- */
 LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ToNode( wxDataViewItem aItem )
 {
     return static_cast<LIB_TREE_NODE*>( aItem.GetID() );
 }
 
 
-/**
- * Convert CMP_TREE_NODE's children to wxDataViewItemArray
- */
 unsigned int LIB_TREE_MODEL_ADAPTER::IntoArray( LIB_TREE_NODE const& aNode,
                                                 wxDataViewItemArray& aChildren )
 {
@@ -77,7 +68,7 @@ unsigned int LIB_TREE_MODEL_ADAPTER::IntoArray( LIB_TREE_NODE const& aNode,
 
 LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, wxString aPinnedKey ) :
         m_parent( aParent ),
-        m_filter( CMP_FILTER_NONE ),
+        m_filter( SYM_FILTER_NONE ),
         m_show_units( true ),
         m_preselect_unit( 0 ),
         m_freeze( 0 ),
@@ -144,7 +135,7 @@ void LIB_TREE_MODEL_ADAPTER::SavePinnedItems()
 }
 
 
-void LIB_TREE_MODEL_ADAPTER::SetFilter( CMP_FILTER_TYPE aFilter )
+void LIB_TREE_MODEL_ADAPTER::SetFilter( SYM_FILTER_TYPE aFilter )
 {
     m_filter = aFilter;
 }
@@ -548,10 +539,12 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowPreselect()
     FindAndExpand( m_tree,
             [&]( LIB_TREE_NODE const* n )
             {
-                if( n->m_Type == LIB_TREE_NODE::LIBID && ( n->m_Children.empty() || !m_preselect_unit ) )
+                if( n->m_Type == LIB_TREE_NODE::LIBID && ( n->m_Children.empty() ||
+                                                           !m_preselect_unit ) )
                     return m_preselect_lib_id == n->m_LibId;
                 else if( n->m_Type == LIB_TREE_NODE::UNIT && m_preselect_unit )
-                    return m_preselect_lib_id == n->m_Parent->m_LibId && m_preselect_unit == n->m_Unit;
+                    return m_preselect_lib_id == n->m_Parent->m_LibId &&
+                            m_preselect_unit == n->m_Unit;
                 else
                     return false;
             },

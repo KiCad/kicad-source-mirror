@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -39,7 +39,7 @@ class SCH_NO_CONNECT;
 class SCH_LINE;
 class SCH_BUS_ENTRY_BASE;
 class SCH_TEXT;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 class SCH_FIELD;
 class PROPERTIES;
 class SELECTION;
@@ -150,10 +150,10 @@ private:
     SCH_LINE* loadWire( LINE_READER& aReader );
     SCH_BUS_ENTRY_BASE* loadBusEntry( LINE_READER& aReader );
     SCH_TEXT* loadText( LINE_READER& aReader );
-    SCH_COMPONENT* loadSymbol( LINE_READER& aReader );
+    SCH_SYMBOL* loadSymbol( LINE_READER& aReader );
     std::shared_ptr<BUS_ALIAS> loadBusAlias( LINE_READER& aReader, SCH_SCREEN* aScreen );
 
-    void saveComponent( SCH_COMPONENT* aComponent );
+    void saveSymbol( SCH_SYMBOL* aSymbol );
     void saveField( SCH_FIELD* aField );
     void saveBitmap( SCH_BITMAP* aBitmap );
     void saveSheet( SCH_SHEET* aSheet );

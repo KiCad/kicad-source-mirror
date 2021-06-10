@@ -42,7 +42,7 @@ class LIB_ARC;
 class LIB_FIELD;
 class LIB_TEXT;
 class LIB_BEZIER;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 class SCH_FIELD;
 class SCH_JUNCTION;
 class SCH_LABEL;
@@ -160,7 +160,7 @@ private:
     void draw( const LIB_FIELD* aField, int aLayer );
     void draw( const LIB_TEXT* aText, int aLayer );
     void draw( const LIB_BEZIER* aCurve, int aLayer );
-    void draw( SCH_COMPONENT* aSymbol, int aLayer );
+    void draw( SCH_SYMBOL* aSymbol, int aLayer );
     void draw( const SCH_JUNCTION* aJct, int aLayer );
     void draw( const SCH_FIELD* aField, int aLayer );
     void draw( const SCH_TEXT* aText, int aLayer );

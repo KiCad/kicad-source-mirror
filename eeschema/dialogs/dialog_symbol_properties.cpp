@@ -274,15 +274,15 @@ public:
 
 
 DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
-                                                    SCH_COMPONENT* aComponent ) :
+                                                    SCH_SYMBOL* aSymbol ) :
         DIALOG_SYMBOL_PROPERTIES_BASE( aParent ),
-        m_comp( nullptr ),
+        m_symbol( nullptr ),
         m_part( nullptr ),
         m_fields( nullptr ),
         m_dataModel( nullptr )
 {
-    m_comp = aComponent;
-    m_part = m_comp->GetPartRef().get();
+    m_symbol = aSymbol;
+    m_part = m_symbol->GetPartRef().get();
 
     // GetPartRef() now points to the cached part in the schematic, which should always be
     // there for usual cases, but can be null when opening old schematics not storing the part
@@ -301,7 +301,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
 #endif /* not KICAD_SPICE */
 
     // disable some options inside the edit dialog which can cause problems while dragging
-    if( m_comp->IsDragging() )
+    if( m_symbol->IsDragging() )
     {
         m_orientationLabel->Disable();
         m_orientationCtrl->Disable();
@@ -332,14 +332,14 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         // back and forth when the conversion is changed.)
         m_pinTablePage->Disable();
         m_pinTablePage->SetToolTip(
-                _( "Alternate pin assignments are not available for DeMorgan components." ) );
+                _( "Alternate pin assignments are not available for DeMorgan symbols." ) );
     }
     else
     {
         m_dataModel = new SCH_PIN_TABLE_DATA_MODEL();
 
         // Make a copy of the pins for editing
-        for( const std::unique_ptr<SCH_PIN>& pin : m_comp->GetRawPins() )
+        for( const std::unique_ptr<SCH_PIN>& pin : m_symbol->GetRawPins() )
             m_dataModel->push_back( *pin );
 
         m_dataModel->SortRows( COL_NUMBER, true );
@@ -413,12 +413,12 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     std::set<wxString> defined;
 
     // Push a copy of each field into m_updateFields
-    for( int i = 0; i < m_comp->GetFieldCount(); ++i )
+    for( int i = 0; i < m_symbol->GetFieldCount(); ++i )
     {
-        SCH_FIELD field( m_comp->GetFields()[i] );
+        SCH_FIELD field( m_symbol->GetFields()[i] );
 
         // change offset to be symbol-relative
-        field.Offset( -m_comp->GetPosition() );
+        field.Offset( -m_symbol->GetPosition() );
 
         defined.insert( field.GetName() );
         m_fields->push_back( field );
@@ -430,7 +430,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {
-            SCH_FIELD field( wxPoint( 0, 0 ), -1, m_comp, templateFieldname.m_Name );
+            SCH_FIELD field( wxPoint( 0, 0 ), -1, m_symbol, templateFieldname.m_Name );
             field.SetVisible( templateFieldname.m_Visible );
             m_fields->push_back( field );
         }
@@ -441,14 +441,14 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_fieldsGrid->ProcessTableMessage( msg );
     AdjustGridColumns( m_fieldsGrid->GetRect().GetWidth() );
 
-    // If a multi-unit component, set up the unit selector and interchangeable checkbox.
-    if( m_comp->GetUnitCount() > 1 )
+    // If a multi-unit symbol, set up the unit selector and interchangeable checkbox.
+    if( m_symbol->GetUnitCount() > 1 )
     {
-        for( int ii = 1; ii <= m_comp->GetUnitCount(); ii++ )
+        for( int ii = 1; ii <= m_symbol->GetUnitCount(); ii++ )
             m_unitChoice->Append( LIB_PART::SubReference( ii, false ) );
 
-        if( m_comp->GetUnit() <= ( int )m_unitChoice->GetCount() )
-            m_unitChoice->SetSelection( m_comp->GetUnit() - 1 );
+        if( m_symbol->GetUnit() <= ( int )m_unitChoice->GetCount() )
+            m_unitChoice->SetSelection( m_symbol->GetUnit() - 1 );
     }
     else
     {
@@ -458,7 +458,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     if( m_part && m_part->HasConversion() )
     {
-        if( m_comp->GetConvert() > LIB_ITEM::LIB_CONVERT::BASE )
+        if( m_symbol->GetConvert() > LIB_ITEM::LIB_CONVERT::BASE )
             m_cbAlternateSymbol->SetValue( true );
     }
     else
@@ -467,28 +467,28 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     }
 
     // Set the symbol orientation and mirroring.
-    int orientation = m_comp->GetOrientation() & ~( CMP_MIRROR_X | CMP_MIRROR_Y );
+    int orientation = m_symbol->GetOrientation() & ~( SYM_MIRROR_X | SYM_MIRROR_Y );
 
     switch( orientation )
     {
     default:
-    case CMP_ORIENT_0:   m_orientationCtrl->SetSelection( 0 ); break;
-    case CMP_ORIENT_90:  m_orientationCtrl->SetSelection( 1 ); break;
-    case CMP_ORIENT_270: m_orientationCtrl->SetSelection( 2 ); break;
-    case CMP_ORIENT_180: m_orientationCtrl->SetSelection( 3 ); break;
+    case SYM_ORIENT_0:   m_orientationCtrl->SetSelection( 0 ); break;
+    case SYM_ORIENT_90:  m_orientationCtrl->SetSelection( 1 ); break;
+    case SYM_ORIENT_270: m_orientationCtrl->SetSelection( 2 ); break;
+    case SYM_ORIENT_180: m_orientationCtrl->SetSelection( 3 ); break;
     }
 
-    int mirror = m_comp->GetOrientation() & ( CMP_MIRROR_X | CMP_MIRROR_Y );
+    int mirror = m_symbol->GetOrientation() & ( SYM_MIRROR_X | SYM_MIRROR_Y );
 
     switch( mirror )
     {
     default:           m_mirrorCtrl->SetSelection( 0 ) ; break;
-    case CMP_MIRROR_X: m_mirrorCtrl->SetSelection( 1 ); break;
-    case CMP_MIRROR_Y: m_mirrorCtrl->SetSelection( 2 ); break;
+    case SYM_MIRROR_X: m_mirrorCtrl->SetSelection( 1 ); break;
+    case SYM_MIRROR_Y: m_mirrorCtrl->SetSelection( 2 ); break;
     }
 
-    m_cbExcludeFromBom->SetValue( !m_comp->GetIncludeInBom() );
-    m_cbExcludeFromBoard->SetValue( !m_comp->GetIncludeOnBoard() );
+    m_cbExcludeFromBom->SetValue( !m_symbol->GetIncludeInBom() );
+    m_cbExcludeFromBoard->SetValue( !m_symbol->GetIncludeOnBoard() );
 
     if( m_part )
     {
@@ -496,8 +496,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
         m_ShowPinNameButt->SetValue( m_part->ShowPinNames() );
     }
 
-    // Set the component's library name.
-    m_tcLibraryID->SetLabelText( m_comp->GetLibId().Format() );
+    // Set the symbol's library name.
+    m_tcLibraryID->SetLabelText( m_symbol->GetLibId().Format() );
 
     Layout();
 
@@ -518,7 +518,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 #ifdef KICAD_SPICE
     int diff = m_fields->size();
 
-    DIALOG_SPICE_MODEL dialog( this, *m_comp, m_fields );
+    DIALOG_SPICE_MODEL dialog( this, *m_symbol, m_fields );
 
     if( dialog.ShowModal() != wxID_OK )
         return;
@@ -557,7 +557,7 @@ bool DIALOG_SYMBOL_PROPERTIES::Validate()
     if( !m_fieldsGrid->CommitPendingChanges() || !m_fieldsGrid->Validate() )
         return false;
 
-    if( !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE_FIELD ).GetText() ) )
+    if( !SCH_SYMBOL::IsReferenceStringValid( m_fields->at( REFERENCE_FIELD ).GetText() ) )
     {
         DisplayErrorMessage( this, _( "References must start with a letter." ) );
 
@@ -608,41 +608,41 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // This needs to be done before the LIB_ID is changed to prevent stale library symbols in
     // the schematic file.
-    currentScreen->Remove( m_comp );
+    currentScreen->Remove( m_symbol );
 
     wxString msg;
 
     // save old cmp in undo list if not already in edit, or moving ...
-    if( m_comp->GetEditFlags() == 0 )
-        GetParent()->SaveCopyInUndoList( currentScreen, m_comp, UNDO_REDO::CHANGED, false );
+    if( m_symbol->GetEditFlags() == 0 )
+        GetParent()->SaveCopyInUndoList( currentScreen, m_symbol, UNDO_REDO::CHANGED, false );
 
     // Save current flags which could be modified by next change settings
-    EDA_ITEM_FLAGS flags = m_comp->GetFlags();
+    EDA_ITEM_FLAGS flags = m_symbol->GetFlags();
 
     // For symbols with multiple shapes (De Morgan representation) Set the selected shape:
     if( m_cbAlternateSymbol->IsEnabled() && m_cbAlternateSymbol->GetValue() )
-        m_comp->SetConvert( LIB_ITEM::LIB_CONVERT::DEMORGAN );
+        m_symbol->SetConvert( LIB_ITEM::LIB_CONVERT::DEMORGAN );
     else
-        m_comp->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
+        m_symbol->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
 
     //Set the part selection in multiple part per package
     int unit_selection = m_unitChoice->IsEnabled() ? m_unitChoice->GetSelection() + 1 : 1;
-    m_comp->SetUnitSelection( &GetParent()->GetCurrentSheet(), unit_selection );
-    m_comp->SetUnit( unit_selection );
+    m_symbol->SetUnitSelection( &GetParent()->GetCurrentSheet(), unit_selection );
+    m_symbol->SetUnit( unit_selection );
 
     switch( m_orientationCtrl->GetSelection() )
     {
-    case 0: m_comp->SetOrientation( CMP_ORIENT_0 );   break;
-    case 1: m_comp->SetOrientation( CMP_ORIENT_90 );  break;
-    case 2: m_comp->SetOrientation( CMP_ORIENT_270 ); break;
-    case 3: m_comp->SetOrientation( CMP_ORIENT_180 ); break;
+    case 0: m_symbol->SetOrientation( SYM_ORIENT_0 );   break;
+    case 1: m_symbol->SetOrientation( SYM_ORIENT_90 );  break;
+    case 2: m_symbol->SetOrientation( SYM_ORIENT_270 ); break;
+    case 3: m_symbol->SetOrientation( SYM_ORIENT_180 ); break;
     }
 
     switch( m_mirrorCtrl->GetSelection() )
     {
     case 0:                                         break;
-    case 1: m_comp->SetOrientation( CMP_MIRROR_X ); break;
-    case 2: m_comp->SetOrientation( CMP_MIRROR_Y ); break;
+    case 1: m_symbol->SetOrientation( SYM_MIRROR_X ); break;
+    case 2: m_symbol->SetOrientation( SYM_MIRROR_Y ); break;
     }
 
     if( m_part )
@@ -652,21 +652,21 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     }
 
     // Restore m_Flag modified by SetUnit() and other change settings
-    m_comp->ClearFlags();
-    m_comp->SetFlags( flags );
+    m_symbol->ClearFlags();
+    m_symbol->SetFlags( flags );
 
     // change all field positions from relative to absolute
     for( unsigned i = 0;  i < m_fields->size();  ++i )
-        m_fields->at( i ).Offset( m_comp->GetPosition() );
+        m_fields->at( i ).Offset( m_symbol->GetPosition() );
 
-    LIB_PART* entry = GetParent()->GetLibPart( m_comp->GetLibId() );
+    LIB_PART* entry = GetParent()->GetLibPart( m_symbol->GetLibId() );
 
     if( entry && entry->IsPower() )
-        m_fields->at( VALUE_FIELD ).SetText( m_comp->GetLibId().GetLibItemName() );
+        m_fields->at( VALUE_FIELD ).SetText( m_symbol->GetLibId().GetLibItemName() );
 
-    // Push all fields to the component -except- for those which are TEMPLATE_FIELDNAMES
+    // Push all fields to the symbol -except- for those which are TEMPLATE_FIELDNAMES
     // with empty values.
-    SCH_FIELDS& fields = m_comp->GetFields();
+    SCH_FIELDS& fields = m_symbol->GetFields();
 
     fields.clear();
 
@@ -693,35 +693,35 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     }
 
     // Reference has a specific initialization, depending on the current active sheet
-    // because for a given component, in a complex hierarchy, there are more than one
+    // because for a given symbol, in a complex hierarchy, there are more than one
     // reference.
-    m_comp->SetRef( &GetParent()->GetCurrentSheet(), m_fields->at( REFERENCE_FIELD ).GetText() );
+    m_symbol->SetRef( &GetParent()->GetCurrentSheet(), m_fields->at( REFERENCE_FIELD ).GetText() );
 
     // Similar for Value and Footprint, except that the GUI behaviour is that they are kept
     // in sync between multiple instances.
-    m_comp->SetValue( m_fields->at( VALUE_FIELD ).GetText() );
-    m_comp->SetFootprint( m_fields->at( FOOTPRINT_FIELD ).GetText() );
+    m_symbol->SetValue( m_fields->at( VALUE_FIELD ).GetText() );
+    m_symbol->SetFootprint( m_fields->at( FOOTPRINT_FIELD ).GetText() );
 
-    m_comp->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
-    m_comp->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
+    m_symbol->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
+    m_symbol->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
 
     // The value, footprint and datasheet fields and exclude from bill of materials setting
     // should be kept in sync in multi-unit parts.
-    if( m_comp->GetUnitCount() > 1 && m_comp->IsAnnotated( &GetParent()->GetCurrentSheet() ) )
+    if( m_symbol->GetUnitCount() > 1 && m_symbol->IsAnnotated( &GetParent()->GetCurrentSheet() ) )
     {
-        wxString ref = m_comp->GetRef( &GetParent()->GetCurrentSheet() );
-        int      unit = m_comp->GetUnit();
-        LIB_ID   libId = m_comp->GetLibId();
+        wxString ref = m_symbol->GetRef( &GetParent()->GetCurrentSheet() );
+        int      unit = m_symbol->GetUnit();
+        LIB_ID   libId = m_symbol->GetLibId();
 
         for( SCH_SHEET_PATH& sheet : GetParent()->Schematic().GetSheets() )
         {
-            SCH_SCREEN*                 screen = sheet.LastScreen();
-            std::vector<SCH_COMPONENT*> otherUnits;
-            constexpr bool              appendUndo = true;
+            SCH_SCREEN*              screen = sheet.LastScreen();
+            std::vector<SCH_SYMBOL*> otherUnits;
+            constexpr bool           appendUndo = true;
 
             CollectOtherUnits( ref, unit, libId, sheet, &otherUnits );
 
-            for( SCH_COMPONENT* otherUnit : otherUnits )
+            for( SCH_SYMBOL* otherUnit : otherUnits )
             {
                 GetParent()->SaveCopyInUndoList( screen, otherUnit, UNDO_REDO::CHANGED,
                                                  appendUndo );
@@ -740,15 +740,15 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     {
         for( const SCH_PIN& model_pin : *m_dataModel )
         {
-            // map from the edited copy back to the "real" pin in the component
-            SCH_PIN* src_pin = m_comp->GetPin( model_pin.GetLibPin() );
+            // map from the edited copy back to the "real" pin in the symbol.
+            SCH_PIN* src_pin = m_symbol->GetPin( model_pin.GetLibPin() );
             src_pin->SetAlt( model_pin.GetAlt() );
         }
     }
 
-    currentScreen->Append( m_comp );
+    currentScreen->Append( m_symbol );
     GetParent()->TestDanglingEnds();
-    GetParent()->UpdateItem( m_comp );
+    GetParent()->UpdateItem( m_symbol );
     GetParent()->OnModify();
 
     // This must go after OnModify() so that the connectivity graph will have been updated.
@@ -807,9 +807,9 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
     if( !m_fieldsGrid->CommitPendingChanges() )
         return;
 
-    SCHEMATIC_SETTINGS& settings = m_comp->Schematic()->Settings();
+    SCHEMATIC_SETTINGS& settings = m_symbol->Schematic()->Settings();
     int                 fieldID = m_fields->size();
-    SCH_FIELD           newField( wxPoint( 0, 0 ), fieldID, m_comp,
+    SCH_FIELD           newField( wxPoint( 0, 0 ), fieldID, m_symbol,
                                   TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID ) );
 
     newField.SetTextAngle( m_fields->at( REFERENCE_FIELD ).GetTextAngle() );

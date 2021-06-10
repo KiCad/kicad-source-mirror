@@ -43,7 +43,7 @@
 
 void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfReferences )
 {
-    // Build a flat list of components in schematic:
+    // Build a flat list of symbols in schematic:
     SCH_REFERENCE_LIST  refs;
     SCH_SHEET_LIST      sheets    = m_frame->Schematic().GetSheets();
     bool                isChanged = false;
@@ -75,7 +75,7 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
             else
                 footprint.Empty();
 
-            // Search the component in the flat list
+            // Search the symbol in the flat list
             for( unsigned ii = 0;  ii < refs.GetCount();  ++ii )
             {
                 if( reference == refs[ii].GetRef() )
@@ -83,19 +83,20 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
                     // We have found a candidate.
                     // Note: it can be not unique (multiple parts per package)
                     // So we *do not* stop the search here
-                    SCH_COMPONENT*  component = refs[ ii ].GetSymbol();
+                    SCH_SYMBOL*  symbol = refs[ ii ].GetSymbol();
+
                     // For backwards-compatibility CvPcb currently updates all instances of a
-                    // component (even though it lists these instances separately).
+                    // symbol (even though it lists these instances separately).
                     SCH_SHEET_PATH* sheetPath = nullptr;    // &refs[ii].GetSheetPath();
                     wxString        oldfp = refs[ii].GetFootprint();
 
-                    if( oldfp.IsEmpty() && component->GetField( FOOTPRINT_FIELD )->IsVisible() )
-                        component->GetField( FOOTPRINT_FIELD )->SetVisible( false );
+                    if( oldfp.IsEmpty() && symbol->GetField( FOOTPRINT_FIELD )->IsVisible() )
+                        symbol->GetField( FOOTPRINT_FIELD )->SetVisible( false );
 
                     if( oldfp != footprint )
                     {
                         isChanged = true;
-                        component->SetFootprint( sheetPath, footprint );
+                        symbol->SetFootprint( sheetPath, footprint );
                     }
                 }
             }
@@ -120,7 +121,7 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
                                                         bool aForceVisibilityState,
                                                         bool aVisibilityState )
 {
-    // Build a flat list of components in schematic:
+    // Build a flat list of symbols in schematic:
     SCH_REFERENCE_LIST  referencesList;
     SCH_SHEET_LIST      sheetList = m_frame->Schematic().GetSheets();
 
@@ -134,7 +135,7 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
     // cmpFileReader dtor will close cmpFile
     FILE_LINE_READER cmpFileReader( cmpFile, aFullFilename );
 
-    // Now, for each component found in file,
+    // Now, for each symbol found in file,
     // replace footprint field value by the new value:
     wxString reference;
     wxString footprint;
@@ -148,7 +149,7 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
         if( !buffer.StartsWith( wxT( "BeginCmp" ) ) )
             continue;
 
-        // Begin component description.
+        // Begin symbol description.
         reference.Empty();
         footprint.Empty();
 
@@ -171,12 +172,12 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
                 footprint = value;
         }
 
-        // A block is read: initialize the footprint field of the corresponding component
+        // A block is read: initialize the footprint field of the corresponding symbol
         // if the footprint name is not empty
         if( reference.IsEmpty() )
             continue;
 
-        // Search the component in the flat list
+        // Search the symbol in the flat list
         for( unsigned ii = 0;  ii < referencesList.GetCount();  ii++ )
         {
             if( reference == referencesList[ii].GetRef() )
@@ -184,7 +185,7 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
                 // We have found a candidate.
                 // Note: it can be not unique (multiple units per part)
                 // So we *do not* stop the search here
-                SCH_COMPONENT*  symbol = referencesList[ ii ].GetSymbol();
+                SCH_SYMBOL*     symbol = referencesList[ ii ].GetSymbol();
                 SCH_SHEET_PATH* sheetPath = &referencesList[ii].GetSheetPath();
 
                 symbol->SetFootprint( sheetPath, footprint );
@@ -229,7 +230,7 @@ int SCH_EDITOR_CONTROL::ImportFPAssignments( const TOOL_EVENT& aEvent )
 
     if( !processCmpToFootprintLinkFile( filename, forceVisibility, visibilityState ) )
     {
-        wxString msg = wxString::Format( _( "Failed to open component-footprint link file \"%s\"" ),
+        wxString msg = wxString::Format( _( "Failed to open symbol-footprint link file \"%s\"" ),
                                          filename.GetData() );
 
         DisplayError( m_frame, msg );

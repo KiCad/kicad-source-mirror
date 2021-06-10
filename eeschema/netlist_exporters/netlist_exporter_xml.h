@@ -44,7 +44,7 @@ class XNODE;
 enum GNL_T
 {
     GNL_LIBRARIES   = 1 << 0,
-    GNL_COMPONENTS  = 1 << 1,
+    GNL_SYMBOLS  = 1 << 1,
     GNL_PARTS       = 1 << 2,
     GNL_HEADER      = 1 << 3,
     GNL_NETS        = 1 << 4,
@@ -77,7 +77,7 @@ public:
      */
     bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
 
-#define GNL_ALL     ( GNL_LIBRARIES | GNL_COMPONENTS | GNL_PARTS | GNL_HEADER | GNL_NETS )
+#define GNL_ALL     ( GNL_LIBRARIES | GNL_SYMBOLS | GNL_PARTS | GNL_HEADER | GNL_NETS )
 
 protected:
    /**
@@ -100,7 +100,7 @@ protected:
     XNODE* makeRoot( unsigned aCtl = GNL_ALL );
 
     /**
-     * @return a sub-tree holding all the schematic components.
+     * @return a sub-tree holding all the schematic symbols.
      */
     XNODE* makeSymbols( unsigned aCtl );
 
@@ -129,7 +129,7 @@ protected:
      */
     XNODE* makeLibraries();
 
-    void addSymbolFields( XNODE* aNode, SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aSheet );
+    void addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheet );
 
     bool                m_resolveTextVars;   // Export textVar references resolved
 

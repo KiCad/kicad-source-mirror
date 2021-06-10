@@ -46,7 +46,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
                                                  const wxString& aSearchText )
 {
     SCH_SHEET_PATH* sheetWithComponentFound = nullptr;
-    SCH_COMPONENT*  component               = nullptr;
+    SCH_SYMBOL*     symbol                  = nullptr;
     wxPoint         pos;
     SCH_PIN*        pin = nullptr;
     SCH_SHEET_LIST  sheetList;
@@ -61,27 +61,27 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
     {
         SCH_SCREEN* screen = sheet.LastScreen();
 
-        for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
+        for( auto item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_COMPONENT* candidate = static_cast<SCH_COMPONENT*>( item );
+            SCH_SYMBOL* candidate = static_cast<SCH_SYMBOL*>( item );
 
             if( aReference.CmpNoCase( candidate->GetRef( &sheet ) ) == 0 )
             {
-                component = candidate;
+                symbol = candidate;
                 sheetWithComponentFound = &sheet;
 
                 if( aSearchType == HIGHLIGHT_PIN )
                 {
                     // temporary: will be changed if the pin is found.
-                    pos = component->GetPosition();
-                    pin = component->GetPin( aSearchText );
+                    pos = symbol->GetPosition();
+                    pin = symbol->GetPin( aSearchText );
 
                     // Ensure we have found the right unit in case of multi-units symbol
                     if( pin )
                     {
                         int unit = pin->GetLibPin()->GetUnit();
 
-                        if( unit != 0 && unit != component->GetUnit() )
+                        if( unit != 0 && unit != symbol->GetUnit() )
                         {
                             pin = nullptr;
                             continue;
@@ -95,8 +95,8 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
                 }
                 else
                 {
-                    pos = component->GetPosition();
-                    foundItem = component;
+                    pos = symbol->GetPosition();
+                    foundItem = symbol;
                     break;
                 }
             }
@@ -109,7 +109,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
     CROSS_PROBING_SETTINGS& crossProbingSettings = m_frame->eeconfig()->m_CrossProbing;
 
 
-    if( component )
+    if( symbol )
     {
         if( *sheetWithComponentFound != m_frame->GetCurrentSheet() )
         {
@@ -127,7 +127,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
 //#define COMP_1_TO_1_RATIO // Un-comment for normal KiCad full screen zoom cross-probe
 #ifdef COMP_1_TO_1_RATIO
                 // Pass "false" to only include visible fields of component in bbox calculations
-                EDA_RECT bbox       = component->GetBoundingBox( false );
+                EDA_RECT bbox       = symbol->GetBoundingBox( false );
                 wxSize   bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
                 VECTOR2D screenSize = getView()->GetViewport().GetSize();
 
@@ -145,7 +145,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
 
 #ifndef COMP_1_TO_1_RATIO // Do the scaled zoom
                 // Pass "false" to only include visible fields of component in bbox calculations
-                EDA_RECT bbox       = component->GetBoundingBox( false );
+                EDA_RECT bbox       = symbol->GetBoundingBox( false );
                 wxSize   bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
                 VECTOR2D screenSize = getView()->GetViewport().GetSize();
 
@@ -257,7 +257,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
     /* Print diag */
     wxString msg;
 
-    if( component )
+    if( symbol )
     {
         if( aSearchType == HIGHLIGHT_PIN )
         {
@@ -350,7 +350,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( idcmd == nullptr )    // Highlight component only (from CvPcb or Pcbnew)
     {
         // Highlight component part_ref, or clear Highlight, if part_ref is not existing
-        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
+        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_SYMBOL, wxEmptyString );
         return;
     }
 
@@ -365,13 +365,13 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     {
         // Highlighting the reference itself isn't actually that useful, and it's harder to
         // see.  Highlight the parent and display the message.
-        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_COMPONENT, msg );
+        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_SYMBOL, msg );
     }
     else if( strcmp( idcmd, "$VAL:" ) == 0 )
     {
         // Highlighting the value itself isn't actually that useful, and it's harder to see.
         // Highlight the parent and display the message.
-        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_COMPONENT, msg );
+        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_SYMBOL, msg );
     }
     else if( strcmp( idcmd, "$PAD:" ) == 0 )
     {
@@ -379,12 +379,12 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     }
     else
     {
-        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
+        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_SYMBOL, wxEmptyString );
     }
 }
 
 
-std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aSymbol )
+std::string FormatProbeItem( EDA_ITEM* aItem, SCH_SYMBOL* aSymbol )
 {
     // This is a keyword followed by a quoted string.
 
@@ -399,8 +399,8 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aSymbol )
         }
         break;
 
-    case SCH_COMPONENT_T:
-        aSymbol = (SCH_COMPONENT*) aItem;
+    case SCH_SYMBOL_T:
+        aSymbol = (SCH_SYMBOL*) aItem;
         return StrPrintf( "$PART: \"%s\"",
                           TO_UTF8( aSymbol->GetField( REFERENCE_FIELD )->GetText() ) );
 
@@ -452,7 +452,7 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aSymbol )
 }
 
 
-void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT* aLibItem )
+void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_SYMBOL* aLibItem )
 {
     wxASSERT( aObjectToSync );     // fix the caller
 

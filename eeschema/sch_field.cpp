@@ -115,7 +115,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
                 }
                 else
                 {
-                    SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
+                    SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
 
                     if( parentSymbol->ResolveTextVar( token, aDepth + 1 ) )
                         return true;
@@ -155,7 +155,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
 
         if( aDepth < 10 )
         {
-            if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
+            if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
                 text = ExpandTextVars( text, &symbolResolver, nullptr, project );
             else if( m_parent && m_parent->Type() == SCH_SHEET_T )
                 text = ExpandTextVars( text, &sheetResolver, nullptr, project );
@@ -169,9 +169,9 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
     // WARNING: the IDs of FIELDS and SHEETS overlap, so one must check *both* the
     // id and the parent's type.
 
-    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
 
         if( m_id == REFERENCE_FIELD )
         {
@@ -211,9 +211,9 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset 
     // Calculate the text orientation according to the symbol orientation.
     orient = GetTextAngle();
 
-    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
 
         if( parentSymbol && parentSymbol->GetTransform().y1 )  // Rotate symbol 90 degrees.
         {
@@ -277,9 +277,9 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
     // Now, apply the symbol transform (mirror/rot)
     TRANSFORM transform;
 
-    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
 
         // Due to the Y axis direction, we must mirror the bounding box,
         // relative to the text position:
@@ -340,12 +340,12 @@ bool SCH_FIELD::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) 
     if( !IsVisible() && !searchHiddenFields )
         return false;
 
-    if( m_parent && m_parent->Type() == SCH_COMPONENT_T && m_id == REFERENCE_FIELD )
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T && m_id == REFERENCE_FIELD )
     {
         if( searchAndReplace && !replaceReferences )
             return false;
 
-        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
         wxASSERT( aAuxData );
 
         // Take sheet path into account which effects the reference field and the unit for
@@ -368,9 +368,9 @@ bool SCH_FIELD::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) 
 
 bool SCH_FIELD::IsReplaceable() const
 {
-    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
 
         if( m_id == VALUE_FIELD )
         {
@@ -399,9 +399,9 @@ bool SCH_FIELD::Replace( const wxFindReplaceData& aSearchData, void* aAuxData )
     bool     resolve = false;    // Replace in source text, not shown text
     bool     isReplaced = false;
 
-    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
 
         switch( m_id )
         {
@@ -547,7 +547,7 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
         return m_name;
     else if( aUseDefaultName )
     {
-        if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
+        if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
             return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
         else if( m_parent && m_parent->Type() == SCH_SHEET_T )
             return SCH_SHEET::GetDefaultFieldName( m_id );
@@ -561,7 +561,7 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 
 wxString SCH_FIELD::GetCanonicalName() const
 {
-    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
         switch( m_id )
         {
@@ -590,7 +590,7 @@ wxString SCH_FIELD::GetCanonicalName() const
 
 BITMAPS SCH_FIELD::GetMenuImage() const
 {
-    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
         switch( m_id )
         {
@@ -653,9 +653,9 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter ) const
     // Calculate the text orientation, according to the symbol orientation/mirror
     int orient = GetTextAngle();
 
-    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
 
         if( parentSymbol->GetTransform().y1 )  // Rotate symbol 90 deg.
         {
@@ -691,10 +691,10 @@ void SCH_FIELD::SetPosition( const wxPoint& aPosition )
     // Actual positions are calculated by the rotation/mirror transform of the parent symbol
     // of the field.  The inverse transform is used to calculate the position relative to the
     // parent symbol.
-    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
-        wxPoint        relPos = aPosition - parentSymbol->GetPosition();
+        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
+        wxPoint     relPos = aPosition - parentSymbol->GetPosition();
 
         relPos = parentSymbol->GetTransform().InverseTransform().TransformCoordinate( relPos );
 
@@ -708,10 +708,10 @@ void SCH_FIELD::SetPosition( const wxPoint& aPosition )
 
 wxPoint SCH_FIELD::GetPosition() const
 {
-    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
-        wxPoint        relativePos = GetTextPos() - parentSymbol->GetPosition();
+        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
+        wxPoint     relativePos = GetTextPos() - parentSymbol->GetPosition();
 
         relativePos = parentSymbol->GetTransform().TransformCoordinate( relativePos );
 

@@ -238,7 +238,8 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
                 aReporter.ReportTail( msg, RPT_SEVERITY_ERROR );
             }
 
-            aReporter.ReportTail( _( "Created project symbol library table.\n" ), RPT_SEVERITY_INFO );
+            aReporter.ReportTail( _( "Created project symbol library table.\n" ),
+                                  RPT_SEVERITY_INFO );
         }
     }
 }
@@ -248,14 +249,14 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
 {
     wxString msg;
     SCH_SCREENS schematic( m_frame->Schematic().Root() );
-    SCH_COMPONENT* symbol;
+    SCH_SYMBOL* symbol;
     SCH_SCREEN* screen;
 
     for( screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
     {
-        for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
+        for( auto item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            symbol = dynamic_cast<SCH_COMPONENT*>( item );
+            symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
             if( !remapSymbolToLibTable( symbol ) )
             {
@@ -279,7 +280,7 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
 }
 
 
-bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_COMPONENT* aSymbol )
+bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_SYMBOL* aSymbol )
 {
     wxCHECK_MSG( aSymbol != NULL, false, "Null pointer passed to remapSymbolToLibTable." );
     wxCHECK_MSG( aSymbol->GetLibId().GetLibNickname().empty(), false,

@@ -107,7 +107,7 @@ class SCH_SHEET;
 class SCH_SCREEN;
 class SCH_MARKER;
 class SCH_ITEM;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 class SCH_REFERENCE_LIST;
 
 
@@ -293,7 +293,7 @@ public:
      *                                   in lib.   The normal option is false, and set to true
      *                                   only to build the full list of symbols.
      */
-    void AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_COMPONENT* aSymbol,
+    void AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* aSymbol,
                        bool aIncludePowerSymbols = true,
                        bool aForceIncludeOrphanSymbols = false ) const;
 
@@ -319,7 +319,7 @@ public:
      * @param aSymbol A symbol to add to aRefList
      * @param aIncludePowerSymbols Set to false to only get normal symbols.
      */
-    void AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList, SCH_COMPONENT* aSymbol,
+    void AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList, SCH_SYMBOL* aSymbol,
                                 bool aIncludePowerSymbols = true ) const;
 
     /**

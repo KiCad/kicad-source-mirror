@@ -320,9 +320,9 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aS
             if( item->Matches( *aData, aSheet ) )
                 return item;
 
-            if( item->Type() == SCH_COMPONENT_T )
+            if( item->Type() == SCH_SYMBOL_T )
             {
-                SCH_COMPONENT* cmp = static_cast<SCH_COMPONENT*>( item );
+                SCH_SYMBOL* cmp = static_cast<SCH_SYMBOL*>( item );
 
                 for( SCH_FIELD& field : cmp->GetFields() )
                 {
@@ -548,7 +548,7 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     SCH_ITEM*          item = nullptr;
-    SCH_COMPONENT*     symbol = nullptr;
+    SCH_SYMBOL*        symbol = nullptr;
 
     if( aForce )
     {
@@ -578,20 +578,20 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
     {
     case SCH_FIELD_T:
     case LIB_FIELD_T:
-        if( item->GetParent() && item->GetParent()->Type() == SCH_COMPONENT_T )
+        if( item->GetParent() && item->GetParent()->Type() == SCH_SYMBOL_T )
         {
-            symbol = (SCH_COMPONENT*) item->GetParent();
+            symbol = (SCH_SYMBOL*) item->GetParent();
             m_frame->SendMessageToPCBNEW( item, symbol );
         }
         break;
 
-    case SCH_COMPONENT_T:
-        symbol = (SCH_COMPONENT*) item;
+    case SCH_SYMBOL_T:
+        symbol = (SCH_SYMBOL*) item;
         m_frame->SendMessageToPCBNEW( item, symbol );
         break;
 
     case SCH_PIN_T:
-        symbol = (SCH_COMPONENT*) item->GetParent();
+        symbol = (SCH_SYMBOL*) item->GetParent();
         m_frame->SendMessageToPCBNEW( static_cast<SCH_PIN*>( item ), symbol );
         break;
 
@@ -610,7 +610,7 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
 static KICAD_T wires[] = { SCH_LINE_LOCATE_WIRE_T, EOT };
 static KICAD_T wiresAndPins[] = { SCH_LINE_LOCATE_WIRE_T, SCH_PIN_T, SCH_SHEET_PIN_T, EOT };
-static KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
+static KICAD_T fieldsAndComponents[] = { SCH_SYMBOL_T, SCH_FIELD_T, EOT };
 
 #define HITTEST_THRESHOLD_PIXELS 5
 
@@ -646,10 +646,10 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 }
                 else if( item->Type() == SCH_PIN_T )
                 {
-                    SCH_PIN*       pin = (SCH_PIN*) item;
-                    SCH_COMPONENT* symbol = (SCH_COMPONENT*) item->GetParent();
-                    wxString       param;
-                    wxString       primitive;
+                    SCH_PIN*    pin = (SCH_PIN*) item;
+                    SCH_SYMBOL* symbol = (SCH_SYMBOL*) item->GetParent();
+                    wxString    param;
+                    wxString    primitive;
 
                     primitive = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, symbol, 0 );
                     primitive.LowerCase();
@@ -760,11 +760,11 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                 if( !item )
                     return false;
 
-                if( item->Type() != SCH_COMPONENT_T )
+                if( item->Type() != SCH_SYMBOL_T )
                 {
                     item = item->GetParent();
 
-                    if( item->Type() != SCH_COMPONENT_T )
+                    if( item->Type() != SCH_SYMBOL_T )
                         return false;
                 }
 
@@ -772,7 +772,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                         (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
 
                 if( simFrame )
-                    simFrame->AddTuner( static_cast<SCH_COMPONENT*>( item ) );
+                    simFrame->AddTuner( static_cast<SCH_SYMBOL*>( item ) );
 
                 return true;
             } );
@@ -842,13 +842,13 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         }
         else
         {
-            SCH_ITEM*      item   = static_cast<SCH_ITEM*>( selTool->GetNode( aPosition ) );
-            SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
+            SCH_ITEM*   item   = static_cast<SCH_ITEM*>( selTool->GetNode( aPosition ) );
+            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
             if( item )
             {
                 if( item->Type() == SCH_FIELD_T )
-                    symbol = dynamic_cast<SCH_COMPONENT*>( item->GetParent() );
+                    symbol = dynamic_cast<SCH_SYMBOL*>( item->GetParent() );
 
                 if( symbol && symbol->GetPartRef() && symbol->GetPartRef()->IsPower() )
                 {
@@ -1009,12 +1009,12 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     for( SCH_ITEM* item : screen->Items() )
     {
         SCH_CONNECTION* itemConn  = nullptr;
-        SCH_COMPONENT*  symbol    = nullptr;
+        SCH_SYMBOL*     symbol    = nullptr;
         bool            redraw    = item->IsBrightened();
         bool            highlight = false;
 
-        if( item->Type() == SCH_COMPONENT_T )
-            symbol = static_cast<SCH_COMPONENT*>( item );
+        if( item->Type() == SCH_SYMBOL_T )
+            symbol = static_cast<SCH_SYMBOL*>( item );
 
         if( symbol && symbol->GetPartRef() && symbol->GetPartRef()->IsPower() )
             itemConn = symbol->Connection();
@@ -1066,7 +1066,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
         redraw |= item->IsBrightened();
 
-        // symbol is only non-null if the item is a SCH_COMPONENT_T
+        // symbol is only non-null if the item is a SCH_SYMBOL_T
         if( symbol )
         {
             redraw |= symbol->HasBrightenedPins();
@@ -1314,7 +1314,7 @@ int SCH_EDITOR_CONTROL::Copy( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* aPasteScreen,
+void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aPasteScreen,
                                              const SCH_SHEET_PATH& aPastePath,
                                              const KIID_PATH&      aClipPath,
                                              bool                  aForceKeepAnnotations )
@@ -1387,9 +1387,9 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
 
     for( SCH_ITEM* item : aSheet->GetScreen()->Items() )
     {
-        if( item->Type() == SCH_COMPONENT_T )
+        if( item->Type() == SCH_SYMBOL_T )
         {
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             updatePastedSymbol( symbol, aSheet->GetScreen(), sheetPath, aClipPath,
                                 aForceKeepAnnotations );
@@ -1555,9 +1555,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         EDA_ITEM* item = loadedItems[i];
         KIID_PATH clipPath( wxT("/") ); // clipboard is at root
 
-        if( item->Type() == SCH_COMPONENT_T )
+        if( item->Type() == SCH_SYMBOL_T )
         {
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             // The library symbol gets set from the cached library symbols in the current
             // schematic not the symbol libraries.  The cached library symbol may have
@@ -1770,11 +1770,11 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
-    SCH_COMPONENT*     symbol = nullptr;
+    SCH_SYMBOL*        symbol = nullptr;
     SYMBOL_EDIT_FRAME* symbolEditor;
 
     if( selection.GetSize() >= 1 )
-        symbol = (SCH_COMPONENT*) selection.Front();
+        symbol = (SCH_SYMBOL*) selection.Front();
 
     if( !symbol || symbol->GetEditFlags() != 0 )
         return 0;

@@ -230,7 +230,7 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
     if( m_fieldId == REFERENCE_FIELD )
     {
         // Test if the reference string is valid:
-        if( !SCH_COMPONENT::IsReferenceStringValid( m_text ) )
+        if( !SCH_SYMBOL::IsReferenceStringValid( m_text ) )
         {
             DisplayError( this, _( "Illegal reference designator value!" ) );
             return false;
@@ -290,7 +290,7 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
         DIALOG_EDIT_ONE_FIELD( aParent, aTitle, aField ),
         m_field( aField )
 {
-    if( aField->GetParent() && aField->GetParent()->Type() == SCH_COMPONENT_T )
+    if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
     {
         m_fieldId = aField->GetId();
     }
@@ -311,14 +311,14 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 
     m_textLabel->SetLabel( m_field->GetName() + ":" );
 
-    // The library symbol may have been removed so using SCH_COMPONENT::GetPartRef() here
+    // The library symbol may have been removed so using SCH_SYMBOL::GetPartRef() here
     // could result in a segfault.  If the library symbol is no longer available, the
     // schematic fields can still edit so set the power symbol flag to false.  This may not
     // be entirely accurate if the power library is missing but it's better then a segfault.
-    if( aField->GetParent() && aField->GetParent()->Type() == SCH_COMPONENT_T )
+    if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
     {
-        const SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
-        const LIB_PART*      part = GetParent()->GetLibPart( component->GetLibId(), true );
+        const SCH_SYMBOL* symbol = (SCH_SYMBOL*) aField->GetParent();
+        const LIB_PART*   part = GetParent()->GetLibPart( symbol->GetLibId(), true );
 
         if( part && part->IsPower() )
             m_isPower = true;
@@ -375,7 +375,7 @@ void DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded( wxStyledTextEvent &aEvent 
             wxString           ref = m_StyledTextCtrl->GetRange( refStart, start - 1 );
             SCH_SHEET_LIST     sheets = editFrame->Schematic().GetSheets();
             SCH_REFERENCE_LIST refs;
-            SCH_COMPONENT*     refSymbol = nullptr;
+            SCH_SYMBOL*        refSymbol = nullptr;
 
             sheets.GetSymbols( refs );
 
@@ -396,8 +396,8 @@ void DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded( wxStyledTextEvent &aEvent 
     {
         partial = m_StyledTextCtrl->GetTextRange( start, pos );
 
-        SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( m_field->GetParent() );
-        SCH_SHEET*     sheet = dynamic_cast<SCH_SHEET*>( m_field->GetParent() );
+        SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( m_field->GetParent() );
+        SCH_SHEET*  sheet = dynamic_cast<SCH_SHEET*>( m_field->GetParent() );
 
         if( symbol )
         {
@@ -427,9 +427,9 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
     SCH_ITEM*       parent = dynamic_cast<SCH_ITEM*>( aField->GetParent() );
     int             fieldType = aField->GetId();
 
-    if( parent && parent->Type() == SCH_COMPONENT_T )
+    if( parent && parent->Type() == SCH_SYMBOL_T )
     {
-        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( parent );
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( parent );
 
         if( fieldType == REFERENCE_FIELD )
             symbol->SetRef( aSheetPath, m_text );
@@ -461,9 +461,9 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
 
     // The value, footprint and datasheet fields should be kept in sync in multi-unit parts.
     // Of course the component must be annotated to collect other units.
-    if( editFrame && parent && parent->Type() == SCH_COMPONENT_T )
+    if( editFrame && parent && parent->Type() == SCH_SYMBOL_T )
     {
-        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( parent );
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( parent );
 
         if( symbol->IsAnnotated( aSheetPath ) && ( fieldType == VALUE_FIELD
                                                 || fieldType == FOOTPRINT_FIELD
@@ -475,13 +475,13 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
 
             for( SCH_SHEET_PATH& sheet : editFrame->Schematic().GetSheets() )
             {
-                SCH_SCREEN*                 screen = sheet.LastScreen();
-                std::vector<SCH_COMPONENT*> otherUnits;
-                constexpr bool              appendUndo = true;
+                SCH_SCREEN*              screen = sheet.LastScreen();
+                std::vector<SCH_SYMBOL*> otherUnits;
+                constexpr bool           appendUndo = true;
 
                 CollectOtherUnits( ref, unit, libId, sheet, &otherUnits );
 
-                for( SCH_COMPONENT* otherUnit : otherUnits )
+                for( SCH_SYMBOL* otherUnit : otherUnits )
                 {
                     editFrame->SaveCopyInUndoList( screen, otherUnit, UNDO_REDO::CHANGED,
                                                    appendUndo );

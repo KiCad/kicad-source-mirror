@@ -53,7 +53,7 @@ class SCH_BITMAP;
 class SCH_SHEET;
 class SCH_SHEET_PATH;
 class SCH_SHEET_PIN;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 class SCH_FIELD;
 class SCH_JUNCTION;
 class SCHEMATIC;
@@ -64,17 +64,17 @@ class HIERARCHY_NAVIG_DLG;
 
 // @todo Move this to transform alone with all of the transform manipulation code.
 /// enum used in RotationMiroir()
-enum COMPONENT_ORIENTATION_T
+enum SYMBOL_ORIENTATION_T
 {
-    CMP_NORMAL,                     // Normal orientation, no rotation or mirror
-    CMP_ROTATE_CLOCKWISE,           // Rotate -90
-    CMP_ROTATE_COUNTERCLOCKWISE,    // Rotate +90
-    CMP_ORIENT_0,                   // No rotation and no mirror id CMP_NORMAL
-    CMP_ORIENT_90,                  // Rotate 90, no mirror
-    CMP_ORIENT_180,                 // Rotate 180, no mirror
-    CMP_ORIENT_270,                 // Rotate -90, no mirror
-    CMP_MIRROR_X = 0x100,           // Mirror around X axis
-    CMP_MIRROR_Y = 0x200            // Mirror around Y axis
+    SYM_NORMAL,                     // Normal orientation, no rotation or mirror
+    SYM_ROTATE_CLOCKWISE,           // Rotate -90
+    SYM_ROTATE_COUNTERCLOCKWISE,    // Rotate +90
+    SYM_ORIENT_0,                   // No rotation and no mirror id SYM_NORMAL
+    SYM_ORIENT_90,                  // Rotate 90, no mirror
+    SYM_ORIENT_180,                 // Rotate 180, no mirror
+    SYM_ORIENT_270,                 // Rotate -90, no mirror
+    SYM_MIRROR_X = 0x100,           // Mirror around X axis
+    SYM_MIRROR_Y = 0x200            // Mirror around Y axis
 };
 
 
@@ -92,7 +92,7 @@ enum ANNOTATE_ORDER_T
 {
     SORT_BY_X_POSITION,     ///< Annotate by X position from left to right.
     SORT_BY_Y_POSITION,     ///< Annotate by Y position from top to bottom.
-    UNSORTED,               ///< Annotate by position of component in the schematic sheet
+    UNSORTED,               ///< Annotate by position of symbol in the schematic sheet
                             ///< object list.
 };
 
@@ -112,7 +112,7 @@ enum ANNOTATE_ALGO_T
 enum SCH_SEARCH_T
 {
     HIGHLIGHT_PIN,
-    HIGHLIGHT_COMPONENT
+    HIGHLIGHT_SYMBOL
 };
 
 
@@ -199,18 +199,18 @@ public:
 
     /**
      * Execute a remote command sent by Pcbnew via a socket connection.
-     * <p>
+     *
      * When user selects a footprint or pin in Pcbnew, Eeschema shows that same
-     * component or pin and moves cursor on the item.  The socket port used
+     * symbol or pin and moves cursor on the item.  The socket port used
      * is #KICAD_SCH_PORT_SERVICE_NUMBER which defaults to 4243.
      *
      * Valid commands are:
-     * \li \c \$PART: \c "reference" Put cursor on component.
-     * \li \c \$PART: \c "reference" \c \$REF: \c "ref" Put cursor on component reference.
-     * \li \c \$PART: \c "reference" \c \$VAL: \c "value" Put cursor on component value.
-     * \li \c \$PART: \c "reference" \c \$PAD: \c "pin name" Put cursor on the component pin.
+     * \li \c \$PART: \c "reference" Put cursor on symbol.
+     * \li \c \$PART: \c "reference" \c \$REF: \c "ref" Put cursor on symbol reference.
+     * \li \c \$PART: \c "reference" \c \$VAL: \c "value" Put cursor on symbol value.
+     * \li \c \$PART: \c "reference" \c \$PAD: \c "pin name" Put cursor on the symbol pin.
      * \li \c \$NET: \c "netname" Highlight a specified net
-     * \li \c \$CLEAR: \c "HIGHLIGHTED" Clear components highlight
+     * \li \c \$CLEAR: \c "HIGHLIGHTED" Clear symbols highlight
      * <p>
      * They are a keyword followed by a quoted string.
      * @param cmdline is the command received from Pcbnew.
@@ -304,12 +304,12 @@ public:
      * Commands are:
      * - $PART: reference   put cursor on footprint anchor
      * - $PIN: number $PART: reference put cursor on the footprint pad
-     * - $SHEET: time_stamp  select all footprints of components is the schematic sheet path
+     * - $SHEET: time_stamp  select all footprints of symbols is the schematic sheet path
      *
      * @param aObjectToSync is the item to be located on board.
      * @param aPart is the symbol if \a aObjectToSync is a sub item of a symbol (like a pin).
      */
-    void SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT* aPart );
+    void SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_SYMBOL* aPart );
 
     /**
      * Sends a net name to Pcbnew for highlighting
@@ -369,7 +369,7 @@ public:
                            REPORTER* aReporter = nullptr );
 
     /**
-     * Clear the current component annotation.
+     * Clear the current symbol annotation.
      *
      * @param aCurrentSheetOnly Where to clear the annotation. See #ANNOTATE_SCOPE_T
      * @param appendUndo true to add the action to the previous undo list
@@ -378,7 +378,7 @@ public:
 
     /**
      * Annotate the symbols in the schematic that are not currently annotated. Multi-unit symbols
-     * are annotated together. E.g. if two components were R8A and R8B, they may become R3A and
+     * are annotated together. E.g. if two symbols were R8A and R8B, they may become R3A and
      * R3B, but not R3A and R3C or R3C and R4D.
      *
      * @param aAnnotateScope See #ANNOTATE_SCOPE_T
@@ -386,7 +386,7 @@ public:
      * @param aAlgoOption Define the annotation style.  See #ANNOTATE_ALGO_T.
      * @param aStartNumber The start number for non-sheet-based annotation styles.
      * @param aResetAnnotation Clear any previous annotation if true.  Otherwise, keep the
-     *                         existing component annotation.
+     *                         existing symbol annotation.
      * @param aRepairTimestamps Test for and repair any duplicate time stamps if true.
      *                          Otherwise, keep the existing time stamps.  This option
      *                          could change previous annotation because time stamps are
@@ -662,9 +662,9 @@ public:
      */
     void DeleteJunction( SCH_ITEM* aItem, bool aAppend = false );
 
-    void ConvertPart( SCH_COMPONENT* aSymbol );
+    void ConvertPart( SCH_SYMBOL* aSymbol );
 
-    void SelectUnit( SCH_COMPONENT* aSymbol, int aUnit );
+    void SelectUnit( SCH_SYMBOL* aSymbol, int aUnit );
 
     /* Undo - redo */
 
@@ -744,7 +744,7 @@ public:
     /**
      * Create a symbol library file with the name of the root document plus the '-cache' suffix,
      *
-     * This file will contain all components used in the current schematic.
+     * This file will contain all symbols used in the current schematic.
      *
      * @param aUseCurrentSheetFilename set to false to use the root sheet filename
      *                                 (default) or true to use the currently opened sheet.
@@ -753,7 +753,7 @@ public:
     bool CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilename = false );
 
     /**
-     * Create a library \a aFileName that contains all components used in the current schematic.
+     * Create a library \a aFileName that contains all symbols used in the current schematic.
      *
      * @param aFileName The full path and file name of the archive library.
      * @return True if \a aFileName was written successfully.

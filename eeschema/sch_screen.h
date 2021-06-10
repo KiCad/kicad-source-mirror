@@ -45,7 +45,7 @@
 #include <title_block.h>
 
 #include <lib_id.h>
-#include <sch_symbol.h>         // COMPONENT_INSTANCE_REFERENCE
+#include <sch_symbol.h>         // SYMBOL_INSTANCE_REFERENCE
 #include <sch_reference_list.h>
 #include <sch_rtree.h>
 #include <sch_sheet.h>
@@ -55,7 +55,7 @@ class BUS_ALIAS;
 class EDA_ITEM;
 class LIB_PART;
 class LIB_PIN;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 class SCH_LINE;
 class SCH_TEXT;
 class PLOTTER;
@@ -203,7 +203,7 @@ public:
                        KICAD_T aType = SCH_LOCATE_ANY_T ) const;
 
     /**
-     * Initialize the #LIB_PART reference for each #SCH_COMPONENT found in this schematic
+     * Initialize the #LIB_PART reference for each #SCH_SYMBOL found in this schematic
      * from the project #SYMBOL_LIB_TABLE.
      *
      * Symbol library links are set using the symbol library table and will fall back to
@@ -220,12 +220,12 @@ public:
     void UpdateSymbolLinks( REPORTER* aReporter = nullptr );
 
     /**
-     * Initialize the #LIB_PART reference for each #SCH_COMPONENT found in this schematic
+     * Initialize the #LIB_PART reference for each #SCH_SYMBOL found in this schematic
      * with the local project library symbols.
      */
     void UpdateLocalLibSymbolLinks();
 
-    void SwapSymbolLinks( const SCH_COMPONENT* aOriginalSymbol, const SCH_COMPONENT* aNewSymbol );
+    void SwapSymbolLinks( const SCH_SYMBOL* aOriginalSymbol, const SCH_SYMBOL* aNewSymbol );
 
     /**
      * Print all the items in the screen to \a aDC.
@@ -284,7 +284,7 @@ public:
 
     /**
      * Return all wires and junctions connected to \a aSegment which are not connected any
-     * component pin.
+     * symbol pin.
      *
      * @param aSegment The segment to test for connections.
      */
@@ -303,8 +303,8 @@ public:
      * A junction is required at \a aPosition if one of the following criteria is satisfied:
      *  - One wire midpoint and one or more wire endpoints.
      *  - Three or more wire endpoints.
-     *  - One wire midpoint and a component pin.
-     *  - Two or more wire endpoints and a component pin.
+     *  - One wire midpoint and a symbol pin.
+     *  - Two or more wire endpoints and a symbol pin.
      *
      * @param[in] aPosition The position to test.
      * @param aNew Checks if a _new_ junction is needed, i.e. there isn't one already
@@ -323,15 +323,15 @@ public:
     bool IsTerminalPoint( const wxPoint& aPosition, int aLayer ) const;
 
     /**
-     * Test the screen for a component pin item at \a aPosition.
+     * Test the screen for a symbol pin item at \a aPosition.
      *
      * @param[in] aPosition Position to test.
-     * @param[out] aSymbol The component if a pin was found, otherwise NULL.
+     * @param[out] aSymbol The symbol if a pin was found, otherwise NULL.
      * @param aEndPointOnly Set to true to test if \a aPosition is the connection
      *                      point of the pin.
      * @return The pin item if found, otherwise NULL.
      */
-    LIB_PIN* GetPin( const wxPoint& aPosition, SCH_COMPONENT** aSymbol = NULL,
+    LIB_PIN* GetPin( const wxPoint& aPosition, SCH_SYMBOL** aSymbol = nullptr,
                      bool aEndPointOnly = false ) const;
 
     /**
@@ -343,9 +343,9 @@ public:
     SCH_SHEET_PIN* GetSheetPin( const wxPoint& aPosition ) const;
 
     /**
-     * Clear the annotation for the components in \a aSheetPath on the screen.
+     * Clear the annotation for the symbols in \a aSheetPath on the screen.
      *
-     * @param[in] aSheetPath The sheet path of the component annotation to clear.  If NULL then
+     * @param[in] aSheetPath The sheet path of the symbol annotation to clear.  If NULL then
      *                       the entire hierarchy is cleared.
      */
     void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
@@ -353,7 +353,7 @@ public:
     /**
      * For screens shared by many sheetpaths (complex hierarchies):
      * to be able to clear or modify any reference related  sharing this screen
-     * (i.e. the list of components), an entry for each screen path must exist.
+     * (i.e. the list of symbols), an entry for each screen path must exist.
      * This function creates missing entries, using as default reference the current
      * reference field and unit number
      * Note: m_clientSheetPathList must be up to date
@@ -362,7 +362,7 @@ public:
     void EnsureAlternateReferencesExist();
 
     /**
-     * Add all schematic sheet and component objects in the screen to \a aItems.
+     * Add all schematic sheet and symbol objects in the screen to \a aItems.
      *
      * @param[out] aItems Hierarchical item list to fill.
      */
@@ -411,7 +411,7 @@ public:
 
     /**
      * Fetch a list of unique #LIB_PART object pointers required to properly render each
-     * #SCH_COMPONENT in this schematic.
+     * #SCH_SYMBOL in this schematic.
      *
      * @return The list of unique #LIB_PART object pointers.
      */
@@ -517,7 +517,7 @@ private:
      *
      * This list is only used to as temporary storage when the schematic file is loaded.
      * If the screen is the root sheet, then this information is used to update the
-     *  #SCH_COMPONENT instance reference and unit information after the entire schematic
+     *  #SCH_SYMBOL instance reference and unit information after the entire schematic
      * is loaded and is never used again.  If this screen is not the root sheet, then the
      * schematic file is the root sheet of another project and this information is saved
      * unchanged back to the schematic file.
@@ -561,7 +561,7 @@ public:
     SCH_SHEET* GetSheet( unsigned int aIndex ) const;
 
     /**
-     * Clear the annotation for the components inside new sheetpaths
+     * Clear the annotation for the symbols inside new sheetpaths
      * when a complex hierarchy is modified and new sheetpaths added
      * when a screen shares more than one sheet path, missing alternate references are added
      * and alternate references of new sheet paths are cleared
@@ -571,10 +571,10 @@ public:
     void ClearAnnotationOfNewSheetPaths( SCH_SHEET_LIST& aInitialSheetPathList );
 
     /**
-     * Test all sheet and component objects in the schematic for duplicate time stamps
+     * Test all sheet and symbol objects in the schematic for duplicate time stamps
      * and replaces them as necessary.
      *
-     * Time stamps must be unique in order for complex hierarchies know which components go
+     * Time stamps must be unique in order for complex hierarchies know which symbols go
      * to which sheets.
      *
      * @return The number of duplicate time stamps replaced.
@@ -601,7 +601,7 @@ public:
     void DeleteMarker( SCH_MARKER* aMarker );
 
     /**
-     * Initialize the #LIB_PART reference for each #SCH_COMPONENT found in the full schematic.
+     * Initialize the #LIB_PART reference for each #SCH_SYMBOL found in the full schematic.
      *
      * @note This should only be called when the user specifically requests all library symbol
      *       links to be update or when the legacy schematic is opened for the last time.  All

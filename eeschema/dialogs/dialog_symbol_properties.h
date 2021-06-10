@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ enum SYMBOL_PROPS_RETVALUE
 
 
 /**
- * Dialog used to edit #SCH_COMPONENT objects in a schematic.
+ * Dialog used to edit #SCH_SYMBOL objects in a schematic.
  *
  * This is derived from DIALOG_SYMBOL_PROPERTIES_BASE which is maintained by
  * wxFormBuilder.
@@ -55,7 +55,7 @@ enum SYMBOL_PROPS_RETVALUE
 class DIALOG_SYMBOL_PROPERTIES : public DIALOG_SYMBOL_PROPERTIES_BASE
 {
 public:
-    DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent );
+    DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SYMBOL* aSymbol );
     ~DIALOG_SYMBOL_PROPERTIES() override;
 
     SCH_EDIT_FRAME* GetParent();
@@ -89,7 +89,7 @@ private:
     void AdjustGridColumns( int aWidth );
 
 private:
-    SCH_COMPONENT* m_comp;
+    SCH_SYMBOL*    m_symbol;
     LIB_PART*      m_part;
 
     int            m_width;

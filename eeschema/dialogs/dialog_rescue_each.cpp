@@ -214,15 +214,15 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
     wxVector<wxVariant> data;
     int count = 0;
 
-    for( SCH_COMPONENT* each_component : *m_Rescuer->GetComponents() )
+    for( SCH_SYMBOL* eachSymbol : *m_Rescuer->GetSymbols() )
     {
-        if( each_component->GetLibId().Format() != UTF8( selected_part.GetRequestedName() ) )
+        if( eachSymbol->GetLibId().Format() != UTF8( selected_part.GetRequestedName() ) )
             continue;
 
-        SCH_FIELD* valueField = each_component->GetField( VALUE_FIELD );
+        SCH_FIELD* valueField = eachSymbol->GetField( VALUE_FIELD );
 
         data.clear();
-        data.push_back( each_component->GetRef( m_currentSheet ) );
+        data.push_back( eachSymbol->GetRef( m_currentSheet ) );
         data.push_back( valueField ? valueField->GetText() : wxT( "" ) );
         m_ListOfInstances->AppendItem( data );
         count++;

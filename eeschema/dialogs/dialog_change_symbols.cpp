@@ -49,7 +49,7 @@ bool g_resetFieldPositions[2]    = { true,   false  };
 bool g_resetAttributes[2]        = { true,   false  };
 
 
-DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aSymbol,
+DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBOL* aSymbol,
                                               MODE aMode ) :
     DIALOG_CHANGE_SYMBOLS_BASE( aParent ),
     m_symbol( aSymbol),
@@ -272,9 +272,9 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
         wxCHECK2( screen, continue );
 
-        for( SCH_ITEM* item : screen->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
+            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
             wxCHECK2( symbol, continue );
 
@@ -379,7 +379,7 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
 }
 
 
-bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aInstance )
+bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInstance )
 {
     LIB_ID id;
 
@@ -442,12 +442,12 @@ bool DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
 
         wxCHECK2( screen, continue );
 
-        std::vector<SCH_COMPONENT*> symbols;
+        std::vector<SCH_SYMBOL*> symbols;
 
-        for( SCH_ITEM* item : screen->Items().OfType( SCH_COMPONENT_T ) )
-            symbols.push_back( static_cast<SCH_COMPONENT*>( item ) );
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+            symbols.push_back( static_cast<SCH_SYMBOL*>( item ) );
 
-        for( SCH_COMPONENT* symbol : symbols )
+        for( SCH_SYMBOL* symbol : symbols )
         {
             if( !isMatch( symbol, &instance ) )
                 continue;
@@ -474,7 +474,7 @@ bool DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
 }
 
 
-bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHEET_PATH* aInstance,
+bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH* aInstance,
                                            const LIB_ID& aNewId, bool aAppendToUndo )
 {
     wxCHECK( aSymbol, false );

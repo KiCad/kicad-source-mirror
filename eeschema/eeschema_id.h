@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2008-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +65,7 @@ enum id_eeschema_frm
     ID_LIBVIEW_PREVIOUS,
     ID_LIBVIEW_SELECT_PART_NUMBER,
     ID_LIBVIEW_LIB_LIST,
-    ID_LIBVIEW_CMP_LIST,
+    ID_LIBVIEW_SYM_LIST,
 
     ID_SIM_RUN,
     ID_SIM_TUNE,
@@ -87,7 +87,7 @@ enum id_eeschema_frm
     ID_POPUP_SCH_SELECT_UNIT1,
     // ... leave room for MAX_UNIT_COUNT_PER_PACKAGE IDs ,
     // to select one unit among MAX_UNIT_COUNT_PER_PACKAGE in popup menu
-    ID_POPUP_SCH_SELECT_UNIT_CMP_MAX = ID_POPUP_SCH_SELECT_UNIT1 + MAX_UNIT_COUNT_PER_PACKAGE
+    ID_POPUP_SCH_SELECT_UNIT_SYM_MAX = ID_POPUP_SCH_SELECT_UNIT1 + MAX_UNIT_COUNT_PER_PACKAGE
 };
 
 

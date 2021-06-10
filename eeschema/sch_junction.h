@@ -79,7 +79,7 @@ public:
     {
         return ( aItem->Type() == SCH_LINE_T &&
                 ( aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS ) ) ||
-                aItem->Type() == SCH_COMPONENT_T;
+                aItem->Type() == SCH_SYMBOL_T;
     }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override

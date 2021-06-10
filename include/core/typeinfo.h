@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@
 #include <type_traits>
 
 /**
- * Checks if the type of aObject is T.
+ * Check if the type of aObject is T.
  *
  * @param aObject the object for type check.
  * @return true, if aObject type equals T.
@@ -132,7 +132,7 @@ enum KICAD_T
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
     SCH_FIELD_T,
-    SCH_COMPONENT_T,
+    SCH_SYMBOL_T,
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
     SCH_PIN_T,
@@ -154,8 +154,8 @@ enum KICAD_T
     SCH_LABEL_LOCATE_WIRE_T,
     SCH_LABEL_LOCATE_BUS_T,
 
-    // Same for picking components which are power symbols
-    SCH_COMPONENT_LOCATE_POWER_T,
+    // Same for picking symbols which are power symbols
+    SCH_SYMBOL_LOCATE_POWER_T,
 
     // matches any type
     SCH_LOCATE_ANY_T,
@@ -166,10 +166,10 @@ enum KICAD_T
     SCHEMATIC_T,
 
     /*
-     * Draw items in library component.
+     * Draw items in library symbol.
      *
      * The order of these items effects the sort order for items inside the
-     * "DRAW/ENDDRAW" section of the component definition in a library file.
+     * "DRAW/ENDDRAW" section of the symbol definition in a library file.
      * If you add a new draw item, type, please make sure you add it so the
      * sort order is logical.
      */
@@ -224,7 +224,7 @@ enum KICAD_T
 };
 
 /**
- * Returns the underlying type of the given type.
+ * Return the underlying type of the given type.
  *
  * This is useful for finding the element type given one of the "non-type" types such as
  * SCH_LINE_LOCATE_WIRE_T.
@@ -251,8 +251,8 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
     case SCH_LABEL_LOCATE_BUS_T:
         return SCH_LABEL_T;
 
-    case SCH_COMPONENT_LOCATE_POWER_T:
-        return SCH_COMPONENT_T;
+    case SCH_SYMBOL_LOCATE_POWER_T:
+        return SCH_SYMBOL_T;
 
     case PCB_LOCATE_HOLE_T:
     case PCB_LOCATE_PTH_T:

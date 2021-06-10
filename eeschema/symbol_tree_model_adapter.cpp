@@ -74,7 +74,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
     std::unordered_map<wxString, std::vector<LIB_PART*>> loadedSymbols;
 
     SYMBOL_ASYNC_LOADER loader( aNicknames, m_libs,
-                                GetFilter() == LIB_TREE_MODEL_ADAPTER::CMP_FILTER_POWER,
+                                GetFilter() == LIB_TREE_MODEL_ADAPTER::SYM_FILTER_POWER,
                                 &loadedSymbols, prg.get() );
 
     LOCALE_IO toggle;
@@ -140,7 +140,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
 void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname )
 {
-    bool                        onlyPowerSymbols = ( GetFilter() == CMP_FILTER_POWER );
+    bool                        onlyPowerSymbols = ( GetFilter() == SYM_FILTER_POWER );
     std::vector<LIB_PART*>      symbols;
     std::vector<LIB_TREE_ITEM*> comp_list;
 

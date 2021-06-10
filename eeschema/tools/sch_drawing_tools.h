@@ -29,7 +29,7 @@
 #include <sch_base_frame.h>
 #include <status_popup.h>
 
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 class SCH_BUS_WIRE_ENTRY;
 class SCH_LABEL;
 class SCHLIB_FILTER;

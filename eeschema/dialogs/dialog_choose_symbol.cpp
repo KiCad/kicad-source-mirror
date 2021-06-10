@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
           m_external_browser_requested( false )
 {
     // Never show footprints in power symbol mode
-    if( aAdapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::CMP_FILTER_POWER )
+    if( aAdapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER )
         m_show_footprints = false;
 
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
@@ -201,8 +201,8 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
 
     Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_SYMBOL::OnInitDialog, this );
     Bind( wxEVT_TIMER, &DIALOG_CHOOSE_SYMBOL::OnCloseTimer, this, m_dbl_click_timer->GetId() );
-    Bind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentPreselected, this );
-    Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentSelected, this );
+    Bind( SYMBOL_PRESELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentPreselected, this );
+    Bind( SYMBOL_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentSelected, this );
 
     if( m_browser_button )
     {
@@ -228,8 +228,8 @@ DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
 {
     Unbind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_SYMBOL::OnInitDialog, this );
     Unbind( wxEVT_TIMER, &DIALOG_CHOOSE_SYMBOL::OnCloseTimer, this );
-    Unbind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentPreselected, this );
-    Unbind( COMPONENT_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentSelected, this );
+    Unbind( SYMBOL_PRESELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentPreselected, this );
+    Unbind( SYMBOL_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentSelected, this );
 
     if( m_browser_button )
     {
@@ -368,7 +368,7 @@ void DIALOG_CHOOSE_SYMBOL::OnUseBrowser( wxCommandEvent& aEvent )
 void DIALOG_CHOOSE_SYMBOL::OnCloseTimer( wxTimerEvent& aEvent )
 {
     // Hack handler because of eaten MouseUp event. See
-    // DIALOG_CHOOSE_COMPONENT::OnComponentSelected for the beginning
+    // DIALOG_CHOOSE_SYMBOL::OnComponentSelected for the beginning
     // of this spaghetti noodle.
 
     auto state = wxGetMouseState();
@@ -549,7 +549,7 @@ void DIALOG_CHOOSE_SYMBOL::OnComponentSelected( wxCommandEvent& aEvent )
         // possible (docs are vague). To get around this, we use a one-shot
         // timer to schedule the dialog close.
         //
-        // See DIALOG_CHOOSE_COMPONENT::OnCloseTimer for the other end of this
+        // See DIALOG_CHOOSE_SYMBOL::OnCloseTimer for the other end of this
         // spaghetti noodle.
         m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_SYMBOL::DblClickDelay );
     }

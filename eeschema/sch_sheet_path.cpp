@@ -286,9 +286,9 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
 
 void SCH_SHEET_PATH::UpdateAllScreenReferences()
 {
-    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
     {
-        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
         symbol->GetField( REFERENCE_FIELD )->SetText( symbol->GetRef( this ) );
         symbol->GetField( VALUE_FIELD )->SetText( symbol->GetValue( this, false ) );
         symbol->GetField( FOOTPRINT_FIELD )->SetText( symbol->GetFootprint( this, false ) );
@@ -301,15 +301,15 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
 void SCH_SHEET_PATH::GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
                                  bool aForceIncludeOrphanSymbols ) const
 {
-    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
     {
-        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
         AppendSymbol( aReferences, symbol, aIncludePowerSymbols, aForceIncludeOrphanSymbols );
     }
 }
 
 
-void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_COMPONENT* aSymbol,
+void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* aSymbol,
                                    bool aIncludePowerSymbols,
                                    bool aForceIncludeOrphanSymbols ) const
 {
@@ -333,16 +333,16 @@ void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_COMPONEN
 void SCH_SHEET_PATH::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
                                           bool aIncludePowerSymbols ) const
 {
-    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
     {
-        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
         AppendMultiUnitSymbol( aRefList, symbol, aIncludePowerSymbols );
     }
 }
 
 
 void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
-                                            SCH_COMPONENT*                aSymbol,
+                                            SCH_SYMBOL* aSymbol,
                                             bool aIncludePowerSymbols ) const
 {
     // Skip pseudo-symbols, which have a reference starting with #.  This mainly
@@ -713,10 +713,10 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
     // Build the list of power symbols:
     for( SCH_SHEET_PATH& sheet : *this )
     {
-        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
-            LIB_PART*      part = symbol->GetPartRef().get();
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            LIB_PART*   part = symbol->GetPartRef().get();
 
             if( part && part->IsPower() )
             {
@@ -899,7 +899,7 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
 
     std::map<KIID_PATH, wxString> pathNameCache;
 
-    // Calculating the name of a path is somewhat expensive; on large designs with many components
+    // Calculating the name of a path is somewhat expensive; on large designs with many symbols
     // this can blow up to a serious amount of time when loading the schematic
     auto getName = [&pathNameCache]( const KIID_PATH& aPath ) -> const wxString&
                    {
@@ -928,7 +928,7 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
             continue;
         }
 
-        SCH_COMPONENT* symbol = symbolInstances[ i ].GetSymbol();
+        SCH_SYMBOL* symbol = symbolInstances[ i ].GetSymbol();
 
         wxCHECK2( symbol, continue );
 

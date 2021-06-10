@@ -148,9 +148,9 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
         // Ensure the item can reach the SCHEMATIC through this screen
         aItem->SetParent( this );
 
-        if( aItem->Type() == SCH_COMPONENT_T )
+        if( aItem->Type() == SCH_SYMBOL_T )
         {
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( aItem );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
 
             if( symbol->GetPartRef() )
             {
@@ -262,15 +262,15 @@ bool SCH_SCREEN::Remove( SCH_ITEM* aItem )
     bool retv = m_rtree.remove( aItem );
 
     // Check if the library symbol for the removed schematic symbol is still required.
-    if( retv && aItem->Type() == SCH_COMPONENT_T )
+    if( retv && aItem->Type() == SCH_SYMBOL_T )
     {
-        SCH_COMPONENT* removedSymbol = static_cast<SCH_COMPONENT*>( aItem );
+        SCH_SYMBOL* removedSymbol = static_cast<SCH_SYMBOL*>( aItem );
 
         bool removeUnusedLibSymbol = true;
 
-        for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             if( removedSymbol->GetSchSymbolLibraryName() == symbol->GetSchSymbolLibraryName() )
             {
@@ -439,7 +439,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
             break;
 
         case SCH_BUS_WIRE_ENTRY_T:
-        case SCH_COMPONENT_T:
+        case SCH_SYMBOL_T:
         case SCH_SHEET_T:
             if( item->IsConnected( aPosition ) )
             {
@@ -541,14 +541,14 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 
     wxString msg;
     std::unique_ptr< LIB_PART > libSymbol;
-    std::vector<SCH_COMPONENT*> symbols;
+    std::vector<SCH_SYMBOL*> symbols;
     SYMBOL_LIB_TABLE* libs = Schematic()->Prj().SchSymbolLibTable();
 
     // This will be a nullptr if an s-expression schematic is loaded.
     PART_LIBS* legacyLibs = Schematic()->Prj().SchLibs();
 
-    for( auto item : Items().OfType( SCH_COMPONENT_T ) )
-        symbols.push_back( static_cast<SCH_COMPONENT*>( item ) );
+    for( auto item : Items().OfType( SCH_SYMBOL_T ) )
+        symbols.push_back( static_cast<SCH_SYMBOL*>( item ) );
 
     // Remove them from the R tree.  There bounding box size may change.
     for( auto symbol : symbols )
@@ -692,12 +692,12 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 
 void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 {
-    std::vector<SCH_COMPONENT*> symbols;
+    std::vector<SCH_SYMBOL*> symbols;
 
-    for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
-        symbols.push_back( static_cast<SCH_COMPONENT*>( item ) );
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+        symbols.push_back( static_cast<SCH_SYMBOL*>( item ) );
 
-    for( SCH_COMPONENT* symbol : symbols )
+    for( SCH_SYMBOL* symbol : symbols )
     {
         // Changing the symbol may adjust the bbox of the symbol; remove and reinsert it afterwards.
         m_rtree.remove( symbol );
@@ -716,8 +716,7 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 }
 
 
-void SCH_SCREEN::SwapSymbolLinks( const SCH_COMPONENT* aOriginalSymbol,
-                                  const SCH_COMPONENT* aNewSymbol )
+void SCH_SCREEN::SwapSymbolLinks( const SCH_SYMBOL* aOriginalSymbol, const SCH_SYMBOL* aNewSymbol )
 {
     wxCHECK( aOriginalSymbol && aNewSymbol /* && m_rtree.contains( aOriginalSymbol, true ) */,
              /* void */ );
@@ -830,15 +829,15 @@ void SCH_SCREEN::ClearDrawingState()
 }
 
 
-LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aSymbol,
+LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_SYMBOL** aSymbol,
                              bool aEndPointOnly ) const
 {
-    SCH_COMPONENT*  candidate = NULL;
-    LIB_PIN*        pin = NULL;
+    SCH_SYMBOL*  candidate = NULL;
+    LIB_PIN*     pin = NULL;
 
-    for( SCH_ITEM* item : Items().Overlapping( SCH_COMPONENT_T, aPosition ) )
+    for( SCH_ITEM* item : Items().Overlapping( SCH_SYMBOL_T, aPosition ) )
     {
-        candidate = static_cast<SCH_COMPONENT*>( item );
+        candidate = static_cast<SCH_SYMBOL*>( item );
 
         if( aEndPointOnly )
         {
@@ -917,9 +916,9 @@ size_t SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions
 void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
 
-    for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
     {
-        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
         symbol->ClearAnnotation( aSheetPath );
     }
@@ -931,9 +930,9 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
     if( GetClientSheetPaths().size() <= 1 ) // No need for alternate reference
         return;
 
-    for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
     {
-        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
         // Add (when not existing) all sheet path entries
         for( const SCH_SHEET_PATH& sheet : GetClientSheetPaths() )
@@ -944,7 +943,7 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
 
 void SCH_SCREEN::GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems ) const
 {
-    static KICAD_T hierarchicalTypes[] = { SCH_COMPONENT_T, SCH_SHEET_T, SCH_GLOBAL_LABEL_T, EOT };
+    static KICAD_T hierarchicalTypes[] = { SCH_SYMBOL_T, SCH_SHEET_T, SCH_GLOBAL_LABEL_T, EOT };
 
     for( SCH_ITEM* item : Items() )
     {
@@ -1326,10 +1325,10 @@ bool SCH_SCREENS::HasNoFullyDefinedLibIds()
 
     for( screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
+        for( auto item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
             cnt++;
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             if( !symbol->GetLibId().GetLibNickname().empty() )
                 return false;
@@ -1344,10 +1343,10 @@ size_t SCH_SCREENS::GetLibNicknames( wxArrayString& aLibNicknames )
 {
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
+        for( auto item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_COMPONENT* symbol   = static_cast<SCH_COMPONENT*>( item );
-            const UTF8&    nickname = symbol->GetLibId().GetLibNickname();
+            SCH_SYMBOL* symbol   = static_cast<SCH_SYMBOL*>( item );
+            const UTF8& nickname = symbol->GetLibId().GetLibNickname();
 
             if( !nickname.empty() && ( aLibNicknames.Index( nickname ) == wxNOT_FOUND ) )
                 aLibNicknames.Add( nickname );
@@ -1365,9 +1364,9 @@ int SCH_SCREENS::ChangeSymbolLibNickname( const wxString& aFrom, const wxString&
 
     for( screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
+        for( auto item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            auto symbol = static_cast<SCH_COMPONENT*>( item );
+            auto symbol = static_cast<SCH_SYMBOL*>( item );
 
             if( symbol->GetLibId().GetLibNickname() != aFrom )
                 continue;

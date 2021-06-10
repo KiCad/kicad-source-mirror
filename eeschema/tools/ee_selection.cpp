@@ -67,8 +67,8 @@ EDA_RECT EE_SELECTION::GetBoundingBox() const
 
     for( EDA_ITEM* item : m_items )
     {
-        if( item->Type() == SCH_COMPONENT_T )
-            bbox.Merge( static_cast<SCH_COMPONENT*>( item )->GetBoundingBox( false ) );
+        if( item->Type() == SCH_SYMBOL_T )
+            bbox.Merge( static_cast<SCH_SYMBOL*>( item )->GetBoundingBox( false ) );
         else if( item->Type() == SCH_SHEET_T )
             bbox.Merge( static_cast<SCH_SHEET*>( item )->GetBodyBoundingBox() );
         else
@@ -86,10 +86,10 @@ void EE_SELECTION::GetSymbols( SCH_REFERENCE_LIST&   aReferences,
 {
     for( EDA_ITEM* item : Items() )
     {
-        if( item->Type() != SCH_COMPONENT_T )
+        if( item->Type() != SCH_SYMBOL_T )
             continue;
 
-        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
         aSelectionPath.AppendSymbol( aReferences, symbol, aIncludePowerSymbols,
                                     aForceIncludeOrphanSymbols );
     }
@@ -102,10 +102,10 @@ void EE_SELECTION::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
 {
     for( EDA_ITEM* item : Items() )
     {
-        if( item->Type() != SCH_COMPONENT_T )
+        if( item->Type() != SCH_SYMBOL_T )
             continue;
 
-        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
         aSelectionPath.AppendMultiUnitSymbol( aRefList, symbol, aIncludePowerSymbols );
     }
 }

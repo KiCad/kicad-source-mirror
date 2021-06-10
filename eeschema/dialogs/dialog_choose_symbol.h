@@ -21,8 +21,8 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#ifndef DIALOG_CHOOSE_COMPONENT_H
-#define DIALOG_CHOOSE_COMPONENT_H
+#ifndef DIALOG_CHOOSE_SYMBOL_H
+#define DIALOG_CHOOSE_SYMBOL_H
 
 #include "dialog_shim.h"
 #include <symbol_tree_model_adapter.h>
@@ -55,8 +55,8 @@ class SCH_DRAW_PANEL;
  * Dialog class to select a symbol from the libraries. This is the master View class in a
  * Model-View-Adapter (mediated MVC) architecture. The other pieces are in:
  *
- * - Adapter: CMP_TREE_MODEL_ADAPTER in common/cmp_tree_model_adapter.h
- * - Model: CMP_TREE_NODE and descendants in common/cmp_tree_model.h
+ * - Adapter: SYM_TREE_MODEL_ADAPTER in common/cmp_tree_model_adapter.h
+ * - Model: SYM_TREE_NODE and descendants in common/cmp_tree_model.h
  *
  * Because everything is tied together in the adapter class, see that file
  * for thorough documentation. A simple example usage follows:
@@ -94,7 +94,7 @@ public:
      *
      * @param aParent   a SCH_BASE_FRAME parent window.
      * @param aTitle    Dialog title.
-     * @param aAdapter  SYMBOL_TREE_MODEL_ADAPTER::PTR. See CMP_TREE_MODEL_ADAPTER
+     * @param aAdapter  SYMBOL_TREE_MODEL_ADAPTER::PTR. See SYM_TREE_MODEL_ADAPTER
      *                  for documentation.
      * @param aDeMorganConvert  preferred deMorgan conversion.
      *                          (TODO: should happen in dialog)
@@ -227,4 +227,4 @@ protected:
     std::vector<std::pair<int, wxString>>  m_field_edits;
 };
 
-#endif /* DIALOG_CHOOSE_COMPONENT_H */
+#endif /* DIALOG_CHOOSE_SYMBOL_H */

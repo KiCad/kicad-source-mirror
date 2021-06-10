@@ -64,10 +64,10 @@
 #include <wx/wfstream.h>
 
 
-const wxPoint GetRelativePosition( const wxPoint& aPosition, const SCH_COMPONENT* aComponent )
+const wxPoint GetRelativePosition( const wxPoint& aPosition, const SCH_SYMBOL* aSymbol )
 {
-    TRANSFORM t = aComponent->GetTransform().InverseTransform();
-    return t.TransformCoordinate( aPosition - aComponent->GetPosition() );
+    TRANSFORM t = aSymbol->GetTransform().InverseTransform();
+    return t.TransformCoordinate( aPosition - aSymbol->GetPosition() );
 }
 
 
@@ -553,8 +553,8 @@ const ASCH_STORAGE_FILE* SCH_ALTIUM_PLUGIN::GetFileFromStorage( const wxString& 
 void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
                                         const std::map<wxString, wxString>& aProperties )
 {
-    auto pair = m_altiumComponents.insert( { aIndex, ASCH_COMPONENT( aProperties ) } );
-    const ASCH_COMPONENT& elem = pair.first->second;
+    auto pair = m_altiumComponents.insert( { aIndex, ASCH_SYMBOL( aProperties ) } );
+    const ASCH_SYMBOL& elem = pair.first->second;
 
     // TODO: this is a hack until we correctly apply all transformations to every element
     wxString name = wxString::Format( "%d%s_%s",
@@ -570,18 +570,18 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
     m_symbols.insert( { aIndex, kpart } );
 
     // each component has its own symbol for now
-    SCH_COMPONENT* component = new SCH_COMPONENT();
+    SCH_SYMBOL* symbol = new SCH_SYMBOL();
 
-    component->SetPosition( elem.location + m_sheetOffset );
+    symbol->SetPosition( elem.location + m_sheetOffset );
     //component->SetOrientation( elem.orientation ); // TODO: keep it simple for now, and only set position
-    component->SetLibId( libId );
+    symbol->SetLibId( libId );
     //component->SetLibSymbol( kpart ); // this has to be done after parsing the LIB_PART!
 
-    component->SetUnit( elem.currentpartid );
+    symbol->SetUnit( elem.currentpartid );
 
-    m_currentSheet->GetScreen()->Append( component );
+    m_currentSheet->GetScreen()->Append( symbol );
 
-    m_components.insert( { aIndex, component } );
+    m_components.insert( { aIndex, symbol } );
 }
 
 
@@ -1683,7 +1683,7 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
     m_rootSheet->LocatePathOfScreen( m_currentSheet->GetScreen(), &sheetpath );
 
     // each component has its own symbol for now
-    SCH_COMPONENT* component = new SCH_COMPONENT();
+    SCH_SYMBOL* component = new SCH_SYMBOL();
     component->SetRef( &sheetpath, "#PWR?" );
     component->SetValue( elem.text );
     component->SetLibId( libId );
@@ -1700,22 +1700,22 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
     switch( elem.orientation )
     {
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
-        component->SetOrientation( COMPONENT_ORIENTATION_T::CMP_ORIENT_90 );
+        component->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_90 );
         valueField->SetTextAngle( -900. );
         valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
         break;
     case ASCH_RECORD_ORIENTATION::UPWARDS:
-        component->SetOrientation( COMPONENT_ORIENTATION_T::CMP_ORIENT_180 );
+        component->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_180 );
         valueField->SetTextAngle( -1800. );
         valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_CENTER );
         break;
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
-        component->SetOrientation( COMPONENT_ORIENTATION_T::CMP_ORIENT_270 );
+        component->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_270 );
         valueField->SetTextAngle( -2700. );
         valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_RIGHT );
         break;
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
-        component->SetOrientation( COMPONENT_ORIENTATION_T::CMP_ORIENT_0 );
+        component->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_0 );
         valueField->SetTextAngle( 0. );
         valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_CENTER );
         break;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ class wxFrame;
 class wxDialog;
 class LIB_PART;
 class PART_LIBS;
-class SCH_COMPONENT;
+class SCH_SYMBOL;
 class SCH_TEXT;
 class SCH_SHEET_PATH;
 class RESCUER;
