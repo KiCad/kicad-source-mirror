@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-19 08:36-0700\n"
+"POT-Creation-Date: 2021-06-10 13:22-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -831,8 +831,8 @@ msgstr "Footprint (.kicad_mod file)"
 msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps file)"
 
-msgid "Worksheet (.kicad_wks file)"
-msgstr "Worksheet (.kicad_wks file)"
+msgid "Drawing Sheet (.kicad_wks file)"
+msgstr "Drawing Sheet (.kicad_wks file)"
 
 msgid "Output Format"
 msgstr "Output Format"
@@ -924,6 +924,19 @@ msgstr "Output directory “%s” created.\n"
 #, c-format
 msgid "Cannot create output directory \"%s\".\n"
 msgstr "Cannot create output directory “%s”.\n"
+
+msgid "This operating system is not supported by KiCad and its dependencies."
+msgstr "This operating system is not supported by KiCad and its dependencies."
+
+msgid "Unsupported Operating System"
+msgstr "Unsupported Operating System"
+
+msgid ""
+"Any issues with KiCad on this system cannot be reported to the official "
+"bugtracker."
+msgstr ""
+"Any issues with KiCad on this system cannot be reported to the official "
+"bugtracker."
 
 msgid "Do not show again"
 msgstr "Do not show again"
@@ -1362,6 +1375,16 @@ msgstr "Image Scale:"
 msgid "Image Editor"
 msgstr "Image Editor"
 
+msgid "Skip Locked Items"
+msgstr "Skip Locked Items"
+
+msgid ""
+"Remove locked items from the selection and only apply the operation to the "
+"unlocked items (if any)."
+msgstr ""
+"Remove locked items from the selection and only apply the operation to the "
+"unlocked items (if any)."
+
 #, c-format
 msgid "The selection contains %d locked items."
 msgstr "The selection contains %d locked items."
@@ -1388,16 +1411,6 @@ msgid ""
 msgstr ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
-
-msgid "Skip Locked Items"
-msgstr "Skip Locked Items"
-
-msgid ""
-"Remove locked items from the selection and only apply the operation to the "
-"unlocked items (if any)."
-msgstr ""
-"Remove locked items from the selection and only apply the operation to the "
-"unlocked items (if any)."
 
 msgid "Locked Items"
 msgstr "Locked Items"
@@ -1510,8 +1523,8 @@ msgid "Portrait"
 msgstr "Portrait"
 
 #, c-format
-msgid "Page layout description file \"%s\" not found."
-msgstr "Page layout description file “%s” not found."
+msgid "Drawing sheet file \"%s\" not found."
+msgstr "Drawing sheet file \"%s\" not found."
 
 msgid "the translation for paper size must preserve original spellings"
 msgstr "the translation for paper size must preserve original spellings"
@@ -1519,22 +1532,22 @@ msgstr "the translation for paper size must preserve original spellings"
 msgid "Landscape"
 msgstr "Landscape"
 
-msgid "Select Page Layout Description File"
-msgstr "Select Page Layout Description File"
+msgid "Select Drawing Sheet File"
+msgstr "Select Drawing Sheet File"
 
 #, c-format
 msgid ""
-"The page layout description file name has changed.\n"
+"The drawing sheet file name has changed.\n"
 "Do you want to use the relative path:\n"
 "\"%s\"\n"
 "instead of\n"
 "\"%s\"?"
 msgstr ""
-"The page layout description file name has changed.\n"
+"The drawing sheet file name has changed.\n"
 "Do you want to use the relative path:\n"
-"“%s”\n"
+"\"%s\"\n"
 "instead of\n"
-"“%s”?"
+"\"%s\"?"
 
 msgid "dummy text"
 msgstr "dummy text"
@@ -1616,8 +1629,8 @@ msgstr "Comment8:"
 msgid "Comment9:"
 msgstr "Comment9:"
 
-msgid "Page layout description file"
-msgstr "Page layout description file"
+msgid "Drawing sheet file"
+msgstr "Drawing sheet file"
 
 msgid "Browse..."
 msgstr "Browse…"
@@ -1850,29 +1863,14 @@ msgstr "Accelerated graphics:"
 msgid "No Antialiasing"
 msgstr "No Antialiasing"
 
-msgid "Subpixel Antialiasing (High Quality)"
-msgstr "Subpixel Antialiasing (High Quality)"
-
-msgid "Subpixel Antialiasing (Ultra Quality)"
-msgstr "Subpixel Antialiasing (Ultra Quality)"
-
-msgid "Supersampling (2x)"
-msgstr "Supersampling (2x)"
-
-msgid "Supersampling (4x)"
-msgstr "Supersampling (4x)"
-
-msgid "Fallback graphics:"
-msgstr "Fallback graphics:"
-
 msgid "Fast Antialiasing"
 msgstr "Fast Antialiasing"
 
-msgid "Balanced Antialiasing"
-msgstr "Balanced Antialiasing"
-
 msgid "High Quality Antialiasing"
 msgstr "High Quality Antialiasing"
+
+msgid "Fallback graphics:"
+msgstr "Fallback graphics:"
 
 msgid "Helper Applications"
 msgstr "Helper Applications"
@@ -2355,8 +2353,8 @@ msgstr "Imported Shape"
 msgid "Image"
 msgstr "Image"
 
-msgid "Error writing page layout design file"
-msgstr "Error writing page layout design file"
+msgid "Error writing drawing sheet file"
+msgstr "Error writing drawing sheet file"
 
 msgid "First Page Only"
 msgstr "First Page Only"
@@ -2635,8 +2633,8 @@ msgstr "Hierarchical Label"
 msgid "Schematic Field"
 msgstr "Schematic Field"
 
-msgid "Component"
-msgstr "Component"
+msgid "Schematic Symbol"
+msgstr "Schematic Symbol"
 
 msgid "Sheet Pin"
 msgstr "Sheet Pin"
@@ -3412,6 +3410,14 @@ msgstr "Unrecognized function '%s'"
 #, c-format
 msgid "Missing units for '%s'| (%s)"
 msgstr "Missing units for '%s'| (%s)"
+
+#, c-format
+msgid "Type mismatch between '%s' and %lf"
+msgstr "Type mismatch between '%s' and %lf"
+
+#, c-format
+msgid "Type mismatch between %lf and '%s'"
+msgstr "Type mismatch between %lf and '%s'"
 
 msgid "No default editor found, you must choose it"
 msgstr "No default editor found, you must choose it"
@@ -4328,8 +4334,8 @@ msgstr "Eagle ver. 6.x XML library files"
 msgid "Geda PCB footprint library files"
 msgstr "Geda PCB footprint library files"
 
-msgid "Page layout design files"
-msgstr "Page layout design files"
+msgid "Drawing sheet files"
+msgstr "Drawing sheet files"
 
 msgid "KiCad symbol footprint link files"
 msgstr "KiCad symbol footprint link files"
@@ -7033,6 +7039,27 @@ msgstr "A sheet must have a valid file name."
 msgid "Sheet file must have a '.kicad_sch' extension."
 msgstr "Sheet file must have a '.kicad_sch' extension."
 
+msgid "Use relative path for sheet file?"
+msgstr "Use relative path for sheet file?"
+
+msgid "Sheet File Path"
+msgstr "Sheet File Path"
+
+msgid ""
+"Using relative hierarchical sheet file name paths improves schematic "
+"portability across systems and platforms.  Using absolute paths can result "
+"in portability issues."
+msgstr ""
+"Using relative hierarchical sheet file name paths improves schematic "
+"portability across systems and platforms.  Using absolute paths can result "
+"in portability issues."
+
+msgid "Use Relative Path"
+msgstr "Use Relative Path"
+
+msgid "Use Absolute Path"
+msgstr "Use Absolute Path"
+
 msgid "Untitled Sheet"
 msgstr "Untitled Sheet"
 
@@ -7048,38 +7075,50 @@ msgstr ""
 "in Preferences > Eeschema > Colors."
 
 #, c-format
-msgid "The file \"%s\" does not appear to be a valid schematic file."
-msgstr "The file \"%s\" does not appear to be a valid schematic file."
+msgid "The file '%s' does not appear to be a valid schematic file."
+msgstr "The file '%s' does not appear to be a valid schematic file."
 
 msgid "Invalid Schematic File"
 msgstr "Invalid Schematic File"
 
 #, c-format
-msgid "\"%s\" already exists."
-msgstr "“%s” already exists."
+msgid ""
+"Cannot normalize new sheet schematic file path:\n"
+"'%s'\n"
+"against parent sheet schematic file path:\n"
+"'%s'."
+msgstr ""
+"Cannot normalize new sheet schematic file path:\n"
+"'%s'\n"
+"against parent sheet schematic file path:\n"
+"'%s'."
 
 #, c-format
-msgid "Link \"%s\" to this file?"
-msgstr "Link “%s” to this file?"
+msgid "'%s' already exists."
+msgstr "'%s' already exists."
 
 #, c-format
-msgid "Change \"%s\" link from \"%s\" to \"%s\"?"
-msgstr "Change “%s” link from “%s” to “%s”?"
+msgid "Link '%s' to this file?"
+msgstr "Link '%s' to this file?"
 
 #, c-format
-msgid "Create new file \"%s\" with contents of \"%s\"?"
-msgstr "Create new file “%s” with contents of “%s”?"
+msgid "Change '%s' link from '%s' to '%s'?"
+msgstr "Change '%s' link from '%s' to '%s'?"
 
 msgid "This action cannot be undone."
 msgstr "This action cannot be undone."
 
 #, c-format
-msgid "Error occurred saving schematic file \"%s\"."
-msgstr "Error occurred saving schematic file “%s”."
+msgid "Create new file '%s' with contents of '%s'?"
+msgstr "Create new file '%s' with contents of '%s'?"
 
 #, c-format
-msgid "Failed to save schematic \"%s\""
-msgstr "Failed to save schematic “%s”"
+msgid "Error occurred saving schematic file '%s'."
+msgstr "Error occurred saving schematic file '%s'."
+
+#, c-format
+msgid "Failed to save schematic '%s'"
+msgstr "Failed to save schematic '%s'"
 
 msgid "A sheet must have a name."
 msgstr "A sheet must have a name."
@@ -7343,6 +7382,17 @@ msgstr "For a MOSFET, pin order is drain, gate, source"
 msgid "For a JFET, pin order is drain, gate, source"
 msgstr "For a JFET, pin order is drain, gate, source"
 
+#, c-format
+msgid ""
+"You need to specify at least the first %d parameters for the transient source"
+msgstr ""
+"You need to specify at least the first %d parameters for the transient source"
+
+msgid ""
+"You cannot leave interleaved empty fields when defining a transient source"
+msgstr ""
+"You cannot leave interleaved empty fields when defining a transient source"
+
 msgid "Select library"
 msgstr "Select library"
 
@@ -7586,6 +7636,9 @@ msgstr "Base Name"
 
 msgid "Alternate Assignment"
 msgstr "Alternate Assignment"
+
+msgid "Alternate pin assignments are not available for DeMorgan symbols."
+msgstr "Alternate pin assignments are not available for DeMorgan symbols."
 
 msgid "Unit:"
 msgstr "Unit:"
@@ -8197,25 +8250,27 @@ msgid "Add Anyway"
 msgstr "Add Anyway"
 
 msgid ""
-"Select one or more table rows containing legacy libraries to save as current "
-"format (*.kicad_sym)."
+"Select one or more rows containing libraries in Legacy format (*.lib) to "
+"save as current KiCad format (*.kicad_sym)."
 msgstr ""
-"Select one or more table rows containing legacy libraries to save as current "
-"format (*.kicad_sym)."
+"Select one or more rows containing libraries in Legacy format (*.lib) to "
+"save as current KiCad format (*.kicad_sym)."
 
 #, c-format
 msgid ""
-"Save '%s' as current format (*.kicad_sym) and replace legacy entry in table?"
+"Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
+"table?"
 msgstr ""
-"Save '%s' as current format (*.kicad_sym) and replace legacy entry in table?"
+"Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
+"table?"
 
 #, c-format
 msgid ""
-"Save %d legacy libraries as current format (*.kicad_sym) and replace legacy "
-"entries in table?"
+"Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
+"replace legacy entries in table?"
 msgstr ""
-"Save %d legacy libraries as current format (*.kicad_sym) and replace legacy "
-"entries in table?"
+"Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
+"replace legacy entries in table?"
 
 #, c-format
 msgid "Library '%s' not found."
@@ -8285,8 +8340,8 @@ msgstr "Add existing library to table"
 msgid "Remove library from table"
 msgstr "Remove library from table"
 
-msgid "Migrate Libraries..."
-msgstr "Migrate Libraries..."
+msgid "Migrate Libraries"
+msgstr "Migrate Libraries"
 
 msgid "Path Substitutions:"
 msgstr "Path Substitutions:"
@@ -8519,16 +8574,16 @@ msgstr ""
 "hierarchical sheet schematics."
 
 #, c-format
-msgid "Error loading schematic file \"%s\""
-msgstr "Error loading schematic file \"%s\""
+msgid "Error loading schematic '%s'."
+msgstr "Error loading schematic '%s'."
 
 #, c-format
 msgid "Memory exhausted loading schematic file \"%s\""
 msgstr "Memory exhausted loading schematic file \"%s\""
 
 #, c-format
-msgid "Failed to load \"%s\""
-msgstr "Failed to load “%s”"
+msgid "Failed to load '%s'."
+msgstr "Failed to load '%s'."
 
 msgid ""
 "An error was found when loading the schematic that has been automatically "
@@ -8589,8 +8644,8 @@ msgstr ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
 
-msgid "Schematic file is read only."
-msgstr "Schematic file is read only."
+msgid "Schematic is read only."
+msgstr "Schematic is read only."
 
 msgid "Append Schematic"
 msgstr "Append Schematic"
@@ -8609,6 +8664,16 @@ msgstr "All supported formats|"
 
 msgid "Import Schematic"
 msgstr "Import Schematic"
+
+#, c-format
+msgid ""
+"Folder '%s' could not be created.\n"
+"\n"
+"Make sure you have write permissions and try again."
+msgstr ""
+"Folder '%s' could not be created.\n"
+"\n"
+"Make sure you have write permissions and try again."
 
 msgid "Saving will overwrite existing files."
 msgstr "Saving will overwrite existing files."
@@ -8630,12 +8695,8 @@ msgid "Abort Project Save"
 msgstr "Abort Project Save"
 
 #, c-format
-msgid ""
-"Error loading schematic \"%s\".\n"
-"%s"
-msgstr ""
-"Error loading schematic \"%s\".\n"
-"%s"
+msgid "Schematic '%s' is already open."
+msgstr "Schematic '%s' is already open."
 
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "The current schematic has been modified.  Save changes?"
@@ -8806,6 +8867,13 @@ msgstr "Failed to create file “%s”"
 #, c-format
 msgid "Could not find library file %s."
 msgstr "Could not find library file %s."
+
+msgid ""
+"Multiple symbols have the same reference designator.\n"
+"Annotation must be corrected before simulating."
+msgstr ""
+"Multiple symbols have the same reference designator.\n"
+"Annotation must be corrected before simulating."
 
 msgid "Run command:"
 msgstr "Run command:"
@@ -9271,21 +9339,21 @@ msgstr ""
 
 #, c-format
 msgid ""
-"Symbol ID '%s' is of an unknown type. It is neither a component or a net "
+"Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
-"Symbol ID '%s' is of an unknown type. It is neither a component or a net "
+"Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
 
 #, c-format
 msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
-"supported in KiCad. The symbol was loaded with 1:1 scale and may require "
-"manual fixing."
+"supported in KiCad. When the symbol is reloaded from the library, it will "
+"revert to the original 1:1 scale."
 msgstr ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
-"supported in KiCad. The symbol was loaded with 1:1 scale and may require "
-"manual fixing."
+"supported in KiCad. When the symbol is reloaded from the library, it will "
+"revert to the original 1:1 scale."
 
 #, c-format
 msgid ""
@@ -10171,17 +10239,11 @@ msgstr "tab"
 msgid "space"
 msgstr "space"
 
-#, c-format
-msgid "%s or %s"
-msgstr "%s or %s"
+msgid " or "
+msgstr " or "
 
-#, c-format
-msgid "%s, %s, or %s"
-msgstr "%s, %s, or %s"
-
-#, c-format
-msgid "%s, %s, %s, or %s"
-msgstr "%s, %s, %s, or %s"
+msgid ", or "
+msgstr ", or "
 
 msgid "The reference designator cannot contain text variable references"
 msgstr "The reference designator cannot contain text variable references"
@@ -10228,10 +10290,6 @@ msgstr "Use partial schematic"
 #, c-format
 msgid "Error occurred loading schematic file \"%s\"."
 msgstr "Error occurred loading schematic file “%s”."
-
-#, c-format
-msgid "Failed to load schematic \"%s\""
-msgstr "Failed to load schematic “%s”"
 
 msgid "Continue Load"
 msgstr "Continue Load"
@@ -10303,9 +10361,6 @@ msgstr "Create New Sheet"
 
 msgid "Discard New Sheet"
 msgstr "Discard New Sheet"
-
-msgid "Start the simulation by clicking the Run Simulation button"
-msgstr "Start the simulation by clicking the Run Simulation button"
 
 msgid ""
 "This simulation provide no plots. Please refer to console window for results"
@@ -10536,6 +10591,13 @@ msgstr ""
 #, c-format
 msgid "Loading library \"%s\""
 msgstr "Loading library “%s”"
+
+msgid ""
+"Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
+"Libraries dialog to adjust paths and add or remove libraries."
+msgstr ""
+"Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
+"Libraries dialog to adjust paths and add or remove libraries."
 
 msgid "Symbol..."
 msgstr "Symbol..."
@@ -10888,13 +10950,6 @@ msgstr "Cannot enumerate library \"%s\" (%s)"
 msgid "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
 msgstr "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
 
-msgid ""
-"Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
-"Libraries dialog to adjust paths and add or remove libraries."
-msgstr ""
-"Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
-"Libraries dialog to adjust paths and add or remove libraries."
-
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
@@ -10955,8 +11010,8 @@ msgid "Change Visibility"
 msgstr "Change Visibility"
 
 #, c-format
-msgid "Failed to open component-footprint link file \"%s\""
-msgstr "Failed to open component-footprint link file “%s”"
+msgid "Failed to open symbol-footprint link file \"%s\""
+msgstr "Failed to open symbol-footprint link file \"%s\""
 
 msgid "Select at least one property to back annotate."
 msgstr "Select at least one property to back annotate."
@@ -11593,6 +11648,12 @@ msgstr "Force H/V Wires and Buses"
 msgid "Switch H & V only mode for new wires and buses"
 msgstr "Switch H & V only mode for new wires and buses"
 
+msgid "Scripting Console"
+msgstr "Scripting Console"
+
+msgid "Show the Python scripting console"
+msgstr "Show the Python scripting console"
+
 msgid "Enter Sheet"
 msgstr "Enter Sheet"
 
@@ -11813,9 +11874,6 @@ msgstr "symbol is not multi-unit"
 
 msgid "Label value cannot go below zero"
 msgstr "Label value cannot go below zero"
-
-msgid "Item locked."
-msgstr "Item locked."
 
 #, c-format
 msgid "Edit %s Field"
@@ -12048,8 +12106,8 @@ msgstr "Page Size"
 msgid "Show page limits"
 msgstr "Show page limits"
 
-msgid "Visibles"
-msgstr "Visibles"
+msgid "Layers Manager"
+msgstr "Layers Manager"
 
 #, c-format
 msgid "File %s not found."
@@ -12267,9 +12325,6 @@ msgstr "Clear Recent Job Files"
 
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber Viewer"
-
-msgid "Layers Manager"
-msgstr "Layers Manager"
 
 msgid "Gerber Viewer"
 msgstr "Gerber Viewer"
@@ -12613,8 +12668,8 @@ msgstr "This file is already open."
 msgid "Library Path"
 msgstr "Library Path"
 
-msgid "Plugin Type"
-msgstr "Plugin Type"
+msgid "Library Format"
+msgstr "Library Format"
 
 msgid "Active"
 msgstr "Active"
@@ -12624,6 +12679,9 @@ msgstr "Malformed expression"
 
 msgid "Reset all hotkeys to the built-in KiCad defaults"
 msgstr "Reset all hotkeys to the built-in KiCad defaults"
+
+msgid "untitled"
+msgstr "untitled"
 
 msgid "Hide this message."
 msgstr "Hide this message."
@@ -12637,8 +12695,8 @@ msgstr "<html><h1>Template Selector</h1></html>"
 msgid "Select Templates Directory"
 msgstr "Select Templates Directory"
 
-msgid "Template path:"
-msgstr "Template path:"
+msgid "Folder:"
+msgstr "Folder:"
 
 msgid "Browse"
 msgstr "Browse"
@@ -12830,8 +12888,12 @@ msgid "Cound't find the meta HTML information file for this template!"
 msgstr "Cound't find the meta HTML information file for this template!"
 
 #, c-format
-msgid "Cannot create folder \"%s\"."
-msgstr "Cannot create folder “%s”."
+msgid "Cannot create folder '%s'."
+msgstr "Cannot create folder '%s'."
+
+#, c-format
+msgid "Cannot copy file '%s'."
+msgstr "Cannot copy file '%s'."
 
 msgid ""
 "Changing file extension will change file type.\n"
@@ -12850,8 +12912,12 @@ msgid "Permission error?"
 msgstr "Permission error?"
 
 #, c-format
-msgid "Failed to delete '%s'"
-msgstr "Failed to delete '%s'"
+msgid "Can not move '%s' to recycle bin."
+msgstr "Can not move '%s' to recycle bin."
+
+#, c-format
+msgid "Can not move '%s' to trash."
+msgstr "Can not move '%s' to trash."
 
 msgid "Directory name:"
 msgstr "Directory name:"
@@ -12919,25 +12985,11 @@ msgstr "Delete the file and its content"
 msgid "Delete the files and their contents"
 msgstr "Delete the files and their contents"
 
+msgid "Move to Trash"
+msgstr "Move to Trash"
+
 msgid "Print the contents of the file"
 msgstr "Print the contents of the file"
-
-msgid "Delete Directory"
-msgstr "Delete Directory"
-
-msgid "Delete File"
-msgstr "Delete File"
-
-#, c-format
-msgid "Are you sure you want to delete '%s'?"
-msgstr "Are you sure you want to delete '%s'?"
-
-#, c-format
-msgid "Are you sure you want to delete %d items?"
-msgstr "Are you sure you want to delete %d items?"
-
-msgid "Delete Multiple Items"
-msgstr "Delete Multiple Items"
 
 #, c-format
 msgid "Change filename: \"%s\""
@@ -13012,30 +13064,20 @@ msgstr "Open Text Editor"
 msgid "Launch preferred text editor"
 msgstr "Launch preferred text editor"
 
-msgid "Create a new directory for the project"
-msgstr "Create a new directory for the project"
+msgid "Create a new folder for the project"
+msgstr "Create a new folder for the project"
 
 msgid "Create New Project"
 msgstr "Create New Project"
 
-#, c-format
 msgid ""
-"Directory \"%s\" could not be created.\n"
-"\n"
-"Please make sure you have write permissions and try again."
-msgstr ""
-"Directory “%s” could not be created.\n"
-"\n"
-"Please make sure you have write permissions and try again."
-
-msgid ""
-"The selected directory is not empty.  It is recommended that you create "
-"projects in their own empty directory.\n"
+"The selected folder is not empty.  It is recommended that you create "
+"projects in their own empty folder.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
-"The selected directory is not empty.  It is recommended that you create "
-"projects in their own empty directory.\n"
+"The selected folder is not empty.  It is recommended that you create "
+"projects in their own empty folder.\n"
 "\n"
 "Do you want to continue?"
 
@@ -13052,14 +13094,11 @@ msgid "New Project Folder"
 msgstr "New Project Folder"
 
 #, c-format
-msgid "Cannot write to folder \"%s\"."
-msgstr "Cannot write to folder “%s”."
+msgid "Cannot write to folder '%s'."
+msgstr "Cannot write to folder '%s'."
 
-msgid "Error!"
-msgstr "Error!"
-
-msgid "Please check your access permissions to this folder and try again."
-msgstr "Please check your access permissions to this folder and try again."
+msgid "Make sure you have write permissions and try again."
+msgstr "Make sure you have write permissions and try again."
 
 msgid "Overwriting files:"
 msgstr "Overwriting files:"
@@ -13067,11 +13106,8 @@ msgstr "Overwriting files:"
 msgid "Similar files already exist in the destination folder."
 msgstr "Similar files already exist in the destination folder."
 
-msgid "A problem occurred creating new project from template!"
-msgstr "A problem occurred creating new project from template!"
-
-msgid "Template Error"
-msgstr "Template Error"
+msgid "A problem occurred creating new project from template."
+msgstr "A problem occurred creating new project from template."
 
 msgid "Open Existing Project"
 msgstr "Open Existing Project"
@@ -13082,6 +13118,30 @@ msgstr "Cannot copy folder \"%s\"."
 
 msgid "Save Project To"
 msgstr "Save Project To"
+
+#, c-format
+msgid "\"%s\" already exists."
+msgstr "“%s” already exists."
+
+#, c-format
+msgid ""
+"Directory \"%s\" could not be created.\n"
+"\n"
+"Please make sure you have write permissions and try again."
+msgstr ""
+"Directory “%s” could not be created.\n"
+"\n"
+"Please make sure you have write permissions and try again."
+
+#, c-format
+msgid "Cannot write to folder \"%s\"."
+msgstr "Cannot write to folder “%s”."
+
+msgid "Error!"
+msgstr "Error!"
+
+msgid "Please check your access permissions to this folder and try again."
+msgstr "Please check your access permissions to this folder and try again."
 
 msgid "Create (or open) a project to edit a schematic."
 msgstr "Create (or open) a project to edit a schematic."
@@ -13105,14 +13165,6 @@ msgstr "%s closed [pid=%d]\n"
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s opened [pid=%ld]\n"
-
-msgid ""
-"Windows 7 and older is no longer supported by KiCad and its dependencies."
-msgstr ""
-"Windows 7 and older is no longer supported by KiCad and its dependencies."
-
-msgid "Unsupported Operating System"
-msgstr "Unsupported Operating System"
 
 #, c-format
 msgid "Error code: %d"
@@ -13158,11 +13210,11 @@ msgstr "Y end:"
 msgid "New Item"
 msgstr "New Item"
 
-msgid "Print Page Layout"
-msgstr "Print Page Layout"
+msgid "Print Drawing Sheet"
+msgstr "Print Drawing Sheet"
 
-msgid "An error occurred attempting to print the page layout."
-msgstr "An error occurred attempting to print the page layout."
+msgid "An error occurred attempting to print the drawing sheet."
+msgstr "An error occurred attempting to print the drawing sheet."
 
 msgid "Printing"
 msgstr "Printing"
@@ -13278,18 +13330,15 @@ msgstr "Bottom:"
 msgid "General Options"
 msgstr "General Options"
 
-msgid "Page Layout Description File"
-msgstr "Page Layout Description File"
+msgid "Drawing Sheet File"
+msgstr "Drawing Sheet File"
 
-msgid "The current page layout has been modified. Save changes?"
-msgstr "The current page layout has been modified. Save changes?"
+msgid "The current drawing sheet has been modified. Save changes?"
+msgstr "The current drawing sheet has been modified. Save changes?"
 
 #, c-format
 msgid "File \"%s\" loaded"
 msgstr "File “%s” loaded"
-
-msgid "The current page layout has been modified.  Save changes?"
-msgstr "The current page layout has been modified.  Save changes?"
 
 msgid "Append Existing Drawing Sheet"
 msgstr "Append Existing Drawing Sheet"
@@ -13345,11 +13394,11 @@ msgstr "no file selected"
 msgid "coord origin: %s"
 msgstr "coord origin: %s"
 
-msgid "New page layout file is unsaved"
-msgstr "New page layout file is unsaved"
+msgid "New drawing sheet file is unsaved"
+msgstr "New drawing sheet file is unsaved"
 
-msgid "Page layout changes are unsaved"
-msgstr "Page layout changes are unsaved"
+msgid "Drawing sheet changes are unsaved"
+msgstr "Drawing sheet changes are unsaved"
 
 msgid "Page Width"
 msgstr "Page Width"
@@ -13409,8 +13458,8 @@ msgstr "Append an existing drawing sheet file to current file"
 msgid "Show Design Inspector"
 msgstr "Show Design Inspector"
 
-msgid "Show the list of items in page layout"
-msgstr "Show the list of items in page layout"
+msgid "Show the list of items in the drawing sheet"
+msgstr "Show the list of items in the drawing sheet"
 
 msgid "Page Preview Settings..."
 msgstr "Page Preview Settings..."
@@ -15590,6 +15639,10 @@ msgstr "Electrical Properties"
 msgid "Clearance:"
 msgstr "Clearance:"
 
+msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
+msgstr ""
+"Copper clearance for this zone (set to 0 to use the netclass clearance)"
+
 msgid "Minimum width:"
 msgstr "Minimum width:"
 
@@ -15612,14 +15665,21 @@ msgstr "Thermal reliefs"
 msgid "Reliefs for PTH"
 msgstr "Reliefs for PTH"
 
-msgid "Thermal clearance:"
-msgstr "Thermal clearance:"
+msgid "Thermal relief gap:"
+msgstr "Thermal relief gap:"
+
+msgid ""
+"The distance that will be kept clear between the filled area of the zone and "
+"a pad connected by thermal relief spokes."
+msgstr ""
+"The distance that will be kept clear between the filled area of the zone and "
+"a pad connected by thermal relief spokes."
 
 msgid "Clearance between pads in the same net and filled areas."
 msgstr "Clearance between pads in the same net and filled areas."
 
-msgid "Thermal spoke width:"
-msgstr "Thermal spoke width:"
+msgid "Thermal relief spoke width:"
+msgstr "Thermal relief spoke width:"
 
 msgid "Width of copper in thermal reliefs."
 msgstr "Width of copper in thermal reliefs."
@@ -16056,6 +16116,9 @@ msgstr "-------- DRC cancelled by user.<br><br>"
 msgid "Done.<br><br>"
 msgstr "Done.<br><br>"
 
+msgid "Run clearance resolution tool..."
+msgstr "Run clearance resolution tool..."
+
 msgid "Open the Board Setup... dialog"
 msgstr "Open the Board Setup... dialog"
 
@@ -16254,6 +16317,17 @@ msgstr "Output Units"
 msgid "Export IDFv3"
 msgstr "Export IDFv3"
 
+msgid "Non-unity scaled models:"
+msgstr "Non-unity scaled models:"
+
+msgid ""
+"Scaled models detected.  Model scaling is not reliable for mechanical export."
+msgstr ""
+"Scaled models detected.  Model scaling is not reliable for mechanical export."
+
+msgid "Model Scale Warning"
+msgstr "Model Scale Warning"
+
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "STEP export failed!  Please save the PCB and try again"
 
@@ -16297,6 +16371,12 @@ msgstr "Other options:"
 
 msgid "Ignore virtual components"
 msgstr "Ignore virtual components"
+
+msgid "Substitute similarly named models"
+msgstr "Substitute similarly named models"
+
+msgid "Replace VRML models with STEP models of the same name"
+msgstr "Replace VRML models with STEP models of the same name"
 
 msgid "Overwrite old file"
 msgstr "Overwrite old file"
@@ -16703,8 +16783,8 @@ msgstr "Use zone setting"
 msgid "Thermal relief"
 msgstr "Thermal relief"
 
-msgid "Local Clearance and Settings"
-msgstr "Local Clearance and Settings"
+msgid "Clearance Overrides and Settings"
+msgstr "Clearance Overrides and Settings"
 
 msgid "3D Model(s)"
 msgstr "3D Model(s)"
@@ -18076,12 +18156,6 @@ msgstr "Pad connection:"
 msgid "From parent footprint"
 msgstr "From parent footprint"
 
-msgid "Thermal relief spoke width:"
-msgstr "Thermal relief spoke width:"
-
-msgid "Thermal relief gap:"
-msgstr "Thermal relief gap:"
-
 msgid "Custom pad shape in zone:"
 msgstr "Custom pad shape in zone:"
 
@@ -18811,12 +18885,6 @@ msgstr "Draw the area using horizontal, verical and 45 degree lines only"
 
 msgid "Rule Area Properties"
 msgstr "Rule Area Properties"
-
-msgid "&Run"
-msgstr "&Run"
-
-msgid "Scripting Test Window"
-msgstr "Scripting Test Window"
 
 msgid "Move items on:"
 msgstr "Move items on:"
@@ -20472,6 +20540,9 @@ msgstr "Items shorting two nets"
 msgid "Items not allowed"
 msgstr "Items not allowed"
 
+msgid "Text (or dimension) on Edge.Cuts layer"
+msgstr "Text (or dimension) on Edge.Cuts layer"
+
 msgid "Clearance violation"
 msgstr "Clearance violation"
 
@@ -20498,6 +20569,9 @@ msgstr "Hole clearance violation"
 
 msgid "Drilled holes too close together"
 msgstr "Drilled holes too close together"
+
+msgid "Drilled holes co-located"
+msgstr "Drilled holes co-located"
 
 msgid "Track width"
 msgstr "Track width"
@@ -20596,8 +20670,8 @@ msgid "Missing version number."
 msgstr "Missing version number."
 
 #, c-format
-msgid "Unrecognized item '%s'.| Expected version number"
-msgstr "Unrecognized item '%s'.| Expected version number"
+msgid "Unrecognized item '%s'.| Expected version number."
+msgstr "Unrecognized item '%s'.| Expected version number."
 
 #, c-format
 msgid "Unrecognized item '%s'."
@@ -20729,13 +20803,6 @@ msgstr "Checking copper to board edge clearances..."
 msgid "Checking silk to board edge clearances..."
 msgstr "Checking silk to board edge clearances..."
 
-msgid "Checking hole to hole clearances..."
-msgstr "Checking hole to hole clearances..."
-
-#, c-format
-msgid "(%s min %s; actual %s)"
-msgstr "(%s min %s; actual %s)"
-
 msgid "Checking pad holes..."
 msgstr "Checking pad holes..."
 
@@ -20752,6 +20819,13 @@ msgstr "(%s min width %s; actual %s)"
 #, c-format
 msgid "(%s max width %s; actual %s)"
 msgstr "(%s max width %s; actual %s)"
+
+msgid "Checking hole to hole clearances..."
+msgstr "Checking hole to hole clearances..."
+
+#, c-format
+msgid "(%s min %s; actual %s)"
+msgstr "(%s min %s; actual %s)"
 
 #, c-format
 msgid "Missing footprint %s (%s)"
@@ -20982,9 +21056,6 @@ msgstr "Current board will be closed, save changes to '%s' before continuing?"
 msgid "Current Board will be closed. Continue?"
 msgstr "Current Board will be closed. Continue?"
 
-msgid "noname"
-msgstr "noname"
-
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -21123,20 +21194,20 @@ msgstr "<no reference designator>"
 msgid "Footprint %s"
 msgstr "Footprint %s"
 
-msgid "Local Clearance"
-msgstr "Local Clearance"
+msgid "Clearance Override"
+msgstr "Clearance Override"
 
-msgid "Local Solderpaste Margin"
-msgstr "Local Solderpaste Margin"
+msgid "Solderpaste Margin Override"
+msgstr "Solderpaste Margin Override"
 
-msgid "Local Solderpaste Margin Ratio"
-msgstr "Local Solderpaste Margin Ratio"
+msgid "Solderpaste Margin Ratio Override"
+msgstr "Solderpaste Margin Ratio Override"
 
-msgid "Thermal Width"
-msgstr "Thermal Width"
+msgid "Thermal Relief Width"
+msgstr "Thermal Relief Width"
 
-msgid "Thermal Gap"
-msgstr "Thermal Gap"
+msgid "Thermal Relief Gap"
+msgstr "Thermal Relief Gap"
 
 #, c-format
 msgid "footprint %s"
@@ -21647,18 +21718,6 @@ msgstr "Auto-Place Footprints"
 msgid "External Plugins"
 msgstr "External Plugins"
 
-msgid "Refresh Plugins"
-msgstr "Refresh Plugins"
-
-msgid "Reload all python plugins and refresh plugin menus"
-msgstr "Reload all python plugins and refresh plugin menus"
-
-msgid "Reveal Plugin Folder in Finder"
-msgstr "Reveal Plugin Folder in Finder"
-
-msgid "Reveals the plugins folder in a Finder window"
-msgstr "Reveals the plugins folder in a Finder window"
-
 msgid "Ro&ute"
 msgstr "Ro&ute"
 
@@ -21739,24 +21798,24 @@ msgid "Cannot add %s (no footprint assigned)."
 msgstr "Cannot add %s (no footprint assigned)."
 
 #, c-format
-msgid "Cannot add %s (footprint \"%s\" not found)."
-msgstr "Cannot add %s (footprint “%s” not found)."
+msgid "Cannot add %s (footprint '%s' not found)."
+msgstr "Cannot add %s (footprint '%s' not found)."
 
 #, c-format
-msgid "Add %s (footprint \"%s\")."
-msgstr "Add %s (footprint “%s”)."
+msgid "Add %s (footprint '%s')."
+msgstr "Add %s (footprint '%s')."
 
 #, c-format
-msgid "Added %s (footprint \"%s\")."
-msgstr "Added %s (footprint \"%s\")."
+msgid "Added %s (footprint '%s')."
+msgstr "Added %s (footprint '%s')."
 
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
 msgstr "Cannot update %s (no footprint assigned)."
 
 #, c-format
-msgid "Cannot update %s (footprint \"%s\" not found)."
-msgstr "Cannot update %s (footprint “%s” not found)."
+msgid "Cannot update %s (footprint '%s' not found)."
+msgstr "Cannot update %s (footprint '%s' not found)."
 
 #, c-format
 msgid "Change %s footprint from '%s' to '%s'."
@@ -21899,8 +21958,8 @@ msgid "Processing symbol '%s:%s'."
 msgstr "Processing symbol '%s:%s'."
 
 #, c-format
-msgid "Multiple footprints found for \"%s\"."
-msgstr "Multiple footprints found for “%s”."
+msgid "Multiple footprints found for '%s'."
+msgstr "Multiple footprints found for '%s'."
 
 #, c-format
 msgid "Cannot remove unused footprint %s (locked)."
@@ -22131,14 +22190,8 @@ msgstr "Hole Size Y"
 msgid "Pad To Die Length"
 msgstr "Pad To Die Length"
 
-msgid "Local Soldermask Margin"
-msgstr "Local Soldermask Margin"
-
-msgid "Thermal Relief Spoke Width"
-msgstr "Thermal Relief Spoke Width"
-
-msgid "Thermal Relief"
-msgstr "Thermal Relief"
+msgid "Soldermask Margin Override"
+msgstr "Soldermask Margin Override"
 
 msgid "Fabrication Property"
 msgstr "Fabrication Property"
@@ -22159,8 +22212,12 @@ msgid "New PCB file is unsaved"
 msgstr "New PCB file is unsaved"
 
 #, c-format
-msgid "The auto save file \"%s\" could not be removed!"
-msgstr "The auto save file “%s” could not be removed!"
+msgid "Save changes to '%s' before closing?"
+msgstr "Save changes to '%s' before closing?"
+
+#, c-format
+msgid "The auto save file '%s' could not be removed!"
+msgstr "The auto save file '%s' could not be removed!"
 
 msgid "Board file is read only."
 msgstr "Board file is read only."
@@ -22184,8 +22241,8 @@ msgid "Eeschema netlist"
 msgstr "Eeschema netlist"
 
 #, c-format
-msgid "Schematic file \"%s\" not found."
-msgstr "Schematic file “%s” not found."
+msgid "Schematic file '%s' not found."
+msgstr "Schematic file '%s' not found."
 
 msgid "Eeschema failed to load:\n"
 msgstr "Eeschema failed to load:\n"
@@ -22777,10 +22834,10 @@ msgstr ""
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
-"Milimetres were applied instead."
+"Millimetres were applied instead."
 msgstr ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
-"Milimetres were applied instead."
+"Millimetres were applied instead."
 
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
@@ -23201,6 +23258,22 @@ msgstr "Unknown PCad layer %u"
 msgid "KiCad only supports 32 signal layers"
 msgstr "KiCad only supports 32 signal layers"
 
+msgid "Exception on python action plugin code"
+msgstr "Exception on python action plugin code"
+
+#, c-format
+msgid "Method \"%s\" not found, or not callable"
+msgstr "Method “%s” not found, or not callable"
+
+msgid "Unknown Method"
+msgstr "Unknown Method"
+
+msgid "Apply action script"
+msgstr "Apply action script"
+
+msgid "Exception on python footprint wizard code"
+msgstr "Exception on python footprint wizard code"
+
 msgid "New Track"
 msgstr "New Track"
 
@@ -23587,22 +23660,6 @@ msgstr "Reference '%s' not found."
 msgid "A wire_via references a missing padstack \"%s\""
 msgstr "A wire_via references a missing padstack “%s”"
 
-msgid "Exception on python action plugin code"
-msgstr "Exception on python action plugin code"
-
-#, c-format
-msgid "Method \"%s\" not found, or not callable"
-msgstr "Method “%s” not found, or not callable"
-
-msgid "Unknown Method"
-msgstr "Unknown Method"
-
-msgid "Apply action script"
-msgstr "Apply action script"
-
-msgid "Exception on python footprint wizard code"
-msgstr "Exception on python footprint wizard code"
-
 msgid "Load footprint from current board"
 msgstr "Load footprint from current board"
 
@@ -23764,11 +23821,17 @@ msgstr "Report incomplete: could not compile custom design rules.  "
 msgid "Resolved clearance: %s."
 msgstr "Resolved clearance: %s."
 
-msgid "Select two items for a clearance resolution report."
-msgstr "Select two items for a clearance resolution report."
-
 msgid "Clearance Report"
 msgstr "Clearance Report"
+
+msgid "Edge clearance resolution for:"
+msgstr "Edge clearance resolution for:"
+
+msgid "Clearance resolution for:"
+msgstr "Clearance resolution for:"
+
+msgid "Select two items for a clearance resolution report."
+msgstr "Select two items for a clearance resolution report."
 
 msgid "Cannot generate clearance report on empty group."
 msgstr "Cannot generate clearance report on empty group."
@@ -23782,12 +23845,6 @@ msgstr "Hole clearance resolution for:"
 #, c-format
 msgid "%s not present on layer %s.  No clearance defined."
 msgstr "%s not present on layer %s.  No clearance defined."
-
-msgid "Edge clearance resolution for:"
-msgstr "Edge clearance resolution for:"
-
-msgid "Clearance resolution for:"
-msgstr "Clearance resolution for:"
 
 msgid "Items belong to the same net. Clearance is 0."
 msgstr "Items belong to the same net. Clearance is 0."
@@ -24023,6 +24080,9 @@ msgstr "Copy cancelled"
 
 msgid "_copy"
 msgstr "_copy"
+
+msgid "No footprint problems found."
+msgstr "No footprint problems found."
 
 msgid "Grouping"
 msgstr "Grouping"
@@ -24511,6 +24571,18 @@ msgstr "Default Pad Properties…"
 msgid "Edit the pad properties used when creating new pads"
 msgstr "Edit the pad properties used when creating new pads"
 
+msgid "Refresh Plugins"
+msgstr "Refresh Plugins"
+
+msgid "Reload all python plugins and refresh plugin menus"
+msgstr "Reload all python plugins and refresh plugin menus"
+
+msgid "Reveal Plugin Folder in Finder"
+msgstr "Reveal Plugin Folder in Finder"
+
+msgid "Reveals the plugins folder in a Finder window"
+msgstr "Reveals the plugins folder in a Finder window"
+
 msgid "Board Setup..."
 msgstr "Board Setup..."
 
@@ -24685,8 +24757,14 @@ msgstr "Clear Net Highlighting"
 msgid "Clear any existing net highlighting"
 msgstr "Clear any existing net highlighting"
 
-msgid "Highlight all copper items of a net"
-msgstr "Highlight all copper items of a net"
+msgid "Toggle Net Highlight"
+msgstr "Toggle Net Highlight"
+
+msgid "Toggle net highlighting"
+msgstr "Toggle net highlighting"
+
+msgid "Highlight all copper items on the selected net(s)"
+msgstr "Highlight all copper items on the selected net(s)"
 
 msgid "Hide Net"
 msgstr "Hide Net"
@@ -24706,20 +24784,14 @@ msgstr "Switch to Schematic Editor"
 msgid "Open schematic in Eeschema"
 msgstr "Open schematic in Eeschema"
 
-msgid "Highlight Ratsnest"
-msgstr "Highlight Ratsnest"
+msgid "Local Ratsnest"
+msgstr "Local Ratsnest"
 
-msgid "Show ratsnest of selected item(s)"
-msgstr "Show ratsnest of selected item(s)"
+msgid "Toggle ratsnest display of selected item(s)"
+msgstr "Toggle ratsnest display of selected item(s)"
 
 msgid "Show the net inspector"
 msgstr "Show the net inspector"
-
-msgid "Scripting Console"
-msgstr "Scripting Console"
-
-msgid "Show the Python scripting console"
-msgstr "Show the Python scripting console"
 
 msgid "Show Appearance Manager"
 msgstr "Show Appearance Manager"
@@ -24914,11 +24986,14 @@ msgstr "Switch between layers in active layer pair"
 msgid "Increase Layer Opacity"
 msgstr "Increase Layer Opacity"
 
-msgid "Make the current layer more transparent"
-msgstr "Make the current layer more transparent"
+msgid "Make the current layer less transparent"
+msgstr "Make the current layer less transparent"
 
 msgid "Decrease Layer Opacity"
 msgstr "Decrease Layer Opacity"
+
+msgid "Make the current layer more transparent"
+msgstr "Make the current layer more transparent"
 
 msgid "Show Board Statistics"
 msgstr "Show Board Statistics"
@@ -24951,6 +25026,12 @@ msgstr "Repair Board"
 
 msgid "Run various diagnostics and attempt to repair board"
 msgstr "Run various diagnostics and attempt to repair board"
+
+msgid "Repair Footprint"
+msgstr "Repair Footprint"
+
+msgid "Run various diagnostics and attempt to repair footprint"
+msgstr "Run various diagnostics and attempt to repair footprint"
 
 msgid "Align to Top"
 msgstr "Align to Top"
@@ -25143,6 +25224,9 @@ msgstr "Length Tuning Settings…"
 
 msgid "Sets the length tuning parameters for currently routed item."
 msgstr "Sets the length tuning parameters for currently routed item."
+
+msgid "Item locked."
+msgstr "Item locked."
 
 msgid "Invalid clipboard contents"
 msgstr "Invalid clipboard contents"
@@ -25807,12 +25891,6 @@ msgstr "Min Width"
 msgid "Pad Connections"
 msgstr "Pad Connections"
 
-msgid "Thermal Clearance"
-msgstr "Thermal Clearance"
-
-msgid "Thermal Spoke Width"
-msgstr "Thermal Spoke Width"
-
 msgid "Building zone fills..."
 msgstr "Building zone fills..."
 
@@ -25932,6 +26010,347 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Worksheet (.kicad_wks file)"
+#~ msgstr "Worksheet (.kicad_wks file)"
+
+#, c-format
+#~ msgid "Page layout description file \"%s\" not found."
+#~ msgstr "Page layout description file “%s” not found."
+
+#~ msgid "Select Page Layout Description File"
+#~ msgstr "Select Page Layout Description File"
+
+#, c-format
+#~ msgid ""
+#~ "The page layout description file name has changed.\n"
+#~ "Do you want to use the relative path:\n"
+#~ "\"%s\"\n"
+#~ "instead of\n"
+#~ "\"%s\"?"
+#~ msgstr ""
+#~ "The page layout description file name has changed.\n"
+#~ "Do you want to use the relative path:\n"
+#~ "“%s”\n"
+#~ "instead of\n"
+#~ "“%s”?"
+
+#~ msgid "Page layout description file"
+#~ msgstr "Page layout description file"
+
+#~ msgid "Subpixel Antialiasing (High Quality)"
+#~ msgstr "Subpixel Antialiasing (High Quality)"
+
+#~ msgid "Subpixel Antialiasing (Ultra Quality)"
+#~ msgstr "Subpixel Antialiasing (Ultra Quality)"
+
+#~ msgid "Supersampling (2x)"
+#~ msgstr "Supersampling (2x)"
+
+#~ msgid "Supersampling (4x)"
+#~ msgstr "Supersampling (4x)"
+
+#~ msgid "Balanced Antialiasing"
+#~ msgstr "Balanced Antialiasing"
+
+#~ msgid "Error writing page layout design file"
+#~ msgstr "Error writing page layout design file"
+
+#~ msgid "Component"
+#~ msgstr "Component"
+
+#~ msgid "Page layout design files"
+#~ msgstr "Page layout design files"
+
+#, c-format
+#~ msgid "The file \"%s\" does not appear to be a valid schematic file."
+#~ msgstr "The file \"%s\" does not appear to be a valid schematic file."
+
+#, c-format
+#~ msgid "Link \"%s\" to this file?"
+#~ msgstr "Link “%s” to this file?"
+
+#, c-format
+#~ msgid "Change \"%s\" link from \"%s\" to \"%s\"?"
+#~ msgstr "Change “%s” link from “%s” to “%s”?"
+
+#, c-format
+#~ msgid "Create new file \"%s\" with contents of \"%s\"?"
+#~ msgstr "Create new file “%s” with contents of “%s”?"
+
+#, c-format
+#~ msgid "Error occurred saving schematic file \"%s\"."
+#~ msgstr "Error occurred saving schematic file “%s”."
+
+#, c-format
+#~ msgid "Failed to save schematic \"%s\""
+#~ msgstr "Failed to save schematic “%s”"
+
+#~ msgid ""
+#~ "Select one or more table rows containing legacy libraries to save as "
+#~ "current format (*.kicad_sym)."
+#~ msgstr ""
+#~ "Select one or more table rows containing legacy libraries to save as "
+#~ "current format (*.kicad_sym)."
+
+#, c-format
+#~ msgid ""
+#~ "Save '%s' as current format (*.kicad_sym) and replace legacy entry in "
+#~ "table?"
+#~ msgstr ""
+#~ "Save '%s' as current format (*.kicad_sym) and replace legacy entry in "
+#~ "table?"
+
+#, c-format
+#~ msgid ""
+#~ "Save %d legacy libraries as current format (*.kicad_sym) and replace "
+#~ "legacy entries in table?"
+#~ msgstr ""
+#~ "Save %d legacy libraries as current format (*.kicad_sym) and replace "
+#~ "legacy entries in table?"
+
+#~ msgid "Migrate Libraries..."
+#~ msgstr "Migrate Libraries..."
+
+#, c-format
+#~ msgid "Error loading schematic file \"%s\""
+#~ msgstr "Error loading schematic file \"%s\""
+
+#, c-format
+#~ msgid "Failed to load \"%s\""
+#~ msgstr "Failed to load “%s”"
+
+#~ msgid "Schematic file is read only."
+#~ msgstr "Schematic file is read only."
+
+#, c-format
+#~ msgid ""
+#~ "Error loading schematic \"%s\".\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Error loading schematic \"%s\".\n"
+#~ "%s"
+
+#, c-format
+#~ msgid ""
+#~ "Symbol ID '%s' is of an unknown type. It is neither a component or a net "
+#~ "power / symbol. The symbol was not loaded."
+#~ msgstr ""
+#~ "Symbol ID '%s' is of an unknown type. It is neither a component or a net "
+#~ "power / symbol. The symbol was not loaded."
+
+#, c-format
+#~ msgid ""
+#~ "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
+#~ "supported in KiCad. The symbol was loaded with 1:1 scale and may require "
+#~ "manual fixing."
+#~ msgstr ""
+#~ "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
+#~ "supported in KiCad. The symbol was loaded with 1:1 scale and may require "
+#~ "manual fixing."
+
+#, c-format
+#~ msgid "%s or %s"
+#~ msgstr "%s or %s"
+
+#, c-format
+#~ msgid "%s, %s, or %s"
+#~ msgstr "%s, %s, or %s"
+
+#, c-format
+#~ msgid "%s, %s, %s, or %s"
+#~ msgstr "%s, %s, %s, or %s"
+
+#, c-format
+#~ msgid "Failed to load schematic \"%s\""
+#~ msgstr "Failed to load schematic “%s”"
+
+#~ msgid "Start the simulation by clicking the Run Simulation button"
+#~ msgstr "Start the simulation by clicking the Run Simulation button"
+
+#, c-format
+#~ msgid "Failed to open component-footprint link file \"%s\""
+#~ msgstr "Failed to open component-footprint link file “%s”"
+
+#~ msgid "Visibles"
+#~ msgstr "Visibles"
+
+#~ msgid "Plugin Type"
+#~ msgstr "Plugin Type"
+
+#~ msgid "Template path:"
+#~ msgstr "Template path:"
+
+#, c-format
+#~ msgid "Cannot create folder \"%s\"."
+#~ msgstr "Cannot create folder “%s”."
+
+#, c-format
+#~ msgid "Failed to delete '%s'"
+#~ msgstr "Failed to delete '%s'"
+
+#~ msgid "Delete Directory"
+#~ msgstr "Delete Directory"
+
+#~ msgid "Delete File"
+#~ msgstr "Delete File"
+
+#, c-format
+#~ msgid "Are you sure you want to delete '%s'?"
+#~ msgstr "Are you sure you want to delete '%s'?"
+
+#, c-format
+#~ msgid "Are you sure you want to delete %d items?"
+#~ msgstr "Are you sure you want to delete %d items?"
+
+#~ msgid "Delete Multiple Items"
+#~ msgstr "Delete Multiple Items"
+
+#~ msgid "Create a new directory for the project"
+#~ msgstr "Create a new directory for the project"
+
+#~ msgid ""
+#~ "The selected directory is not empty.  It is recommended that you create "
+#~ "projects in their own empty directory.\n"
+#~ "\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "The selected directory is not empty.  It is recommended that you create "
+#~ "projects in their own empty directory.\n"
+#~ "\n"
+#~ "Do you want to continue?"
+
+#~ msgid "A problem occurred creating new project from template!"
+#~ msgstr "A problem occurred creating new project from template!"
+
+#~ msgid "Template Error"
+#~ msgstr "Template Error"
+
+#~ msgid ""
+#~ "Windows 7 and older is no longer supported by KiCad and its dependencies."
+#~ msgstr ""
+#~ "Windows 7 and older is no longer supported by KiCad and its dependencies."
+
+#~ msgid "Print Page Layout"
+#~ msgstr "Print Page Layout"
+
+#~ msgid "An error occurred attempting to print the page layout."
+#~ msgstr "An error occurred attempting to print the page layout."
+
+#~ msgid "Page Layout Description File"
+#~ msgstr "Page Layout Description File"
+
+#~ msgid "The current page layout has been modified. Save changes?"
+#~ msgstr "The current page layout has been modified. Save changes?"
+
+#~ msgid "The current page layout has been modified.  Save changes?"
+#~ msgstr "The current page layout has been modified.  Save changes?"
+
+#~ msgid "New page layout file is unsaved"
+#~ msgstr "New page layout file is unsaved"
+
+#~ msgid "Page layout changes are unsaved"
+#~ msgstr "Page layout changes are unsaved"
+
+#~ msgid "Show the list of items in page layout"
+#~ msgstr "Show the list of items in page layout"
+
+#~ msgid "Thermal clearance:"
+#~ msgstr "Thermal clearance:"
+
+#~ msgid "Thermal spoke width:"
+#~ msgstr "Thermal spoke width:"
+
+#~ msgid "Local Clearance and Settings"
+#~ msgstr "Local Clearance and Settings"
+
+#~ msgid "&Run"
+#~ msgstr "&Run"
+
+#~ msgid "Scripting Test Window"
+#~ msgstr "Scripting Test Window"
+
+#, c-format
+#~ msgid "Unrecognized item '%s'.| Expected version number"
+#~ msgstr "Unrecognized item '%s'.| Expected version number"
+
+#~ msgid "noname"
+#~ msgstr "noname"
+
+#~ msgid "Local Clearance"
+#~ msgstr "Local Clearance"
+
+#~ msgid "Local Solderpaste Margin"
+#~ msgstr "Local Solderpaste Margin"
+
+#~ msgid "Local Solderpaste Margin Ratio"
+#~ msgstr "Local Solderpaste Margin Ratio"
+
+#~ msgid "Thermal Width"
+#~ msgstr "Thermal Width"
+
+#~ msgid "Thermal Gap"
+#~ msgstr "Thermal Gap"
+
+#, c-format
+#~ msgid "Cannot add %s (footprint \"%s\" not found)."
+#~ msgstr "Cannot add %s (footprint “%s” not found)."
+
+#, c-format
+#~ msgid "Add %s (footprint \"%s\")."
+#~ msgstr "Add %s (footprint “%s”)."
+
+#, c-format
+#~ msgid "Added %s (footprint \"%s\")."
+#~ msgstr "Added %s (footprint \"%s\")."
+
+#, c-format
+#~ msgid "Cannot update %s (footprint \"%s\" not found)."
+#~ msgstr "Cannot update %s (footprint “%s” not found)."
+
+#, c-format
+#~ msgid "Multiple footprints found for \"%s\"."
+#~ msgstr "Multiple footprints found for “%s”."
+
+#~ msgid "Local Soldermask Margin"
+#~ msgstr "Local Soldermask Margin"
+
+#~ msgid "Thermal Relief Spoke Width"
+#~ msgstr "Thermal Relief Spoke Width"
+
+#~ msgid "Thermal Relief"
+#~ msgstr "Thermal Relief"
+
+#, c-format
+#~ msgid "The auto save file \"%s\" could not be removed!"
+#~ msgstr "The auto save file “%s” could not be removed!"
+
+#, c-format
+#~ msgid "Schematic file \"%s\" not found."
+#~ msgstr "Schematic file “%s” not found."
+
+#, c-format
+#~ msgid ""
+#~ "Dimension ID %s uses a type of unit that is not supported in KiCad. "
+#~ "Milimetres were applied instead."
+#~ msgstr ""
+#~ "Dimension ID %s uses a type of unit that is not supported in KiCad. "
+#~ "Milimetres were applied instead."
+
+#~ msgid "Highlight all copper items of a net"
+#~ msgstr "Highlight all copper items of a net"
+
+#~ msgid "Highlight Ratsnest"
+#~ msgstr "Highlight Ratsnest"
+
+#~ msgid "Show ratsnest of selected item(s)"
+#~ msgstr "Show ratsnest of selected item(s)"
+
+#~ msgid "Thermal Clearance"
+#~ msgstr "Thermal Clearance"
+
+#~ msgid "Thermal Spoke Width"
+#~ msgstr "Thermal Spoke Width"
 
 #, c-format
 #~ msgid ""
@@ -32884,9 +33303,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgid "Symbol name \"%s\" already exists in library \"%s\"."
 #~ msgstr "Symbol name “%s” already exists in library “%s”."
 
-#~ msgid "untitled"
-#~ msgstr "untitled"
-
 #~ msgid "untitled%i"
 #~ msgstr "untitled%i"
 
@@ -37089,9 +37505,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "&Increase Layer Opacity"
 #~ msgstr "&Increase Layer Opacity"
-
-#~ msgid "Make the current layer less transparent"
-#~ msgstr "Make the current layer less transparent"
 
 #~ msgid "&Pad"
 #~ msgstr "&Pad"
