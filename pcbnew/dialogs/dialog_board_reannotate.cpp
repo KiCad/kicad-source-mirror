@@ -102,11 +102,9 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
         : DIALOG_BOARD_REANNOTATE_BASE( aParentFrame ),
           m_footprints( aParentFrame->GetBoard()->Footprints() )
 {
+    m_frame  = aParentFrame;
     m_Config = Kiface().KifaceSettings();
     InitValues();
-
-    m_frame      = aParentFrame;
-    m_screen     = m_frame->GetScreen();
 
     m_FrontRefDesStart->SetValidator( wxTextValidator( wxFILTER_DIGITS ) );
     m_BackRefDesStart->SetValidator( wxTextValidator( wxFILTER_DIGITS ) );

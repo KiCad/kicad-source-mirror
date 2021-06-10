@@ -182,7 +182,6 @@ private:
 
     PCB_EDIT_FRAME*  m_frame;
     FOOTPRINTS       m_footprints;
-    PCB_SCREEN*      m_screen;
     PCB_SELECTION    m_selection;
 
     std::vector<RefDesChange>  m_changeArray;

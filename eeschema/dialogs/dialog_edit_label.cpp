@@ -53,15 +53,6 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     m_Parent = aParent;
     m_CurrentText = aTextItem;
 
-    switch( m_CurrentText->Type() )
-    {
-    case SCH_GLOBAL_LABEL_T:       SetTitle( _( "Global Label Properties" ) );           break;
-    case SCH_HIER_LABEL_T:         SetTitle( _( "Hierarchical Label Properties" ) );     break;
-    case SCH_LABEL_T:              SetTitle( _( "Label Properties" ) );                  break;
-    case SCH_SHEET_PIN_T:          SetTitle( _( "Hierarchical Sheet Pin Properties" ) ); break;
-    default:                       SetTitle( _( "Text Properties" ) );                   break;
-    }
-
     m_valueMultiLine->SetEOLMode( wxSTC_EOL_LF );
 
     m_scintillaTricks = new SCINTILLA_TRICKS( m_valueMultiLine, wxT( "()" ) );
@@ -102,6 +93,15 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
             m_valueSingleLine->SetValidator( m_netNameValidator );
 
         m_valueCombo->SetValidator( m_netNameValidator );
+    }
+
+    switch( m_CurrentText->Type() )
+    {
+    case SCH_GLOBAL_LABEL_T:       SetTitle( _( "Global Label Properties" ) );           break;
+    case SCH_HIER_LABEL_T:         SetTitle( _( "Hierarchical Label Properties" ) );     break;
+    case SCH_LABEL_T:              SetTitle( _( "Label Properties" ) );                  break;
+    case SCH_SHEET_PIN_T:          SetTitle( _( "Hierarchical Sheet Pin Properties" ) ); break;
+    default:                       SetTitle( _( "Text Properties" ) );                   break;
     }
 
     SetInitialFocus( m_activeTextCtrl );
@@ -152,6 +152,28 @@ DIALOG_LABEL_EDITOR::~DIALOG_LABEL_EDITOR()
 
     if( m_helpWindow )
         m_helpWindow->Destroy();
+}
+
+
+void DIALOG_LABEL_EDITOR::SetTitle( const wxString& aTitle )
+{
+    // This class is shared for numerous tasks: a couple of single line labels and
+    // multi-line text fields.  Since the desired size of the multi-line text field editor
+    // is often larger, we retain separate sizes based on the dialog titles.
+    switch( m_CurrentText->Type() )
+    {
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
+    case SCH_LABEL_T:
+        // labels can share retained settings probably.
+        break;
+
+    default:
+        m_hash_key = TO_UTF8( aTitle );
+        m_hash_key += typeid(*this).name();
+    }
+
+    DIALOG_LABEL_EDITOR_BASE::SetTitle( aTitle );
 }
 
 

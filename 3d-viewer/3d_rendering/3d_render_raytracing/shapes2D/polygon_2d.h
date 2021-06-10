@@ -38,8 +38,8 @@
 typedef struct
 {
     SFVEC2F m_Start;
-    float   m_inv_JY_minus_IY;
-    float   m_JX_minus_IX;
+    float   m_inv_JY_minus_IY = 0.0;
+    float   m_JX_minus_IX = 0.0;
 } POLYSEGMENT;
 
 

@@ -42,26 +42,10 @@ public:
     DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
     ~DIALOG_LABEL_EDITOR();
 
-    void SetTitle( const wxString& aTitle ) override
-    {
-        // This class is shared for numerous tasks: a couple of single line labels and
-        // multi-line text fields.  Since the desired size of the multi-line text field editor
-        // is often larger, we retain separate sizes based on the dialog titles.
-        switch( m_CurrentText->Type() )
-        {
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        case SCH_LABEL_T:
-            // labels can share retained settings probably.
-            break;
-
-        default:
-            m_hash_key = TO_UTF8( aTitle );
-            m_hash_key += typeid(*this).name();
-        }
-
-        DIALOG_LABEL_EDITOR_BASE::SetTitle( aTitle );
-    }
+    // This class is shared for numerous tasks: a couple of single line labels and
+    // multi-line text fields.  Since the desired size of the multi-line text field editor
+    // is often larger, we retain separate sizes based on the dialog titles.
+    void SetTitle( const wxString& aTitle ) override;
 
 private:
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
