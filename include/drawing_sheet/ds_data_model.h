@@ -57,6 +57,9 @@ public:
      */
     static void SetAltInstance( DS_DATA_MODEL* aLayout = NULL );
 
+    int GetFileFormatVersionAtLoad() { return m_fileFormatVersionAtLoad; }
+    void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
+
     double GetLeftMargin() { return m_leftMargin; }
     void SetLeftMargin( double aMargin ) { m_leftMargin = aMargin; }
 
@@ -208,6 +211,7 @@ private:
     bool   m_allowVoidList;         // If false, the default drawing sheet will be loaded the
                                     // first time DS_DRAW_ITEM_LIST::BuildDrawItemsList is run
                                     // (useful mainly for drawing sheet editor)
+    int m_fileFormatVersionAtLoad;
     double m_leftMargin;            // the left page margin in mm
     double m_rightMargin;           // the right page margin in mm
     double m_topMargin;             // the top page margin in mm

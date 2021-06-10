@@ -27,12 +27,13 @@
 #include <kicad_string.h>
 #include <locale_io.h>
 #include <macros.h>
+#include <math/vector2d.h>
 #include <drawing_sheet/ds_painter.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_data_model.h>
-#include <math/vector2d.h>
 #include <drawing_sheet/drawing_sheet_reader_lexer.h>
+#include <drawing_sheet/ds_file_versions.h>
 
 #include <wx/msgdlg.h>
 
@@ -189,7 +190,8 @@ void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aDrawingSheet ) const
 {
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
-    m_out->Print( 0, "(drawing_sheet\n" );
+    m_out->Print( 0, "(kicad_wks (version %d) (generator pl_editor)\n",
+                  SEXPR_WORKSHEET_FILE_VERSION );
 
     // Setup
     int nestLevel = 1;

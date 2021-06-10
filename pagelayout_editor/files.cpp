@@ -27,6 +27,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <drawing_sheet/ds_data_model.h>
+#include <drawing_sheet/ds_file_versions.h>
 #include <paths.h>
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
@@ -241,6 +242,15 @@ bool PL_EDITOR_FRAME::LoadDrawingSheetFile( const wxString& aFullFileName )
 
         wxFileName fn = aFullFileName;
         m_infoBar->Dismiss();
+
+        if( DS_DATA_MODEL::GetTheInstance().GetFileFormatVersionAtLoad() < SEXPR_WORKSHEET_FILE_VERSION )
+        {
+            m_infoBar->RemoveAllButtons();
+            m_infoBar->AddCloseButton();
+            m_infoBar->ShowMessage( _( "This file was created by an older version of KiCad. "
+                                       "It will be converted to the new format when saved." ),
+                                    wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
+        }
 
         if( fn.FileExists() && !fn.IsFileWritable() )
         {

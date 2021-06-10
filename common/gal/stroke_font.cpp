@@ -540,7 +540,6 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
     double   maxX = 0.0, curX = 0.0;
 
     double curScale = 1.0;
-    int overbarDepth = -1;
     int superSubDepth = -1;
     int braceNesting = 0;
 

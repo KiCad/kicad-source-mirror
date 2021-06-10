@@ -66,6 +66,7 @@ DS_DATA_MODEL::DS_DATA_MODEL() :
         m_EditMode( false )
 {
     m_allowVoidList = false;
+    m_fileFormatVersionAtLoad = 0;
     m_leftMargin = 10.0;    // the left page margin in mm
     m_rightMargin = 10.0;   // the right page margin in mm
     m_topMargin = 10.0;     // the top page margin in mm

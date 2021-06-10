@@ -25,6 +25,7 @@
 
 #include <eda_item.h>
 #include <locale_io.h>
+#include <kicad_string.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_draw_item.h>
@@ -51,10 +52,22 @@ public:
     void Parse( DS_DATA_MODEL* aLayout );
 
 private:
+    int m_requiredVersion;
 
     /**
-     * Function parseInt
-     * parses an integer and constrains it between two values.
+     * Parse the data specified at the very beginning of the file, like version and the
+     * application used to create this file.
+     */
+    void parseHeader( T aHeaderType );
+
+    /**
+     * Parse an integer.
+     */
+    int parseInt();
+
+    /**
+     * Parse an integer and constrain it between two values.
+     *
      * @param aMin is the smallest return value.
      * @param aMax is the largest return value.
      * @return int - the parsed integer.
@@ -62,8 +75,8 @@ private:
     int parseInt( int aMin, int aMax );
 
     /**
-     * Function parseDouble
-     * parses a double
+     * Parse a double.
+     *
      * @return double - the parsed double.
      */
     double parseDouble();
@@ -71,29 +84,29 @@ private:
     void parseSetup( DS_DATA_MODEL* aLayout );
 
     /**
-     * parse a graphic item starting by "(line" or "(rect" and read parameters.
+     * Parse a graphic item starting by "(line" or "(rect" and read parameters.
      */
     void parseGraphic( DS_DATA_ITEM * aItem );
 
     /**
-     * parse a text item starting by "(tbtext" and read parameters.
+     * Parse a text item starting by "(tbtext" and read parameters.
      */
     void parseText( DS_DATA_ITEM_TEXT * aItem );
 
     /**
-     * parse a polygon item starting by "( polygon" and read parameters.
-     * the list of corners included in this description is read by parsePolyOutline
+     * Parse a polygon item starting by "( polygon" and read parameters.
+     * the list of corners included in this description is read by parsePolyOutline.
      */
     void parsePolygon( DS_DATA_ITEM_POLYGONS * aItem );
 
     /**
-     * parse a list of corners starting by "( pts" and read coordinates.
+     * Parse a list of corners starting by "( pts" and read coordinates.
      */
     void parsePolyOutline( DS_DATA_ITEM_POLYGONS * aItem );
 
 
     /**
-     * parse a bitmap item starting by "( bitmap" and read parameters.
+     * Parse a bitmap item starting by "( bitmap" and read parameters.
      */
     void parseBitmap( DS_DATA_ITEM_BITMAP * aItem );
 
@@ -106,7 +119,8 @@ private:
 
 DRAWING_SHEET_READER_PARSER::DRAWING_SHEET_READER_PARSER( const char* aLine,
                                                           const wxString& aSource ) :
-        DRAWING_SHEET_READER_LEXER( aLine, aSource )
+        DRAWING_SHEET_READER_LEXER( aLine, aSource ),
+        m_requiredVersion( 0 )
 {
 }
 
@@ -190,13 +204,16 @@ void DRAWING_SHEET_READER_PARSER::Parse( DS_DATA_MODEL* aLayout )
     DS_DATA_ITEM* item;
     LOCALE_IO     toggle;
 
-    for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
+    NeedLEFT();
+    T token = NextTok();
+
+    parseHeader( token );
+    aLayout->SetFileFormatVersionAtLoad( m_requiredVersion );
+
+    for( token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
         if( token == T_LEFT )
             token = NextTok();
-
-        if( token == T_page_layout || token == T_drawing_sheet )
-            continue;
 
         switch( token )
         {
@@ -242,6 +259,42 @@ void DRAWING_SHEET_READER_PARSER::Parse( DS_DATA_MODEL* aLayout )
     }
 }
 
+void DRAWING_SHEET_READER_PARSER::parseHeader( T aHeaderType )
+{
+    // The older files had no versioning and their first token after the initial left parenthesis
+    // was a `page_layout` or `drawing_sheet` token. The newer files have versions and have a
+    // `kicad_wks` token instead.
+
+    if( aHeaderType == T_kicad_wks )
+    {
+        NeedLEFT();
+
+        T tok = NextTok();
+
+        if( tok == T_version )
+        {
+            m_requiredVersion = parseInt();
+            NeedRIGHT();
+        }
+        else
+        {
+            Expecting( T_version );
+        }
+
+        // Ignore generator info.
+        NeedLEFT();
+        NeedSYMBOL();
+        NeedSYMBOL();
+        NeedRIGHT();
+    }
+    else
+    {
+        // We assign version 0 to files that were created before there was any versioning of
+        // worksheets. The below line is not strictly necessary, as `m_requiredVersion` is already
+        // initialized to 0 in the constructor.
+        m_requiredVersion = 0;
+    }
+}
 
 void DRAWING_SHEET_READER_PARSER::parseSetup( DS_DATA_MODEL* aLayout )
 {
@@ -576,6 +629,9 @@ void DRAWING_SHEET_READER_PARSER::parseGraphic( DS_DATA_ITEM * aItem )
 
 void DRAWING_SHEET_READER_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
 {
+    if( m_requiredVersion < 20210606 )
+        aItem->m_TextBase = ConvertToNewOverbarNotation( aItem->m_TextBase );
+
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
         if( token == T_LEFT )
@@ -731,14 +787,19 @@ void DRAWING_SHEET_READER_PARSER::parseCoordinate( POINT_COORD& aCoord)
     }
 }
 
-int DRAWING_SHEET_READER_PARSER::parseInt( int aMin, int aMax )
+int DRAWING_SHEET_READER_PARSER::parseInt()
 {
     T token = NextTok();
 
     if( token != T_NUMBER )
         Expecting( T_NUMBER );
 
-    int val = atoi( CurText() );
+    return atoi( CurText() );
+}
+
+int DRAWING_SHEET_READER_PARSER::parseInt( int aMin, int aMax )
+{
+    int val = parseInt();
 
     if( val < aMin )
         val = aMin;
