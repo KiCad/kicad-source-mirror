@@ -436,7 +436,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                                 continue;
 
                             if( segment->ApproxCollinear( *candidateSegment ) )
-                                merged = mergeCollinearSegments( segment, candidateSegment );
+                                merged |= mergeCollinearSegments( segment, candidateSegment );
                         }
                     }
                 }
