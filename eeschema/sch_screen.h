@@ -53,7 +53,7 @@
 
 class BUS_ALIAS;
 class EDA_ITEM;
-class LIB_PART;
+class LIB_SYMBOL;
 class LIB_PIN;
 class SCH_SYMBOL;
 class SCH_LINE;
@@ -203,7 +203,7 @@ public:
                        KICAD_T aType = SCH_LOCATE_ANY_T ) const;
 
     /**
-     * Initialize the #LIB_PART reference for each #SCH_SYMBOL found in this schematic
+     * Initialize the #LIB_SYMBOL reference for each #SCH_SYMBOL found in this schematic
      * from the project #SYMBOL_LIB_TABLE.
      *
      * Symbol library links are set using the symbol library table and will fall back to
@@ -220,7 +220,7 @@ public:
     void UpdateSymbolLinks( REPORTER* aReporter = nullptr );
 
     /**
-     * Initialize the #LIB_PART reference for each #SCH_SYMBOL found in this schematic
+     * Initialize the #LIB_SYMBOL reference for each #SCH_SYMBOL found in this schematic
      * with the local project library symbols.
      */
     void UpdateLocalLibSymbolLinks();
@@ -410,13 +410,13 @@ public:
     SCH_TEXT* GetLabel( const wxPoint& aPosition, int aAccuracy = 0 ) const;
 
     /**
-     * Fetch a list of unique #LIB_PART object pointers required to properly render each
+     * Fetch a list of unique #LIB_SYMBOL object pointers required to properly render each
      * #SCH_SYMBOL in this schematic.
      *
-     * @return The list of unique #LIB_PART object pointers.
+     * @return The list of unique #LIB_SYMBOL object pointers.
      */
-    std::map<wxString, LIB_PART*>& GetLibSymbols() { return m_libSymbols; }
-    const std::map<wxString, LIB_PART*>& GetLibSymbols() const { return m_libSymbols; }
+    std::map<wxString, LIB_SYMBOL*>& GetLibSymbols() { return m_libSymbols; }
+    const std::map<wxString, LIB_SYMBOL*>& GetLibSymbols() const { return m_libSymbols; }
 
     /**
      * Add \a aLibSymbol to the library symbol map.
@@ -425,9 +425,9 @@ public:
      * mapped, the existing symbol is replaced with \a aLibSymbol.  The screen object takes
      * ownership of the pointer.
      *
-     * @param aLibSymbol A pointer the #LIB_PART to be added to the symbol map.
+     * @param aLibSymbol A pointer the #LIB_SYMBOL to be added to the symbol map.
      */
-    void AddLibSymbol( LIB_PART* aLibSymbol );
+    void AddLibSymbol( LIB_SYMBOL* aLibSymbol );
 
     /**
      * Add a bus alias definition (and transfers ownership of the pointer).
@@ -510,7 +510,7 @@ private:
     std::unordered_set< std::shared_ptr< BUS_ALIAS > > m_aliases;
 
     /// Library symbols required for this schematic.
-    std::map<wxString, LIB_PART*> m_libSymbols;
+    std::map<wxString, LIB_SYMBOL*> m_libSymbols;
 
     /**
      * The list of symbol instances loaded from the schematic file.
@@ -601,7 +601,7 @@ public:
     void DeleteMarker( SCH_MARKER* aMarker );
 
     /**
-     * Initialize the #LIB_PART reference for each #SCH_SYMBOL found in the full schematic.
+     * Initialize the #LIB_SYMBOL reference for each #SCH_SYMBOL found in the full schematic.
      *
      * @note This should only be called when the user specifically requests all library symbol
      *       links to be update or when the legacy schematic is opened for the last time.  All

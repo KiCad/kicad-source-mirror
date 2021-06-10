@@ -47,13 +47,13 @@ enum
 
 template <class T>
 FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
-                                         WX_GRID* aGrid, LIB_PART* aPart ) :
+                                         WX_GRID* aGrid, LIB_SYMBOL* aSymbol ) :
         m_frame( aFrame ),
         m_userUnits( aDialog->GetUserUnits() ),
         m_grid( aGrid ),
         m_parentType( SCH_SYMBOL_T ),
         m_mandatoryFieldCount( MANDATORY_FIELDS ),
-        m_part( aPart ),
+        m_part( aSymbol ),
         m_fieldNameValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_NAME ),
         m_referenceValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), REFERENCE_FIELD ),
         m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), VALUE_FIELD ),

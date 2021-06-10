@@ -36,7 +36,7 @@
 
 class SCH_EDIT_FRAME;
 class SYMBOL_LIB_TABLE;
-class LIB_PART;
+class LIB_SYMBOL;
 class LIB_FIELD;
 class DIALOG_LIB_EDIT_TEXT;
 class SYMBOL_TREE_PANE;
@@ -98,14 +98,14 @@ public:
     /**
      * Return the current part being edited or NULL if none selected.
      *
-     * This is a LIB_PART that I own, it is at best a copy of one in a library.
+     * This is a LIB_SYMBOL that I own, it is at best a copy of one in a library.
      */
-    LIB_PART* GetCurPart() const { return m_my_part; }
+    LIB_SYMBOL* GetCurPart() const { return m_my_part; }
 
     /**
-     * Take ownership of aPart and notes that it is the one currently being edited.
+     * Take ownership of aSymbol and notes that it is the one currently being edited.
      */
-    void SetCurPart( LIB_PART* aPart, bool aUpdateZoom );
+    void SetCurPart( LIB_SYMBOL* aSymbol, bool aUpdateZoom );
 
     SYMBOL_LIBRARY_MANAGER& GetLibManager();
 
@@ -159,7 +159,7 @@ public:
 
     void CopyPartToClipboard();
 
-    void LoadPart( const wxString& aLibrary, const wxString& aPart, int Unit );
+    void LoadPart( const wxString& aLibrary, const wxString& aSymbol, int Unit );
 
     /**
      * Insert a duplicate part.
@@ -420,14 +420,14 @@ private:
     /**
      * Create a copy of \a aLibEntry into memory.
      *
-     * @param aLibEntry A pointer to the LIB_PART object to an already loaded symbol.
+     * @param aLibEntry A pointer to the LIB_SYMBOL object to an already loaded symbol.
      * @param aLibrary the path to the library file that \a aLibEntry was loaded from.  This is
      *                 for error messaging purposes only.
      * @param aUnit the initial unit to show.
      * @param aConvert the initial DeMorgan variant to show.
      * @return True if a copy of \a aLibEntry was successfully copied.
      */
-    bool LoadOneLibraryPartAux( LIB_PART* aLibEntry, const wxString& aLibrary, int aUnit,
+    bool LoadOneLibraryPartAux( LIB_SYMBOL* aLibEntry, const wxString& aLibrary, int aUnit,
                                 int aConvert );
 
     /**
@@ -442,7 +442,7 @@ private:
     bool backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt );
 
     ///< Return currently edited part.
-    LIB_PART* getTargetPart() const;
+    LIB_SYMBOL* getTargetPart() const;
 
     ///< Return either the library selected in the symbol tree, if context menu is active or
     ///< the library that is currently modified.
@@ -465,8 +465,8 @@ private:
     ///< Return true if \a aLibId is an alias for the editor screen part.
     bool isCurrentPart( const LIB_ID& aLibId ) const;
 
-    ///< Rename LIB_PART aliases to avoid conflicts before adding a symbol to a library.
-    void ensureUniqueName( LIB_PART* aPart, const wxString& aLibrary );
+    ///< Rename LIB_SYMBOL aliases to avoid conflicts before adding a symbol to a library.
+    void ensureUniqueName( LIB_SYMBOL* aSymbol, const wxString& aLibrary );
 
     enum TABLE_SCOPE
     {
@@ -527,7 +527,7 @@ private:
     ///< Helper screen used when no part is loaded
     SCH_SCREEN* m_dummyScreen;
 
-    LIB_PART*               m_my_part;           // a part I own, it is not in any library, but a
+    LIB_SYMBOL*             m_my_part;           // a part I own, it is not in any library, but a
                                                  // copy could be.
     wxComboBox*             m_unitSelectBox;     // a ComboBox to select a unit to edit (if the
                                                  // part has multiple units)

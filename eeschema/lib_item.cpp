@@ -33,7 +33,7 @@ const int fill_tab[3] = { 'N', 'F', 'f' };
 
 
 LIB_ITEM::LIB_ITEM( KICAD_T        aType,
-                    LIB_PART*      aComponent,
+                    LIB_SYMBOL*    aSymbol,
                     int            aUnit,
                     int            aConvert,
                     FILL_TYPE      aFillType ) :
@@ -42,7 +42,7 @@ LIB_ITEM::LIB_ITEM( KICAD_T        aType,
     m_unit              = aUnit;
     m_convert           = aConvert;
     m_fill              = aFillType;
-    m_parent            = (EDA_ITEM*) aComponent;
+    m_parent            = (EDA_ITEM*) aSymbol;
     m_isFillable        = false;
 }
 

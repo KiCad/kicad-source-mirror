@@ -50,7 +50,7 @@ class FOOTPRINT_INFO_GENERATOR
     wxString m_html;
     SYMBOL_LIB_TABLE* m_sym_lib_table;
     LIB_ID const m_lib_id;
-    LIB_PART* m_symbol;
+    LIB_SYMBOL* m_symbol;
     int m_unit;
 
 public:
@@ -122,7 +122,7 @@ protected:
             wxString root_name = _( "Unknown" );
             wxString root_desc = "";
 
-            std::shared_ptr< LIB_PART > parent = m_symbol->GetParent().lock();
+            std::shared_ptr< LIB_SYMBOL > parent = m_symbol->GetParent().lock();
 
             if( parent )
             {
@@ -212,7 +212,7 @@ protected:
 
         if( m_symbol->IsAlias() )
         {
-            std::shared_ptr<LIB_PART> parent = m_symbol->GetParent().lock();
+            std::shared_ptr<LIB_SYMBOL> parent = m_symbol->GetParent().lock();
 
             // Append all of the unique parent fields if this is an alias.
             if( parent )

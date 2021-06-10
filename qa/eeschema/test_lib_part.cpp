@@ -23,7 +23,7 @@
 
 /**
  * @file
- * Test suite for LIB_PART
+ * Test suite for LIB_SYMBOL
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -35,23 +35,23 @@
 
 #include "lib_field_test_utils.h"
 
-class TEST_LIB_PART_FIXTURE
+class TEST_LIB_SYMBOL_FIXTURE
 {
 public:
-    TEST_LIB_PART_FIXTURE() :
+    TEST_LIB_SYMBOL_FIXTURE() :
         m_part_no_data( "part_name", nullptr )
     {
     }
 
     ///> Part with no extra data set
-    LIB_PART m_part_no_data;
+    LIB_SYMBOL m_part_no_data;
 };
 
 
 /**
  * Declare the test suite
  */
-BOOST_FIXTURE_TEST_SUITE( LibPart, TEST_LIB_PART_FIXTURE )
+BOOST_FIXTURE_TEST_SUITE( LibPart, TEST_LIB_SYMBOL_FIXTURE )
 
 
 /**
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
 
 
 /**
- * Check the drawings on a "blank" LIB_PART
+ * Check the drawings on a "blank" LIB_SYMBOL
  */
 BOOST_AUTO_TEST_CASE( DefaultDrawings )
 {
@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE( DefaultFields )
 
 
 /**
- * Test adding fields to a LIB_PART
+ * Test adding fields to a LIB_SYMBOL
  */
 BOOST_AUTO_TEST_CASE( AddedFields )
 {
@@ -157,14 +157,14 @@ BOOST_AUTO_TEST_CASE( AddedFields )
 
 
 /**
- * Test adding draw items to a LIB_PART
+ * Test adding draw items to a LIB_SYMBOL
  */
 BOOST_AUTO_TEST_CASE( AddedDrawItems )
 {
 }
 
 
-struct TEST_LIB_PART_SUBREF_CASE
+struct TEST_LIB_SYMBOL_SUBREF_CASE
 {
     int         m_index;
     bool        m_addSep;
@@ -177,7 +177,7 @@ struct TEST_LIB_PART_SUBREF_CASE
  */
 BOOST_AUTO_TEST_CASE( SubReference )
 {
-    const std::vector<TEST_LIB_PART_SUBREF_CASE> cases = {
+    const std::vector<TEST_LIB_SYMBOL_SUBREF_CASE> cases = {
         {
             1,
             false,
@@ -223,12 +223,12 @@ BOOST_AUTO_TEST_CASE( SubReference )
 BOOST_AUTO_TEST_CASE( Compare )
 {
     // Identical root part to m_part_no_data sans time stamp.
-    LIB_PART testPart( "part_name" );
+    LIB_SYMBOL testPart( "part_name" );
 
     // Self comparison test.
     BOOST_CHECK_EQUAL( m_part_no_data.Compare( m_part_no_data ), 0 );
 
-    // Test for identical LIB_PART.
+    // Test for identical LIB_SYMBOL.
     BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
 
     // Test name.
@@ -372,7 +372,7 @@ BOOST_AUTO_TEST_CASE( Compare )
     // Time stamp comparison tests.
 
     // Check to see if we broke the copy ctor.
-    LIB_PART* copy = new LIB_PART( testPart );
+    LIB_SYMBOL* copy = new LIB_SYMBOL( testPart );
     BOOST_CHECK( testPart.Compare( *copy ) == 0 );
 }
 
@@ -382,7 +382,7 @@ BOOST_AUTO_TEST_CASE( Compare )
  */
 BOOST_AUTO_TEST_CASE( GetUnitItems )
 {
-    // There are no unit draw items in the empty LIB_PART object.
+    // There are no unit draw items in the empty LIB_SYMBOL object.
     BOOST_CHECK( m_part_no_data.GetUnitItems( 1, 1 ).size() == 0 );
 
     // A single unique unit with 1 pin common to all units and all body styles.
@@ -424,7 +424,7 @@ BOOST_AUTO_TEST_CASE( GetUnitItems )
  */
 BOOST_AUTO_TEST_CASE( GetUnitDrawItems )
 {
-    // There are no unit draw items in the empty LIB_PART object.
+    // There are no unit draw items in the empty LIB_SYMBOL object.
     BOOST_CHECK( m_part_no_data.GetUnitDrawItems().size() == 0 );
 
     // A single unique unit with 1 pin common to all units and all body styles.
@@ -444,9 +444,9 @@ BOOST_AUTO_TEST_CASE( GetUnitDrawItems )
  */
 BOOST_AUTO_TEST_CASE( Inheritance )
 {
-    std::unique_ptr<LIB_PART> parent = std::make_unique<LIB_PART>( "parent" );
+    std::unique_ptr<LIB_SYMBOL> parent = std::make_unique<LIB_SYMBOL>( "parent" );
     BOOST_CHECK( parent->IsRoot() );
-    std::unique_ptr<LIB_PART> child1 = std::make_unique<LIB_PART>( "child1", parent.get() );
+    std::unique_ptr<LIB_SYMBOL> child1 = std::make_unique<LIB_SYMBOL>( "child1", parent.get() );
     BOOST_CHECK( child1->IsAlias() );
     PART_SPTR parentRef = child1->GetParent().lock();
     BOOST_CHECK( parentRef );
@@ -467,7 +467,7 @@ BOOST_AUTO_TEST_CASE( Inheritance )
  */
 BOOST_AUTO_TEST_CASE( CopyConstructor )
 {
-    std::shared_ptr<LIB_PART> copy = std::make_shared<LIB_PART>( m_part_no_data );
+    std::shared_ptr<LIB_SYMBOL> copy = std::make_shared<LIB_SYMBOL>( m_part_no_data );
     BOOST_CHECK( m_part_no_data == *copy.get() );
 }
 

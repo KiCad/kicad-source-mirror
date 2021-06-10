@@ -31,14 +31,14 @@
 
 
 class SYMBOL_EDIT_FRAME;
-class LIB_PART;
+class LIB_SYMBOL;
 class WX_GRID;
 
 
 class DIALOG_LIB_SYMBOL_PROPERTIES: public DIALOG_LIB_SYMBOL_PROPERTIES_BASE
 {
 public:
-    DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PART* aLibEntry );
+    DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_SYMBOL* aLibEntry );
     ~DIALOG_LIB_SYMBOL_PROPERTIES();
 
 protected:
@@ -71,7 +71,7 @@ private:
 
 public:
     SYMBOL_EDIT_FRAME* m_Parent;
-    LIB_PART*          m_libEntry;
+    LIB_SYMBOL*        m_libEntry;
 
     FIELDS_GRID_TABLE<LIB_FIELD>* m_fields;
 

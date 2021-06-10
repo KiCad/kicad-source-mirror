@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2018 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -118,18 +118,18 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
 }
 
 
-void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
+void SCH_VIEW::DisplayComponent( LIB_SYMBOL* aSymbol )
 {
     Clear();
 
-    if( !aPart )
+    if( !aSymbol )
         return;
 
-    std::shared_ptr< LIB_PART > parent;
-    LIB_PART* drawnPart = aPart;
+    std::shared_ptr< LIB_SYMBOL > parent;
+    LIB_SYMBOL* drawnSymbol = aSymbol;
 
     // Draw the mandatory fields for aliases and parent symbols.
-    for( LIB_ITEM& item : aPart->GetDrawItems() )
+    for( LIB_ITEM& item : aSymbol->GetDrawItems() )
     {
         if( item.Type() != LIB_FIELD_T )
             continue;
@@ -145,20 +145,20 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
     }
 
     // Draw the parent items if the symbol is inherited from another symbol.
-    if( aPart->IsAlias() )
+    if( aSymbol->IsAlias() )
     {
-        parent = aPart->GetParent().lock();
+        parent = aSymbol->GetParent().lock();
 
         wxCHECK( parent, /* void */ );
 
-        drawnPart = parent.get();
+        drawnSymbol = parent.get();
     }
 
-    for( LIB_ITEM& item : drawnPart->GetDrawItems() )
+    for( LIB_ITEM& item : drawnSymbol->GetDrawItems() )
     {
         // Don't show parent symbol fields.  Users may be confused by shown fields that can not
         // be edited.
-        if( aPart->IsAlias() && item.Type() == LIB_FIELD_T )
+        if( aSymbol->IsAlias() && item.Type() == LIB_FIELD_T )
             continue;
 
         Add( &item );

@@ -119,7 +119,7 @@ EESCHEMA_SETTINGS* eeconfig()
 
 
 /**
- * Used when a LIB_PART is not found in library to draw a dummy shape.
+ * Used when a LIB_SYMBOL is not found in library to draw a dummy shape.
  * This symbol is a 400 mils square with the text "??"
  *
  *   DEF DUMMY U 0 40 Y Y 1 0 N
@@ -131,29 +131,29 @@ EESCHEMA_SETTINGS* eeconfig()
  *     ENDDRAW
  *   ENDDEF
  */
-static LIB_PART* dummy()
+static LIB_SYMBOL* dummy()
 {
-    static LIB_PART* part;
+    static LIB_SYMBOL* symbol;
 
-    if( !part )
+    if( !symbol )
     {
-        part = new LIB_PART( wxEmptyString );
+        symbol = new LIB_SYMBOL( wxEmptyString );
 
-        LIB_RECTANGLE* square = new LIB_RECTANGLE( part );
+        LIB_RECTANGLE* square = new LIB_RECTANGLE( symbol );
 
         square->MoveTo( wxPoint( Mils2iu( -200 ), Mils2iu( 200 ) ) );
         square->SetEndPosition( wxPoint( Mils2iu( 200 ), Mils2iu( -200 ) ) );
 
-        LIB_TEXT* text = new LIB_TEXT( part );
+        LIB_TEXT* text = new LIB_TEXT( symbol );
 
         text->SetTextSize( wxSize( Mils2iu( 150 ), Mils2iu( 150 ) ) );
         text->SetText( wxString( wxT( "??" ) ) );
 
-        part->AddDrawItem( square );
-        part->AddDrawItem( text );
+        symbol->AddDrawItem( square );
+        symbol->AddDrawItem( text );
     }
 
-    return part;
+    return symbol;
 }
 
 
@@ -211,7 +211,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 
     switch( item->Type() )
     {
-    HANDLE_ITEM( LIB_PART_T, LIB_PART );
+    HANDLE_ITEM( LIB_SYMBOL_T, LIB_SYMBOL );
     HANDLE_ITEM( LIB_RECTANGLE_T, LIB_RECTANGLE );
     HANDLE_ITEM( LIB_POLYLINE_T, LIB_POLYLINE );
     HANDLE_ITEM( LIB_CIRCLE_T, LIB_CIRCLE );
@@ -269,7 +269,8 @@ float SCH_PAINTER::getShadowWidth() const
 
     // For best visuals the selection width must be a cross between the zoom level and the
     // default line width.
-    return (float) std::fabs( matrix.GetScale().x * 2.75 ) + Mils2iu( eeconfig()->m_Selection.thickness );
+    return (float) std::fabs( matrix.GetScale().x * 2.75 ) +
+           Mils2iu( eeconfig()->m_Selection.thickness );
 }
 
 
@@ -412,7 +413,7 @@ void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition, 
 }
 
 
-void SCH_PAINTER::draw( const LIB_PART *aPart, int aLayer, bool aDrawFields, int aUnit, int aConvert )
+void SCH_PAINTER::draw( const LIB_SYMBOL *aSymbol, int aLayer, bool aDrawFields, int aUnit, int aConvert )
 {
     if( !aUnit )
         aUnit = m_schSettings.m_ShowUnit;
@@ -420,16 +421,16 @@ void SCH_PAINTER::draw( const LIB_PART *aPart, int aLayer, bool aDrawFields, int
     if( !aConvert )
         aConvert = m_schSettings.m_ShowConvert;
 
-    std::unique_ptr< LIB_PART > tmpPart;
-    const LIB_PART* drawnPart = aPart;
+    std::unique_ptr< LIB_SYMBOL > tmpSymbol;
+    const LIB_SYMBOL* drawnSymbol = aSymbol;
 
-    if( aPart->IsAlias() )
+    if( aSymbol->IsAlias() )
     {
-        tmpPart = aPart->Flatten();
-        drawnPart = tmpPart.get();
+        tmpSymbol = aSymbol->Flatten();
+        drawnSymbol = tmpSymbol.get();
     }
 
-    for( const LIB_ITEM& item : drawnPart->GetDrawItems() )
+    for( const LIB_ITEM& item : drawnSymbol->GetDrawItems() )
     {
         if( !aDrawFields && item.Type() == LIB_FIELD_T )
             continue;
@@ -948,11 +949,11 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     if( dangling )
         drawPinDanglingSymbol( pos, drawingShadows );
 
-    LIB_PART* libEntry = aPin->GetParent();
+    LIB_SYMBOL* libEntry = aPin->GetParent();
 
     // Draw the labels
     if( drawingShadows
-            && ( libEntry->Type() == LIB_PART_T || libEntry->IsSelected() )
+            && ( libEntry->Type() == LIB_SYMBOL_T || libEntry->IsSelected() )
             && !eeconfig()->m_Selection.draw_selected_children )
     {
         return;
@@ -1388,7 +1389,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
 }
 
 
-static void orientPart( LIB_PART* part, int orientation )
+static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
 {
     struct ORIENT
     {
@@ -1424,7 +1425,7 @@ static void orientPart( LIB_PART* part, int orientation )
         }
     }
 
-    for( auto& item : part->GetDrawItems() )
+    for( auto& item : symbol->GetDrawItems() )
     {
         for( int i = 0; i < o.n_rots; i++ )
             item.Rotate( wxPoint(0, 0 ), true );
@@ -1443,21 +1444,21 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
     int unit = aSymbol->GetUnitSelection( &m_schematic->CurrentSheet() );
     int convert = aSymbol->GetConvert();
 
-    // Use dummy part if the actual couldn't be found (or couldn't be locked).
-    LIB_PART* originalPart = aSymbol->GetPartRef() ? aSymbol->GetPartRef().get() : dummy();
+    // Use dummy symbol if the actual couldn't be found (or couldn't be locked).
+    LIB_SYMBOL* originalSymbol = aSymbol->GetPartRef() ? aSymbol->GetPartRef().get() : dummy();
     LIB_PINS  originalPins;
-    originalPart->GetPins( originalPins, unit, convert );
+    originalSymbol->GetPins( originalPins, unit, convert );
 
     // Copy the source so we can re-orient and translate it.
-    LIB_PART tempPart( *originalPart );
+    LIB_SYMBOL tempSymbol( *originalSymbol );
     LIB_PINS tempPins;
-    tempPart.GetPins( tempPins, unit, convert );
+    tempSymbol.GetPins( tempPins, unit, convert );
 
-    tempPart.SetFlags( aSymbol->GetFlags() );
+    tempSymbol.SetFlags( aSymbol->GetFlags() );
 
-    orientPart( &tempPart, aSymbol->GetOrientation() );
+    orientSymbol( &tempSymbol, aSymbol->GetOrientation() );
 
-    for( auto& tempItem : tempPart.GetDrawItems() )
+    for( auto& tempItem : tempSymbol.GetDrawItems() )
     {
         tempItem.SetFlags( aSymbol->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
         tempItem.MoveTo( tempItem.GetPosition() + (wxPoint) mapCoords( aSymbol->GetPosition() ) );
@@ -1480,7 +1481,7 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
             tempPin->SetFlags( IS_DANGLING );
     }
 
-    draw( &tempPart, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert() );
+    draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert() );
 
     // The fields are SCH_SYMBOL-specific so don't need to be copied/oriented/translated
     for( const SCH_FIELD& field : aSymbol->GetFields() )

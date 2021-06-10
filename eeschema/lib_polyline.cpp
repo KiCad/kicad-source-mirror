@@ -36,7 +36,7 @@
 #include <transform.h>
 
 
-LIB_POLYLINE::LIB_POLYLINE( LIB_PART* aParent ) :
+LIB_POLYLINE::LIB_POLYLINE( LIB_SYMBOL* aParent ) :
     LIB_ITEM( LIB_POLYLINE_T, aParent )
 {
     m_fill  = FILL_TYPE::NO_FILL;

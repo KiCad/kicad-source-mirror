@@ -317,11 +317,11 @@ void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* 
     // affects power symbols.
     if( aIncludePowerSymbols || aSymbol->GetRef( this )[0] != wxT( '#' ) )
     {
-        LIB_PART* part = aSymbol->GetPartRef().get();
+        LIB_SYMBOL* symbol = aSymbol->GetPartRef().get();
 
-        if( part || aForceIncludeOrphanSymbols )
+        if( symbol || aForceIncludeOrphanSymbols )
         {
-            SCH_REFERENCE schReference( aSymbol, part, *this );
+            SCH_REFERENCE schReference( aSymbol, symbol, *this );
 
             schReference.SetSheetNumber( m_virtualPageNumber );
             aReferences.AddItem( schReference );
@@ -350,11 +350,11 @@ void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefLi
     if( !aIncludePowerSymbols && aSymbol->GetRef( this )[0] == wxT( '#' ) )
         return;
 
-    LIB_PART* part = aSymbol->GetPartRef().get();
+    LIB_SYMBOL* symbol = aSymbol->GetPartRef().get();
 
-    if( part && part->GetUnitCount() > 1 )
+    if( symbol && symbol->GetUnitCount() > 1 )
     {
-        SCH_REFERENCE schReference = SCH_REFERENCE( aSymbol, part, *this );
+        SCH_REFERENCE schReference = SCH_REFERENCE( aSymbol, symbol, *this );
         schReference.SetSheetNumber( m_virtualPageNumber );
         wxString reference_str = schReference.GetRef();
 
@@ -716,11 +716,11 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-            LIB_PART*   part = symbol->GetPartRef().get();
+            LIB_SYMBOL* libSymbol = symbol->GetPartRef().get();
 
-            if( part && part->IsPower() )
+            if( libSymbol && libSymbol->IsPower() )
             {
-                SCH_REFERENCE schReference( symbol, part, sheet );
+                SCH_REFERENCE schReference( symbol, libSymbol, sheet );
                 references.AddItem( schReference );
             }
         }
@@ -749,7 +749,6 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
 
         references[ii].SetRef( curr_ref );
     }
-
 
     // Break full symbol reference into name (prefix) and number:
     // example: IC1 become IC, and 1

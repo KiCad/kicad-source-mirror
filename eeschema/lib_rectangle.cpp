@@ -35,7 +35,7 @@
 #include <transform.h>
 
 
-LIB_RECTANGLE::LIB_RECTANGLE( LIB_PART* aParent ) : LIB_ITEM( LIB_RECTANGLE_T, aParent )
+LIB_RECTANGLE::LIB_RECTANGLE( LIB_SYMBOL* aParent ) : LIB_ITEM( LIB_RECTANGLE_T, aParent )
 {
     m_Width      = 0;
     m_fill       = FILL_TYPE::NO_FILL;

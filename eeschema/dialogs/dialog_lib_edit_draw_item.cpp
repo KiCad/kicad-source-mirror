@@ -66,7 +66,7 @@ bool DIALOG_LIB_EDIT_DRAW_ITEM::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    LIB_PART* symbol = m_item->GetParent();
+    LIB_SYMBOL* symbol = m_item->GetParent();
 
     m_lineWidth.SetValue( m_item->GetWidth() );
     m_checkApplyToAllUnits->SetValue( m_item->GetUnit() == 0 );

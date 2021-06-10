@@ -44,7 +44,7 @@ class SCH_FIELD;
 class PROPERTIES;
 class SELECTION;
 class SCH_LEGACY_PLUGIN_CACHE;
-class LIB_PART;
+class LIB_SYMBOL;
 class PART_LIB;
 class BUS_ALIAS;
 
@@ -114,12 +114,12 @@ public:
     void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                              const wxString&   aLibraryPath,
                              const PROPERTIES* aProperties = nullptr ) override;
-    void EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
+    void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                              const wxString&   aLibraryPath,
                              const PROPERTIES* aProperties = nullptr ) override;
-    LIB_PART* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+    LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
                            const PROPERTIES* aProperties = nullptr ) override;
-    void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
+    void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
                      const PROPERTIES* aProperties = nullptr ) override;
     void DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
                        const PROPERTIES* aProperties = nullptr ) override;
@@ -135,8 +135,9 @@ public:
 
     const wxString& GetError() const override { return m_error; }
 
-    static LIB_PART* ParsePart( LINE_READER& aReader, int majorVersion = 0, int minorVersion = 0 );
-    static void FormatPart( LIB_PART* aPart, OUTPUTFORMATTER& aFormatter );
+    static LIB_SYMBOL* ParsePart( LINE_READER& aReader, int majorVersion = 0,
+                                  int minorVersion = 0 );
+    static void FormatPart( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter );
 
 private:
     void loadHierarchy( SCH_SHEET* aSheet );

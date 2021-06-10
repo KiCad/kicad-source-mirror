@@ -124,7 +124,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
 
     for( const PICKED_SYMBOL& i : aHistoryList )
     {
-        LIB_PART* symbol = GetLibPart( i.LibId );
+        LIB_SYMBOL* symbol = GetLibPart( i.LibId );
 
         // This can be null, for example when a symbol has been deleted from a library
         if( symbol )
@@ -196,12 +196,12 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
 
 void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
 {
-    LIB_PART* part = GetLibPart( aSymbol->GetLibId() );
+    LIB_SYMBOL* symbol = GetLibPart( aSymbol->GetLibId() );
 
-    if( !part )
+    if( !symbol )
         return;
 
-    int unitCount = part->GetUnitCount();
+    int unitCount = symbol->GetUnitCount();
 
     if( unitCount <= 1 || aSymbol->GetUnit() == aUnit )
         return;

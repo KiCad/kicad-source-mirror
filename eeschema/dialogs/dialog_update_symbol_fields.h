@@ -24,7 +24,7 @@
 #include <dialog_update_symbol_fields_base.h>
 
 class LIB_ID;
-class LIB_PART;
+class LIB_SYMBOL;
 class SYMBOL_EDIT_FRAME;
 
 /**
@@ -33,7 +33,7 @@ class SYMBOL_EDIT_FRAME;
 class DIALOG_UPDATE_SYMBOL_FIELDS : public DIALOG_UPDATE_SYMBOL_FIELDS_BASE
 {
 public:
-    DIALOG_UPDATE_SYMBOL_FIELDS( SYMBOL_EDIT_FRAME* aParent, LIB_PART* aPart );
+    DIALOG_UPDATE_SYMBOL_FIELDS( SYMBOL_EDIT_FRAME* aParent, LIB_SYMBOL* aSymbol );
     ~DIALOG_UPDATE_SYMBOL_FIELDS() override;
 
 protected:
@@ -56,7 +56,7 @@ private:
     void updateFieldsList();
 
     SYMBOL_EDIT_FRAME* m_editFrame;
-    LIB_PART*          m_symbol;
+    LIB_SYMBOL*        m_symbol;
 
     ///< Set of field names that should have values updated
     std::set<wxString> m_updateFields;

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 
 class SCH_SHEET;
 class SCH_SCREEN;
-class LIB_PART;
+class LIB_SYMBOL;
 class LIB_PIN;
 class SCH_BASE_FRAME;
 class DS_PROXY_VIEW_ITEM;
@@ -80,7 +80,7 @@ public:
     void Cleanup();
 
     void DisplaySheet( const SCH_SCREEN* aScreen );
-    void DisplayComponent( LIB_PART* aPart );
+    void DisplayComponent( LIB_SYMBOL* aSymbol );
 
     // Call it to set new draw area limits (max working and draw area size)
     void ResizeSheetWorkingArea( const SCH_SCREEN *aScreen );

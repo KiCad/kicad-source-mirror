@@ -690,7 +690,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 
             wxCHECK2( symbol, continue );
 
-            LIB_PART* libSymbolInSchematic = symbol->GetPartRef().get();
+            LIB_SYMBOL* libSymbolInSchematic = symbol->GetPartRef().get();
 
             wxCHECK2( libSymbolInSchematic, continue );
 
@@ -720,8 +720,8 @@ int ERC_TESTER::TestLibSymbolIssues()
                 break;
             }
 
-            wxString  symbolName = symbol->GetLibId().GetLibItemName();
-            LIB_PART* libSymbol = SchGetLibPart( symbol->GetLibId(), libTable );
+            wxString    symbolName = symbol->GetLibId().GetLibItemName();
+            LIB_SYMBOL* libSymbol = SchGetLibPart( symbol->GetLibId(), libTable );
 
             if( libSymbol == nullptr )
             {
@@ -736,7 +736,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                 break;
             }
 
-            std::unique_ptr<LIB_PART> flattenedSymbol = libSymbol->Flatten();
+            std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
 
             if( *flattenedSymbol != *libSymbolInSchematic )
             {

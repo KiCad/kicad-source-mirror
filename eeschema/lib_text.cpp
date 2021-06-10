@@ -42,7 +42,7 @@
 #include <default_values.h>    // For some default values
 
 
-LIB_TEXT::LIB_TEXT( LIB_PART* aParent ) :
+LIB_TEXT::LIB_TEXT( LIB_SYMBOL* aParent ) :
     LIB_ITEM( LIB_TEXT_T, aParent ),
     EDA_TEXT( wxEmptyString )
 {

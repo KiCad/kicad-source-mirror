@@ -161,7 +161,7 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
                 if( it == m_libSymbols.end() || !it->second )
                 {
                     m_libSymbols[symbol->GetSchSymbolLibraryName()] =
-                            new LIB_PART( *symbol->GetPartRef() );
+                            new LIB_SYMBOL( *symbol->GetPartRef() );
                 }
                 else
                 {
@@ -169,7 +169,7 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
                     // it was added to the schematic.  If it has changed, then a new name
                     // must be created for the library symbol list to prevent all of the
                     // other schematic symbols referencing that library symbol from changing.
-                    LIB_PART* foundSymbol = it->second;
+                    LIB_SYMBOL* foundSymbol = it->second;
 
                     foundSymbol->GetDrawItems().sort();
 
@@ -187,7 +187,7 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
                         }
 
                         symbol->SetSchSymbolLibraryName( newName );
-                        m_libSymbols[newName] = new LIB_PART( *symbol->GetPartRef() );
+                        m_libSymbols[newName] = new LIB_SYMBOL( *symbol->GetPartRef() );
                     }
                 }
             }
@@ -540,7 +540,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
     wxCHECK_RET( Schematic(), "Cannot call SCH_SCREEN::UpdateSymbolLinks with no SCHEMATIC" );
 
     wxString msg;
-    std::unique_ptr< LIB_PART > libSymbol;
+    std::unique_ptr< LIB_SYMBOL > libSymbol;
     std::vector<SCH_SYMBOL*> symbols;
     SYMBOL_LIB_TABLE* libs = Schematic()->Prj().SchSymbolLibTable();
 
@@ -559,7 +559,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 
     for( auto symbol : symbols )
     {
-        LIB_PART* tmp = nullptr;
+        LIB_SYMBOL* tmp = nullptr;
         libSymbol.reset();
 
         // If the symbol is already in the internal library, map the symbol to it.
@@ -578,7 +578,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
             }
 
             // Internal library symbols are already flattened so just make a copy.
-            symbol->SetLibSymbol( new LIB_PART( *it->second ) );
+            symbol->SetLibSymbol( new LIB_SYMBOL( *it->second ) );
             continue;
         }
 
@@ -658,7 +658,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
             libSymbol->SetParent();
 
             m_libSymbols.insert( { symbol->GetSchSymbolLibraryName(),
-                                   new LIB_PART( *libSymbol.get() ) } );
+                                   new LIB_SYMBOL( *libSymbol.get() ) } );
 
             if( aReporter )
             {
@@ -704,10 +704,10 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 
         auto it = m_libSymbols.find( symbol->GetSchSymbolLibraryName() );
 
-        LIB_PART* libSymbol = nullptr;
+        LIB_SYMBOL* libSymbol = nullptr;
 
         if( it != m_libSymbols.end() )
-            libSymbol = new LIB_PART( *it->second );
+            libSymbol = new LIB_SYMBOL( *it->second );
 
         symbol->SetLibSymbol( libSymbol );
 
@@ -1048,7 +1048,7 @@ SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-void SCH_SCREEN::AddLibSymbol( LIB_PART* aLibSymbol )
+void SCH_SCREEN::AddLibSymbol( LIB_SYMBOL* aLibSymbol )
 {
     wxCHECK( aLibSymbol, /* void */ );
 

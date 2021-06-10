@@ -33,7 +33,7 @@
 
 class wxListBox;
 class SCHLIB_FILTER;
-class LIB_PART;
+class LIB_SYMBOL;
 class SYMBOL_LIB_TABLE_ROW;
 
 
@@ -135,7 +135,7 @@ public:
     int GetUnit() const { return m_unit; }
     int GetConvert() const { return m_convert; }
 
-    LIB_PART* GetSelectedSymbol() const;
+    LIB_SYMBOL* GetSelectedSymbol() const;
 
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override;
 
@@ -189,7 +189,7 @@ private:
      */
     bool m_selection_changed;
 
-    LIB_PART* m_previewItem;
+    LIB_SYMBOL* m_previewItem;
 
     DECLARE_EVENT_TABLE()
 };

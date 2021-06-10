@@ -261,7 +261,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
     SCH_SHEET_LIST  hierarchy = frame->Schematic().GetSheets();
 
-    // Load non-mandatory fields from all matching symbols and their library parts
+    // Load non-mandatory fields from all matching symbols and their library symbols
     std::vector<SCH_FIELD*> fields;
     std::vector<LIB_FIELD*> libFields;
     std::set<wxString>      fieldNames;
@@ -289,24 +289,24 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
             if( m_mode == MODE::UPDATE && symbol->GetLibId().IsValid() )
             {
-                LIB_PART* libSymbol = frame->GetLibPart( symbol->GetLibId() );
+                LIB_SYMBOL* libSymbol = frame->GetLibPart( symbol->GetLibId() );
 
                 if( libSymbol )
                 {
-                    std::unique_ptr<LIB_PART> flattenedPart = libSymbol->Flatten();
+                    std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
 
-                    flattenedPart->GetFields( libFields );
+                    flattenedSymbol->GetFields( libFields );
 
                     for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
                         fieldNames.insert( libFields[i]->GetName() );
 
-                    libFields.clear();  // flattenedPart is about to go out of scope...
+                    libFields.clear();  // flattenedSymbol is about to go out of scope...
                 }
             }
         }
     }
 
-    // Load non-mandatory fields from the change-to library part
+    // Load non-mandatory fields from the change-to library symbol
     if( m_mode == MODE::CHANGE )
     {
         LIB_ID newId;
@@ -315,18 +315,18 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
         if( newId.IsValid() )
         {
-            LIB_PART* libSymbol = frame->GetLibPart( newId );
+            LIB_SYMBOL* libSymbol = frame->GetLibPart( newId );
 
             if( libSymbol )
             {
-                std::unique_ptr<LIB_PART> flattenedPart = libSymbol->Flatten();
+                std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
 
-                flattenedPart->GetFields( libFields );
+                flattenedSymbol->GetFields( libFields );
 
                 for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
                     fieldNames.insert( libFields[i]->GetName() );
 
-                libFields.clear();  // flattenedPart is about to go out of scope...
+                libFields.clear();  // flattenedSymbol is about to go out of scope...
             }
         }
     }
@@ -532,7 +532,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         }
     }
 
-    LIB_PART* libSymbol = frame->GetLibPart( aNewId );
+    LIB_SYMBOL* libSymbol = frame->GetLibPart( aNewId );
 
     if( !libSymbol )
     {
@@ -541,7 +541,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         return false;
     }
 
-    std::unique_ptr<LIB_PART> flattenedSymbol = libSymbol->Flatten();
+    std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
 
     if( flattenedSymbol->GetUnitCount() < aSymbol->GetUnit() )
     {
@@ -550,7 +550,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         return false;
     }
 
-    // Removing the symbol needs to be done before the LIB_PART is changed to prevent stale
+    // Removing the symbol needs to be done before the LIB_SYMBOL is changed to prevent stale
     // library symbols in the schematic file.
     screen->Remove( aSymbol );
     frame->SaveCopyInUndoList( screen, aSymbol, UNDO_REDO::CHANGED, aAppendToUndo );

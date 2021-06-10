@@ -446,8 +446,8 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
                                        : _( "Reached end of sheet." );
 
        // Show the popup during the time period the user can wrap the search
-        m_frame->ShowFindReplaceStatus( msg + wxS( " " ) + _( "Find again to wrap around to the start." ),
-                                        4000 );
+        m_frame->ShowFindReplaceStatus( msg + wxS( " " ) +
+                                        _( "Find again to wrap around to the start." ), 4000 );
         wrapAroundTimer.StartOnce( 4000 );
     }
 
@@ -1577,12 +1577,12 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 end = paste_screen->GetLibSymbols().end();
             }
 
-            LIB_PART* libPart = nullptr;
+            LIB_SYMBOL* libSymbol = nullptr;
 
             if( it != end )
             {
-                libPart = new LIB_PART( *it->second );
-                symbol->SetLibSymbol( libPart );
+                libSymbol = new LIB_SYMBOL( *it->second );
+                symbol->SetLibSymbol( libSymbol );
             }
 
             for( SCH_SHEET_PATH& instance : pasteInstances )
@@ -1600,10 +1600,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             for( SCH_SHEET_PATH& instance : pasteInstances )
             {
-                // Ignore pseudo-symbols (e.g. power symbols) and symbols from a non-existant library
-                if( libPart && symbol->GetRef( &instance )[0] != wxT( '#' ) )
+                // Ignore pseudo-symbols (e.g. power symbols) and symbols from a non-existant
+                // library.
+                if( libSymbol && symbol->GetRef( &instance )[0] != wxT( '#' ) )
                 {
-                    SCH_REFERENCE schReference( symbol, libPart, instance );
+                    SCH_REFERENCE schReference( symbol, libSymbol, instance );
                     schReference.SetSheetNumber( instance.GetVirtualPageNumber() );
                     pastedSymbols[instance].AddItem( schReference );
                 }

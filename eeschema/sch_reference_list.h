@@ -57,11 +57,11 @@ public:
         m_sheetNum        = 0;
     }
 
-    SCH_REFERENCE( SCH_SYMBOL* aSymbol, LIB_PART* aLibPart, const SCH_SHEET_PATH& aSheetPath );
+    SCH_REFERENCE( SCH_SYMBOL* aSymbol, LIB_SYMBOL* aLibSymbol, const SCH_SHEET_PATH& aSheetPath );
 
     SCH_SYMBOL* GetSymbol() const           { return m_rootSymbol; }
 
-    LIB_PART*   GetLibPart() const          { return m_libPart; }
+    LIB_SYMBOL* GetLibPart() const          { return m_libPart; }
 
     const SCH_SHEET_PATH& GetSheetPath() const { return m_sheetPath; }
 
@@ -107,7 +107,7 @@ public:
     wxString GetFullRef()
     {
         if( GetSymbol()->GetUnitCount() > 1 )
-            return GetRef() + LIB_PART::SubReference( GetUnit() );
+            return GetRef() + LIB_SYMBOL::SubReference( GetUnit() );
         else
             return GetRef();
     }
@@ -170,7 +170,7 @@ private:
     /// Symbol reference prefix, without number (for IC1, this is IC) )
     UTF8            m_ref;               // it's private, use the accessors please
     SCH_SYMBOL*     m_rootSymbol;        ///< The symbol associated the reference object.
-    LIB_PART*       m_libPart;           ///< The source symbol from a library.
+    LIB_SYMBOL*     m_libPart;           ///< The source symbol from a library.
     wxPoint         m_symbolPos;         ///< The physical position of the symbol in schematic
                                          ///< used to annotate by X or Y position
     int             m_unit;              ///< The unit number for symbol with multiple parts

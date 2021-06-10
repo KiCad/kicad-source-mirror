@@ -271,7 +271,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConver
 bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aAliasName, int aUnit,
                                                   int aConvert )
 {
-    LIB_PART* alias = nullptr;
+    LIB_SYMBOL* alias = nullptr;
 
     try
     {
@@ -304,7 +304,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aAliasName, in
 }
 
 
-bool SYMBOL_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString& aLibrary,
+bool SYMBOL_EDIT_FRAME::LoadOneLibraryPartAux( LIB_SYMBOL* aEntry, const wxString& aLibrary,
                                                int aUnit, int aConvert )
 {
     wxString msg, rootName;
@@ -334,17 +334,17 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString&
         rebuildMenuAndToolbar = true;
     }
 
-    LIB_PART* lib_part = m_libMgr->GetBufferedPart( aEntry->GetName(), aLibrary );
-    wxCHECK( lib_part, false );
+    LIB_SYMBOL* lib_symbol = m_libMgr->GetBufferedPart( aEntry->GetName(), aLibrary );
+    wxCHECK( lib_symbol, false );
 
     m_unit = aUnit > 0 ? aUnit : 1;
     m_convert = aConvert > 0 ? aConvert : 1;
 
-    // The buffered screen for the part
-    SCH_SCREEN* part_screen = m_libMgr->GetScreen( lib_part->GetName(), aLibrary );
+    // The buffered screen for the symbol
+    SCH_SCREEN* part_screen = m_libMgr->GetScreen( lib_symbol->GetName(), aLibrary );
 
     SetScreen( part_screen );
-    SetCurPart( new LIB_PART( *lib_part ), true );
+    SetCurPart( new LIB_SYMBOL( *lib_symbol ), true );
     SetCurLib( aLibrary );
 
     if( rebuildMenuAndToolbar )
@@ -406,6 +406,7 @@ void SYMBOL_EDIT_FRAME::CreateNewPart()
     }
 
     wxString name = dlg.GetName();
+
     // Currently, symbol names cannot include a space, that breaks libraries:
     name.Replace( " ", "_" );
 
@@ -418,56 +419,56 @@ void SYMBOL_EDIT_FRAME::CreateNewPart()
         return;
     }
 
-    LIB_PART new_part( name );      // do not create part on the heap, it will be buffered soon
+    LIB_SYMBOL new_symbol( name );  // do not create symbol on the heap, it will be buffered soon
 
     wxString parentSymbolName = dlg.GetParentSymbolName();
 
     if( parentSymbolName.IsEmpty() )
     {
-        new_part.GetReferenceField().SetText( dlg.GetReference() );
-        new_part.SetUnitCount( dlg.GetUnitCount() );
+        new_symbol.GetReferenceField().SetText( dlg.GetReference() );
+        new_symbol.SetUnitCount( dlg.GetUnitCount() );
 
-        // Initialize new_part.m_TextInside member:
+        // Initialize new_symbol.m_TextInside member:
         // if 0, pin text is outside the body (on the pin)
         // if > 0, pin text is inside the body
-
         if( dlg.GetPinNameInside() )
         {
-            new_part.SetPinNameOffset( dlg.GetPinTextPosition() );
+            new_symbol.SetPinNameOffset( dlg.GetPinTextPosition() );
 
-            if( new_part.GetPinNameOffset() == 0 )
-                new_part.SetPinNameOffset( 1 );
+            if( new_symbol.GetPinNameOffset() == 0 )
+                new_symbol.SetPinNameOffset( 1 );
         }
         else
         {
-            new_part.SetPinNameOffset( 0 );
+            new_symbol.SetPinNameOffset( 0 );
         }
 
-        ( dlg.GetPowerSymbol() ) ? new_part.SetPower() : new_part.SetNormal();
-        new_part.SetShowPinNumbers( dlg.GetShowPinNumber() );
-        new_part.SetShowPinNames( dlg.GetShowPinName() );
-        new_part.LockUnits( dlg.GetLockItems() );
-        new_part.SetIncludeInBom( dlg.GetIncludeInBom() );
-        new_part.SetIncludeOnBoard( dlg.GetIncludeOnBoard() );
+        ( dlg.GetPowerSymbol() ) ? new_symbol.SetPower() : new_symbol.SetNormal();
+        new_symbol.SetShowPinNumbers( dlg.GetShowPinNumber() );
+        new_symbol.SetShowPinNames( dlg.GetShowPinName() );
+        new_symbol.LockUnits( dlg.GetLockItems() );
+        new_symbol.SetIncludeInBom( dlg.GetIncludeInBom() );
+        new_symbol.SetIncludeOnBoard( dlg.GetIncludeOnBoard() );
 
         if( dlg.GetUnitCount() < 2 )
-            new_part.LockUnits( false );
+            new_symbol.LockUnits( false );
 
-        new_part.SetConversion( dlg.GetAlternateBodyStyle() );
+        new_symbol.SetConversion( dlg.GetAlternateBodyStyle() );
+
         // must be called after loadPart, that calls SetShowDeMorgan, but
         // because the symbol is empty,it looks like it has no alternate body
         SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
     }
     else
     {
-        LIB_PART* parent = m_libMgr->GetAlias( parentSymbolName, lib );
+        LIB_SYMBOL* parent = m_libMgr->GetAlias( parentSymbolName, lib );
         wxCHECK( parent, /* void */ );
-        new_part.SetParent( parent );
+        new_symbol.SetParent( parent );
 
         // Inherit the parent mandatory field attributes.
         for( int id = 0; id < MANDATORY_FIELDS; ++id )
         {
-            LIB_FIELD* field = new_part.GetFieldById( id );
+            LIB_FIELD* field = new_symbol.GetFieldById( id );
 
             // the MANDATORY_FIELDS are exactly that in RAM.
             wxCHECK( field, /* void */ );
@@ -497,11 +498,11 @@ void SYMBOL_EDIT_FRAME::CreateNewPart()
                 break;
             }
 
-            field->SetParent( &new_part );
+            field->SetParent( &new_symbol );
         }
     }
 
-    m_libMgr->UpdatePart( &new_part, lib );
+    m_libMgr->UpdatePart( &new_symbol, lib );
     SyncLibraries( false );
     LoadPart( name, lib, 1 );
 }
@@ -578,11 +579,11 @@ void SYMBOL_EDIT_FRAME::SaveSymbolAs()
 
 void SYMBOL_EDIT_FRAME::savePartAs()
 {
-    LIB_PART* part = getTargetPart();
+    LIB_SYMBOL* symbol = getTargetPart();
 
-    if( part )
+    if( symbol )
     {
-        LIB_ID   old_lib_id = part->GetLibId();
+        LIB_ID   old_lib_id = symbol->GetLibId();
         wxString old_name = old_lib_id.GetLibItemName();
         wxString old_lib = old_lib_id.GetLibNickname();
 
@@ -641,8 +642,8 @@ void SYMBOL_EDIT_FRAME::savePartAs()
 
         // @todo Either check the selecteced library to see if the parent symbol name is in
         //       the new library and/or copy the parent symbol as well.  This is the lazy
-        //       solution to ensure derived parts do not get orphaned.
-        if( part->IsAlias() && new_lib != old_lib )
+        //       solution to ensure derived symbols do not get orphaned.
+        if( symbol->IsAlias() && new_lib != old_lib )
         {
             DisplayError( this, _( "Derived symbols must be saved in the same library as their "
                                    "parent symbol." ) );
@@ -670,12 +671,12 @@ void SYMBOL_EDIT_FRAME::savePartAs()
             return;
         }
 
-        LIB_PART new_part( *part );
-        new_part.SetName( new_name );
+        LIB_SYMBOL new_symbol( *symbol );
+        new_symbol.SetName( new_name );
 
-        m_libMgr->UpdatePart( &new_part, new_lib );
+        m_libMgr->UpdatePart( &new_symbol, new_lib );
         SyncLibraries( false );
-        m_treePane->GetLibTree()->SelectLibId( LIB_ID( new_lib, new_part.GetName() ) );
+        m_treePane->GetLibTree()->SelectLibId( LIB_ID( new_lib, new_symbol.GetName() ) );
         LoadPart( new_name, new_lib, m_unit );
     }
 }
@@ -705,7 +706,7 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
             m_libMgr->UpdatePartAfterRename( m_my_part, *aOldName, lib );
         }
 
-        // Reselect the renamed part
+        // Reselect the renamed symbol
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, m_my_part->GetName() ) );
     }
 
@@ -764,12 +765,13 @@ void SYMBOL_EDIT_FRAME::CopyPartToClipboard()
 {
     int dummyUnit;
     LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId( &dummyUnit );
-    LIB_PART* part = m_libMgr->GetBufferedPart( libId.GetLibItemName(), libId.GetLibNickname() );
+    LIB_SYMBOL* symbol = m_libMgr->GetBufferedPart( libId.GetLibItemName(),
+                                                    libId.GetLibNickname() );
 
-    if( !part )
+    if( !symbol )
         return;
 
-    std::unique_ptr< LIB_PART> tmp = part->Flatten();
+    std::unique_ptr< LIB_SYMBOL> tmp = symbol->Flatten();
     STRING_FORMATTER formatter;
     SCH_SEXPR_PLUGIN::FormatPart( tmp.get(), formatter );
 
@@ -797,8 +799,8 @@ void SYMBOL_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
     if( !m_libMgr->LibraryExists( lib ) )
         return;
 
-    LIB_PART* srcPart = nullptr;
-    LIB_PART* newPart = nullptr;
+    LIB_SYMBOL* srcSymbol = nullptr;
+    LIB_SYMBOL* newSymbol = nullptr;
 
     if( aFromClipboard )
     {
@@ -818,7 +820,7 @@ void SYMBOL_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
 
         try
         {
-            newPart = SCH_SEXPR_PLUGIN::ParsePart( reader );
+            newSymbol = SCH_SEXPR_PLUGIN::ParsePart( reader );
         }
         catch( IO_ERROR& e )
         {
@@ -828,50 +830,50 @@ void SYMBOL_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
     }
     else
     {
-        srcPart = m_libMgr->GetBufferedPart( libId.GetLibItemName(), lib );
+        srcSymbol = m_libMgr->GetBufferedPart( libId.GetLibItemName(), lib );
 
-        wxCHECK( srcPart, /* void */ );
+        wxCHECK( srcSymbol, /* void */ );
 
-        newPart = new LIB_PART( *srcPart );
+        newSymbol = new LIB_SYMBOL( *srcSymbol );
 
         // Derive from same parent.
-        if( srcPart->IsAlias() )
+        if( srcSymbol->IsAlias() )
         {
-            std::shared_ptr< LIB_PART > srcParent = srcPart->GetParent().lock();
+            std::shared_ptr< LIB_SYMBOL > srcParent = srcSymbol->GetParent().lock();
 
             wxCHECK( srcParent, /* void */ );
 
-            newPart->SetParent( srcParent.get() );
+            newSymbol->SetParent( srcParent.get() );
         }
     }
 
-    if( !newPart )
+    if( !newSymbol )
         return;
 
-    ensureUniqueName( newPart, lib );
-    m_libMgr->UpdatePart( newPart, lib );
+    ensureUniqueName( newSymbol, lib );
+    m_libMgr->UpdatePart( newSymbol, lib );
 
-    LoadOneLibraryPartAux( newPart, lib, GetUnit(), GetConvert() );
+    LoadOneLibraryPartAux( newSymbol, lib, GetUnit(), GetConvert() );
 
     SyncLibraries( false );
-    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, newPart->GetName() ) );
+    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, newSymbol->GetName() ) );
 
-    delete newPart;
+    delete newSymbol;
 }
 
 
-void SYMBOL_EDIT_FRAME::ensureUniqueName( LIB_PART* aPart, const wxString& aLibrary )
+void SYMBOL_EDIT_FRAME::ensureUniqueName( LIB_SYMBOL* aSymbol, const wxString& aLibrary )
 {
-    wxCHECK( aPart, /* void */ );
+    wxCHECK( aSymbol, /* void */ );
 
     int      i = 1;
-    wxString newName = aPart->GetName();
+    wxString newName = aSymbol->GetName();
 
     // Append a number to the name until the name is unique in the library.
     while( m_libMgr->PartExists( newName, aLibrary ) )
-        newName.Printf( "%s_%d", aPart->GetName(), i++ );
+        newName.Printf( "%s_%d", aSymbol->GetName(), i++ );
 
-    aPart->SetName( newName );
+    aSymbol->SetName( newName );
 }
 
 
@@ -945,7 +947,7 @@ void SYMBOL_EDIT_FRAME::RevertAll()
 
 void SYMBOL_EDIT_FRAME::LoadPart( const wxString& aAlias, const wxString& aLibrary, int aUnit )
 {
-    LIB_PART* part = m_libMgr->GetBufferedPart( aAlias, aLibrary );
+    LIB_SYMBOL* part = m_libMgr->GetBufferedPart( aAlias, aLibrary );
 
     if( !part )
     {
@@ -1123,7 +1125,6 @@ bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
             {
                 // If saving under existing name fails then do a Save As..., and if that
                 // fails then cancel close action.
-
                 if( !m_libMgr->IsLibraryReadOnly( libNickname ) )
                 {
                     if( saveLibrary( libNickname, false ) )

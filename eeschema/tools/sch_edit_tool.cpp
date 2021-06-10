@@ -115,7 +115,7 @@ private:
         for( int ii = 0; ii < symbol->GetPartRef()->GetUnitCount(); ii++ )
         {
             wxString num_unit;
-            num_unit.Printf( _( "Unit %s" ), LIB_PART::SubReference( ii + 1, false ) );
+            num_unit.Printf( _( "Unit %s" ), LIB_SYMBOL::SubReference( ii + 1, false ) );
 
             wxMenuItem * item = Append( ID_POPUP_SCH_SELECT_UNIT1 + ii, num_unit, wxEmptyString,
                                         wxITEM_CHECK );

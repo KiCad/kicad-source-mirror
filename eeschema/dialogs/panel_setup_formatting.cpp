@@ -59,13 +59,13 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     // Reference style one of: "A" ".A" "-A" "_A" ".1" "-1" "_1"
     int refStyleSelection;
 
-    switch( LIB_PART::GetSubpartIdSeparator() )
+    switch( LIB_SYMBOL::GetSubpartIdSeparator() )
     {
     default:
     case 0:   refStyleSelection = 0; break;
-    case '.': refStyleSelection = LIB_PART::GetSubpartFirstId() == '1' ? 4 : 1; break;
-    case '-': refStyleSelection = LIB_PART::GetSubpartFirstId() == '1' ? 5 : 2; break;
-    case '_': refStyleSelection = LIB_PART::GetSubpartFirstId() == '1' ? 6 : 3; break;
+    case '.': refStyleSelection = LIB_SYMBOL::GetSubpartFirstId() == '1' ? 4 : 1; break;
+    case '-': refStyleSelection = LIB_SYMBOL::GetSubpartFirstId() == '1' ? 5 : 2; break;
+    case '_': refStyleSelection = LIB_SYMBOL::GetSubpartFirstId() == '1' ? 6 : 3; break;
     }
 
     m_choiceSeparatorRefId->SetSelection( refStyleSelection );
@@ -119,10 +119,10 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     case 6: firstRefId = '1'; refSeparator = '_'; break;
     }
 
-    if( refSeparator != LIB_PART::GetSubpartIdSeparator() ||
-        firstRefId != LIB_PART::GetSubpartFirstId() )
+    if( refSeparator != LIB_SYMBOL::GetSubpartIdSeparator() ||
+        firstRefId != LIB_SYMBOL::GetSubpartFirstId() )
     {
-        LIB_PART::SetSubpartIdNotation( refSeparator, firstRefId );
+        LIB_SYMBOL::SetSubpartIdNotation( refSeparator, firstRefId );
     }
 
     settings.m_DefaultTextSize = (int) m_textSize.GetValue();

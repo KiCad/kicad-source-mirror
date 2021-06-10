@@ -39,7 +39,7 @@
 #include <sch_io_mgr.h>
 #include <project.h>
 
-class LIB_PART;
+class LIB_SYMBOL;
 class LIB_ID;
 class LINE_READER;
 class OUTPUTFORMATTER;
@@ -170,7 +170,7 @@ class PART_LIB;
 class wxRegEx;
 
 /**
- * LIB_PART map sorting.
+ * LIB_SYMBOL map sorting.
  */
 struct LibPartMapSort
 {
@@ -182,9 +182,9 @@ struct LibPartMapSort
 
 /// Part map used by part library object.
 
-typedef std::map< wxString, LIB_PART*, LibPartMapSort >  LIB_PART_MAP;
-typedef std::vector< LIB_PART* >                         LIB_PARTS;
-typedef boost::ptr_vector< PART_LIB >                    PART_LIBS_BASE;
+typedef std::map< wxString, LIB_SYMBOL*, LibPartMapSort >  LIB_SYMBOL_MAP;
+typedef std::vector< LIB_SYMBOL* >                         LIB_SYMBOLS;
+typedef boost::ptr_vector< PART_LIB >                      PART_LIBS_BASE;
 
 
 /**
@@ -291,12 +291,12 @@ public:
      *
      * @param aLibId - The #LIB_ID of the symbol to search for.
      * @param aLibraryName - Name of the library to search for part.
-     * @return LIB_PART* - The part object if found, otherwise NULL.
+     * @return LIB_SYMBOL* - The part object if found, otherwise NULL.
      */
-    LIB_PART* FindLibPart( const LIB_ID& aLibId, const wxString& aLibraryName = wxEmptyString );
+    LIB_SYMBOL* FindLibPart( const LIB_ID& aLibId, const wxString& aLibraryName = wxEmptyString );
 
     /**
-     * Search all libraries in the list for a #LIB_PART using a case insensitive comparison.
+     * Search all libraries in the list for a #LIB_SYMBOL using a case insensitive comparison.
      *
      * Helper function used in dialog to find all candidates.
      * During a long time, eeschema was using a case insensitive search.
@@ -308,7 +308,7 @@ public:
      * @param aLibraryName - Name of the library to search.
      * @param aCandidates - a std::vector to store candidates
      */
-    void FindLibraryNearEntries( std::vector<LIB_PART*>& aCandidates, const wxString& aEntryName,
+    void FindLibraryNearEntries( std::vector<LIB_SYMBOL*>& aCandidates, const wxString& aEntryName,
                                  const wxString& aLibraryName = wxEmptyString );
 
     int GetLibraryCount() { return size(); }
@@ -371,29 +371,29 @@ public:
     /**
      * Load a vector with all the entries in this library.
      *
-     * @param aParts - vector to receive the aliases.
+     * @param aSymbols is a vector to receive the aliases.
      */
-    void GetParts( std::vector<LIB_PART*>& aPart) const;
+    void GetParts( std::vector<LIB_SYMBOL*>& aSymbols ) const;
 
     /**
-     * Find #LIB_PART by \a aName.
+     * Find #LIB_SYMBOL by \a aName.
      *
      * @param aName - Name of part, case sensitive.
-     * @return LIB_PART pointer part if found, else NULL.
+     * @return LIB_SYMBOL pointer part if found, else NULL.
      */
-    LIB_PART* FindPart( const wxString& aName ) const;
+    LIB_SYMBOL* FindPart( const wxString& aName ) const;
 
-    LIB_PART* FindPart( const LIB_ID& aLibId ) const;
+    LIB_SYMBOL* FindPart( const LIB_ID& aLibId ) const;
 
     /**
-     * Add \a aPart entry to library.
+     * Add \a aSymbol entry to library.
      *
-     * @note A #LIB_PART can have an alias list so these alias will be added in library.
+     * @note A #LIB_SYMBOL can have an alias list so these alias will be added in library.
      *       and the any existing duplicate aliases will be removed from the library.
      *
-     * @param aPart - Part to add, caller retains ownership, a clone is added.
+     * @param aSymbol - Part to add, caller retains ownership, a clone is added.
      */
-    void AddPart( LIB_PART* aPart );
+    void AddPart( LIB_SYMBOL* aSymbol );
 
     /**
      * Safely remove \a aEntry from the library and return the next entry.
@@ -406,7 +406,7 @@ public:
      * @param aEntry - Entry to remove from library.
      * @return The next entry in the library or NULL if the library is empty.
      */
-    LIB_PART* RemovePart( LIB_PART* aEntry );
+    LIB_SYMBOL* RemovePart( LIB_SYMBOL* aEntry );
 
     /**
      * Replace an existing part entry in the library.
@@ -416,7 +416,7 @@ public:
      * @param aOldPart - The part to replace.
      * @param aNewPart - The new part.
      */
-    LIB_PART* ReplacePart( LIB_PART* aOldPart, LIB_PART* aNewPart );
+    LIB_SYMBOL* ReplacePart( LIB_SYMBOL* aOldSymbol, LIB_SYMBOL* aNewSymbol );
 
     /**
      * Return the file name without path or extension.

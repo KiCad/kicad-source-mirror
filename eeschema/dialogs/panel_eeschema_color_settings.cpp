@@ -331,26 +331,26 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     t2->SetSelected();
 
     {
-        LIB_PART* part = new LIB_PART( wxEmptyString );
+        LIB_SYMBOL* symbol = new LIB_SYMBOL( wxEmptyString );
         wxPoint p( 2625, -1600 );
 
-        LIB_FIELD& ref = part->GetReferenceField();
+        LIB_FIELD& ref = symbol->GetReferenceField();
 
         ref.SetText( wxT( "U1" ) );
         ref.SetPosition( MILS_POINT( p.x + 30, p.y + 260 ) );
         ref.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
 
-        LIB_FIELD& value = part->GetValueField();
+        LIB_FIELD& value = symbol->GetValueField();
 
         value.SetText( wxT( "OPA604" ) );
         value.SetPosition( MILS_POINT( p.x + 30, p.y + 180 ) );
         value.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
 
-        part->SetShowPinNames( true );
-        part->SetShowPinNumbers( true );
-        part->SetPinNameOffset( 0 );
+        symbol->SetShowPinNames( true );
+        symbol->SetShowPinNumbers( true );
+        symbol->SetPinNameOffset( 0 );
 
-        LIB_POLYLINE* comp_body = new LIB_POLYLINE( part );
+        LIB_POLYLINE* comp_body = new LIB_POLYLINE( symbol );
 
         comp_body->SetUnit( 0 );
         comp_body->SetConvert( 0 );
@@ -363,7 +363,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         addItem( comp_body );
 
-        LIB_PIN* pin = new LIB_PIN( part );
+        LIB_PIN* pin = new LIB_PIN( symbol );
 
         pin->SetPosition( MILS_POINT( p.x - 200, p.y + 100 ) );
         pin->SetLength( Mils2iu( 100 ) );
@@ -372,9 +372,9 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         pin->SetNumber( wxT( "1" ) );
         pin->SetName( wxT( "-" ) );
 
-        part->AddDrawItem( pin );
+        symbol->AddDrawItem( pin );
 
-        pin = new LIB_PIN( part );
+        pin = new LIB_PIN( symbol );
 
         pin->SetPosition( MILS_POINT( p.x - 200, p.y - 100 ) );
         pin->SetLength( Mils2iu( 100 ) );
@@ -383,9 +383,9 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         pin->SetNumber( wxT( "2" ) );
         pin->SetName( wxT( "+" ) );
 
-        part->AddDrawItem( pin );
+        symbol->AddDrawItem( pin );
 
-        pin = new LIB_PIN( part );
+        pin = new LIB_PIN( symbol );
 
         pin->SetPosition( MILS_POINT( p.x + 200, p.y ) );
         pin->SetLength( Mils2iu( 100 ) );
@@ -394,9 +394,9 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         pin->SetNumber( wxT( "3" ) );
         pin->SetName( wxT( "OUT" ) );
 
-        part->AddDrawItem( pin );
+        symbol->AddDrawItem( pin );
 
-        addItem( part );
+        addItem( symbol );
     }
 
     SCH_SHEET* s = new SCH_SHEET( nullptr, MILS_POINT( 4000, 1300 ) );

@@ -318,9 +318,9 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
     if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
     {
         const SCH_SYMBOL* symbol = (SCH_SYMBOL*) aField->GetParent();
-        const LIB_PART*   part = GetParent()->GetLibPart( symbol->GetLibId(), true );
+        const LIB_SYMBOL* libSymbol = GetParent()->GetLibPart( symbol->GetLibId(), true );
 
-        if( part && part->IsPower() )
+        if( libSymbol && libSymbol->IsPower() )
             m_isPower = true;
     }
 

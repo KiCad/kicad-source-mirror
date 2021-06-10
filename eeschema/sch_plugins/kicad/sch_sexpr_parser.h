@@ -154,9 +154,9 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     void parseFill( FILL_PARAMS& aFill );
 
     void parseEDA_TEXT( EDA_TEXT* aText );
-    void parsePinNames( std::unique_ptr<LIB_PART>& aSymbol );
+    void parsePinNames( std::unique_ptr<LIB_SYMBOL>& aSymbol );
 
-    LIB_FIELD* parseProperty( std::unique_ptr<LIB_PART>& aSymbol );
+    LIB_FIELD* parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol );
 
     LIB_ARC* parseArc();
     LIB_BEZIER* parseBezier();
@@ -186,10 +186,10 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
 public:
     SCH_SEXPR_PARSER( LINE_READER* aLineReader = nullptr );
 
-    void ParseLib( LIB_PART_MAP& aSymbolLibMap );
+    void ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap );
 
-    LIB_PART* ParseSymbol( LIB_PART_MAP& aSymbolLibMap,
-                           int aFileVersion = SEXPR_SYMBOL_LIB_FILE_VERSION );
+    LIB_SYMBOL* ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap,
+                             int aFileVersion = SEXPR_SYMBOL_LIB_FILE_VERSION );
 
     LIB_ITEM* ParseDrawItem();
 

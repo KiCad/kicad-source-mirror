@@ -79,7 +79,7 @@
 #define Mils2Iu( x ) Mils2iu( x )
 
 
-// Must be the first line of part library document (.dcm) files.
+// Must be the first line of symbol library document (.dcm) files.
 #define DOCFILE_IDENT     "EESchema-DOCLIB  Version 2.0"
 
 #define SCH_PARSE_ERROR( text, reader, pos )                         \
@@ -473,7 +473,7 @@ static void parseQuotedString( wxString& aString, LINE_READER& aReader,
 
 
 /**
- * A cache assistant for the part library portion of the #SCH_PLUGIN API, and only for the
+ * A cache assistant for the symbol library portion of the #SCH_PLUGIN API, and only for the
  * #SCH_LEGACY_PLUGIN, so therefore is private to this implementation file, i.e. not placed
  * into a header.
  */
@@ -483,7 +483,7 @@ class SCH_LEGACY_PLUGIN_CACHE
     wxString        m_fileName;     // Absolute path and file name.
     wxFileName      m_libFileName;  // Absolute path and file name is required here.
     wxDateTime      m_fileModTime;
-    LIB_PART_MAP    m_symbols;      // Map of names of #LIB_PART pointers.
+    LIB_SYMBOL_MAP  m_symbols;      // Map of names of #LIB_SYMBOL pointers.
     bool            m_isWritable;
     bool            m_isModified;
     int             m_versionMajor;
@@ -491,27 +491,29 @@ class SCH_LEGACY_PLUGIN_CACHE
     SCH_LIB_TYPE    m_libType;      // Is this cache a symbol or symbol library.
 
     void                  loadHeader( FILE_LINE_READER& aReader );
-    static void           loadAliases( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader,
-                                       LIB_PART_MAP* aMap = nullptr );
-    static void           loadField( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
-    static void           loadDrawEntries( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader,
+    static void           loadAliases( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader,
+                                       LIB_SYMBOL_MAP* aMap = nullptr );
+    static void           loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static void           loadDrawEntries( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                           LINE_READER& aReader,
                                            int aMajorVersion, int aMinorVersion );
-    static void           loadFootprintFilters( std::unique_ptr<LIB_PART>& aPart,
+    static void           loadFootprintFilters( std::unique_ptr<LIB_SYMBOL>& aSymbol,
                                                 LINE_READER& aReader );
     void                  loadDocs();
-    static LIB_ARC*       loadArc( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
-    static LIB_CIRCLE*    loadCircle( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
-    static LIB_TEXT*      loadText( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader,
+    static LIB_ARC*       loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static LIB_CIRCLE*    loadCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static LIB_TEXT*      loadText( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader,
                                     int aMajorVersion, int aMinorVersion );
-    static LIB_RECTANGLE* loadRectangle( std::unique_ptr<LIB_PART>& aPart,
+    static LIB_RECTANGLE* loadRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
                                          LINE_READER& aReader );
-    static LIB_PIN*       loadPin( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
-    static LIB_POLYLINE*  loadPolyLine( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
-    static LIB_BEZIER*    loadBezier( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
+    static LIB_PIN*       loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static LIB_POLYLINE*  loadPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                        LINE_READER& aReader );
+    static LIB_BEZIER*    loadBezier( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
 
     static FILL_TYPE   parseFillMode( LINE_READER& aReader, const char* aLine,
-                                   const char** aOutput );
-    LIB_PART*       removeSymbol( LIB_PART* aAlias );
+                                      const char** aOutput );
+    LIB_SYMBOL*       removeSymbol( LIB_SYMBOL* aAlias );
 
     void            saveDocFile();
     static void     saveArc( LIB_ARC* aArc, OUTPUTFORMATTER& aFormatter );
@@ -552,7 +554,7 @@ public:
 
     void Load();
 
-    void AddSymbol( const LIB_PART* aPart );
+    void AddSymbol( const LIB_SYMBOL* aSymbol );
 
     void DeleteSymbol( const wxString& aName );
 
@@ -573,10 +575,10 @@ public:
 
     wxString GetFileName() const { return m_libFileName.GetFullPath(); }
 
-    static LIB_PART* LoadPart( LINE_READER& aReader, int aMajorVersion, int aMinorVersion,
-                               LIB_PART_MAP* aMap = nullptr );
-    static void      SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter,
-                                 LIB_PART_MAP* aMap = nullptr );
+    static LIB_SYMBOL* LoadPart( LINE_READER& aReader, int aMajorVersion, int aMinorVersion,
+                                 LIB_SYMBOL_MAP* aMap = nullptr );
+    static void      SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
+                                 LIB_SYMBOL_MAP* aMap = nullptr );
 };
 
 
@@ -2023,11 +2025,11 @@ void SCH_LEGACY_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol )
             name1 = toUTFTildaText( aSymbol->GetField( REFERENCE_FIELD )->GetText() );
     }
 
-    wxString part_name = aSymbol->GetLibId().Format();
+    wxString symbol_name = aSymbol->GetLibId().Format();
 
-    if( part_name.size() )
+    if( symbol_name.size() )
     {
-        name2 = toUTFTildaText( part_name );
+        name2 = toUTFTildaText( symbol_name );
     }
     else
     {
@@ -2088,7 +2090,7 @@ void SCH_LEGACY_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol )
         saveField( &aSymbol->GetFields()[i] );
 
     // User defined fields:
-    // The *policy* about which user defined fields are part of a symbol is now
+    // The *policy* about which user defined fields are symbol of a symbol is now
     // only in the dialog editors.  No policy should be enforced here, simply
     // save all the user defined fields, they are present because a dialog editor
     // thought they should be.  If you disagree, go fix the dialog editors.
@@ -2472,30 +2474,30 @@ bool SCH_LEGACY_PLUGIN_CACHE::IsFileChanged() const
 }
 
 
-LIB_PART* SCH_LEGACY_PLUGIN_CACHE::removeSymbol( LIB_PART* aPart )
+LIB_SYMBOL* SCH_LEGACY_PLUGIN_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
 {
-    wxCHECK_MSG( aPart != NULL, NULL, "NULL pointer cannot be removed from library." );
+    wxCHECK_MSG( aSymbol != NULL, NULL, "NULL pointer cannot be removed from library." );
 
-    LIB_PART* firstChild = NULL;
-    LIB_PART_MAP::iterator it = m_symbols.find( aPart->GetName() );
+    LIB_SYMBOL* firstChild = NULL;
+    LIB_SYMBOL_MAP::iterator it = m_symbols.find( aSymbol->GetName() );
 
     if( it == m_symbols.end() )
         return NULL;
 
     // If the entry pointer doesn't match the name it is mapped to in the library, we
     // have done something terribly wrong.
-    wxCHECK_MSG( *it->second == aPart, NULL,
-                 "Pointer mismatch while attempting to remove alias entry <" + aPart->GetName() +
+    wxCHECK_MSG( *it->second == aSymbol, NULL,
+                 "Pointer mismatch while attempting to remove alias entry <" + aSymbol->GetName() +
                  "> from library cache <" + m_libFileName.GetName() + ">." );
 
     // If the symbol is a root symbol used by other symbols find the first alias that uses
-    // the root part and make it the new root.
-    if( aPart->IsRoot() )
+    // the root symbol and make it the new root.
+    if( aSymbol->IsRoot() )
     {
         for( auto entry : m_symbols )
         {
             if( entry.second->IsAlias()
-              && entry.second->GetParent().lock() == aPart->SharedPtr() )
+              && entry.second->GetParent().lock() == aSymbol->SharedPtr() )
             {
                 firstChild = entry.second;
                 break;
@@ -2504,7 +2506,7 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::removeSymbol( LIB_PART* aPart )
 
         if( firstChild )
         {
-            for( LIB_ITEM& drawItem : aPart->GetDrawItems() )
+            for( LIB_ITEM& drawItem : aSymbol->GetDrawItems() )
             {
                 if( drawItem.Type() == LIB_FIELD_T )
                 {
@@ -2523,32 +2525,32 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::removeSymbol( LIB_PART* aPart )
             for( auto entry : m_symbols )
             {
                 if( entry.second->IsAlias()
-                  && entry.second->GetParent().lock() == aPart->SharedPtr() )
+                  && entry.second->GetParent().lock() == aSymbol->SharedPtr() )
                     entry.second->SetParent( firstChild );
             }
         }
     }
 
     m_symbols.erase( it );
-    delete aPart;
+    delete aSymbol;
     m_isModified = true;
     SCH_LEGACY_PLUGIN_CACHE::IncrementModifyHash();
     return firstChild;
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::AddSymbol( const LIB_PART* aPart )
+void SCH_LEGACY_PLUGIN_CACHE::AddSymbol( const LIB_SYMBOL* aSymbol )
 {
-    // aPart is cloned in PART_LIB::AddPart().  The cache takes ownership of aPart.
-    wxString name = aPart->GetName();
-    LIB_PART_MAP::iterator it = m_symbols.find( name );
+    // aSymbol is cloned in PART_LIB::AddPart().  The cache takes ownership of aSymbol.
+    wxString name = aSymbol->GetName();
+    LIB_SYMBOL_MAP::iterator it = m_symbols.find( name );
 
     if( it != m_symbols.end() )
     {
         removeSymbol( it->second );
     }
 
-    m_symbols[ name ] = const_cast< LIB_PART* >( aPart );
+    m_symbols[ name ] = const_cast< LIB_SYMBOL* >( aSymbol );
     m_isModified = true;
     SCH_LEGACY_PLUGIN_CACHE::IncrementModifyHash();
 }
@@ -2623,10 +2625,10 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
 
         if( strCompare( "DEF", line ) )
         {
-            // Read one DEF/ENDDEF part entry from library:
-            LIB_PART* part = LoadPart( reader, m_versionMajor, m_versionMinor, &m_symbols );
+            // Read one DEF/ENDDEF symbol entry from library:
+            LIB_SYMBOL* symbol = LoadPart( reader, m_versionMajor, m_versionMinor, &m_symbols );
 
-            m_symbols[ part->GetName() ] = part;
+            m_symbols[ symbol->GetName() ] = symbol;
         }
     }
 
@@ -2648,7 +2650,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
     wxString    text;
     wxString    aliasName;
     wxFileName  fn = m_libFileName;
-    LIB_PART*   symbol = NULL;;
+    LIB_SYMBOL* symbol = NULL;;
 
     fn.SetExt( DOC_EXT );
 
@@ -2685,7 +2687,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
         aliasName.Trim();
         aliasName = LIB_ID::FixIllegalChars( aliasName );
 
-        LIB_PART_MAP::iterator it = m_symbols.find( aliasName );
+        LIB_SYMBOL_MAP::iterator it = m_symbols.find( aliasName );
 
         if( it == m_symbols.end() )
             wxLogWarning( "Symbol '%s' not found in library:\n\n"
@@ -2765,8 +2767,8 @@ void SCH_LEGACY_PLUGIN_CACHE::loadHeader( FILE_LINE_READER& aReader )
 }
 
 
-LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVersion,
-                                             int aMinorVersion, LIB_PART_MAP* aMap )
+LIB_SYMBOL* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVersion,
+                                             int aMinorVersion, LIB_SYMBOL_MAP* aMap )
 {
     const char* line = aReader.Line();
 
@@ -2785,7 +2787,7 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
         SCH_PARSE_ERROR( "invalid symbol definition", aReader, line );
 
     // Read DEF line:
-    std::unique_ptr<LIB_PART> part = std::make_unique<LIB_PART>( wxEmptyString );
+    std::unique_ptr<LIB_SYMBOL> symbol = std::make_unique<LIB_SYMBOL>( wxEmptyString );
 
     wxString name, prefix, tmp;
 
@@ -2805,7 +2807,7 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    part->SetPinNameOffset( Mils2Iu( (int)num ) );
+    symbol->SetPinNameOffset( Mils2Iu( (int)num ) );
 
     tmp = tokens.GetNextToken();                  // Show pin numbers.
 
@@ -2814,7 +2816,7 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    part->SetShowPinNumbers( ( tmp == "N" ) ? false : true );
+    symbol->SetShowPinNumbers( ( tmp == "N" ) ? false : true );
 
     tmp = tokens.GetNextToken();                  // Show pin names.
 
@@ -2823,7 +2825,7 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    part->SetShowPinNames( ( tmp == "N" ) ? false : true );
+    symbol->SetShowPinNames( ( tmp == "N" ) ? false : true );
 
     tmp = tokens.GetNextToken();                  // Number of units.
 
@@ -2832,33 +2834,33 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    part->SetUnitCount( (int)num );
+    symbol->SetUnitCount( (int)num );
 
     // Ensure m_unitCount is >= 1.  Could be read as 0 in old libraries.
-    if( part->GetUnitCount() < 1 )
-        part->SetUnitCount( 1 );
+    if( symbol->GetUnitCount() < 1 )
+        symbol->SetUnitCount( 1 );
 
-    // Copy part name and prefix.
+    // Copy symbol name and prefix.
 
     // The root alias is added to the alias list by SetName() which is called by SetText().
     if( name.IsEmpty() )
     {
-        part->SetName( "~" );
+        symbol->SetName( "~" );
     }
     else if( name[0] != '~' )
     {
-        part->SetName( name );
+        symbol->SetName( name );
     }
     else
     {
-        part->SetName( name.Right( name.Length() - 1 ) );
-        part->GetValueField().SetVisible( false );
+        symbol->SetName( name.Right( name.Length() - 1 ) );
+        symbol->GetValueField().SetVisible( false );
     }
 
     // Don't set the library alias, this is determined by the symbol library table.
-    part->SetLibId( LIB_ID( wxEmptyString, part->GetName() ) );
+    symbol->SetLibId( LIB_ID( wxEmptyString, symbol->GetName() ) );
 
-    LIB_FIELD& reference = part->GetReferenceField();
+    LIB_FIELD& reference = symbol->GetReferenceField();
 
     if( prefix == "~" )
     {
@@ -2885,9 +2887,9 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
         tmp = tokens.GetNextToken();
 
         if( tmp == "L" )
-            part->LockUnits( true );
+            symbol->LockUnits( true );
         else if( tmp == "F" || tmp == "0" )
-            part->LockUnits( false );
+            symbol->LockUnits( false );
         else
             THROW_PARSE_ERROR( "expected L, F, or 0", aReader.GetSource(), aReader.Line(),
                                aReader.LineNumber(), pos );
@@ -2901,9 +2903,9 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
         tmp = tokens.GetNextToken();
 
         if( tmp == "P" )
-            part->SetPower();
+            symbol->SetPower();
         else if( tmp == "N" )
-            part->SetNormal();
+            symbol->SetNormal();
         else
             THROW_PARSE_ERROR( "expected P or N", aReader.GetSource(), aReader.Line(),
                                aReader.LineNumber(), pos );
@@ -2919,16 +2921,16 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
         else if( strCompare( "Ti", line, &line ) )          // Modification date is ignored.
             continue;
         else if( strCompare( "ALIAS", line, &line ) )       // Aliases
-            loadAliases( part, aReader, aMap );
+            loadAliases( symbol, aReader, aMap );
         else if( *line == 'F' )                             // Fields
-            loadField( part, aReader );
+            loadField( symbol, aReader );
         else if( strCompare( "DRAW", line, &line ) )        // Drawing objects.
-            loadDrawEntries( part, aReader, aMajorVersion, aMinorVersion );
+            loadDrawEntries( symbol, aReader, aMajorVersion, aMinorVersion );
         else if( strCompare( "$FPLIST", line, &line ) )     // Footprint filter list
-            loadFootprintFilters( part, aReader );
-        else if( strCompare( "ENDDEF", line, &line ) )      // End of part description
+            loadFootprintFilters( symbol, aReader );
+        else if( strCompare( "ENDDEF", line, &line ) )      // End of symbol description
         {
-            return part.release();
+            return symbol.release();
         }
 
         line = aReader.ReadLine();
@@ -2938,9 +2940,9 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr<LIB_PART>& aPart,
-                                           LINE_READER&               aReader,
-                                           LIB_PART_MAP*              aMap )
+void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                           LINE_READER&                 aReader,
+                                           LIB_SYMBOL_MAP*              aMap )
 {
     wxString newAliasName;
     const char* line = aReader.Line();
@@ -2957,17 +2959,17 @@ void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr<LIB_PART>& aPart,
 
         if( aMap )
         {
-            LIB_PART* newPart = new LIB_PART( newAliasName );
+            LIB_SYMBOL* newSymbol = new LIB_SYMBOL( newAliasName );
 
             // Inherit the parent mandatory field attributes.
             for( int id = 0; id < MANDATORY_FIELDS; ++id )
             {
-                LIB_FIELD* field = newPart->GetFieldById( id );
+                LIB_FIELD* field = newSymbol->GetFieldById( id );
 
                 // the MANDATORY_FIELDS are exactly that in RAM.
                 wxASSERT( field );
 
-                LIB_FIELD* parentField = aPart->GetFieldById( id );
+                LIB_FIELD* parentField = aSymbol->GetFieldById( id );
 
                 wxASSERT( parentField );
 
@@ -2976,20 +2978,20 @@ void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr<LIB_PART>& aPart,
                 if( id == VALUE_FIELD )
                     field->SetText( newAliasName );
 
-                field->SetParent( newPart );
+                field->SetParent( newSymbol );
             }
 
-            newPart->SetParent( aPart.get() );
+            newSymbol->SetParent( aSymbol.get() );
 
             // This will prevent duplicate aliases.
-            (*aMap)[ newPart->GetName() ] = newPart;
+            (*aMap)[ newSymbol->GetName() ] = newSymbol;
         }
     }
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
-                                         LINE_READER&               aReader )
+void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                         LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
@@ -3005,7 +3007,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
 
     if( id >= 0 && id < MANDATORY_FIELDS )
     {
-        field = aPart->GetFieldById( id );
+        field = aSymbol->GetFieldById( id );
 
         // this will fire only if somebody broke a constructor or editor.
         // MANDATORY_FIELDS are always present in ram resident symbols, no
@@ -3014,8 +3016,8 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
     }
     else
     {
-        field = new LIB_FIELD( aPart.get(), id );
-        aPart->AddDrawItem( field, false );
+        field = new LIB_FIELD( aSymbol.get(), id );
+        aSymbol->AddDrawItem( field, false );
     }
 
     // Skip to the first double quote.
@@ -3124,10 +3126,10 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
         // Plus assumptions are made in the field editors.
         field->m_name = TEMPLATE_FIELDNAME::GetDefaultFieldName( id );
 
-        // Ensure the VALUE field = the part name (can be not the case
+        // Ensure the VALUE field = the symbol name (can be not the case
         // with malformed libraries: edited by hand, or converted from other tools)
         if( id == VALUE_FIELD )
-            field->SetText( aPart->GetName() );
+            field->SetText( aSymbol->GetName() );
     }
     else
     {
@@ -3136,10 +3138,10 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_PART>& aPart,
-                                               LINE_READER&               aReader,
-                                               int                        aMajorVersion,
-                                               int                        aMinorVersion )
+void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                               LINE_READER&                 aReader,
+                                               int                          aMajorVersion,
+                                               int                          aMinorVersion )
 {
     const char* line = aReader.Line();
 
@@ -3151,38 +3153,39 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_PART>& aPart,
     {
         if( strCompare( "ENDDRAW", line, &line ) )
         {
-            aPart->GetDrawItems().sort();
+            aSymbol->GetDrawItems().sort();
             return;
         }
 
         switch( line[0] )
         {
         case 'A':    // Arc
-            aPart->AddDrawItem( loadArc( aPart, aReader ), false );
+            aSymbol->AddDrawItem( loadArc( aSymbol, aReader ), false );
             break;
 
         case 'C':    // Circle
-            aPart->AddDrawItem( loadCircle( aPart, aReader ), false );
+            aSymbol->AddDrawItem( loadCircle( aSymbol, aReader ), false );
             break;
 
         case 'T':    // Text
-            aPart->AddDrawItem( loadText( aPart, aReader, aMajorVersion, aMinorVersion ), false );
+            aSymbol->AddDrawItem( loadText( aSymbol, aReader, aMajorVersion,
+                                            aMinorVersion ), false );
             break;
 
         case 'S':    // Square
-            aPart->AddDrawItem( loadRectangle( aPart, aReader ), false );
+            aSymbol->AddDrawItem( loadRectangle( aSymbol, aReader ), false );
             break;
 
         case 'X':    // Pin Description
-            aPart->AddDrawItem( loadPin( aPart, aReader ), false );
+            aSymbol->AddDrawItem( loadPin( aSymbol, aReader ), false );
             break;
 
         case 'P':    // Polyline
-            aPart->AddDrawItem( loadPolyLine( aPart, aReader ), false );
+            aSymbol->AddDrawItem( loadPolyLine( aSymbol, aReader ), false );
             break;
 
         case 'B':    // Bezier Curves
-            aPart->AddDrawItem( loadBezier( aPart, aReader ), false );
+            aSymbol->AddDrawItem( loadBezier( aSymbol, aReader ), false );
             break;
 
         case '#':    // Comment
@@ -3218,14 +3221,14 @@ FILL_TYPE SCH_LEGACY_PLUGIN_CACHE::parseFillMode( LINE_READER& aReader, const ch
 }
 
 
-LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_PART>& aPart,
-                                           LINE_READER&               aReader )
+LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                           LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
     wxCHECK_MSG( strCompare( "A", line, &line ), NULL, "Invalid LIB_ARC definition" );
 
-    LIB_ARC* arc = new LIB_ARC( aPart.get() );
+    LIB_ARC* arc = new LIB_ARC( aSymbol.get() );
 
     wxPoint center;
 
@@ -3284,14 +3287,14 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_PART>& aPart,
 }
 
 
-LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_PART>& aPart,
-                                                 LINE_READER&               aReader )
+LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                 LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
     wxCHECK_MSG( strCompare( "C", line, &line ), NULL, "Invalid LIB_CIRCLE definition" );
 
-    LIB_CIRCLE* circle = new LIB_CIRCLE( aPart.get() );
+    LIB_CIRCLE* circle = new LIB_CIRCLE( aSymbol.get() );
 
     wxPoint center;
 
@@ -3311,16 +3314,16 @@ LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_PART>& aPar
 }
 
 
-LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_PART>& aPart,
-                                             LINE_READER&               aReader,
-                                             int                        aMajorVersion,
-                                             int                        aMinorVersion )
+LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                             LINE_READER&                 aReader,
+                                             int                          aMajorVersion,
+                                             int                          aMinorVersion )
 {
     const char* line = aReader.Line();
 
     wxCHECK_MSG( strCompare( "T", line, &line ), NULL, "Invalid LIB_TEXT definition" );
 
-    LIB_TEXT* text = new LIB_TEXT( aPart.get() );
+    LIB_TEXT* text = new LIB_TEXT( aSymbol.get() );
 
     text->SetTextAngle( (double) parseInt( aReader, line, &line ) );
 
@@ -3404,14 +3407,14 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_PART>& aPart,
 }
 
 
-LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr<LIB_PART>& aPart,
-                                                       LINE_READER&               aReader )
+LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                       LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
     wxCHECK_MSG( strCompare( "S", line, &line ), NULL, "Invalid LIB_RECTANGLE definition" );
 
-    LIB_RECTANGLE* rectangle = new LIB_RECTANGLE( aPart.get() );
+    LIB_RECTANGLE* rectangle = new LIB_RECTANGLE( aSymbol.get() );
 
     wxPoint pos;
 
@@ -3436,8 +3439,8 @@ LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr<LIB_PART>
 }
 
 
-LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
-                                           LINE_READER&               aReader )
+LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                           LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
@@ -3567,7 +3570,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
     }
 
 
-    LIB_PIN* pin = new LIB_PIN( aPart.get(), name, number, orientation, pinType, length,
+    LIB_PIN* pin = new LIB_PIN( aSymbol.get(), name, number, orientation, pinType, length,
             nameTextSize, numberTextSize, convert, position, unit );
 
     // Optional
@@ -3626,14 +3629,14 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
 }
 
 
-LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_PART>& aPart,
-                                                     LINE_READER&               aReader )
+LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                     LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
     wxCHECK_MSG( strCompare( "P", line, &line ), NULL, "Invalid LIB_POLYLINE definition" );
 
-    LIB_POLYLINE* polyLine = new LIB_POLYLINE( aPart.get() );
+    LIB_POLYLINE* polyLine = new LIB_POLYLINE( aSymbol.get() );
 
     int points = parseInt( aReader, line, &line );
     polyLine->SetUnit( parseInt( aReader, line, &line ) );
@@ -3657,14 +3660,14 @@ LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_PART>& 
 }
 
 
-LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_PART>& aPart,
-                                                 LINE_READER&               aReader )
+LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                 LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
     wxCHECK_MSG( strCompare( "B", line, &line ), NULL, "Invalid LIB_BEZIER definition" );
 
-    LIB_BEZIER* bezier = new LIB_BEZIER( aPart.get() );
+    LIB_BEZIER* bezier = new LIB_BEZIER( aSymbol.get() );
 
     int points = parseInt( aReader, line, &line );
     bezier->SetUnit( parseInt( aReader, line, &line ) );
@@ -3688,8 +3691,8 @@ LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_PART>& aPar
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::loadFootprintFilters( std::unique_ptr<LIB_PART>& aPart,
-                                                    LINE_READER&               aReader )
+void SCH_LEGACY_PLUGIN_CACHE::loadFootprintFilters( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                    LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
@@ -3703,7 +3706,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadFootprintFilters( std::unique_ptr<LIB_PART>& a
     {
         if( strCompare( "$ENDFPLIST", line, &line ) )
         {
-            aPart->SetFPFilters( footprintFilters );
+            aSymbol->SetFPFilters( footprintFilters );
             return;
         }
 
@@ -3730,7 +3733,7 @@ void SCH_LEGACY_PLUGIN_CACHE::Save( bool aSaveDocFile )
     formatter->Print( 0, "%s %d.%d\n", LIBFILE_IDENT, LIB_VERSION_MAJOR, LIB_VERSION_MINOR );
     formatter->Print( 0, "#encoding utf-8\n");
 
-    for( LIB_PART_MAP::iterator it = m_symbols.begin();  it != m_symbols.end();  it++ )
+    for( LIB_SYMBOL_MAP::iterator it = m_symbols.begin();  it != m_symbols.end();  it++ )
     {
         if( !it->second->IsRoot() )
             continue;
@@ -3749,10 +3752,10 @@ void SCH_LEGACY_PLUGIN_CACHE::Save( bool aSaveDocFile )
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter,
-                                          LIB_PART_MAP* aMap )
+void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
+                                          LIB_SYMBOL_MAP* aMap )
 {
-    wxCHECK_RET( aSymbol && aSymbol->IsRoot(), "Invalid LIB_PART pointer." );
+    wxCHECK_RET( aSymbol && aSymbol->IsRoot(), "Invalid LIB_SYMBOL pointer." );
 
     // LIB_ALIAS objects are deprecated but we still need to gather up the derived symbols
     // and save their names for the old file format.
@@ -3762,10 +3765,10 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aF
     {
         for( auto entry : *aMap )
         {
-            LIB_PART* part = entry.second;
+            LIB_SYMBOL* symbol = entry.second;
 
-            if( part->IsAlias() && part->GetParent().lock() == aSymbol->SharedPtr() )
-                aliasNames.Add( part->GetName() );
+            if( symbol->IsAlias() && symbol->GetParent().lock() == aSymbol->SharedPtr() )
+                aliasNames.Add( symbol->GetName() );
         }
     }
 
@@ -3822,7 +3825,6 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aF
 
     // User defined fields:
     // may have their own save policy so there is a separate loop for them.
-
     int fieldId = MANDATORY_FIELDS;     // really wish this would go away.
 
     for( unsigned i = MANDATORY_FIELDS; i < fields.size(); ++i )
@@ -4079,7 +4081,8 @@ void SCH_LEGACY_PLUGIN_CACHE::saveRectangle( LIB_RECTANGLE* aRectangle,
                       Iu2Mils( aRectangle->GetPosition().y ),
                       Iu2Mils( aRectangle->GetEnd().x ), Iu2Mils( aRectangle->GetEnd().y ),
                       aRectangle->GetUnit(), aRectangle->GetConvert(),
-                      Iu2Mils( aRectangle->GetWidth() ), fill_tab[static_cast<int>( aRectangle->GetFillMode() )] );
+                      Iu2Mils( aRectangle->GetWidth() ),
+                      fill_tab[static_cast<int>( aRectangle->GetFillMode() )] );
 }
 
 
@@ -4130,7 +4133,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveDocFile()
 
     formatter.Print( 0, "%s\n", DOCFILE_IDENT );
 
-    for( LIB_PART_MAP::iterator it = m_symbols.begin();  it != m_symbols.end();  ++it )
+    for( LIB_SYMBOL_MAP::iterator it = m_symbols.begin();  it != m_symbols.end();  ++it )
     {
         wxString description =  it->second->GetDescription();
         wxString keyWords = it->second->GetKeyWords();
@@ -4159,26 +4162,27 @@ void SCH_LEGACY_PLUGIN_CACHE::saveDocFile()
 
 void SCH_LEGACY_PLUGIN_CACHE::DeleteSymbol( const wxString& aSymbolName )
 {
-    LIB_PART_MAP::iterator it = m_symbols.find( aSymbolName );
+    LIB_SYMBOL_MAP::iterator it = m_symbols.find( aSymbolName );
 
     if( it == m_symbols.end() )
         THROW_IO_ERROR( wxString::Format( _( "library %s does not contain a symbol named %s" ),
                                           m_libFileName.GetFullName(), aSymbolName ) );
 
-    LIB_PART* part = it->second;
+    LIB_SYMBOL* symbol = it->second;
 
-    if( part->IsRoot() )
+    if( symbol->IsRoot() )
     {
-        LIB_PART* rootPart = part;
+        LIB_SYMBOL* rootSymbol = symbol;
 
         // Remove the root symbol and all it's children.
         m_symbols.erase( it );
 
-        LIB_PART_MAP::iterator it1 = m_symbols.begin();
+        LIB_SYMBOL_MAP::iterator it1 = m_symbols.begin();
 
         while( it1 != m_symbols.end() )
         {
-            if( it1->second->IsAlias() && it1->second->GetParent().lock() == rootPart->SharedPtr() )
+            if( it1->second->IsAlias()
+              && it1->second->GetParent().lock() == rootSymbol->SharedPtr() )
             {
                 delete it1->second;
                 it1 = m_symbols.erase( it1 );
@@ -4189,13 +4193,13 @@ void SCH_LEGACY_PLUGIN_CACHE::DeleteSymbol( const wxString& aSymbolName )
             }
         }
 
-        delete rootPart;
+        delete rootSymbol;
     }
     else
     {
         // Just remove the alias.
         m_symbols.erase( it );
-        delete part;
+        delete symbol;
     }
 
     SCH_LEGACY_PLUGIN_CACHE::IncrementModifyHash();
@@ -4260,9 +4264,9 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
     cacheLib( aLibraryPath, aProperties  );
 
-    const LIB_PART_MAP& symbols = m_cache->m_symbols;
+    const LIB_SYMBOL_MAP& symbols = m_cache->m_symbols;
 
-    for( LIB_PART_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
+    for( LIB_SYMBOL_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
     {
         if( !powerSymbolsOnly || it->second->IsPower() )
             aSymbolNameList.Add( it->first );
@@ -4270,7 +4274,7 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 }
 
 
-void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
+void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                             const wxString&   aLibraryPath,
                                             const PROPERTIES* aProperties )
 {
@@ -4281,9 +4285,9 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
 
     cacheLib( aLibraryPath, aProperties );
 
-    const LIB_PART_MAP& symbols = m_cache->m_symbols;
+    const LIB_SYMBOL_MAP& symbols = m_cache->m_symbols;
 
-    for( LIB_PART_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
+    for( LIB_SYMBOL_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
     {
         if( !powerSymbolsOnly || it->second->IsPower() )
             aSymbolList.push_back( it->second );
@@ -4291,14 +4295,15 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
 }
 
 
-LIB_PART* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                         const PROPERTIES* aProperties )
+LIB_SYMBOL* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath,
+                                           const wxString& aSymbolName,
+                                           const PROPERTIES* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
     cacheLib( aLibraryPath, aProperties );
 
-    LIB_PART_MAP::const_iterator it = m_cache->m_symbols.find( aSymbolName );
+    LIB_SYMBOL_MAP::const_iterator it = m_cache->m_symbols.find( aSymbolName );
 
     if( it == m_cache->m_symbols.end() )
         return nullptr;
@@ -4307,7 +4312,7 @@ LIB_PART* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxS
 }
 
 
-void SCH_LEGACY_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
+void SCH_LEGACY_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
                                     const PROPERTIES* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
@@ -4422,16 +4427,16 @@ bool SCH_LEGACY_PLUGIN::IsSymbolLibWritable( const wxString& aLibraryPath )
 }
 
 
-LIB_PART* SCH_LEGACY_PLUGIN::ParsePart( LINE_READER& reader, int aMajorVersion,
-                                        int aMinorVersion )
+LIB_SYMBOL* SCH_LEGACY_PLUGIN::ParsePart( LINE_READER& reader, int aMajorVersion,
+                                          int aMinorVersion )
 {
     return SCH_LEGACY_PLUGIN_CACHE::LoadPart( reader, aMajorVersion, aMinorVersion );
 }
 
 
-void SCH_LEGACY_PLUGIN::FormatPart( LIB_PART* part, OUTPUTFORMATTER & formatter )
+void SCH_LEGACY_PLUGIN::FormatPart( LIB_SYMBOL* symbol, OUTPUTFORMATTER & formatter )
 {
-    SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( part, formatter );
+    SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( symbol, formatter );
 }
 
 

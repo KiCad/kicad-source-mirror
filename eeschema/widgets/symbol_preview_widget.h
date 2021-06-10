@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,7 +27,7 @@
 
 
 class LIB_ID;
-class LIB_PART;
+class LIB_SYMBOL;
 class wxStaticText;
 class wxSizer;
 
@@ -58,7 +58,7 @@ public:
      */
     void DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, int aConvert = 0 );
 
-    void DisplayPart( LIB_PART* aPart, int aUnit, int aConvert = 0 );
+    void DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aConvert = 0 );
 
 private:
     void onSize( wxSizeEvent& aEvent );
@@ -76,9 +76,9 @@ private:
     wxSizer*                   m_outerSizer;
 
     /**
-     * A local copy of the #LIB_PART to display on the canvas.
+     * A local copy of the #LIB_SYMBOL to display on the canvas.
      */
-    LIB_PART*                  m_previewItem;
+    LIB_SYMBOL*                m_previewItem;
 
     /// The bounding box of the current item
     BOX2I                      m_itemBBox;

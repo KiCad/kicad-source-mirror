@@ -30,7 +30,7 @@
 #include <sch_pin.h>
 
 
-class LIB_PART;
+class LIB_SYMBOL;
 class SCH_PIN_TABLE_DATA_MODEL;
 class SCH_EDIT_FRAME;
 
@@ -90,7 +90,7 @@ private:
 
 private:
     SCH_SYMBOL*    m_symbol;
-    LIB_PART*      m_part;
+    LIB_SYMBOL*    m_part;
 
     int            m_width;
     int            m_delayedFocusRow;

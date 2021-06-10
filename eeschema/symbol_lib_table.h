@@ -29,7 +29,7 @@
 #include <sch_io_mgr.h>
 #include <lib_id.h>
 
-//class LIB_PART;
+//class LIB_SYMBOL;
 class SYMBOL_LIB_TABLE_GRID;
 class DIALOG_SYMBOL_LIB_TABLE;
 
@@ -156,22 +156,22 @@ public:
     void EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames,
                              bool aPowerSymbolsOnly = false );
 
-    void LoadSymbolLib( std::vector<LIB_PART*>& aAliasList, const wxString& aNickname,
+    void LoadSymbolLib( std::vector<LIB_SYMBOL*>& aAliasList, const wxString& aNickname,
                         bool aPowerSymbolsOnly = false );
 
     /**
-     * Load a #LIB_PART having @a aName from the library given by @a aNickname.
+     * Load a #LIB_SYMBOL having @a aName from the library given by @a aNickname.
      *
      * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW
-     * @param aName is the name of the #LIB_PART to load.
+     * @param aName is the name of the #LIB_SYMBOL to load.
      * @param aFlatten set to true to flatten derived parts.
      * @return the symbol alias if found or NULL if not found.
      * @throw IO_ERROR if the library cannot be found or read.  No exception
      *                 is thrown in the case where \a aNickname cannot be found.
      */
-    LIB_PART* LoadSymbol( const wxString& aNickname, const wxString& aName );
+    LIB_SYMBOL* LoadSymbol( const wxString& aNickname, const wxString& aName );
 
-    LIB_PART* LoadSymbol( const LIB_ID& aLibId )
+    LIB_SYMBOL* LoadSymbol( const LIB_ID& aLibId )
     {
         return LoadSymbol( aLibId.GetLibNickname(), aLibId.GetLibItemName() );
     }
@@ -188,8 +188,8 @@ public:
     /**
      * Write @a aSymbol to an existing library given by @a aNickname.
      *
-     * If a #LIB_PART by the same name already exists or there are any conflicting alias
-     * names, the new #LIB_PART will silently overwrite any existing aliases and/or part
+     * If a #LIB_SYMBOL by the same name already exists or there are any conflicting alias
+     * names, the new #LIB_SYMBOL will silently overwrite any existing aliases and/or part
      * because libraries cannot have duplicate alias names.  It is the responsibility of
      * the caller to check the library for conflicts before saving.
      *
@@ -201,7 +201,7 @@ public:
      * @return SAVE_T - SAVE_OK or SAVE_SKIPPED.  If error saving, then IO_ERROR is thrown.
      * @throw IO_ERROR if there is a problem saving the symbol.
      */
-    SAVE_T SaveSymbol( const wxString& aNickname, const LIB_PART* aSymbol,
+    SAVE_T SaveSymbol( const wxString& aNickname, const LIB_SYMBOL* aSymbol,
                        bool aOverwrite = true );
 
     /**
@@ -239,7 +239,7 @@ public:
     //-----</PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
     /**
-     * Load a #LIB_PART having @a aFootprintId with possibly an empty library nickname.
+     * Load a #LIB_SYMBOL having @a aFootprintId with possibly an empty library nickname.
      *
      * @param aId the library nickname and name of the symbol to load.
      * @return  the library symbol if found (the library owns it) or NULL if not found.
@@ -247,7 +247,7 @@ public:
      *                 is thrown in the case where aId cannot be found.
      * @throw PARSE_ERROR if @a aId is not parsed OK.
      */
-    LIB_PART* LoadSymbolWithOptionalNickname( const LIB_ID& aId );
+    LIB_SYMBOL* LoadSymbolWithOptionalNickname( const LIB_ID& aId );
 
     /**
      * Load the global symbol library table into \a aTable.

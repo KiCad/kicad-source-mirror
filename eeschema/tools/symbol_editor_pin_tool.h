@@ -41,7 +41,7 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    LIB_PIN* CreatePin( const VECTOR2I& aPosition, LIB_PART* aPart );
+    LIB_PIN* CreatePin( const VECTOR2I& aPosition, LIB_SYMBOL* aSymbol );
     LIB_PIN* RepeatPin( const LIB_PIN* aSourcePin );
 
     bool PlacePin( LIB_PIN* aPin );

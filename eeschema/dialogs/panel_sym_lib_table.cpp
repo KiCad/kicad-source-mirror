@@ -799,11 +799,11 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
 bool PANEL_SYM_LIB_TABLE::convertLibrary( const wxString& aLibrary, const wxString& legacyFilepath,
                                           const wxString& newFilepath )
 {
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER legacyPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER kicadPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-    std::vector<LIB_PART*>          parts;
-    std::vector<LIB_PART*>          newParts;
-    std::map<LIB_PART*, LIB_PART*>  partMap;
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER    legacyPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER    kicadPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    std::vector<LIB_SYMBOL*>           symbols;
+    std::vector<LIB_SYMBOL*>           newSymbols;
+    std::map<LIB_SYMBOL*, LIB_SYMBOL*>  symbolMap;
 
     try
     {
@@ -816,32 +816,32 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( const wxString& aLibrary, const wxStri
         // This will write the file
         delete formatter;
 
-        legacyPI->EnumerateSymbolLib( parts, legacyFilepath );
+        legacyPI->EnumerateSymbolLib( symbols, legacyFilepath );
 
-        // Copy non-aliases first so we can build a map from parts to newParts
-        for( LIB_PART* part : parts )
+        // Copy non-aliases first so we can build a map from symbols to newSymbols
+        for( LIB_SYMBOL* symbol : symbols )
         {
-            if( part->IsAlias() )
+            if( symbol->IsAlias() )
                 continue;
 
-            newParts.push_back( new LIB_PART( *part ) );
-            partMap[part] = newParts.back();
+            newSymbols.push_back( new LIB_SYMBOL( *symbol ) );
+            symbolMap[symbol] = newSymbols.back();
         }
 
-        // Now do the aliases using the map to hook them up to their newPart parents
-        for( LIB_PART* part : parts )
+        // Now do the aliases using the map to hook them up to their newSymbol parents
+        for( LIB_SYMBOL* symbol : symbols )
         {
-            if( !part->IsAlias() )
+            if( !symbol->IsAlias() )
                 continue;
 
-            newParts.push_back( new LIB_PART( *part ) );
-            newParts.back()->SetParent( partMap[ part->GetParent().lock().get() ] );
+            newSymbols.push_back( new LIB_SYMBOL( *symbol ) );
+            newSymbols.back()->SetParent( symbolMap[ symbol->GetParent().lock().get() ] );
         }
 
-        // Finally write out newParts
-        for( LIB_PART* part : newParts )
+        // Finally write out newSymbols
+        for( LIB_SYMBOL* symbol : newSymbols )
         {
-            kicadPI->SaveSymbol( newFilepath, part );
+            kicadPI->SaveSymbol( newFilepath, symbol );
         }
     }
     catch( ... )

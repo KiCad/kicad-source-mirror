@@ -291,7 +291,7 @@ static struct EDA_ITEM_DESC
 
             .Map( SCH_SCREEN_T,         _HKI( "SCH Screen" ) )
 
-            .Map( LIB_PART_T,           _HKI( "Symbol" ) )
+            .Map( LIB_SYMBOL_T,         _HKI( "Symbol" ) )
             .Map( LIB_ALIAS_T,          _HKI( "Alias" ) )
             .Map( LIB_ARC_T,            _HKI( "Arc" ) )
             .Map( LIB_CIRCLE_T,         _HKI( "Circle" ) )

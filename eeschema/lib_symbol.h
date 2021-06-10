@@ -37,13 +37,13 @@ class EDA_RECT;
 class LINE_READER;
 class OUTPUTFORMATTER;
 class PART_LIB;
-class LIB_PART;
+class LIB_SYMBOL;
 class LIB_FIELD;
-class TEST_LIB_PART_FIXTURE;
+class TEST_LIB_SYMBOL_FIXTURE;
 
 
-typedef std::shared_ptr<LIB_PART>       PART_SPTR;      ///< shared pointer to LIB_PART
-typedef std::weak_ptr<LIB_PART>         PART_REF;       ///< weak pointer to LIB_PART
+typedef std::shared_ptr<LIB_SYMBOL>       PART_SPTR;      ///< shared pointer to LIB_SYMBOL
+typedef std::weak_ptr<LIB_SYMBOL>         PART_REF;       ///< weak pointer to LIB_SYMBOL
 typedef MULTIVECTOR<LIB_ITEM, LIB_ARC_T, LIB_FIELD_T> LIB_ITEMS_CONTAINER;
 typedef LIB_ITEMS_CONTAINER::ITEM_PTR_VECTOR LIB_ITEMS;
 
@@ -51,12 +51,12 @@ typedef LIB_ITEMS_CONTAINER::ITEM_PTR_VECTOR LIB_ITEMS;
 /* values for member .m_options */
 enum LIBRENTRYOPTIONS
 {
-    ENTRY_NORMAL,   // Libentry is a standard part (real or alias)
+    ENTRY_NORMAL,   // Libentry is a standard symbol (real or alias)
     ENTRY_POWER     // Libentry is a power symbol
 };
 
 
-extern bool operator<( const LIB_PART& aItem1, const LIB_PART& aItem2 );
+extern bool operator<( const LIB_SYMBOL& aItem1, const LIB_SYMBOL& aItem2 );
 
 
 struct PART_DRAW_OPTIONS
@@ -90,27 +90,28 @@ struct PART_UNITS
 /**
  * Define a library symbol object.
  *
- * A library symbol object is typically saved and loaded in a part library file (.lib).
+ * A library symbol object is typically saved and loaded in a symbol library file (.lib).
  * Library symbols are different from schematic symbols.
  */
-class LIB_PART : public EDA_ITEM, public LIB_TREE_ITEM
+class LIB_SYMBOL : public EDA_ITEM, public LIB_TREE_ITEM
 {
 public:
-    LIB_PART( const wxString& aName, LIB_PART* aParent = nullptr, PART_LIB* aLibrary = nullptr );
+    LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent = nullptr,
+                PART_LIB* aLibrary = nullptr );
 
-    LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary = NULL );
+    LIB_SYMBOL( const LIB_SYMBOL& aSymbol, PART_LIB* aLibrary = NULL );
 
-    virtual ~LIB_PART();
+    virtual ~LIB_SYMBOL();
 
     ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
     PART_SPTR SharedPtr() const { return m_me; }
 
     /**
-     * Create a copy of a LIB_PART and assigns unique KIIDs to the copy and its children.
+     * Create a copy of a LIB_SYMBOL and assigns unique KIIDs to the copy and its children.
      */
-    virtual LIB_PART* Duplicate() const
+    virtual LIB_SYMBOL* Duplicate() const
     {
-        LIB_PART* dupe                    = new LIB_PART( *this, m_library );
+        LIB_SYMBOL* dupe = new LIB_SYMBOL( *this, m_library );
         const_cast<KIID&>( dupe->m_Uuid ) = KIID();
 
         for( LIB_ITEM& item : dupe->m_drawings )
@@ -119,13 +120,13 @@ public:
         return dupe;
     }
 
-    void SetParent( LIB_PART* aParent = nullptr );
+    void SetParent( LIB_SYMBOL* aParent = nullptr );
     PART_REF& GetParent() { return m_parent; }
     const PART_REF& GetParent() const { return m_parent; }
 
     virtual wxString GetClass() const override
     {
-        return wxT( "LIB_PART" );
+        return wxT( "LIB_SYMBOL" );
     }
 
     virtual void SetName( const wxString& aName );
@@ -195,7 +196,7 @@ public:
     /**
      * Get the bounding box for the symbol.
      *
-     * @return the part bounding box ( in user coordinates )
+     * @return the symbol bounding box ( in user coordinates )
      * @param aUnit = unit selection = 0, or 1..n
      * @param aConvert = 0, 1 or 2
      *  If aUnit == 0, unit is not used
@@ -207,7 +208,7 @@ public:
     /**
      * Get the symbol bounding box excluding fields.
      *
-     * @return the part bounding box ( in user coordinates ) without fields
+     * @return the symbol bounding box ( in user coordinates ) without fields
      * @param aUnit = unit selection = 0, or 1..n
      * @param aConvert = 0, 1 or 2
      *  If aUnit == 0, unit is not used
@@ -228,13 +229,13 @@ public:
     void SetNormal();
 
     /**
-     * Set interchangeable the property for part units.
+     * Set interchangeable the property for symbol units.
      * @param aLockUnits when true then units are set as not interchangeable.
      */
     void LockUnits( bool aLockUnits ) { m_unitsLocked = aLockUnits; }
 
     /**
-     * Check whether part units are interchangeable.
+     * Check whether symbol units are interchangeable.
      * @return False when interchangeable, true otherwise.
      */
     bool UnitsLocked() const { return m_unitsLocked; }
@@ -243,7 +244,7 @@ public:
      * Overwrite all the existing fields in this symbol with fields supplied
      * in \a aFieldsList.
      *
-     * The only known caller of this function is the library part field editor, and it
+     * The only known caller of this function is the library symbol field editor, and it
      * establishes needed behavior.
      *
      * @param aFieldsList is a set of fields to import, removing all previous fields.
@@ -251,7 +252,7 @@ public:
     void SetFields( const std::vector <LIB_FIELD>& aFieldsList );
 
     /**
-     * Return a list of fields within this part.
+     * Return a list of fields within this symbol.
      *
      * @param aList - List to add fields to
      */
@@ -264,7 +265,7 @@ public:
     void AddField( LIB_FIELD* aField );
 
     /**
-     * Find a field within this part matching \a aFieldName and returns it
+     * Find a field within this symbol matching \a aFieldName and returns it
      * or NULL if not found.
      */
     LIB_FIELD* FindField( const wxString& aFieldName );
@@ -292,10 +293,10 @@ public:
     LIB_FIELD& GetDatasheetField();
 
     /**
-     * Print part.
+     * Print symbol.
      *
-     * @param aOffset - Position of part.
-     * @param aMulti - unit if multiple units per part.
+     * @param aOffset - Position of symbol.
+     * @param aMulti - unit if multiple units per symbol.
      * @param aConvert - Component conversion (DeMorgan) if available.
      * @param aOpts - Drawing options
      */
@@ -303,12 +304,12 @@ public:
                 int aMulti, int aConvert, const PART_DRAW_OPTIONS& aOpts );
 
     /**
-     * Plot lib part to plotter.
+     * Plot lib symbol to plotter.
      * Lib Fields not are plotted here, because this plot function
      * is used to plot schematic items, which have they own fields
      *
      * @param aPlotter - Plotter object to plot to.
-     * @param aUnit - Component part to plot.
+     * @param aUnit - Component symbol to plot.
      * @param aConvert - Component alternate body style to plot.
      * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Component plot transform matrix.
@@ -317,11 +318,11 @@ public:
                const TRANSFORM& aTransform ) const;
 
     /**
-     * Plot Lib Fields only of the part to plotter.
-     * is used to plot the full lib part, outside the schematic
+     * Plot Lib Fields only of the symbol to plotter.
+     * is used to plot the full lib symbol, outside the schematic
      *
      * @param aPlotter - Plotter object to plot to.
-     * @param aUnit - Component part to plot.
+     * @param aUnit - Component symbol to plot.
      * @param aConvert - Component alternate body style to plot.
      * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Component plot transform matrix.
@@ -376,15 +377,15 @@ public:
     /**
      * Return a list of pin object pointers from the draw item list.
      *
-     * Note pin objects are owned by the draw list of the part.
+     * Note pin objects are owned by the draw list of the symbol.
      * Deleting any of the objects will leave list in a unstable state
      * and will likely segfault when the list is destroyed.
      *
      * @param aList - Pin list to place pin object pointers into.
      * @param aUnit - Unit number of pin to add to list.  Set to 0 to
-     *                get pins from any part unit.
+     *                get pins from any symbol unit.
      * @param aConvert - Convert number of pin to add to list.  Set to 0 to
-     *                   get pins from any convert of part.
+     *                   get pins from any convert of symbol.
      */
     void GetPins( LIB_PINS& aList, int aUnit = 0, int aConvert = 0 ) const;
 
@@ -392,7 +393,7 @@ public:
      * Return pin object with the requested pin \a aNumber.
      *
      * @param aNumber - Number of the pin to find.
-     * @param aUnit - Unit of the part to find.  Set to 0 if a specific
+     * @param aUnit - Unit of the symbol to find.  Set to 0 if a specific
      *                unit number is not required.
      * @param aConvert - Alternate body style filter (DeMorgan).  Set to 0 if
      *                   no alternate body style is required.
@@ -401,22 +402,22 @@ public:
     LIB_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aConvert = 0 ) const;
 
     /**
-     * Return true if this part's pins do not match another part's pins. This
+     * Return true if this symbol's pins do not match another symbol's pins. This
      * is used to detect whether the project cache is out of sync with the
      * system libs.
      *
-     * @param aOtherPart - The other library part to test
+     * @param aOtherSymbol - The other library symbol to test
      * @param aTestNums - Whether two pins at the same point must have the same number.
      * @param aTestNames - Whether two pins at the same point must have the same name.
      * @param aTestType - Whether two pins at the same point must have the same electrical type.
      * @param aTestOrientation - Whether two pins at the same point must have the same orientation.
      * @param aTestLength - Whether two pins at the same point must have the same length.
      */
-    bool PinsConflictWith( const LIB_PART& aOtherPart, bool aTestNums, bool aTestNames,
+    bool PinsConflictWith( const LIB_SYMBOL& aOtherSymbol, bool aTestNums, bool aTestNames,
                            bool aTestType, bool aTestOrientation, bool aTestLength ) const;
 
     /**
-     * Move the part \a aOffset.
+     * Move the symbol \a aOffset.
      *
      * @param aOffset - Offset displacement.
      */
@@ -428,14 +429,14 @@ public:
     void RemoveDuplicateDrawItems();
 
     /**
-     * Test if part has more than one body conversion type (DeMorgan).
+     * Test if symbol has more than one body conversion type (DeMorgan).
      *
-     * @return True if part has more than one conversion.
+     * @return True if symbol has more than one conversion.
      */
     bool HasConversion() const;
 
     /**
-     * Clears the status flag all draw objects in this part.
+     * Clears the status flag all draw objects in this symbol.
      */
     void ClearTempFlags();
     void ClearEditFlags();
@@ -475,12 +476,12 @@ public:
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     /**
-     * Set the units per part count.
+     * Set the units per symbol count.
      *
      * If the count is greater than the current count, then the all of the
-     * current draw items are duplicated for each additional part.  If the
+     * current draw items are duplicated for each additional symbol.  If the
      * count is less than the current count, all draw objects for units
-     * greater that count are removed from the part.
+     * greater that count are removed from the symbol.
      *
      * @param aCount - Number of units per package.
      * @param aDuplicateDrawItems Create duplicate draw items of unit 1 for each additionl unit.
@@ -494,15 +495,15 @@ public:
     wxString GetUnitReference( int aUnit ) override;
 
     /**
-     * @return true if the part has multiple units per part.
-     * When true, the reference has a sub reference to identify part.
+     * @return true if the symbol has multiple units per symbol.
+     * When true, the reference has a sub reference to identify symbol.
      */
     bool IsMulti() const { return m_unitCount > 1; }
 
     /**
-     * @return the sub reference for part having multiple units per part.
-     * The sub reference identify the part (or unit)
-     * @param aUnit = the part identifier ( 1 to max count)
+     * @return the sub reference for symbol having multiple units per symbol.
+     * The sub reference identify the symbol (or unit)
+     * @param aUnit = the symbol identifier ( 1 to max count)
      * @param aAddSeparator = true (default) to prepend the sub ref
      *    by the separator symbol (if any)
      * Note: this is a static function.
@@ -526,25 +527,25 @@ public:
     /**
      * Set the separator char between the subpart id and the reference
      * 0 (no separator) or '.' , '-' and '_'
-     * and the ascii char value to calculate the subpart symbol id from the part number:
+     * and the ascii char value to calculate the subpart symbol id from the symbol number:
      * 'A' or '1' only are allowed. (to print U1.A or U1.1)
      * if this is a digit, a number is used as id symbol
      * Note also if the subpart symbol is a digit, the separator cannot be null.
      * @param aSep = the separator symbol (0 (no separator) or '.' , '-' and '_')
-     * @param aFirstId = the Id of the first part ('A' or '1')
+     * @param aFirstId = the Id of the first symbol ('A' or '1')
      */
     static void SetSubpartIdNotation( int aSep, int aFirstId );
 
     /**
-     * Set or clear the alternate body style (DeMorgan) for the part.
+     * Set or clear the alternate body style (DeMorgan) for the symbol.
      *
-     * If the part already has an alternate body style set and a
+     * If the symbol already has an alternate body style set and a
      * asConvert if false, all of the existing draw items for the alternate
      * body style are remove.  If the alternate body style is not set and
      * asConvert is true, than the base draw items are duplicated and
-     * added to the part.
+     * added to the symbol.
      *
-     * @param aSetConvert - Set or clear the part alternate body style.
+     * @param aSetConvert - Set or clear the symbol alternate body style.
      * @param aDuplicatePins - Duplicate all pins from original body style if true.
      */
     void SetConversion( bool aSetConvert, bool aDuplicatePins = true );
@@ -562,7 +563,7 @@ public:
     /**
      * Set or clear the pin name visibility flag.
      *
-     * @param aShow - True to make the part pin names visible.
+     * @param aShow - True to make the symbol pin names visible.
      */
     void SetShowPinNames( bool aShow ) { m_showPinNames = aShow; }
     bool ShowPinNames() const { return m_showPinNames; }
@@ -570,7 +571,7 @@ public:
     /**
      * Set or clear the pin number visibility flag.
      *
-     * @param aShow - True to make the part pin numbers visible.
+     * @param aShow - True to make the symbol pin numbers visible.
      */
     void SetShowPinNumbers( bool aShow ) { m_showPinNumbers = aShow; }
     bool ShowPinNumbers() const { return m_showPinNumbers; }
@@ -600,13 +601,13 @@ public:
      *         1 if this symbol is greater than \a aRhs
      *         0 if this symbol is the same as \a aRhs
      */
-    int Compare( const LIB_PART& aRhs ) const;
+    int Compare( const LIB_SYMBOL& aRhs ) const;
 
-    bool operator==( const LIB_PART* aPart ) const { return this == aPart; }
-    bool operator==( const LIB_PART& aPart ) const { return Compare( aPart ) == 0; }
-    bool operator!=( const LIB_PART& aPart ) const { return Compare( aPart ) != 0; }
+    bool operator==( const LIB_SYMBOL* aSymbol ) const { return this == aSymbol; }
+    bool operator==( const LIB_SYMBOL& aSymbol ) const { return Compare( aSymbol ) == 0; }
+    bool operator!=( const LIB_SYMBOL& aSymbol ) const { return Compare( aSymbol ) != 0; }
 
-    const LIB_PART& operator=( const LIB_PART& aPart );
+    const LIB_SYMBOL& operator=( const LIB_SYMBOL& aSymbol );
 
     /**
      * Return a flattened symbol inheritance to the caller.
@@ -615,7 +616,7 @@ public:
      *
      * @return a flattened symbol on the heap
      */
-    std::unique_ptr< LIB_PART > Flatten() const;
+    std::unique_ptr< LIB_SYMBOL > Flatten() const;
 
     /**
      * Return a list of LIB_ITEM objects separated by unit and convert number.
@@ -664,7 +665,7 @@ private:
     timestamp_t         m_lastModDate;
 
     int                 m_unitCount;        ///< Number of units (parts) per package.
-    bool                m_unitsLocked;      ///< True if part has multiple units and changing one
+    bool                m_unitsLocked;      ///< True if symbol has multiple units and changing one
                                             ///< unit does not automatically change another unit.
 
     int                 m_pinNameOffset;    ///< The offset in mils to draw the pin name.  Set to
@@ -674,7 +675,7 @@ private:
 
     bool                m_includeInBom;
     bool                m_includeOnBoard;
-    LIBRENTRYOPTIONS    m_options;          ///< Special part features such as POWER or NORMAL.)
+    LIBRENTRYOPTIONS    m_options;          ///< Special symbol features such as POWER or NORMAL.)
 
     LIB_ITEMS_CONTAINER m_drawings;
 
@@ -683,13 +684,13 @@ private:
     wxString            m_description;
     wxString            m_keyWords;         ///< Search keywords
     wxArrayString       m_fpFilters;        ///< List of suitable footprint names for the
-                                            ///<  part (wild card names accepted).
+                                            ///<  symbol (wild card names accepted).
 
     static int  m_subpartIdSeparator;       ///< the separator char between
                                             ///< the subpart id and the reference like U1A
                                             ///< ( m_subpartIdSeparator = 0 ) or U1.A or U1-A
     static int  m_subpartFirstId;           ///< the ASCII char value to calculate the subpart
-                                            ///< symbol id from the part number: only 'A', 'a'
+                                            ///< symbol id from the symbol number: only 'A', 'a'
                                             ///< or '1' can be used, other values have no sense.
 };
 

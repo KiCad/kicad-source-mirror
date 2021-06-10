@@ -35,7 +35,7 @@ class TEST_SCH_PIN_FIXTURE
 public:
     TEST_SCH_PIN_FIXTURE()
     {
-        m_parent_part = new LIB_PART( "parent_part", nullptr );
+        m_parent_part = new LIB_SYMBOL( "parent_part", nullptr );
 
         m_lib_pin = new LIB_PIN( m_parent_part );
         m_parent_part->AddDrawItem( m_lib_pin );
@@ -61,7 +61,7 @@ public:
         delete m_parent_part;
     }
 
-    LIB_PART*   m_parent_part;
+    LIB_SYMBOL* m_parent_part;
     LIB_PIN*    m_lib_pin;
 
     SCH_SYMBOL* m_parent_symbol;

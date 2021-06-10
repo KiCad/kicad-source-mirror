@@ -36,7 +36,7 @@ class LIB_RECTANGLE;
 class LIB_PIN;
 class LIB_CIRCLE;
 class LIB_ITEM;
-class LIB_PART;
+class LIB_SYMBOL;
 class LIB_POLYLINE;
 class LIB_ARC;
 class LIB_FIELD;
@@ -153,7 +153,7 @@ private:
     void draw( const LIB_RECTANGLE* aRect, int aLayer );
     void draw( LIB_PIN* aPin, int aLayer );
     void draw( const LIB_CIRCLE* aCircle, int aLayer );
-    void draw( const LIB_PART* aPart, int, bool aDrawFields = true, int aUnit = 0,
+    void draw( const LIB_SYMBOL* aSymbol, int, bool aDrawFields = true, int aUnit = 0,
                int aConvert = 0 );
     void draw( const LIB_ARC* aArc, int aLayer );
     void draw( const LIB_POLYLINE* aLine, int aLayer );

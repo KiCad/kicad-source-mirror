@@ -31,7 +31,7 @@
 #include <sch_view.h>
 
 
-class LIB_PART;
+class LIB_SYMBOL;
 class SCH_SCREEN;
 
 
@@ -44,7 +44,7 @@ public:
 
     ~SCH_DRAW_PANEL();
 
-    void DisplayComponent( LIB_PART *aComponent );
+    void DisplayComponent( LIB_SYMBOL *aSymbol );
     void DisplaySheet( SCH_SCREEN *aScreen );
 
     bool SwitchBackend( GAL_TYPE aGalType ) override;

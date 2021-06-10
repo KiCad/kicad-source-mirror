@@ -40,7 +40,7 @@
 #include <settings/color_settings.h>
 
 
-LIB_FIELD::LIB_FIELD(LIB_PART * aParent, int idfield ) :
+LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int idfield ) :
     LIB_ITEM( LIB_FIELD_T, aParent )
 {
     Init( idfield );
@@ -129,7 +129,7 @@ bool LIB_FIELD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     // Reference designator text has one or 2 additional character (displays U? or U?A)
     if( m_id == REFERENCE_FIELD )
     {
-        const LIB_PART*  parent = dynamic_cast<const LIB_PART*>( m_parent );
+        const LIB_SYMBOL* parent = dynamic_cast<const LIB_SYMBOL*>( m_parent );
 
         wxString extended_text = tmp_text.GetText();
         extended_text.Append('?');
@@ -303,7 +303,7 @@ wxString LIB_FIELD::GetFullText( int unit ) const
     wxCHECK( GetParent(), text );
 
     if( GetParent()->IsMulti() )
-        text << LIB_PART::SubReference( unit );
+        text << LIB_SYMBOL::SubReference( unit );
 
     return text;
 }

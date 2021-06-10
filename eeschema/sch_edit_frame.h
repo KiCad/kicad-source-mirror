@@ -817,13 +817,13 @@ public:
     void FocusOnItem( SCH_ITEM* aItem );
 
     /**
-     * Update the #LIB_PART of the currently selected symbol.
+     * Update the #LIB_SYMBOL of the currently selected symbol.
      *
      * This is typically called from the symbol editor when editing symbols in place.
      *
-     * @param aSymbol is the #LIB_PART to update.
+     * @param aSymbol is the #LIB_SYMBOL to update.
      */
-    void SaveSymbolToSchematic( const LIB_PART& aSymbol );
+    void SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol );
 
     /**
      * Update the schematic's page reference map for all global labels, and refresh the labels

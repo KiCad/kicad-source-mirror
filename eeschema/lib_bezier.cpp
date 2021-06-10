@@ -35,7 +35,7 @@
 #include <settings/color_settings.h>
 
 
-LIB_BEZIER::LIB_BEZIER( LIB_PART* aParent ) :
+LIB_BEZIER::LIB_BEZIER( LIB_SYMBOL* aParent ) :
     LIB_ITEM( LIB_BEZIER_T, aParent )
 {
     m_fill       = FILL_TYPE::NO_FILL;

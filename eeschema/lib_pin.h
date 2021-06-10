@@ -152,9 +152,9 @@ public:
      */
     int PinDrawOrient( const TRANSFORM& aTransform ) const;
 
-    LIB_PIN( LIB_PART* aParent );
+    LIB_PIN( LIB_SYMBOL* aParent );
 
-    LIB_PIN( LIB_PART* aParent, const wxString& aName, const wxString& aNumber, int aOrientation,
+    LIB_PIN( LIB_SYMBOL* aParent, const wxString& aName, const wxString& aNumber, int aOrientation,
              ELECTRICAL_PINTYPE aPinType, int aLength, int aNameTextSize, int aNumTextSize,
              int aConvert, const wxPoint& aPos, int aUnit );
 
@@ -186,7 +186,7 @@ public:
     bool IsPowerConnection() const
     {
         return GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
-               && ( !IsVisible() || (LIB_PART*) GetParent()->IsPower() );
+               && ( !IsVisible() || (LIB_SYMBOL*) GetParent()->IsPower() );
     }
 
     int GetPenWidth() const override;

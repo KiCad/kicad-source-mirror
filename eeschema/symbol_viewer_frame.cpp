@@ -275,7 +275,7 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
     auto demorganCond =
         [this] ( const SELECTION& )
         {
-            LIB_PART* symbol = GetSelectedSymbol();
+            LIB_SYMBOL* symbol = GetSelectedSymbol();
 
             return symbol && symbol->HasConversion();
         };
@@ -295,7 +295,7 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
     auto haveDatasheetCond =
         [this] ( const SELECTION& )
         {
-            LIB_PART* symbol = GetSelectedSymbol();
+            LIB_SYMBOL* symbol = GetSelectedSymbol();
 
             return symbol && !symbol->GetDatasheetField().GetText().IsEmpty();
         };
@@ -323,9 +323,9 @@ void SYMBOL_VIEWER_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
 }
 
 
-LIB_PART* SYMBOL_VIEWER_FRAME::GetSelectedSymbol() const
+LIB_SYMBOL* SYMBOL_VIEWER_FRAME::GetSelectedSymbol() const
 {
-    LIB_PART* symbol = nullptr;
+    LIB_SYMBOL* symbol = nullptr;
 
     if( !m_libraryName.IsEmpty() && !m_entryName.IsEmpty() )
         symbol = Prj().SchSymbolLibTable()->LoadSymbol( m_libraryName, m_entryName );
@@ -336,7 +336,7 @@ LIB_PART* SYMBOL_VIEWER_FRAME::GetSelectedSymbol() const
 
 void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
 {
-    LIB_PART* symbol = GetSelectedSymbol();
+    LIB_SYMBOL* symbol = GetSelectedSymbol();
     KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
 
     if( m_previewItem )
@@ -356,7 +356,7 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
         view->Add( m_previewItem );
 
         wxString parentName;
-        std::shared_ptr<LIB_PART> parent  = m_previewItem->GetParent().lock();
+        std::shared_ptr<LIB_SYMBOL> parent  = m_previewItem->GetParent().lock();
 
         if( parent )
             parentName = parent->GetName();
@@ -440,12 +440,12 @@ void SYMBOL_VIEWER_FRAME::OnSize( wxSizeEvent& SizeEv )
 
 void SYMBOL_VIEWER_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 {
-    LIB_PART* part = GetSelectedSymbol();
+    LIB_SYMBOL* symbol = GetSelectedSymbol();
 
     int unit_count = 1;
 
-    if( part )
-        unit_count = std::max( part->GetUnitCount(), 1 );
+    if( symbol )
+        unit_count = std::max( symbol->GetUnitCount(), 1 );
 
     m_unitChoice->Enable( unit_count > 1 );
 
@@ -778,17 +778,17 @@ void SYMBOL_VIEWER_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
 
 const BOX2I SYMBOL_VIEWER_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
-    LIB_PART* part = GetSelectedSymbol();
+    LIB_SYMBOL* symbol = GetSelectedSymbol();
 
-    if( !part )
+    if( !symbol )
     {
         return BOX2I( VECTOR2I(-200, -200), VECTOR2I( 400, 400 ) );
     }
     else
     {
-        std::shared_ptr< LIB_PART > tmp;
+        std::shared_ptr< LIB_SYMBOL > tmp;
 
-        tmp = ( part->IsAlias() ) ? part->GetParent().lock() : part->SharedPtr();
+        tmp = ( symbol->IsAlias() ) ? symbol->GetParent().lock() : symbol->SharedPtr();
 
         wxCHECK( tmp, BOX2I( VECTOR2I(-200, -200), VECTOR2I( 400, 400 ) ) );
 
@@ -825,7 +825,7 @@ void SYMBOL_VIEWER_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     const auto libNicknames = libs->GetLogicalLibs();
     static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapter.get() )->AddLibraries( libNicknames, this );
 
-    LIB_PART* current = GetSelectedSymbol();
+    LIB_SYMBOL* current = GetSelectedSymbol();
     LIB_ID id;
     int unit = 0;
 

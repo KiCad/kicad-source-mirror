@@ -284,7 +284,7 @@ static void formatStroke( OUTPUTFORMATTER* aFormatter, int aNestLevel,
 
 
 /**
- * A cache assistant for the part library portion of the #SCH_PLUGIN API, and only for the
+ * A cache assistant for the symbol library portion of the #SCH_PLUGIN API, and only for the
  * #SCH_SEXPR_PLUGIN, so therefore is private to this implementation file, i.e. not placed
  * into a header.
  */
@@ -295,13 +295,13 @@ class SCH_SEXPR_PLUGIN_CACHE
     wxString        m_fileName;     // Absolute path and file name.
     wxFileName      m_libFileName;  // Absolute path and file name is required here.
     wxDateTime      m_fileModTime;
-    LIB_PART_MAP    m_symbols;      // Map of names of #LIB_PART pointers.
+    LIB_SYMBOL_MAP  m_symbols;      // Map of names of #LIB_SYMBOL pointers.
     bool            m_isWritable;
     bool            m_isModified;
     int             m_versionMajor;
     SCH_LIB_TYPE    m_libType;      // Is this cache a symbol or symbol library.
 
-    LIB_PART*       removeSymbol( LIB_PART* aAlias );
+    LIB_SYMBOL*       removeSymbol( LIB_SYMBOL* aAlias );
 
     static void     saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTER& aFormatter,
                                         int aNestLevel );
@@ -319,7 +319,7 @@ class SCH_SEXPR_PLUGIN_CACHE
                                    int aNestLevel = 0 );
     static void     saveText( LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0 );
 
-    static void     saveDcmInfoAsFields( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter,
+    static void     saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
                                          int& aNextFreeFieldId, int aNestLevel );
 
     friend SCH_SEXPR_PLUGIN;
@@ -339,7 +339,7 @@ public:
 
     void Load();
 
-    void AddSymbol( const LIB_PART* aPart );
+    void AddSymbol( const LIB_SYMBOL* aSymbol );
 
     void DeleteSymbol( const wxString& aName );
 
@@ -360,7 +360,7 @@ public:
 
     wxString GetFileName() const { return m_libFileName.GetFullPath(); }
 
-    static void SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter,
+    static void SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
                             int aNestLevel = 0, const wxString& aLibName = wxEmptyString );
 };
 
@@ -732,7 +732,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
 
     size_t i;
     SCH_ITEM* item;
-    std::map<wxString, LIB_PART*> libSymbols;
+    std::map<wxString, LIB_SYMBOL*> libSymbols;
     SCH_SCREEN* screen = aSelection->GetScreen();
 
     for( i = 0; i < aSelection->GetSize(); ++i )
@@ -871,11 +871,11 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
 
     static wxString delimiters( wxT( " " ) );
 
-    wxString part_name = aSymbol->GetLibId().Format();
+    wxString symbol_name = aSymbol->GetLibId().Format();
 
-    if( part_name.size() )
+    if( symbol_name.size() )
     {
-        libName = toUTFTildaText( part_name );
+        libName = toUTFTildaText( symbol_name );
     }
     else
     {
@@ -1369,7 +1369,7 @@ SCH_SEXPR_PLUGIN_CACHE::SCH_SEXPR_PLUGIN_CACHE( const wxString& aFullPathAndFile
 SCH_SEXPR_PLUGIN_CACHE::~SCH_SEXPR_PLUGIN_CACHE()
 {
     // When the cache is destroyed, all of the alias objects on the heap should be deleted.
-    for( LIB_PART_MAP::iterator it = m_symbols.begin();  it != m_symbols.end();  ++it )
+    for( LIB_SYMBOL_MAP::iterator it = m_symbols.begin();  it != m_symbols.end();  ++it )
         delete it->second;
 
     m_symbols.clear();
@@ -1414,30 +1414,30 @@ bool SCH_SEXPR_PLUGIN_CACHE::IsFileChanged() const
 }
 
 
-LIB_PART* SCH_SEXPR_PLUGIN_CACHE::removeSymbol( LIB_PART* aPart )
+LIB_SYMBOL* SCH_SEXPR_PLUGIN_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
 {
-    wxCHECK_MSG( aPart != NULL, NULL, "NULL pointer cannot be removed from library." );
+    wxCHECK_MSG( aSymbol != NULL, NULL, "NULL pointer cannot be removed from library." );
 
-    LIB_PART* firstChild = NULL;
-    LIB_PART_MAP::iterator it = m_symbols.find( aPart->GetName() );
+    LIB_SYMBOL* firstChild = NULL;
+    LIB_SYMBOL_MAP::iterator it = m_symbols.find( aSymbol->GetName() );
 
     if( it == m_symbols.end() )
         return NULL;
 
     // If the entry pointer doesn't match the name it is mapped to in the library, we
     // have done something terribly wrong.
-    wxCHECK_MSG( *it->second == aPart, NULL,
-                 "Pointer mismatch while attempting to remove alias entry <" + aPart->GetName() +
+    wxCHECK_MSG( *it->second == aSymbol, NULL,
+                 "Pointer mismatch while attempting to remove alias entry <" + aSymbol->GetName() +
                  "> from library cache <" + m_libFileName.GetName() + ">." );
 
     // If the symbol is a root symbol used by other symbols find the first alias that uses
-    // the root part and make it the new root.
-    if( aPart->IsRoot() )
+    // the root symbol and make it the new root.
+    if( aSymbol->IsRoot() )
     {
         for( auto entry : m_symbols )
         {
             if( entry.second->IsAlias()
-              && entry.second->GetParent().lock() == aPart->SharedPtr() )
+              && entry.second->GetParent().lock() == aSymbol->SharedPtr() )
             {
                 firstChild = entry.second;
                 break;
@@ -1446,7 +1446,7 @@ LIB_PART* SCH_SEXPR_PLUGIN_CACHE::removeSymbol( LIB_PART* aPart )
 
         if( firstChild )
         {
-            for( LIB_ITEM& drawItem : aPart->GetDrawItems() )
+            for( LIB_ITEM& drawItem : aSymbol->GetDrawItems() )
             {
                 if( drawItem.Type() == LIB_FIELD_T )
                 {
@@ -1465,32 +1465,32 @@ LIB_PART* SCH_SEXPR_PLUGIN_CACHE::removeSymbol( LIB_PART* aPart )
             for( auto entry : m_symbols )
             {
                 if( entry.second->IsAlias()
-                  && entry.second->GetParent().lock() == aPart->SharedPtr() )
+                  && entry.second->GetParent().lock() == aSymbol->SharedPtr() )
                     entry.second->SetParent( firstChild );
             }
         }
     }
 
     m_symbols.erase( it );
-    delete aPart;
+    delete aSymbol;
     m_isModified = true;
     ++m_modHash;
     return firstChild;
 }
 
 
-void SCH_SEXPR_PLUGIN_CACHE::AddSymbol( const LIB_PART* aPart )
+void SCH_SEXPR_PLUGIN_CACHE::AddSymbol( const LIB_SYMBOL* aSymbol )
 {
-    // aPart is cloned in PART_LIB::AddPart().  The cache takes ownership of aPart.
-    wxString name = aPart->GetName();
-    LIB_PART_MAP::iterator it = m_symbols.find( name );
+    // aSymbol is cloned in PART_LIB::AddPart().  The cache takes ownership of aSymbol.
+    wxString name = aSymbol->GetName();
+    LIB_SYMBOL_MAP::iterator it = m_symbols.find( name );
 
     if( it != m_symbols.end() )
     {
         removeSymbol( it->second );
     }
 
-    m_symbols[ name ] = const_cast< LIB_PART* >( aPart );
+    m_symbols[ name ] = const_cast< LIB_SYMBOL* >( aSymbol );
     m_isModified = true;
     ++m_modHash;
 }
@@ -1557,7 +1557,7 @@ void SCH_SEXPR_PLUGIN_CACHE::Save()
                 if( !alias.second->IsAlias() )
                     continue;
 
-                std::shared_ptr<LIB_PART> aliasParent = alias.second->GetParent().lock();
+                std::shared_ptr<LIB_SYMBOL> aliasParent = alias.second->GetParent().lock();
 
                 if( aliasParent.get() != parent.second )
                     continue;
@@ -1576,10 +1576,10 @@ void SCH_SEXPR_PLUGIN_CACHE::Save()
 }
 
 
-void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter,
+void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
                                          int aNestLevel, const wxString& aLibName )
 {
-    wxCHECK_RET( aSymbol, "Invalid LIB_PART pointer." );
+    wxCHECK_RET( aSymbol, "Invalid LIB_SYMBOL pointer." );
 
     // The current locale must use period as the decimal point.
     wxCHECK2( wxLocale::GetInfo( wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER ) == ".",
@@ -1683,7 +1683,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
     }
     else
     {
-        std::shared_ptr<LIB_PART> parent = aSymbol->GetParent().lock();
+        std::shared_ptr<LIB_SYMBOL> parent = aSymbol->GetParent().lock();
 
         wxASSERT( parent );
 
@@ -1703,10 +1703,10 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 }
 
 
-void SCH_SEXPR_PLUGIN_CACHE::saveDcmInfoAsFields( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter,
+void SCH_SEXPR_PLUGIN_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
                                                   int& aNextFreeFieldId, int aNestLevel )
 {
-    wxCHECK_RET( aSymbol, "Invalid LIB_PART pointer." );
+    wxCHECK_RET( aSymbol, "Invalid LIB_SYMBOL pointer." );
 
     if( !aSymbol->GetKeyWords().IsEmpty() )
     {
@@ -2057,26 +2057,27 @@ void SCH_SEXPR_PLUGIN_CACHE::saveText( LIB_TEXT* aText, OUTPUTFORMATTER& aFormat
 
 void SCH_SEXPR_PLUGIN_CACHE::DeleteSymbol( const wxString& aSymbolName )
 {
-    LIB_PART_MAP::iterator it = m_symbols.find( aSymbolName );
+    LIB_SYMBOL_MAP::iterator it = m_symbols.find( aSymbolName );
 
     if( it == m_symbols.end() )
         THROW_IO_ERROR( wxString::Format( _( "library %s does not contain a symbol named %s" ),
                                           m_libFileName.GetFullName(), aSymbolName ) );
 
-    LIB_PART* part = it->second;
+    LIB_SYMBOL* symbol = it->second;
 
-    if( part->IsRoot() )
+    if( symbol->IsRoot() )
     {
-        LIB_PART* rootPart = part;
+        LIB_SYMBOL* rootSymbol = symbol;
 
         // Remove the root symbol and all it's children.
         m_symbols.erase( it );
 
-        LIB_PART_MAP::iterator it1 = m_symbols.begin();
+        LIB_SYMBOL_MAP::iterator it1 = m_symbols.begin();
 
         while( it1 != m_symbols.end() )
         {
-            if( it1->second->IsAlias() && it1->second->GetParent().lock() == rootPart->SharedPtr() )
+            if( it1->second->IsAlias()
+              && it1->second->GetParent().lock() == rootSymbol->SharedPtr() )
             {
                 delete it1->second;
                 it1 = m_symbols.erase( it1 );
@@ -2087,13 +2088,13 @@ void SCH_SEXPR_PLUGIN_CACHE::DeleteSymbol( const wxString& aSymbolName )
             }
         }
 
-        delete rootPart;
+        delete rootSymbol;
     }
     else
     {
         // Just remove the alias.
         m_symbols.erase( it );
-        delete part;
+        delete symbol;
     }
 
     ++m_modHash;
@@ -2147,9 +2148,9 @@ void SCH_SEXPR_PLUGIN::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
     cacheLib( aLibraryPath, aProperties );
 
-    const LIB_PART_MAP& symbols = m_cache->m_symbols;
+    const LIB_SYMBOL_MAP& symbols = m_cache->m_symbols;
 
-    for( LIB_PART_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
+    for( LIB_SYMBOL_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
     {
         if( !powerSymbolsOnly || it->second->IsPower() )
             aSymbolNameList.Add( it->first );
@@ -2157,7 +2158,7 @@ void SCH_SEXPR_PLUGIN::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 }
 
 
-void SCH_SEXPR_PLUGIN::EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
+void SCH_SEXPR_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                            const wxString&   aLibraryPath,
                                            const PROPERTIES* aProperties )
 {
@@ -2168,9 +2169,9 @@ void SCH_SEXPR_PLUGIN::EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
 
     cacheLib( aLibraryPath, aProperties );
 
-    const LIB_PART_MAP& symbols = m_cache->m_symbols;
+    const LIB_SYMBOL_MAP& symbols = m_cache->m_symbols;
 
-    for( LIB_PART_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
+    for( LIB_SYMBOL_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
     {
         if( !powerSymbolsOnly || it->second->IsPower() )
             aSymbolList.push_back( it->second );
@@ -2178,14 +2179,14 @@ void SCH_SEXPR_PLUGIN::EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
 }
 
 
-LIB_PART* SCH_SEXPR_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                        const PROPERTIES* aProperties )
+LIB_SYMBOL* SCH_SEXPR_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
+                                          const PROPERTIES* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
     cacheLib( aLibraryPath, aProperties );
 
-    LIB_PART_MAP::const_iterator it = m_cache->m_symbols.find( aSymbolName );
+    LIB_SYMBOL_MAP::const_iterator it = m_cache->m_symbols.find( aSymbolName );
 
     if( it == m_cache->m_symbols.end() )
         return nullptr;
@@ -2194,7 +2195,7 @@ LIB_PART* SCH_SEXPR_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxSt
 }
 
 
-void SCH_SEXPR_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
+void SCH_SEXPR_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
                                    const PROPERTIES* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
@@ -2310,10 +2311,10 @@ bool SCH_SEXPR_PLUGIN::IsSymbolLibWritable( const wxString& aLibraryPath )
 }
 
 
-LIB_PART* SCH_SEXPR_PLUGIN::ParsePart( LINE_READER& aReader, int aFileVersion )
+LIB_SYMBOL* SCH_SEXPR_PLUGIN::ParsePart( LINE_READER& aReader, int aFileVersion )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
-    LIB_PART_MAP map;
+    LIB_SYMBOL_MAP map;
     SCH_SEXPR_PARSER parser( &aReader );
 
     parser.NeedLEFT();
@@ -2323,11 +2324,11 @@ LIB_PART* SCH_SEXPR_PLUGIN::ParsePart( LINE_READER& aReader, int aFileVersion )
 }
 
 
-void SCH_SEXPR_PLUGIN::FormatPart( LIB_PART* part, OUTPUTFORMATTER & formatter )
+void SCH_SEXPR_PLUGIN::FormatPart( LIB_SYMBOL* symbol, OUTPUTFORMATTER & formatter )
 {
 
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
-    SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( part, formatter );
+    SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( symbol, formatter );
 }
 
 

@@ -35,7 +35,7 @@ class SCH_SCREEN;
 class SCH_PLUGIN;
 class SCHEMATIC;
 class KIWAY;
-class LIB_PART;
+class LIB_SYMBOL;
 class PART_LIB;
 class PROPERTIES;
 
@@ -248,13 +248,13 @@ public:
                        const PROPERTIES* aProperties = nullptr );
 
     /**
-     * Populate a list of #LIB_PART alias names contained within the library \a aLibraryPath.
+     * Populate a list of #LIB_SYMBOL alias names contained within the library \a aLibraryPath.
      *
-     * @param aSymbolNameList is an array to populate with the #LIB_PART names associated with
+     * @param aSymbolNameList is an array to populate with the #LIB_SYMBOL names associated with
      *                        the library.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
-     *                     or URL containing one or more #LIB_PART objects.
+     *                     or URL containing one or more #LIB_SYMBOL objects.
      *
      * @param aProperties is an associative array that can be used to tell the plugin anything
      *                    needed about how to perform with respect to \a aLibraryPath.  The
@@ -267,16 +267,16 @@ public:
                                      const PROPERTIES* aProperties = nullptr );
 
     /**
-     * Populate a list of #LIB_PART aliases contained within the library \a aLibraryPath.
+     * Populate a list of #LIB_SYMBOL aliases contained within the library \a aLibraryPath.
      *
      * @note It is the responsibility of the caller to delete the returned object from the heap.
      *       Failure to do this will result in memory leaks.
      *
-     * @param aSymbolList is an array to populate with the #LIB_PART pointers associated with
+     * @param aSymbolList is an array to populate with the #LIB_SYMBOL pointers associated with
      *                    the library.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
-     *                     or URL containing one or more #LIB_PART objects.
+     *                     or URL containing one or more #LIB_SYMBOL objects.
      *
      * @param aProperties is an associative array that can be used to tell the plugin anything
      *                    needed about how to perform with respect to \a aLibraryPath.  The
@@ -285,18 +285,18 @@ public:
      *
      * @throw IO_ERROR if the library cannot be found, the part library cannot be loaded.
      */
-    virtual void EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
+    virtual void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                      const wxString& aLibraryPath,
                                      const PROPERTIES* aProperties = nullptr );
 
     /**
-     * Load a #LIB_PART object having \a aPartName from the \a aLibraryPath containing
+     * Load a #LIB_SYMBOL object having \a aPartName from the \a aLibraryPath containing
      * a library format that this #SCH_PLUGIN knows about.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
      *                     or URL containing several symbols.
      *
-     * @param aPartName is the name of the #LIB_PART to load.
+     * @param aPartName is the name of the #LIB_SYMBOL to load.
      *
      * @param aProperties is an associative array that can be used to tell the loader
      *                    implementation to do something special, because it can take
@@ -310,13 +310,13 @@ public:
      * @throw IO_ERROR if the library cannot be found or read.  No exception
      *                 is thrown in the case where aAliasName cannot be found.
      */
-    virtual LIB_PART* LoadSymbol( const wxString& aLibraryPath, const wxString& aPartName,
+    virtual LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aPartName,
                                   const PROPERTIES* aProperties = nullptr );
 
     /**
-     * Write \a aSymbol to an existing library located at \a aLibraryPath.  If a #LIB_PART
+     * Write \a aSymbol to an existing library located at \a aLibraryPath.  If a #LIB_SYMBOL
      * by the same name already exists or there are any conflicting alias names, the new
-     * #LIB_PART will silently overwrite any existing aliases and/or part because libraries
+     * #LIB_SYMBOL will silently overwrite any existing aliases and/or part because libraries
      * cannot have duplicate alias names.  It is the responsibility of the caller to check
      * the library for conflicts before saving.
      *
@@ -324,7 +324,7 @@ public:
      *                     or URL containing several symbols.
      *
      * @param aSymbol is what to store in the library.  The library is refreshed and the
-     *                caller must update any #LIB_PART pointers that may have changed.
+     *                caller must update any #LIB_SYMBOL pointers that may have changed.
      *
      * @param aProperties is an associative array that can be used to tell the
      *                    saver how to save the symbol, because it can take any number of
@@ -334,17 +334,17 @@ public:
      *
      * @throw IO_ERROR if there is a problem saving.
      */
-    virtual void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
+    virtual void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
                              const PROPERTIES* aProperties = nullptr );
 
     /**
-     * Delete the entire #LIB_PART associated with \a aAliasName from the library
+     * Delete the entire #LIB_SYMBOL associated with \a aAliasName from the library
      * \a aLibraryPath.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
      *                     or URL containing several symbols.
      *
-     * @param aSymbolName is the name of a #LIB_PART associated with it's root #LIB_PART
+     * @param aSymbolName is the name of a #LIB_SYMBOL associated with it's root #LIB_SYMBOL
      *                    object to delete from the specified library.
      *
      * @param aProperties is an associative array that can be used to tell the library

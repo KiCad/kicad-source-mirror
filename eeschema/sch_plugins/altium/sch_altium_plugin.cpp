@@ -308,7 +308,8 @@ void SCH_ALTIUM_PLUGIN::ParseStorage( const CFB::CompoundFileReader& aReader )
     if( reader.HasParsingError() )
         THROW_IO_ERROR( "stream was not parsed correctly!" );
 
-    // TODO pointhi: is it possible to have multiple headers in one Storage file? Otherwise throw IO Error.
+    // TODO pointhi: is it possible to have multiple headers in one Storage file? Otherwise
+    // throw IO Error.
     if( reader.GetRemainingBytes() != 0 )
         wxLogError(
                 wxString::Format( "Storage file was not fully parsed as %d bytes are remaining.",
@@ -486,18 +487,18 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
     if( reader.GetRemainingBytes() != 0 )
         THROW_IO_ERROR( "stream is not fully parsed" );
 
-    // assign LIB_PART -> COMPONENT
+    // assign LIB_SYMBOL -> COMPONENT
     for( auto component : m_components )
     {
-        auto kpart = m_symbols.find( component.first );
+        auto ksymbol = m_symbols.find( component.first );
 
-        if( kpart == m_symbols.end() )
+        if( ksymbol == m_symbols.end() )
             THROW_IO_ERROR( "every component should have a symbol attached" );
 
-        m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_PART( *( kpart->second ) ),
+        m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_SYMBOL( *( ksymbol->second ) ),
                           m_properties.get() );
 
-        component.second->SetLibSymbol( kpart->second );
+        component.second->SetLibSymbol( ksymbol->second );
     }
 
     // Handle title blocks
@@ -563,11 +564,11 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
                                       elem.libreference );
     LIB_ID libId = AltiumToKiCadLibID( getLibName(), name );
 
-    LIB_PART* kpart = new LIB_PART( wxEmptyString );
-    kpart->SetName( name );
-    kpart->SetDescription( elem.componentdescription );
-    kpart->SetLibId( libId );
-    m_symbols.insert( { aIndex, kpart } );
+    LIB_SYMBOL* ksymbol = new LIB_SYMBOL( wxEmptyString );
+    ksymbol->SetName( name );
+    ksymbol->SetDescription( elem.componentdescription );
+    ksymbol->SetLibId( libId );
+    m_symbols.insert( { aIndex, ksymbol } );
 
     // each component has its own symbol for now
     SCH_SYMBOL* symbol = new SCH_SYMBOL();
@@ -575,7 +576,7 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
     symbol->SetPosition( elem.location + m_sheetOffset );
     //component->SetOrientation( elem.orientation ); // TODO: keep it simple for now, and only set position
     symbol->SetLibId( libId );
-    //component->SetLibSymbol( kpart ); // this has to be done after parsing the LIB_PART!
+    //component->SetLibSymbol( ksymbol ); // this has to be done after parsing the LIB_SYMBOL!
 
     symbol->SetUnit( elem.currentpartid );
 
@@ -1426,29 +1427,29 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
 }
 
 
-wxPoint HelperGeneratePowerPortGraphics( LIB_PART* aKPart, ASCH_POWER_PORT_STYLE aStyle,
+wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_STYLE aStyle,
                                          REPORTER* aReporter )
 {
     if( aStyle == ASCH_POWER_PORT_STYLE::CIRCLE || aStyle == ASCH_POWER_PORT_STYLE::ARROW )
     {
-        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKPart );
-        aKPart->AddDrawItem( line1 );
+        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKsymbol );
+        aKsymbol->AddDrawItem( line1 );
         line1->SetWidth( Mils2iu( 10 ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -50 ) } );
 
         if( aStyle == ASCH_POWER_PORT_STYLE::CIRCLE )
         {
-            LIB_CIRCLE* circle = new LIB_CIRCLE( aKPart );
-            aKPart->AddDrawItem( circle );
+            LIB_CIRCLE* circle = new LIB_CIRCLE( aKsymbol );
+            aKsymbol->AddDrawItem( circle );
             circle->SetWidth( Mils2iu( 5 ) );
             circle->SetRadius( Mils2iu( 25 ) );
             circle->SetPosition( { Mils2iu( 0 ), Mils2iu( -75 ) } );
         }
         else
         {
-            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
-            aKPart->AddDrawItem( line2 );
+            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+            aKsymbol->AddDrawItem( line2 );
             line2->SetWidth( Mils2iu( 10 ) );
             line2->AddPoint( { Mils2iu( -25 ), Mils2iu( -50 ) } );
             line2->AddPoint( { Mils2iu( 25 ), Mils2iu( -50 ) } );
@@ -1460,14 +1461,14 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_PART* aKPart, ASCH_POWER_PORT_STYLE
     }
     else if( aStyle == ASCH_POWER_PORT_STYLE::WAVE )
     {
-        LIB_POLYLINE* line = new LIB_POLYLINE( aKPart );
-        aKPart->AddDrawItem( line );
+        LIB_POLYLINE* line = new LIB_POLYLINE( aKsymbol );
+        aKsymbol->AddDrawItem( line );
         line->SetWidth( Mils2iu( 10 ) );
         line->AddPoint( { 0, 0 } );
         line->AddPoint( { 0, Mils2iu( -72 ) } );
 
-        LIB_BEZIER* bezier = new LIB_BEZIER( aKPart );
-        aKPart->AddDrawItem( bezier );
+        LIB_BEZIER* bezier = new LIB_BEZIER( aKsymbol );
+        aKsymbol->AddDrawItem( bezier );
         bezier->SetWidth( Mils2iu( 5 ) );
         bezier->AddPoint( { Mils2iu( 30 ), Mils2iu( -50 ) } );
         bezier->AddPoint( { Mils2iu( 30 ), Mils2iu( -87 ) } );
@@ -1481,42 +1482,42 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_PART* aKPart, ASCH_POWER_PORT_STYLE
              || aStyle == ASCH_POWER_PORT_STYLE::EARTH
              || aStyle == ASCH_POWER_PORT_STYLE::GOST_ARROW )
     {
-        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKPart );
-        aKPart->AddDrawItem( line1 );
+        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKsymbol );
+        aKsymbol->AddDrawItem( line1 );
         line1->SetWidth( Mils2iu( 10 ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -100 ) } );
 
         if( aStyle == ASCH_POWER_PORT_STYLE::POWER_GROUND )
         {
-            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
-            aKPart->AddDrawItem( line2 );
+            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+            aKsymbol->AddDrawItem( line2 );
             line2->SetWidth( Mils2iu( 10 ) );
             line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
             line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
 
-            LIB_POLYLINE* line3 = new LIB_POLYLINE( aKPart );
-            aKPart->AddDrawItem( line3 );
+            LIB_POLYLINE* line3 = new LIB_POLYLINE( aKsymbol );
+            aKsymbol->AddDrawItem( line3 );
             line3->SetWidth( Mils2iu( 10 ) );
             line3->AddPoint( { Mils2iu( -70 ), Mils2iu( -130 ) } );
             line3->AddPoint( { Mils2iu( 70 ), Mils2iu( -130 ) } );
 
-            LIB_POLYLINE* line4 = new LIB_POLYLINE( aKPart );
-            aKPart->AddDrawItem( line4 );
+            LIB_POLYLINE* line4 = new LIB_POLYLINE( aKsymbol );
+            aKsymbol->AddDrawItem( line4 );
             line4->SetWidth( Mils2iu( 10 ) );
             line4->AddPoint( { Mils2iu( -40 ), Mils2iu( -160 ) } );
             line4->AddPoint( { Mils2iu( 40 ), Mils2iu( -160 ) } );
 
-            LIB_POLYLINE* line5 = new LIB_POLYLINE( aKPart );
-            aKPart->AddDrawItem( line5 );
+            LIB_POLYLINE* line5 = new LIB_POLYLINE( aKsymbol );
+            aKsymbol->AddDrawItem( line5 );
             line5->SetWidth( Mils2iu( 10 ) );
             line5->AddPoint( { Mils2iu( -10 ), Mils2iu( -190 ) } );
             line5->AddPoint( { Mils2iu( 10 ), Mils2iu( -190 ) } );
         }
         else if( aStyle == ASCH_POWER_PORT_STYLE::SIGNAL_GROUND )
         {
-            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
-            aKPart->AddDrawItem( line2 );
+            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+            aKsymbol->AddDrawItem( line2 );
             line2->SetWidth( Mils2iu( 10 ) );
             line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
             line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
@@ -1525,24 +1526,24 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_PART* aKPart, ASCH_POWER_PORT_STYLE
         }
         else if( aStyle == ASCH_POWER_PORT_STYLE::EARTH )
         {
-            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
-            aKPart->AddDrawItem( line2 );
+            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+            aKsymbol->AddDrawItem( line2 );
             line2->SetWidth( Mils2iu( 10 ) );
             line2->AddPoint( { Mils2iu( -150 ), Mils2iu( -200 ) } );
             line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
             line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
             line2->AddPoint( { Mils2iu( 50 ), Mils2iu( -200 ) } );
 
-            LIB_POLYLINE* line3 = new LIB_POLYLINE( aKPart );
-            aKPart->AddDrawItem( line3 );
+            LIB_POLYLINE* line3 = new LIB_POLYLINE( aKsymbol );
+            aKsymbol->AddDrawItem( line3 );
             line3->SetWidth( Mils2iu( 10 ) );
             line3->AddPoint( { Mils2iu( 0 ), Mils2iu( -100 ) } );
             line3->AddPoint( { Mils2iu( -50 ), Mils2iu( -200 ) } );
         }
         else // ASCH_POWER_PORT_STYLE::GOST_ARROW
         {
-            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
-            aKPart->AddDrawItem( line2 );
+            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+            aKsymbol->AddDrawItem( line2 );
             line2->SetWidth( Mils2iu( 10 ) );
             line2->AddPoint( { Mils2iu( -25 ), Mils2iu( -50 ) } );
             line2->AddPoint( { Mils2iu( 0 ), Mils2iu( -100 ) } );
@@ -1556,26 +1557,26 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_PART* aKPart, ASCH_POWER_PORT_STYLE
     else if( aStyle == ASCH_POWER_PORT_STYLE::GOST_POWER_GROUND
              || aStyle == ASCH_POWER_PORT_STYLE::GOST_EARTH )
     {
-        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKPart );
-        aKPart->AddDrawItem( line1 );
+        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKsymbol );
+        aKsymbol->AddDrawItem( line1 );
         line1->SetWidth( Mils2iu( 10 ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -160 ) } );
 
-        LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
-        aKPart->AddDrawItem( line2 );
+        LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+        aKsymbol->AddDrawItem( line2 );
         line2->SetWidth( Mils2iu( 10 ) );
         line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -160 ) } );
         line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -160 ) } );
 
-        LIB_POLYLINE* line3 = new LIB_POLYLINE( aKPart );
-        aKPart->AddDrawItem( line3 );
+        LIB_POLYLINE* line3 = new LIB_POLYLINE( aKsymbol );
+        aKsymbol->AddDrawItem( line3 );
         line3->SetWidth( Mils2iu( 10 ) );
         line3->AddPoint( { Mils2iu( -60 ), Mils2iu( -200 ) } );
         line3->AddPoint( { Mils2iu( 60 ), Mils2iu( -200 ) } );
 
-        LIB_POLYLINE* line4 = new LIB_POLYLINE( aKPart );
-        aKPart->AddDrawItem( line4 );
+        LIB_POLYLINE* line4 = new LIB_POLYLINE( aKsymbol );
+        aKsymbol->AddDrawItem( line4 );
         line4->SetWidth( Mils2iu( 10 ) );
         line4->AddPoint( { Mils2iu( -20 ), Mils2iu( -240 ) } );
         line4->AddPoint( { Mils2iu( 20 ), Mils2iu( -240 ) } );
@@ -1583,8 +1584,8 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_PART* aKPart, ASCH_POWER_PORT_STYLE
         if( aStyle == ASCH_POWER_PORT_STYLE::GOST_POWER_GROUND )
             return { 0, Mils2iu( 300 ) };
 
-        LIB_CIRCLE* circle = new LIB_CIRCLE( aKPart );
-        aKPart->AddDrawItem( circle );
+        LIB_CIRCLE* circle = new LIB_CIRCLE( aKsymbol );
+        aKsymbol->AddDrawItem( circle );
         circle->SetWidth( Mils2iu( 10 ) );
         circle->SetRadius( Mils2iu( 120 ) );
         circle->SetPosition( { Mils2iu( 0 ), Mils2iu( -160 ) } );
@@ -1593,14 +1594,14 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_PART* aKPart, ASCH_POWER_PORT_STYLE
     }
     else if( aStyle == ASCH_POWER_PORT_STYLE::GOST_BAR )
     {
-        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKPart );
-        aKPart->AddDrawItem( line1 );
+        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKsymbol );
+        aKsymbol->AddDrawItem( line1 );
         line1->SetWidth( Mils2iu( 10 ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -200 ) } );
 
-        LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
-        aKPart->AddDrawItem( line2 );
+        LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+        aKsymbol->AddDrawItem( line2 );
         line2->SetWidth( Mils2iu( 10 ) );
         line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -200 ) } );
         line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -200 ) } );
@@ -1615,14 +1616,14 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_PART* aKPart, ASCH_POWER_PORT_STYLE
                                RPT_SEVERITY_WARNING );
         }
 
-        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKPart );
-        aKPart->AddDrawItem( line1 );
+        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKsymbol );
+        aKsymbol->AddDrawItem( line1 );
         line1->SetWidth( Mils2iu( 10 ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -100 ) } );
 
-        LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
-        aKPart->AddDrawItem( line2 );
+        LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+        aKsymbol->AddDrawItem( line2 );
         line2->SetWidth( Mils2iu( 10 ) );
         line2->AddPoint( { Mils2iu( -50 ), Mils2iu( -100 ) } );
         line2->AddPoint( { Mils2iu( 50 ), Mils2iu( -100 ) } );
@@ -1638,29 +1639,30 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
 
     LIB_ID libId = AltiumToKiCadLibID( getLibName(), elem.text );
 
-    LIB_PART* kpart = nullptr;
+    LIB_SYMBOL* ksymbol = nullptr;
 
     const auto& symbol = m_powerSymbols.find( elem.text );
     if( symbol != m_powerSymbols.end() )
     {
-        kpart = symbol->second; // cache hit
+        ksymbol = symbol->second; // cache hit
     }
     else
     {
-        kpart = new LIB_PART( wxEmptyString );
-        kpart->SetPower();
-        kpart->SetName( elem.text );
-        kpart->GetReferenceField().SetText( "#PWR" );
-        kpart->GetValueField().SetText( elem.text );
-        kpart->GetValueField().SetVisible( true ); // TODO: why does this not work?
-        kpart->SetDescription( wxString::Format( _( "Power symbol creates a global label with name '%s'" ),
-                                                 elem.text ) );
-        kpart->SetKeyWords( "power-flag" );
-        kpart->SetLibId( libId );
+        ksymbol = new LIB_SYMBOL( wxEmptyString );
+        ksymbol->SetPower();
+        ksymbol->SetName( elem.text );
+        ksymbol->GetReferenceField().SetText( "#PWR" );
+        ksymbol->GetValueField().SetText( elem.text );
+        ksymbol->GetValueField().SetVisible( true ); // TODO: why does this not work?
+        ksymbol->SetDescription(
+                wxString::Format( _( "Power symbol creates a global label with name '%s'" ),
+                                  elem.text ) );
+        ksymbol->SetKeyWords( "power-flag" );
+        ksymbol->SetLibId( libId );
 
         // generate graphic
-        LIB_PIN* pin = new LIB_PIN( kpart );
-        kpart->AddDrawItem( pin );
+        LIB_PIN* pin = new LIB_PIN( ksymbol );
+        ksymbol->AddDrawItem( pin );
 
         pin->SetName( elem.text );
         pin->SetPosition( { 0, 0 } );
@@ -1670,13 +1672,13 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
         pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
         pin->SetVisible( false );
 
-        wxPoint valueFieldPos = HelperGeneratePowerPortGraphics( kpart, elem.style, m_reporter );
+        wxPoint valueFieldPos = HelperGeneratePowerPortGraphics( ksymbol, elem.style, m_reporter );
 
-        kpart->GetValueField().SetPosition( valueFieldPos );
+        ksymbol->GetValueField().SetPosition( valueFieldPos );
 
-        // this has to be done after parsing the LIB_PART!
-        m_pi->SaveSymbol( getLibFileName().GetFullPath(), kpart, m_properties.get() );
-        m_powerSymbols.insert( { elem.text, kpart } );
+        // this has to be done after parsing the LIB_SYMBOL!
+        m_pi->SaveSymbol( getLibFileName().GetFullPath(), ksymbol, m_properties.get() );
+        m_powerSymbols.insert( { elem.text, ksymbol } );
     }
 
     SCH_SHEET_PATH sheetpath;
@@ -1687,13 +1689,13 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
     component->SetRef( &sheetpath, "#PWR?" );
     component->SetValue( elem.text );
     component->SetLibId( libId );
-    component->SetLibSymbol( new LIB_PART( *kpart ) );
+    component->SetLibSymbol( new LIB_SYMBOL( *ksymbol ) );
 
     SCH_FIELD* valueField = component->GetField( VALUE_FIELD );
 
     // TODO: Why do I need to set those a second time?
     valueField->SetVisible( true );
-    valueField->SetPosition( kpart->GetValueField().GetPosition() );
+    valueField->SetPosition( ksymbol->GetValueField().GetPosition() );
 
     component->SetPosition( elem.location + m_sheetOffset );
 

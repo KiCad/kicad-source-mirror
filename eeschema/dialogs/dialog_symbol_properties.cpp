@@ -445,7 +445,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     if( m_symbol->GetUnitCount() > 1 )
     {
         for( int ii = 1; ii <= m_symbol->GetUnitCount(); ii++ )
-            m_unitChoice->Append( LIB_PART::SubReference( ii, false ) );
+            m_unitChoice->Append( LIB_SYMBOL::SubReference( ii, false ) );
 
         if( m_symbol->GetUnit() <= ( int )m_unitChoice->GetCount() )
             m_unitChoice->SetSelection( m_symbol->GetUnit() - 1 );
@@ -659,7 +659,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     for( unsigned i = 0;  i < m_fields->size();  ++i )
         m_fields->at( i ).Offset( m_symbol->GetPosition() );
 
-    LIB_PART* entry = GetParent()->GetLibPart( m_symbol->GetLibId() );
+    LIB_SYMBOL* entry = GetParent()->GetLibPart( m_symbol->GetLibId() );
 
     if( entry && entry->IsPower() )
         m_fields->at( VALUE_FIELD ).SetText( m_symbol->GetLibId().GetLibItemName() );

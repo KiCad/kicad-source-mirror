@@ -37,7 +37,7 @@
 #include <sch_io_mgr.h>
 #include <sch_screen.h>
 
-class LIB_PART;
+class LIB_SYMBOL;
 class PART_LIB;
 class PROGRESS_REPORTER;
 class SCH_PLUGIN;
@@ -92,7 +92,7 @@ public:
      */
     SYMBOL_LIB_TABLE_ROW* GetLibrary( const wxString& aLibrary ) const;
 
-    std::list<LIB_PART*> GetAliases( const wxString& aLibrary ) const;
+    std::list<LIB_SYMBOL*> GetAliases( const wxString& aLibrary ) const;
 
     /**
      * Create an empty library and adds it to the library table. The library file is created.
@@ -115,13 +115,13 @@ public:
      * The library buffer creates a copy of the part.
      * It is required to save the library to use the updated part in the schematic editor.
      */
-    bool UpdatePart( LIB_PART* aPart, const wxString& aLibrary );
+    bool UpdatePart( LIB_SYMBOL* aSymbol, const wxString& aLibrary );
 
     /**
      * Update the part buffer with a new version of the part when the name has changed.
      * The old library buffer will be deleted and a new one created with the new name.
      */
-    bool UpdatePartAfterRename( LIB_PART* aPart, const wxString& oldAlias,
+    bool UpdatePartAfterRename( LIB_SYMBOL* aSymbol, const wxString& oldAlias,
                                 const wxString& aLibrary );
 
     /**
@@ -131,16 +131,16 @@ public:
     bool RemovePart( const wxString& aName, const wxString& aLibrary );
 
     /**
-     * Return either an alias of a working LIB_PART copy, or alias of the original part if there
+     * Return either an alias of a working LIB_SYMBOL copy, or alias of the original part if there
      * is no working copy.
      */
-    LIB_PART* GetAlias( const wxString& aAlias, const wxString& aLibrary ) const;
+    LIB_SYMBOL* GetAlias( const wxString& aAlias, const wxString& aLibrary ) const;
 
     /**
      * Return the part copy from the buffer. In case it does not exist yet, the copy is created.
      * #SYMBOL_LIBRARY_MANAGER retains the ownership.
      */
-    LIB_PART* GetBufferedPart( const wxString& aAlias, const wxString& aLibrary );
+    LIB_SYMBOL* GetBufferedPart( const wxString& aAlias, const wxString& aLibrary );
 
     /**
      * Return the screen used to edit a specific part. #SYMBOL_LIBRARY_MANAGER retains the
@@ -270,18 +270,18 @@ private:
         return static_cast<SYMBOL_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
     }
 
-    ///< Class to store a working copy of a LIB_PART object and editor context.
+    ///< Class to store a working copy of a LIB_SYMBOL object and editor context.
     class PART_BUFFER
     {
     public:
-        PART_BUFFER( LIB_PART* aPart = nullptr, std::unique_ptr<SCH_SCREEN> aScreen = nullptr );
+        PART_BUFFER( LIB_SYMBOL* aSymbol = nullptr, std::unique_ptr<SCH_SCREEN> aScreen = nullptr );
         ~PART_BUFFER();
 
-        LIB_PART* GetPart() const { return m_part; }
-        void SetPart( LIB_PART* aPart );
+        LIB_SYMBOL* GetPart() const { return m_part; }
+        void SetPart( LIB_SYMBOL* aSymbol );
 
-        LIB_PART* GetOriginal() const { return m_original; }
-        void SetOriginal( LIB_PART* aPart );
+        LIB_SYMBOL* GetOriginal() const { return m_original; }
+        void SetOriginal( LIB_SYMBOL* aSymbol );
 
         bool IsModified() const;
         SCH_SCREEN* GetScreen() const { return m_screen.get(); }
@@ -305,8 +305,8 @@ private:
     private:
         std::unique_ptr<SCH_SCREEN> m_screen;
 
-        LIB_PART* m_part;        // Working copy
-        LIB_PART* m_original;    // Initial state of the part
+        LIB_SYMBOL* m_part;        // Working copy
+        LIB_SYMBOL* m_original;    // Initial state of the part
     };
 
 
@@ -335,16 +335,16 @@ private:
 
         int GetHash() const { return m_hash; }
 
-        ///< Return the working copy of a LIB_PART root object with specified alias.
-        LIB_PART* GetPart( const wxString& aAlias ) const;
+        ///< Return the working copy of a LIB_SYMBOL root object with specified alias.
+        LIB_SYMBOL* GetPart( const wxString& aAlias ) const;
 
         ///< Create a new buffer to store a part. LIB_BUFFER takes ownership of aCopy.
-        bool CreateBuffer( LIB_PART* aCopy, SCH_SCREEN* aScreen );
+        bool CreateBuffer( LIB_SYMBOL* aCopy, SCH_SCREEN* aScreen );
 
         ///< Update the buffered part with the contents of \a aCopy.
-        bool UpdateBuffer( PART_BUFFER::PTR aPartBuf, LIB_PART* aCopy );
+        bool UpdateBuffer( PART_BUFFER::PTR aSymbolBuf, LIB_SYMBOL* aCopy );
 
-        bool DeleteBuffer( PART_BUFFER::PTR aPartBuf );
+        bool DeleteBuffer( PART_BUFFER::PTR aSymbolBuf );
 
         void ClearDeletedBuffer()
         {
@@ -353,14 +353,14 @@ private:
 
         ///< Save stored modifications to Symbol Lib Table. It may result in saving the symbol
         ///< to disk as well, depending on the row properties.
-        bool SaveBuffer( PART_BUFFER::PTR aPartBuf, SYMBOL_LIB_TABLE* aLibTable );
+        bool SaveBuffer( PART_BUFFER::PTR aSymbolBuf, SYMBOL_LIB_TABLE* aLibTable );
 
         ///< Save stored modifications using a plugin. aBuffer decides whether the changes
         ///< should be cached or stored directly to the disk (for SCH_LEGACY_PLUGIN).
-        bool SaveBuffer( PART_BUFFER::PTR aPartBuf, const wxString& aFileName,
+        bool SaveBuffer( PART_BUFFER::PTR aSymbolBuf, const wxString& aFileName,
                          SCH_PLUGIN* aPlugin, bool aBuffer );
 
-        ///< Return a part buffer with LIB_PART holding a particular alias
+        ///< Return a part buffer with LIB_SYMBOL holding a particular alias
         PART_BUFFER::PTR GetBuffer( const wxString& aAlias ) const;
 
         ///< Return all buffered parts
@@ -399,7 +399,7 @@ private:
          * @param aParent is the #PART_BUFFER to check against.
          * @return the count of #PART_BUFFER objects removed from the library.
          */
-        int removeChildSymbols( PART_BUFFER::PTR aPartBuf );
+        int removeChildSymbols( PART_BUFFER::PTR aSymbolBuf );
 
         std::deque<PART_BUFFER::PTR> m_parts;
         std::deque<PART_BUFFER::PTR> m_deleted;  // Buffer for deleted parts until library is saved
@@ -408,9 +408,9 @@ private:
     };
 
     /**
-     * Return a set of #LIB_PART objects belonging to the original library.
+     * Return a set of #LIB_SYMBOL objects belonging to the original library.
      */
-    std::set<LIB_PART*> getOriginalParts( const wxString& aLibrary );
+    std::set<LIB_SYMBOL*> getOriginalParts( const wxString& aLibrary );
 
     /**
      * Return an existing library buffer or creates one to using Symbol Library Table to get

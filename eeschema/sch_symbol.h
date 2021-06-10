@@ -54,7 +54,7 @@ struct PICKED_SYMBOL;
 class SCH_SCREEN;
 class LIB_ITEM;
 class LIB_PIN;
-class LIB_PART;
+class LIB_SYMBOL;
 class NETLIST_OBJECT_LIST;
 class PART_LIB;
 class PART_LIBS;
@@ -66,7 +66,7 @@ class SYMBOL_LIB_TABLE;
 /// A container for several SCH_FIELD items
 typedef std::vector<SCH_FIELD>    SCH_FIELDS;
 
-typedef std::weak_ptr<LIB_PART>   PART_REF;
+typedef std::weak_ptr<LIB_SYMBOL> PART_REF;
 
 
 extern std::string toUTFTildaText( const wxString& txt );
@@ -91,10 +91,10 @@ public:
      * @param pos is the position of the symbol.
      * @param setNewItemFlag is used to set the symbol #IS_NEW and #IS_MOVING flags.
      */
-    SCH_SYMBOL( const LIB_PART& aPart, const LIB_ID& aLibId, const SCH_SHEET_PATH* aSheet,
+    SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId, const SCH_SHEET_PATH* aSheet,
                 int unit = 0, int convert = 0, const wxPoint& pos = wxPoint( 0, 0 ) );
 
-    SCH_SYMBOL( const LIB_PART& aPart, const SCH_SHEET_PATH* aSheet, const PICKED_SYMBOL& aSel,
+    SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet, const PICKED_SYMBOL& aSel,
                 const wxPoint& pos = wxPoint( 0, 0 ) );
 
     /**
@@ -161,26 +161,26 @@ public:
     wxString GetSchSymbolLibraryName() const;
     bool UseLibIdLookup() const { return m_schLibSymbolName.IsEmpty(); }
 
-    std::unique_ptr< LIB_PART >& GetPartRef() { return m_part; }
-    const std::unique_ptr< LIB_PART >& GetPartRef() const { return m_part; }
+    std::unique_ptr< LIB_SYMBOL >& GetPartRef() { return m_part; }
+    const std::unique_ptr< LIB_SYMBOL >& GetPartRef() const { return m_part; }
 
     /**
      * Set this schematic symbol library symbol reference to \a aLibSymbol
      *
      * The schematic symbol object owns \a aLibSymbol and the pin list will be updated
-     * accordingly.  The #LIB_PART object can be null to clear the library symbol link
-     * as well as the pin map.  If the #LIB_PART object is not null, it must be a root
+     * accordingly.  The #LIB_SYMBOL object can be null to clear the library symbol link
+     * as well as the pin map.  If the #LIB_SYMBOL object is not null, it must be a root
      * symbol.  Otherwise an assertion will be raised in debug builds and the library
      * symbol will be cleared.  The new file format will no longer require a cache
      * library so all library symbols must be valid.
      *
      * @note This is the only way to publicly set the library symbol for a schematic
-     *       symbol except for the ctors that take a LIB_PART reference.  All previous
+     *       symbol except for the ctors that take a LIB_SYMBOL reference.  All previous
      *       public resolvers have been deprecated.
      *
      * @param aLibSymbol is the library symbol to associate with this schematic symbol.
      */
-    void SetLibSymbol( LIB_PART* aLibSymbol );
+    void SetLibSymbol( LIB_SYMBOL* aLibSymbol );
 
     /**
      * Return information about the aliased parts
@@ -692,7 +692,7 @@ private:
     TRANSFORM   m_transform;    ///< The rotation/mirror transformation matrix.
     SCH_FIELDS  m_fields;       ///< Variable length list of fields.
 
-    std::unique_ptr< LIB_PART >            m_part;    // a flattened copy of the LIB_PART from
+    std::unique_ptr< LIB_SYMBOL >          m_part;    // a flattened copy of the LIB_SYMBOL from
                                                       // the PROJECT's libraries.
     std::vector<std::unique_ptr<SCH_PIN>>  m_pins;    // a SCH_PIN for every LIB_PIN (all units)
     std::unordered_map<LIB_PIN*, unsigned> m_pinMap;  // library pin pointer to SCH_PIN's index

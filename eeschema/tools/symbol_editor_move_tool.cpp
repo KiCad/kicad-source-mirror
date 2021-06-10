@@ -154,12 +154,13 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         if(  lib_item->Type() == LIB_PIN_T )
                         {
                             LIB_PIN* cur_pin = static_cast<LIB_PIN*>( lib_item );
-                            LIB_PART* part = m_frame->GetCurPart();
-                            std::vector<bool> got_unit( part->GetUnitCount() );
+                            LIB_SYMBOL* symbol = m_frame->GetCurPart();
+                            std::vector<bool> got_unit( symbol->GetUnitCount() );
 
                             got_unit[cur_pin->GetUnit()] = true;
 
-                            for( LIB_PIN* pin = part->GetNextPin(); pin; pin = part->GetNextPin( pin ) )
+                            for( LIB_PIN* pin = symbol->GetNextPin(); pin;
+                                 pin = symbol->GetNextPin( pin ) )
                             {
                                 if( !got_unit[pin->GetUnit()]
                                  && pin->GetPosition() == cur_pin->GetPosition()

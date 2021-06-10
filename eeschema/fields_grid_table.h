@@ -73,7 +73,7 @@ class FIELDS_GRID_TABLE : public wxGridTableBase, public std::vector<T>
 {
 public:
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
-                       LIB_PART* aPart );
+                       LIB_SYMBOL* aSymbol );
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
                        SCH_SHEET* aSheet );
     ~FIELDS_GRID_TABLE();
@@ -110,7 +110,7 @@ private:
     WX_GRID*        m_grid;
     KICAD_T         m_parentType;
     int             m_mandatoryFieldCount;
-    LIB_PART*       m_part;
+    LIB_SYMBOL*     m_part;
     wxString        m_curdir;
 
     SCH_FIELD_VALIDATOR   m_fieldNameValidator;

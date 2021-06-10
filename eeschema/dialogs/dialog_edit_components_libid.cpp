@@ -714,7 +714,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
             if( cmp.m_Row != row )
                 continue;
 
-            LIB_PART* symbol = nullptr;
+            LIB_SYMBOL* symbol = nullptr;
 
             try
             {

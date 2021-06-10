@@ -84,8 +84,8 @@ PART_LIB::~PART_LIB()
 
 void PART_LIB::Save( bool aSaveDocFile )
 {
-    wxCHECK_RET( m_plugin != NULL, wxString::Format( "no plugin defined for library `%s`.",
-                                                     fileName.GetFullPath() ) );
+    wxCHECK_RET( m_plugin != nullptr, wxString::Format( "no plugin defined for library `%s`.",
+                                                        fileName.GetFullPath() ) );
 
     PROPERTIES props;
 
@@ -153,19 +153,19 @@ void PART_LIB::GetPartNames( wxArrayString& aNames ) const
 }
 
 
-void PART_LIB::GetParts( std::vector<LIB_PART*>& aSymbols ) const
+void PART_LIB::GetParts( std::vector<LIB_SYMBOL*>& aSymbols ) const
 {
     m_plugin->EnumerateSymbolLib( aSymbols, fileName.GetFullPath(), m_properties.get() );
 
     std::sort( aSymbols.begin(), aSymbols.end(),
-            [](LIB_PART *lhs, LIB_PART *rhs) -> bool
+            [](LIB_SYMBOL *lhs, LIB_SYMBOL *rhs) -> bool
                 { return lhs->GetName() < rhs->GetName(); });
 }
 
 
-LIB_PART* PART_LIB::FindPart( const wxString& aName ) const
+LIB_SYMBOL* PART_LIB::FindPart( const wxString& aName ) const
 {
-    LIB_PART* symbol = m_plugin->LoadSymbol( fileName.GetFullPath(), aName, m_properties.get() );
+    LIB_SYMBOL* symbol = m_plugin->LoadSymbol( fileName.GetFullPath(), aName, m_properties.get() );
 
     // Set the library to this even though technically the legacy cache plugin owns the
     // symbols.  This allows the symbol library table conversion tool to determine the
@@ -177,16 +177,17 @@ LIB_PART* PART_LIB::FindPart( const wxString& aName ) const
 }
 
 
-LIB_PART* PART_LIB::FindPart( const LIB_ID& aLibId ) const
+LIB_SYMBOL* PART_LIB::FindPart( const LIB_ID& aLibId ) const
 {
     return FindPart( aLibId.Format().wx_str() );
 }
 
 
-void PART_LIB::AddPart( LIB_PART* aPart )
+void PART_LIB::AddPart( LIB_SYMBOL* aSymbol )
 {
     // add a clone, not the caller's copy, the plugin take ownership of the new symbol.
-    m_plugin->SaveSymbol( fileName.GetFullPath(), new LIB_PART( *aPart->SharedPtr().get(), this ),
+    m_plugin->SaveSymbol( fileName.GetFullPath(),
+                          new LIB_SYMBOL( *aSymbol->SharedPtr().get(), this ),
                           m_properties.get() );
 
     // If we are not buffering, the library file is updated immediately when the plugin
@@ -198,9 +199,9 @@ void PART_LIB::AddPart( LIB_PART* aPart )
 }
 
 
-LIB_PART* PART_LIB::RemovePart( LIB_PART* aEntry )
+LIB_SYMBOL* PART_LIB::RemovePart( LIB_SYMBOL* aEntry )
 {
-    wxCHECK_MSG( aEntry != NULL, NULL, "NULL pointer cannot be removed from library." );
+    wxCHECK_MSG( aEntry != nullptr, nullptr, "NULL pointer cannot be removed from library." );
 
     m_plugin->DeleteSymbol( fileName.GetFullPath(), aEntry->GetName(), m_properties.get() );
 
@@ -210,18 +211,18 @@ LIB_PART* PART_LIB::RemovePart( LIB_PART* aEntry )
         isModified = true;
 
     ++m_mod_hash;
-    return NULL;
+    return nullptr;
 }
 
 
-LIB_PART* PART_LIB::ReplacePart( LIB_PART* aOldPart, LIB_PART* aNewPart )
+LIB_SYMBOL* PART_LIB::ReplacePart( LIB_SYMBOL* aOldPart, LIB_SYMBOL* aNewPart )
 {
-    wxASSERT( aOldPart != NULL );
-    wxASSERT( aNewPart != NULL );
+    wxASSERT( aOldPart != nullptr );
+    wxASSERT( aNewPart != nullptr );
 
     m_plugin->DeleteSymbol( fileName.GetFullPath(), aOldPart->GetName(), m_properties.get() );
 
-    LIB_PART* my_part = new LIB_PART( *aNewPart, this );
+    LIB_SYMBOL* my_part = new LIB_SYMBOL( *aNewPart, this );
 
     m_plugin->SaveSymbol( fileName.GetFullPath(), my_part, m_properties.get() );
 
@@ -239,16 +240,16 @@ PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName )
 {
     std::unique_ptr<PART_LIB> lib = std::make_unique<PART_LIB>( SCH_LIB_TYPE::LT_EESCHEMA, aFileName );
 
-    std::vector<LIB_PART*> parts;
+    std::vector<LIB_SYMBOL*> parts;
     // This loads the library.
     lib->GetParts( parts );
 
-    // Now, set the LIB_PART m_library member but it will only be used
+    // Now, set the LIB_SYMBOL m_library member but it will only be used
     // when loading legacy libraries in the future. Once the symbols in the
     // schematic have a full #LIB_ID, this will not get called.
     for( size_t ii = 0; ii < parts.size(); ii++ )
     {
-        LIB_PART* part = parts[ii];
+        LIB_SYMBOL* part = parts[ii];
 
         part->SetLib( lib.get() );
     }
@@ -318,7 +319,7 @@ PART_LIB* PART_LIBS::FindLibrary( const wxString& aName )
             return &*it;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -330,7 +331,7 @@ PART_LIB* PART_LIBS::GetCacheLibrary()
             return &*it;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -342,7 +343,7 @@ PART_LIB* PART_LIBS::FindLibraryByFullFileName( const wxString& aFullFileName )
             return &*it;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -370,9 +371,9 @@ wxArrayString PART_LIBS::GetLibraryNames( bool aSorted )
 }
 
 
-LIB_PART* PART_LIBS::FindLibPart( const LIB_ID& aLibId, const wxString& aLibraryName )
+LIB_SYMBOL* PART_LIBS::FindLibPart( const LIB_ID& aLibId, const wxString& aLibraryName )
 {
-    LIB_PART* part = NULL;
+    LIB_SYMBOL* part = nullptr;
 
     for( PART_LIB& lib : *this )
     {
@@ -389,7 +390,7 @@ LIB_PART* PART_LIBS::FindLibPart( const LIB_ID& aLibId, const wxString& aLibrary
 }
 
 
-void PART_LIBS::FindLibraryNearEntries( std::vector<LIB_PART*>& aCandidates,
+void PART_LIBS::FindLibraryNearEntries( std::vector<LIB_SYMBOL*>& aCandidates,
                                         const wxString& aEntryName,
                                         const wxString& aLibraryName )
 {
@@ -488,7 +489,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
 
     wxArrayString   lib_names;
 
-    LibNamesAndPaths( aProject, false, NULL, &lib_names );
+    LibNamesAndPaths( aProject, false, nullptr, &lib_names );
 
     // Post symbol library table, this should be empty.  Only the cache library should get loaded.
     if( !lib_names.empty() )
@@ -496,7 +497,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
         APP_PROGRESS_DIALOG lib_dialog( _( "Loading Symbol Libraries" ),
                                         wxEmptyString,
                                         lib_names.GetCount(),
-                                        NULL,
+                                        nullptr,
                                         false,
                                         wxPD_APP_MODAL );
 

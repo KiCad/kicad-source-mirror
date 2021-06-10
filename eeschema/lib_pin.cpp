@@ -90,7 +90,7 @@ static int externalPinDecoSize( const RENDER_SETTINGS* aSettings, const LIB_PIN 
 }
 
 
-LIB_PIN::LIB_PIN( LIB_PART* aParent ) :
+LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent ) :
         LIB_ITEM( LIB_PIN_T, aParent ),
         m_orientation( PIN_RIGHT ),
         m_shape( GRAPHIC_PINSHAPE::LINE ),
@@ -117,7 +117,7 @@ LIB_PIN::LIB_PIN( LIB_PART* aParent ) :
 }
 
 
-LIB_PIN::LIB_PIN( LIB_PART* aParent, const wxString& aName, const wxString& aNumber,
+LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent, const wxString& aName, const wxString& aNumber,
                   int aOrientation, ELECTRICAL_PINTYPE aPinType, int aLength, int aNameTextSize,
                   int aNumTextSize, int aConvert, const wxPoint& aPos, int aUnit ) :
         LIB_ITEM( LIB_PIN_T, aParent ),
@@ -185,7 +185,7 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
     bool               showPinType = opts ? opts->show_elec_type : false;
     bool               show_connect_point = opts ? opts->show_connect_point : false;
 
-    LIB_PART* part = GetParent();
+    LIB_SYMBOL* part = GetParent();
 
     /* Calculate pin orient taking in account the component orientation. */
     int orient = PinDrawOrient( aTransform );

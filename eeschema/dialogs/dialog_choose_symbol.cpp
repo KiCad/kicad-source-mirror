@@ -396,7 +396,7 @@ void DIALOG_CHOOSE_SYMBOL::ShowFootprintFor( LIB_ID const& aLibId )
     if( !m_fp_preview || !m_fp_preview->IsInitialized() )
         return;
 
-    LIB_PART* symbol = nullptr;
+    LIB_SYMBOL* symbol = nullptr;
 
     try
     {
@@ -453,7 +453,7 @@ void DIALOG_CHOOSE_SYMBOL::PopulateFootprintSelector( LIB_ID const& aLibId )
 
     m_fp_sel_ctrl->ClearFilters();
 
-    LIB_PART* symbol = nullptr;
+    LIB_SYMBOL* symbol = nullptr;
 
     if( aLibId.IsValid() )
     {

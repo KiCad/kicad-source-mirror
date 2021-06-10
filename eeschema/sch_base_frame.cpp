@@ -43,12 +43,12 @@
 #include <tools/ee_selection_tool.h>
 
 
-LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
-                         wxWindow* aParent, bool aShowErrorMsg )
+LIB_SYMBOL* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
+                           wxWindow* aParent, bool aShowErrorMsg )
 {
     wxCHECK_MSG( aLibTable, nullptr, "Invalid symbol library table." );
 
-    LIB_PART* symbol = nullptr;
+    LIB_SYMBOL* symbol = nullptr;
 
     try
     {
@@ -192,7 +192,8 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 }
 
 
-LIB_PART* SCH_BASE_FRAME::GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib, bool aShowErrorMsg )
+LIB_SYMBOL* SCH_BASE_FRAME::GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib,
+                                        bool aShowErrorMsg )
 {
     PART_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : NULL;
 

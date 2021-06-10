@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,7 +88,7 @@ void SYMBOL_EDIT_FRAME::ImportPart()
     }
 
     wxString symbolName = symbols[0];
-    LIB_PART* entry = pi->LoadSymbol( fn.GetFullPath(), symbolName );
+    LIB_SYMBOL* entry = pi->LoadSymbol( fn.GetFullPath(), symbolName );
 
     if( m_libMgr->PartExists( symbols[0], libName ) )
     {
@@ -106,9 +106,9 @@ void SYMBOL_EDIT_FRAME::ImportPart()
 void SYMBOL_EDIT_FRAME::ExportPart()
 {
     wxString msg, title;
-    LIB_PART* part = getTargetPart();
+    LIB_SYMBOL* symbol = getTargetPart();
 
-    if( !part )
+    if( !symbol )
     {
         ShowInfoBarError( _( "There is no symbol selected to save." ) );
         return;
@@ -116,7 +116,7 @@ void SYMBOL_EDIT_FRAME::ExportPart()
 
     wxFileName fn;
 
-    fn.SetName( part->GetName().Lower() );
+    fn.SetName( symbol->GetName().Lower() );
     fn.SetExt( KiCadSymbolLibFileExtension );
 
     wxFileDialog dlg( this, _( "Export Symbol" ), m_mruPath, fn.GetFullName(),
@@ -128,7 +128,7 @@ void SYMBOL_EDIT_FRAME::ExportPart()
     fn = dlg.GetPath();
     fn.MakeAbsolute();
 
-    LIB_PART* old_part = NULL;
+    LIB_SYMBOL* old_symbol = NULL;
     SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
 
@@ -136,7 +136,7 @@ void SYMBOL_EDIT_FRAME::ExportPart()
     {
         try
         {
-            old_part = pi->LoadSymbol( fn.GetFullPath(), part->GetName() );
+            old_symbol = pi->LoadSymbol( fn.GetFullPath(), symbol->GetName() );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -146,10 +146,10 @@ void SYMBOL_EDIT_FRAME::ExportPart()
             return;
         }
 
-        if( old_part )
+        if( old_symbol )
         {
             msg.Printf( _( "Symbol \"%s\" already exists in \"%s\"." ),
-                        part->GetName(),
+                        symbol->GetName(),
                         fn.GetFullName() );
 
             KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
@@ -176,8 +176,8 @@ void SYMBOL_EDIT_FRAME::ExportPart()
 
         // The flattened symbol is most likely what the user would want.  As some point in
         // the future as more of the symbol library inheritance is implemented, this may have
-        // to be changes to save parts of inherited symbols.
-        pi->SaveSymbol( fn.GetFullPath(), part->Flatten().release() );
+        // to be changes to save symbols of inherited symbols.
+        pi->SaveSymbol( fn.GetFullPath(), symbol->Flatten().release() );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -190,7 +190,7 @@ void SYMBOL_EDIT_FRAME::ExportPart()
 
     m_mruPath = fn.GetPath();
 
-    msg.Printf( _( "Symbol \"%s\" saved in library \"%s\"" ), part->GetName(), fn.GetFullPath() );
+    msg.Printf( _( "Symbol \"%s\" saved in library \"%s\"" ), symbol->GetName(), fn.GetFullPath() );
     SetStatusText( msg );
 
     // See if the user wants it added to a library table (global or project)

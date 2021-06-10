@@ -146,19 +146,19 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
     if( hashIt == m_libHashes.end() )
     {
         // add a new library
-        for( LIB_PART* alias : m_libMgr->GetAliases( aLibNode.m_Name ) )
+        for( LIB_SYMBOL* alias : m_libMgr->GetAliases( aLibNode.m_Name ) )
             aLibNode.AddItem( alias );
     }
     else if( hashIt->second != m_libMgr->GetLibraryHash( aLibNode.m_Name ) )
     {
         // update an existing library
-        std::list<LIB_PART*> aliases = m_libMgr->GetAliases( aLibNode.m_Name );
+        std::list<LIB_SYMBOL*> aliases = m_libMgr->GetAliases( aLibNode.m_Name );
 
         // remove the common part from the aliases list
         for( auto nodeIt = aLibNode.m_Children.begin(); nodeIt != aLibNode.m_Children.end(); /**/ )
         {
             auto aliasIt = std::find_if( aliases.begin(), aliases.end(),
-                                         [&] ( const LIB_PART* a )
+                                         [&] ( const LIB_SYMBOL* a )
                                          {
                                              return a->GetName() == (*nodeIt)->m_Name;
                                          } );
@@ -179,7 +179,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
         }
 
         // now the aliases list contains only new aliases that need to be added to the tree
-        for( LIB_PART* alias : aliases )
+        for( LIB_SYMBOL* alias : aliases )
             aLibNode.AddItem( alias );
     }
 
@@ -287,7 +287,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
     if( aCol != 0 )
         return false;
 
-    LIB_PART* curPart = m_frame->GetCurPart();
+    LIB_SYMBOL* curSymbol = m_frame->GetCurPart();
 
     switch( node->m_Type )
     {
@@ -296,7 +296,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
         aAttr.SetBold( m_libMgr->IsLibraryModified( node->m_Name ) );
 
         // mark the current library with background color
-        if( curPart && curPart->GetLibId().GetLibNickname() == node->m_LibId.GetLibNickname() )
+        if( curSymbol && curSymbol->GetLibId().GetLibNickname() == node->m_LibId.GetLibNickname() )
         {
 #ifdef __WXGTK__
             // The native wxGTK+ impl ignores background colour, so set the text colour instead.
@@ -317,7 +317,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
         aAttr.SetItalic( !node->m_IsRoot );
 
         // mark the current part with background color
-        if( curPart && curPart->GetLibId() == node->m_LibId )
+        if( curSymbol && curSymbol->GetLibId() == node->m_LibId )
         {
 #ifdef __WXGTK__
         // The native wxGTK+ impl ignores background colour, so set the text colour instead.

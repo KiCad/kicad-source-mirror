@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,10 +37,10 @@ void SYMBOL_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aUndoType
     if( !aItem )
         return;
 
-    LIB_PART*          copyItem;
+    LIB_SYMBOL*        copyItem;
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
 
-    copyItem = new LIB_PART( * (LIB_PART*) aItem );
+    copyItem = new LIB_SYMBOL( * (LIB_SYMBOL*) aItem );
 
     // Clear current flags (which can be temporary set by a current edit command).
     copyItem->ClearTempFlags();
@@ -67,36 +67,36 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromRedoList()
     PICKED_ITEMS_LIST* redoCommand = PopCommandFromRedoList();
     ITEM_PICKER redoWrapper = redoCommand->PopItem();
     delete redoCommand;
-    LIB_PART* part = (LIB_PART*) redoWrapper.GetItem();
-    wxCHECK( part, /* void */ );
-    part->ClearFlags( UR_TRANSIENT );
+    LIB_SYMBOL* symbol = (LIB_SYMBOL*) redoWrapper.GetItem();
+    wxCHECK( symbol, /* void */ );
+    symbol->ClearFlags( UR_TRANSIENT );
     UNDO_REDO undoRedoType = redoWrapper.GetStatus();
 
-    // Store the current part in the undo buffer
+    // Store the current symbol in the undo buffer
     PICKED_ITEMS_LIST* undoCommand = new PICKED_ITEMS_LIST();
-    LIB_PART* oldPart = m_my_part;
-    oldPart->SetFlags( UR_TRANSIENT );
-    ITEM_PICKER undoWrapper( GetScreen(), oldPart, undoRedoType );
+    LIB_SYMBOL* oldSymbol = m_my_part;
+    oldSymbol->SetFlags( UR_TRANSIENT );
+    ITEM_PICKER undoWrapper( GetScreen(), oldSymbol, undoRedoType );
     undoCommand->PushItem( undoWrapper );
     PushCommandToUndoList( undoCommand );
 
-    // Do not delete the previous part by calling SetCurPart( part )
-    // which calls delete <previous part>.
-    // <previous part> is now put in undo list and is owned by this list
-    // Just set the current part to the part which come from the redo list
-    m_my_part = part;
+    // Do not delete the previous symbol by calling SetCurPart( symbol )
+    // which calls delete <previous symbol>.
+    // <previous symbol> is now put in undo list and is owned by this list
+    // Just set the current symbol to the symbol which come from the redo list
+    m_my_part = symbol;
 
     if( undoRedoType == UNDO_REDO::LIB_RENAME )
     {
         wxString lib = GetCurLib();
-        m_libMgr->UpdatePartAfterRename( part, oldPart->GetName(), lib );
+        m_libMgr->UpdatePartAfterRename( symbol, oldSymbol->GetName(), lib );
 
-        // Reselect the renamed part
-        m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
+        // Reselect the renamed symbol
+        m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, symbol->GetName() ) );
     }
 
     RebuildSymbolUnitsList();
-    SetShowDeMorgan( part->HasConversion() );
+    SetShowDeMorgan( symbol->HasConversion() );
     updateTitle();
 
     RebuildView();
@@ -115,36 +115,36 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
     PICKED_ITEMS_LIST* undoCommand = PopCommandFromUndoList();
     ITEM_PICKER undoWrapper = undoCommand->PopItem();
     delete undoCommand;
-    LIB_PART* part = (LIB_PART*) undoWrapper.GetItem();
-    wxCHECK( part, /* void */ );
-    part->ClearFlags( UR_TRANSIENT );
+    LIB_SYMBOL* symbol = (LIB_SYMBOL*) undoWrapper.GetItem();
+    wxCHECK( symbol, /* void */ );
+    symbol->ClearFlags( UR_TRANSIENT );
     UNDO_REDO undoRedoType = undoWrapper.GetStatus();
 
-    // Store the current part in the redo buffer
+    // Store the current symbol in the redo buffer
     PICKED_ITEMS_LIST* redoCommand = new PICKED_ITEMS_LIST();
-    LIB_PART* oldPart = m_my_part;
-    oldPart->SetFlags( UR_TRANSIENT );
-    ITEM_PICKER redoWrapper( GetScreen(), oldPart, undoRedoType );
+    LIB_SYMBOL* oldSymbol = m_my_part;
+    oldSymbol->SetFlags( UR_TRANSIENT );
+    ITEM_PICKER redoWrapper( GetScreen(), oldSymbol, undoRedoType );
     redoCommand->PushItem( redoWrapper );
     PushCommandToRedoList( redoCommand );
 
-    // Do not delete the previous part by calling SetCurPart( part ),
-    // which calls delete <previous part>.
-    // <previous part> is now put in redo list and is owned by this list.
-    // Just set the current part to the part which come from the undo list
-    m_my_part = part;
+    // Do not delete the previous symbol by calling SetCurPart( symbol ),
+    // which calls delete <previous symbol>.
+    // <previous symbol> is now put in redo list and is owned by this list.
+    // Just set the current symbol to the symbol which come from the undo list
+    m_my_part = symbol;
 
     if( undoRedoType == UNDO_REDO::LIB_RENAME )
     {
         wxString lib = GetCurLib();
-        m_libMgr->UpdatePartAfterRename( part, oldPart->GetName(), lib );
+        m_libMgr->UpdatePartAfterRename( symbol, oldSymbol->GetName(), lib );
 
-        // Reselect the renamed part
-        m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
+        // Reselect the renamed symbol
+        m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, symbol->GetName() ) );
     }
 
     RebuildSymbolUnitsList();
-    SetShowDeMorgan( part->HasConversion() );
+    SetShowDeMorgan( symbol->HasConversion() );
     updateTitle();
 
     RebuildView();
@@ -165,15 +165,15 @@ void SYMBOL_EDIT_FRAME::RollbackSymbolFromUndo()
 
     ITEM_PICKER undoWrapper = undoCommand->PopItem();
     delete undoCommand;
-    LIB_PART* part = (LIB_PART*) undoWrapper.GetItem();
-    part->ClearFlags( UR_TRANSIENT );
-    SetCurPart( part, false );
+    LIB_SYMBOL* symbol = (LIB_SYMBOL*) undoWrapper.GetItem();
+    symbol->ClearFlags( UR_TRANSIENT );
+    SetCurPart( symbol, false );
 
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     selTool->RebuildSelection();
 
     RebuildSymbolUnitsList();
-    SetShowDeMorgan( part->HasConversion() );
+    SetShowDeMorgan( symbol->HasConversion() );
 
     RebuildView();
 }

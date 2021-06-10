@@ -86,8 +86,8 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
 
     // Verify some values, because the config file can be edited by hand,
     // and have bad values:
-    LIB_PART::SetSubpartIdNotation( LIB_PART::GetSubpartIdSeparator(),
-                                    LIB_PART::GetSubpartFirstId() );
+    LIB_SYMBOL::SetSubpartIdNotation( LIB_SYMBOL::GetSubpartIdSeparator(),
+                                      LIB_SYMBOL::GetSubpartFirstId() );
 
     // Load the drawing sheet description file, from the filename stored in
     // BASE_SCREEN::m_DrawingSheetFileName, read in config project file

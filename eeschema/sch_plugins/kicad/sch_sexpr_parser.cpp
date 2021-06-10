@@ -91,7 +91,7 @@ bool SCH_SEXPR_PARSER::IsTooRecent() const
 }
 
 
-void SCH_SEXPR_PARSER::ParseLib( LIB_PART_MAP& aSymbolLibMap )
+void SCH_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
 {
     T token;
 
@@ -110,7 +110,7 @@ void SCH_SEXPR_PARSER::ParseLib( LIB_PART_MAP& aSymbolLibMap )
         {
             m_unit = 1;
             m_convert = 1;
-            LIB_PART* symbol = ParseSymbol( aSymbolLibMap, m_requiredVersion );
+            LIB_SYMBOL* symbol = ParseSymbol( aSymbolLibMap, m_requiredVersion );
             aSymbolLibMap[symbol->GetName()] = symbol;
         }
         else
@@ -121,7 +121,7 @@ void SCH_SEXPR_PARSER::ParseLib( LIB_PART_MAP& aSymbolLibMap )
 }
 
 
-LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, int aFileVersion )
+LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aFileVersion )
 {
     wxCHECK_MSG( CurTok() == T_symbol, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a symbol." ) );
@@ -132,7 +132,7 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, int aFileV
     wxString error;
     LIB_ITEM* item;
     LIB_FIELD* field;
-    std::unique_ptr<LIB_PART> symbol = std::make_unique<LIB_PART>( wxEmptyString );
+    std::unique_ptr<LIB_SYMBOL> symbol = std::make_unique<LIB_SYMBOL>( wxEmptyString );
     std::set<int> fieldIDsRead;
 
     m_requiredVersion = aFileVersion;
@@ -717,7 +717,7 @@ void SCH_SEXPR_PARSER::parseHeader( TSCHEMATIC_T::T aHeaderType, int aFileVersio
 }
 
 
-void SCH_SEXPR_PARSER::parsePinNames( std::unique_ptr<LIB_PART>& aSymbol )
+void SCH_SEXPR_PARSER::parsePinNames( std::unique_ptr<LIB_SYMBOL>& aSymbol )
 {
     wxCHECK_RET( CurTok() == T_pin_names,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
@@ -755,7 +755,7 @@ void SCH_SEXPR_PARSER::parsePinNames( std::unique_ptr<LIB_PART>& aSymbol )
 }
 
 
-LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
+LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol )
 {
     wxCHECK_MSG( CurTok() == T_property, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a property." ) );
@@ -764,7 +764,8 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
     wxString error;
     wxString name;
     wxString value;
-    std::unique_ptr<LIB_FIELD> field = std::make_unique<LIB_FIELD>( aSymbol.get(), MANDATORY_FIELDS );
+    std::unique_ptr<LIB_FIELD> field = std::make_unique<LIB_FIELD>( aSymbol.get(),
+                                                                    MANDATORY_FIELDS );
 
     T token = NextTok();
 
@@ -2134,7 +2135,7 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
         case T_lib_symbols:
         {
             // Dummy map.  No derived symbols are allowed in the library cache.
-            LIB_PART_MAP symbolLibMap;
+            LIB_SYMBOL_MAP symbolLibMap;
 
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {

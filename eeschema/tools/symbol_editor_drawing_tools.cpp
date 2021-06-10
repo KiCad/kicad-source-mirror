@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,9 +148,9 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
-            LIB_PART* part = m_frame->GetCurPart();
+            LIB_SYMBOL* symbol = m_frame->GetCurPart();
 
-            if( !part )
+            if( !symbol )
                 continue;
 
             // First click creates...
@@ -162,13 +162,13 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                 case LIB_PIN_T:
                 {
-                    item = pinTool->CreatePin( wxPoint( cursorPos.x, -cursorPos.y ), part );
+                    item = pinTool->CreatePin( wxPoint( cursorPos.x, -cursorPos.y ), symbol );
                     g_lastPinWeakPtr = item;
                     break;
                 }
                 case LIB_TEXT_T:
                 {
-                    LIB_TEXT* text = new LIB_TEXT( part );
+                    LIB_TEXT* text = new LIB_TEXT( symbol );
 
                     text->SetPosition( wxPoint( cursorPos.x, -cursorPos.y ) );
                     text->SetTextSize( wxSize( Mils2iu( settings->m_Defaults.text_size ),
@@ -207,7 +207,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             // ... and second click places:
             else
             {
-                m_frame->SaveCopyInUndoList( part );
+                m_frame->SaveCopyInUndoList( symbol );
 
                 switch( item->Type() )
                 {
@@ -215,7 +215,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     pinTool->PlacePin( (LIB_PIN*) item );
                     break;
                 case LIB_TEXT_T:
-                    part->AddDrawItem( (LIB_TEXT*) item );
+                    symbol->AddDrawItem( (LIB_TEXT*) item );
                     break;
                 default:
                     wxFAIL_MSG( "TwoClickPlace(): unknown type" );
@@ -274,7 +274,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    LIB_PART* part = m_frame->GetCurPart();
+    LIB_SYMBOL* symbol = m_frame->GetCurPart();
     LIB_ITEM* item = nullptr;
 
     // Prime the pump
@@ -338,17 +338,17 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) && !item )
         {
-            if( !part )
+            if( !symbol )
                 continue;
 
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
             switch( type )
             {
-            case LIB_ARC_T:       item = new LIB_ARC( part );       break;
-            case LIB_CIRCLE_T:    item = new LIB_CIRCLE( part );    break;
-            case LIB_POLYLINE_T:  item = new LIB_POLYLINE( part );  break;
-            case LIB_RECTANGLE_T: item = new LIB_RECTANGLE( part ); break;
+            case LIB_ARC_T:       item = new LIB_ARC( symbol );       break;
+            case LIB_CIRCLE_T:    item = new LIB_CIRCLE( symbol );    break;
+            case LIB_POLYLINE_T:  item = new LIB_POLYLINE( symbol );  break;
+            case LIB_RECTANGLE_T: item = new LIB_RECTANGLE( symbol ); break;
             default: break;     // keep compiler quiet
             }
 
@@ -377,8 +377,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 item->ClearEditFlags();
                 m_view->ClearPreview();
 
-                m_frame->SaveCopyInUndoList( part );
-                part->AddDrawItem( item );
+                m_frame->SaveCopyInUndoList( symbol );
+                symbol->AddDrawItem( item );
                 item = nullptr;
 
                 m_frame->RebuildView();
@@ -453,15 +453,15 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
-            LIB_PART* part = m_frame->GetCurPart();
+            LIB_SYMBOL* symbol = m_frame->GetCurPart();
 
-            if( !part )
+            if( !symbol )
                 continue;
 
             VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
             wxPoint  offset( -cursorPos.x, cursorPos.y );
 
-            part->SetOffset( offset );
+            symbol->SetOffset( offset );
 
             // Refresh the view without changing the viewport
             auto center = m_view->GetCenter();
@@ -489,14 +489,14 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
 {
     SYMBOL_EDITOR_PIN_TOOL* pinTool = m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>();
-    LIB_PART*     part = m_frame->GetCurPart();
+    LIB_SYMBOL*   symbol = m_frame->GetCurPart();
     LIB_PIN*      sourcePin = nullptr;
 
-    if( !part )
+    if( !symbol )
         return 0;
 
     // See if we have a pin matching our weak ptr
-    for( LIB_PIN* test = part->GetNextPin();  test;  test = part->GetNextPin( test ) )
+    for( LIB_PIN* test = symbol->GetNextPin();  test;  test = symbol->GetNextPin( test ) )
     {
         if( (void*) test == g_lastPinWeakPtr )
             sourcePin = test;

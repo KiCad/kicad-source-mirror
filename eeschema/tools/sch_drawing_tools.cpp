@@ -259,13 +259,14 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     // thus can creating autopan issues. Warp the mouse to the canvas centre
                     controls->WarpCursor( canvas_area.Centre(), false );
 
-                LIB_PART* part = sel.LibId.IsValid() ? m_frame->GetLibPart( sel.LibId ) : nullptr;
+                LIB_SYMBOL* libSymbol = sel.LibId.IsValid() ?
+                                        m_frame->GetLibPart( sel.LibId ) : nullptr;
 
-                if( !part )
+                if( !libSymbol )
                     continue;
 
                 wxPoint pos( cursorPos );
-                symbol = new SCH_SYMBOL( *part, &m_frame->GetCurrentSheet(), sel, pos );
+                symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, pos );
                 addSymbol( symbol );
 
                 // Update cursor now that we have a symbol
@@ -377,7 +378,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    // Add all the drawable parts to preview
+    // Add all the drawable symbols to preview
     if( image )
     {
         image->SetPosition( (wxPoint)cursorPos );

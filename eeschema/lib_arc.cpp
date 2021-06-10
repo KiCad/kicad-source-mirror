@@ -44,7 +44,7 @@ static inline wxPoint twoPointVector( const wxPoint &startPoint, const wxPoint &
 }
 
 
-LIB_ARC::LIB_ARC( LIB_PART*      aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
+LIB_ARC::LIB_ARC( LIB_SYMBOL* aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
 {
     m_Radius        = 0;
     m_t1            = 0;

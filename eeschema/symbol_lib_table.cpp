@@ -109,6 +109,7 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
     if( in->CurTok() != T_sym_lib_table )
     {
         in->NeedLEFT();
+
         if( ( tok = in->NextTok() ) != T_sym_lib_table )
             in->Expecting( T_sym_lib_table );
     }
@@ -317,7 +318,7 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname, bool
 }
 
 
-void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_PART*>& aSymbolList,
+void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                       const wxString& aNickname, bool aPowerSymbolsOnly )
 {
     SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
@@ -339,47 +340,47 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_PART*>& aSymbolList,
     // Therefore footprints cannot know their own library nickname when residing in
     // a symbol library.
     // Only at this API layer can we tell the symbol about its actual library nickname.
-    for( LIB_PART* part : aSymbolList )
+    for( LIB_SYMBOL* symbol : aSymbolList )
     {
-        LIB_ID id = part->GetLibId();
+        LIB_ID id = symbol->GetLibId();
 
         id.SetLibNickname( row->GetNickName() );
-        part->SetLibId( id );
+        symbol->SetLibId( id );
     }
 }
 
 
-LIB_PART* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxString& aSymbolName )
+LIB_SYMBOL* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxString& aSymbolName )
 {
     SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
 
     if( !row || !row->plugin )
         return nullptr;
 
-    LIB_PART* part = row->plugin->LoadSymbol( row->GetFullURI( true ), aSymbolName,
-                                              row->GetProperties() );
+    LIB_SYMBOL* symbol = row->plugin->LoadSymbol( row->GetFullURI( true ), aSymbolName,
+                                                  row->GetProperties() );
 
-    if( part == nullptr )
-        return part;
+    if( symbol == nullptr )
+        return symbol;
 
     // The library cannot know its own name, because it might have been renamed or moved.
     // Therefore footprints cannot know their own library nickname when residing in
     // a symbol library.
     // Only at this API layer can we tell the symbol about its actual library nickname.
-    if( part )
+    if( symbol )
     {
-        LIB_ID id = part->GetLibId();
+        LIB_ID id = symbol->GetLibId();
 
         id.SetLibNickname( row->GetNickName() );
-        part->SetLibId( id );
+        symbol->SetLibId( id );
     }
 
-    return part;
+    return symbol;
 }
 
 
 SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname,
-                                                       const LIB_PART* aSymbol, bool aOverwrite )
+                                                       const LIB_SYMBOL* aSymbol, bool aOverwrite )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, SAVE_SKIPPED );
@@ -394,9 +395,9 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
 
         wxString name = aSymbol->GetLibId().GetLibItemName();
 
-        std::unique_ptr< LIB_PART > symbol( row->plugin->LoadSymbol( row->GetFullURI( true ),
-                                                                     name,
-                                                                     row->GetProperties() ) );
+        std::unique_ptr< LIB_SYMBOL > symbol( row->plugin->LoadSymbol( row->GetFullURI( true ),
+                                                                       name,
+                                                                       row->GetProperties() ) );
 
         if( symbol.get() )
             return SAVE_SKIPPED;
@@ -455,7 +456,7 @@ void SYMBOL_LIB_TABLE::CreateSymbolLib( const wxString& aNickname )
 }
 
 
-LIB_PART* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLibId )
+LIB_SYMBOL* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLibId )
 {
     wxString   nickname = aLibId.GetLibNickname();
     wxString   name     = aLibId.GetLibItemName();
@@ -475,7 +476,7 @@ LIB_PART* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLibId
         {
             // FootprintLoad() returns NULL on not found, does not throw exception
             // unless there's an IO_ERROR.
-            LIB_PART* ret = LoadSymbol( nicks[i], name );
+            LIB_SYMBOL* ret = LoadSymbol( nicks[i], name );
 
             if( ret )
                 return ret;

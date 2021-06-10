@@ -29,7 +29,7 @@
 
 #include <wx/string.h>
 
-class LIB_PART;
+class LIB_SYMBOL;
 class PROGRESS_REPORTER;
 class SYMBOL_LIB_TABLE;
 
@@ -47,7 +47,7 @@ public:
      */
     SYMBOL_ASYNC_LOADER( const std::vector<wxString>& aNicknames,
                          SYMBOL_LIB_TABLE* aTable, bool aOnlyPowerSymbols = false,
-                         std::unordered_map<wxString, std::vector<LIB_PART*>>* aOutput = nullptr,
+                         std::unordered_map<wxString, std::vector<LIB_SYMBOL*>>* aOutput = nullptr,
                          PROGRESS_REPORTER* aReporter = nullptr );
 
     ~SYMBOL_ASYNC_LOADER();
@@ -74,7 +74,7 @@ public:
     const wxString& GetErrors() const { return m_errors; }
 
     ///< Represents a pair of <nickname, loaded parts list>
-    typedef std::pair<wxString, std::vector<LIB_PART*>> LOADED_PAIR;
+    typedef std::pair<wxString, std::vector<LIB_SYMBOL*>> LOADED_PAIR;
 
 private:
     ///< Worker job that loads libraries and returns a list of pairs of <nickname, loaded parts>
@@ -90,7 +90,7 @@ private:
     bool m_onlyPowerSymbols;
 
     ///< Handle to map that will be filled with the loaded parts per library
-    std::unordered_map<wxString, std::vector<LIB_PART*>>* m_output;
+    std::unordered_map<wxString, std::vector<LIB_SYMBOL*>>* m_output;
 
     ///< Progress reporter (may be null)
     PROGRESS_REPORTER* m_reporter;

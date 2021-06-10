@@ -772,12 +772,12 @@ bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
 
     if( m_isSymbolEditor )
     {
-        LIB_PART* part = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
+        LIB_SYMBOL* symbol = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
 
-        if( !part )
+        if( !symbol )
             return false;
 
-        aCollector.Collect( part->GetDrawItems(), aFilterList, (wxPoint) aWhere, m_unit,
+        aCollector.Collect( symbol->GetDrawItems(), aFilterList, (wxPoint) aWhere, m_unit,
                             m_convert );
     }
     else
@@ -1508,7 +1508,7 @@ void EE_SELECTION_TOOL::RebuildSelection()
 
     if( m_isSymbolEditor )
     {
-        LIB_PART* start = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
+        LIB_SYMBOL* start = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
 
         for( LIB_ITEM& item : start->GetDrawItems() )
         {
@@ -1723,7 +1723,7 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
             return false;
         break;
 
-    case LIB_PART_T:    // In symbol_editor we do not want to select the symbol itself.
+    case LIB_SYMBOL_T:    // In symbol_editor we do not want to select the symbol itself.
         return false;
 
     case LIB_FIELD_T:   // LIB_FIELD object can always be edited.
@@ -1805,7 +1805,7 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
         aGroup->Add( aItem );
 
     // Highlight pins and fields.  (All the other symbol children are currently only
-    // represented in the LIB_PART and will inherit the settings of the parent symbol.)
+    // represented in the LIB_SYMBOL and will inherit the settings of the parent symbol.)
     if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( aItem ) )
     {
         sch_item->RunOnChildren(
@@ -1838,7 +1838,7 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
         aGroup->Remove( aItem );
 
     // Unhighlight pins and fields.  (All the other symbol children are currently only
-    // represented in the LIB_PART.)
+    // represented in the LIB_SYMBOL.)
     if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( aItem ) )
     {
         sch_item->RunOnChildren(

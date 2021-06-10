@@ -379,9 +379,9 @@ int SYMBOL_EDITOR_CONTROL::ExportView( const TOOL_EVENT& aEvent )
         return 0;
 
     SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-    LIB_PART*          part = editFrame->GetCurPart();
+    LIB_SYMBOL*        symbol = editFrame->GetCurPart();
 
-    if( !part )
+    if( !symbol )
     {
         wxMessageBox( _( "No symbol to export" ) );
         return 0;
@@ -389,7 +389,7 @@ int SYMBOL_EDITOR_CONTROL::ExportView( const TOOL_EVENT& aEvent )
 
     wxString   file_ext = wxT( "png" );
     wxString   mask = wxT( "*." ) + file_ext;
-    wxFileName fn( part->GetName() );
+    wxFileName fn( symbol->GetName() );
     fn.SetExt( "png" );
 
     wxString projectPath = wxPathOnly( m_frame->Prj().GetProjectFullName() );
@@ -419,9 +419,9 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
         return 0;
 
     SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-    LIB_PART*          part = editFrame->GetCurPart();
+    LIB_SYMBOL*        symbol = editFrame->GetCurPart();
 
-    if( !part )
+    if( !symbol )
     {
         wxMessageBox( _( "No symbol to export" ) );
         return 0;
@@ -429,7 +429,7 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
 
     wxString   file_ext = wxT( "svg" );
     wxString   mask     = wxT( "*." ) + file_ext;
-    wxFileName fn( part->GetName() );
+    wxFileName fn( symbol->GetName() );
     fn.SetExt( file_ext );
 
     wxString pro_dir = wxPathOnly( m_frame->Prj().GetProjectFullName() );
@@ -442,7 +442,7 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
         PAGE_INFO pageSave = editFrame->GetScreen()->GetPageSettings();
         PAGE_INFO pageTemp = pageSave;
 
-        wxSize symbolSize = part->GetUnitBoundingBox( editFrame->GetUnit(),
+        wxSize symbolSize = symbol->GetUnitBoundingBox( editFrame->GetUnit(),
                                                       editFrame->GetConvert() ).GetSize();
 
         // Add a small margin to the plot bounding box
@@ -460,20 +460,20 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
 {
-    LIB_PART* part = nullptr;
-    LIB_ID    libId;
-    int       unit, convert;
+    LIB_SYMBOL* libSymbol = nullptr;
+    LIB_ID      libId;
+    int         unit, convert;
 
     if( m_isSymbolEditor )
     {
         SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
 
-        part = editFrame->GetCurPart();
+        libSymbol = editFrame->GetCurPart();
         unit = editFrame->GetUnit();
         convert = editFrame->GetConvert();
 
-        if( part )
-            libId = part->GetLibId();
+        if( libSymbol )
+            libId = libSymbol->GetLibId();
     }
     else
     {
@@ -488,16 +488,16 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
         }
         else
         {
-            part    = viewerFrame->GetSelectedSymbol();
-            unit    = viewerFrame->GetUnit();
-            convert = viewerFrame->GetConvert();
+            libSymbol = viewerFrame->GetSelectedSymbol();
+            unit      = viewerFrame->GetUnit();
+            convert   = viewerFrame->GetConvert();
 
-            if( part )
-                libId = part->GetLibId();
+            if( libSymbol )
+                libId = libSymbol->GetLibId();
         }
     }
 
-    if( part )
+    if( libSymbol )
     {
         SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH, false );
 
@@ -507,9 +507,9 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
             return 0;
         }
 
-        wxCHECK( part->GetLibId().IsValid(), 0 );
+        wxCHECK( libSymbol->GetLibId().IsValid(), 0 );
 
-        SCH_SYMBOL* symbol = new SCH_SYMBOL( *part, libId, &schframe->GetCurrentSheet(),
+        SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schframe->GetCurrentSheet(),
                                              unit, convert );
 
         symbol->SetParent( schframe->GetScreen() );

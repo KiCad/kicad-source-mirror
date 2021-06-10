@@ -217,11 +217,11 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins()
 }
 
 
-void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSymbol,
-                                                  LIB_PART* aPart, SCH_SHEET_PATH* aSheetPath,
+void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol, LIB_SYMBOL* aLibSymbol,
+                                                  SCH_SHEET_PATH* aSheetPath,
                                                   bool aKeepUnconnectedPins )
 {
-    wxString    ref = aSymbol->GetRef( aSheetPath );
+    wxString    ref = aSchSymbol->GetRef( aSheetPath );
     wxString    ref2;
 
     SCH_SHEET_LIST    sheetList = m_schematic->GetSheets();

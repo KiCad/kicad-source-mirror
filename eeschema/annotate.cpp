@@ -52,7 +52,7 @@ void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
         wxString ref = symbol->GetRef( curr_sheetpath );
 
         if( symbol->GetUnitCount() > 1 )
-            ref << LIB_PART::SubReference( symbol->GetUnitSelection( curr_sheetpath ) );
+            ref << LIB_SYMBOL::SubReference( symbol->GetUnitSelection( curr_sheetpath ) );
 
         if( symbol->IsAnnotated( curr_sheetpath ) )
             aMap[ curr_full_uuid.AsString() ] = ref;
@@ -270,7 +270,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
         wxString  newRef  = symbol->GetRef( sheet );
 
         if( symbol->GetUnitCount() > 1 )
-            newRef << LIB_PART::SubReference( symbol->GetUnitSelection( sheet ) );
+            newRef << LIB_SYMBOL::SubReference( symbol->GetUnitSelection( sheet ) );
 
         wxString msg;
 
@@ -282,7 +282,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
             if( symbol->GetUnitCount() > 1 )
                 msg.Printf( _( "Updated %s (unit %s) from %s to %s" ),
                             symbol->GetValue( sheet, true ),
-                            LIB_PART::SubReference( symbol->GetUnit(), false ),
+                            LIB_SYMBOL::SubReference( symbol->GetUnit(), false ),
                             prevRef,
                             newRef );
             else
@@ -296,7 +296,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
             if( symbol->GetUnitCount() > 1 )
                 msg.Printf( _( "Annotated %s (unit %s) as %s" ),
                             symbol->GetValue( sheet, true ),
-                            LIB_PART::SubReference( symbol->GetUnit(), false ),
+                            LIB_SYMBOL::SubReference( symbol->GetUnit(), false ),
                             newRef );
             else
                 msg.Printf( _( "Annotated %s as %s" ),

@@ -55,7 +55,7 @@ std::string toUTFTildaText( const wxString& txt )
 
 
 /**
- * Used to draw a dummy shape when a LIB_PART is not found in library
+ * Used to draw a dummy shape when a LIB_SYMBOL is not found in library
  *
  * This symbol is a 400 mils square with the text "??"
  * DEF DUMMY U 0 40 Y Y 1 0 N
@@ -67,29 +67,29 @@ std::string toUTFTildaText( const wxString& txt )
  * ENDDRAW
  * ENDDEF
  */
-static LIB_PART* dummy()
+static LIB_SYMBOL* dummy()
 {
-    static LIB_PART* part;
+    static LIB_SYMBOL* symbol;
 
-    if( !part )
+    if( !symbol )
     {
-        part = new LIB_PART( wxEmptyString );
+        symbol = new LIB_SYMBOL( wxEmptyString );
 
-        LIB_RECTANGLE* square = new LIB_RECTANGLE( part );
+        LIB_RECTANGLE* square = new LIB_RECTANGLE( symbol );
 
         square->MoveTo( wxPoint( Mils2iu( -200 ), Mils2iu( 200 ) ) );
         square->SetEndPosition( wxPoint( Mils2iu( 200 ), Mils2iu( -200 ) ) );
 
-        LIB_TEXT* text = new LIB_TEXT( part );
+        LIB_TEXT* text = new LIB_TEXT( symbol );
 
         text->SetTextSize( wxSize( Mils2iu( 150 ), Mils2iu( 150 ) ) );
         text->SetText( wxString( wxT( "??" ) ) );
 
-        part->AddDrawItem( square );
-        part->AddDrawItem( text );
+        symbol->AddDrawItem( square );
+        symbol->AddDrawItem( text );
     }
 
-    return part;
+    return symbol;
 }
 
 
@@ -100,8 +100,8 @@ SCH_SYMBOL::SCH_SYMBOL( const wxPoint& aPos, SCH_ITEM* aParent ) :
 }
 
 
-SCH_SYMBOL::SCH_SYMBOL( const LIB_PART& aPart, const LIB_ID& aLibId, const SCH_SHEET_PATH* aSheet,
-                        int unit, int convert, const wxPoint& pos ) :
+SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
+                        const SCH_SHEET_PATH* aSheet, int unit, int convert, const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_SYMBOL_T )
 {
     Init( pos );
@@ -110,9 +110,9 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_PART& aPart, const LIB_ID& aLibId, const SCH_S
     m_convert   = convert;
     m_lib_id    = aLibId;
 
-    std::unique_ptr< LIB_PART > part;
+    std::unique_ptr< LIB_SYMBOL > part;
 
-    part = aPart.Flatten();
+    part = aSymbol.Flatten();
     part->SetParent();
     SetLibSymbol( part.release() );
 
@@ -130,14 +130,14 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_PART& aPart, const LIB_ID& aLibId, const SCH_S
         SetRef( aSheet, UTIL::GetRefDesUnannotated( m_prefix ) );
 
     // Inherit the include in bill of materials and board netlist settings from library symbol.
-    m_inBom = aPart.GetIncludeInBom();
-    m_onBoard = aPart.GetIncludeOnBoard();
+    m_inBom = aSymbol.GetIncludeInBom();
+    m_onBoard = aSymbol.GetIncludeOnBoard();
 }
 
 
-SCH_SYMBOL::SCH_SYMBOL( const LIB_PART& aPart, const SCH_SHEET_PATH* aSheet,
+SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet,
                         const PICKED_SYMBOL& aSel, const wxPoint& pos ) :
-    SCH_SYMBOL( aPart, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
+    SCH_SYMBOL( aSymbol, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
 {
     // Set any fields that were modified as part of the symbol selection
     for( const std::pair<int, wxString>& i : aSel.Fields )
@@ -163,7 +163,7 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
     m_onBoard     = aSymbol.m_onBoard;
 
     if( aSymbol.m_part )
-        SetLibSymbol( new LIB_PART( *aSymbol.m_part.get() ) );
+        SetLibSymbol( new LIB_SYMBOL( *aSymbol.m_part.get() ) );
 
     const_cast<KIID&>( m_Uuid ) = aSymbol.m_Uuid;
 
@@ -244,7 +244,7 @@ wxString SCH_SYMBOL::GetSchSymbolLibraryName() const
 }
 
 
-void SCH_SYMBOL::SetLibSymbol( LIB_PART* aLibSymbol )
+void SCH_SYMBOL::SetLibSymbol( LIB_SYMBOL* aLibSymbol )
 {
     wxCHECK2( ( aLibSymbol == nullptr ) || ( aLibSymbol->IsRoot() ), aLibSymbol = nullptr );
 
@@ -456,7 +456,7 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
         ref = UTIL::GetRefDesUnannotated( m_prefix );
 
     if( aIncludeUnit && GetUnitCount() > 1 )
-        ref += LIB_PART::SubReference( GetUnit() );
+        ref += LIB_SYMBOL::SubReference( GetUnit() );
 
     return ref;
 }
@@ -887,10 +887,10 @@ void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
 
     std::swap( m_lib_id, symbol->m_lib_id );
 
-    LIB_PART* part = symbol->m_part.release();
+    LIB_SYMBOL* libSymbol = symbol->m_part.release();
     symbol->m_part.reset( m_part.release() );
     symbol->UpdatePins();
-    m_part.reset( part );
+    m_part.reset( libSymbol );
     UpdatePins();
 
     std::swap( m_pos, symbol->m_pos );
@@ -997,7 +997,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
         else
             unit = GetUnit();
 
-        *token = LIB_PART::SubReference( unit );
+        *token = LIB_SYMBOL::SubReference( unit );
         return true;
     }
 
@@ -1371,7 +1371,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList
             {
                 msg = _( "Missing parent" );
 
-                std::shared_ptr< LIB_PART > parent = m_part->GetParent().lock();
+                std::shared_ptr< LIB_SYMBOL > parent = m_part->GetParent().lock();
 
                 if( parent )
                     msg = parent->GetName();
@@ -1745,7 +1745,7 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_ITEM& aItem )
 
         m_lib_id    = c->m_lib_id;
 
-        LIB_PART* libSymbol = c->m_part ? new LIB_PART( *c->m_part.get() ) : nullptr;
+        LIB_SYMBOL* libSymbol = c->m_part ? new LIB_SYMBOL( *c->m_part.get() ) : nullptr;
 
         m_part.reset( libSymbol );
         m_pos       = c->m_pos;

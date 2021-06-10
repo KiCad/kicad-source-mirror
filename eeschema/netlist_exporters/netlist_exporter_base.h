@@ -60,15 +60,15 @@ public:
 };
 
 /**
- * Used by std:set<LIB_PART*> instantiation which uses #LIB_PART name as its key.
+ * Used by std:set<LIB_SYMBOL*> instantiation which uses #LIB_SYMBOL name as its key.
  */
-struct LIB_PART_LESS_THAN
+struct LIB_SYMBOL_LESS_THAN
 {
-    // a "less than" test on two LIB_PARTs (.m_name wxStrings)
-    bool operator()( LIB_PART* const& libpart1, LIB_PART* const& libpart2 ) const
+    // a "less than" test on two LIB_SYMBOLs (.m_name wxStrings)
+    bool operator()( LIB_SYMBOL* const& libsymbol1, LIB_SYMBOL* const& libsymbol2 ) const
     {
         // Use case specific GetName() wxString compare
-        return libpart1->GetLibId() < libpart2->GetLibId();
+        return libsymbol1->GetLibId() < libsymbol2->GetLibId();
     }
 };
 
@@ -96,12 +96,12 @@ protected:
     /// TODO(snh): Descope this object
     std::vector<PIN_INFO> m_sortedSymbolPinList;
 
-    /// Used for "multiple parts per package" symbols to avoid processing a lib part more than
+    /// Used for "multiple symbols per package" symbols to avoid processing a lib symbol more than
     /// once
     UNIQUE_STRINGS        m_referencesAlreadyFound;
 
-    /// unique library parts used. LIB_PART items are sorted by names
-    std::set<LIB_PART*, LIB_PART_LESS_THAN> m_libParts;
+    /// unique library symbols used. LIB_SYMBOL items are sorted by names
+    std::set<LIB_SYMBOL*, LIB_SYMBOL_LESS_THAN> m_libParts;
 
     /// The schematic we're generating a netlist for
     SCHEMATIC_IFACE*            m_schematic;
@@ -137,7 +137,7 @@ protected:
      *
      * (This is a list of pins found in the whole schematic, for a single symbol.) These
      * duplicate pins were put in list because some pins (power pins...) are found more than
-     * once when in "multiple parts per package" symbols. For instance, a 74ls00 has 4 parts,
+     * once when in "multiple symbols per package" symbols. For instance, a 74ls00 has 4 symbols,
      * and therefore the VCC pin and GND pin appears 4 times in the list.
      * Note: this list *MUST* be sorted by pin number (.m_PinNum member value)
      * Also set the m_Flag member of "removed" NETLIST_OBJECT pin item to 1
@@ -145,7 +145,7 @@ protected:
     void eraseDuplicatePins();
 
     /**
-     * Find all units for symbols with multiple parts per package.
+     * Find all units for symbols with multiple symbols per package.
      *
      * Search the entire design for all units of \a aSymbol based on matching reference
      * designator, and for each unit, add all its pins to the temporary sorted pin list,
@@ -153,7 +153,7 @@ protected:
      * if aKeepUnconnectedPins = false, unconnected pins will be removed from list
      * but usually we need all pins in netlists.
      */
-    void findAllUnitsOfSymbol( SCH_SYMBOL* aSymbol, LIB_PART* aPart,
+    void findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol, LIB_SYMBOL* aLibSymbol,
                                SCH_SHEET_PATH* aSheetPath, bool aKeepUnconnectedPins );
 
 public:

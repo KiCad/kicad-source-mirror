@@ -205,12 +205,12 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     m_params.emplace_back( new PARAM<wxString>( "spice_external_command",
             &m_SpiceCommandString, "spice \"%I\"" ) );
 
-    // TODO(JE) should we keep these LIB_PART:: things around?
+    // TODO(JE) should we keep these LIB_SYMBOL:: things around?
     m_params.emplace_back( new PARAM<int>( "subpart_id_separator",
-            LIB_PART::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
+            LIB_SYMBOL::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
 
     m_params.emplace_back( new PARAM<int>( "subpart_first_id",
-            LIB_PART::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
+            LIB_SYMBOL::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
 
     m_NgspiceSimulatorSettings =
             std::make_shared<NGSPICE_SIMULATOR_SETTINGS>( this, "ngspice" );

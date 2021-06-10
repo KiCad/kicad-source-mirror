@@ -79,10 +79,10 @@ public:
     //void EnumerateSymbolLib( wxArrayString& aAliasNameList, const wxString& aLibraryPath,
     //                         const PROPERTIES* aProperties = NULL ) override;
 
-    //LIB_PART* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+    //LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
     //                      const PROPERTIES* aProperties = NULL ) override;
 
-    //void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
+    //void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
     //                 const PROPERTIES* aProperties = NULL ) override;
 
     //void DeleteAlias( const wxString& aLibraryPath, const wxString& aAliasName,
@@ -157,9 +157,9 @@ private:
     std::unique_ptr<ASCH_SHEET>     m_altiumSheet;
     std::map<int, SCH_SYMBOL*>      m_components;
     std::map<int, SCH_SHEET*>       m_sheets;
-    std::map<int, LIB_PART*>        m_symbols;           // every component has its unique symbol
+    std::map<int, LIB_SYMBOL*>      m_symbols;           // every component has its unique symbol
 
-    std::map<wxString, LIB_PART*>   m_powerSymbols;
+    std::map<wxString, LIB_SYMBOL*> m_powerSymbols;
     std::vector<ASCH_STORAGE_FILE>  m_altiumStorage;
 
     std::map<int, ASCH_SYMBOL>      m_altiumComponents;

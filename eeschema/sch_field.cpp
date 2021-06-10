@@ -182,7 +182,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
             // For more than one part per package, we must add the part selection
             // A, B, ... or 1, 2, .. to the reference.
             if( parentSymbol->GetUnitCount() > 1 )
-                text << LIB_PART::SubReference( parentSymbol->GetUnit() );
+                text << LIB_SYMBOL::SubReference( parentSymbol->GetUnit() );
         }
     }
     else if( m_parent && m_parent->Type() == SCH_SHEET_T )
@@ -362,7 +362,7 @@ bool SCH_FIELD::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) 
                 return true;
 
             if( parentSymbol->GetUnitCount() > 1 )
-                text << LIB_PART::SubReference( parentSymbol->GetUnit() );
+                text << LIB_SYMBOL::SubReference( parentSymbol->GetUnit() );
         }
     }
 

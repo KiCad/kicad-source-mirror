@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -87,7 +87,8 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
     m_statusSizer->Add( 0, 0, 1 );  // add a spacer
     m_statusPanel->SetSizer( m_statusSizer );
 
-    // Give the status panel the same color scheme as the canvas so it isn't jarring when switched to
+    // Give the status panel the same color scheme as the canvas so it isn't jarring when
+    // switched to.
     m_statusPanel->SetBackgroundColour( backgroundColor.ToColour() );
     m_statusPanel->SetForegroundColour( foregroundColor.ToColour() );
 
@@ -166,11 +167,11 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
 {
     KIGFX::VIEW* view = m_preview->GetView();
     auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
-    std::unique_ptr< LIB_PART > symbol;
+    std::unique_ptr< LIB_SYMBOL > symbol;
 
     try
     {
-        LIB_PART* tmp = m_kiway.Prj().SchSymbolLibTable()->LoadSymbol( aSymbolID );
+        LIB_SYMBOL* tmp = m_kiway.Prj().SchSymbolLibTable()->LoadSymbol( aSymbolID );
 
         if( tmp )
             symbol = tmp->Flatten();
@@ -224,7 +225,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
 }
 
 
-void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit, int aConvert )
+void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aConvert )
 {
     KIGFX::VIEW* view = m_preview->GetView();
 
@@ -235,9 +236,9 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit, int aConver
         m_previewItem = nullptr;
     }
 
-    if( aPart )
+    if( aSymbol )
     {
-        m_previewItem = new LIB_PART( *aPart );
+        m_previewItem = new LIB_SYMBOL( *aSymbol );
 
         // For symbols having a De Morgan body style, use the first style
         auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
@@ -251,7 +252,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit, int aConver
         view->Add( m_previewItem );
 
         // Get the symbole size, in internal units
-        m_itemBBox = aPart->GetUnitBoundingBox( settings->m_ShowUnit, settings->m_ShowConvert );
+        m_itemBBox = aSymbol->GetUnitBoundingBox( settings->m_ShowUnit, settings->m_ShowConvert );
 
         // Calculate the draw scale to fit the drawing area
         fitOnDrawArea();

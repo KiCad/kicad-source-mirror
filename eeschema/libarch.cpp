@@ -85,7 +85,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
         for( auto aItem : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            LIB_PART*   part = nullptr;
+            LIB_SYMBOL* libSymbol = nullptr;
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
 
             try
@@ -93,7 +93,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                 if( archLib->FindPart( symbol->GetLibId() ) )
                     continue;
 
-                part = GetLibPart( symbol->GetLibId(), true );
+                libSymbol = GetLibPart( symbol->GetLibId(), true );
             }
             catch( const IO_ERROR& )
             {
@@ -109,15 +109,15 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                 tmp = _( "Unexpected exception occurred." );
             }
 
-            if( part )
+            if( libSymbol )
             {
-                std::unique_ptr<LIB_PART> flattenedPart = part->Flatten();
+                std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
 
                 // Use the full LIB_ID as the symbol name to prevent symbol name collisions.
-                flattenedPart->SetName( symbol->GetLibId().GetUniStringLibId() );
+                flattenedSymbol->SetName( symbol->GetLibId().GetUniStringLibId() );
 
-                // AddPart() does first clone the part before adding.
-                archLib->AddPart( flattenedPart.get() );
+                // AddPart() does first clone the symbol before adding.
+                archLib->AddPart( flattenedSymbol.get() );
             }
             else
             {

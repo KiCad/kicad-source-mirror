@@ -64,7 +64,8 @@ bool EE_INSPECTION_TOOL::Init()
 
     selToolMenu.AddItem( EE_ACTIONS::excludeMarker, singleMarkerCondition, 100 );
 
-    selToolMenu.AddItem( EE_ACTIONS::showDatasheet, EE_CONDITIONS::SingleSymbol && EE_CONDITIONS::Idle, 220 );
+    selToolMenu.AddItem( EE_ACTIONS::showDatasheet,
+                         EE_CONDITIONS::SingleSymbol && EE_CONDITIONS::Idle, 220 );
 
     return true;
 }
@@ -200,13 +201,13 @@ bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
 
 int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 {
-    LIB_PART* part = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
+    LIB_SYMBOL* symbol = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
 
-    if( !part )
+    if( !symbol )
         return 0;
 
     LIB_PINS pinList;
-    part->GetPins( pinList );
+    symbol->GetPins( pinList );
 
     // Sort pins by pin num, so 2 duplicate pins
     // (pins with the same number) will be consecutive in list
@@ -240,9 +241,9 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
         if( next->GetName() != "~"  && !next->GetName().IsEmpty() )
             nextName = " '" + next->GetName() + "'";
 
-        if( part->HasConversion() && next->GetConvert() )
+        if( symbol->HasConversion() && next->GetConvert() )
         {
-            if( part->GetUnitCount() <= 1 )
+            if( symbol->GetUnitCount() <= 1 )
             {
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
                                " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>"
@@ -271,7 +272,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
         }
         else
         {
-            if( part->GetUnitCount() <= 1 )
+            if( symbol->GetUnitCount() <= 1 )
             {
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
                                " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>." ),
@@ -311,14 +312,14 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
         else
             pinName = "'" + pinName + "'";
 
-        if( !part->IsPower()
+        if( !symbol->IsPower()
                 && pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
                 && !pin->IsVisible() )
         {
             // hidden power pin
-            if( part->HasConversion() && pin->GetConvert() )
+            if( symbol->HasConversion() && pin->GetConvert() )
             {
-                if( part->GetUnitCount() <= 1 )
+                if( symbol->GetUnitCount() <= 1 )
                 {
                     msg.Printf( _( "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
                                    " of converted." ),
@@ -338,7 +339,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
             }
             else
             {
-                if( part->GetUnitCount() <= 1 )
+                if( symbol->GetUnitCount() <= 1 )
                 {
                     msg.Printf( _( "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>." ),
                                 pin->GetNumber(),
@@ -366,9 +367,9 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
                 || ( (pin->GetPosition().y % clamped_grid_size) != 0 ) )
         {
             // pin is off grid
-            if( part->HasConversion() && pin->GetConvert() )
+            if( symbol->HasConversion() && pin->GetConvert() )
             {
-                if( part->GetUnitCount() <= 1 )
+                if( symbol->GetUnitCount() <= 1 )
                 {
                     msg.Printf( _( "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
                                    " of converted." ),
@@ -388,7 +389,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
             }
             else
             {
-                if( part->GetUnitCount() <= 1 )
+                if( symbol->GetUnitCount() <= 1 )
                 {
                     msg.Printf( _( "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>." ),
                                 pin->GetNumber(),
@@ -462,16 +463,16 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        LIB_PART* part = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
+        LIB_SYMBOL* symbol = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
 
-        if( !part )
+        if( !symbol )
             return 0;
 
-        datasheet = part->GetDatasheetField().GetText();
+        datasheet = symbol->GetDatasheetField().GetText();
     }
     else if( m_frame->IsType( FRAME_SCH_VIEWER ) || m_frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
     {
-        LIB_PART* entry = static_cast<SYMBOL_VIEWER_FRAME*>( m_frame )->GetSelectedSymbol();
+        LIB_SYMBOL* entry = static_cast<SYMBOL_VIEWER_FRAME*>( m_frame )->GetSelectedSymbol();
 
         if( !entry )
             return 0;

@@ -416,10 +416,11 @@ private:
 };
 
 
-DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent, LIB_PART* aPart ) :
+DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
+                                                      LIB_SYMBOL* aSymbol ) :
         DIALOG_LIB_EDIT_PIN_TABLE_BASE( parent ),
         m_editFrame( parent ),
-        m_part( aPart )
+        m_part( aSymbol )
 {
     m_dataModel = new PIN_TABLE_DATA_MODEL( GetUserUnits() );
 

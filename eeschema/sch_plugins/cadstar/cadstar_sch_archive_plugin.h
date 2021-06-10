@@ -65,10 +65,10 @@ public:
     //void EnumerateSymbolLib( wxArrayString& aAliasNameList, const wxString& aLibraryPath,
     //                         const PROPERTIES* aProperties = NULL ) override;
 
-    //LIB_PART* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+    //LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
     //                      const PROPERTIES* aProperties = NULL ) override;
 
-    //void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
+    //void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
     //                 const PROPERTIES* aProperties = NULL ) override;
 
     //void DeleteAlias( const wxString& aLibraryPath, const wxString& aAliasName,

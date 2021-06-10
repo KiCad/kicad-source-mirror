@@ -38,7 +38,7 @@ class BUS_ALIAS;
 class EDA_TEXT;
 class LABEL_SPIN_STYLE;
 class LIB_FIELD;
-class LIB_PART;
+class LIB_SYMBOL;
 class SCH_SYMBOL;
 class SCH_ITEM;
 class SCH_FIELD;
@@ -98,11 +98,11 @@ private:
     std::map<LAYER_ID, SCH_SHEET*> m_sheetMap;       ///< Map between Cadstar and KiCad Sheets
     std::map<BLOCK_PIN_ID, SCH_HIERLABEL*>
                                  m_sheetPinMap; ///< Map between Cadstar and KiCad Sheets Pins
-    std::map<PART_ID, LIB_PART*> m_partMap;     ///< Map between Cadstar and KiCad Parts
+    std::map<PART_ID, LIB_SYMBOL*> m_partMap;     ///< Map between Cadstar and KiCad Parts
     std::map<PART_GATE_ID, SYMDEF_ID> m_partSymbolsMap; ///< Map holding the symbols loaded so far
                                                         ///  for a particular PART_ID and GATE_ID
     std::map<PART_ID, TERMINAL_TO_PINNUM_MAP> m_pinNumsMap; ///< Map of pin numbers in CADSTAR parts
-    std::map<wxString, LIB_PART*> m_powerSymLibMap; ///< Map of KiCad Power Symbol Library items
+    std::map<wxString, LIB_SYMBOL*> m_powerSymLibMap; ///< Map of KiCad Power Symbol Library items
     std::map<SYMBOL_ID, SCH_SYMBOL*>
             m_powerSymMap; ///< Map between Cadstar and KiCad Power Symbols
     std::map<SYMBOL_ID, SCH_GLOBALLABEL*>
@@ -134,16 +134,16 @@ private:
 
     //Helper Functions for loading library items
     void loadSymDefIntoLibrary( const SYMDEF_ID& aSymdefID, const PART* aCadstarPart,
-            const GATE_ID& aGateID, LIB_PART* aPart );
+            const GATE_ID& aGateID, LIB_SYMBOL* aSymbol );
 
     void loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
-            wxPoint aSymbolOrigin, LIB_PART* aPart, int aGateNumber );
+            wxPoint aSymbolOrigin, LIB_SYMBOL* aSymbol, int aGateNumber );
 
     void applyToLibraryFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
             wxPoint aSymbolOrigin, LIB_FIELD* aKiCadField );
 
     //Helper Functions for loading symbols in schematic
-    SCH_SYMBOL* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, const LIB_PART& aKiCadPart,
+    SCH_SYMBOL* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, const LIB_SYMBOL& aKiCadPart,
             double& aComponentOrientationDeciDeg );
 
     void loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
@@ -211,10 +211,10 @@ private:
 
     //General Graphical manipulation functions
 
-    LIB_PART* getScaledLibPart( const LIB_PART* aPart, long long aScalingFactorNumerator,
-                                long long aScalingFactorDenominator );
+    LIB_SYMBOL* getScaledLibPart( const LIB_SYMBOL* aSymbol, long long aScalingFactorNumerator,
+                                  long long aScalingFactorDenominator );
 
-    void fixUpLibraryPins( LIB_PART* aPartToFix, int aGateNumber );
+    void fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int aGateNumber );
 
     std::pair<wxPoint, wxSize> getFigureExtentsKiCad( const FIGURE& aCadstarFigure );
 

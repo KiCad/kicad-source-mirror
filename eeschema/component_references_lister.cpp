@@ -629,7 +629,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             msg.Printf( _( "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n" ),
                         flatList[ii].GetRef(),
                         tmp,
-                        LIB_PART::SubReference( flatList[ii].m_unit ),
+                        LIB_SYMBOL::SubReference( flatList[ii].m_unit ),
                         flatList[ii].m_unit,
                         flatList[ii].GetLibPart()->GetUnitCount() );
 
@@ -666,7 +666,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
                 msg.Printf( _( "Duplicate items %s%s%s\n" ),
                             flatList[ii].GetRef(),
                             tmp,
-                            LIB_PART::SubReference( flatList[ii].m_unit ) );
+                            LIB_SYMBOL::SubReference( flatList[ii].m_unit ) );
             }
             else
             {
@@ -696,7 +696,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
                 msg.Printf( _( "Duplicate items %s%s%s\n" ),
                             flatList[ii].GetRef(),
                             tmp,
-                            LIB_PART::SubReference( flatList[ii].m_unit ) );
+                            LIB_SYMBOL::SubReference( flatList[ii].m_unit ) );
             }
             else
             {
@@ -717,11 +717,11 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             msg.Printf( _( "Different values for %s%d%s (%s) and %s%d%s (%s)" ),
                         flatList[ii].GetRef(),
                         flatList[ii].m_numRef,
-                        LIB_PART::SubReference( flatList[ii].m_unit ),
+                        LIB_SYMBOL::SubReference( flatList[ii].m_unit ),
                         flatList[ii].m_value,
                         flatList[next].GetRef(),
                         flatList[next].m_numRef,
-                        LIB_PART::SubReference( flatList[next].m_unit ),
+                        LIB_SYMBOL::SubReference( flatList[next].m_unit ),
                         flatList[next].m_value );
 
             aHandler( ERCE_DIFFERENT_UNIT_VALUE, msg, &flatList[ii], &flatList[ii+1] );
@@ -733,14 +733,14 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
 }
 
 
-SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, LIB_PART* aLibPart,
+SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, LIB_SYMBOL* aLibSymbol,
                               const SCH_SHEET_PATH& aSheetPath )
 {
     wxASSERT( aSymbol != NULL );
 
     m_rootSymbol = aSymbol;
-    m_libPart    = aLibPart;     // Warning: can be nullptr for orphan symbols
-                                 // (i.e. with a symbol library not found)
+    m_libPart    = aLibSymbol;     // Warning: can be nullptr for orphan symbols
+                                   // (i.e. with a symbol library not found)
     m_unit       = aSymbol->GetUnitSelection( &aSheetPath );
     m_footprint  = aSymbol->GetFootprint( &aSheetPath, true );
     m_sheetPath  = aSheetPath;

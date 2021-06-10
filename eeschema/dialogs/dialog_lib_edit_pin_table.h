@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ class SYMBOL_EDIT_FRAME;
 class DIALOG_LIB_EDIT_PIN_TABLE : public DIALOG_LIB_EDIT_PIN_TABLE_BASE
 {
 public:
-    DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent, LIB_PART* aPart );
+    DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent, LIB_SYMBOL* aSymbol );
     ~DIALOG_LIB_EDIT_PIN_TABLE() override;
 
     bool TransferDataToWindow() override;
@@ -76,7 +76,7 @@ protected:
     bool                  m_initialized = false;
     int                   m_originalColWidths[ COL_COUNT ];
     wxString              m_columnsShown;
-    LIB_PART*             m_part;
+    LIB_SYMBOL*           m_part;
     LIB_PINS              m_pins;       // a copy of the pins owned by me
     bool                  m_modified;   ///< true when there are unsaved changes
 

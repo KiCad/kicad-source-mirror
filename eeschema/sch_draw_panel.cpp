@@ -105,10 +105,10 @@ SCH_DRAW_PANEL::~SCH_DRAW_PANEL()
 }
 
 
-void SCH_DRAW_PANEL::DisplayComponent( LIB_PART* aComponent )
+void SCH_DRAW_PANEL::DisplayComponent( LIB_SYMBOL* aSymbol )
 {
     GetView()->Clear();
-    GetView()->DisplayComponent( aComponent );
+    GetView()->DisplayComponent( aSymbol );
 }
 
 

@@ -36,7 +36,7 @@
 #include <transform.h>
 
 
-LIB_CIRCLE::LIB_CIRCLE( LIB_PART* aParent ) :
+LIB_CIRCLE::LIB_CIRCLE( LIB_SYMBOL* aParent ) :
     LIB_ITEM( LIB_CIRCLE_T, aParent )
 {
     m_Width      = 0;
