@@ -927,7 +927,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     ALIGNED_DIMENSION* dimension = new ALIGNED_DIMENSION( m_board );
     m_board->Add( dimension, ADD_MODE::APPEND );
 
-    dimension->SetPrecision( aElem.textprecission );
+    dimension->SetPrecision( aElem.textprecision );
     dimension->SetLayer( klayer );
     dimension->SetStart( referencePoint0 );
 

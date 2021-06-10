@@ -68,7 +68,7 @@ double COAX::alphac_coax()
 
 
 /**
- *  \f$ Z_0 = \frac{Z_{0_{\mathrm{vaccum}}}}{\sqrt{\epsilon_r}}\log_{10}\left( \frac{D_{\mathrm{out}}}{D_{\mathrm{in}}}\right) \f$
+ *  \f$ Z_0 = \frac{Z_{0_{\mathrm{vacuum}}}}{\sqrt{\epsilon_r}}\log_{10}\left( \frac{D_{\mathrm{out}}}{D_{\mathrm{in}}}\right) \f$
  *
  *  \f$ \lambda_g = \frac{c}{f \cdot \sqrt{ \epsilon_r \cdot \mu_r}} \f$
  *
@@ -92,9 +92,9 @@ void COAX::calcAnalyze()
 
 
 /**
- *  \f$ D_{\mathrm{in}} = D_{\mathrm{out}}  \cdot e^{-\frac{Z_0*\sqrt{\epsilon_r}}{2\pi \cdot  Z_{0_{\mathrm{vaccum}}}}} \f$
+ *  \f$ D_{\mathrm{in}} = D_{\mathrm{out}}  \cdot e^{-\frac{Z_0*\sqrt{\epsilon_r}}{2\pi \cdot  Z_{0_{\mathrm{vacuum}}}}} \f$
  *
- *  \f$ D_{\mathrm{out}} = D_{\mathrm{in}}  \cdot e^{ \frac{Z_0*\sqrt{\epsilon_r}}{2\pi \cdot  Z_{0_{\mathrm{vaccum}}}}} \f$
+ *  \f$ D_{\mathrm{out}} = D_{\mathrm{in}}  \cdot e^{ \frac{Z_0*\sqrt{\epsilon_r}}{2\pi \cdot  Z_{0_{\mathrm{vacuum}}}}} \f$
  *
  *  \f$ \lambda_g = \frac{c}{f \cdot \sqrt{ \epsilon_r \cdot \mu_r}} \f$
  *

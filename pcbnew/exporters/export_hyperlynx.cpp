@@ -332,7 +332,7 @@ bool HYPERLYNX_EXPORTER::writeStackupInfo()
      * (SIGNAL T=thickness [P=plating_thickness] [C=constant] L=layer_name [M=material_name]) [comment]
      * (DIELECTRIC T=thickness [C=constant] [L=layer_name] [M=material_name]) [comment]
      * }
-     * name lenght is <= 20 chars
+     * name length is <= 20 chars
      */
 
     LSEQ layers = m_board->GetDesignSettings().GetEnabledLayers().CuStack();

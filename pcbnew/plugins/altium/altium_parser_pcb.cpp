@@ -317,7 +317,7 @@ ADIMENSION6::ADIMENSION6( ALTIUM_PARSER& aReader )
     linewidth      = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "LINEWIDTH", "10mil" );
     textheight     = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "TEXTHEIGHT", "10mil" );
     textlinewidth  = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "TEXTLINEWIDTH", "6mil" );
-    textprecission = ALTIUM_PARSER::PropertiesReadInt( properties, "TEXTPRECISION", 2 );
+    textprecision  = ALTIUM_PARSER::PropertiesReadInt( properties, "TEXTPRECISION", 2 );
     textbold       = ALTIUM_PARSER::PropertiesReadBool( properties, "TEXTLINEWIDTH", false );
     textitalic     = ALTIUM_PARSER::PropertiesReadBool( properties, "ITALIC", false );
 

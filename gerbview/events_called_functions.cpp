@@ -176,7 +176,7 @@ void GERBVIEW_FRAME::ShowChangedLanguage()
     m_LayersManager->SetLayersManagerTabsText();
 
     wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_LayersManager );
-    pane_info.Caption( _( "Visibles" ) );
+    pane_info.Caption( _( "Layers Manager" ) );
     m_auimgr.Update();
 
     ReFillLayerWidget();

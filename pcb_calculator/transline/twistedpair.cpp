@@ -52,10 +52,10 @@ TWISTEDPAIR::TWISTEDPAIR() : TRANSLINE()
  * - \f$ e_r \f$ : relative dielectric constant of the film insulation,
  * - \f$ e_{eff} \f$ : effective relative dielectric constant
  *
- * \f$ Z_0 = \frac{Z_\mathrm{VACCUM}}{\pi \cdot \sqrt{e_{eff}}}\cosh^{-1}\left(\frac{D_{out}}{D_{in}}\right) \f$
+ * \f$ Z_0 = \frac{Z_\mathrm{VACUUM}}{\pi \cdot \sqrt{e_{eff}}}\cosh^{-1}\left(\frac{D_{out}}{D_{in}}\right) \f$
  *
  * - \f$ Z_0 \f$ : line impedance
- * - \f$ Z_\mathrm{VACCUM} \f$ : vaccum impedance
+ * - \f$ Z_\mathrm{VACUUM} \f$ : vacuum impedance
  * - \f$ D_{in} \f$ : Wire diameter without insulation
  *
  * Reference for above equations :

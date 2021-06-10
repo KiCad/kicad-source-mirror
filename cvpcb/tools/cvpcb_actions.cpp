@@ -61,7 +61,7 @@ TOOL_ACTION CVPCB_ACTIONS::showEquFileTable( "cvpcb.Control.ShowEquFileTable",
         _( "Configure footprint association file (.equ) list.  These files are "
            "used to automatically assign footprint names from symbol values." ) );
 
-TOOL_ACTION CVPCB_ACTIONS::saveAssociations( "cvpcb.Control.SaveAssocations",
+TOOL_ACTION CVPCB_ACTIONS::saveAssociations( "cvpcb.Control.SaveAssociations",
         AS_GLOBAL,
         MD_CTRL + 'S', LEGACY_HK_NAME( "Save" ),
         _( "Save to Schematic" ),

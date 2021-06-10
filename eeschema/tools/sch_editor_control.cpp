@@ -1244,10 +1244,10 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseLocalClipboard )
 
     STRING_FORMATTER formatter;
     SCH_SEXPR_PLUGIN plugin;
-    SCH_SHEET_LIST   hiearchy = schematic.GetSheets();
+    SCH_SHEET_LIST   hierarchy = schematic.GetSheets();
     SCH_SHEET_PATH   selPath = m_frame->GetCurrentSheet();
 
-    plugin.Format( &selection, &selPath, &hiearchy, &formatter );
+    plugin.Format( &selection, &selPath, &hierarchy, &formatter );
 
     if( aUseLocalClipboard )
     {
@@ -1516,7 +1516,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     existingRefs.SortByReferenceOnly();
 
     // Keep track of pasted sheets and symbols for the different
-    // paths to the hiearchy
+    // paths to the hierarchy
     std::map<SCH_SHEET_PATH, SCH_REFERENCE_LIST> pastedSymbols;
     std::map<SCH_SHEET_PATH, SCH_SHEET_LIST>     pastedSheets;
 
@@ -1624,7 +1624,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
 
             //@todo: it might be better to just iterate through the sheet names
-            // in this screen instead of the whole hiearchy.
+            // in this screen instead of the whole hierarchy.
             int uniquifier = std::max( 0, wxAtoi( number ) ) + 1;
 
             while( hierarchy.NameExists( candidateName ) )

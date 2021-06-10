@@ -400,7 +400,7 @@ struct ADIMENSION6
     uint32_t linewidth;
     uint32_t textheight;
     uint32_t textlinewidth;
-    int32_t  textprecission;
+    int32_t  textprecision;
     bool     textbold;
     bool     textitalic;
 

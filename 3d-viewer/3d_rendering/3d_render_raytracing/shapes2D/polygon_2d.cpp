@@ -375,9 +375,9 @@ static void polygon_Convert( const SHAPE_LINE_CHAIN& aPath, SEGMENTS& aOutSegmen
 }
 
 
-void CovertPolygonToBlocks( const SHAPE_POLY_SET& aMainPath, CONTAINER_2D_BASE& aDstContainer,
-                            float aBiuTo3dUnitsScale, float aDivFactor,
-                            const BOARD_ITEM& aBoardItem, int aPolyIndex )
+void ConvertPolygonToBlocks( const SHAPE_POLY_SET& aMainPath, CONTAINER_2D_BASE& aDstContainer,
+                             float aBiuTo3dUnitsScale, float aDivFactor,
+                             const BOARD_ITEM& aBoardItem, int aPolyIndex )
 {
     // Get the path
     wxASSERT( aPolyIndex < aMainPath.OutlineCount() );

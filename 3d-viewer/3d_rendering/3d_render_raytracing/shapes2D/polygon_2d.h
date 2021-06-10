@@ -148,7 +148,7 @@ public:
  * @param aDivFactor a division factor (in 3Dunits) to divide the polygon plane,
  *                   0.0f will use the internal polygon segm statistics
  */
-void CovertPolygonToBlocks( const SHAPE_POLY_SET& aMainPath, CONTAINER_2D_BASE& aDstContainer,
+void ConvertPolygonToBlocks( const SHAPE_POLY_SET& aMainPath, CONTAINER_2D_BASE& aDstContainer,
                             float aBiuTo3dUnitsScale, float aDivFactor,
                             const BOARD_ITEM& aBoardItem, int aPolyIndex );
 

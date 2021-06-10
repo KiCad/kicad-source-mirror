@@ -1548,9 +1548,9 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
 
         int labelW = 0;
         // Before staring cycle, calculate label height
-        int labelHeigth = 0;
+        int labelHeight = 0;
         s.Printf( fmt, n );
-        dc.GetTextExtent( s, &tx, &labelHeigth );
+        dc.GetTextExtent( s, &tx, &labelHeight );
 
         for( n = 0; n < tickCount(); n++ )
         {
