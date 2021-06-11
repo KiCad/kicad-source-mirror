@@ -242,7 +242,7 @@ public:
      * @param aOutOrigin out origin position of the ray.
      * @param aOutDirection out direction.
      */
-    void MakeRayAtCurrrentMousePosition( SFVEC3F& aOutOrigin, SFVEC3F& aOutDirection ) const;
+    void MakeRayAtCurrentMousePosition( SFVEC3F& aOutOrigin, SFVEC3F& aOutDirection ) const;
 
 protected:
     void zoomChanged();

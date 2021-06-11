@@ -703,7 +703,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
         STATUSBAR_REPORTER reporter( m_parentStatusBar,
                                      static_cast<int>( EDA_3D_VIEWER_STATUSBAR::HOVERED_ITEM ) );
 
-        RAY mouseRay = getRayAtCurrrentMousePosition();
+        RAY mouseRay = getRayAtCurrentMousePosition();
 
         BOARD_ITEM *rollOverItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
 
@@ -798,7 +798,7 @@ void EDA_3D_CANVAS::OnLeftDown( wxMouseEvent& event )
 
     if( !event.Dragging() && ( m_3d_render_raytracing != nullptr ) )
     {
-        RAY mouseRay = getRayAtCurrrentMousePosition();
+        RAY mouseRay = getRayAtCurrentMousePosition();
 
         BOARD_ITEM *intersectedBoardItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
 
@@ -930,7 +930,7 @@ void EDA_3D_CANVAS::request_start_moving_camera( float aMovingSpeed, bool aRende
 
 void EDA_3D_CANVAS::move_pivot_based_on_cur_mouse_position()
 {
-    RAY mouseRay = getRayAtCurrrentMousePosition();
+    RAY mouseRay = getRayAtCurrentMousePosition();
 
     float hit_t;
 
@@ -1130,13 +1130,13 @@ void EDA_3D_CANVAS::RenderEngineChanged()
 }
 
 
-RAY EDA_3D_CANVAS::getRayAtCurrrentMousePosition()
+RAY EDA_3D_CANVAS::getRayAtCurrentMousePosition()
 {
     SFVEC3F rayOrigin;
     SFVEC3F rayDir;
 
     // Generate a ray origin and direction based on current mouser position and camera
-    m_camera.MakeRayAtCurrrentMousePosition( rayOrigin, rayDir );
+    m_camera.MakeRayAtCurrentMousePosition( rayOrigin, rayDir );
 
     RAY mouseRay;
     mouseRay.Init( rayOrigin, rayDir );

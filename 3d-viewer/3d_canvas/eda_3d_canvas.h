@@ -238,7 +238,7 @@ private:
      */
     void releaseOpenGL();
 
-    RAY getRayAtCurrrentMousePosition();
+    RAY getRayAtCurrentMousePosition();
 
 private:
     TOOL_DISPATCHER*       m_eventDispatcher;

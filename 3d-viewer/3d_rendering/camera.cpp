@@ -385,7 +385,7 @@ void CAMERA::MakeRay( const SFVEC2F& aWindowPos, SFVEC3F& aOutOrigin,
 }
 
 
-void CAMERA::MakeRayAtCurrrentMousePosition( SFVEC3F& aOutOrigin, SFVEC3F& aOutDirection ) const
+void CAMERA::MakeRayAtCurrentMousePosition( SFVEC3F& aOutOrigin, SFVEC3F& aOutDirection ) const
 {
     const SFVEC2I windowPos = SFVEC2I( m_lastPosition.x, m_windowSize.y - m_lastPosition.y );
 
