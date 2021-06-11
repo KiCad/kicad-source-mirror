@@ -55,9 +55,9 @@
 #define ZOOM_MIN_LIMIT_PLEDITOR 0.05
 
 // Scale limits for zoom for gerbview
-#define ZOOM_MAX_LIMIT_GERBVIEW 220
+#define ZOOM_MAX_LIMIT_GERBVIEW 5000
 #define ZOOM_MIN_LIMIT_GERBVIEW 0.02
 
 // Scale limits for zoom (especially mouse wheel) for Pcbnew
-#define ZOOM_MAX_LIMIT_PCBNEW 5000
+#define ZOOM_MAX_LIMIT_PCBNEW 50000
 #define ZOOM_MIN_LIMIT_PCBNEW 0.1

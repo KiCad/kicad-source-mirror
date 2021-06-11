@@ -263,7 +263,7 @@ void VIEW::OnDestroy( VIEW_ITEM* aItem )
 VIEW::VIEW( bool aIsDynamic ) :
     m_enableOrderModifier( true ),
     m_scale( 4.0 ),
-    m_minScale( 0.2 ), m_maxScale( 5000.0 ),
+    m_minScale( 0.2 ), m_maxScale( 50000.0 ),
     m_mirrorX( false ), m_mirrorY( false ),
     m_painter( NULL ),
     m_gal( NULL ),
