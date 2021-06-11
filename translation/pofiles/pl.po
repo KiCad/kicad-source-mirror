@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-05-21 08:32+0000\n"
+"PO-Revision-Date: 2021-06-14 18:33+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1337,7 +1337,6 @@ msgid "Postscript (.ps file)"
 msgstr "Postscript (plik .ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Grafika układu strony (plik .kicad_wks)"
 
@@ -1493,11 +1492,10 @@ msgid "Cannot create output directory \"%s\".\n"
 msgstr "Nie można utworzyć folderu wyjściowego \"%s\".\n"
 
 #: common/common.cpp:615
-#, fuzzy
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
-"Windows 7 i starsze systemy operacyjne nie są już wspierane przez program "
-"KiCad oraz jego moduły zależne."
+"Ten system operacyjny nie jest już wspierany przez program KiCad oraz jego "
+"moduły zależne."
 
 #: common/common.cpp:617
 msgid "Unsupported Operating System"
@@ -1508,6 +1506,8 @@ msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"Wszelkie problemy z programem KiCad w tym systemie nie mogą być zgłaszane do "
+"oficjalnego narzędzia do śledzenia błędów."
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -2436,9 +2436,9 @@ msgid "Portrait"
 msgstr "Pionowo"
 
 #: common/dialogs/dialog_page_settings.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file \"%s\" not found."
-msgstr "Plik ze schematem \"%s\" nie został znaleziony."
+msgstr "Plik z rysunkiem \"%s\" nie został znaleziony."
 
 #: common/dialogs/dialog_page_settings.cpp:537
 msgid "the translation for paper size must preserve original spellings"
@@ -2450,12 +2450,11 @@ msgid "Landscape"
 msgstr "Poziomo"
 
 #: common/dialogs/dialog_page_settings.cpp:781
-#, fuzzy
 msgid "Select Drawing Sheet File"
-msgstr "Ramka arkusza"
+msgstr "Wybierz plik z ramką arkusza"
 
 #: common/dialogs/dialog_page_settings.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The drawing sheet file name has changed.\n"
 "Do you want to use the relative path:\n"
@@ -2671,9 +2670,8 @@ msgid "Comment9:"
 msgstr "Komentarz 9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
-#, fuzzy
 msgid "Drawing sheet file"
-msgstr "Arkusz rysunkowy"
+msgstr "Plik z obramowaniem arkusza"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Browse..."
@@ -3801,9 +3799,8 @@ msgstr "Obraz"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:91
 #: common/drawing_sheet/ds_data_model_io.cpp:120
-#, fuzzy
 msgid "Error writing drawing sheet file"
-msgstr "Błąd wczytywania arkusza rysunkowego"
+msgstr "Błąd zapisu arkusza rysunkowego"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
@@ -4183,9 +4180,8 @@ msgid "Schematic Field"
 msgstr "Pole schematu"
 
 #: common/eda_item.cpp:283
-#, fuzzy
 msgid "Schematic Symbol"
-msgstr "Edycja symboli schematowych"
+msgstr "Symbol schematowy"
 
 #: common/eda_item.cpp:284
 msgid "Sheet Pin"
@@ -5379,12 +5375,12 @@ msgstr "Brakuje jednostek dla '%s'| (%s)"
 #: common/libeval_compiler/libeval_compiler.cpp:1120
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "Niezgodność typów pomiędzy '%s' i %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "Niezgodność typów pomiędzy %lf i '%s'"
 
 #: common/pgm_base.cpp:170
 msgid "No default editor found, you must choose it"
@@ -6644,9 +6640,8 @@ msgid "Geda PCB footprint library files"
 msgstr "Pliki bibliotek footprintów programu gEDA PCB"
 
 #: common/wildcards_and_files_ext.cpp:358
-#, fuzzy
 msgid "Drawing sheet files"
-msgstr "Arkusz rysunkowy"
+msgstr "Pliki arkuszy rysunkowych"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad symbol footprint link files"
@@ -10440,14 +10435,12 @@ msgid "Sheet file must have a '.kicad_sch' extension."
 msgstr "Plik arkusza musi posiadać rozszerzenie '.kicad_sch'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:295
-#, fuzzy
 msgid "Use relative path for sheet file?"
-msgstr "Użyć ścieżki względnej?"
+msgstr "Użyć ścieżki względnej dla arkusza?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:296
-#, fuzzy
 msgid "Sheet File Path"
-msgstr "Plik arkusza"
+msgstr "Ścieżka do arkusza"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:299
 msgid ""
@@ -10455,16 +10448,17 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
+"Korzystanie ze względnych ścieżek w nazwach plików arkuszy hierarchicznych "
+"poprawia przenośność schematów między systemami i platformami.  Korzystanie "
+"ze ścieżek bezwzględnych może powodować problemy z przenośnością."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:303
-#, fuzzy
 msgid "Use Relative Path"
-msgstr "Użyć ścieżki względnej?"
+msgstr "Użyj ścieżki względnej"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:304
-#, fuzzy
 msgid "Use Absolute Path"
-msgstr "Bezwzględny"
+msgstr "Użyj ścieżki bezwzględnej"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:335
 msgid "Untitled Sheet"
@@ -10484,9 +10478,9 @@ msgstr ""
 "we Właściwości > Eeschema > Kolory."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
-msgstr "Plik \"%s\" nie wygląda na plik z prawidłowym schematem."
+msgstr "Plik '%s' nie wygląda na plik z prawidłowym schematem."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:411
 msgid "Invalid Schematic File"
@@ -10500,21 +10494,25 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
+"Nie można znormalizować nowej ścieżki do pliku arkusza schematu:\n"
+"'%s'\n"
+"względem ścieżki do pliku arkusza nadrzędnego:\n"
+"'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists."
-msgstr "\"%s\" już istnieje."
+msgstr "'%s' już istnieje."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Link '%s' to this file?"
-msgstr "Dołączyć \"%s\" do tego pliku?"
+msgstr "Dołączyć '%s' do tego pliku?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "Zmieniam %s wartości z '%s' na '%s'."
+msgstr "Zmienić łącze '%s' z '%s' na '%s'?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:519
 #: eeschema/dialogs/dialog_sheet_properties.cpp:535
@@ -10522,19 +10520,19 @@ msgid "This action cannot be undone."
 msgstr "Ta operacja nie może być cofnięta."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr "Utworzyć nowy plik \"%s\" w zawartością \"%s\"?"
+msgstr "Utworzyć nowy plik '%s' z zawartością '%s'?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:565
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving schematic file '%s'."
-msgstr "Wystąpił błąd podczas zapisu pliku schematu \"%s\"."
+msgstr "Wystąpił błąd podczas zapisu pliku schematu '%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:569
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save schematic '%s'"
-msgstr "Nie powiódł się zapis schematu \"%s\""
+msgstr "Nie powiódł się zapis schematu '%s'"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:651
 msgid "A sheet must have a name."
@@ -10940,11 +10938,14 @@ msgstr "Dla tranzystora JFET, kolejność pinów to dren, bramka, źródło"
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
 msgstr ""
+"Musisz określić co najmniej pierwsze %d parametrów dla źródła przejściowego"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:809
 msgid ""
 "You cannot leave interleaved empty fields when defining a transient source"
 msgstr ""
+"Nie możesz pozostawić przesiewowo pustych pól podczas definiowania źródła "
+"przejściowego"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1021
 msgid "Select library"
@@ -11311,9 +11312,8 @@ msgid "Alternate Assignment"
 msgstr "Alternatywne przypisanie"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:335
-#, fuzzy
 msgid "Alternate pin assignments are not available for DeMorgan symbols."
-msgstr "Alternatywne definicje pinów nie są dostępne w komponentach DeMorgan."
+msgstr "Alternatywne definicje pinów nie są dostępne w symbolach DeMorgan."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:126
 msgid "Unit:"
@@ -12192,31 +12192,30 @@ msgid "Add Anyway"
 msgstr "Dodaj mimo to"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:723
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
 msgstr ""
-"Wybierz co najmniej jeden wiersz tabeli zawierający starsze biblioteki by "
-"zapisać je w bieżącym formacie (*.kicad_sym)."
+"Wybierz co najmniej jeden wiersz tabeli zawierający starsze biblioteki (*."
+"lib) by zapisać je w bieżącym formacie programu KiCad (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:731
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"Zapisać '%s' w aktualnym formacie (*.kicad_sym) i zastąpić starszą pozycję w "
-"tabeli?"
+"Zapisać '%s' w aktualnym formacie programu KiCad (*.kicad_sym) i zastąpić "
+"starszą pozycję w tabeli?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:737
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
 msgstr ""
-"Zapisać %d bibliotek starszego typu w bieżącym formacie (*.kicad_sym) i "
-"zastąpić starsze wpisy w tabeli?"
+"Zapisać %d bibliotek starszego typu w bieżącym formacie programu KiCad (*."
+"kicad_sym) i zastąpić starsze wpisy w tabeli?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:755
 #, c-format
@@ -12316,9 +12315,8 @@ msgid "Remove library from table"
 msgstr "Usuwa bibliotekę z tableli"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:135
-#, fuzzy
 msgid "Migrate Libraries"
-msgstr "Migracja bibliotek..."
+msgstr "Migracja bibliotek"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:145
 msgid "Path Substitutions:"
@@ -12637,11 +12635,9 @@ msgstr ""
 "załadowania arkuszy hierarchicznych."
 
 #: eeschema/files-io.cpp:418 eeschema/files-io.cpp:1178
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s'."
-msgstr ""
-"Błąd podczas ładowania pliku schematu.\n"
-"%s"
+msgstr "Błąd podczas ładowania schematu '%s'."
 
 #: eeschema/files-io.cpp:425
 #, c-format
@@ -12649,9 +12645,9 @@ msgid "Memory exhausted loading schematic file \"%s\""
 msgstr "Wyczerpano pamięć przy ładowaniu schematu \"%s\""
 
 #: eeschema/files-io.cpp:438 eeschema/files-io.cpp:1181 eeschema/sheet.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load '%s'."
-msgstr "Nie można załadować \"%s\""
+msgstr "Nie można załadować '%s'."
 
 #: eeschema/files-io.cpp:451
 msgid ""
@@ -12726,7 +12722,6 @@ msgstr ""
 "zachowany w nowym formacie, gdy ponownie zostanie zapisany."
 
 #: eeschema/files-io.cpp:630
-#, fuzzy
 msgid "Schematic is read only."
 msgstr "Plik schematu jest tylko do odczytu."
 
@@ -12756,13 +12751,13 @@ msgstr "Importuj Schemat"
 #: eeschema/files-io.cpp:807 eeschema/files-io.cpp:864
 #: kicad/tools/kicad_manager_control.cpp:118
 #: kicad/tools/kicad_manager_control.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Folder \"%s\" nie może zostać utworzony.\n"
+"Folder '%s' nie może zostać utworzony.\n"
 "\n"
 "Należy upewnić się czy użytkownik posiada uprawnienia do zapisu i spróbować "
 "ponownie."
@@ -12792,9 +12787,9 @@ msgid "Abort Project Save"
 msgstr "Przerwij zapis projektu"
 
 #: eeschema/files-io.cpp:1106
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open."
-msgstr "Schemat \"%s\" jest już otwarty."
+msgstr "Schemat '%s' jest już otwarty."
 
 #: eeschema/files-io.cpp:1204
 msgid "The current schematic has been modified.  Save changes?"
@@ -13072,6 +13067,8 @@ msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 msgstr ""
+"Wiele symboli ma to samo oznaczenie.\n"
+"Numeracja musi być poprawiona przed symulacją."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:122
 msgid "Run command:"
@@ -13679,7 +13676,7 @@ msgstr ""
 "zaś %d."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
@@ -13688,15 +13685,15 @@ msgstr ""
 "ani sieć zasilania/symbol zasilania. Symbol nie został załadowany."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:652
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
 "Symbol '%s' jest skalowany w oryginalnym schemacie CADSTAR, co nie jest "
-"obsługiwane w programie KiCad. Symbol został załadowany w skali 1:1 i może "
-"wymagać ręcznych poprawek."
+"obsługiwane w programie KiCad. Gdy symbol został załadowany z biblioteki, "
+"jego skala zostanie przywrócona do 1:1."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1092
 #, c-format
@@ -14722,14 +14719,12 @@ msgid "space"
 msgstr "spacja"
 
 #: eeschema/sch_validators.cpp:178
-#, fuzzy
 msgid " or "
-msgstr "%s lub %s"
+msgstr " lub "
 
 #: eeschema/sch_validators.cpp:183
-#, fuzzy
 msgid ", or "
-msgstr "%s lub %s"
+msgstr ", lub "
 
 #: eeschema/sch_validators.cpp:196
 msgid "The reference designator cannot contain text variable references"
@@ -15744,7 +15739,7 @@ msgid "Change Visibility"
 msgstr "Zmiana widoczności"
 
 #: eeschema/tools/assign_footprints.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open symbol-footprint link file \"%s\""
 msgstr "Nie udało się otworzyć pliku łącz \"%s\""
 
@@ -18010,9 +18005,8 @@ msgid "Library Path"
 msgstr "Ścieżka biblioteki"
 
 #: include/lib_table_grid.h:187
-#, fuzzy
 msgid "Library Format"
-msgstr "Ścieżka biblioteki"
+msgstr "Format biblioteki"
 
 #: include/lib_table_grid.h:190
 msgid "Active"
@@ -18048,7 +18042,7 @@ msgstr "Wybierz folder z szablonami"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:29
 msgid "Folder:"
-msgstr ""
+msgstr "Folder:"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:36
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:216
@@ -18294,14 +18288,14 @@ msgid "Cound't find the meta HTML information file for this template!"
 msgstr "Nie można odnaleźć pliku HTML z metadanymi dla tego szablonu!"
 
 #: kicad/project_template.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create folder '%s'."
-msgstr "Nie można utworzyć folderu \"%s\"."
+msgstr "Nie można utworzyć folderu '%s'."
 
 #: kicad/project_template.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy file '%s'."
-msgstr "Nie można skopiować \"%s\"."
+msgstr "Nie można skopiować '%s'."
 
 #: kicad/project_tree_item.cpp:110
 msgid ""
@@ -18324,14 +18318,14 @@ msgid "Permission error?"
 msgstr "Błąd uprawnień?"
 
 #: kicad/project_tree_item.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to recycle bin."
-msgstr "Nie można dokonać konwersji \"%s\" na wartość Integer"
+msgstr "Nie można przenieść '%s' do systemowego kosza."
 
 #: kicad/project_tree_item.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to trash."
-msgstr "Nie można dokonać konwersji \"%s\" na wartość Integer"
+msgstr "Nie można przenieść '%s' do kosza."
 
 #: kicad/project_tree_pane.cpp:256
 msgid "Directory name:"
@@ -18422,9 +18416,8 @@ msgid "Delete the files and their contents"
 msgstr "Usuwa pliki i ich zawartość"
 
 #: kicad/project_tree_pane.cpp:793
-#, fuzzy
 msgid "Move to Trash"
-msgstr "Skonwertuj na ścieżki"
+msgstr "Przenieś do kosza"
 
 #: kicad/project_tree_pane.cpp:807
 msgid "Print the contents of the file"
@@ -18530,7 +18523,6 @@ msgid "Launch preferred text editor"
 msgstr "Uruchom preferowany edytor tekstu"
 
 #: kicad/tools/kicad_manager_control.cpp:45
-#, fuzzy
 msgid "Create a new folder for the project"
 msgstr "Utwórz nowy folder dla projektu"
 
@@ -18539,15 +18531,14 @@ msgid "Create New Project"
 msgstr "Utwórz nowy projekt"
 
 #: kicad/tools/kicad_manager_control.cpp:127
-#, fuzzy
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
-"Wybrany folder nie jest pusty. Zalecane tworzenie projektów w ich własnych "
-"folderach.\n"
+"Wybrany folder nie jest pusty.  Zalecane jest tworzenie projektów w ich "
+"własnych folderach.\n"
 "\n"
 "Czy chcesz kontynuować?"
 
@@ -18568,16 +18559,13 @@ msgid "New Project Folder"
 msgstr "Nowy folder projektu"
 
 #: kicad/tools/kicad_manager_control.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write to folder '%s'."
-msgstr "Nie można zapisać do folderu \"%s\"."
+msgstr "Nie można zapisać do folderu '%s'."
 
 #: kicad/tools/kicad_manager_control.cpp:229
-#, fuzzy
 msgid "Make sure you have write permissions and try again."
 msgstr ""
-"Folder \"%s\" nie może zostać utworzony.\n"
-"\n"
 "Należy upewnić się czy użytkownik posiada uprawnienia do zapisu i spróbować "
 "ponownie."
 
@@ -18590,9 +18578,8 @@ msgid "Similar files already exist in the destination folder."
 msgstr "W folderze docelowym występują już podobne pliki."
 
 #: kicad/tools/kicad_manager_control.cpp:272
-#, fuzzy
 msgid "A problem occurred creating new project from template."
-msgstr "Wystąpił problem przy tworzeniu nowego projektu na podstawie szablonu!"
+msgstr "Wystąpił problem przy tworzeniu nowego projektu na podstawie szablonu."
 
 #: kicad/tools/kicad_manager_control.cpp:295
 msgid "Open Existing Project"
@@ -18744,14 +18731,12 @@ msgid "New Item"
 msgstr "Nowy element"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:236
-#, fuzzy
 msgid "Print Drawing Sheet"
-msgstr "Ramka arkusza"
+msgstr "Drukuj ramkę arkusza"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:241
-#, fuzzy
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr "Wystąpił błąd podczas próby wydruku schematu."
+msgstr "Wystąpił błąd podczas próby wydruku arkusza."
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:242
 msgid "Printing"
@@ -18922,14 +18907,12 @@ msgid "General Options"
 msgstr "Opcje główne"
 
 #: pagelayout_editor/files.cpp:54
-#, fuzzy
 msgid "Drawing Sheet File"
-msgstr "Ramka arkusza"
+msgstr "Plik z ramką arkusza"
 
 #: pagelayout_editor/files.cpp:60 pagelayout_editor/files.cpp:101
-#, fuzzy
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "Bieżący footprint został zmieniony.  Zapisać zmiany?"
+msgstr "Bieżący footprint został zmieniony. Zapisać zmiany?"
 
 #: pagelayout_editor/files.cpp:73
 #, c-format
@@ -19008,14 +18991,12 @@ msgid "coord origin: %s"
 msgstr "punkt bazowy: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:893
-#, fuzzy
 msgid "New drawing sheet file is unsaved"
-msgstr "Nowy plik ze schematem nie jest zapisany"
+msgstr "Nowy plik z obramowaniem nie jest zapisany"
 
 #: pagelayout_editor/pl_editor_frame.cpp:897
-#, fuzzy
 msgid "Drawing sheet changes are unsaved"
-msgstr "Zmiany w footprintach nie zostały zachowane"
+msgstr "Zmiany w arkuszu nie zostały zachowane"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
 msgid "Page Width"
@@ -19095,7 +19076,6 @@ msgid "Show Design Inspector"
 msgstr "Pokaż Inspektora projektu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
-#, fuzzy
 msgid "Show the list of items in the drawing sheet"
 msgstr "Pokazuje listę elementów układu strony"
 
@@ -22122,6 +22102,8 @@ msgstr "Prześwit:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
+"Prześwit warstwy miedzi dla tej strefy (ustaw 0 by użyć wartości z klas "
+"połączeń)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:216
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
@@ -22163,6 +22145,8 @@ msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
 msgstr ""
+"Odległość, która zostanie zachowana między wypełnionym obszarem strefy a "
+"polem lutowniczym połączonymi łączem termicznym."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:257
 msgid "Clearance between pads in the same net and filled areas."
@@ -22823,9 +22807,8 @@ msgid "Done.<br><br>"
 msgstr "Wykonano.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:450
-#, fuzzy
 msgid "Run clearance resolution tool..."
-msgstr "Analiza prześwitu..."
+msgstr "Uruchamiam analizę prześwitów..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:477
 msgid "Open the Board Setup... dialog"
@@ -23090,17 +23073,18 @@ msgstr "Eksport IDFv3"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:208
 msgid "Non-unity scaled models:"
-msgstr ""
+msgstr "Niejednorodne skalowane modele:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:210
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
+"Wykryto skalowanie modeli.  Skalowanie modeli nie jest dokładne w przypadku "
+"eksportu rysunku mechanicznego."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:212
-#, fuzzy
 msgid "Model Scale Warning"
-msgstr "Ostrzeżenie przed zapisem"
+msgstr "Ostrzeżenie przed skalowaniem"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:248
 msgid "STEP export failed!  Please save the PCB and try again"
@@ -23168,11 +23152,11 @@ msgstr "Ignoruj komponenty wirtualne"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:139
 msgid "Substitute similarly named models"
-msgstr ""
+msgstr "Zastąp modele o podobnej nazwie"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:140
 msgid "Replace VRML models with STEP models of the same name"
-msgstr ""
+msgstr "Zastąp modele VRML modelami STEP o tej samej nazwie"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:144
 msgid "Overwrite old file"
@@ -23771,7 +23755,6 @@ msgstr "Połączenie termiczne"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:433
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:334
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:784
-#, fuzzy
 msgid "Clearance Overrides and Settings"
 msgstr "Lokalny prześwit i ustawienia"
 
@@ -28852,9 +28835,8 @@ msgid "Items not allowed"
 msgstr "Elementy niedopuszczalne"
 
 #: pcbnew/drc/drc_item.cpp:61
-#, fuzzy
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr "(nie znaleziono krawędzi na warstwie Edge.Cuts)"
+msgstr "Tekst (lub linia wymiarowa) na warstwie Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Clearance violation"
@@ -28893,7 +28875,6 @@ msgid "Drilled holes too close together"
 msgstr "Otwory zbyt blisko siebie"
 
 #: pcbnew/drc/drc_item.cpp:101
-#, fuzzy
 msgid "Drilled holes co-located"
 msgstr "Otwory zbyt blisko siebie"
 
@@ -29027,9 +29008,9 @@ msgid "Missing version number."
 msgstr "Brak informacji o numerze wersji."
 
 #: pcbnew/drc/drc_rule_parser.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr "Nierozpoznany element '%s\".| Spodziewano się numeru wersji"
+msgstr "Nierozpoznany element '%s\".| Spodziewano się numeru wersji."
 
 #: pcbnew/drc/drc_rule_parser.cpp:144 pcbnew/drc/drc_rule_parser.cpp:223
 #: pcbnew/drc/drc_rule_parser.cpp:365 pcbnew/drc/drc_rule_parser.cpp:386
@@ -29736,29 +29717,24 @@ msgid "Footprint %s"
 msgstr "Footprint %s"
 
 #: pcbnew/footprint.cpp:2084 pcbnew/pad.cpp:1526 pcbnew/zone.cpp:1426
-#, fuzzy
 msgid "Clearance Override"
-msgstr "Obrysy prześwitu"
+msgstr "Przekroczenie prześwitu"
 
 #: pcbnew/footprint.cpp:2087 pcbnew/pad.cpp:1503
-#, fuzzy
 msgid "Solderpaste Margin Override"
-msgstr "Lokalny margines pasy lutowniczej"
+msgstr "Przekroczenie marginesu pasy lutowniczej"
 
 #: pcbnew/footprint.cpp:2090 pcbnew/pad.cpp:1506
-#, fuzzy
 msgid "Solderpaste Margin Ratio Override"
-msgstr "Lokalny współczynnik marginesu pasty"
+msgstr "Przekroczenie współczynnika marginesu pasty"
 
 #: pcbnew/footprint.cpp:2092 pcbnew/pad.cpp:1508 pcbnew/zone.cpp:1437
-#, fuzzy
 msgid "Thermal Relief Width"
 msgstr "Szerokość połączenia termicznego"
 
 #: pcbnew/footprint.cpp:2095 pcbnew/pad.cpp:1511 pcbnew/zone.cpp:1434
-#, fuzzy
 msgid "Thermal Relief Gap"
-msgstr "Połączenie termiczne"
+msgstr "Przerwa połączenia termicznego"
 
 #: pcbnew/footprint.h:206
 #, c-format
@@ -30531,19 +30507,19 @@ msgid "Cannot add %s (no footprint assigned)."
 msgstr "Nie można dodać %s (brakuje przydzielonego footprintu)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "Nie można dodać %s (footprint \"%s\" nie został znaleziony)."
+msgstr "Nie można dodać %s (footprint '%s' nie został znaleziony)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s (footprint '%s')."
-msgstr "Dodanie %s (footprint \"%s\")."
+msgstr "Dodanie %s (footprint '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint '%s')."
-msgstr "Dodano %s (footprint \"%s\")."
+msgstr "Dodano %s (footprint '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:204
 #, c-format
@@ -30551,9 +30527,9 @@ msgid "Cannot update %s (no footprint assigned)."
 msgstr "Nie mogę uaktualnić %s (nie przydzielono footprintu)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "Nie mogę uaktualnić %s (footprint \"%s\" nie został znaleziony)."
+msgstr "Nie mogę uaktualnić %s (footprint '%s' nie został znaleziony)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:226
 #, c-format
@@ -30733,9 +30709,9 @@ msgid "Processing symbol '%s:%s'."
 msgstr "Przetwarzam symbol '%s:%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for '%s'."
-msgstr "Znaleziono kilka footprintów dla \"%s\"."
+msgstr "Znaleziono kilka footprintów dla '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1042
 #, c-format
@@ -31032,9 +31008,8 @@ msgid "Pad To Die Length"
 msgstr "Odległość od pola do krzemu"
 
 #: pcbnew/pad.cpp:1500
-#, fuzzy
 msgid "Soldermask Margin Override"
-msgstr "Lokalny margines soldermaski"
+msgstr "Przekroczenie marginesu soldermaski"
 
 #: pcbnew/pad.cpp:1514
 msgid "Fabrication Property"
@@ -31061,14 +31036,14 @@ msgid "New PCB file is unsaved"
 msgstr "Nowy plik PCB nie został zapisany"
 
 #: pcbnew/pcb_edit_frame.cpp:824
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to '%s' before closing?"
-msgstr "Zapisać zmiany w \"%s\" przed zamknięciem?"
+msgstr "Zapisać zmiany w '%s' przed zamknięciem?"
 
 #: pcbnew/pcb_edit_frame.cpp:875
-#, fuzzy, c-format
+#, c-format
 msgid "The auto save file '%s' could not be removed!"
-msgstr "Plik autozapisu \"%s\" nie może zostać usunięty!"
+msgstr "Plik autozapisu '%s' nie może zostać usunięty!"
 
 #: pcbnew/pcb_edit_frame.cpp:1103
 msgid "Board file is read only."
@@ -31097,9 +31072,9 @@ msgid "Eeschema netlist"
 msgstr "Lista sieci Eeschema"
 
 #: pcbnew/pcb_edit_frame.cpp:1446
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' not found."
-msgstr "Plik ze schematem \"%s\" nie został znaleziony."
+msgstr "Plik ze schematem '%s' nie został znaleziony."
 
 #: pcbnew/pcb_edit_frame.cpp:1477
 msgid "Eeschema failed to load:\n"
@@ -31811,7 +31786,7 @@ msgstr ""
 "%.1f stopni od poziomu."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3534
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimetres were applied instead."
@@ -33499,9 +33474,8 @@ msgid "_copy"
 msgstr "_kopia"
 
 #: pcbnew/tools/footprint_editor_control.cpp:586
-#, fuzzy
 msgid "No footprint problems found."
-msgstr "Nie znaleziono żadnych problemów z płytką."
+msgstr "Nie znaleziono żadnych problemów z footprintami."
 
 #: pcbnew/tools/group_tool.cpp:43
 msgid "Grouping"
@@ -34403,17 +34377,14 @@ msgid "Clear any existing net highlighting"
 msgstr "Kasuje istniejące podświetlenie"
 
 #: pcbnew/tools/pcb_actions.cpp:725
-#, fuzzy
 msgid "Toggle Net Highlight"
-msgstr "Przełącz ostatnie podświetlenie"
+msgstr "Przełącz podświetlenie sieci"
 
 #: pcbnew/tools/pcb_actions.cpp:725
-#, fuzzy
 msgid "Toggle net highlighting"
-msgstr "Skasuj podświetlenie"
+msgstr "Przełącz podświetlenie danej sieci"
 
 #: pcbnew/tools/pcb_actions.cpp:732
-#, fuzzy
 msgid "Highlight all copper items on the selected net(s)"
 msgstr "Podświetla wszystkie elementy należące do wybranej sieci"
 
@@ -34442,14 +34413,12 @@ msgid "Open schematic in Eeschema"
 msgstr "Otwórz schemat w programie Eeschema"
 
 #: pcbnew/tools/pcb_actions.cpp:757
-#, fuzzy
 msgid "Local Ratsnest"
-msgstr "Pokaż połączenia wspomagające"
+msgstr "Połączenia wspomagające"
 
 #: pcbnew/tools/pcb_actions.cpp:757
-#, fuzzy
 msgid "Toggle ratsnest display of selected item(s)"
-msgstr "Pokaż nitki wspomagające dla zaznaczonego(-ych) elementów"
+msgstr "Przełącza widok nitek wspomagających dla zaznaczonego(-ych) elementów"
 
 #: pcbnew/tools/pcb_actions.cpp:768
 msgid "Show the net inspector"
@@ -34714,10 +34683,9 @@ msgid "Increase Layer Opacity"
 msgstr "Zwiększ przeźroczystość warstw"
 
 #: pcbnew/tools/pcb_actions.cpp:1047
-#, fuzzy
 msgid "Make the current layer less transparent"
 msgstr ""
-"Zwiększa przeźroczystość bieżącej warstwy by mniej przesłaniała inne warstwy"
+"Zmniejsza przeźroczystość bieżącej warstwy by mniej przesłaniała inne warstwy"
 
 #: pcbnew/tools/pcb_actions.cpp:1054
 msgid "Decrease Layer Opacity"
@@ -34772,15 +34740,13 @@ msgstr ""
 "Uruchamia procedury diagnostyczne oraz próbuje tym samym naprawić płytkę"
 
 #: pcbnew/tools/pcb_actions.cpp:1093
-#, fuzzy
 msgid "Repair Footprint"
-msgstr "Nowy footprint"
+msgstr "Napraw footprint"
 
 #: pcbnew/tools/pcb_actions.cpp:1094
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair footprint"
 msgstr ""
-"Uruchamia procedury diagnostyczne oraz próbuje tym samym naprawić płytkę"
+"Uruchamia procedury diagnostyczne oraz próbuje tym samym naprawić footprint"
 
 #: pcbnew/tools/pcb_actions.cpp:1102
 msgid "Align to Top"
