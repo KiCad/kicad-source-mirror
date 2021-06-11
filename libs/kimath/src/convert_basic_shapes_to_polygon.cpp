@@ -354,21 +354,46 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoi
 {
     SHAPE_ARC        arc( aStart, aMid, aEnd, aWidth );
     SHAPE_LINE_CHAIN arcSpine = arc.ConvertToPolyline( aError );
+    int              radial_offset = ( aWidth + 1 ) / 2;
+
+    /// We start by making rounded ends on the arc
+    TransformCircleToPolygon( aCornerBuffer,
+            wxPoint( arcSpine.GetPoint( 0 ).x, arcSpine.GetPoint( 0 ).y ), radial_offset, aError,
+            aErrorLoc );
+
+    TransformCircleToPolygon( aCornerBuffer,
+            wxPoint( arcSpine.GetPoint( -1 ).x, arcSpine.GetPoint( -1 ).y ), radial_offset, aError,
+            aErrorLoc );
 
     if( aErrorLoc == ERROR_OUTSIDE )
-        aWidth += 2 * aError;
+        radial_offset += aError;
     else
-        aWidth -= 2 * aError;
+        radial_offset -= aError;
 
-    for( int ii = 0; ii < arcSpine.GetSegmentCount(); ++ii )
+    if( radial_offset < 0 )
+        radial_offset = 0;
+
+    std::vector<VECTOR2I> outside_pts;
+    SHAPE_POLY_SET        polyshape;
+
+    polyshape.NewOutline();
+
+    VECTOR2I center = arc.GetCenter();
+    int      radius = ( arc.GetP0() - center ).EuclideanNorm();
+
+    for( std::size_t ii = 0; ii < arcSpine.GetPointCount(); ++ii )
     {
-        SEG seg = arcSpine.GetSegment( ii );
+        VECTOR2I offset = arcSpine.GetPoint( ii ) - center;
 
-        // Note that the error here is only for the rounded ends; we still need to shrink or
-        // expand the width above for the segments themselves.
-        TransformOvalToPolygon( aCornerBuffer, (wxPoint) seg.A, (wxPoint) seg.B, aWidth, aError,
-                                aErrorLoc );
+        polyshape.Append( offset.Resize( radius - radial_offset ) + center );
+        outside_pts.emplace_back( offset.Resize( radius + radial_offset ) + center );
     }
+
+    for( auto it = outside_pts.rbegin(); it != outside_pts.rend(); ++it )
+        polyshape.Append( *it );
+
+    aCornerBuffer.Append( polyshape );
+
 }
 
 
