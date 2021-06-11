@@ -232,7 +232,7 @@ void EDA_3D_VIEWER::InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDI
     wxTreebook* book = aParent->GetTreebook();
 
     book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
-    book->AddSubPage( new PANEL_3D_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_3D_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_3D_OPENGL_OPTIONS( this, book ), _( "OpenGL" ) );
     book->AddSubPage( new PANEL_3D_RAYTRACING_OPTIONS( this, book ), _( "Raytracing" ) );
     book->AddSubPage( new PANEL_3D_COLORS( this, book ), _( "Colors" ) );
