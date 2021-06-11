@@ -48,7 +48,12 @@
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
 
 
+#define VIEWER3D_FRAMENAME wxT( "Viewer3DFrameName" )
+#define QUALIFIED_VIEWER3D_FRAMENAME( parent ) \
+                    ( wxString( VIEWER3D_FRAMENAME ) + wxT( ":" ) + parent->GetName() )
+
 #define KICAD_MANAGER_FRAME_NAME   wxT( "KicadFrame" )
+
 
 class wxChoice;
 class wxEvent;

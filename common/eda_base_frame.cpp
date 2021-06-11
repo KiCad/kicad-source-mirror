@@ -931,13 +931,23 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     PANEL_HOTKEYS_EDITOR* hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
     book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
 
+    wxWindow* viewer3D = nullptr;
+
     for( unsigned i = 0; i < KIWAY_PLAYER_COUNT;  ++i )
     {
         KIWAY_PLAYER* frame = dlg.Kiway().Player( (FRAME_T) i, false );
 
         if( frame )
+        {
             frame->InstallPreferences( &dlg, hotkeysPanel );
+
+            if( !viewer3D )
+                viewer3D = wxFindWindowByName( QUALIFIED_VIEWER3D_FRAMENAME( frame ) );
+        }
     }
+
+    if( viewer3D )
+        static_cast<EDA_BASE_FRAME*>( viewer3D )->InstallPreferences( &dlg, hotkeysPanel );
 
     // The Kicad manager frame is not a player so we have to add it by hand
     wxWindow* manager = wxFindWindowByName( KICAD_MANAGER_FRAME_NAME );

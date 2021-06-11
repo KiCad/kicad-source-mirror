@@ -273,7 +273,8 @@ void COLOR_SWATCH::GetNewSwatchColor()
         return;
     }
 
-    DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( this ), m_color, true, nullptr, m_default );
+    DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( this ), m_color, m_supportsOpacity,
+                                m_userColors, m_default );
 
     if( dialog.ShowModal() == wxID_OK )
     {

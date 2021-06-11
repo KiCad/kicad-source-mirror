@@ -47,10 +47,6 @@
 
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
 
-#define VIEWER3D_FRAMENAME wxT( "Viewer3DFrameName" )
-#define QUALIFIED_VIEWER3D_FRAMENAME( parent ) \
-                    ( wxString( VIEWER3D_FRAMENAME ) + wxT( ":" ) + parent->GetName() )
-
 
 enum EDA_3D_VIEWER_STATUSBAR
 {
@@ -76,6 +72,8 @@ public:
     BOARD* GetBoard() { return Parent()->GetBoard(); }
 
     wxWindow* GetToolCanvas() const override { return m_canvas; }
+
+    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
     /**
      * Request reloading the 3D view.
@@ -109,63 +107,12 @@ public:
     EDA_3D_CANVAS* GetCanvas()  { return m_canvas; }
 
     /**
-     * Get a SFVEC3D from a color dialog.
-     *
-     * @param aColor is the SFVEC3D to change.
-     * @param aTitle is the title displayed in the colordialog selector.
-     * @param aPredefinedColors is a reference to a CUSTOM_COLOR_ITEM list which contains.
-     *                          a few predefined colors
-     */
-    bool Set3DColorFromUser( SFVEC4F& aColor, const wxString& aTitle,
-                             CUSTOM_COLORS_LIST* aPredefinedColors,
-                             bool aAllowOpacityControl = false,
-                             KIGFX::COLOR4D aDefaultColor = KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
-
-    /**
-     * Set the solder mask color from a set of colors.
-     *
-     * @return true if a new color is chosen, false if no change or aborted by user.
-     */
-    bool Set3DSolderMaskColorFromUser();
-
-    /**
-     * Set the solder mask color from a set of colors.
-     *
-     * @return true if a new color is chosen, false if no change or aborted by user.
-     */
-    bool Set3DSolderPasteColorFromUser();
-
-    /**
-     * Set the copper color from a set of colors.
-     *
-     * @return true if a new color is chosen, false if no change or aborted by user.
-     */
-    bool Set3DCopperColorFromUser();
-
-    /**
-     * Set the copper color from a set of colors.
-     *
-     * @return true if a new color is chosen, false if no change or aborted by user.
-     */
-    bool Set3DBoardBodyColorFromUser();
-
-    /**
-     * Set the silkscreen color from a set of colors.
-     *
-     * @return true if a new color is chosen, false if no change or aborted by user.
-     */
-    bool Set3DSilkScreenColorFromUser();
-
-    /**
      * Notification that common settings are updated.
      *
      * This would be private (and only called by the Kiway), but we need to do this manually
      * from the PCB frame because the 3D viewer isn't updated via the #KIWAY.
      */
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
-
-
-    void SynchroniseColoursWithBoard();
 
 protected:
     void setupUIConditions() override;

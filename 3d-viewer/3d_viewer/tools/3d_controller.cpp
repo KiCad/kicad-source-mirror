@@ -348,13 +348,6 @@ void EDA_3D_CONTROLLER::setTransitions()
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::attributesSMD.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::attributesVirtual.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showBoundingBoxes.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::renderShadows.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::proceduralTextures.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::addFloor.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showRefractions.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showReflections.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::antiAliasing.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::postProcessing.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleRealisticMode.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleBoardBody.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showAxis.MakeEvent() );

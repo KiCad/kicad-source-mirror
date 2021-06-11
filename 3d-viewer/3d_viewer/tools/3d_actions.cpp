@@ -227,42 +227,6 @@ TOOL_ACTION EDA_3D_ACTIONS::showBoundingBoxes( "3DViewer.Control.showBoundingBox
          _( "Show Model Bounding Boxes" ), _( "Show Model Bounding Boxes" ),
          BITMAPS::ortho, AF_NONE, (void*) FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
 
-TOOL_ACTION EDA_3D_ACTIONS::renderShadows( "3DViewer.Control.renderShadows",
-         AS_GLOBAL, 0, "",
-         _( "Render Shadows" ), _( "Render Shadows" ),
-         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_RENDER_RAYTRACING_SHADOWS );
-
-TOOL_ACTION EDA_3D_ACTIONS::proceduralTextures( "3DViewer.Control.proceduralTextures",
-        AS_GLOBAL, 0, "",
-        _( "Procedural Textures" ), _( "Apply procedural textures to materials (slow)" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES );
-
-TOOL_ACTION EDA_3D_ACTIONS::addFloor( "3DViewer.Control.addFloor",
-        AS_GLOBAL, 0, "",
-        _( "Add Floor" ), _( "Adds a floor plane below the board (slow)"),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_RENDER_RAYTRACING_BACKFLOOR );
-
-TOOL_ACTION EDA_3D_ACTIONS::showRefractions( "3DViewer.Control.showRefractions",
-         AS_GLOBAL, 0, "",
-         _( "Refractions" ), _( "Render materials with refractive properties on final render (slow)" ),
-         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_RENDER_RAYTRACING_REFRACTIONS );
-
-TOOL_ACTION EDA_3D_ACTIONS::showReflections( "3DViewer.Control.showReflections",
-         AS_GLOBAL, 0, "",
-         _( "Reflections" ), _( "Render materials with reflective properties on final render (slow)" ),
-         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_RENDER_RAYTRACING_REFLECTIONS );
-
-TOOL_ACTION EDA_3D_ACTIONS::antiAliasing( "3DViewer.Control.antiAliasing",
-         AS_GLOBAL, 0, "",
-         _( "Anti-aliasing" ), _( "Render with improved quality on final render (slow)" ),
-         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_RENDER_RAYTRACING_ANTI_ALIASING );
-
-TOOL_ACTION EDA_3D_ACTIONS::postProcessing( "3DViewer.Control.postProcessing",
-        AS_GLOBAL, 0, "",
-        _( "Post-processing" ),
-        _( "Apply Screen Space Ambient Occlusion and Global Illumination reflections on final render (slow)"),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_RENDER_RAYTRACING_POST_PROCESSING );
-
 TOOL_ACTION EDA_3D_ACTIONS::toggleRealisticMode( "3DViewer.Control.toggleRealisticMode",
         AS_GLOBAL, 0, "",
         _( "Toggle realistic mode" ), _( "Toggle realistic mode" ),

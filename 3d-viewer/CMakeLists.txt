@@ -87,8 +87,14 @@ set(3D-VIEWER_SRCS
     3d_rendering/trackball.cpp
     3d_viewer/3d_menubar.cpp
     3d_viewer/3d_toolbar.cpp
-    3d_viewer/dialogs/dialog_3D_view_option.cpp
-    3d_viewer/dialogs/dialog_3D_view_option_base.cpp
+    3d_viewer/dialogs/panel_3D_colors.cpp
+    3d_viewer/dialogs/panel_3D_colors_base.cpp
+    3d_viewer/dialogs/panel_3D_display_options.cpp
+    3d_viewer/dialogs/panel_3D_display_options_base.cpp
+    3d_viewer/dialogs/panel_3D_opengl_options.cpp
+    3d_viewer/dialogs/panel_3D_opengl_options_base.cpp
+    3d_viewer/dialogs/panel_3D_raytracing_options.cpp
+    3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp
     3d_viewer/tools/3d_actions.cpp
     3d_viewer/tools/3d_conditions.cpp
     3d_viewer/tools/3d_controller.cpp

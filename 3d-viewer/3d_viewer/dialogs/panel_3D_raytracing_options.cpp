@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,71 +22,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "dialog_3D_view_option_base.h"
+#include "panel_3D_raytracing_options.h"
 #include <3d_canvas/board_adapter.h>
 #include <3d_viewer/eda_3d_viewer.h>
 #include <3d_viewer/tools/3d_controller.h>
 #include <bitmaps.h>
 #include <tool/tool_manager.h>
 
-class DIALOG_3D_VIEW_OPTIONS : public DIALOG_3D_VIEW_OPTIONS_BASE
+PANEL_3D_RAYTRACING_OPTIONS::PANEL_3D_RAYTRACING_OPTIONS( EDA_3D_VIEWER* aFrame,
+                                                          wxWindow* aParent ) :
+        PANEL_3D_RAYTRACING_OPTIONS_BASE( aParent ),
+        m_settings( aFrame->GetAdapter() ),
+        m_canvas( aFrame->GetCanvas() )
 {
-public:
-    explicit DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* aParent );
-
-    EDA_3D_VIEWER* GetParent()
-    {
-        return static_cast<EDA_3D_VIEWER*>( DIALOG_SHIM::GetParent() );
-    }
-
-    void OnCheckEnableAnimation( wxCommandEvent& WXUNUSED( event ) ) override;
-    void OnLightsResetToDefaults( wxCommandEvent& event ) override;
-
-    /// Automatically called when clicking on the OK button
-    bool TransferDataFromWindow() override;
-
-    /// Automatically called after creating the dialog
-    bool TransferDataToWindow() override;
-
-    void TransferColorDataToWindow();
-
-private:
-    BOARD_ADAPTER& m_settings;
-    EDA_3D_CANVAS* m_canvas;
-};
-
-
-void EDA_3D_VIEWER::Install3DViewOptionDialog( wxCommandEvent& event )
-{
-    DIALOG_3D_VIEW_OPTIONS dlg( this );
-
-    if( dlg.ShowModal() == wxID_OK )
-    {
-        NewDisplay( true );
-    }
 }
 
 
-DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* aParent ) :
-        DIALOG_3D_VIEW_OPTIONS_BASE( aParent ),
-        m_settings( aParent->GetAdapter() ),
-        m_canvas( aParent->GetCanvas() )
-{
-    m_sdbSizerOK->SetDefault();
-
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    finishDialogSettings();
-}
-
-
-void DIALOG_3D_VIEW_OPTIONS::OnCheckEnableAnimation( wxCommandEvent& event )
-{
-    m_staticAnimationSpeed->Enable( m_checkBoxEnableAnimation->GetValue() );
-    m_sliderAnimationSpeed->Enable( m_checkBoxEnableAnimation->GetValue() );
-}
-
-
-void DIALOG_3D_VIEW_OPTIONS::OnLightsResetToDefaults( wxCommandEvent& event )
+void PANEL_3D_RAYTRACING_OPTIONS::ResetPanel()
 {
     m_settings.m_RtCameraLightColor = SFVEC3F( 0.2f );
     m_settings.m_RtLightColorTop = SFVEC3F( 0.247f );
@@ -116,7 +68,7 @@ void DIALOG_3D_VIEW_OPTIONS::OnLightsResetToDefaults( wxCommandEvent& event )
 }
 
 
-void DIALOG_3D_VIEW_OPTIONS::TransferColorDataToWindow()
+void PANEL_3D_RAYTRACING_OPTIONS::TransferColorDataToWindow()
 {
     auto Transfer_color = [] ( const SFVEC3F& aSource, wxColourPickerCtrl *aTarget )
     {
@@ -136,8 +88,6 @@ void DIALOG_3D_VIEW_OPTIONS::TransferColorDataToWindow()
     Transfer_color( m_settings.m_RtLightColor[5], m_colourPickerLight6 );
     Transfer_color( m_settings.m_RtLightColor[6], m_colourPickerLight7 );
     Transfer_color( m_settings.m_RtLightColor[7], m_colourPickerLight8 );
-
-    Transfer_color( m_settings.m_OpenGlSelectionColor, m_colourPickerSelection );
 
     m_spinCtrlLightElevation1->SetValue(
             (int)( m_settings.m_RtLightSphericalCoords[0].x * 180.0f - 90.0f ) );
@@ -175,42 +125,8 @@ void DIALOG_3D_VIEW_OPTIONS::TransferColorDataToWindow()
 }
 
 
-bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
+bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataToWindow()
 {
-    // Check/uncheck checkboxes
-    m_checkBoxRealisticMode->SetValue( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
-    m_checkBoxBoardBody->SetValue( m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
-    m_checkBoxAreas->SetValue( m_settings.GetFlag( FL_ZONE ) );
-
-    m_checkBox3DshapesTH->SetValue( m_settings.GetFlag( FL_FP_ATTRIBUTES_NORMAL ) );
-    m_checkBox3DshapesSMD->SetValue( m_settings.GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT ) );
-    m_checkBox3DshapesVirtual->SetValue( m_settings.GetFlag( FL_FP_ATTRIBUTES_VIRTUAL ) );
-
-    m_checkBoxSilkscreen->SetValue( m_settings.GetFlag( FL_SILKSCREEN ) );
-    m_checkBoxSolderMask->SetValue( m_settings.GetFlag( FL_SOLDERMASK ) );
-    m_checkBoxSolderpaste->SetValue( m_settings.GetFlag( FL_SOLDERPASTE ) );
-    m_checkBoxAdhesive->SetValue( m_settings.GetFlag( FL_ADHESIVE ) );
-    m_checkBoxComments->SetValue( m_settings.GetFlag( FL_COMMENTS ) );
-    m_checkBoxECO->SetValue( m_settings.GetFlag( FL_ECO ) );
-    m_checkBoxSubtractMaskFromSilk->SetValue( m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
-    m_checkBoxClipSilkOnViaAnnulus->SetValue( m_settings.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) );
-    m_checkBoxRenderPlatedPadsAsPlated->SetValue(
-            m_settings.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) );
-
-    // OpenGL options
-    m_checkBoxCuThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
-    m_checkBoxBoundingBoxes->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
-    m_checkBoxHighlightOnRollOver->SetValue( m_settings.GetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM ) );
-    m_checkBoxDisableAAMove->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE ) );
-    m_checkBoxDisableMoveThickness->SetValue(
-            m_settings.GetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE ) );
-    m_checkBoxDisableMoveVias->SetValue(
-            m_settings.GetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE ) );
-    m_checkBoxDisableMoveHoles->SetValue(
-            m_settings.GetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE ) );
-    m_choiceAntiAliasing->SetSelection( static_cast<int>( m_settings.GetAntiAliasingMode() ) );
-
-    // Raytracing options
     m_checkBoxRaytracing_renderShadows->SetValue(
             m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
     m_checkBoxRaytracing_addFloor->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) );
@@ -240,60 +156,12 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
 
     TransferColorDataToWindow();
 
-    // Camera Options
-    m_checkBoxEnableAnimation->SetValue( m_canvas->AnimationEnabledGet() );
-    m_sliderAnimationSpeed->SetValue( m_canvas->MovingSpeedMultiplierGet() );
-    m_staticAnimationSpeed->Enable( m_canvas->AnimationEnabledGet() );
-    m_sliderAnimationSpeed->Enable( m_canvas->AnimationEnabledGet() );
-
-    EDA_3D_CONTROLLER* ctrlTool = GetParent()->GetToolManager()->GetTool<EDA_3D_CONTROLLER>();
-    m_spinCtrlRotationAngle->SetValue( ctrlTool->GetRotationIncrement() );
-
     return true;
 }
 
 
-bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
+bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataFromWindow()
 {
-    // Set render mode
-    m_settings.SetFlag( FL_USE_REALISTIC_MODE, m_checkBoxRealisticMode->GetValue() );
-
-    // Set visibility of items
-    m_settings.SetFlag( FL_SHOW_BOARD_BODY, m_checkBoxBoardBody->GetValue() );
-    m_settings.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
-    m_settings.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, m_checkBoxSubtractMaskFromSilk->GetValue() );
-    m_settings.SetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS, m_checkBoxClipSilkOnViaAnnulus->GetValue() );
-    m_settings.SetFlag( FL_RENDER_PLATED_PADS_AS_PLATED,
-                        m_checkBoxRenderPlatedPadsAsPlated->GetValue() );
-
-    // Set 3D shapes visibility
-    m_settings.SetFlag( FL_FP_ATTRIBUTES_NORMAL, m_checkBox3DshapesTH->GetValue() );
-    m_settings.SetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT, m_checkBox3DshapesSMD->GetValue() );
-    m_settings.SetFlag( FL_FP_ATTRIBUTES_VIRTUAL, m_checkBox3DshapesVirtual->GetValue() );
-
-    // Set Layer visibility
-    m_settings.SetFlag( FL_SILKSCREEN, m_checkBoxSilkscreen->GetValue() );
-    m_settings.SetFlag( FL_SOLDERMASK, m_checkBoxSolderMask->GetValue() );
-    m_settings.SetFlag( FL_SOLDERPASTE, m_checkBoxSolderpaste->GetValue() );
-    m_settings.SetFlag( FL_ADHESIVE, m_checkBoxAdhesive->GetValue() );
-    m_settings.SetFlag( FL_COMMENTS, m_checkBoxComments->GetValue() );
-    m_settings.SetFlag( FL_ECO, m_checkBoxECO->GetValue( ) );
-
-    // OpenGL options
-    m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, m_checkBoxBoundingBoxes->GetValue() );
-    m_settings.SetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM, m_checkBoxHighlightOnRollOver->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE, m_checkBoxDisableAAMove->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE,
-                        m_checkBoxDisableMoveThickness->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE,
-                        m_checkBoxDisableMoveVias->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE,
-                        m_checkBoxDisableMoveHoles->GetValue() );
-    m_settings.SetAntiAliasingMode(
-            static_cast<ANTIALIASING_MODE>( m_choiceAntiAliasing->GetSelection() ) );
-
-    // Raytracing options
     m_settings.SetFlag( FL_RENDER_RAYTRACING_SHADOWS,
                         m_checkBoxRaytracing_renderShadows->GetValue() );
     m_settings.SetFlag( FL_RENDER_RAYTRACING_BACKFLOOR,
@@ -343,8 +211,6 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     Transfer_color( m_settings.m_RtLightColor[6], m_colourPickerLight7 );
     Transfer_color( m_settings.m_RtLightColor[7], m_colourPickerLight8 );
 
-    Transfer_color( m_settings.m_OpenGlSelectionColor, m_colourPickerSelection );
-
     m_settings.m_RtLightSphericalCoords[0].x =
             ( m_spinCtrlLightElevation1->GetValue() + 90.0f ) / 180.0f;
     m_settings.m_RtLightSphericalCoords[1].x =
@@ -379,13 +245,6 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
         m_settings.m_RtLightSphericalCoords[i].y =
                 glm::clamp( m_settings.m_RtLightSphericalCoords[i].y, 0.0f, 2.0f );
     }
-
-    // Camera Options
-    m_canvas->AnimationEnabledSet( m_checkBoxEnableAnimation->GetValue() );
-    m_canvas->MovingSpeedMultiplierSet( m_sliderAnimationSpeed->GetValue() );
-
-    EDA_3D_CONTROLLER* ctrlTool = GetParent()->GetToolManager()->GetTool<EDA_3D_CONTROLLER>();
-    ctrlTool->SetRotationIncrement( m_spinCtrlRotationAngle->GetValue() );
 
     return true;
 }

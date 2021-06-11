@@ -22,13 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/colordlg.h>
-#include <wx/colour.h>
 #include <wx/filename.h>
 #include <wx/msgdlg.h>
 #include <wx/string.h>
 #include <wx/wupdlock.h>
 #include <wx/clipbrd.h>
+#include <wx/filedlg.h>
+#include <wx/treebook.h>
 #include "eda_3d_viewer.h"
 #include <3d_viewer_settings.h>
 #include <3d_viewer_id.h>
@@ -38,8 +38,6 @@
 #include <bitmaps.h>
 #include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>
-#include <board_stackup_manager/stackup_predefined_prms.h>
-#include <board.h>
 #include <core/arraydim.h>
 #include <layers_id_colors_and_visibility.h>
 #include <gal/dpi_scaling.h>
@@ -53,8 +51,13 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
 #include <widgets/infobar.h>
+#include <widgets/paged_dialog.h>
+#include <dialogs/panel_3D_display_options.h>
+#include <dialogs/panel_3D_opengl_options.h>
+#include <dialogs/panel_3D_raytracing_options.h>
+#include <dialogs/panel_3D_colors.h>
+#include <panel_hotkeys_editor.h>
 #include <wildcards_and_files_ext.h>
-#include <wx/filedlg.h>
 
 /**
  * Flag to enable 3D viewer main frame window debug tracing.
@@ -73,8 +76,6 @@ BEGIN_EVENT_TABLE( EDA_3D_VIEWER, EDA_BASE_FRAME )
 
     EVT_TOOL_RANGE( ID_START_COMMAND_3D, ID_MENU_COMMAND_END,
                     EDA_3D_VIEWER::Process_Special_Functions )
-
-    EVT_TOOL( ID_TOOL_SET_VISIBLE_ITEMS, EDA_3D_VIEWER::Install3DViewOptionDialog )
 
     EVT_MENU( wxID_CLOSE, EDA_3D_VIEWER::Exit3DFrame )
     EVT_MENU( ID_RENDER_CURRENT_VIEW, EDA_3D_VIEWER::OnRenderEngineSelection )
@@ -190,7 +191,6 @@ void EDA_3D_VIEWER::setupUIConditions()
     EDA_3D_CONDITIONS cond( &m_boardAdapter );
 
 // Helper to define check conditions
-#define MaterialCheck( x ) ACTION_CONDITIONS().Check( cond.MaterialMode( x ) )
 #define FlagCheck( x )     ACTION_CONDITIONS().Check( cond.Flag( x ) )
 #define GridSizeCheck( x ) ACTION_CONDITIONS().Check( cond.GridSize( x ) )
 
@@ -202,27 +202,6 @@ void EDA_3D_VIEWER::setupUIConditions()
     RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW,
                              ACTION_CONDITIONS().Check( raytracingCondition ) );
 
-    mgr->SetConditions( EDA_3D_ACTIONS::materialNormal,
-                        MaterialCheck( MATERIAL_MODE::NORMAL ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::materialDiffuse,
-                        MaterialCheck( MATERIAL_MODE::DIFFUSE_ONLY ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::materialCAD,
-                        MaterialCheck( MATERIAL_MODE::CAD_MODE ) );
-
-    mgr->SetConditions( EDA_3D_ACTIONS::renderShadows,
-                        FlagCheck( FL_RENDER_RAYTRACING_SHADOWS ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::proceduralTextures,
-                        FlagCheck( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::addFloor,
-                        FlagCheck( FL_RENDER_RAYTRACING_BACKFLOOR ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showRefractions,
-                        FlagCheck( FL_RENDER_RAYTRACING_REFRACTIONS ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showReflections,
-                        FlagCheck( FL_RENDER_RAYTRACING_REFLECTIONS ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::antiAliasing,
-                        FlagCheck( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::postProcessing,
-                        FlagCheck( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
     mgr->SetConditions( EDA_3D_ACTIONS::showBoundingBoxes,
                         FlagCheck( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
     mgr->SetConditions( EDA_3D_ACTIONS::showAxis,
@@ -236,16 +215,29 @@ void EDA_3D_VIEWER::setupUIConditions()
 
 
     auto orthoCondition =
-        [this] ( const SELECTION& )
-        {
-            return m_currentCamera.GetProjection() == PROJECTION_TYPE::ORTHO;
-        };
+            [this]( const SELECTION& )
+            {
+                return m_currentCamera.GetProjection() == PROJECTION_TYPE::ORTHO;
+            };
 
     mgr->SetConditions( EDA_3D_ACTIONS::toggleOrtho, ACTION_CONDITIONS().Check( orthoCondition ) );
 
-#undef MaterialCheck
 #undef FlagCheck
 #undef GridSizeCheck
+}
+
+
+void EDA_3D_VIEWER::InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
+{
+    wxTreebook* book = aParent->GetTreebook();
+
+    book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
+    book->AddSubPage( new PANEL_3D_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_3D_OPENGL_OPTIONS( this, book ), _( "OpenGL" ) );
+    book->AddSubPage( new PANEL_3D_RAYTRACING_OPTIONS( this, book ), _( "Raytracing" ) );
+    book->AddSubPage( new PANEL_3D_COLORS( this, book ), _( "Colors" ) );
+
+    aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
 
 
@@ -331,43 +323,6 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_MENU_SCREENCOPY_JPEG:
         takeScreenshot( event );
         return;
-
-    case ID_MENU3D_BGCOLOR_BOTTOM:
-        if( Set3DColorFromUser( m_boardAdapter.m_BgColorBot, _( "Background Color, Bottom" ),
-                                nullptr ) )
-            refreshRender();
-        return;
-
-    case ID_MENU3D_BGCOLOR_TOP:
-        if( Set3DColorFromUser( m_boardAdapter.m_BgColorTop, _( "Background Color, Top" ),
-                                nullptr ) )
-            refreshRender();
-        return;
-
-    case ID_MENU3D_SILKSCREEN_COLOR:
-        Set3DSilkScreenColorFromUser();
-        return;
-
-    case ID_MENU3D_SOLDERMASK_COLOR:
-        Set3DSolderMaskColorFromUser();
-        return;
-
-    case ID_MENU3D_SOLDERPASTE_COLOR:
-        Set3DSolderPasteColorFromUser();
-        return;
-
-    case ID_MENU3D_COPPER_COLOR:
-        Set3DCopperColorFromUser();
-        break;
-
-    case ID_MENU3D_PCB_BODY_COLOR:
-        Set3DBoardBodyColorFromUser();
-        break;
-
-    case ID_MENU3D_STACKUP_COLORS:
-        SynchroniseColoursWithBoard();
-        refreshRender();
-        break;
 
     case ID_MENU3D_RESET_DEFAULTS:
     {
@@ -719,73 +674,6 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
 }
 
 
-void EDA_3D_VIEWER::SynchroniseColoursWithBoard()
-{
-    BOARD*                 brd       = GetBoard();
-    const FAB_LAYER_COLOR* stdColors = GetColorStandardList();
-    wxColour               color;
-
-    if( brd )
-    {
-        const BOARD_STACKUP& stckp = brd->GetDesignSettings().GetStackupDescriptor();
-
-        for( const BOARD_STACKUP_ITEM* stckpItem : stckp.GetList() )
-        {
-            wxString colorName = stckpItem->GetColor();
-
-            if( colorName.StartsWith( "#" ) ) // This is a user defined color.
-            {
-                color.Set( colorName );
-            }
-            else
-            {
-                for( int i = 0; i < GetColorStandardListCount(); i++ )
-                {
-                    if( stdColors[i].m_ColorName == colorName )
-                    {
-                        color = stdColors[i].m_Color;
-                        break;
-                    }
-                }
-            }
-
-            if( color.IsOk() )
-            {
-                switch( stckpItem->GetBrdLayerId() )
-                {
-                case F_SilkS:
-                    m_boardAdapter.m_SilkScreenColorTop.r = color.Red() / 255.0;
-                    m_boardAdapter.m_SilkScreenColorTop.g = color.Green() / 255.0;
-                    m_boardAdapter.m_SilkScreenColorTop.b = color.Blue() / 255.0;
-                    break;
-                case B_SilkS:
-                    m_boardAdapter.m_SilkScreenColorBot.r = color.Red() / 255.0;
-                    m_boardAdapter.m_SilkScreenColorBot.g = color.Green() / 255.0;
-                    m_boardAdapter.m_SilkScreenColorBot.b = color.Blue() / 255.0;
-                    break;
-                case F_Mask:
-                    m_boardAdapter.m_SolderMaskColorTop.r = color.Red() / 255.0;
-                    m_boardAdapter.m_SolderMaskColorTop.g = color.Green() / 255.0;
-                    m_boardAdapter.m_SolderMaskColorTop.b = color.Blue() / 255.0;
-                    // Keep the previous alpha value
-                    //m_boardAdapter.m_SolderMaskColorTop.a = color.Alpha() / 255.0;
-                    break;
-                case B_Mask:
-                    m_boardAdapter.m_SolderMaskColorBot.r = color.Red() / 255.0;
-                    m_boardAdapter.m_SolderMaskColorBot.g = color.Green() / 255.0;
-                    m_boardAdapter.m_SolderMaskColorBot.b = color.Blue() / 255.0;
-                    // Keep the previous alpha value
-                    //m_boardAdapter.m_SolderMaskColorBot.a = color.Alpha() / 255.0;
-                    break;
-                default:
-                    break;
-                }
-            }
-        }
-    }
-}
-
-
 void EDA_3D_VIEWER::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::CommonSettingsChanged" );
@@ -902,158 +790,6 @@ void EDA_3D_VIEWER::RenderEngineChanged()
 
     if( m_canvas )
         m_canvas->RenderEngineChanged();
-}
-
-
-bool EDA_3D_VIEWER::Set3DColorFromUser( SFVEC4F &aColor, const wxString& aTitle,
-                                        CUSTOM_COLORS_LIST* aPredefinedColors,
-                                        bool aAllowOpacityControl,
-                                        KIGFX::COLOR4D aDefaultColor )
-{
-    KIGFX::COLOR4D newcolor;
-    KIGFX::COLOR4D oldcolor( aColor.r,aColor.g, aColor.b, aColor.a );
-
-    DIALOG_COLOR_PICKER picker( this, oldcolor, aAllowOpacityControl, aPredefinedColors,
-                                aDefaultColor );
-
-    if( picker.ShowModal() != wxID_OK )
-        return false;
-
-    newcolor = picker.GetColor();
-
-    if( newcolor == oldcolor )
-        return false;
-
-    aColor.r = newcolor.r;
-    aColor.g = newcolor.g;
-    aColor.b = newcolor.b;
-    aColor.a = newcolor.a;
-
-    return true;
-}
-
-
-bool EDA_3D_VIEWER::Set3DSilkScreenColorFromUser()
-{
-    CUSTOM_COLORS_LIST colors;
-
-    colors.push_back( CUSTOM_COLOR_ITEM( 241.0/255.0, 241.0/255.0, 241.0/255.0, "White" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 4.0/255.0, 18.0/255.0, 21.0/255.0, "Dark" ) );
-
-    if( Set3DColorFromUser( m_boardAdapter.m_SilkScreenColorTop, _( "Silkscreen Color" ),
-                            &colors, false, colors[0].m_Color ) )
-    {
-        m_boardAdapter.m_SilkScreenColorBot = m_boardAdapter.m_SilkScreenColorTop;
-
-        refreshRender();
-
-        return true;
-    }
-
-    return false;
-}
-
-
-bool EDA_3D_VIEWER::Set3DSolderMaskColorFromUser()
-{
-    CUSTOM_COLORS_LIST colors;
-
-    colors.push_back( CUSTOM_COLOR_ITEM(  20/255.0,  51/255.0,  36/255.0, 0.83, "Green" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  91/255.0, 168/255.0,  12/255.0, 0.83, "Light Green" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  13/255.0, 104/255.0,  11/255.0, 0.83,
-                                          "Saturated Green" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 181/255.0,  19/255.0,  21/255.0, 0.83, "Red" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 239/255.0,  53/255.0,  41/255.0, 0.83,
-                                         "Red Light Orange" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 210/255.0,  40/255.0,  14/255.0, 0.83, "Red 2" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(   2/255.0,  59/255.0, 162/255.0, 0.83, "Blue" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  54/255.0,  79/255.0, 116/255.0, 0.83, "Light blue 1" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  61/255.0,  85/255.0, 130/255.0, 0.83, "Light blue 2" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  21/255.0,  70/255.0,  80/255.0, 0.83,
-                                          "Green blue (dark)" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  11/255.0,  11/255.0,  11/255.0, 0.83, "Black" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 245/255.0, 245/255.0, 245/255.0, 0.83, "White" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 119/255.0,  31/255.0,  91/255.0, 0.83, "Purple" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  32/255.0,   2/255.0,  53/255.0, 0.83, "Purple Dark" ) );
-
-    if( Set3DColorFromUser( m_boardAdapter.m_SolderMaskColorTop, _( "Solder Mask Color" ),
-                            &colors, true, colors[0].m_Color ) )
-    {
-        m_boardAdapter.m_SolderMaskColorBot = m_boardAdapter.m_SolderMaskColorTop;
-
-        refreshRender();
-
-        return true;
-    }
-
-    return false;
-}
-
-
-bool EDA_3D_VIEWER::Set3DCopperColorFromUser()
-{
-    CUSTOM_COLORS_LIST colors;
-
-    colors.push_back( CUSTOM_COLOR_ITEM( 184/255.0, 115/255.0,  50/255.0, "Copper" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 178/255.0, 156/255.0,       0.0, "Gold" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 213/255.0, 213/255.0, 213/255.0, "Silver" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 160/255.0, 160/255.0, 160/255.0, "Tin" ) );
-
-    if( Set3DColorFromUser( m_boardAdapter.m_CopperColor, _( "Copper Color" ), &colors, false,
-                            colors[0].m_Color ) )
-    {
-        refreshRender();
-
-        return true;
-    }
-
-    return false;
-}
-
-
-bool EDA_3D_VIEWER::Set3DBoardBodyColorFromUser()
-{
-    CUSTOM_COLORS_LIST colors;
-
-    colors.push_back( CUSTOM_COLOR_ITEM(  51/255.0,  43/255.0, 22/255.0, 0.9,
-                                          "FR4 natural, dark" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 109/255.0, 116/255.0, 75/255.0, 0.9, "FR4 natural" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  78/255.0,  14/255.0,  5/255.0, 0.9, "brown/red" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, 0.9, "brown 1" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 160/255.0, 123/255.0, 54/255.0, 0.9, "brown 2" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, 0.9, "brown 3" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  63/255.0, 126/255.0, 71/255.0, 0.9, "green 1" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 117/255.0, 122/255.0, 90/255.0, 0.9, "green 2" ) );
-
-    if( Set3DColorFromUser( m_boardAdapter.m_BoardBodyColor, _( "Board Body Color" ), &colors,
-                            true, colors[0].m_Color ) )
-    {
-        refreshRender();
-
-        return true;
-    }
-
-    return false;
-}
-
-
-bool EDA_3D_VIEWER::Set3DSolderPasteColorFromUser()
-{
-    CUSTOM_COLORS_LIST colors;
-
-    colors.push_back( CUSTOM_COLOR_ITEM( 128/255.0, 128/255.0, 128/255.0, "grey" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 213/255.0, 213/255.0, 213/255.0, "Silver" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  90/255.0,  90/255.0,  90/255.0, "grey 2" ) );
-
-    if( Set3DColorFromUser( m_boardAdapter.m_SolderPasteColor, _( "Solder Paste Color" ), &colors,
-                            false, colors[0].m_Color ) )
-    {
-        refreshRender();
-
-        return true;
-    }
-
-    return false;
 }
 
 

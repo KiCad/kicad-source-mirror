@@ -104,91 +104,19 @@ void EDA_3D_VIEWER::CreateMenuBar()
     //
     ACTION_MENU* prefsMenu = new ACTION_MENU( false, tool );
 
-    prefsMenu->Add( _( "Display Options" ), "",
-                    ID_TOOL_SET_VISIBLE_ITEMS,
-                    BITMAPS::config );
-
     prefsMenu->Add( _( "Raytracing" ), "",
                     ID_RENDER_CURRENT_VIEW,
                     BITMAPS::tools,
                     ACTION_MENU::CHECK );
 
-    // Render options submenu
-    ACTION_MENU* optsSubmenu = new ACTION_MENU( false, tool );
-    optsSubmenu->SetTitle( _( "Render Options" ) );
-    optsSubmenu->SetIcon( BITMAPS::options_3drender );
+    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
+                    _( "Show preferences for all open tools" ),
+                    wxID_PREFERENCES,
+                    BITMAPS::preference );
 
-    // Material properties submenu
-    ACTION_MENU* propsSubmenu = new ACTION_MENU( false, tool );
-    propsSubmenu->SetTitle( _( "Material Properties" ) );
-
-    propsSubmenu->Add( EDA_3D_ACTIONS::materialNormal,  ACTION_MENU::CHECK );
-    propsSubmenu->Add( EDA_3D_ACTIONS::materialDiffuse, ACTION_MENU::CHECK );
-    propsSubmenu->Add( EDA_3D_ACTIONS::materialCAD,     ACTION_MENU::CHECK );
-
-    optsSubmenu->Add( propsSubmenu );
-
-    optsSubmenu->Add( EDA_3D_ACTIONS::showBoundingBoxes, ACTION_MENU::CHECK );
-
-    // Raytracing  submenu
-    ACTION_MENU* raySubmenu = new ACTION_MENU( false, tool );
-    raySubmenu->SetTitle( _( "Raytracing Options" ) );
-
-    raySubmenu->Add( EDA_3D_ACTIONS::renderShadows,      ACTION_MENU::CHECK );
-    raySubmenu->Add( EDA_3D_ACTIONS::proceduralTextures, ACTION_MENU::CHECK );
-    raySubmenu->Add( EDA_3D_ACTIONS::addFloor,           ACTION_MENU::CHECK );
-    raySubmenu->Add( EDA_3D_ACTIONS::showRefractions,    ACTION_MENU::CHECK );
-    raySubmenu->Add( EDA_3D_ACTIONS::showReflections,    ACTION_MENU::CHECK );
-    raySubmenu->Add( EDA_3D_ACTIONS::antiAliasing,       ACTION_MENU::CHECK );
-    raySubmenu->Add( EDA_3D_ACTIONS::postProcessing,     ACTION_MENU::CHECK );
-
-    optsSubmenu->Add( raySubmenu );
-    prefsMenu->Add( optsSubmenu );
+    prefsMenu->Add( _( "Reset to Default Settings" ), ID_MENU3D_RESET_DEFAULTS, BITMAPS::tools );
 
     prefsMenu->AppendSeparator();
-
-    // Color  submenu
-    ACTION_MENU* colorSubmenu = new ACTION_MENU( false, tool );
-    colorSubmenu->SetTitle( _( "Choose Colors" ) );
-    colorSubmenu->SetIcon( BITMAPS::color_materials );
-
-    colorSubmenu->Add( _( "Background Top Color..." ),
-                       ID_MENU3D_BGCOLOR_TOP,
-                       BITMAPS::INVALID_BITMAP );
-
-    colorSubmenu->Add( _( "Background Bottom Color..." ),
-                       ID_MENU3D_BGCOLOR_BOTTOM,
-                       BITMAPS::INVALID_BITMAP );
-
-    colorSubmenu->Add( _( "Silkscreen Color..." ),
-                       ID_MENU3D_SILKSCREEN_COLOR,
-                       BITMAPS::INVALID_BITMAP );
-
-    colorSubmenu->Add( _( "Solder Mask Color..." ),
-                       ID_MENU3D_SOLDERMASK_COLOR,
-                       BITMAPS::INVALID_BITMAP );
-
-    colorSubmenu->Add( _( "Solder Paste Color..." ),
-                       ID_MENU3D_SOLDERPASTE_COLOR,
-                       BITMAPS::INVALID_BITMAP );
-
-    colorSubmenu->Add( _( "Copper/Surface Finish Color..." ),
-                       ID_MENU3D_COPPER_COLOR,
-                       BITMAPS::INVALID_BITMAP );
-
-    colorSubmenu->Add( _( "Board Body Color..." ),
-                       ID_MENU3D_PCB_BODY_COLOR,
-                       BITMAPS::INVALID_BITMAP );
-
-    // Only allow the stackup to be used in the PCB editor, since it isn't editable in the other frames
-    if( Parent()->IsType( FRAME_PCB_EDITOR ) )
-    {
-        colorSubmenu->Add( _( "Get colors from physical stackup" ),
-                           ID_MENU3D_STACKUP_COLORS,
-                           BITMAPS::INVALID_BITMAP );
-    }
-
-    prefsMenu->Add( colorSubmenu );
 
     prefsMenu->Add( EDA_3D_ACTIONS::showAxis, ACTION_MENU::CHECK );
 
@@ -204,16 +132,6 @@ void EDA_3D_VIEWER::CreateMenuBar()
     gridSubmenu->Add( EDA_3D_ACTIONS::show1mmGrid,   ACTION_MENU::CHECK);
 
     prefsMenu->Add( gridSubmenu );
-
-    prefsMenu->AppendSeparator();
-    prefsMenu->Add( _( "Reset to Default Settings" ), ID_MENU3D_RESET_DEFAULTS, BITMAPS::tools );
-
-#ifdef __APPLE__    // Note: will get moved to Apple menu by wxWidgets
-    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
-                    _( "Show preferences for all open tools" ),
-                    wxID_PREFERENCES,
-                    BITMAPS::preference );
-#endif
 
     //-- Menubar -------------------------------------------------------------
     //

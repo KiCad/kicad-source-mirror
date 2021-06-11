@@ -60,11 +60,6 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
                             _( "Copy 3D image to clipboard" ) );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddTool( ID_TOOL_SET_VISIBLE_ITEMS, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::config, this ),
-                            _( "Set display options, and some layers visibility" ) );
-
-    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_RENDER_CURRENT_VIEW, wxEmptyString,
                             KiScaledBitmap( BITMAPS::render_mode, this ),
                             _( "Render current view using Raytracing" ), wxITEM_CHECK );

@@ -80,13 +80,6 @@ public:
     static TOOL_ACTION attributesSMD;
     static TOOL_ACTION attributesVirtual;
     static TOOL_ACTION showBoundingBoxes;
-    static TOOL_ACTION renderShadows;
-    static TOOL_ACTION proceduralTextures;
-    static TOOL_ACTION addFloor;
-    static TOOL_ACTION showRefractions;
-    static TOOL_ACTION showReflections;
-    static TOOL_ACTION antiAliasing;
-    static TOOL_ACTION postProcessing;
     static TOOL_ACTION toggleRealisticMode;
     static TOOL_ACTION toggleBoardBody;
     static TOOL_ACTION showAxis;

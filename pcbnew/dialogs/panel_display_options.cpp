@@ -40,8 +40,7 @@ static const UTIL::CFG_MAP<PCB_DISPLAY_OPTIONS::TRACE_CLEARANCE_DISPLAY_MODE_T> 
 };
 
 
-PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( PCB_BASE_FRAME* aFrame,
-                                              PAGED_DIALOG* aParent ) :
+PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( PCB_BASE_FRAME* aFrame, PAGED_DIALOG* aParent ) :
     PANEL_DISPLAY_OPTIONS_BASE( aParent->GetTreebook() ),
     m_frame( aFrame )
 {

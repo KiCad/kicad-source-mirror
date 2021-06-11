@@ -33,7 +33,7 @@
 #include <functional>
 
 #include <gal/color4d.h>
-
+#include <dialogs/dialog_color_picker.h>
 
 enum SWATCH_SIZE
 {
@@ -90,6 +90,11 @@ public:
     void SetSwatchBackground( KIGFX::COLOR4D aBackground );
 
     /**
+     * Fetch a reference to the user colors list.
+     */
+    void SetUserColors( CUSTOM_COLORS_LIST* aUserColors ) { m_userColors = aUserColors; }
+
+    /**
      * @return the current swatch color
      */
     KIGFX::COLOR4D GetSwatchColor() const;
@@ -103,6 +108,8 @@ public:
 
     void SetReadOnly( bool aReadOnly = true ) { m_readOnly = aReadOnly; }
     bool IsReadOnly() const { return m_readOnly; }
+
+    void SetSupportsOpacity( bool aSupportsOpacity ) { m_supportsOpacity = aSupportsOpacity; }
 
     /// Registers a handler for when the user tries to interact with a read-only swatch
     void SetReadOnlyCallback( std::function<void()> aCallback ) { m_readOnlyCallback = aCallback; }
@@ -118,19 +125,23 @@ private:
      */
     void rePostEvent( wxEvent& aEvent );
 
-    KIGFX::COLOR4D  m_color;
-    KIGFX::COLOR4D  m_background;
-    KIGFX::COLOR4D  m_default;
+    KIGFX::COLOR4D        m_color;
+    KIGFX::COLOR4D        m_background;
+    KIGFX::COLOR4D        m_default;
+    CUSTOM_COLORS_LIST*   m_userColors;
 
-    wxStaticBitmap* m_swatch;
+    wxStaticBitmap*       m_swatch;
 
-    wxSize          m_size;
-    wxSize          m_checkerboardSize;
-    KIGFX::COLOR4D  m_checkerboardBg;
+    wxSize                m_size;
+    wxSize                m_checkerboardSize;
+    KIGFX::COLOR4D        m_checkerboardBg;
 
     /// A read-only swatch won't show the color chooser dialog but otherwise works normally
-    bool            m_readOnly;
+    bool                  m_readOnly;
     std::function<void()> m_readOnlyCallback;
+
+    /// If opacity is not supported the color chooser dialog will be displayed without it
+    bool                  m_supportsOpacity;
 };
 
 
