@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-06-05 08:33+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-06-13 17:58+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1324,9 +1324,8 @@ msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps 文件)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "图框 (.kicad_wks 文件)"
+msgstr "图纸 (.kicad_wks file)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -1476,9 +1475,8 @@ msgid "Cannot create output directory \"%s\".\n"
 msgstr "无法创建输出目录 \"%s\"。\n"
 
 #: common/common.cpp:615
-#, fuzzy
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr "KiCad 及其依赖库不再支持 Windows 7 及更早版本。"
+msgstr "KiCad 及其依赖库不支持此操作系统。"
 
 #: common/common.cpp:617
 msgid "Unsupported Operating System"
@@ -1488,7 +1486,7 @@ msgstr "不支持的操作系统"
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
-msgstr ""
+msgstr "无法将这个系统上任何 KiCad 的问题报告至官方 bugtracker。"
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -2398,9 +2396,9 @@ msgid "Portrait"
 msgstr "纵向"
 
 #: common/dialogs/dialog_page_settings.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file \"%s\" not found."
-msgstr "没有找到原理图文件 \"%s\"。"
+msgstr "未找到图纸文件 \"%s\"。"
 
 #: common/dialogs/dialog_page_settings.cpp:537
 msgid "the translation for paper size must preserve original spellings"
@@ -2412,12 +2410,11 @@ msgid "Landscape"
 msgstr "横向"
 
 #: common/dialogs/dialog_page_settings.cpp:781
-#, fuzzy
 msgid "Select Drawing Sheet File"
-msgstr "图纸"
+msgstr "选择图纸文件"
 
 #: common/dialogs/dialog_page_settings.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The drawing sheet file name has changed.\n"
 "Do you want to use the relative path:\n"
@@ -2425,10 +2422,10 @@ msgid ""
 "instead of\n"
 "\"%s\"?"
 msgstr ""
-"图框设计文件名称已更改。\n"
+"图纸文件名称已更改。\n"
 "你想使用相对路径：\n"
 "\"%s\"\n"
-"代替\n"
+"而非\n"
 "\"%s\" 吗？"
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
@@ -2633,9 +2630,8 @@ msgid "Comment9:"
 msgstr "注释 9："
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
-#, fuzzy
 msgid "Drawing sheet file"
-msgstr "图纸"
+msgstr "图纸文件"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Browse..."
@@ -3730,9 +3726,8 @@ msgstr "图片"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:91
 #: common/drawing_sheet/ds_data_model_io.cpp:120
-#, fuzzy
 msgid "Error writing drawing sheet file"
-msgstr "读取图表出错"
+msgstr "写入图纸文件出错"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
@@ -4108,9 +4103,8 @@ msgid "Schematic Field"
 msgstr "原理图字段"
 
 #: common/eda_item.cpp:283
-#, fuzzy
 msgid "Schematic Symbol"
-msgstr "编辑原理图符号"
+msgstr "原理图符号"
 
 #: common/eda_item.cpp:284
 msgid "Sheet Pin"
@@ -5290,12 +5284,12 @@ msgstr "缺失 '%s' | (%s) 的单位"
 #: common/libeval_compiler/libeval_compiler.cpp:1120
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "'%s' 和 %lf 的类型不匹配"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "%lf 和 '%s'的类型不匹配"
 
 #: common/pgm_base.cpp:170
 msgid "No default editor found, you must choose it"
@@ -6542,9 +6536,8 @@ msgid "Geda PCB footprint library files"
 msgstr "Geda PCB 封装库文件"
 
 #: common/wildcards_and_files_ext.cpp:358
-#, fuzzy
 msgid "Drawing sheet files"
-msgstr "图纸"
+msgstr "图纸文件"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad symbol footprint link files"
@@ -10234,31 +10227,27 @@ msgid "Sheet file must have a '.kicad_sch' extension."
 msgstr "图框文件必须具有 '.kicad_sch' 扩展名。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:295
-#, fuzzy
 msgid "Use relative path for sheet file?"
-msgstr "是否使用相对路径？"
+msgstr "是否对图框文件使用相对路径？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:296
-#, fuzzy
 msgid "Sheet File Path"
-msgstr "图框文件"
+msgstr "图框文件路径"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:299
 msgid ""
 "Using relative hierarchical sheet file name paths improves schematic "
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
-msgstr ""
+msgstr "使用相对分层的图框文件名路径改善原理图跨系统和平台的可移植性。使用绝对路径可能会导致可移植性问题。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:303
-#, fuzzy
 msgid "Use Relative Path"
-msgstr "是否使用相对路径？"
+msgstr "使用相对路径"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:304
-#, fuzzy
 msgid "Use Absolute Path"
-msgstr "绝对"
+msgstr "使用绝对路径"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:335
 msgid "Untitled Sheet"
@@ -10278,9 +10267,9 @@ msgstr ""
 "在偏好设置 > Eeschema > 颜色中。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
-msgstr "文件 \"%s\" 似乎不是有效的原理图文件。"
+msgstr "文件 '%s' 似乎不是有效的原理图文件."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:411
 msgid "Invalid Schematic File"
@@ -10294,21 +10283,25 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
+"不能违反父图框原理图文件路径:\n"
+"'%s'\n"
+"来正常化新图框原理图文件路径:\n"
+"'%s'。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists."
-msgstr "\"%s\" 已经存在。"
+msgstr "'%s' 已经存在。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Link '%s' to this file?"
-msgstr "链接 \"%s\"到这个文件？"
+msgstr "链接 '%s' 到这个文件？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "将 %s 的值从 '%s' 更改为 '%s'。"
+msgstr "要将 '%s' 链接从 '%s' 更改为 '%s' 吗？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:519
 #: eeschema/dialogs/dialog_sheet_properties.cpp:535
@@ -10316,19 +10309,19 @@ msgid "This action cannot be undone."
 msgstr "此操作无法撤销。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr "创建包含 \"%s\" 内容的新文件 \"%s\"？"
+msgstr "创建包含 '%s' 内容的新文件 '%s'？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:565
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving schematic file '%s'."
-msgstr "保存原理图文件 \"%s\" 发生错误。"
+msgstr "保存原理图文件 '%s' 发生错误。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:569
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save schematic '%s'"
-msgstr "无法保存原理图 \"%s\""
+msgstr "未能保存原理图 '%s'"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:651
 msgid "A sheet must have a name."
@@ -10728,12 +10721,12 @@ msgstr "对于 JFET，引脚顺序为 drain、gate、source"
 #, c-format
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
-msgstr ""
+msgstr "你需要指定瞬时源的至少前 %d 个参数"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:809
 msgid ""
 "You cannot leave interleaved empty fields when defining a transient source"
-msgstr ""
+msgstr "定义暂态源时，你不能保留交错的空字段"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1021
 msgid "Select library"
@@ -11101,9 +11094,8 @@ msgid "Alternate Assignment"
 msgstr "备用关联"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:335
-#, fuzzy
 msgid "Alternate pin assignments are not available for DeMorgan symbols."
-msgstr "备用引脚分配不适用于德摩根元件。"
+msgstr "备用引脚分配对德摩根符号不可用。"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:126
 msgid "Unit:"
@@ -11954,25 +11946,24 @@ msgid "Add Anyway"
 msgstr "仍然添加"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:723
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
-msgstr "选择包含旧版库的一个或多个表行以另存为当前格式（* .kicad_sym）。"
+msgstr "选择包含旧格式 (*.lib) 库的一行或多行来保存为当前的KiCad格式 (*.kicad_sym)。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:731
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr "将 '%s' 另存为当前格式（* .kicad_sym）并替换表中的旧条目？"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:737
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
-msgstr "将%d旧式库另存为当前格式（* .kicad_sym）并替换表中的旧式条目？"
+msgstr "将 %d 个旧格式库另存为当前 KiCad 格式（* .kicad_sym）并替换表中的旧格式条目？"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:755
 #, c-format
@@ -12071,9 +12062,8 @@ msgid "Remove library from table"
 msgstr "从表中删除库"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:135
-#, fuzzy
 msgid "Migrate Libraries"
-msgstr "迁移库..."
+msgstr "迁移库"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:145
 msgid "Path Substitutions:"
@@ -12380,11 +12370,9 @@ msgstr ""
 "层次原理图时发生错误。"
 
 #: eeschema/files-io.cpp:418 eeschema/files-io.cpp:1178
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s'."
-msgstr ""
-"加载原理图时出错。\n"
-"%s"
+msgstr "加载原理图 '%s' 时出错。"
 
 #: eeschema/files-io.cpp:425
 #, c-format
@@ -12392,9 +12380,9 @@ msgid "Memory exhausted loading schematic file \"%s\""
 msgstr "加载原理图文件 \"%s\" 时内存耗尽"
 
 #: eeschema/files-io.cpp:438 eeschema/files-io.cpp:1181 eeschema/sheet.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load '%s'."
-msgstr "无法加载 \"%s\""
+msgstr "未能加载 '%s'."
 
 #: eeschema/files-io.cpp:451
 msgid ""
@@ -12460,9 +12448,8 @@ msgid ""
 msgstr "这个文件由 KiCad 的旧版本所创建。它将被转换成新的格式保存。"
 
 #: eeschema/files-io.cpp:630
-#, fuzzy
 msgid "Schematic is read only."
-msgstr "电路图文件是只读的。"
+msgstr "原理图是只读的。"
 
 #: eeschema/files-io.cpp:655
 msgid "Append Schematic"
@@ -12490,15 +12477,15 @@ msgstr "导入原理图"
 #: eeschema/files-io.cpp:807 eeschema/files-io.cpp:864
 #: kicad/tools/kicad_manager_control.cpp:118
 #: kicad/tools/kicad_manager_control.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"无法创建目录 \"%s\"。\n"
+"无法创建目录 '%s'。\n"
 "\n"
-"请确保你拥有写入权限并不再次尝试。"
+"请确保你有写入权限并再次尝试。"
 
 #: eeschema/files-io.cpp:924
 msgid "Saving will overwrite existing files."
@@ -12525,9 +12512,9 @@ msgid "Abort Project Save"
 msgstr "中止工程保存"
 
 #: eeschema/files-io.cpp:1106
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open."
-msgstr "电路图文件 \"%s\" 已经打开。"
+msgstr "原理图 '%s' 已经打开。"
 
 #: eeschema/files-io.cpp:1204
 msgid "The current schematic has been modified.  Save changes?"
@@ -12801,6 +12788,8 @@ msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 msgstr ""
+"多个符号的位号相同。\n"
+"仿真前必须校正注释。"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:122
 msgid "Run command:"
@@ -13380,21 +13369,19 @@ msgstr ""
 "%d。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
-msgstr "符号 ID '%s' 的类型未知。它既不是元件也不是网络电源/符号。未加载符号。"
+msgstr "符号 ID '%s' 的类型未知。它既不是符号也不是网络电源/符号。该符号未被加载。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:652
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
-msgstr ""
-"符号'%s'在原始CADSTAR示意图中按比例缩放，但KiCad不支持。该符号已按1：1比例加"
-"载，可能需要手动固定。"
+msgstr "符号 '%s' 在原始 CADSTAR 原理图中按比例缩放，但 KiCad 不支持。当符号从库中重新加载时，它将恢复到原来的1:1比例。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1092
 #, c-format
@@ -14398,14 +14385,12 @@ msgid "space"
 msgstr "空格"
 
 #: eeschema/sch_validators.cpp:178
-#, fuzzy
 msgid " or "
-msgstr "%s 或 %s"
+msgstr " 或 "
 
 #: eeschema/sch_validators.cpp:183
-#, fuzzy
 msgid ", or "
-msgstr "%s 或 %s"
+msgstr ", 或 "
 
 #: eeschema/sch_validators.cpp:196
 msgid "The reference designator cannot contain text variable references"
@@ -15393,9 +15378,9 @@ msgid "Change Visibility"
 msgstr "修改可见性"
 
 #: eeschema/tools/assign_footprints.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open symbol-footprint link file \"%s\""
-msgstr "无法打开元件封装链接文件 \"%s\""
+msgstr "未能打开元件封装链接文件 \"%s\""
 
 #: eeschema/tools/backannotate.cpp:73
 msgid "Select at least one property to back annotate."
@@ -17616,9 +17601,8 @@ msgid "Library Path"
 msgstr "库路径"
 
 #: include/lib_table_grid.h:187
-#, fuzzy
 msgid "Library Format"
-msgstr "库路径"
+msgstr "库格式"
 
 #: include/lib_table_grid.h:190
 msgid "Active"
@@ -17654,7 +17638,7 @@ msgstr "选择模板目录"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:29
 msgid "Folder:"
-msgstr ""
+msgstr "文件夹："
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:36
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:216
@@ -17893,14 +17877,14 @@ msgid "Cound't find the meta HTML information file for this template!"
 msgstr "找不到此模板的元 HTML 信息文件！"
 
 #: kicad/project_template.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create folder '%s'."
-msgstr "无法创建文件夹 \"%s\"。"
+msgstr "无法创建文件夹 '%s'。"
 
 #: kicad/project_template.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy file '%s'."
-msgstr "无法复制文件 \"%s\"。"
+msgstr "无法复制文件 '%s'。"
 
 #: kicad/project_tree_item.cpp:110
 msgid ""
@@ -17923,14 +17907,14 @@ msgid "Permission error?"
 msgstr "权限错误？"
 
 #: kicad/project_tree_item.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to recycle bin."
-msgstr "\"%s\" 无法转换为整数"
+msgstr "无法移动 '%s' 到回收站。"
 
 #: kicad/project_tree_item.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to trash."
-msgstr "\"%s\" 无法转换为整数"
+msgstr "无法移动 '%s' 到垃圾箱。"
 
 #: kicad/project_tree_pane.cpp:256
 msgid "Directory name:"
@@ -18021,9 +18005,8 @@ msgid "Delete the files and their contents"
 msgstr "删除文件及其内容"
 
 #: kicad/project_tree_pane.cpp:793
-#, fuzzy
 msgid "Move to Trash"
-msgstr "转换为布线"
+msgstr "移动到垃圾箱"
 
 #: kicad/project_tree_pane.cpp:807
 msgid "Print the contents of the file"
@@ -18127,7 +18110,6 @@ msgid "Launch preferred text editor"
 msgstr "启动首选文本编辑器"
 
 #: kicad/tools/kicad_manager_control.cpp:45
-#, fuzzy
 msgid "Create a new folder for the project"
 msgstr "为工程创建一个新目录"
 
@@ -18136,14 +18118,13 @@ msgid "Create New Project"
 msgstr "新建工程"
 
 #: kicad/tools/kicad_manager_control.cpp:127
-#, fuzzy
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
-"您选择的不是空目录。 建议在空目录中创建工程。\n"
+"所选的不是空目录。 建议在空目录中创建项目。\n"
 "\n"
 "你想继续吗？"
 
@@ -18164,17 +18145,13 @@ msgid "New Project Folder"
 msgstr "新建工程文件夹"
 
 #: kicad/tools/kicad_manager_control.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write to folder '%s'."
-msgstr "无法写入到文件夹 \"%s\"。"
+msgstr "无法写入文件夹 ‘%s’。"
 
 #: kicad/tools/kicad_manager_control.cpp:229
-#, fuzzy
 msgid "Make sure you have write permissions and try again."
-msgstr ""
-"无法创建目录 \"%s\"。\n"
-"\n"
-"请确保你拥有写入权限并不再次尝试。"
+msgstr "请确保你拥有写入权限并再次尝试。"
 
 #: kicad/tools/kicad_manager_control.cpp:249
 msgid "Overwriting files:"
@@ -18185,9 +18162,8 @@ msgid "Similar files already exist in the destination folder."
 msgstr "目标文件夹中已存在类似文件。"
 
 #: kicad/tools/kicad_manager_control.cpp:272
-#, fuzzy
 msgid "A problem occurred creating new project from template."
-msgstr "从模板创建工程出现问题!"
+msgstr "从模板创建工程发生一个问题。"
 
 #: kicad/tools/kicad_manager_control.cpp:295
 msgid "Open Existing Project"
@@ -18338,14 +18314,12 @@ msgid "New Item"
 msgstr "新建项"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:236
-#, fuzzy
 msgid "Print Drawing Sheet"
-msgstr "图纸"
+msgstr "打印图纸"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:241
-#, fuzzy
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr "打印原理图时出现错误。"
+msgstr "尝试打印图纸时出现错误。"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:242
 msgid "Printing"
@@ -18515,14 +18489,12 @@ msgid "General Options"
 msgstr "常规选项"
 
 #: pagelayout_editor/files.cpp:54
-#, fuzzy
 msgid "Drawing Sheet File"
-msgstr "图纸"
+msgstr "图纸文件"
 
 #: pagelayout_editor/files.cpp:60 pagelayout_editor/files.cpp:101
-#, fuzzy
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "当前封装已被修改。是否保存更改？"
+msgstr "当前图纸已被修改。保存更改？"
 
 #: pagelayout_editor/files.cpp:73
 #, c-format
@@ -18601,14 +18573,12 @@ msgid "coord origin: %s"
 msgstr "坐标原点: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:893
-#, fuzzy
 msgid "New drawing sheet file is unsaved"
-msgstr "新原理图文件未保存"
+msgstr "新图纸文件未保存"
 
 #: pagelayout_editor/pl_editor_frame.cpp:897
-#, fuzzy
 msgid "Drawing sheet changes are unsaved"
-msgstr "封装更改未保存"
+msgstr "图纸更改未保存"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
 msgid "Page Width"
@@ -18687,9 +18657,8 @@ msgid "Show Design Inspector"
 msgstr "显示设计检查器"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
-#, fuzzy
 msgid "Show the list of items in the drawing sheet"
-msgstr "在图框中显示项目列表"
+msgstr "显示图纸中项目的列表"
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Page Preview Settings..."
@@ -21679,7 +21648,7 @@ msgstr "间隙："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
-msgstr ""
+msgstr "这个区域的铜间隙 (设为 0 使用网络类间隙)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:216
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
@@ -21719,7 +21688,7 @@ msgstr "防散热间距："
 msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
-msgstr ""
+msgstr "区域的填充区和由散热式镂空辐条连接的焊盘间保持清晰的距离。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:257
 msgid "Clearance between pads in the same net and filled areas."
@@ -22366,9 +22335,8 @@ msgid "Done.<br><br>"
 msgstr "完成。<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:450
-#, fuzzy
 msgid "Run clearance resolution tool..."
-msgstr "间隙解析..."
+msgstr "运行间隙解析工具..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:477
 msgid "Open the Board Setup... dialog"
@@ -22630,17 +22598,16 @@ msgstr "导出 IDFv3"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:208
 msgid "Non-unity scaled models:"
-msgstr ""
+msgstr "非同式缩放的模型:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:210
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
-msgstr ""
+msgstr "检测到缩放的模型。 模型缩放对机械导出是不可靠的。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:212
-#, fuzzy
 msgid "Model Scale Warning"
-msgstr "保存警告"
+msgstr "模型缩放警告"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:248
 msgid "STEP export failed!  Please save the PCB and try again"
@@ -22706,11 +22673,11 @@ msgstr "忽略虚拟元件"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:139
 msgid "Substitute similarly named models"
-msgstr ""
+msgstr "替换命名相似的模型"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:140
 msgid "Replace VRML models with STEP models of the same name"
-msgstr ""
+msgstr "将VRML模型替换为同名的STEP模型"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:144
 msgid "Overwrite old file"
@@ -23285,9 +23252,8 @@ msgstr "防散热 (花焊盘)"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:433
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:334
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:784
-#, fuzzy
 msgid "Clearance Overrides and Settings"
-msgstr "局部间隙和设置"
+msgstr "间隙覆盖和设置"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:455
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:356
@@ -28196,9 +28162,8 @@ msgid "Items not allowed"
 msgstr "不允许的项目"
 
 #: pcbnew/drc/drc_item.cpp:61
-#, fuzzy
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr "（在 Edge.Cuts 层上没有找到边框）"
+msgstr "Edge.Cuts 层上的文本 (或标注)"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Clearance violation"
@@ -28237,9 +28202,8 @@ msgid "Drilled holes too close together"
 msgstr "钻孔太靠近了"
 
 #: pcbnew/drc/drc_item.cpp:101
-#, fuzzy
 msgid "Drilled holes co-located"
-msgstr "钻孔太靠近了"
+msgstr "钻孔并列在一起了"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Track width"
@@ -28372,9 +28336,9 @@ msgid "Missing version number."
 msgstr "缺少版本号。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr "无法识别的项目 '%s'。 | 应为版本号"
+msgstr "未识别的项目 '%s'. | 预期的版本号。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:144 pcbnew/drc/drc_rule_parser.cpp:223
 #: pcbnew/drc/drc_rule_parser.cpp:365 pcbnew/drc/drc_rule_parser.cpp:386
@@ -29067,29 +29031,24 @@ msgid "Footprint %s"
 msgstr "封装 %s"
 
 #: pcbnew/footprint.cpp:2084 pcbnew/pad.cpp:1526 pcbnew/zone.cpp:1426
-#, fuzzy
 msgid "Clearance Override"
-msgstr "间隙概要"
+msgstr "间隙覆盖"
 
 #: pcbnew/footprint.cpp:2087 pcbnew/pad.cpp:1503
-#, fuzzy
 msgid "Solderpaste Margin Override"
-msgstr "锡膏间隙"
+msgstr "焊锡膏边缘覆盖"
 
 #: pcbnew/footprint.cpp:2090 pcbnew/pad.cpp:1506
-#, fuzzy
 msgid "Solderpaste Margin Ratio Override"
-msgstr "局部焊锡边率"
+msgstr "焊锡膏边缘率覆盖"
 
 #: pcbnew/footprint.cpp:2092 pcbnew/pad.cpp:1508 pcbnew/zone.cpp:1437
-#, fuzzy
 msgid "Thermal Relief Width"
-msgstr "防散热导线宽度"
+msgstr "花焊盘宽度"
 
 #: pcbnew/footprint.cpp:2095 pcbnew/pad.cpp:1511 pcbnew/zone.cpp:1434
-#, fuzzy
 msgid "Thermal Relief Gap"
-msgstr "防散热 (花焊盘)"
+msgstr "防散热 (花焊盘) 间距"
 
 #: pcbnew/footprint.h:206
 #, c-format
@@ -29846,19 +29805,19 @@ msgid "Cannot add %s (no footprint assigned)."
 msgstr "无法添加 %s (没有关联封装)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "无法添加 %s (封装 \"%s\" 未找到)。"
+msgstr "无法添加 %s (封装 '%s' 未找到)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s (footprint '%s')."
-msgstr "添加 %s (封装 \"%s\")。"
+msgstr "添加 %s (封装 '%s')。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint '%s')."
-msgstr "添加了 %s (封装 \"%s\")。"
+msgstr "添加了 %s (封装 '%s')。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:204
 #, c-format
@@ -29866,9 +29825,9 @@ msgid "Cannot update %s (no footprint assigned)."
 msgstr "无法更新 %s (没有关联封装)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "无法更新 %s (封装 \"%s\" 未找到)."
+msgstr "无法更新 %s (封装 '%s' 未找到)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:226
 #, c-format
@@ -30046,9 +30005,9 @@ msgid "Processing symbol '%s:%s'."
 msgstr "正在处理符号 '%s:%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for '%s'."
-msgstr "找到 \"%s\" 的多个封装。"
+msgstr "找到了 '%s' 的多个封装。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1042
 #, c-format
@@ -30343,9 +30302,8 @@ msgid "Pad To Die Length"
 msgstr "焊盘到裸芯片长度"
 
 #: pcbnew/pad.cpp:1500
-#, fuzzy
 msgid "Soldermask Margin Override"
-msgstr "阻焊间隙"
+msgstr "阻焊层边界覆盖"
 
 #: pcbnew/pad.cpp:1514
 msgid "Fabrication Property"
@@ -30372,14 +30330,14 @@ msgid "New PCB file is unsaved"
 msgstr "新的 PCB 文件未保存"
 
 #: pcbnew/pcb_edit_frame.cpp:824
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to '%s' before closing?"
-msgstr "是否在 \"%s\" 关闭之前保存更改？"
+msgstr "是否在关闭前将更改保存到 '%s'？"
 
 #: pcbnew/pcb_edit_frame.cpp:875
-#, fuzzy, c-format
+#, c-format
 msgid "The auto save file '%s' could not be removed!"
-msgstr "自动保存文件 \"%s\" 不能被删除！"
+msgstr "自动保存文件 '%s' 不能被删除！"
 
 #: pcbnew/pcb_edit_frame.cpp:1103
 msgid "Board file is read only."
@@ -30407,9 +30365,9 @@ msgid "Eeschema netlist"
 msgstr "Eeschema 网表"
 
 #: pcbnew/pcb_edit_frame.cpp:1446
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' not found."
-msgstr "没有找到原理图文件 \"%s\"。"
+msgstr "没有找到原理图文件 '%s'。"
 
 #: pcbnew/pcb_edit_frame.cpp:1477
 msgid "Eeschema failed to load:\n"
@@ -31046,7 +31004,7 @@ msgstr ""
 "%.1f 度。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3534
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimetres were applied instead."
@@ -32665,9 +32623,8 @@ msgid "_copy"
 msgstr "_复制(copy)"
 
 #: pcbnew/tools/footprint_editor_control.cpp:586
-#, fuzzy
 msgid "No footprint problems found."
-msgstr "未发现电路板问题。"
+msgstr "未发现封装问题。"
 
 #: pcbnew/tools/group_tool.cpp:43
 msgid "Grouping"
@@ -33560,19 +33517,16 @@ msgid "Clear any existing net highlighting"
 msgstr "清除任何现有的网络高亮"
 
 #: pcbnew/tools/pcb_actions.cpp:725
-#, fuzzy
 msgid "Toggle Net Highlight"
-msgstr "切换最后一个网络高亮"
+msgstr "切换网络高亮"
 
 #: pcbnew/tools/pcb_actions.cpp:725
-#, fuzzy
 msgid "Toggle net highlighting"
-msgstr "清除网络高亮"
+msgstr "切换网络高亮"
 
 #: pcbnew/tools/pcb_actions.cpp:732
-#, fuzzy
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "高亮网络中的所有铜项目"
+msgstr "高亮选定网络 (s) 中的所有铜项目"
 
 #: pcbnew/tools/pcb_actions.cpp:739
 msgid "Hide Net"
@@ -33599,14 +33553,12 @@ msgid "Open schematic in Eeschema"
 msgstr "在 Eeschema 中打开原理图"
 
 #: pcbnew/tools/pcb_actions.cpp:757
-#, fuzzy
 msgid "Local Ratsnest"
-msgstr "显示飞线"
+msgstr "本地飞线"
 
 #: pcbnew/tools/pcb_actions.cpp:757
-#, fuzzy
 msgid "Toggle ratsnest display of selected item(s)"
-msgstr "显示所选项目的飞线"
+msgstr "切换是否展示所选项目 (s) 的飞线"
 
 #: pcbnew/tools/pcb_actions.cpp:768
 msgid "Show the net inspector"
@@ -33922,14 +33874,12 @@ msgid "Run various diagnostics and attempt to repair board"
 msgstr "运行各种诊断程序并尝试修复电路板"
 
 #: pcbnew/tools/pcb_actions.cpp:1093
-#, fuzzy
 msgid "Repair Footprint"
-msgstr "新建封装"
+msgstr "修复封装"
 
 #: pcbnew/tools/pcb_actions.cpp:1094
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair footprint"
-msgstr "运行各种诊断程序并尝试修复电路板"
+msgstr "运行各种诊断程序并尝试修复封装"
 
 #: pcbnew/tools/pcb_actions.cpp:1102
 msgid "Align to Top"
