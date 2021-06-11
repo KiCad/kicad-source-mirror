@@ -125,7 +125,12 @@ void CAMERA::SetBoardLookAtPos( const SFVEC3F& aBoardPos )
     if( m_board_lookat_pos_init != aBoardPos )
     {
         m_board_lookat_pos_init = aBoardPos;
-        SetLookAtPos( aBoardPos );
+        m_lookat_pos = aBoardPos;
+
+        m_parametersChanged = true;
+
+        updateViewMatrix();
+        updateFrustum();
     }
 }
 

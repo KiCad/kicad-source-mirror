@@ -33,21 +33,19 @@
 #include "../3d_math.h"
 #include <wx/log.h>
 
+#include <glm/gtc/quaternion.hpp>
 
 TRACK_BALL::TRACK_BALL( float aInitialDistance ) :
     CAMERA( aInitialDistance )
 {
     wxLogTrace( m_logTrace, wxT( "TRACK_BALL::TRACK_BALL" ) );
 
-    memset( m_quat, 0, sizeof( m_quat ) );
     memset( m_quat_t0, 0, sizeof( m_quat_t0 ) );
     memset( m_quat_t1, 0, sizeof( m_quat_t1 ) );
 
-    trackball( m_quat, 0.0, 0.0, 0.0, 0.0 );
     trackball( m_quat_t0, 0.0, 0.0, 0.0, 0.0 );
     trackball( m_quat_t1, 0.0, 0.0, 0.0, 0.0 );
 }
-
 
 void TRACK_BALL::Drag( const wxPoint& aNewMousePosition )
 {
@@ -64,33 +62,14 @@ void TRACK_BALL::Drag( const wxPoint& aNewMousePosition )
                zoom * ( 2.0 * aNewMousePosition.x - m_windowSize.x ) / m_windowSize.x,
                zoom * ( m_windowSize.y - 2.0 * aNewMousePosition.y ) / m_windowSize.y );
 
-    add_quats( spin_quat, m_quat, m_quat );
-
-    float rotationMatrix[4][4];
-
-    build_rotmatrix( rotationMatrix, m_quat );
-
-    m_rotationMatrix = glm::make_mat4( &rotationMatrix[0][0] );
+    float spin_matrix[4][4];
+    build_rotmatrix( spin_matrix, spin_quat );
+    m_rotationMatrix = glm::make_mat4( &spin_matrix[0][0] ) * m_rotationMatrix;
 
     updateViewMatrix();
 
     updateFrustum();
 }
-
-
-void TRACK_BALL::SetLookAtPos( const SFVEC3F& aLookAtPos )
-{
-    if( m_lookat_pos != aLookAtPos )
-    {
-        m_lookat_pos = aLookAtPos;
-
-        updateViewMatrix();
-        updateFrustum();
-
-        m_parametersChanged = true;
-    }
-}
-
 
 void TRACK_BALL::Pan( const wxPoint& aNewMousePosition )
 {
@@ -106,7 +85,7 @@ void TRACK_BALL::Pan( const wxPoint& aNewMousePosition )
     else // PROJECTION_TYPE::PERSPECTIVE
     {
         // Unproject the coordinates using the precomputed frustum tangent (zoom level dependent)
-        const float panFactor = -m_camera_pos.z *  m_frustum.tang * 2;
+        const float panFactor = -m_camera_pos.z * m_frustum.tang * 2;
         m_camera_pos.x -= panFactor * m_frustum.ratio *
                 ( m_lastPosition.x - aNewMousePosition.x ) / m_windowSize.x;
         m_camera_pos.y -= panFactor * ( aNewMousePosition.y - m_lastPosition.y ) / m_windowSize.y;
@@ -115,7 +94,6 @@ void TRACK_BALL::Pan( const wxPoint& aNewMousePosition )
     updateViewMatrix();
     updateFrustum();
 }
-
 
 void TRACK_BALL::Pan( const SFVEC3F& aDeltaOffsetInc )
 {
@@ -127,21 +105,10 @@ void TRACK_BALL::Pan( const SFVEC3F& aDeltaOffsetInc )
     updateFrustum();
 }
 
-
 void TRACK_BALL::Pan_T1( const SFVEC3F& aDeltaOffsetInc )
 {
     m_camera_pos_t1 = m_camera_pos + aDeltaOffsetInc;
 }
-
-
-void TRACK_BALL::Reset()
-{
-    CAMERA::Reset();
-
-    memset( m_quat, 0, sizeof( m_quat ) );
-    trackball( m_quat, 0.0, 0.0, 0.0, 0.0 );
-}
-
 
 void TRACK_BALL::Reset_T1()
 {
@@ -151,15 +118,19 @@ void TRACK_BALL::Reset_T1()
     trackball( m_quat_t1, 0.0, 0.0, 0.0, 0.0 );
 }
 
-
 void TRACK_BALL::SetT0_and_T1_current_T()
 {
     CAMERA::SetT0_and_T1_current_T();
 
-    memcpy( m_quat_t0, m_quat, sizeof( m_quat ) );
-    memcpy( m_quat_t1, m_quat, sizeof( m_quat ) );
-}
+    double quat[4];
 
+    // Charge the quaternions with the current rotation matrix to allow dual input.
+    std::copy_n( glm::value_ptr( glm::conjugate( glm::quat_cast( m_rotationMatrix ) ) ),
+                 sizeof( quat ) / sizeof( quat[0] ), quat );
+
+    memcpy( m_quat_t0, quat, sizeof( quat ) );
+    memcpy( m_quat_t1, quat, sizeof( quat ) );
+}
 
 void TRACK_BALL::Interpolate( float t )
 {
@@ -184,15 +155,15 @@ void TRACK_BALL::Interpolate( float t )
     }
 
     const float t0 = 1.0f - t;
-
-    m_quat[0] = m_quat_t0[0] * t0 + m_quat_t1[0] * t;
-    m_quat[1] = m_quat_t0[1] * t0 + m_quat_t1[1] * t;
-    m_quat[2] = m_quat_t0[2] * t0 + m_quat_t1[2] * t;
-    m_quat[3] = m_quat_t0[3] * t0 + m_quat_t1[3] * t;
+    double      quat[4];
+    quat[0] = m_quat_t0[0] * t0 + m_quat_t1[0] * t;
+    quat[1] = m_quat_t0[1] * t0 + m_quat_t1[1] * t;
+    quat[2] = m_quat_t0[2] * t0 + m_quat_t1[2] * t;
+    quat[3] = m_quat_t0[3] * t0 + m_quat_t1[3] * t;
 
     float rotationMatrix[4][4];
 
-    build_rotmatrix( rotationMatrix, m_quat );
+    build_rotmatrix( rotationMatrix, quat );
 
     m_rotationMatrix = glm::make_mat4( &rotationMatrix[0][0] );
 

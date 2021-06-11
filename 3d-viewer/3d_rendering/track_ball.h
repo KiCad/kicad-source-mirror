@@ -50,10 +50,6 @@ public:
 
     void Pan_T1( const SFVEC3F& aDeltaOffsetInc ) override;
 
-    void SetLookAtPos( const SFVEC3F& aLookAtPos ) override;
-
-    void Reset() override;
-
     void Reset_T1() override;
 
     void SetT0_and_T1_current_T() override;
@@ -62,9 +58,8 @@ public:
 
 private:
     /**
-     *  quarternion of the trackball
+     *  interpolate quaternions of the trackball
      */
-    double m_quat[4];
     double m_quat_t0[4];
     double m_quat_t1[4];
 };
