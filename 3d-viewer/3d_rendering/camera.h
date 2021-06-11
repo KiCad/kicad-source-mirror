@@ -109,15 +109,7 @@ public:
     float GetNear() const { return m_frustum.nearD; }
     float GetFar() const { return m_frustum.farD; }
 
-    void SetBoardLookAtPos( const SFVEC3F& aBoardPos )
-    {
-        if( m_board_lookat_pos_init != aBoardPos )
-        {
-            m_board_lookat_pos_init = aBoardPos;
-            SetLookAtPos( aBoardPos );
-        }
-    }
-
+    void         SetBoardLookAtPos( const SFVEC3F& aBoardPos );
     virtual void SetLookAtPos( const SFVEC3F& aLookAtPos ) = 0;
 
     void SetLookAtPos_T1( const SFVEC3F& aLookAtPos )

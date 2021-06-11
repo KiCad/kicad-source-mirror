@@ -120,6 +120,14 @@ void CAMERA::Reset_T1()
         m_rotate_aux_t1.z = static_cast<float>( 2.0f * M_PI );
 }
 
+void CAMERA::SetBoardLookAtPos( const SFVEC3F& aBoardPos )
+{
+    if( m_board_lookat_pos_init != aBoardPos )
+    {
+        m_board_lookat_pos_init = aBoardPos;
+        SetLookAtPos( aBoardPos );
+    }
+}
 
 void CAMERA::zoomChanged()
 {
@@ -186,7 +194,6 @@ void CAMERA::rebuildProjection()
 
         m_frustum.nearD = 0.10f;
 
-        // Ratio width / height of the window display
         m_frustum.angle = 45.0f;
 
         m_projectionMatrix = glm::perspective( glm::radians( m_frustum.angle ), m_frustum.ratio,
@@ -199,19 +206,22 @@ void CAMERA::rebuildProjection()
         m_focalLen.x = ( (float)m_windowSize.y / (float)m_windowSize.x ) / m_frustum.tang;
         m_focalLen.y = 1.0f / m_frustum.tang;
 
-        m_frustum.nh = m_frustum.nearD * m_frustum.tang;
+        m_frustum.nh = 2.0f * m_frustum.nearD * m_frustum.tang;
         m_frustum.nw = m_frustum.nh * m_frustum.ratio;
-        m_frustum.fh = m_frustum.farD * m_frustum.tang;
+        m_frustum.fh = 2.0f * m_frustum.farD * m_frustum.tang;
         m_frustum.fw = m_frustum.fh * m_frustum.ratio;
         break;
 
     case PROJECTION_TYPE::ORTHO:
 
+        // Keep the viewed plane at (m_camera_pos_init * m_zoom) the same dimensions in both projections.
+        m_frustum.angle = 45.0f;
+        m_frustum.tang = glm::tan( glm::radians( m_frustum.angle ) * 0.5f );
+
         m_frustum.nearD = -m_frustum.farD; // Use a symmetrical clip plane for ortho projection
 
-        // This formula was found by trial and error
-        const float orthoReductionFactor = glm::length( m_camera_pos_init ) *
-                                           m_zoom * m_zoom * 0.5f;
+        const float orthoReductionFactor =
+                glm::length( m_camera_pos_init ) * m_zoom * m_frustum.tang;
 
         // Initialize Projection Matrix for Orthographic View
         m_projectionMatrix = glm::ortho( -m_frustum.ratio * orthoReductionFactor,
@@ -283,21 +293,26 @@ void CAMERA::updateFrustum()
      * http://www.lighthouse3d.com/tutorials/view-frustum-culling/
      */
 
+    const SFVEC3F half_right_nw = m_right * m_frustum.nw * 0.5f;
+    const SFVEC3F half_right_fw = m_right * m_frustum.fw * 0.5f;
+    const SFVEC3F half_up_nh = m_up * m_frustum.nh * 0.5f;
+    const SFVEC3F half_up_fh = m_up * m_frustum.fh * 0.5f;
+
     // compute the centers of the near and far planes
     m_frustum.nc = m_pos - m_dir * m_frustum.nearD;
     m_frustum.fc = m_pos - m_dir * m_frustum.farD;
 
     // compute the 4 corners of the frustum on the near plane
-    m_frustum.ntl = m_frustum.nc + m_up * m_frustum.nh - m_right * m_frustum.nw;
-    m_frustum.ntr = m_frustum.nc + m_up * m_frustum.nh + m_right * m_frustum.nw;
-    m_frustum.nbl = m_frustum.nc - m_up * m_frustum.nh - m_right * m_frustum.nw;
-    m_frustum.nbr = m_frustum.nc - m_up * m_frustum.nh + m_right * m_frustum.nw;
+    m_frustum.ntl = m_frustum.nc + half_up_nh - half_right_nw;
+    m_frustum.ntr = m_frustum.nc + half_up_nh + half_right_nw;
+    m_frustum.nbl = m_frustum.nc - half_up_nh - half_right_nw;
+    m_frustum.nbr = m_frustum.nc - half_up_nh + half_right_nw;
 
     // compute the 4 corners of the frustum on the far plane
-    m_frustum.ftl = m_frustum.fc + m_up * m_frustum.fh - m_right * m_frustum.fw;
-    m_frustum.ftr = m_frustum.fc + m_up * m_frustum.fh + m_right * m_frustum.fw;
-    m_frustum.fbl = m_frustum.fc - m_up * m_frustum.fh - m_right * m_frustum.fw;
-    m_frustum.fbr = m_frustum.fc - m_up * m_frustum.fh + m_right * m_frustum.fw;
+    m_frustum.ftl = m_frustum.fc + half_up_fh - half_right_fw;
+    m_frustum.ftr = m_frustum.fc + half_up_fh + half_right_fw;
+    m_frustum.fbl = m_frustum.fc - half_up_fh - half_right_fw;
+    m_frustum.fbr = m_frustum.fc - half_up_fh + half_right_fw;
 
     if( ( m_windowSize.x > 0 ) && ( m_windowSize.y > 0 ) )
     {
@@ -306,16 +321,12 @@ void CAMERA::updateFrustum()
         m_up_nY.resize( m_windowSize.y + 1 );
 
         // Precalc X values for camera -> ray generation
-        const SFVEC3F right_nw = m_right * m_frustum.nw;
-
         for( unsigned int x = 0; x < ( (unsigned int) m_windowSize.x + 1 ); ++x )
-            m_right_nX[x] = right_nw * m_scr_nX[x];
+            m_right_nX[x] = half_right_nw * m_scr_nX[x];
 
         // Precalc Y values for camera -> ray generation
-        const SFVEC3F up_nh = m_up * m_frustum.nh;
-
         for( unsigned int y = 0; y < ( (unsigned int) m_windowSize.y + 1 ); ++y )
-            m_up_nY[y] = up_nh * m_scr_nY[y];
+            m_up_nY[y] = half_up_nh * m_scr_nY[y];
     }
 }
 
@@ -326,18 +337,16 @@ void CAMERA::MakeRay( const SFVEC2I& aWindowPos, SFVEC3F& aOutOrigin,
     wxASSERT( aWindowPos.x < m_windowSize.x );
     wxASSERT( aWindowPos.y < m_windowSize.y );
 
-    const SFVEC3F up_plus_right = m_up_nY[aWindowPos.y] + m_right_nX[aWindowPos.x];
+    aOutOrigin = m_frustum.nc + m_up_nY[aWindowPos.y] + m_right_nX[aWindowPos.x];
 
     switch( m_projectionType )
     {
     default:
     case PROJECTION_TYPE::PERSPECTIVE:
-        aOutOrigin = up_plus_right + m_frustum.nc;
         aOutDirection = glm::normalize( aOutOrigin - m_pos );
         break;
 
     case PROJECTION_TYPE::ORTHO:
-        aOutOrigin = up_plus_right * 0.5f + m_frustum.nc;
         aOutDirection = -m_dir + SFVEC3F( FLT_EPSILON );
         break;
     }
@@ -360,16 +369,16 @@ void CAMERA::MakeRay( const SFVEC2F& aWindowPos, SFVEC3F& aOutOrigin,
                                   m_right_nX[floorWinPos_i.x] * (1.0f - relativeWinPos.x) +
                                   m_right_nX[floorWinPos_i.x + 1] * relativeWinPos.x;
 
+    aOutOrigin = up_plus_right + m_frustum.nc;
+
     switch( m_projectionType )
     {
     default:
     case PROJECTION_TYPE::PERSPECTIVE:
-        aOutOrigin = up_plus_right + m_frustum.nc;
         aOutDirection = glm::normalize( aOutOrigin - m_pos );
         break;
 
     case PROJECTION_TYPE::ORTHO:
-        aOutOrigin = up_plus_right * 0.5f + m_frustum.nc;
         aOutDirection = -m_dir + SFVEC3F( FLT_EPSILON );
         break;
     }
