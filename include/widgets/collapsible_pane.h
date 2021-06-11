@@ -22,6 +22,7 @@
 
 #include <wx/control.h>
 #include <wx/containr.h>
+#include <wx/statbox.h> // needed to provide a hint that wx libraries instantiated wxNavigationEnabled<wxControl>
 
 
 wxDECLARE_EVENT( WX_COLLAPSIBLE_PANE_HEADER_CHANGED, wxCommandEvent );
