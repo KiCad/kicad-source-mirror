@@ -119,6 +119,7 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D 
         m_color( aColor ),
         m_background( aBackground ),
         m_default( aDefault ),
+        m_userColors( nullptr ),
         m_readOnly( false )
 {
     wxASSERT_MSG( aSwatchSize != SWATCH_EXPAND, "SWATCH_EXPAND not supported in COLOR_SWATCH" );
@@ -150,6 +151,7 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D 
 COLOR_SWATCH::COLOR_SWATCH( wxWindow *aParent, wxWindowID aID, const wxPoint &aPos,
                             const wxSize &aSize, long aStyle ) :
         wxPanel( aParent, aID, aPos, aSize, aStyle ),
+        m_userColors( nullptr ),
         m_readOnly( false )
 {
     if( aSize == wxDefaultSize )
