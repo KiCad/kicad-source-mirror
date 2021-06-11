@@ -25,7 +25,7 @@
 #include <map>
 #include <core/optional.h>
 
-#include "track.h" // for VIATYPE_T
+#include "pcb_track.h" // for VIATYPE_T
 
 class BOARD;
 class BOARD_DESIGN_SETTINGS;

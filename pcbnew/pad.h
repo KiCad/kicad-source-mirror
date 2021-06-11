@@ -48,7 +48,6 @@ class LINE_READER;
 class EDA_3D_CANVAS;
 class FOOTPRINT;
 class FP_SHAPE;
-class TRACK;
 
 namespace KIGFX
 {

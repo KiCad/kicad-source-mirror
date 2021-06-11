@@ -26,7 +26,6 @@
 #include <macros.h>
 #include <board.h>
 #include <footprint.h>
-#include <track.h>
 #include <pcbnew.h>
 #include <ratsnest/ratsnest_data.h>
 
@@ -43,8 +42,6 @@ void PCB_BASE_FRAME::Compile_Ratsnest( bool aDisplayStatus )
     GetBoard()->GetConnectivity()->RecalculateRatsnest();
 
     if( aDisplayStatus )
-    {
         SetMsgPanel( m_pcb );
-    }
 }
 

@@ -30,7 +30,6 @@
 
 class NETCLASS;
 class NETINFO_ITEM;
-class TRACK;
 class PAD;
 
 /**

@@ -948,7 +948,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
     if( bds.UseNetClassVia() || viaType == VIATYPE::MICROVIA )
     {
-        class VIA dummyVia( board() );
+        PCB_VIA dummyVia( board() );
         dummyVia.SetViaType( viaType );
         dummyVia.SetLayerPair( currentLayer, targetLayer );
 
@@ -1495,11 +1495,11 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
     if( arcs > 0 || vias > 1 || traces > 2 || vias + traces < 1 )
         return;
 
-    // Fetch first TRACK (via or trace) as our reference
-    TRACK* reference = nullptr;
+    // Fetch first PCB_TRACK (via or trace) as our reference
+    PCB_TRACK* reference = nullptr;
 
     for( int i = 0; !reference && i < aCollector.GetCount(); i++ )
-        reference = dynamic_cast<TRACK*>( aCollector[i] );
+        reference = dynamic_cast<PCB_TRACK*>( aCollector[i] );
 
     int refNet = reference->GetNetCode();
 
@@ -1515,7 +1515,7 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
     // the same net.
     for( int i = 0; i < aCollector.GetCount(); i++ )
     {
-        TRACK* neighbor = dynamic_cast<TRACK*>( aCollector[i] );
+        PCB_TRACK* neighbor = dynamic_cast<PCB_TRACK*>( aCollector[i] );
 
         if( neighbor && neighbor != reference )
         {

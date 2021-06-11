@@ -39,7 +39,7 @@
 #include "footprint.h"
 #include "pad.h"
 #include "pcb_text.h"
-#include "track.h"
+#include "pcb_track.h"
 #include "convert_to_biu.h"
 #include <core/arraydim.h>
 #include <filename_resolver.h>
@@ -615,12 +615,12 @@ void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
 {
     PCB_LAYER_ID top_layer, bottom_layer;
 
-    for( TRACK* track : m_Pcb->Tracks() )
+    for( PCB_TRACK* track : m_Pcb->Tracks() )
     {
         if( track->Type() != PCB_VIA_T )
             continue;
 
-        const VIA* via = (const VIA*) track;
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
         via->LayerPair( &top_layer, &bottom_layer );
 

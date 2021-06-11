@@ -2,7 +2,7 @@
 #include <cstdio>
 
 #include "board.h"
-#include "track.h"
+#include "pcb_track.h"
 
 #include <pcb_expr_evaluator.h>
 
@@ -81,8 +81,8 @@ int main( int argc, char *argv[] )
     net1info->SetClass( netclass1 );
     net2info->SetClass( netclass2 );
 
-    TRACK trackA(&brd);
-    TRACK trackB(&brd);
+    PCB_TRACK trackA( &brd );
+    PCB_TRACK trackB( &brd );
 
     trackA.SetNet( net1info );
     trackB.SetNet( net2info );

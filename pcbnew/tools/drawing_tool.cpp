@@ -2265,7 +2265,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         {
         }
 
-        TRACK* findTrack( VIA* aVia )
+        PCB_TRACK* findTrack( PCB_VIA* aVia )
         {
             const LSET lset = aVia->GetLayerSet();
             wxPoint position = aVia->GetPosition();
@@ -2273,7 +2273,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
             auto view = m_frame->GetCanvas()->GetView();
-            std::vector<TRACK*> possible_tracks;
+            std::vector<PCB_TRACK*> possible_tracks;
 
             view->Query( bbox, items );
 
@@ -2284,7 +2284,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 if( !(item->GetLayerSet() & lset ).any() )
                     continue;
 
-                if( TRACK* track = dyn_cast<TRACK*>( item ) )
+                if( PCB_TRACK* track = dyn_cast<PCB_TRACK*>( item ) )
                 {
                     if( TestSegmentHit( position, track->GetStart(), track->GetEnd(),
                                         ( track->GetWidth() + aVia->GetWidth() ) / 2 ) )
@@ -2292,10 +2292,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 }
             }
 
-            TRACK* return_track = nullptr;
+            PCB_TRACK* return_track = nullptr;
             int min_d = std::numeric_limits<int>::max();
 
-            for( TRACK* track : possible_tracks )
+            for( PCB_TRACK* track : possible_tracks )
             {
                 SEG test( track->GetStart(), track->GetEnd() );
                 int dist = ( test.NearestPoint( position ) - position ).EuclideanNorm();
@@ -2310,7 +2310,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             return return_track;
         }
 
-        bool hasDRCViolation( VIA* aVia, BOARD_ITEM* aOther )
+        bool hasDRCViolation( PCB_VIA* aVia, BOARD_ITEM* aOther )
         {
             // It would really be better to know what particular nets a nettie should allow,
             // but for now it is what it is.
@@ -2347,8 +2347,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             if( aOther->Type() == PCB_VIA_T )
             {
-                VIA* via = static_cast<VIA*>( aOther );
-                wxPoint pos = via->GetPosition();
+                PCB_VIA* via = static_cast<PCB_VIA*>( aOther );
+                wxPoint  pos = via->GetPosition();
 
                 holeShape.reset( new SHAPE_SEGMENT( pos, pos, via->GetDrill() ) );
             }
@@ -2378,7 +2378,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             return false;
         }
 
-        bool checkDRCViolation( VIA* aVia )
+        bool checkDRCViolation( PCB_VIA* aVia )
         {
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
             std::set<BOARD_ITEM*> checkedItems;
@@ -2415,7 +2415,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             return false;
         }
 
-        PAD* findPad( VIA* aVia )
+        PAD* findPad( PCB_VIA* aVia )
         {
             const wxPoint position = aVia->GetPosition();
             const LSET    lset = aVia->GetLayerSet();
@@ -2433,7 +2433,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             return nullptr;
         }
 
-        int findStitchedZoneNet( VIA* aVia )
+        int findStitchedZoneNet( PCB_VIA* aVia )
         {
             const wxPoint position = aVia->GetPosition();
             const LSET    lset = aVia->GetLayerSet();
@@ -2481,9 +2481,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             // this situation.
 
             m_gridHelper.SetSnap( !( m_modifiers & MD_SHIFT ) );
-            auto    via = static_cast<VIA*>( aItem );
-            wxPoint position = via->GetPosition();
-            TRACK*  track = findTrack( via );
+            PCB_VIA*   via = static_cast<PCB_VIA*>( aItem );
+            wxPoint    position = via->GetPosition();
+            PCB_TRACK* track = findTrack( via );
 
             if( track )
             {
@@ -2496,9 +2496,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         bool PlaceItem( BOARD_ITEM* aItem, BOARD_COMMIT& aCommit ) override
         {
-            VIA*    via = static_cast<VIA*>( aItem );
-            wxPoint viaPos = via->GetPosition();
-            TRACK*  track = findTrack( via );
+            PCB_VIA*   via = static_cast<PCB_VIA*>( aItem );
+            wxPoint    viaPos = via->GetPosition();
+            PCB_TRACK* track = findTrack( via );
             PAD *   pad = findPad( via );
 
             if( track )
@@ -2524,7 +2524,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     aCommit.Modify( track );
 
-                    TRACK* newTrack = dynamic_cast<TRACK*>( track->Clone() );
+                    PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
                     const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
 
                     track->SetEnd( viaPos );
@@ -2544,15 +2544,15 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {
-            auto&   ds = m_board->GetDesignSettings();
-            VIA*    via = new VIA( m_board );
+            BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+            PCB_VIA*               via = new PCB_VIA( m_board );
 
             via->SetNetCode( 0 );
-            via->SetViaType( ds.m_CurrentViaType );
+            via->SetViaType( bds.m_CurrentViaType );
 
             // for microvias, the size and hole will be changed later.
-            via->SetWidth( ds.GetCurrentViaSize() );
-            via->SetDrill( ds.GetCurrentViaDrill() );
+            via->SetWidth( bds.GetCurrentViaSize() );
+            via->SetDrill( bds.GetCurrentViaDrill() );
 
             // Usual via is from copper to component.
             // layer pair is B_Cu and F_Cu.

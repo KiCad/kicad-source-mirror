@@ -39,7 +39,7 @@
 #include <pcb_dimension.h>
 #include <footprint.h>
 #include <pcb_group.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <fp_shape.h>
 #include <confirm.h>
@@ -982,7 +982,7 @@ int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 
     // Mark existing items, in order to know what are the new items so we can select only
     // the new items after loading
-    for( TRACK* track : brd->Tracks() )
+    for( PCB_TRACK* track : brd->Tracks() )
         track->SetFlags( SKIP_STRUCT );
 
     for( FOOTPRINT* footprint : brd->Footprints() )

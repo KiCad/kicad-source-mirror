@@ -31,7 +31,6 @@
 #include <widgets/msgpanel.h>
 #include <board.h>
 #include <footprint.h>
-#include <track.h>
 #include <pcb_shape.h>
 #include <pad.h>
 #include <board_commit.h>

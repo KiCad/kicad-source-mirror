@@ -39,7 +39,7 @@
 #include <pcb_text.h>
 #include <pcb_marker.h>
 #include <pcb_group.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <footprint.h>
 #include <zone.h>
 #include <view/view.h>
@@ -1817,7 +1817,7 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
     }
     else if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_ARC_T )
     {
-        double width = static_cast<const TRACK*>( aItem )->GetWidth();
+        double width = static_cast<const PCB_TRACK*>( aItem )->GetWidth();
         return width * width;
     }
     else

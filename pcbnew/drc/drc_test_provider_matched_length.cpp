@@ -20,7 +20,7 @@
 #include <common.h>
 #include <board.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
@@ -92,7 +92,7 @@ private:
 };
 
 
-static int computeViaThruLength( VIA *aVia, const std::set<BOARD_CONNECTED_ITEM*> &conns )
+static int computeViaThruLength( PCB_VIA *aVia, const std::set<BOARD_CONNECTED_ITEM*> &conns )
 {
     return 0; // fixme: not yet there...
 }
@@ -294,15 +294,16 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 if( citem->Type() == PCB_VIA_T )
                 {
                     ent.viaCount++;
-                    ent.totalVia += computeViaThruLength( static_cast<VIA*>( citem ), nitem.second );
+                    ent.totalVia += computeViaThruLength( static_cast<PCB_VIA*>( citem ),
+                                                          nitem.second );
                 }
                 else if( citem->Type() == PCB_TRACE_T )
                 {
-                    ent.totalRoute += static_cast<TRACK*>( citem )->GetLength();
+                    ent.totalRoute += static_cast<PCB_TRACK*>( citem )->GetLength();
                 }
                 else if ( citem->Type() == PCB_ARC_T )
                 {
-                    ent.totalRoute += static_cast<ARC*>( citem )->GetLength();
+                    ent.totalRoute += static_cast<PCB_ARC*>( citem )->GetLength();
                 }
                 else if( citem->Type() == PCB_PAD_T )
                 {

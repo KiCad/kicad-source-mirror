@@ -90,9 +90,9 @@ protected:
     PNS::DEBUG_DECORATOR* m_debugDecorator;
 
     std::unique_ptr<PNS::SOLID>   syncPad( PAD* aPad );
-    std::unique_ptr<PNS::SEGMENT> syncTrack( TRACK* aTrack );
-    std::unique_ptr<PNS::ARC>     syncArc( ARC* aArc );
-    std::unique_ptr<PNS::VIA>     syncVia( VIA* aVia );
+    std::unique_ptr<PNS::SEGMENT> syncTrack( PCB_TRACK* aTrack );
+    std::unique_ptr<PNS::ARC>     syncArc( PCB_ARC* aArc );
+    std::unique_ptr<PNS::VIA>     syncVia( PCB_VIA* aVia );
     bool syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB_LAYER_ID aLayer );
     bool syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem );
     bool syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_SET* aBoardOutline );

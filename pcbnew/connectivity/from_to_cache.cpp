@@ -21,7 +21,6 @@
 #include <memory>
 #include <reporter.h>
 #include <board.h>
-#include <track.h>
 #include <kicad_string.h>
 
 #include <pcb_expr_evaluator.h>

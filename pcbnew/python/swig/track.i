@@ -1,8 +1,8 @@
 
 
-%include track.h
-%rename(Get) operator   TRACK*;
+%include pcb_track.h
+%rename(Get) operator   PCB_TRACK*;
 %{
-#include <track.h>
+#include <pcb_track.h>
 %}
 

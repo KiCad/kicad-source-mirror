@@ -27,7 +27,7 @@
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <footprint.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <pad.h>
 #include <pcb_edit_frame.h>
 #include <tools/pcb_selection_tool.h>
@@ -88,7 +88,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
 
             if( item->Type() == PCB_VIA_T && m_rbScope->GetSelection() == SCOPE_VIAS )
             {
-                VIA* via = static_cast<VIA*>( item );
+                PCB_VIA* via = static_cast<PCB_VIA*>( item );
                 via->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
                 via->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
             }
@@ -130,13 +130,13 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
         }
         else
         {
-            for( TRACK* item : m_frame->GetBoard()->Tracks() )
+            for( PCB_TRACK* item : m_frame->GetBoard()->Tracks() )
             {
                 if( item->Type() != PCB_VIA_T )
                     continue;
 
                 m_commit.Modify( item );
-                VIA* via = static_cast<VIA*>( item );
+                PCB_VIA* via = static_cast<PCB_VIA*>( item );
                 via->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
                 via->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
             }

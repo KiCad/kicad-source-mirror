@@ -25,7 +25,7 @@
 #include <pcb_edit_frame.h>
 #include <board.h>
 #include <board_design_settings.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <connectivity/connectivity_data.h>
 #include <pcb_layer_box_selector.h>
 #include <tool/tool_manager.h>
@@ -85,8 +85,8 @@ protected:
     }
 
 private:
-    void visitItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem );
-    void processItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem );
+    void visitItem( PICKED_ITEMS_LIST* aUndoList, PCB_TRACK* aItem );
+    void processItem( PICKED_ITEMS_LIST* aUndoList, PCB_TRACK* aItem );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -271,7 +271,8 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onSpecifiedValuesUpdateUi( wxUpdateUIEv
 }
 
 
-void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem )
+void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoList,
+                                                      PCB_TRACK* aItem )
 {
     BOARD_DESIGN_SETTINGS& brdSettings = m_brd->GetDesignSettings();
     bool                   isTrack = aItem->Type() == PCB_TRACE_T;
@@ -320,7 +321,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
 }
 
 
-void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::visitItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem )
+void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::visitItem( PICKED_ITEMS_LIST* aUndoList, PCB_TRACK* aItem )
 {
     if( m_selectedItemsFilter->GetValue() && !m_selection.Contains( aItem ) )
         return;

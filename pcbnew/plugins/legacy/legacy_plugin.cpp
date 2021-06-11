@@ -75,7 +75,7 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <pcb_text.h>
 #include <zone.h>
 #include <pcb_dimension.h>
@@ -2265,13 +2265,13 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
             continue;
         }
 
-        TRACK* newTrack;
+        PCB_TRACK* newTrack;
 
         switch( makeType )
         {
         default:
-        case PCB_TRACE_T: newTrack = new TRACK( m_board ); break;
-        case PCB_VIA_T:   newTrack = new VIA( m_board );   break;
+        case PCB_TRACE_T: newTrack = new PCB_TRACK( m_board ); break;
+        case PCB_VIA_T:   newTrack = new PCB_VIA( m_board );   break;
         }
 
         const_cast<KIID&>( newTrack->m_Uuid ) = KIID( uuid );
@@ -2282,7 +2282,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
         if( makeType == PCB_VIA_T )     // Ensure layers are OK when possible:
         {
-            VIA *via = static_cast<VIA*>( newTrack );
+            PCB_VIA *via = static_cast<PCB_VIA*>( newTrack );
             via->SetViaType( viatype );
 
             if( drill < 0 )

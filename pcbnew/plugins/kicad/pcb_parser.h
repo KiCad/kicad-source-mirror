@@ -40,7 +40,7 @@
 #include <unordered_map>
 
 
-class ARC;
+class PCB_ARC;
 class BOARD;
 class BOARD_ITEM;
 class BOARD_ITEM_CONTAINER;
@@ -52,11 +52,11 @@ class EDA_TEXT;
 class FP_SHAPE;
 class FP_TEXT;
 class PCB_TEXT;
-class TRACK;
+class PCB_TRACK;
 class FOOTPRINT;
 class PCB_GROUP;
 class PCB_TARGET;
-class VIA;
+class PCB_VIA;
 class ZONE;
 class FP_3DMODEL;
 struct LAYER;
@@ -199,9 +199,9 @@ private:
     // Parse only the (option ...) inside a pad description
     bool                parsePAD_option( PAD* aPad );
 
-    ARC*                parseARC();
-    TRACK*              parseTRACK();
-    VIA*                parseVIA();
+    PCB_ARC*            parseARC();
+    PCB_TRACK*          parsePCB_TRACK();
+    PCB_VIA*            parsePCB_VIA();
     ZONE*               parseZONE( BOARD_ITEM_CONTAINER* aParent );
     PCB_TARGET*         parsePCB_TARGET();
     BOARD*              parseBOARD();

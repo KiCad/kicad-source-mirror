@@ -30,7 +30,7 @@ using namespace std::placeholders;
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <board.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <pcb_group.h>
 #include <pcb_target.h>
 #include <footprint.h>
@@ -113,7 +113,7 @@ using namespace std::placeholders;
 
 static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 {
-    for( TRACK* item : aPcb->Tracks() )
+    for( PCB_TRACK* item : aPcb->Tracks() )
     {
         if( aItem == static_cast<BOARD_ITEM*>( item ) )
             return true;

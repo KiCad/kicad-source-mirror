@@ -39,7 +39,7 @@
 #include <board_design_settings.h>
 #include <core/arraydim.h>
 #include <footprint.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <fp_shape.h>
 #include <pad.h>
 #include <pcb_text.h>
@@ -426,9 +426,9 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     aPlotter->StartBlock( NULL );
 
-    for( const TRACK* track : aBoard->Tracks() )
+    for( const PCB_TRACK* track : aBoard->Tracks() )
     {
-        const VIA* via = dyn_cast<const VIA*>( track );
+        const PCB_VIA* via = dyn_cast<const PCB_VIA*>( track );
 
         if( !via )
             continue;
@@ -489,7 +489,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
 
     // Plot tracks (not vias) :
-    for( const TRACK* track : aBoard->Tracks() )
+    for( const PCB_TRACK* track : aBoard->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
             continue;
@@ -507,11 +507,11 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
         if( track->Type() == PCB_ARC_T )
         {
-            const ARC* arc = static_cast<const ARC*>( track );
+            const    PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
             VECTOR2D center( arc->GetCenter() );
-            int radius = arc->GetRadius();
-            double start_angle = arc->GetArcAngleStart();
-            double end_angle = start_angle + arc->GetAngle();
+            int      radius = arc->GetRadius();
+            double   start_angle = arc->GetArcAngleStart();
+            double   end_angle = start_angle + arc->GetAngle();
 
             aPlotter->ThickArc( wxPoint( center.x, center.y ), -end_angle, -start_angle,
                                 radius, width, plotMode, &gbr_metadata );
@@ -696,9 +696,9 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         }
 
         // Plot vias holes
-        for( TRACK* track : aBoard->Tracks() )
+        for( PCB_TRACK* track : aBoard->Tracks() )
         {
-            const VIA* via = dyn_cast<const VIA*>( track );
+            const PCB_VIA* via = dyn_cast<const PCB_VIA*>( track );
 
             if( via && via->IsOnLayer( layer ) )    // via holes can be not through holes
             {
@@ -811,9 +811,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             int via_clearance = aBoard->GetDesignSettings().m_SolderMaskMargin;
             int via_margin = via_clearance + inflate;
 
-            for( TRACK* track : aBoard->Tracks() )
+            for( PCB_TRACK* track : aBoard->Tracks() )
             {
-                const VIA* via = dyn_cast<const VIA*>( track );
+                const PCB_VIA* via = dyn_cast<const PCB_VIA*>( track );
 
                 if( !via )
                     continue;

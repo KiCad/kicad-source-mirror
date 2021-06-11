@@ -59,7 +59,7 @@
 #include <fp_shape.h>
 #include <footprint.h>
 #include <fp_text.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <pad.h>
 #include <pcb_target.h>
 #include <pcb_text.h>
@@ -1016,9 +1016,9 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
     if( GetPlotMode() == FILLED )
          m_plotter->SetColor( WHITE );
 
-    for( TRACK* tracks : m_board->Tracks() )
+    for( PCB_TRACK* tracks : m_board->Tracks() )
     {
-        const VIA* via = dyn_cast<const VIA*>( tracks );
+        const PCB_VIA* via = dyn_cast<const PCB_VIA*>( tracks );
 
         if( via )
         {

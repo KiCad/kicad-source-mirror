@@ -40,14 +40,12 @@
 
 class PCB_TARGET;
 class FOOTPRINT;
-class TRACK;
 class NETCLASS;
 class NETCLASSES;
 class ZONE;
 class PCB_DIMENSION_BASE;
 class NETINFO_ITEM;
 class FP_TEXT;
-class TRACK;
 class PAD;
 struct LP_CACHE;
 

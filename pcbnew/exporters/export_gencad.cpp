@@ -35,7 +35,7 @@
 #include <fp_shape.h>
 #include <footprint.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <dialogs/dialog_gencad_export_options.h>
@@ -333,7 +333,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 
 
 // Sort vias for uniqueness
-static bool ViaSort( const VIA* aPadref, const VIA* aPadcmp )
+static bool ViaSort( const PCB_VIA* aPadref, const PCB_VIA* aPadcmp )
 {
     if( aPadref->GetWidth() != aPadcmp->GetWidth() )
         return aPadref->GetWidth() < aPadcmp->GetWidth();
@@ -361,9 +361,9 @@ static void CreateArtworksSection( FILE* aFile )
 // Via name is synthesized from their attributes, pads are numbered
 static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 {
-    std::vector<PAD*> padstacks;
-    std::vector<VIA*> vias;
-    std::vector<VIA*> viastacks;
+    std::vector<PAD*>     padstacks;
+    std::vector<PCB_VIA*> vias;
+    std::vector<PCB_VIA*> viastacks;
 
     padstacks.resize( 1 ); // We count pads from 1
 
@@ -383,14 +383,14 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
 
     // The same for vias
-    for( TRACK* track : aPcb->Tracks() )
+    for( PCB_TRACK* track : aPcb->Tracks() )
     {
-        if( VIA* via = dyn_cast<VIA*>( track ) )
+        if( PCB_VIA* via = dyn_cast<PCB_VIA*>( track ) )
             vias.push_back( via );
     }
 
     std::sort( vias.begin(), vias.end(), ViaSort );
-    vias.erase( std::unique( vias.begin(), vias.end(), []( const VIA* a, const VIA* b )
+    vias.erase( std::unique( vias.begin(), vias.end(), []( const PCB_VIA* a, const PCB_VIA* b )
                                                        {
                                                            return ViaSort( a, b ) == false;
                                                        } ),
@@ -398,7 +398,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
     // Emit vias pads
 
-    for( VIA* via : vias )
+    for( PCB_VIA* via : vias )
     {
         viastacks.push_back( via );
         fprintf( aFile, "PAD V%d.%d.%s ROUND %g\nCIRCLE 0 0 %g\n",
@@ -608,7 +608,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     // Via padstacks
     for( unsigned i = 0; i < viastacks.size(); i++ )
     {
-        VIA* via = viastacks[i];
+        PCB_VIA* via = viastacks[i];
 
         LSET mask = via->GetLayerSet() & master_layermask;
 
@@ -982,7 +982,7 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
 
     TRACKS tracks( aPcb->Tracks() );
     std::sort( tracks.begin(), tracks.end(),
-            []( const TRACK* a, const TRACK* b )
+            []( const PCB_TRACK* a, const PCB_TRACK* b )
             {
                 if( a->GetNetCode() == b->GetNetCode() )
                 {
@@ -999,7 +999,7 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
 
     old_netcode = -1; old_width = -1; old_layer = -1;
 
-    for( TRACK* track : tracks )
+    for( PCB_TRACK* track : tracks )
     {
         if( old_netcode != track->GetNetCode() )
         {
@@ -1037,7 +1037,7 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
 
         if( track->Type() == PCB_VIA_T )
         {
-            const VIA* via = static_cast<const VIA*>(track);
+            const PCB_VIA* via = static_cast<const PCB_VIA*>(track);
 
             LSET vset = via->GetLayerSet() & master_layermask;
 
@@ -1130,7 +1130,7 @@ static void CreateTracksInfoData( FILE* aFile, BOARD* aPcb )
 
     std::set<int> trackinfo;
 
-    for( TRACK* track : aPcb->Tracks() )
+    for( PCB_TRACK* track : aPcb->Tracks() )
         trackinfo.insert( track->GetWidth() );
 
     // Write data

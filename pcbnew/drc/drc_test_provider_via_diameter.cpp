@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <track.h>
+#include <pcb_track.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
@@ -88,7 +88,7 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_VIA_DIAMETER ) )
                     return false;
 
-                VIA* via = dyn_cast<VIA*>( item );
+                PCB_VIA* via = dyn_cast<PCB_VIA*>( item );
 
                 // fixme: move to pad stack check?
                 if( !via )
@@ -145,7 +145,7 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 
     int ii = 0;
 
-    for( TRACK* item : m_drcEngine->GetBoard()->Tracks() )
+    for( PCB_TRACK* item : m_drcEngine->GetBoard()->Tracks() )
     {
         if( !reportProgress( ii++, m_drcEngine->GetBoard()->Tracks().size(), delta ) )
             break;

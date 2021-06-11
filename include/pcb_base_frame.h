@@ -51,7 +51,6 @@ class BOARD;
 class BOARD_CONNECTED_ITEM;
 class COLOR_SETTINGS;
 class FOOTPRINT;
-class TRACK;
 class PAD;
 class EDA_3D_VIEWER;
 class GENERAL_COLLECTOR;

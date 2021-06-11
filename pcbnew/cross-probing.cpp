@@ -35,7 +35,7 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <collectors.h>
 #include <eda_dde.h>
@@ -257,7 +257,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             for( ZONE* zone : pcb->Zones() )
                 merge_area( zone );
 
-            for( TRACK* track : pcb->Tracks() )
+            for( PCB_TRACK* track : pcb->Tracks() )
                 merge_area( track );
 
             for( FOOTPRINT* fp : pcb->Footprints() )

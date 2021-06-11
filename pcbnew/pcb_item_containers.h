@@ -28,14 +28,14 @@
 
 // Board-level items
 class FOOTPRINT;
-class TRACK;
+class PCB_TRACK;
 class PCB_GROUP;
 class PCB_MARKER;
 class ZONE;
 
 DECL_VEC_FOR_SWIG( MARKERS, PCB_MARKER* )
 DECL_VEC_FOR_SWIG( ZONES, ZONE* )
-DECL_DEQ_FOR_SWIG( TRACKS, TRACK* )
+DECL_DEQ_FOR_SWIG( TRACKS, PCB_TRACK* )
 DECL_DEQ_FOR_SWIG( FOOTPRINTS, FOOTPRINT* )
 // Dequeue rather than Vector just so we can use moveUnflaggedItems in pcbnew_control.cpp
 DECL_DEQ_FOR_SWIG( GROUPS, PCB_GROUP* )

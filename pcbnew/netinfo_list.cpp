@@ -25,7 +25,7 @@
 #include <footprint.h>
 #include <macros.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <netinfo.h>
 #include <wx/log.h>
@@ -223,7 +223,7 @@ void NETINFO_MAPPING::Update()
         nets.insert( zone->GetNetCode() );
 
     // Tracks
-    for( TRACK* track : m_board->Tracks() )
+    for( PCB_TRACK* track : m_board->Tracks() )
         nets.insert( track->GetNetCode() );
 
     // footprints/pads

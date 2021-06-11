@@ -51,7 +51,7 @@ public:
     void setTransitions() override;
 
     // A filter for narrowing a collection representing a simple corner
-    // or a non-fanout-via to a single TRACK item.
+    // or a non-fanout-via to a single PCB_TRACK item.
     static void NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector );
 
 private:

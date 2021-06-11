@@ -45,7 +45,7 @@
 #include <footprint.h>
 #include <netclass.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <plugins/kicad/kicad_plugin.h>
 #include <pcb_plot_params_parser.h>
@@ -679,7 +679,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_segment:
-            item = parseTRACK();
+            item = parsePCB_TRACK();
             m_board->Add( item, ADD_MODE::BULK_APPEND );
             bulkAddedItems.push_back( item );
             break;
@@ -695,7 +695,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_via:
-            item = parseVIA();
+            item = parsePCB_VIA();
             m_board->Add( item, ADD_MODE::BULK_APPEND );
             bulkAddedItems.push_back( item );
             break;
@@ -759,11 +759,11 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
                                 }
                             };
 
-        for( auto segm : m_board->Tracks() )
+        for( PCB_TRACK* track : m_board->Tracks() )
         {
-            if( segm->Type() == PCB_VIA_T )
+            if( track->Type() == PCB_VIA_T )
             {
-                VIA*         via = (VIA*) segm;
+                PCB_VIA*     via = static_cast<PCB_VIA*>( track );
                 PCB_LAYER_ID top_layer, bottom_layer;
 
                 if( via->GetViaType() == VIATYPE::THROUGH )
@@ -788,7 +788,9 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
                 }
             }
             else
-                visitItem( segm );
+            {
+                visitItem( track );
+            }
         }
 
         for( BOARD_ITEM* zone : m_board->Zones() )
@@ -4370,7 +4372,7 @@ void PCB_PARSER::parseGROUP( BOARD_ITEM* aParent )
 }
 
 
-ARC* PCB_PARSER::parseARC()
+PCB_ARC* PCB_PARSER::parseARC()
 {
     wxCHECK_MSG( CurTok() == T_arc, NULL,
             wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as ARC." ) );
@@ -4378,7 +4380,7 @@ ARC* PCB_PARSER::parseARC()
     wxPoint pt;
     T       token;
 
-    std::unique_ptr<ARC> arc = std::make_unique<ARC>( m_board );
+    std::unique_ptr<PCB_ARC> arc = std::make_unique<PCB_ARC>( m_board );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -4454,15 +4456,15 @@ ARC* PCB_PARSER::parseARC()
 }
 
 
-TRACK* PCB_PARSER::parseTRACK()
+PCB_TRACK* PCB_PARSER::parsePCB_TRACK()
 {
     wxCHECK_MSG( CurTok() == T_segment, NULL,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as TRACK." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_TRACK." ) );
 
     wxPoint pt;
     T token;
 
-    std::unique_ptr<TRACK> track = std::make_unique<TRACK>( m_board );
+    std::unique_ptr<PCB_TRACK> track = std::make_unique<PCB_TRACK>( m_board );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -4532,15 +4534,15 @@ TRACK* PCB_PARSER::parseTRACK()
 }
 
 
-VIA* PCB_PARSER::parseVIA()
+PCB_VIA* PCB_PARSER::parsePCB_VIA()
 {
     wxCHECK_MSG( CurTok() == T_via, NULL,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as VIA." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_VIA." ) );
 
     wxPoint pt;
     T token;
 
-    std::unique_ptr<VIA> via = std::make_unique<VIA>( m_board );
+    std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( m_board );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {

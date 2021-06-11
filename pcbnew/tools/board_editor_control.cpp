@@ -38,7 +38,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_target.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <pcb_marker.h>
 #include <collectors.h>
@@ -551,7 +551,7 @@ int BOARD_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
             processItem( pad );
     }
 
-    for( TRACK* track : board()->Tracks() )
+    for( PCB_TRACK* track : board()->Tracks() )
         processItem( track );
 
     // From here out I don't think order matters much.
@@ -688,7 +688,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
         {
             if( item->Type() == PCB_TRACE_T )
             {
-                TRACK* track = (TRACK*) item;
+                PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
                 for( int candidate : designSettings.m_TrackWidthList )
                 {
@@ -754,7 +754,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
         {
             if( item->Type() == PCB_TRACE_T )
             {
-                TRACK* track = (TRACK*) item;
+                PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
                 for( int i = designSettings.m_TrackWidthList.size() - 1; i >= 0; --i )
                 {
@@ -822,7 +822,7 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
         {
             if( item->Type() == PCB_VIA_T )
             {
-                VIA* via = (VIA*) item;
+                PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
                 for( VIA_DIMENSION candidate : designSettings.m_ViasDimensionsList )
                 {
@@ -871,7 +871,7 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
         {
             if( item->Type() == PCB_VIA_T )
             {
-                VIA* via = (VIA*) item;
+                PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
                 for( int i = designSettings.m_ViasDimensionsList.size() - 1; i >= 0; --i )
                 {

@@ -24,7 +24,7 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <footprint.h>
 #include <pad.h>
 #include <zone.h>
@@ -167,7 +167,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             typeMask[ aType ] = true;
     }
 
-    for( TRACK* item : brd->Tracks() )
+    for( PCB_TRACK* item : brd->Tracks() )
     {
         if( (item->GetLayerSet() & aLayers).any() )
         {

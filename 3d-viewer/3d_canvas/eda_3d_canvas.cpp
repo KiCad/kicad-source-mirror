@@ -742,7 +742,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
             case PCB_VIA_T:
             case PCB_ARC_T:
             {
-                TRACK* track = dynamic_cast<TRACK*>( rollOverItem );
+                PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( rollOverItem );
 
                 if( track )
                 {

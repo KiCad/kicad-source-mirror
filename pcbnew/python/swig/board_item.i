@@ -74,9 +74,9 @@ class MARKER_PCB;
 class BOARD;
 class FP_SHAPE;
 class PAD;
-class TRACK;
-class VIA;
-class ARC;
+class PCB_TRACK;
+class PCB_VIA;
+class PCB_ARC;
 class ZONE;
 class FP_ZONE;
 class PCB_TARGET;
@@ -100,9 +100,9 @@ static PCB_MARKER*           Cast_to_PCB_MARKER( BOARD_ITEM* );
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* );
 static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* );
 static PAD*                  Cast_to_PAD( BOARD_ITEM* );
-static TRACK*                Cast_to_TRACK( BOARD_ITEM* );
-static VIA*                  Cast_to_VIA( BOARD_ITEM* );
-static ARC*                  Cast_to_ARC( BOARD_ITEM* );
+static PCB_TRACK*            Cast_to_PCB_TRACK( BOARD_ITEM* );
+static PCB_VIA*              Cast_to_PCB_VIA( BOARD_ITEM* );
+static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* );
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* );
 static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* );
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
@@ -126,9 +126,9 @@ static PCB_MARKER*           Cast_to_PCB_MARKER( BOARD_ITEM* );
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* );
 static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* );
 static PAD*                  Cast_to_PAD( BOARD_ITEM* );
-static TRACK*                Cast_to_TRACK( BOARD_ITEM* );
-static VIA*                  Cast_to_VIA( BOARD_ITEM* );
-static ARC*                  Cast_to_ARC( BOARD_ITEM* );
+static PCB_TRACK*            Cast_to_PCB_TRACK( BOARD_ITEM* );
+static PCB_VIA*              Cast_to_PCB_VIA( BOARD_ITEM* );
+static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* );
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* );
 static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* );
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
@@ -167,11 +167,11 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
         elif ct=="MTEXT":
             return Cast_to_FP_TEXT(self)
         elif ct=="VIA":
-            return Cast_to_VIA(self)
+            return Cast_to_PCB_VIA(self)
         elif ct=="TRACK":
-            return Cast_to_TRACK(self)
+            return Cast_to_PCB_TRACK(self)
         elif ct=="ARC":
-            return Cast_to_ARC(self)
+            return Cast_to_PCB_ARC(self)
         elif ct=="PCB_TARGET":
             return Cast_to_PCB_TARGET(self)
         elif ct=="ZONE":
@@ -217,9 +217,9 @@ static PCB_MARKER*           Cast_to_PCB_MARKER( BOARD_ITEM* self )           { 
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* self )                { return dynamic_cast<BOARD*>(self);                }
 static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* self )             { return dynamic_cast<FP_SHAPE*>(self);             }
 static PAD*                  Cast_to_PAD( BOARD_ITEM* self )                  { return dynamic_cast<PAD*>(self);                  }
-static TRACK*                Cast_to_TRACK( BOARD_ITEM* self )                { return dynamic_cast<TRACK*>(self);                }
-static VIA*                  Cast_to_VIA( BOARD_ITEM* self )                  { return dynamic_cast<VIA*>(self);                  }
-static ARC*                  Cast_to_ARC( BOARD_ITEM* self )                  { return dynamic_cast<ARC*>(self);                  }
+static PCB_TRACK*            Cast_to_PCB_TRACK( BOARD_ITEM* self )            { return dynamic_cast<PCB_TRACK *>(self);           }
+static PCB_VIA*              Cast_to_PCB_VIA( BOARD_ITEM* self )              { return dynamic_cast<PCB_VIA *>(self);             }
+static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* self )              { return dynamic_cast<PCB_ARC *>(self);             }
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* self )                 { return dynamic_cast<ZONE*>(self);                 }
 static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* self )              { return dynamic_cast<FP_ZONE*>(self);              }
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* self )           { return dynamic_cast<PCB_TARGET*>(self);           }

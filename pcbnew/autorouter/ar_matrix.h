@@ -33,7 +33,6 @@
 #include <layers_id_colors_and_visibility.h>
 
 class PCB_SHAPE;
-class TRACK;
 class PAD;
 class FOOTPRINT;
 

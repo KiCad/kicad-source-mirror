@@ -27,7 +27,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <drc/drc_rtree.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <pcb_group.h>
 #include <geometry/shape_segment.h>
 #include <pcb_expr_evaluator.h>
@@ -476,7 +476,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                     }
                     else if( item->Type() == PCB_VIA_T )
                     {
-                        VIA*               via = static_cast<VIA*>( item );
+                        PCB_VIA*           via = static_cast<PCB_VIA*>( item );
                         const SHAPE_CIRCLE holeShape( via->GetPosition(), via->GetDrillValue() );
 
                         return areaOutline.Collide( &holeShape );
@@ -712,12 +712,10 @@ static void isMicroVia( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    auto via = dyn_cast<VIA*>( item );
+    PCB_VIA* via = dyn_cast<PCB_VIA*>( item );
 
     if( via && via->GetViaType() == VIATYPE::MICROVIA )
-    {
         result->Set ( 1.0 );
-    }
 }
 
 
@@ -730,12 +728,10 @@ static void isBlindBuriedVia( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    auto via = dyn_cast<VIA*>( item );
+    PCB_VIA* via = dyn_cast<PCB_VIA*>( item );
 
     if( via && via->GetViaType() == VIATYPE::BLIND_BURIED )
-    {
         result->Set ( 1.0 );
-    }
 }
 
 

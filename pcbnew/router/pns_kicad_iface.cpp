@@ -25,7 +25,7 @@
 #include <fp_text.h>
 #include <footprint.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
@@ -94,9 +94,9 @@ private:
 private:
     PNS::ROUTER_IFACE* m_routerIface;
     BOARD*             m_board;
-    TRACK              m_dummyTracks[2];
-    ARC                m_dummyArcs[2];
-    VIA                m_dummyVias[2];
+    PCB_TRACK          m_dummyTracks[2];
+    PCB_ARC            m_dummyArcs[2];
+    PCB_VIA            m_dummyVias[2];
     int                m_clearanceEpsilon;
 
     std::map<std::pair<const PNS::ITEM*, const PNS::ITEM*>, int> m_clearanceCache;
@@ -136,7 +136,7 @@ int PNS_PCBNEW_RULE_RESOLVER::holeRadius( const PNS::ITEM* aItem ) const
     }
     else if( aItem->Kind() == PNS::ITEM::VIA_T )
     {
-        const ::VIA* via = dynamic_cast<const ::VIA*>( aItem->Parent() );
+        const PCB_VIA* via = dynamic_cast<const PCB_VIA*>( aItem->Parent() );
 
         if( via )
             return via->GetDrillValue() / 2;
@@ -963,7 +963,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 }
 
 
-std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( TRACK* aTrack )
+std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( PCB_TRACK* aTrack )
 {
     auto segment = std::make_unique<PNS::SEGMENT>( SEG( aTrack->GetStart(), aTrack->GetEnd() ),
                                                      aTrack->GetNetCode() );
@@ -979,7 +979,7 @@ std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( TRACK* aTrack )
 }
 
 
-std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( ARC* aArc )
+std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( PCB_ARC* aArc )
 {
     auto arc = std::make_unique<PNS::ARC>( SHAPE_ARC( aArc->GetStart(), aArc->GetMid(), aArc->GetEnd(),
                                                       aArc->GetWidth() ),
@@ -995,7 +995,7 @@ std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( ARC* aArc )
 }
 
 
-std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
+std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
 {
     PCB_LAYER_ID top, bottom;
     aVia->LayerPair( &top, &bottom );
@@ -1220,7 +1220,7 @@ bool PNS_KICAD_IFACE::IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) con
         {
         case PCB_VIA_T:
         {
-            const VIA* via = static_cast<const VIA*>( aItem->Parent() );
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem->Parent() );
 
             return via->FlashLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
         }
@@ -1336,7 +1336,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         }
     }
 
-    for( TRACK* t : m_board->Tracks() )
+    for( PCB_TRACK* t : m_board->Tracks() )
     {
         KICAD_T type = t->Type();
 
@@ -1347,12 +1347,12 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         }
         else if( type == PCB_ARC_T )
         {
-            if( auto arc = syncArc( static_cast<ARC*>( t ) ) )
+            if( auto arc = syncArc( static_cast<PCB_ARC*>( t ) ) )
                 aWorld->Add( std::move( arc ) );
         }
         else if( type == PCB_VIA_T )
         {
-            if( auto via = syncVia( static_cast<VIA*>( t ) ) )
+            if( auto via = syncVia( static_cast<PCB_VIA*>( t ) ) )
                 aWorld->Add( std::move( via ) );
         }
     }
@@ -1493,8 +1493,8 @@ void PNS_KICAD_IFACE::UpdateItem( PNS::ITEM* aItem )
     {
     case PNS::ITEM::ARC_T:
     {
-        PNS::ARC* arc = static_cast<PNS::ARC*>( aItem );
-        ARC* arc_board = static_cast<ARC*>( board_item );
+        PNS::ARC*        arc = static_cast<PNS::ARC*>( aItem );
+        PCB_ARC*         arc_board = static_cast<PCB_ARC*>( board_item );
         const SHAPE_ARC* arc_shape = static_cast<const SHAPE_ARC*>( arc->Shape() );
         arc_board->SetStart( wxPoint( arc_shape->GetP0() ) );
         arc_board->SetEnd( wxPoint( arc_shape->GetP1() ) );
@@ -1506,8 +1506,8 @@ void PNS_KICAD_IFACE::UpdateItem( PNS::ITEM* aItem )
     case PNS::ITEM::SEGMENT_T:
     {
         PNS::SEGMENT* seg = static_cast<PNS::SEGMENT*>( aItem );
-        TRACK* track = static_cast<TRACK*>( board_item );
-        const SEG& s = seg->Seg();
+        PCB_TRACK*    track = static_cast<PCB_TRACK*>( board_item );
+        const SEG&    s = seg->Seg();
         track->SetStart( wxPoint( s.A.x, s.A.y ) );
         track->SetEnd( wxPoint( s.B.x, s.B.y ) );
         track->SetWidth( seg->Width() );
@@ -1516,7 +1516,7 @@ void PNS_KICAD_IFACE::UpdateItem( PNS::ITEM* aItem )
 
     case PNS::ITEM::VIA_T:
     {
-        VIA* via_board = static_cast<VIA*>( board_item );
+        PCB_VIA*  via_board = static_cast<PCB_VIA*>( board_item );
         PNS::VIA* via = static_cast<PNS::VIA*>( aItem );
         via_board->SetPosition( wxPoint( via->Pos().x, via->Pos().y ) );
         via_board->SetWidth( via->Diameter() );
@@ -1531,7 +1531,7 @@ void PNS_KICAD_IFACE::UpdateItem( PNS::ITEM* aItem )
 
     case PNS::ITEM::SOLID_T:
     {
-        PAD*   pad = static_cast<PAD*>( aItem->Parent() );
+        PAD*     pad = static_cast<PAD*>( aItem->Parent() );
         VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
 
         m_fpOffsets[ pad ].p_old = pad->GetPosition();
@@ -1559,8 +1559,8 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
     {
     case PNS::ITEM::ARC_T:
     {
-        auto arc = static_cast<PNS::ARC*>( aItem );
-        ARC* new_arc = new ARC( m_board, static_cast<const SHAPE_ARC*>( arc->Shape() ) );
+        PNS::ARC* arc = static_cast<PNS::ARC*>( aItem );
+        PCB_ARC*  new_arc = new PCB_ARC( m_board, static_cast<const SHAPE_ARC*>( arc->Shape() ) );
         new_arc->SetWidth( arc->Width() );
         new_arc->SetLayer( ToLAYER_ID( arc->Layers().Start() ) );
         new_arc->SetNetCode( std::max<int>( 0, arc->Net() ) );
@@ -1571,7 +1571,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
     case PNS::ITEM::SEGMENT_T:
     {
         PNS::SEGMENT* seg = static_cast<PNS::SEGMENT*>( aItem );
-        TRACK* track = new TRACK( m_board );
+        PCB_TRACK*    track = new PCB_TRACK( m_board );
         const SEG& s = seg->Seg();
         track->SetStart( wxPoint( s.A.x, s.A.y ) );
         track->SetEnd( wxPoint( s.B.x, s.B.y ) );
@@ -1584,7 +1584,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 
     case PNS::ITEM::VIA_T:
     {
-        VIA* via_board = new VIA( m_board );
+        PCB_VIA*  via_board = new PCB_VIA( m_board );
         PNS::VIA* via = static_cast<PNS::VIA*>( aItem );
         via_board->SetPosition( wxPoint( via->Pos().x, via->Pos().y ) );
         via_board->SetWidth( via->Diameter() );

@@ -31,7 +31,7 @@
 
 #include <board.h>
 #include <footprint.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <macros.h>
 #include <pcb_marker.h>
 #include <pcb_base_frame.h>
@@ -207,7 +207,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
         m_view->Add( drawing );
 
     // Load tracks
-    for( TRACK* track : aBoard->Tracks() )
+    for( PCB_TRACK* track : aBoard->Tracks() )
         m_view->Add( track );
 
     // Load footprints and its additional elements
@@ -442,7 +442,7 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     int viasCount = 0;
     int trackSegmentsCount = 0;
 
-    for( TRACK* item : board->Tracks() )
+    for( PCB_TRACK* item : board->Tracks() )
     {
         if( item->Type() == PCB_VIA_T )
             viasCount++;

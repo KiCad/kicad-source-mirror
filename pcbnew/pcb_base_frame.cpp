@@ -751,7 +751,7 @@ void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, boo
         GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
                 []( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
-                    if( VIA* via = dynamic_cast<VIA*>( aItem ) )
+                    if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
                     {
                         return via->GetViaType() == VIATYPE::BLIND_BURIED
                                 || via->GetViaType() == VIATYPE::MICROVIA;

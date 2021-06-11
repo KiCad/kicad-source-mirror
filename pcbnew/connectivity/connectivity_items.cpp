@@ -138,12 +138,12 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
     case PCB_TRACE_T:
     case PCB_ARC_T:
         if( n == 0 )
-            return static_cast<const TRACK*>( m_parent )->GetStart();
+            return static_cast<const PCB_TRACK*>( m_parent )->GetStart();
         else
-            return static_cast<const TRACK*>( m_parent )->GetEnd();
+            return static_cast<const PCB_TRACK*>( m_parent )->GetEnd();
 
     case PCB_VIA_T:
-        return static_cast<const VIA*>( m_parent )->GetStart();
+        return static_cast<const PCB_VIA*>( m_parent )->GetStart();
 
     default:
         assert( false );
@@ -158,9 +158,9 @@ void CN_ITEM::Dump()
 {
     wxLogDebug("    valid: %d, connected: \n", !!Valid());
 
-    for( auto i : m_connected )
+    for( CN_ITEM* i : m_connected )
     {
-        TRACK* t = static_cast<TRACK*>( i->Parent() );
+        PCB_TRACK* t = static_cast<PCB_TRACK*>( i->Parent() );
         wxLogDebug( "    - %p %d\n", t, t->Type() );
     }
 }
@@ -239,7 +239,7 @@ CN_ITEM* CN_LIST::Add( PAD* pad )
      return item;
 }
 
-CN_ITEM* CN_LIST::Add( TRACK* track )
+CN_ITEM* CN_LIST::Add( PCB_TRACK* track )
 {
     auto item = new CN_ITEM( track, true );
     m_items.push_back( item );
@@ -251,7 +251,7 @@ CN_ITEM* CN_LIST::Add( TRACK* track )
     return item;
 }
 
-CN_ITEM* CN_LIST::Add( ARC* aArc )
+CN_ITEM* CN_LIST::Add( PCB_ARC* aArc )
 {
     auto item = new CN_ITEM( aArc, true );
     m_items.push_back( item );
@@ -263,7 +263,7 @@ CN_ITEM* CN_LIST::Add( ARC* aArc )
     return item;
 }
 
- CN_ITEM* CN_LIST::Add( VIA* via )
+ CN_ITEM* CN_LIST::Add( PCB_VIA* via )
  {
      auto item = new CN_ITEM( via, !via->GetIsFree(), 1 );
 
@@ -365,7 +365,7 @@ bool CN_ANCHOR::IsDangling() const
         return connected_count < minimal_count;
 
     if( Parent()->Type() == PCB_TRACE_T || Parent()->Type() == PCB_ARC_T )
-        accuracy = ( static_cast<const TRACK*>( Parent() )->GetWidth() + 1 )/ 2;
+        accuracy = ( static_cast<const PCB_TRACK*>( Parent() )->GetWidth() + 1 ) / 2;
 
     // Items with multiple anchors have usually items connected to each anchor.
     // We want only the item count of this anchor point

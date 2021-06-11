@@ -28,7 +28,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <confirm.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <dialog_net_inspector.h>
 #include <eda_pattern_match.h>
 #include <wildcards_and_files_ext.h>
@@ -1129,7 +1129,7 @@ void DIALOG_NET_INSPECTOR::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardIt
         if( r )
         {
             // try to handle frequent operations quickly.
-            if( TRACK* track = dynamic_cast<TRACK*>( i ) )
+            if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( i ) )
             {
                 const std::unique_ptr<LIST_ITEM>& list_item = *r.get();
                 int len = track->GetLength();
@@ -1228,7 +1228,7 @@ void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoard
         if( r )
         {
             // try to handle frequent operations quickly.
-            if( TRACK* track = dynamic_cast<TRACK*>( i ) )
+            if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( i ) )
             {
                 const std::unique_ptr<LIST_ITEM>& list_item = *r.get();
                 int len = track->GetLength();
@@ -1370,9 +1370,9 @@ void DIALOG_NET_INSPECTOR::updateNet( NETINFO_ITEM* aNet )
 }
 
 
-unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const TRACK* aTrack ) const
+unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const PCB_TRACK* aTrack ) const
 {
-    const VIA& via = dynamic_cast<const VIA&>( *aTrack );
+    const PCB_VIA&         via = dynamic_cast<const PCB_VIA&>( *aTrack );
     BOARD_DESIGN_SETTINGS& bds = m_brd->GetDesignSettings();
 
     // calculate the via length individually from the board stackup and via's start and end layer.
@@ -1417,7 +1417,7 @@ DIALOG_NET_INSPECTOR::buildNewItem( NETINFO_ITEM* aNet, unsigned int aPadCount,
         if( item->Type() == PCB_PAD_T )
             new_item->AddChipWireLength( static_cast<PAD*>( item )->GetPadToDieLength() );
 
-        else if( TRACK* track = dynamic_cast<TRACK*>( item ) )
+        else if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
         {
             new_item->AddBoardWireLength( track->GetLength() );
 

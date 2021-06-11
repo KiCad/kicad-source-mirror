@@ -28,7 +28,7 @@
 #include <footprint.h>
 #include <fp_shape.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <pcb_marker.h>
 #include <pcb_dimension.h>
 #include <zone.h>
@@ -161,7 +161,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     PCB_GROUP*          group       = nullptr;
     PAD*                pad         = nullptr;
     bool                pad_through = false;
-    VIA*                via         = nullptr;
+    PCB_VIA*            via         = nullptr;
     PCB_MARKER*         marker      = nullptr;
     ZONE*               zone        = nullptr;
     PCB_SHAPE*          shape       = nullptr;
@@ -258,7 +258,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_VIA_T:     // vias are on many layers, so layer test is specific
-        via = static_cast<VIA*>( item );
+        via = static_cast<PCB_VIA*>( item );
         break;
 
     case PCB_TRACE_T:

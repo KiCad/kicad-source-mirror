@@ -30,7 +30,7 @@
 #include <footprint.h>
 #include <fp_shape.h>
 #include <pcb_shape.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <xnode.h>
 
 #include <wx/string.h>
@@ -138,7 +138,7 @@ void PCB_LINE::AddToBoard()
 {
     if( IsCopperLayer( m_KiCadLayer ) )
     {
-        TRACK* track = new TRACK( m_board );
+        PCB_TRACK* track = new PCB_TRACK( m_board );
         m_board->Add( track );
 
         track->SetPosition( wxPoint( m_positionX, m_positionY ) );

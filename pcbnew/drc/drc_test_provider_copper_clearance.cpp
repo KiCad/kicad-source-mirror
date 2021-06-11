@@ -27,7 +27,7 @@
 #include <footprint.h>
 #include <pcb_shape.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 
 #include <geometry/seg.h>
@@ -81,7 +81,7 @@ public:
     int GetNumPhases() const override;
 
 private:
-    bool testTrackAgainstItem( TRACK* track, SHAPE* trackShape, PCB_LAYER_ID layer,
+    bool testTrackAgainstItem( PCB_TRACK* track, SHAPE* trackShape, PCB_LAYER_ID layer,
                                BOARD_ITEM* other );
 
     void testTrackClearances();
@@ -255,7 +255,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 }
 
 
-bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHAPE* trackShape,
+bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track, SHAPE* trackShape,
                                                                PCB_LAYER_ID layer,
                                                                BOARD_ITEM* other )
 {
@@ -328,7 +328,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
 
         if( other->Type() == PCB_VIA_T )
         {
-            VIA* via = static_cast<VIA*>( other );
+            PCB_VIA* via = static_cast<PCB_VIA*>( other );
             pos = via->GetPosition();
 
             if( via->GetLayerSet().Contains( layer ) )
@@ -458,7 +458,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
 
-    for( TRACK* track : m_board->Tracks() )
+    for( PCB_TRACK* track : m_board->Tracks() )
     {
         if( !reportProgress( ii++, m_board->Tracks().size(), delta ) )
             break;
@@ -541,7 +541,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         testClearance = false;
 
     // Track clearances are tested in testTrackClearances()
-    if( dynamic_cast<TRACK*>( other) )
+    if( dynamic_cast<PCB_TRACK*>( other) )
         testClearance = false;
 
     if( !testClearance && !testShorting && !testHoles )

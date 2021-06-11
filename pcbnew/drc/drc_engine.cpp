@@ -35,7 +35,7 @@
 #include <drc/drc_test_provider.h>
 #include <footprint.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <geometry/shape.h>
 #include <geometry/shape_segment.h>
@@ -895,9 +895,9 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
                     }
                     else if( a->Type() == PCB_VIA_T )
                     {
-                        if( static_cast<const VIA*>( a )->GetViaType() == VIATYPE::BLIND_BURIED )
+                        if( static_cast<const PCB_VIA*>( a )->GetViaType() == VIATYPE::BLIND_BURIED )
                             mask = DRC_DISALLOW_VIAS | DRC_DISALLOW_BB_VIAS;
-                        else if( static_cast<const VIA*>( a )->GetViaType() == VIATYPE::MICROVIA )
+                        else if( static_cast<const PCB_VIA*>( a )->GetViaType() == VIATYPE::MICROVIA )
                             mask = DRC_DISALLOW_VIAS | DRC_DISALLOW_MICRO_VIAS;
                         else
                             mask = DRC_DISALLOW_VIAS;

@@ -42,7 +42,7 @@ class PCB_TARGET;
 class PAD;
 class FP_TEXT;
 class PCB_GROUP;
-class TRACK;
+class PCB_TRACK;
 class ZONE;
 class PCB_TEXT;
 
@@ -261,7 +261,7 @@ private:
 
     void format( const FP_TEXT* aText, int aNestLevel = 0 ) const;
 
-    void format( const TRACK* aTrack, int aNestLevel = 0 ) const;
+    void format( const PCB_TRACK* aTrack, int aNestLevel = 0 ) const;
 
     void format( const ZONE* aZone, int aNestLevel = 0 ) const;
 

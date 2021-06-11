@@ -309,7 +309,7 @@ VECTOR2D KIGFX::PCB_PRINT_PAINTER::getDrillSize( const PAD* aPad ) const
 }
 
 
-int KIGFX::PCB_PRINT_PAINTER::getDrillSize( const VIA* aVia ) const
+int KIGFX::PCB_PRINT_PAINTER::getDrillSize( const PCB_VIA* aVia ) const
 {
     // TODO should it depend on the via size?
     return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillSize( aVia ) : m_drillMarkSize;

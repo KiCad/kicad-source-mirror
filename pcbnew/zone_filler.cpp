@@ -35,7 +35,7 @@
 #include <pad.h>
 #include <pcb_shape.h>
 #include <pcb_target.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <connectivity/connectivity_data.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <board_commit.h>
@@ -742,7 +742,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     // Add non-connected track clearances
     //
     auto knockoutTrackClearance =
-            [&]( TRACK* aTrack )
+            [&]( PCB_TRACK* aTrack )
             {
                 if( aTrack->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
@@ -752,7 +752,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
                     if( aTrack->Type() == PCB_VIA_T )
                     {
-                        VIA* via = static_cast<VIA*>( aTrack );
+                        PCB_VIA* via = static_cast<PCB_VIA*>( aTrack );
 
                         if( !via->FlashLayer( aLayer ) && via->GetNetCode() != aZone->GetNetCode() )
                         {
@@ -774,7 +774,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 }
             };
 
-    for( TRACK* track : m_board->Tracks() )
+    for( PCB_TRACK* track : m_board->Tracks() )
     {
         if( !track->IsOnLayer( aLayer ) )
             continue;
@@ -1529,11 +1529,11 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
         SHAPE_POLY_SET aprons;
         int            min_apron_radius = ( aZone->GetHatchGap() * 10 ) / 19;
 
-        for( TRACK* track : m_board->Tracks() )
+        for( PCB_TRACK* track : m_board->Tracks() )
         {
             if( track->Type() == PCB_VIA_T )
             {
-                VIA* via = static_cast<VIA*>( track );
+                PCB_VIA* via = static_cast<PCB_VIA*>( track );
 
                 if( via->GetNetCode() == aZone->GetNetCode()
                     && via->IsOnLayer( aLayer )

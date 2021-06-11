@@ -149,22 +149,22 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     m_averageHoleDiameter      = 0;
 
     // Prepare track list, convert in a vector. Calc statistic for the holes
-    std::vector< const TRACK *> trackList;
+    std::vector<const PCB_TRACK*> trackList;
     trackList.clear();
     trackList.reserve( m_board->Tracks().size() );
 
-    for( TRACK* track : m_board->Tracks() )
+    for( PCB_TRACK* track : m_board->Tracks() )
     {
         if( !Is3dLayerEnabled( track->GetLayer() ) ) // Skip non enabled layers
             continue;
 
-        // Note: a TRACK holds normal segment tracks and
-        // also vias circles (that have also drill values)
+        // Note: a PCB_TRACK holds normal segment tracks and also vias circles (that have also
+        // drill values)
         trackList.push_back( track );
 
         if( track->Type() == PCB_VIA_T )
         {
-            const VIA *via = static_cast< const VIA*>( track );
+            const PCB_VIA *via = static_cast< const PCB_VIA*>( track );
             m_viaCount++;
             m_averageViaHoleDiameter += via->GetDrillValue() * m_biuTo3Dunits;
         }
@@ -235,14 +235,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         for( unsigned int trackIdx = 0; trackIdx < nTracks; ++trackIdx )
         {
-            const TRACK *track = trackList[trackIdx];
+            const PCB_TRACK *track = trackList[trackIdx];
 
             // NOTE: Vias can be on multiple layers
             if( !track->IsOnLayer( curr_layer_id ) )
                 continue;
 
             // Skip vias annulus when not connected on this layer (if removing is enabled)
-            const VIA *via = dyn_cast< const VIA*>( track );
+            const PCB_VIA *via = dyn_cast< const PCB_VIA*>( track );
 
             if( via && !via->FlashLayer( curr_layer_id ) && IsCopperLayer( curr_layer_id ) )
                 continue;
@@ -260,7 +260,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         for( unsigned int trackIdx = 0; trackIdx < nTracks; ++trackIdx )
         {
-            const TRACK *track = trackList[trackIdx];
+            const PCB_TRACK *track = trackList[trackIdx];
 
             if( !track->IsOnLayer( curr_layer_id ) )
                 continue;
@@ -268,14 +268,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // ADD VIAS and THT
             if( track->Type() == PCB_VIA_T )
             {
-                const VIA*    via               = static_cast<const VIA*>( track );
-                const VIATYPE viatype           = via->GetViaType();
-                const float   holediameter      = via->GetDrillValue() * BiuTo3dUnits();
+                const PCB_VIA* via               = static_cast<const PCB_VIA*>( track );
+                const VIATYPE  viatype           = via->GetViaType();
+                const float    holediameter      = via->GetDrillValue() * BiuTo3dUnits();
 
                 // holes and layer copper extend half info cylinder wall to hide transition
-                const float   thickness         = GetHolePlatingThickness() * BiuTo3dUnits() / 2.0f;
-                const float   hole_inner_radius = ( holediameter / 2.0f );
-                const float   ring_radius       = via->GetWidth() * BiuTo3dUnits() / 2.0f;
+                const float    thickness         = GetHolePlatingThickness() * BiuTo3dUnits() / 2.0f;
+                const float    hole_inner_radius = holediameter / 2.0f;
+                const float    ring_radius       = via->GetWidth() * BiuTo3dUnits() / 2.0f;
 
                 const SFVEC2F via_center( via->GetStart().x * m_biuTo3Dunits,
                                           -via->GetStart().y * m_biuTo3Dunits );
@@ -337,7 +337,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         for( unsigned int trackIdx = 0; trackIdx < nTracks; ++trackIdx )
         {
-            const TRACK *track = trackList[trackIdx];
+            const PCB_TRACK *track = trackList[trackIdx];
 
             if( !track->IsOnLayer( curr_layer_id ) )
                 continue;
@@ -345,12 +345,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // ADD VIAS and THT
             if( track->Type() == PCB_VIA_T )
             {
-                const VIA *via = static_cast< const VIA*>( track );
-                const VIATYPE viatype = via->GetViaType();
+                const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+                const VIATYPE  viatype = via->GetViaType();
 
                 if( viatype != VIATYPE::THROUGH )
                 {
-                    // Add VIA hole contours
+                    // Add PCB_VIA hole contours
 
                     // Add outer holes of VIAs
                     SHAPE_POLY_SET *layerOuterHolesPoly = nullptr;
@@ -430,13 +430,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             for( unsigned int trackIdx = 0; trackIdx < nTracks; ++trackIdx )
             {
-                const TRACK *track = trackList[trackIdx];
+                const PCB_TRACK *track = trackList[trackIdx];
 
                 if( !track->IsOnLayer( curr_layer_id ) )
                     continue;
 
                 // Skip vias annulus when not connected on this layer (if removing is enabled)
-                const VIA *via = dyn_cast< const VIA*>( track );
+                const PCB_VIA *via = dyn_cast<const PCB_VIA*>( track );
 
                 if( via && !via->FlashLayer( curr_layer_id ) && IsCopperLayer( curr_layer_id ) )
                     continue;

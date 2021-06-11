@@ -363,11 +363,11 @@ private:
      *                       in the DrawSegments
      * @return
     */
-    std::vector<TRACK*> makeTracksFromDrawsegments( const std::vector<PCB_SHAPE*> aDrawsegments,
-                                                    BOARD_ITEM_CONTAINER* aParentContainer,
-                                                    NETINFO_ITEM* aNet = nullptr,
-                                                    PCB_LAYER_ID aLayerOverride = UNDEFINED_LAYER,
-                                                    int aWidthOverride = -1 );
+    std::vector<PCB_TRACK*> makeTracksFromDrawsegments( const std::vector<PCB_SHAPE*> aDrawsegments,
+                                                        BOARD_ITEM_CONTAINER* aParentContainer,
+                                                        NETINFO_ITEM* aNet = nullptr,
+                                                        PCB_LAYER_ID aLayerOverride = UNDEFINED_LAYER,
+                                                        int aWidthOverride = -1 );
 
     /**
      * @brief Adds a CADSTAR Attribute to a KiCad footprint

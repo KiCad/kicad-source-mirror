@@ -92,10 +92,10 @@ enum KICAD_T
     PCB_FP_TEXT_T,          ///< class FP_TEXT, text in a footprint
     PCB_FP_SHAPE_T,         ///< class FP_SHAPE, a footprint edge
     PCB_FP_ZONE_T,          ///< class ZONE, managed by a footprint
-    PCB_TRACE_T,            ///< class TRACK, a track segment (segment on a copper layer)
-    PCB_VIA_T,              ///< class VIA, a via (like a track segment on a copper layer)
-    PCB_ARC_T,              ///< class ARC, an arc track segment on a copper layer
-    PCB_MARKER_T,           ///< class MARKER_PCB, a marker used to show something
+    PCB_TRACE_T,            ///< class PCB_TRACK, a track segment (segment on a copper layer)
+    PCB_VIA_T,              ///< class PCB_VIA, a via (like a track segment on a copper layer)
+    PCB_ARC_T,              ///< class PCB_ARC, an arc track segment on a copper layer
+    PCB_MARKER_T,           ///< class PCB_MARKER, a marker used to show something
     PCB_DIMENSION_T,        ///< class PCB_DIMENSION_BASE: abstract dimension meta-type
     PCB_DIM_ALIGNED_T,      ///< class PCB_DIM_ALIGNED, a linear dimension (graphic item)
     PCB_DIM_LEADER_T,       ///< class PCB_DIM_LEADER, a leader dimension (graphic item)

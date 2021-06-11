@@ -22,7 +22,7 @@
  */
 
 #include <common.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
@@ -93,9 +93,9 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_ANNULAR_WIDTH ) )
                     return false;
 
-                int  v_min = 0;
-                int  v_max = 0;
-                VIA* via = dyn_cast<VIA*>( item );
+                int      v_min = 0;
+                int      v_max = 0;
+                PCB_VIA* via = dyn_cast<PCB_VIA*>( item );
 
                 // fixme: check minimum IAR/OAR ring for THT pads too
                 if( !via )
@@ -149,7 +149,7 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
     BOARD* board = m_drcEngine->GetBoard();
     int    ii = 0;
 
-    for( TRACK* item : board->Tracks() )
+    for( PCB_TRACK* item : board->Tracks() )
     {
         if( !reportProgress( ii++, board->Tracks().size(), delta ) )
             break;

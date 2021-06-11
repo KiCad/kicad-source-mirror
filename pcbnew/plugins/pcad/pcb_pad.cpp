@@ -29,7 +29,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <trigo.h>
 #include <xnode.h>
 
@@ -346,7 +346,7 @@ void PCB_PAD::AddToBoard()
 
         if( IsCopperLayer( m_KiCadLayer ) )
         {
-            VIA* via = new VIA( m_board );
+            PCB_VIA* via = new PCB_VIA( m_board );
             m_board->Add( via );
 
             via->SetPosition( wxPoint( m_positionX, m_positionY ) );

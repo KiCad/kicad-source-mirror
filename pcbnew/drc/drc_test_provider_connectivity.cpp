@@ -90,7 +90,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     ii += count;      // We gave half of this phase to CONNECTIVITY_DATA::Build()
     count += count;
 
-    for( TRACK* track : board->Tracks() )
+    for( PCB_TRACK* track : board->Tracks() )
     {
         bool exceedT = m_drcEngine->IsErrorLimitExceeded( DRCE_DANGLING_TRACK );
         bool exceedV = m_drcEngine->IsErrorLimitExceeded( DRCE_DANGLING_VIA );

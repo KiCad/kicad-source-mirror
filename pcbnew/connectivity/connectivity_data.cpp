@@ -484,23 +484,23 @@ bool CONNECTIVITY_DATA::CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& a
 }
 
 
-const std::vector<TRACK*> CONNECTIVITY_DATA::GetConnectedTracks( const BOARD_CONNECTED_ITEM* aItem )
-const
+const std::vector<PCB_TRACK*> CONNECTIVITY_DATA::GetConnectedTracks(
+                                                        const BOARD_CONNECTED_ITEM* aItem ) const
 {
     auto& entry = m_connAlgo->ItemEntry( aItem );
 
-    std::set<TRACK*> tracks;
-    std::vector<TRACK*> rv;
+    std::set<PCB_TRACK*> tracks;
+    std::vector<PCB_TRACK*> rv;
 
-    for( auto citem : entry.GetItems() )
+    for( CN_ITEM* citem : entry.GetItems() )
     {
-        for( auto connected : citem->ConnectedItems() )
+        for( CN_ITEM* connected : citem->ConnectedItems() )
         {
             if( connected->Valid() &&
                     ( connected->Parent()->Type() == PCB_TRACE_T ||
                             connected->Parent()->Type() == PCB_VIA_T ||
                             connected->Parent()->Type() == PCB_ARC_T ) )
-                tracks.insert( static_cast<TRACK*> ( connected->Parent() ) );
+                tracks.insert( static_cast<PCB_TRACK*> ( connected->Parent() ) );
         }
     }
 
@@ -586,7 +586,7 @@ void CONNECTIVITY_DATA::GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges) const
 }
 
 
-bool CONNECTIVITY_DATA::TestTrackEndpointDangling( TRACK* aTrack, wxPoint* aPos )
+bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, wxPoint* aPos )
 {
     auto items = GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems();
 

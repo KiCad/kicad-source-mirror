@@ -140,7 +140,7 @@ public:
     // Build and exports the board outlines (board body)
     void ExportVrmlBoard();
 
-    void ExportVrmlVia( const VIA* aVia );
+    void ExportVrmlVia( const PCB_VIA* aVia );
 
     // Export all via holes
     void ExportVrmlViaHoles();

@@ -46,7 +46,7 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <fp_shape.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <pad.h>
 #include <zone.h>
 #include <base_units.h>
@@ -930,7 +930,7 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
 }
 
 
-PADSTACK* SPECCTRA_DB::makeVia( const ::VIA* aVia )
+PADSTACK* SPECCTRA_DB::makeVia( const PCB_VIA* aVia )
 {
     PCB_LAYER_ID    topLayerNum;
     PCB_LAYER_ID    botLayerNum;
@@ -1580,9 +1580,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         for( int i=0;  i<items.GetCount();  ++i )
         {
-            TRACK*  track = (TRACK*) items[i];
-
-            int     netcode = track->GetNetCode();
+            PCB_TRACK*  track = static_cast<PCB_TRACK*>( items[i] );
+            int         netcode = track->GetNetCode();
 
             if( netcode == 0 )
                 continue;
@@ -1636,10 +1635,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         for( int i = 0; i<items.GetCount(); ++i )
         {
-            ::VIA* via = (::VIA*) items[i];
+            PCB_VIA* via = static_cast<PCB_VIA*>( items[i] );
             wxASSERT( via->Type() == PCB_VIA_T );
 
-            int     netcode = via->GetNetCode();
+            int      netcode = via->GetNetCode();
 
             if( netcode == 0 )
                 continue;

@@ -26,7 +26,7 @@
 #include <geometry/shape_circle.h>
 #include <math/box2.h>
 
-#include "track.h"
+#include "pcb_track.h"
 
 #include "pns_item.h"
 

@@ -114,7 +114,7 @@ private:
                        float aZMax, const MATERIAL* aMaterial, const SFVEC3F& aObjColor );
 
     void addPadsAndVias();
-    void insertHole( const VIA* aVia );
+    void insertHole( const PCB_VIA* aVia );
     void insertHole( const PAD* aPad );
     void loadModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation );
     void addModels( CONTAINER_3D& aDstContainer, const S3DMODEL* a3DModel,

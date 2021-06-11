@@ -226,7 +226,7 @@ void BOARD_ADAPTER::addFootprintShapesWithClearance( const FOOTPRINT* aFootprint
 }
 
 
-void BOARD_ADAPTER::createTrack( const TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
+void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
                                  int aClearanceValue )
 {
     SFVEC2F start3DU( aTrack->GetStart().x * m_biuTo3Dunits,
@@ -243,7 +243,7 @@ void BOARD_ADAPTER::createTrack( const TRACK* aTrack, CONTAINER_2D_BASE* aDstCon
 
     case PCB_ARC_T:
     {
-        const ARC* arc = static_cast<const ARC*>( aTrack );
+        const PCB_ARC* arc = static_cast<const PCB_ARC*>( aTrack );
         VECTOR2D center( arc->GetCenter() );
         double arc_angle = arc->GetAngle();
         double radius = arc->GetRadius();

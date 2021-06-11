@@ -89,7 +89,7 @@ private:
     std::vector<CN_ITEM*> relevantConnectivityItems() const;
     bool                  netFilterMatches( NETINFO_ITEM* aNet ) const;
     void                  updateNet( NETINFO_ITEM* aNet );
-    unsigned int          calculateViaLength( const TRACK* ) const;
+    unsigned int          calculateViaLength( const PCB_TRACK* ) const;
 
     void onSelChanged( wxDataViewEvent& event ) override;
     void onSelChanged();

@@ -33,7 +33,7 @@
 #include <netinfo.h>
 #include <footprint.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <kicad_string.h>
 #include <pcbnew_settings.h>
@@ -608,7 +608,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
         }
     }
 
-    for( TRACK* via : m_board->Tracks() )
+    for( PCB_TRACK* via : m_board->Tracks() )
     {
         if( via->Type() != PCB_VIA_T )
             continue;

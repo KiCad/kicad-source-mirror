@@ -29,7 +29,7 @@
 #include <pcbnew/pcb_expr_evaluator.h>
 
 #include <pcbnew/board.h>
-#include <pcbnew/track.h>
+#include <pcbnew/pcb_track.h>
 
 BOOST_AUTO_TEST_SUITE( Libeval_Compiler )
 
@@ -162,8 +162,8 @@ BOOST_AUTO_TEST_CASE( IntrospectedProperties )
     net1info->SetNetClass( netclass1 );
     net2info->SetNetClass( netclass2 );
 
-    TRACK trackA( &brd );
-    TRACK trackB( &brd );
+    PCB_TRACK trackA( &brd );
+    PCB_TRACK trackB( &brd );
 
     trackA.SetNet( net1info );
     trackB.SetNet( net2info );

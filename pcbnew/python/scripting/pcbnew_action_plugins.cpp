@@ -26,7 +26,7 @@
 #include <board.h>
 #include <board_commit.h>
 #include <footprint.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <menus_helpers.h>
 #include <pcbnew_settings.h>
@@ -216,7 +216,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     bool    fromEmpty   = false;
 
     // Append tracks:
-    for( TRACK* item : currentPcb->Tracks() )
+    for( PCB_TRACK* item : currentPcb->Tracks() )
     {
         ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
@@ -277,7 +277,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     std::set<BOARD_ITEM*> currItemList;
 
     // Append tracks:
-    for( TRACK* item : currentPcb->Tracks() )
+    for( PCB_TRACK* item : currentPcb->Tracks() )
         currItemList.insert( item );
 
     // Append footprints:
@@ -324,7 +324,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         }
     }
 
-    for( TRACK* item : currentPcb->Tracks() )
+    for( PCB_TRACK* item : currentPcb->Tracks() )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {

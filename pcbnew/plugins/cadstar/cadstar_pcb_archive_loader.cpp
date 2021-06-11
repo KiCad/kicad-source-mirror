@@ -37,7 +37,7 @@
 #include <pcb_group.h>
 #include <pcb_text.h>
 #include <project.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
@@ -2032,8 +2032,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
             std::vector<PCB_SHAPE*> outlineSegments =
                     getDrawSegmentsFromVertices( csCopper.Shape.Vertices );
 
-            std::vector<TRACK*> outlineTracks = makeTracksFromDrawsegments( outlineSegments, m_board,
-                    getKiCadNet( csCopper.NetRef.NetID ), getKiCadLayer( csCopper.LayerID ),
+            std::vector<PCB_TRACK*> outlineTracks = makeTracksFromDrawsegments( outlineSegments,
+                    m_board, getKiCadNet( csCopper.NetRef.NetID ),
+                    getKiCadLayer( csCopper.LayerID ),
                     getKiCadLength( getCopperCode( csCopper.CopperCodeID ).CopperWidth ) );
 
             //cleanup
@@ -2045,8 +2046,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
                 std::vector<PCB_SHAPE*> cutoutSeg =
                         getDrawSegmentsFromVertices( cutout.Vertices );
 
-                std::vector<TRACK*> cutoutTracks = makeTracksFromDrawsegments( cutoutSeg, m_board,
-                        getKiCadNet( csCopper.NetRef.NetID ), getKiCadLayer( csCopper.LayerID ),
+                std::vector<PCB_TRACK*> cutoutTracks = makeTracksFromDrawsegments( cutoutSeg,
+                        m_board, getKiCadNet( csCopper.NetRef.NetID ),
+                        getKiCadLayer( csCopper.LayerID ),
                         getKiCadLength( getCopperCode( csCopper.CopperCodeID ).CopperWidth ) );
 
                 //cleanup
@@ -2362,8 +2364,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks( const NET_ID&         aCadstarNe
         prevEnd = v.Vertex.End;
     }
 
-    NETINFO_ITEM*       net = getKiCadNet( aCadstarNetID );
-    std::vector<TRACK*> tracks = makeTracksFromDrawsegments( shapes, m_board, net );
+    NETINFO_ITEM*           net = getKiCadNet( aCadstarNetID );
+    std::vector<PCB_TRACK*> tracks = makeTracksFromDrawsegments( shapes, m_board, net );
 
     //cleanup
     for( PCB_SHAPE* shape : shapes )
@@ -2374,7 +2376,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks( const NET_ID&         aCadstarNe
 int CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia(
         const NET_ID& aCadstarNetID, const NET_PCB::VIA& aCadstarVia )
 {
-    VIA* via = new VIA( m_board );
+    PCB_VIA* via = new PCB_VIA( m_board );
     m_board->Add( via, ADD_MODE::APPEND );
 
     VIACODE   csViaCode   = getViaCode( aCadstarVia.ViaCodeID );
@@ -2958,33 +2960,34 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments( const
 }
 
 
-std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
+std::vector<PCB_TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
                                                   const std::vector<PCB_SHAPE*> aDrawsegments,
                                                   BOARD_ITEM_CONTAINER* aParentContainer,
                                                   NETINFO_ITEM* aNet, PCB_LAYER_ID aLayerOverride,
                                                   int aWidthOverride )
 {
-    std::vector<TRACK*> tracks;
-    TRACK*              prevTrack = nullptr;
-    TRACK*              track = nullptr;
+    std::vector<PCB_TRACK*> tracks;
+    PCB_TRACK*              prevTrack = nullptr;
+    PCB_TRACK*              track = nullptr;
 
-    auto addTrack = [&]( TRACK* aTrack )
-                    {
-                        // Ignore zero length tracks in the same way as the CADSTAR postprocessor
-                        // does when generating gerbers. Note that CADSTAR reports these as "Route
-                        // offset errors" when running a DRC within CADSTAR, so we shouldn't be
-                        // getting this in general, however it is used to remove any synthetic
-                        // points added to aDrawSegments by the caller of this function.
-                        if( aTrack->GetLength() != 0 )
-                        {
-                            tracks.push_back( aTrack );
-                            aParentContainer->Add( aTrack, ADD_MODE::APPEND );
-                        }
-                        else
-                        {
-                            delete aTrack;
-                        }
-                    };
+    auto addTrack =
+            [&]( PCB_TRACK* aTrack )
+            {
+                // Ignore zero length tracks in the same way as the CADSTAR postprocessor does
+                // when generating gerbers. Note that CADSTAR reports these as "Route offset
+                // errors" when running a DRC within CADSTAR, so we shouldn't be getting this in
+                // general, however it is used to remove any synthetic points added to
+                // aDrawSegments by the caller of this function.
+                if( aTrack->GetLength() != 0 )
+                {
+                    tracks.push_back( aTrack );
+                    aParentContainer->Add( aTrack, ADD_MODE::APPEND );
+                }
+                else
+                {
+                    delete aTrack;
+                }
+            };
 
     for( PCB_SHAPE* ds : aDrawsegments )
     {
@@ -2995,25 +2998,25 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
             {
                 FP_SHAPE* em = (FP_SHAPE*) ds;
                 SHAPE_ARC arc( em->GetStart0(), em->GetEnd0(), (double) em->GetAngle() / 10.0 );
-                track = new ARC( aParentContainer, &arc );
+                track = new PCB_ARC( aParentContainer, &arc );
             }
             else
             {
                 SHAPE_ARC arc( ds->GetCenter(), ds->GetArcStart(), (double) ds->GetAngle() / 10.0 );
-                track = new ARC( aParentContainer, &arc );
+                track = new PCB_ARC( aParentContainer, &arc );
             }
             break;
         case PCB_SHAPE_TYPE::SEGMENT:
             if( ds->GetClass() == wxT( "MGRAPHIC" ) )
             {
                 FP_SHAPE* em = (FP_SHAPE*) ds;
-                track = new TRACK( aParentContainer );
+                track = new PCB_TRACK( aParentContainer );
                 track->SetStart( em->GetStart0() );
                 track->SetEnd( em->GetEnd0() );
             }
             else
             {
-                track = new TRACK( aParentContainer );
+                track = new PCB_TRACK( aParentContainer );
                 track->SetStart( ds->GetStart() );
                 track->SetEnd( ds->GetEnd() );
             }
@@ -3067,7 +3070,7 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
             if( track->GetStart() != prevTrack->GetEnd() )
             {
                 int    minWidth = std::min( track->GetWidth(), prevTrack->GetWidth() );
-                TRACK* synthTrack = new TRACK( aParentContainer );
+                PCB_TRACK* synthTrack = new PCB_TRACK( aParentContainer );
                 synthTrack->SetStart( prevTrack->GetEnd() );
                 synthTrack->SetEnd( track->GetStart() );
                 synthTrack->SetWidth( minWidth );

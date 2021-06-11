@@ -737,11 +737,11 @@ void RENDER_3D_LEGACY::generateViasAndPads()
         // Insert plated vertical holes inside the board
 
         // Insert vias holes (vertical cylinders)
-        for( const TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
+        for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
         {
             if( track->Type() == PCB_VIA_T )
             {
-                const VIA* via = static_cast<const VIA*>( track );
+                const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
                 const float holediameter = via->GetDrillValue() * m_boardAdapter.BiuTo3dUnits();
                 const int nrSegments = m_boardAdapter.GetCircleSegmentCount( via->GetDrillValue() );

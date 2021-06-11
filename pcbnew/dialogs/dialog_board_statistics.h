@@ -30,7 +30,7 @@
 #include <base_units.h>
 #include <board.h>
 #include <footprint.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <dialog_board_statistics_base.h>
 #include <pad_shapes.h>
 #include <pcb_base_frame.h>

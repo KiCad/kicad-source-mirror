@@ -28,7 +28,7 @@
 #include <connectivity/connectivity_data.h>
 #include <board.h>
 #include <board_design_settings.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <kicad_string.h>
@@ -47,20 +47,21 @@
 using KIGFX::PCB_PAINTER;
 using KIGFX::PCB_RENDER_SETTINGS;
 
-TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
+PCB_TRACK::PCB_TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
 {
     m_Width = Millimeter2iu( 0.2 );     // Gives a reasonable default width
 }
 
 
-EDA_ITEM* TRACK::Clone() const
+EDA_ITEM* PCB_TRACK::Clone() const
 {
-    return new TRACK( *this );
+    return new PCB_TRACK( *this );
 }
 
 
-ARC::ARC( BOARD_ITEM* aParent, const SHAPE_ARC* aArc ) : TRACK( aParent, PCB_ARC_T )
+PCB_ARC::PCB_ARC( BOARD_ITEM* aParent, const SHAPE_ARC* aArc ) :
+    PCB_TRACK( aParent, PCB_ARC_T )
 {
     m_Start = wxPoint( aArc->GetP0() );
     m_End = wxPoint( aArc->GetP1() );
@@ -68,14 +69,14 @@ ARC::ARC( BOARD_ITEM* aParent, const SHAPE_ARC* aArc ) : TRACK( aParent, PCB_ARC
 }
 
 
-EDA_ITEM* ARC::Clone() const
+EDA_ITEM* PCB_ARC::Clone() const
 {
-    return new ARC( *this );
+    return new PCB_ARC( *this );
 }
 
 
-VIA::VIA( BOARD_ITEM* aParent ) :
-    TRACK( aParent, PCB_VIA_T )
+PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
+        PCB_TRACK( aParent, PCB_VIA_T )
 {
     SetViaType( VIATYPE::THROUGH );
     m_bottomLayer = B_Cu;
@@ -86,13 +87,13 @@ VIA::VIA( BOARD_ITEM* aParent ) :
 }
 
 
-EDA_ITEM* VIA::Clone() const
+EDA_ITEM* PCB_VIA::Clone() const
 {
-    return new VIA( *this );
+    return new PCB_VIA( *this );
 }
 
 
-wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     wxString formatStr;
 
@@ -109,13 +110,13 @@ wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAPS VIA::GetMenuImage() const
+BITMAPS PCB_VIA::GetMenuImage() const
 {
     return BITMAPS::via;
 }
 
 
-bool TRACK::ApproxCollinear( const TRACK& aTrack )
+bool PCB_TRACK::ApproxCollinear( const PCB_TRACK& aTrack )
 {
     SEG a( m_Start, m_End );
     SEG b( aTrack.GetStart(), aTrack.GetEnd() );
@@ -123,14 +124,14 @@ bool TRACK::ApproxCollinear( const TRACK& aTrack )
 }
 
 
-int TRACK::GetLocalClearance( wxString* aSource ) const
+int PCB_TRACK::GetLocalClearance( wxString* aSource ) const
 {
     // Not currently implemented
     return 0;
 }
 
 
-void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
+void PCB_TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
 {
     *aMin = 0;
     *aMax = INT_MAX;
@@ -158,7 +159,7 @@ void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
 }
 
 
-int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
+int PCB_VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
     if( !FlashLayer( aLayer ) )
     {
@@ -189,7 +190,7 @@ int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
 }
 
 
-int VIA::GetDrillValue() const
+int PCB_VIA::GetDrillValue() const
 {
     if( m_drill > 0 ) // Use the specific value.
         return m_drill;
@@ -204,7 +205,7 @@ int VIA::GetDrillValue() const
 }
 
 
-EDA_ITEM_FLAGS TRACK::IsPointOnEnds( const wxPoint& point, int min_dist ) const
+EDA_ITEM_FLAGS PCB_TRACK::IsPointOnEnds( const wxPoint& point, int min_dist ) const
 {
     EDA_ITEM_FLAGS result = 0;
 
@@ -236,7 +237,7 @@ EDA_ITEM_FLAGS TRACK::IsPointOnEnds( const wxPoint& point, int min_dist ) const
 }
 
 
-const EDA_RECT TRACK::GetBoundingBox() const
+const EDA_RECT PCB_TRACK::GetBoundingBox() const
 {
     // end of track is round, this is its radius, rounded up
     int radius = ( m_Width + 1 ) / 2;
@@ -282,20 +283,20 @@ const EDA_RECT TRACK::GetBoundingBox() const
 }
 
 
-double TRACK::GetLength() const
+double PCB_TRACK::GetLength() const
 {
     return GetLineLength( m_Start, m_End );
 }
 
 
-void TRACK::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_TRACK::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     RotatePoint( &m_Start, aRotCentre, aAngle );
     RotatePoint( &m_End, aRotCentre, aAngle );
 }
 
 
-void ARC::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_ARC::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     RotatePoint( &m_Start, aRotCentre, aAngle );
     RotatePoint( &m_End, aRotCentre, aAngle );
@@ -303,7 +304,7 @@ void ARC::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void TRACK::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_TRACK::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
     {
@@ -321,7 +322,7 @@ void TRACK::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-void ARC::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_ARC::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
     {
@@ -341,7 +342,7 @@ void ARC::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-void VIA::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_VIA::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
     {
@@ -368,7 +369,7 @@ void VIA::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 
 
 // see class_track.h
-SEARCH_RESULT TRACK::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+SEARCH_RESULT PCB_TRACK::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T stype = *scanTypes;
 
@@ -383,7 +384,7 @@ SEARCH_RESULT TRACK::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
 }
 
 
-bool VIA::IsOnLayer( PCB_LAYER_ID layer_number ) const
+bool PCB_VIA::IsOnLayer( PCB_LAYER_ID layer_number ) const
 {
     PCB_LAYER_ID bottom_layer, top_layer;
 
@@ -398,7 +399,7 @@ bool VIA::IsOnLayer( PCB_LAYER_ID layer_number ) const
 }
 
 
-LSET VIA::GetLayerSet() const
+LSET PCB_VIA::GetLayerSet() const
 {
     if( GetViaType() == VIATYPE::THROUGH )
         return LSET::AllCuMask();
@@ -419,7 +420,7 @@ LSET VIA::GetLayerSet() const
 }
 
 
-void VIA::SetLayerSet( LSET aLayerSet )
+void PCB_VIA::SetLayerSet( LSET aLayerSet )
 {
     bool first = true;
 
@@ -436,7 +437,7 @@ void VIA::SetLayerSet( LSET aLayerSet )
 }
 
 
-void VIA::SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer )
+void PCB_VIA::SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer )
 {
 
     m_layer = aTopLayer;
@@ -445,19 +446,19 @@ void VIA::SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer )
 }
 
 
-void VIA::SetTopLayer( PCB_LAYER_ID aLayer )
+void PCB_VIA::SetTopLayer( PCB_LAYER_ID aLayer )
 {
     m_layer = aLayer;
 }
 
 
-void VIA::SetBottomLayer( PCB_LAYER_ID aLayer )
+void PCB_VIA::SetBottomLayer( PCB_LAYER_ID aLayer )
 {
     m_bottomLayer = aLayer;
 }
 
 
-void VIA::LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) const
+void PCB_VIA::LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) const
 {
     PCB_LAYER_ID t_layer = F_Cu;
     PCB_LAYER_ID b_layer = B_Cu;
@@ -479,19 +480,19 @@ void VIA::LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) const
 }
 
 
-PCB_LAYER_ID VIA::TopLayer() const
+PCB_LAYER_ID PCB_VIA::TopLayer() const
 {
     return m_layer;
 }
 
 
-PCB_LAYER_ID VIA::BottomLayer() const
+PCB_LAYER_ID PCB_VIA::BottomLayer() const
 {
     return m_bottomLayer;
 }
 
 
-void VIA::SanitizeLayers()
+void PCB_VIA::SanitizeLayers()
 {
     if( GetViaType() == VIATYPE::THROUGH )
     {
@@ -504,7 +505,7 @@ void VIA::SanitizeLayers()
 }
 
 
-bool VIA::FlashLayer( LSET aLayers ) const
+bool PCB_VIA::FlashLayer( LSET aLayers ) const
 {
     for( auto layer : aLayers.Seq() )
     {
@@ -516,7 +517,7 @@ bool VIA::FlashLayer( LSET aLayers ) const
 }
 
 
-bool VIA::FlashLayer( int aLayer ) const
+bool PCB_VIA::FlashLayer( int aLayer ) const
 {
     std::vector<KICAD_T> types
     { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_ZONE_T, PCB_FP_ZONE_T };
@@ -544,7 +545,7 @@ bool VIA::FlashLayer( int aLayer ) const
 }
 
 
-void TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
+void PCB_TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     // Show the track and its netname on different layers
     aLayers[0] = GetLayer();
@@ -553,7 +554,7 @@ void TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-double TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = std::numeric_limits<double>::max();
 
@@ -581,7 +582,7 @@ double TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-const BOX2I TRACK::ViewBBox() const
+const BOX2I PCB_TRACK::ViewBBox() const
 {
     BOX2I bbox = GetBoundingBox();
 
@@ -594,7 +595,7 @@ const BOX2I TRACK::ViewBBox() const
 }
 
 
-void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
+void PCB_VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aLayers[0] = LAYER_VIA_HOLES;
     aLayers[1] = LAYER_VIA_HOLEWALLS;
@@ -613,7 +614,7 @@ void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-double VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = (double)std::numeric_limits<double>::max();
 
@@ -675,7 +676,7 @@ double VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 
 // see class_track.h
-void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     EDA_UNITS units = aFrame->GetUserUnits();
     wxString  msg;
@@ -693,7 +694,7 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 
     if( Type() == PCB_ARC_T )
     {
-        double radius = static_cast<ARC*>( this )->GetRadius();
+        double radius = static_cast<PCB_ARC*>( this )->GetRadius();
         aList.emplace_back( _( "Radius" ), MessageTextFromValue( units, radius ) );
     }
 
@@ -736,7 +737,7 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 }
 
 
-void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     EDA_UNITS units = aFrame->GetUserUnits();
     wxString  msg;
@@ -778,7 +779,8 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 }
 
 
-void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) const
+void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame,
+                                            std::vector<MSG_PANEL_ITEM>& aList ) const
 {
     wxString msg;
 
@@ -810,7 +812,7 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
 }
 
 
-wxString VIA::layerMaskDescribe() const
+wxString PCB_VIA::layerMaskDescribe() const
 {
     BOARD*       board = GetBoard();
     PCB_LAYER_ID top_layer;
@@ -822,13 +824,13 @@ wxString VIA::layerMaskDescribe() const
 }
 
 
-bool TRACK::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PCB_TRACK::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     return TestSegmentHit( aPosition, m_Start, m_End, aAccuracy + ( m_Width / 2 ) );
 }
 
 
-bool ARC::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PCB_ARC::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int max_dist = aAccuracy + ( m_Width / 2 );
 
@@ -864,7 +866,7 @@ bool ARC::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-bool VIA::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PCB_VIA::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int max_dist = aAccuracy + ( m_Width / 2 );
 
@@ -875,7 +877,7 @@ bool VIA::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-bool TRACK::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PCB_TRACK::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT arect = aRect;
     arect.Inflate( aAccuracy );
@@ -887,7 +889,7 @@ bool TRACK::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
 }
 
 
-bool ARC::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PCB_ARC::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT box;
     EDA_RECT arect = aRect;
@@ -906,7 +908,7 @@ bool ARC::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 }
 
 
-bool VIA::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PCB_VIA::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT box;
     EDA_RECT arect = aRect;
@@ -922,57 +924,56 @@ bool VIA::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 }
 
 
-wxString TRACK::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_TRACK::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( Type() == PCB_ARC_T ?
-                                _("Track (arc) %s on %s, length %s" )
-                                : _("Track %s on %s, length %s" ),
+    return wxString::Format( Type() == PCB_ARC_T ? _("Track (arc) %s on %s, length %s" )
+                                                 : _("Track %s on %s, length %s" ),
                              GetNetnameMsg(),
                              GetLayerName(),
                              MessageTextFromValue( aUnits, GetLength() ) );
 }
 
 
-BITMAPS TRACK::GetMenuImage() const
+BITMAPS PCB_TRACK::GetMenuImage() const
 {
     return BITMAPS::add_tracks;
 }
 
-void TRACK::SwapData( BOARD_ITEM* aImage )
+void PCB_TRACK::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_TRACE_T );
 
-    std::swap( *((TRACK*) this), *((TRACK*) aImage) );
+    std::swap( *((PCB_TRACK*) this), *((PCB_TRACK*) aImage) );
 }
 
-void ARC::SwapData( BOARD_ITEM* aImage )
+void PCB_ARC::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_ARC_T );
 
-    std::swap( *this, *static_cast<ARC*>( aImage ) );
+    std::swap( *this, *static_cast<PCB_ARC*>( aImage ) );
 }
 
-void VIA::SwapData( BOARD_ITEM* aImage )
+void PCB_VIA::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_VIA_T );
 
-    std::swap( *((VIA*) this), *((VIA*) aImage) );
+    std::swap( *((PCB_VIA*) this), *((PCB_VIA*) aImage) );
 }
 
 
-wxPoint ARC::GetPosition() const
+wxPoint PCB_ARC::GetPosition() const
 {
     auto center = GetArcCenter( VECTOR2I( m_Start ), VECTOR2I( m_Mid ), VECTOR2I( m_End ) );
     return wxPoint( center.x, center.y );
 }
 
-double ARC::GetRadius() const
+double PCB_ARC::GetRadius() const
 {
     auto center = GetArcCenter( VECTOR2I( m_Start ), VECTOR2I( m_Mid ), VECTOR2I( m_End ) );
     return GetLineLength( wxPoint( center ), m_Start );
 }
 
-double ARC::GetAngle() const
+double PCB_ARC::GetAngle() const
 {
     wxPoint center = GetPosition();
     wxPoint p0 = m_Start - center;
@@ -984,7 +985,7 @@ double ARC::GetAngle() const
     return NormalizeAngle180( angle1 ) + NormalizeAngle180( angle2 );
 }
 
-double ARC::GetArcAngleStart() const
+double PCB_ARC::GetArcAngleStart() const
 {
     wxPoint center = GetPosition();
 
@@ -993,7 +994,7 @@ double ARC::GetArcAngleStart() const
     return NormalizeAnglePos( angleStart );
 }
 
-double ARC::GetArcAngleEnd() const
+double PCB_ARC::GetArcAngleEnd() const
 {
     wxPoint center = GetPosition();
 
@@ -1003,7 +1004,7 @@ double ARC::GetArcAngleEnd() const
 }
 
 
-bool TRACK::cmp_tracks::operator() ( const TRACK* a, const TRACK* b ) const
+bool PCB_TRACK::cmp_tracks::operator() ( const PCB_TRACK* a, const PCB_TRACK* b ) const
 {
     if( a->GetNetCode() != b->GetNetCode() )
         return a->GetNetCode() < b->GetNetCode();
@@ -1021,13 +1022,13 @@ bool TRACK::cmp_tracks::operator() ( const TRACK* a, const TRACK* b ) const
 }
 
 
-std::shared_ptr<SHAPE> TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     return std::make_shared<SHAPE_SEGMENT>( m_Start, m_End, m_Width );
 }
 
 
-std::shared_ptr<SHAPE> VIA::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     if( FlashLayer( aLayer ) )
         return std::make_shared<SHAPE_CIRCLE>( m_Start, m_Width / 2 );
@@ -1036,7 +1037,7 @@ std::shared_ptr<SHAPE> VIA::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 }
 
 
-std::shared_ptr<SHAPE> ARC::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_ARC::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     return std::make_shared<SHAPE_ARC>( GetStart(), GetMid(), GetEnd(), GetWidth() );
 }
@@ -1045,7 +1046,7 @@ std::shared_ptr<SHAPE> ARC::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 
 #if defined(DEBUG)
 
-wxString TRACK::ShowState( int stateBits )
+wxString PCB_TRACK::ShowState( int stateBits )
 {
     wxString ret;
 
@@ -1102,57 +1103,57 @@ static struct TRACK_VIA_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
 
         // Track
-        REGISTER_TYPE( TRACK );
-        propMgr.InheritsAfter( TYPE_HASH( TRACK ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
+        REGISTER_TYPE( PCB_TRACK );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_TRACK ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
-        propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "Width" ),
-            &TRACK::SetWidth, &TRACK::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "Width" ),
+            &PCB_TRACK::SetWidth, &PCB_TRACK::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ),
-            new PROPERTY<TRACK, int, BOARD_ITEM>( _HKI( "Origin X" ),
-            &TRACK::SetX, &TRACK::GetX, PROPERTY_DISPLAY::DISTANCE ) );
+            new PROPERTY<PCB_TRACK, int, BOARD_ITEM>( _HKI( "Origin X" ),
+            &PCB_TRACK::SetX, &PCB_TRACK::GetX, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ),
-            new PROPERTY<TRACK, int, BOARD_ITEM>( _HKI( "Origin Y" ),
-            &TRACK::SetY, &TRACK::GetY, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "End X" ),
-            &TRACK::SetEndX, &TRACK::GetEndX, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "End Y" ),
-            &TRACK::SetEndY, &TRACK::GetEndY, PROPERTY_DISPLAY::DISTANCE ) );
+            new PROPERTY<PCB_TRACK, int, BOARD_ITEM>( _HKI( "Origin Y" ),
+            &PCB_TRACK::SetY, &PCB_TRACK::GetY, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "End X" ),
+            &PCB_TRACK::SetEndX, &PCB_TRACK::GetEndX, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "End Y" ),
+            &PCB_TRACK::SetEndY, &PCB_TRACK::GetEndY, PROPERTY_DISPLAY::DISTANCE ) );
 
         // Arc
-        REGISTER_TYPE( ARC );
-        propMgr.InheritsAfter( TYPE_HASH( ARC ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
+        REGISTER_TYPE( PCB_ARC );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_ARC ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
-        propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "Width" ),
-            &ARC::SetWidth, &ARC::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "Width" ),
+            &PCB_ARC::SetWidth, &PCB_ARC::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ),
-            new PROPERTY<ARC, int, BOARD_ITEM>( _HKI( "Origin X" ),
-            &TRACK::SetX, &ARC::GetX, PROPERTY_DISPLAY::DISTANCE ) );
+            new PROPERTY<PCB_ARC, int, BOARD_ITEM>( _HKI( "Origin X" ),
+            &PCB_TRACK::SetX, &PCB_ARC::GetX, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ),
-            new PROPERTY<ARC, int, BOARD_ITEM>( _HKI( "Origin Y" ),
-            &TRACK::SetY, &ARC::GetY, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "End X" ),
-            &TRACK::SetEndX, &ARC::GetEndX, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "End Y" ),
-            &TRACK::SetEndY, &ARC::GetEndY, PROPERTY_DISPLAY::DISTANCE ) );
+            new PROPERTY<PCB_ARC, int, BOARD_ITEM>( _HKI( "Origin Y" ),
+            &PCB_TRACK::SetY, &PCB_ARC::GetY, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "End X" ),
+            &PCB_TRACK::SetEndX, &PCB_ARC::GetEndX, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "End Y" ),
+            &PCB_TRACK::SetEndY, &PCB_ARC::GetEndY, PROPERTY_DISPLAY::DISTANCE ) );
 
         // Via
-        REGISTER_TYPE( VIA );
-        propMgr.InheritsAfter( TYPE_HASH( VIA ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
+        REGISTER_TYPE( PCB_VIA );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_VIA ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
         // TODO layerset for vias?
         // TODO test drill, use getdrillvalue?
-        propMgr.ReplaceProperty( TYPE_HASH( TRACK ), _HKI( "Width" ),
-            new PROPERTY<VIA, int, TRACK>( _HKI( "Diameter" ),
-            &VIA::SetWidth, &VIA::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<VIA, int>( _HKI( "Drill" ),
-            &VIA::SetDrill, &VIA::GetDrillValue, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.ReplaceProperty( TYPE_HASH( PCB_TRACK ), _HKI( "Width" ),
+            new PROPERTY<PCB_VIA, int, PCB_TRACK>( _HKI( "Diameter" ),
+            &PCB_VIA::SetWidth, &PCB_VIA::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Drill" ),
+            &PCB_VIA::SetDrill, &PCB_VIA::GetDrillValue, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ),
-            new PROPERTY_ENUM<VIA, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Layer Top" ),
-            &VIA::SetLayer, &VIA::GetLayer ) );
-        propMgr.AddProperty( new PROPERTY_ENUM<VIA, PCB_LAYER_ID>( _HKI( "Layer Bottom" ),
-            &VIA::SetBottomLayer, &VIA::BottomLayer ) );
-        propMgr.AddProperty( new PROPERTY_ENUM<VIA, VIATYPE>( _HKI( "Via Type" ),
-            &VIA::SetViaType, &VIA::GetViaType ) );
+            new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Layer Top" ),
+            &PCB_VIA::SetLayer, &PCB_VIA::GetLayer ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Layer Bottom" ),
+            &PCB_VIA::SetBottomLayer, &PCB_VIA::BottomLayer ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, VIATYPE>( _HKI( "Via Type" ),
+            &PCB_VIA::SetViaType, &PCB_VIA::GetViaType ) );
     }
 } _TRACK_VIA_DESC;
 

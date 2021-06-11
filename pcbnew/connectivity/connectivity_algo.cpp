@@ -148,21 +148,21 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         if( m_itemMap.find( aItem ) != m_itemMap.end() )
             return false;
 
-        add( m_itemList, static_cast<TRACK*>( aItem ) );
+        add( m_itemList, static_cast<PCB_TRACK*>( aItem ) );
         break;
 
     case PCB_ARC_T:
         if( m_itemMap.find( aItem ) != m_itemMap.end() )
             return false;
 
-        add( m_itemList, static_cast<ARC*>( aItem ) );
+        add( m_itemList, static_cast<PCB_ARC*>( aItem ) );
         break;
 
     case PCB_VIA_T:
         if( m_itemMap.find( aItem ) != m_itemMap.end() )
             return false;
 
-        add( m_itemList, static_cast<VIA*>( aItem ) );
+        add( m_itemList, static_cast<PCB_VIA*>( aItem ) );
         break;
 
     case PCB_ZONE_T:
@@ -436,7 +436,7 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         reportProgress( aReporter, ii++, size, delta );
     }
 
-    for( TRACK* tv : aBoard->Tracks() )
+    for( PCB_TRACK* tv : aBoard->Tracks() )
     {
         Add( tv );
         reportProgress( aReporter, ii++, size, delta );
@@ -657,7 +657,7 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
             || aItem->Parent()->Type() == PCB_TRACE_T
             || aItem->Parent()->Type() == PCB_ARC_T )
     {
-        accuracy = ( static_cast<TRACK*>( aItem->Parent() )->GetWidth() + 1 ) / 2;
+        accuracy = ( static_cast<PCB_TRACK*>( aItem->Parent() )->GetWidth() + 1 ) / 2;
     }
 
     for( int i = 0; i < aItem->AnchorCount(); ++i )
@@ -776,12 +776,12 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
     if( parentA->Type() == PCB_VIA_T
             || parentA->Type() == PCB_TRACE_T
             || parentA->Type() == PCB_ARC_T)
-        accuracyA = ( static_cast<const TRACK*>( parentA )->GetWidth() + 1 ) / 2;
+        accuracyA = ( static_cast<const PCB_TRACK*>( parentA )->GetWidth() + 1 ) / 2;
 
     if( parentB->Type() == PCB_VIA_T
             || parentB->Type() == PCB_TRACE_T
             || parentB->Type() == PCB_ARC_T )
-        accuracyB = ( static_cast<const TRACK*>( parentB )->GetWidth() + 1 ) / 2;
+        accuracyB = ( static_cast<const PCB_TRACK*>( parentB )->GetWidth() + 1 ) / 2;
 
     // Items do not necessarily have reciprocity as we only check for anchors
     //  therefore, we check HitTest both directions A->B & B->A

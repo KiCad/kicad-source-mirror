@@ -32,7 +32,7 @@ using namespace std::placeholders;
 #include <board_design_settings.h>
 #include <board_item.h>
 #include <clipper.hpp>
-#include <track.h>
+#include <pcb_track.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_group.h>
@@ -417,7 +417,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( evt->HasPosition() && selectionContains( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
-                    TRACK* track = dynamic_cast<TRACK*>( m_selection.GetItem( 0 ) );
+                    PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( m_selection.GetItem( 0 ) );
 
                     // If there is only item in the selection and it's a track, then we need to route it
                     bool doRouting = ( track && ( 1 == m_selection.GetSize() ) );
@@ -1101,7 +1101,7 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 
         for( EDA_ITEM* item : selectedItems )
         {
-            TRACK* trackItem = dynamic_cast<TRACK*>( item );
+            PCB_TRACK* trackItem = dynamic_cast<PCB_TRACK*>( item );
 
             // Track items marked SKIP_STRUCT have already been visited
             if( trackItem && !( trackItem->GetFlags() & SKIP_STRUCT ) )
@@ -1128,9 +1128,9 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
     auto connectivity = board()->GetConnectivity();
     auto connectedItems = connectivity->GetConnectedItems( &aStartItem, types, true );
 
-    std::map<wxPoint, std::vector<TRACK*>> trackMap;
-    std::map<wxPoint, VIA*>                viaMap;
-    std::map<wxPoint, PAD*>                padMap;
+    std::map<wxPoint, std::vector<PCB_TRACK*>> trackMap;
+    std::map<wxPoint, PCB_VIA*>                viaMap;
+    std::map<wxPoint, PAD*>                    padMap;
 
     // Build maps of connected items
     for( BOARD_CONNECTED_ITEM* item : connectedItems )
@@ -1140,7 +1140,7 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
         case PCB_ARC_T:
         case PCB_TRACE_T:
         {
-            TRACK* track = static_cast<TRACK*>( item );
+            PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
             trackMap[ track->GetStart() ].push_back( track );
             trackMap[ track->GetEnd() ].push_back( track );
         }
@@ -1148,7 +1148,7 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
 
         case PCB_VIA_T:
         {
-            VIA* via = static_cast<VIA*>( item );
+            PCB_VIA* via = static_cast<PCB_VIA*>( item );
             viaMap[ via->GetStart() ] = via;
         }
             break;
@@ -1174,12 +1174,12 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
     {
     case PCB_ARC_T:
     case PCB_TRACE_T:
-        activePts.push_back( static_cast<TRACK*>( &aStartItem )->GetStart() );
-        activePts.push_back( static_cast<TRACK*>( &aStartItem )->GetEnd() );
+        activePts.push_back( static_cast<PCB_TRACK*>( &aStartItem )->GetStart() );
+        activePts.push_back( static_cast<PCB_TRACK*>( &aStartItem )->GetEnd() );
         break;
 
     case PCB_VIA_T:
-        activePts.push_back( static_cast<TRACK*>( &aStartItem )->GetStart() );
+        activePts.push_back( static_cast<PCB_TRACK*>( &aStartItem )->GetStart() );
         break;
 
     case PCB_PAD_T:
@@ -1214,7 +1214,7 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
                 continue;
             }
 
-            for( TRACK* track : trackMap[ pt ] )
+            for( PCB_TRACK* track : trackMap[ pt ] )
             {
                 if( track->GetState( SKIP_STRUCT ) )
                     continue;
@@ -1980,9 +1980,9 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         return false;
     }
 
-    const ZONE* zone = nullptr;
-    const VIA*  via = nullptr;
-    const PAD*  pad = nullptr;
+    const ZONE*    zone = nullptr;
+    const PCB_VIA* via = nullptr;
+    const PAD*     pad = nullptr;
 
     switch( aItem->Type() )
     {
@@ -2030,7 +2030,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         if( !board()->IsElementVisible( LAYER_VIAS ) )
             return false;
 
-        via = static_cast<const VIA*>( aItem );
+        via = static_cast<const PCB_VIA*>( aItem );
 
         // For vias it is enough if only one of its layers is visible
         if( !( board()->GetVisibleLayers() & via->GetLayerSet() ).any() )
@@ -2443,7 +2443,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         {
             // Vias rarely hide other things, and we don't want them deferring to short track
             // segments -- so make them artificially small by dropping the π from πr².
-            area = SEG::Square( static_cast<VIA*>( item )->GetDrill() / 2 );
+            area = SEG::Square( static_cast<PCB_VIA*>( item )->GetDrill() / 2 );
         }
         else
         {

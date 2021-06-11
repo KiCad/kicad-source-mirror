@@ -20,7 +20,7 @@
 
 #include <common.h>
 #include <board.h>
-#include <track.h>
+#include <pcb_track.h>
 
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
@@ -162,8 +162,8 @@ struct DIFF_PAIR_COUPLED_SEGMENTS
 {
     SEG          coupledN;
     SEG          coupledP;
-    TRACK*       parentN;
-    TRACK*       parentP;
+    PCB_TRACK*   parentN;
+    PCB_TRACK*   parentP;
     int          computedGap;
     PCB_LAYER_ID layer;
     bool         couplingOK;
@@ -190,18 +190,18 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp, DRC_RTREE& aTree 
 {
     for( BOARD_CONNECTED_ITEM* itemP : aDp.itemsP )
     {
-        TRACK* sp = dyn_cast<TRACK*>( itemP );
+        PCB_TRACK* sp = dyn_cast<PCB_TRACK*>( itemP );
         OPT<DIFF_PAIR_COUPLED_SEGMENTS> bestCoupled;
         int bestGap = std::numeric_limits<int>::max();
 
-        if(!sp)
+        if( !sp )
             continue;
 
         for ( BOARD_CONNECTED_ITEM* itemN : aDp.itemsN )
         {
-            auto sn = dyn_cast<TRACK*> ( itemN );
+            PCB_TRACK* sn = dyn_cast<PCB_TRACK*> ( itemN );
 
-            if(!sn)
+            if( !sn )
                 continue;
 
             if( ( sn->GetLayerSet() & sp->GetLayerSet() ).none() )
@@ -374,17 +374,17 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         OPT<DRC_CONSTRAINT> maxUncoupledConstraint =
                 it.first.parentRule->FindConstraint( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT );
 
-        for( auto& item : it.second.itemsN )
+        for( BOARD_CONNECTED_ITEM* item : it.second.itemsN )
         {
             // fixme: include vias
-            if( auto track = dyn_cast<TRACK*>( item ) )
+            if( PCB_TRACK* track = dyn_cast<PCB_TRACK*>( item ) )
                 it.second.totalLengthN += track->GetLength();
         }
 
-        for( auto& item : it.second.itemsP )
+        for( BOARD_CONNECTED_ITEM* item : it.second.itemsP )
         {
             // fixme: include vias
-            if( auto track = dyn_cast<TRACK*>( item ) )
+            if( PCB_TRACK* track = dyn_cast<PCB_TRACK*>( item ) )
                 it.second.totalLengthP += track->GetLength();
         }
 

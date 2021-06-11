@@ -127,7 +127,7 @@ bool EDIT_TOOL::Init()
 
                 for( EDA_ITEM* item : aSel )
                 {
-                    if( !dynamic_cast<TRACK*>( item ) )
+                    if( !dynamic_cast<PCB_TRACK*>( item ) )
                         return false;
                 }
 
@@ -335,8 +335,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    ARC* theArc = static_cast<ARC*>( selection.Front() );
-    double arcAngleDegrees = std::abs( theArc->GetAngle() ) / 10.0;
+    PCB_ARC* theArc = static_cast<PCB_ARC*>( selection.Front() );
+    double   arcAngleDegrees = std::abs( theArc->GetAngle() ) / 10.0;
 
     if( arcAngleDegrees + ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation >= 180.0 )
     {
@@ -366,7 +366,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     KICAD_T track_types[] = { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
 
     auto getUniqueTrackAtAnchorCollinear =
-        [&]( const VECTOR2I& aAnchor, const SEG& aCollinearSeg ) -> TRACK*
+        [&]( const VECTOR2I& aAnchor, const SEG& aCollinearSeg ) -> PCB_TRACK*
         {
             auto conn = board()->GetConnectivity();
 
@@ -385,11 +385,11 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
                     break;
             }
 
-            TRACK* retval = nullptr;
+            PCB_TRACK* retval = nullptr;
 
             if( itemsOnAnchor.size() == 1 && itemsOnAnchor.front()->Type() == PCB_TRACE_T )
             {
-                retval = static_cast<TRACK*>( itemsOnAnchor.front() );
+                retval = static_cast<PCB_TRACK*>( itemsOnAnchor.front() );
                 SEG trackSeg( retval->GetStart(), retval->GetEnd() );
 
                 // Allow deviations in colinearity as defined in ADVANCED_CFG
@@ -402,7 +402,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
 
             if( !retval )
             {
-                retval = new TRACK( theArc->GetParent() );
+                retval = new PCB_TRACK( theArc->GetParent() );
                 retval->SetStart( (wxPoint) aAnchor );
                 retval->SetEnd( (wxPoint) aAnchor );
                 retval->SetNet( theArc->GetNet() );
@@ -415,13 +415,13 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
             return retval;
         };
 
-    TRACK* trackOnStart = getUniqueTrackAtAnchorCollinear( theArc->GetStart(), tanStart);
-    TRACK* trackOnEnd = getUniqueTrackAtAnchorCollinear( theArc->GetEnd(), tanEnd );
+    PCB_TRACK* trackOnStart = getUniqueTrackAtAnchorCollinear( theArc->GetStart(), tanStart);
+    PCB_TRACK* trackOnEnd = getUniqueTrackAtAnchorCollinear( theArc->GetEnd(), tanEnd );
 
     // Make copies of items to be edited
-    ARC*   theArcCopy = new ARC( *theArc );
-    TRACK* trackOnStartCopy = new TRACK( *trackOnStart );
-    TRACK* trackOnEndCopy = new TRACK( *trackOnEnd );
+    PCB_ARC*   theArcCopy = new PCB_ARC( *theArc );
+    PCB_TRACK* trackOnStartCopy = new PCB_TRACK( *trackOnStart );
+    PCB_TRACK* trackOnEndCopy = new PCB_TRACK( *trackOnEnd );
 
     if( trackOnStart->GetLength() != 0 )
     {
@@ -439,7 +439,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     tanIntersect = tanStart.IntersectLines( tanEnd ).get();
 
     auto isTrackStartClosestToArcStart =
-        [&]( TRACK* aPointA ) -> bool
+        [&]( PCB_TRACK* aPointA ) -> bool
         {
             return GetLineLength( aPointA->GetStart(), theArc->GetStart() )
                    < GetLineLength( aPointA->GetEnd(), theArc->GetStart() );
@@ -595,7 +595,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
 
     // Ensure we only do one commit operation on each object
     auto processTrack =
-        [&]( TRACK* aTrack, TRACK* aTrackCopy, int aMaxLengthIU ) -> bool
+        [&]( PCB_TRACK* aTrack, PCB_TRACK* aTrackCopy, int aMaxLengthIU ) -> bool
         {
             if( aTrack->IsNew() )
             {
@@ -1101,7 +1101,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
                 {
                     BOARD_ITEM* item = aCollector[ i ];
 
-                    if( !dynamic_cast<TRACK*>( item ) )
+                    if( !dynamic_cast<PCB_TRACK*>( item ) )
                         aCollector.Remove( item );
                 }
             },
@@ -1111,7 +1111,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
     {
         if( item->Type() == PCB_VIA_T )
         {
-            VIA* via = static_cast<VIA*>( item );
+            PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
             m_commit->Modify( via );
 
@@ -1136,7 +1136,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
         }
         else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
         {
-            TRACK* track = dynamic_cast<TRACK*>( item );
+            PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item );
 
             wxCHECK( track, 0 );
 
@@ -1174,7 +1174,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                 {
                     BOARD_ITEM* item = aCollector[i];
 
-                    if( !dynamic_cast<TRACK*>( item ) )
+                    if( !dynamic_cast<PCB_TRACK*>( item ) )
                         aCollector.Remove( item );
                 }
             },
@@ -1204,22 +1204,22 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 
     struct FILLET_OP
     {
-        TRACK* t1;
-        TRACK* t2;
-        //If true, start point of track is modified after ARC is added, otherwise the end point:
-        bool   t1Start = true;
-        bool   t2Start = true;
+        PCB_TRACK* t1;
+        PCB_TRACK* t2;
+        // Start point of track is modified after PCB_ARC is added, otherwise the end point:
+        bool       t1Start = true;
+        bool       t2Start = true;
     };
 
     std::vector<FILLET_OP> filletOperations;
     KICAD_T                track_types[] = { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
     bool                   operationPerformedOnAtLeastOne = false;
     bool                   didOneAttemptFail              = false;
-    std::set<TRACK*>       processedTracks;
+    std::set<PCB_TRACK*>   processedTracks;
 
     for( auto it = selection.begin(); it != selection.end(); it++ )
     {
-        TRACK* track = dyn_cast<TRACK*>( *it );
+        PCB_TRACK* track = dyn_cast<PCB_TRACK*>( *it );
 
         if( !track || track->Type() != PCB_TRACE_T || track->IsLocked()
                 || track->GetLength() == 0 )
@@ -1239,7 +1239,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                             && selection.Contains( itemsOnAnchor.at( 0 ) )
                             && itemsOnAnchor.at( 0 )->Type() == PCB_TRACE_T )
                     {
-                        TRACK* trackOther = dyn_cast<TRACK*>( itemsOnAnchor.at( 0 ) );
+                        PCB_TRACK* trackOther = dyn_cast<PCB_TRACK*>( itemsOnAnchor.at( 0 ) );
 
                         // Make sure we don't fillet the same pair of tracks twice
                         if( processedTracks.find( trackOther ) == processedTracks.end() )
@@ -1273,8 +1273,8 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 
     for( FILLET_OP filletOp : filletOperations )
     {
-        TRACK* track1 = filletOp.t1;
-        TRACK* track2 = filletOp.t2;
+        PCB_TRACK* track1 = filletOp.t1;
+        PCB_TRACK* track2 = filletOp.t2;
 
         bool trackOnStart = track1->IsPointOnEnds( track2->GetStart() );
         bool trackOnEnd   = track1->IsPointOnEnds( track2->GetEnd() );
@@ -1325,7 +1325,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                 continue;
             }
 
-            ARC* tArc = new ARC( frame()->GetBoard(), &sArc );
+            PCB_ARC* tArc = new PCB_ARC( frame()->GetBoard(), &sArc );
             tArc->SetLayer( track1->GetLayer() );
             tArc->SetWidth( track1->GetWidth() );
             tArc->SetNet( track1->GetNet() );

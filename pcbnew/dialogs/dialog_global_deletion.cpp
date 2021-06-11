@@ -30,7 +30,7 @@ using namespace std::placeholders;
 #include <board_commit.h>
 #include <board.h>
 #include <footprint.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/global_edit_tool.h>
@@ -213,7 +213,7 @@ void DIALOG_GLOBAL_DELETION::doGlobalDeletions()
 
     if( delete_all || m_delTracks->GetValue() )
     {
-        for( TRACK* track : board->Tracks() )
+        for( PCB_TRACK* track : board->Tracks() )
         {
             if( !delete_all )
             {

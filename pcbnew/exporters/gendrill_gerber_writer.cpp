@@ -36,7 +36,7 @@
 #include <pcb_edit_frame.h>
 #include <board.h>
 #include <footprint.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <pad.h>
 #include <pcbplot.h>
 #include <gendrill_gerber_writer.h>
@@ -182,7 +182,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
         // "Slot" for oblong holes;
         GBR_METADATA gbr_metadata;
 
-        if( dyn_cast<const VIA*>(hole_descr.m_ItemParent ) )
+        if( dyn_cast<const PCB_VIA*>( hole_descr.m_ItemParent ) )
         {
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_VIADRILL );
 

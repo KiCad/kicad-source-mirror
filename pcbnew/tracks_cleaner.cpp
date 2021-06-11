@@ -79,7 +79,7 @@ void TRACKS_CLEANER::removeShortingTrackSegments()
 
     std::set<BOARD_ITEM *> toRemove;
 
-    for( TRACK* segment : m_brd->Tracks() )
+    for( PCB_TRACK* segment : m_brd->Tracks() )
     {
         // Assume that the user knows what they are doing
         if( segment->IsLocked() )
@@ -103,7 +103,7 @@ void TRACKS_CLEANER::removeShortingTrackSegments()
             }
         }
 
-        for( TRACK* testedTrack : connectivity->GetConnectedTracks( segment ) )
+        for( PCB_TRACK* testedTrack : connectivity->GetConnectedTracks( segment ) )
         {
             if( segment->GetNetCode() != testedTrack->GetNetCode() )
             {
@@ -127,7 +127,7 @@ void TRACKS_CLEANER::removeShortingTrackSegments()
 }
 
 
-bool TRACKS_CLEANER::testTrackEndpointIsNode( TRACK* aTrack, bool aTstStart )
+bool TRACKS_CLEANER::testTrackEndpointIsNode( PCB_TRACK* aTrack, bool aTstStart )
 {
     // A node is a point where more than 2 items are connected.
 
@@ -175,9 +175,9 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aTrack, bool aVia )
         m_brd->BuildConnectivity();
 
         // Keep a duplicate deque to all deleting in the primary
-        std::deque<TRACK*> temp_tracks( m_brd->Tracks() );
+        std::deque<PCB_TRACK*> temp_tracks( m_brd->Tracks() );
 
-        for( TRACK* track : temp_tracks )
+        for( PCB_TRACK* track : temp_tracks )
         {
             if( track->IsLocked() )
                 continue;
@@ -228,7 +228,7 @@ void TRACKS_CLEANER::deleteTracksInPads()
     // Delete tracks that start and end on the same pad
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_brd->GetConnectivity();
 
-    for( TRACK* track : m_brd->Tracks() )
+    for( PCB_TRACK* track : m_brd->Tracks() )
     {
         if( track->IsLocked() )
             continue;
@@ -272,7 +272,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 {
     DRC_RTREE rtree;
 
-    for( TRACK* track : m_brd->Tracks() )
+    for( PCB_TRACK* track : m_brd->Tracks() )
     {
         track->ClearFlags( IS_DELETED | SKIP_STRUCT );
         rtree.Insert( track, track->GetLayer() );
@@ -280,14 +280,14 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 
     std::set<BOARD_ITEM*> toRemove;
 
-    for( TRACK* track : m_brd->Tracks() )
+    for( PCB_TRACK* track : m_brd->Tracks() )
     {
         if( track->HasFlag( IS_DELETED ) || track->IsLocked() )
             continue;
 
         if( aDeleteDuplicateVias && track->Type() == PCB_VIA_T )
         {
-            VIA* via = static_cast<VIA*>( track );
+            PCB_VIA* via = static_cast<PCB_VIA*>( track );
 
             if( via->GetStart() != via->GetEnd() )
                 via->SetEnd( via->GetStart() );
@@ -303,7 +303,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                     // Visitor:
                     [&]( BOARD_ITEM* aItem ) -> bool
                     {
-                        VIA* other = static_cast<VIA*>( aItem );
+                        PCB_VIA* other = static_cast<PCB_VIA*>( aItem );
 
                         if( via->GetPosition() == other->GetPosition()
                                 && via->GetViaType() == other->GetViaType()
@@ -367,7 +367,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                     // Visitor:
                     [&]( BOARD_ITEM* aItem ) -> bool
                     {
-                        TRACK* other = static_cast<TRACK*>( aItem );
+                        PCB_TRACK* other = static_cast<PCB_TRACK*>( aItem );
 
                         if( track->IsPointOnEnds( other->GetStart() )
                                 && track->IsPointOnEnds( other->GetEnd() )
@@ -402,10 +402,10 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
             m_brd->BuildConnectivity();
 
             // Keep a duplicate deque to all deleting in the primary
-            std::deque<TRACK*> temp_segments( m_brd->Tracks() );
+            std::deque<PCB_TRACK*> temp_segments( m_brd->Tracks() );
 
             // merge collinear segments:
-            for( TRACK* segment : temp_segments )
+            for( PCB_TRACK* segment : temp_segments )
             {
                 if( segment->Type() != PCB_TRACE_T )    // one can merge only track collinear segments, not vias.
                     continue;
@@ -428,7 +428,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 
                         if( candidateItem->Type() == PCB_TRACE_T && !candidateItem->HasFlag( IS_DELETED ) )
                         {
-                            TRACK* candidateSegment = static_cast<TRACK*>( candidateItem );
+                            PCB_TRACK* candidateSegment = static_cast<PCB_TRACK*>( candidateItem );
 
                             // Do not merge segments having different widths: it is a frequent case
                             // to draw a track between 2 pads:
@@ -444,12 +444,12 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
         } while( merged );
     }
 
-    for( TRACK* track : m_brd->Tracks() )
+    for( PCB_TRACK* track : m_brd->Tracks() )
         track->ClearFlags( IS_DELETED | SKIP_STRUCT );
 }
 
 
-bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
+bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 )
 {
     if( aSeg1->IsLocked() || aSeg2->IsLocked() )
         return false;
@@ -458,7 +458,7 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
 
     // Verify the removed point after merging is not a node.
     // If it is a node (i.e. if more than one other item is connected, the segments cannot be merged
-    TRACK dummy_seg( *aSeg1 );
+    PCB_TRACK dummy_seg( *aSeg1 );
 
     // Calculate the new ends of the segment to merge, and store them to dummy_seg:
     int min_x = std::min( aSeg1->GetStart().x,

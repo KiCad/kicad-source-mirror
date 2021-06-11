@@ -105,7 +105,7 @@ protected:
 
     VECTOR2D getDrillSize( const PAD* aPad ) const override;
 
-    int getDrillSize( const VIA* aVia ) const override;
+    int getDrillSize( const PCB_VIA* aVia ) const override;
 
     ///< Flag deciding whether use the actual hole size or user-specified size for drill marks
     bool m_drillMarkReal;

@@ -46,7 +46,7 @@
 #include <plugins/kicad/kicad_plugin.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <trace_helpers.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/dir.h>
 #include <wx/log.h>
@@ -444,7 +444,7 @@ void PCB_IO::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
     case PCB_TRACE_T:
     case PCB_ARC_T:
     case PCB_VIA_T:
-        format( static_cast<const TRACK*>( aItem ), aNestLevel );
+        format( static_cast<const PCB_TRACK*>( aItem ), aNestLevel );
         break;
 
     case PCB_FP_ZONE_T:
@@ -650,8 +650,8 @@ void PCB_IO::format( const BOARD* aBoard, int aNestLevel ) const
                                                                   aBoard->Footprints().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_drawings( aBoard->Drawings().begin(),
                                                                 aBoard->Drawings().end() );
-    std::set<TRACK*, TRACK::cmp_tracks> sorted_tracks( aBoard->Tracks().begin(),
-                                                       aBoard->Tracks().end() );
+    std::set<PCB_TRACK*, PCB_TRACK::cmp_tracks> sorted_tracks( aBoard->Tracks().begin(),
+                                                               aBoard->Tracks().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aBoard->Zones().begin(),
                                                              aBoard->Zones().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_groups( aBoard->Groups().begin(),
@@ -675,7 +675,7 @@ void PCB_IO::format( const BOARD* aBoard, int aNestLevel ) const
     // Do not save PCB_MARKERs, they can be regenerated easily.
 
     // Save the tracks and vias.
-    for( TRACK* track : sorted_tracks )
+    for( PCB_TRACK* track : sorted_tracks )
         Format( track, aNestLevel );
 
     if( sorted_tracks.size() )
@@ -1759,14 +1759,14 @@ void PCB_IO::format( const FP_TEXT* aText, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const TRACK* aTrack, int aNestLevel ) const
+void PCB_IO::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 {
     if( aTrack->Type() == PCB_VIA_T )
     {
         PCB_LAYER_ID  layer1, layer2;
 
-        const VIA*  via = static_cast<const VIA*>( aTrack );
-        BOARD*      board = (BOARD*) via->GetParent();
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( aTrack );
+        BOARD*         board = (BOARD*) via->GetParent();
 
         wxCHECK_RET( board != nullptr, wxT( "Via " ) +
                      via->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) + wxT( " has no parent." ) );
@@ -1826,8 +1826,8 @@ void PCB_IO::format( const TRACK* aTrack, int aNestLevel ) const
     }
     else if( aTrack->Type() == PCB_ARC_T )
     {
-        const ARC* arc = static_cast<const ARC*>( aTrack );
-        std::string locked = arc->IsLocked() ? " locked" : "";
+        const PCB_ARC* arc = static_cast<const PCB_ARC*>( aTrack );
+        std::string    locked = arc->IsLocked() ? " locked" : "";
 
         m_out->Print( aNestLevel, "(arc%s (start %s) (mid %s) (end %s) (width %s)",
                       locked.c_str(),

@@ -25,12 +25,12 @@
 #include <board_design_settings.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
 #include <wx/choice.h>
 
-void PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
+void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK*         aTrackItem,
                                            PICKED_ITEMS_LIST* aItemsListPicker,
                                            bool               aUseNetclassValue )
 {
@@ -48,7 +48,7 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
 
     if( aTrackItem->Type() == PCB_VIA_T )
     {
-        const VIA *via = static_cast<const VIA *>( aTrackItem );
+        const PCB_VIA *via = static_cast<const PCB_VIA*>( aTrackItem );
 
         // Get the drill value, regardless it is default or specific
         initial_drill = via->GetDrillValue();
@@ -89,7 +89,7 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
             if( aTrackItem->Type() == PCB_VIA_T )
             {
                 // Set new drill value. Note: currently microvias have only a default drill value
-                VIA *via = static_cast<VIA *>( aTrackItem );
+                PCB_VIA *via = static_cast<PCB_VIA*>( aTrackItem );
 
                 if( new_drill > 0 )
                     via->SetDrill( new_drill );

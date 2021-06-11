@@ -23,7 +23,7 @@
 
 #include <footprint.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
@@ -66,7 +66,7 @@ public:
     int GetNumPhases() const override;
 
 private:
-    void checkVia( VIA* via, bool aExceedMicro, bool aExceedStd );
+    void checkVia( PCB_VIA* via, bool aExceedMicro, bool aExceedStd );
     void checkPad( PAD* aPad );
 
     BOARD* m_board;
@@ -111,15 +111,15 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
                 return false;   // DRC cancelled
         }
 
-        std::vector<VIA*> vias;
+        std::vector<PCB_VIA*> vias;
 
-        for( TRACK* track : m_board->Tracks() )
+        for( PCB_TRACK* track : m_board->Tracks() )
         {
             if( track->Type() == PCB_VIA_T )
-                vias.push_back( static_cast<VIA*>( track ) );
+                vias.push_back( static_cast<PCB_VIA*>( track ) );
         }
 
-        for( VIA* via : vias )
+        for( PCB_VIA* via : vias )
         {
             bool exceedMicro = m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_DRILL_OUT_OF_RANGE );
             bool exceedStd = m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE );
@@ -191,7 +191,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( PAD* aPad )
 }
 
 
-void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via, bool aExceedMicro, bool aExceedStd )
+void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( PCB_VIA* via, bool aExceedMicro, bool aExceedStd )
 {
     int errorCode;
 

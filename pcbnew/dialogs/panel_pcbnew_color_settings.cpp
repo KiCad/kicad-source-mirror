@@ -31,7 +31,6 @@
 #include <widgets/appearance_controls.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <pcb_painter.h>
-#include <track.h>
 #include <plugins/kicad/kicad_plugin.h>
 #include <wx/treebook.h>
 

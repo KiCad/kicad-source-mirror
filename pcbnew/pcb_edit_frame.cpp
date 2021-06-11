@@ -936,11 +936,11 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
             GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
                     [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
                     {
-                        TRACK* track = dynamic_cast<TRACK*>( aItem );
-                        PAD*   pad = dynamic_cast<PAD*>( aItem );
+                        PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem );
+                        PAD*       pad = dynamic_cast<PAD*>( aItem );
 
-                        // TRACK is the base class of VIA and ARC so we don't need to
-                        // check them independently
+                        // PCB_TRACK is the base class of PCB_VIA and PCB_ARC so we don't need
+                        // to check them independently
 
                         return ( track && opts.m_ShowTrackClearanceMode )
                                 || ( pad && opts.m_DisplayPadClearance );
@@ -1031,7 +1031,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
             [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
             {
-                if( VIA* via = dynamic_cast<VIA*>( aItem ) )
+                if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
                 {
                     // Vias on a restricted layer set must be redrawn when the active layer
                     // is changed
@@ -1059,7 +1059,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                         return true;
                     }
                 }
-                else if( TRACK* track = dynamic_cast<TRACK*>( aItem ) )
+                else if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem ) )
                 {
                     // Clearances could be layer-dependent so redraw them when the active layer
                     // is changed

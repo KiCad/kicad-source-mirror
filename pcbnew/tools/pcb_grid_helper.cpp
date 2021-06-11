@@ -30,7 +30,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_group.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>
@@ -599,7 +599,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         {
             if( aFrom || m_magneticSettings->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
             {
-                TRACK* track = static_cast<TRACK*>( aItem );
+                PCB_TRACK* track = static_cast<PCB_TRACK*>( aItem );
 
                 addAnchor( track->GetStart(), CORNER | SNAPPABLE, track );
                 addAnchor( track->GetEnd(), CORNER | SNAPPABLE, track );

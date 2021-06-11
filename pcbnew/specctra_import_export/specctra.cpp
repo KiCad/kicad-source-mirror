@@ -53,7 +53,7 @@
 #include <build_version.h>
 
 #include <board.h>
-#include <track.h>
+#include <pcb_track.h>
 
 #include "specctra.h"
 #include <macros.h>

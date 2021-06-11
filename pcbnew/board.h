@@ -47,7 +47,7 @@ class PICKED_ITEMS_LIST;
 class BOARD;
 class FOOTPRINT;
 class ZONE;
-class TRACK;
+class PCB_TRACK;
 class PAD;
 class PCB_GROUP;
 class PCB_MARKER;
@@ -927,11 +927,11 @@ public:
     /**
      * Find a pad connected to \a aEndPoint of \a aTrace.
      *
-     * @param aTrace A pointer to a TRACK object to hit test against.
+     * @param aTrace A pointer to a PCB_TRACK object to hit test against.
      * @param aEndPoint The end point of \a aTrace the hit test against.
      * @return A pointer to a PAD object if found or NULL if not found.
      */
-    PAD* GetPad( const TRACK* aTrace, ENDPOINT_T aEndPoint ) const;
+    PAD* GetPad( const PCB_TRACK* aTrace, ENDPOINT_T aEndPoint ) const;
 
     /**
      * Return pad found at \a aPosition on \a aLayerMask using the fast search method.
@@ -988,7 +988,7 @@ public:
      * @param aTrack Starting track (can also be a via) to check against for connection.
      * @return a tuple containing <number, length, package length>
      */
-    std::tuple<int, double, double> GetTrackLength( const TRACK& aTrack ) const;
+    std::tuple<int, double, double> GetTrackLength( const PCB_TRACK& aTrack ) const;
 
     /**
      * Collect all the TRACKs and VIAs that are members of a net given by aNetCode.

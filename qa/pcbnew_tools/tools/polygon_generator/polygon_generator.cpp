@@ -34,7 +34,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <pad.h>
-#include <track.h>
+#include <pcb_track.h>
 #include <zone.h>
 
 
@@ -76,7 +76,7 @@ int polygon_gererator_main( int argc, char* argv[] )
 
     for( unsigned net = 0; net < brd->GetNetCount(); net++ )
     {
-        for( TRACK* track : brd->Tracks() )
+        for( PCB_TRACK* track : brd->Tracks() )
             process( track, net );
 
         for( FOOTPRINT* fp : brd->Footprints() )
