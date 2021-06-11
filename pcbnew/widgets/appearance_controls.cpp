@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1429,10 +1429,10 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                 aSetting->ctl_color      = swatch;
                 aSetting->ctl_text       = label;
 
-                panel->Bind( wxEVT_LEFT_DOWN, &APPEARANCE_CONTROLS::onLayerClick, this );
-                indicator->Bind( wxEVT_LEFT_DOWN, &APPEARANCE_CONTROLS::onLayerClick, this );
-                swatch->Bind( wxEVT_LEFT_DOWN, &APPEARANCE_CONTROLS::onLayerClick, this );
-                label->Bind( wxEVT_LEFT_DOWN, &APPEARANCE_CONTROLS::onLayerClick, this );
+                panel->Bind( wxEVT_LEFT_DOWN, &APPEARANCE_CONTROLS::onLayerLeftClick, this );
+                indicator->Bind( wxEVT_LEFT_DOWN, &APPEARANCE_CONTROLS::onLayerLeftClick, this );
+                swatch->Bind( wxEVT_LEFT_DOWN, &APPEARANCE_CONTROLS::onLayerLeftClick, this );
+                label->Bind( wxEVT_LEFT_DOWN, &APPEARANCE_CONTROLS::onLayerLeftClick, this );
 
                 btn_visible->Bind( TOGGLE_CHANGED,
                         [&]( wxCommandEvent& aEvent )
@@ -1459,20 +1459,16 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                                                        this ) );
                 swatch->SetReadOnly( readOnly );
 
-                auto rightClickHandler =
-                        [&]( wxMouseEvent& aEvent )
-                        {
-                            wxASSERT( m_layerContextMenu );
-                            PopupMenu( m_layerContextMenu );
-                            passOnFocus();
-                        };
-
-                panel->Bind( wxEVT_RIGHT_DOWN, rightClickHandler );
-                indicator->Bind( wxEVT_RIGHT_DOWN, rightClickHandler );
-                swatch->Bind( wxEVT_RIGHT_DOWN, rightClickHandler );
-                btn_visible->Bind( wxEVT_RIGHT_DOWN, rightClickHandler );
-                label->Bind( wxEVT_RIGHT_DOWN, rightClickHandler );
+                panel->Bind( wxEVT_RIGHT_DOWN, &APPEARANCE_CONTROLS::rightClickHandler, this );
+                indicator->Bind( wxEVT_RIGHT_DOWN, &APPEARANCE_CONTROLS::rightClickHandler, this );
+                swatch->Bind( wxEVT_RIGHT_DOWN, &APPEARANCE_CONTROLS::rightClickHandler, this );
+                btn_visible->Bind( wxEVT_RIGHT_DOWN, &APPEARANCE_CONTROLS::rightClickHandler, this );
+                label->Bind( wxEVT_RIGHT_DOWN, &APPEARANCE_CONTROLS::rightClickHandler, this );
             };
+
+    // Add right click handling to show the conterxt menu when clicking to the free area in
+    // m_windowLayers (below the layer items)
+    m_windowLayers->Bind( wxEVT_RIGHT_DOWN, &APPEARANCE_CONTROLS::rightClickHandler, this );
 
     wxString dsc;
 
@@ -1779,7 +1775,7 @@ void APPEARANCE_CONTROLS::syncColorsAndVisibility()
 }
 
 
-void APPEARANCE_CONTROLS::onLayerClick( wxMouseEvent& aEvent )
+void APPEARANCE_CONTROLS::onLayerLeftClick( wxMouseEvent& aEvent )
 {
     auto eventSource = static_cast<wxWindow*>( aEvent.GetEventObject() );
 
@@ -1791,6 +1787,14 @@ void APPEARANCE_CONTROLS::onLayerClick( wxMouseEvent& aEvent )
     m_frame->SetActiveLayer( layer );
     passOnFocus();
 }
+
+
+void APPEARANCE_CONTROLS::rightClickHandler( wxMouseEvent& aEvent )
+{
+    wxASSERT( m_layerContextMenu );
+    PopupMenu( m_layerContextMenu );
+    passOnFocus();
+};
 
 
 void APPEARANCE_CONTROLS::onLayerVisibilityChanged( PCB_LAYER_ID aLayer, bool isVisible,

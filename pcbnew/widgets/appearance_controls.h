@@ -311,7 +311,9 @@ private:
 
     void syncLayerPresetSelection();
 
-    void onLayerClick( wxMouseEvent& aEvent );
+    void onLayerLeftClick( wxMouseEvent& aEvent );
+
+    void rightClickHandler( wxMouseEvent& aEvent );
 
     void onLayerVisibilityChanged( PCB_LAYER_ID aLayer, bool isVisible, bool isFinal );
 
