@@ -28,7 +28,7 @@
 #include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <board.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <pcb_text.h>
 #include <geometry/shape_compound.h>
 #include <geometry/shape_circle.h>
@@ -39,7 +39,7 @@
 #include <i18n_utility.h>
 
 
-DIMENSION_BASE::DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
+PCB_DIMENSION_BASE::PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
         BOARD_ITEM( aParent, aType ),
         m_overrideTextEnabled( false ),
         m_units( EDA_UNITS::INCHES ),
@@ -59,14 +59,14 @@ DIMENSION_BASE::DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
 }
 
 
-void DIMENSION_BASE::SetParent( EDA_ITEM* aParent )
+void PCB_DIMENSION_BASE::SetParent( EDA_ITEM* aParent )
 {
     BOARD_ITEM::SetParent( aParent );
     m_text.SetParent( aParent );
 }
 
 
-void DIMENSION_BASE::updateText()
+void PCB_DIMENSION_BASE::updateText()
 {
     wxString text = m_overrideTextEnabled ? m_valueString : GetValueText();
 
@@ -95,13 +95,13 @@ void DIMENSION_BASE::updateText()
 
 
 template<typename ShapeType>
-void DIMENSION_BASE::addShape( const ShapeType& aShape )
+void PCB_DIMENSION_BASE::addShape( const ShapeType& aShape )
 {
     m_shapes.push_back( std::make_shared<ShapeType>( aShape ) );
 }
 
 
-wxString DIMENSION_BASE::GetValueText() const
+wxString PCB_DIMENSION_BASE::GetValueText() const
 {
     struct lconv* lc = localeconv();
     wxChar sep = lc->decimal_point[0];
@@ -130,25 +130,25 @@ wxString DIMENSION_BASE::GetValueText() const
 }
 
 
-void DIMENSION_BASE::SetPrefix( const wxString& aPrefix )
+void PCB_DIMENSION_BASE::SetPrefix( const wxString& aPrefix )
 {
     m_prefix = aPrefix;
 }
 
 
-void DIMENSION_BASE::SetSuffix( const wxString& aSuffix )
+void PCB_DIMENSION_BASE::SetSuffix( const wxString& aSuffix )
 {
     m_suffix = aSuffix;
 }
 
 
-void DIMENSION_BASE::SetUnits( EDA_UNITS aUnits )
+void PCB_DIMENSION_BASE::SetUnits( EDA_UNITS aUnits )
 {
     m_units = aUnits;
 }
 
 
-DIM_UNITS_MODE DIMENSION_BASE::GetUnitsMode() const
+DIM_UNITS_MODE PCB_DIMENSION_BASE::GetUnitsMode() const
 {
     if( m_autoUnits )
     {
@@ -172,7 +172,7 @@ DIM_UNITS_MODE DIMENSION_BASE::GetUnitsMode() const
 }
 
 
-void DIMENSION_BASE::SetUnitsMode( DIM_UNITS_MODE aMode )
+void PCB_DIMENSION_BASE::SetUnitsMode( DIM_UNITS_MODE aMode )
 {
     m_autoUnits = false;
 
@@ -197,27 +197,27 @@ void DIMENSION_BASE::SetUnitsMode( DIM_UNITS_MODE aMode )
 }
 
 
-void DIMENSION_BASE::SetText( const wxString& aNewText )
+void PCB_DIMENSION_BASE::SetText( const wxString& aNewText )
 {
     m_valueString = aNewText;
     updateText();
 }
 
 
-const wxString DIMENSION_BASE::GetText() const
+const wxString PCB_DIMENSION_BASE::GetText() const
 {
     return m_text.GetText();
 }
 
 
-void DIMENSION_BASE::SetLayer( PCB_LAYER_ID aLayer )
+void PCB_DIMENSION_BASE::SetLayer( PCB_LAYER_ID aLayer )
 {
     m_layer = aLayer;
     m_text.SetLayer( aLayer );
 }
 
 
-void DIMENSION_BASE::Move( const wxPoint& offset )
+void PCB_DIMENSION_BASE::Move( const wxPoint& offset )
 {
     m_text.Offset( offset );
 
@@ -228,7 +228,7 @@ void DIMENSION_BASE::Move( const wxPoint& offset )
 }
 
 
-void DIMENSION_BASE::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_DIMENSION_BASE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     double newAngle = m_text.GetTextAngle() + aAngle;
 
@@ -248,7 +248,7 @@ void DIMENSION_BASE::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void DIMENSION_BASE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_DIMENSION_BASE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     Mirror( aCentre );
 
@@ -256,7 +256,7 @@ void DIMENSION_BASE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-void DIMENSION_BASE::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight )
+void PCB_DIMENSION_BASE::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight )
 {
     int axis = aMirrorLeftRight ? axis_pos.x : axis_pos.y;
     wxPoint newPos = m_text.GetTextPos();
@@ -289,7 +289,7 @@ void DIMENSION_BASE::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight )
 }
 
 
-void DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     // for now, display only the text within the DIMENSION using class PCB_TEXT.
     wxString    msg;
@@ -352,7 +352,7 @@ void DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 }
 
 
-std::shared_ptr<SHAPE> DIMENSION_BASE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_DIMENSION_BASE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> effectiveShape = std::make_shared<SHAPE_COMPOUND>();
 
@@ -365,7 +365,7 @@ std::shared_ptr<SHAPE> DIMENSION_BASE::GetEffectiveShape( PCB_LAYER_ID aLayer ) 
 }
 
 
-bool DIMENSION_BASE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PCB_DIMENSION_BASE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     if( m_text.TextHitTest( aPosition ) )
         return true;
@@ -384,7 +384,7 @@ bool DIMENSION_BASE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-bool DIMENSION_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PCB_DIMENSION_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT arect = aRect;
     arect.Inflate( aAccuracy );
@@ -401,7 +401,7 @@ bool DIMENSION_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 }
 
 
-const EDA_RECT DIMENSION_BASE::GetBoundingBox() const
+const EDA_RECT PCB_DIMENSION_BASE::GetBoundingBox() const
 {
     EDA_RECT    bBox;
     int         xmin, xmax, ymin, ymax;
@@ -434,7 +434,7 @@ const EDA_RECT DIMENSION_BASE::GetBoundingBox() const
 }
 
 
-wxString DIMENSION_BASE::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_DIMENSION_BASE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Dimension '%s' on %s" ),
                              GetText(),
@@ -443,7 +443,7 @@ wxString DIMENSION_BASE::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 
 
-const BOX2I DIMENSION_BASE::ViewBBox() const
+const BOX2I PCB_DIMENSION_BASE::ViewBBox() const
 {
     BOX2I dimBBox = BOX2I( VECTOR2I( GetBoundingBox().GetPosition() ),
                            VECTOR2I( GetBoundingBox().GetSize() ) );
@@ -453,7 +453,8 @@ const BOX2I DIMENSION_BASE::ViewBBox() const
 }
 
 
-OPT_VECTOR2I DIMENSION_BASE::segPolyIntersection( const SHAPE_POLY_SET& aPoly, const SEG& aSeg, bool aStart )
+OPT_VECTOR2I PCB_DIMENSION_BASE::segPolyIntersection( const SHAPE_POLY_SET& aPoly, const SEG& aSeg,
+                                                      bool aStart )
 {
     VECTOR2I start( aStart ? aSeg.A : aSeg.B );
     VECTOR2I endpoint( aStart ? aSeg.B : aSeg.A );
@@ -477,7 +478,7 @@ OPT_VECTOR2I DIMENSION_BASE::segPolyIntersection( const SHAPE_POLY_SET& aPoly, c
 }
 
 
-OPT_VECTOR2I DIMENSION_BASE::segCircleIntersection( CIRCLE& aCircle, SEG& aSeg, bool aStart )
+OPT_VECTOR2I PCB_DIMENSION_BASE::segCircleIntersection( CIRCLE& aCircle, SEG& aSeg, bool aStart )
 {
     VECTOR2I start( aStart ? aSeg.A : aSeg.B );
     VECTOR2I endpoint( aStart ? aSeg.B : aSeg.A );
@@ -501,8 +502,8 @@ OPT_VECTOR2I DIMENSION_BASE::segCircleIntersection( CIRCLE& aCircle, SEG& aSeg, 
 }
 
 
-ALIGNED_DIMENSION::ALIGNED_DIMENSION( BOARD_ITEM* aParent, KICAD_T aType ) :
-        DIMENSION_BASE( aParent, aType ),
+PCB_DIM_ALIGNED::PCB_DIM_ALIGNED( BOARD_ITEM* aParent, KICAD_T aType ) :
+        PCB_DIMENSION_BASE( aParent, aType ),
         m_height( 0 )
 {
     // To preserve look of old dimensions, initialize extension height based on default arrow length
@@ -510,32 +511,31 @@ ALIGNED_DIMENSION::ALIGNED_DIMENSION( BOARD_ITEM* aParent, KICAD_T aType ) :
 }
 
 
-EDA_ITEM* ALIGNED_DIMENSION::Clone() const
+EDA_ITEM* PCB_DIM_ALIGNED::Clone() const
 {
-    return new ALIGNED_DIMENSION( *this );
+    return new PCB_DIM_ALIGNED( *this );
 }
 
 
-void ALIGNED_DIMENSION::SwapData( BOARD_ITEM* aImage )
+void PCB_DIM_ALIGNED::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_DIM_ALIGNED_T );
 
     m_shapes.clear();
-    static_cast<ALIGNED_DIMENSION*>( aImage )->m_shapes.clear();
+    static_cast<PCB_DIM_ALIGNED*>( aImage )->m_shapes.clear();
 
-    std::swap( *static_cast<ALIGNED_DIMENSION*>( this ),
-               *static_cast<ALIGNED_DIMENSION*>( aImage ) );
+    std::swap( *static_cast<PCB_DIM_ALIGNED*>( this ), *static_cast<PCB_DIM_ALIGNED*>( aImage ) );
 
     Update();
 }
 
-BITMAPS ALIGNED_DIMENSION::GetMenuImage() const
+BITMAPS PCB_DIM_ALIGNED::GetMenuImage() const
 {
     return BITMAPS::add_aligned_dimension;
 }
 
 
-void ALIGNED_DIMENSION::UpdateHeight( const wxPoint& aCrossbarStart, const wxPoint& aCrossbarEnd )
+void PCB_DIM_ALIGNED::UpdateHeight( const wxPoint& aCrossbarStart, const wxPoint& aCrossbarEnd )
 {
     VECTOR2D height( aCrossbarStart - GetStart() );
     VECTOR2D crossBar( aCrossbarEnd - aCrossbarStart );
@@ -549,7 +549,7 @@ void ALIGNED_DIMENSION::UpdateHeight( const wxPoint& aCrossbarStart, const wxPoi
 }
 
 
-void ALIGNED_DIMENSION::updateGeometry()
+void PCB_DIM_ALIGNED::updateGeometry()
 {
     m_shapes.clear();
 
@@ -637,7 +637,7 @@ void ALIGNED_DIMENSION::updateGeometry()
 }
 
 
-void ALIGNED_DIMENSION::updateText()
+void PCB_DIM_ALIGNED::updateText()
 {
     VECTOR2I crossbarCenter( ( m_crossBarEnd - m_crossBarStart ) / 2 );
 
@@ -673,21 +673,20 @@ void ALIGNED_DIMENSION::updateText()
         m_text.SetTextAngle( textAngle );
     }
 
-    DIMENSION_BASE::updateText();
+    PCB_DIMENSION_BASE::updateText();
 }
 
 
-void ALIGNED_DIMENSION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
-                                         std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_DIM_ALIGNED::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    DIMENSION_BASE::GetMsgPanelInfo( aFrame, aList );
+    PCB_DIMENSION_BASE::GetMsgPanelInfo( aFrame, aList );
 
     aList.emplace_back( _( "Height" ), MessageTextFromValue( aFrame->GetUserUnits(), m_height ) );
 }
 
 
-ORTHOGONAL_DIMENSION::ORTHOGONAL_DIMENSION( BOARD_ITEM* aParent ) :
-        ALIGNED_DIMENSION( aParent, PCB_DIM_ORTHOGONAL_T )
+PCB_DIM_ORTHOGONAL::PCB_DIM_ORTHOGONAL( BOARD_ITEM* aParent ) :
+        PCB_DIM_ALIGNED( aParent, PCB_DIM_ORTHOGONAL_T )
 {
     // To preserve look of old dimensions, initialize extension height based on default arrow length
     m_extensionHeight = static_cast<int>( m_arrowLength * std::sin( DEG2RAD( s_arrowAngle ) ) );
@@ -695,33 +694,33 @@ ORTHOGONAL_DIMENSION::ORTHOGONAL_DIMENSION( BOARD_ITEM* aParent ) :
 }
 
 
-EDA_ITEM* ORTHOGONAL_DIMENSION::Clone() const
+EDA_ITEM* PCB_DIM_ORTHOGONAL::Clone() const
 {
-    return new ORTHOGONAL_DIMENSION( *this );
+    return new PCB_DIM_ORTHOGONAL( *this );
 }
 
 
-void ORTHOGONAL_DIMENSION::SwapData( BOARD_ITEM* aImage )
+void PCB_DIM_ORTHOGONAL::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_DIM_ORTHOGONAL_T );
 
     m_shapes.clear();
-    static_cast<ORTHOGONAL_DIMENSION*>( aImage )->m_shapes.clear();
+    static_cast<PCB_DIM_ORTHOGONAL*>( aImage )->m_shapes.clear();
 
-    std::swap( *static_cast<ORTHOGONAL_DIMENSION*>( this ),
-               *static_cast<ORTHOGONAL_DIMENSION*>( aImage ) );
+    std::swap( *static_cast<PCB_DIM_ORTHOGONAL*>( this ),
+               *static_cast<PCB_DIM_ORTHOGONAL*>( aImage ) );
 
     Update();
 }
 
 
-BITMAPS ORTHOGONAL_DIMENSION::GetMenuImage() const
+BITMAPS PCB_DIM_ORTHOGONAL::GetMenuImage() const
 {
     return BITMAPS::add_orthogonal_dimension;
 }
 
 
-void ORTHOGONAL_DIMENSION::updateGeometry()
+void PCB_DIM_ORTHOGONAL::updateGeometry()
 {
     m_shapes.clear();
 
@@ -822,7 +821,7 @@ void ORTHOGONAL_DIMENSION::updateGeometry()
 }
 
 
-void ORTHOGONAL_DIMENSION::updateText()
+void PCB_DIM_ORTHOGONAL::updateText()
 {
     VECTOR2I crossbarCenter( ( m_crossBarEnd - m_crossBarStart ) / 2 );
 
@@ -856,11 +855,11 @@ void ORTHOGONAL_DIMENSION::updateText()
         m_text.SetTextAngle( textAngle );
     }
 
-    DIMENSION_BASE::updateText();
+    PCB_DIMENSION_BASE::updateText();
 }
 
 
-void ORTHOGONAL_DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_DIM_ORTHOGONAL::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     // restrict angle to -179.9 to 180.0 degrees
     if( aAngle > 1800 )
@@ -910,12 +909,12 @@ void ORTHOGONAL_DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
     }
 
     // this will update m_crossBarStart and m_crossbarEnd
-    DIMENSION_BASE::Rotate( aRotCentre, aAngle );
+    PCB_DIMENSION_BASE::Rotate( aRotCentre, aAngle );
 }
 
 
-LEADER::LEADER( BOARD_ITEM* aParent ) :
-        DIMENSION_BASE( aParent, PCB_DIM_LEADER_T ),
+PCB_DIM_LEADER::PCB_DIM_LEADER( BOARD_ITEM* aParent ) :
+        PCB_DIMENSION_BASE( aParent, PCB_DIM_LEADER_T ),
         m_textFrame( DIM_TEXT_FRAME::NONE )
 {
     m_unitsFormat         = DIM_UNITS_FORMAT::NO_SUFFIX;
@@ -924,27 +923,27 @@ LEADER::LEADER( BOARD_ITEM* aParent ) :
 }
 
 
-EDA_ITEM* LEADER::Clone() const
+EDA_ITEM* PCB_DIM_LEADER::Clone() const
 {
-    return new LEADER( *this );
+    return new PCB_DIM_LEADER( *this );
 }
 
 
-void LEADER::SwapData( BOARD_ITEM* aImage )
+void PCB_DIM_LEADER::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_DIM_LEADER_T );
 
-    std::swap( *static_cast<LEADER*>( this ), *static_cast<LEADER*>( aImage ) );
+    std::swap( *static_cast<PCB_DIM_LEADER*>( this ), *static_cast<PCB_DIM_LEADER*>( aImage ) );
 }
 
 
-BITMAPS LEADER::GetMenuImage() const
+BITMAPS PCB_DIM_LEADER::GetMenuImage() const
 {
     return BITMAPS::add_leader;
 }
 
 
-void LEADER::updateGeometry()
+void PCB_DIM_LEADER::updateGeometry()
 {
     m_shapes.clear();
 
@@ -1035,7 +1034,7 @@ void LEADER::updateGeometry()
 }
 
 
-void LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_DIM_LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString    msg;
 
@@ -1055,35 +1054,35 @@ void LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
 }
 
 
-CENTER_DIMENSION::CENTER_DIMENSION( BOARD_ITEM* aParent ) :
-        DIMENSION_BASE( aParent, PCB_DIM_CENTER_T )
+PCB_DIM_CENTER::PCB_DIM_CENTER( BOARD_ITEM* aParent ) :
+        PCB_DIMENSION_BASE( aParent, PCB_DIM_CENTER_T )
 {
     m_unitsFormat         = DIM_UNITS_FORMAT::NO_SUFFIX;
     m_overrideTextEnabled = true;
 }
 
 
-EDA_ITEM* CENTER_DIMENSION::Clone() const
+EDA_ITEM* PCB_DIM_CENTER::Clone() const
 {
-    return new CENTER_DIMENSION( *this );
+    return new PCB_DIM_CENTER( *this );
 }
 
 
-void CENTER_DIMENSION::SwapData( BOARD_ITEM* aImage )
+void PCB_DIM_CENTER::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_DIM_CENTER_T );
 
-    std::swap( *static_cast<CENTER_DIMENSION*>( this ), *static_cast<CENTER_DIMENSION*>( aImage ) );
+    std::swap( *static_cast<PCB_DIM_CENTER*>( this ), *static_cast<PCB_DIM_CENTER*>( aImage ) );
 }
 
 
-BITMAPS CENTER_DIMENSION::GetMenuImage() const
+BITMAPS PCB_DIM_CENTER::GetMenuImage() const
 {
     return BITMAPS::add_center_dimension;
 }
 
 
-const EDA_RECT CENTER_DIMENSION::GetBoundingBox() const
+const EDA_RECT PCB_DIM_CENTER::GetBoundingBox() const
 {
     int halfWidth = VECTOR2I( m_end - m_start ).x + ( m_lineThickness / 2.0 );
 
@@ -1100,14 +1099,14 @@ const EDA_RECT CENTER_DIMENSION::GetBoundingBox() const
 }
 
 
-const BOX2I CENTER_DIMENSION::ViewBBox() const
+const BOX2I PCB_DIM_CENTER::ViewBBox() const
 {
     return BOX2I( VECTOR2I( GetBoundingBox().GetPosition() ),
                   VECTOR2I( GetBoundingBox().GetSize() ) );
 }
 
 
-void CENTER_DIMENSION::updateGeometry()
+void PCB_DIM_CENTER::updateGeometry()
 {
     m_shapes.clear();
 
@@ -1127,8 +1126,8 @@ static struct DIMENSION_DESC
     DIMENSION_DESC()
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        REGISTER_TYPE( DIMENSION_BASE );
-        propMgr.InheritsAfter( TYPE_HASH( DIMENSION_BASE ), TYPE_HASH( BOARD_ITEM ) );
+        REGISTER_TYPE( PCB_DIMENSION_BASE );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_DIMENSION_BASE ), TYPE_HASH( BOARD_ITEM ) );
         // TODO: add dimension properties:
         //propMgr.AddProperty( new PROPERTY<DIMENSION, int>( _HKI( "Height" ),
                     //&DIMENSION::SetHeight, &DIMENSION::GetHeight, PROPERTY_DISPLAY::DISTANCE ) );

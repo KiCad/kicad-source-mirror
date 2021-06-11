@@ -78,7 +78,7 @@
 #include <track.h>
 #include <pcb_text.h>
 #include <zone.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <pcb_target.h>
 #include <fp_shape.h>
@@ -2720,7 +2720,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
 void LEGACY_PLUGIN::loadDIMENSION()
 {
-    std::unique_ptr<ALIGNED_DIMENSION> dim = std::make_unique<ALIGNED_DIMENSION>( m_board );
+    std::unique_ptr<PCB_DIM_ALIGNED> dim = std::make_unique<PCB_DIM_ALIGNED>( m_board );
 
     char*   line;
 

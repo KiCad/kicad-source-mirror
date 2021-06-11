@@ -44,7 +44,7 @@ class TRACK;
 class NETCLASS;
 class NETCLASSES;
 class ZONE;
-class DIMENSION_BASE;
+class PCB_DIMENSION_BASE;
 class NETINFO_ITEM;
 class FP_TEXT;
 class TRACK;

@@ -625,7 +625,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             case PCB_DIM_CENTER_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                addShapeWithClearance( static_cast<DIMENSION_BASE*>( item ),
+                addShapeWithClearance( static_cast<PCB_DIMENSION_BASE*>( item ),
                                        layerContainer, curr_layer_id, 0 );
             break;
 
@@ -919,7 +919,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             case PCB_DIM_CENTER_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                addShapeWithClearance( static_cast<DIMENSION_BASE*>( item ), layerContainer,
+                addShapeWithClearance( static_cast<PCB_DIMENSION_BASE*>( item ), layerContainer,
                                        curr_layer_id, 0 );
                 break;
 

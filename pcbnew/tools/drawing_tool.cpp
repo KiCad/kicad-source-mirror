@@ -49,7 +49,7 @@
 #include <fp_shape.h>
 #include <pcb_group.h>
 #include <pcb_text.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <zone.h>
 #include <footprint.h>
 #include <preview_items/two_point_assistant.h>
@@ -643,7 +643,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 }
 
 
-void DRAWING_TOOL::constrainDimension( DIMENSION_BASE* aDim )
+void DRAWING_TOOL::constrainDimension( PCB_DIMENSION_BASE* aDim )
 {
     const VECTOR2I lineVector{ aDim->GetEnd() - aDim->GetStart() };
 
@@ -666,7 +666,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     };
 
     TOOL_EVENT             originalEvent = aEvent;
-    DIMENSION_BASE*        dimension     = nullptr;
+    PCB_DIMENSION_BASE*    dimension     = nullptr;
     BOARD_COMMIT           commit( m_frame );
     PCB_GRID_HELPER        grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     BOARD_DESIGN_SETTINGS& boardSettings = m_board->GetDesignSettings();
@@ -795,7 +795,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 // Init the new item attributes
                 auto setMeasurementAttributes =
-                        [&]( DIMENSION_BASE* aDim )
+                        [&]( PCB_DIMENSION_BASE* aDim )
                         {
                             aDim->SetUnitsMode( boardSettings.m_DimensionUnitsMode );
                             aDim->SetUnitsFormat( boardSettings.m_DimensionUnitsFormat );
@@ -810,21 +810,21 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 if( originalEvent.IsAction( &PCB_ACTIONS::drawAlignedDimension ) )
                 {
-                    dimension = new ALIGNED_DIMENSION( m_board );
+                    dimension = new PCB_DIM_ALIGNED( m_board );
                     setMeasurementAttributes( dimension );
                 }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawOrthogonalDimension ) )
                 {
-                    dimension = new ORTHOGONAL_DIMENSION( m_board );
+                    dimension = new PCB_DIM_ORTHOGONAL( m_board );
                     setMeasurementAttributes( dimension );
                 }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawCenterDimension ) )
                 {
-                    dimension = new CENTER_DIMENSION( m_board );
+                    dimension = new PCB_DIM_CENTER( m_board );
                 }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawLeader ) )
                 {
-                    dimension = new LEADER( m_board );
+                    dimension = new PCB_DIM_LEADER( m_board );
                     dimension->Text().SetPosition( wxPoint( cursorPos ) );
                 }
                 else
@@ -929,7 +929,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 if( dimension->Type() == PCB_DIM_ORTHOGONAL_T )
                 {
-                    ORTHOGONAL_DIMENSION* ortho = static_cast<ORTHOGONAL_DIMENSION*>( dimension );
+                    PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dimension );
 
                     BOX2I bounds( dimension->GetStart(),
                                   dimension->GetEnd() - dimension->GetStart() );
@@ -937,8 +937,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     // Create a nice preview by measuring the longer dimension
                     bool vert = bounds.GetWidth() < bounds.GetHeight();
 
-                    ortho->SetOrientation( vert ? ORTHOGONAL_DIMENSION::DIR::VERTICAL
-                                                : ORTHOGONAL_DIMENSION::DIR::HORIZONTAL );
+                    ortho->SetOrientation( vert ? PCB_DIM_ORTHOGONAL::DIR::VERTICAL
+                                                : PCB_DIM_ORTHOGONAL::DIR::HORIZONTAL );
                 }
 
                 dimension->Update();
@@ -952,7 +952,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             {
                 if( dimension->Type() == PCB_DIM_ALIGNED_T )
                 {
-                    ALIGNED_DIMENSION* aligned = static_cast<ALIGNED_DIMENSION*>( dimension );
+                    PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dimension );
 
                     // Calculating the direction of travel perpendicular to the selected axis
                     double angle = aligned->GetAngle() + ( M_PI / 2 );
@@ -964,7 +964,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 }
                 else if( dimension->Type() == PCB_DIM_ORTHOGONAL_T )
                 {
-                    ORTHOGONAL_DIMENSION* ortho = static_cast<ORTHOGONAL_DIMENSION*>( dimension );
+                    PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dimension );
 
                     BOX2I    bounds( dimension->GetStart(),
                                   dimension->GetEnd() - dimension->GetStart() );
@@ -996,12 +996,12 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                         {
                             vert = std::abs( direction.y ) < std::abs( direction.x );
                         }
-                        ortho->SetOrientation( vert ? ORTHOGONAL_DIMENSION::DIR::VERTICAL
-                                                    : ORTHOGONAL_DIMENSION::DIR::HORIZONTAL );
+                        ortho->SetOrientation( vert ? PCB_DIM_ORTHOGONAL::DIR::VERTICAL
+                                                    : PCB_DIM_ORTHOGONAL::DIR::HORIZONTAL );
                     }
                     else
                     {
-                        vert = ortho->GetOrientation() == ORTHOGONAL_DIMENSION::DIR::VERTICAL;
+                        vert = ortho->GetOrientation() == PCB_DIM_ORTHOGONAL::DIR::VERTICAL;
                     }
 
                     VECTOR2I heightVector( cursorPos - dimension->GetStart() );

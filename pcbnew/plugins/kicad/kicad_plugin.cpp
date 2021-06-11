@@ -30,7 +30,7 @@
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
 #include <core/arraydim.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <footprint.h>
 #include <fp_shape.h>
 #include <kicad_string.h>
@@ -406,7 +406,7 @@ void PCB_IO::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
     case PCB_DIM_CENTER_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-        format( static_cast<const DIMENSION_BASE*>( aItem ), aNestLevel );
+        format( static_cast<const PCB_DIMENSION_BASE*>( aItem ), aNestLevel );
         break;
 
     case PCB_SHAPE_T:
@@ -691,12 +691,12 @@ void PCB_IO::format( const BOARD* aBoard, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const DIMENSION_BASE* aDimension, int aNestLevel ) const
+void PCB_IO::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) const
 {
-    const ALIGNED_DIMENSION*    aligned = dynamic_cast<const ALIGNED_DIMENSION*>( aDimension );
-    const ORTHOGONAL_DIMENSION* ortho   = dynamic_cast<const ORTHOGONAL_DIMENSION*>( aDimension );
-    const CENTER_DIMENSION*     center  = dynamic_cast<const CENTER_DIMENSION*>( aDimension );
-    const LEADER*               leader  = dynamic_cast<const LEADER*>( aDimension );
+    const PCB_DIM_ALIGNED*    aligned = dynamic_cast<const PCB_DIM_ALIGNED*>( aDimension );
+    const PCB_DIM_ORTHOGONAL* ortho   = dynamic_cast<const PCB_DIM_ORTHOGONAL*>( aDimension );
+    const PCB_DIM_CENTER*     center  = dynamic_cast<const PCB_DIM_CENTER*>( aDimension );
+    const PCB_DIM_LEADER*     leader  = dynamic_cast<const PCB_DIM_LEADER*>( aDimension );
 
     m_out->Print( aNestLevel, "(dimension" );
 

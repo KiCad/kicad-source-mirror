@@ -25,7 +25,7 @@
 
 #include <functional>
 #include <board.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <fp_shape.h>
 #include <footprint.h>
 #include <pad.h>
@@ -643,7 +643,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_ORTHOGONAL_T:
         {
-            const ALIGNED_DIMENSION* dim = static_cast<const ALIGNED_DIMENSION*>( aItem );
+            const PCB_DIM_ALIGNED* dim = static_cast<const PCB_DIM_ALIGNED*>( aItem );
             addAnchor( dim->GetCrossbarStart(), CORNER | SNAPPABLE, aItem );
             addAnchor( dim->GetCrossbarEnd(), CORNER | SNAPPABLE, aItem );
             addAnchor( dim->GetStart(), CORNER | SNAPPABLE, aItem );
@@ -653,7 +653,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         case PCB_DIM_CENTER_T:
         {
-            const CENTER_DIMENSION* dim = static_cast<const CENTER_DIMENSION*>( aItem );
+            const PCB_DIM_CENTER* dim = static_cast<const PCB_DIM_CENTER*>( aItem );
             addAnchor( dim->GetStart(), CORNER | SNAPPABLE, aItem );
             addAnchor( dim->GetEnd(), CORNER | SNAPPABLE, aItem );
 
@@ -671,7 +671,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         case PCB_DIM_LEADER_T:
         {
-            const LEADER* leader = static_cast<const LEADER*>( aItem );
+            const PCB_DIM_LEADER* leader = static_cast<const PCB_DIM_LEADER*>( aItem );
             addAnchor( leader->GetStart(), CORNER | SNAPPABLE, aItem );
             addAnchor( leader->GetEnd(), CORNER | SNAPPABLE, aItem );
             addAnchor( leader->Text().GetPosition(), CORNER | SNAPPABLE, aItem );

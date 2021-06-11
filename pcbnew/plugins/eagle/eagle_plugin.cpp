@@ -77,7 +77,7 @@ Load() TODO's
 #include <zone.h>
 #include <pad_shapes.h>
 #include <pcb_text.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 
 #include <plugins/eagle/eagle_plugin.h>
 
@@ -874,7 +874,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             if( layer != UNDEFINED_LAYER )
             {
                 const BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
-                ALIGNED_DIMENSION* dimension = new ALIGNED_DIMENSION( m_board );
+                PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board );
                 m_board->Add( dimension, ADD_MODE::APPEND );
 
                 if( d.dimensionType )

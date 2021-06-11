@@ -32,7 +32,7 @@
 #include <pgm_base.h>
 #include <board.h>
 #include <board_design_settings.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <footprint_info_impl.h>
 #include <project.h>
 #include <settings/color_settings.h>
@@ -187,7 +187,7 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
         INSPECTOR_FUNC inspector =
                 [units, view]( EDA_ITEM* aItem, void* aTestData )
                 {
-                    DIMENSION_BASE* dimension = static_cast<DIMENSION_BASE*>( aItem );
+                    PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( aItem );
 
                     if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
                     {

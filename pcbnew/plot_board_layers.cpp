@@ -46,7 +46,7 @@
 #include <zone.h>
 #include <pcb_shape.h>
 #include <pcb_target.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 
 #include <pcbplot.h>
 #include <plotters_specific.h>

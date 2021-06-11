@@ -40,7 +40,7 @@ using namespace std::placeholders;
 #include <status_popup.h>
 #include <pcb_edit_frame.h>
 #include <fp_shape.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <pad.h>
 #include <zone.h>
 #include <connectivity/connectivity_data.h>
@@ -291,7 +291,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_ORTHOGONAL_T:
     {
-        const ALIGNED_DIMENSION* dimension = static_cast<const ALIGNED_DIMENSION*>( aItem );
+        const PCB_DIM_ALIGNED* dimension = static_cast<const PCB_DIM_ALIGNED*>( aItem );
 
         points->AddPoint( dimension->GetStart() );
         points->AddPoint( dimension->GetEnd() );
@@ -315,7 +315,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
     case PCB_DIM_CENTER_T:
     {
-        const CENTER_DIMENSION* dimension = static_cast<const CENTER_DIMENSION*>( aItem );
+        const PCB_DIM_CENTER* dimension = static_cast<const PCB_DIM_CENTER*>( aItem );
 
         points->AddPoint( dimension->GetStart() );
         points->AddPoint( dimension->GetEnd() );
@@ -328,7 +328,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
     case PCB_DIM_LEADER_T:
     {
-        const LEADER* dimension = static_cast<const LEADER*>( aItem );
+        const PCB_DIM_LEADER* dimension = static_cast<const PCB_DIM_LEADER*>( aItem );
 
         points->AddPoint( dimension->GetStart() );
         points->AddPoint( dimension->GetEnd() );
@@ -1314,7 +1314,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
     case PCB_DIM_ALIGNED_T:
     {
-        ALIGNED_DIMENSION* dimension = static_cast<ALIGNED_DIMENSION*>( item );
+        PCB_DIM_ALIGNED* dimension = static_cast<PCB_DIM_ALIGNED*>( item );
 
         // Check which point is currently modified and updated dimension's points respectively
         if( isModified( m_editPoints->Point( DIM_CROSSBARSTART ) ) )
@@ -1376,7 +1376,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
     case PCB_DIM_ORTHOGONAL_T:
     {
-        ORTHOGONAL_DIMENSION* dimension = static_cast<ORTHOGONAL_DIMENSION*>( item );
+        PCB_DIM_ORTHOGONAL* dimension = static_cast<PCB_DIM_ORTHOGONAL*>( item );
 
         if( isModified( m_editPoints->Point( DIM_CROSSBARSTART ) ) ||
             isModified( m_editPoints->Point( DIM_CROSSBAREND ) ) )
@@ -1418,12 +1418,12 @@ void PCB_POINT_EDITOR::updateItem() const
                 {
                     vert = std::abs( direction.y ) < std::abs( direction.x );
                 }
-                dimension->SetOrientation( vert ? ORTHOGONAL_DIMENSION::DIR::VERTICAL
-                                                : ORTHOGONAL_DIMENSION::DIR::HORIZONTAL );
+                dimension->SetOrientation( vert ? PCB_DIM_ORTHOGONAL::DIR::VERTICAL
+                                                : PCB_DIM_ORTHOGONAL::DIR::HORIZONTAL );
             }
             else
             {
-                vert = dimension->GetOrientation() == ORTHOGONAL_DIMENSION::DIR::VERTICAL;
+                vert = dimension->GetOrientation() == PCB_DIM_ORTHOGONAL::DIR::VERTICAL;
             }
 
             dimension->SetHeight( vert ? featureLine.x : featureLine.y );
@@ -1452,7 +1452,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
     case PCB_DIM_CENTER_T:
     {
-        CENTER_DIMENSION* dimension = static_cast<CENTER_DIMENSION*>( item );
+        PCB_DIM_CENTER* dimension = static_cast<PCB_DIM_CENTER*>( item );
 
         if( isModified( m_editPoints->Point( DIM_START ) ) )
         {
@@ -1472,7 +1472,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
     case PCB_DIM_LEADER_T:
     {
-        LEADER* dimension = static_cast<LEADER*>( item );
+        PCB_DIM_LEADER* dimension = static_cast<PCB_DIM_LEADER*>( item );
 
         if( isModified( m_editPoints->Point( DIM_START ) ) )
         {
@@ -1723,7 +1723,7 @@ void PCB_POINT_EDITOR::updatePoints()
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_ORTHOGONAL_T:
     {
-        const ALIGNED_DIMENSION* dimension = static_cast<const ALIGNED_DIMENSION*>( item );
+        const PCB_DIM_ALIGNED* dimension = static_cast<const PCB_DIM_ALIGNED*>( item );
 
         m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
         m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
@@ -1735,7 +1735,7 @@ void PCB_POINT_EDITOR::updatePoints()
 
     case PCB_DIM_CENTER_T:
     {
-        const CENTER_DIMENSION* dimension = static_cast<const CENTER_DIMENSION*>( item );
+        const PCB_DIM_CENTER* dimension = static_cast<const PCB_DIM_CENTER*>( item );
 
         m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
         m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
@@ -1744,7 +1744,7 @@ void PCB_POINT_EDITOR::updatePoints()
 
     case PCB_DIM_LEADER_T:
     {
-        const LEADER* dimension = static_cast<const LEADER*>( item );
+        const PCB_DIM_LEADER* dimension = static_cast<const PCB_DIM_LEADER*>( item );
 
         m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
         m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );

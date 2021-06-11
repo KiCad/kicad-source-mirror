@@ -42,7 +42,7 @@
 #include <pcb_base_frame.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <zone.h>
 #include <footprint.h>
 #include <reporter.h>
@@ -586,8 +586,9 @@ private:
     void addShapeWithClearance( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aDstContainer,
                                 PCB_LAYER_ID aLayerId, int aClearanceValue );
 
-    void addShapeWithClearance( const DIMENSION_BASE* aDimension, CONTAINER_2D_BASE* aDstContainer,
-                                PCB_LAYER_ID aLayerId, int aClearanceValue );
+    void addShapeWithClearance( const PCB_DIMENSION_BASE* aDimension,
+                                CONTAINER_2D_BASE* aDstContainer, PCB_LAYER_ID aLayerId,
+                                int aClearanceValue );
 
     void addSolidAreasShapes( const ZONE* aZoneContainer, CONTAINER_2D_BASE* aDstContainer,
                               PCB_LAYER_ID aLayerId );

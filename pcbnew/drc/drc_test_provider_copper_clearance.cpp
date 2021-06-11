@@ -40,7 +40,7 @@
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 
 /*
     Copper clearance test. Checks all copper items (pads, vias, tracks, drawings, zones) for their electrical clearance.

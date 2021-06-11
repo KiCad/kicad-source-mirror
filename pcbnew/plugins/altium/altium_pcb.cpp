@@ -28,7 +28,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <pad.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
@@ -924,7 +924,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     wxPoint referencePoint0 = aElem.referencePoint.at( 0 );
     wxPoint referencePoint1 = aElem.referencePoint.at( 1 );
 
-    ALIGNED_DIMENSION* dimension = new ALIGNED_DIMENSION( m_board );
+    PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board );
     m_board->Add( dimension, ADD_MODE::APPEND );
 
     dimension->SetPrecision( aElem.textprecision );
@@ -1102,7 +1102,7 @@ void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
     wxPoint vec = wxPoint( 0, aElem.height / 2 );
     RotatePoint( &vec, aElem.angle * 10. );
 
-    CENTER_DIMENSION* dimension = new CENTER_DIMENSION( m_board );
+    PCB_DIM_CENTER* dimension = new PCB_DIM_CENTER( m_board );
     m_board->Add( dimension, ADD_MODE::APPEND );
     dimension->SetLayer( klayer );
     dimension->SetLineThickness( aElem.linewidth );

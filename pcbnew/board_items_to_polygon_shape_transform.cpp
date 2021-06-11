@@ -28,7 +28,7 @@
 #include <trigo.h>
 #include <board.h>
 #include <pad.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <track.h>
 #include <kicad_string.h>
 #include <pcb_shape.h>
@@ -774,10 +774,10 @@ void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 }
 
 
-void DIMENSION_BASE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                           PCB_LAYER_ID aLayer, int aClearance,
-                                                           int aError, ERROR_LOC aErrorLoc,
-                                                           bool aIgnoreLineWidth ) const
+void PCB_DIMENSION_BASE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                               PCB_LAYER_ID aLayer, int aClearance,
+                                                               int aError, ERROR_LOC aErrorLoc,
+                                                               bool aIgnoreLineWidth ) const
 {
     wxASSERT_MSG( !aIgnoreLineWidth, "IgnoreLineWidth has no meaning for dimensions." );
 
@@ -800,7 +800,7 @@ void DIMENSION_BASE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorn
         }
         else
         {
-            wxFAIL_MSG( "DIMENSION::TransformShapeWithClearanceToPolygon unexpected shape type." );
+            wxFAIL_MSG( "PCB_DIMENSION_BASE::TransformShapeWithClearanceToPolygon unexpected shape type." );
         }
     }
 }

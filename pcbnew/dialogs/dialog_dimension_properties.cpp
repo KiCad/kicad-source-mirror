@@ -20,7 +20,7 @@
 
 #include <board.h>
 #include <board_commit.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <pcb_base_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <widgets/unit_binder.h>
@@ -47,8 +47,8 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_extensionOffset( aParent, m_lblExtensionOffset, m_txtExtensionOffset, m_lblExtensionOffsetUnits )
 {
     wxASSERT( BaseType( aItem->Type() ) == PCB_DIMENSION_T );
-    m_dimension = static_cast<DIMENSION_BASE*>( aItem );
-    m_previewDimension = static_cast<DIMENSION_BASE*>( m_dimension->Clone() );
+    m_dimension = static_cast<PCB_DIMENSION_BASE*>( aItem );
+    m_previewDimension = static_cast<PCB_DIMENSION_BASE*>( m_dimension->Clone() );
     m_previewDimension->SetParent( m_frame->GetBoard() );
 
     switch( m_dimension->Type() )
@@ -247,7 +247,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     if( m_dimension->Type() == PCB_DIM_LEADER_T )
     {
-        LEADER* leader = static_cast<LEADER*>( m_dimension );
+        PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( m_dimension );
         m_cbTextFrame->SetSelection( static_cast<int>( leader->GetTextFrame() ) );
     }
 
@@ -283,7 +283,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataFromWindow()
 }
 
 
-void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( DIMENSION_BASE* aTarget )
+void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE* aTarget )
 {
     BOARD* board = m_frame->GetBoard();
 
@@ -353,7 +353,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( DIMENSION_BASE* aTa
 
     if( aTarget->Type() == PCB_DIM_LEADER_T )
     {
-        LEADER* leader = static_cast<LEADER*>( aTarget );
+        PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( aTarget );
         leader->SetTextFrame( static_cast<DIM_TEXT_FRAME>( m_cbTextFrame->GetSelection() ) );
     }
 

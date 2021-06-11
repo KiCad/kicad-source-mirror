@@ -38,7 +38,7 @@ class VIA;
 class PAD;
 class PCB_TARGET;
 class PCB_GROUP;
-class DIMENSION_BASE;
+class PCB_DIMENSION_BASE;
 class DRC;
 class DIALOG_PLOT;
 class ZONE;
@@ -555,7 +555,7 @@ public:
 
     // Properties dialogs
     void ShowTargetOptionsDialog( PCB_TARGET* aTarget );
-    void ShowDimensionPropertiesDialog( DIMENSION_BASE* aDimension );
+    void ShowDimensionPropertiesDialog( PCB_DIMENSION_BASE* aDimension );
     void InstallNetlistFrame();
 
     /**

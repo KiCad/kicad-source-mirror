@@ -37,7 +37,7 @@
 #include <advanced_config.h>
 #include <board.h>
 #include <board_design_settings.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <pcb_group.h>
@@ -2566,14 +2566,14 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
 }
 
 
-DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
+PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
 {
     wxCHECK_MSG( CurTok() == T_dimension, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as DIMENSION." ) );
 
     T token;
     bool locked = false;
-    std::unique_ptr<DIMENSION_BASE> dimension;
+    std::unique_ptr<PCB_DIMENSION_BASE> dimension;
 
     token = NextTok();
 
@@ -2595,7 +2595,7 @@ DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
     if( token == T_width )
     {
         isLegacyDimension = true;
-        dimension = std::make_unique<ALIGNED_DIMENSION>( nullptr );
+        dimension = std::make_unique<PCB_DIM_ALIGNED>( nullptr );
         dimension->SetLineThickness( parseBoardUnits( "dimension width value" ) );
         NeedRIGHT();
     }
@@ -2607,19 +2607,19 @@ DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
         switch( NextTok() )
         {
         case T_aligned:
-            dimension = std::make_unique<ALIGNED_DIMENSION>( nullptr );
+            dimension = std::make_unique<PCB_DIM_ALIGNED>( nullptr );
             break;
 
         case T_orthogonal:
-            dimension = std::make_unique<ORTHOGONAL_DIMENSION>( nullptr );
+            dimension = std::make_unique<PCB_DIM_ORTHOGONAL>( nullptr );
             break;
 
         case T_leader:
-            dimension = std::make_unique<LEADER>( nullptr );
+            dimension = std::make_unique<PCB_DIM_LEADER>( nullptr );
             break;
 
         case T_center:
-            dimension = std::make_unique<CENTER_DIMENSION>( nullptr );
+            dimension = std::make_unique<PCB_DIM_CENTER>( nullptr );
             break;
 
         default:
@@ -2691,7 +2691,7 @@ DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
             wxCHECK_MSG( dimension->Type() == PCB_DIM_ALIGNED_T ||
                          dimension->Type() == PCB_DIM_ORTHOGONAL_T, nullptr,
                          wxT( "Invalid height token" ) );
-            ALIGNED_DIMENSION* aligned = static_cast<ALIGNED_DIMENSION*>( dimension.get() );
+            PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dimension.get() );
             aligned->SetHeight( parseBoardUnits( "dimension height value" ) );
             NeedRIGHT();
             break;
@@ -2701,11 +2701,11 @@ DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
         {
             wxCHECK_MSG( dimension->Type() == PCB_DIM_ORTHOGONAL_T, nullptr,
                          wxT( "Invalid orientation token" ) );
-            ORTHOGONAL_DIMENSION* ortho = static_cast<ORTHOGONAL_DIMENSION*>( dimension.get() );
+            PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dimension.get() );
 
             int orientation = parseInt( "orthogonal dimension orientation" );
             orientation     = std::max( 0, std::min( 1, orientation ) );
-            ortho->SetOrientation( static_cast<ORTHOGONAL_DIMENSION::DIR>( orientation ) );
+            ortho->SetOrientation( static_cast<PCB_DIM_ORTHOGONAL::DIR>( orientation ) );
             NeedRIGHT();
             break;
         }
@@ -2806,7 +2806,7 @@ DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
 
                 case T_extension_height:
                 {
-                    ALIGNED_DIMENSION* aligned = dynamic_cast<ALIGNED_DIMENSION*>( dimension.get() );
+                    PCB_DIM_ALIGNED* aligned = dynamic_cast<PCB_DIM_ALIGNED*>( dimension.get() );
                     wxCHECK_MSG( aligned, nullptr, wxT( "Invalid extension_height token" ) );
                     aligned->SetExtensionHeight( parseBoardUnits( "extension height" ) );
                     NeedRIGHT();
@@ -2826,7 +2826,7 @@ DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
                 {
                     wxCHECK_MSG( dimension->Type() == PCB_DIM_LEADER_T, nullptr,
                                  wxT( "Invalid text_frame token" ) );
-                    LEADER* leader = static_cast<LEADER*>( dimension.get() );
+                    PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( dimension.get() );
 
                     int textFrame = parseInt( "dimension text frame mode" );
                     textFrame = std::max( 0, std::min( 3, textFrame ) );
@@ -2893,7 +2893,7 @@ DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
             if( token == T_pts )
             {
                 // If we have a crossbar, we know we're an old aligned dimension
-                ALIGNED_DIMENSION* aligned = static_cast<ALIGNED_DIMENSION*>( dimension.get() );
+                PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dimension.get() );
 
                 // Old style: calculate height from crossbar
                 wxPoint point1, point2;

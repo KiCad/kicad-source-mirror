@@ -30,7 +30,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
 #include <widgets/unit_binder.h>
@@ -287,10 +287,10 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
 {
     aCommit.Modify( aItem );
 
-    EDA_TEXT*       textItem = dynamic_cast<EDA_TEXT*>( aItem );
-    FP_TEXT*        fpTextItem = dynamic_cast<FP_TEXT*>( aItem );
-    PCB_SHAPE*      drawItem = dynamic_cast<PCB_SHAPE*>( aItem );
-    DIMENSION_BASE* dimension = dynamic_cast<DIMENSION_BASE*>( aItem );
+    EDA_TEXT*           textItem = dynamic_cast<EDA_TEXT*>( aItem );
+    FP_TEXT*            fpTextItem = dynamic_cast<FP_TEXT*>( aItem );
+    PCB_SHAPE*          drawItem = dynamic_cast<PCB_SHAPE*>( aItem );
+    PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aItem );
 
     if( dimension )
         textItem = &dimension->Text();

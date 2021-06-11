@@ -46,7 +46,7 @@ class BOARD_ITEM;
 class BOARD_ITEM_CONTAINER;
 class PAD;
 class BOARD_DESIGN_SETTINGS;
-class DIMENSION_BASE;
+class PCB_DIMENSION_BASE;
 class PCB_SHAPE;
 class EDA_TEXT;
 class FP_SHAPE;
@@ -185,30 +185,30 @@ private:
     void parseNETINFO_ITEM();
     void parseNETCLASS();
 
-    PCB_SHAPE*      parsePCB_SHAPE();
-    PCB_TEXT*       parsePCB_TEXT();
-    DIMENSION_BASE* parseDIMENSION();
+    PCB_SHAPE*          parsePCB_SHAPE();
+    PCB_TEXT*           parsePCB_TEXT();
+    PCB_DIMENSION_BASE* parseDIMENSION();
 
     // Parse a footprint, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
-    FOOTPRINT*      parseFOOTPRINT_unchecked( wxArrayString* aInitialComments = nullptr );
+    FOOTPRINT*          parseFOOTPRINT_unchecked( wxArrayString* aInitialComments = nullptr );
 
-    FP_TEXT*        parseFP_TEXT();
-    FP_SHAPE*       parseFP_SHAPE();
-    PAD*            parsePAD( FOOTPRINT* aParent = NULL );
+    FP_TEXT*            parseFP_TEXT();
+    FP_SHAPE*           parseFP_SHAPE();
+    PAD*                parsePAD( FOOTPRINT* aParent = NULL );
 
     // Parse only the (option ...) inside a pad description
-    bool            parsePAD_option( PAD* aPad );
+    bool                parsePAD_option( PAD* aPad );
 
-    ARC*            parseARC();
-    TRACK*          parseTRACK();
-    VIA*            parseVIA();
-    ZONE*           parseZONE( BOARD_ITEM_CONTAINER* aParent );
-    PCB_TARGET*     parsePCB_TARGET();
-    BOARD*          parseBOARD();
-    void            parseGROUP( BOARD_ITEM* aParent );
+    ARC*                parseARC();
+    TRACK*              parseTRACK();
+    VIA*                parseVIA();
+    ZONE*               parseZONE( BOARD_ITEM_CONTAINER* aParent );
+    PCB_TARGET*         parsePCB_TARGET();
+    BOARD*              parseBOARD();
+    void                parseGROUP( BOARD_ITEM* aParent );
 
     // Parse a board, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
-    BOARD*          parseBOARD_unchecked();
+    BOARD*              parseBOARD_unchecked();
 
     /**
      * Parse the current token for the layer definition of a #BOARD_ITEM object.

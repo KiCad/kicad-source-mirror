@@ -110,7 +110,7 @@ void BOARD_ADAPTER::addShapeWithClearance( const PCB_TEXT* aText, CONTAINER_2D_B
 }
 
 
-void BOARD_ADAPTER::addShapeWithClearance( const DIMENSION_BASE* aDimension,
+void BOARD_ADAPTER::addShapeWithClearance( const PCB_DIMENSION_BASE* aDimension,
                                            CONTAINER_2D_BASE* aDstContainer,
                                            PCB_LAYER_ID aLayerId, int aClearanceValue )
 {

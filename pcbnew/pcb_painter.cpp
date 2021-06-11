@@ -34,7 +34,7 @@
 #include <zone.h>
 #include <pcb_text.h>
 #include <pcb_marker.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <pcb_target.h>
 #include <advanced_config.h>
 #include <core/arraydim.h>
@@ -522,7 +522,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     case PCB_DIM_CENTER_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-        draw( static_cast<const DIMENSION_BASE*>( item ), aLayer );
+        draw( static_cast<const PCB_DIMENSION_BASE*>( item ), aLayer );
         break;
 
     case PCB_TARGET_T:
@@ -1686,7 +1686,7 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const DIMENSION_BASE* aDimension, int aLayer )
+void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
 {
     const COLOR4D& strokeColor = m_pcbSettings.GetColor( aDimension, aLayer );
 

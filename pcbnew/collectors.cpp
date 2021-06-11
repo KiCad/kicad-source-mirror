@@ -30,7 +30,7 @@
 #include <pad.h>
 #include <track.h>
 #include <pcb_marker.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <zone.h>
 #include <pcb_shape.h>
 #include <pcb_group.h>
@@ -156,16 +156,16 @@ const KICAD_T GENERAL_COLLECTOR::DraggableItems[] = {
 
 SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
-    BOARD_ITEM*     item        = (BOARD_ITEM*) testItem;
-    FOOTPRINT*      footprint   = nullptr;
-    PCB_GROUP*      group       = nullptr;
-    PAD*            pad         = nullptr;
-    bool            pad_through = false;
-    VIA*            via         = nullptr;
-    PCB_MARKER*     marker      = nullptr;
-    ZONE*           zone        = nullptr;
-    PCB_SHAPE*      shape       = nullptr;
-    DIMENSION_BASE* dimension   = nullptr;
+    BOARD_ITEM*         item        = (BOARD_ITEM*) testItem;
+    FOOTPRINT*          footprint   = nullptr;
+    PCB_GROUP*          group       = nullptr;
+    PAD*                pad         = nullptr;
+    bool                pad_through = false;
+    VIA*                via         = nullptr;
+    PCB_MARKER*         marker      = nullptr;
+    ZONE*               zone        = nullptr;
+    PCB_SHAPE*          shape       = nullptr;
+    PCB_DIMENSION_BASE* dimension   = nullptr;
 
 #if 0   // debugging
     static int  breakhere = 0;
@@ -288,7 +288,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_DIM_CENTER_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-        dimension = static_cast<DIMENSION_BASE*>( item );
+        dimension = static_cast<PCB_DIMENSION_BASE*>( item );
         break;
 
     case PCB_TARGET_T:

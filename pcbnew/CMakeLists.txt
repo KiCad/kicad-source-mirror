@@ -452,10 +452,10 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
     DEPENDS python/swig/board_item.i
     DEPENDS python/swig/board_item_container.i
     DEPENDS python/swig/connectivity.i
-    DEPENDS python/swig/dimension.i
+    DEPENDS python/swig/pcb_dimension.i
     DEPENDS python/swig/pcb_shape.i
     DEPENDS python/swig/fp_shape.i
-    DEPENDS python/swig/marker_pcb.i
+    DEPENDS python/swig/pcb_marker.i
     DEPENDS python/swig/pcb_target.i
     DEPENDS python/swig/pcb_plot_params.i
     DEPENDS python/swig/footprint.i

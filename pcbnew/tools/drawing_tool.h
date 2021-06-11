@@ -259,7 +259,7 @@ private:
      *
      * @param aDimension is the dimension element currently being drawn.
      */
-    void constrainDimension( DIMENSION_BASE* aDim );
+    void constrainDimension( PCB_DIMENSION_BASE* aDim );
 
     ///< Return the appropriate width for a segment depending on the settings.
     int getSegmentWidth( PCB_LAYER_ID aLayer ) const;

@@ -29,7 +29,7 @@
 #include <board_stackup_manager/stackup_predefined_prms.h> // KEY_COPPER, KEY_CORE, KEY_PREPREG
 #include <board.h>
 #include <board_design_settings.h>
-#include <dimension.h>
+#include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <footprint.h>
@@ -1311,21 +1311,21 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
                             csDim.ID ) );
                 }
 
-                ALIGNED_DIMENSION* dimension = nullptr;
+                PCB_DIM_ALIGNED* dimension = nullptr;
 
                 if( csDim.Subtype == DIMENSION::SUBTYPE::ORTHOGONAL )
                 {
-                    dimension = new ORTHOGONAL_DIMENSION( m_board );
-                    ORTHOGONAL_DIMENSION* orDim = static_cast<ORTHOGONAL_DIMENSION*>( dimension );
+                    dimension = new PCB_DIM_ORTHOGONAL( m_board );
+                    PCB_DIM_ORTHOGONAL* orDim = static_cast<PCB_DIM_ORTHOGONAL*>( dimension );
 
                     if( csDim.ExtensionLineParams.Start.x == csDim.Line.Start.x )
-                        orDim->SetOrientation( ORTHOGONAL_DIMENSION::DIR::HORIZONTAL );
+                        orDim->SetOrientation( PCB_DIM_ORTHOGONAL::DIR::HORIZONTAL );
                     else
-                        orDim->SetOrientation( ORTHOGONAL_DIMENSION::DIR::VERTICAL );
+                        orDim->SetOrientation( PCB_DIM_ORTHOGONAL::DIR::VERTICAL );
                 }
                 else
                 {
-                    dimension = new ALIGNED_DIMENSION( m_board );
+                    dimension = new PCB_DIM_ALIGNED( m_board );
                 }
 
                 m_board->Add( dimension, ADD_MODE::APPEND );
@@ -1374,7 +1374,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
             if( csDim.Line.Style == DIMENSION::LINE::STYLE::INTERNAL )
             {
                 // "internal" is a simple double sided arrow from start to end (no extension lines)
-                ALIGNED_DIMENSION* dimension = new ALIGNED_DIMENSION( m_board );
+                PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board );
                 m_board->Add( dimension, ADD_MODE::APPEND );
                 applyDimensionSettings( csDim, dimension );
 
@@ -1390,7 +1390,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
             else
             {
                 // "external" is a "leader" style dimension
-                LEADER* leaderDim = new LEADER( m_board );
+                PCB_DIM_LEADER* leaderDim = new PCB_DIM_LEADER( m_board );
                 m_board->Add( leaderDim, ADD_MODE::APPEND );
 
                 applyDimensionSettings( csDim, leaderDim );
@@ -3475,7 +3475,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::checkAndLogHatchCode( const HATCHCODE_ID& aCads
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCadstarDim,
-                                                         DIMENSION_BASE* aKiCadDim )
+                                                         PCB_DIMENSION_BASE* aKiCadDim )
 {
     UNITS dimensionUnits = aCadstarDim.LinearUnits;
     TEXTCODE txtCode = getTextCode( aCadstarDim.Text.TextCodeID );

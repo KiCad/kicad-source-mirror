@@ -35,7 +35,7 @@ class FP_CACHE;
 class PCB_PARSER;
 class NETINFO_MAPPING;
 class BOARD_DESIGN_SETTINGS;
-class DIMENSION_BASE;
+class PCB_DIMENSION_BASE;
 class FP_SHAPE;
 class PCB_SHAPE;
 class PCB_TARGET;
@@ -242,7 +242,7 @@ protected:
 private:
     void format( const BOARD* aBoard, int aNestLevel = 0 ) const;
 
-    void format( const DIMENSION_BASE* aDimension, int aNestLevel = 0 ) const;
+    void format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel = 0 ) const;
 
     void format( const FP_SHAPE* aFPShape, int aNestLevel = 0 ) const;
 

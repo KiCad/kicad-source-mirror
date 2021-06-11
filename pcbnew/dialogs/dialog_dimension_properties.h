@@ -28,7 +28,7 @@
 
 
 class BOARD_ITEM;
-class DIMENSION_BASE;
+class PCB_DIMENSION_BASE;
 class PCB_BASE_EDIT_FRAME;
 
 
@@ -48,8 +48,8 @@ private:
 
     PCB_BASE_EDIT_FRAME*    m_frame;
 
-    DIMENSION_BASE*         m_dimension;
-    DIMENSION_BASE*         m_previewDimension;
+    PCB_DIMENSION_BASE*     m_dimension;
+    PCB_DIMENSION_BASE*     m_previewDimension;
 
     PCB_LAYER_BOX_SELECTOR* m_cbLayerActual;       // The active layer box control
     wxTextCtrl*             m_txtValueActual;      // The active value control
@@ -67,7 +67,7 @@ private:
     UNIT_BINDER m_arrowLength;
     UNIT_BINDER m_extensionOffset;
 
-    void updateDimensionFromDialog( DIMENSION_BASE* aTarget );
+    void updateDimensionFromDialog( PCB_DIMENSION_BASE* aTarget );
 
     void updatePreviewText();
 };
