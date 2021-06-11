@@ -39,6 +39,11 @@
 
 
 /**
+ * Convert the old `~...~` overbar notation to the new `~{...}` one.
+ */
+wxString ConvertToNewOverbarNotation( const wxString& aOldStr );
+
+/**
  * Convert curly quotes and em/en dashes to straight quotes and dashes.
  *
  * @return true if any characters required conversion.

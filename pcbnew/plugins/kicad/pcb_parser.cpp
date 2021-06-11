@@ -56,6 +56,7 @@
 #include <convert_basic_shapes_to_polygon.h>    // for RECT_CHAMFER_POSITIONS definition
 #include <template_fieldnames.h>
 #include <math/util.h>                           // KiROUND, Clamp
+#include <kicad_string.h>
 #include <wx/log.h>
 
 using namespace PCB_KEYS_T;
@@ -293,6 +294,11 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 {
     wxCHECK_RET( CurTok() == T_effects,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as EDA_TEXT." ) );
+
+    // In version 20210606 the notation for overbars was changed from `~...~` to `~{...}`. We need to convert
+    // the old syntax to the new one.
+    if( m_requiredVersion < 20210606 )
+        aText->SetText( ConvertToNewOverbarNotation( aText->GetText() ) );
 
     T token;
 

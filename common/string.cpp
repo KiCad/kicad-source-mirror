@@ -41,6 +41,59 @@
 static const char illegalFileNameChars[] = "\\/:\"<>|";
 
 
+wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
+{
+    wxString newStr;
+    bool inOverbar = false;
+
+    for( wxString::const_iterator chIt = aOldStr.begin(); chIt != aOldStr.end(); ++chIt )
+    {
+        if( *chIt == '~' )
+        {
+            wxString::const_iterator lookahead = chIt;
+
+            if( ++lookahead != aOldStr.end() && *lookahead == '~' )
+            {
+                if( ++lookahead != aOldStr.end() && *lookahead == '{' )
+                {
+                    // This way the subseqent opening curly brace will not start an
+                    // overbar.
+                    newStr << "~~{}";
+                    continue;
+                }
+
+                // Two subsequent tildes mean a tilde.
+                newStr << "~";
+                continue;
+            }
+            else
+            {
+                if( inOverbar )
+                {
+                    newStr << "}";
+                    inOverbar = false;
+                }
+                else
+                {
+                    newStr << "~{";
+                    inOverbar = true;
+                }
+
+                continue;
+            }
+        }
+
+        newStr << *chIt;
+    }
+
+    // Explicitly end the overbar even if there was no terminating '~' in the aOldStr.
+    if( inOverbar )
+        newStr << "}";
+
+    return newStr;
+}
+
+
 bool ConvertSmartQuotesAndDashes( wxString* aString )
 {
     bool retVal = false;

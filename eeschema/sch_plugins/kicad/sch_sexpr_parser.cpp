@@ -41,6 +41,7 @@
 #include <lib_rectangle.h>
 #include <lib_text.h>
 #include <math/util.h>                           // KiROUND, Clamp
+#include <kicad_string.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>
@@ -600,6 +601,11 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 {
     wxCHECK_RET( aText && CurTok() == T_effects,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as EDA_TEXT." ) );
+
+    // In version 20210606 the notation for overbars was changed from `~...~` to `~{...}`. We need to convert
+    // the old syntax to the new one.
+    if( m_requiredVersion < 20210606 )
+        aText->SetText( ConvertToNewOverbarNotation( aText->GetText() ) );
 
     T token;
 

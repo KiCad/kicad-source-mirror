@@ -60,4 +60,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20210123  // Rename "unconnected" pintype to "no_connect".
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20210125  // R/W uuids for pins, labels, wires, etc.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20210126  // Fix bug with writing pin uuids.
-#define SEXPR_SCHEMATIC_FILE_VERSION 20210406    // Add schematic level uuids.
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20210406  // Add schematic level uuids.
+#define SEXPR_SCHEMATIC_FILE_VERSION 20210606  // Change overbar syntax from `~...~` to `~{...}`.
