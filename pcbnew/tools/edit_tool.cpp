@@ -439,10 +439,12 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     tanIntersect = tanStart.IntersectLines( tanEnd ).get();
 
     auto isTrackStartClosestToArcStart =
-        [&]( PCB_TRACK* aPointA ) -> bool
+        [&]( PCB_TRACK* aTrack ) -> bool
         {
-            return GetLineLength( aPointA->GetStart(), theArc->GetStart() )
-                   < GetLineLength( aPointA->GetEnd(), theArc->GetStart() );
+            double trackStartToArcStart = GetLineLength( aTrack->GetStart(), theArc->GetStart() );
+            double trackEndToArcStart = GetLineLength( aTrack->GetEnd(), theArc->GetStart() );
+
+            return trackStartToArcStart < trackEndToArcStart;
         };
 
     bool isStartTrackOnStartPt = isTrackStartClosestToArcStart( trackOnStart );
@@ -476,21 +478,20 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     //
 
     auto getFurthestPointToTanInterstect =
-        [&]( VECTOR2I& aPointA, VECTOR2I& aPointB ) -> VECTOR2I
-        {
-            if( ( aPointA - tanIntersect ).EuclideanNorm()
-                > ( aPointB - tanIntersect ).EuclideanNorm() )
+            [&]( VECTOR2I& aPointA, VECTOR2I& aPointB ) -> VECTOR2I
             {
-                return aPointA;
-            }
-            else
-            {
-                return aPointB;
-            }
-        };
+                if( ( aPointA - tanIntersect ).EuclideanNorm()
+                    > ( aPointB - tanIntersect ).EuclideanNorm() )
+                {
+                    return aPointA;
+                }
+                else
+                {
+                    return aPointB;
+                }
+            };
 
     CIRCLE   maxTanCircle;
-
     VECTOR2I tanStartPoint = getFurthestPointToTanInterstect( tanStart.A, tanStart.B );
     VECTOR2I tanEndPoint = getFurthestPointToTanInterstect( tanEnd.A, tanEnd.B );
     VECTOR2I tempTangentPoint = tanEndPoint;
@@ -530,8 +531,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
 
             for( VECTOR2I candidate : possiblePoints )
             {
-                if( ( candidate - m_cursor ).EuclideanNorm()
-                    < ( closest - m_cursor ).EuclideanNorm() )
+                if( ( candidate - m_cursor ).SquaredEuclideanNorm()
+                    < ( closest - m_cursor ).SquaredEuclideanNorm() )
                 {
                     closest = candidate;
                 }
