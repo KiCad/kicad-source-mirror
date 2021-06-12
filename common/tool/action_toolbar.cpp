@@ -458,6 +458,7 @@ void ACTION_TOOLBAR::onToolEvent( wxAuiToolBarEvent& aEvent )
             evt = actionIt->second->MakeEvent();
             evt->SetHasPosition( false );
             m_toolManager->ProcessEvent( *evt );
+            m_toolManager->GetToolHolder()->RefreshCanvas();
             handled = true;
         }
     }
@@ -596,6 +597,7 @@ void ACTION_TOOLBAR::onPaletteEvent( wxCommandEvent& aEvent )
         evt = action->MakeEvent();
         evt->SetHasPosition( false );
         m_toolManager->ProcessEvent( *evt );
+        m_toolManager->GetToolHolder()->RefreshCanvas();
 
         // Update the main toolbar item with the selected action
         doSelectAction( group, *action );
