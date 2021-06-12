@@ -1246,17 +1246,14 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     if( IsTextMirrored() || aText.Contains( wxT( "^{" ) ) || aText.Contains( wxT( "_{" ) ) )
         return GAL::BitmapText( aText, aPosition, aRotationAngle );
 
-    const UTF8 text( aText );
-    // Compute text size, so it can be properly justified
-    VECTOR2D textSize;
-    float    commonOffset;
+    const UTF8   text( aText );
+    VECTOR2D     textSize;
+    float        commonOffset;
     std::tie( textSize, commonOffset ) = computeBitmapTextSize( text );
 
     const double SCALE = 1.4 * GetGlyphSize().y / textSize.y;
-    bool         overbar = false;
-
-    int    overbarLength = 0;
-    double overbarHeight = textSize.y;
+    int          overbarLength = 0;
+    double       overbarHeight = textSize.y;
 
     Save();
 
@@ -1347,7 +1344,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
             overbarLength = 0;
         }
 
-        if( overbar )
+        if( overbarDepth >= 0 )
             overbarLength += drawBitmapChar( *chIt );
         else
             drawBitmapChar( *chIt );
@@ -1356,7 +1353,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     // Handle the case when overbar is active till the end of the drawn text
     m_currentManager->Translate( 0, commonOffset, 0 );
 
-    if( overbar && overbarLength > 0 )
+    if( overbarDepth >= 0 && overbarLength > 0 )
         drawBitmapOverbar( overbarLength, overbarHeight );
 
     Restore();
