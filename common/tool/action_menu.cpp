@@ -221,7 +221,7 @@ void ACTION_MENU::AddQuitOrClose( KIFACE_I* aKiface, wxString aAppname )
     {
         // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via
         // wxID_EXIT
-        Add( _( "Quit" ),
+        Add( _( "Quit" ) + "\tCtrl+Q",
              wxString::Format( _( "Quit %s" ), aAppname ),
              wxID_EXIT,
              BITMAPS::exit );
