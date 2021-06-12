@@ -27,9 +27,12 @@ import sys
 # A helper function to convert a UTF8/Unicode/locale string read in netlist
 # for python2 or python3 (Windows/unix)
 def fromNetlistText( aText ):
-    if sys.platform.startswith('win32'):
+    currpage = sys.stdout.encoding      #the current code page. can be none
+    if currpage is None:
+        return aText
+    if currpage != 'utf-8':
         try:
-            return aText.encode('utf-8').decode('cp1252')
+            return aText.encode('utf-8').decode(currpage)
         except UnicodeDecodeError:
             return aText
     else:

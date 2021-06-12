@@ -93,6 +93,17 @@ private:
                              const wxPoint& aOffset = { 0, 0 } );
 
     /**
+     * Write a filled circle to the board file (with line thickness = 0).
+     *
+     * @param aCenterPosition is the actual position of the filled circle,
+     *  given by <round_flashed_shape>->GetABPosition()
+     * @param aRadius is the circle radius.
+     * @param aLayer is the layer to use.
+     */
+    void    writePcbFilledCircle( const VECTOR2I& aCenterPosition, int aRadius,
+                                  LAYER_NUM aLayer );
+
+    /**
      * Write a zone item to the board file.
      *
      * @warning This is experimental for tests only.

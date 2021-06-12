@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,6 +159,13 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
         break;
 
     case GBR_SPOT_CIRCLE:
+        {
+        VECTOR2I center = aGbrItem->GetABPosition( seg_start );
+        int radius = d_codeDescr->m_Size.x / 2;
+        writePcbFilledCircle( center, radius, aLayer );
+        }
+        break;
+
     case GBR_SPOT_RECT:
     case GBR_SPOT_OVAL:
     case GBR_SPOT_POLY:
@@ -428,10 +435,34 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aG
         }
     }
 
-    d_codeDescr->ConvertShapeToPolygon();
     wxPoint offset = aGbrItem->GetABPosition( aGbrItem->m_Start );
 
+    if( aGbrItem->m_Shape == GBR_SPOT_CIRCLE ) // export it as filled circle
+    {
+        VECTOR2I center = offset;
+        int radius = d_codeDescr->m_Size.x / 2;
+        writePcbFilledCircle( center, radius, aLayer );
+        return;
+    }
+
+    d_codeDescr->ConvertShapeToPolygon();
     writePcbPolygon( d_codeDescr->m_Polygon, aLayer, offset );
+}
+
+
+void GBR_TO_PCB_EXPORTER::writePcbFilledCircle( const VECTOR2I& aCenterPosition, int aRadius,
+                                                LAYER_NUM aLayer )
+{
+
+    fprintf( m_fp, "(gr_circle (center %s %s) (end %s %s)",
+             Double2Str( MapToPcbUnits( aCenterPosition.x ) ).c_str(),
+             Double2Str( MapToPcbUnits( aCenterPosition.y ) ).c_str(),
+             Double2Str( MapToPcbUnits( aCenterPosition.x + aRadius ) ).c_str(),
+             Double2Str( MapToPcbUnits( aCenterPosition.y ) ).c_str() );
+
+
+    fprintf( m_fp, "(layer %s) (width 0) (fill solid) )\n",
+             TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
 }
 
 
