@@ -46,6 +46,10 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
     wxString newStr;
     bool inOverbar = false;
 
+    // Don't get tripped up by the legacy empty-string token.
+    if( aOldStr == "~" )
+        return aOldStr;
+
     for( wxString::const_iterator chIt = aOldStr.begin(); chIt != aOldStr.end(); ++chIt )
     {
         if( *chIt == '~' )
