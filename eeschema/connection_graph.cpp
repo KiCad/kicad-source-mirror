@@ -945,7 +945,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         if( connection->SubgraphCode() > 0 )
             continue;
 
-        connection->SetName( pin->GetName() );
+        connection->SetName( pin->GetShownName() );
 
         int code = assignNewNetCode( *connection );
 
@@ -1241,7 +1241,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         {
                             auto pin = static_cast<SCH_PIN*>( driver );
 
-                            if( pin->IsPowerConnection() && pin->GetName() == test_name )
+                            if( pin->IsPowerConnection() && pin->GetShownName() == test_name )
                             {
                                 match = true;
                                 break;

@@ -583,8 +583,8 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
                 XNODE*     pin;
 
                 pins->AddChild( pin = node( "pin" ) );
-                pin->AddAttribute( "num", pinList[i]->GetNumber() );
-                pin->AddAttribute( "name", pinList[i]->GetName() );
+                pin->AddAttribute( "num", pinList[i]->GetShownNumber() );
+                pin->AddAttribute( "name", pinList[i]->GetShownName() );
                 pin->AddAttribute( "type", pinList[i]->GetCanonicalElectricalTypeName() );
 
                 // caution: construction work site here, drive slowly
@@ -738,7 +738,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             xnode->AddAttribute( "ref", refText );
             xnode->AddAttribute( "pin", pinText );
 
-            wxString pinName = netNode.m_Pin->GetName();
+            wxString pinName = netNode.m_Pin->GetShownName();
             wxString pinType = netNode.m_Pin->GetCanonicalElectricalTypeName();
 
             //  ~ is a char used to code empty strings in libs.

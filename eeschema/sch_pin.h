@@ -103,8 +103,11 @@ public:
     bool IsVisible() const { return m_libPin->IsVisible(); }
 
     wxString GetName() const;
+    wxString GetShownName() const;
 
     wxString GetNumber() const { return m_number; }
+    wxString GetShownNumber() const { return m_number; }
+
     void SetNumber( const wxString& aNumber ) { m_number = aNumber; }
 
     ELECTRICAL_PINTYPE GetType() const;

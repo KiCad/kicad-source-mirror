@@ -659,7 +659,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                     else if( primitive == "d" )
                         param = wxT( "Id" );
                     else
-                        param = wxString::Format( wxT( "I%s" ), pin->GetName().Lower() );
+                        param = wxString::Format( wxT( "I%s" ), pin->GetShownName().Lower() );
 
                     simFrame->AddCurrentPlot( symbol->GetRef( &m_frame->GetCurrentSheet() ),
                                               param );

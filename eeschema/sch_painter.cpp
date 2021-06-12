@@ -980,12 +980,12 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         size     [INSIDE] = libEntry->ShowPinNames() ? aPin->GetNameTextSize() : 0;
         thickness[INSIDE] = nameLineWidth;
         colour   [INSIDE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows );
-        text     [INSIDE] = aPin->GetName();
+        text     [INSIDE] = aPin->GetShownName();
 
         size     [ABOVE] = libEntry->ShowPinNumbers() ? aPin->GetNumberTextSize() : 0;
         thickness[ABOVE] = numLineWidth;
         colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows );
-        text     [ABOVE] = aPin->GetNumber();
+        text     [ABOVE] = aPin->GetShownNumber();
     }
     // Otherwise pin NAMES go above and pin NUMBERS go below
     else
@@ -993,12 +993,12 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         size     [ABOVE] = libEntry->ShowPinNames() ? aPin->GetNameTextSize() : 0;
         thickness[ABOVE] = nameLineWidth;
         colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows );
-        text     [ABOVE] = aPin->GetName();
+        text     [ABOVE] = aPin->GetShownName();
 
         size     [BELOW] = libEntry->ShowPinNumbers() ? aPin->GetNumberTextSize() : 0;
         thickness[BELOW] = numLineWidth;
         colour   [BELOW] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows );
-        text     [BELOW] = aPin->GetNumber();
+        text     [BELOW] = aPin->GetShownNumber();
     }
 
     if( m_schSettings.m_ShowPinsElectricalType )
@@ -1472,7 +1472,7 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
         tempPin->ClearFlags();
         tempPin->SetFlags( symbolPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
 
-        tempPin->SetName( symbolPin->GetName() );
+        tempPin->SetName( symbolPin->GetShownName() );
         tempPin->SetType( symbolPin->GetType() );
         tempPin->SetShape( symbolPin->GetShape() );
 

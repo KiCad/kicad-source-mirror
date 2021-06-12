@@ -104,6 +104,7 @@ public:
     }
 
     const wxString& GetName() const { return m_name; }
+    wxString GetShownName() const;
     void SetName( const wxString& aName )
     {
         m_name = aName;
@@ -113,6 +114,7 @@ public:
     }
 
     const wxString& GetNumber() const { return m_number; }
+    wxString GetShownNumber() const { return m_number; }
     void SetNumber( const wxString& aNumber )
     {
         m_number = aNumber;
