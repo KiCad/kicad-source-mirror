@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-05-31 11:32+0000\n"
-"Last-Translator: Radek K <radek.kzn@gmail.com>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2021-06-14 18:33+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -538,9 +538,8 @@ msgid "Show copper thickness"
 msgstr "Zobrazit tloušťku mědi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:171
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Zvýrazněné položky"
+msgstr "Zvýraznit položky na převrácení"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:178
 msgid "Other Options"
@@ -1339,9 +1338,8 @@ msgid "Postscript (.ps file)"
 msgstr "PostScript (.ps soubor)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Pracovní list (.kicad_wks soubor)"
+msgstr "List výkresu (soubor .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -1493,9 +1491,8 @@ msgid "Cannot create output directory \"%s\".\n"
 msgstr "Nelze vytvořit výstupní adresář \"%s\".\n"
 
 #: common/common.cpp:615
-#, fuzzy
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr "Windows 7 a starší již není podporována Kicadem a jeho závislostmi."
+msgstr "Tento operační systém není podporován Kicadem a jeho závislostmi."
 
 #: common/common.cpp:617
 msgid "Unsupported Operating System"
@@ -1506,6 +1503,8 @@ msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"Jakékoli problémy s KiCadem v tomto systému nelze hlásit oficiální "
+"bugtracker."
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -2431,9 +2430,9 @@ msgid "Portrait"
 msgstr "Na výšku"
 
 #: common/dialogs/dialog_page_settings.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file \"%s\" not found."
-msgstr "Soubor schématu \"%s\" nenalezen."
+msgstr "Soubor listu kreslení \"%s\" nenalezen."
 
 #: common/dialogs/dialog_page_settings.cpp:537
 msgid "the translation for paper size must preserve original spellings"
@@ -10379,9 +10378,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:303
-#, fuzzy
 msgid "Use Relative Path"
-msgstr "Použít relativní cestu?"
+msgstr "Použít relativní cestu"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:304
 #, fuzzy
@@ -10435,9 +10433,9 @@ msgid "Link '%s' to this file?"
 msgstr "Odkaz \"%s\" na tento soubor?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "Změna %s hodnoty z '%s' na '%s'."
+msgstr "Změna '%s' odkaz z '%s' na '%s'?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:519
 #: eeschema/dialogs/dialog_sheet_properties.cpp:535
@@ -12228,9 +12226,8 @@ msgid "Remove library from table"
 msgstr "Odebrat knihovnu z tabulky"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:135
-#, fuzzy
 msgid "Migrate Libraries"
-msgstr "Migrovat knihovny..."
+msgstr "Migrovat knihovny"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:145
 msgid "Path Substitutions:"
@@ -12539,11 +12536,9 @@ msgstr ""
 "hierarchického listu schématu."
 
 #: eeschema/files-io.cpp:418 eeschema/files-io.cpp:1178
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s'."
-msgstr ""
-"Chyba při načítání schématu.\n"
-"%s"
+msgstr "Chyba při načítání schématu '%s'."
 
 #: eeschema/files-io.cpp:425
 #, c-format
@@ -12551,9 +12546,9 @@ msgid "Memory exhausted loading schematic file \"%s\""
 msgstr "Vyčerpaná paměť při načítání souboru schématu \"%s\""
 
 #: eeschema/files-io.cpp:438 eeschema/files-io.cpp:1181 eeschema/sheet.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load '%s'."
-msgstr "Selhalo načtení \"%s\""
+msgstr "Nepodařilo se načíst '%s'."
 
 #: eeschema/files-io.cpp:451
 msgid ""
@@ -14601,9 +14596,8 @@ msgid "space"
 msgstr "mezera"
 
 #: eeschema/sch_validators.cpp:178
-#, fuzzy
 msgid " or "
-msgstr "%s nebo %s"
+msgstr " nebo "
 
 #: eeschema/sch_validators.cpp:183
 #, fuzzy
@@ -18163,14 +18157,14 @@ msgid "Permission error?"
 msgstr "Chyba oprávnění?"
 
 #: kicad/project_tree_item.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to recycle bin."
-msgstr "Nelze převézt \"%s\" na integer"
+msgstr "Nelze přesunout do Koše '%s'."
 
 #: kicad/project_tree_item.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to trash."
-msgstr "Nelze převézt \"%s\" na integer"
+msgstr "Nelze přesunout do koše '%s'."
 
 #: kicad/project_tree_pane.cpp:256
 msgid "Directory name:"
@@ -18410,12 +18404,8 @@ msgid "Cannot write to folder '%s'."
 msgstr "Nelze zapisovat do složky \"%s\"."
 
 #: kicad/tools/kicad_manager_control.cpp:229
-#, fuzzy
 msgid "Make sure you have write permissions and try again."
-msgstr ""
-"Adresář \"%s\" nelze vytvořit.\n"
-"\n"
-"Ujistěte se, že máte oprávnění k zápisu a zkuste to znovu."
+msgstr "Ujistěte se, že máte oprávnění k zápisu a zkuste to znovu."
 
 #: kicad/tools/kicad_manager_control.cpp:249
 msgid "Overwriting files:"
@@ -18426,9 +18416,8 @@ msgid "Similar files already exist in the destination folder."
 msgstr "Podobné soubory již existují v cílové složce."
 
 #: kicad/tools/kicad_manager_control.cpp:272
-#, fuzzy
 msgid "A problem occurred creating new project from template."
-msgstr "Problém při vytvoření nového projektu ze šablony!"
+msgstr "Problém při vytvoření nového projektu ze šablony."
 
 #: kicad/tools/kicad_manager_control.cpp:295
 msgid "Open Existing Project"
@@ -18763,9 +18752,8 @@ msgid "Drawing Sheet File"
 msgstr "Výkresový list"
 
 #: pagelayout_editor/files.cpp:60 pagelayout_editor/files.cpp:101
-#, fuzzy
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "Aktuální pouzdro bylo upraveno.  Uložit změny?"
+msgstr "Aktuální list výkresu byl upraven. Uložit změny?"
 
 #: pagelayout_editor/files.cpp:73
 #, c-format
@@ -21727,9 +21715,8 @@ msgid "delete tracks having at least one dangling end"
 msgstr "smazat spoje s nejméně jedním volným koncem"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:45
-#, fuzzy
 msgid "Delete tracks fully inside pads"
-msgstr "Smazat segment spoje"
+msgstr "Smazat spoje, které jsou zcela v ploškách"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
 msgid "Delete tracks that have both start and end positions inside of a pad"
