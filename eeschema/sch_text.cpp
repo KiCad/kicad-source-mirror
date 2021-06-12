@@ -618,7 +618,11 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
     bool     processTextVars = false;
     wxString text = EDA_TEXT::GetShownText( &processTextVars );
 
-    if( processTextVars )
+    if( text == "~" )   // Legacy placeholder for empty string
+    {
+        text = "";
+    }
+    else if( processTextVars )
     {
         wxCHECK_MSG( Schematic(), wxEmptyString, "No parent SCHEMATIC set for SCH_TEXT!" );
 
