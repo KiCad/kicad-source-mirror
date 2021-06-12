@@ -184,19 +184,22 @@ TOOL_ACTION EDA_3D_ACTIONS::show1mmGrid( "3DViewer.Control.show1mmGrid",
 TOOL_ACTION EDA_3D_ACTIONS::materialNormal( "3DViewer.Control.materialNormal",
         AS_ACTIVE,
         0, "",
-        _( "Use All Properties" ), _( "Use all material properties from each 3D model file" ),
+        _( "Render Realistic Materials" ),
+        _( "Use all material properties from each 3D model file" ),
         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) MATERIAL_MODE::NORMAL );
 
 TOOL_ACTION EDA_3D_ACTIONS::materialDiffuse( "3DViewer.Control.materialDiffuse",
         AS_ACTIVE,
         0, "",
-        _( "Use Diffuse Only" ), _( "Use only the diffuse color property from model 3D model file" ),
+        _( "Render Solid Colors" ),
+        _( "Use only the diffuse color property from model 3D model file" ),
         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) MATERIAL_MODE::DIFFUSE_ONLY );
 
 TOOL_ACTION EDA_3D_ACTIONS::materialCAD( "3DViewer.Control.materialCAD",
         AS_ACTIVE,
         0, "",
-        _( "CAD Color Style" ),_( "Use a CAD color style based on the diffuse color of the material" ),
+        _( "Render CAD Colors" ),
+        _( "Use a CAD color style based on the diffuse color of the material" ),
         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) MATERIAL_MODE::CAD_MODE );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotate45axisZ( "3DViewer.Control.rotate45axisZ",
@@ -207,7 +210,7 @@ TOOL_ACTION EDA_3D_ACTIONS::rotate45axisZ( "3DViewer.Control.rotate45axisZ",
 TOOL_ACTION EDA_3D_ACTIONS::attributesTHT( "3DViewer.Control.attributesTHT",
         AS_ACTIVE,
         'T', "",
-        _( "Toggle Through Hole 3D models" ),  _( "Toggle 3D models with 'Through hole' attribute" ),
+        _( "Toggle Through Hole 3D models" ), _( "Toggle 3D models with 'Through hole' attribute" ),
         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_FP_ATTRIBUTES_NORMAL );
 
 TOOL_ACTION EDA_3D_ACTIONS::attributesSMD( "3DViewer.Control.attributesSMD",

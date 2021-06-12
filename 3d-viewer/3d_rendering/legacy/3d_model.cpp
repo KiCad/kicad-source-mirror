@@ -431,10 +431,14 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
     glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, (const float*)&param.x );
 
     // BeginDrawMulti();
-    for( auto& mat : m_materials )
+    for( const MODEL_3D::MATERIAL& mat : m_materials )
     {
-        if( ( mat.IsTransparent() != aTransparent ) && ( aOpacity >= 1.0f ) )
+        if( ( mat.IsTransparent() != aTransparent )
+                && ( aOpacity >= 1.0f )
+                && m_materialMode != MATERIAL_MODE::DIFFUSE_ONLY )
+        {
             continue;
+        }
 
         switch( m_materialMode )
         {

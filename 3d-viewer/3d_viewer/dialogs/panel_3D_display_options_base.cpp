@@ -98,7 +98,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	m_materialPropertiesLabel->Wrap( -1 );
 	bSizerMaterials->Add( m_materialPropertiesLabel, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	wxString m_materialPropertiesChoices[] = { _("Use all properties"), _("Diffuse properties only"), _("CAD color style") };
+	wxString m_materialPropertiesChoices[] = { _("Realistic"), _("Solid colors"), _("CAD colors") };
 	int m_materialPropertiesNChoices = sizeof( m_materialPropertiesChoices ) / sizeof( wxString );
 	m_materialProperties = new wxChoice( sbRenderOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_materialPropertiesNChoices, m_materialPropertiesChoices, 0 );
 	m_materialProperties->SetSelection( 0 );
