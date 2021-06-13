@@ -166,11 +166,11 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
             return Cast_to_PAD(self)
         elif ct=="MTEXT":
             return Cast_to_FP_TEXT(self)
-        elif ct=="VIA":
+        elif ct=="PCB_VIA":
             return Cast_to_PCB_VIA(self)
-        elif ct=="TRACK":
+        elif ct=="PCB_TRACK":
             return Cast_to_PCB_TRACK(self)
-        elif ct=="ARC":
+        elif ct=="PCB_ARC":
             return Cast_to_PCB_ARC(self)
         elif ct=="PCB_TARGET":
             return Cast_to_PCB_TARGET(self)

@@ -31,17 +31,17 @@ class TestBoardClass(unittest.TestCase):
 
         self.assertEqual(pcb.Tracks().size(),0)
 
-        track0 = TRACK(pcb)
+        track0 = PCB_TRACK(pcb)
         pcb.Add(track0)
         self.assertEqual(pcb.Tracks().size(),1)
 
-        track1 = TRACK(pcb)
+        track1 = PCB_TRACK(pcb)
         pcb.Add(track1)
         self.assertEqual(pcb.Tracks().size(),2)
 
     def test_pcb_bounding_box(self):
         pcb = BOARD()
-        track = TRACK(pcb)
+        track = PCB_TRACK(pcb)
         pcb.Add(track)
 
         track.SetStart(wxPointMM(10.0, 10.0))
