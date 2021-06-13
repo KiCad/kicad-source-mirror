@@ -415,6 +415,22 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             chain_commands = true;
             break;
         }
+        else if( evt->IsAction( &EE_ACTIONS::rotateCW )
+                || evt->IsAction( &EE_ACTIONS::rotateCCW )
+                || evt->IsAction( &EE_ACTIONS::mirrorH )
+                || evt->IsAction( &EE_ACTIONS::mirrorV ) )
+        {
+            if( m_isDrag )
+            {
+                // These are just going to make a mess, so eat them without doing anything.
+                wxBell();
+            }
+            else
+            {
+                // Allow operations while moving
+                evt->SetPassEvent();
+            }
+        }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
