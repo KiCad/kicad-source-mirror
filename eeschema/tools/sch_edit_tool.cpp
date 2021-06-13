@@ -584,7 +584,17 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    item->Rotate( rotPoint );
+                    SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+
+                    field->Rotate( rotPoint );
+
+                    if( field->GetTextAngle() == TEXT_ANGLE_HORIZ )
+                        field->SetTextAngle( TEXT_ANGLE_VERT );
+                    else
+                        field->SetTextAngle( TEXT_ANGLE_HORIZ );
+
+                    // Now that we're moving a field, they're no longer autoplaced.
+                    static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();
                 }
             }
             else
