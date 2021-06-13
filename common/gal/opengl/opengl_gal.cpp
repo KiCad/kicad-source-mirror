@@ -1308,8 +1308,6 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
         wxASSERT_MSG( *chIt != '\n' && *chIt != '\r',
                 wxT( "No support for multiline bitmap text yet" ) );
 
-        bool wasOverbar = overbarDepth == -1;
-
         if( *chIt == '~' && overbarDepth == -1 )
         {
             UTF8::uni_iter lookahead = chIt;
@@ -1333,18 +1331,15 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
             if( braceNesting == overbarDepth )
             {
+                drawBitmapOverbar( overbarLength, overbarHeight );
+                overbarLength = 0;
+
                 overbarDepth = -1;
                 continue;
             }
         }
 
-        if( wasOverbar && overbarDepth == -1 )
-        {
-            drawBitmapOverbar( overbarLength, overbarHeight );
-            overbarLength = 0;
-        }
-
-        if( overbarDepth >= 0 )
+        if( overbarDepth != -1 )
             overbarLength += drawBitmapChar( *chIt );
         else
             drawBitmapChar( *chIt );
@@ -1353,7 +1348,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     // Handle the case when overbar is active till the end of the drawn text
     m_currentManager->Translate( 0, commonOffset, 0 );
 
-    if( overbarDepth >= 0 && overbarLength > 0 )
+    if( overbarDepth != -1 && overbarLength > 0 )
         drawBitmapOverbar( overbarLength, overbarHeight );
 
     Restore();

@@ -540,6 +540,7 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
     double   maxX = 0.0, curX = 0.0;
 
     double curScale = 1.0;
+    int overbarDepth = -1;
     int superSubDepth = -1;
     int braceNesting = 0;
 
@@ -565,15 +566,28 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
         }
         else if( (*chIt == '^' || *chIt == '_') && superSubDepth == -1 )
         {
-            auto lookahead = chIt;
+            UTF8::uni_iter lookahead = chIt;
 
             if( ++lookahead != end && *lookahead == '{' )
             {
-                //  process superscript
+                // Process superscript
                 chIt = lookahead;
                 superSubDepth = braceNesting;
+                braceNesting++;
 
                 curScale = 0.8;
+                continue;
+            }
+        }
+        else if( *chIt == '~' && overbarDepth == -1 )
+        {
+            UTF8::uni_iter lookahead = chIt;
+
+            if( ++lookahead != end && *lookahead == '{' )
+            {
+                chIt = lookahead;
+                overbarDepth = braceNesting;
+                braceNesting++;
                 continue;
             }
         }
@@ -585,6 +599,12 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
         {
             if( braceNesting > 0 )
                 braceNesting--;
+
+            if( braceNesting == overbarDepth )
+            {
+                overbarDepth = -1;
+                continue;
+            }
 
             if( braceNesting == superSubDepth )
             {
