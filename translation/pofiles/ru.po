@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-05-23 18:32+0000\n"
+"PO-Revision-Date: 2021-06-14 18:33+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1355,7 +1355,6 @@ msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps файл)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Форматная рамка (.kicad_wks файл)"
 
@@ -1510,11 +1509,8 @@ msgid "Cannot create output directory \"%s\".\n"
 msgstr "Не удалось создать выходной каталог \"%s\".\n"
 
 #: common/common.cpp:615
-#, fuzzy
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr ""
-"Windows 7 и более ранние версии больше не поддерживаются KiCad и его "
-"зависимостями."
+msgstr "Эта операционная система не поддерживается KiCad и его зависимостями."
 
 #: common/common.cpp:617
 msgid "Unsupported Operating System"
@@ -1525,6 +1521,7 @@ msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"Нет возможности сообщить о проблеме с KiCad в официальный реестр ошибок."
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -2451,9 +2448,9 @@ msgid "Portrait"
 msgstr "Вертикально"
 
 #: common/dialogs/dialog_page_settings.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file \"%s\" not found."
-msgstr "Файл схемы \"%s\" не найден."
+msgstr "Файл форматной рамки \"%s\" не найден."
 
 #: common/dialogs/dialog_page_settings.cpp:537
 msgid "the translation for paper size must preserve original spellings"
@@ -2467,12 +2464,11 @@ msgid "Landscape"
 msgstr "Горизонтально"
 
 #: common/dialogs/dialog_page_settings.cpp:781
-#, fuzzy
 msgid "Select Drawing Sheet File"
-msgstr "Форматная рамка"
+msgstr "Выбор файла форматной рамки"
 
 #: common/dialogs/dialog_page_settings.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The drawing sheet file name has changed.\n"
 "Do you want to use the relative path:\n"
@@ -2700,9 +2696,8 @@ msgid "Comment9:"
 msgstr "Комментарий 9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
-#, fuzzy
 msgid "Drawing sheet file"
-msgstr "Форматная рамка"
+msgstr "Файл форматной рамки"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Browse..."
@@ -3832,9 +3827,8 @@ msgstr "Изображениe"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:91
 #: common/drawing_sheet/ds_data_model_io.cpp:120
-#, fuzzy
 msgid "Error writing drawing sheet file"
-msgstr "Ошибка загрузки форматной рамки"
+msgstr "Ошибка записи файла форматной рамки"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
@@ -4208,12 +4202,11 @@ msgstr "Иерархическая метка"
 
 #: common/eda_item.cpp:282
 msgid "Schematic Field"
-msgstr "Поле схемы"
+msgstr "Поле"
 
 #: common/eda_item.cpp:283
-#, fuzzy
 msgid "Schematic Symbol"
-msgstr "Редактировать символы"
+msgstr "Символ"
 
 #: common/eda_item.cpp:284
 msgid "Sheet Pin"
@@ -5403,12 +5396,12 @@ msgstr "Отсутствуют ед.изм. для '%s'| (%s)"
 #: common/libeval_compiler/libeval_compiler.cpp:1120
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "Несоответствие типов между '%s' и %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "Несоответствие типов между %lf и '%s'"
 
 #: common/pgm_base.cpp:170
 msgid "No default editor found, you must choose it"
@@ -6663,9 +6656,8 @@ msgid "Geda PCB footprint library files"
 msgstr "Файл библиотеки посад.мест Geda PCB"
 
 #: common/wildcards_and_files_ext.cpp:358
-#, fuzzy
 msgid "Drawing sheet files"
-msgstr "Форматная рамка"
+msgstr "Файлы форматной рамки"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad symbol footprint link files"
@@ -10426,14 +10418,12 @@ msgid "Sheet file must have a '.kicad_sch' extension."
 msgstr "Файл листа должен оканчиваться расширением '.kicad_sch'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:295
-#, fuzzy
 msgid "Use relative path for sheet file?"
-msgstr "Использовать относительный путь?"
+msgstr "Использовать относительный путь к файлу листа?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:296
-#, fuzzy
 msgid "Sheet File Path"
-msgstr "Файл листа"
+msgstr "Путь к файлу листа"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:299
 msgid ""
@@ -10441,16 +10431,17 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
+"Использование относительных путей к файлам иерархических листов повышает "
+"портативность проекта. Использование абсолютных путей может вызвать проблемы "
+"при переносе проекта на другую систему."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:303
-#, fuzzy
 msgid "Use Relative Path"
-msgstr "Использовать относительный путь?"
+msgstr "Использовать относительный путь"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:304
-#, fuzzy
 msgid "Use Absolute Path"
-msgstr "Абсолютные"
+msgstr "Использовать абсолютный путь"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:335
 msgid "Untitled Sheet"
@@ -10470,9 +10461,9 @@ msgstr ""
 "в меню Настройки > Eeschema > Цвета."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
-msgstr "Похоже файл \"%s\" не является файлом схемы."
+msgstr "Файл '%s' не похож на корректный файл схемы."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:411
 msgid "Invalid Schematic File"
@@ -10486,21 +10477,25 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
+"Не удаётся составить путь к новому файлу схемы:\n"
+"'%s'\n"
+"относительно родительского файла схемы:\n"
+"'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists."
-msgstr "\"%s\" уже существует."
+msgstr "'%s' уже существует."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Link '%s' to this file?"
-msgstr "Привязать \"%s\" к этому файлу?"
+msgstr "Привязать '%s' к этому файлу?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "Значение %s изменено с '%s' на '%s'."
+msgstr "Изменить связь '%s' с '%s' на '%s'?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:519
 #: eeschema/dialogs/dialog_sheet_properties.cpp:535
@@ -10508,19 +10503,19 @@ msgid "This action cannot be undone."
 msgstr "Это действие нельзя отменить."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr "Создать новый файл \"%s\" с содержимым \"%s\"?"
+msgstr "Создать новый файл '%s' с содержимым '%s'?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:565
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving schematic file '%s'."
-msgstr "При сохранении файла схемы \"%s\" возникла ошибка."
+msgstr "При сохранении файла схемы '%s' возникла ошибка."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:569
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save schematic '%s'"
-msgstr "Не удалось сохранить схему \"%s\""
+msgstr "Не удалось сохранить схему '%s'"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:651
 msgid "A sheet must have a name."
@@ -10926,11 +10921,13 @@ msgstr "Для JFET порядок выводов: С, З, И"
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
 msgstr ""
+"Нужно указать как минимум первые %d параметров источника переходного процесса"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:809
 msgid ""
 "You cannot leave interleaved empty fields when defining a transient source"
 msgstr ""
+"Нельзя оставлять пустые поля при определении источника переходного процесса"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1021
 msgid "Select library"
@@ -11296,7 +11293,6 @@ msgid "Alternate Assignment"
 msgstr "Альтернативная функция"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:335
-#, fuzzy
 msgid "Alternate pin assignments are not available for DeMorgan symbols."
 msgstr ""
 "Выводам компонентов с дополнительным начертанием по де Моргану нельзя задать "
@@ -12167,24 +12163,24 @@ msgid "Add Anyway"
 msgstr "Добавить в любом случае"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:723
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
 msgstr ""
-"Выберите одну или несколько строк с устаревшими библиотеками, чтобы "
+"Выберите одну или несколько строк с устаревшими библиотеками (*.lib), чтобы "
 "сохранить их в текущем формате (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:731
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"Сохранить '%s' в текущем формате (*.kicad_sym) и заменить запись в таблице?"
+"Сохранить '%s' в текущем формате (*.kicad_sym) и заменить устаревшую запись "
+"в таблице?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:737
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
@@ -12290,9 +12286,8 @@ msgid "Remove library from table"
 msgstr "Удалить библиотеку из таблицы"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:135
-#, fuzzy
 msgid "Migrate Libraries"
-msgstr "Конвертировать библиотеки..."
+msgstr "Конверт. библиотеки"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:145
 msgid "Path Substitutions:"
@@ -12602,11 +12597,9 @@ msgstr ""
 "схемы с иерархическими листами."
 
 #: eeschema/files-io.cpp:418 eeschema/files-io.cpp:1178
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s'."
-msgstr ""
-"Ошибка загрузки схемы.\n"
-"%s"
+msgstr "Ошибка загрузки схемы '%s'."
 
 #: eeschema/files-io.cpp:425
 #, c-format
@@ -12614,9 +12607,9 @@ msgid "Memory exhausted loading schematic file \"%s\""
 msgstr "Закончилась память при загрузке файла схемы \"%s\""
 
 #: eeschema/files-io.cpp:438 eeschema/files-io.cpp:1181 eeschema/sheet.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load '%s'."
-msgstr "Не удалось загрузить \"%s\""
+msgstr "Не удалось загрузить '%s'."
 
 #: eeschema/files-io.cpp:451
 msgid ""
@@ -12688,7 +12681,6 @@ msgstr ""
 "новом формате."
 
 #: eeschema/files-io.cpp:630
-#, fuzzy
 msgid "Schematic is read only."
 msgstr "Файл схемы доступен только для чтения."
 
@@ -12718,15 +12710,15 @@ msgstr "Импорт схемы"
 #: eeschema/files-io.cpp:807 eeschema/files-io.cpp:864
 #: kicad/tools/kicad_manager_control.cpp:118
 #: kicad/tools/kicad_manager_control.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Не удалось создать каталог \"%s\".\n"
+"Не удалось создать каталог '%s'.\n"
 "\n"
-"Пожалуйста убедитесь, что имеете права на запись и попробуйте снова."
+"Убедитесь, что имеете права на запись и попробуйте снова."
 
 #: eeschema/files-io.cpp:924
 msgid "Saving will overwrite existing files."
@@ -12753,9 +12745,9 @@ msgid "Abort Project Save"
 msgstr "Отменить сохранение проекта"
 
 #: eeschema/files-io.cpp:1106
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open."
-msgstr "Файл схемы \"%s\" уже открыт."
+msgstr "Схема '%s' уже открыта."
 
 #: eeschema/files-io.cpp:1204
 msgid "The current schematic has been modified.  Save changes?"
@@ -13032,6 +13024,8 @@ msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 msgstr ""
+"Несколько символов имеют одно и то же обозначение.\n"
+"Нужно исправить обозначения прежде чем начать симуляцию."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:122
 msgid "Run command:"
@@ -13626,7 +13620,7 @@ msgstr ""
 "имеет слишком много выводов. Ожидаемое число выводов: 1; найдено: %d."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
@@ -13635,14 +13629,14 @@ msgstr ""
 "питания. Символ не загружен."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:652
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
 "Символ '%s' масштабирован в исходной схеме CADSTAR, что не поддерживается в "
-"KiCad. Символ загружен в масштабе 1:1 и может потребовать редактирования."
+"KiCad. Символ загружен из библиотеки в масштабе 1:1."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1092
 #, c-format
@@ -14666,14 +14660,12 @@ msgid "space"
 msgstr "пробел"
 
 #: eeschema/sch_validators.cpp:178
-#, fuzzy
 msgid " or "
-msgstr "%s или %s"
+msgstr " или "
 
 #: eeschema/sch_validators.cpp:183
-#, fuzzy
 msgid ", or "
-msgstr "%s или %s"
+msgstr ", или "
 
 #: eeschema/sch_validators.cpp:196
 msgid "The reference designator cannot contain text variable references"
@@ -15680,7 +15672,7 @@ msgid "Change Visibility"
 msgstr "Изменение видимости"
 
 #: eeschema/tools/assign_footprints.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open symbol-footprint link file \"%s\""
 msgstr "Не удалось открыть файл связей компонент-посад.место \"%s\""
 
@@ -17930,9 +17922,8 @@ msgid "Library Path"
 msgstr "Путь библиотеки"
 
 #: include/lib_table_grid.h:187
-#, fuzzy
 msgid "Library Format"
-msgstr "Путь библиотеки"
+msgstr "Формат библиотеки"
 
 #: include/lib_table_grid.h:190
 msgid "Active"
@@ -17968,7 +17959,7 @@ msgstr "Выбор каталога шаблонов"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:29
 msgid "Folder:"
-msgstr ""
+msgstr "Каталог:"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:36
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:216
@@ -18213,14 +18204,14 @@ msgid "Cound't find the meta HTML information file for this template!"
 msgstr "Не удалось открыть файл HTML мета информации для данного шаблона!"
 
 #: kicad/project_template.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create folder '%s'."
-msgstr "Не удалось создать каталог \"%s\"."
+msgstr "Не удалось создать каталог '%s'."
 
 #: kicad/project_template.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy file '%s'."
-msgstr "Не удалось скопировать файл \"%s\"."
+msgstr "Не удалось скопировать файл '%s'."
 
 #: kicad/project_tree_item.cpp:110
 msgid ""
@@ -18243,14 +18234,14 @@ msgid "Permission error?"
 msgstr "Ошибка доступа?"
 
 #: kicad/project_tree_item.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to recycle bin."
-msgstr "Не удаётся преобразовать \"%s\" в целое число."
+msgstr "Не удалось поместить '%s' в корзину."
 
 #: kicad/project_tree_item.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to trash."
-msgstr "Не удаётся преобразовать \"%s\" в целое число."
+msgstr "Не удалось поместить '%s' в корзину."
 
 #: kicad/project_tree_pane.cpp:256
 msgid "Directory name:"
@@ -18341,9 +18332,8 @@ msgid "Delete the files and their contents"
 msgstr "Удалить файлы и их содержимое"
 
 #: kicad/project_tree_pane.cpp:793
-#, fuzzy
 msgid "Move to Trash"
-msgstr "Преобразовать в дорожки"
+msgstr "Поместить в корзину"
 
 #: kicad/project_tree_pane.cpp:807
 msgid "Print the contents of the file"
@@ -18447,7 +18437,6 @@ msgid "Launch preferred text editor"
 msgstr "Запуск редактора текста"
 
 #: kicad/tools/kicad_manager_control.cpp:45
-#, fuzzy
 msgid "Create a new folder for the project"
 msgstr "Создать новый каталог для проекта"
 
@@ -18456,7 +18445,6 @@ msgid "Create New Project"
 msgstr "Создание нового проекта"
 
 #: kicad/tools/kicad_manager_control.cpp:127
-#, fuzzy
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
@@ -18466,7 +18454,7 @@ msgstr ""
 "Выбранный каталог не пуст. Рекомендуется создавать проекты в их собственных "
 "пустых каталогах.\n"
 "\n"
-"Хотите продолжить?"
+"Продолжить?"
 
 #: kicad/tools/kicad_manager_control.cpp:155
 msgid "System Templates"
@@ -18485,17 +18473,13 @@ msgid "New Project Folder"
 msgstr "Создать каталог проекта"
 
 #: kicad/tools/kicad_manager_control.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write to folder '%s'."
-msgstr "Не удалось записать в каталог \"%s\"."
+msgstr "Не удалось записать в каталог '%s'."
 
 #: kicad/tools/kicad_manager_control.cpp:229
-#, fuzzy
 msgid "Make sure you have write permissions and try again."
-msgstr ""
-"Не удалось создать каталог \"%s\".\n"
-"\n"
-"Пожалуйста убедитесь, что имеете права на запись и попробуйте снова."
+msgstr "Убедитесь, что имеете права на запись и попробуйте снова."
 
 #: kicad/tools/kicad_manager_control.cpp:249
 msgid "Overwriting files:"
@@ -18506,9 +18490,8 @@ msgid "Similar files already exist in the destination folder."
 msgstr "Такой файл уже существует в указанном каталоге."
 
 #: kicad/tools/kicad_manager_control.cpp:272
-#, fuzzy
 msgid "A problem occurred creating new project from template."
-msgstr "Произошла проблема при создании нового проекта из шаблона!"
+msgstr "Произошла проблема при создании нового проекта из шаблона."
 
 #: kicad/tools/kicad_manager_control.cpp:295
 msgid "Open Existing Project"
@@ -18660,14 +18643,12 @@ msgid "New Item"
 msgstr "Новый элемент"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:236
-#, fuzzy
 msgid "Print Drawing Sheet"
-msgstr "Форматная рамка"
+msgstr "Печать форматной рамки"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:241
-#, fuzzy
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr "При печати схемы произошла ошибка."
+msgstr "При печати форматной рамки произошла ошибка."
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:242
 msgid "Printing"
@@ -18837,14 +18818,12 @@ msgid "General Options"
 msgstr "Общие настройки"
 
 #: pagelayout_editor/files.cpp:54
-#, fuzzy
 msgid "Drawing Sheet File"
-msgstr "Форматная рамка"
+msgstr "Файл форматной рамки"
 
 #: pagelayout_editor/files.cpp:60 pagelayout_editor/files.cpp:101
-#, fuzzy
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "Текущее посад.место изменено. Сохранить?"
+msgstr "Текущая форматная рамка изменена. Сохранить?"
 
 #: pagelayout_editor/files.cpp:73
 #, c-format
@@ -18923,14 +18902,12 @@ msgid "coord origin: %s"
 msgstr "начало координат: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:893
-#, fuzzy
 msgid "New drawing sheet file is unsaved"
-msgstr "Новый файл схемы не сохранён"
+msgstr "Новый файл форматной рамки не сохранён"
 
 #: pagelayout_editor/pl_editor_frame.cpp:897
-#, fuzzy
 msgid "Drawing sheet changes are unsaved"
-msgstr "Изменения посад.места не сохранены"
+msgstr "Изменения форматной рамки не сохранены"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
 msgid "Page Width"
@@ -19009,7 +18986,6 @@ msgid "Show Design Inspector"
 msgstr "Показать перечень элементов"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
-#, fuzzy
 msgid "Show the list of items in the drawing sheet"
 msgstr "Показать перечень элементов форматной рамки"
 
@@ -22036,6 +22012,8 @@ msgstr "Зазор:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
+"Зазор меди для этой зоны (установите 0 для использования зазора из класса "
+"цепей)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:216
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
@@ -22076,6 +22054,8 @@ msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
 msgstr ""
+"Расстояние, которое будет оставаться пустым между залитой площадью зоны и "
+"конт.пл. соединённой мостиком терморазгрузки."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:257
 msgid "Clearance between pads in the same net and filled areas."
@@ -22736,7 +22716,6 @@ msgid "Done.<br><br>"
 msgstr "Готово.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:450
-#, fuzzy
 msgid "Run clearance resolution tool..."
 msgstr "Проверка зазора..."
 
@@ -23003,17 +22982,18 @@ msgstr "Экспорт IDFv3"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:208
 msgid "Non-unity scaled models:"
-msgstr ""
+msgstr "Разный масштаб моделей:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:210
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
+"Обнаружены масштабированные модели. Экспорт 3D-моделей с масштабированием "
+"может привести к проблемам."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:212
-#, fuzzy
 msgid "Model Scale Warning"
-msgstr "Предупреждение о сохранении"
+msgstr "Предупреждение о масштабировании моделей"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:248
 msgid "STEP export failed!  Please save the PCB and try again"
@@ -23081,11 +23061,11 @@ msgstr "Игнорировать виртуальные компоненты"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:139
 msgid "Substitute similarly named models"
-msgstr ""
+msgstr "Подставить модели с такими же именами"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:140
 msgid "Replace VRML models with STEP models of the same name"
-msgstr ""
+msgstr "Заменить VRML модели STEP моделями с такими же именами"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:144
 msgid "Overwrite old file"
@@ -23675,9 +23655,8 @@ msgstr "Терморазгрузка"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:433
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:334
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:784
-#, fuzzy
 msgid "Clearance Overrides and Settings"
-msgstr "Локальные зазор и установки"
+msgstr "Настройки зазоров"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:455
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:356
@@ -28721,9 +28700,8 @@ msgid "Items not allowed"
 msgstr "Элементы запрещены"
 
 #: pcbnew/drc/drc_item.cpp:61
-#, fuzzy
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr "(на слое Edge.Cuts сегментов не найдено)"
+msgstr "Текст (или размеры) на слое Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Clearance violation"
@@ -28762,9 +28740,8 @@ msgid "Drilled holes too close together"
 msgstr "Сквозные отверстия слишком близко друг к другу"
 
 #: pcbnew/drc/drc_item.cpp:101
-#, fuzzy
 msgid "Drilled holes co-located"
-msgstr "Сквозные отверстия слишком близко друг к другу"
+msgstr "Сквозные отверстия пересекаются"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Track width"
@@ -28896,9 +28873,9 @@ msgid "Missing version number."
 msgstr "Отсутствует номер версии."
 
 #: pcbnew/drc/drc_rule_parser.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr "Неопознанный элемент '%s'.| Ожидался номер версии"
+msgstr "Неопознанный элемент '%s'.| Ожидался номер версии."
 
 #: pcbnew/drc/drc_rule_parser.cpp:144 pcbnew/drc/drc_rule_parser.cpp:223
 #: pcbnew/drc/drc_rule_parser.cpp:365 pcbnew/drc/drc_rule_parser.cpp:386
@@ -29602,29 +29579,24 @@ msgid "Footprint %s"
 msgstr "Посад.место %s"
 
 #: pcbnew/footprint.cpp:2084 pcbnew/pad.cpp:1526 pcbnew/zone.cpp:1426
-#, fuzzy
 msgid "Clearance Override"
-msgstr "Показать контур зазора"
+msgstr "Установка зазора"
 
 #: pcbnew/footprint.cpp:2087 pcbnew/pad.cpp:1503
-#, fuzzy
 msgid "Solderpaste Margin Override"
-msgstr "Локальный зазор паяльной пасты"
+msgstr "Установка отступов паяльной пасты"
 
 #: pcbnew/footprint.cpp:2090 pcbnew/pad.cpp:1506
-#, fuzzy
 msgid "Solderpaste Margin Ratio Override"
-msgstr "Относительный локальный зазор паяльной пасты"
+msgstr "Установка относительных отступов паяльной пасты"
 
 #: pcbnew/footprint.cpp:2092 pcbnew/pad.cpp:1508 pcbnew/zone.cpp:1437
-#, fuzzy
 msgid "Thermal Relief Width"
-msgstr "Мостик терморазгрузки"
+msgstr "Ширина мостика терморазгрузки"
 
 #: pcbnew/footprint.cpp:2095 pcbnew/pad.cpp:1511 pcbnew/zone.cpp:1434
-#, fuzzy
 msgid "Thermal Relief Gap"
-msgstr "Терморазгрузка"
+msgstr "Зазор мостика терморазгрузки"
 
 #: pcbnew/footprint.h:206
 #, c-format
@@ -30394,19 +30366,19 @@ msgid "Cannot add %s (no footprint assigned)."
 msgstr "Не удалось добавить %s (посад.место не назначено)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "Не удалось добавить %s (посад.место \"%s\" не найдено)."
+msgstr "Не удалось добавить %s (посад.место '%s' не найдено)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s (footprint '%s')."
-msgstr "Добавлено %s (посад.место \"%s\")."
+msgstr "Добавлено %s (посад.место '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint '%s')."
-msgstr "Добавлено %s (посад.место \"%s\")."
+msgstr "Добавлено %s (посад.место '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:204
 #, c-format
@@ -30414,9 +30386,9 @@ msgid "Cannot update %s (no footprint assigned)."
 msgstr "Не удалось обновить %s (не назначено посад.место)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "Не удалось обновить %s (посад.место \"%s\" не найдено)."
+msgstr "Не удалось обновить %s (посад.место '%s' не найдено)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:226
 #, c-format
@@ -30599,9 +30571,9 @@ msgid "Processing symbol '%s:%s'."
 msgstr "Обработка компонента '%s:%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for '%s'."
-msgstr "Найдено несколько посад.мест для \"%s\"."
+msgstr "Найдено несколько посад.мест для '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1042
 #, c-format
@@ -30899,9 +30871,8 @@ msgid "Pad To Die Length"
 msgstr "Длина от конт.пл. до чипа"
 
 #: pcbnew/pad.cpp:1500
-#, fuzzy
 msgid "Soldermask Margin Override"
-msgstr "Локальный зазор паяльной маски"
+msgstr "Установка зазора паяльной маски"
 
 #: pcbnew/pad.cpp:1514
 msgid "Fabrication Property"
@@ -30928,14 +30899,14 @@ msgid "New PCB file is unsaved"
 msgstr "Файл печатной платы не сохранён"
 
 #: pcbnew/pcb_edit_frame.cpp:824
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to '%s' before closing?"
-msgstr "Сохранить изменения в \"%s\" перед закрытием?"
+msgstr "Сохранить изменения в '%s' перед закрытием?"
 
 #: pcbnew/pcb_edit_frame.cpp:875
-#, fuzzy, c-format
+#, c-format
 msgid "The auto save file '%s' could not be removed!"
-msgstr "Не удалось удалить файл авто-сохранения \"%s\"!"
+msgstr "Не удалось удалить файл авто-сохранения '%s'!"
 
 #: pcbnew/pcb_edit_frame.cpp:1103
 msgid "Board file is read only."
@@ -30964,9 +30935,9 @@ msgid "Eeschema netlist"
 msgstr "Список цепей Eeschema"
 
 #: pcbnew/pcb_edit_frame.cpp:1446
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' not found."
-msgstr "Файл схемы \"%s\" не найден."
+msgstr "Файл схемы '%s' не найден."
 
 #: pcbnew/pcb_edit_frame.cpp:1477
 msgid "Eeschema failed to load:\n"
@@ -31661,7 +31632,7 @@ msgstr ""
 "наклонены на %.1f° к горизонту."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3534
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimetres were applied instead."
@@ -33332,9 +33303,8 @@ msgid "_copy"
 msgstr "_копия"
 
 #: pcbnew/tools/footprint_editor_control.cpp:586
-#, fuzzy
 msgid "No footprint problems found."
-msgstr "Проблем на плате не обнаружено."
+msgstr "Проблем в посад.месте не обнаружено."
 
 #: pcbnew/tools/group_tool.cpp:43
 msgid "Grouping"
@@ -34237,19 +34207,16 @@ msgid "Clear any existing net highlighting"
 msgstr "Очистить подсветку цепей"
 
 #: pcbnew/tools/pcb_actions.cpp:725
-#, fuzzy
 msgid "Toggle Net Highlight"
-msgstr "Переключить подсветку последней цепи"
+msgstr "Переключить подсветку цепей"
 
 #: pcbnew/tools/pcb_actions.cpp:725
-#, fuzzy
 msgid "Toggle net highlighting"
-msgstr "Очистить подсветку цепей"
+msgstr "Переключить подсветку цепей"
 
 #: pcbnew/tools/pcb_actions.cpp:732
-#, fuzzy
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "Подсветить все элементы меди цепи"
+msgstr "Подсветить все элементы меди выбранных цепей"
 
 #: pcbnew/tools/pcb_actions.cpp:739
 msgid "Hide Net"
@@ -34276,14 +34243,12 @@ msgid "Open schematic in Eeschema"
 msgstr "Открыть схему в Eeschema"
 
 #: pcbnew/tools/pcb_actions.cpp:757
-#, fuzzy
 msgid "Local Ratsnest"
-msgstr "Показать связи"
+msgstr "Локальные связи"
 
 #: pcbnew/tools/pcb_actions.cpp:757
-#, fuzzy
 msgid "Toggle ratsnest display of selected item(s)"
-msgstr "Показать связи выбранных цепей"
+msgstr "Переключить отображение связей выбранных элементов"
 
 #: pcbnew/tools/pcb_actions.cpp:768
 msgid "Show the net inspector"
@@ -34547,9 +34512,8 @@ msgid "Increase Layer Opacity"
 msgstr "Увеличить прозрачность слоя"
 
 #: pcbnew/tools/pcb_actions.cpp:1047
-#, fuzzy
 msgid "Make the current layer less transparent"
-msgstr "Сделать текущий слой более прозрачным"
+msgstr "Сделать текущий слой менее прозрачным"
 
 #: pcbnew/tools/pcb_actions.cpp:1054
 msgid "Decrease Layer Opacity"
@@ -34601,14 +34565,12 @@ msgid "Run various diagnostics and attempt to repair board"
 msgstr "Провести диагностику и применить восстановление платы"
 
 #: pcbnew/tools/pcb_actions.cpp:1093
-#, fuzzy
 msgid "Repair Footprint"
-msgstr "Создать посад.место"
+msgstr "Восстановить посад.место"
 
 #: pcbnew/tools/pcb_actions.cpp:1094
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair footprint"
-msgstr "Провести диагностику и применить восстановление платы"
+msgstr "Провести диагностику и применить восстановление посад.места"
 
 #: pcbnew/tools/pcb_actions.cpp:1102
 msgid "Align to Top"
