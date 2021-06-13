@@ -374,6 +374,8 @@ public:
     virtual double GetDrawRotation() const;
 
 private:
+    void cacheShownText();
+
     /**
      * Print each line of this EDA_TEXT..
      *
