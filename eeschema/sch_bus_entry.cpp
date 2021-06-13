@@ -150,29 +150,35 @@ PLOT_DASH_TYPE SCH_BUS_ENTRY_BASE::GetStrokeStyle() const
 
 int SCH_BUS_WIRE_ENTRY::GetPenWidth() const
 {
+    if( m_stroke.GetWidth() > 0 )
+        return m_stroke.GetWidth();
+
     NETCLASSPTR netclass = NetClass();
 
     if( netclass )
         return netclass->GetWireWidth();
 
-    if( m_stroke.GetWidth() == 0 && Schematic() )
+    if( Schematic() )
         return std::max( Schematic()->Settings().m_DefaultWireThickness, 1 );
 
-    return ( m_stroke.GetWidth() == 0 ) ? 1 : m_stroke.GetWidth();
+    return DEFAULT_WIRE_THICKNESS;
 }
 
 
 int SCH_BUS_BUS_ENTRY::GetPenWidth() const
 {
+    if( m_stroke.GetWidth() > 0 )
+        return m_stroke.GetWidth();
+
     NETCLASSPTR netclass = NetClass();
 
     if( netclass )
         return netclass->GetBusWidth();
 
-    if( m_stroke.GetWidth() == 0 && Schematic() )
+    if( Schematic() )
         return std::max( Schematic()->Settings().m_DefaultBusThickness, 1 );
 
-    return ( m_stroke.GetWidth() == 0 ) ? 1 : m_stroke.GetWidth();
+    return DEFAULT_BUS_THICKNESS;
 }
 
 

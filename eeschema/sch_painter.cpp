@@ -1773,6 +1773,7 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
     line.SetStartPoint( aEntry->GetPosition() );
     line.SetEndPoint( aEntry->GetEnd() );
     line.SetStroke( aEntry->GetStroke() );
+    line.SetLineWidth( getLineWidth( aEntry, drawingShadows ) );
 
     COLOR4D color = getRenderColor( aEntry, LAYER_WIRE, drawingShadows );
 
