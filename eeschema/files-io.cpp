@@ -24,14 +24,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <advanced_config.h>
 #include <class_library.h>
 #include <confirm.h>
 #include <connection_graph.h>
 #include <dialog_migrate_buses.h>
 #include <dialog_symbol_remap.h>
 #include <eeschema_settings.h>
-#include <gestfich.h>
 #include <id.h>
 #include <kiface_i.h>
 #include <kiplatform/app.h>
@@ -60,7 +58,6 @@
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx/log.h>
-#include <tools/ee_actions.h>
 #include <tools/ee_inspection_tool.h>
 #include <paths.h>
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks
@@ -619,6 +616,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SyncView();
     GetScreen()->ClearDrawingState();
 
+    UpdateHierarchyNavigator();
     UpdateTitle();
 
     wxFileName fn = Prj().AbsolutePath( GetScreen()->GetFileName() );
@@ -669,6 +667,8 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     SyncView();
     OnModify();
     HardRedraw();   // Full reinit of the current screen and the display.
+
+    UpdateHierarchyNavigator();
 
     return true;
 }
@@ -1166,6 +1166,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             initScreenZoom();
             SetSheetNumberAndCount();
             SyncView();
+
+            UpdateHierarchyNavigator();
             UpdateTitle();
         }
         catch( const IO_ERROR& ioe )
