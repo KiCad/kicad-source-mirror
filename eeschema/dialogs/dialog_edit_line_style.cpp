@@ -88,7 +88,7 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
                 return r->GetPenWidth() == first_stroke_item->GetPenWidth();
             } ) )
     {
-        m_width.SetValue( first_stroke_item->GetPenWidth() );
+        m_width.SetValue( first_stroke_item->GetStroke().GetWidth() );
     }
     else
     {
