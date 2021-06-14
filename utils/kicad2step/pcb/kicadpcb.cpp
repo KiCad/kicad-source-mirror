@@ -34,64 +34,17 @@
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/stdpaths.h>
-#include <wx/textctrl.h>
-#include <wx/utils.h>
+#include <wx/wxcrtvararg.h>
 
-#include <iostream>
 #include <memory>
-#include <sstream>
 #include <string>
 
 
-#include <wx/wxcrtvararg.h>
-
-/*
- * GetKicadConfigPath() is taken from KiCad's common.cpp source:
- * Copyright (C) 2014-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2015 KiCad Developers
- */
-static wxString GetKicadConfigPath()
-{
-    wxFileName cfgpath;
-
-    // From the wxWidgets wxStandardPaths::GetUserConfigDir() help:
-    //      Unix: ~ (the home directory)
-    //      Windows: "C:\Documents and Settings\username\Application Data"
-    //      Mac: ~/Library/Preferences
-    cfgpath.AssignDir( wxStandardPaths::Get().GetUserConfigDir() );
-
-#if !defined( __WINDOWS__ ) && !defined( __WXMAC__ )
-    wxString envstr;
-
-    if( !wxGetEnv( "XDG_CONFIG_HOME", &envstr ) || envstr.IsEmpty() )
-    {
-        // XDG_CONFIG_HOME is not set, so use the fallback
-        cfgpath.AppendDir( ".config" );
-    }
-    else
-    {
-        // Override the assignment above with XDG_CONFIG_HOME
-        cfgpath.AssignDir( envstr );
-    }
-#endif
-
-    cfgpath.AppendDir( "kicad" );
-
-    if( !cfgpath.DirExists() )
-    {
-        cfgpath.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-    }
-
-    return cfgpath.GetPath();
-}
 
 
 KICADPCB::KICADPCB()
 {
-    wxFileName cfgdir( GetKicadConfigPath(), "" );
-    cfgdir.AppendDir( "3d" );
-    m_resolver.Set3DConfigDir( cfgdir.GetPath() );
+    m_resolver.Set3DConfigDir( "" );
     m_thickness = 1.6;
     m_pcb_model = nullptr;
     m_minDistance = MIN_DISTANCE;

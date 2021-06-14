@@ -39,7 +39,7 @@
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <reporter.h>
 #include <widgets/text_ctrl_eval.h>
-
+#include <filename_resolver.h>
 
 class DIALOG_EXPORT_STEP: public DIALOG_EXPORT_STEP_BASE
 {
@@ -325,6 +325,10 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         if( wxMessageBox( msg, _( "STEP Export" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
             return;
     }
+
+    FILENAME_RESOLVER* fnResolver = m_parent->Prj().Get3DFilenameResolver();
+
+    fnResolver->WritePathList( wxStandardPaths::Get().GetTempDir(), "ExportPaths.cfg", true );
 
     DIALOG_EXPORT_STEP::STEP_ORG_OPT orgOpt = GetOriginOption();
     double xOrg = 0.0;

@@ -141,15 +141,6 @@ private:
     bool readPathList( void );
 
     /**
-     * Function writePathList
-     * writes the current path list to a configuration file
-     *
-     * @return true if the path list was not empty and was
-     * successfully written to the configuration file
-     */
-    bool writePathList( void );
-
-    /**
      * Function checkEnvVarPath
      * checks the ${ENV_VAR} component of a path and adds
      * it to the resolver's path list if it is not yet in
@@ -183,13 +174,6 @@ public:
      */
     bool SetProjectDir( const wxString& aProjDir, bool* flgChanged = NULL );
     wxString GetProjectDir( void );
-
-    /**
-     * Function UpdatePathList
-     * clears the current path list and substitutes the given path
-     * list, updating the path configuration file on success.
-     */
-    bool UpdatePathList( std::vector< SEARCH_PATH >& aPathList );
 
     /**
      * Function ResolvePath

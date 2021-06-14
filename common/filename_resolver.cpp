@@ -234,7 +234,7 @@ bool FILENAME_RESOLVER::UpdatePathList( const std::vector< SEARCH_PATH >& aPathL
     for( const SEARCH_PATH& path : aPathList )
         addPath( path );
 
-    return writePathList();
+    return WritePathList( m_configDir, RESOLVER_CONFIG, false );
 }
 
 
@@ -594,15 +594,16 @@ bool FILENAME_RESOLVER::readPathList()
     cfgFile.close();
 
     if( vnum < CFGFILE_VERSION )
-        writePathList();
+        WritePathList( m_configDir, RESOLVER_CONFIG, false );
 
     return( m_paths.size() != nitems );
 }
 
 
-bool FILENAME_RESOLVER::writePathList()
+bool FILENAME_RESOLVER::WritePathList( const wxString& aDir, const wxString& aFilename,
+                                       bool aWriteFullList )
 {
-    if( m_configDir.empty() )
+    if( aDir.empty() )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -614,14 +615,19 @@ bool FILENAME_RESOLVER::writePathList()
         return false;
     }
 
+    std::list<SEARCH_PATH>::const_iterator sPL = m_paths.begin();
+
     // skip all ${ENV_VAR} alias names
-    std::list< SEARCH_PATH >::const_iterator sPL = m_paths.begin();
+    if( !aWriteFullList )
+    {
+        while( sPL != m_paths.end()
+                && ( sPL->m_Alias.StartsWith( "${" ) || sPL->m_Alias.StartsWith( "$(" ) ) )
+        {
+            ++sPL;
+        }
+    }
 
-    while( sPL != m_paths.end() &&
-           ( sPL->m_Alias.StartsWith( "${" ) || sPL->m_Alias.StartsWith( "$(" ) ) )
-        ++sPL;
-
-    wxFileName cfgpath( m_configDir, RESOLVER_CONFIG );
+    wxFileName cfgpath( aDir, aFilename );
     wxString cfgname = cfgpath.GetFullPath();
     std::ofstream cfgFile;
 

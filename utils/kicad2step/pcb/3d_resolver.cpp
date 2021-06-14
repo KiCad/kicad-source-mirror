@@ -35,13 +35,14 @@
 #include <wx/thread.h>
 #include <wx/utils.h>
 #include <wx/msgdlg.h>
+#include <wx/stdpaths.h>
 #include "kicadpcb.h"
 
 #include "3d_resolver.h"
 
 // configuration file version
 #define CFGFILE_VERSION 1
-#define S3D_RESOLVER_CONFIG "3Dresolver.cfg"
+#define S3D_RESOLVER_CONFIG "ExportPaths.cfg"
 
 // flag bits used to track different one-off messages to users
 #define ERRFLG_ALIAS    (1)
@@ -62,57 +63,6 @@ S3D_RESOLVER::S3D_RESOLVER()
 
 bool S3D_RESOLVER::Set3DConfigDir( const wxString& aConfigDir )
 {
-    if( aConfigDir.empty() )
-        return false;
-
-    wxFileName cfgdir( aConfigDir, "" );
-    cfgdir.Normalize();
-
-    if( false == cfgdir.DirExists() )
-        return false;
-
-    wxFileName kcom( cfgdir.GetPath(), "" );
-    kcom.RemoveLastDir();
-    kcom.SetFullName( "kicad_common" );
-    wxUniChar psep = wxFileName::GetPathSeparator();
-
-    if( kcom.FileExists() )
-    {
-        wxConfigBase* cfg = new wxFileConfig( "", "", kcom.GetFullPath() );
-        wxString subgroup( "EnvironmentVariables" );
-        wxString entry;
-        wxString val;
-        long idx = 0;
-
-        if( cfg->HasGroup( subgroup ) )
-        {
-            cfg->SetPath( subgroup );
-
-            while( cfg->GetNextEntry( entry, idx ) )
-            {
-                val = cfg->Read( entry, "" );
-
-                if( val.Last() == psep )
-                    val = val.substr( 0, val.length() -1 );
-
-                // only add the EnvVar if it is not currently defined by the shell
-                wxString subst = "${";
-                subst.append( entry );
-                subst.append( "}" );
-                wxString exvar = wxExpandEnvVars( subst );
-
-                if( exvar == subst )
-                    m_EnvVars.insert(std::pair< wxString, wxString >(entry, val));
-
-                entry.clear();
-                val.clear();
-            }
-        }
-
-        delete cfg;
-    }
-
-    m_ConfigDir = cfgdir.GetPath();
     createPathList();
 
     return true;
@@ -306,22 +256,6 @@ bool S3D_RESOLVER::createPathList( void )
 #endif
 
     return true;
-}
-
-
-bool S3D_RESOLVER::UpdatePathList( std::vector< SEARCH_PATH >& aPathList )
-{
-    wxUniChar envMarker( '$' );
-
-    while( !m_Paths.empty() && envMarker != *m_Paths.back().m_Alias.rbegin() )
-        m_Paths.pop_back();
-
-    size_t nI = aPathList.size();
-
-    for( size_t i = 0; i < nI; ++i )
-        addPath( aPathList[i] );
-
-    return writePathList();
 }
 
 
@@ -596,17 +530,7 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
 
 bool S3D_RESOLVER::readPathList( void )
 {
-    if( m_ConfigDir.empty() )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "3D configuration directory is unknown";
-        ostr << " * " << errmsg.ToUTF8();
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-        return false;
-    }
-
-    wxFileName cfgpath( m_ConfigDir, S3D_RESOLVER_CONFIG );
+    wxFileName cfgpath( wxStandardPaths::Get().GetTempDir(), S3D_RESOLVER_CONFIG );
     cfgpath.Normalize();
     wxString cfgname = cfgpath.GetFullPath();
 
@@ -690,108 +614,10 @@ bool S3D_RESOLVER::readPathList( void )
 
     cfgFile.close();
 
-    if( vnum < CFGFILE_VERSION )
-        writePathList();
-
     if( m_Paths.size() != nitems )
         return true;
 
     return false;
-}
-
-
-bool S3D_RESOLVER::writePathList( void )
-{
-    if( m_ConfigDir.empty() )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "3D configuration directory is unknown" );
-        ostr << " * " << errmsg.ToUTF8();
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-        wxMessageBox( errmsg, _( "Write 3D search path list" ) );
-
-        return false;
-    }
-
-    // skip all ${ENV_VAR} alias names
-    std::list< SEARCH_PATH >::const_iterator sPL = m_Paths.begin();
-    std::list< SEARCH_PATH >::const_iterator ePL = m_Paths.end();
-
-    while( sPL != ePL && ( sPL->m_Alias.StartsWith( "${" )
-                           || sPL->m_Alias.StartsWith( "$(" ) ) )
-        ++sPL;
-
-    wxFileName cfgpath( m_ConfigDir, S3D_RESOLVER_CONFIG );
-    wxString cfgname = cfgpath.GetFullPath();
-    std::ofstream cfgFile;
-
-    if( sPL == ePL )
-    {
-        wxMessageDialog md( NULL,
-                            _( "3D search path list is empty;\ncontinue to write empty file?" ),
-                            _( "Write 3D search path list" ), wxYES_NO );
-
-        if( md.ShowModal() == wxID_YES )
-        {
-            cfgFile.open( cfgname.ToUTF8(), std::ios_base::trunc );
-
-            if( !cfgFile.is_open() )
-            {
-                wxMessageBox( _( "Could not open configuration file" ),
-                              _( "Write 3D search path list" ) );
-
-                return false;
-            }
-
-            cfgFile << "#V" << CFGFILE_VERSION << "\n";
-            cfgFile.close();
-            return true;
-        }
-
-        return false;
-    }
-
-    cfgFile.open( cfgname.ToUTF8(), std::ios_base::trunc );
-
-    if( !cfgFile.is_open() )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "Could not open configuration file" );
-        ostr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-        wxMessageBox( errmsg, _( "Write 3D search path list" ) );
-
-        return false;
-    }
-
-    cfgFile << "#V" << CFGFILE_VERSION << "\n";
-    std::string tstr;
-
-    while( sPL != ePL )
-    {
-        tstr = sPL->m_Alias.ToUTF8();
-        cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
-        tstr = sPL->m_Pathvar.ToUTF8();
-        cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
-        tstr = sPL->m_Description.ToUTF8();
-        cfgFile << "\"" << tstr.size() << ":" << tstr << "\"\n";
-        ++sPL;
-    }
-
-    bool bad = cfgFile.bad();
-    cfgFile.close();
-
-    if( bad )
-    {
-        wxMessageBox( _( "Problems writing configuration file" ),
-                      _( "Write 3D search path list" ) );
-
-        return false;
-    }
-
-    return true;
 }
 
 

@@ -87,7 +87,13 @@ public:
      * Clear the current path list and substitutes the given path list and update the path
      * configuration file on success.
      */
-    bool UpdatePathList( const std::vector< SEARCH_PATH >& aPathList );
+    bool UpdatePathList( const std::vector<SEARCH_PATH>& aPathList );
+
+    /**
+     * Write the current path list to a config file.
+     * @param aWriteFullList indicates whether env vars should also be written out or not
+     */
+    bool WritePathList( const wxString& aDir, const wxString& aFilename, bool aWriteFullList );
 
     /**
      * Determines the full path of the given file name.
@@ -114,7 +120,7 @@ public:
      *
      * @return pointer to the internal path list.
      */
-    const std::list< SEARCH_PATH >* GetPaths() const;
+    const std::list<SEARCH_PATH>* GetPaths() const;
 
     /**
      * Return true if the given name contains an alias and populates the string \a anAlias
@@ -161,14 +167,6 @@ private:
      * @return true if a file was found and contained at least one valid path.
      */
     bool readPathList( void );
-
-    /**
-     * Write the current path list to a configuration file.
-     *
-     * @return true if the path list was not empty and was successfully written to the
-     *         configuration file.
-     */
-    bool writePathList( void );
 
     /**
      * Check the ${ENV_VAR} component of a path and adds it to the resolver's path list if
