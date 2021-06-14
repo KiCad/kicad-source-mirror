@@ -115,37 +115,37 @@ bool NESTED_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
     if( !m_parent )
         return false;
 
-    bool modified = Store();
-
     try
     {
-        nlohmann::json patch = nlohmann::json::diff( *m_internals,
-                m_parent->m_internals->Get<nlohmann::json>( m_path ) );
+        bool modified = Store();
 
-        modified |= !patch.empty();
-    }
-    catch( ... )
-    {
-        modified = true;
-    }
+        auto jsonObjectInParent = m_parent->GetJson( m_path );
 
-    if( !modified && !aForce )
-        return false;
+        if( !jsonObjectInParent )
+            modified = true;
+        else if( !nlohmann::json::diff( *m_internals, jsonObjectInParent.value() ).empty() )
+            modified = true;
 
-    try
-    {
-        m_parent->m_internals->At( m_path ).update( *m_internals );
+        if( modified || aForce )
+        {
+            ( *m_parent->m_internals )[m_path].update( *m_internals );
 
-        wxLogTrace( traceSettings, "Stored NESTED_SETTINGS %s with schema %d",
-                    GetFilename(), m_schemaVersion );
+            wxLogTrace( traceSettings, "Stored NESTED_SETTINGS %s with schema %d",
+                        GetFilename(),
+                        m_schemaVersion );
+        }
+
+        return modified;
     }
     catch( ... )
     {
         wxLogTrace( traceSettings, "NESTED_SETTINGS %s: Could not store to %s at %s",
-                    m_filename, m_parent->GetFilename(), m_path );
-    }
+                    m_filename,
+                    m_parent->GetFilename(),
+                    m_path );
 
-    return modified;
+        return false;
+    }
 }
 
 
