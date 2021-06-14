@@ -30,6 +30,7 @@
 
 
 %include board_item.h         // generate code for this interface
+%include eda_item_flags.h         // generate code for this interface
 
 /* Only for compatibility with old python scripts: */
 const int S_SEGMENT = (const int)PCB_SHAPE_TYPE::SEGMENT;
