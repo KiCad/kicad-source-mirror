@@ -21,14 +21,17 @@
 
 #include <nlohmann/json.hpp>
 
+
 #include <project/net_settings.h>
 #include <settings/parameters.h>
+#include <settings/json_settings_internals.h>
 #include <settings/settings_manager.h>
 #include <kicad_string.h>
 #include <convert_to_biu.h>
 
 
-const int netSettingsSchemaVersion = 0;
+// const int netSettingsSchemaVersion = 0;
+const int netSettingsSchemaVersion = 1;     // new overbar syntax
 
 
 static OPT<int> getInPcbUnits( const nlohmann::json& aObj, const std::string& aKey,
@@ -245,6 +248,8 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 }
             },
             {} ) );
+
+    registerMigration( 0, 1, std::bind( &NET_SETTINGS::migrateSchema0to1, this ) );
 }
 
 
@@ -256,6 +261,28 @@ NET_SETTINGS::~NET_SETTINGS()
         m_parent->ReleaseNestedSettings( this );
         m_parent = nullptr;
     }
+}
+
+
+bool NET_SETTINGS::migrateSchema0to1()
+{
+    if( m_internals->contains( "classes" ) && m_internals->At( "classes" ).is_array() )
+    {
+        for( auto& netClass : m_internals->At( "classes" ).items() )
+        {
+            if( netClass.value().contains( "nets" ) && netClass.value()["nets"].is_array() )
+            {
+                nlohmann::json migrated = nlohmann::json::array();
+
+                for( auto& net : netClass.value()["nets"].items() )
+                    migrated.push_back( ConvertToNewOverbarNotation( net.value().get<wxString>() ) );
+
+                netClass.value()["nets"] = migrated;
+            }
+        }
+    }
+
+    return true;
 }
 
 

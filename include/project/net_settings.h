@@ -88,7 +88,9 @@ public:
     void ResolveNetClassAssignments( bool aRebuildFromScratch = false );
 
 private:
-    // TODO: Add diff pairs, bus information, etc here.
+    bool migrateSchema0to1();
+
+    // TODO: Add diff pairs, bus information, etc.
 };
 
 #endif // KICAD_NET_SETTINGS_H
