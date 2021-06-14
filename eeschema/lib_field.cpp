@@ -260,10 +260,10 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     if( GetText().IsEmpty() )
         return;
 
-    // Calculate the text orientation, according to the component orientation/mirror
+    // Calculate the text orientation, according to the symbol orientation/mirror.
     int orient = (int) GetTextAngle();
 
-    if( aTransform.y1 )  // Rotate component 90 deg.
+    if( aTransform.y1 )  // Rotate symbol 90 deg.
     {
         if( orient == TEXT_ANGLE_HORIZ )
             orient = TEXT_ANGLE_VERT;

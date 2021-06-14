@@ -610,7 +610,7 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
 static KICAD_T wires[] = { SCH_LINE_LOCATE_WIRE_T, EOT };
 static KICAD_T wiresAndPins[] = { SCH_LINE_LOCATE_WIRE_T, SCH_PIN_T, SCH_SHEET_PIN_T, EOT };
-static KICAD_T fieldsAndComponents[] = { SCH_SYMBOL_T, SCH_FIELD_T, EOT };
+static KICAD_T fieldsAndSymbols[] = { SCH_SYMBOL_T, SCH_FIELD_T, EOT };
 
 #define HITTEST_THRESHOLD_PIXELS 5
 
@@ -755,7 +755,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
             {
                 EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
                 EDA_ITEM*          item = nullptr;
-                selTool->SelectPoint( aPosition, fieldsAndComponents, &item );
+                selTool->SelectPoint( aPosition, fieldsAndSymbols, &item );
 
                 if( !item )
                     return false;
@@ -782,7 +782,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
             {
                 EE_COLLECTOR collector;
                 collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-                collector.Collect( m_frame->GetScreen(), fieldsAndComponents, (wxPoint) aPos );
+                collector.Collect( m_frame->GetScreen(), fieldsAndSymbols, (wxPoint) aPos );
 
                 EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
                 selectionTool->GuessSelectionCandidates( collector, aPos );
@@ -1770,7 +1770,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    EE_SELECTION&      selection = selTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+    EE_SELECTION&      selection = selTool->RequestSelection( EE_COLLECTOR::SymbolsOnly );
     SCH_SYMBOL*        symbol = nullptr;
     SYMBOL_EDIT_FRAME* symbolEditor;
 
@@ -1816,7 +1816,7 @@ int SCH_EDITOR_CONTROL::EditSymbolFields( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::EditSymbolLibraryLinks( const TOOL_EVENT& aEvent )
 {
-    if( InvokeDialogEditComponentsLibId( m_frame ) )
+    if( InvokeDialogEditSymbolsLibId( m_frame ) )
         m_frame->HardRedraw();
 
     return 0;

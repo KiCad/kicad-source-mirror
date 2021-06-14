@@ -206,7 +206,7 @@ int SCH_EDITOR_CONTROL::ImportFPAssignments( const TOOL_EVENT& aEvent )
 
     wxFileDialog dlg( m_frame, _( "Load Symbol Footprint Link File" ),
                       path, wxEmptyString,
-                      ComponentFileWildcard(),
+                      FootprintAssignmentFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )

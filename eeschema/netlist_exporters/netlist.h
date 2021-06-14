@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
  * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ enum  NETLIST_TYPE_ID {
 
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
 
-// Max pin number per component and footprint
+// Max pin number per symbol and footprint.
 #define MAXPIN      5000
 
 #endif

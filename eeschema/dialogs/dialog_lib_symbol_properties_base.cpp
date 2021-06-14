@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -52,6 +52,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_grid->SetColSize( 10, 84 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
+	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelValue( 0, _("Name") );
 	m_grid->SetColLabelValue( 1, _("Value") );
 	m_grid->SetColLabelValue( 2, _("Show") );
@@ -63,7 +64,6 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_grid->SetColLabelValue( 8, _("Orientation") );
 	m_grid->SetColLabelValue( 9, _("X Position") );
 	m_grid->SetColLabelValue( 10, _("Y Position") );
-	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -239,7 +239,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	m_nameOffsetLabel = new wxStaticText( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("Position offset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_nameOffsetLabel->Wrap( -1 );
-	m_nameOffsetLabel->SetToolTip( _("Margin (in 0.001 inches) between a pin name position and the component body.\nA value from 10 to 40 is usually good.") );
+	m_nameOffsetLabel->SetToolTip( _("Margin between the pin name position and the symbol body.") );
 
 	bSizerNameOffset->Add( m_nameOffsetLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 24 );
 
@@ -251,13 +251,13 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	bSizerNameOffset->Add( m_nameOffsetUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbSizerPinTextOpts->Add( bSizerNameOffset, 0, wxEXPAND|wxTOP, 3 );
+	sbSizerPinTextOpts->Add( bSizerNameOffset, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	sbSizerPinTextOpts->Add( 0, 0, 0, wxEXPAND, 5 );
 
 
-	bSizerRightCol->Add( sbSizerPinTextOpts, 1, wxEXPAND|wxALL, 5 );
+	bSizerRightCol->Add( sbSizerPinTextOpts, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizerLowerBasicPanel->Add( bSizerRightCol, 1, wxEXPAND, 5 );

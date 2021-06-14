@@ -114,7 +114,7 @@ void DIALOG_EDIT_ONE_FIELD::init()
     m_TextValueSelectButton->SetBitmap( KiBitmap( BITMAPS::small_library ) );
     m_TextValueSelectButton->Show( m_fieldId == FOOTPRINT_FIELD );
 
-    // Value fields of power components cannot be modified. This will grey out
+    // Value fields of power symbols cannot be modified. This will grey out
     // the text box and display an explanation.
     if( m_fieldId == VALUE_FIELD && m_isPower )
     {
@@ -278,7 +278,7 @@ DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 {
     m_fieldId = aField->GetId();
 
-    // When in the library editor, power components can be renamed.
+    // When in the library editor, power symbols can be renamed.
     m_isPower = false;
     init();
 }
@@ -460,7 +460,7 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
     updateText( aField );
 
     // The value, footprint and datasheet fields should be kept in sync in multi-unit parts.
-    // Of course the component must be annotated to collect other units.
+    // Of course the symbol must be annotated to collect other units.
     if( editFrame && parent && parent->Type() == SCH_SYMBOL_T )
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( parent );

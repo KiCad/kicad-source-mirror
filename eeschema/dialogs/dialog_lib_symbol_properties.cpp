@@ -67,7 +67,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 
     // Show/hide columns according to the user's preference
     SYMBOL_EDITOR_SETTINGS* cfg = m_Parent->GetSettings();
-    m_grid->ShowHideColumns( cfg->m_EditComponentVisibleColumns );
+    m_grid->ShowHideColumns( cfg->m_EditSymbolVisibleColumns );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_URL_EDITOR( this ) );
@@ -129,7 +129,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::~DIALOG_LIB_SYMBOL_PROPERTIES()
     m_lastOpenedPage = m_NoteBook->GetSelection( );
 
     SYMBOL_EDITOR_SETTINGS* cfg = m_Parent->GetSettings();
-    cfg->m_EditComponentVisibleColumns = m_grid->GetShownColumns();
+    cfg->m_EditSymbolVisibleColumns = m_grid->GetShownColumns();
 
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ class TRANSFORM;
 #define EESCHEMA_VERSION 5
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
 
-/* Rotation, mirror of graphic items in components bodies are handled by a
+/* Rotation, mirror of graphic items in symbol bodies are handled by a
  * transform matrix.  The default matrix is useful to draw lib entries with
  * using this default matrix ( no rotation, no mirror but Y axis is bottom to top, and
  * Y draw axis is to to bottom so we must have a default matrix that reverses

@@ -45,7 +45,7 @@ public:
     static const KICAD_T AllItems[];
     static const KICAD_T EditableItems[];
     static const KICAD_T MovableItems[];
-    static const KICAD_T ComponentsOnly[];
+    static const KICAD_T SymbolsOnly[];
     static const KICAD_T SheetsOnly[];
     static const KICAD_T WiresOnly[];
     static const KICAD_T FieldOwners[];

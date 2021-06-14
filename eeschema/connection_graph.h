@@ -126,10 +126,10 @@ public:
     void UpdateItemConnections();
 
     /**
-     * Returns the priority (higher is more important) of a candidate driver
+     * Return the priority (higher is more important) of a candidate driver
      *
      * 0: Invalid driver
-     * 1: Component pin
+     * 1: Symbol pin
      * 2: Hierarchical sheet pin
      * 3: Hierarchical label
      * 4: Local label

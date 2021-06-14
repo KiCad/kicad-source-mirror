@@ -785,10 +785,10 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();     // sheetpath is saved here
 
     /* When printing all pages, the printed page is not the current page.  In
-     * complex hierarchies, we must update component references and others
+     * complex hierarchies, we must update symbol references and other
      * parameters in the given printed SCH_SCREEN, accordant to the sheet path
      * because in complex hierarchies a SCH_SCREEN (a drawing ) is shared
-     * between many sheets and component references depend on the actual sheet
+     * between many sheets and symbol references depend on the actual sheet
      * path used
      */
     SCH_SHEET_LIST sheetList;
@@ -967,10 +967,10 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
     PAGE_INFO       plotPage;                                    // page size selected to plot
 
     /* When printing all pages, the printed page is not the current page.
-     * In complex hierarchies, we must update component references
-     *  and others parameters in the given printed SCH_SCREEN, accordant to the sheet path
-     *  because in complex hierarchies a SCH_SCREEN (a drawing )
-     *  is shared between many sheets and component references depend on the actual sheet path used
+     * In complex hierarchies, we must update symbol references and other parameters in the
+     * given printed SCH_SCREEN, accordant to the sheet path because in complex hierarchies
+     * a SCH_SCREEN (a drawing ) is shared between many sheets and symbol references
+     * depend on the actual sheet path used.
      */
     SCH_SHEET_LIST  sheetList;
 

@@ -1,20 +1,20 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_lib_new_component_base.h"
+#include "dialog_lib_new_symbol_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( DIALOG_LIB_NEW_COMPONENT_BASE, DIALOG_SHIM )
-	EVT_COMBOBOX( wxID_ANY, DIALOG_LIB_NEW_COMPONENT_BASE::_wxFB_OnParentSymbolSelect )
-	EVT_CHECKBOX( wxID_ANY, DIALOG_LIB_NEW_COMPONENT_BASE::_wxFB_onPowerCheckBox )
+BEGIN_EVENT_TABLE( DIALOG_LIB_NEW_SYMBOL_BASE, DIALOG_SHIM )
+	EVT_COMBOBOX( wxID_ANY, DIALOG_LIB_NEW_SYMBOL_BASE::_wxFB_OnParentSymbolSelect )
+	EVT_CHECKBOX( wxID_ANY, DIALOG_LIB_NEW_SYMBOL_BASE::_wxFB_onPowerCheckBox )
 END_EVENT_TABLE()
 
-DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_LIB_NEW_SYMBOL_BASE::DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -32,7 +32,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 
 	m_staticTextName = new wxStaticText( this, wxID_ANY, _("Symbol name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextName->Wrap( -1 );
-	m_staticTextName->SetToolTip( _("This is the symbol name in library,\nand also the default component value when loaded in the schematic.") );
+	m_staticTextName->SetToolTip( _("The symbol name in library and also the default\nsymbol value when loaded in the schematic.") );
 
 	fgSizer31->Add( m_staticTextName, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -152,6 +152,6 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	this->Centre( wxBOTH );
 }
 
-DIALOG_LIB_NEW_COMPONENT_BASE::~DIALOG_LIB_NEW_COMPONENT_BASE()
+DIALOG_LIB_NEW_SYMBOL_BASE::~DIALOG_LIB_NEW_SYMBOL_BASE()
 {
 }

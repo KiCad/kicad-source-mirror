@@ -185,7 +185,7 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
          * schematic: Because wires and pins are considered as connected when the are to the
          * same coordinate we cannot mix coordinates in mils (internal units) and mm (that
          * cannot exactly converted in mils in many cases).  In fact schematic must only use
-         * 50 and 25 mils to place labels, wires and components others values are useful only
+         * 50 and 25 mils to place labels, wires and symbols others values are useful only
          * for graphic items (mainly in library editor) so use integer values in mils only.
          * The 100 mil grid is added to help conform to the KiCad Library Convention which
          * states: "Using a 100mil grid, pin ends and origin must lie on grid nodes IEC-60617"

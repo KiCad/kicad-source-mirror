@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,14 @@
  */
 
 #include <default_values.h>
-#include <dialog_lib_new_component.h>
+#include <dialog_lib_new_symbol.h>
 #include <eda_draw_frame.h>
 #include <sch_validators.h>
 #include <template_fieldnames.h>
 
-DIALOG_LIB_NEW_COMPONENT::DIALOG_LIB_NEW_COMPONENT( EDA_DRAW_FRAME* aParent,
-                                                    const wxArrayString* aRootSymbolNames ) :
-    DIALOG_LIB_NEW_COMPONENT_BASE( dynamic_cast<wxWindow*>( aParent ) ),
+DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
+                                              const wxArrayString* aRootSymbolNames ) :
+    DIALOG_LIB_NEW_SYMBOL_BASE( dynamic_cast<wxWindow*>( aParent ) ),
     m_pinTextPosition( aParent, m_staticPinTextPositionLabel, m_textPinTextPosition,
                        m_staticPinTextPositionUnits, true )
 {
@@ -53,13 +53,13 @@ DIALOG_LIB_NEW_COMPONENT::DIALOG_LIB_NEW_COMPONENT( EDA_DRAW_FRAME* aParent,
 }
 
 
-void DIALOG_LIB_NEW_COMPONENT::OnParentSymbolSelect( wxCommandEvent& aEvent )
+void DIALOG_LIB_NEW_SYMBOL::OnParentSymbolSelect( wxCommandEvent& aEvent )
 {
     syncControls( !m_comboInheritanceSelect->GetValue().IsEmpty() );
 }
 
 
-void DIALOG_LIB_NEW_COMPONENT::syncControls( bool aIsDerivedPart )
+void DIALOG_LIB_NEW_SYMBOL::syncControls( bool aIsDerivedPart )
 {
     m_staticTextDes->Enable( !aIsDerivedPart );
     m_textReference->Enable( !aIsDerivedPart );
@@ -79,7 +79,7 @@ void DIALOG_LIB_NEW_COMPONENT::syncControls( bool aIsDerivedPart )
 }
 
 
-void DIALOG_LIB_NEW_COMPONENT::onPowerCheckBox( wxCommandEvent& aEvent )
+void DIALOG_LIB_NEW_SYMBOL::onPowerCheckBox( wxCommandEvent& aEvent )
 {
     if( m_checkIsPowerSymbol->IsChecked() )
     {

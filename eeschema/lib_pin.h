@@ -40,7 +40,7 @@
 
 
 /**
- *  The component library pin object orientations.
+ *  The symbol library pin object orientations.
  */
 enum DrawPinOrient {
     PIN_RIGHT = 'R',

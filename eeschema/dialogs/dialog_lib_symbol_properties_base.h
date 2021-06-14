@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -87,7 +87,7 @@ class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_stdSizerButtonOK;
 		wxButton* m_stdSizerButtonCancel;
 
-		// Virtual event handlers, override them in your derived class
+		// Virtual event handlers, overide them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }

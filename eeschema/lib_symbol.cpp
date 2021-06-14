@@ -794,7 +794,7 @@ bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums,
         if( !foundMatch )
         {
             // This means there was not an identical (according to the arguments)
-            // pin at the same position in the other component.
+            // pin at the same position in the other symbol.
             return true;
         }
     }

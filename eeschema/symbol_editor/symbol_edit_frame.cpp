@@ -170,7 +170,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
                       .Left().Layer( 3 ) );
-    m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "ComponentTree" )
+    m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "SymbolTree" )
                       .Left().Layer( 2 )
                       .Caption( _( "Libraries" ) )
                       .MinSize( 250, -1 ).BestSize( 250, -1 ) );
@@ -184,7 +184,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     if( m_settings->m_LibWidth > 0 )
     {
-        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "ComponentTree" );
+        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "SymbolTree" );
 
         // wxAUI hack: force width by setting MinSize() and then Fixed()
         // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
@@ -703,7 +703,7 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
     GetRenderSettings()->m_ShowConvert = m_convert;
     GetRenderSettings()->m_ShowDisabled = IsSymbolFromLegacyLibrary() && !IsSymbolFromSchematic();
     GetRenderSettings()->m_ShowGraphicsDisabled = IsSymbolAlias() && !IsSymbolFromSchematic();
-    GetCanvas()->DisplayComponent( m_my_part );
+    GetCanvas()->DisplaySymbol( m_my_part );
     GetCanvas()->GetView()->HideDrawingSheet();
     GetCanvas()->GetView()->ClearHiddenFlags();
 
@@ -1113,7 +1113,7 @@ void SYMBOL_EDIT_FRAME::RebuildView()
     GetRenderSettings()->m_ShowConvert = m_convert;
     GetRenderSettings()->m_ShowDisabled = IsSymbolFromLegacyLibrary() && !IsSymbolFromSchematic();
     GetRenderSettings()->m_ShowGraphicsDisabled = IsSymbolAlias() && !IsSymbolFromSchematic();
-    GetCanvas()->DisplayComponent( m_my_part );
+    GetCanvas()->DisplaySymbol( m_my_part );
     GetCanvas()->GetView()->HideDrawingSheet();
     GetCanvas()->GetView()->ClearHiddenFlags();
 

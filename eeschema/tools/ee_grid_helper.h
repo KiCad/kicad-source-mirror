@@ -68,11 +68,11 @@ private:
     ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, int aMatchLayer );
 
     /**
-     * computeAnchors inserts the local anchor points in to the grid helper for the specified
+     * Insert the local anchor points in to the grid helper for the specified
      * schematic item, given the reference point and the direction of use for the point.
      *
      * @param aItem The schematic item for which to compute the anchors
-     * @param aRefPos The point for which to compute the anchors (if used by the component)
+     * @param aRefPos The point for which to compute the anchors (if used by the symbol)
      * @param aFrom Is this for an anchor that is designating a source point (aFrom=true) or not
      */
     void computeAnchors( SCH_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom = false );

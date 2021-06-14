@@ -198,7 +198,8 @@ int SCH_REFERENCE_LIST::FindRef( const wxString& aRef ) const
 }
 
 
-void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList, int aMinRefId ) const
+void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList,
+                                       int aMinRefId ) const
 {
     aIdList.clear();
 
@@ -332,6 +333,7 @@ void SCH_REFERENCE_LIST::ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditi
 
     Annotate( false, 0, 0, lockedSymbols, aAdditionalReferences, true );
 }
+
 
 void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
                                    SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap,
@@ -572,6 +574,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
     wxASSERT( originalSize == GetCount() ); // Make sure we didn't make a mistake
 }
 
+
 int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
 {
     int            error = 0;
@@ -595,7 +598,6 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
                 tmp << flatList[ii].m_numRef;
             else
                 tmp = wxT( "?" );
-
 
             if( ( flatList[ii].m_unit > 0 ) && ( flatList[ii].m_unit < 0x7FFFFFFF )  )
             {

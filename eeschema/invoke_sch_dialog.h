@@ -91,11 +91,11 @@ void InvokeDialogBusManager( SCH_EDIT_FRAME* aCaller );
 int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller );
 
 /**
- * Run a dialog to modify the LIB_ID of components for instance when a symbol has
+ * Run a dialog to modify the LIB_ID of symbols for instance when a symbol has
  * moved from a symbol library to another symbol library
  * @return true if changes are made, false if no change
  */
-bool InvokeDialogEditComponentsLibId( SCH_EDIT_FRAME* aCaller );
+bool InvokeDialogEditSymbolsLibId( SCH_EDIT_FRAME* aCaller );
 
 
 

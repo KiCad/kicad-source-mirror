@@ -42,7 +42,8 @@ public:
     DIR_CHECKBOX( wxWindow* aParent )
             : wxPanel( aParent )
     {
-        m_cbCreateDir = new wxCheckBox( this, wxID_ANY, _( "Create a new folder for the project" ) );
+        m_cbCreateDir = new wxCheckBox( this, wxID_ANY,
+                                        _( "Create a new folder for the project" ) );
         m_cbCreateDir->SetValue( true );
 
         wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
@@ -310,6 +311,7 @@ int KICAD_MANAGER_CONTROL::OpenProject( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 int KICAD_MANAGER_CONTROL::CloseProject( const TOOL_EVENT& aEvent )
 {
     m_frame->CloseProject( true );
@@ -385,7 +387,7 @@ public:
                || ext == LegacyPcbFileExtension
                || ext == KiCadFootprintFileExtension
                || ext == LegacyFootprintLibPathExtension
-               || ext == ComponentFileExtension
+               || ext == FootprintAssignmentFileExtension
                || destFile.GetName() == "fp-lib-table" )
         {
             KIFACE* pcbnew = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );

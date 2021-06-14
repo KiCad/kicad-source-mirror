@@ -68,10 +68,10 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     wxString   projectDir = wxPathOnly( Prj().GetProjectFullName() );
     wxFileName fn = GetBoard()->GetFileName();
 
-    fn.SetExt( ComponentFileExtension );
+    fn.SetExt( FootprintAssignmentFileExtension );
 
     wxFileDialog dlg( this, _( "Save Footprint Association File" ),
-                      projectDir, fn.GetFullName(), ComponentFileWildcard(),
+                      projectDir, fn.GetFullName(), FootprintAssignmentFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )

@@ -11,12 +11,13 @@
         <property name="embedded_files_path">res</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
-        <property name="file">dialog_edit_components_libid_base</property>
+        <property name="file">dialog_edit_symbols_libid_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
-        <property name="name">dialog_edit_components_libid_base</property>
+        <property name="name">dialog_edit_symbols_libid_base</property>
         <property name="namespace"></property>
         <property name="path">.</property>
         <property name="precompiled_header"></property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -43,7 +45,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">DIALOG_EDIT_COMPONENTS_LIBID_BASE</property>
+            <property name="name">DIALOG_EDIT_SYMBOLS_LIBID_BASE</property>
             <property name="pos"></property>
             <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
@@ -170,6 +172,7 @@
                                 <property name="aui_name"></property>
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
+                                <property name="auth_needed">0</property>
                                 <property name="best_size"></property>
                                 <property name="bg"></property>
                                 <property name="bitmap"></property>
@@ -219,7 +222,7 @@
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
-                                <property name="tooltip">If some components are orphan (the linked symbol is found nowhere),&#x0A;try to find a candidate having the same name in one of loaded symbol libraries.</property>
+                                <property name="tooltip">If some symbols are orphaned (the linked symbol is not found anywhere),&#x0A;try to find a candidate having the same name in one of loaded symbol libraries.</property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
                                 <property name="validator_type">wxDefaultValidator</property>

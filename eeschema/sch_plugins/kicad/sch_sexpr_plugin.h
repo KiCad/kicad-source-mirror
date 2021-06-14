@@ -135,7 +135,7 @@ private:
     void loadHierarchy( SCH_SHEET* aSheet );
     void loadFile( const wxString& aFileName, SCH_SHEET* aSheet );
 
-    void saveSymbol( SCH_SYMBOL* aComponent, SCH_SHEET_PATH* aSheetPath, int aNestLevel );
+    void saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPath, int aNestLevel );
     void saveField( SCH_FIELD* aField, int aNestLevel );
     void saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel );
     void saveSheet( SCH_SHEET* aSheet, int aNestLevel );

@@ -1617,7 +1617,7 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol )
 
     wxCHECK( selectionTool, /* void */ );
 
-    EE_SELECTION& selection = selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+    EE_SELECTION& selection = selectionTool->RequestSelection( EE_COLLECTOR::SymbolsOnly );
 
     if( selection.Empty() )
         return;

@@ -44,7 +44,7 @@ public:
 
     ~SCH_DRAW_PANEL();
 
-    void DisplayComponent( LIB_SYMBOL *aSymbol );
+    void DisplaySymbol( LIB_SYMBOL *aSymbol );
     void DisplaySheet( SCH_SCREEN *aScreen );
 
     bool SwitchBackend( GAL_TYPE aGalType ) override;

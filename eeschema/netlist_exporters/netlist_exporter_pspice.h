@@ -35,7 +35,7 @@ class PROJECT;
 /// Flags for Spice netlist generation (can be combined)
 enum SPICE_NETLIST_OPTIONS {
     NET_ADJUST_INCLUDE_PATHS = 8, // use full paths for included files (if they are in search path)
-    NET_ADJUST_PASSIVE_VALS = 16, // reformat passive component values (e.g. 1M -> 1Meg)
+    NET_ADJUST_PASSIVE_VALS = 16, // reformat passive symbol values (e.g. 1M -> 1Meg)
     NET_ALL_FLAGS = 0xffff
 };
 
@@ -67,11 +67,11 @@ enum SPICE_PRIMITIVE {
 ///       export dialog.
 
 /**
- * Structure to represent a schematic component in the Spice simulation.
+ * Structure to represent a schematic symbol in the Spice simulation.
  */
 struct SPICE_ITEM
 {
-    ///< Schematic component represented by this SPICE_ITEM.
+    ///< Schematic symbol represented by this SPICE_ITEM.
     SCH_SYMBOL* m_parent;
 
     ///< Spice primitive type (@see SPICE_PRIMITIVE).
@@ -84,13 +84,13 @@ struct SPICE_ITEM
     ///<
     wxString m_refName;
 
-    ///< Flag to indicate whether the component should be used in simulation.
+    ///< Flag to indicate whether the symbol should be used in simulation.
     bool m_enabled;
 
     ///< Array containing Standard Pin Name
     std::vector<wxString> m_pins;
 
-    ///< Numeric indices into m_SortedComponentPinList
+    ///< Numeric indices into m_SortedSymbolPinList
     std::vector<int> m_pinSequence;
 };
 
@@ -124,15 +124,15 @@ public:
     }
 
     /**
-     * Return name of Spice device corresponding to a schematic component.
+     * Return name of Spice device corresponding to a schematic symbol.
      *
-     * @param aComponent is the component reference.
-     * @return Spice device name or empty string if there is no such component in the netlist. The
+     * @param aSymbol is the component reference.
+     * @return Spice device name or empty string if there is no such symbol in the netlist. The
      * name is either plain reference if the first character of reference corresponds to the
      * assigned device model type or it is the reference prefixed with a character defining
      * the device model type.
      */
-    wxString GetSpiceDevice( const wxString& aComponent ) const;
+    wxString GetSpiceDevice( const wxString& aSymbol ) const;
 
     /**
      * Write to specified output file

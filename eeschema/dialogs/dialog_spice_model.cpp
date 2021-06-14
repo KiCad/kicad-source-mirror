@@ -374,7 +374,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
         }
     }
 
-    // Analyze the component fields to fill out the dialog
+    // Analyze the symbol fields to fill out the dialog.
     unsigned int primitive = toupper( m_fieldsTmp[SF_PRIMITIVE][0] );
 
     switch( primitive )
@@ -862,7 +862,7 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
     // Stores the library content. It will be displayed after reading the full library
     wxString fullText;
 
-    // Process the file, looking for components
+    // Process the file, looking for symbols.
     while( !file.Eof() )
     {
         const wxString& line = line_nr == 0 ? file.GetFirstLine() : file.GetNextLine();

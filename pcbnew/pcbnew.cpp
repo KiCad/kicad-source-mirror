@@ -317,7 +317,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
         // Footprints are not project-specific.  Keep their source names.
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == ComponentFileExtension )
+    else if( ext == FootprintAssignmentFileExtension )
     {
         // JEY TODO
     }

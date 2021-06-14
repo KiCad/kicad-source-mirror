@@ -185,7 +185,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
         m_alternatesTurndown->Collapse();
         m_alternatesTurndown->Disable();
         m_alternatesTurndown->SetToolTip(
-                _( "Alternate pin assignments are not available for DeMorgan components." ) );
+                _( "Alternate pin assignments are not available for DeMorgan symbols." ) );
     }
 
     // Set special attributes

@@ -123,7 +123,7 @@ public:
     wxString GetSheetSimCommand();
 
     /**
-     * Parse a two-source .dc command directive into its components
+     * Parse a two-source .dc command directive into its symbols.
      *
      * @param aCmd is the input command string
      * @return true if the command was parsed successfully

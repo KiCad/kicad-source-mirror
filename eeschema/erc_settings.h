@@ -48,9 +48,9 @@ enum ERCE_T
     ERCE_NOCONNECT_NOT_CONNECTED, ///< A no connect symbol is not connected to anything.
     ERCE_LABEL_NOT_CONNECTED,     ///< Label not connected to anything.
     ERCE_SIMILAR_LABELS,          ///< 2 labels are equal for case insensitive comparisons.
-    ERCE_DIFFERENT_UNIT_FP,       ///< Different units of the same component have different
+    ERCE_DIFFERENT_UNIT_FP,       ///< Different units of the same symbol have different
                                   ///< footprints assigned.
-    ERCE_DIFFERENT_UNIT_NET,      ///< Shared pin in a multi-unit component is connected to
+    ERCE_DIFFERENT_UNIT_NET,      ///< Shared pin in a multi-unit symbol is connected to
                                   ///< more than one net.
     ERCE_BUS_ALIAS_CONFLICT,      ///< Conflicting bus alias definitions across sheets.
     ERCE_DRIVER_CONFLICT,         ///< Conflicting drivers (labels, etc) on a subgraph.

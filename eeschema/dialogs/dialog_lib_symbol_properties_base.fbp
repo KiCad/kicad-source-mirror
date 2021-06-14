@@ -1639,7 +1639,7 @@
                                                             <property name="permission">none</property>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxALL</property>
+                                                                <property name="flag">wxALL|wxEXPAND</property>
                                                                 <property name="proportion">1</property>
                                                                 <object class="wxStaticBoxSizer" expanded="1">
                                                                     <property name="id">wxID_ANY</property>
@@ -1852,8 +1852,8 @@
                                                                         </object>
                                                                     </object>
                                                                     <object class="sizeritem" expanded="1">
-                                                                        <property name="border">3</property>
-                                                                        <property name="flag">wxEXPAND|wxTOP</property>
+                                                                        <property name="border">5</property>
+                                                                        <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
                                                                         <property name="proportion">0</property>
                                                                         <object class="wxBoxSizer" expanded="1">
                                                                             <property name="minimum_size"></property>
@@ -1914,7 +1914,7 @@
                                                                                     <property name="style"></property>
                                                                                     <property name="subclass"></property>
                                                                                     <property name="toolbar_pane">0</property>
-                                                                                    <property name="tooltip">Margin (in 0.001 inches) between a pin name position and the component body.&#x0A;A value from 10 to 40 is usually good.</property>
+                                                                                    <property name="tooltip">Margin between the pin name position and the symbol body.</property>
                                                                                     <property name="window_extra_style"></property>
                                                                                     <property name="window_name"></property>
                                                                                     <property name="window_style"></property>

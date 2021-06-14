@@ -109,7 +109,7 @@ public:
      * Set a filter to display only libraries and/or symbols which match the filter.
      *
      * @param aFilter is a filter to pass the allowed library name list and/or some other filter
-     *                see SCH_BASE_FRAME::SelectComponentFromLibrary() for details.
+     *                see SCH_BASE_FRAME::SelectSymbolFromLibrary() for details.
      *                if aFilter == NULL, remove all filtering.
      */
     void SetFilter( const SCHLIB_FILTER* aFilter );
@@ -174,7 +174,7 @@ private:
     int                 m_symbolListWidth;     // Last width of the window.
 
     // Filters to build list of libs/list of symbols.
-    bool                m_listPowerCmpOnly;
+    bool                m_listPowerOnly;
     wxArrayString       m_allowedLibs;
 
     static wxString     m_libraryName;

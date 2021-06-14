@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,8 +64,8 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
         TRANSFORM   temp;     // Uses default transform
         wxPoint     plotPos;
 
-        plotPos.x = pageInfo.GetWidthIU() /2;
-        plotPos.y = pageInfo.GetHeightIU()/2;
+        plotPos.x = pageInfo.GetWidthIU() / 2;
+        plotPos.y = pageInfo.GetHeightIU() / 2;
 
         m_my_part->Plot( plotter, GetUnit(), GetConvert(), plotPos, temp );
 
@@ -86,7 +86,7 @@ void SYMBOL_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
     wxSize pagesize = GetScreen()->GetPageSettings().GetSizeIU();
 
     /* Plot item centered to the page
-     * In symbol_editor, the component is centered at 0,0 coordinates.
+     * In symbol_editor, the symbol is centered at 0,0 coordinates.
      * So we must plot it with an offset = pagesize/2.
      */
     wxPoint plot_offset;

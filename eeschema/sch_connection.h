@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -111,7 +112,7 @@ public:
 
     /**
      * Checks if the SCH_ITEM this connection is attached to can drive connections
-     * Drivers can be labels, sheet pins, or component pins.
+     * Drivers can be labels, sheet pins, or symbol pins.
      *
      * @return true if the attached items is a driver
      */

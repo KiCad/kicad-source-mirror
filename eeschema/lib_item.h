@@ -56,7 +56,7 @@ typedef std::vector< LIB_PIN* > LIB_PINS;
 
 
 /**
- * The base class for drawable items used by schematic library components.
+ * The base class for drawable items used by schematic library symbols.
  */
 class LIB_ITEM : public EDA_ITEM
 {
@@ -87,10 +87,10 @@ public:
     virtual wxString GetTypeName() const = 0;
 
     /**
-     * Begin drawing a component library draw item at \a aPosition.
+     * Begin drawing a symbol library draw item at \a aPosition.
      *
      * It typically would be called on a left click when a draw tool is selected in
-     * the component library editor and one of the graphics tools is selected.
+     * the symbol library editor and one of the graphics tools is selected.
      *
      * @param aPosition The position in drawing coordinates where the drawing was started.
      *                  May or may not be required depending on the item being drawn.
@@ -121,7 +121,7 @@ public:
      *
      * This method gets called by the Draw() method when the item is being edited.  This
      * probably should be a pure virtual method but bezier curves are not yet editable in
-     * the component library editor.  Therefore, the default method does nothing.
+     * the symbol library editor.  Therefore, the default method does nothing.
      *
      * @param aPosition The current mouse position in drawing coordinates.
      */
@@ -135,7 +135,7 @@ public:
      * @param aData Value or pointer used to pass others parameters, depending on body items.
      *              Used for some items to force to force no fill mode ( has meaning only for
      *              items what can be filled ). used in printing or moving objects mode or to
-     *              pass reference to the lib component for pins.
+     *              pass reference to the lib symbol for pins.
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
     virtual void Print( const RENDER_SETTINGS* aSettings, const wxPoint &aOffset,
@@ -274,8 +274,8 @@ protected:
      *
      * The base object sort order which always proceeds the derived object sort order
      * is as follows:
-     *      - Component alternate part (DeMorgan) number.
-     *      - Component part number.
+     *      - Symbol alternate part (DeMorgan) number.
+     *      - Symbol part number.
      *      - KICAD_T enum value.
      *      - Result of derived classes comparison.
      *

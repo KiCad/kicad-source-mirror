@@ -314,7 +314,7 @@ bool SCH_CONNECTION::IsDriver() const
     {
         auto pin = static_cast<SCH_PIN*>( Parent() );
 
-        // Only annotated components should drive nets
+        // Only annotated symbols should drive nets.
         return pin->IsPowerConnection() || pin->GetParentSymbol()->IsAnnotated( &m_sheet );
     }
 
@@ -360,7 +360,7 @@ void SCH_CONNECTION::recacheName()
         case SCH_GLOBAL_LABEL_T:
         case SCH_PIN_T:
             // Pins are either power connections or belong to a uniquely-annotated
-            // component, so they don't need a path if they are driving the subgraph
+            // symbol, so they don't need a path if they are driving the subgraph.
             prepend_path = false;
             break;
 

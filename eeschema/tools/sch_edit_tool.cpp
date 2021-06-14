@@ -1167,7 +1167,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 {
     SCH_SYMBOL* selectedSymbol = nullptr;
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::SymbolsOnly );
 
     if( !selection.Empty() )
         selectedSymbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
@@ -1190,7 +1190,7 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::SymbolsOnly );
 
     if( selection.Empty() )
         return 0;

@@ -105,7 +105,7 @@ private:
                                  wxTextCtrl* aDcIncr );
 
     /**
-     * Update DC sweep source with components from schematic.
+     * Update DC sweep source with symbols from schematic.
      */
     void updateDCSources( wxChar aType, wxChoice* aSource );
 

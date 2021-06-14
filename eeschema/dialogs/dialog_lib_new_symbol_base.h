@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,9 +28,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_LIB_NEW_COMPONENT_BASE
+/// Class DIALOG_LIB_NEW_SYMBOL_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_LIB_NEW_COMPONENT_BASE : public DIALOG_SHIM
+class DIALOG_LIB_NEW_SYMBOL_BASE : public DIALOG_SHIM
 {
 	DECLARE_EVENT_TABLE()
 	private:
@@ -71,8 +71,8 @@ class DIALOG_LIB_NEW_COMPONENT_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("New Symbol"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_LIB_NEW_COMPONENT_BASE();
+		DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("New Symbol"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_LIB_NEW_SYMBOL_BASE();
 
 };
 

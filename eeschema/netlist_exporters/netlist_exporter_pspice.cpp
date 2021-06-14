@@ -41,14 +41,14 @@
 #include <wx/regex.h>
 
 
-wxString NETLIST_EXPORTER_PSPICE::GetSpiceDevice( const wxString& aComponent ) const
+wxString NETLIST_EXPORTER_PSPICE::GetSpiceDevice( const wxString& aSymbol ) const
 {
     const std::list<SPICE_ITEM>& spiceItems = GetSpiceItems();
 
     auto it = std::find_if( spiceItems.begin(), spiceItems.end(),
                             [&]( const SPICE_ITEM& item )
                             {
-                                return item.m_refName == aComponent;
+                                return item.m_refName == aSymbol;
                             } );
 
     if( it == spiceItems.end() )
@@ -286,7 +286,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
     {
         SCH_SHEET_PATH sheet = sheetList[sheet_idx];
 
-        // Process component attributes to find Spice directives
+        // Process symbol attributes to find Spice directives
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
@@ -316,7 +316,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
 
             refNames.insert( spiceItem.m_refName );
 
-            // Check to see if component should be removed from Spice netlist
+            // Check to see if symbol should be removed from Spice netlist
             spiceItem.m_enabled = StringToBool( GetSpiceField( SF_ENABLED, symbol, aCtl ) );
 
             if( fieldLibFile && !fieldLibFile->GetShownText().IsEmpty() )

@@ -25,7 +25,7 @@
 
 /**
  * @file libarch.cpp
- * @brief Module for generation of component archive files.
+ * @brief Module for generation of symbol archive files.
  */
 
 #include <confirm.h>

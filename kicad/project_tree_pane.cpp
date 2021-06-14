@@ -282,7 +282,7 @@ wxString PROJECT_TREE_PANE::GetFileExt( TREE_FILE_TYPE type )
     case TREE_FILE_TYPE::PDF:                   return PdfFileExtension;
     case TREE_FILE_TYPE::TXT:                   return TextFileExtension;
     case TREE_FILE_TYPE::NET:                   return NetlistFileExtension;
-    case TREE_FILE_TYPE::CMP_LINK:              return ComponentFileExtension;
+    case TREE_FILE_TYPE::CMP_LINK:              return FootprintAssignmentFileExtension;
     case TREE_FILE_TYPE::REPORT:                return ReportFileExtension;
     case TREE_FILE_TYPE::FP_PLACE:              return FootprintPlaceFileExtension;
     case TREE_FILE_TYPE::DRILL:                 return DrillFileExtension;

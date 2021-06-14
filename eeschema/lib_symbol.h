@@ -297,7 +297,7 @@ public:
      *
      * @param aOffset - Position of symbol.
      * @param aMulti - unit if multiple units per symbol.
-     * @param aConvert - Component conversion (DeMorgan) if available.
+     * @param aConvert - Symbol conversion (DeMorgan) if available.
      * @param aOpts - Drawing options
      */
     void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
@@ -309,10 +309,10 @@ public:
      * is used to plot schematic items, which have they own fields
      *
      * @param aPlotter - Plotter object to plot to.
-     * @param aUnit - Component symbol to plot.
-     * @param aConvert - Component alternate body style to plot.
+     * @param aUnit - Symbol symbol to plot.
+     * @param aConvert - Symbol alternate body style to plot.
      * @param aOffset - Distance to shift the plot coordinates.
-     * @param aTransform - Component plot transform matrix.
+     * @param aTransform - Symbol plot transform matrix.
      */
     void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
                const TRANSFORM& aTransform ) const;
@@ -322,10 +322,10 @@ public:
      * is used to plot the full lib symbol, outside the schematic
      *
      * @param aPlotter - Plotter object to plot to.
-     * @param aUnit - Component symbol to plot.
-     * @param aConvert - Component alternate body style to plot.
+     * @param aUnit - Symbol to plot.
+     * @param aConvert - Symbol alternate body style to plot.
      * @param aOffset - Distance to shift the plot coordinates.
-     * @param aTransform - Component plot transform matrix.
+     * @param aTransform - Symbol plot transform matrix.
      */
     void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
                         const TRANSFORM& aTransform );

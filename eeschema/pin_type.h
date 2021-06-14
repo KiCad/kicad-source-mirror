@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 enum class BITMAPS : unsigned int;
 
 /**
- * The component library pin object electrical types used in ERC tests.
+ * The symbol library pin object electrical types used in ERC tests.
  */
 enum class ELECTRICAL_PINTYPE
 {
@@ -38,7 +38,7 @@ enum class ELECTRICAL_PINTYPE
     PT_OUTPUT,        ///< usual output
     PT_BIDI,          ///< input or output (like port for a microprocessor)
     PT_TRISTATE,      ///< tris state bus pin
-    PT_PASSIVE,       ///< pin for passive components: must be connected, and can be connected to any pin
+    PT_PASSIVE,       ///< pin for passive symbols: must be connected, and can be connected to any pin
     PT_NIC,           ///< not internally connected (may be connected to anything)
     PT_UNSPECIFIED,   ///< unknown electrical properties: creates always a warning when connected
     PT_POWER_IN,      ///< power input (GND, VCC for ICs). Must be connected to a power output.

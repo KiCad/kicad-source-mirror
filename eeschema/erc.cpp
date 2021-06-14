@@ -329,9 +329,9 @@ int ERC_TESTER::TestMultiunitFootprints()
     SCH_MULTI_UNIT_REFERENCE_MAP refMap;
     sheets.GetMultiUnitSymbols( refMap, true );
 
-    for( std::pair<const wxString, SCH_REFERENCE_LIST>& component : refMap )
+    for( std::pair<const wxString, SCH_REFERENCE_LIST>& symbol : refMap )
     {
-        SCH_REFERENCE_LIST& refList = component.second;
+        SCH_REFERENCE_LIST& refList = symbol.second;
 
         if( refList.GetCount() == 0 )
         {

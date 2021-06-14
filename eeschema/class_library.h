@@ -300,9 +300,9 @@ public:
      *
      * Helper function used in dialog to find all candidates.
      * During a long time, eeschema was using a case insensitive search.
-     * Therefore, for old schematics (<= 2013), or libs, for some components,
+     * Therefore, for old schematics (<= 2013), or libs, for some symbols,
      * the chip name (name of alias in lib) can be broken.
-     * This function can be used to display a list of candidates, in component properties dialog.
+     * This function can be used to display a list of candidates, in symbol properties dialog.
      *
      * @param aEntryName - Name of entries to search for (case insensitive).
      * @param aLibraryName - Name of the library to search.

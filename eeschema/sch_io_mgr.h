@@ -195,7 +195,7 @@ public:
      * @param aFileName is the name of the file to use as input and may be foreign in
      *                  nature or native in nature.
      *
-     * @param aKiway is the #KIWAY object used to access the component libraries loaded
+     * @param aKiway is the #KIWAY object used to access the symbol libraries loaded
      *               by the project.
      *
      * @param aAppendToMe is an existing #SCH_SHEET to append to, but if NULL then this means

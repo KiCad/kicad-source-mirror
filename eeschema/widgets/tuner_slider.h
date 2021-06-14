@@ -42,7 +42,7 @@ class SCH_SYMBOL;
 class TUNER_SLIDER : public TUNER_SLIDER_BASE
 {
 public:
-    TUNER_SLIDER( SIM_PLOT_FRAME *aFrame, wxWindow* aParent, SCH_SYMBOL* aComponent );
+    TUNER_SLIDER( SIM_PLOT_FRAME *aFrame, wxWindow* aParent, SCH_SYMBOL* aSymbol );
 
     wxString GetComponentName() const
     {

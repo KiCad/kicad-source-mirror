@@ -126,7 +126,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
 
     m_libListWidth = 200;
     m_symbolListWidth = 300;
-    m_listPowerCmpOnly = false;
+    m_listPowerOnly = false;
 
     SetScreen( new SCH_SCREEN );
     GetScreen()->m_Center = true;      // Axis origin centered on screen.
@@ -491,7 +491,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
     }
 
     // Remove libs which have no power symbols, if this filter is activated
-    if( m_listPowerCmpOnly )
+    if( m_listPowerOnly )
     {
         for( unsigned ii = 0; ii < libs.size(); )
         {
@@ -551,7 +551,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
     try
     {
         Prj().SchSymbolLibTable()->EnumerateSymbolLib( m_libraryName, aliasNames,
-                                                       m_listPowerCmpOnly );
+                                                       m_listPowerOnly );
     }
     catch( const IO_ERROR& ) {}   // ignore, it is handled below
 
@@ -763,13 +763,13 @@ void SYMBOL_VIEWER_FRAME::CloseLibraryViewer( wxCommandEvent& event )
 
 void SYMBOL_VIEWER_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
 {
-    m_listPowerCmpOnly = false;
+    m_listPowerOnly = false;
     m_allowedLibs.Clear();
 
     if( aFilter )
     {
         m_allowedLibs = aFilter->GetAllowedLibList();
-        m_listPowerCmpOnly = aFilter->GetFilterPowerParts();
+        m_listPowerOnly = aFilter->GetFilterPowerParts();
     }
 
     ReCreateLibList();

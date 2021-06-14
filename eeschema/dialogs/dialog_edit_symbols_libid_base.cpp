@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -7,11 +7,11 @@
 
 #include "widgets/wx_grid.h"
 
-#include "dialog_edit_components_libid_base.h"
+#include "dialog_edit_symbols_libid_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_EDIT_SYMBOLS_LIBID_BASE::DIALOG_EDIT_SYMBOLS_LIBID_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -56,7 +56,7 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* 
 	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttonOrphanItems = new wxButton( this, wxID_ANY, _("Map Orphans"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonOrphanItems->SetToolTip( _("If some components are orphan (the linked symbol is found nowhere),\ntry to find a candidate having the same name in one of loaded symbol libraries.") );
+	m_buttonOrphanItems->SetToolTip( _("If some symbols are orphaned (the linked symbol is not found anywhere),\ntry to find a candidate having the same name in one of loaded symbol libraries.") );
 
 	bSizerButtons->Add( m_buttonOrphanItems, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -88,18 +88,18 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* 
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_grid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onCellBrowseLib ), NULL, this );
-	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::OnSizeGrid ), NULL, this );
-	m_buttonOrphanItems->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onClickOrphansButton ), NULL, this );
-	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onCancel ), NULL, this );
+	m_grid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_EDIT_SYMBOLS_LIBID_BASE::onCellBrowseLib ), NULL, this );
+	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_SYMBOLS_LIBID_BASE::OnSizeGrid ), NULL, this );
+	m_buttonOrphanItems->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_SYMBOLS_LIBID_BASE::onClickOrphansButton ), NULL, this );
+	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_SYMBOLS_LIBID_BASE::onCancel ), NULL, this );
 }
 
-DIALOG_EDIT_COMPONENTS_LIBID_BASE::~DIALOG_EDIT_COMPONENTS_LIBID_BASE()
+DIALOG_EDIT_SYMBOLS_LIBID_BASE::~DIALOG_EDIT_SYMBOLS_LIBID_BASE()
 {
 	// Disconnect Events
-	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onCellBrowseLib ), NULL, this );
-	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::OnSizeGrid ), NULL, this );
-	m_buttonOrphanItems->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onClickOrphansButton ), NULL, this );
-	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onCancel ), NULL, this );
+	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_EDIT_SYMBOLS_LIBID_BASE::onCellBrowseLib ), NULL, this );
+	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_SYMBOLS_LIBID_BASE::OnSizeGrid ), NULL, this );
+	m_buttonOrphanItems->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_SYMBOLS_LIBID_BASE::onClickOrphansButton ), NULL, this );
+	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_SYMBOLS_LIBID_BASE::onCancel ), NULL, this );
 
 }

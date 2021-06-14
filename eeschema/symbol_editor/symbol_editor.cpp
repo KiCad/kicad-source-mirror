@@ -38,7 +38,7 @@
 #include <widgets/lib_tree.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
-#include <dialogs/dialog_lib_new_component.h>
+#include <dialogs/dialog_lib_new_symbol.h>
 #include <dialog_helpers.h>
 #include <wx/clipbrd.h>
 #include <wx/filedlg.h>
@@ -393,7 +393,7 @@ void SYMBOL_EDIT_FRAME::CreateNewPart()
 
     rootSymbols.Sort();
 
-    DIALOG_LIB_NEW_COMPONENT dlg( this, &rootSymbols );
+    DIALOG_LIB_NEW_SYMBOL dlg( this, &rootSymbols );
     dlg.SetMinSize( dlg.GetSize() );
 
     if( dlg.ShowModal() == wxID_CANCEL )

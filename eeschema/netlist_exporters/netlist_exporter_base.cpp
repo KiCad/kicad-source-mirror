@@ -77,7 +77,7 @@ SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PA
     if( aItem->Type() != SCH_SYMBOL_T )
         return nullptr;
 
-    // found next component
+    // found next symbol
     SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem;
 
     // Power symbols and other symbols which have the reference starting with "#" are not
@@ -95,7 +95,7 @@ SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PA
     if( !symbol->GetPartRef() )
         return nullptr;
 
-    // If component is a "multi parts per package" type
+    // If symbol is a "multi parts per package" type
     if( symbol->GetPartRef()->GetUnitCount() > 1 )
     {
         // test if this reference has already been processed, and if so skip
@@ -103,7 +103,7 @@ SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PA
             return nullptr;
     }
 
-    // record the usage of this library component entry.
+    // record the usage of this library symbol entry.
     m_libParts.insert( symbol->GetPartRef().get() ); // rejects non-unique pointers
 
     return symbol;
@@ -173,13 +173,13 @@ void NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
         }
     }
 
-    // Sort pins in m_SortedComponentPinList by pin number
+    // Sort pins in m_SortedSymbolPinList by pin number
     sort( m_sortedSymbolPinList.begin(), m_sortedSymbolPinList.end(), sortPinsByNum );
 
-    // Remove duplicate Pins in m_SortedComponentPinList
+    // Remove duplicate Pins in m_SortedSymbolPinList
     eraseDuplicatePins();
 
-    // record the usage of this library component entry.
+    // record the usage of this library symbol
     m_libParts.insert( aSymbol->GetPartRef().get() ); // rejects non-unique pointers
 }
 

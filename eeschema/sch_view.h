@@ -80,7 +80,7 @@ public:
     void Cleanup();
 
     void DisplaySheet( const SCH_SCREEN* aScreen );
-    void DisplayComponent( LIB_SYMBOL* aSymbol );
+    void DisplaySymbol( LIB_SYMBOL* aSymbol );
 
     // Call it to set new draw area limits (max working and draw area size)
     void ResizeSheetWorkingArea( const SCH_SCREEN *aScreen );

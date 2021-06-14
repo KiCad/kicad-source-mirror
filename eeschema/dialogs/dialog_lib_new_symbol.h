@@ -22,21 +22,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __dialog_lib_new_component__
-#define __dialog_lib_new_component__
+#ifndef __dialog_lib_new_symbol__
+#define __dialog_lib_new_symbol__
 
 #include <widgets/unit_binder.h>
 
-#include <dialog_lib_new_component_base.h>
+#include <dialog_lib_new_symbol_base.h>
 
 class EDA_DRAW_FRAME;
 class wxArrayString;
 
-class DIALOG_LIB_NEW_COMPONENT : public DIALOG_LIB_NEW_COMPONENT_BASE
+class DIALOG_LIB_NEW_SYMBOL : public DIALOG_LIB_NEW_SYMBOL_BASE
 {
 public:
-    DIALOG_LIB_NEW_COMPONENT( EDA_DRAW_FRAME* parent,
-                              const wxArrayString* aRootSymbolNames = nullptr );
+    DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* parent,
+                           const wxArrayString* aRootSymbolNames = nullptr );
 
     void SetName( const wxString& name ) override { m_textName->SetValue( name ); }
     wxString GetName( void ) const override { return m_textName->GetValue(); }
@@ -110,4 +110,4 @@ private:
     UNIT_BINDER     m_pinTextPosition;
 };
 
-#endif // __dialog_lib_new_component__
+#endif // __dialog_lib_new_symbol__

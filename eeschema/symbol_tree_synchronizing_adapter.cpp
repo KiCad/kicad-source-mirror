@@ -165,8 +165,8 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
 
             if( aliasIt != aliases.end() )
             {
-                // alias exists both in the component tree and the library manager,
-                // update only the node data
+                // alias exists both in the symbol tree and the library manager,
+                // update only the node data.
                 static_cast<LIB_TREE_NODE_LIB_ID*>( nodeIt->get() )->Update( *aliasIt );
                 aliases.erase( aliasIt );
                 ++nodeIt;

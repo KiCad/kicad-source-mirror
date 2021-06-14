@@ -59,7 +59,7 @@ const KICAD_T EE_COLLECTOR::EditableItems[] = {
 };
 
 
-const KICAD_T EE_COLLECTOR::ComponentsOnly[] = {
+const KICAD_T EE_COLLECTOR::SymbolsOnly[] = {
     SCH_SYMBOL_T,
     EOT
 };

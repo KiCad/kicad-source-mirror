@@ -130,10 +130,10 @@ private:
     void onRandomSourceType( wxCommandEvent& event ) override;
     void onTypeSelected( wxCommandEvent& event ) override;
 
-    ///< Edited component
+    ///< Edited symbol
     SCH_SYMBOL& m_symbol;
 
-    ///< Fields from the component properties dialog
+    ///< Fields from the symbol properties dialog.
     std::vector<SCH_FIELD>* m_schfields;
     std::vector<LIB_FIELD>* m_libfields;
     bool m_useSchFields;

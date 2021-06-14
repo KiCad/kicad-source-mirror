@@ -187,7 +187,7 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
 
     LIB_SYMBOL* part = GetParent();
 
-    /* Calculate pin orient taking in account the component orientation. */
+    /* Calculate pin orient taking in account the symbol orientation. */
     int orient = PinDrawOrient( aTransform );
 
     /* Calculate the pin position */
@@ -827,7 +827,7 @@ int LIB_PIN::PinDrawOrient( const TRANSFORM& aTransform ) const
     case PIN_RIGHT:  end.x = 1;   break;
     }
 
-    // = pos of end point, according to the component orientation
+    // = pos of end point, according to the symbol orientation.
     end    = aTransform.TransformCoordinate( end );
     orient = PIN_UP;
 

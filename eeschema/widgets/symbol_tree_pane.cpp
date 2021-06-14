@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -49,7 +50,7 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_M
     m_libMgr->GetAdapter()->FinishTreeInitialization();
 
     // Event handlers
-    Bind( SYMBOL_SELECTED, &SYMBOL_TREE_PANE::onComponentSelected, this );
+    Bind( SYMBOL_SELECTED, &SYMBOL_TREE_PANE::onSymbolSelected, this );
     m_tree->Bind( wxEVT_UPDATE_UI, &SYMBOL_TREE_PANE::onUpdateUI, this );
 }
 
@@ -60,7 +61,7 @@ SYMBOL_TREE_PANE::~SYMBOL_TREE_PANE()
 }
 
 
-void SYMBOL_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
+void SYMBOL_TREE_PANE::onSymbolSelected( wxCommandEvent& aEvent )
 {
     m_symbolEditFrame->GetToolManager()->RunAction( EE_ACTIONS::editSymbol, true );
 

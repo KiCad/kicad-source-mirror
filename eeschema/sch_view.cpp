@@ -118,7 +118,7 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
 }
 
 
-void SCH_VIEW::DisplayComponent( LIB_SYMBOL* aSymbol )
+void SCH_VIEW::DisplaySymbol( LIB_SYMBOL* aSymbol )
 {
     Clear();
 

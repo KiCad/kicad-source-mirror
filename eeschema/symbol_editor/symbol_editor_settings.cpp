@@ -38,7 +38,7 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
         m_Repeat(),
         m_ShowPinElectricalType( true ),
         m_LibWidth(),
-        m_EditComponentVisibleColumns()
+        m_EditSymbolVisibleColumns()
 {
     // Make Coverity happy
     m_UseEeschemaColorSettings = true;;
@@ -75,7 +75,7 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "lib_table_width", &m_LibWidth, 250 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "edit_component_visible_columns",
-            &m_EditComponentVisibleColumns, "0 1 2 3 4 5 6 7" ) );
+            &m_EditSymbolVisibleColumns, "0 1 2 3 4 5 6 7" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "pin_table_visible_columns",
             &m_PinTableVisibleColumns, "0 1 2 3 4 8 9" ) );
