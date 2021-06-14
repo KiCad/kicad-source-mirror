@@ -34,7 +34,7 @@
 
 
 /**
- * Illegal file name characters used to insure file names will be valid on all supported
+ * Illegal file name characters used to ensure file names will be valid on all supported
  * platforms.  This is the list of illegal file name characters for Windows which includes
  * the illegal file name characters for Linux and OSX.
  */
@@ -85,6 +85,12 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
 
                 continue;
             }
+        }
+        else if( ( *chIt == ' ' || *chIt == '}' || *chIt == ')' ) && inOverbar )
+        {
+            // Spaces were used to terminate overbar as well
+            newStr << "}";
+            inOverbar = false;
         }
 
         newStr << *chIt;
