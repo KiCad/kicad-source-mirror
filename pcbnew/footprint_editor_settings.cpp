@@ -180,7 +180,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.courtyard_line_width",
             &m_DesignSettings.m_LineThickness[ LAYER_CLASS_COURTYARD ],
-            Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+            Millimeter2iu( DEFAULT_COURTYARD_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
             MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.fab_line_width",
