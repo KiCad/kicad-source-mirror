@@ -27,6 +27,7 @@
 
 #include <commit.h>
 #include <eda_item.h>
+#include <macros.h>
 
 COMMIT::COMMIT()
 {
@@ -208,7 +209,7 @@ CHANGE_TYPE COMMIT::convert( UNDO_REDO aType ) const
 
     default:
         assert( false );
-        // fall through
+        KI_FALLTHROUGH;
 
     case UNDO_REDO::CHANGED:
         return CHT_MODIFY;
