@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{5df960db-b916-4732-a13d-228f20a806fe}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)CActionNode.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CCategory.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CCommand.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CCommandSet.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CCommandTreeNode.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CCookieCollection.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CHitTest.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CImage.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CNavigation3D.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CNavlibImpl.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CNavlibInterface.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IAccessors.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IEvents.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IHit.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IModel.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)INavlib.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IPivot.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ISpace3D.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IState.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IView.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory).editorconfig" />
+  </ItemGroup>
+</Project>
