@@ -1541,8 +1541,10 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             ReadDelimitedText( buf, data, sizeof(buf) );
 
             if( m_board )
+            {
                 wxASSERT( m_board->FindNet( getNetCode( netcode ) )->GetNetname()
-                          == FROM_UTF8( StrPurge( buf ) ) );
+                          == ConvertToNewOverbarNotation( FROM_UTF8( StrPurge( buf ) ) ) );
+            }
         }
 
         else if( TESTLINE( "Po" ) )         // (Po)sition
@@ -1791,6 +1793,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
     txt_end = data + ReadDelimitedText( &m_field, data );
     m_field.Replace( "%V", "${VALUE}" );
     m_field.Replace( "%R", "${REFERENCE}" );
+    m_field = ConvertToNewOverbarNotation( m_field );
     aText->SetText( m_field );
 
     // after switching to strtok, there's no easy coming back because of the
@@ -2039,7 +2042,10 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
             ReadDelimitedText( buf, data, sizeof(buf) );
 
             if( net == NULL )
-                net = new NETINFO_ITEM( m_board, FROM_UTF8( buf ), netCode );
+            {
+                net = new NETINFO_ITEM( m_board, ConvertToNewOverbarNotation( FROM_UTF8( buf ) ),
+                                        netCode );
+            }
             else
             {
                 THROW_IO_ERROR( "Two net definitions in  '$EQUIPOT' block" );
@@ -2114,7 +2120,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
         if( TESTLINE( "Te" ) )          // Text line (or first line for multi line texts)
         {
             ReadDelimitedText( text, line + SZ( "Te" ), sizeof(text) );
-            pcbtxt->SetText( FROM_UTF8( text ) );
+            pcbtxt->SetText( ConvertToNewOverbarNotation( FROM_UTF8( text ) ) );
         }
 
         else if( TESTLINE( "nl" ) )     // next line of the current text
@@ -2352,7 +2358,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
         {
             // e.g. "AddNet "V3.3D"\n"
             ReadDelimitedText( buf, line + SZ( "AddNet" ), sizeof(buf) );
-            netname = FROM_UTF8( buf );
+            netname = ConvertToNewOverbarNotation( FROM_UTF8( buf ) );
             nc->Add( netname );
         }
 

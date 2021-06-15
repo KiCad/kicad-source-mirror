@@ -295,8 +295,8 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
     wxCHECK_RET( CurTok() == T_effects,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as EDA_TEXT." ) );
 
-    // In version 20210606 the notation for overbars was changed from `~...~` to `~{...}`. We need to convert
-    // the old syntax to the new one.
+    // In version 20210606 the notation for overbars was changed from `~...~` to `~{...}`.
+    // We need to convert the old syntax to the new one.
     if( m_requiredVersion < 20210606 )
         aText->SetText( ConvertToNewOverbarNotation( aText->GetText() ) );
 
@@ -2092,6 +2092,11 @@ void PCB_PARSER::parseNETINFO_ITEM()
     NeedSYMBOLorNUMBER();
     wxString name = FromUTF8();
 
+    // Convert overbar syntax from `~...~` to `~{...}`.  These were left out of the first merge
+    // so the version is a bit later.
+    if( m_requiredVersion < 20210615 )
+        name = ConvertToNewOverbarNotation( name );
+
     NeedRIGHT();
 
     // net 0 should be already in list, so store this net
@@ -2166,7 +2171,14 @@ void PCB_PARSER::parseNETCLASS()
 
         case T_add_net:
             NeedSYMBOLorNUMBER();
-            nc->Add( FromUTF8() );
+
+            // Convert overbar syntax from `~...~` to `~{...}`.  These were left out of the
+            // first merge so the version is a bit later.
+            if( m_requiredVersion < 20210615 )
+                nc->Add( ConvertToNewOverbarNotation( FromUTF8() ) );
+            else
+                nc->Add( FromUTF8() );
+
             break;
 
         default:
@@ -3968,17 +3980,26 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             NeedSYMBOLorNUMBER();
 
             // Test validity of the netname in file for netcodes expected having a net name
-            if( m_board && pad->GetNetCode() > 0 &&
-                FromUTF8() != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
+            if( m_board && pad->GetNetCode() > 0 )
             {
-                pad->SetNetCode( NETINFO_LIST::ORPHANED, /* aNoAssert */ true );
-                wxLogError( wxString::Format( _( "Net name doesn't match net ID in\n"
-                                                 "file: '%s'\n"
-                                                 "line: %d\n"
-                                                 "offset: %d" ),
-                                              CurSource(),
-                                              CurLineNumber(),
-                                              CurOffset() ) );
+                wxString netName( FromUTF8() );
+
+                // Convert overbar syntax from `~...~` to `~{...}`.  These were left out of the
+                // first merge so the version is a bit later.
+                if( m_requiredVersion < 20210615 )
+                    netName = ConvertToNewOverbarNotation( netName );
+
+                if( netName != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
+                {
+                    pad->SetNetCode( NETINFO_LIST::ORPHANED, /* aNoAssert */ true );
+                    wxLogError( wxString::Format( _( "Net name doesn't match net ID in\n"
+                                                     "file: '%s'\n"
+                                                     "line: %d\n"
+                                                     "offset: %d" ),
+                                                  CurSource(),
+                                                  CurLineNumber(),
+                                                  CurOffset() ) );
+                }
             }
 
             NeedRIGHT();
