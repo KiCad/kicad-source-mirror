@@ -24,7 +24,7 @@
  */
 
 #include <algorithm>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <confirm.h>
 #include <eeschema_id.h>
 #include <general.h>

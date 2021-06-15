@@ -29,7 +29,7 @@
 #include <schematic.h>
 #include <erc_settings.h>
 #include <sch_reference_list.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <tools/ee_selection.h>
 #include <tools/ee_selection_tool.h>
 #include <tool/tool_manager.h>

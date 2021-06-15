@@ -44,7 +44,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_bitmap.h>
 #include <schematic.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <eeschema_settings.h>
 #include <dialogs/dialog_edit_label.h>
 #include <dialogs/dialog_edit_line_style.h>

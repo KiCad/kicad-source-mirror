@@ -33,7 +33,7 @@
 #include <sch_symbol.h>
 #include <lib_field.h>
 #include <template_fieldnames.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <sch_validators.h>
 #include <schematic.h>
 #include <dialog_edit_one_field.h>

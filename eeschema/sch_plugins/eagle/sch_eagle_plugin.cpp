@@ -34,7 +34,7 @@
 #include <wx/wfstream.h>
 #include <wx/xml/xml.h>
 
-#include <class_library.h>
+#include <symbol_library.h>
 #include <plugins/eagle/eagle_parser.h>
 #include <kicad_string.h>
 #include <lib_arc.h>

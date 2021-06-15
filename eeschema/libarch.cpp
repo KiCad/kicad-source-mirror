@@ -33,7 +33,7 @@
 
 #include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <sch_symbol.h>
 #include <sch_sheet.h>
 #include <schematic.h>

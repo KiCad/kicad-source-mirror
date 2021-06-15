@@ -24,7 +24,7 @@
  */
 
 #include <bitmaps.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
 #include <dialog_choose_symbol.h>

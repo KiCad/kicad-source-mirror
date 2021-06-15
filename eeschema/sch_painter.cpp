@@ -28,7 +28,7 @@
 #include <sch_item.h>
 
 #include <bezier_curves.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <connection_graph.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/geometry_utils.h>

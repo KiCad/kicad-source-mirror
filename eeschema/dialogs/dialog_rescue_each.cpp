@@ -22,7 +22,7 @@
  */
 
 #include <class_draw_panel_gal.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <dialog_rescue_each_base.h>
 #include <eeschema_settings.h>
 #include <invoke_sch_dialog.h>

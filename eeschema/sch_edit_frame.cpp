@@ -24,7 +24,7 @@
 
 #include <base_units.h>
 #include <bitmaps.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <confirm.h>
 #include <connection_graph.h>
 #include <dialogs/dialog_schematic_find.h>

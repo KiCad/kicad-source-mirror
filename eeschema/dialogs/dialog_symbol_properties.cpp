@@ -36,7 +36,7 @@
 #include <widgets/wx_grid.h>
 #include <settings/settings_manager.h>
 #include <ee_collectors.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <fields_grid_table.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>

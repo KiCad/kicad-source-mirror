@@ -26,7 +26,7 @@
 #include <bitmaps.h>
 #include <wx/hyperlink.h>
 #include <base_screen.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <confirm.h>
 #include <core/kicad_algo.h>
 #include <eeschema_id.h>

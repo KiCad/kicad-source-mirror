@@ -24,12 +24,12 @@
  */
 
 /**
- * @file class_library.h
+ * @file symbol_library.h
  * @brief Definition for symbol library class.
  */
 
-#ifndef CLASS_LIBRARY_H
-#define CLASS_LIBRARY_H
+#ifndef SYMBOL_LIBRARY_H
+#define SYMBOL_LIBRARY_H
 
 #include <map>
 #include <mutex>
@@ -483,4 +483,4 @@ private:
 bool operator==( const SYMBOL_LIB& aLibrary, const wxString& aName );
 bool operator!=( const SYMBOL_LIB& aLibrary, const wxString& aName );
 
-#endif  //  CLASS_LIBRARY_H
+#endif  //  SYMBOL_LIBRARY_H

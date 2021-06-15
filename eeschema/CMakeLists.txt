@@ -163,7 +163,6 @@ set( EESCHEMA_SRCS
     autoplace_fields.cpp
     bus_alias.cpp
     bus-wire-junction.cpp
-    class_library.cpp
     cmp_library_lexer.cpp
     component_references_lister.cpp
     connection_graph.cpp
@@ -228,6 +227,7 @@ set( EESCHEMA_SRCS
     sheet.cpp
     symbol_async_loader.cpp
     symbol_lib_table.cpp
+    symbol_library.cpp
     symbol_tree_model_adapter.cpp
     symbol_tree_synchronizing_adapter.cpp
     toolbars_symbol_viewer.cpp

@@ -59,7 +59,7 @@
 #include <template_fieldnames.h>
 #include <sch_screen.h>
 #include <schematic.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <lib_arc.h>
 #include <lib_bezier.h>
 #include <lib_circle.h>

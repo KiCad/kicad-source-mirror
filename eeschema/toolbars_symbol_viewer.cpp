@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -22,7 +22,7 @@
 
 #include <bitmaps.h>
 #include <macros.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <eeschema_id.h>
 #include <symbol_viewer_frame.h>
 #include <sch_painter.h>

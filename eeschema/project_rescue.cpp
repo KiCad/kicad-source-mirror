@@ -23,7 +23,7 @@
  */
 
 #include <sch_draw_panel.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <confirm.h>
 #include <connection_graph.h>
 #include <invoke_sch_dialog.h>

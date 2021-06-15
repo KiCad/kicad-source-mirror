@@ -23,7 +23,7 @@
 
 #include <mutex>
 
-#include <class_library.h>
+#include <symbol_library.h>
 #include <confirm.h>
 #include <dialogs/panel_eeschema_color_settings.h>
 #include <dialogs/panel_eeschema_display_options.h>

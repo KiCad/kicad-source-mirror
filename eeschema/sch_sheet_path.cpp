@@ -27,7 +27,7 @@
 #include <sch_item.h>
 #include <sch_marker.h>
 #include <sch_reference_list.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <sch_sheet.h>

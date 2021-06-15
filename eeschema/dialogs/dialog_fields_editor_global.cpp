@@ -25,7 +25,7 @@
 
 #include <base_units.h>
 #include <bitmaps.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <confirm.h>
 #include <eda_doc.h>
 #include <eeschema_settings.h>

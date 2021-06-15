@@ -27,7 +27,7 @@
 
 #include <refdes_utils.h>
 
-#include <class_library.h>
+#include <symbol_library.h>
 #include <connection_graph.h>
 #include <sch_reference_list.h>
 #include <sch_screen.h>

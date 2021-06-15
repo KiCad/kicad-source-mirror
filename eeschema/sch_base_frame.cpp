@@ -33,7 +33,7 @@
 #include <settings/settings_manager.h>
 #include <confirm.h>
 #include <preview_items/selection_area.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <sch_base_frame.h>
 #include <symbol_lib_table.h>
 #include <tool/action_toolbar.h>

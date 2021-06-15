@@ -30,7 +30,7 @@
 #include <general.h>
 #include <template_fieldnames.h>
 #include <transform.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <lib_pin.h>
 #include <lib_arc.h>
 #include <settings/color_settings.h>

@@ -43,7 +43,7 @@
 #include <sch_edit_frame.h>
 #include <sch_item.h>
 
-#include <class_library.h>
+#include <symbol_library.h>
 #include <connection_graph.h>
 #include <lib_pin.h>
 #include <sch_symbol.h>

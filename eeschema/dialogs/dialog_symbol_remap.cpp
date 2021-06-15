@@ -31,7 +31,7 @@
 #include <wildcards_and_files_ext.h>
 #include <wx_html_report_panel.h>
 
-#include <class_library.h>
+#include <symbol_library.h>
 #include <core/kicad_algo.h>
 #include <symbol_viewer_frame.h>
 #include <project_rescue.h>

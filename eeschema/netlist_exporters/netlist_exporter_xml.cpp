@@ -28,7 +28,7 @@
 #include <build_version.h>
 #include <common.h>     // for ExpandTextVars
 #include <sch_base_frame.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <kicad_string.h>
 #include <connection_graph.h>
 #include <refdes_utils.h>

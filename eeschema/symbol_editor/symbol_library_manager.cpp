@@ -24,7 +24,7 @@
  */
 
 #include <symbol_library_manager.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <dialogs/html_messagebox.h>
 #include <symbol_edit_frame.h>
 #include <env_paths.h>

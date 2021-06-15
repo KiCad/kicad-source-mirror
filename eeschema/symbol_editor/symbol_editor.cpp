@@ -29,7 +29,7 @@
 #include <tools/ee_actions.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <symbol_edit_frame.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <symbol_lib_table.h>

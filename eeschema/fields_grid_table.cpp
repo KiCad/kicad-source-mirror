@@ -29,7 +29,7 @@
 #include <sch_field.h>
 #include <sch_validators.h>
 #include <validators.h>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <template_fieldnames.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <wildcards_and_files_ext.h>

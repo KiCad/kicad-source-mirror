@@ -34,7 +34,7 @@
 
 #include <convert_to_biu.h>                      // IU_PER_MM
 
-#include <class_library.h>
+#include <symbol_library.h>
 #include <schematic_lexer.h>
 #include <sch_file_versions.h>
 #include <default_values.h>    // For some default values

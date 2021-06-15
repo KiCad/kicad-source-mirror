@@ -23,7 +23,7 @@
  */
 
 #include <algorithm>
-#include <class_library.h>
+#include <symbol_library.h>
 #include <dialog_choose_symbol.h>
 #include <eeschema_settings.h>
 #include <kiface_i.h>
