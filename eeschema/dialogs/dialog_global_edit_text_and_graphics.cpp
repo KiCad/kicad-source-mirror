@@ -326,7 +326,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
     {
         if( aItem->Type() == SCH_SYMBOL_T )
         {
-            bool isPower = static_cast<SCH_SYMBOL*>( aItem )->GetPartRef()->IsPower();
+            bool isPower = static_cast<SCH_SYMBOL*>( aItem )->GetLibSymbolRef()->IsPower();
 
             if( isPower != ( m_typeFilter->GetSelection() == 1 ) )
                 return;

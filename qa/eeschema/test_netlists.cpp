@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -92,7 +92,7 @@ void TEST_NETLISTS_FIXTURE::loadSchematic( const wxString& aBaseName )
 
     m_manager.LoadProject( pro.GetFullPath() );
 
-    m_manager.Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, nullptr );
+    m_manager.Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
 
     m_schematic.Reset();
     m_schematic.SetProject( &m_manager.Prj() );

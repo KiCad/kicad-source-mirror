@@ -50,7 +50,7 @@ class SCH_FIELD;
 class PROPERTIES;
 class SCH_EAGLE_PLUGIN_CACHE;
 class LIB_SYMBOL;
-class PART_LIB;
+class SYMBOL_LIB;
 class LIB_CIRCLE;
 class LIB_FIELD;
 class LIB_RECTANGLE;

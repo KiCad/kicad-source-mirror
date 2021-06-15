@@ -344,21 +344,21 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         // Don't reload the symbol libraries if we are just launching Eeschema from KiCad again.
         // They are already saved in the kiface project object.
-        if( differentProject || !Prj().GetElem( PROJECT::ELEM_SCH_PART_LIBS ) )
+        if( differentProject || !Prj().GetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS ) )
         {
             // load the libraries here, not in SCH_SCREEN::Draw() which is a context
             // that will not tolerate DisplayError() dialog since we're already in an
             // event handler in there.
             // And when a schematic file is loaded, we need these libs to initialize
             // some parameters (links to PART LIB, dangling ends ...)
-            Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, nullptr );
+            Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
             Prj().SchLibs();
         }
     }
     else
     {
         // No legacy symbol libraries including the cache are loaded with the new file format.
-        Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, nullptr );
+        Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
     }
 
     // Load the symbol library table, this will be used forever more.
@@ -475,7 +475,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 wxString paths;
                 wxArrayString libNames;
 
-                PART_LIBS::LibNamesAndPaths( &Prj(), false, &paths, &libNames );
+                SYMBOL_LIBS::LibNamesAndPaths( &Prj(), false, &paths, &libNames );
 
                 if( !libNames.IsEmpty() )
                 {
@@ -499,7 +499,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
                     libNames.Clear();
                     paths.Clear();
-                    PART_LIBS::LibNamesAndPaths( &Prj(), true, &paths, &libNames );
+                    SYMBOL_LIBS::LibNamesAndPaths( &Prj(), true, &paths, &libNames );
                 }
 
                 if( !cfg || !cfg->m_RescueNeverShow )
@@ -510,7 +510,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             }
 
             // Ensure there is only one legacy library loaded and that it is the cache library.
-            PART_LIBS* legacyLibs = Schematic().Prj().SchLibs();
+            SYMBOL_LIBS* legacyLibs = Schematic().Prj().SchLibs();
 
             if( legacyLibs->GetLibraryCount() == 0 )
             {

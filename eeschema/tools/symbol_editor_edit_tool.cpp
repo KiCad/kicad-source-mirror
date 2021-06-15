@@ -58,10 +58,11 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
 
     wxASSERT_MSG( drawingTools, "eeschema.SymbolDrawing tool is not available" );
 
-    auto havePartCondition =
+    auto haveSymbolCondition =
             [&]( const SELECTION& sel )
             {
-                return m_isSymbolEditor && static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
+                return m_isSymbolEditor &&
+                       static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
             };
 
     auto canEdit =
@@ -105,7 +106,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
         moveMenu.AddItem( ACTIONS::doDelete,        canEdit && EE_CONDITIONS::NotEmpty, 200 );
 
         moveMenu.AddSeparator( 400 );
-        moveMenu.AddItem( ACTIONS::selectAll,       havePartCondition, 400 );
+        moveMenu.AddItem( ACTIONS::selectAll,       haveSymbolCondition, 400 );
     }
 
     // Add editing actions to the drawing tool menu
@@ -137,7 +138,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
     selToolMenu.AddItem( ACTIONS::doDelete,         canEdit && EE_CONDITIONS::NotEmpty, 300 );
 
     selToolMenu.AddSeparator( 400 );
-    selToolMenu.AddItem( ACTIONS::selectAll,        havePartCondition, 400 );
+    selToolMenu.AddItem( ACTIONS::selectAll,        haveSymbolCondition, 400 );
 
     return true;
 }
@@ -155,7 +156,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     LIB_ITEM* item = static_cast<LIB_ITEM*>( selection.Front() );
 
     if( !item->IsMoving() )
-        saveCopyInUndoList( m_frame->GetCurPart(), UNDO_REDO::LIBEDIT );
+        saveCopyInUndoList( m_frame->GetCurSymbol(), UNDO_REDO::LIBEDIT );
 
     if( selection.GetSize() == 1 )
         rotPoint = item->GetPosition();
@@ -199,7 +200,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     LIB_ITEM* item = static_cast<LIB_ITEM*>( selection.Front() );
 
     if( !item->IsMoving() )
-        saveCopyInUndoList( m_frame->GetCurPart(), UNDO_REDO::LIBEDIT );
+        saveCopyInUndoList( m_frame->GetCurSymbol(), UNDO_REDO::LIBEDIT );
 
     if( selection.GetSize() == 1 )
         mirrorPoint = item->GetPosition();
@@ -252,7 +253,7 @@ static KICAD_T nonFields[] =
 
 int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL* symbol = m_frame->GetCurPart();
+    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
     auto        items = m_selectionTool->RequestSelection( nonFields ).GetItems();
 
     if( items.empty() )
@@ -413,7 +414,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     if( selection.Empty() || aEvent.IsAction( &EE_ACTIONS::symbolProperties ) )
     {
-        if( m_frame->GetCurPart() )
+        if( m_frame->GetCurSymbol() )
             editSymbolProperties();
     }
     else if( selection.Size() == 1 )
@@ -556,7 +557,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
 
 void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
 {
-    LIB_SYMBOL*   symbol = m_frame->GetCurPart();
+    LIB_SYMBOL*   symbol = m_frame->GetCurSymbol();
     bool          partLocked = symbol->UnitsLocked();
     wxString      oldName = symbol->GetName();
 
@@ -593,7 +594,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
 
 int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL* symbol = m_frame->GetCurPart();
+    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
 
     if( !symbol )
         return 0;
@@ -616,7 +617,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL* symbol = m_frame->GetCurPart();
+    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
 
     if( !symbol )
         return 0;
@@ -672,7 +673,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Cut( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL*   symbol = m_frame->GetCurPart();
+    LIB_SYMBOL*   symbol = m_frame->GetCurSymbol();
     EE_SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
 
     if( !symbol || !selection.GetSize() )
@@ -692,7 +693,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
     LIB_SYMBOL* partCopy = new LIB_SYMBOL( *symbol );
 
     STRING_FORMATTER  formatter;
-    SCH_SEXPR_PLUGIN::FormatPart( partCopy, formatter );
+    SCH_SEXPR_PLUGIN::FormatLibSymbol( partCopy, formatter );
 
     delete partCopy;
 
@@ -708,7 +709,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL*         symbol = m_frame->GetCurPart();
+    LIB_SYMBOL*         symbol = m_frame->GetCurSymbol();
 
     if( !symbol || symbol->IsAlias() )
         return 0;
@@ -719,7 +720,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
     try
     {
-        newPart = SCH_SEXPR_PLUGIN::ParsePart( reader );
+        newPart = SCH_SEXPR_PLUGIN::ParseLibSymbol( reader );
     }
     catch( IO_ERROR& )
     {
@@ -773,7 +774,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL*   symbol = m_frame->GetCurPart();
+    LIB_SYMBOL*   symbol = m_frame->GetCurSymbol();
     EE_SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
 
     if( selection.GetSize() == 0 )
@@ -785,7 +786,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         return 0;
 
     if( !selection.Front()->IsMoving() )
-        saveCopyInUndoList( m_frame->GetCurPart(), UNDO_REDO::LIBEDIT );
+        saveCopyInUndoList( m_frame->GetCurSymbol(), UNDO_REDO::LIBEDIT );
 
     EDA_ITEMS newItems;
 

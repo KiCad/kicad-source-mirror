@@ -62,7 +62,7 @@ public:
     void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
 
     /**
-     * Get if any parts or libraries have been modified but not saved.
+     * Get if any symbols or libraries have been modified but not saved.
      *
      * @return true if the any changes have not been saved
      */
@@ -96,16 +96,16 @@ public:
     LIB_ID GetTreeLIBID( int* aUnit = nullptr ) const;
 
     /**
-     * Return the current part being edited or NULL if none selected.
+     * Return the current symbol being edited or NULL if none selected.
      *
      * This is a LIB_SYMBOL that I own, it is at best a copy of one in a library.
      */
-    LIB_SYMBOL* GetCurPart() const { return m_my_part; }
+    LIB_SYMBOL* GetCurSymbol() const { return m_symbol; }
 
     /**
      * Take ownership of aSymbol and notes that it is the one currently being edited.
      */
-    void SetCurPart( LIB_SYMBOL* aSymbol, bool aUpdateZoom );
+    void SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom );
 
     SYMBOL_LIBRARY_MANAGER& GetLibManager();
 
@@ -122,15 +122,15 @@ public:
     bool AddLibraryFile( bool aCreateNew );
 
     /**
-     * Create a new part in the selected library.
+     * Create a new symbol in the selected library.
      */
-    void CreateNewPart();
+    void CreateNewSymbol();
 
-    void ImportPart();
-    void ExportPart();
+    void ImportSymbol();
+    void ExportSymbol();
 
     /**
-     * Save the selected part or library.
+     * Save the selected symbol or library.
      */
     void Save();
 
@@ -145,28 +145,28 @@ public:
     void SaveLibraryAs();
 
     /**
-     * Save all modified parts and libraries.
+     * Save all modified symbols and libraries.
      */
     void SaveAll();
 
     /**
-     * Revert unsaved changes in a part, restoring to the last saved state.
+     * Revert unsaved changes in a symbol, restoring to the last saved state.
      */
     void Revert( bool aConfirm = true );
     void RevertAll();
 
-    void DeletePartFromLibrary();
+    void DeleteSymbolFromLibrary();
 
-    void CopyPartToClipboard();
+    void CopySymbolToClipboard();
 
-    void LoadPart( const wxString& aLibrary, const wxString& aSymbol, int Unit );
+    void LoadSymbol( const wxString& aLibrary, const wxString& aSymbol, int Unit );
 
     /**
-     * Insert a duplicate part.
+     * Insert a duplicate symbol.
      *
      * If \a aFromClipboard is true then action is a paste.
      */
-    void DuplicatePart( bool aFromClipboard );
+    void DuplicateSymbol( bool aFromClipboard );
 
     void OnSelectUnit( wxCommandEvent& event );
 
@@ -176,7 +176,7 @@ public:
     void FreezeLibraryTree();
     void ThawLibraryTree();
 
-    void OnUpdatePartNumber( wxUpdateUIEvent& event );
+    void OnUpdateUnitNumber( wxUpdateUIEvent& event );
 
     void UpdateAfterSymbolProperties( wxString* aOldName = nullptr );
     void RebuildSymbolUnitsList();
@@ -354,11 +354,11 @@ public:
 
     bool IsSymbolAlias() const;
 
-    ///< Restore the empty editor screen, without any part or library selected.
+    ///< Restore the empty editor screen, without any symbol or library selected.
     void emptyScreen();
 
-    ///< Return either the part selected in the symbol tree, if context menu is active or the
-    ///< currently modified part.
+    ///< Return either the symbol selected in the symbol tree, if context menu is active or the
+    ///< currently modified symbol.
     LIB_ID GetTargetLibId() const;
 
 protected:
@@ -368,7 +368,7 @@ private:
     // Set up the tool framework
     void setupTools();
 
-    void savePartAs();
+    void saveSymbolAs();
 
     /**
      * Save the changes to the current library.
@@ -427,8 +427,8 @@ private:
      * @param aConvert the initial DeMorgan variant to show.
      * @return True if a copy of \a aLibEntry was successfully copied.
      */
-    bool LoadOneLibraryPartAux( LIB_SYMBOL* aLibEntry, const wxString& aLibrary, int aUnit,
-                                int aConvert );
+    bool LoadOneLibrarySymbolAux( LIB_SYMBOL* aLibEntry, const wxString& aLibrary, int aUnit,
+                                  int aConvert );
 
     /**
      * Display a dialog asking the user to select a symbol library table.
@@ -441,8 +441,8 @@ private:
     ///< Create a backup copy of a file with requested extension.
     bool backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt );
 
-    ///< Return currently edited part.
-    LIB_SYMBOL* getTargetPart() const;
+    ///< Return currently edited symbol.
+    LIB_SYMBOL* getTargetSymbol() const;
 
     ///< Return either the library selected in the symbol tree, if context menu is active or
     ///< the library that is currently modified.
@@ -456,14 +456,14 @@ private:
      */
     bool saveAllLibraries( bool aRequireConfirmation );
 
-    ///< Save the current part.
-    bool saveCurrentPart();
+    ///< Save the current symbol.
+    bool saveCurrentSymbol();
 
-    ///< Store the currently modified part in the library manager buffer.
-    void storeCurrentPart();
+    ///< Store the currently modified symbol in the library manager buffer.
+    void storeCurrentSymbol();
 
-    ///< Return true if \a aLibId is an alias for the editor screen part.
-    bool isCurrentPart( const LIB_ID& aLibId ) const;
+    ///< Return true if \a aLibId is an alias for the editor screen symbol.
+    bool isCurrentSymbol( const LIB_ID& aLibId ) const;
 
     ///< Rename LIB_SYMBOL aliases to avoid conflicts before adding a symbol to a library.
     void ensureUniqueName( LIB_SYMBOL* aSymbol, const wxString& aLibrary );
@@ -507,11 +507,11 @@ public:
      * When units are interchangeable, synchronizing editing of pins is usually the best way,
      * because if units are interchangeable, it implies that all similar pins are at the same
      * location.
-     * When units are not interchangeable, do not synchronize editing of pins, because each part
+     * When units are not interchangeable, do not synchronize editing of pins, because each symbol
      * is specific, and there are no (or few) similar pins between units.
      *
-     * Setting this to false allows editing each pin per part or body style regardless other
-     * pins at the same location. This requires the user to open each part or body style to make
+     * Setting this to false allows editing each pin per symbol or body style regardless other
+     * pins at the same location. This requires the user to open each symbol or body style to make
      * changes to the other pins at the same location.
      *
      * To know if others pins must be coupled when editing a pin, use SynchronizePins() instead
@@ -524,13 +524,13 @@ public:
     bool          m_SyncPinEdit;
 
 private:
-    ///< Helper screen used when no part is loaded
+    ///< Helper screen used when no symbol is loaded
     SCH_SCREEN* m_dummyScreen;
 
-    LIB_SYMBOL*             m_my_part;           // a part I own, it is not in any library, but a
+    LIB_SYMBOL*             m_symbol;            // a symbol I own, it is not in any library, but a
                                                  // copy could be.
     wxComboBox*             m_unitSelectBox;     // a ComboBox to select a unit to edit (if the
-                                                 // part has multiple units)
+                                                 // symbol has multiple units)
     SYMBOL_TREE_PANE*       m_treePane;          // symbol search tree widget
     SYMBOL_LIBRARY_MANAGER* m_libMgr;            // manager taking care of temporary modifications
     SYMBOL_EDITOR_SETTINGS* m_settings;          // Handle to the settings

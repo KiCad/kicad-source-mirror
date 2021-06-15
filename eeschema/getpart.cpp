@@ -116,7 +116,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
 
         adapter->AssignIntrinsicRanks();
 
-        if( aFilter->GetFilterPowerParts() )
+        if( aFilter->GetFilterPowerSymbols() )
             adapter->SetFilter( SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER );
     }
 
@@ -131,7 +131,8 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
             history_list.push_back( symbol );
     }
 
-    adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list, true );
+    adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list,
+                           true );
 
     if( !aHistoryList.empty() )
         adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
@@ -235,14 +236,14 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
 
 void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
 {
-    if( !aSymbol || !aSymbol->GetPartRef() )
+    if( !aSymbol || !aSymbol->GetLibSymbolRef() )
         return;
 
     wxString msg;
 
-    if( !aSymbol->GetPartRef()->HasConversion() )
+    if( !aSymbol->GetLibSymbolRef()->HasConversion() )
     {
-        LIB_ID id = aSymbol->GetPartRef()->GetLibId();
+        LIB_ID id = aSymbol->GetLibSymbolRef()->GetLibId();
 
         msg.Printf( _( "No alternate body style found for symbol \"%s\" in library \"%s\"." ),
                     id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );

@@ -43,7 +43,7 @@
 class wxConfigBase;
 class PARAM_CFG;
 class FP_LIB_TABLE;
-class PART_LIBS;
+class SYMBOL_LIBS;
 class SEARCH_STACK;
 class S3D_CACHE;
 class KIWAY;
@@ -159,9 +159,9 @@ public:
     {
         DOC_PATH,
         SCH_LIB_PATH,
-        SCH_LIB_SELECT,         // eeschema/selpart.cpp
+        SCH_LIB_SELECT,               // eeschema/selpart.cpp
         SCH_LIBEDIT_CUR_LIB,
-        SCH_LIBEDIT_CUR_PART,        // eeschema/libeditframe.cpp
+        SCH_LIBEDIT_CUR_SYMBOL,       // eeschema/libeditframe.cpp
 
         VIEWER_3D_PATH,
         VIEWER_3D_FILTER_INDEX,
@@ -201,7 +201,7 @@ public:
     {
         ELEM_FPTBL,
 
-        ELEM_SCH_PART_LIBS,
+        ELEM_SCH_SYMBOL_LIBS,
         ELEM_SCH_SEARCH_STACK,
         ELEM_3DCACHE,
         ELEM_SYMBOL_LIB_TABLE,
@@ -285,7 +285,7 @@ public:
 
 #if defined( EESCHEMA )
     // These are all prefaced with "Sch"
-    PART_LIBS*  SchLibs();
+    SYMBOL_LIBS*  SchLibs();
 
     /// Accessor for Eeschema search stack.
     SEARCH_STACK*  SchSearchS();

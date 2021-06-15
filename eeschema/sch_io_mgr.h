@@ -36,7 +36,7 @@ class SCH_PLUGIN;
 class SCHEMATIC;
 class KIWAY;
 class LIB_SYMBOL;
-class PART_LIB;
+class SYMBOL_LIB;
 class PROPERTIES;
 
 
@@ -311,7 +311,7 @@ public:
      *                 is thrown in the case where aAliasName cannot be found.
      */
     virtual LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aPartName,
-                                  const PROPERTIES* aProperties = nullptr );
+                                    const PROPERTIES* aProperties = nullptr );
 
     /**
      * Write \a aSymbol to an existing library located at \a aLibraryPath.  If a #LIB_SYMBOL

@@ -148,7 +148,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
-            LIB_SYMBOL* symbol = m_frame->GetCurPart();
+            LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
 
             if( !symbol )
                 continue;
@@ -274,7 +274,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    LIB_SYMBOL* symbol = m_frame->GetCurPart();
+    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
     LIB_ITEM* item = nullptr;
 
     // Prime the pump
@@ -453,7 +453,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
-            LIB_SYMBOL* symbol = m_frame->GetCurPart();
+            LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
 
             if( !symbol )
                 continue;
@@ -489,7 +489,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
 {
     SYMBOL_EDITOR_PIN_TOOL* pinTool = m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>();
-    LIB_SYMBOL*   symbol = m_frame->GetCurPart();
+    LIB_SYMBOL*   symbol = m_frame->GetCurSymbol();
     LIB_PIN*      sourcePin = nullptr;
 
     if( !symbol )

@@ -54,11 +54,11 @@
         "This may cause some unexpected behavior when loading symbols into a schematic." )
 
 
-PART_LIB::PART_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
+SYMBOL_LIB::SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
                     SCH_IO_MGR::SCH_FILE_T aPluginType ) :
     // start @ != 0 so each additional library added
     // is immediately detectable, zero would not be.
-    m_mod_hash( PART_LIBS::GetModifyGeneration() ),
+    m_mod_hash( SYMBOL_LIBS::GetModifyGeneration() ),
     m_pluginType( aPluginType )
 {
     type = aType;
@@ -78,12 +78,12 @@ PART_LIB::PART_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
 }
 
 
-PART_LIB::~PART_LIB()
+SYMBOL_LIB::~SYMBOL_LIB()
 {
 }
 
 
-void PART_LIB::Save( bool aSaveDocFile )
+void SYMBOL_LIB::Save( bool aSaveDocFile )
 {
     wxCHECK_RET( m_plugin != nullptr, wxString::Format( "no plugin defined for library `%s`.",
                                                         fileName.GetFullPath() ) );
@@ -98,7 +98,7 @@ void PART_LIB::Save( bool aSaveDocFile )
 }
 
 
-void PART_LIB::Create( const wxString& aFileName )
+void SYMBOL_LIB::Create( const wxString& aFileName )
 {
     wxString tmpFileName = fileName.GetFullPath();
 
@@ -109,7 +109,7 @@ void PART_LIB::Create( const wxString& aFileName )
 }
 
 
-void PART_LIB::SetPluginType( SCH_IO_MGR::SCH_FILE_T aPluginType )
+void SYMBOL_LIB::SetPluginType( SCH_IO_MGR::SCH_FILE_T aPluginType )
 {
     if( m_pluginType != aPluginType )
     {
@@ -119,25 +119,25 @@ void PART_LIB::SetPluginType( SCH_IO_MGR::SCH_FILE_T aPluginType )
 }
 
 
-bool PART_LIB::IsCache() const
+bool SYMBOL_LIB::IsCache() const
 {
     return m_properties->Exists( SCH_LEGACY_PLUGIN::PropNoDocFile );
 }
 
 
-void PART_LIB::SetCache()
+void SYMBOL_LIB::SetCache()
 {
     (*m_properties)[ SCH_LEGACY_PLUGIN::PropNoDocFile ] = "";
 }
 
 
-bool PART_LIB::IsBuffering() const
+bool SYMBOL_LIB::IsBuffering() const
 {
     return m_properties->Exists( SCH_LEGACY_PLUGIN::PropBuffering );
 }
 
 
-void PART_LIB::EnableBuffering( bool aEnable )
+void SYMBOL_LIB::EnableBuffering( bool aEnable )
 {
     if( aEnable )
         (*m_properties)[ SCH_LEGACY_PLUGIN::PropBuffering ] = "";
@@ -146,7 +146,7 @@ void PART_LIB::EnableBuffering( bool aEnable )
 }
 
 
-void PART_LIB::GetPartNames( wxArrayString& aNames ) const
+void SYMBOL_LIB::GetSymbolNames( wxArrayString& aNames ) const
 {
     m_plugin->EnumerateSymbolLib( aNames, fileName.GetFullPath(), m_properties.get() );
 
@@ -154,7 +154,7 @@ void PART_LIB::GetPartNames( wxArrayString& aNames ) const
 }
 
 
-void PART_LIB::GetParts( std::vector<LIB_SYMBOL*>& aSymbols ) const
+void SYMBOL_LIB::GetSymbols( std::vector<LIB_SYMBOL*>& aSymbols ) const
 {
     m_plugin->EnumerateSymbolLib( aSymbols, fileName.GetFullPath(), m_properties.get() );
 
@@ -164,7 +164,7 @@ void PART_LIB::GetParts( std::vector<LIB_SYMBOL*>& aSymbols ) const
 }
 
 
-LIB_SYMBOL* PART_LIB::FindPart( const wxString& aName ) const
+LIB_SYMBOL* SYMBOL_LIB::FindSymbol( const wxString& aName ) const
 {
     LIB_SYMBOL* symbol = m_plugin->LoadSymbol( fileName.GetFullPath(), aName, m_properties.get() );
 
@@ -172,19 +172,19 @@ LIB_SYMBOL* PART_LIB::FindPart( const wxString& aName ) const
     // symbols.  This allows the symbol library table conversion tool to determine the
     // correct library where the symbol was found.
     if( symbol && !symbol->GetLib() )
-        symbol->SetLib( const_cast<PART_LIB*>( this ) );
+        symbol->SetLib( const_cast<SYMBOL_LIB*>( this ) );
 
     return symbol;
 }
 
 
-LIB_SYMBOL* PART_LIB::FindPart( const LIB_ID& aLibId ) const
+LIB_SYMBOL* SYMBOL_LIB::FindSymbol( const LIB_ID& aLibId ) const
 {
-    return FindPart( aLibId.Format().wx_str() );
+    return FindSymbol( aLibId.Format().wx_str() );
 }
 
 
-void PART_LIB::AddPart( LIB_SYMBOL* aSymbol )
+void SYMBOL_LIB::AddSymbol( LIB_SYMBOL* aSymbol )
 {
     // add a clone, not the caller's copy, the plugin take ownership of the new symbol.
     m_plugin->SaveSymbol( fileName.GetFullPath(),
@@ -200,7 +200,7 @@ void PART_LIB::AddPart( LIB_SYMBOL* aSymbol )
 }
 
 
-LIB_SYMBOL* PART_LIB::RemovePart( LIB_SYMBOL* aEntry )
+LIB_SYMBOL* SYMBOL_LIB::RemoveSymbol( LIB_SYMBOL* aEntry )
 {
     wxCHECK_MSG( aEntry != nullptr, nullptr, "NULL pointer cannot be removed from library." );
 
@@ -216,14 +216,14 @@ LIB_SYMBOL* PART_LIB::RemovePart( LIB_SYMBOL* aEntry )
 }
 
 
-LIB_SYMBOL* PART_LIB::ReplacePart( LIB_SYMBOL* aOldPart, LIB_SYMBOL* aNewPart )
+LIB_SYMBOL* SYMBOL_LIB::ReplaceSymbol( LIB_SYMBOL* aOldSymbol, LIB_SYMBOL* aNewSymbol )
 {
-    wxASSERT( aOldPart != nullptr );
-    wxASSERT( aNewPart != nullptr );
+    wxASSERT( aOldSymbol != nullptr );
+    wxASSERT( aNewSymbol != nullptr );
 
-    m_plugin->DeleteSymbol( fileName.GetFullPath(), aOldPart->GetName(), m_properties.get() );
+    m_plugin->DeleteSymbol( fileName.GetFullPath(), aOldSymbol->GetName(), m_properties.get() );
 
-    LIB_SYMBOL* my_part = new LIB_SYMBOL( *aNewPart, this );
+    LIB_SYMBOL* my_part = new LIB_SYMBOL( *aNewSymbol, this );
 
     m_plugin->SaveSymbol( fileName.GetFullPath(), my_part, m_properties.get() );
 
@@ -237,13 +237,14 @@ LIB_SYMBOL* PART_LIB::ReplacePart( LIB_SYMBOL* aOldPart, LIB_SYMBOL* aNewPart )
 }
 
 
-PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName )
+SYMBOL_LIB* SYMBOL_LIB::LoadLibrary( const wxString& aFileName )
 {
-    std::unique_ptr<PART_LIB> lib = std::make_unique<PART_LIB>( SCH_LIB_TYPE::LT_EESCHEMA, aFileName );
+    std::unique_ptr<SYMBOL_LIB> lib = std::make_unique<SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
+                                                                    aFileName );
 
     std::vector<LIB_SYMBOL*> parts;
     // This loads the library.
-    lib->GetParts( parts );
+    lib->GetSymbols( parts );
 
     // Now, set the LIB_SYMBOL m_library member but it will only be used
     // when loading legacy libraries in the future. Once the symbols in the
@@ -255,14 +256,14 @@ PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName )
         part->SetLib( lib.get() );
     }
 
-    PART_LIB* ret = lib.release();
+    SYMBOL_LIB* ret = lib.release();
     return ret;
 }
 
 
-PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName )
+SYMBOL_LIB* SYMBOL_LIBS::AddLibrary( const wxString& aFileName )
 {
-    PART_LIB* lib;
+    SYMBOL_LIB* lib;
 
     wxFileName fn = aFileName;
     // Don't reload the library if it is already loaded.
@@ -273,7 +274,7 @@ PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName )
 
     try
     {
-        lib = PART_LIB::LoadLibrary( aFileName );
+        lib = SYMBOL_LIB::LoadLibrary( aFileName );
         push_back( lib );
 
         return lib;
@@ -285,18 +286,18 @@ PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName )
 }
 
 
-PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName, PART_LIBS::iterator& aIterator )
+SYMBOL_LIB* SYMBOL_LIBS::AddLibrary( const wxString& aFileName, SYMBOL_LIBS::iterator& aIterator )
 {
     // Don't reload the library if it is already loaded.
     wxFileName fn( aFileName );
-    PART_LIB* lib = FindLibrary( fn.GetName() );
+    SYMBOL_LIB* lib = FindLibrary( fn.GetName() );
 
     if( lib )
         return lib;
 
     try
     {
-        lib = PART_LIB::LoadLibrary( aFileName );
+        lib = SYMBOL_LIB::LoadLibrary( aFileName );
 
         if( aIterator >= begin() && aIterator < end() )
             insert( aIterator, lib );
@@ -312,9 +313,9 @@ PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName, PART_LIBS::iterator&
 }
 
 
-PART_LIB* PART_LIBS::FindLibrary( const wxString& aName )
+SYMBOL_LIB* SYMBOL_LIBS::FindLibrary( const wxString& aName )
 {
-    for( PART_LIBS::iterator it = begin();  it!=end();  ++it )
+    for( SYMBOL_LIBS::iterator it = begin();  it!=end();  ++it )
     {
         if( it->GetName() == aName )
             return &*it;
@@ -324,9 +325,9 @@ PART_LIB* PART_LIBS::FindLibrary( const wxString& aName )
 }
 
 
-PART_LIB* PART_LIBS::GetCacheLibrary()
+SYMBOL_LIB* SYMBOL_LIBS::GetCacheLibrary()
 {
-    for( PART_LIBS::iterator it = begin();  it!=end();  ++it )
+    for( SYMBOL_LIBS::iterator it = begin();  it!=end();  ++it )
     {
         if( it->IsCache() )
             return &*it;
@@ -336,9 +337,9 @@ PART_LIB* PART_LIBS::GetCacheLibrary()
 }
 
 
-PART_LIB* PART_LIBS::FindLibraryByFullFileName( const wxString& aFullFileName )
+SYMBOL_LIB* SYMBOL_LIBS::FindLibraryByFullFileName( const wxString& aFullFileName )
 {
-    for( PART_LIBS::iterator it = begin();  it!=end();  ++it )
+    for( SYMBOL_LIBS::iterator it = begin();  it!=end();  ++it )
     {
         if( it->GetFullFileName() == aFullFileName )
             return &*it;
@@ -348,12 +349,12 @@ PART_LIB* PART_LIBS::FindLibraryByFullFileName( const wxString& aFullFileName )
 }
 
 
-wxArrayString PART_LIBS::GetLibraryNames( bool aSorted )
+wxArrayString SYMBOL_LIBS::GetLibraryNames( bool aSorted )
 {
     wxArrayString cacheNames;
     wxArrayString names;
 
-    for( PART_LIB& lib : *this )
+    for( SYMBOL_LIB& lib : *this )
     {
         if( lib.IsCache() && aSorted )
             cacheNames.Add( lib.GetName() );
@@ -372,16 +373,16 @@ wxArrayString PART_LIBS::GetLibraryNames( bool aSorted )
 }
 
 
-LIB_SYMBOL* PART_LIBS::FindLibPart( const LIB_ID& aLibId, const wxString& aLibraryName )
+LIB_SYMBOL* SYMBOL_LIBS::FindLibSymbol( const LIB_ID& aLibId, const wxString& aLibraryName )
 {
     LIB_SYMBOL* part = nullptr;
 
-    for( PART_LIB& lib : *this )
+    for( SYMBOL_LIB& lib : *this )
     {
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
 
-        part = lib.FindPart( aLibId.GetLibItemName().wx_str() );
+        part = lib.FindSymbol( aLibId.GetLibItemName().wx_str() );
 
         if( part )
             break;
@@ -391,18 +392,18 @@ LIB_SYMBOL* PART_LIBS::FindLibPart( const LIB_ID& aLibId, const wxString& aLibra
 }
 
 
-void PART_LIBS::FindLibraryNearEntries( std::vector<LIB_SYMBOL*>& aCandidates,
-                                        const wxString& aEntryName,
-                                        const wxString& aLibraryName )
+void SYMBOL_LIBS::FindLibraryNearEntries( std::vector<LIB_SYMBOL*>& aCandidates,
+                                          const wxString& aEntryName,
+                                          const wxString& aLibraryName )
 {
-    for( PART_LIB& lib : *this )
+    for( SYMBOL_LIB& lib : *this )
     {
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
 
         wxArrayString partNames;
 
-        lib.GetPartNames( partNames );
+        lib.GetSymbolNames( partNames );
 
         if( partNames.IsEmpty() )
             continue;
@@ -410,36 +411,36 @@ void PART_LIBS::FindLibraryNearEntries( std::vector<LIB_SYMBOL*>& aCandidates,
         for( size_t i = 0;  i < partNames.size();  i++ )
         {
             if( partNames[i].CmpNoCase( aEntryName ) == 0 )
-                aCandidates.push_back( lib.FindPart( partNames[i] ) );
+                aCandidates.push_back( lib.FindSymbol( partNames[i] ) );
         }
     }
 }
 
 
-int        PART_LIBS::s_modify_generation = 1;     // starts at 1 and goes up
-std::mutex PART_LIBS::s_generationMutex;
+int        SYMBOL_LIBS::s_modify_generation = 1;     // starts at 1 and goes up
+std::mutex SYMBOL_LIBS::s_generationMutex;
 
 
-int PART_LIBS::GetModifyHash()
+int SYMBOL_LIBS::GetModifyHash()
 {
     int hash = 0;
 
-    for( PART_LIBS::const_iterator it = begin();  it != end();  ++it )
+    for( SYMBOL_LIBS::const_iterator it = begin();  it != end();  ++it )
     {
         hash += it->GetModHash();
     }
 
     // Rebuilding the cache (m_cache) does not change the GetModHash() value,
-    // but changes PART_LIBS::s_modify_generation.
+    // but changes SYMBOL_LIBS::s_modify_generation.
     // Take this change in account:
-    hash += PART_LIBS::GetModifyGeneration();
+    hash += SYMBOL_LIBS::GetModifyGeneration();
 
     return hash;
 }
 
 
-void PART_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
-                                  wxString* aPaths, wxArrayString* aNames )
+void SYMBOL_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
+                                    wxString* aPaths, wxArrayString* aNames )
 {
     wxCHECK_RET( aProject, "Null PROJECT in LibNamesAndPaths" );
 
@@ -464,7 +465,7 @@ void PART_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
 }
 
 
-const wxString PART_LIBS::CacheName( const wxString& aFullProjectFilename )
+const wxString SYMBOL_LIBS::CacheName( const wxString& aFullProjectFilename )
 {
     wxFileName  name = aFullProjectFilename;
 
@@ -478,7 +479,7 @@ const wxString PART_LIBS::CacheName( const wxString& aFullProjectFilename )
 }
 
 
-void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
+void SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
 {
     wxString        filename;
     wxString        libs_not_found;
@@ -566,7 +567,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
 
     // add the special cache library.
     wxString cache_name = CacheName( aProject->GetProjectFullName() );
-    PART_LIB* cache_lib;
+    SYMBOL_LIB* cache_lib;
 
     if( !aProject->IsNullProject() && !cache_name.IsEmpty() )
     {

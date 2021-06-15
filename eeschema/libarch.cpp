@@ -69,7 +69,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     SCH_SCREENS       screens( Schematic().Root() );
 
     // Create a new empty library to archive symbols:
-    std::unique_ptr<PART_LIB> archLib = std::make_unique<PART_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
+    std::unique_ptr<SYMBOL_LIB> archLib = std::make_unique<SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
                                                                     aFileName );
 
     // Save symbols to file only when the library will be fully filled
@@ -90,7 +90,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
             try
             {
-                if( archLib->FindPart( symbol->GetLibId() ) )
+                if( archLib->FindSymbol( symbol->GetLibId() ) )
                     continue;
 
                 libSymbol = GetLibPart( symbol->GetLibId(), true );
@@ -116,8 +116,8 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                 // Use the full LIB_ID as the symbol name to prevent symbol name collisions.
                 flattenedSymbol->SetName( symbol->GetLibId().GetUniStringLibId() );
 
-                // AddPart() does first clone the symbol before adding.
-                archLib->AddPart( flattenedSymbol.get() );
+                // AddSymbol() does first clone the symbol before adding.
+                archLib->AddSymbol( flattenedSymbol.get() );
             }
             else
             {

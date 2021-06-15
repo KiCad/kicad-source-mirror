@@ -500,7 +500,7 @@ private:
     wxPoint     m_aux_origin;               // Origin used for drill & place files by Pcbnew.
     EE_RTREE    m_rtree;
 
-    int         m_modification_sync;        // Inequality with PART_LIBS::GetModificationHash()
+    int         m_modification_sync;        // Inequality with SYMBOL_LIBS::GetModificationHash()
                                             // will trigger ResolveAll().
 
     bool        m_zoomInitialized;          // Set to true once the zoom value is initialized with

@@ -431,7 +431,7 @@ BOOST_AUTO_TEST_CASE( GetUnitDrawItems )
     LIB_PIN* pin1 = new LIB_PIN( &m_part_no_data );
     pin1->SetNumber( "1" );
     m_part_no_data.AddDrawItem( pin1 );
-    std::vector<struct PART_UNITS> units = m_part_no_data.GetUnitDrawItems();
+    std::vector<struct LIB_SYMBOL_UNITS> units = m_part_no_data.GetUnitDrawItems();
     BOOST_CHECK( units.size() == 1 );
     BOOST_CHECK( units[0].m_unit == 0 );
     BOOST_CHECK( units[0].m_convert == 0 );
@@ -448,7 +448,7 @@ BOOST_AUTO_TEST_CASE( Inheritance )
     BOOST_CHECK( parent->IsRoot() );
     std::unique_ptr<LIB_SYMBOL> child1 = std::make_unique<LIB_SYMBOL>( "child1", parent.get() );
     BOOST_CHECK( child1->IsAlias() );
-    PART_SPTR parentRef = child1->GetParent().lock();
+    LIB_SYMBOL_SPTR parentRef = child1->GetParent().lock();
     BOOST_CHECK( parentRef );
     BOOST_CHECK( parentRef == parent->SharedPtr() );
     BOOST_CHECK_EQUAL( parent->SharedPtr().use_count(), 3 );

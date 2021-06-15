@@ -56,8 +56,8 @@ class LIB_ITEM;
 class LIB_PIN;
 class LIB_SYMBOL;
 class NETLIST_OBJECT_LIST;
-class PART_LIB;
-class PART_LIBS;
+class SYMBOL_LIB;
+class SYMBOL_LIBS;
 class EE_COLLECTOR;
 class SCH_SCREEN;
 class SYMBOL_LIB_TABLE;
@@ -83,7 +83,7 @@ public:
     /**
      * Create schematic symbol from library symbol object.
      *
-     * @param aPart is the library part to create schematic symbol from.
+     * @param aSymbol is the library symbol to create schematic symbol from.
      * @param aLibId is the #LIB_ID of alias to create.
      * @param aSheet is the schematic sheet the symbol is place into.
      * @param unit is unit for symbols that have multiple parts per package.
@@ -161,8 +161,8 @@ public:
     wxString GetSchSymbolLibraryName() const;
     bool UseLibIdLookup() const { return m_schLibSymbolName.IsEmpty(); }
 
-    std::unique_ptr< LIB_SYMBOL >& GetPartRef() { return m_part; }
-    const std::unique_ptr< LIB_SYMBOL >& GetPartRef() const { return m_part; }
+    std::unique_ptr< LIB_SYMBOL >& GetLibSymbolRef() { return m_part; }
+    const std::unique_ptr< LIB_SYMBOL >& GetLibSymbolRef() const { return m_part; }
 
     /**
      * Set this schematic symbol library symbol reference to \a aLibSymbol

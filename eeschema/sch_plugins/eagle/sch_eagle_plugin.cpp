@@ -2799,17 +2799,17 @@ bool SCH_EAGLE_PLUGIN::checkConnections( const SCH_SYMBOL* aSymbol, const LIB_PI
 void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScreen,
                                                bool aUpdateSet )
 {
-    wxCHECK( aSymbol->GetPartRef(), /*void*/ );
+    wxCHECK( aSymbol->GetLibSymbolRef(), /*void*/ );
 
     // Normally power parts also have power input pins,
     // but they already force net names on the attached wires
-    if( aSymbol->GetPartRef()->IsPower() )
+    if( aSymbol->GetLibSymbolRef()->IsPower() )
         return;
 
     int                   unit      = aSymbol->GetUnit();
     const wxString        reference = aSymbol->GetField( REFERENCE_FIELD )->GetText();
     std::vector<LIB_PIN*> pins;
-    aSymbol->GetPartRef()->GetPins( pins );
+    aSymbol->GetLibSymbolRef()->GetPins( pins );
     std::set<int> missingUnits;
 
     // Search all units for pins creating implicit connections
@@ -2844,7 +2844,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* 
         }
     }
 
-    if( aUpdateSet && aSymbol->GetPartRef()->GetUnitCount() > 1 )
+    if( aUpdateSet && aSymbol->GetLibSymbolRef()->GetUnitCount() > 1 )
     {
         auto cmpIt = m_missingCmps.find( reference );
 

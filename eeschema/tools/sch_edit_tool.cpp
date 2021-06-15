@@ -105,14 +105,14 @@ private:
 
         int  unit = symbol->GetUnit();
 
-        if( !symbol->GetPartRef() || symbol->GetPartRef()->GetUnitCount() < 2 )
+        if( !symbol->GetLibSymbolRef() || symbol->GetLibSymbolRef()->GetUnitCount() < 2 )
         {
             Append( ID_POPUP_SCH_UNFOLD_BUS, _( "symbol is not multi-unit" ), wxEmptyString );
             Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
             return;
         }
 
-        for( int ii = 0; ii < symbol->GetPartRef()->GetUnitCount(); ii++ )
+        for( int ii = 0; ii < symbol->GetLibSymbolRef()->GetUnitCount(); ii++ )
         {
             wxString num_unit;
             num_unit.Printf( _( "Unit %s" ), LIB_SYMBOL::SubReference( ii + 1, false ) );

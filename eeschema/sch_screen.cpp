@@ -152,16 +152,16 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
 
-            if( symbol->GetPartRef() )
+            if( symbol->GetLibSymbolRef() )
             {
-                symbol->GetPartRef()->GetDrawItems().sort();
+                symbol->GetLibSymbolRef()->GetDrawItems().sort();
 
                 auto it = m_libSymbols.find( symbol->GetSchSymbolLibraryName() );
 
                 if( it == m_libSymbols.end() || !it->second )
                 {
                     m_libSymbols[symbol->GetSchSymbolLibraryName()] =
-                            new LIB_SYMBOL( *symbol->GetPartRef() );
+                            new LIB_SYMBOL( *symbol->GetLibSymbolRef() );
                 }
                 else
                 {
@@ -173,7 +173,7 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
 
                     foundSymbol->GetDrawItems().sort();
 
-                    if( *foundSymbol != *symbol->GetPartRef() )
+                    if( *foundSymbol != *symbol->GetLibSymbolRef() )
                     {
                         int cnt = 1;
                         wxString newName;
@@ -187,7 +187,7 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
                         }
 
                         symbol->SetSchSymbolLibraryName( newName );
-                        m_libSymbols[newName] = new LIB_SYMBOL( *symbol->GetPartRef() );
+                        m_libSymbols[newName] = new LIB_SYMBOL( *symbol->GetLibSymbolRef() );
                     }
                 }
             }
@@ -545,7 +545,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
     SYMBOL_LIB_TABLE* libs = Schematic()->Prj().SchSymbolLibTable();
 
     // This will be a nullptr if an s-expression schematic is loaded.
-    PART_LIBS* legacyLibs = Schematic()->Prj().SchLibs();
+    SYMBOL_LIBS* legacyLibs = Schematic()->Prj().SchLibs();
 
     for( auto item : Items().OfType( SCH_SYMBOL_T ) )
         symbols.push_back( static_cast<SCH_SYMBOL*>( item ) );
@@ -630,7 +630,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 
         if( !tmp && legacyLibs && legacyLibs->GetLibraryCount() )
         {
-            PART_LIB& legacyCacheLib = legacyLibs->at( 0 );
+            SYMBOL_LIB& legacyCacheLib = legacyLibs->at( 0 );
 
             // It better be the cache library.
             wxCHECK2( legacyCacheLib.IsCache(), continue );
@@ -648,7 +648,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
                 aReporter->ReportTail( msg, RPT_SEVERITY_WARNING );
             }
 
-            tmp = legacyCacheLib.FindPart( id );
+            tmp = legacyCacheLib.FindSymbol( id );
         }
 
         if( tmp )
@@ -843,11 +843,11 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_SYMBOL** aSymbol,
         {
             pin = NULL;
 
-            if( !candidate->GetPartRef() )
+            if( !candidate->GetLibSymbolRef() )
                 continue;
 
-            for( pin = candidate->GetPartRef()->GetNextPin(); pin;
-                 pin = candidate->GetPartRef()->GetNextPin( pin ) )
+            for( pin = candidate->GetLibSymbolRef()->GetNextPin(); pin;
+                 pin = candidate->GetLibSymbolRef()->GetNextPin( pin ) )
             {
                 // Skip items not used for this part.
                 if( candidate->GetUnit() && pin->GetUnit() &&

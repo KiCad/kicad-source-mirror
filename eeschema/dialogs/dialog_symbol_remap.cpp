@@ -130,10 +130,10 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     wxString paths;
     wxArrayString libNames;
 
-    PART_LIBS::LibNamesAndPaths( &Prj(), true, &paths, &libNames );
+    SYMBOL_LIBS::LibNamesAndPaths( &Prj(), true, &paths, &libNames );
 
     // Reload the cache symbol library.
-    Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
+    Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, NULL );
     Prj().SchLibs();
 
     Raise();
@@ -141,11 +141,11 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 }
 
 
-size_t DIALOG_SYMBOL_REMAP::getLibsNotInGlobalSymbolLibTable( std::vector< PART_LIB* >& aLibs )
+size_t DIALOG_SYMBOL_REMAP::getLibsNotInGlobalSymbolLibTable( std::vector< SYMBOL_LIB* >& aLibs )
 {
-    PART_LIBS* libs = Prj().SchLibs();
+    SYMBOL_LIBS* libs = Prj().SchLibs();
 
-    for( PART_LIBS_BASE::iterator it = libs->begin(); it != libs->end(); ++it )
+    for( SYMBOL_LIBS_BASE::iterator it = libs->begin(); it != libs->end(); ++it )
     {
         // Ignore the cache library.
         if( it->IsCache() )
@@ -165,7 +165,7 @@ size_t DIALOG_SYMBOL_REMAP::getLibsNotInGlobalSymbolLibTable( std::vector< PART_
 void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
 {
     wxString msg;
-    std::vector< PART_LIB* > libs;
+    std::vector< SYMBOL_LIB* > libs;
 
     if( getLibsNotInGlobalSymbolLibTable( libs ) )
     {
@@ -288,15 +288,15 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_SYMBOL* aSymbol )
     wxCHECK_MSG( !aSymbol->GetLibId().GetLibItemName().empty(), false,
                  "The symbol LIB_ID name is empty." );
 
-    PART_LIBS* libs = Prj().SchLibs();
+    SYMBOL_LIBS* libs = Prj().SchLibs();
 
-    for( PART_LIBS_BASE::iterator it = libs->begin(); it != libs->end(); ++it )
+    for( SYMBOL_LIBS_BASE::iterator it = libs->begin(); it != libs->end(); ++it )
     {
         // Ignore the cache library.
         if( it->IsCache() )
             continue;
 
-        LIB_SYMBOL* alias = it->FindPart( aSymbol->GetLibId().GetLibItemName().wx_str() );
+        LIB_SYMBOL* alias = it->FindSymbol( aSymbol->GetLibId().GetLibItemName().wx_str() );
 
         // Found in the same library as the old look up method assuming the user didn't
         // change the libraries or library ordering since the last time the schematic was

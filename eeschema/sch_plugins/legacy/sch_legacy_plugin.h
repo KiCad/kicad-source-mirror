@@ -45,7 +45,7 @@ class PROPERTIES;
 class SELECTION;
 class SCH_LEGACY_PLUGIN_CACHE;
 class LIB_SYMBOL;
-class PART_LIB;
+class SYMBOL_LIB;
 class BUS_ALIAS;
 
 
@@ -118,7 +118,7 @@ public:
                              const wxString&   aLibraryPath,
                              const PROPERTIES* aProperties = nullptr ) override;
     LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                           const PROPERTIES* aProperties = nullptr ) override;
+                            const PROPERTIES* aProperties = nullptr ) override;
     void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
                      const PROPERTIES* aProperties = nullptr ) override;
     void DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,

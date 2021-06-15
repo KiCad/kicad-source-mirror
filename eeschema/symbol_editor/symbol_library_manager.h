@@ -1,5 +1,5 @@
 /*
- * This program source code file is part of KiCad, a free EDA CAD application.
+ * This program source code file is symbol of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
  * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
@@ -13,7 +13,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A SYMBOLICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -38,7 +38,7 @@
 #include <sch_screen.h>
 
 class LIB_SYMBOL;
-class PART_LIB;
+class SYMBOL_LIB;
 class PROGRESS_REPORTER;
 class SCH_PLUGIN;
 class SYMBOL_EDIT_FRAME;
@@ -111,48 +111,48 @@ public:
     }
 
     /**
-     * Update the part buffer with a new version of the part.
-     * The library buffer creates a copy of the part.
-     * It is required to save the library to use the updated part in the schematic editor.
+     * Update the symbol buffer with a new version of the symbol.
+     * The library buffer creates a copy of the symbol.
+     * It is required to save the library to use the updated symbol in the schematic editor.
      */
-    bool UpdatePart( LIB_SYMBOL* aSymbol, const wxString& aLibrary );
+    bool UpdateSymbol( LIB_SYMBOL* aSymbol, const wxString& aLibrary );
 
     /**
-     * Update the part buffer with a new version of the part when the name has changed.
+     * Update the symbol buffer with a new version of the symbol when the name has changed.
      * The old library buffer will be deleted and a new one created with the new name.
      */
-    bool UpdatePartAfterRename( LIB_SYMBOL* aSymbol, const wxString& oldAlias,
-                                const wxString& aLibrary );
+    bool UpdateSymbolAfterRename( LIB_SYMBOL* aSymbol, const wxString& oldAlias,
+                                  const wxString& aLibrary );
 
     /**
-     * Remove the part from the part buffer.
-     * It is required to save the library to have the part removed in the schematic editor.
+     * Remove the symbol from the symbol buffer.
+     * It is required to save the library to have the symbol removed in the schematic editor.
      */
-    bool RemovePart( const wxString& aName, const wxString& aLibrary );
+    bool RemoveSymbol( const wxString& aName, const wxString& aLibrary );
 
     /**
-     * Return either an alias of a working LIB_SYMBOL copy, or alias of the original part if there
+     * Return either an alias of a working LIB_SYMBOL copy, or alias of the original symbol if there
      * is no working copy.
      */
     LIB_SYMBOL* GetAlias( const wxString& aAlias, const wxString& aLibrary ) const;
 
     /**
-     * Return the part copy from the buffer. In case it does not exist yet, the copy is created.
+     * Return the symbol copy from the buffer. In case it does not exist yet, the copy is created.
      * #SYMBOL_LIBRARY_MANAGER retains the ownership.
      */
-    LIB_SYMBOL* GetBufferedPart( const wxString& aAlias, const wxString& aLibrary );
+    LIB_SYMBOL* GetBufferedSymbol( const wxString& aAlias, const wxString& aLibrary );
 
     /**
-     * Return the screen used to edit a specific part. #SYMBOL_LIBRARY_MANAGER retains the
+     * Return the screen used to edit a specific symbol. #SYMBOL_LIBRARY_MANAGER retains the
      * ownership.
      */
     SCH_SCREEN* GetScreen( const wxString& aAlias, const wxString& aLibrary );
 
     /**
-     * Return true if part with a specific alias exists in library (either original one or
+     * Return true if symbol with a specific alias exists in library (either original one or
      * buffered).
      */
-    bool PartExists( const wxString& aAlias, const wxString& aLibrary ) const;
+    bool SymbolExists( const wxString& aAlias, const wxString& aLibrary ) const;
 
     /**
      * Return true if library exists.  If \a aCheckEnabled is set, then the library must
@@ -171,19 +171,19 @@ public:
     bool IsLibraryModified( const wxString& aLibrary ) const;
 
     /**
-     * Return true if part has unsaved modifications.
+     * Return true if symbol has unsaved modifications.
      */
-    bool IsPartModified( const wxString& aAlias, const wxString& aLibrary ) const;
+    bool IsSymbolModified( const wxString& aAlias, const wxString& aLibrary ) const;
 
     /**
-     * Clear the modified flag for all parts in a library.
+     * Clear the modified flag for all symbols in a library.
      */
     bool ClearLibraryModified( const wxString& aLibrary ) const;
 
     /**
-     * Clear the modified flag for a part.
+     * Clear the modified flag for a symbol.
      */
-    bool ClearPartModified( const wxString& aAlias, const wxString& aLibrary ) const;
+    bool ClearSymbolModified( const wxString& aAlias, const wxString& aLibrary ) const;
 
     /**
      * Return true if the library is stored in a read-only file.
@@ -193,12 +193,12 @@ public:
     bool IsLibraryReadOnly( const wxString& aLibrary ) const;
 
     /**
-     * Save part changes to the library copy used by the schematic editor. Not it is not
+     * Save symbol changes to the library copy used by the schematic editor. Not it is not
      * necessarily saved to the file.
      *
      * @return True on success, false otherwise.
      */
-    bool FlushPart( const wxString& aAlias, const wxString& aLibrary );
+    bool FlushSymbol( const wxString& aAlias, const wxString& aLibrary );
 
     /**
      * Save library to a file, including unsaved changes.
@@ -211,15 +211,15 @@ public:
                       SCH_IO_MGR::SCH_FILE_T aFileType = SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY );
 
     /**
-     * Revert unsaved changes for a particular part.
+     * Revert unsaved changes for a symbolicular symbol.
      *
-     * @return The LIB_ID of the reverted part (which may be different in the case
+     * @return The LIB_ID of the reverted symbol (which may be different in the case
      * of a rename)
      */
-    LIB_ID RevertPart( const wxString& aAlias, const wxString& aLibrary );
+    LIB_ID RevertSymbol( const wxString& aAlias, const wxString& aLibrary );
 
     /**
-     * Revert unsaved changes for a particular library.
+     * Revert unsaved changes for a symbolicular library.
      *
      * @return True on success, false otherwise.
      */
@@ -271,14 +271,15 @@ private:
     }
 
     ///< Class to store a working copy of a LIB_SYMBOL object and editor context.
-    class PART_BUFFER
+    class SYMBOL_BUFFER
     {
     public:
-        PART_BUFFER( LIB_SYMBOL* aSymbol = nullptr, std::unique_ptr<SCH_SCREEN> aScreen = nullptr );
-        ~PART_BUFFER();
+        SYMBOL_BUFFER( LIB_SYMBOL* aSymbol = nullptr,
+                       std::unique_ptr<SCH_SCREEN> aScreen = nullptr );
+        ~SYMBOL_BUFFER();
 
-        LIB_SYMBOL* GetPart() const { return m_part; }
-        void SetPart( LIB_SYMBOL* aSymbol );
+        LIB_SYMBOL* GetSymbol() const { return m_symbol; }
+        void SetSymbol( LIB_SYMBOL* aSymbol );
 
         LIB_SYMBOL* GetOriginal() const { return m_original; }
         void SetOriginal( LIB_SYMBOL* aSymbol );
@@ -299,14 +300,14 @@ private:
             return ret;
         }
 
-        typedef std::shared_ptr<PART_BUFFER> PTR;
-        typedef std::weak_ptr<PART_BUFFER> WEAK_PTR;
+        typedef std::shared_ptr<SYMBOL_BUFFER> PTR;
+        typedef std::weak_ptr<SYMBOL_BUFFER> WEAK_PTR;
 
     private:
         std::unique_ptr<SCH_SCREEN> m_screen;
 
-        LIB_SYMBOL* m_part;        // Working copy
-        LIB_SYMBOL* m_original;    // Initial state of the part
+        LIB_SYMBOL* m_symbol;      // Working copy
+        LIB_SYMBOL* m_original;    // Initial state of the symbol
     };
 
 
@@ -324,9 +325,9 @@ private:
             if( !m_deleted.empty() )
                 return true;
 
-            for( const auto& partBuf : m_parts )
+            for( const auto& symbolBuf : m_symbols )
             {
-                if( partBuf->IsModified() )
+                if( symbolBuf->IsModified() )
                     return true;
             }
 
@@ -336,15 +337,15 @@ private:
         int GetHash() const { return m_hash; }
 
         ///< Return the working copy of a LIB_SYMBOL root object with specified alias.
-        LIB_SYMBOL* GetPart( const wxString& aAlias ) const;
+        LIB_SYMBOL* GetSymbol( const wxString& aAlias ) const;
 
-        ///< Create a new buffer to store a part. LIB_BUFFER takes ownership of aCopy.
+        ///< Create a new buffer to store a symbol. LIB_BUFFER takes ownership of aCopy.
         bool CreateBuffer( LIB_SYMBOL* aCopy, SCH_SCREEN* aScreen );
 
-        ///< Update the buffered part with the contents of \a aCopy.
-        bool UpdateBuffer( PART_BUFFER::PTR aSymbolBuf, LIB_SYMBOL* aCopy );
+        ///< Update the buffered symbol with the contents of \a aCopy.
+        bool UpdateBuffer( SYMBOL_BUFFER::PTR aSymbolBuf, LIB_SYMBOL* aCopy );
 
-        bool DeleteBuffer( PART_BUFFER::PTR aSymbolBuf );
+        bool DeleteBuffer( SYMBOL_BUFFER::PTR aSymbolBuf );
 
         void ClearDeletedBuffer()
         {
@@ -353,21 +354,21 @@ private:
 
         ///< Save stored modifications to Symbol Lib Table. It may result in saving the symbol
         ///< to disk as well, depending on the row properties.
-        bool SaveBuffer( PART_BUFFER::PTR aSymbolBuf, SYMBOL_LIB_TABLE* aLibTable );
+        bool SaveBuffer( SYMBOL_BUFFER::PTR aSymbolBuf, SYMBOL_LIB_TABLE* aLibTable );
 
         ///< Save stored modifications using a plugin. aBuffer decides whether the changes
         ///< should be cached or stored directly to the disk (for SCH_LEGACY_PLUGIN).
-        bool SaveBuffer( PART_BUFFER::PTR aSymbolBuf, const wxString& aFileName,
+        bool SaveBuffer( SYMBOL_BUFFER::PTR aSymbolBuf, const wxString& aFileName,
                          SCH_PLUGIN* aPlugin, bool aBuffer );
 
-        ///< Return a part buffer with LIB_SYMBOL holding a particular alias
-        PART_BUFFER::PTR GetBuffer( const wxString& aAlias ) const;
+        ///< Return a symbol buffer with LIB_SYMBOL holding a symbolicular alias
+        SYMBOL_BUFFER::PTR GetBuffer( const wxString& aAlias ) const;
 
-        ///< Return all buffered parts
-        const std::deque<PART_BUFFER::PTR>& GetBuffers() const { return m_parts; }
+        ///< Return all buffered symbols
+        const std::deque<SYMBOL_BUFFER::PTR>& GetBuffers() const { return m_symbols; }
 
         /**
-         * Check to see any parts in the buffer are derived from a parent named \a aParentName.
+         * Check to see any symbols in the buffer are derived from a parent named \a aParentName.
          *
          * @param aParentName is the name of the parent to test.
          * @return true if any symbols are found derived from a symbol named \a aParent, otherwise
@@ -385,7 +386,7 @@ private:
         /**
          * Fetch all of the symbols derived from a \a aSymbolName into \a aList.
          *
-         * @param aSymbolName is the name of the symbol to search for derived parts in this
+         * @param aSymbolName is the name of the symbol to search for derived symbols in this
          *                    buffer.
          * @param aList is the list of symbols names derived from \a aSymbolName.
          * @return a size_t count of the number of symbols derived from \a aSymbolName.
@@ -396,21 +397,23 @@ private:
         /**
          * Remove all symbols derived from \a aParent from the library buffer.
          *
-         * @param aParent is the #PART_BUFFER to check against.
-         * @return the count of #PART_BUFFER objects removed from the library.
+         * @param aParent is the #SYMBOL_BUFFER to check against.
+         * @return the count of #SYMBOL_BUFFER objects removed from the library.
          */
-        int removeChildSymbols( PART_BUFFER::PTR aSymbolBuf );
+        int removeChildSymbols( SYMBOL_BUFFER::PTR aSymbolBuf );
 
-        std::deque<PART_BUFFER::PTR> m_parts;
-        std::deque<PART_BUFFER::PTR> m_deleted;  // Buffer for deleted parts until library is saved
-        const wxString               m_libName;  // Buffered library name
-        int                          m_hash;
+        std::deque<SYMBOL_BUFFER::PTR> m_symbols;
+
+        ///< Buffer for deleted symbols until library is saved.
+        std::deque<SYMBOL_BUFFER::PTR> m_deleted;
+        const wxString                 m_libName;  // Buffered library name
+        int                            m_hash;
     };
 
     /**
      * Return a set of #LIB_SYMBOL objects belonging to the original library.
      */
-    std::set<LIB_SYMBOL*> getOriginalParts( const wxString& aLibrary );
+    std::set<LIB_SYMBOL*> getOriginalSymbols( const wxString& aLibrary );
 
     /**
      * Return an existing library buffer or creates one to using Symbol Library Table to get

@@ -73,7 +73,7 @@ BEGIN_EVENT_TABLE( SYMBOL_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LIBVIEW_SELECT_PART, SYMBOL_VIEWER_FRAME::OnSelectSymbol )
     EVT_TOOL( ID_LIBVIEW_NEXT, SYMBOL_VIEWER_FRAME::onSelectNextSymbol )
     EVT_TOOL( ID_LIBVIEW_PREVIOUS, SYMBOL_VIEWER_FRAME::onSelectPreviousSymbol )
-    EVT_CHOICE( ID_LIBVIEW_SELECT_PART_NUMBER, SYMBOL_VIEWER_FRAME::onSelectSymbolUnit )
+    EVT_CHOICE( ID_LIBVIEW_SELECT_UNIT_NUMBER, SYMBOL_VIEWER_FRAME::onSelectSymbolUnit )
 
     // listbox events
     EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, SYMBOL_VIEWER_FRAME::ClickOnLibList )
@@ -84,7 +84,7 @@ BEGIN_EVENT_TABLE( SYMBOL_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_CLOSE, SYMBOL_VIEWER_FRAME::CloseLibraryViewer )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 
-    EVT_UPDATE_UI( ID_LIBVIEW_SELECT_PART_NUMBER, SYMBOL_VIEWER_FRAME::onUpdateUnitChoice )
+    EVT_UPDATE_UI( ID_LIBVIEW_SELECT_UNIT_NUMBER, SYMBOL_VIEWER_FRAME::onUpdateUnitChoice )
 
 END_EVENT_TABLE()
 
@@ -769,7 +769,7 @@ void SYMBOL_VIEWER_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
     if( aFilter )
     {
         m_allowedLibs = aFilter->GetAllowedLibList();
-        m_listPowerOnly = aFilter->GetFilterPowerParts();
+        m_listPowerOnly = aFilter->GetFilterPowerSymbols();
     }
 
     ReCreateLibList();

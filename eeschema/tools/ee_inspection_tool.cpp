@@ -201,7 +201,7 @@ bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
 
 int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL* symbol = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
+    LIB_SYMBOL* symbol = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
 
     if( !symbol )
         return 0;
@@ -463,7 +463,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        LIB_SYMBOL* symbol = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
+        LIB_SYMBOL* symbol = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
 
         if( !symbol )
             return 0;

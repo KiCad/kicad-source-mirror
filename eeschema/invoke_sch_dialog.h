@@ -46,7 +46,7 @@
 
 class wxFrame;
 class wxDialog;
-class PART_LIBS;
+class SYMBOL_LIBS;
 class SCH_SYMBOL;
 class SCH_TEXT;
 class SCH_SHEET_PATH;

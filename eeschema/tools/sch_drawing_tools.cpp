@@ -124,7 +124,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     else if (aEvent.IsAction( &EE_ACTIONS::placePower ) )
     {
         historyList = &m_powerHistoryList;
-        filter.FilterPowerParts( true );
+        filter.FilterPowerSymbols( true );
     }
     else
     {
@@ -1176,7 +1176,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             else
             {
                 item->ClearFlags( IS_MOVING );
-                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item, false );
+                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item,
+                                                     false );
                 item = nullptr;
 
                 m_view->ClearPreview();

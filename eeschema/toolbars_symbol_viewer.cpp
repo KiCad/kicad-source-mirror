@@ -71,7 +71,7 @@ void SYMBOL_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddScaledSeparator( this );
 
     if( m_unitChoice == nullptr )
-        m_unitChoice = new wxChoice( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
+        m_unitChoice = new wxChoice( m_mainToolBar, ID_LIBVIEW_SELECT_UNIT_NUMBER,
                                      wxDefaultPosition, wxSize( 150, -1 ) );
     m_mainToolBar->AddControl( m_unitChoice );
 

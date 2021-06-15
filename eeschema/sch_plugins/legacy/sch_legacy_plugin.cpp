@@ -2541,7 +2541,7 @@ LIB_SYMBOL* SCH_LEGACY_PLUGIN_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
 
 void SCH_LEGACY_PLUGIN_CACHE::AddSymbol( const LIB_SYMBOL* aSymbol )
 {
-    // aSymbol is cloned in PART_LIB::AddPart().  The cache takes ownership of aSymbol.
+    // aSymbol is cloned in SYMBOL_LIB::AddSymbol().  The cache takes ownership of aSymbol.
     wxString name = aSymbol->GetName();
     LIB_SYMBOL_MAP::iterator it = m_symbols.find( name );
 
@@ -3911,7 +3911,8 @@ void SCH_LEGACY_PLUGIN_CACHE::saveArc( LIB_ARC* aArc, OUTPUTFORMATTER& aFormatte
     aFormatter.Print( 0, "A %d %d %d %d %d %d %d %d %c %d %d %d %d\n",
                       Iu2Mils( aArc->GetPosition().x ), Iu2Mils( aArc->GetPosition().y ),
                       Iu2Mils( aArc->GetRadius() ), x1, x2, aArc->GetUnit(), aArc->GetConvert(),
-                      Iu2Mils( aArc->GetWidth() ), fill_tab[ static_cast<int>( aArc->GetFillMode() ) ],
+                      Iu2Mils( aArc->GetWidth() ),
+                               fill_tab[ static_cast<int>( aArc->GetFillMode() ) ],
                       Iu2Mils( aArc->GetStart().x ), Iu2Mils( aArc->GetStart().y ),
                       Iu2Mils( aArc->GetEnd().x ), Iu2Mils( aArc->GetEnd().y ) );
 }
@@ -3940,7 +3941,8 @@ void SCH_LEGACY_PLUGIN_CACHE::saveCircle( LIB_CIRCLE* aCircle,
     aFormatter.Print( 0, "C %d %d %d %d %d %d %c\n",
                       Iu2Mils( aCircle->GetPosition().x ), Iu2Mils( aCircle->GetPosition().y ),
                       Iu2Mils( aCircle->GetRadius() ), aCircle->GetUnit(), aCircle->GetConvert(),
-                      Iu2Mils( aCircle->GetWidth() ), fill_tab[static_cast<int>( aCircle->GetFillMode() )] );
+                      Iu2Mils( aCircle->GetWidth() ),
+                               fill_tab[static_cast<int>( aCircle->GetFillMode() )] );
 }
 
 
@@ -4215,10 +4217,10 @@ void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPER
         delete m_cache;
         m_cache = new SCH_LEGACY_PLUGIN_CACHE( aLibraryFileName );
 
-        // Because m_cache is rebuilt, increment PART_LIBS::s_modify_generation
+        // Because m_cache is rebuilt, increment SYMBOL_LIBS::s_modify_generation
         // to modify the hash value that indicate symbol to symbol links
         // must be updated.
-        PART_LIBS::IncrementModifyGeneration();
+        SYMBOL_LIBS::IncrementModifyGeneration();
 
         if( !isBuffering( aProperties ) )
             m_cache->Load();

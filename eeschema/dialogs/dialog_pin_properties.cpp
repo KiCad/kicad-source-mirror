@@ -347,7 +347,7 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     dc.SetUserScale( scale, scale );
     GRResetPenAndBrush( &dc );
 
-    PART_DRAW_OPTIONS opts;
+    LIB_SYMBOL_OPTIONS opts;
     opts.draw_hidden_fields = true;
     opts.show_connect_point = true;
 

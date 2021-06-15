@@ -180,7 +180,7 @@ wxString LIB_PIN::GetShownName() const
 void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                      const TRANSFORM& aTransform )
 {
-    PART_DRAW_OPTIONS* opts = (PART_DRAW_OPTIONS*) aData;
+    LIB_SYMBOL_OPTIONS* opts = (LIB_SYMBOL_OPTIONS*) aData;
     bool               drawHiddenFields = opts ? opts->draw_hidden_fields : false;
     bool               showPinType = opts ? opts->show_elec_type : false;
     bool               show_connect_point = opts ? opts->show_connect_point : false;

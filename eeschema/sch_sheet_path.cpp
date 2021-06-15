@@ -317,7 +317,7 @@ void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* 
     // affects power symbols.
     if( aIncludePowerSymbols || aSymbol->GetRef( this )[0] != wxT( '#' ) )
     {
-        LIB_SYMBOL* symbol = aSymbol->GetPartRef().get();
+        LIB_SYMBOL* symbol = aSymbol->GetLibSymbolRef().get();
 
         if( symbol || aForceIncludeOrphanSymbols )
         {
@@ -350,7 +350,7 @@ void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefLi
     if( !aIncludePowerSymbols && aSymbol->GetRef( this )[0] == wxT( '#' ) )
         return;
 
-    LIB_SYMBOL* symbol = aSymbol->GetPartRef().get();
+    LIB_SYMBOL* symbol = aSymbol->GetLibSymbolRef().get();
 
     if( symbol && symbol->GetUnitCount() > 1 )
     {
@@ -716,7 +716,7 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-            LIB_SYMBOL* libSymbol = symbol->GetPartRef().get();
+            LIB_SYMBOL* libSymbol = symbol->GetLibSymbolRef().get();
 
             if( libSymbol && libSymbol->IsPower() )
             {

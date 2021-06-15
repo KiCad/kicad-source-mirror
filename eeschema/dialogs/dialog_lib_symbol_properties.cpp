@@ -196,11 +196,11 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
         m_Parent->GetLibManager().GetRootSymbolNames( libName, rootSymbolNames );
         m_inheritanceSelectCombo->Append( rootSymbolNames );
 
-        PART_SPTR rootPart = m_libEntry->GetParent().lock();
+        LIB_SYMBOL_SPTR rootSymbol = m_libEntry->GetParent().lock();
 
-        wxCHECK( rootPart, false );
+        wxCHECK( rootSymbol, false );
 
-        wxString parentName = rootPart->GetName();
+        wxString parentName = rootSymbol->GetName();
         int selection = m_inheritanceSelectCombo->FindString( parentName );
 
         wxCHECK( selection != wxNOT_FOUND, false );
@@ -307,7 +307,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     {
         wxString libName = m_Parent->GetCurLib();
 
-        if( m_Parent->GetLibManager().PartExists( newName, libName ) )
+        if( m_Parent->GetLibManager().SymbolExists( newName, libName ) )
         {
             wxString msg;
 

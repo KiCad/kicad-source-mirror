@@ -25,7 +25,7 @@
 
 /**
  * @file class_library.h
- * @brief Definition for part library class.
+ * @brief Definition for symbol library class.
  */
 
 #ifndef CLASS_LIBRARY_H
@@ -50,12 +50,12 @@ class SCH_PLUGIN;
 #define DOC_EXT           "dcm"
 
 /*
- * Part Library version and file header  macros.
+ * Symbol Library version and file header  macros.
  */
 #define LIB_VERSION_MAJOR 2
 #define LIB_VERSION_MINOR 4
 
-/* Must be the first line of part library (.lib) files. */
+/* Must be the first line of symbol library (.lib) files. */
 #define LIBFILE_IDENT     "EESchema-LIBRARY Version"
 
 #define LIB_VERSION( major, minor ) ( major * 100 + minor )
@@ -68,7 +68,7 @@ class SCH_PLUGIN;
 
 /*
  * Library versions 2.4 and lower use the old separate library (.lib) and
- * document (.dcm) files.  Part libraries after 2.4 merged the library
+ * document (.dcm) files.  Symbol libraries after 2.4 merged the library
  * and document files into a single library file.  This macro checks if the
  * library version supports the old format
  */
@@ -81,14 +81,14 @@ enum class SCH_LIB_TYPE
     LT_SYMBOL
 };
 
-// Helper class to filter a list of libraries, and/or a list of PART_LIB
+// Helper class to filter a list of libraries, and/or a list of SYMBOL_LIB
 // in dialogs
 class SCHLIB_FILTER
 {
 public:
     SCHLIB_FILTER()
     {
-        m_filterPowerParts = false;
+        m_filterPowerSymbols = false;
         m_forceLoad = false;
     }
 
@@ -122,19 +122,19 @@ public:
     }
 
     /**
-     * set the filtering of power parts
+     * Set the filtering of power symbols
      */
-    void FilterPowerParts( bool aFilterEnable )
+    void FilterPowerSymbols( bool aFilterEnable )
     {
-        m_filterPowerParts = aFilterEnable;
+        m_filterPowerSymbols = aFilterEnable;
     }
 
     // Accessors
 
     /**
-     * @return true if the filtering of power parts is on
+     * @return true if the filtering of power symbols is on
      */
-    bool GetFilterPowerParts() const { return m_filterPowerParts; }
+    bool GetFilterPowerSymbols() const { return m_filterPowerSymbols; }
 
 
     /**
@@ -143,8 +143,8 @@ public:
     const wxArrayString& GetAllowedLibList() const { return m_allowedLibs; }
 
     /**
-     * @return the name of the lib to use to load a part, or an a empty string
-     * Useful to load (in lib editor or lib viewer) a part from a given library
+     * @return the name of the lib to use to load a symbol, or an a empty string
+     * Useful to load (in lib editor or lib viewer) a symbol from a given library
      */
     const wxString& GetLibSource() const
     {
@@ -159,20 +159,20 @@ public:
 private:
     wxArrayString m_allowedLibs;        ///< a list of lib names to list some libraries
                                         ///< if empty: no filter
-    bool          m_filterPowerParts;   ///< true to filter (show only) power parts
-    bool          m_forceLoad;          // When true, load a part lib from the lib
+    bool          m_filterPowerSymbols; ///< true to filter (show only) power symbols
+    bool          m_forceLoad;          // When true, load a symbol lib from the lib
                                         // which is given in m_allowedLibs[0]
 };
 
 
-/* Helpers for creating a list of part libraries. */
-class PART_LIB;
+/* Helpers for creating a list of symbol libraries. */
+class SYMBOL_LIB;
 class wxRegEx;
 
 /**
  * LIB_SYMBOL map sorting.
  */
-struct LibPartMapSort
+struct LibSymbolMapSort
 {
     bool operator() ( const wxString& aItem1, const wxString& aItem2 ) const
     {
@@ -180,42 +180,42 @@ struct LibPartMapSort
     }
 };
 
-/// Part map used by part library object.
+/// Symbol map used by symbol library object.
 
-typedef std::map< wxString, LIB_SYMBOL*, LibPartMapSort >  LIB_SYMBOL_MAP;
-typedef std::vector< LIB_SYMBOL* >                         LIB_SYMBOLS;
-typedef boost::ptr_vector< PART_LIB >                      PART_LIBS_BASE;
+typedef std::map< wxString, LIB_SYMBOL*, LibSymbolMapSort > LIB_SYMBOL_MAP;
+typedef std::vector< LIB_SYMBOL* >                          LIB_SYMBOLS;
+typedef boost::ptr_vector< SYMBOL_LIB >                     SYMBOL_LIBS_BASE;
 
 
 /**
- * A collection of #PART_LIB objects.
+ * A collection of #SYMBOL_LIB objects.
  *
  * It extends from PROJECT::_ELEM so it can be hung in the PROJECT.  It does not use any
  * UI calls, but rather simply throws an IO_ERROR when there is a problem.
  */
-class PART_LIBS : public PART_LIBS_BASE, public PROJECT::_ELEM
+class SYMBOL_LIBS : public SYMBOL_LIBS_BASE, public PROJECT::_ELEM
 {
 public:
-    KICAD_T Type() override { return PART_LIBS_T; }
+    KICAD_T Type() override { return SYMBOL_LIBS_T; }
 
     static int        s_modify_generation;         ///< helper for GetModifyHash()
     static std::mutex s_generationMutex;
 
-    PART_LIBS()
+    SYMBOL_LIBS()
     {
         IncrementModifyGeneration();
     }
 
     static void IncrementModifyGeneration()
     {
-        std::lock_guard<std::mutex> mut( PART_LIBS::s_generationMutex );
-        ++PART_LIBS::s_modify_generation;
+        std::lock_guard<std::mutex> mut( SYMBOL_LIBS::s_generationMutex );
+        ++SYMBOL_LIBS::s_modify_generation;
     }
 
     static int GetModifyGeneration()
     {
-        std::lock_guard<std::mutex> mut( PART_LIBS::s_generationMutex );
-        return PART_LIBS::s_modify_generation;
+        std::lock_guard<std::mutex> mut( SYMBOL_LIBS::s_generationMutex );
+        return SYMBOL_LIBS::s_modify_generation;
     }
 
     /// Return the modification hash for all libraries.  The value returned
@@ -223,22 +223,22 @@ public:
     int GetModifyHash();
 
     /**
-     * Allocate and adds a part library to the library list.
+     * Allocate and adds a symbol library to the library list.
      *
-     * @param aFileName - File name object of part library.
+     * @param aFileName is the file name object of symbol library.
      * @throw IO_ERROR if there's any problem loading.
      */
-    PART_LIB* AddLibrary( const wxString& aFileName );
+    SYMBOL_LIB* AddLibrary( const wxString& aFileName );
 
     /**
-     * Insert a part library into the library list.
+     * Insert a symbol library into the library list.
      *
-     * @param aFileName - File name object of part library.
-     * @param aIterator - Iterator to insert library in front of.
-     * @return PART_LIB* - the new PART_LIB, which remains owned by this PART_LIBS container.
+     * @param aFileName is the file name object of symbol library.
+     * @param aIterator is an iterator to insert library in front of.
+     * @return the new SYMBOL_LIB, which remains owned by this SYMBOL_LIBS container.
      * @throw IO_ERROR if there's any problem loading.
      */
-    PART_LIB* AddLibrary( const wxString& aFileName, PART_LIBS::iterator& aIterator );
+    SYMBOL_LIB* AddLibrary( const wxString& aFileName, SYMBOL_LIBS::iterator& aIterator );
 
     /**
      * Load all of the project's libraries into this container, which should
@@ -250,7 +250,7 @@ public:
     void LoadAllLibraries( PROJECT* aProject, bool aShowProgress=true );
 
     /**
-     * Save or load the names of the currently configured part libraries (without paths).
+     * Save or load the names of the currently configured symbol libraries (without paths).
      */
     static void LibNamesAndPaths( PROJECT* aProject, bool doSave,
                                   wxString* aPaths, wxArrayString* aNames=NULL );
@@ -259,41 +259,41 @@ public:
      * Return the name of the cache library after potentially fixing it from
      * an older naming scheme.  That is, the old file is renamed if needed.
      *
-     * @param aFullProjectFilename - the *.pro filename with absolute path.
+     * @param aFullProjectFilename is the *.pro filename with absolute path.
      */
     static const wxString CacheName( const wxString& aFullProjectFilename );
 
     /**
-     * Find a part library by \a aName.
+     * Find a symbol library by \a aName.
      *
-     * @param aName - Library file name without path or extension to find.
-     * @return Part library if found, otherwise NULL.
+     * @param aName is the library file name without path or extension to find.
+     * @return the symbol library if found, otherwise NULL.
      */
-    PART_LIB* FindLibrary( const wxString& aName );
+    SYMBOL_LIB* FindLibrary( const wxString& aName );
 
-    PART_LIB* FindLibraryByFullFileName( const wxString& aFullFileName );
+    SYMBOL_LIB* FindLibraryByFullFileName( const wxString& aFullFileName );
 
-    PART_LIB* GetCacheLibrary();
+    SYMBOL_LIB* GetCacheLibrary();
 
     /**
-     * Return the list of part library file names without path and extension.
+     * Return the list of symbol library file names without path and extension.
      *
-     * @param aSorted - Sort the list of name if true.  Otherwise use the library load order.
-     * @return The list of library names.
+     * @param aSorted sort the list of name if true.  Otherwise use the library load order.
+     * @return the list of library names.
      */
     wxArrayString GetLibraryNames( bool aSorted = true );
 
     /**
-     * Search all libraries in the list for a part.
+     * Search all libraries in the list for a symbol.
      *
-     * A part object will always be returned.  If the entry found
-     * is an alias.  The root part will be found and returned.
+     * A symbol object will always be returned.  If the entry found
+     * is an alias.  The root symbol will be found and returned.
      *
-     * @param aLibId - The #LIB_ID of the symbol to search for.
-     * @param aLibraryName - Name of the library to search for part.
-     * @return LIB_SYMBOL* - The part object if found, otherwise NULL.
+     * @param aLibId is the #LIB_ID of the symbol to search for.
+     * @param aLibraryName is the name of the library to search for symbol.
+     * @return the symbol object if found, otherwise NULL.
      */
-    LIB_SYMBOL* FindLibPart( const LIB_ID& aLibId, const wxString& aLibraryName = wxEmptyString );
+    LIB_SYMBOL* FindLibSymbol( const LIB_ID& aLibId, const wxString& aLibraryName = wxEmptyString );
 
     /**
      * Search all libraries in the list for a #LIB_SYMBOL using a case insensitive comparison.
@@ -304,9 +304,9 @@ public:
      * the chip name (name of alias in lib) can be broken.
      * This function can be used to display a list of candidates, in symbol properties dialog.
      *
-     * @param aEntryName - Name of entries to search for (case insensitive).
-     * @param aLibraryName - Name of the library to search.
-     * @param aCandidates - a std::vector to store candidates
+     * @param aEntryName is the name of entries to search for (case insensitive).
+     * @param aLibraryName is the name of the library to search.
+     * @param aCandidates is a std::vector to store candidates.
      */
     void FindLibraryNearEntries( std::vector<LIB_SYMBOL*>& aCandidates, const wxString& aEntryName,
                                  const wxString& aLibraryName = wxEmptyString );
@@ -321,12 +321,12 @@ public:
  * @warning This code is obsolete with the exception of the cache library.  All other
  *          symbol library I/O is managed by the #SCH_IO_MGR object.
  */
-class PART_LIB
+class SYMBOL_LIB
 {
 public:
-    PART_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
+    SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
               SCH_IO_MGR::SCH_FILE_T aPluginType = SCH_IO_MGR::SCH_LEGACY );
-    ~PART_LIB();
+    ~SYMBOL_LIB();
 
     /**
      * @return a magic number that changes if the library has changed
@@ -364,26 +364,26 @@ public:
     /**
      * Load a string array with the names of all the entries in this library.
      *
-     * @param aNames - String array to place entry names into.
+     * @param aNames is the array to place entry names into.
      */
-    void GetPartNames( wxArrayString& aNames ) const;
+    void GetSymbolNames( wxArrayString& aNames ) const;
 
     /**
      * Load a vector with all the entries in this library.
      *
      * @param aSymbols is a vector to receive the aliases.
      */
-    void GetParts( std::vector<LIB_SYMBOL*>& aSymbols ) const;
+    void GetSymbols( std::vector<LIB_SYMBOL*>& aSymbols ) const;
 
     /**
      * Find #LIB_SYMBOL by \a aName.
      *
-     * @param aName - Name of part, case sensitive.
-     * @return LIB_SYMBOL pointer part if found, else NULL.
+     * @param aName is the name of the symbol, case sensitive.
+     * @return LIB_SYMBOL pointer symbol if found, else NULL.
      */
-    LIB_SYMBOL* FindPart( const wxString& aName ) const;
+    LIB_SYMBOL* FindSymbol( const wxString& aName ) const;
 
-    LIB_SYMBOL* FindPart( const LIB_ID& aLibId ) const;
+    LIB_SYMBOL* FindSymbol( const LIB_ID& aLibId ) const;
 
     /**
      * Add \a aSymbol entry to library.
@@ -391,51 +391,52 @@ public:
      * @note A #LIB_SYMBOL can have an alias list so these alias will be added in library.
      *       and the any existing duplicate aliases will be removed from the library.
      *
-     * @param aSymbol - Part to add, caller retains ownership, a clone is added.
+     * @param aSymbol is the symbol to add, caller retains ownership, a clone is added.
      */
-    void AddPart( LIB_SYMBOL* aSymbol );
+    void AddSymbol( LIB_SYMBOL* aSymbol );
 
     /**
      * Safely remove \a aEntry from the library and return the next entry.
      *
      * The next entry returned depends on the entry being removed.  If the entry being
-     * remove also removes the part, then the next entry from the list is returned.
-     * If the entry being used only removes an alias from a part, then the next alias
-     * of the part is returned.
+     * remove also removes the symbol, then the next entry from the list is returned.
+     * If the entry being used only removes an alias from a symbol, then the next alias
+     * of the symbol is returned.
      *
-     * @param aEntry - Entry to remove from library.
+     * @param aEntry is the entry to remove from library.
      * @return The next entry in the library or NULL if the library is empty.
      */
-    LIB_SYMBOL* RemovePart( LIB_SYMBOL* aEntry );
+    LIB_SYMBOL* RemoveSymbol( LIB_SYMBOL* aEntry );
 
     /**
-     * Replace an existing part entry in the library.
+     * Replace an existing symbol entry in the library.
      *
-     * Note a part can have an alias list,
-     * so these alias will be added in library (and previously existing alias removed)
-     * @param aOldPart - The part to replace.
-     * @param aNewPart - The new part.
+     * @note A symbol can have an alias list so these aliases will be added in library and
+     *       previously existing alias removed.
+     *
+     * @param aOldSymbol is the symbol to replace.
+     * @param aNewSymbol is the new symbol.
      */
-    LIB_SYMBOL* ReplacePart( LIB_SYMBOL* aOldSymbol, LIB_SYMBOL* aNewSymbol );
+    LIB_SYMBOL* ReplaceSymbol( LIB_SYMBOL* aOldSymbol, LIB_SYMBOL* aNewSymbol );
 
     /**
      * Return the file name without path or extension.
      *
-     * @return Name of library file.
+     * @return the name of library file.
      */
     const wxString GetName() const            { return fileName.GetName(); }
 
     /**
      * Return the full file library name with path and extension.
      *
-     * @return wxString - Full library file name with path and extension.
+     * @return the full library file name with path and extension.
      */
     wxString GetFullFileName() const          { return fileName.GetFullPath(); }
 
     /**
      * Return the logical name of the library.
      *
-     * @return wxString - The logical name of this library.
+     * @return The logical name of this library.
      */
     const wxString GetLogicalName() const
     {
@@ -454,11 +455,11 @@ public:
     /**
      * Allocate and load a symbol library file.
      *
-     * @param aFileName - File name of the part library to load.
-     * @return PART_LIB* - the allocated and loaded PART_LIB, which is owned by the caller.
+     * @param aFileName is the file name of the symbol library to load.
+     * @return SYMBOL_LIB* is the allocated and loaded SYMBOL_LIB, which is owned by the caller.
      * @throw IO_ERROR if there's any problem loading the library.
      */
-    static PART_LIB* LoadLibrary( const wxString& aFileName );
+    static SYMBOL_LIB* LoadLibrary( const wxString& aFileName );
 
 private:
     SCH_LIB_TYPE    type;           ///< Library type indicator.
@@ -479,7 +480,7 @@ private:
 /**
  * Case insensitive library name comparison.
  */
-bool operator==( const PART_LIB& aLibrary, const wxString& aName );
-bool operator!=( const PART_LIB& aLibrary, const wxString& aName );
+bool operator==( const SYMBOL_LIB& aLibrary, const wxString& aName );
+bool operator!=( const SYMBOL_LIB& aLibrary, const wxString& aName );
 
 #endif  //  CLASS_LIBRARY_H

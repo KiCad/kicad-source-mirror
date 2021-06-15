@@ -29,7 +29,7 @@
 #define _DIALOG_SYMBOL_REMAP_H_
 
 
-class PART_LIB;
+class SYMBOL_LIB;
 class SCH_SYMBOL;
 class REPORTER;
 
@@ -59,7 +59,7 @@ private:
      *              list.
      * @return the number of libraries found.
      */
-    size_t getLibsNotInGlobalSymbolLibTable( std::vector< PART_LIB* >& aLibs );
+    size_t getLibsNotInGlobalSymbolLibTable( std::vector< SYMBOL_LIB* >& aLibs );
 
     void createProjectSymbolLibTable( REPORTER& aReporter );
 

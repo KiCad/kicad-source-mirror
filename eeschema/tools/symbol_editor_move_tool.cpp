@@ -119,7 +119,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     VECTOR2I    prevPos;
 
     if( !selection.Front()->IsNew() )
-        saveCopyInUndoList( m_frame->GetCurPart(), UNDO_REDO::LIBEDIT );
+        saveCopyInUndoList( m_frame->GetCurSymbol(), UNDO_REDO::LIBEDIT );
 
     m_cursor = controls->GetCursorPosition();
 
@@ -154,7 +154,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         if(  lib_item->Type() == LIB_PIN_T )
                         {
                             LIB_PIN* cur_pin = static_cast<LIB_PIN*>( lib_item );
-                            LIB_SYMBOL* symbol = m_frame->GetCurPart();
+                            LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
                             std::vector<bool> got_unit( symbol->GetUnitCount() );
 
                             got_unit[cur_pin->GetUnit()] = true;

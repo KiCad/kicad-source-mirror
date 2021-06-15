@@ -1481,7 +1481,7 @@ LIB_SYMBOL* SCH_SEXPR_PLUGIN_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
 
 void SCH_SEXPR_PLUGIN_CACHE::AddSymbol( const LIB_SYMBOL* aSymbol )
 {
-    // aSymbol is cloned in PART_LIB::AddPart().  The cache takes ownership of aSymbol.
+    // aSymbol is cloned in SYMBOL_LIB::AddSymbol().  The cache takes ownership of aSymbol.
     wxString name = aSymbol->GetName();
     LIB_SYMBOL_MAP::iterator it = m_symbols.find( name );
 
@@ -1656,9 +1656,9 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& a
         saveDcmInfoAsFields( aSymbol, aFormatter, nextFreeFieldId, aNestLevel );
 
         // Save the draw items grouped by units.
-        std::vector<PART_UNITS> units = aSymbol->GetUnitDrawItems();
+        std::vector<LIB_SYMBOL_UNITS> units = aSymbol->GetUnitDrawItems();
         std::sort( units.begin(), units.end(),
-                   []( const PART_UNITS& a, const PART_UNITS& b )
+                   []( const LIB_SYMBOL_UNITS& a, const LIB_SYMBOL_UNITS& b )
                    {
                         if( a.m_unit == b.m_unit )
                             return a.m_convert < b.m_convert;
@@ -2110,10 +2110,10 @@ void SCH_SEXPR_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPERT
         delete m_cache;
         m_cache = new SCH_SEXPR_PLUGIN_CACHE( aLibraryFileName );
 
-        // Because m_cache is rebuilt, increment PART_LIBS::s_modify_generation
+        // Because m_cache is rebuilt, increment SYMBOL_LIBS::s_modify_generation
         // to modify the hash value that indicate symbol to symbol links
         // must be updated.
-        PART_LIBS::IncrementModifyGeneration();
+        SYMBOL_LIBS::IncrementModifyGeneration();
 
         if( !isBuffering( aProperties ) )
             m_cache->Load();
@@ -2311,7 +2311,7 @@ bool SCH_SEXPR_PLUGIN::IsSymbolLibWritable( const wxString& aLibraryPath )
 }
 
 
-LIB_SYMBOL* SCH_SEXPR_PLUGIN::ParsePart( LINE_READER& aReader, int aFileVersion )
+LIB_SYMBOL* SCH_SEXPR_PLUGIN::ParseLibSymbol( LINE_READER& aReader, int aFileVersion )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
     LIB_SYMBOL_MAP map;
@@ -2324,7 +2324,7 @@ LIB_SYMBOL* SCH_SEXPR_PLUGIN::ParsePart( LINE_READER& aReader, int aFileVersion 
 }
 
 
-void SCH_SEXPR_PLUGIN::FormatPart( LIB_SYMBOL* symbol, OUTPUTFORMATTER & formatter )
+void SCH_SEXPR_PLUGIN::FormatLibSymbol( LIB_SYMBOL* symbol, OUTPUTFORMATTER & formatter )
 {
 
     LOCALE_IO toggle;     // toggles on, then off, the C locale.

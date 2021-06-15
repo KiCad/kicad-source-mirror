@@ -1445,7 +1445,8 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
     int convert = aSymbol->GetConvert();
 
     // Use dummy symbol if the actual couldn't be found (or couldn't be locked).
-    LIB_SYMBOL* originalSymbol = aSymbol->GetPartRef() ? aSymbol->GetPartRef().get() : dummy();
+    LIB_SYMBOL* originalSymbol = aSymbol->GetLibSymbolRef() ?
+                                 aSymbol->GetLibSymbolRef().get() : dummy();
     LIB_PINS  originalPins;
     originalSymbol->GetPins( originalPins, unit, convert );
 

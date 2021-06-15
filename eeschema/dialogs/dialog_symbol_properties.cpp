@@ -282,9 +282,9 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         m_dataModel( nullptr )
 {
     m_symbol = aSymbol;
-    m_part = m_symbol->GetPartRef().get();
+    m_part = m_symbol->GetLibSymbolRef().get();
 
-    // GetPartRef() now points to the cached part in the schematic, which should always be
+    // GetLibSymbolRef() now points to the cached part in the schematic, which should always be
     // there for usual cases, but can be null when opening old schematics not storing the part
     // so we need to handle m_part == nullptr
     wxASSERT( m_part );

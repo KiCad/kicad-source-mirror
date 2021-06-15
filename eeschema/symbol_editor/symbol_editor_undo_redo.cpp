@@ -74,22 +74,22 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromRedoList()
 
     // Store the current symbol in the undo buffer
     PICKED_ITEMS_LIST* undoCommand = new PICKED_ITEMS_LIST();
-    LIB_SYMBOL* oldSymbol = m_my_part;
+    LIB_SYMBOL* oldSymbol = m_symbol;
     oldSymbol->SetFlags( UR_TRANSIENT );
     ITEM_PICKER undoWrapper( GetScreen(), oldSymbol, undoRedoType );
     undoCommand->PushItem( undoWrapper );
     PushCommandToUndoList( undoCommand );
 
-    // Do not delete the previous symbol by calling SetCurPart( symbol )
+    // Do not delete the previous symbol by calling SetCurSymbol( symbol )
     // which calls delete <previous symbol>.
     // <previous symbol> is now put in undo list and is owned by this list
     // Just set the current symbol to the symbol which come from the redo list
-    m_my_part = symbol;
+    m_symbol = symbol;
 
     if( undoRedoType == UNDO_REDO::LIB_RENAME )
     {
         wxString lib = GetCurLib();
-        m_libMgr->UpdatePartAfterRename( symbol, oldSymbol->GetName(), lib );
+        m_libMgr->UpdateSymbolAfterRename( symbol, oldSymbol->GetName(), lib );
 
         // Reselect the renamed symbol
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, symbol->GetName() ) );
@@ -122,22 +122,22 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
 
     // Store the current symbol in the redo buffer
     PICKED_ITEMS_LIST* redoCommand = new PICKED_ITEMS_LIST();
-    LIB_SYMBOL* oldSymbol = m_my_part;
+    LIB_SYMBOL* oldSymbol = m_symbol;
     oldSymbol->SetFlags( UR_TRANSIENT );
     ITEM_PICKER redoWrapper( GetScreen(), oldSymbol, undoRedoType );
     redoCommand->PushItem( redoWrapper );
     PushCommandToRedoList( redoCommand );
 
-    // Do not delete the previous symbol by calling SetCurPart( symbol ),
+    // Do not delete the previous symbol by calling SetCurSymbol( symbol ),
     // which calls delete <previous symbol>.
     // <previous symbol> is now put in redo list and is owned by this list.
     // Just set the current symbol to the symbol which come from the undo list
-    m_my_part = symbol;
+    m_symbol = symbol;
 
     if( undoRedoType == UNDO_REDO::LIB_RENAME )
     {
         wxString lib = GetCurLib();
-        m_libMgr->UpdatePartAfterRename( symbol, oldSymbol->GetName(), lib );
+        m_libMgr->UpdateSymbolAfterRename( symbol, oldSymbol->GetName(), lib );
 
         // Reselect the renamed symbol
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, symbol->GetName() ) );
@@ -167,7 +167,7 @@ void SYMBOL_EDIT_FRAME::RollbackSymbolFromUndo()
     delete undoCommand;
     LIB_SYMBOL* symbol = (LIB_SYMBOL*) undoWrapper.GetItem();
     symbol->ClearFlags( UR_TRANSIENT );
-    SetCurPart( symbol, false );
+    SetCurSymbol( symbol, false );
 
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     selTool->RebuildSelection();

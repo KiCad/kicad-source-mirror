@@ -850,7 +850,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
                 if( item->Type() == SCH_FIELD_T )
                     symbol = dynamic_cast<SCH_SYMBOL*>( item->GetParent() );
 
-                if( symbol && symbol->GetPartRef() && symbol->GetPartRef()->IsPower() )
+                if( symbol && symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->IsPower() )
                 {
                     std::vector<SCH_PIN*> pins = symbol->GetPins();
 
@@ -1016,7 +1016,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         if( item->Type() == SCH_SYMBOL_T )
             symbol = static_cast<SCH_SYMBOL*>( item );
 
-        if( symbol && symbol->GetPartRef() && symbol->GetPartRef()->IsPower() )
+        if( symbol && symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->IsPower() )
             itemConn = symbol->Connection();
         else
             itemConn = item->Connection();
@@ -1084,7 +1084,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                 }
             }
 
-            if( symbol->GetPartRef() && symbol->GetPartRef()->IsPower() )
+            if( symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->IsPower() )
             {
                 std::vector<SCH_FIELD>& fields = symbol->GetFields();
 

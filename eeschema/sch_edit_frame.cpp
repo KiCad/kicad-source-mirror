@@ -117,7 +117,7 @@ SEARCH_STACK* PROJECT::SchSearchS()
 
         try
         {
-            PART_LIBS::LibNamesAndPaths( this, false, &libDir );
+            SYMBOL_LIBS::LibNamesAndPaths( this, false, &libDir );
         }
         catch( const IO_ERROR& )
         {
@@ -145,18 +145,18 @@ SEARCH_STACK* PROJECT::SchSearchS()
 }
 
 
-PART_LIBS* PROJECT::SchLibs()
+SYMBOL_LIBS* PROJECT::SchLibs()
 {
-    PART_LIBS* libs = (PART_LIBS*) GetElem( PROJECT::ELEM_SCH_PART_LIBS );
+    SYMBOL_LIBS* libs = (SYMBOL_LIBS*) GetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS );
 
-    wxASSERT( !libs || libs->Type() == PART_LIBS_T );
+    wxASSERT( !libs || libs->Type() == SYMBOL_LIBS_T );
 
     if( !libs )
     {
-        libs = new PART_LIBS();
+        libs = new SYMBOL_LIBS();
 
-        // Make PROJECT the new PART_LIBS owner.
-        SetElem( PROJECT::ELEM_SCH_PART_LIBS, libs );
+        // Make PROJECT the new SYMBOL_LIBS owner.
+        SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, libs );
 
         try
         {

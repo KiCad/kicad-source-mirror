@@ -60,7 +60,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = []( const SELECTION& aSel )
         SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aSel.Front() );
 
         if( symbol )
-            return !symbol->GetPartRef() || !symbol->GetPartRef()->IsPower();
+            return !symbol->GetLibSymbolRef() || !symbol->GetLibSymbolRef()->IsPower();
     }
 
     return false;
@@ -80,7 +80,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleDeMorganSymbol = []( const SELECTION& a
         SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aSel.Front() );
 
         if( symbol )
-            return symbol->GetPartRef() && symbol->GetPartRef()->HasConversion();
+            return symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->HasConversion();
     }
 
     return false;
@@ -94,7 +94,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleMultiUnitSymbol = []( const SELECTION& 
         SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aSel.Front() );
 
         if( symbol )
-            return symbol->GetPartRef() && symbol->GetPartRef()->GetUnitCount() >= 2;
+            return symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->GetUnitCount() >= 2;
     }
 
     return false;
@@ -184,10 +184,11 @@ bool EE_SELECTION_TOOL::Init()
                         && editFrame->GetCurrentSheet().Last() != &editFrame->Schematic().Root();
             };
 
-    auto havePartCondition =
+    auto haveSymbolCondition =
             [&]( const SELECTION& sel )
             {
-                return m_isSymbolEditor && static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
+                return m_isSymbolEditor &&
+                       static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
             };
 
     auto& menu = m_menu.GetMenu();
@@ -219,8 +220,10 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::editPageNumber,     schEditSheetPageNumberCondition, 250 );
 
     menu.AddSeparator( 400 );
-    menu.AddItem( EE_ACTIONS::symbolProperties,   havePartCondition && EE_CONDITIONS::Empty, 400 );
-    menu.AddItem( EE_ACTIONS::pinTable,           havePartCondition && EE_CONDITIONS::Empty, 400 );
+    menu.AddItem( EE_ACTIONS::symbolProperties,
+                  haveSymbolCondition && EE_CONDITIONS::Empty, 400 );
+    menu.AddItem( EE_ACTIONS::pinTable,
+                  haveSymbolCondition && EE_CONDITIONS::Empty, 400 );
 
     menu.AddSeparator( 1000 );
     m_frame->AddStandardSubMenus( m_menu );
@@ -565,7 +568,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         SYMBOL_EDIT_FRAME* libFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
 
                         // Cannot move any derived symbol elements for now.
-                        if( libFrame && libFrame->GetCurPart() && libFrame->GetCurPart()->IsRoot() )
+                        if( libFrame && libFrame->GetCurSymbol()
+                          && libFrame->GetCurSymbol()->IsRoot() )
                             m_toolMgr->InvokeTool( "eeschema.SymbolMoveTool" );
                     }
                     else
@@ -772,7 +776,7 @@ bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
 
     if( m_isSymbolEditor )
     {
-        LIB_SYMBOL* symbol = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
+        LIB_SYMBOL* symbol = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
 
         if( !symbol )
             return false;
@@ -1508,7 +1512,7 @@ void EE_SELECTION_TOOL::RebuildSelection()
 
     if( m_isSymbolEditor )
     {
-        LIB_SYMBOL* start = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
+        LIB_SYMBOL* start = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
 
         for( LIB_ITEM& item : start->GetDrawItems() )
         {

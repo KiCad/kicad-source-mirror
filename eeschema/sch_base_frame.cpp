@@ -43,7 +43,7 @@
 #include <tools/ee_selection_tool.h>
 
 
-LIB_SYMBOL* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
+LIB_SYMBOL* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, SYMBOL_LIB* aCacheLib,
                            wxWindow* aParent, bool aShowErrorMsg )
 {
     wxCHECK_MSG( aLibTable, nullptr, "Invalid symbol library table." );
@@ -60,7 +60,7 @@ LIB_SYMBOL* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PA
 
             wxString cacheName = aLibId.GetLibNickname().wx_str();
             cacheName += "_" + aLibId.GetLibItemName();
-            symbol = aCacheLib->FindPart( cacheName );
+            symbol = aCacheLib->FindSymbol( cacheName );
         }
     }
     catch( const IO_ERROR& ioe )
@@ -195,7 +195,7 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 LIB_SYMBOL* SCH_BASE_FRAME::GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib,
                                         bool aShowErrorMsg )
 {
-    PART_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : NULL;
+    SYMBOL_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : NULL;
 
     return SchGetLibPart( aLibId, Prj().SchSymbolLibTable(), cache, this, aShowErrorMsg );
 }
@@ -231,7 +231,8 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
         catch( const IO_ERROR& ioe )
         {
             success = false;
-            msg.Printf( _( "Error saving project-specific symbol library table:\n%s" ), ioe.What() );
+            msg.Printf( _( "Error saving project-specific symbol library table:\n%s" ),
+                        ioe.What() );
             wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         }
     }

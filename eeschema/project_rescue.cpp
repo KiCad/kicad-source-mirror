@@ -83,15 +83,15 @@ static void getSymbols( SCHEMATIC* aSchematic, std::vector<SCH_SYMBOL*>& aSymbol
  * Search the libraries for the first symbol with a given name.
  *
  * @param aName - name to search for
- * @param aLibs - the loaded PART_LIBS
+ * @param aLibs - the loaded SYMBOL_LIBS
  * @param aCached - whether we are looking for the cached symbol
  */
-static LIB_SYMBOL* findSymbol( const wxString& aName, PART_LIBS* aLibs, bool aCached )
+static LIB_SYMBOL* findSymbol( const wxString& aName, SYMBOL_LIBS* aLibs, bool aCached )
 {
     LIB_SYMBOL *symbol = NULL;
     wxString new_name = LIB_ID::FixIllegalChars( aName );
 
-    for( PART_LIB& each_lib : *aLibs )
+    for( SYMBOL_LIB& each_lib : *aLibs )
     {
         if( aCached && !each_lib.IsCache() )
             continue;
@@ -99,7 +99,7 @@ static LIB_SYMBOL* findSymbol( const wxString& aName, PART_LIBS* aLibs, bool aCa
         if( !aCached && each_lib.IsCache() )
             continue;
 
-        symbol = each_lib.FindPart( new_name );
+        symbol = each_lib.FindSymbol( new_name );
 
         if( symbol )
             break;
@@ -161,7 +161,7 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 
             LIB_ID id( wxEmptyString, search_name );
 
-            case_sensitive_match = aRescuer.GetPrj()->SchLibs()->FindLibPart( id );
+            case_sensitive_match = aRescuer.GetPrj()->SchLibs()->FindLibSymbol( id );
 
             // If the case sensitive match failed, try a case insensitive match.
             if( !case_sensitive_match )
@@ -320,7 +320,7 @@ bool RESCUE_CACHE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 
     std::unique_ptr<LIB_SYMBOL> new_symbol = tmp->Flatten();
     new_symbol->SetName( m_new_name );
-    aRescuer->AddPart( new_symbol.get() );
+    aRescuer->AddSymbol( new_symbol.get() );
 
     for( SCH_SYMBOL* eachSymbol : *aRescuer->GetSymbols() )
     {
@@ -399,7 +399,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             if( !cache_match && !lib_match )
                 continue;
 
-            PART_SPTR lib_match_parent;
+            LIB_SYMBOL_SPTR lib_match_parent;
 
             // If it's a derive symbol, use the parent symbol to perform the pin test.
             if( lib_match && lib_match->IsAlias() )
@@ -482,7 +482,7 @@ bool RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::PerformAction( RESCUER* aRescuer )
     std::unique_ptr<LIB_SYMBOL> new_symbol = tmp->Flatten();
     new_symbol->SetLibId( m_new_id );
     new_symbol->SetName( m_new_id.GetLibItemName() );
-    aRescuer->AddPart( new_symbol.get() );
+    aRescuer->AddSymbol( new_symbol.get() );
 
     for( SCH_SYMBOL* eachSymbol : *aRescuer->GetSymbols() )
     {
@@ -645,7 +645,7 @@ void LEGACY_RESCUER::OpenRescueLibrary()
 {
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
 
-    std::unique_ptr<PART_LIB> rescue_lib = std::make_unique<PART_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
+    std::unique_ptr<SYMBOL_LIB> rescue_lib = std::make_unique<SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
                                                                        fn.GetFullPath() );
 
     m_rescue_lib = std::move( rescue_lib );
@@ -653,19 +653,19 @@ void LEGACY_RESCUER::OpenRescueLibrary()
 
     // If a rescue library already exists copy the contents of that library so we do not
     // lose an previous rescues.
-    PART_LIB* rescueLib = m_prj->SchLibs()->FindLibrary( fn.GetName() );
+    SYMBOL_LIB* rescueLib = m_prj->SchLibs()->FindLibrary( fn.GetName() );
 
     if( rescueLib )
     {
         // For items in the rescue library, aliases are the root symbol.
         std::vector< LIB_SYMBOL* > symbols;
 
-        rescueLib->GetParts( symbols );
+        rescueLib->GetSymbols( symbols );
 
         for( auto symbol : symbols )
         {
             // The LIB_SYMBOL copy constructor flattens derived symbols (formerly known as aliases).
-            m_rescue_lib->AddPart( new LIB_SYMBOL( *symbol, m_rescue_lib.get() ) );
+            m_rescue_lib->AddSymbol( new LIB_SYMBOL( *symbol, m_rescue_lib.get() ) );
         }
     }
 }
@@ -691,17 +691,17 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     wxString libPaths;
 
     wxString libName = m_rescue_lib->GetName();
-    PART_LIBS *libs = dynamic_cast<PART_LIBS*>( m_prj->GetElem( PROJECT::ELEM_SCH_PART_LIBS ) );
+    SYMBOL_LIBS *libs = dynamic_cast<SYMBOL_LIBS*>( m_prj->GetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS ) );
 
     if( !libs )
     {
-        libs = new PART_LIBS();
-        m_prj->SetElem( PROJECT::ELEM_SCH_PART_LIBS, libs );
+        libs = new SYMBOL_LIBS();
+        m_prj->SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, libs );
     }
 
     try
     {
-        PART_LIBS::LibNamesAndPaths( m_prj, false, &libPaths, &libNames );
+        SYMBOL_LIBS::LibNamesAndPaths( m_prj, false, &libPaths, &libNames );
 
         // Make sure the library is not already in the list
         while( libNames.Index( libName ) != wxNOT_FOUND )
@@ -709,7 +709,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
         // Add the library to the top of the list and save.
         libNames.Insert( libName, 0 );
-        PART_LIBS::LibNamesAndPaths( m_prj, true, &libPaths, &libNames );
+        SYMBOL_LIBS::LibNamesAndPaths( m_prj, true, &libPaths, &libNames );
     }
     catch( const IO_ERROR& )
     {
@@ -719,12 +719,12 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
     // Save the old libraries in case there is a problem after clear(). We'll
     // put them back in.
-    boost::ptr_vector<PART_LIB> libsSave;
+    boost::ptr_vector<SYMBOL_LIB> libsSave;
     libsSave.transfer( libsSave.end(), libs->begin(), libs->end(), *libs );
 
-    m_prj->SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
+    m_prj->SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, NULL );
 
-    libs = new PART_LIBS();
+    libs = new SYMBOL_LIBS();
 
     try
     {
@@ -743,7 +743,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
         return false;
     }
 
-    m_prj->SetElem( PROJECT::ELEM_SCH_PART_LIBS, libs );
+    m_prj->SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, libs );
 
     // Update the schematic symbol library links since the library list has changed.
     SCH_SCREENS schematic( m_schematic->Root() );
@@ -752,12 +752,12 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 }
 
 
-void LEGACY_RESCUER::AddPart( LIB_SYMBOL* aNewSymbol )
+void LEGACY_RESCUER::AddSymbol( LIB_SYMBOL* aNewSymbol )
 {
     wxCHECK_RET( aNewSymbol, "Invalid LIB_SYMBOL pointer." );
 
     aNewSymbol->SetLib( m_rescue_lib.get() );
-    m_rescue_lib->AddPart( aNewSymbol );
+    m_rescue_lib->AddSymbol( aNewSymbol );
 }
 
 
@@ -849,7 +849,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 }
 
 
-void SYMBOL_LIB_TABLE_RESCUER::AddPart( LIB_SYMBOL* aNewSymbol )
+void SYMBOL_LIB_TABLE_RESCUER::AddSymbol( LIB_SYMBOL* aNewSymbol )
 {
     wxCHECK_RET( aNewSymbol, "Invalid LIB_SYMBOL pointer." );
 

@@ -297,9 +297,9 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             // "logical" library name, which is in anticipation of a better search algorithm
             // for parts based on "logical_lib.part" and where logical_lib is merely the library
             // name minus path and extension.
-            if( symbol->GetPartRef() )
+            if( symbol->GetLibSymbolRef() )
                 xlibsource->AddAttribute( "lib",
-                                          symbol->GetPartRef()->GetLibId().GetLibNickname() );
+                                          symbol->GetLibSymbolRef()->GetLibId().GetLibNickname() );
 
             // We only want the symbol name, not the full LIB_ID.
             xlibsource->AddAttribute( "part", symbol->GetLibId().GetLibItemName() );

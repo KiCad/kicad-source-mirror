@@ -311,7 +311,7 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 
     m_textLabel->SetLabel( m_field->GetName() + ":" );
 
-    // The library symbol may have been removed so using SCH_SYMBOL::GetPartRef() here
+    // The library symbol may have been removed so using SCH_SYMBOL::GetLibSymbolRef() here
     // could result in a segfault.  If the library symbol is no longer available, the
     // schematic fields can still edit so set the power symbol flag to false.  This may not
     // be entirely accurate if the power library is missing but it's better then a segfault.

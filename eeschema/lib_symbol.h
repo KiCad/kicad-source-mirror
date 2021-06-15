@@ -36,14 +36,14 @@
 class EDA_RECT;
 class LINE_READER;
 class OUTPUTFORMATTER;
-class PART_LIB;
+class SYMBOL_LIB;
 class LIB_SYMBOL;
 class LIB_FIELD;
 class TEST_LIB_SYMBOL_FIXTURE;
 
 
-typedef std::shared_ptr<LIB_SYMBOL>       PART_SPTR;      ///< shared pointer to LIB_SYMBOL
-typedef std::weak_ptr<LIB_SYMBOL>         PART_REF;       ///< weak pointer to LIB_SYMBOL
+typedef std::shared_ptr<LIB_SYMBOL>       LIB_SYMBOL_SPTR;      ///< shared pointer to LIB_SYMBOL
+typedef std::weak_ptr<LIB_SYMBOL>         LIB_SYMBOL_REF;       ///< weak pointer to LIB_SYMBOL
 typedef MULTIVECTOR<LIB_ITEM, LIB_ARC_T, LIB_FIELD_T> LIB_ITEMS_CONTAINER;
 typedef LIB_ITEMS_CONTAINER::ITEM_PTR_VECTOR LIB_ITEMS;
 
@@ -59,7 +59,7 @@ enum LIBRENTRYOPTIONS
 extern bool operator<( const LIB_SYMBOL& aItem1, const LIB_SYMBOL& aItem2 );
 
 
-struct PART_DRAW_OPTIONS
+struct LIB_SYMBOL_OPTIONS
 {
     TRANSFORM transform;            // Coordinate adjustment settings
     bool draw_visible_fields;       // Whether to draw "visible" fields
@@ -68,7 +68,7 @@ struct PART_DRAW_OPTIONS
     bool show_connect_point;        // Whether to show the pin connect point marker (small circle)
                                     // useful in dialog pin properties
 
-    PART_DRAW_OPTIONS()
+    LIB_SYMBOL_OPTIONS()
     {
         transform = DefaultTransform;
         draw_visible_fields = true;
@@ -79,7 +79,7 @@ struct PART_DRAW_OPTIONS
 };
 
 
-struct PART_UNITS
+struct LIB_SYMBOL_UNITS
 {
     int m_unit;                       ///< The unit number.
     int m_convert;                    ///< The alternate body style of the unit.
@@ -97,14 +97,14 @@ class LIB_SYMBOL : public EDA_ITEM, public LIB_TREE_ITEM
 {
 public:
     LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent = nullptr,
-                PART_LIB* aLibrary = nullptr );
+                SYMBOL_LIB* aLibrary = nullptr );
 
-    LIB_SYMBOL( const LIB_SYMBOL& aSymbol, PART_LIB* aLibrary = NULL );
+    LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary = NULL );
 
     virtual ~LIB_SYMBOL();
 
     ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
-    PART_SPTR SharedPtr() const { return m_me; }
+    LIB_SYMBOL_SPTR SharedPtr() const { return m_me; }
 
     /**
      * Create a copy of a LIB_SYMBOL and assigns unique KIIDs to the copy and its children.
@@ -121,8 +121,8 @@ public:
     }
 
     void SetParent( LIB_SYMBOL* aParent = nullptr );
-    PART_REF& GetParent() { return m_parent; }
-    const PART_REF& GetParent() const { return m_parent; }
+    LIB_SYMBOL_REF& GetParent() { return m_parent; }
+    const LIB_SYMBOL_REF& GetParent() const { return m_parent; }
 
     virtual wxString GetClass() const override
     {
@@ -143,7 +143,7 @@ public:
     {
         if( m_description.IsEmpty() && IsAlias() )
         {
-            if( PART_SPTR parent = m_parent.lock() )
+            if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
                 return parent->GetDescription();
         }
 
@@ -156,7 +156,7 @@ public:
     {
         if( m_keyWords.IsEmpty() && IsAlias() )
         {
-            if( PART_SPTR parent = m_parent.lock() )
+            if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
                 return parent->GetKeyWords();
         }
 
@@ -173,8 +173,8 @@ public:
 
     const wxString GetLibraryName() const;
 
-    PART_LIB* GetLib() const          { return m_library; }
-    void SetLib( PART_LIB* aLibrary ) { m_library = aLibrary; }
+    SYMBOL_LIB* GetLib() const          { return m_library; }
+    void SetLib( SYMBOL_LIB* aLibrary ) { m_library = aLibrary; }
 
     timestamp_t GetLastModDate() const { return m_lastModDate; }
 
@@ -184,7 +184,7 @@ public:
     {
         if( m_fpFilters.IsEmpty() && IsAlias() )
         {
-            if( PART_SPTR parent = m_parent.lock() )
+            if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
                 return parent->GetFPFilters();
         }
 
@@ -301,7 +301,7 @@ public:
      * @param aOpts - Drawing options
      */
     void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
-                int aMulti, int aConvert, const PART_DRAW_OPTIONS& aOpts );
+                int aMulti, int aConvert, const LIB_SYMBOL_OPTIONS& aOpts );
 
     /**
      * Plot lib symbol to plotter.
@@ -624,7 +624,7 @@ public:
      * @note This does not include LIB_FIELD objects since they are not associated with
      *       unit and/or convert numbers.
      */
-    std::vector<struct PART_UNITS> GetUnitDrawItems();
+    std::vector<struct LIB_SYMBOL_UNITS> GetUnitDrawItems();
 
     /**
      * Return a list of unit numbers that are unique to this symbol.
@@ -634,7 +634,7 @@ public:
      *
      * @return a list of unique unit numbers and their associated draw items.
      */
-    std::vector<struct PART_UNITS> GetUniqueUnits();
+    std::vector<struct LIB_SYMBOL_UNITS> GetUniqueUnits();
 
     /**
      * Return a list of item pointers for \a aUnit and \a aConvert for this symbol.
@@ -659,8 +659,8 @@ private:
     void deleteAllFields();
 
 private:
-    PART_SPTR           m_me;
-    PART_REF            m_parent;           ///< Use for inherited symbols.
+    LIB_SYMBOL_SPTR     m_me;
+    LIB_SYMBOL_REF      m_parent;           ///< Use for inherited symbols.
     LIB_ID              m_libId;
     timestamp_t         m_lastModDate;
 
@@ -679,7 +679,7 @@ private:
 
     LIB_ITEMS_CONTAINER m_drawings;
 
-    PART_LIB*           m_library;
+    SYMBOL_LIB*         m_library;
     wxString            m_name;
     wxString            m_description;
     wxString            m_keyWords;         ///< Search keywords

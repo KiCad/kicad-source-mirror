@@ -258,7 +258,7 @@ public:
      */
     virtual void FindCandidates() = 0;
 
-    virtual void AddPart( LIB_SYMBOL* aNewSymbol ) = 0;
+    virtual void AddSymbol( LIB_SYMBOL* aNewSymbol ) = 0;
 
     /**
      * Display a dialog to allow the user to select rescues.
@@ -350,10 +350,10 @@ public:
 
     virtual bool WriteRescueLibrary( wxWindow *aParent ) override;
 
-    virtual void AddPart( LIB_SYMBOL* aNewSymbol ) override;
+    virtual void AddSymbol( LIB_SYMBOL* aNewSymbol ) override;
 
 private:
-    std::unique_ptr<PART_LIB> m_rescue_lib;
+    std::unique_ptr<SYMBOL_LIB> m_rescue_lib;
 };
 
 
@@ -376,7 +376,7 @@ public:
 
     virtual bool WriteRescueLibrary( wxWindow* aParent ) override;
 
-    virtual void AddPart( LIB_SYMBOL* aNewSymbol ) override;
+    virtual void AddSymbol( LIB_SYMBOL* aNewSymbol ) override;
 
 private:
     SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;

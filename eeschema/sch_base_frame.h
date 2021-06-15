@@ -51,7 +51,7 @@ class TITLE_BLOCK;
 class SYMBOL_VIEWER_FRAME;
 class SYMBOL_EDIT_FRAME;
 class LIB_SYMBOL;
-class PART_LIB;
+class SYMBOL_LIB;
 class SCHLIB_FILTER;
 class LIB_ID;
 class SYMBOL_LIB_TABLE;
@@ -73,8 +73,8 @@ class SYMBOL_EDITOR_SETTINGS;
  * @return The symbol found in the library or NULL if the symbol was not found.
  */
 LIB_SYMBOL* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
-                           PART_LIB* aCacheLib = NULL, wxWindow* aParent = NULL,
-                         bool aShowErrorMsg = false );
+                           SYMBOL_LIB* aCacheLib = NULL, wxWindow* aParent = NULL,
+                           bool aShowErrorMsg = false );
 
 /**
  * A shim class between EDA_DRAW_FRAME and several derived classes:

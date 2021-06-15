@@ -242,8 +242,8 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField, SCH_S
         wxString nodeSeq;
         std::vector<LIB_PIN*> pins;
 
-        wxCHECK( aSymbol->GetPartRef(), wxString() );
-        aSymbol->GetPartRef()->GetPins( pins );
+        wxCHECK( aSymbol->GetLibSymbolRef(), wxString() );
+        aSymbol->GetLibSymbolRef()->GetPins( pins );
 
         for( LIB_PIN* pin : pins )
             nodeSeq += pin->GetNumber() + " ";

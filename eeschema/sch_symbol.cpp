@@ -368,7 +368,7 @@ int SCH_SYMBOL::GetUnitCount() const
 
 void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    PART_DRAW_OPTIONS opts;
+    LIB_SYMBOL_OPTIONS opts;
     opts.transform = m_transform;
     opts.draw_visible_fields = false;
     opts.draw_hidden_fields = false;

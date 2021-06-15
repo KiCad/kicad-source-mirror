@@ -215,7 +215,7 @@ enum KICAD_T
      */
     SYMBOL_LIB_TABLE_T,
     FP_LIB_TABLE_T,
-    PART_LIBS_T,
+    SYMBOL_LIBS_T,
     SEARCH_STACK_T,
     S3D_CACHE_T,
 

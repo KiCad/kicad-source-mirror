@@ -48,7 +48,7 @@ class PROPERTIES;
 class EE_SELECTION;
 class SCH_SEXPR_PLUGIN_CACHE;
 class LIB_SYMBOL;
-class PART_LIB;
+class SYMBOL_LIB;
 class BUS_ALIAS;
 
 /**
@@ -127,9 +127,9 @@ public:
 
     const wxString& GetError() const override { return m_error; }
 
-    static LIB_SYMBOL* ParsePart( LINE_READER& aReader,
-                                  int aVersion = SEXPR_SCHEMATIC_FILE_VERSION );
-    static void FormatPart( LIB_SYMBOL* aPart, OUTPUTFORMATTER& aFormatter );
+    static LIB_SYMBOL* ParseLibSymbol( LINE_READER& aReader,
+                                       int aVersion = SEXPR_SCHEMATIC_FILE_VERSION );
+    static void FormatLibSymbol( LIB_SYMBOL* aPart, OUTPUTFORMATTER& aFormatter );
 
 private:
     void loadHierarchy( SCH_SHEET* aSheet );

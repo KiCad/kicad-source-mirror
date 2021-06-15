@@ -33,7 +33,7 @@
 #include <wx/filedlg.h>
 
 
-void SYMBOL_EDIT_FRAME::ImportPart()
+void SYMBOL_EDIT_FRAME::ImportSymbol()
 {
     wxString msg;
     wxString libName = getTargetLib();
@@ -68,7 +68,7 @@ void SYMBOL_EDIT_FRAME::ImportPart()
     SCH_IO_MGR::SCH_FILE_T piType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( piType ) );
 
-    // TODO dialog to select the part to be imported if there is more than one
+    // TODO dialog to select the symbol to be imported if there is more than one
     try
     {
         pi->EnumerateSymbolLib( symbols, fn.GetFullPath() );
@@ -90,23 +90,23 @@ void SYMBOL_EDIT_FRAME::ImportPart()
     wxString symbolName = symbols[0];
     LIB_SYMBOL* entry = pi->LoadSymbol( fn.GetFullPath(), symbolName );
 
-    if( m_libMgr->PartExists( symbols[0], libName ) )
+    if( m_libMgr->SymbolExists( symbols[0], libName ) )
     {
         msg.Printf( _( "Symbol \"%s\" already exists in library \"%s\"." ), symbolName, libName );
         DisplayError( this,  msg );
         return;
     }
 
-    m_libMgr->UpdatePart( entry, libName );
+    m_libMgr->UpdateSymbol( entry, libName );
     SyncLibraries( false );
-    LoadPart( symbolName, libName, 1 );
+    LoadSymbol( symbolName, libName, 1 );
 }
 
 
-void SYMBOL_EDIT_FRAME::ExportPart()
+void SYMBOL_EDIT_FRAME::ExportSymbol()
 {
     wxString msg, title;
-    LIB_SYMBOL* symbol = getTargetPart();
+    LIB_SYMBOL* symbol = getTargetSymbol();
 
     if( !symbol )
     {
