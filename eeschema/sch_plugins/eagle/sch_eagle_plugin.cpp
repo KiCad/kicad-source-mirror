@@ -2356,7 +2356,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 moveLabels( line, p );
                                 line->SetStartPoint( p );
                             }
-                            else if( testBusHit( linestart + entrySize( 0, 100 ) ) )
+                            else if( testBusHit( linestart + entrySize( 0, 1 ) ) )
                             {
                                 // There is room below the wire for the bus entry
                                 // | ___
@@ -2504,12 +2504,11 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 //  |
                                 //   \
                                 // -----
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY(
-                                        linestart + wxPoint( 0, 100 ), false );
+                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, linestart + wxPoint( 0, -100 ) );
-                                line->SetStartPoint( linestart + wxPoint( 0, -100 ) );
+                                moveLabels( line, p );
+                                line->SetStartPoint( p );
                             }
                             else
                             {
@@ -2575,7 +2574,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             //   |
                             //   |
                             // -----
-                            wxPoint p = linestart + entrySize( 0, -1 );
+                            wxPoint p = lineend + entrySize( 0, -1 );
 
                             if( testBusHit( lineend + entrySize( -1, 0 ) ) )
                             {
@@ -2587,8 +2586,8 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
                                 busEntry->SetFlags( IS_NEW );
                                 m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, lineend + wxPoint( 0, -100 ) );
-                                line->SetEndPoint( lineend + wxPoint( 0, -100 ) );
+                                moveLabels( line, p );
+                                line->SetEndPoint( p );
                             }
                             else if( testBusHit( lineend + entrySize( 1, 0 ) ) )
                             {
@@ -2707,7 +2706,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
 
-                            moveLabels( line, linestart + wxPoint( 100, -100 ) );
+                            moveLabels( line, p );
 
                             if( p == lineend ) // wire is overlapped by bus entry symbol
                                 m_currentSheet->GetScreen()->DeleteItem( line );
