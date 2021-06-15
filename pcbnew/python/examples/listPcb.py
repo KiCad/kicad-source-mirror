@@ -24,14 +24,14 @@ FromUnits = FromMM
 print("List vias:")
 
 for item in pcb.GetTracks():
-    if type(item) is VIA:
+    if type(item) is PCB_VIA:
 
         pos = item.GetPosition()
         drill = item.GetDrillValue()
         width = item.GetWidth()
         print(" * Via:   %s - %f/%f " % (ToUnits(pos), ToUnits(drill), ToUnits(width)))
 
-    elif type(item) is TRACK:
+    elif type(item) is PCB_TRACK:
 
         start = item.GetStart()
         end = item.GetEnd()
@@ -57,7 +57,7 @@ print("")
 print("List footprints:")
 
 for footprint in pcb.Footprints():
-    print("* Module: %s at %s" % ( fromUTF8Text( footprint.GetReference() ), ToUnits(footprint.GetPosition())))
+    print("* Footprint: %s at %s" % ( fromUTF8Text( footprint.GetReference() ), ToUnits(footprint.GetPosition())))
 
 print("")
 print("Nets cnt: ", pcb.GetNetCount())
