@@ -147,13 +147,13 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
             return Cast_to_PCB_TEXT(self)
         elif ct=="BOARD":
             return Cast_to_BOARD(self)
-        elif ct=="ALIGNED_DIMENSION":
+        elif ct=="PCB_DIM_ALIGNED":
             return Cast_to_PCB_DIM_ALIGNED(self)
-        elif ct=="LEADER":
+        elif ct=="PCB_DIM_LEADER":
             return Cast_to_PCB_DIM_LEADER(self)
-        elif ct=="CENTER_DIMENSION":
+        elif ct=="PCB_DIM_CENTER":
             return Cast_to_PCB_DIM_CENTER(self)
-        elif ct=="ORTHOGONAL_DIMENSION":
+        elif ct=="PCB_DIM_ORTHOGONAL":
             return Cast_to_PCB_DIM_ORTHOGONAL(self)
         elif ct=="PCB_SHAPE":
             return Cast_to_PCB_SHAPE(self)
