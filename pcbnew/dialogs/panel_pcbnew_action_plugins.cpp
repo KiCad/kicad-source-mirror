@@ -235,7 +235,7 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 
 void PANEL_PCBNEW_ACTION_PLUGINS::OnOpenDirectoryButtonClick( wxCommandEvent& event )
 {
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::pluginsShowFolder );
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::pluginsShowFolder, true );
 }
 
 void PANEL_PCBNEW_ACTION_PLUGINS::OnShowErrorsButtonClick( wxCommandEvent& event )
