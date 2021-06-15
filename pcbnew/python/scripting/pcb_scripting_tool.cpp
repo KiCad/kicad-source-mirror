@@ -35,6 +35,7 @@
 
 #include <Python.h>
 #include <wx/string.h>
+#include <launch_ext.h>
 
 using initfunc = PyObject* (*)(void);
 
@@ -124,21 +125,8 @@ pcbnew.LoadPlugins( sys_path, user_path )
 
 int SCRIPTING_TOOL::showPluginFolder( const TOOL_EVENT& aEvent )
 {
-#ifdef __WXMAC__
-    wxString msg;
-
-    // Quote in case there are spaces in the path.
-    msg.Printf( "open \"%s\"", SCRIPTING::PyPluginsPath( true ) );
-
-    system( msg.c_str() );
-#else
-    wxString pypath( SCRIPTING::PyPluginsPath( true ) );
-
-    // Quote in case there are spaces in the path.
-    AddDelimiterString( pypath );
-
-    wxLaunchDefaultApplication( pypath );
-#endif
+    wxString pluginpath( SCRIPTING::PyPluginsPath( true ) );
+    LaunchExternal( pluginpath );
 
     return 0;
 }
