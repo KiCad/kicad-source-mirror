@@ -60,6 +60,23 @@ SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, bool aFlipY ) :
 }
 
 
+SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, int aQuadrant ) :
+    SCH_BUS_ENTRY_BASE( SCH_BUS_WIRE_ENTRY_T, pos, false )
+{
+    switch( aQuadrant )
+    {
+    case 1: m_size.x *=  1; m_size.y *= -1; break;
+    case 2: m_size.x *=  1; m_size.y *=  1; break;
+    case 3: m_size.x *= -1; m_size.y *=  1; break;
+    case 4: m_size.x *= -1; m_size.y *= -1; break;
+    default: wxFAIL_MSG( "SCH_BUS_WIRE_ENTRY ctor: unexpected quadrant" );
+    }
+
+    m_layer  = LAYER_WIRE;
+    m_connected_bus_item = nullptr;
+}
+
+
 SCH_BUS_BUS_ENTRY::SCH_BUS_BUS_ENTRY( const wxPoint& pos, bool aFlipY ) :
     SCH_BUS_ENTRY_BASE( SCH_BUS_BUS_ENTRY_T, pos, aFlipY )
 {

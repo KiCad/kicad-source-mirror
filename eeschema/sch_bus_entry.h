@@ -133,6 +133,8 @@ class SCH_BUS_WIRE_ENTRY : public SCH_BUS_ENTRY_BASE
 public:
     SCH_BUS_WIRE_ENTRY( const wxPoint& pos = wxPoint( 0, 0 ), bool aFlipY = false );
 
+    SCH_BUS_WIRE_ENTRY( const wxPoint& pos, int aQuadrant );
+
     ~SCH_BUS_WIRE_ENTRY() { }
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
