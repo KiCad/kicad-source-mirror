@@ -342,6 +342,10 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
 
     if( !text.IsEmpty() )
     {
+#ifdef __WXMAC__
+        // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
+        text.Replace( "\r", "\n" );
+#endif
         m_CurrentText->SetText( text );
     }
     else if( !m_CurrentText->IsNew() )
