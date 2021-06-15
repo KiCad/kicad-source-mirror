@@ -104,6 +104,8 @@ public:
         double origin_x;
         double origin_y;
         bool   no_virtual;
+        bool   replace_models;
+        bool   overwrite_file;
     };
 
     struct DIALOG_EXPORT_SVG

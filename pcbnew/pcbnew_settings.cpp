@@ -279,6 +279,12 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "export_step.no_virtual",
             &m_ExportStep.no_virtual, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "export_step.replace_models",
+            &m_ExportStep.replace_models, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "export_step.overwrite_file",
+            &m_ExportStep.overwrite_file, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "export_svg.black_and_white",
             &m_ExportSvg.black_and_white, false ) );
 
