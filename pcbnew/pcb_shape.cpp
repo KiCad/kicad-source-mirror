@@ -878,12 +878,28 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 
             // Account for the width of the line
             arect.Inflate( GetWidth() / 2 );
-            int count = m_poly.TotalVertices();
+
+            // Polygons in footprints use coordinates relative to the footprint.
+            // Therefore, instead of using m_poly, we make a copy which is translated
+            // to the actual location in the board.
+
+            FOOTPRINT* fp{ GetParentFootprint() };
+            double     orientation{ fp ? -DECIDEG2RAD( fp->GetOrientation() ) : 0.0 };
+            wxPoint    offset;
+
+            if( fp )
+                offset = fp->GetPosition();
+
+            SHAPE_POLY_SET poly{ m_poly };
+            poly.Rotate( orientation );
+            poly.Move( offset );
+
+            int count = poly.TotalVertices();
 
             for( int ii = 0; ii < count; ii++ )
             {
-                auto vertex = m_poly.CVertex( ii );
-                auto vertexNext = m_poly.CVertex(( ii + 1 ) % count );
+                auto vertex = poly.CVertex( ii );
+                auto vertexNext = poly.CVertex(( ii + 1 ) % count );
 
                 // Test if the point is within aRect
                 if( arect.Contains( ( wxPoint ) vertex ) )
