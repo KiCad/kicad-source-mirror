@@ -2797,6 +2797,7 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
             m_xpath->push( "eagle.drawing.layers" );
             wxXmlNode* layers  = drawingChildren["layers"];
             loadLayerDefs( layers );
+            mapEagleLayersToKicad();
             m_xpath->pop();
 
             m_xpath->push( "eagle.drawing.library" );
