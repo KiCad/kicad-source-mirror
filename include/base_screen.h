@@ -130,13 +130,6 @@ protected:
 
 private:
     bool        m_flagModified;     ///< Indicates current drawing has been modified.
-
-    /**
-     * The cross hair position in logical (drawing) units.  The cross hair is not the cursor
-     * position.  It is an addition indicator typically drawn on grid to indicate to the
-     * user where the current action will be performed.
-     */
-    wxPoint     m_crossHairPosition;
 };
 
 #endif  // BASE_SCREEN_H

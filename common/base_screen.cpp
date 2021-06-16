@@ -47,17 +47,11 @@ void BASE_SCREEN::InitDataPoints( const wxSize& aPageSizeIU )
 {
     if( m_Center )
     {
-        m_crossHairPosition.x = 0;
-        m_crossHairPosition.y = 0;
-
         m_DrawOrg.x = -aPageSizeIU.x / 2;
         m_DrawOrg.y = -aPageSizeIU.y / 2;
     }
     else
     {
-        m_crossHairPosition.x = aPageSizeIU.x / 2;
-        m_crossHairPosition.y = aPageSizeIU.y / 2;
-
         m_DrawOrg.x = 0;
         m_DrawOrg.y = 0;
     }
