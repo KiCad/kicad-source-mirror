@@ -756,11 +756,9 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
 
     if( IsCurrentFPFromBoard() )
     {
-        title = wxString::Format( _( "%s%s [from %s.%s]" ) + wxT( " \u2014 " ),
-                                  IsContentModified() ? "*" : "",
-                                  footprint->GetReference(),
-                                  Prj().GetProjectName(),
-                                  PcbFileExtension );
+        title = ( IsContentModified() ? "*" : "" )
+                        + footprint->GetReference() + wxS( " [from " )
+                        + Prj().GetProjectName() + "." + PcbFileExtension + wxS( "] \u2014 " );
     }
     else if( fpid.IsValid() )
     {
@@ -774,18 +772,16 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
         }
 
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
-        title += wxString::Format( wxT( "%s%s %s\u2014 " ),
-                                   IsContentModified() ? "*" : "",
-                                   FROM_UTF8( footprint->GetFPID().Format().c_str() ),
-                                   writable ? "" : _( "[Read Only]" ) + wxS( " " ) );
+        title = ( IsContentModified() ? "*" : "" )
+                                + FROM_UTF8( footprint->GetFPID().Format().c_str() ) + " "
+                                + ( writable ? wxS( "" ) : _( "[Read Only]" ) + wxS( " " ) ) + wxS( "\u2014 " );
     }
     else if( !fpid.GetLibItemName().empty() )
     {
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
-        title += wxString::Format( wxT( "%s%s %s \u2014 " ),
-                                   IsContentModified() ? "*" : "",
-                                   FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() ),
-                                   _( "[Unsaved]" ) );
+        title = ( IsContentModified() ? "*" : "" )
+                                + FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() ) + " "
+                                + _( "[Unsaved]" ) + wxS( " \u2014 " );
     }
 
     title += _( "Footprint Editor" );

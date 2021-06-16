@@ -1264,12 +1264,11 @@ void SCH_EDIT_FRAME::UpdateTitle()
         else
             unsaved = true;
 
-        title.Printf( wxT( "%s%s [%s] %s%s\u2014 " ) + _( "Schematic Editor" ),
-                      IsContentModified() ? "*" : "",
-                      fn.GetName(),
-                      GetCurrentSheet().PathHumanReadable( false ),
-                      readOnly ? _( "[Read Only]" ) + wxS( " " ) : "",
-                      unsaved ? _( "[Unsaved]" ) + wxS( " " ) : "" );
+        title = ( IsContentModified() ? "*" : "" )
+                        + fn.GetName() + " [" + GetCurrentSheet().PathHumanReadable( false ) + "] "
+                        + ( readOnly ? _( "[Read Only]" ) + wxS( " " ) : wxS( "" ) )
+                        + ( unsaved ? _( "[Unsaved]" ) + wxS( " " ) : wxS( "" ) )
+                        + wxT( "\u2014 " ) + _( "Schematic Editor" );
     }
 
     SetTitle( title );

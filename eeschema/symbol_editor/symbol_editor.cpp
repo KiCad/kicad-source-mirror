@@ -139,9 +139,10 @@ void SYMBOL_EDIT_FRAME::updateTitle()
 
     if( IsSymbolFromSchematic() )
     {
-        title = wxString::Format( _( "%s%s [from schematic]" ) + wxT( " \u2014 " ),
-                                     GetScreen() && GetScreen()->IsContentModified() ? "*" : "",
-                                   m_reference );
+        title = ( GetScreen() && GetScreen()->IsContentModified() ? "*" : "" )
+                + m_reference + " "
+                + _( "[from schematic]" )
+                + wxT( " \u2014 " );
     }
     else
     {
@@ -149,10 +150,11 @@ void SYMBOL_EDIT_FRAME::updateTitle()
         {
             bool readOnly = m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() );
 
-            title = wxString::Format( wxT( "%s%s %s\u2014 " ),
-                                      GetScreen() && GetScreen()->IsContentModified() ? "*" : "",
-                                      GetCurSymbol()->GetLibId().Format().c_str(),
-                                      readOnly ? _( "[Read Only Library]" ) + wxT( " " ) : "" );
+            title = ( GetScreen() && GetScreen()->IsContentModified() ? "*" : "" )
+                    + FROM_UTF8( GetCurSymbol()->GetLibId().Format().c_str() )
+                    + " "
+                    + ( readOnly ? _( "[Read Only Library]" ) + wxT( " " ) : "" )
+                    + wxT( " \u2014 " );
         }
     }
 
