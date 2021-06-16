@@ -757,7 +757,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
     if( IsCurrentFPFromBoard() )
     {
         title = ( IsContentModified() ? "*" : "" )
-                        + footprint->GetReference() + wxS( " [from " )
+                        + footprint->GetReference() + wxS( " [" ) + _( "from" ) + " "
                         + Prj().GetProjectName() + "." + PcbFileExtension + wxS( "] \u2014 " );
     }
     else if( fpid.IsValid() )
