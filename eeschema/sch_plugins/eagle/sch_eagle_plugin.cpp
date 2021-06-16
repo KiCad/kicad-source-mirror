@@ -718,10 +718,12 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     ReplaceIllegalFileNameChars( &filename );
     replace( filename.begin(), filename.end(), ' ', '_' );
 
-    wxString fn = wxString( filename + "." + KiCadSchematicFileExtension );
-    filenameField.SetText( fn );
-    wxFileName fileName( fn );
-    m_currentSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
+    wxFileName fn( m_filename );
+    fn.SetName( filename );
+    fn.SetExt( KiCadSchematicFileExtension );
+
+    filenameField.SetText( fn.GetFullName() );
+    m_currentSheet->GetScreen()->SetFileName( fn.GetFullPath() );
     m_currentSheet->AutoplaceFields( m_currentSheet->GetScreen(), true );
 
 
@@ -2249,17 +2251,15 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
     // for each wire segment, compare each end with all busses.
     // If the wire end is found to end on a bus segment, place a bus entry symbol.
 
-    for( auto it1 = m_currentSheet->GetScreen()->Items().OfType( SCH_LINE_T ).begin();
-            it1 != m_currentSheet->GetScreen()->Items().end(); ++it1 )
+    for( SCH_ITEM* ii : m_currentSheet->GetScreen()->Items().OfType( SCH_LINE_T ) )
     {
-        SCH_LINE* bus = static_cast<SCH_LINE*>( *it1 );
+        SCH_LINE* bus = static_cast<SCH_LINE*>( ii );
 
-        // Check line type for wire
-        if( bus->GetLayer() != LAYER_BUS )
+        if( !bus->IsBus() )
             continue;
 
-        wxPoint busstart = bus->GetStartPoint();
-        wxPoint busend   = bus->GetEndPoint();
+        wxPoint busStart = bus->GetStartPoint();
+        wxPoint busEnd   = bus->GetEndPoint();
 
         auto entrySize =
                 []( int signX, int signY ) -> wxPoint
@@ -2271,531 +2271,482 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
         auto testBusHit =
                 [&]( const wxPoint& aPt ) -> bool
                 {
-                    return TestSegmentHit( aPt, busstart, busend, 0 );
+                    return TestSegmentHit( aPt, busStart, busEnd, 0 );
                 };
 
-        auto it2 = it1;
-        ++it2;
-
-        for( ; it2 != m_currentSheet->GetScreen()->Items().end(); ++it2 )
+        for( SCH_ITEM* jj : m_currentSheet->GetScreen()->Items().OfType( SCH_LINE_T ) )
         {
-            SCH_LINE* line = static_cast<SCH_LINE*>( *it2 );
+            SCH_LINE* wire = static_cast<SCH_LINE*>( jj );
 
-            // Check line type for bus
-            if( ( (SCH_LINE*) *it2 )->GetLayer() == LAYER_WIRE )
+            if( !wire->IsWire() )
+                continue;
+
+            wxPoint wireStart = wire->GetStartPoint();
+            wxPoint wireEnd   = wire->GetEndPoint();
+
+            // Test for horizontal wire and vertical bus
+            if( wireStart.y == wireEnd.y && busStart.x == busEnd.x )
             {
-                // Get points of both segments.
-                wxPoint linestart = line->GetStartPoint();
-                wxPoint lineend   = line->GetEndPoint();
-
-                // Test for horizontal wire and vertical bus
-                if( linestart.y == lineend.y && busstart.x == busend.x )
+                if( testBusHit( wireStart ) )
                 {
-                    if( testBusHit( linestart ) )
-                    {
-                        // Wire start is on the vertical bus
+                    // Wire start is on the vertical bus
 
-                        if( lineend.x < busstart.x )
+                    if( wireEnd.x < busStart.x )
+                    {
+                        // the end of the wire is to the left of the bus
+                        //     |
+                        // ----|
+                        //     |
+                        wxPoint p = wireStart + entrySize( -1, 0 );
+
+                        if( testBusHit( wireStart + entrySize( 0, -1 )  ) )
                         {
-                            // the end of the wire is to the left of the bus
+                            // there is room above the wire for the bus entry
                             //     |
-                            // ----|
+                            // ___/|
                             //     |
-                            wxPoint p = linestart + entrySize( -1, 0 );
-
-                            if( testBusHit( linestart + entrySize( 0, -1 )  ) )
-                            {
-                                // there is room above the wire for the bus entry
-                                //     |
-                                // ___/|
-                                //     |
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetStartPoint( p );
-                            }
-                            else if( testBusHit( linestart + entrySize( 0, 1 ) ) )
-                            {
-                                // there is room below the wire for the bus entry
-                                // ___ |
-                                //    \|
-                                //     |
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetStartPoint( p );
-                            }
-                            else
-                            {
-                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
-                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
-
-                                SCH_MARKER* marker = new SCH_MARKER( ercItem, linestart );
-                                m_currentSheet->GetScreen()->Append( marker );
-                            }
-                        }
-                        else
-                        {
-                            // the wire end is to the right of the bus
-                            // |
-                            // |----
-                            // |
-                            wxPoint p = linestart + entrySize( 1, 0 );
-
-                            if( testBusHit( linestart + entrySize( 0, -1 ) ) )
-                            {
-                                // There is room above the wire for the bus entry
-                                // |
-                                // |\___
-                                // |
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p , 4 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetStartPoint( p );
-                            }
-                            else if( testBusHit( linestart + entrySize( 0, 1 ) ) )
-                            {
-                                // There is room below the wire for the bus entry
-                                // | ___
-                                // |/
-                                // |
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetStartPoint( p );
-                            }
-                            else
-                            {
-                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
-                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
-
-                                SCH_MARKER* marker = new SCH_MARKER( ercItem, linestart );
-                                m_currentSheet->GetScreen()->Append( marker );
-                            }
-                        }
-                    }
-
-                    // Same thing but test end of the wire instead.
-                    if( testBusHit( lineend ) )
-                    {
-                        // Wire end is on the vertical bus
-
-                        if( linestart.x < busstart.x )
-                        {
-                            // start of the wire is to the left of the bus
-                            //     |
-                            // ----|
-                            //     |
-                            wxPoint p = lineend + entrySize( -1, 0 );
-
-                            if( testBusHit( lineend + entrySize( 0, -1 ) ) )
-                            {
-                                // there is room above the wire for the bus entry
-                                //     |
-                                // ___/|
-                                //     |
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetEndPoint( p );
-                            }
-                            else if( testBusHit( lineend + entrySize( 0, -1 ) ) )
-                            {
-                                // there is room below the wire for the bus entry
-                                // ___ |
-                                //    \|
-                                //     |
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, lineend + entrySize( -1, 0 ) );
-                                line->SetEndPoint( lineend + entrySize( -1, 0 ) );
-                            }
-                            else
-                            {
-                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
-                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
-
-                                SCH_MARKER* marker = new SCH_MARKER( ercItem, lineend );
-                                m_currentSheet->GetScreen()->Append( marker );
-                            }
-                        }
-                        else
-                        {
-                            // the start of the wire is to the right of the bus
-                            // |
-                            // |----
-                            // |
-                            wxPoint p = lineend + entrySize( 1, 0 );
-
-                            if( testBusHit( lineend + entrySize( 0, -1 ) ) )
-                            {
-                                // There is room above the wire for the bus entry
-                                // |
-                                // |\___
-                                // |
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetEndPoint( p );
-                            }
-                            else if( testBusHit( lineend + entrySize( 0, 1 ) ) )
-                            {
-                                // There is room below the wire for the bus entry
-                                // | ___
-                                // |/
-                                // |
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetEndPoint( p );
-                            }
-                            else
-                            {
-                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
-                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
-
-                                SCH_MARKER* marker = new SCH_MARKER( ercItem, lineend );
-                                m_currentSheet->GetScreen()->Append( marker );
-                            }
-                        }
-                    }
-                } // if( linestart.y == lineend.y && busstart.x == busend.x)
-
-                // Test for vertical wire and horizontal bus
-                if( linestart.x == lineend.x && busstart.y == busend.y )
-                {
-                    if( testBusHit( linestart ) )
-                    {
-                        // Wire start is on the bus
-
-                        if( lineend.y < busstart.y )
-                        {
-                            // the end of the wire is above the bus
-                            //   |
-                            //   |
-                            // -----
-                            wxPoint p = linestart + entrySize( 0, -1 );
-
-                            if( testBusHit( linestart + entrySize( -1, 0 ) ) )
-                            {
-                                // there is room to the left of the wire for the bus entry
-                                //    |
-                                //    |
-                                //   /
-                                // -----
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetStartPoint( p );
-                            }
-                            else if( testBusHit( linestart + entrySize( 1, 0 ) ) )
-                            {
-                                // there is room to the right of the wire for the bus entry
-                                //  |
-                                //  |
-                                //   \
-                                // -----
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetStartPoint( p );
-                            }
-                            else
-                            {
-                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
-                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
-
-                                SCH_MARKER* marker = new SCH_MARKER( ercItem, linestart );
-                                m_currentSheet->GetScreen()->Append( marker );
-                            }
-                        }
-                        else
-                        {
-                            // wire end is below the bus
-                            // -----
-                            //   |
-                            //   |
-                            wxPoint p = linestart + entrySize( 0, 1 );
-
-                            if( testBusHit( linestart + entrySize( -1, 0 ) ) )
-                            {
-                                // there is room to the left of the wire for the bus entry
-                                // -----
-                                //   \
-                                //    |
-                                //    |
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetStartPoint( p );
-                            }
-                            else if( testBusHit( linestart + entrySize( 1, 0 ) ) )
-                            {
-                                // there is room to the right of the wire for the bus entry
-                                // -----
-                                //   /
-                                //  |
-                                //  |
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetStartPoint( p );
-                            }
-                            else
-                            {
-                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
-                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
-
-                                SCH_MARKER* marker = new SCH_MARKER( ercItem, linestart );
-                                m_currentSheet->GetScreen()->Append( marker );
-                            }
-                        }
-                    }
-
-                    if( testBusHit( lineend ) )
-                    {
-                        // Wire end is on the bus
-
-                        if( linestart.y < busstart.y )
-                        {
-                            // the start of the wire is above the bus
-                            //   |
-                            //   |
-                            // -----
-                            wxPoint p = lineend + entrySize( 0, -1 );
-
-                            if( testBusHit( lineend + entrySize( -1, 0 ) ) )
-                            {
-                                // there is room to the left of the wire for the bus entry
-                                //    |
-                                //    |
-                                //   /
-                                // -----
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetEndPoint( p );
-                            }
-                            else if( testBusHit( lineend + entrySize( 1, 0 ) ) )
-                            {
-                                // there is room to the right of the wire for the bus entry
-                                //  |
-                                //  |
-                                //   \
-                                // -----
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetEndPoint( p );
-                            }
-                            else
-                            {
-                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
-                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
-
-                                SCH_MARKER* marker = new SCH_MARKER( ercItem, lineend );
-                                m_currentSheet->GetScreen()->Append( marker );
-                            }
-                        }
-                        else
-                        {
-                            // wire start is below the bus
-                            // -----
-                            //   |
-                            //   |
-                            wxPoint p = lineend + entrySize( 0, 1 );
-
-                            if( testBusHit( lineend + entrySize( -1, 0 ) ) )
-                            {
-                                // there is room to the left of the wire for the bus entry
-                                // -----
-                                //   \
-                                //    |
-                                //    |
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetEndPoint( p );
-                            }
-                            else if( testBusHit( lineend + entrySize( 1, 0 ) ) )
-                            {
-                                // there is room to the right of the wire for the bus entry
-                                // -----
-                                //   /
-                                //  |
-                                //  |
-                                SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
-                                busEntry->SetFlags( IS_NEW );
-                                m_currentSheet->GetScreen()->Append( busEntry );
-                                moveLabels( line, p );
-                                line->SetEndPoint( p );
-                            }
-                            else
-                            {
-                                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( 0 );
-                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
-
-                                SCH_MARKER* marker = new SCH_MARKER( ercItem, lineend );
-                                m_currentSheet->GetScreen()->Append( marker );
-                            }
-                        }
-                    }
-                }
-
-                linestart = line->GetStartPoint();
-                lineend   = line->GetEndPoint();
-                busstart  = bus->GetStartPoint();
-                busend    = bus->GetEndPoint();
-
-                // bus entry wire isn't horizontal or vertical
-                if( testBusHit( linestart ) )
-                {
-                    wxPoint wirevector = linestart - lineend;
-
-                    if( wirevector.x > 0 )
-                    {
-                        if( wirevector.y > 0 )
-                        {
-                            wxPoint             p = linestart + entrySize( -1, -1 );
-                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
-                            busEntry->SetFlags( IS_NEW );
-                            m_currentSheet->GetScreen()->Append( busEntry );
-                            moveLabels( line, p );
-
-                            if( p == lineend ) // wire is overlapped by bus entry symbol
-                                m_currentSheet->GetScreen()->DeleteItem( line );
-                            else
-                                line->SetStartPoint( p );
-                        }
-                        else
-                        {
-                            wxPoint             p = linestart + entrySize( -1, 1 );
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
-
-                            moveLabels( line, p );
-
-                            if( p == lineend ) // wire is overlapped by bus entry symbol
-                                m_currentSheet->GetScreen()->DeleteItem( line );
-                            else
-                                line->SetStartPoint( p );
+                            moveLabels( wire, p );
+                            wire->SetStartPoint( p );
+                        }
+                        else if( testBusHit( wireStart + entrySize( 0, 1 ) ) )
+                        {
+                            // there is room below the wire for the bus entry
+                            // ___ |
+                            //    \|
+                            //     |
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            moveLabels( wire, p );
+                            wire->SetStartPoint( p );
+                        }
+                        else
+                        {
+                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireStart );
+                            m_currentSheet->GetScreen()->Append( marker );
                         }
                     }
                     else
                     {
-                        if( wirevector.y > 0 )
+                        // the wire end is to the right of the bus
+                        // |
+                        // |----
+                        // |
+                        wxPoint p = wireStart + entrySize( 1, 0 );
+
+                        if( testBusHit( wireStart + entrySize( 0, -1 ) ) )
                         {
-                            wxPoint             p = linestart + entrySize( 1, -1 );
+                            // There is room above the wire for the bus entry
+                            // |
+                            // |\___
+                            // |
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p , 4 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            moveLabels( wire, p );
+                            wire->SetStartPoint( p );
+                        }
+                        else if( testBusHit( wireStart + entrySize( 0, 1 ) ) )
+                        {
+                            // There is room below the wire for the bus entry
+                            // | ___
+                            // |/
+                            // |
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
-
-                            moveLabels( line, p );
-
-                            if( p == lineend ) // wire is overlapped by bus entry symbol
-                                m_currentSheet->GetScreen()->DeleteItem( line );
-                            else
-                                line->SetStartPoint( p );
+                            moveLabels( wire, p );
+                            wire->SetStartPoint( p );
                         }
                         else
                         {
-                            wxPoint             p = linestart + entrySize( 1, 1 );
-                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
-                            busEntry->SetFlags( IS_NEW );
-                            m_currentSheet->GetScreen()->Append( busEntry );
-                            moveLabels( line, p );
-
-                            if( p == lineend ) // wire is overlapped by bus entry symbol
-                                m_currentSheet->GetScreen()->DeleteItem( line );
-                            else
-                                line->SetStartPoint( p );
+                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireStart );
+                            m_currentSheet->GetScreen()->Append( marker );
                         }
                     }
                 }
-                else if( testBusHit( lineend ) )
-                {
-                    wxPoint wirevector = linestart - lineend;
 
-                    if( wirevector.x > 0 )
+                // Same thing but test end of the wire instead.
+                if( testBusHit( wireEnd ) )
+                {
+                    // Wire end is on the vertical bus
+
+                    if( wireStart.x < busStart.x )
                     {
-                        if( wirevector.y > 0 )
+                        // start of the wire is to the left of the bus
+                        //     |
+                        // ----|
+                        //     |
+                        wxPoint p = wireEnd + entrySize( -1, 0 );
+
+                        if( testBusHit( wireEnd + entrySize( 0, -1 ) ) )
                         {
-                            wxPoint             p = lineend + entrySize( 1, 1 );
-                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
+                            // there is room above the wire for the bus entry
+                            //     |
+                            // ___/|
+                            //     |
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
-
-                            moveLabels( line, p );
-
-                            if( p == linestart ) // wire is overlapped by bus entry symbol
-                                m_currentSheet->GetScreen()->DeleteItem( line );
-                            else
-                                line->SetEndPoint( p );
+                            moveLabels( wire, p );
+                            wire->SetEndPoint( p );
+                        }
+                        else if( testBusHit( wireEnd + entrySize( 0, -1 ) ) )
+                        {
+                            // there is room below the wire for the bus entry
+                            // ___ |
+                            //    \|
+                            //     |
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            moveLabels( wire, wireEnd + entrySize( -1, 0 ) );
+                            wire->SetEndPoint( wireEnd + entrySize( -1, 0 ) );
                         }
                         else
                         {
-                            wxPoint             p = lineend + entrySize( 1, -1 );
-                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
-                            busEntry->SetFlags( IS_NEW );
-                            m_currentSheet->GetScreen()->Append( busEntry );
-
-                            moveLabels( line, p );
-
-                            if( p == linestart ) // wire is overlapped by bus entry symbol
-                                m_currentSheet->GetScreen()->DeleteItem( line );
-                            else
-                                line->SetEndPoint( p );
+                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireEnd );
+                            m_currentSheet->GetScreen()->Append( marker );
                         }
                     }
                     else
                     {
-                        if( wirevector.y > 0 )
+                        // the start of the wire is to the right of the bus
+                        // |
+                        // |----
+                        // |
+                        wxPoint p = wireEnd + entrySize( 1, 0 );
+
+                        if( testBusHit( wireEnd + entrySize( 0, -1 ) ) )
                         {
-                            wxPoint             p = lineend + entrySize( -1, 1 );
-                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
+                            // There is room above the wire for the bus entry
+                            // |
+                            // |\___
+                            // |
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
-                            moveLabels( line, p );
-
-                            if( p == linestart ) // wire is overlapped by bus entry symbol
-                                m_currentSheet->GetScreen()->DeleteItem( line );
-                            else
-                                line->SetEndPoint( p );
+                            moveLabels( wire, p );
+                            wire->SetEndPoint( p );
+                        }
+                        else if( testBusHit( wireEnd + entrySize( 0, 1 ) ) )
+                        {
+                            // There is room below the wire for the bus entry
+                            // | ___
+                            // |/
+                            // |
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            moveLabels( wire, p );
+                            wire->SetEndPoint( p );
                         }
                         else
                         {
-                            wxPoint             p = lineend + entrySize( -1, -1 );
+                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireEnd );
+                            m_currentSheet->GetScreen()->Append( marker );
+                        }
+                    }
+                }
+            } // if( wireStart.y == wireEnd.y && busStart.x == busEnd.x)
+
+            // Test for vertical wire and horizontal bus
+            if( wireStart.x == wireEnd.x && busStart.y == busEnd.y )
+            {
+                if( testBusHit( wireStart ) )
+                {
+                    // Wire start is on the bus
+
+                    if( wireEnd.y < busStart.y )
+                    {
+                        // the end of the wire is above the bus
+                        //   |
+                        //   |
+                        // -----
+                        wxPoint p = wireStart + entrySize( 0, -1 );
+
+                        if( testBusHit( wireStart + entrySize( -1, 0 ) ) )
+                        {
+                            // there is room to the left of the wire for the bus entry
+                            //    |
+                            //    |
+                            //   /
+                            // -----
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            moveLabels( wire, p );
+                            wire->SetStartPoint( p );
+                        }
+                        else if( testBusHit( wireStart + entrySize( 1, 0 ) ) )
+                        {
+                            // there is room to the right of the wire for the bus entry
+                            //  |
+                            //  |
+                            //   \
+                            // -----
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
-                            moveLabels( line, p );
+                            moveLabels( wire, p );
+                            wire->SetStartPoint( p );
+                        }
+                        else
+                        {
+                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireStart );
+                            m_currentSheet->GetScreen()->Append( marker );
+                        }
+                    }
+                    else
+                    {
+                        // wire end is below the bus
+                        // -----
+                        //   |
+                        //   |
+                        wxPoint p = wireStart + entrySize( 0, 1 );
 
-                            if( p == linestart ) // wire is overlapped by bus entry symbol
-                                m_currentSheet->GetScreen()->DeleteItem( line );
-                            else
-                                line->SetEndPoint( p );
+                        if( testBusHit( wireStart + entrySize( -1, 0 ) ) )
+                        {
+                            // there is room to the left of the wire for the bus entry
+                            // -----
+                            //   \
+                            //    |
+                            //    |
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            moveLabels( wire, p );
+                            wire->SetStartPoint( p );
+                        }
+                        else if( testBusHit( wireStart + entrySize( 1, 0 ) ) )
+                        {
+                            // there is room to the right of the wire for the bus entry
+                            // -----
+                            //   /
+                            //  |
+                            //  |
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            moveLabels( wire, p );
+                            wire->SetStartPoint( p );
+                        }
+                        else
+                        {
+                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireStart );
+                            m_currentSheet->GetScreen()->Append( marker );
+                        }
+                    }
+                }
+
+                if( testBusHit( wireEnd ) )
+                {
+                    // Wire end is on the bus
+
+                    if( wireStart.y < busStart.y )
+                    {
+                        // the start of the wire is above the bus
+                        //   |
+                        //   |
+                        // -----
+                        wxPoint p = wireEnd + entrySize( 0, -1 );
+
+                        if( testBusHit( wireEnd + entrySize( -1, 0 ) ) )
+                        {
+                            // there is room to the left of the wire for the bus entry
+                            //    |
+                            //    |
+                            //   /
+                            // -----
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            moveLabels( wire, p );
+                            wire->SetEndPoint( p );
+                        }
+                        else if( testBusHit( wireEnd + entrySize( 1, 0 ) ) )
+                        {
+                            // there is room to the right of the wire for the bus entry
+                            //  |
+                            //  |
+                            //   \
+                            // -----
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            moveLabels( wire, p );
+                            wire->SetEndPoint( p );
+                        }
+                        else
+                        {
+                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireEnd );
+                            m_currentSheet->GetScreen()->Append( marker );
+                        }
+                    }
+                    else
+                    {
+                        // wire start is below the bus
+                        // -----
+                        //   |
+                        //   |
+                        wxPoint p = wireEnd + entrySize( 0, 1 );
+
+                        if( testBusHit( wireEnd + entrySize( -1, 0 ) ) )
+                        {
+                            // there is room to the left of the wire for the bus entry
+                            // -----
+                            //   \
+                            //    |
+                            //    |
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            moveLabels( wire, p );
+                            wire->SetEndPoint( p );
+                        }
+                        else if( testBusHit( wireEnd + entrySize( 1, 0 ) ) )
+                        {
+                            // there is room to the right of the wire for the bus entry
+                            // -----
+                            //   /
+                            //  |
+                            //  |
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            moveLabels( wire, p );
+                            wire->SetEndPoint( p );
+                        }
+                        else
+                        {
+                            auto        ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_NEEDED );
+                            SCH_MARKER* marker = new SCH_MARKER( ercItem, wireEnd );
+                            m_currentSheet->GetScreen()->Append( marker );
                         }
                     }
                 }
             }
+
+            wireStart = wire->GetStartPoint();
+            wireEnd   = wire->GetEndPoint();
+            busStart  = bus->GetStartPoint();
+            busEnd    = bus->GetEndPoint();
+
+            // bus entry wire isn't horizontal or vertical
+            if( testBusHit( wireStart ) )
+            {
+                wxPoint wirevector = wireStart - wireEnd;
+
+                if( wirevector.x > 0 )
+                {
+                    if( wirevector.y > 0 )
+                    {
+                        wxPoint             p = wireStart + entrySize( -1, -1 );
+                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
+                        busEntry->SetFlags( IS_NEW );
+                        m_currentSheet->GetScreen()->Append( busEntry );
+
+                        moveLabels( wire, p );
+                        wire->SetStartPoint( p );
+                    }
+                    else
+                    {
+                        wxPoint             p = wireStart + entrySize( -1, 1 );
+                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
+                        busEntry->SetFlags( IS_NEW );
+                        m_currentSheet->GetScreen()->Append( busEntry );
+
+                        moveLabels( wire, p );
+                        wire->SetStartPoint( p );
+                    }
+                }
+                else
+                {
+                    if( wirevector.y > 0 )
+                    {
+                        wxPoint             p = wireStart + entrySize( 1, -1 );
+                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
+                        busEntry->SetFlags( IS_NEW );
+                        m_currentSheet->GetScreen()->Append( busEntry );
+
+                        moveLabels( wire, p );
+                        wire->SetStartPoint( p );
+                    }
+                    else
+                    {
+                        wxPoint             p = wireStart + entrySize( 1, 1 );
+                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
+                        busEntry->SetFlags( IS_NEW );
+                        m_currentSheet->GetScreen()->Append( busEntry );
+
+                        moveLabels( wire, p );
+                        wire->SetStartPoint( p );
+                    }
+                }
+            }
+            else if( testBusHit( wireEnd ) )
+            {
+                wxPoint wirevector = wireStart - wireEnd;
+
+                if( wirevector.x > 0 )
+                {
+                    if( wirevector.y > 0 )
+                    {
+                        wxPoint             p = wireEnd + entrySize( 1, 1 );
+                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
+                        busEntry->SetFlags( IS_NEW );
+                        m_currentSheet->GetScreen()->Append( busEntry );
+
+                        moveLabels( wire, p );
+                        wire->SetEndPoint( p );
+                    }
+                    else
+                    {
+                        wxPoint             p = wireEnd + entrySize( 1, -1 );
+                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
+                        busEntry->SetFlags( IS_NEW );
+                        m_currentSheet->GetScreen()->Append( busEntry );
+
+                        moveLabels( wire, p );
+                        wire->SetEndPoint( p );
+                    }
+                }
+                else
+                {
+                    if( wirevector.y > 0 )
+                    {
+                        wxPoint             p = wireEnd + entrySize( -1, 1 );
+                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
+                        busEntry->SetFlags( IS_NEW );
+                        m_currentSheet->GetScreen()->Append( busEntry );
+
+                        moveLabels( wire, p );
+                        wire->SetEndPoint( p );
+                    }
+                    else
+                    {
+                        wxPoint             p = wireEnd + entrySize( -1, -1 );
+                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
+                        busEntry->SetFlags( IS_NEW );
+                        m_currentSheet->GetScreen()->Append( busEntry );
+
+                        moveLabels( wire, p );
+                        wire->SetEndPoint( p );
+                    }
+                }
+            }
         }
-    } // for ( bus ..
+    }
 }
 
 

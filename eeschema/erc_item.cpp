@@ -143,12 +143,16 @@ ERC_ITEM ERC_ITEM::extraUnits( ERCE_EXTRA_UNITS,
         wxT( "extra_units" ) );
 
 ERC_ITEM ERC_ITEM::differentUnitValue( ERCE_DIFFERENT_UNIT_VALUE,
-                                       _( "Units of same symbol have different values" ),
-                                       wxT( "unit_value_mismatch" ) );
+        _( "Units of same symbol have different values" ),
+        wxT( "unit_value_mismatch" ) );
 
 ERC_ITEM ERC_ITEM::duplicateReference( ERCE_DUPLICATE_REFERENCE,
         _( "Duplicate reference designators" ),
         wxT( "duplicate_reference" ) );
+
+ERC_ITEM ERC_ITEM::busEntryNeeded( ERCE_BUS_ENTRY_NEEDED,
+        _( "Bus Entry needed" ),
+        wxT( "bus_entry_needed" ) );
 
 std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::heading_connections,
@@ -160,6 +164,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::labelDangling,
                  ERC_ITEM::globalLabelDangling,
                  ERC_ITEM::wireDangling,
+                 ERC_ITEM::busEntryNeeded,
 
                  ERC_ITEM::heading_conflicts,
                  ERC_ITEM::duplicateReference,
@@ -217,6 +222,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_EXTRA_UNITS:             return std::make_shared<ERC_ITEM>( extraUnits );
     case ERCE_DIFFERENT_UNIT_VALUE:    return std::make_shared<ERC_ITEM>( differentUnitValue );
     case ERCE_DUPLICATE_REFERENCE:     return std::make_shared<ERC_ITEM>( duplicateReference );
+    case ERCE_BUS_ENTRY_NEEDED:        return std::make_shared<ERC_ITEM>( busEntryNeeded );
     case ERCE_UNSPECIFIED:
     default:
         wxFAIL_MSG( "Unknown ERC error code" );

@@ -69,8 +69,9 @@ enum ERCE_T
     ERCE_EXTRA_UNITS,             ///< Symbol has more units than are defined.
     ERCE_DIFFERENT_UNIT_VALUE,    ///< Units of same symbol have different values.
     ERCE_DUPLICATE_REFERENCE,     ///< More than one symbol with the same reference.
+    ERCE_BUS_ENTRY_NEEDED,        ///< Importer failed to auto-place a bus entry.
 
-    ERCE_LAST = ERCE_DUPLICATE_REFERENCE,
+    ERCE_LAST = ERCE_BUS_ENTRY_NEEDED,
 
     // Errors after this point will not automatically appear in the Severities Panel
 
