@@ -401,7 +401,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             if( !aErrors.empty() )
                 aErrors += "\n";
 
-            msg.Printf( _( "Cannot copy file \"%s\"." ), destFile.GetFullPath() );
+            msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
             aErrors += msg;
         }
     }
@@ -433,7 +433,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             if( !aErrors.empty() )
                 aErrors += "\n";
 
-            msg.Printf( _( "Cannot copy file \"%s\"." ), destFile.GetFullPath() );
+            msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
             aErrors += msg;
         }
     }

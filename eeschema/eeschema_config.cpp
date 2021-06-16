@@ -268,7 +268,7 @@ SYMBOL_LIB_TABLE* PROJECT::SchSymbolLibTable()
             catch( const IO_ERROR& ioe )
             {
                 wxString msg;
-                msg.Printf( _( "An error occurred loading the symbol library table \"%s\"." ),
+                msg.Printf( _( "An error occurred loading the symbol library table '%s'." ),
                             fn.GetFullPath() );
                 DisplayErrorMessage( NULL, msg, ioe.What() );
             }

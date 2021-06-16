@@ -64,7 +64,7 @@ bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename, NETLIST& aN
 
         if( !netlistReader.get() )
         {
-            msg.Printf( _( "Cannot open netlist file \"%s\"." ), aFilename );
+            msg.Printf( _( "Cannot open netlist file '%s'." ), aFilename );
             wxMessageBox( msg, _( "Netlist Load Error." ), wxOK | wxICON_ERROR, this );
             return false;
         }
@@ -152,7 +152,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         // The FPID is ok as long as there is a footprint portion coming from eeschema.
         if( !component->GetFPID().GetLibItemName().size() )
         {
-            msg.Printf( _( "No footprint defined for symbol \"%s\".\n" ),
+            msg.Printf( _( "No footprint defined for symbol %s.\n" ),
                         component->GetReference() );
             aReporter.Report( msg, RPT_SEVERITY_ERROR );
 
@@ -179,7 +179,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
 
         if( footprintMisMatch && !aNetlist.GetReplaceFootprints() )
         {
-            msg.Printf( _( "Footprint of %s changed: board footprint \"%s\", netlist footprint \"%s\"." ),
+            msg.Printf( _( "Footprint of %s changed: board footprint '%s', netlist footprint '%s'." ),
                         component->GetReference(),
                         fpOnBoard->GetFPID().Format().wx_str(),
                         component->GetFPID().Format().wx_str() );
@@ -202,7 +202,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
             // it's needed.  Nickname can be blank.
             if( !component->GetFPID().GetLibItemName().size() )
             {
-                msg.Printf( _( "%s footprint ID \"%s\" is not valid." ),
+                msg.Printf( _( "%s footprint ID '%s' is not valid." ),
                             component->GetReference(),
                             component->GetFPID().Format().wx_str() );
                 aReporter.Report( msg, RPT_SEVERITY_ERROR );
@@ -219,7 +219,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
             }
             else
             {
-                msg.Printf( _( "%s footprint \"%s\" not found in any libraries in the footprint "
+                msg.Printf( _( "%s footprint '%s' not found in any libraries in the footprint "
                                "library table.\n" ),
                             component->GetReference(),
                             component->GetFPID().GetLibItemName().wx_str() );

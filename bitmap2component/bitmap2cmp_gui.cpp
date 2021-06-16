@@ -752,7 +752,7 @@ void BM2CMP_FRAME::OnExportLogo()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File \"%s\" could not be created." ), m_ConvertedFileName );
+        msg.Printf( _( "File '%s' could not be created." ), m_ConvertedFileName );
         wxMessageBox( msg );
         return;
     }
@@ -792,7 +792,7 @@ void BM2CMP_FRAME::exportPostScriptFormat()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File \"%s\" could not be created." ), m_ConvertedFileName );
+        msg.Printf( _( "File '%s' could not be created." ), m_ConvertedFileName );
         wxMessageBox( msg );
         return;
     }
@@ -831,7 +831,7 @@ void BM2CMP_FRAME::exportEeschemaFormat()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File \"%s\" could not be created." ), m_ConvertedFileName );
+        msg.Printf( _( "File '%s' could not be created." ), m_ConvertedFileName );
         wxMessageBox( msg );
         return;
     }
@@ -870,7 +870,7 @@ void BM2CMP_FRAME::exportPcbnewFormat()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File \"%s\" could not be created." ), m_ConvertedFileName );
+        msg.Printf( _( "File '%s' could not be created." ), m_ConvertedFileName );
         wxMessageBox( msg );
         return;
     }

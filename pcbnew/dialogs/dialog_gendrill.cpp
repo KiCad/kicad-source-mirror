@@ -302,7 +302,7 @@ void DIALOG_GENDRILL::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
     wxFileName fn( Prj().AbsolutePath( m_board->GetFileName() ) );
     wxString   defaultPath = fn.GetPathWithSep();
     wxString   msg;
-    msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ), defaultPath );
+    msg.Printf( _( "Do you want to use a path relative to\n'%s'?" ), defaultPath );
 
     wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
                             wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
@@ -384,7 +384,7 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
     if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
     {
         wxString msg;
-        msg.Printf( _( "Could not write drill and/or map files to folder \"%s\"." ),
+        msg.Printf( _( "Could not write drill and/or map files to folder '%s'." ),
                 outputDir.GetPath() );
         DisplayError( this, msg );
         return;

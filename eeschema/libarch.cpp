@@ -98,8 +98,9 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
             catch( const IO_ERROR& )
             {
                 // Queue up error messages for later.
-                tmp.Printf( _( "Failed to add symbol \"%s\" to library file \"%s\"." ),
-                            symbol->GetLibId().GetUniStringLibItemName(), aFileName );
+                tmp.Printf( _( "Failed to add symbol %s to library file '%s'." ),
+                            symbol->GetLibId().GetUniStringLibItemName(),
+                            aFileName );
 
                 // Don't bail out here.  Attempt to add as many of the symbols to the library
                 // as possible.
@@ -149,13 +150,13 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     }
     catch( const IO_ERROR& ioe )
     {
-        errorMsg.Printf( _( "Failed to save symbol library file \"%s\"" ), aFileName );
+        errorMsg.Printf( _( "Failed to save symbol library file '%s'." ), aFileName );
         DisplayErrorMessage( this, errorMsg, ioe.What() );
         return false;
     }
     catch( std::exception& error )
     {
-        errorMsg.Printf( _( "Failed to save symbol library file \"%s\"" ), aFileName );
+        errorMsg.Printf( _( "Failed to save symbol library file '%s'." ), aFileName );
         DisplayErrorMessage( this, errorMsg, error.what() );
         return false;
     }

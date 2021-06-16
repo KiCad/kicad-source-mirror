@@ -103,7 +103,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList,
 
             if( aErrorMessages )
             {
-                error_msg.Printf( _( "Equivalence file \"%s\" could not be found in the "
+                error_msg.Printf( _( "Equivalence file '%s' could not be found in the "
                                      "default search paths." ),
                                   fn.GetFullName() );
 
@@ -124,7 +124,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList,
 
             if( aErrorMessages )
             {
-                error_msg.Printf( _( "Error opening equivalence file \"%s\"." ), tmp );
+                error_msg.Printf( _( "Error opening equivalence file '%s'." ), tmp );
 
                 if( ! aErrorMessages->IsEmpty() )
                     *aErrorMessages << wxT("\n\n");

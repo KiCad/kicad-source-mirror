@@ -178,7 +178,7 @@ bool CMP_READER::Load( NETLIST* aNetlist )
             if( !footprint.IsEmpty() && fpid.Parse( footprint, true ) >= 0 )
             {
                 wxString error;
-                error.Printf( _( "Invalid footprint ID in\nfile: \"%s\"\nline: %d" ),
+                error.Printf( _( "Invalid footprint ID in\nfile: '%s'\nline: %d" ),
                               m_lineReader->GetSource(), m_lineReader->LineNumber() );
 
                 THROW_IO_ERROR( error );

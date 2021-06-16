@@ -463,7 +463,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
     {
         if( aReporter )
         {
-            msg.Printf( _( "Zip file \"%s\" cannot be opened" ), aFullFileName );
+            msg.Printf( _( "Zip file '%s' cannot be opened." ), aFullFileName );
             aReporter->Report( msg, RPT_SEVERITY_ERROR );
         }
 
@@ -505,7 +505,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         {
             if( aReporter )
             {
-                msg.Printf( _( "Info: skip file \"%s\" (unknown type)\n" ), entry->GetName() );
+                msg.Printf( _( "Skipped file '%s' (unknown type).\n" ), entry->GetName() );
                 aReporter->Report( msg, RPT_SEVERITY_WARNING );
             }
 
@@ -517,7 +517,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             //We cannot read a gerber job file as a gerber plot file: skip it
             if( aReporter )
             {
-                msg.Printf( _( "Info: skip file \"%s\" (gerber job file)\n" ), entry->GetName() );
+                msg.Printf( _( "Skipped file '%s' (gerber job file).\n" ), entry->GetName() );
                 aReporter->Report( msg, RPT_SEVERITY_WARNING );
             }
 
@@ -558,7 +558,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 
                 if( aReporter )
                 {
-                    msg.Printf( _( "<b>Unable to create temporary file \"%s\"</b>\n"),
+                    msg.Printf( _( "<b>Unable to create temporary file '%s'.</b>\n"),
                                 unzipped_tempfile );
                     aReporter->Report( msg, RPT_SEVERITY_ERROR );
                 }

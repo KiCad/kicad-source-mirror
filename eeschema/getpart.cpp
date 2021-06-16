@@ -245,8 +245,9 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
     {
         LIB_ID id = aSymbol->GetLibSymbolRef()->GetLibId();
 
-        msg.Printf( _( "No alternate body style found for symbol \"%s\" in library \"%s\"." ),
-                    id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
+        msg.Printf( _( "No alternate body style found for symbol '%s' in library '%s'." ),
+                    id.GetLibItemName().wx_str(),
+                    id.GetLibNickname().wx_str() );
         DisplayError( this,  msg );
         return;
     }

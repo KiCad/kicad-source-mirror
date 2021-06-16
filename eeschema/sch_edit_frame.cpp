@@ -958,7 +958,7 @@ void SCH_EDIT_FRAME::NewProject()
         if( create_me.FileExists() )
         {
             wxString msg;
-            msg.Printf( _( "Schematic file \"%s\" already exists." ), create_me.GetFullName() );
+            msg.Printf( _( "Schematic file '%s' already exists." ), create_me.GetFullName() );
             DisplayError( this, msg );
             return ;
         }

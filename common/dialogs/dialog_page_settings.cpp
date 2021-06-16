@@ -463,7 +463,7 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
         if( !fullFileName.IsEmpty() && !wxFileExists( fullFileName ) )
         {
             wxString msg;
-            msg.Printf( _( "Drawing sheet file \"%s\" not found." ), fullFileName );
+            msg.Printf( _( "Drawing sheet file '%s' not found." ), fullFileName );
             wxMessageBox( msg );
             return false;
         }

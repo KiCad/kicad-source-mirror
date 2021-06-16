@@ -973,17 +973,17 @@ bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName )
 
     if( fn.IsDir() && !fn.IsDirWritable() )
     {
-        msg.Printf( _( "You do not have write permissions to folder \"%s\"." ),
+        msg.Printf( _( "You do not have write permissions to folder '%s'." ),
                     fn.GetPath() );
     }
     else if( !fn.FileExists() && !fn.IsDirWritable() )
     {
-        msg.Printf( _( "You do not have write permissions to save file \"%s\" to folder \"%s\"." ),
+        msg.Printf( _( "You do not have write permissions to save file '%s' to folder '%s'." ),
                     fn.GetFullName(), fn.GetPath() );
     }
     else if( fn.FileExists() && !fn.IsFileWritable() )
     {
-        msg.Printf( _( "You do not have write permissions to save file \"%s\"." ),
+        msg.Printf( _( "You do not have write permissions to save file '%s'." ),
                     fn.GetFullPath() );
     }
 

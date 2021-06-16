@@ -137,11 +137,13 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
     }
     catch( const IO_ERROR& ioe )
     {
-        msg.Printf( _( "Error saving schematic file \"%s\".\n%s" ),
-                    schematicFileName.GetFullPath(), ioe.What() );
+        msg.Printf( _( "Error saving schematic file '%s'.\n%s" ),
+                    schematicFileName.GetFullPath(),
+                    ioe.What() );
         DisplayError( this, msg );
 
-        msg.Printf( _( "Failed to create temporary file \"%s\"" ), tempFile.GetFullPath() );
+        msg.Printf( _( "Failed to create temporary file '%s'." ),
+                    tempFile.GetFullPath() );
         SetMsgPanel( wxEmptyString, msg );
 
         // In case we started a file but didn't fully write it, clean up
@@ -157,12 +159,14 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
 
         if( !success )
         {
-            msg.Printf( _( "Error saving schematic file \"%s\".\n"
-                           "Failed to rename temporary file %s" ),
-                        schematicFileName.GetFullPath(), tempFile.GetFullPath() );
+            msg.Printf( _( "Error saving schematic file '%s'.\n"
+                           "Failed to rename temporary file '%s'." ),
+                        schematicFileName.GetFullPath(),
+                        tempFile.GetFullPath() );
             DisplayError( this, msg );
 
-            msg.Printf( _( "Failed to rename temporary file \"%s\"" ), tempFile.GetFullPath() );
+            msg.Printf( _( "Failed to rename temporary file '%s'." ),
+                        tempFile.GetFullPath() );
             SetMsgPanel( wxEmptyString, msg );
         }
     }
@@ -195,7 +199,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
         screen->SetContentModified( false );
         UpdateTitle();
 
-        msg.Printf( _( "File \"%s\" saved." ),  screen->GetFileName() );
+        msg.Printf( _( "File '%s' saved." ),  screen->GetFileName() );
         SetStatusText( msg, 0 );
     }
     else
@@ -263,7 +267,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( !LockFile( fullFileName ) )
     {
-        msg.Printf( _( "Schematic file \"%s\" is already open." ), fullFileName );
+        msg.Printf( _( "Schematic file '%s' is already open." ), fullFileName );
         DisplayError( this, msg );
         return false;
     }
@@ -284,7 +288,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( is_new && !( aCtl & KICTL_CREATE ) )
     {
         // notify user that fullFileName does not exist, ask if user wants to create it.
-        msg.Printf( _( "Schematic \"%s\" does not exist.  Do you wish to create it?" ),
+        msg.Printf( _( "Schematic '%s' does not exist.  Do you wish to create it?" ),
                     fullFileName );
 
         if( !IsOK( this, msg ) )
@@ -419,7 +423,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         catch( const std::bad_alloc& )
         {
-            msg.Printf( _( "Memory exhausted loading schematic file \"%s\"" ), fullFileName );
+            msg.Printf( _( "Memory exhausted loading schematic file '%s'." ), fullFileName );
             DisplayErrorMessage( this, msg );
 
             failedLoad = true;

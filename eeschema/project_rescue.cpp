@@ -681,7 +681,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     {
         wxString msg;
 
-        msg.Printf( _( "Failed to create symbol library file \"%s\"" ),
+        msg.Printf( _( "Failed to create symbol library file '%s'." ),
                     m_rescue_lib->GetFullFileName() );
         DisplayError( aParent, msg );
         return false;

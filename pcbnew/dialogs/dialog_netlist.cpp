@@ -223,7 +223,7 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
     wxBusyCursor busy;
 
     wxString msg;
-    msg.Printf( _( "Reading netlist file \"%s\".\n" ), netlistFileName  );
+    msg.Printf( _( "Reading netlist file '%s'.\n" ), netlistFileName  );
     reporter.ReportHead( msg, RPT_SEVERITY_INFO );
 
     if( m_matchByTimestamp->GetSelection() == 1 )

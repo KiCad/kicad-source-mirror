@@ -207,8 +207,9 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
             // Don't add symbol libraries that do not exist.
             if( tmpFn.Normalize() && tmpFn.FileExists() )
             {
-                msg.Printf( _( "Adding library \"%s\", file \"%s\" to project symbol library table." ),
-                            libName, fullFileName );
+                msg.Printf( _( "Adding library '%s', file '%s' to project symbol library table." ),
+                            libName,
+                            fullFileName );
                 aReporter.Report( msg, RPT_SEVERITY_INFO );
 
                 prjLibTable.InsertRow( new SYMBOL_LIB_TABLE_ROW( libName, fullFileName,
@@ -216,7 +217,7 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
             }
             else
             {
-                msg.Printf( _( "Library \"%s\" not found." ), fullFileName );
+                msg.Printf( _( "Library '%s' not found." ), fullFileName );
                 aReporter.Report( msg, RPT_SEVERITY_WARNING );
             }
         }
@@ -260,13 +261,13 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
 
             if( !remapSymbolToLibTable( symbol ) )
             {
-                msg.Printf( _( "No symbol \"%s\" found in symbol library table." ),
+                msg.Printf( _( "No symbol %s found in symbol library table." ),
                             symbol->GetLibId().GetLibItemName().wx_str() );
                 aReporter.Report( msg, RPT_SEVERITY_WARNING );
             }
             else
             {
-                msg.Printf( _( "Symbol \"%s\" mapped to symbol library \"%s\"." ),
+                msg.Printf( _( "Symbol %s mapped to symbol library '%s'." ),
                             symbol->GetLibId().GetLibItemName().wx_str(),
                             symbol->GetLibId().GetLibNickname().wx_str() );
                 aReporter.Report( msg, RPT_SEVERITY_ACTION );
@@ -345,7 +346,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     {
         if( !destFileName.Mkdir() )
         {
-            errorMsg.Printf( _( "Cannot create project remap back up folder \"%s\"." ),
+            errorMsg.Printf( _( "Cannot create project remap back up folder '%s'." ),
                              destFileName.GetPath() );
 
             wxMessageDialog dlg( this, errorMsg, _( "Backup Error" ),
@@ -368,14 +369,16 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     destFileName.AppendDir( backupFolder );
     destFileName.SetName( destFileName.GetName() + timeStamp );
 
-    tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
-                srcFileName.GetFullPath(), destFileName.GetFullPath() );
+    tmp.Printf( _( "Backing up file '%s' to '%s'." ),
+                srcFileName.GetFullPath(),
+                destFileName.GetFullPath() );
     aReporter.Report( tmp, RPT_SEVERITY_INFO );
 
     if( wxFileName::Exists( srcFileName.GetFullPath() )
       && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
     {
-        tmp.Printf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
+        tmp.Printf( _( "Failed to back up file '%s'.\n" ),
+                    srcFileName.GetFullPath() );
         errorMsg += tmp;
     }
 
@@ -401,13 +404,14 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
             destFileName.AppendDir( backupFolder );
         }
 
-        tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
-                    screen->GetFileName(), destFileName.GetFullPath() );
+        tmp.Printf( _( "Backing up file '%s' to '%s'." ),
+                    screen->GetFileName(),
+                    destFileName.GetFullPath() );
         aReporter.Report( tmp, RPT_SEVERITY_INFO );
 
         if( !destFileName.DirExists() && !destFileName.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
         {
-            tmp.Printf( _( "Failed to create backup folder \"%s\"\n" ), destFileName.GetPath() );
+            tmp.Printf( _( "Failed to create backup folder '%s'.\n" ), destFileName.GetPath() );
             errorMsg += tmp;
             continue;
         }
@@ -415,7 +419,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
         if( wxFileName::Exists( screen->GetFileName() )
           && !wxCopyFile( screen->GetFileName(), destFileName.GetFullPath() ) )
         {
-            tmp.Printf( _( "Failed to back up file \"%s\".\n" ), screen->GetFileName() );
+            tmp.Printf( _( "Failed to back up file '%s'.\n" ), screen->GetFileName() );
             errorMsg += tmp;
         }
     }
@@ -425,14 +429,15 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     destFileName.SetName( destFileName.GetName() + timeStamp );
     destFileName.AppendDir( backupFolder );
 
-    tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
-                   Prj().GetProjectFullName(), destFileName.GetFullPath() );
+    tmp.Printf( _( "Backing up file '%s' to '%s'." ),
+                   Prj().GetProjectFullName(),
+                   destFileName.GetFullPath() );
     aReporter.Report( tmp, RPT_SEVERITY_INFO );
 
     if( wxFileName::Exists( Prj().GetProjectFullName() )
       && !wxCopyFile( Prj().GetProjectFullName(), destFileName.GetFullPath() ) )
     {
-        tmp.Printf( _( "Failed to back up file \"%s\".\n" ), Prj().GetProjectFullName() );
+        tmp.Printf( _( "Failed to back up file '%s'.\n" ), Prj().GetProjectFullName() );
         errorMsg += tmp;
     }
 
@@ -445,14 +450,15 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     destFileName.SetName( destFileName.GetName() + timeStamp );
     destFileName.AppendDir( backupFolder );
 
-    tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
-                srcFileName.GetFullPath(), destFileName.GetFullPath() );
+    tmp.Printf( _( "Backing up file '%s' to '%s'." ),
+                srcFileName.GetFullPath(),
+                destFileName.GetFullPath() );
     aReporter.Report( tmp, RPT_SEVERITY_INFO );
 
     if( srcFileName.Exists()
       && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
     {
-        tmp.Printf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
+        tmp.Printf( _( "Failed to back up file '%s'.\n" ), srcFileName.GetFullPath() );
         errorMsg += tmp;
     }
 
@@ -460,7 +466,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     srcFileName.SetName( Prj().GetProjectName() + "-rescue" );
     destFileName.SetName( srcFileName.GetName() + timeStamp );
 
-    tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
+    tmp.Printf( _( "Backing up file '%s' to '%s'." ),
                 srcFileName.GetFullPath(),
                 destFileName.GetFullPath() );
     aReporter.Report( tmp, RPT_SEVERITY_INFO );
@@ -468,7 +474,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     if( srcFileName.Exists()
       && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
     {
-        tmp.Printf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
+        tmp.Printf( _( "Failed to back up file '%s'.\n" ), srcFileName.GetFullPath() );
         errorMsg += tmp;
     }
 
@@ -476,7 +482,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     srcFileName.SetExt( LegacySymbolDocumentFileExtension );
     destFileName.SetExt( srcFileName.GetExt() );
 
-    tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
+    tmp.Printf( _( "Backing up file '%s' to '%s'." ),
                 srcFileName.GetFullPath(),
                 destFileName.GetFullPath() );
     aReporter.Report( tmp, RPT_SEVERITY_INFO );
@@ -484,7 +490,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     if( srcFileName.Exists()
       && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
     {
-        tmp.Printf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
+        tmp.Printf( _( "Failed to back up file '%s'.\n" ), srcFileName.GetFullPath() );
         errorMsg += tmp;
     }
 

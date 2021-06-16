@@ -317,7 +317,7 @@ bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
     {
         if( aReporter )
         {
-            msg.Printf( _( "Cannot make path \"%s\" absolute with respect to \"%s\"." ),
+            msg.Printf( _( "Cannot make path '%s' absolute with respect to '%s'." ),
                         aTargetFullFileName->GetPath(),
                         baseFilePath );
             aReporter->Report( msg, RPT_SEVERITY_ERROR );
@@ -336,7 +336,7 @@ bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
         {
             if( aReporter )
             {
-                msg.Printf( _( "Output directory \"%s\" created.\n" ), outputPath );
+                msg.Printf( _( "Output directory '%s' created.\n" ), outputPath );
                 aReporter->Report( msg, RPT_SEVERITY_INFO );
                 return true;
             }
@@ -345,7 +345,7 @@ bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
         {
             if( aReporter )
             {
-                msg.Printf( _( "Cannot create output directory \"%s\".\n" ), outputPath );
+                msg.Printf( _( "Cannot create output directory '%s'.\n" ), outputPath );
                 aReporter->Report( msg, RPT_SEVERITY_ERROR );
             }
 

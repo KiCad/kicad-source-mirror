@@ -79,7 +79,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
         return;
 
     wxString unzipDir = dirDlg.GetPath() + wxT( "/" );
-    msg.Printf( _( "Unzipping project in \"%s\"\n" ), unzipDir );
+    msg.Printf( _( "Unzipping project in '%s'.\n" ), unzipDir );
     PrintMsg( msg );
 
     if( unzipDir == Prj().GetProjectPath() )

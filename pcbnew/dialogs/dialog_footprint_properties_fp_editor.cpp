@@ -534,7 +534,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::checkFootprintName( const wxString& 
     }
     else if( !FOOTPRINT::IsLibNameValid( aFootprintName ) )
     {
-        m_delayedErrorMessage.Printf( _( "Footprint name may not contain \"%s\"." ),
+        m_delayedErrorMessage.Printf( _( "Footprint name may not contain '%s'." ),
                                       FOOTPRINT::StringLibNameInvalidChars( true ) );
         return false;
     }

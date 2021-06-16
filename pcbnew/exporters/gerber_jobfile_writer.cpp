@@ -149,13 +149,13 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
     {
         if( m_reporter )
         {
-            msg.Printf( _( "Unable to create job file \"%s\"" ), aFullFilename );
+            msg.Printf( _( "Unable to create job file '%s'." ), aFullFilename );
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         }
     }
     else if( m_reporter )
     {
-        msg.Printf( _( "Create Gerber job file \"%s\"" ), aFullFilename );
+        msg.Printf( _( "Create Gerber job file '%s'." ), aFullFilename );
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 

@@ -532,7 +532,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::validateLibIds()
         if( !id.IsValid() )
         {
             wxString msg;
-            msg.Printf( _( "Symbol library identifier \"%s\" is not valid." ), new_libid );
+            msg.Printf( _( "Symbol library identifier %s is not valid." ), new_libid );
             wxMessageBox( msg );
 
             m_grid->SetFocus();

@@ -642,7 +642,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
 
     if( outFile == NULL )
     {
-        msg.Printf( _( "Unable to create file \"%s\"" ), saveFileDialog.GetPath() );
+        msg.Printf( _( "Unable to create file '%s'." ), saveFileDialog.GetPath() );
         DisplayErrorMessage( this, msg );
         return;
     }
@@ -725,7 +725,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
 
     if( fprintf( outFile, "%s", TO_UTF8( msg ) ) < 0 )
     {
-        msg.Printf( _( "Error writing to file \"%s\"" ), saveFileDialog.GetPath() );
+        msg.Printf( _( "Error writing file '%s'." ), saveFileDialog.GetPath() );
         DisplayErrorMessage( this, msg );
     }
 

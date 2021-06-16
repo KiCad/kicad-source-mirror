@@ -557,8 +557,9 @@ void SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
             catch( const IO_ERROR& ioe )
             {
                 wxString msg;
-                msg.Printf( _( "Symbol library \"%s\" failed to load. Error:\n %s" ),
-                            filename, ioe.What() );
+                msg.Printf( _( "Symbol library '%s' failed to load. Error:\n %s" ),
+                            filename,
+                            ioe.What() );
 
                 wxLogError( msg );
             }

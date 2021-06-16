@@ -243,8 +243,8 @@ void LEGACY_NETLIST_READER::loadFootprintFilters()
             if( component == NULL )
             {
                 wxString msg;
-                msg.Printf( _( "Cannot find symbol \"%s\" in footprint filter section "
-                               "of netlist." ), cmpRef );
+                msg.Printf( _( "Cannot find symbol %s in footprint filter section of netlist." ),
+                            cmpRef );
                 THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), line, m_lineReader->LineNumber(),
                                    m_lineReader->Length() );
             }

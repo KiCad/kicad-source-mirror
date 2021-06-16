@@ -46,7 +46,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
     if( ( f = wxFopen( aOutFileName, wxT( "wt" ) ) ) == NULL )
     {
         wxString msg;
-        msg.Printf( _( "Failed to create file \"%s\"" ), aOutFileName );
+        msg.Printf( _( "Failed to create file '%s'." ), aOutFileName );
         DisplayError( NULL, msg );
         return false;
     }

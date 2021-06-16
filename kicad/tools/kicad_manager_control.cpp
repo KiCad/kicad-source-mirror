@@ -473,7 +473,7 @@ public:
             if( !m_errors.empty() )
                 m_errors += "\n";
 
-            msg.Printf( _( "Cannot copy folder \"%s\"." ), destDir.GetFullPath() );
+            msg.Printf( _( "Cannot copy folder '%s'." ), destDir.GetFullPath() );
             m_errors += msg;
         }
 
@@ -529,14 +529,14 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
 
     if( wxDirExists( newProjectDir.GetFullPath() ) )
     {
-        msg.Printf( _( "\"%s\" already exists." ), newProjectDir.GetFullPath() );
+        msg.Printf( _( "'%s' already exists." ), newProjectDir.GetFullPath() );
         DisplayErrorMessage( m_frame, msg );
         return -1;
     }
 
     if( !wxMkdir( newProjectDir.GetFullPath() ) )
     {
-        msg.Printf( _( "Directory \"%s\" could not be created.\n\n"
+        msg.Printf( _( "Directory '%s' could not be created.\n\n"
                        "Please make sure you have write permissions and try again." ),
                     newProjectDir.GetPath() );
         DisplayErrorMessage( m_frame, msg );
@@ -545,7 +545,7 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
 
     if( !newProjectDir.IsDirWritable() )
     {
-        msg.Printf( _( "Cannot write to folder \"%s\"." ), newProjectDir.GetFullPath() );
+        msg.Printf( _( "Cannot write to folder '%s'." ), newProjectDir.GetFullPath() );
         wxMessageDialog msgDlg( m_frame, msg, _( "Error!" ), wxICON_ERROR | wxOK | wxCENTER );
         msgDlg.SetExtendedMessage( _( "Please check your access permissions to this folder "
                                       "and try again." ) );
