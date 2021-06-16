@@ -68,6 +68,7 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
 
                 // Two subsequent tildes mean a tilde.
                 newStr << "~";
+                ++chIt;
                 continue;
             }
             else
