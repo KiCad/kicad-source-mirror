@@ -597,14 +597,14 @@ void SCH_SEXPR_PARSER::parseFill( FILL_PARAMS& aFill )
 }
 
 
-void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
+void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSyntax )
 {
     wxCHECK_RET( aText && CurTok() == T_effects,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as EDA_TEXT." ) );
 
-    // In version 20210606 the notation for overbars was changed from `~...~` to `~{...}`. We need to convert
-    // the old syntax to the new one.
-    if( m_requiredVersion < 20210606 )
+    // In version 20210606 the notation for overbars was changed from `~...~` to `~{...}`.
+    // We need to convert the old syntax to the new one.
+    if( aConvertOverbarSyntax && m_requiredVersion < 20210606 )
         aText->SetText( ConvertToNewOverbarNotation( aText->GetText() ) );
 
     T token;
@@ -827,7 +827,7 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
             break;
 
         case T_effects:
-            parseEDA_TEXT( static_cast<EDA_TEXT*>( field.get() ) );
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( field.get() ), field->GetId() == VALUE_FIELD );
             break;
 
         default:
@@ -1299,7 +1299,7 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
                     // so duplicate parsing is not required.
                     EDA_TEXT text;
 
-                    parseEDA_TEXT( &text );
+                    parseEDA_TEXT( &text, true );
                     pin->SetNameTextSize( text.GetTextHeight() );
                     NeedRIGHT();
                 }
@@ -1334,7 +1334,7 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
                     // so duplicate parsing is not required.
                     EDA_TEXT text;
 
-                    parseEDA_TEXT( &text );
+                    parseEDA_TEXT( &text, false );
                     pin->SetNumberTextSize( text.GetTextHeight() );
                     NeedRIGHT();
                 }
@@ -1543,7 +1543,7 @@ LIB_TEXT* SCH_SEXPR_PARSER::parseText()
             break;
 
         case T_effects:
-            parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ) );
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ), true );
             break;
 
         default:
@@ -1780,7 +1780,7 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
             break;
 
         case T_effects:
-            parseEDA_TEXT( static_cast<EDA_TEXT*>( field.get() ) );
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( field.get() ), field->GetId() == VALUE_FIELD );
             break;
 
         default:
@@ -1867,7 +1867,7 @@ SCH_SHEET_PIN* SCH_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
         }
 
         case T_effects:
-            parseEDA_TEXT( static_cast<EDA_TEXT*>( sheetPin.get() ) );
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( sheetPin.get() ), true );
             break;
 
         case T_uuid:
@@ -2938,7 +2938,7 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
             break;
 
         case T_effects:
-            parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ) );
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ), true );
 
             // Spin style is defined differently for graphical text (#SCH_TEXT) objects.
             if( text->Type() == SCH_TEXT_T )
