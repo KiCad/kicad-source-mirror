@@ -43,6 +43,7 @@
 #include <dialogs/wx_html_report_box.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <tools/drc_tool.h>
+#include <tools/zone_filler_tool.h>
 #include <tools/board_inspection_tool.h>
 #include <kiplatform/ui.h>
 
@@ -196,10 +197,18 @@ void DIALOG_DRC::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 
 void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 {
-    DRC_TOOL* drcTool = m_frame->GetToolManager()->GetTool<DRC_TOOL>();
-    bool      refillZones            = m_cbRefillZones->GetValue();
-    bool      reportAllTrackErrors   = m_cbReportAllTrackErrors->GetValue();
-    bool      testFootprints         = m_cbTestFootprints->GetValue();
+    TOOL_MANAGER*     toolMgr              = m_frame->GetToolManager();
+    DRC_TOOL*         drcTool              = toolMgr->GetTool<DRC_TOOL>();
+    ZONE_FILLER_TOOL* zoneFillerTool       = toolMgr->GetTool<ZONE_FILLER_TOOL>();
+    bool              refillZones          = m_cbRefillZones->GetValue();
+    bool              reportAllTrackErrors = m_cbReportAllTrackErrors->GetValue();
+    bool              testFootprints       = m_cbTestFootprints->GetValue();
+
+    if( zoneFillerTool->IsBusy() )
+    {
+        wxBell();
+        return;
+    }
 
     // This is not the time to have stale or buggy rules.  Ensure they're up-to-date
     // and that they at least parse.

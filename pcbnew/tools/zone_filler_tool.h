@@ -55,12 +55,17 @@ public:
     int ZoneUnfill( const TOOL_EVENT& aEvent );
     int ZoneUnfillAll( const TOOL_EVENT& aEvent );
 
+    bool IsBusy() { return m_fillInProgress; }
+
 private:
     ///< Refocus on an idle event (used after the Progress Reporter messes up the focus).
     void singleShotRefocus( wxIdleEvent& );
 
     ///< Set up handlers for various events.
     void setTransitions() override;
+
+private:
+    bool m_fillInProgress;
 };
 
 #endif
