@@ -559,7 +559,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     wxXmlNode* libraryNode       = getChildrenNodes( schematicChildren, "libraries" );
     wxXmlNode* sheetNode         = getChildrenNodes( schematicChildren, "sheets" );
 
-    if( !partNode || !libraryNode || !sheetNode )
+    if( !sheetNode )
         return;
 
     while( partNode )
@@ -571,21 +571,23 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
         partNode                        = partNode->GetNext();
     }
 
-    // Loop through all the libraries
-    while( libraryNode )
+    if( libraryNode )
     {
-        // Read the library name
-        wxString libName = libraryNode->GetAttribute( "name" );
+        while( libraryNode )
+        {
+            // Read the library name
+            wxString libName = libraryNode->GetAttribute( "name" );
 
-        EAGLE_LIBRARY* elib = &m_eagleLibs[libName];
-        elib->name          = libName;
+            EAGLE_LIBRARY* elib = &m_eagleLibs[libName];
+            elib->name          = libName;
 
-        loadLibrary( libraryNode, &m_eagleLibs[libName] );
+            loadLibrary( libraryNode, &m_eagleLibs[libName] );
 
-        libraryNode = libraryNode->GetNext();
+            libraryNode = libraryNode->GetNext();
+        }
+
+        m_pi->SaveLibrary( getLibFileName().GetFullPath() );
     }
-
-    m_pi->SaveLibrary( getLibFileName().GetFullPath() );
 
     // find all nets and count how many sheets they appear on.
     // local labels will be used for nets found only on that sheet.
