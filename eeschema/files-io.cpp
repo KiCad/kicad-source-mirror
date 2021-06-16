@@ -768,6 +768,8 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     m_toolManager->GetTool<EE_SELECTION_TOOL>()->ClearSelection();
 
     importFile( dlg.GetPath(), pluginType );
+
+    RefreshCanvas();
 }
 
 
