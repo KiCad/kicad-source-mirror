@@ -23,6 +23,7 @@
  */
 
 #include "bom_plugins.h"
+#include <config.h>
 #include <paths.h>
 #include <wx/ffile.h>
 #include <wx/log.h>
@@ -70,7 +71,12 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
                                   m_file.GetPath(), m_file.GetFullName(),
                                   getOutputExtension( m_info ) );
 #else
-        m_cmd = wxString::Format( "python \"%s\" \"%%I\" \"%%O%s\"", m_file.GetFullPath(),
+        wxString interpreter = wxString::FromUTF8Unchecked( PYTHON_EXECUTABLE );
+
+        if( interpreter.IsEmpty() )
+            interpreter = wxT( "python" );
+
+        m_cmd = wxString::Format( "%s \"%s\" \"%%I\" \"%%O%s\"", interpreter, m_file.GetFullPath(),
                                   getOutputExtension( m_info ) );
 #endif
     }
