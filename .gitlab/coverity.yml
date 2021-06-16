@@ -39,7 +39,8 @@ Coverity:
   tags:
     - coverity
   stage: build
-  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:34
+  # Use Fedora 33 because Coverity needs GCC 10 still (as of 06/16/2021)
+  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:33
   only:
     refs:
       - schedules
