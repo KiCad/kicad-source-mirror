@@ -495,6 +495,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_MicroViasMinSize  = Millimeter2iu( DEFAULT_MICROVIASMINSIZE );
     m_MicroViasMinDrill = Millimeter2iu( DEFAULT_MICROVIASMINDRILL );
 
+    m_HoleToHoleMin = Millimeter2iu( DEFAULT_HOLETOHOLEMIN );
+
     // Global mask margins:
     m_SolderMaskMargin  = Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE );
     m_SolderMaskMinWidth = Millimeter2iu( DEFAULT_SOLDERMASK_MIN_WIDTH );
@@ -502,6 +504,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_SolderPasteMarginRatio = 0.0;             // Solder paste margin as a ratio of pad size
                                                 // The final margin is the sum of these 2 values
                                                 // Usually < 0 because the mask is smaller than pad
+
     // Layer thickness for 3D viewer
     m_boardThickness = Millimeter2iu( DEFAULT_BOARD_THICKNESS_MM );
 
