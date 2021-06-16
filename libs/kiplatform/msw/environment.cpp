@@ -23,12 +23,11 @@
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
+#include <wx/app.h>
 
 #include <Windows.h>
 #include <shellapi.h>
 #include <shlwapi.h>
-
-#include <wx/app.h>
 
 
 void KIPLATFORM::ENV::Init()
