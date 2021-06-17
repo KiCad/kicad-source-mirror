@@ -155,7 +155,7 @@ int UnsavedChangesDialog( wxWindow* parent, wxString aMessage, bool* aApplyToAll
 {
     static bool s_apply_to_all = false;
 
-    wxRichMessageDialog dlg( parent, aMessage, wxEmptyString,
+    wxRichMessageDialog dlg( parent, aMessage, _( "Save Changes?" ),
                              wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "If you don't save, all your changes will be permanently lost." ) );
     dlg.SetYesNoLabels( _( "Save" ), _( "Discard Changes" ) );
@@ -182,7 +182,7 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage )
     // wxWidgets gets the button order wrong on Mac so use the other dialog.
     return UnsavedChangesDialog( parent, aMessage, nullptr );
 #else
-    wxMessageDialog dlg( parent, aMessage, wxEmptyString,
+    wxMessageDialog dlg( parent, aMessage, _( "Save Changes?" ),
                          wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "If you don't save, all your changes will be permanently lost." ) );
     dlg.SetYesNoLabels( _( "Save" ), _( "Discard Changes" ) );
