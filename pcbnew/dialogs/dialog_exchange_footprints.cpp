@@ -73,7 +73,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     {
         SetTitle( _( "Change Footprints" ) );
         m_matchAll->SetLabel( _( "Change all footprints on board" ) );
-        m_matchSelected->SetLabel( _( "Change selected footprint" ) );
+        m_matchSelected->SetLabel( _( "Change selected footprint(s)" ) );
         m_matchSpecifiedRef->SetLabel( _( "Change footprints matching reference designator:" ) );
         m_matchSpecifiedValue->SetLabel( _( "Change footprints matching value:" ) );
         m_matchSpecifiedID->SetLabel( _( "Change footprints with library id:" ) );
@@ -190,7 +190,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( FOOTPRINT* aFootprint )
     case ID_MATCH_FP_ALL:
         return true;
     case ID_MATCH_FP_SELECTED:
-        return aFootprint == m_currentFootprint;
+        return aFootprint == m_currentFootprint || aFootprint->IsSelected();
     case ID_MATCH_FP_REF:
         return WildCompareString( m_specifiedRef->GetValue(), aFootprint->GetReference(), false );
     case ID_MATCH_FP_VAL:

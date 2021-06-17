@@ -73,7 +73,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
         SCH_SHEET_PATH* currentSheet = &aParent->Schematic().CurrentSheet();
 
         if( m_mode == MODE::CHANGE )
-            m_matchBySelection->SetLabel( _( "Change selected Symbol" ) );
+            m_matchBySelection->SetLabel( _( "Change selected symbol(s)" ) );
 
         m_newId->AppendText( FROM_UTF8( m_symbol->GetLibId().Format().c_str() ) );
         m_specifiedReference->ChangeValue( m_symbol->GetRef( currentSheet ) );
@@ -395,7 +395,7 @@ bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInsta
     }
     else if( m_matchBySelection->GetValue() )
     {
-        return aSymbol == m_symbol;
+        return aSymbol == m_symbol || aSymbol->IsSelected();
     }
     else if( m_matchByReference->GetValue() )
     {

@@ -94,10 +94,6 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
     else
         wxFAIL_MSG( "ExchangeFootprints: unexpected action" );
 
-    // Footprint exchange could remove footprints, so they have to be
-    // removed from the selection first
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
     // invoke the exchange dialog process
     {
         PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();

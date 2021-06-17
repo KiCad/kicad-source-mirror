@@ -24,7 +24,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_matchAll = new wxRadioButton( this, wxID_ANY, _("Update all footprints on board"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchAll, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxEXPAND|wxALL, 5 );
 
-	m_matchSelected = new wxRadioButton( this, wxID_ANY, _("Update selected footprint"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchSelected = new wxRadioButton( this, wxID_ANY, _("Update selected footprint(s)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSelected, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	m_matchSpecifiedRef = new wxRadioButton( this, wxID_ANY, _("Update footprints matching reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
