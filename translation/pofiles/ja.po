@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-04-17 23:05+0000\n"
+"PO-Revision-Date: 2021-06-20 16:33+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1327,9 +1327,8 @@ msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps ファイル)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "ワークシート (.kicad_wksファイル)"
+msgstr "図面シート (.kicad_wksファイル)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -2419,9 +2418,9 @@ msgid "Portrait"
 msgstr "縦向き"
 
 #: common/dialogs/dialog_page_settings.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file \"%s\" not found."
-msgstr "回路図ファイル \"%s\" が見つかりません。"
+msgstr "図面シートファイル \"%s\" が見つかりません。"
 
 #: common/dialogs/dialog_page_settings.cpp:537
 msgid "the translation for paper size must preserve original spellings"
@@ -2433,12 +2432,11 @@ msgid "Landscape"
 msgstr "横向き"
 
 #: common/dialogs/dialog_page_settings.cpp:781
-#, fuzzy
 msgid "Select Drawing Sheet File"
-msgstr "図面シート"
+msgstr "図面シートファイルを選択"
 
 #: common/dialogs/dialog_page_settings.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The drawing sheet file name has changed.\n"
 "Do you want to use the relative path:\n"
@@ -2446,11 +2444,11 @@ msgid ""
 "instead of\n"
 "\"%s\"?"
 msgstr ""
-"図枠ファイルの指定が変更されました。\n"
-"相対パスを使用して図枠ファイルを参照しますか？:\n"
+"図面シートの名前が変更されました。\n"
+"相対パス:\n"
+"\"%s\" を\n"
 "\"%s\"\n"
-"(以下に代わって) \n"
-"\"%s\""
+"の代わりに使用しますか？"
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
@@ -2654,9 +2652,8 @@ msgid "Comment9:"
 msgstr "コメント9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
-#, fuzzy
 msgid "Drawing sheet file"
-msgstr "図面シート"
+msgstr "図面シートファイル"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Browse..."
@@ -2669,14 +2666,13 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_paste_special.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "'%s' リファレンス指定子を '%s' へ変更します。"
+msgstr "リファレンス指定子を '%s' に置き換えます。"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "シンボルとフットプリントの関連付けにレファレンス指定子を使用\n"
+msgstr "ユニークなリファレンス指定子を貼り付けられたシンボルに割り当てます"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
@@ -2684,9 +2680,8 @@ msgid "Keep existing reference designators, even if they are duplicated"
 msgstr "重複があっても、既存のアノテーションをキープ"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Clear reference designators on all pasted symbols"
-msgstr "不正なリファレンス指定子の値です！"
+msgstr "貼り付けられたシンボルのリファレンス指定子をクリアします"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -6171,11 +6166,13 @@ msgid "File Not Found"
 msgstr "ファイルが見つかりません"
 
 #: common/tool/common_control.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file \"%s\" could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "ヘルプファイル \"%s\" が見つかりません。"
+msgstr ""
+"ヘルプファイル \"%s\" が見つかりません。\n"
+"KiCadのオンラインヘルプにアクセスしますか？"
 
 #: common/tool/common_control.cpp:266
 #, c-format
@@ -6605,9 +6602,8 @@ msgid "Geda PCB footprint library files"
 msgstr "Geda PCB フットプリント ライブラリー ファイル"
 
 #: common/wildcards_and_files_ext.cpp:358
-#, fuzzy
 msgid "Drawing sheet files"
-msgstr "図面シート"
+msgstr "図面シートファイル"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad symbol footprint link files"
@@ -10391,9 +10387,8 @@ msgid "Use relative path for sheet file?"
 msgstr "相対パスを使用しますか？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:296
-#, fuzzy
 msgid "Sheet File Path"
-msgstr "シート ファイル"
+msgstr "図面シートファイルのパス"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:299
 msgid ""
@@ -10403,14 +10398,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:303
-#, fuzzy
 msgid "Use Relative Path"
-msgstr "相対パスを使用しますか？"
+msgstr "相対パスを使用"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:304
-#, fuzzy
 msgid "Use Absolute Path"
-msgstr "絶対位置"
+msgstr "絶対パスを使用"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:335
 msgid "Untitled Sheet"
@@ -10430,9 +10423,9 @@ msgstr ""
 "にある '%s' のチェックを外します。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
-msgstr "ファイル \"%s\" は有効な回路図ファイルではないようです。"
+msgstr "ファイル '%s' は有効な回路図ファイルではないようです。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:411
 msgid "Invalid Schematic File"
@@ -10448,14 +10441,14 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists."
-msgstr "\"%s\" は既に存在します。"
+msgstr "'%s' は既に存在します。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Link '%s' to this file?"
-msgstr "このファイルへ \"%s\" をリンクしますか？"
+msgstr "このファイルへ '%s' をリンクしますか？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:514
 #, fuzzy, c-format
@@ -10468,9 +10461,9 @@ msgid "This action cannot be undone."
 msgstr "このアクションは元に戻せません。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr "新しいファイル \"%s\" を \"%s\" の内容で作成しますか？"
+msgstr "新しいファイル '%s' を '%s' の内容で作成しますか？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:565
 #, fuzzy, c-format
@@ -10649,9 +10642,8 @@ msgid "TEMP"
 msgstr "TEMP"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:115
-#, fuzzy
 msgid "Source:"
-msgstr "ソース"
+msgstr "ソース:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:119
 #, fuzzy
@@ -12171,9 +12163,8 @@ msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "ファイル '%s' は既に存在します。このファイルを上書きしますか？"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:768
-#, fuzzy
 msgid "Migrate Library"
-msgstr "ライブラリーを移行..."
+msgstr "ライブラリーを移行"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:792
 #, c-format
@@ -12258,9 +12249,8 @@ msgid "Remove library from table"
 msgstr "テーブルからライブラリーを削除"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:135
-#, fuzzy
 msgid "Migrate Libraries"
-msgstr "ライブラリーを移行..."
+msgstr "ライブラリーを移行"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:145
 msgid "Path Substitutions:"
@@ -12572,11 +12562,9 @@ msgstr ""
 "したところ、エラーが発生しました。"
 
 #: eeschema/files-io.cpp:418 eeschema/files-io.cpp:1178
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s'."
-msgstr ""
-"回路図ロード中のエラー。\n"
-"%s"
+msgstr "回路図 '%s' のロード中のエラー。"
 
 #: eeschema/files-io.cpp:425
 #, fuzzy, c-format
@@ -12584,9 +12572,9 @@ msgid "Memory exhausted loading schematic file \"%s\""
 msgstr "回路図ファイル \"%s\" のロード中にエラーが発生しました。"
 
 #: eeschema/files-io.cpp:438 eeschema/files-io.cpp:1181 eeschema/sheet.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load '%s'."
-msgstr "\"%s\" のロードに失敗しました"
+msgstr "'%s' のロードに失敗しました。"
 
 #: eeschema/files-io.cpp:451
 msgid ""
@@ -12660,9 +12648,8 @@ msgstr ""
 "フォーマットに変換されます。"
 
 #: eeschema/files-io.cpp:630
-#, fuzzy
 msgid "Schematic is read only."
-msgstr "回路図ファイルは読み込み専用です。"
+msgstr "回路図は読み込み専用です。"
 
 #: eeschema/files-io.cpp:655
 msgid "Append Schematic"
@@ -12690,13 +12677,13 @@ msgstr "回路図をインポート"
 #: eeschema/files-io.cpp:807 eeschema/files-io.cpp:864
 #: kicad/tools/kicad_manager_control.cpp:118
 #: kicad/tools/kicad_manager_control.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"ディレクトリー \"%s\" を作成できませんでした。\n"
+"フォルダー '%s' を作成できませんでした。\n"
 "\n"
 "書き込み権限を確認後、再実行して下さい。"
 
@@ -12725,9 +12712,9 @@ msgid "Abort Project Save"
 msgstr "プロジェクト保存の中止"
 
 #: eeschema/files-io.cpp:1106
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open."
-msgstr "この回路図ファイル \"%s\" は既に開かれています。"
+msgstr "回路図 '%s' は既に開かれています。"
 
 #: eeschema/files-io.cpp:1204
 msgid "The current schematic has been modified.  Save changes?"
@@ -12994,9 +12981,9 @@ msgid "Failed to create file \"%s\""
 msgstr "ファイルの作成に失敗しました \"%s\""
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file %s."
-msgstr "ライブラリー ファイル %s が見つかりません"
+msgstr "ライブラリー ファイル %s が見つかりません。"
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:312
 msgid ""
@@ -13014,9 +13001,8 @@ msgid "Command error. Return code %d."
 msgstr "コマンドエラー。リターンコード %d"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:132
-#, fuzzy
 msgid "Success."
-msgstr "成功"
+msgstr "成功."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:138
 msgid "Info messages:"
@@ -14645,14 +14631,12 @@ msgid "space"
 msgstr "スペース"
 
 #: eeschema/sch_validators.cpp:178
-#, fuzzy
 msgid " or "
-msgstr "%s または %s"
+msgstr " または "
 
 #: eeschema/sch_validators.cpp:183
-#, fuzzy
 msgid ", or "
-msgstr "%s または %s"
+msgstr ", または "
 
 #: eeschema/sch_validators.cpp:196
 msgid "The reference designator cannot contain text variable references"
@@ -16767,9 +16751,8 @@ msgid "No symbol issues found."
 msgstr "シンボルの問題は見つかりません。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:494
-#, fuzzy
 msgid "No datasheet defined."
-msgstr "データシート フィールド"
+msgstr "データシートが定義されていません。"
 
 #: eeschema/tools/ee_selection_tool.cpp:1586
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
@@ -18250,14 +18233,14 @@ msgid "Permission error?"
 msgstr "パーミッション エラー?"
 
 #: kicad/project_tree_item.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to recycle bin."
-msgstr "\"%s\" を整数に変換できません"
+msgstr "'%s' をごみ箱に移動できません。"
 
 #: kicad/project_tree_item.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to trash."
-msgstr "\"%s\" を整数に変換できません"
+msgstr "'%s' をごみ箱に移動できません。"
 
 #: kicad/project_tree_pane.cpp:256
 msgid "Directory name:"
@@ -18494,17 +18477,13 @@ msgid "New Project Folder"
 msgstr "新規プロジェクト フォルダー"
 
 #: kicad/tools/kicad_manager_control.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write to folder '%s'."
-msgstr "フォルダ \"%s\" に書き込むことができません。"
+msgstr "フォルダー '%s' に書き込むことができません。"
 
 #: kicad/tools/kicad_manager_control.cpp:229
-#, fuzzy
 msgid "Make sure you have write permissions and try again."
-msgstr ""
-"ディレクトリー \"%s\" を作成できませんでした。\n"
-"\n"
-"書き込み権限を確認後、再実行して下さい。"
+msgstr "書き込み権限を確認後、再実行してください。"
 
 #: kicad/tools/kicad_manager_control.cpp:249
 msgid "Overwriting files:"
@@ -18515,9 +18494,8 @@ msgid "Similar files already exist in the destination folder."
 msgstr "フォルダーには既に同名ファイルが存在しています。"
 
 #: kicad/tools/kicad_manager_control.cpp:272
-#, fuzzy
 msgid "A problem occurred creating new project from template."
-msgstr "テンプレートから新しいプロジェクトを作成する時に問題が発生しました!"
+msgstr "テンプレートから新しいプロジェクトを作成する時に問題が発生しました。"
 
 #: kicad/tools/kicad_manager_control.cpp:295
 msgid "Open Existing Project"
@@ -18668,9 +18646,8 @@ msgid "New Item"
 msgstr "新規アイテム"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:236
-#, fuzzy
 msgid "Print Drawing Sheet"
-msgstr "図面シート"
+msgstr "図面シートを印刷"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:241
 #, fuzzy
@@ -18850,9 +18827,8 @@ msgid "Drawing Sheet File"
 msgstr "図面シート"
 
 #: pagelayout_editor/files.cpp:60 pagelayout_editor/files.cpp:101
-#, fuzzy
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "現在のフットプリントは変更されています。  保存しますか?"
+msgstr "現在の図面シートは変更されています。 保存しますか?"
 
 #: pagelayout_editor/files.cpp:73
 #, c-format
@@ -21281,7 +21257,7 @@ msgstr ""
 "%d %s Uuid: [%s], X, Y: %s, 丸められたX, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:570
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -21289,8 +21265,7 @@ msgid ""
 msgstr ""
 "\n"
 "PCB には%d 個の空または無効なリファレンス指定子があります。\n"
-"「回路図に対するフットプリントのテスト」をオンにしてDRCを実行することをお勧め"
-"します。\n"
+"「回路図に対するフットプリントのテスト」をオンにしてDRCを実行することをお勧めします。\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:576
 #, c-format
@@ -23223,14 +23198,12 @@ msgid "Copy 3D model files to 3D model path"
 msgstr "3D モデルパスへ3D モデルファイルをコピー"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:125
-#, fuzzy
 msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
 "チェックした場合: フットプリントの 3D モデルをフォルダーにコピーする\n"
-"チェックしない場合: VRMLボードファイル内のフットプリント3Dモデルをマージす"
-"る\n"
+"チェックしない場合: VRMLボードファイル内のト3Dモデルを埋め込む"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
@@ -25747,11 +25720,8 @@ msgid "Check zone fills before plotting"
 msgstr "プロット前にゾーンの塗り潰しをチェック"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask min width and/or margin are not set to 0. "
-msgstr ""
-"グローバルなハンダ マスクの最小幅および/またはマージンは 0 に設定されていませ"
-"ん。 ほとんどのボードハウスは"
+msgstr "グローバルなハンダ マスクの最小幅および/またはマージンは 0 に設定されていません。 "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
 #, fuzzy
@@ -26383,9 +26353,8 @@ msgid "Layers:"
 msgstr "レイヤー:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:41
-#, fuzzy
 msgid "Basic rules:"
-msgstr "基本ルール"
+msgstr "基本ルール:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
 msgid "Keep out tracks"
@@ -27871,14 +27840,10 @@ msgid "User9"
 msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:29
-#, fuzzy
 msgid ""
 "Use your board house's recommendation for solder mask clearance and minimum "
 "bridge width."
-msgstr ""
-"ハンダ マスクのクリアランスと最小ブリッジ幅については、ボードハウスの推奨値を"
-"使用してください。\n"
-"何も指定されていない場合は、値をゼロに設定することをお勧めします。"
+msgstr "ハンダ マスクのクリアランスと最小ブリッジ幅については、ボードハウスの推奨値を使用してください。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:35
 msgid "If none is provided, setting the values to zero is suggested."
@@ -28341,9 +28306,9 @@ msgid "Local override on %s; clearance: %s."
 msgstr "%s のローカルで上書き; クリアランス: %s."
 
 #: pcbnew/drc/drc_engine.cpp:822
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum clearance: %s."
-msgstr "最小クリアランス:"
+msgstr "最小クリアランス: %s."
 
 #: pcbnew/drc/drc_engine.cpp:842
 #, c-format
@@ -28639,9 +28604,9 @@ msgid "Missing version number."
 msgstr "バージョン番号がありません。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr "認識されないアイテム '%s' | バージョン番号が期待されています"
+msgstr "認識されないアイテム '%s' | バージョン番号が期待されています。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:144 pcbnew/drc/drc_rule_parser.cpp:223
 #: pcbnew/drc/drc_rule_parser.cpp:365 pcbnew/drc/drc_rule_parser.cpp:386
@@ -30131,14 +30096,14 @@ msgid "Cannot add %s (no footprint assigned)."
 msgstr "%s を追加できません。(関連付けられたフットプリントがありません)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "%s を追加できません。(フットプリント \"%s\" が見つかりません)"
+msgstr "%s を追加できません(フットプリント \"%s\" が見つかりません)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s (footprint '%s')."
-msgstr "%s を追加 (フットプリント \"%s\")"
+msgstr "%s を追加 (フットプリント \"%s\")."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:186
 #, fuzzy, c-format
@@ -30152,9 +30117,9 @@ msgstr ""
 "%s をアップデートできません。(関連付けられたフットプリントがありません)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "%s をアップデートできません。(フットプリント \"%s\" が見つかりません)"
+msgstr "%s をアップデートできません(フットプリント \"%s\" が見つかりません)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:226
 #, c-format
@@ -30332,9 +30297,9 @@ msgid "Processing symbol '%s:%s'."
 msgstr "シンボル '%s:%s' を処理中です。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for '%s'."
-msgstr "重複したフットプリントが \"%s\" に見つかりました。"
+msgstr "重複したフットプリントが '%s' に見つかりました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1042
 #, c-format
@@ -30669,14 +30634,14 @@ msgid "New PCB file is unsaved"
 msgstr "新しい基板ファイルは保存されていません"
 
 #: pcbnew/pcb_edit_frame.cpp:824
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to '%s' before closing?"
-msgstr "閉じる前に \"%s\" へ変更を保存しますか?"
+msgstr "閉じる前に '%s' へ変更を保存しますか?"
 
 #: pcbnew/pcb_edit_frame.cpp:875
-#, fuzzy, c-format
+#, c-format
 msgid "The auto save file '%s' could not be removed!"
-msgstr "自動保存ファイル \"%s\" は削除できませんでした!"
+msgstr "自動保存ファイル '%s' は削除できませんでした!"
 
 #: pcbnew/pcb_edit_frame.cpp:1103
 msgid "Board file is read only."
@@ -30705,9 +30670,9 @@ msgid "Eeschema netlist"
 msgstr "Eeschema ネットリスト"
 
 #: pcbnew/pcb_edit_frame.cpp:1446
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' not found."
-msgstr "回路図ファイル \"%s\" が見つかりません。"
+msgstr "回路図ファイル '%s' が見つかりません。"
 
 #: pcbnew/pcb_edit_frame.cpp:1477
 msgid "Eeschema failed to load:\n"
@@ -34338,9 +34303,8 @@ msgid "Run various diagnostics and attempt to repair board"
 msgstr "さまざまな診断を実行し、ボードの修復を試みます"
 
 #: pcbnew/tools/pcb_actions.cpp:1093
-#, fuzzy
 msgid "Repair Footprint"
-msgstr "新規フットプリント"
+msgstr "フットプリントの修復"
 
 #: pcbnew/tools/pcb_actions.cpp:1094
 #, fuzzy
