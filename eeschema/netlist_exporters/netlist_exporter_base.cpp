@@ -168,7 +168,7 @@ void NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
                     continue;
                 }
 
-                m_sortedSymbolPinList.emplace_back( pin->GetNumber(), netName );
+                m_sortedSymbolPinList.emplace_back( pin->GetShownNumber(), netName );
             }
         }
     }
@@ -254,7 +254,7 @@ void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol, LIB_SY
                             continue;
                     }
 
-                    m_sortedSymbolPinList.emplace_back( pin->GetNumber(), netName );
+                    m_sortedSymbolPinList.emplace_back( pin->GetShownNumber(), netName );
                 }
             }
         }

@@ -584,7 +584,7 @@ int ERC_TESTER::TestMultUnitPinConflicts()
                         continue;
 
                     wxString name = pin->GetParentSymbol()->GetRef( &subgraph->m_sheet ) +
-                                      + ":" + pin->GetNumber();
+                                      + ":" + pin->GetShownNumber();
 
                     if( !pinToNetMap.count( name ) )
                     {
@@ -597,7 +597,9 @@ int ERC_TESTER::TestMultUnitPinConflicts()
 
                         ercItem->SetErrorMessage( wxString::Format(
                                 _( "Pin %s is connected to both %s and %s" ),
-                                pin->GetNumber(), netName, pinToNetMap[name].first ) );
+                                pin->GetShownNumber(),
+                                netName,
+                                pinToNetMap[name].first ) );
 
                         ercItem->SetItems( pin, pinToNetMap[name].second );
                         ercItem->SetIsSheetSpecific();

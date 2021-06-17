@@ -87,10 +87,24 @@ wxString SCH_PIN::GetName() const
 
 wxString SCH_PIN::GetShownName() const
 {
-    if( !m_alt.IsEmpty() )
-        return m_alt;
+    wxString name = m_libPin->GetName();
 
-    return m_libPin->GetShownName();
+    if( !m_alt.IsEmpty() )
+        name = m_alt;
+
+    if( name == "~" )
+        return wxEmptyString;
+    else
+        return name;
+}
+
+
+wxString SCH_PIN::GetShownNumber() const
+{
+    if( m_number == "~" )
+        return wxEmptyString;
+    else
+        return m_number;
 }
 
 
@@ -184,8 +198,7 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Converted" ), msg ) );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetShownName() ) );
-    msg = GetNumber().IsEmpty() ? wxT( "?" ) : GetShownNumber();
-    aList.push_back( MSG_PANEL_ITEM( _( "Number" ), msg ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Number" ), GetShownNumber() ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), ElectricalPinTypeGetText( GetType() ) ) );
 
     msg = PinShapeGetText( GetShape() );

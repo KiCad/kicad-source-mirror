@@ -144,7 +144,7 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
                     wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
 
                     if( ref_a == ref_b )
-                        return a.first->GetNumber() < b.first->GetNumber();
+                        return a.first->GetShownNumber() < b.first->GetShownNumber();
 
                     return ref_a < ref_b;
                 } );
@@ -158,7 +158,7 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
                     wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
                     wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
 
-                    return ref_a == ref_b && a.first->GetNumber() == b.first->GetNumber();
+                    return ref_a == ref_b && a.first->GetShownNumber() == b.first->GetShownNumber();
                 } ),
                 sorted_items.end() );
 
@@ -170,7 +170,7 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
             SCH_SHEET_PATH sheet = pair.second;
 
             wxString refText = pin->GetParentSymbol()->GetRef( &sheet );
-            wxString pinText = pin->GetNumber();
+            wxString pinText = pin->GetShownNumber();
 
             // Skip power symbols and virtual symbols
             if( refText[0] == wxChar( '#' ) )

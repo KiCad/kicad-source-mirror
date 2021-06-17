@@ -106,7 +106,7 @@ public:
     wxString GetShownName() const;
 
     wxString GetNumber() const { return m_number; }
-    wxString GetShownNumber() const { return m_number; }
+    wxString GetShownNumber() const;
 
     void SetNumber( const wxString& aNumber ) { m_number = aNumber; }
 
