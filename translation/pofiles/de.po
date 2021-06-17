@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-05-01 07:31+0000\n"
+"PO-Revision-Date: 2021-06-20 16:33+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1361,12 +1361,11 @@ msgstr "Footprint (.kicad_mod-Datei)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
-msgstr "Postscript (.ps Datei)"
+msgstr "Postscript (.ps-Datei)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Zeichnungsblatt (.kicad_wks Datei)"
+msgstr "Zeichnungsblatt (.kicad_wks-Datei)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -1523,10 +1522,9 @@ msgid "Cannot create output directory \"%s\".\n"
 msgstr "Konnte das Ausgabeverzeichnis \"%s\" nicht erstellen.\n"
 
 #: common/common.cpp:615
-#, fuzzy
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
-"Windows 7 und älter wird von KiCad und seinen Abhängigkeiten nicht mehr "
+"Dieses Betriebssystem wird von KiCad und seinen Abhängigkeiten nicht "
 "unterstützt."
 
 #: common/common.cpp:617
@@ -1538,6 +1536,8 @@ msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"Auf diesem System können Probleme mit KiCad nicht dem offiziellen Bugtracker "
+"gemeldet werden."
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -2471,9 +2471,9 @@ msgid "Portrait"
 msgstr "Hochformat"
 
 #: common/dialogs/dialog_page_settings.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file \"%s\" not found."
-msgstr "Schaltplandatei \"%s\" wurde nicht gefunden."
+msgstr "Zeichnungsblattdatei \"%s\" wurde nicht gefunden."
 
 #: common/dialogs/dialog_page_settings.cpp:537
 msgid "the translation for paper size must preserve original spellings"
@@ -2486,12 +2486,11 @@ msgid "Landscape"
 msgstr "Querformat"
 
 #: common/dialogs/dialog_page_settings.cpp:781
-#, fuzzy
 msgid "Select Drawing Sheet File"
-msgstr "Zeichnungsblatt"
+msgstr "Zeichnungsblattdatei auswählen"
 
 #: common/dialogs/dialog_page_settings.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The drawing sheet file name has changed.\n"
 "Do you want to use the relative path:\n"
@@ -2499,7 +2498,7 @@ msgid ""
 "instead of\n"
 "\"%s\"?"
 msgstr ""
-"Der Dateiname für die Seitenlayoutbeschreibung wurde geändert.\n"
+"Der Dateiname für das Zeichnungsblatt wurde geändert.\n"
 "Möchte Sie den folgenden relativen Pfad verwenden:\n"
 "\"%s\"\n"
 "statt\n"
@@ -2707,9 +2706,8 @@ msgid "Comment9:"
 msgstr "Kommentar9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
-#, fuzzy
 msgid "Drawing sheet file"
-msgstr "Zeichnungsblatt"
+msgstr "Zeichnungsblattdatei"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Browse..."
@@ -2720,28 +2718,26 @@ msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
 msgstr ""
+"Findet den nächsten verfügbaren Referenzbezeichner für bereits im Design "
+"vorhandene Bezeichner."
 
 #: common/dialogs/dialog_paste_special.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Ändere '%s' Referenzbezeichner in '%s'."
+msgstr "Ersetzt Referenzbezeichner mit '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Assign unique reference designators to pasted symbols"
-msgstr ""
-"Verwenden von Referenzbezeichnern für den Abgleich von Symbolen mit "
-"Footprints.\n"
+msgstr "Eingefügten Symbolen eindeutige Referenzbezeichner zuweisen"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "Behalte vorhandene Annotationen, auch wenn diese dupliziert werden"
+msgstr ""
+"Behalte vorhandene Referenzbezeichner, auch wenn diese dupliziert werden"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Unzulässiger Referenzbezeichnungswert!"
+msgstr "Referenzbezeichner von allen eingefügten Symbolen zurücksetzen"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -3845,9 +3841,8 @@ msgstr "Bild"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:91
 #: common/drawing_sheet/ds_data_model_io.cpp:120
-#, fuzzy
 msgid "Error writing drawing sheet file"
-msgstr "Die Zeichnung beenden"
+msgstr "Fehler beim Schreiben der Zeichnungsblattdatei"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
