@@ -708,7 +708,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                 ercItem->SetErrorMessage( msg );
 
                 markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
-                break;
+                continue;
             }
             else if( !libTable->HasLibrary( libName, true ) )
             {
@@ -719,7 +719,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                 ercItem->SetErrorMessage( msg );
 
                 markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
-                break;
+                continue;
             }
 
             wxString    symbolName = symbol->GetLibId().GetLibItemName();
@@ -735,7 +735,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                 ercItem->SetErrorMessage( msg );
 
                 markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
-                break;
+                continue;
             }
 
             std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
