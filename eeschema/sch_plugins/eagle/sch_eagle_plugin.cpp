@@ -2482,11 +2482,12 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
                         if( testBusHit( wireStart + entrySize( -1, 0 ) ) )
                         {
-                            // there is room to the left of the wire for the bus entry
-                            //    |
-                            //    |
-                            //   /
-                            // -----
+                            /* there is room to the left of the wire for the bus entry
+                             *    |
+                             *    |
+                             *   /
+                             * -----
+                            */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2495,11 +2496,12 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else if( testBusHit( wireStart + entrySize( 1, 0 ) ) )
                         {
-                            // there is room to the right of the wire for the bus entry
-                            //  |
-                            //  |
-                            //   \
-                            // -----
+                            /* there is room to the right of the wire for the bus entry
+                             *  |
+                             *  |
+                             *   \
+                             * -----
+                            */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2523,11 +2525,12 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
                         if( testBusHit( wireStart + entrySize( -1, 0 ) ) )
                         {
-                            // there is room to the left of the wire for the bus entry
-                            // -----
-                            //   \
-                            //    |
-                            //    |
+                            /* there is room to the left of the wire for the bus entry
+                             * -----
+                             *   \
+                             *    |
+                             *    |
+                            */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2536,11 +2539,12 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else if( testBusHit( wireStart + entrySize( 1, 0 ) ) )
                         {
-                            // there is room to the right of the wire for the bus entry
-                            // -----
-                            //   /
-                            //  |
-                            //  |
+                            /* there is room to the right of the wire for the bus entry
+                             * -----
+                             *   /
+                             *  |
+                             *  |
+                            */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2571,11 +2575,12 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
                         if( testBusHit( wireEnd + entrySize( -1, 0 ) ) )
                         {
-                            // there is room to the left of the wire for the bus entry
-                            //    |
-                            //    |
-                            //   /
-                            // -----
+                            /* there is room to the left of the wire for the bus entry
+                             *    |
+                             *    |
+                             *   /
+                             * -----
+                            */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2584,11 +2589,12 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else if( testBusHit( wireEnd + entrySize( 1, 0 ) ) )
                         {
-                            // there is room to the right of the wire for the bus entry
-                            //  |
-                            //  |
-                            //   \
-                            // -----
+                            /* there is room to the right of the wire for the bus entry
+                             *  |
+                             *  |
+                             *   \
+                             * -----
+                            */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2612,11 +2618,12 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
                         if( testBusHit( wireEnd + entrySize( -1, 0 ) ) )
                         {
-                            // there is room to the left of the wire for the bus entry
-                            // -----
-                            //   \
-                            //    |
-                            //    |
+                            /* there is room to the left of the wire for the bus entry
+                             * -----
+                             *   \
+                             *    |
+                             *    |
+                            */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );

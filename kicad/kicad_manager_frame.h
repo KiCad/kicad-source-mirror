@@ -51,7 +51,7 @@ public:
 
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
     void doCloseWindow() override;
-    void OnSize( wxSizeEvent& event );
+    void OnSize( wxSizeEvent& event ) override;
 
     void OnArchiveFiles( wxCommandEvent& event );
     void OnUnarchiveFiles( wxCommandEvent& event );
