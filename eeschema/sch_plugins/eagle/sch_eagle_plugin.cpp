@@ -2253,42 +2253,46 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
     // for each wire segment, compare each end with all busses.
     // If the wire end is found to end on a bus segment, place a bus entry symbol.
 
+    std::vector<SCH_LINE*> buses;
+    std::vector<SCH_LINE*> wires;
+
     for( SCH_ITEM* ii : m_currentSheet->GetScreen()->Items().OfType( SCH_LINE_T ) )
     {
-        SCH_LINE* bus = static_cast<SCH_LINE*>( ii );
+        SCH_LINE* line = static_cast<SCH_LINE*>( ii );
 
-        if( !bus->IsBus() )
-            continue;
+        if( line->IsBus() )
+            buses.push_back( line );
+        else if( line->IsWire() )
+            wires.push_back( line );
+    }
 
-        wxPoint busStart = bus->GetStartPoint();
-        wxPoint busEnd   = bus->GetEndPoint();
+    for( SCH_LINE* wire : wires )
+    {
+        wxPoint wireStart = wire->GetStartPoint();
+        wxPoint wireEnd   = wire->GetEndPoint();
 
-        auto entrySize =
-                []( int signX, int signY ) -> wxPoint
-                {
-                    return wxPoint( Mils2iu( DEFAULT_SCH_ENTRY_SIZE ) * signX,
-                                    Mils2iu( DEFAULT_SCH_ENTRY_SIZE ) * signY );
-                };
-
-        auto testBusHit =
-                [&]( const wxPoint& aPt ) -> bool
-                {
-                    return TestSegmentHit( aPt, busStart, busEnd, 0 );
-                };
-
-        for( SCH_ITEM* jj : m_currentSheet->GetScreen()->Items().OfType( SCH_LINE_T ) )
+        for( SCH_LINE* bus : buses )
         {
-            SCH_LINE* wire = static_cast<SCH_LINE*>( jj );
+            wxPoint busStart = bus->GetStartPoint();
+            wxPoint busEnd   = bus->GetEndPoint();
 
-            if( !wire->IsWire() )
-                continue;
+            auto entrySize =
+                    []( int signX, int signY ) -> wxPoint
+                    {
+                        return wxPoint( Mils2iu( DEFAULT_SCH_ENTRY_SIZE ) * signX,
+                                        Mils2iu( DEFAULT_SCH_ENTRY_SIZE ) * signY );
+                    };
 
-            wxPoint wireStart = wire->GetStartPoint();
-            wxPoint wireEnd   = wire->GetEndPoint();
+            auto testBusHit =
+                    [&]( const wxPoint& aPt ) -> bool
+                    {
+                        return TestSegmentHit( aPt, busStart, busEnd, 0 );
+                    };
 
-            // Test for horizontal wire and vertical bus
             if( wireStart.y == wireEnd.y && busStart.x == busEnd.x )
             {
+                // Horizontal wire and vertical bus
+
                 if( testBusHit( wireStart ) )
                 {
                     // Wire start is on the vertical bus
@@ -2371,10 +2375,10 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             m_currentSheet->GetScreen()->Append( marker );
                         }
                     }
-                }
 
-                // Same thing but test end of the wire instead.
-                if( testBusHit( wireEnd ) )
+                    break;
+                }
+                else if( testBusHit( wireEnd ) )
                 {
                     // Wire end is on the vertical bus
 
@@ -2456,12 +2460,14 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             m_currentSheet->GetScreen()->Append( marker );
                         }
                     }
-                }
-            } // if( wireStart.y == wireEnd.y && busStart.x == busEnd.x)
 
-            // Test for vertical wire and horizontal bus
-            if( wireStart.x == wireEnd.x && busStart.y == busEnd.y )
+                    break;
+                }
+            }
+            else if( wireStart.x == wireEnd.x && busStart.y == busEnd.y )
             {
+                // Vertical wire and horizontal bus
+
                 if( testBusHit( wireStart ) )
                 {
                     // Wire start is on the bus
@@ -2548,9 +2554,10 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             m_currentSheet->GetScreen()->Append( marker );
                         }
                     }
-                }
 
-                if( testBusHit( wireEnd ) )
+                    break;
+                }
+                else if( testBusHit( wireEnd ) )
                 {
                     // Wire end is on the bus
 
@@ -2636,115 +2643,119 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             m_currentSheet->GetScreen()->Append( marker );
                         }
                     }
+
+                    break;
                 }
             }
-
-            wireStart = wire->GetStartPoint();
-            wireEnd   = wire->GetEndPoint();
-            busStart  = bus->GetStartPoint();
-            busEnd    = bus->GetEndPoint();
-
-            // bus entry wire isn't horizontal or vertical
-            if( testBusHit( wireStart ) )
+            else
             {
-                wxPoint wirevector = wireStart - wireEnd;
+                // Wire isn't horizontal or vertical
 
-                if( wirevector.x > 0 )
+                if( testBusHit( wireStart ) )
                 {
-                    if( wirevector.y > 0 )
-                    {
-                        wxPoint             p = wireStart + entrySize( -1, -1 );
-                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
-                        busEntry->SetFlags( IS_NEW );
-                        m_currentSheet->GetScreen()->Append( busEntry );
+                    wxPoint wirevector = wireStart - wireEnd;
 
-                        moveLabels( wire, p );
-                        wire->SetStartPoint( p );
+                    if( wirevector.x > 0 )
+                    {
+                        if( wirevector.y > 0 )
+                        {
+                            wxPoint             p = wireStart + entrySize( -1, -1 );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+
+                            moveLabels( wire, p );
+                            wire->SetStartPoint( p );
+                        }
+                        else
+                        {
+                            wxPoint             p = wireStart + entrySize( -1, 1 );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+
+                            moveLabels( wire, p );
+                            wire->SetStartPoint( p );
+                        }
                     }
                     else
                     {
-                        wxPoint             p = wireStart + entrySize( -1, 1 );
-                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
-                        busEntry->SetFlags( IS_NEW );
-                        m_currentSheet->GetScreen()->Append( busEntry );
+                        if( wirevector.y > 0 )
+                        {
+                            wxPoint             p = wireStart + entrySize( 1, -1 );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
 
-                        moveLabels( wire, p );
-                        wire->SetStartPoint( p );
+                            moveLabels( wire, p );
+                            wire->SetStartPoint( p );
+                        }
+                        else
+                        {
+                            wxPoint             p = wireStart + entrySize( 1, 1 );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+
+                            moveLabels( wire, p );
+                            wire->SetStartPoint( p );
+                        }
                     }
+
+                    break;
                 }
-                else
+                else if( testBusHit( wireEnd ) )
                 {
-                    if( wirevector.y > 0 )
-                    {
-                        wxPoint             p = wireStart + entrySize( 1, -1 );
-                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
-                        busEntry->SetFlags( IS_NEW );
-                        m_currentSheet->GetScreen()->Append( busEntry );
+                    wxPoint wirevector = wireStart - wireEnd;
 
-                        moveLabels( wire, p );
-                        wire->SetStartPoint( p );
+                    if( wirevector.x > 0 )
+                    {
+                        if( wirevector.y > 0 )
+                        {
+                            wxPoint             p = wireEnd + entrySize( 1, 1 );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+
+                            moveLabels( wire, p );
+                            wire->SetEndPoint( p );
+                        }
+                        else
+                        {
+                            wxPoint             p = wireEnd + entrySize( 1, -1 );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+
+                            moveLabels( wire, p );
+                            wire->SetEndPoint( p );
+                        }
                     }
                     else
                     {
-                        wxPoint             p = wireStart + entrySize( 1, 1 );
-                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
-                        busEntry->SetFlags( IS_NEW );
-                        m_currentSheet->GetScreen()->Append( busEntry );
+                        if( wirevector.y > 0 )
+                        {
+                            wxPoint             p = wireEnd + entrySize( -1, 1 );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
 
-                        moveLabels( wire, p );
-                        wire->SetStartPoint( p );
+                            moveLabels( wire, p );
+                            wire->SetEndPoint( p );
+                        }
+                        else
+                        {
+                            wxPoint             p = wireEnd + entrySize( -1, -1 );
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+
+                            moveLabels( wire, p );
+                            wire->SetEndPoint( p );
+                        }
                     }
-                }
-            }
-            else if( testBusHit( wireEnd ) )
-            {
-                wxPoint wirevector = wireStart - wireEnd;
 
-                if( wirevector.x > 0 )
-                {
-                    if( wirevector.y > 0 )
-                    {
-                        wxPoint             p = wireEnd + entrySize( 1, 1 );
-                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
-                        busEntry->SetFlags( IS_NEW );
-                        m_currentSheet->GetScreen()->Append( busEntry );
-
-                        moveLabels( wire, p );
-                        wire->SetEndPoint( p );
-                    }
-                    else
-                    {
-                        wxPoint             p = wireEnd + entrySize( 1, -1 );
-                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
-                        busEntry->SetFlags( IS_NEW );
-                        m_currentSheet->GetScreen()->Append( busEntry );
-
-                        moveLabels( wire, p );
-                        wire->SetEndPoint( p );
-                    }
-                }
-                else
-                {
-                    if( wirevector.y > 0 )
-                    {
-                        wxPoint             p = wireEnd + entrySize( -1, 1 );
-                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
-                        busEntry->SetFlags( IS_NEW );
-                        m_currentSheet->GetScreen()->Append( busEntry );
-
-                        moveLabels( wire, p );
-                        wire->SetEndPoint( p );
-                    }
-                    else
-                    {
-                        wxPoint             p = wireEnd + entrySize( -1, -1 );
-                        SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
-                        busEntry->SetFlags( IS_NEW );
-                        m_currentSheet->GetScreen()->Append( busEntry );
-
-                        moveLabels( wire, p );
-                        wire->SetEndPoint( p );
-                    }
+                    break;
                 }
             }
         }
