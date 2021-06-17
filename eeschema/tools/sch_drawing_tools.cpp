@@ -260,7 +260,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     controls->WarpCursor( canvas_area.Centre(), false );
 
                 LIB_SYMBOL* libSymbol = sel.LibId.IsValid() ?
-                                        m_frame->GetLibPart( sel.LibId ) : nullptr;
+                                        m_frame->GetLibSymbol( sel.LibId ) : nullptr;
 
                 if( !libSymbol )
                     continue;

@@ -723,7 +723,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             }
 
             wxString    symbolName = symbol->GetLibId().GetLibItemName();
-            LIB_SYMBOL* libSymbol = SchGetLibPart( symbol->GetLibId(), libTable );
+            LIB_SYMBOL* libSymbol = SchGetLibSymbol( symbol->GetLibId(), libTable );
 
             if( libSymbol == nullptr )
             {

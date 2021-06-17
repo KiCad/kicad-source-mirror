@@ -83,7 +83,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
 
-        for( auto aItem : screen->Items().OfType( SCH_SYMBOL_T ) )
+        for( SCH_ITEM* aItem : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
             LIB_SYMBOL* libSymbol = nullptr;
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
@@ -93,7 +93,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                 if( archLib->FindSymbol( symbol->GetLibId() ) )
                     continue;
 
-                libSymbol = GetLibPart( symbol->GetLibId(), true );
+                libSymbol = GetLibSymbol( symbol->GetLibId(), true );
             }
             catch( const IO_ERROR& )
             {

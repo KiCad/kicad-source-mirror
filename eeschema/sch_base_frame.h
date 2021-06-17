@@ -72,9 +72,9 @@ class SYMBOL_EDITOR_SETTINGS;
  *
  * @return The symbol found in the library or NULL if the symbol was not found.
  */
-LIB_SYMBOL* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
-                           SYMBOL_LIB* aCacheLib = NULL, wxWindow* aParent = NULL,
-                           bool aShowErrorMsg = false );
+LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
+                             SYMBOL_LIB* aCacheLib = NULL, wxWindow* aParent = NULL,
+                             bool aShowErrorMsg = false );
 
 /**
  * A shim class between EDA_DRAW_FRAME and several derived classes:
@@ -177,10 +177,8 @@ public:
      * @param aShowErrorMessage set to true to show any error messages.
      * @return The symbol found in the library or NULL if the symbol was not found.
      */
-    LIB_SYMBOL* GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib = false,
-                            bool aShowErrorMsg = false );
-
-    LIB_SYMBOL* GetFlattenedLibPart( const LIB_ID& aLibId, bool aShowErrorMsg = false );
+    LIB_SYMBOL* GetLibSymbol( const LIB_ID& aLibId, bool aUseCacheLib = false,
+                              bool aShowErrorMsg = false );
 
     /**
      * Call the library viewer to select symbol to import into schematic.

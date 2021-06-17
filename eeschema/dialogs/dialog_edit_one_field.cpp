@@ -317,8 +317,8 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
     // be entirely accurate if the power library is missing but it's better then a segfault.
     if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
     {
-        const SCH_SYMBOL* symbol = (SCH_SYMBOL*) aField->GetParent();
-        const LIB_SYMBOL* libSymbol = GetParent()->GetLibPart( symbol->GetLibId(), true );
+        const SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aField->GetParent() );
+        const LIB_SYMBOL* libSymbol = GetParent()->GetLibSymbol( symbol->GetLibId(), true );
 
         if( libSymbol && libSymbol->IsPower() )
             m_isPower = true;

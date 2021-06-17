@@ -289,7 +289,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
             if( m_mode == MODE::UPDATE && symbol->GetLibId().IsValid() )
             {
-                LIB_SYMBOL* libSymbol = frame->GetLibPart( symbol->GetLibId() );
+                LIB_SYMBOL* libSymbol = frame->GetLibSymbol( symbol->GetLibId() );
 
                 if( libSymbol )
                 {
@@ -315,7 +315,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
         if( newId.IsValid() )
         {
-            LIB_SYMBOL* libSymbol = frame->GetLibPart( newId );
+            LIB_SYMBOL* libSymbol = frame->GetLibSymbol( newId );
 
             if( libSymbol )
             {
@@ -532,7 +532,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         }
     }
 
-    LIB_SYMBOL* libSymbol = frame->GetLibPart( aNewId );
+    LIB_SYMBOL* libSymbol = frame->GetLibSymbol( aNewId );
 
     if( !libSymbol )
     {

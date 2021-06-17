@@ -394,7 +394,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
                                       true );
 
             // Get the library symbol from the symbol library table.
-            lib_match = SchGetLibPart( symbol_id, aRescuer.GetPrj()->SchSymbolLibTable() );
+            lib_match = SchGetLibSymbol( symbol_id, aRescuer.GetPrj()->SchSymbolLibTable() );
 
             if( !cache_match && !lib_match )
                 continue;
@@ -407,13 +407,9 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
                 lib_match_parent = lib_match->GetParent().lock();
 
                 if( !lib_match_parent )
-                {
                     lib_match = nullptr;
-                }
                 else
-                {
                     lib_match = lib_match_parent.get();
-                }
             }
 
             // Test whether there is a conflict or if the symbol can only be found in the cache.
@@ -421,7 +417,9 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             {
                 if( cache_match && lib_match &&
                     !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
+                {
                     continue;
+                }
 
                 if( !cache_match && lib_match )
                     continue;
@@ -460,14 +458,23 @@ wxString RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::GetActionDescription() const
     wxString action;
 
     if( !m_cache_candidate && !m_lib_candidate )
+    {
         action.Printf( _( "Cannot rescue symbol %s which is not available in any library or "
-                          "the cache." ), m_requested_id.GetLibItemName().wx_str() );
+                          "the cache." ),
+                       m_requested_id.GetLibItemName().wx_str() );
+    }
     else if( m_cache_candidate && !m_lib_candidate )
+    {
         action.Printf( _( "Rescue symbol %s found only in cache library to %s." ),
-                       m_requested_id.Format().wx_str(), m_new_id.Format().wx_str() );
+                       m_requested_id.Format().wx_str(),
+                       m_new_id.Format().wx_str() );
+    }
     else
+    {
         action.Printf( _( "Rescue modified symbol %s to %s" ),
-                       m_requested_id.Format().wx_str(), m_new_id.Format().wx_str() );
+                       m_requested_id.Format().wx_str(),
+                       m_new_id.Format().wx_str() );
+    }
 
     return action;
 }
