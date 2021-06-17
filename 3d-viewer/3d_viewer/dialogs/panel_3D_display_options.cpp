@@ -76,10 +76,10 @@ bool PANEL_3D_DISPLAY_OPTIONS::TransferDataToWindow()
     }
 
     // Camera Options
-    m_checkBoxEnableAnimation->SetValue( m_canvas->AnimationEnabledGet() );
-    m_sliderAnimationSpeed->SetValue( m_canvas->MovingSpeedMultiplierGet() );
-    m_staticAnimationSpeed->Enable( m_canvas->AnimationEnabledGet() );
-    m_sliderAnimationSpeed->Enable( m_canvas->AnimationEnabledGet() );
+    m_checkBoxEnableAnimation->SetValue( m_canvas->GetAnimationEnabled() );
+    m_sliderAnimationSpeed->SetValue( m_canvas->GetMovingSpeedMultiplier() );
+    m_staticAnimationSpeed->Enable( m_canvas->GetAnimationEnabled() );
+    m_sliderAnimationSpeed->Enable( m_canvas->GetAnimationEnabled() );
 
     EDA_3D_CONTROLLER* ctrlTool = m_frame->GetToolManager()->GetTool<EDA_3D_CONTROLLER>();
     m_spinCtrlRotationAngle->SetValue( ctrlTool->GetRotationIncrement() );
@@ -123,8 +123,8 @@ bool PANEL_3D_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_settings.SetFlag( FL_ECO, m_checkBoxECO->GetValue( ) );
 
     // Camera Options
-    m_canvas->AnimationEnabledSet( m_checkBoxEnableAnimation->GetValue() );
-    m_canvas->MovingSpeedMultiplierSet( m_sliderAnimationSpeed->GetValue() );
+    m_canvas->SetAnimationEnabled( m_checkBoxEnableAnimation->GetValue());
+    m_canvas->SetMovingSpeedMultiplier( m_sliderAnimationSpeed->GetValue());
 
     EDA_3D_CONTROLLER* ctrlTool = m_frame->GetToolManager()->GetTool<EDA_3D_CONTROLLER>();
     ctrlTool->SetRotationIncrement( m_spinCtrlRotationAngle->GetValue() );

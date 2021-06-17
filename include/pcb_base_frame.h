@@ -350,15 +350,8 @@ public:
 
     virtual void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer );
 
-    virtual void SetActiveLayer( PCB_LAYER_ID aLayer )
-    {
-        GetScreen()->m_Active_Layer = aLayer;
-    }
-
-    virtual PCB_LAYER_ID GetActiveLayer() const
-    {
-        return GetScreen()->m_Active_Layer;
-    }
+    virtual void SetActiveLayer( PCB_LAYER_ID aLayer ) { GetScreen()->m_Active_Layer = aLayer; }
+    virtual PCB_LAYER_ID GetActiveLayer() const { return GetScreen()->m_Active_Layer; }
 
     SEVERITY GetSeverity( int aErrorCode ) const override;
 
@@ -395,6 +388,7 @@ public:
     virtual bool GetAutoZoom() { return false; }
 
 protected:
+    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
 
     /**
      * Attempts to load \a aFootprintId from the footprint library table.
@@ -407,12 +401,13 @@ protected:
      */
     FOOTPRINT* loadFootprint( const LIB_ID& aFootprintId );
 
+    virtual void unitsChangeRefresh() override;
+
+protected:
     BOARD*                  m_pcb;
     PCB_DISPLAY_OPTIONS     m_displayOptions;
     PCB_ORIGIN_TRANSFORMS   m_originTransforms;
     PCBNEW_SETTINGS*        m_settings; // No ownership, just a shortcut
-
-    virtual void unitsChangeRefresh() override;
 };
 
 #endif  // PCB_BASE_FRAME_H

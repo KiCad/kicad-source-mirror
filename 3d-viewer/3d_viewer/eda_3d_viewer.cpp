@@ -531,8 +531,9 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
         m_boardAdapter.SetMaterialMode( static_cast<MATERIAL_MODE>( cfg->m_Render.material_mode ) );
 
-        m_canvas->AnimationEnabledSet( cfg->m_Camera.animation_enabled );
-        m_canvas->MovingSpeedMultiplierSet( cfg->m_Camera.moving_speed_multiplier );
+        m_canvas->SetAnimationEnabled( cfg->m_Camera.animation_enabled );
+        m_canvas->SetMovingSpeedMultiplier( cfg->m_Camera.moving_speed_multiplier );
+        m_canvas->SetProjectionMode( cfg->m_Camera.projection_mode );
 
 #undef TRANSFER_SETTING
     }
@@ -630,8 +631,9 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
 
         save_color( m_boardAdapter.m_OpenGlSelectionColor, cfg->m_Render.opengl_selection_color );
 
-        cfg->m_Camera.animation_enabled       = m_canvas->AnimationEnabledGet();
-        cfg->m_Camera.moving_speed_multiplier = m_canvas->MovingSpeedMultiplierGet();
+        cfg->m_Camera.animation_enabled       = m_canvas->GetAnimationEnabled();
+        cfg->m_Camera.moving_speed_multiplier = m_canvas->GetMovingSpeedMultiplier();
+        cfg->m_Camera.projection_mode         = m_canvas->GetProjectionMode();
 
         if( EDA_3D_CONTROLLER* ctrlTool = GetToolManager()->GetTool<EDA_3D_CONTROLLER>() )
             cfg->m_Camera.rotation_increment = ctrlTool->GetRotationIncrement();

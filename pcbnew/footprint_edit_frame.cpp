@@ -632,7 +632,7 @@ bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         }
     }
 
-    return true;
+    return PCB_BASE_EDIT_FRAME::canCloseWindow( aEvent );
 }
 
 

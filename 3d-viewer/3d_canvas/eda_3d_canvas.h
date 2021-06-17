@@ -118,34 +118,20 @@ public:
 
     /**
      * Enable or disable camera animation when switching to a pre-defined view.
-     *
-     * @param aAnimationEnabled animation enabled state to set.
      */
-    void AnimationEnabledSet( bool aAnimationEnabled ) { m_animation_enabled = aAnimationEnabled; }
-
-    /**
-     * Return whether camera animation is enabled when switching to a pre-defined view.
-     *
-     * @return true if animation is enabled.
-     */
-    bool AnimationEnabledGet() const { return m_animation_enabled; }
+    void SetAnimationEnabled( bool aEnable ) { m_animation_enabled = aEnable; }
+    bool GetAnimationEnabled() const { return m_animation_enabled; }
 
     /**
      * Set the camera animation moving speed multiplier option.
      *
-     * @param aMovingSpeedMultiplier one of the possible integer options: [1,2,3,4,5].
+     * @param aMultiplier one of the possible integer options: [1,2,3,4,5].
      */
-    void MovingSpeedMultiplierSet( int aMovingSpeedMultiplier )
-    {
-        m_moving_speed_multiplier = aMovingSpeedMultiplier;
-    }
+    void SetMovingSpeedMultiplier( int aMultiplier ) { m_moving_speed_multiplier = aMultiplier; }
+    int GetMovingSpeedMultiplier() const { return m_moving_speed_multiplier; }
 
-    /**
-     * Return the current camera animation moving speed multiplier option.
-     *
-     * @return current moving speed multiplier option, one of [1,2,3,4,5].
-     */
-    int MovingSpeedMultiplierGet() const { return m_moving_speed_multiplier; }
+    int GetProjectionMode() const { return (int) m_camera.GetProjection(); };
+    void SetProjectionMode( int aMode ) { m_camera.SetProjection( (PROJECTION_TYPE) aMode ); }
 
     /**
      * Notify that the render engine was changed.

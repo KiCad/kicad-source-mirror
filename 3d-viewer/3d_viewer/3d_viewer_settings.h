@@ -93,6 +93,7 @@ public:
         bool   animation_enabled;
         int    moving_speed_multiplier;
         double rotation_increment;
+        int    projection_mode;
     };
 
     EDA_3D_VIEWER_SETTINGS();

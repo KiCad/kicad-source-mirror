@@ -83,6 +83,19 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
 }
 
 
+bool PCB_BASE_FRAME::canCloseWindow( wxCloseEvent& aEvent )
+{
+    // Close modeless dialogs.  They're trouble when they get destroyed after the frame and/or
+    // board.
+    wxWindow* viewer3D = Get3DViewerFrame();
+
+    if( viewer3D )
+        viewer3D->Close( true );
+
+    return true;
+}
+
+
 EDA_3D_VIEWER* PCB_BASE_FRAME::Get3DViewerFrame()
 {
     return dynamic_cast<EDA_3D_VIEWER*>( FindWindowByName( QUALIFIED_VIEWER3D_FRAMENAME( this ) ) );

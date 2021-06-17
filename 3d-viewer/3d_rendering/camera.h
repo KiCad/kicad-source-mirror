@@ -36,7 +36,7 @@
 
 enum class PROJECTION_TYPE
 {
-    ORTHO,
+    ORTHO = 0,
     PERSPECTIVE
 };
 
@@ -158,6 +158,7 @@ public:
 
     void ToggleProjection();
     PROJECTION_TYPE GetProjection() { return m_projectionType; }
+    void SetProjection( PROJECTION_TYPE aProjection ) { m_projectionType = aProjection; }
 
     /**
      * Update the windows size of the camera.
