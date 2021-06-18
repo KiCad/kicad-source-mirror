@@ -156,12 +156,14 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     m_messagePanel->SetBackgroundColour( COLOR4D( LIGHTGRAY ).ToColour() );
 
+#if wxCHECK_VERSION( 3, 1, 3 )
     Bind( wxEVT_DPI_CHANGED,
           [&]( wxDPIChangedEvent& )
           {
               wxMoveEvent dummy;
               OnMove( dummy );
           } );
+#endif
 }
 
 
