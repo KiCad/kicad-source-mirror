@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-06-13 17:58+0000\n"
+"PO-Revision-Date: 2021-06-18 13:11+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3444,11 +3444,11 @@ msgstr "差分对间隙"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
 msgid "Schematic wire thickness"
-msgstr "原理图线厚度"
+msgstr "原理图线粗细"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
 msgid "Bus wire thickness"
-msgstr "总线线厚度"
+msgstr "总线线粗细"
 
 #: common/dialogs/panel_setup_netclasses.cpp:484
 msgid "Schematic wire color"
@@ -3507,11 +3507,11 @@ msgstr "差分对间距"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 msgid "Wire Thickness"
-msgstr "线厚度"
+msgstr "线粗细"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 msgid "Bus Thickness"
-msgstr "总线厚度"
+msgstr "总线粗细"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:54
 #: eeschema/dialogs/dialog_edit_line_style_base.h:65 eeschema/sch_line.cpp:893
@@ -4286,7 +4286,7 @@ msgstr "向下对齐"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_text_grid_table.cpp:93
 #: pcbnew/pcb_shape.cpp:1301 pcbnew/pcb_text.cpp:127
 msgid "Thickness"
-msgstr "厚度"
+msgstr "粗细"
 
 #: common/eda_text.cpp:667
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:306
@@ -6243,7 +6243,7 @@ msgstr "网格样式"
 
 #: common/widgets/gal_options_panel.cpp:122
 msgid "Grid thickness:"
-msgstr "网格厚度："
+msgstr "网格粗细："
 
 #: common/widgets/gal_options_panel.cpp:133
 #: common/widgets/gal_options_panel.cpp:149
@@ -9886,7 +9886,7 @@ msgstr "默认线宽："
 msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
-msgstr "当线厚度设置为 0 时,将选择默认的画笔厚度用来绘制项。"
+msgstr "当线粗细设置为 0 时,将选择默认的画笔粗细用来绘制项。"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:119
 #: pcbnew/dialogs/dialog_plot_base.cpp:254
@@ -11474,7 +11474,7 @@ msgstr "填充所选形状"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 msgid "&Highlight thickness:"
-msgstr "高亮厚度 (&H)："
+msgstr "高亮粗细 (&H)："
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:70
 msgid "(highlight color can be edited in the \"Colors\" page)"
@@ -11732,7 +11732,7 @@ msgstr "在导线或母线上方或下方偏移文字的文字大小百分比"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 msgid "Default line thickness:"
-msgstr "默认线厚度："
+msgstr "默认线粗细："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:105
 msgid "Pin symbol size:"
@@ -18452,12 +18452,12 @@ msgstr "默认值"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:351
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:137
 msgid "Line thickness:"
-msgstr "线厚度："
+msgstr "线粗细："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:466
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:206
 msgid "Text thickness:"
-msgstr "文本线厚度："
+msgstr "文本线粗细："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:486
 msgid "Set to Default"
@@ -19221,7 +19221,7 @@ msgstr "过孔长度："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1180
 msgid "Via length is the board thickness for through hole vias"
-msgstr "通孔长度是通孔过孔的板厚"
+msgstr "通孔长度是通过的电路板厚度"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1192
 msgid "Via pad diameter:"
@@ -19435,7 +19435,7 @@ msgstr "布线宽度："
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1591
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1689
 msgid "Trace thickness:"
-msgstr "布线厚度："
+msgstr "布线粗细："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1612
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1710
@@ -22206,12 +22206,12 @@ msgstr "文本位置 Y"
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:150
 msgid "Thickness:"
-msgstr "厚度："
+msgstr "粗细："
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:274
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:152
 msgid "Text thickness"
-msgstr "文本厚度"
+msgstr "文本粗细"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:287
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:165
@@ -22283,7 +22283,7 @@ msgstr "标注线"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:353
 msgid "Thickness of the dimension lines"
-msgstr "标注线的厚度"
+msgstr "标注线的粗细"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:135
@@ -23849,7 +23849,7 @@ msgstr "其他层"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:44
 msgid "Line Thickness"
-msgstr "线厚度"
+msgstr "线粗细"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:230
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
@@ -23867,7 +23867,7 @@ msgstr "文本高度"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:128
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:47
 msgid "Text Thickness"
-msgstr "文本厚度"
+msgstr "文本粗细"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:254
 msgid "Upright"
@@ -26029,7 +26029,7 @@ msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 msgstr ""
-"文本厚度与高度比例不对。\n"
+"文本粗细与高度比例不对。\n"
 "它将会变形，被挤在一起。"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:410
@@ -26514,7 +26514,7 @@ msgid ""
 "Text will not be readable with a thickness greater than\n"
 "1/4 its width or height."
 msgstr ""
-"文本读取困难，其厚度大于\n"
+"文本读取困难，其粗细大于\n"
 "1/4 的宽度或高度。"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:22
