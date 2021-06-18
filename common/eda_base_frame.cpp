@@ -510,7 +510,7 @@ void EDA_BASE_FRAME::OnSize( wxSizeEvent& aEvent )
 #ifdef __WXMAC__
     int currentDisplay = wxDisplay::GetFromWindow( this );
 
-    if( m_displayIndex >= 0 && currentDisplay != m_displayIndex )
+    if( m_displayIndex >= 0 && currentDisplay >= 0 && currentDisplay != m_displayIndex )
     {
         wxLogTrace( traceDisplayLocation, "OnSize: current display changed %d to %d",
                     m_displayIndex, currentDisplay );
@@ -659,7 +659,7 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
 
     if( pos.x + size.x - clientSize.x > clientSize.width )
     {
-        int newWidth = clientSize.width - pos.x;
+        int newWidth = clientSize.width - ( pos.x - clientSize.x );
         wxLogTrace( traceDisplayLocation,
                     "ensureWindowIsOnScreen: effective width %d above available %d, setting to %d",
                     pos.x + size.x, clientSize.width, newWidth );
@@ -668,7 +668,7 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
 
     if( pos.y + size.y - clientSize.y > clientSize.height )
     {
-        int newHeight = clientSize.height - pos.y;
+        int newHeight = clientSize.height - ( pos.y - clientSize.y );
         wxLogTrace( traceDisplayLocation,
                     "ensureWindowIsOnScreen: effective height %d above available %d, setting to %d",
                     pos.y + size.y, clientSize.height, newHeight );
