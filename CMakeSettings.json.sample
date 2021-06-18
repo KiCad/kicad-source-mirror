@@ -72,11 +72,6 @@
           "type": "BOOL"
         },
         {
-          "name": "KICAD_SCRIPTING_WXPYTHON_PHOENIX",
-          "value": "OFF",
-          "type": "BOOL"
-        },
-        {
           "name": "KICAD_WIN32_DPI_AWARE",
           "value": "ON",
           "type": "BOOL"
@@ -133,11 +128,6 @@
         {
           "name": "KICAD_BUILD_QA_TESTS",
           "value": "False",
-          "type": "BOOL"
-        },
-        {
-          "name": "KICAD_SCRIPTING_WXPYTHON_PHOENIX",
-          "value": "OFF",
           "type": "BOOL"
         },
         {
@@ -200,11 +190,6 @@
           "type": "BOOL"
         },
         {
-          "name": "KICAD_SCRIPTING_WXPYTHON_PHOENIX",
-          "value": "OFF",
-          "type": "BOOL"
-        },
-        {
           "name": "KICAD_WIN32_DPI_AWARE",
           "value": "ON",
           "type": "BOOL"
@@ -261,11 +246,6 @@
         {
           "name": "KICAD_BUILD_QA_TESTS",
           "value": "False",
-          "type": "BOOL"
-        },
-        {
-          "name": "KICAD_SCRIPTING_WXPYTHON_PHOENIX",
-          "value": "OFF",
           "type": "BOOL"
         },
         {
@@ -335,11 +315,6 @@
         {
           "name": "KICAD_BUILD_QA_TESTS",
           "value": "False",
-          "type": "BOOL"
-        },
-        {
-          "name": "KICAD_SCRIPTING_WXPYTHON_PHOENIX",
-          "value": "OFF",
           "type": "BOOL"
         },
         {
