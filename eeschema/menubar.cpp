@@ -85,7 +85,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AppendSeparator();
 
-    fileMenu->Add( _( "Append Schematic Sheet Content..." ),
+    fileMenu->Add( _( "Insert Schematic Sheet Content..." ),
                    _( "Append schematic sheet content from another project to the current sheet" ),
                    ID_APPEND_PROJECT,
                    BITMAPS::add_document );

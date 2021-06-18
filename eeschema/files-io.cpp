@@ -654,7 +654,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     // open file chooser dialog
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Append Schematic" ), path, wxEmptyString,
+    wxFileDialog dlg( this, _( "Insert Schematic" ), path, wxEmptyString,
                       KiCadSchematicFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
