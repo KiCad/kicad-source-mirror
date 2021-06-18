@@ -63,6 +63,9 @@ public:
     wxString CreateNewLibrary( const wxString& aLibName = wxEmptyString,
                                const wxString& aProposedName = wxEmptyString );
 
+    wxString CreateNewProjectLibrary( const wxString& aLibName = wxEmptyString,
+                                      const wxString& aProposedName = wxEmptyString );
+
     /**
      * Add an existing library to either the global or project library table.
      *
@@ -215,6 +218,13 @@ protected:
      * @return Pointer to library table selected or nullptr if none selected/canceled
      */
     FP_LIB_TABLE* selectLibTable( bool aOptional = false );
+
+    /**
+     * Create a new library in the given table (presumed to be either the global or project
+     * library table).
+     */
+    wxString createNewLibrary( const wxString& aLibName, const wxString& aProposedName,
+                               FP_LIB_TABLE* aTable );
 
     void handleActivateEvent( wxActivateEvent& aEvent ) override;
 
