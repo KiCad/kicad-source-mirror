@@ -102,6 +102,7 @@ BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
     EVT_MENU_CLOSE( EDA_BASE_FRAME::OnMenuEvent )
     EVT_MENU_HIGHLIGHT_ALL( EDA_BASE_FRAME::OnMenuEvent )
     EVT_MOVE( EDA_BASE_FRAME::OnMove )
+    EVT_SIZE( EDA_BASE_FRAME::OnSize )
     EVT_MAXIMIZE( EDA_BASE_FRAME::OnMaximize )
 
     EVT_SYS_COLOUR_CHANGED( EDA_BASE_FRAME::onSystemColorChange )
@@ -125,6 +126,7 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     m_autoSaveTimer     = new wxTimer( this, ID_AUTO_SAVE_TIMER );
     m_mruPath           = PATHS::GetDefaultUserProjectsPath();
     m_frameSize         = defaultSize( aFrameType );
+    m_displayIndex      = -1;
 
     m_auimgr.SetArtProvider( new WX_AUI_DOCK_ART() );
 
@@ -144,7 +146,6 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EDA_BASE_FRAME::windowClosing ) );
 
     initExitKey();
-
 }
 
 EDA_BASE_FRAME::EDA_BASE_FRAME( FRAME_T aFrameType, KIWAY* aKiway ) :
@@ -504,6 +505,22 @@ void EDA_BASE_FRAME::ThemeChanged()
 }
 
 
+void EDA_BASE_FRAME::OnSize( wxSizeEvent& aEvent )
+{
+    int currentDisplay = wxDisplay::GetFromWindow( this );
+
+    if( m_displayIndex >= 0 && currentDisplay != m_displayIndex )
+    {
+        wxLogTrace( traceDisplayLocation, "OnSize: current display changed %d to %d",
+                    m_displayIndex, currentDisplay );
+        m_displayIndex = currentDisplay;
+        ensureWindowIsOnScreen();
+    }
+
+    aEvent.Skip();
+}
+
+
 void EDA_BASE_FRAME::LoadWindowState( const wxString& aFileName )
 {
     if( !Pgm().GetCommonSettings()->m_Session.remember_open_files )
@@ -583,16 +600,6 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
         }
     }
 
-    // Ensure Window title bar is visible
-#if defined( __WXOSX__ )
-    // for macOSX, the window must be below system (macOSX) toolbar
-    int Ypos_min = 20;
-#else
-    int Ypos_min = 0;
-#endif
-    if( m_framePos.y < Ypos_min )
-        m_framePos.y = Ypos_min;
-
     wxLogTrace( traceDisplayLocation, "Final window position (%d, %d) with size (%d, %d)",
                 m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
@@ -616,6 +623,60 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
         wxLogTrace( traceDisplayLocation, "Maximizing window" );
         Maximize();
     }
+
+    m_displayIndex = wxDisplay::GetFromWindow( this );
+}
+
+
+void EDA_BASE_FRAME::ensureWindowIsOnScreen()
+{
+    wxDisplay display( wxDisplay::GetFromWindow( this ) );
+    wxRect    clientSize = display.GetClientArea();
+    wxPoint   pos        = GetPosition();
+    wxSize    size       = GetWindowSize();
+
+    wxLogTrace( traceDisplayLocation,
+                "ensureWindowIsOnScreen: clientArea (%d, %d) w %d h %d", clientSize.x, clientSize.y,
+                clientSize.width, clientSize.height );
+
+    if( pos.y < clientSize.y )
+    {
+        wxLogTrace( traceDisplayLocation,
+                    "ensureWindowIsOnScreen: y pos %d below minimum, setting to %d", pos.y,
+                    clientSize.y );
+        pos.y = clientSize.y;
+    }
+
+    if( pos.x < clientSize.x )
+    {
+        wxLogTrace( traceDisplayLocation,
+                    "ensureWindowIsOnScreen: x pos %d is off the client rect, setting to %d", pos.x,
+                    clientSize.x );
+        pos.y = clientSize.x;
+    }
+
+    if( pos.x + size.x - clientSize.x > clientSize.width )
+    {
+        int newWidth = clientSize.width - pos.x;
+        wxLogTrace( traceDisplayLocation,
+                    "ensureWindowIsOnScreen: effective width %d above available %d, setting to %d",
+                    pos.x + size.x, clientSize.width, newWidth );
+        size.x = newWidth;
+    }
+
+    if( pos.y + size.y - clientSize.y > clientSize.height )
+    {
+        int newHeight = clientSize.height - pos.y;
+        wxLogTrace( traceDisplayLocation,
+                    "ensureWindowIsOnScreen: effective height %d above available %d, setting to %d",
+                    pos.y + size.y, clientSize.height, newHeight );
+        size.y = newHeight;
+    }
+
+    wxLogTrace( traceDisplayLocation, "Updating window position (%d, %d) with size (%d, %d)",
+                pos.x, pos.y, size.x, size.y );
+
+    SetSize( pos.x, pos.y, size.x, size.y );
 }
 
 

@@ -195,6 +195,8 @@ public:
         aEvent.Skip();
     }
 
+    virtual void OnSize( wxSizeEvent& aEvent );
+
     void OnMaximize( wxMaximizeEvent& aEvent );
 
     void SetAutoSaveInterval( int aInterval );
@@ -646,6 +648,8 @@ protected:
      */
     void initExitKey();
 
+    void ensureWindowIsOnScreen();
+
     DECLARE_EVENT_TABLE()
 
 private:
@@ -682,6 +686,7 @@ protected:
     wxPoint         m_framePos;
     wxSize          m_frameSize;
     bool            m_maximizeByDefault;
+    int             m_displayIndex;
 
     // These contain the frame size and position for when it is not maximized
     wxPoint         m_normalFramePos;

@@ -274,7 +274,7 @@ public:
     /**
      * Recalculate the size of toolbars and display panel when the frame size changes.
      */
-    virtual void OnSize( wxSizeEvent& event );
+    virtual void OnSize( wxSizeEvent& event ) override;
 
     void OnMove( wxMoveEvent& aEvent ) override;
 
