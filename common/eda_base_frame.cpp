@@ -507,6 +507,7 @@ void EDA_BASE_FRAME::ThemeChanged()
 
 void EDA_BASE_FRAME::OnSize( wxSizeEvent& aEvent )
 {
+#ifdef __WXMAC__
     int currentDisplay = wxDisplay::GetFromWindow( this );
 
     if( m_displayIndex >= 0 && currentDisplay != m_displayIndex )
@@ -516,6 +517,7 @@ void EDA_BASE_FRAME::OnSize( wxSizeEvent& aEvent )
         m_displayIndex = currentDisplay;
         ensureWindowIsOnScreen();
     }
+#endif
 
     aEvent.Skip();
 }
