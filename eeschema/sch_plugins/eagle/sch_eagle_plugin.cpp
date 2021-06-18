@@ -2299,18 +2299,20 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
                     if( wireEnd.x < busStart.x )
                     {
-                        // the end of the wire is to the left of the bus
-                        //     |
-                        // ----|
-                        //     |
+                        /* the end of the wire is to the left of the bus
+                         *         ⎥⎢
+                         *   ——————⎥⎢
+                         *         ⎥⎢
+                         */
                         wxPoint p = wireStart + entrySize( -1, 0 );
 
                         if( testBusHit( wireStart + entrySize( 0, -1 )  ) )
                         {
-                            // there is room above the wire for the bus entry
-                            //     |
-                            // ___/|
-                            //     |
+                            /* there is room above the wire for the bus entry
+                             *         ⎥⎢
+                             *   _____/⎥⎢
+                             *         ⎥⎢
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2319,10 +2321,11 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else if( testBusHit( wireStart + entrySize( 0, 1 ) ) )
                         {
-                            // there is room below the wire for the bus entry
-                            // ___ |
-                            //    \|
-                            //     |
+                            /* there is room below the wire for the bus entry
+                             *   _____ ⎥⎢
+                             *        \⎥⎢
+                             *         ⎥⎢
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2338,18 +2341,20 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                     }
                     else
                     {
-                        // the wire end is to the right of the bus
-                        // |
-                        // |----
-                        // |
+                        /* the wire end is to the right of the bus
+                         *   ⎥⎢
+                         *   ⎥⎢——————
+                         *   ⎥⎢
+                         */
                         wxPoint p = wireStart + entrySize( 1, 0 );
 
                         if( testBusHit( wireStart + entrySize( 0, -1 ) ) )
                         {
-                            // There is room above the wire for the bus entry
-                            // |
-                            // |\___
-                            // |
+                            /* There is room above the wire for the bus entry
+                             *   ⎥⎢
+                             *   ⎥⎢\_____
+                             *   ⎥⎢
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p , 4 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2358,10 +2363,11 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else if( testBusHit( wireStart + entrySize( 0, 1 ) ) )
                         {
-                            // There is room below the wire for the bus entry
-                            // | ___
-                            // |/
-                            // |
+                            /* There is room below the wire for the bus entry
+                             *   ⎥⎢ _____
+                             *   ⎥⎢/
+                             *   ⎥⎢
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2384,18 +2390,20 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
                     if( wireStart.x < busStart.x )
                     {
-                        // start of the wire is to the left of the bus
-                        //     |
-                        // ----|
-                        //     |
+                        /* start of the wire is to the left of the bus
+                         *        ⎥⎢
+                         *  ——————⎥⎢
+                         *        ⎥⎢
+                         */
                         wxPoint p = wireEnd + entrySize( -1, 0 );
 
                         if( testBusHit( wireEnd + entrySize( 0, -1 ) ) )
                         {
-                            // there is room above the wire for the bus entry
-                            //     |
-                            // ___/|
-                            //     |
+                            /* there is room above the wire for the bus entry
+                             *         ⎥⎢
+                             *   _____/⎥⎢
+                             *         ⎥⎢
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2404,10 +2412,11 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else if( testBusHit( wireEnd + entrySize( 0, -1 ) ) )
                         {
-                            // there is room below the wire for the bus entry
-                            // ___ |
-                            //    \|
-                            //     |
+                            /* there is room below the wire for the bus entry
+                             *   _____ ⎥⎢
+                             *        \⎥⎢
+                             *         ⎥⎢
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2423,18 +2432,20 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                     }
                     else
                     {
-                        // the start of the wire is to the right of the bus
-                        // |
-                        // |----
-                        // |
+                        /* the start of the wire is to the right of the bus
+                         *   ⎥⎢
+                         *   ⎥⎢——————
+                         *   ⎥⎢
+                         */
                         wxPoint p = wireEnd + entrySize( 1, 0 );
 
                         if( testBusHit( wireEnd + entrySize( 0, -1 ) ) )
                         {
-                            // There is room above the wire for the bus entry
-                            // |
-                            // |\___
-                            // |
+                            /* There is room above the wire for the bus entry
+                             *   ⎥⎢
+                             *   ⎥⎢\_____
+                             *   ⎥⎢
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2443,10 +2454,11 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else if( testBusHit( wireEnd + entrySize( 0, 1 ) ) )
                         {
-                            // There is room below the wire for the bus entry
-                            // | ___
-                            // |/
-                            // |
+                            /* There is room below the wire for the bus entry
+                             *   ⎥⎢ _____
+                             *   ⎥⎢/
+                             *   ⎥⎢
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2474,20 +2486,22 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
                     if( wireEnd.y < busStart.y )
                     {
-                        // the end of the wire is above the bus
-                        //   |
-                        //   |
-                        // -----
+                        /* the end of the wire is above the bus
+                         *      |
+                         *      |
+                         *      |
+                         *   =======
+                         */
                         wxPoint p = wireStart + entrySize( 0, -1 );
 
                         if( testBusHit( wireStart + entrySize( -1, 0 ) ) )
                         {
                             /* there is room to the left of the wire for the bus entry
-                             *    |
-                             *    |
-                             *   /
-                             * -----
-                            */
+                             *      |
+                             *      |
+                             *     /
+                             *  =======
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2497,11 +2511,11 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         else if( testBusHit( wireStart + entrySize( 1, 0 ) ) )
                         {
                             /* there is room to the right of the wire for the bus entry
-                             *  |
-                             *  |
-                             *   \
-                             * -----
-                            */
+                             *    |
+                             *    |
+                             *     \
+                             *  =======
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2517,20 +2531,22 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                     }
                     else
                     {
-                        // wire end is below the bus
-                        // -----
-                        //   |
-                        //   |
+                        /* wire end is below the bus
+                         *   =======
+                         *      |
+                         *      |
+                         *      |
+                         */
                         wxPoint p = wireStart + entrySize( 0, 1 );
 
                         if( testBusHit( wireStart + entrySize( -1, 0 ) ) )
                         {
                             /* there is room to the left of the wire for the bus entry
-                             * -----
-                             *   \
-                             *    |
-                             *    |
-                            */
+                             *  =======
+                             *     \
+                             *      |
+                             *      |
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2540,11 +2556,11 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         else if( testBusHit( wireStart + entrySize( 1, 0 ) ) )
                         {
                             /* there is room to the right of the wire for the bus entry
-                             * -----
-                             *   /
-                             *  |
-                             *  |
-                            */
+                             *  =======
+                             *     /
+                             *    |
+                             *    |
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2567,20 +2583,22 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
                     if( wireStart.y < busStart.y )
                     {
-                        // the start of the wire is above the bus
-                        //   |
-                        //   |
-                        // -----
+                        /* the start of the wire is above the bus
+                         *      |
+                         *      |
+                         *      |
+                         *   =======
+                         */
                         wxPoint p = wireEnd + entrySize( 0, -1 );
 
                         if( testBusHit( wireEnd + entrySize( -1, 0 ) ) )
                         {
                             /* there is room to the left of the wire for the bus entry
-                             *    |
-                             *    |
-                             *   /
-                             * -----
-                            */
+                             *      |
+                             *      |
+                             *     /
+                             *  =======
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2590,11 +2608,11 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         else if( testBusHit( wireEnd + entrySize( 1, 0 ) ) )
                         {
                             /* there is room to the right of the wire for the bus entry
-                             *  |
-                             *  |
-                             *   \
-                             * -----
-                            */
+                             *    |
+                             *    |
+                             *     \
+                             *  =======
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2610,20 +2628,22 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                     }
                     else
                     {
-                        // wire start is below the bus
-                        // -----
-                        //   |
-                        //   |
+                        /* wire start is below the bus
+                         *   =======
+                         *      |
+                         *      |
+                         *      |
+                         */
                         wxPoint p = wireEnd + entrySize( 0, 1 );
 
                         if( testBusHit( wireEnd + entrySize( -1, 0 ) ) )
                         {
                             /* there is room to the left of the wire for the bus entry
-                             * -----
-                             *   \
-                             *    |
-                             *    |
-                            */
+                             *  =======
+                             *     \
+                             *      |
+                             *      |
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2632,11 +2652,12 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else if( testBusHit( wireEnd + entrySize( 1, 0 ) ) )
                         {
-                            // there is room to the right of the wire for the bus entry
-                            // -----
-                            //   /
-                            //  |
-                            //  |
+                            /* there is room to the right of the wire for the bus entry
+                             *  =======
+                             *     /
+                             *    |
+                             *    |
+                             */
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
