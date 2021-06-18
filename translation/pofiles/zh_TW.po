@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-06-14 18:33+0000\n"
+"PO-Revision-Date: 2021-06-19 06:37+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -3439,11 +3439,11 @@ msgstr "差分對間隙"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
 msgid "Schematic wire thickness"
-msgstr "原理圖線厚度"
+msgstr "原理圖線粗細"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
 msgid "Bus wire thickness"
-msgstr "匯流排線厚度"
+msgstr "匯流排線粗細"
 
 #: common/dialogs/panel_setup_netclasses.cpp:484
 msgid "Schematic wire color"
@@ -3502,11 +3502,11 @@ msgstr "差分對間距"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 msgid "Wire Thickness"
-msgstr "線厚度"
+msgstr "線粗細"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 msgid "Bus Thickness"
-msgstr "匯流排厚度"
+msgstr "匯流排粗細"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:54
 #: eeschema/dialogs/dialog_edit_line_style_base.h:65 eeschema/sch_line.cpp:893
@@ -4281,7 +4281,7 @@ msgstr "向下對齊"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_text_grid_table.cpp:93
 #: pcbnew/pcb_shape.cpp:1301 pcbnew/pcb_text.cpp:127
 msgid "Thickness"
-msgstr "厚度"
+msgstr "粗細"
 
 #: common/eda_text.cpp:667
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:306
@@ -6238,7 +6238,7 @@ msgstr "網格樣式"
 
 #: common/widgets/gal_options_panel.cpp:122
 msgid "Grid thickness:"
-msgstr "網格厚度："
+msgstr "網格粗細："
 
 #: common/widgets/gal_options_panel.cpp:133
 #: common/widgets/gal_options_panel.cpp:149
@@ -9881,7 +9881,7 @@ msgstr "預設線寬："
 msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
-msgstr "當線厚度設定為 0 時,將選擇預設的畫筆厚度用來繪製項。"
+msgstr "當線粗細設定為 0 時,將選擇預設的畫筆粗細用來繪製項。"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:119
 #: pcbnew/dialogs/dialog_plot_base.cpp:254
@@ -11467,7 +11467,7 @@ msgstr "填充所選形狀"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 msgid "&Highlight thickness:"
-msgstr "高亮厚度 (&H)："
+msgstr "高亮粗細 (&H)："
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:70
 msgid "(highlight color can be edited in the \"Colors\" page)"
@@ -11725,7 +11725,7 @@ msgstr "在導線或母線上方或下方偏移文字的文字大小百分比"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 msgid "Default line thickness:"
-msgstr "預設線厚度："
+msgstr "預設線粗細："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:105
 msgid "Pin symbol size:"
@@ -18444,12 +18444,12 @@ msgstr "預設值"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:351
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:137
 msgid "Line thickness:"
-msgstr "線厚度："
+msgstr "線粗細："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:466
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:206
 msgid "Text thickness:"
-msgstr "文字線厚度："
+msgstr "文字線粗細："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:486
 msgid "Set to Default"
@@ -19213,7 +19213,7 @@ msgstr "過孔長度："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1180
 msgid "Via length is the board thickness for through hole vias"
-msgstr "通孔長度是通孔過孔的板厚"
+msgstr "通孔長度是透過的電路板厚度"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1192
 msgid "Via pad diameter:"
@@ -19427,7 +19427,7 @@ msgstr "佈線寬度："
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1591
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1689
 msgid "Trace thickness:"
-msgstr "佈線厚度："
+msgstr "佈線粗細："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1612
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1710
@@ -20223,7 +20223,7 @@ msgstr "鎖定"
 #: pcbnew/board_stackup_manager/board_stackup.cpp:306
 #, c-format
 msgid "Dielectric %d"
-msgstr "Dielectric %d"
+msgstr "電介質層 %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:526
 msgid "Top Silk Screen"
@@ -22198,12 +22198,12 @@ msgstr "文字位置 Y"
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:150
 msgid "Thickness:"
-msgstr "厚度："
+msgstr "粗細："
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:274
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:152
 msgid "Text thickness"
-msgstr "文字厚度"
+msgstr "文字粗細"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:287
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:165
@@ -22275,7 +22275,7 @@ msgstr "標註線"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:353
 msgid "Thickness of the dimension lines"
-msgstr "標註線的厚度"
+msgstr "標註線的粗細"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:135
@@ -23840,7 +23840,7 @@ msgstr "其他層"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:44
 msgid "Line Thickness"
-msgstr "線厚度"
+msgstr "線粗細"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:230
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
@@ -23858,7 +23858,7 @@ msgstr "文字高度"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:128
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:47
 msgid "Text Thickness"
-msgstr "文字厚度"
+msgstr "文字粗細"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:254
 msgid "Upright"
@@ -26018,7 +26018,7 @@ msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 msgstr ""
-"文字厚度與高度比例不對。\n"
+"文字粗細與高度比例不對。\n"
 "它將會變形，被擠在一起。"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:410
@@ -26496,14 +26496,14 @@ msgstr "如果選中，區域將在使用區域屬性對話方塊編輯區域的
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:130
 msgid "Internal Layers"
-msgstr "Internal Layers"
+msgstr "內層"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:325
 msgid ""
 "Text will not be readable with a thickness greater than\n"
 "1/4 its width or height."
 msgstr ""
-"文字讀取困難，其厚度大於\n"
+"文字讀取困難，其粗細大於\n"
 "1/4 的寬度或高度。"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:22
@@ -28640,7 +28640,7 @@ msgstr "正在測試 %d 絲印功能針對 %d 個電路板專案。"
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:100
 msgid "Checking silkscreen for potential soldermask clipping..."
-msgstr "正在檢查絲網印是否存在潛在的阻焊裁剪..."
+msgstr "正在檢查絲印是否可能與開窗區相交..."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:182
 #, c-format
@@ -28857,10 +28857,8 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果此電路板上的覆銅被重新填充，將應用銅邊緣間隙設定 （見電路板配置 > 設計規"
-"則 >限制）。\n"
-"這可能導致來自先前 KiCad 版本的不同填充，這些版本會將電路板邊緣的線路厚度用"
-"於 Edge Cuts 層。"
+"如果此電路板上的覆銅被重新填充，將應用銅邊緣間隙設定 （見電路板配置 > 設計規則 >限制）。\n"
+"這可能導致來自先前 KiCad 版本的不同填充，這些版本會將電路板邊緣的線粗細用於 Edge Cuts 層。"
 
 #: pcbnew/files.cpp:548
 msgid "Edge Clearance Warning"
@@ -29505,7 +29503,7 @@ msgstr "未知(%d)"
 
 #: pcbnew/kicad_clipboard.cpp:406
 msgid "Clipboard content is not KiCad compatible"
-msgstr "剪貼簿內容不相容 KiCad"
+msgstr "剪貼簿內容與 KiCad 不相容"
 
 #: pcbnew/load_select_footprint.cpp:265
 #, c-format
@@ -32403,11 +32401,11 @@ msgstr "層名稱"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:265
 msgid "Thickness (mm)"
-msgstr "厚度 (mm)"
+msgstr "粗細 (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:268
 msgid "Thickness (mils)"
-msgstr "厚度 (mils)"
+msgstr "粗細 (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:281
 msgid "Loss Tangent"
@@ -32927,7 +32925,7 @@ msgstr "帶位號複製"
 
 #: pcbnew/tools/pcb_actions.cpp:265
 msgid "Copy selected item(s) to clipboard with a specified starting point"
-msgstr "將選定專案複製到具有指定起始點的剪貼簿"
+msgstr "將選定專案及指定的起始點複製到剪貼簿"
 
 #: pcbnew/tools/pcb_actions.cpp:271
 msgid "Duplicate and Increment"
