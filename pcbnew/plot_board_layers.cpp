@@ -113,8 +113,10 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                     PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
             }
             else
+            {
                 PlotSolderMaskLayer( aBoard, aPlotter, layer_mask, plotOpt,
                                      soldermask_min_thickness );
+            }
 
             break;
 
@@ -130,6 +132,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
                 PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+
             break;
 
         case F_SilkS:
@@ -159,6 +162,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                 // Plot the mask
                 PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
             }
+
             break;
 
         // These layers are plotted like silk screen layers.
@@ -183,6 +187,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
                 PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+
             break;
 
         default:
@@ -195,6 +200,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
                 PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+
             break;
         }
     }
@@ -245,9 +251,13 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 if( sketchPads &&
                         ( ( onFrontFab && pad->GetLayerSet().Contains( F_Cu ) ) ||
                           ( onBackFab && pad->GetLayerSet().Contains( B_Cu ) ) ) )
+                {
                     padPlotMode = SKETCH;
+                }
                 else
+                {
                     continue;
+                }
             }
 
             /// pads not connected to copper are optionally not drawn
@@ -308,7 +318,9 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     ( aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::NO_DRILL_SHAPE ) &&
                     ( pad->GetSize() == pad->GetDrillSize() ) &&
                     ( pad->GetAttribute() == PAD_ATTRIB::NPTH ) )
+                {
                     break;
+                }
 
                 itemplotter.PlotPad( pad, color, padPlotMode );
                 break;
@@ -332,7 +344,9 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 // because inflating/deflating using different values for y and y
                 // we are using only margin.x as inflate/deflate value
                 if( mask_clearance == 0 )
+                {
                     itemplotter.PlotPad( pad, color, padPlotMode );
+                }
                 else
                 {
                     PAD dummy( *pad );
@@ -976,8 +990,9 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
         compound_scale = std::min( xscale, yscale ) * paperscale;
     }
     else
+    {
         compound_scale = aPlotOpts->GetScale() * paperscale;
-
+    }
 
     // For the plot offset we have to keep in mind the auxiliary origin too: if autoscaling is
     // off we check that plot option (i.e. autoscaling overrides auxiliary origin)
