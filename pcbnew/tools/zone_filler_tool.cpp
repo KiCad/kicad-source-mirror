@@ -126,7 +126,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
 
         button->Bind( wxEVT_COMMAND_HYPERLINK,
                       std::function<void( wxHyperlinkEvent& aEvent )>(
-                              [&]( wxHyperlinkEvent& aEvent )
+                              [frame]( wxHyperlinkEvent& aEvent )
                               {
                                   frame->ShowBoardSetupDialog( _( "Rules" ) );
                               } ) );
