@@ -39,106 +39,6 @@ static volatile bool s_initialized;
 
 static std::mutex s_lock;        // for s_initialized
 
-// Assume that on these platforms libcurl uses OpenSSL
-#if defined(__linux__) || defined(__MINGW32__)
-
-#include <openssl/crypto.h>
-
-static std::mutex* s_crypto_locks;
-
-/*
- * From OpenSSL v1.1.0, the CRYPTO_set_locking_callback macro is a no-op.
- *
- * Once this is the minimum OpenSSL version, the entire s_crypto_locks
- * system and related functions can be removed.
- *
- * In the meantime, use this macro to determine when to use the callback.
- * Keep them compiling until then to prevent accidentally breaking older
- * version builds.
- *
- * https://github.com/openssl/openssl/issues/1260
- */
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-#define USE_OPENSSL_LOCKING_CALLBACKS
-#endif
-
-
-static void lock_callback( int mode, int type, const char* file, int line )
-{
-    (void)file;
-    (void)line;
-
-    wxASSERT( s_crypto_locks && unsigned( type ) < unsigned( CRYPTO_num_locks() ) );
-
-    if( mode & CRYPTO_LOCK )
-    {
-        s_crypto_locks[ type ].lock();
-    }
-    else
-    {
-        s_crypto_locks[ type ].unlock();
-    }
-}
-
-
-static void init_locks()
-{
-    s_crypto_locks = new std::mutex[ CRYPTO_num_locks() ];
-
-    // From http://linux.die.net/man/3/crypto_set_id_callback:
-
-    /*
-
-    OpenSSL can safely be used in multi-threaded applications provided that at
-    least two callback functions are set, locking_function and threadid_func.
-
-    locking_function(int mode, int n, const char *file, int line) is needed to
-    perform locking on shared data structures. (Note that OpenSSL uses a number
-    of global data structures that will be implicitly shared whenever multiple
-    threads use OpenSSL.) Multi-threaded applications will crash at random if it
-    is not set.
-
-    threadid_func( CRYPTO_THREADID *id) is needed to record the
-    currently-executing thread's identifier into id. The implementation of this
-    callback should not fill in id directly, but should use
-    CRYPTO_THREADID_set_numeric() if thread IDs are numeric, or
-    CRYPTO_THREADID_set_pointer() if they are pointer-based. If the application
-    does not register such a callback using CRYPTO_THREADID_set_callback(), then
-    a default implementation is used - on Windows and BeOS this uses the
-    system's default thread identifying APIs, and on all other platforms it uses
-    the address of errno. The latter is satisfactory for thread-safety if and
-    only if the platform has a thread-local error number facility.
-
-    Dick: "sounds like CRYPTO_THREADID_set_callback() is not mandatory on our
-    2 OpenSSL platforms."
-
-    */
-
-    CRYPTO_set_locking_callback( &lock_callback );
-
-#ifndef USE_OPENSSL_LOCKING_CALLBACKS
-    // Ignore the unused function (the above macro didn't use it)
-    (void) &lock_callback;
-#endif
-}
-
-
-static void kill_locks()
-{
-    CRYPTO_set_locking_callback( NULL );
-
-    delete[] s_crypto_locks;
-
-    s_crypto_locks = NULL;
-}
-
-#else
-
-inline void init_locks()    { /* dummy */ }
-inline void kill_locks()    { /* dummy */ }
-
-#endif
-
 /// At process termination, using atexit() keeps the CURL stuff out of the
 /// singletops and PGM_BASE.
 static void at_terminate()
@@ -162,8 +62,6 @@ void KICAD_CURL::Init()
             {
                 THROW_IO_ERROR( "curl_global_init() failed." );
             }
-
-            init_locks();
 
             s_initialized = true;
         }
@@ -195,8 +93,6 @@ void KICAD_CURL::Cleanup()
         if( s_initialized )
         {
             curl_global_cleanup();
-
-            kill_locks();
 
             atexit( &at_terminate );
 

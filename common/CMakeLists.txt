@@ -19,11 +19,6 @@ include_directories(
     ${INC_AFTER}
     )
 
-if( NOT APPLE )     # windows and linux use openssl under curl
-    find_package( OpenSSL REQUIRED )
-    include_directories( SYSTEM ${OPENSSL_INCLUDE_DIR} )
-endif()
-
 set( GAL_SRCS
     # Common part
     basic_gal.cpp
@@ -489,7 +484,6 @@ target_link_libraries( common
     pybind11::embed
     ${Boost_LIBRARIES}
     ${CURL_LIBRARIES}
-    ${OPENSSL_LIBRARIES}        # empty on Apple
     ${wxWidgets_LIBRARIES}
     ${EXTRA_LIBS}
     )
