@@ -128,11 +128,13 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	m_maxAmplUnit->Wrap( -1 );
 	fgSizer3->Add( m_maxAmplUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 
-	m_spacingLabel = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("Spacing (s):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_spacingLabel = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("Min spacing (s):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_spacingLabel->Wrap( -1 );
 	fgSizer3->Add( m_spacingLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_spacingText = new wxTextCtrl( sbSizerLower->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_spacingText->SetToolTip( _("Minimum spacing between adjacent meander segments. The resulting spacing may be greater based on design rules.") );
+
 	fgSizer3->Add( m_spacingText, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_spacingUnit = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );

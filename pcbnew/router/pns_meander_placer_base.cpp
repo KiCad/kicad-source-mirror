@@ -53,9 +53,26 @@ void MEANDER_PLACER_BASE::AmplitudeStep( int aSign )
 void MEANDER_PLACER_BASE::SpacingStep( int aSign )
 {
     int s = m_settings.m_spacing + aSign * m_settings.m_step;
-    s = std::max( s, 2 * m_currentWidth );
+    s = std::max( s, m_currentWidth + Clearance() );
 
     m_settings.m_spacing = s;
+}
+
+
+int MEANDER_PLACER_BASE::Clearance()
+{
+    // Asumption: All tracks are part of the same net class.
+    // It shouldn't matter which track we pick. They should all have the same clearance if
+    // they are part of the same net class. Therefore, pick the first one on the list.
+    ITEM*           itemToCheck = Traces().CItems().front().item;
+    PNS::CONSTRAINT constraint;
+
+    Router()->GetRuleResolver()->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, itemToCheck,
+                                                  nullptr, CurrentLayer(), &constraint );
+
+    wxCHECK_MSG( constraint.m_Value.HasMin(), m_currentWidth, "No minimum clearance?" );
+
+    return constraint.m_Value.Min();
 }
 
 

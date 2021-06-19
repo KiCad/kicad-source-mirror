@@ -80,6 +80,13 @@ public:
     virtual void SpacingStep( int aSign );
 
     /**
+     * Return the clearance of the track(s) being length tuned
+     *
+     * @return clearance value in internal units
+     */
+    virtual int Clearance();
+
+    /**
      * Return the current meandering configuration.
      *
      * @return the settings
