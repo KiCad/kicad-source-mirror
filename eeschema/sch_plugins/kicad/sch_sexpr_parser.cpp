@@ -1286,7 +1286,11 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
                 THROW_IO_ERROR( error );
             }
 
-            pin->SetName( FromUTF8() );
+            if( m_requiredVersion < 20210606 )
+                pin->SetName( ConvertToNewOverbarNotation( FromUTF8() ) );
+            else
+                pin->SetName( FromUTF8() );
+
             token = NextTok();
 
             if( token != T_RIGHT )
