@@ -1,6 +1,6 @@
 # uLe <uestrada@mafu-robotics.de>, 2020.
 # Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>, 2020, 2021.
-# Iñigo Figuero Sanz <news@imagedworld.com>, 2020.
+# Iñigo Figuero Sanz <news@imagedworld.com>, 2020, 2021.
 # Echedey <echedeyla@hotmail.com>, 2020, 2021.
 # Tomás Mora <tom.mora96@gmail.com>, 2021.
 # Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-01-24 22:54+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"PO-Revision-Date: 2021-06-20 16:33+0000\n"
+"Last-Translator: Iñigo Figuero Sanz <news@imagedworld.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.7\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -150,19 +150,17 @@ msgid "No footprint loaded."
 msgstr "No se ha especificado huella."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:489
-#, fuzzy
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"El contorno de la huella está mal formado. Ejecute Footprint Checker para un "
-"análisis completo."
+"No existe contorno de huella 0 está malformado. Ejecute Footprint Checker "
+"para un análisis completo."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:498
-#, fuzzy
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"El contorno de la placa está mal formado. Ejecute DRC para un análisis "
+"No existe contorno de placa está malformado. Ejecute DRC para un análisis "
 "completo."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:224
@@ -195,9 +193,9 @@ msgstr ""
 "No se admite su versión de OpenGL. La versión requerida mínima es la 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:534
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Tiempo de renderizado %.3f s"
+msgstr "Último tiempo de renderizado %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:724
 #, c-format
@@ -492,11 +490,11 @@ msgstr "Recortar serigrafía en el anillo de la vía"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Utilizar color de cobre para cobre sin baño"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "Utilizar colores diferentes para cobre bañado o sin bañar. (Lento)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -539,9 +537,8 @@ msgid "Show copper thickness"
 msgstr "Mostrar grosor del cobre"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:171
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Elementos resaltados:"
+msgstr "Resaltar elementos al voltear"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:178
 msgid "Other Options"
@@ -752,9 +749,8 @@ msgstr "Opciones de visualización 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:99
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:72
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "Visor 3D"
+msgstr "Visor 3D de KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:336
 msgid "Background Color, Bottom"
@@ -1335,24 +1331,20 @@ msgid "Export to Clipboard"
 msgstr "Exportar al portapapeles"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.lib file)"
-msgstr "Relleno del cuerpo del símbolo"
+msgstr "Símbolo (archivo .lib)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (archivo .kicad_mod)"
+msgstr "Huella (archivo .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Postscript (.ps file)"
 msgstr "Postscript (archivo .ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Logotipo para el bloque título (archivo .kicad_wks)"
+msgstr "Hoja de dibujo (archivo .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -1508,18 +1500,19 @@ msgstr "No puede crearse la carpeta de salida «%s».\n"
 
 #: common/common.cpp:615
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr ""
+msgstr "Está operación no está admitida por KiCad y sus dependencias."
 
 #: common/common.cpp:617
-#, fuzzy
 msgid "Unsupported Operating System"
-msgstr "Forma de vía no soportada: %s"
+msgstr "Sistema operativo no compatible"
 
 #: common/common.cpp:620
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"No puede informarse de los problemas con KiCad en este sistema al "
+"repositorio oficial de errores."
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -2207,14 +2200,12 @@ msgid "Reset Grid Origin"
 msgstr "Restaurar origen de cuadrícula"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "&Rejilla Usuario ..."
+msgstr "Reiniciar tamaños de rejilla"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "Ajustar a 0 para utilizar los valores por defecto"
+msgstr "Ajustar a valores por defecto la lista de tamaños de rejilla"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -2258,15 +2249,16 @@ msgid "Image Editor"
 msgstr "Editor de imágenes"
 
 #: common/dialogs/dialog_locked_items_query.cpp:34
-#, fuzzy
 msgid "Skip Locked Items"
-msgstr "Bloqueado: Sí"
+msgstr "Omitir elementos bloqueados"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"Eliminar elementos bloqueados de la selección y aplicar la operación a los "
+"desbloqueados (si existen)."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
@@ -2278,15 +2270,16 @@ msgid "These items will be skipped unless you override the locks."
 msgstr "Estos elementos se omitirán a menos que anule los bloqueos."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
-#, fuzzy
 msgid "Remember decision for this session."
-msgstr "Eliminar exclusión de esta violación"
+msgstr "Recordar la decisión durante esta sesión."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"Recordar la opción seleccionada durante el resto de esta sesión.\n"
+"Este diálogo no se mostrará de nuevo hasta que se reinicie KiCad."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -2297,11 +2290,13 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"Desestrimar bloqueos y aplicar la operación a todos los elementos "
+"seleccionados.\n"
+"Todos los elementos bloqueados lo seguirán estando al finalizar la operación."
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
-#, fuzzy
 msgid "Locked Items"
-msgstr "Bloqueado: Sí"
+msgstr "Elementos bloqueados"
 
 #: common/dialogs/dialog_migrate_settings.cpp:31
 msgid "Quit KiCad"
@@ -2453,9 +2448,9 @@ msgid "Portrait"
 msgstr "Vertical"
 
 #: common/dialogs/dialog_page_settings.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file \"%s\" not found."
-msgstr "No se ha encontrado el archivo de recuperación \"%s\"."
+msgstr "No se ha encontrado la hoja de dibujo \"%s\"."
 
 #: common/dialogs/dialog_page_settings.cpp:537
 msgid "the translation for paper size must preserve original spellings"
@@ -2469,12 +2464,11 @@ msgid "Landscape"
 msgstr "Horizontal"
 
 #: common/dialogs/dialog_page_settings.cpp:781
-#, fuzzy
 msgid "Select Drawing Sheet File"
-msgstr "Arrastrar hoja"
+msgstr "Seleccionar hoja de dibujo"
 
 #: common/dialogs/dialog_page_settings.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The drawing sheet file name has changed.\n"
 "Do you want to use the relative path:\n"
@@ -2482,8 +2476,8 @@ msgid ""
 "instead of\n"
 "\"%s\"?"
 msgstr ""
-"El archivo de diseño de hoja se ha modificado.\n"
-"Desea utilizar la ruta relativa:\n"
+"Se ha modificado el nombre del archivo de hoja de dibujo.\n"
+"¿Desea utilizar la ruta relativa:\n"
 "\"%s\"\n"
 "en lugar de\n"
 "\"%s\"?"
@@ -2690,9 +2684,8 @@ msgid "Comment9:"
 msgstr "Comentario9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
-#, fuzzy
 msgid "Drawing sheet file"
-msgstr "Arrastrar hoja"
+msgstr "Archivo de hoja de dibujo"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Browse..."
@@ -2703,21 +2696,20 @@ msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
 msgstr ""
+"Busca la siguiente referencia libre para todas las existentes en el diseño."
 
 #: common/dialogs/dialog_paste_special.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Cambiar la referencia %s a %s."
+msgstr "Cambia las referencias a '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Utilizando referencias para combinar componentes y huellas.\n"
+msgstr "Asignar referencias únicas a los símbolos pegados."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "Mantener la anotación actual, aunque existan duplicados"
+msgstr "Mantener las referencias actuales, aunque existan duplicados"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
