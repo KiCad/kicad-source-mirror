@@ -323,33 +323,27 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
         return 0;
     }
 
-    // Reserve a 2% margin around bounding boxes.
-    double margin_scale_factor = 1.02;
+    // Reserve enough margin to limit the amount of the view that might be obscured behind the
+    // infobar.
+    double margin_scale_factor = 1.04;
 
-    switch( aFitType )
+    if( canvas->GetClientSize().y < 768 )
+        margin_scale_factor = 1.10;
+
+    if( aFitType == ZOOM_FIT_ALL )
     {
-    case ZOOM_FIT_ALL:
         // Leave a bigger margin for library editors & viewers
 
         if( frame->IsType( FRAME_FOOTPRINT_VIEWER ) || frame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
                 || frame->IsType( FRAME_SCH_VIEWER ) || frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
         {
-            margin_scale_factor = 1.4;
+            margin_scale_factor = 1.30;
         }
         else if( frame->IsType( FRAME_SCH_SYMBOL_EDITOR )
                 || frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
         {
-            margin_scale_factor = 2;
+            margin_scale_factor = 1.48;
         }
-        break;
-
-    // Currently the same value as "ZOOM_FIT_ALL" but allows easy expansion/change in the future.
-    case ZOOM_FIT_OBJECTS:
-        margin_scale_factor = 1.02; // Reserve a 2% margin around bounding box.
-        break;
-
-    default:
-        margin_scale_factor = 1.02;
     }
 
     view->SetScale( scale / margin_scale_factor );
