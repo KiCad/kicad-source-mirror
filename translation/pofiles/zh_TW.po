@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-06-19 06:37+0000\n"
+"PO-Revision-Date: 2021-06-20 16:33+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -4281,7 +4281,7 @@ msgstr "向下對齊"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_text_grid_table.cpp:93
 #: pcbnew/pcb_shape.cpp:1301 pcbnew/pcb_text.cpp:127
 msgid "Thickness"
-msgstr "粗細"
+msgstr "厚度"
 
 #: common/eda_text.cpp:667
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:306
