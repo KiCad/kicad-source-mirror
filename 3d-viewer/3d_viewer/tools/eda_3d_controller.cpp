@@ -27,9 +27,8 @@
 #include <eda_3d_viewer.h>
 #include <id.h>
 #include <kiface_i.h>
-#include <3d_viewer_id.h>
-#include <tools/3d_controller.h>
-#include "3d_actions.h"
+#include <tools/eda_3d_controller.h>
+#include "eda_3d_actions.h"
 
 
 bool EDA_3D_CONTROLLER::Init()
@@ -177,7 +176,7 @@ int EDA_3D_CONTROLLER::SetMaterial( const TOOL_EVENT& aEvent )
 
     m_boardAdapter->SetMaterialMode( mode );
 
-    if( EDA_3D_VIEWER* viewer = dynamic_cast<EDA_3D_VIEWER*>( m_toolMgr->GetToolHolder() ) )
+    if( auto* viewer = dynamic_cast<EDA_3D_VIEWER_FRAME*>( m_toolMgr->GetToolHolder() ) )
         viewer->NewDisplay( true );
     else
         m_canvas->Request_refresh();
@@ -218,9 +217,7 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
 
     default:
     {
-        EDA_3D_VIEWER* viewer = dynamic_cast<EDA_3D_VIEWER*>( m_toolMgr->GetToolHolder() );
-
-        if( viewer )
+        if( auto* viewer = dynamic_cast<EDA_3D_VIEWER_FRAME*>( m_toolMgr->GetToolHolder() ) )
             viewer->NewDisplay( true );
         else
             m_canvas->Request_refresh();

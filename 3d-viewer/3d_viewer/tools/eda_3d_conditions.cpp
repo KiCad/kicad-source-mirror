@@ -23,7 +23,7 @@
  */
 
 #include <3d_canvas/board_adapter.h>
-#include <3d_viewer/tools/3d_conditions.h>
+#include <3d_viewer/tools/eda_3d_conditions.h>
 
 #include <functional>
 

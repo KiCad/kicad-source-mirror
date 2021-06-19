@@ -26,7 +26,7 @@
 
 #include <tool/tool_interactive.h>
 
-class EDA_3D_VIEWER;
+class EDA_3D_VIEWER_FRAME;
 class BOARD_ADAPTER;
 
 

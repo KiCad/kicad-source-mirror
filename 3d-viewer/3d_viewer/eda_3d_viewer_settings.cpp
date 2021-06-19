@@ -23,7 +23,7 @@
 #include <settings/parameters.h>
 #include <wx/config.h>
 
-#include "3d_viewer_settings.h"
+#include "eda_3d_viewer_settings.h"
 
 using KIGFX::COLOR4D;
 

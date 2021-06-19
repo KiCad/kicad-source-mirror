@@ -25,12 +25,12 @@
 
 
 #include <set>
-#include "dlg_select_3dmodel.h"
+#include "dialog_select_3d_model.h"
 #include "project.h"
 #include "3d_cache/3d_info.h"
 #include "3d_cache/3d_cache.h"
 #include "3d_cache_dialogs.h"
-#include <3d_model_viewer/3d_model_viewer.h>
+#include <3d_model_viewer/eda_3d_model_viewer.h>
 #include <common_ogl/ogl_attr_list.h>
 #include <filename_resolver.h>
 #include <pcbnew/footprint.h>
@@ -40,25 +40,19 @@
 #include <kiplatform/ui.h>
 
 
-DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager,
-                                        FP_3DMODEL* aModelItem, wxString& prevModelSelectDir,
-                                        int& prevModelWildcard ) :
-    DLG_SELECT_3D_MODELE_BASE( aParent ),
-    m_model( aModelItem ), m_cache( aCacheManager ), m_previousDir( prevModelSelectDir ),
-    m_previousFilterIndex( prevModelWildcard )
+DIALOG_SELECT_3DMODEL::DIALOG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager,
+                                              FP_3DMODEL* aModelItem, wxString& prevModelSelectDir,
+                                              int& prevModelWildcard ) :
+        DIALOG_SELECT_3D_MODEL_BASE( aParent ),
+        m_model( aModelItem ),
+        m_cache( aCacheManager ),
+        m_resolver( aCacheManager ? aCacheManager->GetResolver() : nullptr ),
+        m_previousDir( prevModelSelectDir ),
+        m_modelViewer( nullptr )
 {
-    if( NULL != m_cache )
-        m_resolver = m_cache->GetResolver();
-    else
-        m_resolver = NULL;
-
-    // set to NULL to avoid segfaults when m_FileTree is instantiated
-    // and wxGenericDirCtrl events are posted
-    m_modelViewer = NULL;
-
-    m_modelViewer = new C3D_MODEL_VIEWER( m_pane3Dviewer,
-                                          OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
-                                          m_cache );
+    m_modelViewer = new EDA_3D_MODEL_VIEWER( m_pane3Dviewer,
+                                             OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
+                                             m_cache );
     m_modelViewer->SetMinSize( wxSize( 400, -1 ) );
     m_Sizer3Dviewer->Add( m_modelViewer, 1, wxEXPAND|wxRIGHT, 5 );
 
@@ -102,13 +96,19 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
                 m_FileTree->SetFilter( full_filter );
             }
             else
+            {
                 m_FileTree->SetFilter( filter );
+            }
         }
         else
+        {
             m_FileTree->SetFilter( wxFileSelectorDefaultWildcardStr );
+        }
 
         if( prevModelWildcard >= 0 && prevModelWildcard < (int)fl->size() )
+        {
             m_FileTree->SetFilterIndex( prevModelWildcard );
+        }
         else
         {
             prevModelWildcard = 0;
@@ -138,7 +138,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
 }
 
 
-bool DLG_SELECT_3DMODEL::TransferDataFromWindow()
+bool DIALOG_SELECT_3DMODEL::TransferDataFromWindow()
 {
     if( !m_model || !m_FileTree )
         return true;
@@ -160,7 +160,6 @@ bool DLG_SELECT_3DMODEL::TransferDataFromWindow()
         return true;
 
     m_previousDir = m_FileTree->GetPath();
-    m_previousFilterIndex = m_FileTree->GetFilterIndex();
 
     // file selection mode: retrieve the filename and specify a
     // path relative to one of the config paths
@@ -172,14 +171,14 @@ bool DLG_SELECT_3DMODEL::TransferDataFromWindow()
 }
 
 
-void DLG_SELECT_3DMODEL::OnSelectionChanged( wxCommandEvent& event )
+void DIALOG_SELECT_3DMODEL::OnSelectionChanged( wxCommandEvent& event )
 {
     if( m_modelViewer )
         m_modelViewer->Set3DModel( m_FileTree->GetFilePath() );
 }
 
 
-void DLG_SELECT_3DMODEL::OnFileActivated( wxCommandEvent& event )
+void DIALOG_SELECT_3DMODEL::OnFileActivated( wxCommandEvent& event )
 {
     if( m_modelViewer )
         m_modelViewer->Set3DModel( m_FileTree->GetFilePath() );
@@ -188,21 +187,21 @@ void DLG_SELECT_3DMODEL::OnFileActivated( wxCommandEvent& event )
 }
 
 
-void DLG_SELECT_3DMODEL::SetRootDir( wxCommandEvent& event )
+void DIALOG_SELECT_3DMODEL::SetRootDir( wxCommandEvent& event )
 {
     if( m_FileTree && m_dirChoices->GetSelection() > 0 )
         m_FileTree->SetPath( m_dirChoices->GetString( m_dirChoices->GetSelection() ) );
 }
 
 
-void DLG_SELECT_3DMODEL::Cfg3DPaths( wxCommandEvent& event )
+void DIALOG_SELECT_3DMODEL::Cfg3DPaths( wxCommandEvent& event )
 {
     if( S3D::Configure3DPaths( this, m_resolver ) )
         updateDirChoiceList();
 }
 
 
-void DLG_SELECT_3DMODEL::updateDirChoiceList( void )
+void DIALOG_SELECT_3DMODEL::updateDirChoiceList( void )
 {
     if( !m_FileTree || !m_resolver || !m_dirChoices )
         return;

@@ -234,7 +234,7 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
     if( m_toolManager )
         m_toolManager->DeactivateTool();
 
-    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
+    EDA_3D_VIEWER_FRAME* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
         draw3DFrame->Destroy();

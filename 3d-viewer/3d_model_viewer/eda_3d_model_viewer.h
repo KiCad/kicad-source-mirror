@@ -42,7 +42,7 @@ class MODEL_3D;
 /**
  *  Implement a canvas based on a wxGLCanvas.
  */
-class C3D_MODEL_VIEWER : public HIDPI_GL_CANVAS
+class EDA_3D_MODEL_VIEWER : public HIDPI_GL_CANVAS
 {
 public:
     /**
@@ -51,10 +51,10 @@ public:
      *  @param aParent the parent creator of this canvas.
      *  @param aAttribList a list of openGL options created by #OGL_ATT_LIST::GetAttributesList.
      */
-    C3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribList  = nullptr,
-                      S3D_CACHE* aCacheManager = nullptr );
+    EDA_3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribList  = nullptr,
+                         S3D_CACHE* aCacheManager = nullptr );
 
-    ~C3D_MODEL_VIEWER();
+    ~EDA_3D_MODEL_VIEWER();
 
     /**
      * Set this model to be displayed.

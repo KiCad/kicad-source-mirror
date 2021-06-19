@@ -22,27 +22,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dlg_select_3dmodel.h
- * creates a dialog to select 3D model files
- */
+#ifndef DIALOG_SELECT_3DMODEL_H
+#define DIALOG_SELECT_3DMODEL_H
 
-
-#ifndef DLG_SELECT_3DMODEL_H
-#define DLG_SELECT_3DMODEL_H
-
-#include "dlg_select_3dmodel_base.h"
+#include "dialog_select_3d_model_base.h"
 
 class FP_3DMODEL;
 class S3D_CACHE;
 class FILENAME_RESOLVER;
-class C3D_MODEL_VIEWER;
+class EDA_3D_MODEL_VIEWER;
 
-class DLG_SELECT_3DMODEL : public DLG_SELECT_3D_MODELE_BASE
+class DIALOG_SELECT_3DMODEL : public DIALOG_SELECT_3D_MODEL_BASE
 {
 public:
-    DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager, FP_3DMODEL* aModelItem,
-                        wxString& prevModelSelectDir, int& prevModelWildcard );
+    DIALOG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager, FP_3DMODEL* aModelItem,
+                           wxString& prevModelSelectDir, int& prevModelWildcard );
 
     bool TransferDataFromWindow() override;
     void OnSelectionChanged( wxCommandEvent& event )override;
@@ -53,14 +47,13 @@ public:
 private:
     void updateDirChoiceList( void );
 
-    FP_3DMODEL*        m_model;       // data for the selected model
-    S3D_CACHE*         m_cache;       // cache manager
-    FILENAME_RESOLVER* m_resolver;    // 3D filename resolver
+    FP_3DMODEL*          m_model;       // data for the selected model
+    S3D_CACHE*           m_cache;       // cache manager
+    FILENAME_RESOLVER*   m_resolver;    // 3D filename resolver
 
-    wxString& m_previousDir;
-    int&      m_previousFilterIndex;
+    wxString&            m_previousDir;
 
-    C3D_MODEL_VIEWER* m_modelViewer;
+    EDA_3D_MODEL_VIEWER* m_modelViewer;
 };
 
-#endif  // DLG_SELECT_3DMODEL_H
+#endif  // DIALOG_SELECT_3DMODEL_H

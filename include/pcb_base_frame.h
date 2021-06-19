@@ -52,7 +52,7 @@ class BOARD_CONNECTED_ITEM;
 class COLOR_SETTINGS;
 class FOOTPRINT;
 class PAD;
-class EDA_3D_VIEWER;
+class EDA_3D_VIEWER_FRAME;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
 class BOARD_DESIGN_SETTINGS;
@@ -81,7 +81,7 @@ public:
     /**
      * @return a reference to the child 3D viewer frame, when exists, or NULL
      */
-    EDA_3D_VIEWER* Get3DViewerFrame();
+    EDA_3D_VIEWER_FRAME* Get3DViewerFrame();
 
     /**
      * Update the 3D view, if the viewer is opened by this frame.
@@ -231,7 +231,7 @@ public:
      *
      * If it does not exist, it is created.  If it exists, it is brought to the foreground.
      */
-    EDA_3D_VIEWER* CreateAndShow3D_Frame();
+    EDA_3D_VIEWER_FRAME* CreateAndShow3D_Frame();
 
     /**
      * @return global configuration options.

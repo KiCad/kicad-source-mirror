@@ -29,7 +29,7 @@
 #include <board_stackup_manager/board_stackup.h>
 #include <board_design_settings.h>
 
-PANEL_3D_COLORS::PANEL_3D_COLORS( EDA_3D_VIEWER* aFrame, wxWindow* aParent ) :
+PANEL_3D_COLORS::PANEL_3D_COLORS( EDA_3D_VIEWER_FRAME* aFrame, wxWindow* aParent ) :
         PANEL_3D_COLORS_BASE( aParent ),
         m_settings( aFrame->GetAdapter() )
 {

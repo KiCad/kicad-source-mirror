@@ -39,7 +39,7 @@
 #include <widgets/ui_common.h>
 #include <base_units.h>
 
-#include "../3d-viewer/3d_viewer/3d_viewer_settings.h"
+#include "../3d-viewer/3d_viewer/eda_3d_viewer_settings.h"
 
 
 ///! Update the schema version whenever a migration is required

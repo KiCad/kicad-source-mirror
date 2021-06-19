@@ -42,7 +42,7 @@
 #include <settings/settings_manager.h>
 
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
-#include "3d_cache/dialogs/panel_prev_3d.h"
+#include "3d_cache/dialogs/panel_preview_3d_model.h"
 
 #include <dialog_footprint_properties.h>
 
@@ -52,15 +52,15 @@ int DIALOG_FOOTPRINT_PROPERTIES::m_page = 0;     // remember the last open page 
 
 DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParent,
                                                           FOOTPRINT* aFootprint ) :
-    DIALOG_FOOTPRINT_PROPERTIES_BASE( aParent ),
-    m_posX( aParent, m_XPosLabel, m_ModPositionX, m_XPosUnit ),
-    m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit ),
-    m_OrientValidator( 3, &m_OrientValue ),
-    m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
-    m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
-    m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
-    m_initialFocus( true ),
-    m_inSelect( false )
+        DIALOG_FOOTPRINT_PROPERTIES_BASE( aParent ),
+        m_posX( aParent, m_XPosLabel, m_ModPositionX, m_XPosUnit ),
+        m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit ),
+        m_orientValidator( 3, &m_orientValue ),
+        m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
+        m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
+        m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
+        m_initialFocus( true ),
+        m_inSelect( false )
 {
     m_frame     = aParent;
     m_footprint = aFootprint;
@@ -119,15 +119,15 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_modelsGrid->SetWindowStyleFlag( m_modelsGrid->GetWindowStyle() & ~wxHSCROLL );
     m_modelsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
-    m_OrientValidator.SetRange( -360.0, 360.0 );
-    m_OrientValueCtrl->SetValidator( m_OrientValidator );
-    m_OrientValidator.SetWindow( m_OrientValueCtrl );
+    m_orientValidator.SetRange( -360.0, 360.0 );
+    m_OrientValueCtrl->SetValidator( m_orientValidator );
+    m_orientValidator.SetWindow( m_OrientValueCtrl );
 
     aParent->Prj().Get3DCacheManager()->GetResolver()->SetProgramBase( &Pgm() );
 
-    m_PreviewPane = new PANEL_PREV_3D( m_Panel3D, m_frame, m_footprint, &m_shapes3D_list );
+    m_previewPane = new PANEL_PREVIEW_3D_MODEL( m_Panel3D, m_frame, m_footprint, &m_shapes3D_list );
 
-    bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
+    bLowerSizer3D->Add( m_previewPane, 1, wxEXPAND, 5 );
 
     // Set font size for items showing long strings:
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -165,7 +165,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
 
     m_sdbSizerStdButtonsOK->SetDefault();
 
-    m_OrientValue = 0;
+    m_orientValue = 0;
 
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
@@ -198,7 +198,7 @@ DIALOG_FOOTPRINT_PROPERTIES::~DIALOG_FOOTPRINT_PROPERTIES()
     m_page = m_NoteBook->GetSelection();
     m_NoteBook->SetSelection( 1 );
 
-    delete m_PreviewPane;
+    delete m_previewPane;
 }
 
 
@@ -245,13 +245,13 @@ void DIALOG_FOOTPRINT_PROPERTIES::ChangeFootprint( wxCommandEvent&  )
 void DIALOG_FOOTPRINT_PROPERTIES::FootprintOrientEvent( wxCommandEvent&  )
 {
     if( m_Orient0->GetValue() )
-        m_OrientValue = 0.0;
+        m_orientValue = 0.0;
     else if( m_Orient90->GetValue() )
-        m_OrientValue = 90.0;
+        m_orientValue = 90.0;
     else if( m_Orient270->GetValue() )
-        m_OrientValue = 270.0;
+        m_orientValue = 270.0;
     else if( m_Orient180->GetValue() )
-        m_OrientValue = 180.0;
+        m_orientValue = 180.0;
 
     updateOrientationControl();
 }
@@ -312,15 +312,15 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     m_BoardSideCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
 
-    m_OrientValue = m_footprint->GetOrientation() / 10.0;
+    m_orientValue = m_footprint->GetOrientation() / 10.0;
 
-    if( m_OrientValue == 0.0 )
+    if( m_orientValue == 0.0 )
         m_Orient0->SetValue( true );
-    else if( m_OrientValue == 90.0 || m_OrientValue == -270.0 )
+    else if( m_orientValue == 90.0 || m_orientValue == -270.0 )
         m_Orient90->SetValue( true );
-    else if( m_OrientValue == 270.0 || m_OrientValue == -90.0 )
+    else if( m_orientValue == 270.0 || m_orientValue == -90.0 )
         m_Orient270->SetValue( true );
-    else if( m_OrientValue == 180.0 || m_OrientValue == -180.0 )
+    else if( m_orientValue == 180.0 || m_orientValue == -180.0 )
         m_Orient180->SetValue( true );
     else
         m_OrientOther->SetValue( true );
@@ -402,7 +402,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     }
 
     select3DModel( 0 );   // will clamp idx within bounds
-    m_PreviewPane->UpdateDummyFootprint();
+    m_previewPane->UpdateDummyFootprint();
 
     // Show the footprint's FPID.
     m_tcLibraryID->SetValue( m_footprint->GetFPID().Format() );
@@ -452,7 +452,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::select3DModel( int aModelIdx )
         m_modelsGrid->SetGridCursor( aModelIdx, 0 );
     }
 
-    m_PreviewPane->SetSelectedModel( aModelIdx );
+    m_previewPane->SetSelectedModel( aModelIdx );
 
     m_inSelect = false;
 }
@@ -505,7 +505,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::On3DModelCellChanged( wxGridEvent& aEvent )
         m_shapes3D_list[ aEvent.GetRow() ].m_Show = ( showValue == wxT( "1" ) );
     }
 
-    m_PreviewPane->UpdateDummyFootprint();
+    m_previewPane->UpdateDummyFootprint();
 }
 
 
@@ -521,7 +521,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnRemove3DModel( wxCommandEvent&  )
         m_modelsGrid->DeleteRows( idx, 1 );
 
         select3DModel( idx );       // will clamp idx within bounds
-        m_PreviewPane->UpdateDummyFootprint();
+        m_previewPane->UpdateDummyFootprint();
     }
 }
 
@@ -589,7 +589,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAdd3DModel( wxCommandEvent&  )
     m_modelsGrid->SetCellValue( idx, 1, wxT( "1" ) );
 
     select3DModel( idx );
-    m_PreviewPane->UpdateDummyFootprint();
+    m_previewPane->UpdateDummyFootprint();
 }
 
 
@@ -753,9 +753,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
     // Now, set orientation.  Must be done after other changes because rotation changes field
     // positions on board (so that relative positions are held constant)
-    m_OrientValidator.TransferFromWindow();
+    m_orientValidator.TransferFromWindow();
 
-    double orient = m_OrientValue * 10;
+    double orient = m_orientValue * 10;
 
     if( m_footprint->GetOrientation() != orient )
         m_footprint->Rotate( m_footprint->GetPosition(), orient - m_footprint->GetOrientation() );
@@ -852,7 +852,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnDeleteField( wxCommandEvent&  )
 void DIALOG_FOOTPRINT_PROPERTIES::Cfg3DPath( wxCommandEvent&  )
 {
     if( S3D::Configure3DPaths( this, Prj().Get3DCacheManager()->GetResolver() ) )
-        m_PreviewPane->UpdateDummyFootprint();
+        m_previewPane->UpdateDummyFootprint();
 }
 
 
@@ -967,5 +967,5 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnPageChange( wxNotebookEvent& aEvent )
 
 void DIALOG_FOOTPRINT_PROPERTIES::updateOrientationControl()
 {
-    KIUI::ValidatorTransferToWindowWithoutEvents( m_OrientValidator );
+    KIUI::ValidatorTransferToWindowWithoutEvents( m_orientValidator );
 }

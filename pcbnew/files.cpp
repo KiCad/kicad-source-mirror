@@ -906,7 +906,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     onBoardLoaded();
 
     // Refresh the 3D view, if any
-    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
+    EDA_3D_VIEWER_FRAME* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
         draw3DFrame->NewDisplay();

@@ -1,15 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dlg_select_3dmodel_base.h"
+#include "dialog_select_3d_model_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DLG_SELECT_3D_MODELE_BASE::DLG_SELECT_3D_MODELE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_SELECT_3D_MODEL_BASE::DIALOG_SELECT_3D_MODEL_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -22,7 +22,7 @@ DLG_SELECT_3D_MODELE_BASE::DLG_SELECT_3D_MODELE_BASE( wxWindow* parent, wxWindow
 	bSizerUpper->SetMinSize( wxSize( -1,400 ) );
 	m_splitterWin = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
 	m_splitterWin->SetSashGravity( 0.35 );
-	m_splitterWin->Connect( wxEVT_IDLE, wxIdleEventHandler( DLG_SELECT_3D_MODELE_BASE::m_splitterWinOnIdle ), NULL, this );
+	m_splitterWin->Connect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_SELECT_3D_MODEL_BASE::m_splitterWinOnIdle ), NULL, this );
 
 	m_panelLeft = new wxPanel( m_splitterWin, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerLeft;
@@ -87,18 +87,18 @@ DLG_SELECT_3D_MODELE_BASE::DLG_SELECT_3D_MODELE_BASE( wxWindow* parent, wxWindow
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_FileTree->Connect( wxEVT_DIRCTRL_FILEACTIVATED, wxCommandEventHandler( DLG_SELECT_3D_MODELE_BASE::OnFileActivated ), NULL, this );
-	m_FileTree->Connect( wxEVT_DIRCTRL_SELECTIONCHANGED, wxCommandEventHandler( DLG_SELECT_3D_MODELE_BASE::OnSelectionChanged ), NULL, this );
-	m_dirChoices->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DLG_SELECT_3D_MODELE_BASE::SetRootDir ), NULL, this );
-	m_cfgPathsButt->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_SELECT_3D_MODELE_BASE::Cfg3DPaths ), NULL, this );
+	m_FileTree->Connect( wxEVT_DIRCTRL_FILEACTIVATED, wxCommandEventHandler( DIALOG_SELECT_3D_MODEL_BASE::OnFileActivated ), NULL, this );
+	m_FileTree->Connect( wxEVT_DIRCTRL_SELECTIONCHANGED, wxCommandEventHandler( DIALOG_SELECT_3D_MODEL_BASE::OnSelectionChanged ), NULL, this );
+	m_dirChoices->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SELECT_3D_MODEL_BASE::SetRootDir ), NULL, this );
+	m_cfgPathsButt->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SELECT_3D_MODEL_BASE::Cfg3DPaths ), NULL, this );
 }
 
-DLG_SELECT_3D_MODELE_BASE::~DLG_SELECT_3D_MODELE_BASE()
+DIALOG_SELECT_3D_MODEL_BASE::~DIALOG_SELECT_3D_MODEL_BASE()
 {
 	// Disconnect Events
-	m_FileTree->Disconnect( wxEVT_DIRCTRL_FILEACTIVATED, wxCommandEventHandler( DLG_SELECT_3D_MODELE_BASE::OnFileActivated ), NULL, this );
-	m_FileTree->Disconnect( wxEVT_DIRCTRL_SELECTIONCHANGED, wxCommandEventHandler( DLG_SELECT_3D_MODELE_BASE::OnSelectionChanged ), NULL, this );
-	m_dirChoices->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DLG_SELECT_3D_MODELE_BASE::SetRootDir ), NULL, this );
-	m_cfgPathsButt->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_SELECT_3D_MODELE_BASE::Cfg3DPaths ), NULL, this );
+	m_FileTree->Disconnect( wxEVT_DIRCTRL_FILEACTIVATED, wxCommandEventHandler( DIALOG_SELECT_3D_MODEL_BASE::OnFileActivated ), NULL, this );
+	m_FileTree->Disconnect( wxEVT_DIRCTRL_SELECTIONCHANGED, wxCommandEventHandler( DIALOG_SELECT_3D_MODEL_BASE::OnSelectionChanged ), NULL, this );
+	m_dirChoices->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SELECT_3D_MODEL_BASE::SetRootDir ), NULL, this );
+	m_cfgPathsButt->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SELECT_3D_MODEL_BASE::Cfg3DPaths ), NULL, this );
 
 }

@@ -32,7 +32,7 @@ add_executable( libeval_compiler_test
     libeval_compiler_test.cpp
     ../qa_utils/mocks.cpp
     ../../common/base_units.cpp
-    ../../3d-viewer/3d_viewer/3d_viewer_settings.cpp
+    ../../3d-viewer/3d_viewer/eda_3d_viewer_settings.cpp
 )
 
 include_directories( BEFORE ${INC_BEFORE} )

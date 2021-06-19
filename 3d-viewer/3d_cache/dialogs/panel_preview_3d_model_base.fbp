@@ -11,12 +11,12 @@
         <property name="embedded_files_path">res</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
-        <property name="file">panel_prev_3d_base</property>
+        <property name="file">panel_preview_3d_model_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
-        <property name="name">panel_prev_3d_base</property>
+        <property name="name">panel_preview_3d_model_base</property>
         <property name="namespace"></property>
         <property name="path">.</property>
         <property name="precompiled_header"></property>
@@ -41,7 +41,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">PANEL_PREV_3D_BASE</property>
+            <property name="name">PANEL_PREVIEW_3D_MODEL_BASE</property>
             <property name="pos"></property>
             <property name="size">-1,-1</property>
             <property name="subclass"></property>

@@ -32,9 +32,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_PREV_3D_BASE
+/// Class PANEL_PREVIEW_3D_MODEL_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_PREV_3D_BASE : public wxPanel
+class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 {
 	private:
 
@@ -101,8 +101,8 @@ class PANEL_PREV_3D_BASE : public wxPanel
 	public:
 		wxTextCtrl* yoff;
 
-		PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
-		~PANEL_PREV_3D_BASE();
+		PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		~PANEL_PREVIEW_3D_MODEL_BASE();
 
 };
 

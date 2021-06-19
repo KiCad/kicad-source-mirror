@@ -27,7 +27,7 @@
 #include "3d_info.h"
 #include "3d_cache.h"
 #include "3d_cache_dialogs.h"
-#include "dlg_select_3dmodel.h"
+#include "dialog_select_3d_model.h"
 
 
 bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache, wxString& prevModelSelectDir,
@@ -36,7 +36,7 @@ bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache, wxString& prevMod
     if( NULL == aModel )
         return false;
 
-    DLG_SELECT_3DMODEL dm( aParent, aCache, aModel, prevModelSelectDir, prevModelWildcard );
+    DIALOG_SELECT_3DMODEL dm( aParent, aCache, aModel, prevModelSelectDir, prevModelWildcard );
 
     // Use QuasiModal so that Configure3DPaths (and its help window) will work
     return dm.ShowQuasiModal() == wxID_OK;

@@ -22,7 +22,7 @@
 #include <bitmaps.h>
 #include <3d_viewer_id.h>
 #include <3d_enums.h>
-#include "3d_actions.h"
+#include "eda_3d_actions.h"
 
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to

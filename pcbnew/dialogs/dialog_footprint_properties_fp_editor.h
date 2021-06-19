@@ -32,7 +32,7 @@
 #include <dialog_footprint_properties_fp_editor_base.h>
 
 
-class PANEL_PREV_3D;
+class PANEL_PREVIEW_3D_MODEL;
 class FOOTPRINT_EDIT_FRAME;
 
 
@@ -68,19 +68,20 @@ private:
 
     void adjustGridColumns( int aWidth );
 
+private:
     FOOTPRINT_EDIT_FRAME*    m_frame;
     FOOTPRINT*               m_footprint;
 
     static int               m_page;       // remember the last open page during session
 
-    FP_TEXT_GRID_TABLE*     m_texts;
+    FP_TEXT_GRID_TABLE*      m_texts;
 
     UNIT_BINDER              m_netClearance;
     UNIT_BINDER              m_solderMask;
     UNIT_BINDER              m_solderPaste;
 
     std::vector<FP_3DMODEL>  m_shapes3D_list;
-    PANEL_PREV_3D*           m_PreviewPane;
+    PANEL_PREVIEW_3D_MODEL*  m_previewPane;
 
     wxControl*               m_delayedFocusCtrl;
     int                      m_delayedFocusPage;

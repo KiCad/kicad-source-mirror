@@ -40,7 +40,7 @@
 #include <dialog_footprint_properties_fp_editor.h>
 #include "filename_resolver.h"
 #include <pgm_base.h>
-#include "3d_cache/dialogs/panel_prev_3d.h"
+#include "3d_cache/dialogs/panel_preview_3d_model.h"
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
@@ -109,9 +109,9 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
 
     aParent->Prj().Get3DCacheManager()->GetResolver()->SetProgramBase( &Pgm() );
 
-    m_PreviewPane = new PANEL_PREV_3D( m_Panel3D, m_frame, m_footprint, &m_shapes3D_list );
+    m_previewPane = new PANEL_PREVIEW_3D_MODEL( m_Panel3D, m_frame, m_footprint, &m_shapes3D_list );
 
-    bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
+    bLowerSizer3D->Add( m_previewPane, 1, wxEXPAND, 5 );
 
     m_FootprintNameCtrl->SetValidator( FOOTPRINT_NAME_VALIDATOR() );
 
@@ -187,7 +187,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR()
     m_page = m_NoteBook->GetSelection();
     m_NoteBook->SetSelection( 1 );
 
-    delete m_PreviewPane;
+    delete m_previewPane;
 }
 
 
@@ -309,7 +309,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     }
 
     select3DModel( 0 );   // will clamp idx within bounds
-    m_PreviewPane->UpdateDummyFootprint();
+    m_previewPane->UpdateDummyFootprint();
 
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
     {
@@ -357,7 +357,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::select3DModel( int aModelIdx )
         m_modelsGrid->SetGridCursor( aModelIdx, 0 );
     }
 
-    m_PreviewPane->SetSelectedModel( aModelIdx );
+    m_previewPane->SetSelectedModel( aModelIdx );
 
     m_inSelect = false;
 }
@@ -411,7 +411,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::On3DModelCellChanged( wxGridEvent& a
         m_shapes3D_list[ aEvent.GetRow() ].m_Show = ( showValue == wxT( "1" ) );
     }
 
-    m_PreviewPane->UpdateDummyFootprint();
+    m_previewPane->UpdateDummyFootprint();
 }
 
 
@@ -428,7 +428,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnRemove3DModel( wxCommandEvent&  )
         m_modelsGrid->DeleteRows( idx );
 
         select3DModel( idx );       // will clamp idx within bounds
-        m_PreviewPane->UpdateDummyFootprint();
+        m_previewPane->UpdateDummyFootprint();
     }
 }
 
@@ -496,7 +496,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     m_modelsGrid->SetCellValue( idx, 1, wxT( "1" ) );
 
     select3DModel( idx );
-    m_PreviewPane->UpdateDummyFootprint();
+    m_previewPane->UpdateDummyFootprint();
 }
 
 
@@ -803,7 +803,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteField( wxCommandEvent& event
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Cfg3DPath( wxCommandEvent& event )
 {
     if( S3D::Configure3DPaths( this, Prj().Get3DCacheManager()->GetResolver() ) )
-        m_PreviewPane->UpdateDummyFootprint();
+        m_previewPane->UpdateDummyFootprint();
 }
 
 

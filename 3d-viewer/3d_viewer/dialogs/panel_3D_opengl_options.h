@@ -31,7 +31,7 @@
 class PANEL_3D_OPENGL_OPTIONS : public PANEL_3D_OPENGL_OPTIONS_BASE
 {
 public:
-    explicit PANEL_3D_OPENGL_OPTIONS( EDA_3D_VIEWER* aFrame, wxWindow* aParent );
+    explicit PANEL_3D_OPENGL_OPTIONS( EDA_3D_VIEWER_FRAME* aFrame, wxWindow* aParent );
 
     /// Automatically called when clicking on the OK button
     bool TransferDataFromWindow() override;

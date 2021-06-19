@@ -32,7 +32,7 @@
 class PANEL_3D_DISPLAY_OPTIONS : public PANEL_3D_DISPLAY_OPTIONS_BASE
 {
 public:
-    explicit PANEL_3D_DISPLAY_OPTIONS( EDA_3D_VIEWER* aFrame, wxWindow* aParent );
+    explicit PANEL_3D_DISPLAY_OPTIONS( EDA_3D_VIEWER_FRAME* aFrame, wxWindow* aParent );
 
     void OnCheckEnableAnimation( wxCommandEvent& WXUNUSED( event ) ) override;
 
@@ -45,9 +45,9 @@ public:
     void TransferColorDataToWindow();
 
 private:
-    EDA_3D_VIEWER* m_frame;
-    BOARD_ADAPTER& m_settings;
-    EDA_3D_CANVAS* m_canvas;
+    EDA_3D_VIEWER_FRAME* m_frame;
+    BOARD_ADAPTER&       m_settings;
+    EDA_3D_CANVAS*       m_canvas;
 };
 
 

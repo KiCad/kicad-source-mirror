@@ -59,13 +59,13 @@ enum EDA_3D_VIEWER_STATUSBAR
 /**
  * Create and handle a window for the 3d viewer connected to a Kiway and a pcbboard
  */
-class EDA_3D_VIEWER : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
+class EDA_3D_VIEWER_FRAME : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
 {
 public:
-    EDA_3D_VIEWER( KIWAY* aKiway, PCB_BASE_FRAME* aParent, const wxString& aTitle,
-                   long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
+    EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent, const wxString& aTitle,
+                         long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
 
-    ~EDA_3D_VIEWER();
+    ~EDA_3D_VIEWER_FRAME();
 
     PCB_BASE_FRAME* Parent() const { return (PCB_BASE_FRAME*)GetParent(); }
 

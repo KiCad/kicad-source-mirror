@@ -24,12 +24,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "panel_prev_3d.h"
+#include "panel_preview_3d_model.h"
 #include <3d_canvas/eda_3d_canvas.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-#include <tools/3d_actions.h>
-#include <tools/3d_controller.h>
+#include <tools/eda_3d_actions.h>
+#include <tools/eda_3d_controller.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <board.h>
@@ -41,9 +41,10 @@
 #include <widgets/infobar.h>
 
 
-PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRINT* aFootprint,
-                              std::vector<FP_3DMODEL>* aParentModelList ) :
-        PANEL_PREV_3D_BASE( aParent, wxID_ANY ),
+PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
+                                                FOOTPRINT* aFootprint,
+                                                std::vector<FP_3DMODEL>* aParentModelList ) :
+        PANEL_PREVIEW_3D_MODEL_BASE( aParent, wxID_ANY ),
         m_previewPane( nullptr ),
         m_infobar( nullptr ),
         m_boardAdapter(),
@@ -122,7 +123,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRI
     m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND, 5 );
 
     for( wxEventType eventType : { wxEVT_MENU_OPEN, wxEVT_MENU_CLOSE, wxEVT_MENU_HIGHLIGHT } )
-        Connect( eventType, wxMenuEventHandler( PANEL_PREV_3D::OnMenuEvent ), NULL, this );
+        Connect( eventType, wxMenuEventHandler( PANEL_PREVIEW_3D_MODEL::OnMenuEvent ), NULL, this );
 
 #ifdef __WXOSX__
     // Call layout once to get the proper button sizes after the bitmaps have been set
@@ -145,14 +146,14 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRI
 }
 
 
-PANEL_PREV_3D::~PANEL_PREV_3D()
+PANEL_PREVIEW_3D_MODEL::~PANEL_PREVIEW_3D_MODEL()
 {
     delete m_dummyBoard;
     delete m_previewPane;
 }
 
 
-void PANEL_PREV_3D::OnMenuEvent( wxMenuEvent& aEvent )
+void PANEL_PREVIEW_3D_MODEL::OnMenuEvent( wxMenuEvent& aEvent )
 {
     if( !m_toolDispatcher )
         aEvent.Skip();
@@ -161,7 +162,7 @@ void PANEL_PREV_3D::OnMenuEvent( wxMenuEvent& aEvent )
 }
 
 
-void PANEL_PREV_3D::loadCommonSettings()
+void PANEL_PREVIEW_3D_MODEL::loadCommonSettings()
 {
     wxCHECK_RET( m_previewPane, "Cannot load settings to null canvas" );
 
@@ -199,19 +200,19 @@ static double rotationFromString( const wxString& aValue )
 }
 
 
-wxString PANEL_PREV_3D::formatScaleValue( double aValue )
+wxString PANEL_PREVIEW_3D_MODEL::formatScaleValue( double aValue )
 {
     return wxString::Format( "%.4f", aValue );
 }
 
 
-wxString PANEL_PREV_3D::formatRotationValue( double aValue )
+wxString PANEL_PREVIEW_3D_MODEL::formatRotationValue( double aValue )
 {
     return wxString::Format( "%.2f %s", aValue, GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
 }
 
 
-wxString PANEL_PREV_3D::formatOffsetValue( double aValue )
+wxString PANEL_PREVIEW_3D_MODEL::formatOffsetValue( double aValue )
 {
     // Convert from internal units (mm) to user units
     if( m_userUnits == EDA_UNITS::INCHES )
@@ -221,7 +222,7 @@ wxString PANEL_PREV_3D::formatOffsetValue( double aValue )
 }
 
 
-void PANEL_PREV_3D::SetSelectedModel( int idx )
+void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
 {
     if( m_parentModelList && idx >= 0 && idx < (int) m_parentModelList->size() )
     {
@@ -265,7 +266,7 @@ void PANEL_PREV_3D::SetSelectedModel( int idx )
 }
 
 
-void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
+void PANEL_PREVIEW_3D_MODEL::updateOrientation( wxCommandEvent &event )
 {
     if( m_parentModelList && m_selected >= 0 && m_selected < (int) m_parentModelList->size() )
     {
@@ -290,7 +291,7 @@ void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
 }
 
 
-void PANEL_PREV_3D::onOpacitySlider( wxCommandEvent& event )
+void PANEL_PREVIEW_3D_MODEL::onOpacitySlider( wxCommandEvent& event )
 {
     if( m_parentModelList && m_selected >= 0 && m_selected < (int) m_parentModelList->size() )
     {
@@ -305,7 +306,7 @@ void PANEL_PREV_3D::onOpacitySlider( wxCommandEvent& event )
 }
 
 
-void PANEL_PREV_3D::doIncrementScale( wxSpinEvent& event, double aSign )
+void PANEL_PREVIEW_3D_MODEL::doIncrementScale( wxSpinEvent& event, double aSign )
 {
     wxSpinButton* spinCtrl = (wxSpinButton*) event.GetEventObject();
 
@@ -326,7 +327,7 @@ void PANEL_PREV_3D::doIncrementScale( wxSpinEvent& event, double aSign )
 }
 
 
-void PANEL_PREV_3D::doIncrementRotation( wxSpinEvent& aEvent, double aSign )
+void PANEL_PREVIEW_3D_MODEL::doIncrementRotation( wxSpinEvent& aEvent, double aSign )
 {
     wxSpinButton* spinCtrl = (wxSpinButton*) aEvent.GetEventObject();
     wxTextCtrl* textCtrl = xrot;
@@ -346,7 +347,7 @@ void PANEL_PREV_3D::doIncrementRotation( wxSpinEvent& aEvent, double aSign )
 }
 
 
-void PANEL_PREV_3D::doIncrementOffset( wxSpinEvent& event, double aSign )
+void PANEL_PREVIEW_3D_MODEL::doIncrementOffset( wxSpinEvent& event, double aSign )
 {
     wxSpinButton* spinCtrl = (wxSpinButton*) event.GetEventObject();
 
@@ -372,7 +373,7 @@ void PANEL_PREV_3D::doIncrementOffset( wxSpinEvent& event, double aSign )
 }
 
 
-void PANEL_PREV_3D::onMouseWheelScale( wxMouseEvent& event )
+void PANEL_PREVIEW_3D_MODEL::onMouseWheelScale( wxMouseEvent& event )
 {
     wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
 
@@ -394,7 +395,7 @@ void PANEL_PREV_3D::onMouseWheelScale( wxMouseEvent& event )
 }
 
 
-void PANEL_PREV_3D::onMouseWheelRot( wxMouseEvent& event )
+void PANEL_PREVIEW_3D_MODEL::onMouseWheelRot( wxMouseEvent& event )
 {
     wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
 
@@ -416,7 +417,7 @@ void PANEL_PREV_3D::onMouseWheelRot( wxMouseEvent& event )
 }
 
 
-void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
+void PANEL_PREVIEW_3D_MODEL::onMouseWheelOffset( wxMouseEvent& event )
 {
     wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
 
@@ -446,7 +447,7 @@ void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
 }
 
 
-void PANEL_PREV_3D::UpdateDummyFootprint( bool aReloadRequired )
+void PANEL_PREVIEW_3D_MODEL::UpdateDummyFootprint( bool aReloadRequired )
 {
     m_dummyFootprint->Models().clear();
 

@@ -33,10 +33,10 @@
  * to tune the positioning of the models without invoking a file selector dialog.
  */
 
-#ifndef PANEL_PREV_MODEL_H
-#define PANEL_PREV_MODEL_H
+#ifndef PANEL_PREVIEW_3D_MODEL_H
+#define PANEL_PREVIEW_3D_MODEL_H
 
-#include "panel_prev_3d_base.h"
+#include "panel_preview_3d_model_base.h"
 
 #include <vector>
 #include <tool/tools_holder.h>
@@ -71,13 +71,13 @@ class BOARD;
 class BOARD_ADAPTER;
 class FOOTPRINT;
 
-class PANEL_PREV_3D: public EDA_3D_BOARD_HOLDER, public TOOLS_HOLDER, public PANEL_PREV_3D_BASE
+class PANEL_PREVIEW_3D_MODEL: public EDA_3D_BOARD_HOLDER, public TOOLS_HOLDER, public PANEL_PREVIEW_3D_MODEL_BASE
 {
 public:
-    PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRINT* aFootprint,
-                   std::vector<FP_3DMODEL>* aParentModelList );
+    PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRINT* aFootprint,
+                            std::vector<FP_3DMODEL>* aParentModelList );
 
-    ~PANEL_PREV_3D();
+    ~PANEL_PREVIEW_3D_MODEL();
 
     /**
      * The TOOL_DISPATCHER needs these to work around some issues in wxWidgets where the menu
@@ -210,4 +210,4 @@ private:
     EDA_UNITS m_userUnits;
 };
 
-#endif  // PANEL_PREV_MODEL_H
+#endif  // PANEL_PREVIEW_3D_MODEL_H

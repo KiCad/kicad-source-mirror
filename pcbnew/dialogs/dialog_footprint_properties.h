@@ -35,7 +35,7 @@
 
 
 class PCB_EDIT_FRAME;
-class PANEL_PREV_3D;
+class PANEL_PREVIEW_3D_MODEL;
 
 
 class DIALOG_FOOTPRINT_PROPERTIES: public DIALOG_FOOTPRINT_PROPERTIES_BASE
@@ -93,6 +93,7 @@ private:
      */
     void updateOrientationControl();
 
+private:
     PCB_EDIT_FRAME*                  m_frame;
     FOOTPRINT*                       m_footprint;
 
@@ -101,15 +102,15 @@ private:
     FP_TEXT_GRID_TABLE*              m_texts;
     UNIT_BINDER                      m_posX;
     UNIT_BINDER                      m_posY;
-    wxFloatingPointValidator<double> m_OrientValidator;
-    double                           m_OrientValue;
+    wxFloatingPointValidator<double> m_orientValidator;
+    double                           m_orientValue;
 
     UNIT_BINDER                      m_netClearance;
     UNIT_BINDER                      m_solderMask;
     UNIT_BINDER                      m_solderPaste;
 
     std::vector<FP_3DMODEL>          m_shapes3D_list;
-    PANEL_PREV_3D*                   m_PreviewPane;
+    PANEL_PREVIEW_3D_MODEL*          m_previewPane;
 
     wxString                         m_delayedErrorMessage;
     wxGrid*                          m_delayedFocusGrid;

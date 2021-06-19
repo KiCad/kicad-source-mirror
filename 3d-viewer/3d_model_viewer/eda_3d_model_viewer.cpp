@@ -31,7 +31,7 @@
 
 #include <iostream>
 #include "3d_rendering/legacy/3d_model.h"
-#include "3d_model_viewer.h"
+#include "eda_3d_model_viewer.h"
 #include "../3d_rendering/legacy/ogl_legacy_utils.h"
 #include "../3d_cache/3d_cache.h"
 #include "common_ogl/ogl_utils.h"
@@ -52,27 +52,27 @@
  *
  * @ingroup trace_env_vars
  */
-const wxChar* C3D_MODEL_VIEWER::m_logTrace = wxT( "KI_TRACE_EDA_3D_MODEL_VIEWER" );
+const wxChar* EDA_3D_MODEL_VIEWER::m_logTrace = wxT( "KI_TRACE_EDA_3D_MODEL_VIEWER" );
 
 
-BEGIN_EVENT_TABLE( C3D_MODEL_VIEWER, wxGLCanvas )
-    EVT_PAINT( C3D_MODEL_VIEWER::OnPaint )
+BEGIN_EVENT_TABLE( EDA_3D_MODEL_VIEWER, wxGLCanvas )
+    EVT_PAINT( EDA_3D_MODEL_VIEWER::OnPaint )
 
     // mouse events
-    EVT_LEFT_DOWN(  C3D_MODEL_VIEWER::OnLeftDown )
-    EVT_LEFT_UP(    C3D_MODEL_VIEWER::OnLeftUp )
-    EVT_MIDDLE_UP(  C3D_MODEL_VIEWER::OnMiddleUp )
-    EVT_MIDDLE_DOWN(C3D_MODEL_VIEWER::OnMiddleDown)
-    EVT_RIGHT_DOWN( C3D_MODEL_VIEWER::OnRightClick )
-    EVT_MOUSEWHEEL( C3D_MODEL_VIEWER::OnMouseWheel )
-    EVT_MOTION(     C3D_MODEL_VIEWER::OnMouseMove )
+    EVT_LEFT_DOWN( EDA_3D_MODEL_VIEWER::OnLeftDown )
+    EVT_LEFT_UP( EDA_3D_MODEL_VIEWER::OnLeftUp )
+    EVT_MIDDLE_UP( EDA_3D_MODEL_VIEWER::OnMiddleUp )
+    EVT_MIDDLE_DOWN( EDA_3D_MODEL_VIEWER::OnMiddleDown)
+    EVT_RIGHT_DOWN( EDA_3D_MODEL_VIEWER::OnRightClick )
+    EVT_MOUSEWHEEL( EDA_3D_MODEL_VIEWER::OnMouseWheel )
+    EVT_MOTION( EDA_3D_MODEL_VIEWER::OnMouseMove )
 
 #ifdef USE_OSX_MAGNIFY_EVENT
-     EVT_MAGNIFY(   C3D_MODEL_VIEWER::OnMagnify )
+     EVT_MAGNIFY(   EDA_3D_MODEL_VIEWER::OnMagnify )
 #endif
 
     // other events
-    EVT_ERASE_BACKGROUND( C3D_MODEL_VIEWER::OnEraseBackground )
+    EVT_ERASE_BACKGROUND( EDA_3D_MODEL_VIEWER::OnEraseBackground )
 END_EVENT_TABLE()
 
 
@@ -82,13 +82,13 @@ END_EVENT_TABLE()
 #define RANGE_SCALE_3D 8.0f
 
 
-C3D_MODEL_VIEWER::C3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribList,
-                                    S3D_CACHE* aCacheManager ) :
+EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribList,
+                                          S3D_CACHE* aCacheManager ) :
         HIDPI_GL_CANVAS( aParent, wxID_ANY, aAttribList, wxDefaultPosition, wxDefaultSize,
                          wxFULL_REPAINT_ON_RESIZE ),
         m_trackBallCamera( RANGE_SCALE_3D * 2.0f ), m_cacheManager( aCacheManager )
 {
-    wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::C3D_MODEL_VIEWER" ) );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER" ) );
 
     m_ogl_initialized = false;
     m_reload_is_needed = false;
@@ -100,9 +100,9 @@ C3D_MODEL_VIEWER::C3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribList,
 }
 
 
-C3D_MODEL_VIEWER::~C3D_MODEL_VIEWER()
+EDA_3D_MODEL_VIEWER::~EDA_3D_MODEL_VIEWER()
 {
-    wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::~C3D_MODEL_VIEWER" ) );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWERWER" ) );
 
     if( m_glRC )
     {
@@ -117,9 +117,9 @@ C3D_MODEL_VIEWER::~C3D_MODEL_VIEWER()
 }
 
 
-void C3D_MODEL_VIEWER::Set3DModel( const S3DMODEL& a3DModel )
+void EDA_3D_MODEL_VIEWER::Set3DModel( const S3DMODEL& a3DModel )
 {
-    wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::Set3DModel with a S3DMODEL" ) );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::Set3DModel with a S3DMODEL" ) );
 
     // Validate a3DModel pointers
     wxASSERT( a3DModel.m_Materials != nullptr );
@@ -144,9 +144,9 @@ void C3D_MODEL_VIEWER::Set3DModel( const S3DMODEL& a3DModel )
 }
 
 
-void C3D_MODEL_VIEWER::Set3DModel(const wxString& aModelPathName)
+void EDA_3D_MODEL_VIEWER::Set3DModel( const wxString& aModelPathName)
 {
-    wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::Set3DModel with a wxString" ) );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::Set3DModel with a wxString" ) );
 
     if( m_cacheManager )
     {
@@ -160,7 +160,7 @@ void C3D_MODEL_VIEWER::Set3DModel(const wxString& aModelPathName)
 }
 
 
-void C3D_MODEL_VIEWER::Clear3DModel()
+void EDA_3D_MODEL_VIEWER::Clear3DModel()
 {
     // Delete the old model
     m_reload_is_needed = false;
@@ -174,7 +174,7 @@ void C3D_MODEL_VIEWER::Clear3DModel()
 }
 
 
-void C3D_MODEL_VIEWER::ogl_initialize()
+void EDA_3D_MODEL_VIEWER::ogl_initialize()
 {
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
     glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
@@ -206,7 +206,7 @@ void C3D_MODEL_VIEWER::ogl_initialize()
 }
 
 
-void C3D_MODEL_VIEWER::ogl_set_arrow_material()
+void EDA_3D_MODEL_VIEWER::ogl_set_arrow_material()
 {
     glEnable( GL_COLOR_MATERIAL );
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
@@ -218,14 +218,14 @@ void C3D_MODEL_VIEWER::ogl_set_arrow_material()
 }
 
 
-void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
+void EDA_3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
 {
     event.Skip( false );
 
     // SwapBuffer requires the window to be shown before calling
     if( !IsShownOnScreen() )
     {
-        wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::OnPaint !IsShown" ) );
+        wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::OnPaint !IsShown" ) );
         return;
     }
 
@@ -253,7 +253,7 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
 
     if( m_reload_is_needed )
     {
-        wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::OnPaint m_reload_is_needed" ) );
+        wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::OnPaint m_reload_is_needed" ) );
 
         m_reload_is_needed = false;
         m_ogl_3dmodel      = new MODEL_3D( *m_3d_model, MATERIAL_MODE::NORMAL );
@@ -349,16 +349,16 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
 }
 
 
-void C3D_MODEL_VIEWER::OnEraseBackground( wxEraseEvent& event )
+void EDA_3D_MODEL_VIEWER::OnEraseBackground( wxEraseEvent& event )
 {
-    wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::OnEraseBackground" ) );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::OnEraseBackground" ) );
     // Do nothing, to avoid flashing.
 }
 
 
-void C3D_MODEL_VIEWER::OnMouseWheel( wxMouseEvent& event )
+void EDA_3D_MODEL_VIEWER::OnMouseWheel( wxMouseEvent& event )
 {
-    wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::OnMouseWheel" ) );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::OnMouseWheel" ) );
 
     if( event.ShiftDown() )
     {
@@ -387,13 +387,13 @@ void C3D_MODEL_VIEWER::OnMouseWheel( wxMouseEvent& event )
 
 
 #ifdef USE_OSX_MAGNIFY_EVENT
-void C3D_MODEL_VIEWER::OnMagnify( wxMouseEvent& event )
+void EDA_3D_MODEL_VIEWER::OnMagnify( wxMouseEvent& event )
 {
 }
 #endif
 
 
-void C3D_MODEL_VIEWER::OnMouseMove( wxMouseEvent& event )
+void EDA_3D_MODEL_VIEWER::OnMouseMove( wxMouseEvent& event )
 {
     m_trackBallCamera.SetCurWindowSize( GetClientSize() );
 
@@ -410,31 +410,31 @@ void C3D_MODEL_VIEWER::OnMouseMove( wxMouseEvent& event )
 }
 
 
-void C3D_MODEL_VIEWER::OnLeftDown( wxMouseEvent& event )
+void EDA_3D_MODEL_VIEWER::OnLeftDown( wxMouseEvent& event )
 {
     event.Skip();
 }
 
 
-void C3D_MODEL_VIEWER::OnLeftUp( wxMouseEvent& event )
+void EDA_3D_MODEL_VIEWER::OnLeftUp( wxMouseEvent& event )
 {
     event.Skip();
 }
 
 
-void C3D_MODEL_VIEWER::OnMiddleDown( wxMouseEvent& event )
+void EDA_3D_MODEL_VIEWER::OnMiddleDown( wxMouseEvent& event )
 {
     event.Skip();
 }
 
 
-void C3D_MODEL_VIEWER::OnMiddleUp( wxMouseEvent& event )
+void EDA_3D_MODEL_VIEWER::OnMiddleUp( wxMouseEvent& event )
 {
     event.Skip();
 }
 
 
-void C3D_MODEL_VIEWER::OnRightClick( wxMouseEvent& event )
+void EDA_3D_MODEL_VIEWER::OnRightClick( wxMouseEvent& event )
 {
     event.Skip();
 }

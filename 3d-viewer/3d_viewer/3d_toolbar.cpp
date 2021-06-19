@@ -30,12 +30,12 @@
 #include <eda_3d_viewer.h>
 #include <menus_helpers.h>
 #include <tool/action_toolbar.h>
-#include <tools/3d_actions.h>
+#include <tools/eda_3d_actions.h>
 #include <3d_viewer_id.h>
 
-void EDA_3D_VIEWER::ReCreateMainToolbar()
+void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
 {
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER::ReCreateMainToolbar" );
+    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::ReCreateMainToolbar" );
 
     wxWindowUpdateLocker dummy( this );
 

@@ -26,9 +26,9 @@
 #include <widgets/color_swatch.h>
 #include <3d_canvas/board_adapter.h>
 #include <3d_viewer/eda_3d_viewer.h>
-#include <3d_viewer/tools/3d_controller.h>
+#include <3d_viewer/tools/eda_3d_controller.h>
 
-PANEL_3D_OPENGL_OPTIONS::PANEL_3D_OPENGL_OPTIONS( EDA_3D_VIEWER* aFrame, wxWindow* aParent ) :
+PANEL_3D_OPENGL_OPTIONS::PANEL_3D_OPENGL_OPTIONS( EDA_3D_VIEWER_FRAME* aFrame, wxWindow* aParent ) :
         PANEL_3D_OPENGL_OPTIONS_BASE( aParent ),
         m_settings( aFrame->GetAdapter() ),
         m_canvas( aFrame->GetCanvas() )

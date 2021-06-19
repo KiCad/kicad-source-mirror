@@ -31,7 +31,7 @@
 class PANEL_3D_RAYTRACING_OPTIONS : public PANEL_3D_RAYTRACING_OPTIONS_BASE
 {
 public:
-    explicit PANEL_3D_RAYTRACING_OPTIONS( EDA_3D_VIEWER* aFrame, wxWindow* aParent );
+    explicit PANEL_3D_RAYTRACING_OPTIONS( EDA_3D_VIEWER_FRAME* aFrame, wxWindow* aParent );
 
     void ResetPanel() override;
 
