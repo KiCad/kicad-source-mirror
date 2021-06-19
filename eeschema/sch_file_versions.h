@@ -42,7 +42,7 @@
 
 
 /**
- * Symbol library file version.
+ * Schematic file version.
  */
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200310  // Initial version.  Sheet fields were named
                                                  // incorrectly (using symbol field vocabulary).
