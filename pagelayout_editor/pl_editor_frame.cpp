@@ -222,6 +222,9 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 PL_EDITOR_FRAME::~PL_EDITOR_FRAME()
 {
+    // Ensure m_canvasType is up to date, to save it in config
+    m_canvasType = GetCanvas()->GetBackend();
+
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();

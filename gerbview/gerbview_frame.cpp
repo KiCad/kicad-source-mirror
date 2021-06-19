@@ -202,6 +202,9 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
 GERBVIEW_FRAME::~GERBVIEW_FRAME()
 {
+    // Ensure m_canvasType is up to date, to save it in config
+    m_canvasType = GetCanvas()->GetBackend();
+
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
