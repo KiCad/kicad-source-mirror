@@ -550,8 +550,14 @@ public:
     ///< Return the area of this poly set
     double Area();
 
+    ///< Count the number of arc shapes present
+    int ArcCount() const;
+
     ///< Appends all the arcs in this polyset to \a aArcBuffer
     void GetArcs( std::vector<SHAPE_ARC>& aArcBuffer ) const;
+
+    ///< Removes all arc references from all the outlines and holes in the polyset
+    void ClearArcs();
 
     ///< Appends a vertex at the end of the given outline/hole (default: the last outline)
     /**

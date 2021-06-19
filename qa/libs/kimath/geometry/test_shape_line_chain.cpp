@@ -95,6 +95,16 @@ BOOST_AUTO_TEST_CASE( ArcToPolylineLargeCoords )
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
     BOOST_CHECK_EQUAL( base_chain.PointCount(), 11 ); // Adding 1 point, removing 3
     BOOST_CHECK_EQUAL( base_chain.ArcCount(), 3 );    // Should still have three arcs
+
+    // Test ClearArcs
+    base_chain.SetClosed( true );
+    double areaPriorToArcRemoval = base_chain.Area();
+    base_chain.ClearArcs();
+
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
+    BOOST_CHECK_EQUAL( base_chain.PointCount(), 11 ); // We should have the same number of points
+    BOOST_CHECK_EQUAL( base_chain.ArcCount(), 0 ); // All arcs should have been removed
+    BOOST_CHECK_EQUAL( base_chain.Area(), areaPriorToArcRemoval ); // Area should not have changed
 }
 
 

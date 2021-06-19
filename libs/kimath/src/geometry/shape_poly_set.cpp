@@ -490,6 +490,20 @@ double SHAPE_POLY_SET::Area()
 }
 
 
+int SHAPE_POLY_SET::ArcCount() const
+{
+    int retval = 0;
+
+    for( const POLYGON& poly : m_polys )
+    {
+        for( size_t i = 0; i < poly.size(); i++ )
+            retval += poly[i].ArcCount();
+    }
+
+    return retval;
+}
+
+
 void SHAPE_POLY_SET::GetArcs( std::vector<SHAPE_ARC>& aArcBuffer ) const
 {
     for( const POLYGON& poly : m_polys )
@@ -499,6 +513,16 @@ void SHAPE_POLY_SET::GetArcs( std::vector<SHAPE_ARC>& aArcBuffer ) const
             for( SHAPE_ARC arc : poly[i].m_arcs )
                 aArcBuffer.push_back( arc );
         }
+    }
+}
+
+
+void SHAPE_POLY_SET::ClearArcs()
+{
+    for( POLYGON& poly : m_polys )
+    {
+        for( size_t i = 0; i < poly.size(); i++ )
+            poly[i].ClearArcs();
     }
 }
 
@@ -513,6 +537,13 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
 void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aShape,
                                 const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode )
 {
+    if( ( aShape.OutlineCount() > 1 || aOtherShape.OutlineCount() > 0 )
+        && ( aShape.ArcCount() > 0 || aOtherShape.ArcCount() > 0 ) )
+    {
+        wxFAIL_MSG( "Boolean ops on curved polygons are not supported. You should call "
+                    "ClearArcs() before carrying out the boolean operation." );
+    }
+
     ClipperLib::Clipper c;
 
     c.StrictlySimple( aFastMode == PM_STRICTLY_SIMPLE );

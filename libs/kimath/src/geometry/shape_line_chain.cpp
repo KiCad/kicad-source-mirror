@@ -121,7 +121,6 @@ ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation,
 }
 
 
-//TODO(SH): Adjust this into two functions: one to convert and one to split the arc into two arcs
 void SHAPE_LINE_CHAIN::convertArc( ssize_t aArcIndex )
 {
     if( aArcIndex < 0 )
@@ -512,6 +511,13 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Reverse() const
     a.m_closed = m_closed;
 
     return a;
+}
+
+
+void SHAPE_LINE_CHAIN::ClearArcs()
+{
+    for( ssize_t arcIndex = m_arcs.size() - 1; arcIndex >= 0; --arcIndex )
+        convertArc( arcIndex );
 }
 
 

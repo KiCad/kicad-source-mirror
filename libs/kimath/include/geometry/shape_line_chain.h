@@ -425,6 +425,13 @@ public:
     const SHAPE_LINE_CHAIN Reverse() const;
 
     /**
+     * Remove all arc references in the line chain, resulting in a chain formed
+     * only of straight segments. Any arcs in the chain are removed and only the
+     * piecewise linear approximation remains.
+     */
+    void ClearArcs();
+
+    /**
      * Return length of the line chain in Euclidean metric.
      *
      * @return the length of the line chain.
