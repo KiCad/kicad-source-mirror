@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <limits.h>          // for INT_MAX
 #include <math.h>            // for hypot
+#include <map>
 #include <string>            // for basic_string
 
 #include <clipper.hpp>
@@ -54,32 +55,67 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV)
     }
 }
 
-SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath ) :
-    SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
-    m_closed( true ),
-    m_width( 0 )
+SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const ClipperLib::Path&             aPath,
+                                    const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
+                                    const std::vector<SHAPE_ARC>&       aArcBuffer ) :
+        SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+        m_closed( true ), m_width( 0 )
 {
+    std::map<ssize_t, ssize_t> loadedArcs;
     m_points.reserve( aPath.size() );
     m_shapes.reserve( aPath.size() );
+
+    auto loadArc =
+        [&]( ssize_t aArcIndex ) -> ssize_t
+        {
+            if( aArcIndex == SHAPE_IS_PT )
+            {
+                return SHAPE_IS_PT;
+            }
+            else if( loadedArcs.count( aArcIndex ) == 0 )
+            {
+                loadedArcs.insert( { aArcIndex, m_arcs.size() } );
+                m_arcs.push_back( aArcBuffer.at( aArcIndex ) );
+            }
+
+            return loadedArcs.at(aArcIndex);
+        };
 
     for( size_t ii = 0; ii < aPath.size(); ++ii )
     {
         Append( aPath[ii].X, aPath[ii].Y );
+
+        m_shapes[ii].first = loadArc( aZValueBuffer[aPath[ii].Z].m_FirstArcIdx );
+        m_shapes[ii].second = loadArc( aZValueBuffer[aPath[ii].Z].m_SecondArcIdx );
     }
 }
 
-ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation ) const
+ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation,
+                                                     std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
+                                                     std::vector<SHAPE_ARC>& aArcBuffer ) const
 {
     ClipperLib::Path c_path;
+    SHAPE_LINE_CHAIN input;
+    bool             orientation = Area( false ) >= 0;
+    ssize_t          shape_offset = aArcBuffer.size();
 
-    for( int i = 0; i < PointCount(); i++ )
+    if( orientation != aRequiredOrientation )
+        input = Reverse();
+    else
+        input = *this;
+
+    for( int i = 0; i < input.PointCount(); i++ )
     {
-        const VECTOR2I& vertex = CPoint( i );
-        c_path.push_back( ClipperLib::IntPoint( vertex.x, vertex.y ) );
+        const VECTOR2I& vertex = input.CPoint( i );
+
+        CLIPPER_Z_VALUE z_value( input.m_shapes[i], shape_offset );
+        size_t          z_value_ptr = aZValueBuffer.size();
+        aZValueBuffer.push_back( z_value );
+
+        c_path.push_back( ClipperLib::IntPoint( vertex.x, vertex.y, z_value_ptr ) );
     }
 
-    if( Orientation( c_path ) != aRequiredOrientation )
-        ReversePath( c_path );
+    aArcBuffer.insert( aArcBuffer.end(), input.m_arcs.begin(), input.m_arcs.end() );
 
     return c_path;
 }
@@ -1761,7 +1797,7 @@ const VECTOR2I SHAPE_LINE_CHAIN::PointAlong( int aPathLength ) const
 }
 
 
-double SHAPE_LINE_CHAIN::Area() const
+double SHAPE_LINE_CHAIN::Area( bool aAbsolute ) const
 {
     // see https://www.mathopenref.com/coordpolygonarea2.html
 
@@ -1778,7 +1814,10 @@ double SHAPE_LINE_CHAIN::Area() const
         j = i;
     }
 
-    return std::fabs( area * 0.5 ); // The result would be negative if points are anti-clockwise
+    if( aAbsolute )
+        return std::fabs( area * 0.5 ); // The result would be negative if points are anti-clockwise
+    else
+        return -area * 0.5; // The result would be negative if points are anti-clockwise
 }
 
 

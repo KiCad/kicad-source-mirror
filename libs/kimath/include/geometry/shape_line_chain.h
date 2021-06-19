@@ -33,6 +33,31 @@
 #include <geometry/shape_arc.h>
 #include <math/vector2d.h>
 
+/**
+ * Holds information on each point of a SHAPE_LINE_CHAIN that is retrievable
+ * after an operation with ClipperLib
+ */
+struct CLIPPER_Z_VALUE
+{
+    CLIPPER_Z_VALUE( const std::pair<ssize_t, ssize_t> aShapeIndices, ssize_t aOffset = 0 )
+    {
+        m_FirstArcIdx = aShapeIndices.first;
+        m_SecondArcIdx = aShapeIndices.second;
+
+        auto offsetVal = [&]( ssize_t& aVal )
+                         {
+                             if( aVal >= 0 )
+                                 aVal += aOffset;
+                         };
+
+        offsetVal( m_FirstArcIdx );
+        offsetVal( m_SecondArcIdx );
+    }
+
+    ssize_t m_FirstArcIdx;
+    ssize_t m_SecondArcIdx;
+};
+
 
 /**
  * Represent a polyline (an zero-thickness chain of connected line segments).
@@ -152,7 +177,8 @@ public:
         m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( m_points.size(), SHAPES_ARE_PT );
     }
 
-    SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath );
+    SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath, const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
+                      const std::vector<SHAPE_ARC>& aArcBuffer );
 
     virtual ~SHAPE_LINE_CHAIN()
     {}
@@ -698,7 +724,12 @@ public:
 
     const VECTOR2I PointAlong( int aPathLength ) const;
 
-    double Area() const;
+    /**
+     * Return the area of this chain
+     * @param aAbsolute If true, returns a positive value. Otherwise the value depends on the
+     * orientation of the chain
+     */
+    double Area( bool aAbsolute = true ) const;
 
     size_t ArcCount() const
     {
@@ -810,7 +841,9 @@ protected:
     /**
      * Create a new Clipper path from the SHAPE_LINE_CHAIN in a given orientation
      */
-    ClipperLib::Path convertToClipper( bool aRequiredOrientation ) const;
+    ClipperLib::Path convertToClipper( bool aRequiredOrientation,
+                                       std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
+                                       std::vector<SHAPE_ARC>&       aArcBuffer ) const;
 
 private:
 

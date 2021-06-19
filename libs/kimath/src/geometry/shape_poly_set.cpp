@@ -516,31 +516,43 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
 
     c.StrictlySimple( aFastMode == PM_STRICTLY_SIMPLE );
 
-    // All possible arcs in the resulting shape of the booleanop
-    std::vector<SHAPE_ARC> possibleArcs;
-
-    aShape.GetArcs( possibleArcs );
-    aOtherShape.GetArcs( possibleArcs );
+    std::vector<CLIPPER_Z_VALUE> zValues;
+    std::vector<SHAPE_ARC> arcBuffer;
 
     for( const POLYGON& poly : aShape.m_polys )
     {
-        for( size_t i = 0 ; i < poly.size(); i++ )
-            c.AddPath( poly[i].convertToClipper( i == 0 ), ClipperLib::ptSubject, true );
+        for( size_t i = 0; i < poly.size(); i++ )
+        {
+            c.AddPath( poly[i].convertToClipper( i == 0, zValues, arcBuffer ),
+                       ClipperLib::ptSubject, true );
+        }
     }
 
     for( const POLYGON& poly : aOtherShape.m_polys )
     {
         for( size_t i = 0; i < poly.size(); i++ )
-            c.AddPath( poly[i].convertToClipper( i == 0 ), ClipperLib::ptClip, true );
+        {
+            c.AddPath( poly[i].convertToClipper( i == 0, zValues, arcBuffer ),
+                       ClipperLib::ptClip, true );
+        }
     }
 
     ClipperLib::PolyTree solution;
 
+    ClipperLib::ZFillCallback callback =
+            []( ClipperLib::IntPoint & e1bot, ClipperLib::IntPoint & e1top,
+                ClipperLib::IntPoint & e2bot, ClipperLib::IntPoint & e2top,
+                ClipperLib::IntPoint & pt )
+            {
+                //@todo write callback to handle arc intersections
+                int i = 0;
+            };
+
+    c.ZFillFunction( callback ); // register callback
+
     c.Execute( aType, solution, ClipperLib::pftNonZero, ClipperLib::pftNonZero );
 
-    importTree( &solution );
-
-    detectArcs( possibleArcs );
+    importTree( &solution, zValues, arcBuffer );
 }
 
 
@@ -651,10 +663,16 @@ void SHAPE_POLY_SET::Inflate( int aAmount, int aCircleSegCount, CORNER_STRATEGY 
         break;
     }
 
+    std::vector<CLIPPER_Z_VALUE> zValues;
+    std::vector<SHAPE_ARC>       arcBuffer;
+
     for( const POLYGON& poly : m_polys )
     {
         for( size_t i = 0; i < poly.size(); i++ )
-            c.AddPath( poly[i].convertToClipper( i == 0 ), joinType, etClosedPolygon );
+        {
+            c.AddPath( poly[i].convertToClipper( i == 0, zValues, arcBuffer ),
+                       joinType, etClosedPolygon );
+        }
     }
 
     PolyTree solution;
@@ -685,11 +703,13 @@ void SHAPE_POLY_SET::Inflate( int aAmount, int aCircleSegCount, CORNER_STRATEGY 
     c.MiterFallback = miterFallback;
     c.Execute( solution, aAmount );
 
-    importTree( &solution );
+    importTree( &solution, zValues, arcBuffer );
 }
 
 
-void SHAPE_POLY_SET::importTree( ClipperLib::PolyTree* tree )
+void SHAPE_POLY_SET::importTree( ClipperLib::PolyTree*               tree,
+                                 const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
+                                 const std::vector<SHAPE_ARC>&       aArcBuffer )
 {
     m_polys.clear();
 
@@ -700,10 +720,10 @@ void SHAPE_POLY_SET::importTree( ClipperLib::PolyTree* tree )
             POLYGON paths;
             paths.reserve( n->Childs.size() + 1 );
 
-            paths.push_back( n->Contour );
+            paths.emplace_back( n->Contour, aZValueBuffer, aArcBuffer );
 
             for( unsigned int i = 0; i < n->Childs.size(); i++ )
-                paths.push_back( n->Childs[i]->Contour );
+                paths.emplace_back( n->Childs[i]->Contour, aZValueBuffer, aArcBuffer );
 
             m_polys.push_back( paths );
         }

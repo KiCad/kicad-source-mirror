@@ -1341,7 +1341,9 @@ public:
 private:
     void fractureSingle( POLYGON& paths );
     void unfractureSingle ( POLYGON& path );
-    void importTree( ClipperLib::PolyTree* tree );
+    void importTree( ClipperLib::PolyTree*               tree,
+                     const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
+                     const std::vector<SHAPE_ARC>&       aArcBuffe );
 
     /**
      * This is the engine to execute all polygon boolean transforms (AND, OR, ... and polygon
