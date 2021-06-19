@@ -1711,7 +1711,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
     if( isRouterActive() )
     {
-        wxBell();
+        m_toolMgr->RunAction( PCB_ACTIONS::routerUndoLastSegment, true );
         return 0;
     }
 

@@ -1349,6 +1349,12 @@ TOOL_ACTION PCB_ACTIONS::routerTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPai
 TOOL_ACTION PCB_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
         AS_CONTEXT );
 
+TOOL_ACTION PCB_ACTIONS::routerUndoLastSegment( "pcbnew.InteractiveRouter.UndoLastSegment",
+        AS_CONTEXT,
+        WXK_BACK, "",
+        _( "Undo Last Segment" ),  _( "Walks the current track back one segment." ),
+        BITMAPS::checked_ok );
+
 TOOL_ACTION PCB_ACTIONS::inlineBreakTrack( "pcbnew.InteractiveRouter.InlineBreakTrack",
         AS_GLOBAL, 0, "",
         _( "Break Track" ),

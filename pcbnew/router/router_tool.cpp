@@ -83,12 +83,6 @@ enum VIA_ACTION_FLAGS
 #undef _
 #define _(s) s
 
-static const TOOL_ACTION ACT_UndoLastSegment( "pcbnew.InteractiveRouter.UndoLastSegment",
-        AS_CONTEXT,
-        WXK_BACK, "",
-        _( "Undo last segment" ),  _( "Stops laying the current track." ),
-        BITMAPS::checked_ok );
-
 static const TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack",
         AS_CONTEXT,
         WXK_END, "",
@@ -447,23 +441,23 @@ bool ROUTER_TOOL::Init()
 
     menu.AddSeparator();
 
-    menu.AddItem( PCB_ACTIONS::routeSingleTrack,     notRoutingCond );
-    menu.AddItem( PCB_ACTIONS::routeDiffPair,        notRoutingCond );
-    menu.AddItem( ACT_EndTrack,                      SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( ACT_UndoLastSegment,               SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( PCB_ACTIONS::breakTrack,           notRoutingCond );
+    menu.AddItem( PCB_ACTIONS::routeSingleTrack,      notRoutingCond );
+    menu.AddItem( PCB_ACTIONS::routeDiffPair,         notRoutingCond );
+    menu.AddItem( ACT_EndTrack,                       SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( PCB_ACTIONS::routerUndoLastSegment, SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( PCB_ACTIONS::breakTrack,            notRoutingCond );
 
-    menu.AddItem( PCB_ACTIONS::drag45Degree,         notRoutingCond );
-    menu.AddItem( PCB_ACTIONS::dragFreeAngle,        notRoutingCond );
+    menu.AddItem( PCB_ACTIONS::drag45Degree,          notRoutingCond );
+    menu.AddItem( PCB_ACTIONS::dragFreeAngle,         notRoutingCond );
 
 //        Add( ACT_AutoEndRoute );  // fixme: not implemented yet. Sorry.
-    menu.AddItem( ACT_PlaceThroughVia,               SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( ACT_PlaceBlindVia,                 SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( ACT_PlaceMicroVia,                 SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( ACT_SelLayerAndPlaceThroughVia,    SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( ACT_SelLayerAndPlaceBlindVia,      SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( ACT_SwitchPosture,                 SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( ACT_SwitchRounding,                SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_PlaceThroughVia,                SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_PlaceBlindVia,                  SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_PlaceMicroVia,                  SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_SelLayerAndPlaceThroughVia,     SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_SelLayerAndPlaceBlindVia,       SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_SwitchPosture,                  SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_SwitchRounding,                 SELECTION_CONDITIONS::ShowAlways );
 
     menu.AddSeparator();
 
@@ -473,10 +467,10 @@ bool ROUTER_TOOL::Init()
             return m_router->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR;
         };
 
-    menu.AddMenu( m_trackViaMenu.get(),              SELECTION_CONDITIONS::ShowAlways );
-    menu.AddMenu( m_diffPairMenu.get(),              diffPairCond );
+    menu.AddMenu( m_trackViaMenu.get(),               SELECTION_CONDITIONS::ShowAlways );
+    menu.AddMenu( m_diffPairMenu.get(),               diffPairCond );
 
-    menu.AddItem( PCB_ACTIONS::routerSettingsDialog, SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( PCB_ACTIONS::routerSettingsDialog,  SELECTION_CONDITIONS::ShowAlways );
 
     menu.AddSeparator();
 
@@ -1109,7 +1103,7 @@ void ROUTER_TOOL::performRouting()
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
-        else if( evt->IsAction( &ACT_UndoLastSegment ) )
+        else if( evt->IsAction( &PCB_ACTIONS::routerUndoLastSegment ) )
         {
             m_router->UndoLastSegment();
             updateEndItem( *evt );
