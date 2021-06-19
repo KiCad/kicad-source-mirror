@@ -257,200 +257,6 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I&, GENERAL_COLLECTOR& 
 }
 
 
-static const int viewer3dSchemaVersion = 0;
-
-#include "3d_viewer/3d_viewer_settings.h"
-
-
-EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
-        : APP_SETTINGS_BASE( "3d_viewer", viewer3dSchemaVersion ),
-          m_Render(),
-          m_Camera()
-{
-}
-
-
-bool EDA_3D_VIEWER_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
-{
-  return false;
-}
-
-#include "3d_viewer/eda_3d_viewer.h"
-#include <3d_viewer/3d_viewer_settings.h>
-#include <3d-viewer/3d_viewer_id.h>
-
-/**
- * Flag to enable 3D viewer main frame window debug tracing.
- *
- * Use "KI_TRACE_EDA_3D_VIEWER" to enable.
- *
- * @ingroup trace_env_vars
- */
-const wxChar * EDA_3D_VIEWER::m_logTrace = wxT( "KI_TRACE_EDA_3D_VIEWER" );
-
-
-BEGIN_EVENT_TABLE( EDA_3D_VIEWER, EDA_BASE_FRAME )
-
-    EVT_ACTIVATE( EDA_3D_VIEWER::OnActivate )
-    EVT_SET_FOCUS( EDA_3D_VIEWER::OnSetFocus )
-
-    EVT_TOOL_RANGE( ID_START_COMMAND_3D, ID_MENU_COMMAND_END,
-                    EDA_3D_VIEWER::Process_Special_Functions )
-
-    EVT_MENU( wxID_CLOSE, EDA_3D_VIEWER::Exit3DFrame )
-    EVT_MENU( ID_RENDER_CURRENT_VIEW, EDA_3D_VIEWER::OnRenderEngineSelection )
-    EVT_MENU( ID_DISABLE_RAY_TRACING, EDA_3D_VIEWER::OnDisableRayTracing )
-
-    EVT_CLOSE( EDA_3D_VIEWER::OnCloseWindow )
-END_EVENT_TABLE()
-
-
-EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxString &aTitle,
-                              long style ) :
-        KIWAY_PLAYER( aKiway, aParent, FRAME_PCB_DISPLAY3D, aTitle, wxDefaultPosition,
-                      wxDefaultSize, style, QUALIFIED_VIEWER3D_FRAMENAME( aParent ) ),
-        m_mainToolBar( nullptr ),
-        m_canvas( nullptr ),
-        m_currentCamera( m_trackBallCamera ),
-        m_trackBallCamera( RANGE_SCALE_3D ),
-        m_disable_ray_tracing( true )
-{
-
-}
-
-
-EDA_3D_VIEWER::~EDA_3D_VIEWER()
-{
-
-}
-
-
-void EDA_3D_VIEWER::setupUIConditions()
-{
-
-}
-
-
-void EDA_3D_VIEWER::ReloadRequest()
-{
-
-}
-
-
-void EDA_3D_VIEWER::NewDisplay( bool aForceImmediateRedraw )
-{
-
-}
-
-
-void EDA_3D_VIEWER::Exit3DFrame( wxCommandEvent &event )
-{
-
-}
-
-
-void EDA_3D_VIEWER::OnCloseWindow( wxCloseEvent &event )
-{
-
-}
-
-
-void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
-{
-
-}
-
-
-void EDA_3D_VIEWER::OnRenderEngineSelection( wxCommandEvent &event )
-{
-
-}
-
-
-void EDA_3D_VIEWER::OnDisableRayTracing( wxCommandEvent& aEvent )
-{
-
-}
-
-
-void EDA_3D_VIEWER::OnActivate( wxActivateEvent &event )
-{
-
-}
-
-
-void EDA_3D_VIEWER::OnSetFocus(wxFocusEvent &event)
-{
-
-}
-
-
-void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
-{
-
-}
-
-
-void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
-{
-
-}
-
-
-void EDA_3D_VIEWER::SynchroniseColoursWithBoard()
-{
-
-}
-
-
-void EDA_3D_VIEWER::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
-{
-
-}
-
-
-void EDA_3D_VIEWER::takeScreenshot( wxCommandEvent& event )
-{
-
-
-}
-
-
-void EDA_3D_VIEWER::RenderEngineChanged()
-{
-
-}
-
-
-bool EDA_3D_VIEWER::Set3DColorFromUser( SFVEC4F &aColor, const wxString& aTitle,
-                                        CUSTOM_COLORS_LIST* aPredefinedColors,
-                                        bool aAllowOpacityControl,
-                                        KIGFX::COLOR4D aDefaultColor )
-{
-
-    return true;
-}
-
-
-bool EDA_3D_VIEWER::Set3DSilkScreenColorFromUser()
-{
-    return false;
-}
-
-
-bool EDA_3D_VIEWER::Set3DSolderMaskColorFromUser()
-{
-    return false;
-}
-
-
-void EDA_3D_VIEWER::Redraw(){};
-
-bool EDA_3D_VIEWER::Set3DCopperColorFromUser(){ return false; }
-bool EDA_3D_VIEWER::Set3DBoardBodyColorFromUser() { return false; }
-bool EDA_3D_VIEWER::Set3DSolderPasteColorFromUser() { return false; }
-void EDA_3D_VIEWER::loadCommonSettings() { }
-void EDA_3D_VIEWER::Install3DViewOptionDialog( wxCommandEvent& event ) { };
 
 #include <tools/pcb_selection_tool.h>
 
@@ -905,3 +711,28 @@ const LSET PCB_SELECTION::GetSelectionLayers()
   return LSET();
 }
 
+#if 0
+#include <3d_canvas/board_adapter.h>
+
+BOARD_ADAPTER::BOARD_ADAPTER() {};
+BOARD_ADAPTER::~BOARD_ADAPTER() {};
+BBOX_3D::BBOX_3D(){};
+BBOX_3D::~BBOX_3D(){};
+TRACK_BALL::TRACK_BALL(float x) : CAMERA(x) {};
+BVH_CONTAINER_2D::BVH_CONTAINER_2D() : CONTAINER_2D_BASE( OBJECT_2D_TYPE::POLYGON ) {};
+BVH_CONTAINER_2D::~BVH_CONTAINER_2D() {};
+
+#endif
+
+#include <board_stackup_manager/stackup_predefined_prms.h>
+
+const FAB_LAYER_COLOR* GetColorStandardList()
+{
+    return nullptr;
+}
+
+
+int GetColorStandardListCount()
+{
+    return 0;
+}

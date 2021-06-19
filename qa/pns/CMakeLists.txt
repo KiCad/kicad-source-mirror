@@ -27,14 +27,8 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 
 add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW)
 
-set ( PCB_OBJS $<TARGET_OBJECTS:pcbnew_kiface_objects> )
-list ( REMOVE_ITEM PCB_OBJS pcbnew.cpp )
-list ( REMOVE_ITEM PCB_OBJS pcbnew.o )
-list ( REMOVE_ITEM PCB_OBJS pcbnew.cpp.o )
-list ( REMOVE_ITEM PCB_OBJS pcbnew/CMakeFiles/pcbnew_kiface_objects.dir/pcbnew.cpp.o )
 
 add_executable( test_pns
-#  test_pns.cpp
     ../../pcbnew/drc/drc_rule.cpp
     ../../pcbnew/drc/drc_rule_condition.cpp
     ../../pcbnew/drc/drc_rule_parser.cpp
@@ -81,7 +75,6 @@ add_dependencies( test_pns pcbnew )
 
 target_link_libraries( test_pns
     qa_pcbnew_utils
-    3d-viewer
     connectivity
     pcbcommon
     pnsrouter
@@ -93,6 +86,8 @@ target_link_libraries( test_pns
     tinyspline_lib
     nanosvg
     idf3
+    pcbcommon
+    3d-viewer
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

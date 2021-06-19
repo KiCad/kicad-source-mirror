@@ -58,5 +58,7 @@ endif()
 add_subdirectory( common_tools )
 add_subdirectory( pcbnew_tools )
 
-# add_subdirectory( pns )
+if( KICAD_BUILD_PNS_DEBUG_TOOL )
+    add_subdirectory( pns )
+endif()
 
