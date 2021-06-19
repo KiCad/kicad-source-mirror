@@ -654,7 +654,7 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
         wxLogTrace( traceDisplayLocation,
                     "ensureWindowIsOnScreen: x pos %d is off the client rect, setting to %d", pos.x,
                     clientSize.x );
-        pos.y = clientSize.x;
+        pos.x = clientSize.x;
     }
 
     if( pos.x + size.x - clientSize.x > clientSize.width )
