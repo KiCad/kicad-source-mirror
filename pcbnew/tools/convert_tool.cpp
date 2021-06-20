@@ -156,12 +156,8 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    // TODO(JE) From a context menu, the selection condition enforces that the items are on
-    // a single layer.  But, you can still trigger this with items on multiple layer selected.
-    // Technically we should make this work if each contiguous poly shares a layer
-    PCB_LAYER_ID destLayer = static_cast<BOARD_ITEM*>( selection.Front() )->GetLayer();
-
-    SHAPE_POLY_SET polySet = makePolysFromSegs( selection.GetItems() );
+    PCB_LAYER_ID   destLayer = m_frame->GetActiveLayer();
+    SHAPE_POLY_SET polySet   = makePolysFromSegs( selection.GetItems() );
 
     polySet.Append( makePolysFromRects( selection.GetItems() ) );
 
@@ -207,10 +203,15 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
         BOARD_ITEM_CONTAINER* parent   = frame->GetModel();
         ZONE_SETTINGS         zoneInfo = frame->GetZoneSettings();
 
+        bool nonCopper = IsNonCopperLayer( destLayer );
+        zoneInfo.m_Layers.reset().set( destLayer );
+
         int ret;
 
         if( aEvent.IsAction( &PCB_ACTIONS::convertToKeepout ) )
             ret = InvokeRuleAreaEditor( frame, &zoneInfo );
+        else if( nonCopper )
+            ret = InvokeNonCopperZonesEditor( frame, &zoneInfo );
         else
             ret = InvokeCopperZonesEditor( frame, &zoneInfo );
 
