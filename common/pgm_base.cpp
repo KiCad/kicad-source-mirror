@@ -102,7 +102,6 @@ LANGUAGE_DESCR LanguagesList[] =
 
 PGM_BASE::PGM_BASE()
 {
-    m_pgm_checker = nullptr;
     m_locale = nullptr;
     m_Printing = false;
     m_ModalDialogCount = 0;
@@ -124,9 +123,6 @@ PGM_BASE::~PGM_BASE()
 void PGM_BASE::Destroy()
 {
     // unlike a normal destructor, this is designed to be called more than once safely:
-    delete m_pgm_checker;
-    m_pgm_checker = nullptr;
-
     delete m_locale;
     m_locale = nullptr;
 }
@@ -218,33 +214,6 @@ bool PGM_BASE::InitPgm( bool aHeadless )
         return false;
     }
 #endif
-
-    m_pgm_checker = new wxSingleInstanceChecker( pgm_name + wxT( "-" ) +
-                                                 wxGetUserId(), GetKicadLockFilePath() );
-
-    // It'd be nice to export this processing to the individual apps, but the current linkage
-    // makes that surprisingly difficult.
-
-    if( m_pgm_checker->IsAnotherRunning() )
-    {
-        if( pgm_name == "pcb_calculator"
-                || pgm_name == "gerbview"
-                || pgm_name == "bitmap2component" )
-        {
-            // no warning
-        }
-        else
-        {
-            if( !IsOK( NULL, wxString::Format( _( "%s is already running. Continue?\n\n"
-                                                  "Saving files from more than one %s instance may "
-                                                  "cause the project file to get out of sync." ),
-                                               App().GetAppDisplayName(),
-                                               App().GetAppDisplayName() ) ) )
-            {
-                return false;
-            }
-        }
-    }
 
     // Init KiCad environment
     // the environment variable KICAD (if exists) gives the kicad path:

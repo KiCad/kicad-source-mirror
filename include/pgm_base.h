@@ -308,9 +308,6 @@ protected:
 
     std::unique_ptr<SCRIPTING> m_python_scripting;
 
-    /// prevents multiple instances of a program from being run at the same time.
-    wxSingleInstanceChecker* m_pgm_checker;
-
     /// full path to this program
     wxString        m_bin_dir;
 
