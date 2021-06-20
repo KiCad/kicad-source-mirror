@@ -353,11 +353,13 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
         }
 
-        // Enable autopanning and cursor capture only when there is a footprint to be placed
+        // Enable autopanning and cursor capture only when there is a symbol to be placed
         getViewControls()->SetAutoPan( symbol != nullptr );
         getViewControls()->CaptureCursor( symbol != nullptr );
     }
 
+    getViewControls()->SetAutoPan( false );
+    getViewControls()->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_inPlaceSymbol = false;
     return 0;
@@ -569,11 +571,13 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
         }
 
-        // Enable autopanning and cursor capture only when there is a footprint to be placed
+        // Enable autopanning and cursor capture only when there is an image to be placed
         getViewControls()->SetAutoPan( image != nullptr );
         getViewControls()->CaptureCursor( image != nullptr );
     }
 
+    getViewControls()->SetAutoPan( false );
+    getViewControls()->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_inPlaceImage = false;
     return 0;
@@ -1221,13 +1225,15 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
         }
 
-        // Enable autopanning and cursor capture only when there is a footprint to be placed
+        // Enable autopanning and cursor capture only when there is an item to be placed
         controls->SetAutoPan( item != nullptr );
         controls->CaptureCursor( item != nullptr );
     }
 
-    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    controls->SetAutoPan( false );
+    controls->CaptureCursor( false );
     controls->ForceCursorPosition( false );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_inTwoClickPlace = false;
     return 0;
 }
@@ -1407,6 +1413,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( sheet != nullptr );
     }
 
+    getViewControls()->SetAutoPan( false );
+    getViewControls()->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_inDrawSheet = false;
     return 0;

@@ -124,9 +124,12 @@ private:
     ///< Set up handlers for various events.
     void setTransitions() override;
 
-    PCB_EDIT_FRAME* m_frame;     ///< Pointer to the currently used edit frame.
+private:
+    PCB_EDIT_FRAME*  m_frame;
+    bool             m_inPlaceFootprint;        // Re-entrancy guard.
+    bool             m_inPlaceTarget;           // Re-entrancy guard.
 
-    std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_placeOrigin;    ///< Place & drill origin marker
+    std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_placeOrigin;
 
     static const int WIDTH_STEP; ///< How does line width change after one -/+ key press.
 };

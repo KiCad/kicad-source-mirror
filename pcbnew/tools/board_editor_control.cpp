@@ -177,7 +177,9 @@ protected:
 
 BOARD_EDITOR_CONTROL::BOARD_EDITOR_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.EditorControl" ),
-    m_frame( nullptr )
+    m_frame( nullptr ),
+    m_inPlaceFootprint( false ),
+    m_inPlaceTarget( false )
 {
     m_placeOrigin = std::make_unique<KIGFX::ORIGIN_VIEWITEM>(
             KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
@@ -916,6 +918,11 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 
 int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 {
+    if( m_inPlaceFootprint )
+        return 0;
+    else
+        m_inPlaceFootprint = true;
+
     FOOTPRINT*            fp = aEvent.Parameter<FOOTPRINT*>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     BOARD_COMMIT          commit( m_frame );
@@ -1073,11 +1080,15 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
         }
 
         // Enable autopanning and cursor capture only when there is a footprint to be placed
-        controls->SetAutoPan( !!fp );
-        controls->CaptureCursor( !!fp );
+        controls->SetAutoPan( fp != nullptr );
+        controls->CaptureCursor( fp != nullptr );
     }
 
+    controls->SetAutoPan( false );
+    controls->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+
+    m_inPlaceFootprint = false;
     return 0;
 }
 
@@ -1161,6 +1172,11 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
 int BOARD_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 {
+    if( m_inPlaceTarget )
+        return 0;
+    else
+        m_inPlaceTarget = true;
+
     KIGFX::VIEW* view = getView();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     BOARD* board = getModel<BOARD>();
@@ -1267,6 +1283,8 @@ int BOARD_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     view->Remove( &preview );
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+
+    m_inPlaceTarget = false;
     return 0;
 }
 
