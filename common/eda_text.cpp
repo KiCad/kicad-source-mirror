@@ -369,6 +369,10 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         }
     }
 
+    // Many fonts draw diacriticals, descenders, etc. outside the X-height of the font.  This
+    // will cacth most (but probably not all) of them.
+    rect.Inflate( 0, thickness * 1.5 );
+
     rect.Normalize();       // Make h and v sizes always >= 0
 
     return rect;
