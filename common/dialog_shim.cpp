@@ -320,9 +320,11 @@ static void selectAllInTextCtrls( wxWindowList& children )
     {
         if( wxTextCtrl* childTextCtrl = dynamic_cast<wxTextCtrl*>( child ) )
         {
+#if defined( __WXMAC__ ) || defined( __WXMSW__ )
             // Respect an existing selection
             if( childTextCtrl->GetStringSelection().IsEmpty() )
                 childTextCtrl->SelectAll();
+#endif
         }
 #ifdef __WXMAC__
         // Temp hack for square (looking) buttons on OSX.  Will likely be made redundant
