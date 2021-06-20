@@ -1245,11 +1245,19 @@ void PCB_EDIT_FRAME::UpdateTitle()
 
     wxString title;
 
-    title = ( IsContentModified() ? "*" : "" )
-                    + fn.GetName() + " "
-                    + ( readOnly ? _( "[Read Only]" ) + wxS( " " ) : wxS( "" ) )
-                    + ( unsaved ? _( "[Unsaved]" ) + wxS( " " ) : wxS( "" ) )
-                    + wxT( "\u2014 " ) + _( "PCB Editor" );
+    if( IsContentModified() )
+        title = wxT( "*" );
+
+    title += fn.GetName();
+
+    if( readOnly )
+        title += wxS( " " ) + _( "[Read Only]" );
+
+    if( unsaved )
+        title += wxS( " " ) + _( "[Unsaved]" );
+
+    title += wxT( " \u2014 " ) + _( "PCB Editor" );
+
     SetTitle( title );
 }
 

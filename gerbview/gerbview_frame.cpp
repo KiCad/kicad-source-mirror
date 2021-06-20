@@ -621,13 +621,15 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
     }
     else
     {
-        wxString title;
+        wxString   title;
         wxFileName filename( gerber->m_FileName );
 
-        title.Printf( wxT( "%s%s \u2014 " ) + _( "Gerber Viewer" ),
-                      filename.GetFullName(),
-                      gerber->m_IsX2_file ? wxS( " " ) + _( "(with X2 attributes)" )
-                                          : wxString( wxEmptyString ) );
+        title = filename.GetFullName();
+
+        if( gerber->m_IsX2_file )
+            title += wxS( " " ) + _( "(with X2 attributes)" );
+
+        title += wxT( " \u2014 " ) + _( "Gerber Viewer" );
         SetTitle( title );
 
         gerber->DisplayImageInfo( this );

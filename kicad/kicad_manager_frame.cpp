@@ -605,7 +605,6 @@ void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
 
 void KICAD_MANAGER_FRAME::ProjectChanged()
 {
-    wxString app = wxS( "KiCad " ) + GetMajorMinorVersion();
     wxString file  = GetProjectFileName();
     wxString title;
 
@@ -613,15 +612,17 @@ void KICAD_MANAGER_FRAME::ProjectChanged()
     {
         wxFileName fn( file );
 
-        title += fn.GetName();
+        title = fn.GetName();
 
         if( !fn.IsDirWritable() )
             title += wxS( " " ) + _( "[Read Only]" );
-
-        title += wxS(" \u2014 ");
+    }
+    else
+    {
+        title = _( "[no project loaded]" );
     }
 
-    title += app;
+    title += wxT( " \u2014 " ) + _( "KiCad " ) + GetMajorMinorVersion();
 
     SetTitle( title );
 }

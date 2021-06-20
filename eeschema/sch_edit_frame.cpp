@@ -1249,11 +1249,7 @@ void SCH_EDIT_FRAME::UpdateTitle()
 {
     wxString title;
 
-    if( GetScreen()->GetFileName().IsEmpty() )
-    {
-        title = _( "[no file]" ) + wxT( " \u2014 " ) + _( "Schematic Editor" );
-    }
-    else
+    if( !GetScreen()->GetFileName().IsEmpty() )
     {
         wxFileName fn( Prj().AbsolutePath( GetScreen()->GetFileName() ) );
         bool       readOnly = false;
@@ -1264,12 +1260,24 @@ void SCH_EDIT_FRAME::UpdateTitle()
         else
             unsaved = true;
 
-        title = ( IsContentModified() ? "*" : "" )
-                        + fn.GetName() + " [" + GetCurrentSheet().PathHumanReadable( false ) + "] "
-                        + ( readOnly ? _( "[Read Only]" ) + wxS( " " ) : wxS( "" ) )
-                        + ( unsaved ? _( "[Unsaved]" ) + wxS( " " ) : wxS( "" ) )
-                        + wxT( "\u2014 " ) + _( "Schematic Editor" );
+        if( IsContentModified() )
+            title = wxT( "*" );
+
+        title += fn.GetName();
+        title += wxString::Format( wxT( " [%s]" ), GetCurrentSheet().PathHumanReadable( false ) );
+
+        if( readOnly )
+            title += wxS( " " ) + _( "[Read Only]" );
+
+        if( unsaved )
+            title += wxS( " " ) +  _( "[Unsaved]" );
     }
+    else
+    {
+        title = _( "[no schematic loaded]" );
+    }
+
+    title += wxT( " \u2014 " ) + _( "Schematic Editor" );
 
     SetTitle( title );
 }

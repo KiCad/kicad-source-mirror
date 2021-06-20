@@ -333,11 +333,22 @@ void SIM_PLOT_FRAME::updateTitle()
     else
         unsaved = true;
 
-    SetTitle( wxString::Format( wxT( "%s%s %s%s\u2014 " ) + _( "Spice Simulator" ),
-                                m_workbook->IsModified() ? "*" : "",
-                                filename.GetName(),
-                                readOnly ? _( "[Read Only]" ) + wxS( " " ) : "",
-                                unsaved ? _( "[Unsaved]" ) + wxS( " " ) : "" ) );
+    wxString title;
+
+    if( m_workbook->IsModified() )
+        title = wxT( "*" ) + filename.GetName();
+    else
+        title = filename.GetName();
+
+    if( readOnly )
+        title += wxS( " " ) + _( "[Read Only]" );
+
+    if( unsaved )
+        title += wxS( " " ) + _( "[Unsaved]" );
+
+    title += wxT( " \u2014 " ) + _( "Spice Simulator" );
+
+    SetTitle( title );
 }
 
 

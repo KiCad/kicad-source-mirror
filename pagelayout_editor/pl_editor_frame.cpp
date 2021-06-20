@@ -547,8 +547,13 @@ void PL_EDITOR_FRAME::UpdateTitleAndInfo()
     wxString title;
     wxFileName file( GetCurrentFileName() );
 
-    title.Printf( wxT( "%s \u2014 " ) + _( "Drawing Sheet Editor" ),
-                  file.IsOk() ? file.GetName() : _( "no file selected" ) );
+    if( file.IsOk() )
+        title = file.GetName();
+    else
+        title = _( "[no drawing sheet loaded]" );
+
+    title += wxT( " \u2014 " ) + _( "Drawing Sheet Editor" ),
+
     SetTitle( title );
 }
 

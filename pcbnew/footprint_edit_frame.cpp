@@ -756,9 +756,12 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
 
     if( IsCurrentFPFromBoard() )
     {
-        title = ( IsContentModified() ? "*" : "" )
-                        + footprint->GetReference() + wxS( " [" ) + _( "from" ) + " "
-                        + Prj().GetProjectName() + "." + PcbFileExtension + wxS( "] \u2014 " );
+        if( IsContentModified() )
+            title = wxT( "*" );
+
+        title += footprint->GetReference();
+        title += wxS( " " ) + wxString::Format( _( "[from %s]" ),
+                                                Prj().GetProjectName() + "." + PcbFileExtension );
     }
     else if( fpid.IsValid() )
     {
@@ -772,19 +775,29 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
         }
 
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
-        title = ( IsContentModified() ? "*" : "" )
-                                + FROM_UTF8( footprint->GetFPID().Format().c_str() ) + " "
-                                + ( writable ? wxS( "" ) : _( "[Read Only]" ) + wxS( " " ) ) + wxS( "\u2014 " );
+        if( IsContentModified() )
+            title = wxT( "*" );
+
+        title += FROM_UTF8( footprint->GetFPID().Format().c_str() );
+
+        if( !writable )
+            title += wxS( " " ) + _( "[Read Only]" );
     }
     else if( !fpid.GetLibItemName().empty() )
     {
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
-        title = ( IsContentModified() ? "*" : "" )
-                                + FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() ) + " "
-                                + _( "[Unsaved]" ) + wxS( " \u2014 " );
+        if( IsContentModified() )
+            title = wxT( "*" );
+
+        title += FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() );
+        title += wxS( " " ) + _( "[Unsaved]" );
+    }
+    else
+    {
+        title = _( "[no footprint loaded]" );
     }
 
-    title += _( "Footprint Editor" );
+    title += wxT( " \u2014 " ) + _( "Footprint Editor" );
 
     SetTitle( title );
 }

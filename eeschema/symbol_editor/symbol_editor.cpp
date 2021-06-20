@@ -139,26 +139,28 @@ void SYMBOL_EDIT_FRAME::updateTitle()
 
     if( IsSymbolFromSchematic() )
     {
-        title = ( GetScreen() && GetScreen()->IsContentModified() ? "*" : "" )
-                + m_reference + " "
-                + _( "[from schematic]" )
-                + wxT( " \u2014 " );
+        if( GetScreen() && GetScreen()->IsContentModified() )
+            title = wxT( "*" );
+
+        title += m_reference;
+        title += wxS( " " ) + _( "[from schematic]" );
+    }
+    else if( GetCurSymbol() )
+    {
+        if( GetScreen() && GetScreen()->IsContentModified() )
+            title = wxT( "*" );
+
+        title += FROM_UTF8( GetCurSymbol()->GetLibId().Format().c_str() );
+
+        if( m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() ) )
+            title += wxS( " " ) + _( "[Read Only Library]" );
     }
     else
     {
-        if( GetCurSymbol() )
-        {
-            bool readOnly = m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() );
-
-            title = ( GetScreen() && GetScreen()->IsContentModified() ? "*" : "" )
-                    + FROM_UTF8( GetCurSymbol()->GetLibId().Format().c_str() )
-                    + " "
-                    + ( readOnly ? _( "[Read Only Library]" ) + wxT( " " ) : "" )
-                    + wxT( " \u2014 " );
-        }
+        title = _( "[no symbol loaded]" );
     }
 
-    title += _( "Symbol Editor" );
+    title += wxT( " \u2014 " ) + _( "Symbol Editor" );
     SetTitle( title );
 }
 
