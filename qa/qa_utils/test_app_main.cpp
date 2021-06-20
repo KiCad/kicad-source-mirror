@@ -254,7 +254,7 @@ int main( int argc, char** argv )
 {
     wxInitialize( argc, argv );
 
-    Pgm().InitPgm();
+    Pgm().InitPgm( true );
 
     auto ret = wxEntry( argc, argv );
 

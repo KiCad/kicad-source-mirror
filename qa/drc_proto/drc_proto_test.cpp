@@ -39,7 +39,7 @@ int main( int argc, char** argv )
 {
     wxInitialize( argc, argv );
 
-    Pgm().InitPgm();
+    Pgm().InitPgm( true );
 
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     propMgr.Rebuild();

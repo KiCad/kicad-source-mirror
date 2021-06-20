@@ -206,7 +206,7 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 
 bool PGM_BASE::InitPgm( bool aHeadless )
 {
-    wxFileName pgm_name( App().argv[0] );
+    wxString pgm_name = wxFileName( App().argv[0] ).GetName().Lower();
 
     wxInitAllImageHandlers();
 
@@ -219,15 +219,30 @@ bool PGM_BASE::InitPgm( bool aHeadless )
     }
 #endif
 
-    m_pgm_checker = new wxSingleInstanceChecker( pgm_name.GetName().Lower() + wxT( "-" ) +
+    m_pgm_checker = new wxSingleInstanceChecker( pgm_name + wxT( "-" ) +
                                                  wxGetUserId(), GetKicadLockFilePath() );
+
+    // It'd be nice to export this processing to the individual apps, but the current linkage
+    // makes that surprisingly difficult.
 
     if( m_pgm_checker->IsAnotherRunning() )
     {
-        if( !IsOK( NULL, wxString::Format( _( "%s is already running. Continue?" ),
-                                           App().GetAppDisplayName() ) ) )
+        if( pgm_name == "pcb_calculator"
+                || pgm_name == "gerbview"
+                || pgm_name == "bitmap2component" )
         {
-            return false;
+            // no warning
+        }
+        else
+        {
+            if( !IsOK( NULL, wxString::Format( _( "%s is already running. Continue?\n\n"
+                                                  "Saving files from more than one %s instance may "
+                                                  "cause the project file to get out of sync." ),
+                                               App().GetAppDisplayName(),
+                                               App().GetAppDisplayName() ) ) )
+            {
+                return false;
+            }
         }
     }
 
@@ -246,7 +261,7 @@ bool PGM_BASE::InitPgm( bool aHeadless )
 
     // Init parameters for configuration
     App().SetVendorName( "KiCad" );
-    App().SetAppName( pgm_name.GetName().Lower() );
+    App().SetAppName( pgm_name );
 
     // Install some image handlers, mainly for help
     if( wxImage::FindHandler( wxBITMAP_TYPE_PNG ) == NULL )
