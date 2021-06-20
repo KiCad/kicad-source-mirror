@@ -54,9 +54,9 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
     {
         if( *chIt == '~' )
         {
-            wxString::const_iterator lookahead = chIt;
+            wxString::const_iterator lookahead = chIt + 1;
 
-            if( ++lookahead != aOldStr.end() && *lookahead == '~' )
+            if( lookahead != aOldStr.end() && *lookahead == '~' )
             {
                 if( ++lookahead != aOldStr.end() && *lookahead == '{' )
                 {
@@ -70,6 +70,12 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
                 newStr << "~";
                 ++chIt;
                 continue;
+            }
+            else if( lookahead != aOldStr.end() && *lookahead == '{' )
+            {
+                // Could mean the user wants "{" with an overbar, but more likely this
+                // is a case of double notation conversion.  Bail out.
+                return aOldStr;
             }
             else
             {
