@@ -357,7 +357,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     int dx = padSize.x / 2;
                     int dy = padSize.y / 2;
                     int ddx = padDelta.x / 2;
-                    int  ddy = padDelta.y / 2;
+                    int ddy = padDelta.y / 2;
 
                     outline.Append( -dx - ddy,  dy + ddx );
                     outline.Append(  dx + ddy,  dy - ddx );
@@ -383,10 +383,57 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 break;
 
             case PAD_SHAPE::ROUNDRECT:
-            case PAD_SHAPE::CHAMFERED_RECT:
-                // Chamfer and rounding are stored as a percent and so don't need scaling
+            {
+                // rounding is stored as a percent, but we have to change the new radius
+                // to initial_radius + clearance to have a inflated/deflated similar shape
+                int initial_radius = pad->GetRoundRectCornerRadius();
                 pad->SetSize( padPlotsSize );
+                pad->SetRoundRectCornerRadius( std::max( initial_radius + mask_clearance, 0 ) );
+
                 itemplotter.PlotPad( pad, color, padPlotMode );
+            }
+                break;
+
+            case PAD_SHAPE::CHAMFERED_RECT:
+                if( mask_clearance == 0 )
+                {
+                    // the size can be slightly inflated by width_adj (PS/PDF only)
+                    pad->SetSize( padPlotsSize );
+                    itemplotter.PlotPad( pad, color, padPlotMode );
+                }
+                else
+                {
+                    // Due to the polygonal shape of a CHAMFERED_RECT pad, the best way is to
+                    // convert the pad shape to a full polygon, inflate/deflate the polygon
+                    // and use a dummy  CUSTOM pad to plot the final shape.
+                    PAD dummy( *pad );
+                    // Build the dummy pad outline with coordinates relative to the pad position
+                    // and orientation 0. The actual pos and rotation will be taken in account
+                    // later by the plot function
+                    dummy.SetPosition( wxPoint( 0, 0 ) );
+                    dummy.SetOrientation( 0 );
+                    SHAPE_POLY_SET outline;
+                    int maxError = aBoard->GetDesignSettings().m_MaxError;
+                    int numSegs = GetArcToSegmentCount( mask_clearance, maxError, 360.0 );
+                    dummy.TransformShapeWithClearanceToPolygon( outline, UNDEFINED_LAYER, 0,
+                                                                maxError, ERROR_INSIDE );
+                    outline.InflateWithLinkedHoles( mask_clearance, numSegs, SHAPE_POLY_SET::PM_FAST );
+
+                    // Initialize the dummy pad shape:
+                    dummy.SetAnchorPadShape( PAD_SHAPE::CIRCLE );
+                    dummy.SetShape( PAD_SHAPE::CUSTOM );
+                    dummy.DeletePrimitivesList();
+                    dummy.AddPrimitivePoly( outline, 0, true );
+
+                    // Be sure the anchor pad is not bigger than the deflated shape because this
+                    // anchor will be added to the pad shape when plotting the pad.
+                    // So we set the anchor size to 0
+                    dummy.SetSize( wxSize( 0,0 ) );
+                    dummy.SetPosition( pad->GetPosition() );
+                    dummy.SetOrientation( pad->GetOrientation() );
+
+                    itemplotter.PlotPad( &dummy, color, padPlotMode );
+                }
                 break;
 
             case PAD_SHAPE::CUSTOM:
