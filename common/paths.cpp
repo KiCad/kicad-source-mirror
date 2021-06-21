@@ -153,8 +153,10 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
         fn.RemoveLastDir();
         fn.RemoveLastDir();
         path = fn.GetPath();
-#else
+#elif defined( __WXMSW__ )
         path = getWindowsKiCadRoot();
+#else
+        path = Pgm().GetExecutablePath() + wxT( ".." );
 #endif
     }
     else
@@ -350,7 +352,7 @@ wxString PATHS::GetOSXKicadDataDir()
 #ifdef __WXWINDOWS__
 wxString PATHS::getWindowsKiCadRoot()
 {
-    wxFileName root(Pgm().GetExecutablePath() + "/../");
+    wxFileName root( Pgm().GetExecutablePath() + "/../" );
     root.MakeAbsolute();
 
     return root.GetPathWithSep();
