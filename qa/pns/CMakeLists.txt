@@ -25,7 +25,7 @@
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
-add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW)
+add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW -DTEST_APP_GUI)
 
 
 add_executable( test_pns

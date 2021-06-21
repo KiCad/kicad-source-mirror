@@ -40,6 +40,7 @@ ubuntu20.04_build:
       -DKICAD_USE_OCC=ON
       -DKICAD_SPICE=ON
       -DKICAD_BUILD_I18N=ON
+      -DKICAD_BUILD_PNS_DEBUG_TOOL=ON
       ../../
     - ninja 2>&1 | tee compilation_log.txt
     - cd ../../

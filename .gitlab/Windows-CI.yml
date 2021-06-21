@@ -27,6 +27,7 @@ win64_build:
       -DKICAD_USE_OCE=OFF `
       -DKICAD_USE_OCC=ON `
       -DKICAD_SPICE=ON `
+      -DKICAD_BUILD_PNS_DEBUG_TOOL=ON `
       ../../
     - cmake --build . 2>&1 | tee compilation_log.txt
     - cd ../../
