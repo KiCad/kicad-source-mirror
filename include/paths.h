@@ -145,6 +145,15 @@ private:
      * @param aPath Variable to receive the path
      */
     static void getUserDocumentPath( wxFileName& aPath );
+
+#ifdef __WXWINDOWS__
+    /**
+     * Gets the root of the kicad install on Windows specifically.
+     * KiCad on Windows has a psuedo posix folder structure contained in it's installed folder
+     * This retrieves that root for usage in other methods
+     */
+    static wxString getWindowsKiCadRoot();
+#endif
 };
 
 #endif
