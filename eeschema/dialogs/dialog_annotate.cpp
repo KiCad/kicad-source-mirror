@@ -31,6 +31,7 @@
 #include <kiface_i.h>
 #include <widgets/infobar.h>
 #include <wx_html_report_panel.h>
+#include <schematic.h>
 
 // A window name for the annotate dialog to retrieve is if not destroyed
 #define DLG_WINDOW_NAME "DialogAnnotateWindowName"
@@ -111,6 +112,24 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
     cfg->m_AnnotatePanel.options = m_rbOptions->GetSelection();
     cfg->m_AnnotatePanel.scope = m_rbScope->GetSelection();
     cfg->m_AnnotatePanel.messages_filter = m_MessageWindow->GetVisibleSeverities();
+
+    // Get the "start annotation after" value from dialog and update project settings if changed
+    int startNum = GetStartNumber();
+    SCH_EDIT_FRAME* schFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_parentFrame );
+
+    if( schFrame ) {
+        SCHEMATIC_SETTINGS& projSettings = schFrame->Schematic().Settings();
+
+        // If the user has updated the start annotation number then update the project file.
+        // We manually update the project file here in case the user has changed the value
+        // and just clicked the "Close" button on the annotation dialog.
+
+        if( projSettings.m_AnnotateStartNum != startNum )
+        {
+            projSettings.m_AnnotateStartNum = startNum;
+            schFrame->SaveProjectSettings();
+        }
+    }
 }
 
 
@@ -141,7 +160,18 @@ void DIALOG_ANNOTATE::InitValues()
     case 2: m_rbSheetX1000->SetValue( true ); break;
     }
 
-    m_textNumberAfter->SetValue( wxT( "0" ) );
+    int annotateStartNum = 0; // Default "start after" value for annotation
+
+    // See if we can get a "start after" value from the project settings
+    SCH_EDIT_FRAME* schFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_parentFrame );
+
+    if( schFrame )
+    {
+        SCHEMATIC_SETTINGS& projSettings = schFrame->Schematic().Settings();
+        annotateStartNum = projSettings.m_AnnotateStartNum;
+    }
+
+    m_textNumberAfter->SetValue( wxString::Format( wxT( "%d" ), annotateStartNum ) );
 
     annotate_down_right_bitmap->SetBitmap( KiBitmap( BITMAPS::annotate_down_right ) );
     annotate_right_down_bitmap->SetBitmap( KiBitmap( BITMAPS::annotate_right_down ) );

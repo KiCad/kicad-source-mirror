@@ -52,7 +52,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_IntersheetRefsPrefix( DEFAULT_IREF_PREFIX ),
         m_IntersheetRefsSuffix( DEFAULT_IREF_SUFFIX ),
         m_SpiceAdjustPassiveValues( false ),
-        m_NgspiceSimulatorSettings( nullptr )
+        m_NgspiceSimulatorSettings( nullptr ),
+        m_AnnotateStartNum( 0 )
 {
     EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
@@ -127,9 +128,9 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             Mils2iu( defaultJunctionSize ), Mils2iu( 5 ), Mils2iu( 1000 ), 1 / IU_PER_MILS ) );
 
     // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc )
-    m_params.emplace_back(new PARAM<int>("drawing.junction_size_choice",
-           &m_JunctionSizeChoice,
-           defaultJunctionSizeChoice) );
+    m_params.emplace_back( new PARAM<int>( "drawing.junction_size_choice",
+            &m_JunctionSizeChoice,
+            defaultJunctionSizeChoice ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "drawing.field_names",
             [&]() -> nlohmann::json
@@ -211,6 +212,9 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     m_params.emplace_back( new PARAM<int>( "subpart_first_id",
             LIB_SYMBOL::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
+
+    m_params.emplace_back( new PARAM<int>( "annotate_start_num",
+            &m_AnnotateStartNum, 0 ) );
 
     m_NgspiceSimulatorSettings =
             std::make_shared<NGSPICE_SIMULATOR_SETTINGS>( this, "ngspice" );
