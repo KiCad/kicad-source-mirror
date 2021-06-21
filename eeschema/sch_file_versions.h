@@ -63,4 +63,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20210126  // Fix bug with writing pin uuids.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20210406  // Add schematic level uuids.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20210606  // Change overbar syntax from `~...~` to `~{...}`.
-#define SEXPR_SCHEMATIC_FILE_VERSION 20210615  // Update overbar syntax in net names.
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20210615  // Update overbar syntax in net names.
+#define SEXPR_SCHEMATIC_FILE_VERSION 20210621  // Update overbar syntax in bus aliases.

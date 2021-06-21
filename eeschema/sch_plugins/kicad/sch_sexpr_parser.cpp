@@ -3013,10 +3013,19 @@ void SCH_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
     wxCHECK( aScreen, /* void */ );
 
     T token;
-    auto busAlias = std::make_shared<BUS_ALIAS>( aScreen );
+    std::shared_ptr<BUS_ALIAS> busAlias = std::make_shared<BUS_ALIAS>( aScreen );
+    wxString alias;
+    wxString member;
 
     NeedSYMBOL();
-    busAlias->SetName( FromUTF8() );
+
+    alias = FromUTF8();
+
+    if( m_requiredVersion < 20210621 )
+        alias = ConvertToNewOverbarNotation( alias );
+
+    busAlias->SetName( alias );
+
     NeedLEFT();
     token = NextTok();
 
@@ -3030,7 +3039,13 @@ void SCH_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
         if( !IsSymbol( token ) )
             Expecting( "quoted string" );
 
-        busAlias->AddMember( FromUTF8() );
+        member = FromUTF8();
+
+        if( m_requiredVersion < 20210621 )
+            member = ConvertToNewOverbarNotation( member );
+
+        busAlias->AddMember( member );
+
         token = NextTok();
     }
 
