@@ -1149,7 +1149,24 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 case SH_SIMPLE:
                 {
                     const SHAPE_SIMPLE* poly = static_cast<const SHAPE_SIMPLE*>( shape );
-                    m_gal->DrawPolygon( poly->Vertices() );
+
+                    if( margin.x < 0 )  // The poly shape must be deflated
+                    {
+                        int maxError = bds.m_MaxError;
+                        int numSegs = GetArcToSegmentCount( -margin.x, maxError, 360.0 );
+                        SHAPE_POLY_SET outline;
+                        outline.NewOutline();
+
+                        for( int ii = 0; ii < poly->PointCount(); ++ii )
+                            outline.Append( poly->CPoint( ii ) );
+
+                        outline.Deflate( -margin.x, numSegs );
+
+                        m_gal->DrawPolygon( outline );
+                    }
+
+                    else
+                        m_gal->DrawPolygon( poly->Vertices() );
 
                     // Now add on a rounded margin (using segments) if the margin > 0
                     if( margin.x > 0 )
