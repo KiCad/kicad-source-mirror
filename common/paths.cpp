@@ -353,7 +353,7 @@ wxString PATHS::GetOSXKicadDataDir()
 wxString PATHS::getWindowsKiCadRoot()
 {
     wxFileName root( Pgm().GetExecutablePath() + "/../" );
-    root.MakeAbsolute();
+    root.Normalize();
 
     return root.GetPathWithSep();
 }
