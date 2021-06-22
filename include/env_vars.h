@@ -26,66 +26,66 @@
 #define ENV_VARS_H
 
 #include <wx/string.h>
-
 #include <vector>
-
 #include <core/optional.h>
 
-using ENV_VAR_LIST = std::vector<wxString>;
+namespace ENV_VAR
+{
+    using ENV_VAR_LIST = std::vector<wxString>;
 
-/**
- * Determine if an environment variable is "predefined", i.e. if the
- * name of the variable is special to KiCad, and isn't just a user-specified
- * substitution name.
- * @param  aEnvVar the variable to check
- * @return         true if predefined
- */
-bool IsEnvVarImmutable( const wxString& aEnvVar );
+    /**
+     * Determine if an environment variable is "predefined", i.e. if the
+     * name of the variable is special to KiCad, and isn't just a user-specified
+     * substitution name.
+     * @param  aEnvVar the variable to check
+     * @return         true if predefined
+     */
+    bool IsEnvVarImmutable( const wxString& aEnvVar );
 
-/**
- * Get the list of pre-defined environment variables.
- */
-const ENV_VAR_LIST& GetPredefinedEnvVars();
+    /**
+     * Get the list of pre-defined environment variables.
+     */
+    const ENV_VAR_LIST& GetPredefinedEnvVars();
 
-/**
- * Look up long-form help text for a given environment variable.
- *
- * This is intended for use in more verbose help resources (as opposed to
- * tooltip text)
- *
- * @param  aEnvVar The variable to look up
- * @return         A string with help for that variable. Empty if
- *                 no help available for this variable.
- */
-wxString LookUpEnvVarHelp( const wxString& aEnvVar );
+    /**
+     * Look up long-form help text for a given environment variable.
+     *
+     * This is intended for use in more verbose help resources (as opposed to
+     * tooltip text)
+     *
+     * @param  aEnvVar The variable to look up
+     * @return         A string with help for that variable. Empty if
+     *                 no help available for this variable.
+     */
+    wxString LookUpEnvVarHelp( const wxString& aEnvVar );
 
-/**
- * Get an environment variable as a specific type, if set correctly
- *
- * @param aEnvVarName the name of the environment variable
- * @return an OPT containing the value, if set and parseable, otherwise empty.
- */
-template <typename VAL_TYPE>
-OPT<VAL_TYPE> GetEnvVar( const wxString& aEnvVarName );
+    /**
+     * Get an environment variable as a specific type, if set correctly
+     *
+     * @param aEnvVarName the name of the environment variable
+     * @return an OPT containing the value, if set and parseable, otherwise empty.
+     */
+    template <typename VAL_TYPE>
+    OPT<VAL_TYPE> GetEnvVar( const wxString& aEnvVarName );
 
-/**
- * Get a string environment variable, if it is set.
- *
- * @param aEnvVarName the name of the environment variable
- * @return an OPT containing the value, if set, otherwise empty.
- */
-template<>
-OPT<wxString> GetEnvVar( const wxString& aEnvVarName );
+    /**
+     * Get a string environment variable, if it is set.
+     *
+     * @param aEnvVarName the name of the environment variable
+     * @return an OPT containing the value, if set, otherwise empty.
+     */
+    template<>
+    OPT<wxString> GetEnvVar( const wxString& aEnvVarName );
 
-/**
- * Get a double from an environment variable, if set
- *
- * @param aEnvVarName the name of the environment variable
- * @return an OPT containing the value, if set and parseable as a double,
- * otherwise empty.
- */
-template <>
-OPT<double> GetEnvVar( const wxString& aEnvVarName );
-
+    /**
+     * Get a double from an environment variable, if set
+     *
+     * @param aEnvVarName the name of the environment variable
+     * @return an OPT containing the value, if set and parseable as a double,
+     * otherwise empty.
+     */
+    template <>
+    OPT<double> GetEnvVar( const wxString& aEnvVarName );
+};
 
 #endif /* ENV_VARS_H */

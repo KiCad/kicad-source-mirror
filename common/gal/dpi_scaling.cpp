@@ -80,7 +80,7 @@ static OPT<double> getEnvironmentScale()
     if( port_id == wxPORT_GTK )
     {
         // Under GTK, the user can use GDK_SCALE to force the scaling
-        scale = GetEnvVar<double>( "GDK_SCALE" );
+        scale = ENV_VAR::GetEnvVar<double>( "GDK_SCALE" );
     }
 
     if( scale )

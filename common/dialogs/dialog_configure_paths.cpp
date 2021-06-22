@@ -185,7 +185,7 @@ void DIALOG_CONFIGURE_PATHS::AppendEnvVar( const wxString& aName, const wxString
     wxGridCellTextEditor* nameTextEditor = new GRID_CELL_TEXT_EDITOR();
     nameTextEditor->SetValidator( ENV_VAR_NAME_VALIDATOR() );
     nameCellAttr->SetEditor( nameTextEditor );
-    nameCellAttr->SetReadOnly( IsEnvVarImmutable( aName ) );
+    nameCellAttr->SetReadOnly( ENV_VAR::IsEnvVarImmutable( aName ) );
     nameCellAttr->DecRef();
 
     m_EnvVars->SetCellValue( i, TV_VALUE_COL, aPath );
@@ -405,7 +405,7 @@ void DIALOG_CONFIGURE_PATHS::OnRemoveEnvVar( wxCommandEvent& event )
 
     if( curRow < 0 || m_EnvVars->GetNumberRows() <= curRow )
         return;
-    else if( IsEnvVarImmutable( m_EnvVars->GetCellValue( curRow, TV_NAME_COL ) ) )
+    else if( ENV_VAR::IsEnvVarImmutable( m_EnvVars->GetCellValue( curRow, TV_NAME_COL ) ) )
     {
         wxBell();
         return;
@@ -586,11 +586,11 @@ void DIALOG_CONFIGURE_PATHS::OnHelp( wxCommandEvent& event )
               "will only accept upper case letters, digits, and the underscore characters." );
     msg << "</b>";
 
-    for( const auto& var: GetPredefinedEnvVars() )
+    for( const auto& var : ENV_VAR::GetPredefinedEnvVars() )
     {
         msg << "<br><br><b>" << var << "</b>";
 
-        const auto desc = LookUpEnvVarHelp( var );
+        const auto desc = ENV_VAR::LookUpEnvVarHelp( var );
 
         if( desc.size() > 0 )
             msg << ": " << desc;

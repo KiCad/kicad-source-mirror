@@ -68,15 +68,4 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
 wxString ResolveFile( const wxString& aFileName, const ENV_VAR_MAP* aEnvVars,
                       const PROJECT* aProject );
 
-/**
- * Check if a given filename is within a given project directory (not whether it exists!)
- *
- * @param aFileName is the absolute path to check
- * @param aProject is the project to test against
- * @param aSubPath will be filled with the relative path to the file inside the project (if any)
- * @return true if aFileName's path is inside aProject's path
- */
-bool PathIsInsideProject( const wxString& aFileName, const PROJECT* aProject,
-                          wxFileName* aSubPath = nullptr );
-
 #endif /* ENV_PATHS_H */

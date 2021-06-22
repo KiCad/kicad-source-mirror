@@ -33,7 +33,7 @@ using STRING_MAP = std::map<wxString, wxString>;
  * extract them from elsewhere in the program
  * (where they are originally defined)
  */
-static const ENV_VAR_LIST predefined_env_vars = {
+static const ENV_VAR::ENV_VAR_LIST predefinedEnvVars = {
     "KIPRJMOD",
     "KICAD6_SYMBOL_DIR",
     "KICAD6_3DMODEL_DIR",
@@ -44,9 +44,9 @@ static const ENV_VAR_LIST predefined_env_vars = {
 };
 
 
-bool IsEnvVarImmutable( const wxString& aEnvVar )
+bool ENV_VAR::IsEnvVarImmutable( const wxString& aEnvVar )
 {
-    for( const auto& s: predefined_env_vars )
+    for( const auto& s : predefinedEnvVars )
     {
         if( s == aEnvVar )
             return true;
@@ -56,13 +56,13 @@ bool IsEnvVarImmutable( const wxString& aEnvVar )
 }
 
 
-const ENV_VAR_LIST& GetPredefinedEnvVars()
+const ENV_VAR::ENV_VAR_LIST& ENV_VAR::GetPredefinedEnvVars()
 {
-    return predefined_env_vars;
+    return predefinedEnvVars;
 }
 
 
-void initialiseEnvVarHelp( STRING_MAP& aMap )
+static void initialiseEnvVarHelp( STRING_MAP& aMap )
 {
     // Set up dynamically, as we want to be able to use _() translations,
     // which can't be done statically
@@ -101,21 +101,21 @@ void initialiseEnvVarHelp( STRING_MAP& aMap )
 }
 
 
-wxString LookUpEnvVarHelp( const wxString& aEnvVar )
+wxString ENV_VAR::LookUpEnvVarHelp( const wxString& aEnvVar )
 {
-    static STRING_MAP env_var_help_text;
+    static STRING_MAP envVarHelpText;
 
-    if( env_var_help_text.size() == 0 )
-        initialiseEnvVarHelp( env_var_help_text );
+    if( envVarHelpText.size() == 0 )
+        initialiseEnvVarHelp( envVarHelpText );
 
-    return env_var_help_text[aEnvVar];
+    return envVarHelpText[ aEnvVar ];
 }
 
 
 template<>
-OPT<double> GetEnvVar( const wxString& aEnvVarName )
+OPT<double> ENV_VAR::GetEnvVar( const wxString& aEnvVarName )
 {
-    OPT<double> opt_value;
+    OPT<double> optValue;
 
     wxString env;
     if( wxGetEnv( aEnvVarName, &env ) )
@@ -123,23 +123,23 @@ OPT<double> GetEnvVar( const wxString& aEnvVarName )
         double value;
         if( env.ToDouble( &value ) )
         {
-            opt_value = value;
+            optValue = value;
         }
     }
 
-    return opt_value;
+    return optValue;
 }
 
 template<>
-OPT<wxString> GetEnvVar( const wxString& aEnvVarName )
+OPT<wxString> ENV_VAR::GetEnvVar( const wxString& aEnvVarName )
 {
-    OPT<wxString> opt_value;
+    OPT<wxString> optValue;
 
     wxString env;
     if( wxGetEnv( aEnvVarName, &env ) )
     {
-        opt_value = env;
+        optValue = env;
     }
 
-    return opt_value;
+    return optValue;
 }
