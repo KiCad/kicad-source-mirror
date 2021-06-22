@@ -483,7 +483,7 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
     if( m_view )
     {
         m_view->UnselectAll();
-        wxYield();
+        wxSafeYield();
         m_view->Freeze();
     }
 

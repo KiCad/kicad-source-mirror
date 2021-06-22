@@ -175,6 +175,8 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
     if( selection == wxNOT_FOUND )
         selection = 0;
 
+    DeselectAll();
+    wxSafeYield();
     wxWindowUpdateLocker freeze( this );
     DeleteAllItems();
 
