@@ -791,22 +791,22 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         if( !sketchMode )
             m_gal->SetLineWidth( ( aVia->GetWidth() - aVia->GetDrillValue() ) / 2.0 );
 
-        m_gal->DrawArc( center, radius, M_PI / 2.0, M_PI );
-        m_gal->DrawArc( center, radius, 3.0 * M_PI / 2.0, 2.0 * M_PI );
+        m_gal->DrawArc( center, radius, M_PI * -0.375, M_PI * 0.375 );
+        m_gal->DrawArc( center, radius, M_PI * 0.625, M_PI * 1.375 );
 
         if( sketchMode )
             m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerTop ) );
         else
             m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerTop ) );
 
-        m_gal->DrawArc( center, radius, 0.0, M_PI / 2.0 );
+        m_gal->DrawArc( center, radius, M_PI * 1.375, M_PI * 1.625 );
 
         if( sketchMode )
             m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
         else
             m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
 
-        m_gal->DrawArc( center, radius, M_PI, 3.0 * M_PI / 2.0 );
+        m_gal->DrawArc( center, radius, M_PI * 0.375, M_PI * 0.625 );
     }
 
     // Clearance lines
