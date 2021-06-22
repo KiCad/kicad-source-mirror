@@ -1623,6 +1623,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 number = baseName.Last() + number;
                 baseName.RemoveLast();
             }
+            // Update hierarchy to include any other sheets we already added, avoiding
+            // duplicate sheet names
+            hierarchy = m_frame->Schematic().GetSheets();
 
             //@todo: it might be better to just iterate through the sheet names
             // in this screen instead of the whole hierarchy.
