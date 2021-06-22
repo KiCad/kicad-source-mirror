@@ -4,17 +4,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-05-21 08:32+0000\n"
+"PO-Revision-Date: 2021-06-24 04:32+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7.1-dev\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -6632,7 +6632,7 @@ msgstr "Изабери језик"
 
 #: common/widgets/widget_hotkey_list.cpp:380
 msgid "Edit..."
-msgstr ""
+msgstr "Уреди..."
 
 #: common/widgets/widget_hotkey_list.cpp:381
 msgid "Undo Changes"
