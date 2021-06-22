@@ -780,7 +780,7 @@ include_directories( BEFORE SYSTEM ${PYBIND11_INCLUDE_DIR} )
 set( PythonInterp_FIND_VERSION 3.6 )
 set( PythonLibs_FIND_VERSION 3.6 )
 
-find_package( PythonInterp )
+find_package( PythonInterp ${PythonInterp_FIND_VERSION} )
 
 check_find_package_result( PYTHONINTERP_FOUND "Python Interpreter" )
 
