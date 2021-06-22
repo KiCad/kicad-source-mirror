@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-06-22 08:33+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-06-24 04:32+0000\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -9903,7 +9903,7 @@ msgstr "左下方，绘图仪单位"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr "居中的绘图仪单元"
+msgstr "居中，绘图仪单位"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
@@ -21968,11 +21968,11 @@ msgstr "网格阵列"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:207
 msgid "Horizontal center:"
-msgstr "水平居中："
+msgstr "水平中心："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:218
 msgid "Vertical center:"
-msgstr "垂直居中："
+msgstr "垂直中心："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:229
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1244
@@ -24492,7 +24492,7 @@ msgstr "环"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:145
 msgid "Center:"
-msgstr "居中："
+msgstr "圆心："
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:332
 msgid "Polygon must have at least 3 corners"
