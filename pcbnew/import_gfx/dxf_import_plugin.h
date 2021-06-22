@@ -558,7 +558,9 @@ private:
     double      m_minX, m_maxX;      // handles image size in mm
     double      m_minY, m_maxY;      // handles image size in mm
 
-    DXF_IMPORT_UNITS m_currentUnit;     // current unit during import
+    DXF_IMPORT_UNITS m_currentUnit;               // current unit during import
+    int              m_importCoordinatePrecision; // current precision for linear units (points)
+    int              m_importAnglePrecision;      // current precision for angles
 
     GRAPHICS_IMPORTER_BUFFER m_internalImporter;
 

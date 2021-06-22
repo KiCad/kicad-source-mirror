@@ -99,6 +99,8 @@ DXF_IMPORT_PLUGIN::DXF_IMPORT_PLUGIN() : DL_CreationAdapter()
     m_minX = m_minY = std::numeric_limits<double>::max();
     m_maxX = m_maxY = std::numeric_limits<double>::min();
     m_currentUnit = DXF_IMPORT_UNITS::DEFAULT;
+    m_importCoordinatePrecision = 4;    // initial value per dxf spec
+    m_importAnglePrecision = 0;         // initial value per dxf spec
 
     // placeholder layer so we can fallback to something later
     std::unique_ptr<DXF_IMPORT_LAYER> layer0 =
@@ -940,6 +942,18 @@ void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int c
     if( key == "$DWGCODEPAGE" )
     {
         m_codePage = value;
+        return;
+    }
+
+    if( key == "$AUPREC" )
+    {
+        m_importAnglePrecision = value;
+        return;
+    }
+
+    if( key == "$LUPREC" )
+    {
+        m_importCoordinatePrecision = value;
         return;
     }
 
