@@ -1143,12 +1143,16 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     std::list<std::unique_ptr<EDA_ITEM>>& list = dlg.GetImportedItems();
 
     if( dlgResult != wxID_OK )
+    {
+        m_inDrawingTool = false;
         return 0;
+    }
 
     // Ensure the list is not empty:
     if( list.empty() )
     {
-        wxMessageBox( _( "No graphic items found in file to import") );
+        wxMessageBox( _( "No graphic items found in file.") );
+        m_inDrawingTool = false;
         return 0;
     }
 
