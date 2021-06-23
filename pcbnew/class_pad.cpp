@@ -481,15 +481,15 @@ void D_PAD::FlipPrimitives()
 }
 
 
-void D_PAD::MirrorXPrimitives( int aX )
+void D_PAD::MirrorXPrimitives()
 {
     // Mirror custom shapes
     for( unsigned ii = 0; ii < m_basicShapes.size(); ++ii )
     {
         PAD_CS_PRIMITIVE& primitive = m_basicShapes[ii];
 
-        MIRROR( primitive.m_Start.x, aX );
-        MIRROR( primitive.m_End.x, aX );
+        MIRROR( primitive.m_Start.x, 0 );
+        MIRROR( primitive.m_End.x, 0 );
         primitive.m_ArcAngle = -primitive.m_ArcAngle;
 
         switch( primitive.m_Shape )

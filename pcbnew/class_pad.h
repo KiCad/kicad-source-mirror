@@ -336,11 +336,10 @@ public:
     void FlipPrimitives();
 
     /**
-     * Mirror the primitives about a coordinate
-     *
-     * @param aX the x coordinate about which to mirror
+     * Mirror the primitives around the vertical axis. Primitive coordinates are
+     * relative to the pad, and are not absolute
      */
-    void MirrorXPrimitives( int aX );
+    void MirrorXPrimitives();
 
     /**
      * Import to the basic shape list

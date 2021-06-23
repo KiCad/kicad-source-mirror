@@ -761,7 +761,7 @@ static void mirrorPadX( D_PAD& aPad, const wxPoint& aMirrorPoint )
     wxPoint tmpPt = mirrorPointX( aPad.GetPosition(), aMirrorPoint );
 
     if( aPad.GetShape() == PAD_SHAPE_CUSTOM )
-        aPad.MirrorXPrimitives( tmpPt.x );
+        aPad.MirrorXPrimitives();
 
     aPad.SetPosition( tmpPt );
 

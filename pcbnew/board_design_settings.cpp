@@ -377,7 +377,7 @@ public:
         wxString                   oldPath = aConfig->GetPath();
         NETCLASSES::const_iterator nc = m_Pt_param->begin();
 
-        for( int index = 0; index <= m_Pt_param->GetCount(); ++index )
+        for( size_t index = 0; index <= m_Pt_param->GetCount(); ++index )
         {
             wxString    path = "";
             NETCLASSPTR netclass;
