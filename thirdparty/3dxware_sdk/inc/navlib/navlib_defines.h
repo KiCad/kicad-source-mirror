@@ -58,4 +58,9 @@
 #else
 #define _NAVLIB_DLLAPI
 #endif
+
+#if defined(__GNUC__) && !defined(__clang__)
+#define __cdecl __attribute__((__cdecl__))
+#endif
+
 #endif // NAVLIB_DEFINES_H_INCLUDED_

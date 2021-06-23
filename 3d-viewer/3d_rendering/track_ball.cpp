@@ -35,6 +35,9 @@
 
 #include <glm/gtc/quaternion.hpp>
 
+// stdlib
+#include <algorithm>
+
 TRACK_BALL::TRACK_BALL( float aInitialDistance ) :
     CAMERA( aInitialDistance )
 {

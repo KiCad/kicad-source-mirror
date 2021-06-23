@@ -23,6 +23,7 @@
  * @file navlib_templates.h
  * @brief templates used in the 3dconnexion interface.
  */
+
 #if (defined _MSC_VER && _MSC_VER < 1900)
 #define CONSTEXPR const
 #else

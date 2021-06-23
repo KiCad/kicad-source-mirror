@@ -26,7 +26,9 @@
 
 #include <navlib/navlib_defines.h>
 
+#include <errno.h>
 #if (defined(_MSC_VER) && _MSC_VER < 1600)
+typedef __int8 int8_t;
 typedef unsigned __int32 uint32_t;
 typedef unsigned __int64 uint64_t;
 #if _WIN64
@@ -35,6 +37,7 @@ typedef unsigned __int64 size_t;
 typedef unsigned int size_t;
 #endif
 #else
+#include <stddef.h>
 #include <stdint.h>
 #endif
 
@@ -66,9 +69,7 @@ public:
   }
 };
 _NAVLIB_END
-#else //__cplusplus
-typedef __int8 bool;
-#endif
+#endif //__cplusplus
 
 _NAVLIB_BEGIN
 /// <summary>
@@ -1322,7 +1323,11 @@ typedef struct tagNlCreateOptions {
   /// true is to use multi-threading, false for single-threaded.
   /// </summary>
   /// <remarks>The default is false (single-threaded).</remarks>
+#if __cplusplus
   bool bMultiThreaded;
+#else
+  int8_t bMultiThreaded;
+#endif
   /// <inheritdoc/>
   nlOptions_t options;
 } nlCreateOptions_t;
