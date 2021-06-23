@@ -29,7 +29,7 @@
 
 #include "fabmaster_plugin.h"
 #include <board.h>
-
+#include <widgets/progress_reporter.h>
 #include <common.h>
 #include <macros.h>
 
@@ -70,6 +70,14 @@ BOARD* FABMASTER_PLUGIN::Load( const wxString &aFileName, BOARD *aAppendToMe,
     if( !aAppendToMe )
         m_board->SetFileName( aFileName );
 
+    if( aProgressReporter )
+    {
+        aProgressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
+
+        if( !aProgressReporter->KeepRefreshing() )
+            THROW_IO_ERROR( ( "Open cancelled by user." ) );
+    }
+
     if( !m_fabmaster.Read( aFileName.ToStdString() ) )
     {
         std::string readerr;
@@ -79,6 +87,7 @@ BOARD* FABMASTER_PLUGIN::Load( const wxString &aFileName, BOARD *aAppendToMe,
     }
 
     m_fabmaster.Process();
-    m_fabmaster.LoadBoard( m_board );
+    m_fabmaster.LoadBoard( m_board, aProgressReporter );
+
     return m_board;
 }

@@ -53,9 +53,28 @@
 #include <common.h>
 #include <geometry/shape_arc.h>
 #include <kicad_string.h>
-#include <convert_to_biu.h>
+#include <widgets/progress_reporter.h>
 #include <math/util.h>
 #include <wx/filename.h>
+
+
+void FABMASTER::checkpoint()
+{
+    const unsigned PROGRESS_DELTA = 250;
+
+    if( m_progressReporter )
+    {
+        if( ++m_doneCount > m_lastProgressCount + PROGRESS_DELTA )
+        {
+            m_progressReporter->SetCurrentProgress(( (double) m_doneCount ) / m_totalCount );
+
+            if( !m_progressReporter->KeepRefreshing() )
+                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+
+            m_lastProgressCount = m_doneCount;
+        }
+    }
+}
 
 
 double FABMASTER::readDouble( const std::string aStr ) const
@@ -1804,11 +1823,14 @@ bool FABMASTER::Process()
 
 bool FABMASTER::loadZones( BOARD* aBoard )
 {
-
     for( auto& zone : zones )
     {
+        checkpoint();
+
         if( IsCopperLayer( getLayer( zone->layer ) ) || zone->layer == "ALL" )
+        {
             loadZone( aBoard, zone );
+        }
         else
         {
             if( zone->layer == "OUTLINE" || zone->layer == "DESIGN_OUTLINE" )
@@ -1915,6 +1937,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
     for( auto& mod : components )
     {
+        checkpoint();
+
         bool has_multiple = mod.second.size() > 1;
 
         for( int i = 0; i < mod.second.size(); ++i )
@@ -2362,6 +2386,8 @@ bool FABMASTER::loadLayers( BOARD* aBoard )
 
     for( auto& layer : layers )
     {
+        checkpoint();
+
         if( layer.second.layerid >= PCBNEW_LAYER_ID_START )
             layer_set.set( layer.second.layerid );
     }
@@ -2388,6 +2414,8 @@ bool FABMASTER::loadVias( BOARD* aBoard )
 
     for( auto& via : vias )
     {
+        checkpoint();
+
         auto net_it = netinfo.find( via->net );
         auto padstack = pads.find( via->padstack );
 
@@ -2430,6 +2458,8 @@ bool FABMASTER::loadNets( BOARD* aBoard )
 {
     for( auto& net : netnames )
     {
+        checkpoint();
+
         NETINFO_ITEM *newnet = new NETINFO_ITEM( aBoard, net );
         aBoard->Add( newnet, ADD_MODE::APPEND );
     }
@@ -2769,6 +2799,8 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
 
     for( auto& geom : board_graphics )
     {
+        checkpoint();
+
         PCB_LAYER_ID layer;
 
         // The pin numbers are not useful for us outside of the footprints
@@ -2911,9 +2943,19 @@ bool FABMASTER::orderZones( BOARD* aBoard )
 }
 
 
-bool FABMASTER::LoadBoard( BOARD* aBoard )
+bool FABMASTER::LoadBoard( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter )
 {
     aBoard->SetFileName( m_filename.GetFullPath() );
+    m_progressReporter = aProgressReporter;
+
+    m_totalCount = netnames.size()
+                    + layers.size()
+                    + vias.size()
+                    + components.size()
+                    + zones.size()
+                    + board_graphics.size()
+                    + traces.size();
+    m_doneCount = 0;
 
     loadNets( aBoard );
     loadLayers( aBoard );
@@ -2924,6 +2966,8 @@ bool FABMASTER::LoadBoard( BOARD* aBoard )
 
     for( auto& track : traces )
     {
+        checkpoint();
+
         if( track->lclass == "ETCH" )
         {
             loadEtch( aBoard, track);
