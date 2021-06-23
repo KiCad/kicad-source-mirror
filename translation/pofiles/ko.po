@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-06-20 16:33+0000\n"
+"PO-Revision-Date: 2021-06-24 04:32+0000\n"
 "Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7\n"
+"X-Generator: Weblate 4.7.1-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -4884,9 +4884,9 @@ msgid "Error loading editor"
 msgstr "회로도 라이브러리 열기 시작"
 
 #: common/kiway.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to switch language to %s"
-msgstr "<%s>을(를) 생성할 수 없습니다."
+msgstr "언어를 %s로 전환 할 수 없음"
 
 #: common/languages_menu.cpp:48
 #, fuzzy
@@ -5211,9 +5211,8 @@ msgid "Symbol values"
 msgstr "모듈 값 인쇄"
 
 #: common/layer_id.cpp:116
-#, fuzzy
 msgid "Symbol fields"
-msgstr "유효하지 않은 심볼 파일입니다."
+msgstr "심볼 필드"
 
 #: common/layer_id.cpp:117
 #, fuzzy
@@ -5221,9 +5220,8 @@ msgid "Symbol body outlines"
 msgstr "보드 파일:"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Symbol body fills"
-msgstr "유효하지 않은 심볼 파일입니다."
+msgstr "심볼 본문 채우기"
 
 #: common/layer_id.cpp:119
 msgid "Notes"
@@ -5563,9 +5561,8 @@ msgid "Select Preferred Editor"
 msgstr "사용자 지정 에디터:"
 
 #: common/pgm_base.cpp:216
-#, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "Cvpcb 설정"
+msgstr "환경 변수 HOME이 비어 있습니다.  계속할 수 없습니다."
 
 #: common/pgm_base.cpp:227
 #, c-format
@@ -5582,9 +5579,9 @@ msgstr ""
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2319
 #: pcbnew/plugins/altium/altium_pcb.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'"
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "'%s' 파일을 열 수 없음"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2335
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2353
@@ -5688,9 +5685,9 @@ msgid "Warning: "
 msgstr "경고: "
 
 #: common/richio.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open filename \"%s\" for reading"
-msgstr "<%s> 파일을 다시 열 수 없습니다."
+msgstr "파일 이름 “%s”을 읽기 위해 열 수 없음"
 
 #: common/richio.cpp:205 common/richio.cpp:300
 msgid "Maximum line length exceeded"
