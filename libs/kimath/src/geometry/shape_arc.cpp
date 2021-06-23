@@ -424,10 +424,14 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
 
     int n;
 
-    if( r < aAccuracy )
+    // To calculate the arc to segment count, use the external radius instead of the radius.
+    // for a arc with small radius and large width, the difference can be significant
+    double external_radius = r+(m_width/2);
+
+    if( external_radius < aAccuracy )
         n = 0;
     else
-        n = GetArcToSegmentCount( r, aAccuracy, ca );
+        n = GetArcToSegmentCount( external_radius, aAccuracy, ca );
 
     // Split the error on either side of the arc.  Since we want the start and end points
     // to be exactly on the arc, the first and last segments need to be shorter to stay within
