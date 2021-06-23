@@ -126,9 +126,14 @@ private:
     {
         if( m_it != m_expr.end() )
         {
+            m_it++;
             m_pos++;
+
+            if( m_it != m_expr.end() )
+                return *( m_it );
         }
-        return *( ++m_it );
+
+        return wxUniChar();
     }
 
     size_t                   m_pos;
