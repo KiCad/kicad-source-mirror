@@ -679,9 +679,10 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
     for( FP_ZONE* zone : m_fp_zones )
         area.Merge( zone->GetBoundingBox() );
 
-    // Groups do not contribute to the rect, only their members
+    bool noDrawItems = ( m_drawings.empty() && m_pads.empty() && m_fp_zones.empty() );
 
-    if( aIncludeText )
+    // Groups do not contribute to the rect, only their members
+    if( aIncludeText || noDrawItems )
     {
         for( BOARD_ITEM* item : m_drawings )
         {
@@ -710,16 +711,18 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
         }
 
 
-        if( ( m_value->IsVisible() && valueLayerIsVisible ) || aIncludeInvisibleText )
+        if( ( m_value->IsVisible() && valueLayerIsVisible )
+          || aIncludeInvisibleText || noDrawItems )
             area.Merge( m_value->GetBoundingBox() );
 
-        if( ( m_reference->IsVisible() && refLayerIsVisible ) || aIncludeInvisibleText )
+        if( ( m_reference->IsVisible() && refLayerIsVisible )
+          || aIncludeInvisibleText || noDrawItems )
             area.Merge( m_reference->GetBoundingBox() );
     }
 
     if( board )
     {
-        if( aIncludeText && aIncludeInvisibleText )
+        if( ( aIncludeText && aIncludeInvisibleText ) || noDrawItems )
         {
             m_boundingBoxCacheTimeStamp = board->GetTimeStamp();
             m_cachedBoundingBox = area;
@@ -790,9 +793,10 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
     if( rawPolys.OutlineCount() == 0 )
     {
         // generate a small dummy rectangular outline around the anchor
-        const int halfsize = Millimeter2iu( 0.02 );
+        const int halfsize = Millimeter2iu( 1.0 );
 
         rawPolys.NewOutline();
+
         // add a square:
         rawPolys.Append( GetPosition().x - halfsize,  GetPosition().y - halfsize );
         rawPolys.Append( GetPosition().x + halfsize,  GetPosition().y - halfsize );
@@ -924,12 +928,18 @@ bool FOOTPRINT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     arect.Inflate( aAccuracy );
 
     if( aContained )
+    {
         return arect.Contains( GetBoundingBox( false, false ) );
+    }
     else
     {
         // If the rect does not intersect the bounding box, skip any tests
         if( !aRect.Intersects( GetBoundingBox( false, false ) ) )
             return false;
+
+        // The empty footprint dummy rectangle intersects the selection area.
+        if( m_pads.empty() && m_fp_zones.empty() && m_drawings.empty() )
+            return GetBoundingBox( true, false ).Intersects( arect );
 
         // Determine if any elements in the FOOTPRINT intersect the rect
         for( PAD* pad : m_pads )
@@ -2087,14 +2097,18 @@ static struct FOOTPRINT_DESC
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Solderpaste Margin Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Solderpaste Margin Ratio Override" ),
-                    &FOOTPRINT::SetLocalSolderPasteMarginRatio, &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT,
+                             double>( _HKI( "Solderpaste Margin Ratio Override" ),
+                                      &FOOTPRINT::SetLocalSolderPasteMarginRatio,
+                                      &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Thermal Relief Width" ),
-                    &FOOTPRINT::SetThermalWidth, &FOOTPRINT::GetThermalWidth,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                                                           &FOOTPRINT::SetThermalWidth,
+                                                           &FOOTPRINT::GetThermalWidth,
+                                                           PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Thermal Relief Gap" ),
-                    &FOOTPRINT::SetThermalGap, &FOOTPRINT::GetThermalGap,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                                                           &FOOTPRINT::SetThermalGap,
+                                                           &FOOTPRINT::GetThermalGap,
+                                                           PROPERTY_DISPLAY::DISTANCE ) );
         // TODO zone connection, FPID?
     }
 } _FOOTPRINT_DESC;

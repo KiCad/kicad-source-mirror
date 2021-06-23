@@ -2,9 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,6 +76,7 @@ public:
 
         Add( PCB_ACTIONS::selectConnection );
         Add( PCB_ACTIONS::selectNet );
+
         // This could be enabled if we have better logic for picking the target net with the mouse
         // Add( PCB_ACTIONS::deselectNet );
         Add( PCB_ACTIONS::selectSameSheet );
@@ -90,7 +91,7 @@ private:
 
 
 /**
- * Private implementation of firewalled private data
+ * Private implementation of firewalled private data.
  */
 class PCB_SELECTION_TOOL::PRIV
 {
@@ -307,9 +308,9 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             evt->SetPassEvent();
         }
-        // Single click? Select single object
         else if( evt->IsClick( BUT_LEFT ) )
         {
+            // Single click? Select single object
             if( m_highlight_modifier && brd_editor )
                 m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true );
             else
@@ -419,7 +420,8 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     // Yes -> run the move tool and wait till it finishes
                     PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( m_selection.GetItem( 0 ) );
 
-                    // If there is only item in the selection and it's a track, then we need to route it
+                    // If there is only item in the selection and it's a track, then we need
+                    // to route it.
                     bool doRouting = ( track && ( 1 == m_selection.GetSize() ) );
 
                     if( doRouting && trackDragAction == TRACK_DRAG_ACTION::DRAG )
@@ -802,9 +804,9 @@ bool PCB_SELECTION_TOOL::selectMultiple()
         int width = area.GetEnd().x - area.GetOrigin().x;
 
         /* Selection mode depends on direction of drag-selection:
-             * Left > Right : Select objects that are fully enclosed by selection
-             * Right > Left : Select objects that are crossed by selection
-             */
+         * Left > Right : Select objects that are fully enclosed by selection
+         * Right > Left : Select objects that are crossed by selection
+         */
         bool windowSelection = width >= 0 ? true : false;
 
         if( view->IsMirroredX() )
@@ -1230,7 +1232,8 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
                 expand = true;
             }
 
-            if( viaMap.count( pt ) && !viaMap[ pt ]->IsSelected() && aStopCondition != STOP_AT_JUNCTION )
+            if( viaMap.count( pt ) && !viaMap[ pt ]->IsSelected()
+              && aStopCondition != STOP_AT_JUNCTION )
                 select( viaMap[ pt ] );
 
             activePts.erase( activePts.begin() + i );
@@ -1333,7 +1336,8 @@ void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 
     for( int netCode : netcodeList )
     {
-        for( BOARD_CONNECTED_ITEM* mitem : board()->GetConnectivity()->GetNetItems( netCode, padType ) )
+        for( BOARD_CONNECTED_ITEM* mitem : board()->GetConnectivity()->GetNetItems( netCode,
+                                                                                    padType ) )
         {
             if( mitem->Type() == PCB_PAD_T && !alg::contains( footprintList, mitem->GetParent() ) )
             {
@@ -1360,7 +1364,8 @@ void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 
     for( int netCode : netcodeList )
     {
-        for( BOARD_CONNECTED_ITEM* item : board()->GetConnectivity()->GetNetItems( netCode, trackViaType ) )
+        for( BOARD_CONNECTED_ITEM* item : board()->GetConnectivity()->GetNetItems( netCode,
+                                                                                   trackViaType ) )
             localConnectionList.push_back( item );
     }
 
@@ -1496,9 +1501,7 @@ int PCB_SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
 
 
 /**
- * Function itemIsIncludedByFilter()
- *
- * Determine if an item is included by the filter specified
+ * Determine if an item is included by the filter specified.
  *
  * @return true if aItem should be selected by this filter (i..e not filtered out)
  */
@@ -1942,8 +1945,14 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
             return false;
 
         // Allow selection of footprints if some part of the footprint is visible.
-
         const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( aItem );
+
+        // If the footprint has no items except the reference and value fields, include the
+        // footprint in the selections.
+        if( footprint->GraphicalItems().empty()
+          && footprint->Pads().empty()
+          && footprint->Zones().empty() )
+            return true;
 
         for( const BOARD_ITEM* item : footprint->GraphicalItems() )
         {
@@ -2391,7 +2400,6 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     }
 
     // Prefer exact hits to sloppy ones
-
     constexpr int MAX_SLOP = 5;
 
     int pixel = (int) aCollector.GetGuide()->OnePixelInIU();
@@ -2411,7 +2419,6 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     }
 
     // Prune sloppier items
-
     if( minSlop < INT_MAX )
     {
         for( std::pair<BOARD_ITEM*, int> pair : itemsBySloppiness )
@@ -2423,7 +2430,6 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 
     // If the user clicked on a small item within a much larger one then it's pretty clear
     // they're trying to select the smaller one.
-
     constexpr double sizeRatio = 1.5;
 
     std::vector<std::pair<BOARD_ITEM*, double>> itemsByArea;
@@ -2480,7 +2486,6 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 
     // Special case: if a footprint is completely covered with other features then there's no
     // way to select it -- so we need to leave it in the list for user disambiguation.
-
     constexpr double maxCoverRatio = 0.70;
 
     for( int i = 0; i < aCollector.GetCount(); ++i )
@@ -2493,7 +2498,6 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     }
 
     // Hopefully we've now got what the user wanted.
-
     if( (unsigned) aCollector.GetCount() > rejected.size() )  // do not remove everything
     {
         for( BOARD_ITEM* item : rejected )
@@ -2531,7 +2535,6 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
 
     // Set TEMP_SELECTED on all parents which are included in the GENERAL_COLLECTOR.  This
     // algorithm is O3n, whereas checking for the parent inclusion could potentially be On^2.
-
     for( int j = 0; j < aCollector.GetCount(); j++ )
     {
         if( aCollector[j]->GetParent() )
