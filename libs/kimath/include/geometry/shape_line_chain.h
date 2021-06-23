@@ -638,16 +638,6 @@ public:
     SHAPE_LINE_CHAIN& Simplify( bool aRemoveColinear = true );
 
     /**
-     * Detects arcs in a chain and converts them from segments to true arcs by adding an arc
-     * and the associated references.  The original segment points are not changed.
-     *
-     * @param aArcs List of possible arcs that might be in this chain
-     * @param aMargin Maximum acceptable deviation from the found points to the arc (defaults
-     * to ARC_HIGH_DEF)
-     */
-    void DetectArcs( const std::vector<SHAPE_ARC>& aArcs, int aMargin = PCB_IU_PER_MM * 0.005 );
-
-    /**
      * Find the segment nearest the given point.
      *
      * @param aP is the point to compare with.

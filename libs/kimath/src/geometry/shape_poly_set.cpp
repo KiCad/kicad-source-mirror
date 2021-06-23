@@ -678,18 +678,6 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
 }
 
 
-void SHAPE_POLY_SET::detectArcs( const std::vector<SHAPE_ARC>& aArcs, int aMargin )
-{
-    for( POLYGON& poly : m_polys )
-    {
-        for( size_t i = 0; i < poly.size(); i++ )
-        {
-            poly[i].DetectArcs( aArcs, aMargin );
-        }
-    }
-}
-
-
 void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode )
 {
     booleanOp( ClipperLib::ctUnion, b, aFastMode );
