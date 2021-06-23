@@ -153,9 +153,11 @@ public:
                        const PROPERTIES* aProperties = nullptr ) override;
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
+                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr,
+                 PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
-    BOARD* DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIES* aProperties );
+    BOARD* DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIES* aProperties,
+                     PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount );
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts, const PROPERTIES* aProperties = nullptr ) override;

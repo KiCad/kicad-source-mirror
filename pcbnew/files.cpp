@@ -25,7 +25,6 @@
 
 #include <confirm.h>
 #include <core/arraydim.h>
-#include <kicad_string.h>
 #include <gestfich.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
@@ -48,6 +47,7 @@
 #include <kiplatform/app.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/infobar.h>
+#include <widgets/progress_reporter.h>
 #include <settings/settings_manager.h>
 #include <paths.h>
 #include <project/project_file.h>
@@ -56,7 +56,6 @@
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 #include <plugins/kicad/kicad_plugin.h>
 #include <dialogs/dialog_imported_layers.h>
-#include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include "footprint_info_impl.h"
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks()
@@ -691,12 +690,13 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             props["page_width"]  = xbuf;
             props["page_height"] = ybuf;
 
+            WX_PROGRESS_REPORTER progressReporter( this, _( "Loading PCB" ), 1 );
 #if USE_INSTRUMENTATION
             // measure the time to load a BOARD.
             unsigned startTime = GetRunningMicroSecs();
 #endif
 
-            loadedBoard = pi->Load( fullFileName, NULL, &props, &Prj() );
+            loadedBoard = pi->Load( fullFileName, NULL, &props, &Prj(), &progressReporter );
 
 #if USE_INSTRUMENTATION
             unsigned stopTime = GetRunningMicroSecs();

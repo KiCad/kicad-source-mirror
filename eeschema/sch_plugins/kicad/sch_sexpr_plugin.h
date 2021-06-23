@@ -79,6 +79,11 @@ public:
         return wxT( "kicad_sym" );
     }
 
+    void SetProgressReporter( PROGRESS_REPORTER* aReporter ) override
+    {
+        m_progressReporter = aReporter;
+    }
+
     /**
      * The property used internally by the plugin to enable cache buffering which prevents
      * the library file from being written every time the cache is changed.  This is useful
@@ -152,16 +157,18 @@ private:
     bool isBuffering( const PROPERTIES* aProperties );
 
 protected:
-    int                  m_version;    ///< Version of file being loaded.
-    int                  m_nextFreeFieldId;
+    int                     m_version;          ///< Version of file being loaded.
+    int                     m_nextFreeFieldId;
 
-    wxString             m_error;      ///< For throwing exceptions or errors on partial loads.
+    wxString                m_error;            ///< For throwing exceptions or errors on partial
+                                                ///<  loads.
+    PROGRESS_REPORTER*      m_progressReporter;
 
-    wxString             m_path;       ///< Root project path for loading child sheets.
-    std::stack<wxString> m_currentPath;///< Stack to maintain nested sheet paths
-    SCH_SHEET*           m_rootSheet;  ///< The root sheet of the schematic being loaded..
-    SCHEMATIC*           m_schematic;  ///< Passed to Load(), the schematic object being loaded
-    OUTPUTFORMATTER*     m_out;        ///< The output formatter for saving SCH_SCREEN objects.
+    wxString                m_path;             ///< Root project path for loading child sheets.
+    std::stack<wxString>    m_currentPath;      ///< Stack to maintain nested sheet paths
+    SCH_SHEET*              m_rootSheet;        ///< The root sheet of the schematic being loaded.
+    SCHEMATIC*              m_schematic;
+    OUTPUTFORMATTER*        m_out;              ///< The formatter for saving SCH_SCREEN objects.
     SCH_SEXPR_PLUGIN_CACHE* m_cache;
 
     /// initialize PLUGIN like a constructor would.

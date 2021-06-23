@@ -47,6 +47,7 @@
 #include <plugins/kicad/pcb_parser.h>
 #include <trace_helpers.h>
 #include <pcb_track.h>
+#include <widgets/progress_reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/dir.h>
 #include <wx/log.h>
@@ -2188,11 +2189,26 @@ PCB_IO::~PCB_IO()
 
 
 BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties,
-                     PROJECT* aProject )
+                     PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter )
 {
     FILE_LINE_READER reader( aFileName );
 
-    BOARD* board = DoLoad( reader, aAppendToMe, aProperties );
+    unsigned lineCount = 0;
+
+    if( aProgressReporter )
+    {
+        aProgressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
+
+        if( !aProgressReporter->KeepRefreshing() )
+            THROW_IO_ERROR( ( "Open cancelled by user." ) );
+
+        while( reader.ReadLine() )
+            lineCount++;
+
+        reader.Rewind();
+    }
+
+    BOARD* board = DoLoad( reader, aAppendToMe, aProperties, aProgressReporter, lineCount );
 
     // Give the filename to the board if it's new
     if( !aAppendToMe )
@@ -2202,12 +2218,14 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPER
 }
 
 
-BOARD* PCB_IO::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIES* aProperties )
+BOARD* PCB_IO::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIES* aProperties,
+                       PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount)
 {
     init( aProperties );
 
     m_parser->SetLineReader( &aReader );
     m_parser->SetBoard( aAppendToMe );
+    m_parser->SetProgressReporter( aProgressReporter, &aReader, aLineCount );
 
     BOARD* board;
 

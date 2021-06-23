@@ -38,6 +38,7 @@
 #include <settings/settings_manager.h>
 #include <widgets/infobar.h>
 #include <widgets/resettable_panel.h>
+#include <widgets/progress_reporter.h>
 #include <wildcards_and_files_ext.h>
 
 #include "dialog_board_setup.h"
@@ -192,7 +193,10 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
 
     try
     {
-        otherBoard = pi->Load( boardFn.GetFullPath(), nullptr, nullptr );
+        WX_PROGRESS_REPORTER progressReporter( this, _( "Loading PCB" ), 1 );
+
+        otherBoard = pi->Load( boardFn.GetFullPath(), nullptr, nullptr, nullptr,
+                               &progressReporter );
 
         if( importDlg.m_LayersOpt->GetValue() )
         {

@@ -352,7 +352,8 @@ void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
 
 
 BOARD* CLIPBOARD_IO::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                           const PROPERTIES* aProperties, PROJECT* aProject )
+                           const PROPERTIES* aProperties, PROJECT* aProject,
+                           PROGRESS_REPORTER* aProgressReporter )
 {
     std::string result;
 

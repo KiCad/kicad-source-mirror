@@ -33,6 +33,7 @@
 #include <wx/tokenzr.h>
 #include <wx/wfstream.h>
 #include <wx/xml/xml.h>
+#include <wx/msgdlg.h>
 
 #include <symbol_library.h>
 #include <plugins/eagle/eagle_parser.h>
@@ -60,6 +61,7 @@
 #include <schematic.h>
 #include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
+#include <widgets/progress_reporter.h>
 
 
 // Eagle schematic axes are aligned with x increasing left to right and Y increasing bottom to top
@@ -351,7 +353,11 @@ static void eagleToKicadAlignment( EDA_TEXT* aText, int aEagleAlignment, int aRe
 }
 
 
-SCH_EAGLE_PLUGIN::SCH_EAGLE_PLUGIN()
+SCH_EAGLE_PLUGIN::SCH_EAGLE_PLUGIN() :
+    m_progressReporter( nullptr ),
+    m_doneCount( 0 ),
+    m_lastProgressCount( 0 ),
+    m_totalCount( 0 )
 {
     m_rootSheet    = nullptr;
     m_currentSheet = nullptr;
@@ -390,6 +396,25 @@ int SCH_EAGLE_PLUGIN::GetModifyHash() const
 }
 
 
+void SCH_EAGLE_PLUGIN::checkpoint()
+{
+    const unsigned PROGRESS_DELTA = 5;
+
+    if( m_progressReporter )
+    {
+        if( ++m_doneCount > m_lastProgressCount + PROGRESS_DELTA )
+        {
+            m_progressReporter->SetCurrentProgress(( (double) m_doneCount ) / m_totalCount );
+
+            if( !m_progressReporter->KeepRefreshing() )
+                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+
+            m_lastProgressCount = m_doneCount;
+        }
+    }
+}
+
+
 SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
                                    SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
@@ -399,13 +424,21 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     m_filename = aFileName;
     m_schematic = aSchematic;
 
+    if( m_progressReporter )
+    {
+        m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
+
+        if( !m_progressReporter->KeepRefreshing() )
+            THROW_IO_ERROR( ( "Open cancelled by user." ) );
+    }
+
     // Load the document
     wxXmlDocument xmlDocument;
     wxFFileInputStream stream( m_filename.GetFullPath() );
 
     if( !stream.IsOk() || !xmlDocument.Load( stream ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Unable to read file \"%s\"" ),
+        THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'." ),
                                           m_filename.GetFullPath() ) );
     }
 
@@ -562,8 +595,68 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     if( !sheetNode )
         return;
 
+    auto count_nodes = []( wxXmlNode* aNode ) -> unsigned
+            {
+                unsigned count = 0;
+
+                while( aNode )
+                {
+                    count++;
+                    aNode = aNode->GetNext();
+                }
+
+                return count;
+            };
+
+    if( m_progressReporter )
+    {
+        m_totalCount = 0;
+        m_doneCount = 0;
+
+        m_totalCount += count_nodes( partNode );
+
+        while( libraryNode )
+        {
+            NODE_MAP libraryChildren = MapChildren( libraryNode );
+            wxXmlNode* devicesetNode = getChildrenNodes( libraryChildren, "devicesets" );
+
+            while( devicesetNode )
+            {
+                NODE_MAP deviceSetChildren = MapChildren( devicesetNode );
+                wxXmlNode* deviceNode = getChildrenNodes( deviceSetChildren, "devices" );
+                wxXmlNode* gateNode = getChildrenNodes( deviceSetChildren, "gates" );
+
+                m_totalCount += count_nodes( deviceNode ) * count_nodes( gateNode );
+
+                devicesetNode = devicesetNode->GetNext();
+            }
+
+            libraryNode = libraryNode->GetNext();
+        }
+
+        // Rewind
+        libraryNode = getChildrenNodes( schematicChildren, "libraries" );
+
+        while( sheetNode )
+        {
+            NODE_MAP sheetChildren = MapChildren( sheetNode );
+
+            m_totalCount += count_nodes( getChildrenNodes( sheetChildren, "instances" ) );
+            m_totalCount += count_nodes( getChildrenNodes( sheetChildren, "busses" ) );
+            m_totalCount += count_nodes( getChildrenNodes( sheetChildren, "nets" ) );
+            m_totalCount += count_nodes( getChildrenNodes( sheetChildren, "plain" ) );
+
+            sheetNode = sheetNode->GetNext();
+        }
+
+        // Rewind
+        sheetNode = getChildrenNodes( schematicChildren, "sheets" );
+    }
+
     while( partNode )
     {
+        checkpoint();
+
         std::unique_ptr<EPART> epart = std::make_unique<EPART>( partNode );
 
         // N.B. Eagle parts are case-insensitive in matching but we keep the display case
@@ -585,7 +678,6 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
             libraryNode = libraryNode->GetNext();
         }
-
         m_pi->SaveLibrary( getLibFileName().GetFullPath() );
     }
 
@@ -734,6 +826,8 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
     while( instanceNode )
     {
+        checkpoint();
+
         loadInstance( instanceNode );
         instanceNode = instanceNode->GetNext();
     }
@@ -746,6 +840,8 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
     while( busNode )
     {
+        checkpoint();
+
         // Get the bus name
         wxString busName = translateEagleBusName( busNode->GetAttribute( "name" ) );
 
@@ -762,6 +858,8 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
     while( netNode )
     {
+        checkpoint();
+
         // Get the net name and class
         wxString netName  = netNode->GetAttribute( "name" );
         wxString netClass = netNode->GetAttribute( "class" );
@@ -792,6 +890,8 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
     while( plainNode )
     {
+        checkpoint();
+
         wxString nodeName = plainNode->GetName();
 
         if( nodeName == "text" )
@@ -1371,8 +1471,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 }
 
 
-EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary(
-        wxXmlNode* aLibraryNode, EAGLE_LIBRARY* aEagleLibrary )
+EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
+                                              EAGLE_LIBRARY* aEagleLibrary )
 {
     NODE_MAP libraryChildren = MapChildren( aLibraryNode );
 
@@ -1396,8 +1496,8 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary(
 
         wxString prefix = edeviceset.prefix ? edeviceset.prefix.Get() : "";
 
-        NODE_MAP   aDeviceSetChildren = MapChildren( devicesetNode );
-        wxXmlNode* deviceNode         = getChildrenNodes( aDeviceSetChildren, "devices" );
+        NODE_MAP   deviceSetChildren = MapChildren( devicesetNode );
+        wxXmlNode* deviceNode        = getChildrenNodes( deviceSetChildren, "devices" );
 
         // For each device in the device set:
         while( deviceNode )
@@ -1418,8 +1518,8 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary(
             unique_ptr<LIB_SYMBOL> kpart( new LIB_SYMBOL( symbolName ) );
 
             // Process each gate in the deviceset for this device.
-            wxXmlNode* gateNode    = getChildrenNodes( aDeviceSetChildren, "gates" );
-            int        gates_count = countChildren( aDeviceSetChildren["gates"], "gate" );
+            wxXmlNode* gateNode    = getChildrenNodes( deviceSetChildren, "gates" );
+            int        gates_count = countChildren( deviceSetChildren["gates"], "gate" );
             kpart->SetUnitCount( gates_count );
             kpart->LockUnits( true );
 
@@ -1437,10 +1537,11 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary(
 
             while( gateNode )
             {
+                checkpoint();
+
                 EGATE egate = EGATE( gateNode );
 
                 aEagleLibrary->GateUnit[edeviceset.name + edevice.name + egate.name] = gateindex;
-
                 ispower = loadSymbol( aEagleLibrary->SymbolNodes[egate.symbol], kpart, &edevice,
                         gateindex, egate.name );
 

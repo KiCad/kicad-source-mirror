@@ -156,14 +156,15 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
 
 
 BOARD* IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aAppendToMe,
-                     const PROPERTIES* aProperties, PROJECT* aProject )
+                     const PROPERTIES* aProperties, PROJECT* aProject,
+                     PROGRESS_REPORTER* aProgressReporter )
 {
     // release the PLUGIN even if an exception is thrown.
     PLUGIN::RELEASER pi( PluginFind( aFileType ) );
 
     if( (PLUGIN*) pi )  // test pi->plugin
     {
-        return pi->Load( aFileName, aAppendToMe, aProperties, aProject );  // virtual
+        return pi->Load( aFileName, aAppendToMe, aProperties, aProject, aProgressReporter );
     }
 
     THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );

@@ -74,7 +74,8 @@ public:
     }
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
+                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr,
+                 PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts,
@@ -101,6 +102,11 @@ public:
     static LSET leg_mask2new( int cu_count, unsigned aMask );
 
 protected:
+    /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
+    void init( const PROPERTIES* aProperties );
+
+    void checkpoint();
+
     ///< Converts net code using the mapping table if available,
     ///< otherwise returns unchanged net code
     inline int getNetCode( int aNetCode )
@@ -174,24 +180,25 @@ protected:
     void cacheLib( const wxString& aLibraryPath );
 
 protected:
-    int               m_cu_count;
+    int                m_cu_count;
 
-    wxString          m_error;      ///< for throwing exceptions
-    BOARD*            m_board;      ///< which BOARD, no ownership here
-    const PROPERTIES* m_props;      ///< passed via Save() or Load(), no ownership, may be NULL.
+    wxString           m_error;                  ///< for throwing exceptions
+    BOARD*             m_board;                  ///< which BOARD, no ownership here
+    const PROPERTIES*  m_props;                  ///< passed via Save() or Load(), no ownership,
+                                                 ///<  may be NULL.
+    PROGRESS_REPORTER* m_progressReporter;       ///< may be NULL, no ownership
+    unsigned           m_lastProgressLine;
+    unsigned           m_lineCount;              ///< for progress reporting
 
-    LINE_READER*      m_reader;     ///< no ownership here.
-    FILE*             m_fp;         ///< no ownership here.
+    LINE_READER*       m_reader;                 ///< no ownership here.
+    FILE*              m_fp;                     ///< no ownership here.
 
-    wxString          m_field;      ///< reused to stuff FOOTPRINT fields.
-    int               m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
-    LP_CACHE*         m_cache;
-    bool              m_showLegacyZoneWarning;
+    wxString           m_field;                  ///< reused to stuff FOOTPRINT fields.
+    int                m_loading_format_version; ///< which BOARD_FORMAT_VERSION am I Load()ing?
+    LP_CACHE*          m_cache;
+    bool               m_showLegacyZoneWarning;
 
-    std::vector<int>  m_netCodes;   ///< net codes mapping for boards being loaded
-
-    /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
-    void    init( const PROPERTIES* aProperties );
+    std::vector<int>   m_netCodes;               ///< net codes mapping for boards being loaded
 
     double  biuToDisk;              ///< convert from BIUs to disk engineering units
                                     ///< with this scale factor

@@ -40,10 +40,11 @@ public:
 
     const wxString  PluginName() const override;
 
-    BOARD*          Load( const wxString&   aFileName,
-                          BOARD*            aAppendToMe,
-                          const PROPERTIES* aProperties = nullptr,
-                          PROJECT*          aProject = nullptr ) override;
+    BOARD*          Load( const wxString&    aFileName,
+                          BOARD*             aAppendToMe,
+                          const PROPERTIES*  aProperties = nullptr,
+                          PROJECT*           aProject = nullptr,
+                          PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     const wxString  GetFileExtension() const override;
 

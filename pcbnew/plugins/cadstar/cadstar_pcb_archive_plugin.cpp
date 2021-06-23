@@ -106,7 +106,8 @@ std::vector<FOOTPRINT*> CADSTAR_PCB_ARCHIVE_PLUGIN::GetImportedCachedLibraryFoot
 
 
 BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                                         const PROPERTIES* aProperties, PROJECT* aProject )
+                                         const PROPERTIES* aProperties, PROJECT* aProject,
+                                         PROGRESS_REPORTER* aProgressReporter )
 {
     m_props = aProperties;
     m_board = aAppendToMe ? aAppendToMe : new BOARD();

@@ -78,7 +78,7 @@ struct ERULES
         mdWireWire          ( 0 )
     {}
 
-    void parse( wxXmlNode* aRules );
+    void parse( wxXmlNode* aRules, std::function<void()> aCheckpoint );
 
     ///< percent over 100%.  0-> not elongated, 100->twice as wide as is tall
     ///< Goes into making a scaling factor for "long" pads.
@@ -131,7 +131,8 @@ public:
     const wxString PluginName() const override;
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
+                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr,
+                 PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
 
@@ -176,9 +177,11 @@ public:
 
 private:
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
-    void    init( const PROPERTIES* aProperties );
+    void init( const PROPERTIES* aProperties );
 
-    void    clear_cu_map();
+    void checkpoint();
+
+    void clear_cu_map();
 
     /// Convert an Eagle distance to a KiCad distance.
     int kicad_y( const ECOORD& y ) const { return -y.ToPcbUnits(); }
@@ -298,6 +301,11 @@ private:
 
     const PROPERTIES* m_props;      ///< passed via Save() or Load(), no ownership, may be NULL.
     BOARD*      m_board;            ///< which BOARD is being worked on, no ownership here
+
+    PROGRESS_REPORTER*  m_progressReporter;  ///< optional; may be nullptr
+    unsigned            m_doneCount;
+    unsigned            m_lastProgressCount;
+    unsigned            m_totalCount;         ///< for progress reporting
 
     int         m_min_trace;        ///< smallest trace we find on Load(), in BIU.
     int         m_min_hole;         ///< smallest diameter hole we find on Load(), in BIU.

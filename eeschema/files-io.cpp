@@ -61,6 +61,7 @@
 #include <tools/ee_inspection_tool.h>
 #include <paths.h>
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks
+#include <widgets/progress_reporter.h>
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
 {
@@ -399,6 +400,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         SCH_PLUGIN* plugin = SCH_IO_MGR::FindPlugin( schFileType );
         SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( plugin );
+
+        WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Schematic" ), 1 );
+        pi->SetProgressReporter( &progressReporter );
 
         bool failedLoad = false;
         try
@@ -1117,19 +1121,18 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
         try
         {
             SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
-            DIALOG_HTML_REPORTER*           reporter = new DIALOG_HTML_REPORTER( this );
+            DIALOG_HTML_REPORTER            errorReporter( this );
+            WX_PROGRESS_REPORTER            progressReporter( this, _( "Importing Schematic" ), 1 );
 
-            pi->SetReporter( reporter->m_Reporter );
+            pi->SetReporter( errorReporter.m_Reporter );
+            pi->SetProgressReporter( &progressReporter );
             Schematic().SetRoot( pi->Load( aFileName, &Schematic() ) );
 
-            if( reporter->m_Reporter->HasMessage() )
+            if( errorReporter.m_Reporter->HasMessage() )
             {
-                reporter->m_Reporter->Flush();  // Build HTML messages
-                reporter->ShowModal();
+                errorReporter.m_Reporter->Flush();  // Build HTML messages
+                errorReporter.ShowModal();
             }
-
-            pi->SetReporter( &WXLOG_REPORTER::GetInstance() );
-            delete reporter;
 
             // Non-KiCad schematics do not use a drawing-sheet (or if they do, it works differently
             // to KiCad), so set it to an empty one

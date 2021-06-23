@@ -225,6 +225,9 @@ public:
         m_lineNum = 0;
     }
 
+    long int FileLength();
+    long int CurPos();
+
 protected:
     bool    m_iOwn; ///< if I own the file, I'll promise to close it, else not.
     FILE*   m_fp;   ///< I may own this file, but might not.

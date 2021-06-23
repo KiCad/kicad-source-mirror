@@ -64,7 +64,8 @@ const wxString ALTIUM_DESIGNER_PLUGIN::GetFileExtension() const
 
 
 BOARD* ALTIUM_DESIGNER_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                                     const PROPERTIES* aProperties, PROJECT* aProject )
+                                     const PROPERTIES* aProperties, PROJECT* aProject,
+                                     PROGRESS_REPORTER* aProgressReporter )
 {
     m_props = aProperties;
 

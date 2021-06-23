@@ -59,7 +59,8 @@ public:
     BOARD_ITEM* Parse();
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
+                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr,
+                 PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     void SetBoard( BOARD* aBoard );
 

@@ -28,13 +28,11 @@
  */
 
 #include <cerrno>
-#include <common.h>
 #include <confirm.h>
 #include <macros.h>
 #include <title_block.h>
 #include <trigo.h>
 
-#include <advanced_config.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <pcb_dimension.h>
@@ -54,10 +52,10 @@
 #include <zones.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <convert_basic_shapes_to_polygon.h>    // for RECT_CHAMFER_POSITIONS definition
-#include <template_fieldnames.h>
 #include <math/util.h>                           // KiROUND, Clamp
 #include <kicad_string.h>
 #include <wx/log.h>
+#include <widgets/progress_reporter.h>
 
 using namespace PCB_KEYS_T;
 
@@ -103,6 +101,27 @@ void PCB_PARSER::init()
         std::string key = StrPrintf( "Inner%d.Cu", i );
 
         m_layerMasks[ key ] = LSET( PCB_LAYER_ID( In15_Cu - i ) );
+    }
+}
+
+
+void PCB_PARSER::checkpoint()
+{
+    const unsigned PROGRESS_DELTA = 250;
+
+    if( m_progressReporter )
+    {
+        unsigned curLine = m_lineReader->LineNumber();
+
+        if( curLine > m_lastProgressLine + PROGRESS_DELTA )
+        {
+            m_progressReporter->SetCurrentProgress( ( (double) curLine ) / m_lineCount );
+
+            if( !m_progressReporter->KeepRefreshing() )
+                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+
+            m_lastProgressLine = curLine;
+        }
     }
 }
 
@@ -588,6 +607,8 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
+        checkpoint();
+
         if( token != T_LEFT )
             Expecting( T_LEFT );
 

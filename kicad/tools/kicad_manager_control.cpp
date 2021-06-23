@@ -665,18 +665,13 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
                 filepath = legacy_board.GetFullPath();
         }
 
-        // Show the frame (and update widgets to set valid sizes),
-        // after creating player and before calling OpenProjectFiles().
-        // Useful because loading a complex board and building its internal data can be
-        // time consuming
-        player->Show( true );
-        wxSafeYield();
-
         if( !filepath.IsEmpty() )
         {
             if( !player->OpenProjectFiles( std::vector<wxString>( 1, filepath ) ) )
                 return -1;
         }
+
+        player->Show( true );
     }
 
     // Needed on Windows, other platforms do not use it, but it creates no issue

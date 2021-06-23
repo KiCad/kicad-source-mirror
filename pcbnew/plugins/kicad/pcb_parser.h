@@ -60,6 +60,7 @@ class PCB_VIA;
 class ZONE;
 class FP_3DMODEL;
 struct LAYER;
+class PROGRESS_REPORTER;
 
 
 /**
@@ -72,7 +73,11 @@ public:
     PCB_PARSER( LINE_READER* aReader = nullptr ) :
         PCB_LEXER( aReader ),
         m_board( nullptr ),
-        m_resetKIIDs( false )
+        m_resetKIIDs( false ),
+        m_progressReporter( nullptr ),
+        m_lineReader( nullptr ),
+        m_lastProgressLine( 0 ),
+        m_lineCount( 0 )
     {
         init();
     }
@@ -99,6 +104,15 @@ public:
 
         if( aBoard != nullptr )
             m_resetKIIDs = true;
+    }
+
+    void SetProgressReporter( PROGRESS_REPORTER* aProgressReporter, const LINE_READER* aLineReader,
+                              unsigned aLineCount )
+    {
+        m_progressReporter = aProgressReporter;
+        m_lineReader = aLineReader;
+        m_lastProgressLine = 0;
+        m_lineCount = aLineCount;
     }
 
     BOARD_ITEM* Parse();
@@ -153,6 +167,8 @@ private:
      * is encountered.
      */
     void init();
+
+    void checkpoint();
 
     /**
      * Create a mapping from the (short-lived) bug where layer names were translated.
@@ -341,6 +357,11 @@ private:
     KIID_MAP            m_resetKIIDMap;
 
     bool                m_showLegacyZoneWarning;
+
+    PROGRESS_REPORTER*  m_progressReporter;  ///< optional; may be nullptr
+    const LINE_READER*  m_lineReader;        ///< for progress reporting
+    unsigned            m_lastProgressLine;
+    unsigned            m_lineCount;         ///< for progress reporting
 
     // Group membership info refers to other Uuids in the file.
     // We don't want to rely on group declarations being last in the file, so

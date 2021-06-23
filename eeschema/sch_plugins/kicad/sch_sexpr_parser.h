@@ -84,6 +84,13 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     int m_convert;          ///< The current body style being parsed.
     wxString m_symbolName;  ///< The current symbol name.
 
+    PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr
+    const LINE_READER* m_lineReader;        // for progress reporting
+    unsigned           m_lastProgressLine;
+    unsigned           m_lineCount;         // for progress reporting
+
+    void checkpoint();
+
     void parseHeader( TSCHEMATIC_T::T aHeaderType, int aFileVersion );
 
     inline long parseHex()
@@ -184,7 +191,8 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     void parseBusAlias( SCH_SCREEN* aScreen );
 
 public:
-    SCH_SEXPR_PARSER( LINE_READER* aLineReader = nullptr );
+    SCH_SEXPR_PARSER( LINE_READER* aLineReader = nullptr,
+                      PROGRESS_REPORTER* aProgressReporter = nullptr, unsigned aLineCount = 0 );
 
     void ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap );
 

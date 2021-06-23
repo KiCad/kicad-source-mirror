@@ -38,6 +38,7 @@ class KIWAY;
 class LIB_SYMBOL;
 class SYMBOL_LIB;
 class PROPERTIES;
+class PROGRESS_REPORTER;
 
 
 /**
@@ -163,6 +164,11 @@ public:
      * Set an optional reporter for warnings/errors.
      */
     virtual void SetReporter( REPORTER* aReporter ) {}
+
+    /**
+     * Set an optional progress reporter.
+     */
+    virtual void SetProgressReporter( PROGRESS_REPORTER* aReporter ) {}
 
     /**
      * Return the file extension for the #SCH_PLUGIN.

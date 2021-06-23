@@ -55,6 +55,7 @@
 #include <view/view_controls.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_edit_frame.h>
+#include <widgets/progress_reporter.h>
 
 using namespace std::placeholders;
 
@@ -1018,8 +1019,10 @@ int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
         props["page_width"]  = xbuf;
         props["page_height"] = ybuf;
 
+        WX_PROGRESS_REPORTER progressReporter( editFrame, _( "Loading PCB" ), 1 );
+
         editFrame->GetDesignSettings().GetNetClasses().Clear();
-        pi.Load( fileName, brd, &props );
+        pi.Load( fileName, brd, &props, nullptr, &progressReporter );
     }
     catch( const IO_ERROR& ioe )
     {

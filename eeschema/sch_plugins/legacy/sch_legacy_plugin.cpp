@@ -41,6 +41,9 @@
 #include <properties.h>
 #include <trace_helpers.h>
 #include <trigo.h>
+#include <confirm.h>
+#include <widgets/progress_reporter.h>
+#include <wx_filename.h>       // For ::ResolvePossibleSymlinks()
 
 #include <general.h>
 #include <sch_bitmap.h>
@@ -70,10 +73,8 @@
 #include <lib_text.h>
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definition.
-#include <confirm.h>
 #include <tool/selection.h>
 #include <default_values.h>    // For some default values
-#include <wx_filename.h>       // For ::ResolvePossibleSymlinks()
 
 
 #define Mils2Iu( x ) Mils2iu( x )
@@ -582,7 +583,11 @@ public:
 };
 
 
-SCH_LEGACY_PLUGIN::SCH_LEGACY_PLUGIN()
+SCH_LEGACY_PLUGIN::SCH_LEGACY_PLUGIN() :
+    m_progressReporter( nullptr ),
+    m_lineReader( nullptr ),
+    m_lastProgressLine( 0 ),
+    m_lineCount( 0 )
 {
     init( NULL );
 }
@@ -601,6 +606,27 @@ void SCH_LEGACY_PLUGIN::init( SCHEMATIC* aSchematic, const PROPERTIES* aProperti
     m_schematic = aSchematic;
     m_cache     = nullptr;
     m_out       = nullptr;
+}
+
+
+void SCH_LEGACY_PLUGIN::checkpoint()
+{
+    const unsigned PROGRESS_DELTA = 250;
+
+    if( m_progressReporter )
+    {
+        unsigned curLine = m_lineReader->LineNumber();
+
+        if( curLine > m_lastProgressLine + PROGRESS_DELTA )
+        {
+            m_progressReporter->SetCurrentProgress( ( (double) curLine ) / m_lineCount );
+
+            if( !m_progressReporter->KeepRefreshing() )
+                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+
+            m_lastProgressLine = curLine;
+        }
+    }
 }
 
 
@@ -753,6 +779,22 @@ void SCH_LEGACY_PLUGIN::loadFile( const wxString& aFileName, SCH_SCREEN* aScreen
 {
     FILE_LINE_READER reader( aFileName );
 
+    if( m_progressReporter )
+    {
+        m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
+
+        if( !m_progressReporter->KeepRefreshing() )
+            THROW_IO_ERROR( ( "Open cancelled by user." ) );
+
+        m_lineReader = &reader;
+        m_lineCount = 0;
+
+        while( reader.ReadLine() )
+            m_lineCount++;
+
+        reader.Rewind();
+    }
+
     loadHeader( reader, aScreen );
 
     LoadContent( reader, aScreen, m_version );
@@ -782,6 +824,8 @@ void SCH_LEGACY_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen, 
 
     while( aReader.ReadLine() )
     {
+        checkpoint();
+
         char* line = aReader.Line();
 
         while( *line == ' ' )
@@ -842,6 +886,8 @@ void SCH_LEGACY_PLUGIN::loadHeader( LINE_READER& aReader, SCH_SCREEN* aScreen )
     // Skip all lines until the end of header "EELAYER END" is found
     while( aReader.ReadLine() )
     {
+        checkpoint();
+
         line = aReader.Line();
 
         while( *line == ' ' )

@@ -167,8 +167,8 @@ FILE_LINE_READER::FILE_LINE_READER( const wxString& aFileName,
 
     if( !m_fp )
     {
-        wxString msg = wxString::Format(
-            _( "Unable to open filename \"%s\" for reading" ), aFileName.GetData() );
+        wxString msg = wxString::Format( _( "Unable to open %s for reading." ),
+                                         aFileName.GetData() );
         THROW_IO_ERROR( msg );
     }
 
@@ -192,6 +192,22 @@ FILE_LINE_READER::~FILE_LINE_READER()
 {
     if( m_iOwn && m_fp )
         fclose( m_fp );
+}
+
+
+long int FILE_LINE_READER::FileLength()
+{
+    fseek( m_fp, 0, SEEK_END );
+    long int fileLength = ftell( m_fp );
+    rewind( m_fp );
+
+    return fileLength;
+}
+
+
+long int FILE_LINE_READER::CurPos()
+{
+    return ftell( m_fp );
 }
 
 

@@ -1164,9 +1164,10 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
                         m_gal->DrawPolygon( outline );
                     }
-
                     else
+                    {
                         m_gal->DrawPolygon( poly->Vertices() );
+                    }
 
                     // Now add on a rounded margin (using segments) if the margin > 0
                     if( margin.x > 0 )

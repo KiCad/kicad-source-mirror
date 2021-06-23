@@ -131,7 +131,7 @@ std::vector<SYMBOL_ASYNC_LOADER::LOADED_PAIR> SYMBOL_ASYNC_LOADER::worker()
         }
 
         if( m_reporter )
-            m_reporter->AdvancePhase( wxString::Format( _( "Loading library \"%s\"" ), nickname ) );
+            m_reporter->AdvancePhase( wxString::Format( _( "Loading library %s..." ), nickname ) );
     }
 
     return ret;

@@ -55,18 +55,45 @@
 #include <sch_plugins/kicad/sch_sexpr_parser.h>
 #include <template_fieldnames.h>
 #include <trigo.h>
+#include <widgets/progress_reporter.h>
 
 
 using namespace TSCHEMATIC_T;
 
 
-SCH_SEXPR_PARSER::SCH_SEXPR_PARSER( LINE_READER* aLineReader ) :
+SCH_SEXPR_PARSER::SCH_SEXPR_PARSER( LINE_READER* aLineReader, PROGRESS_REPORTER* aProgressReporter,
+                                    unsigned aLineCount ) :
     SCHEMATIC_LEXER( aLineReader ),
     m_requiredVersion( 0 ),
     m_fieldId( 0 ),
     m_unit( 1 ),
-    m_convert( 1 )
+    m_convert( 1 ),
+    m_progressReporter( aProgressReporter ),
+    m_lineReader( aLineReader ),
+    m_lastProgressLine( 0 ),
+    m_lineCount( aLineCount )
 {
+}
+
+
+void SCH_SEXPR_PARSER::checkpoint()
+{
+    const unsigned PROGRESS_DELTA = 250;
+
+    if( m_progressReporter )
+    {
+        unsigned curLine = m_lineReader->LineNumber();
+
+        if( curLine > m_lastProgressLine + PROGRESS_DELTA )
+        {
+            m_progressReporter->SetCurrentProgress( ( (double) curLine ) / m_lineCount );
+
+            if( !m_progressReporter->KeepRefreshing() )
+                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+
+            m_lastProgressLine = curLine;
+        }
+    }
 }
 
 
@@ -2089,6 +2116,8 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
             Expecting( T_LEFT );
 
         token = NextTok();
+
+        checkpoint();
 
         if( !aIsCopyableOnly && token == T_page && m_requiredVersion <= 20200506 )
             token = T_paper;

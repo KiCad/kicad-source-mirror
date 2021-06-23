@@ -64,7 +64,8 @@ const wxString ALTIUM_CIRCUIT_MAKER_PLUGIN::GetFileExtension() const
 
 
 BOARD* ALTIUM_CIRCUIT_MAKER_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                                          const PROPERTIES* aProperties, PROJECT* aProject )
+                                          const PROPERTIES* aProperties, PROJECT* aProject,
+                                          PROGRESS_REPORTER* aProgressReporter )
 {
     m_props = aProperties;
 

@@ -44,7 +44,7 @@ static void not_implemented( PLUGIN* aPlugin, const char* aCaller )
 
 
 BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties,
-                     PROJECT* aProject )
+                     PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter )
 {
     not_implemented( this, __FUNCTION__ );
     return nullptr;

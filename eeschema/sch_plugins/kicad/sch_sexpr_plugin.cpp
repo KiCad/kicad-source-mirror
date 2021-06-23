@@ -61,6 +61,7 @@
 #include <ee_selection.h>
 #include <kicad_string.h>
 #include <wx_filename.h>       // for ::ResolvePossibleSymlinks()
+#include <widgets/progress_reporter.h>
 
 
 using namespace TSCHEMATIC_T;
@@ -365,7 +366,8 @@ public:
 };
 
 
-SCH_SEXPR_PLUGIN::SCH_SEXPR_PLUGIN()
+SCH_SEXPR_PLUGIN::SCH_SEXPR_PLUGIN() :
+    m_progressReporter( nullptr )
 {
     init( NULL );
 }
@@ -386,6 +388,7 @@ void SCH_SEXPR_PLUGIN::init( SCHEMATIC* aSchematic, const PROPERTIES* aPropertie
     m_out             = nullptr;
     m_nextFreeFieldId = 100; // number arbitrarily > MANDATORY_FIELDS or SHEET_MANDATORY_FIELDS
 }
+
 
 SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
                                    SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
@@ -518,10 +521,10 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
 
             // This was moved out of the try{} block so that any sheets definitionsthat
             // the plugin fully parsed before the exception was raised will be loaded.
-            for( auto aItem : aSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
+            for( SCH_ITEM* aItem : aSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
             {
                 wxCHECK2( aItem->Type() == SCH_SHEET_T, /* do nothing */ );
-                auto sheet = static_cast<SCH_SHEET*>( aItem );
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
 
                 // Recursion starts here.
                 loadHierarchy( sheet );
@@ -538,7 +541,22 @@ void SCH_SEXPR_PLUGIN::loadFile( const wxString& aFileName, SCH_SHEET* aSheet )
 {
     FILE_LINE_READER reader( aFileName );
 
-    SCH_SEXPR_PARSER parser( &reader );
+    size_t lineCount = 0;
+
+    if( m_progressReporter )
+    {
+        m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
+
+        if( !m_progressReporter->KeepRefreshing() )
+            THROW_IO_ERROR( ( "Open cancelled by user." ) );
+
+        while( reader.ReadLine() )
+            lineCount++;
+
+        reader.Rewind();
+    }
+
+    SCH_SEXPR_PARSER parser( &reader, m_progressReporter, lineCount );
 
     parser.ParseSchematic( aSheet );
 }

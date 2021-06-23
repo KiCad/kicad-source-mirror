@@ -87,6 +87,11 @@ public:
 
     void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
 
+    void SetProgressReporter( PROGRESS_REPORTER* aReporter ) override
+    {
+        m_progressReporter = aReporter;
+    }
+
     const wxString GetFileExtension() const override;
 
     const wxString GetLibraryFileExtension() const override;
@@ -99,8 +104,9 @@ public:
 
     bool CheckHeader( const wxString& aFileName ) override;
 
-
 private:
+    void checkpoint();
+
     void loadDrawing( wxXmlNode* aDrawingNode );
     void loadLayerDefs( wxXmlNode* aLayers );
     void loadSchematic( wxXmlNode* aSchematicNode );
@@ -120,15 +126,15 @@ private:
     SCH_LAYER_ID kiCadLayer( int aEagleLayer );
 
     std::pair<VECTOR2I, const SEG*> findNearestLinePoint( const wxPoint& aPoint,
-            const std::vector<SEG>& aLines ) const;
+                                                          const std::vector<SEG>& aLines ) const;
 
-    void                loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
-                                      const wxString& aNetClass );
-    SCH_LINE*           loadWire( wxXmlNode* aWireNode );
-    SCH_TEXT*           loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
-    SCH_JUNCTION*       loadJunction( wxXmlNode* aJunction );
-    SCH_TEXT*           loadPlainText( wxXmlNode* aSchText );
-    void                loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_LINE*>& aLines );
+    void            loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
+                                  const wxString& aNetClass );
+    SCH_LINE*       loadWire( wxXmlNode* aWireNode );
+    SCH_TEXT*       loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
+    SCH_JUNCTION*   loadJunction( wxXmlNode* aJunction );
+    SCH_TEXT*       loadPlainText( wxXmlNode* aSchText );
+    void            loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_LINE*>& aLines );
 
     bool            loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBOL>& aSymbol,
                                 EDEVICE* aDevice, int aGateNumber, const wxString& aGateName );
@@ -228,8 +234,13 @@ private:
     EPART_MAP                         m_partlist;
     std::map<wxString, EAGLE_LIBRARY> m_eagleLibs;
 
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER   m_pi;         ///< Plugin to create the KiCad symbol library.
-    std::unique_ptr< PROPERTIES >     m_properties; ///< Library plugin properties.
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER   m_pi;                ///< PI to create KiCad symbol library.
+    std::unique_ptr< PROPERTIES >     m_properties;        ///< Library plugin properties.
+
+    PROGRESS_REPORTER*                m_progressReporter;  ///< optional; may be nullptr
+    unsigned                          m_doneCount;
+    unsigned                          m_lastProgressCount;
+    unsigned                          m_totalCount;        ///< for progress reporting
 
     std::map<wxString, int>           m_netCounts;
     std::map<int, SCH_LAYER_ID>       m_layerMap;

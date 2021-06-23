@@ -67,6 +67,7 @@ Load() TODO's
 #include <properties.h>
 #include <trigo.h>
 #include <math/util.h>      // for KiROUND
+#include <widgets/progress_reporter.h>
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -207,12 +208,14 @@ static void setKeepoutSettingsToZone( ZONE* aZone, LAYER_NUM aLayer )
 }
 
 
-void ERULES::parse( wxXmlNode* aRules )
+void ERULES::parse( wxXmlNode* aRules, std::function<void()> aCheckpoint )
 {
     wxXmlNode* child = aRules->GetChildren();
 
     while( child )
     {
+        aCheckpoint();
+
         if( child->GetName() == "param" )
         {
             const wxString& name = child->GetAttribute( "name" );
@@ -273,9 +276,13 @@ void ERULES::parse( wxXmlNode* aRules )
 
 
 EAGLE_PLUGIN::EAGLE_PLUGIN() :
-    m_rules( new ERULES() ),
-    m_xpath( new XPATH() ),
-    m_mod_time( wxDateTime::Now() )
+        m_rules( new ERULES() ),
+        m_xpath( new XPATH() ),
+        m_progressReporter( nullptr ),
+        m_doneCount( 0 ),
+        m_lastProgressCount( 0 ),
+        m_totalCount( 0 ),
+        m_mod_time( wxDateTime::Now() )
 {
     using namespace std::placeholders;
 
@@ -305,6 +312,26 @@ const wxString EAGLE_PLUGIN::GetFileExtension() const
     return wxT( "brd" );
 }
 
+
+void EAGLE_PLUGIN::checkpoint()
+{
+    const unsigned PROGRESS_DELTA = 50;
+
+    if( m_progressReporter )
+    {
+        if( ++m_doneCount > m_lastProgressCount + PROGRESS_DELTA )
+        {
+            m_progressReporter->SetCurrentProgress(( (double) m_doneCount ) / m_totalCount );
+
+            if( !m_progressReporter->KeepRefreshing() )
+                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+
+            m_lastProgressCount = m_doneCount;
+        }
+    }
+}
+
+
 wxSize inline EAGLE_PLUGIN::kicad_fontz( const ECOORD& d, int aTextThickness ) const
 {
     // Eagle includes stroke thickness in the text size, KiCAD does not
@@ -314,7 +341,8 @@ wxSize inline EAGLE_PLUGIN::kicad_fontz( const ECOORD& d, int aTextThickness ) c
 
 
 BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                           const PROPERTIES* aProperties, PROJECT* aProject )
+                           const PROPERTIES* aProperties, PROJECT* aProject,
+                           PROGRESS_REPORTER* aProgressReporter )
 {
     LOCALE_IO       toggle;     // toggles on, then off, the C locale.
     wxXmlNode*      doc;
@@ -322,6 +350,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
     init( aProperties );
 
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
+    m_progressReporter = aProgressReporter;
 
     // Give the filename to the board if it's new
     if( !aAppendToMe )
@@ -332,6 +361,14 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
 
     try
     {
+        if( m_progressReporter )
+        {
+            m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
+
+            if( !m_progressReporter->KeepRefreshing() )
+                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+        }
+
         wxFileName fn = aFileName;
         // Load the document
         wxFFileInputStream stream( fn.GetFullPath() );
@@ -339,7 +376,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
 
         if( !stream.IsOk() || !xmlDocument.Load( stream ) )
         {
-            THROW_IO_ERROR( wxString::Format( _( "Unable to read file \"%s\"" ),
+            THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
                                               fn.GetFullPath() ) );
         }
 
@@ -414,9 +451,7 @@ std::vector<FOOTPRINT*> EAGLE_PLUGIN::GetImportedCachedLibraryFootprints()
     std::vector<FOOTPRINT*> retval;
 
     for( std::pair<wxString, FOOTPRINT*> fp : m_templates )
-    {
         retval.push_back( static_cast<FOOTPRINT*>( fp.second->Clone() ) );
-    }
 
     return retval;
 }
@@ -458,12 +493,53 @@ void EAGLE_PLUGIN::loadAllSections( wxXmlNode* aDoc )
     wxXmlNode* board         = drawingChildren["board"];
     NODE_MAP boardChildren   = MapChildren( board );
 
+    auto count_children = [this]( wxXmlNode* aNode )
+            {
+                if( aNode )
+                {
+                    wxXmlNode* child = aNode->GetChildren();
+
+                    while( child )
+                    {
+                        m_totalCount++;
+                        child = child->GetNext();
+                    }
+                }
+            };
+
+    wxXmlNode* designrules = boardChildren["designrules"];
+    wxXmlNode* layers = drawingChildren["layers"];
+    wxXmlNode* plain = boardChildren["plain"];
+    wxXmlNode* signals = boardChildren["signals"];
+    wxXmlNode* libs = boardChildren["libraries"];
+    wxXmlNode* elems = boardChildren["elements"];
+
+    if( m_progressReporter )
+    {
+        m_totalCount = 0;
+        m_doneCount = 0;
+
+        count_children( designrules );
+        count_children( layers );
+        count_children( plain );
+        count_children( signals );
+        count_children( elems );
+
+        while( libs )
+        {
+            count_children( MapChildren( libs )["packages"] );
+            libs = libs->GetNext();
+        }
+
+        // Rewind
+        libs = boardChildren["libraries"];
+    }
+
     m_xpath->push( "eagle.drawing" );
 
     {
         m_xpath->push( "board" );
 
-        wxXmlNode* designrules = boardChildren["designrules"];
         loadDesignRules( designrules );
 
         m_xpath->pop();
@@ -472,7 +548,6 @@ void EAGLE_PLUGIN::loadAllSections( wxXmlNode* aDoc )
     {
         m_xpath->push( "layers" );
 
-        wxXmlNode* layers = drawingChildren["layers"];
         loadLayerDefs( layers );
         mapEagleLayersToKicad();
 
@@ -482,19 +557,12 @@ void EAGLE_PLUGIN::loadAllSections( wxXmlNode* aDoc )
     {
         m_xpath->push( "board" );
 
-        wxXmlNode* plain = boardChildren["plain"];
         loadPlain( plain );
-
-        wxXmlNode*  signals = boardChildren["signals"];
         loadSignals( signals );
-
-        wxXmlNode*  libs = boardChildren["libraries"];
         loadLibraries( libs );
-
-        wxXmlNode* elems = boardChildren["elements"];
         loadElements( elems );
 
-        m_xpath->pop();     // "board"
+        m_xpath->pop();
     }
 
     m_xpath->pop();     // "eagle.drawing"
@@ -506,7 +574,7 @@ void EAGLE_PLUGIN::loadDesignRules( wxXmlNode* aDesignRules )
     if( aDesignRules )
     {
         m_xpath->push( "designrules" );
-        m_rules->parse( aDesignRules );
+        m_rules->parse( aDesignRules, [this](){ checkpoint(); } );
         m_xpath->pop();     // "designrules"
     }
 }
@@ -533,9 +601,7 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
 
         // find the subset of layers that are copper and active
         if( elayer.number >= 1 && elayer.number <= 16 && ( !elayer.active || *elayer.active ) )
-        {
             cu.push_back( elayer );
-        }
 
         layerNode = layerNode->GetNext();
     }
@@ -546,9 +612,13 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
     for( EITER it = cu.begin();  it != cu.end();  ++it,  ++ki_layer_count )
     {
         if( ki_layer_count == 0 )
+        {
             m_cu_map[it->number] = F_Cu;
+        }
         else if( ki_layer_count == int( cu.size()-1 ) )
+        {
             m_cu_map[it->number] = B_Cu;
+        }
         else
         {
             // some eagle boards do not have contiguous layer number sequences.
@@ -592,6 +662,8 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
     // (polygon | wire | text | circle | rectangle | frame | hole)*
     while( gr )
     {
+        checkpoint();
+
         wxString grName = gr->GetName();
 
         if( grName == "wire" )
@@ -945,6 +1017,8 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 
     while( package )
     {
+        checkpoint();
+
         m_xpath->push( "package", "name" );
 
         wxString pack_ref = package->GetAttribute( "name" );
@@ -1018,6 +1092,8 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
     while( element )
     {
+        checkpoint();
+
         if( element->GetName() != "element" )
         {
             // Get next item
@@ -1039,7 +1115,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
         if( it == m_templates.end() )
         {
-            wxString emsg = wxString::Format( _( "No \"%s\" package in library \"%s\"" ),
+            wxString emsg = wxString::Format( _( "No '%s' package in library '%s'." ),
                                               FROM_UTF8( e.package.c_str() ),
                                               FROM_UTF8( e.library.c_str() ) );
             THROW_IO_ERROR( emsg );
@@ -1742,7 +1818,7 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
         // if shape is not present, our default is circle and that matches their default "round"
     }
 
-    if( e.diameter )
+    if( e.diameter && e.diameter->value > 0 )
     {
         int diameter = e.diameter->ToPcbUnits();
         pad->SetSize( wxSize( diameter, diameter ) );
@@ -2148,6 +2224,9 @@ void EAGLE_PLUGIN::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
 {
     EHOLE   e( aTree );
 
+    if( e.drill.value == 0 )
+        return;
+
     // we add a PAD_ATTRIB::NPTH pad to this footprint.
     PAD* pad = new PAD( aFootprint );
     aFootprint->Add( pad );
@@ -2188,7 +2267,7 @@ void EAGLE_PLUGIN::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     ESMD e( aTree );
     PCB_LAYER_ID layer = kicad_layer( e.layer );
 
-    if( !IsCopperLayer( layer ) )
+    if( !IsCopperLayer( layer ) || e.dx.value == 0 || e.dy.value == 0 )
         return;
 
     PAD* pad = new PAD( aFootprint );
@@ -2304,6 +2383,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
     while( net )
     {
+        checkpoint();
+
         bool    sawPad = false;
 
         zones.clear();
@@ -2557,7 +2638,13 @@ void EAGLE_PLUGIN::mapEagleLayersToKicad()
         inputDescs.push_back( layerDesc );
     }
 
+    if( m_progressReporter && dynamic_cast<wxWindow*>( m_progressReporter ) )
+        dynamic_cast<wxWindow*>( m_progressReporter )->Hide();
+
     m_layer_map = m_layer_mapping_handler( inputDescs );
+
+    if( m_progressReporter && dynamic_cast<wxWindow*>( m_progressReporter ))
+        dynamic_cast<wxWindow*>( m_progressReporter )->Show();
 }
 
 PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
