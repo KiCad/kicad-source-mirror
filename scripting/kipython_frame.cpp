@@ -32,15 +32,25 @@
 
 void KIPYTHON_FRAME::SetupPythonEditor()
 {
+    using namespace pybind11::literals;
+
+    // As always, first grab the GIL
+    PyLOCK lock;
+
+    // Make sure the kicad_pyshell module is in the path
+    wxString sysPath = SCRIPTING::PyScriptingPath( false );
+    auto     locals  = pybind11::dict( "stock_path"_a = sysPath.ToStdString() );
+
+    pybind11::exec( R"(
+import sys
+sys.path.append( stock_path )
+    )", pybind11::globals(), locals );
 
     // passing window ids instead of pointers is because wxPython is not
     // exposing the needed c++ apis to make that possible.
     std::stringstream pcbnew_pyshell_one_step;
     pcbnew_pyshell_one_step << "import kicad_pyshell\n";
     pcbnew_pyshell_one_step << "newshell = kicad_pyshell.makePcbnewShellWindow( " << GetId() << " )\n";
-
-    // As always, first grab the GIL
-    PyLOCK      lock;
 
     // Execute the code to make the makeWindow function we defined above
     PyRun_SimpleString( pcbnew_pyshell_one_step.str().c_str() );
