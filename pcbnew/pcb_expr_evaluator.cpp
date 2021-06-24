@@ -87,10 +87,14 @@ static void existsOnLayer( LIBEVAL::CONTEXT* aCtx, void *self )
     if( !item )
         return;
 
-    if( !arg && aCtx->HasErrorCallback() )
+    if( !arg )
     {
-        aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
-                                             wxT( "existsOnLayer()" ) ) );
+        if( aCtx->HasErrorCallback() )
+        {
+            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+                                                 wxT( "existsOnLayer()" ) ) );
+        }
+
         return;
     }
 
