@@ -236,6 +236,8 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup(
     //Get Layer names
     BOARD_DESIGN_SETTINGS&           dsnSettings = m_frame->GetDesignSettings();
     BOARD_STACKUP&                   stackup     = dsnSettings.GetStackupDescriptor();
+    stackup.SynchronizeWithBoard( &dsnSettings );
+
     std::vector<BOARD_STACKUP_ITEM*> layers      = stackup.GetList();
 
     std::vector<PCB_TEXT*> colLayer;
@@ -281,39 +283,53 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup(
     t->SetText( _( "Loss Tangent" ) );
     colTanD.push_back( t );
 
-    int i;
+    int i, j;
 
     for( i = 0; i < stackup.GetCount(); i++ )
     {
-        t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-        t->SetText( layers.at( i )->GetLayerName() );
-        colLayer.push_back( t );
+        for( j = 0; j < layers.at( i )->GetSublayersCount(); j++ )
+        {
+            // Layer names are empty untill we close at least once the board setup dialog.
+            // If the user did not open the dialog, then get the names from the board.
+            // But dielectric layer names will be missing.
+            t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
+            if( layers.at( i )->GetLayerName().IsEmpty() )
+            {
+                t->SetText( m_frame->GetBoard()->GetLayerName( layers.at( i )->GetBrdLayerId() ) );
+            }
+            else
+            {
+                t->SetText( layers.at( i )->GetLayerName() );
+            }
+            colLayer.push_back( t );
 
-        t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-        t->SetText( layers.at( i )->GetTypeName() );
-        colType.push_back( t );
+            t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
+            t->SetText( layers.at( i )->GetTypeName() );
+            colType.push_back( t );
 
-        t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-        t->SetText( layers.at( i )->GetMaterial() );
-        colMaterial.push_back( t );
+            t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
+            t->SetText( layers.at( i )->GetMaterial( j ) );
+            colMaterial.push_back( t );
 
-        t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-        t->SetText(
-                StringFromValue( m_frame->GetUserUnits(), layers.at( i )->GetThickness(), true ) );
-        colThickness.push_back( t );
+            t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
+            t->SetText( StringFromValue( m_frame->GetUserUnits(), layers.at( i )->GetThickness( j ),
+                                         true ) );
+            colThickness.push_back( t );
 
-        t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-        t->SetText( layers.at( i )->GetColor() );
-        colColor.push_back( t );
+            t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
+            t->SetText( layers.at( i )->GetColor() );
+            colColor.push_back( t );
 
-        t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-        t->SetText( StringFromValue( EDA_UNITS::UNSCALED, layers.at( i )->GetEpsilonR(), false ) );
-        colEpsilon.push_back( t );
+            t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
+            t->SetText( StringFromValue( EDA_UNITS::UNSCALED, layers.at( i )->GetEpsilonR( j ),
+                                         false ) );
+            colEpsilon.push_back( t );
 
-        t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-        t->SetText(
-                StringFromValue( EDA_UNITS::UNSCALED, layers.at( i )->GetLossTangent(), false ) );
-        colTanD.push_back( t );
+            t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
+            t->SetText( StringFromValue( EDA_UNITS::UNSCALED, layers.at( i )->GetLossTangent( j ),
+                                         false ) );
+            colTanD.push_back( t );
+        }
     }
 
     texts.push_back( colLayer );
