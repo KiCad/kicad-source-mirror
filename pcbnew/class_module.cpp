@@ -4,7 +4,7 @@
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -460,7 +460,9 @@ EDA_RECT MODULE::GetFootprintRect() const
 
     area.SetOrigin( m_Pos );
     area.SetEnd( m_Pos );
-    area.Inflate( Millimeter2iu( 0.25 ) );   // Give a min size to the area
+
+    // Give a minimum size to the area in case footprint has no drawing or pad objects.
+    area.Inflate( Millimeter2iu( 0.5 ) );
 
     for( const BOARD_ITEM* item = m_Drawings.GetFirst(); item; item = item->Next() )
     {
@@ -478,13 +480,6 @@ EDA_RECT MODULE::GetFootprintRect() const
 const EDA_RECT MODULE::GetBoundingBox() const
 {
     EDA_RECT area = GetFootprintRect();
-
-    // Add in items not collected by GetFootprintRect():
-    for( const BOARD_ITEM* item = m_Drawings.GetFirst(); item; item = item->Next() )
-    {
-        if( item->Type() != PCB_MODULE_EDGE_T )
-            area.Merge( item->GetBoundingBox() );
-    }
 
     area.Merge( m_Value->GetBoundingBox() );
     area.Merge( m_Reference->GetBoundingBox() );
@@ -529,6 +524,7 @@ SHAPE_POLY_SET MODULE::GetBoundingPoly() const
     poly.Append( p );
 
     BOARD* board = GetBoard();
+
     if( board )
     {
         int biggest_clearance = board->GetDesignSettings().GetBiggestClearanceValue();
@@ -650,12 +646,19 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
     arect.Inflate( aAccuracy );
 
     if( aContained )
+    {
         return arect.Contains( m_BoundaryBox );
+    }
     else
     {
         // If the rect does not intersect the bounding box, skip any tests
         if( !aRect.Intersects( GetBoundingBox() ) )
             return false;
+
+        // If there are no drawing objects, there was still an intersection with the reference
+        // and/or value text.
+        if( m_Pads.GetCount() == 0 && m_Drawings.GetCount() == 0 )
+            return true;
 
         // Determine if any elements in the MODULE intersect the rect
         for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )

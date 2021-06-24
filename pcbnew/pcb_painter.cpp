@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2019 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -383,7 +385,40 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         return false;
     }
 
-    return true;
+    // Draw bounding boxes after drawing objects so they can be seen.
+#if 0
+    // Show bounding boxes of painted objects for debugging.
+    EDA_RECT box = item->GetBoundingBox();
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+
+    if( item->Type() == PCB_MODULE_T )
+        m_gal->SetStrokeColor( item->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 ) :
+                               COLOR4D( MAGENTA ) );
+    else
+        m_gal->SetStrokeColor( item->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 ) :
+                               COLOR4D( 0.2, 0.2, 0.2, 1 ) );
+
+    m_gal->SetLineWidth( 1.5 / m_gal->GetWorldScale() );
+    m_gal->DrawRectangle( box.GetOrigin(), box.GetEnd() );
+
+    if( item->Type() == PCB_MODULE_T )
+    {
+        m_gal->SetStrokeColor( item->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 ) :
+                               COLOR4D( CYAN ) );
+
+        const MODULE* fp = static_cast<const MODULE*>( item );
+
+        if( fp )
+        {
+            SHAPE_POLY_SET convex = fp->GetBoundingPoly();
+
+            m_gal->DrawPolyline( convex.COutline( 0 ) );
+        }
+    }
+#endif
+
+return true;
 }
 
 

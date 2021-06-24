@@ -2,9 +2,10 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1701,8 +1702,13 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
             return false;
 
         // Allow selection of footprints if some part of the footprint is visible.
-
         MODULE* module = const_cast<MODULE*>( static_cast<const MODULE*>( aItem ) );
+
+        // If the footprint has no drawable items other than the reference and value test,
+        // then it can be selected.
+        if( ( module->GraphicalItemsList().GetCount() == 0 ) &&
+            ( module->PadsList().GetCount() == 0 ) )
+            return true;
 
         for( auto item : module->GraphicalItems() )
         {
