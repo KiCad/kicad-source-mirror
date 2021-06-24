@@ -1083,6 +1083,10 @@ bool LINE_PLACER::SetLayer( int aLayer )
         m_currentLayer = aLayer;
         m_head.Line().Clear();
         m_tail.Line().Clear();
+        m_last_head.Line().Clear();
+        m_head.RemoveVia();
+        m_tail.RemoveVia();
+        m_last_head.RemoveVia();
         m_head.SetLayer( m_currentLayer );
         m_tail.SetLayer( m_currentLayer );
         Move( m_currentEnd, nullptr );
