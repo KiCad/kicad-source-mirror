@@ -115,7 +115,8 @@ void PCB_PARSER::checkpoint()
 
         if( curLine > m_lastProgressLine + PROGRESS_DELTA )
         {
-            m_progressReporter->SetCurrentProgress( ( (double) curLine ) / m_lineCount );
+            m_progressReporter->SetCurrentProgress( ( (double) curLine )
+                                                            / std::max( 1U, m_lineCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
                 THROW_IO_ERROR( ( "Open cancelled by user." ) );

@@ -321,7 +321,8 @@ void EAGLE_PLUGIN::checkpoint()
     {
         if( ++m_doneCount > m_lastProgressCount + PROGRESS_DELTA )
         {
-            m_progressReporter->SetCurrentProgress(( (double) m_doneCount ) / m_totalCount );
+            m_progressReporter->SetCurrentProgress( ( (double) m_doneCount )
+                                                            / std::max( 1U, m_totalCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
                 THROW_IO_ERROR( ( "Open cancelled by user." ) );
