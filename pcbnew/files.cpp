@@ -663,13 +663,13 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
 
-        LAYER_REMAPPABLE_PLUGIN* layerRemappable =
+        LAYER_REMAPPABLE_PLUGIN* layerRemappablePlugin =
             dynamic_cast< LAYER_REMAPPABLE_PLUGIN* >( (PLUGIN*) pi );
-        if ( layerRemappable )
+
+        if( layerRemappablePlugin )
         {
-            using namespace std::placeholders;
-            layerRemappable->RegisterLayerMappingCallback(
-                    std::bind( DIALOG_IMPORTED_LAYERS::GetMapModal, this, _1 ) );
+            layerRemappablePlugin->RegisterLayerMappingCallback(
+                    std::bind( DIALOG_IMPORTED_LAYERS::GetMapModal, this, std::placeholders::_1 ) );
         }
 
         // This will rename the file if there is an autosave and the user want to recover
@@ -733,9 +733,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         SetBoard( loadedBoard );
 
         if( GFootprintList.GetCount() == 0 )
-        {
             GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + "fp-info-cache" );
-        }
 
         if( loadedBoard->m_LegacyDesignSettingsLoaded )
         {
