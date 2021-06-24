@@ -53,8 +53,16 @@ public:
 
     using single_row = std::vector<std::string>;
     FABMASTER() :
-        has_pads( false ), has_comps( false ), has_graphic( false ),
-        has_nets( false ), has_pins( false )
+        has_pads( false ),
+        has_comps( false ),
+        has_graphic( false ),
+        has_nets( false ),
+        has_pins( false ),
+        m_progressReporter( nullptr ),
+        m_doneCount( 0 ),
+        m_lastProgressCount( 0 ),
+        m_totalCount( 0 )
+
     {}
 
     bool Read( const std::string& aFile );
