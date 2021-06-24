@@ -295,22 +295,25 @@ void DRC_ENGINE::loadImplicitRules()
                     constraint.Value().SetOpt( nc->GetDiffPairGap() );
                     netclassRule->AddConstraint( constraint );
 
-                    // The diffpair gap overrides the netclass min clearance, but not the board
-                    // min clearance.
-                    netclassRule = new DRC_RULE;
-                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
-                                                             ncName );
-                    netclassRule->m_Implicit = true;
+                    // A narrower diffpair gap overrides the netclass min clearance (but is still
+                    // trimmed to the board min clearance, which is absolute).
+                    if( nc->GetDiffPairGap() < nc->GetClearance() )
+                    {
+                        netclassRule = new DRC_RULE;
+                        netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
+                                                                 ncName );
+                        netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s' && AB.isCoupledDiffPair()",
-                                             ncName );
-                    netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
-                    netclassItemSpecificRules.push_back( netclassRule );
+                        expr = wxString::Format( "A.NetClass == '%s' && AB.isCoupledDiffPair()",
+                                                 ncName );
+                        netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                        netclassItemSpecificRules.push_back( netclassRule );
 
-                    DRC_CONSTRAINT min_clearanceConstraint( CLEARANCE_CONSTRAINT );
-                    min_clearanceConstraint.Value().SetMin( std::max( bds.m_MinClearance,
-                                                                  nc->GetDiffPairGap() ) );
-                    netclassRule->AddConstraint( min_clearanceConstraint );
+                        DRC_CONSTRAINT min_clearanceConstraint( CLEARANCE_CONSTRAINT );
+                        min_clearanceConstraint.Value().SetMin( std::max( bds.m_MinClearance,
+                                                                          nc->GetDiffPairGap() ) );
+                        netclassRule->AddConstraint( min_clearanceConstraint );
+                    }
                 }
 
                 if( nc->GetViaDiameter() || nc->GetViaDrill() )
