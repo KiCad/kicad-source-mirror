@@ -49,12 +49,6 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
 {
     m_scintillaTricks = new SCINTILLA_TRICKS( m_textEditor, wxT( "()" ) );
 
-    int    size = wxNORMAL_FONT->GetPointSize();
-    wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
-
-    for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
-        m_textEditor->StyleSetFont( i, fixedFont );
-
     m_netClassRegex.Compile( "NetClass\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_netNameRegex.Compile( "NetName\\s*[!=]=\\s*$", wxRE_ADVANCED );
 

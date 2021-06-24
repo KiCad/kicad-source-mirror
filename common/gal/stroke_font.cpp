@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2021 Kicad Developers, see change_log.txt for contributors.
  *
  * Stroke font class
  *
@@ -48,7 +48,9 @@ std::vector<BOX2D>* g_newStrokeFontGlyphBoundingBoxes;   ///< Bounding boxes of 
 
 
 STROKE_FONT::STROKE_FONT( GAL* aGal ) :
-    m_gal( aGal ), m_glyphs( nullptr ), m_glyphBoundingBoxes( nullptr ), m_maxGlyphWidth( 1.0 )
+    m_gal( aGal ),
+    m_glyphs( nullptr ),
+    m_glyphBoundingBoxes( nullptr )
 {
 }
 
@@ -151,8 +153,6 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
         // Compute the bounding box of the glyph
         g_newStrokeFontGlyphBoundingBoxes->emplace_back( computeBoundingBox( glyph, glyphWidth ) );
         g_newStrokeFontGlyphs->push_back( glyph );
-        m_maxGlyphWidth = std::max( m_maxGlyphWidth,
-                g_newStrokeFontGlyphBoundingBoxes->back().GetWidth() );
     }
 
     m_glyphs = g_newStrokeFontGlyphs;
@@ -343,15 +343,15 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 
     for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
     {
-        // Handle tabs as locked to the nearest 4th column (counting in spaces)
-        // The choice of spaces is somewhat arbitrary but sufficient for aligning text
+        // Handle tabs as locked to the nearest 4th column (counting in space-widths).
+        // The choice of spaces is somewhat arbitrary but sufficient for aligning text; while
+        // it can produce tabs that go backwards when following wide characters, spacing in
+        // widest-char-widths produces tab spacing that is much too wide (and would change the
+        // layout of existing boards).
         if( *chIt == '\t' )
         {
-            // We align to the 4th column.  This is based on the monospace font used in the text input
-            // boxes.  Here, we take the widest character as our baseline spacing and make tab stops
-            // at each fourth of this widest character
             char_count = ( char_count / 4 + 1 ) * 4 - 1;
-            xOffset = m_maxGlyphWidth * baseGlyphSize.x * char_count;
+            xOffset =  baseGlyphSize.x * char_count;
 
             glyphSize = baseGlyphSize;
             yOffset = 0;

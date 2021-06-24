@@ -36,7 +36,7 @@
 #include <pcb_layer_box_selector.h>
 #include <wx/valnum.h>
 #include <math/util.h>      // for KiROUND
-
+#include <scintilla_tricks.h>
 
 DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem ) :
     DIALOG_TEXT_PROPERTIES_BASE( aParent ),
@@ -59,6 +59,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
     m_MultiLineText->SetEOLMode( wxSTC_EOL_LF );
+
+    m_scintillaTricks = new SCINTILLA_TRICKS( m_MultiLineText, wxT( "{}" ) );
 
     // A hack which causes Scintilla to auto-size the text editor canvas
     // See: https://github.com/jacobslusser/ScintillaNET/issues/216
@@ -91,15 +93,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
         SetInitialFocus( m_MultiLineText );
         m_SingleLineSizer->Show( false );
-
-        int    size = wxNORMAL_FONT->GetPointSize();
-        wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
-
-        for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
-            m_MultiLineText->StyleSetFont( i, fixedFont );
-
-        // Addresses a bug in wx3.0 where styles are not correctly set
-        m_MultiLineText->StyleClearAll();
 
         // This option makes sense only for footprint texts; texts on board are always visible.
         m_Visible->SetValue( true );
@@ -170,6 +163,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 DIALOG_TEXT_PROPERTIES::~DIALOG_TEXT_PROPERTIES()
 {
     Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ), NULL, this );
+
+    delete m_scintillaTricks;
 }
 
 
@@ -178,60 +173,6 @@ void PCB_BASE_EDIT_FRAME::ShowTextPropertiesDialog( BOARD_ITEM* aText )
 {
     DIALOG_TEXT_PROPERTIES dlg( this, aText );
     dlg.ShowQuasiModal();
-}
-
-
-void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
-{
-    if( aEvent.GetKeyCode() == WXK_RETURN && aEvent.ShiftDown() )
-    {
-        if( TransferDataFromWindow() )
-        {
-            // Do not use EndModal to close the dialog that can be opened
-            // in quasi modal mode
-            SetReturnCode( wxID_OK );
-            Close();
-        }
-    }
-    else if( m_MultiLineText->IsShown() && m_MultiLineText->HasFocus() )
-    {
-        if( aEvent.GetKeyCode() == WXK_TAB && !aEvent.ControlDown() )
-        {
-            m_MultiLineText->Tab();
-        }
-        else if( IsCtrl( 'Z', aEvent ) )
-        {
-            m_MultiLineText->Undo();
-        }
-        else if( IsShiftCtrl( 'Z', aEvent ) || IsCtrl( 'Y', aEvent ) )
-        {
-            m_MultiLineText->Redo();
-        }
-        else if( IsCtrl( 'X', aEvent ) )
-        {
-            m_MultiLineText->Cut();
-        }
-        else if( IsCtrl( 'C', aEvent ) )
-        {
-            m_MultiLineText->Copy();
-        }
-        else if( IsCtrl( 'V', aEvent ) )
-        {
-            m_MultiLineText->Paste();
-        }
-        else if( IsCtrl( 'A', aEvent ) )
-        {
-            m_MultiLineText->SelectAll();
-        }
-        else
-        {
-            aEvent.Skip();
-        }
-    }
-    else
-    {
-        aEvent.Skip();
-    }
 }
 
 

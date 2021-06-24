@@ -35,6 +35,7 @@ class BOARD_ITEM;
 class EDA_TEXT;
 class FP_TEXT;
 class PCB_TEXT;
+class SCINTILLA_TRICKS;
 
 
 class DIALOG_TEXT_PROPERTIES : public DIALOG_TEXT_PROPERTIES_BASE
@@ -51,6 +52,10 @@ public:
     virtual void OnSetFocusText( wxFocusEvent& event ) override;
 
 private:
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
+private:
     PCB_BASE_EDIT_FRAME* m_Parent;
     BOARD_ITEM*          m_item;        // FP_TEXT or PCB_TEXT
     EDA_TEXT*            m_edaText;     // always non-null
@@ -65,10 +70,7 @@ private:
     UNIT_BINDER          m_orientation;     // rotation in degrees
     double               m_OrientValue;
 
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
-    void OnCharHook( wxKeyEvent& aEvent ) override;
+    SCINTILLA_TRICKS*    m_scintillaTricks;
 };
 
 

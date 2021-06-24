@@ -43,6 +43,23 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
     m_te->SetScrollWidth( 1 );
     m_te->SetScrollWidthTracking( true );
 
+    // Set a monospace font with a tab width of 4.  This is the closest we can get to having
+    // Scintilla mimic the stroke font's tab positioning.
+    int    size = wxNORMAL_FONT->GetPointSize();
+    wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
+
+#ifdef __WXMAC__
+    // I think wxFONTFAMILY_TELETYPE worked on wxWidgets 3.0, but it doesn't on 3.1.  Set a
+    // monospaced font by hand.
+    fixedFont.SetFaceName( "Menlo" );
+#endif
+
+    for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
+        m_te->StyleSetFont( i, fixedFont );
+
+    m_te->StyleClearAll();    // Addresses a bug in wx3.0 where styles are not correctly set
+    m_te->SetTabWidth( 4 );
+
     // Set up the brace highlighting
     wxColour highlight = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
    	wxColour highlightText = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
