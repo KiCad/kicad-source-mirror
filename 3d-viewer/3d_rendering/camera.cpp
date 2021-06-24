@@ -28,7 +28,7 @@
 
 #include "camera.h"
 #include <wx/log.h>
-
+#include <algorithm>
 
 // A helper function to normalize aAngle between -2PI and +2PI
 inline void normalise2PI( float& aAngle )
@@ -47,8 +47,8 @@ inline void normalise2PI( float& aAngle )
 const wxChar *CAMERA::m_logTrace = wxT( "KI_TRACE_CAMERA" );
 
 
-#define DEFAULT_MIN_ZOOM 0.10f
-#define DEFAULT_MAX_ZOOM 1.20f
+#define DEFAULT_MIN_ZOOM 0.020f
+#define DEFAULT_MAX_ZOOM 2.0f
 
 
 CAMERA::CAMERA( float aInitialDistance )
@@ -178,11 +178,17 @@ void CAMERA::updateRotationMatrix()
 }
 
 
-const glm::mat4 CAMERA::GetRotationMatrix() const
+glm::mat4 CAMERA::GetRotationMatrix() const
 {
     return m_rotationMatrix * m_rotationMatrixAux;
 }
 
+void CAMERA::SetRotationMatrix( const glm::mat4& aRotation )
+{
+    m_parametersChanged = true;
+    std::copy_n( glm::value_ptr( aRotation * glm::inverse( m_rotationMatrixAux ) ), 12,
+                 glm::value_ptr( m_rotationMatrix ) );
+}
 
 void CAMERA::rebuildProjection()
 {
@@ -444,6 +450,38 @@ const glm::mat4& CAMERA::GetViewMatrix() const
 }
 
 
+void CAMERA::SetViewMatrix( glm::mat4 aViewMatrix )
+{
+    SetRotationMatrix( aViewMatrix );
+
+    // The look at position in the view frame.
+    glm::vec4 lookat = aViewMatrix * glm::vec4( m_lookat_pos, 1.0f );
+
+    wxLogTrace( m_logTrace,
+                wxT( "CAMERA::SetViewMatrix   aViewMatrix[3].z =%f, old_zoom=%f, new_zoom=%f, "
+                     "m[3].z=%f" ),
+                aViewMatrix[3].z, m_zoom, lookat.z / m_camera_pos_init.z, lookat.z );
+
+    m_zoom = lookat.z / m_camera_pos_init.z;
+
+    if( m_zoom > m_maxZoom )
+    {
+        m_zoom = m_maxZoom;
+        aViewMatrix[3].z += -lookat.z + m_maxZoom * m_camera_pos_init.z;
+    }
+    else if( m_zoom < m_minZoom )
+    {
+        m_zoom = m_minZoom;
+        aViewMatrix[3].z += -lookat.z + m_minZoom * m_camera_pos_init.z;
+    }
+
+    m_viewMatrix = std::move( aViewMatrix );
+    m_camera_pos = m_viewMatrix
+                   * glm::inverse( m_rotationMatrix * m_rotationMatrixAux
+                                   * glm::translate( glm::mat4( 1.0f ), -m_lookat_pos ) )[3];
+}
+
+
 const glm::mat4& CAMERA::GetViewMatrix_Inv() const
 {
     return m_viewMatrixInverse;
@@ -495,22 +533,38 @@ void CAMERA::ZoomReset()
 
 bool CAMERA::Zoom( float aFactor )
 {
-    if( ( m_zoom == m_minZoom && aFactor > 1 ) || ( m_zoom == m_maxZoom && aFactor < 1 )
+    if( ( m_zoom <= m_minZoom && aFactor > 1 ) || ( m_zoom >= m_maxZoom && aFactor < 1 )
         || aFactor == 1 )
     {
         return false;
     }
 
+    float zoom = m_zoom;
     m_zoom /= aFactor;
 
-    zoomChanged();
+    if( m_zoom <= m_minZoom && aFactor > 1 )
+    {
+        aFactor = zoom / m_minZoom;
+        m_zoom = m_minZoom;
+    }
+    else if( m_zoom >= m_maxZoom && aFactor < 1 )
+    {
+        aFactor = zoom / m_maxZoom;
+        m_zoom = m_maxZoom;
+    }
+
+    m_camera_pos.z /= aFactor;
+
+    updateViewMatrix();
+    rebuildProjection();
+
     return true;
 }
 
 
 bool CAMERA::Zoom_T1( float aFactor )
 {
-    if( ( m_zoom == m_minZoom && aFactor > 1 ) || ( m_zoom == m_maxZoom && aFactor < 1 )
+    if( ( m_zoom <= m_minZoom && aFactor > 1 ) || ( m_zoom >= m_maxZoom && aFactor < 1 )
         || aFactor == 1 )
     {
         return false;

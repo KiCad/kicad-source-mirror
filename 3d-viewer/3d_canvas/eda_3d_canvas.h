@@ -161,6 +161,28 @@ public:
      */
     void OnEvent( wxEvent& aEvent );
 
+    /**
+     * Get the canvas camera.
+     */
+    CAMERA* GetCamera() { return &m_camera; }
+
+    /**
+     * Get information used to display 3D board.
+     */
+    const BOARD_ADAPTER& GetBoardAdapter() const { return m_boardAdapter; }
+
+    /**
+     * Get a value indicating whether to render the pivot.
+     */
+    bool GetRenderPivot() { return m_render_pivot; }
+
+    /**
+     * Set aValue indicating whether to render the pivot.
+     *
+     * @param aValue true will cause the pivot to be rendered on the next redraw.
+     */
+    void SetRenderPivot( bool aValue ) { m_render_pivot = aValue; }
+
 private:
     /**
      * Called by a wxPaintEvent event

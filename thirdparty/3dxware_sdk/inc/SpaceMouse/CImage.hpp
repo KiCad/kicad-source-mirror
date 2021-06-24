@@ -39,7 +39,7 @@
 #endif
 #endif
 
-#ifdef __APPLE__
+#ifndef _WIN32
 #define IS_INTRESOURCE(x) false
 #endif
 

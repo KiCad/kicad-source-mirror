@@ -47,6 +47,8 @@
 
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
 
+// Forward declarations
+class NL_3D_VIEWER_PLUGIN;
 
 enum EDA_3D_VIEWER_STATUSBAR
 {
@@ -167,6 +169,8 @@ private:
     TRACK_BALL       m_trackBallCamera;
 
     bool             m_disable_ray_tracing;
+
+    NL_3D_VIEWER_PLUGIN* m_spaceMouse;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

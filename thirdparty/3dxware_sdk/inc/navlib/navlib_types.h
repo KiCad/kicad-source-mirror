@@ -45,6 +45,7 @@ typedef unsigned int size_t;
 #include <siappcmd_types.h>
 
 #if __cplusplus
+#include <cstring>
 #include <sstream>
 #include <stdexcept>
 /// <summary>
