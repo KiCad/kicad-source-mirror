@@ -652,8 +652,10 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
     SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
     if( !plotPanel || plotPanel->GetType() != simType )
+    {
         plotPanel =
                 dynamic_cast<SIM_PLOT_PANEL*>( NewPlotPanel( m_exporter->GetUsedSimCommand() ) );
+    }
 
     wxASSERT( plotPanel );
 
@@ -668,8 +670,8 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
         int baseType = aType & ~( SPT_AC_MAG | SPT_AC_PHASE );
 
         // Add two plots: magnitude & phase
-        updated |=
-                updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_MAG ), aParam, plotPanel );
+        updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_MAG ), aParam,
+                               plotPanel );
         updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_PHASE ), aParam,
                                plotPanel );
     }
@@ -1044,7 +1046,9 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
         const SIM_PLOT_PANEL* panel = dynamic_cast<const SIM_PLOT_PANEL*>( plotPanel );
 
         if( !panel )
+        {
             file.AddLine( wxString::Format( "%llu", 0ull ) );
+        }
         else
         {
             file.AddLine( wxString::Format( "%llu", panel->GetTraces().size() ) );
@@ -1075,16 +1079,10 @@ SIM_PLOT_TYPE SIM_PLOT_FRAME::GetXAxisType( SIM_TYPE aType ) const
 {
     switch( aType )
     {
-        case ST_AC:
-            return SPT_LIN_FREQUENCY;
-            /// @todo SPT_LOG_FREQUENCY
-
-        case ST_DC:
-            return SPT_SWEEP;
-
-        case ST_TRANSIENT:
-            return SPT_TIME;
-
+        /// @todo SPT_LOG_FREQUENCY
+        case ST_AC:        return SPT_LIN_FREQUENCY;
+        case ST_DC:        return SPT_SWEEP;
+        case ST_TRANSIENT: return SPT_TIME;
         default:
             wxASSERT_MSG( false, "Unhandled simulation type" );
             return (SIM_PLOT_TYPE) 0;
@@ -1145,7 +1143,8 @@ void SIM_PLOT_FRAME::menuSaveWorkbookAs( wxCommandEvent& event )
         defaultFilename = Prj().GetProjectName() + wxT( ".wbk" );
 
     wxFileDialog saveAsDlg( this, _( "Save Simulation Workbook As" ), m_savedWorkbooksPath,
-            defaultFilename, WorkbookFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                            defaultFilename, WorkbookFileWildcard(),
+                            wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveAsDlg.ShowModal() == wxID_CANCEL )
         return;
@@ -1162,8 +1161,8 @@ void SIM_PLOT_FRAME::menuSaveImage( wxCommandEvent& event )
     if( !CurrentPlot() )
         return;
 
-    wxFileDialog saveDlg( this, _( "Save Plot as Image" ), "", "",
-                          PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog saveDlg( this, _( "Save Plot as Image" ), "", "", PngFileWildcard(),
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;
@@ -1179,8 +1178,8 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
 
     const wxChar SEPARATOR = ';';
 
-    wxFileDialog saveDlg( this, _( "Save Plot Data" ), "", "",
-                          CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog saveDlg( this, _( "Save Plot Data" ), "", "", CsvFileWildcard(),
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;
@@ -1302,10 +1301,8 @@ void SIM_PLOT_FRAME::menuWhiteBackground( wxCommandEvent& event )
         // which is only SIM_PLOT_PANEL_BASE
         SIM_PLOT_PANEL* panel = dynamic_cast<SIM_PLOT_PANEL*>( curPage );
 
-        if( panel != nullptr )
-        {
+        if( panel )
             panel->UpdatePlotColors();
-        }
     }
 }
 
@@ -1317,8 +1314,7 @@ void SIM_PLOT_FRAME::onPlotClose( wxAuiNotebookEvent& event )
     if( idx == wxNOT_FOUND )
         return;
 
-    SIM_PANEL_BASE* plotPanel =
-            dynamic_cast<SIM_PANEL_BASE*>( m_plotNotebook->GetPage( idx ) );
+    SIM_PANEL_BASE* plotPanel = dynamic_cast<SIM_PANEL_BASE*>( m_plotNotebook->GetPage( idx ) );
 
     m_workbook->RemovePlotPanel( plotPanel );
     wxCommandEvent dummy;
@@ -1558,7 +1554,10 @@ bool SIM_PLOT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         wxString msg = _( "Save changes to \"%s\" before closing?" );
 
         return HandleUnsavedChanges( this, wxString::Format( msg, filename.GetFullName() ), 
-                                     [&]()->bool { return saveWorkbook( Prj().AbsolutePath ( filename.GetFullName() ) ); } );
+                [&]()->bool
+                {
+                    return saveWorkbook( Prj().AbsolutePath ( filename.GetFullName() ) );
+                } );
     }
 
     return true;
@@ -1659,14 +1658,9 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
         struct TRACE_DESC
         {
-            ///< Name of the measured net/device
-            wxString m_name;
-
-            ///< Type of the signal
-            SIM_PLOT_TYPE m_type;
-
-            ///< Name of the signal parameter
-            wxString m_param;
+            wxString      m_name;    ///< Name of the measured net/device
+            SIM_PLOT_TYPE m_type;    ///< Type of the signal
+            wxString      m_param;   ///< Name of the signal parameter
         };
 
         std::vector<struct TRACE_DESC> traceInfo;
@@ -1715,8 +1709,9 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
             const size_t tab     = 25; //characters
             size_t padding = ( signal.length() < tab ) ? ( tab - signal.length() ) : 1;
 
-            outLine.Printf( wxT( "%s%s" ), ( signal + wxT( ":" ) ).Pad( padding, wxUniChar( ' ' ) ),
-                    SPICE_VALUE( val ).ToSpiceString() );
+            outLine.Printf( wxT( "%s%s" ),
+                            ( signal + wxT( ":" ) ).Pad( padding, wxUniChar( ' ' ) ),
+                            SPICE_VALUE( val ).ToSpiceString() );
 
             outLine.Append( type == SPT_CURRENT ? "A\n" : "V\n" );
 
@@ -1765,8 +1760,7 @@ SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSigna
 {
     SIM_PLOT_PANEL* plot = m_plotFrame->CurrentPlot();
 
-    AddMenuItem( this, HIDE_SIGNAL, _( "Hide Signal" ),
-                 _( "Erase the signal from plot screen" ),
+    AddMenuItem( this, HIDE_SIGNAL, _( "Hide Signal" ), _( "Erase the signal from plot screen" ),
                  KiBitmap( BITMAPS::trash ) );
 
     TRACE* trace = plot->GetTrace( m_signal );
