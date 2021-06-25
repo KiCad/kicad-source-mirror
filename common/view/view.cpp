@@ -281,7 +281,6 @@ VIEW::VIEW( bool aIsDynamic ) :
     double size = coord_limits::max() - coord_limits::epsilon();
     m_boundary.SetOrigin( pos, pos );
     m_boundary.SetSize( size, size );
-    SetPrintMode( 0 );
 
     m_allItems.reset( new std::vector<VIEW_ITEM*> );
     m_allItems->reserve( 32768 );

@@ -406,9 +406,6 @@ public:
         wxCHECK( aLayer >= 0, false);
         wxCHECK( aLayer < (int) m_layers.size(), false );
 
-        if( GetPrintMode() > 0 )
-            return true;
-
         return m_layers.at( aLayer ).visible;
     }
 
@@ -680,24 +677,6 @@ public:
      */
     std::unique_ptr<VIEW> DataReference() const;
 
-    /**
-     * Get the current print mode.
-     *
-     * Return values less than or equal to zero indicate the current mode is the draw mode.
-     * Return values greater than zero indicate print mode.
-
-     * @return the printing mode.
-     */
-    int GetPrintMode() const { return m_printMode; }
-
-    /**
-     * Set the printing mode.
-     *
-     * @param aPrintMode is the printing mode.  If 0, the current mode is not a printing mode,
-     *                   just the draw mode
-     */
-    void SetPrintMode( int aPrintMode ) { m_printMode = aPrintMode; }
-
     static constexpr int VIEW_MAX_LAYERS = 512;  ///< maximum number of layers that may be shown
 
 protected:
@@ -863,10 +842,6 @@ protected:
 
     ///< Flag to reverse the draw order when using draw priority.
     bool m_reverseDrawOrder;
-
-    ///< A control for printing: m_printMode <= 0 means no printing mode (normal draw mode
-    ///< m_printMode > 0 is a printing mode (currently means "we are in printing mode").
-    int m_printMode;
 };
 } // namespace KIGFX
 

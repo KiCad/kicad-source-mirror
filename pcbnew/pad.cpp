@@ -1239,8 +1239,8 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( !aView->IsLayerVisible( LAYER_PADS ) )
         return HIDE;
 
-    // Handle board visibility (unless printing)
-    if( board && !aView->GetPrintMode() )
+    // Handle board visibility
+    if( board )
         visible = board->GetVisibleLayers() & board->GetEnabledLayers();
 
     // Handle Render tab switches

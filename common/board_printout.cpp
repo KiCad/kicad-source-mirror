@@ -94,11 +94,12 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     std::unique_ptr<KIGFX::VIEW> view( m_view->DataReference() );
 
     // Target paper size
-    wxRect pageSizePx = GetLogicalPageRect();
+    wxRect         pageSizePx = GetLogicalPageRect();
     const VECTOR2D pageSizeIn( (double) pageSizePx.width / dc->GetPPI().x,
-            (double) pageSizePx.height / dc->GetPPI().y );
-    galPrint->SetSheetSize( pageSizeIn );
+                               (double) pageSizePx.height / dc->GetPPI().y );
     const VECTOR2D pageSizeIU( milsToIU( pageSizeIn.x * 1000 ), milsToIU( pageSizeIn.y * 1000 ) );
+
+    galPrint->SetSheetSize( pageSizeIn );
 
     view->SetGAL( gal );
     view->SetPainter( painter.get() );
@@ -131,9 +132,10 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     setupPainter( *painter );
     setupViewLayers( *view, m_settings.m_LayerSet );
 
-    auto sheetSizeMils = m_settings.m_pageInfo.GetSizeMils();
-    VECTOR2I sheetSizeIU( milsToIU( sheetSizeMils.GetWidth() ), milsToIU( sheetSizeMils.GetHeight() ) );
-    BOX2I bBox;
+    wxSize   sheetSizeMils = m_settings.m_pageInfo.GetSizeMils();
+    VECTOR2I sheetSizeIU( milsToIU( sheetSizeMils.GetWidth() ),
+                          milsToIU( sheetSizeMils.GetHeight() ) );
+    BOX2I    bBox;
 
     // Determine printout bounding box
     if( m_settings.PrintBorderAndTitleBlock() )
@@ -165,8 +167,6 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
         }
     }
 
-    view->SetPrintMode( 1 );
-
     setupGal( gal );
     galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
     gal->SetLookAtPoint( bBox.Centre() );
@@ -176,11 +176,9 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     gal->ClearScreen();
 
     {
-    KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
-    view->Redraw();
+        KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
+        view->Redraw();
     }
-
-    view->SetPrintMode( 0 );
 }
 
 

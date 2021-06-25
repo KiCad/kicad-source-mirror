@@ -161,12 +161,17 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         setVisibility( LAYER_MOD_TEXT_FR );
         setVisibility( LAYER_MOD_TEXT_BK );
         setVisibility( LAYER_MOD_TEXT_INVISIBLE );
+        setVisibility( LAYER_PADS );
         setVisibility( LAYER_PAD_FR );
         setVisibility( LAYER_PAD_BK );
         setVisibility( LAYER_PADS_TH );
 
         setVisibility( LAYER_TRACKS );
         setVisibility( LAYER_VIAS );
+        setVisibility( LAYER_VIA_MICROVIA );
+        setVisibility( LAYER_VIA_BBLIND );
+        setVisibility( LAYER_VIA_THROUGH );
+        setVisibility( LAYER_ZONES );
 
         setVisibility( LAYER_NO_CONNECTS );
         setVisibility( LAYER_DRC_WARNING );
@@ -175,17 +180,6 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         setVisibility( LAYER_ANCHOR );
         setVisibility( LAYER_DRAWINGSHEET );
         setVisibility( LAYER_GRID );
-
-        // Keep certain items always enabled and just rely on either the finer or coarser
-        // visibility controls
-        const int alwaysEnabled[] =
-                {
-                    LAYER_ZONES, LAYER_PADS, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND,
-                    LAYER_VIA_THROUGH
-                };
-
-        for( int layer : alwaysEnabled )
-            aView.SetLayerVisible( layer, true );
     }
     else
     {
