@@ -700,6 +700,20 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle,
                                width + clearance * 2 );
     }
+
+// Debug only: enable this code only to test the TransformArcToPolygon function
+// and display the polygon outline created by it.
+#if 0
+    SHAPE_POLY_SET cornerBuffer;
+    int errorloc = aArc->GetBoard()->GetDesignSettings().m_MaxError;
+    TransformArcToPolygon( cornerBuffer, aArc->GetStart(), aArc->GetMid(),
+                           aArc->GetEnd(), width, errorloc, ERROR_LOC::ERROR_OUTSIDE );
+    m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( color );
+    m_gal->DrawPolygon( cornerBuffer );
+#endif
 }
 
 
