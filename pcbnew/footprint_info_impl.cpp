@@ -26,10 +26,8 @@
 #include <footprint_info.h>
 #include <fp_lib_table.h>
 #include <dialogs/html_messagebox.h>
-#include <io_mgr.h>
 #include <kicad_string.h>
 #include <locale_io.h>
-#include <kiface_ids.h>
 #include <kiway.h>
 #include <lib_id.h>
 #include <wildcards_and_files_ext.h>
@@ -39,7 +37,6 @@
 #include <wx/wfstream.h>
 
 #include <thread>
-#include <mutex>
 
 
 void FOOTPRINT_INFO_IMPL::load()
@@ -103,10 +100,11 @@ void FOOTPRINT_LIST_IMPL::loader_job()
 
     while( m_queue_in.pop( nickname ) && !m_cancelled )
     {
-        CatchErrors( [this, &nickname]() {
-            m_lib_table->PrefetchLib( nickname );
-            m_queue_out.push( nickname );
-        } );
+        CatchErrors( [this, &nickname]()
+                     {
+                         m_lib_table->PrefetchLib( nickname );
+                         m_queue_out.push( nickname );
+                     } );
 
         m_count_finished.fetch_add( 1 );
 

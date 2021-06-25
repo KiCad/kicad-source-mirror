@@ -385,7 +385,7 @@ public:
      * @throw IO_ERROR if there is an error prefetching the library.
      */
     virtual void PrefetchLib( const wxString& aLibraryPath,
-            const PROPERTIES* aProperties = nullptr );
+                              const PROPERTIES* aProperties = nullptr );
 
     /**
      * Load a footprint having @a aFootprintName from the @a aLibraryPath containing a library
