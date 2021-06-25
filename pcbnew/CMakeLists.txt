@@ -714,6 +714,12 @@ target_link_libraries( pcbnew_kiface
         ${PCBNEW_KIFACE_LIBRARIES}
     )
 
+if( KICAD_USE_3DCONNEXION )
+    message( STATUS "Including 3Dconnexion SpaceMouse navigation support in PcbNew" )
+    add_subdirectory( navlib )
+    target_link_libraries( pcbnew_kiface pcbnew_navlib)
+endif()
+
 set_source_files_properties( pcbnew.cpp PROPERTIES
     # The KIFACE is in pcbnew.cpp, export it:
     COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"

@@ -57,6 +57,7 @@ class FP_LIB_TABLE;
 class BOARD_NETLIST_UPDATER;
 class ACTION_MENU;
 class TOOL_ACTION;
+class NL_PCBNEW_PLUGIN;
 
 enum LAST_PATH_TYPE : unsigned int;
 
@@ -723,12 +724,12 @@ protected:
      */
     void AddActionPluginTools();
 
-	/**
-	 * Execute action plugin's Run() method and updates undo buffer.
+    /**
+     * Execute action plugin's Run() method and updates undo buffer.
      *
-	 * @param aActionPlugin action plugin
-	 */
-	void RunActionPlugin( ACTION_PLUGIN* aActionPlugin );
+     * @param aActionPlugin action plugin
+     */
+    void RunActionPlugin( ACTION_PLUGIN* aActionPlugin );
 
     /**
      * Launched by the menu when an action is called.
@@ -736,6 +737,13 @@ protected:
      * @param aEvent sent by wx
      */
     void OnActionPluginMenu( wxCommandEvent& aEvent);
+
+    /**
+     * Sent when a window or application is being activated or deactivated.
+     *
+     * @param aEvent sent by wx
+     */
+    void OnActivate( wxActivateEvent& aEvent );
 
     /**
      * Launched by the button when an action is called.
@@ -816,6 +824,8 @@ private:
     wxTimer      m_redrawNetnamesTimer;
 
     wxTimer*     m_eventCounterTimer;
+
+    NL_PCBNEW_PLUGIN* m_spaceMouse;
 };
 
 #endif  // __PCB_EDIT_FRAME_H__
