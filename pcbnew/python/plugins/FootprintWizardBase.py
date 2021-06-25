@@ -518,6 +518,16 @@ class FootprintWizardDrawingAids:
         circle.SetStartEnd(start, end)
         self.module.Add(circle)
 
+    def MyCmp(self, n1, n2):
+        """
+        replace the cmp() of python2
+        """
+        if n1 < n2:
+            return -1
+        if n1 > n2:
+            return 1
+        return 0
+
     def Arc(self, cx, cy, sx, sy, a):
         """!
         Draw an arc based on centre, start and angle
@@ -543,7 +553,7 @@ class FootprintWizardDrawingAids:
         circle.SetShape(pcbnew.S_ARC)
 
         # check if the angle needs to be reverse (a flip scaling)
-        if cmp(self.dc['transform'][0], 0) != cmp(self.dc['transform'][4], 0):
+        if self.MyCmp(self.dc['transform'][0], 0) != self.MyCmp(self.dc['transform'][4], 0):
             a = -a
 
         circle.SetAngle(a)
