@@ -50,7 +50,7 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
 
 #ifdef __WXMAC__
     // I think wxFONTFAMILY_TELETYPE worked on wxWidgets 3.0, but it doesn't on 3.1.  Set a
-    // monospaced font by hand.
+    // monospaced font by hand.  (https://trac.wxwidgets.org/ticket/19210)
     fixedFont.SetFaceName( "Menlo" );
 #endif
 
