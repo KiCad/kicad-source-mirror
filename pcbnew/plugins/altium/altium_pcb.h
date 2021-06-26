@@ -85,6 +85,7 @@ class BOARD;
 class PCB_SHAPE;
 class FOOTPRINT;
 class ZONE;
+class PROGRESS_REPORTER;
 
 
 /**
@@ -94,8 +95,8 @@ class ZONE;
  * @param aFileName file name of board file
  * @param aFileMapping mapping how altium stream names are mapped
  */
-void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName,
-        const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping );
+void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER* aProgressReporter,
+                     const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping );
 
 
 namespace CFB
@@ -114,13 +115,15 @@ typedef std::function<void( const CFB::CompoundFileReader&, const CFB::COMPOUND_
 class ALTIUM_PCB
 {
 public:
-    explicit ALTIUM_PCB( BOARD* aBoard );
+    explicit ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter );
     ~ALTIUM_PCB();
 
     void Parse( const CFB::CompoundFileReader&           aReader,
             const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping );
 
 private:
+    void checkpoint();
+
     PCB_LAYER_ID  GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const;
     int           GetNetCode( uint16_t aId ) const;
     const ARULE6* GetRule( ALTIUM_RULE_KIND aKind, const wxString& aName ) const;
@@ -191,6 +194,11 @@ private:
     std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>> m_rules;
 
     std::map<ALTIUM_LAYER, ZONE*>        m_outer_plane;
+
+    PROGRESS_REPORTER* m_progressReporter; ///< optional; may be nullptr
+    unsigned           m_doneCount;
+    unsigned           m_lastProgressCount;
+    unsigned           m_totalCount; ///< for progress reporting
 
     /// Altium stores pour order across all layers
     int m_highest_pour_index;

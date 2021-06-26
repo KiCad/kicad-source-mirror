@@ -78,28 +78,28 @@ BOARD* ALTIUM_DESIGNER_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendTo
     // clang-format off
     const std::map<ALTIUM_PCB_DIR, std::string> mapping = {
             { ALTIUM_PCB_DIR::FILE_HEADER, "FileHeader" },
-            { ALTIUM_PCB_DIR::ARCS6, "Arcs6\\Data" },
-            { ALTIUM_PCB_DIR::BOARD6, "Board6\\Data" },
-            { ALTIUM_PCB_DIR::BOARDREGIONS, "BoardRegions\\Data" },
-            { ALTIUM_PCB_DIR::CLASSES6, "Classes6\\Data" },
-            { ALTIUM_PCB_DIR::COMPONENTS6, "Components6\\Data" },
-            { ALTIUM_PCB_DIR::COMPONENTBODIES6, "ComponentBodies6\\Data" },
-            { ALTIUM_PCB_DIR::DIMENSIONS6, "Dimensions6\\Data" },
-            { ALTIUM_PCB_DIR::FILLS6, "Fills6\\Data" },
-            { ALTIUM_PCB_DIR::MODELS, "Models\\Data" },
-            { ALTIUM_PCB_DIR::NETS6, "Nets6\\Data" },
-            { ALTIUM_PCB_DIR::PADS6, "Pads6\\Data" },
-            { ALTIUM_PCB_DIR::POLYGONS6, "Polygons6\\Data" },
-            { ALTIUM_PCB_DIR::REGIONS6, "Regions6\\Data" },
-            { ALTIUM_PCB_DIR::RULES6, "Rules6\\Data" },
-            { ALTIUM_PCB_DIR::SHAPEBASEDREGIONS6, "ShapeBasedRegions6\\Data" },
-            { ALTIUM_PCB_DIR::TEXTS6, "Texts6\\Data" },
-            { ALTIUM_PCB_DIR::TRACKS6, "Tracks6\\Data" },
-            { ALTIUM_PCB_DIR::VIAS6, "Vias6\\Data" }
+            { ALTIUM_PCB_DIR::ARCS6, "Arcs6\\" },
+            { ALTIUM_PCB_DIR::BOARD6, "Board6\\" },
+            { ALTIUM_PCB_DIR::BOARDREGIONS, "BoardRegions\\" },
+            { ALTIUM_PCB_DIR::CLASSES6, "Classes6\\" },
+            { ALTIUM_PCB_DIR::COMPONENTS6, "Components6\\" },
+            { ALTIUM_PCB_DIR::COMPONENTBODIES6, "ComponentBodies6\\" },
+            { ALTIUM_PCB_DIR::DIMENSIONS6, "Dimensions6\\" },
+            { ALTIUM_PCB_DIR::FILLS6, "Fills6\\" },
+            { ALTIUM_PCB_DIR::MODELS, "Models\\" },
+            { ALTIUM_PCB_DIR::NETS6, "Nets6\\" },
+            { ALTIUM_PCB_DIR::PADS6, "Pads6\\" },
+            { ALTIUM_PCB_DIR::POLYGONS6, "Polygons6\\" },
+            { ALTIUM_PCB_DIR::REGIONS6, "Regions6\\" },
+            { ALTIUM_PCB_DIR::RULES6, "Rules6\\" },
+            { ALTIUM_PCB_DIR::SHAPEBASEDREGIONS6, "ShapeBasedRegions6\\" },
+            { ALTIUM_PCB_DIR::TEXTS6, "Texts6\\" },
+            { ALTIUM_PCB_DIR::TRACKS6, "Tracks6\\" },
+            { ALTIUM_PCB_DIR::VIAS6, "Vias6\\" }
     };
     // clang-format on
 
-    ParseAltiumPcb( m_board, aFileName, mapping );
+    ParseAltiumPcb( m_board, aFileName, aProgressReporter, mapping );
 
     return m_board;
 }

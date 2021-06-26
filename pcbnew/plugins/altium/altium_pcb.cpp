@@ -51,9 +51,10 @@
 #include <wx/mstream.h>
 #include <wx/wfstream.h>
 #include <wx/zstream.h>
+#include <widgets/progress_reporter.h>
 
 
-void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName,
+void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER* aProgressReporter,
                      const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping )
 {
     // Open file
@@ -90,7 +91,7 @@ void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName,
         CFB::CompoundFileReader reader( buffer.get(), bytesRead );
 
         // Parse File
-        ALTIUM_PCB pcb( aBoard );
+        ALTIUM_PCB pcb( aBoard, aProgressReporter );
         pcb.Parse( reader, aFileMapping );
     }
     catch( CFB::CFBException& exception )
@@ -309,15 +310,38 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
 }
 
 
-ALTIUM_PCB::ALTIUM_PCB( BOARD* aBoard )
+ALTIUM_PCB::ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter )
 {
     m_board              = aBoard;
+    m_progressReporter = aProgressReporter;
+    m_doneCount = 0;
+    m_lastProgressCount = 0;
+    m_totalCount = 0;
     m_num_nets           = 0;
     m_highest_pour_index = 0;
 }
 
 ALTIUM_PCB::~ALTIUM_PCB()
 {
+}
+
+void ALTIUM_PCB::checkpoint()
+{
+    const unsigned PROGRESS_DELTA = 250;
+
+    if( m_progressReporter )
+    {
+        if( ++m_doneCount > m_lastProgressCount + PROGRESS_DELTA )
+        {
+            m_progressReporter->SetCurrentProgress( ( (double) m_doneCount )
+                                                    / std::max( 1U, m_totalCount ) );
+
+            if( !m_progressReporter->KeepRefreshing() )
+                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+
+            m_lastProgressCount = m_doneCount;
+        }
+    }
 }
 
 void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
@@ -340,7 +364,6 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
         { true, ALTIUM_PCB_DIR::MODELS,
                 [this, aFileMapping]( auto aReader, auto fileHeader ) {
                     wxString dir( aFileMapping.at( ALTIUM_PCB_DIR::MODELS ) );
-                    dir.RemoveLast( 4 ); // Remove "Data" from the path
                     this->ParseModelsData( aReader, fileHeader, dir );
                 } },
         { true, ALTIUM_PCB_DIR::COMPONENTBODIES6,
@@ -405,6 +428,51 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
                 } }
     };
 
+    if( m_progressReporter != nullptr )
+    {
+        // Count number of records we will read for the progress reporter
+        for( const std::tuple<bool, ALTIUM_PCB_DIR, PARSE_FUNCTION_POINTER_fp>& cur : parserOrder )
+        {
+            bool                      isRequired;
+            ALTIUM_PCB_DIR            directory;
+            PARSE_FUNCTION_POINTER_fp fp;
+            std::tie( isRequired, directory, fp ) = cur;
+
+            if( directory == ALTIUM_PCB_DIR::FILE_HEADER )
+            {
+                continue;
+            }
+
+            const auto& mappedDirectory = aFileMapping.find( directory );
+            if( mappedDirectory == aFileMapping.end() )
+            {
+                continue;
+            }
+
+            std::string mappedFile = mappedDirectory->second + "Header";
+
+            const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, mappedFile.c_str() );
+            if( file == nullptr )
+            {
+                continue;
+            }
+
+            ALTIUM_PARSER reader( aReader, file );
+            uint32_t      numOfRecords = reader.Read<uint32_t>();
+            if( reader.HasParsingError() )
+            {
+                wxLogError( "'%s' was not parsed correctly", mappedFile );
+                continue;
+            }
+            m_totalCount += numOfRecords;
+            if( reader.GetRemainingBytes() != 0 )
+            {
+                wxLogError( "'%s' is not fully parsed", mappedFile );
+                continue;
+            }
+        }
+    }
+
     // Parse data in specified order
     for( const std::tuple<bool, ALTIUM_PCB_DIR, PARSE_FUNCTION_POINTER_fp>& cur : parserOrder )
     {
@@ -422,15 +490,20 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
             continue;
         }
 
-        const CFB::COMPOUND_FILE_ENTRY* file =
-                FindStream( aReader, mappedDirectory->second.c_str() );
+        std::string mappedFile = mappedDirectory->second;
+        if( directory != ALTIUM_PCB_DIR::FILE_HEADER )
+        {
+            mappedFile += "Data";
+        }
+
+        const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, mappedFile.c_str() );
         if( file != nullptr )
         {
             fp( aReader, file );
         }
         else if( isRequired )
         {
-            wxLogError( wxString::Format( _( "File not found: '%s'" ), mappedDirectory->second ) );
+            wxLogError( wxString::Format( _( "File not found: '%s'" ), mappedFile ) );
         }
     }
 
@@ -551,8 +624,12 @@ void ALTIUM_PCB::ParseFileHeader( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Board Data" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
+    checkpoint();
     ABOARD6 elem( reader );
 
     if( reader.GetRemainingBytes() != 0 )
@@ -756,10 +833,14 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
 void ALTIUM_PCB::ParseClasses6Data( const CFB::CompoundFileReader& aReader,
                                     const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Net Classes" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         ACLASS6 elem( reader );
 
         if( elem.kind == ALTIUM_CLASS_KIND::NET_CLASS )
@@ -792,11 +873,15 @@ void ALTIUM_PCB::ParseClasses6Data( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParseComponents6Data( const CFB::CompoundFileReader& aReader,
                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Components" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     uint16_t componentId = 0;
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         ACOMPONENT6 elem( reader );
 
         FOOTPRINT* footprint = new FOOTPRINT( m_board );
@@ -835,10 +920,14 @@ void ALTIUM_PCB::ParseComponents6Data( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aReader,
                                              const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Components 3D Models" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         ACOMPONENTBODY6 elem( reader ); // TODO: implement
 
         if( elem.component == ALTIUM_COMPONENT_NONE )
@@ -1114,10 +1203,14 @@ void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
 void ALTIUM_PCB::ParseDimensions6Data( const CFB::CompoundFileReader& aReader,
                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Dimension Drawings" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         ADIMENSION6 elem( reader );
 
         switch( elem.kind )
@@ -1151,6 +1244,9 @@ void ALTIUM_PCB::ParseDimensions6Data( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString aRootDir )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: 3D Models" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     if( reader.GetRemainingBytes() == 0 )
@@ -1187,11 +1283,18 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
     int idx = 0;
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         AMODEL elem( reader );
 
         wxString stepPath = aRootDir + std::to_string( idx++ );
 
         const CFB::COMPOUND_FILE_ENTRY* stepEntry = FindStream( aReader, stepPath.c_str() );
+        if( stepEntry == nullptr )
+        {
+            wxLogError( wxString::Format( _( "File not found: '%s' -> 3D-model not imported." ),
+                                          stepPath ) );
+            continue;
+        }
 
         size_t                  stepSize = static_cast<size_t>( stepEntry->size );
         std::unique_ptr<char[]> stepContent( new char[stepSize] );
@@ -1228,11 +1331,15 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParseNets6Data( const CFB::CompoundFileReader& aReader,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Nets" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     wxASSERT( m_num_nets == 0 );
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         ANET6 elem( reader );
 
         m_board->Add( new NETINFO_ITEM( m_board, elem.name, ++m_num_nets ), ADD_MODE::APPEND );
@@ -1247,10 +1354,14 @@ void ALTIUM_PCB::ParseNets6Data( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
                                      const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Polygons" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         APOLYGON6 elem( reader );
 
         PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
@@ -1376,10 +1487,14 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParseRules6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Rules" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         ARULE6 elem( reader );
 
         m_rules[elem.kind].emplace_back( elem );
@@ -1404,10 +1519,14 @@ void ALTIUM_PCB::ParseRules6Data( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParseBoardRegionsData( const CFB::CompoundFileReader& aReader,
                                         const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Board Regions" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         AREGION6 elem( reader, false );
 
         // TODO: implement?
@@ -1422,10 +1541,14 @@ void ALTIUM_PCB::ParseBoardRegionsData( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aReader,
                                               const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Zones" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         AREGION6 elem( reader, true );
 
         if( elem.kind == ALTIUM_REGION_KIND::BOARD_CUTOUT )
@@ -1532,6 +1655,9 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
 void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
                                     const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Zone Fills" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     for( ZONE* zone : m_polygons )
@@ -1542,6 +1668,7 @@ void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         AREGION6 elem( reader, false );
 
         if( elem.subpolyindex != ALTIUM_POLYGON_NONE )
@@ -1616,10 +1743,14 @@ void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Arcs" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         AARC6 elem( reader );
 
         if( elem.is_polygonoutline || elem.subpolyindex != ALTIUM_POLYGON_NONE )
@@ -1751,10 +1882,14 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Pads" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         APAD6 elem( reader );
 
         // It is possible to place altium pads on non-copper layers -> we need to interpolate them using drawings!
@@ -2160,10 +2295,14 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
 void ALTIUM_PCB::ParseVias6Data( const CFB::CompoundFileReader& aReader,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Vias" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         AVIA6 elem( reader );
 
         PCB_VIA* via = new PCB_VIA( m_board );
@@ -2216,10 +2355,14 @@ void ALTIUM_PCB::ParseVias6Data( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
                                    const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Tracks" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         ATRACK6 elem( reader );
 
         if( elem.is_polygonoutline || elem.subpolyindex != ALTIUM_POLYGON_NONE )
@@ -2318,10 +2461,14 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Text" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         ATEXT6 elem( reader );
 
         if( elem.fonttype == ALTIUM_TEXT_TYPE::BARCODE )
@@ -2500,10 +2647,14 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
 void ALTIUM_PCB::ParseFills6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
+    if( m_progressReporter )
+        m_progressReporter->Report( "Parse: Rectangles" );
+
     ALTIUM_PARSER reader( aReader, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
+        checkpoint();
         AFILL6 elem( reader );
 
         wxPoint p11( elem.pos1.x, elem.pos1.y );
