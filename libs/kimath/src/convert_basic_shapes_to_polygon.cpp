@@ -43,6 +43,14 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter,
 {
     wxPoint corner_position;
     int     numSegs = GetArcToSegmentCount( aRadius, aError, 360.0 );
+
+    // The shape will be built with a even number of segs. Reason: the horizontal
+    // diameter begins and ends to points on the actual circle, or circle
+    // expanded by aError if aErrorLoc == ERROR_OUTSIDE.
+    // This is used by Arc to Polygon shape convert.
+    if( numSegs & 1 )
+        numSegs++;
+
     int     delta = 3600 / numSegs;           // rotate angle in 0.1 degree
     int     radius = aRadius;
 
@@ -67,6 +75,14 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, i
 {
     wxPoint corner_position;
     int     numSegs = GetArcToSegmentCount( aRadius, aError, 360.0 );
+
+    // The shape will be built with a even number of segs. Reason: the horizontal
+    // diameter begins and ends to points on the actual circle, or circle
+    // expanded by aError if aErrorLoc == ERROR_OUTSIDE.
+    // This is used by Arc to Polygon shape convert.
+    if( numSegs & 1 )
+        numSegs++;
+
     int     delta = 3600 / numSegs;           // rotate angle in 0.1 degree
     int     radius = aRadius;
 
@@ -366,6 +382,21 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoi
     TransformCircleToPolygon( polyshape,
             wxPoint( arcSpine.GetPoint( -1 ).x, arcSpine.GetPoint( -1 ).y ), radial_offset, aError,
             aErrorLoc );
+
+    // The circle polygon is built with a even number of segments, so the
+    // horizontal diameter has 2 corners on the biggest diameter
+    // Rotate these 2 corners to match the start and ens points of inner and outer
+    // end points of the arc appoximation outlines, build below.
+    // The final shape is much better.
+    double arc_angle_end_deg = arc.GetStartAngle();
+
+    if( arc_angle_end_deg != 0 & arc_angle_end_deg != 180.0 )
+        polyshape.Outline(0).Rotate( arc_angle_end_deg * M_PI/180.0, arcSpine.GetPoint( 0 ) );
+
+    arc_angle_end_deg = arc.GetEndAngle();
+
+    if( arc_angle_end_deg != 0 & arc_angle_end_deg != 180.0 )
+        polyshape.Outline(1).Rotate( arc_angle_end_deg * M_PI/180.0, arcSpine.GetPoint( -1 ) );
 
     if( aErrorLoc == ERROR_OUTSIDE )
         radial_offset += aError;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -61,7 +61,7 @@ public:
      */
     SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid, const VECTOR2I& aArcEnd,
                int aWidth );
-   
+
     /**
      * SHAPE_ARC ctor.
      * Builds a SHAPE_ARC which is tangent to two segments and a given radius
@@ -144,8 +144,19 @@ public:
         return SEG( m_start, m_end );
     }
 
+    /**
+     * @return the central angle of the arc shape in degrees, normalized between 0.0, 360.0 deg
+     */
     double  GetCentralAngle() const;
+
+    /**
+     * @return the start angle of the arc shape in degrees, normalized between 0.0, 360.0 deg
+     */
     double  GetStartAngle() const;
+
+    /**
+     * @return the end angle of the arc shape in degrees, normalized between 0.0, 360.0 deg
+     */
     double  GetEndAngle() const;
 
     /**
