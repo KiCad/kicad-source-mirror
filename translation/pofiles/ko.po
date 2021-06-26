@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-06-24 04:32+0000\n"
+"PO-Revision-Date: 2021-06-26 15:57+0000\n"
 "Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -1432,12 +1432,10 @@ msgid "mils"
 msgstr "mils"
 
 #: common/base_units.cpp:450
-#, fuzzy
 msgid "sq. mils"
 msgstr "sq. mils"
 
 #: common/base_units.cpp:452
-#, fuzzy
 msgid "cu. mils"
 msgstr "cu. mils"
 
@@ -3818,7 +3816,7 @@ msgstr ""
 #: common/drawing_sheet/drawing_sheet_reader.cpp:853
 #, c-format
 msgid "The file \"%s\" was not fully read"
-msgstr "%s 파일을 완전히 읽지 못했습니다."
+msgstr "\"%s\" 파일을 완전히 읽지 못했음"
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:657
