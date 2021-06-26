@@ -390,12 +390,12 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoi
     // The final shape is much better.
     double arc_angle_end_deg = arc.GetStartAngle();
 
-    if( arc_angle_end_deg != 0 & arc_angle_end_deg != 180.0 )
+    if( arc_angle_end_deg != 0 && arc_angle_end_deg != 180.0 )
         polyshape.Outline(0).Rotate( arc_angle_end_deg * M_PI/180.0, arcSpine.GetPoint( 0 ) );
 
     arc_angle_end_deg = arc.GetEndAngle();
 
-    if( arc_angle_end_deg != 0 & arc_angle_end_deg != 180.0 )
+    if( arc_angle_end_deg != 0 && arc_angle_end_deg != 180.0 )
         polyshape.Outline(1).Rotate( arc_angle_end_deg * M_PI/180.0, arcSpine.GetPoint( -1 ) );
 
     if( aErrorLoc == ERROR_OUTSIDE )

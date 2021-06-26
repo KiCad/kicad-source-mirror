@@ -157,8 +157,8 @@ DRAWING_TOOL::DRAWING_TOOL() :
     m_board( nullptr ),
     m_frame( nullptr ),
     m_mode( MODE::NONE ),
-    m_lineWidth( 1 ),
-    m_inDrawingTool( false )
+    m_inDrawingTool( false ),
+    m_lineWidth( 1 )
 {
 }
 
