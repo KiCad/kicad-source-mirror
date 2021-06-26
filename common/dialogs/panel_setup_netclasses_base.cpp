@@ -168,7 +168,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_assignAllButton = new wxButton( sbEdit->GetStaticBox(), wxID_ANY, _("Assign To Listed Nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_assignAllButton = new wxButton( sbEdit->GetStaticBox(), wxID_ANY, _("Assign To All Listed Nets"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer12->Add( m_assignAllButton, 1, wxALL, 5 );
 
 

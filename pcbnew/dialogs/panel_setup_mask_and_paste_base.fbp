@@ -64,14 +64,24 @@
                         <property name="orient">wxVERTICAL</property>
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxALL</property>
+                            <property name="border">10</property>
+                            <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                             <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bMessages</property>
                                 <property name="orient">wxHORIZONTAL</property>
                                 <property name="permission">none</property>
+                                <object class="sizeritem" expanded="1">
+                                    <property name="border">5</property>
+                                    <property name="flag">wxEXPAND</property>
+                                    <property name="proportion">0</property>
+                                    <object class="spacer" expanded="1">
+                                        <property name="height">0</property>
+                                        <property name="permission">protected</property>
+                                        <property name="width">4</property>
+                                    </object>
+                                </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
                                     <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
@@ -132,7 +142,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND</property>
+                                    <property name="flag">wxEXPAND|wxLEFT</property>
                                     <property name="proportion">1</property>
                                     <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
@@ -140,8 +150,8 @@
                                         <property name="orient">wxVERTICAL</property>
                                         <property name="permission">none</property>
                                         <object class="sizeritem" expanded="1">
-                                            <property name="border">5</property>
-                                            <property name="flag">wxALL|wxEXPAND</property>
+                                            <property name="border">1</property>
+                                            <property name="flag">wxEXPAND</property>
                                             <property name="proportion">0</property>
                                             <object class="wxStaticText" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -201,8 +211,8 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem" expanded="1">
-                                            <property name="border">5</property>
-                                            <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
+                                            <property name="border">1</property>
+                                            <property name="flag">wxEXPAND|wxTOP</property>
                                             <property name="proportion">0</property>
                                             <object class="wxStaticText" expanded="1">
                                                 <property name="BottomDockable">1</property>
