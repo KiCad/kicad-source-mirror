@@ -1732,7 +1732,7 @@ void PCB_PARSER::parseSetup()
             break;
 
         case T_via_min_annulus:
-            designSettings.m_ViasMinAnnulus = parseBoardUnits( T_via_min_annulus );
+            designSettings.m_ViasMinAnnularWidth = parseBoardUnits( T_via_min_annulus );
             m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;

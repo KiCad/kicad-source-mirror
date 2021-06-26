@@ -141,7 +141,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_MinClearance        = Millimeter2iu( DEFAULT_MINCLEARANCE );
     m_TrackMinWidth       = Millimeter2iu( DEFAULT_TRACKMINWIDTH );
-    m_ViasMinAnnulus      = Millimeter2iu( DEFAULT_VIASMINSIZE - DEFAULT_MINTHROUGHDRILL ) / 2;
+    m_ViasMinAnnularWidth = Millimeter2iu( DEFAULT_VIASMINSIZE - DEFAULT_MINTHROUGHDRILL ) / 2;
     m_ViasMinSize         = Millimeter2iu( DEFAULT_VIASMINSIZE );
     m_MinThroughDrill     = Millimeter2iu( DEFAULT_MINTHROUGHDRILL );
     m_MicroViasMinSize    = Millimeter2iu( DEFAULT_MICROVIASMINSIZE );
@@ -216,9 +216,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             Millimeter2iu( DEFAULT_TRACKMINWIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
             MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_via_annular_width", &m_ViasMinAnnulus,
-            Millimeter2iu( DEFAULT_VIASMINSIZE ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
-            MM_PER_IU ) );
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_via_annular_width",
+            &m_ViasMinAnnularWidth, Millimeter2iu( DEFAULT_VIASMINSIZE ), Millimeter2iu( 0.01 ),
+            Millimeter2iu( 25.0 ), MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_via_diameter", &m_ViasMinSize,
             Millimeter2iu( DEFAULT_VIASMINSIZE ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
@@ -678,7 +678,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_UseConnectedTrackWidth = aOther.m_UseConnectedTrackWidth;
     m_MinClearance           = aOther.m_MinClearance;
     m_TrackMinWidth          = aOther.m_TrackMinWidth;
-    m_ViasMinAnnulus         = aOther.m_ViasMinAnnulus;
+    m_ViasMinAnnularWidth    = aOther.m_ViasMinAnnularWidth;
     m_ViasMinSize            = aOther.m_ViasMinSize;
     m_MinThroughDrill        = aOther.m_MinThroughDrill;
     m_MicroViasMinSize       = aOther.m_MicroViasMinSize;

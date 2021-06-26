@@ -683,7 +683,7 @@ public:
                                             // connected track
     int        m_MinClearance;              // overall min clearance
     int        m_TrackMinWidth;             // overall min track width
-    int        m_ViasMinAnnulus;            // overall minimum width of the via copper ring
+    int        m_ViasMinAnnularWidth;       // overall minimum width of the via copper ring
     int        m_ViasMinSize;               // overall vias (not micro vias) min diameter
     int        m_MinThroughDrill;           // through hole (not micro vias) min drill diameter
     int        m_MicroViasMinSize;          // micro vias min diameter

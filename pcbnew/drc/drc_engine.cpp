@@ -156,7 +156,7 @@ void DRC_ENGINE::loadImplicitRules()
     rule->AddConstraint( drillConstraint );
 
     DRC_CONSTRAINT annulusConstraint( ANNULAR_WIDTH_CONSTRAINT );
-    annulusConstraint.Value().SetMin( bds.m_ViasMinAnnulus );
+    annulusConstraint.Value().SetMin( bds.m_ViasMinAnnularWidth );
     rule->AddConstraint( annulusConstraint );
 
     DRC_CONSTRAINT diameterConstraint( VIA_DIAMETER_CONSTRAINT );

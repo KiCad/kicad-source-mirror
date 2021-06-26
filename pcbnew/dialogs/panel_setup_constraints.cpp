@@ -76,7 +76,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
 
     m_minClearance.SetValue( m_BrdSettings->m_MinClearance );
     m_trackMinWidth.SetValue( m_BrdSettings->m_TrackMinWidth );
-    m_viaMinAnnulus.SetValue( m_BrdSettings->m_ViasMinAnnulus );
+    m_viaMinAnnulus.SetValue( m_BrdSettings->m_ViasMinAnnularWidth );
     m_viaMinSize.SetValue(m_BrdSettings->m_ViasMinSize );
     m_holeClearance.SetValue( m_BrdSettings->m_HoleClearance );
     m_edgeClearance.SetValue( m_BrdSettings->m_CopperEdgeClearance );
@@ -134,7 +134,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
 
     m_BrdSettings->m_MinClearance = m_minClearance.GetValue();
     m_BrdSettings->m_TrackMinWidth = m_trackMinWidth.GetValue();
-    m_BrdSettings->m_ViasMinAnnulus = m_viaMinAnnulus.GetValue();
+    m_BrdSettings->m_ViasMinAnnularWidth = m_viaMinAnnulus.GetValue();
     m_BrdSettings->m_ViasMinSize = m_viaMinSize.GetValue();
     m_BrdSettings->m_HoleClearance = m_holeClearance.GetValue();
     m_BrdSettings->SetCopperEdgeClearance( m_edgeClearance.GetValue() );

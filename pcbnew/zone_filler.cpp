@@ -1570,9 +1570,9 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
                     // enough.
                     int pad_width = std::min( pad->GetSize().x, pad->GetSize().y );
                     int slot_width = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
-                    int min_annulus = ( pad_width - slot_width ) / 2;
+                    int min_annular_ring_width = ( pad_width - slot_width ) / 2;
                     int clearance = std::max( min_apron_radius - pad_width / 2,
-                                              outline_margin - min_annulus );
+                                              outline_margin - min_annular_ring_width );
 
                     clearance = std::max( 0, clearance - linethickness / 2 );
                     pad->TransformShapeWithClearanceToPolygon( aprons, aLayer, clearance,

@@ -39,7 +39,7 @@ add_executable( test_pns
     ../../pcbnew/drc/drc_test_provider_hole_size.cpp
     ../../pcbnew/drc/drc_test_provider_disallow.cpp
     ../../pcbnew/drc/drc_test_provider_track_width.cpp
-    ../../pcbnew/drc/drc_test_provider_annulus.cpp
+    ../../pcbnew/drc/drc_test_provider_annular_width.cpp
     ../../pcbnew/drc/drc_test_provider_connectivity.cpp
     ../../pcbnew/drc/drc_test_provider_courtyard_clearance.cpp
     ../../pcbnew/drc/drc_test_provider_via_diameter.cpp

@@ -239,7 +239,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         }
         else if( sexprs.top() == "constraint" )
         {
-            tokens = "annulus_width "
+            tokens = "annular_width "
                      "clearance "
                      "courtyard_clearance "
                      "diff_pair_gap "

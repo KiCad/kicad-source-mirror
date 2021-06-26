@@ -32,21 +32,21 @@
     Via/pad annular ring width test. Checks if there's sufficient copper ring around
     PTH/NPTH holes (vias/pads)
     Errors generated:
-    - DRCE_ANNULUS
+    - DRCE_ANNULAR_WIDTH
 
     Todo:
     - check pad holes too.
     - pad stack support (different IAR/OAR values depending on layer)
 */
 
-class DRC_TEST_PROVIDER_ANNULUS : public DRC_TEST_PROVIDER
+class DRC_TEST_PROVIDER_ANNULAR_WIDTH : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_ANNULUS()
+    DRC_TEST_PROVIDER_ANNULAR_WIDTH()
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_ANNULUS()
+    virtual ~DRC_TEST_PROVIDER_ANNULAR_WIDTH()
     {
     }
 
@@ -54,7 +54,7 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "annulus";
+        return "annular_width";
     };
 
     virtual const wxString GetDescription() const override
@@ -68,7 +68,7 @@ public:
 };
 
 
-bool DRC_TEST_PROVIDER_ANNULUS::Run()
+bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 {
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_ANNULAR_WIDTH ) )
     {
@@ -80,14 +80,14 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
 
     if( !m_drcEngine->HasRulesForConstraintType( ANNULAR_WIDTH_CONSTRAINT ) )
     {
-        reportAux( "No annulus constraints found. Tests not run." );
+        reportAux( "No annular width constraints found. Tests not run." );
         return true;    // continue with other tests
     }
 
     if( !reportPhase( _( "Checking via annular rings..." ) ) )
         return false;   // DRC cancelled
 
-    auto checkAnnulus =
+    auto checkAnnularWidth =
             [&]( BOARD_ITEM* item ) -> bool
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_ANNULAR_WIDTH ) )
@@ -104,20 +104,20 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                 // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
                 auto constraint = m_drcEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, via, nullptr,
                                                           UNDEFINED_LAYER );
-                int  annulus = ( via->GetWidth() - via->GetDrillValue() ) / 2;
+                int  annularWidth = ( via->GetWidth() - via->GetDrillValue() ) / 2;
                 bool fail_min = false;
                 bool fail_max = false;
 
                 if( constraint.Value().HasMin() )
                 {
                     v_min = constraint.Value().Min();
-                    fail_min = annulus < v_min;
+                    fail_min = annularWidth < v_min;
                 }
 
                 if( constraint.Value().HasMax() )
                 {
                     v_max = constraint.Value().Max();
-                    fail_max = annulus > v_max;
+                    fail_max = annularWidth > v_max;
                 }
 
                 if( fail_min || fail_max )
@@ -128,13 +128,13 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                         m_msg.Printf( _( "(%s min annular width %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), v_min ),
-                                      MessageTextFromValue( userUnits(), annulus ) );
+                                      MessageTextFromValue( userUnits(), annularWidth ) );
 
                     if( fail_max )
                         m_msg.Printf( _( "(%s max annular width %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), v_max ),
-                                      MessageTextFromValue( userUnits(), annulus ) );
+                                      MessageTextFromValue( userUnits(), annularWidth ) );
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
                     drcItem->SetItems( item );
@@ -154,7 +154,7 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
         if( !reportProgress( ii++, board->Tracks().size(), delta ) )
             break;
 
-        if( !checkAnnulus( item ) )
+        if( !checkAnnularWidth( item ) )
             return false;   // DRC cancelled
     }
 
@@ -164,13 +164,13 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
 }
 
 
-int DRC_TEST_PROVIDER_ANNULUS::GetNumPhases() const
+int DRC_TEST_PROVIDER_ANNULAR_WIDTH::GetNumPhases() const
 {
     return 1;
 }
 
 
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_ANNULUS::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_ANNULAR_WIDTH::GetConstraintTypes() const
 {
     return { ANNULAR_WIDTH_CONSTRAINT };
 }
@@ -178,5 +178,5 @@ std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_ANNULUS::GetConstraintTypes() const
 
 namespace detail
 {
-static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_ANNULUS> dummy;
+static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_ANNULAR_WIDTH> dummy;
 }

@@ -691,8 +691,8 @@ void PAD_TOOL::recombinePad( PAD* aPad )
                                                         ERROR_INSIDE );
 
             aPad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
-            wxSize minAnnulus( Millimeter2iu( 0.2 ), Millimeter2iu( 0.2 ) );
-            aPad->SetSize( aPad->GetDrillSize() + minAnnulus );
+            wxSize minAnnularRingWidth( Millimeter2iu( 0.2 ), Millimeter2iu( 0.2 ) );
+            aPad->SetSize( aPad->GetDrillSize() + minAnnularRingWidth );
             aPad->SetOffset( wxPoint( 0, 0 ) );
 
             PCB_SHAPE* shape = new PCB_SHAPE;
