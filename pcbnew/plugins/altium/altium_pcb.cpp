@@ -62,7 +62,7 @@ void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER
 
     if( fp == nullptr )
     {
-        wxLogError( wxString::Format( _( "Cannot open file '%s'" ), aFileName ) );
+        wxLogError( _( "Cannot open file '%s'." ), aFileName );
         return;
     }
 
@@ -72,7 +72,7 @@ void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER
     if( len < 0 )
     {
         fclose( fp );
-        THROW_IO_ERROR( "Reading error, cannot determine length of file" );
+        THROW_IO_ERROR( _( "Error reading file: cannot determine length." ) );
     }
 
     std::unique_ptr<unsigned char[]> buffer( new unsigned char[len] );
@@ -83,7 +83,7 @@ void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER
 
     if( static_cast<size_t>( len ) != bytesRead )
     {
-        THROW_IO_ERROR( "Reading error" );
+        THROW_IO_ERROR( _( "Error reading file." ) );
     }
 
     try
@@ -459,15 +459,18 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
 
             ALTIUM_PARSER reader( aReader, file );
             uint32_t      numOfRecords = reader.Read<uint32_t>();
+
             if( reader.HasParsingError() )
             {
-                wxLogError( "'%s' was not parsed correctly", mappedFile );
+                wxLogError( _( "'%s' was not parsed correctly." ), mappedFile );
                 continue;
             }
+
             m_totalCount += numOfRecords;
+
             if( reader.GetRemainingBytes() != 0 )
             {
-                wxLogError( "'%s' is not fully parsed", mappedFile );
+                wxLogError( _( "'%s' was not fully parsed." ), mappedFile );
                 continue;
             }
         }
@@ -503,7 +506,7 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
         }
         else if( isRequired )
         {
-            wxLogError( wxString::Format( _( "File not found: '%s'" ), mappedFile ) );
+            wxLogError( _( "File not found: '%s'." ), mappedFile );
         }
     }
 
@@ -1004,9 +1007,9 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( wxString::Format( _( "Dimension on Altium layer %d has no KiCad equivalent. "
-                                           "Put it on Eco1_User instead" ),
-                                        aElem.layer ) );
+        wxLogWarning( _( "Dimension found on an Altium layer (%d) with no KiCad equivalent. "
+                         "It has been moved to KiCad layer Eco1_User." ),
+                      aElem.layer );
         klayer = Eco1_User;
     }
 
@@ -1079,11 +1082,12 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
 {
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( wxString::Format( _( "Dimension on Altium layer %d has no KiCad equivalent. "
-                                           "Put it on Eco1_User instead" ),
-                                        aElem.layer ) );
+        wxLogWarning( _( "Dimension found on an Altium layer (%d) with no KiCad equivalent. "
+                         "It has been moved to KiCad layer Eco1_User." ),
+                      aElem.layer );
         klayer = Eco1_User;
     }
 
@@ -1157,11 +1161,12 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
 void ALTIUM_PCB::HelperParseDimensions6Datum( const ADIMENSION6& aElem )
 {
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( wxString::Format( _( "Dimension on Altium layer %d has no KiCad equivalent. "
-                                           "Put it on Eco1_User instead" ),
-                                        aElem.layer ) );
+        wxLogWarning( _( "Dimension found on an Altium layer (%d) with no KiCad equivalent. "
+                         "It has been moved to KiCad layer Eco1_User." ),
+                      aElem.layer );
         klayer = Eco1_User;
     }
 
@@ -1180,11 +1185,12 @@ void ALTIUM_PCB::HelperParseDimensions6Datum( const ADIMENSION6& aElem )
 void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
 {
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( wxString::Format( _( "Dimension on Altium layer %d has no KiCad equivalent. "
-                                           "Put it on Eco1_User instead" ),
-                                        aElem.layer ) );
+        wxLogWarning( _( "Dimension found on an Altium layer (%d) with no KiCad equivalent. "
+                         "It has been moved to KiCad layer Eco1_User." ),
+                      aElem.layer );
         klayer = Eco1_User;
     }
 
@@ -1222,14 +1228,16 @@ void ALTIUM_PCB::ParseDimensions6Data( const CFB::CompoundFileReader& aReader,
             HelperParseDimensions6Leader( elem );
             break;
         case ALTIUM_DIMENSION_KIND::DATUM:
-            wxLogWarning( wxString::Format( "Ignore dimension object of kind %d", elem.kind ) );
+            wxLogError( _( "Ignored dimension of kind %d (not yet supported)." ),
+                        elem.kind );
             // HelperParseDimensions6Datum( elem );
             break;
         case ALTIUM_DIMENSION_KIND::CENTER:
             HelperParseDimensions6Center( elem );
             break;
         default:
-            wxLogWarning( wxString::Format( "Ignore dimension object of kind %d", elem.kind ) );
+            wxLogError( _( "Ignored dimension of kind %d (not yet supported)." ),
+                        elem.kind );
             break;
         }
     }
@@ -1273,9 +1281,8 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
     {
         if( !altiumModelsPath.Mkdir() )
         {
-            wxLogError( wxString::Format(
-                    _( "Cannot create directory \"%s\" -> no 3D-models will be imported." ),
-                    altiumModelsPath.GetFullPath() ) );
+            wxLogError( _( "Cannot create directory '%s'. No 3D-models will be imported." ),
+                        altiumModelsPath.GetFullPath() );
             return;
         }
     }
@@ -1291,8 +1298,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
         const CFB::COMPOUND_FILE_ENTRY* stepEntry = FindStream( aReader, stepPath.c_str() );
         if( stepEntry == nullptr )
         {
-            wxLogError( wxString::Format( _( "File not found: '%s' -> 3D-model not imported." ),
-                                          stepPath ) );
+            wxLogError( _( "File not found: '%s'. 3D-model not imported." ), stepPath );
             continue;
         }
 
@@ -1305,9 +1311,8 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
         wxFileName storagePath( altiumModelsPath.GetPath(), elem.name );
         if( !storagePath.IsDirWritable() )
         {
-            wxLogError(
-                    wxString::Format( _( "You do not have write permissions to save file \"%s\"." ),
-                            storagePath.GetFullPath() ) );
+            wxLogError( _( "You do not have write permissions to save file '%s'." ),
+                        storagePath.GetFullPath() );
             continue;
         }
 
@@ -1332,7 +1337,7 @@ void ALTIUM_PCB::ParseNets6Data( const CFB::CompoundFileReader& aReader,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading nets..." );
+        m_progressReporter->Report( _( "Loading nets..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1355,7 +1360,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
                                      const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading polygons..." );
+        m_progressReporter->Report( _( "Loading polygons..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1365,13 +1370,13 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
         APOLYGON6 elem( reader );
 
         PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
+
         if( klayer == UNDEFINED_LAYER )
         {
-            wxLogWarning( wxString::Format( _( "Polygon on Altium layer %d has no KiCad equivalent. "
-                                               "Ignore it instead" ),
-                                            elem.layer ) );
-            m_polygons.emplace_back( nullptr );
-            continue;
+            wxLogWarning( _( "Polygon found on an Altium layer (%d) with no KiCad equivalent. "
+                             "It has been moved to KiCad layer Eco1_User." ),
+                          elem.layer );
+            klayer = Eco1_User;
         }
 
         SHAPE_LINE_CHAIN linechain;
@@ -1379,10 +1384,10 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
 
         if( linechain.PointCount() < 2 )
         {
-            wxLogError( wxString::Format( _( "Polygon has only %d point extracted from %ld vertices. "
-                                             "At least 2 points are required." ),
-                                          linechain.PointCount(),
-                                          elem.vertices.size() ) );
+            wxLogError( _( "Polygon has only %d point extracted from %ld vertices. At least 2 "
+                           "points are required." ),
+                        linechain.PointCount(),
+                        elem.vertices.size() );
             m_polygons.emplace_back( nullptr );
             continue;
         }
@@ -1406,9 +1411,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
         const ARULE6* clearanceRule = GetRuleDefault( ALTIUM_RULE_KIND::PLANE_CLEARANCE );
 
         if( clearanceRule != nullptr )
-        {
             zone->SetLocalClearance( clearanceRule->planeclearanceClearance );
-        }
 
         const ARULE6* polygonConnectRule = GetRuleDefault( ALTIUM_RULE_KIND::POLYGON_CONNECT );
 
@@ -1488,7 +1491,7 @@ void ALTIUM_PCB::ParseRules6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading rules..." );
+        m_progressReporter->Report( _( "Loading rules..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1520,7 +1523,7 @@ void ALTIUM_PCB::ParseBoardRegionsData( const CFB::CompoundFileReader& aReader,
                                         const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading board regions..." );
+        m_progressReporter->Report( _( "Loading board regions..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1542,7 +1545,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
                                               const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading zones..." );
+        m_progressReporter->Report( _( "Loading zones..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1562,9 +1565,10 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
 
             if( linechain.PointCount() < 2 )
             {
-                wxLogError( wxString::Format(
-                        _( "ShapeBasedRegion has only %d point extracted from %ld vertices. At least 2 points are required." ),
-                        linechain.PointCount(), elem.outline.size() ) );
+                wxLogError(  _( "ShapeBasedRegion has only %d point extracted from %ld vertices. "
+                                "At least 2 points are required." ),
+                             linechain.PointCount(),
+                             elem.outline.size() );
                 continue;
             }
 
@@ -1590,11 +1594,12 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
             else
             {
                 PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
+
                 if( klayer == UNDEFINED_LAYER )
                 {
-                    wxLogWarning( wxString::Format( _( "Zone on Altium layer %d has no KiCad "
-                                                       "equivalent. Put it on Eco1_User instead" ),
-                                                    elem.layer ) );
+                    wxLogWarning( _( "Zone found on an Altium layer (%d) with no KiCad equivalent. "
+                                     "It has been moved to KiCad layer Eco1_User." ),
+                                  elem.layer );
                     klayer = Eco1_User;
                 }
                 zone->SetLayer( klayer );
@@ -1608,11 +1613,12 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
             if( elem.subpolyindex == ALTIUM_POLYGON_NONE )
             {
                 PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
+
                 if( klayer == UNDEFINED_LAYER )
                 {
-                    wxLogWarning( wxString::Format( _( "Polygon on Altium layer %d has no KiCad "
-                                                       "equivalent. Put it on Eco1_User instead" ),
-                                                    elem.layer ) );
+                    wxLogWarning( _( "Polygon found on an Altium layer (%d) with no KiCad equivalent. "
+                                     "It has been moved to KiCad layer Eco1_User." ),
+                                  elem.layer );
                     klayer = Eco1_User;
                 }
 
@@ -1621,9 +1627,10 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
 
                 if( linechain.PointCount() < 2 )
                 {
-                    wxLogError( wxString::Format( _( "Polygon has only %d point extracted from %ld "
-                                                     "vertices. At least 2 points are required." ),
-                                                  linechain.PointCount(), elem.outline.size() ) );
+                    wxLogError( _( "Polygon has only %d point extracted from %ld vertices. At "
+                                   "least 2 points are required." ),
+                                linechain.PointCount(),
+                                elem.outline.size() );
                     continue;
                 }
 
@@ -1639,10 +1646,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
         }
         else
         {
-            wxLogError( wxString::Format( "Ignore polygon shape of kind %d on layer %s, because "
-                                          "not implemented yet",
-                                          elem.kind,
-                                          LSET::Name( GetKicadLayer( elem.layer ) ) ) );
+            wxLogError( _( "Ignored polygon shape of kind %d (not yet supported)." ), elem.kind );
         }
     }
 
@@ -1656,7 +1660,7 @@ void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
                                     const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading zone fills..." );
+        m_progressReporter->Report( _( "Loading zone fills..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1675,9 +1679,10 @@ void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
         {
             if( m_polygons.size() <= elem.subpolyindex )
             {
-                THROW_IO_ERROR(  wxString::Format(
-                        "Region stream tries to access polygon id %d of %d existing polygons",
-                        elem.subpolyindex, m_polygons.size() ) );
+                THROW_IO_ERROR(  wxString::Format( "Region stream tries to access polygon id %d "
+                                                   "of %d existing polygons.",
+                                                   elem.subpolyindex,
+                                                   m_polygons.size() ) );
             }
 
             ZONE *zone = m_polygons.at( elem.subpolyindex );
@@ -1744,7 +1749,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading arcs..." );
+        m_progressReporter->Report( _( "Loading arcs..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1803,11 +1808,12 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
             else
             {
                 PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
+
                 if( klayer == UNDEFINED_LAYER )
                 {
-                    wxLogWarning( wxString::Format( _( "Arc Keepout on Altium layer %d has no "
-                                                       "KiCad equivalent. Put it on Eco1_User instead" ),
-                                                    elem.layer ) );
+                    wxLogWarning( _( "Arc keepout found on an Altium layer (%d) with no KiCad "
+                                     "equivalent. It has been moved to KiCad layer Eco1_User." ),
+                                  elem.layer );
                     klayer = Eco1_User;
                 }
                 zone->SetLayer( klayer );
@@ -1824,9 +1830,9 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
 
         if( klayer == UNDEFINED_LAYER )
         {
-            wxLogWarning( wxString::Format( _( "Arc on Altium layer %d has no KiCad equivalent. "
-                                               "Put it on Eco1_User instead" ),
-                                            elem.layer ) );
+            wxLogWarning( _( "Arc found on an Altium layer (%d) with no KiCad equivalent. "
+                             "It has been moved to KiCad layer Eco1_User." ),
+                          elem.layer );
             klayer = Eco1_User;
         }
 
@@ -1883,7 +1889,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading pads..." );
+        m_progressReporter->Report( _( "Loading pads..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1943,9 +1949,9 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
             if( elem.layer != ALTIUM_LAYER::MULTI_LAYER )
             {
                 // TODO: I assume other values are possible as well?
-                wxLogError( wxString::Format(
-                            "Pad '%s' of Footprint %s is not marked as multilayer, but it is an THT pad",
-                            elem.name, footprint->GetReference() ) );
+                wxLogError( _( "Footprint %s pad %s is not marked as multilayer, but is a TH pad." ),
+                            footprint->GetReference(),
+                            elem.name );
             }
             pad->SetAttribute( elem.plated ? PAD_ATTRIB::PTH :
                                              PAD_ATTRIB::NPTH );
@@ -1963,10 +1969,9 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                     break;
 
                 case ALTIUM_PAD_HOLE_SHAPE::SQUARE:
-                    wxLogWarning( wxString::Format( _( "Pad '%s' of Footprint %s has a square hole. "
-                                                       "KiCad does not support this yet" ),
-                                                    elem.name,
-                                                    footprint->GetReference() ) );
+                    wxLogWarning( _( "Footprint %s pad %s has a square hole (not yet supported)." ),
+                                  footprint->GetReference(),
+                                  elem.name );
                     pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
                     pad->SetDrillSize( wxSize( elem.holesize, elem.holesize ) ); // Workaround
                     // TODO: elem.sizeAndShape->slotsize was 0 in testfile. Either use holesize in this case or rect holes have a different id
@@ -1977,6 +1982,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                     pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_OBLONG );
                     double normalizedSlotrotation =
                             NormalizeAngleDegreesPos( elem.sizeAndShape->slotrotation );
+
                     if( normalizedSlotrotation == 0. || normalizedSlotrotation == 180. )
                     {
                         pad->SetDrillSize( wxSize( elem.sizeAndShape->slotsize, elem.holesize ) );
@@ -1985,12 +1991,11 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                     {
                         if( normalizedSlotrotation != 90. && normalizedSlotrotation != 270. )
                         {
-                            wxLogWarning( wxString::Format( _( "Pad '%s' of Footprint %s has a "
-                                                               "hole-rotation of %f degree. KiCad "
-                                                               "only supports 90 degree angles" ),
-                                                            elem.name,
-                                                            footprint->GetReference(),
-                                                            normalizedSlotrotation ) );
+                            wxLogWarning( _( "Footprint %s pad %s has a hole-rotation of %f "
+                                             "degrees. KiCad only supports 90 degree rotations." ),
+                                          footprint->GetReference(),
+                                          elem.name,
+                                          normalizedSlotrotation );
                         }
 
                         pad->SetDrillSize( wxSize( elem.holesize, elem.sizeAndShape->slotsize ) );
@@ -2000,9 +2005,10 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
 
                 default:
                 case ALTIUM_PAD_HOLE_SHAPE::UNKNOWN:
-                    wxLogError( wxString::Format(
-                                "Pad '%s' of Footprint %s uses a hole of unknown kind %d", elem.name,
-                                footprint->GetReference(), elem.sizeAndShape->holeshape ) );
+                    wxLogError( _( "Footprint %s pad %s uses a hole of unknown kind %d." ),
+                                footprint->GetReference(),
+                                elem.name,
+                                elem.sizeAndShape->holeshape );
                     pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
                     pad->SetDrillSize( wxSize( elem.holesize, elem.holesize ) ); // Workaround
                     break;
@@ -2017,9 +2023,9 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
 
         if( elem.padmode != ALTIUM_PAD_MODE::SIMPLE )
         {
-            wxLogWarning( wxString::Format(
-                        _( "Pad '%s' of Footprint %s uses a complex pad stack (kind %d), which is not supported yet" ),
-                        elem.name, footprint->GetReference(), elem.padmode ) );
+            wxLogError( _( "Footprint %s pad %s uses a complex pad stack (not yet supported.)" ),
+                        footprint->GetReference(),
+                        elem.name );
         }
 
         switch( elem.topshape )
@@ -2051,8 +2057,9 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
             break;
         case ALTIUM_PAD_SHAPE::UNKNOWN:
         default:
-            wxLogError( wxString::Format( "Pad '%s' of Footprint %s uses a unknown pad-shape",
-                                          elem.name, footprint->GetReference() ) );
+            wxLogError( _( "Footprint %s pad %s uses an unknown pad-shape." ),
+                        footprint->GetReference(),
+                        elem.name );
             break;
         }
 
@@ -2109,31 +2116,28 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
 
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( wxString::Format( _( "Non-Copper Pad on Altium layer %d has no KiCad "
-                                           "equivalent. Put it on Eco1_User instead" ),
-                                        aElem.layer ) );
+        wxLogWarning( _( "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. "
+                         "It has been moved to KiCad layer Eco1_User." ),
+                      aElem.name,
+                      aElem.layer );
         klayer = Eco1_User;
     }
 
     if( aElem.net != ALTIUM_NET_UNCONNECTED )
     {
-        wxLogError( wxString::Format( "Non-Copper Pad '%s' is connected to a net. This is not "
-                                      "supported",
-                                      aElem.name ) );
+        wxLogError( _( "Non-copper pad %s is connected to a net, which is not supported." ),
+                    aElem.name );
     }
 
     if( aElem.holesize != 0 )
     {
-        wxLogError( wxString::Format( _( "Non-Copper Pad '%s' has a hole. This should not happen" ),
-                                      aElem.name ) );
+        wxLogError( _( "Non-copper pad %s has a hole, which is not supported." ), aElem.name );
     }
 
     if( aElem.padmode != ALTIUM_PAD_MODE::SIMPLE )
     {
-        wxLogWarning( wxString::Format( _( "Non-Copper Pad '%s' uses a complex pad stack (kind %d). "
-                                           "This should not happen" ),
-                                        aElem.name,
-                                        aElem.padmode ) );
+        wxLogWarning( _( "Non-copper pad %s has a complex pad stack (not yet supported)." ),
+                      aElem.name );
     }
 
     switch( aElem.topshape )
@@ -2286,8 +2290,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
 
     case ALTIUM_PAD_SHAPE::UNKNOWN:
     default:
-        wxLogError(
-                wxString::Format( "Non-Copper Pad '%s' uses a unknown pad-shape", aElem.name ) );
+        wxLogError( _( "Non-copper pad %s uses an unknown pad-shape." ), aElem.name );
         break;
     }
 }
@@ -2296,7 +2299,7 @@ void ALTIUM_PCB::ParseVias6Data( const CFB::CompoundFileReader& aReader,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading vias..." );
+        m_progressReporter->Report( _( "Loading vias..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -2334,11 +2337,13 @@ void ALTIUM_PCB::ParseVias6Data( const CFB::CompoundFileReader& aReader,
 
         PCB_LAYER_ID start_klayer = GetKicadLayer( elem.layer_start );
         PCB_LAYER_ID end_klayer   = GetKicadLayer( elem.layer_end );
+
         if( !IsCopperLayer( start_klayer ) || !IsCopperLayer( end_klayer ) )
         {
-            wxLogError( wxString::Format(
-                    "Via from layer %d <-> %d uses non-copper layer. This should not happen.",
-                    elem.layer_start, elem.layer_end ) );
+            wxLogError( _( "Via from layer %d to %d uses a non-copper layer, which is not "
+                           "supported." ),
+                        elem.layer_start,
+                        elem.layer_end );
             continue; // just assume through-hole instead.
         }
 
@@ -2356,7 +2361,7 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
                                    const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading tracks..." );
+        m_progressReporter->Report( _( "Loading tracks..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -2401,11 +2406,12 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
             else
             {
                 PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
+
                 if( klayer == UNDEFINED_LAYER )
                 {
-                    wxLogWarning( wxString::Format(
-                            _( "Track Keepout on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                            elem.layer ) );
+                    wxLogWarning( _( "Track keepout found on an Altium layer (%d) with no KiCad "
+                                     "equivalent. It has been moved to KiCad layer Eco1_User." ),
+                                  elem.layer );
                     klayer = Eco1_User;
                 }
                 zone->SetLayer( klayer );
@@ -2421,9 +2427,9 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
 
         if( klayer == UNDEFINED_LAYER )
         {
-            wxLogWarning( wxString::Format(
-                    _( "Track on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                    elem.layer ) );
+            wxLogWarning( _( "Track found on an Altium layer (%d) with no KiCadequivalent. "
+                             "It has been moved to KiCad layer Eco1_User." ),
+                          elem.layer );
             klayer = Eco1_User;
         }
 
@@ -2462,7 +2468,7 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading text..." );
+        m_progressReporter->Report( _( "Loading text..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -2473,9 +2479,8 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
 
         if( elem.fonttype == ALTIUM_TEXT_TYPE::BARCODE )
         {
-            wxLogWarning( wxString::Format(
-                    _( "Ignore Barcode on Altium layer %d because it is not supported right now." ),
-                    elem.layer ) );
+            wxLogError( _( "Ignored barcode on Altium layer %d (not yet supported)." ),
+                        elem.layer );
             continue;
         }
 
@@ -2562,9 +2567,9 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
 
         if( klayer == UNDEFINED_LAYER )
         {
-            wxLogWarning( wxString::Format(
-                    _( "Text on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                    elem.layer ) );
+            wxLogWarning( _( "Text found on an Altium layer (%d) with no KiCad equivalent. "
+                             "It has been moved to KiCad layer Eco1_User." ),
+                          elem.layer );
             klayer = Eco1_User;
         }
 
@@ -2648,7 +2653,7 @@ void ALTIUM_PCB::ParseFills6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading rectangles..." );
+        m_progressReporter->Report( _( "Loading rectangles..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -2665,11 +2670,12 @@ void ALTIUM_PCB::ParseFills6Data( const CFB::CompoundFileReader& aReader,
         wxPoint center( ( elem.pos1.x + elem.pos2.x ) / 2, ( elem.pos1.y + elem.pos2.y ) / 2 );
 
         PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
+
         if( klayer == UNDEFINED_LAYER )
         {
-            wxLogWarning( wxString::Format( _( "Fill on Altium layer %d has no KiCad equivalent. "
-                                               "Put it on Eco1_User instead" ),
-                                            elem.layer ) );
+            wxLogWarning( _( "Fill found on an Altium layer (%d) with no KiCad equivalent. "
+                             "It has been moved to KiCad layer Eco1_User." ),
+                          elem.layer );
             klayer = Eco1_User;
         }
 

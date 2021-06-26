@@ -251,10 +251,10 @@ FABMASTER::section_type FABMASTER::detectType( size_t aOffset )
     if( row1 == "LAYERSORT" )
         return EXTRACT_FULL_LAYERS;
 
-    wxLogError
-    (
-            wxString::Format( _( "Unknown FABMASTER section %s:%s at row %zu." ), row1.c_str(),
-                    row2.c_str(), aOffset ) );
+    wxLogError( _( "Unknown FABMASTER section %s:%s at row %zu." ),
+                row1.c_str(),
+                row2.c_str(),
+                aOffset );
     return UNKNOWN_EXTRACT;
 
 }
@@ -268,8 +268,9 @@ double FABMASTER::processScaleFactor( size_t aRow )
 
     if( rows[aRow].size() < 11 )
     {
-        wxLogError( wxString::Format( _( "Invalid row size in J row %zu.  "
-                "Expecting 11 elements but found %zu" ), aRow, rows[aRow].size() ) );
+        wxLogError( _( "Invalid row size in J row %zu. Expecting 11 elements but found %zu." ),
+                    aRow,
+                    rows[aRow].size() );
         return -1.0;
     }
 
@@ -290,7 +291,7 @@ double FABMASTER::processScaleFactor( size_t aRow )
 
     if( retval < 1.0 )
     {
-        wxLogError( _( "Could not find units value, defaulting to Mils" ) );
+        wxLogError( _( "Could not find units value, defaulting to mils." ) );
         retval = IU_PER_MILS;
     }
 
@@ -315,7 +316,7 @@ int FABMASTER::getColFromName( size_t aRow, const std::string& aStr )
             return i;
     }
 
-    THROW_IO_ERROR( wxString::Format( _( "Could not find column label %s" ), aStr.c_str() ) );
+    THROW_IO_ERROR( wxString::Format( _( "Could not find column label %s." ), aStr.c_str() ) );
     return -1;
 }
 
@@ -359,8 +360,10 @@ size_t FABMASTER::processPadStackLayers( size_t aRow )
 
         if( row.size() != header.size() )
         {
-            wxLogError( wxString::Format( _( "Invalid row size in row %zu.  "
-                    "Expecting %zu elements but found %zu" ), rownum, header.size(), row.size() ) );
+            wxLogError( _( "Invalid row size in row %zu. Expecting %zu elements but found %zu." ),
+                        rownum,
+                        header.size(),
+                        row.size() );
             continue;
         }
 
@@ -440,8 +443,10 @@ size_t FABMASTER::processPadStacks( size_t aRow )
 
         if( row.size() != header.size() )
         {
-            wxLogError( wxString::Format( _( "Invalid row size in row %zu.  "
-                    "Expecting %zu elements but found %zu" ), rownum, header.size(), row.size() ) );
+            wxLogError( _( "Invalid row size in row %zu. Expecting %zu elements but found %zu." ),
+                        rownum,
+                        header.size(),
+                        row.size() );
             continue;
         }
 
@@ -490,9 +495,11 @@ size_t FABMASTER::processPadStacks( size_t aRow )
             }
             catch( ... )
             {
-                wxLogError( wxString::Format( _( "Expecting drill size value "
-                        "but found %s!%s!%s at line %zu" ),
-                        pad_shape.c_str(), pad_width.c_str(), pad_height.c_str(), rownum ) );
+                wxLogError( _( "Expecting drill size value but found %s!%s!%s in row %zu." ),
+                            pad_shape.c_str(),
+                            pad_width.c_str(),
+                            pad_height.c_str(),
+                            rownum );
                 continue;
             }
 
@@ -536,8 +543,10 @@ size_t FABMASTER::processPadStacks( size_t aRow )
         }
         catch( ... )
         {
-            wxLogError( wxString::Format( _( "Expecting pad size values "
-                    "but found %s : %s at line %zu" ), pad_width.c_str(), pad_height.c_str(), rownum ) );
+            wxLogError( _( "Expecting pad size values but found %s : %s in row %zu." ),
+                        pad_width.c_str(),
+                        pad_height.c_str(),
+                        rownum );
             continue;
         }
 
@@ -556,7 +565,7 @@ size_t FABMASTER::processPadStacks( size_t aRow )
 
         if( w > std::numeric_limits<int>::max() || h > std::numeric_limits<int>::max() )
         {
-            wxLogError( wxString::Format( _( "Invalid pad size on line %zu" ), rownum ) );
+            wxLogError( _( "Invalid pad size in row %zu." ), rownum );
             continue;
         }
 
@@ -591,8 +600,10 @@ size_t FABMASTER::processPadStacks( size_t aRow )
         }
         catch( ... )
         {
-            wxLogError( wxString::Format( _( "Expecting pad offset values "
-                    "but found %s : %s at line %zu" ), pad_xoff.c_str(), pad_yoff.c_str(), rownum ) );
+            wxLogError( _( "Expecting pad offset values but found %s:%s in row %zu." ),
+                        pad_xoff.c_str(),
+                        pad_yoff.c_str(),
+                        rownum );
             continue;
         }
 
@@ -634,8 +645,10 @@ size_t FABMASTER::processPadStacks( size_t aRow )
             }
             else
             {
-                wxLogError( wxString::Format( _( "Unknown pad shape name '%s' on layer '%s' at line %zu" ),
-                        pad_shape.c_str(), pad_layer.c_str(), rownum ) );
+                wxLogError( _( "Unknown pad shape name '%s' on layer '%s' in row %zu." ),
+                            pad_shape.c_str(),
+                            pad_layer.c_str(),
+                            rownum );
                 continue;
             }
         }
@@ -670,8 +683,10 @@ size_t FABMASTER::processSimpleLayers( size_t aRow )
 
          if( row.size() != header.size() )
          {
-             wxLogError( wxString::Format( _( "Invalid row size in row %zu.  "
-                     "Expecting %zu elements but found %zu" ), rownum, header.size(), row.size() ) );
+             wxLogError( _( "Invalid row size in row %zu. Expecting %zu elements but found %zu." ),
+                         rownum,
+                         header.size(),
+                         row.size() );
              continue;
          }
 
@@ -819,8 +834,10 @@ size_t FABMASTER::processLayers( size_t aRow )
 
         if( row.size() != header.size() )
         {
-            wxLogError( wxString::Format( _( "Invalid row size in row %zu.  "
-                    "Expecting %zu elements but found %zu" ), rownum, header.size(), row.size() ) );
+            wxLogError( _( "Invalid row size in row %zu. Expecting %zu elements but found %zu." ),
+                        rownum,
+                        header.size(),
+                        row.size() );
             continue;
         }
 
@@ -904,8 +921,10 @@ size_t FABMASTER::processCustomPads( size_t aRow )
 
         if( row.size() != header.size() )
         {
-            wxLogError( wxString::Format( _( "Invalid row size in row %zu.  "
-                    "Expecting %zu elements but found %zu" ), rownum, header.size(), row.size() ) );
+            wxLogError( _( "Invalid row size in row %zu. Expecting %zu elements but found %zu." ),
+                        rownum,
+                        header.size(),
+                        row.size() );
 
             continue;
         }
@@ -948,9 +967,9 @@ size_t FABMASTER::processCustomPads( size_t aRow )
 
         if( std::sscanf( pad_record_tag.c_str(), "%d %d", &id, &seq ) != 2 )
         {
-            wxLogError( wxString::Format( _( "Invalid format for id string \"%s\" "
-                                             "in custom pad row %zu" ),
-                    pad_record_tag.c_str(), rownum ) );
+            wxLogError( _( "Invalid format for id string '%s' in custom pad row %zu." ),
+                        pad_record_tag.c_str(),
+                        rownum );
             continue;
         }
 
@@ -989,14 +1008,16 @@ size_t FABMASTER::processCustomPads( size_t aRow )
 
             if( !retval.second )
             {
-                wxLogError( wxString::Format( _( "Could not insert graphical item %d into padstack \"%s\"" ),
-                        seq, pad_stack_name.c_str() ) );
+                wxLogError( _( "Could not insert graphical item %d into padstack '%s'." ),
+                            seq,
+                            pad_stack_name.c_str() );
             }
         }
         else
         {
-            wxLogError( wxString::Format( _( "Unrecognized pad shape primitive \"%s\" in line %zu." ),
-                gr_data.graphic_dataname, rownum  ) );
+            wxLogError( _( "Unrecognized pad shape primitive '%s' in row %zu." ),
+                        gr_data.graphic_dataname,
+                        rownum );
         }
     }
 
@@ -1101,8 +1122,7 @@ FABMASTER::GRAPHIC_TEXT* FABMASTER::processText( const FABMASTER::GRAPHIC_DATA& 
     if( toks.size() < 8 )
     {
             // We log the error here but continue in the case of too few tokens
-            wxLogError( wxString::Format( _( "Invalid token count."
-                                                " Expected 8 but found %zu" ), toks.size() ) );
+            wxLogError( _( "Invalid token count. Expected 8 but found %zu." ), toks.size() );
             new_text->height = 0;
             new_text->width  = 0;
             new_text->ital   = false;
@@ -1205,8 +1225,10 @@ size_t FABMASTER::processGeometry( size_t aRow )
 
         if( row.size() != header.size() )
         {
-            wxLogError( wxString::Format( _( "Invalid row size in row %zu.  "
-                    "Expecting %zu elements but found %zu" ), rownum, header.size(), row.size() ) );
+            wxLogError( _( "Invalid row size in row %zu. Expecting %zu elements but found %zu." ),
+                        rownum,
+                        header.size(),
+                        row.size() );
             continue;
         }
 
@@ -1235,9 +1257,9 @@ size_t FABMASTER::processGeometry( size_t aRow )
 
         if( std::sscanf( geo_tag.c_str(), "%d %d %d", &id, &seq, &subseq ) < 2 )
         {
-            wxLogError( wxString::Format( _( "Invalid format for record_tag string \"%s\" "
-                                             "in Geometric definition row %zu" ),
-                    geo_tag.c_str(), rownum ) );
+            wxLogError( _( "Invalid format for record_tag string '%s' in row %zu." ),
+                        geo_tag.c_str(),
+                        rownum );
             continue;
         }
 
@@ -1245,9 +1267,10 @@ size_t FABMASTER::processGeometry( size_t aRow )
 
         if( !gr_item )
         {
-            wxLogDebug( wxString::Format( _( "Unhandled graphic item '%s' "
-                                             "in Geometric definition row %zu" ),
-                    gr_data.graphic_dataname.c_str(), geo_tag.c_str(), rownum ) );
+            wxLogDebug( "Unhandled graphic item '%s' in row %zu.",
+                        gr_data.graphic_dataname.c_str(),
+                        geo_tag.c_str(),
+                        rownum );
             continue;
         }
 
@@ -1327,8 +1350,10 @@ size_t FABMASTER::processVias( size_t aRow )
 
         if( row.size() != header.size() )
         {
-            wxLogError( wxString::Format( _( "Invalid row size in row %zu.  "
-                    "Expecting %zu elements but found %zu" ), rownum, header.size(), row.size() ) );
+            wxLogError( _( "Invalid row size in row %zu. Expecting %zu elements but found %zu." ),
+                        rownum,
+                        header.size(),
+                        row.size() );
             continue;
         }
 
@@ -1392,8 +1417,10 @@ size_t FABMASTER::processTraces( size_t aRow )
 
         if( row.size() != header.size() )
         {
-            wxLogError( wxString::Format( _( "Invalid row size in row %zu.  "
-                    "Expecting %zu elements but found %zu" ), rownum, header.size(), row.size() ) );
+            wxLogError( _( "Invalid row size in row %zu.  Expecting %zu elements but found %zu." ),
+                        rownum,
+                        header.size(),
+                        row.size() );
             continue;
         }
 
@@ -1419,9 +1446,9 @@ size_t FABMASTER::processTraces( size_t aRow )
 
         if( std::sscanf( geo_tag.c_str(), "%d %d %d", &id, &seq, &subseq ) < 2 )
         {
-            wxLogError( wxString::Format( _( "Invalid format for record_tag string \"%s\" "
-                                             "in Traces definition row %zu" ),
-                    geo_tag.c_str(), rownum ) );
+            wxLogError( _( "Invalid format for record_tag string '%s' in row %zu." ),
+                        geo_tag.c_str(),
+                        rownum );
             continue;
         }
 
@@ -1429,9 +1456,9 @@ size_t FABMASTER::processTraces( size_t aRow )
 
         if( !gr_item )
         {
-            wxLogDebug( wxString::Format( _( "Unhandled graphic item '%s' "
-                                             "in Traces definition row %zu" ),
-                    gr_data.graphic_dataname.c_str(), rownum ) );
+            wxLogDebug( _( "Unhandled graphic item '%s' in row %zu." ),
+                        gr_data.graphic_dataname.c_str(),
+                        rownum );
             continue;
         }
 
@@ -1460,8 +1487,10 @@ size_t FABMASTER::processTraces( size_t aRow )
 
             if( !gr_result.second )
             {
-                wxLogError( wxString::Format( _( "Duplicate item for ID %d and sequence %d "
-                        "in Traces definition row %zu \n" ), id, seq, rownum ) );
+                wxLogError( _( "Duplicate item for ID %d and sequence %d in row %zu." ),
+                            id,
+                            seq,
+                            rownum );
             }
 
         }
@@ -1473,8 +1502,10 @@ size_t FABMASTER::processTraces( size_t aRow )
 
             if( !gr_result.second )
             {
-                wxLogError( wxString::Format( _( "Duplicate item for ID %d and sequence %d "
-                        "in Traces definition row %zu \n" ), id, seq, rownum ) );
+                wxLogError( _( "Duplicate item for ID %d and sequence %d in row %zu." ),
+                            id,
+                            seq,
+                            rownum );
             }
         }
     }
@@ -1555,8 +1586,10 @@ size_t FABMASTER::processFootprints( size_t aRow )
 
         if( row.size() != header.size() )
         {
-            wxLogError( wxString::Format( _( "Invalid row size in row %zu.  "
-                    "Expecting %zu elements but found %zu" ), rownum, header.size(), row.size() ) );
+            wxLogError( _( "Invalid row size in row %zu. Expecting %zu elements but found %zu." ),
+                        rownum,
+                        header.size(),
+                        row.size() );
             continue;
         }
 
@@ -1632,8 +1665,10 @@ size_t FABMASTER::processPins( size_t aRow )
 
         if( row.size() != header.size() )
         {
-            wxLogError( wxString::Format( _( "Invalid row size in row %zu.  "
-                    "Expecting %zu elements but found %zu" ), rownum, header.size(), row.size() ) );
+            wxLogError( _( "Invalid row size in row %zu. Expecting %zu elements but found %zu." ),
+                        rownum,
+                        header.size(),
+                        row.size() );
             continue;
         }
 
@@ -1697,8 +1732,10 @@ size_t FABMASTER::processNets( size_t aRow )
 
         if( row.size() != header.size() )
         {
-            wxLogError( wxString::Format( _( "Invalid row size in row %zu.  "
-                    "Expecting %zu elements but found %zu" ), rownum, header.size(), row.size() ) );
+            wxLogError( _( "Invalid row size in row %zu. Expecting %zu elements but found %zu." ),
+                        rownum,
+                        header.size(),
+                        row.size() );
             continue;
         }
 
@@ -2278,9 +2315,9 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                 if( poly_outline.OutlineCount() < 1
                                         || poly_outline.Outline( 0 ).PointCount() < 3 )
                                 {
-                                    wxLogError( wxString::Format(
-                                            _( "Invalid custom pad named '%s'. Replacing with circular pad." ),
-                                            custom_name.c_str() ) );
+                                    wxLogError( _( "Invalid custom pad '%s'. Replacing with "
+                                                   "circular pad." ),
+                                                custom_name.c_str() );
                                     newpad->SetShape( PAD_SHAPE::CIRCLE );
                                 }
                                 else
@@ -2307,16 +2344,16 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                                 if( mergedPolygon.OutlineCount() > 1 )
                                 {
-                                    wxLogError( wxString::Format(
-                                            _( "Invalid custom pad named '%s'. Replacing with circular pad." ),
-                                            custom_name.c_str() ) );
+                                    wxLogError( _( "Invalid custom pad '%s'. Replacing with "
+                                                   "circular pad." ),
+                                                custom_name.c_str() );
                                     newpad->SetShape( PAD_SHAPE::CIRCLE );
                                 }
                             }
                             else
                             {
-                                wxLogError( wxString::Format( _( "Could not find custom pad named %s" ),
-                                        custom_name.c_str() ) );
+                                wxLogError( _( "Could not find custom pad '%s'." ),
+                                            custom_name.c_str() );
                             }
                         }
                         else
@@ -2515,8 +2552,8 @@ bool FABMASTER::loadEtch( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
         }
         else
         {
-            wxLogError( wxString::Format( _( "Expecting etch data to be on copper layer. "
-                    "Row found on layer '%s'" ), seg->layer.c_str() ) );
+            wxLogError( _( "Expecting etch data to be on copper layer. Row found on layer '%s'" ),
+                        seg->layer.c_str() );
         }
     }
 

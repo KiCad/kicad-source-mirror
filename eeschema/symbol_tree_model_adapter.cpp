@@ -150,9 +150,9 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxLogError( wxString::Format( _( "Error loading symbol library %s.\n\n%s" ),
-                                      aLibNickname,
-                                      ioe.What() ) );
+        wxLogError( _( "Error loading symbol library '%s'." ) + wxS( "\n%s" ),
+                    aLibNickname,
+                    ioe.What() );
         return;
     }
 

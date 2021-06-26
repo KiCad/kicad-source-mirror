@@ -29,6 +29,7 @@
 #include <sstream>
 #include <utf.h>
 #include <wx/log.h>
+#include <wx/translation.h>
 
 const CFB::COMPOUND_FILE_ENTRY* FindStream(
         const CFB::CompoundFileReader& aReader, const char* aStreamName )
@@ -108,8 +109,9 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
     bool hasNullByte = m_pos[length - 1] == '\0';
     if( !hasNullByte )
     {
-        wxLogError( "For Altium import, we assumes a null byte at the end of a list of properties. "
-                    "Because this is missing, imported data might be malformed or missing." );
+        wxLogError( _( "For Altium import, we assumes a null byte at the end of a list of "
+                       "properties. Because this is missing, imported data might be malformed or "
+                       "missing." ) );
     }
 
     // we use std::string because std::string can handle NULL-bytes
@@ -220,16 +222,18 @@ int32_t ALTIUM_PARSER::PropertiesReadKicadUnit( const std::map<wxString, wxStrin
     const wxString& value = PropertiesReadString( aProperties, aKey, aDefault );
 
     wxString prefix;
+
     if( !value.EndsWith( "mil", &prefix ) )
     {
-        wxLogError( wxString::Format( "Unit '%s' does not end with mil", value ) );
+        wxLogError( _( "Unit '%s' does not end with 'mil'." ), value );
         return 0;
     }
 
     double mils;
+
     if( !prefix.ToCDouble( &mils ) )
     {
-        wxLogError( wxString::Format( "Cannot convert '%s' into double", prefix ) );
+        wxLogError( _( "Cannot convert '%s' to double." ), prefix );
         return 0;
     }
 

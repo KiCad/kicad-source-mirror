@@ -60,7 +60,7 @@ static bool CopyStreamData( wxInputStream& inputStream, wxOutputStream& outputSt
 
         if( outputStream.LastWrite() != actuallyRead )
         {
-            wxLogError( "Failed to output data" );
+            wxLogError( _( "Failed to output data." ) );
             //return false;
         }
 

@@ -259,7 +259,7 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
     if( len < 0 )
     {
         fclose( fp );
-        THROW_IO_ERROR( "Reading error, cannot determine length of file" );
+        THROW_IO_ERROR( "Read error, cannot determine length of file." );
     }
 
     std::unique_ptr<unsigned char[]> buffer( new unsigned char[len] );
@@ -269,7 +269,7 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
     fclose( fp );
 
     if( static_cast<size_t>( len ) != bytesRead )
-        THROW_IO_ERROR( "Reading error" );
+        THROW_IO_ERROR( "Read error." );
 
     try
     {
@@ -311,9 +311,10 @@ void SCH_ALTIUM_PLUGIN::ParseStorage( const CFB::CompoundFileReader& aReader )
     // TODO pointhi: is it possible to have multiple headers in one Storage file? Otherwise
     // throw IO Error.
     if( reader.GetRemainingBytes() != 0 )
-        wxLogError(
-                wxString::Format( "Storage file was not fully parsed as %d bytes are remaining.",
-                                  reader.GetRemainingBytes() ) );
+    {
+        wxLogError( _( "Storage file was not fully parsed as %d bytes are remaining." ),
+                    reader.GetRemainingBytes() );
+    }
 }
 
 
@@ -1365,10 +1366,10 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
     ASCH_SHEET_ENTRY elem( aProperties );
 
     const auto& sheet = m_sheets.find( elem.ownerindex );
+
     if( sheet == m_sheets.end() )
     {
-        wxLogError( wxString::Format( "Sheet Entry has non-existent ownerindex %d",
-                                      elem.ownerindex ) );
+        wxLogError( _( "Sheet entry's owner (%d) not found." ), elem.ownerindex );
         return;
     }
 
@@ -1770,10 +1771,7 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
                             || endIsBusTerminal;
 
     if( !connectionFound )
-    {
-        wxLogError( wxString::Format( "There is a Port for \"%s\", but no connections towards it?",
-                                      aElem.name ) );
-    }
+        wxLogError( _( "There is a port for '%s', but no connections to it." ), aElem.name );
 
     // Select label position. In case both match, we will add a line later.
     wxPoint position = ( startIsWireTerminal || startIsBusTerminal ) ? start : end;
@@ -1946,8 +1944,7 @@ void SCH_ALTIUM_PLUGIN::ParseImage( const std::map<wxString, wxString>& aPropert
 
         if( !storageFile )
         {
-            wxLogError(
-                    wxString::Format( "Embedded file not found in storage: %s", elem.filename ) );
+            wxLogError( _( "Embedded file %s not found in storage." ), elem.filename );
             return;
         }
 
@@ -1962,7 +1959,7 @@ void SCH_ALTIUM_PLUGIN::ParseImage( const std::map<wxString, wxString>& aPropert
 
         if( !bitmap->ReadImageFile( storagePath ) )
         {
-            wxLogError( wxString::Format( "Error while reading image: %s", storagePath ) );
+            wxLogError( _( "Error reading image %s." ), storagePath );
             return;
         }
 
@@ -1973,13 +1970,13 @@ void SCH_ALTIUM_PLUGIN::ParseImage( const std::map<wxString, wxString>& aPropert
     {
         if( !wxFileExists( elem.filename ) )
         {
-            wxLogError( wxString::Format( "File not found on disk: %s", elem.filename ) );
+            wxLogError( _( "File not found %s." ), elem.filename );
             return;
         }
 
         if( !bitmap->ReadImageFile( elem.filename ) )
         {
-            wxLogError( wxString::Format( "Error while reading image: %s", elem.filename ) );
+            wxLogError( _( "Error reading image %s." ), elem.filename );
             return;
         }
     }
@@ -2096,8 +2093,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheetName( const std::map<wxString, wxString>& aPro
     const auto& sheet = m_sheets.find( elem.ownerindex );
     if( sheet == m_sheets.end() )
     {
-        wxLogError( wxString::Format( "Sheet Name has non-existent ownerindex %d",
-                                      elem.ownerindex ) );
+        wxLogError( _( "Sheet name's owner (%d) not found." ), elem.ownerindex );
         return;
     }
 
@@ -2121,8 +2117,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileName( const std::map<wxString, wxString>& aProp
     const auto& sheet = m_sheets.find( elem.ownerindex );
     if( sheet == m_sheets.end() )
     {
-        wxLogError( wxString::Format( "File Name has non-existent ownerindex %d",
-                                      elem.ownerindex ) );
+        wxLogError( _( "File name's owner (%d) not found." ), elem.ownerindex );
         return;
     }
 

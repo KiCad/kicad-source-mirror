@@ -78,10 +78,10 @@ public:
         }
         catch( const IO_ERROR& ioe )
         {
-            wxLogError( wxString::Format( _( "Error loading footprint %s from library '%s'.\n\n%s" ),
-                                          m_lib_id.GetLibItemName().wx_str(),
-                                          m_lib_id.GetLibNickname().wx_str(),
-                                          ioe.What() ) );
+            wxLogError( _( "Error loading footprint %s from library '%s'." ) + wxS( "\n%s" ),
+                        m_lib_id.GetLibItemName().wx_str(),
+                        m_lib_id.GetLibNickname().wx_str(),
+                        ioe.What() );
             return;
         }
 

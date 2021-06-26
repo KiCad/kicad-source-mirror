@@ -3990,13 +3990,10 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         case T_net:
             if( ! pad->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
             {
-                wxLogError( wxString::Format( _( "Invalid net ID in\n"
-                                                 "file: '%s'\n"
-                                                 "line: %d\n"
-                                                 "offset: %d" ),
-                                              CurSource(),
-                                              CurLineNumber(),
-                                              CurOffset() ) );
+                wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d offset: %d" ),
+                            CurSource(),
+                            CurLineNumber(),
+                            CurOffset() );
             }
 
             NeedSYMBOLorNUMBER();
@@ -4014,13 +4011,10 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 if( netName != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
                 {
                     pad->SetNetCode( NETINFO_LIST::ORPHANED, /* aNoAssert */ true );
-                    wxLogError( wxString::Format( _( "Net name doesn't match net ID in\n"
-                                                     "file: '%s'\n"
-                                                     "line: %d\n"
-                                                     "offset: %d" ),
-                                                  CurSource(),
-                                                  CurLineNumber(),
-                                                  CurOffset() ) );
+                    wxLogError( _( "Net name doesn't match ID in\nfile: %s\nline: %d offset: %d" ),
+                                 CurSource(),
+                                 CurLineNumber(),
+                                 CurOffset() );
                 }
             }
 

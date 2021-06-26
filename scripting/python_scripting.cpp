@@ -205,7 +205,7 @@ bool SCRIPTING::scriptingSetup()
     // Ensure the user plugin path exists, and create it if not.
     // However, if it cannot be created, this is not a fatal error.
     if( !path.DirExists() && !path.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-        wxLogError( "Warning: could not create user scripting path %s", path.GetPath() );
+        wxLogError( _( "Could not create user scripting path %s." ), path.GetPath() );
 
     return true;
 }
@@ -324,7 +324,7 @@ void UpdatePythonEnvVar( const wxString& aVar, const wxString& aValue )
     int retv = PyRun_SimpleString( cmd );
 
     if( retv != 0 )
-        wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
+        wxLogError( "Python error %d running command:\n\n`%s`", retv, cmd );
 }
 
 

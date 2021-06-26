@@ -128,10 +128,10 @@ ALTIUM_LAYER altium_layer_from_name( const wxString& aName )
     };
 
     auto it = hash_map.find( std::string( aName.c_str() ) );
+
     if( it == hash_map.end() )
     {
-        wxLogError( wxString::Format(
-                "Unknown mapping of the Altium layer '%s'. Please report as issue.", aName ) );
+        wxLogError( _( "Unknown mapping of the Altium layer '%s'." ), aName );
         return ALTIUM_LAYER::UNKNOWN;
     }
     else
@@ -785,8 +785,7 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     }
     else if( subrecord6 != 0 )
     {
-        wxLogError( wxString::Format(
-                "Pads6 stream has unexpected length for subrecord 6: %d", subrecord6 ) );
+        wxLogError( _( "Pads6 stream has unexpected length for subrecord 6: %d." ), subrecord6 );
     }
 
     aReader.SkipSubrecord();
