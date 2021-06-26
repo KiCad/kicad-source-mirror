@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,6 +61,19 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
 
     // Ensure at least two segments are used for algorithmic safety
     return std::max( segCount, 2 );
+}
+
+
+int GetCircleToSegmentError( int aRadius, int aSegCount )
+{
+    // avoid divide-by-zero, and the minimal seg count used here = 2
+    // (giving error = aRadius)
+    aSegCount = std::max( 2, aSegCount );
+
+    double alpha = M_PI / aSegCount;
+    double error = aRadius * ( 1.0 - cos( alpha) );
+
+    return error;
 }
 
 // When creating polygons to create a clearance polygonal area, the polygon must

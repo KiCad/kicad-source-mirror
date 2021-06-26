@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,13 @@ enum ERROR_LOC { ERROR_OUTSIDE, ERROR_INSIDE };
  * @param aArcAngleDegree is the arc angle in degrees
  */
 int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree );
+
+/**
+ * @return the max error when approximating a circle by segments
+ * @param aRadius is the radius of the circle
+ * @param aSegCount is the seg count to approximate the circle
+ */
+int GetCircleToSegmentError( int aRadius, int aSegCount );
 
 /**
  * When creating polygons to create a clearance polygonal area, the polygon must

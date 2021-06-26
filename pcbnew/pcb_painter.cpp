@@ -703,11 +703,13 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
 
 // Debug only: enable this code only to test the TransformArcToPolygon function
 // and display the polygon outline created by it.
+// arcs on F_Cu are approximated with ERROR_INSIDE, others with ERROR_OUTSIDE
 #if 0
     SHAPE_POLY_SET cornerBuffer;
-    int errorloc = aArc->GetBoard()->GetDesignSettings().m_MaxError;
+    int error_value = aArc->GetBoard()->GetDesignSettings().m_MaxError;
+    ERROR_LOC errorloc = aLayer == F_Cu ? ERROR_LOC::ERROR_INSIDE : ERROR_LOC::ERROR_OUTSIDE;
     TransformArcToPolygon( cornerBuffer, aArc->GetStart(), aArc->GetMid(),
-                           aArc->GetEnd(), width, errorloc, ERROR_LOC::ERROR_OUTSIDE );
+                           aArc->GetEnd(), width, error_value, errorloc );
     m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
