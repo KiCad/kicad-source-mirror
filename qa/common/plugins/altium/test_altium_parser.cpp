@@ -263,6 +263,8 @@ static const std::vector<READ_PROPERTIES_CASE> read_properties = {
     { "|A=a\na\0", { { "A", "a\na" } } },
     { "|A=a\ta\0", { { "A", "a\ta" } } },
     // Encoding, TODO: extend
+    { "|%UTF8%A=abc\0", { { "%UTF8%A", "abc" } } },
+    { "|%UTF8%A=\xc2\xa6\0", { { "%UTF8%A", { "\xc2\xa6", wxConvUTF8 } } } }, // Convert to '|' ?
     // Correct reading errors
     { "|A|B=C\0", { { "B", "C" } } },
     { "|A=B|C\0", { { "A", "B" } } },

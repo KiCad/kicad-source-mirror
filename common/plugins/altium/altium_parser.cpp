@@ -140,10 +140,16 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
         // convert the strings to wxStrings, since we use them everywhere
         // value can have non-ASCII characters, so we convert them from LATIN1/ISO8859-1
         wxString key( keyS.c_str(), wxConvISO8859_1 );
-        wxString value( valueS.c_str(), wxConvISO8859_1 );
-
         // Altium stores keys either in Upper, or in CamelCase. Lets unify it.
-        kv.insert( { key.Trim( false ).Trim( true ).MakeUpper(), value.Trim() } );
+        wxString canonicalKey = key.Trim( false ).Trim( true ).MakeUpper();
+        // If the key starts with '%UTF8%' we have to parse the value using UTF8
+        wxString value;
+        if( canonicalKey.StartsWith( "%UTF8%" ) )
+            value = wxString( valueS.c_str(), wxConvUTF8 );
+        else
+            value = wxString( valueS.c_str(), wxConvISO8859_1 );
+
+        kv.insert( { canonicalKey, value.Trim() } );
     }
 
     return kv;
@@ -233,6 +239,11 @@ int32_t ALTIUM_PARSER::PropertiesReadKicadUnit( const std::map<wxString, wxStrin
 wxString ALTIUM_PARSER::PropertiesReadString( const std::map<wxString, wxString>& aProperties,
         const wxString& aKey, const wxString& aDefault )
 {
+    const std::map<wxString, wxString>::const_iterator& utf8Value =
+            aProperties.find( wxString( "%UTF8%" ) + aKey );
+    if( utf8Value != aProperties.end() )
+        return utf8Value->second;
+
     const std::map<wxString, wxString>::const_iterator& value = aProperties.find( aKey );
     return value == aProperties.end() ? aDefault : value->second;
 }

@@ -93,6 +93,7 @@ class PROGRESS_REPORTER;
  *
  * @param aBoard board the pcb should be appended to
  * @param aFileName file name of board file
+ * @param aProgressReporter report import progress, might be a nullptr.
  * @param aFileMapping mapping how altium stream names are mapped
  */
 void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER* aProgressReporter,
