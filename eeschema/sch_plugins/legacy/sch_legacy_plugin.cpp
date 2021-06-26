@@ -718,10 +718,10 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         // Save the current path so that it gets restored when descending and ascending the
         // sheet hierarchy which allows for sheet schematic files to be nested in folders
         // relative to the last path a schematic was loaded from.
-        wxLogTrace( traceSchLegacyPlugin, "Saving path    \"%s\"", m_currentPath.top() );
+        wxLogTrace( traceSchLegacyPlugin, "Saving path    '%s'", m_currentPath.top() );
         m_currentPath.push( fileName.GetPath() );
-        wxLogTrace( traceSchLegacyPlugin, "Current path   \"%s\"", m_currentPath.top() );
-        wxLogTrace( traceSchLegacyPlugin, "Loading        \"%s\"", fileName.GetFullPath() );
+        wxLogTrace( traceSchLegacyPlugin, "Current path   '%s'", m_currentPath.top() );
+        wxLogTrace( traceSchLegacyPlugin, "Loading        '%s'", fileName.GetFullPath() );
 
         m_rootSheet->SearchHierarchy( fileName.GetFullPath(), &screen );
 
@@ -2613,15 +2613,15 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
 
     wxCHECK_RET( m_libFileName.IsAbsolute(),
                  wxString::Format( "Cannot use relative file paths in legacy plugin to "
-                                   "open library \"%s\".", m_libFileName.GetFullPath() ) );
+                                   "open library '%s'.", m_libFileName.GetFullPath() ) );
 
-    wxLogTrace( traceSchLegacyPlugin, "Loading legacy symbol file \"%s\"",
+    wxLogTrace( traceSchLegacyPlugin, "Loading legacy symbol file '%s'",
                 m_libFileName.GetFullPath() );
 
     FILE_LINE_READER reader( m_libFileName.GetFullPath() );
 
     if( !reader.ReadLine() )
-        THROW_IO_ERROR( _( "unexpected end of file" ) );
+        THROW_IO_ERROR( _( "Unexpected end of file." ) );
 
     const char* line = reader.Line();
 
@@ -3248,7 +3248,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_SYMBOL>& aSym
         line = aReader.ReadLine();
     }
 
-    SCH_PARSE_ERROR( "file ended prematurely loading symbol draw element", aReader, line );
+    SCH_PARSE_ERROR( "File ended prematurely loading symbol draw element.", aReader, line );
 }
 
 
@@ -3764,7 +3764,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadFootprintFilters( std::unique_ptr<LIB_SYMBOL>&
         line = aReader.ReadLine();
     }
 
-    SCH_PARSE_ERROR( "file ended prematurely while loading footprint filters", aReader, line );
+    SCH_PARSE_ERROR( "File ended prematurely while loading footprint filters.", aReader, line );
 }
 
 

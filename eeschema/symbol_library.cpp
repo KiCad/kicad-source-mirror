@@ -514,7 +514,7 @@ void SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
         {
             if( aShowProgress )
             {
-                lib_dialog.Update( i, _( "Loading " + lib_names[i] ) );
+                lib_dialog.Update( i, wxString::Format( _( "Loading %s..." ), lib_names[i] ) );
             }
 
             // lib_names[] does not store the file extension. Set it.

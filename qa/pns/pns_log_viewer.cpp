@@ -399,10 +399,7 @@ static BOARD* loadBoard( const std::string& filename )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = wxString::Format( _( "Error loading board.\n%s" ),
-                ioe.Problem() );
-
-        printf( "Board Loading Error: '%s'\n", (const char*) msg.mb_str() );
+        printf( "Board Loading Error: '%s'\n", ioe.Problem() );
         return nullptr;
     }
 

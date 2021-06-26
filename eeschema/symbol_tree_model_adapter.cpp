@@ -102,7 +102,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
     {
         HTML_MESSAGE_BOX dlg( aParent, _( "Load Error" ) );
 
-        dlg.MessageSet( _( "Errors were encountered loading symbols:" ) );
+        dlg.MessageSet( _( "Errors loading symbols:" ) );
 
         wxString msg = loader.GetErrors();
         msg.Replace( "\n", "<BR>" );

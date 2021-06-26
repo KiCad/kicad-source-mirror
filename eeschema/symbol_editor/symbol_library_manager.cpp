@@ -102,7 +102,7 @@ void SYMBOL_LIBRARY_MANAGER::Preload( PROGRESS_REPORTER& aReporter )
     {
         HTML_MESSAGE_BOX dlg( &m_frame, _( "Load Error" ) );
 
-        dlg.MessageSet( _( "Errors were encountered loading symbols:" ) );
+        dlg.MessageSet( _( "Errors loading symbols:" ) );
 
         wxString msg = loader.GetErrors();
         msg.Replace( "\n", "<BR>" );
@@ -429,7 +429,7 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aAlias,
         }
         catch( const IO_ERROR& e )
         {
-            wxLogMessage( _( "Error loading symbol \"%s\" from library \"%s\". (%s)" ),
+            wxLogMessage( _( "Error loading symbol %s from library '%s'. (%s)" ),
                           aAlias, aLibrary, e.What() );
             bufferedSymbol = nullptr;
         }

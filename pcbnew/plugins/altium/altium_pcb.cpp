@@ -625,7 +625,7 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Board Data" );
+        m_progressReporter->Report( "Loading board data..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -834,7 +834,7 @@ void ALTIUM_PCB::ParseClasses6Data( const CFB::CompoundFileReader& aReader,
                                     const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Net Classes" );
+        m_progressReporter->Report( "Loading netclasses..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -874,7 +874,7 @@ void ALTIUM_PCB::ParseComponents6Data( const CFB::CompoundFileReader& aReader,
                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Components" );
+        m_progressReporter->Report( "Loading components..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -921,7 +921,7 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aRea
                                              const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Components 3D Models" );
+        m_progressReporter->Report( "Loading component 3D models..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1204,7 +1204,7 @@ void ALTIUM_PCB::ParseDimensions6Data( const CFB::CompoundFileReader& aReader,
                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Dimension Drawings" );
+        m_progressReporter->Report( "Loading dimension drawings..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1245,7 +1245,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString aRootDir )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: 3D Models" );
+        m_progressReporter->Report( "Loading 3D models..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1332,7 +1332,7 @@ void ALTIUM_PCB::ParseNets6Data( const CFB::CompoundFileReader& aReader,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Nets" );
+        m_progressReporter->Report( "Loading nets..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1355,7 +1355,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
                                      const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Polygons" );
+        m_progressReporter->Report( "Loading polygons..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1488,7 +1488,7 @@ void ALTIUM_PCB::ParseRules6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Rules" );
+        m_progressReporter->Report( "Loading rules..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1520,7 +1520,7 @@ void ALTIUM_PCB::ParseBoardRegionsData( const CFB::CompoundFileReader& aReader,
                                         const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Board Regions" );
+        m_progressReporter->Report( "Loading board regions..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1542,7 +1542,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
                                               const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Zones" );
+        m_progressReporter->Report( "Loading zones..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1656,7 +1656,7 @@ void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
                                     const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Zone Fills" );
+        m_progressReporter->Report( "Loading zone fills..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1744,7 +1744,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Arcs" );
+        m_progressReporter->Report( "Loading arcs..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1883,7 +1883,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Pads" );
+        m_progressReporter->Report( "Loading pads..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -2296,7 +2296,7 @@ void ALTIUM_PCB::ParseVias6Data( const CFB::CompoundFileReader& aReader,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Vias" );
+        m_progressReporter->Report( "Loading vias..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -2356,7 +2356,7 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
                                    const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Tracks" );
+        m_progressReporter->Report( "Loading tracks..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -2462,7 +2462,7 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Text" );
+        m_progressReporter->Report( "Loading text..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -2648,7 +2648,7 @@ void ALTIUM_PCB::ParseFills6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Parse: Rectangles" );
+        m_progressReporter->Report( "Loading rectangles..." );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 

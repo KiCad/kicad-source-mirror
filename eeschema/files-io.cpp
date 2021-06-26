@@ -427,7 +427,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         catch( const std::bad_alloc& )
         {
-            msg.Printf( _( "Memory exhausted loading schematic file '%s'." ), fullFileName );
+            msg.Printf( _( "Memory exhausted loading schematic '%s'." ), fullFileName );
             DisplayErrorMessage( this, msg );
 
             failedLoad = true;

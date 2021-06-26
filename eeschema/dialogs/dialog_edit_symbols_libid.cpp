@@ -724,7 +724,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
             {
                 wxString msg;
 
-                msg.Printf( _( "Error occurred loading symbol %s from library %s.\n\n%s" ),
+                msg.Printf( _( "Error loading symbol %s from library %s.\n\n%s" ),
                             id.GetLibItemName().wx_str(),
                             id.GetLibNickname().wx_str(),
                             ioe.What() );

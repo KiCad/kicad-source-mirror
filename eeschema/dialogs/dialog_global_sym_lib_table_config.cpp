@@ -129,8 +129,8 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, wxString::Format( _( "Error occurred loading global symbol library "
-                                                 "table.\n\n%s" ),
+        DisplayError( this, wxString::Format( _( "Error loading global symbol library table."
+                                                 "\n\n%s" ),
                                               ioe.What() ) );
         return false;
     }

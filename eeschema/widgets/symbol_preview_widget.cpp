@@ -178,7 +178,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
     }
     catch( const IO_ERROR& ioe )
     {
-        wxLogError( wxString::Format( _( "Error loading symbol %s from library %s.\n\n%s" ),
+        wxLogError( wxString::Format( _( "Error loading symbol %s from library '%s'.\n\n%s" ),
                                       aSymbolID.GetLibItemName().wx_str(),
                                       aSymbolID.GetLibNickname().wx_str(),
                                       ioe.What() ) );

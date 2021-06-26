@@ -285,7 +285,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aAliasName, in
     {
         wxString msg;
 
-        msg.Printf( _( "Error occurred loading symbol %s from library '%s'." ),
+        msg.Printf( _( "Error loading symbol %s from library '%s'." ),
                     aAliasName,
                     GetCurLib() );
         DisplayErrorMessage( this, msg, ioe.What() );

@@ -410,15 +410,15 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayErrorMessage( nullptr, _( "Error loading editor" ), ioe.What() );
+            DisplayErrorMessage( nullptr, _( "Error loading editor." ), ioe.What() );
         }
         catch( const std::exception& e)
         {
-            DisplayErrorMessage( nullptr, _( "Error loading editor" ), e.what() );
+            DisplayErrorMessage( nullptr, _( "Error loading editor." ), e.what() );
         }
         catch( ... )
         {
-            DisplayErrorMessage( nullptr, _( "Error loading editor" ) );
+            DisplayErrorMessage( nullptr, _( "Error loading editor." ) );
         }
     }
 

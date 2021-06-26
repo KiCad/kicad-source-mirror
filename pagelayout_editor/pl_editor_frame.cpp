@@ -332,7 +332,7 @@ bool PL_EDITOR_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 
     if( !LoadDrawingSheetFile( fn ) )
     {
-        wxMessageBox( wxString::Format( _( "Error when loading file \"%s\"" ), fn ) );
+        wxMessageBox( wxString::Format( _( "Error loading drawing sheet '%s'." ), fn ) );
         return false;
     }
     else

@@ -67,7 +67,7 @@ LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
     {
         if( aShowErrorMsg )
         {
-            wxString msg = wxString::Format( _( "Error loading symbol '%s' from library '%s'." ),
+            wxString msg = wxString::Format( _( "Error loading symbol %s from library '%s'." ),
                                              aLibId.GetLibItemName().wx_str(),
                                              aLibId.GetLibNickname().wx_str() );
             DisplayErrorMessage( aParent, msg, ioe.What() );

@@ -159,7 +159,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     }
     catch( const IO_ERROR& ioe )
     {
-        msg.Printf( _( "Error occurred loading schematic file '%s'." ), fullFilename );
+        msg.Printf( _( "Error loading schematic '%s'." ), fullFilename );
         DisplayErrorMessage( this, msg, ioe.What() );
 
         msg.Printf( _( "Failed to load '%s'." ), fullFilename );
@@ -281,7 +281,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                 }
                 catch( const IO_ERROR& ioe )
                 {
-                    msg.Printf( _( "An error occurred loading the symbol library table '%s'." ),
+                    msg.Printf( _( "Error loading the symbol library table '%s'." ),
                                 symLibTableFn.GetFullPath() );
                     DisplayErrorMessage( nullptr, msg, ioe.What() );
                     return false;

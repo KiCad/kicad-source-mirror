@@ -878,7 +878,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
 #endif
 
     if( aStatusReporter )
-        aStatusReporter->Report( _( "Loading 3D models" ) );
+        aStatusReporter->Report( _( "Loading 3D models..." ) );
 
     loadModels( m_objectContainer, aOnlyLoadCopperAndShapes );
 

@@ -131,9 +131,9 @@ bool DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG::TransferDataFromWindow()
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this,
-                      wxString::Format( _( "Error occurred loading global footprint library table:"
-                                           "\n\n%s" ), ioe.What() ) );
+        DisplayError( this, wxString::Format( _( "Error loading global footprint library table."
+                                                 "\n\n%s" ),
+                                              ioe.What() ) );
         return false;
     }
 

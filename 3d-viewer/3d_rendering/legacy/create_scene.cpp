@@ -641,7 +641,7 @@ void RENDER_3D_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     // Load 3D models
     if( aStatusReporter )
-        aStatusReporter->Report( _( "Loading 3D models" ) );
+        aStatusReporter->Report( _( "Loading 3D models..." ) );
 
     load3dModels( aStatusReporter );
 
@@ -881,9 +881,8 @@ void RENDER_3D_LEGACY::load3dModels( REPORTER* aStatusReporter )
                     // Display the short filename of the 3D model loaded:
                     // (the full name is usually too long to be displayed)
                     wxFileName fn( model.m_Filename );
-                    wxString msg;
-                    msg.Printf( _( "Loading %s" ), fn.GetFullName() );
-                    aStatusReporter->Report( msg );
+                    aStatusReporter->Report( wxString::Format( _( "Loading %s..." ),
+                                                               fn.GetFullName() ) );
                 }
 
                 // Check if the model is not present in our cache map
