@@ -556,7 +556,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // This is for python:
     if( aFileSet.size() != 1 )
     {
-        UTF8 msg = StrPrintf( "Pcbnew:%s() takes only a single filename", __func__ );
+        UTF8 msg = StrPrintf( "Pcbnew:%s() takes a single filename", __func__ );
         DisplayError( this, msg );
         return false;
     }
@@ -575,7 +575,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( !lockFile )
     {
-        wxString msg = wxString::Format( _( "PCB file \"%s\" is already open." ), fullFileName );
+        wxString msg = wxString::Format( _( "PCB '%s' is already open." ), fullFileName );
         DisplayError( this, msg );
         return false;
     }
@@ -610,9 +610,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Get rid of any existing warnings about the old board
     GetInfoBar()->Dismiss();
 
-    // Loading a complex project and build data can be time
-    // consuming, so display a busy cursor
-    wxBusyCursor dummy;
+    WX_PROGRESS_REPORTER progressReporter( this, is_new ? _( "Creating PCB" )
+                                                        : _( "Loading PCB" ), 1 );
 
     // No save prompt (we already prompted above), and only reset to a new blank board if new
     Clear_Pcb( false, !is_new );
@@ -690,7 +689,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             props["page_width"]  = xbuf;
             props["page_height"] = ybuf;
 
-            WX_PROGRESS_REPORTER progressReporter( this, _( "Loading PCB" ), 1 );
 #if USE_INSTRUMENTATION
             // measure the time to load a BOARD.
             unsigned startTime = GetRunningMicroSecs();
@@ -707,18 +705,17 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             if( ioe.Problem() != wxT( "CANCEL" ) )
             {
-                wxString msg = wxString::Format( _( "Error loading board file:\n%s" ),
-                                                 fullFileName );
-                DisplayErrorMessage( this, msg, ioe.What() );
+                DisplayErrorMessage( this, wxString::Format( _( "Error loading PCB '%s'." ),
+                                                             fullFileName ),
+                                     ioe.What() );
             }
 
             failedLoad = true;
         }
         catch( const std::bad_alloc& )
         {
-            wxString msg = wxString::Format( _( "Memory exhausted loading board file:\n%s" ), fullFileName );
-            DisplayErrorMessage( this, msg );
-
+            DisplayErrorMessage( this, wxString::Format( _( "Memory exhausted loading PCB '%s'" ),
+                                                         fullFileName ) );
             failedLoad = true;
         }
 
@@ -824,11 +821,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                     }
                     catch( const IO_ERROR& ioe )
                     {
-                        wxLogError( wxString::Format( _( "Error occurred when saving footprint "
-                                                         "'%s' to the project specific footprint "
-                                                         "library: %s" ),
-                                                         footprint->GetFPID().GetUniStringLibItemName(),
-                                                         ioe.What() ) );
+                        wxLogError( _( "Error saving footprint %s to project specific library." )
+                                    + wxS( "\n%s" ),
+                                    footprint->GetFPID().GetUniStringLibItemName(),
+                                    ioe.What() );
                     }
                 }
 
@@ -854,9 +850,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 }
                 catch( const IO_ERROR& ioe )
                 {
-                    wxLogError( wxString::Format( _( "Error occurred saving the project specific "
-                                                     "footprint library table: %s" ),
-                                                     ioe.What() ) );
+                    wxLogError( _( "Error saving project specific footprint library table." )
+                                + wxS( "\n%s" ),
+                                ioe.What() );
                 }
 
                 // Update footprint LIB_IDs to point to the just imported library

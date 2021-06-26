@@ -296,10 +296,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             return false;
     }
 
-    // Loading a complex project and build data can be time
-    // consumming, so display a busy cursor
-    wxBusyCursor dummy;
-
     // unload current project file before loading new
     {
         SetScreen( nullptr );
@@ -310,17 +306,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SetStatusText( wxEmptyString );
     m_infoBar->Dismiss();
 
-    SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( fullFileName );
-
-    // PROJECT::SetProjectFullName() is an impactful function.  It should only be
-    // called under carefully considered circumstances.
-
-    // The calling code should know not to ask me here to change projects unless
-    // it knows what consequences that will have on other KIFACEs running and using
-    // this same PROJECT.  It can be very harmful if that calling code is stupid.
-
-    // NOTE: The calling code should never call this in hosted (non-standalone) mode with a
-    // different project than what has been loaded by the manager frame.  This will crash.
+    WX_PROGRESS_REPORTER progressReporter( this, is_new ? _( "Creating Schematic" )
+                                                        : _( "Loading Schematic" ), 1 );
 
     bool differentProject = pro.GetFullPath() != Prj().GetProjectFullName();
 
@@ -344,6 +331,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         CreateScreens();
     }
+
+    SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( fullFileName );
 
     if( schFileType == SCH_IO_MGR::SCH_LEGACY )
     {
@@ -401,7 +390,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         SCH_PLUGIN* plugin = SCH_IO_MGR::FindPlugin( schFileType );
         SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( plugin );
 
-        WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Schematic" ), 1 );
         pi->SetProgressReporter( &progressReporter );
 
         bool failedLoad = false;
@@ -769,7 +757,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 
     if( pluginType == SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN )
     {
-        wxLogError( wxString::Format( "unexpected file extension: %s", fn.GetExt() ) );
+        wxLogError( _( "Unexpected file extension: '%s'." ), fn.GetExt() );
         return;
     }
 
