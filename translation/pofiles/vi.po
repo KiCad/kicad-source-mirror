@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-06-10 20:22+0000\n"
+"PO-Revision-Date: 2021-06-28 09:32+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7.1-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1522,6 +1522,8 @@ msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"Không thể báo cáo bất kỳ sự cố nào với KiCad trên hệ thống này cho trình "
+"kiểm tra lỗi chính thức."
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -5641,12 +5643,12 @@ msgstr "Thiếu đơn vị cho '%s'| (%s)"
 #: common/libeval_compiler/libeval_compiler.cpp:1120
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "Nhập không khớp giữa '%s' và %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "Nhập không khớp giữa %lf và '%s'"
 
 #: common/pgm_base.cpp:170
 msgid "No default editor found, you must choose it"
@@ -9095,32 +9097,32 @@ msgstr "Trường phải có tên."
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:1001
 #, c-format
 msgid "Field name \"%s\" already in use."
-msgstr ""
+msgstr "Tên trường \"%s\" đã được sử dụng."
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:1205
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:753
 msgid "Save changes?"
-msgstr ""
+msgstr "Lưu thay đổi?"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:31
 msgid "Group symbols"
-msgstr ""
+msgstr "Ký hiệu nhóm"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:33
 msgid "Group symbols together based on common properties"
-msgstr ""
+msgstr "Nhóm các ký hiệu lại với nhau dựa trên các thuộc tính chung"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:53
 msgid "Add Field..."
-msgstr ""
+msgstr "Thêm Trường..."
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.h:76
 msgid "Symbol Fields"
-msgstr ""
+msgstr "Trường ký hiệu"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
-msgstr ""
+msgstr "Các trường ký hiệu khác"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Wires && wire labels"
