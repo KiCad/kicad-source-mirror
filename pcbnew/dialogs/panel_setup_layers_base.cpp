@@ -23,7 +23,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	bSizerLayerCnt->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_addUserDefinedLayerButton = new wxButton( this, wxID_ANY, _("Add User Defined Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_addUserDefinedLayerButton = new wxButton( this, wxID_ANY, _("Add User Defined Layer..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLayerCnt->Add( m_addUserDefinedLayerButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
@@ -46,6 +46,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_CrtYdFrontCheckBox, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxLEFT, 5 );
 
 	m_CrtYdFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("CrtYd_Front"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CrtYdFrontName->SetMinSize( wxSize( 160,-1 ) );
+
 	m_LayerListFlexGridSizer->Add( m_CrtYdFrontName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_CrtYdFrontStaticText = new wxStaticText( m_LayersListPanel, ID_CRTYDFRONTCHOICE, _("Off-board, testing"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -814,7 +816,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	// Connect Events
 	m_addUserDefinedLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::addUserDefinedLayer ), NULL, this );
-	m_addUserDefinedLayerButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_LAYERS_BASE::onUpdateAddUserDefinedLayer ), NULL, this );
 	m_CrtYdFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
 	m_FabFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_AdhesFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
@@ -880,7 +881,6 @@ PANEL_SETUP_LAYERS_BASE::~PANEL_SETUP_LAYERS_BASE()
 {
 	// Disconnect Events
 	m_addUserDefinedLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::addUserDefinedLayer ), NULL, this );
-	m_addUserDefinedLayerButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_LAYERS_BASE::onUpdateAddUserDefinedLayer ), NULL, this );
 	m_CrtYdFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
 	m_FabFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_AdhesFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );

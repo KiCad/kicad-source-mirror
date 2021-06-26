@@ -55,15 +55,15 @@ public:
      * @param aTitle The title shown on top.
      * @param aItemHeaders an optional array containing the column header names for the dialog.
      * @param aItemList A wxArrayString of the list of elements.
-     * @param aRefText An item name if an item must be preselected.
+     * @param aPreselectText An item name if an item must be preselected.
      */
-    EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
-                     const wxArrayString& aItemHeaders,
+    EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, const wxArrayString& aItemHeaders,
                      const std::vector<wxArrayString>& aItemList,
-                     const wxString& aRefText );
+                     const wxString& aPreselectText = wxEmptyString );
 
     void SetListLabel( const wxString& aLabel );
     void SetOKLabel( const wxString& aLabel );
+    void HideFilter();
 
     void Append( const wxArrayString& aItemStr );
     void InsertItems( const std::vector<wxArrayString>& aItemList, int aPosition = 0 );
@@ -75,6 +75,8 @@ public:
      * @return the selected text from \a aColumn.
      */
     wxString GetTextSelection( int aColumn = 0 );
+
+    long GetSelection();
 
 private:
     void onListItemActivated( wxListEvent& event ) override;

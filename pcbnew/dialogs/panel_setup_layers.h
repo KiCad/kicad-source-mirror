@@ -110,8 +110,6 @@ private:
     bool TransferDataFromWindow() override;
     virtual void addUserDefinedLayer( wxCommandEvent& aEvent ) override;
 
-    virtual void onUpdateAddUserDefinedLayer( wxUpdateUIEvent& event ) override;
-
     bool testLayerNames();
 
     /**
@@ -123,8 +121,6 @@ private:
      * Return a list of layers in use in footprints, and therefore not removable.
      */
     LSEQ getNonRemovableLayers();
-
-    wxArrayString getAvailableUserDefinedLayers();
 
     PANEL_SETUP_LAYERS_CTLs getCTLs( LAYER_NUM aLayerNumber );
     wxControl*  getName( LAYER_NUM aLayer );

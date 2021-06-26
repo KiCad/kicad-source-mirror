@@ -2359,7 +2359,7 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
             }
         }
 
-        EDA_LIST_DIALOG dlg( m_frame, _( "Delete Preset" ), headers, items, wxEmptyString );
+        EDA_LIST_DIALOG dlg( m_frame, _( "Delete Preset" ), headers, items );
         dlg.SetListLabel( _( "Select preset:" ) );
 
         if( dlg.ShowModal() == wxID_OK )

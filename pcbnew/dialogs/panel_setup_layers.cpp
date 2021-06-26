@@ -36,6 +36,7 @@
 
 #include <wx/choicdlg.h>
 #include <wx/treebook.h>
+#include <dialog_helpers.h>
 
 
 // some define to choose how copper layers widgets are shown
@@ -790,20 +791,44 @@ bool PANEL_SETUP_LAYERS::CheckCopperLayerCount( BOARD* aWorkingBoard, BOARD* aIm
 
 void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
 {
-    LSEQ seq;
-    wxArrayString availableUserDefinedLayers = getAvailableUserDefinedLayers();
+    wxArrayString headers;
+    headers.Add( _( "Layers" ) );
 
-    wxCHECK( !availableUserDefinedLayers.IsEmpty(), /* void */ );
+    // Build the available user-defined layers list:
+    std::vector<wxArrayString> list;
 
-    wxSingleChoiceDialog dlg( this, _( "Select user defined layer to add to board layer set" ),
-            _( "Select Layer" ), availableUserDefinedLayers );
+    for( LSEQ seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
+    {
+        wxCheckBox* checkBox = getCheckBox( *seq );
 
-    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetStringSelection().IsEmpty() )
+        if( checkBox && checkBox->IsShown() )
+            continue;
+
+        wxArrayString available_user_layer;
+        available_user_layer.Add( LayerName( *seq ) );
+
+        list.emplace_back( available_user_layer );
+    }
+
+    if( list.empty() )
+    {
+        DisplayErrorMessage( m_parentDialog,
+                             _( "All user-defined layers have already been added." ) );
         return;
+    }
+
+    EDA_LIST_DIALOG dlg( m_parentDialog, _( "Add User-defined Layer" ), headers, list );
+    dlg.SetListLabel( _( "Select layer to add:" ) );
+    dlg.HideFilter();
+
+    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetTextSelection().IsEmpty() )
+        return;
+
+    LSEQ seq;
 
     for( seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
     {
-        if( LayerName( *seq ) == dlg.GetStringSelection() )
+        if( LayerName( *seq ) == dlg.GetTextSelection() )
             break;
     }
 
@@ -830,27 +855,3 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
 }
 
 
-void PANEL_SETUP_LAYERS::onUpdateAddUserDefinedLayer( wxUpdateUIEvent& event )
-{
-    wxArrayString availableUserDefinedLayers = getAvailableUserDefinedLayers();
-
-    event.Enable( !availableUserDefinedLayers.IsEmpty() );
-}
-
-
-wxArrayString PANEL_SETUP_LAYERS::getAvailableUserDefinedLayers()
-{
-    wxArrayString availableUserDefinedLayers;
-
-    for( LSEQ seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
-    {
-        wxCheckBox* checkBox = getCheckBox( *seq );
-
-        if( checkBox && checkBox->IsShown() )
-            continue;
-
-        availableUserDefinedLayers.Add( LayerName( *seq ) );
-    }
-
-    return availableUserDefinedLayers;
-}

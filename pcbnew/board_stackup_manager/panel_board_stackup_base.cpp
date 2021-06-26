@@ -42,10 +42,10 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	bTopSizer->Add( 40, 0, 1, wxEXPAND, 5 );
 
-	m_buttonAddDielectricLayer = new wxButton( this, wxID_ANY, _("Add Dielectric Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonAddDielectricLayer = new wxButton( this, wxID_ANY, _("Add Dielectric Layer..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bTopSizer->Add( m_buttonAddDielectricLayer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_buttonRemoveDielectricLayer = new wxButton( this, wxID_ANY, _("Remove Dielectric Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRemoveDielectricLayer = new wxButton( this, wxID_ANY, _("Remove Dielectric Layer..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bTopSizer->Add( m_buttonRemoveDielectricLayer, 0, wxEXPAND|wxALL, 5 );
 
 

@@ -353,7 +353,6 @@ class PANEL_SETUP_LAYERS_BASE : public wxPanel
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void addUserDefinedLayer( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onUpdateAddUserDefinedLayer( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void DenyChangeCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 
