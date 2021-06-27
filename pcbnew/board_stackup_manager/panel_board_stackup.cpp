@@ -773,6 +773,9 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
 void PANEL_SETUP_BOARD_STACKUP::rebuildLayerStackPanel()
 {
+    wxWindowUpdateLocker locker( m_scGridWin );
+    m_scGridWin->Hide();
+
     // Rebuild the stackup for the dialog, after dielectric parameters list is modified
     // (added/removed):
 
@@ -832,13 +835,12 @@ void PANEL_SETUP_BOARD_STACKUP::rebuildLayerStackPanel()
     showOnlyActiveLayers();
 
     m_scGridWin->Layout();
+    m_scGridWin->Show();
 }
 
 
 void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel( bool aCreatedInitialStackup )
 {
-    wxWindowUpdateLocker locker( m_scGridWin );
-
     // Build a full stackup for the dialog, with a active copper layer count
     // = current board layer count to calculate a reasonable default stackup:
     if( aCreatedInitialStackup )
@@ -894,7 +896,6 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel( bool aCreatedInitialStacku
     }
 
     updateIconColor();
-    m_scGridWin->Layout();
 }
 
 
