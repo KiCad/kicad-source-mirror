@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-06-20 16:33+0000\n"
-"Last-Translator: Radek K <radek.kzn@gmail.com>\n"
+"PO-Revision-Date: 2021-06-28 09:32+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7\n"
+"X-Generator: Weblate 4.7.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -17637,9 +17637,8 @@ msgid "Sketch Flashed Items"
 msgstr "Vybrat položky"
 
 #: gerbview/tools/gerbview_actions.cpp:150
-#, fuzzy
 msgid "Show flashed items in outline mode"
-msgstr "Zobrazit plošky jako obrys"
+msgstr "Zobrazit blikající prvky v režimu osnovy"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 msgid "Sketch Polygons"
@@ -21170,7 +21169,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Pouzdra vzadu"
+"Pouzdra dole"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:878
 msgid "Footprint not found in changelist"
@@ -21244,7 +21243,7 @@ msgstr "Opakované očíslování:"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
 #: pcbnew/footprint.cpp:841
 msgid "Front"
-msgstr "Horní"
+msgstr "Nahoře"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:181
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
@@ -21253,9 +21252,8 @@ msgid "Back"
 msgstr "Dole"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
-#, fuzzy
 msgid "Front reference start:"
-msgstr "Výchozí označení reference:"
+msgstr "Horní reference začíná:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
 msgid "Starting reference designation for front."
@@ -21281,9 +21279,8 @@ msgid "Default is 1"
 msgstr "Výchozí je 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:220
-#, fuzzy
 msgid "Back reference start:"
-msgstr "Výchozí označení reference:"
+msgstr "Dolní reference začíná:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:222
 msgid ""
@@ -21298,9 +21295,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
-#, fuzzy
 msgid "Remove front prefix"
-msgstr "Odebrat z výběru"
+msgstr "Odstraňte předponu nahoře"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:233
 msgid ""
@@ -21309,9 +21305,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:237
-#, fuzzy
 msgid "Remove back prefix"
-msgstr "Smazat roh"
+msgstr "Odstraňte předponu dole"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:238
 msgid ""
@@ -21391,9 +21386,8 @@ msgid "Physical Stackup"
 msgstr "Strana desky"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:92
-#, fuzzy
 msgid "Board Finish"
-msgstr "Obrys desky"
+msgstr "Povrchová úprava desky"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:93 pcbnew/dialogs/dialog_plot.cpp:952
 msgid "Solder Mask/Paste"
@@ -21614,9 +21608,8 @@ msgid "Start Layer"
 msgstr "První vrstva"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:237
-#, fuzzy
 msgid "Stop Layer"
-msgstr "Zaměnit vrstvy"
+msgstr "Poslední vrstva"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:258
 msgid "Drill Holes"
@@ -21865,9 +21858,10 @@ msgid "Clearance:"
 msgstr "Izolační mezera:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
-#, fuzzy
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
-msgstr "Nastavte oddělovací mezery na 0 pro použití hodnot tříd sítě."
+msgstr ""
+"Izolační mezera mědi pro tuto zónu (nastavit na 0 pro použití izolační "
+"mezery třídy sítě)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:216
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
@@ -28562,9 +28556,9 @@ msgid "Missing version number."
 msgstr "Chybí číslo verze."
 
 #: pcbnew/drc/drc_rule_parser.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr "Nerozpoznaná položka '%s'.| Očekávané číslo verze"
+msgstr "Nerozpoznaná položka '%s'.| Očekávané číslo verze."
 
 #: pcbnew/drc/drc_rule_parser.cpp:144 pcbnew/drc/drc_rule_parser.cpp:223
 #: pcbnew/drc/drc_rule_parser.cpp:365 pcbnew/drc/drc_rule_parser.cpp:386
@@ -29281,9 +29275,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "Zobrazit vrstvy pájecí pasty"
 
 #: pcbnew/footprint.cpp:2092 pcbnew/pad.cpp:1508 pcbnew/zone.cpp:1437
-#, fuzzy
 msgid "Thermal Relief Width"
-msgstr "Šířka propojení s mědí:"
+msgstr "Šířka tepelného reliefu"
 
 #: pcbnew/footprint.cpp:2095 pcbnew/pad.cpp:1511 pcbnew/zone.cpp:1434
 #, fuzzy
