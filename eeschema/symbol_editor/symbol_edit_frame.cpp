@@ -822,7 +822,7 @@ bool SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 
     if( m_libMgr->LibraryExists( libName ) )
     {
-        DisplayError( this, wxString::Format( _( "Library \"%s\" already exists" ), libName ) );
+        DisplayError( this, wxString::Format( _( "Library '%s' already exists." ), libName ) );
         return false;
     }
 
@@ -831,7 +831,7 @@ bool SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
         if( !m_libMgr->CreateLibrary( fn.GetFullPath(), libTable ) )
         {
             DisplayError( this, wxString::Format( _( "Could not create the library file '%s'.\n"
-                                                     "Check write permission." ),
+                                                     "Make sure you have write permissions and try again." ),
                                                   fn.GetFullPath() ) );
             return false;
         }
@@ -1031,7 +1031,7 @@ bool SYMBOL_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxStr
 
         if( !wxCopyFile( aOriginalFile.GetFullPath(), backupFileName.GetFullPath() ) )
         {
-            DisplayError( this, wxString::Format( _( "Failed to save backup to \"%s\"" ),
+            DisplayError( this, wxString::Format( _( "Failed to save backup to '%s'." ),
                                                   backupFileName.GetFullPath() ) );
             return false;
         }

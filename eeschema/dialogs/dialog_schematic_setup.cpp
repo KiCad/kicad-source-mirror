@@ -147,7 +147,7 @@ void DIALOG_SCHEMATIC_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
     if( !m_frame->GetSettingsManager()->LoadProject( projectFn.GetFullPath(), false ) )
     {
         wxString msg = wxString::Format( _( "Error importing settings from project:\n"
-                                            "Project file %s could not be loaded" ),
+                                            "Project file %s could not be loaded." ),
                                          projectFn.GetFullPath() );
         DisplayErrorMessage( this, msg );
 

@@ -261,7 +261,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
 
     if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
     {
-        wxString msg = wxString::Format( _( "Could not write plot files to folder \"%s\"." ),
+        wxString msg = wxString::Format( _( "Could not write plot files to folder '%s'." ),
                                          outputDir.GetPath() );
         DisplayError( this, msg );
         return;
@@ -288,11 +288,12 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
 
         if( CreateSVGFile( svgPath ) )
         {
-            reporter.Report( wxString::Format( _( "Exported \"%s\"." ), svgPath ), RPT_SEVERITY_ACTION );
+            reporter.Report( wxString::Format( _( "Exported '%s'." ), svgPath ),
+                             RPT_SEVERITY_ACTION );
         }
         else    // Error
         {
-            reporter.Report( wxString::Format( _( "Unable to create file \"%s\"." ), svgPath ),
+            reporter.Report( wxString::Format( _( "Unable to create '%s'." ), svgPath ),
                              RPT_SEVERITY_ERROR );
         }
 

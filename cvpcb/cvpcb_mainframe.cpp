@@ -531,7 +531,7 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
     // Test for validity of the requested footprint
     if( !fpid.empty() && !fpid.IsValid() )
     {
-        wxString msg = wxString::Format( _( "\"%s\" is not a valid footprint." ),
+        wxString msg = wxString::Format( _( "'%s' is not a valid footprint." ),
                                          fpid.Format().wx_str() );
         DisplayErrorMessage( this, msg );
         return;
@@ -841,7 +841,7 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA( bool aClearHighligntOnly )
     // Now highlight the selected symbol:
     COMPONENT* symbol = m_netlist.GetComponent( selection );
 
-    packet = StrPrintf( "$PART: \"%s\"", TO_UTF8( symbol->GetReference() ) );
+    packet = std::string( "$PART: \"" ) + TO_UTF8( symbol->GetReference() ) + "\"";
 
     if( Kiface().IsSingle() )
         SendCommand( MSG_TO_SCH, packet );

@@ -735,7 +735,7 @@ void EDA_3D_VIEWER_FRAME::takeScreenshot( wxCommandEvent& event )
         {
             wxString msg;
 
-            msg.Printf( _( "Insufficient permissions required to save file\n%s" ), fullFileName );
+            msg.Printf( _( "Insufficient permissions to save file '%s'." ), fullFileName );
             wxMessageBox( msg, _( "Error" ), wxOK | wxICON_ERROR, this );
             return;
         }

@@ -1309,9 +1309,10 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
         aReader.ReadFile( stepEntry, 0, stepContent.get(), stepSize );
 
         wxFileName storagePath( altiumModelsPath.GetPath(), elem.name );
+
         if( !storagePath.IsDirWritable() )
         {
-            wxLogError( _( "You do not have write permissions to save file '%s'." ),
+            wxLogError( _( "Insufficient permissions to save file '%s'." ),
                         storagePath.GetFullPath() );
             continue;
         }

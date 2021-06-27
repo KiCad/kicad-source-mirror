@@ -1551,7 +1551,7 @@ bool SIM_PLOT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         if( filename.GetName().IsEmpty() )
             filename.SetFullName( Prj().GetProjectName() + wxT( ".wbk" ) );
 
-        wxString msg = _( "Save changes to \"%s\" before closing?" );
+        wxString msg = _( "Save changes to '%s' before closing?" );
 
         return HandleUnsavedChanges( this, wxString::Format( msg, filename.GetFullName() ), 
                 [&]()->bool

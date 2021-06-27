@@ -923,7 +923,7 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
 
         if( it == aSymbolInstances.end() )
         {
-            wxLogTrace( traceSchSheetPaths, "No symbol instance found for path \"%s\"", path );
+            wxLogTrace( traceSchSheetPaths, "No symbol instance found for path '%s'", path );
             continue;
         }
 
@@ -954,7 +954,7 @@ void SCH_SHEET_LIST::UpdateSheetInstances( const std::vector<SCH_SHEET_INSTANCE>
 
         if( it == aSheetInstances.end() )
         {
-            wxLogTrace( traceSchSheetPaths, "No sheet instance found for path \"%s\"",
+            wxLogTrace( traceSchSheetPaths, "No sheet instance found for path '%s'",
                         instance.PathWithoutRootUuid().AsString() );
             continue;
         }

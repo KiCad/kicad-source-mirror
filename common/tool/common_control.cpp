@@ -213,7 +213,7 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 
         if( !helpFile )
         {
-            msg = wxString::Format( _( "Help file \"%s\" or\n\"%s\" could not be found.\n"
+            msg = wxString::Format( _( "Help file '%s' or\n'%s' could not be found.\n"
                                        "Do you want to access the KiCad online help?" ),
                                     names[0], names[1] );
             wxMessageDialog dlg( NULL, msg, _( "File Not Found" ),
@@ -233,7 +233,7 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 
         if( !helpFile )
         {
-            msg = wxString::Format( _( "Help file \"%s\" could not be found.\n"
+            msg = wxString::Format( _( "Help file '%s' could not be found.\n"
                                        "Do you want to access the KiCad online help?" ),
                                     base_name );
             wxMessageDialog dlg( NULL, msg, _( "File Not Found" ),

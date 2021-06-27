@@ -356,7 +356,7 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
 
         if( fp == nullptr )
         {
-            wxMessageBox( wxString::Format( _( "Unable to create or write file '%s'." ),
+            wxMessageBox( wxString::Format( _( "Insufficient permissions to write file '%s'." ),
                                             dlg.GetPath() ) );
             return;
         }

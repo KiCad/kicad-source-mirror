@@ -59,7 +59,7 @@ public:
         m_initial_help( INITIAL_HELP ),
         m_grid_widths_dirty( true )
     {
-        SetTitle( wxString::Format( _( "Options for Library \"%s\"" ), aNickname ) );
+        SetTitle( wxString::Format( _( "Options for Library '%s'" ), aNickname ) );
 
         // Give a bit more room for combobox editors
         m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );

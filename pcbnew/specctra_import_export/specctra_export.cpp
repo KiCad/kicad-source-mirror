@@ -1026,7 +1026,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             if( footprint->GetReference() == wxEmptyString )
             {
                 THROW_IO_ERROR( wxString::Format(
-                        _( "Symbol with value of \"%s\" has empty reference id." ),
+                        _( "Symbol with value of '%s' has empty reference id." ),
                         footprint->GetValue() ) );
             }
 
@@ -1036,7 +1036,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             if( !refpair.second )      // insert failed
             {
                 THROW_IO_ERROR( wxString::Format(
-                        _( "Multiple symbols have identical reference IDs of \"%s\"." ),
+                        _( "Multiple symbols have identical reference IDs of '%s'." ),
                         footprint->GetReference() ) );
             }
         }

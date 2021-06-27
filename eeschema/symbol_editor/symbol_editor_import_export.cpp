@@ -163,7 +163,7 @@ void SYMBOL_EDIT_FRAME::ExportSymbol()
 
     if( fn.Exists() && !fn.IsDirWritable() )
     {
-        msg.Printf( _( "Write permissions are required to save library '%s'." ),
+        msg.Printf( _( "Insufficient permissions to save library '%s'." ),
                     fn.GetFullPath() );
         DisplayError( this, msg );
         return;

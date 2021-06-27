@@ -225,9 +225,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     {
         wxString msg;
 
-        msg.Printf( _( "Cannot write to folder '%s'." ), fn.GetPath() );
+        msg.Printf( _( "Insufficient permissions to write to folder '%s'." ), fn.GetPath() );
         wxMessageDialog msgDlg( m_frame, msg, _( "Error" ), wxICON_ERROR | wxOK | wxCENTER );
-        msgDlg.SetExtendedMessage( _( "Make sure you have write permissions and try again." ) );
         msgDlg.ShowModal();
         return -1;
     }
@@ -536,7 +535,7 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
 
     if( !wxMkdir( newProjectDir.GetFullPath() ) )
     {
-        msg.Printf( _( "Directory '%s' could not be created.\n\n"
+        msg.Printf( _( "Folder '%s' could not be created.\n\n"
                        "Please make sure you have write permissions and try again." ),
                     newProjectDir.GetPath() );
         DisplayErrorMessage( m_frame, msg );
@@ -545,10 +544,9 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
 
     if( !newProjectDir.IsDirWritable() )
     {
-        msg.Printf( _( "Cannot write to folder '%s'." ), newProjectDir.GetFullPath() );
+        msg.Printf( _( "Insufficient permissions to write to folder '%s'." ),
+                    newProjectDir.GetFullPath() );
         wxMessageDialog msgDlg( m_frame, msg, _( "Error!" ), wxICON_ERROR | wxOK | wxCENTER );
-        msgDlg.SetExtendedMessage( _( "Please check your access permissions to this folder "
-                                      "and try again." ) );
         msgDlg.ShowModal();
         return -1;
     }

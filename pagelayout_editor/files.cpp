@@ -169,12 +169,12 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     case wxID_SAVE:
         if( !SaveDrawingSheetFile( filename ) )
         {
-            msg.Printf( _( "Unable to write \"%s\"" ), filename );
+            msg.Printf( _( "Unable to write '%s'." ), filename );
             DisplayErrorMessage( this, msg );
         }
         else
         {
-            msg.Printf( _("File \"%s\" saved."), filename );
+            msg.Printf( _("File '%s' saved."), filename );
             SetStatusText( msg );
         }
         break;

@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_library.cpp
- */
-
 #include <algorithm>
 #include <kiface_i.h>
 #include <eda_base_frame.h>
@@ -47,12 +43,6 @@
 #include <wx/log.h>
 #include <wx/progdlg.h>
 #include <wx/tokenzr.h>
-#include <wx/regex.h>
-
-#define DUPLICATE_NAME_MSG  \
-    _(  "Library \"%s\" has duplicate entry name \"%s\".\n" \
-        "This may cause some unexpected behavior when loading symbols into a schematic." )
-
 
 SYMBOL_LIB::SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
                     SCH_IO_MGR::SCH_FILE_T aPluginType ) :
@@ -581,9 +571,10 @@ void SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
         }
         catch( const IO_ERROR& ioe )
         {
-            wxString msg =
-                    wxString::Format( _( "Symbol library \"%s\" failed to load.\nError: %s" ),
-                            cache_name, ioe.What() );
+            wxString msg = wxString::Format( _( "Error loading symbol library '%s'." )
+                                             + wxS( "\n%s" ),
+                                             cache_name,
+                                             ioe.What() );
 
             THROW_IO_ERROR( msg );
         }

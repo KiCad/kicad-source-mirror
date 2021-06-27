@@ -2706,8 +2706,10 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
         return;
 
     if( !fn.IsFileReadable() )
-        THROW_IO_ERROR( wxString::Format( _( "user does not have permission to read library "
-                                             "document file \"%s\"" ), fn.GetFullPath() ) );
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Insufficient permissions to read library '%s'." ),
+                                          fn.GetFullPath() ) );
+    }
 
     FILE_LINE_READER reader( fn.GetFullPath() );
 

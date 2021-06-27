@@ -979,7 +979,7 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPER
 
     if( !fn.IsDirWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "user does not have permission to delete directory \"%s\"" ),
+        THROW_IO_ERROR( wxString::Format( _( "Insufficient permissions to delete folder '%s'." ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -987,7 +987,7 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPER
 
     if( dir.HasSubDirs() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "library directory \"%s\" has unexpected sub-directories" ),
+        THROW_IO_ERROR( wxString::Format( _( "Library folder '%s' has unexpected sub-folders." ),
                                           aLibraryPath.GetData() ) );
     }
 

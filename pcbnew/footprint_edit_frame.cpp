@@ -619,7 +619,7 @@ bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         }
 
         wxString footprintName = GetBoard()->GetFirstFootprint()->GetFPID().GetLibItemName();
-        wxString msg = _( "Save changes to \"%s\" before closing?" );
+        wxString msg = _( "Save changes to '%s' before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, footprintName ),
                                    [&]() -> bool

@@ -942,7 +942,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     if( !IsWritable( pcbFileName ) )
     {
-        wxString msg = wxString::Format( _( "No access rights to write to file \"%s\"" ),
+        wxString msg = wxString::Format( _( "Insufficient permissions to write file '%s'." ),
                                          pcbFileName.GetFullPath() );
 
         DisplayError( this, msg );
@@ -1081,7 +1081,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
 
     if( !IsWritable( pcbFileName ) )
     {
-        DisplayError( this, wxString::Format( _( "No access rights to write to file '%s'." ),
+        DisplayError( this, wxString::Format( _( "Insufficient permissions to write file '%s'." ),
                                               pcbFileName.GetFullPath() ) );
         return false;
     }

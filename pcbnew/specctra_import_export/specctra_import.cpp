@@ -163,9 +163,8 @@ PCB_TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
 
     if( layerNdx == -1 )
     {
-        wxString layerName = FROM_UTF8( aPath->layer_id.c_str() );
-        THROW_IO_ERROR(
-                wxString::Format( _( "Session file uses invalid layer id \"%s\"" ), layerName ) );
+        THROW_IO_ERROR( wxString::Format( _( "Session file uses invalid layer id '%s'." ),
+                                          FROM_UTF8( aPath->layer_id.c_str() ) ) );
     }
 
     PCB_TRACK* track = new PCB_TRACK( m_sessionBoard );

@@ -338,7 +338,7 @@ void IPC356D_WRITER::Write( const wxString& aFilename )
     if( ( file = wxFopen( aFilename, wxT( "wt" ) ) ) == nullptr )
     {
         wxString details;
-        details.Printf( "The file %s could not be opened for writing", aFilename );
+        details.Printf( "The file %s could not be opened for writing.", aFilename );
         DisplayErrorMessage( m_parent, "Could not write IPC-356D file!", details );
         return;
     }

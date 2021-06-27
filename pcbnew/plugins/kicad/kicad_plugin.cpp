@@ -169,13 +169,13 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
 
     if( !m_lib_path.DirExists() && !m_lib_path.Mkdir() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Cannot create footprint library path \"%s\"" ),
+        THROW_IO_ERROR( wxString::Format( _( "Cannot create footprint library path '%s'." ),
                                           m_lib_raw_path ) );
     }
 
     if( !m_lib_path.IsDirWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Footprint library path \"%s\" is read only" ),
+        THROW_IO_ERROR( wxString::Format( _( "Footprint library path '%s' is read only." ),
                                           m_lib_raw_path ) );
     }
 
@@ -195,7 +195,7 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
         // Allow file output stream to go out of scope to close the file stream before
         // renaming the file.
         {
-            wxLogTrace( traceKicadPcbPlugin, wxT( "Creating temporary library file %s" ),
+            wxLogTrace( traceKicadPcbPlugin, wxT( "Creating temporary library file '%s'." ),
                     tempFileName );
 
             FILE_OUTPUTFORMATTER formatter( tempFileName );
@@ -213,9 +213,9 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
 
         if( !wxRenameFile( tempFileName, fn.GetFullPath() ) )
         {
-            wxString msg = wxString::Format(
-                    _( "Cannot rename temporary file \"%s\" to footprint library file \"%s\"" ),
-                    tempFileName, fn.GetFullPath() );
+            wxString msg = wxString::Format( _( "Cannot rename temporary file '%s' to '%s'" ),
+                                             tempFileName,
+                                             fn.GetFullPath() );
             THROW_IO_ERROR( msg );
         }
 #endif
@@ -296,7 +296,7 @@ void FP_CACHE::Remove( const wxString& aFootprintName )
 
     if( it == m_footprints.end() )
     {
-        wxString msg = wxString::Format( _( "library \"%s\" has no footprint \"%s\" to delete" ),
+        wxString msg = wxString::Format( _( "Library '%s' has no footprint '%s'." ),
                                          m_lib_raw_path,
                                          aFootprintName );
         THROW_IO_ERROR( msg );
@@ -2400,7 +2400,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
     {
         if( !m_cache->Exists() )
         {
-            const wxString msg = wxString::Format( _( "Library \"%s\" does not exist.\n"
+            const wxString msg = wxString::Format( _( "Library '%s' does not exist.\n"
                                                       "Would you like to create it?"),
                                                       aLibraryPath );
 
@@ -2412,7 +2412,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
         }
         else
         {
-            wxString msg = wxString::Format( _( "Library \"%s\" is read only" ), aLibraryPath );
+            wxString msg = wxString::Format( _( "Library '%s' is read only." ), aLibraryPath );
             THROW_IO_ERROR( msg );
         }
     }
@@ -2430,13 +2430,13 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
 
     if( !fn.IsOk() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Footprint file name \"%s\" is not valid." ),
+        THROW_IO_ERROR( wxString::Format( _( "Footprint file name '%s' is not valid." ),
                                           fn.GetFullPath() ) );
     }
 
     if( fn.FileExists() && !fn.IsFileWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "No write permissions to delete file \"%s\"" ),
+        THROW_IO_ERROR( wxString::Format( _( "Insufficient permissions to delete '%s'." ),
                                           fn.GetFullPath() ) );
     }
 
@@ -2488,7 +2488,7 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 
     if( !m_cache->IsWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library \"%s\" is read only." ),
+        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only." ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -2507,7 +2507,7 @@ void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES*
 {
     if( wxDir::Exists( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Cannot overwrite library path \"%s\"." ),
+        THROW_IO_ERROR( wxString::Format( _( "Cannot overwrite library path '%s'." ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -2532,8 +2532,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
 
     if( !fn.IsDirWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "User does not have permission to delete directory "
-                                             "\"%s\"." ),
+        THROW_IO_ERROR( wxString::Format( _( "Insufficient permissions to delete folder '%s'." ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -2541,8 +2540,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
 
     if( dir.HasSubDirs() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library directory \"%s\" has unexpected "
-                                             "sub-directories." ),
+        THROW_IO_ERROR( wxString::Format( _( "Library folder '%s' has unexpected sub-folders." ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -2561,9 +2559,10 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
 
             if( tmp.GetExt() != KiCadFootprintFileExtension )
             {
-                THROW_IO_ERROR( wxString::Format( _( "Unexpected file \"%s\" was found in "
-                                                     "library path \"%s\"." ),
-                                                  files[i].GetData(), aLibraryPath.GetData() ) );
+                THROW_IO_ERROR( wxString::Format( _( "Unexpected file '%s' found in library "
+                                                     "path '%s'." ),
+                                                  files[i].GetData(),
+                                                  aLibraryPath.GetData() ) );
             }
         }
 
@@ -2571,14 +2570,14 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
             wxRemoveFile( files[i] );
     }
 
-    wxLogTrace( traceKicadPcbPlugin, wxT( "Removing footprint library \"%s\"." ),
+    wxLogTrace( traceKicadPcbPlugin, wxT( "Removing footprint library '%s'." ),
                 aLibraryPath.GetData() );
 
     // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog
     // we don't want that.  we want bare metal portability with no UI here.
     if( !wxRmdir( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Footprint library \"%s\" cannot be deleted." ),
+        THROW_IO_ERROR( wxString::Format( _( "Footprint library '%s' cannot be deleted." ),
                                           aLibraryPath.GetData() ) );
     }
 
