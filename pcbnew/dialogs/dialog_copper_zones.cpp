@@ -31,11 +31,12 @@
 #include <bitmaps.h>
 #include <widgets/unit_binder.h>
 #include <zone.h>
+#include <pad.h>
 #include <board.h>
 #include <trigo.h>
 
 #include <dialog_copper_zones_base.h>
-
+#include <kicad_string.h>
 
 class DIALOG_COPPER_ZONE : public DIALOG_COPPER_ZONE_BASE
 {
@@ -43,29 +44,31 @@ public:
     DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings );
 
 private:
-    PCB_BASE_FRAME* m_Parent;
+    PCB_BASE_FRAME*  m_Parent;
 
-    bool            m_settingsExported;     // settings will be written to all other zones
+    bool             m_settingsExported;     // settings will be written to all other zones
 
-    ZONE_SETTINGS   m_settings;
-    ZONE_SETTINGS*  m_ptr;
+    ZONE_SETTINGS    m_settings;
+    ZONE_SETTINGS*   m_ptr;
 
-    bool            m_NetSortingByPadCount;
-    long            m_NetFiltering;
-    static wxString m_netNameShowFilter;    // the filter to show nets (default * "*").  Static
-                                            // to keep this pattern for an entire Pcbnew session
-    int             m_cornerSmoothingType;
+    std::vector<int> m_listIndexToNetCodeMap;
 
-    UNIT_BINDER     m_cornerRadius;
-    UNIT_BINDER     m_clearance;
-    UNIT_BINDER     m_minWidth;
-    UNIT_BINDER     m_antipadClearance ;
-    UNIT_BINDER     m_spokeWidth;
+    bool             m_netSortingByPadCount;
+    long             m_netFiltering;
+    static wxString  m_netNameShowFilter;    // the filter to show nets (default * "*").  Static
+                                             // to keep this pattern for an entire Pcbnew session
+    int              m_cornerSmoothingType;
 
-    UNIT_BINDER     m_gridStyleRotation;
-    UNIT_BINDER     m_gridStyleThickness;
-    UNIT_BINDER     m_gridStyleGap;
-    UNIT_BINDER     m_islandThreshold;
+    UNIT_BINDER      m_cornerRadius;
+    UNIT_BINDER      m_clearance;
+    UNIT_BINDER      m_minWidth;
+    UNIT_BINDER      m_antipadClearance ;
+    UNIT_BINDER      m_spokeWidth;
+
+    UNIT_BINDER      m_gridStyleRotation;
+    UNIT_BINDER      m_gridStyleThickness;
+    UNIT_BINDER      m_gridStyleGap;
+    UNIT_BINDER      m_islandThreshold;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -124,8 +127,8 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
 
     m_settingsExported = false;
 
-    m_NetFiltering = false;
-    m_NetSortingByPadCount = true;      // false = alphabetic sort, true = pad count sort
+    m_netFiltering = false;
+    m_netSortingByPadCount = true;      // false = alphabetic sort, true = pad count sort
 
     m_sdbSizerOK->SetDefault();
 
@@ -188,21 +191,21 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     m_islandThresholdUnits->Enable( val );
 
     wxString netNameDoNotShowFilter = wxT( "Net-*" );
-    m_NetFiltering = false;
-    m_NetSortingByPadCount = true;
+    m_netFiltering = false;
+    m_netSortingByPadCount = true;
 
     PCBNEW_SETTINGS* cfg = m_Parent->GetPcbNewSettings();
 
     int opt = cfg->m_Zones.net_sort_mode;
-    m_NetFiltering = opt >= 2;
-    m_NetSortingByPadCount = opt % 2;
+    m_netFiltering = opt >= 2;
+    m_netSortingByPadCount = opt % 2;
 
     netNameDoNotShowFilter = cfg->m_Zones.net_filter;
 
     m_ShowNetNameFilter->SetValue( m_netNameShowFilter );
     m_DoNotShowNetNameFilter->SetValue( netNameDoNotShowFilter );
-    m_showAllNetsOpt->SetValue( !m_NetFiltering );
-    m_sortByPadsOpt->SetValue( m_NetSortingByPadCount );
+    m_showAllNetsOpt->SetValue( !m_netFiltering );
+    m_sortByPadsOpt->SetValue( m_netSortingByPadCount );
 
     // Build list of nets:
     buildAvailableListOfNets();
@@ -420,16 +423,12 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
         return false;
     }
 
-    NETINFO_ITEM* net = nullptr;
+    int netcode = 0;
 
-    // Search net_code for this net, if a net was selected
     if( m_ListNetNameSelection->GetSelection() > 0 )
-    {
-        wxString netname = m_ListNetNameSelection->GetStringSelection();
-        net = m_Parent->GetBoard()->FindNet( netname );
-    }
+        netcode = m_listIndexToNetCodeMap[ m_ListNetNameSelection->GetSelection() ];
 
-    m_settings.m_NetcodeSelection = net ? net->GetNetCode() : 0;
+    m_settings.m_NetcodeSelection = netcode;
 
     m_settings.m_Name = m_tcZoneName->GetValue();
 
@@ -466,17 +465,17 @@ void DIALOG_COPPER_ZONE::OnLayerSelection( wxDataViewEvent& event )
 
 void DIALOG_COPPER_ZONE::OnNetSortingOptionSelected( wxCommandEvent& event )
 {
-    m_NetFiltering = !m_showAllNetsOpt->GetValue();
-    m_NetSortingByPadCount = m_sortByPadsOpt->GetValue();
+    m_netFiltering = !m_showAllNetsOpt->GetValue();
+    m_netSortingByPadCount = m_sortByPadsOpt->GetValue();
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
 
     buildAvailableListOfNets();
 
     auto cfg = m_Parent->GetPcbNewSettings();
 
-    int configValue = m_NetFiltering ? 2 : 0;
+    int configValue = m_netFiltering ? 2 : 0;
 
-    if( m_NetSortingByPadCount )
+    if( m_netSortingByPadCount )
         configValue += 1;
 
     cfg->m_Zones.net_sort_mode = configValue;
@@ -508,20 +507,96 @@ void DIALOG_COPPER_ZONE::ExportSetupToOtherCopperZones( wxCommandEvent& event )
 
 void DIALOG_COPPER_ZONE::OnRunFiltersButtonClick( wxCommandEvent& event )
 {
-    m_NetFiltering = true;
+    m_netFiltering = true;
     m_showAllNetsOpt->SetValue( false );
 
     buildAvailableListOfNets();
 }
 
 
+// The pad count for each netcode, stored in a buffer for a fast access.
+// This is needed by the sort function sortNetsByNodes()
+static std::vector<int> padCountListByNet;
+
+
+// Sort nets by decreasing pad count.
+// For same pad count, sort by alphabetic names
+static bool sortNetsByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
+{
+    int countA = padCountListByNet[ a->GetNetCode() ];
+    int countB = padCountListByNet[ b->GetNetCode() ];
+
+    if( countA == countB )
+        return a->GetNetname() < b->GetNetname();
+    else
+        return countB < countA;
+}
+
+
+// Sort nets by alphabetic names
+static bool sortNetsByNames( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
+{
+    return a->GetNetname() < b->GetNetname();
+}
+
+
 void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
 {
-    wxArrayString   listNetName;
+    NETINFO_LIST& netInfo = m_Parent->GetBoard()->GetNetInfo();
+    wxArrayString listNetName;
+    m_listIndexToNetCodeMap.clear();
 
-    m_Parent->GetBoard()->SortedNetnamesList( listNetName, m_NetSortingByPadCount );
+    if( netInfo.GetNetCount() > 0 )
+    {
+        // Build the list
+        std::vector<NETINFO_ITEM*> netBuffer;
 
-    if( m_NetFiltering )
+        netBuffer.reserve( netInfo.GetNetCount() );
+        int max_netcode = 0;
+
+        for( NETINFO_ITEM* net : netInfo )
+        {
+            int netcode = net->GetNetCode();
+
+            if( netcode > 0 && net->IsCurrent() )
+            {
+                netBuffer.push_back( net );
+                max_netcode = std::max( netcode, max_netcode);
+            }
+        }
+
+        // sort the list
+        if( m_netSortingByPadCount )
+        {
+            // Build the pad count by net:
+            padCountListByNet.clear();
+            std::vector<PAD*> pads = m_Parent->GetBoard()->GetPads();
+
+            padCountListByNet.assign( max_netcode + 1, 0 );
+
+            for( PAD* pad : pads )
+            {
+                int netCode = pad->GetNetCode();
+
+                if( netCode >= 0 )
+                    padCountListByNet[ netCode ]++;
+            }
+
+            sort( netBuffer.begin(), netBuffer.end(), sortNetsByNodes );
+        }
+        else
+        {
+            sort( netBuffer.begin(), netBuffer.end(), sortNetsByNames );
+        }
+
+        for( NETINFO_ITEM* net : netBuffer )
+        {
+            listNetName.Add( UnescapeString( net->GetNetname() ) );
+            m_listIndexToNetCodeMap.push_back( net->GetNetCode() );
+        }
+    }
+
+    if( m_netFiltering )
     {
         wxString doNotShowFilter = m_DoNotShowNetNameFilter->GetValue().Lower();
         wxString ShowFilter = m_ShowNetNameFilter->GetValue().Lower();
@@ -542,6 +617,7 @@ void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
     }
 
     listNetName.Insert( wxT( "<no net>" ), 0 );
+    m_listIndexToNetCodeMap.insert( m_listIndexToNetCodeMap.begin(), 0 );
 
     // Ensure currently selected net for the zone is visible, regardless of filters
     int selectedNetListNdx = 0;
@@ -550,6 +626,7 @@ void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
     if( net_select > 0 )
     {
         NETINFO_ITEM* selectedNet = m_Parent->GetBoard()->FindNet( net_select );
+
         if( selectedNet )
         {
             selectedNetListNdx = listNetName.Index( selectedNet->GetNetname() );

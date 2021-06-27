@@ -779,14 +779,6 @@ public:
     FOOTPRINT* FindFootprintByPath( const KIID_PATH& aPath ) const;
 
     /**
-     * @param aNames An array string to fill with net names.
-     * @param aSortbyPadsCount  set to true to sort by active pads count, false = no sort (i.e.
-     *                          leave the sort by net names).
-     * @return net names count.
-     */
-    int SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount );
-
-    /**
      * Return a list of name candidates for netclass assignment.
      *
      * Tokens may appear more than once if they were harvested from hierarchical nets
