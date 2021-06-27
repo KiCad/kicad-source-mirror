@@ -25,10 +25,8 @@
 void LaunchExternal( const wxString& aPath )
 {
 #ifdef __WXMAC__
-    wxString msg;
-
     // Quote in case there are spaces in the path.
-    msg.Printf( "open \"%s\"", aPath );
+    wxString msg = "open \"" + aPath + "\"";
 
     system( msg.c_str() );
 #else

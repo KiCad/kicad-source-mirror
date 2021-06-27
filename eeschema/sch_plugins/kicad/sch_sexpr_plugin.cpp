@@ -1518,13 +1518,13 @@ void SCH_SEXPR_PLUGIN_CACHE::Load()
 {
     if( !m_libFileName.FileExists() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library file \"%s\" not found." ),
+        THROW_IO_ERROR( wxString::Format( _( "Library file '%s' not found." ),
                                           m_libFileName.GetFullPath() ) );
     }
 
     wxCHECK_RET( m_libFileName.IsAbsolute(),
                  wxString::Format( "Cannot use relative file paths in sexpr plugin to "
-                                   "open library \"%s\".", m_libFileName.GetFullPath() ) );
+                                   "open library '%s'.", m_libFileName.GetFullPath() ) );
 
     // The current locale must use period as the decimal point.
     wxCHECK2( wxLocale::GetInfo( wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER ) == ".",

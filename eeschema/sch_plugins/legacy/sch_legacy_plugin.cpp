@@ -2607,7 +2607,7 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
 {
     if( !m_libFileName.FileExists() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library file \"%s\" not found." ),
+        THROW_IO_ERROR( wxString::Format( _( "Library file '%s' not found." ),
                                           m_libFileName.GetFullPath() ) );
     }
 

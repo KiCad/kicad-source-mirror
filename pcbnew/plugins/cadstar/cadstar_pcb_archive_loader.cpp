@@ -455,8 +455,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         case LAYER_TYPE::ASSCOMPCOPP:
         case LAYER_TYPE::NOLAYER:
             //Shouldn't be here if CPA file is correctly parsed and not corrupt
-            THROW_IO_ERROR( wxString::Format(
-                    _( "Unexpected layer '%s' in layer stack." ), curLayer.Name ) );
+            THROW_IO_ERROR( wxString::Format( _( "Unexpected layer '%s' in layer stack." ),
+                                              curLayer.Name ) );
             break;
 
         case LAYER_TYPE::JUMPERLAYER:
@@ -1213,17 +1213,17 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadGroups()
         {
             if( m_groupMap.find( csGroup.ID ) == m_groupMap.end() )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "The file appears to be corrupt. Unable to find group ID %s "
-                           "in the group definitions." ),
-                        csGroup.ID ) );
+                THROW_IO_ERROR( wxString::Format( _( "Unable to find group ID %s in the group "
+                                                     "definitions." ),
+                                                  csGroup.ID ) );
             }
             else if( m_groupMap.find( csGroup.ID ) == m_groupMap.end() )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "The file appears to be corrupt. Unable to find sub group %s "
-                           "in the group map (parent group ID=%s, Name=%s)." ),
-                        csGroup.GroupID, csGroup.ID, csGroup.Name ) );
+                THROW_IO_ERROR( wxString::Format( _( "Unable to find sub group %s in the group "
+                                                     "map (parent group ID=%s, Name=%s)." ),
+                                                  csGroup.GroupID,
+                                                  csGroup.ID,
+                                                  csGroup.Name ) );
             }
             else
             {
@@ -1535,18 +1535,19 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadAreas()
             zone->SetDoNotAllowVias( area.NoVias );
 
             if( area.Placement )
-                wxLogWarning( wxString::Format(
-                        _( "The CADSTAR area '%s' is marked as a placement area in CADSTAR. "
-                           "Placement areas are not supported in KiCad. Only the supported "
-                           "elements for the area were imported." ),
-                        area.Name ) );
+            {
+                wxLogWarning( wxString::Format( _( "The CADSTAR area '%s' is marked as a placement "
+                                                   "area in CADSTAR. Placement areas are not "
+                                                   "supported in KiCad. Only the supported elements "
+                                                   "for the area were imported." ),
+                                                area.Name ) );
+            }
         }
         else
         {
-            wxLogError(
-                    wxString::Format( _( "The CADSTAR area '%s' does not have a KiCad equivalent. "
-                                         "Pure Placement areas are not supported." ),
-                            area.Name ) );
+            wxLogError( wxString::Format( _( "The CADSTAR area '%s' does not have a KiCad "
+                                             "equivalent. Pure Placement areas are not supported." ),
+                                          area.Name ) );
         }
 
         //todo Process area.AreaHeight when KiCad supports 3D design rules
@@ -1573,7 +1574,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
         {
             THROW_IO_ERROR( wxString::Format( _( "Unable to find component '%s' in the library"
                                                  "(Symdef ID: '%s')" ),
-                    comp.Name, comp.SymdefID ) );
+                                              comp.Name,
+                                              comp.SymdefID ) );
         }
 
         FOOTPRINT* libFootprint = fpIter->second;

@@ -375,7 +375,7 @@ void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& 
         if( !aErrors.IsEmpty() )
             aErrors += "\n";
 
-        msg.Printf( _( "Cannot copy file \"%s\"." ), aDestPath );
+        msg.Printf( _( "Cannot copy file '%s'." ), aDestPath );
         aErrors += msg;
     }
 }

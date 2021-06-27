@@ -29,6 +29,7 @@
 #include <xnode.h>
 
 #include <wx/string.h>
+#include <wx/translation.h>
 
 namespace PCAD2KICAD {
 
@@ -87,7 +88,7 @@ void PCB_VIA::Parse( XNODE*          aNode,
     lNode   = FindNode( lNode, wxT( "library" ) );
 
     if ( !lNode )
-        THROW_IO_ERROR( wxT( "Unable to find library section" ) );
+        THROW_IO_ERROR( _( "Unable to find library section." ) );
 
     lNode   = FindNode( lNode, wxT( "viaStyleDef" ) );
 
@@ -102,7 +103,7 @@ void PCB_VIA::Parse( XNODE*          aNode,
     }
 
     if ( !lNode )
-        THROW_IO_ERROR( wxString::Format( wxT( "Unable to find viaStyleDef " ) + m_name.text ) );
+        THROW_IO_ERROR( wxString::Format( _( "Unable to find viaStyleDef %s." ), m_name.text ) );
 
     if( lNode )
     {

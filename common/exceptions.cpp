@@ -59,10 +59,10 @@ void IO_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
     // a short filename will be printed (it is better for user, the full filename has no meaning).
     wxString srcname = aThrowersFile;
 
-    where.Printf(  _( "from %s : %s() line:%d" ),
-                   srcname.AfterLast( '/' ),
-                   wxString( aThrowersFunction ),
-                   aThrowersLineNumber );
+    where.Printf( _( "from %s : %s() line %d" ),
+                  srcname.AfterLast( '/' ),
+                  wxString( aThrowersFunction ),
+                  aThrowersLineNumber );
 }
 
 
@@ -73,7 +73,7 @@ void PARSE_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
 {
     parseProblem = aProblem;
 
-    problem.Printf( _( "%s in \"%s\", line %d, offset %d" ),
+    problem.Printf( _( "%s in '%s', line %d, offset %d." ),
                     aProblem,
                     aSource,
                     aLineNumber,

@@ -747,7 +747,7 @@ void LEGACY_PLUGIN::loadSHEET()
 
                 if( !page.SetType( wname ) )
                 {
-                    m_error.Printf( _( "Unknown sheet type \"%s\" on line:%d" ),
+                    m_error.Printf( _( "Unknown sheet type '%s' on line: %d." ),
                                     wname.GetData(),
                                     m_reader->LineNumber() );
                     THROW_IO_ERROR( m_error );
@@ -1427,9 +1427,8 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
         }
     }
 
-    wxString msg = wxString::Format(
-            _( "Missing '$EndMODULE' for MODULE \"%s\"" ), aFootprint->GetFPID().GetLibItemName().wx_str() );
-
+    wxString msg = wxString::Format( _( "Missing '$EndMODULE' for MODULE '%s'." ),
+                                     aFootprint->GetFPID().GetLibItemName().wx_str() );
     THROW_IO_ERROR( msg );
 }
 
@@ -1478,7 +1477,7 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             case 'O':   padshape = static_cast<int>( PAD_SHAPE::OVAL );        break;
             case 'T':   padshape = static_cast<int>( PAD_SHAPE::TRAPEZOID );   break;
             default:
-                m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line: %d of footprint: \"%s\"" ),
+                m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'." ),
                                 padchar,
                                 padchar,
                                 m_reader->LineNumber(),
@@ -1683,12 +1682,11 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
     case 'A': shape = PCB_SHAPE_TYPE::ARC; break;
     case 'P': shape = PCB_SHAPE_TYPE::POLYGON; break;
     default:
-        m_error.Printf( _( "Unknown FP_SHAPE type:'%c=0x%02x' on line:%d of footprint:\"%s\"" ),
+        m_error.Printf( _( "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'." ),
                         (unsigned char) line[1],
                         (unsigned char) line[1],
                         m_reader->LineNumber(),
-                        aFootprint->GetFPID().GetLibItemName().wx_str()
-                        );
+                        aFootprint->GetFPID().GetLibItemName().wx_str() );
         THROW_IO_ERROR( m_error );
     }
 
