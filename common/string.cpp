@@ -218,33 +218,36 @@ wxString UnescapeString( const wxString& aSource )
 
     for( size_t i = 0; i < sourceLen; ++i )
     {
-        if( ( aSource[i] == '$' || aSource[i] == '^' || aSource[i] == '_' )
+        wxUniChar ch = aSource[i];
+        if( ( ch == '$' || ch == '^' || ch == '_' )
                 && i + 1 < sourceLen && aSource[i+1] == '{' )
         {
             for( ; i < sourceLen; ++i )
             {
-                newbuf += aSource[i];
+                ch = aSource[i];
+                newbuf += ch;
 
-                if( aSource[i] == '}' )
+                if( ch == '}' )
                     break;
             }
         }
-        else if( aSource[i] == '{' )
+        else if( ch == '{' )
         {
             wxString token;
             int      depth = 1;
 
             for( i = i + 1; i < sourceLen; ++i )
             {
-                if( aSource[i] == '{' )
+                ch = aSource[i];
+                if( ch == '{' )
                     depth++;
-                else if( aSource[i] == '}' )
+                else if( ch == '}' )
                     depth--;
 
                 if( depth <= 0 )
                     break;
                 else
-                    token.append( aSource[i] );
+                    token.append( ch );
             }
 
             if(      token == wxS( "dblquote" ) )  newbuf.append( wxS( "\"" ) );
@@ -268,7 +271,7 @@ wxString UnescapeString( const wxString& aSource )
         }
         else
         {
-            newbuf.append( aSource[i] );
+            newbuf.append( ch );
         }
     }
 
