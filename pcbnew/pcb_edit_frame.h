@@ -292,7 +292,7 @@ public:
      */
     int DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
                                      bool aForceSmdItems, bool aTopSide, bool aBottomSide,
-                                     bool aFormatCSV = false );
+                                     bool aFormatCSV, bool aUseAuxOrigin );
 
     /**
      * Call #DoGenFootprintsReport to create a footprint report file

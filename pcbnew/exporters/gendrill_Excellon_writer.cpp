@@ -71,9 +71,8 @@ EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
 }
 
 
-void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
-                                                 bool aGenDrill, bool aGenMap,
-                                                 REPORTER * aReporter )
+void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, bool aGenDrill,
+                                                 bool aGenMap, REPORTER * aReporter )
 {
     wxFileName  fn;
     wxString    msg;
@@ -93,10 +92,11 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
 
         buildHolesList( pair, doing_npth );
 
-        // The file is created if it has holes, or if it is the non plated drill file
-        // to be sure the NPTH file is up to date in separate files mode.
-        // Also a PTH drill/map file is always created, to be sure at least one plated hole drill file
-        // is created (do not create any PTH drill file can be seen as not working drill generator).
+        // The file is created if it has holes, or if it is the non plated drill file to be
+        // sure the NPTH file is up to date in separate files mode.
+        // Also a PTH drill/map file is always created, to be sure at least one plated hole
+        // drill file is created (do not create any PTH drill file can be seen as not working
+        // drill generator).
         if( getHolesCount() > 0 || doing_npth || pair == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
         {
             fn = getDrillFileName( pair, doing_npth, m_merge_PTH_NPTH );

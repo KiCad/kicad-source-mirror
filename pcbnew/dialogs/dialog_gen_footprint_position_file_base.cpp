@@ -77,6 +77,9 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_cbIncludeBoardEdge = new wxCheckBox( this, wxID_ANY, _("Include board edge layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLower->Add( m_cbIncludeBoardEdge, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_useDrillPlaceOrigin = new wxCheckBox( this, wxID_ANY, _("Use drill/place file origin"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerLower->Add( m_useDrillPlaceOrigin, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 	m_messagesPanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_messagesPanel->SetMinSize( wxSize( 350,300 ) );
 

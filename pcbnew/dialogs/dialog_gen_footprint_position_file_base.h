@@ -51,6 +51,7 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		wxRadioBox* m_radioBoxFilesCount;
 		wxCheckBox* m_excludeTH;
 		wxCheckBox* m_cbIncludeBoardEdge;
+		wxCheckBox* m_useDrillPlaceOrigin;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;

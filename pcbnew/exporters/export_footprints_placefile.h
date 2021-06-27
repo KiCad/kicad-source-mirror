@@ -61,8 +61,8 @@ public:
      * @param aBottomSide true to generate bottom side info
      * @param aFormatCSV true to generate a csv format info, false to generate a ascii info
      */
-    PLACE_FILE_EXPORTER( BOARD* aBoard,  bool aUnitsMM,
-                         bool aForceSmdItems, bool aTopSide, bool aBottomSide, bool aFormatCSV );
+    PLACE_FILE_EXPORTER( BOARD* aBoard,  bool aUnitsMM, bool aForceSmdItems, bool aTopSide,
+                         bool aBottomSide, bool aFormatCSV, bool useAuxOrigin );
 
     /**
      * build a string filled with the position data

@@ -99,7 +99,7 @@ public:
     static bool      m_Mirror;
     static bool      m_Merge_PTH_NPTH;
     DRILL_PRECISION  m_Precision;                // Precision for drill files, in non decimal format
-    wxPoint          m_FileDrillOffset;          // Drill offset: 0,0 for absolute coordinates,
+    wxPoint          m_DrillFileOffset;          // Drill offset: 0,0 for absolute coordinates,
                                                  // or origin of the auxiliary axis
     static bool      m_UseRouteModeForOvalHoles; // True to use a G00 route command for oval holes
                                                  // False to use a G85 canned mode for oval holes

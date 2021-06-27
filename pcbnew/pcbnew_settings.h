@@ -177,6 +177,7 @@ public:
         int  file_options;
         int  file_format;
         bool include_board_edge;
+        bool use_aux_origin;
     };
 
     struct DIALOG_PLOT

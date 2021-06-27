@@ -340,9 +340,9 @@ void DIALOG_GENDRILL::UpdateDrillParams()
     m_UseRouteModeForOvalHoles = m_radioBoxOvalHoleMode->GetSelection() == 0;
 
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
-        m_FileDrillOffset = wxPoint( 0, 0 );
+        m_DrillFileOffset = wxPoint( 0, 0 );
     else
-        m_FileDrillOffset = m_board->GetDesignSettings().m_AuxOrigin;
+        m_DrillFileOffset = m_board->GetDesignSettings().m_AuxOrigin;
 
     if( m_UnitDrillIsInch )
         m_Precision = precisionListForInches;
@@ -366,8 +366,12 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
 
     const PLOT_FORMAT filefmt[6] = {
         // Keep these format ids in the same order than m_Choice_Drill_Map choices
-        PLOT_FORMAT::HPGL, PLOT_FORMAT::POST, PLOT_FORMAT::GERBER, PLOT_FORMAT::DXF,
-        PLOT_FORMAT::SVG, PLOT_FORMAT::PDF
+        PLOT_FORMAT::HPGL,
+        PLOT_FORMAT::POST,
+        PLOT_FORMAT::GERBER,
+        PLOT_FORMAT::DXF,
+        PLOT_FORMAT::SVG,
+        PLOT_FORMAT::PDF
     };
 
     unsigned choice = (unsigned) m_Choice_Drill_Map->GetSelection();
@@ -385,7 +389,7 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
     {
         wxString msg;
         msg.Printf( _( "Could not write drill and/or map files to folder '%s'." ),
-                outputDir.GetPath() );
+                    outputDir.GetPath() );
         DisplayError( this, msg );
         return;
     }
@@ -395,7 +399,7 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
         EXCELLON_WRITER excellonWriter( m_board );
         excellonWriter.SetFormat( !m_UnitDrillIsInch, (EXCELLON_WRITER::ZEROS_FMT) m_ZerosFormat,
                                   m_Precision.m_Lhs, m_Precision.m_Rhs );
-        excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_FileDrillOffset, m_Merge_PTH_NPTH );
+        excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_DrillFileOffset, m_Merge_PTH_NPTH );
         excellonWriter.SetRouteModeForOvalHoles( m_UseRouteModeForOvalHoles );
         excellonWriter.SetMapFileFormat( filefmt[choice] );
 
@@ -409,11 +413,11 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
         // (SetFormat() accept 5 or 6, and any other value set the precision to 5)
         // the integer part precision is always 4, and units always mm
         gerberWriter.SetFormat( m_plotOpts.GetGerberPrecision() );
-        gerberWriter.SetOptions( m_FileDrillOffset );
+        gerberWriter.SetOptions( m_DrillFileOffset );
         gerberWriter.SetMapFileFormat( filefmt[choice] );
 
-        gerberWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(),
-                                                aGenDrill, aGenMap, &reporter );
+        gerberWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(), aGenDrill, aGenMap,
+                                                &reporter );
     }
 }
 

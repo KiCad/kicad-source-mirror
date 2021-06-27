@@ -74,7 +74,8 @@ enum SELECT_SIDE
 };
 
 PLACE_FILE_EXPORTER::PLACE_FILE_EXPORTER( BOARD* aBoard, bool aUnitsMM, bool aExcludeAllTH,
-                                          bool aTopSide, bool aBottomSide, bool aFormatCSV )
+                                          bool aTopSide, bool aBottomSide, bool aFormatCSV,
+                                          bool aUseAuxOrigin )
 {
     m_board        = aBoard;
     m_unitsMM      = aUnitsMM;
@@ -91,6 +92,11 @@ PLACE_FILE_EXPORTER::PLACE_FILE_EXPORTER( BOARD* aBoard, bool aUnitsMM, bool aEx
         m_side = PCB_NO_SIDE;
 
     m_formatCSV = aFormatCSV;
+
+    if( aUseAuxOrigin )
+        m_place_Offset = m_board->GetDesignSettings().m_AuxOrigin;
+    else
+        m_place_Offset = wxPoint( 0, 0 );
 }
 
 
@@ -104,8 +110,6 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
     int lenRefText = 8;
     int lenValText = 8;
     int lenPkgText = 16;
-
-    m_place_Offset = m_board->GetDesignSettings().m_AuxOrigin;
 
     // Calculating the number of useful footprints (CMS attribute, not VIRTUAL)
     m_fpCount = 0;

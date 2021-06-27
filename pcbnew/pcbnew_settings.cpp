@@ -402,6 +402,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "place_file.include_board_edge",
             &m_PlaceFile.include_board_edge, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "place_file.use_place_file_origin",
+            &m_PlaceFile.use_aux_origin, true ) );
+
     m_params.emplace_back( new PARAM<int>( "plot.all_layers_on_one_page",
             &m_Plot.all_layers_on_one_page, 1 ) );
 

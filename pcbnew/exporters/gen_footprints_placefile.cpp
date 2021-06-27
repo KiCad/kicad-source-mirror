@@ -153,7 +153,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 {
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
-    auto cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
     m_units            = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
     m_fileOpt          = cfg->m_PlaceFile.file_options;
@@ -168,7 +168,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     m_radioBoxFilesCount->SetSelection( m_fileOpt );
     m_rbFormat->SetSelection( m_fileFormat );
     m_cbIncludeBoardEdge->SetValue( m_includeBoardEdge );
-
+    m_useDrillPlaceOrigin->SetValue( cfg->m_PlaceFile.use_aux_origin );
 
     // Update sizes and sizers:
     m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
@@ -217,6 +217,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
     cfg->m_PlaceFile.file_options       = m_fileOpt;
     cfg->m_PlaceFile.file_format        = m_fileFormat;
     cfg->m_PlaceFile.include_board_edge = m_includeBoardEdge;
+    cfg->m_PlaceFile.use_aux_origin     = m_useDrillPlaceOrigin->GetValue();
 
     // Set output directory and replace backslashes with forward ones
     // (Keep unix convention in cfg files)
@@ -235,10 +236,10 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
 
 bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 {
-    BOARD* brd = m_parent->GetBoard();
-    wxFileName  fn;
-    wxString    msg;
-    int fullcount = 0;
+    BOARD*     brd = m_parent->GetBoard();
+    wxFileName fn;
+    wxString   msg;
+    int        fullcount = 0;
 
     // Create output directory if it does not exist. Also transform it in absolute path.
     // Bail if it fails
@@ -315,19 +316,20 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 
 bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 {
-    BOARD * brd = m_parent->GetBoard();
-    wxFileName  fn;
-    wxString    msg;
-    bool singleFile = OneFileOnly();
-    bool useCSVfmt = m_fileFormat == 1;
-    int fullcount = 0;
-    int top_side = true;
-    int bottom_side = true;
+    BOARD *    brd = m_parent->GetBoard();
+    wxFileName fn;
+    wxString   msg;
+    bool       singleFile = OneFileOnly();
+    bool       useCSVfmt = m_fileFormat == 1;
+    bool       useAuxOrigin = m_useDrillPlaceOrigin->GetValue();
+    int        fullcount = 0;
+    int        topSide = true;
+    int        bottomSide = true;
 
     // Test for any footprint candidate in list.
     {
-        PLACE_FILE_EXPORTER exporter( brd, UnitsMM(), ExcludeAllTH(), top_side, bottom_side,
-                                      useCSVfmt );
+        PLACE_FILE_EXPORTER exporter( brd, UnitsMM(), ExcludeAllTH(), topSide, bottomSide,
+                                      useCSVfmt, useAuxOrigin );
         exporter.GenPositionData();
 
         if( exporter.GetFootprintCount() == 0 )
@@ -357,12 +359,12 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     fn.SetPath( outputDir.GetPath() );
 
     // Create the Front or Top side placement file, or a single file
-    top_side = true;
-    bottom_side = false;
+    topSide = true;
+    bottomSide = false;
 
     if( singleFile )
     {
-        bottom_side = true;
+        bottomSide = true;
         fn.SetName( fn.GetName() + wxT( "-" ) + wxT("all") );
     }
     else
@@ -378,8 +380,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         fn.SetExt( FootprintPlaceFileExtension );
 
     int fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
-                                                         ExcludeAllTH(), top_side, bottom_side,
-                                                         useCSVfmt );
+                                                         ExcludeAllTH(), topSide, bottomSide,
+                                                         useCSVfmt, useAuxOrigin );
     if( fpcount < 0 )
     {
         msg.Printf( _( "Unable to create '%s'." ), fn.GetFullPath() );
@@ -406,8 +408,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     // Create the Back or Bottom side placement file
     fullcount = fpcount;
-    top_side = false;
-    bottom_side = true;
+    topSide = false;
+    bottomSide = true;
     fn = brd->GetFileName();
     fn.SetPath( outputDir.GetPath() );
     fn.SetName( fn.GetName() + wxT( "-" ) + PLACE_FILE_EXPORTER::GetBackSideName().c_str() );
@@ -421,7 +423,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         fn.SetExt( FootprintPlaceFileExtension );
 
     fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), ExcludeAllTH(),
-                                                     top_side, bottom_side, useCSVfmt );
+                                                     topSide, bottomSide, useCSVfmt, useAuxOrigin );
 
     if( fpcount < 0 )
     {
@@ -467,7 +469,8 @@ int BOARD_EDITOR_CONTROL::GeneratePosFile( const TOOL_EVENT& aEvent )
 
 int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
                                                  bool aForceSmdItems, bool aTopSide,
-                                                 bool aBottomSide, bool aFormatCSV )
+                                                 bool aBottomSide, bool aFormatCSV,
+                                                 bool aUseAuxOrigin )
 {
     FILE * file = NULL;
 
@@ -481,7 +484,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, 
 
     std::string data;
     PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, aForceSmdItems, aTopSide, aBottomSide,
-                                  aFormatCSV );
+                                  aFormatCSV, aUseAuxOrigin );
     data = exporter.GenPositionData();
 
     // if aFullFileName is empty, the file is not created, only the
@@ -541,7 +544,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
         return false;
 
     std::string data;
-    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, false, true, true, false );
+    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, false, true, true, false, true );
     data = exporter.GenReportData();
 
     fputs( data.c_str(), rptfile );

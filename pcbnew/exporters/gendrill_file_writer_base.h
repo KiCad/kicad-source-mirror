@@ -178,7 +178,7 @@ public:
     void SetMergeOption( bool aMerge ) { m_merge_PTH_NPTH = aMerge; }
 
     /**
-     * Return the plot offset (usually the position of the auxiliary axis.
+     * Return the plot offset (usually the position of the drill/place origin).
      */
     wxPoint GetOffset() { return m_offset; }
 
