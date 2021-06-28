@@ -445,7 +445,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::updatePreview()
 
 void PANEL_EESCHEMA_COLOR_SETTINGS::zoomFitPreview()
 {
-    auto view = m_preview->GetView();
+    KIGFX::VIEW* view = m_preview->GetView();
 
     view->SetScale( 1.0 );
     VECTOR2D screenSize = view->ToWorld( m_preview->GetClientSize(), false );
@@ -454,7 +454,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::zoomFitPreview()
     double scale = view->GetScale() / std::max( fabs( psize.x / screenSize.x ),
                                                 fabs( psize.y / screenSize.y ) );
 
-    view->SetScale( scale * 1.1 );
+    view->SetScale( scale * m_galDisplayOptions.m_scaleFactor * 0.8 /* margin */ );
     view->SetCenter( m_drawingSheet->ViewBBox().Centre() );
     m_preview->ForceRefresh();
 }
