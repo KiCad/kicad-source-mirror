@@ -47,6 +47,8 @@ protected:
     void launchMatchIdSymbolBrowser( wxCommandEvent& aEvent ) override;
     void launchNewIdSymbolBrowser( wxCommandEvent& aEvent ) override;
     void onMatchTextKillFocus( wxFocusEvent& event ) override;
+    void onMatchIDKillFocus( wxFocusEvent& event ) override;
+    void onNewLibIDKillFocus( wxFocusEvent& event ) override;
     void onOkButtonClicked( wxCommandEvent& aEvent ) override;
     void onMatchByAll( wxCommandEvent& aEvent ) override;
     void onMatchBySelected( wxCommandEvent& aEvent ) override;

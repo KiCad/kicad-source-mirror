@@ -206,6 +206,18 @@ void DIALOG_CHANGE_SYMBOLS::onMatchTextKillFocus( wxFocusEvent& event )
 }
 
 
+void DIALOG_CHANGE_SYMBOLS::onMatchIDKillFocus( wxFocusEvent& event )
+{
+    updateFieldsList();
+}
+
+
+void DIALOG_CHANGE_SYMBOLS::onNewLibIDKillFocus( wxFocusEvent& event )
+{
+    updateFieldsList();
+}
+
+
 DIALOG_CHANGE_SYMBOLS::~DIALOG_CHANGE_SYMBOLS()
 {
     g_selectRefDes = m_fieldsBox->IsChecked( REFERENCE_FIELD );

@@ -187,7 +187,9 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_specifiedValue->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onMatchTextKillFocus ), NULL, this );
 	m_specifiedValue->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::OnMatchText ), NULL, this );
 	m_matchById->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onMatchById ), NULL, this );
+	m_specifiedId->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onMatchIDKillFocus ), NULL, this );
 	m_matchIdBrowserButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::launchMatchIdSymbolBrowser ), NULL, this );
+	m_newId->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onNewLibIDKillFocus ), NULL, this );
 	m_newIdBrowserButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::launchNewIdSymbolBrowser ), NULL, this );
 	m_selAllBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onSelectAll ), NULL, this );
 	m_selNoneBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onSelectNone ), NULL, this );
@@ -205,7 +207,9 @@ DIALOG_CHANGE_SYMBOLS_BASE::~DIALOG_CHANGE_SYMBOLS_BASE()
 	m_specifiedValue->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onMatchTextKillFocus ), NULL, this );
 	m_specifiedValue->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::OnMatchText ), NULL, this );
 	m_matchById->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onMatchById ), NULL, this );
+	m_specifiedId->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onMatchIDKillFocus ), NULL, this );
 	m_matchIdBrowserButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::launchMatchIdSymbolBrowser ), NULL, this );
+	m_newId->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onNewLibIDKillFocus ), NULL, this );
 	m_newIdBrowserButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::launchNewIdSymbolBrowser ), NULL, this );
 	m_selAllBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onSelectAll ), NULL, this );
 	m_selNoneBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CHANGE_SYMBOLS_BASE::onSelectNone ), NULL, this );

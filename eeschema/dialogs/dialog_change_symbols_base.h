@@ -86,7 +86,9 @@ class DIALOG_CHANGE_SYMBOLS_BASE : public DIALOG_SHIM
 		virtual void onMatchByValue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMatchText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onMatchById( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onMatchIDKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void launchMatchIdSymbolBrowser( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onNewLibIDKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void launchNewIdSymbolBrowser( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSelectAll( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSelectNone( wxCommandEvent& event ) { event.Skip(); }
