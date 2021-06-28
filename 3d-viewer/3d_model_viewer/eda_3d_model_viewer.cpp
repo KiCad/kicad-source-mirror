@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,8 @@
  */
 
 /**
- * @file c3d_model_viewer.cpp
- * @brief Implements a model viewer canvas. The propose of model viewer is to
- * render 3d models that come in the original data from the files without any
- * transformations.
+ * @brief Implements a model viewer canvas. The purpose of the model viewer is to render
+ * 3d models that come in the original data from the files without any transformations.
  */
 
 #include <iostream>
@@ -34,7 +32,6 @@
 #include "eda_3d_model_viewer.h"
 #include "../3d_rendering/legacy/ogl_legacy_utils.h"
 #include "../3d_cache/3d_cache.h"
-#include "common_ogl/ogl_utils.h"
 #include <wx/dcclient.h>
 #include <base_units.h>
 #include <gl_context_mgr.h>
@@ -111,7 +108,7 @@ EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribL
 
 EDA_3D_MODEL_VIEWER::~EDA_3D_MODEL_VIEWER()
 {
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWERWER" ) );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::~EDA_3D_MODEL_VIEWER" ) );
 
     if( m_glRC )
     {
@@ -252,7 +249,7 @@ void EDA_3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
     // multiple canvases: If we updated the viewport in the wxSizeEvent
     // handler, changing the size of one canvas causes a viewport setting that
     // is wrong when next another canvas is repainted.
-    wxSize clientSize = GetClientSize();
+    wxSize clientSize = GetNativePixelSize();
 
     if( !m_ogl_initialized )
     {
@@ -404,7 +401,7 @@ void EDA_3D_MODEL_VIEWER::OnMagnify( wxMouseEvent& event )
 
 void EDA_3D_MODEL_VIEWER::OnMouseMove( wxMouseEvent& event )
 {
-    m_trackBallCamera.SetCurWindowSize( GetClientSize() );
+    m_trackBallCamera.SetCurWindowSize( GetNativePixelSize() );
 
     if( event.Dragging() )
     {

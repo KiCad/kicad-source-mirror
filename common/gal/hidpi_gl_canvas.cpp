@@ -30,16 +30,11 @@
 
 
 HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( wxWindow* parent, wxWindowID id, const int* attribList,
-        const wxPoint& pos, const wxSize& size, long style, const wxString& name,
-        const wxPalette& palette )
-        : wxGLCanvas( parent, id, attribList, pos, size, style, name, palette ),
-          m_scale_factor( DPI_SCALING::GetDefaultScaleFactor() )
+                                  const wxPoint& pos, const wxSize& size, long style,
+                                  const wxString& name, const wxPalette& palette ) :
+        wxGLCanvas( parent, id, attribList, pos, size, style, name, palette ),
+        m_scale_factor( DPI_SCALING::GetDefaultScaleFactor() )
 {
-    // As of wxWidgets version 3.1.3, this is the default behavior of the wxGLCanvas on OSX
-    // so this piece of code can be removed once our minimum version is >3.1.3 for OSX.
-#ifdef RETINA_OPENGL_PATCH
-    SetViewWantsBestResolution( true );
-#endif
 }
 
 
