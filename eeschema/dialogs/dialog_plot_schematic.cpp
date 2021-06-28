@@ -435,7 +435,7 @@ wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( const wxString& aPlotFileN
     if( !EnsureFileDirectoryExists( &tmp, retv.GetFullName(), aReporter )
       || !tmp.IsDirWritable() )
     {
-        wxString msg = wxString::Format( _( "Could not write plot files to folder \"%s\"." ),
+        wxString msg = wxString::Format( _( "Failed to write plot files to folder '%s'." ),
                                          tmp.GetPath() );
         aReporter->Report( msg, RPT_SEVERITY_ERROR );
         retv.Clear();
@@ -510,18 +510,18 @@ void DIALOG_PLOT_SCHEMATIC::createDxfFile( bool aPlotAll, bool aPlotDrawingSheet
             if( plotOneSheetDxf( plotFileName.GetFullPath(), screen, aRenderSettings,
                                  plot_offset, 1.0, aPlotDrawingSheet ) )
             {
-                msg.Printf( _( "Plotted to '%s'.\n" ), plotFileName.GetFullPath() );
+                msg.Printf( _( "Plotted to '%s'." ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ACTION );
             }
             else    // Error
             {
-                msg.Printf( _( "Unable to create file '%s'.\n" ), plotFileName.GetFullPath() );
+                msg.Printf( _( "Failed to create file '%s'." ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ERROR );
             }
         }
         catch( IO_ERROR& e )
         {
-            msg.Printf( wxT( "DXF Plotter exception: %s\n"), e.What() );
+            msg.Printf( wxT( "DXF Plotter exception: %s"), e.What() );
             reporter.Report( msg, RPT_SEVERITY_ERROR );
             schframe->SetCurrentSheet( oldsheetpath );
             schframe->GetCurrentSheet().UpdateAllScreenReferences();
@@ -680,18 +680,18 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef,
             if( plotOneSheetHpgl( plotFileName.GetFullPath(), screen, plotPage, aRenderSettings,
                                   plotOffset, plot_scale, aPlotFrameRef, getPlotOriginAndUnits() ) )
             {
-                msg.Printf( _( "Plotted to '%s'.\n" ), plotFileName.GetFullPath() );
+                msg.Printf( _( "Plotted to '%s'." ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ACTION );
             }
             else
             {
-                msg.Printf( _( "Unable to create file '%s'.\n" ), plotFileName.GetFullPath() );
+                msg.Printf( _( "Failed to create file '%s'." ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ERROR );
             }
         }
         catch( IO_ERROR& e )
         {
-            msg.Printf( wxT( "HPGL Plotter exception: %s\n"), e.What() );
+            msg.Printf( wxT( "HPGL Plotter exception: %s"), e.What() );
             reporter.Report( msg, RPT_SEVERITY_ERROR );
         }
 
@@ -837,8 +837,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
 
                 if( !plotter->OpenFile( plotFileName.GetFullPath() ) )
                 {
-                    msg.Printf( _( "Unable to create file '%s'.\n" ),
-                                plotFileName.GetFullPath() );
+                    msg.Printf( _( "Failed to create file '%s'." ), plotFileName.GetFullPath() );
                     reporter.Report( msg, RPT_SEVERITY_ERROR );
                     delete plotter;
                     return;
@@ -851,7 +850,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
             catch( const IO_ERROR& e )
             {
                 // Cannot plot PDF file
-                msg.Printf( wxT( "PDF Plotter exception: %s\n" ), e.What() );
+                msg.Printf( wxT( "PDF Plotter exception: %s" ), e.What() );
                 reporter.Report( msg, RPT_SEVERITY_ERROR );
 
                 restoreEnvironment( plotter, oldsheetpath );
@@ -1034,20 +1033,20 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
             if( plotOneSheetPS( plotFileName.GetFullPath(), screen, aRenderSettings, plotPage,
                                 plot_offset, scale, aPlotFrameRef ) )
             {
-                msg.Printf( _( "Plotted to '%s'.\n" ), plotFileName.GetFullPath() );
+                msg.Printf( _( "Plotted to '%s'." ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ACTION );
             }
             else
             {
                 // Error
-                msg.Printf( _( "Unable to create file '%s'.\n" ), plotFileName.GetFullPath() );
+                msg.Printf( _( "Failed to create file '%s'." ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ERROR );
             }
 
         }
         catch( IO_ERROR& e )
         {
-            msg.Printf( wxT( "PS Plotter exception: %s\n"), e.What() );
+            msg.Printf( wxT( "PS Plotter exception: %s"), e.What() );
             reporter.Report( msg, RPT_SEVERITY_ERROR );
         }
     }
@@ -1160,19 +1159,19 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
 
             if( !success )
             {
-                msg.Printf( _( "Cannot create file '%s'.\n" ), plotFileName.GetFullPath() );
+                msg.Printf( _( "Failed to create file '%s'." ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ERROR );
             }
             else
             {
-                msg.Printf( _( "Plotted to '%s'.\n" ), plotFileName.GetFullPath() );
+                msg.Printf( _( "Plotted to '%s'." ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ACTION );
             }
         }
         catch( const IO_ERROR& e )
         {
             // Cannot plot SVG file
-            msg.Printf( wxT( "SVG Plotter exception: %s\n" ), e.What() );
+            msg.Printf( wxT( "SVG Plotter exception: %s" ), e.What() );
             reporter.Report( msg, RPT_SEVERITY_ERROR );
             break;
         }

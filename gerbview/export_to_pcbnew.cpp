@@ -65,7 +65,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const LAYER_NUM* aLayerLookUpTable, int aCo
     if( m_fp == NULL )
     {
         wxString msg;
-        msg.Printf( _( "Cannot create file '%s'." ), m_pcb_file_name );
+        msg.Printf( _( "Failed to create file '%s'." ), m_pcb_file_name );
         DisplayError( m_gerbview_frame, msg );
         return false;
     }

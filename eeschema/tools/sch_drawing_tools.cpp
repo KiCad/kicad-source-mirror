@@ -513,7 +513,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
                 if( !image || !image->ReadImageFile( fullFilename ) )
                 {
-                    wxMessageBox( _( "Couldn't load image from \"%s\"" ), fullFilename );
+                    wxMessageBox( _( "Could not load image from '%s'." ), fullFilename );
                     delete image;
                     image = nullptr;
                     continue;

@@ -204,8 +204,8 @@ int CVPCB_ASSOCIATION_TOOL::Associate( const TOOL_EVENT& aEvent )
     // Test for validity of the requested footprint
     if( !fpid.IsValid() )
     {
-        wxString msg =
-                wxString::Format( _( "\"%s\" is not a valid footprint." ), fpid.Format().wx_str() );
+        wxString msg = wxString::Format( _( "'%s' is not a valid footprint." ),
+                                         fpid.Format().wx_str() );
         DisplayErrorMessage( m_frame, msg );
     }
 

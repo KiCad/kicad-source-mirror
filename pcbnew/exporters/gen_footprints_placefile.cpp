@@ -290,7 +290,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 
     if( fpcount < 0 )
     {
-        msg.Printf( _( "Unable to create file '%s'." ), filename );
+        msg.Printf( _( "Failed to create file '%s'." ), filename );
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         wxMessageBox( msg );
         return false;
@@ -427,7 +427,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     if( fpcount < 0 )
     {
-        msg.Printf( _( "Unable to create file '%s'." ), fn.GetFullPath() );
+        msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         wxMessageBox( msg );
         return false;

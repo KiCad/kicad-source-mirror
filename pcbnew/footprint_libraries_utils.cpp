@@ -246,7 +246,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 
     if( !fp )
     {
-        wxString msg = wxString::Format( _( "File \"%s\" not found" ), fn.GetFullPath() );
+        wxString msg = wxString::Format( _( "File '%s' not found." ), fn.GetFullPath() );
         DisplayError( this, msg );
         return nullptr;
     }
@@ -258,7 +258,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 
     if( fileType == IO_MGR::FILE_TYPE_NONE )
     {
-        DisplayError( this, _( "Not a footprint file" ) );
+        DisplayError( this, _( "Not a footprint file." ) );
         return nullptr;
     }
 
@@ -1062,7 +1062,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
 {
     if( GetScreen()->IsContentModified() && m_revertModule )
     {
-        wxString msg = wxString::Format( _( "Revert \"%s\" to last version saved?" ),
+        wxString msg = wxString::Format( _( "Revert '%s' to last version saved?" ),
                                          GetLoadedFPID().GetLibItemName().wx_str() );
 
         if( ConfirmRevertDialog( this, msg ) )

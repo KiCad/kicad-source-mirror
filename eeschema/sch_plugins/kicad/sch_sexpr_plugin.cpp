@@ -2246,9 +2246,8 @@ void SCH_SEXPR_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath,
 {
     if( wxFileExists( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format(
-            _( "symbol library \"%s\" already exists, cannot create a new library" ),
-            aLibraryPath.GetData() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Symbol library '%s' already exists." ),
+                                          aLibraryPath.GetData() ) );
     }
 
     LOCALE_IO toggle;
@@ -2273,7 +2272,7 @@ bool SCH_SEXPR_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath,
     // we don't want that.  we want bare metal portability with no UI here.
     if( wxRemove( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "library \"%s\" cannot be deleted" ),
+        THROW_IO_ERROR( wxString::Format( _( "Symbol library '%s' cannot be deleted." ),
                                           aLibraryPath.GetData() ) );
     }
 

@@ -55,8 +55,8 @@ DIALOG_SYMBOL_REMAP::DIALOG_SYMBOL_REMAP( SCH_EDIT_FRAME* aParent ) :
 
     if( !wxFileName::IsDirWritable( Prj().GetProjectPath() ) )
     {
-        DisplayInfoMessage( this, _( "Remapping is not possible because you do not have "
-                                     "write privileges to the project folder \"%s\"." ) );
+        DisplayInfoMessage( this, _( "Remapping is not possible because you have insufficient "
+                                     "privileges to the project folder '%s'." ) );
 
         // Disable the remap button.
         m_remapped = true;

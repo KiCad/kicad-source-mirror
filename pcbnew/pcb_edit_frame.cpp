@@ -1485,7 +1485,7 @@ void PCB_EDIT_FRAME::RunEeschema()
             }
             catch( const IO_ERROR& err )
             {
-                wxMessageBox( _( "Eeschema failed to load:\n" ) + err.What(),
+                wxMessageBox( _( "Eeschema failed to load." ) + wxS( "\n" ) + err.What(),
                               _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
                 return;
             }

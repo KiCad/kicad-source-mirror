@@ -860,7 +860,7 @@ void ALTIUM_PCB::ParseClasses6Data( const CFB::CompoundFileReader& aReader,
             {
                 // Name conflict, this is likely a bad board file.
                 // unique_ptr will delete nc on this code path
-                THROW_IO_ERROR( wxString::Format( _( "Duplicated Netclass name \"%s\"" ), elem.name ) );
+                THROW_IO_ERROR( wxString::Format( _( "Duplicate netclass name '%s'." ), elem.name ) );
             }
         }
     }
@@ -1281,7 +1281,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
     {
         if( !altiumModelsPath.Mkdir() )
         {
-            wxLogError( _( "Cannot create directory '%s'. No 3D-models will be imported." ),
+            wxLogError( _( "Failed to create folder '%s'." ) + _( "No 3D-models will be imported." ),
                         altiumModelsPath.GetFullPath() );
             return;
         }

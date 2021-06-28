@@ -868,8 +868,8 @@ void SCH_LEGACY_PLUGIN::loadHeader( LINE_READER& aReader, SCH_SCREEN* aScreen )
 
     if( !line || !strCompare( "Eeschema Schematic File Version", line, &line ) )
     {
-        m_error.Printf(
-                _( "\"%s\" does not appear to be an Eeschema file" ), aScreen->GetFileName() );
+        m_error.Printf( _( "'%s' does not appear to be an Eeschema file." ),
+                        aScreen->GetFileName() );
         THROW_IO_ERROR( m_error );
     }
 
@@ -4396,9 +4396,8 @@ void SCH_LEGACY_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath,
 {
     if( wxFileExists( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format(
-            _( "symbol library \"%s\" already exists, cannot create a new library" ),
-            aLibraryPath.GetData() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Symbol library '%s' already exists." ),
+                                          aLibraryPath.GetData() ) );
     }
 
     LOCALE_IO toggle;
@@ -4423,7 +4422,7 @@ bool SCH_LEGACY_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath,
     // we don't want that.  we want bare metal portability with no UI here.
     if( wxRemove( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "library \"%s\" cannot be deleted" ),
+        THROW_IO_ERROR( wxString::Format( _( "Symbol library '%s' cannot be deleted." ),
                                           aLibraryPath.GetData() ) );
     }
 

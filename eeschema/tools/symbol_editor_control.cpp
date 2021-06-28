@@ -405,7 +405,7 @@ int SYMBOL_EDITOR_CONTROL::ExportView( const TOOL_EVENT& aEvent )
 
         if( !SaveCanvasImageToFile( editFrame, dlg.GetPath(), BITMAP_TYPE::PNG ) )
         {
-            wxMessageBox( wxString::Format( _( "Can't save file \"%s\"." ), dlg.GetPath() ) );
+            wxMessageBox( wxString::Format( _( "Can't save file '%s'." ), dlg.GetPath() ) );
         }
     }
 

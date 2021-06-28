@@ -141,19 +141,17 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
                             break;
 
                         case 1:
-                            msg += wxString::Format( _(
-                                    "Component \"%s\" footprint \"%s\" was <b>not found</b> in any library.\n" ),
-                                    component->GetReference(),
-                                    component->GetFPID().GetLibItemName().wx_str()
-                                    );
+                            msg += wxString::Format( _( "Component '%s' footprint '%s' <b>not "
+                                                        "found</b> in any library.\n" ),
+                                                     component->GetReference(),
+                                                     component->GetFPID().GetLibItemName().wx_str() );
                             break;
 
                         case 2:
-                            msg += wxString::Format( _(
-                                    "Component \"%s\" footprint \"%s\" was found in <b>multiple</b> libraries.\n" ),
-                                    component->GetReference(),
-                                    component->GetFPID().GetLibItemName().wx_str()
-                                    );
+                            msg += wxString::Format( _( "Component '%s' footprint '%s' was found "
+                                                        "in <b>multiple</b> libraries.\n" ),
+                                                     component->GetReference(),
+                                                     component->GetFPID().GetLibItemName().wx_str() );
                             break;
                         }
                     }

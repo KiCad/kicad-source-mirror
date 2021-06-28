@@ -1537,7 +1537,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             if( hierarchy.TestForRecursion( sheetHierarchy, destFn.GetFullPath( wxPATH_UNIX ) ) )
             {
-                auto msg = wxString::Format( _( "The pasted sheet \"%s\"\n"
+                auto msg = wxString::Format( _( "The pasted sheet '%s'\n"
                                                 "was dropped because the destination already has "
                                                 "the sheet or one of its subsheets as a parent." ),
                                              sheet->GetFileName() );

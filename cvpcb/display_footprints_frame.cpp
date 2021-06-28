@@ -397,7 +397,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
 
     if( fpid.Parse( aFootprintName ) >= 0 )
     {
-        aReporter.Report( wxString::Format( _( "Footprint ID \"%s\" is not valid." ),
+        aReporter.Report( wxString::Format( _( "Footprint ID '%s' is not valid." ),
                                             aFootprintName ),
                           RPT_SEVERITY_ERROR );
         return NULL;
@@ -412,7 +412,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     // See if the library requested is in the library table
     if( !fpTable->HasLibrary( libNickname ) )
     {
-        aReporter.Report( wxString::Format( _( "Library \"%s\" is not in the footprint library table." ),
+        aReporter.Report( wxString::Format( _( "Library '%s' is not in the footprint library table." ),
                                             libNickname ),
                           RPT_SEVERITY_ERROR );
         return NULL;
@@ -421,7 +421,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     // See if the footprint requested is in the library
     if( !fpTable->FootprintExists( libNickname, fpName ) )
     {
-        aReporter.Report( wxString::Format( _( "Footprint \"%s\" not found." ), aFootprintName ),
+        aReporter.Report( wxString::Format( _( "Footprint '%s' not found." ), aFootprintName ),
                           RPT_SEVERITY_ERROR );
         return NULL;
     }
@@ -446,7 +446,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
         return footprint;
     }
 
-    aReporter.Report( wxString::Format( _( "Footprint \"%s\" not found." ), aFootprintName ),
+    aReporter.Report( wxString::Format( _( "Footprint '%s' not found." ), aFootprintName ),
                       RPT_SEVERITY_ERROR );
     return NULL;
 }

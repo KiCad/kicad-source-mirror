@@ -230,7 +230,7 @@ int SCH_EDITOR_CONTROL::ImportFPAssignments( const TOOL_EVENT& aEvent )
 
     if( !processCmpToFootprintLinkFile( filename, forceVisibility, visibilityState ) )
     {
-        wxString msg = wxString::Format( _( "Failed to open symbol-footprint link file \"%s\"" ),
+        wxString msg = wxString::Format( _( "Failed to open symbol-footprint link file '%s'." ),
                                          filename.GetData() );
 
         DisplayError( m_frame, msg );

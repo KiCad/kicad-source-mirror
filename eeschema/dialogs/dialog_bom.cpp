@@ -388,7 +388,7 @@ void DIALOG_BOM::OnAddGenerator( wxCommandEvent& event )
     // Verify if it does not exists
     if( pluginExists( name ) )
     {
-        wxMessageBox( wxString::Format( _( "Nickname \"%s\" already in use." ), name ) );
+        wxMessageBox( wxString::Format( _( "Nickname '%s' already in use." ), name ) );
         return;
     }
 

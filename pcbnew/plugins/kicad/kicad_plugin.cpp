@@ -169,13 +169,13 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
 
     if( !m_lib_path.DirExists() && !m_lib_path.Mkdir() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Cannot create footprint library path '%s'." ),
+        THROW_IO_ERROR( wxString::Format( _( "Cannot create footprint library '%s'." ),
                                           m_lib_raw_path ) );
     }
 
     if( !m_lib_path.IsDirWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Footprint library path '%s' is read only." ),
+        THROW_IO_ERROR( wxString::Format( _( "Footprint library '%s' is read only." ),
                                           m_lib_raw_path ) );
     }
 
@@ -239,8 +239,7 @@ void FP_CACHE::Load()
 
     if( !dir.IsOpened() )
     {
-        wxString msg = wxString::Format( _( "Footprint library path '%s' does not exist "
-                                            "(or is not a directory)." ),
+        wxString msg = wxString::Format( _( "Footprint library '%s' not found." ),
                                          m_lib_raw_path );
         THROW_IO_ERROR( msg );
     }

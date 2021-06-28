@@ -320,7 +320,7 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
 
     if( aEntry->GetName().IsEmpty() )
     {
-        wxLogWarning( "Symbol in library \"%s\" has empty name field.", aLibrary );
+        wxLogWarning( "Symbol in library '%s' has empty name field.", aLibrary );
         return false;
     }
 
@@ -418,8 +418,9 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol()
     // Test if there is a symbol with this name already.
     if( !lib.empty() && m_libMgr->SymbolExists( name, lib ) )
     {
-        wxString msg = wxString::Format( _( "Symbol \"%s\" already exists in library \"%s\"" ),
-                                         name, lib );
+        wxString msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'." ),
+                                         name,
+                                         lib );
         DisplayError( this, msg );
         return;
     }
@@ -730,9 +731,9 @@ void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
     LIB_ID libId = GetTargetLibId();
 
     if( m_libMgr->IsSymbolModified( libId.GetLibItemName(), libId.GetLibNickname() )
-        && !IsOK( this, _( wxString::Format( "The symbol \"%s\" has been modified\n"
-                                             "Do you want to remove it from the library?",
-                                             libId.GetUniStringLibItemName() ) ) ) )
+        && !IsOK( this, wxString::Format( _( "The symbol '%s' has been modified.\n"
+                                             "Do you want to remove it from the library?" ),
+                                          libId.GetUniStringLibItemName() ) ) )
     {
         return;
     }
@@ -743,7 +744,7 @@ void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
 
         msg.Printf( _( "The symbol %s is used to derive other symbols.\n"
                        "Deleting this symbol will delete all of the symbols derived from it.\n\n"
-                       "Do you wish to delete this symbol and all of it's derivatives?" ),
+                       "Do you wish to delete this symbol and all of its derivatives?" ),
                     libId.GetLibItemName().wx_str() );
 
         wxMessageDialog::ButtonLabel yesButtonLabel( _( "Delete Symbol" ) );
@@ -890,7 +891,7 @@ void SYMBOL_EDIT_FRAME::Revert( bool aConfirm )
     // Empty if this is the library itself that is selected.
     const wxString& symbolName = libId.GetLibItemName();
 
-    wxString msg = wxString::Format( _( "Revert \"%s\" to last version saved?" ),
+    wxString msg = wxString::Format( _( "Revert '%s' to last version saved?" ),
                                      symbolName.IsEmpty() ? libName : symbolName );
 
     if( aConfirm && !ConfirmRevertDialog( this, msg ) )
@@ -1006,7 +1007,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
         wxString wildcards = KiCadSymbolLibFileWildcard();
 
-        wxFileDialog dlg( this, wxString::Format( _( "Save Library \"%s\" As..." ), aLibrary ),
+        wxFileDialog dlg( this, wxString::Format( _( "Save Library '%s' As..." ), aLibrary ),
                           default_path, fn.GetFullName(), wildcards,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 

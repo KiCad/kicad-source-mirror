@@ -649,7 +649,7 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     if( sheetlist.IsModified() )
     {
         wxFileName fileName = Schematic().RootScreen()->GetFileName();
-        wxString msg = _( "Save changes to \"%s\" before closing?" );
+        wxString msg = _( "Save changes to '%s' before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
                                    [&]()->bool { return SaveProject(); } ) )

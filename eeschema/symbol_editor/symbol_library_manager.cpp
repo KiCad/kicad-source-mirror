@@ -172,8 +172,8 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIBRARY_MANAGER::GetLibrary( const wxString& aLibra
     }
     catch( const IO_ERROR& e )
     {
-        wxLogMessage( _( "Cannot find library \"%s\" in the Symbol Library Table (%s)" ),
-                      aLibrary, e.What() );
+        wxLogMessage( _( "Library '%s' not found in the Symbol Library Table." ) + e.What(),
+                      aLibrary );
     }
 
     return row;
@@ -615,8 +615,9 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetAlias( const wxString& aAlias,
     }
     catch( const IO_ERROR& e )
     {
-        wxLogMessage( _( "Cannot load symbol \"%s\" from library \"%s\" (%s)" ),
-                      aAlias, aLibrary, e.What() );
+        wxLogMessage( _( "Cannot load symbol '%s' from library '%s'." ) + e.What(),
+                      aAlias,
+                      aLibrary );
     }
 
     return alias;
@@ -770,7 +771,7 @@ std::set<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER::getOriginalSymbols( const wxString
     }
     catch( const IO_ERROR& e )
     {
-        wxLogMessage( _( "Cannot enumerate library \"%s\" (%s)" ), aLibrary, e.What() );
+        wxLogMessage( _( "Cannot enumerate library '%s'." ) + e.What(), aLibrary );
     }
 
     return symbols;

@@ -656,7 +656,7 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
 
         if( hasOneOf( name, badchars ) )
         {
-            auto msg = wxString::Format(_( "\"%s\" are forbidden in layer names." ), badchars );
+            wxString msg = wxString::Format(_( "%s are forbidden in layer names." ), badchars );
             m_parentDialog->SetError( msg, this, ctl );
             return false;
         }
@@ -671,7 +671,7 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
         {
             if( name == existingName )
             {
-                auto msg = wxString::Format(_( "Layer name \"%s\" is already in use." ), name );
+                wxString msg = wxString::Format(_( "Layer name '%s' already in use." ), name );
                 m_parentDialog->SetError( msg, this, ctl );
                 return false;
             }

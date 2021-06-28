@@ -334,7 +334,7 @@ void DIALOG_FIND::search( bool aDirection )
     if( m_hitList.empty() )
     {
         m_frame->SetStatusText( wxEmptyString );
-        msg.Printf( _( "\"%s\" not found" ), searchString );
+        msg.Printf( _( "'%s' not found" ), searchString );
         m_frame->ShowInfoBarMsg( msg );
 
         m_status->SetLabel( msg );
@@ -351,11 +351,12 @@ void DIALOG_FIND::search( bool aDirection )
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, *m_it );
         m_frame->FocusOnLocation( ( *m_it )->GetPosition() );
 
-        msg.Printf( _( "\"%s\" found" ), searchString );
+        msg.Printf( _( "'%s' found" ), searchString );
         m_frame->SetStatusText( msg );
 
-        msg.Printf( _( "Hit(s): %ld / %lu" ), std::distance( m_hitList.begin(), m_it ) + 1,
-                m_hitList.size() );
+        msg.Printf( _( "Hit(s): %ld / %lu" ),
+                    std::distance( m_hitList.begin(), m_it ) + 1,
+                    m_hitList.size() );
         m_status->SetLabel( msg );
     }
 

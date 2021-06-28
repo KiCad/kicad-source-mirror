@@ -2463,7 +2463,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
 
                 // unique_ptr will delete nc on this code path
 
-                m_error.Printf( _( "duplicate NETCLASS name \"%s\"" ), nc->GetName().GetData() );
+                m_error.Printf( _( "Duplicate NETCLASS name '%s'." ), nc->GetName().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2980,18 +2980,20 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in file: \"%s\"\nline: %d, offset: %d" ),
-            m_reader->GetSource().GetData(),
-            m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
+        m_error.Printf( _( "Invalid floating point number in file: '%s'\nline: %d, offset: %d" ),
+                        m_reader->GetSource().GetData(),
+                        m_reader->LineNumber(),
+                        aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
     }
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in file: \"%s\"\nline: %d, offset: %d" ),
-            m_reader->GetSource().GetData(),
-            m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
+        m_error.Printf( _( "Missing floating point number in file: '%s'\nline: %d, offset: %d" ),
+                        m_reader->GetSource().GetData(),
+                        m_reader->LineNumber(),
+                        aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
     }
@@ -3017,16 +3019,20 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in file: \"%s\"\nline: %d, offset: %d" ),
-            m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
+        m_error.Printf( _( "Invalid floating point number in file: '%s'\nline: %d, offset: %d" ),
+                        m_reader->GetSource().GetData(),
+                        m_reader->LineNumber(),
+                        aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
     }
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in file: \"%s\"\nline: %d, offset: %d" ),
-            m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
+        m_error.Printf( _( "Missing floating point number in file: '%s'\nline: %d, offset: %d" ),
+                        m_reader->GetSource().GetData(),
+                        m_reader->LineNumber(),
+                        aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
     }
@@ -3396,7 +3402,7 @@ bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath,
     // we don't want that.  we want bare metal portability with no UI here.
     if( wxRemove( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "library \"%s\" cannot be deleted" ),
+        THROW_IO_ERROR( wxString::Format( _( "Footprint library '%s' cannot be deleted." ),
                                           aLibraryPath.GetData() ) );
     }
 

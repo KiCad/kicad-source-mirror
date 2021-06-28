@@ -428,7 +428,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
             const FOOTPRINT* footprint = cur->GetEnumeratedFootprint( curLibPath, footprints[i] );
             dst->FootprintSave( dstLibPath, footprint );
 
-            msg = wxString::Format( _( "Footprint \"%s\" saved" ), footprints[i] );
+            msg = wxString::Format( _( "Footprint '%s' saved." ), footprints[i] );
             SetStatusText( msg );
         }
     }
@@ -438,7 +438,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
         return false;
     }
 
-    msg = wxString::Format( _( "Footprint library \"%s\" saved as \"%s\"." ),
+    msg = wxString::Format( _( "Footprint library '%s' saved as '%s'." ),
                             curLibPath,
                             dstLibPath );
 

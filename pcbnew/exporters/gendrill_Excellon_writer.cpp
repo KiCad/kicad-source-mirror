@@ -121,7 +121,7 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                 {
                     if( aReporter )
                     {
-                        msg.Printf( _( "Create file %s\n" ), fullFilename );
+                        msg.Printf( _( "Created file '%s'" ), fullFilename );
                         aReporter->Report( msg );
                     }
                 }

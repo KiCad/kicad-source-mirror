@@ -161,7 +161,7 @@ void PCB_CALCULATOR_FRAME::OnDataFileSelection( wxCommandEvent& event )
     else
     {
         wxString msg;
-        msg.Printf( _("Unable to read data file \"%s\""), fullfilename );
+        msg.Printf( _("Unable to read data file '%s'."), fullfilename );
         wxMessageBox( msg );
     }
 }

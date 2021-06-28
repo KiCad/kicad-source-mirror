@@ -911,7 +911,7 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
 
     if( wksFile.Read( buffer.get(), filelen ) != filelen )
     {
-        wxLogMessage( _( "The file \"%s\" was not fully read" ), fullFileName.GetData() );
+        wxLogMessage( _( "The file '%s' was not fully read." ), fullFileName.GetData() );
         return false;
     }
     else

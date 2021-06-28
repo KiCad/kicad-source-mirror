@@ -80,6 +80,6 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     wxString path = dlg.GetPath();
 
     if( !RecreateCmpFile( GetBoard(), path ) )
-        DisplayError( this, wxString::Format( _( "Could not create file '%s'." ), path ) );
+        DisplayError( this, wxString::Format( _( "Failed to create file '%s'." ), path ) );
 }
 

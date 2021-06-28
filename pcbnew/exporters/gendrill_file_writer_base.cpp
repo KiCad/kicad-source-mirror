@@ -351,7 +351,7 @@ void GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "Create file %s\n" ), fullfilename );
+                    msg.Printf( _( "Created file '%s'." ), fullfilename );
                     aReporter->Report( msg );
                 }
             }

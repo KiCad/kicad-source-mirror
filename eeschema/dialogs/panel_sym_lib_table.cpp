@@ -436,11 +436,10 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
             }
             catch( const IO_ERROR& ioe )
             {
-                msg = wxString::Format( _( "Symbol library \"%s\" failed to load.\n %s" ),
-                                        row.GetNickName(),
-                                        ioe.What() );
+                msg.Printf( _( "Symbol library '%s' failed to load." ), row.GetNickName() );
 
-                wxMessageDialog errdlg( this, msg, _( "Error Loading Library" ) );
+                wxMessageDialog errdlg( this, msg + wxS( "\n" ) + ioe.What(),
+                                        _( "Error Loading Library" ) );
                 errdlg.ShowModal();
 
                 return false;

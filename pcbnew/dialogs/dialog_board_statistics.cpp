@@ -642,7 +642,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
 
     if( outFile == NULL )
     {
-        msg.Printf( _( "Unable to create file '%s'." ), saveFileDialog.GetPath() );
+        msg.Printf( _( "Failed to create file '%s'." ), saveFileDialog.GetPath() );
         DisplayErrorMessage( this, msg );
         return;
     }

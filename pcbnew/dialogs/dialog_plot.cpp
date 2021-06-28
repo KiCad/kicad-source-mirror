@@ -909,7 +909,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         }
         else
         {
-            msg.Printf( _( "Unable to create file '%s'." ), fn.GetFullPath() );
+            msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
             reporter.Report( msg, RPT_SEVERITY_ERROR );
         }
 

@@ -251,8 +251,8 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     {
         if( !modelPath.Mkdir() )
         {
-            wxString msg = wxString::Format(
-                    _( "Unable to create directory \"%s\"" ), modelPath.GetPath() );
+            wxString msg = wxString::Format( _( "Failed to create folder '%s'." ),
+                                             modelPath.GetPath() );
             DisplayErrorMessage( this, msg );
             return;
         }
@@ -261,7 +261,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     if( !ExportVRML_File( path, scale, export3DFiles, useRelativePaths,
                           modelPath.GetPath(), aXRef, aYRef ) )
     {
-        wxString msg = wxString::Format( _( "Unable to create file \"%s\"" ), path );
+        wxString msg = wxString::Format( _( "Failed to create file '%s'." ), path );
         DisplayErrorMessage( this, msg );
         return;
     }

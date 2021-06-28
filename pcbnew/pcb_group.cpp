@@ -305,7 +305,7 @@ wxString PCB_GROUP::GetSelectMenuText( EDA_UNITS aUnits ) const
                                  m_items.size() );
     }
 
-    return wxString::Format( _( "Group \"%s\", %zu members" ),
+    return wxString::Format( _( "Group '%s', %zu members" ),
                              m_name,
                              m_items.size() );
 }

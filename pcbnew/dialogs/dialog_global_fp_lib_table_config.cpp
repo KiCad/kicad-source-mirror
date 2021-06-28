@@ -56,11 +56,10 @@ bool DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG::TransferDataFromWindow()
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayError( this,
-                          wxString::Format( _( "Error occurred writing empty footprint library "
-                                               "table file.\n\n%s" ),
-                                            FP_LIB_TABLE::GetGlobalTableFileName(),
-                                            ioe.What() ) );
+            DisplayError( this, wxString::Format( _( "Error occurred writing empty footprint "
+                                                     "library table '%s'." ),
+                                                  FP_LIB_TABLE::GetGlobalTableFileName() )
+                                + wxS( "\n" ) + ioe.What() );
             return false;
         }
 
@@ -80,8 +79,7 @@ bool DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG::TransferDataFromWindow()
     // Make sure the footprint library table to copy actually exists.
     if( !fn.FileExists() )
     {
-        DisplayError( this,
-                      wxString::Format( _( "File \"%s\" not found." ), fn.GetFullPath() ) );
+        DisplayError( this, wxString::Format( _( "File '%s' not found." ), fn.GetFullPath() ) );
         return false;
     }
 
@@ -94,9 +92,9 @@ bool DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG::TransferDataFromWindow()
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this,
-                      wxString::Format( _( "File \"%s\" is not a valid footprint library table "
-                                           "file.\n\n%s" ), fn.GetFullPath(), ioe.What() ) );
+        DisplayError( this, wxString::Format( _( "'%s' is not a valid footprint library table." ),
+                                              fn.GetFullPath() )
+                            + wxS( "\n" ) + ioe.What() );
         return false;
     }
 
@@ -105,19 +103,20 @@ bool DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG::TransferDataFromWindow()
 
     if( !fpTableFileName.DirExists() && !fpTableFileName.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
     {
-        DisplayError( this,
-                      wxString::Format( _( "Cannot create global library table path \"%s\"." ),
-                                            fpTableFileName.GetPath() ) );
+        DisplayError( this, wxString::Format( _( "Cannot create library table path '%s'." ),
+                                              fpTableFileName.GetPath() ) );
         return false;
     }
 
     // Copy the global footprint library table file to the user config.
     if( !::wxCopyFile( fn.GetFullPath(), fpTableFileName.GetFullPath() ) )
     {
-        DisplayError( this,
-                      wxString::Format( _( "Cannot copy global footprint library table "
-                                           "file:\n\n \"%s\"\n\n:to:\n\n\"%s\"." ),
-                                        fn.GetFullPath(), fpTableFileName.GetFullPath() ) );
+        DisplayError( this, wxString::Format( _( "Cannot copy footprint library table from:\n"
+                                                 "%s\n"
+                                                 "to:\n"
+                                                 "%s." ),
+                                              fn.GetFullPath(),
+                                              fpTableFileName.GetFullPath() ) );
         return false;
     }
 
@@ -131,9 +130,8 @@ bool DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG::TransferDataFromWindow()
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, wxString::Format( _( "Error loading global footprint library table."
-                                                 "\n\n%s" ),
-                                              ioe.What() ) );
+        DisplayError( this, _( "Error loading footprint library table." )
+                            + wxS( "\n" ) + ioe.What() );
         return false;
     }
 

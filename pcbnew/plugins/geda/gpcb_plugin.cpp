@@ -88,7 +88,7 @@ static inline long parseInt( const wxString& aValue, double aScalar )
     aValue.ToCDouble(&value);
     if( value == std::numeric_limits<double>::max() ) // conversion really failed
     {
-        THROW_IO_ERROR( wxString::Format( _( "Cannot convert \"%s\" to an integer" ),
+        THROW_IO_ERROR( wxString::Format( _( "Cannot convert '%s' to an integer." ),
                                           aValue.GetData() ) );
         return 0;
     }
@@ -226,7 +226,7 @@ void GPCB_FPL_CACHE::Load()
 
     if( !dir.IsOpened() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "footprint library path \"%s\" does not exist" ),
+        THROW_IO_ERROR( wxString::Format( _( "Footprint library '%s' not found." ),
                                           m_lib_path.GetPath().GetData() ) );
     }
 
@@ -280,7 +280,7 @@ void GPCB_FPL_CACHE::Remove( const wxString& aFootprintName )
 
     if( it == m_footprints.end() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "library \"%s\" has no footprint \"%s\" to delete" ),
+        THROW_IO_ERROR( wxString::Format( _( "Library '%s' has no footprint '%s'." ),
                                           m_lib_path.GetPath().GetData(),
                                           aFootprintName.GetData() ) );
     }
@@ -344,7 +344,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
     if( parameters[0].CmpNoCase( wxT( "Element" ) ) != 0 )
     {
-        msg.Printf( _( "unknown token \"%s\"" ), parameters[0] );
+        msg.Printf( _( "Unknown token '%s'" ), parameters[0] );
         THROW_PARSE_ERROR( msg, aLineReader->GetSource(), (const char *)aLineReader,
                            aLineReader->LineNumber(), 0 );
     }
@@ -874,7 +874,7 @@ void GPCB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxSt
             return;
         else
         {
-            THROW_IO_ERROR( wxString::Format( _( "footprint library path \"%s\" does not exist" ),
+            THROW_IO_ERROR( wxString::Format( _( "Footprint library '%s' not found." ),
                                               aLibraryPath ) );
         }
     }
@@ -960,7 +960,7 @@ void GPCB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString&
 
     if( !m_cache->IsWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library \"%s\" is read only" ),
+        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only." ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -1006,8 +1006,9 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPER
 
             if( tmp.GetExt() != KiCadFootprintFileExtension )
             {
-                THROW_IO_ERROR( wxString::Format( _( "unexpected file \"%s\" was found in library path \"%s\"" ),
-                                                  files[i].GetData(), aLibraryPath.GetData() ) );
+                THROW_IO_ERROR( wxString::Format( _( "Unexpected file '%s' found in library '%s'." ),
+                                                  files[i].GetData(),
+                                                  aLibraryPath.GetData() ) );
             }
         }
 
@@ -1024,7 +1025,7 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPER
     // we don't want that.  we want bare metal portability with no UI here.
     if( !wxRmdir( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "footprint library \"%s\" cannot be deleted" ),
+        THROW_IO_ERROR( wxString::Format( _( "Footprint library '%s' cannot be deleted." ),
                                           aLibraryPath.GetData() ) );
     }
 

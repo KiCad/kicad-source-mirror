@@ -372,7 +372,7 @@ bool PL_EDITOR_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     if( IsContentModified() )
     {
         wxFileName filename = GetCurrentFileName();
-        wxString   msg      = _( "Save changes to \"%s\" before closing?" );
+        wxString   msg      = _( "Save changes to '%s' before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, filename.GetFullName() ),
                                    [&]() -> bool
@@ -852,7 +852,7 @@ DS_DATA_ITEM* PL_EDITOR_FRAME::AddDrawingSheetItem( int aType )
 
         if( !wxFileExists( fullFilename ) )
         {
-            wxMessageBox( _( "Couldn't load image from \"%s\"" ), fullFilename );
+            wxMessageBox( _( "Could not load image from '%s'." ), fullFilename );
             break;
         }
 
@@ -860,7 +860,7 @@ DS_DATA_ITEM* PL_EDITOR_FRAME::AddDrawingSheetItem( int aType )
 
         if( !image->ReadImageFile( fullFilename ) )
         {
-            wxMessageBox( _( "Couldn't load image from \"%s\"" ), fullFilename );
+            wxMessageBox( _( "Could not load image from '%s'." ), fullFilename );
             delete image;
             break;
         }

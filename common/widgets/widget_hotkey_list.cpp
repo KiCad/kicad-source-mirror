@@ -416,7 +416,7 @@ bool WIDGET_HOTKEY_LIST::resolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
         return true;
 
     TOOL_ACTION* conflictingAction = conflictingHotKey->m_Actions[ 0 ];
-    wxString msg = wxString::Format( _( "\"%s\" is already assigned to \"%s\" in section \"%s\". "
+    wxString msg = wxString::Format( _( "'%s' is already assigned to '%s' in section '%s'. "
                                         "Are you sure you want to change its assignment?" ),
                                      KeyNameFromKeyCode( aKey ),
                                      conflictingAction->GetLabel(),
