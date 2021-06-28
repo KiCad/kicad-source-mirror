@@ -55,11 +55,14 @@ enum ERROR_LOC { ERROR_OUTSIDE, ERROR_INSIDE };
 int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree );
 
 /**
- * @return the max error when approximating a circle by segments
- * @param aRadius is the radius of the circle
+ * @return the radius diffence of the circle defined by segments inside the circle
+ * and the radius of the circle tangent to the middle of segments (defined by
+ * segments outside this circle)
+ * @param aInnerCircleRadius is the radius of the circle tangent to the middle
+ * of segments
  * @param aSegCount is the seg count to approximate the circle
  */
-int GetCircleToSegmentError( int aRadius, int aSegCount );
+int CircleToEndSegmentDeltaRadius( int aInnerCircleRadius, int aSegCount );
 
 /**
  * When creating polygons to create a clearance polygonal area, the polygon must

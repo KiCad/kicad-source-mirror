@@ -64,18 +64,22 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
 }
 
 
-int GetCircleToSegmentError( int aRadius, int aSegCount )
+int CircleToEndSegmentDeltaRadius( int aRadius, int aSegCount )
 {
-    // This is similar to the "inverse" of GetArcToSegmentCount()
-
-    // The minimal seg count is 2, giving error = aRadius
+    // The minimal seg count is 3, otherwise we cannot calculate the result
+    // in practice, the min count is clamped to 8 in kicad
     if( aSegCount <= 2 )
-        return aRadius;
+        aSegCount = 3;
 
+    // The angle between the center of the segment and one end of the segment
+    // when the circle is approximated by aSegCount segments
     double alpha = M_PI / aSegCount;
-    int error = KiROUND( aRadius * ( 1.0 - cos( alpha) ) );
 
-    return error;
+    // aRadius is the radius of the circle tangent to the middle of each segment
+    // and aRadius/cos(aplha) is the radius of the circle defined by seg ends
+    int delta = KiROUND( aRadius * ( 1/cos(alpha) - 1 ) );
+
+    return delta;
 }
 
 // When creating polygons to create a clearance polygonal area, the polygon must

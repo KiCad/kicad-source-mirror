@@ -56,8 +56,11 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter,
 
     if( aErrorLoc == ERROR_OUTSIDE )
     {
-        int actual_error = GetCircleToSegmentError( radius, numSegs );
-        radius += GetCircleToPolyCorrection( actual_error );
+        // The outer radius should be radius+aError
+        // Recalculate the actual approx error, as it can be smaller than aError
+        // because numSegs is clamped to a minimal value
+        int actual_delta_radius = CircleToEndSegmentDeltaRadius( radius, numSegs );
+        radius += GetCircleToPolyCorrection( actual_delta_radius );
     }
 
     for( int angle = 0; angle < 3600; angle += delta )
@@ -90,7 +93,13 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, i
     int     radius = aRadius;
 
     if( aErrorLoc == ERROR_OUTSIDE )
-        radius += GetCircleToPolyCorrection( aError );
+    {
+        // The outer radius should be radius+aError
+        // Recalculate the actual approx error, as it can be smaller than aError
+        // because numSegs is clamped to a minimal value
+        int actual_delta_radius = CircleToEndSegmentDeltaRadius( radius, numSegs );
+        radius += GetCircleToPolyCorrection( actual_delta_radius );
+    }
 
     aCornerBuffer.NewOutline();
 
