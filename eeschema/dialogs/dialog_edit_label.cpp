@@ -55,7 +55,11 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
     m_valueMultiLine->SetEOLMode( wxSTC_EOL_LF );
 
-    m_scintillaTricks = new SCINTILLA_TRICKS( m_valueMultiLine, wxT( "{}" ) );
+    m_scintillaTricks = new SCINTILLA_TRICKS( m_valueMultiLine, wxT( "{}" ), false,
+            [this]()
+            {
+                wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+            } );
 
     if( m_CurrentText->IsMultilineAllowed() )
     {

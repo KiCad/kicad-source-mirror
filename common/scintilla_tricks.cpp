@@ -32,33 +32,39 @@
 #include <wx/settings.h>
 #include <confirm.h>
 
-SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces ) :
+SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces,
+                                    bool aSingleLine, std::function<void()> aReturnCallback ) :
         m_te( aScintilla ),
         m_braces( aBraces ),
         m_lastCaretPos( -1 ),
-        m_suppressAutocomplete( false )
+        m_suppressAutocomplete( false ),
+        m_singleLine( aSingleLine ),
+        m_returnCallback( aReturnCallback )
 {
     // A hack which causes Scintilla to auto-size the text editor canvas
     // See: https://github.com/jacobslusser/ScintillaNET/issues/216
     m_te->SetScrollWidth( 1 );
     m_te->SetScrollWidthTracking( true );
 
-    // Set a monospace font with a tab width of 4.  This is the closest we can get to having
-    // Scintilla mimic the stroke font's tab positioning.
-    int    size = wxNORMAL_FONT->GetPointSize();
-    wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
+    if( !m_singleLine )
+    {
+        // Set a monospace font with a tab width of 4.  This is the closest we can get to having
+        // Scintilla mimic the stroke font's tab positioning.
+        int    size = wxNORMAL_FONT->GetPointSize();
+        wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
 
-#ifdef __WXMAC__
-    // I think wxFONTFAMILY_TELETYPE worked on wxWidgets 3.0, but it doesn't on 3.1.  Set a
-    // monospaced font by hand.  (https://trac.wxwidgets.org/ticket/19210)
-    fixedFont.SetFaceName( "Menlo" );
-#endif
+    #ifdef __WXMAC__
+        // I think wxFONTFAMILY_TELETYPE worked on wxWidgets 3.0, but it doesn't on 3.1.  Set a
+        // monospaced font by hand.  (https://trac.wxwidgets.org/ticket/19210)
+        fixedFont.SetFaceName( "Menlo" );
+    #endif
 
-    for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
-        m_te->StyleSetFont( i, fixedFont );
+        for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
+            m_te->StyleSetFont( i, fixedFont );
 
-    m_te->StyleClearAll();    // Addresses a bug in wx3.0 where styles are not correctly set
-    m_te->SetTabWidth( 4 );
+        m_te->StyleClearAll();    // Addresses a bug in wx3.0 where styles are not correctly set
+        m_te->SetTabWidth( 4 );
+    }
 
     // Set up the brace highlighting
     wxColour highlight = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
@@ -128,7 +134,11 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     if( !isalpha( aEvent.GetKeyCode() ) )
         m_suppressAutocomplete = false;
 
-    if( ConvertSmartQuotesAndDashes( &c ) )
+    if( aEvent.GetKeyCode() == WXK_RETURN && ( m_singleLine || aEvent.ShiftDown() ) )
+    {
+        m_returnCallback();
+    }
+    else if( ConvertSmartQuotesAndDashes( &c ) )
     {
         m_te->AddText( c );
     }

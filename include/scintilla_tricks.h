@@ -34,7 +34,8 @@ class SCINTILLA_TRICKS : public wxEvtHandler
 {
 public:
 
-    SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces );
+    SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces, bool aSingleLine,
+                      std::function<void()> m_enterCallback = [](){ } );
 
     void DoAutocomplete( const wxString& aPartial, const wxArrayString& aTokens );
 
@@ -45,11 +46,14 @@ protected:
     void onScintillaUpdateUI( wxStyledTextEvent& aEvent );
 
 protected:
-    wxStyledTextCtrl* m_te;
-    wxString          m_braces;
-
-    int               m_lastCaretPos;
-    bool              m_suppressAutocomplete;
+    wxStyledTextCtrl*     m_te;
+    wxString              m_braces;
+    int                   m_lastCaretPos;
+    bool                  m_suppressAutocomplete;
+    bool                  m_singleLine;            // Treat <return> as OK, and skip special tab
+                                                   //  stop handling (including monospaced font).
+    std::function<void()> m_returnCallback;        // Process <return> in singleLine, and
+                                                   //  <shift> + <return> irrespective.
 };
 
 #endif  // SCINTILLA_TRICKS_H

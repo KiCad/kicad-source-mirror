@@ -60,7 +60,11 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
     m_MultiLineText->SetEOLMode( wxSTC_EOL_LF );
 
-    m_scintillaTricks = new SCINTILLA_TRICKS( m_MultiLineText, wxT( "{}" ) );
+    m_scintillaTricks = new SCINTILLA_TRICKS( m_MultiLineText, wxT( "{}" ), false,
+            [this]()
+            {
+                wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+            } );
 
     // A hack which causes Scintilla to auto-size the text editor canvas
     // See: https://github.com/jacobslusser/ScintillaNET/issues/216
