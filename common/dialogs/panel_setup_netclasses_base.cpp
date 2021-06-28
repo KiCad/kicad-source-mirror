@@ -79,6 +79,13 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	buttonBoxSizer->Add( m_removeButton, 0, wxRIGHT|wxLEFT, 5 );
 
 
+	buttonBoxSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_colorDefaultHelpText = new wxStaticText( m_netclassesPane, wxID_ANY, _("Set color to transparent to use Kicad default color."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_colorDefaultHelpText->Wrap( -1 );
+	buttonBoxSizer->Add( m_colorDefaultHelpText, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
 	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 

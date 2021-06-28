@@ -23,9 +23,9 @@ class WX_GRID;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
-#include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <wx/statbox.h>
@@ -46,6 +46,7 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		WX_GRID* m_netclassGrid;
 		wxBitmapButton* m_addButton;
 		wxBitmapButton* m_removeButton;
+		wxStaticText* m_colorDefaultHelpText;
 		wxPanel* m_membershipPane;
 		wxStaticText* m_ncfilterLabel;
 		wxChoice* m_netClassFilter;

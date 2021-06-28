@@ -135,6 +135,10 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
         attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( g_lineStyleIcons, g_lineStyleNames ) );
         attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( g_lineStyleIcons, g_lineStyleNames ) );
         m_netclassGrid->SetColAttr( GRID_LINESTYLE, attr );
+
+        wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+        infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+        m_colorDefaultHelpText->SetFont( infoFont );
     }
     else
     {
@@ -143,6 +147,8 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
             m_netclassGrid->HideCol( i );
             m_originalColWidths[ i ] = 0;
         }
+
+        m_colorDefaultHelpText->Hide();
     }
 
     // Be sure the column labels are readable
