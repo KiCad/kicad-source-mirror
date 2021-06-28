@@ -36,7 +36,6 @@
 #include <common_ogl/ogl_attr_list.h>
 #include <gal/dpi_scaling.h>
 #include <pgm_base.h>
-#include <project.h>
 #include <settings/common_settings.h>
 #include <widgets/infobar.h>
 
@@ -49,7 +48,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
         m_infobar( nullptr ),
         m_boardAdapter(),
         m_currentCamera( m_trackBallCamera ),
-        m_trackBallCamera( RANGE_SCALE_3D )
+        m_trackBallCamera( RANGE_SCALE_3D, 0.85f )
 {
     m_userUnits = aFrame->GetUserUnits();
 

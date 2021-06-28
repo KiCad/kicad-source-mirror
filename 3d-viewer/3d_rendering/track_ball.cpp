@@ -34,7 +34,8 @@
 #include <wx/log.h>
 
 
-TRACK_BALL::TRACK_BALL( float aRangeScale ) : CAMERA( aRangeScale )
+TRACK_BALL::TRACK_BALL( float aRangeScale, float aDefaultZoom ) :
+    CAMERA( aRangeScale, aDefaultZoom )
 {
     wxLogTrace( m_logTrace, wxT( "TRACK_BALL::TRACK_BALL" ) );
 

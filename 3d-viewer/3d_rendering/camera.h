@@ -84,7 +84,7 @@ public:
      *                    -aRangeScale/2 to +aRangeScale/2.  It will initialize the
      *                    Z position with aRangeScale.
      */
-    explicit CAMERA( float aRangeScale );
+    explicit CAMERA( float aRangeScale, float aDefaultZoom );
 
     virtual ~CAMERA()
     {
@@ -251,9 +251,11 @@ protected:
      */
     float m_range_scale;
 
+
     /**
      * 3D zoom value (Min 0.0 ... Max 1.0)
      */
+    float m_default_zoom;
     float m_zoom;
     float m_zoom_t0;
     float m_zoom_t1;

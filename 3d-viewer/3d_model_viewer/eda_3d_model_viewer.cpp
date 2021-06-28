@@ -38,6 +38,9 @@
 #include <wx/dcclient.h>
 #include <base_units.h>
 #include <gl_context_mgr.h>
+#include <settings/common_settings.h>
+#include <pgm_base.h>
+#include <gal/dpi_scaling.h>
 
 /**
   * Scale conversion from 3d model units to pcb units
@@ -86,7 +89,8 @@ EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribL
                                           S3D_CACHE* aCacheManager ) :
         HIDPI_GL_CANVAS( aParent, wxID_ANY, aAttribList, wxDefaultPosition, wxDefaultSize,
                          wxFULL_REPAINT_ON_RESIZE ),
-        m_trackBallCamera( RANGE_SCALE_3D * 2.0f ), m_cacheManager( aCacheManager )
+        m_trackBallCamera( RANGE_SCALE_3D * 2.0f, 0.38f ),
+        m_cacheManager( aCacheManager )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER" ) );
 
@@ -97,6 +101,11 @@ EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribL
     m_BiuTo3dUnits = 1.0;
 
     m_glRC = nullptr;
+
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+
+    const DPI_SCALING dpi{ settings, this };
+    SetScaleFactor( dpi.GetScaleFactor() );
 }
 
 

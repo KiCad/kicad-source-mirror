@@ -51,11 +51,12 @@ const wxChar *CAMERA::m_logTrace = wxT( "KI_TRACE_CAMERA" );
 #define MAX_ZOOM 1.25f
 
 
-CAMERA::CAMERA( float aRangeScale )
+CAMERA::CAMERA( float aRangeScale, float aDefaultZoom )
 {
     wxLogTrace( m_logTrace, wxT( "CAMERA::CAMERA" ) );
 
     m_range_scale           = aRangeScale;
+    m_default_zoom          = aDefaultZoom;
     m_camera_pos_init       = SFVEC3F( 0.0f, 0.0f, -(aRangeScale * 2.0f ) );
     m_board_lookat_pos_init = SFVEC3F( 0.0f );
     m_windowSize            = SFVEC2I( 0, 0 );
@@ -75,9 +76,9 @@ void CAMERA::Reset()
     m_rotationMatrixAux    = glm::mat4( 1.0f );
     m_lastPosition         = wxPoint( 0, 0 );
 
-    m_zoom                 = 1.0f;
-    m_zoom_t0              = 1.0f;
-    m_zoom_t1              = 1.0f;
+    m_zoom                 = m_default_zoom;
+    m_zoom_t0              = m_default_zoom;
+    m_zoom_t1              = m_default_zoom;
     m_camera_pos           = m_camera_pos_init;
     m_camera_pos_t0        = m_camera_pos_init;
     m_camera_pos_t1        = m_camera_pos_init;
@@ -101,7 +102,7 @@ void CAMERA::Reset()
 void CAMERA::Reset_T1()
 {
     m_camera_pos_t1        = m_camera_pos_init;
-    m_zoom_t1              = 1.0f;
+    m_zoom_t1              = m_default_zoom;
     m_rotate_aux_t1        = SFVEC3F( 0.0f );
     m_lookat_pos_t1        = m_board_lookat_pos_init;
 

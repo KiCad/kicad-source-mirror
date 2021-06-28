@@ -36,7 +36,7 @@
 class TRACK_BALL : public CAMERA
 {
 public:
-    explicit TRACK_BALL( float aRangeScale );
+    explicit TRACK_BALL( float aRangeScale, float aDefaultZoom );
 
     virtual ~TRACK_BALL()
     {
