@@ -55,7 +55,10 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter,
     int     radius = aRadius;
 
     if( aErrorLoc == ERROR_OUTSIDE )
-        radius += GetCircleToPolyCorrection( aError );
+    {
+        int actual_error = GetCircleToSegmentError( radius, numSegs );
+        radius += GetCircleToPolyCorrection( actual_error );
+    }
 
     for( int angle = 0; angle < 3600; angle += delta )
     {

@@ -66,12 +66,14 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
 
 int GetCircleToSegmentError( int aRadius, int aSegCount )
 {
-    // avoid divide-by-zero, and the minimal seg count used here = 2
-    // (giving error = aRadius)
-    aSegCount = std::max( 2, aSegCount );
+    // This is similar to the "inverse" of GetArcToSegmentCount()
+
+    // The minimal seg count is 2, giving error = aRadius
+    if( aSegCount <= 2 )
+        return aRadius;
 
     double alpha = M_PI / aSegCount;
-    double error = aRadius * ( 1.0 - cos( alpha) );
+    int error = KiROUND( aRadius * ( 1.0 - cos( alpha) ) );
 
     return error;
 }

@@ -713,8 +713,27 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetStrokeColor( color );
+    m_gal->SetStrokeColor( COLOR4D( 0, 0, 1.0, 1.0 ) );
     m_gal->DrawPolygon( cornerBuffer );
+#endif
+
+// Debug only: enable this code only to test the SHAPE_ARC::ConvertToPolyline function
+// and display the polyline created by it.
+#if 0
+    int error_value2 = aArc->GetBoard()->GetDesignSettings().m_MaxError;
+    SHAPE_ARC arc( aArc->GetCenter(), aArc->GetStart(),
+                   aArc->GetAngle() / 10.0, aArc->GetWidth() );
+    SHAPE_LINE_CHAIN arcSpine = arc.ConvertToPolyline( error_value2 );
+    m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( COLOR4D( 0.3, 0.2, 0.5, 1.0 ) );
+
+    for( int idx = 1; idx < arcSpine.PointCount(); idx++ )
+    {
+        m_gal->DrawSegment( arcSpine.CPoint( idx-1 ), arcSpine.CPoint( idx ),
+                            aArc->GetWidth() );
+    };
 #endif
 }
 
