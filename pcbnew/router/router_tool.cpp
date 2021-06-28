@@ -128,9 +128,18 @@ static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia(
         AS_CONTEXT,
         MD_ALT + '<', LEGACY_HK_NAME( "Select Layer and Add Blind/Buried Via" ),
         _( "Select Layer and Place Blind/Buried Via..." ),
-        _( "Select a layer, then add a blind or buried via at the end of currently routed track."),
+        _( "Select a layer, then add a blind or buried via at the end of currently routed track." ),
         BITMAPS::select_w_layer, AF_NONE,
         (void*) ( VIA_ACTION_FLAGS::BLIND_VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
+
+static const TOOL_ACTION ACT_SelLayerAndPlaceMicroVia(
+        "pcbnew.InteractiveRouter.SelLayerAndPlaceMicroVia",
+        AS_CONTEXT,
+        0, "",
+        _( "Select Layer and Place Micro Via..." ),
+        _( "Select a layer, then add a micro via at the end of currently routed track." ),
+        BITMAPS::select_w_layer, AF_NONE,
+        (void*) ( VIA_ACTION_FLAGS::MICROVIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
 static const TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
         AS_CONTEXT,
@@ -456,6 +465,7 @@ bool ROUTER_TOOL::Init()
     menu.AddItem( ACT_PlaceMicroVia,                  SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_SelLayerAndPlaceThroughVia,     SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_SelLayerAndPlaceBlindVia,       SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_SelLayerAndPlaceMicroVia,       SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_SwitchPosture,                  SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_SwitchRounding,                 SELECTION_CONDITIONS::ShowAlways );
 
@@ -851,22 +861,6 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             infobar->ShowMessageFor( _( "Microvias must first be enabled in "
                                         "Board Setup > Design Rules > Constraints." ),
                                      10000, wxICON_ERROR );
-            return false;
-        }
-
-        // Can only place through vias on 2-layer boards
-        if( ( viaType != VIATYPE::THROUGH ) && ( layerCount <= 2 ) )
-        {
-            frame()->ShowInfoBarError( _( "Only through vias are allowed on 2 layer boards." ) );
-            return false;
-        }
-
-        // Can only place microvias if we're on an outer layer, or directly adjacent to one
-        if( ( viaType == VIATYPE::MICROVIA ) && ( currentLayer > In1_Cu )
-                && ( currentLayer < layerCount - 2 ) )
-        {
-            frame()->ShowInfoBarError( _( "Microvias can only be placed between the outer layers "
-                                          "(F.Cu/B.Cu) and the ones directly adjacent to them." ) );
             return false;
         }
     }
@@ -1898,6 +1892,7 @@ void ROUTER_TOOL::setTransitions()
     Go( &ROUTER_TOOL::onViaCommand,           ACT_PlaceMicroVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand,           ACT_SelLayerAndPlaceThroughVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand,           ACT_SelLayerAndPlaceBlindVia.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           ACT_SelLayerAndPlaceMicroVia.MakeEvent() );
 
     Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerTop.MakeEvent() );
     Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner1.MakeEvent() );
