@@ -26,6 +26,7 @@
 
 
 #include <wx/stc/stc.h>
+#include <functional>
 
 /**
  * Add cut/copy/paste, autocomplete and brace highlighting to a wxStyleTextCtrl instance.
