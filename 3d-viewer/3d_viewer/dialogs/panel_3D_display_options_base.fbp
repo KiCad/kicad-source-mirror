@@ -14,6 +14,7 @@
         <property name="file">panel_3D_display_options_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">panel_3D_display_options_base</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Panel" expanded="1">
@@ -56,8 +58,8 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">10</property>
-                    <property name="flag">wxEXPAND|wxTOP|wxBOTTOM|wxLEFT</property>
-                    <property name="proportion">1</property>
+                    <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxTOP</property>
+                    <property name="proportion">3</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">bSizeLeft</property>
@@ -541,7 +543,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxALL</property>
+                            <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="1">
                                 <property name="id">wxID_ANY</property>
@@ -685,8 +687,8 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">10</property>
-                    <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
-                    <property name="proportion">1</property>
+                    <property name="flag">wxEXPAND|wxRIGHT|wxTOP</property>
+                    <property name="proportion">4</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">bSizerRight</property>
@@ -694,7 +696,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxTOP|wxBOTTOM|wxLEFT</property>
+                            <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxTOP</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="0">
                                 <property name="id">wxID_ANY</property>
@@ -1100,7 +1102,7 @@
                                         <property name="permission">none</property>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxTOP|wxBOTTOM|wxLEFT</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxStaticText" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -1229,9 +1231,9 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxTOP|wxBOTTOM|wxLEFT</property>
+                            <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxTOP</property>
                             <property name="proportion">0</property>
-                            <object class="wxStaticBoxSizer" expanded="0">
+                            <object class="wxStaticBoxSizer" expanded="1">
                                 <property name="id">wxID_ANY</property>
                                 <property name="label">Camera Options</property>
                                 <property name="minimum_size"></property>
@@ -1241,7 +1243,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxBOTTOM</property>
+                                    <property name="flag">wxBOTTOM</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBoxSizer" expanded="0">
                                         <property name="minimum_size"></property>
@@ -1438,7 +1440,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
+                                    <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticLine" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -1559,11 +1561,11 @@
                                         <event name="OnCheckBox">OnCheckEnableAnimation</event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="0">
+                                <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
+                                    <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxBoxSizer" expanded="0">
+                                    <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
                                         <property name="name">bSizerSlider</property>
                                         <property name="orient">wxHORIZONTAL</property>

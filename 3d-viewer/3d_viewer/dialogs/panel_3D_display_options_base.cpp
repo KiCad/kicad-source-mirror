@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -60,10 +60,10 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	sbUserLayers->Add( m_checkBoxECO, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizeLeft->Add( sbUserLayers, 0, wxEXPAND|wxALL, 5 );
+	bSizeLeft->Add( sbUserLayers, 0, wxALL|wxEXPAND, 5 );
 
 
-	bSizerMain->Add( bSizeLeft, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 10 );
+	bSizerMain->Add( bSizeLeft, 3, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 10 );
 
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
@@ -96,7 +96,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 
 	m_materialPropertiesLabel = new wxStaticText( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Material properties:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_materialPropertiesLabel->Wrap( -1 );
-	bSizerMaterials->Add( m_materialPropertiesLabel, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerMaterials->Add( m_materialPropertiesLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_materialPropertiesChoices[] = { _("Realistic"), _("Solid colors"), _("CAD colors") };
 	int m_materialPropertiesNChoices = sizeof( m_materialPropertiesChoices ) / sizeof( wxString );
@@ -108,7 +108,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	sbRenderOptions->Add( bSizerMaterials, 1, wxEXPAND, 5 );
 
 
-	bSizerRight->Add( sbRenderOptions, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerRight->Add( sbRenderOptions, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
 
 	wxStaticBoxSizer* sbCameraOptions;
 	sbCameraOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Camera Options") ), wxVERTICAL );
@@ -129,10 +129,10 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	bSizerRotAngle->Add( m_staticTextRotAngleUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbCameraOptions->Add( bSizerRotAngle, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbCameraOptions->Add( bSizerRotAngle, 0, wxBOTTOM, 5 );
 
 	m_staticline3 = new wxStaticLine( sbCameraOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	sbCameraOptions->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	sbCameraOptions->Add( m_staticline3, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_checkBoxEnableAnimation = new wxCheckBox( sbCameraOptions->GetStaticBox(), wxID_ANY, _("Enable animation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxEnableAnimation->SetValue(true);
@@ -151,13 +151,13 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	bSizerSlider->Add( m_sliderAnimationSpeed, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	sbCameraOptions->Add( bSizerSlider, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	sbCameraOptions->Add( bSizerSlider, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
-	bSizerRight->Add( sbCameraOptions, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerRight->Add( sbCameraOptions, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
 
 
-	bSizerMain->Add( bSizerRight, 1, wxEXPAND|wxTOP|wxBOTTOM, 10 );
+	bSizerMain->Add( bSizerRight, 4, wxEXPAND|wxRIGHT|wxTOP, 10 );
 
 
 	this->SetSizer( bSizerMain );
