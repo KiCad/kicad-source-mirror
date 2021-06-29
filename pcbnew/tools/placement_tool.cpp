@@ -161,12 +161,12 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItemsToAlign,
     {
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
-        if( boardItem->IsLocked() )
+        // We do not lock items in the footprint editor
+        if( boardItem->IsLocked() && m_frame->IsType( FRAME_PCB_EDITOR ) )
         {
             // Locking a pad but not the footprint means that we align the footprint using
             // the pad position.  So we test for footprint locking here
-            if( m_frame->IsType( FRAME_PCB_EDITOR ) && boardItem->Type() == PCB_PAD_T
-                    && !boardItem->GetParent()->IsLocked() )
+            if( boardItem->Type() == PCB_PAD_T && !boardItem->GetParent()->IsLocked() )
             {
                 itemsToAlign.push_back( boardItem );
             }
