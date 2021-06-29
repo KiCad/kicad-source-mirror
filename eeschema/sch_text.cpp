@@ -615,14 +615,13 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
                 return false;
             };
 
-    bool     processTextVars = false;
-    wxString text = EDA_TEXT::GetShownText( &processTextVars );
+    wxString text = EDA_TEXT::GetShownText();
 
     if( text == "~" )   // Legacy placeholder for empty string
     {
         text = "";
     }
-    else if( processTextVars )
+    else if( HasTextVars() )
     {
         wxCHECK_MSG( Schematic(), wxEmptyString, "No parent SCHEMATIC set for SCH_TEXT!" );
 

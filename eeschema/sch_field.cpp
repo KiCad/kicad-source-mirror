@@ -145,14 +145,13 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
             };
 
     PROJECT*  project = nullptr;
-    bool      processTextVars = false;
-    wxString  text = EDA_TEXT::GetShownText( &processTextVars );
+    wxString  text = EDA_TEXT::GetShownText();
 
     if( text == "~" )    // Legacy placeholder for empty string
     {
         text = "";
     }
-    else if( processTextVars )
+    else if( HasTextVars() )
     {
         if( Schematic() )
             project = &Schematic()->Prj();

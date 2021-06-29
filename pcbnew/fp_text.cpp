@@ -429,10 +429,9 @@ wxString FP_TEXT::GetShownText( int aDepth ) const
                 return board->ResolveTextVar( token, aDepth + 1 );
             };
 
-    bool     processTextVars = false;
-    wxString text = EDA_TEXT::GetShownText( &processTextVars );
+    wxString text = EDA_TEXT::GetShownText();
 
-    if( processTextVars )
+    if( HasTextVars() )
     {
         PROJECT* project = nullptr;
 

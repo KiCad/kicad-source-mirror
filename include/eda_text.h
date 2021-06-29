@@ -141,21 +141,14 @@ public:
     virtual wxString GetShownText( int aDepth = 0 ) const { return m_shown_text; }
 
     /**
-     * A version of GetShownText() which also indicates whether or not the text needs
-     * to be processed for text variables.
-     *
-     * @param processTextVars [out]
-     */
-    wxString GetShownText( bool* processTextVars ) const
-    {
-        *processTextVars = m_shown_text_has_text_var_refs;
-        return m_shown_text;
-    }
-
-    /**
      * Returns a shortened version (max 15 characters) of the shown text
      */
     wxString ShortenedShownText() const;
+
+    /**
+     * Indicates the ShownText has text var references which need to be processed.
+     */
+    bool HasTextVars() const { return m_shown_text_has_text_var_refs; }
 
     virtual void SetText( const wxString& aText );
 

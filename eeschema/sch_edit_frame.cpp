@@ -800,6 +800,11 @@ void SCH_EDIT_FRAME::OnModify()
                     return true;
                 }
 
+                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+
+                if( text && text->HasTextVars() )
+                    return true;
+
                 return false;
             } );
 
