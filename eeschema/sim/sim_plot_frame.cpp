@@ -1512,13 +1512,17 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
             text->StyleSetBackground( wxSTC_STYLE_LINENUMBER, wxColour( 220, 220, 220 ) );
             text->SetMarginType( MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER );
 
-            text->StyleSetFont( wxSTC_STYLE_DEFAULT, KIUI::GetMonospacedUIFont() );
+            wxFont fixedFont = KIUI::GetMonospacedUIFont();
+
+            for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
+                text->StyleSetFont( i, fixedFont );
+
+            text->StyleClearAll();  // Addresses a bug in wx3.0 where styles are not correctly set
 
             text->SetWrapMode( wxSTC_WRAP_WORD );
 
             text->SetText( source );
 
-            text->StyleClearAll();
             text->SetLexer( wxSTC_LEX_SPICE );
 
             wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
