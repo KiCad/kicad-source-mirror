@@ -32,7 +32,6 @@
 #include <kiway_express.h>
 #include <macros.h>
 #include <netlist_reader/netlist_reader.h>
-#include <footprint_info_impl.h>
 #include <numeric>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
@@ -57,13 +56,8 @@
 #include <wx/button.h>
 #include <wx/settings.h>
 
+
 #define CVPCB_MAINFRAME_NAME wxT( "CvpcbFrame" )
-
-
-/// The global footprint info table.  This is performance-intensive to build so we
-/// keep a hash-stamped global version.  Any deviation from the request vs. stored
-/// hash will result in it being rebuilt.
-FOOTPRINT_LIST_IMPL   GFootprintList;
 
 
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
@@ -78,7 +72,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_skipComponentSelect = false;
     m_filteringOptions    = FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST;
     m_tcFilterString      = NULL;
-    m_FootprintsList      = &GFootprintList;
+    m_FootprintsList      = FOOTPRINT_LIST::GetInstance( Kiway() );
     m_initialized         = false;
     m_aboutTitle          = "CvPcb";
 
@@ -95,8 +89,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
     ReCreateMenuBar();
     ReCreateHToolbar();
-
-    GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + "fp-info-cache" );
 
     // Create list of available footprints and symbols of the schematic
     BuildSymbolsListBox();
@@ -777,7 +769,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
     }
 
     // Extract the library information
-    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs( Kiway() );
+    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs();
 
     if( fptbl->HasLibrary( lib ) )
         msg = wxString::Format( _( "Library location: %s" ), fptbl->GetFullURI( lib ) );
@@ -790,7 +782,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
 
 bool CVPCB_MAINFRAME::LoadFootprintFiles()
 {
-    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs( Kiway() );
+    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs();
 
     // Check if there are footprint libraries in the footprint library table.
     if( !fptbl || !fptbl->GetLogicalLibs().size() )
@@ -949,7 +941,7 @@ void CVPCB_MAINFRAME::BuildLibrariesListBox()
                                              wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ) );
     }
 
-    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs( Kiway() );
+    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
 
     if( tbl )
     {

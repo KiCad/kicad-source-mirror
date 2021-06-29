@@ -130,7 +130,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
                     if( component->GetFPID().IsLegacy() )
                     {
                         // get this first here, it's possibly obsoleted if we get it too soon.
-                        FP_LIB_TABLE*   tbl = Prj().PcbFootprintLibs( Kiway() );
+                        FP_LIB_TABLE*   tbl = Prj().PcbFootprintLibs();
 
                         int guess = guessNickname( tbl, (LIB_ID*) &component->GetFPID() );
 

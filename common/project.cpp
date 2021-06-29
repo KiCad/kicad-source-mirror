@@ -24,7 +24,6 @@
 #include <wx/log.h>
 #include <wx/stdpaths.h>
 
-#include <config_params.h>
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <fp_lib_table.h>

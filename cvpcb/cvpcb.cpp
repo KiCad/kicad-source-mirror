@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp..charras at wanadoo.fr
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file cvpcb.cpp
- */
-
 #include <confirm.h>
 #include <fp_lib_table.h>
+#include <footprint_info_impl.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -36,7 +33,7 @@
 #include <cvpcb_mainframe.h>
 #include <cvpcb_settings.h>
 #include <display_footprints_frame.h>
-
+#include <kiface_ids.h>
 
 namespace CV {
 
@@ -75,7 +72,23 @@ static struct IFACE : public KIFACE_I
      */
     void* IfaceOrAddress( int aDataId ) override
     {
-        return NULL;
+        switch( aDataId )
+        {
+        // Return a pointer to the global instance of the footprint list.
+        case KIFACE_FOOTPRINT_LIST:
+            return (void*) &GFootprintList;
+
+        // Return a new FP_LIB_TABLE with the global table installed as a fallback.
+        case KIFACE_NEW_FOOTPRINT_TABLE:
+            return (void*) new FP_LIB_TABLE( &GFootprintTable );
+
+        // Return a pointer to the global instance of the global footprint table.
+        case KIFACE_GLOBAL_FOOTPRINT_TABLE:
+            return (void*) &GFootprintTable;
+
+        default:
+            return nullptr;
+        }
     }
 
 } kiface( "cvpcb", KIWAY::FACE_CVPCB );
@@ -115,10 +128,18 @@ PGM_BASE* PgmOrNull()
 }
 
 
+/// The global footprint library table.  This is not dynamically allocated because
+/// in a multiple project environment we must keep its address constant (since it is
+/// the fallback table for multiple projects).
+FP_LIB_TABLE        GFootprintTable;
+
+/// The global footprint info table.  This is performance-intensive to build so we
+/// keep a hash-stamped global version.  Any deviation from the request vs. stored
+/// hash will result in it being rebuilt.
+FOOTPRINT_LIST_IMPL GFootprintList;
+
+
 //!!!!!!!!!!!!!!! This code is obsolete because of the merge into pcbnew, don't bother with it.
-
-FP_LIB_TABLE GFootprintTable;
-
 
 // A short lived implementation.  cvpcb will get combine into pcbnew shortly, so
 // we skip setting KICAD6_FOOTPRINT_DIR here for now.  User should set the environment
@@ -150,24 +171,22 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
         if( !FP_LIB_TABLE::LoadGlobalTable( GFootprintTable ) )
         {
-            DisplayInfoMessage( NULL, _(
-                "You have run CvPcb for the first time using the "
-                "new footprint library table method for finding "
-                "footprints.\nCvPcb has either copied the default "
-                "table or created an empty table in your home "
-                "folder.\nYou must first configure the library "
-                "table to include all footprint libraries not "
-                "included with KiCad.\nSee the \"Footprint Library "
-                "Table\" section of the CvPcb documentation for "
-                "more information." ) );
+            DisplayInfoMessage( NULL, _( "You have run CvPcb for the first time using the "
+                                         "new footprint library table method for finding "
+                                         "footprints.\nCvPcb has either copied the default "
+                                         "table or created an empty table in your home "
+                                         "folder.\nYou must first configure the library "
+                                         "table to include all footprint libraries not "
+                                         "included with KiCad.\nSee the \"Footprint Library "
+                                         "Table\" section of the CvPcb documentation for "
+                                         "more information." ) );
         }
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayErrorMessage(
-            nullptr,
-            _( "An error occurred attempting to load the global footprint library table" ),
-            ioe.What() );
+        DisplayErrorMessage( nullptr, _( "An error occurred attempting to load the global "
+                                         "footprint library table." ),
+                             ioe.What() );
         return false;
     }
 

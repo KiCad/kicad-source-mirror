@@ -406,7 +406,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     wxString libNickname = FROM_UTF8( fpid.GetLibNickname().c_str() );
     wxString fpName      = FROM_UTF8( fpid.GetLibItemName().c_str() );
 
-    FP_LIB_TABLE* fpTable = Prj().PcbFootprintLibs( Kiway() );
+    FP_LIB_TABLE* fpTable = Prj().PcbFootprintLibs();
     wxASSERT( fpTable );
 
     // See if the library requested is in the library table
