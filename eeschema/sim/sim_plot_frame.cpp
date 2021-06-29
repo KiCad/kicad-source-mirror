@@ -472,7 +472,7 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
         SIM_PANEL_BASE* plotPanel = currentPlotWindow();
 
         if( plotPanel && m_workbook->HasPlotPanel( plotPanel ) )
-            m_exporter->SetSimCommand( plotPanel->GetSimCommand() );
+            m_exporter->SetSimCommand( m_workbook->GetSimCommand( plotPanel ) );
     }
     else
     {
@@ -1041,7 +1041,7 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
     for( const SIM_PANEL_BASE*& plotPanel : plotPanels )
     {
         file.AddLine( wxString::Format( "%d", plotPanel->GetType() ) );
-        file.AddLine( plotPanel->GetSimCommand() );
+        file.AddLine( m_workbook->GetSimCommand( plotPanel ) );
 
         const SIM_PLOT_PANEL* panel = dynamic_cast<const SIM_PLOT_PANEL*>( plotPanel );
 
@@ -1401,14 +1401,14 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
     }
 
     if( m_workbook->HasPlotPanel( plotPanelWindow ) )
-        m_settingsDlg->SetSimCommand( plotPanelWindow->GetSimCommand() );
+        m_settingsDlg->SetSimCommand( m_workbook->GetSimCommand( plotPanelWindow ) );
 
     if( m_settingsDlg->ShowModal() == wxID_OK )
     {
         wxString oldCommand;
 
         if( m_workbook->HasPlotPanel( plotPanelWindow ) )
-            oldCommand = plotPanelWindow->GetSimCommand();
+            oldCommand = m_workbook->GetSimCommand( plotPanelWindow );
         else
             oldCommand = wxString();
 
@@ -1428,7 +1428,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
         else
         {
             // Update simulation command in the current plot
-            plotPanelWindow->SetSimCommand( newCommand );
+            m_workbook->SetSimCommand( plotPanelWindow, newCommand );
         }
 
         m_simulator->Init();

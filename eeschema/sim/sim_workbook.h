@@ -62,6 +62,16 @@ public:
         m_plots.at( aPlotPanel ).pos = pos;
     }
 
+    void SetSimCommand( SIM_PANEL_BASE* aPlotPanel, const wxString& aSimCommand )
+    {
+        aPlotPanel->SetSimCommand( aSimCommand );
+    }
+
+    const wxString& GetSimCommand( const SIM_PANEL_BASE* aPlotPanel )
+    {
+        return aPlotPanel->GetSimCommand();
+    }
+
     void ClrModified() { m_flagModified = false; }
     bool IsModified() const { return m_flagModified; }
 

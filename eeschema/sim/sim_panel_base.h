@@ -27,6 +27,7 @@
 #define __SIM_PLOT_PANEL_BASE_H
 
 #include "sim_types.h"
+#include "netlist_exporter_pspice_sim.h"
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -34,6 +35,8 @@
 
 class SIM_PANEL_BASE : public wxWindow
 {
+    friend class SIM_WORKBOOK;
+
 public:
     SIM_PANEL_BASE();
     SIM_PANEL_BASE( wxString aCommand );
@@ -46,9 +49,20 @@ public:
 
     SIM_TYPE GetType() const;
 
-    void SetSimCommand( const wxString& aSimCommand );
+protected:
+    // Some members should be accessible from outside only through a workbook object, to prevent
+    // anyone from modifying the state without its knowledge. Otherwise we risk some things not
+    // getting saved.
 
     const wxString& GetSimCommand() const { return m_simCommand; }
+
+    void SetSimCommand( const wxString& aSimCommand )
+    {
+        wxCHECK_RET( GetType() == NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( aSimCommand ),
+                     "Cannot change the type of simulation of the existing plot panel" );
+
+        m_simCommand = aSimCommand;
+    }
 
 private:
     wxString m_simCommand;
