@@ -268,7 +268,7 @@ void DIALOG_BOARD_REANNOTATE::OnApplyClick( wxCommandEvent& event )
     {
         ShowReport( _( "PCB successfully reannotated" ), RPT_SEVERITY_ACTION );
         ShowReport( _( "PCB annotation changes should be synchronized with schematic using "
-                       "the \"Update PCB from Schematic\" tool." ), RPT_SEVERITY_WARNING );
+                       "the \"Update Schematic from PCB\" tool." ), RPT_SEVERITY_WARNING );
     }
 
     m_MessageWindow->SetLazyUpdate( false );
