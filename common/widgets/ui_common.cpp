@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <dialog_shim.h>
 #include <pgm_base.h>
+#include <wx/settings.h>
 
 int KIUI::GetStdMargin()
 {
@@ -68,6 +69,37 @@ wxSize KIUI::GetTextSize( const wxString& aSingleLine, wxWindow* aWindow )
     }
 
     return wxSize( width, height );
+}
+
+
+wxFont KIUI::GetMonospacedUIFont()
+{
+    static int guiFontSize = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
+
+    wxFont font( guiFontSize, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
+
+#ifdef __WXMAC__
+    // https://trac.wxwidgets.org/ticket/19210
+    if( font.GetFaceName().IsEmpty() )
+        font.SetFaceName( "Menlo" );
+#endif
+
+    return font;
+}
+
+
+wxFont KIUI::GetInfoFont()
+{
+    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    font.SetSymbolicSize( wxFONTSIZE_SMALL );
+
+#ifdef __WXMAC__
+    // https://trac.wxwidgets.org/ticket/19210
+    if( font.GetFaceName().IsEmpty() )
+        font.SetFaceName( "Lucida Grande" );
+#endif
+
+    return font;
 }
 
 

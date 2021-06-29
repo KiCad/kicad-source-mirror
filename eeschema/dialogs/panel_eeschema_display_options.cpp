@@ -37,9 +37,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* 
 
     m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
 
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_highlightColorNote->SetFont( infoFont );
+    m_highlightColorNote->SetFont( KIUI::GetInfoFont() );
 }
 
 

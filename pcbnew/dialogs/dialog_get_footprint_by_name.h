@@ -46,7 +46,7 @@ public:
         m_sdbSizerOK->SetDefault();
         m_choiceFpList->Append( aFpList );
 
-        wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+        wxFont infoFont = KIUI::GetInfoFont();
         infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
         m_multipleHint->SetFont( infoFont );
 

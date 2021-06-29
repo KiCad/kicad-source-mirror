@@ -44,9 +44,7 @@ DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT
     m_TextValueSelectButton->Hide();
     m_PowerComponentValues->Show( false );
 
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_PowerComponentValues->SetFont( infoFont );
+    m_PowerComponentValues->SetFont( KIUI::GetInfoFont() );
 
     SetInitialFocus( m_TextCtrl );
     m_StyledTextCtrl->Show( false );

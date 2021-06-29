@@ -56,9 +56,6 @@ PANEL_SETUP_PINMAP::PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* paren
     m_parent    = parent;
     m_schematic = &parent->Schematic();
 
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-
     reBuildMatrixPanel();
 }
 

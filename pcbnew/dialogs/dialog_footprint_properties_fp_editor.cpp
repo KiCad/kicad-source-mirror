@@ -116,8 +116,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
     m_FootprintNameCtrl->SetValidator( FOOTPRINT_NAME_VALIDATOR() );
 
     // Set font sizes
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    wxFont infoFont = KIUI::GetInfoFont();
 #if __WXMAC__
     m_allow90Label->SetFont( infoFont );
     m_allow180Label->SetFont( infoFont );

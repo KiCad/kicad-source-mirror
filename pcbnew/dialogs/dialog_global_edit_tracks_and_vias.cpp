@@ -127,9 +127,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
     m_layerBox->SetUndefinedLayerName( INDETERMINATE_ACTION );
     m_layerBox->Resync();
 
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_netclassGrid->SetDefaultCellFont( infoFont );
+    m_netclassGrid->SetDefaultCellFont( KIUI::GetInfoFont() );
     buildNetclassesGrid();
 
     m_netclassGrid->SetCellHighlightPenWidth( 0 );

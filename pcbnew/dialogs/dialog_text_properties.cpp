@@ -130,7 +130,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
         m_OrientCtrl->SetString( ii, wxString::Format( "%.1f", rot_list[ii] ) );
 
     // Set font sizes
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    wxFont infoFont = KIUI::GetInfoFont();
     infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
     m_statusLine->SetFont( infoFont );
 

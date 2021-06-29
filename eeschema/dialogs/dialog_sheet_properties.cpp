@@ -81,9 +81,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_bpMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
 
     // Set font sizes
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_hierarchicalPathLabel->SetFont( infoFont );
+    m_hierarchicalPathLabel->SetFont( KIUI::GetInfoFont() );
 
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,

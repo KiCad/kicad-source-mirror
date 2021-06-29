@@ -50,14 +50,7 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
     {
         // Set a monospace font with a tab width of 4.  This is the closest we can get to having
         // Scintilla mimic the stroke font's tab positioning.
-        int    size = wxNORMAL_FONT->GetPointSize();
-        wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
-
-    #ifdef __WXMAC__
-        // I think wxFONTFAMILY_TELETYPE worked on wxWidgets 3.0, but it doesn't on 3.1.  Set a
-        // monospaced font by hand.  (https://trac.wxwidgets.org/ticket/19210)
-        fixedFont.SetFaceName( "Menlo" );
-    #endif
+        wxFont fixedFont = KIUI::GetMonospacedUIFont();
 
         for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
             m_te->StyleSetFont( i, fixedFont );

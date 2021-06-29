@@ -27,6 +27,7 @@
 #define UI_COMMON_H
 
 #include <wx/string.h>
+#include <wx/font.h>
 
 class wxSize;
 class wxTextCtrl;
@@ -47,6 +48,10 @@ int GetStdMargin();
  * using whatever font is currently set in that window.
  */
 wxSize GetTextSize( const wxString& aSingleLine, wxWindow* aWindow );
+
+wxFont GetMonospacedUIFont();
+
+wxFont GetInfoFont();
 
 /**
  * Set the minimum pixel width on a text control in order to make a text

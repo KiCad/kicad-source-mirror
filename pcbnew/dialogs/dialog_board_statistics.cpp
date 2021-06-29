@@ -87,8 +87,7 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     m_checkBoxSubtractHoles->SetValue( s_savedDialogState.subtractHoles );
 
     // Make labels for grids
-    wxFont headingFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    headingFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    wxFont headingFont = KIUI::GetInfoFont();
     m_gridComponents->SetCellValue( ROW_LABEL, COL_FRONT_SIDE, _( "Front Side" ) );
     m_gridComponents->SetCellFont( ROW_LABEL, COL_FRONT_SIDE, headingFont );
     m_gridComponents->SetCellValue( ROW_LABEL, COL_BOTTOM_SIDE, _( "Back Side" ) );

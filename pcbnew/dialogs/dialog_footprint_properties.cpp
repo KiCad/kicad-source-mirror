@@ -130,8 +130,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     bLowerSizer3D->Add( m_previewPane, 1, wxEXPAND, 5 );
 
     // Set font size for items showing long strings:
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    wxFont infoFont = KIUI::GetInfoFont();
 #if __WXMAC__
     m_allow90Label->SetFont( infoFont );
     m_allow180Label->SetFont( infoFont );
@@ -155,7 +154,9 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_delayedFocusColumn = 0;
     }
     else if ( m_page == 1 )
+    {
         SetInitialFocus( m_NetClearanceCtrl );
+    }
     else
     {
         m_delayedFocusGrid = m_modelsGrid;

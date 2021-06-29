@@ -51,9 +51,7 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( PAGED_DIALOG* aParent, PCB_EDI
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
 
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_stCircleToPolyWarning->SetFont( infoFont );
+    m_stCircleToPolyWarning->SetFont( KIUI::GetInfoFont() );
 }
 
 

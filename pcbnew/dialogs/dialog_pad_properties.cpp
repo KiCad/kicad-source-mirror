@@ -183,8 +183,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
     initValues();
 
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    wxFont infoFont = KIUI::GetInfoFont();
     m_copperLayersLabel->SetFont( infoFont );
     m_techLayersLabel->SetFont( infoFont );
     m_parentInfo->SetFont( infoFont );

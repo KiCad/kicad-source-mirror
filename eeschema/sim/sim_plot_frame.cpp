@@ -1512,9 +1512,7 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
             text->StyleSetBackground( wxSTC_STYLE_LINENUMBER, wxColour( 220, 220, 220 ) );
             text->SetMarginType( MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER );
 
-            wxFont font = wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_TELETYPE,
-                    wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString );
-            text->StyleSetFont( wxSTC_STYLE_DEFAULT, font );
+            text->StyleSetFont( wxSTC_STYLE_DEFAULT, KIUI::GetMonospacedUIFont() );
 
             text->SetWrapMode( wxSTC_WRAP_WORD );
 

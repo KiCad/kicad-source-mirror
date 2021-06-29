@@ -136,9 +136,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
         attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( g_lineStyleIcons, g_lineStyleNames ) );
         m_netclassGrid->SetColAttr( GRID_LINESTYLE, attr );
 
-        wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-        infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-        m_colorDefaultHelpText->SetFont( infoFont );
+        m_colorDefaultHelpText->SetFont( KIUI::GetInfoFont() );
     }
     else
     {

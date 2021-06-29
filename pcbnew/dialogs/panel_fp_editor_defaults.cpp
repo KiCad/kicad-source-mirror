@@ -199,9 +199,7 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame
 
     m_graphicsGrid->PushEventHandler( new GRID_TRICKS( m_graphicsGrid ) );
 
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_staticTextInfo->SetFont( infoFont );
+    m_staticTextInfo->SetFont( KIUI::GetInfoFont() );
 }
 
 
