@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -31,12 +33,13 @@
 #include <geometry/seg.h>    // for SEG, OPT_VECTOR2I
 #include <geometry/shape_line_chain.h>
 #include <math/box2.h>       // for BOX2I
-#include <math/util.h>  // for rescale
+#include <math/util.h>       // for rescale
 #include <math/vector2d.h>   // for VECTOR2, VECTOR2I
 
 class SHAPE;
 
-SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV)
+
+SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV )
     : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ), m_closed( false ), m_width( 0 )
 {
     for(size_t i = 0; i < aV.size(); i+= 2 )
@@ -44,6 +47,7 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV)
         Append( aV[i], aV[i+1] );
     }
 }
+
 
 ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation ) const
 {
@@ -294,7 +298,9 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const VECTOR2I& 
     }
 
     if( aStartIndex == aEndIndex )
+    {
         m_points[aStartIndex] = aP;
+    }
     else
     {
         m_points.erase( m_points.begin() + aStartIndex + 1, m_points.begin() + aEndIndex + 1 );
@@ -486,8 +492,10 @@ int SHAPE_LINE_CHAIN::Find( const VECTOR2I& aP, int aThreshold ) const
 int SHAPE_LINE_CHAIN::FindSegment( const VECTOR2I& aP, int aThreshold ) const
 {
     for( int s = 0; s < SegmentCount(); s++ )
+    {
         if( CSegment( s ).Distance( aP ) <= aThreshold )
             return s;
+    }
 
     return -1;
 }
@@ -518,8 +526,7 @@ int SHAPE_LINE_CHAIN::ShapeCount() const
                 i++;
 
             // Add the "hidden" segment at the end of the arc, if it exists
-            if( i < numPoints &&
-                m_points[i] != m_points[i - 1] )
+            if( i < numPoints && m_points[i] != m_points[i - 1] )
             {
                 numShapes++;
             }
@@ -645,7 +652,9 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_LINE_CHAIN& aOtherLine )
     assert( m_shapes.size() == m_points.size() );
 
     if( aOtherLine.PointCount() == 0 )
+    {
         return;
+    }
 
     else if( PointCount() == 0 || aOtherLine.CPoint( 0 ) != CPoint( -1 ) )
     {
@@ -725,8 +734,7 @@ void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const SHAPE_ARC& aArc )
 
     /// Step 2: Add the arc polyline points to the chain
     auto& chain = aArc.ConvertToPolyline();
-    m_points.insert( m_points.begin() + aVertex,
-            chain.CPoints().begin(), chain.CPoints().end() );
+    m_points.insert( m_points.begin() + aVertex, chain.CPoints().begin(), chain.CPoints().end() );
 
     /// Step 3: Add the vector of indices to the shape vector
     std::vector<size_t> new_points( chain.PointCount(), arc_pos );
@@ -761,6 +769,7 @@ int SHAPE_LINE_CHAIN::Intersect( const SEG& aSeg, INTERSECTIONS& aIp ) const
             INTERSECTION is;
             is.valid = true;
             is.index_our = s;
+            is.index_their = -1;
             is.is_corner_our = is.is_corner_their = false;
             is.p = *p;
             aIp.push_back( is );
@@ -773,7 +782,9 @@ int SHAPE_LINE_CHAIN::Intersect( const SEG& aSeg, INTERSECTIONS& aIp ) const
     return aIp.size();
 }
 
-static inline void addIntersection( SHAPE_LINE_CHAIN::INTERSECTIONS& aIps, int aPc, const SHAPE_LINE_CHAIN::INTERSECTION& aP )
+
+static inline void addIntersection( SHAPE_LINE_CHAIN::INTERSECTIONS& aIps, int aPc,
+                                    const SHAPE_LINE_CHAIN::INTERSECTION& aP )
 {
     if( aIps.size() == 0 )
     {
@@ -786,7 +797,9 @@ static inline void addIntersection( SHAPE_LINE_CHAIN::INTERSECTIONS& aIps, int a
     aIps.push_back( aP );
 }
 
-int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp, bool aExcludeColinearAndTouching ) const
+
+int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp,
+                                 bool aExcludeColinearAndTouching ) const
 {
     BOX2I bb_other = aChain.BBox();
 
@@ -815,10 +828,35 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
 
             if( coll && ! aExcludeColinearAndTouching )
             {
-                if( a.Contains( b.A ) ) { is.p = b.A; is.is_corner_their = true; addIntersection(aIp, PointCount(), is); }
-                if( a.Contains( b.B ) ) { is.p = b.B; is.index_their++; is.is_corner_their = true; addIntersection(aIp, PointCount(), is); }
-                if( b.Contains( a.A ) ) { is.p = a.A; is.is_corner_our = true; addIntersection(aIp, PointCount(), is); }
-                if( b.Contains( a.B ) ) { is.p = a.B; is.index_our++; is.is_corner_our = true; addIntersection(aIp, PointCount(), is); }
+                if( a.Contains( b.A ) )
+                {
+                    is.p = b.A;
+                    is.is_corner_their = true;
+                    addIntersection(aIp, PointCount(), is);
+                }
+
+                if( a.Contains( b.B ) )
+                {
+                    is.p = b.B;
+                    is.index_their++;
+                    is.is_corner_their = true;
+                    addIntersection( aIp, PointCount(), is );
+                }
+
+                if( b.Contains( a.A ) )
+                {
+                    is.p = a.A;
+                    is.is_corner_our = true;
+                    addIntersection( aIp, PointCount(), is );
+                }
+
+                if( b.Contains( a.B ) )
+                {
+                    is.p = a.B;
+                    is.index_our++;
+                    is.is_corner_our = true;
+                    addIntersection( aIp, PointCount(), is );
+                }
             }
             else if( p )
             {
@@ -829,11 +867,29 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
                 int distA = ( b.A - *p ).EuclideanNorm();
                 int distB = ( b.B - *p ).EuclideanNorm();
 
-                if ( p == a.A ) { is.is_corner_our = true; }
-                if ( p == a.B ) { is.is_corner_our = true; is.index_our++; }
-                if ( p == b.A ) { is.is_corner_their = true; }
-                if ( p == b.B ) { is.is_corner_their = true; is.index_their++; }
-                addIntersection(aIp, PointCount(), is);
+                if( p == a.A )
+                {
+                    is.is_corner_our = true;
+                }
+
+                if( p == a.B )
+                {
+                    is.is_corner_our = true;
+                    is.index_our++;
+                }
+
+                if( p == b.A )
+                {
+                    is.is_corner_their = true;
+                }
+
+                if( p == b.B )
+                {
+                    is.is_corner_their = true;
+                    is.index_their++;
+                }
+
+                addIntersection( aIp, PointCount(), is );
             }
         }
     }
@@ -895,7 +951,7 @@ bool SHAPE_LINE_CHAIN_BASE::PointInside( const VECTOR2I& aPt, int aAccuracy,
 
     bool inside = false;
 
-    /**
+    /*
      * To check for interior points, we draw a line in the positive x direction from
      * the point.  If it intersects an even number of segments, the point is outside the
      * line chain (it had to first enter and then exit).  Otherwise, it is inside the chain.
@@ -937,11 +993,13 @@ bool SHAPE_LINE_CHAIN_BASE::PointOnEdge( const VECTOR2I& aPt, int aAccuracy ) co
 	return EdgeContainingPoint( aPt, aAccuracy ) >= 0;
 }
 
+
 int SHAPE_LINE_CHAIN_BASE::EdgeContainingPoint( const VECTOR2I& aPt, int aAccuracy ) const
 {
     if( !GetPointCount() )
+    {
 		return -1;
-
+    }
 	else if( GetPointCount() == 1 )
     {
 	    VECTOR2I dist = GetPoint(0) - aPt;
@@ -963,11 +1021,10 @@ int SHAPE_LINE_CHAIN_BASE::EdgeContainingPoint( const VECTOR2I& aPt, int aAccura
 }
 
 
-bool SHAPE_LINE_CHAIN::CheckClearance( const VECTOR2I& aP, const int aDist) const
+bool SHAPE_LINE_CHAIN::CheckClearance( const VECTOR2I& aP, const int aDist ) const
 {
     if( !PointCount() )
         return false;
-
     else if( PointCount() == 1 )
         return m_points[0] == aP;
 
@@ -1185,6 +1242,7 @@ const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const SEG& aSeg, int& dist ) cons
     int nearest = 0;
 
     dist = INT_MAX;
+
     for( int i = 0; i < PointCount(); i++ )
     {
         int d = aSeg.LineDistance( CPoint( i ) );
@@ -1224,11 +1282,12 @@ const std::string SHAPE_LINE_CHAIN::Format() const
 {
     std::stringstream ss;
 
-
     ss << "SHAPE_LINE_CHAIN( { ";
+
     for( int i = 0; i < PointCount(); i++ )
     {
         ss << "VECTOR2I( " << m_points[i].x << ", " << m_points[i].y << ")";
+
         if( i != PointCount() -1 )
             ss << ", ";
     }
@@ -1236,10 +1295,7 @@ const std::string SHAPE_LINE_CHAIN::Format() const
     ss << "}, " << ( m_closed ? "true" : "false" );
     ss << " );";
 
-
-
     return ss.str();
-
 
    /* fixme: arcs
     for( size_t i = 0; i < m_arcs.size(); i++ )
@@ -1251,7 +1307,7 @@ const std::string SHAPE_LINE_CHAIN::Format() const
 }
 
 
-bool SHAPE_LINE_CHAIN::CompareGeometry ( const SHAPE_LINE_CHAIN & aOther ) const
+bool SHAPE_LINE_CHAIN::CompareGeometry( const SHAPE_LINE_CHAIN & aOther ) const
 {
     SHAPE_LINE_CHAIN a(*this), b( aOther );
     a.Simplify();
@@ -1260,9 +1316,12 @@ bool SHAPE_LINE_CHAIN::CompareGeometry ( const SHAPE_LINE_CHAIN & aOther ) const
     if( a.m_points.size() != b.m_points.size() )
         return false;
 
-    for( int i = 0; i < a.PointCount(); i++)
+    for( int i = 0; i < a.PointCount(); i++ )
+    {
         if( a.CPoint( i ) != b.CPoint( i ) )
             return false;
+    }
+
     return true;
 }
 
@@ -1278,6 +1337,7 @@ SHAPE* SHAPE_LINE_CHAIN::Clone() const
 {
     return new SHAPE_LINE_CHAIN( *this );
 }
+
 
 bool SHAPE_LINE_CHAIN::Parse( std::stringstream& aStream )
 {
@@ -1351,6 +1411,7 @@ const VECTOR2I SHAPE_LINE_CHAIN::PointAlong( int aPathLength ) const
     return CPoint( -1 );
 }
 
+
 double SHAPE_LINE_CHAIN::Area() const
 {
     // see https://www.mathopenref.com/coordpolygonarea2.html
@@ -1363,7 +1424,8 @@ double SHAPE_LINE_CHAIN::Area() const
 
     for( int i = 0, j = size - 1; i < size; ++i )
     {
-        area += ( (double) m_points[j].x + m_points[i].x ) * ( (double) m_points[j].y - m_points[i].y );
+        area += ( (double) m_points[j].x + m_points[i].x ) *
+                ( (double) m_points[j].y - m_points[i].y );
         j = i;
     }
 
@@ -1437,6 +1499,7 @@ bool SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER::processVertex(
             }
         }
     }
+
     return true;
 }
 
@@ -1469,4 +1532,3 @@ bool SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER::IsInside()
     processVertex( m_lastPoint, m_firstPoint );
     return m_state > 0;
 }
-

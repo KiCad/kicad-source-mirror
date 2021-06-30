@@ -762,9 +762,12 @@ static void compose_quat( double q1[4], double q2[4], double qr[4] )
 }
 
 
-void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint,
-                                      std::ostream* aOutputFile )
+void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream* aOutputFile )
 {
+    wxCHECK( aFootprint && aOutputFile, /* void */ );
+
+    auto old_precision = aOutputFile->precision();
+
     // Export pad holes
     for( PAD* pad : aFootprint->Pads() )
         ExportVrmlPadHole( pad );
@@ -868,7 +871,8 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint,
                 }
                 else
                 {
-                    if( !S3D::WriteVRML( dstFile.GetFullPath().ToUTF8(), true, mod3d, m_ReuseDef, true ) )
+                    if( !S3D::WriteVRML( dstFile.GetFullPath().ToUTF8(), true, mod3d, m_ReuseDef,
+                                         true ) )
                         continue;
                 }
             }
@@ -933,6 +937,8 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint,
 
         ++sM;
     }
+
+    std::setprecision( old_precision );
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -115,12 +115,14 @@ wxString ENV_VAR::LookUpEnvVarHelp( const wxString& aEnvVar )
 template<>
 OPT<double> ENV_VAR::GetEnvVar( const wxString& aEnvVarName )
 {
-    OPT<double> optValue;
+    OPT<double> optValue = NULLOPT;
 
     wxString env;
+
     if( wxGetEnv( aEnvVarName, &env ) )
     {
         double value;
+
         if( env.ToDouble( &value ) )
         {
             optValue = value;
@@ -130,12 +132,14 @@ OPT<double> ENV_VAR::GetEnvVar( const wxString& aEnvVarName )
     return optValue;
 }
 
+
 template<>
 OPT<wxString> ENV_VAR::GetEnvVar( const wxString& aEnvVarName )
 {
     OPT<wxString> optValue;
 
     wxString env;
+
     if( wxGetEnv( aEnvVarName, &env ) )
     {
         optValue = env;

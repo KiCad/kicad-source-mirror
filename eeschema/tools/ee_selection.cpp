@@ -68,11 +68,26 @@ EDA_RECT EE_SELECTION::GetBoundingBox() const
     for( EDA_ITEM* item : m_items )
     {
         if( item->Type() == SCH_SYMBOL_T )
-            bbox.Merge( static_cast<SCH_SYMBOL*>( item )->GetBoundingBox( false ) );
+        {
+            // Quiet Coverity warning.  The LIB_SYMBOL field container is a Boost ptr_vector
+            // so the exception is legit.
+            try
+            {
+                bbox.Merge( static_cast<SCH_SYMBOL*>( item )->GetBoundingBox( false ) );
+            }
+            catch( const boost::bad_pointer& exc )
+            {
+                wxFAIL_MSG( "Invalid pointer." );
+            }
+        }
         else if( item->Type() == SCH_SHEET_T )
+        {
             bbox.Merge( static_cast<SCH_SHEET*>( item )->GetBodyBoundingBox() );
+        }
         else
+        {
             bbox.Merge( item->GetBoundingBox() );
+        }
     }
 
     return bbox;

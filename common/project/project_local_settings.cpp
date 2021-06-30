@@ -361,6 +361,7 @@ void PROJECT_LOCAL_SETTINGS::SaveFileState( const wxString& aFileName,
     {
         PROJECT_FILE_STATE fileState;
         fileState.fileName = aFileName;
+        fileState.open = false;
 
         m_files.push_back( fileState );
 

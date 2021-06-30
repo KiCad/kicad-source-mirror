@@ -514,10 +514,10 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                                      EscapeHTML( getItemDescription( a ) ),
                                      EscapeHTML( getItemDescription( b ) ) ) );
 
-        BOARD_CONNECTED_ITEM* ac = a && a->IsConnected() ?
-                                        static_cast<BOARD_CONNECTED_ITEM*>( a ) : nullptr;
-        BOARD_CONNECTED_ITEM* bc = b && b->IsConnected() ?
-                                        static_cast<BOARD_CONNECTED_ITEM*>( b ) : nullptr;
+        BOARD_CONNECTED_ITEM* ac = a->IsConnected() ?
+                                   static_cast<BOARD_CONNECTED_ITEM*>( a ) : nullptr;
+        BOARD_CONNECTED_ITEM* bc = b->IsConnected() ?
+                                   static_cast<BOARD_CONNECTED_ITEM*>( b ) : nullptr;
 
         if( ac && bc && ac->GetNetCode() > 0 && ac->GetNetCode() == bc->GetNetCode() )
         {

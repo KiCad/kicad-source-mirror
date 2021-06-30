@@ -106,7 +106,7 @@ public:
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         TYPE_ID thisType = TYPE_HASH( *this );
         PROPERTY_BASE* prop = propMgr.GetProperty( thisType, aProperty );
-        boost::optional<T> ret;
+        boost::optional<T> ret = T();
 
         if( prop )
         {
