@@ -961,6 +961,19 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
         }
     }
 
+    for( const TEMPLATE_FIELDNAME& templateFieldname :
+            schematic->Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
+    {
+        if( token->IsSameAs( templateFieldname.m_Name )
+            || token->IsSameAs( templateFieldname.m_Name.Upper() ) )
+        {
+            // If we didn't find it in the fields list then it isn't set on this symbol.
+            // Just return an empty string.
+            *token = wxEmptyString;
+            return true;
+        }
+    }
+
     if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ) )
     {
         wxString footprint;
