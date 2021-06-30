@@ -768,12 +768,16 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     }
                     else
                     {
-                        // Gives more clearance to arcs (the arc to area conv is not perfect)
+                        // Gives more clearance to arcs (the arc to area drc test is not perfect)
                         // extra_margin is not enought here
-                        // This is a workaround, that can be removed when (if?) the arcs
+                        // This is a workaround, that can be removed when (if?) the DRC arcs
                         // issues are fixed
+                        // The root cause is the fact the DRC approximates the arc shape
+                        // by a segmentlist with a error = +- SHAPE_ARC::DefaultAccuracyForPCB()/2
+                        // and the arc to polygons approximation also creates approxiamtions when
+                        // filling the zone
                         if( aTrack->Type() == PCB_ARC_T )
-                            gap += Millimeter2iu( 0.004 );
+                            gap += SHAPE_ARC::DefaultAccuracyForPCB();
 
                         aTrack->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap,
                                                                       m_maxError, ERROR_OUTSIDE );

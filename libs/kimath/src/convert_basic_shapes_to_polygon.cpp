@@ -377,23 +377,120 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
 }
 
 
+static int convertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRadius,
+                          double aStartAngle, double aArcAngle, double aAccuracy,
+                          ERROR_LOC aErrorLoc )
+{
+    double endAngle = aStartAngle + aArcAngle;
+    int n = 2;
+
+    if( aRadius >= aAccuracy )
+        n = GetArcToSegmentCount( aRadius, aAccuracy, aArcAngle )+1;  // n >= 3
+
+    if( aErrorLoc == ERROR_OUTSIDE )
+    {
+        int seg360 = std::abs( KiROUND( n * 360.0 / aArcAngle ) );
+        int actual_delta_radius = CircleToEndSegmentDeltaRadius( aRadius, seg360 );
+        aRadius += actual_delta_radius;
+    }
+
+    for( int i = 0; i <= n ; i++ )
+    {
+        double rot = aStartAngle;
+        rot += ( aArcAngle * i ) / n;
+
+        double x = aCenter.x + aRadius * cos( rot * M_PI / 180.0 );
+        double y = aCenter.y + aRadius * sin( rot * M_PI / 180.0 );
+
+        aPolyline.Append( KiROUND( x ), KiROUND( y ) );
+    }
+
+    return n;
+}
+
+
 void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aMid,
                             wxPoint aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc )
 {
     SHAPE_ARC        arc( aStart, aMid, aEnd, aWidth );
-    SHAPE_LINE_CHAIN arcSpine = arc.ConvertToPolyline( aError );
+    // Currentlye have currently 2 algos:
+    // the first approximates the thick arc from its outlines
+    // the second approximates the thick arc from segments given by SHAPE_ARC
+    // using SHAPE_ARC::ConvertToPolyline
+    // The actual approximation errors are similar but not exactly the same.
+    //
+    // For now, both algorithms are kept, the second is the initial algo used in Kicad.
+
+#if 1
+    // This appproximation convert the 2 ends to polygons, arc outer to polyline
+    // and arc inner to polyline and merge shapes.
     int              radial_offset = ( aWidth + 1 ) / 2;
+
     SHAPE_POLY_SET   polyshape;
     std::vector<VECTOR2I> outside_pts;
 
     /// We start by making rounded ends on the arc
-    TransformCircleToPolygon( polyshape,
-            wxPoint( arcSpine.GetPoint( 0 ).x, arcSpine.GetPoint( 0 ).y ), radial_offset, aError,
-            aErrorLoc );
+    TransformCircleToPolygon( polyshape, aStart, radial_offset, aError, aErrorLoc );
+    TransformCircleToPolygon( polyshape, aEnd, radial_offset, aError, aErrorLoc );
 
-    TransformCircleToPolygon( polyshape,
-            wxPoint( arcSpine.GetPoint( -1 ).x, arcSpine.GetPoint( -1 ).y ), radial_offset, aError,
-            aErrorLoc );
+    // The circle polygon is built with a even number of segments, so the
+    // horizontal diameter has 2 corners on the biggest diameter
+    // Rotate these 2 corners to match the start and ens points of inner and outer
+    // end points of the arc appoximation outlines, build below.
+    // The final shape is much better.
+    double arc_angle_start_deg = arc.GetStartAngle();
+    double arc_angle = arc.GetCentralAngle();
+    double arc_angle_end_deg = arc_angle_start_deg + arc_angle;
+
+    if( arc_angle_start_deg != 0 && arc_angle_start_deg != 180.0 )
+        polyshape.Outline(0).Rotate( arc_angle_start_deg * M_PI/180.0, aStart );
+
+    if( arc_angle_end_deg != 0 && arc_angle_end_deg != 180.0 )
+        polyshape.Outline(1).Rotate( arc_angle_end_deg * M_PI/180.0, aEnd );
+
+    VECTOR2I center = arc.GetCenter();
+    int      radius = arc.GetRadius();
+
+    int      arc_outer_radius = radius + radial_offset;
+    int      arc_inner_radius = radius - radial_offset;
+    ERROR_LOC errorLocInner = ERROR_OUTSIDE;
+    ERROR_LOC errorLocOuter = ERROR_INSIDE;
+
+    if( aErrorLoc == ERROR_OUTSIDE )
+    {
+        errorLocInner = ERROR_INSIDE;
+        errorLocOuter = ERROR_OUTSIDE;
+    }
+
+    polyshape.NewOutline();
+
+    convertArcToPolyline( polyshape.Outline(2), center, arc_outer_radius,
+                          arc_angle_start_deg, arc_angle, aError, errorLocOuter );
+
+    if( arc_inner_radius > 0 )
+        convertArcToPolyline( polyshape.Outline(2), center, arc_inner_radius,
+                              arc_angle_end_deg, -arc_angle, aError, errorLocInner );
+    else
+        polyshape.Append( center );
+#else
+    // This appproximation use SHAPE_ARC to convert the 2 ends to polygons,
+    // approximate arc to polyline, convert the polyline corners to outer and inner
+    // corners of outer and inner utliners and merge shapes.
+    double defaultErr;
+    SHAPE_LINE_CHAIN arcSpine = arc.ConvertToPolyline( SHAPE_ARC::DefaultAccuracyForPCB(),
+                                                       &defaultErr);
+    int              radius = arc.GetRadius();
+    int              radial_offset = ( aWidth + 1 ) / 2;
+    SHAPE_POLY_SET   polyshape;
+    std::vector<VECTOR2I> outside_pts;
+
+    // delta is the effective error approximation to build a polyline from an arc
+    int segCnt360 = arcSpine.GetSegmentCount()*360.0/arc.GetCentralAngle();;
+    int delta = CircleToEndSegmentDeltaRadius( radius+radial_offset, std::abs(segCnt360) );
+
+    /// We start by making rounded ends on the arc
+    TransformCircleToPolygon( polyshape, aStart, radial_offset, aError, aErrorLoc );
+    TransformCircleToPolygon( polyshape, aEnd, radial_offset, aError, aErrorLoc );
 
     // The circle polygon is built with a even number of segments, so the
     // horizontal diameter has 2 corners on the biggest diameter
@@ -411,9 +508,9 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoi
         polyshape.Outline(1).Rotate( arc_angle_end_deg * M_PI/180.0, arcSpine.GetPoint( -1 ) );
 
     if( aErrorLoc == ERROR_OUTSIDE )
-        radial_offset += aError;
+        radial_offset += delta + defaultErr/2;
     else
-        radial_offset -= aError/2;
+        radial_offset -= defaultErr/2;
 
     if( radial_offset < 0 )
         radial_offset = 0;
@@ -421,7 +518,6 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoi
     polyshape.NewOutline();
 
     VECTOR2I center = arc.GetCenter();
-    int      radius = ( arc.GetP0() - center ).EuclideanNorm();
     int last_index = arcSpine.GetPointCount() -1;
 
     for( std::size_t ii = 0; ii <= last_index; ++ii )
@@ -429,16 +525,13 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoi
         VECTOR2I offset = arcSpine.GetPoint( ii ) - center;
         int curr_rd = radius;
 
-        // This correction gives a better position of intermediate points of the sides of arc.
-        if( ii > 0 && ii < last_index )
-            curr_rd += aError/2;
-
         polyshape.Append( offset.Resize( curr_rd - radial_offset ) + center );
         outside_pts.emplace_back( offset.Resize( curr_rd + radial_offset ) + center );
     }
 
     for( auto it = outside_pts.rbegin(); it != outside_pts.rend(); ++it )
         polyshape.Append( *it );
+#endif
 
     // Can be removed, but usefull to display the outline:
     polyshape.Simplify( SHAPE_POLY_SET::PM_FAST );

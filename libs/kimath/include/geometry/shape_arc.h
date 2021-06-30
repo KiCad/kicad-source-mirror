@@ -165,16 +165,29 @@ public:
     double GetLength() const;
 
     /**
+     * @return a default accuray value for ConvertToPolyline() to build the polyline.
+     *   ** Note that the default is ARC_HIGH_DEF in PCBNew units
+     *      This is to allow common geometry collision functions
+     *      Other programs should call this using explicit accuracy values
+     *      TODO: unify KiCad internal units
+     */
+    static double DefaultAccuracyForPCB(){ return 0.005 * PCB_IU_PER_MM; }
+
+    /**
      * Constructs a SHAPE_LINE_CHAIN of segments from a given arc
      * @param aAccuracy maximum divergence from true arc given in internal units
      *   ** Note that the default is ARC_HIGH_DEF in PCBNew units
      *      This is to allow common geometry collision functions
      *      Other programs should call this using explicit accuracy values
      *      TODO: unify KiCad internal units
+     * @param aEffectiveAccuracy is the actual divergence from true arc given
+     * the approximation error is between -aEffectiveAccuracy/2 and +aEffectiveAccuracy/2
+     * in internal units
      *
      * @return a SHAPE_LINE_CHAIN
      */
-    const SHAPE_LINE_CHAIN ConvertToPolyline( double aAccuracy = 0.005 * PCB_IU_PER_MM ) const;
+    const SHAPE_LINE_CHAIN ConvertToPolyline( double aAccuracy = DefaultAccuracyForPCB(),
+                                              double* aEffectiveAccuracy = nullptr ) const;
 
 private:
     bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC ) const

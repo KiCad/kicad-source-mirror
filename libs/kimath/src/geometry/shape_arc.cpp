@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -414,29 +414,43 @@ double SHAPE_ARC::GetRadius() const
 }
 
 
-const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
+const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy,
+                                                     double* aEffectiveAccuracy ) const
 {
     SHAPE_LINE_CHAIN rv;
-    double r = GetRadius();
-    double sa = GetStartAngle();
-    auto   c = GetCenter();
-    double ca = GetCentralAngle();
+    double r    = GetRadius();
+    double sa   = GetStartAngle();
+    VECTOR2I c  = GetCenter();
+    double ca   = GetCentralAngle();
 
     int n;
 
     // To calculate the arc to segment count, use the external radius instead of the radius.
     // for a arc with small radius and large width, the difference can be significant
     double external_radius = r+(m_width/2);
+    double effectiveAccuracy;
 
-    if( external_radius < aAccuracy )
+    if( external_radius < aAccuracy/2 )     // Should be a very rare case
+    {
+        // In this case, the arc is approximated by one segment, with a effective error
+        // between -aAccuracy/2 and +aAccuracy/2, as expected.
         n = 0;
+        effectiveAccuracy = external_radius;
+    }
     else
-        n = GetArcToSegmentCount( external_radius, aAccuracy, ca );
+    {
+        double arc_angle = std::abs( ca );
+        n = GetArcToSegmentCount( external_radius, aAccuracy, arc_angle );
+
+        // Recalculate the effective error of approximation, that can be < aAccuracy
+        int seg360 = n * 360.0 / arc_angle;
+        effectiveAccuracy = CircleToEndSegmentDeltaRadius( external_radius, seg360 );
+    }
 
     // Split the error on either side of the arc.  Since we want the start and end points
     // to be exactly on the arc, the first and last segments need to be shorter to stay within
     // the error band (since segments normally start 1/2 the error band outside the arc).
-    r += aAccuracy / 2;
+    r += effectiveAccuracy / 2;
     n = n * 2;
 
     rv.Append( m_start );
@@ -455,6 +469,9 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
     }
 
     rv.Append( m_end );
+
+    if( aEffectiveAccuracy )
+        *aEffectiveAccuracy = effectiveAccuracy;
 
     return rv;
 }
