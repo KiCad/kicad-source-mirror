@@ -150,11 +150,6 @@ private:
     void updateTitle();
 
     /**
-     * Update the workbook to match the changes in the frame.
-     */
-    void updateWorkbook();
-
-    /**
      * Update the frame to match the changes to the workbook. Should be always called after the
      * workbook was modified.
      */
@@ -170,7 +165,7 @@ private:
      */
     SIM_PANEL_BASE* currentPlotWindow() const
     {
-        return dynamic_cast<SIM_PANEL_BASE*>( m_plotNotebook->GetCurrentPage() );
+        return dynamic_cast<SIM_PANEL_BASE*>( m_workbook->GetCurrentPage() );
     }
 
     /**
@@ -186,9 +181,8 @@ private:
      * Remove a plot with a specific title.
      *
      * @param aPlotName is the full plot title (e.g. I(Net-C1-Pad1)).
-     * @param aErase decides if plot should be removed from corresponding TRACE_MAP (see m_plots).
      */
-    void removePlot( const wxString& aPlotName, bool aErase = true );
+    void removePlot( const wxString& aPlotName );
 
     /**
      * Reload the current schematic for the netlist exporter.
@@ -204,7 +198,7 @@ private:
      * @return True if a plot was successfully added/updated.
      */
     bool updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam,
-                     SIM_PLOT_PANEL* aPanel );
+                     SIM_PLOT_PANEL* aPlotPanel );
 
     /**
      * Update the list of currently plotted signals.
@@ -314,9 +308,6 @@ private:
     std::unique_ptr<NETLIST_EXPORTER_PSPICE_SIM> m_exporter;
     std::shared_ptr<SPICE_SIMULATOR> m_simulator;
     SIM_THREAD_REPORTER* m_reporter;
-
-    ///< Stores the data that can be preserved across simulator sessions
-    std::unique_ptr<SIM_WORKBOOK> m_workbook;
 
     ///< List of currently displayed tuners
     std::list<TUNER_SLIDER*> m_tuners;

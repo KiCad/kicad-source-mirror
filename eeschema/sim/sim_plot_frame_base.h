@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "sim_workbook.h"
 #include "kiway_player.h"
 #include <wx/string.h>
 #include <wx/bitmap.h>
@@ -72,7 +73,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxSplitterWindow* m_splitterPlotAndConsole;
 		wxPanel* m_plotPanel;
 		wxBoxSizer* m_sizerPlot;
-		wxAuiNotebook* m_plotNotebook;
+		SIM_WORKBOOK* m_workbook;
 		wxPanel* m_panelConsole;
 		wxBoxSizer* m_sizerConsole;
 		wxTextCtrl* m_simConsole;

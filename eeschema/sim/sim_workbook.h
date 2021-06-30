@@ -22,63 +22,52 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef __SIM_WORKBOOK__
+#define __SIM_WORKBOOK__
+
 #include "dialog_sim_settings.h"
 #include <sim/sim_panel_base.h>
 #include <sim/sim_plot_panel.h>
 
 
-class SIM_WORKBOOK
+class SIM_WORKBOOK : public wxAuiNotebook
 {
 public:
-
-    struct PLOT_INFO
-    {
-        ///< The current position of the plot in the notebook
-        unsigned int pos;
-    };
-
     SIM_WORKBOOK();
+    SIM_WORKBOOK( wxWindow* aParent, wxWindowID aId=wxID_ANY, const wxPoint&
+            aPos=wxDefaultPosition, const wxSize& aSize=wxDefaultSize, long
+            aStyle=wxAUI_NB_DEFAULT_STYLE );
 
-    void Clear();
+    // Methods from wxAuiNotebook
+    
+    bool AddPage( wxWindow* aPage, const wxString& aCaption, bool aSelect=false, const wxBitmap& aBitmap=wxNullBitmap );
+    bool AddPage( wxWindow* aPage, const wxString& aText, bool aSelect, int aImageId ) override;
 
-    void AddPlotPanel( SIM_PANEL_BASE* aPlotPanel );
-    void RemovePlotPanel( SIM_PANEL_BASE* aPlotPanel );
+    bool DeleteAllPages() override; 
+    bool DeletePage( size_t aPage ) override;
 
-    std::vector<const SIM_PANEL_BASE*> GetSortedPlotPanels() const;
+    // Custom methods
 
-    bool HasPlotPanel( SIM_PANEL_BASE* aPlotPanel ) const
-    {
-        return m_plots.count( aPlotPanel ) == 1;
-    }
-
-    void AddTrace( const SIM_PANEL_BASE* aPlotPanel, const wxString& aName );
-    void RemoveTrace( const SIM_PANEL_BASE* aPlotPanel, const wxString& aName );
-
-    void SetPlotPanelPosition( const SIM_PANEL_BASE* aPlotPanel, unsigned int pos )
-    {
-        if( pos != m_plots.at( aPlotPanel ).pos )
-            m_flagModified = true;
-
-        m_plots.at( aPlotPanel ).pos = pos;
-    }
-
+    void AddTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName, int aPoints, const double*
+            aX, const double* aY, SIM_PLOT_TYPE aType, const wxString& aParam );
+    void DeleteTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName );
+    
     void SetSimCommand( SIM_PANEL_BASE* aPlotPanel, const wxString& aSimCommand )
     {
-        aPlotPanel->SetSimCommand( aSimCommand );
+        aPlotPanel->setSimCommand( aSimCommand );
     }
 
     const wxString& GetSimCommand( const SIM_PANEL_BASE* aPlotPanel )
     {
-        return aPlotPanel->GetSimCommand();
+        return aPlotPanel->getSimCommand();
     }
 
-    void ClrModified() { m_flagModified = false; }
-    bool IsModified() const { return m_flagModified; }
+    void ClrModified() { m_modified = false; }
+    bool IsModified() const { return m_modified; }
 
 private:
     ///< Dirty bit, indicates something in the workbook has changed
-    bool m_flagModified;
-
-    ///< Map of plot panels and associated data
-    std::map<const SIM_PANEL_BASE*, PLOT_INFO> m_plots;
+    bool m_modified;
 };
+
+#endif // __SIM_WORKBOOK__

@@ -50,13 +50,13 @@ public:
     SIM_TYPE GetType() const;
 
 protected:
-    // Some members should be accessible from outside only through a workbook object, to prevent
-    // anyone from modifying the state without its knowledge. Otherwise we risk some things not
-    // getting saved.
+    // We use `protected` here because members should be accessible from outside only through a
+    // workbook object, to prevent anyone from modifying the state without its knowledge. Otherwise
+    // we risk some things not getting saved.
 
-    const wxString& GetSimCommand() const { return m_simCommand; }
+    const wxString& getSimCommand() const { return m_simCommand; }
 
-    void SetSimCommand( const wxString& aSimCommand )
+    void setSimCommand( const wxString& aSimCommand )
     {
         wxCHECK_RET( GetType() == NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( aSimCommand ),
                      "Cannot change the type of simulation of the existing plot panel" );

@@ -386,9 +386,9 @@ void SIM_PLOT_PANEL::prepareDCAxes()
 {
     wxRegEx simCmd( "^.dc[[:space:]]+([[:alnum:]]+\\M).*", wxRE_ADVANCED | wxRE_ICASE );
 
-    if( simCmd.Matches( GetSimCommand() ) )
+    if( simCmd.Matches( getSimCommand() ) )
     {
-        switch( static_cast<char>( simCmd.GetMatch( GetSimCommand().Lower(), 1 ).GetChar( 0 ) ) )
+        switch( static_cast<char>( simCmd.GetMatch( getSimCommand().Lower(), 1 ).GetChar( 0 ) ) )
         {
         case 'v':
             m_axis_x =
@@ -441,7 +441,7 @@ void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
 }
 
 
-bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints, const double* aX,
+bool SIM_PLOT_PANEL::addTrace( const wxString& aName, int aPoints, const double* aX,
                                const double* aY, SIM_PLOT_TYPE aType, const wxString& aParam )
 {
     TRACE* trace = NULL;
@@ -526,7 +526,7 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints, const double*
 }
 
 
-bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aName )
+bool SIM_PLOT_PANEL::deleteTrace( const wxString& aName )
 {
     auto it = m_traces.find( aName );
 
@@ -548,11 +548,11 @@ bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aName )
 }
 
 
-void SIM_PLOT_PANEL::DeleteAllTraces()
+void SIM_PLOT_PANEL::deleteAllTraces()
 {
     for( auto& t : m_traces )
     {
-        DeleteTrace( t.first );
+        deleteTrace( t.first );
     }
 
     m_traces.clear();
