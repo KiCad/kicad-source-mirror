@@ -216,28 +216,28 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
     SCH_SHEET_LIST sheetList = GetSheets();
     wxString       remainder;
     wxString       ref = token->BeforeFirst( ':', &remainder );
-    SCH_SHEET_PATH dummy;
-    SCH_ITEM*      refItem = sheetList.GetItem( KIID( ref ), &dummy );
+    SCH_SHEET_PATH sheetPath;
+    SCH_ITEM*      refItem = sheetList.GetItem( KIID( ref ), &sheetPath );
 
     if( refItem && refItem->Type() == SCH_SYMBOL_T )
     {
         SCH_SYMBOL* refSymbol = static_cast<SCH_SYMBOL*>( refItem );
 
         if( refSymbol->ResolveTextVar( &remainder, aDepth + 1 ) )
-        {
             *token = remainder;
-            return true;
-        }
+        else
+            *token = refSymbol->GetRef( &sheetPath, true ) + ":" + remainder;
+
+        return true;    // Cross-reference is resolved whether or not the actual textvar was
     }
     else if( refItem && refItem->Type() == SCH_SHEET_T )
     {
         SCH_SHEET* refSheet = static_cast<SCH_SHEET*>( refItem );
 
         if( refSheet->ResolveTextVar( &remainder, aDepth + 1 ) )
-        {
             *token = remainder;
-            return true;
-        }
+
+        return true;    // Cross-reference is resolved whether or not the actual textvar was
     }
 
     return false;
@@ -282,11 +282,7 @@ wxString SCHEMATIC::ConvertRefsToKIIDs( const wxString& aSource ) const
 
                     if( ref == refSymbol->GetRef( &references[ jj ].GetSheetPath(), true ) )
                     {
-                        wxString test( remainder );
-
-                        if( refSymbol->ResolveTextVar( &test ) )
-                            token = refSymbol->m_Uuid.AsString() + ":" + remainder;
-
+                        token = refSymbol->m_Uuid.AsString() + ":" + remainder;
                         break;
                     }
                 }
