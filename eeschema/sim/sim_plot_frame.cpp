@@ -1125,7 +1125,12 @@ void SIM_PLOT_FRAME::menuSaveWorkbookAs( wxCommandEvent& event )
     wxString defaultFilename = m_simulator->Settings()->GetWorkbookFilename();
 
     if( defaultFilename.IsEmpty() )
-        defaultFilename = Prj().GetProjectName() + wxT( ".wbk" );
+    {
+        if( Prj().GetProjectName().IsEmpty() )
+            defaultFilename = wxT( "noname.wbk" );
+        else
+            defaultFilename = Prj().GetProjectName() + wxT( ".wbk" );
+    }
 
     wxFileDialog saveAsDlg( this, _( "Save Simulation Workbook As" ), m_savedWorkbooksPath,
                             defaultFilename, WorkbookFileWildcard(),
@@ -1530,14 +1535,19 @@ bool SIM_PLOT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         wxFileName filename = m_simulator->Settings()->GetWorkbookFilename();
 
         if( filename.GetName().IsEmpty() )
-            filename.SetFullName( Prj().GetProjectName() + wxT( ".wbk" ) );
+        {
+            if( Prj().GetProjectName().IsEmpty() )
+                filename.SetFullName( wxT( "noname.wbk" ) );
+            else
+                filename.SetFullName( Prj().GetProjectName() + wxT( ".wbk" ) );
+        }
 
         wxString msg = _( "Save changes to '%s' before closing?" );
 
         return HandleUnsavedChanges( this, wxString::Format( msg, filename.GetFullName() ), 
                 [&]()->bool
                 {
-                    return saveWorkbook( Prj().AbsolutePath ( filename.GetFullName() ) );
+                    return saveWorkbook( Prj().AbsolutePath( filename.GetFullName() ) );
                 } );
     }
 
