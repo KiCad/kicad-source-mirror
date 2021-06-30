@@ -1851,10 +1851,26 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
     case LAYER_MOD_TEXT_FR:
         // Because Footprint Text is a meta-control that also can disable values/references,
         // drag them along here so that the user is less likely to be confused.
-        onObjectVisibilityChanged( LAYER_MOD_REFERENCES, isVisible, false );
-        onObjectVisibilityChanged( LAYER_MOD_VALUES, isVisible, false );
-        m_objectSettingsMap[LAYER_MOD_REFERENCES]->ctl_visibility->SetValue( isVisible );
-        m_objectSettingsMap[LAYER_MOD_VALUES]->ctl_visibility->SetValue( isVisible );
+        if( isFinal )
+        {
+            // Should only trigger when you actually click the Footprint Text button
+            // Otherwise it goes into infinite recursive loop with the following case section
+            onObjectVisibilityChanged( LAYER_MOD_REFERENCES, isVisible, false );
+            onObjectVisibilityChanged( LAYER_MOD_VALUES, isVisible, false );
+            m_objectSettingsMap[LAYER_MOD_REFERENCES]->ctl_visibility->SetValue( isVisible );
+            m_objectSettingsMap[LAYER_MOD_VALUES]->ctl_visibility->SetValue( isVisible );
+        }
+        break;
+
+    case LAYER_MOD_REFERENCES:
+    case LAYER_MOD_VALUES:
+        // In case that user changes Footprint Value/References when the Footprint Text
+        // meta-control is disabled, we should put it back on.
+        if( isVisible )
+        {
+            onObjectVisibilityChanged( LAYER_MOD_TEXT_FR, isVisible, false );
+            m_objectSettingsMap[LAYER_MOD_TEXT_FR]->ctl_visibility->SetValue( isVisible );
+        }
         break;
 
     default:
