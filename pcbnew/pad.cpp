@@ -968,40 +968,43 @@ bool PAD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 bool PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    auto getArea = []( const SHAPE_POLY_SET& aPoly ) -> double
-                   {
-                       return aPoly.OutlineCount() ? aPoly.COutline( 0 ).Area() : 0;
-                   };
-
     EDA_RECT arect = aRect;
     arect.Normalize();
     arect.Inflate( aAccuracy );
 
     EDA_RECT bbox = GetBoundingBox();
 
-    if( !arect.Intersects( bbox ) )
-        return false;
-
-    // This covers total containment for all test cases
-    if( arect.Contains( bbox ) )
-        return true;
-
-    SHAPE_POLY_SET selRect;
-    selRect.NewOutline();
-    selRect.Append( arect.GetOrigin() );
-    selRect.Append( VECTOR2I( arect.GetRight(), arect.GetTop() ) );
-    selRect.Append( VECTOR2I( arect.GetRight(), arect.GetBottom() ) );
-    selRect.Append( VECTOR2I( arect.GetLeft(), arect.GetBottom() ) );
-
-    selRect.BooleanIntersection( *GetEffectivePolygon(), SHAPE_POLY_SET::PM_FAST );
-
-    double padArea = getArea( *GetEffectivePolygon() );
-    double intersection = getArea( selRect );
-
-    if( intersection > ( padArea * 0.99 ) )
-        return true;
+    if( aContained )
+    {
+        return arect.Contains( bbox );
+    }
     else
-        return !aContained && intersection > 0;
+    {
+        // Fast test: if aRect is outside the polygon bounding box,
+        // rectangles cannot intersect
+        if( !arect.Intersects( bbox ) )
+            return false;
+
+        const std::shared_ptr<SHAPE_POLY_SET>& poly = GetEffectivePolygon();
+
+        int count = poly->TotalVertices();
+
+        for( int ii = 0; ii < count; ii++ )
+        {
+            auto vertex = poly->CVertex( ii );
+            auto vertexNext = poly->CVertex(( ii + 1 ) % count );
+
+            // Test if the point is within aRect
+            if( arect.Contains( ( wxPoint ) vertex ) )
+                return true;
+
+            // Test if this edge intersects aRect
+            if( arect.Intersects( ( wxPoint ) vertex, ( wxPoint ) vertexNext ) )
+                return true;
+        }
+
+        return false;
+    }
 }
 
 
