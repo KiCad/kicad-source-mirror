@@ -113,12 +113,6 @@ bool SCH_SEXPR_PARSER::parseBool()
 }
 
 
-bool SCH_SEXPR_PARSER::IsTooRecent() const
-{
-    return m_requiredVersion && m_requiredVersion > SEXPR_SYMBOL_LIB_FILE_VERSION;
-}
-
-
 void SCH_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
 {
     T token;
@@ -695,6 +689,10 @@ void SCH_SEXPR_PARSER::parseHeader( TSCHEMATIC_T::T aHeaderType, int aFileVersio
     if( tok == T_version )
     {
         m_requiredVersion = parseInt( FromUTF8().mb_str( wxConvUTF8 ) );
+
+        if( m_requiredVersion > aFileVersion )
+            throw FUTURE_FORMAT_ERROR( FromUTF8() );
+
         NeedRIGHT();
 
         // Skip the host name and host build version information.

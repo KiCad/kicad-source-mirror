@@ -510,7 +510,7 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
             {
                 // If there is a problem loading the root sheet, there is no recovery.
                 if( aSheet == m_rootSheet )
-                    throw( ioe );
+                    throw;
 
                 // For all subsheets, queue up the error message for the caller.
                 if( !m_error.IsEmpty() )

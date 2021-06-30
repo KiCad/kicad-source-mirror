@@ -220,11 +220,6 @@ public:
      */
     void ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyablyOnly = false,
                          int aFileVersion = SEXPR_SCHEMATIC_FILE_VERSION );
-
-    /**
-     * Return whether a version number, if any was parsed, was too recent
-     */
-    bool IsTooRecent() const;
 };
 
 #endif    // __SCH_SEXPR_PARSER_H__

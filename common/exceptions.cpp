@@ -87,33 +87,43 @@ void PARSE_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
     // a short filename will be printed (it is better for user, the full filename has no meaning).
     wxString srcname = aThrowersFile;
 
-    where.Printf(  _( "from %s : %s() line:%d" ),
-                   srcname.AfterLast( '/' ),
-                   wxString( aThrowersFunction ),
-                   aThrowersLineNumber );
+    where.Printf( _( "from %s : %s() line:%d" ),
+                  srcname.AfterLast( '/' ),
+                  wxString( aThrowersFunction ),
+                  aThrowersLineNumber );
+}
+
+
+void FUTURE_FORMAT_ERROR::init( const wxString& aRequiredVersion )
+{
+    requiredVersion = aRequiredVersion;
+
+    problem.Printf( _( "KiCad was unable to open this file because it was created with a more "
+                       "recent version than the one you are running.\n\n"
+                       "To open it you will need to upgrade KiCad to a version dated %s or "
+                       "later." ),
+                    aRequiredVersion );
+}
+
+
+FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const wxString& aRequiredVersion ) :
+        PARSE_ERROR()
+{
+    init( aRequiredVersion );
+
+    lineNumber = 0;
+    byteIndex = 0;
 }
 
 
 FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError,
                                           const wxString& aRequiredVersion ) :
-        PARSE_ERROR(), requiredVersion( aRequiredVersion )
+        PARSE_ERROR()
 {
-    // Avoid double-printing the error message
-    bool wrapped_same_type = !!( dynamic_cast<const FUTURE_FORMAT_ERROR *>( &aParseError ) );
+    init( aRequiredVersion );
 
-    if( wrapped_same_type )
-    {
-        problem = aParseError.Problem();
-    }
-    else
-    {
-        problem.Printf( _( "KiCad was unable to open this file, as it was created with a more\n"
-                           "recent version than the one you are running.\n"
-                           "To open it you will need to upgrade KiCad to a more recent version.\n\n"
-                           "Date of KiCad version required (or newer): %s\n\n"
-                           "Full error text:\n%s" ),
-                           requiredVersion, aParseError.Problem() );
-    }
+    if( !aParseError.Problem().IsEmpty() )
+        problem += wxS( "\n\n" ) + _( "Full error text:" ) + wxS( "\n" ) + aParseError.Problem();
 
     lineNumber = aParseError.lineNumber;
     byteIndex = aParseError.byteIndex;

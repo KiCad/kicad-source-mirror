@@ -2199,7 +2199,7 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPER
         aProgressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
         if( !aProgressReporter->KeepRefreshing() )
-            THROW_IO_ERROR( ( "Open cancelled by user." ) );
+            THROW_IO_ERROR( _( "Open cancelled by user." ) );
 
         while( reader.ReadLine() )
             lineCount++;
@@ -2248,9 +2248,8 @@ BOARD* PCB_IO::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIE
     if( !board )
     {
         // The parser loaded something that was valid, but wasn't a board.
-        THROW_PARSE_ERROR( _( "this file does not contain a PCB" ),
-                m_parser->CurSource(), m_parser->CurLine(),
-                m_parser->CurLineNumber(), m_parser->CurOffset() );
+        THROW_PARSE_ERROR( _( "This file does not contain a PCB." ), m_parser->CurSource(),
+                           m_parser->CurLine(), m_parser->CurLineNumber(), m_parser->CurOffset() );
     }
 
     return board;

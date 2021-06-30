@@ -175,8 +175,11 @@ struct FUTURE_FORMAT_ERROR : public PARSE_ERROR
 {
     wxString requiredVersion;   ///< version or date of KiCad required to open file
 
+    FUTURE_FORMAT_ERROR( const wxString& aRequiredVersion );
     FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError, const wxString& aRequiredVersion );
     ~FUTURE_FORMAT_ERROR() throw () {}
+
+    void init( const wxString& aRequiredVersion );
 };
 
 /** @} exception_types */

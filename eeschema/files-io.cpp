@@ -393,22 +393,30 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         pi->SetProgressReporter( &progressReporter );
 
         bool failedLoad = false;
+
         try
         {
             Schematic().SetRoot( pi->Load( fullFileName, &Schematic() ) );
 
             if( !pi->GetError().IsEmpty() )
             {
-                DisplayErrorMessage( this,
-                                     _( "The entire schematic could not be loaded.  Errors "
-                                        "occurred attempting to load \nhierarchical sheet "
-                                        "schematics." ),
+                DisplayErrorMessage( this, _( "The entire schematic could not be loaded.  Errors "
+                                              "occurred attempting to load hierarchical sheets." ),
                                      pi->GetError() );
             }
+        }
+        catch( const FUTURE_FORMAT_ERROR& ffe )
+        {
+            msg.Printf( _( "Error loading schematic '%s'." ), fullFileName);
+            progressReporter.Hide();
+            DisplayErrorMessage( this, msg, ffe.Problem() );
+
+            failedLoad = true;
         }
         catch( const IO_ERROR& ioe )
         {
             msg.Printf( _( "Error loading schematic '%s'." ), fullFileName);
+            progressReporter.Hide();
             DisplayErrorMessage( this, msg, ioe.What() );
 
             failedLoad = true;
@@ -416,7 +424,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         catch( const std::bad_alloc& )
         {
             msg.Printf( _( "Memory exhausted loading schematic '%s'." ), fullFileName );
-            DisplayErrorMessage( this, msg );
+            progressReporter.Hide();
+            DisplayErrorMessage( this, msg, wxEmptyString );
 
             failedLoad = true;
         }

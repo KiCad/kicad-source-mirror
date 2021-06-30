@@ -666,7 +666,10 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
         if( !filepath.IsEmpty() )
         {
             if( !player->OpenProjectFiles( std::vector<wxString>( 1, filepath ) ) )
+            {
+                player->Destroy();
                 return -1;
+            }
         }
 
         player->Show( true );
