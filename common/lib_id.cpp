@@ -29,58 +29,6 @@
 
 #include <macros.h>     // TO_UTF8()
 #include <lib_id.h>
-#include <kicad_string.h>
-
-
-static inline bool isDigit( char c )
-{
-    return c >= '0' && c <= '9';
-}
-
-
-const char* EndsWithRev( const char* start, const char* tail, char separator )
-{
-    bool    sawDigit = false;
-
-    while( tail > start && isDigit( *--tail ) )
-    {
-        sawDigit = true;
-    }
-
-    // if sawDigit, tail points to the 'v' here.
-
-    if( sawDigit && tail-3 >= start )
-    {
-        tail -= 3;
-
-        if( tail[0]==separator && tail[1]=='r' && tail[2]=='e' && tail[3]=='v' )
-        {
-            return tail+1;  // omit separator, return "revN[N..]"
-        }
-    }
-
-    return nullptr;
-}
-
-
-#if 0   // Not used
-int RevCmp( const char* s1, const char* s2 )
-{
-    int r = strncmp( s1, s2, 3 );
-
-    if( r || strlen(s1)<4 || strlen(s2)<4 )
-    {
-        return r;
-    }
-
-    int rnum1 = atoi( s1+3 );
-    int rnum2 = atoi( s2+3 );
-
-    return -(rnum1 - rnum2);    // swap the sign, higher revs first
-}
-#endif
-
-//----<Policy and field test functions>-------------------------------------
 
 
 static inline int okLogical( const UTF8& aField )
@@ -91,31 +39,10 @@ static inline int okLogical( const UTF8& aField )
 }
 
 
-static int okRevision( const UTF8& aField )
-{
-    char rev[32];  // C string for speed
-
-    if( aField.size() >= 4 )
-    {
-        strncpy( rev, "x/", sizeof( rev ) );
-        strncat( rev, aField.c_str(), sizeof(rev)-strlen(rev)-1 );
-
-        if( EndsWithRev( rev, rev + strlen(rev), '/' ) == rev+2 )
-            return -1;    // success
-    }
-
-    return 0; // first character position "is in error", is best we can do.
-}
-
-
-//----</Policy and field test functions>-------------------------------------
-
-
 void LIB_ID::clear()
 {
     m_libraryName.clear();
     m_itemName.clear();
-    m_revision.clear();
 }
 
 
@@ -123,28 +50,10 @@ int LIB_ID::Parse( const UTF8& aId, bool aFix )
 {
     clear();
 
-    const char* buffer = aId.c_str();
-    const char* rev = EndsWithRev( buffer, buffer+aId.length(), '/' );
-    size_t      revNdx;
-    size_t      partNdx;
-    int         offset = -1;
+    size_t partNdx;
+    int    offset = -1;
 
-    //=====<revision>=====================================
-    // in a LIB_ID like discret:R3/rev4
-    if( rev )
-    {
-        revNdx = rev - buffer;
-
-        // no need to check revision, EndsWithRev did that.
-        m_revision = aId.substr( revNdx );
-        --revNdx;  // back up to omit the '/' which precedes the rev
-    }
-    else
-    {
-        revNdx = aId.size();
-    }
-
-    //=====<name>=========================================
+    //=====<library nickname>=============================
     if( ( partNdx = aId.find( ':' ) ) != aId.npos )
     {
         offset = SetLibNickname( aId.substr( 0, partNdx ) );
@@ -160,10 +69,7 @@ int LIB_ID::Parse( const UTF8& aId, bool aFix )
     }
 
     //=====<item name>====================================
-    if( partNdx >= revNdx )
-        return partNdx;     // Error: no library item name.
-
-    UTF8 fpname = aId.substr( partNdx, revNdx-partNdx );
+    UTF8 fpname = aId.substr( partNdx );
 
     // Be sure the item name is valid.
     // Some chars can be found in legacy files converted files from other EDA tools.
@@ -181,11 +87,9 @@ int LIB_ID::Parse( const UTF8& aId, bool aFix )
 }
 
 
-LIB_ID::LIB_ID( const wxString& aLibraryName, const wxString& aItemName,
-                const wxString& aRevision ) :
+LIB_ID::LIB_ID( const wxString& aLibraryName, const wxString& aItemName ) :
         m_libraryName( aLibraryName ),
-        m_itemName( aItemName ),
-        m_revision( aRevision )
+        m_itemName( aItemName )
 {
 }
 
@@ -201,32 +105,11 @@ int LIB_ID::SetLibNickname( const UTF8& aLogical )
 }
 
 
-int LIB_ID::SetLibItemName( const UTF8& aLibItemName, bool aTestForRev )
+int LIB_ID::SetLibItemName( const UTF8& aLibItemName )
 {
-    int separation = int( aLibItemName.find_first_of( "/" ) );
-
-    if( aTestForRev && separation != -1 )
-    {
-        m_itemName = aLibItemName.substr( 0, separation-1 );
-        return separation;
-    }
-    else
-    {
-        m_itemName = aLibItemName;
-    }
+    m_itemName = aLibItemName;
 
     return -1;
-}
-
-
-int LIB_ID::SetRevision( const UTF8& aRevision )
-{
-    int offset = okRevision( aRevision );
-
-    if( offset == -1 )
-        m_revision = aRevision;
-
-    return offset;
 }
 
 
@@ -242,31 +125,11 @@ UTF8 LIB_ID::Format() const
 
     ret += m_itemName;
 
-    if( m_revision.size() )
-    {
-        ret += '/';
-        ret += m_revision;
-    }
-
     return ret;
 }
 
 
-UTF8 LIB_ID::GetLibItemNameAndRev() const
-{
-    UTF8 ret = m_itemName;
-
-    if( m_revision.size() )
-    {
-        ret += '/';
-        ret += m_revision;
-    }
-
-    return ret;
-}
-
-
-UTF8 LIB_ID::Format( const UTF8& aLibraryName, const UTF8& aLibItemName, const UTF8& aRevision )
+UTF8 LIB_ID::Format( const UTF8& aLibraryName, const UTF8& aLibItemName )
 {
     UTF8    ret;
     int     offset;
@@ -278,7 +141,8 @@ UTF8 LIB_ID::Format( const UTF8& aLibraryName, const UTF8& aLibItemName, const U
         if( offset != -1 )
         {
             THROW_PARSE_ERROR( _( "Illegal character found in logical library name" ),
-                               wxString::FromUTF8( aLibraryName.c_str() ), aLibraryName.c_str(), 0, offset );
+                               wxString::FromUTF8( aLibraryName.c_str() ), aLibraryName.c_str(),
+                               0, offset );
         }
 
         ret += aLibraryName;
@@ -286,23 +150,6 @@ UTF8 LIB_ID::Format( const UTF8& aLibraryName, const UTF8& aLibItemName, const U
     }
 
     ret += aLibItemName;    // TODO: Add validity test.
-
-    if( aRevision.size() )
-    {
-        offset = okRevision( aRevision );
-
-        if( offset != -1 )
-        {
-            THROW_PARSE_ERROR( _( "Illegal character found in revision" ),
-                               wxString::FromUTF8( aRevision.c_str() ),
-                               aRevision.c_str(),
-                               0,
-                               offset );
-        }
-
-        ret += '/';
-        ret += aRevision;
-    }
 
     return ret;
 }
@@ -319,12 +166,7 @@ int LIB_ID::compare( const LIB_ID& aLibId ) const
     if( retv != 0 )
         return retv;
 
-    retv = m_itemName.compare( aLibId.m_itemName );
-
-    if( retv != 0 )
-        return retv;
-
-    return m_revision.compare( aLibId.m_revision );
+    return m_itemName.compare( aLibId.m_itemName );
 }
 
 
@@ -374,12 +216,12 @@ bool LIB_ID::isLegalChar( unsigned aUniChar )
     switch( aUniChar )
     {
     case ':':
-    case '/':
     case '\t':
     case '\n':
     case '\r':
         return false;
 
+    case '/':
     case '\\':
     case '<':
     case '>':
@@ -428,33 +270,3 @@ bool LIB_ID::isLegalLibraryNameChar( unsigned aUniChar )
     }
 }
 
-
-#if 0
-
-// @todo Move this test into the unit test framework.
-
-void LIB_ID::Test()
-{
-    static const char* lpids[] = {
-        "smt:R_0805/rev0",
-        "mysmt:R_0805/rev2",
-        "device:AXIAL-0500",
-    };
-
-    for( unsigned i=0;  i<sizeof(lpids)/sizeof(lpids[0]);  ++i )
-    {
-        // test some round tripping
-
-        LIB_ID lpid( lpids[i] );  // parse
-
-        // format
-        printf( "input:'%s'  full:'%s'  nickname: %s  m_itemName:'%s' rev:'%s'\n",
-                lpids[i],
-                lpid.Format().c_str(),
-                lpid.GetLibNickname().c_str(),
-                lpid.GetLibItemName().c_str(),
-                lpid.GetRevision().c_str() );
-    }
-}
-
-#endif

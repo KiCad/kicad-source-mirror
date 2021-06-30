@@ -609,7 +609,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     commit.Modify( m_footprint );
 
     LIB_ID fpID = m_footprint->GetFPID();
-    fpID.SetLibItemName( m_FootprintNameCtrl->GetValue(), false );
+    fpID.SetLibItemName( m_FootprintNameCtrl->GetValue() );
     m_footprint->SetFPID( fpID );
 
     m_footprint->SetDescription( m_DocCtrl->GetValue() );

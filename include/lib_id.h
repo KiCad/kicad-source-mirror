@@ -65,10 +65,8 @@ public:
      * @param aLibraryName is the library name used to look up the library item in the #LIB_TABLE.
      * @param aItemName is the name of the library item which is not parsed by the standard
      *                     LIB_ID::Parse() function.
-     * @param aRevision is the revision of the library item.
      */
-    LIB_ID( const wxString& aLibraryName, const wxString& aItemName,
-            const wxString& aRevision = wxEmptyString );
+    LIB_ID( const wxString& aLibraryName, const wxString& aItemName );
 
     /**
      * Parse LIB_ID with the information from @a aId.
@@ -122,13 +120,7 @@ public:
      *               into the parameter at which an error was detected, usually because it
      *               contained '/'.
      */
-    int SetLibItemName( const UTF8& aLibItemName, bool aTestForRev = true );
-
-    int SetRevision( const UTF8& aRevision );
-
-    const UTF8& GetRevision() const { return m_revision; }
-
-    UTF8 GetLibItemNameAndRev() const;
+    int SetLibItemName( const UTF8& aLibItemName );
 
     /**
      * @return the fully formatted text of the LIB_ID in a UTF8 string.
@@ -150,8 +142,7 @@ public:
      *
      * @throw PARSE_ERROR if any of the pieces are illegal.
      */
-    static UTF8 Format( const UTF8& aLibraryName, const UTF8& aLibItemName,
-                        const UTF8& aRevision = "" );
+    static UTF8 Format( const UTF8& aLibraryName, const UTF8& aLibItemName );
 
     /**
      * Check if this LID_ID is valid.
@@ -175,7 +166,7 @@ public:
      */
     bool IsLegacy() const
     {
-        return m_libraryName.empty() && !m_itemName.empty() && m_revision.empty();
+        return m_libraryName.empty() && !m_itemName.empty();
     }
 
     /**
@@ -188,7 +179,7 @@ public:
      */
     bool empty() const
     {
-        return m_libraryName.empty() && m_itemName.empty() && m_revision.empty();
+        return m_libraryName.empty() && m_itemName.empty();
     }
 
     /**
@@ -266,7 +257,6 @@ protected:
 
     UTF8    m_libraryName;    ///< The nickname of the library or empty.
     UTF8    m_itemName;       ///< The name of the entry in the logical library.
-    UTF8    m_revision;       ///< The revision of the entry.
 };
 
 

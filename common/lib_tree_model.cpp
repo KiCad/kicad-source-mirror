@@ -160,7 +160,7 @@ LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITE
     m_Parent = aParent;
 
     m_LibId.SetLibNickname( aItem->GetLibNickname() );
-    m_LibId.SetLibItemName( aItem->GetName () );
+    m_LibId.SetLibItemName( aItem->GetName() );
 
     m_Name = aItem->GetName();
     m_Desc = aItem->GetDescription();

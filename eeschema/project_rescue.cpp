@@ -205,7 +205,7 @@ bool RESCUE_CASE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 
         LIB_ID libId;
 
-        libId.SetLibItemName( m_new_name, false );
+        libId.SetLibItemName( m_new_name );
         eachSymbol->SetLibId( libId );
         eachSymbol->ClearFlags();
         aRescuer->LogRescue( eachSymbol, m_requested_name, m_new_name );
@@ -329,7 +329,7 @@ bool RESCUE_CACHE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 
         LIB_ID libId;
 
-        libId.SetLibItemName( m_new_name, false );
+        libId.SetLibItemName( m_new_name );
         eachSymbol->SetLibId( libId );
         eachSymbol->ClearFlags();
         aRescuer->LogRescue( eachSymbol, m_requested_name, m_new_name );
@@ -550,7 +550,7 @@ void RESCUER::UndoRescues()
     {
         LIB_ID libId;
 
-        libId.SetLibItemName( each_logitem.old_name, false );
+        libId.SetLibItemName( each_logitem.old_name );
         each_logitem.symbol->SetLibId( libId );
         each_logitem.symbol->ClearFlags();
     }

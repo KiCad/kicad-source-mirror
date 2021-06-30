@@ -1575,7 +1575,7 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
             if( m_version > 3 )
                 libId.Parse( libName, true );
             else
-                libId.SetLibItemName( libName, false );
+                libId.SetLibItemName( libName );
 
             symbol->SetLibId( libId );
 

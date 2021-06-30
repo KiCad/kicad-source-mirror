@@ -1038,7 +1038,7 @@ void PCB_IO::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
 
     if( m_ctl & CTL_OMIT_LIBNAME )
         m_out->Print( aNestLevel, "(footprint %s",
-                      m_out->Quotes( aFootprint->GetFPID().GetLibItemNameAndRev() ).c_str() );
+                      m_out->Quotes( aFootprint->GetFPID().GetLibItemName() ).c_str() );
     else
         m_out->Print( aNestLevel, "(footprint %s",
                       m_out->Quotes( aFootprint->GetFPID().Format() ).c_str() );

@@ -314,7 +314,7 @@ wxString LIB_SYMBOL::GetUnitReference( int aUnit )
 void LIB_SYMBOL::SetName( const wxString& aName )
 {
     m_name = aName;
-    m_libId.SetLibItemName( aName, false );
+    m_libId.SetLibItemName( aName );
 
     GetValueField().SetText( aName );
 }
