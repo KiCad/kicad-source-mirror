@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-06-26 15:57+0000\n"
+"PO-Revision-Date: 2021-07-01 02:33+0000\n"
 "Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.1-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -5730,9 +5730,8 @@ msgid "Quit %s"
 msgstr "종료 %s"
 
 #: common/tool/actions.cpp:43
-#, fuzzy
 msgid "New..."
-msgstr "새 파일 (&N)"
+msgstr "새로 만들기…"
 
 #: common/tool/actions.cpp:43
 #, fuzzy
@@ -5740,9 +5739,8 @@ msgid "Create a new document in the editor"
 msgstr "새 디렉토리 만들기"
 
 #: common/tool/actions.cpp:49
-#, fuzzy
 msgid "New Library..."
-msgstr "새 라이브러리"
+msgstr "새 라이브러리…"
 
 #: common/tool/actions.cpp:49
 #, fuzzy
@@ -5750,19 +5748,16 @@ msgid "Create a new library folder"
 msgstr "새 디렉토리 만들기"
 
 #: common/tool/actions.cpp:55
-#, fuzzy
 msgid "Add Library..."
-msgstr "라이브러리"
+msgstr "라이브러리 추가…"
 
 #: common/tool/actions.cpp:55
-#, fuzzy
 msgid "Add an existing library folder"
-msgstr "은(는) 라이브러리에 이미 존재합니다."
+msgstr "기존 라이브러리 폴더 추가"
 
 #: common/tool/actions.cpp:61 eeschema/sim/sim_plot_frame_base.cpp:25
-#, fuzzy
 msgid "Open..."
-msgstr "열기 (&O)"
+msgstr "열기…"
 
 #: common/tool/actions.cpp:61
 #, fuzzy
@@ -5795,9 +5790,8 @@ msgid "Save a copy of the current document to another location"
 msgstr "현재 보드 저장"
 
 #: common/tool/actions.cpp:85
-#, fuzzy
 msgid "Save All"
-msgstr "다른 이름으로 저장 (&S)..."
+msgstr "모두 저장"
 
 #: common/tool/actions.cpp:85
 #, fuzzy
@@ -5809,9 +5803,8 @@ msgid "Throw away changes"
 msgstr ""
 
 #: common/tool/actions.cpp:97
-#, fuzzy
 msgid "Page Settings..."
-msgstr "페이지 설정"
+msgstr "페이지 설정..."
 
 #: common/tool/actions.cpp:97
 #, fuzzy
@@ -5819,14 +5812,12 @@ msgid "Settings for paper size and title block info"
 msgstr "페이지 설정"
 
 #: common/tool/actions.cpp:103 kicad/project_tree_pane.cpp:803
-#, fuzzy
 msgid "Print..."
-msgstr "인쇄 (&P)"
+msgstr "인쇄…"
 
 #: common/tool/actions.cpp:109
-#, fuzzy
 msgid "Plot..."
-msgstr "플로트"
+msgstr "플로트…"
 
 #: common/tool/actions.cpp:109 pcbnew/dialogs/dialog_plot.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.h:153
@@ -6186,9 +6177,8 @@ msgid "Display grid dots or lines in the edit window"
 msgstr ""
 
 #: common/tool/actions.cpp:479
-#, fuzzy
 msgid "Grid Properties..."
-msgstr "패드 속성"
+msgstr "그리드 속성..."
 
 #: common/tool/actions.cpp:479
 #, fuzzy
@@ -6357,9 +6347,8 @@ msgid "Update PCB with changes made to schematic"
 msgstr "회로도 인쇄"
 
 #: common/tool/actions.cpp:586
-#, fuzzy
 msgid "Update Schematic from PCB..."
-msgstr "새 회로도 (&S)"
+msgstr "PCB에서 회로도 업데이트..."
 
 #: common/tool/actions.cpp:586
 #, fuzzy
@@ -6369,9 +6358,8 @@ msgstr "새 회로도 (&S)"
 #: common/tool/actions.cpp:596
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:490
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:389
-#, fuzzy
 msgid "Configure Paths..."
-msgstr "설정"
+msgstr "경로 구성..."
 
 #: common/tool/actions.cpp:596
 msgid "Edit path configuration environment variables"
@@ -6386,9 +6374,8 @@ msgid "Edit the global and project symbol library lists"
 msgstr ""
 
 #: common/tool/actions.cpp:607
-#, fuzzy
 msgid "Manage Footprint Libraries..."
-msgstr "풋프린트 압축 만들기"
+msgstr "풋프린트 라이브러리 관리..."
 
 #: common/tool/actions.cpp:608
 msgid "Edit the global and project footprint library lists"
@@ -6413,9 +6400,8 @@ msgid "Open product documentation in a web browser"
 msgstr ""
 
 #: common/tool/actions.cpp:626
-#, fuzzy
 msgid "List Hotkeys..."
-msgstr "D-Codes 목록 (&L)"
+msgstr "단축키 목록…"
 
 #: common/tool/actions.cpp:627
 msgid "Displays current hotkeys table and corresponding commands"
@@ -6452,9 +6438,8 @@ msgid ""
 msgstr ""
 
 #: common/tool/common_control.cpp:219 common/tool/common_control.cpp:239
-#, fuzzy
 msgid "File Not Found"
-msgstr "파일을 찾을 수 없습니다."
+msgstr "파일을 찾을 수 없음"
 
 #: common/tool/common_control.cpp:236
 #, c-format
@@ -6535,18 +6520,16 @@ msgid "Signal names cannot contain CR or LF characters"
 msgstr ""
 
 #: common/validators.cpp:370
-#, fuzzy
 msgid "Signal names cannot contain spaces"
-msgstr "<%s> 파일로 모듈을 내보냈습니다."
+msgstr "신호 이름은 공백을 포함 할 수 없음"
 
 #: common/view/view.cpp:543
 msgid "Mirroring for Y axis is not supported yet"
 msgstr ""
 
 #: common/widgets/footprint_preview_widget.cpp:103
-#, fuzzy
 msgid "Footprint not found."
-msgstr "풋프린트 회전"
+msgstr "풋프린트를 찾을 수 없습니다."
 
 #: common/widgets/footprint_select_widget.cpp:144
 #, fuzzy
@@ -6747,9 +6730,8 @@ msgid "Set Hotkey"
 msgstr ""
 
 #: common/widgets/widget_hotkey_list.cpp:380
-#, fuzzy
 msgid "Edit..."
-msgstr "편집"
+msgstr "편집…"
 
 #: common/widgets/widget_hotkey_list.cpp:381
 #, fuzzy
@@ -6964,9 +6946,8 @@ msgid "CSV Files"
 msgstr "ERC 파일:"
 
 #: common/wildcards_and_files_ext.cpp:396
-#, fuzzy
 msgid "Portable document format files"
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "휴대용 문서 형식 파일"
 
 #: common/wildcards_and_files_ext.cpp:402
 #, fuzzy
@@ -6997,9 +6978,8 @@ msgid "Text files"
 msgstr "텍스트 파일"
 
 #: common/wildcards_and_files_ext.cpp:438
-#, fuzzy
 msgid "Legacy footprint export files"
-msgstr "<%s> 파일로 모듈을 내보냈습니다."
+msgstr "기존 풋프린트 파일 내보내기"
 
 #: common/wildcards_and_files_ext.cpp:444
 #, fuzzy
@@ -7017,9 +6997,8 @@ msgid "SPICE netlist file"
 msgstr "네트리스트 파일:"
 
 #: common/wildcards_and_files_ext.cpp:462
-#, fuzzy
 msgid "CadStar netlist file"
-msgstr "네트리스트 파일을 만들 수 없습니다."
+msgstr "CadStar 네트리스트 파일"
 
 #: common/wildcards_and_files_ext.cpp:468
 #, fuzzy
@@ -7201,14 +7180,13 @@ msgid "Description: %s;  Keywords: %s"
 msgstr "설명: %s; 키워드: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:774
-#, fuzzy, c-format
+#, c-format
 msgid "Library location: %s"
-msgstr "<%s> 라이브러리를 찾을 수 없습니다 ."
+msgstr "라이브러리 위치: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:776
-#, fuzzy
 msgid "Library location: unknown"
-msgstr "<%s> 라이브러리를 찾을 수 없습니다 ."
+msgstr "라이브러리 위치: 알 수 없음"
 
 #: cvpcb/cvpcb_mainframe.cpp:789
 msgid ""
@@ -7412,9 +7390,8 @@ msgstr ""
 "구성 요소 %s\" 풋프린트 %s\"가 <b> 여러 </b> 라이브러리에서 발견되었습니다.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:166
-#, fuzzy
 msgid "First check your footprint library table entries."
-msgstr "하나의 라이브러리 파일에 풋프린트 압축 또는 추가"
+msgstr "먼저 풋프린트 라이브러리 테이블 항목을 확인하세요."
 
 #: cvpcb/readwrite_dlgs.cpp:168
 msgid "Problematic Footprint Library Tables"
