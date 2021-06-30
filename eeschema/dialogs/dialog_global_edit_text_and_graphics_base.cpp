@@ -79,7 +79,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_fieldnameFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter fields by name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fieldnameFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter other symbol fields by name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_fieldnameFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_fieldnameFilter = new wxTextCtrl( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -121,13 +121,19 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_netFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by net:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_netFilterOpt, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer2->Add( m_netFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_netFilter = new wxTextCtrl( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_netFilter, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
+	fgSizer2->Add( m_netFilter, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
+
+
+	fgSizer2->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_selectedFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Only include selected items"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_selectedFilterOpt, 0, wxALL, 5 );
+	fgSizer2->Add( m_selectedFilterOpt, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	sbFilters->Add( fgSizer2, 1, wxEXPAND|wxRIGHT, 5 );

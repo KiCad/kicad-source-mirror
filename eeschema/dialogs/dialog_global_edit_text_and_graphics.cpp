@@ -441,6 +441,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         return false;
 
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
+    m_appendUndo = false;
 
     // Go through sheets
     for( const SCH_SHEET_PATH& sheetPath : m_parent->Schematic().GetSheets() )
@@ -450,17 +451,16 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         if( screen )
         {
             m_parent->SetCurrentSheet( sheetPath );
-            m_appendUndo = false;
 
             for( SCH_ITEM* item : screen->Items() )
                 visitItem( sheetPath, item );
-
-            if( m_appendUndo )
-            {
-                m_parent->OnModify();
-                m_parent->HardRedraw();
-            }
         }
+    }
+
+    if( m_appendUndo )
+    {
+        m_parent->OnModify();
+        m_parent->HardRedraw();
     }
 
     // Reset the view to where we left the user
