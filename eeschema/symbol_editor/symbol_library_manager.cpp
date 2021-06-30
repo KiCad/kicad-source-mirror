@@ -39,6 +39,7 @@
 #include <list>
 #include <locale_io.h>
 #include <wx/log.h>
+#include <kicad_string.h>
 #include "lib_logger.h"
 
 
@@ -1091,7 +1092,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer(
             }
             catch( const IO_ERROR& ioe )
             {
-                wxLogError( errorMsg, cachedParent->GetName(), aFileName, ioe.What() );
+                wxLogError( errorMsg, UnescapeString( cachedParent->GetName() ), aFileName,
+                            ioe.What() );
                 return false;
             }
 
@@ -1101,7 +1103,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer(
             }
             catch( const IO_ERROR& ioe )
             {
-                wxLogError( errorMsg, newCachedSymbol->GetName(), aFileName, ioe.What() );
+                wxLogError( errorMsg, UnescapeString( newCachedSymbol->GetName() ), aFileName,
+                            ioe.What() );
                 return false;
             }
 
@@ -1121,7 +1124,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer(
             }
             catch( const IO_ERROR& ioe )
             {
-                wxLogError( errorMsg, newCachedSymbol->GetName(), aFileName, ioe.What() );
+                wxLogError( errorMsg, UnescapeString( newCachedSymbol->GetName() ), aFileName,
+                            ioe.What() );
                 return false;
             }
 
@@ -1146,7 +1150,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer(
             }
             catch( const IO_ERROR& ioe )
             {
-                wxLogError( errorMsg, libSymbol->GetName(), aFileName, ioe.What() );
+                wxLogError( errorMsg, UnescapeString( libSymbol->GetName() ), aFileName,
+                            ioe.What() );
                 return false;
             }
 
@@ -1163,7 +1168,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer(
             }
             catch( const IO_ERROR& ioe )
             {
-                wxLogError( errorMsg, libSymbol->GetName(), aFileName, ioe.What() );
+                wxLogError( errorMsg, UnescapeString( libSymbol->GetName() ), aFileName,
+                            ioe.What() );
                 return false;
             }
 
@@ -1183,7 +1189,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer(
                 }
                 catch( const IO_ERROR& ioe )
                 {
-                    wxLogError( errorMsg, derivedSymbol->GetName(), aFileName, ioe.What() );
+                    wxLogError( errorMsg, UnescapeString( derivedSymbol->GetName() ), aFileName,
+                                ioe.What() );
                     return false;
                 }
             }
@@ -1235,7 +1242,7 @@ void SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetRootSymbolNames( wxArrayString& aRoo
         if( entry->GetSymbol()->IsAlias() )
             continue;
 
-        aRootSymbolNames.Add( entry->GetSymbol()->GetName() );
+        aRootSymbolNames.Add( UnescapeString( entry->GetSymbol()->GetName() ) );
     }
 }
 

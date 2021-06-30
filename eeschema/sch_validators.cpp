@@ -52,14 +52,7 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsLibEditor, int aFieldId, wxSt
     }
     else if( m_fieldId == SHEETNAME_V )
     {
-        // Does it make sense to exclude the colon and back slash characters?  The forward slash
-        // makes sense because it is used as the separator when generating human readable sheet
-        // paths.
-        excludes += wxT( ":/\\" );
-    }
-    else if( aFieldId == VALUE_FIELD && m_isLibEditor )
-    {
-        excludes += wxT( " :/\\" );
+        excludes += wxT( "/" );
     }
 
     long style = GetStyle();

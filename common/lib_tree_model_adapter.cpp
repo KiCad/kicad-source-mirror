@@ -29,6 +29,7 @@
 #include <widgets/ui_common.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
+#include <kicad_string.h>
 
 
 #define PINNED_ITEMS_KEY      wxT( "PinnedItems" )
@@ -455,7 +456,7 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
     {
     default:    // column == -1 is used for default Compare function
     case 0:
-        aVariant = node->m_Name;
+        aVariant = UnescapeString( node->m_Name );
         break;
     case 1:
         aVariant = node->m_Desc;

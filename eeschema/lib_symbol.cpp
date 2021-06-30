@@ -313,12 +313,10 @@ wxString LIB_SYMBOL::GetUnitReference( int aUnit )
 
 void LIB_SYMBOL::SetName( const wxString& aName )
 {
-    wxString validatedName = LIB_ID::FixIllegalChars( aName );
+    m_name = aName;
+    m_libId.SetLibItemName( aName, false );
 
-    m_name = validatedName;
-    m_libId.SetLibItemName( validatedName, false );
-
-    GetValueField().SetText( validatedName );
+    GetValueField().SetText( aName );
 }
 
 

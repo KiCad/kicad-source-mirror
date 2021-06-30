@@ -282,6 +282,9 @@ DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 {
     m_fieldId = aField->GetId();
 
+    if( m_fieldId == VALUE_FIELD )
+        m_text = UnescapeString( aField->GetText() );
+
     // When in the library editor, power symbols can be renamed.
     m_isPower = false;
     init();

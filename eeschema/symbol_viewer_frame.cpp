@@ -55,6 +55,7 @@
 #include <wx/listbox.h>
 
 #include <default_values.h>
+#include <kicad_string.h>
 
 // Save previous symbol library viewer state.
 wxString SYMBOL_VIEWER_FRAME::m_libraryName;
@@ -361,8 +362,8 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
         if( parent )
             parentName = parent->GetName();
 
-        AppendMsgPanel( _( "Name" ), m_previewItem->GetName() );
-        AppendMsgPanel( _( "Parent" ),  parentName );
+        AppendMsgPanel( _( "Name" ), UnescapeString( m_previewItem->GetName() ) );
+        AppendMsgPanel( _( "Parent" ),  UnescapeString( parentName ) );
         AppendMsgPanel( _( "Description" ), m_previewItem->GetDescription() );
         AppendMsgPanel( _( "Keywords" ), m_previewItem->GetKeyWords() );
     }

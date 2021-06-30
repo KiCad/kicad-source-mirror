@@ -36,6 +36,7 @@
 #include <project/project_file.h>
 #include "eda_doc.h"
 #include <wx/settings.h>
+#include <kicad_string.h>
 
 
 enum
@@ -381,7 +382,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         return field.GetName( false );
 
     case FDC_VALUE:
-        return field.GetText();
+        return UnescapeString( field.GetText() );
 
     case FDC_SHOWN:
         return StringFromBool( field.IsVisible() );
@@ -486,6 +487,10 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
                 fn.SetExt( KiCadSchematicFileExtension );
                 value = fn.GetFullPath();
             }
+        }
+        else if( m_parentType == SCH_SYMBOL_T && aRow == VALUE_FIELD )
+        {
+            value = EscapeString( value, CTX_LIBID );
         }
 
         field.SetText( value );

@@ -43,7 +43,7 @@
 #include <wx/clipbrd.h>
 #include <wx/filedlg.h>
 #include <wx/log.h>
-
+#include <kicad_string.h>
 
 
 /**
@@ -692,17 +692,15 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
 {
     wxCHECK( m_symbol, /* void */ );
 
-    wxString  msg;
-    wxString  lib = GetCurLib();
+    wxString lib = GetCurLib();
 
     if( !lib.IsEmpty() && aOldName && *aOldName != m_symbol->GetName() )
     {
         // Test the current library for name conflicts
         if( m_libMgr->SymbolExists( m_symbol->GetName(), lib ) )
         {
-            msg.Printf( _( "The name '%s' conflicts with an existing entry in the library '%s'." ),
-                        m_symbol->GetName(),
-                        lib );
+            wxString msg = wxString::Format( _( "Symbol name '%s' already in use." ),
+                                             UnescapeString( m_symbol->GetName() ) );
 
             DisplayErrorMessage( this, msg );
             m_symbol->SetName( *aOldName );
@@ -1185,14 +1183,14 @@ void SYMBOL_EDIT_FRAME::DisplaySymbolDatasheet()
 
     wxString msg = m_symbol->GetName();
 
-    AppendMsgPanel( _( "Name" ), msg, 8 );
+    AppendMsgPanel( _( "Name" ), UnescapeString( msg ), 8 );
 
     if( m_symbol->IsAlias() )
     {
         LIB_SYMBOL_SPTR parent = m_symbol->GetParent().lock();
 
         msg = parent ? parent->GetName() : _( "Undefined!" );
-        AppendMsgPanel( _( "Parent" ), msg, 8 );
+        AppendMsgPanel( _( "Parent" ), UnescapeString( msg ), 8 );
     }
 
     static wxChar UnitLetter[] = wxT( "?ABCDEFGHIJKLMNOPQRSTUVWXYZ" );

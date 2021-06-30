@@ -213,7 +213,7 @@ void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 
     if( !m_Normalized )
     {
-        m_MatchName = m_MatchName.Lower();
+        m_MatchName = UnescapeString( m_MatchName ).Lower();
         m_SearchText = m_SearchText.Lower();
         m_Normalized = true;
     }

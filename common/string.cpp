@@ -157,6 +157,14 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         {
             if( c == '{' )
                 converted += "{brace}";
+            else if( c == '/' )
+                converted += "{slash}";
+            else if( c == '\\' )
+                converted += "{backslash}";
+            else if( c == '<' )
+                converted += "{lt}";
+            else if( c == '>' )
+                converted += "{gt}";
             else if( c == ':' )
                 converted += "{colon}";
             else if( c == '\n' || c == '\r' )

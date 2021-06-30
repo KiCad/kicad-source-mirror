@@ -3006,7 +3006,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* 
 
 wxString SCH_EAGLE_PLUGIN::fixSymbolName( const wxString& aName )
 {
-    wxString ret = LIB_ID::FixIllegalChars( aName );
+    wxString ret = EscapeString( aName, CTX_LIBID );
 
     return ret;
 }

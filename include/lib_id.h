@@ -220,7 +220,7 @@ public:
      * @param aLib True if we are checking library names, false if we are checking item names
      * @return the corrected version of \a aLibItemName.
      */
-    static UTF8 FixIllegalChars( const UTF8& aLibItemName, bool aLib = false );
+    static UTF8 FixIllegalChars( const UTF8& aLibItemName, bool aLib );
 
     /**
      * Looks for characters that are illegal in library nicknames.

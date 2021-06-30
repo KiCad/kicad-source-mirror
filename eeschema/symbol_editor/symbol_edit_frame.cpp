@@ -72,6 +72,7 @@
 #include <wildcards_and_files_ext.h>
 #include <panel_sym_lib_table.h>
 #include <wx/choicdlg.h>
+#include <kicad_string.h>
 
 
 bool SYMBOL_EDIT_FRAME::m_showDeMorgan = false;
@@ -748,10 +749,10 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
         wxString link;
 
         msg.Printf( _( "Symbol %s is derived from %s.  Symbol graphics will not be editable." ),
-                    symbolName,
-                    parentSymbolName );
+                    UnescapeString( symbolName ),
+                    UnescapeString( parentSymbolName ) );
 
-        link.Printf( _( "Open %s" ), parentSymbolName );
+        link.Printf( _( "Open %s" ), UnescapeString( parentSymbolName ) );
 
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(

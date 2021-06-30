@@ -606,7 +606,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
                 if( i == REFERENCE_FIELD )
                     aSymbol->SetRef( aInstance, UTIL::GetRefDesUnannotated( libField->GetText() ) );
                 else if( i == VALUE_FIELD )
-                    aSymbol->SetValue( aInstance, libField->GetText() );
+                    aSymbol->SetValue( aInstance, UnescapeString( libField->GetText() ) );
                 else if( i == FOOTPRINT_FIELD )
                     aSymbol->SetFootprint( aInstance, libField->GetText() );
                 else

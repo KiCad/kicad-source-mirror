@@ -529,7 +529,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
-    wxString newFieldValue = LIB_ID::FixIllegalChars( dlg.GetText() );
+    wxString newFieldValue = EscapeString( dlg.GetText(), CTX_LIBID );
     wxString oldFieldValue = aField->GetFullText( m_frame->GetUnit() );
     bool     renamed = aField->GetId() == VALUE_FIELD && newFieldValue != oldFieldValue;
 
@@ -557,9 +557,8 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
 
 void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
 {
-    LIB_SYMBOL*   symbol = m_frame->GetCurSymbol();
-    bool          partLocked = symbol->UnitsLocked();
-    wxString      oldName = symbol->GetName();
+    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
+    bool        partLocked = symbol->UnitsLocked();
 
     m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );

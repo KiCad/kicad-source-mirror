@@ -117,11 +117,16 @@ public:
 
     void UpdateField( LIB_FIELD* aField )
     {
-        aField->SetText( m_text );
+        wxString value = m_text;
+
+        if( m_fieldId == VALUE_FIELD )
+            value = EscapeString( value, CTX_LIBID );
+
+        aField->SetText( value );
 
         // VALUE === symbol name, so update the parent symbol if it changes.
-        if( aField->GetId() == VALUE_FIELD && aField->GetParent() )
-            aField->GetParent()->SetName( m_text );
+        if( m_fieldId == VALUE_FIELD && aField->GetParent() )
+            aField->GetParent()->SetName( value );
 
         updateText( aField );
     }

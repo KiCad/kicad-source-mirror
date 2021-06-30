@@ -30,7 +30,6 @@
 
 #include <confirm.h>
 #include <sch_edit_frame.h>
-#include <sch_draw_panel.h>
 #include <sch_symbol.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
@@ -44,6 +43,8 @@
 #include <wx/dcclient.h>
 #include <grid_tricks.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <kicad_string.h>
+
 
 #define COL_REFS 0
 #define COL_CURR_LIBID 1
@@ -696,6 +697,11 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
     if( !validateLibIds() )
         return false;
 
+    auto getName = []( const LIB_ID& aLibId )
+            {
+                return UnescapeString( aLibId.GetLibItemName().wx_str() );
+            };
+
     int row_max = m_grid->GetNumberRows() - 1;
 
     for( int row = 0; row <= row_max; row++ )
@@ -743,8 +749,8 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
             SCH_FIELD* value = candidate.m_Symbol->GetField( VALUE_FIELD );
 
             // If value is a proxy for the itemName then make sure it gets updated
-            if( candidate.m_Symbol->GetLibId().GetLibItemName().wx_str() == value->GetText() )
-                candidate.m_Symbol->SetValue( id.GetLibItemName().wx_str() );
+            if( getName( candidate.m_Symbol->GetLibId() ) == value->GetText() )
+                candidate.m_Symbol->SetValue( getName( id ) );
 
             candidate.m_Symbol->SetLibId( id );
             candidate.m_Symbol->SetLibSymbol( symbol->Flatten().release() );

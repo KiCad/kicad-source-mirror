@@ -106,7 +106,7 @@ public:
 protected:
     void SetHtmlName()
     {
-        m_html.Replace( "__NAME__", EscapeHTML( m_symbol->GetName() ) );
+        m_html.Replace( "__NAME__", EscapeHTML( UnescapeString( m_symbol->GetName() ) ) );
     }
 
 
@@ -130,7 +130,7 @@ protected:
             }
 
             m_html.Replace( "__ALIASOF__", wxString::Format(  AliasOfFormat,
-                                                              EscapeHTML( root_name ),
+                                                              EscapeHTML( UnescapeString( root_name ) ),
                                                               EscapeHTML( root_desc ) ) );
         }
     }

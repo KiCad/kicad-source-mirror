@@ -27,6 +27,7 @@
 #include <symbol_library_manager.h>
 #include <symbol_lib_table.h>
 #include <tools/symbol_editor_control.h>
+#include <kicad_string.h>
 
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
@@ -158,10 +159,10 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
         for( auto nodeIt = aLibNode.m_Children.begin(); nodeIt != aLibNode.m_Children.end(); /**/ )
         {
             auto aliasIt = std::find_if( aliases.begin(), aliases.end(),
-                                         [&] ( const LIB_SYMBOL* a )
-                                         {
-                                             return a->GetName() == (*nodeIt)->m_Name;
-                                         } );
+                    [&] ( const LIB_SYMBOL* a )
+                    {
+                        return a->GetName() == (*nodeIt)->m_LibId.GetLibItemName();
+                    } );
 
             if( aliasIt != aliases.end() )
             {
@@ -217,9 +218,9 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
             node->m_Name = m_frame->GetCurSymbol()->GetLibId().GetLibItemName();
 
         if( node->m_Pinned )
-            aVariant = GetPinningSymbol() + node->m_Name;
+            aVariant = GetPinningSymbol() + UnescapeString( node->m_Name );
         else
-            aVariant = node->m_Name;
+            aVariant = UnescapeString( node->m_Name );
 
         // mark modified items with an asterisk
         if( node->m_Type == LIB_TREE_NODE::LIB )

@@ -63,6 +63,7 @@
 #include <kiface_i.h>
 #include <default_values.h>
 #include <advanced_config.h>
+#include <kicad_string.h>
 #include "sch_painter.h"
 
 namespace KIGFX
@@ -672,7 +673,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
 
         double orient = aField->GetTextAngleRadians();
 
-        strokeText( aField->GetText(), pos, orient );
+        strokeText( UnescapeString( aField->GetText() ), pos, orient );
     }
 
     // Draw the umbilical line

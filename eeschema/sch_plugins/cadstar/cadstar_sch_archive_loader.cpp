@@ -535,7 +535,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
                 // Name of the net that the symbol instance in CADSTAR refers to:
                 wxString symbolInstanceNetName = sym.SymbolVariant.Reference;
-                symbolInstanceNetName = LIB_ID::FixIllegalChars( symbolInstanceNetName );
+                symbolInstanceNetName = EscapeString( symbolInstanceNetName, CTX_LIBID );
 
                 // Name of the symbol we will use for saving the part in KiCad
                 // Note: In CADSTAR all power symbols will start have the reference name be

@@ -31,6 +31,7 @@
 #include <sch_symbol.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
+#include <kicad_string.h>
 
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
@@ -165,7 +166,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_grid->ProcessTableMessage( msg );
     adjustGridColumns( m_grid->GetRect().GetWidth() );
 
-    m_SymbolNameCtrl->ChangeValue( m_libEntry->GetName() );
+    m_SymbolNameCtrl->ChangeValue( UnescapeString( m_libEntry->GetName() ) );
 
     m_DescCtrl->ChangeValue( m_libEntry->GetDescription() );
     m_KeywordCtrl->ChangeValue( m_libEntry->GetKeyWords() );
@@ -200,7 +201,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
         wxCHECK( rootSymbol, false );
 
-        wxString parentName = rootSymbol->GetName();
+        wxString parentName = UnescapeString( rootSymbol->GetName() );
         int selection = m_inheritanceSelectCombo->FindString( parentName );
 
         wxCHECK( selection != wxNOT_FOUND, false );
@@ -312,7 +313,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
             wxString msg;
 
             msg.Printf( _( "The name '%s' conflicts with an existing entry in the library '%s'." ),
-                        newName, libName );
+                        UnescapeString( newName ),
+                        libName );
             DisplayErrorMessage( this, msg );
             return false;
         }
@@ -339,7 +341,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     // Update the parent for inherited symbols
     if( m_libEntry->IsAlias() )
     {
-        wxString parentName = m_inheritanceSelectCombo->GetValue();
+        wxString parentName = EscapeString( m_inheritanceSelectCombo->GetValue(), CTX_LIBID );
 
         // The parentName was verified to be non-empty in the Validator
         wxString libName = m_Parent->GetCurLib();
@@ -435,7 +437,9 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
         }
     }
     else if( event.GetRow() == VALUE_FIELD && event.GetCol() == FDC_VALUE )
+    {
         m_SymbolNameCtrl->ChangeValue( event.GetString() );
+    }
 
     editor->DecRef();
 }

@@ -2734,7 +2734,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
 
         aliasName = wxString::FromUTF8( line );
         aliasName.Trim();
-        aliasName = LIB_ID::FixIllegalChars( aliasName );
+        aliasName = EscapeString( aliasName, CTX_LIBID );
 
         LIB_SYMBOL_MAP::iterator it = m_symbols.find( aliasName );
 

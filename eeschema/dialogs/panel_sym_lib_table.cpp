@@ -503,7 +503,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     {
         wxString   filePath = dlg.GetDirectory() + wxFileName::GetPathSeparator() + file;
         wxFileName fn( filePath );
-        wxString   nickname = LIB_ID::FixIllegalChars( fn.GetName() );
+        wxString   nickname = LIB_ID::FixIllegalChars( fn.GetName(), true );
         bool       doAdd = true;
 
         if( cur_model()->ContainsNickname( nickname ) )

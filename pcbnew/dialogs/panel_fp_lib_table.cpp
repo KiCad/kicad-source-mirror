@@ -896,7 +896,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     for( const wxString& filePath : files )
     {
         wxFileName fn( filePath );
-        wxString   nickname = LIB_ID::FixIllegalChars( fn.GetName() );
+        wxString   nickname = LIB_ID::FixIllegalChars( fn.GetName(), true );
         bool       doAdd    = true;
 
         if( cur_model()->ContainsNickname( nickname ) )

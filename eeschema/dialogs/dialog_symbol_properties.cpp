@@ -781,7 +781,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 
             if( newName.CmpNoCase( m_fieldsGrid->GetCellValue( i, FDC_NAME ) ) == 0 )
             {
-                DisplayError( this, wxString::Format( _( "The name '%s' is already in use." ),
+                DisplayError( this, wxString::Format( _( "Field name '%s' already in use." ),
                                                       newName ) );
                 event.Veto();
                 m_delayedFocusRow = event.GetRow();
