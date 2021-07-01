@@ -107,6 +107,12 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             const PCB_GROUP* group = dynamic_cast<const PCB_GROUP*>( item );
             BOARD_ITEM*      clone;
 
+            if( const FP_TEXT* text = dyn_cast<const FP_TEXT*>( item ) )
+            {
+                if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
+                    continue;
+            }
+
             if( group )
                 clone = static_cast<BOARD_ITEM*>( group->DeepClone() );
             else
