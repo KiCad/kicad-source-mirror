@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-07-01 14:28+0000\n"
-"Last-Translator: Deleted User <noreply+33206@weblate.org>\n"
+"PO-Revision-Date: 2021-07-01 16:20+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -5868,7 +5868,7 @@ msgstr "设置网格标注"
 
 #: common/tool/actions.cpp:484
 msgid "Use inches"
-msgstr "使用英寸"
+msgstr "使用 inch 作为单位"
 
 #: common/tool/actions.cpp:489
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5880,7 +5880,7 @@ msgstr "Mils"
 
 #: common/tool/actions.cpp:489
 msgid "Use mils"
-msgstr "使用密尔"
+msgstr "使用 mil 作为单位"
 
 #: common/tool/actions.cpp:494
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5895,7 +5895,7 @@ msgstr "mm"
 
 #: common/tool/actions.cpp:494
 msgid "Use millimeters"
-msgstr "使用毫米"
+msgstr "使用 mm 作为单位"
 
 #: common/tool/actions.cpp:503
 msgid "Switch units"
@@ -5931,7 +5931,7 @@ msgstr "全屏十字光标"
 
 #: common/tool/actions.cpp:525
 msgid "Switch display of full-window crosshairs"
-msgstr "开关全屏十字光标"
+msgstr "切换全屏十字光标"
 
 #: common/tool/actions.cpp:530
 msgid "Single Layer View Mode"
@@ -8898,7 +8898,7 @@ msgstr "方向"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:56
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:50
 msgid "Number Text Size"
-msgstr "编号文本尺寸"
+msgstr "编号文本高度"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:57
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:51
@@ -9083,7 +9083,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:76
 msgid "Create symbol with alternate body style (DeMorgan)"
-msgstr "创建有备用主体样式的符号 (德摩根)"
+msgstr "创建德摩根等效符号"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:79
 msgid "Create symbol as power symbol"
@@ -9141,11 +9141,11 @@ msgstr "是否删除符号多余单元?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:281
 msgid "Add new pins for alternate body style (DeMorgan) to symbol?"
-msgstr "添加新的引脚到符号的备用主体 (德摩根)？"
+msgstr "添加新的引脚到符号的德摩根等效符号？"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:286
 msgid "Delete alternate body style (DeMorgan) draw items from symbol?"
-msgstr "确定从符号中删除备用主体样式 (德摩根) 的图形项目？"
+msgstr "确定删除符号所关联的德摩根等效符号？"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:314
 #: eeschema/symbol_editor/symbol_editor.cpp:696
@@ -9267,11 +9267,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
 msgid "Has alternate body style (DeMorgan)"
-msgstr "有不同的主体风格 (德摩根)"
+msgstr "存在关联的德摩根等效符号"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
-msgstr "如果符号有备用主体样式（德摩根），请选中此选项"
+msgstr "如果符号有关联的德摩根等效符号，请选中此选项"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:173
 msgid "Define as power symbol"
@@ -9579,7 +9579,7 @@ msgstr "备用引脚号"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:188
 msgid "Alternate pin assignments are not available for DeMorgan components."
-msgstr "备用引脚分配不适用于德摩根元件。"
+msgstr "备用引脚分配不适用于德摩根等效符号。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:274
 msgid "Alternate pin definitions must have a name."
@@ -9622,11 +9622,11 @@ msgstr "引脚长度 (&P)："
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:74
 msgid "N&ame text size:"
-msgstr "名称尺寸 (&A)："
+msgstr "引脚名称高度 (&A)："
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:81
 msgid "Number text si&ze:"
-msgstr "编号文本尺寸 (&Z)："
+msgstr "编号文本高度 (&Z)："
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:88
 msgid "Electrical type:"
@@ -11097,7 +11097,7 @@ msgstr "备用关联"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:335
 msgid "Alternate pin assignments are not available for DeMorgan symbols."
-msgstr "备用引脚分配对德摩根符号不可用。"
+msgstr "备用引脚分配对德摩根等效符号不可用。"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:126
 msgid "Unit:"
@@ -11105,15 +11105,15 @@ msgstr "单元："
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
 msgid "Alternate symbol (DeMorgan)"
-msgstr "备用符号 (德摩根)"
+msgstr "德摩根等效符号"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:138
 msgid ""
 "Use the alternate shape of this symbol.\n"
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
-"使用此符号的备用形状。\n"
-"对于门而言，这是“德摩根”转换"
+"使用此符号的等效符号。\n"
+"对逻辑门而言，称作 “德摩根” 转换"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:142
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1036
@@ -11843,7 +11843,7 @@ msgstr "当前引脚编号尺寸 (&F)："
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:82
 msgid "Def&ault pin name size:"
-msgstr "默认引脚名称尺寸 (&A)："
+msgstr "默认引脚名称高度 (&A)："
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:96
 msgid "Show pin &electrical type"
@@ -15594,7 +15594,7 @@ msgstr "显示引脚电气类型"
 
 #: eeschema/tools/ee_actions.cpp:183
 msgid "Annotate pins with their electrical types"
-msgstr "用它们的电气类型对引脚进行批注"
+msgstr "显示引脚的电气类型"
 
 #: eeschema/tools/ee_actions.cpp:188
 msgid "Show Symbol Tree"
@@ -15940,7 +15940,7 @@ msgstr "将网络类关联给选定导线的网络"
 
 #: eeschema/tools/ee_actions.cpp:453
 msgid "DeMorgan Conversion"
-msgstr "德摩根转换"
+msgstr "转换为德摩根等效符号"
 
 #: eeschema/tools/ee_actions.cpp:453
 msgid "Switch between DeMorgan representations"
@@ -15956,11 +15956,11 @@ msgstr "切换到标准的德摩根表示"
 
 #: eeschema/tools/ee_actions.cpp:463
 msgid "DeMorgan Alternate"
-msgstr "德摩根备用"
+msgstr "德摩根等效"
 
 #: eeschema/tools/ee_actions.cpp:463
 msgid "Switch to alternate DeMorgan representation"
-msgstr "切换到备用德摩根表示"
+msgstr "改为德摩根等效符号表示"
 
 #: eeschema/tools/ee_actions.cpp:468
 msgid "Change to Label"
