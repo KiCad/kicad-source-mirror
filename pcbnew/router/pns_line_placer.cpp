@@ -929,7 +929,8 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
         if( !routeHead( aP, new_head ) )
             fail = true;
 
-        if( !new_head.Is45Degree() )
+        if( !new_head.Is45Degree() &&
+            !(Settings().GetFreeAngleMode() && Settings().Mode() == RM_MarkObstacles) )
             fail = true;
 
         if( fail )
