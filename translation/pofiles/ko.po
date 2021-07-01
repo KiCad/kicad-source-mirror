@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-07-01 02:33+0000\n"
+"PO-Revision-Date: 2021-07-01 16:20+0000\n"
 "Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -7477,9 +7477,8 @@ msgid "Assign footprint"
 msgstr "풋프린트"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
-#, fuzzy
 msgid "Assign footprint to selected symbols"
-msgstr "라이브러리가 정의되지 않았습니다."
+msgstr "선택한 기호에 풋프린트 지정"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 #, fuzzy
@@ -7525,14 +7524,12 @@ msgid "Filter footprint list by pin count"
 msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:149
-#, fuzzy
 msgid "Filter by library"
-msgstr "라이브러리 파일이 아닙니다."
+msgstr "라이브러리로 필터링"
 
 #: cvpcb/tools/cvpcb_actions.cpp:150
-#, fuzzy
 msgid "Filter footprint list by library"
-msgstr "라이브러리 파일이 아닙니다."
+msgstr "라이브러리별로 풋프린트 목록 필터링"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:257
 msgid "Delete all associations?"
@@ -7564,9 +7561,8 @@ msgid "Annotated %s as %s"
 msgstr "애노테이션 되지 않은 항목: %s%s"
 
 #: eeschema/annotate.cpp:318
-#, fuzzy
 msgid "Annotation complete."
-msgstr "치수 속성"
+msgstr "부품 참조번호 주석이 완료되었음."
 
 #: eeschema/bom_plugins.cpp:45
 #, c-format
