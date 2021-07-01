@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2020 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +52,7 @@ public:
     const std::string Format() const override;
 
     bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
-            VECTOR2I* aLocation = nullptr ) const override;
+                  VECTOR2I* aLocation = nullptr ) const override;
 
     bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const override
     {

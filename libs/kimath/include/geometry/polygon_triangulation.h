@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Modifications Copyright (C) 2018-2019 KiCad Developers
+ * Modifications Copyright (C) 2018-2021 KiCad Developers
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,6 +95,7 @@ private:
                 parent( aParent )
         {
         }
+
         Vertex& operator=( const Vertex& ) = delete;
         Vertex& operator=( Vertex&& ) = delete;
 
@@ -106,15 +107,14 @@ private:
 
 
         /**
-         * Function split
-         * Splits the referenced polygon between the reference point and
+         * Split the referenced polygon between the reference point and
          * vertex b, assuming they are in the same polygon.  Notes that while we
          * create a new vertex pointer for the linked list, we maintain the same
          * vertex index value from the original polygon.  In this way, we have
          * two polygons that both share the same vertices.
          *
-         * Returns the pointer to the newly created vertex in the polygon that
-         * does not include the reference vertex.
+         * @return the newly created vertex in the polygon that does not include the
+         *         reference vertex.
          */
         Vertex* split( Vertex* b )
         {
@@ -141,8 +141,7 @@ private:
         }
 
         /**
-         * Function remove
-         * Removes the node from the linked list and z-ordered linked list.
+         * Remove the node from the linked list and z-ordered linked list.
          */
         void remove()
         {
@@ -151,8 +150,10 @@ private:
 
             if( prevZ )
                 prevZ->nextZ = nextZ;
+
             if( nextZ )
                 nextZ->prevZ = prevZ;
+
             next = NULL;
             prev = NULL;
             nextZ = NULL;
@@ -166,9 +167,8 @@ private:
         }
 
         /**
-         * Function updateList
          * After inserting or changing nodes, this function should be called to
-         * remove duplicate vertices and ensure z-ordering is correct
+         * remove duplicate vertices and ensure z-ordering is correct.
          */
         void updateList()
         {
@@ -197,7 +197,7 @@ private:
         }
 
         /**
-         * Sort all vertices in this vertex's list by their Morton code
+         * Sort all vertices in this vertex's list by their Morton code.
          */
         void zSort()
         {
@@ -208,12 +208,13 @@ private:
             for( auto p = next; p && p != this; p = p->next )
                 queue.push_back( p );
 
-            std::sort( queue.begin(), queue.end(), []( const Vertex* a, const Vertex* b)
+            std::sort( queue.begin(), queue.end(), []( const Vertex* a, const Vertex* b )
             {
                 return a->z < b->z;
             } );
 
             Vertex* prev_elem = nullptr;
+
             for( auto elem : queue )
             {
                 if( prev_elem )
@@ -278,8 +279,8 @@ private:
     }
 
     /**
-     * Function removeNullTriangles
-     * Iterates through the list to remove NULL triangles if they exist.
+     * Iterate through the list to remove NULL triangles if they exist.
+     *
      * This should only be called as a last resort when tesselation fails
      * as the NULL triangles are inserted as Steiner points to improve the
      * triangulation regularity of polygons
@@ -315,9 +316,7 @@ private:
     }
 
     /**
-     * Function createList
-     * Takes a Clipper path and converts it into a circular, doubly-linked
-     * list for triangulation
+     * Take a Clipper path and converts it into a circular, doubly-linked list for triangulation.
      */
     Vertex* createList( const ClipperLib::Path& aPath )
     {
@@ -358,9 +357,7 @@ private:
     }
 
     /**
-     * Function createList
-     * Takes the SHAPE_LINE_CHAIN and links each point into a
-     * circular, doubly-linked list
+     * Take a #SHAPE_LINE_CHAIN and links each point into a circular, doubly-linked list.
      */
     Vertex* createList( const SHAPE_LINE_CHAIN& points )
     {
@@ -392,15 +389,17 @@ private:
     }
 
     /**
-     * Function: earcutList
-     * Walks through a circular linked list starting at aPoint.  For each point,
-     * test to see if the adjacent points form a triangle that is completely enclosed
-     * by the remaining polygon (an "ear" sticking off the polygon).  If the three points
-     * form an ear, we log the ear's location and remove the center point from the linked list.
+     * Walk through a circular linked list starting at \a aPoint.
      *
-     * This function can be called recursively in the case of difficult polygons.  In cases where
-     * there is an intersection (not technically allowed by KiCad, but could exist in an edited file),
-     * we create a single triangle and remove both vertices before attempting to
+     * For each point, test to see if the adjacent points form a triangle that is completely
+     * enclosed by the remaining polygon (an "ear" sticking off the polygon).  If the three
+     * points form an ear, we log the ear's location and remove the center point from the
+     * linked list.
+     *
+     * This function can be called recursively in the case of difficult polygons.  In cases
+     * where there is an intersection (not technically allowed by KiCad, but could exist in
+     * an edited file), we create a single triangle and remove both vertices before attempting
+     * to.
      */
     bool earcutList( Vertex* aPoint, int pass = 0 )
     {
@@ -448,9 +447,9 @@ private:
 
             aPoint = next;
 
-            /**
-             * We've searched the entire polygon for available ears and there are still un-sliced nodes
-             * remaining
+            /*
+             * We've searched the entire polygon for available ears and there are still
+             * un-sliced nodes remaining.
              */
             if( aPoint == stop )
             {
@@ -469,20 +468,20 @@ private:
             }
         }
 
-        /**
-         * At this point, our polygon should be fully tesselated.
+        /*
+         * At this point, our polygon should be fully tessellated.
          */
         return( aPoint->prev == aPoint->next );
     }
 
     /**
-     * Function isEar
-     * Checks whether the given vertex is in the middle of an ear.
-     * This works by walking forward and backward in zOrder to the limits
-     * of the minimal bounding box formed around the triangle, checking whether
-     * any points are located inside the given triangle.
+     * Check whether the given vertex is in the middle of an ear.
      *
-     * Returns true if aEar is the apex point of a ear in the polygon
+     * This works by walking forward and backward in zOrder to the limits of the minimal
+     * bounding box formed around the triangle, checking whether any points are located
+     * inside the given triangle.
+     *
+     * @return true if aEar is the apex point of a ear in the polygon.
      */
     bool isEar( Vertex* aEar ) const
     {
@@ -514,6 +513,7 @@ private:
                     && p->inTriangle( *a, *b, *c )
                     && area( p->prev, p, p->next ) >= 0 )
                 return false;
+
             p = p->nextZ;
         }
 
@@ -526,6 +526,7 @@ private:
                     && p->inTriangle( *a, *b, *c )
                     && area( p->prev, p, p->next ) >= 0 )
                 return false;
+
             p = p->prevZ;
         }
 
@@ -533,7 +534,6 @@ private:
     }
 
     /**
-     * Function splitPolygon
      * If we cannot find an ear to slice in the current polygon list, we
      * use this to split the polygon into two separate lists and slice them each
      * independently.  This is assured to generate at least one new ear if the
@@ -542,9 +542,11 @@ private:
     void splitPolygon( Vertex* start )
     {
         Vertex* origPoly = start;
+
         do
         {
             Vertex* marker = origPoly->next->next;
+
             while( marker != origPoly->prev )
             {
                 // Find a diagonal line that is wholly enclosed by the polygon interior
@@ -559,8 +561,10 @@ private:
                     earcutList( newPoly );
                     return;
                 }
+
                 marker = marker->next;
             }
+
             origPoly = origPoly->next;
         } while( origPoly != start );
     }
@@ -582,9 +586,7 @@ private:
     }
 
     /**
-     * Function area
-     * Returns the twice the signed area of the triangle formed by vertices
-     * p, q, r.
+     * Return the twice the signed area of the triangle formed by vertices p, q, and r.
      */
     double area( const Vertex* p, const Vertex* q, const Vertex* r ) const
     {
@@ -592,9 +594,9 @@ private:
     }
 
     /**
-     * Function intersects
-     * Checks for intersection between two segments, end points included.
-     * Returns true if p1-p2 intersects q1-q2
+     * Check for intersection between two segments, end points included.
+     *
+     * @return true if p1-p2 intersects q1-q2.
      */
     bool intersects( const Vertex* p1, const Vertex* q1, const Vertex* p2, const Vertex* q2 ) const
     {
@@ -606,14 +608,15 @@ private:
     }
 
     /**
-     * Function intersectsPolygon
-     * Checks whether the segment from vertex a -> vertex b crosses any of the segments
+     * Check whether the segment from vertex a -> vertex b crosses any of the segments
      * of the polygon of which vertex a is a member.
-     * Return true if the segment intersects the edge of the polygon
+     *
+     * @return true if the segment intersects the edge of the polygon.
      */
     bool intersectsPolygon( const Vertex* a, const Vertex* b ) const
     {
         const Vertex* p = a->next;
+
         do
         {
             if( p->i != a->i &&
@@ -629,12 +632,13 @@ private:
     }
 
     /**
-     * Function locallyInside
-     * Checks whether the segment from vertex a -> vertex b is inside the polygon
-     * around the immediate area of vertex a.  We don't define the exact area
-     * over which the segment is inside but it is guaranteed to be inside the polygon
-     * immediately adjacent to vertex a.
-     * Returns true if the segment from a->b is inside a's polygon next to vertex a
+     * Check whether the segment from vertex a -> vertex b is inside the polygon
+     * around the immediate area of vertex a.
+     *
+     * We don't define the exact area over which the segment is inside but it is guaranteed to
+     * be inside the polygon immediately adjacent to vertex a.
+     *
+     * @return true if the segment from a->b is inside a's polygon next to vertex a.
      */
     bool locallyInside( const Vertex* a, const Vertex* b ) const
     {
@@ -645,10 +649,10 @@ private:
     }
 
     /**
-     * Function insertVertex
-     * Creates an entry in the vertices lookup and optionally inserts the newly
-     * created vertex into an existing linked list.
-     * Returns a pointer to the newly created vertex
+     * Create an entry in the vertices lookup and optionally inserts the newly created vertex
+     * into an existing linked list.
+     *
+     * @return a pointer to the newly created vertex.
      */
     Vertex* insertVertex( const VECTOR2I& pt, Vertex* last )
     {
@@ -656,6 +660,7 @@ private:
         m_vertices.emplace_back( m_result.GetVertexCount() - 1, pt.x, pt.y, this );
 
         Vertex* p = &m_vertices.back();
+
         if( !last )
         {
             p->prev = p;

@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -38,24 +39,29 @@
 #include <math/vector2d.h>
 
 /**
- * Class POLY_GRID_PARTITION
- *
- * Provides a fast test for point inside polygon.
+ * Provide a fast test for point inside polygon.
  *
  * Takes a large poly and splits it into a grid of rectangular cells, forming a spatial hash table.
  * Each cell contains only the edges that 'touch it' (any point of the edge belongs to the cell).
- * Edges can be marked as leading or trailing. Leading edge indicates that space to the left of it (x-wise) is outside the polygon.
- * Trailing edge, conversely, means space to the right is outside the polygon.
+ * Edges can be marked as leading or trailing. Leading edge indicates that space to the left of
+ * it (x-wise) is outside the polygon. Trailing edge, conversely, means space to the right is
+ * outside the polygon.
+ *
  * The point inside check for point (p) works as follows:
- * - determine the cell coordinates of (p) (poly2grid)
- * - find the matching grid cell ( O(0), if the cell coordinates are outside the range, the point is not in the polygon )
- * - if the cell contains edges, find the first edge to the left or right of the point, whichever comes first.
- * - if the edge to the left is the 'lead edge', the point is inside. if it's a trailing edge, the point is outside.
- * - idem for the edge to the right of (p), just reverse the edge types
- * - if the cell doesn't contain any edges, scan horizontal cells to the left and right (switching sides with each iteration)
- *   until an edge if found.
- * NOTE: the rescale_trunc() function is used for grid<->world coordinate conversion because it rounds towards 0 (not to nearest)
- * It's important as rounding to nearest (which the standard rescale() function does) will shift the grid by half a cell.
+ *  - determine the cell coordinates of (p) (poly2grid)
+ *  - find the matching grid cell ( O(0), if the cell coordinates are outside the range, the point
+ *    is not in the polygon ).
+ *  - if the cell contains edges, find the first edge to the left or right of the point, whichever
+ *    comes first.
+ *  - if the edge to the left is the 'lead edge', the point is inside. if it's a trailing edge, the
+ *    point is outside.
+ *  - idem for the edge to the right of (p), just reverse the edge types.
+ *  - if the cell doesn't contain any edges, scan horizontal cells to the left and right (switching
+ *    sides with each iteration) until an edge if found.
+ *
+ * @note: The rescale_trunc() function is used for grid<->world coordinate conversion because it
+ *        rounds towards 0 (not to nearest).  It's important as rounding to nearest (which the
+ *        standard rescale() function does) will shift the grid by half a cell.
  */
 
 class POLY_GRID_PARTITION
@@ -108,7 +114,7 @@ private:
 
     int rescale_trunc( int aNumerator, int aValue, int aDenominator ) const;
 
-    // convertes grid cell coordinates to the polygon coordinates
+    // converts grid cell coordinates to the polygon coordinates
     const VECTOR2I grid2poly( const VECTOR2I& p ) const;
 
     int grid2polyX( int x ) const;

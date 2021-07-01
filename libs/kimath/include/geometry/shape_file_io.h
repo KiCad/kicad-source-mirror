@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -32,40 +34,38 @@
 class SHAPE;
 
 /**
- * SHAPE_FILE_IO
- *
  * Helper class for saving/loading shapes from a file.
  */
 class SHAPE_FILE_IO
 {
-    public:
-        enum IO_MODE
-        {
-            IOM_READ = 0,
-            IOM_APPEND,
-            IOM_WRITE
-        };
+public:
+    enum IO_MODE
+    {
+        IOM_READ = 0,
+        IOM_APPEND,
+        IOM_WRITE
+    };
 
-        SHAPE_FILE_IO();
-        SHAPE_FILE_IO( const std::string& aFilename, IO_MODE aMode = IOM_READ );
-        ~SHAPE_FILE_IO();
+    SHAPE_FILE_IO();
+    SHAPE_FILE_IO( const std::string& aFilename, IO_MODE aMode = IOM_READ );
+    ~SHAPE_FILE_IO();
 
-        void BeginGroup( const std::string& aName = "<noname>");
-        void EndGroup();
+    void BeginGroup( const std::string& aName = "<noname>");
+    void EndGroup();
 
-        SHAPE* Read();
+    SHAPE* Read();
 
-        void Write( const SHAPE* aShape, const std::string& aName = "<noname>" );
+    void Write( const SHAPE* aShape, const std::string& aName = "<noname>" );
 
-        void Write( const SHAPE& aShape, const std::string& aName = "<noname>" )
-        {
-            Write( &aShape, aName );
-        }
+    void Write( const SHAPE& aShape, const std::string& aName = "<noname>" )
+    {
+        Write( &aShape, aName );
+    }
 
-    private:
-        FILE* m_file;
-        bool m_groupActive;
-        IO_MODE m_mode;
+private:
+    FILE* m_file;
+    bool m_groupActive;
+    IO_MODE m_mode;
 };
 
 #endif // __SHAPE_FILE_IO_H

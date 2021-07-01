@@ -42,29 +42,31 @@ public:
     {};
 
     /**
-     * SHAPE_ARC ctor using center, start, angle.  Center and angle are used to calculate the mid
-     * and end points of the arc, and are not stored
-     * @param aArcCenter is the arc center
-     * @param aArcStartPoint is the arc start point
-     * @param aCenterAngle is the arc angle in degrees
-     * @param aWidth is the arc line thickness
+     * Construct and arc using center, start, angle.
+     *
+     * Center and angle are used to calculate the mid and end points of the arc, and are not
+     * stored.
+     *
+     * @param aArcCenter is the arc center.
+     * @param aArcStartPoint is the arc start point.
+     * @param aCenterAngle is the arc angle in degrees.
+     * @param aWidth is the arc line thickness.
      */
     SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint, double aCenterAngle,
                int aWidth = 0 );
 
     /**
-     * SHAPE_ARC ctor.
-     * @param aArcStart is the arc start point
-     * @param aArcEnd is the arc end point
-     * @param aArcMid is the arc mid point
-     * @param aWidth is the arc line thickness
+     * @param aArcStart is the arc start point.
+     * @param aArcEnd is the arc end point.
+     * @param aArcMid is the arc mid point.
+     * @param aWidth is the arc line thickness.
      */
     SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid, const VECTOR2I& aArcEnd,
                int aWidth );
 
     /**
-     * SHAPE_ARC ctor.
-     * Builds a SHAPE_ARC which is tangent to two segments and a given radius
+     * Build a SHAPE_ARC which is tangent to two segments and a given radius.
+     *
      * @param aSegmentA is the first segment
      * @param aSegmentB is the second segment
      * @param aRadius is the arc radius
@@ -82,12 +84,13 @@ public:
     }
 
     /**
-     * Constructs this arc from the given start, end and angle.
+     * Construct this arc from the given start, end and angle.
+     *
      * @param aStart is the arc starting point
      * @param aEnd is the arc endpoint
      * @param aAngle is the arc included angle
      * @param aWidth is the arc line thickness
-     * @return *this
+     * @return this arc.
      */
     SHAPE_ARC& ConstructFromStartEndAngle( const VECTOR2I& aStart, const VECTOR2I& aEnd,
                                            double aAngle, double aWidth = 0 );
@@ -122,10 +125,10 @@ public:
     void Move( const VECTOR2I& aVector ) override;
 
     /**
-     * Function Rotate
-     * rotates the arc by a given angle about a point
-     * @param aCenter is the rotation center
-     * @param aAngle rotation angle in radians
+     * Rotate the arc by a given angle about a point.
+     *
+     * @param aCenter is the rotation center.
+     * @param aAngle rotation angle in radians.
      */
     void Rotate( double aAngle, const VECTOR2I& aCenter ) override;
 
@@ -145,46 +148,50 @@ public:
     }
 
     /**
-     * @return the central angle of the arc shape in degrees, normalized between 0.0, 360.0 deg
+     * @return the central angle of the arc shape in degrees, normalized between 0.0, 360.0 deg.
      */
     double  GetCentralAngle() const;
 
     /**
-     * @return the start angle of the arc shape in degrees, normalized between 0.0, 360.0 deg
+     * @return the start angle of the arc shape in degrees, normalized between 0.0, 360.0 deg.
      */
     double  GetStartAngle() const;
 
     /**
-     * @return the end angle of the arc shape in degrees, normalized between 0.0, 360.0 deg
+     * @return the end angle of the arc shape in degrees, normalized between 0.0, 360.0 deg.
      */
     double  GetEndAngle() const;
 
     /**
-     * @return the length of the arc shape
+     * @return the length of the arc shape.
      */
     double GetLength() const;
 
     /**
-     * @return a default accuray value for ConvertToPolyline() to build the polyline.
-     *   ** Note that the default is ARC_HIGH_DEF in PCBNew units
-     *      This is to allow common geometry collision functions
-     *      Other programs should call this using explicit accuracy values
-     *      TODO: unify KiCad internal units
+     * @note The default is #ARC_HIGH_DEF in Pcbnew units.  This is to allow common geometry
+     *       collision functions.  Other programs should call this using explicit accuracy
+     *       values.
+     *
+     * @todo Unify KiCad internal units.
+     *
+     * @return a default accuracy value for ConvertToPolyline() to build the polyline.
      */
     static double DefaultAccuracyForPCB(){ return 0.005 * PCB_IU_PER_MM; }
 
     /**
-     * Constructs a SHAPE_LINE_CHAIN of segments from a given arc
-     * @param aAccuracy maximum divergence from true arc given in internal units
-     *   ** Note that the default is ARC_HIGH_DEF in PCBNew units
-     *      This is to allow common geometry collision functions
-     *      Other programs should call this using explicit accuracy values
-     *      TODO: unify KiCad internal units
-     * @param aEffectiveAccuracy is the actual divergence from true arc given
+     * Construct a SHAPE_LINE_CHAIN of segments from a given arc.
+     *
+     * @note The default is #ARC_HIGH_DEF in Pcbnew units.  This is to allow common geometry
+     *       collision functions.  Other programs should call this using explicit accuracy
+     *       values.
+     *
+     * @todo Unify KiCad internal units.
+     *
+     * @param aAccuracy maximum divergence from true arc given in internal units.
+     * @param aEffectiveAccuracy is the actual divergence from true arc given.
      * the approximation error is between -aEffectiveAccuracy/2 and +aEffectiveAccuracy/2
      * in internal units
-     *
-     * @return a SHAPE_LINE_CHAIN
+     * @return a #SHAPE_LINE_CHAIN.
      */
     const SHAPE_LINE_CHAIN ConvertToPolyline( double aAccuracy = DefaultAccuracyForPCB(),
                                               double* aEffectiveAccuracy = nullptr ) const;

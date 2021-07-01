@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Jacobo Aragunde Pérez
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -33,12 +35,12 @@
 #include <math/box2.h>
 
 /**
- * shapeFunctor template function
+ * Used by #SHAPE_INDEX to get a SHAPE* from another type.
  *
- * It is used by SHAPE_INDEX to get a SHAPE* from another type.
  * By default relies on T::GetShape() method, should be specialized if the T object
  * doesn't allow that method.
- * @param aItem generic T object
+ *
+ * @param aItem generic T object.
  * @return a SHAPE* object equivalent to object.
  */
 template <class T>
@@ -48,12 +50,12 @@ static const SHAPE* shapeFunctor( T aItem )
 }
 
 /**
- * boundingBox template method
+ * Used by #SHAPE_INDEX to get the bounding box of a generic T object.
  *
- * It is used by SHAPE_INDEX to get the bounding box of a generic T object.
  * By default relies on T::BBox() method, should be specialized if the T object
  * doesn't allow that method.
- * @param aObject generic T object
+ *
+ * @param aObject is a generic T object.
  * @return a BOX2I object containing the bounding box of the T object.
  */
 template <class T>
@@ -63,13 +65,13 @@ BOX2I boundingBox( T aObject )
 }
 
 /**
- * acceptVisitor template method
+ * Used by #SHAPE_INDEX to implement Accept().
  *
- * It is used by SHAPE_INDEX to implement Accept().
  * By default relies on V::operation() redefinition, should be specialized if V class
  * doesn't have its () operation defined to accept T objects.
- * @param aObject generic T object
- * @param aVisitor V visitor object
+ *
+ * @param aObject is a generic T object.
+ * @param aVisitor is a visitor object.
  */
 template <class T, class V>
 void acceptVisitor( T aObject, V aVisitor )
@@ -78,15 +80,15 @@ void acceptVisitor( T aObject, V aVisitor )
 }
 
 /**
- * collide template method
+ * Used by #SHAPE_INDEX to implement Query().
  *
- * It is used by SHAPE_INDEX to implement Query().
  * By default relies on T::Collide(U) method, should be specialized if the T object
  * doesn't allow that method.
- * @param aObject generic T object
- * @param aAnotherObject generic U object
- * @param aMinDistance minimum collision distance
- * @return if object and anotherObject collide
+ *
+ * @param aObject is a generic T object.
+ * @param aAnotherObject is a generic U object.
+ * @param aMinDistance is the minimum collision distance.
+ * @return true if object and anotherObject collide.
  */
 template <class T, class U>
 bool collide( T aObject, U aAnotherObject, int aMinDistance )
@@ -115,10 +117,9 @@ class SHAPE_INDEX
             RTreeIterator iterator;
 
             /**
-             * Function Init()
-             *
              * Setup the internal tree iterator.
-             * @param aTree pointer to a RTREE object
+             *
+             * @param aTree is a #RTREE object/
              */
             void Init( RTree<T, int, 2, double>* aTree )
             {
@@ -127,10 +128,9 @@ class SHAPE_INDEX
 
         public:
             /**
-             * Iterator constructor
+             * Create an iterator for the index object.
              *
-             * Creates an iterator for the index object
-             * @param aIndex SHAPE_INDEX object to iterate
+             * @param aIndex is a #SHAPE_INDEX object to iterate.
              */
             Iterator( SHAPE_INDEX* aIndex )
             {
@@ -138,9 +138,7 @@ class SHAPE_INDEX
             }
 
             /**
-             * Operator * (prefix)
-             *
-             * Returns the next data element.
+             * Return the next data element.
              */
             T operator*()
             {
@@ -148,9 +146,7 @@ class SHAPE_INDEX
             }
 
             /**
-             * Operator ++ (prefix)
-             *
-             * Shifts the iterator to the next element.
+             * Shift the iterator to the next element.
              */
             bool operator++()
             {
@@ -158,9 +154,7 @@ class SHAPE_INDEX
             }
 
             /**
-             * Operator ++ (postfix)
-             *
-             * Shifts the iterator to the next element.
+             * Shift the iterator to the next element.
              */
             bool operator++( int )
             {
@@ -168,10 +162,9 @@ class SHAPE_INDEX
             }
 
             /**
-             * Function IsNull()
+             * Check if the iterator has reached the end.
              *
-             * Checks if the iterator has reached the end.
-             * @return true if it is in an invalid position (data finished)
+             * @return true if it is in an invalid position (data finished).
              */
             bool IsNull() const
             {
@@ -179,10 +172,9 @@ class SHAPE_INDEX
             }
 
             /**
-             * Function IsNotNull()
+             * Check if the iterator has not reached the end.
              *
-             * Checks if the iterator has not reached the end.
-             * @return true if it is in an valid position (data not finished)
+             * @return true if it is in an valid position (data not finished).
              */
             bool IsNotNull() const
             {
@@ -190,11 +182,9 @@ class SHAPE_INDEX
             }
 
             /**
-             * Function Next()
+             * Return the current element of the iterator and moves to the next position.
              *
-             * Returns the current element of the iterator and moves to the next
-             * position.
-             * @return SHAPE object pointed by the iterator before moving to the next position.
+             * @return a #SHAPE object pointed by the iterator before moving to the next position.
              */
             T Next()
             {
@@ -210,40 +200,36 @@ class SHAPE_INDEX
         ~SHAPE_INDEX();
 
         /**
-         * Function Add()
+         * Add a #SHAPE to the index.
          *
-         * Adds a SHAPE to the index.
          * @param aShape is the new SHAPE.
          */
         void Add( T aShape );
 
         /**
-         * Adds a shape with alternate BBox
-         * @param aShape Shape (Item) to add
+         * Add a shape with alternate BBox.
+         *
+         * @param aShape Shape (Item) to add.
          * @param aBbox alternate bounding box.  This should be a subset of the item's bbox
          */
         void Add( T aShape, const BOX2I& aBbox );
 
         /**
-         * Function Remove()
+         * Remove a #SHAPE from the index.
          *
-         * Removes a SHAPE to the index.
-         * @param aShape is the new SHAPE.
+         * @param aShape is the #SHAPE to remove.
          */
         void Remove( T aShape );
 
         /**
-         * Function RemoveAll()
-         *
-         * Removes all the contents of the index.
+         * Remove all the contents of the index.
          */
         void RemoveAll();
 
         /**
-         * Function Accept()
+         * Accept a visitor for every #SHAPE object contained in this INDEX.
          *
-         * Accepts a visitor for every SHAPE object contained in this INDEX.
-         * @param aVisitor Visitor object to be run
+         * @param aVisitor is the visitor object to be run.
          */
         template <class V>
         void Accept( V aVisitor )
@@ -259,20 +245,18 @@ class SHAPE_INDEX
         }
 
         /**
-         * Function Reindex()
+         * Rebuild the index.
          *
-         * Rebuilds the index. This should be used if the geometry of the objects
-         * contained by the index has changed.
+         * This should be used if the geometry of the objects contained by the index has changed.
          */
         void Reindex();
 
         /**
-         * Function Query()
+         * Run a callback on every #SHAPE object contained in the bounding box of (shape).
          *
-         * Runs a callback on every SHAPE object contained in the bounding box of (shape).
-         * @param aShape shape to search against
-         * @param aMinDistance distance threshold
-         * @param aVisitor object to be invoked on every object contained in the search area.
+         * @param aShape is the shape to search against.
+         * @param aMinDistance is the distance threshold.
+         * @param aVisitor is the object to be invoked on every object contained in the search area.
          */
         template <class V>
         int Query( const SHAPE *aShape, int aMinDistance, V& aVisitor) const
@@ -287,10 +271,9 @@ class SHAPE_INDEX
         }
 
         /**
-         * Function Begin()
+         * Create an iterator for the current index object.
          *
-         * Creates an iterator for the current index object
-         * @return iterator
+         * @return iterator to the first object.
          */
         Iterator Begin();
 

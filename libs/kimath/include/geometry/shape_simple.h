@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,9 +31,7 @@
 #include <math/vector2d.h>
 
 /**
- * SHAPE_SIMPLE
- *
- * Represents a simple polygon consisting of a zero-thickness closed chain of
+ * Represent a simple polygon consisting of a zero-thickness closed chain of
  * connected line segments.
  *
  * Internally the vertices are held in a SHAPE_LINE_CHAIN, please note that
@@ -44,8 +42,7 @@ class SHAPE_SIMPLE : public SHAPE_LINE_CHAIN_BASE
 {
 public:
     /**
-     * Constructor
-     * Creates an empty polygon
+     * Create an empty polygon.
      */
     SHAPE_SIMPLE() :
         SHAPE_LINE_CHAIN_BASE( SH_SIMPLE )
@@ -70,8 +67,7 @@ public:
     }
 
     /**
-     * Function Clear()
-     * Removes all points from the polygon.
+     * Remove all points from the polygon.
      */
     void Clear()
     {
@@ -85,10 +81,9 @@ public:
     }
 
     /**
-     * Function PointCount()
+     * Return the number of points (vertices) in this polygon.
      *
-     * Returns the number of points (vertices) in this polygon
-     * @return number of points
+     * @return number of points.
      */
     int PointCount() const
     {
@@ -96,13 +91,13 @@ public:
     }
 
     /**
-     * Function Point()
+     * Return a const reference to a given point in the polygon.
      *
-     * Returns a const reference to a given point in the polygon. Negative
-     * indices count from the end of the point list, e.g. -1 means "last
-     * point", -2 means "second to last point" and so on.
-     * @param aIndex index of the point
-     * @return const reference to the point
+     * Negative indices count from the end of the point list, e.g. -1 means "last point", -2 means
+     * "second to last point" and so on.
+     *
+     * @param aIndex is the index of the point.
+     * @return the const reference to the point.
      */
     const VECTOR2I& CPoint( int aIndex ) const
     {
@@ -110,12 +105,10 @@ public:
     }
 
     /**
-     * Function CDPoint()
+     * Return a given point as a vector with elements of type double.
      *
-     * Returns a given point as a vector with elements of type double.
-     *
-     * @param aIndex index of the point
-     * @return the point with elements of type double
+     * @param aIndex is the index of the point.
+     * @return the point with elements of type double.
      */
     const VECTOR2D CDPoint( int aIndex ) const
     {
@@ -124,11 +117,9 @@ public:
     }
 
     /**
-     * Function Vertices()
+     * Return the list of vertices defining this simple polygon.
      *
-     * Returns the list of vertices defining this simple polygon.
-     *
-     * @return the list of vertices defining this simple polygon
+     * @return the list of vertices defining this simple polygon.
      */
     const SHAPE_LINE_CHAIN& Vertices() const
     {
@@ -136,11 +127,10 @@ public:
     }
 
     /**
-     * Function Append()
+     * Append a new point at the end of the polygon.
      *
-     * Appends a new point at the end of the polygon.
-     * @param aX is X coordinate of the new point
-     * @param aY is Y coordinate of the new point
+     * @param aX is X coordinate of the new point.
+     * @param aY is Y coordinate of the new point.
      */
     void Append( int aX, int aY )
     {
@@ -149,10 +139,9 @@ public:
     }
 
     /**
-     * Function Append()
+     * Append a new point at the end of the polygon.
      *
-     * Appends a new point at the end of the polygon.
-     * @param aP the new point
+     * @param aP is the new point.
      */
     void Append( const VECTOR2I& aP )
     {

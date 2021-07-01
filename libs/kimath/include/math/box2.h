@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2021 Kicad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -35,17 +35,11 @@
 #include <core/optional.h>
 
 /**
- * BOX2
- * handles a 2-D bounding box, built on top of an origin point
- * and size vector, both of templated class Vec
+ * A 2D bounding box built on top of an origin point and size vector.
  */
 template <class Vec>
 class BOX2
 {
-private:
-    Vec m_Pos;      // Rectangle Origin
-    Vec m_Size;     // Rectangle Size
-
 public:
     typedef typename Vec::coord_type                 coord_type;
     typedef typename Vec::extended_type              ecoord_type;
@@ -73,7 +67,7 @@ public:
     }
 
     /**
-     * @brief Compute the bounding box from a given list of points.
+     * Compute the bounding box from a given list of points.
      *
      * @param aPointList is the list points of the object.
      */
@@ -103,9 +97,9 @@ public:
     }
 
     /**
-     * Function Move
-     * moves the rectangle by the \a aMoveVector.
-     * @param aMoveVector A point that is the value to move this rectangle
+     * Move the rectangle by the \a aMoveVector.
+     *
+     * @param aMoveVector is a point that is the value to move this rectangle.
      */
     void Move( const Vec& aMoveVector )
     {
@@ -113,8 +107,7 @@ public:
     }
 
     /**
-     * Function Normalize
-     * ensures that the height ant width are positive.
+     * Ensure that the height ant width are positive.
      */
     BOX2<Vec>& Normalize()
     {
@@ -134,9 +127,9 @@ public:
     }
 
     /**
-     * Function Contains
-     * @param aPoint = the point to test
-     * @return true if aPoint is inside the boundary box. A point on a edge is seen as inside
+     * @param aPoint is the point to test.
+     *
+     * @return true if \a aPoint is inside the boundary box. A point on a edge is seen as inside.
      */
     bool Contains( const Vec& aPoint ) const
     {
@@ -155,21 +148,21 @@ public:
             rel_pos.y += size.y;
         }
 
-        return ( rel_pos.x >= 0 ) && ( rel_pos.y >= 0 ) && ( rel_pos.y <= size.y) && ( rel_pos.x <= size.x);
+        return ( rel_pos.x >= 0 ) && ( rel_pos.y >= 0 ) && ( rel_pos.y <= size.y) &&
+               ( rel_pos.x <= size.x);
     }
 
     /**
-     * Function Contains
-     * @param x = the x coordinate of the point to test
-     * @param y = the x coordinate of the point to test
-     * @return true if point is inside the boundary box. A point on a edge is seen as inside
+     * @param x is the x coordinate of the point to test.
+     * @param y is the x coordinate of the point to test.
+     * @return true if point is inside the boundary box. A point on a edge is seen as inside.
      */
     bool Contains( coord_type x, coord_type y ) const { return Contains( Vec( x, y ) ); }
 
     /**
-     * Function Contains
-     * @param aRect = the BOX2 to test
-     * @return true if aRect is Contained. A common edge is seen as contained
+     * @param aRect is the the area to test.
+     *
+     * @return true if \a aRect is contained. A common edge is seen as contained.
      */
     bool Contains( const BOX2<Vec>& aRect ) const
     {
@@ -204,8 +197,7 @@ public:
     void Offset( coord_type dx, coord_type dy ) { m_Pos.x += dx; m_Pos.y += dy; }
     void Offset( const Vec& offset )
     {
-        m_Pos.x += offset.x; m_Pos.y +=
-            offset.y;
+        m_Pos.x += offset.x; m_Pos.y += offset.y;
     }
 
     void SetX( coord_type val ) { m_Pos.x = val; }
@@ -219,9 +211,8 @@ public:
     }
 
     /**
-     * Function Intersects
-     * @return bool - true if the argument rectangle intersects this rectangle.
-     * (i.e. if the 2 rectangles have at least a common point)
+     * @return true if the argument rectangle intersects this rectangle.
+     *         (i.e. if the 2 rectangles have at least a common point)
      */
     bool Intersects( const BOX2<Vec>& aRect ) const
     {
@@ -252,8 +243,7 @@ public:
     }
 
     /**
-     * Function Intersect
-     * Returns the intersection of this with another rectangle.
+     * Return the intersection of this with another rectangle.
      */
     BOX2<Vec> Intersect( const BOX2<Vec>& aRect )
     {
@@ -285,8 +275,7 @@ public:
     }
 
     /**
-     * Function Inflate
-     * inflates the rectangle horizontally by \a dx and vertically by \a dy. If \a dx
+     * Inflates the rectangle horizontally by \a dx and vertically by \a dy. If \a dx
      * and/or \a dy is negative the rectangle is deflated.
      */
     BOX2<Vec>& Inflate( coord_type dx, coord_type dy )
@@ -357,8 +346,7 @@ public:
     }
 
     /**
-     * Function Inflate
-     * inflates the rectangle horizontally and vertically by \a aDelta. If \a aDelta
+     * Inflate the rectangle horizontally and vertically by \a aDelta. If \a aDelta
      * is negative the rectangle is deflated.
      */
     BOX2<Vec>& Inflate( int aDelta )
@@ -368,10 +356,9 @@ public:
     }
 
     /**
-     * Function Merge
-     * modifies the position and size of the rectangle in order to contain \a aRect.  It is
-     * mainly used to calculate bounding boxes.
-     * @param aRect  The rectangle to merge with this rectangle.
+     * Modify the position and size of the rectangle in order to contain \a aRect.
+     *
+     * @param aRect is the rectangle to merge with this rectangle.
      */
     BOX2<Vec>& Merge( const BOX2<Vec>& aRect )
     {
@@ -391,16 +378,17 @@ public:
     }
 
     /**
-     * Function Merge
-     * modifies the position and size of the rectangle in order to contain the given point.
-     * @param aPoint The point to merge with the rectangle.
+     * Modify the position and size of the rectangle in order to contain the given point.
+     *
+     * @param aPoint is the point to merge with the rectangle.
      */
     BOX2<Vec>& Merge( const Vec& aPoint )
     {
         Normalize();        // ensure width and height >= 0
 
         Vec end = GetEnd();
-        // Change origin and size in order to contain the given rect
+
+        // Change origin and size in order to contain the given rectangle.
         m_Pos.x = std::min( m_Pos.x, aPoint.x );
         m_Pos.y = std::min( m_Pos.y, aPoint.y );
         end.x   = std::max( end.x, aPoint.x );
@@ -410,8 +398,8 @@ public:
     }
 
     /**
-     * Function GetArea
-     * returns the area of the rectangle.
+     * Return the area of the rectangle.
+     *
      * @return The area of the rectangle.
      */
     ecoord_type GetArea() const
@@ -420,9 +408,9 @@ public:
     }
 
     /**
-     * Function GetArea
-     * returns the length of the diagonal of the rectangle.
-     * @return The area of the diagonal.
+     * Return the length of the diagonal of the rectangle.
+     *
+     * @return The length of the rectangle diagonal.
      */
     ecoord_type Diagonal() const
     {
@@ -433,8 +421,10 @@ public:
     {
         ecoord_type x2 = m_Pos.x + m_Size.x;
         ecoord_type y2 = m_Pos.y + m_Size.y;
-        ecoord_type xdiff = std::max( aP.x < m_Pos.x ? m_Pos.x - aP.x : m_Pos.x - x2, (ecoord_type) 0 );
-        ecoord_type ydiff = std::max( aP.y < m_Pos.y ? m_Pos.y - aP.y : m_Pos.y - y2, (ecoord_type) 0 );
+        ecoord_type xdiff = std::max( aP.x < m_Pos.x ? m_Pos.x - aP.x : m_Pos.x - x2,
+                                      (ecoord_type) 0 );
+        ecoord_type ydiff = std::max( aP.y < m_Pos.y ? m_Pos.y - aP.y : m_Pos.y - y2,
+                                      (ecoord_type) 0 );
         return xdiff * xdiff + ydiff * ydiff;
     }
 
@@ -444,10 +434,10 @@ public:
     }
 
     /**
-     * Function SquaredDistance
-     * returns the square of the minimum distance between self and box aBox
-     * @param aBox: the other box
-     * @return The distance, squared
+     * Return the square of the minimum distance between self and box \a aBox
+     *
+     * @param aBox is the other box.
+     * @return The distance squared from \a aBox.
      */
     ecoord_type SquaredDistance( const BOX2<Vec>& aBox ) const
     {
@@ -479,10 +469,10 @@ public:
     }
 
     /**
-     * Function Distance
-     * returns the minimum distance between self and box aBox
-     * @param aBox: the other box
-     * @return The distance
+     * Return the minimum distance between self and \a aBox.
+     *
+     * @param aBox is the other box to get the distance from.
+     * @return The distance from \a aBox.
      */
     ecoord_type Distance( const BOX2<Vec>& aBox ) const
     {
@@ -506,6 +496,10 @@ public:
         t2.Normalize();
         return ( t1.m_Pos != t2.m_Pos || t1.m_Size != t2.m_Size );
     }
+
+private:
+    Vec m_Pos;      // Rectangle Origin
+    Vec m_Size;     // Rectangle Size
 };
 
 /* Default specializations */

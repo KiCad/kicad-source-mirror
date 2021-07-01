@@ -3,6 +3,8 @@
  *
  * Copyright (c) 2005 Michael Niedermayer <michaelni@gmx.at>
  * Copyright (C) CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -37,14 +39,15 @@
 void kimathLogDebug( const char* aFormatString, ... );
 
 /**
- * Function Clamp
- * limits @a value within the range @a lower <= @a value <= @a upper.  It will work
- * on temporary expressions, since they are evaluated only once, and it should work
- * on most if not all numeric types, string types, or any type for which "operator < ()"
- * is present. The arguments are accepted in this order so you can remember the
- * expression as a memory aid:
+ * Limit @a value within the range @a lower <= @a value <= @a upper.
+ *
+ * It will work on temporary expressions, since they are evaluated only once, and it should
+ * work on most if not all numeric types, string types, or any type for which "operator < ()"
+ * is present. The arguments are accepted in this order so you can remember the expression as
+ * a memory aid:
  * <p>
  * result is:  lower <= value <= upper
+ *</p>
  */
 template <typename T> inline const T& Clamp( const T& lower, const T& value, const T& upper )
 {
@@ -88,9 +91,7 @@ constexpr ret_type KiROUND( fp_type v )
 #endif
 
 /**
- * Function rescale()
- *
- * Scales a number (value) by rational (numerator/denominator). Numerator must be <= denominator.
+ * Scale a number (value) by rational (numerator/denominator). Numerator must be <= denominator.
  */
 
 template <typename T>

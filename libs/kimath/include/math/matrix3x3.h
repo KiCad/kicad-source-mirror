@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Matrix class (3x3)
  *
@@ -64,15 +64,11 @@ public:
     T m_data[3][3];
 
     /**
-     * @brief Constructor
-     *
      * Initialize all matrix members to zero.
      */
     MATRIX3x3();
 
     /**
-     * @brief Constructor
-     *
      * Initialize with given matrix members
      *
      * @param a00 is the component [0,0].
@@ -88,28 +84,28 @@ public:
     MATRIX3x3( T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21, T a22 );
 
     /**
-     * @brief Set the matrix to the identity matrix.
+     * Set the matrix to the identity matrix.
      *
      * The diagonal components of the matrix are set to 1.
      */
     void SetIdentity();
 
     /**
-     * @brief Set the translation components of the matrix.
+     * Set the translation components of the matrix.
      *
      * @param aTranslation is the translation, specified as 2D-vector.
      */
     void SetTranslation( VECTOR2<T> aTranslation );
 
     /**
-     * @brief Get the translation components of the matrix.
+     * Get the translation components of the matrix.
      *
      * @return is the translation (2D-vector).
      */
     VECTOR2<T> GetTranslation() const;
 
     /**
-     * @brief Set the rotation components of the matrix.
+     * Set the rotation components of the matrix.
      *
      * The angle needs to have a positive value for an anti-clockwise rotation.
      *
@@ -118,28 +114,28 @@ public:
     void SetRotation( T aAngle );
 
     /**
-     * @brief Set the scale components of the matrix.
+     * Set the scale components of the matrix.
      *
      * @param aScale contains the scale factors, specified as 2D-vector.
      */
     void SetScale( VECTOR2<T> aScale );
 
     /**
-     * @brief Get the scale components of the matrix.
+     * Get the scale components of the matrix.
      *
      * @return the scale factors, specified as 2D-vector.
      */
     VECTOR2<T> GetScale() const;
 
     /**
-     * @brief Compute the determinant of the matrix.
+     * Compute the determinant of the matrix.
      *
      * @return the determinant value.
      */
     T Determinant() const;
 
     /**
-     * @brief Determine the inverse of the matrix.
+     * Determine the inverse of the matrix.
      *
      * The inverse of a transformation matrix can be used to revert a transformation.
      *
@@ -151,14 +147,14 @@ public:
     MATRIX3x3 Inverse() const;
 
     /**
-     * @brief Get the transpose of the matrix.
+     * Get the transpose of the matrix.
      *
      * @return the transpose matrix.
      */
     MATRIX3x3 Transpose() const;
 
     /**
-     * @brief Output to a stream.
+     * Output to a stream.
      */
     friend std::ostream& operator<<<T>( std::ostream& aStream, const MATRIX3x3<T>& aMatrix );
 
@@ -166,13 +162,13 @@ public:
 
 // Operators
 
-//! @brief Matrix multiplication
+//! Matrix multiplication
 template <class T> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& aA, MATRIX3x3<T> const& aB );
 
-//! @brief Multiplication with a 2D vector, the 3rd z-component is assumed to be 1
+//! Multiplication with a 2D vector, the 3rd z-component is assumed to be 1
 template <class T> VECTOR2<T> const operator*( MATRIX3x3<T> const& aA, VECTOR2<T> const& aB );
 
-//! @brief Multiplication with a scalar
+//! Multiplication with a scalar
 template <class T, class S> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& aA, T aScalar );
 template <class T, class S> MATRIX3x3<T> const operator*( T aScalar, MATRIX3x3<T> const& aMatrix );
 

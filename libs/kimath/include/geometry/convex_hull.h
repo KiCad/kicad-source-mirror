@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,32 +27,34 @@
 
 
 #include <vector>
+
 class wxPoint;      // Defined in wxWidgets
 class SHAPE_POLY_SET;
 
 /**
- * Calculate the convex hull of a list of points
- * in counter-clockwise order.
- * @param aResult = a vector to store the convex polygon.
+ * Calculate the convex hull of a list of points in counter-clockwise order.
+ *
+ * @param aResult is a vector to store the convex polygon.
  * @param aPoly is the list of points.
  */
 
-void BuildConvexHull( std::vector<wxPoint>& aResult, const std::vector<wxPoint>& aPoly);
-
+void BuildConvexHull( std::vector<wxPoint>& aResult, const std::vector<wxPoint>& aPoly );
 
 /**
- * Calculate the convex hull of a SHAPE_POLY_SET
- * @param aResult = a vector to store the convex polygon.
- * @param aPolygons = the SHAPE_POLY_SET
+ * Calculate the convex hull of a #SHAPE_POLY_SET.
+ *
+ * @param aResult is a vector to store the convex polygon.
+ * @param aPolygons is the #SHAPE_POLY_SET.
  */
 void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPolygons );
 
 /**
- * Calculate the convex hull (rotated and moved) of a SHAPE_POLY_SET
- * @param aResult = a vector to store the convex polygon.
- * @param aPolygons is the set of polygons
- * @param aPosition = the final position of the convex hull
- * @param aRotation = the rotation of the convex hull
+ * Calculate the convex hull (rotated and moved) of a #SHAPE_POLY_SET.
+ *
+ * @param aResult is a vector to store the convex polygon.
+ * @param aPolygons is the set of polygons.
+ * @param aPosition is the final position of the convex hull.
+ * @param aRotation is the rotation of the convex hull.
  */
 void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPolygons,
                       wxPoint aPosition, double aRotation );
