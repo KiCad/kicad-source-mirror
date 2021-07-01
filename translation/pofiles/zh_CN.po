@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-07-01 02:33+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-07-01 13:48+0000\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -11192,7 +11192,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
 msgid "Update Symbol from Library..."
-msgstr "更新库中的符号..."
+msgstr "从库中更新符号..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
 #: eeschema/tools/ee_actions.cpp:437
@@ -30246,9 +30246,9 @@ msgid "Pad %s of %s on %s"
 msgstr "焊盘　%s (%s) - %s"
 
 #: pcbnew/pad.cpp:1132
-#, c-format
+#, c-format, fuzzy
 msgid "Through hole pad %s of %s"
-msgstr "%s 的通孔焊盘 %s"
+msgstr "%2$s 的通孔焊盘 %1$s"
 
 #: pcbnew/pad.cpp:1443
 msgid "Edge connector"
