@@ -315,6 +315,13 @@ const KICAD_T movableSymbolItems[] =
 };
 
 
+const KICAD_T movableSymbolAliasItems[] =
+{
+    LIB_FIELD_T,
+    EOT
+};
+
+
 void EE_SELECTION_TOOL::setModifiersState( bool aShiftState, bool aCtrlState, bool aAltState )
 {
     // Set the configuration of m_additive, m_subtractive, m_exclusive_or
@@ -552,30 +559,26 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else
             {
-                // selection is empty? try to start dragging the item under the point where drag
-                // started
-                if( m_isSymbolEditor && m_selection.Empty() )
-                    m_selection = RequestSelection( movableSymbolItems );
-                else if( m_selection.Empty() )
+                if( m_isSymbolEditor )
+                {
+                    if( static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->IsSymbolAlias() )
+                        m_selection = RequestSelection( movableSymbolAliasItems );
+                    else
+                        m_selection = RequestSelection( movableSymbolItems );
+                }
+                else
+                {
                     m_selection = RequestSelection( movableSchematicItems );
+                }
 
                 // Check if dragging has started within any of selected items bounding box
                 if( selectionContains( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
                     if( m_isSymbolEditor )
-                    {
-                        SYMBOL_EDIT_FRAME* libFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
-
-                        // Cannot move any derived symbol elements for now.
-                        if( libFrame && libFrame->GetCurSymbol()
-                          && libFrame->GetCurSymbol()->IsRoot() )
-                            m_toolMgr->InvokeTool( "eeschema.SymbolMoveTool" );
-                    }
+                        m_toolMgr->InvokeTool( "eeschema.SymbolMoveTool" );
                     else
-                    {
                         m_toolMgr->InvokeTool( "eeschema.InteractiveMove" );
-                    }
                 }
                 else
                 {
