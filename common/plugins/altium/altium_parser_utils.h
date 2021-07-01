@@ -45,6 +45,8 @@ typedef std::map<wxString, wxString, CASE_INSENSITIVE_COMPARATOR> altium_overrid
 
 LIB_ID AltiumToKiCadLibID( wxString aLibName, wxString aLibReference );
 
+wxString AltiumPropertyToKiCadString( const wxString& aString );
+
 wxString AltiumSpecialStringsToKiCadVariables( const wxString&              aString,
                                                const altium_override_map_t& aOverride );
 

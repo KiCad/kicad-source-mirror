@@ -30,8 +30,7 @@
 
 LIB_ID AltiumToKiCadLibID( wxString aLibName, wxString aLibReference )
 {
-    ReplaceIllegalFileNameChars( aLibName, '_' );
-    ReplaceIllegalFileNameChars( aLibReference, '_' );
+    aLibReference = EscapeString( aLibReference, CTX_LIBID );
 
     wxString key = !aLibName.empty() ? ( aLibName + ":" + aLibReference ) : aLibReference;
 
@@ -40,6 +39,43 @@ LIB_ID AltiumToKiCadLibID( wxString aLibName, wxString aLibReference )
 
     return libId;
 }
+
+
+wxString AltiumPropertyToKiCadString( const wxString& aString )
+{
+    wxString converted;
+    bool     inOverbar = false;
+
+    for( wxString::const_iterator chIt = aString.begin(); chIt != aString.end(); ++chIt )
+    {
+        wxString::const_iterator lookahead = chIt + 1;
+
+        if( lookahead != aString.end() && *lookahead == '\\' )
+        {
+            if( !inOverbar )
+            {
+                converted += "~{";
+                inOverbar = true;
+            }
+
+            converted += *chIt;
+            chIt = lookahead;
+        }
+        else
+        {
+            if( inOverbar )
+            {
+                converted += "}";
+                inOverbar = false;
+            }
+
+            converted += *chIt;
+        }
+    }
+
+    return converted;
+}
+
 
 // https://www.altium.com/documentation/altium-designer/sch-obj-textstringtext-string-ad#!special-strings
 wxString AltiumSpecialStringsToKiCadVariables( const wxString&              aString,
@@ -64,6 +100,7 @@ wxString AltiumSpecialStringsToKiCadVariables( const wxString&              aStr
         {
             size_t text_start = escaping_start + 1;
             size_t escaping_end = aString.find( "'", text_start );
+
             if( escaping_end == wxString::npos )
             {
                 escaping_end = aString.size();
@@ -80,6 +117,7 @@ wxString AltiumSpecialStringsToKiCadVariables( const wxString&              aStr
             if( !specialString.IsEmpty() )
             {
                 auto variableOverride = aOverride.find( specialString );
+
                 if( variableOverride == aOverride.end() )
                 {
                     result += wxString::Format( wxT( "${%s}" ), specialString );

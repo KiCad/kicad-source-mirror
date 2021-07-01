@@ -2257,12 +2257,11 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
 
         switch( elem.orientation )
         {
-        case ASCH_RECORD_ORIENTATION::RIGHTWARDS: field->SetTextAngle( 0 ); break;
-        case ASCH_RECORD_ORIENTATION::UPWARDS: field->SetTextAngle( 90 ); break;
-        case ASCH_RECORD_ORIENTATION::LEFTWARDS: field->SetTextAngle( 180 ); break;
-        case ASCH_RECORD_ORIENTATION::DOWNWARDS: field->SetTextAngle( 270 ); break;
-        default:
-            break;
+        case ASCH_RECORD_ORIENTATION::RIGHTWARDS: field->SetTextAngle( 0 );   break;
+        case ASCH_RECORD_ORIENTATION::UPWARDS:    field->SetTextAngle( 90 );  break;
+        case ASCH_RECORD_ORIENTATION::LEFTWARDS:  field->SetTextAngle( 180 ); break;
+        case ASCH_RECORD_ORIENTATION::DOWNWARDS:  field->SetTextAngle( 270 ); break;
+        default:                                                              break;
         }
     }
 }
