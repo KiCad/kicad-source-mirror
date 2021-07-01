@@ -5,13 +5,14 @@
 # Rigo Ligo <rigoligo03@gmail.com>, 2020, 2021.
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 # Liu Guang <l.g110@163.com>, 2021.
+# CloverGit <w991593239@163.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
-"PO-Revision-Date: 2021-07-01 13:48+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2021-07-01 14:28+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -15835,8 +15836,9 @@ msgid "Rotates selected item(s) clockwise"
 msgstr "将选中的项目顺时针旋转"
 
 #: eeschema/tools/ee_actions.cpp:378 pcbnew/tools/edit_tool.cpp:1468
+#, fuzzy
 msgid "Rotate"
-msgstr "旋转"
+msgstr "逆时针旋转"
 
 #: eeschema/tools/ee_actions.cpp:378
 msgid "Rotates selected item(s) counter-clockwise"
@@ -25217,11 +25219,11 @@ msgstr "强制绘制隐藏的值或位号"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Plot Edge.Cuts on all layers"
-msgstr "在所有层上绘制电路板边框轮廓层"
+msgstr "在所有层上绘制 Edge.Cuts 层"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Do not plot the contents of the PCB edge layer on any other layers."
-msgstr "请勿在其他层上绘制 PCB 边框层的内容。"
+msgstr "请勿在其他任何层上绘制 PCB 边框。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Sketch pads on fab layers"
