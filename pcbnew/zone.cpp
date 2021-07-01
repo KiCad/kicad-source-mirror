@@ -399,8 +399,8 @@ void ZONE::BuildHashValue( PCB_LAYER_ID aLayer )
 
 bool ZONE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    // Normally accuracy is zoom-relative, but at high zooms zones can be too hard to select
-    // so we provide a minimum.
+    // When looking for an "exact" hit aAccuracy will be 0 which works poorly for very thin
+    // lines.  Give it a floor.
     int accuracy = std::max( aAccuracy, Millimeter2iu( 0.1 ) );
 
     return HitTestForCorner( aPosition, accuracy * 2 ) || HitTestForEdge( aPosition, accuracy );

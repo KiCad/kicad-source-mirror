@@ -317,6 +317,10 @@ const EDA_RECT SCH_PIN::GetBoundingBox() const
 
 bool SCH_PIN::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
+    // When looking for an "exact" hit aAccuracy will be 0 which works poorly if the pin has
+    // no pin number or name.  Give it a floor.
+    aAccuracy = std::max( aAccuracy, GetPenWidth() );
+
     EDA_RECT rect = GetBoundingBox();
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
