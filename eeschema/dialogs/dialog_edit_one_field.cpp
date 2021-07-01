@@ -39,6 +39,8 @@
 #include <dialog_edit_one_field.h>
 #include <sch_text.h>
 #include <scintilla_tricks.h>
+#include <wildcards_and_files_ext.h>
+
 
 DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                                               const EDA_TEXT* aTextItem ) :
@@ -246,6 +248,18 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
         {
             DisplayError( this, _( "Value may not be empty." ) );
             return false;
+        }
+    }
+    else if( m_fieldId == SHEETFILENAME_V )
+    {
+        wxFileName fn( m_text );
+
+        // It's annoying to throw up nag dialogs when the extension isn't right.  Just
+        // fix it.
+        if( fn.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
+        {
+            fn.SetExt( KiCadSchematicFileExtension );
+            m_text = fn.GetFullPath();
         }
     }
 
