@@ -45,6 +45,10 @@ SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, bool 
     m_size.x = Mils2iu( DEFAULT_SCH_ENTRY_SIZE );
     m_size.y = Mils2iu( DEFAULT_SCH_ENTRY_SIZE );
 
+    m_stroke.SetWidth( 0 );
+    m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+    m_stroke.SetColor( COLOR4D::UNSPECIFIED );
+
     if( aFlipY )
         m_size.y *= -1;
 

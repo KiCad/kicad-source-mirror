@@ -50,6 +50,8 @@ class DIALOG_EDIT_LINE_STYLE_BASE : public DIALOG_SHIM
 		COLOR_SWATCH* m_colorSwatch;
 		wxStaticText* m_staticTextStyle;
 		wxBitmapComboBox* m_typeCombo;
+		wxStaticText* m_helpLabel1;
+		wxStaticText* m_helpLabel2;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
