@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,13 +20,14 @@ class TEXT_CTRL_EVAL;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/filepicker.h>
-#include <wx/statline.h>
-#include <wx/radiobut.h>
 #include <wx/sizer.h>
+#include <wx/radiobut.h>
+#include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/checkbox.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -42,25 +43,19 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_txtBrdFile;
 		wxFilePickerCtrl* m_filePickerSTEP;
-		wxStaticLine* m_staticline2;
-		wxStaticText* m_staticText6;
 		wxRadioButton* m_rbDrillAndPlotOrigin;
 		wxRadioButton* m_rbGridOrigin;
 		wxRadioButton* m_rbUserDefinedOrigin;
 		wxRadioButton* m_rbBoardCenterOrigin;
-		wxStaticText* m_staticText2;
 		wxStaticText* m_staticTextUnits;
 		wxChoice* m_STEP_OrgUnitChoice;
 		wxStaticText* m_staticTextXpos;
 		TEXT_CTRL_EVAL* m_STEP_Xorg;
 		wxStaticText* m_staticTextYpos;
 		TEXT_CTRL_EVAL* m_STEP_Yorg;
-		wxStaticText* m_staticText7;
 		wxCheckBox* m_cbRemoveVirtual;
 		wxCheckBox* m_cbSubstModels;
 		wxCheckBox* m_cbOverwriteFile;
-		wxStaticLine* m_staticline3;
-		wxStaticText* m_staticText9;
 		wxStaticText* m_staticTextTolerance;
 		wxChoice* m_tolerance;
 		wxStaticLine* m_staticline;
