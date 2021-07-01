@@ -112,12 +112,12 @@ protected:
     }
 
     // Buffers are simply textures storing a result of certain target rendering.
-    typedef struct
+    struct OPENGL_BUFFER
     {
         VECTOR2U dimensions;
         GLuint textureTarget;                ///< Main texture handle
         GLuint attachmentPoint;              ///< Point to which an image from texture is attached
-    } OPENGL_BUFFER;
+    };
 
     bool            m_initialized;            ///< Initialization status flag
     unsigned int    m_curBuffer;              ///< Currently used buffer handle

@@ -183,7 +183,7 @@ public:
      * SHAPE_POLY_SET object: the polygon index, the contour index relative to the polygon and
      * the vertex index relative the contour.
      */
-    typedef struct VERTEX_INDEX
+    struct VERTEX_INDEX
     {
         int m_polygon;   /*!< m_polygon is the index of the polygon. */
         int m_contour;   /*!< m_contour is the index of the contour relative to the polygon. */
@@ -195,7 +195,7 @@ public:
             m_vertex(-1)
         {
         }
-    } VERTEX_INDEX;
+    };
 
     /**
      * Base class for iterating over all vertices in a given SHAPE_POLY_SET.

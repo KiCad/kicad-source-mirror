@@ -53,7 +53,7 @@ enum TTEXT_JUSTIFY
    Right
 };
 
-typedef struct _TTEXTVALUE
+struct TTEXTVALUE
 {
     wxString      text;
     int           textPositionX, textPositionY,
@@ -64,7 +64,7 @@ typedef struct _TTEXTVALUE
     bool          isBold;
     bool          isItalic;
     bool          isTrueType;
-} TTEXTVALUE;
+};
 
 extern wxString     GetWord( wxString* aStr );
 extern XNODE*       FindPinMap( XNODE* aNode );

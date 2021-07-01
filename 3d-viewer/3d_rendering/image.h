@@ -75,12 +75,12 @@ enum class IMAGE_FILTER
 };
 
 /// 5x5 Filter struct parameters
-typedef struct
+struct S_FILTER
 {
     signed char    kernel[5][5];
     unsigned int   div;
     unsigned char  offset;
-} S_FILTER;
+};
 
 
 /**

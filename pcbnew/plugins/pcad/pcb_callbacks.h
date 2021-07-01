@@ -41,12 +41,12 @@ enum LAYER_TYPE_T
     LAYER_TYPE_PLANE
 };
 
-typedef struct _TLAYER
+struct TLAYER
 {
     PCB_LAYER_ID  KiCadLayer;
     LAYER_TYPE_T  layerType;
     wxString      netNameRef;
-} TLAYER;
+};
 
 namespace PCAD2KICAD
 {

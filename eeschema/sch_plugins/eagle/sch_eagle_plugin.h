@@ -60,14 +60,14 @@ class LIB_TEXT;
 class wxXmlNode;
 
 
-typedef struct EAGLE_LIBRARY
+struct EAGLE_LIBRARY
 {
     wxString name;
     boost::ptr_map<wxString, LIB_SYMBOL> KiCadSymbols;
     std::unordered_map<wxString, wxXmlNode*> SymbolNodes;
     std::unordered_map<wxString, int> GateUnit;
     std::unordered_map<wxString, wxString> package;
-} EAGLE_LIBRARY;
+};
 
 typedef boost::ptr_map<wxString, EPART> EPART_LIST;
 
@@ -250,14 +250,14 @@ private:
     std::vector<VECTOR2I> m_wireIntersections;
 
     ///< Wires and labels of a single connection (segment in Eagle nomenclature)
-    typedef struct SEG_DESC_STRUCT
+    struct SEG_DESC
     {
         ///< Test if a particular label is attached to any of the stored segments
         const SEG* LabelAttached( const SCH_TEXT* aLabel ) const;
 
         std::vector<SCH_TEXT*> labels;
         std::vector<SEG> segs;
-    } SEG_DESC;
+    };
 
     ///< Segments representing wires for intersection checking
     std::vector<SEG_DESC> m_segments;

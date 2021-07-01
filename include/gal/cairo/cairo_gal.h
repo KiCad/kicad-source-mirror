@@ -310,7 +310,7 @@ protected:
     };
 
     /// Type definition for an graphics group element
-    typedef struct
+    struct GROUP_ELEMENT
     {
         GRAPHICS_COMMAND m_Command;                 ///< Command to execute
         union {
@@ -319,7 +319,7 @@ protected:
             int    IntArg = 0;                      ///< An int argument
         }                m_Argument;
         cairo_path_t*    m_CairoPath = nullptr;     ///< Pointer to a Cairo path
-    } GROUP_ELEMENT;
+    };
 
     typedef std::deque<GROUP_ELEMENT> GROUP;        ///< A graphic group type definition
 

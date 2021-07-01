@@ -279,14 +279,14 @@ public:
     }
 
     ///< Parameters passed to the GLU tesselator
-    typedef struct
+    struct TessParams
     {
         /// Manager used for storing new vertices
         VERTEX_MANAGER* vboManager;
 
         /// Intersect points, that have to be freed after tessellation
         std::deque< boost::shared_array<GLdouble> >& intersectPoints;
-    } TessParams;
+    };
 
 private:
     /// Super class definition

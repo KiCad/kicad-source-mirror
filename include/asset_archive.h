@@ -59,11 +59,11 @@ public:
     long GetFilePointer( const wxString& aFilePath, const unsigned char** aDest );
 
 private:
-    typedef struct
+    struct FILE_INFO
     {
         size_t offset;
         size_t length;
-    } FILE_INFO;
+    };
 
     /// Cache of file info for a given file path
     std::unordered_map<wxString, FILE_INFO> m_fileInfoCache;

@@ -118,12 +118,12 @@ protected:
     }
 
     typedef uint32_t* BitmapPtr;
-    typedef struct
+    struct CAIRO_BUFFER
     {
         cairo_t*            context;        ///< Main texture handle
         cairo_surface_t*    surface;        ///< Point to which an image from texture is attached
         BitmapPtr           bitmap;         ///< Pixel storage
-    } CAIRO_BUFFER;
+    };
 
     unsigned int            m_current;      ///< Currently used buffer handle
     typedef std::deque<CAIRO_BUFFER> CAIRO_BUFFERS;

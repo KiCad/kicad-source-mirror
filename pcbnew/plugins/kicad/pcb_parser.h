@@ -367,13 +367,13 @@ private:
     // We don't want to rely on group declarations being last in the file, so
     // we store info about the group declarations here during parsing and then resolve
     // them into BOARD_ITEM* after we've parsed the rest of the file.
-    typedef struct
+    struct GROUP_INFO
     {
         BOARD_ITEM*       parent;
         wxString          name;
         KIID              uuid;
         std::vector<KIID> memberUuids;
-    } GROUP_INFO;
+    };
 
     std::vector<GROUP_INFO> m_groupInfos;
 };
