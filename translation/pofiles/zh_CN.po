@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-01 16:20+0000\n"
+"PO-Revision-Date: 2021-07-01 22:35+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -3499,7 +3499,7 @@ msgstr "默认"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
 msgid "Set color to transparent to use Kicad default color."
-msgstr ""
+msgstr "将颜色设为透明以使用 Kicad 默认颜色。"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
@@ -8154,7 +8154,7 @@ msgstr "切换到原理图编辑器"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
-msgstr ""
+msgstr "将颜色设为透明以使用原理图编辑器颜色。"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:241
 msgid "Illegal reference designator value!"
@@ -9300,7 +9300,7 @@ msgstr "位置偏移："
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
 msgid "Margin between the pin name position and the symbol body."
-msgstr ""
+msgstr "符号主体与引脚名称之间的距离。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:111
@@ -13249,9 +13249,9 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "电源符号创建名为 '%s' 的全局标签"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1774
-#, c-format
+#, c-format, fuzzy
 msgid "There is a port for '%s', but no connections to it."
-msgstr ""
+msgstr "端口'%s' 未连接。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1947
 #, fuzzy, c-format
@@ -13586,7 +13586,7 @@ msgstr "无效的信号名称"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1686
 msgid "Invalid title block comment number"
-msgstr ""
+msgstr "无效的标题栏注释号"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1784
 #, fuzzy
@@ -14930,6 +14930,8 @@ msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
 msgstr ""
+"符号 “%s” 已被修改。\n"
+"要将其从库中删除吗？"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:743
 #, fuzzy, c-format
@@ -20533,10 +20535,11 @@ msgid "PCB successfully reannotated"
 msgstr "PCB 和原理图已成功重新批注"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:270
+#, fuzzy
 msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
-msgstr ""
+msgstr "改变 PCB 批注后应使用 “从 PCB 更新原理图” 工具与原理图进行同步。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:285
 #, c-format
@@ -25430,10 +25433,11 @@ msgid "Min spacing (s):"
 msgstr "间隔 (s)："
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:136
+#, fuzzy
 msgid ""
 "Minimum spacing between adjacent meander segments. The resulting spacing may "
 "be greater based on design rules."
-msgstr ""
+msgstr "相邻曲线之间的最小间距。 根据设计规则，产生的间距可能更大。"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:144
 msgid "Miter style:"
@@ -26656,7 +26660,7 @@ msgstr "要删除的内部铜层"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:816
 msgid "All user-defined layers have already been added."
-msgstr ""
+msgstr "已经添加了所有用户定义的层。"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:820
 #, fuzzy
@@ -28682,8 +28686,9 @@ msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB '%s' 不存在，你想创建它吗？"
 
 #: pcbnew/files.cpp:613
+#, fuzzy
 msgid "Creating PCB"
-msgstr ""
+msgstr "PCB 创建中"
 
 #: pcbnew/files.cpp:706 pcbnew/files.cpp:716
 #, fuzzy, c-format
@@ -30422,8 +30427,9 @@ msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Pads6 流没有 subrecord1 数据"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:75
+#, fuzzy
 msgid "Error reading file: cannot determine length."
-msgstr ""
+msgstr "读取文件时出错：无法确定长度。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:86
 #, fuzzy
