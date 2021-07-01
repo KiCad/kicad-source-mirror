@@ -6,13 +6,14 @@
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 # Liu Guang <l.g110@163.com>, 2021.
 # CloverGit <w991593239@163.com>, 2021.
+# Deleted User <noreply+33206@weblate.org>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-10 13:22-0700\n"
 "PO-Revision-Date: 2021-07-01 14:28+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"Last-Translator: Deleted User <noreply+33206@weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -27492,7 +27493,6 @@ msgid "Check rule syntax"
 msgstr "检查规则语法"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -27704,7 +27704,8 @@ msgstr ""
 "\n"
 "    版本语句：(version <版本号>)\n"
 "\n"
-"    规则语句：(rule <规则名> <规则语句> ...)\n"
+"\n"
+"规则语句：(rule <规则名> <规则语句> ...)\n"
 "\n"
 "\n"
 "<br><br>\n"
@@ -27713,7 +27714,7 @@ msgstr ""
 "\n"
 "    约束语句：(constraint <约束类型> ...)\n"
 "\n"
-"    条件语句：(condition \"<条件表达式>\")\n"
+" 条件语句：(condition \"<条件表达式>\")\n"
 "\n"
 "    层语句：(layer \"<层名>\")\n"
 "\n"
