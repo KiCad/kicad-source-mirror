@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-02 08:02+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-07-09 08:32+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -4364,9 +4364,9 @@ msgid ""
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad 无法打开此文件，因为它是用比您正在运行的版本更新的版本创建的。\n"
+"KiCad 无法打开此文件，该文件由高于当前运行版本的软件所创建。\n"
 "\n"
-"要打开它，您需要将 KiCad 升级到日期为 %s 或更高的版本。"
+"请将 KiCad 升级到 %s 或更高的版本以打开改文件。"
 
 #: common/exceptions.cpp:126
 msgid "Full error text:"
@@ -5577,7 +5577,7 @@ msgstr "创建副本"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicates the selected item(s)"
-msgstr "创建所选项的拷贝"
+msgstr "创建所选项的副本"
 
 #: common/tool/actions.cpp:192
 msgid "Deletes selected item(s)"
@@ -14076,7 +14076,7 @@ msgstr "位号不能包含 %s 字符。"
 #: eeschema/sch_validators.cpp:106
 #, c-format
 msgid "The value field cannot contain %s character(s)."
-msgstr "值字段不能包含 %s 字符。"
+msgstr "值字段不能包含 '%s' 。"
 
 #: eeschema/sch_validators.cpp:110
 #, c-format
@@ -14940,9 +14940,9 @@ msgid "Error Saving Library"
 msgstr "保存库时出错"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1092
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' saved."
-msgstr "符号库文件 \"%s\" 已保存"
+msgstr "符号库文件 \"%s\" 已保存。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1192
 msgid "Undefined!"
@@ -14983,9 +14983,9 @@ msgstr "符号库 \"%s\" 为空。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "符号 '%s' 已存在于库 '%s' 中"
+msgstr "符号 '%s' 已存在于库 '%s' 中。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:114
 msgid "There is no symbol selected to save."
@@ -15296,7 +15296,7 @@ msgstr "在编辑器画布上显示选定的符号"
 
 #: eeschema/tools/ee_actions.cpp:133
 msgid "Duplicate Symbol"
-msgstr "复制符号"
+msgstr "创建副本"
 
 #: eeschema/tools/ee_actions.cpp:133
 msgid "Make a copy of the selected symbol"
@@ -31558,9 +31558,8 @@ msgid "Unknown PCad layer %u"
 msgstr "未知的 PCad 层 %u"
 
 #: pcbnew/plugins/pcad/pcb.cpp:748
-#, fuzzy
 msgid "KiCad only supports 32 signal layers."
-msgstr "KiCad 仅支持 32 个信号层"
+msgstr "KiCad 最多支持 32 个信号层。"
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:91
 #, fuzzy
@@ -32053,9 +32052,9 @@ msgid "Session via padstack has no shapes"
 msgstr "过孔的焊盘槽/孔会话没有形状"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported via shape: %s."
-msgstr "不支持的过孔样式: %s"
+msgstr "不支持的过孔形状: %s。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:246
 #: pcbnew/specctra_import_export/specctra_import.cpp:271
