@@ -885,25 +885,25 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         break;
 
     case VIATYPE::MICROVIA:
-        wxASSERT_MSG( !selectLayer, "Unexpected select layer for microvia (microvia layers are "
-                                    "implicit)" );
-
-        if( currentLayer == F_Cu || currentLayer == In1_Cu )
+        if( targetLayer == UNDEFINED_LAYER )
         {
-            // front-side microvia
-            currentLayer = F_Cu;
-            targetLayer = In1_Cu;
-        }
-        else if( currentLayer == B_Cu || currentLayer == layerCount - 2 )
-        {
-            // back-side microvia
-            currentLayer = B_Cu,
-            targetLayer = (PCB_LAYER_ID) ( layerCount - 2 );
-        }
-        else
-        {
-            wxASSERT_MSG( false, "Invalid layer pair for microvia (must be on or adjacent to an "
-                                 "outer layer)" );
+            if( currentLayer == F_Cu || currentLayer == In1_Cu )
+            {
+                // front-side microvia
+                currentLayer = F_Cu;
+                targetLayer = In1_Cu;
+            }
+            else if( currentLayer == B_Cu || currentLayer == layerCount - 2 )
+            {
+                // back-side microvia
+                currentLayer = B_Cu,
+                targetLayer = (PCB_LAYER_ID) ( layerCount - 2 );
+            }
+            else
+            {
+                wxASSERT_MSG( false, "Invalid implicit layer pair for microvia (must be on or "
+                                     "adjacent to an outer layer)." );
+            }
         }
         break;
 
