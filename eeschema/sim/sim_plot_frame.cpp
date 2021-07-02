@@ -312,10 +312,7 @@ void SIM_PLOT_FRAME::initWorkbook()
         filename.SetPath( Prj().GetProjectPath() );
 
         if( !loadWorkbook( filename.GetFullPath() ) )
-        {
-            // Empty the workbook filename to prevent error messages from appearing again
             m_simulator->Settings()->SetWorkbookFilename( "" );
-        }
     }
 }
 
@@ -789,7 +786,6 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, con
                 std::vector<double> sub_y( data_y.begin() + offset,
                                            data_y.begin() + offset + inner );
 
-                //if( aPlotPanel->AddTrace( name, inner, sub_x.data(), sub_y.data(), aType, aParam ) )
                 m_workbook->AddTrace( aPlotPanel, name, inner, sub_x.data(), sub_y.data(), aType,
                         aParam );
 
@@ -928,9 +924,12 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
     long plotsCount;
 
-    if( !file.GetFirstLine().ToLong( &plotsCount ) )        // GetFirstLine instead of GetNextLine
+    if( !file.GetFirstLine().ToLong( &plotsCount ) ) // GetFirstLine instead of GetNextLine
     {
         file.Close();
+        DisplayErrorMessage( this,
+                _( "Error loading workbook: First line is not convertible to `long`." ) );
+
         updateFrame();
         return false;
     }
@@ -941,6 +940,10 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
         if( !file.GetNextLine().ToLong( &plotType ) )
         {
+            file.Close();
+            DisplayErrorMessage( this, wxString::Format( 
+                    _( "Error loading workbook: Line %d is not convertible to `long`." ), 6*i+2 ) );
+
             updateFrame();
             return false;
         }
@@ -958,6 +961,11 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
         if( !file.GetNextLine().ToLong( &tracesCount ) )
         {
+            file.Close();
+            DisplayErrorMessage( this, wxString::Format( 
+                    _( "Error loading workbook: Line %d is not convertible to `long`." ), 6*i+4 )
+                    );
+
             updateFrame();
             return false;
         }
@@ -970,16 +978,34 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
             if( !file.GetNextLine().ToLong( &traceType ) )
             {
                 file.Close();
+                DisplayErrorMessage( this, wxString::Format( 
+                        _( "Error loading workbook: Line %d is not convertible to `long`." ), 6*i+5
+                        ) );
+
                 updateFrame();
                 return false;
             }
 
             name = file.GetNextLine();
-            param = file.GetNextLine();
 
-            if( name.IsEmpty() || param.IsEmpty() )
+            if( name.IsEmpty() )
             {
                 file.Close();
+                DisplayErrorMessage( this, wxString::Format( 
+                    _( "Error loading workbook: Line %d is empty" ), 6*i+6 ) );
+
+                updateFrame();
+                return false;
+            }
+
+            param = file.GetNextLine();
+
+            if( param.IsEmpty() )
+            {
+                file.Close();
+                DisplayErrorMessage( this, wxString::Format( 
+                    _( "Error loading workbook: Line %d is empty" ), 6*i+7 ) );
+
                 updateFrame();
                 return false;
             }
@@ -1025,6 +1051,12 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
     {
         const SIM_PANEL_BASE* basePanel = dynamic_cast<const SIM_PANEL_BASE*>( m_workbook->GetPage( i ) );
 
+        if( !basePanel )
+        {
+            file.AddLine( wxString::Format( "%llu", 0ull ) );
+            continue;
+        }
+
         file.AddLine( wxString::Format( "%d", basePanel->GetType() ) );
         file.AddLine( m_workbook->GetSimCommand( basePanel ) );
 
@@ -1033,17 +1065,16 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
         if( !plotPanel )
         {
             file.AddLine( wxString::Format( "%llu", 0ull ) );
+            continue;
         }
-        else
-        {
-            file.AddLine( wxString::Format( "%llu", plotPanel->GetTraces().size() ) );
 
-            for( const auto& trace : plotPanel->GetTraces() )
-            {
-                file.AddLine( wxString::Format( "%d", trace.second->GetType() ) );
-                file.AddLine( trace.second->GetName() );
-                file.AddLine( trace.second->GetParam() );
-            }
+        file.AddLine( wxString::Format( "%llu", plotPanel->GetTraces().size() ) );
+
+        for( const auto& trace : plotPanel->GetTraces() )
+        {
+            file.AddLine( wxString::Format( "%d", trace.second->GetType() ) );
+            file.AddLine( trace.second->GetName() );
+            file.AddLine( trace.second->GetParam() );
         }
     }
 
@@ -1052,7 +1083,9 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
 
     // Store the filename of the last saved workbook. It will be used to restore the simulation if
     // the frame is closed and then opened again.
-    m_simulator->Settings()->SetWorkbookFilename( wxFileName( savePath ).GetFullName() );
+    if( res )
+        m_simulator->Settings()->SetWorkbookFilename( wxFileName( savePath ).GetFullName() );
+
     m_workbook->ClrModified();
     updateFrame();
 
@@ -1096,9 +1129,7 @@ void SIM_PLOT_FRAME::menuOpenWorkbook( wxCommandEvent& event )
         return;
 
     m_savedWorkbooksPath = openDlg.GetDirectory();
-
-    if( !loadWorkbook( openDlg.GetPath() ) )
-        DisplayErrorMessage( this, _( "There was an error while opening the workbook file" ) );
+    loadWorkbook( openDlg.GetPath() );
 }
 
 
@@ -1115,8 +1146,7 @@ void SIM_PLOT_FRAME::menuSaveWorkbook( wxCommandEvent& event )
         return;
     }
 
-    if ( !saveWorkbook( Prj().AbsolutePath( m_simulator->Settings()->GetWorkbookFilename() ) ) )
-        DisplayErrorMessage( this, _( "There was an error while saving the workbook file" ) );
+    saveWorkbook( Prj().AbsolutePath( m_simulator->Settings()->GetWorkbookFilename() ) );
 }
 
 
@@ -1141,8 +1171,7 @@ void SIM_PLOT_FRAME::menuSaveWorkbookAs( wxCommandEvent& event )
 
     m_savedWorkbooksPath = saveAsDlg.GetDirectory();
 
-    if( !saveWorkbook( saveAsDlg.GetPath() ) )
-        DisplayErrorMessage( this, _( "There was an error while saving the workbook file" ) );
+    saveWorkbook( saveAsDlg.GetPath() );
 }
 
 
