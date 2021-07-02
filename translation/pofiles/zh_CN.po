@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
 "PO-Revision-Date: 2021-07-02 07:57+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -15740,7 +15740,7 @@ msgstr "德摩根等效"
 
 #: eeschema/tools/ee_actions.cpp:463
 msgid "Switch to alternate DeMorgan representation"
-msgstr "改为德摩根等效符号表示"
+msgstr "改用德摩根等效符号表示"
 
 #: eeschema/tools/ee_actions.cpp:468
 msgid "Change to Label"
