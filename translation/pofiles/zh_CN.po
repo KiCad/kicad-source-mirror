@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
 "PO-Revision-Date: 2021-07-02 07:57+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -4357,7 +4357,7 @@ msgid "from %s : %s() line:%d"
 msgstr "来自 %s : %s() 行：%d"
 
 #: common/exceptions.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -4368,10 +4368,7 @@ msgstr ""
 "正在运行的版本更新的版本创建的。\n"
 "要打开它，您需要将 KiCad 升级到更新版本。\n"
 "\n"
-"所需的 KiCad 版本日期(或更新版本)：%s。\n"
-"\n"
-"完整错误文本：\n"
-"%s"
+"所需的 KiCad 版本日期(或更新版本)：%s。"
 
 #: common/exceptions.cpp:126
 #, fuzzy
@@ -11839,11 +11836,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "多个库不能共享相同的昵称（'%s'）。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:439 eeschema/symbol_library.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr ""
-"符号库 \"%s\" 加载失败。\n"
-" %s"
+msgstr "符号库 \"%s\" 加载失败。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:442
 msgid "Error Loading Library"
@@ -12414,9 +12409,9 @@ msgid "Import Schematic"
 msgstr "导入原理图"
 
 #: eeschema/files-io.cpp:769
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file extension: '%s'."
-msgstr "使用 Protel 文件扩展名"
+msgstr "文件扩展名“%s”无效。"
 
 #: eeschema/files-io.cpp:814 eeschema/files-io.cpp:871
 #: kicad/tools/kicad_manager_control.cpp:119
@@ -13212,9 +13207,9 @@ msgid "Rectangle has non-existent ownerindex %d."
 msgstr "矩形有不存在的所有者索引 %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1372
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr "未找到位号 \"%s\"。"
+msgstr "找不到 Altium 原理图子图端口 \"%d\"。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1616
 msgid "Power Port has unknown style, use bar instead."
@@ -13237,24 +13232,24 @@ msgstr "没有找到备份文件 \"%s\"。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1962
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1979
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading image %s."
-msgstr "读取图表出错"
+msgstr "读取图片“%s”时出错。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1973
-#, fuzzy, c-format
+#, c-format
 msgid "File not found %s."
-msgstr "文件没有找到。"
+msgstr "找不到文件“%s”。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2096
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet name's owner (%d) not found."
-msgstr "未找到位号 \"%s\"。"
+msgstr "找不到 Altium 原理图子图名称的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2120
-#, fuzzy, c-format
+#, c-format
 msgid "File name's owner (%d) not found."
-msgstr "找不到文件 '%s'。"
+msgstr "找不到文件名的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2154
 #, c-format
@@ -13449,13 +13444,9 @@ msgid "Invalid parent symbol name"
 msgstr "无效的信号名称"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:260
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s"
-msgstr ""
-"没有扩展符号 %s 的父级在\n"
-"文件：\"%s\"\n"
-"行：%d\n"
-"偏移：%d"
+msgstr "扩展符号 %s 没有父级。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:275
 #, fuzzy
@@ -13463,32 +13454,24 @@ msgid "Invalid symbol unit name"
 msgstr "无效的信号名称"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "无效的单元前缀"
+msgstr "无效的单元前缀 %s 。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name suffix %s"
-msgstr ""
-"无效的符号单元名称后缀 %s 在\n"
-"文件：\"%s\"\n"
-"行：%d\n"
-"偏移：%d"
+msgstr "无效的符号单元名称后缀 %s 。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit number %s"
-msgstr "无效的符号库标识符"
+msgstr "无效的符号库单元数 %s 。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol convert number %s"
-msgstr ""
-"无效的符号转换编号 %s 在\n"
-"文件：\"%s\"\n"
-"行：%d\n"
-"位移：%d"
+msgstr "无效的符号转换编号 %s 。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:428
 #, fuzzy
@@ -15058,9 +15041,9 @@ msgstr ""
 "%s"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
-msgstr "在符号库表中找不到库。"
+msgstr "在符号库表中找不到库 “%s”。"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:402
 msgid "Symbol not found."
@@ -15077,9 +15060,9 @@ msgid "Cannot load symbol '%s' from library '%s'."
 msgstr "加载符号 \"%s\" 时出错，来自于库 \"%s\"。"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot enumerate library '%s'."
-msgstr "无法枚举库 \"%s\"(%s)"
+msgstr "无法枚举库 “%s”。"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:1053
 #, fuzzy, c-format
@@ -15093,12 +15076,9 @@ msgid ""
 msgstr "找到重复的库别名 '%s' 在符号库表文件行 %d 中"
 
 #: eeschema/symbol_library.cpp:572 eeschema/symbol_tree_model_adapter.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol library '%s'."
-msgstr ""
-"加载符号库 %s 出现错误。\n"
-"\n"
-"%s"
+msgstr "加载符号库“%s”时出现错误。"
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:259
 msgid "(failed to load)"
@@ -18330,9 +18310,9 @@ msgid "Properties"
 msgstr "属性"
 
 #: pagelayout_editor/pl_editor_frame.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "加载图纸错误"
+msgstr "加载图纸“%s”时出现错误。"
 
 #: pagelayout_editor/pl_editor_frame.cpp:440
 msgid "Error Init Printer info"
@@ -23770,12 +23750,9 @@ msgid "Please select a footprint library table file."
 msgstr "请选择一个封装库表文件。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr ""
-"文件 \"%s\" 不是一个有效的封装库表文件。\n"
-"\n"
-"%s"
+msgstr "文件 “%s” 不是一个有效的封装库表文件。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
 #, fuzzy, c-format
@@ -27503,7 +27480,7 @@ msgstr ""
 "    版本语句：(version <版本号>)\n"
 "\n"
 "\n"
-"规则语句：(rule <规则名> <规则语句> ...)\n"
+"    规则语句：(rule <规则名> <规则语句> ...)\n"
 "\n"
 "\n"
 "<br><br>\n"
@@ -27512,7 +27489,7 @@ msgstr ""
 "\n"
 "    约束语句：(constraint <约束类型> ...)\n"
 "\n"
-" 条件语句：(condition \"<条件表达式>\")\n"
+"    条件语句：(condition \"<条件表达式>\")\n"
 "\n"
 "    层语句：(layer \"<层名>\")\n"
 "\n"
@@ -28680,9 +28657,9 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:834
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving footprint %s to project specific library."
-msgstr "将封装 '%s' 保存到工程专用封装库时出错：%s"
+msgstr "将封装“%s”保存到工程专用封装库时出错。"
 
 #: pcbnew/files.cpp:863
 #, fuzzy
@@ -29162,10 +29139,7 @@ msgstr "文档"
 #: pcbnew/generate_footprint_info.cpp:81
 #, fuzzy, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr ""
-"加载封装 %s 出错，来自于库%s。\n"
-"\n"
-"%s"
+msgstr "从库“%2$s”加载封装“%1$s”时出错。"
 
 #: pcbnew/generate_footprint_info.cpp:121
 msgid "doc url"
@@ -30399,9 +30373,9 @@ msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Altium 层 \"%s\" 的未知映射。 请作为问题报告。"
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:788
-#, fuzzy, c-format
+#, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr "Pads6 流没有 subrecord1 数据"
+msgstr "Pads6 流中的 subrecord6 数据的长度 %d 非法。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:75
 #, fuzzy
@@ -30414,14 +30388,14 @@ msgid "Error reading file."
 msgstr "解压文件时出错！\n"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not parsed correctly."
-msgstr "Nets6 流未正确解析"
+msgstr "“%s”未正确解析。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not fully parsed."
-msgstr "Nets6 流未完全解析"
+msgstr "“%s”未完全解析。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:509
 #, fuzzy, c-format
@@ -30516,9 +30490,9 @@ msgid ""
 msgstr "Altium 层 %d 上的覆铜没有任何 KiCad 等效项。改为将其放在 Eco1_User 上"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1650
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr "忽略类型为 %d（图层 %s ）的 Polygon，因为尚未实现"
+msgstr "忽略类型为 %d 的多边形，因为尚未实现。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1664
 #, fuzzy
@@ -30572,9 +30546,9 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "焊盘 \"%s\"（封装 %s）使用未知类型 %d 的孔"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2027
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
-msgstr "焊盘 \"%s\"（封装 %s）使用复杂的焊盘压层（类型为 %d），尚不支持"
+msgstr "封装 %s 的焊盘 %s 使用了复杂的焊盘压层，尚不支持"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2061
 #, fuzzy, c-format
@@ -30586,13 +30560,12 @@ msgstr "焊盘 \"%s\"（封装 %s）使用未知的焊盘形状"
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
-msgstr ""
-"Altium 层 %d 上的非铜焊盘没有任何 KiCad 等效项。改为将其放在 Eco1_User 上"
+msgstr "Altium 层 %2$d 上的非铜焊盘 %1$s 没有任何 KiCad 等效项，改为将其放在 Eco1_User 上。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2129
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
-msgstr "铜区的网络没有焊盘"
+msgstr "非铜焊盘 %s 被连接到了某个网络，KiCad 不支持这种行为。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2135
 #, fuzzy, c-format
@@ -30600,14 +30573,14 @@ msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "非铜焊盘 '%s' 有一个洞。这不应该发生"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2140
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
-msgstr "非铜焊盘 \"%s\" 使用复杂的焊盘压层（类型为 %d）。这不应该发生"
+msgstr "非铜焊盘“%s”使用复杂的焊盘压层，尚不支持。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2294
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
-msgstr "焊盘 \"%s\"（封装 %s）使用未知的焊盘形状"
+msgstr "非铜焊盘“%s”使用了未知的焊盘形状。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2303
 #, fuzzy
@@ -31203,9 +31176,9 @@ msgstr "\"%s\" 无法转换为整数"
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:229
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:877
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' not found."
-msgstr "封装库没有找到。"
+msgstr "找不到封装库“%s”。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:283
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:298
@@ -32528,7 +32501,7 @@ msgstr "铜表面处理（镀铜）： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:443
 msgid "Castellated pads: "
-msgstr "城堡形焊盘： "
+msgstr "邮票孔： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:451
 msgid "Board Thickness: "
