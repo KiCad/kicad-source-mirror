@@ -95,6 +95,8 @@
  */
 
 
+#include <atomic>
+#include <wx/defs.h>
 #include <wx/event.h>
 #include <import_export.h>
 #include <search_stack.h>
@@ -424,13 +426,13 @@ private:
 
     wxFrame*        m_top;      // Usually m_top is the Project manager
 
-    // a string array ( size KIWAY_PLAYER_COUNT ) to Store the frame name
-    // of PLAYER frames which were run.
+    // An array to store the window ID of PLAYER frames which were run.
     // A non empty name means only a PLAYER was run at least one time.
-    // It can be closed. Call :
-    // wxWindow::FindWindowByName( m_playerFrameName[aFrameType] )
+    // Empty entries are represented by wxID_NONE.
+    // They can be closed, and the stored window ID may be invalid.
+    // Call: wxWindow::FindWindowById( m_playerFrameId[aFrameType] )
     // to know if still exists (or GetPlayerFrame( FRAME_T aFrameType )
-    wxArrayString  m_playerFrameName;
+    std::atomic<wxWindowID> m_playerFrameId[KIWAY_PLAYER_COUNT];
 };
 
 

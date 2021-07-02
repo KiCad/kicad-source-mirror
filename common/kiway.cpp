@@ -52,15 +52,14 @@ KIWAY::KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop ):
 {
     SetTop( aTop );     // hook player_destroy_handler() into aTop.
 
-
-    // Prepare the room to store the frame names, once they will be created
-    // with FRAME_T type as index in this table.
-    // (note this is a list of frame names, but a non empty entry
-    // does not mean the frame still exists. It means only the frame was created
-    // at least once. It can be destroyed after. These entries are not cleared.
-    // the purpose is just to allow a call to wxWindow::FindWindowByName(), from
-    // a FRAME_T frame type
-    m_playerFrameName.Add( wxEmptyString, KIWAY_PLAYER_COUNT );
+    // Set the array of all known frame window IDs to empty = wxID_NONE,
+    // once they are be created, they are added with FRAME_T as index to this array.
+    // Note: A non empty entry does not mean the frame still exists.
+    //   It means only the frame was created at least once. It can be destroyed after.
+    //   These entries are not cleared automatically on window closing. The purpose is just
+    //   to allow a call to wxWindow::FindWindowById() using a FRAME_T frame type
+    for( int n = 0; n < KIWAY_PLAYER_COUNT; n++ )
+        m_playerFrameId[n] = wxID_NONE;
 }
 
 
@@ -361,10 +360,19 @@ KIWAY::FACE_T KIWAY::KifaceType( FRAME_T aFrameType )
 
 KIWAY_PLAYER* KIWAY::GetPlayerFrame( FRAME_T aFrameType )
 {
-    if( m_playerFrameName[aFrameType].IsEmpty() )
+    wxWindowID storedId = m_playerFrameId[aFrameType];
+
+    if( storedId == wxID_NONE )
         return NULL;
 
-    return static_cast<KIWAY_PLAYER*>( wxWindow::FindWindowByName( m_playerFrameName[aFrameType] ) );
+    wxWindow* frame = wxWindow::FindWindowById( storedId );
+
+    // Since wxWindow::FindWindow*() is not cheap (especially if the window does not exist), 
+    // clear invalid entries to save CPU on repeated calls that do not lead to frame creation
+    if( !frame )
+        m_playerFrameId[aFrameType].compare_exchange_strong( storedId, wxID_NONE );
+
+    return static_cast<KIWAY_PLAYER*>( frame );
 }
 
 
@@ -403,7 +411,7 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
                                                         // were passed to KIFACE::OnKifaceStart()
                                             );
 
-            m_playerFrameName[aFrameType] = frame->GetName();
+            m_playerFrameId[aFrameType].store( frame->GetId() );
             return frame;
         }
         catch( const IO_ERROR& ioe )
