@@ -157,7 +157,14 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     m_canvas->SetStatusBar( status_bar );
 
 #if defined( KICAD_USE_3DCONNEXION )
-    m_spaceMouse = new NL_3D_VIEWER_PLUGIN( m_canvas );
+    try
+    {
+        m_spaceMouse = new NL_3D_VIEWER_PLUGIN( m_canvas );
+    }
+    catch( const std::system_error& e )
+    {
+        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
+    }
 #endif
 
     // Fixes bug in Windows (XP and possibly others) where the canvas requires the focus

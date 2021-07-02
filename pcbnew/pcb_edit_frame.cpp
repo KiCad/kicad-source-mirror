@@ -373,7 +373,14 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
  //       GetMenuBar()->FindItem( ID_GEN_EXPORT_FILE_STEP )->Enable( false );
 
 #if defined( KICAD_USE_3DCONNEXION )
-    m_spaceMouse = new NL_PCBNEW_PLUGIN( canvas );
+    try
+    {
+        m_spaceMouse = new NL_PCBNEW_PLUGIN( canvas );
+    }
+    catch( const std::system_error& e )
+    {
+        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
+    }
 #endif
 
     // AUI doesn't refresh properly on wxMac after changes in eb7dc6dd, so force it to
