@@ -25,6 +25,7 @@
  */
 
 // stdlib
+#include <cstdint>
 #include <string>
 #include <sstream>
 
@@ -39,9 +40,22 @@
 #endif
 #endif
 
-#ifndef _WIN32
-#define IS_INTRESOURCE(x) false
+/// <summary>
+/// Determines whether a value is an integer identifier for a resource.
+/// </summary>
+/// <param name="id">
+/// The pointer to be tested whether it contains an integer resource identifier.
+/// </param>
+/// <returns>
+/// true when  id is an integer identifier for a resource, otherwise false when
+/// it is typically a pointer to a string </returns>
+__inline bool IsIntResource(const char *id) {
+#ifdef _WIN32
+  return ((reinterpret_cast<uintptr_t>(id)) >> 16) == 0;
+#else
+  return false;
 #endif
+}
 
 namespace TDx {
 /// <summary>
@@ -85,7 +99,7 @@ public:
     }
   }
 
-#if !defined(__GNUC__) || defined(__clang__)
+#if USE_DECLSPEC_PROPERTY
   /// <summary>
   /// Gets or sets the image id.
   /// </summary>
@@ -181,7 +195,7 @@ public:
 
     std::string r_id;
     if (resourceId != nullptr) {
-      if (IS_INTRESOURCE(resourceId)) {
+      if (IsIntResource(resourceId)) {
         std::ostringstream stream;
         stream << "#" << reinterpret_cast<uintptr_t>(resourceId);
         r_id = stream.str();
@@ -192,7 +206,7 @@ public:
 
     std::string r_type;
     if (resourceType != nullptr) {
-      if (IS_INTRESOURCE(resourceType)) {
+      if (IsIntResource(resourceType)) {
         std::ostringstream stream;
         stream << "#" << reinterpret_cast<uintptr_t>(resourceType);
         r_type = stream.str();

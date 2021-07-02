@@ -44,7 +44,7 @@ public:
   CHitTest() : m_aperture(1), m_dirty(false), m_selectionOnly(false) {
   }
 
-#if !defined(__GNUC__) || defined(__clang__)
+#if USE_DECLSPEC_PROPERTY
   /// <summary>
   /// Property accessors
   /// </summary>

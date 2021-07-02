@@ -201,7 +201,7 @@ public:
     base_type::next = next.release();
   }
 
-#if !defined(__GNUC__) || defined(__clang__)
+#if USE_DECLSPEC_PROPERTY
   /// <summary>
   /// The <see cref="SiActionNodeEx_t"/> properties.
   /// </summary>

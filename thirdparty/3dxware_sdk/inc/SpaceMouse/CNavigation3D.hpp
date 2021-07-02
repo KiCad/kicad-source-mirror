@@ -106,7 +106,7 @@ public:
   virtual ~CNavigation3D() {
   }
 
-#if !defined(__GNUC__) || defined(__clang__)
+#if USE_DECLSPEC_PROPERTY
   /// <summary>
   /// Gets or sets a value indicating whether the 3DMouse navigation is enabled.
   /// </summary>
