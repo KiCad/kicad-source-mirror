@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-01 22:35+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2021-07-02 07:57+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -217,9 +217,8 @@ msgstr "加载光线追踪：层"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:881
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:644
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "载入 3D 模型"
+msgstr "正载入 3D 模型…"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:1021
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:654
@@ -266,9 +265,9 @@ msgstr "载入 OpenGL：层"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2199
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "正在载入 %s"
+msgstr "正在载入 %s…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
@@ -365,39 +364,32 @@ msgid "Render current view using Raytracing"
 msgstr "使用光线追踪渲染当前视图"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:27
-#, fuzzy
 msgid "Background top:"
-msgstr "背景"
+msgstr "背景顶部："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:34
-#, fuzzy
 msgid "Background bottom:"
-msgstr "背景颜色"
+msgstr "背景底部："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:47
-#, fuzzy
 msgid "Silkscreen top:"
-msgstr "丝印层"
+msgstr "丝印层顶部："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:54
-#, fuzzy
 msgid "Silkscreen bottom:"
-msgstr "丝印颜色"
+msgstr "丝印层底部："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:67
-#, fuzzy
 msgid "Solder mask top:"
-msgstr "阻焊颜色"
+msgstr "阻焊层顶部："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:74
-#, fuzzy
 msgid "Solder mask bottom:"
-msgstr "阻焊颜色"
+msgstr "阻焊层底部："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:87
-#, fuzzy
 msgid "Solder paste:"
-msgstr "顶部焊膏"
+msgstr "焊膏："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:100
 #, fuzzy
@@ -405,9 +397,8 @@ msgid "Copper/surface finish:"
 msgstr "铜表面处理（镀铜）："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:113
-#, fuzzy
 msgid "Board body:"
-msgstr "构造电路板"
+msgstr "电路板主体："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:126
 #, fuzzy
@@ -497,9 +488,8 @@ msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr "对镀铜和非镀铜使用不同的颜色。 (慢)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "Material properties:"
-msgstr "材料属性"
+msgstr "材料属性："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
 #, fuzzy
@@ -507,9 +497,8 @@ msgid "Realistic"
 msgstr "真实渲染模式"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "Solid colors"
-msgstr "选区颜色："
+msgstr "单色"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
 #, fuzzy
@@ -715,44 +704,36 @@ msgid "Azimuth (deg)"
 msgstr "方位角 (度)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:206
-#, fuzzy
 msgid "Light 1:"
-msgstr "浅色"
+msgstr "浅色 1："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:222
-#, fuzzy
 msgid "Light 5:"
-msgstr "浅色"
+msgstr "浅色 5："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:235
-#, fuzzy
 msgid "Light 2:"
-msgstr "浅色"
+msgstr "浅色 2："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:251
-#, fuzzy
 msgid "Light 6:"
-msgstr "浅色"
+msgstr "浅色 6："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:264
-#, fuzzy
 msgid "Light 3:"
-msgstr "浅色"
+msgstr "浅色 3："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:280
-#, fuzzy
 msgid "Light 7:"
-msgstr "浅色"
+msgstr "浅色 7："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:293
-#, fuzzy
 msgid "Light 4:"
-msgstr "浅色"
+msgstr "浅色 4："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:309
-#, fuzzy
 msgid "Light 8:"
-msgstr "浅色"
+msgstr "浅色 8："
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:100
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:72
@@ -782,11 +763,9 @@ msgstr "3D 图像文件名称"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:738 common/eda_base_frame.cpp:1043
 #: common/eda_base_frame.cpp:1048 pcbnew/plugins/altium/altium_pcb.cpp:1315
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
-"保存文件所需的权限不足。\n"
-"%s"
+msgstr "无足够权限保存文件 '%s'。"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:739 common/confirm.cpp:130
 #: common/confirm.cpp:269 common/dialogs/panel_setup_severities.cpp:43
@@ -3653,9 +3632,9 @@ msgid "Could not use OpenGL"
 msgstr "无法使用 OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' was not fully read."
-msgstr "文件 \"%s\" 没有被完全读取"
+msgstr "文件 '%s' 没有被完全读取。"
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -3827,11 +3806,9 @@ msgid "Hotkeys"
 msgstr "快捷键"
 
 #: common/eda_base_frame.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr ""
-"保存文件所需的权限不足。\n"
-"%s"
+msgstr "对文件夹 '%s' 的权限不足。"
 
 #: common/eda_base_frame.cpp:1078
 #, c-format
@@ -4370,9 +4347,9 @@ msgid "from %s : %s() line %d"
 msgstr "来自 %s : %s() 行：%d"
 
 #: common/exceptions.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr "%s 在 \"%s\" 中，行 %d，偏移 %d"
+msgstr "%s 在 \"%s\" 中，行 %d，偏移 %d。"
 
 #: common/exceptions.cpp:90
 #, c-format
