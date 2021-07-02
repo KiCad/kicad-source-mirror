@@ -97,6 +97,11 @@ public:
      */
     void ScriptingConsoleEnableDisable();
 
+    /**
+     * Gets the current visibility of the scripting console window
+     */
+    bool IsScriptingConsoleVisible();
+
     wxFindReplaceData& GetFindReplaceData() { return *m_findReplaceData; }
     wxArrayString& GetFindHistoryList() { return m_findStringHistoryList; }
 

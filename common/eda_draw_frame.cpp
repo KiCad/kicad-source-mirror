@@ -234,7 +234,13 @@ void EDA_DRAW_FRAME::ScriptingConsoleEnableDisable()
     }
 
     frame->Show( !frame->IsVisible() );
+}
 
+
+bool EDA_DRAW_FRAME::IsScriptingConsoleVisible()
+{
+    KIWAY_PLAYER* frame = Kiway().Player( FRAME_PYTHON, false );
+    return frame && frame->IsVisible();
 }
 
 

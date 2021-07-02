@@ -707,25 +707,6 @@ protected:
      */
     void OnActionPluginButton( wxCommandEvent& aEvent );
 
-
-    /**
-     * Has meaning only if KICAD_SCRIPTING_WXPYTHON option is not defined.
-     *
-     * @return the frame name identifier for the python console frame.
-     */
-    static const wxChar * pythonConsoleNameId()
-    {
-        return wxT( "PythonConsole" );
-    }
-
-    /**
-     * @return a pointer to the python console frame, or NULL if not exist
-     */
-    static wxWindow * findPythonConsole()
-    {
-       return FindWindowByName( pythonConsoleNameId() );
-    }
-
     /**
      * Update the state of the GUI after a new board is loaded or created.
      */

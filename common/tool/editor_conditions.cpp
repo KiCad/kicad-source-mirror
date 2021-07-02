@@ -104,6 +104,16 @@ SELECTION_CONDITION EDITOR_CONDITIONS::FullscreenCursor()
 }
 
 
+SELECTION_CONDITION EDITOR_CONDITIONS::ScriptingConsoleVisible()
+{
+    EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
+
+    wxASSERT( drwFrame );
+
+    return std::bind( &EDITOR_CONDITIONS::consoleVisibleFunc, _1, drwFrame );
+}
+
+
 bool EDITOR_CONDITIONS::contentModifiedFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame )
 {
     return aFrame->IsContentModified();
@@ -159,3 +169,8 @@ bool EDITOR_CONDITIONS::cursorFunc( const SELECTION& aSelection, EDA_DRAW_FRAME*
     return aFrame->GetGalDisplayOptions().m_fullscreenCursor;
 }
 
+
+bool EDITOR_CONDITIONS::consoleVisibleFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame )
+{
+    return aFrame->IsScriptingConsoleVisible();
+}
