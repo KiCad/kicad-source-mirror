@@ -115,7 +115,7 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_buttonReset = new wxButton( this, wxID_ANY, _("Reset to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonReset->SetToolTip( _("Reset the list of BOM generator scripts to the default settings") );
 
-	bSizer8->Add( m_buttonReset, 0, wxALL, 5 );
+	bSizer8->Add( m_buttonReset, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 
 	bSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -132,7 +132,7 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer8->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
 
 
-	bMainSizer->Add( bSizer8, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bSizer8, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( bMainSizer );
