@@ -873,20 +873,19 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         viaType = VIATYPE::THROUGH;
     }
 
-    switch( viaType )
+    if( targetLayer == UNDEFINED_LAYER )
     {
-    case VIATYPE::THROUGH:
-        if( targetLayer == UNDEFINED_LAYER )
+        // Implicic layer selection
+
+        switch( viaType )
         {
+        case VIATYPE::THROUGH:
             // use the default layer pair
             currentLayer = pairTop;
             targetLayer = pairBottom;
-        }
-        break;
+            break;
 
-    case VIATYPE::MICROVIA:
-        if( targetLayer == UNDEFINED_LAYER )
-        {
+        case VIATYPE::MICROVIA:
             if( currentLayer == F_Cu || currentLayer == In1_Cu )
             {
                 // front-side microvia
@@ -901,15 +900,12 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             }
             else
             {
-                wxASSERT_MSG( false, "Invalid implicit layer pair for microvia (must be on or "
-                                     "adjacent to an outer layer)." );
+                wxFAIL_MSG( "Invalid implicit layer pair for microvia (must be on "
+                            "or adjacent to an outer layer)." );
             }
-        }
-        break;
+            break;
 
-    case VIATYPE::BLIND_BURIED:
-        if( targetLayer == UNDEFINED_LAYER )
-        {
+        case VIATYPE::BLIND_BURIED:
             if( currentLayer == pairTop || currentLayer == pairBottom )
             {
                 // the current layer is on the defined layer pair,
@@ -923,12 +919,12 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
                 // so fallback and swap to the top layer of the pair by default
                 targetLayer = pairTop;
             }
-        }
-        break;
+            break;
 
-    default:
-        wxASSERT( false );
-        break;
+        default:
+            wxFAIL_MSG( "unexpected via type" );
+            break;
+        }
     }
 
     sizes.SetViaDiameter( bds.m_ViasMinSize );
