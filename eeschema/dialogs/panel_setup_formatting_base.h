@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Mar  8 2021)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -64,7 +64,7 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_suffixLabel;
 		wxTextCtrl* m_suffixCtrl;
 
-		// Virtual event handlers, override them in your derived class
+		// Virtual event handlers, overide them in your derived class
 		virtual void onCheckBoxIref( wxCommandEvent& event ) { event.Skip(); }
 
 

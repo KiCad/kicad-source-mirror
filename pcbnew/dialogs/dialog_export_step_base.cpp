@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -62,7 +62,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticTextUnits = new wxStaticText( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnits->Wrap( -1 );
-	fgSizer1->Add( m_staticTextUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_staticTextUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_STEP_OrgUnitChoiceChoices[] = { _("mm"), _("inch") };
 	int m_STEP_OrgUnitChoiceNChoices = sizeof( m_STEP_OrgUnitChoiceChoices ) / sizeof( wxString );
@@ -72,7 +72,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticTextXpos = new wxStaticText( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("X position:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextXpos->Wrap( -1 );
-	fgSizer1->Add( m_staticTextXpos, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_staticTextXpos, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_STEP_Xorg = new TEXT_CTRL_EVAL( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -87,7 +87,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticTextYpos = new wxStaticText( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("Y position:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextYpos->Wrap( -1 );
-	fgSizer1->Add( m_staticTextYpos, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_staticTextYpos, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_STEP_Yorg = new TEXT_CTRL_EVAL( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -122,7 +122,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticTextTolerance = new wxStaticText( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Board outline chaining tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTolerance->Wrap( -1 );
-	sbOtherOptions->Add( m_staticTextTolerance, 0, wxTOP|wxRIGHT, 5 );
+	sbOtherOptions->Add( m_staticTextTolerance, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxString m_toleranceChoices[] = { _("Tight (0.001 mm)"), _("Standard (0.01 mm)"), _("Loose (0.1 mm)") };
 	int m_toleranceNChoices = sizeof( m_toleranceChoices ) / sizeof( wxString );
@@ -130,7 +130,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_tolerance->SetSelection( 1 );
 	m_tolerance->SetToolTip( _("Tolerance sets the distance between two points that are considered joined.") );
 
-	sbOtherOptions->Add( m_tolerance, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	sbOtherOptions->Add( m_tolerance, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizer2->Add( sbOtherOptions, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );

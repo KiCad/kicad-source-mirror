@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Mar  8 2021)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -47,40 +47,40 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Text") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer2 = new wxFlexGridSizer( 0, 3, 5, 5 );
 	fgSizer2->AddGrowableCol( 1 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_textSizeLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Default text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
-	fgSizer2->Add( m_textSizeLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer2->Add( m_textSizeLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textSizeCtrl = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_textSizeCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer2->Add( m_textSizeCtrl, 0, wxEXPAND, 5 );
 
 	m_textSizeUnits = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeUnits->Wrap( -1 );
-	fgSizer2->Add( m_textSizeUnits, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer2->Add( m_textSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE, 5 );
 
 	m_textOffsetRatioLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Text offset ratio:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOffsetRatioLabel->Wrap( -1 );
 	m_textOffsetRatioLabel->SetToolTip( _("Percentage of the text size to offset text above or below wire or bus") );
 
-	fgSizer2->Add( m_textOffsetRatioLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer2->Add( m_textOffsetRatioLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textOffsetRatioCtrl = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_textOffsetRatioCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer2->Add( m_textOffsetRatioCtrl, 0, wxEXPAND, 5 );
 
 	m_offsetRatioUnits = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetRatioUnits->Wrap( -1 );
-	fgSizer2->Add( m_offsetRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer2->Add( m_offsetRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE, 5 );
 
 
-	sbSizer4->Add( fgSizer2, 1, wxEXPAND|wxBOTTOM, 5 );
+	sbSizer4->Add( fgSizer2, 1, wxALL|wxEXPAND, 5 );
 
 
-	bLeftColumn->Add( sbSizer4, 1, wxEXPAND|wxALL, 5 );
+	bLeftColumn->Add( sbSizer4, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizer41;
 	sbSizer41 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbols") ), wxVERTICAL );
@@ -100,7 +100,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 
 	m_lineWidthUnits = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthUnits->Wrap( -1 );
-	fgSizer321->Add( m_lineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizer321->Add( m_lineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE|wxLEFT|wxRIGHT, 5 );
 
 	m_pinSymbolSizeLabel = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("Pin symbol size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pinSymbolSizeLabel->Wrap( -1 );
@@ -111,7 +111,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 
 	m_pinSymbolSizeUnits = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pinSymbolSizeUnits->Wrap( -1 );
-	fgSizer321->Add( m_pinSymbolSizeUnits, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer321->Add( m_pinSymbolSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE|wxLEFT|wxRIGHT, 5 );
 
 
 	sbSizer41->Add( fgSizer321, 1, wxEXPAND|wxBOTTOM, 5 );
@@ -142,7 +142,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	bLeftColumn->Add( sbSizer2, 0, wxEXPAND|wxALL, 5 );
 
 
-	bPanelSizer->Add( bLeftColumn, 1, wxTOP|wxLEFT, 10 );
+	bPanelSizer->Add( bLeftColumn, 1, wxLEFT|wxTOP, 10 );
 
 	wxBoxSizer* bRightColumn;
 	bRightColumn = new wxBoxSizer( wxVERTICAL );

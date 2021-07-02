@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,7 @@ static const double gridMinSpacingMin = 5;
 static const double gridMinSpacingMax = 200;
 static const double gridMinSpacingStep = 5;
 
+
 ///TODO: These are duplicated in gal_display_options - Unify!
 static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleSelectMap =
 {
@@ -54,12 +55,14 @@ static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleSelectMap =
     { KIGFX::GRID_STYLE::SMALL_CROSS, 2 },
 };
 
+
 static const UTIL::CFG_MAP<KIGFX::GRID_SNAPPING> gridSnapConfigVals =
 {
     { KIGFX::GRID_SNAPPING::ALWAYS,     0 },
     { KIGFX::GRID_SNAPPING::WITH_GRID,  1 },
     { KIGFX::GRID_SNAPPING::NEVER,      2 }
 };
+
 
 GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame ) :
     wxPanel( aParent, wxID_ANY ),
@@ -106,11 +109,12 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFr
             _( "Lines" ),
             _( "Small crosses" )
         };
+
         int m_gridStyleNChoices = sizeof( m_gridStyleChoices ) / sizeof( wxString );
         m_gridStyle = new wxRadioBox( sGridSettings->GetStaticBox(), wxID_ANY, _( "Grid Style" ),
                                       wxDefaultPosition, wxDefaultSize,  m_gridStyleNChoices,
                                       m_gridStyleChoices, 1, wxRA_SPECIFY_COLS );
-        sGridSettings->Add( m_gridStyle, 0, wxBOTTOM|wxEXPAND, 5 );
+        sGridSettings->Add( m_gridStyle, 0, wxLEFT | wxRIGHT | wxBOTTOM | wxEXPAND, 5 );
 
         wxFlexGridSizer* sGridSettingsGrid;
         sGridSettingsGrid = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -121,7 +125,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFr
         l_gridLineWidth = new wxStaticText( sGridSettings->GetStaticBox(), wxID_ANY,
                                             _( "Grid thickness:" ) );
         l_gridLineWidth->Wrap( -1 );
-        sGridSettingsGrid->Add( l_gridLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+        sGridSettingsGrid->Add( l_gridLineWidth, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
         m_gridLineWidth = new wxSpinCtrlDouble( sGridSettings->GetStaticBox(), wxID_ANY );
         m_gridLineWidth->SetRange( gridThicknessMin, gridThicknessMax );
@@ -137,7 +141,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFr
         l_gridMinSpacing = new wxStaticText( sGridSettings->GetStaticBox(), wxID_ANY,
                                              _( "Min grid spacing:" ) );
         l_gridMinSpacing->Wrap( -1 );
-        sGridSettingsGrid->Add( l_gridMinSpacing, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+        sGridSettingsGrid->Add( l_gridMinSpacing, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
         m_gridMinSpacing = new wxSpinCtrlDouble( sGridSettings->GetStaticBox(), wxID_ANY);
         m_gridMinSpacing->SetRange( gridMinSpacingMin, gridMinSpacingMax );
@@ -155,14 +159,14 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFr
         l_gridSnapOptions->Wrap( -1 );
         sGridSettingsGrid->Add( l_gridSnapOptions, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-        wxString gridSnapChoices[] = { _( "Always"), _("When grid shown"), _("Never") };
+        wxString gridSnapChoices[] = { _( "Always" ), _( "When grid shown" ), _( "Never" ) };
         int gridSnapNChoices = sizeof( gridSnapChoices ) / sizeof( wxString );
         m_gridSnapOptions = new wxChoice( sGridSettings->GetStaticBox(), wxID_ANY,
                                           wxDefaultPosition, wxDefaultSize, gridSnapNChoices,
                                           gridSnapChoices );
         m_gridSnapOptions->Select( 0 );
-        sGridSettingsGrid->Add( m_gridSnapOptions, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND | wxALL,
-                                5 );
+        sGridSettingsGrid->Add( m_gridSnapOptions, 0,
+                                wxALIGN_CENTER_VERTICAL | wxEXPAND | wxTOP | wxBOTTOM, 5 );
 
         l_gridSnapSpace = new wxStaticText( sGridSettings->GetStaticBox(), wxID_ANY, _( "px" ) );
         l_gridSnapSpace->Wrap( -1 );
@@ -199,7 +203,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFr
 
         m_cursorShape->SetSelection( 0 );
         m_cursorShape->SetToolTip( _( "Cursor shape for drawing, placement and movement tools" ) );
-        sCursorSettings->Add( m_cursorShape, 0, wxBOTTOM | wxEXPAND, 5 );
+        sCursorSettings->Add( m_cursorShape, 0, wxLEFT | wxRIGHT | wxBOTTOM | wxEXPAND, 5 );
 
         m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY, _( "Always show crosshairs" ) );
         sCursorSettings->Add( m_forceCursorDisplay, 0, wxALL | wxEXPAND, 5 );
