@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-02 07:57+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2021-07-02 08:02+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -4364,16 +4364,13 @@ msgid ""
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad 无法打开此文件，因为它是用比您\n"
-"正在运行的版本更新的版本创建的。\n"
-"要打开它，您需要将 KiCad 升级到更新版本。\n"
+"KiCad 无法打开此文件，因为它是用比您正在运行的版本更新的版本创建的。\n"
 "\n"
-"所需的 KiCad 版本日期(或更新版本)：%s。"
+"要打开它，您需要将 KiCad 升级到日期为 %s 或更高的版本。"
 
 #: common/exceptions.cpp:126
-#, fuzzy
 msgid "Full error text:"
-msgstr "镜像文本"
+msgstr "完整错误文本："
 
 #: common/filehistory.cpp:155
 msgid "No Files"
@@ -4435,7 +4432,7 @@ msgstr "加载封装时出现错误："
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-msgstr "找到重复的库别名 \"%s\" ，在封装库表文件第 %d 行"
+msgstr "在封装库表文件的行 %d 中找到了重复的库昵称 '%s' 。"
 
 #: common/fp_lib_table.cpp:300
 #, c-format
@@ -4450,23 +4447,23 @@ msgid "Cannot create global library table path '%s'."
 msgstr "无法创建全局库表路径 '%s'。"
 
 #: common/gestfich.cpp:190
-#, fuzzy, c-format
+#, c-format
 msgid "Command '%s' could not be found."
-msgstr "没有找到命令 \"%s\""
+msgstr "找不到命令 \"%s\"。"
 
 #: common/gestfich.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Problem while running the PDF viewer.\n"
 "Command is '%s'."
 msgstr ""
-"运行 PDF 浏览器出现问题\n"
-"命令是 \"%s\""
+"运行 PDF 浏览器时出现问题。\n"
+"命令是 \"%s\"。"
 
 #: common/gestfich.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a PDF viewer for '%s'."
-msgstr "没有找到 PDF 浏览器 \"%s\""
+msgstr "无法为 '%s' 找到一款 PDF 查看器。"
 
 #: common/gestfich.cpp:349
 #, c-format
@@ -4645,9 +4642,8 @@ msgstr ""
 "'"
 
 #: common/kiway.cpp:411 common/kiway.cpp:415 common/kiway.cpp:419
-#, fuzzy
 msgid "Error loading editor."
-msgstr "加载编辑器时出错"
+msgstr "加载编辑器时出错。"
 
 #: common/kiway.cpp:504
 #, c-format
@@ -5270,9 +5266,9 @@ msgid ""
 msgstr ""
 
 #: common/plugins/altium/altium_parser.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr "单位 \"%s\" 不以 mils 结尾"
+msgstr "单元 \"%s\" 未以 'mil' 结尾。"
 
 #: common/plugins/altium/altium_parser.cpp:236
 #, fuzzy, c-format
@@ -5333,14 +5329,12 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "半径为 %f 且角度为 %f 的无效圆弧"
 
 #: common/project.cpp:311 common/project.cpp:316 pcbnew/pcb_base_frame.cpp:156
-#, fuzzy
 msgid "Error loading project footprint library table."
-msgstr "加载工程封装库表时出错"
+msgstr "加载工程封装库表时出错。"
 
 #: common/project/project_archiver.cpp:63
-#, fuzzy
 msgid "Failed to output data."
-msgstr "字段更新"
+msgstr "未能输出数据。"
 
 #: common/project/project_archiver.cpp:91
 msgid "Could not open archive file\n"
