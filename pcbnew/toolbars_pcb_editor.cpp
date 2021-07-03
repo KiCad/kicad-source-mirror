@@ -522,6 +522,10 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     UpdateTrackWidthSelectBox( m_SelTrackWidthBox );
     m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
+    m_SelTrackWidthBox->SetToolTip( _( "Select the default width for new tracks. Note that this "
+                                       "width can be overridden by the board minimum width, or by "
+                                       "the width of an existing track if the 'Use Existing Track "
+                                       "Width' feature is enabled." ) );
 
     m_auxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, wxEmptyString,
                                  KiScaledBitmap( BITMAPS::auto_track_width, this ),
