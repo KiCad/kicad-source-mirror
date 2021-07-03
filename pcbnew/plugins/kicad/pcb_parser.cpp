@@ -2115,7 +2115,7 @@ void PCB_PARSER::parseNETINFO_ITEM()
 
     // Convert overbar syntax from `~...~` to `~{...}`.  These were left out of the first merge
     // so the version is a bit later.
-    if( m_requiredVersion < 20210615 )
+    if( m_requiredVersion < 20210606 )
         name = ConvertToNewOverbarNotation( name );
 
     NeedRIGHT();
@@ -2195,7 +2195,7 @@ void PCB_PARSER::parseNETCLASS()
 
             // Convert overbar syntax from `~...~` to `~{...}`.  These were left out of the
             // first merge so the version is a bit later.
-            if( m_requiredVersion < 20210615 )
+            if( m_requiredVersion < 20210606 )
                 nc->Add( ConvertToNewOverbarNotation( FromUTF8() ) );
             else
                 nc->Add( FromUTF8() );
@@ -4009,7 +4009,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
                 // Convert overbar syntax from `~...~` to `~{...}`.  These were left out of the
                 // first merge so the version is a bit later.
-                if( m_requiredVersion < 20210615 )
+                if( m_requiredVersion < 20210606 )
                     netName = ConvertToNewOverbarNotation( netName );
 
                 if( netName != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
