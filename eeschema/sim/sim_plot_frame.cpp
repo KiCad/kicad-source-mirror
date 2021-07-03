@@ -305,8 +305,6 @@ WINDOW_SETTINGS* SIM_PLOT_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 
 void SIM_PLOT_FRAME::initWorkbook()
 {
-    m_workbook->DeleteAllPages();
-
     if( !m_simulator->Settings()->GetWorkbookFilename().IsEmpty() )
     {
         wxFileName filename = m_simulator->Settings()->GetWorkbookFilename();

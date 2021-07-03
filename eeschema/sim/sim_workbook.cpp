@@ -27,12 +27,14 @@
 
 SIM_WORKBOOK::SIM_WORKBOOK() : wxAuiNotebook()
 {
+    m_modified = false;
 }
 
 
 SIM_WORKBOOK::SIM_WORKBOOK( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos, const wxSize&
         aSize, long aStyle ) : wxAuiNotebook( aParent, aId, aPos, aSize, aStyle )
 {
+    m_modified = false;
 }
 
 
