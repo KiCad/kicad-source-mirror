@@ -801,7 +801,7 @@ void SCH_LEGACY_PLUGIN::loadFile( const wxString& aFileName, SCH_SCREEN* aScreen
     LoadContent( reader, aScreen, m_version );
 
     // Unfortunately schematic files prior to version 2 are not terminated with $EndSCHEMATC
-    // so checking for it's existance will fail so just exit here and take our chances. :(
+    // so checking for its existance will fail so just exit here and take our chances. :(
     if( m_version > 1 )
     {
         char* line = reader.Line();
@@ -4225,7 +4225,7 @@ void SCH_LEGACY_PLUGIN_CACHE::DeleteSymbol( const wxString& aSymbolName )
     {
         LIB_SYMBOL* rootSymbol = symbol;
 
-        // Remove the root symbol and all it's children.
+        // Remove the root symbol and all its children.
         m_symbols.erase( it );
 
         LIB_SYMBOL_MAP::iterator it1 = m_symbols.begin();

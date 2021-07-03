@@ -289,7 +289,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup(
     {
         for( j = 0; j < layers.at( i )->GetSublayersCount(); j++ )
         {
-            // Layer names are empty untill we close at least once the board setup dialog.
+            // Layer names are empty until we close at least once the board setup dialog.
             // If the user did not open the dialog, then get the names from the board.
             // But dielectric layer names will be missing.
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );

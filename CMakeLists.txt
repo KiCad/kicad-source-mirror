@@ -49,7 +49,7 @@ cmake_dependent_option( BUILD_SMALL_DEBUG_FILES "In debug build: create smaller 
 #
 # KiCad build options should be added below.
 #
-# If you add a new build option, please add it's state to the
+# If you add a new build option, please add its state to the
 # OnCopyVersionInfo() function in common/dialog_about/dialog_about.cpp
 # so that build option settings can be included in bug reports.
 #

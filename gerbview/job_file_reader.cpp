@@ -96,7 +96,7 @@ private:
     wxFileName m_filename;
     wxArrayString m_GerberFiles;    // List of gerber files in job
 
-    // Convert a JSON string, that uses escaped sequence of 4 hexdecimal digits
+    // Convert a JSON string, that uses escaped sequence of 4 hexadecimal digits
     // to encode unicode chars when not ASCII7 codes
     // json11 converts this sequence to UTF8 string
     wxString formatStringFromJSON( const std::string& name );
@@ -166,7 +166,7 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
 
 wxString GERBER_JOBFILE_READER::formatStringFromJSON( const std::string& name )
 {
-    // Convert a JSON string, that uses a escaped sequence of 4 hexdecimal digits
+    // Convert a JSON string, that uses a escaped sequence of 4 hexadecimal digits
     // to encode unicode chars
     // Our json11 library returns in this case a UTF8 sequence. Just convert it to
     // a wxString.

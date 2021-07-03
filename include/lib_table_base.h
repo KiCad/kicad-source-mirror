@@ -293,7 +293,7 @@ public:
     virtual void Parse( LIB_TABLE_LEXER* aLexer ) = 0;
 
     /**
-     * Generate the table in s-expression format to \a aOutput with an indention level
+     * Generate the table in s-expression format to \a aOutput with an indentation level
      * of \a aIndentLevel.
      *
      * @param aOutput is the #OUTPUTFORMATTER to format the table into.

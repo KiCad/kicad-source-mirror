@@ -192,8 +192,8 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_Offset.x = 0;
     m_Offset.y = 0;                                 // Coord Offset, from OF command
     m_Scale.x  = m_Scale.y = 1.0;                   // scale (A and B) this layer
-    m_MirrorA  = false;                             // true: miror / axe A (default = X)
-    m_MirrorB  = false;                             // true: miror / axe B (default = Y)
+    m_MirrorA  = false;                             // true: mirror / axe A (default = X)
+    m_MirrorB  = false;                             // true: mirror / axe B (default = Y)
     m_SwapAxis = false;                             // false if A = X, B = Y; true if A =Y, B = Y
     m_Has_DCode = false;                            // true = DCodes in file
                                                     // false = no DCode-> perhaps deprecated RS274D file

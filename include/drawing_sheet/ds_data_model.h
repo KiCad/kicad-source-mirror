@@ -120,7 +120,7 @@ public:
     int GetItemIndex( DS_DATA_ITEM* aItem ) const;
 
     /**
-     * @return is the item from it's index \a aIdx, or NULL if does not exist.
+     * @return is the item from its index \a aIdx, or NULL if does not exist.
      */
     DS_DATA_ITEM* GetItem( unsigned aIdx ) const;
 

@@ -149,7 +149,7 @@ private:
 #ifdef __WXWINDOWS__
     /**
      * Gets the root of the kicad install on Windows specifically.
-     * KiCad on Windows has a psuedo posix folder structure contained in it's installed folder
+     * KiCad on Windows has a pseudo posix folder structure contained in its installed folder
      * This retrieves that root for usage in other methods
      */
     static wxString getWindowsKiCadRoot();

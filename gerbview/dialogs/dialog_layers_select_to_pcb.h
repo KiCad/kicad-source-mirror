@@ -61,7 +61,7 @@ private:
      *
      * The passed vector<int> will be returned with the same number of elements
      * as there are Gerber files.  The indices into it are 1:1 with the loaded Gerber
-     * files.  Any Gerber that maps will have it's entry set to the KiCad PCB layer
+     * files.  Any Gerber that maps will have its entry set to the KiCad PCB layer
      * number.  Gerbers that can be identified or which don't map to an
      * equivalent KiCad PCB layer will be set to UNSELECTED_LAYER.
      *
@@ -76,7 +76,7 @@ private:
      *
      * The passed vector<int> will be returned with the same number of elements
      * as there are Gerber files.  The indices into it are 1:1 with the loaded Gerber
-     * files.  Any Gerber that maps will have it's entry set to the KiCad PCB layer
+     * files.  Any Gerber that maps will have its entry set to the KiCad PCB layer
      * number.  Gerbers that aren't using Altium extensions or which don't map to an
      * equivalent KiCad PCB layer will be set to UNSELECTED_LAYER.
      *
@@ -91,7 +91,7 @@ private:
      *
      * The passed vector<int> will be returned with the same number of elements
      * as there are Gerber files.  The indices into it are 1:1 with the loaded Gerber
-     * files.  Any Gerber that maps will have it's entry set to the KiCad PCB layer
+     * files.  Any Gerber that maps will have its entry set to the KiCad PCB layer
      * number.  Gerbers that aren't using KiCad naming or which don't map to an
      * equivalent KiCad PCB layer will be set to UNSELECTED_LAYER.
      *
@@ -106,7 +106,7 @@ private:
      *
      * The passed vector<int> will be returned with the same number of elements
      * as there are Gerber files.  The indices into it are 1:1 with the loaded Gerber
-     * files.  Any Gerber that maps will have it's entry set to the KiCad PCB layer
+     * files.  Any Gerber that maps will have its entry set to the KiCad PCB layer
      * number.  Gerbers that aren't using X2 File functions or which don't map to an
      * equivalent KiCad PCB layer will be set to UNSELECTED_LAYER.
      *

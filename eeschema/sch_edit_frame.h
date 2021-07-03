@@ -886,12 +886,12 @@ private:
     void initScreenZoom();
 
     /**
-     * Verify that the symbol library links \a aSheet and all of it's child sheets have
+     * Verify that the symbol library links \a aSheet and all of its child sheets have
      * been remapped to the symbol library table.
      *
      * @param aSheet is the #SCH_SHEET object to test.
      *
-     * @return true if \a aSheet and it's child sheets have not been remapped.
+     * @return true if \a aSheet and its child sheets have not been remapped.
      */
     bool checkForNoFullyDefinedLibIds( SCH_SHEET* aSheet );
 

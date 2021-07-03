@@ -203,7 +203,7 @@ void SCH_SCREEN::Append( SCH_SCREEN* aScreen )
 {
     wxCHECK_RET( aScreen, "Invalid screen object." );
 
-    // No need to descend the hierarchy.  Once the top level screen is copied, all of it's
+    // No need to descend the hierarchy.  Once the top level screen is copied, all of its
     // children are copied as well.
     for( auto aItem : aScreen->m_rtree )
         Append( aItem );

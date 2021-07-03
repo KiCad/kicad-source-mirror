@@ -68,7 +68,7 @@ struct SCH_SHEET_INSTANCE
  *
  * A hierarchical schematic uses sheets (hierarchical sheets) included in a given sheet.
  * Each sheet corresponds to a schematic drawing handled by a SCH_SCREEN structure.  A
- * SCH_SCREEN structure contains drawings, and have a filename to write it's data.  Also a
+ * SCH_SCREEN structure contains drawings, and have a filename to write its data.  Also a
  * SCH_SCREEN displays a sheet number and the name of the sheet.
  *
  * In simple (and flat) hierarchies a sheet is linked to a SCH_SCREEN, and a SCH_SCREEN is
@@ -346,7 +346,7 @@ public:
     bool TestForRecursion( const wxString& aSrcFileName, const wxString& aDestFileName );
 
     /**
-     * Make the sheet file name relative to it's parent sheet.
+     * Make the sheet file name relative to its parent sheet.
      *
      * This should only be called when changing the parent sheet path such performing a save
      * as or a new schematic without a project in stand alone mode.  The sheet file name is

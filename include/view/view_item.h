@@ -70,7 +70,7 @@ enum VIEW_VISIBILITY_FLAGS {
 /**
  * An abstract base class for deriving all objects that can be added to a VIEW.
  *
- * It's role is to:
+ * Its role is to:
  * - communicate geometry, appearance and visibility updates to the associated dynamic VIEW,
  * - provide a bounding box for redraw area calculation,
  * - (optional) draw the object using the #GAL API functions for #PAINTER-less implementations.

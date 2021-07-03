@@ -603,7 +603,7 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     {
     case PAD_SHAPE::CIRCLE:
     case PAD_SHAPE::OVAL:
-        // Note: dx == dy is not guaranted for circle pads in legacy boards
+        // Note: dx == dy is not guaranteed for circle pads in legacy boards
         if( dx == dy || ( GetShape() == PAD_SHAPE::CIRCLE ) )
         {
             TransformCircleToPolygon( aCornerBuffer, padShapePos, dx + aClearanceValue, aError,

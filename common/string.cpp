@@ -60,7 +60,7 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
             {
                 if( ++lookahead != aOldStr.end() && *lookahead == '{' )
                 {
-                    // This way the subseqent opening curly brace will not start an
+                    // This way the subsequent opening curly brace will not start an
                     // overbar.
                     newStr << "~~{}";
                     continue;

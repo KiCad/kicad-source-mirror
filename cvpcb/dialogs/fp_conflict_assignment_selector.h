@@ -44,7 +44,7 @@ public:
     void Add( const wxString& aRef, const wxString& aFpSchName, const wxString& aFpCmpName );
 
     /**
-     * @param aReference is the compoent schematic reference.
+     * @param aReference is the component schematic reference.
      * @return the selection option:
      *      0 for fpid text from the netlist
      *      1 for fpid text from the cmp file

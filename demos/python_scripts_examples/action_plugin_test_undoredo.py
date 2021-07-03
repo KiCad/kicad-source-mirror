@@ -52,7 +52,7 @@ class testundoredo2(ActionPlugin):
     def createFPCXFootprint(self,pads):
         size_025_160mm = wxSizeMM(0.25,1.6)
         size_150_200mm = wxSizeMM(1.50,2.0)
-        # create a new footprint, it's parent is our previously created pcb
+        # create a new footprint, its parent is our previously created pcb
         footprint = FOOTPRINT(self.pcb)
         footprint.SetReference("FPC"+str(pads))   # give it a reference name
         footprint.Reference().SetPosition(wxPointMM(-1,-1))

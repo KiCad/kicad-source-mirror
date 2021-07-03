@@ -183,7 +183,7 @@ protected:
     template <typename T>
     T* getEditFrame() const
     {
-#if !defined( QA_TEST )   // Dynamic casts give the linker a siezure in the test framework
+#if !defined( QA_TEST )   // Dynamic casts give the linker a seizure in the test framework
         wxASSERT( dynamic_cast<T*>( getToolHolderInt() ) );
 #endif
         return static_cast<T*>( getToolHolderInt() );
@@ -196,7 +196,7 @@ protected:
     T* getModel() const
     {
         EDA_ITEM* m = getModelInt();
-#if !defined( QA_TEST )   // Dynamic casts give the linker a siezure in the test framework
+#if !defined( QA_TEST )   // Dynamic casts give the linker a seizure in the test framework
         wxASSERT( dynamic_cast<T*>( m ) );
 #endif
         return static_cast<T*>( m );

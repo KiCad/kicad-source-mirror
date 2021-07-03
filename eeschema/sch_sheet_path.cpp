@@ -231,7 +231,7 @@ wxString SCH_SHEET_PATH::PathAsString() const
     s = wxT( "/" );     // This is the root path
 
     // Start at 1 to avoid the root sheet, which does not need to be added to the path.
-    // It's timestamp changes anyway.
+    // Its timestamp changes anyway.
     for( unsigned i = 1; i < size(); i++ )
         s += at( i )->m_Uuid.AsString() + "/";
 

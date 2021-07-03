@@ -183,7 +183,7 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
 
 
 /* Returns the current coordinate type pointed to by InnJnn Text (InnnnJmmmm)
- * These coordinates are relative, so if coordinate is absent, it's value
+ * These coordinates are relative, so if coordinate is absent, its value
  * defaults to 0
  */
 wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )

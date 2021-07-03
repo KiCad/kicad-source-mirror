@@ -748,7 +748,7 @@ protected:
  * around.
  *
  * Each panel has rows, starting at 0. Each row has positions starting at 0. Each item in a panel
- * can have it's row and position set.
+ * can have its row and position set.
  *
  * Eventually panels will be movable. Each initialization function sets up the panel for this,
  * then after a //==// break has additional calls to anchor toolbars in a way that matches

@@ -195,13 +195,13 @@ public:
     /**
      * Set the default language without reference to any preferences.  Can be used to set
      * the language for dialogs that show before preferences are loaded
-     * @param aErrMsg String to return the error messsage(s) in
+     * @param aErrMsg String to return the error message(s) in
      * @return false if the language could not be set
      */
     bool SetDefaultLanguage( wxString& aErrMsg );
 
     /**
-     * Set in .m_language_id member the wxWidgets language identifier ID fromthe KiCad
+     * Set in .m_language_id member the wxWidgets language identifier ID from the KiCad
      * menu id (internal menu identifier).
      *
      * @param menu_id The KiCad menuitem id (returned by Menu Event, when clicking on a

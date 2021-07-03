@@ -138,7 +138,7 @@ void eserie::NewCalc( void )
         i.e_use = false;                // no combinations and no results are available
 
     for( r_data& i : luts[m_series])
-        i.e_use = true;                 // all selecte E-values available
+        i.e_use = true;                 // all selected E-values available
 }
 
 

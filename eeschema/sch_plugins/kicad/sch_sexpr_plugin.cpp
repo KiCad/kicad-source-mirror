@@ -2087,7 +2087,7 @@ void SCH_SEXPR_PLUGIN_CACHE::DeleteSymbol( const wxString& aSymbolName )
     {
         LIB_SYMBOL* rootSymbol = symbol;
 
-        // Remove the root symbol and all it's children.
+        // Remove the root symbol and all its children.
         m_symbols.erase( it );
 
         LIB_SYMBOL_MAP::iterator it1 = m_symbols.begin();

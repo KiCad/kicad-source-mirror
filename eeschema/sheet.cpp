@@ -81,7 +81,7 @@ bool SCH_EDIT_FRAME::checkForNoFullyDefinedLibIds( SCH_SHEET* aSheet )
 
     if( newScreens.HasNoFullyDefinedLibIds() )
     {
-        msg.Printf( _( "The schematic '%s' has not had it's symbol library links remapped "
+        msg.Printf( _( "The schematic '%s' has not had its symbol library links remapped "
                        "to the symbol library table.  The project this schematic belongs to "
                        "must first be remapped before it can be imported into the current "
                        "project." ),

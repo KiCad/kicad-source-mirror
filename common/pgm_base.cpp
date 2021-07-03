@@ -256,7 +256,7 @@ bool PGM_BASE::InitPgm( bool aHeadless )
     if( !m_settings_manager->IsOK() )
         return false;
 
-    // Set up built-in environment variables (and override them from the system enviroment if set)
+    // Set up built-in environment variables (and override them from the system environment if set)
     GetCommonSettings()->InitializeEnvironment();
 
     // Load common settings from disk after setting up env vars

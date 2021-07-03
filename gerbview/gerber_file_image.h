@@ -214,7 +214,7 @@ public:
     /**
      * Return the current coordinate type pointed to by InnJnn Text (InnnnJmmmm)
      *
-     * These coordinates are relative, so if coordinate is absent, it's value
+     * These coordinates are relative, so if coordinate is absent, its value
      * defaults to 0
      */
     wxPoint ReadIJCoord( char*& Text );

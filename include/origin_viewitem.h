@@ -84,7 +84,7 @@ public:
     /**
      * Set the draw at zero flag.
      *
-     * When set the marker will be drawn when it's position is 0,0.  Otherwise it will not
+     * When set the marker will be drawn when its position is 0,0.  Otherwise it will not
      * be drawn when its position is 0,0.
      *
      * @param aDrawFlag The value to set the draw at zero flag.

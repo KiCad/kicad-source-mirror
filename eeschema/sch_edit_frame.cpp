@@ -676,7 +676,7 @@ void SCH_EDIT_FRAME::doCloseWindow()
 
     RecordERCExclusions();
 
-    // Close the find dialog and preserve it's setting if it is displayed.
+    // Close the find dialog and preserve its setting if it is displayed.
     if( m_findReplaceDialog )
     {
         m_findStringHistoryList = m_findReplaceDialog->GetFindEntries();

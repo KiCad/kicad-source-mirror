@@ -45,7 +45,7 @@ public:
     void         WriteConfig();
 
 protected:
-    // The constructor is protected, because this class is not intended to be instanciated.
+    // The constructor is protected, because this class is not intended to be instantiated.
     ATTENUATOR( ATTENUATORS_TYPE Topology );
 
 public:

@@ -61,7 +61,7 @@ void MEANDER_PLACER_BASE::SpacingStep( int aSign )
 
 int MEANDER_PLACER_BASE::Clearance()
 {
-    // Asumption: All tracks are part of the same net class.
+    // Assumption: All tracks are part of the same net class.
     // It shouldn't matter which track we pick. They should all have the same clearance if
     // they are part of the same net class. Therefore, pick the first one on the list.
     ITEM*           itemToCheck = Traces().CItems().front().item;

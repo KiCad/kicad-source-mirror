@@ -889,7 +889,7 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
     if( it == m_matchingTypes.end() )
     {
         // Don't force user to type "A.Type == 'via' && A.Via_Type == 'buried'" when the
-        // simplier "A.Via_Type == 'buried'" is perfectly clear.  Instead, return an undefined
+        // simpler "A.Via_Type == 'buried'" is perfectly clear.  Instead, return an undefined
         // value when the property doesn't appear on a particular object.
 
         return LIBEVAL::VALUE();

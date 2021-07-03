@@ -2330,7 +2330,7 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
             break;
 
         case T_property:
-            // The field parent symbol must be set and it's orientation must be set before
+            // The field parent symbol must be set and its orientation must be set before
             // the field positions are set.
             field = parseSchField( symbol.get() );
 
