@@ -33,7 +33,7 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_textCtrlFilter = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer7->Add( m_textCtrlFilter, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer7->Add( m_textCtrlFilter, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	bSizer7->Add( 20, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -49,7 +49,7 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 	fgSizer1->Add( m_groupBy, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_groupByText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_groupByText, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 5 );
+	fgSizer1->Add( m_groupByText, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_groupByKind = new wxComboBox( this, wxID_ANY, _("Wildcard"), wxDefaultPosition, wxSize( -1,-1 ), 0, NULL, wxCB_DROPDOWN|wxCB_READONLY|wxCB_SIMPLE );
 	m_groupByKind->Append( _("Wildcard") );
