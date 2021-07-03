@@ -111,6 +111,9 @@ public:
 
     OPT_BOX2I ChangedArea( const ARC* aOther ) const;
 
+    SHAPE_ARC& Arc() { return m_arc; }
+    const SHAPE_ARC& CArc() const { return m_arc; }
+
 private:
     SHAPE_ARC m_arc;
 };

@@ -113,8 +113,9 @@ private:
         VECTOR2I offset;
     };
 
-    std::set<SOLID*>                m_solids;
-    std::vector<DRAGGED_CONNECTION> m_conns;
+    std::set<SOLID*>                m_solids;       // Pads being dragged
+    std::set<ITEM*>                 m_fixedItems;   // Items being moved along with pads
+    std::vector<DRAGGED_CONNECTION> m_conns;        // Lines being dragged with pads
 
     bool     m_dragStatus;
     ITEM_SET m_draggedItems;
