@@ -35,6 +35,7 @@
 #include <wildcards_and_files_ext.h>
 #include <widgets/tuner_slider.h>
 #include <dialogs/dialog_signal_list.h>
+#include "kicad_string.h"
 #include "netlist_exporter_pspice_sim.h"
 #include <pgm_base.h>
 #include "ngspice.h"
@@ -948,7 +949,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
             return false;
         }
 
-        wxString        simCommand = file.GetNextLine();
+        wxString        simCommand = UnescapeString( file.GetNextLine() );
         NewPlotPanel( simCommand );
         StartSimulation( simCommand );
 
@@ -1058,7 +1059,7 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
         }
 
         file.AddLine( wxString::Format( "%d", basePanel->GetType() ) );
-        file.AddLine( m_workbook->GetSimCommand( basePanel ) );
+        file.AddLine( EscapeString( m_workbook->GetSimCommand( basePanel ), CTX_LINE ) );
 
         const SIM_PLOT_PANEL* plotPanel = dynamic_cast<const SIM_PLOT_PANEL*>( basePanel );
 

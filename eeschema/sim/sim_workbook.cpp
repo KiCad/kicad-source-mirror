@@ -25,7 +25,9 @@
 #include <sim/sim_workbook.h>
 
 
-SIM_WORKBOOK::SIM_WORKBOOK() = default;
+SIM_WORKBOOK::SIM_WORKBOOK() : wxAuiNotebook()
+{
+}
 
 
 SIM_WORKBOOK::SIM_WORKBOOK( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos, const wxSize&
