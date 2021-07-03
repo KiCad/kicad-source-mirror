@@ -22,11 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_FIELDS_EDITOR_GLOBAL_H
-#define DIALOG_FIELDS_EDITOR_GLOBAL_H
+#ifndef DIALOG_SYMBOL_FIELDS_TABLE_H
+#define DIALOG_SYMBOL_FIELDS_TABLE_H
 
 
-#include <dialog_fields_editor_global_base.h>
+#include <dialog_symbol_fields_table_base.h>
 #include <sch_reference_list.h>
 
 
@@ -34,11 +34,11 @@ class SCH_EDIT_FRAME;
 class FIELDS_EDITOR_GRID_DATA_MODEL;
 
 
-class DIALOG_FIELDS_EDITOR_GLOBAL : public DIALOG_FIELDS_EDITOR_GLOBAL_BASE
+class DIALOG_SYMBOL_FIELDS_TABLE : public DIALOG_SYMBOL_FIELDS_TABLE_BASE
 {
 public:
-    DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent );
-    virtual ~DIALOG_FIELDS_EDITOR_GLOBAL();
+    DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent );
+    virtual ~DIALOG_SYMBOL_FIELDS_TABLE();
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -71,4 +71,4 @@ private:
     FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
 };
 
-#endif /* DIALOG_FIELDS_EDITOR_GLOBAL_H */
+#endif /* DIALOG_SYMBOL_FIELDS_TABLE_H */

@@ -51,8 +51,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_bom.cpp
     dialogs/dialog_bom_base.cpp
     dialogs/dialog_bus_manager.cpp
-    dialogs/dialog_fields_editor_global.cpp
-    dialogs/dialog_fields_editor_global_base.cpp
     dialogs/dialog_change_symbols.cpp
     dialogs/dialog_change_symbols_base.cpp
     dialogs/dialog_choose_symbol.cpp
@@ -102,6 +100,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_schematic_find.cpp
     dialogs/dialog_schematic_find_base.cpp
     dialogs/dialog_schematic_setup.cpp
+    dialogs/dialog_symbol_fields_table.cpp
+    dialogs/dialog_symbol_fields_table_base.cpp
     dialogs/dialog_symbol_properties.cpp
     dialogs/dialog_symbol_properties_base.cpp
     dialogs/dialog_symbol_remap.cpp

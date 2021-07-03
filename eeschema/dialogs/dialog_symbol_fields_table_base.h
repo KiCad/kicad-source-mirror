@@ -36,9 +36,9 @@ class WX_GRID;
 #define OPT_GROUP_COMPONENTS 1000
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_FIELDS_EDITOR_GLOBAL_BASE
+/// Class DIALOG_SYMBOL_FIELDS_TABLE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
+class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -73,8 +73,8 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Fields"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER );
-		~DIALOG_FIELDS_EDITOR_GLOBAL_BASE();
+		DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Fields Table"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER );
+		~DIALOG_SYMBOL_FIELDS_TABLE_BASE();
 
 };
 

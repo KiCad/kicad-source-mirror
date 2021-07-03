@@ -44,7 +44,7 @@
 #include <wx/msgdlg.h>
 #include <wx/textdlg.h>
 
-#include "dialog_fields_editor_global.h"
+#include "dialog_symbol_fields_table.h"
 
 
 #define DISPLAY_NAME_COLUMN   0
@@ -670,8 +670,8 @@ public:
 };
 
 
-DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent ) :
-        DIALOG_FIELDS_EDITOR_GLOBAL_BASE( parent ),
+DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent ) :
+        DIALOG_SYMBOL_FIELDS_TABLE_BASE( parent ),
         m_parent( parent )
 {
     wxSize defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
@@ -816,15 +816,15 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
 
     // Connect Events
     m_grid->Connect( wxEVT_GRID_COL_SORT,
-                     wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort ), NULL, this );
+                     wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), NULL, this );
 }
 
 
-DIALOG_FIELDS_EDITOR_GLOBAL::~DIALOG_FIELDS_EDITOR_GLOBAL()
+DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 {
     // Disconnect Events
     m_grid->Disconnect( wxEVT_GRID_COL_SORT,
-                        wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort ), NULL, this );
+                        wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), NULL, this );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
@@ -833,7 +833,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::~DIALOG_FIELDS_EDITOR_GLOBAL()
 }
 
 
-bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataToWindow()
+bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
         return false;
@@ -881,7 +881,7 @@ bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataToWindow()
 }
 
 
-bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataFromWindow()
+bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
 {
     if( !m_grid->CommitPendingChanges() )
         return false;
@@ -904,9 +904,9 @@ bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataFromWindow()
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aDisplayName,
-                                            const wxString& aCanonicalName,
-                                            bool defaultShow, bool defaultSortBy )
+void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aDisplayName,
+                                           const wxString& aCanonicalName,
+                                           bool defaultShow, bool defaultSortBy )
 {
     m_dataModel->AddColumn( aCanonicalName );
 
@@ -938,7 +938,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aDisplayName,
  * Constructs the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
  * field names in use.
  */
-void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
+void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
 {
     std::set<wxString> userFieldNames;
 
@@ -974,7 +974,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
 {
     // quantities column will become new field column, so it needs to be reset
     auto attr = new wxGridCellAttr;
@@ -1024,7 +1024,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
 {
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxDataViewItem     item = event.GetItem();
@@ -1075,7 +1075,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnGroupSymbolsToggled( wxCommandEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 {
     m_dataModel->RebuildRows( m_groupSymbolsBox, m_fieldsCtrl );
     m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
@@ -1083,7 +1083,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnGroupSymbolsToggled( wxCommandEvent& event )
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort( wxGridEvent& aEvent )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnColSort( wxGridEvent& aEvent )
 {
     int sortCol = aEvent.GetCol();
     bool ascending;
@@ -1106,13 +1106,13 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort( wxGridEvent& aEvent )
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableValueChanged( wxGridEvent& aEvent )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnTableValueChanged( wxGridEvent& aEvent )
 {
     m_grid->ForceRefresh();
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableColSize( wxGridSizeEvent& aEvent )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnTableColSize( wxGridSizeEvent& aEvent )
 {
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     int                col = aEvent.GetRowOrCol();
@@ -1125,7 +1125,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableColSize( wxGridSizeEvent& aEvent )
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnRegroupSymbols( wxCommandEvent& aEvent )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnRegroupSymbols( wxCommandEvent& aEvent )
 {
     m_dataModel->RebuildRows( m_groupSymbolsBox, m_fieldsCtrl );
     m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
@@ -1133,7 +1133,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnRegroupSymbols( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
 {
     if( event.GetCol() == REFERENCE_FIELD )
     {
@@ -1159,7 +1159,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableItemContextMenu( wxGridEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnTableItemContextMenu( wxGridEvent& event )
 {
     // TODO: Option to select footprint if FOOTPRINT column selected
 
@@ -1167,7 +1167,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableItemContextMenu( wxGridEvent& event )
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnSizeFieldList( wxSizeEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
 {
     int nameColWidth = event.GetSize().GetX() - m_showColWidth - m_groupByColWidth - 8;
 
@@ -1182,20 +1182,20 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnSizeFieldList( wxSizeEvent& event )
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnSaveAndContinue( wxCommandEvent& aEvent )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnSaveAndContinue( wxCommandEvent& aEvent )
 {
     if( TransferDataFromWindow() )
         m_parent->SaveProject();
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnCancel( wxCommandEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnCancel( wxCommandEvent& event )
 {
     Close();
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnClose( wxCloseEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& event )
 {
     // This is a cancel, so commit quietly as we're going to throw the results away anyway.
     m_grid->CommitPendingChanges( true );

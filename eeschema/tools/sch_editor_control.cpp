@@ -26,7 +26,7 @@
 #include <confirm.h>
 #include <widgets/infobar.h>
 #include <connection_graph.h>
-#include <dialogs/dialog_fields_editor_global.h>
+#include <dialogs/dialog_symbol_fields_table.h>
 #include <dialogs/dialog_eeschema_page_settings.h>
 #include <dialogs/dialog_paste_special.h>
 #include <dialogs/dialog_plot_schematic.h>
@@ -1811,7 +1811,7 @@ int SCH_EDITOR_CONTROL::ShowCvpcb( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::EditSymbolFields( const TOOL_EVENT& aEvent )
 {
-    DIALOG_FIELDS_EDITOR_GLOBAL dlg( m_frame );
+    DIALOG_SYMBOL_FIELDS_TABLE dlg( m_frame );
     dlg.ShowQuasiModal();
     return 0;
 }
