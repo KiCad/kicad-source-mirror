@@ -54,7 +54,7 @@ private:
     std::map<wxString, int> m_displayNameToNetCodeMap;
 
     bool             m_netSortingByPadCount;
-    long             m_netFiltering;
+    bool             m_netFiltering;
     static wxString  m_netNameShowFilter;    // the filter to show nets (default * "*").  Static
                                              // to keep this pattern for an entire Pcbnew session
     int              m_cornerSmoothingType;
@@ -202,8 +202,8 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
 
     netNameDoNotShowFilter = cfg->m_Zones.net_filter;
 
-    m_ShowNetNameFilter->SetValue( m_netNameShowFilter );
-    m_DoNotShowNetNameFilter->SetValue( netNameDoNotShowFilter );
+    m_ShowNetNameFilter->ChangeValue( m_netNameShowFilter );
+    m_DoNotShowNetNameFilter->ChangeValue( netNameDoNotShowFilter );
     m_showAllNetsOpt->SetValue( !m_netFiltering );
     m_sortByPadsOpt->SetValue( m_netSortingByPadCount );
 
@@ -471,7 +471,7 @@ void DIALOG_COPPER_ZONE::OnNetSortingOptionSelected( wxCommandEvent& event )
 
     buildAvailableListOfNets();
 
-    auto cfg = m_Parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_Parent->GetPcbNewSettings();
 
     int configValue = m_netFiltering ? 2 : 0;
 
@@ -511,6 +511,16 @@ void DIALOG_COPPER_ZONE::OnRunFiltersButtonClick( wxCommandEvent& event )
     m_showAllNetsOpt->SetValue( false );
 
     buildAvailableListOfNets();
+
+    PCBNEW_SETTINGS* cfg = m_Parent->GetPcbNewSettings();
+
+    int configValue = m_netFiltering ? 2 : 0;
+
+    if( m_netSortingByPadCount )
+        configValue += 1;
+
+    cfg->m_Zones.net_sort_mode = configValue;
+    cfg->m_Zones.net_filter = m_DoNotShowNetNameFilter->GetValue().ToStdString();
 }
 
 
