@@ -1714,7 +1714,7 @@ void DIALOG_NET_INSPECTOR::adjustListColumns()
     int w0, w1, w2, w3, w4, w5, w6, w7;
 
     dc.GetTextExtent( COLUMN_NET.display_name, &w0, &h );
-    dc.GetTextExtent( COLUMN_NAME.display_name, &minw_col1, &h );
+    dc.GetTextExtent( "MMMMMMMMMMMMMMMM", &minw_col1, &h );
     dc.GetTextExtent( COLUMN_PAD_COUNT.display_name, &w2, &h );
     dc.GetTextExtent( COLUMN_VIA_COUNT.display_name, &w3, &h );
     dc.GetTextExtent( COLUMN_VIA_LENGTH.display_name, &w4, &h );
@@ -1760,11 +1760,8 @@ void DIALOG_NET_INSPECTOR::adjustListColumns()
     int width = m_netsList->GetClientSize().x - 24;
     w1        = width - w0 - w2 - w3 - w4 - w5 - w6 - w7;
 
-    // Column 1 (net names) need a minimal width to display net names
-    dc.GetTextExtent( "MMMMMMMMMMMMMMMM", &minw, &h );
-    w1 = std::max( w1, minw );
-
-    m_netsList->GetColumn( column_order[1] )->SetWidth( w1 );
+    if( w1 > minw_col1 )
+        m_netsList->GetColumn( column_order[1] )->SetWidth( w1 );
 
     m_netsList->Refresh();
 }
