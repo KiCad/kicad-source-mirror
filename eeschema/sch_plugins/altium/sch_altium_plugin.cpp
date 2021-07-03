@@ -616,6 +616,12 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
     pin->SetNumber( elem.designator );
     pin->SetLength( elem.pinlength );
 
+    if( !elem.showDesignator )
+        pin->SetNumberTextSize( 0 );
+
+    if( !elem.showPinName )
+        pin->SetNameTextSize( 0 );
+
     wxPoint pinLocation = elem.location; // the location given is not the connection point!
 
     switch( elem.orientation )
