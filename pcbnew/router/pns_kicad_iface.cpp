@@ -445,6 +445,9 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     if( bds.m_UseConnectedTrackWidth && aStartItem != nullptr )
     {
         found = inheritTrackWidth( aStartItem, &trackWidth );
+
+        if( found )
+            aSizes.SetWidthSource( _( "existing track" ) );
     }
 
     if( !found && bds.UseNetClassTrack() && aStartItem )
@@ -454,12 +457,24 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         {
             trackWidth = std::max( trackWidth, constraint.m_Value.Opt() );
             found = true;
+
+            if( trackWidth == constraint.m_Value.Opt() )
+                aSizes.SetWidthSource( constraint.m_RuleName );
+            else
+                aSizes.SetWidthSource( _( "board minimum width" ) );
         }
     }
 
     if( !found )
     {
         trackWidth = std::max( trackWidth, bds.GetCurrentTrackWidth() );
+
+        if( bds.UseNetClassTrack() )
+            aSizes.SetWidthSource( _( "netclass 'Default'" ) );
+        else if( trackWidth == bds.GetCurrentTrackWidth() )
+            aSizes.SetWidthSource( _( "user choice" ) );
+        else
+            aSizes.SetWidthSource( _( "board minimum width" ) );
     }
 
     aSizes.SetTrackWidth( trackWidth );

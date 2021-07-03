@@ -48,7 +48,8 @@ public:
             m_diffPairGap( 180000 ),
             m_diffPairViaGap( 180000 ),
             m_diffPairViaGapSameAsTraceGap( true ),
-            m_holeToHole( 0 )
+            m_holeToHole( 0 ),
+            m_widthSource()
     {};
 
     ~SIZES_SETTINGS() {};
@@ -103,6 +104,9 @@ public:
     void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
     VIATYPE ViaType() const { return m_viaType; }
 
+    wxString GetWidthSource() const { return m_widthSource; }
+    void SetWidthSource( const wxString& aSource ) { m_widthSource = aSource; }
+
 private:
     int     m_minClearance;
     int     m_trackWidth;
@@ -120,6 +124,8 @@ private:
     int     m_holeToHole;
 
     std::map<int, int> m_layerPairs;
+
+    wxString m_widthSource;
 };
 
 }

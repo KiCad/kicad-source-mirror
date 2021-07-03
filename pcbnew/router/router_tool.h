@@ -73,6 +73,8 @@ private:
     bool finishInteractive();
     void saveRouterDebugLog();
 
+    void updateMessagePanel();
+
 private:
     std::shared_ptr<ACTION_MENU> m_diffPairMenu;
     std::shared_ptr<ACTION_MENU> m_trackViaMenu;

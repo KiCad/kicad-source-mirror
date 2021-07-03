@@ -1033,6 +1033,7 @@ bool ROUTER_TOOL::prepareInteractive()
     m_endItem = nullptr;
     m_endSnapPoint = m_startSnapPoint;
 
+    updateMessagePanel();
     frame()->UndoRedoBlock( true );
 
     return true;
@@ -1046,6 +1047,7 @@ bool ROUTER_TOOL::finishInteractive()
     m_startItem = nullptr;
     m_endItem   = nullptr;
 
+    updateMessagePanel();
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
@@ -1866,6 +1868,67 @@ int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
     m_router->Move( m_endSnapPoint, m_endItem );
 
     return 0;
+}
+
+
+void ROUTER_TOOL::updateMessagePanel()
+{
+    if( !m_router->RoutingInProgress() )
+    {
+        frame()->SetMsgPanel( board() );
+        return;
+    }
+
+    MSG_PANEL_ITEMS items;
+    PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
+    PNS::RULE_RESOLVER* resolver   = m_iface->GetRuleResolver();
+    bool                isDiffPair = m_router->Mode() == PNS::ROUTER_MODE::PNS_MODE_ROUTE_DIFF_PAIR;
+
+    if( m_startItem && m_startItem->Net() > 0 )
+    {
+        wxString description = isDiffPair ? _( "Routing Diff Pair: %s" ) : _( "Routing Track: %s" );
+
+        NETINFO_ITEM* netInfo = board()->FindNet( m_startItem->Net() );
+        wxASSERT( netInfo );
+
+        items.emplace_back( wxString::Format( description, netInfo->GetNetname() ),
+                            wxString::Format( _( "Net Class: %s" ), netInfo->GetNetClassName() ) );
+    }
+    else
+    {
+        items.emplace_back( _( "Routing Track" ), _( "(no net)" ) );
+    }
+
+    EDA_UNITS units = frame()->GetUserUnits();
+
+    int width = isDiffPair ? sizes.DiffPairWidth() : sizes.TrackWidth();
+    items.emplace_back( wxString::Format( _( "Track Width: %s" ),
+                                          MessageTextFromValue( units, width ) ),
+                        wxString::Format( _( "(from %s)" ), sizes.GetWidthSource() ) );
+
+    if( m_startItem )
+    {
+        PNS::SEGMENT dummy;
+        dummy.SetNet( m_startItem->Net() );
+
+        PNS::CONSTRAINT constraint;
+
+        if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, &dummy, nullptr,
+                                       m_router->GetCurrentLayer(), &constraint ) )
+        {
+            items.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
+                                        MessageTextFromValue( units, constraint.m_Value.Min() ) ),
+                                wxString::Format( _( "(from %s)" ), constraint.m_RuleName ) );
+        }
+    }
+
+    if( isDiffPair )
+    {
+        items.emplace_back( _( "Diff Pair Gap" ),
+                            MessageTextFromValue( units, sizes.DiffPairGap() ) );
+    }
+
+    frame()->SetMsgPanel( items );
 }
 
 
