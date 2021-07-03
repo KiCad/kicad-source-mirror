@@ -1832,18 +1832,18 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
     }
 
     // Now, find the best driver for this chain of subgraphs
-    CONNECTION_SUBGRAPH* original = aSubgraph;
+    CONNECTION_SUBGRAPH*          bestDriver = aSubgraph;
     CONNECTION_SUBGRAPH::PRIORITY highest =
             CONNECTION_SUBGRAPH::GetDriverPriority( aSubgraph->m_driver );
-    bool     originalStrong = ( highest >= CONNECTION_SUBGRAPH::PRIORITY::HIER_LABEL );
-    wxString originalName   = original->m_driver_connection->Name();
+    bool     bestIsStrong = ( highest >= CONNECTION_SUBGRAPH::PRIORITY::HIER_LABEL );
+    wxString bestName     = aSubgraph->m_driver_connection->Name();
 
     // Check if a subsheet has a higher-priority connection to the same net
     if( highest < CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN )
     {
         for( CONNECTION_SUBGRAPH* subgraph : visited )
         {
-            if( subgraph == original )
+            if( subgraph == aSubgraph )
                 continue;
 
             CONNECTION_SUBGRAPH::PRIORITY priority =
@@ -1851,8 +1851,8 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 
             bool     candidateStrong = ( priority >= CONNECTION_SUBGRAPH::PRIORITY::HIER_LABEL );
             wxString candidateName   = subgraph->m_driver_connection->Name();
-            bool     shorterPath     = subgraph->m_sheet.size() < original->m_sheet.size();
-            bool     asGoodPath      = subgraph->m_sheet.size() <= original->m_sheet.size();
+            bool     shorterPath     = subgraph->m_sheet.size() < bestDriver->m_sheet.size();
+            bool     asGoodPath      = subgraph->m_sheet.size() <= bestDriver->m_sheet.size();
 
             // Pick a better driving subgraph if it:
             // a) has a power pin or global driver
@@ -1862,28 +1862,28 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
             // e) matches our strength and is at least as short, and is alphabetically lower
 
             if( ( priority >= CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN ) ||
-                ( !originalStrong && candidateStrong ) ||
+                ( !bestIsStrong && candidateStrong ) ||
                 ( priority > highest && candidateStrong ) ||
                 ( priority == highest && candidateStrong && shorterPath ) ||
-                ( ( originalStrong == candidateStrong ) && asGoodPath &&
-                  ( candidateName < originalName ) ) )
+                ( ( bestIsStrong == candidateStrong ) && asGoodPath && ( priority == highest ) &&
+                  ( candidateName < bestName ) ) )
             {
-                original       = subgraph;
-                highest        = priority;
-                originalStrong = candidateStrong;
-                originalName   = subgraph->m_driver_connection->Name();
+                bestDriver   = subgraph;
+                highest      = priority;
+                bestIsStrong = candidateStrong;
+                bestName     = candidateName;
             }
         }
     }
 
-    if( original != aSubgraph )
+    if( bestDriver != aSubgraph )
     {
         wxLogTrace( ConnTrace, "%lu (%s) overridden by new driver %lu (%s)",
-                    aSubgraph->m_code, aSubgraph->m_driver_connection->Name(), original->m_code,
-                    original->m_driver_connection->Name() );
+                    aSubgraph->m_code, aSubgraph->m_driver_connection->Name(), bestDriver->m_code,
+                bestDriver->m_driver_connection->Name() );
     }
 
-    conn = original->m_driver_connection;
+    conn = bestDriver->m_driver_connection;
 
     for( CONNECTION_SUBGRAPH* subgraph : visited )
     {
