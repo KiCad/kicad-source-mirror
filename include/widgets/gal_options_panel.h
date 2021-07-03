@@ -51,8 +51,6 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    EDA_DRAW_FRAME*   m_drawFrame;
-
     wxBoxSizer*       m_mainSizer;
 
 #ifndef __WXMAC__

@@ -66,7 +66,6 @@ static const UTIL::CFG_MAP<KIGFX::GRID_SNAPPING> gridSnapConfigVals =
 
 GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame ) :
     wxPanel( aParent, wxID_ANY ),
-    m_drawFrame( aDrawFrame ),
     m_galOptions( aDrawFrame->GetGalDisplayOptions() )
 {
     // the main sizer that holds "columns" of settings
