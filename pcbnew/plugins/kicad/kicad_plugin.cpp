@@ -830,7 +830,6 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
         {
             const SHAPE_POLY_SET& poly = aShape->GetPolyShape();
             const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
-            const int pointsCount = outline.PointCount();
 
             m_out->Print( aNestLevel, "(gr_poly%s (pts\n",
                           locked.c_str() );
@@ -839,7 +838,7 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
             {
                 int nestLevel = 0;
 
-                if( ii && ( !( ii%4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave ) )
+                if( ii && ( !( ii % 4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave ) )
                 {
                     // newline every 4 pts.
                     nestLevel = aNestLevel + 1;
@@ -851,11 +850,12 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
                 if( ind < 0 )
                 {
                     m_out->Print( nestLevel, "%s(xy %s)",
-                                  nestLevel ? "" : " ", FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
+                                  nestLevel ? "" : " ",
+                                  FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
                 }
                 else
                 {
-                    auto& arc = outline.Arc( ind );
+                    SHAPE_ARC& arc = outline.Arc( ind );
                     m_out->Print( aNestLevel, "%s(arc (start %s) (mid %s) (end %s)",
                             nestLevel ? "" : " ",
                             FormatInternalUnits( arc.GetP0() ).c_str(),
