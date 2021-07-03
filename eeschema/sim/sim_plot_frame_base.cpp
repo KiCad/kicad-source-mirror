@@ -30,7 +30,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_fileMenu->Append( m_saveWorkbook );
 
 	wxMenuItem* m_saveWorkbookAs;
-	m_saveWorkbookAs = new wxMenuItem( m_fileMenu, wxID_SAVE_AS, wxString( _("Save As...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_saveWorkbookAs = new wxMenuItem( m_fileMenu, wxID_SAVEAS, wxString( _("Save As...") ) + wxT('\t') + wxT("SHIFT+CTRL+S"), wxEmptyString, wxITEM_NORMAL );
 	m_fileMenu->Append( m_saveWorkbookAs );
 
 	m_fileMenu->AppendSeparator();

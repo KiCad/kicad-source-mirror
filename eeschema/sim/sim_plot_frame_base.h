@@ -33,19 +33,18 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define wxID_SAVE_AS 1000
-#define ID_SAVE_AS_IMAGE 1001
-#define ID_SAVE_AS_CSV 1002
-#define ID_MENU_RUN_SIM 1003
-#define ID_MENU_ADD_SIGNAL 1004
-#define ID_MENU_PROBE_SIGNALS 1005
-#define ID_MENU_TUNE_SIGNALS 1006
-#define ID_MENU_SHOW_NETLIST 1007
-#define ID_MENU_SET_SIMUL 1008
-#define ID_MENU_SHOW_GRID 1009
-#define ID_MENU_SHOW_LEGEND 1010
-#define ID_MENU_DOTTED 1011
-#define ID_MENU_WHITE_BG 1012
+#define ID_SAVE_AS_IMAGE 1000
+#define ID_SAVE_AS_CSV 1001
+#define ID_MENU_RUN_SIM 1002
+#define ID_MENU_ADD_SIGNAL 1003
+#define ID_MENU_PROBE_SIGNALS 1004
+#define ID_MENU_TUNE_SIGNALS 1005
+#define ID_MENU_SHOW_NETLIST 1006
+#define ID_MENU_SET_SIMUL 1007
+#define ID_MENU_SHOW_GRID 1008
+#define ID_MENU_SHOW_LEGEND 1009
+#define ID_MENU_DOTTED 1010
+#define ID_MENU_WHITE_BG 1011
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class SIM_PLOT_FRAME_BASE

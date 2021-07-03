@@ -76,7 +76,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style"></property>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">File</property>
                     <property name="name">m_fileMenu</property>
                     <property name="permission">protected</property>
@@ -131,12 +131,12 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_SAVE_AS</property>
+                        <property name="id">wxID_SAVEAS</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Save As...</property>
                         <property name="name">m_saveWorkbookAs</property>
                         <property name="permission">none</property>
-                        <property name="shortcut"></property>
+                        <property name="shortcut">SHIFT+CTRL+S</property>
                         <property name="unchecked_bitmap"></property>
                         <event name="OnMenuSelection">menuSaveWorkbookAs</event>
                     </object>
@@ -402,7 +402,7 @@
                     </object>
                 </object>
             </object>
-            <object class="wxBoxSizer" expanded="1">
+            <object class="wxBoxSizer" expanded="0">
                 <property name="minimum_size"></property>
                 <property name="name">m_sizerMain</property>
                 <property name="orient">wxVERTICAL</property>
