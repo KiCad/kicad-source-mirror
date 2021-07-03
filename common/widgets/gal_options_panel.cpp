@@ -218,6 +218,8 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
         m_renderingEngine->SetSelection( 0 );
     else
         m_renderingEngine->SetSelection( 1 );
+#else
+    (void) m_drawFrame;  // Quiet unused variable warning
 #endif
 
     m_gridSnapOptions->SetSelection( UTIL::GetConfigForVal( gridSnapConfigVals,
