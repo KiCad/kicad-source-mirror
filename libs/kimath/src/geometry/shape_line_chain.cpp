@@ -150,8 +150,8 @@ void SHAPE_LINE_CHAIN::convertArc( ssize_t aArcIndex )
 }
 
 
-void SHAPE_LINE_CHAIN::ammendArc( size_t aArcIndex, const VECTOR2I& aNewStart,
-                                  const VECTOR2I& aNewEnd )
+void SHAPE_LINE_CHAIN::amendArc( size_t aArcIndex, const VECTOR2I& aNewStart,
+                                 const VECTOR2I& aNewEnd )
 {
     wxCHECK_MSG( aArcIndex <  m_arcs.size(), /* void */,
                  "Invalid arc index requested." );
@@ -185,13 +185,13 @@ void SHAPE_LINE_CHAIN::splitArc( ssize_t aPtIndex, bool aCoincident )
 
         ssize_t firstArcIndex = m_shapes[aPtIndex].first;
 
-        const VECTOR2I& newStart = m_arcs[firstArcIndex].GetP0(); //don't ammend the start
-        const VECTOR2I& newEnd = m_points[aPtIndex - 1];
-        ammendArc( firstArcIndex, newStart, newEnd );
+        const VECTOR2I& newStart = m_arcs[firstArcIndex].GetP0(); // don't amend the start
+        const VECTOR2I& newEnd   = m_points[aPtIndex - 1];
+        amendArc( firstArcIndex, newStart, newEnd );
 
         if( IsSharedPt( aPtIndex ) )
         {
-            m_shapes[aPtIndex].first = m_shapes[aPtIndex].second;
+            m_shapes[aPtIndex].first  = m_shapes[aPtIndex].second;
             m_shapes[aPtIndex].second = SHAPE_IS_PT;
         }
         else

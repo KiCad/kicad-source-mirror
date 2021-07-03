@@ -628,7 +628,7 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
                     newIntersectPoints.insert( { VECTOR2I( pt.X, pt.Y ), newZval } );
 
                 pt.Z = z_value_ptr;
-                //@todo ammend X,Y values to true intersection between arcs or arc and segment
+                //@todo amend X,Y values to true intersection between arcs or arc and segment
             };
 
     c.ZFillFunction( callback ); // register callback
@@ -637,7 +637,7 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
 
     importTree( &solution, zValues, arcBuffer );
 
-    // Ammend arcs for the intersection points
+    // amend arcs for the intersection points
     for( auto& poly : m_polys )
     {
         for( size_t i = 0; i < poly.size(); i++ )
@@ -655,16 +655,16 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
                     //@todo consider editing the intersection point to be the "true" arc intersection
                     if( poly[i].IsSharedPt( j ) )
                     {
-                        poly[i].ammendArcEnd( shape.first, pt );
-                        poly[i].ammendArcStart( shape.second, pt );
+                        poly[i].amendArcEnd( shape.first, pt );
+                        poly[i].amendArcStart( shape.second, pt );
                     }
                     else if( poly[i].IsArcStart( j ) )
                     {
-                        poly[i].ammendArcStart( shape.first, pt );
+                        poly[i].amendArcStart( shape.first, pt );
                     }
                     else if( poly[i].IsArcEnd( j ) )
                     {
-                        poly[i].ammendArcEnd( shape.first, pt );
+                        poly[i].amendArcEnd( shape.first, pt );
                     }
                     else
                     {

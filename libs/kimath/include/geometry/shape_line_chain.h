@@ -140,23 +140,28 @@ public:
     /**
      * Initialize an empty line chain.
      */
-    SHAPE_LINE_CHAIN() : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ), m_closed( false ), m_width( 0 )
+    SHAPE_LINE_CHAIN() :
+            SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+            m_closed( false ),
+            m_width( 0 )
     {}
 
-    SHAPE_LINE_CHAIN( const SHAPE_LINE_CHAIN& aShape )
-            : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
-              m_points( aShape.m_points ),
-              m_shapes( aShape.m_shapes ),
-              m_arcs( aShape.m_arcs ),
-              m_closed( aShape.m_closed ),
-              m_width( aShape.m_width ),
-              m_bbox( aShape.m_bbox )
+    SHAPE_LINE_CHAIN( const SHAPE_LINE_CHAIN& aShape ) :
+            SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+            m_points( aShape.m_points ),
+            m_shapes( aShape.m_shapes ),
+            m_arcs( aShape.m_arcs ),
+            m_closed( aShape.m_closed ),
+            m_width( aShape.m_width ),
+            m_bbox( aShape.m_bbox )
     {}
 
-    SHAPE_LINE_CHAIN( const std::vector<int>& aV);
+    SHAPE_LINE_CHAIN( const std::vector<int>& aV );
 
-    SHAPE_LINE_CHAIN( const std::vector<wxPoint>& aV, bool aClosed = false )
-            : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ), m_closed( aClosed ), m_width( 0 )
+    SHAPE_LINE_CHAIN( const std::vector<wxPoint>& aV, bool aClosed = false ) :
+            SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+            m_closed( aClosed ),
+            m_width( 0 )
     {
         m_points.reserve( aV.size() );
 
@@ -166,30 +171,33 @@ public:
         m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( aV.size(), SHAPES_ARE_PT );
     }
 
-    SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed = false )
-            : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ), m_closed( aClosed ), m_width( 0 )
+    SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed = false ) :
+            SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+            m_closed( aClosed ),
+            m_width( 0 )
     {
         m_points = aV;
         m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( aV.size(), SHAPES_ARE_PT );
     }
 
-    SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed = false )
-            : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
-              m_closed( aClosed ),
-              m_width( 0 )
+    SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed = false ) :
+            SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+            m_closed( aClosed ),
+            m_width( 0 )
     {
         m_points = aArc.ConvertToPolyline().CPoints();
         m_arcs.emplace_back( aArc );
         m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( m_points.size(), SHAPES_ARE_PT );
     }
 
-    SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath, const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
+    SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath,
+                      const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                       const std::vector<SHAPE_ARC>& aArcBuffer );
 
     virtual ~SHAPE_LINE_CHAIN()
     {}
 
-    SHAPE_LINE_CHAIN& operator=(const SHAPE_LINE_CHAIN&) = default;
+    SHAPE_LINE_CHAIN& operator=( const SHAPE_LINE_CHAIN& ) = default;
 
     SHAPE* Clone() const override;
 
@@ -838,19 +846,16 @@ protected:
      */
     void splitArc( ssize_t aPtIndex, bool aCoincident = false );
 
+    void amendArc( size_t aArcIndex, const VECTOR2I& aNewStart, const VECTOR2I& aNewEnd );
 
-    void ammendArc( size_t aArcIndex, const VECTOR2I& aNewStart, const VECTOR2I& aNewEnd );
-
-
-    void ammendArcStart( size_t aArcIndex, const VECTOR2I& aNewStart )
+    void amendArcStart( size_t aArcIndex, const VECTOR2I& aNewStart )
     {
-        ammendArc( aArcIndex, aNewStart, m_arcs[aArcIndex].GetP1() );
+        amendArc( aArcIndex, aNewStart, m_arcs[aArcIndex].GetP1() );
     }
 
-
-    void ammendArcEnd( size_t aArcIndex, const VECTOR2I& aNewEnd )
+    void amendArcEnd( size_t aArcIndex, const VECTOR2I& aNewEnd )
     {
-        ammendArc( aArcIndex, m_arcs[aArcIndex].GetP0(), aNewEnd );
+        amendArc( aArcIndex, m_arcs[aArcIndex].GetP0(), aNewEnd );
     }
 
     /**
