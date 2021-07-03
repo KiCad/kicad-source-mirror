@@ -202,14 +202,29 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow* aParent )
 }
 
 
+wxRegEx SCH_NETNAME_VALIDATOR::m_busGroupRegex( R"([^$]?{)", wxRE_ADVANCED );
+
+
 wxString SCH_NETNAME_VALIDATOR::IsValid( const wxString& str ) const
 {
-    if( NET_SETTINGS::ParseBusGroup( str, nullptr, nullptr ) )
+    // We don't do single-character validation here
+    if( str.Length() == 1 )
         return wxString();
 
     if( ( str.Contains( '[' ) || str.Contains( ']' ) ) &&
         !NET_SETTINGS::ParseBusVector( str, nullptr, nullptr ) )
+    {
         return _( "Signal name contains '[' or ']' but is not a valid vector bus name" );
+    }
+
+    // Figuring out if the user "meant" to make a bus group is somewhat trickier because angle
+    // brackets are also used for variable expansion
+
+    if( m_busGroupRegex.Matches( str ) && str.Contains( '}' ) &&
+        !NET_SETTINGS::ParseBusGroup( str, nullptr, nullptr ) )
+    {
+        return _( "Signal name contains '{' and '}' but is not a valid group bus name" );
+    }
 
     return NETNAME_VALIDATOR::IsValid( str );
 }

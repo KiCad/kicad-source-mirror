@@ -90,9 +90,14 @@ public:
             NETNAME_VALIDATOR( aValidator )
     { }
 
+    virtual wxObject* Clone() const override { return new SCH_NETNAME_VALIDATOR( *this ); }
+
 protected:
     /// @return the error message if the contents of \a aVal are invalid.
     wxString IsValid( const wxString& aVal ) const override;
+
+private:
+    static wxRegEx m_busGroupRegex;
 };
 
 #endif // _SCH_VALIDATORS_H_
