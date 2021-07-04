@@ -25,13 +25,18 @@
 #include <widgets/color_swatch.h>
 #include <3d_canvas/board_adapter.h>
 #include <3d_viewer/eda_3d_viewer.h>
+#include <eda_3d_viewer_settings.h>
+#include <settings/settings_manager.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <board_design_settings.h>
+#include <pgm_base.h>
+
 
 PANEL_3D_COLORS::PANEL_3D_COLORS( EDA_3D_VIEWER_FRAME* aFrame, wxWindow* aParent ) :
         PANEL_3D_COLORS_BASE( aParent ),
-        m_settings( aFrame->GetAdapter() )
+        m_frame( aFrame ),
+        m_boardAdapter( aFrame->GetAdapter() )
 {
 #define ADD_COLOR( list, r, g, b, a, name ) \
     list.push_back( CUSTOM_COLOR_ITEM( r/255.0, g/255.0, b/255.0, a, name ) )
@@ -109,15 +114,15 @@ bool PANEL_3D_COLORS::TransferDataToWindow()
                 return COLOR4D( src.r, src.g, src.b, src.a );
             };
 
-    m_backgroundTop->SetSwatchColor( to_COLOR4D( m_settings.m_BgColorTop ), false );
-    m_backgroundBottom->SetSwatchColor( to_COLOR4D( m_settings.m_BgColorBot ), false );
-    m_silkscreenTop->SetSwatchColor( to_COLOR4D( m_settings.m_SilkScreenColorTop ), false );
-    m_silkscreenBottom->SetSwatchColor( to_COLOR4D( m_settings.m_SilkScreenColorBot ), false );
-    m_solderMaskTop->SetSwatchColor( to_COLOR4D( m_settings.m_SolderMaskColorTop ), false );
-    m_solderMaskBottom->SetSwatchColor( to_COLOR4D( m_settings.m_SolderMaskColorBot ), false );
-    m_solderPaste->SetSwatchColor( to_COLOR4D( m_settings.m_SolderPasteColor ), false );
-    m_surfaceFinish->SetSwatchColor( to_COLOR4D( m_settings.m_CopperColor ), false );
-    m_boardBody->SetSwatchColor( to_COLOR4D( m_settings.m_BoardBodyColor ), false );
+    m_backgroundTop->SetSwatchColor( to_COLOR4D( m_boardAdapter.m_BgColorTop ), false );
+    m_backgroundBottom->SetSwatchColor( to_COLOR4D( m_boardAdapter.m_BgColorBot ), false );
+    m_silkscreenTop->SetSwatchColor( to_COLOR4D( m_boardAdapter.m_SilkScreenColorTop ), false );
+    m_silkscreenBottom->SetSwatchColor( to_COLOR4D( m_boardAdapter.m_SilkScreenColorBot ), false );
+    m_solderMaskTop->SetSwatchColor( to_COLOR4D( m_boardAdapter.m_SolderMaskColorTop ), false );
+    m_solderMaskBottom->SetSwatchColor( to_COLOR4D( m_boardAdapter.m_SolderMaskColorBot ), false );
+    m_solderPaste->SetSwatchColor( to_COLOR4D( m_boardAdapter.m_SolderPasteColor ), false );
+    m_surfaceFinish->SetSwatchColor( to_COLOR4D( m_boardAdapter.m_CopperColor ), false );
+    m_boardBody->SetSwatchColor( to_COLOR4D( m_boardAdapter.m_BoardBodyColor ), false );
 
     return true;
 }
@@ -130,15 +135,20 @@ bool PANEL_3D_COLORS::TransferDataFromWindow()
                 return SFVEC4F( src.r, src.g, src.b, src.a );
             };
 
-    m_settings.m_BgColorTop = to_SFVEC4F( m_backgroundTop->GetSwatchColor() );
-    m_settings.m_BgColorBot = to_SFVEC4F( m_backgroundBottom->GetSwatchColor() );
-    m_settings.m_SilkScreenColorTop = to_SFVEC4F( m_silkscreenTop->GetSwatchColor() );
-    m_settings.m_SilkScreenColorBot = to_SFVEC4F( m_silkscreenBottom->GetSwatchColor() );
-    m_settings.m_SolderMaskColorTop = to_SFVEC4F( m_solderMaskTop->GetSwatchColor() );
-    m_settings.m_SolderMaskColorBot = to_SFVEC4F( m_solderMaskBottom->GetSwatchColor() );
-    m_settings.m_SolderPasteColor = to_SFVEC4F( m_solderPaste->GetSwatchColor() );
-    m_settings.m_CopperColor = to_SFVEC4F( m_surfaceFinish->GetSwatchColor() );
-    m_settings.m_BoardBodyColor = to_SFVEC4F( m_boardBody->GetSwatchColor() );
+    m_boardAdapter.m_BgColorTop = to_SFVEC4F( m_backgroundTop->GetSwatchColor() );
+    m_boardAdapter.m_BgColorBot = to_SFVEC4F( m_backgroundBottom->GetSwatchColor() );
+    m_boardAdapter.m_SilkScreenColorTop = to_SFVEC4F( m_silkscreenTop->GetSwatchColor() );
+    m_boardAdapter.m_SilkScreenColorBot = to_SFVEC4F( m_silkscreenBottom->GetSwatchColor() );
+    m_boardAdapter.m_SolderMaskColorTop = to_SFVEC4F( m_solderMaskTop->GetSwatchColor() );
+    m_boardAdapter.m_SolderMaskColorBot = to_SFVEC4F( m_solderMaskBottom->GetSwatchColor() );
+    m_boardAdapter.m_SolderPasteColor = to_SFVEC4F( m_solderPaste->GetSwatchColor() );
+    m_boardAdapter.m_CopperColor = to_SFVEC4F( m_surfaceFinish->GetSwatchColor() );
+    m_boardAdapter.m_BoardBodyColor = to_SFVEC4F( m_boardBody->GetSwatchColor() );
+
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+
+    if( cfg )
+        m_frame->SaveSettings( cfg );
 
     return true;
 }
@@ -146,7 +156,7 @@ bool PANEL_3D_COLORS::TransferDataFromWindow()
 
 void PANEL_3D_COLORS::OnLoadColorsFromBoardStackup( wxCommandEvent& event )
 {
-    const BOARD*           brd       = m_settings.GetBoard();
+    const BOARD*           brd       = m_boardAdapter.GetBoard();
     const FAB_LAYER_COLOR* stdColors = GetColorStandardList();
     wxColour               color;
 
@@ -179,26 +189,26 @@ void PANEL_3D_COLORS::OnLoadColorsFromBoardStackup( wxCommandEvent& event )
                 switch( stckpItem->GetBrdLayerId() )
                 {
                 case F_SilkS:
-                    m_settings.m_SilkScreenColorTop.r = color.Red() / 255.0;
-                    m_settings.m_SilkScreenColorTop.g = color.Green() / 255.0;
-                    m_settings.m_SilkScreenColorTop.b = color.Blue() / 255.0;
+                    m_boardAdapter.m_SilkScreenColorTop.r = color.Red() / 255.0;
+                    m_boardAdapter.m_SilkScreenColorTop.g = color.Green() / 255.0;
+                    m_boardAdapter.m_SilkScreenColorTop.b = color.Blue() / 255.0;
                     break;
                 case B_SilkS:
-                    m_settings.m_SilkScreenColorBot.r = color.Red() / 255.0;
-                    m_settings.m_SilkScreenColorBot.g = color.Green() / 255.0;
-                    m_settings.m_SilkScreenColorBot.b = color.Blue() / 255.0;
+                    m_boardAdapter.m_SilkScreenColorBot.r = color.Red() / 255.0;
+                    m_boardAdapter.m_SilkScreenColorBot.g = color.Green() / 255.0;
+                    m_boardAdapter.m_SilkScreenColorBot.b = color.Blue() / 255.0;
                     break;
                 case F_Mask:
-                    m_settings.m_SolderMaskColorTop.r = color.Red() / 255.0;
-                    m_settings.m_SolderMaskColorTop.g = color.Green() / 255.0;
-                    m_settings.m_SolderMaskColorTop.b = color.Blue() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorTop.r = color.Red() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorTop.g = color.Green() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorTop.b = color.Blue() / 255.0;
                     // Keep the previous alpha value
                     //m_boardAdapter.m_SolderMaskColorTop.a = color.Alpha() / 255.0;
                     break;
                 case B_Mask:
-                    m_settings.m_SolderMaskColorBot.r = color.Red() / 255.0;
-                    m_settings.m_SolderMaskColorBot.g = color.Green() / 255.0;
-                    m_settings.m_SolderMaskColorBot.b = color.Blue() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorBot.r = color.Red() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorBot.g = color.Green() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorBot.b = color.Blue() / 255.0;
                     // Keep the previous alpha value
                     //m_boardAdapter.m_SolderMaskColorBot.a = color.Alpha() / 255.0;
                     break;

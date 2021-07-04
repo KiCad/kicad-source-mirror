@@ -280,7 +280,7 @@
                         <property name="id">ID_MENU_SET_SIMUL</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Settings...</property>
-                        <property name="name">m_settings</property>
+                        <property name="name">m_boardAdapter</property>
                         <property name="permission">protected</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>

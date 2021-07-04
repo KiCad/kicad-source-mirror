@@ -106,7 +106,7 @@ private:
     /**
      * Load 3D relevant settings from the user configuration
      */
-    void loadCommonSettings();
+    void loadSettings();
 
     /**
      * It will receive the events from editing the fields.

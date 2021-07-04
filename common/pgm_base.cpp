@@ -262,7 +262,7 @@ bool PGM_BASE::InitPgm( bool aHeadless )
     // Load common settings from disk after setting up env vars
     GetSettingsManager().Load( GetCommonSettings() );
 
-    // Init user language *before* calling loadCommonSettings, because
+    // Init user language *before* calling loadSettings, because
     // env vars could be incorrectly initialized on Linux
     // (if the value contains some non ASCII7 chars, the env var is not initialized)
     SetLanguage( tmp, true );
@@ -343,7 +343,7 @@ void PGM_BASE::loadCommonSettings()
 
     for( const std::pair<wxString, ENV_VAR_ITEM> it : GetCommonSettings()->m_Env.vars )
     {
-        wxLogTrace( traceEnvVars, "PGM_BASE::loadCommonSettings: Found entry %s = %s",
+        wxLogTrace( traceEnvVars, "PGM_BASE::loadSettings: Found entry %s = %s",
                     it.first, it.second.GetValue() );
 
         // Do not store the env var PROJECT_VAR_NAME ("KIPRJMOD") definition if for some reason

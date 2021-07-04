@@ -106,6 +106,9 @@ public:
 
     EDA_3D_CANVAS* GetCanvas()  { return m_canvas; }
 
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+
     /**
      * Notification that common settings are updated.
      *
@@ -136,10 +139,6 @@ private:
 
     void CreateMenuBar();
     void ReCreateMainToolbar();
-
-    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
-
-    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     /**
      *  Create a Screenshot of the current 3D view.
