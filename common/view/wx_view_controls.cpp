@@ -428,7 +428,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         {
             m_state = IDLE;
 #if defined USE_MOUSE_CAPTURE
-            if( !m_boardAdapter.m_cursorCaptured && m_parentPanel->HasCapture() )
+            if( !m_settings.m_cursorCaptured && m_parentPanel->HasCapture() )
                 m_parentPanel->ReleaseMouse();
 #endif
         }
@@ -629,7 +629,7 @@ void WX_VIEW_CONTROLS::CancelDrag()
     {
         m_state = IDLE;
 #if defined USE_MOUSE_CAPTURE
-        if( !m_boardAdapter.m_cursorCaptured && m_parentPanel->HasCapture() )
+        if( !m_settings.m_cursorCaptured && m_parentPanel->HasCapture() )
             m_parentPanel->ReleaseMouse();
 #endif
     }
