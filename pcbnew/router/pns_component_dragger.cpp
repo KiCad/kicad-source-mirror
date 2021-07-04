@@ -84,6 +84,28 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
                 cn.attachedPad = aSolid;
                 cn.offset      = aOffset;
 
+                // Lines that go directly between two linked pads are also special-cased
+                const SHAPE_LINE_CHAIN& line = cn.origLine.CLine();
+                JOINT* jA = m_world->FindJoint( line.CPoint( 0 ), aItem->Layer(), aItem->Net() );
+                JOINT* jB = m_world->FindJoint( line.CPoint( -1 ), aItem->Layer(), aItem->Net() );
+
+                wxASSERT( jA == aJoint || jB == aJoint );
+                JOINT* jSearch = ( jA == aJoint ) ? jB : jA;
+
+                if( jSearch && jSearch->LinkCount( ITEM::SOLID_T ) )
+                {
+                    for( const ITEM_SET::ENTRY& otherItem : jSearch->LinkList() )
+                    {
+                        if( aPrimitives.Contains( otherItem.item ) )
+                        {
+                            for( ITEM* item : cn.origLine.Links() )
+                                m_fixedItems.insert( item );
+
+                            return;
+                        }
+                    }
+                }
+
                 m_conns.push_back( cn );
             };
 
