@@ -23,24 +23,25 @@
  */
 
 #include <bitmaps.h>
-#include <board_commit.h>
 #include <board.h>
+#include <board_commit.h>
 #include <board_design_settings.h>
-#include <pcb_shape.h>
-#include <fp_shape.h>
-#include <pcb_track.h>
-#include <zone.h>
 #include <collectors.h>
 #include <confirm.h>
+#include <convert_basic_shapes_to_polygon.h>
+#include <footprint_edit_frame.h>
+#include <fp_shape.h>
+#include <geometry/shape_compound.h>
 #include <menus_helpers.h>
 #include <pcb_edit_frame.h>
-#include <footprint_edit_frame.h>
-#include <trigo.h>
+#include <pcb_shape.h>
+#include <pcb_track.h>
 #include <tool/tool_manager.h>
 #include <tools/edit_tool.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
-#include <convert_basic_shapes_to_polygon.h>
+#include <trigo.h>
+#include <zone.h>
 
 #include "convert_tool.h"
 
@@ -73,14 +74,16 @@ bool CONVERT_TOOL::Init()
     m_menu->SetIcon( BITMAPS::convert );
     m_menu->SetTitle( _( "Convert" ) );
 
-    static KICAD_T convertableTracks[] = { PCB_TRACE_T, PCB_ARC_T, EOT };
+    static KICAD_T convertibleTracks[] = { PCB_TRACE_T, PCB_ARC_T, EOT };
     static KICAD_T zones[]  = { PCB_ZONE_T, PCB_FP_ZONE_T, EOT };
 
-    auto graphicLines = P_S_C::OnlyGraphicShapeTypes( { PCB_SHAPE_TYPE::SEGMENT, PCB_SHAPE_TYPE::RECT,
-                                            PCB_SHAPE_TYPE::CIRCLE } )
+    auto graphicLines = P_S_C::OnlyGraphicShapeTypes( { PCB_SHAPE_TYPE::SEGMENT,
+                                                        PCB_SHAPE_TYPE::RECT,
+                                                        PCB_SHAPE_TYPE::CIRCLE,
+                                                        PCB_SHAPE_TYPE::ARC } )
                                 && P_S_C::SameLayer();
 
-    auto trackLines   = S_C::MoreThan( 1 ) && S_C::OnlyTypes( convertableTracks )
+    auto trackLines   = S_C::MoreThan( 1 ) && S_C::OnlyTypes( convertibleTracks )
                                 && P_S_C::SameLayer();
 
     auto anyLines     = graphicLines || trackLines;
@@ -134,7 +137,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
                         case PCB_SHAPE_TYPE::SEGMENT:
                         case PCB_SHAPE_TYPE::RECT:
                         case PCB_SHAPE_TYPE::CIRCLE:
-                        // case S_ARC: // Not yet
+                        case PCB_SHAPE_TYPE::ARC:
                             break;
 
                         default:
@@ -144,7 +147,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
                         break;
 
                     case PCB_TRACE_T:
-                    // case PCB_ARC_T: // Not yet
+                    case PCB_ARC_T:
                         break;
 
                     default:
@@ -241,7 +244,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
 {
     SHAPE_POLY_SET poly;
 
-    std::map<VECTOR2I, std::vector<EDA_ITEM*>> connections;
+    // Stores pairs of (anchor, item) where anchor == 0 -> SEG.A, anchor == 1 -> SEG.B
+    std::map<VECTOR2I, std::vector<std::pair<int, EDA_ITEM*>>> connections;
     std::set<EDA_ITEM*> used;
     std::deque<EDA_ITEM*> toCheck;
 
@@ -250,8 +254,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
         if( OPT<SEG> seg = getStartEndPoints( item, nullptr ) )
         {
             toCheck.push_back( item );
-            connections[seg->A].emplace_back( item );
-            connections[seg->B].emplace_back( item );
+            connections[seg->A].emplace_back( std::make_pair( 0, item ) );
+            connections[seg->B].emplace_back( std::make_pair( 1, item ) );
         }
     }
 
@@ -263,67 +267,103 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
         if( used.count( candidate ) )
             continue;
 
-        int      width = -1;
-        OPT<SEG> seg = getStartEndPoints( candidate, &width );
-        wxASSERT( seg );
+        int width = -1;
+        SHAPE_LINE_CHAIN outline;
 
-        SHAPE_LINE_CHAIN     outline;
-        std::deque<VECTOR2I> points;
+        auto insert =
+                [&]( EDA_ITEM* aItem, VECTOR2I aAnchor, bool aDirection )
+                {
+                    if( aItem->Type() == PCB_ARC_T ||
+                        ( aItem->Type() == PCB_SHAPE_T &&
+                          static_cast<PCB_SHAPE*>( aItem )->GetShape() == PCB_SHAPE_TYPE::ARC ) )
+                    {
+                        SHAPE_ARC arc;
+
+                        if( aItem->Type() == PCB_ARC_T )
+                        {
+                            std::shared_ptr<SHAPE> es =
+                                    static_cast<PCB_ARC*>( aItem )->GetEffectiveShape();
+                            arc = *static_cast<SHAPE_ARC*>( es.get() );
+                        }
+                        else
+                        {
+                            PCB_SHAPE* ps = static_cast<PCB_SHAPE*>( aItem );
+                            arc = SHAPE_ARC( ps->GetArcStart(), ps->GetArcMid(), ps->GetArcEnd(),
+                                             ps->GetWidth() );
+                        }
+
+                        if( aDirection )
+                            outline.Append( aAnchor == arc.GetP0() ? arc : arc.Reversed() );
+                        else
+                            outline.Insert( 0, aAnchor == arc.GetP0() ? arc : arc.Reversed() );
+                    }
+                    else
+                    {
+                        OPT<SEG> nextSeg = getStartEndPoints( aItem, &width );
+                        wxASSERT( nextSeg );
+
+                        VECTOR2I& point = ( aAnchor == nextSeg->A ) ? nextSeg->B : nextSeg->A;
+
+                        if( aDirection )
+                            outline.Append( point );
+                        else
+                            outline.Insert( 0, point );
+                    }
+                };
 
         // aDirection == true for walking "right" and appending to the end of points
         // false for walking "left" and prepending to the beginning
-        std::function<void( EDA_ITEM*, bool )> process =
-                [&]( EDA_ITEM* aItem, bool aDirection )
+        std::function<void( EDA_ITEM*, VECTOR2I, bool )> process =
+                [&]( EDA_ITEM* aItem, VECTOR2I aAnchor, bool aDirection )
                 {
                     if( used.count( aItem ) )
                         return;
 
                     used.insert( aItem );
 
-                    OPT<SEG> nextSeg = getStartEndPoints( aItem, &width );
-                    wxASSERT( nextSeg );
+                    insert( aItem, aAnchor, aDirection );
 
-                    // The reference point, i.e. last added point in the direction we're headed
-                    VECTOR2I& ref = aDirection ? points.back() : points.front();
+                    OPT<SEG> anchors = getStartEndPoints( aItem, &width );
+                    wxASSERT( anchors );
 
-                    // The next point, i.e. the other point on this segment
-                    VECTOR2I& next = ( ref == nextSeg->A ) ? nextSeg->B : nextSeg->A;
+                    VECTOR2I nextAnchor = ( aAnchor == anchors->A ) ? anchors->B : anchors->A;
 
-                    if( aDirection )
-                        points.push_back( next );
-                    else
-                        points.push_front( next );
+                    for( std::pair<int, EDA_ITEM*> pair : connections[nextAnchor] )
+                    {
+                        if( pair.second == aItem )
+                            continue;
 
-                    for( EDA_ITEM* neighbor : connections[next] )
-                        process( neighbor, aDirection );
+                        process( pair.second, nextAnchor, aDirection );
+                    }
                 };
 
-        // Start with just one point and walk one direction
-        points.push_back( seg->A );
-        process( candidate, true );
+        OPT<SEG> anchors = getStartEndPoints( candidate, &width );
+        wxASSERT( anchors );
+
+        // Start with the first object and walk "right"
+        insert( candidate, anchors->A, true );
+        process( candidate, anchors->B, true );
 
         // check for any candidates on the "left"
         EDA_ITEM* left = nullptr;
 
-        for( EDA_ITEM* possibleLeft : connections[seg->A] )
+        for( std::pair<int, EDA_ITEM*> possibleLeft : connections[anchors->A] )
         {
-            if( possibleLeft != candidate )
+            if( possibleLeft.second != candidate )
             {
-                left = possibleLeft;
+                left = possibleLeft.second;
                 break;
             }
         }
 
         if( left )
-            process( left, false );
+            process( left, anchors->A, false );
 
-        if( points.size() < 3 )
+        if( outline.PointCount() < 3 )
             continue;
 
-        for( const VECTOR2I& point : points )
-            outline.Append( point );
-
         outline.SetClosed( true );
+        outline.Simplify();
 
         if( width >= 0 )
             outline.SetWidth( width );
@@ -691,8 +731,16 @@ OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem, int* aWidth )
         if( aWidth )
             *aWidth = line->GetWidth();
 
-        return boost::make_optional<SEG>( { VECTOR2I( line->GetStart() ),
-                                            VECTOR2I( line->GetEnd() ) } );
+        if( line->GetShape() == PCB_SHAPE_TYPE::SEGMENT )
+        {
+            return boost::make_optional<SEG>( { VECTOR2I( line->GetStart() ),
+                                                VECTOR2I( line->GetEnd() ) } );
+        }
+        else
+        {
+            return boost::make_optional<SEG>( { VECTOR2I( line->GetArcStart() ),
+                                                VECTOR2I( line->GetArcEnd() ) } );
+        }
     }
 
     case PCB_TRACE_T:
