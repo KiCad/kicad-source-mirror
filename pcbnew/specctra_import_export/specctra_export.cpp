@@ -500,6 +500,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
                                          0, rradius,
                                          aPad->GetChamferRectRatio(),
                                          doChamfer ? aPad->GetChamferPositions() : 0,
+                                         0,
                                          aBoard->GetDesignSettings().m_MaxError,
                                          ERROR_INSIDE );
             SHAPE_LINE_CHAIN& polygonal_shape = cornerBuffer.Outline( 0 );

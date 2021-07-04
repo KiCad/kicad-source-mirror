@@ -629,37 +629,9 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         int  ddx = GetShape() == PAD_SHAPE::TRAPEZOID ? m_deltaSize.x / 2 : 0;
         int  ddy = GetShape() == PAD_SHAPE::TRAPEZOID ? m_deltaSize.y / 2 : 0;
 
-        wxPoint corners[4];
-        corners[0] = wxPoint( -dx - ddy,  dy + ddx );
-        corners[1] = wxPoint(  dx + ddy,  dy - ddx );
-        corners[2] = wxPoint(  dx - ddy, -dy + ddx );
-        corners[3] = wxPoint( -dx + ddy, -dy - ddx );
-
         SHAPE_POLY_SET outline;
-        outline.NewOutline();
-
-        for( wxPoint& corner : corners )
-        {
-            RotatePoint( &corner, angle );
-            corner += padShapePos;
-            outline.Append( corner.x, corner.y );
-        }
-
-        if( aClearanceValue )
-        {
-            int numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
-                                    pad_min_seg_per_circle_count );
-            int clearance = aClearanceValue;
-
-            if( aErrorLoc == ERROR_OUTSIDE )
-            {
-                int actual_error = CircleToEndSegmentDeltaRadius( clearance, numSegs );
-                clearance += GetCircleToPolyCorrection( actual_error );
-            }
-
-            outline.Inflate( clearance, numSegs );
-        }
-
+        TransformTrapezoidToPolygon( outline, padShapePos, m_size, angle, ddx, ddy,
+                                     aClearanceValue, aError, aErrorLoc );
         aCornerBuffer.Append( outline );
     }
         break;
@@ -667,51 +639,14 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE::CHAMFERED_RECT:
     case PAD_SHAPE::ROUNDRECT:
     {
-        int    radius = GetRoundRectCornerRadius();
-        wxSize shapesize( m_size );
-        bool   doChamfer = GetShape() == PAD_SHAPE::CHAMFERED_RECT;
-
-        double chamferRatio = doChamfer ? GetChamferRectRatio() : 0.0;
-
-        if( aClearanceValue )
-        {
-            radius += aClearanceValue;
-            shapesize.x += aClearanceValue * 2;
-            shapesize.y += aClearanceValue * 2;
-
-            // The chamfer position (the 45 deg line on corner) must be
-            // offsetted by aClearanceValue from the base shape chamfer pos
-            // So we recalculate the chamferRatio to do that
-            //
-            // the chamfered shape is square with widet = w, and a corner dist from center
-            // is w*1.414 / 2 = w*0.707
-            // the distance from corner to chamfer line is ch = chamfer_size/707
-            // the distance from center to chamfer line is
-            // d = w*707 - ch/707
-            // so we have:
-            // base shape: d1 = w1*707 - ch1/707 = 0.707 * ( w1 - w1*chamferRatio)
-            // shape with clearance: d2 = w2*707 - ch2/707 = d1 + aClearanceValue
-            const double rootsq_2 = 1.41421356237/2;
-            int d1 = rootsq_2 * std::min( m_size.x, m_size.y ) * ( 1 - GetChamferRectRatio() );
-            int d2 = d1 + aClearanceValue;
-            // d2 = 0.707 * w2 * ( 1 - chamferRatio2 )
-            // 1 - d2 / ( 0.707 * w2 ) = chamferRatio2
-            chamferRatio = 1.0 - d2 / ( rootsq_2 * std::min( shapesize.x, shapesize.y ) );
-
-            // Ensure chamferRatio = 0.0 ... 0.5
-            if( chamferRatio < 0.0 )
-                chamferRatio = 0.0;
-
-            if( chamferRatio > 0.5 )
-                chamferRatio = 0.5;
-        }
+        bool doChamfer = GetShape() == PAD_SHAPE::CHAMFERED_RECT;
 
         SHAPE_POLY_SET outline;
-        TransformRoundChamferedRectToPolygon( outline, padShapePos, shapesize, angle, radius,
-                                              chamferRatio,
+        TransformRoundChamferedRectToPolygon( outline, padShapePos, m_size, angle,
+                                              GetRoundRectCornerRadius(),
+                                              doChamfer ? GetChamferRectRatio() : 0,
                                               doChamfer ? GetChamferPositions() : 0,
-                                              aError, aErrorLoc );
-
+                                              aClearanceValue, aError, aErrorLoc );
         aCornerBuffer.Append( outline );
     }
         break;

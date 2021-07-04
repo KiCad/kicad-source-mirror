@@ -582,7 +582,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
             TransformRoundChamferedRectToPolygon( outline, pad->GetPosition(), pad->GetSize(),
                     pad->GetOrientation(), pad->GetRoundRectCornerRadius(),
-                    pad->GetChamferRectRatio(), pad->GetChamferPositions(), maxError,
+                    pad->GetChamferRectRatio(), pad->GetChamferPositions(), 0, maxError,
                     ERROR_INSIDE );
 
             for( int jj = 0; jj < outline.OutlineCount(); ++jj )

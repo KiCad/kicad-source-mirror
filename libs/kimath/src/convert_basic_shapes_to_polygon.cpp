@@ -26,6 +26,7 @@
  */
 
 #include <algorithm>                    // for max, min
+#include <bitset>                       // for bitset::count
 #include <math.h>                       // for atan2
 #include <type_traits>                  // for swap
 
@@ -226,169 +227,209 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPo
 }
 
 
-// Return a polygon representing a round rect centered at {0,0}
-void TransformRoundRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxSize& aSize,
-                                  int aCornerRadius, int aError, ERROR_LOC aErrorLoc )
+struct ROUNDED_CORNER
+{
+    VECTOR2I m_position;
+    int      m_radius;
+    ROUNDED_CORNER( int x, int y ) : m_position( VECTOR2I( x, y ) ), m_radius( 0 ) {}
+    ROUNDED_CORNER( int x, int y, int radius ) : m_position( VECTOR2I( x, y ) ), m_radius( radius ) {}
+};
+
+
+// Corner List requirements: no concave shape, corners in clockwise order, no duplicate corners
+void CornerListToPolygon( SHAPE_POLY_SET& outline, std::vector<ROUNDED_CORNER>& aCorners,
+                          int aInflate, int aError, ERROR_LOC aErrorLoc )
+{
+    assert( aInflate >= 0 );
+    outline.NewOutline();
+    VECTOR2I incoming = aCorners[0].m_position - aCorners.back().m_position;
+
+    for( int n = 0, count = aCorners.size(); n < count; n++ )
+    {
+        ROUNDED_CORNER& cur = aCorners[n];
+        ROUNDED_CORNER& next = aCorners[( n + 1 ) % count];
+        VECTOR2I        outgoing = next.m_position - cur.m_position;
+
+        if( !( aInflate || cur.m_radius ) )
+            outline.Append( cur.m_position );
+        else
+        {
+            VECTOR2I position = cur.m_position;
+            int      radius = cur.m_radius;
+            double   cosNum = (double) incoming.x * outgoing.x + (double) incoming.y * outgoing.y;
+            double   cosDen = (double) incoming.EuclideanNorm() * outgoing.EuclideanNorm();
+            double   angle = acos( cosNum / cosDen );
+            double   tanAngle2 = tan( ( M_PI - angle ) / 2 );
+
+            if( aInflate )
+            {
+                radius += aInflate;
+                position += incoming.Resize( aInflate / tanAngle2 )
+                          + incoming.Perpendicular().Resize( -aInflate );
+            }
+
+            // Ensure 16+ segments per 360° and ensure first & last segment are the same size
+            int    numSegs = std::max( 16, GetArcToSegmentCount( radius, aError, 360.0 ) );
+            int    angDelta = 3600 / numSegs;
+            int    targetAngle = RAD2DECIDEG( angle );
+            int    angPos = ( angDelta + ( targetAngle % angDelta ) ) / 2;
+
+            double   centerProjection = radius / tanAngle2;
+            VECTOR2I arcStart = position - incoming.Resize( centerProjection );
+            VECTOR2I arcEnd = position + outgoing.Resize( centerProjection );
+            VECTOR2I arcCenter = arcStart + incoming.Perpendicular().Resize( radius );
+
+            if( aErrorLoc == ERROR_INSIDE )
+            {
+                outline.Append( arcStart );
+                VECTOR2I zeroRef = arcStart - arcCenter;
+
+                for( ; angPos < targetAngle; angPos += angDelta )
+                {
+                    VECTOR2I pt = zeroRef;
+                    RotatePoint( pt, -angPos );
+                    outline.Append( pt + arcCenter );
+                }
+
+                outline.Append( arcEnd );
+            }
+            else
+            {
+                // The outer radius should be radius+aError, recalculate because numSegs is clamped
+                int      actualDeltaRadius = CircleToEndSegmentDeltaRadius( radius, numSegs );
+                int      radiusExtend = GetCircleToPolyCorrection( actualDeltaRadius );
+                VECTOR2I arcExStart = arcStart + incoming.Perpendicular().Resize( -radiusExtend );
+                VECTOR2I arcExEnd = arcEnd + outgoing.Perpendicular().Resize( -radiusExtend );
+
+                // A larger radius will create "ears", so we intersect the first and last segment
+                // of the rounded corner with the non-rounded outline
+                SEG      inSeg( position - incoming, position );
+                SEG      outSeg( position, position + outgoing );
+                VECTOR2I zeroRef = arcExStart - arcCenter;
+                VECTOR2I pt = zeroRef;
+
+                RotatePoint( pt, -angPos );
+                pt += arcCenter;
+                OPT<VECTOR2I> intersect = inSeg.Intersect( SEG( arcExStart, pt ) );
+                outline.Append( intersect.has_value() ? intersect.get() : arcStart );
+                outline.Append( pt );
+                angPos += angDelta;
+
+                for( ; angPos < targetAngle; angPos += angDelta )
+                {
+                    pt = zeroRef;
+                    RotatePoint( pt, -angPos );
+                    pt += arcCenter;
+                    outline.Append( pt );
+                }
+
+                intersect = outSeg.Intersect( SEG( pt, arcExEnd ) );
+                outline.Append( intersect.has_value() ? intersect.get() : arcEnd );
+            }
+        }
+
+        incoming = outgoing;
+    }
+}
+
+
+void CornerListRemoveDuplicates( std::vector<ROUNDED_CORNER>& aCorners )
+{
+    VECTOR2I prev = aCorners[0].m_position;
+
+    for( int pos = aCorners.size() - 1; pos >= 0; pos-- )
+    {
+        if( aCorners[pos].m_position == prev )
+            aCorners.erase( aCorners.begin() + pos );
+        else
+            prev = aCorners[pos].m_position;
+    }
+}
+
+
+void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aPosition,
+                                  const wxSize& aSize, double aRotation, int aDeltaX, int aDeltaY,
+                                  int aInflate, int aError, ERROR_LOC aErrorLoc )
 {
     SHAPE_POLY_SET outline;
+    wxSize         size( aSize / 2 );
 
-    wxPoint centers[4];
-    wxSize size( aSize / 2 );
+    std::vector<ROUNDED_CORNER> corners;
+    corners.reserve( 4 );
+    corners.push_back( ROUNDED_CORNER( -size.x + aDeltaY, -size.y - aDeltaX ) );
+    corners.push_back( ROUNDED_CORNER( size.x - aDeltaY, -size.y + aDeltaX ) );
+    corners.push_back( ROUNDED_CORNER( size.x + aDeltaY, size.y - aDeltaX ) );
+    corners.push_back( ROUNDED_CORNER( -size.x - aDeltaY, size.y + aDeltaX ) );
 
-    size.x -= aCornerRadius;
-    size.y -= aCornerRadius;
+    if( aDeltaY == size.x || aDeltaX == size.y )
+        CornerListRemoveDuplicates( corners );
 
-    // Ensure size is > 0, to avoid generating unusable shapes which can crash kicad.
-    size.x = std::max( 1, size.x );
-    size.y = std::max( 1, size.y );
+    CornerListToPolygon( outline, corners, aInflate, aError, aErrorLoc );
 
-    centers[0] = wxPoint( -size.x,  size.y );
-    centers[1] = wxPoint(  size.x,  size.y );
-    centers[2] = wxPoint(  size.x, -size.y );
-    centers[3] = wxPoint( -size.x, -size.y );
+    if( aRotation != 0.0 )
+        outline.Rotate( DECIDEG2RAD( -aRotation ), VECTOR2I( 0, 0 ) );
 
-    int numSegs = GetArcToSegmentCount( aCornerRadius, aError, 360.0 );
-
-    // Choppy corners on rounded-corner rectangles look awful so enforce a minimum of
-    // 4 segments per corner.
-    if( numSegs < 16 )
-        numSegs = 16;
-
-    int delta = 3600 / numSegs;           // rotate angle in 0.1 degree
-    int radius = aCornerRadius;
-
-    if( aErrorLoc == ERROR_OUTSIDE )
-    {
-        // The outer radius should be radius+aError
-        // Recalculate the actual approx error, as it can be smaller than aError
-        // because numSegs is clamped to a minimal value
-        int actual_delta_radius = CircleToEndSegmentDeltaRadius( radius, numSegs );
-        radius += GetCircleToPolyCorrection( actual_delta_radius );
-    }
-
-    auto genArc =
-            [&]( const wxPoint& aCenter, int aStart, int aEnd )
-            {
-                for( int angle = aStart + delta; angle < aEnd; angle += delta )
-                {
-                    wxPoint pt( -radius, 0 );
-                    RotatePoint( &pt, angle );
-                    pt += aCenter;
-                    outline.Append( pt.x, pt.y );
-                }
-            };
-
-    outline.NewOutline();
-
-    outline.Append( centers[0] + wxPoint( -radius, 0 ) );
-    genArc( centers[0], 0, 900 );
-    outline.Append( centers[0] + wxPoint( 0, radius ) );
-    outline.Append( centers[1] + wxPoint( 0, radius ) );
-    genArc( centers[1], 900, 1800 );
-    outline.Append( centers[1] + wxPoint( radius, 0 ) );
-    outline.Append( centers[2] + wxPoint( radius, 0 ) );
-    genArc( centers[2], 1800, 2700 );
-    outline.Append( centers[2] + wxPoint( 0, -radius ) );
-    outline.Append( centers[3] + wxPoint( 0, -radius ) );
-    genArc( centers[3], 2700, 3600 );
-    outline.Append( centers[3] + wxPoint( -radius, 0 ) );
-
-    outline.Outline( 0 ).SetClosed( true );
-
-    // The created outlines are bigger than the actual outlines, due to the fact
-    // the corner radius is bigger than the initial value when building a shape outside the
-    // actual shape.
-    // However the bounding box shape does not need to be bigger: only rounded corners must
-    // be modified.
-    // So clamp the too big shape by the actual bounding box
-    if( aErrorLoc == ERROR_OUTSIDE )
-    {
-        SHAPE_POLY_SET bbox;
-        bbox.NewOutline();
-        wxSize bbox_size = aSize/2;
-
-        bbox.Append( wxPoint( -bbox_size.x, -bbox_size.y ) );
-        bbox.Append( wxPoint( bbox_size.x, -bbox_size.y ) );
-        bbox.Append( wxPoint( bbox_size.x, bbox_size.y ) );
-        bbox.Append( wxPoint( -bbox_size.x, bbox_size.y ) );
-        bbox.Outline( 0 ).SetClosed( true );
-
-        outline.BooleanIntersection( bbox, SHAPE_POLY_SET::PM_FAST );
-        // The result is a convex polygon, no need to simplify or fracture.
-    }
-
-    // Add the outline:
+    outline.Move( VECTOR2I( aPosition ) );
     aCornerBuffer.Append( outline );
 }
 
 
 void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aPosition,
-                                           const wxSize& aSize, double aRotation,
-                                           int aCornerRadius, double aChamferRatio,
-                                           int aChamferCorners, int aError, ERROR_LOC aErrorLoc )
+                                           const wxSize& aSize, double aRotation, int aCornerRadius,
+                                           double aChamferRatio, int aChamferCorners, int aInflate,
+                                           int aError, ERROR_LOC aErrorLoc )
 {
     SHAPE_POLY_SET outline;
-    TransformRoundRectToPolygon( outline, aSize, aCornerRadius, aError, aErrorLoc );
+    wxSize         size( aSize / 2 );
+    int            chamferCnt = std::bitset<8>( aChamferCorners ).count();
+
+    // Ensure size is > 0, to avoid generating unusable shapes which can crash kicad.
+    size.x = std::max( 1, size.x );
+    size.y = std::max( 1, size.y );
+
+    std::vector<ROUNDED_CORNER> corners;
+    corners.reserve( 4 + chamferCnt );
+    corners.push_back( ROUNDED_CORNER( -size.x, -size.y, aCornerRadius ) );
+    corners.push_back( ROUNDED_CORNER( size.x, -size.y, aCornerRadius ) );
+    corners.push_back( ROUNDED_CORNER( size.x, size.y, aCornerRadius ) );
+    corners.push_back( ROUNDED_CORNER( -size.x, size.y, aCornerRadius ) );
 
     if( aChamferCorners )
     {
-        // Now we have the round rect outline, in position 0,0 orientation 0.0.
-        // Chamfer the corner(s).
-        int chamfer_value = aChamferRatio * std::min( aSize.x, aSize.y );
-
-        SHAPE_POLY_SET chamfered_corner;    // corner shape for the current corner to chamfer
-
-        int corner_id[4] =
+        int shorterSide = std::min( aSize.x, aSize.y );
+        int chamfer = aChamferRatio * shorterSide;
+        int chamId[4] = { RECT_CHAMFER_TOP_LEFT, RECT_CHAMFER_TOP_RIGHT,
+                          RECT_CHAMFER_BOTTOM_RIGHT, RECT_CHAMFER_BOTTOM_LEFT };
+        int sign[8] = { 0, 1, -1, 0, 0, -1, 1, 0 };
+        
+        for( int cc = 0, pos = 0; cc < 4; cc++, pos++ )
         {
-            RECT_CHAMFER_TOP_LEFT, RECT_CHAMFER_TOP_RIGHT,
-            RECT_CHAMFER_BOTTOM_LEFT, RECT_CHAMFER_BOTTOM_RIGHT
-        };
-        // Depending on the corner position, signX[] and signY[] give the sign of chamfer
-        // coordinates relative to the corner position
-        // The first corner is the top left corner, then top right, bottom left and bottom right
-        int signX[4] = {1, -1, 1,-1 };
-        int signY[4] = {1, 1, -1,-1 };
-
-        for( int ii = 0; ii < 4; ii++ )
-        {
-            if( (corner_id[ii] & aChamferCorners) == 0 )
+            if( !( aChamferCorners & chamId[cc] ) )
                 continue;
 
-            VECTOR2I corner_pos( -signX[ii]*aSize.x/2, -signY[ii]*aSize.y/2 );
+            corners[pos].m_radius = 0;
+            
+            if( chamfer == 0 )
+                continue;
 
-            if( aCornerRadius )
-            {
-                // We recreate a rectangular area covering the full rounded corner
-                // (max size = aSize/2) to rebuild the corner before chamfering, to be sure
-                // the rounded corner shape does not overlap the chamfered corner shape:
-                chamfered_corner.RemoveAllContours();
-                chamfered_corner.NewOutline();
-                chamfered_corner.Append( 0, 0 );
-                chamfered_corner.Append( 0, signY[ii] * aSize.y / 2 );
-                chamfered_corner.Append( signX[ii] * aSize.x / 2, signY[ii] * aSize.y / 2 );
-                chamfered_corner.Append( signX[ii] * aSize.x / 2, 0 );
-                chamfered_corner.Move( corner_pos );
-                outline.BooleanAdd( chamfered_corner, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-            }
-
-            // Now chamfer this corner
-            chamfered_corner.RemoveAllContours();
-            chamfered_corner.NewOutline();
-            chamfered_corner.Append( 0, 0 );
-            chamfered_corner.Append( 0, signY[ii] * chamfer_value );
-            chamfered_corner.Append( signX[ii] * chamfer_value, 0 );
-            chamfered_corner.Move( corner_pos );
-            outline.BooleanSubtract( chamfered_corner, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            corners.insert( corners.begin() + pos + 1, corners[pos] );
+            corners[pos].m_position.x += sign[( 2 * cc ) & 7] * chamfer;
+            corners[pos].m_position.y += sign[( 2 * cc - 2 ) & 7] * chamfer;
+            corners[pos + 1].m_position.x += sign[( 2 * cc + 1 ) & 7] * chamfer;
+            corners[pos + 1].m_position.y += sign[( 2 * cc - 1 ) & 7] * chamfer;
+            pos++;
         }
+
+        if( chamferCnt > 1 && 2 * chamfer >= shorterSide )
+            CornerListRemoveDuplicates( corners );
     }
 
-    // Rotate and move the outline:
+    CornerListToPolygon( outline, corners, aInflate, aError, aErrorLoc );
+
     if( aRotation != 0.0 )
         outline.Rotate( DECIDEG2RAD( -aRotation ), VECTOR2I( 0, 0 ) );
 
     outline.Move( VECTOR2I( aPosition ) );
-
-    // Add the outline:
     aCornerBuffer.Append( outline );
 }
 

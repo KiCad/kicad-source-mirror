@@ -210,7 +210,7 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
 
     SHAPE_POLY_SET outline;
     TransformRoundChamferedRectToPolygon( outline, aPadPos, size, aOrient, aCornerRadius,
-                                          0.0, 0, GetPlotterArcHighDef(), ERROR_INSIDE );
+                                          0.0, 0, 0, GetPlotterArcHighDef(), ERROR_INSIDE );
 
     std::vector< wxPoint > cornerList;
     // TransformRoundRectToPolygon creates only one convex polygon

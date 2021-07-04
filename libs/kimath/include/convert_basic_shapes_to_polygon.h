@@ -113,11 +113,29 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, i
 void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aEnd,
                              int aWidth, int aError, ERROR_LOC aErrorLoc, int aMinSegCount = 0 );
 
+/**
+ * Convert a rectangle or trapezoid to a polygon.
+ *
+ * This will generate at least 16 segments per circle (when using inflate).
+ *
+ * @param aCornerBuffer is a buffer to store the polygon.
+ * @param aPosition is the coordinate of the center of the rectangle.
+ * @param aSize is the size of the rectangle.
+ * @param aDeltaX is the delta for trapezoids in X direction
+ * @param aDeltaY is the delta for trapezoids in Y direction
+ * @param aInflate is the (positive) shape inflation or 0
+ * @param aError is the IU allowed for error in approximation.
+ * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
+ */
+void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                  const wxPoint& aPosition, const wxSize& aSize,
+                                  double aRotation, int aDeltaX, int aDeltaY, int aInflate,
+                                  int aError, ERROR_LOC aErrorLoc );
 
 /**
  * Convert a rectangle with rounded corners and/or chamfered corners to a polygon.
  *
- * Convert rounded corners arcs to multiple straight lines.  This will generate at least
+ * Convert rounded corners arcs to multiple straight lines. This will generate at least
  * 16 segments per circle.
  *
  * @param aCornerBuffer is a buffer to store the polygon.
@@ -125,7 +143,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPo
  * @param aSize is the size of the rectangle.
  * @param aCornerRadius is the radius of rounded corners (can be 0).
  * @param aRotation is the rotation in 0.1 degrees of the rectangle.
- * @param aChamferRatio is the ratio between smaller rect size and chamfer value.
+ * @param aChamferRatio is the ratio between smaller rect side and chamfer value.
  * @param aChamferCorners is the identifier of the corners to chamfer:
  *  - 0 = no chamfer
  *  - 1 = TOP_LEFT
@@ -133,13 +151,14 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPo
  *  - 4 = BOTTOM_LEFT
  *  - 8 = BOTTOM_RIGHT
  * One can have more than one chamfered corner by ORing the corner identifiers.
+ * @param aInflate is the (positive) shape inflation or 0
  * @param aError is the IU allowed for error in approximation.
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
  */
 void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                            const wxPoint& aPosition, const wxSize& aSize,
                                            double aRotation, int aCornerRadius,
-                                           double aChamferRatio, int aChamferCorners,
+                                           double aChamferRatio, int aChamferCorners, int aInflate,
                                            int aError, ERROR_LOC aErrorLoc );
 
 /**

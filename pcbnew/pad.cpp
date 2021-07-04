@@ -430,7 +430,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 
         TransformRoundChamferedRectToPolygon( outline, shapePos, GetSize(), m_orient,
                                               GetRoundRectCornerRadius(), GetChamferRectRatio(),
-                                              GetChamferPositions(), maxError, ERROR_INSIDE );
+                                              GetChamferPositions(), 0, maxError, ERROR_INSIDE );
 
         add( new SHAPE_SIMPLE( outline.COutline( 0 ) ) );
     }
