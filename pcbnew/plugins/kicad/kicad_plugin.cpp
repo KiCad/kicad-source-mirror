@@ -856,7 +856,7 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
                 else
                 {
                     const SHAPE_ARC& arc = outline.Arc( ind );
-                    m_out->Print( aNestLevel, "%s(arc (start %s) (mid %s) (end %s)",
+                    m_out->Print( aNestLevel, "%s(arc (start %s) (mid %s) (end %s))",
                             nestLevel ? "" : " ",
                             FormatInternalUnits( arc.GetP0() ).c_str(),
                             FormatInternalUnits( arc.GetArcMid() ).c_str(),

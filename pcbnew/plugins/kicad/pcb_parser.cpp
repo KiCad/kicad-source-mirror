@@ -358,7 +358,9 @@ void PCB_PARSER::parseOutlinePoints( SHAPE_LINE_CHAIN& aPoly )
         SHAPE_ARC arc( arc_start, arc_mid, arc_end, 0 );
 
         aPoly.Append( arc );
-        NeedRIGHT();
+
+        if( token != T_RIGHT )
+            Expecting( T_RIGHT );
 
         break;
     }
