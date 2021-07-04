@@ -1385,10 +1385,15 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
 
         if( linechain.PointCount() < 2 )
         {
-            wxLogError( _( "Polygon has only %d point extracted from %ld vertices. At least 2 "
-                           "points are required." ),
-                        linechain.PointCount(),
-                        elem.vertices.size() );
+            // We have found multiple Altium files with polygon records containing nothing but two
+            // coincident vertices.  These polygons do not appear when opening the file in Altium.
+            // https://gitlab.com/kicad/code/kicad/-/issues/8183
+            //
+            // wxLogError( _( "Polygon has only %d point extracted from %ld vertices. At least 2 "
+            //                "points are required." ),
+            //             linechain.PointCount(),
+            //             elem.vertices.size() );
+
             m_polygons.emplace_back( nullptr );
             continue;
         }
@@ -1566,10 +1571,14 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
 
             if( linechain.PointCount() < 2 )
             {
-                wxLogError(  _( "ShapeBasedRegion has only %d point extracted from %ld vertices. "
-                                "At least 2 points are required." ),
-                             linechain.PointCount(),
-                             elem.outline.size() );
+                // We have found multiple Altium files with polygon records containing nothing but
+                // two coincident vertices.  These polygons do not appear when opening the file in
+                // Altium.  https://gitlab.com/kicad/code/kicad/-/issues/8183
+                //
+                // wxLogError( _( "ShapeBasedRegion has only %d point extracted from %ld vertices. "
+                //                "At least 2 points are required." ),
+                //              linechain.PointCount(),
+                //              elem.outline.size() );
                 continue;
             }
 
@@ -1628,10 +1637,15 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
 
                 if( linechain.PointCount() < 2 )
                 {
-                    wxLogError( _( "Polygon has only %d point extracted from %ld vertices. At "
-                                   "least 2 points are required." ),
-                                linechain.PointCount(),
-                                elem.outline.size() );
+                    // We have found multiple Altium files with polygon records containing nothing
+                    // but two coincident vertices.  These polygons do not appear when opening the
+                    // file in Altium.  https://gitlab.com/kicad/code/kicad/-/issues/8183
+                    //
+                    // wxLogError( _( "Polygon has only %d point extracted from %ld vertices. At "
+                    //                "least 2 points are required." ),
+                    //             linechain.PointCount(),
+                    //             elem.outline.size() );
+
                     continue;
                 }
 
