@@ -208,7 +208,7 @@ wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
 
 void ACTION_MENU::AddClose( wxString aAppname )
 {
-#ifdef __WINDOWS_
+#ifdef __WINDOWS__
     Add( _( "Close" ),
          wxString::Format( _( "Close %s" ), aAppname ),
          wxID_CLOSE,
