@@ -151,6 +151,7 @@ extern const std::string EagleFootprintLibPathExtension;
 extern const std::string DrawingSheetFileExtension;
 extern const std::string SpecctraDsnFileExtension;
 extern const std::string IpcD356FileExtension;
+extern const std::string WorkbookFileExtension;
 
 extern const std::string PngFileExtension;
 extern const std::string JpegFileExtension;

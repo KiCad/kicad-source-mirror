@@ -915,6 +915,9 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
     wxTextFile file( aPath );
 
+#define DISPLAY_LOAD_ERROR( fmt ) DisplayErrorMessage( this, wxString::Format( _( fmt ), \
+            file.GetCurrentLine()+1 ) )
+
     if( !file.Open() )
     {
         updateFrame();
@@ -925,9 +928,8 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
     if( !file.GetFirstLine().ToLong( &plotsCount ) ) // GetFirstLine instead of GetNextLine
     {
+        DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
         file.Close();
-        DisplayErrorMessage( this,
-                _( "Error loading workbook: First line is not convertible to `long`." ) );
 
         updateFrame();
         return false;
@@ -939,9 +941,8 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
         if( !file.GetNextLine().ToLong( &plotType ) )
         {
+            DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
             file.Close();
-            DisplayErrorMessage( this, wxString::Format( 
-                    _( "Error loading workbook: Line %d is not convertible to `long`." ), 6*i+2 ) );
 
             updateFrame();
             return false;
@@ -960,10 +961,8 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
         if( !file.GetNextLine().ToLong( &tracesCount ) )
         {
+            DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
             file.Close();
-            DisplayErrorMessage( this, wxString::Format( 
-                    _( "Error loading workbook: Line %d is not convertible to `long`." ), 6*i+4 )
-                    );
 
             updateFrame();
             return false;
@@ -976,10 +975,9 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
             if( !file.GetNextLine().ToLong( &traceType ) )
             {
+                DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer."
+                        );
                 file.Close();
-                DisplayErrorMessage( this, wxString::Format( 
-                        _( "Error loading workbook: Line %d is not convertible to `long`." ), 6*i+5
-                        ) );
 
                 updateFrame();
                 return false;
@@ -989,9 +987,8 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
             if( name.IsEmpty() )
             {
+                DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is empty." );
                 file.Close();
-                DisplayErrorMessage( this, wxString::Format( 
-                    _( "Error loading workbook: Line %d is empty" ), 6*i+6 ) );
 
                 updateFrame();
                 return false;
@@ -1001,9 +998,8 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
             if( param.IsEmpty() )
             {
+                DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is empty." );
                 file.Close();
-                DisplayErrorMessage( this, wxString::Format( 
-                    _( "Error loading workbook: Line %d is empty" ), 6*i+7 ) );
 
                 updateFrame();
                 return false;
@@ -1025,12 +1021,10 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
 bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
 {
-    wxString savePath = aPath;
+    wxFileName filename = aPath;
+    filename.SetExt( WorkbookFileExtension );
 
-    if( !savePath.Lower().EndsWith(".wbk") )
-        savePath += ".wbk";
-
-    wxTextFile file( savePath );
+    wxTextFile file( filename.GetFullPath() );
 
     if( file.Exists() )
     {
@@ -1083,7 +1077,7 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
     // Store the filename of the last saved workbook. It will be used to restore the simulation if
     // the frame is closed and then opened again.
     if( res )
-        m_simulator->Settings()->SetWorkbookFilename( wxFileName( savePath ).GetFullName() );
+        m_simulator->Settings()->SetWorkbookFilename( filename.GetFullName() );
 
     m_workbook->ClrModified();
     updateFrame();
@@ -1151,18 +1145,24 @@ void SIM_PLOT_FRAME::menuSaveWorkbook( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::menuSaveWorkbookAs( wxCommandEvent& event )
 {
-    wxString defaultFilename = m_simulator->Settings()->GetWorkbookFilename();
+    wxFileName defaultFilename = m_simulator->Settings()->GetWorkbookFilename();
 
-    if( defaultFilename.IsEmpty() )
+    if( defaultFilename.GetName().IsEmpty() )
     {
         if( Prj().GetProjectName().IsEmpty() )
-            defaultFilename = wxT( "noname.wbk" );
+        {
+            defaultFilename.SetName( _( "noname" ) );
+            defaultFilename.SetExt( WorkbookFileExtension );
+        }
         else
-            defaultFilename = Prj().GetProjectName() + wxT( ".wbk" );
+        {
+            defaultFilename.SetName( Prj().GetProjectName() );
+            defaultFilename.SetExt( WorkbookFileExtension );
+        }
     }
 
     wxFileDialog saveAsDlg( this, _( "Save Simulation Workbook As" ), m_savedWorkbooksPath,
-                            defaultFilename, WorkbookFileWildcard(),
+                            defaultFilename.GetFullPath(), WorkbookFileWildcard(),
                             wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveAsDlg.ShowModal() == wxID_CANCEL )

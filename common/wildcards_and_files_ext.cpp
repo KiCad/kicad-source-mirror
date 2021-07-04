@@ -161,6 +161,7 @@ const std::string GedaPcbFootprintLibFileExtension( "fp" );     // this is a fil
 const std::string KiCadFootprintFileExtension( "kicad_mod" );
 const std::string SpecctraDsnFileExtension( "dsn" );
 const std::string IpcD356FileExtension( "d356" );
+const std::string WorkbookFileExtension( "wbk" );
 
 const std::string PngFileExtension( "png" );
 const std::string JpegFileExtension( "jpg" );
