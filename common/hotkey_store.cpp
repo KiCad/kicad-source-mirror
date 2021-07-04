@@ -60,7 +60,9 @@ static PSEUDO_ACTION* g_gesturePseudoActions[] = {
 };
 
 static PSEUDO_ACTION* g_standardPlatformCommands[] = {
+#ifndef __WINDOWS__
     new PSEUDO_ACTION( _( "Close" ), MD_CTRL + 'W' ),
+#endif
     new PSEUDO_ACTION( _( "Quit" ), MD_CTRL + 'Q' )
 };
 

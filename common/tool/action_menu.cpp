@@ -208,10 +208,17 @@ wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
 
 void ACTION_MENU::AddClose( wxString aAppname )
 {
+#ifdef __WINDOWS_
+    Add( _( "Close" ),
+         wxString::Format( _( "Close %s" ), aAppname ),
+         wxID_CLOSE,
+         BITMAPS::exit );
+#else
     Add( _( "Close" ) + "\tCtrl+W",
          wxString::Format( _( "Close %s" ), aAppname ),
          wxID_CLOSE,
          BITMAPS::exit );
+#endif
 }
 
 
