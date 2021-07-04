@@ -341,7 +341,15 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
         wxASSERT( anchors );
 
         // Start with the first object and walk "right"
-        insert( candidate, anchors->A, true );
+        // Note if the first object is an arc, we don't need to insert its first point here, the
+        // whole arc will be inserted at anchor B inside process()
+        if( !( candidate->Type() == PCB_ARC_T ||
+               ( candidate->Type() == PCB_SHAPE_T &&
+                 static_cast<PCB_SHAPE*>( candidate )->GetShape() == PCB_SHAPE_TYPE::ARC ) ) )
+        {
+            insert( candidate, anchors->A, true );
+        }
+
         process( candidate, anchors->B, true );
 
         // check for any candidates on the "left"
