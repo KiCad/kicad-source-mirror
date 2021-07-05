@@ -120,7 +120,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
     // handler will intermittently fire.
     if( m_query_ctrl )
     {
-        m_query_ctrl->SetHint( _( "Filter" ) );
+        m_query_ctrl->SetDescriptiveText( _( "Filter" ) );
         m_query_ctrl->SetFocus();
         m_query_ctrl->SetValue( wxEmptyString );
 
