@@ -57,6 +57,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/listbox.h>
+#include <wx/srchctrl.h>
 #include <wx/tokenzr.h>
 
 using namespace std::placeholders;
@@ -137,9 +138,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     wxPanel* libPanel = new wxPanel( this );
     wxSizer* libSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_libFilter = new wxTextCtrl( libPanel, ID_MODVIEW_LIB_FILTER, wxEmptyString,
+    m_libFilter = new wxSearchCtrl( libPanel, ID_MODVIEW_LIB_FILTER, wxEmptyString,
                                   wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-    m_libFilter->SetHint( _( "Filter" ) );
+    m_libFilter->SetDescriptiveText( _( "Filter" ) );
     libSizer->Add( m_libFilter, 0, wxEXPAND, 5 );
 
     m_libList = new wxListBox( libPanel, ID_MODVIEW_LIB_LIST, wxDefaultPosition, wxDefaultSize,
@@ -152,9 +153,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     wxPanel* fpPanel = new wxPanel( this );
     wxSizer* fpSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_fpFilter = new wxTextCtrl( fpPanel, ID_MODVIEW_FOOTPRINT_FILTER, wxEmptyString,
+    m_fpFilter = new wxSearchCtrl( fpPanel, ID_MODVIEW_FOOTPRINT_FILTER, wxEmptyString,
                                  wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-    m_fpFilter->SetHint( _( "Filter" ) );
+    m_fpFilter->SetDescriptiveText( _( "Filter" ) );
     m_fpFilter->SetToolTip(
             _( "Filter on footprint name, keywords, description and pad count.\n"
                "Search terms are separated by spaces.  All search terms must match.\n"
