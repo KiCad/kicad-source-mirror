@@ -1661,6 +1661,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     // Send an initial movement to prime the collision detection
     m_router->Move( p, nullptr );
 
+    bool hasMouseMoved = false;
+
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
@@ -1671,6 +1673,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
+            hasMouseMoved = true;
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
 
@@ -1719,7 +1722,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
+        else if( hasMouseMoved && ( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ))
         {
             updateEndItem( *evt );
             m_router->FixRoute( m_endSnapPoint, m_endItem );
