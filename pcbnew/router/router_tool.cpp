@@ -1722,7 +1722,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( hasMouseMoved && ( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ))
+        else if( hasMouseMoved && ( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
         {
             updateEndItem( *evt );
             m_router->FixRoute( m_endSnapPoint, m_endItem );
