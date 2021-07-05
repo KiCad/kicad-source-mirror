@@ -88,7 +88,7 @@ enum class ALTIUM_SCH_RECORD
     RECORD_46           = 46,
     RECORD_47           = 47,
     RECORD_48           = 48,
-    RECORD_209          = 209,
+    NOTE                = 209,
     RECORD_215          = 215,
     RECORD_216          = 216,
     RECORD_217          = 217,
@@ -236,6 +236,14 @@ enum class ASCH_LABEL_JUSTIFICATION
 };
 
 
+enum class ASCH_NOTE_ALIGNMENT
+{
+    LEFT    = 1,
+    CENTER  = 2,
+    RIGHT   = 3
+};
+
+
 struct ASCH_LABEL
 {
     int ownerindex;
@@ -251,6 +259,26 @@ struct ASCH_LABEL
     ASCH_LABEL_JUSTIFICATION justification;
 
     explicit ASCH_LABEL( const std::map<wxString, wxString>& aProperties );
+};
+
+
+struct ASCH_NOTE
+{
+    wxPoint location;
+    wxSize  size;
+
+    wxString text;
+    wxString author;
+
+    int  fontId;
+    bool isWordWrapped;
+    bool border;
+    int  textMargin;
+    int  areaColor;
+
+    ASCH_NOTE_ALIGNMENT alignment;
+
+    explicit ASCH_NOTE( const std::map<wxString, wxString>& aProperties );
 };
 
 

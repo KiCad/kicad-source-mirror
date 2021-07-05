@@ -47,8 +47,8 @@ constexpr int Altium2KiCadUnit( const int val, const int frac )
 }
 
 
-int PropertiesReadKiCadUnitFrac(
-        const std::map<wxString, wxString>& aProperties, const wxString& aKey )
+int PropertiesReadKiCadUnitFrac( const std::map<wxString, wxString>& aProperties,
+                                 const wxString& aKey )
 {
     // a unit is stored using two fields, denoting the size in mils and a fraction size
     int key     = ALTIUM_PARSER::PropertiesReadInt( aProperties, aKey, 0 );
@@ -57,8 +57,8 @@ int PropertiesReadKiCadUnitFrac(
 }
 
 
-int PropertiesReadKiCadUnitFrac1(
-        const std::map<wxString, wxString>& aProperties, const wxString& aKey )
+int PropertiesReadKiCadUnitFrac1( const std::map<wxString, wxString>& aProperties,
+                                  const wxString& aKey )
 {
     // a unit is stored using two fields, denoting the size in mils and a fraction size
     // Dunno why Altium invents different units for the same purpose
@@ -70,9 +70,10 @@ int PropertiesReadKiCadUnitFrac1(
 
 template <typename T>
 T PropertiesReadEnum( const std::map<wxString, wxString>& aProperties, const wxString& aKey,
-        int aLower, int aUpper, T aDefault )
+                      int aLower, int aUpper, T aDefault )
 {
     int value = ALTIUM_PARSER::PropertiesReadInt( aProperties, aKey, static_cast<int>( aDefault ) );
+
     if( value < aLower || value > aUpper )
         return aDefault;
     else
@@ -98,17 +99,17 @@ ASCH_SYMBOL::ASCH_SYMBOL( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::COMPONENT );
 
-    currentpartid =
-            ALTIUM_PARSER::PropertiesReadInt( aProperties, "CURRENTPARTID", ALTIUM_COMPONENT_NONE );
+    currentpartid = ALTIUM_PARSER::PropertiesReadInt( aProperties, "CURRENTPARTID",
+                                                      ALTIUM_COMPONENT_NONE );
     libreference = ALTIUM_PARSER::PropertiesReadString( aProperties, "LIBREFERENCE", "" );
     sourcelibraryname = ALTIUM_PARSER::PropertiesReadString( aProperties, "SOURCELIBRARYNAME", "" );
-    componentdescription =
-            ALTIUM_PARSER::PropertiesReadString( aProperties, "COMPONENTDESCRIPTION", "" );
+    componentdescription = ALTIUM_PARSER::PropertiesReadString( aProperties, "COMPONENTDESCRIPTION",
+                                                                "" );
 
     orientation = ALTIUM_PARSER::PropertiesReadInt( aProperties, "ORIENTATION", 0 );
     isMirrored  = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISMIRRORED", false );
     location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
-            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+                        -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
 
     partcount        = ALTIUM_PARSER::PropertiesReadInt( aProperties, "PARTCOUNT", 0 );
     displaymodecount = ALTIUM_PARSER::PropertiesReadInt( aProperties, "DISPLAYMODECOUNT", 0 );
@@ -120,12 +121,12 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::PIN );
 
-    ownerindex =
-            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
-    ownerpartid =
-            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
-    ownerpartdisplaymode =
-            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTDISPLAYMODE", 0 );
+    ownerindex = ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX",
+                                                   ALTIUM_COMPONENT_NONE );
+    ownerpartid = ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID",
+                                                    ALTIUM_COMPONENT_NONE );
+    ownerpartdisplaymode = ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTDISPLAYMODE",
+                                                             0 );
 
     name       = ALTIUM_PARSER::PropertiesReadString( aProperties, "NAME", "" );
     text       = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
@@ -209,7 +210,7 @@ ASCH_LABEL::ASCH_LABEL( const std::map<wxString, wxString>& aProperties )
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
 
     location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
-            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+                        -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
 
     text = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
 
@@ -218,6 +219,31 @@ ASCH_LABEL::ASCH_LABEL( const std::map<wxString, wxString>& aProperties )
 
     justification = PropertiesReadEnum<ASCH_LABEL_JUSTIFICATION>(
             aProperties, "JUSTIFICATION", 0, 8, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT );
+}
+
+
+ASCH_NOTE::ASCH_NOTE( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::NOTE );
+
+    location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+                        -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+    size = wxSize( PropertiesReadKiCadUnitFrac( aProperties, "CORNER.X" ) - location.x,
+                   -PropertiesReadKiCadUnitFrac( aProperties, "CORNER.Y" ) - location.y );
+
+    text = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
+    text.Replace( "~1", "\n", true );
+
+    author = ALTIUM_PARSER::PropertiesReadString( aProperties, "AUTHOR", "" );
+
+    fontId = ALTIUM_PARSER::PropertiesReadInt( aProperties, "FONTID", 0 );
+    isWordWrapped = ALTIUM_PARSER::PropertiesReadBool( aProperties, "WORDWRAP", false );
+    border = ALTIUM_PARSER::PropertiesReadBool( aProperties, "SHOWBORDER", false );
+    textMargin = PropertiesReadKiCadUnitFrac( aProperties, "TEXTMARGIN" );
+    areaColor = ALTIUM_PARSER::PropertiesReadInt( aProperties, "AREACOLOR", 0 );
+
+    alignment = PropertiesReadEnum<ASCH_NOTE_ALIGNMENT>(
+            aProperties, "ALIGNMENT", 1, 3, ASCH_NOTE_ALIGNMENT::LEFT );
 }
 
 

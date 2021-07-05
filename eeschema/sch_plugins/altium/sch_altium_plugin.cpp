@@ -462,7 +462,8 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
             break;
         case ALTIUM_SCH_RECORD::RECORD_48:
             break;
-        case ALTIUM_SCH_RECORD::RECORD_209:
+        case ALTIUM_SCH_RECORD::NOTE:
+            ParseNote( properties );
             break;
         case ALTIUM_SCH_RECORD::RECORD_215:
             break;
@@ -831,6 +832,48 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
             text->SetTextSize( { font.size / 2, font.size / 2 } );
         }
     }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseNote( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_NOTE elem( aProperties );
+
+    SCH_TEXT* text = new SCH_TEXT( elem.location + m_sheetOffset, elem.text );
+
+    switch( elem.alignment )
+    {
+    default:
+    case ASCH_NOTE_ALIGNMENT::LEFT:
+        text->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
+        break;
+    case ASCH_NOTE_ALIGNMENT::CENTER:
+        // No support for centered text in Eeschema yet...
+        text->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
+        break;
+    case ASCH_NOTE_ALIGNMENT::RIGHT:
+        text->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::LEFT );
+        break;
+    }
+
+    // TODO: set size and word-wrap once KiCad supports wrapped text.
+
+    // TODO: set border and background color once KiCad supports them.
+
+    // TODO: need some sort of propety system for storing author....
+
+    size_t fontId = static_cast<int>( elem.fontId );
+
+    if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
+    {
+        const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
+        text->SetItalic( font.italic );
+        text->SetBold( font.bold );
+        text->SetTextSize( { font.size / 2, font.size / 2 } );
+    }
+
+    text->SetFlags( IS_NEW );
+    m_currentSheet->GetScreen()->Append( text );
 }
 
 
