@@ -152,7 +152,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         // The FPID is ok as long as there is a footprint portion coming from eeschema.
         if( !component->GetFPID().GetLibItemName().size() )
         {
-            msg.Printf( _( "No footprint defined for symbol %s.\n" ),
+            msg.Printf( _( "No footprint defined for symbol %s." ),
                         component->GetReference() );
             aReporter.Report( msg, RPT_SEVERITY_ERROR );
 
@@ -220,7 +220,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
             else
             {
                 msg.Printf( _( "%s footprint '%s' not found in any libraries in the footprint "
-                               "library table.\n" ),
+                               "library table." ),
                             component->GetReference(),
                             component->GetFPID().GetLibItemName().wx_str() );
                 aReporter.Report( msg, RPT_SEVERITY_ERROR );

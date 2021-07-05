@@ -149,13 +149,13 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
     {
         if( m_reporter )
         {
-            msg.Printf( _( "Unable to create job file '%s'." ), aFullFilename );
+            msg.Printf( _( "Failed to create file '%s'." ), aFullFilename );
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         }
     }
     else if( m_reporter )
     {
-        msg.Printf( _( "Create Gerber job file '%s'." ), aFullFilename );
+        msg.Printf( _( "Created Gerber job file '%s'." ), aFullFilename );
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
@@ -572,9 +572,7 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
     bool uptodate = not brd_stackup.SynchronizeWithBoard( &m_pcb->GetDesignSettings() );
 
     if( !uptodate && m_pcb->GetDesignSettings().m_HasStackup )
-        m_reporter->Report( _( "Board stackup settings not up to date\n"
-                               "Please fix the stackup" ),
-                            RPT_SEVERITY_ERROR );
+        m_reporter->Report( _( "Board stackup settings not up to date." ), RPT_SEVERITY_ERROR );
 
     PCB_LAYER_ID last_copper_layer = F_Cu;
 

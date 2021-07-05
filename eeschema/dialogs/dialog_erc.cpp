@@ -752,12 +752,12 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
 
     if( writeReport( fn.GetFullPath() ) )
     {
-        m_messages->Report( wxString::Format( _( "Report file '%s' created\n" ),
+        m_messages->Report( wxString::Format( _( "Report file '%s' created." ),
                                               fn.GetFullPath() ) );
     }
     else
     {
-        DisplayError( this, wxString::Format( _( "Unable to create report file '%s'" ),
+        DisplayError( this, wxString::Format( _( "Failed to create file '%s'." ),
                                               fn.GetFullPath() ) );
     }
 }

@@ -115,12 +115,10 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
         if( aReporter )
         {
             wxArrayString output, errors;
-            int diag = wxExecute( commandLine, output, errors, m_exec_flags );
+            int           diag = wxExecute( commandLine, output, errors, m_exec_flags );
+            wxString      msg;
 
-            wxString msg;
-
-            msg << _( "Run command:" ) << wxT( "\n" ) << commandLine << wxT( "\n\n" );
-            aReporter->ReportHead( msg, RPT_SEVERITY_ACTION );
+            aReporter->ReportHead( commandLine, RPT_SEVERITY_ACTION );
 
             if( diag != 0 )
             {
@@ -134,22 +132,14 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
 
             if( output.GetCount() )
             {
-                msg.Empty();
-                msg << wxT( "\n" ) << _( "Info messages:" ) << wxT( "\n" );
-                aReporter->Report( msg, RPT_SEVERITY_INFO );
-
                 for( unsigned ii = 0; ii < output.GetCount(); ii++ )
-                    aReporter->Report( output[ii] + wxT( "\n" ), RPT_SEVERITY_INFO );
+                    aReporter->Report( output[ii], RPT_SEVERITY_INFO );
             }
 
             if( errors.GetCount() )
             {
-                msg.Empty();
-                msg << wxT("\n") << _( "Error messages:" ) << wxT( "\n" );
-                aReporter->Report( msg, RPT_SEVERITY_INFO );
-
                 for( unsigned ii = 0; ii < errors.GetCount(); ii++ )
-                    aReporter->Report( errors[ii] + wxT( "\n" ), RPT_SEVERITY_ERROR );
+                    aReporter->Report( errors[ii], RPT_SEVERITY_ERROR );
             }
         }
         else

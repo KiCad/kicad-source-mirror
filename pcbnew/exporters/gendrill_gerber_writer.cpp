@@ -101,8 +101,8 @@ void GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
                 {
                     if( aReporter )
                     {
-                        msg.Printf( _( "** Unable to create %s **\n" ), fullFilename );
-                        aReporter->Report( msg );
+                        msg.Printf( _( "Failed to create file '%s'." ), fullFilename );
+                        aReporter->Report( msg, RPT_SEVERITY_ERROR );
                     }
                     break;
                 }
@@ -111,7 +111,7 @@ void GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
                     if( aReporter )
                     {
                         msg.Printf( _( "Created file '%s'." ), fullFilename );
-                        aReporter->Report( msg );
+                        aReporter->Report( msg, RPT_SEVERITY_INFO );
                     }
                 }
 

@@ -269,7 +269,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 
     if( fpcount < 0 )
     {
-        msg.Printf( _( "Unable to create '%s'." ), fn.GetFullPath() );
+        msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
         wxMessageBox( msg );
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         return false;
@@ -301,14 +301,13 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
-
     m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
     fullcount += fpcount;
-    msg.Printf( _( "Full component count: %d.\n" ), fullcount );
+    msg.Printf( _( "Full component count: %d." ), fullcount );
     m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
-    m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_ACTION );
+    m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_INFO );
 
     return true;
 }
@@ -384,7 +383,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
                                                          useCSVfmt, useAuxOrigin );
     if( fpcount < 0 )
     {
-        msg.Printf( _( "Unable to create '%s'." ), fn.GetFullPath() );
+        msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
         wxMessageBox( msg );
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         return false;
@@ -393,8 +392,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     if( singleFile  )
         msg.Printf( _( "Placement file: '%s'." ), fn.GetFullPath() );
     else
-        msg.Printf( _( "Front (top side) placement file: '%s'." ),
-                    fn.GetFullPath() );
+        msg.Printf( _( "Front (top side) placement file: '%s'." ), fn.GetFullPath() );
+
     m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
@@ -402,7 +401,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     if( singleFile  )
     {
-        m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_ACTION );
+        m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_INFO );
         return true;
     }
 
@@ -440,18 +439,17 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
         msg.Printf( _( "Component count: %d." ), fpcount );
-
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
     }
 
     if( !singleFile )
     {
         fullcount += fpcount;
-        msg.Printf( _( "Full component count: %d.\n" ), fullcount );
+        msg.Printf( _( "Full component count: %d." ), fullcount );
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
     }
 
-    m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_ACTION );
+    m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_INFO );
 
     return true;
 }
@@ -529,7 +527,7 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
 
     else
     {
-        msg.Printf( _( "Unable to create '%s'." ), fn.GetFullPath() );
+        msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
         DisplayError( this, msg );
     }
 }

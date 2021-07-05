@@ -220,7 +220,7 @@ void PCB_EDIT_FRAME::OnExportIDF3( wxCommandEvent& event )
 
     if( !Export_IDF3( GetBoard(), fullFilename, thou, aXRef, aYRef ) )
     {
-        wxString msg = wxString::Format( _( "Unable to create %s" ), fullFilename );
+        wxString msg = wxString::Format( _( "Failed to create file '%s'." ), fullFilename );
         wxMessageBox( msg );
         return;
     }

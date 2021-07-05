@@ -249,7 +249,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 
     if( !file )
     {
-        DisplayError( this, wxString::Format( _( "Unable to create \"%s\"" ),
+        DisplayError( this, wxString::Format( _( "Failed to create file '%s'." ),
                                               optionsDialog.GetFileName() ) );
         return;
     }

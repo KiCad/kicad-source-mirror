@@ -201,7 +201,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
         if( !SaveDrawingSheetFile( filename ) )
         {
-            msg.Printf( _( "Unable to create \"%s\"" ), filename );
+            msg.Printf( _( "Failed to create file '%s'." ), filename );
             DisplayErrorMessage( this, msg );
         }
 

@@ -463,12 +463,12 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
 
     if( ! success )
     {
-        msg.Printf(  _( "** Unable to create %s **\n" ), dlg.GetPath() );
+        msg.Printf(  _( "Failed to create file '%s'." ), dlg.GetPath() );
         m_messagesBox->AppendText( msg );
     }
     else
     {
-        msg.Printf( _( "Report file %s created\n" ), dlg.GetPath() );
+        msg.Printf( _( "Report file '%s' created." ), dlg.GetPath() );
         m_messagesBox->AppendText( msg );
     }
 }

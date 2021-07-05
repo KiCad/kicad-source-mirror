@@ -293,7 +293,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
         }
         else    // Error
         {
-            reporter.Report( wxString::Format( _( "Unable to create '%s'." ), svgPath ),
+            reporter.Report( wxString::Format( _( "Failed to create file '%s'." ), svgPath ),
                              RPT_SEVERITY_ERROR );
         }
 

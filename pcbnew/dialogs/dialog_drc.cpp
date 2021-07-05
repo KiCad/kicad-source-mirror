@@ -663,7 +663,7 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
     }
     else
     {
-        DisplayError( this, wxString::Format( _( "Unable to create report file '%s'<br>" ),
+        DisplayError( this, wxString::Format( _( "Failed to create file '%s'." ),
                                               fn.GetFullPath() ) );
     }
 }

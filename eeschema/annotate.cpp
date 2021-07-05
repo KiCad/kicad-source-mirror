@@ -280,28 +280,36 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
                 continue;
 
             if( symbol->GetUnitCount() > 1 )
-                msg.Printf( _( "Updated %s (unit %s) from %s to %s" ),
+            {
+                msg.Printf( _( "Updated %s (unit %s) from %s to %s." ),
                             symbol->GetValue( sheet, true ),
                             LIB_SYMBOL::SubReference( symbol->GetUnit(), false ),
                             prevRef,
                             newRef );
+            }
             else
-                msg.Printf( _( "Updated %s from %s to %s" ),
+            {
+                msg.Printf( _( "Updated %s from %s to %s." ),
                             symbol->GetValue( sheet, true ),
                             prevRef,
                             newRef );
+            }
         }
         else
         {
             if( symbol->GetUnitCount() > 1 )
-                msg.Printf( _( "Annotated %s (unit %s) as %s" ),
+            {
+                msg.Printf( _( "Annotated %s (unit %s) as %s." ),
                             symbol->GetValue( sheet, true ),
                             LIB_SYMBOL::SubReference( symbol->GetUnit(), false ),
                             newRef );
+            }
             else
-                msg.Printf( _( "Annotated %s as %s" ),
+            {
+                msg.Printf( _( "Annotated %s as %s." ),
                             symbol->GetValue( sheet, true ),
                             newRef );
+            }
         }
 
         aReporter.Report( msg, RPT_SEVERITY_ACTION );

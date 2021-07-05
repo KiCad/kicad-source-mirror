@@ -45,7 +45,7 @@ REPORTER& WX_TEXT_CTRL_REPORTER::Report( const wxString& aText, SEVERITY aSeveri
     wxCHECK_MSG( m_textCtrl != NULL, *this,
                  wxT( "No wxTextCtrl object defined in WX_TEXT_CTRL_REPORTER." ) );
 
-    m_textCtrl->AppendText( aText );
+    m_textCtrl->AppendText( aText + wxS( "\n" ) );
     return *this;
 }
 
@@ -59,7 +59,7 @@ REPORTER& WX_STRING_REPORTER::Report( const wxString& aText, SEVERITY aSeverity 
     wxCHECK_MSG( m_string != NULL, *this,
                  wxT( "No wxString object defined in WX_STRING_REPORTER." ) );
 
-    *m_string << aText;
+    *m_string << aText << wxS( "\n" );
     return *this;
 }
 

@@ -411,7 +411,7 @@ void EDA_3D_CANVAS::DoRePaint()
         if( !m_is_opengl_version_supported )
         {
             warningReporter.Report( _( "Your OpenGL version is not supported. Minimum required "
-                                       "is 1.5" ), RPT_SEVERITY_ERROR );
+                                       "is 1.5." ), RPT_SEVERITY_ERROR );
 
             warningReporter.Finalize();
         }
