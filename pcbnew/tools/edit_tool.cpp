@@ -408,6 +408,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
                 retval->SetNet( theArc->GetNet() );
                 retval->SetLayer( theArc->GetLayer() );
                 retval->SetWidth( theArc->GetWidth() );
+                retval->SetLocked( theArc->IsLocked() );
                 retval->SetFlags( IS_NEW );
                 getView()->Add( retval );
             }
@@ -1330,6 +1331,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
             tArc->SetLayer( track1->GetLayer() );
             tArc->SetWidth( track1->GetWidth() );
             tArc->SetNet( track1->GetNet() );
+            tArc->SetLocked( track1->IsLocked() );
             m_commit->Add( tArc );
             itemsToAddToSelection.push_back( tArc );
 
