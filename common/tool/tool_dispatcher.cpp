@@ -520,17 +520,9 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         keyIsEscape = ( ke->GetKeyCode() == WXK_ESCAPE );
 
-        wxTextEntry*      textEntry = dynamic_cast<wxTextEntry*>( focus );
-        wxStyledTextCtrl* styledText = dynamic_cast<wxStyledTextCtrl*>( focus );
-
-        if( KIUI::IsInputControlFocused() )
+        if( KIUI::IsInputControlFocused( focus ) )
         {
-            bool enabled = true;
-
-            if( textEntry )
-                enabled = textEntry->IsEditable();
-            else if( styledText )
-                enabled = styledText->IsEditable();
+            bool enabled = KIUI::IsInputControlEditable( focus );
 
             // Never process key events for tools when a text entry has focus
             if( enabled )

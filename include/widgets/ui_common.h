@@ -76,8 +76,19 @@ void SelectReferenceNumber( wxTextEntry* aTextEntry );
 
 /**
  * Checks if a input control has focus
+ *
+ * @param aFocus Control that has focus, if null, wxWidgets will be queried
  */
-bool IsInputControlFocused();
+bool IsInputControlFocused( wxWindow* aFocus = nullptr );
+
+/**
+ * Checks if a input control has focus
+ *
+ * @param aFocus Control that test if editable
+ *
+ * @return True if control is input and editable OR control is not a input. False if control is input and not editable.
+ */
+bool IsInputControlEditable( wxWindow* aControl );
 
 bool IsModalDialogFocused();
 

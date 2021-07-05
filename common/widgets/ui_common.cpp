@@ -168,26 +168,29 @@ void KIUI::SelectReferenceNumber( wxTextEntry* aTextEntry )
 }
 
 
-bool KIUI::IsInputControlFocused()
+bool KIUI::IsInputControlFocused( wxWindow* aFocus )
 {
-    wxWindow* focus = wxWindow::FindFocus();
+    if( aFocus == nullptr )
+    {
+        aFocus = wxWindow::FindFocus();
+    }
 
-    if( !focus )
+    if( !aFocus )
     {
         return false;
     }
 
-    wxTextEntry*      textEntry = dynamic_cast<wxTextEntry*>( focus );
-    wxStyledTextCtrl* styledText = dynamic_cast<wxStyledTextCtrl*>( focus );
-    wxListBox*        listBox = dynamic_cast<wxListBox*>( focus );
-    wxSearchCtrl*     searchCtrl = dynamic_cast<wxSearchCtrl*>( focus );
+    wxTextEntry*      textEntry = dynamic_cast<wxTextEntry*>( aFocus );
+    wxStyledTextCtrl* styledText = dynamic_cast<wxStyledTextCtrl*>( aFocus );
+    wxListBox*        listBox = dynamic_cast<wxListBox*>( aFocus );
+    wxSearchCtrl*     searchCtrl = dynamic_cast<wxSearchCtrl*>( aFocus );
 
     // Data view control is annoying, the focus is on a "wxDataViewCtrlMainWindow"
     // class that is not formerly exported via the header.
     // However, we can test the parent is wxDataViewCtrl instead
     wxDataViewCtrl* dataViewCtrl = nullptr;
 
-    wxWindow* parent = focus->GetParent();
+    wxWindow* parent = aFocus->GetParent();
 
     if( parent )
     {
@@ -195,6 +198,24 @@ bool KIUI::IsInputControlFocused()
     }
 
     return ( textEntry || styledText || listBox || dataViewCtrl || searchCtrl || dataViewCtrl );
+}
+
+
+bool KIUI::IsInputControlEditable( wxWindow* aFocus )
+{
+    wxTextEntry*      textEntry = dynamic_cast<wxTextEntry*>( aFocus );
+    wxStyledTextCtrl* styledText = dynamic_cast<wxStyledTextCtrl*>( aFocus );
+    wxSearchCtrl*     searchCtrl = dynamic_cast<wxSearchCtrl*>( aFocus );
+    wxListBox*        listBox = dynamic_cast<wxListBox*>( aFocus );
+
+    if( textEntry )
+        return textEntry->IsEditable();
+    else if( styledText )
+        return styledText->IsEditable();
+    else if( searchCtrl )
+        return searchCtrl->IsEditable();
+
+    return true;    // Must return true if we can't determine the state, intentionally true for non inputs as well
 }
 
 
