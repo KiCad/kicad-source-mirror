@@ -24,7 +24,6 @@
  */
 
 #include "spice_settings.h"
-
 #include <settings/parameters.h>
 
 
@@ -36,12 +35,16 @@ SPICE_SIMULATOR_SETTINGS::SPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent,
     NESTED_SETTINGS( "simulator", spiceSettingsSchemaVersion, aParent, aPath )
 {
     m_params.emplace_back( new PARAM<wxString>( "workbook_filename", &m_workbookFilename, "" ) );
+    m_params.emplace_back( new PARAM<bool>( "fix_passive_vals", &m_fixPassiveVals, false ) );
+    m_params.emplace_back( new PARAM<bool>( "fix_include_paths", &m_fixIncludePaths, true ) );
 }
 
 
 bool SPICE_SIMULATOR_SETTINGS::operator==( const SPICE_SIMULATOR_SETTINGS &aRhs ) const
 {
-    return m_workbookFilename == aRhs.m_workbookFilename;
+    return m_workbookFilename == aRhs.m_workbookFilename
+        && m_fixPassiveVals == aRhs.m_fixPassiveVals
+        && m_fixIncludePaths == aRhs.m_fixIncludePaths;
 }
 
 

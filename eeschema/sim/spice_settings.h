@@ -46,8 +46,22 @@ public:
     wxString GetWorkbookFilename() const { return m_workbookFilename; }
     void     SetWorkbookFilename( wxString aFilename ) { m_workbookFilename = aFilename; }
 
+    bool GetFixPassiveVals() const { return m_fixPassiveVals; }
+    void SetFixPassiveVals( bool aFixPassiveVals )
+    {
+        m_fixPassiveVals = aFixPassiveVals;
+    }
+
+    bool GetFixIncludePaths() const { return m_fixIncludePaths; }
+    void SetFixIncludePaths( bool aFixIncludePaths )
+    {
+        m_fixIncludePaths = aFixIncludePaths;
+    }
+
 private:
     wxString m_workbookFilename;
+    bool m_fixPassiveVals;
+    bool m_fixIncludePaths;
 };
 
 /**
