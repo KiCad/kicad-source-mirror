@@ -33,6 +33,7 @@
 #include <wx/srchctrl.h>
 #include <wx/settings.h>
 #include <wx/statbmp.h>
+#include <wx/timer.h>
 
 
 LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
@@ -57,6 +58,8 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
 
         m_query_ctrl->ShowCancelButton( true );
 
+        m_debounceTimer = new wxTimer( this );
+
 // Additional visual cue for GTK, which hides the placeholder text on focus
 #ifdef __WXGTK__
         auto bitmap = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_FIND, wxART_FRAME_ICON ) );
@@ -70,6 +73,8 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
         m_query_ctrl->Bind( wxEVT_TEXT, &LIB_TREE::onQueryText, this );
         m_query_ctrl->Bind( wxEVT_TEXT_ENTER, &LIB_TREE::onQueryEnter, this );
         m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onQueryCharHook, this );
+
+        Bind( wxEVT_TIMER, &LIB_TREE::onDebounceTimer, this, m_debounceTimer->GetId() );
     }
 
     // Tree control
@@ -322,7 +327,7 @@ void LIB_TREE::setState( const STATE& aState )
 
 void LIB_TREE::onQueryText( wxCommandEvent& aEvent )
 {
-    Regenerate( false );
+    m_debounceTimer->StartOnce( 200 );
 
     // Required to avoid interaction with SetHint()
     // See documentation for wxTextEntry::SetHint
@@ -334,6 +339,12 @@ void LIB_TREE::onQueryEnter( wxCommandEvent& aEvent )
 {
     if( GetSelectedLibId().IsValid() )
         postSelectEvent();
+}
+
+
+void LIB_TREE::onDebounceTimer( wxTimerEvent& aEvent )
+{
+    Regenerate( false );
 }
 
 

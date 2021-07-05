@@ -33,6 +33,8 @@ class wxTextCtrl;
 class wxHtmlWindow;
 class wxHtmlLinkEvent;
 class wxSearchCtrl;
+class wxTimer;
+class wxTimerEvent;
 class ACTION_MENU;
 class LIB_ID;
 class LIB_TABLE;
@@ -167,6 +169,8 @@ protected:
     void onPreselect( wxCommandEvent& aEvent );
     void onContextMenu( wxDataViewEvent& aEvent );
 
+    void onDebounceTimer( wxTimerEvent& aEvent );
+
 protected:
     LIB_TABLE*       m_lib_table;
 
@@ -175,6 +179,7 @@ protected:
     wxSearchCtrl*    m_query_ctrl;
     wxDataViewCtrl*  m_tree_ctrl;
     wxHtmlWindow*    m_details_ctrl;
+    wxTimer*         m_debounceTimer;
 
     LIB_ID           m_last_libid;
 };
