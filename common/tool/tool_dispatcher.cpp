@@ -523,7 +523,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         wxTextEntry*      textEntry = dynamic_cast<wxTextEntry*>( focus );
         wxStyledTextCtrl* styledText = dynamic_cast<wxStyledTextCtrl*>( focus );
 
-        if( textEntry || styledText )
+        if( KIUI::IsInputControlFocused() )
         {
             bool enabled = true;
 
