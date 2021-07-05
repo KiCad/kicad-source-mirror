@@ -121,4 +121,11 @@
         <td></td>
         <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>
     </tr>
+    <tr>
+        <td><br></td>
+    </tr>
 </table>
+<p></p>
+<p></p>
+<i>Note that markup has precedence over bus definitions.</i>
+
