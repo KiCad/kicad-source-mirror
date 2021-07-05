@@ -270,7 +270,7 @@ bool COLOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     return false;
 }
 
-
+#include <iostream>
 bool COLOR_SETTINGS::migrateSchema0to1()
 {
     /**
@@ -298,7 +298,7 @@ bool COLOR_SETTINGS::migrateSchema0to1()
     COLOR_SETTINGS* fpsettings = m_manager->AddNewColorSettings( filename );
 
     // Start out with a clone
-    fpsettings->Set( "", At( "" ) );
+    fpsettings->m_internals->CloneFrom( *m_internals );
 
     // Footprint editor now just looks at the "board" namespace
     fpsettings->Set( "board", fpsettings->At( "fpedit" ) );

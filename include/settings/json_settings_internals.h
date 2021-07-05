@@ -62,6 +62,12 @@ public:
     {
         return nlohmann::json::operator[]( PointerFromString( aPath ) );
     }
+
+    void CloneFrom( const JSON_SETTINGS_INTERNALS& aOther )
+    {
+        nlohmann::json::json_pointer root( "" );
+        this->nlohmann::json::operator[]( root ) = aOther.nlohmann::json::operator[]( root );
+    }
 };
 
 #endif // KICAD_JSON_SETTINGS_INTERNALS_H
