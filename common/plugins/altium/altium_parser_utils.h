@@ -48,6 +48,6 @@ LIB_ID AltiumToKiCadLibID( wxString aLibName, wxString aLibReference );
 wxString AltiumPropertyToKiCadString( const wxString& aString );
 
 wxString AltiumSpecialStringsToKiCadVariables( const wxString&              aString,
-                                               const altium_override_map_t& aOverride );
+                                               const altium_override_map_t& aOverrides );
 
 #endif //ALTIUM_PARSER_UTILS_H

@@ -79,7 +79,7 @@ wxString AltiumPropertyToKiCadString( const wxString& aString )
 
 // https://www.altium.com/documentation/altium-designer/sch-obj-textstringtext-string-ad#!special-strings
 wxString AltiumSpecialStringsToKiCadVariables( const wxString&              aString,
-                                               const altium_override_map_t& aOverride )
+                                               const altium_override_map_t& aOverrides )
 {
     if( aString.IsEmpty() || aString.at( 0 ) != '=' )
     {
@@ -116,15 +116,17 @@ wxString AltiumSpecialStringsToKiCadVariables( const wxString&              aStr
 
             if( !specialString.IsEmpty() )
             {
-                auto variableOverride = aOverride.find( specialString );
+                auto overrideIt = aOverrides.find( specialString );
 
-                if( variableOverride == aOverride.end() )
+                if( overrideIt != aOverrides.end() )
                 {
-                    result += wxString::Format( wxT( "${%s}" ), specialString );
+                    result += overrideIt->second;
                 }
                 else
                 {
-                    result += variableOverride->second;
+                    // Note: Altium variable references are case-insensitive.  KiCad matches
+                    // case-senstive OR to all-upper-case, so make the references all-upper-case.
+                    result += wxString::Format( wxT( "${%s}" ), specialString.Upper() );
                 }
             }
             start = delimiter + 1;
