@@ -532,12 +532,12 @@ void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
     aEndIndex = std::min( aEndIndex, PointCount() - 1 );
 
     // Split arcs at start index and end just after the end index
-    if( aStartIndex < m_points.size() && m_shapes[aStartIndex] != SHAPES_ARE_PT )
+    if( IsPtOnArc( aStartIndex ) )
         splitArc( aStartIndex );
 
     size_t nextIndex = static_cast<size_t>( aEndIndex ) + 1;
 
-    if( nextIndex < m_points.size() && m_shapes[aEndIndex] != SHAPES_ARE_PT )
+    if( IsPtOnArc( nextIndex ) )
         splitArc( nextIndex );
 
     std::set<size_t> extra_arcs;
