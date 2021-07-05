@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "widgets/color_swatch.h"
 #include "widgets/resettable_panel.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
@@ -21,7 +22,6 @@
 #include <wx/stattext.h>
 #include <wx/spinctrl.h>
 #include <wx/statbox.h>
-#include <wx/clrpicker.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -54,51 +54,51 @@ class PANEL_3D_RAYTRACING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxSpinCtrlDouble* m_spinCtrlDouble_SpreadFactor_Refractions;
 		wxSpinCtrl* m_spinCtrlRecursiveLevel_Refractions;
 		wxStaticText* m_staticText17;
-		wxColourPickerCtrl* m_colourPickerCameraLight;
+		COLOR_SWATCH* m_colourPickerCameraLight;
 		wxStaticText* m_staticText5;
-		wxColourPickerCtrl* m_colourPickerTopLight;
+		COLOR_SWATCH* m_colourPickerTopLight;
 		wxStaticText* m_staticText6;
-		wxColourPickerCtrl* m_colourPickerBottomLight;
+		COLOR_SWATCH* m_colourPickerBottomLight;
 		wxStaticText* m_staticText20;
 		wxStaticText* m_staticText18;
 		wxStaticText* m_staticText27;
 		wxStaticText* m_staticText28;
 		wxStaticText* m_staticText21;
-		wxColourPickerCtrl* m_colourPickerLight1;
+		COLOR_SWATCH* m_colourPickerLight1;
 		wxSpinCtrl* m_spinCtrlLightElevation1;
 		wxSpinCtrl* m_spinCtrlLightAzimuth1;
 		wxStaticText* m_staticText22;
-		wxColourPickerCtrl* m_colourPickerLight5;
+		COLOR_SWATCH* m_colourPickerLight5;
 		wxSpinCtrl* m_spinCtrlLightElevation5;
 		wxSpinCtrl* m_spinCtrlLightAzimuth5;
 		wxStaticText* m_staticText23;
-		wxColourPickerCtrl* m_colourPickerLight2;
+		COLOR_SWATCH* m_colourPickerLight2;
 		wxSpinCtrl* m_spinCtrlLightElevation2;
 		wxSpinCtrl* m_spinCtrlLightAzimuth2;
 		wxStaticText* m_staticText24;
-		wxColourPickerCtrl* m_colourPickerLight6;
+		COLOR_SWATCH* m_colourPickerLight6;
 		wxSpinCtrl* m_spinCtrlLightElevation6;
 		wxSpinCtrl* m_spinCtrlLightAzimuth6;
 		wxStaticText* m_staticText25;
-		wxColourPickerCtrl* m_colourPickerLight3;
+		COLOR_SWATCH* m_colourPickerLight3;
 		wxSpinCtrl* m_spinCtrlLightElevation3;
 		wxSpinCtrl* m_spinCtrlLightAzimuth3;
 		wxStaticText* m_staticText26;
-		wxColourPickerCtrl* m_colourPickerLight7;
+		COLOR_SWATCH* m_colourPickerLight7;
 		wxSpinCtrl* m_spinCtrlLightElevation7;
 		wxSpinCtrl* m_spinCtrlLightAzimuth7;
 		wxStaticText* m_staticText171;
-		wxColourPickerCtrl* m_colourPickerLight4;
+		COLOR_SWATCH* m_colourPickerLight4;
 		wxSpinCtrl* m_spinCtrlLightElevation4;
 		wxSpinCtrl* m_spinCtrlLightAzimuth4;
 		wxStaticText* m_staticText181;
-		wxColourPickerCtrl* m_colourPickerLight8;
+		COLOR_SWATCH* m_colourPickerLight8;
 		wxSpinCtrl* m_spinCtrlLightElevation8;
 		wxSpinCtrl* m_spinCtrlLightAzimuth8;
 
 	public:
 
-		PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 795,478 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_3D_RAYTRACING_OPTIONS_BASE();
 
 };

@@ -140,8 +140,10 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	m_staticText17->Wrap( -1 );
 	bSizer11->Add( m_staticText17, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_colourPickerCameraLight = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxColour( 51, 51, 51 ), wxDefaultPosition, wxSize( 72,-1 ), wxCLRP_DEFAULT_STYLE );
-	bSizer11->Add( m_colourPickerCameraLight, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_colourPickerCameraLight = new COLOR_SWATCH( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colourPickerCameraLight->SetMinSize( wxSize( 72,20 ) );
+
+	bSizer11->Add( m_colourPickerCameraLight, 0, wxALL, 5 );
 
 
 	bSizer11->Add( 0, 0, 1, 0, 5 );
@@ -150,8 +152,10 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	m_staticText5->Wrap( -1 );
 	bSizer11->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_colourPickerTopLight = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxColour( 63, 63, 63 ), wxDefaultPosition, wxSize( 72,-1 ), wxCLRP_DEFAULT_STYLE );
-	bSizer11->Add( m_colourPickerTopLight, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_colourPickerTopLight = new COLOR_SWATCH( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colourPickerTopLight->SetMinSize( wxSize( 72,20 ) );
+
+	bSizer11->Add( m_colourPickerTopLight, 0, wxALL, 5 );
 
 
 	bSizer11->Add( 0, 0, 1, 0, 5 );
@@ -160,8 +164,10 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	m_staticText6->Wrap( -1 );
 	bSizer11->Add( m_staticText6, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_colourPickerBottomLight = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxColour( 63, 63, 63 ), wxDefaultPosition, wxSize( 72,-1 ), wxCLRP_DEFAULT_STYLE );
-	bSizer11->Add( m_colourPickerBottomLight, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_colourPickerBottomLight = new COLOR_SWATCH( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colourPickerBottomLight->SetMinSize( wxSize( 72,20 ) );
+
+	bSizer11->Add( m_colourPickerBottomLight, 0, wxALL, 5 );
 
 
 	sbSizerRaytracingLightConfiguration->Add( bSizer11, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
@@ -180,7 +186,7 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 
 	m_staticText20 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("Elevation (deg)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText20->Wrap( -1 );
-	fgSizer11->Add( m_staticText20, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer11->Add( m_staticText20, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	m_staticText18 = new wxStaticText( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("Azimuth (deg)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18->Wrap( -1 );
@@ -207,8 +213,10 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	m_staticText21->Wrap( -1 );
 	fgSizer11->Add( m_staticText21, 0, wxALIGN_CENTER|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_colourPickerLight1 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 72,-1 ), wxCLRP_DEFAULT_STYLE );
-	fgSizer11->Add( m_colourPickerLight1, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_colourPickerLight1 = new COLOR_SWATCH( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colourPickerLight1->SetMinSize( wxSize( 72,20 ) );
+
+	fgSizer11->Add( m_colourPickerLight1, 0, wxALL, 5 );
 
 	m_spinCtrlLightElevation1 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
 	fgSizer11->Add( m_spinCtrlLightElevation1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 1 );
@@ -223,8 +231,10 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	m_staticText22->Wrap( -1 );
 	fgSizer11->Add( m_staticText22, 0, wxALIGN_CENTER|wxLEFT, 5 );
 
-	m_colourPickerLight5 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 72,-1 ), wxCLRP_DEFAULT_STYLE );
-	fgSizer11->Add( m_colourPickerLight5, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_colourPickerLight5 = new COLOR_SWATCH( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colourPickerLight5->SetMinSize( wxSize( 72,20 ) );
+
+	fgSizer11->Add( m_colourPickerLight5, 0, wxALL, 5 );
 
 	m_spinCtrlLightElevation5 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
 	fgSizer11->Add( m_spinCtrlLightElevation5, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 1 );
@@ -236,8 +246,10 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	m_staticText23->Wrap( -1 );
 	fgSizer11->Add( m_staticText23, 0, wxALIGN_CENTER, 5 );
 
-	m_colourPickerLight2 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 72,-1 ), wxCLRP_DEFAULT_STYLE );
-	fgSizer11->Add( m_colourPickerLight2, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_colourPickerLight2 = new COLOR_SWATCH( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colourPickerLight2->SetMinSize( wxSize( 72,20 ) );
+
+	fgSizer11->Add( m_colourPickerLight2, 0, wxALL, 5 );
 
 	m_spinCtrlLightElevation2 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
 	fgSizer11->Add( m_spinCtrlLightElevation2, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 1 );
@@ -252,8 +264,10 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	m_staticText24->Wrap( -1 );
 	fgSizer11->Add( m_staticText24, 0, wxALIGN_CENTER|wxLEFT, 5 );
 
-	m_colourPickerLight6 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 72,-1 ), wxCLRP_DEFAULT_STYLE );
-	fgSizer11->Add( m_colourPickerLight6, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_colourPickerLight6 = new COLOR_SWATCH( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colourPickerLight6->SetMinSize( wxSize( 72,20 ) );
+
+	fgSizer11->Add( m_colourPickerLight6, 0, wxALL, 5 );
 
 	m_spinCtrlLightElevation6 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
 	fgSizer11->Add( m_spinCtrlLightElevation6, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 1 );
@@ -265,8 +279,10 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	m_staticText25->Wrap( -1 );
 	fgSizer11->Add( m_staticText25, 0, wxALIGN_CENTER, 5 );
 
-	m_colourPickerLight3 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 72,-1 ), wxCLRP_DEFAULT_STYLE );
-	fgSizer11->Add( m_colourPickerLight3, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_colourPickerLight3 = new COLOR_SWATCH( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colourPickerLight3->SetMinSize( wxSize( 72,20 ) );
+
+	fgSizer11->Add( m_colourPickerLight3, 0, wxALL, 5 );
 
 	m_spinCtrlLightElevation3 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
 	fgSizer11->Add( m_spinCtrlLightElevation3, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 1 );
@@ -281,8 +297,10 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	m_staticText26->Wrap( -1 );
 	fgSizer11->Add( m_staticText26, 0, wxALIGN_CENTER|wxLEFT, 5 );
 
-	m_colourPickerLight7 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 72,-1 ), wxCLRP_DEFAULT_STYLE );
-	fgSizer11->Add( m_colourPickerLight7, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_colourPickerLight7 = new COLOR_SWATCH( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colourPickerLight7->SetMinSize( wxSize( 72,20 ) );
+
+	fgSizer11->Add( m_colourPickerLight7, 0, wxALL, 5 );
 
 	m_spinCtrlLightElevation7 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
 	fgSizer11->Add( m_spinCtrlLightElevation7, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 1 );
@@ -294,8 +312,10 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	m_staticText171->Wrap( -1 );
 	fgSizer11->Add( m_staticText171, 0, wxALIGN_CENTER, 5 );
 
-	m_colourPickerLight4 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 72,-1 ), wxCLRP_DEFAULT_STYLE );
-	fgSizer11->Add( m_colourPickerLight4, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_colourPickerLight4 = new COLOR_SWATCH( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colourPickerLight4->SetMinSize( wxSize( 72,20 ) );
+
+	fgSizer11->Add( m_colourPickerLight4, 0, wxALL, 5 );
 
 	m_spinCtrlLightElevation4 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
 	fgSizer11->Add( m_spinCtrlLightElevation4, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 1 );
@@ -310,8 +330,10 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	m_staticText181->Wrap( -1 );
 	fgSizer11->Add( m_staticText181, 0, wxALIGN_CENTER|wxLEFT, 5 );
 
-	m_colourPickerLight8 = new wxColourPickerCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxSize( 72,-1 ), wxCLRP_DEFAULT_STYLE );
-	fgSizer11->Add( m_colourPickerLight8, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_colourPickerLight8 = new COLOR_SWATCH( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colourPickerLight8->SetMinSize( wxSize( 72,20 ) );
+
+	fgSizer11->Add( m_colourPickerLight8, 0, wxALL, 5 );
 
 	m_spinCtrlLightElevation8 = new wxSpinCtrl( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 124,-1 ), wxSP_ARROW_KEYS, -90, 90, 0 );
 	fgSizer11->Add( m_spinCtrlLightElevation8, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 1 );
@@ -331,7 +353,6 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
-	bSizerMain->Fit( this );
 }
 
 PANEL_3D_RAYTRACING_OPTIONS_BASE::~PANEL_3D_RAYTRACING_OPTIONS_BASE()

@@ -29,6 +29,7 @@
 #include <bitmaps.h>
 #include <tool/tool_manager.h>
 
+
 PANEL_3D_RAYTRACING_OPTIONS::PANEL_3D_RAYTRACING_OPTIONS( EDA_3D_VIEWER_FRAME* aFrame,
                                                           wxWindow* aParent ) :
         PANEL_3D_RAYTRACING_OPTIONS_BASE( aParent ),
@@ -70,24 +71,26 @@ void PANEL_3D_RAYTRACING_OPTIONS::ResetPanel()
 
 void PANEL_3D_RAYTRACING_OPTIONS::TransferColorDataToWindow()
 {
-    auto Transfer_color = [] ( const SFVEC3F& aSource, wxColourPickerCtrl *aTarget )
+    auto transfer_color = [] ( const SFVEC3F& aSource, COLOR_SWATCH *aTarget )
     {
-        aTarget->SetColour( wxColour( aSource.r * 255, aSource.g * 255, aSource.b * 255, 255 ) );
+        aTarget->SetSupportsOpacity( false );
+        aTarget->SetDefaultColor( KIGFX::COLOR4D( 0.5, 0.5, 0.5, 1.0 ) );
+        aTarget->SetSwatchColor( COLOR4D( aSource.r, aSource.g, aSource.b, 1.0 ), false );
     };
 
-    Transfer_color( m_settings.m_RtCameraLightColor, m_colourPickerCameraLight );
-    Transfer_color( m_settings.m_RtLightColorTop, m_colourPickerTopLight );
-    Transfer_color( m_settings.m_RtLightColorBottom, m_colourPickerBottomLight );
+    transfer_color( m_settings.m_RtCameraLightColor, m_colourPickerCameraLight );
+    transfer_color( m_settings.m_RtLightColorTop, m_colourPickerTopLight );
+    transfer_color( m_settings.m_RtLightColorBottom, m_colourPickerBottomLight );
 
-    Transfer_color( m_settings.m_RtLightColor[0], m_colourPickerLight1 );
-    Transfer_color( m_settings.m_RtLightColor[1], m_colourPickerLight2 );
-    Transfer_color( m_settings.m_RtLightColor[2], m_colourPickerLight3 );
-    Transfer_color( m_settings.m_RtLightColor[3], m_colourPickerLight4 );
+    transfer_color( m_settings.m_RtLightColor[0], m_colourPickerLight1 );
+    transfer_color( m_settings.m_RtLightColor[1], m_colourPickerLight2 );
+    transfer_color( m_settings.m_RtLightColor[2], m_colourPickerLight3 );
+    transfer_color( m_settings.m_RtLightColor[3], m_colourPickerLight4 );
 
-    Transfer_color( m_settings.m_RtLightColor[4], m_colourPickerLight5 );
-    Transfer_color( m_settings.m_RtLightColor[5], m_colourPickerLight6 );
-    Transfer_color( m_settings.m_RtLightColor[6], m_colourPickerLight7 );
-    Transfer_color( m_settings.m_RtLightColor[7], m_colourPickerLight8 );
+    transfer_color( m_settings.m_RtLightColor[4], m_colourPickerLight5 );
+    transfer_color( m_settings.m_RtLightColor[5], m_colourPickerLight6 );
+    transfer_color( m_settings.m_RtLightColor[6], m_colourPickerLight7 );
+    transfer_color( m_settings.m_RtLightColor[7], m_colourPickerLight8 );
 
     m_spinCtrlLightElevation1->SetValue(
             (int)( m_settings.m_RtLightSphericalCoords[0].x * 180.0f - 90.0f ) );
@@ -191,25 +194,25 @@ bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataFromWindow()
     m_settings.m_RtRecursiveReflectionCount = m_spinCtrlRecursiveLevel_Reflections->GetValue();
     m_settings.m_RtRecursiveRefractionCount = m_spinCtrlRecursiveLevel_Refractions->GetValue();
 
-    auto Transfer_color = [] ( SFVEC3F& aTarget, wxColourPickerCtrl *aSource )
+    auto transfer_color = [] ( SFVEC3F& aTarget, COLOR_SWATCH *aSource )
     {
-        const wxColour color = aSource->GetColour();
+        const COLOR4D color = aSource->GetSwatchColor();
 
-        aTarget = SFVEC3F( color.Red() / 255.0f, color.Green() / 255.0f, color.Blue() / 255.0f );
+        aTarget = SFVEC3F( color.r, color.g, color.b );
     };
 
-    Transfer_color( m_settings.m_RtCameraLightColor, m_colourPickerCameraLight );
-    Transfer_color( m_settings.m_RtLightColorTop, m_colourPickerTopLight );
-    Transfer_color( m_settings.m_RtLightColorBottom, m_colourPickerBottomLight );
+    transfer_color( m_settings.m_RtCameraLightColor, m_colourPickerCameraLight );
+    transfer_color( m_settings.m_RtLightColorTop, m_colourPickerTopLight );
+    transfer_color( m_settings.m_RtLightColorBottom, m_colourPickerBottomLight );
 
-    Transfer_color( m_settings.m_RtLightColor[0], m_colourPickerLight1 );
-    Transfer_color( m_settings.m_RtLightColor[1], m_colourPickerLight2 );
-    Transfer_color( m_settings.m_RtLightColor[2], m_colourPickerLight3 );
-    Transfer_color( m_settings.m_RtLightColor[3], m_colourPickerLight4 );
-    Transfer_color( m_settings.m_RtLightColor[4], m_colourPickerLight5 );
-    Transfer_color( m_settings.m_RtLightColor[5], m_colourPickerLight6 );
-    Transfer_color( m_settings.m_RtLightColor[6], m_colourPickerLight7 );
-    Transfer_color( m_settings.m_RtLightColor[7], m_colourPickerLight8 );
+    transfer_color( m_settings.m_RtLightColor[0], m_colourPickerLight1 );
+    transfer_color( m_settings.m_RtLightColor[1], m_colourPickerLight2 );
+    transfer_color( m_settings.m_RtLightColor[2], m_colourPickerLight3 );
+    transfer_color( m_settings.m_RtLightColor[3], m_colourPickerLight4 );
+    transfer_color( m_settings.m_RtLightColor[4], m_colourPickerLight5 );
+    transfer_color( m_settings.m_RtLightColor[5], m_colourPickerLight6 );
+    transfer_color( m_settings.m_RtLightColor[6], m_colourPickerLight7 );
+    transfer_color( m_settings.m_RtLightColor[7], m_colourPickerLight8 );
 
     m_settings.m_RtLightSphericalCoords[0].x =
             ( m_spinCtrlLightElevation1->GetValue() + 90.0f ) / 180.0f;
