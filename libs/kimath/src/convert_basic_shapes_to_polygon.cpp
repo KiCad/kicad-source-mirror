@@ -39,10 +39,11 @@
 
 
 void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter, int aRadius,
-                               int aError, ERROR_LOC aErrorLoc )
+                               int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
 {
     wxPoint corner_position;
     int     numSegs = GetArcToSegmentCount( aRadius, aError, 360.0 );
+    numSegs = std::max( aMinSegCount, numSegs );
 
     // The shape will be built with a even number of segs. Reason: the horizontal
     // diameter begins and ends to points on the actual circle, or circle
@@ -77,10 +78,11 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter,
 
 
 void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, int aRadius,
-                               int aError, ERROR_LOC aErrorLoc )
+                               int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
 {
     wxPoint corner_position;
     int     numSegs = GetArcToSegmentCount( aRadius, aError, 360.0 );
+    numSegs = std::max( aMinSegCount, numSegs);
 
     // The shape will be built with a even number of segs. Reason: the horizontal
     // diameter begins and ends to points on the actual circle, or circle
@@ -121,7 +123,7 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, i
 
 
 void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aEnd,
-                             int aWidth, int aError, ERROR_LOC aErrorLoc )
+                             int aWidth, int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
 {
     // To build the polygonal shape outside the actual shape, we use a bigger
     // radius to build rounded ends.
@@ -130,11 +132,19 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPo
     // of the segment.
     int radius  = aWidth / 2;
     int numSegs = GetArcToSegmentCount( radius, aError, 360.0 );
+    numSegs = std::max( aMinSegCount, numSegs );
+
     int delta = 3600 / numSegs;   // rotate angle in 0.1 degree
-    int correction = GetCircleToPolyCorrection( aError );
 
     if( aErrorLoc == ERROR_OUTSIDE )
+    {
+        // The outer radius should be radius+aError
+        // Recalculate the actual approx error, as it can be smaller than aError
+        // because numSegs is clamped to a minimal value
+        int actual_delta_radius = CircleToEndSegmentDeltaRadius( radius, numSegs );
+        int correction = GetCircleToPolyCorrection( actual_delta_radius );
         radius += correction;
+    }
 
     // end point is the coordinate relative to aStart
     wxPoint        endp = aEnd - aStart;
@@ -248,7 +258,13 @@ void TransformRoundRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxSize& a
     int radius = aCornerRadius;
 
     if( aErrorLoc == ERROR_OUTSIDE )
-        radius += GetCircleToPolyCorrection( aError );
+    {
+        // The outer radius should be radius+aError
+        // Recalculate the actual approx error, as it can be smaller than aError
+        // because numSegs is clamped to a minimal value
+        int actual_delta_radius = CircleToEndSegmentDeltaRadius( radius, numSegs );
+        radius += GetCircleToPolyCorrection( actual_delta_radius );
+    }
 
     auto genArc =
             [&]( const wxPoint& aCenter, int aStart, int aEnd )

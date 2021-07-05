@@ -56,9 +56,11 @@ enum RECT_CHAMFER_POSITIONS : int
  * @param aRadius is the radius of the circle.
  * @param aError is the internal units allowed for error approximation.
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
+ * @param aMinSegCount is the min count of segments to approximate.
+ * Default = 0 to do not force a min count.
  */
 void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter, int aRadius,
-                               int aError, ERROR_LOC aErrorLoc );
+                               int aError, ERROR_LOC aErrorLoc, int aMinSegCount = 0 );
 
 /**
  * Convert a circle to a polygon, using multiple straight lines.
@@ -68,9 +70,11 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter,
  * @param aRadius is the radius of the circle.
  * @param aError is the internal units allowed for error in approximation.
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
+ * @param aMinSegCount is the min count of segments to approximate.
+ * Default = 0 to do not force a min count.
  */
 void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, int aRadius,
-                               int aError, ERROR_LOC aErrorLoc );
+                               int aError, ERROR_LOC aErrorLoc, int aMinSegCount = 0 );
 
 
 /**
@@ -87,9 +91,11 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, i
  * @param aWidth is the width of the segment.
  * @param aError is the internal units allowed for error in approximation.
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
+ * @param aMinSegCount is the min count of segments to approximate.
+ * Default = 0 to do not force a min count.
  */
 void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aEnd,
-                             int aWidth, int aError, ERROR_LOC aErrorLoc );
+                             int aWidth, int aError, ERROR_LOC aErrorLoc, int aMinSegCount = 0 );
 
 
 /**
