@@ -58,6 +58,11 @@ public:
         return at( PointerFromString( aPath ) );
     }
 
+    nlohmann::json& operator[]( const nlohmann::json::json_pointer& aPointer )
+    {
+        return nlohmann::json::operator[]( aPointer );
+    }
+
     nlohmann::json& operator[]( const std::string& aPath )
     {
         return nlohmann::json::operator[]( PointerFromString( aPath ) );

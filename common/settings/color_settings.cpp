@@ -270,7 +270,7 @@ bool COLOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     return false;
 }
 
-#include <iostream>
+
 bool COLOR_SETTINGS::migrateSchema0to1()
 {
     /**
