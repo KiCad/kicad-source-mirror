@@ -305,14 +305,19 @@ WINDOW_SETTINGS* SIM_PLOT_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 
 void SIM_PLOT_FRAME::initWorkbook()
 {
-    if( !m_simulator->Settings()->GetWorkbookFilename().IsEmpty() )
+    // Removed for the time being. We cannot run the simulation on simulator launch, as it may
+    // take a lot of time, confusing the user.
+    // TODO: Change workbook loading routines so that they don't run the simulation until the user
+    // initiates it.
+
+    /*if( !m_simulator->Settings()->GetWorkbookFilename().IsEmpty() )
     {
         wxFileName filename = m_simulator->Settings()->GetWorkbookFilename();
         filename.SetPath( Prj().GetProjectPath() );
 
         if( !loadWorkbook( filename.GetFullPath() ) )
             m_simulator->Settings()->SetWorkbookFilename( "" );
-    }
+    }*/
 }
 
 
