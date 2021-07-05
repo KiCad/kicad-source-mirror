@@ -70,6 +70,9 @@ public:
     void SetFocus( bool aFocus = true );
 
 private:
+    /**
+      * Export the invocable actions and images to the 3Dconnexion UI.
+      */
     void exportCommandsAndImages();
 
     long GetCameraMatrix( navlib::matrix_t& aMatrix ) const override;

@@ -1,5 +1,5 @@
 cmake_policy(PUSH)
-cmake_policy(VERSION 2.6)
+cmake_policy(VERSION 3.1)
 
 # Commands may need to know the format version.
 set(CMAKE_IMPORT_FILE_VERSION 1)

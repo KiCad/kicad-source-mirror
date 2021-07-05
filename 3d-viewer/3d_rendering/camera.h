@@ -162,6 +162,9 @@ public:
     void ResetXYpos();
     void ResetXYpos_T1();
 
+    /**
+     *  Get the current mouse position.
+     */
     const wxPoint& GetCurMousePosition() { return m_lastPosition; }
 
     /**
@@ -264,6 +267,9 @@ public:
      */
     void MakeRayAtCurrentMousePosition( SFVEC3F& aOutOrigin, SFVEC3F& aOutDirection ) const;
 
+    /**
+     * Update the camera.
+     */
     void Update() { updateFrustum(); }
 
 protected:

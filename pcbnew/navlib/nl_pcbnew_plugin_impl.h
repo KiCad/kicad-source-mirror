@@ -54,6 +54,10 @@ class PCB_VIEW;
 // Convenience typedef.
 typedef TDx::SpaceMouse::Navigation3D::CNavigation3D NAV_3D;
 
+/**
+ * The class that implements the accessors and mutators required for
+ * 3D navigation in an PCB_DRAW_PANEL_GAL using a SpaceMouse.
+ */
 class NL_PCBNEW_PLUGIN_IMPL : public NAV_3D
 {
 public:
@@ -75,6 +79,9 @@ public:
     void SetFocus( bool aFocus );
 
 private:
+    /**
+      * Export the invocable actions and images to the 3Dconnexion UI.
+      */
     void exportCommandsAndImages();
 
     long GetCameraMatrix( navlib::matrix_t& aMatrix ) const override;

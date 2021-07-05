@@ -1260,6 +1260,7 @@ void PCB_EDIT_FRAME::OnDisplayOptionsChanged()
     m_appearancePanel->UpdateDisplayOptions();
 }
 
+
 void PCB_EDIT_FRAME::OnActivate( wxActivateEvent& aEvent )
 {
 #if defined( KICAD_USE_3DCONNEXION )
@@ -1271,6 +1272,7 @@ void PCB_EDIT_FRAME::OnActivate( wxActivateEvent& aEvent )
 
     aEvent.Skip(); // required under wxMAC
 }
+
 
 bool PCB_EDIT_FRAME::IsElementVisible( GAL_LAYER_ID aElement ) const
 {

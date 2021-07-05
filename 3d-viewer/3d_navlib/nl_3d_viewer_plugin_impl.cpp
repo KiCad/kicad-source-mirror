@@ -42,6 +42,7 @@
 #include <vector>
 
 #include <wx/mstream.h>
+
 /**
  * Flag to enable the NL_3D_VIEWER_PLUGIN debug tracing.
  *
@@ -63,17 +64,21 @@ template <class T>
 bool equals( T aFirst, T aSecond, T aEpsilon = static_cast<T>( FLT_EPSILON ) )
 {
     T diff = fabs( aFirst - aSecond );
+
     if( diff < aEpsilon )
     {
         return true;
     }
+
     aFirst = fabs( aFirst );
     aSecond = fabs( aSecond );
     T largest = aFirst > aSecond ? aFirst : aSecond;
+
     if( diff <= largest * aEpsilon )
     {
         return true;
     }
+
     return false;
 }
 
@@ -103,6 +108,7 @@ bool equals( glm::mat<L, C, T, Q> const& aFirst, glm::mat<L, C, T, Q> const& aSe
     return true;
 }
 
+
 NL_3D_VIEWER_PLUGIN_IMPL::NL_3D_VIEWER_PLUGIN_IMPL( EDA_3D_CANVAS* aCanvas ) :
         NAV_3D( false, false ), m_canvas( aCanvas ), m_capIsMoving( false )
 {
@@ -116,10 +122,12 @@ NL_3D_VIEWER_PLUGIN_IMPL::NL_3D_VIEWER_PLUGIN_IMPL( EDA_3D_CANVAS* aCanvas ) :
     exportCommandsAndImages();
 }
 
+
 NL_3D_VIEWER_PLUGIN_IMPL::~NL_3D_VIEWER_PLUGIN_IMPL()
 {
     EnableNavigation( false );
 }
+
 
 void NL_3D_VIEWER_PLUGIN_IMPL::SetFocus( bool aFocus )
 {
@@ -150,6 +158,7 @@ CATEGORY_STORE::iterator add_category( std::string aCategoryPath, CATEGORY_STORE
     {
         std::string parentPath = aCategoryPath.substr( 0, pos );
         parent_iter = aCategoryStore.find( parentPath );
+
         if( parent_iter == aCategoryStore.end() )
         {
             parent_iter = add_category( parentPath, aCategoryStore );
@@ -167,9 +176,7 @@ CATEGORY_STORE::iterator add_category( std::string aCategoryPath, CATEGORY_STORE
     return iter;
 }
 
-/**
-  * Export the invocable actions and images to the 3Dconnexion UI.
-  */
+
 void NL_3D_VIEWER_PLUGIN_IMPL::exportCommandsAndImages()
 {
     wxLogTrace( m_logTrace, wxT( "NL_3D_VIEWER_PLUGIN_IMPL::exportCommandsAndImages" ) );
@@ -205,6 +212,7 @@ void NL_3D_VIEWER_PLUGIN_IMPL::exportCommandsAndImages()
     {
         const TOOL_ACTION* action = *it;
         std::string        label = action->GetLabel().ToStdString();
+
         if( label.empty() )
         {
             continue;
@@ -220,6 +228,7 @@ void NL_3D_VIEWER_PLUGIN_IMPL::exportCommandsAndImages()
 
         std::string              strCategory = action->GetToolName();
         CATEGORY_STORE::iterator iter = categoryStore.find( strCategory );
+
         if( iter == categoryStore.end() )
         {
             iter = add_category( std::move( strCategory ), categoryStore );
@@ -229,6 +238,7 @@ void NL_3D_VIEWER_PLUGIN_IMPL::exportCommandsAndImages()
 
         // Arbitrary 8-bit data stream
         wxMemoryOutputStream imageStream;
+
         if( action->GetIcon() != BITMAPS::INVALID_BITMAP )
         {
             wxImage image = KiBitmap( action->GetIcon() ).ConvertToImage();
@@ -260,6 +270,7 @@ void NL_3D_VIEWER_PLUGIN_IMPL::exportCommandsAndImages()
     NAV_3D::AddImages( vImages );
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
 {
     // cache the camera matrix so that we can tell if the view has been moved and
@@ -271,6 +282,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::GetPointerPosition( navlib::point_t& position ) const
 {
     SFVEC3F origin, direction;
@@ -280,6 +292,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetPointerPosition( navlib::point_t& position ) c
 
     return 0;
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::GetViewExtents( navlib::box_t& extents ) const
 {
@@ -297,6 +310,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetViewExtents( navlib::box_t& extents ) const
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::GetViewFOV( double& aFov ) const
 {
     const CAMERA_FRUSTUM& f = m_camera->GetFrustum();
@@ -304,6 +318,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetViewFOV( double& aFov ) const
     aFov = glm::radians( f.angle );
     return 0;
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::GetViewFrustum( navlib::frustum_t& aFrustum ) const
 {
@@ -320,12 +335,14 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetViewFrustum( navlib::frustum_t& aFrustum ) con
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::GetIsViewPerspective( navlib::bool_t& perspective ) const
 {
     perspective = m_camera->GetProjection() == PROJECTION_TYPE::PERSPECTIVE ? 1 : 0;
 
     return 0;
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& aCameraMatrix )
 {
@@ -335,11 +352,11 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& aCameraM
     std::copy_n( aCameraMatrix.m, 16, glm::value_ptr( cam ) );
     viewMatrix = glm::inverse( cam );
 
-
     glm::mat4 camera = m_camera->GetViewMatrix();
 
     // The navlib does not move the camera in its z-axis in an orthographic projection
     // as this does not change the viewed object size. However ...
+
     if( m_camera->GetProjection() == PROJECTION_TYPE::ORTHO )
     {
         // ... the CAMERA class couples zoom and distance to the object: we need to
@@ -374,6 +391,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& aCameraM
     m_cameraMatrix = m_camera->GetViewMatrix();
 
     // The camera has a constraint on the z position so we need to check that ...
+
     if( !equals( m_cameraMatrix[3].z, viewMatrix[3].z ) )
     {
         // ... and let the 3DMouse controller know, when something is amiss.
@@ -382,6 +400,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& aCameraM
 
     return 0;
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::SetViewExtents( const navlib::box_t& extents )
 {
@@ -406,15 +425,18 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetViewExtents( const navlib::box_t& extents )
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::SetViewFOV( double fov )
 {
     return navlib::make_result_code( navlib::navlib_errc::function_not_supported );
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::SetViewFrustum( const navlib::frustum_t& frustum )
 {
     return navlib::make_result_code( navlib::navlib_errc::permission_denied );
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::GetModelExtents( navlib::box_t& extents ) const
 {
@@ -426,15 +448,18 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetModelExtents( navlib::box_t& extents ) const
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::GetSelectionExtents( navlib::box_t& extents ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::GetSelectionTransform( navlib::matrix_t& transform ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::GetIsSelectionEmpty( navlib::bool_t& empty ) const
 {
@@ -443,10 +468,12 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetIsSelectionEmpty( navlib::bool_t& empty ) cons
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::SetSelectionTransform( const navlib::matrix_t& matrix )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::GetPivotPosition( navlib::point_t& position ) const
 {
@@ -457,12 +484,14 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetPivotPosition( navlib::point_t& position ) con
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::IsUserPivot( navlib::bool_t& userPivot ) const
 {
     userPivot = false;
 
     return 0;
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::SetPivotPosition( const navlib::point_t& position )
 {
@@ -484,12 +513,14 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetPivotPosition( const navlib::point_t& position
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::GetPivotVisible( navlib::bool_t& visible ) const
 {
     visible = m_canvas->GetRenderPivot();
 
     return 0;
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::SetPivotVisible( bool visible )
 {
@@ -500,6 +531,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetPivotVisible( bool visible )
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::GetHitLookAt( navlib::point_t& position ) const
 {
     RAY mouseRay;
@@ -509,6 +541,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetHitLookAt( navlib::point_t& position ) const
     glm::vec3 vec;
 
     // Test it with the board bounding box
+
     if( m_canvas->GetBoardAdapter().GetBBox().Intersect( mouseRay, &hit ) )
     {
         vec = mouseRay.at( hit );
@@ -519,10 +552,12 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetHitLookAt( navlib::point_t& position ) const
     return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::SetHitAperture( double aperture )
 {
     return navlib::make_result_code( navlib::navlib_errc::function_not_supported );
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::SetHitDirection( const navlib::vector_t& direction )
 {
@@ -531,6 +566,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetHitDirection( const navlib::vector_t& directio
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::SetHitLookFrom( const navlib::point_t& eye )
 {
     m_rayOrigin = { eye.x, eye.y, eye.z };
@@ -538,10 +574,12 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetHitLookFrom( const navlib::point_t& eye )
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::SetHitSelectionOnly( bool onlySelection )
 {
     return navlib::make_result_code( navlib::navlib_errc::function_not_supported );
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 {
@@ -570,6 +608,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 
         // Only allow command execution if the window is enabled. i.e. there is not a modal dialog
         // currently active.
+
         if( parent->IsEnabled() )
         {
             TOOL_MANAGER* tool_manager = static_cast<PCB_BASE_FRAME*>( parent )->GetToolManager();
@@ -605,10 +644,12 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::SetSettingsChanged( long change )
 {
     return 0;
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::SetMotionFlag( bool value )
 {
@@ -616,6 +657,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetMotionFlag( bool value )
 
     return 0;
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::SetTransaction( long value )
 {
@@ -631,10 +673,12 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetTransaction( long value )
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::SetCameraTarget( const navlib::point_t& position )
 {
     return navlib::make_result_code( navlib::navlib_errc::function_not_supported );
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::GetFrontView( navlib::matrix_t& matrix ) const
 {
@@ -642,12 +686,14 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetFrontView( navlib::matrix_t& matrix ) const
     return 0;
 }
 
+
 long NL_3D_VIEWER_PLUGIN_IMPL::GetCoordinateSystem( navlib::matrix_t& matrix ) const
 {
     // Use the right-handed coordinate system X-right, Z-up, Y-in (row vectors)
     matrix = { 1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1 };
     return 0;
 }
+
 
 long NL_3D_VIEWER_PLUGIN_IMPL::GetIsViewRotatable( navlib::bool_t& isRotatable ) const
 {

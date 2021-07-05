@@ -23,28 +23,35 @@
 
 #include "nl_pcbnew_plugin_impl.h"
 
+
 NL_PCBNEW_PLUGIN::NL_PCBNEW_PLUGIN( PCB_DRAW_PANEL_GAL* aViewport ) :
         m_impl( new NL_PCBNEW_PLUGIN_IMPL( aViewport ) )
 {
 }
+
 
 NL_PCBNEW_PLUGIN::~NL_PCBNEW_PLUGIN()
 {
     delete m_impl;
 }
 
+
 void NL_PCBNEW_PLUGIN::SetFocus( bool focus )
 {
     m_impl->SetFocus( focus );
 }
 #else
+
+
 NL_PCBNEW_PLUGIN::NL_PCBNEW_PLUGIN( PCB_DRAW_PANEL_GAL* aViewport )
 {
 }
 
+
 void NL_PCBNEW_PLUGIN::SetFocus( bool focus )
 {
 }
+
 
 NL_PCBNEW_PLUGIN::~NL_PCBNEW_PLUGIN()
 {

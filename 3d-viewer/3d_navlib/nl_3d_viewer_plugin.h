@@ -29,6 +29,7 @@
 // Forward declarations.
 class EDA_3D_CANVAS;
 class NL_3D_VIEWER_PLUGIN_IMPL;
+
 /**
  * The class that implements the public interface to the SpaceMouse plug-in.
  */

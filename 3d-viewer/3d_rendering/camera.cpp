@@ -120,6 +120,7 @@ void CAMERA::Reset_T1()
         m_rotate_aux_t1.z = static_cast<float>( 2.0f * M_PI );
 }
 
+
 void CAMERA::SetBoardLookAtPos( const SFVEC3F& aBoardPos )
 {
     if( m_board_lookat_pos_init != aBoardPos )
@@ -133,6 +134,7 @@ void CAMERA::SetBoardLookAtPos( const SFVEC3F& aBoardPos )
         updateFrustum();
     }
 }
+
 
 void CAMERA::zoomChanged()
 {
@@ -183,12 +185,14 @@ glm::mat4 CAMERA::GetRotationMatrix() const
     return m_rotationMatrix * m_rotationMatrixAux;
 }
 
+
 void CAMERA::SetRotationMatrix( const glm::mat4& aRotation )
 {
     m_parametersChanged = true;
     std::copy_n( glm::value_ptr( aRotation * glm::inverse( m_rotationMatrixAux ) ), 12,
                  glm::value_ptr( m_rotationMatrix ) );
 }
+
 
 void CAMERA::rebuildProjection()
 {
@@ -530,6 +534,7 @@ void CAMERA::ZoomReset()
     updateViewMatrix();
     rebuildProjection();
 }
+
 
 bool CAMERA::Zoom( float aFactor )
 {

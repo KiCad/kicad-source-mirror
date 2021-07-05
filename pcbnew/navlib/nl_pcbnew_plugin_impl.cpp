@@ -54,17 +54,21 @@ template <class T>
 bool equals( T aFirst, T aSecond, T aEpsilon = static_cast<T>( FLT_EPSILON ) )
 {
     T diff = fabs( aFirst - aSecond );
+
     if( diff < aEpsilon )
     {
         return true;
     }
+
     aFirst = fabs( aFirst );
     aSecond = fabs( aSecond );
     T largest = aFirst > aSecond ? aFirst : aSecond;
+
     if( diff <= largest * aEpsilon )
     {
         return true;
     }
+
     return false;
 }
 
@@ -97,6 +101,7 @@ bool equals( VECTOR2<T> const& aFirst, VECTOR2<T> const& aSecond,
  */
 const wxChar* NL_PCBNEW_PLUGIN_IMPL::m_logTrace = wxT( "KI_TRACE_NL_PCBNEW_PLUGIN" );
 
+
 NL_PCBNEW_PLUGIN_IMPL::NL_PCBNEW_PLUGIN_IMPL( PCB_DRAW_PANEL_GAL* aViewport ) :
         CNavigation3D( false, false ), m_viewport2D( aViewport ), m_isMoving( false )
 {
@@ -115,10 +120,12 @@ NL_PCBNEW_PLUGIN_IMPL::NL_PCBNEW_PLUGIN_IMPL( PCB_DRAW_PANEL_GAL* aViewport ) :
     exportCommandsAndImages();
 }
 
+
 NL_PCBNEW_PLUGIN_IMPL::~NL_PCBNEW_PLUGIN_IMPL()
 {
     EnableNavigation( false );
 }
+
 
 void NL_PCBNEW_PLUGIN_IMPL::SetFocus( bool aFocus )
 {
@@ -150,6 +157,7 @@ static CATEGORY_STORE::iterator add_category( std::string     aCategoryPath,
     {
         std::string parentPath = aCategoryPath.substr( 0, pos );
         parent_iter = aCategoryStore.find( parentPath );
+
         if( parent_iter == aCategoryStore.end() )
         {
             parent_iter = add_category( parentPath, aCategoryStore );
@@ -167,9 +175,7 @@ static CATEGORY_STORE::iterator add_category( std::string     aCategoryPath,
     return iter;
 }
 
-/**
-  * Export the invocable actions and images to the 3Dconnexion UI.
-  */
+
 void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
 {
     wxLogTrace( m_logTrace, "NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages" );
@@ -205,6 +211,7 @@ void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
     {
         const TOOL_ACTION* action = *it;
         std::string        label = action->GetLabel().ToStdString();
+
         if( label.empty() )
         {
             continue;
@@ -213,6 +220,7 @@ void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
         std::string name = action->GetName();
 
         // Do no export commands for the 3DViewer app.
+
         if( name.rfind( "3DViewer.", 0 ) == 0 )
         {
             continue;
@@ -220,6 +228,7 @@ void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
 
         std::string              strCategory = action->GetToolName();
         CATEGORY_STORE::iterator iter = categoryStore.find( strCategory );
+
         if( iter == categoryStore.end() )
         {
             iter = add_category( std::move( strCategory ), categoryStore );
@@ -229,6 +238,7 @@ void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
 
         // Arbitrary 8-bit data stream
         wxMemoryOutputStream imageStream;
+
         if( action->GetIcon() != BITMAPS::INVALID_BITMAP )
         {
             wxImage image = KiBitmap( action->GetIcon() ).ConvertToImage();
@@ -260,6 +270,7 @@ void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
     NAV_3D::AddImages( vImages );
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
 {
     if( m_view == nullptr )
@@ -281,6 +292,7 @@ long NL_PCBNEW_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
     return 0;
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::GetPointerPosition( navlib::point_t& position ) const
 {
     if( m_view == nullptr )
@@ -296,6 +308,7 @@ long NL_PCBNEW_PLUGIN_IMPL::GetPointerPosition( navlib::point_t& position ) cons
 
     return 0;
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::GetViewExtents( navlib::box_t& extents ) const
 {
@@ -318,12 +331,14 @@ long NL_PCBNEW_PLUGIN_IMPL::GetViewExtents( navlib::box_t& extents ) const
     return 0;
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::GetIsViewPerspective( navlib::bool_t& perspective ) const
 {
     perspective = false;
 
     return 0;
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& matrix )
 {
@@ -350,6 +365,7 @@ long NL_PCBNEW_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& matrix )
     return result;
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::SetViewExtents( const navlib::box_t& extents )
 {
     if( m_view == nullptr )
@@ -358,6 +374,7 @@ long NL_PCBNEW_PLUGIN_IMPL::SetViewExtents( const navlib::box_t& extents )
     }
 
     long result = 0;
+
     if( m_viewportWidth != m_view->GetViewport().GetWidth() )
     {
         result = navlib::make_result_code( navlib::navlib_errc::error );
@@ -377,15 +394,18 @@ long NL_PCBNEW_PLUGIN_IMPL::SetViewExtents( const navlib::box_t& extents )
     return result;
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::SetViewFOV( double fov )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::SetViewFrustum( const navlib::frustum_t& frustum )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::GetModelExtents( navlib::box_t& extents ) const
 {
@@ -398,6 +418,7 @@ long NL_PCBNEW_PLUGIN_IMPL::GetModelExtents( navlib::box_t& extents ) const
     box.Normalize();
 
     double half_depth = 0.1 / m_viewport2D->GetGAL()->GetWorldScale();
+
     if( box.GetWidth() == 0 && box.GetHeight() == 0 )
     {
         half_depth = 0;
@@ -413,6 +434,7 @@ long NL_PCBNEW_PLUGIN_IMPL::GetModelExtents( navlib::box_t& extents ) const
     return 0;
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::GetCoordinateSystem( navlib::matrix_t& matrix ) const
 {
     // The coordinate system is defined as x to the right, y down and z into the screen.
@@ -420,11 +442,13 @@ long NL_PCBNEW_PLUGIN_IMPL::GetCoordinateSystem( navlib::matrix_t& matrix ) cons
     return 0;
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::GetFrontView( navlib::matrix_t& matrix ) const
 {
     matrix = { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1 };
     return 0;
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::GetIsSelectionEmpty( navlib::bool_t& empty ) const
 {
@@ -432,11 +456,13 @@ long NL_PCBNEW_PLUGIN_IMPL::GetIsSelectionEmpty( navlib::bool_t& empty ) const
     return 0;
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::GetIsViewRotatable( navlib::bool_t& isRotatable ) const
 {
     isRotatable = false;
     return 0;
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 {
@@ -465,6 +491,7 @@ long NL_PCBNEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 
         // Only allow command execution if the window is enabled. i.e. there is not a modal dialog
         // currently active.
+
         if( parent->IsEnabled() )
         {
             TOOL_MANAGER* tool_manager = static_cast<PCB_BASE_FRAME*>( parent )->GetToolManager();
@@ -494,10 +521,12 @@ long NL_PCBNEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
     return 0;
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::SetSettingsChanged( long change )
 {
     return 0;
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::SetMotionFlag( bool value )
 {
@@ -505,6 +534,7 @@ long NL_PCBNEW_PLUGIN_IMPL::SetMotionFlag( bool value )
 
     return 0;
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::SetTransaction( long value )
 {
@@ -516,80 +546,96 @@ long NL_PCBNEW_PLUGIN_IMPL::SetTransaction( long value )
     return 0;
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::GetViewFOV( double& fov ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::GetViewFrustum( navlib::frustum_t& frustum ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::GetSelectionExtents( navlib::box_t& extents ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::GetSelectionTransform( navlib::matrix_t& transform ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::SetSelectionTransform( const navlib::matrix_t& matrix )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::GetPivotPosition( navlib::point_t& position ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::IsUserPivot( navlib::bool_t& userPivot ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::SetPivotPosition( const navlib::point_t& position )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::GetPivotVisible( navlib::bool_t& visible ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::SetPivotVisible( bool visible )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::GetHitLookAt( navlib::point_t& position ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::SetHitAperture( double aperture )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::SetHitDirection( const navlib::vector_t& direction )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::SetHitLookFrom( const navlib::point_t& eye )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
+
 long NL_PCBNEW_PLUGIN_IMPL::SetHitSelectionOnly( bool onlySelection )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
+
 
 long NL_PCBNEW_PLUGIN_IMPL::SetCameraTarget( const navlib::point_t& position )
 {
