@@ -170,15 +170,31 @@ void KIUI::SelectReferenceNumber( wxTextEntry* aTextEntry )
 
 bool KIUI::IsInputControlFocused()
 {
-    wxWindow*         focus        = wxWindow::FindFocus();
+    wxWindow* focus = wxWindow::FindFocus();
 
-    wxTextEntry*      textEntry    = dynamic_cast<wxTextEntry*>( focus );
-    wxStyledTextCtrl* styledText   = dynamic_cast<wxStyledTextCtrl*>( focus );
-    wxListBox*        listBox      = dynamic_cast<wxListBox*>( focus );
-    wxDataViewCtrl*   dataViewCtrl = dynamic_cast<wxDataViewCtrl*>( focus );
-    wxSearchCtrl*     searchCtrl   = dynamic_cast<wxSearchCtrl*>( focus );
+    if( !focus )
+    {
+        return false;
+    }
 
-    return ( textEntry || styledText || listBox || dataViewCtrl || searchCtrl );
+    wxTextEntry*      textEntry = dynamic_cast<wxTextEntry*>( focus );
+    wxStyledTextCtrl* styledText = dynamic_cast<wxStyledTextCtrl*>( focus );
+    wxListBox*        listBox = dynamic_cast<wxListBox*>( focus );
+    wxSearchCtrl*     searchCtrl = dynamic_cast<wxSearchCtrl*>( focus );
+
+    // Data view control is annoying, the focus is on a "wxDataViewCtrlMainWindow"
+    // class that is not formerly exported via the header.
+    // However, we can test the parent is wxDataViewCtrl instead
+    wxDataViewCtrl* dataViewCtrl = nullptr;
+
+    wxWindow* parent = focus->GetParent();
+
+    if( parent )
+    {
+        dataViewCtrl = dynamic_cast<wxDataViewCtrl*>( parent );
+    }
+
+    return ( textEntry || styledText || listBox || dataViewCtrl || searchCtrl || dataViewCtrl );
 }
 
 
