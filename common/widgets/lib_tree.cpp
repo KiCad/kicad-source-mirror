@@ -30,6 +30,7 @@
 #include <wx/html/htmlwin.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
+#include <wx/srchctrl.h>
 #include <wx/settings.h>
 #include <wx/statbmp.h>
 
@@ -51,8 +52,10 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
     {
         auto search_sizer = new wxBoxSizer( wxHORIZONTAL );
 
-        m_query_ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+        m_query_ctrl = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                        wxDefaultSize, wxTE_PROCESS_ENTER );
+
+        m_query_ctrl->ShowCancelButton( true );
 
 // Additional visual cue for GTK, which hides the placeholder text on focus
 #ifdef __WXGTK__

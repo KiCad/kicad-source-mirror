@@ -32,6 +32,7 @@ class wxDataViewCtrl;
 class wxTextCtrl;
 class wxHtmlWindow;
 class wxHtmlLinkEvent;
+class wxSearchCtrl;
 class ACTION_MENU;
 class LIB_ID;
 class LIB_TABLE;
@@ -171,7 +172,7 @@ protected:
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 
-    wxTextCtrl*      m_query_ctrl;
+    wxSearchCtrl*    m_query_ctrl;
     wxDataViewCtrl*  m_tree_ctrl;
     wxHtmlWindow*    m_details_ctrl;
 
