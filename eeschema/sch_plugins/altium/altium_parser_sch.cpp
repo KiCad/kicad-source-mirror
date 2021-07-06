@@ -229,9 +229,10 @@ ASCH_LABEL::ASCH_LABEL( const std::map<wxString, wxString>& aProperties )
 }
 
 
-ASCH_NOTE::ASCH_NOTE( const std::map<wxString, wxString>& aProperties )
+ASCH_TEXT_FRAME::ASCH_TEXT_FRAME( const std::map<wxString, wxString>& aProperties )
 {
-    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::NOTE );
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::NOTE
+                || PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::TEXT_FRAME );
 
     location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
                         -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
@@ -241,16 +242,23 @@ ASCH_NOTE::ASCH_NOTE( const std::map<wxString, wxString>& aProperties )
     text = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
     text.Replace( "~1", "\n", true );
 
-    author = ALTIUM_PARSER::PropertiesReadString( aProperties, "AUTHOR", "" );
-
     fontId = ALTIUM_PARSER::PropertiesReadInt( aProperties, "FONTID", 0 );
     isWordWrapped = ALTIUM_PARSER::PropertiesReadBool( aProperties, "WORDWRAP", false );
     border = ALTIUM_PARSER::PropertiesReadBool( aProperties, "SHOWBORDER", false );
     textMargin = PropertiesReadKiCadUnitFrac( aProperties, "TEXTMARGIN" );
     areaColor = ALTIUM_PARSER::PropertiesReadInt( aProperties, "AREACOLOR", 0 );
 
-    alignment = PropertiesReadEnum<ASCH_NOTE_ALIGNMENT>(
-            aProperties, "ALIGNMENT", 1, 3, ASCH_NOTE_ALIGNMENT::LEFT );
+    alignment = PropertiesReadEnum<ASCH_TEXT_FRAME_ALIGNMENT>(
+            aProperties, "ALIGNMENT", 1, 3, ASCH_TEXT_FRAME_ALIGNMENT::LEFT );
+}
+
+
+ASCH_NOTE::ASCH_NOTE( const std::map<wxString, wxString>& aProperties ) :
+        ASCH_TEXT_FRAME( aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::NOTE );
+
+    author = ALTIUM_PARSER::PropertiesReadString( aProperties, "AUTHOR", "" );
 }
 
 

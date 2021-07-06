@@ -115,6 +115,7 @@ private:
     void ParseComponent( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParsePin( const std::map<wxString, wxString>& aProperties );
     void ParseLabel( const std::map<wxString, wxString>& aProperties );
+    void ParseTextFrame( const std::map<wxString, wxString>& aProperties );
     void ParseNote( const std::map<wxString, wxString>& aProperties );
     void ParseBezier( const std::map<wxString, wxString>& aProperties );
     void ParsePolyline( const std::map<wxString, wxString>& aProperties );

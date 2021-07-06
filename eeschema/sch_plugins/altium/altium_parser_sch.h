@@ -236,7 +236,7 @@ enum class ASCH_LABEL_JUSTIFICATION
 };
 
 
-enum class ASCH_NOTE_ALIGNMENT
+enum class ASCH_TEXT_FRAME_ALIGNMENT
 {
     LEFT    = 1,
     CENTER  = 2,
@@ -262,13 +262,12 @@ struct ASCH_LABEL
 };
 
 
-struct ASCH_NOTE
+struct ASCH_TEXT_FRAME
 {
     wxPoint location;
     wxSize  size;
 
     wxString text;
-    wxString author;
 
     int  fontId;
     bool isWordWrapped;
@@ -276,7 +275,15 @@ struct ASCH_NOTE
     int  textMargin;
     int  areaColor;
 
-    ASCH_NOTE_ALIGNMENT alignment;
+    ASCH_TEXT_FRAME_ALIGNMENT alignment;
+
+    explicit ASCH_TEXT_FRAME( const std::map<wxString, wxString>& aProperties );
+};
+
+
+struct ASCH_NOTE : ASCH_TEXT_FRAME
+{
+    wxString author;
 
     explicit ASCH_NOTE( const std::map<wxString, wxString>& aProperties );
 };
