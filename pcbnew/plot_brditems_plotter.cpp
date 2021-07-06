@@ -805,6 +805,17 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET&
                 {
                     m_plotter->PlotPoly( outline, FILL_TYPE::NO_FILL,
                                          outline_thickness, &gbr_metadata );
+
+                    // Ensure the outline is closed:
+                    int last_idx = outline.PointCount() - 1;
+
+                    if( outline.CPoint( 0 ) != outline.CPoint( last_idx ) )
+                    {
+                        m_plotter->ThickSegment( wxPoint( outline.CPoint( 0 ) ),
+                                                 wxPoint( outline.CPoint( last_idx ) ),
+                                                 outline_thickness,
+                                                 GetPlotMode(), &gbr_metadata );
+                    }
                 }
 
                 static_cast<GERBER_PLOTTER*>( m_plotter )->PlotGerberRegion(
@@ -820,10 +831,21 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET&
         {
             if( outline_thickness )
             {
-                for( int jj = 1; jj < outline.PointCount(); jj++ )
+                int last_idx = outline.PointCount() - 1;
+
+                for( int jj = 1; jj <= last_idx; jj++ )
                 {
                     m_plotter->ThickSegment( wxPoint( outline.CPoint( jj - 1) ),
                                              wxPoint( outline.CPoint( jj ) ),
+                                             outline_thickness,
+                                             GetPlotMode(), &gbr_metadata );
+                }
+
+                // Ensure the outline is closed:
+                if( outline.CPoint( 0 ) != outline.CPoint( last_idx ) )
+                {
+                    m_plotter->ThickSegment( wxPoint( outline.CPoint( 0 ) ),
+                                             wxPoint( outline.CPoint( last_idx ) ),
                                              outline_thickness,
                                              GetPlotMode(), &gbr_metadata );
                 }
