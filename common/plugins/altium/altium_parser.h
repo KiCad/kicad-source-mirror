@@ -139,20 +139,20 @@ public:
 
     static int32_t ConvertToKicadUnit( const double aValue );
 
-    static int PropertiesReadInt(
-            const std::map<wxString, wxString>& aProperties, const wxString& aKey, int aDefault );
+    static int PropertiesReadInt( const std::map<wxString, wxString>& aProperties,
+                                  const wxString& aKey, int aDefault );
 
     static double PropertiesReadDouble( const std::map<wxString, wxString>& aProperties,
-            const wxString& aKey, double aDefault );
+                                        const wxString& aKey, double aDefault );
 
-    static bool PropertiesReadBool(
-            const std::map<wxString, wxString>& aProperties, const wxString& aKey, bool aDefault );
+    static bool PropertiesReadBool( const std::map<wxString, wxString>& aProperties,
+                                    const wxString& aKey, bool aDefault );
 
     static int32_t PropertiesReadKicadUnit( const std::map<wxString, wxString>& aProperties,
-            const wxString& aKey, const wxString& aDefault );
+                                            const wxString& aKey, const wxString& aDefault );
 
     static wxString PropertiesReadString( const std::map<wxString, wxString>& aProperties,
-            const wxString& aKey, const wxString& aDefault );
+                                          const wxString& aKey, const wxString& aDefault );
 
     void Skip( size_t aLength )
     {

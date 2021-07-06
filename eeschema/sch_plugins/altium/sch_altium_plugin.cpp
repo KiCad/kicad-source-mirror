@@ -233,13 +233,6 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
 }
 
 
-/*wxString SCH_EAGLE_PLUGIN::fixSymbolName( const wxString& aName )
-{
-    wxString ret = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_SCH );
-
-    return ret;
-}*/
-
 void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
 {
     // Open file
@@ -2303,11 +2296,11 @@ void SCH_ALTIUM_PLUGIN::ParseImplementation( const std::map<wxString, wxString>&
             return;
         }
 
-        const auto& component = m_symbols.at( libSymbolIt->first );
+        SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
 
         if( elem.libname != "" )
-            component->SetFootprint( elem.libname + wxT( ":" ) + elem.name );
+            symbol->SetFootprint( elem.libname + wxT( ":" ) + elem.name );
         else
-            component->SetFootprint( elem.name );
+            symbol->SetFootprint( elem.name );
     }
 }
