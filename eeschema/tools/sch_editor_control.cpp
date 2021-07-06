@@ -633,8 +633,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             [this, simFrame]( const VECTOR2D& aPosition )
             {
                 EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-                EDA_ITEM*          item = nullptr;
-                selTool->SelectPoint( aPosition, wiresAndPins, &item );
+                EDA_ITEM*          item = selTool->GetNode( aPosition );
 
                 if( !item )
                     return false;
