@@ -576,7 +576,10 @@ void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, int
 
     // Build the hole:
     buffer.NewHole();
-    TransformCircleToPolygon( buffer.Hole( 0, 0 ), aCentre, inner_radius, aError, aErrorLoc );
+    // The circle is the hole, so the approximation error location is the opposite of aErrorLoc
+    ERROR_LOC inner_err_loc = aErrorLoc == ERROR_OUTSIDE ? ERROR_INSIDE : ERROR_OUTSIDE;
+    TransformCircleToPolygon( buffer.Hole( 0, 0 ), aCentre, inner_radius,
+                              aError, inner_err_loc );
 
     buffer.Fracture( SHAPE_POLY_SET::PM_FAST );
     aCornerBuffer.Append( buffer );
