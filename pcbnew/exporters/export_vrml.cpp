@@ -882,11 +882,11 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
             // only write a rotation if it is >= 0.1 deg
             if( std::abs( rot[3] ) > 0.0001745 )
             {
-                (*aOutputFile) << "  rotation " << std::setprecision( 5 );
+                (*aOutputFile) << "  rotation " << aOutputFile->precision( 5 );
                 (*aOutputFile) << rot[0] << " " << rot[1] << " " << rot[2] << " " << rot[3] << "\n";
             }
 
-            (*aOutputFile) << "  translation " << std::setprecision( m_precision );
+            (*aOutputFile) << "  translation " << aOutputFile->precision( m_precision );
             (*aOutputFile) << trans.x << " ";
             (*aOutputFile) << trans.y << " ";
             (*aOutputFile) << trans.z << "\n";
@@ -938,7 +938,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
         ++sM;
     }
 
-    std::setprecision( old_precision );
+    aOutputFile->precision( old_precision );
 }
 
 

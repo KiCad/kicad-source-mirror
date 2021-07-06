@@ -934,15 +934,18 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
 {
     SCHEMATIC* schematic = Schematic();
 
+    // SCH_SYMOL object has no context outside a schematic.
+    wxCHECK( schematic, false );
+
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
         if( token->IsSameAs( m_fields[ i ].GetCanonicalName().Upper() ) )
         {
-            if( i == REFERENCE_FIELD && schematic )
+            if( i == REFERENCE_FIELD )
                 *token = GetRef( &schematic->CurrentSheet(), true );
-            else if( i == VALUE_FIELD && schematic )
+            else if( i == VALUE_FIELD )
                 *token = GetValue( &schematic->CurrentSheet(), true );
-            else if( i == FOOTPRINT_FIELD && schematic )
+            else if( i == FOOTPRINT_FIELD )
                 *token = GetFootprint( &schematic->CurrentSheet(), true );
             else
                 *token = m_fields[ i ].GetShownText( aDepth + 1 );
@@ -978,10 +981,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     {
         wxString footprint;
 
-        if( schematic )
-            footprint = GetFootprint( &schematic->CurrentSheet(), true );
-        else
-            footprint = m_fields[ FOOTPRINT_FIELD ].GetShownText();
+        footprint = GetFootprint( &schematic->CurrentSheet(), true );
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -992,10 +992,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     {
         wxString footprint;
 
-        if( schematic )
-            footprint = GetFootprint( &schematic->CurrentSheet(), true );
-        else
-            footprint = m_fields[ FOOTPRINT_FIELD ].GetShownText();
+        footprint = GetFootprint( &schematic->CurrentSheet(), true );
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -1006,10 +1003,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     {
         int unit;
 
-        if( schematic )
-            unit = GetUnitSelection( &schematic->CurrentSheet() );
-        else
-            unit = GetUnit();
+        unit = GetUnitSelection( &schematic->CurrentSheet() );
 
         *token = LIB_SYMBOL::SubReference( unit );
         return true;

@@ -115,8 +115,6 @@ wxString ENV_VAR::LookUpEnvVarHelp( const wxString& aEnvVar )
 template<>
 OPT<double> ENV_VAR::GetEnvVar( const wxString& aEnvVarName )
 {
-    OPT<double> optValue = NULLOPT;
-
     wxString env;
 
     if( wxGetEnv( aEnvVarName, &env ) )
@@ -124,12 +122,10 @@ OPT<double> ENV_VAR::GetEnvVar( const wxString& aEnvVarName )
         double value;
 
         if( env.ToDouble( &value ) )
-        {
-            optValue = value;
-        }
+            return value;
     }
 
-    return optValue;
+    return NULLOPT;
 }
 
 

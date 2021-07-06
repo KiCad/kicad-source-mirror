@@ -1,21 +1,22 @@
 /*
-    This file is part of libeval, a simple math expression evaluator
-
-    Copyright (C) 2017 Michael Geselbracht, mgeselbracht3@gmail.com
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ * This file is part of libeval, a simple math expression evaluator
+ *
+ * Copyright (C) 2017 Michael Geselbracht, mgeselbracht3@gmail.com
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 #include <kicad_string.h>
 #include <libeval/numeric_evaluator.h>
@@ -55,10 +56,10 @@ NUMERIC_EVALUATOR::NUMERIC_EVALUATOR( EDA_UNITS aUnits )
 
     switch( aUnits )
     {
-    case EDA_UNITS::MILLIMETRES: m_defaultUnits = Unit::MM; break;
-    case EDA_UNITS::MILS: m_defaultUnits = Unit::Mil; break;
-    case EDA_UNITS::INCHES: m_defaultUnits = Unit::Inch; break;
-    default: m_defaultUnits = Unit::MM; break;
+    case EDA_UNITS::MILLIMETRES: m_defaultUnits = Unit::MM;   break;
+    case EDA_UNITS::MILS:        m_defaultUnits = Unit::Mil;  break;
+    case EDA_UNITS::INCHES:      m_defaultUnits = Unit::Inch; break;
+    default:                     m_defaultUnits = Unit::MM;   break;
     }
 }
 
@@ -176,6 +177,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
 
     retval.token = ENDS;
     retval.value.dValue = 0;
+    retval.value.valid = false;
 
     if( m_token.token == nullptr )
         return retval;
@@ -203,18 +205,20 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
 
             m_token.token[ idx++ ] = ch;
 
-            if( isDecimalSeparator( ch ))
+            if( isDecimalSeparator( ch ) )
                 haveSeparator = true;
 
             ch = m_token.input[ ++m_token.pos ];
-        } while( isdigit( ch ) || isDecimalSeparator( ch ));
+        } while( isdigit( ch ) || isDecimalSeparator( ch ) );
 
         m_token.token[ idx ] = 0;
 
         // Ensure that the systems decimal separator is used
         for( int i = strlen( m_token.token ); i; i-- )
-            if( isDecimalSeparator( m_token.token[ i - 1 ] ))
+        {
+            if( isDecimalSeparator( m_token.token[ i - 1 ] ) )
                 m_token.token[ i - 1 ] = m_localeDecimalSeparator;
+        }
     };
 
     // Lamda: Get unit for current token.
@@ -232,31 +236,33 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
         const char* cptr = &m_token.input[ m_token.pos ];
         const auto sizeLeft = m_token.inputLen - m_token.pos;
 
-        if( sizeLeft >= 2 && ch == 'm' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ))
+        if( sizeLeft >= 2 && ch == 'm' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ) )
         {
             m_token.pos += 2;
             return Unit::MM;
         }
 
-        if( sizeLeft >= 2 && ch == 'c' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ))
+        if( sizeLeft >= 2 && ch == 'c' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ) )
         {
             m_token.pos += 2;
             return Unit::CM;
         }
 
-        if( sizeLeft >= 2 && ch == 'i' && cptr[ 1 ] == 'n' && !isalnum( cptr[ 2 ] ))
+        if( sizeLeft >= 2 && ch == 'i' && cptr[ 1 ] == 'n' && !isalnum( cptr[ 2 ] ) )
         {
             m_token.pos += 2;
             return Unit::Inch;
         }
 
-        if( sizeLeft >= 3 && ch == 'm' && cptr[ 1 ] == 'i' && cptr[ 2 ] == 'l' && !isalnum( cptr[ 3 ] ))
+        if( sizeLeft >= 3 && ch == 'm' && cptr[ 1 ] == 'i' && cptr[ 2 ] == 'l'
+          && !isalnum( cptr[ 3 ] ) )
         {
             m_token.pos += 3;
             return Unit::Mil;
         }
 
-        if( sizeLeft >= 4 && ch == 't' && cptr[ 1 ] == 'h' && cptr[ 2 ] == 'o' && cptr[ 3 ] == 'u' && !isalnum( cptr[ 4 ] ))
+        if( sizeLeft >= 4 && ch == 't' && cptr[ 1 ] == 'h' && cptr[ 2 ] == 'o'
+          && cptr[ 3 ] == 'u' && !isalnum( cptr[ 4 ] ) )
         {
             m_token.pos += 4;
             return Unit::Mil;
@@ -300,37 +306,38 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
         // The factor is assigned to the terminal UNIT. The actual
         // conversion is done within a parser action.
         retval.token = UNIT;
+
         if( m_defaultUnits == Unit::MM )
         {
             switch( convertFrom )
             {
-            case Unit::Inch    :retval.value.dValue = 25.4;          break;
-            case Unit::Mil     :retval.value.dValue = 25.4 / 1000.0; break;
-            case Unit::MM      :retval.value.dValue = 1.0;           break;
-            case Unit::CM      :retval.value.dValue = 10.0;          break;
-            case Unit::Invalid :break;
+            case Unit::Inch: retval.value.dValue = 25.4;          break;
+            case Unit::Mil:  retval.value.dValue = 25.4 / 1000.0; break;
+            case Unit::MM:   retval.value.dValue = 1.0;           break;
+            case Unit::CM:   retval.value.dValue = 10.0;          break;
+            case Unit::Invalid:                                   break;
             }
         }
         else if( m_defaultUnits == Unit::Inch )
         {
             switch( convertFrom )
             {
-            case Unit::Inch    :retval.value.dValue = 1.0;          break;
-            case Unit::Mil     :retval.value.dValue = 1.0 / 1000.0; break;
-            case Unit::MM      :retval.value.dValue = 1.0 / 25.4;   break;
-            case Unit::CM      :retval.value.dValue = 1.0 / 2.54;   break;
-            case Unit::Invalid :break;
+            case Unit::Inch: retval.value.dValue = 1.0;          break;
+            case Unit::Mil:  retval.value.dValue = 1.0 / 1000.0; break;
+            case Unit::MM:   retval.value.dValue = 1.0 / 25.4;   break;
+            case Unit::CM:   retval.value.dValue = 1.0 / 2.54;   break;
+            case Unit::Invalid:                                  break;
             }
         }
         else if( m_defaultUnits == Unit::Mil )
         {
             switch( convertFrom )
             {
-            case Unit::Inch    :retval.value.dValue = 1.0 * 1000.0;  break;
-            case Unit::Mil     :retval.value.dValue = 1.0;           break;
-            case Unit::MM      :retval.value.dValue = 1000.0 / 25.4; break;
-            case Unit::CM      :retval.value.dValue = 1000.0 / 2.54; break;
-            case Unit::Invalid :break;
+            case Unit::Inch: retval.value.dValue = 1.0 * 1000.0;  break;
+            case Unit::Mil:  retval.value.dValue = 1.0;           break;
+            case Unit::MM:   retval.value.dValue = 1000.0 / 25.4; break;
+            case Unit::CM:   retval.value.dValue = 1000.0 / 2.54; break;
+            case Unit::Invalid:                                   break;
             }
         }
     }
@@ -346,7 +353,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
         retval.token = VAR;
         size_t bytesToCopy = cptr - &m_token.input[ m_token.pos ];
 
-        if( bytesToCopy >= sizeof( retval.value.text ))
+        if( bytesToCopy >= sizeof( retval.value.text ) )
             bytesToCopy = sizeof( retval.value.text ) - 1;
 
         strncpy( retval.value.text, &m_token.input[ m_token.pos ], bytesToCopy );
@@ -358,18 +365,22 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
         // Single char tokens
         switch( ch )
         {
-        case '+' :retval.token = PLUS;   break;
-        case '-' :retval.token = MINUS;  break;
-        case '*' :retval.token = MULT;   break;
-        case '/' :retval.token = DIVIDE; break;
-        case '(' :retval.token = PARENL; break;
-        case ')' :retval.token = PARENR; break;
-        case '=' :retval.token = ASSIGN; break;
-        case ';' :retval.token = SEMCOL; break;
-        default  :m_parseError = true;   break;   /* invalid character */
+        case '+': retval.token = PLUS;   break;
+        case '-': retval.token = MINUS;  break;
+        case '*': retval.token = MULT;   break;
+        case '/': retval.token = DIVIDE; break;
+        case '(': retval.token = PARENL; break;
+        case ')': retval.token = PARENR; break;
+        case '=': retval.token = ASSIGN; break;
+        case ';': retval.token = SEMCOL; break;
+        default:  m_parseError = true;   break;   /* invalid character */
         }
+
         m_token.pos++;
     }
+
+    if( !m_parseError )
+        retval.value.valid = true;
 
     return retval;
 }
