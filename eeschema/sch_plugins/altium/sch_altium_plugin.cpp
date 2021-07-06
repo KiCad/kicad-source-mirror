@@ -347,7 +347,10 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
 
     m_currentTitleBlock = std::make_unique<TITLE_BLOCK>();
 
-    // index is required required to resolve OWNERINDEX
+    // Track implementation_list ownerindex, because subsequent implementations will depend on it
+    int implementationlistindex = -1;
+
+    // index is required to resolve OWNERINDEX
     for( int index = 0; reader.GetRemainingBytes() > 0; index++ )
     {
         std::map<wxString, wxString> properties = reader.ReadProperties();
@@ -429,7 +432,9 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
         case ALTIUM_SCH_RECORD::JUNCTION:
             ParseJunction( properties );
             break;
-        case ALTIUM_SCH_RECORD::IMAGE: ParseImage( properties ); break;
+        case ALTIUM_SCH_RECORD::IMAGE:
+            ParseImage( properties );
+            break;
         case ALTIUM_SCH_RECORD::SHEET:
             ParseSheet( properties );
             break;
@@ -453,8 +458,13 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
         case ALTIUM_SCH_RECORD::WARNING_SIGN:
             break;
         case ALTIUM_SCH_RECORD::IMPLEMENTATION_LIST:
+        {
+            ASCH_IMPLEMENTATION_LIST elem( properties );
+            implementationlistindex = elem.ownerindex;
+        }
             break;
         case ALTIUM_SCH_RECORD::IMPLEMENTATION:
+            ParseImplementation( properties, implementationlistindex );
             break;
         case ALTIUM_SCH_RECORD::RECORD_46:
             break;
@@ -1058,9 +1068,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
         line->SetUnit( elem.ownerpartid );
 
         for( wxPoint& point : elem.points )
-        {
             line->AddPoint( GetRelativePosition( point + m_sheetOffset, symbol ) );
-        }
 
         line->SetWidth( elem.lineWidth );
     }
@@ -1227,6 +1235,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
     else
     {
         const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
+
         if( libSymbolIt == m_libSymbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
@@ -2051,7 +2060,6 @@ void SCH_ALTIUM_PLUGIN::ParseSheet( const std::map<wxString, wxString>& aPropert
     PAGE_INFO pageInfo;
 
     bool isPortrait = m_altiumSheet->sheetOrientation == ASCH_SHEET_WORKSPACEORIENTATION::PORTRAIT;
-
     switch( m_altiumSheet->sheetSize )
     {
     default:
@@ -2274,5 +2282,32 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
         case ASCH_RECORD_ORIENTATION::DOWNWARDS:  field->SetTextAngle( 270 ); break;
         default:                                                              break;
         }
+    }
+}
+
+void SCH_ALTIUM_PLUGIN::ParseImplementation( const std::map<wxString, wxString>& aProperties,
+                                             int                                 ownerindex )
+{
+    ASCH_IMPLEMENTATION elem( aProperties );
+
+    // Only get footprint, currently assigned only
+    if( ( elem.type == "PCBLIB" ) && ( elem.isCurrent ) )
+    {
+        const auto& libSymbolIt = m_libSymbols.find( ownerindex );
+
+        if( libSymbolIt == m_libSymbols.end() )
+        {
+            m_reporter->Report( wxString::Format( _( "Footprint has non-existent ownerindex %d." ),
+                                                  ownerindex ),
+                                RPT_SEVERITY_WARNING );
+            return;
+        }
+
+        const auto& component = m_symbols.at( libSymbolIt->first );
+
+        if( elem.libname != "" )
+            component->SetFootprint( elem.libname + wxT( ":" ) + elem.name );
+        else
+            component->SetFootprint( elem.name );
     }
 }

@@ -139,6 +139,7 @@ private:
     void ParseDesignator( const std::map<wxString, wxString>& aProperties );
     void ParseBusEntry( const std::map<wxString, wxString>& aProperties );
     void ParseParameter( const std::map<wxString, wxString>& aProperties );
+    void ParseImplementation( const std::map<wxString, wxString>& aProperties, int ownerindex );
 
 private:
     REPORTER*                       m_reporter;          // current reporter for warnings/errors
