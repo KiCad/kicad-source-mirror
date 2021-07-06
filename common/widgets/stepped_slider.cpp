@@ -30,7 +30,9 @@ STEPPED_SLIDER::STEPPED_SLIDER( wxWindow* aParent, wxWindowID aId, int aValue, i
                                 int aMaxValue, const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxValidator& aValidator,
                                 const wxString& aName ) :
-        wxSlider( aParent, aId, aValue, aMinValue, aMaxValue, aPos, aSize, aStyle, aValidator,
+        wxSlider( aParent, aId, aValue, aMinValue, aMaxValue, aPos, aSize,
+                  ( aStyle | wxSL_AUTOTICKS | wxSL_MIN_MAX_LABELS ),
+                  aValidator,
                   aName ),
         m_step( 1 )
 {}
