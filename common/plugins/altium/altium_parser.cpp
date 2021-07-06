@@ -157,7 +157,8 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
         else
             value = wxString( valueS.c_str(), wxConvISO8859_1 );
 
-        value = AltiumPropertyToKiCadString( value.Trim() );
+        if( key == wxT( "Designator" ) || key == wxT( "Name" ) || key == wxT( "Text" ) )
+            value = AltiumPropertyToKiCadString( value.Trim() );
 
         kv.insert( { canonicalKey, value.Trim() } );
     }
