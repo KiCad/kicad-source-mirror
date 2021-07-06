@@ -497,12 +497,6 @@ void SIM_PLOT_FRAME::StopSimulation()
 }
 
 
-bool SIM_PLOT_FRAME::IsSimulationRunning()
-{
-    return m_simulator ? m_simulator->IsRunning() : false;
-}
-
-
 SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand )
 {
     SIM_PANEL_BASE* plotPanel = nullptr;
@@ -963,7 +957,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
         {
             wxThread::This()->Sleep( 50 );
         }
-        while( IsSimulationRunning() );
+        while( m_simulator->IsRunning() );
 
         if( !file.GetNextLine().ToLong( &tracesCount ) )
         {
@@ -1395,7 +1389,7 @@ void SIM_PLOT_FRAME::onSignalRClick( wxListEvent& event )
 
 void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 {
-    if( IsSimulationRunning() )
+    if( m_simulator->IsRunning() )
         StopSimulation();
     else
         StartSimulation();
@@ -1457,7 +1451,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onAddSignal( wxCommandEvent& event )
 {
-    if( IsSimulationRunning() )
+    if( m_simulator->IsRunning() )
     {
         DisplayInfoMessage( this, _( "Simulator is running. Try later" ) );
         return;
@@ -1481,7 +1475,7 @@ void SIM_PLOT_FRAME::onProbe( wxCommandEvent& event )
     if( m_schematicFrame == NULL )
         return;
 
-    if( IsSimulationRunning() )
+    if( m_simulator->IsRunning() )
     {
         DisplayInfoMessage( this, _( "Simulator is running. Try later" ) );
         return;
@@ -1591,7 +1585,7 @@ bool SIM_PLOT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
 void SIM_PLOT_FRAME::doCloseWindow()
 {
-    if( IsSimulationRunning() )
+    if( m_simulator->IsRunning() )
         m_simulator->Stop();
 
     // Cancel a running simProbe or simTune tool
@@ -1672,7 +1666,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     if( !plotPanelWindow || plotPanelWindow->GetType() != simType )
         plotPanelWindow = NewPlotPanel( m_exporter->GetUsedSimCommand() );
 
-    if( IsSimulationRunning() )
+    if( m_simulator->IsRunning() )
         return;
 
     // If there are any signals plotted, update them
@@ -1748,7 +1742,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
 void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
 {
-    if( IsSimulationRunning() )
+    if( m_simulator->IsRunning() )
         StopSimulation();
 
     if( CurrentPlot() != m_lastSimPlot )
