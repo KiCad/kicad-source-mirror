@@ -70,9 +70,20 @@ int STEPPED_SLIDER::GetStep() const
 
 void STEPPED_SLIDER::OnScroll( wxScrollEvent& aEvent )
 {
-    const int value = GetValue();
-    const int rounded = value - value % m_step;
-
-    SetValue( rounded );
+    // On Windows, moving the thumb can generate multiple subevents and wx is blindly
+    // calling SetValue for each one before calling this event handler
+    // We need to explicitly wait until the "final" sub event or else we end up fighting
+    // wx on the value it is setting and extreme glitchlyness will occur
+    // Not sure if other platforms have this issue
+#ifdef __WXMSW__
+    if( aEvent.GetEventType() == wxEVT_SCROLL_CHANGED )
+    {
+#endif // __WXMSW__
+        const int value = GetValue();
+        const int rounded = value - value % m_step;
+        SetValue( rounded );
+#ifdef __WXMSW__
+    }
+#endif // __WXMSW__
     aEvent.Skip();
 }
