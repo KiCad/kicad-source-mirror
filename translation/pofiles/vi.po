@@ -1,19 +1,20 @@
 # lê văn lập <levanlap2502@gmail.com>, 2020, 2021.
+# Trần Phi Hải <tranphihai-focus@outlook.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-06-28 09:32+0000\n"
-"Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"PO-Revision-Date: 2021-07-09 08:32+0000\n"
+"Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.1-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -144,18 +145,17 @@ msgid "No footprint loaded."
 msgstr "Không có footprint nào được nạp vào."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:489
-#, fuzzy
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Đường viền Footprint không đúng định dạng. Chạy Trình kiểm tra Footprint để "
-"có phân tích đầy đủ."
+"Đường bao ngoài kích thước tổng của linh kiện bị mất hay lỗi. Mở công cụ "
+"kiểm tra linh kiện để tìm lỗi."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:498
-#, fuzzy
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr "Đường viền bo mạch không đúng định dạng. Chạy DRC để phân tích đầy đủ."
+msgstr ""
+"Đường bao kích thước bo mạch bị mất hay lỗi. Mở DRC để kiểm tra lỗi này."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:224
 msgid "Create tracks and vias"
@@ -186,9 +186,9 @@ msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 msgstr "Phiên bản OpenGL của bạn không được hỗ trợ. Yêu cầu tối thiểu là 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:534
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Thời gian hiển thị %.3f s"
+msgstr "Thời gian quét ảnh lần trước %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:724
 #, c-format
@@ -211,9 +211,8 @@ msgstr "Tải Raytracing: các lớp"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:881
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:644
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "Đang tải mô hình 3D"
+msgstr "Đang tải thư viện 3D"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:1021
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:654
@@ -260,9 +259,9 @@ msgstr "Tải OpenGL: các lớp"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2199
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "Đang tải %s"
+msgstr "Đang mở  %s"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
@@ -359,54 +358,44 @@ msgid "Render current view using Raytracing"
 msgstr "Hiển thị chế độ xem hiện tại bằng Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:27
-#, fuzzy
 msgid "Background top:"
-msgstr "Nền"
+msgstr "Lớp nền trên cùng:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:34
-#, fuzzy
 msgid "Background bottom:"
-msgstr "Màu sắc nền, ở phía dưới cùng"
+msgstr "Lớp nền mặt đáy:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:47
-#, fuzzy
 msgid "Silkscreen top:"
-msgstr "Màu sắc lớp Silkscreen"
+msgstr "Chữ in mặt trên:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:54
-#, fuzzy
 msgid "Silkscreen bottom:"
-msgstr "Màu sắc lớp Silkscreen"
+msgstr "Chữ in mặt đáy:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:67
-#, fuzzy
 msgid "Solder mask top:"
-msgstr "Màu sắc lớp Solder Mask"
+msgstr "Tráng chì ở mặt trên:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:74
-#, fuzzy
 msgid "Solder mask bottom:"
-msgstr "Màu sắc lớp Solder Mask"
+msgstr "Tráng chì ở mặt đáy:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:87
-#, fuzzy
 msgid "Solder paste:"
-msgstr "Màu sắc lớp Solder Paste"
+msgstr "Đổ bột chì kem:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:100
-#, fuzzy
 msgid "Copper/surface finish:"
-msgstr "Màu sắc lớp đồng / bề mặt hoàn thiện ..."
+msgstr "Lớp đồng/chuẩn cho bề mặt bản mạch:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:113
-#, fuzzy
 msgid "Board body:"
-msgstr "Hiển thị thân bo mạch"
+msgstr "Phần bản mạch:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:126
-#, fuzzy
 msgid "Load Colors from Board Stackup"
-msgstr "Nhận màu sắc từ physical stackup"
+msgstr "Tải bảng màu từ cấu hình số lớp của  mạch in"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:21
 msgid "3D Model Visibility"
