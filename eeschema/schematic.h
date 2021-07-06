@@ -113,6 +113,8 @@ public:
     /// Helper to retrieve the screen of the root sheet
     SCH_SCREEN* RootScreen() const;
 
+    bool ResolveTextVar( wxString* token, int aDepth ) const;
+
     /// Helper to retrieve the filename from the root sheet screen
     wxString GetFileName() const override;
 

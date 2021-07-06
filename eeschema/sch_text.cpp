@@ -615,6 +615,12 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
                 return false;
             };
 
+    std::function<bool( wxString* )> schematicTextResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return Schematic()->ResolveTextVar( token, aDepth + 1 );
+            };
+
     wxString text = EDA_TEXT::GetShownText();
 
     if( text == "~" )   // Legacy placeholder for empty string
@@ -631,7 +637,7 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
             project = &Schematic()->Prj();
 
         if( aDepth < 10 )
-            text = ExpandTextVars( text, &textResolver, nullptr, project );
+            text = ExpandTextVars( text, &textResolver, &schematicTextResolver, project );
     }
 
     return text;
