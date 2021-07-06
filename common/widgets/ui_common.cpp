@@ -18,8 +18,13 @@
  */
 
 #include <wx/dcclient.h>
+#include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/listbox.h>
 #include <wx/dataview.h>
+#include <wx/radiobut.h>
+#include <wx/slider.h>
+#include <wx/spinctrl.h>
 #include <wx/srchctrl.h>
 #include <wx/stc/stc.h>
 #include <widgets/ui_common.h>
@@ -184,6 +189,12 @@ bool KIUI::IsInputControlFocused( wxWindow* aFocus )
     wxStyledTextCtrl* styledText = dynamic_cast<wxStyledTextCtrl*>( aFocus );
     wxListBox*        listBox = dynamic_cast<wxListBox*>( aFocus );
     wxSearchCtrl*     searchCtrl = dynamic_cast<wxSearchCtrl*>( aFocus );
+    wxCheckBox*       checkboxCtrl = dynamic_cast<wxCheckBox*>( aFocus );
+    wxChoice*         choiceCtrl = dynamic_cast<wxChoice*>( aFocus );
+    wxRadioButton*    radioBtn = dynamic_cast<wxRadioButton*>( aFocus );
+    wxSpinCtrl*       spinCtrl = dynamic_cast<wxSpinCtrl*>( aFocus );
+    wxSpinCtrlDouble* spinDblCtrl = dynamic_cast<wxSpinCtrlDouble*>( aFocus );
+    wxSlider*         sliderCtl = dynamic_cast<wxSlider*>( aFocus );
 
     // Data view control is annoying, the focus is on a "wxDataViewCtrlMainWindow"
     // class that is not formerly exported via the header.
@@ -197,7 +208,8 @@ bool KIUI::IsInputControlFocused( wxWindow* aFocus )
         dataViewCtrl = dynamic_cast<wxDataViewCtrl*>( parent );
     }
 
-    return ( textEntry || styledText || listBox || dataViewCtrl || searchCtrl || dataViewCtrl );
+    return ( textEntry || styledText || listBox || dataViewCtrl || searchCtrl || dataViewCtrl
+             || checkboxCtrl || choiceCtrl || radioBtn || spinCtrl || spinDblCtrl || sliderCtl );
 }
 
 
@@ -207,6 +219,7 @@ bool KIUI::IsInputControlEditable( wxWindow* aFocus )
     wxStyledTextCtrl* styledText = dynamic_cast<wxStyledTextCtrl*>( aFocus );
     wxSearchCtrl*     searchCtrl = dynamic_cast<wxSearchCtrl*>( aFocus );
     wxListBox*        listBox = dynamic_cast<wxListBox*>( aFocus );
+    wxCheckBox*       checkboxCtrl = dynamic_cast<wxCheckBox*>( aFocus );
 
     if( textEntry )
         return textEntry->IsEditable();
