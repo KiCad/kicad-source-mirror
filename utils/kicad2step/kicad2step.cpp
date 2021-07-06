@@ -2,7 +2,7 @@
  * This program source code file is part of kicad2mcad
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,8 +42,12 @@ class KICAD2STEP_FRAME;
 class KICAD2MCAD_APP : public wxApp
 {
 public:
-    KICAD2MCAD_APP() : wxApp(), m_frame( nullptr ), m_Panel( nullptr )
+    KICAD2MCAD_APP() :
+        wxApp(),
+        m_frame( nullptr ),
+        m_Panel( nullptr )
     {}
+
     virtual bool OnInit() override;
     virtual int OnRun() override;
     virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
@@ -167,14 +171,14 @@ void KICAD2MCAD_APP::OnInitCmdLine( wxCmdLineParser& parser )
 }
 
 
-PANEL_KICAD2STEP::PANEL_KICAD2STEP( wxWindow* parent, wxWindowID id,
-                  const wxPoint& pos, const wxSize& size, long style ):
-                wxPanel( parent, id, pos, size, style )
+PANEL_KICAD2STEP::PANEL_KICAD2STEP( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                    const wxSize& size, long style ) :
+        wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* bSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_tcMessages = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
-                                   wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
+	m_tcMessages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                   wxTE_MULTILINE|wxTE_READONLY );
 	bSizer->Add( m_tcMessages, 1, wxALL|wxEXPAND, 5 );
 
 	SetSizer( bSizer );
@@ -451,8 +455,10 @@ int PANEL_KICAD2STEP::RunConverter()
     if( !errs.IsEmpty() )    // Any troubles?
     {
         if( !success )
+        {
             msg = "Unable to create STEP file.\n"
                   "Check that the board has a valid outline and models.";
+        }
         else
         {
             msg = "STEP file has been created, but there are warnings.";

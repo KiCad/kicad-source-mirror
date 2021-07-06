@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,12 +95,13 @@ class PCBMODEL
     double                          m_thickness;    // PCB thickness, mm
     double                          m_minx;         // minimum X value in curves (leftmost curve feature)
     double                          m_minDistance2; // minimum squared distance between items (mm)
-    std::list< KICADCURVE >::iterator m_mincurve;   // iterator to the leftmost curve
+    std::list<KICADCURVE>::iterator m_mincurve;   // iterator to the leftmost curve
 
-    std::list< KICADCURVE >     m_curves;
-    std::vector< TopoDS_Shape > m_cutouts;
+    std::list<KICADCURVE>           m_curves;
+    std::vector<TopoDS_Shape>       m_cutouts;
 
-    bool getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel, bool aSubstituteModels );
+    bool getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel,
+                        bool aSubstituteModels );
 
     bool getModelLocation( bool aBottom, DOUBLET aPosition, double aRotation,
         TRIPLET aOffset, TRIPLET aOrientation, TopLoc_Location& aLocation );
@@ -108,7 +110,7 @@ class PCBMODEL
     bool readSTEP( Handle( TDocStd_Document )& m_doc, const char* fname );
 
     TDF_Label transferModel( Handle( TDocStd_Document )& source,
-        Handle( TDocStd_Document )& dest, TRIPLET aScale );
+                             Handle( TDocStd_Document )& dest, TRIPLET aScale );
 
 public:
     PCBMODEL();

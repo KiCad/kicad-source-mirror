@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -602,24 +603,24 @@ bool PCBMODEL::AddPadHole( const KICADPAD* aPad )
 
 // add a component at the given position and orientation
 bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aRefDes,
-    bool aBottom, DOUBLET aPosition, double aRotation,
-    TRIPLET aOffset, TRIPLET aOrientation, TRIPLET aScale,
-    bool aSubstituteModels )
+                             bool aBottom, DOUBLET aPosition, double aRotation,
+                             TRIPLET aOffset, TRIPLET aOrientation, TRIPLET aScale,
+                             bool aSubstituteModels )
 {
     if( aFileName.empty() )
     {
-        ReportMessage( wxString::Format( "no model defined for component %s\n", aRefDes ) );
+        ReportMessage( wxString::Format( "No model defined for component %s.\n", aRefDes ) );
         return false;
     }
 
-    ReportMessage( wxString::Format( "add component %s\n", aRefDes ) );
+    ReportMessage( wxString::Format( "Add component %s.\n", aRefDes ) );
 
     // first retrieve a label
     TDF_Label lmodel;
 
     if( !getModelLabel( aFileName, aScale, lmodel, aSubstituteModels ) )
     {
-        ReportMessage( wxString::Format( "no model for filename %s\n", aFileName ) );
+        ReportMessage( wxString::Format( "No model for filename '%s'.\n", aFileName ) );
         return false;
     }
 
@@ -628,7 +629,7 @@ bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aR
 
     if( !getModelLocation( aBottom, aPosition, aRotation, aOffset, aOrientation, toploc ) )
     {
-        ReportMessage( wxString::Format( "no location data for filename %s\n", aFileName ) );
+        ReportMessage( wxString::Format( "No location data for filename '%s'.\n", aFileName ) );
         return false;
     }
 
@@ -637,7 +638,8 @@ bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aR
 
     if( llabel.IsNull() )
     {
-        ReportMessage( wxString::Format( "could not add component with filename %s\n", aFileName ) );
+        ReportMessage( wxString::Format( "Could not add component with filename '%s'.\n",
+                                         aFileName ) );
         return false;
     }
 
@@ -684,7 +686,7 @@ bool PCBMODEL::CreatePCB()
     if( m_curves.empty() || m_mincurve == m_curves.end() )
     {
         m_hasPCB = true;
-        ReportMessage( "no valid board outline\n" );
+        ReportMessage( "No valid board outline.\n" );
         return false;
     }
 
@@ -695,7 +697,7 @@ bool PCBMODEL::CreatePCB()
     oln.AddSegment( *m_mincurve );
     m_curves.erase( m_mincurve );
 
-    ReportMessage( wxString::Format( "Build board outline (%d items)\n",
+    ReportMessage( wxString::Format( "Build board outline (%d items).\n",
                    (int)m_curves.size() ) );
 
     while( !m_curves.empty() )
@@ -706,7 +708,7 @@ bool PCBMODEL::CreatePCB()
             {
                 if( !oln.MakeShape( board, m_thickness ) )
                 {
-                    ReportMessage( "could not create board extrusion\n" );
+                    ReportMessage( "Could not create board extrusion.\n" );
                     return false;
                 }
             }
@@ -720,7 +722,7 @@ bool PCBMODEL::CreatePCB()
                 }
                 else
                 {
-                    ReportMessage( "could not create board cutout\n" );
+                    ReportMessage( "Could not create board cutout.\n" );
                 }
             }
 
@@ -753,7 +755,7 @@ bool PCBMODEL::CreatePCB()
         if( !added && !oln.m_curves.empty() )
         {
             wxString msg;
-            msg.Printf( "could not close outline (dropping outline data with %d segments)\n",
+            msg.Printf( "Could not close outline (dropping outline data with %d segments).\n",
                         static_cast<int>( oln.m_curves.size() ) );
 
             for( const auto& c : oln.m_curves )
@@ -776,7 +778,7 @@ bool PCBMODEL::CreatePCB()
         {
             if( !oln.MakeShape( board, m_thickness ) )
             {
-                ReportMessage( "could not create board extrusion\n" );
+                ReportMessage( "Could not create board extrusion.\n" );
                 return false;
             }
         }
@@ -790,20 +792,22 @@ bool PCBMODEL::CreatePCB()
             }
             else
             {
-                ReportMessage( "could not create board cutout\n" );
+                ReportMessage( "Could not create board cutout.\n" );
             }
         }
     }
     else
     {
-        ReportMessage( "* could not create closed board outlines *\n" );
+        ReportMessage( "Could not create closed board outlines.\n" );
         return false;
     }
 
     // subtract cutouts (if any)
     if( m_cutouts.size() )
-        ReportMessage( wxString::Format( "Build board cutouts and holes (%d holes)\n",
-                       (int)m_cutouts.size() ) );
+    {
+        ReportMessage( wxString::Format( "Build board cutouts and holes (%d holes).\n",
+                                         (int)m_cutouts.size() ) );
+    }
 
 #if 0 // First version for holes removing: very slow when having many (> 300) holes
     // Substract holes (cutouts) can be time consuming, so display activity
@@ -847,7 +851,7 @@ bool PCBMODEL::CreatePCB()
 #endif
 
     // push the board to the data structure
-    ReportMessage( "\nGenerate board full shape\n" );
+    ReportMessage( "\nGenerate board full shape.\n" );
     m_pcb_label = m_assy->AddComponent( m_assy_label, board );
 
     if( m_pcb_label.IsNull() )
@@ -881,8 +885,8 @@ bool PCBMODEL::WriteIGES( const wxString& aFileName )
 {
     if( m_pcb_label.IsNull() )
     {
-        ReportMessage( wxString::Format(
-                "No valid PCB assembly; cannot create output file %s\n", aFileName ) );
+        ReportMessage( wxString::Format( "No valid PCB assembly; cannot create output file '%s'.\n",
+                                         aFileName ) );
         return false;
     }
 
@@ -911,7 +915,8 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
 {
     if( m_pcb_label.IsNull() )
     {
-        ReportMessage( wxString::Format( "No valid PCB assembly; cannot create output file %s\n", aFileName ) );
+        ReportMessage( wxString::Format( "No valid PCB assembly; cannot create output file '%s'.\n",
+                                         aFileName ) );
         return false;
     }
     wxFileName fn( aFileName );
@@ -925,10 +930,8 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
     // but in the meantime, defaulting to the basename of the output
     // target is still better than "open cascade step translter v..."
     // UTF8 should be ok from ISO 10303-21:2016, but... older stuff? use boring ascii
-    if( !Interface_Static::SetCVal("write.step.product.name", fn.GetName().ToAscii()) ) {
-        wxString s("Failed to set step product name, but will attempt to continue");
-        ReportMessage(s);
-    }
+    if( !Interface_Static::SetCVal( "write.step.product.name", fn.GetName().ToAscii() ) )
+        ReportMessage( "Failed to set step product name, but will attempt to continue." );
 
     if( Standard_False == writer.Transfer( m_doc, STEPControl_AsIs ) )
         return false;
@@ -961,8 +964,9 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
     {
         if( !wxRenameFile( tmpfname, fn.GetFullName(), true ) )
         {
-            ReportMessage( wxString::Format( "Cannot rename temporary file '%s' to '%s'\n",
-                           tmpfname, fn.GetFullName() ) );
+            ReportMessage( wxString::Format( "Cannot rename temporary file '%s' to '%s'.\n",
+                                             tmpfname,
+                                             fn.GetFullName() ) );
             success = false;
         }
     }
@@ -973,7 +977,8 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
 }
 
 
-bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel, bool aSubstituteModels )
+bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel,
+                              bool aSubstituteModels )
 {
     std::string model_key = aFileName + "_" + std::to_string( aScale.x )
                             + "_" + std::to_string( aScale.y ) + "_" + std::to_string( aScale.z );
@@ -998,7 +1003,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
         case FMT_IGES:
             if( !readIGES( doc, aFileName.c_str() ) )
             {
-                ReportMessage( wxString::Format( "readIGES() failed on filename %s\n",
+                ReportMessage( wxString::Format( "readIGES() failed on filename '%s'.\n",
                                aFileName ) );
                 return false;
             }
@@ -1007,7 +1012,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
         case FMT_STEP:
             if( !readSTEP( doc, aFileName.c_str() ) )
             {
-                ReportMessage( wxString::Format( "readSTEP() failed on filename %s\n",
+                ReportMessage( wxString::Format( "readSTEP() failed on filename '%s'.\n",
                                aFileName ) );
                 return false;
             }
@@ -1025,7 +1030,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
 
             if( size == wxInvalidOffset )
             {
-                ReportMessage( wxString::Format( "readSTEP() failed on filename %s\n",
+                ReportMessage( wxString::Format( "readSTEP() failed on filename '%s'.\n",
                                                  aFileName ) );
                 return false;
             }
@@ -1131,11 +1136,12 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
                         std::string altFileName = altFile.GetFullPath().ToStdString();
 
                         // When substituting a STEP/IGS file for VRML, do not apply the VRML scaling
-                        // to the new STEP model.  This process of auto-substitution is janky as all heck
-                        // so let's not mix up un-displayed scale factors with potentially mis-matched
-                        // files.  And hope that the user doesn't have multiples files named "model.wrl" and
-                        // "model.stp" referring to different parts.
-                        // TODO: Fix model handling in v7.  Default models should only be STP.  Have option to override this in DISPLAY
+                        // to the new STEP model.  This process of auto-substitution is janky as all
+                        // heck so let's not mix up un-displayed scale factors with potentially
+                        // mis-matched files.  And hope that the user doesn't have multiples files
+                        // named "model.wrl" and "model.stp" referring to different parts.
+                        // TODO: Fix model handling in v7.  Default models should only be STP.
+                        //       Have option to override this in DISPLAY.
                         if( getModelLabel( altFileName, TRIPLET( 1.0, 1.0, 1.0 ), aLabel, false ) )
                         {
                             return true;
@@ -1156,7 +1162,8 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
 
     if( aLabel.IsNull() )
     {
-        ReportMessage( wxString::Format( "could not transfer model data from file %s\n", aFileName  ) );
+        ReportMessage( wxString::Format( "Could not transfer model data from file '%s'.\n",
+                                         aFileName  ) );
         return false;
     }
 
@@ -1173,8 +1180,8 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
 }
 
 
-bool PCBMODEL::getModelLocation( bool aBottom, DOUBLET aPosition, double aRotation,
-    TRIPLET aOffset, TRIPLET aOrientation, TopLoc_Location& aLocation )
+bool PCBMODEL::getModelLocation( bool aBottom, DOUBLET aPosition, double aRotation, TRIPLET aOffset,
+                                 TRIPLET aOrientation, TopLoc_Location& aLocation )
 {
     // Order of operations:
     // a. aOrientation is applied -Z*-Y*-X
@@ -1307,7 +1314,7 @@ bool PCBMODEL::readSTEP( Handle(TDocStd_Document)& doc, const char* fname )
 
 
 TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
-    Handle( TDocStd_Document )& dest, TRIPLET aScale )
+                                   Handle( TDocStd_Document )& dest, TRIPLET aScale )
 {
     // transfer data from Source into a top level component of Dest
 
@@ -1618,8 +1625,10 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
             break;
 
         case CURVE_CIRCLE:
-            edge = BRepBuilderAPI_MakeEdge( gp_Circ( gp_Ax2( gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 ),
-                gp_Dir( 0.0, 0.0, 1.0 ) ), aCurve.m_radius ) );
+            edge = BRepBuilderAPI_MakeEdge( gp_Circ( gp_Ax2( gp_Pnt( aCurve.m_start.x,
+                                                                     aCurve.m_start.y, 0.0 ),
+                                                             gp_Dir( 0.0, 0.0, 1.0 ) ),
+                                                     aCurve.m_radius ) );
             break;
 
         case CURVE_BEZIER:
