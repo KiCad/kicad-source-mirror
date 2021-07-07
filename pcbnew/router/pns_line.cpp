@@ -1084,29 +1084,12 @@ void LINE::ClipVertexRange( int aStart, int aEnd )
 
     int numPoints = static_cast<int>( m_line.PointCount() );
 
-    for( int i = 0; i < m_line.PointCount(); i++ )
+    for( int i = 0; i >= 0 && i < m_line.PointCount(); i = m_line.NextShape( i ) )
     {
         if( i <= aStart )
             firstLink = linkIdx;
 
-        //@todo RFB Should this be replaced by m_line.NextShape( i ); ?
-        if( m_line.IsPtOnArc( i ) )
-        {
-            // Account for "hidden segments" between two arcs
-            if( i > aStart && ( m_line.IsArcSegment( static_cast<size_t>( i ) - 1 ) ) )
-                linkIdx++;
-
-            arcIdx = m_line.ArcIndex(i);
-
-            // Skip over the rest of the arc vertices
-            while( i < numPoints && m_line.ArcIndex( i ) == arcIdx )
-                i++;
-
-            // Back up two vertices to restart at the segment coincident with the end of the arc
-            i -= 2;
-        }
-
-        if( i >= aEnd - 1 || linkIdx >= lastLink )
+        if( i == -1 || i >= aEnd - 1 || linkIdx >= lastLink )
         {
             lastLink = linkIdx;
             break;
