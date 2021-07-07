@@ -439,7 +439,8 @@ void DIALOG_PAGES_SETTINGS::OnDateApplyClick( wxCommandEvent& event )
 {
     wxDateTime datetime = m_PickDate->GetValue();
     wxString date =
-    // We can choose different formats. Only one must be uncommented
+    // We can choose different formats. Should probably be kept in sync with CURRENT_DATE
+    // formatting in TITLE_BLOCK.
     //
     //  datetime.Format( wxLocale::GetInfo( wxLOCALE_SHORT_DATE_FMT ) );
     //  datetime.Format( wxLocale::GetInfo( wxLOCALE_LONG_DATE_FMT ) );

@@ -786,21 +786,28 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
 {
     ASCH_LABEL elem( aProperties );
 
-    // TODO: text variable support
+    // TODO: general text variable support
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         if( elem.text.StartsWith( "=" ) )
         {
-            wxString token = elem.text.AfterFirst( '=' ).Lower();
+            wxString token = elem.text.AfterFirst( '=' ).Upper();
 
-            if(      token == "sheetnumber"  ) elem.text = "${#}";
-            else if( token == "sheettotal"   ) elem.text = "${##}";
-            else if( token == "title"        ) elem.text = "${TITLE}";
-            else if( token == "projectrev"   ) elem.text = "${REVISION}";
-            else if( token == "date"         ) elem.text = "${ISSUE_DATE}";
-            else if( token == "companyname"  ) elem.text = "${COMPANY}";
-            else if( token == "documentname" ) elem.text = "${FILENAME}";
+            if(      token == "SHEETNUMBER"  ) elem.text = "${#}";
+            else if( token == "SHEETTOTAL"   ) elem.text = "${##}";
+            else if( token == "TITLE"        ) elem.text = "${TITLE}";
+            else if( token == "PROJECTREV"   ) elem.text = "${REVISION}";
+            else if( token == "DATE"         ) elem.text = "${ISSUE_DATE}";
+            else if( token == "CURRENTDATE"  ) elem.text = "${CURRENT_DATE}";
+            else if( token == "COMPANYNAME"  ) elem.text = "${COMPANY}";
+            else if( token == "DOCUMENTNAME" ) elem.text = "${FILENAME}";
+            else if( token == "PROJECTNAME"  ) elem.text = "${PROJECTNAME}";
+            else
+            {
+                if( m_schematic->Prj().GetTextVars().count( token ) )
+                    elem.text = wxString::Format( "${%s}", token );
+            }
         }
 
         SCH_TEXT* text = new SCH_TEXT( elem.location + m_sheetOffset, elem.text );
@@ -2298,20 +2305,36 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
         if( elem.text == "*" )
             return; // indicates parameter not set?
 
-        SCH_SHEET_PATH sheetpath;
-        m_rootSheet->LocatePathOfScreen( m_currentSheet->GetScreen(), &sheetpath );
+        wxString paramName = elem.name.Upper();
 
-        if( elem.name == "SheetNumber" )
+        if( paramName == "SHEETNUMBER" )
+        {
+            SCH_SHEET_PATH sheetpath;
+            m_rootSheet->LocatePathOfScreen( m_currentSheet->GetScreen(), &sheetpath );
+
             m_rootSheet->SetPageNumber( sheetpath, elem.text );
-        else if( elem.name == "Title" )
+        }
+        else if( paramName == "TITLE" )
+        {
             m_currentTitleBlock->SetTitle( elem.text );
-        else if( elem.name == "Revision" )
+        }
+        else if( paramName == "REVISION" )
+        {
             m_currentTitleBlock->SetRevision( elem.text );
-        else if( elem.name == "Date" )
+        }
+        else if( paramName == "DATE" )
+        {
             m_currentTitleBlock->SetDate( elem.text );
-        else if( elem.name == "CompanyName" )
+        }
+        else if( paramName == "COMPANYNAME" )
+        {
             m_currentTitleBlock->SetCompany( elem.text );
-        // TODO: parse other parameters
+        }
+        else
+        {
+            m_schematic->Prj().GetTextVars()[ paramName ] = elem.text;
+        }
+
         // TODO: handle parameters in labels
     }
     else

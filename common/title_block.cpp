@@ -97,6 +97,18 @@ bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject ) c
         *aToken = GetDate();
         tokenUpdated = true;
     }
+    else if( aToken->IsSameAs( wxT( "CURRENT_DATE" ) ) )
+    {
+        // We can choose different formats. Should probably be kept in sync with ISSUE_DATE
+        // formatting in DIALOG_PAGES_SETTINGS.
+        //
+        //  *aToken = wxDateTime::Now().Format( wxLocale::GetInfo( wxLOCALE_SHORT_DATE_FMT ) );
+        //  *aToken = wxDateTime::Now().Format( wxLocale::GetInfo( wxLOCALE_LONG_DATE_FMT ) );
+        //  *aToken = wxDateTime::Now().Format( wxT("%Y-%b-%d") );
+        *aToken = wxDateTime::Now().FormatISODate();
+
+        tokenUpdated = true;
+    }
     else if( aToken->IsSameAs( wxT( "REVISION" ) ) )
     {
         *aToken = GetRevision();

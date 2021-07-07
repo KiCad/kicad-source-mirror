@@ -145,6 +145,11 @@ bool SCHEMATIC::ResolveTextVar( wxString* token, int aDepth ) const
             *token = fn.GetFullName();
             return true;
         }
+        else if( token->IsSameAs( wxT( "PROJECTNAME" ) ) )
+        {
+            *token = Prj().GetProjectFullName();
+            return true;
+        }
 
         return CurrentSheet().LastScreen()->GetTitleBlock().TextVarResolver( token, m_project );
     }
