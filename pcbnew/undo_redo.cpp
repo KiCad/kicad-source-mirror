@@ -224,10 +224,10 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
                 clone->SetParent( GetBoard() );
 
                 // Clear current flags (which can be temporary set by a current edit command)
-                for( auto child : clone->GraphicalItems() )
+                for( BOARD_ITEM* child : clone->GraphicalItems() )
                     child->ClearEditFlags();
 
-                for( auto pad : clone->Pads() )
+                for( PAD* pad : clone->Pads() )
                     pad->ClearEditFlags();
 
                 clone->Reference().ClearEditFlags();

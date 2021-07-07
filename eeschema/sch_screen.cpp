@@ -1325,7 +1325,7 @@ bool SCH_SCREENS::HasNoFullyDefinedLibIds()
 
     for( screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( auto item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
             cnt++;
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );

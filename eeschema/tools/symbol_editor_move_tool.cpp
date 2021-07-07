@@ -339,7 +339,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     m_anchorPos = { 0, 0 };
 
-    for( auto item : selection )
+    for( EDA_ITEM* item : selection )
         item->ClearEditFlags();
 
     if( restore_state )

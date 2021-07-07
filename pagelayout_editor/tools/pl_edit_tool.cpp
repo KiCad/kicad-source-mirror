@@ -255,7 +255,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     selection.ClearReferencePoint();
 
-    for( auto item : selection )
+    for( EDA_ITEM* item : selection )
         item->ClearEditFlags();
 
     if( unselect )
