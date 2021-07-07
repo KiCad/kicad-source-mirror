@@ -790,20 +790,25 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        if( elem.text == "=SheetNumber" )
-            elem.text = "${#}";
-        else if( elem.text == "=SheetTotal" )
-            elem.text = "${##}";
-        else if( elem.text == "=Title" )
-            elem.text = "${TITLE}";
-        else if( elem.text == "=ProjectRev" )
-            elem.text = "${REVISION}";
-        else if( elem.text == "=Date" )
-            elem.text = "${ISSUE_DATE}";
-        else if( elem.text == "=CompanyName" )
-            elem.text = "${COMPANY}";
-        else if( elem.text == "=DocumentName" )
-            elem.text = "${FILENAME}";
+        if( elem.text.StartsWith( "=" ) )
+        {
+            wxString token = elem.text.AfterFirst( '=' ).Lower();
+
+            if( token == "sheetnumber" )
+                elem.text = "${#}";
+            else if( token == "sheettotal" )
+                elem.text = "${##}";
+            else if( token == "title" )
+                elem.text = "${TITLE}";
+            else if( token == "projectrev" )
+                elem.text = "${REVISION}";
+            else if( token == "date" )
+                elem.text = "${ISSUE_DATE}";
+            else if( token == "companyname" )
+                elem.text = "${COMPANY}";
+            else if( token == "documentname" )
+                elem.text = "${FILENAME}";
+        }
 
         SCH_TEXT* text = new SCH_TEXT( elem.location + m_sheetOffset, elem.text );
 
