@@ -695,7 +695,7 @@ int SCH_SHEET::CountSheets() const
 
     if( m_screen )
     {
-        for( auto aItem : m_screen->Items().OfType( SCH_SHEET_T ) )
+        for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_SHEET_T ) )
             count += static_cast<SCH_SHEET*>( aItem )->CountSheets();
     }
 

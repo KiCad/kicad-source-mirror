@@ -122,29 +122,34 @@ SCH_SCREEN* SCHEMATIC::RootScreen() const
 
 bool SCHEMATIC::ResolveTextVar( wxString* token, int aDepth ) const
 {
-    if( token->IsSameAs( wxT( "#" ) ) )
+    if( !CurrentSheet().empty() )
     {
-        *token = CurrentSheet().GetPageNumber();
-        return true;
-    }
-    else if( token->IsSameAs( wxT( "##" ) ) )
-    {
-        *token = wxString::Format( "%i", Root().CountSheets() );
-        return true;
-    }
-    else if( token->IsSameAs( wxT( "SHEETNAME" ) ) )
-    {
-        *token = CurrentSheet().PathHumanReadable();
-        return true;
-    }
-    else if( token->IsSameAs( wxT( "FILENAME" ) ) )
-    {
-        wxFileName fn( GetFileName() );
-        *token = fn.GetFullName();
-        return true;
+        if( token->IsSameAs( wxT( "#" ) ) )
+        {
+            *token = CurrentSheet().GetPageNumber();
+            return true;
+        }
+        else if( token->IsSameAs( wxT( "##" ) ) )
+        {
+            *token = wxString::Format( "%i", Root().CountSheets() );
+            return true;
+        }
+        else if( token->IsSameAs( wxT( "SHEETNAME" ) ) )
+        {
+            *token = CurrentSheet().PathHumanReadable();
+            return true;
+        }
+        else if( token->IsSameAs( wxT( "FILENAME" ) ) )
+        {
+            wxFileName fn( GetFileName() );
+            *token = fn.GetFullName();
+            return true;
+        }
+
+        return CurrentSheet().LastScreen()->GetTitleBlock().TextVarResolver( token, m_project );
     }
 
-    return CurrentSheet().LastScreen()->GetTitleBlock().TextVarResolver( token, m_project );
+    return false;
 }
 
 
