@@ -62,7 +62,9 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
 
 // Additional visual cue for GTK, which hides the placeholder text on focus
 #ifdef __WXGTK__
-        auto bitmap = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_FIND, wxART_FRAME_ICON ) );
+        auto bitmap = new wxStaticBitmap( this, wxID_ANY,
+                                          wxArtProvider::GetBitmap( wxART_FIND,
+                                                                    wxART_FRAME_ICON ) );
 
         search_sizer->Add( bitmap, 0, wxALIGN_CENTER | wxRIGHT, 5 );
 #endif
@@ -72,7 +74,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
 
         m_query_ctrl->Bind( wxEVT_TEXT, &LIB_TREE::onQueryText, this );
 
-#if wxCHECK_VERSION( 3, 1, 0 )
+#if wxCHECK_VERSION( 3, 1, 1 )
         m_query_ctrl->Bind( wxEVT_SEARCH, &LIB_TREE::onQueryEnter, this );
 #else
         m_query_ctrl->Bind( wxEVT_TEXT_ENTER, &LIB_TREE::onQueryEnter, this );
