@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-06-28 09:32+0000\n"
+"PO-Revision-Date: 2021-07-09 08:32+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.1-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -791,11 +791,9 @@ msgstr "Název souboru 3D obrázku"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:738 common/eda_base_frame.cpp:1043
 #: common/eda_base_frame.cpp:1048 pcbnew/plugins/altium/altium_pcb.cpp:1315
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
-"Nedostatek požadovaných oprávnění k uložení souboru\n"
-"%s"
+msgstr "Nedostatek požadovaných oprávnění k uložení souboru '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:739 common/confirm.cpp:130
 #: common/confirm.cpp:269 common/dialogs/panel_setup_severities.cpp:43
@@ -3878,11 +3876,9 @@ msgid "Hotkeys"
 msgstr "Kl. zkratky"
 
 #: common/eda_base_frame.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr ""
-"Nedostatek požadovaných oprávnění k uložení souboru\n"
-"%s"
+msgstr "Nedostatek požadovaných oprávnění ke složce '%s'."
 
 #: common/eda_base_frame.cpp:1078
 #, c-format
@@ -6138,13 +6134,14 @@ msgid "Report Bug"
 msgstr "Hlášení chyb"
 
 #: common/tool/common_control.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' or\n"
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"Soubor nápovědy \"%s\" nenalezen.\n"
+"Soubor nápovědy '%s' nebo\n"
+"'%s' nelze nalézt.\n"
 "Chcete získat přístup k online nápovědě KiCadu?"
 
 #: common/tool/common_control.cpp:219 common/tool/common_control.cpp:239
@@ -8864,13 +8861,14 @@ msgstr ""
 "Nelze zkopírovat soubor tabulky globální knihovny symbolů '%s' do '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading global symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"Došlo k chybě při ukládání globální tabulky knihovny symbolů:\n"
+"Chyba při načítání globální tabulky knihoven symbolů.\n"
+"\n"
 "%s"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
@@ -9858,9 +9856,9 @@ msgid "Failed to create file '%s'."
 msgstr "Selhalo vytvoření souboru \"%s\""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:874
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'.\n"
-msgstr "Nepodařilo se načíst '%s'."
+msgstr "Vynesen na '%s'.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1250
 #, c-format
@@ -12012,11 +12010,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Více knihoven nemůže sdílet stejnou přezdívku („%s“)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:439 eeschema/symbol_library.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr ""
-"Knihovna součástek \"%s\" načtení selhalo.\n"
-" %s"
+msgstr "Symbol knihovny '%s' se nezdařilo načíst."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:442
 msgid "Error Loading Library"
@@ -13668,13 +13664,9 @@ msgid "Invalid parent symbol name"
 msgstr "Neplatné jméno signálu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:260
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s"
-msgstr ""
-"Žádný rodič pro rozšířený symbol %s v\n"
-"souboru: \"%s\"\n"
-"řádek: %d\n"
-"offset: %d"
+msgstr "Žádný rodič pro rozšířený symbol %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:275
 #, fuzzy
@@ -13687,13 +13679,9 @@ msgid "Invalid symbol unit name prefix %s"
 msgstr "Neplatný prefix jednotky"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name suffix %s"
-msgstr ""
-"Přípona neplatného názvu jednotky symbolu %s v\n"
-"souboru: \"%s\"\n"
-"řádek: %d\n"
-"offset: %d"
+msgstr "Neplatná přípona názvu jednotky symbolu %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:299
 #, fuzzy, c-format
@@ -17828,9 +17816,8 @@ msgid "[no project loaded]"
 msgstr "Nenačteno pouzdro."
 
 #: kicad/kicad_manager_frame.cpp:625
-#, fuzzy
 msgid "KiCad "
-msgstr "KiCad"
+msgstr "KiCad "
 
 #: kicad/kicad_manager_frame.cpp:664
 #, c-format
@@ -21229,9 +21216,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:614
 #: pcbnew/tools/pcb_control.cpp:1022
-#, fuzzy
 msgid "Loading PCB"
-msgstr "Načítání "
+msgstr "Načítání DPS"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:220
 #, c-format
@@ -28794,15 +28780,15 @@ msgid "Footprint Report"
 msgstr "Report pouzdra"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'"
-msgstr "Vytvořit soubor %s\n"
+msgstr "Vytvořený soubor '%s'"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:354
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'."
-msgstr "Vytvořit soubor %s\n"
+msgstr "Vytvořený soubor '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:152
 #, fuzzy, c-format
@@ -30414,9 +30400,8 @@ msgid "Schematic file '%s' not found."
 msgstr "Soubor schématu \"%s\" nenalezen."
 
 #: pcbnew/pcb_edit_frame.cpp:1488
-#, fuzzy
 msgid "Eeschema failed to load."
-msgstr "Eeschema se nepodařilo načíst:\n"
+msgstr "Eeschema se nepodařilo načíst."
 
 #: pcbnew/pcb_edit_frame.cpp:1627
 msgid "Edit design rules"
@@ -30677,9 +30662,8 @@ msgid "Error reading file: cannot determine length."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:86
-#, fuzzy
 msgid "Error reading file."
-msgstr "Chyba rozbalování souboru!\n"
+msgstr "Chyba čtení souboru."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:465
 #, fuzzy, c-format
@@ -31608,9 +31592,9 @@ msgid "Undefined layers:"
 msgstr "Nedefinované vrstvy:"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1010
-#, fuzzy, c-format
+#, c-format
 msgid "Page type '%s' is not valid."
-msgstr "Typ stránky \"%s\" není platný "
+msgstr "Typ stránky '%s' není platný."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1541
 #, fuzzy, c-format
