@@ -713,8 +713,7 @@ struct ASCH_DESIGNATOR
 
 struct ASCH_IMPLEMENTATION
 {
-	// IMPLEMENTATION_LIST -> ownerindex must be read and used for these IMPLEMENTATIONs
-    // int ownerindex;
+    int ownerindex;
 
     wxString name;
     wxString type;

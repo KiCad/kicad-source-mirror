@@ -720,10 +720,7 @@ ASCH_IMPLEMENTATION::ASCH_IMPLEMENTATION( const std::map<wxString, wxString>& aP
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::IMPLEMENTATION );
 
-	// "OWNERINDEX" points to unknown item. Use ASCH_IMPLEMENTATION_LIST -> OWNERINDEX prior
-	// in order to get real ownerindex for this particular implementation
-    //ownerindex = ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX",
-    //                                               ALTIUM_COMPONENT_NONE );
+    ownerindex = ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
     name = ALTIUM_PARSER::PropertiesReadString( aProperties, "MODELNAME", "" );
     type = ALTIUM_PARSER::PropertiesReadString( aProperties, "MODELTYPE", "" );
     libname = ALTIUM_PARSER::PropertiesReadString( aProperties, "MODELDATAFILE0", "" );

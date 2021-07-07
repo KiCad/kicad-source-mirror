@@ -140,7 +140,8 @@ private:
     void ParseDesignator( const std::map<wxString, wxString>& aProperties );
     void ParseBusEntry( const std::map<wxString, wxString>& aProperties );
     void ParseParameter( const std::map<wxString, wxString>& aProperties );
-    void ParseImplementation( const std::map<wxString, wxString>& aProperties, int ownerindex );
+    void ParseImplementationList( int aIndex, const std::map<wxString, wxString>& aProperties );
+    void ParseImplementation( const std::map<wxString, wxString>& aProperties );
 
 private:
     REPORTER*                       m_reporter;          // current reporter for warnings/errors
@@ -166,6 +167,7 @@ private:
     std::vector<ASCH_STORAGE_FILE>  m_altiumStorage;
 
     std::map<int, ASCH_SYMBOL>      m_altiumComponents;
+    std::map<int, int>              m_altiumImplementationList;
     std::vector<ASCH_PORT>          m_altiumPortsCurrentSheet; // we require all connections first
 };
 
