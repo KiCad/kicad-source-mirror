@@ -96,6 +96,12 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
 
     LOCALE_IO       toggle;     // Switch the locale to standard C
 
+    // Build the board oulines *before* flipping footprints
+    if( !db.BuiltBoardOutlines( GetBoard() ) )
+    {
+        wxLogWarning( _( "Board outline is malformed. Run DRC for a full analysis." ) );
+    }
+
     // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the top view.  So we
     // temporarily flip any footprints which are on the back side of the board to the front,
     // and record this in the FOOTPRINT's flag field.
@@ -226,6 +232,12 @@ static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string
     path->AppendPoint( aEnd );
     path->SetLayerId( aLayerName.c_str() );
     return path;
+}
+
+
+bool SPECCTRA_DB::BuiltBoardOutlines( BOARD* aBoard  )
+{
+    return aBoard->GetBoardPolygonOutlines( m_brd_outlines );
 }
 
 
@@ -949,20 +961,13 @@ PADSTACK* SPECCTRA_DB::makeVia( const PCB_VIA* aVia )
 
 void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
 {
-    SHAPE_POLY_SET outlines;
-
-    if( !aBoard->GetBoardPolygonOutlines( outlines ) )
-    {
-        wxLogWarning( _( "Board outline is malformed. Run DRC for a full analysis." ) );
-    }
-
-    for( int cnt = 0; cnt < outlines.OutlineCount(); cnt++ )   // Should be one outline
+    for( int cnt = 0; cnt < m_brd_outlines.OutlineCount(); cnt++ )   // Should be one outline
     {
         PATH*  path = new PATH( boundary );
         boundary->paths.push_back( path );
         path->layer_id = "pcb";
 
-        SHAPE_LINE_CHAIN& outline = outlines.Outline( cnt );
+        SHAPE_LINE_CHAIN& outline = m_brd_outlines.Outline( cnt );
 
         for( int ii = 0; ii < outline.PointCount(); ii++ )
         {
@@ -975,7 +980,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
         path->AppendPoint( mapPt( pos0 ) );
 
         // Generate holes as keepout:
-        for( int ii = 0; ii < outlines.HoleCount( cnt ); ii++ )
+        for( int ii = 0; ii < m_brd_outlines.HoleCount( cnt ); ii++ )
         {
             // emit a signal layers keepout for every interior polygon left...
             KEEPOUT*    keepout = new KEEPOUT( NULL, T_keepout );
@@ -985,7 +990,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
             poly_ko->SetLayerId( "signal" );
             m_pcb->structure->keepouts.push_back( keepout );
 
-            SHAPE_LINE_CHAIN& hole = outlines.Hole( cnt, ii );
+            SHAPE_LINE_CHAIN& hole = m_brd_outlines.Hole( cnt, ii );
 
             for( int jj = 0; jj < hole.PointCount(); jj++ )
             {

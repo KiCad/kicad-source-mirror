@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #include <specctra_import_export/specctra_lexer.h>
 
 #include <memory>
+#include <geometry/shape_poly_set.h>
 
 // all outside the DSN namespace:
 class BOARD;
@@ -3634,6 +3635,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     static const KEYWORD keywords[];
 
     PCB*              m_pcb;
+    SHAPE_POLY_SET    m_brd_outlines;       // the board outlines for DSN export
     SESSION*          m_session;
     wxString          m_filename;
     std::string       m_quote_char;
@@ -3980,6 +3982,14 @@ public:
      * @param aFilename The file to save to.
      */
     void ExportSESSION( const wxString& aFilename );
+
+    /**
+     * Build the board outlines and store it in m_brd_outlines.
+     * Because it calls GetBoardPolygonOutlines() it *must be* called
+     * before flipping footprints
+     * @return false if the board outlines cannot be built (not closed outlines)
+     */
+    bool BuiltBoardOutlines( BOARD* aBoard  );
 
     /**
      * Function FlipFOOTPRINTs
