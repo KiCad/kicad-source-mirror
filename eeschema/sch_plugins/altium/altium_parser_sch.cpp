@@ -486,6 +486,7 @@ ASCH_PORT::ASCH_PORT( const std::map<wxString, wxString>& aProperties )
                         -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
 
     name = ALTIUM_PARSER::PropertiesReadString( aProperties, "NAME", "" );
+    harnessType = ALTIUM_PARSER::PropertiesReadString( aProperties, "HARNESSTYPE", "" );
 
     width  = PropertiesReadKiCadUnitFrac( aProperties, "WIDTH" );
     height = PropertiesReadKiCadUnitFrac( aProperties, "HEIGHT" );

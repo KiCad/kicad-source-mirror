@@ -1752,7 +1752,7 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
         libSymbol->GetReferenceField().SetText( "#PWR" );
         libSymbol->GetValueField().SetText( elem.text );
         libSymbol->GetValueField().SetVisible( true ); // TODO: why does this not work?
-        libSymbol->SetDescription( wxString::Format( _( "Power powerSymbolIt creates a global "
+        libSymbol->SetDescription( wxString::Format( _( "Power symbol creates a global "
                                                         "label with name '%s'" ), elem.text ) );
         libSymbol->SetKeyWords( "power-flag" );
         libSymbol->SetLibId( libId );
@@ -1829,9 +1829,9 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
 
 void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
 {
-    // Get both connection points where we could connect to
-    wxPoint start = aElem.location + m_sheetOffset;
-    wxPoint end   = start;
+    bool    isHarness = !aElem.harnessType.IsEmpty();
+    wxPoint start     = aElem.location + m_sheetOffset;
+    wxPoint end       = start;
 
     switch( aElem.style )
     {
@@ -1866,19 +1866,34 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
                             || endIsWireTerminal
                             || endIsBusTerminal;
 
-    if( !connectionFound )
+    if( !isHarness && !connectionFound )
     {
-        wxString msg = wxString::Format( _( "There is a port for '%s', but no connections to it." ),
-                                         aElem.name );
-        m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+        m_reporter->Report( wxString::Format( _( "Port %s has no connections." ), aElem.name ),
+                            RPT_SEVERITY_WARNING );
     }
 
     // Select label position. In case both match, we will add a line later.
-    wxPoint position = ( startIsWireTerminal || startIsBusTerminal ) ? start : end;
+    wxPoint   position = ( startIsWireTerminal || startIsBusTerminal ) ? start : end;
+    SCH_TEXT* label;
 
-    SCH_TEXT* const label = new SCH_GLOBALLABEL( position, aElem.name );
+    if( isHarness )
+    {
+        wxString name = _( "HARNESS: " ) + aElem.name;
+
+        if( aElem.harnessType != aElem.name )
+            name += wxString::Format( wxT( " (%s)" ), aElem.harnessType );
+
+        label = new SCH_TEXT( position, name );
+    }
     // TODO: detect correct label type depending on sheet settings, etc.
-    // label = new SCH_HIERLABEL( elem.location + m_sheetOffset, elem.name );
+    //{
+    //    label = new SCH_HIERLABEL( elem.location + m_sheetOffset, elem.name );
+    //}
+    else
+    {
+
+        label = new SCH_GLOBALLABEL( position, aElem.name );
+    }
 
     switch( aElem.iotype )
     {
@@ -1924,7 +1939,7 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     m_currentSheet->GetScreen()->Append( label );
 
     // This is a hack, for the case both connection points are valid: add a small wire
-    if( ( startIsWireTerminal && endIsWireTerminal ) || !connectionFound )
+    if( ( startIsWireTerminal && endIsWireTerminal ) )
     {
         SCH_LINE* wire = new SCH_LINE( start, SCH_LAYER_ID::LAYER_WIRE );
         wire->SetEndPoint( end );

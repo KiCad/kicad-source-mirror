@@ -520,6 +520,7 @@ struct ASCH_PORT
     int ownerpartid;
 
     wxString name;
+    wxString harnessType;
 
     wxPoint location;
     int     width;
