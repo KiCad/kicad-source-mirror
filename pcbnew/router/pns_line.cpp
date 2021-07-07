@@ -1084,12 +1084,12 @@ void LINE::ClipVertexRange( int aStart, int aEnd )
 
     int numPoints = static_cast<int>( m_line.PointCount() );
 
-    for( int i = 0; i >= 0 && i < m_line.PointCount(); i = m_line.NextShape( i ) )
+    for( int i = 0; i < m_line.PointCount(); i = m_line.NextShape( i ) )
     {
         if( i <= aStart )
             firstLink = linkIdx;
 
-        if( i == -1 || i >= aEnd - 1 || linkIdx >= lastLink )
+        if( i < 0 || i >= aEnd - 1 || linkIdx >= lastLink )
         {
             lastLink = linkIdx;
             break;
