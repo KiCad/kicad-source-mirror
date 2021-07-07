@@ -1437,8 +1437,8 @@ void SCH_ALTIUM_PLUGIN::ParseSheetSymbol( int aIndex, const std::map<wxString,
     SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
 
     sheet->SetSize( elem.size );
-
     sheet->SetBorderColor( GetColorFromInt( elem.color ) );
+
     if( elem.isSolid )
         sheet->SetBackgroundColor( GetColorFromInt( elem.areacolor ) );
 
@@ -1455,9 +1455,9 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
 {
     ASCH_SHEET_ENTRY elem( aProperties );
 
-    const auto& sheet = m_sheets.find( elem.ownerindex );
+    const auto& sheetIt = m_sheets.find( elem.ownerindex );
 
-    if( sheet == m_sheets.end() )
+    if( sheetIt == m_sheets.end() )
     {
         m_reporter->Report( wxString::Format( _( "Sheet entry's owner (%d) not found." ),
                                               elem.ownerindex ),
@@ -1465,16 +1465,16 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
         return;
     }
 
-    SCH_SHEET_PIN* sheetPin = new SCH_SHEET_PIN( sheet->second );
-    sheet->second->AddPin( sheetPin );
+    SCH_SHEET_PIN* sheetPin = new SCH_SHEET_PIN( sheetIt->second );
+    sheetIt->second->AddPin( sheetPin );
 
     sheetPin->SetText( elem.name );
     sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
     //sheetPin->SetLabelSpinStyle( getSpinStyle( term.OrientAngle, false ) );
     //sheetPin->SetPosition( getKiCadPoint( term.Position ) );
 
-    wxPoint pos  = sheet->second->GetPosition();
-    wxSize  size = sheet->second->GetSize();
+    wxPoint pos  = sheetIt->second->GetPosition();
+    wxSize  size = sheetIt->second->GetSize();
 
     switch( elem.side )
     {
@@ -2114,6 +2114,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheet( const std::map<wxString, wxString>& aPropert
     PAGE_INFO pageInfo;
 
     bool isPortrait = m_altiumSheet->sheetOrientation == ASCH_SHEET_WORKSPACEORIENTATION::PORTRAIT;
+
     switch( m_altiumSheet->sheetSize )
     {
     default:
@@ -2160,8 +2161,9 @@ void SCH_ALTIUM_PLUGIN::ParseSheetName( const std::map<wxString, wxString>& aPro
 {
     ASCH_SHEET_NAME elem( aProperties );
 
-    const auto& sheet = m_sheets.find( elem.ownerindex );
-    if( sheet == m_sheets.end() )
+    const auto& sheetIt = m_sheets.find( elem.ownerindex );
+
+    if( sheetIt == m_sheets.end() )
     {
         m_reporter->Report( wxString::Format( _( "Sheetname's owner (%d) not found." ),
                                               elem.ownerindex ),
@@ -2169,7 +2171,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheetName( const std::map<wxString, wxString>& aPro
         return;
     }
 
-    SCH_FIELD& sheetNameField = sheet->second->GetFields()[SHEETNAME];
+    SCH_FIELD& sheetNameField = sheetIt->second->GetFields()[SHEETNAME];
 
     sheetNameField.SetPosition( elem.location + m_sheetOffset );
     sheetNameField.SetText( elem.text );
