@@ -613,6 +613,8 @@ public:
      */
     void UpdateSymbolLinks( REPORTER* aReporter = nullptr );
 
+    void ClearEditFlags();
+
     /**
      * Test all of the schematic symbols to see if all #LIB_ID objects library nickname is not
      * set.

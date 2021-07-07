@@ -1246,6 +1246,16 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
 }
 
 
+void SCH_SCREENS::ClearEditFlags()
+{
+    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items() )
+            item->ClearEditFlags();
+    }
+}
+
+
 void SCH_SCREENS::DeleteMarker( SCH_MARKER* aMarker )
 {
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
