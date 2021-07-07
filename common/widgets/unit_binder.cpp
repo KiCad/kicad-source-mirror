@@ -122,7 +122,7 @@ void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
     {
         wxString oldStr = m_eval.OriginalText();
 
-        if( oldStr.length() )
+        if( oldStr.length() && oldStr != textEntry->GetValue() )
         {
             textEntry->SetValue( oldStr );
             textEntry->SetSelection( m_selStart, m_selEnd );
