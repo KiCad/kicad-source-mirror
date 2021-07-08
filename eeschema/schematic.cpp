@@ -147,7 +147,7 @@ bool SCHEMATIC::ResolveTextVar( wxString* token, int aDepth ) const
         }
         else if( token->IsSameAs( wxT( "PROJECTNAME" ) ) )
         {
-            *token = Prj().GetProjectFullName();
+            *token = Prj().GetProjectName();
             return true;
         }
 

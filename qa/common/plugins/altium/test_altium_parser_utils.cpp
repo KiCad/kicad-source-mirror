@@ -44,9 +44,9 @@ BOOST_FIXTURE_TEST_SUITE( AltiumParserUtils, ALTIUM_PARSER_UTILS_FIXTURE )
 
 struct SPECIAL_STRINGS_TO_KICAD
 {
-    wxString              input;
-    wxString              exp_result;
-    altium_override_map_t override;
+    wxString                     input;
+    wxString                     exp_result;
+    std::map<wxString, wxString> override;
 };
 
 /**
@@ -77,24 +77,20 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> special_string_to_kicad_prope
     { "${A}", "${A}", {} }, // TODO: correct substitution
     // Simple special strings
     { "=A", "${A}", {} },
-    { "=A", "C", { { "A", "C" } } },
-    { "=A", "${C}", { { "A", "${C}" } } },
+    { "=A", "${C}", { { "A", "C" } } },
     { "=A_B", "${A_B}", {} },
     // Combined special strings
     { "=A+B", "${A}${B}", {} },
     { "=A+B", "${A}${B}", {} },
-    { "=A+B", "C${B}", { { "A", "C" } } },
-    { "=A+B", "CD", { { "A", "C" }, { "B", "D" } } },
+    { "=A+B", "${C}${B}", { { "A", "C" } } },
+    { "=A+B", "${C}${D}", { { "A", "C" }, { "B", "D" } } },
     // Case insensitive special strings
-    { "=A", "C", { { "a", "C" } } },
-    { "=a", "C", { { "A", "C" } } },
-    { "=AB", "C", { { "Ab", "C" } } },
-    { "=AB", "C", { { "aB", "C" } } },
-    { "=AB", "C", { { "ab", "C" } } },
-    { "=AB", "C", { { "AB", "C" } } },
-    { "=aB", "C", { { "Ab", "C" } } },
-    { "=Ab", "C", { { "aB", "C" } } },
-    { "=ab", "C", { { "AB", "C" } } },
+    { "=A", "${C}", { { "A", "C" } } },
+    { "=a", "${C}", { { "A", "C" } } },
+    { "=AB", "${C}", { { "AB", "C" } } },
+    { "=aB", "${C}", { { "AB", "C" } } },
+    { "=Ab", "${C}", { { "AB", "C" } } },
+    { "=ab", "${C}", { { "AB", "C" } } },
     // Special strings with text
     { "='A'", "A", {} },
     { "='This is a long text with spaces'", "This is a long text with spaces", {} },
@@ -108,6 +104,10 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> special_string_to_kicad_prope
     { "='A'+' '", "A ", {} },
     { "=' '+'B'", " B", {} },
     { "='A'+B", "A${B}", {} },
+    { "='A'+\"B\"", "A${B}", {} },
+    { "='A' + \"B\"", "A${B}", {} },
+    { "=\"A\"+'B'", "${A}B", {} },
+    { "=\"A\" + 'B'", "${A}B", {} },
     { "=A+'B'", "${A}B", {} },
     { "=A+' '+B", "${A} ${B}", {} },
     { "='A'+B+'C'+D", "A${B}C${D}", {} },

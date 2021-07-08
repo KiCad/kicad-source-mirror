@@ -786,46 +786,38 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
 {
     ASCH_LABEL elem( aProperties );
 
-    // TODO: general text variable support
-
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        if( elem.text.StartsWith( "=" ) )
-        {
-            wxString token = elem.text.AfterFirst( '=' ).Upper();
+        std::map<wxString, wxString> variableMap = {
+            { "APPLICATION_BUILDNUMBER", "KICAD_VERSION" },
+            { "SHEETNUMBER",  "#"            },
+            { "SHEETTOTAL",   "##"           },
+            { "TITLE",        "TITLE"        }, // 1:1 maps are sort of useless, but it makes it
+            { "REVISION",     "REVISION"     }, // easier to see that the list is complete
+            { "DATE",         "ISSUE_DATE"   },
+            { "CURRENTDATE",  "CURRENT_DATE" },
+            { "COMPANYNAME",  "COMPANY"      },
+            { "DOCUMENTNAME", "FILENAME"     },
+            { "PROJECTNAME",  "PROJECTNAME"  },
+        };
 
-            if(      token == "SHEETNUMBER"  ) elem.text = "${#}";
-            else if( token == "SHEETTOTAL"   ) elem.text = "${##}";
-            else if( token == "TITLE"        ) elem.text = "${TITLE}";
-            else if( token == "PROJECTREV"   ) elem.text = "${REVISION}";
-            else if( token == "DATE"         ) elem.text = "${ISSUE_DATE}";
-            else if( token == "CURRENTDATE"  ) elem.text = "${CURRENT_DATE}";
-            else if( token == "COMPANYNAME"  ) elem.text = "${COMPANY}";
-            else if( token == "DOCUMENTNAME" ) elem.text = "${FILENAME}";
-            else if( token == "PROJECTNAME"  ) elem.text = "${PROJECTNAME}";
-            else
-            {
-                if( m_schematic->Prj().GetTextVars().count( token ) )
-                    elem.text = wxString::Format( "${%s}", token );
-            }
-        }
+        wxString  kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, variableMap );
+        SCH_TEXT* textItem = new SCH_TEXT( elem.location + m_sheetOffset, kicadText );
 
-        SCH_TEXT* text = new SCH_TEXT( elem.location + m_sheetOffset, elem.text );
-
-        SetEdaTextJustification( text, elem.justification );
+        SetEdaTextJustification( textItem, elem.justification );
 
         size_t fontId = static_cast<int>( elem.fontId );
 
         if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
         {
             const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-            text->SetItalic( font.italic );
-            text->SetBold( font.bold );
-            text->SetTextSize( { font.size / 2, font.size / 2 } );
+            textItem->SetItalic( font.italic );
+            textItem->SetBold( font.bold );
+            textItem->SetTextSize( { font.size / 2, font.size / 2 } );
         }
 
-        text->SetFlags( IS_NEW );
-        m_currentSheet->GetScreen()->Append( text );
+        textItem->SetFlags(IS_NEW );
+        m_currentSheet->GetScreen()->Append( textItem );
     }
     else
     {
@@ -841,23 +833,23 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
         }
 
         SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
-        LIB_TEXT*   text = new LIB_TEXT( libSymbolIt->second );
-        libSymbolIt->second->AddDrawItem( text );
+        LIB_TEXT*   textItem = new LIB_TEXT( libSymbolIt->second );
+        libSymbolIt->second->AddDrawItem( textItem );
 
-        text->SetUnit( elem.ownerpartid );
+        textItem->SetUnit( elem.ownerpartid );
 
-        text->SetPosition( GetRelativePosition( elem.location + m_sheetOffset, symbol ) );
-        text->SetText( elem.text );
-        SetEdaTextJustification( text, elem.justification );
+        textItem->SetPosition( GetRelativePosition( elem.location + m_sheetOffset, symbol ) );
+        textItem->SetText( elem.text );
+        SetEdaTextJustification( textItem, elem.justification );
 
         size_t fontId = static_cast<int>( elem.fontId );
 
         if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
         {
             const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-            text->SetItalic( font.italic );
-            text->SetBold( font.bold );
-            text->SetTextSize( { font.size / 2, font.size / 2 } );
+            textItem->SetItalic( font.italic );
+            textItem->SetBold( font.bold );
+            textItem->SetTextSize( { font.size / 2, font.size / 2 } );
         }
     }
 }
@@ -2294,9 +2286,9 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
     ASCH_PARAMETER elem( aProperties );
 
     // TODO: fill in replacements from variant, sheet and project
-    altium_override_map_t stringReplacement = {
-        { "Comment", "${VALUE}" },
-        { "Value", "${Altium_Value}" },
+    std::map<wxString, wxString> variableMap = {
+        { "COMMENT", "VALUE"        },
+        { "VALUE",   "ALTIUM_VALUE" },
     };
 
     if( elem.ownerindex <= 0 && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
@@ -2334,8 +2326,6 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
         {
             m_schematic->Prj().GetTextVars()[ paramName ] = elem.text;
         }
-
-        // TODO: handle parameters in labels
     }
     else
     {
@@ -2354,19 +2344,23 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
 
         SCH_FIELD* field = nullptr;
 
-        if( elem.name == "Comment" )
+        if( elem.name.Upper() == "COMMENT" )
         {
             field = symbol->GetField( VALUE_FIELD );
             field->SetPosition( position );
         }
         else
         {
-            int fieldIdx = symbol->GetFieldCount();
-            wxString fieldName = elem.name.IsSameAs( "Value", false ) ? "Altium_Value" : elem.name;
+            int      fieldIdx = symbol->GetFieldCount();
+            wxString fieldName = elem.name.Upper();
+
+            if( fieldName == "VALUE" )
+                fieldName = "ALTIUM_VALUE";
+
             field = symbol->AddField( { position, fieldIdx, symbol, fieldName } );
         }
 
-        wxString kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, stringReplacement );
+        wxString kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, variableMap );
         field->SetText( kicadText );
 
         field->SetVisible( !elem.isHidden );
@@ -2384,7 +2378,8 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseImplementationList( int aIndex, const std::map<wxString, wxString>& aProperties )
+void SCH_ALTIUM_PLUGIN::ParseImplementationList( int aIndex,
+                                                 const std::map<wxString, wxString>& aProperties )
 {
     ASCH_IMPLEMENTATION_LIST elem( aProperties );
 
@@ -2399,20 +2394,22 @@ void SCH_ALTIUM_PLUGIN::ParseImplementation( const std::map<wxString, wxString>&
     // Only get footprint, currently assigned only
     if( ( elem.type == "PCBLIB" ) && ( elem.isCurrent ) )
     {
-        const auto& implementationOwnerindexIt = m_altiumImplementationList.find( elem.ownerindex );
-        if( implementationOwnerindexIt == m_altiumImplementationList.end() ) {
-            m_reporter->Report( wxString::Format( _( "Implementation list's owner (%d) not found." ),
+        const auto& implementationOwnerIt = m_altiumImplementationList.find( elem.ownerindex );
+
+        if( implementationOwnerIt == m_altiumImplementationList.end() )
+        {
+            m_reporter->Report( wxString::Format( _( "Implementation's owner (%d) not found." ),
                                                   elem.ownerindex ),
                                 RPT_SEVERITY_ERROR );
             return;
         }
 
-        const auto& libSymbolIt = m_libSymbols.find( implementationOwnerindexIt->second );
+        const auto& libSymbolIt = m_libSymbols.find( implementationOwnerIt->second );
 
         if( libSymbolIt == m_libSymbols.end() )
         {
             m_reporter->Report( wxString::Format( _( "Footprint's owner (%d) not found." ),
-                                                  implementationOwnerindexIt->second ),
+                                                  implementationOwnerIt->second ),
                                 RPT_SEVERITY_ERROR );
             return;
         }
