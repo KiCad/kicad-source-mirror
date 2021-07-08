@@ -617,10 +617,15 @@ bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aR
 
     // first retrieve a label
     TDF_Label lmodel;
+    wxString errorMessage;
 
-    if( !getModelLabel( aFileName, aScale, lmodel, aSubstituteModels ) )
+    if( !getModelLabel( aFileName, aScale, lmodel, aSubstituteModels, &errorMessage ) )
     {
-        ReportMessage( wxString::Format( "No model for filename '%s'.\n", aFileName ) );
+        if( errorMessage.IsEmpty() )
+            ReportMessage( wxString::Format( "No model for filename '%s'.\n", aFileName ) );
+        else
+            ReportMessage( errorMessage );
+
         return false;
     }
 
@@ -978,7 +983,7 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
 
 
 bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel,
-                              bool aSubstituteModels )
+                              bool aSubstituteModels, wxString* aErrorMessage )
 {
     std::string model_key = aFileName + "_" + std::to_string( aScale.x )
                             + "_" + std::to_string( aScale.y ) + "_" + std::to_string( aScale.z );
@@ -1148,6 +1153,15 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
                         }
                     }
                 }
+
+                return false;   // No replacement model found
+            }
+            else        // Substitution is not allowed
+            {
+                if( aErrorMessage )
+                    aErrorMessage->Printf( "Cannot add a VRML model data to a Step file.\n",
+                                           aFileName );
+                return false;
             }
 
             break;

@@ -100,8 +100,18 @@ class PCBMODEL
     std::list<KICADCURVE>           m_curves;
     std::vector<TopoDS_Shape>       m_cutouts;
 
+    /**
+     * Load a 3D model data
+     * aFileName is the filename (different formats allowed) but for WRML files a model
+     * data can be loaded instead of the vrml data, not suitable in a step file
+     * @param aScale is the X,Y,Z scaling factors
+     * @param aLabel is the TDF_Label to store the data
+     * @param aSubstituteModels = true to allows data substitution, false to disallow.
+     * @param aErrorMessage (can be nullptr) is an error message to be displayed on error.
+     * @return true if successfully loaded, false on error
+     */
     bool getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel,
-                        bool aSubstituteModels );
+                        bool aSubstituteModels, wxString* aErrorMessage = nullptr );
 
     bool getModelLocation( bool aBottom, DOUBLET aPosition, double aRotation,
         TRIPLET aOffset, TRIPLET aOrientation, TopLoc_Location& aLocation );
