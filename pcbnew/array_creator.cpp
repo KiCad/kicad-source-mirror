@@ -108,6 +108,7 @@ void ARRAY_CREATOR::Invoke()
                     case PCB_SHAPE_T:
                     case PCB_TEXT_T:
                     case PCB_TRACE_T:
+                    case PCB_ARC_T:
                     case PCB_VIA_T:
                     case PCB_DIM_ALIGNED_T:
                     case PCB_DIM_CENTER_T:
