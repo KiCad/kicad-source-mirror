@@ -1,22 +1,22 @@
 /*
-    This file is part of libeval, a simple math expression evaluator
-
-    Copyright (C) 2017 Michael Geselbracht, mgeselbracht3@gmail.com
-    Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ * This file is part of libeval, a simple math expression evaluator
+ *
+ * Copyright (C) 2017 Michael Geselbracht, mgeselbracht3@gmail.com
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 #include <memory>
 #include <set>
@@ -419,6 +419,7 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
     wxString msg;
 
     retval.value.str = nullptr;
+    retval.value.num = 0.0;
     retval.token = G_ENDS;
 
     if( m_tokenizer.Done() )
@@ -560,7 +561,6 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
         case ';': retval.token = G_SEMCOL;       break;
         case '.': retval.token = G_STRUCT_REF;   break;
         case ',': retval.token = G_COMMA;        break;
-
 
         default:
             reportError( CST_PARSE, wxString::Format( _( "Unrecognized character '%c'" ),
@@ -774,14 +774,14 @@ static std::vector<TREE_NODE*> squashParamList( TREE_NODE* root )
 
         if( n )
         {
-            args.push_back(n);
+            args.push_back( n );
         }
     }
 
     std::reverse( args.begin(), args.end() );
 
     for( size_t i = 0; i < args.size(); i++ )
-        libeval_dbg(10, "squash arg%d: %s\n", int( i ), *args[i]->value.str );
+        libeval_dbg( 10, "squash arg%d: %s\n", int( i ), *args[i]->value.str );
 
     return args;
 }
@@ -866,12 +866,14 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     if( !vref )
                     {
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
-                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) itemName.length() );
+                        reportError( CST_CODEGEN, msg,
+                                     node->leaf[0]->srcPos - (int) itemName.length() );
                     }
                     else if( vref->GetType() == VT_PARSE_ERROR )
                     {
                         msg.Printf( _( "Unrecognized property '%s'" ), propName );
-                        reportError( CST_CODEGEN, msg, node->leaf[1]->srcPos - (int) propName.length() );
+                        reportError( CST_CODEGEN, msg,
+                                     node->leaf[1]->srcPos - (int) propName.length() );
                     }
 
                     node->leaf[0]->isVisited = true;
@@ -894,7 +896,8 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     if( !vref )
                     {
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
-                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) itemName.length() );
+                        reportError( CST_CODEGEN, msg,
+                                     node->leaf[0]->srcPos - (int) itemName.length() );
                     }
 
                     wxString functionName = *node->leaf[1]->leaf[0]->value.str;
@@ -967,7 +970,8 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     if( !vref )
                     {
                         msg.Printf( _( "Unrecognized item '%s'" ), itemName );
-                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) itemName.length() );
+                        reportError( CST_CODEGEN, msg,
+                                     node->leaf[0]->srcPos - (int) itemName.length() );
                     }
 
                     msg.Printf( _( "Unrecognized property '%s'" ), propName );
@@ -980,6 +984,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     node->isTerminal = true;
                     break;
             }
+
             break;
         }
 

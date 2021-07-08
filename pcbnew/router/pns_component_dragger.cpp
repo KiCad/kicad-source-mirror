@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2020 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -46,6 +47,8 @@ COMPONENT_DRAGGER::~COMPONENT_DRAGGER()
 
 bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 {
+    assert( m_world );
+
     m_currentNode         = nullptr;
     m_initialDraggedItems = aPrimitives;
     m_p0                  = aP;
@@ -148,8 +151,11 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
     return true;
 }
 
+
 bool COMPONENT_DRAGGER::Drag( const VECTOR2I& aP )
 {
+    assert( m_world );
+
     m_world->KillChildren();
     m_currentNode = m_world->Branch();
 
@@ -234,6 +240,7 @@ bool COMPONENT_DRAGGER::Drag( const VECTOR2I& aP )
     return true;
 }
 
+
 bool COMPONENT_DRAGGER::FixRoute()
 {
     NODE* node = CurrentNode();
@@ -257,10 +264,12 @@ bool COMPONENT_DRAGGER::FixRoute()
     return false;
 }
 
+
 NODE* COMPONENT_DRAGGER::CurrentNode() const
 {
     return m_currentNode ? m_currentNode : m_world;
 }
+
 
 const ITEM_SET COMPONENT_DRAGGER::Traces()
 {

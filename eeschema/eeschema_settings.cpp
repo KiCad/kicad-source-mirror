@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -586,7 +586,10 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, "RescueNeverShow",     "system.never_show_rescue_dialog" );
 
     // Legacy version stored this setting in eeschema, so move it to common if it exists
-    aCfg->Read( "MoveWarpsCursor", &Pgm().GetCommonSettings()->m_Input.warp_mouse_on_move );
+    bool tmp;
+
+    if( aCfg->Read( "MoveWarpsCursor", &tmp ) )
+        Pgm().GetCommonSettings()->m_Input.warp_mouse_on_move = tmp;
 
     COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetMigratedColorSettings();
 

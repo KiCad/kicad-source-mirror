@@ -32,7 +32,9 @@ const int spiceSettingsSchemaVersion = 0;
 
 SPICE_SIMULATOR_SETTINGS::SPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent,
                                                     const std::string& aPath ) :
-    NESTED_SETTINGS( "simulator", spiceSettingsSchemaVersion, aParent, aPath )
+    NESTED_SETTINGS( "simulator", spiceSettingsSchemaVersion, aParent, aPath ),
+    m_fixPassiveVals( false ),
+    m_fixIncludePaths( true )
 {
     m_params.emplace_back( new PARAM<wxString>( "workbook_filename", &m_workbookFilename, "" ) );
     m_params.emplace_back( new PARAM<bool>( "fix_passive_vals", &m_fixPassiveVals, false ) );

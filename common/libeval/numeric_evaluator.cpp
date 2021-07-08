@@ -178,6 +178,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
     retval.token = ENDS;
     retval.value.dValue = 0;
     retval.value.valid = false;
+    retval.value.text[0] = 0;
 
     if( m_token.token == nullptr )
         return retval;

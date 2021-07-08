@@ -585,11 +585,12 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
         {
             bool valid_cw = false, valid_ccw = false;
             VECTOR2I p_cw, p_ccw;
-            int dist_ccw, dist_cw;
+            int dist_ccw = 0, dist_cw = 0;
 
             if( wr.statusCcw == WALKAROUND::ALMOST_DONE )
             {
                 valid_ccw = cursorDistMinimum( l_ccw, aP, hugThresholdLength, dist_ccw, p_ccw );
+
                 if( valid_ccw )
                 {
                     int idx_ccw = l_ccw.Split( p_ccw );
@@ -598,9 +599,11 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
                     PNS_DBG( Dbg(), AddLine, l_ccw, MAGENTA, 200000, "wh-result-ccw" );
                 }
             }
+
             if( wr.statusCw == WALKAROUND::ALMOST_DONE )
             {
                 valid_cw = cursorDistMinimum( l_cw, aP, hugThresholdLength, dist_cw, p_cw );
+
                 if( valid_cw )
                 {
                     int idx_cw = l_cw.Split( p_cw );
@@ -660,7 +663,6 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
     }
 
     OPTIMIZER::Optimize( &walkFull, effort, m_currentNode );
-
 
     if( m_currentNode->CheckColliding( &walkFull ) )
     {
