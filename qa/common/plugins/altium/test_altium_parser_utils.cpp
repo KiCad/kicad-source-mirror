@@ -122,7 +122,7 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> special_string_to_kicad_prope
     { "=++B", "${B}", {} },
     { " =", " =", {} },
     { "= ", "", {} },
-    { "= A", "${ A}", {} },
+    { "= A", "${A}", {} },
     { "=A ", "${A}", {} },
     { "='A'B", "A", {} },
     { "=A'B'", "B", {} },
