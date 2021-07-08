@@ -4,21 +4,22 @@
 # Echedey <echedeyla@hotmail.com>, 2020, 2021.
 # Tomás Mora <tom.mora96@gmail.com>, 2021.
 # Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
+# Iñigo <ifs@elektroquark.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-06-20 16:33+0000\n"
-"Last-Translator: Iñigo Figuero Sanz <news@imagedworld.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"PO-Revision-Date: 2021-07-09 08:32+0000\n"
+"Last-Translator: Iñigo <ifs@elektroquark.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -218,9 +219,8 @@ msgstr "Carga Raytracing: capas"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:881
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:644
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "Cargando modelos 3D"
+msgstr "Cargando modelos 3D..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:1021
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:654
@@ -267,9 +267,9 @@ msgstr "Cargar OpenGL: capas"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2199
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "Cargando %s"
+msgstr "Cargando %s..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
@@ -366,54 +366,44 @@ msgid "Render current view using Raytracing"
 msgstr "Renderizar la vista actual utilizando Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:27
-#, fuzzy
 msgid "Background top:"
-msgstr "Fondo"
+msgstr "Parte superior de fondo:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:34
-#, fuzzy
 msgid "Background bottom:"
-msgstr "Color de fondo, Base"
+msgstr "Parte inferior del fondo:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:47
-#, fuzzy
 msgid "Silkscreen top:"
-msgstr "Serigr Cmp"
+msgstr "Serigrafía superior:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:54
-#, fuzzy
 msgid "Silkscreen bottom:"
-msgstr "Color de la serigrafía"
+msgstr "Serigrafía inferior:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:67
-#, fuzzy
 msgid "Solder mask top:"
-msgstr "SoldP Cmp"
+msgstr "Máscara de soldadura superior:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:74
-#, fuzzy
 msgid "Solder mask bottom:"
-msgstr "SoldP Cmp"
+msgstr "Máscara de soldadura inferior:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:87
-#, fuzzy
 msgid "Solder paste:"
-msgstr "SoldP Cmp"
+msgstr "Pasta de soldadura:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:100
-#, fuzzy
 msgid "Copper/surface finish:"
-msgstr "Zonas de cobre"
+msgstr "Terminación cobre/superficie:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:113
-#, fuzzy
 msgid "Board body:"
-msgstr "Construir el cuerpo de la placa"
+msgstr "Cuerpo de la placa:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:126
-#, fuzzy
 msgid "Load Colors from Board Stackup"
-msgstr "Obtener colores del apilamiento físico"
+msgstr "Cargar colores desde la placa"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:21
 msgid "3D Model Visibility"
@@ -485,7 +475,6 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "Restar la máscara de soldadura de la serigrafía"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:86
-#, fuzzy
 msgid "Clip silkscreen at via annuli"
 msgstr "Recortar serigrafía en el anillo de la vía"
 
@@ -498,24 +487,20 @@ msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr "Utilizar colores diferentes para cobre bañado o sin bañar. (Lento)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "Material properties:"
-msgstr "Propiedades del material"
+msgstr "Propiedades del material:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "Realistic"
-msgstr "Modo estilo real"
+msgstr "Estilo real"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "Solid colors"
-msgstr "Color de selección:"
+msgstr "Colores sólidos"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "CAD colors"
-msgstr "Colores"
+msgstr "Colores CAD"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:114
 msgid "Camera Options"
@@ -547,7 +532,6 @@ msgstr "Velocidad de animación:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:23
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
-#, fuzzy
 msgid "Rendering Options"
 msgstr "Opciones de representación"
 
@@ -613,27 +597,21 @@ msgid "Disable holes"
 msgstr "Desactivar agujeros"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
-#, fuzzy
 msgid "Procedural textures (slow)"
-msgstr "Texturas de procedimiento"
+msgstr "Texturas de procedimiento (lento)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
-#, fuzzy
 msgid "Add floor (slow)"
-msgstr "Añadir suelo"
+msgstr "Añadir suelo (lento)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
-#, fuzzy
 msgid "Anti-aliasing (slow)"
-msgstr "Antidentado"
+msgstr "Antidentado (lento)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
-#, fuzzy
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr ""
-"Aplicar Oclusión Ambiental del Espacio de Pantalla y reflexiones de "
-"Iluminación Global en la representación final (lento)"
+msgstr "Oclusiones ambientales y reflexiones de iluminación global (lento)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -714,55 +692,45 @@ msgstr "Luz inferior:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:181
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:198
-#, fuzzy
 msgid "Elevation (deg)"
 msgstr "Elevación (grados)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:185
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:202
-#, fuzzy
 msgid "Azimuth (deg)"
 msgstr "Azimut (grados)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:206
-#, fuzzy
 msgid "Light 1:"
-msgstr "Derecha"
+msgstr "Luz 1:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:222
-#, fuzzy
 msgid "Light 5:"
-msgstr "Derecha"
+msgstr "Luz 5:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:235
-#, fuzzy
 msgid "Light 2:"
-msgstr "Derecha"
+msgstr "Luz 2:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:251
-#, fuzzy
 msgid "Light 6:"
-msgstr "Derecha"
+msgstr "Luz 6:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:264
-#, fuzzy
 msgid "Light 3:"
-msgstr "Derecha"
+msgstr "Luz 3:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:280
-#, fuzzy
 msgid "Light 7:"
-msgstr "Derecha"
+msgstr "Luz 7:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:293
-#, fuzzy
 msgid "Light 4:"
-msgstr "Derecha"
+msgstr "Luz 4:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:309
-#, fuzzy
 msgid "Light 8:"
-msgstr "Derecha"
+msgstr "Luz 8:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:100
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:72
@@ -792,11 +760,9 @@ msgstr "Nombre del archivo de imagen 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:738 common/eda_base_frame.cpp:1043
 #: common/eda_base_frame.cpp:1048 pcbnew/plugins/altium/altium_pcb.cpp:1315
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
-"Permisos insuficientes para guardar el archivo\n"
-"%s"
+msgstr "Permisos insuficientes para guardar el archivo '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:739 common/confirm.cpp:130
 #: common/confirm.cpp:269 common/dialogs/panel_setup_severities.cpp:43
@@ -934,9 +900,8 @@ msgid "3D Grid 1mm"
 msgstr "Cuadrícula 3D 1 mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
-#, fuzzy
 msgid "Render Realistic Materials"
-msgstr "Pérdidas dieléctricas:"
+msgstr "Represención real de materiales"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
@@ -945,18 +910,16 @@ msgstr ""
 "de modelo 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
-#, fuzzy
 msgid "Render Solid Colors"
-msgstr "Mostrar sombras"
+msgstr "Representar colores sólidos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
 msgstr "Utilizar solo la propiedad de color difuso del archivo de modelo 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
-#, fuzzy
 msgid "Render CAD Colors"
-msgstr "Colores definidos"
+msgstr "Representar colores CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
@@ -1176,9 +1139,9 @@ msgstr "Crear archivo de logotipo"
 #: bitmap2component/bitmap2cmp_gui.cpp:795
 #: bitmap2component/bitmap2cmp_gui.cpp:834
 #: bitmap2component/bitmap2cmp_gui.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' could not be created."
-msgstr "No pudo crearse el archivo «%s»."
+msgstr "No se puede crear el archivo '%s'."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:775
 msgid "Create PostScript File"
@@ -1440,19 +1403,19 @@ msgstr ""
 "posición %u en '%s'."
 
 #: common/common.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "No puede hacerse la ruta \"%s\" absoluta con respecto a \"%s\"."
+msgstr "No puede hacerse la ruta '%s' absoluta con respecto a '%s'."
 
 #: common/common.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created.\n"
-msgstr "Se ha creado la carpeta de salida «%s».\n"
+msgstr "Se ha creado la carpeta de salida '%s'.\n"
 
 #: common/common.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'.\n"
-msgstr "No puede crearse la carpeta de salida «%s».\n"
+msgstr "No puede crearse la carpeta de salida '%s'.\n"
 
 #: common/common.cpp:615
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -1500,7 +1463,6 @@ msgid "Warning"
 msgstr "Aviso"
 
 #: common/confirm.cpp:158 common/confirm.cpp:185
-#, fuzzy
 msgid "Save Changes?"
 msgstr "¿Guardar cambios?"
 
@@ -2409,9 +2371,9 @@ msgid "Portrait"
 msgstr "Vertical"
 
 #: common/dialogs/dialog_page_settings.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "No se ha encontrado la hoja de dibujo \"%s\"."
+msgstr "No se ha encontrado la hoja de dibujo '%s'."
 
 #: common/dialogs/dialog_page_settings.cpp:537
 msgid "the translation for paper size must preserve original spellings"
@@ -2673,9 +2635,8 @@ msgid "Keep existing reference designators, even if they are duplicated"
 msgstr "Mantener las referencias actuales, aunque existan duplicados"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Clear reference designators on all pasted symbols"
-msgstr "¡Valor del designador de referencia ilegal!"
+msgstr "Eliminar referencias de todos los símbolos pegados."
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -2948,9 +2909,8 @@ msgid "Executable files ("
 msgstr "Archivos ejecutables ("
 
 #: common/dialogs/panel_common_settings.cpp:304
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
-msgstr "Seleccionar el lector de PDFs preferido"
+msgstr "Seleccionar el lector PDF preferido"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
 msgid "&Auto save:"
@@ -3056,18 +3016,16 @@ msgid "Show icons in menus"
 msgstr "Mostrar iconos en menús"
 
 #: common/dialogs/panel_common_settings_base.cpp:186
-#, fuzzy
 msgid "Icon theme:"
-msgstr "Tema de color:"
+msgstr "Tema de iconos:"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
-#, fuzzy
 msgid "Light"
-msgstr "Derecha"
+msgstr "Claro"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "Utilizar iconos diseñados para fondos de ventana claros"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
@@ -3076,12 +3034,12 @@ msgstr "Oscuro"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "Utilizar iconos para fondos de ventana oscuros"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr ""
+msgstr "Elegir automáticamente los iconos en función del color del tema"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3227,18 +3185,18 @@ msgstr "Importar archivo de atajos de teclado:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:240
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Acción | Teclas por defecto | Descripción"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
-#, fuzzy
 msgid "Cmd"
 msgstr "Comando"
 
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
+"Sólo se puede asignar una acción a cada ajuste de desplazamiento vertical"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3298,9 +3256,8 @@ msgid "Drag Gestures"
 msgstr "Gestos de arrastre"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:99
-#, fuzzy
 msgid "Left button drag:"
-msgstr "Arrastrar botón derecho:"
+msgstr "Arrastrar botón izquierdo:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Draw selection rectangle"
@@ -3356,23 +3313,20 @@ msgid "Right button drag:"
 msgstr "Arrastrar botón derecho:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
-#, fuzzy
 msgid "Scroll Gestures"
-msgstr "Gestos"
+msgstr "Gestos de desplazamiento"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:153
-#, fuzzy
 msgid "Vertical touchpad or scroll wheel movement:"
-msgstr "Berrido izquierdo/derecho con el panel táctil o rueda del ratón"
+msgstr "Movimiento vertical del panel táctil o de la rueda de desplazamiento:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:158
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "Sólo se puede asignar una acción a cada columna"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:175
-#, fuzzy
 msgid "--"
-msgstr "-"
+msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:179
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:122
@@ -3401,19 +3355,16 @@ msgid "Zoom:"
 msgstr "Zoom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:207
-#, fuzzy
 msgid "Pan up/down:"
-msgstr "Barrido Arriba/Abajo"
+msgstr "Panorámica arriba/abajo:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:223
-#, fuzzy
 msgid "Pan left/right:"
-msgstr "Barrido Izquierda/Derecha"
+msgstr "Panorámica izquierda/derecha:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:257
-#, fuzzy
 msgid "Pan left/right with horizontal movement"
-msgstr "Berrido izquierdo/derecho con el panel táctil o rueda del ratón"
+msgstr "Panorámica izquierda/derecha con movimiento horizontal"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:258
 msgid ""
@@ -3423,14 +3374,12 @@ msgstr ""
 "izquierda a derecha en el panel táctil"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Restablecer ajustes predeterminados"
+msgstr "Restablecer los valores predeterminados del ratón"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "Restablecer ajustes predeterminados"
+msgstr "Restablecer los valores predeterminados del trackpad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:85
 #: eeschema/dialogs/dialog_edit_line_style.cpp:45
@@ -3470,64 +3419,52 @@ msgid "Netclass name already in use."
 msgstr "Nombre de clase de red en uso."
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
-#, fuzzy
 msgid "Minimum copper clearance"
-msgstr "Margen min"
+msgstr "Distancia mínima del cobre"
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
-#, fuzzy
 msgid "Minimum track width"
-msgstr "Mínimo ancho de pista:"
+msgstr "Ancho de pista mínimo"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "Diámetro de vía:"
+msgstr "Diámetro del pad de vía"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
-#, fuzzy
 msgid "Via plated hole diameter"
-msgstr "Diámetro de vía:"
+msgstr "Diámetro del orificio de vía plateada"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
-#, fuzzy
 msgid "Microvia pad diameter"
-msgstr "Diámetro de vía:"
+msgstr "Diámetro pad de microvía"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
-#, fuzzy
 msgid "Microvia plated hole diameter"
-msgstr "Diámetro de vía:"
+msgstr "Diámetro de orificio vía plateada"
 
 #: common/dialogs/panel_setup_netclasses.cpp:484
-#, fuzzy
 msgid "Differential pair track width"
-msgstr "Ajuste del desvío de par diferencial"
+msgstr "Ancho de pista de par diferencial"
 
 #: common/dialogs/panel_setup_netclasses.cpp:485
-#, fuzzy
 msgid "Differential pair gap"
-msgstr "Par &differencial"
+msgstr "Espaciado de par diferencial"
 
 #: common/dialogs/panel_setup_netclasses.cpp:486
-#, fuzzy
 msgid "Schematic wire thickness"
-msgstr "Propiedades del esquema:"
+msgstr "Grosor de la línea de conexión"
 
 #: common/dialogs/panel_setup_netclasses.cpp:487
-#, fuzzy
 msgid "Bus wire thickness"
-msgstr "Grosor de bus"
+msgstr "Grosor de la línea de BUS"
 
 #: common/dialogs/panel_setup_netclasses.cpp:488
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "Campo de esquema"
+msgstr "Color línea de conexión"
 
 #: common/dialogs/panel_setup_netclasses.cpp:489
-#, fuzzy
 msgid "Schematic wire line style"
-msgstr "Archivos de esquema"
+msgstr "Estilo línea de conexión"
 
 #: common/dialogs/panel_setup_netclasses.cpp:540
 msgid "The default net class is required."
@@ -3556,9 +3493,8 @@ msgid "Via Size"
 msgstr "Diámetro Via"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
-#, fuzzy
 msgid "Via Hole"
-msgstr "Orificios de vía"
+msgstr "Orificio de vía"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:198
@@ -3566,9 +3502,8 @@ msgid "uVia Size"
 msgstr "Tamaño de uVía"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
-#, fuzzy
 msgid "uVia Hole"
-msgstr "Orificios de vía"
+msgstr "Orificio de microvía"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:49
 msgid "DP Width"
@@ -3605,6 +3540,8 @@ msgstr "Por defecto"
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
 msgid "Set color to transparent to use Kicad default color."
 msgstr ""
+"Establezca el color como transparente para utilizar el color por defecto de "
+"KiCad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
@@ -3639,9 +3576,8 @@ msgid "New net class:"
 msgstr "Nueva clase de red:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:178
-#, fuzzy
 msgid "Assign To All Listed Nets"
-msgstr "Asignar a las redes listadas"
+msgstr "Asignar a todas las redes listadas"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:184
 msgid "Assign To Selected Nets"
@@ -3700,9 +3636,9 @@ msgid "Save Report to File"
 msgstr "Guardar informe"
 
 #: common/dialogs/wx_html_report_panel.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "No puede escribirse el informe en el archivo \"%s\"."
+msgstr "No puede escribirse el informe en el archivo '%s'."
 
 #: common/dialogs/wx_html_report_panel.cpp:353
 msgid "File save error"
@@ -3759,9 +3695,9 @@ msgid "Could not use OpenGL"
 msgstr "No puede utilizarse OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' was not fully read."
-msgstr "No se ha leído completamente el archivo \"%s\""
+msgstr "El archivo '%s' no fue leído completamente."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -3805,9 +3741,8 @@ msgstr "Imagen"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:92
 #: common/drawing_sheet/ds_data_model_io.cpp:121
-#, fuzzy
 msgid "Error writing drawing sheet file"
-msgstr "Terminar la hoja de dibujo"
+msgstr "Error al escribir el archivo de la hoja de dibujo"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
@@ -3912,9 +3847,9 @@ msgid "&Help"
 msgstr "A&yuda"
 
 #: common/eda_base_frame.cpp:933
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found."
-msgstr "No se ha encontrado el archivo %s."
+msgstr "No se ha encontrado el archivo '%s'."
 
 #: common/eda_base_frame.cpp:976
 msgid "Preferences"
@@ -3934,11 +3869,9 @@ msgid "Hotkeys"
 msgstr "Atajos"
 
 #: common/eda_base_frame.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr ""
-"Permisos insuficientes para guardar el archivo\n"
-"%s"
+msgstr "Permisos insuficientes para la carpeta '%s'."
 
 #: common/eda_base_frame.cpp:1078
 #, c-format
@@ -3966,14 +3899,14 @@ msgid "Doc Files"
 msgstr "Archivos de documentación"
 
 #: common/eda_doc.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Doc File '%s' not found"
-msgstr "No se ha encontrado el archivo \"%s\" de documentación"
+msgstr "No se ha encontrado el archivo '%s' de documentación"
 
 #: common/eda_doc.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for doc file '%s'"
-msgstr "Tipo MIME desconocido del archivo \"%s\""
+msgstr "Tipo MIME desconocido del archivo '%s'"
 
 #: common/eda_draw_frame.cpp:141 common/tool/actions.cpp:484
 #: pagelayout_editor/pl_editor_frame.cpp:158
@@ -4180,9 +4113,8 @@ msgid "Schematic Field"
 msgstr "Campo de esquema"
 
 #: common/eda_item.cpp:283
-#, fuzzy
 msgid "Schematic Symbol"
-msgstr "Editar símbolos de esquema"
+msgstr "Símbolo esquemático"
 
 #: common/eda_item.cpp:284
 msgid "Sheet Pin"
@@ -4485,14 +4417,14 @@ msgid "Deprecated version of KICAD_SYMBOL_DIR."
 msgstr "Versión obsoleta de KICAD_SYMBOL_DIR."
 
 #: common/exceptions.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "from %s : %s() line %d"
-msgstr "desde %s : %s() línea:%d"
+msgstr "desde %s : %s() línea %d"
 
 #: common/exceptions.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr "%s en \"%s\", línea %d, desplazamiento %d"
+msgstr "%s en '%s', línea %d, desplazamiento %d."
 
 #: common/exceptions.cpp:90
 #, c-format
@@ -4500,26 +4432,21 @@ msgid "from %s : %s() line:%d"
 msgstr "desde %s : %s() línea:%d"
 
 #: common/exceptions.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad no ha podido abrir el archivo, ya que ha sido creado\n"
-"con una versión más reciente de la que está en uso.\n"
-"Para abrirlo, necesita actualizar KiCad a una versión más reciente.\n"
+"KiCad no ha podido abrir el archivo ya que ha sido creado con una versión "
+"más reciente de la que está en uso.\n"
 "\n"
-"Fecha de la versión de KiCad necesaria (o superior): %s\n"
-"\n"
-"Texto completo del error:\n"
-"%s"
+"Para abrirlo, necesita actualizar KiCad a la versión %s o posterior."
 
 #: common/exceptions.cpp:126
-#, fuzzy
 msgid "Full error text:"
-msgstr "Invertir X"
+msgstr "Texto completo del error:"
 
 #: common/filehistory.cpp:155
 msgid "No Files"
@@ -4577,62 +4504,62 @@ msgid "Errors were encountered loading footprints:"
 msgstr "Se han encontrado errores al cargar la huella:"
 
 #: common/fp_lib_table.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
-"Se ha encontrado un nombre de librería duplicado \"%s\"  en la línea %d de "
-"la tabla de librerías de huellas"
+"Se ha encontrado un nombre de librería duplicado '%s' en la línea %d de la "
+"tabla de librerías de huellas"
 
 #: common/fp_lib_table.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr "los archivos de fp-lib-table no contienen la librería de nombre \"%s\""
+msgstr "La tabla fp-lib-table no contienen la librería de nombre '%s'."
 
 #: common/fp_lib_table.cpp:492
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
 #: eeschema/symbol_lib_table.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "No se puede crear la ruta \"%s\" de la tabla global de librerías."
+msgstr "No se puede crear la ruta '%s' de la tabla global de librerías."
 
 #: common/gestfich.cpp:190
-#, fuzzy, c-format
+#, c-format
 msgid "Command '%s' could not be found."
-msgstr "No se ha podido encontrar el comando \"%s\""
+msgstr "No se ha podido encontrar el comando '%s'."
 
 #: common/gestfich.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Problem while running the PDF viewer.\n"
 "Command is '%s'."
 msgstr ""
-"Se ha encontrado un problema al ejecutar el visor de PDFs\n"
-"El comando es \"%s\""
+"Se ha encontrado un problema al ejecutar el visor de PDFs.\n"
+"El comando es '%s'."
 
 #: common/gestfich.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a PDF viewer for '%s'."
-msgstr "No se puede encontrar un visor de PDF para \"%s\""
+msgstr "No se ha podido encontrar un visor de PDF para '%s'."
 
 #: common/gestfich.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot print '%s'.\n"
 "\n"
 "Unknown file type."
 msgstr ""
-"No puede imprimirse '%s'.\n"
+"No se puede imprimir '%s'.\n"
 "\n"
 "Tipo de archivo desconocido."
 
 #: common/gestfich.cpp:378 eeschema/eeschema.cpp:404 eeschema/eeschema.cpp:436
 #: gerbview/gerbview.cpp:231 kicad/project_template.cpp:257
 #: pcbnew/pcbnew.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy file '%s'."
-msgstr "No puede copiarse al archivo \"%s\"."
+msgstr "No puede copiarse al archivo '%s'."
 
 #: common/grid_tricks.cpp:241 common/tool/actions.cpp:154
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1890
@@ -4669,9 +4596,8 @@ msgid "Delete"
 msgstr "Eliminar"
 
 #: common/grid_tricks.cpp:244
-#, fuzzy
 msgid "Delete selected cells"
-msgstr "Elimina el/los elemento/s seleccionado/s."
+msgstr "Borrar las celdas seleccionadas"
 
 #: common/grid_tricks.cpp:245 common/tool/actions.cpp:172
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -4724,9 +4650,8 @@ msgid "Ignore Other Snaps"
 msgstr "Ignorar otros ajustes"
 
 #: common/hotkey_store.cpp:59
-#, fuzzy
 msgid "Ignore H/V/45 Constraints"
-msgstr "Requerimientos"
+msgstr "Ignorar restricciones H/V/45"
 
 #: common/hotkey_store.cpp:64 common/tool/action_menu.cpp:224
 #: common/tool/actions.cpp:115
@@ -4740,21 +4665,18 @@ msgstr "Administrador de proyectos"
 #: common/hotkey_store.cpp:80 eeschema/eeschema_config.cpp:67
 #: eeschema/menubar.cpp:125 eeschema/sch_edit_frame.cpp:1285
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Opciones del Editor de esquemas"
+msgstr "Editor de esquemas"
 
 #: common/hotkey_store.cpp:81 kicad/tools/kicad_manager_actions.cpp:76
 #: pcbnew/menubar_pcb_editor.cpp:184 pcbnew/pcb_edit_frame.cpp:1259
 #: pcbnew/pcbnew_config.cpp:57
-#, fuzzy
 msgid "PCB Editor"
-msgstr "Abrir Edit&or de placas"
+msgstr "Editor de placas"
 
 #: common/hotkey_store.cpp:82 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:86 pagelayout_editor/pl_editor_frame.cpp:481
 #: pagelayout_editor/pl_editor_frame.cpp:555
-#, fuzzy
 msgid "Drawing Sheet Editor"
 msgstr "Editor de hoja de trabajo"
 
@@ -4763,16 +4685,16 @@ msgid "Gestures"
 msgstr "Gestos"
 
 #: common/kiway.cpp:253
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "No ha podido cargarse la librería kiface \"%s\"."
+msgstr "No ha podido cargarse la librería kiface '%s'."
 
 #: common/kiway.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
 msgstr ""
-"No ha podido leerse el nombre de instancia ni la versión del símbolo desde "
-"la librería kiface \"%s\"."
+"No se puede leer el nombre de instancia ni la versión desde la librería "
+"kiface '%s'."
 
 #: common/kiway.cpp:295
 #, c-format
@@ -4802,9 +4724,8 @@ msgstr ""
 "'"
 
 #: common/kiway.cpp:411 common/kiway.cpp:415 common/kiway.cpp:419
-#, fuzzy
 msgid "Error loading editor."
-msgstr "Error al cargar el editor"
+msgstr "Error al cargar el editor."
 
 #: common/kiway.cpp:504
 #, c-format
@@ -5056,23 +4977,20 @@ msgid "Rescue"
 msgstr "Recuperar"
 
 #: common/layer_id.cpp:105
-#, fuzzy
 msgid "Wires"
-msgstr "Línea"
+msgstr "Líneas"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
 msgstr "Buses"
 
 #: common/layer_id.cpp:107
-#, fuzzy
 msgid "Bus junctions"
-msgstr "Unión de BUS"
+msgstr "Uniones de BUS"
 
 #: common/layer_id.cpp:108
-#, fuzzy
 msgid "Junctions"
-msgstr "Unión"
+msgstr "Uniones"
 
 #: common/layer_id.cpp:109
 msgid "Labels"
@@ -5089,71 +5007,60 @@ msgid "Hierarchical labels"
 msgstr "Etiquetas jerárquicas"
 
 #: common/layer_id.cpp:112
-#, fuzzy
 msgid "Pin numbers"
-msgstr "Números de pin:"
+msgstr "Números de pin"
 
 #: common/layer_id.cpp:113
-#, fuzzy
 msgid "Pin names"
-msgstr "Nombre de pin"
+msgstr "Nombres de pin"
 
 #: common/layer_id.cpp:114
-#, fuzzy
 msgid "Symbol references"
-msgstr "Referencia de símbolo"
+msgstr "Referencias de símbolo"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Symbol values"
-msgstr "Valor del símbolo"
+msgstr "Valores de símbolo"
 
 #: common/layer_id.cpp:116
 msgid "Symbol fields"
 msgstr "Campos del símbolo"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Symbol body outlines"
-msgstr "Contorno del cuerpo del símbolo"
+msgstr "Contornos del cuerpo del símbolo"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Symbol body fills"
-msgstr "Relleno del cuerpo del símbolo"
+msgstr "Rellenos del cuerpo del símbolo"
 
 #: common/layer_id.cpp:119
 msgid "Notes"
 msgstr "Notas"
 
 #: common/layer_id.cpp:120
-#, fuzzy
 msgid "Pins"
-msgstr "Añadir Pin"
+msgstr "Pines"
 
 #: common/layer_id.cpp:121
-#, fuzzy
 msgid "Sheet borders"
-msgstr "Borde de la hoja"
+msgstr "Bordes de hoja"
 
 #: common/layer_id.cpp:122
-#, fuzzy
 msgid "Sheet backgrounds"
-msgstr "Fondo de la hoja"
+msgstr "Fondos de hoja"
 
 #: common/layer_id.cpp:123
-#, fuzzy
 msgid "Sheet names"
-msgstr "Nombre de hoja"
+msgstr "Nombres de hoja"
 
 #: common/layer_id.cpp:124
 msgid "Sheet fields"
 msgstr "Campos de la hoja"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Sheet file names"
-msgstr "Nombre de archivo de la hoja"
+msgstr "Nombres de archivo de hoja"
 
 #: common/layer_id.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
@@ -5161,19 +5068,16 @@ msgid "Sheet pins"
 msgstr "Pines de página"
 
 #: common/layer_id.cpp:127
-#, fuzzy
 msgid "No-connect symbols"
-msgstr "Símbolo de no conectado"
+msgstr "Símbolos de no conectado"
 
 #: common/layer_id.cpp:128
-#, fuzzy
 msgid "ERC warnings"
-msgstr "Aviso de ERC"
+msgstr "Avisos de ERC"
 
 #: common/layer_id.cpp:129
-#, fuzzy
 msgid "ERC errors"
-msgstr "Error de ERC"
+msgstr "Errores de ERC"
 
 #: common/layer_id.cpp:130 common/layer_id.cpp:170
 msgid "Helper items"
@@ -5203,26 +5107,22 @@ msgid "Highlighted items"
 msgstr "Elementos resaltados:"
 
 #: common/layer_id.cpp:136
-#, fuzzy
 msgid "Hidden items"
-msgstr "Elemento oculto"
+msgstr "Elementos oculto"
 
 #: common/layer_id.cpp:137 common/layer_id.cpp:174
 msgid "Selection highlight"
 msgstr "Remarcar selección"
 
 #: common/layer_id.cpp:138 common/layer_id.cpp:168
-#, fuzzy
 msgid "Drawing sheet"
-msgstr "Arrastrar hoja"
+msgstr "Hoja de dibujo"
 
 #: common/layer_id.cpp:142
-#, fuzzy
 msgid "Footprints front"
 msgstr "Huellas frontales"
 
 #: common/layer_id.cpp:143
-#, fuzzy
 msgid "Footprints back"
 msgstr "Huellas traseras"
 
@@ -5243,32 +5143,26 @@ msgid "Reference designators"
 msgstr "Indicadores de referencia"
 
 #: common/layer_id.cpp:146
-#, fuzzy
 msgid "Footprint text front"
-msgstr "Texto frontal de huellas"
+msgstr "Texto frontal de huella"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text back"
-msgstr "Texto trasero de huellas"
+msgstr "Texto trasero de huella"
 
 #: common/layer_id.cpp:148
-#, fuzzy
 msgid "Hidden text"
 msgstr "Texto oculto"
 
 #: common/layer_id.cpp:149
-#, fuzzy
 msgid "Pads front"
 msgstr "Pads frontales"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Pads back"
 msgstr "Pads traseros"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Through-hole pads"
 msgstr "Pads pasantes"
 
@@ -5282,42 +5176,34 @@ msgid "Tracks"
 msgstr "Pistas"
 
 #: common/layer_id.cpp:153
-#, fuzzy
 msgid "Through vias"
-msgstr "Vías pasantes:"
+msgstr "Vías pasantes"
 
 #: common/layer_id.cpp:154
-#, fuzzy
 msgid "Bl/Buried vias"
-msgstr "Vía ciega/enterrada"
+msgstr "Vías ciegas/enterradas"
 
 #: common/layer_id.cpp:155
-#, fuzzy
 msgid "Micro-vias"
-msgstr "Microvías:"
+msgstr "Microvías"
 
 #: common/layer_id.cpp:156
-#, fuzzy
 msgid "Via holes"
 msgstr "Orificios de vía"
 
 #: common/layer_id.cpp:157
-#, fuzzy
 msgid "Via hole walls"
-msgstr "Orificios de vía"
+msgstr "Paredes de orificios de vía"
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Plated holes"
 msgstr "Orificios plateados"
 
 #: common/layer_id.cpp:159
-#, fuzzy
 msgid "Plated hole walls"
-msgstr "Orificios plateados"
+msgstr "Paredes de orificios plateados"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Non-plated holes"
 msgstr "Orificios no plateados"
 
@@ -5329,27 +5215,22 @@ msgid "Ratsnest"
 msgstr "Líneas aéreas"
 
 #: common/layer_id.cpp:162
-#, fuzzy
 msgid "No-connects"
 msgstr "Sin conectar"
 
 #: common/layer_id.cpp:163
-#, fuzzy
 msgid "DRC warnings"
 msgstr "Avisos de DRC"
 
 #: common/layer_id.cpp:164
-#, fuzzy
 msgid "DRC errors"
 msgstr "Errores de DRC"
 
 #: common/layer_id.cpp:165
-#, fuzzy
 msgid "DRC exclusions"
 msgstr "Exclusiones DRC"
 
 #: common/layer_id.cpp:166
-#, fuzzy
 msgid "DRC marker shadows"
 msgstr "Sombras de marcadores DRC"
 
@@ -5358,7 +5239,6 @@ msgid "Anchors"
 msgstr "Anclas"
 
 #: common/layer_id.cpp:172
-#, fuzzy
 msgid "Grid axes"
 msgstr "Ejes de la cuadrícula"
 
@@ -5426,12 +5306,12 @@ msgstr "Faltan las unidades de '%s'| (%s)"
 #: common/libeval_compiler/libeval_compiler.cpp:1120
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "Error de tipo entre '%s' y %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "Error de tipo entre %lf y '%s'"
 
 #: common/pgm_base.cpp:166
 msgid "No default editor found, you must choose it"
@@ -5450,9 +5330,8 @@ msgid "Select Preferred Editor"
 msgstr "Seleccionar el editor preferido"
 
 #: common/pgm_base.cpp:212
-#, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "No puede renombrase la variable de entorno \"%s\"."
+msgstr "La variable de entorno HOME está vacía.  No se puede continuar."
 
 #: common/pgm_base.cpp:421
 msgid "This language is not supported by the operating system."
@@ -5468,16 +5347,19 @@ msgid ""
 "properties. Because this is missing, imported data might be malformed or "
 "missing."
 msgstr ""
+"Para la importación de Altium, asumimos un byte nulo al final de una lista "
+"de propiedades. Debido a que esto falta, los datos importados podrían estar "
+"malformados o faltar."
 
 #: common/plugins/altium/altium_parser.cpp:228
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr ""
+msgstr "La unidad '%s' no termina en 'mil'."
 
 #: common/plugins/altium/altium_parser.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "No puede convertirse \"%s\" a un entero"
+msgstr "No se puede convertir '%s' a doble."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2319
 #, c-format
@@ -5535,14 +5417,12 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Arco no válido con radio %f y ángulo %f"
 
 #: common/project.cpp:311 common/project.cpp:316 pcbnew/pcb_base_frame.cpp:156
-#, fuzzy
 msgid "Error loading project footprint library table."
-msgstr "Error al cargar la tabla de librerías de huellas del proyecto"
+msgstr "Error al cargar la tabla de librerías de huellas del proyecto."
 
 #: common/project/project_archiver.cpp:63
-#, fuzzy
 msgid "Failed to output data."
-msgstr "Error de apertura"
+msgstr "No se pudieron generar datos."
 
 #: common/project/project_archiver.cpp:91
 msgid "Could not open archive file\n"
@@ -5553,33 +5433,33 @@ msgid "Invalid archive file format\n"
 msgstr "Formato de archivo no válido\n"
 
 #: common/project/project_archiver.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'.\n"
-msgstr "Extrayendo archivo \"%s\"\n"
+msgstr "Extrayendo el archivo '%s'.\n"
 
 #: common/project/project_archiver.cpp:151
 msgid "Error extracting file!\n"
 msgstr "¡Error al extraer el archivo!\n"
 
 #: common/project/project_archiver.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create archive file '%s'.\n"
-msgstr "No puede crearse el archivo \"%s\"\n"
+msgstr "No puede crearse el archivo '%s'.\n"
 
 #: common/project/project_archiver.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'.\n"
-msgstr "Archivo \"%s\"\n"
+msgstr "Archivo guardado '%s'.\n"
 
 #: common/project/project_archiver.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'.\n"
-msgstr "No ha podido crearse el archivo de respaldo \"%s\".\n"
+msgstr "No ha podido guardarse el archivo '%s'.\n"
 
 #: common/project/project_archiver.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed).\n"
-msgstr "Se ha creado archivo Zip \"%s\" (%s sin comprimir, %s comprimido)\n"
+msgstr "Se ha creado archivo Zip '%s' (%s sin comprimir, %s comprimido).\n"
 
 #: common/rc_item.cpp:353
 msgid "Excluded "
@@ -5594,9 +5474,9 @@ msgid "Warning: "
 msgstr "Aviso: "
 
 #: common/richio.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open %s for reading."
-msgstr "No puede abrirse al archivo \"%s\" para lectura"
+msgstr "No puede abrirse al archivo '%s' para lectura."
 
 #: common/richio.cpp:221 common/richio.cpp:316
 msgid "Maximum line length exceeded"
@@ -5853,29 +5733,27 @@ msgid "Replace all matches"
 msgstr "Reemplazar todas las concordancias"
 
 #: common/tool/actions.cpp:250
-#, fuzzy
 msgid "Previous Marker"
-msgstr "Cambiar a la capa anterior"
+msgstr "Marcador anterior"
 
 #: common/tool/actions.cpp:250
-#, fuzzy
 msgid "Go to previous marker in Checker window"
-msgstr "Mostrar la ventana comprobación de las reglas de diseño"
+msgstr ""
+"Ir a marcador anterior en la ventana comprobación de las reglas de diseño"
 
 #: common/tool/actions.cpp:255
-#, fuzzy
 msgid "Next Marker"
-msgstr "Buscar Marcador Siguiente"
+msgstr "Siguiente marcador"
 
 #: common/tool/actions.cpp:255
-#, fuzzy
 msgid "Go to next marker in Checker window"
-msgstr "Mostrar la ventana comprobación de las reglas de diseño"
+msgstr ""
+"Ir al siguiente marcador en la ventana de comprobación de las reglas de "
+"diseño"
 
 #: common/tool/actions.cpp:260
-#, fuzzy
 msgid "Exclude Marker"
-msgstr "Excluido "
+msgstr "Excluir marcador"
 
 #: common/tool/actions.cpp:260
 msgid "Mark current violation in Checker window as an exclusion"
@@ -5969,18 +5847,16 @@ msgid "Pin Library"
 msgstr "Fijar librería"
 
 #: common/tool/actions.cpp:408
-#, fuzzy
 msgid "Keep the library at the top of the list"
-msgstr "Seleccione la Tabla de librerías a la que añadir la librería:"
+msgstr "Mantener la librería al comienzo de la lista"
 
 #: common/tool/actions.cpp:411
 msgid "Unpin Library"
 msgstr "No fijar librería"
 
 #: common/tool/actions.cpp:412
-#, fuzzy
 msgid "No longer keep the library at the top of the list"
-msgstr "Seleccione la Tabla de librerías a la que añadir la librería:"
+msgstr "Dejar de mantener la librería al comienzo de la lista"
 
 #: common/tool/actions.cpp:417
 msgid "Pan Up"
@@ -6248,36 +6124,39 @@ msgstr "Abrir \"Contribuya con KiCad\" en el navegador web"
 
 #: common/tool/actions.cpp:638
 msgid "Donate"
-msgstr ""
+msgstr "Donar"
 
 #: common/tool/actions.cpp:639
-#, fuzzy
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "Abrir \"Contribuya con KiCad\" en el navegador web"
+msgstr "Abrir \"Donar a KiCad\" en el navegador web"
 
 #: common/tool/actions.cpp:643
 msgid "Report Bug"
 msgstr "Informar de un error"
 
 #: common/tool/common_control.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' or\n"
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "No puede encontrase el archivo de ayuda \"%s\"."
+msgstr ""
+"No puede encontrarse el archivo de ayuda '%s'\n"
+"o '%s'.\n"
+"¿Quiere acceder a la ayuda en línea de KiCad?"
 
 #: common/tool/common_control.cpp:219 common/tool/common_control.cpp:239
-#, fuzzy
 msgid "File Not Found"
 msgstr "Archivo no encontrado"
 
 #: common/tool/common_control.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "No puede encontrase el archivo de ayuda \"%s\"."
+msgstr ""
+"No puede encontrase el archivo de ayuda '%s'.\n"
+"¿Quiere acceder a la ayuda en línea de KiCad?"
 
 #: common/tool/common_control.cpp:266
 #, c-format
@@ -6293,18 +6172,17 @@ msgid "Get involved with KiCad"
 msgstr "Colabore con KiCad"
 
 #: common/tool/common_control.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
 "No se pudo iniciar el explorador predeterminado.\n"
-"Para obtener información sobre cómo ayudar al proyecto KiCad, visite %s"
+"Para donar al proyecto KiCad, visite %s"
 
 #: common/tool/common_control.cpp:283
-#, fuzzy
 msgid "Donate to KiCad"
-msgstr "¡Bienvenido a KiCad %s!"
+msgstr "Donar a KiCad"
 
 #: common/tool/grid_menu.cpp:93
 #, c-format
@@ -6335,9 +6213,9 @@ msgid "Entry contains leading white space."
 msgstr "La entrada contiene un espacio en blanco al comienzo."
 
 #: common/validators.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid library identifier format."
-msgstr "\"%s\" no es un formato de identificador de librería válido."
+msgstr "'%s' no es un formato de identificador de librería válido."
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
@@ -6360,31 +6238,26 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Aún no está implementado el reflejo sobre el eje Y"
 
 #: common/widgets/footprint_preview_widget.cpp:103
-#, fuzzy
 msgid "Footprint not found."
-msgstr "No se ha encontrado la huella"
+msgstr "No se ha encontrado la huella."
 
 #: common/widgets/footprint_select_widget.cpp:144
 msgid "No default footprint"
 msgstr "No hay huella predeterminada"
 
 #: common/widgets/gal_options_panel.cpp:82
-#, fuzzy
 msgid "Accelerated graphics"
-msgstr "Gráficos acelerados:"
+msgstr "Gráficos acelerados"
 
 #: common/widgets/gal_options_panel.cpp:82
-#, fuzzy
 msgid "Fallback graphics"
-msgstr "Gráficos de reserva:"
+msgstr "Gráficos de reserva"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Rendering Engine"
 msgstr "Motor de renderizado"
 
 #: common/widgets/gal_options_panel.cpp:87
-#, fuzzy
 msgid "Hardware-accelerated graphics (recommended)"
 msgstr "Utilizar aceleración gráfica por hardware (recomendado)"
 
@@ -6393,6 +6266,8 @@ msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Gráficos de software (para ordenadores que no soportan los requisitos de "
+"aceleración de hardware de KiCad)"
 
 #: common/widgets/gal_options_panel.cpp:100
 msgid "Grid Options"
@@ -6566,13 +6441,13 @@ msgid "Restore Default"
 msgstr "Restablecer valores predeterminados"
 
 #: common/widgets/widget_hotkey_list.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
 msgstr ""
-"\"%s\" ya ha sido asignado a \"%s\" en la sección \"%s\". ¿Está seguro de "
-"que quiere modificar la asignación?"
+"'%s' ya ha sido asignado a '%s' en la sección '%s'. ¿Está seguro de que "
+"quiere modificar la asignación?"
 
 #: common/widgets/widget_hotkey_list.cpp:425
 msgid "Confirm change"
@@ -6712,9 +6587,8 @@ msgid "Geda PCB footprint library files"
 msgstr "Archivos de librería de huellas de Geda PCB"
 
 #: common/wildcards_and_files_ext.cpp:358
-#, fuzzy
 msgid "Drawing sheet files"
-msgstr "Arrastrar hoja"
+msgstr "Archivos de hoja de dibujo"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad symbol footprint link files"
@@ -6749,9 +6623,8 @@ msgid "Report files"
 msgstr "Archivos de informe"
 
 #: common/wildcards_and_files_ext.cpp:414
-#, fuzzy
 msgid "Component placement files"
-msgstr "Archivo colocación lado componentes:"
+msgstr "Archivos colocación de componentes"
 
 #: common/wildcards_and_files_ext.cpp:420
 msgid "VRML and X3D files"
@@ -6770,7 +6643,6 @@ msgid "Legacy footprint export files"
 msgstr "Archivos de exportación de huellas obsoletas"
 
 #: common/wildcards_and_files_ext.cpp:444
-#, fuzzy
 msgid "Electrical rule check file"
 msgstr "Archivo de comprobación de reglas eléctricas"
 
@@ -6828,25 +6700,25 @@ msgid "Jpeg file"
 msgstr "Archivo Jpeg"
 
 #: cvpcb/auto_associate.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found in the default search paths."
 msgstr ""
-"No se puede encontrar el archivo de equivalencia \"%s\" en la ruta por "
+"No se puede encontrar el archivo de equivalencia '%s' en las rutas por "
 "defecto."
 
 #: cvpcb/auto_associate.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening equivalence file '%s'."
-msgstr "Error al abrir el archivo de equivalencia \"%s\"."
+msgstr "Error al abrir el archivo de equivalencia '%s'."
 
 #: cvpcb/auto_associate.cpp:179
 msgid "Equivalence File Load Error"
 msgstr "Error al cargar el archivo de equivalencia"
 
 #: cvpcb/auto_associate.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "Encontradas equivalencias para la huella/cmp %lu."
+msgstr "Encontradas equivalencias para la huella %lu."
 
 #: cvpcb/auto_associate.cpp:262
 #, c-format
@@ -6882,12 +6754,11 @@ msgstr ""
 "CvPcb para mayor información."
 
 #: cvpcb/cvpcb.cpp:187
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table."
 msgstr ""
 "Ha ocurrido un error al intentar cargar la tabla global de librerías de "
-"huellas"
+"huellas."
 
 #: cvpcb/cvpcb_mainframe.cpp:64 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
@@ -6921,9 +6792,9 @@ msgstr ""
 "cambios?"
 
 #: cvpcb/cvpcb_mainframe.cpp:524 cvpcb/tools/cvpcb_association_tool.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint."
-msgstr "\"%s\" no es una huella válida."
+msgstr "'%s' no es una huella válida."
 
 #: cvpcb/cvpcb_mainframe.cpp:679 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1416 eeschema/symbol_editor/symbol_editor.cpp:1215
@@ -6993,9 +6864,9 @@ msgstr ""
 "%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Project file: '%s'"
-msgstr "Archivo de proyecto: \"%s\""
+msgstr "Archivo de proyecto: '%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 msgid "No editor defined in KiCad. Please choose it."
@@ -7006,9 +6877,9 @@ msgid "Footprint Association File"
 msgstr "Archivo de asociación de huellas"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists in list."
-msgstr "El archivo \"%s\" ya existe en la lista"
+msgstr "El archivo '%s' ya existe en la lista."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
@@ -7115,20 +6986,20 @@ msgid "Footprint Viewer"
 msgstr "Visor de huellas"
 
 #: cvpcb/display_footprints_frame.cpp:400
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr "El ID de huella \"%s\" no es válido."
+msgstr "El ID de la huella '%s' no es válido."
 
 #: cvpcb/display_footprints_frame.cpp:415
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "La librería \"%s\" no está en la tabla de librerías de huellas."
+msgstr "La biblioteca '%s' no está en la tabla de bibliotecas de huellas."
 
 #: cvpcb/display_footprints_frame.cpp:424
 #: cvpcb/display_footprints_frame.cpp:449
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found."
-msgstr "No se ha encontrado la huella \"%s\"."
+msgstr "No se ha encontrado la huella '%s'."
 
 #: cvpcb/display_footprints_frame.cpp:479 pcbnew/footprint.cpp:878
 #, c-format
@@ -7141,30 +7012,29 @@ msgid "Lib: %s"
 msgstr "Librería: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"Algunas de las librerías asignadas son entradas obsoletas (no disponen de "
-"alias). ¿Desea que CvPcb intente convertirlas al nuevo formato requerido "
+"Algunas de las librerías asignadas son entradas obsoletas que no disponen de "
+"nombre. ¿Desea que KiCad intente convertirlas al nuevo formato requerido "
 "LIB_ID? (Si su respuesta es negativa, esas asignaciones serán eliminadas y "
 "deberá reasignar esas huellas manualmente.)"
 
 #: cvpcb/readwrite_dlgs.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
 msgstr ""
-"Para el componente \"%s\" <b>no se ha encontrado</b> la huella \"%s\" en "
-"ninguna librería.\n"
+"Para el componente '%s' <b>no se ha encontrado</b> la huella '%s' en ninguna "
+"librería.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
 msgstr ""
-"Para el componente \"%s\" se ha encontrado la huella \"%s\" en <b>varias</b> "
+"Para el componente '%s' se ha encontrado la huella '%s' en <b>varias</b> "
 "librerías.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:164
@@ -7236,44 +7106,36 @@ msgstr ""
 "esquema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:91
-#, fuzzy
 msgid "Select next unassigned symbol"
 msgstr "Seleccionar siguiente símbolo sin vincular"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
-#, fuzzy
 msgid "Select next symbol with no footprint assignment"
-msgstr "Eliminar todas las asociaciones de huellas"
+msgstr "Seleccionar siguiente símbolo sin huella asignada"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
-#, fuzzy
 msgid "Select previous unassigned symbol"
 msgstr "Seleccionar símbolo no vinculado previo"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
-#, fuzzy
 msgid "Select previous symbol with no footprint assignment"
-msgstr "Eliminar todas las asociaciones de huellas"
+msgstr "Seleccionar el símbolo anterior sin huella asignada"
 
 #: cvpcb/tools/cvpcb_actions.cpp:108
-#, fuzzy
 msgid "Assign footprint"
 msgstr "Asignar huella"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
-#, fuzzy
 msgid "Assign footprint to selected symbols"
-msgstr "Asignar huellas a símbolos de esquema"
+msgstr "Asignar huellas a los símbolos seleccionados"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
-#, fuzzy
 msgid "Automatically assign footprints"
 msgstr "Vincular huellas automáticamente"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
-#, fuzzy
 msgid "Perform automatic footprint assignment"
-msgstr "Vincular automáticamente"
+msgstr "Realizar asignación automática de huellas"
 
 #: cvpcb/tools/cvpcb_actions.cpp:121
 msgid "Delete association"
@@ -7367,22 +7229,22 @@ msgid "Item not annotated: %s%s\n"
 msgstr "Elemento sin anotar: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr ""
-"Error: símbolo %s%s unidad %d y símbolo solo tiene %d unidades definidas\n"
+"Error: el símbolo %s%s%s (unidad %d) sobrepasa las unidades definidas (%d)\n"
 
 #: eeschema/component_references_lister.cpp:668
 #: eeschema/component_references_lister.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "Elemento múltiple %s%s\n"
+msgstr "Duplicar elementos %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:675
 #: eeschema/component_references_lister.cpp:705
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s\n"
-msgstr "Elemento múltiple %s%s\n"
+msgstr "Duplicar elementos %s%s\n"
 
 #: eeschema/component_references_lister.cpp:719
 #, c-format
@@ -7405,17 +7267,16 @@ msgstr ""
 "La red %s está conectada gráficamente al bus %s pero no a un miembro del bus"
 
 #: eeschema/connection_graph.cpp:2877
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "El puerto de hoja %s no tiene una etiqueta jerárquica correspondiente en la "
 "hoja"
 
 #: eeschema/connection_graph.cpp:2894
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr ""
-"La etiqueta jerárquica %s no está conectada a ninguna etiqueta de hoja."
+msgstr "La etiqueta jerárquica %s no está conectada a la hoja pricipal"
 
 #: eeschema/cross-probing.cpp:265 pcbnew/cross-probing.cpp:171
 #, c-format
@@ -7423,9 +7284,9 @@ msgid "%s pin %s found"
 msgstr "%s pin %s encontrado"
 
 #: eeschema/cross-probing.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "%s found but pin %s not found"
-msgstr "Se ha encontrado %s pero no %s"
+msgstr "Se ha encontrado %s pero no el pin %s"
 
 #: eeschema/cross-probing.cpp:271 pcbnew/cross-probing.cpp:184
 #, c-format
@@ -7459,9 +7320,8 @@ msgid "Current sheet only"
 msgstr "Solo hoja actual"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
-#, fuzzy
 msgid "Selection only"
-msgstr "Eliminar selección"
+msgstr "Solo la selección"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:23
@@ -7476,14 +7336,12 @@ msgid "Order"
 msgstr "Orden"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
-#, fuzzy
 msgid "Sort symbols by &X position"
-msgstr "Ordenar los componentes por su posición &X"
+msgstr "Ordenar los símbolos por su posición &X"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:69
-#, fuzzy
 msgid "Sort symbols by &Y position"
-msgstr "Ordenar los componentes por su posición &Y"
+msgstr "Ordenar los símbolos por su posición &Y"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:84
 msgid "Keep existing annotations"
@@ -7522,14 +7380,13 @@ msgid "Generate"
 msgstr "Generar"
 
 #: eeschema/dialogs/dialog_bom.cpp:217
-#, fuzzy
 msgid "(file missing)"
-msgstr "No se encuentra.\n"
+msgstr "(no se encuentra el archivo)"
 
 #: eeschema/dialogs/dialog_bom.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Esta acción no puede deshacerse."
+msgstr "No puede encontrarse el script generador de BOM seleccionado %s."
 
 #: eeschema/dialogs/dialog_bom.cpp:299
 #, c-format
@@ -7540,12 +7397,15 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Buscado:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:345
-#, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr ""
-"Para exportar la lista de redes se necesita un esquema anotado completamente."
+msgstr "La generación de BOM necesita un esquema anotado completamente."
 
 #: eeschema/dialogs/dialog_bom.cpp:382 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -7556,9 +7416,9 @@ msgid "Add Generator"
 msgstr "Añadir generador"
 
 #: eeschema/dialogs/dialog_bom.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Nickname '%s' already in use."
-msgstr "El alias \"%s\" ya está en uso."
+msgstr "El alias '%s' ya está en uso."
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:685
 msgid "Generator files:"
@@ -7612,9 +7472,10 @@ msgstr ""
 "Establezca esta opción para mostrar la ventana del comando en ejecución."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
-#, fuzzy
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "Ajustar a 0 para utilizar los valores por defecto"
+msgstr ""
+"Restablecer la lista de scripts del generador de BOM a la configuración por "
+"defecto"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
@@ -8034,9 +7895,8 @@ msgid "Change Symbols"
 msgstr "Cambiar símbolos"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:76
-#, fuzzy
 msgid "Change selected symbol(s)"
-msgstr "Cambiar símbolo seleccionado"
+msgstr "Cambiar símbolo(s) seleccionado(s)"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching reference designator:"
@@ -8063,9 +7923,8 @@ msgid "Reset fields if empty in new symbol"
 msgstr "Reiniciar campos si están vacíos en un símbolo nuevo"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
-#, fuzzy
 msgid "Update field text"
-msgstr "Actualizar campos"
+msgstr "Actualizar texto del campo"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:136
 msgid "Update field visibilities"
@@ -8080,9 +7939,8 @@ msgid "Update field positions"
 msgstr "Actualizar posición de los campos"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Archivos de &fabricación"
+msgstr "Actualizar atributos del símbolo"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:159
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:165
@@ -8096,24 +7954,24 @@ msgid "Update"
 msgstr "Actualizar"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr "Actualizado %s de %s a %s"
+msgstr "Actualizar símbolo %s de '%s' a '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "Actualizado %s de %s a %s"
+msgstr "Actualizar símbolos %s de '%s' a '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "Cambiar el valor %s de %s a %s."
+msgstr "Cambiar el símbolo %s de '%s' a '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:540
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "Cambiar el valor %s de %s a %s."
+msgstr "Cambiar símbolos %s de '%s' a '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:551
 msgid "*** symbol not found ***"
@@ -8128,9 +7986,8 @@ msgid "Update all symbols in schematic"
 msgstr "Actualizar todos los símbolos en el esquema"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
-#, fuzzy
 msgid "Update selected symbol(s)"
-msgstr "Actualizar el símbolo seleccionado"
+msgstr "Actualizar símbolo(s) seleccionado(s)"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
@@ -8150,9 +8007,8 @@ msgstr "Nuevo identificador de librería:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
-#, fuzzy
 msgid "Update/reset Fields"
-msgstr "Actualizar campos"
+msgstr "Actualizar/restablecer campos"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:108
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:50
@@ -8183,32 +8039,27 @@ msgstr "Reiniciar campos si están vacíos en el símbolo de la librería"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "Actualizar campos"
+msgstr "Actualizar/restablecer texto del campo"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
-#, fuzzy
 msgid "Update/reset field visibilities"
-msgstr "Actualizar la visibilidad de los campos"
+msgstr "Actualizar/restablecer las visibilidades de los campos"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:136
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:78
-#, fuzzy
 msgid "Update/reset field sizes and styles"
-msgstr "Actualizar tamaños y estilos de los campos"
+msgstr "Actualizar/restablecer los tamaños y estilos de los campos"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:139
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
-#, fuzzy
 msgid "Update/reset field positions"
-msgstr "Actualizar posición de los campos"
+msgstr "Actualizar/restablecer las posiciones de los campos"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:145
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "Archivos de &fabricación"
+msgstr "Actualizar/restablecer los atributos de los símbolos"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:100
 msgid "Update Symbols from Library"
@@ -8220,14 +8071,12 @@ msgid "Select with Browser"
 msgstr "Seleccionar con el navegador"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:147
-#, fuzzy
 msgid "Place repeated copies"
-msgstr "Emplazar huellas seleccionadas"
+msgstr "Emplazar copias repetidas"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:149
-#, fuzzy
 msgid "Keep the symbol selected for subsequent clicks."
-msgstr "No hay ningún símbolo seleccionado para guardar."
+msgstr "Mantener el símbolo seleccionado para los siguientes clics."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:151
 msgid "Place all units"
@@ -8242,9 +8091,9 @@ msgstr "Emplazar secuencialmente todas las unidades del símbolo."
 #: eeschema/generate_alias_info.cpp:81 eeschema/sch_base_frame.cpp:70
 #: eeschema/symbol_editor/symbol_editor.cpp:288
 #: eeschema/widgets/symbol_preview_widget.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "Ha ocurrido un error al cargar el símbolo '%s' desde la librería '%s'."
+msgstr "Ha ocurrido un error al cargar el símbolo %s desde la librería '%s'."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:430
 msgid "No footprint specified"
@@ -8282,7 +8131,7 @@ msgstr "Propiedades del texto"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:348
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "La etiqueta requiere un texto no vacío."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -8313,9 +8162,8 @@ msgstr "Ayuda de sintaxis"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:99
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
-#, fuzzy
 msgid "Show syntax help window"
-msgstr "Mostrar consola"
+msgstr "Mostrar la ventana de ayuda de sintaxis"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
@@ -8348,9 +8196,8 @@ msgid "Align top"
 msgstr "Alineación superior"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:122 eeschema/sch_text.cpp:745
-#, fuzzy
 msgid "Justification"
-msgstr "Justificado:"
+msgstr "Justificado"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
 msgid "Bold and italic"
@@ -8425,13 +8272,16 @@ msgid "Combo!"
 msgstr "¡Combinado!"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Schematic Editor line widths."
-msgstr "Editor de esquemas"
+msgstr ""
+"Establezca la anchura en 0 para utilizar la anchura de las líneas del Editor "
+"de Esquemas."
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
 msgstr ""
+"Establezca el color como transparente para utilizar los colores del Editor "
+"de Esquemas."
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:241
 msgid "Illegal reference designator value!"
@@ -8442,9 +8292,9 @@ msgid "Value may not be empty."
 msgstr "El valor no debe estar vacío."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library identifier %s is not valid."
-msgstr "El identificador de librería de símbolos \"%s\" no es válido."
+msgstr "El identificador de la biblioteca de símbolos %s no es válido."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:633
 #, c-format
@@ -8499,7 +8349,6 @@ msgid "Map Orphans"
 msgstr "Mapear huérfanos"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:59
-#, fuzzy
 msgid ""
 "If some symbols are orphaned (the linked symbol is not found anywhere),\n"
 "try to find a candidate having the same name in one of loaded symbol "
@@ -8510,15 +8359,17 @@ msgstr ""
 "librerías de símbolos cargadas."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "Actualizar símbolos desde la librería"
+msgstr "Actualizar símbolos desde la nueva biblioteca"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:64
 msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"Reemplazar los campos de símbolos actuales por los campos de la nueva "
+"biblioteca.\n"
+"Atención: los campos \"Valor\" y \"Huellas\" serán por tanto sustituidos."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 msgid "Symbol Library References"
@@ -8535,6 +8386,8 @@ msgstr "Mostrar el diálogo de anotación"
 #: eeschema/dialogs/dialog_erc.cpp:106
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
+"El esquema no está completamente anotado. Los resultados del ERC serán "
+"incompletos."
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
@@ -8557,16 +8410,15 @@ msgstr "Errores, Advertencias y Exclusiones"
 #: eeschema/dialogs/dialog_erc.cpp:302
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "%d símbolo(s) requieren anotación.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:306
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC cancelado por el usuario.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
-#, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr "Terminado.<br><br>"
+msgstr "ERC completado.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -8839,9 +8691,8 @@ msgid "Group symbols"
 msgstr "Agrupar símbolos"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:33
-#, fuzzy
 msgid "Group symbols together based on common properties"
-msgstr "Agrupar componentes en base a propiedades comunes"
+msgstr "Agrupar los símbolos en función de las propiedades comunes"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:53
 msgid "Add Field..."
@@ -8885,9 +8736,8 @@ msgid "Filters"
 msgstr "Filtros"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:82
-#, fuzzy
 msgid "Filter other symbol fields by name:"
-msgstr "Filtrar campos por nombre:"
+msgstr "Filtro otros campos de símbolo por nombre:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:94
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8918,9 +8768,8 @@ msgstr "Filtrar elementos por red:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:135
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
-#, fuzzy
 msgid "Only include selected items"
-msgstr "Cortar elemento seleccionado"
+msgstr "Incluir sólo los elementos seleccionados"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:154
 msgid "Set To"
@@ -8946,9 +8795,8 @@ msgstr "Abajo"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: include/base_units.h:48
-#, fuzzy
 msgid "-- leave unchanged --"
-msgstr "Guardar cambios"
+msgstr "- dejar sin cambios -"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
 msgid "H Alignment (fields only):"
@@ -8993,13 +8841,13 @@ msgid "symbol"
 msgstr "símbolo"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred writing empty symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"Ha ocurrido un error al intentar escribir una tabla de librerías de símbolos "
+"Se ha producido un error al escribir la tabla de la biblioteca de símbolos "
 "vacía.\n"
 "\n"
 "%s"
@@ -9011,41 +8859,37 @@ msgstr "Seleccione un archivo de tabla de librería de símbolos."
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:82
 #: pcbnew/footprint_libraries_utils.cpp:249
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found."
-msgstr "No se ha encontrado el archivo '%s'"
+msgstr "No se ha encontrado el archivo '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is not a valid symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"\"%s\" no es un archivo válido de tabla de librerías de símbolos.\n"
+"'%s' no es una tabla de bibliotecas de símbolos válida.\n"
 "\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy global symbol library table file '%s' to '%s'."
 msgstr ""
-"No puede copiarse el archivo de tabla de librerías globales de símbolos:\n"
-"\n"
-" \"%s\"\n"
-"\n"
-":a:\n"
-"\n"
-"\"%s\"."
+"No se puede copiar el archivo de tabla de bibliotecas de símbolos global "
+"'%s' a '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading global symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"Ha ocurrido un error al guardar la tabla global de librerías de símbolos:\n"
+"Error al cargar la tabla de bibliotecas de símbolos global.\n"
+"\n"
 "%s"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
@@ -9060,14 +8904,15 @@ msgstr "Propiedades de la unión"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:496
 #: eeschema/dialogs/dialog_lib_edit_text.cpp:55
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:91
-#, fuzzy
 msgid "Read Only"
-msgstr "[Solo lectura]"
+msgstr "Solo lectura"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item.cpp:106
 msgid ""
 "Line width may not be 0 for shapes other than filled with body outline color."
 msgstr ""
+"La anchura de la línea no puede ser 0 para las formas que no estén rellenas "
+"con el color del contorno del cuerpo."
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Do not fill"
@@ -9278,13 +9123,13 @@ msgid "Symbol name:"
 msgstr "Nombre del símbolo:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:35
-#, fuzzy
 msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
-"Este es el nombre del símbolo en la librería,\n"
-"y también el valor por defecto del símbolo al cargarlo en el esquema."
+"El nombre del símbolo en la biblioteca y también el valor del símbolo por "
+"defecto\n"
+"cuando se carga en el esquema."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
 msgid "Derive from existing symbol:"
@@ -9554,16 +9399,17 @@ msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr "Introduzca el número de unidades para un símbolo múltiple"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "All units are interchangeable"
-msgstr "Las unidades no pueden intercambiarse"
+msgstr "Todas las unidades son intercambiables"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
-#, fuzzy
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
-msgstr "Marque esta opción si el símbolo es un símbolo de alimentación"
+msgstr ""
+"Marque esta opción cuando todas las unidades de símbolos sean idénticas "
+"excepto\n"
+"los números de los pines."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
 msgid "Pin Text Options"
@@ -9606,7 +9452,7 @@ msgstr "Desplazamiento:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
 msgid "Margin between the pin name position and the symbol body."
-msgstr ""
+msgstr "Margen entre la posición del nombre del pin y el cuerpo del símbolo."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:111
@@ -9735,10 +9581,8 @@ msgid "Export Netlist"
 msgstr "Exportar listado de redes"
 
 #: eeschema/dialogs/dialog_netlist.cpp:305
-#, fuzzy
 msgid "Simulator requires a fully annotated schematic."
-msgstr ""
-"Para exportar la lista de redes se necesita un esquema anotado completamente."
+msgstr "El simulador requiere un esquema completamente anotado."
 
 #: eeschema/dialogs/dialog_netlist.cpp:328
 msgid "Reformat passive symbol values"
@@ -9781,7 +9625,6 @@ msgstr "Exportar %s"
 
 #: eeschema/dialogs/dialog_netlist.cpp:514
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
-#, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr ""
 "Para exportar la lista de redes se necesita un esquema anotado completamente."
@@ -9838,11 +9681,10 @@ msgstr "Nombre de pin alternativo"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:188
 #: eeschema/dialogs/dialog_symbol_properties.cpp:335
-#, fuzzy
 msgid "Alternate pin assignments are not available for DeMorgan symbols."
 msgstr ""
 "Las asignaciones de pines alternativas no están disponibles para los "
-"componentes DeMorgan."
+"símbolos DeMorgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:274
 msgid "Alternate pin definitions must have a name."
@@ -9938,12 +9780,12 @@ msgstr "Seleccionar la carpeta destino"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:231
 #: pcbnew/dialogs/dialog_gendrill.cpp:305 pcbnew/dialogs/dialog_plot.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
 msgstr ""
-"¿Desea utilizar una ruta relativa a\n"
+"¿Utilizar una ruta relativa a\n"
 "\"%s\"?"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:233
@@ -10020,18 +9862,18 @@ msgid "Schematic"
 msgstr "Esquema"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write plot files to folder '%s'."
-msgstr "No pueden guardarse los archivos de trazado en la carpeta '%s'."
+msgstr "Error al escribir archivos de trazado en la carpeta '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:513
 #: eeschema/dialogs/dialog_plot_schematic.cpp:683
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1036
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1167
 #: pcbnew/dialogs/dialog_plot.cpp:907
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'."
-msgstr "No ha podido cargarse \"%s\""
+msgstr "Trazado a '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:518
 #: eeschema/dialogs/dialog_plot_schematic.cpp:688
@@ -10046,30 +9888,29 @@ msgstr "No ha podido cargarse \"%s\""
 #: pcbnew/exporters/export_footprint_associations.cpp:83
 #: pcbnew/exporters/gen_footprints_placefile.cpp:293
 #: pcbnew/exporters/gen_footprints_placefile.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'."
-msgstr "No puede crearse el archivo \"%s\""
+msgstr "No puede crearse el archivo '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:874
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'.\n"
-msgstr "No ha podido cargarse \"%s\""
+msgstr "Trazado a '%s'.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1250
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr ""
+msgstr "Volviendo a ruta de usuario '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1271
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1311
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "No puede abrirse al archivo '%s'"
+msgstr "No se puede normalizar la ruta '%s %s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1297
-#, fuzzy
 msgid "No project or path defined for the current schematic."
-msgstr "Crear una lista de materiales a partir del esquema activo"
+msgstr "Ningún proyecto o ruta de acceso definida para el esquema actual."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:24
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:24
@@ -10120,23 +9961,20 @@ msgid "Page size:"
 msgstr "Tamaño de página:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "Terminar la hoja de dibujo"
+msgstr "Trazar hoja de dibujo"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "Imprimir marco y bloque de título"
+msgstr "Trazar el borde de la hoja de dibujo y el bloque de título"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
 msgstr "Monocromo"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
-#, fuzzy
 msgid "Plot background color"
-msgstr "Imprimir color de fondo"
+msgstr "Trazar el color de fondo"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
@@ -10169,14 +10007,12 @@ msgid "HPGL Options"
 msgstr "Opciones HPGL"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:126
-#, fuzzy
 msgid "Position and units:"
-msgstr "Unidades de posición:"
+msgstr "Posición y unidades:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
-#, fuzzy
 msgid "Bottom left, plotter units"
-msgstr "Esquina inferior izquierda"
+msgstr "Abajo a la izquierda, unidades de trazado"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
@@ -10483,13 +10319,13 @@ msgid "Project is missing or read-only. Changes will not be saved."
 msgstr "Falta el proyecto o es de solo lectura. Los cambios no se guardarán."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 msgstr ""
 "Error al importar la configuración del proyecto:\n"
-"No se pudo cargar el archivo de proyecto %s"
+"No se ha podido cargar el archivo de proyecto %s."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -10508,14 +10344,12 @@ msgid "Sheet file must have a '.kicad_sch' extension."
 msgstr "El archivo de hoja debe tener una extensión '.kicad_sch'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:293
-#, fuzzy
 msgid "Use relative path for sheet file?"
-msgstr "¿Utilizar una ruta relativa?"
+msgstr "¿Utilizar la ruta relativa para el archivo de hoja?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:294
-#, fuzzy
 msgid "Sheet File Path"
-msgstr "Archivo de hoja"
+msgstr "Ruta del archivo de hoja"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:297
 msgid ""
@@ -10523,16 +10357,17 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
+"El uso de rutas relativas de nombres de archivos de hoja jerárquicos mejora "
+"la portabilidad de los esquemas entre sistemas y plataformas.  El uso de "
+"rutas absolutas puede dar lugar a problemas de portabilidad."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:301
-#, fuzzy
 msgid "Use Relative Path"
-msgstr "¿Utilizar una ruta relativa?"
+msgstr "Usar ruta relativa"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:302
-#, fuzzy
 msgid "Use Absolute Path"
-msgstr "Ruta absoluta"
+msgstr "Usar ruta absoluta"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:333
 msgid "Untitled Sheet"
@@ -10553,9 +10388,9 @@ msgstr ""
 "en Preferencias > Eeschema > Colores."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:407
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
-msgstr "El archivo \"%s\" no parece ser un archivo de esquema válido."
+msgstr "El archivo '%s' no parece ser un archivo de esquema válido."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:409
 msgid "Invalid Schematic File"
@@ -10569,17 +10404,21 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
+"No se puede normalizar la ruta del archivo de esquema de hoja nueva:\n"
+"'%s'\n"
+"contra la ruta del archivo esquemático de la hoja principal:\n"
+"'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #: kicad/tools/kicad_manager_control.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists."
-msgstr "Ya existe \"%s\"."
+msgstr "Ya existe '%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:472
-#, fuzzy, c-format
+#, c-format
 msgid "Link '%s' to this file?"
-msgstr "¿Enlazar \"%s\"a este archivo?"
+msgstr "¿Enlazar '%s' a este archivo?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:512
 #, fuzzy, c-format
