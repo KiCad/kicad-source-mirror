@@ -167,9 +167,9 @@ private:
 
     friend struct PCB::IFACE;       // constructor called from here only
 
-    wxSearchCtrl*       m_libFilter;
+    wxTextCtrl*         m_libFilter;
     wxListBox*          m_libList;        // The list of library names.
-    wxSearchCtrl*       m_fpFilter;
+    wxTextCtrl*         m_fpFilter;
     wxListBox*          m_fpList;         // The list of footprint names.
 
     bool                m_autoZoom;
