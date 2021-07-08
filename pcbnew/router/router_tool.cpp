@@ -1152,6 +1152,7 @@ void ROUTER_TOOL::performRouting()
             }
             controls()->SetAutoPan( true );
             setCursor();
+            updateMessagePanel();
         }
         else if( evt->IsAction( &ACT_EndTrack ) || evt->IsDblClick( BUT_LEFT )  )
         {
@@ -1869,6 +1870,8 @@ int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
     // Changing the track width can affect the placement, so call the
     // move routine without changing the destination
     m_router->Move( m_endSnapPoint, m_endItem );
+
+    updateMessagePanel();
 
     return 0;
 }
