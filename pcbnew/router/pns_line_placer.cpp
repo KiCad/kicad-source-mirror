@@ -828,7 +828,9 @@ bool LINE_PLACER::optimizeTailHeadTransition()
 
     PNS_DBG( Dbg(), Message, "optimize HT" );
 
-    if( OPTIMIZER::Optimize( &linetmp, OPTIMIZER::FANOUT_CLEANUP, m_currentNode ) )
+    // NOTE: FANOUT_CLEANUP can override posture setting at the moment
+    if( !m_mouseTrailTracer.IsManuallyForced() &&
+        OPTIMIZER::Optimize( &linetmp, OPTIMIZER::FANOUT_CLEANUP, m_currentNode ) )
     {
         if( linetmp.SegmentCount() < 1 )
             return false;
