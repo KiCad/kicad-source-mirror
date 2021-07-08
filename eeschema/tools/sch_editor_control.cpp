@@ -1166,17 +1166,22 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = m_frame->PopCommandFromUndoList();
+    size_t num_undos = m_frame->m_undoList.m_CommandsList.size();
 
     /* Undo the command */
     m_frame->PutDataInPreviousState( List );
 
-    /* Put the old list in RedoList */
-    List->ReversePickersListOrder();
-    m_frame->PushCommandToRedoList( List );
-
     m_frame->SetSheetNumberAndCount();
     m_frame->TestDanglingEnds();
     m_frame->OnPageSettingsChange();
+
+    // If we modified anything during cleanup we don't want it going on the undolist
+    while( m_frame->m_undoList.m_CommandsList.size() > num_undos )
+        delete m_frame->PopCommandFromUndoList();
+
+    // Now push the old command to the RedoList
+    List->ReversePickersListOrder();
+    m_frame->PushCommandToRedoList( List );
 
     m_toolMgr->GetTool<EE_SELECTION_TOOL>()->RebuildSelection();
 
