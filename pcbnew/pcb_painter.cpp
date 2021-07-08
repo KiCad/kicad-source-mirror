@@ -1695,7 +1695,7 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
 
     if( m_pcbSettings.m_zoneOutlines && outline && outline->OutlineCount() > 0 )
     {
-        m_gal->SetStrokeColor( color );
+        m_gal->SetStrokeColor( color.WithAlpha( 1.0 ) );
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
