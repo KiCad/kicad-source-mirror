@@ -208,10 +208,11 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     }
     else if( aEvent.GetKeyCode() == WXK_DELETE )
     {
+        if( m_te->GetSelectionEnd() == m_te->GetSelectionStart() )
+            m_te->CharRightExtend();
+
         if( m_te->GetSelectionEnd() > m_te->GetSelectionStart() )
             m_te->DeleteBack();
-        else
-            m_te->DeleteRange( m_te->GetSelectionStart(), 1 );
     }
     else if( aEvent.GetKeyCode() == WXK_ESCAPE )
     {
