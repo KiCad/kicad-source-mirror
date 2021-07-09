@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,7 +49,7 @@ PANEL_TEXT_VARIABLES_BASE::PANEL_TEXT_VARIABLES_BASE( wxWindow* parent, wxWindow
 	m_TextVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_TextVars->SetMinSize( wxSize( 604,170 ) );
 
-	bSizer3->Add( m_TextVars, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer3->Add( m_TextVars, 1, wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* bSizerEnvVarBtns;
 	bSizerEnvVarBtns = new wxBoxSizer( wxHORIZONTAL );
@@ -67,7 +67,7 @@ PANEL_TEXT_VARIABLES_BASE::PANEL_TEXT_VARIABLES_BASE( wxWindow* parent, wxWindow
 	bSizer3->Add( bSizerEnvVarBtns, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bPanelSizer->Add( bSizer3, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
+	bPanelSizer->Add( bSizer3, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bPanelSizer );

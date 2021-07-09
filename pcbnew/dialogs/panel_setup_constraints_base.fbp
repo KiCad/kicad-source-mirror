@@ -716,7 +716,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip"></property>
+                                                            <property name="tooltip">The maximum allowed deviation between a true arc or circle and segments used to approximate it.  Smaller values produce smoother graphics at the expense of performance.</property>
                                                             <property name="validator_data_type">wxString</property>
                                                             <property name="validator_style">wxFILTER_NUMERIC</property>
                                                             <property name="validator_type">wxTextValidator</property>
@@ -1536,7 +1536,7 @@
                                 <property name="border">5</property>
                                 <property name="flag">wxEXPAND|wxRIGHT</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBoxSizer" expanded="0">
+                                <object class="wxBoxSizer" expanded="1">
                                     <property name="minimum_size"></property>
                                     <property name="name">sbFeatureConstraints</property>
                                     <property name="orient">wxVERTICAL</property>
@@ -1820,7 +1820,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass">; ; forward_declare</property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip"></property>
+                                                    <property name="tooltip">The minimum clearance between copper items which do not belong to the same net.  If set, this is an absolute minimum which cannot be reduced by netclasses, custom rules, or other settings.</property>
                                                     <property name="validator_data_type"></property>
                                                     <property name="validator_style">wxFILTER_NONE</property>
                                                     <property name="validator_type">wxDefaultValidator</property>
@@ -2064,7 +2064,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip"></property>
+                                                    <property name="tooltip">The minimum track width.  If set, this is an absolute minimum and cannot be reduced by netclasses, custom rules, or other settings.</property>
                                                     <property name="validator_data_type">wxString</property>
                                                     <property name="validator_style">wxFILTER_NUMERIC</property>
                                                     <property name="validator_type">wxTextValidator</property>
@@ -2308,7 +2308,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass">; ; forward_declare</property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip"></property>
+                                                    <property name="tooltip">The minimum annular ring width.  If set, this is an absolute minimum and cannot be reduced by netclasses, custom rules, or other settings.</property>
                                                     <property name="validator_data_type"></property>
                                                     <property name="validator_style">wxFILTER_NONE</property>
                                                     <property name="validator_type">wxDefaultValidator</property>
@@ -2552,7 +2552,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass">; </property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip"></property>
+                                                    <property name="tooltip">The minimum via diameter.  If set, this is an absolute minimum and cannot be reduced by netclasses, custom rules, or other settings.</property>
                                                     <property name="validator_data_type">wxString</property>
                                                     <property name="validator_style">wxFILTER_NUMERIC</property>
                                                     <property name="validator_type">wxTextValidator</property>
@@ -2796,7 +2796,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass">; ; forward_declare</property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip"></property>
+                                                    <property name="tooltip">The minimum clearance between a hole and an unassociated copper item.  If set, this is an absolute minimum and cannot be reduced by custom rules or other settings.</property>
                                                     <property name="validator_data_type"></property>
                                                     <property name="validator_style">wxFILTER_NONE</property>
                                                     <property name="validator_type">wxDefaultValidator</property>
@@ -3040,7 +3040,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass">; forward_declare</property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip"></property>
+                                                    <property name="tooltip">The minimum clearance between the board edge and any copper item.  If set, this is an absolute minimum and cannot be reduced by custom rules or other settings.</property>
                                                     <property name="validator_data_type"></property>
                                                     <property name="validator_style">wxFILTER_NONE</property>
                                                     <property name="validator_type">wxDefaultValidator</property>
@@ -3607,7 +3607,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip"></property>
+                                                    <property name="tooltip">The minimum through-hole size.  If set, this is an absolute minimum and cannot be reduced by netclasses, custom rules or other settings.</property>
                                                     <property name="validator_data_type"></property>
                                                     <property name="validator_style">wxFILTER_NUMERIC</property>
                                                     <property name="validator_type">wxTextValidator</property>
@@ -3851,7 +3851,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass">; forward_declare</property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip"></property>
+                                                    <property name="tooltip">The minimum clearance between two drilled holes.   If set, this is an absolute minimum and cannot be reduced by custom rules or other settings. (Note: does not apply to milled holes.)</property>
                                                     <property name="validator_data_type"></property>
                                                     <property name="validator_style">wxFILTER_NONE</property>
                                                     <property name="validator_type">wxDefaultValidator</property>
@@ -4418,7 +4418,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip"></property>
+                                                    <property name="tooltip">The minimum diameter for micro-vias.  If set, this is an absolute minimum and cannot be reduced by netclasses, custom rules, or other settings.</property>
                                                     <property name="validator_data_type"></property>
                                                     <property name="validator_style">wxFILTER_NUMERIC</property>
                                                     <property name="validator_type">wxTextValidator</property>
@@ -4662,7 +4662,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip"></property>
+                                                    <property name="tooltip">The minimum micro-via hole size.  If set, this is an absolute minimum and cannot be reduced by netclasses, custom rules, or other settings.</property>
                                                     <property name="validator_data_type"></property>
                                                     <property name="validator_style">wxFILTER_NUMERIC</property>
                                                     <property name="validator_type">wxTextValidator</property>
@@ -5181,7 +5181,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass">; ; forward_declare</property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip"></property>
+                                                    <property name="tooltip">Minimum clearance between two items on the same silkscreen layer.  If set this can improve legibility.  (Note: does not apply to multiple shapes within a single footprint.)</property>
                                                     <property name="validator_data_type"></property>
                                                     <property name="validator_style">wxFILTER_NONE</property>
                                                     <property name="validator_type">wxDefaultValidator</property>

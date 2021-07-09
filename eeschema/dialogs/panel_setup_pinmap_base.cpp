@@ -17,6 +17,9 @@ PANEL_SETUP_PINMAP_BASE::PANEL_SETUP_PINMAP_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* m_panelMatrixSizer;
 	m_panelMatrixSizer = new wxBoxSizer( wxVERTICAL );
 
+
+	m_panelMatrixSizer->Add( 0, 5, 0, 0, 5 );
+
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pin to Pin Connections") ), wxVERTICAL );
 
@@ -26,10 +29,10 @@ PANEL_SETUP_PINMAP_BASE::PANEL_SETUP_PINMAP_BASE( wxWindow* parent, wxWindowID i
 	sbSizer3->Add( m_matrixPanel, 1, wxEXPAND | wxALL, 5 );
 
 
-	m_panelMatrixSizer->Add( sbSizer3, 1, wxALL|wxEXPAND, 10 );
+	m_panelMatrixSizer->Add( sbSizer3, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 
-	bSizer2->Add( m_panelMatrixSizer, 1, wxEXPAND|wxLEFT, 10 );
+	bSizer2->Add( m_panelMatrixSizer, 1, wxEXPAND, 10 );
 
 
 	this->SetSizer( bSizer2 );

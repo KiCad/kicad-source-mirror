@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -142,7 +142,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	bLeftColumn->Add( sbSizer2, 0, wxEXPAND|wxALL, 5 );
 
 
-	bPanelSizer->Add( bLeftColumn, 1, wxLEFT|wxTOP, 10 );
+	bPanelSizer->Add( bLeftColumn, 1, 0, 10 );
 
 	wxBoxSizer* bRightColumn;
 	bRightColumn = new wxBoxSizer( wxVERTICAL );
@@ -200,7 +200,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	bRightColumn->Add( 0, 0, 0, wxEXPAND, 5 );
 
 
-	bPanelSizer->Add( bRightColumn, 1, wxLEFT|wxTOP, 10 );
+	bPanelSizer->Add( bRightColumn, 1, wxRIGHT|wxLEFT, 10 );
 
 
 	this->SetSizer( bPanelSizer );

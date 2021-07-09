@@ -41,14 +41,6 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT
     m_title->SetLabel( aGlobal ? _( "Global field name templates:" )
                                : _( "Project field name templates:" ) );
 
-    // Yep, it's a hack.  I haven't a clue why the global and project versions don't lay
-    // out the same.
-    if( !aGlobal )
-    {
-        m_leftMargin->PrependSpacer( 10 );
-        m_topMargin->PrependSpacer( 10 );
-    }
-
     m_addFieldButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
     m_deleteFieldButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
