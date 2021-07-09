@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -28,8 +30,12 @@
 
 #include <sim/netlist_exporter_pspice_sim.h>
 
-DIALOG_SIGNAL_LIST::DIALOG_SIGNAL_LIST( SIM_PLOT_FRAME* aParent, NETLIST_EXPORTER_PSPICE_SIM* aExporter )
-    : DIALOG_SIGNAL_LIST_BASE( aParent ), m_plotFrame( aParent ), m_exporter( aExporter )
+
+DIALOG_SIGNAL_LIST::DIALOG_SIGNAL_LIST( SIM_PLOT_FRAME* aParent,
+                                        NETLIST_EXPORTER_PSPICE_SIM* aExporter ) :
+    DIALOG_SIGNAL_LIST_BASE( aParent ),
+    m_plotFrame( aParent ),
+    m_exporter( aExporter )
 {
 
 }
@@ -70,7 +76,7 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
             {
                 // Add all possible currents for the primitive
                 for( const auto& current :
-                        NETLIST_EXPORTER_PSPICE_SIM::GetCurrents( (SPICE_PRIMITIVE) item.m_primitive ) )
+                     NETLIST_EXPORTER_PSPICE_SIM::GetCurrents( (SPICE_PRIMITIVE) item.m_primitive ) )
                 {
                     m_signals->Append( wxString::Format( "%s(%s)", current, item.m_refName ) );
                 }
@@ -96,6 +102,7 @@ bool DIALOG_SIGNAL_LIST::addSignalToPlotFrame( const wxString& aPlotName )
     if( !name.IsEmpty() )
     {
         wxUniChar firstChar = aPlotName[0];
+
         if( firstChar == 'V' || firstChar == 'v' )
         {
             m_plotFrame->AddVoltagePlot( name );
@@ -125,6 +132,7 @@ void DIALOG_SIGNAL_LIST::addSelectionToPlotFrame()
         if( m_signals->IsSelected( i ) )
         {
             const wxString& plotName = m_signals->GetString( i );
+
             if( !addSignalToPlotFrame( plotName ) )
                 wxASSERT_MSG( false, "Unhandled plot type" );
         }

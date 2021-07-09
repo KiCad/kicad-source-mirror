@@ -52,6 +52,7 @@
 #include <wx/filedlg.h>
 #include <dialog_shim.h>
 
+
 SIM_PLOT_TYPE operator|( SIM_PLOT_TYPE aFirst, SIM_PLOT_TYPE aSecond )
 {
     int res = (int) aFirst | (int) aSecond;
@@ -801,7 +802,7 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, con
             return true;
         }
     }
-    
+
     m_workbook->AddTrace( aPlotPanel, aName, size, data_x.data(), data_y.data(), aType, aParam );
 
     updateFrame();
@@ -1577,7 +1578,7 @@ bool SIM_PLOT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
         wxString msg = _( "Save changes to '%s' before closing?" );
 
-        return HandleUnsavedChanges( this, wxString::Format( msg, filename.GetFullName() ), 
+        return HandleUnsavedChanges( this, wxString::Format( msg, filename.GetFullName() ),
                 [&]()->bool
                 {
                     return saveWorkbook( Prj().AbsolutePath( filename.GetFullName() ) );
@@ -1760,6 +1761,7 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
     {
         // Incremental update
         m_simConsole->Clear();
+
         // Do not export netlist, it is already stored in the simulator
         applyTuners();
         m_simulator->Run();
