@@ -36,6 +36,7 @@
 #include <sch_reference_list.h>
 #include <env_paths.h>
 #include <pgm_base.h>
+#include <common.h>
 
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
@@ -94,25 +95,27 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
     aFormatter->Print( 0, ".title %s\n", TO_UTF8( m_title ) );
 
     // Write .include directives
-    for( const wxString& lib : m_libraries )
+    for( const wxString& curr_lib : m_libraries )
     {
+        // First, expand env vars, if any
+        wxString libname = ExpandEnvVarSubstitutions( curr_lib, &m_schematic->Prj() );
         wxString full_path;
 
         if( ( aCtl & NET_ADJUST_INCLUDE_PATHS ) )
         {
             // Look for the library in known search locations
-            full_path = ResolveFile( lib, &Pgm().GetLocalEnvVariables(), &m_schematic->Prj() );
+            full_path = ResolveFile( libname, &Pgm().GetLocalEnvVariables(), &m_schematic->Prj() );
 
             if( full_path.IsEmpty() )
             {
                 DisplayError( nullptr, wxString::Format( _( "Could not find library file %s." ),
-                                                         lib ) );
-                full_path = lib;
+                                                         libname ) );
+                full_path = libname;
             }
         }
         else
         {
-            full_path = lib;    // just use the unaltered path
+            full_path = libname;    // just use the unaltered path
         }
 
         aFormatter->Print( 0, ".include \"%s\"\n", TO_UTF8( full_path ) );
