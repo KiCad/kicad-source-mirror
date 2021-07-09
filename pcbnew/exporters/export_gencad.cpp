@@ -289,7 +289,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 
         if( footprint->GetLayer() == B_Cu )
         {
-            footprint->Flip( footprint->GetPosition(), Settings().m_FlipLeftRight );
+            footprint->Flip( footprint->GetPosition(), false );
             footprint->SetFlag( 1 );
         }
     }
@@ -323,7 +323,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     {
         if( footprint->GetFlag() )
         {
-            footprint->Flip( footprint->GetPosition(), Settings().m_FlipLeftRight );
+            footprint->Flip( footprint->GetPosition(), false );
             footprint->SetFlag( 0 );
         }
     }
