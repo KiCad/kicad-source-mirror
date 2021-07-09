@@ -138,9 +138,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     wxPanel* libPanel = new wxPanel( this );
     wxSizer* libSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_libFilter = new wxTextCtrl( libPanel, ID_MODVIEW_LIB_FILTER, wxEmptyString,
+    m_libFilter = new wxSearchCtrl( libPanel, ID_MODVIEW_LIB_FILTER, wxEmptyString,
                                   wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-    m_libFilter->SetHint( _( "Filter" ) );
+    m_libFilter->SetDescriptiveText( _( "Filter" ) );
     libSizer->Add( m_libFilter, 0, wxEXPAND, 5 );
 
     m_libList = new wxListBox( libPanel, ID_MODVIEW_LIB_LIST, wxDefaultPosition, wxDefaultSize,
@@ -153,9 +153,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     wxPanel* fpPanel = new wxPanel( this );
     wxSizer* fpSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_fpFilter = new wxTextCtrl( fpPanel, ID_MODVIEW_FOOTPRINT_FILTER, wxEmptyString,
+    m_fpFilter = new wxSearchCtrl( fpPanel, ID_MODVIEW_FOOTPRINT_FILTER, wxEmptyString,
                                  wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-    m_fpFilter->SetHint( _( "Filter" ) );
+    m_fpFilter->SetDescriptiveText( _( "Filter" ) );
     m_fpFilter->SetToolTip(
             _( "Filter on footprint name, keywords, description and pad count.\n"
                "Search terms are separated by spaces.  All search terms must match.\n"
@@ -532,31 +532,17 @@ void FOOTPRINT_VIEWER_FRAME::OnCharHook( wxKeyEvent& aEvent )
 {
     if( aEvent.GetKeyCode() == WXK_UP )
     {
-        wxWindow* focused = FindFocus();
-
         if( m_libFilter->HasFocus() || m_libList->HasFocus() )
             selectPrev( m_libList );
         else
             selectPrev( m_fpList );
-
-        // Need to reset the focus after selection due to GTK mouse-refresh
-        // that captures the mouse into the canvas to update scrollbars
-        if( focused )
-            focused->SetFocus();
     }
     else if( aEvent.GetKeyCode() == WXK_DOWN )
     {
-        wxWindow* focused = FindFocus();
-
         if( m_libFilter->HasFocus() || m_libList->HasFocus() )
             selectNext( m_libList );
         else
             selectNext( m_fpList );
-
-        // Need to reset the focus after selection due to GTK mouse-refresh
-        // that captures the mouse into the canvas to update scrollbars
-        if( focused )
-            focused->SetFocus();
     }
     else if( aEvent.GetKeyCode() == WXK_TAB && m_libFilter->HasFocus() )
     {
@@ -638,16 +624,6 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& aEvent )
 
     ReCreateFootprintList();
     UpdateTitle();
-
-    // The m_libList has now the focus, in order to be able to use arrow keys
-    // to navigate inside the list.
-    // the gal canvas must not steal the focus to allow navigation
-    GetCanvas()->SetStealsFocus( false );
-
-    if( filterFocus )
-        m_libFilter->SetFocus();
-    else
-        m_libList->SetFocus();
 }
 
 
@@ -699,16 +675,6 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
         GetCanvas()->Refresh();
         Update3DView( true, true );
     }
-
-    // The m_fpList has now the focus, in order to be able to use arrow keys
-    // to navigate inside the list.
-    // the gal canvas must not steal the focus to allow navigation
-    GetCanvas()->SetStealsFocus( false );
-
-    if( filterFocus )
-        m_fpFilter->SetFocus();
-    else
-        m_fpList->SetFocus();
 }
 
 
