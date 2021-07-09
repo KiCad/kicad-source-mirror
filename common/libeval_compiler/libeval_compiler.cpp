@@ -420,6 +420,7 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
 
     retval.value.str = nullptr;
     retval.value.num = 0.0;
+    retval.value.idx = -1;
     retval.token = G_ENDS;
 
     if( m_tokenizer.Done() )

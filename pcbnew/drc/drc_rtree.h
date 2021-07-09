@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2020 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -38,8 +38,7 @@
 #include <math/vector2d.h>
 
 /**
- * DRC_RTREE -
- * Implements an R-tree for fast spatial and layer indexing of connectable items.
+ * Implement an R-tree for fast spatial and layer indexing of connectable items.
  * Non-owning.
  */
 class DRC_RTREE
@@ -82,12 +81,11 @@ public:
     }
 
     /**
-     * Function Insert()
-     * Inserts an item into the tree on a particular layer with an optional worst clearance.
+     * Insert an item into the tree on a particular layer with an optional worst clearance.
      */
     void Insert( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aWorstClearance = 0 )
     {
-        wxASSERT( aLayer != UNDEFINED_LAYER );
+        wxCHECK( aLayer != UNDEFINED_LAYER, /* void */ );
 
         if( aItem->Type() == PCB_FP_TEXT_T && !static_cast<FP_TEXT*>( aItem )->IsVisible() )
             return;
@@ -117,8 +115,7 @@ public:
     }
 
     /**
-     * Function RemoveAll()
-     * Removes all items from the RTree
+     * Remove all items from the RTree.
      */
     void clear()
     {
@@ -406,8 +403,9 @@ public:
     }
 
     /**
-     * Returns the number of items in the tree
-     * @return number of elements in the tree;
+     * Return the number of items in the tree.
+     *
+     * @return number of elements in the tree.
      */
     size_t size() const
     {
