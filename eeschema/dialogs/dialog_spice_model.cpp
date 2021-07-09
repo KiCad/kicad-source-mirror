@@ -29,6 +29,7 @@
 #include <sim/spice_value.h>
 #include <confirm.h>
 #include <project.h>
+#include <common.h>
 
 #include <wx/textfile.h>
 #include <wx/tokenzr.h>
@@ -836,19 +837,18 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
 
 void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
 {
+    //First, expand env vars, if any
+    wxString libname = ExpandEnvVarSubstitutions( aFilePath, &Prj() );
+    // Add make path absolute, especially if relative to the project path
+    libname = Prj().AbsolutePath( libname );
+
     wxString curModel = m_modelName->GetValue();
     m_models.clear();
-    wxFileName filePath( aFilePath );
+    wxFileName filePath( libname );
     bool in_subckt = false;        // flag indicating that the parser is inside a .subckt section
 
-    // Look for the file in the project path
     if( !filePath.Exists() )
-    {
-        filePath.SetPath( Prj().GetProjectPath() + filePath.GetPath() );
-
-        if( !filePath.Exists() )
             return;
-    }
 
     // Display the library contents
     wxWindowUpdateLocker updateLock( this );
