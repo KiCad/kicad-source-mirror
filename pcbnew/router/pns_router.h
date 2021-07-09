@@ -166,10 +166,7 @@ public:
 
     LOGGER* Logger();
 
-    RULE_RESOLVER* GetRuleResolver() const
-    {
-        return m_iface->GetRuleResolver();
-    }
+    RULE_RESOLVER* GetRuleResolver() const { return m_iface->GetRuleResolver(); }
 
     bool IsPlacingVia() const;
 
@@ -207,20 +204,10 @@ public:
 
     PLACEMENT_ALGO* Placer() { return m_placer.get(); }
 
-    ROUTER_IFACE* GetInterface() const
-    {
-        return m_iface;
-    }
+    ROUTER_IFACE* GetInterface() const { return m_iface; }
 
-    void SetVisibleViewArea( const BOX2I& aExtents )
-    {
-        m_visibleViewArea = aExtents;
-    }
-
-    const BOX2I& VisibleViewArea() const
-    {
-        return m_visibleViewArea;
-    }
+    void SetVisibleViewArea( const BOX2I& aExtents ) { m_visibleViewArea = aExtents; }
+    const BOX2I& VisibleViewArea() const { return m_visibleViewArea; }
 
 private:
     void movePlacing( const VECTOR2I& aP, ITEM* aItem );
@@ -233,9 +220,9 @@ private:
     void markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR& aRemoved );
     bool isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aItem, int aLayer );
 
-    BOX2I             m_visibleViewArea;
-    VECTOR2I          m_currentEnd;
-    RouterState       m_state;
+private:
+    BOX2I                           m_visibleViewArea;
+    RouterState                     m_state;
 
     std::unique_ptr<NODE>           m_world;
     NODE*                           m_lastNode;

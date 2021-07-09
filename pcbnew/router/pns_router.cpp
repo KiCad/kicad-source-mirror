@@ -188,6 +188,7 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     if( m_dragger->Start( aP, aStartItems ) )
     {
         m_state = DRAG_SEGMENT;
+        return true;
     }
     else
     {
@@ -195,8 +196,6 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
         m_state = IDLE;
         return false;
     }
-
-    return true;
 }
 
 
@@ -412,21 +411,21 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
         m_logger->Log( LOGGER::EVT_START_ROUTE, aP, aStartItem );
     }
 
-    bool rv = m_placer->Start( aP, aStartItem );
-
-    if( !rv )
+    if( m_placer->Start( aP, aStartItem ) )
+    {
+        m_state = ROUTE_TRACK;
+        return true;
+    }
+    else
+    {
+        m_state = IDLE;
         return false;
-
-    m_currentEnd = aP;
-    m_state = ROUTE_TRACK;
-    return rv;
+    }
 }
 
 
 void ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
 {
-    m_currentEnd = aP;
-
     if( m_logger )
         m_logger->Log( LOGGER::EVT_MOVE, aP, endItem );
 
