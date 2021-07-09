@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -522,7 +524,11 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
         else
         {
             for( int i = 0; i < aPoints; i++ )
-                tmp[i] = 20 * log( tmp[i] ) / log( 10.0 );      // convert to dB
+            {
+                // log( 0 ) is not valid.
+                if( tmp[i] != 0.0 )
+                    tmp[i] = 20 * log( tmp[i] ) / log( 10.0 );  // convert to dB
+            }
         }
     }
 
