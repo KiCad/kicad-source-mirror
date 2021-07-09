@@ -1245,24 +1245,24 @@ TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSel
 //
 TOOL_ACTION PCB_ACTIONS::zoneFill( "pcbnew.ZoneFiller.zoneFill",
         AS_GLOBAL, 0, "",
-        _( "Fill" ), _( "Fill zone(s)" ),
+        _( "Fill Zone" ), _( "Update copper fill of selected zone(s)" ),
         BITMAPS::fill_zone );
 
 TOOL_ACTION PCB_ACTIONS::zoneFillAll( "pcbnew.ZoneFiller.zoneFillAll",
         AS_GLOBAL,
         'B', LEGACY_HK_NAME( "Fill or Refill All Zones" ),
-        _( "Fill All" ), _( "Fill all zones" ),
+        _( "Fill All Zones" ), _( "Update copper fill of all zones" ),
         BITMAPS::fill_zone );
 
 TOOL_ACTION PCB_ACTIONS::zoneUnfill( "pcbnew.ZoneFiller.zoneUnfill",
         AS_GLOBAL, 0, "",
-        _( "Unfill" ), _( "Unfill zone(s)" ),
+        _( "Unfill Zone" ), _( "Remove copper fill from selected zone(s)" ),
         BITMAPS::zone_unfill );
 
 TOOL_ACTION PCB_ACTIONS::zoneUnfillAll( "pcbnew.ZoneFiller.zoneUnfillAll",
         AS_GLOBAL,
         MD_CTRL + 'B', LEGACY_HK_NAME( "Remove Filled Areas in All Zones" ),
-        _( "Unfill All" ), _( "Unfill all zones" ),
+        _( "Unfill All Zones" ), _( "Remove copper fill from all zones" ),
         BITMAPS::zone_unfill );
 
 
