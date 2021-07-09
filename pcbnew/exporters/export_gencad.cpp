@@ -32,6 +32,7 @@
 #include <build_version.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <fp_shape.h>
 #include <footprint.h>
 #include <pad.h>
@@ -464,12 +465,12 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         case PAD_SHAPE::OVAL:
             {
                 const wxSize& size = pad->GetSize();
-                int radius;
+                int radius = std::min( size.x, size.y ) / 2;
 
                 if( pad->GetShape() == PAD_SHAPE::ROUNDRECT )
+                {
                     radius = pad->GetRoundRectCornerRadius();
-                else
-                    radius = std::min( size.x, size.y ) / 2;
+                }
 
                 int lineX = size.x / 2 - radius;
                 int lineY = size.y / 2 - radius;
@@ -482,7 +483,6 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
                         ( -off.y - lineY ) / SCALE_FACTOR, ( off.x - lineX ) / SCALE_FACTOR,
                         ( -off.y - lineY - radius ) / SCALE_FACTOR,
                         ( off.x - lineX ) / SCALE_FACTOR, ( -off.y - lineY ) / SCALE_FACTOR );
-
                 // bottom line
                 if( lineX > 0 )
                 {
@@ -572,6 +572,37 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
                 }
             }
             break;
+
+        case PAD_SHAPE::CHAMFERED_RECT:
+        {
+            fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+
+            SHAPE_POLY_SET outline;
+            int            maxError = aPcb->GetDesignSettings().m_MaxError;
+
+            TransformRoundChamferedRectToPolygon( outline, pad->GetPosition(), pad->GetSize(),
+                    pad->GetOrientation(), pad->GetRoundRectCornerRadius(),
+                    pad->GetChamferRectRatio(), pad->GetChamferPositions(), maxError,
+                    ERROR_INSIDE );
+
+            for( int jj = 0; jj < outline.OutlineCount(); ++jj )
+            {
+                const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
+                int pointCount = poly.PointCount();
+
+                for( int ii = 0; ii < pointCount; ii++ )
+                {
+                    int next = ( ii + 1 ) % pointCount;
+                    fprintf( aFile, "LINE %g %g %g %g\n",
+                            ( off.x + poly.CPoint( ii ).x ) / SCALE_FACTOR,
+                            ( -off.y - poly.CPoint( ii ).y ) / SCALE_FACTOR,
+                            ( off.x + poly.CPoint( next ).x ) / SCALE_FACTOR,
+                            ( -off.y - poly.CPoint( next ).y ) / SCALE_FACTOR );
+                }
+            }
+
+            break;
+        }
 
         case PAD_SHAPE::CUSTOM:
             {
