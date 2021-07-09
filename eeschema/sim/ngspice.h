@@ -139,16 +139,16 @@ private:
     static int cbControlledExit( int aStatus, NG_BOOL aImmediate, NG_BOOL aExitOnQuit, int aId,
                                  void* aUser );
 
-    // Assure ngspice is in a valid state and reinitializes it if need be
+    // Assure ngspice is in a valid state and reinitializes it if need be.
     void validate();
 
-    ///< Error flag indicating that ngspice needs to be reloaded
+    ///< Error flag indicating that ngspice needs to be reloaded.
     bool m_error;
 
-    ///< Ngspice should be initialized only once
+    ///< Ngspice should be initialized only once.
     static bool m_initialized;
 
-    ///< current netlist
+    ///< Current netlist
     std::string m_netlist;
 };
 

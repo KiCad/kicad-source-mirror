@@ -112,7 +112,7 @@ public:
     /**
      * Return the currently opened plot panel (or NULL if there is none).
      */
-    SIM_PLOT_PANEL* CurrentPlot() const;
+    SIM_PLOT_PANEL* GetCurrentPlot() const;
 
     /**
      * Return the netlist exporter object used for simulations.
@@ -160,14 +160,6 @@ private:
     void setIconsForMenuItems();
 
     /**
-     * Return the currently opened plot panel (or NULL if there is none).
-     */
-    SIM_PANEL_BASE* currentPlotWindow() const
-    {
-        return dynamic_cast<SIM_PANEL_BASE*>( m_workbook->GetCurrentPage() );
-    }
-
-    /**
      * Add a new plot to the current panel.
      *
      * @param aName is the device/net name.
@@ -198,6 +190,11 @@ private:
      */
     bool updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam,
                      SIM_PLOT_PANEL* aPlotPanel );
+
+    /**
+     * Update the toolbar.
+     */
+    void updateToolbar();
 
     /**
      * Update the list of currently plotted signals.
@@ -233,9 +230,28 @@ private:
     bool saveWorkbook( const wxString& aPath );
 
     /**
+     * Return the currently opened plot panel (or NULL if there is none).
+     */
+    SIM_PANEL_BASE* getCurrentPlotWindow() const
+    {
+        return dynamic_cast<SIM_PANEL_BASE*>( m_workbook->GetCurrentPage() );
+    }
+
+    /**
+     *
+     */
+    wxString getCurrentSimCommand() const
+    {
+        if( getCurrentPlotWindow() == nullptr )
+            return m_exporter->GetSheetSimCommand();
+        else
+            return m_workbook->GetSimCommand( getCurrentPlotWindow() );
+    }
+
+    /**
      * Return X axis for a given simulation type.
      */
-    SIM_PLOT_TYPE GetXAxisType( SIM_TYPE aType ) const;
+    SIM_PLOT_TYPE getXAxisType( SIM_TYPE aType ) const;
 
     // Menu handlers
     void menuNewPlot( wxCommandEvent& aEvent ) override;
@@ -354,6 +370,7 @@ private:
     int m_splitterTuneValuesSashPosition;
     bool m_plotUseWhiteBg;
     unsigned int m_plotNumber;
+    bool m_simFinished;
 };
 
 // Commands
