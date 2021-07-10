@@ -113,9 +113,8 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
 
     if( !hasNullByte )
     {
-        wxLogError( _( "For Altium import, we assumes a null byte at the end of a list of "
-                       "properties. Because this is missing, imported data might be malformed or "
-                       "missing." ) );
+        wxLogError( _( "Missing null byte at end of property list. Imported data might be "
+                       "malformed or missing." ) );
     }
 
     // we use std::string because std::string can handle NULL-bytes

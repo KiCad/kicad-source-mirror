@@ -1258,9 +1258,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
     ALTIUM_PARSER reader( aReader, aEntry );
 
     if( reader.GetRemainingBytes() == 0 )
-    {
-        return; // fast path: no 3d-models present which need to be imported -> no directory needs to be created
-    }
+        return;
 
     wxString projectPath = wxPathOnly( m_board->GetFileName() );
     // TODO: set KIPRJMOD always after import (not only when loading project)?
@@ -1271,6 +1269,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
 
     wxFileName altiumModelsPath = wxFileName::DirName( projectPath );
     wxString   kicadModelPrefix = "${KIPRJMOD}/" + altiumModelDir + "/";
+
     if( !altiumModelsPath.AppendDir( altiumModelDir ) )
     {
         THROW_IO_ERROR( "Cannot construct directory path for step models" );
@@ -1281,21 +1280,28 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
     {
         if( !altiumModelsPath.Mkdir() )
         {
-            wxLogError( _( "Failed to create folder '%s'." ) + _( "No 3D-models will be imported." ),
+            wxLogError( _( "Failed to create folder '%s'." ) + wxS( " " )
+                      + _( "No 3D-models will be imported." ),
                         altiumModelsPath.GetFullPath() );
             return;
         }
     }
 
     int idx = 0;
+
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
         checkpoint();
         AMODEL elem( reader );
 
-        wxString stepPath = aRootDir + std::to_string( idx++ );
+        wxString   stepPath = wxString::Format( aRootDir + "%d", idx );
+        wxString   storageName = elem.name.IsEmpty() ? wxString::Format( "%d", idx ) : elem.name;
+        wxFileName storagePath( altiumModelsPath.GetPath(), storageName );
+
+        idx++;
 
         const CFB::COMPOUND_FILE_ENTRY* stepEntry = FindStream( aReader, stepPath.c_str() );
+
         if( stepEntry == nullptr )
         {
             wxLogError( _( "File not found: '%s'. 3D-model not imported." ), stepPath );
@@ -1307,8 +1313,6 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
 
         // read file into buffer
         aReader.ReadFile( stepEntry, 0, stepContent.get(), stepSize );
-
-        wxFileName storagePath( altiumModelsPath.GetPath(), elem.name );
 
         if( !storagePath.IsDirWritable() )
         {
