@@ -550,10 +550,10 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 return segs;
             };
 
-    BOARD_COMMIT commit( m_frame );
+    BOARD_COMMIT          commit( m_frame );
     FOOTPRINT_EDIT_FRAME* fpEditor = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
-
-    FOOTPRINT* footprint = nullptr;
+    FOOTPRINT*            footprint = nullptr;
+    PCB_LAYER_ID          copperLayer = UNSELECTED_LAYER;
 
     if( fpEditor )
         footprint = fpEditor->GetBoard()->GetFirstFootprint();
@@ -597,7 +597,15 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
             BOARD_ITEM_CONTAINER* parent = frame->GetModel();
 
             if( !IsCopperLayer( layer ) )
-                layer = frame->SelectOneLayer( F_Cu, LSET::AllNonCuMask() );
+            {
+                if( copperLayer == UNSELECTED_LAYER )
+                    copperLayer = frame->SelectOneLayer( F_Cu, LSET::AllNonCuMask() );
+
+                if( copperLayer == UNDEFINED_LAYER )    // User cancelled
+                    continue;
+
+                layer = copperLayer;
+            }
 
             // I am really unsure converting a polygon to "tracks" (i.e. segments on
             // copper layers) make sense for footprints, but anyway this code exists
