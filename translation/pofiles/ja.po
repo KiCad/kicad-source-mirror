@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-09 08:32+0000\n"
+"PO-Revision-Date: 2021-07-12 08:34+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -376,14 +376,12 @@ msgid "Silkscreen bottom:"
 msgstr "裏面シルクスクリーン:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:67
-#, fuzzy
 msgid "Solder mask top:"
-msgstr "半田マスク オプション:"
+msgstr "ハンダマスク表面:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:74
-#, fuzzy
 msgid "Solder mask bottom:"
-msgstr "ハンダ マスクの色"
+msgstr "ハンダマスク裏面:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:87
 msgid "Solder paste:"
@@ -4410,9 +4408,8 @@ msgstr ""
 "このファイルを開くためには KiCad を %s 以降のバージョンにアップグレードする必要があります。"
 
 #: common/exceptions.cpp:126
-#, fuzzy
 msgid "Full error text:"
-msgstr "テキストを反転"
+msgstr "エラー文字列全文:"
 
 #: common/filehistory.cpp:155
 msgid "No Files"
