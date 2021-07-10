@@ -84,7 +84,10 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
                          wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), NULL, this );
 
     if( Prj().IsReadOnly() )
-        m_infoBar->ShowMessage( _( "Project is missing or read-only. Changes will not be saved." ) );
+    {
+        m_infoBar->ShowMessage( _( "Project is missing or read-only. Changes will not be saved." ),
+                                wxICON_WARNING );
+    }
 
     finishDialogSettings();
 }
