@@ -109,6 +109,8 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     m_layerColors[LAYER_PAD_PLATEDHOLES] = aSettings->GetColor( LAYER_PCB_BACKGROUND );
     m_layerColors[LAYER_VIA_NETNAMES]    = COLOR4D( 0.2, 0.2, 0.2, 0.9 );
     m_layerColors[LAYER_PAD_NETNAMES]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
+    m_layerColors[LAYER_PAD_FR]          = aSettings->GetColor( F_Cu );
+    m_layerColors[LAYER_PAD_BK]          = aSettings->GetColor( B_Cu );
     m_layerColors[LAYER_PAD_FR_NETNAMES] = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[LAYER_PAD_BK_NETNAMES] = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
 
@@ -1272,9 +1274,11 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
          * For other layers, use the pad shape, although one can use an other criteria,
          * depending on the non copper layer.
          */
-        int activeLayer = m_pcbSettings.GetActiveLayer();
-        bool flashActiveLayer = IsCopperLayer( activeLayer ) ?
-                                    aPad->FlashLayer( activeLayer ) : true;
+        int  activeLayer = m_pcbSettings.GetActiveLayer();
+        bool flashActiveLayer = true;
+
+        if( IsCopperLayer( activeLayer ) )
+            flashActiveLayer = aPad->FlashLayer( activeLayer );
 
         if( flashActiveLayer || aPad->GetDrillSize().x )
         {

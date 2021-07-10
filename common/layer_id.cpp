@@ -146,8 +146,8 @@ wxString LayerName( int aLayer )
     case LAYER_MOD_TEXT_FR:             return _( "Footprint text front" );
     case LAYER_MOD_TEXT_BK:             return _( "Footprint text back" );
     case LAYER_MOD_TEXT_INVISIBLE:      return _( "Hidden text" );
-    case LAYER_PAD_FR:                  return _( "Pads front" );
-    case LAYER_PAD_BK:                  return _( "Pads back" );
+    case LAYER_PAD_FR:                  return _( "SMD pads front" );
+    case LAYER_PAD_BK:                  return _( "SMD pads back" );
     case LAYER_PADS_TH:                 return _( "Through-hole pads" );
     case LAYER_TRACKS:                  return _( "Tracks" );
     case LAYER_VIA_THROUGH:             return _( "Through vias" );

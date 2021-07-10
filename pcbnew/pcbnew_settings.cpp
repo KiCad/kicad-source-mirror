@@ -761,8 +761,6 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "Color4DGrid",               LAYER_GRID );
     migrateLegacyColor( "Color4DNoNetPadMarker",     LAYER_NO_CONNECTS );
     migrateLegacyColor( "Color4DNonPlatedEx",        LAYER_NON_PLATEDHOLES );
-    migrateLegacyColor( "Color4DPadBackEx",          LAYER_PAD_BK );
-    migrateLegacyColor( "Color4DPadFrontEx",         LAYER_PAD_FR );
     migrateLegacyColor( "Color4DPadThruHoleEx",      LAYER_PADS_TH );
     migrateLegacyColor( "Color4DPCBBackground",      LAYER_PCB_BACKGROUND );
     migrateLegacyColor( "Color4DPCBCursor",          LAYER_CURSOR );

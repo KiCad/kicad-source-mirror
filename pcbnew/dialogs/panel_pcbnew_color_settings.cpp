@@ -356,6 +356,8 @@ std::set<int> g_excludedLayers =
             LAYER_VIA_HOLEWALLS,
             LAYER_MOD_FR,
             LAYER_MOD_BK,
+            LAYER_PAD_FR,
+            LAYER_PAD_BK,
             LAYER_MOD_VALUES,
             LAYER_MOD_REFERENCES,
             LAYER_TRACKS,
