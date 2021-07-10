@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-09 08:32+0000\n"
+"PO-Revision-Date: 2021-07-10 17:36+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -290,7 +290,7 @@ msgstr "Kopiuj obraz 3D do schowka"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:238
 msgid "Raytracing"
-msgstr "Raytracing"
+msgstr "Fotorealizm"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:112 common/tool/actions.cpp:591
 #: cvpcb/menubar.cpp:74 eeschema/menubar.cpp:272
@@ -4723,243 +4723,243 @@ msgstr "Ustaw język"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
-msgstr "F.Cu"
+msgstr "Górna sygnałowa"
 
 #: common/layer_id.cpp:33
 msgid "In1.Cu"
-msgstr "In1.Cu"
+msgstr "Wewnętrzna 1 sygnałowa"
 
 #: common/layer_id.cpp:34
 msgid "In2.Cu"
-msgstr "In2.Cu"
+msgstr "Wewnętrzna 2 sygnałowa"
 
 #: common/layer_id.cpp:35
 msgid "In3.Cu"
-msgstr "In3.Cu"
+msgstr "Wewnętrzna 3 sygnałowa"
 
 #: common/layer_id.cpp:36
 msgid "In4.Cu"
-msgstr "In4.Cu"
+msgstr "Wewnętrzna 4 sygnałowa"
 
 #: common/layer_id.cpp:37
 msgid "In5.Cu"
-msgstr "In5.Cu"
+msgstr "Wewnętrzna 5 sygnałowa"
 
 #: common/layer_id.cpp:38
 msgid "In6.Cu"
-msgstr "In6.Cu"
+msgstr "Wewnętrzna 6 sygnałowa"
 
 #: common/layer_id.cpp:39
 msgid "In7.Cu"
-msgstr "In7.Cu"
+msgstr "Wewnętrzna 7 sygnałowa"
 
 #: common/layer_id.cpp:40
 msgid "In8.Cu"
-msgstr "In8.Cu"
+msgstr "Wewnętrzna 8 sygnałowa"
 
 #: common/layer_id.cpp:41
 msgid "In9.Cu"
-msgstr "In9.Cu"
+msgstr "Wewnętrzna 9 sygnałowa"
 
 #: common/layer_id.cpp:42
 msgid "In10.Cu"
-msgstr "In10.Cu"
+msgstr "Wewnętrzna 10 sygnałowa"
 
 #: common/layer_id.cpp:43
 msgid "In11.Cu"
-msgstr "In11.Cu"
+msgstr "Wewnętrzna 11 sygnałowa"
 
 #: common/layer_id.cpp:44
 msgid "In12.Cu"
-msgstr "In12.Cu"
+msgstr "Wewnętrzna 12 sygnałowa"
 
 #: common/layer_id.cpp:45
 msgid "In13.Cu"
-msgstr "In13.Cu"
+msgstr "Wewnętrzna 13 sygnałowa"
 
 #: common/layer_id.cpp:46
 msgid "In14.Cu"
-msgstr "In14.Cu"
+msgstr "Wewnętrzna 14 sygnałowa"
 
 #: common/layer_id.cpp:47
 msgid "In15.Cu"
-msgstr "In15.Cu"
+msgstr "Wewnętrzna 15 sygnałowa"
 
 #: common/layer_id.cpp:48
 msgid "In16.Cu"
-msgstr "In16.Cu"
+msgstr "Wewnętrzna 16 sygnałowa"
 
 #: common/layer_id.cpp:49
 msgid "In17.Cu"
-msgstr "In17.Cu"
+msgstr "Wewnętrzna 17 sygnałowa"
 
 #: common/layer_id.cpp:50
 msgid "In18.Cu"
-msgstr "In18.Cu"
+msgstr "Wewnętrzna 18 sygnałowa"
 
 #: common/layer_id.cpp:51
 msgid "In19.Cu"
-msgstr "In19.Cu"
+msgstr "Wewnętrzna 19 sygnałowa"
 
 #: common/layer_id.cpp:52
 msgid "In20.Cu"
-msgstr "In20.Cu"
+msgstr "Wewnętrzna 20 sygnałowa"
 
 #: common/layer_id.cpp:53
 msgid "In21.Cu"
-msgstr "In21.Cu"
+msgstr "Wewnętrzna 21 sygnałowa"
 
 #: common/layer_id.cpp:54
 msgid "In22.Cu"
-msgstr "In22.Cu"
+msgstr "Wewnętrzna 22 sygnałowa"
 
 #: common/layer_id.cpp:55
 msgid "In23.Cu"
-msgstr "In23.Cu"
+msgstr "Wewnętrzna 23 sygnałowa"
 
 #: common/layer_id.cpp:56
 msgid "In24.Cu"
-msgstr "In24.Cu"
+msgstr "Wewnętrzna 24 sygnałowa"
 
 #: common/layer_id.cpp:57
 msgid "In25.Cu"
-msgstr "In25.Cu"
+msgstr "Wewnętrzna 25 sygnałowa"
 
 #: common/layer_id.cpp:58
 msgid "In26.Cu"
-msgstr "In26.Cu"
+msgstr "Wewnętrzna 26 sygnałowa"
 
 #: common/layer_id.cpp:59
 msgid "In27.Cu"
-msgstr "In27.Cu"
+msgstr "Wewnętrzna 27 sygnałowa"
 
 #: common/layer_id.cpp:60
 msgid "In28.Cu"
-msgstr "In28.Cu"
+msgstr "Wewnętrzna 28 sygnałowa"
 
 #: common/layer_id.cpp:61
 msgid "In29.Cu"
-msgstr "In29.Cu"
+msgstr "Wewnętrzna 29 sygnałowa"
 
 #: common/layer_id.cpp:62
 msgid "In30.Cu"
-msgstr "In30.Cu"
+msgstr "Wewnętrzna 30 sygnałowa"
 
 #: common/layer_id.cpp:63
 msgid "B.Cu"
-msgstr "B.Cu"
+msgstr "Dolna sygnałowa"
 
 #: common/layer_id.cpp:66
 msgid "B.Adhesive"
-msgstr "B.Adhesive"
+msgstr "Dolna kleju"
 
 #: common/layer_id.cpp:67
 msgid "F.Adhesive"
-msgstr "F.Adhesive"
+msgstr "Górna kleju"
 
 #: common/layer_id.cpp:68
 msgid "B.Paste"
-msgstr "B.Paste"
+msgstr "Dolna pasty"
 
 #: common/layer_id.cpp:69
 msgid "F.Paste"
-msgstr "F.Paste"
+msgstr "Górna pasty"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
+msgstr "Dolna opisowa"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr "Górna opisowa"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
-msgstr "B.Mask"
+msgstr "Dolna sodermaski"
 
 #: common/layer_id.cpp:73
 msgid "F.Mask"
-msgstr "F.Mask"
+msgstr "Górna soldermaski"
 
 #: common/layer_id.cpp:76
 msgid "User.Drawings"
-msgstr "User.Drawings"
+msgstr "Rysunkowa użytkownika"
 
 #: common/layer_id.cpp:77
 msgid "User.Comments"
-msgstr "User.Comments"
+msgstr "Komentarzy użytkownika"
 
 #: common/layer_id.cpp:78
 msgid "User.Eco1"
-msgstr "User.Eco1"
+msgstr "Inżynieryjna 1"
 
 #: common/layer_id.cpp:79
 msgid "User.Eco2"
-msgstr "User.Eco2"
+msgstr "Inżynieryjna 2"
 
 #: common/layer_id.cpp:80
 msgid "Edge.Cuts"
-msgstr "Edge.Cuts"
+msgstr "Krawędziowa"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:662
 msgid "Margin"
-msgstr "Margin"
+msgstr "Marginesu"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
-msgstr "F.Courtyard"
+msgstr "Górne pola zajętości"
 
 #: common/layer_id.cpp:85
 msgid "B.Courtyard"
-msgstr "B.Courtyard"
+msgstr "Dolne pola zajętości"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
-msgstr "F.Fab"
+msgstr "Górna produkcyjna"
 
 #: common/layer_id.cpp:87
 msgid "B.Fab"
-msgstr "B.Fab"
+msgstr "Dolna produkcyjna"
 
 #: common/layer_id.cpp:90
 msgid "User.1"
-msgstr "User.1"
+msgstr "Użytkownika 1"
 
 #: common/layer_id.cpp:91
 msgid "User.2"
-msgstr "User.2"
+msgstr "Użytkownika 2"
 
 #: common/layer_id.cpp:92
 msgid "User.3"
-msgstr "User.3"
+msgstr "Użytkownika 3"
 
 #: common/layer_id.cpp:93
 msgid "User.4"
-msgstr "User.4"
+msgstr "Użytkownika 4"
 
 #: common/layer_id.cpp:94
 msgid "User.5"
-msgstr "User.5"
+msgstr "Użytkownika 5"
 
 #: common/layer_id.cpp:95
 msgid "User.6"
-msgstr "User.6"
+msgstr "Użytkownika 6"
 
 #: common/layer_id.cpp:96
 msgid "User.7"
-msgstr "User.7"
+msgstr "Użytkownika 7"
 
 #: common/layer_id.cpp:97
 msgid "User.8"
-msgstr "User.8"
+msgstr "Użytkownika 8"
 
 #: common/layer_id.cpp:98
 msgid "User.9"
-msgstr "User.9"
+msgstr "Użytkownika 9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:763
 msgid "Rescue"
-msgstr "Odzyskaj"
+msgstr "Odzyskania"
 
 #: common/layer_id.cpp:105
 msgid "Wires"
@@ -5141,11 +5141,11 @@ msgstr "Tekst ukryty"
 
 #: common/layer_id.cpp:149
 msgid "Pads front"
-msgstr "Pady na stronie górnej"
+msgstr "Pola lutownicze na stronie górnej"
 
 #: common/layer_id.cpp:150
 msgid "Pads back"
-msgstr "Pady na stronie dolniej"
+msgstr "Pole lutownicze na stronie dolnej"
 
 #: common/layer_id.cpp:151
 msgid "Through-hole pads"
@@ -5162,7 +5162,7 @@ msgstr "Ścieżki"
 
 #: common/layer_id.cpp:153
 msgid "Through vias"
-msgstr "Przelotek na wylot"
+msgstr "Przelotki na wylot"
 
 #: common/layer_id.cpp:154
 msgid "Bl/Buried vias"
@@ -5170,7 +5170,7 @@ msgstr "Przelotki ślepe/zagrzebane"
 
 #: common/layer_id.cpp:155
 msgid "Micro-vias"
-msgstr "Mikroprzelotek"
+msgstr "Mikroprzelotki"
 
 #: common/layer_id.cpp:156
 msgid "Via holes"
