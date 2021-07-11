@@ -49,6 +49,22 @@ enum RECT_CHAMFER_POSITIONS : int
 
 
 /**
+ * Generate a polyline to approximate a arc
+ *
+ * @param aPolyline is a buffer to store the polyline.
+ * @param aCenter is the center of the arc.
+ * @param aRadius is the radius of the arc.
+ * @param aStartAngleDeg is the starting point (in degrees) of the arc.
+ * @param aArcAngleDeg is the angle (in degrees) of the arc.
+ * @param aError is the internal units allowed for error approximation.
+ * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
+ */
+int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRadius,
+                          double aStartAngleDeg, double aArcAngleDeg, double aAccuracy,
+                          ERROR_LOC aErrorLoc );
+
+
+/**
  * Convert a circle to a polygon, using multiple straight lines.
  *
  * @param aCornerBuffer is a buffer to store the polygon.

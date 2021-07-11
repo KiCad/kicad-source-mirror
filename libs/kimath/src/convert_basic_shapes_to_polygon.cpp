@@ -393,27 +393,27 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
 }
 
 
-static int convertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRadius,
-                          double aStartAngle, double aArcAngle, double aAccuracy,
+int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRadius,
+                          double aStartAngleDeg, double aArcAngleDeg, double aAccuracy,
                           ERROR_LOC aErrorLoc )
 {
-    double endAngle = aStartAngle + aArcAngle;
+    double endAngle = aStartAngleDeg + aArcAngleDeg;
     int n = 2;
 
     if( aRadius >= aAccuracy )
-        n = GetArcToSegmentCount( aRadius, aAccuracy, aArcAngle )+1;  // n >= 3
+        n = GetArcToSegmentCount( aRadius, aAccuracy, aArcAngleDeg )+1;  // n >= 3
 
     if( aErrorLoc == ERROR_OUTSIDE )
     {
-        int seg360 = std::abs( KiROUND( n * 360.0 / aArcAngle ) );
+        int seg360 = std::abs( KiROUND( n * 360.0 / aArcAngleDeg ) );
         int actual_delta_radius = CircleToEndSegmentDeltaRadius( aRadius, seg360 );
         aRadius += actual_delta_radius;
     }
 
     for( int i = 0; i <= n ; i++ )
     {
-        double rot = aStartAngle;
-        rot += ( aArcAngle * i ) / n;
+        double rot = aStartAngleDeg;
+        rot += ( aArcAngleDeg * i ) / n;
 
         double x = aCenter.x + aRadius * cos( rot * M_PI / 180.0 );
         double y = aCenter.y + aRadius * sin( rot * M_PI / 180.0 );
@@ -480,11 +480,11 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoi
 
     polyshape.NewOutline();
 
-    convertArcToPolyline( polyshape.Outline(2), center, arc_outer_radius,
+    ConvertArcToPolyline( polyshape.Outline(2), center, arc_outer_radius,
                           arc_angle_start_deg, arc_angle, aError, errorLocOuter );
 
     if( arc_inner_radius > 0 )
-        convertArcToPolyline( polyshape.Outline(2), center, arc_inner_radius,
+        ConvertArcToPolyline( polyshape.Outline(2), center, arc_inner_radius,
                               arc_angle_end_deg, -arc_angle, aError, errorLocInner );
     else
         polyshape.Append( center );
