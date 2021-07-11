@@ -134,6 +134,7 @@ private:
     static DRC_ITEM heading_DFM;
     static DRC_ITEM heading_schematic_parity;
     static DRC_ITEM heading_signal_integrity;
+    static DRC_ITEM heading_readability;
     static DRC_ITEM heading_misc;
 
     static DRC_ITEM unconnectedItems;

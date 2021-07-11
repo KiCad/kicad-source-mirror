@@ -41,9 +41,10 @@
 
 
 DRC_ITEM DRC_ITEM::heading_electrical( 0, _( "Electrical" ), "" );
-DRC_ITEM DRC_ITEM::heading_DFM( 0, _( "Design For Manufacturing" ), "" );
+DRC_ITEM DRC_ITEM::heading_DFM( 0, _( "Design for Manufacturing" ), "" );
 DRC_ITEM DRC_ITEM::heading_schematic_parity( 0, _( "Schematic Parity" ), "" );
 DRC_ITEM DRC_ITEM::heading_signal_integrity( 0, _( "Signal Integrity" ), "" );
+DRC_ITEM DRC_ITEM::heading_readability( 0, _( "Readability" ), "" );
 DRC_ITEM DRC_ITEM::heading_misc( 0, _( "Miscellaneous" ), "" );
 
 DRC_ITEM DRC_ITEM::unconnectedItems( DRCE_UNCONNECTED_ITEMS,
@@ -258,10 +259,14 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::diffPairGapOutOfRange,
             DRC_ITEM::diffPairUncoupledLengthTooLong,
 
-            DRC_ITEM::heading_misc,
-            DRC_ITEM::itemsNotAllowed,
+            DRC_ITEM::heading_readability,
             DRC_ITEM::silkOverlaps,
             DRC_ITEM::silkMaskClearance,
+            DRC_ITEM::textHeightOutOfRange,
+            DRC_ITEM::textThicknessOutOfRange,
+
+            DRC_ITEM::heading_misc,
+            DRC_ITEM::itemsNotAllowed,
             DRC_ITEM::zonesIntersect,
             DRC_ITEM::zoneHasEmptyNet,
             DRC_ITEM::padstack,
@@ -271,6 +276,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::unresolvedVariable,
 
             DRC_ITEM::footprintTypeMismatch,
+            DRC_ITEM::libFootprintIssues,
             DRC_ITEM::footprintTHPadhasNoHole
         } );
 

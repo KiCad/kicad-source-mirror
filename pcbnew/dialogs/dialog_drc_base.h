@@ -28,6 +28,7 @@ class WX_HTML_REPORT_BOX;
 #include <wx/icon.h>
 #include <wx/notebook.h>
 #include <wx/dataview.h>
+#include <wx/listctrl.h>
 #include <wx/simplebook.h>
 #include <wx/stattext.h>
 #include <widgets/number_badge.h>
@@ -64,6 +65,8 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 		wxDataViewCtrl* m_unconnectedDataView;
 		wxPanel* m_panelFootprintWarnings;
 		wxDataViewCtrl* m_footprintsDataView;
+		wxPanel* m_panelIgnored;
+		wxListCtrl* m_ignoredList;
 		wxStaticText* m_showLabel;
 		wxCheckBox* m_showAll;
 		wxCheckBox* m_showErrors;
@@ -89,6 +92,7 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 		virtual void OnDRCItemDClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnDRCItemRClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnDRCItemSelected( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnIgnoreItemRClick( wxListEvent& event ) { event.Skip(); }
 		virtual void OnSeverity( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveReport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteOneClick( wxCommandEvent& event ) { event.Skip(); }
