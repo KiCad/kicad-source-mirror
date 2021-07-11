@@ -116,6 +116,8 @@ protected:
     virtual bool updateUI() = 0;
 
     wxString           m_rptMessage;
+    bool               m_msgChanged;    // true after change in m_rptMessage
+                                        // the dialog needs perhaps a resize
     mutable std::mutex m_mutex;
     std::atomic_int    m_phase;
     std::atomic_int    m_numPhases;

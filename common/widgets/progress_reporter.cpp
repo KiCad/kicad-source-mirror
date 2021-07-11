@@ -27,6 +27,7 @@
 #include <thread>
 
 PROGRESS_REPORTER::PROGRESS_REPORTER( int aNumPhases ) :
+    m_msgChanged( false ),
     m_phase( 0 ),
     m_numPhases( aNumPhases ),
     m_progress( 0 ),
@@ -61,6 +62,7 @@ void PROGRESS_REPORTER::Report( const wxString& aMessage )
 {
     std::lock_guard<std::mutex> guard( m_mutex );
     m_rptMessage = aMessage;
+    m_msgChanged = true;
 }
 
 
@@ -170,14 +172,22 @@ bool WX_PROGRESS_REPORTER::updateUI()
     if( cur < 0 || cur > 1000 )
         cur = 0;
 
+    bool msgChanged = false;
     wxString message;
     {
         std::lock_guard<std::mutex> guard( m_mutex );
         message = m_rptMessage;
+        msgChanged = m_msgChanged;
+        m_msgChanged = false;
     }
 
     SetRange( 1000 );
-    return wxProgressDialog::Update( cur, message );
+    bool diag = wxProgressDialog::Update( cur, message );
+
+    if( msgChanged )
+        Fit();
+
+    return diag;
 }
 
 
