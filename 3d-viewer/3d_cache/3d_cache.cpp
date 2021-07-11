@@ -238,7 +238,7 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
 
         if( fname.FileExists() )    // Only check if file exists. If not, it will
         {                           // use the same model in cache.
-            bool reload = false;
+            bool       reload = ADVANCED_CFG::GetCfg().m_Skip3DMemoryCache;
             wxDateTime fmdate = fname.GetModificationTime();
 
             if( fmdate != mi->second->modTime )
@@ -292,17 +292,17 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
     if( aCachePtr )
         *aCachePtr = nullptr;
 
-    unsigned char sha1sum[20];
+    unsigned char    sha1sum[20];
+    S3D_CACHE_ENTRY* ep = new S3D_CACHE_ENTRY;
+    m_CacheList.push_back( ep );
+    wxFileName fname( aFileName );
+    ep->modTime = fname.GetModificationTime();
 
     if( !getSHA1( aFileName, sha1sum ) || m_CacheDir.empty() )
     {
         // just in case we can't get a hash digest (for example, on access issues)
         // or we do not have a configured cache file directory, we create an
         // entry to prevent further attempts at loading the file
-        S3D_CACHE_ENTRY* ep = new S3D_CACHE_ENTRY;
-        m_CacheList.push_back( ep );
-        wxFileName fname( aFileName );
-        ep->modTime = fname.GetModificationTime();
 
         if( m_CacheMap.insert( std::pair< wxString, S3D_CACHE_ENTRY* >
             ( aFileName, ep ) ).second == false )
@@ -321,11 +321,6 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
 
         return nullptr;
     }
-
-    S3D_CACHE_ENTRY* ep = new S3D_CACHE_ENTRY;
-    m_CacheList.push_back( ep );
-    wxFileName fname( aFileName );
-    ep->modTime = fname.GetModificationTime();
 
     if( m_CacheMap.insert( std::pair< wxString, S3D_CACHE_ENTRY* >
                                ( aFileName, ep ) ).second == false )

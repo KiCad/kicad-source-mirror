@@ -164,6 +164,8 @@ static const wxChar ShowPcbnewExportNetlist[] = wxT( "ShowPcbnewExportNetlist" )
 
 static const wxChar Skip3DFileCache[] = wxT( "Skip3DFileCache" );
 
+static const wxChar Skip3DMemoryCache[] = wxT( "Skip3DMemoryCache" );
+
 } // namespace KEYS
 
 
@@ -369,6 +371,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Skip3DFileCache,
                                                 &m_Skip3DFileCache, false ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Skip3DMemoryCache,
+                                                &m_Skip3DMemoryCache, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 

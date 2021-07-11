@@ -175,6 +175,11 @@ public:
      */
     bool m_Skip3DFileCache;
 
+    /**
+     * Skip reading/writing 3d model memory caches
+     */
+    bool m_Skip3DMemoryCache;
+
 private:
     ADVANCED_CFG();
 
