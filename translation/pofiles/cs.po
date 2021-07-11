@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-09 08:32+0000\n"
+"PO-Revision-Date: 2021-07-12 08:34+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -4436,21 +4436,18 @@ msgid "from %s : %s() line:%d"
 msgstr "z %s: %s() řádek:%d"
 
 #: common/exceptions.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad nemohl otevřít tento soubor, protože byl vytvořen\n"
-"novější verzí, než je verze, kterou používáte.\n"
-"Chcete-li jej otevřít, budete muset aktualizovat KiCad na novější verzi.\n"
+"KiCad nemohl otevřít tento soubor, protože byl vytvořen novější verzí, než "
+"tou, která je spuštěna.\n"
 "\n"
-"Datum požadované verze KiCadu (nebo novější): %s\n"
-"\n"
-"Plný text chyby:\n"
-"%s"
+"Chcete-li jej otevřít, budete muset aktualizovat KiCad na verzi datovanou %s "
+"nebo novější."
 
 #: common/exceptions.cpp:126
 #, fuzzy
@@ -13689,31 +13686,17 @@ msgid "Invalid symbol unit number %s"
 msgstr "Neplatný identifikátor knihovny symbolů"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol convert number %s"
-msgstr ""
-"Neplatné číslo jednotky symbolu %s v\n"
-"souboru: \"%s\"\n"
-"řádek: %d\n"
-"offset: %d"
+msgstr "Neplatné číslo konverze symbolu %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:428
-#, fuzzy
 msgid "Floating point number with incorrect locale"
-msgstr ""
-"Číslo s plovoucí desetinnou čárkou se špatnou místní hodnotou v\n"
-"souboru: \"%s\"\n"
-"řádek: %d\n"
-"offset: %d"
+msgstr "Plovoucí číslo s nesprávným oddělovačem"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:438
-#, fuzzy
 msgid "Invalid floating point number"
-msgstr ""
-"Neplatné reálné číslo v\n"
-"souboru: \"%s\"\n"
-"řádek: %d\n"
-"offset: %d"
+msgstr "Neplatné plovoucí číslo"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:444
 #, fuzzy
@@ -13868,11 +13851,9 @@ msgid "Unexpected end of file."
 msgstr "Neočekávaný konec souboru"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2710
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr ""
-"Nedostatek požadovaných oprávnění k uložení souboru\n"
-"%s"
+msgstr "Nedostatek požadovaných oprávnění ke čtení knihovny '%s'."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2719
 msgid "symbol document library file is empty"
@@ -15127,11 +15108,13 @@ msgid "Symbol name '%s' already in use."
 msgstr "Název '%s' se již používá."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:732
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
-msgstr "Aktuální deska byla upravena. Přejete si uložit změny?"
+msgstr ""
+"Symbol '%s' byl upraven.\n"
+"Chcete jej odstranit z knihovny?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:743
 #, c-format
@@ -15252,11 +15235,9 @@ msgid "Overwrite"
 msgstr "Přepsat"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr ""
-"Nedostatek požadovaných oprávnění k uložení souboru\n"
-"%s"
+msgstr "Nedostatečná oprávnění k uložení knihovny '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:187
 #, fuzzy, c-format
@@ -15270,11 +15251,8 @@ msgstr "Symbol \"%s\" uložen do knihovny \"%s\""
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:106
 #: eeschema/symbol_tree_model_adapter.cpp:105
-#, fuzzy
 msgid "Errors loading symbols:"
-msgstr ""
-"Chyba při načítání desky.\n"
-"%s"
+msgstr "Chyby načítání symbolů:"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:176
 #, fuzzy, c-format
@@ -15314,12 +15292,9 @@ msgstr ""
 "na řádku %d"
 
 #: eeschema/symbol_library.cpp:572 eeschema/symbol_tree_model_adapter.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol library '%s'."
-msgstr ""
-"Chyba při načítání knihovny symbolu%s.\n"
-"\n"
-"%s"
+msgstr "Chyba načítání knihovny symbolů '%s'."
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:259
 msgid "(failed to load)"
@@ -18181,11 +18156,9 @@ msgstr "Nová složka projektu"
 
 #: kicad/tools/kicad_manager_control.cpp:228
 #: kicad/tools/kicad_manager_control.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write to folder '%s'."
-msgstr ""
-"Nedostatek požadovaných oprávnění k uložení souboru\n"
-"%s"
+msgstr "Nedostatečná oprávnění k zápisu do složky '%s'."
 
 #: kicad/tools/kicad_manager_control.cpp:249
 msgid "Overwriting files:"
@@ -24036,24 +24009,18 @@ msgid "footprint"
 msgstr "pouzdro"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr ""
-"Chyba nastala při zápisu prázdné tabulky knihovny symbolů.\n"
-"\n"
-"%s"
+msgstr "Nastala chyba při zápisu prázdné tabulky knihoven pouzder '%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 msgid "Please select a footprint library table file."
 msgstr "Prosím, vyberte soubor tabulky knihovnu pouzder."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr ""
-"Soubor \"%s\" není platný soubor tabulky knihovny symbolů.\n"
-"\n"
-"%s"
+msgstr "'%s' není platný soubor tabulky knihoven pouzder."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
 #, fuzzy, c-format
