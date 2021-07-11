@@ -96,19 +96,6 @@ bool DIALOG_LIB_EDIT_DRAW_ITEM::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    // Min. 1 um and max. 1 m are more than enough.
-    if( !m_lineWidth.Validate( 0, 1000.0, EDA_UNITS::MILLIMETRES ) )
-        return false;
-
-    if( m_lineWidth.GetValue() == 0
-        && ( (FILL_TYPE) m_fillCtrl->GetSelection() ) != FILL_TYPE::FILLED_SHAPE )
-    {
-        DisplayError( this, _( "Line width may not be 0 for shapes other than filled with body "
-            "outline color." ) );
-        m_widthCtrl->SetFocus();
-        return false;
-    }
-
     if( m_item->IsFillable() )
         m_item->SetFillMode( (FILL_TYPE) std::max( m_fillCtrl->GetSelection(), 0 ) );
 
