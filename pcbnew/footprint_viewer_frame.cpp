@@ -618,8 +618,6 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& aEvent )
     if( getCurNickname() == name )
         return;
 
-    bool filterFocus = m_libFilter->HasFocus();
-
     setCurNickname( name );
 
     ReCreateFootprintList();
@@ -636,8 +634,6 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
 
     if( ii < 0 )
         return;
-
-    bool filterFocus = m_fpFilter->HasFocus();
 
     wxString name = m_fpList->GetString( ii );
 
