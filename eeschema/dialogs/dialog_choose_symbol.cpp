@@ -231,6 +231,10 @@ DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
     Unbind( SYMBOL_PRESELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentPreselected, this );
     Unbind( SYMBOL_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentSelected, this );
 
+    // Stop the timer during destruction early to avoid potential race conditions (that do happen)
+    m_dbl_click_timer->Stop();
+    delete m_dbl_click_timer;
+
     if( m_browser_button )
     {
         m_browser_button->Unbind( wxEVT_COMMAND_BUTTON_CLICKED,
@@ -248,10 +252,6 @@ DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
         m_details->Disconnect( wxEVT_CHAR_HOOK,
                                wxKeyEventHandler( DIALOG_CHOOSE_SYMBOL::OnCharHook ), NULL, this );
     }
-
-    // I am not sure the following two lines are necessary, but they will not hurt anyone
-    m_dbl_click_timer->Stop();
-    delete m_dbl_click_timer;
 
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
