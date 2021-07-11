@@ -44,7 +44,8 @@
 
 static std::vector<std::pair<PCM_PACKAGE_TYPE, wxString>> PACKAGE_TYPE_LIST = {
     { PT_PLUGIN, _( "Plugins (%d)" ) },
-    { PT_LIBRARY, _( "Libraries (%d)" ) }
+    { PT_LIBRARY, _( "Libraries (%d)" ) },
+    { PT_COLORTHEME, _( "Color themes (%d)" ) },
 };
 
 

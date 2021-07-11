@@ -32,7 +32,8 @@
                     "type": "string",
                     "enum": [
                         "plugin",
-                        "library"
+                        "library",
+                        "colortheme"
                     ],
                     "description": "Type of the package"
                 },

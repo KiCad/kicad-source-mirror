@@ -257,6 +257,9 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
     // Set up built-in environment variables (and override them from the system environment if set)
     GetCommonSettings()->InitializeEnvironment();
 
+    // Load color settings after env is initialized
+    m_settings_manager->ReloadColorSettings();
+
     // Load common settings from disk after setting up env vars
     GetSettingsManager().Load( GetCommonSettings() );
 

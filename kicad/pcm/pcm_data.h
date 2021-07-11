@@ -42,6 +42,7 @@ enum PCM_PACKAGE_TYPE
     PT_INVALID,
     PT_PLUGIN,
     PT_LIBRARY,
+    PT_COLORTHEME,
 };
 
 
@@ -159,6 +160,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM( PCM_PACKAGE_TYPE, {
                                                         { PT_INVALID, "invalid" },
                                                         { PT_PLUGIN, "plugin" },
                                                         { PT_LIBRARY, "library" },
+                                                        { PT_COLORTHEME, "colortheme" },
                                                 } )
 
 
