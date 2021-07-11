@@ -254,7 +254,17 @@ void PNS_LOG_VIEWER_OVERLAY::Arc( const SHAPE_ARC& arc )
     double   start_angle = DEG2RAD( arc.GetStartAngle() );
     double   angle = DEG2RAD( arc.GetCentralAngle() );
 
+    KIGFX::VIEW_OVERLAY::SetLineWidth( arc.GetWidth() / 10 );
     KIGFX::VIEW_OVERLAY::Arc( arc.GetCenter(), radius, start_angle, start_angle + angle );
+
+    COLOR4D prevStrokeCol = KIGFX::VIEW_OVERLAY::GetStrokeColor();
+    COLOR4D lightStrokeCol = prevStrokeCol.WithAlpha(0.5);
+    KIGFX::VIEW_OVERLAY::SetStrokeColor( lightStrokeCol );
+
+    KIGFX::VIEW_OVERLAY::SetLineWidth( arc.GetWidth() );
+    KIGFX::VIEW_OVERLAY::Arc( arc.GetCenter(), radius, start_angle, start_angle + angle );
+
+    KIGFX::VIEW_OVERLAY::SetStrokeColor( prevStrokeCol );
 }
 
 void PNS_LOG_VIEWER_OVERLAY::DrawAnnotations()

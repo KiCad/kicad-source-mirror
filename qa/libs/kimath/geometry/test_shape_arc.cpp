@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_arc.h>
 
 #include <geometry/shape_line_chain.h>
@@ -621,6 +622,129 @@ BOOST_AUTO_TEST_CASE( CollidePt )
                 else
                     BOOST_CHECK_EQUAL( dist, -1 );
             }
+        }
+    }
+}
+
+
+struct ARC_DATA_MM
+{
+    // Coordinates and dimensions in millimeters
+    double m_center_x;
+    double m_center_y;
+    double m_start_x;
+    double m_start_y;
+    double m_center_angle;
+    double m_width;
+
+    SHAPE_ARC GenerateArc() const
+    {
+        SHAPE_ARC arc( VECTOR2D( PcbMillimeter2iu( m_center_x ), PcbMillimeter2iu( m_center_y ) ),
+                       VECTOR2D( PcbMillimeter2iu( m_start_x ), PcbMillimeter2iu( m_start_y ) ),
+                       m_center_angle, PcbMillimeter2iu( m_width ) );
+
+        return arc;
+    }
+};
+
+
+struct ARC_ARC_COLLIDE_CASE
+{
+    std::string         m_ctx_name;
+    ARC_DATA_MM         m_arc1;
+    ARC_DATA_MM         m_arc2;
+    int                 m_clearance;
+    bool                m_exp_result;
+};
+
+
+static const std::vector<ARC_ARC_COLLIDE_CASE> arc_arc_collide_cases = {
+    { "case 1: No intersection",
+      { 73.843527, 74.355869, 71.713528, 72.965869, -76.36664803, 0.2 },
+      { 71.236473, 74.704131, 73.366472, 76.094131, -76.36664803, 0.2 },
+      0,
+      false },
+    { "case 2: No intersection",
+      { 82.542335, 74.825975, 80.413528, 73.435869, -76.4, 0.2 },
+      { 76.491192, 73.839894, 78.619999, 75.23, -76.4, 0.2 },
+      0,
+      false },
+    { "case 3: No intersection",
+      { 89.318807, 74.810106, 87.19, 73.42, -76.4, 0.2 },
+      { 87.045667, 74.632941, 88.826472, 75.794131, -267.9, 0.2 },
+      0,
+      false },
+    { "case 4: Co-centered not intersecting",
+      { 94.665667, 73.772941, 96.446472, 74.934131, -267.9, 0.2 },
+      { 94.665667, 73.772941, 93.6551, 73.025482, -255.5, 0.2 },
+      0,
+      false },
+    { "case 5: Not intersecting, but end points very close",
+      { 72.915251, 80.493054, 73.570159, 81.257692, -260.5, 0.2 },
+      { 73.063537, 82.295989, 71.968628, 81.581351, -255.5, 0.2 },
+      0,
+      false },
+    { "case 6: Coincident centers, colliding due to arc thickness",
+      { 79.279991, 80.67988, 80.3749, 81.394518, -255.5, 0.2 },
+      { 79.279991, 80.67988, 80.3749, 81.694518, -255.5, 0.2 },
+      0,
+      true },
+    { "case 7: Single intersection",
+      { 88.495265, 81.766089, 90.090174, 82.867869, -255.5, 0.2 },
+      { 86.995265, 81.387966, 89.090174, 82.876887, -255.5, 0.2 },
+      0,
+      true },
+    { "case 8: Double intersection",
+      { 96.149734, 81.792126, 94.99, 83.37, -347.2, 0.2 },
+      { 94.857156, 81.240589, 95.91, 83.9, -288.5, 0.2 },
+      0,
+      true },
+    { "case 9: Endpoints within arc width",
+      { 72.915251, 86.493054, 73.970159, 87.257692, -260.5, 0.2 },
+      { 73.063537, 88.295989, 71.968628, 87.581351, -255.5, 0.2 },
+      0,
+      true },
+    { "case 10: Endpoints close, outside, no collision",
+      { 78.915251, 86.393054, 79.970159, 87.157692, 99.5, 0.2 },
+      { 79.063537, 88.295989, 77.968628, 87.581351, -255.5, 0.2 },
+      0,
+      false },
+    { "case 11: Endpoints close, inside, collision due to arc width",
+      { 85.915251, 86.993054, 86.970159, 87.757692, 99.5, 0.2 },
+      { 86.063537, 88.295989, 84.968628, 87.581351, -255.5, 0.2 },
+      0,
+      true },
+};
+
+
+BOOST_AUTO_TEST_CASE( CollideArc )
+{
+    for( const auto& c : arc_arc_collide_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_ctx_name )
+        {
+            SHAPE_ARC arc1( c.m_arc1.GenerateArc() );
+            SHAPE_ARC arc2( c.m_arc2.GenerateArc() );
+
+            int      actual = 0;
+            VECTOR2I location;
+
+            bool result = static_cast<SHAPE*>( &arc1 )->Collide( &arc2, c.m_clearance, &actual,
+                                                                 &location );
+
+            BOOST_CHECK_EQUAL( result, c.m_exp_result );
+
+            // Test conversion to polygon
+            /*
+            SHAPE_POLY_SET poly;
+
+            TransformArcToPolygon( poly, wxPoint( arc1.GetP0() ), wxPoint( arc1.GetArcMid() ),
+                                   wxPoint( arc1.GetP1() ), arc1.GetWidth() * 2,
+                                   SHAPE_ARC::DefaultAccuracyForPCB(), ERROR_OUTSIDE );
+
+            bool result2 = poly.Collide( &arc1, arc1.GetWidth(), &actual, &location);
+
+            BOOST_CHECK_EQUAL( result2, false );*/
         }
     }
 }

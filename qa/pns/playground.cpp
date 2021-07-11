@@ -101,8 +101,8 @@ static int arclineIntersect( const SHAPE_ARC& a, const SEG& s, VECTOR2D* pts )
     overlay->AnnotatedPoint( s.B, 200000 );
     overlay->SetStrokeColor( YELLOW );
     overlay->AnnotatedPoint( c, 200000 );
-    
-    
+
+
     overlay->SetStrokeColor( WHITE );
     overlay->Arc( a );
     overlay->SetStrokeColor( DARKGRAY );
@@ -270,33 +270,39 @@ int playground_main_func( int argc, char* argv[] )
 
     struct ARC_DATA
     {
-        double sx, sy, ex, ey, ca, w;
+        double cx, cy, sx, sy, ca, w;
     };
 
-    const ARC_DATA test_data [] = 
+    const ARC_DATA test_data [] =
     {
         {73.843527, 74.355869, 71.713528, 72.965869, -76.36664803, 0.2},
         {71.236473, 74.704131, 73.366472, 76.094131, -76.36664803, 0.2},
         {82.542335, 74.825975, 80.413528, 73.435869, -76.4, 0.2},
         {76.491192, 73.839894, 78.619999, 75.23, -76.4, 0.2},
-        {94.665667, 73.772941, 96.446472, 74.934131, -267.9, 0.2},
-        {94.750009, 73.74012, 93.6551, 73.025482, -255.5, 0.2},
         {89.318807, 74.810106, 87.19, 73.42, -76.4, 0.2},
         {87.045667, 74.632941, 88.826472, 75.794131, -267.9, 0.2},
-        {79.279991, 80.67988, 80.3749, 81.394518, -255.5, 0.2},
-        {79.279991, 80.688898, 80.3749, 81.403536, -255.5, 0.2},
-        {72.87525, 80.173054, 73.970159, 80.887692, -255.5, 0.2},
+        {94.665667, 73.772941, 96.446472, 74.934131, -267.9, 0.2},
+        {94.750009, 73.74012, 93.6551, 73.025482, -255.5, 0.2},
+        {72.915251, 80.493054, 73.570159, 81.257692, -260.5, 0.2}, // end points clearance false positive
         {73.063537, 82.295989, 71.968628, 81.581351, -255.5, 0.2},
+        {79.279991, 80.67988, 80.3749, 81.394518, -255.5, 0.2},
+        {79.279991, 80.67988, 80.3749, 81.694518, -255.5, 0.2 },
         {88.495265, 81.766089, 90.090174, 82.867869, -255.5, 0.2},
         {86.995265, 81.387966, 89.090174, 82.876887, -255.5, 0.2},
         {96.149734, 81.792126, 94.99, 83.37, -347.2, 0.2},
-        {94.857156, 81.240589, 95.91, 83.9, -288.5, 0.2}
+        {94.857156, 81.240589, 95.91, 83.9, -288.5, 0.2},
+        {72.915251, 86.493054, 73.970159, 87.257692, -260.5, 0.2}, // end points clearance #1
+        {73.063537, 88.295989, 71.968628, 87.581351, -255.5, 0.2},
+        {78.915251, 86.393054, 79.970159, 87.157692, 99.5, 0.2}, // end points clearance #2 - false positive
+        {79.063537, 88.295989, 77.968628, 87.581351, -255.5, 0.2},
+        {85.915251, 86.993054, 86.970159, 87.757692, 99.5, 0.2}, // intersection - false negative
+        {86.063537, 88.295989, 84.968628, 87.581351, -255.5, 0.2},
     };
 
 
     overlay = frame->GetOverlay();
 
-    
+
     overlay->SetIsFill(false);
     overlay->SetLineWidth(10000);
 
@@ -309,8 +315,9 @@ int playground_main_func( int argc, char* argv[] )
     {
         const ARC_DATA& d = test_data[i];
 
-        SHAPE_ARC arc( VECTOR2D( Millimeter2iu( d.sx ), Millimeter2iu( d.sy ) ),
-                       VECTOR2D( Millimeter2iu( d.ex ), Millimeter2iu( d.ey ) ), d.ca, d.w );
+        SHAPE_ARC arc( VECTOR2D( Millimeter2iu( d.cx ), Millimeter2iu( d.cy ) ),
+                       VECTOR2D( Millimeter2iu( d.sx ), Millimeter2iu( d.sy ) ), d.ca,
+                       Millimeter2iu( d.w ) );
 
         arcs.push_back( arc );
 
@@ -325,28 +332,25 @@ int playground_main_func( int argc, char* argv[] )
     LABEL_MANAGER labelMgr( frame->GetPanel()->GetGAL() );
     frame->GetPanel()->GetView()->SetViewport( BOX2D( vp.GetOrigin(), vp.GetSize() ) );
 
-    overlay->SetStrokeColor( WHITE );
-    overlay->SetLineWidth( 10000.0 );
-    overlay->SetStrokeColor( WHITE );
-
     for(int i = 0; i < arcs.size(); i+= 2)
     {
         SEG closestDist;
         VECTOR2D ips[2];
-        bool collides = collideArc2Arc( arcs[i], arcs[i+1], INT_MAX, closestDist );
+        bool collides = collideArc2Arc( arcs[i], arcs[i+1], 0, closestDist );
         int ni = intersectArc2Arc( arcs[i], arcs[i+1], ips );
 
-        overlay->SetStrokeColor( WHITE );
-        overlay->Arc( arcs[i] );
-        overlay->Arc( arcs[i+1] );
-
+        overlay->SetLineWidth( 10000.0 );
         overlay->SetStrokeColor( CYAN );
-        overlay->AnnotatedPoint( arcs[i].GetArcMid(), 20000 );
-        overlay->AnnotatedPoint( arcs[i+1].GetArcMid(), 20000 );
-        overlay->SetStrokeColor( MAGENTA );
+        overlay->AnnotatedPoint( arcs[i].GetP0(), arcs[i].GetWidth() / 2 );
+        overlay->AnnotatedPoint( arcs[i + 1].GetP0(), arcs[i + 1].GetWidth() / 2 );
+        overlay->AnnotatedPoint( arcs[i].GetArcMid(), arcs[i].GetWidth() / 2 );
+        overlay->AnnotatedPoint( arcs[i + 1].GetArcMid(), arcs[i + 1].GetWidth() / 2 );
+        overlay->AnnotatedPoint( arcs[i].GetP1(), arcs[i].GetWidth() / 2 );
+        overlay->AnnotatedPoint( arcs[i + 1].GetP1(), arcs[i + 1].GetWidth() / 2 );
+        overlay->SetStrokeColor( GREEN );
 
         for(int j = 0; j < ni; j++ )
-            overlay->AnnotatedPoint( ips[j], 200000 );
+            overlay->AnnotatedPoint( ips[j], arcs[i].GetWidth() );
 
         if( collides )
         {
@@ -354,6 +358,10 @@ int playground_main_func( int argc, char* argv[] )
             overlay->Line(closestDist.A, closestDist.B);
         }
 
+        overlay->SetStrokeColor( RED );
+        overlay->Arc( arcs[i] );
+        overlay->SetStrokeColor( MAGENTA );
+        overlay->Arc( arcs[i + 1] );
     }
 
 
