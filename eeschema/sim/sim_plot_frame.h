@@ -192,11 +192,6 @@ private:
                      SIM_PLOT_PANEL* aPlotPanel );
 
     /**
-     * Update the toolbar.
-     */
-    void updateToolbar();
-
-    /**
      * Update the list of currently plotted signals.
      */
     void updateSignalList();
@@ -275,11 +270,16 @@ private:
     void menuShowLegendUpdate( wxUpdateUIEvent& event ) override;
     void menuShowDotted( wxCommandEvent& event ) override;
     void menuShowDottedUpdate( wxUpdateUIEvent& event ) override;
-	void menuWhiteBackground( wxCommandEvent& event ) override;
-	void menuShowWhiteBackgroundUpdate( wxUpdateUIEvent& event ) override
+    void menuWhiteBackground( wxCommandEvent& event ) override;
+    void menuShowWhiteBackgroundUpdate( wxUpdateUIEvent& event ) override
     {
         event.Check( m_plotUseWhiteBg );
     }
+
+    void menuSimulateUpdate( wxUpdateUIEvent& event ) override;
+    void menuAddSignalsUpdate( wxUpdateUIEvent& event ) override;
+    void menuProbeUpdate( wxUpdateUIEvent& event ) override;
+    void menuTuneUpdate( wxUpdateUIEvent& event ) override;
 
     // Event handlers
     void onPlotClose( wxAuiNotebookEvent& event ) override;

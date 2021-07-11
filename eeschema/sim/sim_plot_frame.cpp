@@ -185,6 +185,15 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_toolSettings = m_toolBar->AddTool( wxID_ANY, _( "Sim Parameters" ),
             KiBitmap( BITMAPS::config ), _( "Simulation parameters and settings" ), wxITEM_NORMAL );
 
+    Connect( m_toolSimulate->GetId(), wxEVT_UPDATE_UI,
+             wxUpdateUIEventHandler( SIM_PLOT_FRAME::menuSimulateUpdate ), NULL, this );
+    Connect( m_toolAddSignals->GetId(), wxEVT_UPDATE_UI,
+             wxUpdateUIEventHandler( SIM_PLOT_FRAME::menuAddSignalsUpdate ), NULL, this );
+    Connect( m_toolProbe->GetId(), wxEVT_UPDATE_UI,
+             wxUpdateUIEventHandler( SIM_PLOT_FRAME::menuProbeUpdate ), NULL, this );
+    Connect( m_toolTune->GetId(), wxEVT_UPDATE_UI,
+             wxUpdateUIEventHandler( SIM_PLOT_FRAME::menuTuneUpdate ), NULL, this );
+
     Connect( m_toolSimulate->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
              wxCommandEventHandler( SIM_PLOT_FRAME::onSimulate ), NULL, this );
     Connect( m_toolAddSignals->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
@@ -204,9 +213,8 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onTune, this, m_tuneValue->GetId() );
     Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onShowNetlist, this,
           m_showNetlist->GetId() );
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSettings, this, m_settings->GetId() );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSettings, this, m_toolSettings->GetId() );
 
-    updateToolbar();
     m_toolBar->Realize();
 
 #ifndef wxHAS_NATIVE_TABART
@@ -224,6 +232,8 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // events
     wxSafeYield();
     setSubWindowsSashSize();
+
+    UpdateWindowUI();
 
     // Ensure the window is on top
     Raise();
@@ -360,7 +370,6 @@ void SIM_PLOT_FRAME::updateTitle()
 
 void SIM_PLOT_FRAME::updateFrame()
 {
-    updateToolbar();
     updateTitle();
 }
 
@@ -797,16 +806,6 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, con
 
     updateFrame();
     return true;
-}
-
-
-void SIM_PLOT_FRAME::updateToolbar()
-{
-    m_toolBar->EnableTool( ID_SIM_RUN,
-            m_exporter->CommandToSimType( getCurrentSimCommand() ) != ST_UNKNOWN );
-    m_toolBar->EnableTool( ID_SIM_ADD_SIGNALS, m_simFinished );
-    m_toolBar->EnableTool( ID_SIM_PROBE, m_simFinished );
-    m_toolBar->EnableTool( ID_SIM_TUNE, m_simFinished );
 }
 
 
@@ -1327,6 +1326,30 @@ void SIM_PLOT_FRAME::menuWhiteBackground( wxCommandEvent& event )
         if( panel )
             panel->UpdatePlotColors();
     }
+}
+
+
+void SIM_PLOT_FRAME::menuSimulateUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable( m_exporter->CommandToSimType( getCurrentSimCommand() ) != ST_UNKNOWN );
+}
+
+
+void SIM_PLOT_FRAME::menuAddSignalsUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable( m_simFinished );
+}
+
+
+void SIM_PLOT_FRAME::menuProbeUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable( m_simFinished );
+}
+
+
+void SIM_PLOT_FRAME::menuTuneUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable( m_simFinished );
 }
 
 

@@ -62,7 +62,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxMenuItem* m_probeSignals;
 		wxMenuItem* m_tuneValue;
 		wxMenuItem* m_showNetlist;
-		wxMenuItem* m_settings;
+		wxMenuItem* m_boardAdapter;
 		wxMenu* m_viewMenu;
 		wxBoxSizer* m_sizerMain;
 		wxToolBar* m_toolBar;
@@ -99,6 +99,10 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void menuSaveImage( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuSaveCsv( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuExit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuSimulateUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void menuAddSignalsUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void menuProbeUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void menuTuneUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void menuZoomIn( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuZoomOut( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuZoomFit( wxCommandEvent& event ) { event.Skip(); }

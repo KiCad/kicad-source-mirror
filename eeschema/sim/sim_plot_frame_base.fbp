@@ -191,7 +191,7 @@
                         <event name="OnMenuSelection">menuExit</event>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">Simulation</property>
                     <property name="name">m_simulationMenu</property>
                     <property name="permission">protected</property>
@@ -207,6 +207,7 @@
                         <property name="permission">protected</property>
                         <property name="shortcut">Ctrl+R</property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnUpdateUI">menuSimulateUpdate</event>
                     </object>
                     <object class="separator" expanded="0">
                         <property name="name">m_separator31</property>
@@ -224,6 +225,7 @@
                         <property name="permission">protected</property>
                         <property name="shortcut">Ctrl+A</property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnUpdateUI">menuAddSignalsUpdate</event>
                     </object>
                     <object class="wxMenuItem" expanded="0">
                         <property name="bitmap"></property>
@@ -237,6 +239,7 @@
                         <property name="permission">protected</property>
                         <property name="shortcut">Ctrl+P</property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnUpdateUI">menuProbeUpdate</event>
                     </object>
                     <object class="wxMenuItem" expanded="0">
                         <property name="bitmap"></property>
@@ -250,6 +253,7 @@
                         <property name="permission">protected</property>
                         <property name="shortcut">Ctrl+T</property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnUpdateUI">menuTuneUpdate</event>
                     </object>
                     <object class="separator" expanded="0">
                         <property name="name">m_separator7</property>
@@ -286,7 +290,7 @@
                         <property name="unchecked_bitmap"></property>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">View</property>
                     <property name="name">m_viewMenu</property>
                     <property name="permission">protected</property>

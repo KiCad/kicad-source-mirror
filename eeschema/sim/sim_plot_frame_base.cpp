@@ -73,8 +73,8 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_simulationMenu->AppendSeparator();
 
-	m_settings = new wxMenuItem( m_simulationMenu, ID_MENU_SET_SIMUL, wxString( _("Settings...") ) , wxEmptyString, wxITEM_NORMAL );
-	m_simulationMenu->Append( m_settings );
+	m_boardAdapter = new wxMenuItem( m_simulationMenu, ID_MENU_SET_SIMUL, wxString( _("Settings...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_simulationMenu->Append( m_boardAdapter );
 
 	m_mainMenu->Append( m_simulationMenu, _("Simulation") );
 
@@ -279,6 +279,10 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveImage ), this, m_saveImage->GetId());
 	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveCsv ), this, m_saveCsv->GetId());
 	m_fileMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuExit ), this, m_exitSim->GetId());
+	this->Connect( m_runSimulation->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuSimulateUpdate ) );
+	this->Connect( m_addSignals->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuAddSignalsUpdate ) );
+	this->Connect( m_probeSignals->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuProbeUpdate ) );
+	this->Connect( m_tuneValue->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuTuneUpdate ) );
 	m_viewMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomIn ), this, m_zoomIn->GetId());
 	m_viewMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomOut ), this, m_zoomOut->GetId());
 	m_viewMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomFit ), this, m_zoomFit->GetId());
@@ -301,6 +305,10 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 SIM_PLOT_FRAME_BASE::~SIM_PLOT_FRAME_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( ID_MENU_RUN_SIM, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuSimulateUpdate ) );
+	this->Disconnect( ID_MENU_ADD_SIGNAL, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuAddSignalsUpdate ) );
+	this->Disconnect( ID_MENU_PROBE_SIGNALS, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuProbeUpdate ) );
+	this->Disconnect( ID_MENU_TUNE_SIGNALS, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuTuneUpdate ) );
 	this->Disconnect( ID_MENU_SHOW_GRID, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowGridUpdate ) );
 	this->Disconnect( ID_MENU_SHOW_LEGEND, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowLegendUpdate ) );
 	this->Disconnect( ID_MENU_DOTTED, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowDottedUpdate ) );
