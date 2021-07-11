@@ -743,6 +743,16 @@ void DIALOG_DRC::NextMarker()
 }
 
 
+void DIALOG_DRC::SelectMarker( PCB_MARKER* aMarker )
+{
+    if( m_Notebook->IsShown() )
+    {
+        m_Notebook->SetSelection( 0 );
+        m_markersTreeModel->SelectMarker( aMarker );
+    }
+}
+
+
 void DIALOG_DRC::ExcludeMarker()
 {
     if( !m_Notebook->IsShown() || m_Notebook->GetSelection() != 0 )

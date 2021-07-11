@@ -594,6 +594,19 @@ void RC_TREE_MODEL::NextMarker()
 }
 
 
+void RC_TREE_MODEL::SelectMarker( MARKER_BASE* aMarker )
+{
+    for( RC_TREE_NODE* candidate : m_tree )
+    {
+        if( candidate->m_RcItem->GetParent() == aMarker )
+        {
+            m_view->Select( ToItem( candidate ) );
+            break;
+        }
+    }
+}
+
+
 void RC_TREE_MODEL::onSizeView( wxSizeEvent& aEvent )
 {
     int width = m_view->GetMainWindow()->GetRect().GetWidth() - WX_DATAVIEW_WINDOW_PADDING;

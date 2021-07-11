@@ -27,6 +27,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_tool_base.h>
 #include <tools/zone_filler_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <tools/drc_tool.h>
 #include <kiface_base.h>
 #include <dialog_drc.h>
@@ -265,6 +266,25 @@ int DRC_TOOL::NextMarker( const TOOL_EVENT& aEvent )
 }
 
 
+int DRC_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
+{
+    if( m_drcDialog )
+    {
+        PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+        PCB_SELECTION&      selection = selectionTool->GetSelection();
+
+        if( selection.GetSize() == 1 && selection.Front()->Type() == PCB_MARKER_T )
+        {
+            m_drcDialog->Show( true );
+            m_drcDialog->Raise();
+            m_drcDialog->SelectMarker( static_cast<PCB_MARKER*>( selection.Front() ) );
+        }
+    }
+
+    return 0;
+}
+
+
 int DRC_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
 {
     if( m_drcDialog )
@@ -280,6 +300,7 @@ void DRC_TOOL::setTransitions()
     Go( &DRC_TOOL::PrevMarker,                 ACTIONS::prevMarker.MakeEvent() );
     Go( &DRC_TOOL::NextMarker,                 ACTIONS::nextMarker.MakeEvent() );
     Go( &DRC_TOOL::ExcludeMarker,              ACTIONS::excludeMarker.MakeEvent() );
+    Go( &DRC_TOOL::CrossProbe,                 EVENTS::SelectedEvent );
 }
 
 

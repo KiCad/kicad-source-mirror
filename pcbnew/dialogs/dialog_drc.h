@@ -57,6 +57,8 @@ public:
 
     void PrevMarker();
     void NextMarker();
+    void SelectMarker( PCB_MARKER* aMarker );
+
     void ExcludeMarker();
 
 private:

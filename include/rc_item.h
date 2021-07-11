@@ -227,6 +227,7 @@ public:
 
     void PrevMarker();
     void NextMarker();
+    void SelectMarker( MARKER_BASE* aMarker );
 
     bool IsContainer( wxDataViewItem const& aItem ) const override;
 
