@@ -238,7 +238,7 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
 
         if( fname.FileExists() )    // Only check if file exists. If not, it will
         {                           // use the same model in cache.
-            bool       reload = ADVANCED_CFG::GetCfg().m_Skip3DMemoryCache;
+            bool       reload = ADVANCED_CFG::GetCfg().m_Skip3DModelMemoryCache;
             wxDateTime fmdate = fname.GetModificationTime();
 
             if( fmdate != mi->second->modTime )
@@ -341,13 +341,13 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
     wxString bname = ep->GetCacheBaseName();
     wxString cachename = m_CacheDir + bname + wxT( ".3dc" );
 
-    if( !ADVANCED_CFG::GetCfg().m_Skip3DFileCache && wxFileName::FileExists( cachename )
+    if( !ADVANCED_CFG::GetCfg().m_Skip3DModelFileCache && wxFileName::FileExists( cachename )
         && loadCacheData( ep ) )
         return ep->sceneData;
 
     ep->sceneData = m_Plugins->Load3DModel( aFileName, ep->pluginInfo );
 
-    if( !ADVANCED_CFG::GetCfg().m_Skip3DFileCache && nullptr != ep->sceneData )
+    if( !ADVANCED_CFG::GetCfg().m_Skip3DModelFileCache && nullptr != ep->sceneData )
         saveCacheData( ep );
 
     return ep->sceneData;

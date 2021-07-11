@@ -172,13 +172,16 @@ public:
 
     /**
      * Skip reading/writing 3d model file caches
+     * This does not prevent the models from being cached in memory meaning reopening the 3d viewer
+     * in the same project session will not reload model data from disk again.
      */
-    bool m_Skip3DFileCache;
+    bool m_Skip3DModelFileCache;
 
     /**
      * Skip reading/writing 3d model memory caches
+     * This ensures 3d models are always reloaded from disk even if we previously opened the 3d viewer.
      */
-    bool m_Skip3DMemoryCache;
+    bool m_Skip3DModelMemoryCache;
 
 private:
     ADVANCED_CFG();
