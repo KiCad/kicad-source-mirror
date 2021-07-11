@@ -185,6 +185,13 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_toolSettings = m_toolBar->AddTool( wxID_ANY, _( "Sim Parameters" ),
             KiBitmap( BITMAPS::config ), _( "Simulation parameters and settings" ), wxITEM_NORMAL );
 
+    // Start all toolbar buttons except settings as disabled
+    m_toolSimulate->Enable( false );
+    m_toolAddSignals->Enable( false );
+    m_toolProbe->Enable( false );
+    m_toolTune->Enable( false );
+    m_toolSettings->Enable( true );
+
     Connect( m_toolSimulate->GetId(), wxEVT_UPDATE_UI,
              wxUpdateUIEventHandler( SIM_PLOT_FRAME::menuSimulateUpdate ), NULL, this );
     Connect( m_toolAddSignals->GetId(), wxEVT_UPDATE_UI,
@@ -204,6 +211,9 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
              wxCommandEventHandler( SIM_PLOT_FRAME::onTune ), NULL, this );
     Connect( m_toolSettings->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
              wxCommandEventHandler( SIM_PLOT_FRAME::onSettings ), NULL, this );
+
+    Bind( EVT_WORKBOOK_MODIFIED, &SIM_PLOT_FRAME::onWorkbookModified, this );
+    Bind( EVT_WORKBOOK_CLR_MODIFIED, &SIM_PLOT_FRAME::onWorkbookClrModified, this );
 
     // Bind toolbar buttons event to existing menu event handlers, so they behave the same
     Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSimulate, this,
@@ -233,13 +243,11 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxSafeYield();
     setSubWindowsSashSize();
 
-    UpdateWindowUI();
-
     // Ensure the window is on top
     Raise();
 
     initWorkbook();
-    updateFrame();
+    updateTitle();
 }
 
 
@@ -365,12 +373,6 @@ void SIM_PLOT_FRAME::updateTitle()
     title += wxT( " \u2014 " ) + _( "Spice Simulator" );
 
     SetTitle( title );
-}
-
-
-void SIM_PLOT_FRAME::updateFrame()
-{
-    updateTitle();
 }
 
 
@@ -529,7 +531,6 @@ SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand )
 
     m_workbook->AddPage( dynamic_cast<wxWindow*>( plotPanel ), pageTitle, true );
 
-    updateFrame();
     return plotPanel;
 }
 
@@ -691,7 +692,6 @@ void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName )
     updateSignalList();
     wxCommandEvent dummy;
     onCursorUpdate( dummy );
-    updateFrame();
 }
 
 
@@ -797,14 +797,12 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, con
                 offset += inner;
             }
 
-            updateFrame();
             return true;
         }
     }
 
     m_workbook->AddTrace( aPlotPanel, aName, size, data_x.data(), data_y.data(), aType, aParam );
 
-    updateFrame();
     return true;
 }
 
@@ -924,10 +922,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
             file.GetCurrentLine()+1 ) )
 
     if( !file.Open() )
-    {
-        updateFrame();
         return false;
-    }
 
     long plotsCount;
 
@@ -936,7 +931,6 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
         DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
         file.Close();
 
-        updateFrame();
         return false;
     }
 
@@ -949,7 +943,6 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
             DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
             file.Close();
 
-            updateFrame();
             return false;
         }
 
@@ -969,7 +962,6 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
             DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
             file.Close();
 
-            updateFrame();
             return false;
         }
 
@@ -984,7 +976,6 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
                         );
                 file.Close();
 
-                updateFrame();
                 return false;
             }
 
@@ -995,7 +986,6 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
                 DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is empty." );
                 file.Close();
 
-                updateFrame();
                 return false;
             }
 
@@ -1006,7 +996,6 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
                 DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is empty." );
                 file.Close();
 
-                updateFrame();
                 return false;
             }
 
@@ -1018,8 +1007,6 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
     // Successfully loading a workbook does not count as modyfying it.
     m_workbook->ClrModified();
-
-    updateFrame();
     return true;
 }
 
@@ -1085,8 +1072,6 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
         m_simulator->Settings()->SetWorkbookFilename( filename.GetFullName() );
 
     m_workbook->ClrModified();
-    updateFrame();
-
     return res;
 }
 
@@ -1110,10 +1095,7 @@ void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
     SIM_TYPE type = m_exporter->GetSimType();
 
     if( SIM_PANEL_BASE::IsPlottable( type ) )
-    {
         NewPlotPanel( m_exporter->GetUsedSimCommand() );
-        updateFrame();
-    }
 }
 
 
@@ -1367,7 +1349,6 @@ void SIM_PLOT_FRAME::onPlotClose( wxAuiNotebookEvent& event )
 
 void SIM_PLOT_FRAME::onPlotClosed( wxAuiNotebookEvent& event )
 {
-    updateFrame();
 }
 
 
@@ -1376,14 +1357,11 @@ void SIM_PLOT_FRAME::onPlotChanged( wxAuiNotebookEvent& event )
     updateSignalList();
     wxCommandEvent dummy;
     onCursorUpdate( dummy );
-
-    updateFrame();
 }
 
 
 void SIM_PLOT_FRAME::onPlotDragged( wxAuiNotebookEvent& event )
 {
-    updateFrame();
 }
 
 
@@ -1412,6 +1390,18 @@ void SIM_PLOT_FRAME::onSignalRClick( wxListEvent& event )
         SIGNAL_CONTEXT_MENU ctxMenu( netName, this );
         m_signals->PopupMenu( &ctxMenu );
     }
+}
+
+
+void SIM_PLOT_FRAME::onWorkbookModified( wxCommandEvent& event )
+{
+    updateTitle();
+}
+
+
+void SIM_PLOT_FRAME::onWorkbookClrModified( wxCommandEvent& event )
+{
+    updateTitle();
 }
 
 
@@ -1472,7 +1462,6 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
         }
 
         m_simulator->Init();
-        updateFrame();
     }
 }
 
@@ -1663,8 +1652,6 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
             m_cursors->SetItem( idx, Y_COL, SPICE_VALUE( coords.y ).ToSpiceString() );
         }
     }
-
-    updateFrame();
 }
 
 
@@ -1672,8 +1659,6 @@ void SIM_PLOT_FRAME::onSimStarted( wxCommandEvent& aEvent )
 {
     m_toolBar->SetToolNormalBitmap( ID_SIM_RUN, KiBitmap( BITMAPS::sim_stop ) );
     SetCursor( wxCURSOR_ARROWWAIT );
-
-    updateFrame();
 }
 
 
@@ -1730,7 +1715,6 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
         updateSignalList();
         plotPanel->GetPlotWin()->UpdateAll();
         plotPanel->ResetScales();
-        updateFrame();
     }
     else if( simType == ST_OP )
     {
@@ -1765,7 +1749,6 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     }
 
     m_simFinished = true;
-    updateFrame();
 }
 
 
@@ -1789,8 +1772,6 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
         applyTuners();
         m_simulator->Run();
     }
-
-    updateFrame();
 }
 
 
@@ -1798,8 +1779,6 @@ void SIM_PLOT_FRAME::onSimReport( wxCommandEvent& aEvent )
 {
     m_simConsole->AppendText( aEvent.GetString() + "\n" );
     m_simConsole->SetInsertionPointEnd();
-
-    updateFrame();
 }
 
 

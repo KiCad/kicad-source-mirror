@@ -149,12 +149,6 @@ private:
     void updateTitle();
 
     /**
-     * Update the frame to match the changes to the workbook. Should be always called after the
-     * workbook was modified.
-     */
-    void updateFrame();
-
-    /**
      * Give icons to menuitems of the main menubar.
      */
     void setIconsForMenuItems();
@@ -289,6 +283,9 @@ private:
 
     void onSignalDblClick( wxMouseEvent& event ) override;
     void onSignalRClick( wxListEvent& event ) override;
+
+    void onWorkbookModified( wxCommandEvent& event );
+    void onWorkbookClrModified( wxCommandEvent& event );
 
     void onSimulate( wxCommandEvent& event );
     void onSettings( wxCommandEvent& event );

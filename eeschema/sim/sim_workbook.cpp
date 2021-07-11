@@ -40,42 +40,63 @@ SIM_WORKBOOK::SIM_WORKBOOK( wxWindow* aParent, wxWindowID aId, const wxPoint& aP
 
 bool SIM_WORKBOOK::AddPage( wxWindow* page, const wxString& caption, bool select, const wxBitmap& bitmap )
 {
-    m_modified = true;
-    return wxAuiNotebook::AddPage( page, caption, select, bitmap );
+    bool res = wxAuiNotebook::AddPage( page, caption, select, bitmap );
+    setModified( res );
+    return res;
 }
 
 
 bool SIM_WORKBOOK::AddPage( wxWindow* page, const wxString& text, bool select, int imageId )
 {
-    m_modified = true;
-    return wxAuiNotebook::AddPage( page, text, select, imageId );
+    bool res = wxAuiNotebook::AddPage( page, text, select, imageId );
+    setModified( res );
+    return res;
 }
 
 
 bool SIM_WORKBOOK::DeleteAllPages()
 {
-    m_modified = true;
-    return wxAuiNotebook::DeleteAllPages();
+    bool res = wxAuiNotebook::DeleteAllPages();
+    setModified( res );
+    return res;
 }
 
 
 bool SIM_WORKBOOK::DeletePage( size_t page )
 {
-    m_modified = true;
-    return wxAuiNotebook::DeletePage( page );
+    bool res = wxAuiNotebook::DeletePage( page );
+    setModified( res );
+    return res;
 }
 
 
-void SIM_WORKBOOK::AddTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName, int aPoints, const
+bool SIM_WORKBOOK::AddTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName, int aPoints, const
         double* aX, const double* aY, SIM_PLOT_TYPE aType, const wxString& aParam )
 {
-    aPlotPanel->addTrace( aName, aPoints, aX, aY, aType, aParam );
-    m_modified = true;   
+    bool res = aPlotPanel->addTrace( aName, aPoints, aX, aY, aType, aParam );
+    setModified( res );
+    return res;
 }
 
 
-void SIM_WORKBOOK::DeleteTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName )
+bool SIM_WORKBOOK::DeleteTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName )
 {
-    aPlotPanel->deleteTrace( aName );
-    m_modified = true;
+    bool res = aPlotPanel->deleteTrace( aName );
+    setModified( res );
+    return res;
 }
+
+void SIM_WORKBOOK::ClrModified()
+{
+    m_modified = false;
+    wxPostEvent( GetParent(), wxCommandEvent( EVT_WORKBOOK_CLR_MODIFIED ) );
+}
+
+void SIM_WORKBOOK::setModified( bool value )
+{
+    m_modified = value;
+    wxPostEvent( GetParent(), wxCommandEvent( EVT_WORKBOOK_MODIFIED ) );
+}
+
+wxDEFINE_EVENT( EVT_WORKBOOK_MODIFIED, wxCommandEvent );
+wxDEFINE_EVENT( EVT_WORKBOOK_CLR_MODIFIED, wxCommandEvent );

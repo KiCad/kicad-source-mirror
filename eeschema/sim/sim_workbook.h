@@ -25,7 +25,7 @@
 #ifndef __SIM_WORKBOOK__
 #define __SIM_WORKBOOK__
 
-#include "dialog_sim_settings.h"
+#include <dialog_sim_settings.h>
 #include <sim/sim_panel_base.h>
 #include <sim/sim_plot_panel.h>
 
@@ -48,13 +48,14 @@ public:
 
     // Custom methods
 
-    void AddTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName, int aPoints, const double*
-            aX, const double* aY, SIM_PLOT_TYPE aType, const wxString& aParam );
-    void DeleteTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName );
+    bool AddTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName, int aPoints, const double*
+                   aX, const double* aY, SIM_PLOT_TYPE aType, const wxString& aParam );
+    bool DeleteTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName );
     
     void SetSimCommand( SIM_PANEL_BASE* aPlotPanel, const wxString& aSimCommand )
     {
         aPlotPanel->setSimCommand( aSimCommand );
+        setModified();
     }
 
     const wxString& GetSimCommand( const SIM_PANEL_BASE* aPlotPanel )
@@ -62,12 +63,17 @@ public:
         return aPlotPanel->getSimCommand();
     }
 
-    void ClrModified() { m_modified = false; }
+    void ClrModified();
     bool IsModified() const { return m_modified; }
 
 private:
+    void setModified( bool value = true );
+
     ///< Dirty bit, indicates something in the workbook has changed
     bool m_modified;
 };
+
+wxDECLARE_EVENT( EVT_WORKBOOK_MODIFIED, wxCommandEvent );
+wxDECLARE_EVENT( EVT_WORKBOOK_CLR_MODIFIED, wxCommandEvent );
 
 #endif // __SIM_WORKBOOK__
