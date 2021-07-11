@@ -168,6 +168,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_DRCSeverities[ DRCE_EXTRA_FOOTPRINT ] = RPT_SEVERITY_WARNING;
     m_DRCSeverities[ DRCE_NET_CONFLICT ] = RPT_SEVERITY_WARNING;
 
+    m_DRCSeverities[ DRCE_OVERLAPPING_SILK ] = RPT_SEVERITY_WARNING;
+    m_DRCSeverities[ DRCE_SILK_MASK_CLEARANCE ] = RPT_SEVERITY_WARNING;
+
     m_MaxError = ARC_HIGH_DEF;
     m_ZoneFillVersion = 6;                      // Use new algo by default to fill zones
     m_ZoneKeepExternalFillets = false;          // Use new algo by default.  Legacy boards might
