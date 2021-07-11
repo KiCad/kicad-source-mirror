@@ -186,6 +186,14 @@ DRC_ITEM DRC_ITEM::silkOverlaps( DRCE_OVERLAPPING_SILK,
         _( "Silkscreen overlap" ),
         wxT( "silk_overlap" ) );
 
+DRC_ITEM DRC_ITEM::textHeightOutOfRange( DRCE_TEXT_HEIGHT,
+        _( "Text height out of range" ),
+        wxT( "text_height" ) );
+
+DRC_ITEM DRC_ITEM::textThicknessOutOfRange( DRCE_TEXT_THICKNESS,
+        _( "Text thickness out of range" ),
+        wxT( "text_thickness" ) );
+
 DRC_ITEM DRC_ITEM::lengthOutOfRange( DRCE_LENGTH_OUT_OF_RANGE,
         _( "Trace length out of range" ),
         wxT( "length_out_of_range" ) );
@@ -306,6 +314,8 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_UNRESOLVED_VARIABLE:      return std::make_shared<DRC_ITEM>( unresolvedVariable );
     case DRCE_OVERLAPPING_SILK:         return std::make_shared<DRC_ITEM>( silkOverlaps );
     case DRCE_SILK_MASK_CLEARANCE:      return std::make_shared<DRC_ITEM>( silkMaskClearance );
+    case DRCE_TEXT_HEIGHT:              return std::make_shared<DRC_ITEM>( textHeightOutOfRange );
+    case DRCE_TEXT_THICKNESS:           return std::make_shared<DRC_ITEM>( textThicknessOutOfRange );
     case DRCE_LENGTH_OUT_OF_RANGE:      return std::make_shared<DRC_ITEM>( lengthOutOfRange );
     case DRCE_SKEW_OUT_OF_RANGE:        return std::make_shared<DRC_ITEM>( skewOutOfRange );
     case DRCE_TOO_MANY_VIAS:            return std::make_shared<DRC_ITEM>( tooManyVias );

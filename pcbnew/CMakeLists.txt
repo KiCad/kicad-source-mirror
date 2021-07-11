@@ -241,6 +241,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_test_provider_library_parity.cpp
     drc/drc_test_provider_schematic_parity.cpp
     drc/drc_test_provider_misc.cpp
+    drc/drc_test_provider_text_dims.cpp
     drc/drc_test_provider_track_width.cpp
     drc/drc_test_provider_via_diameter.cpp
     drc/drc_test_provider_silk_to_mask.cpp

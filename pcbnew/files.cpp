@@ -765,7 +765,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             if( !loadedBoard->m_LegacyCopperEdgeClearanceLoaded )
             {
                 int edgeClearance = inferLegacyEdgeClearance( loadedBoard );
-                loadedBoard->GetDesignSettings().SetCopperEdgeClearance( edgeClearance );
+                loadedBoard->GetDesignSettings().m_CopperEdgeClearance = edgeClearance;
             }
 
             // On save; design settings will be removed from the board

@@ -560,27 +560,6 @@ public:
     int GetCurrentDiffPairViaGap() const;
 
     /**
-     * @param aValue The minimum distance between the edges of two holes or 0 to disable
-     * hole-to-hole separation checking.
-     */
-    void SetMinHoleSeparation( int aDistance );
-
-    /**
-     * @param aValue The minimum distance between copper items and board edges.
-     */
-    void SetCopperEdgeClearance( int aDistance );
-
-    /**
-     * Set the minimum distance between silk items to \a aValue.
-     *
-     * @note Compound graphics within a single footprint or on the board are not checked,
-     *       but distances between text and between graphics from different footprints are.
-     *
-     * @param aValue The minimum distance between silk items.
-     */
-    void SetSilkClearance( int aDistance );
-
-    /**
      * Return a bit-mask of all the layers that are enabled.
      *
      * @return the enabled layers in bit-mapped form.
@@ -700,6 +679,8 @@ public:
     int        m_HoleClearance;             // Hole to copper clearance
     int        m_HoleToHoleMin;             // Min width of web between two drilled holes
     int        m_SilkClearance;
+    int        m_MinSilkTextHeight;         // Min text height for silkscreen layers
+    int        m_MinSilkTextThickness;      // Min text thickness for silkscreen layers
 
     std::shared_ptr<DRC_ENGINE> m_DRCEngine;
     std::map<int, SEVERITY>     m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY

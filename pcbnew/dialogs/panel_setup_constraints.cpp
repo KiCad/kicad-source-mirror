@@ -46,6 +46,8 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( PAGED_DIALOG* aParent, PCB_EDI
         m_holeClearance( aFrame, m_HoleClearanceLabel, m_HoleClearanceCtrl, m_HoleClearanceUnits ),
         m_edgeClearance( aFrame, m_EdgeClearanceLabel, m_EdgeClearanceCtrl, m_EdgeClearanceUnits ),
         m_silkClearance( aFrame, m_silkClearanceLabel, m_silkClearanceCtrl, m_silkClearanceUnits ),
+        m_minTextHeight( aFrame, m_textHeightLabel, m_textHeightCtrl, m_textHeightUnits ),
+        m_minTextThickness( aFrame, m_textThicknessLabel, m_textThicknessCtrl, m_textThicknessUnits ),
         m_maxError( aFrame, m_maxErrorTitle, m_maxErrorCtrl, m_maxErrorUnits )
 {
     m_Frame = aFrame;
@@ -86,6 +88,8 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
     m_uviaMinDrill.SetValue( m_BrdSettings->m_MicroViasMinDrill );
 
     m_silkClearance.SetValue( m_BrdSettings->m_SilkClearance );
+    m_minTextHeight.SetValue( m_BrdSettings->m_MinSilkTextHeight );
+    m_minTextThickness.SetValue( m_BrdSettings->m_MinSilkTextThickness );
 
     return true;
 }
@@ -135,15 +139,17 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
     m_BrdSettings->m_ViasMinAnnularWidth = m_viaMinAnnulus.GetValue();
     m_BrdSettings->m_ViasMinSize = m_viaMinSize.GetValue();
     m_BrdSettings->m_HoleClearance = m_holeClearance.GetValue();
-    m_BrdSettings->SetCopperEdgeClearance( m_edgeClearance.GetValue() );
+    m_BrdSettings->m_CopperEdgeClearance = m_edgeClearance.GetValue();
 
     m_BrdSettings->m_MinThroughDrill = m_throughHoleMin.GetValue();
-    m_BrdSettings->SetMinHoleSeparation( m_holeToHoleMin.GetValue() );
+    m_BrdSettings->m_HoleToHoleMin = m_holeToHoleMin.GetValue();
 
     m_BrdSettings->m_MicroViasMinSize = m_uviaMinSize.GetValue();
     m_BrdSettings->m_MicroViasMinDrill = m_uviaMinDrill.GetValue();
 
     m_BrdSettings->m_SilkClearance = m_silkClearance.GetValue();
+    m_BrdSettings->m_MinSilkTextHeight = m_minTextHeight.GetValue();
+    m_BrdSettings->m_MinSilkTextThickness = m_minTextThickness.GetValue();
 
     return true;
 }

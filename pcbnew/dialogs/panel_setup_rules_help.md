@@ -32,6 +32,8 @@
  * hole\_size
  * silk\_clearance
  * skew
+ * text\_height
+ * text\_thickness
  * track\_width
  * via\_count
  * via\_diameter

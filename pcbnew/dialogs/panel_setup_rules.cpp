@@ -303,6 +303,8 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                      "hole_to_hole|"
                      "silk_clearance|"
                      "skew|"
+                     "text_height|"
+                     "text_thickness|"
                      "track_width|"
                      "via_count|"
                      "via_diameter";

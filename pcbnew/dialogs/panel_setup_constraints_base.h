@@ -120,6 +120,12 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_silkClearanceLabel;
 		wxTextCtrl* m_silkClearanceCtrl;
 		wxStaticText* m_silkClearanceUnits;
+		wxStaticText* m_textHeightLabel;
+		wxTextCtrl* m_textHeightCtrl;
+		wxStaticText* m_textHeightUnits;
+		wxStaticText* m_textThicknessLabel;
+		wxTextCtrl* m_textThicknessCtrl;
+		wxStaticText* m_textThicknessUnits;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void onChangeOutlineOpt( wxCommandEvent& event ) { event.Skip(); }

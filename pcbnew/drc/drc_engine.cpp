@@ -174,9 +174,18 @@ void DRC_ENGINE::loadImplicitRules()
 
     rule = createImplicitRule( _( "board setup constraints silk" ) );
     rule->m_LayerCondition = LSET( 2, F_SilkS, B_SilkS );
+
     DRC_CONSTRAINT silkClearanceConstraint( SILK_CLEARANCE_CONSTRAINT );
     silkClearanceConstraint.Value().SetMin( bds.m_SilkClearance );
     rule->AddConstraint( silkClearanceConstraint );
+
+    DRC_CONSTRAINT silkTextHeightConstraint( TEXT_HEIGHT_CONSTRAINT );
+    silkTextHeightConstraint.Value().SetMin( bds.m_MinSilkTextHeight );
+    rule->AddConstraint( silkTextHeightConstraint );
+
+    DRC_CONSTRAINT silkTextThicknessConstraint( TEXT_THICKNESS_CONSTRAINT );
+    silkTextThicknessConstraint.Value().SetMin( bds.m_MinSilkTextThickness );
+    rule->AddConstraint( silkTextThicknessConstraint );
 
     rule = createImplicitRule( _( "board setup constraints hole" ) );
     DRC_CONSTRAINT holeClearanceConstraint( HOLE_CLEARANCE_CONSTRAINT );
@@ -496,6 +505,8 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
         { HOLE_SIZE_CONSTRAINT,           "hole_size",           formatMinMax },
         { COURTYARD_CLEARANCE_CONSTRAINT, "courtyard_clearance", formatMinMax },
         { SILK_CLEARANCE_CONSTRAINT,      "silk_clearance",      formatMinMax },
+        { TEXT_HEIGHT_CONSTRAINT,         "text_height",         formatMinMax },
+        { TEXT_THICKNESS_CONSTRAINT,      "text_thickness",      formatMinMax },
         { TRACK_WIDTH_CONSTRAINT,         "track_width",         formatMinMax },
         { ANNULAR_WIDTH_CONSTRAINT,       "annular_width",       formatMinMax },
         { DISALLOW_CONSTRAINT,            "disallow",            nullptr },
