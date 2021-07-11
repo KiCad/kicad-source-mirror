@@ -162,6 +162,8 @@ static const wxChar DrawBoundingBoxes[] = wxT( "DrawBoundingBoxes" );
 
 static const wxChar ShowPcbnewExportNetlist[] = wxT( "ShowPcbnewExportNetlist" );
 
+static const wxChar Skip3DFileCache[] = wxT( "Skip3DFileCache" );
+
 } // namespace KEYS
 
 
@@ -264,6 +266,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_HotkeysDumper             = false;
     m_DrawBoundingBoxes         = false;
     m_ShowPcbnewExportNetlist   = false;
+    m_Skip3DFileCache         = false;
 
     loadFromConfigFile();
 }
@@ -363,6 +366,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowPcbnewExportNetlist,
                                                 &m_ShowPcbnewExportNetlist, false ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Skip3DFileCache,
+                                                &m_Skip3DFileCache, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 

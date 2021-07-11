@@ -170,6 +170,11 @@ public:
      */
     bool m_ShowPcbnewExportNetlist;
 
+    /**
+     * Skip reading/writing 3d model file caches
+     */
+    bool m_Skip3DFileCache;
+
 private:
     ADVANCED_CFG();
 

@@ -47,6 +47,7 @@
 #include "sg/scenegraph.h"
 #include "plugins/3dapi/ifsg_api.h"
 
+#include <advanced_config.h>
 #include <common.h>     // For ExpandEnvVarSubstitutions
 #include <filename_resolver.h>
 #include <paths.h>
@@ -345,12 +346,13 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
     wxString bname = ep->GetCacheBaseName();
     wxString cachename = m_CacheDir + bname + wxT( ".3dc" );
 
-    if( wxFileName::FileExists( cachename ) && loadCacheData( ep ) )
+    if( !ADVANCED_CFG::GetCfg().m_Skip3DFileCache && wxFileName::FileExists( cachename )
+        && loadCacheData( ep ) )
         return ep->sceneData;
 
     ep->sceneData = m_Plugins->Load3DModel( aFileName, ep->pluginInfo );
 
-    if( nullptr != ep->sceneData )
+    if( !ADVANCED_CFG::GetCfg().m_Skip3DFileCache && nullptr != ep->sceneData )
         saveCacheData( ep );
 
     return ep->sceneData;
