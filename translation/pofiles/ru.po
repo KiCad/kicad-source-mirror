@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-09 08:32+0000\n"
+"PO-Revision-Date: 2021-07-12 08:34+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -12798,9 +12798,9 @@ msgid "Graphic Text '%s'"
 msgstr "Надпись '%s'"
 
 #: eeschema/libarch.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr "Не удалось добавить символ \"%s\" в файл библиотеки \"%s\"."
+msgstr "Не удалось добавить символ '%s' в файл библиотеки '%s'."
 
 #: eeschema/libarch.cpp:110
 msgid "Unexpected exception occurred."
@@ -12822,9 +12822,8 @@ msgid "Open Recent"
 msgstr "Открыть недавние"
 
 #: eeschema/menubar.cpp:88
-#, fuzzy
 msgid "Insert Schematic Sheet Content..."
-msgstr "Добавить схему..."
+msgstr "Вставить схему..."
 
 #: eeschema/menubar.cpp:89
 msgid ""
@@ -13030,9 +13029,9 @@ msgstr "Символы не были спасены."
 
 #: eeschema/project_rescue.cpp:691
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create symbol library file '%s'."
-msgstr "Не удалось создать файл библиотеки символов \"%s\""
+msgstr "Не удалось создать файл библиотеки символов '%s'."
 
 #: eeschema/project_rescue.cpp:815
 #, c-format
@@ -13135,9 +13134,9 @@ msgid "New Schematic"
 msgstr "Новая схема"
 
 #: eeschema/sch_edit_frame.cpp:966
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' already exists."
-msgstr "Файл схемы \"%s\" уже существует."
+msgstr "Файл схемы '%s' уже существует."
 
 #: eeschema/sch_edit_frame.cpp:987
 msgid "Open Schematic"
@@ -13163,9 +13162,8 @@ msgid "[Unsaved]"
 msgstr "[Изменено]"
 
 #: eeschema/sch_edit_frame.cpp:1282
-#, fuzzy
 msgid "[no schematic loaded]"
-msgstr "Схема сохранена"
+msgstr "[схема не загружена]"
 
 #: eeschema/sch_edit_frame.cpp:1453
 #, c-format
@@ -13320,7 +13318,7 @@ msgstr "Не удалось открыть файл '%s'."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:315
 #, c-format
 msgid "Storage file was not fully parsed as %d bytes are remaining."
-msgstr ""
+msgstr "Файл хранилища обработан не полностью, %d байт осталось."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:479
 #, c-format
@@ -13399,9 +13397,9 @@ msgid "Rectangle has non-existent ownerindex %d."
 msgstr "Прямоугольник имеет несуществующий ownerindex: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1372
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr "Обозначение '%s' не найдено."
+msgstr "Владелец листа (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1616
 msgid "Power Port has unknown style, use bar instead."
@@ -13415,33 +13413,33 @@ msgstr "Символ питания создаёт глобальную метк
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1774
 #, c-format
 msgid "There is a port for '%s', but no connections to it."
-msgstr ""
+msgstr "Имеется порт без подключений для '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1947
-#, fuzzy, c-format
+#, c-format
 msgid "Embedded file %s not found in storage."
-msgstr "Файл восстановления \"%s\" не найден."
+msgstr "Встроенный файл %s не найден в хранилище."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1962
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1979
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading image %s."
-msgstr "Ошибка загрузки форматной рамки"
+msgstr "Ошибка чтения изображения %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1973
-#, fuzzy, c-format
+#, c-format
 msgid "File not found %s."
-msgstr "Файл не найден."
+msgstr "Файл не найден %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2096
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet name's owner (%d) not found."
-msgstr "Обозначение '%s' не найдено."
+msgstr "Владелец имени листа (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2120
-#, fuzzy, c-format
+#, c-format
 msgid "File name's owner (%d) not found."
-msgstr "Файл '%s' не найден."
+msgstr "Владелец имени файла (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2154
 #, c-format
@@ -13626,9 +13624,9 @@ msgstr ""
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:442
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2876
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'."
-msgstr "Не удалось прочитать файл \"%s\""
+msgstr "Не удалось прочитать файл '%s'."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1269
 #, c-format
@@ -13645,162 +13643,122 @@ msgid "Could not find '%s' in the imported library."
 msgstr "Не удалось найти '%s' в импортируемой библиотеке."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:169
-#, fuzzy
 msgid "Invalid symbol name"
-msgstr "Неверное имя сигнала"
+msgstr "Неверное имя символа"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:179
-#, fuzzy
 msgid "Invalid library identifier"
-msgstr "Неверное обозначение библиотеки символов"
+msgstr "Неверный идентификатор библиотеки"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:251
-#, fuzzy
 msgid "Invalid parent symbol name"
-msgstr "Неверное имя сигнала"
+msgstr "Неверное имя родителя символа"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:260
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s"
-msgstr ""
-"Не указан родитель для производного символа %s в\n"
-"файл: \"%s\"\n"
-"строка: %d\n"
-"позиция: %d"
+msgstr "У расширенного символа %s нет родителя"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:275
-#, fuzzy
 msgid "Invalid symbol unit name"
-msgstr "Неверное имя сигнала"
+msgstr "Неверное имя части символа"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "Неверный множитель единиц измерения"
+msgstr "Неверный префикс %s имени части символа"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name suffix %s"
-msgstr ""
-"Неверный суффикс для частей символа %s в\n"
-"файл: \"%s\"\n"
-"строка: %d\n"
-"позиция: %d"
+msgstr "Неверный суффикс %s имени части символа"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit number %s"
-msgstr "Неверное обозначение библиотеки символов"
+msgstr "Неверное количество частей символа %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol convert number %s"
-msgstr ""
-"Неверный номер альтернативного начертания символа %s в\n"
-"файле: \"%s\"\n"
-"строка: %d\n"
-"позиция: %d"
+msgstr "Неверное количество альтернативных представлений символа %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:428
-#, fuzzy
 msgid "Floating point number with incorrect locale"
-msgstr ""
-"Число с плавающей точкой с неверными региональными настройками (local) в\n"
-"файле: \"%s\"\n"
-"строка: %d\n"
-"позиция: %d"
+msgstr "Число с плавающей точкой с неверными региональными настройками (locale)"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:438
-#, fuzzy
 msgid "Invalid floating point number"
-msgstr ""
-"Неверное число с плавающей точкой в\n"
-"файле: \"%s\"\n"
-"строка: %d\n"
-"позиция: %d"
+msgstr "Неверное число с плавающей точкой"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:444
-#, fuzzy
 msgid "Missing floating point number"
-msgstr "Отсутствует номер версии."
+msgstr "Отсутствует число с плавающей точкой"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:749
-#, fuzzy
 msgid "Invalid pin names definition"
-msgstr "Неверное определение строки"
+msgstr "Неверное определение имён вывода"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:771
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1712
-#, fuzzy
 msgid "Invalid property name"
-msgstr "Неверное имя сигнала"
+msgstr "Неверное имя свойства"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:779
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1720
-#, fuzzy
 msgid "Empty property name"
-msgstr "Введите имя посад.места:"
+msgstr "Пустое имя свойства"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:788
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1728
-#, fuzzy
 msgid "Invalid property value"
-msgstr "Неверное значение Spice-модели"
+msgstr "Неверное значение свойства"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1272
-#, fuzzy
 msgid "Invalid pin name"
-msgstr "Неверное имя сигнала"
+msgstr "Неверное имя вывода"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1310
-#, fuzzy
 msgid "Invalid pin number"
-msgstr "Неверное имя сигнала"
+msgstr "Неверный номер вывода"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1347
-#, fuzzy
 msgid "Invalid alternate pin name"
-msgstr "Альтернативная функция"
+msgstr "Неверное альтернативное имя вывода"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1511
-#, fuzzy
 msgid "Invalid text string"
-msgstr "Неверное значение Spice-модели"
+msgstr "Неверная строка текста"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1558
-#, fuzzy
 msgid "Invalid page type"
-msgstr "Неверное имя сигнала"
+msgstr "Неверный тип страницы"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1686
 msgid "Invalid title block comment number"
-msgstr ""
+msgstr "Неверное количество комментариев основной надписи"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1784
-#, fuzzy
 msgid "Invalid sheet pin name"
-msgstr "Неверное имя сигнала"
+msgstr "Неверное имя вывода листа"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1792
-#, fuzzy
 msgid "Empty sheet pin name"
-msgstr "Имя листа дублировано"
+msgstr "Пустое имя вывода листа"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2243
-#, fuzzy
 msgid "Invalid symbol library name"
-msgstr "Неверное обозначение библиотеки символов"
+msgstr "Неверное имя библиотеки символов"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2263
-#, fuzzy
 msgid "Invalid symbol library ID"
-msgstr "Неверное обозначение библиотеки символов"
+msgstr "Неверный идентификатор библиотеки символов"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1521
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2610
-#, fuzzy, c-format
+#, c-format
 msgid "Library file '%s' not found."
-msgstr "Файл библиотеки \"%s\" не найден."
+msgstr "Файл библиотеки '%s' не найден."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2081
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4219
@@ -13810,15 +13768,15 @@ msgstr "библиотека %s не содержит символ с имене
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2249
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4399
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' already exists."
-msgstr "Библиотека %s уже существует."
+msgstr "Библиотека '%s' уже существует."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2275
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4425
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' cannot be deleted."
-msgstr "библиотеку \"%s\" не удалось удалить"
+msgstr "Библиотеку символов '%s' удалить не удалось."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:165
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:207
@@ -13839,9 +13797,9 @@ msgid "expected unquoted string"
 msgstr "ожидалась строка без кавычек"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:871
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' does not appear to be an Eeschema file."
-msgstr "\"%s\" не является файлом Eeschema"
+msgstr "'%s' не похож на файл Eeschema."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:901
 msgid "Missing 'EELAYER END'"
@@ -13866,16 +13824,13 @@ msgid "symbol field text attributes must be 3 characters wide"
 msgstr "атрибуты текстового поля символа должны быть длиной в 3 символа"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2624
-#, fuzzy
 msgid "Unexpected end of file."
-msgstr "Неожиданный конец файла"
+msgstr "Неожиданный конец файла."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2710
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr ""
-"Недостаточно прав для сохранения файла \n"
-"%s"
+msgstr "Недостаточно прав для чтения библиотеки '%s'."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2719
 msgid "symbol document library file is empty"
@@ -14040,7 +13995,6 @@ msgid "Syntax Help"
 msgstr "Справка по синтаксису"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14234,8 +14188,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14250,8 +14204,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Определения шин</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Результирующие цепи</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14302,9 +14256,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
 
@@ -14388,25 +14342,24 @@ msgid "Signal name contains '[' or ']' but is not a valid vector bus name"
 msgstr "Имя сигнала содержит '[' или ']', но они запрещены в названиях шин"
 
 #: eeschema/sheet.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"Изменения листа не могут быть применены, потому что он уже содержит лист \"%s"
-"\" или где-то в иерархии схемы имеется такой же родительский лист."
+"Изменения листа не могут быть применены, потому что он уже содержит лист "
+"'%s' или где-то в иерархии схемы имеется такой же родительский лист."
 
 #: eeschema/sheet.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The schematic '%s' has not had it's symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"Схема \"%s\" не настроена на работу с таблицами библиотек символов. Перед "
-"импортом схемы в текущий проект, необходимо перевести проект, содержащий "
-"данную схему, на работу с таблицами библиотек."
+"Схема '%s' не настроена на работу с таблицами библиотек символов. Необходимо "
+"перевести проект, содержащий данную схему, на работу с таблицами библиотек."
 
 #: eeschema/sheet.cpp:147
 msgid ""
@@ -14448,12 +14401,12 @@ msgid "Continue Load Schematic"
 msgstr "Продолжить"
 
 #: eeschema/sheet.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The project library table '%s' does not exist or cannot be read.  This may "
 "result in broken symbol links for the schematic.  Do you wish to continue?"
 msgstr ""
-"Таблица библиотек проекта \"%s\" не существует либо не может быть прочитана. "
+"Таблица библиотек проекта '%s' не существует либо не может быть прочитана. "
 "Это может привести к появлению символов с неверными ссылками на библиотеки. "
 "Продолжить?"
 
@@ -14479,7 +14432,7 @@ msgstr ""
 "Продолжить?"
 
 #: eeschema/sheet.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file name '%s' can cause issues with an existing file name\n"
 "already defined in the schematic on systems that support case\n"
@@ -14489,7 +14442,7 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Имя файла \"%s\" может вызвать проблемы с уже определёнными в схеме\n"
+"Имя файла '%s' может вызвать проблемы с уже определёнными в схеме\n"
 "именами файлов на системах, которые не различают регистр в именах файлов.\n"
 "Такая проблема может возникнуть при копировании проекта в систему,\n"
 "файловая система которой не различает регистр в именах файлов.\n"
@@ -14792,9 +14745,9 @@ msgid "Please, fill required fields"
 msgstr "Пожалуйста, заполните требуемые поля"
 
 #: eeschema/sim/spice_value.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid Spice value."
-msgstr "\"%s\" это неверное Spice значение"
+msgstr "'%s' это неверное Spice значение."
 
 #: eeschema/symbol_async_loader.cpp:126
 #, c-format
@@ -14808,9 +14761,9 @@ msgstr ""
 "%s\n"
 
 #: eeschema/symbol_async_loader.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library %s..."
-msgstr "Загрузка библиотеки \"%s\""
+msgstr "Загрузка библиотеки %s..."
 
 #: eeschema/symbol_editor/lib_logger.cpp:64
 msgid ""
@@ -14897,12 +14850,12 @@ msgid "Open %s"
 msgstr "Открыть %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:826
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' already exists."
-msgstr "Библиотека %s уже существует."
+msgstr "Библиотека '%s' уже существует."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:834
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
 "Make sure you have write permissions and try again."
@@ -14916,9 +14869,9 @@ msgid "Could not open the library file."
 msgstr "Не удалось открыть файл библиотеки."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'..."
-msgstr "Загрузка библиотеки '%s'"
+msgstr "Загрузка библиотеки '%s'..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
 #: pcbnew/footprint_libraries_utils.cpp:504
@@ -14946,9 +14899,9 @@ msgid "Add To Library Table"
 msgstr "Добавление в таблицу библиотек"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save backup to '%s'."
-msgstr "Не удалось сохранить резервную копию в \"%s\""
+msgstr "Не удалось сохранить резервную копию в '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1181
 #: eeschema/symbol_viewer_frame.cpp:391
@@ -15045,18 +14998,16 @@ msgstr ""
 "чтобы избежать дублирования имён."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:146
-#, fuzzy
 msgid "[from schematic]"
-msgstr "%s%s [из схемы]"
+msgstr "[из схемы]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:156
 msgid "[Read Only Library]"
 msgstr "[Библиотека только для чтения]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:160
-#, fuzzy
 msgid "[no symbol loaded]"
-msgstr "символ не выбран"
+msgstr "[символ не загружен]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:188
 msgid "No symbol libraries are loaded."
@@ -15075,9 +15026,9 @@ msgid "This new symbol has no name and cannot be created."
 msgstr "Новый символ не имеет имени и не может быть создан."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "Символ '%s' уже существует в библиотеке '%s'"
+msgstr "Символ '%s' уже существует в библиотеке '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:527
 #: eeschema/tools/symbol_editor_control.cpp:506
@@ -15130,9 +15081,9 @@ msgid "Symbol '%s' already exists in library '%s'"
 msgstr "Символ '%s' уже существует в библиотеке '%s'"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use."
-msgstr "Имя '%s' уже используется."
+msgstr "Имя символа '%s' уже используется."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:732
 #, c-format
@@ -15140,16 +15091,18 @@ msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
 msgstr ""
+"Символ '%s' был изменён.\n"
+"Удалить его из библиотеки?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:743
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol %s is used to derive other symbols.\n"
 "Deleting this symbol will delete all of the symbols derived from it.\n"
 "\n"
 "Do you wish to delete this symbol and all of its derivatives?"
 msgstr ""
-"Символ \"%s\" используется для наследования другими символами.\n"
+"Символ '%s' используется для наследования другими символами.\n"
 "Удаление этого символа приведёт к удалению всех производных символов.\n"
 "\n"
 "Удалить этот и все производные символы?"
@@ -15165,38 +15118,37 @@ msgstr "Удалить символ"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:892
 #: pcbnew/footprint_libraries_utils.cpp:1065
-#, fuzzy, c-format
+#, c-format
 msgid "Revert '%s' to last version saved?"
-msgstr "Вернуть \"%s\" к последней сохранённой версии?"
+msgstr "Вернуть '%s' к последней сохранённой версии?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:960
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s not found in library '%s'."
-msgstr "Символ \"%s\" не найден в библиотеке \"%s\"."
+msgstr "Символ %s не найден в библиотеке '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:989
 msgid "No library specified."
 msgstr "Не указана библиотека."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Save Library '%s' As..."
-msgstr "Сохранить библиотеку \"%s\" как..."
+msgstr "Сохранить библиотеку '%s' как..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1047
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save changes to symbol library file '%s'."
-msgstr "Не удалось сохранить изменения символа в файл библиотеки \"%s\""
+msgstr "Не удалось сохранить изменения в файл библиотеки символов '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1049
-#, fuzzy
 msgid "Error Saving Library"
 msgstr "Ошибка сохранения библиотеки"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1092
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' saved."
-msgstr "Файл библиотеки символов \"%s\" сохранён"
+msgstr "Файл библиотеки символов '%s' сохранён."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1192
 msgid "Undefined!"
@@ -15226,20 +15178,20 @@ msgid "Import Symbol"
 msgstr "Импорт символа"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol library '%s'."
-msgstr "Не удалось импортировать библиотеку символов \"%s\"."
+msgstr "Не удалось импортировать библиотеку символов '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' is empty."
-msgstr "Файл библиотеки символов \"%s\" пуст."
+msgstr "Файл библиотеки символов '%s' пуст."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "Символ '%s' уже существует в библиотеке '%s'"
+msgstr "Символ %s уже существует в библиотеке '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:114
 msgid "There is no symbol selected to save."
@@ -15250,9 +15202,9 @@ msgid "Export Symbol"
 msgstr "Экспорт символа"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr "При попытке загрузить файл библиотеки символов \"%s\" возникла ошибка"
+msgstr "При попытке загрузить файл библиотеки символов '%s' возникла ошибка."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:157
 #: kicad/tools/kicad_manager_control.cpp:257
@@ -15264,58 +15216,53 @@ msgid "Overwrite"
 msgstr "Перезаписать"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr ""
-"Недостаточно прав для сохранения файла \n"
-"%s"
+msgstr "Недостаточно прав для сохранения файла '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating symbol library '%s'."
-msgstr "Ошибка создания библиотеки символов \"%s\""
+msgstr "Ошибка создания библиотеки символов '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s saved to library '%s'."
-msgstr "Символ \"%s\" сохранён в библиотеке \"%s\""
+msgstr "Символ '%s' сохранён в библиотеке '%s'."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:106
 #: eeschema/symbol_tree_model_adapter.cpp:105
-#, fuzzy
 msgid "Errors loading symbols:"
-msgstr ""
-"Ошибка загрузки платы.\n"
-"%s"
+msgstr "Ошибки загрузки символов:"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
-msgstr "Библиотека не найдена в таблице библиотек символов."
+msgstr "Библиотека '%s' не найдена в таблице библиотек символов."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:402
 msgid "Symbol not found."
 msgstr "Символ не найден."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'. (%s)"
-msgstr "При загрузке символа \"%s\" из библиотеки \"%s\" возникла ошибка. (%s)"
+msgstr "При загрузке символа '%s' из библиотеки '%s' возникла ошибка. (%s)"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
-msgstr "При загрузке символа '%s' из библиотеки '%s' возникла ошибка."
+msgstr "Не удалось загрузить символ '%s' из библиотеки '%s'."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot enumerate library '%s'."
-msgstr "Не удалось перечислить библиотеки \"%s\" (%s)"
+msgstr "Не удалось просмотреть библиотеку '%s'."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:1053
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving symbol %s to library '%s'."
-msgstr "При загрузке символа '%s' из библиотеки '%s' возникла ошибка."
+msgstr "При сохранении символа %s в библиотеку '%s' возникла ошибка."
 
 #: eeschema/symbol_lib_table.cpp:229
 #, c-format
@@ -15326,12 +15273,9 @@ msgstr ""
 "символов"
 
 #: eeschema/symbol_library.cpp:572 eeschema/symbol_tree_model_adapter.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol library '%s'."
-msgstr ""
-"Ошибка загрузки библиотеки символов %s.\n"
-"\n"
-"%s"
+msgstr "Ошибка загрузки библиотеки символов '%s'."
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:259
 msgid "(failed to load)"
@@ -15347,9 +15291,8 @@ msgid "Unit %c"
 msgstr "Часть %c"
 
 #: eeschema/symbol_viewer_frame.cpp:905 pcbnew/footprint_viewer_frame.cpp:1027
-#, fuzzy
 msgid "[no library selected]"
-msgstr "библиотека не выбрана"
+msgstr "[библиотека не выбрана]"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Choose symbol"
@@ -15392,9 +15335,9 @@ msgid "Change Visibility"
 msgstr "Изменение видимости"
 
 #: eeschema/tools/assign_footprints.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open symbol-footprint link file '%s'."
-msgstr "Не удалось открыть файл связей компонент-посад.место \"%s\""
+msgstr "Не удалось открыть файл связей компонент-посад.место '%s'."
 
 #: eeschema/tools/backannotate.cpp:73
 msgid "Select at least one property to back annotate."
@@ -15467,10 +15410,10 @@ msgid "Change %s pin %s net label from '%s' to '%s'."
 msgstr "У %s, вывод %s, изменена метка цепи с '%s' на '%s'."
 
 #: eeschema/tools/backannotate.cpp:557
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
 msgstr ""
-"Цепь %s не может быть заменена на '%s', так как подключена к силовому выводу."
+"Цепь %s не может быть заменена на %s, так как подключена к силовому выводу."
 
 #: eeschema/tools/backannotate.cpp:566
 #, c-format
@@ -16507,9 +16450,9 @@ msgstr "Нажмите <ESC> для отмены создания изображ
 #: eeschema/tools/sch_drawing_tools.cpp:516
 #: pagelayout_editor/pl_editor_frame.cpp:855
 #: pagelayout_editor/pl_editor_frame.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "Could not load image from '%s'."
-msgstr "Не удалось загрузить изображение из \"%s\""
+msgstr "Не удалось загрузить изображение из '%s'."
 
 #: eeschema/tools/sch_drawing_tools.cpp:643
 #: eeschema/tools/sch_drawing_tools.cpp:1149
@@ -16606,13 +16549,13 @@ msgid "Select netclass:"
 msgstr "Выбор класса цепей:"
 
 #: eeschema/tools/sch_editor_control.cpp:1540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The pasted sheet '%s'\n"
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
-"Вставка листа \"%s\"\n"
+"Вставка листа '%s'\n"
 "отменена, так как он или один из его вложенных листов является родительским "
 "для целевого листа."
 
@@ -16650,9 +16593,9 @@ msgid "Image File Name"
 msgstr "Файл изображения"
 
 #: eeschema/tools/symbol_editor_control.cpp:408
-#, fuzzy, c-format
+#, c-format
 msgid "Can't save file '%s'."
-msgstr "Не удалось сохранить файл \"%s\"."
+msgstr "Не удалось сохранить файл '%s'."
 
 #: eeschema/tools/symbol_editor_control.cpp:437
 msgid "Filename:"
@@ -17028,9 +16971,9 @@ msgid "Loading Gerber files..."
 msgstr "Загрузка Gerber файлов..."
 
 #: gerbview/files.cpp:245 gerbview/files.cpp:252
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %u/%zu %s..."
-msgstr "Загружается %u/%zu %s"
+msgstr "Загружается %u/%zu %s..."
 
 #: gerbview/files.cpp:276
 #, c-format
@@ -17042,24 +16985,24 @@ msgid "Open NC (Excellon) Drill File(s)"
 msgstr "Открыть файлы сверловки NC (Excellon)"
 
 #: gerbview/files.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Zip file '%s' cannot be opened."
-msgstr "Zip файл \"%s\" не может быть открыт"
+msgstr "Не удаётся открыть Zip файл '%s'."
 
 #: gerbview/files.cpp:513
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (unknown type).\n"
-msgstr "Примечание: пропускается файл \"%s\"> (неизвестный тип)\n"
+msgstr "Пропускается файл '%s' (неизвестный тип).\n"
 
 #: gerbview/files.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (gerber job file).\n"
-msgstr "Примечание: пропускается файл \"%s\" (файл задания)\n"
+msgstr "Пропускается файл '%s' (gerber job файл).\n"
 
 #: gerbview/files.cpp:566
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>\n"
-msgstr "<b>Не удаётся создать временный файл \"%s\"</b>\n"
+msgstr "<b>Не удаётся создать временный файл '%s'</b>\n"
 
 #: gerbview/files.cpp:596
 #, c-format
@@ -17485,19 +17428,18 @@ msgid "D Codes"
 msgstr "D коды"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Source file '%s' not found."
-msgstr "Файл схемы '%s' не найден."
+msgstr "Исходный файл '%s' не найден."
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#, fuzzy
 msgid "No editor defined. Please select one."
-msgstr "Редактор не выбран. Выберите какой-нибудь"
+msgstr "Редактор не задан. Выберите какой-нибудь."
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "No file loaded on the active layer %d."
-msgstr "Не загружен файл на активном слое %d"
+msgstr "Не загружен файл на активном слое %d."
 
 #: gerbview/tools/gerbview_selection_tool.cpp:48
 msgid "Highlight"
@@ -17756,9 +17698,9 @@ msgid "Target Directory"
 msgstr "Каталог назначения"
 
 #: kicad/files-io.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Unzipping project in '%s'.\n"
-msgstr "Распаковка проекта в \"%s\"\n"
+msgstr "Распаковка проекта в '%s'.\n"
 
 #: kicad/files-io.cpp:117
 msgid "Archive Project Files"
@@ -17829,14 +17771,12 @@ msgid "Load File to Edit"
 msgstr "Загрузить файл для редактирования"
 
 #: kicad/kicad_manager_frame.cpp:622
-#, fuzzy
 msgid "[no project loaded]"
-msgstr "Нет загруженных посад.мест."
+msgstr "[проект не загружен]"
 
 #: kicad/kicad_manager_frame.cpp:625
-#, fuzzy
 msgid "KiCad "
-msgstr "KiCad"
+msgstr "KiCad "
 
 #: kicad/kicad_manager_frame.cpp:664
 #, c-format
@@ -18198,11 +18138,9 @@ msgstr "Создать каталог проекта"
 
 #: kicad/tools/kicad_manager_control.cpp:228
 #: kicad/tools/kicad_manager_control.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write to folder '%s'."
-msgstr ""
-"Недостаточно прав для сохранения файла \n"
-"%s"
+msgstr "Недостаточно прав для записи в каталог '%s'."
 
 #: kicad/tools/kicad_manager_control.cpp:249
 msgid "Overwriting files:"
@@ -18221,16 +18159,16 @@ msgid "Open Existing Project"
 msgstr "Открыть существующий проект"
 
 #: kicad/tools/kicad_manager_control.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy folder '%s'."
-msgstr "Не удалось скопировать каталог \"%s\"."
+msgstr "Не удалось скопировать каталог '%s'."
 
 #: kicad/tools/kicad_manager_control.cpp:518
 msgid "Save Project To"
 msgstr "Сохранение проекта"
 
 #: kicad/tools/kicad_manager_control.cpp:538
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
@@ -18562,9 +18500,9 @@ msgid "File \"%s\" saved."
 msgstr "Файл \"%s\" сохранён."
 
 #: pagelayout_editor/files.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write '%s'."
-msgstr "Не удалось записать \"%s\""
+msgstr "Не удалось записать '%s'."
 
 #: pagelayout_editor/files.cpp:185
 msgid "Save As"
@@ -18596,18 +18534,17 @@ msgid "Properties"
 msgstr "Свойства"
 
 #: pagelayout_editor/pl_editor_frame.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "Ошибка загрузки форматной рамки"
+msgstr "Ошибка загрузки форматной рамки '%s'."
 
 #: pagelayout_editor/pl_editor_frame.cpp:440
 msgid "Error Init Printer info"
 msgstr "Ошибка подключения к принтеру"
 
 #: pagelayout_editor/pl_editor_frame.cpp:553
-#, fuzzy
 msgid "[no drawing sheet loaded]"
-msgstr "Чертить форматную рамку"
+msgstr "[форматная рамка не загружена]"
 
 #: pagelayout_editor/pl_editor_frame.cpp:761
 #, c-format
@@ -19753,9 +19690,9 @@ msgid "Do you want to load this file and replace current regulator list?"
 msgstr "Желаете загрузить этот файл и заменить текущий список стабилизаторов?"
 
 #: pcb_calculator/regulators_funct.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read data file '%s'."
-msgstr "Не удалось прочитать файл \"%s\""
+msgstr "Не удалось прочитать файл данных '%s'."
 
 #: pcb_calculator/regulators_funct.cpp:196
 msgid "This regulator is already in list. Aborted"
@@ -20391,9 +20328,9 @@ msgid "PrePreg"
 msgstr "Препрег"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' (sublayer %d/%d)"
-msgstr "Слой \"%s\" (подслой %d/%d)"
+msgstr "Слой '%s' (подслой %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:212
 msgid "Add Dielectric Layer"
@@ -20401,23 +20338,21 @@ msgstr "Добавить слой диэлектр."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
 #: pcbnew/dialogs/panel_setup_layers.cpp:821
-#, fuzzy
 msgid "Select layer to add:"
-msgstr "Выберите Github библиотеки для добавления:"
+msgstr "Выберите слой для добавления:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' sublayer %d/%d"
-msgstr "Слой \"%s\" (подслой %d/%d)"
+msgstr "Слой '%s' (подслой %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:268
 msgid "Remove Dielectric Layer"
 msgstr "Удалить слой диэлектр."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:269
-#, fuzzy
 msgid "Select layer to remove:"
-msgstr "Выберите вершину для удаления."
+msgstr "Выберите слой для удаления:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:454
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1193
@@ -20553,14 +20488,12 @@ msgstr ""
 "будут добавлены к ограничениям."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
-#, fuzzy
 msgid "Add Dielectric Layer..."
-msgstr "Добавить слой диэлектр."
+msgstr "Добавить слой диэлектрика..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:48
-#, fuzzy
 msgid "Remove Dielectric Layer..."
-msgstr "Удалить слой диэлектр."
+msgstr "Удалить слой диэлектрика..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:72
 #: pcbnew/build_BOM_from_board.cpp:109
@@ -20790,15 +20723,16 @@ msgid "No PCB to reannotate!"
 msgstr "Нет платы для обозначения!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:269
-#, fuzzy
 msgid "PCB successfully reannotated"
-msgstr "Плата и схема успешно обозначены"
+msgstr "Плата успешно обозначена"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:270
 msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
+"Изменения обозначений на плате должны быть синхронизированы со схемой с "
+"помощью инструмента \"Обновить схему из платы\"."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:285
 #, c-format
@@ -21304,9 +21238,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:614
 #: pcbnew/tools/pcb_control.cpp:1022
-#, fuzzy
 msgid "Loading PCB"
-msgstr "Загрузка "
+msgstr "Загрузка платы"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:220
 #, c-format
@@ -21450,9 +21383,9 @@ msgid "Drill holes"
 msgstr "Отверстий"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:727
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing file '%s'."
-msgstr "Ошибка записи в файл \"%s\""
+msgstr "Ошибка записи в файл '%s'."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:117
 msgid "Board Size"
@@ -21921,13 +21854,13 @@ msgid "Bad numeric value for %s: %s"
 msgstr "Плохое численное значение %s: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not determine numbering start from '%s': expected value consistent "
 "with alphabet '%s'."
 msgstr ""
-"Не удалось определить начало нумерации с \"%s\": ожидаемое значение "
-"соответствует алфавиту \"%s\""
+"Не удалось определить начало нумерации с '%s': ожидаемое значение "
+"соответствует алфавиту '%s'."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:307
 msgid "step value"
@@ -22555,9 +22488,8 @@ msgid "Change all footprints on board"
 msgstr "Заменить все посад.места на плате"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
-#, fuzzy
 msgid "Change selected footprint(s)"
-msgstr "Заменить выбранное посад.место"
+msgstr "Заменить выбранные посад.места"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
 msgid "Change footprints matching reference designator:"
@@ -22618,9 +22550,8 @@ msgid "Update all footprints on board"
 msgstr "Обновить все посад.места на плате"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
-#, fuzzy
 msgid "Update selected footprint(s)"
-msgstr "Обновить выбранное посад.место"
+msgstr "Обновить выбранные посад.места"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
 msgid "Update footprints matching reference designator:"
@@ -22780,7 +22711,6 @@ msgid "Board center origin"
 msgstr "Начало координат в центре платы"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
-#, fuzzy
 msgid "User Defined Origin"
 msgstr "Начало координат пользователя"
 
@@ -22805,9 +22735,8 @@ msgid "Overwrite old file"
 msgstr "Перезаписать старый файл"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
-#, fuzzy
 msgid "Board outline chaining tolerance:"
-msgstr "Контур платы:"
+msgstr "Допуск образования контура платы:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
 msgid "Tight (0.001 mm)"
@@ -22825,7 +22754,7 @@ msgstr "Неточно (0.1 мм)"
 msgid ""
 "Tolerance sets the distance between two points that are considered joined."
 msgstr ""
-"Точность определяет расстояние между двумя точками, которые считаются "
+"Допуск определяет расстояние между двумя точками, которые считаются "
 "соединёнными."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:75
@@ -22847,22 +22776,22 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_svg.cpp:264 pcbnew/dialogs/dialog_plot.cpp:815
 #: pcbnew/exporters/gen_footprints_placefile.cpp:254
 #: pcbnew/exporters/gen_footprints_placefile.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write plot files to folder '%s'."
-msgstr "Не удалось записать файлы чертежа в каталог \"%s\"."
+msgstr "Не удалось записать файлы чертежа в каталог '%s'."
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid "Exported '%s'."
-msgstr "Экспорт \"%s\" завершён."
+msgstr "Экспорт '%s' завершён."
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:296
 #: pcbnew/exporters/gen_footprints_placefile.cpp:272
 #: pcbnew/exporters/gen_footprints_placefile.cpp:387
 #: pcbnew/exporters/gen_footprints_placefile.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create '%s'."
-msgstr "Не удалось создать %s"
+msgstr "Не удалось создать '%s'."
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:29
 msgid ""
@@ -22926,9 +22855,9 @@ msgstr "Перезаписать существующий файл?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:254
 #: pcbnew/plugins/altium/altium_pcb.cpp:1284
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create folder '%s'."
-msgstr "Не удалось создать файл \"%s\""
+msgstr "Не удалось создать каталог '%s'."
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
@@ -23027,9 +22956,9 @@ msgid "Searching..."
 msgstr "Поиск..."
 
 #: pcbnew/dialogs/dialog_find.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' not found"
-msgstr "%s не найдено"
+msgstr "'%s' не найдено"
 
 #: pcbnew/dialogs/dialog_find.cpp:345
 msgid "No more items to show"
@@ -23040,9 +22969,9 @@ msgid "No hits"
 msgstr "Нет совпадений"
 
 #: pcbnew/dialogs/dialog_find.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' found"
-msgstr "%s найдено"
+msgstr "'%s' найдено"
 
 #: pcbnew/dialogs/dialog_find.cpp:357
 #, c-format
@@ -23433,9 +23362,9 @@ msgid "Footprint must have a name."
 msgstr "У посад.места должно быть имя."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name may not contain '%s'."
-msgstr "Имя посад.места не может содержать \"%s\"."
+msgstr "Имя посад.места не может содержать '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
 msgid "Unconstrained"
@@ -23561,9 +23490,9 @@ msgstr ""
 "помощью кнопки <b>Добавить выбранный параметр</b>."
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Options for Library '%s'"
-msgstr "Параметры для библиотеки \"%s\""
+msgstr "Параметры для библиотеки '%s'"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:25
 msgid "Plugin Options"
@@ -23683,9 +23612,9 @@ msgstr ""
 "различные)!"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
-msgstr "Не удалось записать файлы сверловки и/или карты в каталог \"%s\"."
+msgstr "Не удалось записать файлы сверловки и/или карты в каталог '%s'."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:440
 msgid "Save Drill Report File"
@@ -24120,50 +24049,41 @@ msgid "footprint"
 msgstr "посад.мест"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
 msgstr ""
-"При создании пустого файла таблицы библиотек посад.мест произошла ошибка.\n"
-"\n"
-"%s"
+"При создании пустого файла таблицы библиотек посад.мест возникла ошибка '%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 msgid "Please select a footprint library table file."
 msgstr "Выберите файл таблицы библиотек посад.мест."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr ""
-"Файл \"%s\" не является корректной таблицей библиотек посад.мест.\n"
-"\n"
-"%s"
+msgstr "'%s' не является корректной таблицей библиотек посад.мест."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create library table path '%s'."
-msgstr "Не удалось создать глобальную таблицу библиотек по пути '%s'."
+msgstr "Не удалось создать таблицу библиотек по пути '%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot copy footprint library table from:\n"
 "%s\n"
 "to:\n"
 "%s."
 msgstr ""
-"Не удалось скопировать файла глобальной таблицы библиотек посад.мест:\n"
-"\n"
-" \"%s\"\n"
-"\n"
-":в:\n"
-"\n"
-"\"%s\"."
+"Не удалось скопировать файла таблицы библиотек посад.мест:\n"
+"%s\n"
+"в:\n"
+"%s."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:133
-#, fuzzy
 msgid "Error loading footprint library table."
-msgstr "Ошибка загрузки таблицы библиотек посад.мест проекта"
+msgstr "Ошибка загрузки таблицы библиотек посад.мест."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:178
 msgid "Circle Properties"
@@ -24544,9 +24464,9 @@ msgid "Changes Applied to PCB"
 msgstr "Изменения применены к плате"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Reading netlist file '%s'.\n"
-msgstr "Чтение файла списка цепей \"%s\".\n"
+msgstr "Чтение файла списка цепей '%s'.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:230
 msgid "Using reference designators to match symbols and footprints.\n"
@@ -25815,15 +25735,16 @@ msgid "Max amplitude (Amax):"
 msgstr "Макс. амплитуда (Amax):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:131
-#, fuzzy
 msgid "Min spacing (s):"
-msgstr "Шаг (s):"
+msgstr "Мин отступ (s):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:136
 msgid ""
 "Minimum spacing between adjacent meander segments. The resulting spacing may "
 "be greater based on design rules."
 msgstr ""
+"Минимальный отступ между соседними сегментами меандра. Итоговый отступ может "
+"бить больше в зависимости от правил проектирования."
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:144
 msgid "Miter style:"
@@ -27053,18 +26974,18 @@ msgid "Layer must have a name."
 msgstr "У слоя должно быть имя."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:659
-#, fuzzy, c-format
+#, c-format
 msgid "%s are forbidden in layer names."
-msgstr "\"%s\" нельзя использовать в названиях слоёв."
+msgstr "%s нельзя использовать в названиях слоёв."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:666
 msgid "Layer name \"signal\" is reserved."
 msgstr "Имя слоя \"signal\" зарезервировано."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:674
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name '%s' already in use."
-msgstr "Имя слоя \"%s\" уже используется."
+msgstr "Имя слоя '%s' уже используется."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:774
 #, c-format
@@ -27085,17 +27006,15 @@ msgstr "Внутренние слои для удаления"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:816
 msgid "All user-defined layers have already been added."
-msgstr ""
+msgstr "Уже добавлены все пользовательские слои."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:820
-#, fuzzy
 msgid "Add User-defined Layer"
 msgstr "Добавить пользовательский слой"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
-#, fuzzy
 msgid "Add User Defined Layer..."
-msgstr "Добавить пользовательский слой"
+msgstr "Добавить пользовательский слой..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:44
 msgid "If you want a courtyard layer for the front side of the board"
@@ -28360,9 +28279,9 @@ msgid "Unconditional rule applied."
 msgstr "Применено безусловное правило."
 
 #: pcbnew/drc/drc_engine.cpp:1006
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition '%s'."
-msgstr "Проверка условия правила \"%s\"."
+msgstr "Проверка условия правила '%s'."
 
 #: pcbnew/drc/drc_engine.cpp:1012
 msgid "Constraint applied."
@@ -28981,9 +28900,9 @@ msgstr "Сформировать файл позиций"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:278
 #: pcbnew/exporters/gen_footprints_placefile.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Front (top side) placement file: '%s'."
-msgstr "Файл размещения на верхней стороне: \"%s\"."
+msgstr "Файл размещения на верхней стороне: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:281
 #: pcbnew/exporters/gen_footprints_placefile.cpp:303
@@ -28995,15 +28914,15 @@ msgstr "Кол-во компонентов: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:300
 #: pcbnew/exporters/gen_footprints_placefile.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Back (bottom side) placement file: '%s'."
-msgstr "Файл размещения на нижней стороне: \"%s\"."
+msgstr "Файл размещения на нижней стороне: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:308
 #: pcbnew/exporters/gen_footprints_placefile.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "Full component count: %d.\n"
-msgstr "Всего компонентов: %d\n"
+msgstr "Всего компонентов: %d.\n"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:311
 #: pcbnew/exporters/gen_footprints_placefile.cpp:405
@@ -29016,43 +28935,43 @@ msgid "No footprint for automated placement."
 msgstr "Нет посад.мест для автоматического размещения."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:394
-#, fuzzy, c-format
+#, c-format
 msgid "Placement file: '%s'."
-msgstr "Файл размещения: \"%s\"."
+msgstr "Файл размещения: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:526
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint report file created:\n"
 "'%s'."
 msgstr ""
 "Файл отчёта о посад.местах создан:\n"
-"\"%s\""
+"'%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:527
 msgid "Footprint Report"
 msgstr "Отчёт о посад.местах"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'"
-msgstr "Создать файл %s\n"
+msgstr "Создать файл '%s'"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:354
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'."
-msgstr "Создать файл %s\n"
+msgstr "Создать файл '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create job file '%s'."
-msgstr "Не удалось создать \"%s\""
+msgstr "Не удалось создать job-файл '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Create Gerber job file '%s'."
-msgstr "Создать файл задания Gerber \"%s\""
+msgstr "Создать файл Gerber Job '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:575
 msgid ""
@@ -29095,14 +29014,14 @@ msgid "Printed circuit board"
 msgstr "Печатная плата"
 
 #: pcbnew/files.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Recovery file '%s' not found."
-msgstr "Файл восстановления \"%s\" не найден."
+msgstr "Файл восстановления '%s' не найден."
 
 #: pcbnew/files.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "Загрузить файл резервного копирования \"%s\"?"
+msgstr "Загрузить файл резервного копирования '%s'?"
 
 #: pcbnew/files.cpp:374
 #, c-format
@@ -29132,9 +29051,9 @@ msgid "Edge Clearance Warning"
 msgstr "Предупреждение о зазоре у края платы"
 
 #: pcbnew/files.cpp:578
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open."
-msgstr "Файл печатной платы \"%s\" уже открыт."
+msgstr "Файл печатной платы '%s' уже открыт."
 
 #: pcbnew/files.cpp:585
 msgid "The current PCB has been modified.  Save changes?"
@@ -29146,42 +29065,35 @@ msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "Плата '%s' не существует. Создать?"
 
 #: pcbnew/files.cpp:613
-#, fuzzy
 msgid "Creating PCB"
-msgstr "Создание компонента : "
+msgstr "Создание платы"
 
 #: pcbnew/files.cpp:706 pcbnew/files.cpp:716
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading PCB '%s'."
-msgstr "Ошибка загрузки схемы '%s'."
+msgstr "Ошибка загрузки платы '%s'."
 
 #: pcbnew/files.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr ""
-"Закончилась память при загрузке файла платы:\n"
-"%s"
+msgstr "Закончилась память при загрузке файла платы '%s'"
 
 #: pcbnew/files.cpp:834
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
-"При сохранении посад.места '%s' в библиотеку посад.мест проекта возникла "
-"ошибка: %s"
+"При сохранении посад.места %s в библиотеку посад.мест проекта возникла "
+"ошибка."
 
 #: pcbnew/files.cpp:863
-#, fuzzy
 msgid "Error saving project specific footprint library table."
-msgstr ""
-"При сохранении таблицы библиотек посад.мест проекта возникла ошибка: %s"
+msgstr "При сохранении таблицы библиотек посад.мест проекта возникла ошибка."
 
 #: pcbnew/files.cpp:955 pcbnew/files.cpp:1094
 #: pcbnew/footprint_libraries_utils.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr ""
-"Недостаточно прав для сохранения файла \n"
-"%s"
+msgstr "Недостаточно прав для записи файла '%s'."
 
 #: pcbnew/files.cpp:983 pcbnew/files.cpp:1139
 #, c-format
@@ -29198,13 +29110,13 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Ошибка сохранения файла платы \"%s\".\n"
-"Не удалось переименовать временный файл\"%s\""
+"Ошибка сохранения файла платы '%s'.\n"
+"Не удалось переименовать временный файл '%s'."
 
 #: pcbnew/files.cpp:1143
 #, c-format
@@ -29327,14 +29239,13 @@ msgstr ""
 "Редактируется посад.место %s из платы. Сохранение коснётся только платы."
 
 #: pcbnew/footprint_edit_frame.cpp:763
-#, fuzzy, c-format
+#, c-format
 msgid "[from %s]"
-msgstr "(%s)"
+msgstr "[из %s]"
 
 #: pcbnew/footprint_edit_frame.cpp:797
-#, fuzzy
 msgid "[no footprint loaded]"
-msgstr "Нет загруженных посад.мест."
+msgstr "[посад.место не загружено]"
 
 #: pcbnew/footprint_edit_frame.cpp:853
 msgid "Updating Footprint Libraries"
@@ -29379,14 +29290,12 @@ msgid "Footprint library not enabled."
 msgstr "Библиотека посад.мест не задействована."
 
 #: pcbnew/footprint_info_impl.cpp:130
-#, fuzzy
 msgid "Fetching footprint libraries..."
-msgstr "Получение библиотек посадочных мест"
+msgstr "Получение библиотек посадочных мест..."
 
 #: pcbnew/footprint_info_impl.cpp:159
-#, fuzzy
 msgid "Loading footprints..."
-msgstr "Загрузка посад.мест"
+msgstr "Загрузка посад.мест..."
 
 #: pcbnew/footprint_libraries_utils.cpp:58
 msgid ""
@@ -29417,9 +29326,8 @@ msgid "Import Footprint"
 msgstr "Импорт посад.места"
 
 #: pcbnew/footprint_libraries_utils.cpp:261
-#, fuzzy
 msgid "Not a footprint file."
-msgstr "Файл не является посад.местом"
+msgstr "Файл не является посад.местом."
 
 #: pcbnew/footprint_libraries_utils.cpp:273
 #, c-format
@@ -29431,14 +29339,14 @@ msgid "Export Footprint"
 msgstr "Экспорт посад.места"
 
 #: pcbnew/footprint_libraries_utils.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint exported to file '%s'."
-msgstr "Посад.место экспортировано в файл \"%s\""
+msgstr "Посад.место экспортировано в файл '%s'."
 
 #: pcbnew/footprint_libraries_utils.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s is read only."
-msgstr "Библиотека \"%s\" доступна только для чтения."
+msgstr "Библиотека %s доступна только для чтения."
 
 #: pcbnew/footprint_libraries_utils.cpp:468
 #, c-format
@@ -29652,12 +29560,9 @@ msgid "Documentation"
 msgstr "Документация"
 
 #: pcbnew/generate_footprint_info.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr ""
-"Ошибка загрузки посад.места %s из библиотеки %s.\n"
-"\n"
-"%s"
+msgstr "Ошибка загрузки посад.места %s из библиотеки '%s'."
 
 #: pcbnew/generate_footprint_info.cpp:121
 msgid "doc url"
@@ -29792,14 +29697,14 @@ msgid "Footprints [%u items]"
 msgstr "Посад.мест [%u шт.]"
 
 #: pcbnew/load_select_footprint.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' saved."
-msgstr "Посад.место \"%s\" сохранено"
+msgstr "Посад.место '%s' сохранено."
 
 #: pcbnew/load_select_footprint.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' saved as '%s'."
-msgstr "Библиотека посад.мест \"%s\" сохранена как \"%s\"."
+msgstr "Библиотека посад.мест '%s' сохранена как '%s'."
 
 #: pcbnew/menubar_footprint_editor.cpp:68
 #: pcbnew/menubar_footprint_editor.cpp:77
@@ -30318,7 +30223,7 @@ msgid "Cannot find component with ref '%s' in netlist."
 msgstr "Не удалось найти компонент с обозначением '%s' в списке цепей."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -30326,7 +30231,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Неверный ID посад.места в\n"
-"файл: \"%s\"\n"
+"файл: '%s'\n"
 "строка: %d\n"
 "позиция: %d"
 
@@ -30355,15 +30260,14 @@ msgid "Cannot parse net name in symbol net section of netlist."
 msgstr "Не удалось разобрать имя цепи символа в списке цепей."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr ""
-"Не удалось найти символ \"%s\" в секции фильтра посад.мест в списке цепей."
+msgstr "Не удалось найти символ %s в секции фильтра посад.мест списка цепей."
 
 #: pcbnew/netlist_reader/netlist.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open netlist file '%s'."
-msgstr "Не удалось открыть файл списка цепей \"%s\"."
+msgstr "Не удалось открыть файл списка цепей '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:68
 msgid "Netlist Load Error."
@@ -30383,39 +30287,40 @@ msgid "Netlist Load Error"
 msgstr "Ошибка чтения списка цепей"
 
 #: pcbnew/netlist_reader/netlist.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol %s.\n"
-msgstr "Не задано посад.место для символа \"%s\".\n"
+msgstr "Не задано посад.место для символа %s.\n"
 
 #: pcbnew/netlist_reader/netlist.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
 msgstr ""
-"Заменено посад.место для %s: посад.место на плате \"%s\", посад.место в "
-"списке цепей \"%s\"."
+"Заменено посад.место для %s: посад.место на плате '%s', посад.место в списке "
+"цепей '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint ID '%s' is not valid."
-msgstr "У %s неверное значение ID посад.места \"%s\"."
+msgstr "У %s неверный ID посад.места '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library "
 "table.\n"
 msgstr ""
-"Для %s посад.место \"%s\" не найдено ни в одной библиотеке из всех таблиц.\n"
+"Для %s посад.место '%s' не найдено ни в одной библиотеке из таблиц библиотек."
+"\n"
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d"
 msgstr ""
 "Неверный ID посад.места в\n"
-"файле: \"%s\"\n"
+"файле: '%s'\n"
 "строке: %d"
 
 #: pcbnew/pad.cpp:692
@@ -30584,9 +30489,8 @@ msgid "Round Radius Ratio"
 msgstr "Относительный радиус скругления"
 
 #: pcbnew/pcb_base_frame.cpp:151
-#, fuzzy
 msgid "Error loading project footprint libraries."
-msgstr "Ошибка загрузки библиотек посад.мест проекта"
+msgstr "Ошибка загрузки библиотек посад.мест проекта."
 
 #: pcbnew/pcb_dimension.cpp:299
 msgid "Dimension"
@@ -30658,9 +30562,8 @@ msgid "Schematic file '%s' not found."
 msgstr "Файл схемы '%s' не найден."
 
 #: pcbnew/pcb_edit_frame.cpp:1488
-#, fuzzy
 msgid "Eeschema failed to load."
-msgstr "Не удалось загрузить Eeschema:\n"
+msgstr "Не удалось загрузить Eeschema."
 
 #: pcbnew/pcb_edit_frame.cpp:1627
 msgid "Edit design rules"
@@ -30710,9 +30613,9 @@ msgid "Unnamed Group, %zu members"
 msgstr "Безымянная группа, %zu элементов"
 
 #: pcbnew/pcb_group.cpp:308
-#, fuzzy, c-format
+#, c-format
 msgid "Group '%s', %zu members"
-msgstr "Группа \"%s\", %zu элементов"
+msgstr "Группа '%s', %zu элементов"
 
 #: pcbnew/pcb_group.cpp:322
 msgid "<unnamed>"
@@ -30907,89 +30810,85 @@ msgstr "Python-модуль, в котором реализована функц
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
-msgstr ""
+msgstr "Неизвестное назначение слоя Altium '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:788
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr ""
+msgstr "Поток Pads6 имеет неожиданную длину для записи 6: %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:75
 msgid "Error reading file: cannot determine length."
-msgstr ""
+msgstr "Ошибка чтения файла: не удалось определить длину."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:86
-#, fuzzy
 msgid "Error reading file."
-msgstr "Ошибка извлечения файла!\n"
+msgstr "Ошибка чтения файла."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not parsed correctly."
-msgstr "Зона меди '%s' не подключена ни к одному выводу."
+msgstr "'%s' разобран неправильно."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not fully parsed."
-msgstr "Файл \"%s\" был прочитан не полностью"
+msgstr "'%s' разобран не полностью."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:509
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'."
-msgstr "Файл не найден: '%s'"
+msgstr "Файл не найден: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate netclass name '%s'."
-msgstr "Дубликат имени класса цепей \"%s\""
+msgstr "Дубликат имени класса цепей '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1010
 #: pcbnew/plugins/altium/altium_pcb.cpp:1088
 #: pcbnew/plugins/altium/altium_pcb.cpp:1167
 #: pcbnew/plugins/altium/altium_pcb.cpp:1191
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Размерная линия на слое Altium %d не имеет аналога в KiCad. Она будет "
-"размещена на слое Eco1_User"
+"Размерная линия на слое Altium (%d) не имеет аналога в KiCad. Она будет "
+"размещена на слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1231
 #: pcbnew/plugins/altium/altium_pcb.cpp:1239
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr ""
+msgstr "Проигнорирована размерная линия типа %d (пока не поддерживается)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1284
-#, fuzzy
 msgid "No 3D-models will be imported."
-msgstr "Не удалось создать каталог \"%s\" -> 3D-модели не будут импортированы."
+msgstr "3D-модели не будут импортированы."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1301
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'. 3D-model not imported."
-msgstr "Файл не найден: '%s'"
+msgstr "Файл не найден: '%s'. 3D-модели не импортированы."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1341
-#, fuzzy
 msgid "Loading nets..."
-msgstr "Загрузка..."
+msgstr "Загрузка цепей..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1364
-#, fuzzy
 msgid "Loading polygons..."
-msgstr "Производится заливка полигонов..."
+msgstr "Загрузка полигонов..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1377
 #: pcbnew/plugins/altium/altium_pcb.cpp:1620
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Полигон на слое Altium %d не имеет аналога в KiCad. Он будет размещён на "
-"слое Eco1_User"
+"Полигон на слое Altium (%d) не имеет аналога в KiCad. Он будет размещён на "
+"слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1388
 #: pcbnew/plugins/altium/altium_pcb.cpp:1631
@@ -31002,19 +30901,16 @@ msgstr ""
 "минимум 2 точки."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1495
-#, fuzzy
 msgid "Loading rules..."
-msgstr "Загрузка Gerber файлов..."
+msgstr "Загрузка правил..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1527
-#, fuzzy
 msgid "Loading board regions..."
-msgstr "Загрузка Gerber файлов..."
+msgstr "Загрузка областей платы..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1549
-#, fuzzy
 msgid "Loading zones..."
-msgstr "Загрузка..."
+msgstr "Загрузка зон..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1569
 #, c-format
@@ -31026,188 +30922,181 @@ msgstr ""
 "как минимум 2 точки."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1601
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Зона на слое Altium %d не имеет аналога в KiCad. Она будет размещена на слое "
-"Eco1_User"
+"Зона на слое Altium (%d) не имеет аналога в KiCad. Она будет размещена на "
+"слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1650
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr ""
+msgstr "Проигнорирован полигон типа %d (пока не поддерживается)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1664
-#, fuzzy
 msgid "Loading zone fills..."
-msgstr "Построение заливки зоны..."
+msgstr "Построение заливок зон..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1753
-#, fuzzy
 msgid "Loading arcs..."
-msgstr "Загрузка..."
+msgstr "Загрузка дуг..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1815
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Дуга области запрета на слое Altium %d не имеет аналога в KiCad. Она будет "
-"размещена на слое Eco1_User"
+"Дуга области запрета на слое Altium (%d) не имеет аналога в KiCad. Она будет "
+"размещена на слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1834
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Дуга области запрета на слое Altium %d не имеет аналога в KiCad. Она будет "
-"размещена на слое Eco1_User"
+"Дуга области запрета на слое Altium (%d) не имеет аналога в KiCad. Она будет "
+"размещена на слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1893
-#, fuzzy
 msgid "Loading pads..."
-msgstr "Загрузка..."
+msgstr "Загрузка конт.пл..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1953
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
+"У посад.места %s конт.пл. %s не обозначена как многослойная, но является "
+"кон.пл. сквозного монтажа."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1973
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
-"Конт.пл. '%s' посад.места %s имеет квадратное отверстие. KiCad пока не "
-"поддерживает их"
+"У посад.места %s конт.пл. %s имеет квадратное отверстие (пока не "
+"поддерживается)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1995
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"Конт.пл. '%s' посад.места %s имеет отверстие под углом %f °. KiCad "
-"поддерживает сверление только под углом 90°"
+"У посад.места %s конт.пл. %s имеет отверстие под углом %f °. KiCad "
+"поддерживает сверление только под углом 90°."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2009
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr ""
+msgstr "У посад.места %s конт.пл. %s содержит отверстие неизвестного типа %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2027
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
-"Конт.пл. '%s' посад.места %s имеет сложную структуру (тип %d), которая пока "
-"не поддерживаются"
+"У посад.места %s конт.пл. %s имеет сложную структуру (пока не "
+"поддерживаются)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2061
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "У посад.места %s конт.пл. %s имеет неизвестную форму."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2120
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Не медная конт.пл. на слое Altium %d не имеет аналога в KiCad. Она будет "
-"размещена на слое Eco1_User"
+"Не медная конт.пл. %s на слое Altium (%d) не имеет аналога в KiCad. Она "
+"будет размещена на слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2129
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
-msgstr "Для зоны меди назначена цепь, к которой не подключены конт.пл."
+msgstr "Не медная конт.пл. %s подключена к цепи, что не поддерживается."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2135
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr "Не медная конт.пл. '%s' имеет отверстие. Такого не должно быть"
+msgstr "Не медная конт.пл. %s имеет отверстие, что не поддерживается."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2140
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
-msgstr ""
-"Не медная конт.пл. '%s' имеет сложную структуру (тип %d). Такого не должно "
-"быть"
+msgstr "Не медная конт.пл. %s имеет сложную структуру (пока не поддерживается)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2294
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "Не медная конт.пл. %s имеет неизвестную форму."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2303
-#, fuzzy
 msgid "Loading vias..."
-msgstr "Загрузка..."
+msgstr "Загрузка перех.отв..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2344
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr ""
+"Перех.отв. из слоя %d в %d использует не медный слой, что не поддерживается."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2365
-#, fuzzy
 msgid "Loading tracks..."
-msgstr "Загрузка..."
+msgstr "Загрузка дорожек..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2413
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Дорожка области запрета не слое Altium %d не имеет аналога в KiCad. Она "
-"будет размещена на слое Eco1_User"
+"Дорожка области запрета не слое Altium (%d) не имеет аналога в KiCad. Она "
+"будет размещена на слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2431
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCadequivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Дорожка области запрета не слое Altium %d не имеет аналога в KiCad. Она "
-"будет размещена на слое Eco1_User"
+"Дорожка не слое Altium (%d) не имеет аналога в KiCad. Она будет размещена на "
+"слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2472
-#, fuzzy
 msgid "Loading text..."
-msgstr "Загрузка..."
+msgstr "Загрузка надписей..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2483
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
-msgstr ""
-"Штрих-код на слое Altium %d игнорируется, так как пока не поддерживается."
+msgstr "Штрих-код на слое Altium (%d) игнорируется ( пока не поддерживается)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2571
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Текст на слое Altium %d не имеет аналога в KiCad. Он будет размещён на слое "
-"Eco1_User"
+"Текст на слое Altium (%d) не имеет аналога в KiCad. Он будет размещён на "
+"слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2657
-#, fuzzy
 msgid "Loading rectangles..."
-msgstr "Загрузка Gerber файлов..."
+msgstr "Загрузка прямоугольников..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2677
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Заливка на слое Altium %d не имеет аналога в KiCad. Она будет размещена на "
-"слое Eco1_User"
+"Заливка на слое Altium (%d) не имеет аналога в KiCad. Она будет размещена на "
+"слое Eco1_User."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:87
 msgid ""
@@ -31312,19 +31201,17 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "При импорте описания конт.пл. '%s' CADSTAR возникли ошибки: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1216
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find group ID %s in the group definitions."
-msgstr ""
-"Похоже, файл повреждён. Не удаётся найти идентификатор группы %s в описаниях "
-"групп."
+msgstr "Не удаётся найти идентификатор группы %s в описаниях групп."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
 msgstr ""
-"Похоже, файл повреждён. Не удаётся найти подгруппу %s в карте групп "
-"(родительская группа: ID=%s, Name=%s)."
+"Не удаётся найти подгруппу %s в карте групп (родительская группа: ID=%s, "
+"Name=%s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1297
 #, c-format
@@ -31347,12 +31234,12 @@ msgstr ""
 "использованием внутреннего стиля."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr "Неожиданный тип размерной линии (ID %s). Не импортировано"
+msgstr "Неожиданный тип размерной линии (ID %s). Не импортировано."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1499
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
@@ -31605,19 +31492,19 @@ msgstr ""
 "зон."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'"
-msgstr "Не удалось прочитать файл \"%s\""
+msgstr "Не удалось прочитать файл '%s'"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1042
-#, fuzzy, c-format
+#, c-format
 msgid "<package> '%s' duplicated in <library> '%s'"
-msgstr "<package> под именем \"%s\" дублирован в eagle <library>:\"%s\""
+msgstr "<package> '%s' дублирован в <library> '%s'"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "No '%s' package in library '%s'."
-msgstr "Посадочного места \"%s\" нет в библиотеке \"%s\""
+msgstr "Пакета '%s' нет в библиотеке '%s'."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1344
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2119
@@ -31663,20 +31550,19 @@ msgid "Unknown FABMASTER section %s:%s at row %zu."
 msgstr "Неизвестный раздел FABMASTER %s:%s в строке %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
-msgstr "Неверный размер строки %zu. Ожидается 11 элементов, но обнаружено %zu"
+msgstr "Неверный размер строки %zu. Ожидается 11 элементов, но обнаружено %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:294
-#, fuzzy
 msgid "Could not find units value, defaulting to mils."
 msgstr ""
-"Не удалось определить единицы измерения, по умолчанию используются милы"
+"Не удалось определить единицы измерения, по умолчанию используются милы."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:319
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find column label %s."
-msgstr "Не удалось найти метку столбца %s"
+msgstr "Не удалось найти метку столбца %s."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:363
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:446
@@ -31688,92 +31574,89 @@ msgstr "Не удалось найти метку столбца %s"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1589
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1668
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1735
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
-msgstr "Неверный размер строки %zu. Ожидается %zu элементов, но обнаружено %zu"
+msgstr "Неверный размер строки %zu. Ожидается %zu элементов, но обнаружено %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting drill size value but found %s!%s!%s in row %zu."
-msgstr "Ожидается размер сверла, но найдено %s!%s!%s в строке %zu"
+msgstr "Ожидается размер сверла, но найдено %s!%s!%s в строке %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:546
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
-msgstr "Ожидается размер конт.пл., но найдено %s : %s в строке %zu"
+msgstr "Ожидается размер конт.пл., но найдено %s : %s в строке %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid pad size in row %zu."
-msgstr "Неверный размер конт.пл. в строке %zu"
+msgstr "Неверный размер конт.пл. в строке %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:603
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting pad offset values but found %s:%s in row %zu."
-msgstr "Ожидается смещение конт.пл., но найдено %s : %s в строке %zu"
+msgstr "Ожидается смещение конт.пл., но найдено %s:%s в строке %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
-msgstr "Неизвестное имя формы конт.пл. '%s' на слое '%s' в строке %zu"
+msgstr "Неизвестное имя формы конт.пл. '%s' на слое '%s' в строке %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:970
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid format for id string '%s' in custom pad row %zu."
 msgstr ""
-"Неверный формат строки идентификатора \"%s\" в конт.пл. сложной формы в "
-"строке %zu"
+"Неверный формат строки идентификатора '%s' в конт.пл. сложной формы в строке "
+"%zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Could not insert graphical item %d into padstack '%s'."
-msgstr "Не удалось вставить графический элемент %d в стопку кон.пл. \"%s\""
+msgstr "Не удалось вставить графический элемент %d в стопку кон.пл. '%s'."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1018
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized pad shape primitive '%s' in row %zu."
-msgstr "Неопознанная форма примитива конт.пл. \"%s\" в строке %zu."
+msgstr "Неопознанная форма примитива конт.пл. '%s' в строке %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1125
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr "Неверное количество лексем. Ожидается 8, но найдено %zu"
+msgstr "Неверное количество лексем. Ожидается 8, но найдено %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1260
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1449
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid format for record_tag string '%s' in row %zu."
-msgstr "Неверный формат строки record_tag \"%s\" в секции Traces, строка %zu"
+msgstr "Неверный формат строки record_tag '%s' в строке %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1420
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
-msgstr "Неверный размер строки %zu. Ожидается %zu элементов, но обнаружено %zu"
+msgstr "Неверный размер строки %zu. Ожидается %zu элементов, но обнаружено %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1459
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled graphic item '%s' in row %zu."
-msgstr "Не поддерживаемый графический элемент '%s' в секции Traces, строка %zu"
+msgstr "Не поддерживаемый графический элемент '%s' в строке %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1490
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1505
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate item for ID %d and sequence %d in row %zu."
-msgstr ""
-"Дубликат элемента с ID %d и порядковым номером %d в секции Traces, строка "
-"%zu \n"
+msgstr "Дубликат элемента с ID %d и порядковым номером %d в строке %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2318
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2347
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid custom pad '%s'. Replacing with circular pad."
-msgstr ""
-"Неверная форма конт.пл. с именем '%s'. Замена на конт.пл. круглой формы."
+msgstr "Неверная конт.пл. сложной формы '%s'. Замена на конт.пл. круглой формы."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2355
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find custom pad '%s'."
-msgstr "Не удалось найти конт.пл. сложной формы с именем %s"
+msgstr "Не удалось найти конт.пл. сложной формы с именем '%s'."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2555
 #, c-format
@@ -31783,29 +31666,29 @@ msgstr ""
 "слое '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to an integer."
-msgstr "Не удаётся преобразовать \"%s\" в целое число."
+msgstr "Не удаётся преобразовать '%s' в целое число."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:229
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:877
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' not found."
-msgstr "Библиотека посад.мест не найдена."
+msgstr "Библиотека посад.мест '%s' не найдена."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:283
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr "В библиотеке \"%s\" нет посад.места \"%s\" для удаления."
+msgstr "В библиотеке '%s' нет посад.места '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:347
 #: pcbnew/plugins/kicad/pcb_parser.cpp:573
 #: pcbnew/plugins/kicad/pcb_parser.cpp:739
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown token '%s'"
-msgstr "Неизвестная лексема \"%s\""
+msgstr "Неизвестная лексема '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:354
 #, c-format
@@ -31814,46 +31697,42 @@ msgstr "Лексема Element содержит %d параметров."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:982
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2533
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
-"Недостаточно прав для сохранения файла \n"
-"%s"
+msgstr "Недостаточно прав для удаления каталога '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:990
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2541
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr "Каталог библиотеки \"%s\" содержит неожиданные подкаталоги."
+msgstr "Каталог библиотеки '%s' содержит неожиданные подкаталоги."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr "Неожиданный файл \"%s\" найден по пути библиотеки \"%s\"."
+msgstr "Неожиданный файл '%s' найден в библиотеке '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1028
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2578
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3405
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' cannot be deleted."
-msgstr "Библиотеку посад.мест \"%s\" удалить не удалось."
+msgstr "Библиотеку посад.мест '%s' удалить не удалось."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create footprint library '%s'."
-msgstr "Не удалось создать библиотеку посад.мест по пути \"%s\"."
+msgstr "Не удалось создать библиотеку посад.мест '%s'."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:178
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' is read only."
-msgstr "Путь библиотеки посад.мест \"%s\" доступен только для чтения"
+msgstr "Библиотека посад.мест '%s' доступна только для чтения."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'"
-msgstr ""
-"Не удалось переименовать временный файл \"%s\" в файл библиотеки посад.мест "
-"\"%s\""
+msgstr "Не удалось переименовать временный файл '%s' в '%s'"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:342
 #, c-format
@@ -31891,52 +31770,48 @@ msgid "unknown zone corner smoothing type %d"
 msgstr "неизвестный тип скругления углов зоны %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2202
-#, fuzzy
 msgid "Open cancelled by user."
-msgstr "Переопределение посад.мест отменено пользователем."
+msgstr "Открытие отменено пользователем."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2251
-#, fuzzy
 msgid "This file does not contain a PCB."
-msgstr "данный файл не содержит печатную плату"
+msgstr "Этот файл не содержит печатную плату."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2401
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
 msgstr ""
-"Библиотека \"%s\" не существует.\n"
-"Желаете создать её?"
+"Библиотека '%s' не существует.\n"
+"Создать её?"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2405
 msgid "Library Not Found"
 msgstr "Библиотека на найдена"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2431
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint file name '%s' is not valid."
-msgstr "Неправильное имя файла посад.места \"%s\"."
+msgstr "Неправильное имя файла посад.места '%s'."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2437
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete '%s'."
-msgstr ""
-"Недостаточно прав для сохранения файла \n"
-"%s"
+msgstr "Недостаточно прав для удаления '%s'."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2508
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "Не удалось переписать путь библиотеки \"%s\"."
+msgstr "Не удалось переписать путь библиотеки '%s'."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2560
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
-msgstr "Неожиданный файл \"%s\" найден по пути библиотеки \"%s\"."
+msgstr "Неожиданный файл '%s' найден по пути библиотеки '%s'."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in\n"
 "file: '%s'\n"
@@ -31944,12 +31819,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Неверное число с плавающей точкой в\n"
-"файле: \"%s\"\n"
+"файле: '%s'\n"
 "строка: %d\n"
 "позиция: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in\n"
 "file: '%s'\n"
@@ -31957,7 +31832,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Отсутствует число с плавающей точкой в\n"
-"файл: \"%s\"\n"
+"файл: '%s'\n"
 "строка: %d\n"
 "позиция: %d"
 
@@ -31979,14 +31854,14 @@ msgid "Undefined layers:"
 msgstr "Неопределённые слои:"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1010
-#, fuzzy, c-format
+#, c-format
 msgid "Page type '%s' is not valid."
-msgstr "Тип страницы \"%s\" неверный "
+msgstr "Тип страницы '%s' неверный."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1541
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
-msgstr "Слой \"%s\" в файле \"%s\" строка %d, не зафиксирован в хэше слоёв"
+msgstr "Слой '%s' в файле '%s' строка %d, не зафиксирован в хэше слоёв."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1579
 #, c-format
@@ -31994,13 +31869,12 @@ msgid "%d is not a valid layer count"
 msgstr "%d недопустимый номер слоя"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2221
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr ""
-"Дубликат имени класса цепей \"%s\" в файле \"%s\" в строке %d, позиция %d"
+msgstr "Дубликат имени NETCLASS '%s' в файле '%s' в строке %d, позиция %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3068
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -32008,7 +31882,7 @@ msgid ""
 "offset: %d."
 msgstr ""
 "Неверный ID посад.места в\n"
-"файл: \"%s\"\n"
+"файл: '%s'\n"
 "строка: %d\n"
 "позиция: %d"
 
@@ -32018,7 +31892,7 @@ msgid "Cannot handle footprint text type %s"
 msgstr "Не удалось обработать тип текста посад.места %s"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3997
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
@@ -32030,7 +31904,7 @@ msgstr ""
 "позиция: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4018
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net name doesn't match ID in\n"
 "file: %s\n"
@@ -32043,7 +31917,7 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4470
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4550
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: '%s'\n"
@@ -32069,7 +31943,7 @@ msgstr ""
 "позиция: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4754
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 " file: '%s;\n"
@@ -32101,31 +31975,30 @@ msgid "File '%s' has an unrecognized version: %d."
 msgstr "Файл '%s' имеет неизвестную версию: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:750
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "Неизвестный тип листа \"%s\" в строке:%d"
+msgstr "Неизвестный тип листа '%s' в строке: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1430
-#, fuzzy, c-format
+#, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
-msgstr "Отсутствует '$EndMODULE' для MODULE \"%s\""
+msgstr "Отсутствует '$EndMODULE' для MODULE '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1480
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
 msgstr ""
-"Неизвестная форма конт.пл. '%c=0x%02x' в строке: %d в посад.месте: \"%s\""
+"Неизвестная форма конт.пл. '%c=0x%02x' в строке: %d в посад.месте: '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1685
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
-msgstr ""
-"Неизвестный тип FP_SHAPE: '%c=0x%02x' в строке: %d в посад.месте: \"%s\""
+msgstr "Неизвестный тип FP_SHAPE: '%c=0x%02x' в строке: %d в посад.месте: '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2466
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate NETCLASS name '%s'."
-msgstr "дубликат имена класса цепей \"%s\""
+msgstr "Дубликат имени NETCLASS '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2545
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2556
@@ -32145,25 +32018,25 @@ msgstr "Плохое значение конт.пл. ZClearance для CZONE_CON
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2983
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3022
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
 "Неверное число с плавающей точкой в\n"
-"файле: \"%s\"\n"
+"файле: '%s'\n"
 "строка: %d\n"
 "позиция: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2993
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3032
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
 "Отсутствует число с плавающей точкой в\n"
-"файл: \"%s\"\n"
+"файл: '%s'\n"
 "строка: %d\n"
 "позиция: %d"
 
@@ -32184,19 +32057,17 @@ msgid "Unknown PCad layer %u"
 msgstr "Неизвестный слой PCad %u"
 
 #: pcbnew/plugins/pcad/pcb.cpp:748
-#, fuzzy
 msgid "KiCad only supports 32 signal layers."
-msgstr "KiCad поддерживает только 32 сигнальных слоя"
+msgstr "KiCad поддерживает только 32 сигнальных слоя."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:91
-#, fuzzy
 msgid "Unable to find library section."
-msgstr "Не удалось найти файл библиотеки %s."
+msgstr "Не удалось найти раздел библиотек."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find viaStyleDef %s."
-msgstr "Не удалось найти PDF-просмотрщик для \"%s\""
+msgstr "Не удалось найти viaStyleDef %s."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:70
 msgid "Exception on python action plugin code"
@@ -32470,17 +32341,15 @@ msgstr ""
 "разведённой дорожки."
 
 #: pcbnew/router/router_tool.cpp:139
-#, fuzzy
 msgid "Select Layer and Place Micro Via..."
-msgstr "Выбрать слой и разместить перех.отв..."
+msgstr "Выбрать слой и разместить перех.микроотв..."
 
 #: pcbnew/router/router_tool.cpp:140
-#, fuzzy
 msgid ""
 "Select a layer, then add a micro via at the end of currently routed track."
 msgstr ""
-"Выбрать слой, затем добавить сквозное перех.отв. в конце текущей разведённой "
-"дорожки."
+"Выбрать слой, затем добавить сквозное перех.микроотв. в конце текущей "
+"разведённой дорожки."
 
 #: pcbnew/router/router_tool.cpp:147
 msgid "Custom Track/Via Size..."
@@ -32662,14 +32531,14 @@ msgstr ""
 "Не удалось экспортировать, пожалуйста исправьте ошибки и попробуйте снова."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1029
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol with value of '%s' has empty reference id."
-msgstr "Символ со значением \"%s\" имеет пустое обозначение."
+msgstr "Символ со значением '%s' имеет пустое обозначение."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1039
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple symbols have identical reference IDs of '%s'."
-msgstr "Несколько символов имеют одинаковое обозначение \"%s\"."
+msgstr "Несколько символов имеют одинаковое обозначение '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:70
 msgid ""
@@ -32684,18 +32553,18 @@ msgid "Session file imported and merged OK."
 msgstr "Файл сессии импортирован и успешно совмещён."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr "Файл сессии использует неверный идентификатор слоя \"%s\""
+msgstr "Файл сессии использует неверный идентификатор слоя '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:217
 msgid "Session via padstack has no shapes"
 msgstr "Стопка площадок перех.отв. сессии не имеет формы"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported via shape: %s."
-msgstr "Не поддерживаемый тип перех.отв.: %s"
+msgstr "Не поддерживаемый тип перех.отв.: %s."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:246
 #: pcbnew/specctra_import_export/specctra_import.cpp:271
@@ -32726,9 +32595,9 @@ msgid "Reference '%s' not found."
 msgstr "Обозначение '%s' не найдено."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "wire_via ссылается на несуществующую стопку конт.пл. \"%s\""
+msgstr "wire_via ссылается на несуществующую стопку конт.пл. '%s'."
 
 #: pcbnew/toolbars_footprint_editor.cpp:91
 msgid "Load footprint from current board"
@@ -33192,9 +33061,8 @@ msgid "Draw a dimension"
 msgstr "Чертить размерную линию"
 
 #: pcbnew/tools/drawing_tool.cpp:1154
-#, fuzzy
 msgid "No graphic items found in file."
-msgstr "В файле для импорта не найдено графических элементов"
+msgstr "В файле не найдено графических элементов."
 
 #: pcbnew/tools/drawing_tool.cpp:1205 pcbnew/tools/drawing_tool.cpp:1276
 msgid "Place a DXF_SVG drawing"
@@ -34820,14 +34688,12 @@ msgid "Tune skew of a differential pair"
 msgstr "Настроить перекос диф.пары"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
-#, fuzzy
 msgid "Undo Last Segment"
 msgstr "Отменить последний сегмент"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
-#, fuzzy
 msgid "Walks the current track back one segment."
-msgstr "Сделать текущий слой более прозрачным"
+msgstr "Вернуться к редактированию предыдущего сегмента."
 
 #: pcbnew/tools/pcb_actions.cpp:1361 pcbnew/tools/pcb_actions.cpp:1367
 msgid ""
