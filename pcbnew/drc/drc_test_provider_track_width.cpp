@@ -59,8 +59,6 @@ public:
     }
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
-
-    int GetNumPhases() const override;
 };
 
 
@@ -168,12 +166,6 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
     reportRuleStatistics();
 
     return true;
-}
-
-
-int DRC_TEST_PROVIDER_TRACK_WIDTH::GetNumPhases() const
-{
-    return 1;
 }
 
 

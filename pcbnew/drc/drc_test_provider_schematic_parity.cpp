@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2021 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 #include <netlist_reader/pcb_netlist.h>
 
 /*
-    Layout-versus-schematic (LVS) test.
+    Schematic parity test.
 
     Errors generated:
     - DRCE_MISSING_FOOTPRINT
@@ -44,15 +44,15 @@
     - cross-check PCB fields against SCH fields
 */
 
-class DRC_TEST_PROVIDER_LVS : public DRC_TEST_PROVIDER
+class DRC_TEST_PROVIDER_SCHEMATIC_PARITY : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_LVS()
+    DRC_TEST_PROVIDER_SCHEMATIC_PARITY()
     {
         m_isRuleDriven = false;
     }
 
-    virtual ~DRC_TEST_PROVIDER_LVS()
+    virtual ~DRC_TEST_PROVIDER_SCHEMATIC_PARITY()
     {
     }
 
@@ -60,7 +60,7 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "LVS";
+        return "schematic_parity";
     };
 
     virtual const wxString GetDescription() const override
@@ -70,14 +70,12 @@ public:
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
-    int GetNumPhases() const override;
-
 private:
-    void testFootprints( NETLIST& aNetlist );
+    void testNetlist( NETLIST& aNetlist );
 };
 
 
-void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
+void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
 {
     BOARD* board = m_drcEngine->GetBoard();
 
@@ -211,7 +209,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
 }
 
 
-bool DRC_TEST_PROVIDER_LVS::Run()
+bool DRC_TEST_PROVIDER_SCHEMATIC_PARITY::Run()
 {
     if( m_drcEngine->GetTestFootprints() )
     {
@@ -222,11 +220,11 @@ bool DRC_TEST_PROVIDER_LVS::Run()
 
         if( !netlist )
         {
-            reportAux( _("No netlist provided, skipping LVS.") );
+            reportAux( _( "No netlist provided, skipping schematic parity tests." ) );
             return true;
         }
 
-        testFootprints( *netlist );
+        testNetlist( *netlist );
 
         reportRuleStatistics();
     }
@@ -235,13 +233,7 @@ bool DRC_TEST_PROVIDER_LVS::Run()
 }
 
 
-int DRC_TEST_PROVIDER_LVS::GetNumPhases() const
-{
-    return m_drcEngine->GetTestFootprints() ? 1 : 0;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_LVS::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_SCHEMATIC_PARITY::GetConstraintTypes() const
 {
     return {};
 }
@@ -249,5 +241,5 @@ std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_LVS::GetConstraintTypes() const
 
 namespace detail
 {
-static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_LVS> dummy;
+static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_SCHEMATIC_PARITY> dummy;
 }

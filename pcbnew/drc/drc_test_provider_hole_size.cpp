@@ -62,8 +62,6 @@ public:
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
-    int GetNumPhases() const override;
-
 private:
     void checkVia( PCB_VIA* via, bool aExceedMicro, bool aExceedStd );
     void checkPad( PAD* aPad );
@@ -248,12 +246,6 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( PCB_VIA* via, bool aExceedMicro, boo
 
         reportViolation( drcItem, via->GetPosition() );
     }
-}
-
-
-int DRC_TEST_PROVIDER_HOLE_SIZE::GetNumPhases() const
-{
-    return 2;
 }
 
 

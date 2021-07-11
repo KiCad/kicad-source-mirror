@@ -68,6 +68,7 @@ enum PCB_DRC_CODE {
     DRCE_NET_CONFLICT,                   // pad net doesn't match netlist
 
     DRCE_FOOTPRINT_TYPE_MISMATCH,        // footprint attribute does not match actual pads
+    DRCE_LIB_FOOTPRINT_ISSUES,           // footprint does not match the current library
     DRCE_PAD_TH_WITH_NO_HOLE,            // footprint has Plated Through-Hole with no hole
 
     DRCE_UNRESOLVED_VARIABLE,
@@ -164,6 +165,7 @@ private:
     static DRC_ITEM missingFootprint;
     static DRC_ITEM extraFootprint;
     static DRC_ITEM netConflict;
+    static DRC_ITEM libFootprintIssues;
     static DRC_ITEM unresolvedVariable;
     static DRC_ITEM silkMaskClearance;
     static DRC_ITEM silkOverlaps;

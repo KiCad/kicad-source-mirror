@@ -1225,8 +1225,8 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> sorted_drawings(
             aFootprint->GraphicalItems().begin(),
             aFootprint->GraphicalItems().end() );
-    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aFootprint->Zones().begin(),
-                                                             aFootprint->Zones().end() );
+    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> sorted_zones( aFootprint->Zones().begin(),
+                                                           aFootprint->Zones().end() );
     std::set<BOARD_ITEM*, PCB_GROUP::ptr_cmp> sorted_groups( aFootprint->Groups().begin(),
                                                              aFootprint->Groups().end() );
 

@@ -91,13 +91,6 @@ public:
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const = 0;
 
-    virtual int GetNumPhases() const = 0;
-
-    virtual bool IsRuleDriven() const
-    {
-        return m_isRuleDriven;
-    }
-
     bool IsEnabled() const
     {
         return m_enabled;

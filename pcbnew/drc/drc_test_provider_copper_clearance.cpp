@@ -80,8 +80,6 @@ public:
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
-    int GetNumPhases() const override;
-
 private:
     bool testTrackAgainstItem( PCB_TRACK* track, SHAPE* trackShape, PCB_LAYER_ID layer,
                                BOARD_ITEM* other );
@@ -1003,12 +1001,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
             }
         }
     }
-}
-
-
-int DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetNumPhases() const
-{
-    return 4;
 }
 
 

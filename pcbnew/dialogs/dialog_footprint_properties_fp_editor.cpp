@@ -443,7 +443,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 
     // Copy the models from the panel to the footprint
     std::vector<FP_3DMODEL>& panelList = m_3dPanel->GetModelList();
-    std::list<FP_3DMODEL>*   fpList    = &m_footprint->Models();
+    std::vector<FP_3DMODEL>* fpList    = &m_footprint->Models();
     fpList->clear();
     fpList->insert( fpList->end(), panelList.begin(), panelList.end() );
 

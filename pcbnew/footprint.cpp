@@ -2168,28 +2168,48 @@ bool FOOTPRINT::HasThroughHolePads() const
 }
 
 
-bool FOOTPRINT::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
-                                          const BOARD_ITEM* aSecond ) const
+#define TEST( a, b ) { if( a != b ) return a < b; }
+#define TEST_PT( a, b ) { if( a.x != b.x ) return a.x < b.x; if( a.y != b.y ) return a.y < b.y; }
+
+
+bool FOOTPRINT::cmp_drawings::operator()( const BOARD_ITEM* itemA, const BOARD_ITEM* itemB ) const
 {
-    if( aFirst->Type() != aSecond->Type() )
-        return aFirst->Type() < aSecond->Type();
+    TEST( itemA->Type(), itemB->Type() );
+    TEST( itemA->GetLayer(), itemB->GetLayer() );
 
-    if( aFirst->GetLayer() != aSecond->GetLayer() )
-        return aFirst->GetLayer() < aSecond->GetLayer();
-
-    if( aFirst->Type() == PCB_FP_SHAPE_T )
+    if( itemA->Type() == PCB_FP_SHAPE_T )
     {
-        const FP_SHAPE* dwgA = static_cast<const FP_SHAPE*>( aFirst );
-        const FP_SHAPE* dwgB = static_cast<const FP_SHAPE*>( aSecond );
+        const FP_SHAPE* dwgA = static_cast<const FP_SHAPE*>( itemA );
+        const FP_SHAPE* dwgB = static_cast<const FP_SHAPE*>( itemB );
 
-        if( dwgA->GetShape() != dwgB->GetShape() )
-            return dwgA->GetShape() < dwgB->GetShape();
+        TEST( dwgA->GetShape(), dwgB->GetShape() );
+
+        TEST_PT( dwgA->GetStart0(), dwgB->GetStart0() );
+        TEST_PT( dwgA->GetEnd0(), dwgB->GetEnd0() );
+
+        if( dwgA->GetShape() == SHAPE_T::ARC )
+        {
+            TEST_PT( dwgA->GetCenter0(), dwgB->GetCenter0() );
+        }
+        else if( dwgA->GetShape() == SHAPE_T::BEZIER )
+        {
+            TEST_PT( dwgA->GetBezierC1_0(), dwgB->GetBezierC1_0() );
+            TEST_PT( dwgA->GetBezierC2_0(), dwgB->GetBezierC2_0() );
+        }
+        else if( dwgA->GetShape() == SHAPE_T::POLY )
+        {
+            TEST( dwgA->GetPolyShape().TotalVertices(), dwgB->GetPolyShape().TotalVertices() );
+
+            for( int ii = 0; ii < dwgA->GetPolyShape().TotalVertices(); ++ii )
+                TEST_PT( dwgA->GetPolyShape().CVertex( ii ), dwgB->GetPolyShape().CVertex( ii ) );
+        }
+
+        TEST( dwgA->GetWidth(), dwgB->GetWidth() );
     }
 
-    if( aFirst->m_Uuid != aSecond->m_Uuid ) // shopuld be always the case foer valid boards
-        return aFirst->m_Uuid < aSecond->m_Uuid;
+    TEST( itemA->m_Uuid, itemB->m_Uuid );   // should be always the case for valid boards
 
-    return aFirst < aSecond;
+    return itemA < itemB;
 }
 
 
@@ -2198,11 +2218,33 @@ bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) co
     if( aFirst->GetNumber() != aSecond->GetNumber() )
         return StrNumCmp( aFirst->GetNumber(), aSecond->GetNumber() ) < 0;
 
-    if( aFirst->m_Uuid != aSecond->m_Uuid ) // shopuld be always the case foer valid boards
-        return aFirst->m_Uuid < aSecond->m_Uuid;
+    TEST_PT( aFirst->GetPos0(), aSecond->GetPos0() );
+    TEST_PT( aFirst->GetSize(), aSecond->GetSize() );
+    TEST( aFirst->GetShape(), aSecond->GetShape() );
+
+    TEST( aFirst->m_Uuid, aSecond->m_Uuid );   // should be always the case for valid boards
 
     return aFirst < aSecond;
 }
+
+
+bool FOOTPRINT::cmp_zones::operator()( const FP_ZONE* aFirst, const FP_ZONE* aSecond ) const
+{
+    TEST( aFirst->GetPriority(), aSecond->GetPriority() );
+    TEST( aFirst->GetLayerSet().Seq(), aSecond->GetLayerSet().Seq() );
+
+    TEST( aFirst->Outline()->TotalVertices(), aSecond->Outline()->TotalVertices() );
+
+    for( int ii = 0; ii < aFirst->Outline()->TotalVertices(); ++ii )
+        TEST_PT( aFirst->Outline()->CVertex( ii ), aSecond->Outline()->CVertex( ii ) );
+
+    TEST( aFirst->m_Uuid, aSecond->m_Uuid );   // should be always the case for valid boards
+
+    return aFirst < aSecond;
+}
+
+
+#undef TEST
 
 
 void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,

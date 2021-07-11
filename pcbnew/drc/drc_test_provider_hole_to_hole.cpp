@@ -70,8 +70,6 @@ public:
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
-    int GetNumPhases() const override;
-
 private:
     bool testHoleAgainstHole( BOARD_ITEM* aItem, SHAPE_CIRCLE* aHole, BOARD_ITEM* aOther );
 
@@ -324,12 +322,6 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
     }
 
     return true;
-}
-
-
-int DRC_TEST_PROVIDER_HOLE_TO_HOLE::GetNumPhases() const
-{
-    return 1;
 }
 
 

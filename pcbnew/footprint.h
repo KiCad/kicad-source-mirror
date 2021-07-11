@@ -180,8 +180,8 @@ public:
 
     bool HasThroughHolePads() const;
 
-    std::list<FP_3DMODEL>& Models()             { return m_3D_Drawings; }
-    const std::list<FP_3DMODEL>& Models() const { return m_3D_Drawings; }
+    std::vector<FP_3DMODEL>& Models()             { return m_3D_Drawings; }
+    const std::vector<FP_3DMODEL>& Models() const { return m_3D_Drawings; }
 
     void SetPosition( const wxPoint& aPos ) override;
     wxPoint GetPosition() const override { return m_pos; }
@@ -656,6 +656,11 @@ public:
     static const wxChar* StringLibNameInvalidChars( bool aUserReadable );
 
     /**
+     * Return true if a board footprint differs from the library version.
+     */
+    bool FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint );
+
+    /**
      * Take ownership of caller's heap allocated aInitialComments block.
      *
      * The comments are single line strings already containing the s-expression comments with
@@ -723,6 +728,11 @@ public:
         bool operator()( const PAD* aFirst, const PAD* aSecond ) const;
     };
 
+    struct cmp_zones
+    {
+        bool operator()( const FP_ZONE* aFirst, const FP_ZONE* aSecond ) const;
+    };
+
 
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
@@ -778,7 +788,7 @@ private:
     int             m_rot90Cost;         // Horizontal automatic placement cost ( 0..10 ).
     int             m_rot180Cost;        // Vertical automatic placement cost ( 0..10 ).
 
-    std::list<FP_3DMODEL>         m_3D_Drawings;       // Linked list of 3D models.
+    std::vector<FP_3DMODEL>       m_3D_Drawings;       // 3D models.
     std::map<wxString, wxString>  m_properties;
     wxArrayString*                m_initial_comments;  // s-expression comments in the footprint,
                                                        // lazily allocated only if needed for speed

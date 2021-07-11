@@ -66,11 +66,6 @@ public:
         return "Tests matched track lengths.";
     }
 
-    virtual int GetNumPhases() const override
-    {
-        return 1;
-    }
-
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
     DRC_LENGTH_REPORT BuildLengthReport() const;

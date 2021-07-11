@@ -70,8 +70,6 @@ public:
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
-    int GetNumPhases() const override;
-
 private:
     void testOutline();
     void testDisabledLayers();
@@ -281,12 +279,6 @@ bool DRC_TEST_PROVIDER_MISC::Run()
     }
 
     return true;
-}
-
-
-int DRC_TEST_PROVIDER_MISC::GetNumPhases() const
-{
-    return 3;
 }
 
 

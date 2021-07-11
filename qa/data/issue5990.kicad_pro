@@ -76,6 +76,7 @@
         "items_not_allowed": "error",
         "keepout": "error",
         "length_out_of_range": "error",
+        "lib_footprint_issues": "ignore",
         "malformed_courtyard": "error",
         "microvia_drill_too_small": "error",
         "missing_courtyard": "ignore",

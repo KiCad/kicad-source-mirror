@@ -74,11 +74,6 @@ public:
         return "Tests differential pair coupling";
     }
 
-    virtual int GetNumPhases() const override
-    {
-        return 1;
-    }
-
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
 private:

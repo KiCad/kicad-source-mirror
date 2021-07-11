@@ -65,11 +65,6 @@ public:
         return "Tests for silkscreen being clipped by solder mask";
     }
 
-    virtual int GetNumPhases() const override
-    {
-        return 1;
-    }
-
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
 private:
