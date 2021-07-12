@@ -1885,7 +1885,7 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
 
     if( isHarness )
     {
-        wxString name = _( "HARNESS: " ) + aElem.name;
+        wxString name = wxT( "HARNESS: " ) + aElem.name;
 
         if( aElem.harnessType != aElem.name )
             name += wxString::Format( wxT( " (%s)" ), aElem.harnessType );
