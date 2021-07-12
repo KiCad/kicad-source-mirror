@@ -839,7 +839,7 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
 {
     //First, expand env vars, if any
     wxString libname = ExpandEnvVarSubstitutions( aFilePath, &Prj() );
-    // Add make path absolute, especially if relative to the project path
+    // Make path absolute, especially if it is relative to the project path
     libname = Prj().AbsolutePath( libname );
 
     wxString curModel = m_modelName->GetValue();
@@ -1012,7 +1012,12 @@ bool DIALOG_SPICE_MODEL::addPwlValue( const wxString& aTime, const wxString& aVa
 
 void DIALOG_SPICE_MODEL::onSelectLibrary( wxCommandEvent& event )
 {
-    wxString searchPath = wxFileName( m_modelLibrary->GetValue() ).GetPath();
+    //First, expand env vars, if any, in lib path
+    wxString libname = ExpandEnvVarSubstitutions( m_modelLibrary->GetValue(), &Prj() );
+    // Make path absolute, especially if it is relative to the project path
+    libname = Prj().AbsolutePath( libname );
+
+    wxString searchPath = wxFileName( libname ).GetPath();
 
     if( searchPath.IsEmpty() )
         searchPath = Prj().GetProjectPath();
