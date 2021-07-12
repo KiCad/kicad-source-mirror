@@ -15,6 +15,11 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 
 	m_MainBoxSizer = new wxBoxSizer( wxVERTICAL );
 
+	m_copperZoneInfo = new wxInfoBar( this );
+	m_copperZoneInfo->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
+	m_copperZoneInfo->SetEffectDuration( 500 );
+	m_MainBoxSizer->Add( m_copperZoneInfo, 0, wxBOTTOM|wxEXPAND, 5 );
+
 	wxBoxSizer* m_OptionsBoxSizer;
 	m_OptionsBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -30,62 +35,34 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_OptionsBoxSizer->Add( sbSizer2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net") ), wxHORIZONTAL );
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net") ), wxVERTICAL );
 
-	m_ListNetNameSelection = new wxListBox( sbSizer3->GetStaticBox(), ID_NETNAME_SELECTION, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	sbSizer3->Add( m_ListNetNameSelection, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 
 	wxBoxSizer* bFilteringSizer;
-	bFilteringSizer = new wxBoxSizer( wxVERTICAL );
+	bFilteringSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextDisplay = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Hide nets matching:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextDisplay->Wrap( -1 );
-	bFilteringSizer->Add( m_staticTextDisplay, 0, wxRIGHT|wxLEFT, 5 );
-
-	m_DoNotShowNetNameFilter = new wxTextCtrl( sbSizer3->GetStaticBox(), ID_TEXTCTRL_NETNAMES_FILTER, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	m_DoNotShowNetNameFilter->SetToolTip( _("Pattern to filter net names in filtered list.\nNet names matching this pattern are not displayed.") );
-	m_DoNotShowNetNameFilter->SetMinSize( wxSize( 180,-1 ) );
-
-	bFilteringSizer->Add( m_DoNotShowNetNameFilter, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_staticTextVFilter = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Show nets matching:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextVFilter->Wrap( -1 );
-	bFilteringSizer->Add( m_staticTextVFilter, 0, wxRIGHT|wxLEFT, 5 );
-
-	m_ShowNetNameFilter = new wxTextCtrl( sbSizer3->GetStaticBox(), ID_TEXTCTRL_NETNAMES_FILTER, _("*"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_ShowNetNameFilter = new wxTextCtrl( sbSizer3->GetStaticBox(), ID_TEXTCTRL_NETNAMES_FILTER, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_ShowNetNameFilter->SetToolTip( _("Pattern to filter net names in filtered list.\nOnly net names matching this pattern are displayed.") );
 
-	bFilteringSizer->Add( m_ShowNetNameFilter, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bFilteringSizer->Add( m_ShowNetNameFilter, 2, wxALIGN_CENTER|wxBOTTOM, 5 );
 
-	m_buttonRunFilter = new wxButton( sbSizer3->GetStaticBox(), wxID_APPLY_FILTERS, _("Apply Filters"), wxDefaultPosition, wxDefaultSize, 0 );
-	bFilteringSizer->Add( m_buttonRunFilter, 0, wxALL|wxEXPAND, 5 );
-
-
-	bFilteringSizer->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-
-	m_showAllNetsOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Show all nets"), wxDefaultPosition, wxDefaultSize, 0 );
-	bFilteringSizer->Add( m_showAllNetsOpt, 0, wxALL, 5 );
-
-
-	bFilteringSizer->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );
+	m_hideAutoGenNetNamesOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Hide auto-generated net names"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hideAutoGenNetNamesOpt->SetValue(true);
+	bFilteringSizer->Add( m_hideAutoGenNetNamesOpt, 0, wxALIGN_CENTER|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_sortByPadsOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Sort nets by pad count"), wxDefaultPosition, wxDefaultSize, 0 );
-	bFilteringSizer->Add( m_sortByPadsOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_bNoNetWarning = new wxBoxSizer( wxHORIZONTAL );
-
-	m_bitmapNoNetWarning = new wxStaticBitmap( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_bNoNetWarning->Add( m_bitmapNoNetWarning, 0, wxTOP|wxBOTTOM|wxLEFT, 8 );
-
-	m_staticText18 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("No net will result\nin an unconnected \ncopper island."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText18->Wrap( -1 );
-	m_bNoNetWarning->Add( m_staticText18, 0, wxALL, 5 );
+	bFilteringSizer->Add( m_sortByPadsOpt, 1, wxALIGN_CENTER|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	bFilteringSizer->Add( m_bNoNetWarning, 1, wxEXPAND|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxTOP, 20 );
+	bSizer8->Add( bFilteringSizer, 0, wxEXPAND, 20 );
 
 
-	sbSizer3->Add( bFilteringSizer, 0, wxEXPAND, 20 );
+	sbSizer3->Add( bSizer8, 1, wxEXPAND, 5 );
+
+	m_ListNetNameSelection = new wxListBox( sbSizer3->GetStaticBox(), ID_NETNAME_SELECTION, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	sbSizer3->Add( m_ListNetNameSelection, 8, wxBOTTOM|wxEXPAND, 5 );
 
 
 	m_OptionsBoxSizer->Add( sbSizer3, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -400,7 +377,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_ExportSetupButton = new wxButton( this, wxID_BUTTON_EXPORT, _("Export Settings to Other Zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExportSetupButton->SetToolTip( _("Export this zone setup (excluding layer and net selection) to all other copper zones.") );
 
-	bSizerbottom->Add( m_ExportSetupButton, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
+	bSizerbottom->Add( m_ExportSetupButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -423,14 +400,13 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_COPPER_ZONE_BASE::OnClose ) );
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_COPPER_ZONE_BASE::OnUpdateUI ) );
 	m_layers->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_COPPER_ZONE_BASE::OnLayerSelection ), NULL, this );
-	m_DoNotShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
-	m_DoNotShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
-	m_ShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
-	m_ShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
-	m_buttonRunFilter->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
-	m_showAllNetsOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
+	m_ShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnShowNetNameFilterChange ), NULL, this );
+	m_ShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnShowNetNameFilterChange ), NULL, this );
+	m_hideAutoGenNetNamesOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
 	m_sortByPadsOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
+	m_ListNetNameSelection->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSelectionUpdated ), NULL, this );
 	m_GridStyleCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnStyleSelection ), NULL, this );
+	m_cbRemoveIslands->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRemoveIslandsSelection ), NULL, this );
 	m_ExportSetupButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::ExportSetupToOtherCopperZones ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnButtonCancelClick ), NULL, this );
 }
@@ -441,14 +417,13 @@ DIALOG_COPPER_ZONE_BASE::~DIALOG_COPPER_ZONE_BASE()
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_COPPER_ZONE_BASE::OnClose ) );
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_COPPER_ZONE_BASE::OnUpdateUI ) );
 	m_layers->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_COPPER_ZONE_BASE::OnLayerSelection ), NULL, this );
-	m_DoNotShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
-	m_DoNotShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
-	m_ShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
-	m_ShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
-	m_buttonRunFilter->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
-	m_showAllNetsOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
+	m_ShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnShowNetNameFilterChange ), NULL, this );
+	m_ShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnShowNetNameFilterChange ), NULL, this );
+	m_hideAutoGenNetNamesOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
 	m_sortByPadsOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
+	m_ListNetNameSelection->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSelectionUpdated ), NULL, this );
 	m_GridStyleCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnStyleSelection ), NULL, this );
+	m_cbRemoveIslands->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRemoveIslandsSelection ), NULL, this );
 	m_ExportSetupButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::ExportSetupToOtherCopperZones ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnButtonCancelClick ), NULL, this );
 

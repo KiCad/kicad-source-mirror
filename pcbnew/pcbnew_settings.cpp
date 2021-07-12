@@ -330,11 +330,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "zones.hatching_style",
             &m_Zones.hatching_style, 0 ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "zones.net_filter",
-            &m_Zones.net_filter, "" ) );
-
     m_params.emplace_back( new PARAM<int>( "zones.net_sort_mode",
-            &m_Zones.net_sort_mode, 1 ) );
+            &m_Zones.net_sort_mode, -1 ) );
 
     m_params.emplace_back( new PARAM<double>( "zones.clearance",
             &m_Zones.clearance, ZONE_CLEARANCE_MIL ) );
@@ -663,7 +660,6 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>   ( aCfg, "VrmlOriginMode",       "export_vrml.origin_mode" );
 
     ret &= fromLegacy<int>(    aCfg, "Zone_Ouline_Hatch_Opt", "zones.hatching_style" );
-    ret &= fromLegacyString(   aCfg, "Zone_Filter_Opt",       "zones.net_filter" );
     ret &= fromLegacy<int>(    aCfg, "Zone_NetSort_Opt",      "zones.net_sort_mode" );
     ret &= fromLegacy<double>( aCfg, "Zone_Clearance",        "zones.clearance" );
     ret &= fromLegacy<double>( aCfg, "Zone_Thickness",        "zones.min_thickness" );

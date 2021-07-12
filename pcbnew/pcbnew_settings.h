@@ -220,7 +220,6 @@ public:
     struct ZONES
     {
         int         hatching_style;
-        wxString    net_filter;
         int         net_sort_mode;
         double      clearance;
         double      min_thickness;
