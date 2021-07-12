@@ -60,8 +60,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_edit_symbols_libid_base.cpp
     dialogs/dialog_edit_label.cpp
     dialogs/dialog_edit_label_base.cpp
-    dialogs/dialog_edit_line_style.cpp
-    dialogs/dialog_edit_line_style_base.cpp
     dialogs/dialog_edit_one_field.cpp
     dialogs/dialog_eeschema_page_settings.cpp
     dialogs/dialog_erc.cpp
@@ -79,6 +77,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_lib_edit_text_base.cpp
     dialogs/dialog_lib_new_symbol.cpp
     dialogs/dialog_lib_new_symbol_base.cpp
+    dialogs/dialog_line_wire_bus_properties.cpp
+    dialogs/dialog_line_wire_bus_properties_base.cpp
     dialogs/dialog_migrate_buses.cpp
     dialogs/dialog_migrate_buses_base.cpp
     dialogs/dialog_netlist.cpp

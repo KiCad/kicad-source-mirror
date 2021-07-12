@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Seth Hillbrand <hillbrand@ucdavis.edu>
- * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 
 #include <bitmaps.h>
 #include <sch_line.h>
-#include <dialog_edit_line_style.h>
+#include <dialog_line_wire_bus_properties.h>
 #include <dialogs/dialog_color_picker.h>
 #include <settings/settings_manager.h>
 #include <sch_edit_frame.h>
@@ -53,12 +53,12 @@ const std::map<PLOT_DASH_TYPE, struct lineTypeStruct> lineTypeNames = {
 #define INDETERMINATE_STYLE _( "Leave unchanged" )
 
 
-DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent,
-                                                std::deque<SCH_ITEM*>& strokeItems ) :
-          DIALOG_EDIT_LINE_STYLE_BASE( aParent ),
-          m_frame( aParent ),
-          m_strokeItems( strokeItems ),
-          m_width( aParent, m_staticTextWidth, m_lineWidth, m_staticWidthUnits, true )
+DIALOG_LINE_WIRE_BUS_PROPERTIES::DIALOG_LINE_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME* aParent,
+                                                                  std::deque<SCH_ITEM*>& aItems ) :
+        DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE( aParent ),
+        m_frame( aParent ),
+        m_strokeItems( aItems ),
+        m_width( aParent, m_staticTextWidth, m_lineWidth, m_staticWidthUnits, true )
 {
     m_sdbSizerApply->SetLabel( _( "Default" ) );
 
@@ -69,7 +69,7 @@ DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent,
 
     SetInitialFocus( m_lineWidth );
 
-    for( auto& typeEntry : lineTypeNames )
+    for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
         m_typeCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
 
     m_typeCombo->Append( DEFAULT_STYLE );
@@ -81,9 +81,9 @@ DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent,
 }
 
 
-bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
+bool DIALOG_LINE_WIRE_BUS_PROPERTIES::TransferDataToWindow()
 {
-    auto first_stroke_item = m_strokeItems.front();
+    SCH_ITEM* first_stroke_item = m_strokeItems.front();
 
     if( std::all_of( m_strokeItems.begin() + 1, m_strokeItems.end(),
             [&]( const SCH_ITEM* r )
@@ -136,7 +136,7 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
 }
 
 
-void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
+void DIALOG_LINE_WIRE_BUS_PROPERTIES::resetDefaults( wxCommandEvent& event )
 {
     m_width.SetValue( 0 );
     m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
@@ -147,7 +147,7 @@ void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
 }
 
 
-bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
+bool DIALOG_LINE_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
 {
     PICKED_ITEMS_LIST pickedItems;
     STROKE_PARAMS stroke;

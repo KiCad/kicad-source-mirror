@@ -54,7 +54,7 @@
 #include <wx/gdicmn.h>
 #include <dialogs/dialog_change_symbols.h>
 #include <dialogs/dialog_image_editor.h>
-#include <dialogs/dialog_edit_line_style.h>
+#include <dialogs/dialog_line_wire_bus_properties.h>
 #include <dialogs/dialog_symbol_properties.h>
 #include <dialogs/dialog_sheet_pin_properties.h>
 #include <dialogs/dialog_edit_one_field.h>
@@ -1428,7 +1428,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
                 return 0;
         }
 
-        DIALOG_EDIT_LINE_STYLE dlg( m_frame, strokeItems );
+        DIALOG_LINE_WIRE_BUS_PROPERTIES dlg( m_frame, strokeItems );
 
         if( dlg.ShowModal() == wxID_OK )
         {

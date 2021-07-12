@@ -7,15 +7,15 @@
 
 #include "widgets/color_swatch.h"
 
-#include "dialog_edit_line_style_base.h"
+#include "dialog_line_wire_bus_properties_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( DIALOG_EDIT_LINE_STYLE_BASE, DIALOG_SHIM )
-	EVT_BUTTON( wxID_APPLY, DIALOG_EDIT_LINE_STYLE_BASE::_wxFB_resetDefaults )
+BEGIN_EVENT_TABLE( DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE, DIALOG_SHIM )
+	EVT_BUTTON( wxID_APPLY, DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE::_wxFB_resetDefaults )
 END_EVENT_TABLE()
 
-DIALOG_EDIT_LINE_STYLE_BASE::DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE::DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -103,6 +103,6 @@ DIALOG_EDIT_LINE_STYLE_BASE::DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWi
 	this->Centre( wxBOTH );
 }
 
-DIALOG_EDIT_LINE_STYLE_BASE::~DIALOG_EDIT_LINE_STYLE_BASE()
+DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE::~DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE()
 {
 }

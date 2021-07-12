@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Seth Hillbrand <hillbrand@ucdavis.edu>
- * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __dialog_edit_line_style__
-#define __dialog_edit_line_style__
+#ifndef DIALOG_LINE_WIRE_BUS_PROPERTIES_H
+#define DIALOG_LINE_WIRE_BUS_PROPERTIES_H
 
-#include <dialog_edit_line_style_base.h>
+#include <dialog_line_wire_bus_properties_base.h>
 #include <widgets/unit_binder.h>
 
 
@@ -33,10 +33,10 @@ class SCH_EDIT_FRAME;
 class SCH_LINE;
 
 
-class DIALOG_EDIT_LINE_STYLE : public DIALOG_EDIT_LINE_STYLE_BASE
+class DIALOG_LINE_WIRE_BUS_PROPERTIES : public DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE
 {
 public:
-    DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent, std::deque<SCH_ITEM*>& strokeItems );
+    DIALOG_LINE_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME* aParent, std::deque<SCH_ITEM*>& aItems );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -50,4 +50,4 @@ private:
     void resetDefaults( wxCommandEvent& event ) override;
 };
 
-#endif // __dialog_edit_line_style__
+#endif // DIALOG_LINE_WIRE_BUS_PROPERTIES_H

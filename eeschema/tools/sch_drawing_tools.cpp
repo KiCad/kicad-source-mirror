@@ -47,7 +47,7 @@
 #include <symbol_library.h>
 #include <eeschema_settings.h>
 #include <dialogs/dialog_edit_label.h>
-#include <dialogs/dialog_edit_line_style.h>
+#include <dialogs/dialog_line_wire_bus_properties.h>
 #include <dialogs/dialog_junction_props.h>
 #include <dialogs/dialog_sheet_pin_properties.h>
 #include <kicad_string.h>
@@ -803,7 +803,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     std::deque<SCH_ITEM*> strokeItems;
                     strokeItems.push_back( previewItem );
 
-                    DIALOG_EDIT_LINE_STYLE dlg( m_frame, strokeItems );
+                    DIALOG_LINE_WIRE_BUS_PROPERTIES dlg( m_frame, strokeItems );
 
                     if( dlg.ShowModal() == wxID_OK )
                     {

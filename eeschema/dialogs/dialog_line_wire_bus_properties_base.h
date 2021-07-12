@@ -30,9 +30,9 @@ class COLOR_SWATCH;
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_EDIT_LINE_STYLE_BASE
+/// Class DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_EDIT_LINE_STYLE_BASE : public DIALOG_SHIM
+class DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	DECLARE_EVENT_TABLE()
 	private:
@@ -64,8 +64,8 @@ class DIALOG_EDIT_LINE_STYLE_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Style"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_EDIT_LINE_STYLE_BASE();
+		DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line, Wire & Bus Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE();
 
 };
 
