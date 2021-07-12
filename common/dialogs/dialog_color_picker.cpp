@@ -223,21 +223,13 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
 
 void DIALOG_COLOR_PICKER::createRGBBitmap()
 {
-    wxMemoryDC bitmapDC;
     wxSize bmsize = m_RgbBitmap->GetSize();
     int half_size = std::min( bmsize.x, bmsize.y )/2;
-    m_bitmapRGB = new wxBitmap( bmsize );
-    bitmapDC.SelectObject( *m_bitmapRGB );
-    wxPen pen;
 
-    // clear background (set the window bg color)
-    wxBrush bgbrush( GetBackgroundColour() );
-    bitmapDC.SetBackground( bgbrush );
-    bitmapDC.Clear();
-
-    // Use Y axis from bottom to top and origin to center
-    bitmapDC.SetAxisOrientation( true, true );
-    bitmapDC.SetDeviceOrigin( half_size, half_size );
+    // We use here a Y axis from bottom to top and origin to center, So we need to map
+    // coordinated to write pixel in a wxImage
+    #define MAPX(xx) bmsize.x/2 + (xx)
+    #define MAPY(yy) bmsize.y/2 - (yy)
 
     // Reserve room to draw cursors inside the bitmap
     half_size -= m_cursorsSize/2;
@@ -245,11 +237,23 @@ void DIALOG_COLOR_PICKER::createRGBBitmap()
     COLOR4D color;
 
     // Red blue area in X Z 3d axis
-    double inc = 1.0 / half_size;
+    double inc = 255.0 / half_size;
     #define SLOPE_AXIS 50.0
     double slope = SLOPE_AXIS/half_size;
     color.g = 0.0;
 
+    wxImage img( bmsize );  // a temporary buffer to build the color map
+
+    // clear background (set the window bg color)
+    wxColor bg = GetBackgroundColour();
+
+    for( int xx = 0; xx < bmsize.x; xx++ ) // blue axis
+    {
+        for( int yy = 0; yy < bmsize.y; yy++ )  // Red axis
+            img.SetRGB( xx, yy, bg.Red(), bg.Green(), bg.Blue() );
+    }
+
+    // Build the palette
     for( int xx = 0; xx < half_size; xx++ ) // blue axis
     {
         color.b = inc * xx;
@@ -257,10 +261,7 @@ void DIALOG_COLOR_PICKER::createRGBBitmap()
         for( int yy = 0; yy < half_size; yy++ )  // Red axis
         {
             color.r = inc * yy;
-
-            pen.SetColour( color.ToColour() );
-            bitmapDC.SetPen( pen );
-            bitmapDC.DrawPoint( xx, yy - (slope*xx) );
+            img.SetRGB( MAPX( xx ), MAPY( yy - (slope*xx) ), color.r, color.g, color.b );
         }
     }
 
@@ -273,10 +274,7 @@ void DIALOG_COLOR_PICKER::createRGBBitmap()
         for( int yy = 0; yy < half_size; yy++ ) // Red axis
         {
             color.r = inc * yy;
-
-            pen.SetColour( color.ToColour() );
-            bitmapDC.SetPen( pen );
-            bitmapDC.DrawPoint( -xx, yy - (slope*xx) );
+            img.SetRGB( MAPX( -xx ), MAPY( yy - (slope*xx) ), color.r, color.g, color.b );
         }
     }
 
@@ -290,39 +288,43 @@ void DIALOG_COLOR_PICKER::createRGBBitmap()
         {
             color.b = inc * yy;
 
-            pen.SetColour( color.ToColour() );
-            bitmapDC.SetPen( pen );
-
             // Mapping the xx, yy color axis to draw coordinates is more tricky than previously
             // in DC coordinates:
             // the blue axis is the (0, 0) to half_size, (-yy - SLOPE_AXIS)
             // the green axis is the (0, 0) to - half_size, (-yy - SLOPE_AXIS)
             int drawX = -xx + yy;
             int drawY = - std::min( xx,yy ) * 0.9;
-            bitmapDC.DrawPoint( drawX, drawY - std::abs( slope*drawX ) );
+            img.SetRGB( MAPX( drawX ),  MAPY( drawY - std::abs( slope*drawX ) ),
+                        color.r,  color.g,  color.b );
         }
     }
+
+    delete m_bitmapRGB;
+    m_bitmapRGB = new wxBitmap( img, 24 );
+    m_RgbBitmap->SetBitmap( *m_bitmapRGB );
 }
 
 
 void DIALOG_COLOR_PICKER::createHSVBitmap()
 {
-    wxMemoryDC bitmapDC;
     wxSize bmsize = m_HsvBitmap->GetSize();
     int half_size = std::min( bmsize.x, bmsize.y )/2;
-    delete m_bitmapHSV;
-    m_bitmapHSV = new wxBitmap( bmsize );
-    bitmapDC.SelectObject( *m_bitmapHSV );
-    wxPen pen;
 
-    // clear background (set the window bd color)
-    wxBrush bgbrush( GetBackgroundColour() );
-    bitmapDC.SetBackground( bgbrush );
-    bitmapDC.Clear();
+    // We use here a Y axis from bottom to top and origin to center, So we need to map
+    // coordinated to write pixel in a wxImage
+    #define MAPX(xx) bmsize.x/2 + (xx)
+    #define MAPY(yy) bmsize.y/2 - (yy)
 
-    // Use Y axis from bottom to top and origin to center
-    bitmapDC.SetAxisOrientation( true, true );
-    bitmapDC.SetDeviceOrigin( half_size, half_size );
+    wxImage img( bmsize );  // a temporary buffer to build the color map
+
+    // clear background (set the window bg color)
+    wxColor bg = GetBackgroundColour();
+
+    for( int xx = 0; xx < bmsize.x; xx++ ) // blue axis
+    {
+        for( int yy = 0; yy < bmsize.y; yy++ )  // Red axis
+            img.SetRGB( xx, yy, bg.Red(), bg.Green(), bg.Blue() );
+    }
 
     // Reserve room to draw cursors inside the bitmap
     half_size -= m_cursorsSize/2;
@@ -331,6 +333,7 @@ void DIALOG_COLOR_PICKER::createHSVBitmap()
     COLOR4D color;
     int     sq_radius = half_size*half_size;
 
+    // Build the palette
     for( int xx = -half_size; xx < half_size; xx++ )
     {
         for( int yy = -half_size; yy < half_size; yy++ )
@@ -351,16 +354,13 @@ void DIALOG_COLOR_PICKER::createHSVBitmap()
 
             color.FromHSV( hue, sat, 1.0 );
 
-            pen.SetColour( color.ToColour() );
-            bitmapDC.SetPen( pen );
-            bitmapDC.DrawPoint( xx, yy );
+            img.SetRGB( MAPX( xx ), MAPY( yy ), color.r*255, color.g*255, color.b*255 );
         }
     }
 
-    /* Deselect the Tool Bitmap from DC,
-     * in order to delete the MemoryDC safely without deleting the bitmap
-     */
-    bitmapDC.SelectObject( wxNullBitmap );
+    delete m_bitmapHSV;
+    m_bitmapHSV = new wxBitmap( img, 24 );
+    m_HsvBitmap->SetBitmap( *m_bitmapHSV );
 }
 
 
