@@ -121,11 +121,11 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_simFinished( false )
 {
     SetKiway( this, aKiway );
-    m_signalsIconColorList = NULL;
+    m_signalsIconColorList = nullptr;
 
     m_schematicFrame = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
 
-    if( m_schematicFrame == NULL )
+    if( m_schematicFrame == nullptr )
         throw std::runtime_error( "There is no schematic window" );
 
     // Give an icon
@@ -166,12 +166,11 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     updateNetlistExporter();
 
-    Connect( EVT_SIM_UPDATE, wxCommandEventHandler( SIM_PLOT_FRAME::onSimUpdate ), NULL, this );
-    Connect( EVT_SIM_REPORT, wxCommandEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
-    Connect( EVT_SIM_STARTED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimStarted ), NULL, this );
-    Connect( EVT_SIM_FINISHED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
-    Connect( EVT_SIM_CURSOR_UPDATE, wxCommandEventHandler( SIM_PLOT_FRAME::onCursorUpdate ),
-             NULL, this );
+    Bind( EVT_SIM_UPDATE, &SIM_PLOT_FRAME::onSimUpdate, this );
+    Bind( EVT_SIM_REPORT, &SIM_PLOT_FRAME::onSimReport, this );
+    Bind( EVT_SIM_STARTED, &SIM_PLOT_FRAME::onSimStarted, this );
+    Bind( EVT_SIM_FINISHED, &SIM_PLOT_FRAME::onSimFinished, this );
+    Bind( EVT_SIM_CURSOR_UPDATE, &SIM_PLOT_FRAME::onCursorUpdate, this );
 
     // Toolbar buttons
     m_toolSimulate = m_toolBar->AddTool( ID_SIM_RUN, _( "Run/Stop Simulation" ),
@@ -192,25 +191,18 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_toolTune->Enable( false );
     m_toolSettings->Enable( true );
 
-    Connect( m_toolSimulate->GetId(), wxEVT_UPDATE_UI,
-             wxUpdateUIEventHandler( SIM_PLOT_FRAME::menuSimulateUpdate ), NULL, this );
-    Connect( m_toolAddSignals->GetId(), wxEVT_UPDATE_UI,
-             wxUpdateUIEventHandler( SIM_PLOT_FRAME::menuAddSignalsUpdate ), NULL, this );
-    Connect( m_toolProbe->GetId(), wxEVT_UPDATE_UI,
-             wxUpdateUIEventHandler( SIM_PLOT_FRAME::menuProbeUpdate ), NULL, this );
-    Connect( m_toolTune->GetId(), wxEVT_UPDATE_UI,
-             wxUpdateUIEventHandler( SIM_PLOT_FRAME::menuTuneUpdate ), NULL, this );
+    Bind( wxEVT_UPDATE_UI, &SIM_PLOT_FRAME::menuSimulateUpdate, this, m_toolSimulate->GetId() );
+    Bind( wxEVT_UPDATE_UI, &SIM_PLOT_FRAME::menuAddSignalsUpdate, this,
+          m_toolAddSignals->GetId() );
+    Bind( wxEVT_UPDATE_UI, &SIM_PLOT_FRAME::menuProbeUpdate, this, m_toolProbe->GetId() );
+    Bind( wxEVT_UPDATE_UI, &SIM_PLOT_FRAME::menuTuneUpdate, this, m_toolTune->GetId() );
 
-    Connect( m_toolSimulate->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
-             wxCommandEventHandler( SIM_PLOT_FRAME::onSimulate ), NULL, this );
-    Connect( m_toolAddSignals->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
-             wxCommandEventHandler( SIM_PLOT_FRAME::onAddSignal ), NULL, this );
-    Connect( m_toolProbe->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
-             wxCommandEventHandler( SIM_PLOT_FRAME::onProbe ), NULL, this );
-    Connect( m_toolTune->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
-             wxCommandEventHandler( SIM_PLOT_FRAME::onTune ), NULL, this );
-    Connect( m_toolSettings->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
-             wxCommandEventHandler( SIM_PLOT_FRAME::onSettings ), NULL, this );
+    Bind( wxEVT_COMMAND_TOOL_CLICKED, &SIM_PLOT_FRAME::onSimulate, this, m_toolSimulate->GetId() );
+    Bind( wxEVT_COMMAND_TOOL_CLICKED, &SIM_PLOT_FRAME::onAddSignal, this,
+          m_toolAddSignals->GetId() );
+    Bind( wxEVT_COMMAND_TOOL_CLICKED, &SIM_PLOT_FRAME::onProbe, this, m_toolProbe->GetId() );
+    Bind( wxEVT_COMMAND_TOOL_CLICKED, &SIM_PLOT_FRAME::onTune, this, m_toolTune->GetId() );
+    Bind( wxEVT_COMMAND_TOOL_CLICKED, &SIM_PLOT_FRAME::onSettings, this, m_toolSettings->GetId() );
 
     Bind( EVT_WORKBOOK_MODIFIED, &SIM_PLOT_FRAME::onWorkbookModified, this );
     Bind( EVT_WORKBOOK_CLR_MODIFIED, &SIM_PLOT_FRAME::onWorkbookClrModified, this );
@@ -223,7 +215,8 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onTune, this, m_tuneValue->GetId() );
     Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onShowNetlist, this,
           m_showNetlist->GetId() );
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSettings, this, m_toolSettings->GetId() );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSettings, this,
+          m_boardAdapter->GetId() );
 
     m_toolBar->Realize();
 
