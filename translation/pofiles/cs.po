@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-12 08:34+0000\n"
+"PO-Revision-Date: 2021-07-15 02:34+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -220,9 +220,8 @@ msgstr "Načítání Raytracing: vrstvy"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:881
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:644
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "Načítání 3D modelů"
+msgstr "Načítání 3D modelů..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:1021
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:654
@@ -269,9 +268,9 @@ msgstr "Načítání OpenGL: vrstvy"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2199
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "Načítání %s"
+msgstr "Načítání %s..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
@@ -378,39 +377,32 @@ msgid "Background bottom:"
 msgstr "Barva pozadí"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:47
-#, fuzzy
 msgid "Silkscreen top:"
-msgstr "Potisk"
+msgstr "Potisk nahoře:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:54
-#, fuzzy
 msgid "Silkscreen bottom:"
-msgstr "Barva potisku"
+msgstr "Potisk dole:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:67
-#, fuzzy
 msgid "Solder mask top:"
-msgstr "Možnosti pájecí masky:"
+msgstr "Pájecí maska nahoře:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:74
-#, fuzzy
 msgid "Solder mask bottom:"
-msgstr "Barva masky"
+msgstr "Pájecí maska dole:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:87
-#, fuzzy
 msgid "Solder paste:"
-msgstr "Pájecí pasta nahoře"
+msgstr "Pájecí pasta:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:100
-#, fuzzy
 msgid "Copper/surface finish:"
-msgstr "Povrch mědi:"
+msgstr "Měď/povrchová úprava:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:113
-#, fuzzy
 msgid "Board body:"
-msgstr "Vytvořit podklad desky"
+msgstr "Tělo desky:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:126
 #, fuzzy
@@ -500,9 +492,8 @@ msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr "Pro pokovenou a nepokovovanou měď použít různé barvy. (Pomalý)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "Material properties:"
-msgstr "Vlastnosti materiálu"
+msgstr "Vlastnosti materiálu:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
 #, fuzzy
@@ -512,12 +503,11 @@ msgstr "Realistický mód"
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
 #, fuzzy
 msgid "Solid colors"
-msgstr "Výběr barev:"
+msgstr "Plné barvy:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "CAD colors"
-msgstr "Barvy"
+msgstr "CAD barvy"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:114
 msgid "Camera Options"
@@ -549,9 +539,8 @@ msgstr "Rychlost animace:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:23
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
-#, fuzzy
 msgid "Rendering Options"
-msgstr "Možnosti rendrování"
+msgstr "Možnosti vykreslování"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:25
 msgid "Show model bounding boxes"
@@ -625,9 +614,8 @@ msgid "Add floor (slow)"
 msgstr "Přidat referenční rovinu"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
-#, fuzzy
 msgid "Anti-aliasing (slow)"
-msgstr "Antialiasing"
+msgstr "Antialiasing (pomalé)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 #, fuzzy
@@ -713,55 +701,45 @@ msgstr "Světlo zespodu:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:181
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:198
-#, fuzzy
 msgid "Elevation (deg)"
-msgstr "Elevace (stupně)"
+msgstr "Elevace (st)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:185
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:202
-#, fuzzy
 msgid "Azimuth (deg)"
-msgstr "Azimut (stupně)"
+msgstr "Azimut (st)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:206
-#, fuzzy
 msgid "Light 1:"
-msgstr "Světlo"
+msgstr "Světlo 1:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:222
-#, fuzzy
 msgid "Light 5:"
-msgstr "Světlo"
+msgstr "Světlo 5:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:235
-#, fuzzy
 msgid "Light 2:"
-msgstr "Světlo"
+msgstr "Světlo 2:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:251
-#, fuzzy
 msgid "Light 6:"
-msgstr "Světlo"
+msgstr "Světlo 6:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:264
-#, fuzzy
 msgid "Light 3:"
-msgstr "Světlo"
+msgstr "Světlo 3:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:280
-#, fuzzy
 msgid "Light 7:"
-msgstr "Světlo"
+msgstr "Světlo 7:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:293
-#, fuzzy
 msgid "Light 4:"
-msgstr "Světlo"
+msgstr "Světlo 4:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:309
-#, fuzzy
 msgid "Light 8:"
-msgstr "Světlo"
+msgstr "Světlo 8:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:100
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:72
@@ -793,7 +771,7 @@ msgstr "Název souboru 3D obrázku"
 #: common/eda_base_frame.cpp:1048 pcbnew/plugins/altium/altium_pcb.cpp:1315
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr "Nedostatek požadovaných oprávnění k uložení souboru '%s'."
+msgstr "Nedostatečná oprávnění k uložení souboru '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:739 common/confirm.cpp:130
 #: common/confirm.cpp:269 common/dialogs/panel_setup_severities.cpp:43
@@ -1171,9 +1149,9 @@ msgstr "Vytvořit soubor loga"
 #: bitmap2component/bitmap2cmp_gui.cpp:795
 #: bitmap2component/bitmap2cmp_gui.cpp:834
 #: bitmap2component/bitmap2cmp_gui.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' could not be created."
-msgstr "Soubor \"%s\" nelze vytvořit."
+msgstr "Soubor '%s' nelze vytvořit."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:775
 msgid "Create PostScript File"
@@ -1432,19 +1410,19 @@ msgstr ""
 "Rozšíření proměnných prostředí se nezdařilo: chybí '%c' na pozici %u v '%s'."
 
 #: common/common.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "Nelze vytvořit cestu \"%s\" absolutně s ohledem na \"%s\"."
+msgstr "Nelze vytvořit cestu '%s' absolutně s ohledem na '%s'."
 
 #: common/common.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created.\n"
-msgstr "Výstupní adresář \"%s\" vytvořen.\n"
+msgstr "Výstupní adresář '%s' vytvořen.\n"
 
 #: common/common.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'.\n"
-msgstr "Nelze vytvořit výstupní adresář \"%s\".\n"
+msgstr "Nelze vytvořit výstupní adresář '%s'.\n"
 
 #: common/common.cpp:615
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -1492,7 +1470,6 @@ msgid "Warning"
 msgstr "Varování"
 
 #: common/confirm.cpp:158 common/confirm.cpp:185
-#, fuzzy
 msgid "Save Changes?"
 msgstr "Uložit změny?"
 
@@ -2391,9 +2368,9 @@ msgid "Portrait"
 msgstr "Na výšku"
 
 #: common/dialogs/dialog_page_settings.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "Soubor listu kreslení \"%s\" nenalezen."
+msgstr "Soubor listu kreslení '%s' nenalezen."
 
 #: common/dialogs/dialog_page_settings.cpp:537
 msgid "the translation for paper size must preserve original spellings"
@@ -2409,7 +2386,7 @@ msgid "Select Drawing Sheet File"
 msgstr "Vybrat soubor výkresového listu"
 
 #: common/dialogs/dialog_page_settings.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The drawing sheet file name has changed.\n"
 "Do you want to use the relative path:\n"
@@ -2417,7 +2394,7 @@ msgid ""
 "instead of\n"
 "\"%s\"?"
 msgstr ""
-"Název souboru návrhu stránky se změnil.\n"
+"Název souboru listu výkresu se změnil\n"
 "Chcete použít relativní cestu:\n"
 "\"%s\"\n"
 "místo\n"
@@ -2625,9 +2602,8 @@ msgid "Comment9:"
 msgstr "Komentář9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
-#, fuzzy
 msgid "Drawing sheet file"
-msgstr "List kreslení"
+msgstr "Soubor listu kreslení"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Browse..."
@@ -3581,9 +3557,8 @@ msgid "New net class:"
 msgstr "Nová třída sítě:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:178
-#, fuzzy
 msgid "Assign To All Listed Nets"
-msgstr "Přiřadit k uvedeným sítím"
+msgstr "Přiřadit do všech uvedených sítí"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:184
 msgid "Assign To Selected Nets"
@@ -3642,9 +3617,9 @@ msgid "Save Report to File"
 msgstr "Uložit report do souboru"
 
 #: common/dialogs/wx_html_report_panel.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "Nelze zapsat report do souboru \"%s\"."
+msgstr "Nelze zapsat report do souboru '%s'."
 
 #: common/dialogs/wx_html_report_panel.cpp:353
 msgid "File save error"
@@ -3701,9 +3676,9 @@ msgid "Could not use OpenGL"
 msgstr "Nelze použít OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' was not fully read."
-msgstr "Soubor \"%s\" nebyl zcela načten"
+msgstr "Soubor '%s' nebyl zcela načten."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -3854,9 +3829,9 @@ msgid "&Help"
 msgstr "&Nápověda"
 
 #: common/eda_base_frame.cpp:933
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found."
-msgstr "Soubor \"%s\" nenalezen."
+msgstr "Soubor '%s nenalezen."
 
 #: common/eda_base_frame.cpp:976
 msgid "Preferences"
@@ -3878,7 +3853,7 @@ msgstr "Kl. zkratky"
 #: common/eda_base_frame.cpp:1038
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr "Nedostatek požadovaných oprávnění ke složce '%s'."
+msgstr "Nedostatečná oprávnění ke složce '%s'."
 
 #: common/eda_base_frame.cpp:1078
 #, c-format
@@ -3904,14 +3879,14 @@ msgid "Doc Files"
 msgstr "Soubory dok"
 
 #: common/eda_doc.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Doc File '%s' not found"
-msgstr "Soubor dok. \"%s\"nenalezen"
+msgstr "Soubor dok. '%s' nenalezen"
 
 #: common/eda_doc.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for doc file '%s'"
-msgstr "Neznámý MIME typ souboru dokumentace \"%s\""
+msgstr "Neznámý MIME typ souboru dokumentace '%s'"
 
 #: common/eda_draw_frame.cpp:141 common/tool/actions.cpp:484
 #: pagelayout_editor/pl_editor_frame.cpp:158
@@ -4118,9 +4093,8 @@ msgid "Schematic Field"
 msgstr "Pole schématu"
 
 #: common/eda_item.cpp:283
-#, fuzzy
 msgid "Schematic Symbol"
-msgstr "Upravit symboly schématu"
+msgstr "Symbol schématu"
 
 #: common/eda_item.cpp:284
 msgid "Sheet Pin"
@@ -4421,14 +4395,14 @@ msgid "Deprecated version of KICAD_SYMBOL_DIR."
 msgstr "Zastaralá verze KICAD_SYMBOL_DIR."
 
 #: common/exceptions.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "from %s : %s() line %d"
-msgstr "z %s: %s() řádek:%d"
+msgstr "z %s: %s() řádek %d"
 
 #: common/exceptions.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr "%s na \"%s\", řádek %d, offset %d"
+msgstr "%s na '%s', řádek %d, offset %d."
 
 #: common/exceptions.cpp:90
 #, c-format
@@ -4444,15 +4418,14 @@ msgid ""
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
 "KiCad nemohl otevřít tento soubor, protože byl vytvořen novější verzí, než "
-"tou, která je spuštěna.\n"
+"je verze, kterou používáte.\n"
 "\n"
-"Chcete-li jej otevřít, budete muset aktualizovat KiCad na verzi datovanou %s "
+"Chcete-li jej otevřít, budete muset upgradovat KiCad na verzi s datem %s "
 "nebo novější."
 
 #: common/exceptions.cpp:126
-#, fuzzy
 msgid "Full error text:"
-msgstr "Zrcadlit text"
+msgstr "Plný text chyby:"
 
 #: common/filehistory.cpp:155
 msgid "No Files"
@@ -4531,23 +4504,23 @@ msgid "Cannot create global library table path '%s'."
 msgstr "Nelze vytvořit globální tabulku knihoven cesta '%s'."
 
 #: common/gestfich.cpp:190
-#, fuzzy, c-format
+#, c-format
 msgid "Command '%s' could not be found."
-msgstr "Příkaz \"%s\" nelze nalézt"
+msgstr "Příkaz '%s' nebyl nalezen."
 
 #: common/gestfich.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Problem while running the PDF viewer.\n"
 "Command is '%s'."
 msgstr ""
-"Problém při spuštění prohlížeče PDF\n"
-"Příkaz je \"%s\""
+"Problém při spuštění prohlížeče PDF.\n"
+"Příkaz je '%s'."
 
 #: common/gestfich.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a PDF viewer for '%s'."
-msgstr "Nelze najít prohlížeč PDF pro \"%s\""
+msgstr "Nelze najít prohlížeč PDF pro '%s'."
 
 #: common/gestfich.cpp:349
 #, c-format
@@ -4563,9 +4536,9 @@ msgstr ""
 #: common/gestfich.cpp:378 eeschema/eeschema.cpp:404 eeschema/eeschema.cpp:436
 #: gerbview/gerbview.cpp:231 kicad/project_template.cpp:257
 #: pcbnew/pcbnew.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy file '%s'."
-msgstr "Nelze kopírovat soubor \"%s\"."
+msgstr "Nelze kopírovat soubor '%s'."
 
 #: common/grid_tricks.cpp:241 common/tool/actions.cpp:154
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1890
@@ -4654,9 +4627,8 @@ msgid "Ignore Other Snaps"
 msgstr "Přepnout stav výběru"
 
 #: common/hotkey_store.cpp:59
-#, fuzzy
 msgid "Ignore H/V/45 Constraints"
-msgstr "Omezení"
+msgstr "Ignorovat omezení H/V/45"
 
 #: common/hotkey_store.cpp:64 common/tool/action_menu.cpp:224
 #: common/tool/actions.cpp:115
@@ -4690,14 +4662,14 @@ msgid "Gestures"
 msgstr "Gesta"
 
 #: common/kiway.cpp:253
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "Nepodařilo se načíst knihovnu kiface \"%s\"."
+msgstr "Nepodařilo se načíst knihovnu kiface '%s'."
 
 #: common/kiway.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
-msgstr "Nelze číst jméno instance a verze symbolů v knihovně kiface \"%s\"."
+msgstr "Nelze číst jméno instance a verze symbolů v knihovně kiface '%s'."
 
 #: common/kiway.cpp:295
 #, c-format
@@ -4727,9 +4699,8 @@ msgstr ""
 "'"
 
 #: common/kiway.cpp:411 common/kiway.cpp:415 common/kiway.cpp:419
-#, fuzzy
 msgid "Error loading editor."
-msgstr "Chyba při načítání editoru"
+msgstr "Chyba při načítání editoru."
 
 #: common/kiway.cpp:504
 #, c-format
@@ -5357,9 +5328,9 @@ msgid "Unit '%s' does not end with 'mil'."
 msgstr ""
 
 #: common/plugins/altium/altium_parser.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "Nelze přesunout do koše '%s'."
+msgstr "Nelze převést '%s' na dvojnásobek."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2319
 #, c-format
@@ -5415,14 +5386,12 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Neplatný oblouk s poloměrem %f a úhlem %f"
 
 #: common/project.cpp:311 common/project.cpp:316 pcbnew/pcb_base_frame.cpp:156
-#, fuzzy
 msgid "Error loading project footprint library table."
-msgstr "Chyba načtení tabulky knihovny pouzder projektu"
+msgstr "Chyba načtení tabulky knihovny pouzder projektu."
 
 #: common/project/project_archiver.cpp:63
-#, fuzzy
 msgid "Failed to output data."
-msgstr "Nepodařilo se načíst '%s'."
+msgstr "Selhaly výstupní data."
 
 #: common/project/project_archiver.cpp:91
 msgid "Could not open archive file\n"
@@ -5433,33 +5402,33 @@ msgid "Invalid archive file format\n"
 msgstr "Neplatný formát souboru archívu\n"
 
 #: common/project/project_archiver.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'.\n"
-msgstr "Rozbalit soubor \"%s\"\n"
+msgstr "Rozbalování souboru '%s'.\n"
 
 #: common/project/project_archiver.cpp:151
 msgid "Error extracting file!\n"
 msgstr "Chyba rozbalování souboru!\n"
 
 #: common/project/project_archiver.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create archive file '%s'.\n"
-msgstr "Nelze vytvořit soubor archivu \"%s\"\n"
+msgstr "Nelze vytvořit soubor archivu '%s'.\n"
 
 #: common/project/project_archiver.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'.\n"
-msgstr "Soubor archívu \"%s\"\n"
+msgstr "Archivovaný soubor '%s'.\n"
 
 #: common/project/project_archiver.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'.\n"
-msgstr "Selhalo zálohování souboru \"%s\".\n"
+msgstr "Archivace souboru '%s' se nezdařila.\n"
 
 #: common/project/project_archiver.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed).\n"
-msgstr "Zip archív \"%s\" vytvořen (%s nekomprimováno, %s komprimováno)\n"
+msgstr "Zip archív '%s' vytvořen (%s nekomprimováno, %s komprimováno).\n"
 
 #: common/rc_item.cpp:353
 msgid "Excluded "
@@ -5474,9 +5443,9 @@ msgid "Warning: "
 msgstr "Varování: "
 
 #: common/richio.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open %s for reading."
-msgstr "Nelze otevřít soubor \"%s\" pro čtení"
+msgstr "Nelze otevřít soubor %s pro čtení."
 
 #: common/richio.cpp:221 common/richio.cpp:316
 msgid "Maximum line length exceeded"
@@ -6138,7 +6107,7 @@ msgid ""
 "Do you want to access the KiCad online help?"
 msgstr ""
 "Soubor nápovědy '%s' nebo\n"
-"'%s' nelze nalézt.\n"
+"'%s' nebyl nalezen.\n"
 "Chcete získat přístup k online nápovědě KiCadu?"
 
 #: common/tool/common_control.cpp:219 common/tool/common_control.cpp:239
@@ -6146,12 +6115,12 @@ msgid "File Not Found"
 msgstr "Soubor nenalezen"
 
 #: common/tool/common_control.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"Soubor nápovědy \"%s\" nenalezen.\n"
+"Soubor nápovědy '%s' nenalezen.\n"
 "Chcete získat přístup k online nápovědě KiCadu?"
 
 #: common/tool/common_control.cpp:266
@@ -6209,9 +6178,9 @@ msgid "Entry contains leading white space."
 msgstr "Záznam obsahuje úvodní prázdné místo."
 
 #: common/validators.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid library identifier format."
-msgstr "\"%s\" není platný formát identifikátoru knihovny."
+msgstr "'%s' není platný formát identifikátoru knihovny."
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
@@ -6436,13 +6405,13 @@ msgid "Restore Default"
 msgstr "Obnovit výchozí"
 
 #: common/widgets/widget_hotkey_list.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
 msgstr ""
-"\"%s\"je již přiřazena k \"%s\" v sekci \"%s\". Jste si jisti, že chcete "
-"změnit její přiřazení?"
+"'%s' je již přiřazena k '%s' v sekci '%s'. Jste si jisti, že chcete změnit "
+"její přiřazení?"
 
 #: common/widgets/widget_hotkey_list.cpp:425
 msgid "Confirm change"
@@ -6582,9 +6551,8 @@ msgid "Geda PCB footprint library files"
 msgstr "Soubor knihovny pouzder Geda PCB"
 
 #: common/wildcards_and_files_ext.cpp:358
-#, fuzzy
 msgid "Drawing sheet files"
-msgstr "List kreslení"
+msgstr "Soubory listu kreslení"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad symbol footprint link files"
@@ -6696,15 +6664,14 @@ msgid "Jpeg file"
 msgstr "Jpeg soubory"
 
 #: cvpcb/auto_associate.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found in the default search paths."
-msgstr ""
-"Soubor ekvivalence \"%s\" nenalezen ve výchozích vyhledávacích cestách."
+msgstr "Soubor ekvivalence '%s' nenalezen ve výchozích vyhledávacích cestách."
 
 #: cvpcb/auto_associate.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening equivalence file '%s'."
-msgstr "Chyba při otevírání souboru ekvivalence \"%s\"."
+msgstr "Chyba při otevírání souboru ekvivalence '%s'."
 
 #: cvpcb/auto_associate.cpp:179
 msgid "Equivalence File Load Error"
@@ -6747,10 +6714,9 @@ msgstr ""
 "CvPcb."
 
 #: cvpcb/cvpcb.cpp:187
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table."
-msgstr "Došlo k chybě při pokusu o načtení globální tabulky knihovny pouzder"
+msgstr "Došlo k chybě při pokusu o načtení globální tabulky knihovny pouzder."
 
 #: cvpcb/cvpcb_mainframe.cpp:64 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
@@ -6782,9 +6748,9 @@ msgid "Symbol to Footprint links have been modified. Save changes?"
 msgstr "Soubor propojení symbolů a pouzder byl změněn. Uložit před ukončením?"
 
 #: cvpcb/cvpcb_mainframe.cpp:524 cvpcb/tools/cvpcb_association_tool.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint."
-msgstr "\"%s\" není platné pouzdro."
+msgstr "'%s' není platné pouzdro."
 
 #: cvpcb/cvpcb_mainframe.cpp:679 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1416 eeschema/symbol_editor/symbol_editor.cpp:1215
@@ -6856,9 +6822,9 @@ msgstr ""
 "%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Project file: '%s'"
-msgstr "Soubor projektu: \"%s\""
+msgstr "Soubor projektu: '%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 msgid "No editor defined in KiCad. Please choose it."
@@ -6869,9 +6835,9 @@ msgid "Footprint Association File"
 msgstr "Soubor přiřazení pouzdra"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists in list."
-msgstr "Soubor \"%s\" již v seznamu existuje"
+msgstr "Soubor '%s' již v seznamu existuje."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
@@ -6978,20 +6944,20 @@ msgid "Footprint Viewer"
 msgstr "Prohlížeč pouzder"
 
 #: cvpcb/display_footprints_frame.cpp:400
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr "Pouzdro ID \"%s\" není platné."
+msgstr "Pouzdro ID '%s' není platné."
 
 #: cvpcb/display_footprints_frame.cpp:415
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "Knihovna \"%s\" není v tabulce knihoven pouzder."
+msgstr "Knihovna '%s' není v tabulce knihoven pouzder."
 
 #: cvpcb/display_footprints_frame.cpp:424
 #: cvpcb/display_footprints_frame.cpp:449
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found."
-msgstr "Pouzdro \"%s\" nenalezeno."
+msgstr "Pouzdro '%s' nenalezeno."
 
 #: cvpcb/display_footprints_frame.cpp:479 pcbnew/footprint.cpp:878
 #, c-format
@@ -7016,17 +6982,16 @@ msgstr ""
 "pouzdra znovu přiřadit ručně.)"
 
 #: cvpcb/readwrite_dlgs.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
-msgstr ""
-"Součástka \"%s\" pouzdro \"%s\" nebyla <b> nalezena </b> v žádné knihovně.\n"
+msgstr "Součástka '%s' pouzdra '%s' <b>nenalezena</b> v žádné knihovně.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
 msgstr ""
-"Součástka \"%s\" pouzdra \"%s\" byla nalezena ve <b>více než jedné</b> "
-"knihovně.\n"
+"Součástka '%s' pouzdra '%s' byla nalezena ve <b>více než jedné</b> knihovně."
+"\n"
 
 #: cvpcb/readwrite_dlgs.cpp:164
 msgid "First check your footprint library table entries."
@@ -7879,9 +7844,8 @@ msgid "Change Symbols"
 msgstr "Změnit symboly"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:76
-#, fuzzy
 msgid "Change selected symbol(s)"
-msgstr "Změnit vybraný symbol"
+msgstr "Změnit vybraný symbol(y)"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching reference designator:"
@@ -7971,9 +7935,8 @@ msgid "Update all symbols in schematic"
 msgstr "Aktualizovat všechny symboly ve schématu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
-#, fuzzy
 msgid "Update selected symbol(s)"
-msgstr "Aktualizovat vybraný symbol"
+msgstr "Aktualizovat vybraný symbol(y)"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
@@ -8075,9 +8038,9 @@ msgstr "Umístěte postupně všechny jednotky symbolu."
 #: eeschema/generate_alias_info.cpp:81 eeschema/sch_base_frame.cpp:70
 #: eeschema/symbol_editor/symbol_editor.cpp:288
 #: eeschema/widgets/symbol_preview_widget.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "Chyba při načítání symbolu '%s' z knihovny '%s'."
+msgstr "Chyba při načítání symbolu %s z knihovny '%s'."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:430
 msgid "No footprint specified"
@@ -8255,9 +8218,8 @@ msgid "Combo!"
 msgstr "Kombinace!"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Schematic Editor line widths."
-msgstr "Přepněte do editoru schmémat"
+msgstr "Nastavte šířku na 0, chcete-li použít šířky čar editoru schémat."
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
@@ -8272,9 +8234,9 @@ msgid "Value may not be empty."
 msgstr "Hodnota nemůže být prázdná."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library identifier %s is not valid."
-msgstr "Identifikátor knihovny symbolů \"%s\" není platný."
+msgstr "Identifikátor knihovny symbolů %s není platný."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:633
 #, c-format
@@ -8713,9 +8675,8 @@ msgid "Filters"
 msgstr "Filtry"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:82
-#, fuzzy
 msgid "Filter other symbol fields by name:"
-msgstr "Filtrovat pole podle názvu:"
+msgstr "Filtrovat pole symbolu podle názvu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:94
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8864,7 +8825,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Chyba při načítání globální tabulky knihoven symbolů.\n"
+"Došlo k chybě načítání globální tabulky knihovny symbolů.\n"
 "\n"
 "%s"
 
@@ -9095,13 +9056,12 @@ msgid "Symbol name:"
 msgstr "Název symbolu:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:35
-#, fuzzy
 msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
-"To je název symbolu v knihovně,\n"
-"a také výchozí hodnota součástky při načtení ve schématu."
+"Název symbolu v knihovně a také výchozí\n"
+"hodnota symbolu při načtení do schématu."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
 msgid "Derive from existing symbol:"
@@ -9642,9 +9602,8 @@ msgstr "Alternativní název vývodu"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:188
 #: eeschema/dialogs/dialog_symbol_properties.cpp:335
-#, fuzzy
 msgid "Alternate pin assignments are not available for DeMorgan symbols."
-msgstr "Alternativní definice vývodů nejsou u komponent DeMorgan k dispozici."
+msgstr "Pro symboly DeMorgan nejsou k dispozici alternativní přiřazení vývodů."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:274
 msgid "Alternate pin definitions must have a name."
@@ -9740,13 +9699,13 @@ msgstr "Výběr výstupního adresáře"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:231
 #: pcbnew/dialogs/dialog_gendrill.cpp:305 pcbnew/dialogs/dialog_plot.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
 msgstr ""
 "Použít relativní cestu k \n"
-"\"%s\""
+"'%s'?"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:233
 #: pcbnew/dialogs/dialog_export_svg.cpp:214
@@ -9822,18 +9781,18 @@ msgid "Schematic"
 msgstr "Schéma"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write plot files to folder '%s'."
-msgstr "Nelze zapisovat soubory kreslení do složky \"%s\"."
+msgstr "Selhal zápis souborů vykreslení do složky '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:513
 #: eeschema/dialogs/dialog_plot_schematic.cpp:683
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1036
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1167
 #: pcbnew/dialogs/dialog_plot.cpp:907
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'."
-msgstr "Nepodařilo se načíst '%s'."
+msgstr "Vykresleno na '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:518
 #: eeschema/dialogs/dialog_plot_schematic.cpp:688
@@ -9848,14 +9807,14 @@ msgstr "Nepodařilo se načíst '%s'."
 #: pcbnew/exporters/export_footprint_associations.cpp:83
 #: pcbnew/exporters/gen_footprints_placefile.cpp:293
 #: pcbnew/exporters/gen_footprints_placefile.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'."
-msgstr "Selhalo vytvoření souboru \"%s\""
+msgstr "Selhalo vytvoření souboru '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:874
 #, c-format
 msgid "Plotted to '%s'.\n"
-msgstr "Vynesen na '%s'.\n"
+msgstr "Vykresleno na '%s'.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1250
 #, c-format
@@ -10278,13 +10237,13 @@ msgid "Project is missing or read-only. Changes will not be saved."
 msgstr "Projekt chybí nebo je jen pro čtení. Změny nebudou uloženy."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 msgstr ""
 "Chyba při importu nastavení z projektu:\n"
-"Soubor projektu %s nelze načíst"
+"Soubor projektu %s nelze načíst."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -10303,14 +10262,12 @@ msgid "Sheet file must have a '.kicad_sch' extension."
 msgstr "Soubor listu musí mít příponu „.kicad_sch“."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:293
-#, fuzzy
 msgid "Use relative path for sheet file?"
-msgstr "Použít relativní cestu?"
+msgstr "Použít relativní cestu pro soubor listu?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:294
-#, fuzzy
 msgid "Sheet File Path"
-msgstr "Soubor listu"
+msgstr "Soubor listu Cesta"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:297
 msgid ""
@@ -10324,9 +10281,8 @@ msgid "Use Relative Path"
 msgstr "Použít relativní cestu"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:302
-#, fuzzy
 msgid "Use Absolute Path"
-msgstr "Absolutní"
+msgstr "Použít absolutní cestu"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:333
 msgid "Untitled Sheet"
@@ -10347,9 +10303,9 @@ msgstr ""
 "v Předvolby> Eeschema> Barvy."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:407
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
-msgstr "Soubor \"%s\" se nezdá jako platný soubor schématu."
+msgstr "Soubor '%s' se nezdá jako platný soubor schématu."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:409
 msgid "Invalid Schematic File"
@@ -10366,14 +10322,14 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #: kicad/tools/kicad_manager_control.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists."
-msgstr "\"%s\" již existuje."
+msgstr "'%s' již existuje."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:472
-#, fuzzy, c-format
+#, c-format
 msgid "Link '%s' to this file?"
-msgstr "Odkaz \"%s\" na tento soubor?"
+msgstr "Odkaz '%s' na tento soubor?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:512
 #, c-format
@@ -10386,19 +10342,19 @@ msgid "This action cannot be undone."
 msgstr "Tuto akci nelze vrátit zpět."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr "Vytvořit nový soubor \"%s\" s obsahem \"%s\"?"
+msgstr "Vytvořit nový soubor '%s' s obsahem '%s'?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving schematic file '%s'."
-msgstr "Chyba při ukládání souboru schématu \"%s\"."
+msgstr "Chyba při ukládání souboru schématu '%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save schematic '%s'"
-msgstr "Selhalo uložení schématu \"%s\""
+msgstr "Selhalo uložení schématu '%s'"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:649
 msgid "A sheet must have a name."
@@ -11173,9 +11129,9 @@ msgid "Alternate Assignment"
 msgstr "Alternativní přiřazení"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already in use."
-msgstr "Název pole \"%s\" již používán."
+msgstr "Název pole '%s' již používán."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:126
 msgid "Unit:"
@@ -11315,13 +11271,13 @@ msgid "Symbol Properties"
 msgstr "Vlastnosti symbolu"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Remapping is not possible because you have insufficient privileges to the "
 "project folder '%s'."
 msgstr ""
-"Přemapování není možné, protože nemáte oprávnění k zápisu do složky projektu "
-"\"%s\"."
+"Přemapování není možné, protože nemáte dostatečná oprávnění ke složce "
+"projektu '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:67
 msgid ""
@@ -11344,10 +11300,10 @@ msgstr ""
 "muset provést přemapování symbolů ručně."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
 msgstr ""
-"Přidání knihovny \"%s\", soubor \"%s\" do tabulky knihovny symbolů projektu."
+"Přidání knihovny '%s', soubor '%s' do tabulky knihovny symbolů projektu."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:220
 #: eeschema/dialogs/panel_sym_lib_table.cpp:754
@@ -11374,18 +11330,18 @@ msgid "No symbol %s found in symbol library table."
 msgstr "Žádný symbol \"%s\" nebyl nalezen v tabulce knihovny symbolů."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:270
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s mapped to symbol library '%s'."
-msgstr "Symbol \"%s\" byl mapován do knihovny symbolů \"%s\"."
+msgstr "Symbol %s byl mapován do knihovny symbolů '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:279
 msgid "Symbol library table mapping complete!"
 msgstr "Mapování tabulky knihoven symbolů je kompletní!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr "Nelze vytvořit záložní složku pro přemapování projektu \"%s\"."
+msgstr "Nelze vytvořit záložní složku pro přemapování projektu '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:352
 #: eeschema/dialogs/dialog_symbol_remap.cpp:500
@@ -11408,9 +11364,9 @@ msgstr "Zrušit záchranu"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:453
 #: eeschema/dialogs/dialog_symbol_remap.cpp:469
 #: eeschema/dialogs/dialog_symbol_remap.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "Backing up file '%s' to '%s'."
-msgstr "Zálohování souboru \"%s\" do souboru \"%s\"."
+msgstr "Zálohování souboru '%s' do souboru '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:380
 #: eeschema/dialogs/dialog_symbol_remap.cpp:422
@@ -11418,14 +11374,14 @@ msgstr "Zálohování souboru \"%s\" do souboru \"%s\"."
 #: eeschema/dialogs/dialog_symbol_remap.cpp:461
 #: eeschema/dialogs/dialog_symbol_remap.cpp:477
 #: eeschema/dialogs/dialog_symbol_remap.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to back up file '%s'.\n"
-msgstr "Selhalo zálohování souboru \"%s\".\n"
+msgstr "Selhalo zálohování souboru '%s'.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create backup folder '%s'.\n"
-msgstr "Nepodařilo se vytvoření složky zálohy \"%s\"\n"
+msgstr "Nepodařilo se vytvoření složky zálohy '%s'.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:499
 msgid "Some of the project files could not be backed up."
@@ -12009,7 +11965,7 @@ msgstr "Více knihoven nemůže sdílet stejnou přezdívku („%s“)."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:439 eeschema/symbol_library.cpp:550
 #, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr "Symbol knihovny '%s' se nezdařilo načíst."
+msgstr "Knihovna symbolů '%s' načtení selhalo."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:442
 msgid "Error Loading Library"
@@ -12043,31 +11999,30 @@ msgid "Add Anyway"
 msgstr "Přidat každopádně"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:722
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
 msgstr ""
-"Vyberte jeden nebo více řádků tabulky obsahujících starší knihovny, které "
-"chcete uložit jako aktuální formát (* .kicad_sym)."
+"Vyberte jeden nebo více řádků obsahujících knihovny ve formátu Legacy (* ."
+"lib), které chcete uložit jako aktuální formát KiCad (* .kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:730
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"Uložit „%s“ jako aktuální formát (* .kicad_sym) a nahradit starší položku v "
+"Uložit '%s' jako aktuální formát (*.kicad_sym) a nahradit starší položku v "
 "tabulce?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:736
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
 msgstr ""
-"Uložit %d starší knihovny jako aktuální formát (* .kicad_sym) a nahradit "
-"starší položky v tabulce?"
+"Uložit %d starší verze knihoven jako aktuální formát KiCad (*.kicad_sym) a "
+"nahradit starší položky v tabulce?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:764
 #: pcbnew/dialogs/dialog_export_step.cpp:324
@@ -12192,14 +12147,13 @@ msgid "Editing Options"
 msgstr "Úprava možností"
 
 #: eeschema/eeschema_config.cpp:100 pcbnew/pcbnew_config.cpp:83
-#, fuzzy
 msgid "Error loading drawing sheet."
-msgstr "Chyba při načítání listu výkresu"
+msgstr "Chyba při načítání listu výkresu."
 
 #: eeschema/eeschema_config.cpp:271 eeschema/sheet.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading the symbol library table '%s'."
-msgstr "Při načítání tabulky \"%s\" knihoven symbolů došlo k chybě."
+msgstr "Chyba při načítání tabulky '%s' knihoven symbolů došlo k chybě."
 
 #: eeschema/erc.cpp:59 eeschema/erc.cpp:76
 msgid "Input Pin"
@@ -12410,12 +12364,12 @@ msgid "Schematic Files"
 msgstr "Soubory schémat"
 
 #: eeschema/files-io.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
-"Chyba uložení souboru schématu \"%s\".\n"
+"Chyba uložení souboru schématu '%s'.\n"
 "%s"
 
 #: eeschema/files-io.cpp:146 pcbnew/files.cpp:1018
@@ -12424,18 +12378,18 @@ msgid "Failed to create temporary file '%s'."
 msgstr "Nepodařilo se vytvořit dočasný soubor '%s'."
 
 #: eeschema/files-io.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "Failed to rename temporary file '%s'."
 msgstr ""
-"Chyba uložení souboru schématu \"%s\".\n"
-"Nepodařilo se přejmenovat dočasný soubor %s"
+"Chyba uložení souboru schématu '%s'.\n"
+"Nepodařilo se přejmenovat dočasný soubor '%s'."
 
 #: eeschema/files-io.cpp:169 pcbnew/files.cpp:1036
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to rename temporary file '%s'."
-msgstr "Nepodařilo se vytvořit dočasný soubor '%s'."
+msgstr "Nepodařilo se přejmenovat dočasný soubor '%s'."
 
 #: eeschema/files-io.cpp:203 pagelayout_editor/files.cpp:177
 #: pcbnew/files.cpp:1069
@@ -12448,37 +12402,34 @@ msgid "File write operation failed."
 msgstr "Zápis do souboru selhal."
 
 #: eeschema/files-io.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' is already open."
-msgstr "Soubor schématu \"%s\" je již otevřen."
+msgstr "Soubor schématu '%s' je již otevřen."
 
 #: eeschema/files-io.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
-msgstr "Schéma\"%s\" neexistuje. Chcete ho vytvořit?"
+msgstr "Schéma '%s' neexistuje.  Chcete ho vytvořit?"
 
 #: eeschema/files-io.cpp:309
-#, fuzzy
 msgid "Creating Schematic"
-msgstr "Tisk schématu"
+msgstr "Vytváření schématu"
 
 #: eeschema/files-io.cpp:310
-#, fuzzy
 msgid "Loading Schematic"
-msgstr "Tisk schématu"
+msgstr "Načítání schématu"
 
 #: eeschema/files-io.cpp:370
 msgid "Schematic file changes are unsaved"
 msgstr "Změny souboru schématu nejsou uloženy"
 
 #: eeschema/files-io.cpp:403
-#, fuzzy
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
 msgstr ""
-"Celé schéma nebylo možné načíst. Došlo k chybě při pokusu o načtení "
-"hierarchického listu schématu."
+"Celé schéma nelze načíst.  Při pokusu o načtení hierarchických listů došlo k "
+"chybám."
 
 #: eeschema/files-io.cpp:410 eeschema/files-io.cpp:418
 #: eeschema/files-io.cpp:1186 eeschema/sheet.cpp:162
@@ -12487,9 +12438,9 @@ msgid "Error loading schematic '%s'."
 msgstr "Chyba při načítání schématu '%s'."
 
 #: eeschema/files-io.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading schematic '%s'."
-msgstr "Vyčerpaná paměť při načítání souboru schématu \"%s\""
+msgstr "Vyčerpaná paměť při načítání souboru schématu '%s'."
 
 #: eeschema/files-io.cpp:440 eeschema/files-io.cpp:1189 eeschema/sheet.cpp:165
 #, c-format
@@ -12566,14 +12517,12 @@ msgstr ""
 "nového formátu."
 
 #: eeschema/files-io.cpp:633
-#, fuzzy
 msgid "Schematic is read only."
-msgstr "Soubor schématu je pouze pro čtení."
+msgstr "Schéma je pouze pro čtení."
 
 #: eeschema/files-io.cpp:658
-#, fuzzy
 msgid "Insert Schematic"
-msgstr "Importovat schéma"
+msgstr "Vložit schéma"
 
 #: eeschema/files-io.cpp:686
 msgid ""
@@ -12595,20 +12544,20 @@ msgid "Import Schematic"
 msgstr "Importovat schéma"
 
 #: eeschema/files-io.cpp:769
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file extension: '%s'."
-msgstr "Použít PROTEL přípony souboru"
+msgstr "Neočekávaná přípona souboru: '%s'."
 
 #: eeschema/files-io.cpp:814 eeschema/files-io.cpp:871
 #: kicad/tools/kicad_manager_control.cpp:119
 #: kicad/tools/kicad_manager_control.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Adresář \"%s\" nelze vytvořit.\n"
+"Adresář '%s' nelze vytvořit.\n"
 "\n"
 "Ujistěte se, že máte oprávnění k zápisu a zkuste to znovu."
 
@@ -12637,14 +12586,13 @@ msgid "Abort Project Save"
 msgstr "Přerušit uložení projektu"
 
 #: eeschema/files-io.cpp:1113
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open."
-msgstr "Soubor schématu \"%s\" je již otevřen."
+msgstr "Schéma '%s' je již otevřeno."
 
 #: eeschema/files-io.cpp:1122
-#, fuzzy
 msgid "Importing Schematic"
-msgstr "Importovat schéma"
+msgstr "Importování schématu"
 
 #: eeschema/files-io.cpp:1212
 msgid "The current schematic has been modified.  Save changes?"
@@ -12675,11 +12623,9 @@ msgid "Choose Symbol (%d items loaded)"
 msgstr "Zvolit symbol (%d položek načteno)"
 
 #: eeschema/getpart.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
-msgstr ""
-"V knihovně \"%s\" nebyl pro symbol \"%s\" nalezen žádný alternativní styl "
-"tvaru."
+msgstr "Nenalezen žádný alternativní styl těla pro symbol '%s' v knihovně '%s'."
 
 #: eeschema/hierarch.cpp:88
 msgid "Navigator"
@@ -12800,9 +12746,9 @@ msgid "Graphic Text '%s'"
 msgstr "Text '%s'"
 
 #: eeschema/libarch.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr "Selhalo přidání symbolu \"%s\" v souboru knihovny \"%s\"."
+msgstr "Selhalo přidání symbolu %s do souboru knihovny '%s'."
 
 #: eeschema/libarch.cpp:110
 msgid "Unexpected exception occurred."
@@ -12824,9 +12770,8 @@ msgid "Open Recent"
 msgstr "Naposledy otevřené"
 
 #: eeschema/menubar.cpp:88
-#, fuzzy
 msgid "Insert Schematic Sheet Content..."
-msgstr "Připojit obsah listu schématu..."
+msgstr "Vložit obsah listu schématu..."
 
 #: eeschema/menubar.cpp:89
 msgid ""
@@ -13030,9 +12975,9 @@ msgstr "Žádné symboly nebyly zachráněny."
 
 #: eeschema/project_rescue.cpp:691
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create symbol library file '%s'."
-msgstr "Selhalo vytvoření souboru knihovny symbolu \"%s\""
+msgstr "Selhalo vytvoření souboru knihovny symbolu '%s'."
 
 #: eeschema/project_rescue.cpp:815
 #, c-format
@@ -13117,9 +13062,9 @@ msgstr "Nový soubor schématu není uložen"
 #: eeschema/symbol_editor/symbol_editor.cpp:1119
 #: pagelayout_editor/pl_editor_frame.cpp:375
 #: pcbnew/footprint_edit_frame.cpp:622 pcbnew/pcb_edit_frame.cpp:824
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to '%s' before closing?"
-msgstr "Uložit změny do \"%s\" před zavřením?"
+msgstr "Uložit změny do '%s' před zavřením?"
 
 #: eeschema/sch_edit_frame.cpp:823
 msgid ""
@@ -13136,9 +13081,9 @@ msgid "New Schematic"
 msgstr "Nové schéma"
 
 #: eeschema/sch_edit_frame.cpp:966
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' already exists."
-msgstr "Soubor schématu \"%s\" již existuje."
+msgstr "Soubor schématu '%s' již existuje."
 
 #: eeschema/sch_edit_frame.cpp:987
 msgid "Open Schematic"
@@ -13164,9 +13109,8 @@ msgid "[Unsaved]"
 msgstr "[Neuloženo]"
 
 #: eeschema/sch_edit_frame.cpp:1282
-#, fuzzy
 msgid "[no schematic loaded]"
-msgstr "Schéma je uloženo"
+msgstr "[není načteno schéma]"
 
 #: eeschema/sch_edit_frame.cpp:1453
 #, c-format
@@ -13421,20 +13365,20 @@ msgid "There is a port for '%s', but no connections to it."
 msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1947
-#, fuzzy, c-format
+#, c-format
 msgid "Embedded file %s not found in storage."
-msgstr "Soubor obnovy \"%s\" nenalezen."
+msgstr "Vložený soubor %s nebyl v úložišti nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1962
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1979
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading image %s."
-msgstr "Vykreslit ohraničení stránky"
+msgstr "Chyba při čtení obrázku %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1973
-#, fuzzy, c-format
+#, c-format
 msgid "File not found %s."
-msgstr "Soubor nenalezen."
+msgstr "Soubor nenalezen %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2096
 #, fuzzy, c-format
@@ -13627,9 +13571,9 @@ msgstr ""
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:442
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2876
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'."
-msgstr "Nelze číst soubor \"%s\""
+msgstr "Nelze číst soubor '%s'."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1269
 #, c-format
@@ -13661,9 +13605,13 @@ msgid "Invalid parent symbol name"
 msgstr "Neplatné jméno signálu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:260
-#, c-format
+#, c-format, fuzzy
 msgid "No parent for extended symbol %s"
-msgstr "Žádný rodič pro rozšířený symbol %s"
+msgstr ""
+"Žádný rodič pro rozšířený symbol %s v\n"
+"souboru: \"%s\"\n"
+"řádek: %d\n"
+"offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:275
 #, fuzzy
@@ -13676,9 +13624,13 @@ msgid "Invalid symbol unit name prefix %s"
 msgstr "Neplatný prefix jednotky"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:293
-#, c-format
+#, c-format, fuzzy
 msgid "Invalid symbol unit name suffix %s"
-msgstr "Neplatná přípona názvu jednotky symbolu %s"
+msgstr ""
+"Přípona neplatného názvu jednotky symbolu %s v\n"
+"souboru: \"%s\"\n"
+"řádek: %d\n"
+"offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:299
 #, fuzzy, c-format
@@ -13686,17 +13638,31 @@ msgid "Invalid symbol unit number %s"
 msgstr "Neplatný identifikátor knihovny symbolů"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
-#, c-format
+#, c-format, fuzzy
 msgid "Invalid symbol convert number %s"
-msgstr "Neplatné číslo konverze symbolu %s"
+msgstr ""
+"Neplatné číslo jednotky symbolu %s v\n"
+"souboru: \"%s\"\n"
+"řádek: %d\n"
+"offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:428
+#, fuzzy
 msgid "Floating point number with incorrect locale"
-msgstr "Plovoucí číslo s nesprávným oddělovačem"
+msgstr ""
+"Číslo s plovoucí desetinnou čárkou se špatnou místní hodnotou v\n"
+"souboru: \"%s\"\n"
+"řádek: %d\n"
+"offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:438
+#, fuzzy
 msgid "Invalid floating point number"
-msgstr "Neplatné plovoucí číslo"
+msgstr ""
+"Neplatné reálné číslo v\n"
+"souboru: \"%s\"\n"
+"řádek: %d\n"
+"offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:444
 #, fuzzy
@@ -13756,9 +13722,8 @@ msgid "Invalid title block comment number"
 msgstr ""
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1784
-#, fuzzy
 msgid "Invalid sheet pin name"
-msgstr "Přidat vývody listu"
+msgstr "Neplatný název vývodu listu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1792
 #, fuzzy
@@ -13777,9 +13742,9 @@ msgstr "Neplatný identifikátor knihovny symbolů"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1521
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2610
-#, fuzzy, c-format
+#, c-format
 msgid "Library file '%s' not found."
-msgstr "Soubor knihovny \"%s\" nenalezen."
+msgstr "Soubor knihovny '%s' nenalezen."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2081
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4219
@@ -13789,15 +13754,15 @@ msgstr "knihovna %s neobsahuje symbol s názvem %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2249
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4399
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' already exists."
-msgstr "Knihovna %s již existuje."
+msgstr "Knihovna symbolů '%s' již existuje."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2275
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4425
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' cannot be deleted."
-msgstr "knihovnu \"%s\" nelze odstranit"
+msgstr "Knihovnu symbolů '%s' nelze odstranit."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:165
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:207
@@ -13818,9 +13783,9 @@ msgid "expected unquoted string"
 msgstr "očekávaný řetězec bez uvozovek"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:871
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' does not appear to be an Eeschema file."
-msgstr "\"%s\" se nezdá být soubor Eeschema"
+msgstr "'%s' se nezdá být soubor Eeschema"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:901
 msgid "Missing 'EELAYER END'"
@@ -13841,19 +13806,17 @@ msgid "expected 'Italics' or '~'"
 msgstr "očekávané 'Kurzíva' nebo '~'"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1773
-#, fuzzy
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr "atributy textových částí pole musí mít šířku 3 znaky"
+msgstr "atributy textu pole symbolu musí být široké 3 znaky"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2624
-#, fuzzy
 msgid "Unexpected end of file."
-msgstr "Neočekávaný konec souboru"
+msgstr "Neočekávaný konec souboru."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2710
 #, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr "Nedostatek požadovaných oprávnění ke čtení knihovny '%s'."
+msgstr "Nedostatečné oprávnění ke čtení knihovny '%s'."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2719
 msgid "symbol document library file is empty"
@@ -14574,9 +14537,8 @@ msgid "There was an error while saving the workbook file"
 msgstr "Při ukládání souboru sešitu došlo k chybě"
 
 #: eeschema/sim/sim_plot_frame.cpp:1145
-#, fuzzy
 msgid "Save Simulation Workbook As"
-msgstr "Uložit záznamy simulace"
+msgstr "Uložit sešit simulace jako"
 
 #: eeschema/sim/sim_plot_frame.cpp:1164
 msgid "Save Plot as Image"
@@ -14769,9 +14731,9 @@ msgid "Please, fill required fields"
 msgstr "Prosím, vyplňte povinná pole"
 
 #: eeschema/sim/spice_value.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid Spice value."
-msgstr "\"%s\" není platná hodnota Spice"
+msgstr "'%s' není platná hodnota Spice."
 
 #: eeschema/symbol_async_loader.cpp:126
 #, c-format
@@ -14785,9 +14747,9 @@ msgstr ""
 "%s\n"
 
 #: eeschema/symbol_async_loader.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library %s..."
-msgstr "Načítání knihovny \"%s\""
+msgstr "Načítání knihovny %s..."
 
 #: eeschema/symbol_editor/lib_logger.cpp:64
 msgid ""
@@ -14874,9 +14836,9 @@ msgid "Open %s"
 msgstr "Otevřít %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:826
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' already exists."
-msgstr "Knihovna %s již existuje."
+msgstr "Knihovna '%s' již existuje."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:834
 #, fuzzy, c-format
@@ -14893,9 +14855,9 @@ msgid "Could not open the library file."
 msgstr "Soubor knihovny nelze otevřít."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'..."
-msgstr "Načítání knihovny '%s'"
+msgstr "Načítání knihovny '%s'..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
 #: pcbnew/footprint_libraries_utils.cpp:504
@@ -14923,9 +14885,9 @@ msgid "Add To Library Table"
 msgstr "Přidat do tabulky knihoven"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save backup to '%s'."
-msgstr "Selhalo uložení zálohy do \"%s\""
+msgstr "Selhalo uložení zálohy do '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1181
 #: eeschema/symbol_viewer_frame.cpp:391
@@ -15018,18 +14980,16 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:146
-#, fuzzy
 msgid "[from schematic]"
-msgstr "%s%s [ze schématu]"
+msgstr "[ze schématu]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:156
 msgid "[Read Only Library]"
 msgstr "[Knihovna pouze pro čtení]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:160
-#, fuzzy
 msgid "[no symbol loaded]"
-msgstr "není vybrán žádný symbol"
+msgstr "[nenačten žádný symbol]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:188
 msgid "No symbol libraries are loaded."
@@ -15048,9 +15008,9 @@ msgid "This new symbol has no name and cannot be created."
 msgstr "Nový symbol nemá jméno a nemůže být vytvořen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "Symbol '%s' již existuje v knihovně '%s'"
+msgstr "Symbol '%s' již existuje v knihovně '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:527
 #: eeschema/tools/symbol_editor_control.cpp:506
@@ -15103,9 +15063,9 @@ msgid "Symbol '%s' already exists in library '%s'"
 msgstr "Symbol '%s' již existuje v knihovně '%s'"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use."
-msgstr "Název '%s' se již používá."
+msgstr "Název symbolu '%s' se již používá."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:732
 #, c-format
@@ -15114,7 +15074,7 @@ msgid ""
 "Do you want to remove it from the library?"
 msgstr ""
 "Symbol '%s' byl upraven.\n"
-"Chcete jej odstranit z knihovny?"
+"Přejete si ho odstranit z knihovny?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:743
 #, c-format
@@ -15136,38 +15096,37 @@ msgstr "Ponechat symbol"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:892
 #: pcbnew/footprint_libraries_utils.cpp:1065
-#, fuzzy, c-format
+#, c-format
 msgid "Revert '%s' to last version saved?"
-msgstr "Vrátit \"%s\" na poslední uloženou verzi?"
+msgstr "Vrátit '%s' na poslední uloženou verzi?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:960
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s not found in library '%s'."
-msgstr "Součástka \"%s\" nenalezena v knihovně \"%s\"."
+msgstr "Symbol %s nenalezen v knihovně '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:989
 msgid "No library specified."
 msgstr "Knihovna není zvolena."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Save Library '%s' As..."
-msgstr "Uložit knihovnu \"%s\" jako..."
+msgstr "Uložit knihovnu '%s' jako..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1047
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save changes to symbol library file '%s'."
-msgstr "Nepodařilo se uložit změny do souboru knihovny symbolů \"%s\""
+msgstr "Nepodařilo se uložit změny do souboru knihovny symbolů '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1049
-#, fuzzy
 msgid "Error Saving Library"
 msgstr "Chyba při ukládání knihovny"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1092
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' saved."
-msgstr "Soubor knihovny symbolů \"%s\" uložen"
+msgstr "Soubor knihovny symbolů '%s' uložen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1192
 msgid "Undefined!"
@@ -15197,20 +15156,20 @@ msgid "Import Symbol"
 msgstr "Importovat symbol"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol library '%s'."
-msgstr "Nelze importovat knihovnu symbolů \"%s\"."
+msgstr "Nelze importovat knihovnu symbolů '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' is empty."
-msgstr "Soubor knihovny symbolů \"%s\" je prázdný."
+msgstr "Soubor knihovny symbolů '%s' je prázdný."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "Symbol '%s' již existuje v knihovně '%s'"
+msgstr "Symbol %s již existuje v knihovně '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:114
 msgid "There is no symbol selected to save."
@@ -15221,9 +15180,9 @@ msgid "Export Symbol"
 msgstr "Exportovat symbol"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr "Chyba při pokusu o načtení souboru knihovny symbolů \"%s\""
+msgstr "Chyba při pokusu o načtení souboru knihovny symbolů '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:157
 #: kicad/tools/kicad_manager_control.cpp:257
@@ -15240,48 +15199,48 @@ msgid "Insufficient permissions to save library '%s'."
 msgstr "Nedostatečná oprávnění k uložení knihovny '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating symbol library '%s'."
-msgstr "Chyba při vytváření knihovny symbolů \"%s\""
+msgstr "Chyba při vytváření knihovny symbolů '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s saved to library '%s'."
-msgstr "Symbol \"%s\" uložen do knihovny \"%s\""
+msgstr "Symbol %s uložen do knihovny '%s'."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:106
 #: eeschema/symbol_tree_model_adapter.cpp:105
 msgid "Errors loading symbols:"
-msgstr "Chyby načítání symbolů:"
+msgstr "Chyby při načítání symbolů:"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
-msgstr "Knihovna nebyla nalezena v tabulce knihoven symbolů."
+msgstr "Knihovna '%s' nebyla nalezena v tabulce knihoven symbolů."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:402
 msgid "Symbol not found."
 msgstr "Symbol nenalezen."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'. (%s)"
-msgstr "Chyba při načítání symbolu \"%s\" z knihovny \"%s\".(%s)"
+msgstr "Chyba při načítání symbolu %s z knihovny '%s'. (%s)"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
-msgstr "Chyba při načítání symbolu '%s' z knihovny '%s'."
+msgstr "Nelze načíst symbol '%s' z knihovny '%s'."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot enumerate library '%s'."
-msgstr "Nelze vyjmenovat knihovnu \"%s\" (%s)"
+msgstr "Nelze vyjmenovat knihovnu '%s'."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:1053
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving symbol %s to library '%s'."
-msgstr "Chyba při načítání symbolu '%s' z knihovny '%s'."
+msgstr "Chyba při ukládání symbolu %s do knihovny '%s'."
 
 #: eeschema/symbol_lib_table.cpp:229
 #, fuzzy, c-format
@@ -15294,7 +15253,7 @@ msgstr ""
 #: eeschema/symbol_library.cpp:572 eeschema/symbol_tree_model_adapter.cpp:153
 #, c-format
 msgid "Error loading symbol library '%s'."
-msgstr "Chyba načítání knihovny symbolů '%s'."
+msgstr "Chyba při načítání knihovny symbolu '%s'."
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:259
 msgid "(failed to load)"
@@ -15310,9 +15269,8 @@ msgid "Unit %c"
 msgstr "Jednotka %c"
 
 #: eeschema/symbol_viewer_frame.cpp:905 pcbnew/footprint_viewer_frame.cpp:1027
-#, fuzzy
 msgid "[no library selected]"
-msgstr "není vybrána knihovna"
+msgstr "[nevybrána žádná knihovna]"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Choose symbol"
@@ -15355,9 +15313,9 @@ msgid "Change Visibility"
 msgstr "Změnit viditelnost"
 
 #: eeschema/tools/assign_footprints.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open symbol-footprint link file '%s'."
-msgstr "Selhalo otevření odkazu souboru součástka-pouzdro \"%s\""
+msgstr "Selhalo otevření odkazu souboru symbol-pouzdro '%s'."
 
 #: eeschema/tools/backannotate.cpp:73
 msgid "Select at least one property to back annotate."
@@ -16298,7 +16256,7 @@ msgstr "Dokončení čáry"
 
 #: eeschema/tools/ee_actions.cpp:728
 msgid "Complete connected lines with current segment"
-msgstr ""
+msgstr "Dokončete spojené čáry s aktuálním segmentem"
 
 #: eeschema/tools/ee_actions.cpp:737 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/dialogs/panel_edit_options_base.cpp:340
@@ -16436,9 +16394,8 @@ msgid "No symbol issues found."
 msgstr "Nenalezeny problémy se symbolem."
 
 #: eeschema/tools/ee_inspection_tool.cpp:495
-#, fuzzy
 msgid "No datasheet defined."
-msgstr "Nedefinované vrtání prokovu."
+msgstr "Nedefinován žádný datasheet."
 
 #: eeschema/tools/ee_selection_tool.cpp:1590
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
@@ -16462,9 +16419,9 @@ msgstr ""
 #: eeschema/tools/sch_drawing_tools.cpp:516
 #: pagelayout_editor/pl_editor_frame.cpp:855
 #: pagelayout_editor/pl_editor_frame.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "Could not load image from '%s'."
-msgstr "Nelze načíst obrázek z \"%s\""
+msgstr "Nelze načíst obrázek z '%s'."
 
 #: eeschema/tools/sch_drawing_tools.cpp:643
 #: eeschema/tools/sch_drawing_tools.cpp:1149
@@ -16561,13 +16518,13 @@ msgid "Select netclass:"
 msgstr "Vybrat třídu spojů:"
 
 #: eeschema/tools/sch_editor_control.cpp:1540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The pasted sheet '%s'\n"
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
-"Vložení listu \"%s\"\n"
+"Vložení listu '%s'\n"
 "bylo zrušeno, protože cíl již má list nebo jednu z jeho podřízených listů "
 "jako nadřazenou."
 
@@ -16605,9 +16562,9 @@ msgid "Image File Name"
 msgstr "Název obrázku"
 
 #: eeschema/tools/symbol_editor_control.cpp:408
-#, fuzzy, c-format
+#, c-format
 msgid "Can't save file '%s'."
-msgstr "Nelze uložit soubor \"%s\"."
+msgstr "Nelze uložit soubor '%s'."
 
 #: eeschema/tools/symbol_editor_control.cpp:437
 msgid "Filename:"
@@ -16904,13 +16861,13 @@ msgstr ""
 "<b>Nenačteno:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "<b>Memory was exhausted reading:</b> <i>%s</i>"
 msgstr ""
 "\n"
-"<b>Nenačteno:</b> <i>%s</i>"
+"<b>Paměť byla vyčerpána čtením:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:87
 msgid "Zip files"
@@ -16985,9 +16942,9 @@ msgid "Loading Gerber files..."
 msgstr "Načítání souborů Gerber..."
 
 #: gerbview/files.cpp:245 gerbview/files.cpp:252
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %u/%zu %s..."
-msgstr "Načítání %u/%zu %s"
+msgstr "Načítání %u/%zu %s..."
 
 #: gerbview/files.cpp:276
 #, c-format
@@ -16999,24 +16956,24 @@ msgid "Open NC (Excellon) Drill File(s)"
 msgstr "Otevřít soubor(y) vrtání NC (Excellon)"
 
 #: gerbview/files.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Zip file '%s' cannot be opened."
-msgstr "Soubor Zip \"%s\" nelze otevřít"
+msgstr "Soubor Zip '%s' nelze otevřít."
 
 #: gerbview/files.cpp:513
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (unknown type).\n"
-msgstr "Info: přeskočit soubor \"%s\" (neznámý typ)\n"
+msgstr "Přeskočený soubor '%s' (neznámý typ).\n"
 
 #: gerbview/files.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (gerber job file).\n"
-msgstr "Info: přeskočit soubor \"%s\" ( gerber job soubor)\n"
+msgstr "Přeskočený soubor '%s' (gerber job soubor).\n"
 
 #: gerbview/files.cpp:566
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>\n"
-msgstr "<b>Nelze vytvořit přechodný soubor \"%s\"</b>\n"
+msgstr "<b>Nelze vytvořit přechodný soubor '%s'.</b>\n"
 
 #: gerbview/files.cpp:596
 #, c-format
@@ -17445,19 +17402,18 @@ msgid "D Codes"
 msgstr "D kódy"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Source file '%s' not found."
-msgstr "Soubor schématu \"%s\" nenalezen."
+msgstr "Zdrojový soubor '%s' nenalezen."
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#, fuzzy
 msgid "No editor defined. Please select one."
-msgstr "Není definován editor. Prosím vyberte některý"
+msgstr "Není definován editor. Prosím vyberte jeden."
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "No file loaded on the active layer %d."
-msgstr "Nenačten žádný soubor na aktivní vrstvu %d"
+msgstr "Nenačten žádný soubor na aktivní vrstvě %d."
 
 #: gerbview/tools/gerbview_selection_tool.cpp:48
 msgid "Highlight"
@@ -17713,9 +17669,9 @@ msgid "Target Directory"
 msgstr "Cílový adresář"
 
 #: kicad/files-io.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Unzipping project in '%s'.\n"
-msgstr "Rozbaluji projekt do \"%s\"\n"
+msgstr "Rozbaluji projekt do '%s'.\n"
 
 #: kicad/files-io.cpp:117
 msgid "Archive Project Files"
@@ -17786,9 +17742,8 @@ msgid "Load File to Edit"
 msgstr "Načíst soubor k úpravám"
 
 #: kicad/kicad_manager_frame.cpp:622
-#, fuzzy
 msgid "[no project loaded]"
-msgstr "Nenačteno pouzdro."
+msgstr "[nenačten žádný projekt]"
 
 #: kicad/kicad_manager_frame.cpp:625
 msgid "KiCad "
@@ -17881,18 +17836,17 @@ msgid "Could open the template path!"
 msgstr "Nelze otevřít cestu šablon!"
 
 #: kicad/project_template.cpp:57
-#, fuzzy
 msgid "Couldn't open the meta information directory for this template!"
-msgstr "Nelze otevřít adresář meta informací pro tuto šablonu!"
+msgstr "Adresář meta informací pro tuto šablonu nelze otevřít!"
 
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
 msgstr "Nelze najít informační soubor meta HTML pro tuto šablonu!"
 
 #: kicad/project_template.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create folder '%s'."
-msgstr "Nelze vytvořit složku \"%s\"."
+msgstr "Nelze vytvořit složku '%s'."
 
 #: kicad/project_tree_item.cpp:110
 msgid ""
@@ -18013,9 +17967,8 @@ msgid "Delete the files and their contents"
 msgstr "Smazat soubory i s jeho obsahem"
 
 #: kicad/project_tree_pane.cpp:793
-#, fuzzy
 msgid "Move to Trash"
-msgstr "Převést na pouzdra"
+msgstr "Přesunout do koše"
 
 #: kicad/project_tree_pane.cpp:807
 msgid "Print the contents of the file"
@@ -18177,22 +18130,22 @@ msgid "Open Existing Project"
 msgstr "Načíst existující projekt"
 
 #: kicad/tools/kicad_manager_control.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy folder '%s'."
-msgstr "Nelze kopírovat složku \"%s\"."
+msgstr "Nelze kopírovat složku '%s'."
 
 #: kicad/tools/kicad_manager_control.cpp:518
 msgid "Save Project To"
 msgstr "Uložit projekt do"
 
 #: kicad/tools/kicad_manager_control.cpp:538
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
 "Please make sure you have write permissions and try again."
 msgstr ""
-"Adresář \"%s\" nelze vytvořit.\n"
+"Složku '%s' nelze vytvořit.\n"
 "\n"
 "Ujistěte se, že máte oprávnění k zápisu a zkuste to znovu."
 
@@ -18307,14 +18260,12 @@ msgid "New Item"
 msgstr "Nová položka"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:236
-#, fuzzy
 msgid "Print Drawing Sheet"
-msgstr "Výkresový list"
+msgstr "Tisk výkresového listu"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:241
-#, fuzzy
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr "Došlo k chybě při pokusu tisku schématu."
+msgstr "Při pokusu o tisk listu výkresu došlo k chybě."
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:242
 msgid "Printing"
@@ -18522,9 +18473,9 @@ msgid "File \"%s\" saved."
 msgstr "Soubor \"%s\" uložen."
 
 #: pagelayout_editor/files.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write '%s'."
-msgstr "Nelze zapisovat \"%s\""
+msgstr "Nelze zapisovat '%s'."
 
 #: pagelayout_editor/files.cpp:185
 msgid "Save As"
@@ -18536,9 +18487,8 @@ msgid "Unable to create \"%s\""
 msgstr "Nelze vytvořit \"%s\""
 
 #: pagelayout_editor/files.cpp:235
-#, fuzzy
 msgid "Error reading drawing sheet"
-msgstr "Vykreslit ohraničení stránky"
+msgstr "Chyba při čtení listu výkresu"
 
 #: pagelayout_editor/files.cpp:257
 msgid "Layout file is read only."
@@ -18557,18 +18507,17 @@ msgid "Properties"
 msgstr "Vlastnosti"
 
 #: pagelayout_editor/pl_editor_frame.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "Chyba při načítání listu výkresu"
+msgstr "Chyba při načítání listu výkresu '%s'."
 
 #: pagelayout_editor/pl_editor_frame.cpp:440
 msgid "Error Init Printer info"
 msgstr "Chyba inicializace tiskárny"
 
 #: pagelayout_editor/pl_editor_frame.cpp:553
-#, fuzzy
 msgid "[no drawing sheet loaded]"
-msgstr "Vykreslit ohraničení stránky"
+msgstr "[nenačten výkresový list]"
 
 #: pagelayout_editor/pl_editor_frame.cpp:761
 #, c-format
@@ -19176,9 +19125,8 @@ msgid "Insulator mu:"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
-#, fuzzy
 msgid "Conductor mu:"
-msgstr "Délka vodiče:"
+msgstr "Vodič mu:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:857
 msgid "Component Parameters"
@@ -19355,9 +19303,8 @@ msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
 msgstr "Použití hodnoty tepelné vodivosti 401 Wattů/(metr-Kelvin)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1391
-#, fuzzy
 msgid "deg C/W"
-msgstr "°C"
+msgstr "°C/W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1395
 msgid "Estimated ampacity:"
@@ -19691,9 +19638,9 @@ msgid "Do you want to load this file and replace current regulator list?"
 msgstr "Chcete načíst tento soubor a nahradit stávající seznam regulátorů?"
 
 #: pcb_calculator/regulators_funct.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read data file '%s'."
-msgstr "Nelze číst soubor dat \"%s\""
+msgstr "Nelze číst soubor dat '%s'."
 
 #: pcb_calculator/regulators_funct.cpp:196
 msgid "This regulator is already in list. Aborted"
@@ -19824,7 +19771,6 @@ msgstr "Výška obdélníku"
 #: pcb_calculator/transline_ident.cpp:217
 #: pcb_calculator/transline_ident.cpp:325
 #: pcb_calculator/transline_ident.cpp:367
-#, fuzzy
 msgid "Strip thickness"
 msgstr "Tloušťka pásku"
 
@@ -19882,7 +19828,6 @@ msgstr "Tloušťka čáry"
 #: pcb_calculator/transline_ident.cpp:298
 #: pcb_calculator/transline_ident.cpp:339
 #: pcb_calculator/transline_ident.cpp:375
-#, fuzzy
 msgid "Line length"
 msgstr "Délka vedení"
 
@@ -19980,24 +19925,20 @@ msgid "Effective %s (odd):"
 msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:314
-#, fuzzy
 msgid "Conductor losses (even):"
-msgstr "Ztráty vodičů Even:"
+msgstr "Ztráty vodičů (even):"
 
 #: pcb_calculator/transline_ident.cpp:315
-#, fuzzy
 msgid "Conductor losses (odd):"
-msgstr "Ztráty vodičů Odd:"
+msgstr "Ztráty vodičů (odd):"
 
 #: pcb_calculator/transline_ident.cpp:316
-#, fuzzy
 msgid "Dielectric losses (even):"
-msgstr "Even dielektrické ztráty:"
+msgstr "Dielektrické ztráty (even):"
 
 #: pcb_calculator/transline_ident.cpp:317
-#, fuzzy
 msgid "Dielectric losses (odd):"
-msgstr "Odd dielektrické ztráty:"
+msgstr "Dielektrické ztráty (odd):"
 
 #: pcb_calculator/transline_ident.cpp:342
 msgid "Zeven"
@@ -20016,9 +19957,8 @@ msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
 msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:364
-#, fuzzy
 msgid "Distance between strip and top metal"
-msgstr "vzdálenost mezi páskem a kovovým povrchem"
+msgstr "Vzdálenost mezi páskem a kovovým povrchem"
 
 #: pcb_calculator/transline_ident.cpp:395
 msgid "Twists"
@@ -20317,9 +20257,9 @@ msgid "PrePreg"
 msgstr "Prepreg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' (sublayer %d/%d)"
-msgstr "Vrstva \"%s\" (podvrstva %d/%d)"
+msgstr "Vrstva '%s' (podvrstva %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:212
 msgid "Add Dielectric Layer"
@@ -20327,23 +20267,21 @@ msgstr "Přidat dielektrickou vrstvu"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
 #: pcbnew/dialogs/panel_setup_layers.cpp:821
-#, fuzzy
 msgid "Select layer to add:"
-msgstr "Zvolte Github knihovny pro přidání:"
+msgstr "Vybrat vrstvu pro přidání:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' sublayer %d/%d"
-msgstr "Vrstva \"%s\" (podvrstva %d/%d)"
+msgstr "Vrstva '%s' podvrstva %d/%d"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:268
 msgid "Remove Dielectric Layer"
 msgstr "Odstranit dielektrickou vrstvu"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:269
-#, fuzzy
 msgid "Select layer to remove:"
-msgstr "Vybrat knihovnu k prohlížení"
+msgstr "Vybrat vrstvu pro odstranění:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:454
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1193
@@ -20476,14 +20414,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
-#, fuzzy
 msgid "Add Dielectric Layer..."
-msgstr "Přidat dielektrickou vrstvu"
+msgstr "Přidat dielektrickou vrstvu..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:48
-#, fuzzy
 msgid "Remove Dielectric Layer..."
-msgstr "Odstranit dielektrickou vrstvu"
+msgstr "Odstranit dielektrickou vrstvu..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:72
 #: pcbnew/build_BOM_from_board.cpp:109
@@ -20768,7 +20704,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:309
 msgid "the last front footprint + 1"
-msgstr "Poslední pouzdro nahoře + 1"
+msgstr "poslední pouzdro nahoře + 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:317
 #, c-format
@@ -20812,7 +20748,7 @@ msgstr "umístění pouzdra"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:350
 msgid "reference designator location"
-msgstr "Umístění označení reference"
+msgstr "umístění označení reference"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:492
 #, c-format
@@ -21189,8 +21125,9 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:614
 #: pcbnew/tools/pcb_control.cpp:1022
+#, fuzzy
 msgid "Loading PCB"
-msgstr "Načítání DPS"
+msgstr "Načítání"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:220
 #, c-format
@@ -24009,18 +23946,24 @@ msgid "footprint"
 msgstr "pouzdro"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
-#, c-format
+#, c-format, fuzzy
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr "Nastala chyba při zápisu prázdné tabulky knihoven pouzder '%s'."
+msgstr ""
+"Chyba nastala při zápisu prázdné tabulky knihovny symbolů.\n"
+"\n"
+"%s"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 msgid "Please select a footprint library table file."
 msgstr "Prosím, vyberte soubor tabulky knihovnu pouzder."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
-#, c-format
+#, c-format, fuzzy
 msgid "'%s' is not a valid footprint library table."
-msgstr "'%s' není platný soubor tabulky knihoven pouzder."
+msgstr ""
+"Soubor \"%s\" není platný soubor tabulky knihovny symbolů.\n"
+"\n"
+"%s"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
 #, fuzzy, c-format
@@ -28747,15 +28690,15 @@ msgid "Footprint Report"
 msgstr "Report pouzdra"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:124
-#, c-format
+#, c-format, fuzzy
 msgid "Created file '%s'"
-msgstr "Vytvořený soubor '%s'"
+msgstr "Vytvořit soubor %s"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:354
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:113
-#, c-format
+#, c-format, fuzzy
 msgid "Created file '%s'."
-msgstr "Vytvořený soubor '%s'."
+msgstr "Vytvořit soubor %s"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:152
 #, fuzzy, c-format
@@ -28810,9 +28753,9 @@ msgid "Recovery file '%s' not found."
 msgstr "Soubor obnovy \"%s\" nenalezen."
 
 #: pcbnew/files.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "OK pro načtení souboru obnovení \"%s\""
+msgstr "OK pro načtení souboru obnovení '%s'?"
 
 #: pcbnew/files.cpp:374
 #, fuzzy, c-format
@@ -30367,8 +30310,9 @@ msgid "Schematic file '%s' not found."
 msgstr "Soubor schématu \"%s\" nenalezen."
 
 #: pcbnew/pcb_edit_frame.cpp:1488
+#, fuzzy
 msgid "Eeschema failed to load."
-msgstr "Eeschema se nepodařilo načíst."
+msgstr "Eeschema se nepodařilo načíst:"
 
 #: pcbnew/pcb_edit_frame.cpp:1627
 msgid "Edit design rules"
@@ -31559,9 +31503,9 @@ msgid "Undefined layers:"
 msgstr "Nedefinované vrstvy:"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1010
-#, c-format
+#, c-format, fuzzy
 msgid "Page type '%s' is not valid."
-msgstr "Typ stránky '%s' není platný."
+msgstr "Typ stránky \"%s\" není platný"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1541
 #, fuzzy, c-format
