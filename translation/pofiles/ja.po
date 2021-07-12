@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-12 08:34+0000\n"
+"PO-Revision-Date: 2021-07-15 02:34+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -8015,11 +8015,11 @@ msgstr "以降のクリックのためにシンボルを選択したままにし
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:151
 msgid "Place all units"
-msgstr "全ユニット配置"
+msgstr "全てのユニットを配置"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:153
 msgid "Sequentially place all units of the symbol."
-msgstr "シンボルの全てのユニットを連続して配置する。"
+msgstr "連続してシンボルの全てのユニットを配置します。"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:407
 #: eeschema/dialogs/dialog_choose_symbol.cpp:466
