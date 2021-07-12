@@ -907,9 +907,17 @@ class KiCadEditorFrame(KiCadPyFrame):
 class KiCadEditorNotebookFrame(KiCadEditorFrame):
     def __init__(self, parent):
         """Create EditorNotebookFrame instance."""
+
         self.notebook = None
         KiCadEditorFrame.__init__(self, parent)
+
         if self.notebook:
+            """Keep pydoc output on stdout instead of pager and
+                place the stdout into the editor window """
+            import pydoc, sys
+            self._keep_stdin = sys.stdin
+            pydoc.pager = pydoc.plainpager
+
             dispatcher.connect(receiver=self._editorChange,
                                signal='EditorChange', sender=self.notebook)
 
@@ -934,6 +942,7 @@ class KiCadEditorNotebookFrame(KiCadEditorFrame):
         self.notebook.AddPage(page=self.crust, text='*Shell*', select=True)
         self.setEditor(self.crust.editor)
         self.crust.editor.SetFocus()
+
 
     def _editorChange(self, editor):
         """Editor change signal receiver."""
