@@ -108,6 +108,12 @@ class PcbnewPyShell(editor.EditorNotebookFrame):
         self.setEditor(self.crust.editor)
         self.crust.editor.SetFocus()
 
+        """Keep pydoc output on stdout instead of pager and
+            place the stdout into the editor window """
+        import pydoc, sys
+        self._keep_stdin = sys.stdin
+        pydoc.pager = pydoc.plainpager
+
         self.LoadHistory()
 
     def OnAbout(self, event):
