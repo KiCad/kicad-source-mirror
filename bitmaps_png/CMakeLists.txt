@@ -152,6 +152,7 @@ set( BMAPS_MID
     add_orthogonal_dimension
     add_pcb_target
     add_power
+    add_radial_dimension
     add_rectangle
     add_symbol_to_schematic
     add_tracks

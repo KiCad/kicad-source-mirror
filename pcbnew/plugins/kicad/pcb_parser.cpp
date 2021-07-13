@@ -2847,6 +2847,10 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
             dimension = std::make_unique<PCB_DIM_CENTER>( nullptr );
             break;
 
+        case T_radial:
+            dimension = std::make_unique<PCB_DIM_RADIAL>( nullptr );
+            break;
+
         default:
             wxFAIL_MSG( wxT( "Cannot parse unknown dimension type %s" ) +
                         GetTokenString( CurTok() ) );
@@ -2918,6 +2922,16 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
                          wxT( "Invalid height token" ) );
             PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dimension.get() );
             aligned->SetHeight( parseBoardUnits( "dimension height value" ) );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_leader_length:
+        {
+            wxCHECK_MSG( dimension->Type() == PCB_DIM_RADIAL_T, nullptr,
+                         wxT( "Invalid leader_length token" ) );
+            PCB_DIM_RADIAL* radial = static_cast<PCB_DIM_RADIAL*>( dimension.get() );
+            radial->SetLeaderLength( parseBoardUnits( "dimension leader length value" ) );
             NeedRIGHT();
             break;
         }
@@ -3055,7 +3069,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
 
                     int textFrame = parseInt( "dimension text frame mode" );
                     textFrame = std::max( 0, std::min( 3, textFrame ) );
-                    leader->SetTextFrame( static_cast<DIM_TEXT_FRAME>( textFrame ) );
+                    leader->SetTextBorder( static_cast<DIM_TEXT_BORDER>( textFrame ));
                     NeedRIGHT();
                     break;
                 }

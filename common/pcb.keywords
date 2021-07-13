@@ -157,6 +157,7 @@ last_trace_width
 layer
 layers
 leader
+leader_length
 left
 linear
 links
@@ -225,6 +226,7 @@ prefix
 primitives
 priority
 pts
+radial
 radius
 rev
 rect

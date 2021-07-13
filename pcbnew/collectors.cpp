@@ -52,6 +52,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     PCB_SHAPE_T,            // in m_drawings
     PCB_DIM_ALIGNED_T,      // in m_drawings
     PCB_DIM_CENTER_T,       // in m_drawings
+    PCB_DIM_RADIAL_T,       // in m_drawings
     PCB_DIM_ORTHOGONAL_T,   // in m_drawings
     PCB_DIM_LEADER_T,       // in m_drawings
     PCB_TARGET_T,           // in m_drawings
@@ -74,6 +75,7 @@ const KICAD_T GENERAL_COLLECTOR::BoardLevelItems[] = {
     PCB_DIM_ALIGNED_T,
     PCB_DIM_ORTHOGONAL_T,
     PCB_DIM_CENTER_T,
+    PCB_DIM_RADIAL_T,
     PCB_DIM_LEADER_T,
     PCB_TARGET_T,
     PCB_VIA_T,
@@ -141,6 +143,7 @@ const KICAD_T GENERAL_COLLECTOR::Dimensions[] = {
     PCB_DIM_LEADER_T,
     PCB_DIM_ORTHOGONAL_T,
     PCB_DIM_CENTER_T,
+    PCB_DIM_RADIAL_T,
     EOT
 };
 
@@ -286,6 +289,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
         dimension = static_cast<PCB_DIMENSION_BASE*>( item );

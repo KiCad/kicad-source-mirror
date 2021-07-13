@@ -100,6 +100,7 @@ enum KICAD_T
     PCB_DIM_ALIGNED_T,      ///< class PCB_DIM_ALIGNED, a linear dimension (graphic item)
     PCB_DIM_LEADER_T,       ///< class PCB_DIM_LEADER, a leader dimension (graphic item)
     PCB_DIM_CENTER_T,       ///< class PCB_DIM_CENTER, a center point marking (graphic item)
+    PCB_DIM_RADIAL_T,       ///< class PCB_DIM_RADIAL, a radius or diameter dimension
     PCB_DIM_ORTHOGONAL_T,   ///< class PCB_DIM_ORTHOGONAL, a linear dimension constrained to x/y
     PCB_TARGET_T,           ///< class PCB_TARGET, a target (graphic item)
     PCB_ZONE_T,             ///< class ZONE, a copper pour area
@@ -257,6 +258,7 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
         return PCB_DIMENSION_T;

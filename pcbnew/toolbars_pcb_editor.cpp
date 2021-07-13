@@ -409,6 +409,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
                                            { &PCB_ACTIONS::drawAlignedDimension,
                                              &PCB_ACTIONS::drawOrthogonalDimension,
                                              &PCB_ACTIONS::drawCenterDimension,
+                                             &PCB_ACTIONS::drawRadialDimension,
                                              &PCB_ACTIONS::drawLeader } );
     }
 

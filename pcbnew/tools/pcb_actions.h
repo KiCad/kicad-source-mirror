@@ -144,6 +144,7 @@ public:
     static TOOL_ACTION placeText;
     static TOOL_ACTION drawAlignedDimension;
     static TOOL_ACTION drawCenterDimension;
+    static TOOL_ACTION drawRadialDimension;
     static TOOL_ACTION drawOrthogonalDimension;
     static TOOL_ACTION drawLeader;
     static TOOL_ACTION drawZone;

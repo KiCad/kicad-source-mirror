@@ -248,6 +248,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_VIA_T:              // a via (like track segment on a copper layer)
                 case PCB_DIM_ALIGNED_T:      // a dimension (graphic item)
                 case PCB_DIM_CENTER_T:
+                case PCB_DIM_RADIAL_T:
                 case PCB_DIM_ORTHOGONAL_T:
                 case PCB_DIM_LEADER_T:       // a leader dimension
                 case PCB_TARGET_T:           // a target (graphic item)

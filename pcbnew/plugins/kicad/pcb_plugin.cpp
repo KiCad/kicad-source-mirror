@@ -409,6 +409,7 @@ void PCB_PLUGIN::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
         format( static_cast<const PCB_DIMENSION_BASE*>( aItem ), aNestLevel );
@@ -709,6 +710,7 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
     const PCB_DIM_ALIGNED*    aligned = dynamic_cast<const PCB_DIM_ALIGNED*>( aDimension );
     const PCB_DIM_ORTHOGONAL* ortho   = dynamic_cast<const PCB_DIM_ORTHOGONAL*>( aDimension );
     const PCB_DIM_CENTER*     center  = dynamic_cast<const PCB_DIM_CENTER*>( aDimension );
+    const PCB_DIM_RADIAL*     radial  = dynamic_cast<const PCB_DIM_RADIAL*>( aDimension );
     const PCB_DIM_LEADER*     leader  = dynamic_cast<const PCB_DIM_LEADER*>( aDimension );
 
     m_out->Print( aNestLevel, "(dimension" );
@@ -722,6 +724,8 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
         m_out->Print( 0, " (type leader)" );
     else if( aDimension->Type() == PCB_DIM_CENTER_T )
         m_out->Print( 0, " (type center)" );
+    else if (aDimension->Type() == PCB_DIM_RADIAL_T )
+        m_out->Print( 0, " (type radial)" );
     else if( aDimension->Type() == PCB_DIM_ORTHOGONAL_T )
         m_out->Print( 0, " (type orthogonal)" );
     else
@@ -743,6 +747,12 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
     {
         m_out->Print( aNestLevel+1, "(height %s)\n",
                       FormatInternalUnits( aligned->GetHeight() ).c_str() );
+    }
+
+    if( radial )
+    {
+        m_out->Print( aNestLevel+1, "(leader_length %s)\n",
+                      FormatInternalUnits( radial->GetLeaderLength() ).c_str() );
     }
 
     if( ortho )
@@ -789,7 +799,7 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
     }
 
     if( leader )
-        m_out->Print( 0, " (text_frame %d)", static_cast<int>( leader->GetTextFrame() ) );
+        m_out->Print( 0, " (text_frame %d)", static_cast<int>( leader->GetTextBorder() ) );
 
     m_out->Print( 0, " (extension_offset %s)",
                   FormatInternalUnits( aDimension->GetExtensionOffset() ).c_str() );

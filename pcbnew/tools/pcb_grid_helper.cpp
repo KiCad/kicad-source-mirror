@@ -679,6 +679,16 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             break;
         }
 
+        case PCB_DIM_RADIAL_T:
+        {
+            const PCB_DIM_RADIAL* radialDim = static_cast<const PCB_DIM_RADIAL*>( aItem );
+            addAnchor( radialDim->GetStart(), CORNER | SNAPPABLE, aItem );
+            addAnchor( radialDim->GetEnd(), CORNER | SNAPPABLE, aItem );
+            addAnchor( radialDim->GetKnee(), CORNER | SNAPPABLE, aItem );
+            addAnchor( radialDim->Text().GetPosition(), CORNER | SNAPPABLE, aItem );
+            break;
+        }
+
         case PCB_DIM_LEADER_T:
         {
             const PCB_DIM_LEADER* leader = static_cast<const PCB_DIM_LEADER*>( aItem );

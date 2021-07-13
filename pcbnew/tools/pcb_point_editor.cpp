@@ -95,6 +95,7 @@ enum DIMENSION_POINTS
     DIM_TEXT,
     DIM_CROSSBARSTART,
     DIM_CROSSBAREND,
+    DIM_KNEE = DIM_CROSSBARSTART
 };
 
 
@@ -334,6 +335,25 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         break;
     }
 
+    case PCB_DIM_RADIAL_T:
+    {
+        const PCB_DIM_RADIAL* dimension = static_cast<const PCB_DIM_RADIAL*>( aItem );
+
+        points->AddPoint( dimension->GetStart() );
+        points->AddPoint( dimension->GetEnd() );
+        points->AddPoint( dimension->Text().GetPosition() );
+        points->AddPoint( dimension->GetKnee() );
+
+        points->Point( DIM_KNEE ).SetConstraint( new EC_LINE( points->Point( DIM_START ),
+                                                              points->Point( DIM_END ) ) );
+
+        points->Point( DIM_TEXT ).SetConstraint( new EC_45DEGREE( points->Point( DIM_TEXT ),
+                                                                  points->Point( DIM_KNEE ) ) );
+        points->Point( DIM_TEXT ).SetGridConstraint( IGNORE_GRID );
+
+        break;
+    }
+
     case PCB_DIM_LEADER_T:
     {
         const PCB_DIM_LEADER* dimension = static_cast<const PCB_DIM_LEADER*>( aItem );
@@ -344,6 +364,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
         points->Point( DIM_TEXT ).SetConstraint( new EC_45DEGREE( points->Point( DIM_TEXT ),
                                                                   points->Point( DIM_END ) ) );
+        points->Point( DIM_TEXT ).SetGridConstraint( IGNORE_GRID );
 
         break;
     }
@@ -1461,6 +1482,54 @@ void PCB_POINT_EDITOR::updateItem() const
         break;
     }
 
+    case PCB_DIM_RADIAL_T:
+    {
+        PCB_DIM_RADIAL* dimension = static_cast<PCB_DIM_RADIAL*>( item );
+
+        if( isModified( m_editPoints->Point( DIM_START ) ) )
+        {
+            dimension->SetStart( (wxPoint) m_editedPoint->GetPosition() );
+            dimension->Update();
+
+            m_editPoints->Point( DIM_KNEE ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_START ),
+                                                                        m_editPoints->Point( DIM_END ) ) );
+        }
+        else if( isModified( m_editPoints->Point( DIM_END ) ) )
+        {
+            wxPoint  oldKnee = dimension->GetKnee();
+
+            dimension->SetEnd( (wxPoint) m_editedPoint->GetPosition() );
+            dimension->Update();
+
+            wxPoint kneeDelta = dimension->GetKnee() - oldKnee;
+            dimension->Text().SetPosition( dimension->Text().GetPosition() + kneeDelta );
+            dimension->Update();
+
+            m_editPoints->Point( DIM_KNEE ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_START ),
+                                                                        m_editPoints->Point( DIM_END ) ) );
+        }
+        else if( isModified( m_editPoints->Point( DIM_KNEE ) ) )
+        {
+            wxPoint  oldKnee = dimension->GetKnee();
+            VECTOR2I arrowVec = m_editPoints->Point( DIM_KNEE ).GetPosition()
+                                - m_editPoints->Point( DIM_END ).GetPosition();
+
+            dimension->SetLeaderLength( arrowVec.EuclideanNorm() );
+            dimension->Update();
+
+            wxPoint kneeDelta = dimension->GetKnee() - oldKnee;
+            dimension->Text().SetPosition( dimension->Text().GetPosition() + kneeDelta );
+            dimension->Update();
+        }
+        else if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
+        {
+            dimension->Text().SetPosition( (wxPoint) m_editedPoint->GetPosition() );
+            dimension->Update();
+        }
+
+        break;
+    }
+
     case PCB_DIM_LEADER_T:
     {
         PCB_DIM_LEADER* dimension = static_cast<PCB_DIM_LEADER*>( item );
@@ -1731,6 +1800,17 @@ void PCB_POINT_EDITOR::updatePoints()
         break;
     }
 
+    case PCB_DIM_RADIAL_T:
+    {
+        const PCB_DIM_RADIAL* dimension = static_cast<const PCB_DIM_RADIAL*>( item );
+
+        m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
+        m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
+        m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->Text().GetPosition() );
+        m_editPoints->Point( DIM_KNEE ).SetPosition( dimension->GetKnee() );
+        break;
+    }
+
     case PCB_DIM_LEADER_T:
     {
         const PCB_DIM_LEADER* dimension = static_cast<const PCB_DIM_LEADER*>( item );
@@ -1857,6 +1937,14 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
     {
         if( isModified( m_editPoints->Point( DIM_END ) ) )
             return m_editPoints->Point( DIM_START );
+
+        break;
+    }
+
+    case PCB_DIM_RADIAL_T:
+    {
+        if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
+            return m_editPoints->Point( DIM_KNEE );
 
         break;
     }

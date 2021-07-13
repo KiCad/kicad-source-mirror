@@ -65,7 +65,7 @@ enum class DIM_UNITS_MODE
 /**
  * Frame to show around dimension text
  */
-enum class DIM_TEXT_FRAME
+enum class DIM_TEXT_BORDER
 {
     NONE,
     RECTANGLE,
@@ -473,15 +473,71 @@ private:
 
 
 /**
+ * A radial dimension indicates either the radius or diameter of an arc or circle.
+ *
+ * A guide to the geometry of a circle dimension:
+ *
+ *     |
+ *   --a--
+ *     |
+ *
+ *
+ *          b_
+ *          |\
+ *            \
+ *             c---d TEXT
+ *
+ * Point a (the center of the arc or circle) is m_start, point b (a point on the arc or circle)
+ * is m_end, point c is m_leaderLength away from b on the a-b vector, and point d is the end of
+ * the "text line". The c-d line is drawn from c to the text center, and clipped on the text
+ * bounding box.
+ */
+class PCB_DIM_RADIAL : public PCB_DIMENSION_BASE
+{
+public:
+    PCB_DIM_RADIAL( BOARD_ITEM* aParent );
+
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && PCB_DIM_RADIAL_T == aItem->Type();
+    }
+
+    EDA_ITEM* Clone() const override;
+
+    virtual void SwapData( BOARD_ITEM* aImage ) override;
+
+    void SetLeaderLength( int aLength ) { m_leaderLength = aLength; }
+    int GetLeaderLength() const { return m_leaderLength; }
+
+    // Returns the point (c).
+    wxPoint GetKnee() const;
+
+    BITMAPS GetMenuImage() const override;
+
+    wxString GetClass() const override
+    {
+        return wxT( "PCB_DIM_RADIAL" );
+    }
+
+protected:
+    void updateText() override;
+    void updateGeometry() override;
+
+private:
+    bool m_isDiameter;
+    int  m_leaderLength;
+};
+
+
+/**
  * A leader is a dimension-like object pointing to a specific point.
  *
  * A guide to the geometry of a leader:
  *
- *     a
- *        _
- *       |\
- *          \
- *            b---c TEXT
+ *     a_
+ *     |\
+ *       \
+ *        b---c TEXT
  *
  * Point (a) is m_start, point (b) is m_end, point (c) is the end of the "text line"
  * The b-c line is drawn from b to the text center, and clipped on the text bounding box.
@@ -507,8 +563,8 @@ public:
         return wxT( "PCB_DIM_LEADER" );
     }
 
-    void SetTextFrame( DIM_TEXT_FRAME aFrame ) { m_textFrame = aFrame; }
-    DIM_TEXT_FRAME GetTextFrame() const { return m_textFrame; }
+    void SetTextBorder( DIM_TEXT_BORDER aFrame ) { m_textBorder = aFrame; }
+    DIM_TEXT_BORDER GetTextBorder() const { return m_textBorder; }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -516,7 +572,7 @@ protected:
     void updateGeometry() override;
 
 private:
-    DIM_TEXT_FRAME m_textFrame;
+    DIM_TEXT_BORDER m_textBorder;
 };
 
 

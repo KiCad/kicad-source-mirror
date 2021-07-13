@@ -894,6 +894,11 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 {
                     dimension = new PCB_DIM_CENTER( m_board );
                 }
+                else if( originalEvent.IsAction( &PCB_ACTIONS::drawRadialDimension ) )
+                {
+                    dimension = new PCB_DIM_RADIAL( m_board );
+                    setMeasurementAttributes( dimension );
+                }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawLeader ) )
                 {
                     dimension = new PCB_DIM_LEADER( m_board );
@@ -930,22 +935,18 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             }
 
             case SET_END:
-            {
-                dimension->SetEnd( (wxPoint) cursorPos );
-                dimension->Update();
-
-                if( Is45Limited() || dimension->Type() == PCB_DIM_CENTER_T )
-                    constrainDimension( dimension );
-
                 // Dimensions that have origin and end in the same spot are not valid
                 if( dimension->GetStart() == dimension->GetEnd() )
-                    --step;
-                else if( dimension->Type() == PCB_DIM_LEADER_T )
-                    dimension->SetText( wxT( "?" ) );
-
-                if( dimension->Type() == PCB_DIM_CENTER_T )
                 {
-                    // No separate height/text step
+                    --step;
+                    break;
+                }
+
+                if( dimension->Type() == PCB_DIM_CENTER_T
+                        || dimension->Type() == PCB_DIM_RADIAL_T
+                        || dimension->Type() == PCB_DIM_LEADER_T )
+                {
+                    // No separate height step
                     ++step;
                     KI_FALLTHROUGH;
                 }
@@ -953,34 +954,23 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 {
                     break;
                 }
-            }
 
             case SET_HEIGHT:
+                assert( dimension->GetStart() != dimension->GetEnd() );
+                assert( dimension->GetLineThickness() > 0 );
+
+                preview.Remove( dimension );
+
+                commit.Add( dimension );
+                commit.Push( _( "Draw a dimension" ) );
+
                 if( dimension->Type() == PCB_DIM_LEADER_T )
                 {
-                    assert( dimension->GetStart() != dimension->GetEnd() );
-                    assert( dimension->GetLineThickness() > 0 );
-
-                    preview.Remove( dimension );
-
-                    commit.Add( dimension );
-                    commit.Push( _( "Draw a leader" ) );
-
                     // Run the edit immediately to set the leader text
                     m_toolMgr->RunAction( PCB_ACTIONS::properties, true, dimension );
                 }
-                else if( (wxPoint) cursorPos != dimension->GetPosition() )
-                {
-                    assert( dimension->GetStart() != dimension->GetEnd() );
-                    assert( dimension->GetLineThickness() > 0 );
 
-                    preview.Remove( dimension );
-
-                    commit.Add( dimension );
-                    commit.Push( _( "Draw a dimension" ) );
-
-                    m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, dimension );
-                }
+                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, dimension );
 
                 break;
             }
@@ -999,6 +989,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             case SET_END:
                 dimension->SetEnd( (wxPoint) cursorPos );
 
+                if( Is45Limited() || dimension->Type() == PCB_DIM_CENTER_T )
+                    constrainDimension( dimension );
+
                 if( dimension->Type() == PCB_DIM_ORTHOGONAL_T )
                 {
                     PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dimension );
@@ -1012,16 +1005,31 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     ortho->SetOrientation( vert ? PCB_DIM_ORTHOGONAL::DIR::VERTICAL
                                                 : PCB_DIM_ORTHOGONAL::DIR::HORIZONTAL );
                 }
+                else if( dimension->Type() == PCB_DIM_RADIAL_T )
+                {
+                    PCB_DIM_RADIAL* radialDim = static_cast<PCB_DIM_RADIAL*>( dimension );
+                    wxPoint         textOffset( radialDim->GetArrowLength() * 10, 0 );
 
-                dimension->Update();
+                    if( radialDim->GetEnd().x < radialDim->GetStart().x )
+                        textOffset = -textOffset;
 
-                if( Is45Limited() || dimension->Type() == PCB_DIM_CENTER_T )
-                    constrainDimension( dimension );
+                    radialDim->Text().SetPosition( radialDim->GetKnee() + textOffset );
+                    radialDim->Update();
+                }
+                else if( dimension->Type() == PCB_DIM_LEADER_T )
+                {
+                    wxPoint textOffset( dimension->GetArrowLength() * 10, 0 );
+
+                    if( dimension->GetEnd().x < dimension->GetStart().x )
+                        textOffset = -textOffset;
+
+                    dimension->Text().SetPosition( dimension->GetEnd() + textOffset );
+                    dimension->Update();
+                }
 
                 break;
 
             case SET_HEIGHT:
-            {
                 if( dimension->Type() == PCB_DIM_ALIGNED_T )
                 {
                     PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dimension );
@@ -1038,36 +1046,27 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 {
                     PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dimension );
 
-                    BOX2I    bounds( dimension->GetStart(),
-                                  dimension->GetEnd() - dimension->GetStart() );
-                    VECTOR2I direction( cursorPos - bounds.Centre() );
+                    BOX2I    bbox( dimension->GetStart(),
+                                   dimension->GetEnd() - dimension->GetStart() );
+                    VECTOR2I direction( cursorPos - bbox.Centre() );
                     bool     vert;
 
-                    // Only change the orientation when we move outside the bounds
-                    if( !bounds.Contains( cursorPos ) )
+                    // Only change the orientation when we move outside the bbox
+                    if( !bbox.Contains( cursorPos ) )
                     {
                         // If the dimension is horizontal or vertical, set correct orientation
                         // otherwise, test if we're left/right of the bounding box or above/below it
-                        if( bounds.GetWidth() == 0 )
-                        {
+                        if( bbox.GetWidth() == 0 )
                             vert = true;
-                        }
-                        else if( bounds.GetHeight() == 0 )
-                        {
+                        else if( bbox.GetHeight() == 0 )
                             vert = false;
-                        }
-                        else if( cursorPos.x > bounds.GetLeft() && cursorPos.x < bounds.GetRight() )
-                        {
+                        else if( cursorPos.x > bbox.GetLeft() && cursorPos.x < bbox.GetRight() )
                             vert = false;
-                        }
-                        else if( cursorPos.y > bounds.GetTop() && cursorPos.y < bounds.GetBottom() )
-                        {
+                        else if( cursorPos.y > bbox.GetTop() && cursorPos.y < bbox.GetBottom() )
                             vert = true;
-                        }
                         else
-                        {
                             vert = std::abs( direction.y ) < std::abs( direction.x );
-                        }
+
                         ortho->SetOrientation( vert ? PCB_DIM_ORTHOGONAL::DIR::VERTICAL
                                                     : PCB_DIM_ORTHOGONAL::DIR::HORIZONTAL );
                     }
@@ -1080,16 +1079,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     ortho->SetHeight( vert ? heightVector.x : heightVector.y );
                     ortho->Update();
                 }
-                else if( dimension->Type() == PCB_DIM_LEADER_T )
-                {
-                    // Leader: SET_HEIGHT actually sets the text position directly
-                    VECTOR2I lineVector( cursorPos - dimension->GetEnd() );
-                    dimension->Text().SetPosition( wxPoint( VECTOR2I( dimension->GetEnd() ) +
-                                                            GetVectorSnapped45( lineVector ) ) );
-                    dimension->Update();
-                }
-            }
-            break;
+
+                break;
             }
 
             // Show a preview of the item
@@ -2732,6 +2723,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawAlignedDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawOrthogonalDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawCenterDimension.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawRadialDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawLeader.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawRuleArea.MakeEvent() );

@@ -196,8 +196,8 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     if( m_cbLayerActual->SetLayerSelection( m_dimension->GetLayer() ) < 0 )
     {
-        wxMessageBox( _( "This item was on a non-existing or forbidden layer.\n"
-                         "It has been moved to the first allowed layer." ) );
+        wxMessageBox( _( "This item was on a non-existing layer.\n"
+                         "It has been moved to the first defined layer." ) );
         m_cbLayerActual->SetSelection( 0 );
     }
 
@@ -223,6 +223,8 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
     m_cbKeepAligned->SetValue( m_dimension->GetKeepTextAligned() );
     m_cbTextOrientation->Enable( !m_dimension->GetKeepTextAligned() );
 
+    m_orientValidator.TransferToWindow();
+
     m_cbItalic->SetValue( text.IsItalic() );
     m_cbMirrored->SetValue( text.IsMirrored() );
     EDA_TEXT_HJUSTIFY_T hJustify = text.GetHorizJustify();
@@ -243,12 +245,10 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
         m_txtValueActual->SetValue( m_dimension->GetValueText() );
     }
 
-    m_orientValidator.TransferToWindow();
-
     if( m_dimension->Type() == PCB_DIM_LEADER_T )
     {
         PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( m_dimension );
-        m_cbTextFrame->SetSelection( static_cast<int>( leader->GetTextFrame() ) );
+        m_cbTextFrame->SetSelection( static_cast<int>( leader->GetTextBorder() ) );
     }
 
     return DIALOG_DIMENSION_PROPERTIES_BASE::TransferDataToWindow();
@@ -303,22 +303,22 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
 
     switch( m_cbUnits->GetSelection() )
     {
-        case 0:
-            aTarget->SetUnitsMode( DIM_UNITS_MODE::INCHES );
-            break;
+    case 0:
+        aTarget->SetUnitsMode( DIM_UNITS_MODE::INCHES );
+        break;
 
-        case 1:
-            aTarget->SetUnitsMode( DIM_UNITS_MODE::MILS );
-            break;
+    case 1:
+        aTarget->SetUnitsMode( DIM_UNITS_MODE::MILS );
+        break;
 
-        case 2:
-            aTarget->SetUnitsMode( DIM_UNITS_MODE::MILLIMETRES );
-            break;
+    case 2:
+        aTarget->SetUnitsMode( DIM_UNITS_MODE::MILLIMETRES );
+        break;
 
-        case 3:
-            aTarget->SetUnitsMode( DIM_UNITS_MODE::AUTOMATIC );
-            aTarget->SetUnits( m_frame->GetUserUnits() );
-            break;
+    case 3:
+        aTarget->SetUnitsMode( DIM_UNITS_MODE::AUTOMATIC );
+        aTarget->SetUnits( m_frame->GetUserUnits() );
+        break;
     }
 
     aTarget->SetUnitsFormat( static_cast<DIM_UNITS_FORMAT>( m_cbUnitsFormat->GetSelection() ) );
@@ -354,7 +354,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
     if( aTarget->Type() == PCB_DIM_LEADER_T )
     {
         PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( aTarget );
-        leader->SetTextFrame( static_cast<DIM_TEXT_FRAME>( m_cbTextFrame->GetSelection() ) );
+        leader->SetTextBorder( static_cast<DIM_TEXT_BORDER>( m_cbTextFrame->GetSelection()));
     }
 
     aTarget->Update();

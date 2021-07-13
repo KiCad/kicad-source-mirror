@@ -134,6 +134,11 @@ TOOL_ACTION PCB_ACTIONS::drawCenterDimension( "pcbnew.InteractiveDrawing.centerD
         _( "Add Center Dimension" ), _( "Add a center dimension" ),
         BITMAPS::add_center_dimension, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::drawRadialDimension( "pcbnew.InteractiveDrawing.radialDimension",
+        AS_GLOBAL, 0, "",
+        _( "Add Radial Dimension" ), _( "Add a radial dimension" ),
+        BITMAPS::add_radial_dimension, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::drawOrthogonalDimension( "pcbnew.InteractiveDrawing.orthogonalDimension",
         AS_GLOBAL, 0, "",
         _( "Add Orthogonal Dimension" ), _( "Add an orthogonal dimension" ),

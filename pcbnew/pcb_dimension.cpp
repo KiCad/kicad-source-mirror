@@ -952,11 +952,13 @@ void PCB_DIM_ORTHOGONAL::Rotate( const wxPoint& aRotCentre, double aAngle )
 
 PCB_DIM_LEADER::PCB_DIM_LEADER( BOARD_ITEM* aParent ) :
         PCB_DIMENSION_BASE( aParent, PCB_DIM_LEADER_T ),
-        m_textFrame( DIM_TEXT_FRAME::NONE )
+        m_textBorder( DIM_TEXT_BORDER::NONE )
 {
     m_unitsFormat         = DIM_UNITS_FORMAT::NO_SUFFIX;
     m_overrideTextEnabled = true;
     m_keepTextAligned     = false;
+
+    SetText( _( "Leader" ) );
 }
 
 
@@ -970,7 +972,12 @@ void PCB_DIM_LEADER::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_DIM_LEADER_T );
 
+    m_shapes.clear();
+    static_cast<PCB_DIM_LEADER*>( aImage )->m_shapes.clear();
+
     std::swap( *static_cast<PCB_DIM_LEADER*>( this ), *static_cast<PCB_DIM_LEADER*>( aImage ) );
+
+    Update();
 }
 
 
@@ -1008,7 +1015,7 @@ void PCB_DIM_LEADER::updateGeometry()
     OPT_VECTOR2I arrowSegEnd = boost::make_optional( false, VECTOR2I() );;
     OPT_VECTOR2I textSegEnd = boost::make_optional( false, VECTOR2I() );
 
-    if( m_textFrame == DIM_TEXT_FRAME::CIRCLE )
+    if( m_textBorder == DIM_TEXT_BORDER::CIRCLE )
     {
         double penWidth = m_text.GetEffectiveTextPenWidth() / 2.0;
         double radius = ( textBox.GetWidth() / 2.0 ) - penWidth;
@@ -1035,16 +1042,16 @@ void PCB_DIM_LEADER::updateGeometry()
     double arrowRotNeg = firstLine.Angle() - DEG2RAD( s_arrowAngle );
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( start,
-                                              start + wxPoint( arrowEnd.Rotate( arrowRotPos ) ) ) );
+                                              start + (wxPoint) arrowEnd.Rotate( arrowRotPos ) ) );
     m_shapes.emplace_back( new SHAPE_SEGMENT( start,
-                                              start + wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
+                                              start + (wxPoint) arrowEnd.Rotate( arrowRotNeg ) ) );
 
 
     if( !GetText().IsEmpty() )
     {
-        switch( m_textFrame )
+        switch( m_textBorder )
         {
-        case DIM_TEXT_FRAME::RECTANGLE:
+        case DIM_TEXT_BORDER::RECTANGLE:
         {
             for( SHAPE_POLY_SET::SEGMENT_ITERATOR seg = polyBox.IterateSegments(); seg; seg++ )
                 m_shapes.emplace_back( new SHAPE_SEGMENT( *seg ) );
@@ -1052,7 +1059,7 @@ void PCB_DIM_LEADER::updateGeometry()
             break;
         }
 
-        case DIM_TEXT_FRAME::CIRCLE:
+        case DIM_TEXT_BORDER::CIRCLE:
         {
             double penWidth = m_text.GetEffectiveTextPenWidth() / 2.0;
             double radius   = ( textBox.GetWidth() / 2.0 ) - penWidth;
@@ -1088,6 +1095,138 @@ void PCB_DIM_LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     aList.emplace_back( start, wxEmptyString );
 
     aList.emplace_back( _( "Layer" ), GetLayerName() );
+}
+
+
+PCB_DIM_RADIAL::PCB_DIM_RADIAL( BOARD_ITEM* aParent ) :
+        PCB_DIMENSION_BASE( aParent, PCB_DIM_RADIAL_T )
+{
+    m_unitsFormat         = DIM_UNITS_FORMAT::NO_SUFFIX;
+    m_overrideTextEnabled = false;
+    m_keepTextAligned     = true;
+    m_isDiameter          = false;
+    m_prefix              = "R ";
+    m_leaderLength        = m_arrowLength * 3;
+}
+
+
+EDA_ITEM* PCB_DIM_RADIAL::Clone() const
+{
+    return new PCB_DIM_RADIAL( *this );
+}
+
+
+void PCB_DIM_RADIAL::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_DIM_RADIAL_T );
+
+    m_shapes.clear();
+    static_cast<PCB_DIM_RADIAL*>( aImage )->m_shapes.clear();
+
+    std::swap( *static_cast<PCB_DIM_RADIAL*>( this ), *static_cast<PCB_DIM_RADIAL*>( aImage ) );
+
+    Update();
+}
+
+
+BITMAPS PCB_DIM_RADIAL::GetMenuImage() const
+{
+    return BITMAPS::add_radial_dimension;
+}
+
+
+wxPoint PCB_DIM_RADIAL::GetKnee() const
+{
+    VECTOR2I radial( m_end - m_start );
+
+    return m_end + (wxPoint) radial.Resize( m_leaderLength );
+}
+
+
+void PCB_DIM_RADIAL::updateText()
+{
+    if( m_keepTextAligned )
+    {
+        VECTOR2I textLine( Text().GetPosition() - GetKnee() );
+        double   textAngle = 3600 - RAD2DECIDEG( textLine.Angle() );
+
+        NORMALIZE_ANGLE_POS( textAngle );
+
+        if( textAngle > 900 && textAngle <= 2700 )
+            textAngle -= 1800;
+
+        // Round to nearest degree
+        m_text.SetTextAngle( KiROUND( textAngle / 10 ) * 10 );
+    }
+
+    PCB_DIMENSION_BASE::updateText();
+}
+
+
+void PCB_DIM_RADIAL::updateGeometry()
+{
+    m_shapes.clear();
+
+    VECTOR2I center( m_start );
+    VECTOR2I centerArm( 0, m_arrowLength );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( center - centerArm, center + centerArm ) );
+
+    centerArm = centerArm.Rotate( DEG2RAD( 90 ) );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( center - centerArm, center + centerArm ) );
+
+    VECTOR2I radius( m_end - m_start );
+
+    if( m_isDiameter )
+        m_measuredValue = KiROUND( radius.EuclideanNorm() * 2 );
+    else
+        m_measuredValue = KiROUND( radius.EuclideanNorm() );
+
+    updateText();
+
+    // Now that we have the text updated, we can determine how to draw the second line
+    // First we need to create an appropriate bounding polygon to collide with
+    EDA_RECT textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
+                                                    m_text.GetEffectiveTextPenWidth() );
+
+    SHAPE_POLY_SET polyBox;
+    polyBox.NewOutline();
+    polyBox.Append( textBox.GetOrigin() );
+    polyBox.Append( textBox.GetOrigin().x, textBox.GetEnd().y );
+    polyBox.Append( textBox.GetEnd() );
+    polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
+    polyBox.Rotate( -m_text.GetTextAngleRadians(), textBox.GetCenter() );
+
+    VECTOR2I radial( m_end - m_start );
+    radial = radial.Resize( m_leaderLength );
+
+    SEG arrowSeg( m_end, m_end + (wxPoint) radial );
+    SEG textSeg( arrowSeg.B, m_text.GetPosition() );
+
+    OPT_VECTOR2I arrowSegEnd = segPolyIntersection( polyBox, arrowSeg );
+    OPT_VECTOR2I textSegEnd = segPolyIntersection( polyBox, textSeg );
+
+    if( arrowSegEnd )
+        arrowSeg.B = arrowSegEnd.get();
+
+    if( textSegEnd )
+        textSeg.B = textSegEnd.get();
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( arrowSeg ) );
+
+    // Add arrows
+    VECTOR2I arrowEnd( m_arrowLength, 0 );
+
+    double arrowRotPos = radial.Angle() + DEG2RAD( s_arrowAngle );
+    double arrowRotNeg = radial.Angle() - DEG2RAD( s_arrowAngle );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_end,
+                                              m_end + (wxPoint) arrowEnd.Rotate( arrowRotPos ) ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_end,
+                                              m_end + (wxPoint) arrowEnd.Rotate( arrowRotNeg ) ) );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( textSeg ) );
 }
 
 
