@@ -653,7 +653,7 @@ struct ARC_ARC_COLLIDE_CASE
     std::string         m_ctx_name;
     ARC_DATA_MM         m_arc1;
     ARC_DATA_MM         m_arc2;
-    int                 m_clearance;
+    double              m_clearance;
     bool                m_exp_result;
 };
 
@@ -714,6 +714,11 @@ static const std::vector<ARC_ARC_COLLIDE_CASE> arc_arc_collide_cases = {
       { 86.063537, 88.295989, 84.968628, 87.581351, -255.5, 0.2 },
       0,
       true },
+    { "case 12: Simulated differential pair meander",
+      { 94.6551, 88.295989, 95.6551, 88.295989, 90.0, 0.1 },
+      { 94.6551, 88.295989, 95.8551, 88.295989, 90.0, 0.1 },
+      0.1 - SHAPE_ARC::DefaultAccuracyForPCB() / PCB_IU_PER_MM, // remove offset when support for true arc-arc intersection
+      false },
 };
 
 
@@ -729,24 +734,56 @@ BOOST_AUTO_TEST_CASE( CollideArc )
             int      actual = 0;
             VECTOR2I location;
 
-            bool result = static_cast<SHAPE*>( &arc1 )->Collide( &arc2, c.m_clearance, &actual,
-                                                                 &location );
+            bool result = arc1.Collide( &arc2, PcbMillimeter2iu( c.m_clearance ), &actual, &location );
 
             BOOST_CHECK_EQUAL( result, c.m_exp_result );
-
-            // Test conversion to polygon
-            /*
-            SHAPE_POLY_SET poly;
-
-            TransformArcToPolygon( poly, wxPoint( arc1.GetP0() ), wxPoint( arc1.GetArcMid() ),
-                                   wxPoint( arc1.GetP1() ), arc1.GetWidth() * 2,
-                                   SHAPE_ARC::DefaultAccuracyForPCB(), ERROR_OUTSIDE );
-
-            bool result2 = poly.Collide( &arc1, arc1.GetWidth(), &actual, &location);
-
-            BOOST_CHECK_EQUAL( result2, false );*/
         }
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( CollideArcToPolygonApproximation )
+{
+    SHAPE_ARC arc( VECTOR2I( 73843527, 74355869 ), VECTOR2I( 71713528, 72965869 ), -76.36664803,
+                   2000000 );
+
+    // Create a polyset approximation from the arc - error outside (simulating the zone filler)
+    SHAPE_POLY_SET arcBuffer;
+    int            clearance = ( arc.GetWidth() * 3 ) / 2;
+
+    TransformArcToPolygon( arcBuffer, wxPoint( arc.GetP0() ), wxPoint( arc.GetArcMid() ),
+                           wxPoint( arc.GetP1() ), arc.GetWidth() + 2 * clearance,
+                           SHAPE_ARC::DefaultAccuracyForPCB(), ERROR_OUTSIDE );
+
+    BOOST_REQUIRE_EQUAL( arcBuffer.OutlineCount(), 1 );
+    BOOST_CHECK_EQUAL( arcBuffer.HoleCount( 0 ), 0 );
+
+    // Make a reasonably large rectangular outline around the arc shape
+    BOX2I arcbbox = arc.BBox( clearance * 4 );
+
+    SHAPE_LINE_CHAIN zoneOutline( { arcbbox.GetPosition(),
+                                    arcbbox.GetPosition() + VECTOR2I( arcbbox.GetWidth(), 0 ),
+                                    arcbbox.GetEnd(),
+                                    arcbbox.GetEnd() - VECTOR2I( arcbbox.GetWidth(), 0 )
+                                  },
+                                  true );
+
+    // Create a synthetic "zone fill" polygon
+    SHAPE_POLY_SET zoneFill;
+    zoneFill.AddOutline( zoneOutline );
+    zoneFill.AddHole( arcBuffer.Outline( 0 ) );
+
+    int      actual = 0;
+    VECTOR2I location;
+
+    int tol = SHAPE_ARC::DefaultAccuracyForPCB();
+
+    //@todo remove "- tol" from collision check below once true arc collisions have been implemented
+    BOOST_CHECK_EQUAL( zoneFill.Collide( &arc, clearance - tol, &actual, &location ), false );
+
+    BOOST_CHECK_EQUAL( zoneFill.Collide( &arc, clearance * 2, &actual, &location ), true );
+
+    BOOST_CHECK( KI_TEST::IsWithin( actual, clearance, tol ) );
 }
 
 

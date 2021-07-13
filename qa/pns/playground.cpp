@@ -297,6 +297,8 @@ int playground_main_func( int argc, char* argv[] )
         {79.063537, 88.295989, 77.968628, 87.581351, -255.5, 0.2},
         {85.915251, 86.993054, 86.970159, 87.757692, 99.5, 0.2}, // intersection - false negative
         {86.063537, 88.295989, 84.968628, 87.581351, -255.5, 0.2},
+        {94.6551, 88.295989, 95.6551, 88.295989, 90.0, 0.2 }, // simulating diff pair
+        {94.6551, 88.295989, 95.8551, 88.295989, 90.0, 0.2 },
     };
 
 
@@ -340,6 +342,22 @@ int playground_main_func( int argc, char* argv[] )
         int ni = intersectArc2Arc( arcs[i], arcs[i+1], ips );
 
         overlay->SetLineWidth( 10000.0 );
+        overlay->SetStrokeColor( GREEN );
+
+        for( int j = 0; j < ni; j++ )
+            overlay->AnnotatedPoint( ips[j], arcs[i].GetWidth() );
+
+        if( collides )
+        {
+            overlay->SetStrokeColor( YELLOW );
+            overlay->Line( closestDist.A, closestDist.B );
+            overlay->SetLineWidth( 10000.0 );
+            overlay->SetGlyphSize( { 100000.0, 100000.0 } );
+            overlay->BitmapText( wxString::Format( "dist: %d", closestDist.Length() ),
+                                 closestDist.A + VECTOR2I( 0, -arcs[i].GetWidth() ), 0 );
+        }
+
+        overlay->SetLineWidth( 10000.0 );
         overlay->SetStrokeColor( CYAN );
         overlay->AnnotatedPoint( arcs[i].GetP0(), arcs[i].GetWidth() / 2 );
         overlay->AnnotatedPoint( arcs[i + 1].GetP0(), arcs[i + 1].GetWidth() / 2 );
@@ -347,16 +365,7 @@ int playground_main_func( int argc, char* argv[] )
         overlay->AnnotatedPoint( arcs[i + 1].GetArcMid(), arcs[i + 1].GetWidth() / 2 );
         overlay->AnnotatedPoint( arcs[i].GetP1(), arcs[i].GetWidth() / 2 );
         overlay->AnnotatedPoint( arcs[i + 1].GetP1(), arcs[i + 1].GetWidth() / 2 );
-        overlay->SetStrokeColor( GREEN );
 
-        for(int j = 0; j < ni; j++ )
-            overlay->AnnotatedPoint( ips[j], arcs[i].GetWidth() );
-
-        if( collides )
-        {
-            overlay->SetStrokeColor( YELLOW );
-            overlay->Line(closestDist.A, closestDist.B);
-        }
 
         overlay->SetStrokeColor( RED );
         overlay->Arc( arcs[i] );

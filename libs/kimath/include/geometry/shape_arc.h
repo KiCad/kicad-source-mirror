@@ -120,6 +120,13 @@ public:
     bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
                   VECTOR2I* aLocation = nullptr ) const override;
 
+
+    bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override
+    {
+        return SHAPE::Collide( aShape, aClearance, aActual, aLocation );
+    }
+
     bool IsClockwise() const;
 
     void SetWidth( int aWidth )
