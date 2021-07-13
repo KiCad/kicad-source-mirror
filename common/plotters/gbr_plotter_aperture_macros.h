@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -108,10 +108,10 @@
 "%AMOutline5P*\n\
 0 Free polygon, 5 corners , with rotation*\n\
 0 The origin of the aperture is its center*\n\
-0 number of corners: always 8*\n\
+0 number of corners: always 5*\n\
 0 $1 to $10 corner X, Y*\n\
 0 $11 Rotation angle, in degrees counterclockwise*\n\
-0 create outline with 8 corners*\n\
+0 create outline with 5 corners*\n\
 4,1,5,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$1,$2,$11*%\n"
 
 // A aperture macro to define a polygon by 6 corners

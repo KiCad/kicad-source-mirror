@@ -7,7 +7,7 @@
  *
  * Copyright (C) 1992-2017 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,10 +96,12 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
                                    SHAPE_POLY_SET& aShapeBuffer,
                                    wxPoint aShapePos )
 {
-    #define TO_POLY_SHAPE { aShapeBuffer.NewOutline(); \
-                            for( unsigned jj = 0; jj < polybuffer.size(); jj++ )\
-                                aShapeBuffer.Append( polybuffer[jj].x, polybuffer[jj].y );\
-                            aShapeBuffer.Append( polybuffer[0].x, polybuffer[0].y );}
+    #define TO_POLY_SHAPE { if( polybuffer.size() > 1 )\
+                            {   aShapeBuffer.NewOutline(); \
+                                for( unsigned jj = 0; jj < polybuffer.size(); jj++ )\
+                                    aShapeBuffer.Append( polybuffer[jj].x, polybuffer[jj].y );\
+                                aShapeBuffer.Append( polybuffer[0].x, polybuffer[0].y );}\
+                          }
 
     // Draw the primitive shape for flashed items.
     static std::vector<wxPoint> polybuffer;     // create a static buffer to avoid a lot of memory reallocation
@@ -462,8 +464,13 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
          * <rotation> is a optional parameter: rotation from origin.
          * type is not stored in parameters list, so the first parameter is exposure
          */
-        wxPoint center = mapPt( params[2].GetValue( tool ), params[3].GetValue( tool ), m_GerbMetric );
         int radius = scaletoIU( params[1].GetValue( tool ), m_GerbMetric ) / 2;
+        // A circle primitive can have a 0 size (for instance when used in roundrect macro),
+        // so skip it
+        if( radius <= 0 )
+            break;
+
+        wxPoint center = mapPt( params[2].GetValue( tool ), params[3].GetValue( tool ), m_GerbMetric );
         wxPoint corner;
         const int delta = 3600 / seg_per_circle;    // rot angle in 0.1 degree
 
@@ -805,6 +812,9 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
             }
         }
     }
+
+    // Merge and cleanup basic shape polygons
+    m_shape.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     // If a hole is defined inside a polygon, we must fracture the polygon
     // to be able to drawn it (i.e link holes by overlapping edges)
