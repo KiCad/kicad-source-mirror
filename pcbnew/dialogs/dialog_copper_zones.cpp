@@ -186,6 +186,8 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
     m_settings.SetupLayersList( m_layers, m_Parent, true );
 
     m_settingsExported = false;
+    m_currentlySelectedNetcode = INVALID_NET_CODE;
+    m_maxNetCode = INVALID_NET_CODE;
 
     m_netSortingByPadCount = true;      // false = alphabetic sort, true = pad count sort
 
