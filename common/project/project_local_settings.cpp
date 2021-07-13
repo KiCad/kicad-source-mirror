@@ -373,6 +373,11 @@ void PROJECT_LOCAL_SETTINGS::SaveFileState( const wxString& aFileName,
         fileState.fileName = aFileName;
         fileState.open = false;
         fileState.window.maximized = false;
+        fileState.window.size_x = -1;
+        fileState.window.size_y = -1;
+        fileState.window.pos_x = -1;
+        fileState.window.pos_y = -1;
+        fileState.window.display = 0;
 
         m_files.push_back( fileState );
 
