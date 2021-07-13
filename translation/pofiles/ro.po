@@ -4,17 +4,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-05-29 08:45+0000\n"
+"PO-Revision-Date: 2021-07-15 02:34+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
-"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ro/>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files (*.*)|*.*"
@@ -209,9 +209,8 @@ msgstr "Încărcați Raytracing: straturi"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:881
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:644
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "Se încarcă modele 3D"
+msgstr "Se încarcă modelele 3D..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:1021
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:654
@@ -258,9 +257,9 @@ msgstr "Încărcați OpenGL: straturi"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2199
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "Se încarcă %s"
+msgstr "Se încarcă %s..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
@@ -357,24 +356,20 @@ msgid "Render current view using Raytracing"
 msgstr "Randați vizualizarea curentă utilizând Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:27
-#, fuzzy
 msgid "Background top:"
-msgstr "Fundal"
+msgstr "Partea de sus a fundalului:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:34
-#, fuzzy
 msgid "Background bottom:"
-msgstr "Culoarea fundalului, partea de jos"
+msgstr "Partea de jos a fundalului:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:47
-#, fuzzy
 msgid "Silkscreen top:"
-msgstr "Serigrafie"
+msgstr "Partea superioară a serigrafiei:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:54
-#, fuzzy
 msgid "Silkscreen bottom:"
-msgstr "Culoare serigrafie"
+msgstr "Partea inferioară a serigrafiei:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:67
 #, fuzzy
@@ -392,17 +387,14 @@ msgid "Solder paste:"
 msgstr "Culoare pastei de sudură"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:100
-#, fuzzy
 msgid "Copper/surface finish:"
-msgstr "Culoare finisare cupru / suprafață ..."
+msgstr "Cupru / finisaj de suprafață:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:113
-#, fuzzy
 msgid "Board body:"
-msgstr "Arată corpul plăci"
+msgstr "Corpul plăci:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:126
-#, fuzzy
 msgid "Load Colors from Board Stackup"
 msgstr "Obțineți culori din stivuirea fizică"
 
@@ -927,7 +919,7 @@ msgstr "Grilă 3D de 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
 msgid "Render Realistic Materials"
-msgstr ""
+msgstr "Render Materiale Realistice"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
@@ -1448,16 +1440,19 @@ msgstr "Nu se poate crea directorul de ieșire \"%s\".\n"
 #: common/common.cpp:615
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
+"Acest sistem de operare nu este suportat de KiCad și de dependențele sale."
 
 #: common/common.cpp:617
 msgid "Unsupported Operating System"
-msgstr ""
+msgstr "Sistem de operare neacceptat"
 
 #: common/common.cpp:620
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"Orice problemă cu KiCad pe acest sistem nu poate fi raportată la bugtracker-"
+"ul oficial."
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -1489,9 +1484,8 @@ msgid "Warning"
 msgstr "Atenție"
 
 #: common/confirm.cpp:158 common/confirm.cpp:185
-#, fuzzy
 msgid "Save Changes?"
-msgstr "Salvați modificările"
+msgstr "Salvați modificările?"
 
 #: common/confirm.cpp:160 common/confirm.cpp:187
 msgid "If you don't save, all your changes will be permanently lost."
@@ -3577,6 +3571,7 @@ msgstr "Predefinit"
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
 msgid "Set color to transparent to use Kicad default color."
 msgstr ""
+"Setați culoarea la transparent pentru a utiliza culoarea standard Kicad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
@@ -4573,7 +4568,7 @@ msgstr "Fișierele fp-lib-table nu conțin nicio bibliotecă cu numele \"%s\"."
 #: eeschema/symbol_lib_table.cpp:507
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr ""
+msgstr "Nu se poate crea calea globală a tabelului de bibliotecă '%s'."
 
 #: common/gestfich.cpp:190
 #, fuzzy, c-format
@@ -5359,12 +5354,12 @@ msgstr "Unități lipsă pentru \"%s\"| (%s)"
 #: common/libeval_compiler/libeval_compiler.cpp:1120
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "Nepotrivire de tip între \"%s\" și %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "Nepotrivire de tip între %lf și \"%s\""
 
 #: common/pgm_base.cpp:166
 msgid "No default editor found, you must choose it"
@@ -5400,11 +5395,14 @@ msgid ""
 "properties. Because this is missing, imported data might be malformed or "
 "missing."
 msgstr ""
+"În cazul importului din Altium, presupunem un octet nul la sfârșitul unei "
+"liste de proprietăți. Deoarece acesta lipsește, datele importate ar putea fi "
+"malformate sau lipsă."
 
 #: common/plugins/altium/altium_parser.cpp:228
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr ""
+msgstr "Unitatea \"%s\" nu se termină cu \"mil\"."
 
 #: common/plugins/altium/altium_parser.cpp:236
 #, fuzzy, c-format
@@ -6523,11 +6521,11 @@ msgstr "Fișiere cu simboluri de desen KiCad"
 
 #: common/wildcards_and_files_ext.cpp:191
 msgid "KiCad symbol library files"
-msgstr ""
+msgstr "Fișiere bibliotecă de simboluri KiCad"
 
 #: common/wildcards_and_files_ext.cpp:197
 msgid "KiCad legacy symbol library files"
-msgstr ""
+msgstr "Fișiere de bibliotecă de simboluri vechi KiCad"
 
 #: common/wildcards_and_files_ext.cpp:203
 msgid "All KiCad symbol library files"
@@ -6608,7 +6606,7 @@ msgstr "Fișiere PCB Altium Circuit Studio"
 
 #: common/wildcards_and_files_ext.cpp:312
 msgid "Altium Circuit Maker PCB files"
-msgstr ""
+msgstr "Fișiere PCB Altium Circuit Maker"
 
 #: common/wildcards_and_files_ext.cpp:317
 msgid "Fabmaster PCB files"
@@ -6624,15 +6622,15 @@ msgstr "Căile bibliotecilor de amprente KiCad"
 
 #: common/wildcards_and_files_ext.cpp:340
 msgid "Legacy footprint library files"
-msgstr ""
+msgstr "Fișiere vechi de bibliotecă de amprentă"
 
 #: common/wildcards_and_files_ext.cpp:346
 msgid "Eagle ver. 6.x XML library files"
-msgstr ""
+msgstr "Eagle ver. 6.x bibliotecă fișiere XML"
 
 #: common/wildcards_and_files_ext.cpp:352
 msgid "Geda PCB footprint library files"
-msgstr ""
+msgstr "Fișiere de bibliotecă de amprentă Geda PCB"
 
 #: common/wildcards_and_files_ext.cpp:358
 #, fuzzy
@@ -6641,7 +6639,7 @@ msgstr "Foaie de desen"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad symbol footprint link files"
-msgstr ""
+msgstr "KiCad simbol amprentă fișier de atribuire"
 
 #: common/wildcards_and_files_ext.cpp:372 gerbview/files.cpp:68
 msgid "Drill files"
@@ -6689,7 +6687,7 @@ msgstr "Fișiere text"
 
 #: common/wildcards_and_files_ext.cpp:438
 msgid "Legacy footprint export files"
-msgstr ""
+msgstr "Fișiere de export vechi de amprentă"
 
 #: common/wildcards_and_files_ext.cpp:444
 msgid "Electrical rule check file"
@@ -6738,7 +6736,7 @@ msgstr "Fișiere de testare IPC-D-356"
 
 #: common/wildcards_and_files_ext.cpp:510
 msgid "Workbook file"
-msgstr ""
+msgstr "Fișier registru de lucru"
 
 #: common/wildcards_and_files_ext.cpp:516
 msgid "PNG file"
@@ -6783,6 +6781,7 @@ msgid "CvPcb Warning"
 msgstr "Avertisment CvPcb"
 
 #: cvpcb/cvpcb.cpp:174
+#, fuzzy
 msgid ""
 "You have run CvPcb for the first time using the new footprint library table "
 "method for finding footprints.\n"
@@ -6793,6 +6792,14 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
+"Ați rulat CvPcb pentru prima dată utilizând noua metodă de căutare a "
+"amprentelor prin intermediul tabelelor din biblioteca de amprente.\n"
+"CvPcb fie a copiat tabelul implicit, fie a creat un tabel gol în dosarul "
+"dvs. de pornire.\n"
+"Trebuie mai întâi să configurați tabelul de biblioteci pentru a include "
+"toate bibliotecile de amprente care nu sunt incluse în KiCad.\n"
+"Pentru mai multe informații, consultați secțiunea \"Footprint Library Table\""
+" din documentația CvPcb."
 
 #: cvpcb/cvpcb.cpp:187
 #, fuzzy
@@ -6812,7 +6819,7 @@ msgstr "Biblioteci de amprente"
 
 #: cvpcb/cvpcb_mainframe.cpp:107
 msgid "Symbol : Footprint Assignments"
-msgstr ""
+msgstr "Simbol : Atribuiri de amprente"
 
 #: cvpcb/cvpcb_mainframe.cpp:110
 msgid "Filtered Footprints"
@@ -7061,18 +7068,18 @@ msgid ""
 msgstr ""
 
 #: cvpcb/readwrite_dlgs.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
 msgstr ""
-"Componenta %s: amprenta %s nu se găsește în niciuna dintre bibliotecile de "
-"amprente ale proiectului."
+"Componenta '%s': amprenta '%s' <b>nu se găsește</b> în niciuna dintre "
+"bibliotecile de amprente ale proiectului.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
 msgstr ""
-"Componenta %s: amprenta %s nu se găsește în niciuna dintre bibliotecile de "
-"amprente ale proiectului."
+"Componenta \"%s\" amprentă \"%s\" a fost găsită în bibliotecile "
+"<b>multiple</b>.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:164
 msgid "First check your footprint library table entries."
@@ -9830,9 +9837,9 @@ msgid "Failed to create file '%s'."
 msgstr "Nu s-a reușit crearea fișierului temporar \"%s\"."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:874
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'.\n"
-msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
+msgstr "Trasat la \"%s\".\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1250
 #, c-format
@@ -10325,9 +10332,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #: kicad/tools/kicad_manager_control.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists."
-msgstr "Tema există deja!"
+msgstr "'%s' există deja."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:472
 #, c-format
@@ -13624,9 +13631,9 @@ msgstr ""
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2249
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4399
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' already exists."
-msgstr "Tema există deja!"
+msgstr "Biblioteca de simboluri „%s” există deja."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2275
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4425
@@ -14668,9 +14675,9 @@ msgid "Open %s"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:826
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' already exists."
-msgstr "Tema există deja!"
+msgstr "Biblioteca '%s' există deja."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:834
 #, fuzzy, c-format
@@ -17528,9 +17535,8 @@ msgid "[no project loaded]"
 msgstr "Nici o amprentă încărcată."
 
 #: kicad/kicad_manager_frame.cpp:625
-#, fuzzy
 msgid "KiCad "
-msgstr "KiCad"
+msgstr "KiCad "
 
 #: kicad/kicad_manager_frame.cpp:664
 #, c-format
@@ -20836,7 +20842,7 @@ msgstr ""
 #: pcbnew/tools/pcb_control.cpp:1022
 #, fuzzy
 msgid "Loading PCB"
-msgstr "Se încarcă "
+msgstr "Se încarcă PCB"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:220
 #, c-format
@@ -29722,11 +29728,9 @@ msgid "New PCB file is unsaved"
 msgstr ""
 
 #: pcbnew/pcb_edit_frame.cpp:875
-#, fuzzy, c-format
+#, c-format
 msgid "The auto save file '%s' could not be removed!"
-msgstr ""
-"Fișierul de salvare automată nu a putut fi redenumit cu numele de fișier al "
-"plăcii."
+msgstr "Fișierul de salvare automată \"%s\" nu a putut fi eliminat!"
 
 #: pcbnew/pcb_edit_frame.cpp:1103
 msgid "Board file is read only."
@@ -30056,9 +30060,8 @@ msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1284
-#, fuzzy
 msgid "No 3D-models will be imported."
-msgstr " va fi ignorat"
+msgstr "Nu vor fi importate modele 3D."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1301
 #, c-format
@@ -30630,11 +30633,11 @@ msgid "Unknown FABMASTER section %s:%s at row %zu."
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
 msgstr ""
-"Dimensiune nevalabilă a rândului în rândul J %zu.  Așteaptă 11 elemente, dar "
-"a găsit %zu"
+"Dimensiunea nevalabilă a rândului în rândul J %zu. Se așteptau 11 elemente, "
+"dar s-a găsit %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:294
 msgid "Could not find units value, defaulting to mils."
@@ -30655,11 +30658,11 @@ msgstr "Nu s-a putut găsi fișierul de bibliotecă %s."
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1589
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1668
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1735
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
 msgstr ""
-"Dimensiune nevalabilă a rândului în rândul %zu.  Se așteaptă la %zu "
-"elemente, dar s-a găsit %zu"
+"Dimensiunea nevalabilă a rândului în rândul %zu. Se aștepta la %zu elemente, "
+"dar a găsit %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:498
 #, fuzzy, c-format
