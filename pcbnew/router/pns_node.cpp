@@ -103,6 +103,9 @@ int NODE::GetClearance( const ITEM* aA, const ITEM* aB ) const
    if( !m_ruleResolver )
         return 100000;
 
+   if( aA->IsVirtual() || aB->IsVirtual() )
+       return 0;
+
    return m_ruleResolver->Clearance( aA, aB );
 }
 
@@ -110,6 +113,9 @@ int NODE::GetClearance( const ITEM* aA, const ITEM* aB ) const
 int NODE::GetHoleClearance( const ITEM* aA, const ITEM* aB ) const
 {
     if( !m_ruleResolver )
+        return 0;
+
+    if( aA->IsVirtual() || aB->IsVirtual() )
         return 0;
 
     return m_ruleResolver->HoleClearance( aA, aB );
@@ -120,6 +126,9 @@ int NODE::GetHoleToHoleClearance( const ITEM* aA, const ITEM* aB ) const
 {
    if( !m_ruleResolver )
         return 0;
+
+   if( aA->IsVirtual() || aB->IsVirtual() )
+       return 0;
 
    return m_ruleResolver->HoleToHoleClearance( aA, aB );
 }
@@ -257,6 +266,10 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
 int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles, int aKindMask,
                           int aLimitCount, bool aDifferentNetsOnly )
 {
+    /// By default, virtual items cannot collide
+    if( aItem->IsVirtual() )
+        return 0;
+
     DEFAULT_OBSTACLE_VISITOR visitor( aObstacles, aItem, aKindMask, aDifferentNetsOnly );
 
 #ifdef DEBUG
