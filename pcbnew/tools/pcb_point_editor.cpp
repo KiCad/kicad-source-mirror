@@ -334,6 +334,9 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         points->AddPoint( dimension->GetEnd() );
         points->AddPoint( dimension->Text().GetPosition() );
 
+        points->Point( DIM_TEXT ).SetConstraint( new EC_45DEGREE( points->Point( DIM_TEXT ),
+                                                                  points->Point( DIM_END ) ) );
+
         break;
     }
 
@@ -512,7 +515,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 m_editedPoint->ApplyConstraint();
 
             if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
-                m_editedPoint->SetPosition( grid.BestSnapAnchor( pos, snapLayers, { item } ) );
+            {
+                m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
+                                                                 snapLayers, { item } ) );
+            }
 
             updateItem();
             getViewControls()->ForceCursorPosition( true, m_editedPoint->GetPosition() );
@@ -1024,15 +1030,9 @@ void PCB_POINT_EDITOR::updateItem() const
         {
         case PCB_SHAPE_TYPE::SEGMENT:
             if( isModified( m_editPoints->Point( SEG_START ) ) )
-            {
-                shape->SetStart( wxPoint( m_editPoints->Point( SEG_START ).GetPosition().x,
-                                          m_editPoints->Point( SEG_START ).GetPosition().y ) );
-            }
+                shape->SetStart( (wxPoint) m_editPoints->Point( SEG_START ).GetPosition() );
             else if( isModified( m_editPoints->Point( SEG_END ) ) )
-            {
-                shape->SetEnd( wxPoint( m_editPoints->Point( SEG_END ).GetPosition().x,
-                                        m_editPoints->Point( SEG_END ).GetPosition().y ) );
-            }
+                shape->SetEnd( (wxPoint) m_editPoints->Point( SEG_END ).GetPosition() );
 
             break;
 
@@ -1040,7 +1040,7 @@ void PCB_POINT_EDITOR::updateItem() const
         {
             if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) ) )
             {
-                shape->SetStart((wxPoint) m_editPoints->Point( RECT_TOP_LEFT ).GetPosition() );
+                shape->SetStart( (wxPoint) m_editPoints->Point( RECT_TOP_LEFT ).GetPosition() );
             }
             else if( isModified( m_editPoints->Point( RECT_TOP_RIGHT ) ) )
             {
@@ -1049,7 +1049,7 @@ void PCB_POINT_EDITOR::updateItem() const
             }
             else if( isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
             {
-                shape->SetEnd((wxPoint) m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition() );
+                shape->SetEnd( (wxPoint) m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition() );
             }
             else if( isModified( m_editPoints->Point( RECT_BOT_LEFT ) ) )
             {
@@ -1343,8 +1343,7 @@ void PCB_POINT_EDITOR::updateItem() const
         }
         else if( isModified( m_editPoints->Point( DIM_START ) ) )
         {
-            dimension->SetStart( wxPoint( m_editedPoint->GetPosition().x,
-                                          m_editedPoint->GetPosition().y ) );
+            dimension->SetStart( (wxPoint) m_editedPoint->GetPosition() );
             dimension->Update();
 
             m_editPoints->Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARSTART ),
@@ -1354,8 +1353,7 @@ void PCB_POINT_EDITOR::updateItem() const
         }
         else if( isModified( m_editPoints->Point( DIM_END ) ) )
         {
-            dimension->SetEnd( wxPoint( m_editedPoint->GetPosition().x,
-                                        m_editedPoint->GetPosition().y ) );
+            dimension->SetEnd( (wxPoint) m_editedPoint->GetPosition() );
             dimension->Update();
 
             m_editPoints->Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARSTART ),
@@ -1399,25 +1397,16 @@ void PCB_POINT_EDITOR::updateItem() const
                 // If the dimension is horizontal or vertical, set correct orientation
                 // otherwise, test if we're left/right of the bounding box or above/below it
                 if( bounds.GetWidth() == 0 )
-                {
                     vert = true;
-                }
                 else if( bounds.GetHeight() == 0 )
-                {
                     vert = false;
-                }
                 else if( cursorPos.x > bounds.GetLeft() && cursorPos.x < bounds.GetRight() )
-                {
                     vert = false;
-                }
                 else if( cursorPos.y > bounds.GetTop() && cursorPos.y < bounds.GetBottom() )
-                {
                     vert = true;
-                }
                 else
-                {
                     vert = std::abs( direction.y ) < std::abs( direction.x );
-                }
+
                 dimension->SetOrientation( vert ? PCB_DIM_ORTHOGONAL::DIR::VERTICAL
                                                 : PCB_DIM_ORTHOGONAL::DIR::HORIZONTAL );
             }
@@ -1430,13 +1419,11 @@ void PCB_POINT_EDITOR::updateItem() const
         }
         else if( isModified( m_editPoints->Point( DIM_START ) ) )
         {
-            dimension->SetStart( wxPoint( m_editedPoint->GetPosition().x,
-                                          m_editedPoint->GetPosition().y ) );
+            dimension->SetStart( (wxPoint) m_editedPoint->GetPosition() );
         }
         else if( isModified( m_editPoints->Point( DIM_END ) ) )
         {
-            dimension->SetEnd( wxPoint( m_editedPoint->GetPosition().x,
-                                        m_editedPoint->GetPosition().y ) );
+            dimension->SetEnd( (wxPoint) m_editedPoint->GetPosition() );
         }
         else if( isModified( m_editPoints->Point(DIM_TEXT ) ) )
         {
@@ -1455,15 +1442,9 @@ void PCB_POINT_EDITOR::updateItem() const
         PCB_DIM_CENTER* dimension = static_cast<PCB_DIM_CENTER*>( item );
 
         if( isModified( m_editPoints->Point( DIM_START ) ) )
-        {
-            dimension->SetStart( wxPoint( m_editedPoint->GetPosition().x,
-                                          m_editedPoint->GetPosition().y ) );
-        }
+            dimension->SetStart( (wxPoint) m_editedPoint->GetPosition() );
         else if( isModified( m_editPoints->Point( DIM_END ) ) )
-        {
-            dimension->SetEnd( wxPoint( m_editedPoint->GetPosition().x,
-                                        m_editedPoint->GetPosition().y ) );
-        }
+            dimension->SetEnd( (wxPoint) m_editedPoint->GetPosition() );
 
         dimension->Update();
 
@@ -1476,12 +1457,11 @@ void PCB_POINT_EDITOR::updateItem() const
 
         if( isModified( m_editPoints->Point( DIM_START ) ) )
         {
-            dimension->SetStart( wxPoint( m_editedPoint->GetPosition().x,
-                                          m_editedPoint->GetPosition().y ) );
+            dimension->SetStart( (wxPoint) m_editedPoint->GetPosition() );
         }
         else if( isModified( m_editPoints->Point( DIM_END ) ) )
         {
-            wxPoint newPoint( m_editedPoint->GetPosition().x, m_editedPoint->GetPosition().y );
+            wxPoint newPoint( m_editedPoint->GetPosition() );
             wxPoint delta = newPoint - dimension->GetEnd();
 
             dimension->SetEnd( newPoint );
@@ -1489,7 +1469,7 @@ void PCB_POINT_EDITOR::updateItem() const
         }
         else if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
         {
-            dimension->Text().SetPosition( wxPoint( m_editedPoint->GetPosition() ) );
+            dimension->Text().SetPosition( (wxPoint) m_editedPoint->GetPosition() );
         }
 
         dimension->Update();
