@@ -218,8 +218,6 @@ bool KIUI::IsInputControlEditable( wxWindow* aFocus )
     wxTextEntry*      textEntry = dynamic_cast<wxTextEntry*>( aFocus );
     wxStyledTextCtrl* styledText = dynamic_cast<wxStyledTextCtrl*>( aFocus );
     wxSearchCtrl*     searchCtrl = dynamic_cast<wxSearchCtrl*>( aFocus );
-    wxListBox*        listBox = dynamic_cast<wxListBox*>( aFocus );
-    wxCheckBox*       checkboxCtrl = dynamic_cast<wxCheckBox*>( aFocus );
 
     if( textEntry )
         return textEntry->IsEditable();
