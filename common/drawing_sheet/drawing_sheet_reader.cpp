@@ -879,19 +879,15 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
         if( fullFileName.IsEmpty() )
             wxGetEnv( wxT( "KICAD_WKSFILE" ), &fullFileName );
 
-
         if( fullFileName.IsEmpty() )
         {
-            #if 0
-            if( !fullFileName.IsEmpty() )
-                wxLogMessage( wxT( "Drawing sheet file <%s> not found" ), fullFileName.GetData() );
-            #endif
             SetDefaultLayout();
             return true; // we assume its fine / default init
         }
 
         if( !wxFileExists( fullFileName ) )
         {
+            wxLogMessage( _( "Drawing sheet '%s' not found." ), fullFileName );
             SetDefaultLayout();
             return false;
         }
@@ -901,8 +897,11 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
 
     if( ! wksFile.IsOpened() )
     {
+        wxLogMessage( _( "Drawing sheet '%s' could not be opened." ), fullFileName );
+
         if( !Append )
             SetDefaultLayout();
+
         return false;
     }
 
@@ -911,7 +910,7 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
 
     if( wksFile.Read( buffer.get(), filelen ) != filelen )
     {
-        wxLogMessage( _( "The file '%s' was not fully read." ), fullFileName.GetData() );
+        wxLogMessage( _( "Drawing sheet '%s' was not fully read." ), fullFileName.GetData() );
         return false;
     }
     else
