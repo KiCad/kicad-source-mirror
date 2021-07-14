@@ -2834,7 +2834,7 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
         }
 
         shape->SetArcStart( startPoint );
-        shape->SetCenter( centerPoint );
+        shape->SetArcCenter( centerPoint );
 
         arcStartAngle = getPolarAngle( startPoint - centerPoint );
         arcEndAngle   = getPolarAngle( endPoint - centerPoint );

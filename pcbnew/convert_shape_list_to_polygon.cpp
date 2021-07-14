@@ -34,7 +34,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/geometry_utils.h>
-#include <convert_drawsegment_list_to_polygon.h>
+#include <convert_shape_list_to_polygon.h>
 
 #include <wx/log.h>
 
@@ -535,8 +535,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 break;
 
             default:
-                wxFAIL_MSG( "Unsupported PCB_SHAPE type "
-                                + BOARD_ITEM::ShowShape( graphic->GetShape() ) );
+                wxFAIL_MSG( "ConvertOutlineToPolygon not implemented for "
+                            + graphic->SHAPE_T_asString() );
                 return false;
             }
 
@@ -781,9 +781,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     break;
 
                 default:
-                    wxFAIL_MSG( "Unsupported PCB_SHAPE type "
-                                    + BOARD_ITEM::ShowShape( graphic->GetShape() ) );
-
+                    wxFAIL_MSG( "ConvertOutlineToPolygon not implemented for "
+                                + graphic->SHAPE_T_asString() );
                     return false;
                 }
 

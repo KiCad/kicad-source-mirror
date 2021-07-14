@@ -21,12 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file convert_drawsegment_list_to_polygon.h
- * @brief functions to convert a shape built with DRAWSEGMENTS to a polygon.
- * expecting the shape describes shape similar to a polygon
- */
-
 #pragma once
 
 class PCB_SHAPE;

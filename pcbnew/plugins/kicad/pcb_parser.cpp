@@ -2392,7 +2392,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetCenter( pt );
+        shape->SetArcCenter( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
@@ -2426,7 +2426,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetCenter( pt );
+        shape->SetArcCenter( pt );
         NeedRIGHT();
         NeedLEFT();
 

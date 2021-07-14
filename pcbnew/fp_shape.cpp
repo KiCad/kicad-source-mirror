@@ -38,10 +38,8 @@
 
 
 FP_SHAPE::FP_SHAPE( FOOTPRINT* parent, SHAPE_T aShape ) :
-        PCB_SHAPE( parent, PCB_FP_SHAPE_T )
+        PCB_SHAPE( parent, PCB_FP_SHAPE_T, aShape )
 {
-    m_shape = aShape;
-    m_angle = 0;
     m_layer = F_SilkS;
 }
 
@@ -122,7 +120,7 @@ void FP_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 wxString FP_SHAPE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "%s on %s" ),
-                             ShowShape( m_shape  ),
+                             ShowShape(),
                              GetLayerName() );
 }
 

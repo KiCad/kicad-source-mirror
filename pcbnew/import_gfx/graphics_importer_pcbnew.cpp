@@ -82,7 +82,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
     circle->SetFilled( aFilled );
     circle->SetLayer( GetLayer() );
     circle->SetWidth( MapLineWidth( aWidth ) );
-    circle->SetCenter( MapCoordinate( aCenter ) );
+    circle->SetArcCenter( MapCoordinate( aCenter ));
     circle->SetArcStart( MapCoordinate( VECTOR2D( aCenter.x + aRadius, aCenter.y ) ) );
 
     if( circle->Type() == PCB_FP_SHAPE_T )
@@ -99,7 +99,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
     arc->SetShape( SHAPE_T::ARC );
     arc->SetLayer( GetLayer() );
     arc->SetWidth( MapLineWidth( aWidth ) );
-    arc->SetCenter( MapCoordinate( aCenter) );
+    arc->SetArcCenter( MapCoordinate( aCenter ));
     arc->SetArcStart( MapCoordinate( aStart ) );
     arc->SetAngle( aAngle * 10.0 );     // Pcbnew uses the decidegree
 

@@ -36,7 +36,7 @@
 #include <list>
 
 #include <zones.h>
-#include <convert_drawsegment_list_to_polygon.h>
+#include <convert_shape_list_to_polygon.h>
 #include <pcb_item_containers.h>
 #include <fp_text.h>
 #include <functional>

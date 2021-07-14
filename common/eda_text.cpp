@@ -649,6 +649,25 @@ double EDA_TEXT::GetDrawRotation() const
 }
 
 
+int EDA_TEXT::Compare( const EDA_TEXT* aOther ) const
+{
+#define TEST( a, b ) { if( a != b ) return a < b; }
+#define TEST_PT( a, b ) { TEST( a.x, b.x ); TEST( a.y, b.y ); }
+
+    TEST_PT( m_e.pos, aOther->m_e.pos );
+
+    TEST_PT( m_e.size, aOther->m_e.size );
+    TEST( m_e.penwidth, aOther->m_e.penwidth );
+    TEST( m_e.angle, aOther->m_e.angle );
+
+    TEST( m_e.hjustify, aOther->m_e.hjustify );
+    TEST( m_e.vjustify, aOther->m_e.vjustify );
+    TEST( m_e.bits, aOther->m_e.bits );
+
+    return m_text.Cmp( aOther->m_text );
+}
+
+
 static struct EDA_TEXT_DESC
 {
     EDA_TEXT_DESC()

@@ -502,6 +502,7 @@ target_include_directories( common PUBLIC
 set( PCB_COMMON_SRCS
     base_screen.cpp
     eda_text.cpp
+    eda_shape.cpp
     fp_lib_table.cpp
     hash_eda.cpp
     page_info.cpp
@@ -533,7 +534,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/connectivity/connectivity_items.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/connectivity/connectivity_data.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/connectivity/from_to_cache.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/convert_drawsegment_list_to_polygon.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/convert_shape_list_to_polygon.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_engine.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule.cpp

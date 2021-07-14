@@ -45,7 +45,7 @@
 #include <view/view.h>
 #include <geometry/shape_null.h>
 #include <i18n_utility.h>
-#include <convert_drawsegment_list_to_polygon.h>
+#include <convert_shape_list_to_polygon.h>
 #include <geometry/convex_hull.h>
 
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :

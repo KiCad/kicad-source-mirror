@@ -868,7 +868,7 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
                 wxPoint arcStartOffset = wxPoint( KiROUND( std::cos( startradiant ) * cur->radius ),
                         -KiROUND( std::sin( startradiant ) * cur->radius ) );
                 wxPoint arcStart       = cur->center + arcStartOffset;
-                shape->SetCenter( cur->center );
+                shape->SetArcCenter( cur->center );
                 shape->SetArcStart( arcStart );
 
                 if( !last->isRound )
@@ -1927,7 +1927,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
         {
             PCB_SHAPE shape( nullptr ); // just a helper to get the graphic
             shape.SetWidth( elem.width );
-            shape.SetCenter( elem.center );
+            shape.SetArcCenter( elem.center );
 
             if( elem.startangle == 0. && elem.endangle == 360. )
             { // TODO: other variants to define circle?
@@ -2027,7 +2027,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
         else
         {
             PCB_SHAPE* shape = HelperCreateAndAddDrawsegment( elem.component );
-            shape->SetCenter( elem.center );
+            shape->SetArcCenter( elem.center );
             shape->SetWidth( elem.width );
             shape->SetLayer( klayer );
 
@@ -2367,7 +2367,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
                 // circle
                 shape->SetShape( SHAPE_T::CIRCLE );
                 shape->SetFilled( true );
-                shape->SetCenter( aElem.position );
+                shape->SetArcCenter( aElem.position );
                 shape->SetWidth( aElem.topsize.x / 2 );
                 shape->SetArcStart( aElem.position - wxPoint( 0, aElem.topsize.x / 4 ) );
             }
@@ -2400,7 +2400,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
             shape->SetShape( SHAPE_T::CIRCLE );
             shape->SetFilled( true );
             shape->SetLayer( klayer );
-            shape->SetCenter( aElem.position );
+            shape->SetArcCenter( aElem.position );
             shape->SetWidth( aElem.topsize.x / 2 );
             shape->SetArcStart( aElem.position - wxPoint( 0, aElem.topsize.x / 4 ) );
             HelperDrawsegmentSetLocalCoord( shape, aElem.component );

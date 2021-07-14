@@ -814,7 +814,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
         arc->SetLayer( layer );
         arc->SetWidth( line->GetWidth() );
 
-        arc->SetCenter( wxPoint( center ) );
+        arc->SetArcCenter( wxPoint( center ));
         arc->SetArcStart( wxPoint( start ) );
         arc->SetAngle( GetArcAngle( start, mid, end ) );
 

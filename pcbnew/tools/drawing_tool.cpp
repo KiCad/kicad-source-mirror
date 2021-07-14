@@ -1418,7 +1418,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPointManager;
 
     // drawing assistant overlay
-    // TODO: workaround because PCB_SHAPE_TYPE_T is not visible from commons.
+    // TODO: workaround because EDA_SHAPE_TYPE_T is not visible from commons.
     KIGFX::PREVIEW::GEOM_SHAPE geomShape( static_cast<KIGFX::PREVIEW::GEOM_SHAPE>( shape ) );
     KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst( twoPointManager, userUnits, geomShape );
 
@@ -1716,7 +1716,7 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 {
     auto vec = aMgr.GetOrigin();
 
-    aArc.SetCenter( { vec.x, vec.y } );
+    aArc.SetArcCenter( { vec.x, vec.y } );
 
     vec = aMgr.GetStartRadiusEnd();
     aArc.SetArcStart( { vec.x, vec.y } );

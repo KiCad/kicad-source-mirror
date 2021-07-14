@@ -29,7 +29,7 @@
 #include <pcb_marker.h>
 #include <drc/drc_results_provider.h>
 #include <footprint_edit_frame.h>
-#include <convert_drawsegment_list_to_polygon.h>
+#include <convert_shape_list_to_polygon.h>
 #include <tools/footprint_editor_control.h>
 
 

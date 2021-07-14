@@ -335,7 +335,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
 
     if( m_item->GetShape() == SHAPE_T::ARC )
     {
-        m_item->SetCenter( GetArcCenter( m_item->GetArcStart(), m_item->GetArcEnd(), m_AngleValue ) );
+        m_item->SetArcCenter( GetArcCenter( m_item->GetArcStart(), m_item->GetArcEnd(), m_AngleValue ));
         m_item->SetAngle( m_AngleValue * 10.0, false );
     }
 
@@ -408,8 +408,8 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
         break;
 
     default:
-        wxASSERT_MSG( false, "DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate not implemented for shape"
-                             + PCB_SHAPE::ShowShape( m_item->GetShape() ) );
+        wxFAIL_MSG( "DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate not implemented for shape "
+                    + m_item->SHAPE_T_asString() );
         break;
     }
 

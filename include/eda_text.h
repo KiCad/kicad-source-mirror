@@ -366,6 +366,8 @@ public:
 
     virtual double GetDrawRotation() const;
 
+    int Compare( const EDA_TEXT* aOther ) const;
+
 private:
     void cacheShownText();
 

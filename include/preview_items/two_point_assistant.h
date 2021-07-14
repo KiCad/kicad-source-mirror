@@ -33,7 +33,7 @@ namespace KIGFX
 namespace PREVIEW
 {
 
-// TODO: required until PCB_SHAPE_TYPE_T is moved into commons or a better approach is found
+// TODO: required until EDA_SHAPE_TYPE_T is moved into commons or a better approach is found
 enum class GEOM_SHAPE
 {
     SEGMENT = 0,

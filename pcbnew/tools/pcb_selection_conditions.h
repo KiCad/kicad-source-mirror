@@ -29,7 +29,7 @@
 
 #include <tool/selection.h>
 #include <tool/selection_conditions.h>
-#include <board_item.h>
+#include <eda_shape.h>
 
 
 class PCB_SELECTION_CONDITIONS : public SELECTION_CONDITIONS

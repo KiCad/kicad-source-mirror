@@ -88,7 +88,7 @@ void PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aA
     PCB_SHAPE* item = new PCB_SHAPE();
     item->SetShape( SHAPE_T::ARC );
     item->SetFilled( false );
-    item->SetCenter( aCenter );
+    item->SetArcCenter( aCenter );
     item->SetArcStart( aStart );
     item->SetAngle( aArcAngle );
     item->SetWidth( aThickness );

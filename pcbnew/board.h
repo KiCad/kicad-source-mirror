@@ -27,7 +27,7 @@
 
 #include <board_item_container.h>
 #include <common.h> // Needed for stl hash extensions
-#include <convert_drawsegment_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
+#include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
 #include <layer_ids.h>
 #include <netinfo.h>
 #include <pcb_item_containers.h>
@@ -1072,6 +1072,18 @@ public:
      * @return bit field of legal ops.
      */
     GroupLegalOpsField GroupLegalOps( const PCB_SELECTION& selection ) const;
+
+    // --------- Item order comparators ---------
+
+    struct cmp_items
+    {
+        bool operator() ( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;
+    };
+
+    struct cmp_drawings
+    {
+        bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;
+    };
 
     // ------------ Run-time caches -------------
     std::mutex                                            m_CachesMutex;

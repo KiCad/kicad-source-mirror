@@ -734,7 +734,7 @@ void BOARD_ADAPTER::addShapeWithClearance( const PCB_SHAPE* aShape,
 
     default:
         wxFAIL_MSG( "BOARD_ADAPTER::addShapeWithClearance no implementation for "
-                    + SHAPE_T_asString( aShape->GetShape()) );
+                    + aShape->SHAPE_T_asString() );
         break;
     }
 }

@@ -760,7 +760,7 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR
         if( arcValid )
         {
             aArc->SetAngle( newAngle, false );
-            aArc->SetCenter( ( wxPoint ) center );
+            aArc->SetArcCenter( ( wxPoint ) center );
 
             if( movingStart )
                 aArc->SetArcStart( ( wxPoint ) start );
@@ -944,7 +944,7 @@ void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, const VECTOR2
         newAngle -= 3600.0;
 
     aArc->SetAngle( newAngle, false );
-    aArc->SetCenter( (wxPoint) aCenter );
+    aArc->SetArcCenter((wxPoint) aCenter );
 
     if( movingStart )
         aArc->SetArcStart( (wxPoint) aStart );
