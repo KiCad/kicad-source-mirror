@@ -67,7 +67,7 @@ static T within_range(T x, T minval, T maxval, T wrap)
     return rv;
 }
 
-static bool sliceContainsPoint( SHAPE_ARC a, VECTOR2D p )
+static bool sliceContainsPoint( const SHAPE_ARC& a, const VECTOR2I& p )
 {
     double phi = 180.0 / M_PI * atan2( p.y - a.GetCenter().y, p.x - a.GetCenter().x );
     double ca = a.GetCentralAngle();
@@ -87,96 +87,39 @@ static bool sliceContainsPoint( SHAPE_ARC a, VECTOR2D p )
     return within_range( phi, sa, ea, 360.0 );
 }
 
-static int arclineIntersect( const SHAPE_ARC& a, const SEG& s, VECTOR2D* pts )
+static int arclineIntersect( const SHAPE_ARC& a, const SEG& s, std::vector<VECTOR2I>* ips )
 {
-    VECTOR2I c = a.GetCenter();
-    double r = a.GetRadius();
-    VECTOR2I nearest = s.LineProject( c );
+    CIRCLE circ( a.GetCenter(), a.GetRadius() );
 
-    double nd = (c - nearest).EuclideanNorm();
+    std::vector<VECTOR2I> intersections = circ.IntersectLine( s );
 
-    /*overlay->SetStrokeColor( RED );
-    overlay->AnnotatedPoint( s.A, 200000 );
-    overlay->SetStrokeColor( GREEN );
-    overlay->AnnotatedPoint( s.B, 200000 );
-    overlay->SetStrokeColor( YELLOW );
-    overlay->AnnotatedPoint( c, 200000 );
+    size_t originalSize = ips->size();
 
-
-    overlay->SetStrokeColor( WHITE );
-    overlay->Arc( a );
-    overlay->SetStrokeColor( DARKGRAY );
-    overlay->Circle( a.GetCenter(), a.GetRadius() );*/
-
-    if( nd > r )
-        return 0;
-
-    double ll = r * r - nd * nd;
-    double l = 0;
-    if( ll > 0 )
-        l = sqrt(ll);
-
-    int n = 0;
-
-    VECTOR2I perp = ( s.B - s.A ).Resize( l );
-
-    VECTOR2I p0( nearest + perp );
-    VECTOR2I p1( nearest - perp );
-
-    if( sliceContainsPoint( a, p0 ) ) { pts[n] = p0; n++; }
-    if( sliceContainsPoint( a, p1 ) ) { pts[n] = p1; n++; }
-
-    //for(int i = 0; i < n ; i++)    overlay->AnnotatedPoint( pts[i], 40000 );
-
-    return n;
-}
-
-int intersectArc2Arc( const SHAPE_ARC& a1, const SHAPE_ARC& a2, VECTOR2D* ips )
-{
-    VECTOR2I dc( a2.GetCenter() - a1.GetCenter() );
-    double dcl = dc.EuclideanNorm();
-    double r1 = a1.GetRadius();
-    double r2 = a2.GetRadius();
-
-    if( dc.x == 0 && dc.y == 0 )
+    for( const VECTOR2I& intersection : intersections )
     {
-        if(r1 == r2)
-        {
-            ips[0] = a1.GetP0();
-            return 1;
-        }
+        if( sliceContainsPoint( a, intersection ) )
+            ips->push_back( intersection );
     }
 
-    double d = ( dcl * dcl - r2*r2 + r1*r1 ) / (2 * dcl);
+    return ips->size() - originalSize;
+}
 
-    //overlay->SetStrokeColor( DARKGRAY );
-    //overlay->Circle( a1.GetCenter(), a1.GetRadius() );
-    //overlay->SetStrokeColor( DARKGRAY );
-    //overlay->Circle( a2.GetCenter(), a2.GetRadius() );
+int intersectArc2Arc( const SHAPE_ARC& a1, const SHAPE_ARC& a2, std::vector<VECTOR2I>* ips )
+{
+    CIRCLE circ1( a1.GetCenter(), a1.GetRadius() );
+    CIRCLE circ2( a2.GetCenter(), a2.GetRadius() );
 
-    double r1sq = r1 * r1;
-    double dsq = d * d;
+    std::vector<VECTOR2I> intersections = circ1.Intersect( circ2 );
 
-    if( r1sq < dsq )
-        return 0;
+    size_t originalSize = ips->size();
 
-    double q = sqrt ( r1sq - dsq );
+    for( const VECTOR2I& intersection : intersections )
+    {
+        if( sliceContainsPoint( a1, intersection ) && sliceContainsPoint( a2, intersection ) )
+            ips->push_back( intersection );
+    }
 
-//    printf("d %.1f q %.1f dcl %.1f\n", d, q, dcl );
-
-    VECTOR2D pp = a1.GetCenter() + dc.Resize( d );
-
-    VECTOR2D ip0 = pp + dc.Perpendicular().Resize(q);
-    VECTOR2D ip1 = pp - dc.Perpendicular().Resize(q);
-
-    int n_ips = 0;
-
-    if( sliceContainsPoint( a1, ip0 ) )
-        ips[n_ips++] = ip0;
-    if( sliceContainsPoint( a1, ip1 ) )
-        ips[n_ips++] = ip1;
-
-    return n_ips;
+    return ips->size() - originalSize;
 }
 
 
@@ -184,73 +127,51 @@ bool collideArc2Arc( const SHAPE_ARC& a1, const SHAPE_ARC& a2, int clearance, SE
 {
     SEG mediatrix( a1.GetCenter(), a2.GetCenter() );
 
-    int      nA = 0, nB = 0;
-    VECTOR2D ptsA[8];
-    VECTOR2D ptsB[8];
+    std::vector<VECTOR2I> ips;
 
-
-    VECTOR2D ips[4];
-
-    if( intersectArc2Arc( a1, a2, ips ) > 0 )
+    if( intersectArc2Arc( a1, a2, &ips ) > 0 )
     {
         minDistSeg.A = minDistSeg.B = ips[0];
         return true;
     }
+
+    std::vector<VECTOR2I> ptsA;
+    std::vector<VECTOR2I> ptsB;
 
     bool cocentered = ( mediatrix.A == mediatrix.B );
 
     // arcs don't have the same center point
     if( !cocentered )
     {
-        nA = arclineIntersect( a1, mediatrix, ptsA );
-        nB = arclineIntersect( a2, mediatrix, ptsB );
+        arclineIntersect( a1, mediatrix, &ptsA );
+        arclineIntersect( a2, mediatrix, &ptsB );
     }
 
-    /*overlay->SetStrokeColor( LIGHTRED );
-        overlay->Line( SEG( a2.GetP0(), a2.GetCenter() ) );
-        overlay->Line( SEG( a2.GetP1(), a2.GetCenter() ) );*/
+    arclineIntersect( a1, SEG( a2.GetP0(), a2.GetCenter() ), &ptsA );
+    arclineIntersect( a1, SEG( a2.GetP1(), a2.GetCenter() ), &ptsA );
 
-    nA += arclineIntersect( a1, SEG( a2.GetP0(), a2.GetCenter() ), ptsA + nA );
-    nA += arclineIntersect( a1, SEG( a2.GetP1(), a2.GetCenter() ), ptsA + nA );
+    arclineIntersect( a2, SEG( a1.GetP0(), a1.GetCenter() ), &ptsB );
+    arclineIntersect( a2, SEG( a1.GetP1(), a1.GetCenter() ), &ptsB );
 
+    ptsA.push_back( a1.GetP0() );
+    ptsA.push_back( a1.GetP1() );
+    ptsB.push_back( a2.GetP0() );
+    ptsB.push_back( a2.GetP1() );
 
-    /*overlay->SetStrokeColor( LIGHTBLUE );
-        overlay->Line( SEG( a1.GetP0(), a1.GetCenter() ) );
-        overlay->Line( SEG( a1.GetP1(), a1.GetCenter() ) );*/
-
-    nB += arclineIntersect( a2, SEG( a1.GetP0(), a1.GetCenter() ), ptsB + nB );
-    nB += arclineIntersect( a2, SEG( a1.GetP1(), a1.GetCenter() ), ptsB + nB );
-
-    ptsA[nA++] = a1.GetP0();
-    ptsA[nA++] = a1.GetP1();
-    ptsB[nB++] = a2.GetP0();
-    ptsB[nB++] = a2.GetP1();
-
-    //    printf("nA %d nB %d\n", nA, nB );
-
-    double minDist;
+    double minDist = std::numeric_limits<double>::max();
     bool   minDistFound = false;
 
-    for( int i = 0; i < nA; i++ )
-        for( int j = 0; j < nB; j++ )
+    for( const VECTOR2I& ptA: ptsA )
+        for( const VECTOR2I& ptB : ptsB )
         {
-            double dist =
-                    ( ptsA[i] - ptsB[j] ).EuclideanNorm() - a1.GetWidth() / 2 - a2.GetWidth() / 2;
-
-            /* overlay->SetStrokeColor( RED );
-            overlay->AnnotatedPoint( ptsA[i], 100000 );
-            overlay->SetStrokeColor( GREEN );
-            overlay->AnnotatedPoint( ptsB[j], 100000 );*/
-
-
-            //printf("dist %.1f\n", dist );
+            double dist = ( ptA - ptB ).EuclideanNorm() - a1.GetWidth() / 2.0 - a2.GetWidth() / 2.0;
 
             if( dist < clearance )
             {
                 if( !minDistFound || dist < minDist )
                 {
                     minDist = dist;
-                    minDistSeg = SEG( ptsA[i], ptsB[j] );
+                    minDistSeg = SEG( ptA, ptB );
                 }
 
                 minDistFound = true;
@@ -337,9 +258,9 @@ int playground_main_func( int argc, char* argv[] )
     for(int i = 0; i < arcs.size(); i+= 2)
     {
         SEG closestDist;
-        VECTOR2D ips[2];
+        std::vector<VECTOR2I> ips;
         bool collides = collideArc2Arc( arcs[i], arcs[i+1], 0, closestDist );
-        int ni = intersectArc2Arc( arcs[i], arcs[i+1], ips );
+        int ni = intersectArc2Arc( arcs[i], arcs[i+1], &ips );
 
         overlay->SetLineWidth( 10000.0 );
         overlay->SetStrokeColor( GREEN );
