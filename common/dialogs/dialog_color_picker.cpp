@@ -184,6 +184,9 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
                 swatch->Connect( wxEVT_LEFT_DOWN,
                                  wxMouseEventHandler( DIALOG_COLOR_PICKER::buttColorClick ),
                                  NULL, this );
+                swatch->Connect( wxEVT_LEFT_DCLICK,
+                                 wxMouseEventHandler( DIALOG_COLOR_PICKER::colorDClick ),
+                                 NULL, this );
             };
 
     // If no predefined list is given, build the default predefined colors:
@@ -520,6 +523,13 @@ void DIALOG_COLOR_PICKER::drawAll()
     m_NewColorRect->Refresh();
     m_HsvBitmap->Refresh();
     m_RgbBitmap->Refresh();
+}
+
+
+void DIALOG_COLOR_PICKER::colorDClick( wxMouseEvent& event )
+{
+    buttColorClick( event );
+    wxDialog::EndModal( wxID_OK );
 }
 
 

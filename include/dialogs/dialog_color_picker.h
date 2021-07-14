@@ -177,6 +177,9 @@ private:
     ///< Event handler for defined color buttons
     void buttColorClick( wxMouseEvent& event );
 
+    ///< Event handler for double click on color buttons
+    void colorDClick( wxMouseEvent& event );
+
     ///< called when creating the dialog
     bool TransferDataToWindow() override;
 
