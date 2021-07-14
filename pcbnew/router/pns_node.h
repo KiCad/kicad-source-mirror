@@ -257,7 +257,7 @@ public:
     bool Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant = false );
     void Add( std::unique_ptr< SOLID >   aSolid );
     void Add( std::unique_ptr< VIA >     aVia );
-    void Add( std::unique_ptr< ARC >     aArc );
+    bool Add( std::unique_ptr< ARC >     aArc, bool aAllowRedundant = false );
 
     void Add( LINE& aLine, bool aAllowRedundant = false );
 

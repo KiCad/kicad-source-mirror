@@ -1365,7 +1365,9 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
             std::unique_ptr<ARC> ap = std::make_unique<ARC>( arc );
             lastItem = ap.get();
 
-            m_lastNode->Add( std::move( ap ) );
+            if( !m_lastNode->Add( std::move( ap ) ) )
+                lastItem = nullptr;
+
             lastArc  = arcIndex;
         }
     }

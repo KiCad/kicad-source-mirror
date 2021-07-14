@@ -662,10 +662,19 @@ void NODE::addArc( ARC* aArc )
 }
 
 
-void NODE::Add( std::unique_ptr< ARC > aArc )
+bool NODE::Add( std::unique_ptr< ARC > aArc, bool aAllowRedundant )
 {
+    const SHAPE_ARC& arc = aArc->CArc();
+
+    if( !aAllowRedundant && findRedundantArc( arc.GetP0(), arc.GetP1(), aArc->Layers(),
+                                              aArc->Net() ) )
+    {
+        return false;
+    }
+
     aArc->SetOwner( this );
     addArc( aArc.release() );
+    return true;
 }
 
 
