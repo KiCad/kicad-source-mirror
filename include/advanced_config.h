@@ -183,6 +183,12 @@ public:
      */
     bool m_Skip3DModelMemoryCache;
 
+    /**
+     * Hides the build version from the KiCad manager frame title.
+     * Useful for making screenshots/videos of KiCad without pinning to a specific version.
+     */
+    bool m_HideVersionFromTitle;
+
 private:
     ADVANCED_CFG();
 

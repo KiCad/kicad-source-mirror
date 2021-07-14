@@ -26,6 +26,7 @@
 #include "kicad_id.h"
 #include "pgm_kicad.h"
 #include "project_tree_pane.h"
+#include <advanced_config.h>
 #include <bitmaps.h>
 #include <build_version.h>
 #include <dialogs/panel_kicad_launcher.h>
@@ -172,7 +173,10 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     if( mainSizer && config()->m_Window.state.size_x == 0 && config()->m_Window.state.size_y == 0 )
         mainSizer->Fit( this );
 
-    SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
+    if( ADVANCED_CFG::GetCfg().m_HideVersionFromTitle )
+        SetTitle( wxT( "KiCad" ) );
+    else
+        SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
 
     // Do not let the messages window have initial focus
     m_leftWin->SetFocus();
@@ -622,7 +626,10 @@ void KICAD_MANAGER_FRAME::ProjectChanged()
         title = _( "[no project loaded]" );
     }
 
-    title += wxT( " \u2014 " ) + _( "KiCad " ) + GetMajorMinorVersion();
+    if( ADVANCED_CFG::GetCfg().m_HideVersionFromTitle )
+        title += wxT( " \u2014 " ) + wxString( "KiCad" );
+    else
+        title += wxT( " \u2014 " ) + wxString( "KiCad " ) + GetMajorMinorVersion();
 
     SetTitle( title );
 }
