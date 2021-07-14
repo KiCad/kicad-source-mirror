@@ -97,7 +97,7 @@ static const wxChar* s_allowedExtensionsToList[] = {
     wxT( "^.*\\.xnc$" ),           // Excellon NC drill files (alternate file ext)
     wxT( "^.*\\.svg$" ),           // SVG print/plot files
     wxT( "^.*\\.ps$" ),            // PostScript plot files
-    NULL                           // end of list
+    nullptr                        // end of list
 };
 
 
@@ -114,9 +114,9 @@ const wxString GerberFileExtensionWildCard( ".((gbr|gbrjob|(gb|gt)[alops])|pho)"
 
 
 /**
- * @brief class PROJECT_TREE_PANE is the frame that shows the tree list of files and subdirs
- * inside the working directory.  Files are filtered (see s_allowedExtensionsToList) so
- * only useful files are shown.
+ * The frame that shows the tree list of files and subdirectories inside the working directory.
+ *
+ * Files are filtered (see s_allowedExtensionsToList) so only useful files are shown.
  */
 
 
@@ -140,7 +140,7 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
                             wxNO_BORDER | wxTAB_TRAVERSAL )
 {
     m_Parent = parent;
-    m_TreeProject = NULL;
+    m_TreeProject = nullptr;
     m_isRenaming = false;
     m_selectedItem = nullptr;
     m_watcherNeedReset = false;
@@ -153,7 +153,7 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
      * Filtering is now inverted: the filters are actually used to _enable_ support
      * for a given file type.
      */
-    for( int ii = 0; s_allowedExtensionsToList[ii] != NULL; ii++ )
+    for( int ii = 0; s_allowedExtensionsToList[ii] != nullptr; ii++ )
         m_filters.emplace_back( s_allowedExtensionsToList[ii] );
 
     m_filters.emplace_back( wxT( "^no KiCad files found" ) );
@@ -1180,7 +1180,7 @@ void PROJECT_TREE_PANE::FileWatcherReset()
 
     wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
 
-    #if defined( _WIN32 )
+#if defined( _WIN32 )
     if( KIPLATFORM::ENV::IsNetworkPath( prj_dir ) )
     {
         // Due to a combination of a bug in SAMBA sending bad change event IDs and wxWidgets
@@ -1194,7 +1194,7 @@ void PROJECT_TREE_PANE::FileWatcherReset()
     {
         m_Parent->SetStatusText( _( "Local path: monitoring folder changes" ), 1 );
     }
-    #endif
+#endif
 
     // Prepare file watcher:
     if( m_watcher )

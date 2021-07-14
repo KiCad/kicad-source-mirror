@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,8 +53,8 @@ KIWAY_PLAYER::KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType
 
 
 KIWAY_PLAYER::KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
-        const wxPoint& aPos, const wxSize& aSize, long aStyle,
-        const wxString& aWdoName ) :
+                            const wxPoint& aPos, const wxSize& aSize, long aStyle,
+                            const wxString& aWdoName ) :
     EDA_BASE_FRAME( aParent, (FRAME_T) aId, aTitle, aPos, aSize, aStyle, aWdoName, nullptr ),
     m_modal( false ),
     m_modal_loop( nullptr ),
@@ -63,6 +63,7 @@ KIWAY_PLAYER::KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& a
     m_socketServer( nullptr )
 {
 }
+
 
 KIWAY_PLAYER::~KIWAY_PLAYER() throw() {}
 
@@ -83,7 +84,7 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
 
         It works in tandem with DismissModal().  But only ShowModal() is in the
         vtable and therefore cross-module capable.
-   */
+    */
 
     // This is an exception safe way to zero a pointer before returning.
     // Yes, even though DismissModal() clears this first normally, this is
@@ -114,8 +115,10 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
         std::vector<wxWindow*> enabledTopLevelWindows;
 
         for( unsigned ii = 0; ii < wlist.size(); ii++ )
+        {
             if( wlist[ii]->IsTopLevel() && wlist[ii]->IsEnabled() )
                 enabledTopLevelWindows.push_back( wlist[ii] );
+        }
 
         // exception safe way to disable all top level windows except the modal one,
         // re-enables only those that were disabled on exit
@@ -147,10 +150,12 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
     return m_modal_ret_val;
 }
 
+
 bool KIWAY_PLAYER::Destroy()
 {
     return EDA_BASE_FRAME::Destroy();
 }
+
 
 bool KIWAY_PLAYER::IsDismissed()
 {
@@ -189,3 +194,6 @@ void KIWAY_PLAYER::language_change( wxCommandEvent& event )
 }
 
 
+
+//  LocalWords:  ShowModal DismissModal vtable wxWindowDisabler aui
+//  LocalWords:  miniframe reenables KIWAY PLAYERs

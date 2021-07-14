@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Brian Sidebotham <brian.sidebotham@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,15 +48,15 @@ TEMPLATE_WIDGET::TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* a
     // Bind(wxEVT_LEFT_DOWN, &TEMPLATE_WIDGET::OnMouse, this );
 
     m_bitmapIcon->Connect( wxEVT_LEFT_DOWN,
-                           wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ), NULL, this );
+                           wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ), nullptr, this );
     m_staticTitle->Connect( wxEVT_LEFT_DOWN,
-                            wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ), NULL, this );
+                            wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ), nullptr, this );
 
     // We're not selected until we're clicked
     Unselect();
 
     // Start with template being NULL
-    m_currTemplate = NULL;
+    m_currTemplate = nullptr;
 }
 
 
@@ -77,11 +77,11 @@ void TEMPLATE_WIDGET::Unselect()
 }
 
 
-void TEMPLATE_WIDGET::SetTemplate(PROJECT_TEMPLATE* aTemplate)
+void TEMPLATE_WIDGET::SetTemplate( PROJECT_TEMPLATE* aTemplate )
 {
     m_currTemplate = aTemplate;
-    m_staticTitle->SetLabel( *(aTemplate->GetTitle() ) );
-    m_bitmapIcon->SetBitmap( *(aTemplate->GetIcon() ) );
+    m_staticTitle->SetLabel( *( aTemplate->GetTitle() ) );
+    m_bitmapIcon->SetBitmap( *( aTemplate->GetIcon() ) );
 }
 
 
@@ -93,7 +93,7 @@ void TEMPLATE_WIDGET::OnMouse( wxMouseEvent& event )
 }
 
 
-void DIALOG_TEMPLATE_SELECTOR::onNotebookResize(wxSizeEvent& event)
+void DIALOG_TEMPLATE_SELECTOR::onNotebookResize( wxSizeEvent& event )
 {
     for( size_t i=0; i < m_notebook->GetPageCount(); i++ )
     {
@@ -103,6 +103,7 @@ void DIALOG_TEMPLATE_SELECTOR::onNotebookResize(wxSizeEvent& event)
                                                 m_panels[i]->GetSize().GetHeight() - 6 );
         m_panels[i]->m_SizerChoice->FitInside( m_panels[i]->m_scrolledWindow );
     }
+
     m_notebook->Refresh();
 
     event.Skip();
@@ -126,14 +127,14 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent ) :
     m_htmlWin->SetPage( _( "<html><h1>Template Selector</h1></html>" ) );
     m_notebook->Connect( wxEVT_SIZE,
                          wxSizeEventHandler( DIALOG_TEMPLATE_SELECTOR::onNotebookResize ),
-                         NULL, this );
-    m_selectedWidget = NULL;
+                         nullptr, this );
+    m_selectedWidget = nullptr;
 }
 
 
 void DIALOG_TEMPLATE_SELECTOR::SetWidget( TEMPLATE_WIDGET* aWidget )
 {
-    if( m_selectedWidget != NULL )
+    if( m_selectedWidget != nullptr )
         m_selectedWidget->Unselect();
 
     m_selectedWidget = aWidget;
@@ -160,7 +161,7 @@ void DIALOG_TEMPLATE_SELECTOR::AddTemplate( int aPage, PROJECT_TEMPLATE* aTempla
 
 PROJECT_TEMPLATE* DIALOG_TEMPLATE_SELECTOR::GetSelectedTemplate()
 {
-    return m_selectedWidget? m_selectedWidget->GetTemplate() : NULL;
+    return m_selectedWidget? m_selectedWidget->GetTemplate() : nullptr;
 }
 
 
@@ -279,7 +280,7 @@ void DIALOG_TEMPLATE_SELECTOR::replaceCurrentPage()
 
     buildPageContent( m_tcTemplatePath->GetValue(), page );
 
-    m_selectedWidget = NULL;
+    m_selectedWidget = nullptr;
 }
 
 

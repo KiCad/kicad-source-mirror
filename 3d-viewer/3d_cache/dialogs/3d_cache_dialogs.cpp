@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache, wxString& prevModelSelectDir,
                          int& prevModelWildcard, FP_3DMODEL* aModel )
 {
-    if( NULL == aModel )
+    if( nullptr == aModel )
         return false;
 
     DIALOG_SELECT_3DMODEL dm( aParent, aCache, aModel, prevModelSelectDir, prevModelWildcard );

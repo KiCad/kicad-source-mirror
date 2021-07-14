@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +34,7 @@ class PROJECT_TREE_PANE;
 class wxTreeCtrl;
 
 /**
- * PROJECT_TREE_ITEM
- * handles one item (a file or a directory name) for the tree file
+ * Handle one item (a file or a directory name) for the tree file.
  */
 class PROJECT_TREE_ITEM : public wxTreeItemData
 {
@@ -44,7 +43,7 @@ public:
     PROJECT_TREE_ITEM( TREE_FILE_TYPE type, const wxString& data, wxTreeCtrl* parent );
 
     PROJECT_TREE_ITEM() :
-            m_parent( NULL )
+            m_parent( nullptr )
     { }
 
     PROJECT_TREE_ITEM( const PROJECT_TREE_ITEM& src ) :

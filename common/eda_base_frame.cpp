@@ -79,6 +79,7 @@ static const wxSize minSize( FRAME_T aFrameType )
     }
 }
 
+
 static const wxSize defaultSize( FRAME_T aFrameType )
 {
     switch( aFrameType )
@@ -147,6 +148,7 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     initExitKey();
 }
 
+
 EDA_BASE_FRAME::EDA_BASE_FRAME( FRAME_T aFrameType, KIWAY* aKiway ) :
         wxFrame(),
         TOOLS_HOLDER(),
@@ -154,6 +156,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( FRAME_T aFrameType, KIWAY* aKiway ) :
 {
     commonInit( aFrameType );
 }
+
 
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
@@ -398,8 +401,8 @@ void EDA_BASE_FRAME::HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAM
 #else
     bool canCheck = true;
 
-    // wxMenuItems don't want to be checked unless they actually are checkable, so we have to check to
-    // see if they can be and can't just universally apply a check in this event.
+    // wxMenuItems don't want to be checked unless they actually are checkable, so we have to
+    // check to see if they can be and can't just universally apply a check in this event.
     if( auto menu = dynamic_cast<wxMenu*>( aEvent.GetEventObject() ) )
         canCheck = menu->FindItem( aEvent.GetId() )->IsCheckable();
 
@@ -554,7 +557,8 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
         m_frameSize = defaultSize( m_ident );
         wasDefault  = true;
 
-        wxLogTrace( traceDisplayLocation, "Using minimum size (%d, %d)", m_frameSize.x, m_frameSize.y );
+        wxLogTrace( traceDisplayLocation, "Using minimum size (%d, %d)",
+                    m_frameSize.x, m_frameSize.y );
     }
 
     wxLogTrace( traceDisplayLocation, "Number of displays: %d", wxDisplay::GetCount() );
@@ -723,7 +727,8 @@ void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
     aCfg->state.maximized = IsMaximized();
     aCfg->state.display   = wxDisplay::GetFromWindow( this );
 
-    wxLogTrace( traceDisplayLocation, "Saving window maximized: %s", IsMaximized() ? "true" : "false" );
+    wxLogTrace( traceDisplayLocation, "Saving window maximized: %s",
+                IsMaximized() ? "true" : "false" );
     wxLogTrace( traceDisplayLocation, "Saving config position (%d, %d) with size (%d, %d)",
                 m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
@@ -966,7 +971,7 @@ void EDA_BASE_FRAME::ClearFileHistory( FILE_HISTORY* aFileHistory )
 
 void EDA_BASE_FRAME::OnKicadAbout( wxCommandEvent& event )
 {
-    void ShowAboutDialog(EDA_BASE_FRAME * aParent); // See AboutDialog_main.cpp
+    void ShowAboutDialog( EDA_BASE_FRAME * aParent ); // See AboutDialog_main.cpp
     ShowAboutDialog( this );
 }
 
@@ -1194,8 +1199,10 @@ void EDA_BASE_FRAME::OnMaximize( wxMaximizeEvent& aEvent )
     {
         m_normalFrameSize = GetWindowSize();
         m_normalFramePos  = GetPosition();
-        wxLogTrace( traceDisplayLocation, "Maximizing window - Saving position (%d, %d) with size (%d, %d)",
-                    m_normalFramePos.x, m_normalFramePos.y, m_normalFrameSize.x, m_normalFrameSize.y );
+        wxLogTrace( traceDisplayLocation,
+                    "Maximizing window - Saving position (%d, %d) with size (%d, %d)",
+                    m_normalFramePos.x, m_normalFramePos.y,
+                    m_normalFrameSize.x, m_normalFrameSize.y );
     }
 
     // Skip event to actually maximize the window

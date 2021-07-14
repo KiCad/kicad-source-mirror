@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ SGCOORDINDEX::SGCOORDINDEX( SGNODE* aParent ) : SGINDEX( aParent )
 {
     m_SGtype = S3D::SGTYPE_COORDINDEX;
 
-    if( NULL != aParent && S3D::SGTYPE_FACESET == aParent->GetNodeType() )
+    if( nullptr != aParent && S3D::SGTYPE_FACESET == aParent->GetNodeType() )
     {
         m_Parent->AddChildNode( this );
     }
