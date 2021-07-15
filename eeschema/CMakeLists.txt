@@ -494,6 +494,13 @@ else()
         )
 endif()
 
+
+if( KICAD_WIN32_INSTALL_PDBS )
+    # Get the PDBs to copy over for MSVC
+    install(FILES $<TARGET_PDB_FILE:eeschema> DESTINATION ${KICAD_BIN})
+    install(FILES $<TARGET_PDB_FILE:eeschema_kiface> DESTINATION ${KICAD_BIN})
+endif()
+
 # auto-generate cmp_library_lexer.h and cmp_library_keywords.cpp for the component
 # library format.
 make_lexer(

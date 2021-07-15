@@ -95,11 +95,17 @@ install( TARGETS kicad
     DESTINATION ${KICAD_BIN}
     COMPONENT binary
     )
+
+if( KICAD_WIN32_INSTALL_PDBS )
+    # Get the PDBs to copy over for MSVC
+    install(FILES $<TARGET_PDB_FILE:kicad> DESTINATION ${KICAD_BIN})
+endif()
+
 if( APPLE )
     # "install( CODE ... )" will launch its own CMake, so no variables from
     # this CMake instance are accessible... use helper to transfer
     set( SCRIPTING_HELPER "1" )
-    
+
     if( KICAD_SPICE )
         set( SPICE_HELPER "1" )
     else()

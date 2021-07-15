@@ -146,6 +146,11 @@ option( KICAD_GAL_PROFILE
     "Enable profiling info for GAL"
     OFF )
 
+cmake_dependent_option( KICAD_WIN32_INSTALL_PDBS
+    "Installs debug pdb to the bin folder, NOT REQUIRED FOR DEBUGGING THE SOURCE ON MSVC. This is purely for release building."
+    OFF "WIN32"
+    OFF )
+
 # Global setting: exports are explicit
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )
 set( CMAKE_VISIBILITY_INLINES_HIDDEN ON )

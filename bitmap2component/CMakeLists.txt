@@ -85,6 +85,10 @@ else()
         )
 endif()
 
+if( KICAD_WIN32_INSTALL_PDBS )
+    # Get the PDBs to copy over for MSVC
+    install(FILES $<TARGET_PDB_FILE:bitmap2component> DESTINATION ${KICAD_BIN})
+endif()
 
 if( false )     # linker map with cross reference
     set_target_properties( bitmap2component PROPERTIES

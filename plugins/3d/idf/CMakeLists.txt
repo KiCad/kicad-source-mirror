@@ -41,3 +41,8 @@ install( TARGETS
     DESTINATION ${KICAD_USER_PLUGIN}/3d
     COMPONENT binary
     )
+
+if( KICAD_WIN32_INSTALL_PDBS )
+    # Get the PDBs to copy over for MSVC
+    install(FILES $<TARGET_PDB_FILE:s3d_plugin_idf> DESTINATION ${KICAD_USER_PLUGIN}/3d)
+endif()
