@@ -535,8 +535,7 @@ void DIALOG_COLOR_PICKER::drawAll()
 
 void DIALOG_COLOR_PICKER::colorDClick( wxMouseEvent& event )
 {
-    buttColorClick( event );
-    wxDialog::EndModal( wxID_OK );
+    wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
 }
 
 
