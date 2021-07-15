@@ -849,6 +849,9 @@ bool SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     bool globalTable = ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() );
     saveSymbolLibTables( globalTable, !globalTable );
 
+    std::string packet = fn.GetFullPath().ToStdString();
+    this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_LIB_EDIT, packet );
+
     return true;
 }
 
@@ -1201,6 +1204,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             if( m_treePane )
             {
                 LIB_ID id( libNickname, wxEmptyString );
+                m_treePane->GetLibTree()->SelectLibId( id );
                 m_treePane->GetLibTree()->ExpandLibId( id );
                 m_treePane->GetLibTree()->CenterLibId( id );
             }
