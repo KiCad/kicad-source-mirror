@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -39,7 +40,7 @@ STATUS_POPUP::STATUS_POPUP( wxWindow* aParent ) :
     m_panel->SetSizer( m_topSizer );
     m_panel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
-    Connect( wxEVT_TIMER, wxTimerEventHandler( STATUS_POPUP::onExpire ), NULL, this );
+    Connect( wxEVT_TIMER, wxTimerEventHandler( STATUS_POPUP::onExpire ), nullptr, this );
 
 #ifdef __WXOSX_MAC__
     // Key events from popups don't get put through the wxWidgets event system on OSX,

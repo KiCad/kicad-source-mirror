@@ -265,8 +265,8 @@ VIEW::VIEW( bool aIsDynamic ) :
     m_scale( 4.0 ),
     m_minScale( 0.2 ), m_maxScale( 50000.0 ),
     m_mirrorX( false ), m_mirrorY( false ),
-    m_painter( NULL ),
-    m_gal( NULL ),
+    m_painter( nullptr ),
+    m_gal( nullptr ),
     m_dynamic( aIsDynamic ),
     m_useDrawPriority( false ),
     m_nextDrawPriority( 0 ),
@@ -1138,7 +1138,7 @@ void VIEW::Redraw()
     // The view rtree uses integer positions.  Large screens can overflow
     // this size so in this case, simply set the rectangle to the full rtree
     if( rect.GetWidth() > std::numeric_limits<int>::max() ||
-            rect.GetHeight() > std::numeric_limits<int>::max() )
+        rect.GetHeight() > std::numeric_limits<int>::max() )
         recti.SetMaximum();
 
     redrawRect( recti );

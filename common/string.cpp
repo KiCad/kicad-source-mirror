@@ -493,8 +493,8 @@ char* StrPurge( char* text )
 char* GetLine( FILE* File, char* Line, int* LineNum, int SizeLine )
 {
     do {
-        if( fgets( Line, SizeLine, File ) == NULL )
-            return NULL;
+        if( fgets( Line, SizeLine, File ) == nullptr )
+            return nullptr;
 
         if( LineNum )
             *LineNum += 1;
@@ -597,7 +597,7 @@ int StrNumCmp( const wxString& aString1, const wxString& aString2, bool aIgnoreC
 bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
                         bool case_sensitive )
 {
-    const wxChar* cp = NULL, * mp = NULL;
+    const wxChar* cp = nullptr, * mp = nullptr;
     const wxChar* wild, * str;
     wxString      _pattern, _string_to_tst;
 
@@ -721,9 +721,13 @@ int ValueStringCompare( wxString strFWord, wxString strSWord )
     int isEqual = strFWordBeg.CmpNoCase( strSWordBeg );
 
     if( isEqual > 0 )
+    {
         return 1;
+    }
     else if( isEqual < 0 )
+    {
         return -1;
+    }
     else
     {
         // If the first sections are equal compare their digits

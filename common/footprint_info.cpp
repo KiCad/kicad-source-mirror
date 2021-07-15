@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 Jean-Pierre Charras, <jp.charras@wanadoo.fr>
  * Copyright (C) 2013-2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetFootprintInfo( const wxString& aLibNickname,
                                                   const wxString& aFootprintName )
 {
     if( aFootprintName.IsEmpty() )
-        return NULL;
+        return nullptr;
 
     for( std::unique_ptr<FOOTPRINT_INFO>& fp : m_list )
     {
@@ -51,18 +51,18 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetFootprintInfo( const wxString& aLibNickname,
             return fp.get();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
 FOOTPRINT_INFO* FOOTPRINT_LIST::GetFootprintInfo( const wxString& aFootprintName )
 {
     if( aFootprintName.IsEmpty() )
-        return NULL;
+        return nullptr;
 
     LIB_ID fpid;
 
-    wxCHECK_MSG( fpid.Parse( aFootprintName ) < 0, NULL,
+    wxCHECK_MSG( fpid.Parse( aFootprintName ) < 0, nullptr,
                  wxString::Format( wxT( "'%s' is not a valid LIB_ID." ), aFootprintName ) );
 
     return GetFootprintInfo( fpid.GetLibNickname(), fpid.GetLibItemName() );

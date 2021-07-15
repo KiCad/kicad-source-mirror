@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2016-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -53,35 +55,35 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 
     switch( aChangeType & CHT_TYPE )
     {
-        case CHT_ADD:
-            assert( m_changedItems.find( aItem ) == m_changedItems.end() );
-            makeEntry( aItem, CHT_ADD | flag );
-            return *this;
+    case CHT_ADD:
+        assert( m_changedItems.find( aItem ) == m_changedItems.end() );
+        makeEntry( aItem, CHT_ADD | flag );
+        return *this;
 
-        case CHT_REMOVE:
-            makeEntry( aItem, CHT_REMOVE | flag );
-            return *this;
+    case CHT_REMOVE:
+        makeEntry( aItem, CHT_REMOVE | flag );
+        return *this;
 
-        case CHT_MODIFY:
-        {
-            EDA_ITEM* parent = parentObject( aItem );
-            EDA_ITEM* clone = nullptr;
+    case CHT_MODIFY:
+    {
+        EDA_ITEM* parent = parentObject( aItem );
+        EDA_ITEM* clone = nullptr;
 
-            assert( parent );
+        assert( parent );
 
-            if( parent )
-                clone = parent->Clone();
+        if( parent )
+            clone = parent->Clone();
 
-            assert( clone );
+        assert( clone );
 
-            if( clone )
-                return createModified( parent, clone, flag );
+        if( clone )
+            return createModified( parent, clone, flag );
 
-            break;
-        }
+        break;
+    }
 
-        default:
-            assert( false );
+    default:
+        assert( false );
     }
 
     return *this;
@@ -105,7 +107,7 @@ COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag )
     {
         UNDO_REDO change_type = aItems.GetPickedItemStatus( i );
         EDA_ITEM* item = aItems.GetPickedItem( i );
-        EDA_ITEM* copy = NULL;
+        EDA_ITEM* copy = nullptr;
 
         if( change_type == UNDO_REDO::UNSPECIFIED )
             change_type = aModFlag;
@@ -169,7 +171,8 @@ void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy )
 
     if( m_changedItems.find( aItem ) != m_changedItems.end() )
     {
-        eraseIf( m_changes, [aItem] ( const COMMIT_LINE& aEnt ) {
+        eraseIf( m_changes, [aItem] ( const COMMIT_LINE& aEnt )
+        {
             return aEnt.m_item == aItem;
         } );
     }

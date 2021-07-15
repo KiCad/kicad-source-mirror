@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,7 +83,7 @@ bool PLOTTER::OpenFile( const wxString& aFullFilename )
     // but only for most of them
     m_outputFile = wxFopen( m_filename, wxT( "wt" ) );
 
-    if( m_outputFile == NULL )
+    if( m_outputFile == nullptr )
         return false ;
 
     return true;
@@ -136,6 +136,7 @@ double PLOTTER::userToDeviceSize( double size ) const
 
 #define IU_PER_MILS ( m_IUsPerDecimil * 10 )
 
+
 double PLOTTER::GetDotMarkLenIU() const
 {
     return userToDeviceSize( DOT_MARK_LEN( GetCurrentLineWidth() ) );
@@ -157,7 +158,7 @@ double PLOTTER::GetDashGapLenIU() const
 void PLOTTER::Arc( const SHAPE_ARC& aArc )
 {
     Arc( wxPoint( aArc.GetCenter() ), aArc.GetStartAngle(), aArc.GetEndAngle(), aArc.GetRadius(),
-            FILL_TYPE::NO_FILL, aArc.GetWidth() );
+         FILL_TYPE::NO_FILL, aArc.GetWidth() );
 }
 
 
@@ -237,8 +238,7 @@ void PLOTTER::BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
 
 void PLOTTER::PlotImage(const wxImage & aImage, const wxPoint& aPos, double aScaleFactor )
 {
-    wxSize size( aImage.GetWidth() * aScaleFactor,
-	         aImage.GetHeight() * aScaleFactor );
+    wxSize size( aImage.GetWidth() * aScaleFactor, aImage.GetHeight() * aScaleFactor );
 
     wxPoint start = aPos;
     start.x -= size.x / 2;
@@ -338,6 +338,7 @@ void PLOTTER::markerVBar( const wxPoint& pos, int radius )
 void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
 {
     int radius = diametre / 2;
+
     /* Marker are composed by a series of 'parts' superimposed; not every
        combination make sense, obviously. Since they are used in order I
        tried to keep the uglier/more complex constructions at the end.
@@ -347,72 +348,73 @@ void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
        If Visual C++ supported the 0b literals they would be optimally
        and easily encoded as an integer array. We have to do with octal */
     static const unsigned char marker_patterns[MARKER_COUNT] = {
-	// Bit order:  O Square Lozenge - | \ /
-	// First choice: simple shapes
-	0003,  // X
-	0100,  // O
-	0014,  // +
-	0040,  // Sq
-	0020,  // Lz
-	// Two simple shapes
-	0103,  // X O
-	0017,  // X +
-	0043,  // X Sq
-	0023,  // X Lz
-	0114,  // O +
-	0140,  // O Sq
-	0120,  // O Lz
-	0054,  // + Sq
-	0034,  // + Lz
-	0060,  // Sq Lz
-	// Three simple shapes
-	0117,  // X O +
-	0143,  // X O Sq
-	0123,  // X O Lz
-	0057,  // X + Sq
-	0037,  // X + Lz
-	0063,  // X Sq Lz
-	0154,  // O + Sq
-	0134,  // O + Lz
-	0074,  // + Sq Lz
-	// Four simple shapes
-	0174,  // O Sq Lz +
-	0163,  // X O Sq Lz
-	0157,  // X O Sq +
-	0137,  // X O Lz +
-	0077,  // X Sq Lz +
-	// This draws *everything *
-	0177,  // X O Sq Lz +
-	// Here we use the single bars... so the cross is forbidden
-	0110,  // O -
-	0104,  // O |
-	0101,  // O /
-	0050,  // Sq -
-	0044,  // Sq |
-	0041,  // Sq /
-	0030,  // Lz -
-	0024,  // Lz |
-	0021,  // Lz /
-	0150,  // O Sq -
-	0144,  // O Sq |
-	0141,  // O Sq /
-	0130,  // O Lz -
-	0124,  // O Lz |
-	0121,  // O Lz /
-	0070,  // Sq Lz -
-	0064,  // Sq Lz |
-	0061,  // Sq Lz /
-	0170,  // O Sq Lz -
-	0164,  // O Sq Lz |
-	0161,  // O Sq Lz /
-	// Last resort: the backlash component (easy to confound)
-	0102,  // \ O
-	0042,  // \ Sq
-	0022,  // \ Lz
-	0142,  // \ O Sq
-	0122,  // \ O Lz
-	0062,  // \ Sq Lz
-	0162   // \ O Sq Lz
+
+        // Bit order:  O Square Lozenge - | \ /
+        // First choice: simple shapes
+        0003,  // X
+        0100,  // O
+        0014,  // +
+        0040,  // Sq
+        0020,  // Lz
+        // Two simple shapes
+        0103,  // X O
+        0017,  // X +
+        0043,  // X Sq
+        0023,  // X Lz
+        0114,  // O +
+        0140,  // O Sq
+        0120,  // O Lz
+        0054,  // + Sq
+        0034,  // + Lz
+        0060,  // Sq Lz
+        // Three simple shapes
+        0117,  // X O +
+        0143,  // X O Sq
+        0123,  // X O Lz
+        0057,  // X + Sq
+        0037,  // X + Lz
+        0063,  // X Sq Lz
+        0154,  // O + Sq
+        0134,  // O + Lz
+        0074,  // + Sq Lz
+        // Four simple shapes
+        0174,  // O Sq Lz +
+        0163,  // X O Sq Lz
+        0157,  // X O Sq +
+        0137,  // X O Lz +
+        0077,  // X Sq Lz +
+        // This draws *everything *
+        0177,  // X O Sq Lz +
+        // Here we use the single bars... so the cross is forbidden
+        0110,  // O -
+        0104,  // O |
+        0101,  // O /
+        0050,  // Sq -
+        0044,  // Sq |
+        0041,  // Sq /
+        0030,  // Lz -
+        0024,  // Lz |
+        0021,  // Lz /
+        0150,  // O Sq -
+        0144,  // O Sq |
+        0141,  // O Sq /
+        0130,  // O Lz -
+        0124,  // O Lz |
+        0121,  // O Lz /
+        0070,  // Sq Lz -
+        0064,  // Sq Lz |
+        0061,  // Sq Lz /
+        0170,  // O Sq Lz -
+        0164,  // O Sq Lz |
+        0161,  // O Sq Lz /
+        // Last resort: the backlash component (easy to confound)
+        0102,  // \ O
+        0042,  // \ Sq
+        0022,  // \ Lz
+        0142,  // \ O Sq
+        0122,  // \ O Lz
+        0062,  // \ Sq Lz
+        0162   // \ O Sq Lz
     };
     if( aShapeId >= MARKER_COUNT )
     {
@@ -421,22 +423,29 @@ void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
     }
     else
     {
-	// Decode the pattern and draw the corresponding parts
-	unsigned char pat = marker_patterns[aShapeId];
-	if( pat & 0001 )
-	    markerSlash( position, radius );
-	if( pat & 0002 )
-	    markerBackSlash( position, radius );
-	if( pat & 0004 )
-	    markerVBar( position, radius );
-	if( pat & 0010 )
-	    markerHBar( position, radius );
-	if( pat & 0020 )
-	    markerLozenge( position, radius );
-	if( pat & 0040 )
-	    markerSquare( position, radius );
-	if( pat & 0100 )
-	    markerCircle( position, radius );
+        // Decode the pattern and draw the corresponding parts
+        unsigned char pat = marker_patterns[aShapeId];
+
+        if( pat & 0001 )
+            markerSlash( position, radius );
+
+        if( pat & 0002 )
+            markerBackSlash( position, radius );
+
+        if( pat & 0004 )
+            markerVBar( position, radius );
+
+        if( pat & 0010 )
+            markerHBar( position, radius );
+
+        if( pat & 0020 )
+            markerLozenge( position, radius );
+
+        if( pat & 0040 )
+            markerSquare( position, radius );
+
+        if( pat & 0100 )
+            markerCircle( position, radius );
     }
 }
 
@@ -458,7 +467,7 @@ void PLOTTER::segmentAsOval( const wxPoint& start, const wxPoint& end, int width
     size.x = KiROUND( EuclideanNorm( size ) ) + width;
     size.y = width;
 
-    FlashPadOval( center, size, orient, tracemode, NULL );
+    FlashPadOval( center, size, orient, tracemode, nullptr );
 }
 
 
@@ -538,7 +547,9 @@ void PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
                         int radius, int width, OUTLINE_MODE tracemode, void* aData )
 {
     if( tracemode == FILLED )
+    {
         Arc( centre, StAngle, EndAngle, radius, FILL_TYPE::NO_FILL, width );
+    }
     else
     {
         SetCurrentLineWidth( -1 );
@@ -554,19 +565,21 @@ void PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
                          OUTLINE_MODE tracemode, void* aData )
 {
     if( tracemode == FILLED )
+    {
         Rect( p1, p2, FILL_TYPE::NO_FILL, width );
+    }
     else
     {
         SetCurrentLineWidth( -1 );
         wxPoint offsetp1( p1.x - (width - m_currentPenWidth) / 2,
                           p1.y - (width - m_currentPenWidth) / 2 );
         wxPoint offsetp2( p2.x + (width - m_currentPenWidth) / 2,
-			  p2.y + (width - m_currentPenWidth) / 2 );
+                          p2.y + (width - m_currentPenWidth) / 2 );
         Rect( offsetp1, offsetp2, FILL_TYPE::NO_FILL, -1 );
-        offsetp1.x += (width - m_currentPenWidth);
-        offsetp1.y += (width - m_currentPenWidth);
-        offsetp2.x -= (width - m_currentPenWidth);
-        offsetp2.y -= (width - m_currentPenWidth);
+        offsetp1.x += ( width - m_currentPenWidth );
+        offsetp1.y += ( width - m_currentPenWidth );
+        offsetp2.x -= ( width - m_currentPenWidth );
+        offsetp2.y -= ( width - m_currentPenWidth );
         Rect( offsetp1, offsetp2, FILL_TYPE::NO_FILL, -1 );
     }
 }
@@ -603,7 +616,7 @@ void PLOTTER::FilledCircle( const wxPoint& pos, int diametre, OUTLINE_MODE trace
 
 
 void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_TYPE aFill,
-                       int aWidth, void * aData )
+                        int aWidth, void* aData )
 {
     std::vector<wxPoint> cornerList;
     cornerList.reserve( aCornerList.PointCount() );

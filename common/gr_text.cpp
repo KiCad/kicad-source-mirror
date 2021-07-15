@@ -230,6 +230,6 @@ void PLOTTER::Text( const wxPoint&              aPos,
     SetColor( aColor );
     SetCurrentLineWidth( aPenWidth, aData );
 
-    GRText( NULL, aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aPenWidth,
+    GRText( nullptr, aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aPenWidth,
             aItalic, aBold, nullptr, nullptr, this );
 }

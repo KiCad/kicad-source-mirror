@@ -125,7 +125,7 @@ public:
     }
 
     /// @copydoc wxWindow::Refresh()
-    virtual void Refresh( bool aEraseBackground = true, const wxRect* aRect = NULL ) override;
+    virtual void Refresh( bool aEraseBackground = true, const wxRect* aRect = nullptr ) override;
 
     /**
      * Force a redraw.

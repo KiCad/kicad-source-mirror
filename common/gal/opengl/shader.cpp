@@ -79,6 +79,7 @@ SHADER::~SHADER()
     }
 }
 
+
 bool SHADER::LoadShaderFromFile( SHADER_TYPE aShaderType, const std::string& aShaderSourceName )
 {
     // Load shader sources
@@ -253,7 +254,7 @@ bool SHADER::loadShaderFromStringArray( SHADER_TYPE aShaderType, const char** aA
     programInfo( programNumber );
 
     // Attach the sources
-    glShaderSource( shaderNumber, aSize, (const GLchar**) aArray, NULL );
+    glShaderSource( shaderNumber, aSize, (const GLchar**) aArray, nullptr );
     programInfo( programNumber );
 
     // Compile and attach shader to the program

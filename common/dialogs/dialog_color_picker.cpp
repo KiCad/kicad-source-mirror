@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -111,7 +111,7 @@ DIALOG_COLOR_PICKER::~DIALOG_COLOR_PICKER()
     {
         swatch->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
                             wxMouseEventHandler( DIALOG_COLOR_PICKER::buttColorClick ),
-                            NULL, this );
+                            nullptr, this );
     }
 }
 
@@ -183,10 +183,10 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
 
                 swatch->Connect( wxEVT_LEFT_DOWN,
                                  wxMouseEventHandler( DIALOG_COLOR_PICKER::buttColorClick ),
-                                 NULL, this );
+                                 nullptr, this );
                 swatch->Connect( wxEVT_LEFT_DCLICK,
                                  wxMouseEventHandler( DIALOG_COLOR_PICKER::colorDClick ),
-                                 NULL, this );
+                                 nullptr, this );
             };
 
     // If no predefined list is given, build the default predefined colors:
@@ -230,9 +230,12 @@ void DIALOG_COLOR_PICKER::createRGBBitmap()
     int half_size = std::min( bmsize.x, bmsize.y )/2;
 
     // We use here a Y axis from bottom to top and origin to center, So we need to map
-    // coordinated to write pixel in a wxImage
-    #define MAPX(xx) bmsize.x/2 + (xx)
-    #define MAPY(yy) bmsize.y/2 - (yy)
+    // coordinated to write pixel in a wxImage.  MAPX and MAPY are defined above so they
+    // must be undefined here to prevent compiler warnings.
+#undef MAPX
+#undef MAPY
+#define MAPX( xx ) bmsize.x / 2 + ( xx )
+#define MAPY( yy ) bmsize.y / 2 - ( yy )
 
     // Reserve room to draw cursors inside the bitmap
     half_size -= m_cursorsSize/2;
@@ -270,6 +273,7 @@ void DIALOG_COLOR_PICKER::createRGBBitmap()
 
     // Red green area in y Z 3d axis
     color.b = 0.0;
+
     for( int xx = 0; xx < half_size; xx++ )     // green axis
     {
         color.g = inc * xx;
@@ -283,6 +287,7 @@ void DIALOG_COLOR_PICKER::createRGBBitmap()
 
     // Blue green area in x y 3d axis
     color.r = 0.0;
+
     for( int xx = 0; xx < half_size; xx++ )     // green axis
     {
         color.g = inc * xx;
@@ -315,8 +320,8 @@ void DIALOG_COLOR_PICKER::createHSVBitmap()
 
     // We use here a Y axis from bottom to top and origin to center, So we need to map
     // coordinated to write pixel in a wxImage
-    #define MAPX(xx) bmsize.x/2 + (xx)
-    #define MAPY(yy) bmsize.y/2 - (yy)
+    #define MAPX( xx ) bmsize.x / 2 + ( xx )
+    #define MAPY( yy ) bmsize.y / 2 - ( yy )
 
     wxImage img( bmsize );  // a temporary buffer to build the color map
 
@@ -390,10 +395,10 @@ void DIALOG_COLOR_PICKER::drawRGBPalette()
     wxBrush brush( wxColor( 0, 0, 0 ), wxBRUSHSTYLE_TRANSPARENT );
     bitmapDC.SetPen( pen );
     bitmapDC.SetBrush( brush );
-    int half_csize = m_cursorsSize/2;
+    int half_csize = m_cursorsSize / 2;
 
     #define SLOPE_AXIS 50.0
-    double slope = SLOPE_AXIS/half_size;
+    double slope = SLOPE_AXIS / half_size;
 
     // Red axis cursor (Z 3Daxis):
     m_cursorBitmapRed.x = 0;
@@ -425,6 +430,7 @@ void DIALOG_COLOR_PICKER::drawRGBPalette()
     bitmapDC.DrawLine( 0, 0, -half_size, - half_size*slope );   // green axis (Y 3D axis)
 
     m_RgbBitmap->SetBitmap( newBm );
+
     /* Deselect the Tool Bitmap from DC,
      *  in order to delete the MemoryDC safely without deleting the bitmap */
     bitmapDC.SelectObject( wxNullBitmap );
@@ -438,7 +444,7 @@ void DIALOG_COLOR_PICKER::drawHSVPalette()
 
     wxMemoryDC bitmapDC;
     wxSize bmsize = m_bitmapHSV->GetSize();
-    int half_size = std::min( bmsize.x, bmsize.y )/2;
+    int half_size = std::min( bmsize.x, bmsize.y ) / 2;
     wxBitmap newBm( *m_bitmapHSV );
     bitmapDC.SelectObject( newBm );
 
@@ -447,7 +453,7 @@ void DIALOG_COLOR_PICKER::drawHSVPalette()
     bitmapDC.SetDeviceOrigin( half_size, half_size );
 
     // Reserve room to draw cursors inside the bitmap
-    half_size -= m_cursorsSize/2;
+    half_size -= m_cursorsSize / 2;
 
     // Draw the HSB cursor:
     m_cursorBitmapHSV.x = cos( m_hue * M_PI / 180.0 ) * half_size * m_sat;
@@ -464,6 +470,7 @@ void DIALOG_COLOR_PICKER::drawHSVPalette()
                             m_cursorsSize, m_cursorsSize );
 
     m_HsvBitmap->SetBitmap( newBm );
+
     /* Deselect the Tool Bitmap from DC,
      * in order to delete the MemoryDC safely without deleting the bitmap
      */
@@ -558,7 +565,7 @@ void DIALOG_COLOR_PICKER::onRGBMouseClick( wxMouseEvent& event )
 
     // The cursor position is relative to the m_bitmapHSV wxBitmap center
     wxSize bmsize = m_bitmapRGB->GetSize();
-    int half_size = std::min( bmsize.x, bmsize.y )/2;
+    int half_size = std::min( bmsize.x, bmsize.y ) / 2;
     mousePos.x -= half_size;
     mousePos.y -= half_size;
     mousePos.y = -mousePos.y;       // Use the bottom to top vertical axis
@@ -608,12 +615,12 @@ void DIALOG_COLOR_PICKER::onRGBMouseDrag( wxMouseEvent& event )
     // The cursor position is relative to the m_bitmapHSV wxBitmap center
     wxPoint mousePos = event.GetPosition();
     wxSize bmsize = m_bitmapRGB->GetSize();
-    int half_size = std::min( bmsize.x, bmsize.y )/2;
+    int half_size = std::min( bmsize.x, bmsize.y ) / 2;
     mousePos.x -= half_size;
     mousePos.y -= half_size;
-    mousePos.y = -mousePos.y;       // Use the bottom to top vertical axis
+    mousePos.y = -mousePos.y;           // Use the bottom to top vertical axis
 
-    half_size -= m_cursorsSize/2;       // the actual half_size of the palette area
+    half_size -= m_cursorsSize / 2;     // the actual half_size of the palette area
 
     // Change colors according to the selected cursor:
     if( m_selectedCursor == &m_cursorBitmapRed )
@@ -683,6 +690,7 @@ bool DIALOG_COLOR_PICKER::setHSvaluesFromCursor( wxPoint aMouseCursor )
     wxPoint mousePos = aMouseCursor;
     wxSize bmsize = m_bitmapHSV->GetSize();
     int half_size = std::min( bmsize.x, bmsize.y )/2;
+
     // Make the cursor position relative to the m_bitmapHSV wxBitmap center
     mousePos.x -= half_size;
     mousePos.y -= half_size;
@@ -698,7 +706,7 @@ bool DIALOG_COLOR_PICKER::setHSvaluesFromCursor( wxPoint aMouseCursor )
     m_cursorBitmapHSV = mousePos;
 
     // Set saturation and hue from new cursor position:
-    half_size -= m_cursorsSize/2;       // the actual half_size of the palette area
+    half_size -= m_cursorsSize / 2;       // the actual half_size of the palette area
     m_sat = dist_from_centre / half_size;
 
     if( m_sat > 1.0 )

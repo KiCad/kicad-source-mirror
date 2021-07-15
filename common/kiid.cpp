@@ -99,10 +99,10 @@ KIID::KIID( const wxString& aString ) : m_uuid(), m_cached_timestamp( 0 )
         for( int i = 0; i < 4; ++i )
         {
             wxString octet      = aString.substr( i * 2, 2 );
-            m_uuid.data[i + 12] = strtol( octet.data(), NULL, 16 );
+            m_uuid.data[i + 12] = strtol( octet.data(), nullptr, 16 );
         }
 
-        m_cached_timestamp = strtol( aString.c_str(), NULL, 16 );
+        m_cached_timestamp = strtol( aString.c_str(), nullptr, 16 );
     }
     else
     {
@@ -111,7 +111,7 @@ KIID::KIID( const wxString& aString ) : m_uuid(), m_cached_timestamp( 0 )
             m_uuid = stringGenerator( aString.wc_str() );
 
             if( IsLegacyTimestamp() )
-                m_cached_timestamp = strtol( aString.substr( 28 ).c_str(), NULL, 16 );
+                m_cached_timestamp = strtol( aString.substr( 28 ).c_str(), nullptr, 16 );
         }
         catch( ... )
         {
@@ -177,7 +177,7 @@ KIID::KIID( timestamp_t aTimestamp )
     for( int i = 0; i < 4; ++i )
     {
         wxString octet      = str.substr( i * 2, 2 );
-        m_uuid.data[i + 12] = strtol( octet.data(), NULL, 16 );
+        m_uuid.data[i + 12] = strtol( octet.data(), nullptr, 16 );
     }
 }
 

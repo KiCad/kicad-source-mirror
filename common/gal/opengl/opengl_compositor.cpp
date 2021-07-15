@@ -199,7 +199,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
     // Set texture parameters
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, aDimensions.x, aDimensions.y, 0, GL_RGBA,
-                  GL_UNSIGNED_BYTE, NULL );
+                  GL_UNSIGNED_BYTE, nullptr );
     checkGlError( "creating framebuffer texture", __FILE__, __LINE__ );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );

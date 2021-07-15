@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -67,9 +67,11 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 }
 
 
-void ACTION_MANAGER::SetConditions( const TOOL_ACTION& aAction, const ACTION_CONDITIONS& aConditions )
+void ACTION_MANAGER::SetConditions( const TOOL_ACTION& aAction,
+                                    const ACTION_CONDITIONS& aConditions )
 {
-    // Remove any existing handlers with the old conditions to ensure the UI layer doesn't have stale data
+    // Remove any existing handlers with the old conditions to ensure the UI layer doesn't have
+    // stale data.
     if( m_toolMgr )
         m_toolMgr->GetToolHolder()->UnregisterUIUpdateHandler( aAction );
 
@@ -112,7 +114,7 @@ TOOL_ACTION* ACTION_MANAGER::FindAction( const std::string& aActionName ) const
     if( it != m_actionNameIndex.end() )
         return it->second;
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -150,7 +152,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     // Choose the action that has the highest priority on the active tools stack
     // If there is none, run the global action associated with the hot key
     int highestPriority = -1, priority = -1;
-    const TOOL_ACTION* context = NULL;      // pointer to context action of the highest priority tool
+    const TOOL_ACTION* context = nullptr; // pointer to context action of the highest priority tool
     std::vector<const TOOL_ACTION*> global; // pointers to global actions
                                             // if there is no context action
 

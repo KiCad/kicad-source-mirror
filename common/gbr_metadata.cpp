@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include <gbr_metadata.h>
 #include <utf8.h>
 
+
 wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat )
 {
     // creates the CreationDate attribute:
@@ -41,9 +42,11 @@ wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat )
     // the date the Gerber file was effectively created,
     // not the time the project of PCB was started
     wxDateTime date( wxDateTime::GetTimeNow() );
+
     // Date format: see http://www.cplusplus.com/reference/ctime/strftime
     wxString timezone_offset;   // ISO 8601 offset from UTC in timezone
     timezone_offset = date.Format( "%z" );  // Extract the time zone offset
+
     // The time zone offset format is +mm or +hhmm (or -mm or -hhmm)
     // (mm = number of minutes, hh = number of hours. 1h00mn is returned as +0100)
     // we want +(or -) hh:mm
@@ -87,7 +90,8 @@ wxString GbrMakeProjectGUIDfromString( const wxString& aText )
      *  M = '1' or '4' (UUID version: 1 (basic) or 4 (random)) (we use 4: UUID random)
      * and
      *  N = '8' or '9' or 'A|a' or 'B|b' : UUID variant 1: 2 MSB bits have meaning) (we use N = 9)
-     *  N = 1000 or 1001 or 1010 or 1011  : 10xx means Variant 1 (Variant2: 110x and 111x are reserved)
+     *  N = 1000 or 1001 or 1010 or 1011  : 10xx means Variant 1 (Variant2: 110x and 111x are
+     *  reserved)
      */
 
     wxString guid;
@@ -158,7 +162,8 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
     // generate a string to print a Gerber Aperture attribute
     switch( aAttribute )
     {
-    case GBR_APERTURE_ATTRIB_END:           // Dummy value (aAttribute must be < GBR_APERTURE_ATTRIB_END)
+    // Dummy value (aAttribute must be < GBR_APERTURE_ATTRIB_END).
+    case GBR_APERTURE_ATTRIB_END:
     case GBR_APERTURE_ATTRIB_NONE:          // idle command: do nothing
         break;
 
@@ -211,11 +216,13 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
         attribute_string = "TA.AperFunction,BGAPad,CuDef";
         break;
 
-    case GBR_APERTURE_ATTRIB_CONNECTORPAD:  // print info associated to a flashed edge connector pad (outer layers)
+    case GBR_APERTURE_ATTRIB_CONNECTORPAD:
+        // print info associated to a flashed edge connector pad (outer layers)
         attribute_string = "TA.AperFunction,ConnectorPad";
         break;
 
-    case GBR_APERTURE_ATTRIB_WASHERPAD:     // print info associated to flashed mechanical pads (NPTH)
+    case GBR_APERTURE_ATTRIB_WASHERPAD:
+        // print info associated to flashed mechanical pads (NPTH)
         attribute_string = "TA.AperFunction,WasherPad";
         break;
 
@@ -239,13 +246,13 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
         attribute_string = "TA.AperFunction,FiducialPad,Local";
         break;
 
-    case GBR_APERTURE_ATTRIB_CASTELLATEDPAD:    // print info associated to a flashed castellated pad
-                                                // (typically for SMDs)
+    case GBR_APERTURE_ATTRIB_CASTELLATEDPAD:
+        // print info associated to a flashed castellated pad (typically for SMDs)
         attribute_string = "TA.AperFunction,CastellatedPad";
         break;
 
-    case GBR_APERTURE_ATTRIB_CASTELLATEDDRILL:  // print info associated to a flashed castellated pad
-                                                // in drill files
+    case GBR_APERTURE_ATTRIB_CASTELLATEDDRILL:
+        // print info associated to a flashed castellated pad in drill files
         attribute_string = "TA.AperFunction,CastellatedDrill";
         break;
 
@@ -363,9 +370,9 @@ wxString FormatStringFromGerber( const wxString& aString )
 {
     // make the inverse conversion of FormatStringToGerber()
     // It converts a "normalized" gerber string containing escape sequences
-    // and convert it to a 16 bits unicode char
-    // and return a wxString (unicode 16) from the gerber string
-    // Note the initial gerber string can already contain unicode chars.
+    // and convert it to a 16 bits Unicode char
+    // and return a wxString (Unicode 16) from the gerber string
+    // Note the initial gerber string can already contain Unicode chars.
     wxString txt;           // The string converted from Gerber string
 
     unsigned count = aString.Length();
@@ -377,9 +384,9 @@ wxString FormatStringFromGerber( const wxString& aString )
         if( code == '\\' && ii < count-5 && aString[ii+1] == 'u' )
         {
             // Note the latest Gerber X2 spec (2019 06) uses \uXXXX to encode
-            // the unicode XXXX hexadecimal value
+            // the Unicode XXXX hexadecimal value
             // If 4 chars next to 'u' are hexadecimal chars,
-            // Convert these 4 hexadecimal digits to a 16 bit unicode
+            // Convert these 4 hexadecimal digits to a 16 bit Unicode
             // (Gerber allows only 4 hexadecimal digits)
             // If an error occurs, the escape sequence is not translated,
             // and used "as this"
@@ -416,20 +423,23 @@ wxString FormatStringFromGerber( const wxString& aString )
             }
         }
         else
+        {
             txt.Append( aString[ii] );
+        }
     }
 
     return txt;
 }
 
 
-wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf8Chars, bool aQuoteString )
+wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf8Chars,
+                                         bool aQuoteString )
 {
-    /* format string means convert any code > 0x7E and unautorized codes to a hexadecimal
-     * 16 bits sequence unicode
-     * However if aAllowUtf8Chars is true only unautorized codes will be escaped, because some
+    /* format string means convert any code > 0x7E and unauthorized codes to a hexadecimal
+     * 16 bits sequence Unicode
+     * However if aAllowUtf8Chars is true only unauthorized codes will be escaped, because some
      * Gerber files accept UTF8 chars.
-     * unautorized codes are ',' '*' '%' '\' '"' and are used as separators in Gerber files
+     * unauthorized codes are ',' '*' '%' '\' '"' and are used as separators in Gerber files
      */
     wxString txt;
 
@@ -466,13 +476,15 @@ wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf
         {
             // Convert code to 4 hexadecimal digit
             // (Gerber allows only 4 hexadecimal digit) in escape seq:
-            // "\uXXXX", XXXX is the unicode 16 bits hexa value
+            // "\uXXXX", XXXX is the Unicode 16 bits hexa value
             char hexa[32];
             sprintf( hexa,"\\u%4.4X", code & 0xFFFF);
             txt += hexa;
         }
         else
+        {
             txt += code;
+        }
     }
 
     if( aQuoteString )
@@ -500,9 +512,10 @@ std::string GBR_DATA_FIELD::GetGerberString() const
 std::string FormatStringToGerber( const wxString& aString )
 {
     wxString converted;
-    /* format string means convert any code > 0x7E and unautorized codes to a hexadecimal
-     * 16 bits sequence unicode
-     * unautorized codes are ',' '*' '%' '\'
+
+    /* format string means convert any code > 0x7E and unauthorized codes to a hexadecimal
+     * 16 bits sequence Unicode
+     * unauthorized codes are ',' '*' '%' '\'
      * This conversion is not made for quoted strings, because if the string is
      * quoted, the conversion is expected to be already made, and the returned string must use
      * UTF8 encoding
@@ -512,17 +525,19 @@ std::string FormatStringToGerber( const wxString& aString )
     else
         converted = aString;
 
-    // Convert the char string to std::string. Be careful when converting awxString to
+    // Convert the char string to std::string. Be careful when converting a wxString to
     // a std::string: using static_cast<const char*> is mandatory
     std::string txt = static_cast<const char*>( converted.utf8_str() );
 
     return txt;
 }
 
+
 // Netname and Pan num fields cannot be empty in Gerber files
 // Normalized names must be used, if any
 #define NO_NET_NAME wxT( "N/C" )    // net name of not connected pads (one pad net) (normalized)
 #define NO_PAD_NAME wxT( "" )       // pad name of pads without pad name/number (not normalized)
+
 
 bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttributes,
                          const GBR_NETLIST_METADATA* aData, bool& aClearPreviousAttributes,
@@ -546,7 +561,7 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
     // print a Gerber net attribute record.
     // it is added to the object attributes dictionary
     // On file, only modified or new attributes are printed.
-    if( aData == NULL )
+    if( aData == nullptr )
         return false;
 
     std::string pad_attribute_string;
@@ -565,8 +580,10 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
         pad_attribute_string += FormatStringToGerber( aData->m_Cmpref ) + ",";
 
         if( aData->m_Padname.IsEmpty() )
+        {
             // Happens for "mechanical" or never connected pads
             pad_attribute_string += FormatStringToGerber( NO_PAD_NAME );
+        }
         else
         {
             pad_attribute_string += aData->m_Padname.GetGerberString();
@@ -605,7 +622,9 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
             }
         }
         else
+        {
             net_attribute_string += FormatStringToGerber( aData->m_Netname );
+        }
 
         net_attribute_string += eol_string;
     }
@@ -633,7 +652,7 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
     if( aLastNetAttributes != full_attribute_string )
     {
         // first, remove no longer existing attributes.
-        // Because in Kicad the full attribute list is evaluated for each object,
+        // Because in KiCad the full attribute list is evaluated for each object,
         // the entire dictionary is cleared
         // If m_TryKeepPreviousAttributes is true, only the no longer existing attribute
         // is cleared.
@@ -650,12 +669,16 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
                 else
                     clearDict = true;
             }
-            else if( aLastNetAttributes.find( pad_attribute_string )
-                     == std::string::npos )     // This attribute has changed
+            else if( aLastNetAttributes.find( pad_attribute_string ) == std::string::npos )
+            {
+                // This attribute has changed
                 short_attribute_string += pad_attribute_string;
+            }
         }
         else    // New attribute
+        {
             short_attribute_string += pad_attribute_string;
+        }
 
         if( aLastNetAttributes.find( "TO.N," ) != std::string::npos )
         {
@@ -666,12 +689,16 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
                 else
                     clearDict = true;
             }
-            else if( aLastNetAttributes.find( net_attribute_string )
-                     == std::string::npos )     // This attribute has changed
+            else if( aLastNetAttributes.find( net_attribute_string ) == std::string::npos )
+            {
+                // This attribute has changed.
                 short_attribute_string += net_attribute_string;
+            }
         }
         else    // New attribute
+        {
             short_attribute_string += net_attribute_string;
+        }
 
         if( aLastNetAttributes.find( "TO.C," ) != std::string::npos )
         {
@@ -687,14 +714,20 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
                         short_attribute_string.insert( 0, prepend_string + "TO.C" + eol_string );
                 }
                 else
+                {
                     clearDict = true;
+                }
             }
-            else if( aLastNetAttributes.find( cmp_attribute_string )
-                     == std::string::npos )     // This attribute has changed
+            else if( aLastNetAttributes.find( cmp_attribute_string ) == std::string::npos )
+            {
+                // This attribute has changed.
                 short_attribute_string += cmp_attribute_string;
+            }
         }
         else    // New attribute
+        {
             short_attribute_string += cmp_attribute_string;
+        }
 
         aClearPreviousAttributes = clearDict;
 
@@ -710,8 +743,6 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
 }
 
 
-/************  class GBR_CMP_PNP_METADATA *************/
-
 void GBR_CMP_PNP_METADATA::ClearData()
 {
     // Clear all strings
@@ -722,6 +753,8 @@ void GBR_CMP_PNP_METADATA::ClearData()
     m_Value.Clear();
     m_MountType = MOUNT_TYPE_UNSPECIFIED;
 }
+
+
 /**
  * @return a string containing the formatted metadata in X2 syntax.
  * one line by non empty data
@@ -730,7 +763,7 @@ void GBR_CMP_PNP_METADATA::ClearData()
 wxString GBR_CMP_PNP_METADATA::FormatCmpPnPMetadata()
 {
     wxString text;
-    wxString start_of_line( "%TO.");
+    wxString start_of_line( "%TO." );
     wxString end_of_line( "*%\n" );
 
     wxString mounType[] =

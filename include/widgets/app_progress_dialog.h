@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,22 +25,23 @@
 #define __APP_PROGRESS_REPORTER
 
 #include <wx/progdlg.h>
-#if wxCHECK_VERSION(3, 1, 0)
+
+#if wxCHECK_VERSION( 3, 1, 0 )
 #include <wx/appprogress.h>
 #endif
 
 /**
-* wxProgressDialog with the option to also update the application progress on the taskbar
-*/
+ * wxProgressDialog with the option to also update the application progress on the taskbar
+ */
 class APP_PROGRESS_DIALOG : public wxProgressDialog
 {
 public:
     APP_PROGRESS_DIALOG( const wxString& aTitle, const wxString& aMessage, int aMaximum = 100,
-                         wxWindow* aParent = NULL, bool aIndeterminateTaskBarStatus = false,
+                         wxWindow* aParent = nullptr, bool aIndeterminateTaskBarStatus = false,
                          int aStyle = wxPD_APP_MODAL | wxPD_AUTO_HIDE );
 
     virtual bool Update( int aValue, const wxString& aNewMsg = wxEmptyString,
-                         bool* aSkip = NULL ) override;
+                         bool* aSkip = nullptr ) override;
 
 
 private:

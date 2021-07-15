@@ -55,7 +55,7 @@ public:
      *
      * @param aLayout the alternate drawing sheet; if null restore the default drawing sheet
      */
-    static void SetAltInstance( DS_DATA_MODEL* aLayout = NULL );
+    static void SetAltInstance( DS_DATA_MODEL* aLayout = nullptr );
 
     int GetFileFormatVersionAtLoad() { return m_fileFormatVersionAtLoad; }
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }

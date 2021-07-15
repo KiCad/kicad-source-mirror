@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -163,7 +163,7 @@ const wxString& PGM_BASE::GetEditorName( bool aCanShowFileChooser )
     // If we still don't have an editor name show a dialog asking the user to select one
     if( !editorname && aCanShowFileChooser )
     {
-        DisplayInfoMessage( NULL, _( "No default editor found, you must choose it" ) );
+        DisplayInfoMessage( nullptr, _( "No default editor found, you must choose it" ) );
 
         editorname = AskUserForPreferredEditor();
     }
@@ -195,7 +195,7 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 
     // Show the modal editor and return the file chosen (may be empty if the user cancels
     // the dialog).
-    return EDA_FILE_SELECTOR( _( "Select Preferred Editor" ), path, name, ext, mask, NULL,
+    return EDA_FILE_SELECTOR( _( "Select Preferred Editor" ), path, name, ext, mask, nullptr,
                               wxFD_OPEN | wxFD_FILE_MUST_EXIST, true );
 }
 
@@ -233,13 +233,13 @@ bool PGM_BASE::InitPgm( bool aHeadless )
     App().SetAppName( pgm_name );
 
     // Install some image handlers, mainly for help
-    if( wxImage::FindHandler( wxBITMAP_TYPE_PNG ) == NULL )
+    if( wxImage::FindHandler( wxBITMAP_TYPE_PNG ) == nullptr )
         wxImage::AddHandler( new wxPNGHandler );
 
-    if( wxImage::FindHandler( wxBITMAP_TYPE_GIF ) == NULL )
+    if( wxImage::FindHandler( wxBITMAP_TYPE_GIF ) == nullptr )
         wxImage::AddHandler( new wxGIFHandler );
 
-    if( wxImage::FindHandler( wxBITMAP_TYPE_JPEG ) == NULL )
+    if( wxImage::FindHandler( wxBITMAP_TYPE_JPEG ) == nullptr )
         wxImage::AddHandler( new wxJPEGHandler );
 
     wxFileSystem::AddHandler( new wxZipFSHandler );
@@ -563,7 +563,7 @@ void PGM_BASE::SetLanguagePath()
             wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
         }
 
-	// Append path for macOS install
+        // Append path for macOS install
         fn.RemoveLastDir();
         fn.RemoveLastDir();
         fn.RemoveLastDir();

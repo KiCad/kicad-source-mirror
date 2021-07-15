@@ -553,7 +553,7 @@ void PDF_PLOTTER::closePdfStream()
     else
     {
         // NULL means memos owns the memory, but provide a hint on optimum size needed.
-        wxMemoryOutputStream    memos( NULL, std::max( 2000l, stream_len ) ) ;
+        wxMemoryOutputStream    memos( nullptr, std::max( 2000l, stream_len ) ) ;
 
         {
             /* Somewhat standard parameters to compress in DEFLATE. The PDF spec is
@@ -752,7 +752,7 @@ bool PDF_PLOTTER::EndPlot()
     // The info dictionary
     int infoDictHandle = startPdfObject();
     char date_buf[250];
-    time_t ltime = time( NULL );
+    time_t ltime = time( nullptr );
     strftime( date_buf, 250, "D:%Y%m%d%H%M%S", localtime( &ltime ) );
 
     if( m_title.IsEmpty() )
@@ -811,7 +811,7 @@ bool PDF_PLOTTER::EndPlot()
              (unsigned long) xrefTable.size(), catalogHandle, infoDictHandle, xref_start );
 
     fclose( m_outputFile );
-    m_outputFile = NULL;
+    m_outputFile = nullptr;
 
     return true;
 }

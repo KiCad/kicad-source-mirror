@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,7 +88,7 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
 
     delete[] formBuilderColWidths;
 
-    Connect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), NULL, this );
+    Connect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), nullptr, this );
 
     m_weOwnTable = aTakeOwnership;
 }
@@ -100,7 +100,7 @@ void WX_GRID::DestroyTable( wxGridTableBase* aTable )
     // is left open.  Normally it's closed in Validate(), but not if the user hit Cancel.
     CommitPendingChanges( true /* quiet mode */ );
 
-    Disconnect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), NULL, this );
+    Disconnect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), nullptr, this );
 
     wxGrid::SetTable( nullptr );
     delete aTable;
@@ -144,8 +144,6 @@ void WX_GRID::ShowHideColumns( const wxString& shownColumns )
 }
 
 
-// An re-implementation of wxGrid::DrawColLabel which left-aligns the first column when
-// there are no row labels.
 void WX_GRID::DrawColLabel( wxDC& dc, int col )
 {
     if( GetColWidth( col ) <= 0 || m_colLabelHeight <= 0 )
@@ -157,7 +155,7 @@ void WX_GRID::DrawColLabel( wxDC& dc, int col )
     static wxGridColumnHeaderRendererDefault rend;
 
     // It is reported that we need to erase the background to avoid display
-    // artefacts, see #12055.
+    // artifacts, see #12055.
     // wxWidgets renamed this variable between 3.1.2 and 3.1.3 ...
 #if wxCHECK_VERSION( 3, 1, 3 )
     wxDCBrushChanger setBrush( dc, m_colLabelWin->GetBackgroundColour() );
@@ -208,10 +206,10 @@ bool WX_GRID::CommitPendingChanges( bool aQuietMode )
 
     if( changed )
     {
-        if( !aQuietMode && SendEvent(wxEVT_GRID_CELL_CHANGING, newval) == -1 )
+        if( !aQuietMode && SendEvent( wxEVT_GRID_CELL_CHANGING, newval ) == -1 )
             return false;
 
-        editor->ApplyEdit(row, col, this);
+        editor->ApplyEdit( row, col, this );
 
         // for compatibility reasons dating back to wx 2.8 when this event
         // was called wxEVT_GRID_CELL_CHANGE and wxEVT_GRID_CELL_CHANGING

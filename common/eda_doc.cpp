@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
     wxString      command;
     bool          success = false;
 
-#if defined(EESCHEMA)
+#if defined( EESCHEMA )
     SEARCH_STACK* aPaths = aProject ? aProject->SchSearchS() : nullptr;
 #endif
 
@@ -118,9 +118,8 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
     docname.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 #endif
 
-
     /* Compute the full file name */
-    if( wxIsAbsolutePath( docname ) || aPaths == NULL )
+    if( wxIsAbsolutePath( docname ) || aPaths == nullptr )
         fullfilename = docname;
     /* If the file exists, this is a trivial case: return the filename
      * "as this".  the name can be an absolute path, or a relative path
@@ -182,7 +181,7 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
         mimeDatabase->AddFallbacks( EDAfallbacks );
         filetype = mimeDatabase->GetFileTypeFromExtension( file_ext );
         delete mimeDatabase;
-        mimeDatabase = NULL;
+        mimeDatabase = nullptr;
     }
 
     if( filetype )

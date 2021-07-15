@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -69,7 +69,7 @@ public:
         m_type( aType ),
         m_toolId( aId ),
         m_toolName( aName ),
-        m_toolMgr( NULL ) {};
+        m_toolMgr( nullptr ) {};
 
     virtual ~TOOL_BASE() {};
 

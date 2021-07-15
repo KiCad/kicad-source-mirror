@@ -173,7 +173,7 @@ struct TOOL_MANAGER::TOOL_STATE
         }
         else
         {
-            cofunc = NULL;
+            cofunc = nullptr;
             return false;
         }
     }
@@ -189,8 +189,8 @@ private:
         shutdown           = false;
         pendingWait        = false;
         pendingContextMenu = false;
-        cofunc             = NULL;
-        contextMenu        = NULL;
+        cofunc             = nullptr;
+        contextMenu        = nullptr;
         contextMenuTrigger = CMENU_OFF;
         vcSettings.Reset();
         transitions.clear();
@@ -231,11 +231,11 @@ TOOL_MANAGER::~TOOL_MANAGER()
 void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 {
     wxASSERT_MSG( m_toolNameIndex.find( aTool->GetName() ) == m_toolNameIndex.end(),
-                  wxT( "Adding two tools with the same name may result in unexpected behaviour.") );
+                  wxT( "Adding two tools with the same name may result in unexpected behavior.") );
     wxASSERT_MSG( m_toolIdIndex.find( aTool->GetId() ) == m_toolIdIndex.end(),
-                  wxT( "Adding two tools with the same ID may result in unexpected behaviour.") );
+                  wxT( "Adding two tools with the same ID may result in unexpected behavior.") );
     wxASSERT_MSG( m_toolTypes.find( typeid( *aTool ).name() ) == m_toolTypes.end(),
-                  wxT( "Adding two tools of the same type may result in unexpected behaviour.") );
+                  wxT( "Adding two tools of the same type may result in unexpected behavior.") );
 
     m_toolOrder.push_back( aTool );
 
@@ -387,7 +387,7 @@ int TOOL_MANAGER::GetHotKey( const TOOL_ACTION& aAction ) const
 
 bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 {
-    wxASSERT( aTool != NULL );
+    wxASSERT( aTool != nullptr );
 
     TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, aTool->GetName() );
     evt.SetMousePosition( GetCursorPosition() );
@@ -402,7 +402,7 @@ bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 
 bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
 {
-    wxASSERT( aTool != NULL );
+    wxASSERT( aTool != nullptr );
 
     if( !isRegistered( aTool ) )
     {
@@ -413,7 +413,7 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
     TOOL_ID id = aTool->GetId();
 
     wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::runTool - running tool %s",
-                                     aTool->GetName() );
+                aTool->GetName() );
 
     if( aTool->GetType() == INTERACTIVE )
         static_cast<TOOL_INTERACTIVE*>( aTool )->resetTransitions();
@@ -466,7 +466,7 @@ void TOOL_MANAGER::ShutdownTool( TOOL_ID aToolId )
         ShutdownTool( tool );
 
     wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::ShutdownTool - no tool with ID %d",
-                                     aToolId );
+                aToolId );
 }
 
 
@@ -478,19 +478,20 @@ void TOOL_MANAGER::ShutdownTool( const std::string& aToolName )
         ShutdownTool( tool );
 
     wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::ShutdownTool - no tool with name %s",
-                                     aToolName );
+                aToolName );
 }
 
 
 void TOOL_MANAGER::ShutdownTool( TOOL_BASE* aTool )
 {
-    wxASSERT( aTool != NULL );
+    wxASSERT( aTool != nullptr );
 
     TOOL_ID id = aTool->GetId();
 
     if( isActive( aTool ) )
     {
-        TOOL_MANAGER::ID_LIST::iterator it = std::find( m_activeTools.begin(), m_activeTools.end(), id );
+        TOOL_MANAGER::ID_LIST::iterator it = std::find( m_activeTools.begin(),
+                                                        m_activeTools.end(), id );
 
         TOOL_STATE* st = m_toolIdIndex[*it];
 
@@ -526,7 +527,7 @@ TOOL_BASE* TOOL_MANAGER::FindTool( int aId ) const
     if( it != m_toolIdIndex.end() )
         return it->second->theTool;
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -537,7 +538,7 @@ TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
     if( it != m_toolNameIndex.end() )
         return it->second->theTool;
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -664,7 +665,7 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
     bool handled = false;
 
     wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchInternal - received event: %s",
-                                     aEvent.Format() );
+                aEvent.Format() );
 
     auto it = m_activeTools.begin();
 
@@ -785,7 +786,7 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
     }
 
     wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchInternal - %s handle event: %s",
-                                     ( handled ? "Did" : "Did not" ), aEvent.Format() );
+                ( handled ? "Did" : "Did not" ), aEvent.Format() );
 
     return handled;
 }
@@ -803,7 +804,7 @@ bool TOOL_MANAGER::DispatchHotKey( const TOOL_EVENT& aEvent )
 bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 {
     wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchActivation - Received event: %s",
-                                     aEvent.Format() );
+                aEvent.Format() );
 
     if( aEvent.IsActivate() )
     {
@@ -880,7 +881,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         if( wxWindow* frame = dynamic_cast<wxWindow*>( m_frame ) )
             frame->PopupMenu( menu.get() );
 
-        // If a menu is cancelled then notify tool
+        // If a menu is canceled then notify tool
         if( menu->GetSelected() < 0 )
         {
             TOOL_EVENT evt( TC_COMMAND, TA_CHOICE_MENU_CHOICE, -1 );
@@ -988,7 +989,7 @@ bool TOOL_MANAGER::SaveClipboard( const std::string& aTextUTF8 )
 
     if( wxTheClipboard->Open() )
     {
-        // Store the UTF8 string as unicode string in clipboard:
+        // Store the UTF8 string as Unicode string in clipboard:
         wxTheClipboard->SetData( new wxTextDataObject( wxString( aTextUTF8.c_str(),
                                                                  wxConvUTF8 ) ) );
 
@@ -1016,7 +1017,7 @@ std::string TOOL_MANAGER::GetClipboardUTF8() const
             wxTextDataObject data;
             wxTheClipboard->GetData( data );
 
-            // The clipboard is expected containing a unicode string, so return it
+            // The clipboard is expected containing a Unicode string, so return it
             // as UTF8 string
             result = data.GetText().utf8_str();
         }

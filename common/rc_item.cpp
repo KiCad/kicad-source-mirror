@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,7 +178,7 @@ RC_TREE_MODEL::RC_TREE_MODEL( EDA_DRAW_FRAME* aParentFrame, wxDataViewCtrl* aVie
 {
     m_view->GetMainWindow()->Connect( wxEVT_SIZE,
                                       wxSizeEventHandler( RC_TREE_MODEL::onSizeView ),
-                                      NULL, this );
+                                      nullptr, this );
 }
 
 
@@ -258,7 +258,7 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
     // The fastest method to update wxDataViewCtrl is to rebuild from
     // scratch by calling Cleared(). Linux requires to reassociate model to
     // display data, but Windows will create multiple associations.
-    // On MacOS, this crashes kicad. See https://gitlab.com/kicad/code/kicad/issues/3666
+    // On MacOS, this crashes KiCad. See https://gitlab.com/kicad/code/kicad/issues/3666
     // and https://gitlab.com/kicad/code/kicad/issues/3653
     m_view->AssociateModel( this );
 #endif
@@ -321,7 +321,7 @@ wxDataViewItem RC_TREE_MODEL::GetParent( wxDataViewItem const& aItem ) const
 
 
 unsigned int RC_TREE_MODEL::GetChildren( wxDataViewItem const& aItem,
-                                          wxDataViewItemArray&  aChildren ) const
+                                         wxDataViewItemArray&  aChildren ) const
 {
     const RC_TREE_NODE* node = ToNode( aItem );
     const std::vector<RC_TREE_NODE*>& children = node ? node->m_Children : m_tree;
@@ -333,9 +333,6 @@ unsigned int RC_TREE_MODEL::GetChildren( wxDataViewItem const& aItem,
 }
 
 
-/**
- * Called by the wxDataView to fetch an item's value.
- */
 void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
                               wxDataViewItem const&   aItem,
                               unsigned int            aCol ) const
@@ -400,10 +397,6 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
 }
 
 
-/**
- * Called by the wxDataView to fetch an item's formatting.  Return true iff the
- * item has non-default attributes.
- */
 bool RC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
                              unsigned int            aCol,
                              wxDataViewItemAttr&     aAttr ) const

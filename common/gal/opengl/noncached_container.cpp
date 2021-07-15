@@ -73,7 +73,7 @@ VERTEX* NONCACHED_CONTAINER::Allocate( unsigned int aSize )
         VERTEX* newVertices =
                 static_cast<VERTEX*>( realloc( m_vertices, m_currentSize * 2 * sizeof( VERTEX ) ) );
 
-        if( newVertices != NULL )
+        if( newVertices != nullptr )
         {
             m_vertices = newVertices;
             m_freeSpace += m_currentSize;

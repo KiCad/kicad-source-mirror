@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ char* FILTER_READER::ReadLine()
 {
     char* s;
 
-    while( ( s = reader.ReadLine() ) != NULL )
+    while( ( s = reader.ReadLine() ) != nullptr )
     {
         if( !strchr( "#\n\r", s[0] ) )
             break;
@@ -91,12 +91,12 @@ char* WHITESPACE_FILTER_READER::ReadLine()
 {
     char* s;
 
-    while( ( s = reader.ReadLine() ) != NULL )
+    while( ( s = reader.ReadLine() ) != nullptr )
     {
-        while( s != NULL && strchr( " \t", *s ) )
+        while( s != nullptr && strchr( " \t", *s ) )
             s++;
 
-        if( s != NULL && !strchr( "#\n\r", *s ) )
+        if( s != nullptr && !strchr( "#\n\r", *s ) )
             break;
     }
 

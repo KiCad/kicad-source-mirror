@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,7 +104,7 @@ std::string StrPrintf( const char* format, ... )
 //-----<LINE_READER>------------------------------------------------------
 
 LINE_READER::LINE_READER( unsigned aMaxLineLength ) :
-                m_length( 0 ), m_lineNum( 0 ), m_line( NULL ),
+                m_length( 0 ), m_lineNum( 0 ), m_line( nullptr ),
                 m_capacity( 0 ), m_maxLineLength( aMaxLineLength )
 {
     if( aMaxLineLength != 0 )
@@ -159,8 +159,8 @@ void LINE_READER::expandCapacity( unsigned aNewsize )
 }
 
 
-FILE_LINE_READER::FILE_LINE_READER( const wxString& aFileName,
-            unsigned aStartingLineNumber, unsigned aMaxLineLength ):
+FILE_LINE_READER::FILE_LINE_READER( const wxString& aFileName, unsigned aStartingLineNumber,
+                                    unsigned aMaxLineLength ):
     LINE_READER( aMaxLineLength ), m_iOwn( true )
 {
     m_fp = wxFopen( aFileName, wxT( "rt" ) );
@@ -215,7 +215,7 @@ char* FILE_LINE_READER::ReadLine()
 {
     m_length = 0;
 
-    for(;;)
+    for( ;; )
     {
         if( m_length >= m_maxLineLength )
             THROW_IO_ERROR( _( "Maximum line length exceeded" ) );
@@ -241,7 +241,7 @@ char* FILE_LINE_READER::ReadLine()
     // leads to better error reporting when we hit an end of file.
     ++m_lineNum;
 
-    return m_length ? m_line : NULL;
+    return m_length ? m_line : nullptr;
 }
 
 
@@ -294,11 +294,12 @@ char* STRING_LINE_READER::ReadLine()
     ++m_lineNum;      // this gets incremented even if no bytes were read
     m_line[m_length] = 0;
 
-    return m_length ? m_line : NULL;
+    return m_length ? m_line : nullptr;
 }
 
 
-INPUTSTREAM_LINE_READER::INPUTSTREAM_LINE_READER( wxInputStream* aStream, const wxString& aSource ) :
+INPUTSTREAM_LINE_READER::INPUTSTREAM_LINE_READER( wxInputStream* aStream,
+                                                  const wxString& aSource ) :
     LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),
     m_stream( aStream )
 {
@@ -310,7 +311,7 @@ char* INPUTSTREAM_LINE_READER::ReadLine()
 {
     m_length  = 0;
 
-    for(;;)
+    for( ;; )
     {
         if( m_length >= m_maxLineLength )
             THROW_IO_ERROR( _( "Maximum line length exceeded" ) );
@@ -336,7 +337,7 @@ char* INPUTSTREAM_LINE_READER::ReadLine()
     // leads to better error reporting when we hit an end of file.
     ++m_lineNum;
 
-    return m_length ? m_line : NULL;
+    return m_length ? m_line : nullptr;
 }
 
 
@@ -361,8 +362,8 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote
     for(  ; *wrapee;  ++wrapee, isFirst = false )
     {
         static const char quoteThese[] = "\t ()"
-            "%"     // per Alfons of freerouting.net, he does not like this unquoted as of 1-Feb-2008
-            "{}"    // guessing that these are problems too
+            "%"   // per Alfons of freerouting.net, he does not like this unquoted as of 1-Feb-2008
+            "{}"  // guessing that these are problems too
             ;
 
         // if the string to be wrapped (wrapee) has a delimiter in it,
@@ -382,6 +383,7 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee ) const
 {
     return GetQuoteChar( wrapee, quoteChar );
 }
+
 
 int OUTPUTFORMATTER::vprint( const char* fmt, va_list ap )
 {
@@ -522,7 +524,6 @@ void STRING_FORMATTER::StripUseless()
     }
 }
 
-//-----<FILE_OUTPUTFORMATTER>----------------------------------------
 
 FILE_OUTPUTFORMATTER::FILE_OUTPUTFORMATTER( const wxString& aFileName, const wxChar* aMode,
                                             char aQuoteChar ):
@@ -549,8 +550,6 @@ void FILE_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount )
         THROW_IO_ERROR( strerror( errno ) );
 }
 
-
-//-----<STREAM_OUTPUTFORMATTER>--------------------------------------
 
 void STREAM_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount )
 {

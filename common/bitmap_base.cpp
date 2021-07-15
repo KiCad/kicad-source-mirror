@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 jean-pierre.charras
- * Copyright (C) 2011-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,15 +38,11 @@
 #include <wx/mstream.h>
 
 
-/**********************/
-/* class BITMAP_BASE */
-/**********************/
-
 BITMAP_BASE::BITMAP_BASE( const wxPoint& pos )
 {
     m_scale  = 1.0;                     // 1.0 = original bitmap size
-    m_bitmap = NULL;
-    m_image  = NULL;
+    m_bitmap = nullptr;
+    m_image  = nullptr;
     m_ppi    = 300;                     // the bitmap definition. the default is 300PPI
     m_pixelSizeIu = 254000.0 / m_ppi;   // a pixel size value OK for bitmaps using 300 PPI
                                         // for Eeschema which uses currently 254000PPI
@@ -70,10 +66,6 @@ BITMAP_BASE::BITMAP_BASE( const BITMAP_BASE& aSchBitmap )
 }
 
 
-/**
- * Function ImportData
- * Copy aItem image to me and update m_bitmap
- */
 void BITMAP_BASE::ImportData( BITMAP_BASE* aItem )
 {
     *m_image  = *aItem->m_image;
@@ -240,7 +232,7 @@ const EDA_RECT BITMAP_BASE::GetBoundingBox() const
 
 void BITMAP_BASE::DrawBitmap( wxDC* aDC, const wxPoint& aPos )
 {
-    if( m_bitmap == NULL )
+    if( m_bitmap == nullptr )
         return;
 
     wxPoint pos  = aPos;
@@ -342,7 +334,7 @@ void BITMAP_BASE::PlotImage( PLOTTER*       aPlotter,
                              COLOR4D        aDefaultColor,
                              int            aDefaultPensize ) const
 {
-    if( m_image == NULL )
+    if( m_image == nullptr )
         return;
 
     // These 2 lines are useful only for plotters that cannot plot a bitmap

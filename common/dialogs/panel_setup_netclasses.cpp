@@ -178,7 +178,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
     // wxFormBuilder doesn't include this event...
     m_netclassGrid->Connect( wxEVT_GRID_CELL_CHANGING,
                              wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ),
-                             NULL, this );
+                             nullptr, this );
 
     // Handle tooltips for grid
     m_netclassGrid->GetGridColLabelWindow()->Bind( wxEVT_MOTION,
@@ -204,7 +204,7 @@ PANEL_SETUP_NETCLASSES::~PANEL_SETUP_NETCLASSES()
 
     m_netclassGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
                                 wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ),
-                                NULL, this );
+                                nullptr, this );
 }
 
 
@@ -373,7 +373,8 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     // Copy other NetClasses:
     for( int row = 1; row < m_netclassGrid->GetNumberRows();  ++row )
     {
-        NETCLASSPTR nc = std::make_shared<NETCLASS>( m_netclassGrid->GetCellValue( row, GRID_NAME ) );
+        NETCLASSPTR nc = std::make_shared<NETCLASS>( m_netclassGrid->GetCellValue( row,
+                                                                                   GRID_NAME ) );
 
         if( m_netclasses->Add( nc ) )
             gridRowToNetclass( m_Parent->GetUserUnits(), m_netclassGrid, row, nc );
@@ -605,7 +606,7 @@ void PANEL_SETUP_NETCLASSES::onmembershipPanelSize( wxSizeEvent& event )
     int c_row = m_membershipGrid->GetGridCursorRow();
     int c_col = m_membershipGrid->GetGridCursorCol();
 
-    if( c_row >= 0 && c_col == 1 )    // this means the class name choice widget is selected (opened)
+    if( c_row >= 0 && c_col == 1 )  // this means the class name choice widget is selected (opened)
         m_membershipGrid->SetGridCursor( c_row, 0 );    // Close it
 
     event.Skip();

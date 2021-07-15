@@ -614,14 +614,14 @@ std::vector<wxPoint> EDA_TEXT::TransformToSegmentList() const
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             wxString txt = strings_list.Item( ii );
-            GRText( NULL, positions[ii], color, txt, GetDrawRotation(), size, GetHorizJustify(),
+            GRText( nullptr, positions[ii], color, txt, GetDrawRotation(), size, GetHorizJustify(),
                     GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToBuffer,
                     &cornerBuffer );
         }
     }
     else
     {
-        GRText( NULL, GetTextPos(), color, GetShownText(), GetDrawRotation(), size,
+        GRText( nullptr, GetTextPos(), color, GetShownText(), GetDrawRotation(), size,
                 GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), forceBold,
                 addTextSegmToBuffer, &cornerBuffer );
     }
@@ -671,13 +671,16 @@ static struct EDA_TEXT_DESC
                                                           &EDA_TEXT::GetTextThickness,
                                                           PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Italic" ),
-                    &EDA_TEXT::SetItalic, &EDA_TEXT::IsItalic ) );
+                                                         &EDA_TEXT::SetItalic,
+                                                         &EDA_TEXT::IsItalic ) );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Bold" ),
-                    &EDA_TEXT::SetBold, &EDA_TEXT::IsBold ) );
+                                                         &EDA_TEXT::SetBold, &EDA_TEXT::IsBold ) );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Mirrored" ),
-                    &EDA_TEXT::SetMirrored, &EDA_TEXT::IsMirrored ) );
+                                                         &EDA_TEXT::SetMirrored,
+                                                         &EDA_TEXT::IsMirrored ) );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Visible" ),
-                    &EDA_TEXT::SetVisible, &EDA_TEXT::IsVisible ) );
+                                                         &EDA_TEXT::SetVisible,
+                                                         &EDA_TEXT::IsVisible ) );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Width" ),
                                                           &EDA_TEXT::SetTextWidth,
                                                           &EDA_TEXT::GetTextWidth,

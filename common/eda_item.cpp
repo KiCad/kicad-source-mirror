@@ -82,7 +82,7 @@ const EDA_RECT EDA_ITEM::GetBoundingBox() const
 
 EDA_ITEM* EDA_ITEM::Clone() const
 {
-    wxCHECK_MSG( false, NULL, wxT( "Clone not implemented in derived class " ) + GetClass() +
+    wxCHECK_MSG( false, nullptr, wxT( "Clone not implemented in derived class " ) + GetClass() +
                  wxT( ".  Bad programmer!" ) );
 }
 
@@ -146,7 +146,7 @@ bool EDA_ITEM::Replace( const wxFindReplaceData& aSearchData, wxString& aText )
 {
     wxString searchString = (aSearchData.GetFlags() & wxFR_MATCHCASE) ? aText : aText.Upper();
 
-    int result = searchString.Find( (aSearchData.GetFlags() & wxFR_MATCHCASE) ?
+    int result = searchString.Find( ( aSearchData.GetFlags() & wxFR_MATCHCASE ) ?
                                     aSearchData.GetFindString() :
                                     aSearchData.GetFindString().Upper() );
 
@@ -171,10 +171,11 @@ bool EDA_ITEM::Replace( const wxFindReplaceData& aSearchData, wxString& aText )
 bool EDA_ITEM::operator<( const EDA_ITEM& aItem ) const
 {
     wxFAIL_MSG( wxString::Format( wxT( "Less than operator not defined for item type %s." ),
-                                 GetClass() ) );
+                                  GetClass() ) );
 
     return false;
 }
+
 
 EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 {
@@ -188,6 +189,7 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 
     return *this;
 }
+
 
 const BOX2I EDA_ITEM::ViewBBox() const
 {
@@ -205,12 +207,14 @@ void EDA_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
     aLayers[0]  = 0;
 }
 
+
 BITMAPS EDA_ITEM::GetMenuImage() const
 {
     return BITMAPS::dummy_item;
 }
 
-#if defined(DEBUG)
+
+#if defined( DEBUG )
 
 void EDA_ITEM::ShowDummy( std::ostream& os ) const
 {
@@ -234,9 +238,6 @@ std::ostream& EDA_ITEM::NestedSpace( int nestLevel, std::ostream& os )
 }
 
 #endif
-
-
-
 
 
 static struct EDA_ITEM_DESC

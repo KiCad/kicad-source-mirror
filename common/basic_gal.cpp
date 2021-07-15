@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
  */
 
 /**
- * @brief Implement a very basic GAL used to draw, plot and convert texts in segments
+ * Implement a very basic GAL used to draw, plot and convert texts in segments
  * for DRC functions, using the common GAL functions.
  * Draw functions use wxDC.
  * Plot functions use a PLOTTER
@@ -53,22 +53,20 @@ const VECTOR2D BASIC_GAL::transform( const VECTOR2D& aPoint ) const
 }
 
 
-// Draws a polyline given a list of points already transformed into the local coordinate
-// system.
 void BASIC_GAL::doDrawPolyline( const std::vector<wxPoint>& aLocalPointList )
 {
     if( m_DC )
     {
         if( m_isFillEnabled )
         {
-            GRPoly( m_isClipped ? &m_clipBox : NULL, m_DC, aLocalPointList.size(),
+            GRPoly( m_isClipped ? &m_clipBox : nullptr, m_DC, aLocalPointList.size(),
                     &aLocalPointList[0], 0, GetLineWidth(), m_Color, m_Color );
         }
         else
         {
             for( unsigned ii = 1; ii < aLocalPointList.size(); ++ii )
             {
-                GRCSegm( m_isClipped ? &m_clipBox : NULL, m_DC, aLocalPointList[ ii - 1],
+                GRCSegm( m_isClipped ? &m_clipBox : nullptr, m_DC, aLocalPointList[ ii - 1],
                          aLocalPointList[ii], GetLineWidth(), m_Color );
             }
         }
@@ -132,13 +130,13 @@ void BASIC_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint
     {
         if( m_isFillEnabled )
         {
-            GRLine( m_isClipped ? &m_clipBox : NULL, m_DC, startVector.x, startVector.y,
+            GRLine( m_isClipped ? &m_clipBox : nullptr, m_DC, startVector.x, startVector.y,
                     endVector.x, endVector.y, GetLineWidth(), m_Color );
         }
         else
         {
-            GRCSegm( m_isClipped ? &m_clipBox : NULL, m_DC, startVector.x, startVector.y,
-                    endVector.x, endVector.y, GetLineWidth(), 0, m_Color );
+            GRCSegm( m_isClipped ? &m_clipBox : nullptr, m_DC, startVector.x, startVector.y,
+                     endVector.x, endVector.y, GetLineWidth(), 0, m_Color );
         }
     }
     else if( m_plotter )
@@ -149,7 +147,6 @@ void BASIC_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint
     }
     else if( m_callback )
     {
-            m_callback( startVector.x, startVector.y,
-                        endVector.x, endVector.y, m_callbackData );
+        m_callback( startVector.x, startVector.y, endVector.x, endVector.y, m_callbackData );
     }
 }

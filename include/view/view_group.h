@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -46,7 +46,7 @@ namespace KIGFX
 class VIEW_GROUP : public VIEW_ITEM
 {
 public:
-    VIEW_GROUP( VIEW* aView = NULL );
+    VIEW_GROUP( VIEW* aView = nullptr );
     virtual ~VIEW_GROUP();
 
     /**

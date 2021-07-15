@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -69,7 +69,7 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParen
 
     m_filePicker1->Connect( wxEVT_UPDATE_UI,
                             wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker ),
-                            NULL, this );
+                            nullptr, this );
 
     wxButton* okButton = (wxButton *) FindWindowById( wxID_OK );
 
@@ -84,7 +84,7 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG::~DIALOG_GLOBAL_LIB_TABLE_CONFIG()
 {
     m_filePicker1->Disconnect( wxEVT_UPDATE_UI,
                                wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker ),
-                               NULL, this );
+                               nullptr, this );
 }
 
 

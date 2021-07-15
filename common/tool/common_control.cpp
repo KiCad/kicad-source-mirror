@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
- * @author Maciej Suminski <maciej.suminski@cern.ch>
  * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@
 /// URL to launch a new issue with pre-populated description
 wxString COMMON_CONTROL::m_bugReportUrl =
         "https://gitlab.com/kicad/code/kicad/issues/new?issue[description]=%s";
+
 
 /// Issue template to use for reporting bugs (this should not be translated)
 wxString COMMON_CONTROL::m_bugReportTemplate =
@@ -216,7 +217,7 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
             msg = wxString::Format( _( "Help file '%s' or\n'%s' could not be found.\n"
                                        "Do you want to access the KiCad online help?" ),
                                     names[0], names[1] );
-            wxMessageDialog dlg( NULL, msg, _( "File Not Found" ),
+            wxMessageDialog dlg( nullptr, msg, _( "File Not Found" ),
                                  wxYES_NO | wxNO_DEFAULT | wxCANCEL );
 
             if( dlg.ShowModal() != wxID_YES )
@@ -236,7 +237,7 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
             msg = wxString::Format( _( "Help file '%s' could not be found.\n"
                                        "Do you want to access the KiCad online help?" ),
                                     base_name );
-            wxMessageDialog dlg( NULL, msg, _( "File Not Found" ),
+            wxMessageDialog dlg( nullptr, msg, _( "File Not Found" ),
                                  wxYES_NO | wxNO_DEFAULT | wxCANCEL );
 
             if( dlg.ShowModal() != wxID_YES )
@@ -268,6 +269,7 @@ int COMMON_CONTROL::GetInvolved( const TOOL_EVENT& aEvent )
                     URL_GET_INVOLVED );
         wxMessageBox( msg, _( "Get involved with KiCad" ), wxOK, m_frame );
     }
+
     return 0;
 }
 
@@ -282,6 +284,7 @@ int COMMON_CONTROL::Donate( const TOOL_EVENT& aEvent )
                     URL_DONATE );
         wxMessageBox( msg, _( "Donate to KiCad" ), wxOK, m_frame );
     }
+
     return 0;
 }
 

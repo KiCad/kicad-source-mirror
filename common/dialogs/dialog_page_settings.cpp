@@ -535,7 +535,8 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
     if( !success )
     {
-        wxASSERT_MSG( false, _( "the translation for paper size must preserve original spellings" ) );
+        wxASSERT_MSG( false,
+                      _( "the translation for paper size must preserve original spellings" ) );
         m_pageInfo.SetType( PAGE_INFO::A4 );
     }
 
@@ -637,6 +638,7 @@ void DIALOG_PAGES_SETTINGS::UpdateDrawingSheetExample()
         wxString pageFmtName = m_pageFmt[idx].BeforeFirst( ' ' );
         bool portrait = clamped_layout_size.x < clamped_layout_size.y;
         pageDUMMY.SetType( pageFmtName, portrait );
+
         if( m_customFmt )
         {
             pageDUMMY.SetWidthMils( clamped_layout_size.x );
@@ -665,7 +667,8 @@ void DIALOG_PAGES_SETTINGS::UpdateDrawingSheetExample()
                 renderSettings.SetLayerColor( LAYER_DRAWINGSHEET, color );
             }
 
-            GRFilledRect( NULL, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, bgColor, bgColor );
+            GRFilledRect( nullptr, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, bgColor,
+                          bgColor );
 
             PrintDrawingSheet( &renderSettings, pageDUMMY, emptyString, emptyString, m_tb,
                                m_screen->GetPageCount(), m_screen->GetPageNumber(), 1, &Prj(),
@@ -674,7 +677,8 @@ void DIALOG_PAGES_SETTINGS::UpdateDrawingSheetExample()
             memDC.SelectObject( wxNullBitmap );
             m_PageLayoutExampleBitmap->SetBitmap( *m_pageBitmap );
         }
-        DS_DATA_MODEL::SetAltInstance( NULL );
+
+        DS_DATA_MODEL::SetAltInstance( nullptr );
 
         // Refresh the dialog.
         Layout();

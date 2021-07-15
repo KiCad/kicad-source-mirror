@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,12 +40,6 @@ static const wxString HOSTNAME( wxT( "localhost" ) );
 static char client_ipc_buffer[IPC_BUF_SIZE];
 
 
-/**********************************/
-/* Routines related to the server */
-/**********************************/
-
-/* Function to initialize a server socket
- */
 void KIWAY_PLAYER::CreateServer( int service, bool local )
 {
     wxIPV4address addr;
@@ -66,8 +60,6 @@ void KIWAY_PLAYER::CreateServer( int service, bool local )
 }
 
 
-/* Function called on every client request.
- */
 void KIWAY_PLAYER::OnSockRequest( wxSocketEvent& evt )
 {
     size_t        len;
@@ -98,8 +90,6 @@ void KIWAY_PLAYER::OnSockRequest( wxSocketEvent& evt )
 }
 
 
-/* Function called when a connection is requested by a client.
- */
 void KIWAY_PLAYER::OnSockRequestServer( wxSocketEvent& evt )
 {
     wxSocketBase*   socket;
@@ -107,7 +97,7 @@ void KIWAY_PLAYER::OnSockRequestServer( wxSocketEvent& evt )
 
     socket = server->Accept();
 
-    if( socket == NULL )
+    if( socket == nullptr )
         return;
 
     m_sockets.push_back( socket );
@@ -118,17 +108,14 @@ void KIWAY_PLAYER::OnSockRequestServer( wxSocketEvent& evt )
 }
 
 
-/**********************************/
-/* Routines related to the CLIENT */
-/**********************************/
-
 /**
- * Spins up a thread to send messages via a socket.  No message queuing, if a message is in flight
- * when another is posted with Send(), the second is just dropped.
- * This is a workaround for "non-blocking" sockets not always being non-blocking, especially on
- * Windows.  It is kept fairly simple and not exposed to the outside world because it should be
- * replaced in a future KiCad version with a real message queue of some sort, and unified with the
- * Kiway messaging system.
+ * Spin up a thread to send messages via a socket.
+ *
+ * No message queuing, if a message is in flight when another is posted with Send(), the
+ * second is just dropped.  This is a workaround for "non-blocking" sockets not always being
+ * non-blocking, especially on Windows.  It is kept fairly simple and not exposed to the
+ * outside world because it should be replaced in a future KiCad version with a real message
+ * queue of some sort, and unified with the Kiway messaging system.
  */
 class ASYNC_SOCKET_HOLDER
 {
@@ -173,10 +160,11 @@ public:
     }
 
     /**
-     * Attempts to send a message if the thread is available
-     * @param aService is the port number (i.e. service) to send to
-     * @param aMessage is the message to send
-     * @return true if the message was queued
+     * Attempt to send a message if the thread is available.
+     *
+     * @param aService is the port number (i.e. service) to send to.
+     * @param aMessage is the message to send.
+     * @return true if the message was queued.
     */
     bool Send( int aService, const std::string& aMessage )
     {
@@ -303,12 +291,15 @@ private:
 
 std::unique_ptr<ASYNC_SOCKET_HOLDER> socketHolder = nullptr;
 
-/* Used by a client to sent (by a socket connection) a data to a server.
- *  - Open a Socket Client connection
- *  - Send the buffer cmdline
- *  - Close the socket connection
+
+/**
+ * Used by a client to sent (by a socket connection) a data to a server.
+ *  - Open a Socket Client connection.
+ *  - Send the buffer cmdline.
+ *  - Close the socket connection.
  *
- *  service is the service number for the TC/IP connection
+ * @param aService is the service number for the TC/IP connection.
+ * @param aMessage is the message to send.
  */
 bool SendCommand( int aService, const std::string& aMessage )
 {

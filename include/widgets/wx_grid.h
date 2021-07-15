@@ -99,6 +99,10 @@ public:
     void ShowEditorOnMouseUp() { m_waitForSlowClick = true; }
 
 protected:
+    /**
+     * A re-implementation of wxGrid::DrawColLabel which left-aligns the first column when
+     * there are no row labels.
+     */
     void DrawColLabel( wxDC& dc, int col ) override;
 
     void onGridColMove( wxGridEvent& aEvent );

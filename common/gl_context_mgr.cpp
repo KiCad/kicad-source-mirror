@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -26,12 +26,14 @@
 #include <gl_context_mgr.h>
 #include <wx/debug.h>
 
+
 GL_CONTEXT_MANAGER& GL_CONTEXT_MANAGER::Get()
 {
     static GL_CONTEXT_MANAGER instance;
 
     return instance;
 }
+
 
 wxGLContext* GL_CONTEXT_MANAGER::CreateCtx( wxGLCanvas* aCanvas, const wxGLContext* aOther )
 {
@@ -66,7 +68,7 @@ void GL_CONTEXT_MANAGER::DestroyCtx( wxGLContext* aContext )
     }
 
     if( m_glCtx == aContext )
-        m_glCtx = NULL;
+        m_glCtx = nullptr;
 }
 
 
@@ -78,7 +80,7 @@ void GL_CONTEXT_MANAGER::DeleteAll()
         delete ctx.first;
 
     m_glContexts.clear();
-    m_glCtx = NULL;
+    m_glCtx = nullptr;
     m_glCtxMutex.unlock();
 }
 
@@ -109,7 +111,7 @@ void GL_CONTEXT_MANAGER::UnlockCtx( wxGLContext* aContext )
     if( m_glCtx == aContext )
     {
         m_glCtxMutex.unlock();
-        m_glCtx = NULL;
+        m_glCtx = nullptr;
     }
     else
     {
@@ -120,7 +122,7 @@ void GL_CONTEXT_MANAGER::UnlockCtx( wxGLContext* aContext )
 
 
 GL_CONTEXT_MANAGER::GL_CONTEXT_MANAGER()
-    : m_glCtx( NULL )
+    : m_glCtx( nullptr )
 {
 }
 

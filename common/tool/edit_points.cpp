@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2014-2019 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -27,6 +28,7 @@
 #include <painter.h>
 #include <math/util.h>      // for KiROUND
 #include "tool/edit_points.h"
+
 
 bool EDIT_POINT::WithinPoint( const VECTOR2I& aPoint, unsigned int aSize ) const
 {
@@ -64,7 +66,7 @@ EDIT_POINT* EDIT_POINTS::FindPoint( const VECTOR2I& aLocation, KIGFX::VIEW *aVie
             return &line;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -145,7 +147,7 @@ EDIT_POINT* EDIT_POINTS::Previous( const EDIT_POINT& aPoint, bool aTraverseConto
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -162,7 +164,7 @@ EDIT_LINE* EDIT_POINTS::Previous( const EDIT_LINE& aLine )
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -182,7 +184,7 @@ EDIT_POINT* EDIT_POINTS::Next( const EDIT_POINT& aPoint, bool aTraverseContours 
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -199,7 +201,7 @@ EDIT_LINE* EDIT_POINTS::Next( const EDIT_LINE& aLine )
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 

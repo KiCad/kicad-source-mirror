@@ -73,7 +73,7 @@ wxString EDA_FILE_SELECTOR( const wxString& aTitle,
 
     if( defaultpath.IsEmpty() )
     {
-        if( aMruPath == NULL )
+        if( aMruPath == nullptr )
             defaultpath = wxGetCwd();
         else
             defaultpath = *aMruPath;
@@ -246,14 +246,14 @@ bool OpenPDF( const wxString& file )
         {
             wxString msg;
             msg.Printf( _( "Problem while running the PDF viewer.\nCommand is '%s'." ), command );
-            DisplayError( NULL, msg );
+            DisplayError( nullptr, msg );
         }
     }
     else
     {
         wxString msg;
         msg.Printf( _( "Unable to find a PDF viewer for '%s'." ), file );
-        DisplayError( NULL, msg );
+        DisplayError( nullptr, msg );
     }
 
     return false;
@@ -316,10 +316,10 @@ bool doPrintFile( const wxString& file, bool aDryRun )
     if( !application.IsEmpty() )
     {
         printCommand.Printf( "osascript -e 'tell application \"%s\"' "
-                                  "-e '   set srcFileRef to (open POSIX file \"%s\")' "
-                                  "-e '   activate' "
-                                  "-e '   print srcFileRef print dialog true' "
-                                  "-e 'end tell' ",
+                             "-e '   set srcFileRef to (open POSIX file \"%s\")' "
+                             "-e '   activate' "
+                             "-e '   print srcFileRef print dialog true' "
+                             "-e 'end tell' ",
                              application,
                              file );
 

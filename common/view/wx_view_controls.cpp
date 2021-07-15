@@ -84,55 +84,55 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
     LoadSettings();
 
     m_parentPanel->Connect( wxEVT_MOTION,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), nullptr, this );
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     m_parentPanel->Connect( wxEVT_MAGNIFY,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onMagnify ), NULL, this );
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onMagnify ), nullptr, this );
 #endif
     m_parentPanel->Connect( wxEVT_MOUSEWHEEL,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onWheel ), NULL, this );
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onWheel ), nullptr, this );
     m_parentPanel->Connect( wxEVT_MIDDLE_UP,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), nullptr, this );
     m_parentPanel->Connect( wxEVT_MIDDLE_DOWN,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), nullptr, this );
     m_parentPanel->Connect( wxEVT_LEFT_UP,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), nullptr, this );
     m_parentPanel->Connect( wxEVT_LEFT_DOWN,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), nullptr, this );
     m_parentPanel->Connect( wxEVT_RIGHT_UP,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), nullptr, this );
     m_parentPanel->Connect( wxEVT_RIGHT_DOWN,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), nullptr, this );
 #if defined __WXMSW__
     m_parentPanel->Connect( wxEVT_ENTER_WINDOW,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onEnter ), NULL, this );
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onEnter ), nullptr, this );
 #endif
     m_parentPanel->Connect( wxEVT_LEAVE_WINDOW,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onLeave ), NULL, this );
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onLeave ), nullptr, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_THUMBTRACK,
-                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), nullptr, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_PAGEUP,
-                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), nullptr, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_PAGEDOWN,
-                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), nullptr, this );
 
     m_parentPanel->Connect( wxEVT_SCROLLWIN_BOTTOM,
-                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), nullptr, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_TOP,
-                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), nullptr, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_LINEUP,
-                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), nullptr, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_LINEDOWN,
-                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), nullptr, this );
 #if defined USE_MOUSE_CAPTURE
     m_parentPanel->Connect( wxEVT_MOUSE_CAPTURE_LOST,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onCaptureLost ), NULL, this );
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onCaptureLost ), nullptr, this );
 #endif
 
     m_cursorWarped = false;
 
     m_panTimer.SetOwner( this );
-    this->Connect( wxEVT_TIMER, wxTimerEventHandler( WX_VIEW_CONTROLS::onTimer ), NULL, this );
+    this->Connect( wxEVT_TIMER, wxTimerEventHandler( WX_VIEW_CONTROLS::onTimer ), nullptr, this );
 
     m_settings.m_lastKeyboardCursorPositionValid = false;
     m_settings.m_lastKeyboardCursorPosition = { 0.0, 0.0 };
@@ -399,6 +399,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
             m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             m_lookStartPoint = m_view->GetCenter();
             m_state = DRAG_PANNING;
+
 #if defined USE_MOUSE_CAPTURE
             if( !m_parentPanel->HasCapture() )
                 m_parentPanel->CaptureMouse();
@@ -411,6 +412,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
             m_zoomStartPoint = m_dragStartPoint;
             m_initialZoomScale = m_view->GetScale();
             m_state = DRAG_ZOOMING;
+
 #if defined USE_MOUSE_CAPTURE
             if( !m_parentPanel->HasCapture() )
                 m_parentPanel->CaptureMouse();
@@ -427,6 +429,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         if( aEvent.MiddleUp() || aEvent.LeftUp() || aEvent.RightUp() )
         {
             m_state = IDLE;
+
 #if defined USE_MOUSE_CAPTURE
             if( !m_settings.m_cursorCaptured && m_parentPanel->HasCapture() )
                 m_parentPanel->ReleaseMouse();
@@ -451,8 +454,9 @@ void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
     }
 
 #if defined( _WIN32 )
-    // Win32 transmits mouse move and wheel events to all controls below the mouse regardless of focus
-    // Forcing the focus here will cause the EDA FRAMES to immediately become the top level active window
+    // Win32 transmits mouse move and wheel events to all controls below the mouse regardless
+    // of focus.  Forcing the focus here will cause the EDA FRAMES to immediately become the
+    // top level active window.
     if( m_parentPanel->GetParent() != nullptr )
     {
         // this assumes the parent panel's parent is the eda window
@@ -479,10 +483,11 @@ void WX_VIEW_CONTROLS::onCaptureLost( wxMouseEvent& aEvent )
     // This method must be present to suppress the capture-lost assertion
 
     // Set the flag to allow calling m_parentPanel->CaptureMouse()
-    // Nots: One cannot call m_parentPanel->CaptureMouse() twice, thit is not accepted
+    // Note: One cannot call m_parentPanel->CaptureMouse() twice, this is not accepted
     // by wxWidgets (MSW specific) so we need this guard
     m_parentPanel->m_MouseCapturedLost = true;
 }
+
 
 void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 {
@@ -572,10 +577,7 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
         else if( type == wxEVT_SCROLLWIN_LINEDOWN )
             dist = -linePanDelta;
         else
-        {
-            wxASSERT( "Unhandled event type" );
-            return;
-        }
+            wxCHECK_MSG( false, /* void */, wxT( "Unhandled event type" ) );
 
         VECTOR2D scroll = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) * dist;
 
@@ -698,7 +700,8 @@ void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpV
 }
 
 
-void WX_VIEW_CONTROLS::SetCrossHairCursorPosition( const VECTOR2D& aPosition, bool aWarpView = true )
+void WX_VIEW_CONTROLS::SetCrossHairCursorPosition( const VECTOR2D& aPosition,
+                                                   bool aWarpView = true )
 {
     m_updateCursor = false;
 
@@ -714,7 +717,7 @@ void WX_VIEW_CONTROLS::SetCrossHairCursorPosition( const VECTOR2D& aPosition, bo
 
 
 void WX_VIEW_CONTROLS::WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates,
-                                    bool aWarpView )
+                                   bool aWarpView )
 {
     if( aWorldCoordinates )
     {
@@ -764,10 +767,10 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 
     if( m_cursorWarped || ( m_settings.m_lastKeyboardCursorPositionValid && p == pKey ) )
     {
-        // last cursor move event came from keyboard cursor control. If auto-panning is enabled and
-        // the next position is inside the autopan zone, check if it really came from a mouse event, otherwise
-        // disable autopan temporarily. Also temporarily disable autopan if the cursor is in the autopan zone
-        // because the application warped the cursor.
+        // last cursor move event came from keyboard cursor control. If auto-panning is enabled
+        // and the next position is inside the autopan zone, check if it really came from a mouse
+        // event, otherwise disable autopan temporarily. Also temporarily disable autopan if the
+        // cursor is in the autopan zone because the application warped the cursor.
 
         m_cursorWarped = false;
         return true;
@@ -777,7 +780,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 
     // Compute areas where autopanning is active
     int borderStart = std::min( m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().x,
-                                   m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().y );
+                                m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().y );
     borderStart = std::max( borderStart, 2 );
     int borderEndX = m_view->GetScreenPixelSize().x - borderStart;
     int borderEndY = m_view->GetScreenPixelSize().y - borderStart;
@@ -829,8 +832,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
         return false;
     }
 
-    wxASSERT_MSG( false, wxT( "This line should never be reached" ) );
-    return false;    // Should not be reached, just avoid the compiler warnings..
+    wxCHECK_MSG( false, false, wxT( "This line should never be reached" ) );
 }
 
 
@@ -903,12 +905,14 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
     m_scrollScale.x = 2e3 / viewport.GetWidth();    // TODO it does not have to be updated so often
     m_scrollScale.y = 2e3 / viewport.GetHeight();
     VECTOR2I newScroll( ( viewport.Centre().x - boundary.GetLeft() ) * m_scrollScale.x,
-                ( viewport.Centre().y - boundary.GetTop() ) * m_scrollScale.y );
+                        ( viewport.Centre().y - boundary.GetTop() ) * m_scrollScale.y );
 
     // We add the width of the scroll bar thumb to the range because the scroll range is given by
     // the full bar while the position is given by the left/top position of the thumb
-    VECTOR2I newRange( m_scrollScale.x * boundary.GetWidth() + m_parentPanel->GetScrollThumb( wxSB_HORIZONTAL ),
-            m_scrollScale.y * boundary.GetHeight() + m_parentPanel->GetScrollThumb( wxSB_VERTICAL ) );
+    VECTOR2I newRange( m_scrollScale.x * boundary.GetWidth() +
+                       m_parentPanel->GetScrollThumb( wxSB_HORIZONTAL ),
+                       m_scrollScale.y * boundary.GetHeight() +
+                       m_parentPanel->GetScrollThumb( wxSB_VERTICAL ) );
 
     // Flip scroll direction in flipped view
     if( m_view->IsMirroredX() )
@@ -919,12 +923,14 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
     if( m_scrollPos != newScroll || newRange.x != m_parentPanel->GetScrollRange( wxSB_HORIZONTAL )
             || newRange.y != m_parentPanel->GetScrollRange( wxSB_VERTICAL ) )
     {
-        m_parentPanel->SetScrollbars( 1, 1, newRange.x, newRange.y, newScroll.x, newScroll.y, true );
+        m_parentPanel->SetScrollbars( 1, 1, newRange.x, newRange.y, newScroll.x, newScroll.y,
+                                      true );
         m_scrollPos = newScroll;
 
 #if !defined( __APPLE__ ) && !defined( WIN32 )
         // Trigger a mouse refresh to get the canvas update in GTK (re-draws the scrollbars).
-        // Note that this causes an infinite loop on OSX and Windows (in certain cases) as it generates a paint event.
+        // Note that this causes an infinite loop on OSX and Windows (in certain cases) as it
+        // generates a paint event.
         refreshMouse();
 #endif
     }

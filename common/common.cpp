@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014-2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -381,8 +381,8 @@ bool matchWild( const char* pat, const char* text, bool dot_special )
 
     const char *m = pat,
     *n = text,
-    *ma = NULL,
-    *na = NULL;
+    *ma = nullptr,
+    *na = nullptr;
     int just = 0,
     acount = 0,
     count = 0;
@@ -420,6 +420,7 @@ bool matchWild( const char* pat, const char* text, bool dot_special )
                 if( !*m )
                     return false;
             }
+
             if( !*m )
             {
                 /*
@@ -492,7 +493,7 @@ bool matchWild( const char* pat, const char* text, bool dot_special )
 static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL(11644473600000);
 
 
-static void ConvertFileTimeToWx( wxDateTime *dt, const FILETIME &ft )
+static void ConvertFileTimeToWx( wxDateTime* dt, const FILETIME& ft )
 {
     wxLongLong t( ft.dwHighDateTime, ft.dwLowDateTime );
     t /= 10000; // Convert hundreds of nanoseconds to milliseconds.
@@ -505,13 +506,12 @@ static void ConvertFileTimeToWx( wxDateTime *dt, const FILETIME &ft )
 
 
 /**
- * TimestampDir
- *
  * This routine offers SIGNIFICANT performance benefits over using wxWidgets to gather
  * timestamps from matching files in a directory.
- * @param aDirPath the directory to search
- * @param aFilespec a (wildcarded) file spec to match against
- * @return a hash of the last-mod-dates of all matching files in the directory
+ *
+ * @param aDirPath is the directory to search.
+ * @param aFilespec is a (wildcarded) file spec to match against.
+ * @return a hash of the last-mod-dates of all matching files in the directory.
  */
 long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
 {
@@ -537,7 +537,9 @@ long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
         {
             ConvertFileTimeToWx( &lastModDate, findData.ftLastWriteTime );
             timestamp += lastModDate.GetValue().GetValue();
-            timestamp += findData.nFileSizeLow; // Get the file size (partial) as well to check for sneaky changes
+
+            // Get the file size (partial) as well to check for sneaky changes.
+            timestamp += findData.nFileSizeLow;
         }
         while ( FindNextFile( fileHandle, &findData ) != 0 );
     }
@@ -590,7 +592,9 @@ long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
                 if( S_ISREG( entry_stat.st_mode ) )    // wxFileExists()
                 {
                     timestamp += entry_stat.st_mtime * 1000;
-                    timestamp += entry_stat.st_size;    // Get the file size as well to check for sneaky changes
+
+                    // Get the file size as well to check for sneaky changes.
+                    timestamp += entry_stat.st_size;
                 }
             }
             else
@@ -607,13 +611,14 @@ long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
     return timestamp;
 }
 
+
 bool WarnUserIfOperatingSystemUnsupported()
 {
     if( !KIPLATFORM::APP::IsOperatingSystemUnsupported() )
         return false;
 
-    wxMessageDialog dialog( NULL, _( "This operating system is not supported "
-                                     "by KiCad and its dependencies." ), 
+    wxMessageDialog dialog( nullptr, _( "This operating system is not supported "
+                                        "by KiCad and its dependencies." ),
                             _( "Unsupported Operating System" ),
                             wxOK | wxICON_EXCLAMATION );
 

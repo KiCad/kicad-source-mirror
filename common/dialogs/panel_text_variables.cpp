@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,9 @@ PANEL_TEXT_VARIABLES::PANEL_TEXT_VARIABLES( wxWindow* aParent, PROJECT* aProject
     m_TextVars->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
 
     // wxFormBuilder doesn't include this event...
-    m_TextVars->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( PANEL_TEXT_VARIABLES::OnGridCellChanging ), NULL, this );
+    m_TextVars->Connect( wxEVT_GRID_CELL_CHANGING,
+                         wxGridEventHandler( PANEL_TEXT_VARIABLES::OnGridCellChanging ),
+                         nullptr, this );
 }
 
 
@@ -67,7 +69,9 @@ PANEL_TEXT_VARIABLES::~PANEL_TEXT_VARIABLES()
     // Delete the GRID_TRICKS.
     m_TextVars->PopEventHandler( true );
 
-    m_TextVars->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( PANEL_TEXT_VARIABLES::OnGridCellChanging ), NULL, this );
+    m_TextVars->Disconnect( wxEVT_GRID_CELL_CHANGING,
+                            wxGridEventHandler( PANEL_TEXT_VARIABLES::OnGridCellChanging ),
+                            nullptr, this );
 }
 
 
@@ -193,7 +197,8 @@ void PANEL_TEXT_VARIABLES::OnUpdateUI( wxUpdateUIEvent& event )
         int width = m_TextVars->GetClientRect().GetWidth();
 
         m_TextVars->AutoSizeColumn( TV_NAME_COL );
-        m_TextVars->SetColSize( TV_NAME_COL, std::max( m_TextVars->GetColSize( TV_NAME_COL ), 120 ) );
+        m_TextVars->SetColSize( TV_NAME_COL, std::max( m_TextVars->GetColSize( TV_NAME_COL ),
+                                                       120 ) );
 
         m_TextVars->SetColSize( TV_VALUE_COL, width - m_TextVars->GetColSize( TV_NAME_COL ) );
         m_gridWidthsDirty = false;

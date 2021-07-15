@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,12 +83,16 @@ void KIWAY::SetTop( wxFrame* aTop )
 #if 0
     if( m_top )
     {
-        m_top->Disconnect( wxEVT_DESTROY, wxWindowDestroyEventHandler( KIWAY::player_destroy_handler ), NULL, this );
+        m_top->Disconnect( wxEVT_DESTROY,
+                           wxWindowDestroyEventHandler( KIWAY::player_destroy_handler ),
+                           nullptr, this );
     }
 
     if( aTop )
     {
-        aTop->Connect( wxEVT_DESTROY, wxWindowDestroyEventHandler( KIWAY::player_destroy_handler ), NULL, this );
+        aTop->Connect( wxEVT_DESTROY,
+                       wxWindowDestroyEventHandler( KIWAY::player_destroy_handler ),
+                       nullptr, this );
     }
 #endif
 
@@ -188,7 +192,7 @@ PROJECT& KIWAY::Prj() const
 }
 
 
-KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
+KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 {
     // Since this will be called from python, cannot assume that code will
     // not pass a bad aFaceId.
@@ -198,7 +202,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         // way it gets some explanatory text.
 
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFaceId" ) );
-        return NULL;
+        return nullptr;
     }
 
     // return the previously loaded KIFACE, if it was.
@@ -208,7 +212,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
     wxString msg;
 
     // DSO with KIFACE has not been loaded yet, does caller want to load it?
-    if( doLoad  )
+    if( doLoad )
     {
         wxString dname = dso_search_path( aFaceId );
 
@@ -227,7 +231,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
         wxDynamicLibrary dso;
 
-        void*   addr = NULL;
+        void*   addr = nullptr;
 
         // For some reason wxDynamicLibrary::Load() crashes in some languages
         // (chinese for instance) when loading the dynamic library.
@@ -252,7 +256,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             msg.Printf( _( "Failed to load kiface library '%s'." ), dname );
             THROW_IO_ERROR( msg );
         }
-        else if( ( addr = dso.GetSymbol( wxT( KIFACE_INSTANCE_NAME_AND_VERSION ) ) ) == NULL )
+        else if( ( addr = dso.GetSymbol( wxT( KIFACE_INSTANCE_NAME_AND_VERSION ) ) ) == nullptr )
         {
             // Failure: error reporting UI was done via wxLogSysError().
             // No further reporting required here.  Assume the same thing applies here as
@@ -290,9 +294,8 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         // to exist, and we did not find one.  If we do not find one, this is an
         // installation bug.
 
-        msg = wxString::Format( _(
-            "Fatal Installation Bug. File:\n"
-            "\"%s\"\ncould not be loaded\n" ), dname );
+        msg = wxString::Format( _( "Fatal Installation Bug. File:\n"
+                                   "\"%s\"\ncould not be loaded\n" ), dname );
 
         if( ! wxFileExists( dname ) )
             msg << _( "It is missing.\n" );
@@ -310,7 +313,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         THROW_IO_ERROR( msg );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -363,11 +366,11 @@ KIWAY_PLAYER* KIWAY::GetPlayerFrame( FRAME_T aFrameType )
     wxWindowID storedId = m_playerFrameId[aFrameType];
 
     if( storedId == wxID_NONE )
-        return NULL;
+        return nullptr;
 
     wxWindow* frame = wxWindow::FindWindowById( storedId );
 
-    // Since wxWindow::FindWindow*() is not cheap (especially if the window does not exist), 
+    // Since wxWindow::FindWindow*() is not cheap (especially if the window does not exist),
     // clear invalid entries to save CPU on repeated calls that do not lead to frame creation
     if( !frame )
         m_playerFrameId[aFrameType].compare_exchange_strong( storedId, wxID_NONE );
@@ -447,7 +450,7 @@ bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
 
     KIWAY_PLAYER* frame =  GetPlayerFrame( aFrameType );
 
-    if( frame == NULL ) // Already closed
+    if( frame == nullptr ) // Already closed
         return true;
 
     if( frame->NonUserClose( doForce ) )
@@ -470,7 +473,8 @@ bool KIWAY::PlayersClose( bool doForce )
 }
 
 
-void KIWAY::ExpressMail( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload, wxWindow* aSource )
+void KIWAY::ExpressMail( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload,
+                         wxWindow* aSource )
 {
     KIWAY_EXPRESS   mail( aDestination, aCommand, aPayload, aSource );
 

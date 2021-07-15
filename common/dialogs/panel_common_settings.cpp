@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,8 +44,8 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
           m_dialog( aDialog ),
           m_last_scale( -1 )
 {
-    m_canvasScaleCtrl->SetRange(
-            DPI_SCALING::GetMinScaleFactor(), DPI_SCALING::GetMaxScaleFactor() );
+    m_canvasScaleCtrl->SetRange( DPI_SCALING::GetMinScaleFactor(),
+                                 DPI_SCALING::GetMaxScaleFactor() );
     m_canvasScaleCtrl->SetDigits( dpi_scaling_precision );
     m_canvasScaleCtrl->SetIncrement( dpi_scaling_increment );
     m_canvasScaleCtrl->SetValue( DPI_SCALING::GetDefaultScaleFactor() );
@@ -79,7 +79,7 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
 
     m_canvasScaleCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
                                 wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ),
-                                NULL, this );
+                                nullptr, this );
 }
 
 
@@ -87,7 +87,7 @@ PANEL_COMMON_SETTINGS::~PANEL_COMMON_SETTINGS()
 {
     m_canvasScaleCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
                                    wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ),
-                                   NULL, this );
+                                   nullptr, this );
 }
 
 

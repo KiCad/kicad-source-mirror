@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -33,7 +33,9 @@
 
 #include "widgets/unit_binder.h"
 
+
 wxDEFINE_EVENT( DELAY_FOCUS, wxCommandEvent );
+
 
 UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindow* aValueCtrl,
                           wxStaticText* aUnitLabel, bool allowEval ) :
@@ -64,17 +66,22 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindo
     if( m_unitLabel )
         m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
 
-    m_valueCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), NULL, this );
-    m_valueCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
-    Connect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), NULL, this );
+    m_valueCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ),
+                          nullptr, this );
+    m_valueCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ),
+                          nullptr, this );
+    Connect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), nullptr,
+             this );
 
-    m_frame->Connect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ), nullptr, this );
+    m_frame->Connect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
+                      nullptr, this );
 }
 
 
 UNIT_BINDER::~UNIT_BINDER()
 {
-    m_frame->Disconnect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ), nullptr, this );
+    m_frame->Disconnect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
+                         nullptr, this );
 }
 
 
@@ -208,6 +215,7 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
                                            StringFromValue( m_units, val_min_iu, true ) );
 
         textEntry->SelectAll();
+
         // Don't focus directly; we might be inside a KillFocus event handler
         wxPostEvent( this, wxCommandEvent( DELAY_FOCUS ) );
 
@@ -222,6 +230,7 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
                                            StringFromValue( m_units, val_max_iu, true ) );
 
         textEntry->SelectAll();
+
         // Don't focus directly; we might be inside a KillFocus event handler
         wxPostEvent( this, wxCommandEvent( DELAY_FOCUS ) );
 
@@ -306,9 +315,13 @@ long long int UNIT_BINDER::GetValue()
             value = textEntry->GetValue();
     }
     else if( staticText )
+    {
         value = staticText->GetLabel();
+    }
     else
+    {
         return 0;
+    }
 
     long long int displayValue = ValueFromString( m_units, value, m_dataType );
     return m_originTransforms.FromDisplay( displayValue, m_coordType );

@@ -54,7 +54,7 @@ GPU_MANAGER* GPU_MANAGER::MakeManager( VERTEX_CONTAINER* aContainer )
 GPU_MANAGER::GPU_MANAGER( VERTEX_CONTAINER* aContainer ) :
         m_isDrawing( false ),
         m_container( aContainer ),
-        m_shader( NULL ),
+        m_shader( nullptr ),
         m_shaderAttrib( 0 ),
         m_enableDepthTest( true )
 {
@@ -73,7 +73,7 @@ void GPU_MANAGER::SetShader( SHADER& aShader )
 
     if( m_shaderAttrib == -1 )
     {
-        DisplayError( NULL, wxT( "Could not get the shader attribute location" ) );
+        DisplayError( nullptr, wxT( "Could not get the shader attribute location" ) );
     }
 }
 
@@ -82,7 +82,7 @@ void GPU_MANAGER::SetShader( SHADER& aShader )
 GPU_CACHED_MANAGER::GPU_CACHED_MANAGER( VERTEX_CONTAINER* aContainer ) :
         GPU_MANAGER( aContainer ),
         m_buffersInitialized( false ),
-        m_indicesPtr( NULL ),
+        m_indicesPtr( nullptr ),
         m_indicesBuffer( 0 ),
         m_indicesSize( 0 ),
         m_indicesCapacity( 0 )
@@ -184,7 +184,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
     glVertexPointer( COORD_STRIDE, GL_FLOAT, VERTEX_SIZE, (GLvoid*) COORD_OFFSET );
     glColorPointer( COLOR_STRIDE, GL_UNSIGNED_BYTE, VERTEX_SIZE, (GLvoid*) COLOR_OFFSET );
 
-    if( m_shader != NULL ) // Use shader if applicable
+    if( m_shader != nullptr ) // Use shader if applicable
     {
         m_shader->Use();
         glEnableVertexAttribArray( m_shaderAttrib );
@@ -196,7 +196,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, m_indicesSize * sizeof( int ), (GLvoid*) m_indices.get(),
                   GL_DYNAMIC_DRAW );
 
-    glDrawElements( GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, NULL );
+    glDrawElements( GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, nullptr );
 
 #ifdef KICAD_GAL_PROFILE
     wxLogTrace( traceGalProfile, wxT( "Cached manager size: %d" ), m_indicesSize );
@@ -210,7 +210,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
     glDisableClientState( GL_COLOR_ARRAY );
     glDisableClientState( GL_VERTEX_ARRAY );
 
-    if( m_shader != NULL )
+    if( m_shader != nullptr )
     {
         glDisableVertexAttribArray( m_shaderAttrib );
         m_shader->Deactivate();
@@ -287,7 +287,7 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
     glVertexPointer( COORD_STRIDE, GL_FLOAT, VERTEX_SIZE, coordinates );
     glColorPointer( COLOR_STRIDE, GL_UNSIGNED_BYTE, VERTEX_SIZE, colors );
 
-    if( m_shader != NULL ) // Use shader if applicable
+    if( m_shader != nullptr ) // Use shader if applicable
     {
         GLfloat* shaders = (GLfloat*) ( vertices ) + SHADER_OFFSET / sizeof( GLfloat );
 
@@ -307,7 +307,7 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
     glDisableClientState( GL_COLOR_ARRAY );
     glDisableClientState( GL_VERTEX_ARRAY );
 
-    if( m_shader != NULL )
+    if( m_shader != nullptr )
     {
         glDisableVertexAttribArray( m_shaderAttrib );
         m_shader->Deactivate();

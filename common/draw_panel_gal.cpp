@@ -95,9 +95,11 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
     EnableScrolling( false, false ); // otherwise Zoom Auto disables GAL canvas
 
-    Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
-    Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
-    Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( EDA_DRAW_PANEL_GAL::onLostFocus ), NULL, this );
+    Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), nullptr, this );
+    Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), nullptr,
+             this );
+    Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( EDA_DRAW_PANEL_GAL::onLostFocus ), nullptr,
+             this );
 
     const wxEventType events[] = {
         // Binding both EVT_CHAR and EVT_CHAR_HOOK ensures that all key events,
@@ -124,7 +126,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     };
 
     for( wxEventType eventType : events )
-        Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::OnEvent ), NULL,
+        Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::OnEvent ), nullptr,
                  m_eventDispatcher );
 
     m_pendingRefresh = false;
@@ -134,12 +136,12 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     // Set up timer that prevents too frequent redraw commands
     m_refreshTimer.SetOwner( this );
     Connect( m_refreshTimer.GetId(), wxEVT_TIMER,
-             wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
+             wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), nullptr, this );
 
     // Set up timer to execute OnShow() method when the window appears on the screen
     m_onShowTimer.SetOwner( this );
     Connect( m_onShowTimer.GetId(), wxEVT_TIMER,
-             wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onShowTimer ), NULL, this );
+             wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onShowTimer ), nullptr, this );
     m_onShowTimer.Start( 10 );
 }
 
@@ -346,7 +348,7 @@ void EDA_DRAW_PANEL_GAL::StartDrawing()
 void EDA_DRAW_PANEL_GAL::StopDrawing()
 {
     m_drawingEnabled = false;
-    Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
+    Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), nullptr, this );
     m_pendingRefresh = false;
     m_refreshTimer.Stop();
 }
@@ -377,7 +379,7 @@ void EDA_DRAW_PANEL_GAL::SetTopLayer( int aLayer )
 bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 {
     // Do not do anything if the currently used GAL is correct
-    if( aGalType == m_backend && m_gal != NULL )
+    if( aGalType == m_backend && m_gal != nullptr )
         return true;
 
     VECTOR2D grid_size = m_gal ? m_gal->GetGridSize() : VECTOR2D();
@@ -387,7 +389,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     // Prevent refreshing canvas during backend switch
     StopDrawing();
 
-    KIGFX::GAL* new_gal = NULL;
+    KIGFX::GAL* new_gal = nullptr;
 
     try
     {
@@ -531,7 +533,8 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
         {
             m_drawing = false;
             m_pendingRefresh = true;
-            Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
+            Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), nullptr,
+                     this );
             m_drawingEnabled = true;
         }
         else

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-18 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,14 +43,21 @@ GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid ):
     m_sel_row_count = 0;
     m_sel_col_count = 0;
 
-    aGrid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridCellLeftClick ), NULL, this );
-    aGrid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( GRID_TRICKS::onGridCellLeftDClick ), NULL, this );
-    aGrid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridCellRightClick ), NULL, this );
-    aGrid->Connect( wxEVT_GRID_LABEL_RIGHT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridLabelRightClick ), NULL, this );
-    aGrid->Connect( wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridLabelLeftClick ), NULL, this );
-    aGrid->Connect( GRIDTRICKS_FIRST_ID, GRIDTRICKS_LAST_ID, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GRID_TRICKS::onPopupSelection ), NULL, this );
-    aGrid->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( GRID_TRICKS::onKeyDown ), NULL, this );
-    aGrid->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( GRID_TRICKS::onUpdateUI ), NULL, this );
+    aGrid->Connect( wxEVT_GRID_CELL_LEFT_CLICK,
+                    wxGridEventHandler( GRID_TRICKS::onGridCellLeftClick ), nullptr, this );
+    aGrid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK,
+                    wxGridEventHandler( GRID_TRICKS::onGridCellLeftDClick ), nullptr, this );
+    aGrid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK,
+                    wxGridEventHandler( GRID_TRICKS::onGridCellRightClick ), nullptr, this );
+    aGrid->Connect( wxEVT_GRID_LABEL_RIGHT_CLICK,
+                    wxGridEventHandler( GRID_TRICKS::onGridLabelRightClick ), nullptr, this );
+    aGrid->Connect( wxEVT_GRID_LABEL_LEFT_CLICK,
+                    wxGridEventHandler( GRID_TRICKS::onGridLabelLeftClick ), nullptr, this );
+    aGrid->Connect( GRIDTRICKS_FIRST_ID, GRIDTRICKS_LAST_ID, wxEVT_COMMAND_MENU_SELECTED,
+                    wxCommandEventHandler( GRID_TRICKS::onPopupSelection ), nullptr, this );
+    aGrid->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( GRID_TRICKS::onKeyDown ), nullptr, this );
+    aGrid->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( GRID_TRICKS::onUpdateUI ),
+                    nullptr, this );
 }
 
 
@@ -238,10 +245,13 @@ void GRID_TRICKS::onGridLabelRightClick( wxGridEvent&  )
 
 void GRID_TRICKS::showPopupMenu( wxMenu& menu )
 {
-    menu.Append( GRIDTRICKS_ID_CUT,    _( "Cut" ) + "\tCtrl+X",         _( "Clear selected cells placing original contents on clipboard" ) );
-    menu.Append( GRIDTRICKS_ID_COPY,   _( "Copy" ) + "\tCtrl+C",        _( "Copy selected cells to clipboard" ) );
-    menu.Append( GRIDTRICKS_ID_PASTE,  _( "Paste" ) + "\tCtrl+V",       _( "Paste clipboard cells to matrix at current cell" ) );
-    menu.Append( GRIDTRICKS_ID_DELETE, _( "Delete" ) + "\tDel",         _( "Delete selected cells" ) );
+    menu.Append( GRIDTRICKS_ID_CUT, _( "Cut" ) + "\tCtrl+X",
+                 _( "Clear selected cells placing original contents on clipboard" ) );
+    menu.Append( GRIDTRICKS_ID_COPY, _( "Copy" ) + "\tCtrl+C",
+                 _( "Copy selected cells to clipboard" ) );
+    menu.Append( GRIDTRICKS_ID_PASTE, _( "Paste" ) + "\tCtrl+V",
+                 _( "Paste clipboard cells to matrix at current cell" ) );
+    menu.Append( GRIDTRICKS_ID_DELETE, _( "Delete" ) + "\tDel", _( "Delete selected cells" ) );
     menu.Append( GRIDTRICKS_ID_SELECT, _( "Select All" ) + "\tCtrl+A",  _( "Select all cells" ) );
 
     getSelectedArea();
@@ -457,9 +467,13 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
                 break;
 
             if( !test->GetChildren().empty() )
+            {
                 test = test->GetChildren().front();
+            }
             else if( test->GetNextSibling() )
+            {
                 test = test->GetNextSibling();
+            }
             else
             {
                 while( test )

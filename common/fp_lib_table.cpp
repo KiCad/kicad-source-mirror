@@ -467,7 +467,7 @@ FOOTPRINT* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootp
                 return ret;
         }
 
-        return NULL;
+        return nullptr;
     }
 }
 

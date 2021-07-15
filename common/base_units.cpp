@@ -99,6 +99,7 @@ double To_User_Unit( EDA_UNITS aUnit, double aValue )
  * could truncate the actual value
  */
 
+
 // A lower-precision (for readability) version of StringFromValue()
 wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, bool aAddUnitLabel,
                                EDA_DATA_TYPE aType )
@@ -494,7 +495,7 @@ std::string FormatInternalUnits( int aValue )
         len = snprintf( buf, sizeof(buf), "%.10f", engUnits );
 
         // Make sure snprintf() didn't fail and the locale numeric separator is correct.
-        wxCHECK( len >= 0 && len < 50 && strchr( buf, ',' ) == NULL, std::string( "" ) );
+        wxCHECK( len >= 0 && len < 50 && strchr( buf, ',' ) == nullptr, std::string( "" ) );
 
         while( --len > 0 && buf[len] == '0' )
             buf[len] = '\0';
@@ -509,7 +510,7 @@ std::string FormatInternalUnits( int aValue )
         len = snprintf( buf, sizeof(buf), "%.10g", engUnits );
 
         // Make sure snprintf() didn't fail and the locale numeric separator is correct.
-        wxCHECK( len >= 0 && len < 50 && strchr( buf, ',' ) == NULL , std::string( "" ) );
+        wxCHECK( len >= 0 && len < 50 && strchr( buf, ',' ) == nullptr , std::string( "" ) );
     }
 
     return std::string( buf, len );

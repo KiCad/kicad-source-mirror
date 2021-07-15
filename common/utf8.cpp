@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,11 +27,6 @@
 #include <wx/strconv.h>
 #include <wx/buffer.h>
 #include <vector>
-
-/* THROW_IO_ERROR needs this, but it includes this file, so until some
-    factoring of THROW_IO_ERROR into a separate header, defer and use the asserts.
-#include <richio.h>
-*/
 
 #include <cassert>
 
@@ -193,7 +188,7 @@ bool IsUTF8( const char* aString )
 
         while( next < end )
         {
-            int charLen = UTF8::uni_forward( next, NULL );
+            int charLen = UTF8::uni_forward( next, nullptr );
 
             if( charLen == 0 )
                 return false;
@@ -231,7 +226,9 @@ UTF8::UTF8( const wchar_t* txt )
 UTF8& UTF8::operator+=( unsigned w_ch )
 {
     if( w_ch <= 0x7F )
+    {
         m_s.operator+=( char( w_ch ) );
+    }
     else
     {
         //TODO: Remove wchar use.  Replace with std::byte*

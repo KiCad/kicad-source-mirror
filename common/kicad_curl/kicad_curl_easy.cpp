@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ static size_t write_callback( void* contents, size_t size, size_t nmemb, void* u
 
 
 KICAD_CURL_EASY::KICAD_CURL_EASY() :
-    m_headers( NULL )
+    m_headers( nullptr )
 {
     // Call KICAD_CURL::Init() from in here everytime, but only the first time
     // will incur any overhead.  This strategy ensures that libcurl is never loaded
@@ -120,6 +120,7 @@ bool KICAD_CURL_EASY::SetUserAgent( const std::string& aAgent )
     {
         return true;
     }
+
     return false;
 }
 
@@ -130,6 +131,7 @@ bool KICAD_CURL_EASY::SetURL( const std::string& aURL )
     {
         return true;
     }
+
     return false;
 }
 
@@ -140,6 +142,7 @@ bool KICAD_CURL_EASY::SetFollowRedirects( bool aFollow )
     {
         return true;
     }
+
     return false;
 }
 

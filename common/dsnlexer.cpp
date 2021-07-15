@@ -370,6 +370,7 @@ void DSNLEXER::NeedLEFT()
 void DSNLEXER::NeedRIGHT()
 {
     int tok = NextTok();
+
     if( tok != DSN_RIGHT )
         Expecting( DSN_RIGHT );
 }
@@ -378,8 +379,10 @@ void DSNLEXER::NeedRIGHT()
 int DSNLEXER::NeedSYMBOL()
 {
     int tok = NextTok();
+
     if( !IsSymbol( tok ) )
         Expecting( DSN_SYMBOL );
+
     return tok;
 }
 
@@ -387,8 +390,10 @@ int DSNLEXER::NeedSYMBOL()
 int DSNLEXER::NeedSYMBOLorNUMBER()
 {
     int  tok = NextTok();
+
     if( !IsSymbol( tok ) && tok!=DSN_NUMBER )
         Expecting( "a symbol or number" );
+
     return tok;
 }
 
@@ -396,21 +401,23 @@ int DSNLEXER::NeedSYMBOLorNUMBER()
 int DSNLEXER::NeedNUMBER( const char* aExpectation )
 {
     int tok = NextTok();
+
     if( tok != DSN_NUMBER )
     {
-        wxString errText = wxString::Format(
-            _( "need a number for '%s'" ), wxString::FromUTF8( aExpectation ).GetData() );
+        wxString errText = wxString::Format( _( "need a number for '%s'" ),
+                                             wxString::FromUTF8( aExpectation ).GetData() );
         THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
+
     return tok;
 }
 
 
 /**
- * Function isSpace
- * tests for whitespace.  Our whitespace, by our definition, is a subset of ASCII,
- * i.e. no bytes with MSB on can be considered whitespace, since they are likely part
- * of a multibyte UTF8 character.
+ * Test for whitespace.
+ *
+ * Our whitespace, by our definition, is a subset of ASCII, i.e. no bytes with MSB on can be
+ * considered whitespace, since they are likely part of a multibyte UTF8 character.
  */
 static bool isSpace( char cc )
 {
@@ -428,6 +435,7 @@ static bool isSpace( char cc )
             return true;
         }
     }
+
     return false;
 }
 
@@ -438,7 +446,7 @@ inline bool isDigit( char cc )
 }
 
 
-/// return true if @a cc is an s-expression separator character
+///< @return true if @a cc is an s-expression separator character.
 inline bool isSep( char cc )
 {
     return isSpace( cc ) || cc=='(' || cc==')';
@@ -446,15 +454,13 @@ inline bool isSep( char cc )
 
 
 /**
- * Function isNumber
- * returns true if the next sequence of text is a number:
+ * Return true if the next sequence of text is a number:
  * either an integer, fixed point, or float with exponent.  Stops scanning
  * at the first non-number character, even if it is not whitespace.
  *
  * @param cp is the start of the current token.
  * @param limit is the end of the current token.
- *
- * @return bool - true if input token is a number, else false.
+ * @return true if input token is a number, else false.
  */
 static bool isNumber( const char* cp, const char* limit )
 {
@@ -522,6 +528,7 @@ L_read:
         // blank lines are returned as "\n" and will have a len of 1.
         // EOF will have a len of 0 and so is detectable.
         int len = readLine();
+
         if( len == 0 )
         {
             cur = start;        // after readLine(), since start can change, set cur offset to start
@@ -532,7 +539,7 @@ L_read:
         cur = start;    // after readLine() since start can change.
 
         // skip leading whitespace
-        while( cur<limit && isSpace( *cur ) )
+        while( cur < limit && isSpace( *cur ) )
             ++cur;
 
         // If the first non-blank character is #, this line is a comment.
@@ -556,13 +563,15 @@ L_read:
                 goto exit;
             }
             else
+            {
                 goto L_read;
+            }
         }
     }
     else
     {
         // skip leading whitespace
-        while( cur<limit && isSpace( *cur ) )
+        while( cur < limit && isSpace( *cur ) )
             ++cur;
     }
 
@@ -624,33 +633,42 @@ L_read:
                     case 'v':   c = '\x0b';     break;
 
                     case 'x':   // 1 or 2 byte hex escape sequence
-                        for( i=0; i<2; ++i )
+                        for( i = 0; i < 2; ++i )
                         {
                             if( !isxdigit( head[i] ) )
                                 break;
+
                             tbuf[i] = head[i];
                         }
+
                         tbuf[i] = '\0';
+
                         if( i > 0 )
-                            c = (char) strtoul( tbuf, NULL, 16 );
+                            c = (char) strtoul( tbuf, nullptr, 16 );
                         else
                             c = 'x';   // a goofed hex escape sequence, interpret as 'x'
+
                         head += i;
                         break;
 
                     default:    // 1-3 byte octal escape sequence
                         --head;
+
                         for( i=0; i<3; ++i )
                         {
                             if( head[i] < '0' || head[i] > '7' )
                                 break;
+
                             tbuf[i] = head[i];
                         }
+
                         tbuf[i] = '\0';
+
                         if( i > 0 )
-                            c = (char) strtoul( tbuf, NULL, 8 );
+                            c = (char) strtoul( tbuf, nullptr, 8 );
                         else
                             c = '\\';   // a goofed octal escape sequence, interpret as '\'
+
                         head += i;
                         break;
                     }
@@ -676,7 +694,6 @@ L_read:
                                cur - start + curText.length() );
         }
     }
-
     else    // is specctraMode, tests in this block should not occur in KiCad mode.
     {
         /*  get the dash out of a <pin_reference> which is embedded for example
@@ -694,7 +711,8 @@ L_read:
         // switching the string_quote character
         if( prevTok == DSN_STRING_QUOTE )
         {
-            static const wxString errtxt( _("String delimiter must be a single character of ', \", or $"));
+            static const wxString errtxt( _("String delimiter must be a single character of "
+                                            "', \", or $") );
 
             char cc = *cur;
             switch( cc )

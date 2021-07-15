@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2019 CERN
- * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -59,7 +59,7 @@ ACTION_MENU::ACTION_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
 
 ACTION_MENU::~ACTION_MENU()
 {
-    // Set parent to NULL to prevent submenus from unregistering from a notexisting object
+    // Set parent to NULL to prevent submenus from unregistering from a nonexistent object
     for( auto menu : m_submenus )
         menu->SetParent( nullptr );
 
@@ -78,13 +78,9 @@ void ACTION_MENU::SetIcon( BITMAPS aIcon )
 
 void ACTION_MENU::setupEvents()
 {
-// See wxWidgets hack in TOOL_DISPATCHER::DispatchWxEvent().
-//    Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
-//    Connect( wxEVT_MENU_HIGHLIGHT, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
-//    Connect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
-
-    Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
-    Connect( wxEVT_IDLE, wxIdleEventHandler( ACTION_MENU::OnIdle ), NULL, this );
+    Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), nullptr,
+             this );
+    Connect( wxEVT_IDLE, wxIdleEventHandler( ACTION_MENU::OnIdle ), nullptr, this );
 }
 
 
@@ -325,7 +321,8 @@ ACTION_MENU* ACTION_MENU::create() const
     ACTION_MENU* menu = new ACTION_MENU( false );
 
     wxASSERT_MSG( typeid( *this ) == typeid( *menu ),
-            wxString::Format( "You need to override create() method for class %s", typeid(*this).name() ) );
+                  wxString::Format( "You need to override create() method for class %s",
+                                    typeid( *this ).name() ) );
 
     return menu;
 }
@@ -380,6 +377,7 @@ void ACTION_MENU::updateHotKeys()
 // menuClose events, but these are actually generated for hotkeys as well.)
 
 static int g_last_menu_highlighted_id = 0;
+
 
 // We need to store the position of the mouse when the menu was opened so it can be passed
 // to the command event generated when the menu item is selected.
@@ -488,17 +486,17 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
                 wxMenu* menu = nullptr;
                 FindItem( m_selected, &menu );
 
-    // This conditional compilation is probably not needed.
-    // It will be removed later, for the Kicad V 6.x version.
-    // But in "old" 3.0 version, the "&& menu != this" contition was added to avoid hang
-    // This hang is no longer encountered in wxWidgets 3.0.4 version, and this condition is no longer needed.
-    // And in 3.1.2, we have to remove it, as "menu != this" never happens
-    // ("menu != this" always happens in 3.1.1 and older!).
-    #if wxCHECK_VERSION(3, 1, 2)
+                // This conditional compilation is probably not needed.
+                // It will be removed later, for the Kicad V 6.x version.
+                // But in "old" 3.0 version, the "&& menu != this" contition was added to avoid
+                // hang.  This hang is no longer encountered in wxWidgets 3.0.4 version, and this
+                // condition is no longer needed.  And in 3.1.2, we have to remove it, as
+                // "menu != this" never happens ("menu != this" always happens in 3.1.1 and older!).
+#if wxCHECK_VERSION( 3, 1, 2 )
                 if( menu )
-    #else
+#else
                 if( menu && menu != this )
-    #endif
+#endif
                 {
                     ACTION_MENU* cxmenu = static_cast<ACTION_MENU*>( menu );
                     evt = cxmenu->eventHandler( aEvent );
@@ -645,11 +643,12 @@ wxMenuItem* ACTION_MENU::appendCopy( const wxMenuItem* aSource )
     // On Windows, for Checkable Menu items, adding a bitmap adds also
     // our predefined checked alternate bitmap
     // On other OS, wxITEM_CHECK and wxITEM_RADIO Menu items do not use custom bitmaps.
-#if defined(_WIN32)
-    // On Windows, AddBitmapToMenuItem() uses the unchecked bitmap for wxITEM_CHECK and wxITEM_RADIO menuitems
-    // and autoamtically adds a checked bitmap.
+#if defined( _WIN32 )
+    // On Windows, AddBitmapToMenuItem() uses the unchecked bitmap for wxITEM_CHECK and
+    // wxITEM_RADIO menuitems and autoamtically adds a checked bitmap.
     // For other menuitrms, use the "checked" bitmap.
-    bool use_checked_bm = ( aSource->GetKind() == wxITEM_CHECK || aSource->GetKind() == wxITEM_RADIO ) ? false : true;
+    bool use_checked_bm = ( aSource->GetKind() == wxITEM_CHECK ||
+                            aSource->GetKind() == wxITEM_RADIO ) ? false : true;
     const wxBitmap& src_bitmap = aSource->GetBitmap( use_checked_bm );
 #else
     const wxBitmap& src_bitmap = aSource->GetBitmap();

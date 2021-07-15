@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,17 +37,17 @@
 
 kicad::stream::stream()
 {
-    m_buf = NULL;
-    m_stream = NULL;
+    m_buf = nullptr;
+    m_stream = nullptr;
 }
 
 
 kicad::stream::~stream()
 {
-    if( NULL != m_stream )
+    if( nullptr != m_stream )
         delete m_stream;
 
-    if( NULL != m_buf )
+    if( nullptr != m_buf )
     {
         m_buf->close(); // ensure file is closed regardless of m_buf's destructor
         delete m_buf;
@@ -56,13 +57,13 @@ kicad::stream::~stream()
 
 std::iostream* kicad::stream::Open( const char* aFileName, std::ios_base::openmode aMode )
 {
-    if( NULL != m_stream )
+    if( nullptr != m_stream )
     {
         delete m_stream;
-        m_stream = NULL;
+        m_stream = nullptr;
     }
 
-    if( NULL != m_buf )
+    if( nullptr != m_buf )
     {
         m_buf->close();
         delete m_buf;

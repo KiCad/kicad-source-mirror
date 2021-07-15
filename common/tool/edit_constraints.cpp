@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -32,6 +33,7 @@
 
 #include <utility>
 #include <geometry/geometry_utils.h>
+
 
 void EC_VERTICAL::Apply( EDIT_POINT& aHandle )
 {
@@ -92,7 +94,7 @@ void EC_CIRCLE::Apply( EDIT_POINT& aHandle )
 
 EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
     EDIT_CONSTRAINT<EDIT_LINE>( aLine ),
-    m_colinearConstraint( NULL ), m_editPoints( aPoints )
+    m_colinearConstraint( nullptr ), m_editPoints( aPoints )
 {
     // Dragged segment endings
     EDIT_POINT& origin = aLine.GetOrigin();

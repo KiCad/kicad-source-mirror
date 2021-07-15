@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
- * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -33,6 +33,7 @@
 #include <wx/msgdlg.h>
 #include <wx/menu.h>
 
+
 WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent,
                                             wxWindowID id,
                                             const wxPoint& pos,
@@ -47,7 +48,7 @@ WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent,
     m_htmlView->SetPage( addHeader( "" ) );
 
     Connect( wxEVT_COMMAND_MENU_SELECTED,
-            wxMenuEventHandler( WX_HTML_REPORT_PANEL::onMenuEvent ), NULL, this );
+             wxMenuEventHandler( WX_HTML_REPORT_PANEL::onMenuEvent ), nullptr, this );
 }
 
 
@@ -249,7 +250,8 @@ void WX_HTML_REPORT_PANEL::onMenuEvent( wxMenuEvent& event )
 
 
 // Don't globally define this; different facilities use different definitions of "ALL"
-static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SEVERITY_INFO | RPT_SEVERITY_ACTION;
+static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SEVERITY_INFO |
+                              RPT_SEVERITY_ACTION;
 
 
 void WX_HTML_REPORT_PANEL::onCheckBoxShowAll( wxCommandEvent& event )

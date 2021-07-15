@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Dick Hollenbeck
  *
@@ -205,7 +205,7 @@ public:
     public:
         uni_iter()  // Needed only to build python wrapper, not used outside the wrapper
         {
-            it = NULL;
+            it = nullptr;
         }
 
         uni_iter( const uni_iter& o )
@@ -297,7 +297,7 @@ public:
      * @param aResult is where to put the unicode character, and may be NULL if no interest.
      * @return the count of bytes consumed.
      */
-    static int uni_forward( const unsigned char* aSequence, unsigned* aResult = NULL );
+    static int uni_forward( const unsigned char* aSequence, unsigned* aResult = nullptr );
 #endif  // SWIG
 
 protected:

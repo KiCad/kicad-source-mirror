@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ PROJECT::PROJECT() :
         m_projectFile( nullptr ),
         m_localSettings( nullptr )
 {
-    memset( m_elems, 0, sizeof(m_elems) );
+    memset( m_elems, 0, sizeof( m_elems ) );
 }
 
 
@@ -52,7 +52,7 @@ void PROJECT::ElemsClear()
     // be in the same link image as PROJECT.
     for( unsigned i = 0;  i < arrayDim( m_elems );  ++i )
     {
-        SetElem( ELEM_T( i ), NULL );
+        SetElem( ELEM_T( i ), nullptr );
     }
 }
 
@@ -246,19 +246,18 @@ const wxString& PROJECT::GetRString( RSTRING_T aIndex )
 PROJECT::_ELEM* PROJECT::GetElem( ELEM_T aIndex )
 {
     // This is virtual, so implement it out of line
-
     if( unsigned( aIndex ) < arrayDim( m_elems ) )
     {
         return m_elems[aIndex];
     }
-    return NULL;
+
+    return nullptr;
 }
 
 
 void PROJECT::SetElem( ELEM_T aIndex, _ELEM* aElem )
 {
     // This is virtual, so implement it out of line
-
     if( unsigned( aIndex ) < arrayDim( m_elems ) )
     {
         delete m_elems[aIndex];
@@ -308,12 +307,12 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayErrorMessage( NULL, _( "Error loading project footprint library table." ),
+            DisplayErrorMessage( nullptr, _( "Error loading project footprint library table." ),
                                  ioe.What() );
         }
         catch( ... )
         {
-            DisplayErrorMessage( NULL, _( "Error loading project footprint library table." ) );
+            DisplayErrorMessage( nullptr, _( "Error loading project footprint library table." ) );
         }
     }
 

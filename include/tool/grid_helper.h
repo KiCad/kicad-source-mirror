@@ -87,7 +87,7 @@ protected:
 
     struct ANCHOR
     {
-        ANCHOR( VECTOR2I aPos, int aFlags = CORNER | SNAPPABLE, EDA_ITEM* aItem = NULL ) :
+        ANCHOR( VECTOR2I aPos, int aFlags = CORNER | SNAPPABLE, EDA_ITEM* aItem = nullptr ) :
             pos( aPos ),
             flags( aFlags ),
             item( aItem )

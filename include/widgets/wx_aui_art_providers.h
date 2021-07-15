@@ -35,6 +35,13 @@ public:
 
     virtual ~WX_AUI_TOOLBAR_ART() = default;
 
+    /**
+     * The same as wxAuiDefaultToolBarArt::DrawButton except with dark-mode awareness based on
+     * BITMAP_BUTTON.
+     *
+     * Unfortunately, wx 3.0 does not provide any hooks that would make it possible to do this in
+     * a way other than just copy/pasting the upstream implementation and modifying it.
+     */
     void DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiToolBarItem& aItem,
                      const wxRect& aRect ) override;
 };

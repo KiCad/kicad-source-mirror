@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,15 +29,13 @@
 #include <bitmaps.h>
 
 
-//---- Grid helpers: custom wxGridCellRenderer that renders icon and a label ------------
-
-
 GRID_CELL_ICON_TEXT_RENDERER::GRID_CELL_ICON_TEXT_RENDERER( const std::vector<BITMAPS>& icons,
                                                             const wxArrayString& names ) :
     m_icons( icons ),
     m_names( names )
 {
 }
+
 
 void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
                                          const wxRect& aRect, int aRow, int aCol, bool isSelected )
@@ -60,9 +58,10 @@ void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, w
         bitmap = KiBitmap( m_icons[ position ] );
         aDC.DrawBitmap( bitmap, rect.GetLeft() + 3, rect.GetTop() + 2, true );
     }
-    // still need a bitmap to fetch the width
-    else
+    else    // still need a bitmap to fetch the width
+    {
         bitmap = KiBitmap( m_icons[ 0 ] );
+    }
 
     // draw the text
     rect.SetLeft( rect.GetLeft() + bitmap.GetWidth() + 7 );
@@ -83,11 +82,8 @@ wxSize GRID_CELL_ICON_TEXT_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& 
 }
 
 
-//---- Grid helpers: custom wxGridCellRenderer that renders just an icon ----------------
-//
-// Note: this renderer is supposed to be used with read only cells
-
-GRID_CELL_ICON_RENDERER::GRID_CELL_ICON_RENDERER(const wxBitmap& icon) : m_icon( icon )
+GRID_CELL_ICON_RENDERER::GRID_CELL_ICON_RENDERER( const wxBitmap& icon ) :
+    m_icon( icon )
 {
 }
 
@@ -112,7 +108,8 @@ void GRID_CELL_ICON_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& 
 }
 
 
-wxSize GRID_CELL_ICON_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, int row, int col )
+wxSize GRID_CELL_ICON_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                                             int row, int col )
 {
     return wxSize( m_icon.GetWidth() + 6, m_icon.GetHeight() + 4 );
 }
@@ -122,11 +119,6 @@ wxGridCellRenderer* GRID_CELL_ICON_RENDERER::Clone() const
 {
     return new GRID_CELL_ICON_RENDERER( m_icon );
 }
-
-
-//---- Grid helpers: custom wxGridCellEditor ------------------------------------------
-//
-// Note: this implementation is an adaptation of wxGridCellChoiceEditor
 
 
 GRID_CELL_ICON_TEXT_POPUP::GRID_CELL_ICON_TEXT_POPUP( const std::vector<BITMAPS>& icons,
@@ -146,9 +138,10 @@ wxGridCellEditor* GRID_CELL_ICON_TEXT_POPUP::Clone() const
 void GRID_CELL_ICON_TEXT_POPUP::Create( wxWindow* aParent, wxWindowID aId,
                                         wxEvtHandler* aEventHandler )
 {
-    m_control = new wxBitmapComboBox(
-                    aParent, aId, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL,
-                    wxCB_READONLY | wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB | wxBORDER_NONE );
+    m_control = new wxBitmapComboBox( aParent, aId, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, 0, nullptr,
+                                      wxCB_READONLY | wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB |
+                                      wxBORDER_NONE );
 
     for( unsigned i = 0; i < m_names.size(); ++i )
     {
@@ -163,10 +156,12 @@ void GRID_CELL_ICON_TEXT_POPUP::Create( wxWindow* aParent, wxWindowID aId,
     wxGridCellEditor::Create(aParent, aId, aEventHandler);
 }
 
+
 wxString GRID_CELL_ICON_TEXT_POPUP::GetValue() const
 {
     return Combo()->GetValue();
 }
+
 
 void GRID_CELL_ICON_TEXT_POPUP::SetSize( const wxRect& aRect )
 {

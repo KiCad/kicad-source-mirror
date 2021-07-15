@@ -26,11 +26,7 @@
 #include <kiplatform/ui.h>
 #include <widgets/wx_aui_art_providers.h>
 
-/**
- * wxAuiDefaultToolBarArt::DrawButton except with dark-mode awareness based on BITMAP_BUTTON
- * Unfortunately, wx 3.0 does not provide any hooks that would make it possible to do this in a way
- * other than just copy/pasting the upstream implementation and modifying it...
- */
+
 void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiToolBarItem& aItem,
                                      const wxRect& aRect )
 {
@@ -56,7 +52,8 @@ void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiTo
     {
         bmpX = aRect.x + ( aRect.width / 2 ) - ( aItem.GetBitmap().GetWidth() / 2 );
 
-        bmpY = aRect.y + ( ( aRect.height - textHeight ) / 2 ) - ( aItem.GetBitmap().GetHeight() / 2 );
+        bmpY = aRect.y + ( ( aRect.height - textHeight ) / 2 ) -
+               ( aItem.GetBitmap().GetHeight() / 2 );
 
         textX = aRect.x + ( aRect.width / 2 ) - ( textWidth / 2 ) + 1;
         textY = aRect.y + aRect.height - textHeight - 1;
@@ -132,7 +129,7 @@ WX_AUI_DOCK_ART::WX_AUI_DOCK_ART() : wxAuiDefaultDockArt()
     m_captionFont = *wxNORMAL_FONT;
 
     // Increase the box the caption rests in size a bit
-    m_captionSize = wxWindow::FromDIP( 20, NULL );
+    m_captionSize = wxWindow::FromDIP( 20, nullptr );
 #endif
 #endif
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 
 #include <widgets/layer_box_selector.h>
 
+
 LAYER_SELECTOR::LAYER_SELECTOR()
 {
     m_layerhotkeys = true;
@@ -53,9 +54,10 @@ void LAYER_SELECTOR::DrawColorSwatch( wxBitmap& aLayerbmp, COLOR4D aBackground, 
     bmpDC.SelectObject( aLayerbmp );
 
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
+
     if( aBackground != COLOR4D::UNSPECIFIED )
     {
-        brush.SetColour( aBackground.WithAlpha(1.0).ToColour() );
+        brush.SetColour( aBackground.WithAlpha( 1.0 ).ToColour() );
         bmpDC.SetBrush( brush );
         bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
     }
@@ -70,19 +72,17 @@ void LAYER_SELECTOR::DrawColorSwatch( wxBitmap& aLayerbmp, COLOR4D aBackground, 
 }
 
 
-/* class to display a layer list in a wxBitmapComboBox.
- */
-
 LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
                                         const wxPoint& pos, const wxSize& size,
                                         int n, const wxString choices[] ) :
     wxBitmapComboBox( parent, id, wxEmptyString, pos, size, n, choices, wxCB_READONLY ),
     LAYER_SELECTOR()
 {
-    if( choices != NULL )
+    if( choices != nullptr )
         ResyncBitmapOnly();
 
-    GetParent()->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( LAYER_BOX_SELECTOR::onKeyDown ), NULL, this );
+    GetParent()->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( LAYER_BOX_SELECTOR::onKeyDown ),
+                          nullptr, this );
 }
 
 
@@ -95,24 +95,24 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
     if( !choices.IsEmpty() )
         ResyncBitmapOnly();
 
-    GetParent()->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( LAYER_BOX_SELECTOR::onKeyDown ), NULL, this );
+    GetParent()->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( LAYER_BOX_SELECTOR::onKeyDown ),
+                          nullptr, this );
 }
 
 
 LAYER_BOX_SELECTOR::~LAYER_BOX_SELECTOR()
 {
-    GetParent()->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( LAYER_BOX_SELECTOR::onKeyDown ), NULL, this );
+    GetParent()->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( LAYER_BOX_SELECTOR::onKeyDown ),
+                             nullptr, this );
 }
 
 
-// Get Current Item #
 int LAYER_BOX_SELECTOR::GetChoice()
 {
     return GetSelection();
 }
 
 
-// Get Current Layer
 LAYER_NUM LAYER_BOX_SELECTOR::GetLayerSelection() const
 {
     if( GetSelection() < 0 )
@@ -122,7 +122,6 @@ LAYER_NUM LAYER_BOX_SELECTOR::GetLayerSelection() const
 }
 
 
-// Set Layer #
 int LAYER_BOX_SELECTOR::SetLayerSelection( LAYER_NUM layer )
 {
     int elements = GetCount();

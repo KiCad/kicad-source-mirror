@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -145,7 +145,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
                 DS_DRAW_ITEM_BITMAP* drawItem = (DS_DRAW_ITEM_BITMAP*) item;
                 DS_DATA_ITEM_BITMAP* bitmap = (DS_DATA_ITEM_BITMAP*) drawItem->GetPeer();
 
-                if( bitmap->m_ImageBitmap == NULL )
+                if( bitmap->m_ImageBitmap == nullptr )
                     break;
 
                 bitmap->m_ImageBitmap->PlotImage( plotter, drawItem->GetPosition(), plotColor,

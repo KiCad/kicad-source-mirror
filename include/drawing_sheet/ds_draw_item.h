@@ -488,7 +488,7 @@ public:
         if( m_graphicList.size() )
             return m_graphicList[0];
         else
-            return NULL;
+            return nullptr;
     }
 
     DS_DRAW_ITEM_BASE* GetNext()
@@ -498,7 +498,7 @@ public:
         if( m_graphicList.size() > m_idx )
             return m_graphicList[m_idx];
         else
-            return NULL;
+            return nullptr;
     }
 
     void GetAllItems( std::vector<DS_DRAW_ITEM_BASE*>* aList )

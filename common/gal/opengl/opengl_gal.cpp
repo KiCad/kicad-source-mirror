@@ -79,7 +79,7 @@ using namespace KIGFX::BUILTIN_FONT;
 static void      InitTesselatorCallbacks( GLUtesselator* aTesselator );
 static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
 
-wxGLContext* OPENGL_GAL::m_glMainContext = NULL;
+wxGLContext* OPENGL_GAL::m_glMainContext = nullptr;
 int          OPENGL_GAL::m_instanceCounter = 0;
 GLuint       OPENGL_GAL::g_fontTexture = 0;
 bool         OPENGL_GAL::m_isBitmapFontLoaded = false;
@@ -210,7 +210,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
         m_isContextLocked( false ),
         m_lockClientCookie( 0 )
 {
-    if( m_glMainContext == NULL )
+    if( m_glMainContext == nullptr )
     {
         m_glMainContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
 
@@ -237,7 +237,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     m_groupCounter = 0;
 
     // Connect the native cursor handler
-    Connect( wxEVT_SET_CURSOR, wxSetCursorEventHandler( OPENGL_GAL::onSetNativeCursor ), NULL,
+    Connect( wxEVT_SET_CURSOR, wxSetCursorEventHandler( OPENGL_GAL::onSetNativeCursor ), nullptr,
              this );
 
     // Connecting the event handlers
@@ -325,7 +325,7 @@ OPENGL_GAL::~OPENGL_GAL()
 
         GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glMainContext );
         GL_CONTEXT_MANAGER::Get().DestroyCtx( m_glMainContext );
-        m_glMainContext = NULL;
+        m_glMainContext = nullptr;
     }
 }
 
@@ -334,8 +334,8 @@ wxString OPENGL_GAL::CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions )
 {
     wxString retVal = wxEmptyString;
 
-    wxFrame* testFrame = new wxFrame( NULL, wxID_ANY, wxT( "" ), wxDefaultPosition, wxSize( 1, 1 ),
-                                      wxFRAME_TOOL_WINDOW | wxNO_BORDER );
+    wxFrame* testFrame = new wxFrame( nullptr, wxID_ANY, wxT( "" ), wxDefaultPosition,
+                                      wxSize( 1, 1 ), wxFRAME_TOOL_WINDOW | wxNO_BORDER );
 
     KIGFX::OPENGL_GAL* opengl_gal = nullptr;
 
@@ -407,7 +407,8 @@ double OPENGL_GAL::getWorldPixelSize() const
 VECTOR2D OPENGL_GAL::getScreenPixelSize() const
 {
     double sf = GetScaleFactor();
-    return VECTOR2D( 2.0 / (double) ( m_screenSize.x * sf ), 2.0 / (double) ( m_screenSize.y * sf ) );
+    return VECTOR2D( 2.0 / (double) ( m_screenSize.x * sf ), 2.0 /
+                     (double) ( m_screenSize.y * sf ) );
 }
 
 
@@ -449,6 +450,7 @@ void OPENGL_GAL::beginDrawing()
             wxLogVerbose( "Could not create a framebuffer for overlays.\n" );
             m_overlayBuffer = 0;
         }
+
         m_isFramebufferInitialized = true;
     }
 
@@ -2199,7 +2201,7 @@ void OPENGL_GAL::init()
     if( !m_glPrivContext )
         throw std::runtime_error( "Could not create a private OpenGL context" );
 
-    if( m_tesselator == NULL )
+    if( m_tesselator == nullptr )
         throw std::runtime_error( "Could not create the m_tesselator" );
     // End initialization checks
 
@@ -2331,6 +2333,7 @@ inline double round_to_half_pixel( double f, double r )
 {
     return ( ceil( f / r ) - 0.5 ) * r;
 }
+
 
 void OPENGL_GAL::ComputeWorldScreenMatrix()
 {

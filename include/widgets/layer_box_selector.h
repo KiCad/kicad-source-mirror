@@ -71,7 +71,7 @@ public:
     LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
-                        int n = 0, const wxString choices[] = NULL );
+                        int n = 0, const wxString choices[] = nullptr );
 
     LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
                         const wxPoint& pos, const wxSize& size,

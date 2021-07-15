@@ -196,7 +196,7 @@ const char* GetVirtualKeyCodeName(int keycode)
 #undef WXK_
 
     default:
-        return NULL;
+        return nullptr;
     }
 }
 
