@@ -158,6 +158,27 @@ bool collideArc2Arc( const SHAPE_ARC& a1, const SHAPE_ARC& a2, int clearance, SE
     ptsB.push_back( a2.GetP0() );
     ptsB.push_back( a2.GetP1() );
 
+    std::vector<VECTOR2I> nearestA, nearestB;
+
+    // this probably can be made with less points, but still...
+    CIRCLE circ1( a1.GetCenter(), a1.GetRadius() );
+    for( auto pB: ptsB )
+    {
+        auto nearest = circ1.NearestPoint( pB );
+        if( sliceContainsPoint( a1, nearest ) )
+            nearestA.push_back( nearest );
+    }
+    CIRCLE circ2( a2.GetCenter(), a2.GetRadius() );
+    for( auto pA: ptsA )
+    {
+        auto nearest = circ2.NearestPoint( pA );
+        if( sliceContainsPoint( a2, nearest ) )
+            nearestB.push_back( nearest );
+    }
+
+    ptsA.insert( ptsA.end(), nearestA.begin(), nearestA.end() );
+    ptsB.insert( ptsB.end(), nearestB.begin(), nearestB.end() );
+
     double minDist = std::numeric_limits<double>::max();
     bool   minDistFound = false;
 
