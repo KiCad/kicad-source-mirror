@@ -311,7 +311,7 @@ void CornerListToPolygon( SHAPE_POLY_SET& outline, std::vector<ROUNDED_CORNER>& 
                 RotatePoint( pt, -angPos );
                 pt += arcCenter;
                 OPT<VECTOR2I> intersect = inSeg.Intersect( SEG( arcExStart, pt ) );
-                outline.Append( intersect.has_value() ? intersect.get() : arcStart );
+                outline.Append( intersect.is_initialized() ? intersect.get() : arcStart );
                 outline.Append( pt );
                 angPos += angDelta;
 
@@ -324,7 +324,7 @@ void CornerListToPolygon( SHAPE_POLY_SET& outline, std::vector<ROUNDED_CORNER>& 
                 }
 
                 intersect = outSeg.Intersect( SEG( pt, arcExEnd ) );
-                outline.Append( intersect.has_value() ? intersect.get() : arcEnd );
+                outline.Append( intersect.is_initialized() ? intersect.get() : arcEnd );
             }
         }
 
@@ -401,14 +401,14 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
         int chamId[4] = { RECT_CHAMFER_TOP_LEFT, RECT_CHAMFER_TOP_RIGHT,
                           RECT_CHAMFER_BOTTOM_RIGHT, RECT_CHAMFER_BOTTOM_LEFT };
         int sign[8] = { 0, 1, -1, 0, 0, -1, 1, 0 };
-        
+
         for( int cc = 0, pos = 0; cc < 4; cc++, pos++ )
         {
             if( !( aChamferCorners & chamId[cc] ) )
                 continue;
 
             corners[pos].m_radius = 0;
-            
+
             if( chamfer == 0 )
                 continue;
 
