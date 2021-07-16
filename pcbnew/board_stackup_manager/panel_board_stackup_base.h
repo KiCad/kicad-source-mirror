@@ -57,18 +57,21 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		wxStaticText* m_staticTextLossTg;
 		wxStaticText* m_staticTextCT;
 		wxTextCtrl* m_tcCTValue;
+		wxButton* m_buttonAdjust;
 		wxButton* m_buttonExport;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void onCopperLayersSelCount( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAddDielectricLayer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRemoveDielectricLayer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRemoveDielUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onAdjustDielectricThickness( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onExportToClipboard( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 680,281 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_SETUP_BOARD_STACKUP_BASE();
 
 };

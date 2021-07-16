@@ -136,6 +136,9 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 	m_tcCTValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	bBottomSizer->Add( m_tcCTValue, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_buttonAdjust = new wxButton( this, wxID_ANY, _("Adjust Dielectric Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
+	bBottomSizer->Add( m_buttonAdjust, 0, wxALL, 5 );
+
 
 	bBottomSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
@@ -148,21 +151,24 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 
 	// Connect Events
+	m_choiceCopperLayers->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onCopperLayersSelCount ), NULL, this );
 	m_buttonAddDielectricLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onAddDielectricLayer ), NULL, this );
 	m_buttonRemoveDielectricLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onRemoveDielectricLayer ), NULL, this );
 	m_buttonRemoveDielectricLayer->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onRemoveDielUI ), NULL, this );
+	m_buttonAdjust->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onAdjustDielectricThickness ), NULL, this );
 	m_buttonExport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onExportToClipboard ), NULL, this );
 }
 
 PANEL_SETUP_BOARD_STACKUP_BASE::~PANEL_SETUP_BOARD_STACKUP_BASE()
 {
 	// Disconnect Events
+	m_choiceCopperLayers->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onCopperLayersSelCount ), NULL, this );
 	m_buttonAddDielectricLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onAddDielectricLayer ), NULL, this );
 	m_buttonRemoveDielectricLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onRemoveDielectricLayer ), NULL, this );
 	m_buttonRemoveDielectricLayer->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onRemoveDielUI ), NULL, this );
+	m_buttonAdjust->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onAdjustDielectricThickness ), NULL, this );
 	m_buttonExport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onExportToClipboard ), NULL, this );
 
 }

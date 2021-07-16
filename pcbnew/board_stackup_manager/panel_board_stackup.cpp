@@ -44,9 +44,11 @@
 #include <wx/richmsgdlg.h>
 #include <wx/dcclient.h>
 #include <wx/treebook.h>
+#include <wx/textdlg.h>
 
 #include <locale_io.h>
 #include <dialog_helpers.h>
+
 
 // Some wx widget ID to know what widget has fired a event:
 #define ID_INCREMENT 256    // space between 2 ID type. Bigger than the layer count max
@@ -117,20 +119,100 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
     buildLayerStackPanel( true );
     synchronizeWithBoard( true );
     computeBoardThickness();
-
-    m_choiceCopperLayers->Bind( wxEVT_CHOICE,
-            [&]( wxCommandEvent& )
-            {
-                updateCopperLayerCount();
-                showOnlyActiveLayers();
-                Layout();
-            } );
 }
 
 
 PANEL_SETUP_BOARD_STACKUP::~PANEL_SETUP_BOARD_STACKUP()
 {
     disconnectEvents();
+}
+
+
+void PANEL_SETUP_BOARD_STACKUP::onCopperLayersSelCount( wxCommandEvent& event )
+{
+    updateCopperLayerCount();
+    showOnlyActiveLayers();
+    computeBoardThickness();
+    Layout();
+}
+
+
+void PANEL_SETUP_BOARD_STACKUP::onAdjustDielectricThickness( wxCommandEvent& event )
+{
+    // The list of items that can be modified:
+    std::vector< BOARD_STACKUP_ROW_UI_ITEM* > items_candidate;
+
+    // Some dielectric layers can have a locked thickness, so calculate the min
+    // acceptable thickness
+    int min_thickness = 0;
+
+    for( BOARD_STACKUP_ROW_UI_ITEM& ui_item : m_rowUiItemsList )
+    {
+        BOARD_STACKUP_ITEM* item = ui_item.m_Item;
+
+        if( !item->IsThicknessEditable() || !ui_item.m_isEnabled )
+            continue;
+
+        // We are looking for locked thickness items only:
+        wxCheckBox* cb_box = dynamic_cast<wxCheckBox*> ( ui_item.m_ThicknessLockCtrl );
+
+        if( cb_box && !cb_box->GetValue() )
+        {
+            items_candidate.push_back( &ui_item );
+            continue;
+        }
+
+        wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( ui_item.m_ThicknessCtrl );
+        wxString txt = textCtrl->GetValue();
+
+        int item_thickness = ValueFromString( m_frame->GetUserUnits(), txt );
+        min_thickness += item_thickness;
+    }
+
+    wxString title;
+
+    if( min_thickness == 0 )
+        title.Printf( _( "Enter board thickness in %s" ),
+                      GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ) );
+    else
+        title.Printf( _( "Enter expected board thickness in %s (min value %s)" ),
+                      GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ),
+                      StringFromValue( m_frame->GetUserUnits(), min_thickness ) );
+
+    wxTextEntryDialog dlg( this, title, _( "Adjust not locked dielectric thickness layers" ) );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    wxString result = dlg.GetValue();
+
+    int iu_thickness = ValueFromString( m_frame->GetUserUnits(), result );
+
+    if( iu_thickness <= min_thickness )
+    {
+        wxMessageBox( wxString::Format( _("Too small value (min value %s %s). Aborted" ),
+                      StringFromValue( m_frame->GetUserUnits(), min_thickness ),
+                      GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ) ) );
+        return;
+    }
+
+    // Now adjust not locked dielectric thickness layers:
+
+    if( items_candidate.size() )
+    {
+        int thickness_layer = ( iu_thickness - min_thickness ) / items_candidate.size();
+        wxString txt = StringFromValue( m_frame->GetUserUnits(), thickness_layer );
+
+        for( BOARD_STACKUP_ROW_UI_ITEM* ui_item : items_candidate )
+        {
+            wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( ui_item->m_ThicknessCtrl );
+            textCtrl->SetValue( txt );
+        }
+    }
+    else
+        wxMessageBox( _( "All dielectric  thickness layers are locked" ) );
+
+    computeBoardThickness();
 }
 
 
@@ -902,17 +984,6 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel( bool aCreatedInitialStacku
 // Transfer current UI settings to m_stackup but not to the board
 bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
 {
-    // First, verify the list of layers currently in stackup: if it doesn't match the list
-    // of layers set in PANEL_SETUP_LAYERS prompt the user to update the stackup
-    LSET layersList = m_panelLayers->GetUILayerMask() & BOARD_STACKUP::StackupAllowedBrdLayers();
-
-    if( m_enabledLayers != layersList )
-        OnLayersOptionsChanged( m_panelLayers->GetUILayerMask() );
-
-    // The board thickness and the thickness from stackup settings should be compatible
-    // so verify that compatibility
-    int stackup_thickness = 0;
-
     wxString txt;
     wxString error_msg;
     bool success = true;
@@ -1008,7 +1079,6 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
 
             int new_thickness = ValueFromString( m_frame->GetUserUnits(), txt );
             item->SetThickness( new_thickness, sub_item );
-            stackup_thickness += new_thickness;
 
             if( new_thickness < 0 )
             {

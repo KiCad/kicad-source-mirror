@@ -198,6 +198,8 @@ private:
     void onAddDielectricLayer( wxCommandEvent& event ) override;
     void onRemoveDielectricLayer( wxCommandEvent& event ) override;
     void onRemoveDielUI( wxUpdateUIEvent& event ) override;
+	void onCopperLayersSelCount( wxCommandEvent& event ) override;
+	void onAdjustDielectricThickness( wxCommandEvent& event ) override;
 
     /** Update the icons color (swatches in first grid column)
      * @param aRow is the row (index in m_rowUiItemsList) that manages the icon to update.
