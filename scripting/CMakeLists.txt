@@ -72,6 +72,12 @@ else()
         COMPONENT binary
         )
 endif()
+
+if( KICAD_WIN32_INSTALL_PDBS )
+    # Get the PDBs to copy over for MSVC
+    install(FILES $<TARGET_PDB_FILE:scripting_kiface> DESTINATION ${KICAD_BIN})
+endif()
+
 # python shell installation
 install( DIRECTORY ${PROJECT_SOURCE_DIR}/scripting/kicad_pyshell/
     DESTINATION ${KICAD_DATA}/scripting/kicad_pyshell
