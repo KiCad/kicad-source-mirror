@@ -215,8 +215,8 @@ bool EE_COLLECTOR::IsCorner() const
     if( GetCount() != 2 )
         return false;
 
-    bool is_busentry0 = ( dynamic_cast<SCH_BUS_ENTRY_BASE*>( m_list[0] ) != NULL);
-    bool is_busentry1 = ( dynamic_cast<SCH_BUS_ENTRY_BASE*>( m_list[1] ) != NULL);
+    bool is_busentry0 = ( dynamic_cast<SCH_BUS_ENTRY_BASE*>( m_list[0] ) != nullptr );
+    bool is_busentry1 = ( dynamic_cast<SCH_BUS_ENTRY_BASE*>( m_list[1] ) != nullptr );
 
     if(( m_list[0]->Type() == SCH_LINE_T) && ( m_list[1]->Type() == SCH_LINE_T) )
         return ( ( SCH_LINE* ) m_list[0])->GetLayer() == ( ( SCH_LINE* ) m_list[1])->GetLayer();

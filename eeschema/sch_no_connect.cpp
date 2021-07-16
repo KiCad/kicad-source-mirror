@@ -39,7 +39,7 @@
 
 
 SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :
-    SCH_ITEM( NULL, SCH_NO_CONNECT_T )
+    SCH_ITEM( nullptr, SCH_NO_CONNECT_T )
 {
     m_pos    = pos;
     m_size   = Mils2iu( DEFAULT_NOCONNECT_SIZE );      ///< No-connect symbol size.
@@ -56,7 +56,7 @@ EDA_ITEM* SCH_NO_CONNECT::Clone() const
 
 void SCH_NO_CONNECT::SwapData( SCH_ITEM* aItem )
 {
-    wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_NO_CONNECT_T),
+    wxCHECK_RET( ( aItem != nullptr ) && ( aItem->Type() == SCH_NO_CONNECT_T ),
                  wxT( "Cannot swap no connect data with invalid item." ) );
 
     SCH_NO_CONNECT* item = (SCH_NO_CONNECT*)aItem;
@@ -143,6 +143,7 @@ bool SCH_NO_CONNECT::doIsConnected( const wxPoint& aPosition ) const
 {
     return m_pos == aPosition;
 }
+
 
 bool SCH_NO_CONNECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {

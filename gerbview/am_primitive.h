@@ -150,6 +150,10 @@ private:
      *
      * Arcs and circles are approximated by segments.  Useful when a shape is not a graphic
      * primitive (shape with hole, rotated shape ... ) and cannot be easily drawn.
+     *
+     * @note Some schapes conbining circles and solid lines (rectangles), only rectangles are
+     *       converted because circles are very easy to draw (no rotation problem) so convert
+     *       them in polygons and draw them as polygons is not a good idea.
      */
     void ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent, std::vector<wxPoint>& aBuffer );
 };

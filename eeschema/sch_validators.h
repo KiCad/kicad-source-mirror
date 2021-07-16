@@ -51,7 +51,7 @@
 class SCH_FIELD_VALIDATOR : public wxTextValidator
 {
 public:
-    SCH_FIELD_VALIDATOR( bool aIsLibEditor, int aFieldId, wxString* aValue = NULL );
+    SCH_FIELD_VALIDATOR( bool aIsLibEditor, int aFieldId, wxString* aValue = nullptr );
 
     SCH_FIELD_VALIDATOR( const SCH_FIELD_VALIDATOR& aValidator );
 

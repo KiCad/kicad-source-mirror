@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -114,7 +114,7 @@ private:
 
 GERBVIEW_SELECTION_TOOL::GERBVIEW_SELECTION_TOOL() :
         TOOL_INTERACTIVE( "gerbview.InteractiveSelection" ),
-        m_frame( NULL ),
+        m_frame( nullptr ),
         m_additive( false ),
         m_subtractive( false ),
         m_exclusive_or( false )
@@ -175,8 +175,10 @@ void GERBVIEW_SELECTION_TOOL::Reset( RESET_REASON aReason )
         getView()->GetPainter()->GetSettings()->SetHighlight( false );
     }
     else
+    {
         // Restore previous properties of selected items and remove them from containers
         clearSelection();
+    }
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( &m_selection );
@@ -206,9 +208,9 @@ int GERBVIEW_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             selectPoint( evt->Position() );
         }
-        // right click? if there is any object - show the context menu
         else if( evt->IsClick( BUT_RIGHT ) )
         {
+            // right click? if there is any object - show the context menu
             if( m_selection.Empty() )
             {
                 selectPoint( evt->Position() );
@@ -217,9 +219,9 @@ int GERBVIEW_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selection );
         }
-        // Middle double click?  Do zoom to fit
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {
+            // Middle double click?  Do zoom to fit
             m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
         }
         else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE )
@@ -244,7 +246,7 @@ GERBVIEW_SELECTION& GERBVIEW_SELECTION_TOOL::GetSelection()
 
 bool GERBVIEW_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag )
 {
-    EDA_ITEM* item = NULL;
+    EDA_ITEM* item = nullptr;
     GERBER_COLLECTOR collector;
     EDA_ITEM* model = getModel<EDA_ITEM>();
 
@@ -411,7 +413,7 @@ void GERBVIEW_SELECTION_TOOL::clearSelection()
 
 EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollector )
 {
-    EDA_ITEM* current = NULL;
+    EDA_ITEM* current = nullptr;
     KIGFX::VIEW_GROUP highlightGroup;
     ACTION_MENU menu( true );
 
@@ -466,7 +468,7 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
             }
             else
             {
-                current = NULL;
+                current = nullptr;
             }
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
@@ -477,7 +479,7 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
             if( id && ( *id > 0 ) )
                 current = ( *aCollector )[*id - 1];
             else
-                current = NULL;
+                current = nullptr;
 
             break;
         }
@@ -507,6 +509,7 @@ bool GERBVIEW_SELECTION_TOOL::selectable( const EDA_ITEM* aItem ) const
     {
         // Don't allow selection of invisible negative items
         auto rs = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( getView()->GetPainter()->GetSettings() );
+
         if( !rs->IsShowNegativeItems() )
             return false;
     }

@@ -24,10 +24,6 @@
  */
 
 
-/************************************************************/
-/* class_gerber_layer_widget.h : header for the layers manager */
-/************************************************************/
-
 #ifndef GERBER_LAYER_WIDGET_H
 #define GERBER_LAYER_WIDGET_H
 
@@ -46,6 +42,9 @@ public:
      */
     GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFocusOwner );
 
+    /**
+     * Rebuild Render for instance after the config is read.
+     */
     void ReFill();
 
     /**

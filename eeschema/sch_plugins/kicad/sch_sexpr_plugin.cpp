@@ -369,7 +369,7 @@ public:
 SCH_SEXPR_PLUGIN::SCH_SEXPR_PLUGIN() :
     m_progressReporter( nullptr )
 {
-    init( NULL );
+    init( nullptr );
 }
 
 
@@ -431,7 +431,7 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     m_currentPath.push( m_path );
     init( aSchematic, aProperties );
 
-    if( aAppendToMe == NULL )
+    if( aAppendToMe == nullptr )
     {
         // Clean up any allocated memory if an exception occurs loading the schematic.
         std::unique_ptr<SCH_SHEET> newSheet = std::make_unique<SCH_SHEET>( aSchematic );
@@ -469,7 +469,7 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
 
 void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
 {
-    SCH_SCREEN* screen = NULL;
+    SCH_SCREEN* screen = nullptr;
 
     if( !aSheet->GetScreen() )
     {
@@ -576,7 +576,7 @@ void SCH_SEXPR_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, int
 void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
                              const PROPERTIES* aProperties )
 {
-    wxCHECK_RET( aSheet != NULL, "NULL SCH_SHEET object." );
+    wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
 
     LOCALE_IO   toggle;     // toggles on, then off, the C locale, to write floating point values.
@@ -599,8 +599,8 @@ void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEM
 
 void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 {
-    wxCHECK_RET( aSheet != NULL, "NULL SCH_SHEET* object." );
-    wxCHECK_RET( m_schematic != NULL, "NULL SCHEMATIC* object." );
+    wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET* object." );
+    wxCHECK_RET( m_schematic != nullptr, "NULL SCHEMATIC* object." );
 
     SCH_SCREEN* screen = aSheet->GetScreen();
 
@@ -1051,7 +1051,7 @@ void SCH_SEXPR_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
 
     const wxImage* image = aBitmap->GetImage()->GetImageData();
 
-    wxCHECK_RET( image != NULL, "wxImage* is NULL" );
+    wxCHECK_RET( image != nullptr, "wxImage* is NULL" );
 
     m_out->Print( aNestLevel, "(image (at %s %s)",
                   FormatInternalUnits( aBitmap->GetPosition().x ).c_str(),
@@ -1306,7 +1306,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
 
 void SCH_SEXPR_PLUGIN::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNestLevel )
 {
-    wxCHECK_RET( aAlias != NULL, "BUS_ALIAS* is NULL" );
+    wxCHECK_RET( aAlias != nullptr, "BUS_ALIAS* is NULL" );
 
     wxString members;
 
@@ -1434,17 +1434,17 @@ bool SCH_SEXPR_PLUGIN_CACHE::IsFileChanged() const
 
 LIB_SYMBOL* SCH_SEXPR_PLUGIN_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
 {
-    wxCHECK_MSG( aSymbol != NULL, NULL, "NULL pointer cannot be removed from library." );
+    wxCHECK_MSG( aSymbol != nullptr, nullptr, "NULL pointer cannot be removed from library." );
 
-    LIB_SYMBOL* firstChild = NULL;
+    LIB_SYMBOL* firstChild = nullptr;
     LIB_SYMBOL_MAP::iterator it = m_symbols.find( aSymbol->GetName() );
 
     if( it == m_symbols.end() )
-        return NULL;
+        return nullptr;
 
     // If the entry pointer doesn't match the name it is mapped to in the library, we
     // have done something terribly wrong.
-    wxCHECK_MSG( *it->second == aSymbol, NULL,
+    wxCHECK_MSG( *it->second == aSymbol, nullptr,
                  "Pointer mismatch while attempting to remove alias entry <" + aSymbol->GetName() +
                  "> from library cache <" + m_libFileName.GetName() + ">." );
 
@@ -1944,8 +1944,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFor
 }
 
 
-void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
-                                      OUTPUTFORMATTER& aFormatter,
+void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter,
                                       int aNestLevel )
 {
     wxCHECK_RET( aPin && aPin->Type() == LIB_PIN_T, "Invalid LIB_PIN object." );
@@ -1989,8 +1988,7 @@ void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
 }
 
 
-void SCH_SEXPR_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine,
-                                           OUTPUTFORMATTER& aFormatter,
+void SCH_SEXPR_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine, OUTPUTFORMATTER& aFormatter,
                                            int aNestLevel )
 {
     wxCHECK_RET( aPolyLine && aPolyLine->Type() == LIB_POLYLINE_T, "Invalid LIB_POLYLINE object." );

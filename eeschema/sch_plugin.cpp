@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -52,7 +52,7 @@ SCH_SHEET* SCH_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
                              SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
     not_implemented( this, __FUNCTION__ );
-    return NULL;
+    return nullptr;
 }
 
 
@@ -87,7 +87,7 @@ LIB_SYMBOL* SCH_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
-    return NULL;
+    return nullptr;
 }
 
 

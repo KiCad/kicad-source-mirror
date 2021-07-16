@@ -121,7 +121,7 @@ void LIB_POLYLINE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 void LIB_POLYLINE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform ) const
 {
-    wxASSERT( aPlotter != NULL );
+    wxASSERT( aPlotter != nullptr );
 
     static std::vector< wxPoint > cornerList;
     cornerList.clear();
@@ -348,8 +348,7 @@ void LIB_POLYLINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aLi
 
 wxString LIB_POLYLINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Polyline, %d points" ),
-                             int( m_PolyPoints.size() ) );
+    return wxString::Format( _( "Polyline, %d points" ), int( m_PolyPoints.size() ) );
 }
 
 

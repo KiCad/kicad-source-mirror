@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -39,8 +39,9 @@ using namespace std::placeholders;
 
 
 GERBVIEW_DRAW_PANEL_GAL::GERBVIEW_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
-                                        const wxPoint& aPosition, const wxSize& aSize,
-                                        KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
+                                                  const wxPoint& aPosition, const wxSize& aSize,
+                                                  KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
+                                                  GAL_TYPE aGalType ) :
 EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType )
 {
     m_view = new KIGFX::VIEW( true );
@@ -49,6 +50,7 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 
     m_painter = std::make_unique<KIGFX::GERBVIEW_PAINTER>( m_gal );
     m_view->SetPainter( m_painter.get() );
+
     // This fixes the zoom in and zoom out limits:
     m_view->SetScaleLimits( ZOOM_MAX_LIMIT_GERBVIEW, ZOOM_MIN_LIMIT_GERBVIEW );
 
@@ -118,7 +120,7 @@ bool GERBVIEW_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 {
     bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend( aGalType );
 
-    // The next onPaint event will call m_view->UpdateItems() that is very time consumming
+    // The next onPaint event will call m_view->UpdateItems() that is very time consuming
     // after switching to opengl. Clearing m_view and rebuild it is much faster
     if( aGalType == GAL_TYPE_OPENGL )
     {
@@ -132,7 +134,7 @@ bool GERBVIEW_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
             {
                 GERBER_FILE_IMAGE* gerber = frame->GetImagesList()->GetGbrImage( layer );
 
-                if( gerber == NULL )    // Graphic layer not yet used
+                if( gerber == nullptr )    // Graphic layer not yet used
                     continue;
 
                 for( GERBER_DRAW_ITEM* item : gerber->GetItems() )
@@ -158,9 +160,6 @@ void GERBVIEW_DRAW_PANEL_GAL::setDefaultLayerDeps()
 
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, target );
-
-    // for( int i = GERBVIEW_LAYER_ID_START; i < GERBVIEW_LAYER_ID_RESERVED; i++ )
-    //     m_view->SetLayerDisplayOnly( i );
 
     m_view->SetLayerDisplayOnly( LAYER_DCODES );
     m_view->SetLayerDisplayOnly( LAYER_NEGATIVE_OBJECTS );

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Simon Richter <Simon.Richter@hogyros.de>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,15 +36,15 @@ public:
     /// @todo C++11: replace with forwarder
 
     PinShapeComboBox( wxWindow* parent,
-            wxWindowID id = wxID_ANY,
-            const wxString& value = wxEmptyString,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            int n = 0,
-            const wxString choices[] = NULL,
-            long style = 0,
-            const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxBitmapComboBoxNameStr );
+                      wxWindowID id = wxID_ANY,
+                      const wxString& value = wxEmptyString,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      int n = 0,
+                      const wxString choices[] = nullptr,
+                      long style = 0,
+                      const wxValidator& validator = wxDefaultValidator,
+                      const wxString& name = wxBitmapComboBoxNameStr );
 
     GRAPHIC_PINSHAPE GetPinShapeSelection();
     void             SetSelection( GRAPHIC_PINSHAPE aShape );

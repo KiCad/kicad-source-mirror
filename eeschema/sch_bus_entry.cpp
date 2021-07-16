@@ -39,7 +39,7 @@
 
 
 SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, bool aFlipY ) :
-    SCH_ITEM( NULL, aType )
+    SCH_ITEM( nullptr, aType )
 {
     m_pos    = pos;
     m_size.x = Mils2iu( DEFAULT_SCH_ENTRY_SIZE );

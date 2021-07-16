@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 <Jean-Pierre Charras>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@
 #include <wx/msgdlg.h>
 
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberImageFile ) :
-    EDA_ITEM( (EDA_ITEM*)NULL, GERBER_DRAW_ITEM_T )
+    EDA_ITEM( nullptr, GERBER_DRAW_ITEM_T )
 {
     m_GerberImageFile = aGerberImageFile;
     m_Shape         = GBR_SEGMENT;
@@ -77,7 +77,7 @@ void GERBER_DRAW_ITEM::SetNetAttributes( const GBR_NETLIST_METADATA& aNetAttribu
 
 int GERBER_DRAW_ITEM::GetLayer() const
 {
-    // returns the layer this item is on, or 0 if the m_GerberImageFile is NULL.
+    // Return the layer this item is on, or 0 if the m_GerberImageFile is null.
     return m_GerberImageFile ? m_GerberImageFile->m_GraphicLayer : 0;
 }
 
@@ -174,6 +174,7 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
     // abPos.y must be negated when no mirror, because draw axis is top to bottom
     if( !m_mirrorB )
         abPos.y = -abPos.y;
+
     return abPos;
 }
 
@@ -269,11 +270,11 @@ wxString GERBER_DRAW_ITEM::ShowGBRShape() const
 
 D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr() const
 {
-    if( (m_DCode < FIRST_DCODE) || (m_DCode > LAST_DCODE) )
-        return NULL;
+    if( ( m_DCode < FIRST_DCODE ) || ( m_DCode > LAST_DCODE ) )
+        return nullptr;
 
-    if( m_GerberImageFile == NULL )
-        return NULL;
+    if( m_GerberImageFile == nullptr )
+        return nullptr;
 
     return m_GerberImageFile->GetDCODE( m_DCode );
 }
@@ -317,7 +318,7 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
         if( arc_angle < 0.0 )
             arc_angle += 360.0;
 
-        if( m_End == m_Start )      // Arc with the end point = start point is expected to be a circle
+        if( m_End == m_Start )  // Arc with the end point = start point is expected to be a circle.
             arc_angle = 360.0;
 
         SHAPE_ARC arc( m_ArcCentre, m_Start, arc_angle );
@@ -335,6 +336,7 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
             int radius = code->m_Size.x >> 1;
             bbox.Inflate( radius, radius );
         }
+
         break;
     }
 
@@ -342,6 +344,7 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
     {
         if( code )
             bbox.Inflate( code->m_Size.x / 2, code->m_Size.y / 2 );
+
         break;
     }
 
@@ -349,6 +352,7 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
     {
         if( code )
             bbox.Inflate( code->m_Size.x /2, code->m_Size.y / 2 );
+
         break;
     }
 
@@ -362,6 +366,7 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
             bbox.Inflate( code->m_Polygon.BBox().GetWidth() / 2,
                           code->m_Polygon.BBox().GetHeight() / 2 );
         }
+
         break;
     }
     case GBR_SPOT_MACRO:
@@ -370,9 +375,11 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
         {
             // Update the shape drawings and the bounding box coordinates:
             code->GetMacro()->GetApertureMacroShape( this, m_Start );
+
             // now the bounding box is valid:
             bbox = code->GetMacro()->GetBoundingBox();
         }
+
         break;
     }
 
@@ -407,7 +414,7 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
         break;
     }
 
-    // calculate the corners coordinates in current gerber axis orientations
+    // calculate the corners coordinates in current Gerber axis orientations
     wxPoint org = GetABPosition( bbox.GetOrigin() );
     wxPoint end = GetABPosition( bbox.GetEnd() );
 
@@ -461,7 +468,7 @@ void GERBER_DRAW_ITEM::Print( wxDC* aDC, const wxPoint& aOffset, GBR_DISPLAY_OPT
     static bool   show_err;
     D_CODE*       d_codeDescr = GetDcodeDescr();
 
-    if( d_codeDescr == NULL )
+    if( d_codeDescr == nullptr )
         d_codeDescr = &dummyD_CODE;
 
     COLOR4D color = m_GerberImageFile->GetPositiveDrawColor();
@@ -506,6 +513,7 @@ void GERBER_DRAW_ITEM::Print( wxDC* aDC, const wxPoint& aOffset, GBR_DISPLAY_OPT
         {
             GRCircle( nullptr, aDC, GetABPosition( m_Start ), radius, m_Size.x, color );
         }
+
         break;
 
     case GBR_ARC:
@@ -535,7 +543,7 @@ void GERBER_DRAW_ITEM::Print( wxDC* aDC, const wxPoint& aOffset, GBR_DISPLAY_OPT
 
     case GBR_SEGMENT:
         /* Plot a line from m_Start to m_End.
-         * Usually, a round pen is used, but some gerber files use a rectangular pen
+         * Usually, a round pen is used, but some Gerber files use a rectangular pen
          * In fact, any aperture can be used to plot a line.
          * currently: only a square pen is handled (I believe using a polygon gives a strange plot).
          */
@@ -611,7 +619,7 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon()
     corner.y += m_Size.y;
     m_Polygon.Append( VECTOR2I( corner ) );  // upper left corner, start point (2)
 
-    if( delta.x || delta.y)
+    if( delta.x || delta.y )
     {
         corner += delta;
         m_Polygon.Append( VECTOR2I( corner ) );  // upper left corner, end point (3)
@@ -705,9 +713,8 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
     aList.emplace_back( _( "Polarity" ), msg );
 
     // Display mirroring (item specific)
-    msg.Printf( wxT( "A:%s B:%s" ),
-                m_mirrorA ? _("Yes") : _("No"),
-                m_mirrorB ? _("Yes") : _("No"));
+    msg.Printf( wxT( "A:%s B:%s" ), m_mirrorA ? _( "Yes" ) : _( "No" ),
+                m_mirrorB ? _( "Yes" ) : _( "No" ) );
     aList.emplace_back( _( "Mirror" ), msg );
 
     // Display AB axis swap (item specific)
@@ -789,7 +796,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
     // In case the item has a very tiny width defined, allow it to be selected
     const int MIN_HIT_TEST_RADIUS = Millimeter2iu( 0.01 );
 
-    // calculate aRefPos in XY gerber axis:
+    // calculate aRefPos in XY Gerber axis:
     wxPoint ref_pos = GetXYPosition( aRefPos );
 
     SHAPE_POLY_SET poly;
@@ -809,7 +816,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
         return GetBoundingBox().Contains( aRefPos );
 
     case GBR_SPOT_OVAL:
-        {
+    {
         EDA_RECT bbox = GetBoundingBox();
 
             if( ! bbox.Contains( aRefPos ) )
@@ -818,6 +825,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
         // This is similar to a segment with thickness = min( m_Size.x, m_Size.y )
         int radius = std::min( m_Size.x, m_Size.y )/2;
         wxPoint start, end;
+
         if( m_Size.x > m_Size.y )   // Horizontal oval
         {
             int len = m_Size.y - m_Size.x;
@@ -830,6 +838,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
             start.y = -len/2;
             end.y = len/2;
         }
+
         start += bbox.Centre();
         end += bbox.Centre();
 
@@ -837,46 +846,45 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
             radius = MIN_HIT_TEST_RADIUS;
 
         return TestSegmentHit( aRefPos, start, end, radius );
-        }
+    }
 
     case GBR_ARC:
+    {
+        double radius = GetLineLength( m_Start, m_ArcCentre );
+        VECTOR2D test_radius = VECTOR2D( ref_pos ) - VECTOR2D( m_ArcCentre );
+
+        int size = ( ( m_Size.x < MIN_HIT_TEST_RADIUS ) ? MIN_HIT_TEST_RADIUS : m_Size.x );
+
+        // Are we close enough to the radius?
+        bool radius_hit = ( std::fabs( test_radius.EuclideanNorm() - radius) < size );
+
+        if( radius_hit )
         {
-            double radius = GetLineLength( m_Start, m_ArcCentre );
-            VECTOR2D test_radius = VECTOR2D( ref_pos ) - VECTOR2D( m_ArcCentre );
+            // Now check that we are within the arc angle
 
-            int size = ( ( m_Size.x < MIN_HIT_TEST_RADIUS ) ? MIN_HIT_TEST_RADIUS
-                                                            : m_Size.x );
+            VECTOR2D start = VECTOR2D( m_Start ) - VECTOR2D( m_ArcCentre );
+            VECTOR2D end = VECTOR2D( m_End ) - VECTOR2D( m_ArcCentre );
 
-            // Are we close enough to the radius?
-            bool radius_hit = ( std::fabs( test_radius.EuclideanNorm() - radius) < size );
+            double start_angle = NormalizeAngleRadiansPos( start.Angle() );
+            double end_angle = NormalizeAngleRadiansPos( end.Angle() );
 
-            if( radius_hit )
+            if( m_Start == m_End )
             {
-                // Now check that we are within the arc angle
-
-                VECTOR2D start = VECTOR2D( m_Start ) - VECTOR2D( m_ArcCentre );
-                VECTOR2D end = VECTOR2D( m_End ) - VECTOR2D( m_ArcCentre );
-
-                double start_angle = NormalizeAngleRadiansPos( start.Angle() );
-                double end_angle = NormalizeAngleRadiansPos( end.Angle() );
-
-                if( m_Start == m_End )
-                {
-                    start_angle = 0;
-                    end_angle = 2 * M_PI;
-                }
-                else if( end_angle < start_angle )
-                {
-                    end_angle += 2 * M_PI;
-                }
-
-                double test_angle = NormalizeAngleRadiansPos( test_radius.Angle() );
-
-                return ( test_angle > start_angle && test_angle < end_angle );
+                start_angle = 0;
+                end_angle = 2 * M_PI;
+            }
+            else if( end_angle < start_angle )
+            {
+                end_angle += 2 * M_PI;
             }
 
-            return false;
+            double test_angle = NormalizeAngleRadiansPos( test_radius.Angle() );
+
+            return ( test_angle > start_angle && test_angle < end_angle );
         }
+
+        return false;
+    }
 
     case GBR_SPOT_MACRO:
         // Aperture macro polygons are already in absolute coordinates
@@ -986,7 +994,8 @@ double GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-SEARCH_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+SEARCH_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData,
+                                       const KICAD_T scanTypes[] )
 {
     KICAD_T stype = *scanTypes;
 

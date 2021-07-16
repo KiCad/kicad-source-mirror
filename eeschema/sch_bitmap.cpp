@@ -41,7 +41,7 @@
 
 
 SCH_BITMAP::SCH_BITMAP( const wxPoint& pos ) :
-    SCH_ITEM( NULL, SCH_BITMAP_T )
+    SCH_ITEM( nullptr, SCH_BITMAP_T )
 {
     m_pos   = pos;
     m_layer = LAYER_NOTES;              // used only to draw/plot a rectangle,
@@ -95,8 +95,8 @@ EDA_ITEM* SCH_BITMAP::Clone() const
 void SCH_BITMAP::SwapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem->Type() == SCH_BITMAP_T,
-            wxString::Format( wxT( "SCH_BITMAP object cannot swap data with %s object." ),
-                    aItem->GetClass() ) );
+                 wxString::Format( wxT( "SCH_BITMAP object cannot swap data with %s object." ),
+                                   aItem->GetClass() ) );
 
     SCH_BITMAP* item = (SCH_BITMAP*) aItem;
     std::swap( m_pos, item->m_pos );

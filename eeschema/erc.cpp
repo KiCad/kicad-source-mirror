@@ -287,7 +287,7 @@ int ERC_TESTER::TestConflictingBusAliases()
     SCH_SCREENS screens( m_schematic->Root() );
     std::vector< std::shared_ptr<BUS_ALIAS> > aliases;
 
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
     {
         std::unordered_set< std::shared_ptr<BUS_ALIAS> > screen_aliases = screen->GetBusAliases();
 
@@ -682,7 +682,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 
     SCH_SCREENS screens( m_schematic->Root() );
 
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
     {
         std::vector<SCH_MARKER*> markers;
 

@@ -530,7 +530,7 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
         }
         else if( drawItem.Type() == LIB_FIELD_T )
         {
-            drawItem.Print( aSettings, aOffset, (void*) NULL, aOpts.transform );
+            drawItem.Print( aSettings, aOffset, (void*) nullptr, aOpts.transform );
         }
         else
         {
@@ -544,7 +544,7 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
 void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
                        const TRANSFORM& aTransform ) const
 {
-    wxASSERT( aPlotter != NULL );
+    wxASSERT( aPlotter != nullptr );
 
     aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
     bool fill = aPlotter->GetColorMode();
@@ -590,7 +590,7 @@ void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint
 void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
                                 const wxPoint& aOffset, const TRANSFORM& aTransform )
 {
-    wxASSERT( aPlotter != NULL );
+    wxASSERT( aPlotter != nullptr );
 
     aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_FIELDS ) );
     bool fill = aPlotter->GetColorMode();
@@ -626,7 +626,7 @@ void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
 
 void LIB_SYMBOL::RemoveDrawItem( LIB_ITEM* aItem )
 {
-    wxASSERT( aItem != NULL );
+    wxASSERT( aItem != nullptr );
 
     // none of the MANDATORY_FIELDS may be removed in RAM, but they may be
     // omitted when saving to disk.
@@ -663,7 +663,7 @@ void LIB_SYMBOL::AddDrawItem( LIB_ITEM* aItem, bool aSort )
 
 LIB_ITEM* LIB_SYMBOL::GetNextDrawItem( const LIB_ITEM* aItem, KICAD_T aType )
 {
-    if( aItem == NULL )
+    if( aItem == nullptr )
     {
         LIB_ITEMS_CONTAINER::ITERATOR it1 = m_drawings.begin( aType );
 
@@ -686,7 +686,7 @@ LIB_ITEM* LIB_SYMBOL::GetNextDrawItem( const LIB_ITEM* aItem, KICAD_T aType )
             return &( *it );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -731,7 +731,7 @@ LIB_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aConvert ) 
             return pinList[i];
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -946,7 +946,7 @@ LIB_FIELD* LIB_SYMBOL::GetFieldById( int aId ) const
             return field;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -958,7 +958,7 @@ LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName )
             return static_cast<LIB_FIELD*>( &item );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -970,14 +970,14 @@ const LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName ) const
             return static_cast<const LIB_FIELD*>( &item );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
 LIB_FIELD& LIB_SYMBOL::GetValueField()
 {
     LIB_FIELD* field = GetFieldById( VALUE_FIELD );
-    wxASSERT( field != NULL );
+    wxASSERT( field != nullptr );
     return *field;
 }
 
@@ -985,7 +985,7 @@ LIB_FIELD& LIB_SYMBOL::GetValueField()
 LIB_FIELD& LIB_SYMBOL::GetReferenceField()
 {
     LIB_FIELD* field = GetFieldById( REFERENCE_FIELD );
-    wxASSERT( field != NULL );
+    wxASSERT( field != nullptr );
     return *field;
 }
 
@@ -993,7 +993,7 @@ LIB_FIELD& LIB_SYMBOL::GetReferenceField()
 LIB_FIELD& LIB_SYMBOL::GetFootprintField()
 {
     LIB_FIELD* field = GetFieldById( FOOTPRINT_FIELD );
-    wxASSERT( field != NULL );
+    wxASSERT( field != nullptr );
     return *field;
 }
 
@@ -1001,7 +1001,7 @@ LIB_FIELD& LIB_SYMBOL::GetFootprintField()
 LIB_FIELD& LIB_SYMBOL::GetDatasheetField()
 {
     LIB_FIELD* field = GetFieldById( DATASHEET_FIELD );
-    wxASSERT( field != NULL );
+    wxASSERT( field != nullptr );
     return *field;
 }
 
@@ -1070,7 +1070,7 @@ LIB_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aConvert,
             return &item;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 

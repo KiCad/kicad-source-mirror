@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,6 @@
 GERBER_FILE_IMAGE_LIST s_GERBER_List;
 
 
-// GERBER_FILE_IMAGE_LIST is a helper class to handle a list of GERBER_FILE_IMAGE files
 GERBER_FILE_IMAGE_LIST::GERBER_FILE_IMAGE_LIST()
 {
     m_GERBER_List.reserve( GERBER_DRAWLAYERS_COUNT );
@@ -67,14 +66,10 @@ GERBER_FILE_IMAGE* GERBER_FILE_IMAGE_LIST::GetGbrImage( int aIdx )
     if( (unsigned)aIdx < m_GERBER_List.size() )
         return m_GERBER_List[aIdx];
 
-    return NULL;
+    return nullptr;
 }
 
-/* creates a new, empty GERBER_FILE_IMAGE* at index aIdx
- * or at the first free location if aIdx < 0
- * aIdx = the index of graphic layer to use, or -1 to uses the first free graphic layer
- * return the index actually used, or -1 if no room to add image
- */
+
 int GERBER_FILE_IMAGE_LIST::AddGbrImage( GERBER_FILE_IMAGE* aGbrImage, int aIdx )
 {
     int idx = aIdx;
@@ -83,7 +78,7 @@ int GERBER_FILE_IMAGE_LIST::AddGbrImage( GERBER_FILE_IMAGE* aGbrImage, int aIdx 
     {
         for( idx = 0; idx < (int)m_GERBER_List.size(); idx++ )
         {
-            if( m_GERBER_List[idx] == NULL )
+            if( m_GERBER_List[idx] == nullptr )
                 break;
         }
     }
@@ -117,12 +112,12 @@ void GERBER_FILE_IMAGE_LIST::DeleteImage( int aIdx )
     m_GERBER_List[ aIdx ] = nullptr;
 }
 
-// Build a name for image aIdx which can be used in layers manager
+
 const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly, bool aFullName )
 {
     wxString name;
 
-    GERBER_FILE_IMAGE* gerber = NULL;
+    GERBER_FILE_IMAGE* gerber = nullptr;
 
     if( aIdx >= 0 && aIdx < (int)m_GERBER_List.size() )
         gerber = m_GERBER_List[aIdx];
@@ -173,7 +168,9 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly,
             }
         }
         else
+        {
             name = filename;
+        }
 
         if( aNameOnly )
             return name;
@@ -185,7 +182,9 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly,
         return fullname;
     }
     else
+    {
         name.Printf( _( "Graphic layer %d" ), aIdx + 1 );
+    }
 
     return name;
 }

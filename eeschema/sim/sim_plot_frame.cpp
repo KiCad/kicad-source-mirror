@@ -85,7 +85,7 @@ public:
 
     void OnSimStateChange( SPICE_SIMULATOR* aObject, SIM_STATE aNewState ) override
     {
-        wxCommandEvent* event = NULL;
+        wxCommandEvent* event = nullptr;
 
         switch( aNewState )
         {
@@ -339,8 +339,7 @@ void SIM_PLOT_FRAME::initWorkbook()
 
 void SIM_PLOT_FRAME::updateTitle()
 {
-    wxFileName filename = Prj().AbsolutePath(
-            m_simulator->Settings()->GetWorkbookFilename() );
+    wxFileName filename = Prj().AbsolutePath( m_simulator->Settings()->GetWorkbookFilename() );
 
     bool readOnly = false;
     bool unsaved = false;
@@ -818,7 +817,7 @@ void SIM_PLOT_FRAME::updateSignalList()
     wxMemoryDC bmDC;
     const int isize = bmDC.GetCharHeight();
 
-    if( m_signalsIconColorList == NULL )
+    if( m_signalsIconColorList == nullptr )
         m_signalsIconColorList = new wxImageList( isize, isize, false );
     else
         m_signalsIconColorList->RemoveAll();
@@ -1067,6 +1066,7 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
     m_workbook->ClrModified();
     return res;
 }
+
 
 SIM_PLOT_TYPE SIM_PLOT_FRAME::getXAxisType( SIM_TYPE aType ) const
 {
@@ -1545,14 +1545,14 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
             sizer->Add( text, 1, wxEXPAND );
             SetSizer( sizer );
 
-            Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ), NULL,
-                     this );
+            Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ),
+                     nullptr, this );
 
             finishDialogSettings();
         }
     };
 
-    if( m_schematicFrame == NULL || m_simulator == NULL )
+    if( m_schematicFrame == nullptr || m_simulator == nullptr )
         return;
 
     NETLIST_VIEW_DIALOG dlg( this, m_simulator->GetNetlist() );
@@ -1793,7 +1793,7 @@ SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSigna
         AddMenuItem( this, SHOW_CURSOR, _( "Show Cursor" ), KiBitmap( BITMAPS::pcb_target ) );
 
     Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( SIGNAL_CONTEXT_MENU::onMenuEvent ),
-             NULL, this );
+             nullptr, this );
 }
 
 

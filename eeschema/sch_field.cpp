@@ -253,7 +253,7 @@ void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
 
 void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 {
-    wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_FIELD_T),
+    wxCHECK_RET( ( aItem != nullptr ) && ( aItem->Type() == SCH_FIELD_T ),
                  wxT( "Cannot swap field data with invalid item." ) );
 
     SCH_FIELD* item = (SCH_FIELD*) aItem;
@@ -474,9 +474,7 @@ void SCH_FIELD::Rotate( const wxPoint& aCenter )
 
 wxString SCH_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( "%s '%s'",
-                             GetName(),
-                             ShortenedShownText() );
+    return wxString::Format( "%s '%s'", GetName(), ShortenedShownText() );
 }
 
 

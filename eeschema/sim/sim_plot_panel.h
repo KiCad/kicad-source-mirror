@@ -219,7 +219,7 @@ public:
     {
         auto trace = m_traces.find( aName );
 
-        return trace == m_traces.end() ? NULL : trace->second;
+        return trace == m_traces.end() ? nullptr : trace->second;
     }
 
     void ShowGrid( bool aEnable )
@@ -270,10 +270,10 @@ public:
     ///< Returns true if the trace has cursor shown.
     bool HasCursorEnabled( const wxString& aName ) const;
 
-    ///< Toggles cursor for a particular trace.
+    ///< Toggle cursor for a particular trace.
     void EnableCursor( const wxString& aName, bool aEnable );
 
-    ///< Resets scale ranges to fit the current traces
+    ///< Reset scale ranges to fit the current traces.
     void ResetScales();
 
     ///< Update trace line style

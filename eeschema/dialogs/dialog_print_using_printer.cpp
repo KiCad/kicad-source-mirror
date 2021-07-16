@@ -37,6 +37,7 @@
 #include <wx/print.h>
 #include <wx/printdlg.h>
 
+
 class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
 {
 public:
@@ -70,7 +71,7 @@ public:
     SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle ) :
         wxPrintout( aTitle )
     {
-        wxASSERT( aParent != NULL );
+        wxASSERT( aParent != nullptr );
         m_parent = aParent;
     }
 
@@ -336,6 +337,7 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataFromWindow()
             m_parent->GetPageSetupData() = printer.GetPrintDialogData().GetPrintData();
         }
     }
+
     Pgm().m_Printing = false;
 
     return true;
@@ -349,7 +351,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     wxCHECK_MSG( page >= 1 && page <= (int)sheetList.size(), false,
                  wxT( "Cannot print invalid page number." ) );
 
-    wxCHECK_MSG( sheetList[ page - 1].LastScreen() != NULL, false,
+    wxCHECK_MSG( sheetList[ page - 1].LastScreen() != nullptr, false,
                  wxT( "Cannot print page with NULL screen." ) );
 
     wxString msg;

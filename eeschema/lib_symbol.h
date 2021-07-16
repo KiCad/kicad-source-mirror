@@ -99,7 +99,7 @@ public:
     LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent = nullptr,
                 SYMBOL_LIB* aLibrary = nullptr );
 
-    LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary = NULL );
+    LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary = nullptr );
 
     virtual ~LIB_SYMBOL();
 
@@ -354,7 +354,7 @@ public:
      *                if TYPE_NOT_INIT search for all items types
      * @return - The next drawing object in the list if found, otherwise NULL.
      */
-    LIB_ITEM* GetNextDrawItem( const LIB_ITEM* aItem = NULL, KICAD_T aType = TYPE_NOT_INIT );
+    LIB_ITEM* GetNextDrawItem( const LIB_ITEM* aItem = nullptr, KICAD_T aType = TYPE_NOT_INIT );
 
     size_t GetPinCount() const { return m_drawings.size( LIB_PIN_T ); }
 
@@ -369,7 +369,7 @@ public:
      *                first pin in the draw object list.
      * @return - The next pin object in the list if found, otherwise NULL.
      */
-    LIB_PIN* GetNextPin( LIB_PIN* aItem = NULL )
+    LIB_PIN* GetNextPin( LIB_PIN* aItem = nullptr )
     {
         return (LIB_PIN*) GetNextDrawItem( (LIB_ITEM*) aItem, LIB_PIN_T );
     }

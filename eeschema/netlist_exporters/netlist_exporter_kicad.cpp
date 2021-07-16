@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,10 +31,7 @@
 #include <connection_graph.h>
 #include "netlist_exporter_kicad.h"
 
-/**
- * Generate the KiCad netlist format supported by Pcbnew. It is basically the XML netlist
- * just formatted slightly different.
- */
+
 bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
     try
@@ -45,7 +42,7 @@ bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigne
 
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( NULL, ioe.What() );
+        DisplayError( nullptr, ioe.What() );
         return false;
     }
 

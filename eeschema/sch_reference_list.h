@@ -48,8 +48,8 @@ public:
     SCH_REFERENCE() :
             m_sheetPath()
     {
-        m_rootSymbol      = NULL;
-        m_libPart         = NULL;
+        m_rootSymbol      = nullptr;
+        m_libPart         = nullptr;
         m_unit            = 0;
         m_isNew           = false;
         m_numRef          = 0;

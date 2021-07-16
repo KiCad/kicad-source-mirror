@@ -36,9 +36,6 @@ class SCH_SHEET_PATH;
 class SCH_SYMBOL;
 
 
-/**
- * EE_COLLECTOR
- */
 class EE_COLLECTOR : public COLLECTOR
 {
 public:
@@ -68,7 +65,7 @@ public:
         if( (unsigned)aIndex < (unsigned)GetCount() )
             return (SCH_ITEM*) m_list[ aIndex ];
 
-        return NULL;
+        return nullptr;
     }
 
     SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData ) override;

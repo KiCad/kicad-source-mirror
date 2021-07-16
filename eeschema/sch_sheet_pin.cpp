@@ -75,8 +75,8 @@ void SCH_SHEET_PIN::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOff
 void SCH_SHEET_PIN::SwapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem->Type() == SCH_SHEET_PIN_T,
-            wxString::Format( wxT( "SCH_SHEET_PIN object cannot swap data with %s object." ),
-                    aItem->GetClass() ) );
+                 wxString::Format( wxT( "SCH_SHEET_PIN object cannot swap data with %s object." ),
+                                   aItem->GetClass() ) );
 
     SCH_SHEET_PIN* pin = ( SCH_SHEET_PIN* ) aItem;
     SCH_TEXT::SwapData( (SCH_TEXT*) pin );
@@ -157,7 +157,7 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 {
     SCH_SHEET* sheet = GetParent();
 
-    if( sheet == NULL )
+    if( sheet == nullptr )
         return;
 
     int leftSide  = sheet->m_pos.x;

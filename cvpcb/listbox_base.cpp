@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,14 +31,9 @@
 #include <wx/dcclient.h>
 
 
-/******************************************************************************
-* Basic class (from wxListView) to display symbol and footprint lists
-* Not directly used: the 2 list boxes actually used are derived from it
-******************************************************************************/
-
 ITEMS_LISTBOX_BASE::ITEMS_LISTBOX_BASE( CVPCB_MAINFRAME* aParent, wxWindowID aId,
                                         const wxPoint& aLocation, const wxSize& aSize,
-                                        long aStyle) :
+                                        long aStyle ) :
     wxListView( aParent, aId, aLocation, aSize, LISTBOX_STYLE | aStyle ),
     columnWidth( 0 )
 {
@@ -72,11 +67,6 @@ void ITEMS_LISTBOX_BASE::UpdateWidth( int aLine )
 }
 
 
-/*
- * Calculate the width of the given line, and increase the column width
- * if needed. This is effectively the wxListCtrl code for autosizing.
- * NB. it relies on the caller checking the given line number is valid.
- */
 void ITEMS_LISTBOX_BASE::UpdateLineWidth( unsigned aLine )
 {
     wxClientDC dc( this );
@@ -84,7 +74,7 @@ void ITEMS_LISTBOX_BASE::UpdateLineWidth( unsigned aLine )
     int newWidth = 10;  // Value of AUTOSIZE_COL_MARGIN from wxWidgets source.
 
     dc.SetFont( GetFont() );
-    dc.GetTextExtent( GetItemText( aLine, 0 ) + " ", &w, NULL );
+    dc.GetTextExtent( GetItemText( aLine, 0 ) + " ", &w, nullptr );
     newWidth += w;
 
     if( newWidth > columnWidth )
@@ -95,16 +85,12 @@ void ITEMS_LISTBOX_BASE::UpdateLineWidth( unsigned aLine )
 }
 
 
-/*
- * Return an index for the selected item
- */
 int ITEMS_LISTBOX_BASE::GetSelection()
 {
     return GetFirstSelected();
 }
 
-/*  Removes all selection in list
-*/
+
 void ITEMS_LISTBOX_BASE::DeselectAll()
 {
     for( int i = 0; i < GetItemCount(); i++ )

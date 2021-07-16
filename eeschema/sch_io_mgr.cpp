@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -123,7 +123,7 @@ const wxString SCH_IO_MGR::GetFileExtension( SCH_FILE_T aFileType )
     wxString ext = wxEmptyString;
     SCH_PLUGIN* plugin = FindPlugin( aFileType );
 
-    if( plugin != NULL )
+    if( plugin != nullptr )
     {
         ext = plugin->GetFileExtension();
         ReleasePlugin( plugin );
@@ -138,7 +138,7 @@ const wxString SCH_IO_MGR::GetLibraryFileExtension( SCH_FILE_T aFileType )
     wxString ext = wxEmptyString;
     SCH_PLUGIN* plugin = FindPlugin( aFileType );
 
-    if( plugin != NULL )
+    if( plugin != nullptr )
     {
         ext = plugin->GetLibraryFileExtension();
         ReleasePlugin( plugin );

@@ -62,7 +62,7 @@ private:
      * @param aTarget is the destination for the generated string.
      * @return True if the string was saved successfully.
      */
-    bool generatePowerSource( wxString& aTarget ) const;
+    bool generatePowerSource( wxString& aTarget );
 
     /**
      * Load a list of components (.model and .subckt) from a spice library file and add them to

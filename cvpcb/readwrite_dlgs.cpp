@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jean-pierre.charras
- * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,9 +34,13 @@
 #include <fp_conflict_assignment_selector.h>
 
 
-/// Return true if the resultant LIB_ID has a certain nickname.  The guess
-/// is only made if this footprint resides in only one library.
-/// @return int - 0 on success, 1 on not found, 2 on ambiguous i.e. multiple matches
+/**
+ * Return true if the resultant LIB_ID has a certain nickname.
+ *
+ * The guess is only made if this footprint resides in only one library.
+ *
+ * @return int - 0 on success, 1 on not found, 2 on ambiguous i.e. multiple matches.
+ */
 static int guessNickname( FP_LIB_TABLE* aTbl, LIB_ID* aFootprintId )
 {
     if( aFootprintId->GetLibNickname().size() )
@@ -83,7 +87,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
 
     ReadSchematicNetlist( aNetlist );
 
-    if( m_symbolsListBox == NULL )
+    if( m_symbolsListBox == nullptr )
         return false;
 
     wxSafeYield();
@@ -182,7 +186,9 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
                 dlg.ShowModal();
 #else
                 dlg.Fit();
-                dlg.Show( true );   // modeless lets user watch while fixing the problems, but its not working.
+
+                // Modeless lets user watch while fixing the problems, but its not working.
+                dlg.Show( true );
 #endif
             }
         }
@@ -195,7 +201,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
 
                 if( component->GetFPID().IsLegacy() )
                 {
-                    component->SetFPID( LIB_ID() /* empty */ );
+                    component->SetFPID( LIB_ID() );
                     m_modified = true;
                 }
             }
@@ -239,7 +245,6 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
 
         if( dlg.ShowModal() == wxID_OK )
         {
-
             // Update the fp selection:
             for( unsigned ii = 0; ii < m_indexes.size(); ii++ )
             {

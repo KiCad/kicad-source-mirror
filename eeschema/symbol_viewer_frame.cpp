@@ -154,10 +154,10 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     ReCreateMenuBar();
 
     m_libList = new wxListBox( this, ID_LIBVIEW_LIB_LIST, wxDefaultPosition, wxDefaultSize,
-                               0, NULL, wxLB_HSCROLL | wxNO_BORDER );
+                               0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
 
     m_symbolList = new wxListBox( this, ID_LIBVIEW_SYM_LIST, wxDefaultPosition, wxDefaultSize,
-                                  0, NULL, wxLB_HSCROLL | wxNO_BORDER );
+                                  0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
 
     if( aLibraryName.empty() )
     {
@@ -178,13 +178,15 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     m_auimgr.SetManagedWindow( this );
 
     // Manage main toolbar
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
+                      .Bottom().Layer( 6 ) );
 
     m_auimgr.AddPane( m_libList, EDA_PANE().Palette().Name( "Libraries" ).Left().Layer(3)
                       .CaptionVisible( false ).MinSize( 80, -1 ).BestSize( m_libListWidth, -1 ) );
     m_auimgr.AddPane( m_symbolList, EDA_PANE().Palette().Name( "Symbols" ).Left().Layer(1)
-                      .CaptionVisible( false ).MinSize( 80, -1 ).BestSize( m_symbolListWidth, -1 ) );
+                      .CaptionVisible( false ).MinSize( 80, -1 )
+                      .BestSize( m_symbolListWidth, -1 ) );
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
@@ -208,7 +210,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     double max_size_x = Millimeter2iu( 450 );
     double max_size_y = Millimeter2iu( 450 );
     BOX2D bbox;
-    bbox.SetOrigin( -max_size_x /2, -max_size_y/2 );
+    bbox.SetOrigin( -max_size_x / 2, -max_size_y / 2 );
     bbox.SetSize( max_size_x, max_size_y );
     GetCanvas()->GetView()->SetBoundary( bbox );
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
@@ -466,7 +468,9 @@ void SYMBOL_VIEWER_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
             m_unitChoice->SetSelection( std::max( 0, m_unit - 1 ) );
     }
     else if( m_unitChoice->GetCount() )
+    {
         m_unitChoice->Clear();
+    }
 }
 
 
@@ -544,7 +548,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
 
 bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
 {
-    if( m_symbolList == NULL )
+    if( m_symbolList == nullptr )
         return false;
 
     wxArrayString aliasNames;

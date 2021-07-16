@@ -170,14 +170,15 @@ void DIALOG_PRINT_GERBVIEW::createExtraOptions()
     // Print mirrored
     m_checkboxMirror = new wxCheckBox( box, wxID_ANY, _( "Print mirrored" ) );
     optionsSizer->Add( m_checkboxMirror, wxGBPosition( rows, 0 ), wxGBSpan( 1, cols ),
-            wxBOTTOM | wxRIGHT | wxLEFT, 5 );
+                       wxBOTTOM | wxRIGHT | wxLEFT, 5 );
 }
 
 
 void DIALOG_PRINT_GERBVIEW::createLeftPanel()
 {
-    wxStaticBoxSizer* sbLayersSizer = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, _( "Included Layers" ) ), wxVERTICAL );
+    wxStaticBoxSizer* sbLayersSizer =
+            new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _( "Included Layers" ) ),
+                                  wxVERTICAL );
 
     // Layer lists
     wxBoxSizer* bLayerListsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -195,9 +196,11 @@ void DIALOG_PRINT_GERBVIEW::createLeftPanel()
                                         _( "Deselect all" ) );
 
     m_buttonSelectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler( DIALOG_PRINT_GERBVIEW::onSelectAllClick ), NULL, this );
+                                wxCommandEventHandler( DIALOG_PRINT_GERBVIEW::onSelectAllClick ),
+                                nullptr, this );
     m_buttonDeselectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler( DIALOG_PRINT_GERBVIEW::onDeselectAllClick ), NULL, this );
+                                  wxCommandEventHandler( DIALOG_PRINT_GERBVIEW::onDeselectAllClick ),
+                                  nullptr, this );
 
     wxBoxSizer* buttonSizer = new wxBoxSizer( wxHORIZONTAL );
     buttonSizer->Add( m_buttonSelectAll, 1, wxALL, 5 );

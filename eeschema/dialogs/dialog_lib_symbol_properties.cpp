@@ -103,7 +103,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
                      wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ),
-                     NULL, this );
+                     nullptr, this );
 
     if( m_lastLayout != DIALOG_LIB_SYMBOL_PROPERTIES::NONE )
     {
@@ -137,7 +137,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::~DIALOG_LIB_SYMBOL_PROPERTIES()
 
     m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
                         wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ),
-                        NULL, this );
+                        nullptr, this );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
@@ -171,7 +171,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_DescCtrl->ChangeValue( m_libEntry->GetDescription() );
     m_KeywordCtrl->ChangeValue( m_libEntry->GetKeyWords() );
     m_SelNumberOfUnits->SetValue( m_libEntry->GetUnitCount() );
-    m_OptionPartsInterchangeable->SetValue( !m_libEntry->UnitsLocked() || m_libEntry->GetUnitCount() == 1 );
+    m_OptionPartsInterchangeable->SetValue( !m_libEntry->UnitsLocked() ||
+                                            m_libEntry->GetUnitCount() == 1 );
     m_AsConvertButt->SetValue( m_libEntry->HasConversion() );
     m_OptionPower->SetValue( m_libEntry->IsPower() );
     m_excludeFromBomCheckBox->SetValue( !m_libEntry->GetIncludeInBom() );
@@ -563,7 +564,9 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
         m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
     }
     else
+    {
         wxBell();
+    }
 }
 
 
@@ -596,7 +599,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 }
 
 
-void DIALOG_LIB_SYMBOL_PROPERTIES::OnFilterDClick( wxMouseEvent& event)
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnFilterDClick( wxMouseEvent& event )
 {
     int idx = m_FootprintFilterListBox->HitTest( event.GetPosition() );
     wxCommandEvent dummy;

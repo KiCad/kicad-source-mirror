@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,34 +29,33 @@
 
 #include <wx/combobox.h>
 
-/* helper class to display a DCode list and select a DCode id.
- */
-
 // Define event type for DCODE_SELECTION_BOX
 #define EVT_SELECT_DCODE EVT_COMBOBOX
 
+
+/**
+ * Helper to display a DCode list and select a DCode id.
+ */
 class DCODE_SELECTION_BOX : public wxComboBox
 {
-public: DCODE_SELECTION_BOX( wxAuiToolBar* aParent, wxWindowID aId,
-                             const wxPoint& aLocation, const wxSize& aSize,
-                             const wxArrayString* aChoices = NULL );
-        ~DCODE_SELECTION_BOX();
+public:
+    DCODE_SELECTION_BOX( wxAuiToolBar* aParent, wxWindowID aId,
+                         const wxPoint& aLocation, const wxSize& aSize,
+                         const wxArrayString* aChoices = nullptr );
+    ~DCODE_SELECTION_BOX();
 
     /**
-     * Function GetSelectedDCodeId
      * @return the current selected DCode Id or 0 if no dcode
      */
     int GetSelectedDCodeId();
 
     /**
-     * Function SetDCodeSelection
-     * @param aDCodeId = the DCode Id to select or <= 0 to select "no dcode"
+     * @param aDCodeId is the DCode Id to select or <= 0 to select "no dcode".
      */
     void SetDCodeSelection( int aDCodeId );
 
     /**
-     * Function AppendDCodeList
-     * @param aChoices = the DCode Id list to add to the combo box
+     * @param aChoices is the DCode Id list to add to the combo box.
      */
     void AppendDCodeList( const wxArrayString& aChoices );
 };

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -104,8 +105,8 @@ DIALOG_BUS_MANAGER::DIALOG_BUS_MANAGER( SCH_EDIT_FRAME* aParent )
                                              wxDefaultPosition, wxDefaultSize,
                                              wxALIGN_LEFT );
 
-    m_signal_edit = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
-            wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+    m_signal_edit = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxDefaultSize, wxTE_PROCESS_ENTER );
 
     auto right_button_sizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -146,31 +147,31 @@ DIALOG_BUS_MANAGER::DIALOG_BUS_MANAGER( SCH_EDIT_FRAME* aParent )
 
     Bind( wxEVT_INIT_DIALOG, &DIALOG_BUS_MANAGER::OnInitDialog, this );
     m_bus_list_view->Connect( wxEVT_COMMAND_LIST_ITEM_DESELECTED,
-            wxListEventHandler( DIALOG_BUS_MANAGER::OnSelectBus ), NULL, this );
+            wxListEventHandler( DIALOG_BUS_MANAGER::OnSelectBus ), nullptr, this );
     m_bus_list_view->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED,
-            wxListEventHandler( DIALOG_BUS_MANAGER::OnSelectBus ), NULL, this );
+            wxListEventHandler( DIALOG_BUS_MANAGER::OnSelectBus ), nullptr, this );
     m_signal_list_view->Connect( wxEVT_COMMAND_LIST_ITEM_DESELECTED,
-            wxListEventHandler( DIALOG_BUS_MANAGER::OnSelectSignal ), NULL, this );
+            wxListEventHandler( DIALOG_BUS_MANAGER::OnSelectSignal ), nullptr, this );
     m_signal_list_view->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED,
-            wxListEventHandler( DIALOG_BUS_MANAGER::OnSelectSignal ), NULL, this );
+            wxListEventHandler( DIALOG_BUS_MANAGER::OnSelectSignal ), nullptr, this );
 
     m_btn_add_bus->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnAddBus ), NULL, this );
+            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnAddBus ), nullptr, this );
     m_btn_rename_bus->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnRenameBus ), NULL, this );
+            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnRenameBus ), nullptr, this );
     m_btn_remove_bus->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnRemoveBus ), NULL, this );
+            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnRemoveBus ), nullptr, this );
     m_signal_edit->Connect( wxEVT_TEXT_ENTER,
-            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnAddSignal ), NULL, this );
+            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnAddSignal ), nullptr, this );
 
     m_btn_add_signal->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnAddSignal ), NULL, this );
+            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnAddSignal ), nullptr, this );
     m_btn_rename_signal->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnRenameSignal ), NULL, this );
+            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnRenameSignal ), nullptr, this );
     m_btn_remove_signal->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnRemoveSignal ), NULL, this );
+            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnRemoveSignal ), nullptr, this );
     m_bus_edit->Connect( wxEVT_TEXT_ENTER,
-            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnAddBus ), NULL, this );
+            wxCommandEventHandler( DIALOG_BUS_MANAGER::OnAddBus ), nullptr, this );
 
     // Set initial UI state
 
@@ -204,7 +205,7 @@ bool DIALOG_BUS_MANAGER::TransferDataToWindow()
     std::vector< std::shared_ptr<BUS_ALIAS> > original_aliases;
 
     // collect aliases from each open sheet
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
     {
         std::unordered_set<std::shared_ptr<BUS_ALIAS>> sheet_aliases = screen->GetBusAliases();
         original_aliases.insert( original_aliases.end(), sheet_aliases.begin(),
@@ -298,7 +299,7 @@ void DIALOG_BUS_MANAGER::OnSelectBus( wxListEvent& event )
     }
     else
     {
-        m_active_alias = NULL;
+        m_active_alias = nullptr;
         m_bus_edit->Clear();
         m_signal_edit->Clear();
         m_signal_list_view->DeleteAllItems();
@@ -402,7 +403,7 @@ void DIALOG_BUS_MANAGER::OnRemoveBus( wxCommandEvent& aEvent )
     m_aliases.erase( m_aliases.begin() + i );
     m_bus_edit->Clear();
 
-    m_active_alias = NULL;
+    m_active_alias = nullptr;
 
     auto evt = wxListEvent( wxEVT_COMMAND_LIST_ITEM_DESELECTED );
     OnSelectBus( evt );

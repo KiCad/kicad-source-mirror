@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2007-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,8 +50,8 @@
 #include <display_footprints_frame.h>
 #include <tools/cvpcb_actions.h>
 #include <tools/pcb_actions.h>
-#include <tools/pcb_editor_conditions.h>  // Shared conditions with other pcbnew frames
-#include <tools/pcb_viewer_tools.h>       // shared tools with other pcbnew frames
+#include <tools/pcb_editor_conditions.h>  // Shared conditions with other Pcbnew frames
+#include <tools/pcb_viewer_tools.h>       // shared tools with other Pcbnew frames
 #include <tools/cvpcb_fpviewer_selection_tool.h>
 #include <widgets/infobar.h>
 #include <wx/choice.h>
@@ -182,7 +182,7 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
     GetCanvas()->SetEvtHandlerEnabled( false );
 
     delete GetScreen();
-    SetScreen( NULL );      // Be sure there is no double deletion
+    SetScreen( nullptr );      // Be sure there is no double deletion
 }
 
 
@@ -197,9 +197,12 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
 
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( ACTIONS::zoomTool,          CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,     CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
-    mgr->SetConditions( ACTIONS::measureTool,       CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
+    mgr->SetConditions( ACTIONS::zoomTool,
+                        CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,
+                        CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::measureTool,
+                        CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
 
     mgr->SetConditions( ACTIONS::toggleGrid,        CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
@@ -216,10 +219,12 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
             };
 
     mgr->SetConditions( PCB_ACTIONS::zoomFootprintAutomatically, CHECK( autoZoomCond ) );
-    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,             CHECK( cond.PadNumbersDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,
+                        CHECK( cond.PadNumbersDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::padDisplayMode,             CHECK( !cond.PadFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::textOutlines,               CHECK( !cond.TextFillDisplay() ) );
-    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,           CHECK( !cond.GraphicsFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,
+                        CHECK( !cond.GraphicsFillDisplay() ) );
 
 #undef CHECK
 }
@@ -296,7 +301,8 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool,                       ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
+    m_mainToolBar->Add( ACTIONS::zoomTool,
+                        ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
     m_mainToolBar->Add( PCB_ACTIONS::zoomFootprintAutomatically, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddScaledSeparator( this );
@@ -323,8 +329,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     m_mainToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
     m_mainToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
 
-    // after adding the buttons to the toolbar, must call Realize() to reflect
-    // the changes
+    // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
 }
 
@@ -392,7 +397,7 @@ COLOR4D DISPLAY_FOOTPRINTS_FRAME::GetGridColor()
 FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintName,
                                                    REPORTER& aReporter )
 {
-    FOOTPRINT* footprint = NULL;
+    FOOTPRINT* footprint = nullptr;
     LIB_ID     fpid;
 
     if( fpid.Parse( aFootprintName ) >= 0 )
@@ -400,7 +405,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
         aReporter.Report( wxString::Format( _( "Footprint ID '%s' is not valid." ),
                                             aFootprintName ),
                           RPT_SEVERITY_ERROR );
-        return NULL;
+        return nullptr;
     }
 
     wxString libNickname = FROM_UTF8( fpid.GetLibNickname().c_str() );
@@ -415,7 +420,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
         aReporter.Report( wxString::Format( _( "Library '%s' is not in the footprint library table." ),
                                             libNickname ),
                           RPT_SEVERITY_ERROR );
-        return NULL;
+        return nullptr;
     }
 
     // See if the footprint requested is in the library
@@ -423,7 +428,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     {
         aReporter.Report( wxString::Format( _( "Footprint '%s' not found." ), aFootprintName ),
                           RPT_SEVERITY_ERROR );
-        return NULL;
+        return nullptr;
     }
 
     try
@@ -436,7 +441,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.What() );
-        return NULL;
+        return nullptr;
     }
 
     if( footprint )
@@ -448,7 +453,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
 
     aReporter.Report( wxString::Format( _( "Footprint '%s' not found." ), aFootprintName ),
                       RPT_SEVERITY_ERROR );
-    return NULL;
+    return nullptr;
 }
 
 

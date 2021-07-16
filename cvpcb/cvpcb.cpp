@@ -49,26 +49,26 @@ static struct IFACE : public KIFACE_I
 
     void OnKifaceEnd() override;
 
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
+                            int aCtlBits = 0 ) override
     {
         switch( aClassId )
         {
         case FRAME_CVPCB:         return new CVPCB_MAINFRAME( aKiway, aParent );
         case FRAME_CVPCB_DISPLAY: return new DISPLAY_FOOTPRINTS_FRAME( aKiway, aParent );
-        default:                  return NULL;
+        default:                  return nullptr;
         }
     }
 
     /**
-     * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this
-     * is to retrieve a pointer to a static instance of an interface, similar to
-     * how the KIFACE interface is exported.  But if you know what you are doing
-     * use it to retrieve anything you want.
+     * Return a pointer to the requested object.
+     *
+     * The safest way to use this is to retrieve a pointer to a static instance of an interface,
+     * similar to how the KIFACE interface is exported.  But if you know what you are doing use
+     * it to retrieve anything you want.
      *
      * @param aDataId identifies which object you want the address of.
-     *
-     * @return void* - and must be cast into the know type.
+     * @return the object requested and must be cast into the known type.
      */
     void* IfaceOrAddress( int aDataId ) override
     {
@@ -133,18 +133,18 @@ PGM_BASE* PgmOrNull()
 /// the fallback table for multiple projects).
 FP_LIB_TABLE        GFootprintTable;
 
+
 /// The global footprint info table.  This is performance-intensive to build so we
 /// keep a hash-stamped global version.  Any deviation from the request vs. stored
 /// hash will result in it being rebuilt.
 FOOTPRINT_LIST_IMPL GFootprintList;
 
 
-//!!!!!!!!!!!!!!! This code is obsolete because of the merge into pcbnew, don't bother with it.
+//!!!!!!!!!!!!!!! This code is obsolete because of the merge into Pcbnew, don't bother with it.
 
-// A short lived implementation.  cvpcb will get combine into pcbnew shortly, so
+// A short lived implementation.  cvpcb will get combine into Pcbnew shortly, so
 // we skip setting KICAD6_FOOTPRINT_DIR here for now.  User should set the environment
 // variable.
-
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
     // This is process level, not project level, initialization of the DSO.
@@ -171,15 +171,15 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
         if( !FP_LIB_TABLE::LoadGlobalTable( GFootprintTable ) )
         {
-            DisplayInfoMessage( NULL, _( "You have run CvPcb for the first time using the "
-                                         "new footprint library table method for finding "
-                                         "footprints.\nCvPcb has either copied the default "
-                                         "table or created an empty table in your home "
-                                         "folder.\nYou must first configure the library "
-                                         "table to include all footprint libraries not "
-                                         "included with KiCad.\nSee the \"Footprint Library "
-                                         "Table\" section of the CvPcb documentation for "
-                                         "more information." ) );
+            DisplayInfoMessage( nullptr, _( "You have run CvPcb for the first time using the "
+                                            "new footprint library table method for finding "
+                                            "footprints.\nCvPcb has either copied the default "
+                                            "table or created an empty table in your home "
+                                            "folder.\nYou must first configure the library "
+                                            "table to include all footprint libraries not "
+                                            "included with KiCad.\nSee the \"Footprint Library "
+                                            "Table\" section of the CvPcb documentation for "
+                                            "more information." ) );
         }
     }
     catch( const IO_ERROR& ioe )
@@ -192,6 +192,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     return true;
 }
+
 
 void IFACE::OnKifaceEnd()
 {

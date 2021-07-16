@@ -161,7 +161,7 @@ wxFileName SCH_ALTIUM_PLUGIN::getLibFileName()
 SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
                                     SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
-    wxASSERT( !aFileName || aSchematic != NULL );
+    wxASSERT( !aFileName || aSchematic != nullptr );
 
     wxFileName fileName( aFileName );
     fileName.SetExt( KiCadSchematicFileExtension );
@@ -197,7 +197,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
 
     SYMBOL_LIB_TABLE* libTable = m_schematic->Prj().SchSymbolLibTable();
 
-    wxCHECK_MSG( libTable, NULL, "Could not load symbol lib table." );
+    wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
 
     m_pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
@@ -224,7 +224,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
         }
 
         // Reload the symbol library table.
-        m_schematic->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
+        m_schematic->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, nullptr );
         m_schematic->Prj().SchSymbolLibTable();
     }
 
@@ -579,9 +579,10 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
     SCH_SYMBOL* symbol = new SCH_SYMBOL();
 
     symbol->SetPosition( elem.location + m_sheetOffset );
-    //component->SetOrientation( elem.orientation ); // TODO: keep it simple for now, and only set position
+
+    // TODO: keep it simple for now, and only set position.
+    //component->SetOrientation( elem.orientation );
     symbol->SetLibId( libId );
-    //component->SetLibSymbol( ksymbol ); // this has to be done after parsing the LIB_SYMBOL!
 
     symbol->SetUnit( elem.currentpartid );
 
@@ -651,6 +652,7 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
 
     // TODO: position can be sometimes off a little bit!
     pin->SetPosition( GetRelativePosition( pinLocation + m_sheetOffset, symbol ) );
+
     // TODO: the following fix is even worse for now?
     // pin->SetPosition( GetRelativePosition( elem.kicadLocation, symbol ) );
 
@@ -920,7 +922,7 @@ void SCH_ALTIUM_PLUGIN::ParseNote( const std::map<wxString, wxString>& aProperti
 
     // TODO: set border and background color once KiCad supports them.
 
-    // TODO: need some sort of propety system for storing author....
+    // TODO: need some sort of property system for storing author....
 
     size_t fontId = static_cast<int>( elem.fontId );
 
@@ -969,7 +971,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
             }
             else
             {
-                // simulate bezier using line segments
+                // simulate Bezier using line segments
                 std::vector<wxPoint> bezierPoints;
                 std::vector<wxPoint> polyPoints;
 
@@ -1031,7 +1033,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
             }
             else
             {
-                // bezier always has maximum of 4 control points
+                // Bezier always has maximum of 4 control points
                 LIB_BEZIER* bezier = new LIB_BEZIER( libSymbolIt->second );
                 libSymbolIt->second->AddDrawItem( bezier );
 
@@ -1236,6 +1238,7 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
             return;
 
         SCH_SYMBOL*    symbol = m_symbols.at( libSymbolIt->first );
+
         // TODO: misses rounded edges
         LIB_RECTANGLE* rect = new LIB_RECTANGLE( libSymbolIt->second );
         libSymbolIt->second->AddDrawItem( rect );
@@ -1776,7 +1779,8 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
         pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
         pin->SetVisible( false );
 
-        wxPoint valueFieldPos = HelperGeneratePowerPortGraphics( libSymbol, elem.style, m_reporter );
+        wxPoint valueFieldPos = HelperGeneratePowerPortGraphics( libSymbol, elem.style,
+                                                                 m_reporter );
 
         libSymbol->GetValueField().SetPosition( valueFieldPos );
 

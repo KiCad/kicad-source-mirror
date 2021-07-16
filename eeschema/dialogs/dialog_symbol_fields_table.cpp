@@ -101,8 +101,10 @@ protected:
         if( event.GetId() == MYID_SELECT_FOOTPRINT )
         {
             // pick a footprint using the footprint picker.
-            wxString      fpid = m_grid->GetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT_FIELD );
-            KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true, m_dlg );
+            wxString      fpid = m_grid->GetCellValue( m_grid->GetGridCursorRow(),
+                                                       FOOTPRINT_FIELD );
+            KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true,
+                                                         m_dlg );
 
             if( frame->ShowModal( &fpid, m_dlg ) )
                 m_grid->SetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT_FIELD, fpid );
@@ -111,7 +113,8 @@ protected:
         }
         else if (event.GetId() == MYID_SHOW_DATASHEET )
         {
-            wxString datasheet_uri = m_grid->GetCellValue( m_grid->GetGridCursorRow(), DATASHEET_FIELD );
+            wxString datasheet_uri = m_grid->GetCellValue( m_grid->GetGridCursorRow(),
+                                                           DATASHEET_FIELD );
             GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj() );
         }
         else
@@ -816,7 +819,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
     // Connect Events
     m_grid->Connect( wxEVT_GRID_COL_SORT,
-                     wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), NULL, this );
+                     wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr, this );
 }
 
 
@@ -824,7 +827,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 {
     // Disconnect Events
     m_grid->Disconnect( wxEVT_GRID_COL_SORT,
-                        wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), NULL, this );
+                        wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr,
+                        this );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
@@ -934,10 +938,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aDisplayName,
 }
 
 
-/**
- * Constructs the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
- * field names in use.
- */
 void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
 {
     std::set<wxString> userFieldNames;

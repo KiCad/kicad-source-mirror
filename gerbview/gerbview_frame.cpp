@@ -67,14 +67,14 @@
 
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
         : EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ), wxDefaultPosition,
-                wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME ),
+                          wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME ),
           m_TextInfo( nullptr ),
           m_zipFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_ZIP_FILE1,
-                  ID_GERBVIEW_ZIP_FILE_LIST_CLEAR, _( "Clear Recent Zip Files" ) ),
+                            ID_GERBVIEW_ZIP_FILE_LIST_CLEAR, _( "Clear Recent Zip Files" ) ),
           m_drillFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_DRILL_FILE1,
-                  ID_GERBVIEW_DRILL_FILE_LIST_CLEAR, _( "Clear Recent Drill Files" ) ),
+                              ID_GERBVIEW_DRILL_FILE_LIST_CLEAR, _( "Clear Recent Drill Files" ) ),
           m_jobFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_JOB_FILE1,
-                  ID_GERBVIEW_JOB_FILE_LIST_CLEAR, _( "Clear Recent Job Files" ) ),
+                            ID_GERBVIEW_JOB_FILE_LIST_CLEAR, _( "Clear Recent Job Files" ) ),
           m_activeLayer( 0 )
 {
     m_maximizeByDefault = true;
@@ -136,7 +136,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_LayersManager = new GERBER_LAYER_WIDGET( this, GetCanvas() );
 
     // Update the minimum string length in the layer panel with the length of the last default layer
-    wxString lyrName = GetImagesList()->GetDisplayName( GetImagesList()->ImagesMaxCount(), false, true );
+    wxString lyrName = GetImagesList()->GetDisplayName( GetImagesList()->ImagesMaxCount(),
+                                                        false, true );
     m_LayersManager->SetSmallestLayerString( lyrName );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
@@ -328,7 +329,8 @@ void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );
 
-    SetElementVisibility( LAYER_GERBVIEW_DRAWINGSHEET, cfg->m_Appearance.show_border_and_titleblock );
+    SetElementVisibility( LAYER_GERBVIEW_DRAWINGSHEET,
+                          cfg->m_Appearance.show_border_and_titleblock );
 
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
     pageInfo.SetType( cfg->m_Appearance.page_type );
@@ -413,11 +415,13 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
             // GetLayerPolarity() returns true for negative items
             return ( item && item->GetLayerPolarity() );
         } );
+
         break;
     }
 
     case LAYER_GERBVIEW_DRAWINGSHEET:
         m_showBorderAndTitleBlock = aNewState;
+
         // NOTE: LAYER_DRAWINGSHEET always used for visibility, but the layer manager passes
         // LAYER_GERBVIEW_DRAWINGSHEET because of independent color control
         GetCanvas()->GetView()->SetLayerVisible( LAYER_DRAWINGSHEET, aNewState );
@@ -468,7 +472,7 @@ int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
     {
         const GERBER_FILE_IMAGE* gerber = GetGbrImage( layer );
 
-        if( gerber == NULL )    // this graphic layer is available: use it
+        if( gerber == nullptr )    // this graphic layer is available: use it
             return layer;
 
         ++layer;                // try next graphic layer
@@ -504,7 +508,7 @@ void GERBVIEW_FRAME::syncLayerBox( bool aRebuildLayerBox )
     {
         updateDCodeSelectBox();
         m_DCodeSelector->SetDCodeSelection( dcodeSelected );
-        m_DCodeSelector->Enable( gerber != NULL );
+        m_DCodeSelector->Enable( gerber != nullptr );
     }
 }
 
@@ -603,7 +607,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
     GERBER_FILE_IMAGE* gerber = GetGbrImage( GetActiveLayer() );
 
     // Display the gerber filename
-    if( gerber == NULL )
+    if( gerber == nullptr )
     {
         SetTitle( _("Gerber Viewer") );
 
@@ -673,7 +677,8 @@ bool GERBVIEW_FRAME::IsElementVisible( int aLayerID ) const
     case LAYER_GERBVIEW_BACKGROUND:   return true;
 
     default:
-        wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d", aLayerID ) );
+        wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d",
+                                      aLayerID ) );
     }
 
     return true;
@@ -894,9 +899,6 @@ void GERBVIEW_FRAME::SetGridColor( COLOR4D aColor )
 }
 
 
-/*
- * Display the grid status.
- */
 void GERBVIEW_FRAME::DisplayGridMsg()
 {
     wxString line;

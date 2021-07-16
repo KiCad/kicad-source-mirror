@@ -96,12 +96,12 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     inline long parseHex()
     {
         NextTok();
-        return strtol( CurText(), NULL, 16 );
+        return strtol( CurText(), nullptr, 16 );
     }
 
     inline int parseInt()
     {
-        return (int)strtol( CurText(), NULL, 10 );
+        return (int)strtol( CurText(), nullptr, 10 );
     }
 
     inline int parseInt( const char* aExpected )

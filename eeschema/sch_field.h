@@ -175,7 +175,7 @@ public:
 
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
 
-    bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData = NULL ) override;
+    bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData = nullptr ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 

@@ -90,7 +90,7 @@ bool SCH_DRAWING_TOOLS::Init()
 
 EDA_RECT SCH_DRAWING_TOOLS::GetCanvasFreeAreaPixels()
 {
-    // calculate thearea of the canvas in pixels that create no autopan when
+    // calculate the area of the canvas in pixels that create no autopan when
     // is inside this area the mouse cursor
     wxSize canvas_size = m_frame->GetCanvas()->GetSize();
     EDA_RECT canvas_area( wxPoint( 0, 0 ), canvas_size );
@@ -256,7 +256,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     controls->WarpCursor( controls->GetCursorPosition(), true );
                 else if( !canvas_area.Contains( wxPoint( newMousePos ) ) )
                     // The mouse is outside the canvas area, after closing the dialog,
-                    // thus can creating autopan issues. Warp the mouse to the canvas centre
+                    // thus can creating autopan issues. Warp the mouse to the canvas center
                     controls->WarpCursor( canvas_area.Centre(), false );
 
                 LIB_SYMBOL* libSymbol = sel.LibId.IsValid() ?
@@ -275,7 +275,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             else
             {
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                    symbol->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+                    symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
                 symbol->ClearEditFlags();
 
@@ -501,7 +501,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                     controls->WarpCursor( controls->GetCursorPosition(), true );
                 else if( !canvas_area.Contains( wxPoint( newMousePos ) ) )
                     // The mouse is outside the canvas area, after closing the dialog,
-                    // thus can creating autopan issues. Warp the mouse to the canvas centre
+                    // thus can creating autopan issues. Warp the mouse to the canvas center
                     controls->WarpCursor( canvas_area.Centre(), false );
 
                 cursorPos = controls->GetMousePosition( true );
@@ -1175,9 +1175,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                 controls->SetCursorPosition( cursorPos, false );
             }
-
-            // ... and second click places:
-            else
+            else            // ... and second click places:
             {
                 item->ClearFlags( IS_MOVING );
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item,
@@ -1336,7 +1334,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(),
                                    static_cast<wxPoint>( cursorPos ) );
             sheet->SetFlags( IS_NEW | IS_RESIZING );
-            sheet->SetScreen( NULL );
+            sheet->SetScreen( nullptr );
             sheet->SetBorderWidth( cfg->m_Drawing.default_line_thickness );
             sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );
             sheet->SetBackgroundColor( cfg->m_Drawing.default_sheet_background_color );
@@ -1376,7 +1374,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             if( m_frame->EditSheetProperties( static_cast<SCH_SHEET*>( sheet ),
                                               &m_frame->GetCurrentSheet(), nullptr ) )
             {
-                sheet->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+                sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), sheet, false );
                 m_frame->UpdateHierarchyNavigator();

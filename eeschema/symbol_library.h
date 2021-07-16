@@ -253,7 +253,7 @@ public:
      * Save or load the names of the currently configured symbol libraries (without paths).
      */
     static void LibNamesAndPaths( PROJECT* aProject, bool doSave,
-                                  wxString* aPaths, wxArrayString* aNames=NULL );
+                                  wxString* aPaths, wxArrayString* aNames = nullptr );
 
     /**
      * Return the name of the cache library after potentially fixing it from

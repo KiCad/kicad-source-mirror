@@ -139,7 +139,7 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
 
 void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    // For now, axes are forced off in eeschema even if turned on in config
+    // For now, axes are forced off in Eeschema even if turned on in config
     eeconfig()->m_Window.grid.axes_enabled = false;
 
     SCH_BASE_FRAME::LoadSettings( eeconfig() );
@@ -270,7 +270,7 @@ SYMBOL_LIB_TABLE* PROJECT::SchSymbolLibTable()
                 wxString msg;
                 msg.Printf( _( "Error loading the symbol library table '%s'." ),
                             fn.GetFullPath() );
-                DisplayErrorMessage( NULL, msg, ioe.What() );
+                DisplayErrorMessage( nullptr, msg, ioe.What() );
             }
         }
     }

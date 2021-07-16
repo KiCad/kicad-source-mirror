@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2019 jean-pierre.charras
- * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,10 +43,11 @@
 /* free a potrace bitmap */
 static void bm_free( potrace_bitmap_t* bm )
 {
-    if( bm != NULL )
+    if( bm != nullptr )
     {
         free( bm->map );
     }
+
     free( bm );
 }
 
@@ -66,14 +67,13 @@ BITMAPCONV_INFO::BITMAPCONV_INFO( std::string& aData ):
     m_PixmapHeight = 0;
     m_ScaleX  = 1.0;
     m_ScaleY  = 1.0;
-    m_Paths   = NULL;
+    m_Paths   = nullptr;
     m_CmpName = "LOGO";
 }
 
 
-int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap,
-                      OUTPUT_FMT_ID aFormat, int aDpi_X, int aDpi_Y,
-                      BMP2CMP_MOD_LAYER aModLayer )
+int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap, OUTPUT_FMT_ID aFormat,
+                                    int aDpi_X, int aDpi_Y, BMP2CMP_MOD_LAYER aModLayer )
 {
     potrace_param_t* param;
     potrace_state_t* st;
@@ -103,6 +103,7 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap,
         {
             potrace_state_free( st );
         }
+
         potrace_param_free( param );
 
         char msg[256];
@@ -128,6 +129,7 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap,
         m_Format = POSTSCRIPT_FMT;
         m_ScaleX = 1.0;                // the conversion scale
         m_ScaleY = m_ScaleX;
+
         // output vector data, e.g. as a rudimentary EPS file (mainly for tests)
         createOutputData();
         break;
@@ -161,7 +163,7 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap,
 
 const char* BITMAPCONV_INFO::getBoardLayerName( BMP2CMP_MOD_LAYER aChoice )
 {
-    const char * layerName = "F.SilkS";
+    const char* layerName = "F.SilkS";
 
     switch( aChoice )
     {
@@ -210,10 +212,10 @@ void BITMAPCONV_INFO::outputDataHeader(  const char * aBrdLayerName )
         sprintf( strbuf, "(attr board_only exclude_from_pos_files exclude_from_bom)\n");
         m_Data += strbuf;
         sprintf( strbuf, " (fp_text reference \"G***\" (at 0 0) (layer %s)\n"
-            "  (effects (font (thickness 0.3)))\n  )\n", aBrdLayerName );
+                 "  (effects (font (thickness 0.3)))\n  )\n", aBrdLayerName );
         m_Data += strbuf;
         sprintf( strbuf, "  (fp_text value \"%s\" (at 0.75 0) (layer %s) hide\n"
-            "  (effects (font (thickness 0.3)))\n  )\n", m_CmpName.c_str(), aBrdLayerName );
+                 "  (effects (font (thickness 0.3)))\n  )\n", m_CmpName.c_str(), aBrdLayerName );
         m_Data += strbuf;
         break;
 
@@ -226,8 +228,7 @@ void BITMAPCONV_INFO::outputDataHeader(  const char * aBrdLayerName )
         m_Data += strbuf;
         sprintf( strbuf, "#\n# %s\n", m_CmpName.c_str() );
         m_Data += strbuf;
-        sprintf( strbuf, "# pixmap size w = %d, h = %d\n#\n",
-                 m_PixmapWidth, m_PixmapHeight );
+        sprintf( strbuf, "# pixmap size w = %d, h = %d\n#\n", m_PixmapWidth, m_PixmapHeight );
         m_Data += strbuf;
 
         // print reference and value
@@ -270,7 +271,7 @@ void BITMAPCONV_INFO::outputDataEnd()
 }
 
 
-void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* aBrdLayerName )
+void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN& aPolygon, const char* aBrdLayerName )
 {
     // write one polygon to output file.
     // coordinates are expected in target unit.
@@ -287,15 +288,14 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char*
     {
     case POSTSCRIPT_FMT:
         offsetY = (int)( m_PixmapHeight * m_ScaleY );
-        sprintf( strbuf, "newpath\n%d %d moveto\n",
-                 startpoint.x, offsetY - startpoint.y );
+        sprintf( strbuf, "newpath\n%d %d moveto\n", startpoint.x, offsetY - startpoint.y );
         m_Data += strbuf;
         jj = 0;
+
         for( ii = 1; ii < aPolygon.PointCount(); ii++ )
         {
             currpoint = aPolygon.CPoint( ii );
-            sprintf( strbuf, " %d %d lineto",
-                     currpoint.x, offsetY - currpoint.y );
+            sprintf( strbuf, " %d %d lineto", currpoint.x, offsetY - currpoint.y );
             m_Data += strbuf;
 
             if( jj++ > 6 )
@@ -314,12 +314,13 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char*
         m_Data += "  (fp_poly (pts";
 
         jj = 0;
+
         for( ii = 0; ii < aPolygon.PointCount(); ii++ )
         {
             currpoint = aPolygon.CPoint( ii );
             sprintf( strbuf, " (xy %f %f)",
-                    ( currpoint.x - offsetX ) / PCB_IU_PER_MM,
-                    ( currpoint.y - offsetY ) / PCB_IU_PER_MM );
+                     ( currpoint.x - offsetX ) / PCB_IU_PER_MM,
+                     ( currpoint.y - offsetY ) / PCB_IU_PER_MM );
             m_Data += strbuf;
 
             if( jj++ > 6 )
@@ -329,6 +330,7 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char*
             }
         }
         // No need to close polygon
+
         m_Data += " )";
         sprintf( strbuf, "(layer %s) (width  %f)\n  )\n", aBrdLayerName, width );
         m_Data += strbuf;
@@ -337,14 +339,16 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char*
 
     case KICAD_LOGO:
         m_Data += "  (pts";
+
         // Internal units = micron, file unit = mm
         jj = 0;
+
         for( ii = 0; ii < aPolygon.PointCount(); ii++ )
         {
             currpoint = aPolygon.CPoint( ii );
             sprintf( strbuf, " (xy %.3f %.3f)",
-                    ( currpoint.x - offsetX ) / PL_IU_PER_MM,
-                    ( currpoint.y - offsetY ) / PL_IU_PER_MM );
+                     ( currpoint.x - offsetX ) / PL_IU_PER_MM,
+                     ( currpoint.y - offsetY ) / PL_IU_PER_MM );
             m_Data += strbuf;
 
             if( jj++ > 4 )
@@ -353,6 +357,7 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char*
                 m_Data += "\n    ";
             }
         }
+
         // Close polygon
         sprintf( strbuf, " (xy %.3f %.3f) )\n",
                  ( startpoint.x - offsetX ) / PL_IU_PER_MM,
@@ -364,20 +369,18 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char*
         // The polygon outline thickness is fixed here to 1 mil, the minimal
         // value in Eeschema (0 means use default thickness for graphics)
         #define EE_LINE_THICKNESS 1
-        sprintf( strbuf, "P %d 0 0 %d",
-                 (int) aPolygon.PointCount() + 1, EE_LINE_THICKNESS );
+        sprintf( strbuf, "P %d 0 0 %d", (int) aPolygon.PointCount() + 1, EE_LINE_THICKNESS );
         m_Data += strbuf;
+
         for( ii = 0; ii < aPolygon.PointCount(); ii++ )
         {
             currpoint = aPolygon.CPoint( ii );
-            sprintf( strbuf, " %d %d",
-                     currpoint.x - offsetX, currpoint.y - offsetY );
+            sprintf( strbuf, " %d %d", currpoint.x - offsetX, currpoint.y - offsetY );
             m_Data += strbuf;
         }
 
         // Close polygon
-        sprintf( strbuf, " %d %d",
-                 startpoint.x - offsetX, startpoint.y - offsetY );
+        sprintf( strbuf, " %d %d", startpoint.x - offsetX, startpoint.y - offsetY );
         m_Data += strbuf;
 
         m_Data += " F\n";
@@ -417,12 +420,13 @@ void BITMAPCONV_INFO::createOutputData( BMP2CMP_MOD_LAYER aModLayer )
         m_errors += "No path in black and white image: no outline created\n";
     }
 
-    while( paths != NULL )
+    while( paths != nullptr )
     {
         int cnt  = paths->curve.n;
         int* tag = paths->curve.tag;
         c = paths->curve.c;
         potrace_dpoint_t startpoint = c[cnt - 1][2];
+
         for( int i = 0; i < cnt; i++ )
         {
             switch( tag[i] )
@@ -457,6 +461,7 @@ void BITMAPCONV_INFO::createOutputData( BMP2CMP_MOD_LAYER aModLayer )
         {
             // Add current hole in polyset_holes
             polyset_holes.NewOutline();
+
             for( unsigned int i = 0; i < cornersBuffer.size(); i++ )
             {
                 polyset_holes.Append( int( cornersBuffer[i].x * m_ScaleX ),
@@ -466,9 +471,8 @@ void BITMAPCONV_INFO::createOutputData( BMP2CMP_MOD_LAYER aModLayer )
 
         cornersBuffer.clear();
 
-        /* at the end of a group of a positive path and its negative children, fill.
-         */
-        if( paths->next == NULL || paths->next->sign == '+' )
+        // at the end of a group of a positive path and its negative children, fill.
+        if( paths->next == nullptr || paths->next->sign == '+' )
         {
             polyset_areas.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
             polyset_holes.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
@@ -491,6 +495,7 @@ void BITMAPCONV_INFO::createOutputData( BMP2CMP_MOD_LAYER aModLayer )
             polyset_holes.RemoveAllContours();
             main_outline = true;
         }
+
         paths = paths->next;
     }
 
@@ -500,14 +505,16 @@ void BITMAPCONV_INFO::createOutputData( BMP2CMP_MOD_LAYER aModLayer )
 // a helper function to calculate a square value
 inline double square( double x )
 {
-    return x*x;
+    return x * x;
 }
+
 
 // a helper function to calculate a cube value
 inline double cube( double x )
 {
-    return x*x*x;
+    return x * x * x;
 }
+
 
 /* render a Bezier curve. */
 void BezierToPolyline( std::vector <potrace_dpoint_t>& aCornersBuffer,

@@ -95,8 +95,6 @@ static void add_search_paths( SEARCH_STACK* aDst, const SEARCH_STACK& aSrc, int 
 }
 
 
-//-----<SCH "data on demand" functions>-------------------------------------------
-
 SEARCH_STACK* PROJECT::SchSearchS()
 {
     SEARCH_STACK* ss = (SEARCH_STACK*) GetElem( PROJECT::ELEM_SCH_SEARCH_STACK );
@@ -189,8 +187,6 @@ SYMBOL_LIBS* PROJECT::SchLibs()
 
     return libs;
 }
-
-//-----</SCH "data on demand" functions>------------------------------------------
 
 
 BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
@@ -326,7 +322,7 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 
     delete m_item_to_repeat;        // we own the cloned object, see this->SaveCopyForRepeatItem()
 
-    SetScreen( NULL );
+    SetScreen( nullptr );
 
     delete m_schematic;
     m_schematic = nullptr;
@@ -393,7 +389,8 @@ void SCH_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
-    mgr->SetConditions( ACTIONS::millimetersUnits,    CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::millimetersUnits,
+                        CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
     mgr->SetConditions( ACTIONS::inchesUnits,         CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
     mgr->SetConditions( ACTIONS::milsUnits,           CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
@@ -410,11 +407,14 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::mirrorH,          ENABLE( hasElements ) );
     mgr->SetConditions( EE_ACTIONS::mirrorV,          ENABLE( hasElements ) );
 
-    mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::zoomTool,
+                        CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,
+                        CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 
     if( SCRIPTING::IsWxAvailable() )
-        mgr->SetConditions( EE_ACTIONS::showPythonConsole, CHECK( cond.ScriptingConsoleVisible() ) );
+        mgr->SetConditions( EE_ACTIONS::showPythonConsole,
+                            CHECK( cond.ScriptingConsoleVisible() ) );
 
     auto showHiddenPinsCond =
         [this] ( const SELECTION& )
@@ -486,6 +486,7 @@ void SCH_EDIT_FRAME::SaveCopyForRepeatItem( const SCH_ITEM* aItem )
         delete m_item_to_repeat;
 
         m_item_to_repeat = (SCH_ITEM*) aItem->Clone();
+
         // Clone() preserves the flags, we want 'em cleared.
         m_item_to_repeat->ClearFlags();
     }
@@ -518,7 +519,7 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
         sheet_number++;                          // Not found, increment before this current path
     }
 
-    for( screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
+    for( screen = s_list.GetFirst(); screen != nullptr; screen = s_list.GetNext() )
         screen->SetPageCount( sheet_count );
 
     GetCurrentSheet().SetVirtualPageNumber( sheet_number );
@@ -569,7 +570,7 @@ void SCH_EDIT_FRAME::CreateScreens()
     m_schematic->Root().AddInstance( rootSheetPath.Path() );
     m_schematic->Root().SetPageNumber( rootSheetPath, wxT( "1" ) );
 
-    if( GetScreen() == NULL )
+    if( GetScreen() == nullptr )
     {
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
         SetScreen( screen );
@@ -695,7 +696,7 @@ void SCH_EDIT_FRAME::doCloseWindow()
     SCH_SCREENS screens( Schematic().Root() );
     wxFileName fn;
 
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
     {
         fn = Prj().AbsolutePath( screen->GetFileName() );
 
@@ -1165,7 +1166,7 @@ static void inheritNetclass( const SCH_SHEET_PATH& aSheetPath, SCH_TEXT* aItem )
 void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
                                                  bool aUndoAppend )
 {
-    wxCHECK_RET( aItem != NULL, wxT( "Cannot add null item to list." ) );
+    wxCHECK_RET( aItem != nullptr, wxT( "Cannot add null item to list." ) );
 
     SCH_SHEET*  parentSheet = nullptr;
     SCH_SYMBOL* parentSymbol = nullptr;
@@ -1356,7 +1357,7 @@ void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
     std::vector<wxString> pageNumbers;
 
     /* Iterate over screens */
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
     {
         pageNumbers.clear();
 

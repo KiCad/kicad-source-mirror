@@ -580,7 +580,7 @@ void EE_POINT_EDITOR::updateParentItem() const
 
         // Update the fields if we're in autoplace mode
         if( sheet->GetFieldsAutoplaced() == FIELDS_AUTOPLACED_AUTO )
-            sheet->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+            sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
         // Keep sheet pins attached to edges:
         for( SCH_SHEET_PIN* pin : sheet->GetPins() )

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,26 +33,24 @@ class GBR_LAYER_BOX_SELECTOR : public LAYER_BOX_SELECTOR
 {
 public:
     GBR_LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
-            const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            int n = 0, const wxString choices[] = NULL ) :
+                            const wxPoint& pos = wxDefaultPosition,
+                            const wxSize& size = wxDefaultSize,
+                            int n = 0, const wxString choices[] = nullptr ) :
         LAYER_BOX_SELECTOR( parent, id, pos, size, n, choices )
     {
         m_layerhotkeys = false;
     }
 
     // Reload the Layers names and bitmaps
-    // Virtual function
     void Resync() override;
 
-    // Returns a color index from the layer id
-    // Virtual function
+    // Return a color index from the layer id
     COLOR4D getLayerColor( int aLayer ) const override;
 
-    // Returns true if the layer id is enabled (i.e. is it should be displayed)
-    // Virtual function
+    // Return true if the layer id is enabled (i.e. is it should be displayed)
     bool isLayerEnabled( int aLayer ) const override { return true; }
 
-    // Returns the name of the layer id
+    // Return the name of the layer id
     wxString getLayerName( int aLayer ) const override;
 };
 

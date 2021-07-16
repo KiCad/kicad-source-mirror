@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,10 +53,8 @@ EDA_RECT TRANSFORM::TransformCoordinate( const EDA_RECT& aRect ) const
     return rect;
 }
 
-/*
-* Calculate the Inverse mirror/rotation transform.
-*/
-TRANSFORM TRANSFORM::InverseTransform( ) const
+
+TRANSFORM TRANSFORM::InverseTransform() const
 {
     int invx1;
     int invx2;
@@ -64,9 +62,9 @@ TRANSFORM TRANSFORM::InverseTransform( ) const
     int invy2;
 
     /* Calculates the inverse matrix coeffs:
-    * for a matrix m{x1, x2, y1, y2}
-    * the inverse matrix is 1/(x1*y2 -x2*y1) m{y2,-x2,-y1,x1)
-    */
+     * for a matrix m{x1, x2, y1, y2}
+     * the inverse matrix is 1/(x1*y2 -x2*y1) m{y2,-x2,-y1,x1)
+     */
     int det = x1*y2 -x2*y1; // Is never null, because the inverse matrix exists
     invx1 = y2/det;
     invx2 = -x2/det;
@@ -80,7 +78,7 @@ TRANSFORM TRANSFORM::InverseTransform( ) const
 
 bool TRANSFORM::MapAngles( int* aAngle1, int* aAngle2 ) const
 {
-    wxCHECK_MSG( aAngle1 != NULL && aAngle2 != NULL, false,
+    wxCHECK_MSG( aAngle1 != nullptr && aAngle2 != nullptr, false,
                  wxT( "Cannot map NULL point angles." ) );
 
     int    Angle, Delta;
@@ -88,6 +86,7 @@ bool TRANSFORM::MapAngles( int* aAngle1, int* aAngle2 ) const
     bool   swap = false;
 
     Delta = *aAngle2 - *aAngle1;
+
     if( Delta >= 1800 )
     {
         *aAngle1 -= 1;
@@ -110,6 +109,7 @@ bool TRANSFORM::MapAngles( int* aAngle1, int* aAngle2 ) const
 
     NORMALIZE_ANGLE_POS( *aAngle1 );
     NORMALIZE_ANGLE_POS( *aAngle2 );
+
     if( *aAngle2 < *aAngle1 )
         *aAngle2 += 3600;
 
@@ -121,8 +121,10 @@ bool TRANSFORM::MapAngles( int* aAngle1, int* aAngle2 ) const
 
         NORMALIZE_ANGLE_POS( *aAngle1 );
         NORMALIZE_ANGLE_POS( *aAngle2 );
+
         if( *aAngle2 < *aAngle1 )
             *aAngle2 += 3600;
+
         swap = true;
     }
 

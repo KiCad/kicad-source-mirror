@@ -63,7 +63,12 @@ private:
     /**
      * Collect holes from a drill layer.
      *
-     * We'll use these later when writing pads & vias.
+     * We'll use these later when writing pads & vias.  Many holes will be pads, but we have
+     * no way to create those without footprints, and creating a footprint per pad is not
+     * really viable.  We use vias to mimic holes, with the loss of any hole shape (as we only
+     * have round holes in vias at present).  We start out with a via size minimally larger
+     * than the hole.  We'll leave it this way if the pad gets drawn as a copper polygon, or
+     * increase it to the proper size if it has a circular, concentric copper flashing.
      */
     void    collect_hole( const GERBER_DRAW_ITEM* aGbrItem );
 

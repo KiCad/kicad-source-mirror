@@ -35,6 +35,9 @@ class FOOTPRINT_LIST;
 #define LISTBOX_STYLE     ( wxBORDER_NONE | wxLC_NO_HEADER | wxLC_REPORT | wxLC_VIRTUAL | \
                             wxVSCROLL | wxHSCROLL )
 
+/**
+ * Base class to display symbol and footprint lists.
+ */
 class ITEMS_LISTBOX_BASE : public wxListView
 {
 public:
@@ -48,10 +51,10 @@ public:
      * @return the index of the selected item in lists allowing only one item selected
      * and the index of the first selected item in lists allowing many selection
      */
-    int                      GetSelection();
+    int GetSelection();
 
     /**
-     * Removes all selection in lists which can have more than one item selected
+     * Remove all selection in lists which can have more than one item selected.
      */
     void DeselectAll();
 
@@ -67,6 +70,11 @@ public:
     void UpdateWidth( int aLine = -1 );
 
 private:
+    /**
+     * Calculate the width of the given line, and increase the column width
+     * if needed. This is effectively the wxListCtrl code for autosizing.
+     * NB. it relies on the caller checking the given line number is valid.
+     */
     void UpdateLineWidth( unsigned aLine );
 
     int columnWidth;
@@ -154,7 +162,7 @@ public:
     /**
      * Called on a key press.
      *
-     * Call default handler for some special keys, and for "ascii" keys, select the first
+     * Call default handler for some special keys, and for "ASCII" keys, select the first
      * footprint that the name starts by the letter.
      *
      * This is the default behavior of a listbox, but because we use virtual lists, the
@@ -199,7 +207,7 @@ public:
     /**
      * Called on a key press.
      *
-     * Call default handler for some special keys, and for "ascii" keys, select the first
+     * Call default handler for some special keys, and for "ASCII" keys, select the first
      * component that the name starts by the letter.
      *
      * This is the default behavior of a listbox, but because we use virtual lists, the

@@ -126,7 +126,7 @@ public:
      *                       a row is not found in this table.  No ownership is
      *                       taken of aFallBackTable.
      */
-    SYMBOL_LIB_TABLE( SYMBOL_LIB_TABLE* aFallBackTable = NULL );
+    SYMBOL_LIB_TABLE( SYMBOL_LIB_TABLE* aFallBackTable = nullptr );
 
     /**
      * Return an SYMBOL_LIB_TABLE_ROW if \a aNickName is found in this table or in any chained

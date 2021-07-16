@@ -46,6 +46,11 @@ public:
 private:
     void AddField( const wxString& displayName, const wxString& aCanonicalName, bool defaultShow,
                    bool defaultSortBy );
+
+    /**
+     * Construct the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
+     * field names in use.
+     */
     void LoadFieldNames();
 
     void OnColSort( wxGridEvent& aEvent );

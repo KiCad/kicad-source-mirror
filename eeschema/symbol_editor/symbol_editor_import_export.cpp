@@ -129,7 +129,7 @@ void SYMBOL_EDIT_FRAME::ExportSymbol()
     fn = dlg.GetPath();
     fn.MakeAbsolute();
 
-    LIB_SYMBOL* old_symbol = NULL;
+    LIB_SYMBOL* old_symbol = nullptr;
     SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
 

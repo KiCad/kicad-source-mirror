@@ -310,6 +310,7 @@ wxString buildFullReference( const SCH_REFERENCE& aItem, int aUnitNumber = -1 )
     return fullref;
 }
 
+
 void SCH_REFERENCE_LIST::ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditionalReferences )
 {
     SplitReferences();
@@ -348,7 +349,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
     // The algorithm tries to allocate the new reference to symbols having the same
     // old reference.
     // This algo works fine as long as the previous annotation has no duplicates.
-    // But when a hierarchy is reannotated with this option, the previous anotation can
+    // But when a hierarchy is reannotated with this option, the previous annotation can
     // have duplicate references, and obviously we must fix these duplicate.
     // therefore do not try to allocate a full reference more than once when trying
     // to keep this order of multi units.
@@ -402,7 +403,8 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             continue;
 
         // Check whether this symbol is in aLockedUnitMap.
-        SCH_REFERENCE_LIST* lockedList = NULL;
+        SCH_REFERENCE_LIST* lockedList = nullptr;
+
         for( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair : aLockedUnitMap )
         {
             unsigned n_refs = pair.second.GetCount();
@@ -417,7 +419,9 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                     break;
                 }
             }
-            if( lockedList != NULL ) break;
+
+            if( lockedList != nullptr )
+                break;
         }
 
         if(  ( flatList[first].CompareRef( ref_unit ) != 0 )
@@ -469,7 +473,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
 
         // If this symbol is in aLockedUnitMap, copy the annotation to all
         // symbols that are not it
-        if( lockedList != NULL )
+        if( lockedList != nullptr )
         {
             unsigned n_refs = lockedList->GetCount();
 
@@ -583,7 +587,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
 
     SortByRefAndValue();
 
-    // Spiit reference designators into name (prefix) and number: IC1 becomes IC, and 1.
+    // Split reference designators into name (prefix) and number: IC1 becomes IC, and 1.
     SplitReferences();
 
     // count not yet annotated items or annotation error.
@@ -608,9 +612,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             }
             else
             {
-                msg.Printf( _( "Item not annotated: %s%s\n" ),
-                            flatList[ii].GetRef(),
-                            tmp );
+                msg.Printf( _( "Item not annotated: %s%s\n" ), flatList[ii].GetRef(), tmp );
             }
 
             aHandler( ERCE_UNANNOTATED, msg, &flatList[ii], nullptr );
@@ -672,9 +674,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             }
             else
             {
-                msg.Printf( _( "Duplicate items %s%s\n" ),
-                            flatList[ii].GetRef(),
-                            tmp );
+                msg.Printf( _( "Duplicate items %s%s\n" ), flatList[ii].GetRef(), tmp );
             }
 
             aHandler( ERCE_DUPLICATE_REFERENCE, msg, &flatList[ii], &flatList[ii+1] );
@@ -702,9 +702,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             }
             else
             {
-                msg.Printf( _( "Duplicate items %s%s\n" ),
-                            flatList[ii].GetRef(),
-                            tmp );
+                msg.Printf( _( "Duplicate items %s%s\n" ), flatList[ii].GetRef(), tmp );
             }
 
             aHandler( ERCE_DUPLICATE_REFERENCE, msg, &flatList[ii], &flatList[ii+1] );
@@ -738,7 +736,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
 SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, LIB_SYMBOL* aLibSymbol,
                               const SCH_SHEET_PATH& aSheetPath )
 {
-    wxASSERT( aSymbol != NULL );
+    wxASSERT( aSymbol != nullptr );
 
     m_rootSymbol = aSymbol;
     m_libPart    = aLibSymbol;     // Warning: can be nullptr for orphan symbols

@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,8 @@ static struct IFACE : public KIFACE_I
 
     void OnKifaceEnd() override;
 
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
+                            int aCtlBits = 0 ) override
     {
         switch( aClassId )
         {
@@ -70,24 +71,25 @@ static struct IFACE : public KIFACE_I
             ;
         }
 
-        return NULL;
+        return nullptr;
     }
 
     /**
-     * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this is to retrieve
-     * a pointer to a static instance of an interface, similar to how the KIFACE interface
-     * is exported.  But if you know what you are doing use it to retrieve anything you want.
+     * Return a pointer to the requested object.
+     *
+     * The safest way to use this is to retrieve a pointer to a static instance of an interface,
+     * similar to how the KIFACE interface is exported.  But if you know what you are doing use
+     * it to retrieve anything you want.
+     *
      * @param aDataId identifies which object you want the address of.
-     * @return void* - and must be cast into the know type.
+     * @return the object requested and must be cast into the know type.
      */
     void* IfaceOrAddress( int aDataId ) override
     {
-        return NULL;
+        return nullptr;
     }
 
     /**
-     * Function SaveFileAs
      * Saving a file under a different name is delegated to the various KIFACEs because
      * the project doesn't know the internal format of the various files (which may have
      * paths in them that need updating).
@@ -100,9 +102,12 @@ static struct IFACE : public KIFACE_I
 
 } // namespace
 
+
 using namespace GERBV;
 
+
 static PGM_BASE* process;
+
 
 KIFACE_I& Kiface() { return kiface; }
 
@@ -128,6 +133,7 @@ PGM_BASE* PgmOrNull()
 {
     return process;
 }
+
 
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,10 +45,10 @@
 #define QUOTE   '\''
 
 
-/*
- * read the string between quotes and put it in aTarget
- * put text in aTarget
- * return a pointer to the last read char (the second quote if OK)
+/**
+ * Read the string between quotes.
+ *
+ * @return a the quoted string.
  */
 wxString GetQuotedText( wxString& text )
 {
@@ -76,7 +76,6 @@ bool sortListbyCmpValue( const FOOTPRINT_EQUIVALENCE& ref, const FOOTPRINT_EQUIV
 }
 
 
-// read the .equ files and populate the list of equivalents
 int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList,
                                            wxString* aErrorMessages )
 {
@@ -118,7 +117,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList,
 
         file = wxFopen( tmp, wxT( "rt" ) );
 
-        if( file == NULL )
+        if( file == nullptr )
         {
             error_count++;
 
@@ -135,7 +134,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList,
             continue;
         }
 
-        while( GetLine( file, line, NULL, sizeof( line ) ) != NULL )
+        while( GetLine( file, line, nullptr, sizeof( line ) ) != nullptr )
         {
             if( *line == 0 )
                 continue;

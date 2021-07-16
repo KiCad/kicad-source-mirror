@@ -81,7 +81,8 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
 	// Connect Events
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
-                         wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), NULL, this );
+                         wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), nullptr,
+                         this );
 
     if( Prj().IsReadOnly() )
     {
@@ -96,7 +97,8 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 DIALOG_SCHEMATIC_SETUP::~DIALOG_SCHEMATIC_SETUP()
 {
 	m_treebook->Disconnect( wxEVT_TREEBOOK_PAGE_CHANGED,
-                         wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), NULL, this );
+                            wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), nullptr,
+                            this );
 }
 
 

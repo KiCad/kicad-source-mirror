@@ -53,7 +53,7 @@ public:
 
     BITMAP_BASE* GetImage() const
     {
-        wxCHECK_MSG( m_image != NULL, NULL, "Invalid SCH_BITMAP init, m_image is NULL." );
+        wxCHECK_MSG( m_image != nullptr, nullptr, "Invalid SCH_BITMAP init, m_image is NULL." );
         return m_image;
     }
 

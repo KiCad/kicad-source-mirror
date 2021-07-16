@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2018 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@
 #include <gerber_file_image_list.h>
 
 GBR_LAYOUT::GBR_LAYOUT() :
-    EDA_ITEM( (EDA_ITEM*)nullptr, GERBER_LAYOUT_T )
+    EDA_ITEM( nullptr, GERBER_LAYOUT_T )
 {
 }
 
@@ -37,7 +37,7 @@ GBR_LAYOUT::~GBR_LAYOUT()
 {
 }
 
-// Accessor to the list of gerber files (and drill files) images
+// Accessor to the list of Gerber files (and drill files) images
 GERBER_FILE_IMAGE_LIST* GBR_LAYOUT::GetImagesList() const
 {
     return &GERBER_FILE_IMAGE_LIST::GetImagesList();
@@ -53,7 +53,7 @@ EDA_RECT GBR_LAYOUT::ComputeBoundingBox() const
     {
         GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( layer );
 
-        if( gerber == NULL )    // Graphic layer not yet used
+        if( gerber == nullptr )    // Graphic layer not yet used
             continue;
 
         for( GERBER_DRAW_ITEM* item : gerber->GetItems() )
@@ -97,7 +97,7 @@ SEARCH_RESULT GBR_LAYOUT::Visit( INSPECTOR inspector, void* testData, const KICA
             {
                 GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( layer );
 
-                if( gerber == NULL )    // Graphic layer not yet used
+                if( gerber == nullptr )    // Graphic layer not yet used
                     continue;
 
                 result = gerber->Visit( inspector, testData, p );

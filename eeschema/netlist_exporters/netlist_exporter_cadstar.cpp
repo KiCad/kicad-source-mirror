@@ -41,13 +41,13 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
 {
     (void)aNetlistOptions;      //unused
     int ret = 0;
-    FILE* f = NULL;
+    FILE* f = nullptr;
 
-    if( ( f = wxFopen( aOutFileName, wxT( "wt" ) ) ) == NULL )
+    if( ( f = wxFopen( aOutFileName, wxT( "wt" ) ) ) == nullptr )
     {
         wxString msg;
         msg.Printf( _( "Failed to create file '%s'." ), aOutFileName );
-        DisplayError( NULL, msg );
+        DisplayError( nullptr, msg );
         return false;
     }
 

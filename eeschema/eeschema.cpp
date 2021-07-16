@@ -50,7 +50,7 @@
 #include <connection_graph.h>
 
 // The main sheet of the project
-SCH_SHEET*  g_RootSheet = NULL;
+SCH_SHEET*  g_RootSheet = nullptr;
 
 // a transform matrix, to display symbols in lib editor
 TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
@@ -123,7 +123,8 @@ static struct IFACE : public KIFACE_I
 
     void OnKifaceEnd() override;
 
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
+                            int aCtlBits = 0 ) override
     {
         switch( aClassId )
         {
@@ -167,17 +168,19 @@ static struct IFACE : public KIFACE_I
             return nullptr;
 
         default:
-            return NULL;
+            return nullptr;
         }
     }
 
     /**
-     * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this is to retrieve
-     * a pointer to a static instance of an interface, similar to how the KIFACE interface
-     * is exported.  But if you know what you are doing use it to retrieve anything you want.
+     * Return a pointer to the requested object.
+     *
+     * The safest way to use this is to retrieve a pointer to a static instance of an interface,
+     * similar to how the KIFACE interface is exported.  But if you know what you are doing use
+     * it to retrieve anything you want.
+     *
      * @param aDataId identifies which object you want the address of.
-     * @return void* - and must be cast into the know type.
+     * @return the object requested and must be cast into the know type.
      */
     void* IfaceOrAddress( int aDataId ) override
     {
@@ -186,11 +189,11 @@ static struct IFACE : public KIFACE_I
             case KIFACE_NETLIST_SCHEMATIC:
                 return (void*) generateSchematicNetlist;
         }
-        return NULL;
+
+        return nullptr;
     }
 
     /**
-     * Function SaveFileAs
      * Saving a file under a different name is delegated to the various KIFACEs because
      * the project doesn't know the internal format of the various files (which may have
      * paths in them that need updating).
@@ -247,7 +250,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     if( !fn.FileExists() )
     {
-        DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG fpDialog( NULL );
+        DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG fpDialog( nullptr );
 
         fpDialog.ShowModal();
     }
@@ -271,7 +274,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
                 "Please edit this global symbol library table in Preferences menu."
                 );
 
-            DisplayErrorMessage( NULL, msg, ioe.What() );
+            DisplayErrorMessage( nullptr, msg, ioe.What() );
         }
     }
 
@@ -283,6 +286,7 @@ void IFACE::OnKifaceEnd()
 {
     end_common();
 }
+
 
 static void traverseSEXPR( SEXPR::SEXPR* aNode,
                            const std::function<void( SEXPR::SEXPR* )>& aVisitor )
@@ -311,8 +315,10 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 
     destFile.SetPath( destPath );
 
-    if( ext == LegacySchematicFileExtension || ext == LegacySchematicFileExtension + BackupFileSuffix ||
-        ext == KiCadSchematicFileExtension || ext == KiCadSchematicFileExtension + BackupFileSuffix )
+    if( ext == LegacySchematicFileExtension ||
+        ext == LegacySchematicFileExtension + BackupFileSuffix ||
+        ext == KiCadSchematicFileExtension ||
+        ext == KiCadSchematicFileExtension + BackupFileSuffix )
     {
         if( destFile.GetName() == aProjectName )
             destFile.SetName( aNewProjectName  );
@@ -416,7 +422,8 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             wxString       uri = row.GetFullURI();
 
             uri.Replace( "/" + aProjectName + "-cache.lib", "/" + aNewProjectName + "-cache.lib" );
-            uri.Replace( "/" + aProjectName + "-rescue.lib", "/" + aNewProjectName + "-rescue.lib" );
+            uri.Replace( "/" + aProjectName + "-rescue.lib", "/" + aNewProjectName +
+                         "-rescue.lib" );
             uri.Replace( "/" + aProjectName + ".lib", "/" + aNewProjectName + ".lib" );
 
             row.SetFullURI( uri );

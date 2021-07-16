@@ -103,7 +103,7 @@ SCH_SYMBOL::SCH_SYMBOL( const wxPoint& aPos, SCH_ITEM* aParent ) :
 
 SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
                         const SCH_SHEET_PATH* aSheet, int unit, int convert, const wxPoint& pos ) :
-    SCH_ITEM( NULL, SCH_SYMBOL_T )
+    SCH_ITEM( nullptr, SCH_SYMBOL_T )
 {
     Init( pos );
 
@@ -741,7 +741,7 @@ SCH_FIELD* SCH_SYMBOL::FindField( const wxString& aFieldName, bool aIncludeDefau
             return &m_fields[i];
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -881,7 +881,7 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) const
 
 void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
 {
-    wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_SYMBOL_T),
+    wxCHECK_RET( (aItem != nullptr) && (aItem->Type() == SCH_SYMBOL_T),
                  wxT( "Cannot swap data with invalid symbol." ) );
 
     SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem;
@@ -1570,7 +1570,7 @@ bool SCH_SYMBOL::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
 
 wxPoint SCH_SYMBOL::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 {
-    wxCHECK_MSG( Pin != NULL && Pin->Type() == LIB_PIN_T, wxPoint( 0, 0 ),
+    wxCHECK_MSG( Pin != nullptr && Pin->Type() == LIB_PIN_T, wxPoint( 0, 0 ),
                  wxT( "Cannot get physical position of pin." ) );
 
     return m_transform.TransformCoordinate( Pin->GetPosition() ) + m_pos;
@@ -1611,7 +1611,7 @@ LIB_ITEM* SCH_SYMBOL::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
         return m_part->LocateDrawItem( m_unit, m_convert, aType, libPosition, m_transform );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 

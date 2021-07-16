@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,10 +50,10 @@ static double scale_list[SCALE_LIST_SIZE] =
     0.00001 * IU_PER_MILS,  // provided, but not used
 };
 
-/*
- * Function scale
- * converts a coordinate given in floating point to Gerbvies internal units
- * (currently = 10 nanometers)
+
+/**
+ * Convert a coordinate given in floating point to GerbView's internal units
+ * (currently = 10 nanometers).
  */
 int scaletoIU( double aCoord, bool isMetric )
 {
@@ -82,13 +82,14 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
     else
         pos = m_CurrentPos;
 
-    if( Text == NULL )
+    if( Text == nullptr )
         return pos;
 
     text = line;
+
     while( *Text )
     {
-        if( (*Text == 'X') || (*Text == 'Y') || (*Text == 'A') )
+        if( ( *Text == 'X' ) || ( *Text == 'Y' ) || ( *Text == 'A' ) )
         {
             type_coord = *Text;
             Text++;
@@ -97,12 +98,13 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
 
             while( IsNumber( *Text ) )
             {
-                if( *Text == '.' )  // Force decimat format if reading a floating point number
+                if( *Text == '.' )  // Force decimal format if reading a floating point number
                     is_float = true;
 
                 // count digits only (sign and decimal point are not counted)
                 if( (*Text >= '0') && (*Text <='9') )
                     nbdigits++;
+
                 *(text++) = *(Text++);
             }
 
@@ -156,9 +158,13 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
             }
 
             if( type_coord == 'X' )
+            {
                 pos.x = current_coord;
+            }
             else if( type_coord == 'Y' )
+            {
                 pos.y = current_coord;
+            }
             else if( type_coord == 'A' )
             {
                 m_ArcRadius = current_coord;
@@ -168,7 +174,9 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
             continue;
         }
         else
+        {
             break;
+        }
     }
 
     if( m_Relative )
@@ -182,10 +190,6 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
 }
 
 
-/* Returns the current coordinate type pointed to by InnJnn Text (InnnnJmmmm)
- * These coordinates are relative, so if coordinate is absent, its value
- * defaults to 0
- */
 wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
 {
     wxPoint pos( 0, 0 );
@@ -195,31 +199,34 @@ wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
     char*   text;
     char    line[256];
 
-    if( Text == NULL )
+    if( Text == nullptr )
         return pos;
 
     text = line;
+
     while( *Text )
     {
-        if( (*Text == 'I') || (*Text == 'J') )
+        if( ( *Text == 'I' ) || ( *Text == 'J' ) )
         {
             type_coord = *Text;
             Text++;
             text     = line;
             nbdigits = 0;
+
             while( IsNumber( *Text ) )
             {
                 if( *Text == '.' )
                     is_float = true;
 
                 // count digits only (sign and decimal point are not counted)
-                if( (*Text >= '0') && (*Text <='9') )
+                if( ( *Text >= '0' ) && ( *Text <= '9' ) )
                     nbdigits++;
 
                 *(text++) = *(Text++);
             }
 
             *text = 0;
+
             if( is_float )
             {
                 // When X or Y values are float numbers, they are given in mm or inches
@@ -230,13 +237,12 @@ wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
             }
             else
             {
-                int fmt_scale =
-                    (type_coord == 'I') ? m_FmtScale.x : m_FmtScale.y;
+                int fmt_scale = ( type_coord == 'I' ) ? m_FmtScale.x : m_FmtScale.y;
 
                 if( m_NoTrailingZeros )
                 {
-                    int min_digit =
-                        (type_coord == 'I') ? m_FmtLen.x : m_FmtLen.y;
+                    int min_digit = ( type_coord == 'I' ) ? m_FmtLen.x : m_FmtLen.y;
+
                     while( nbdigits < min_digit )
                     {
                         *(text++) = '0';
@@ -255,6 +261,7 @@ wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
 
                 current_coord = KiROUND( current_coord * real_scale );
             }
+
             if( type_coord == 'I' )
                 pos.x = current_coord;
             else if( type_coord == 'J' )
@@ -263,7 +270,9 @@ wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
             continue;
         }
         else
+        {
             break;
+        }
     }
 
     m_IJPos = pos;
@@ -277,13 +286,14 @@ wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
 // Helper functions:
 
 /**
- * Function ReadInt
- * reads an int from an ASCII character buffer.  If there is a comma after the
- * int, then skip over that.
- * @param text A reference to a character pointer from which bytes are read
- *    and the pointer is advanced for each byte read.
- * @param aSkipSeparator = true (default) to skip comma
- * @return int - The int read in.
+ * Read an integer from an ASCII character buffer.
+ *
+ * If there is a comma after the integer, then skip over that.
+ *
+ * @param text is a reference to a character pointer from which bytes are read
+ *        and the pointer is advanced for each byte read.
+ * @param aSkipSeparator set to true (default) to skip comma.
+ * @return The integer read in.
  */
 int ReadInt( char*& text, bool aSkipSeparator = true )
 {
@@ -298,7 +308,9 @@ int ReadInt( char*& text, bool aSkipSeparator = true )
         ret = 0;
     }
     else
+    {
         ret = (int) strtol( text, &text, 10 );
+    }
 
     if( *text == ',' || isspace( *text ) )
     {
@@ -311,13 +323,14 @@ int ReadInt( char*& text, bool aSkipSeparator = true )
 
 
 /**
- * Function ReadDouble
- * reads a double from an ASCII character buffer. If there is a comma after
- * the double, then skip over that.
- * @param text A reference to a character pointer from which the ASCII double
- *          is read from and the pointer advanced for each character read.
- * @param aSkipSeparator = true (default) to skip comma
- * @return double
+ * Read a double precision floating point number from an ASCII character buffer.
+ *
+ * If there is a comma after the number, then skip over that.
+ *
+ * @param text is a reference to a character pointer from which the ASCII double
+ *             is read from and the pointer advanced for each character read.
+ * @param aSkipSeparator set to true (default) to skip comma.
+ * @return number read.
  */
 double ReadDouble( char*& text, bool aSkipSeparator = true )
 {
@@ -332,7 +345,9 @@ double ReadDouble( char*& text, bool aSkipSeparator = true )
         ret = 0.0;
     }
     else
+    {
         ret = strtod( text, &text );
+    }
 
     if( *text == ',' || isspace( *text ) )
     {

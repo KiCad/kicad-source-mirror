@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,8 +38,6 @@ class SCH_SCREEN;
 class CADSTAR_SCH_ARCHIVE_PLUGIN : public SCH_PLUGIN
 {
 public:
-    //-----<PUBLIC SCH_PLUGIN API>-------------------------------------------------
-
     const wxString GetName() const override;
 
     void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
@@ -51,44 +49,10 @@ public:
     int GetModifyHash() const override;
 
     SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-            SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL ) override;
+                     SCH_SHEET* aAppendToMe = nullptr,
+                     const PROPERTIES* aProperties = nullptr ) override;
 
     bool CheckHeader( const wxString& aFileName ) override;
-
-
-    // unimplemented functions. Will trigger a not_implemented IO error.
-    //void SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties = NULL ) override;
-
-    //void Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
-    //           const PROPERTIES* aProperties = NULL ) override;
-
-    //void EnumerateSymbolLib( wxArrayString& aAliasNameList, const wxString& aLibraryPath,
-    //                         const PROPERTIES* aProperties = NULL ) override;
-
-    //LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-    //                      const PROPERTIES* aProperties = NULL ) override;
-
-    //void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-    //                 const PROPERTIES* aProperties = NULL ) override;
-
-    //void DeleteAlias( const wxString& aLibraryPath, const wxString& aAliasName,
-    //                  const PROPERTIES* aProperties = NULL ) override;
-
-    //void DeleteSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-    //                   const PROPERTIES* aProperties = NULL ) override;
-
-    //void CreateSymbolLib( const wxString& aLibraryPath,
-    //                      const PROPERTIES* aProperties = NULL ) override;
-
-    // bool DeleteSymbolLib( const wxString& aLibraryPath,
-    //                      const PROPERTIES* aProperties = NULL ) override;
-
-    //bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
-
-    //void SymbolLibOptions( PROPERTIES* aListToAppendTo ) const override;
-
-    //-----</PUBLIC SCH_PLUGIN API>------------------------------------------------
-
 
     CADSTAR_SCH_ARCHIVE_PLUGIN()
     {

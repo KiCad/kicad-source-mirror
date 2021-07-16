@@ -77,7 +77,7 @@ void D_CODE::Clear_D_CODE_Data()
     m_DrillShape = APT_DEF_NO_HOLE;
     m_InUse      = false;
     m_Defined    = false;
-    m_Macro      = NULL;
+    m_Macro      = nullptr;
     m_Rotation   = 0.0;
     m_EdgesCount = 0;
     m_Polygon.RemoveAllContours();
@@ -159,27 +159,29 @@ void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wx
 
     case APT_CIRCLE:
         radius = m_Size.x >> 1;
-        if( !aFilledShape )
-            GRCircle( aClipBox, aDC, aParent->GetABPosition(aShapePos), radius, 0, aColor );
-        else
-            if( m_DrillShape == APT_DEF_NO_HOLE )
-            {
-                GRFilledCircle( aClipBox, aDC, aParent->GetABPosition(aShapePos),
-                                radius, aColor );
-            }
-            else if( m_DrillShape == APT_DEF_ROUND_HOLE )    // round hole in shape
-            {
-                int width = (m_Size.x - m_Drill.x ) / 2;
-                GRCircle( aClipBox, aDC,  aParent->GetABPosition(aShapePos),
-                          radius - (width / 2), width, aColor );
-            }
-            else                            // rectangular hole
-            {
-                if( m_Polygon.OutlineCount() == 0 )
-                    ConvertShapeToPolygon();
 
-                DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
-            }
+        if( !aFilledShape )
+        {
+            GRCircle( aClipBox, aDC, aParent->GetABPosition(aShapePos), radius, 0, aColor );
+        }
+        else if( m_DrillShape == APT_DEF_NO_HOLE )
+        {
+            GRFilledCircle( aClipBox, aDC, aParent->GetABPosition(aShapePos), radius, aColor );
+        }
+        else if( m_DrillShape == APT_DEF_ROUND_HOLE )    // round hole in shape
+        {
+            int width = (m_Size.x - m_Drill.x ) / 2;
+            GRCircle( aClipBox, aDC,  aParent->GetABPosition(aShapePos),
+                      radius - (width / 2), width, aColor );
+        }
+        else                            // rectangular hole
+        {
+            if( m_Polygon.OutlineCount() == 0 )
+                ConvertShapeToPolygon();
+
+            DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
+        }
+
         break;
 
     case APT_RECT:
@@ -248,6 +250,7 @@ void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wx
             DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
         }
     }
+
     break;
 
     case APT_POLYGON:
@@ -334,7 +337,7 @@ void D_CODE::ConvertShapeToPolygon()
         // we create an horizontal oval shape. then rotate if needed
         if( m_Size.x > m_Size.y )   // horizontal oval
         {
-            delta  = (m_Size.x - m_Size.y) / 2;
+            delta = ( m_Size.x - m_Size.y ) / 2;
             radius = m_Size.y / 2;
         }
         else   // vertical oval
@@ -374,6 +377,7 @@ void D_CODE::ConvertShapeToPolygon()
 
         addHoleToPolygon( &m_Polygon, m_DrillShape, m_Drill, initialpos );
     }
+
     break;
 
     case APT_POLYGON:

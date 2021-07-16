@@ -475,7 +475,7 @@ SCH_EDIT_FRAME* DIALOG_EDIT_SYMBOLS_LIBID::GetParent()
 
 
 void DIALOG_EDIT_SYMBOLS_LIBID::AddRowToGrid( bool aMarkRow, const wxString& aReferences,
-                                                 const wxString& aStrLibId )
+                                              const wxString& aStrLibId )
 {
     int row = m_grid->GetNumberRows();
 
@@ -634,8 +634,9 @@ void DIALOG_EDIT_SYMBOLS_LIBID::onClickOrphansButton( wxCommandEvent& event )
                         m_grid->GetCellValue( grid_row_idx, COL_CURR_LIBID ) );
 
             wxSingleChoiceDialog dlg ( this, msg,
-                wxString::Format( _( "Candidates count %d " ), libIdCandidateCount ),
-                candidateSymbNames );
+                                       wxString::Format( _( "Candidates count %d " ),
+                                                         libIdCandidateCount ),
+                                       candidateSymbNames );
 
             if( dlg.ShowModal() == wxID_OK )
                 m_grid->SetCellValue( grid_row_idx, COL_NEW_LIBID, dlg.GetStringSelection() );
@@ -649,7 +650,9 @@ void DIALOG_EDIT_SYMBOLS_LIBID::onClickOrphansButton( wxCommandEvent& event )
                                         (unsigned) m_OrphansRowIndexes.size() - fixesCount ) );
     }
     else
+    {
         wxMessageBox( wxString::Format( _( "All %u link(s) resolved" ), fixesCount ) );
+    }
 }
 
 
@@ -658,7 +661,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::setLibIdByBrowser( int aRow )
 #if 0
     // Use dialog symbol selector to choose a symbol
     SCH_BASE_FRAME::HISTORY_LIST dummy;
-    SCH_BASE_FRAME::PICKED_SYMBOL sel = m_frame->SelectComponentFromLibrary( NULL, dummy, true,
+    SCH_BASE_FRAME::PICKED_SYMBOL sel = m_frame->SelectComponentFromLibrary( nullptr, dummy, true,
                                                                              0, 0, false );
 #else
     // Use library viewer to choose a symbol
@@ -671,7 +674,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::setLibIdByBrowser( int aRow )
     if( !current.IsEmpty() )
         preselected.Parse( current, true );
 
-    PICKED_SYMBOL sel = GetParent()->PickSymbolFromLibBrowser( this, NULL, preselected, 0, 0 );
+    PICKED_SYMBOL sel = GetParent()->PickSymbolFromLibBrowser( this, nullptr, preselected, 0, 0 );
 #endif
 
     if( sel.LibId.empty() )     // command aborted
@@ -764,7 +767,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
                                                   false, /* update ref */
                                                   false, /* update other fields */
                                                   false, /* reset ref */
-                                                  true /* reset other fields */ );
+                                                  true   /* reset other fields */ );
             }
         }
     }
@@ -829,8 +832,8 @@ bool InvokeDialogEditSymbolsLibId( SCH_EDIT_FRAME* aCaller )
     // quasimodal mode for the quasimodal frame support to work.  So don't use
     // the QUASIMODAL macros here.
     DIALOG_EDIT_SYMBOLS_LIBID dlg( aCaller );
-    // DO NOT use ShowModal() here, otherwise the library browser will not work
-    // properly.
+
+    // DO NOT use ShowModal() here, otherwise the library browser will not work properly.
     dlg.ShowQuasiModal();
 
     return dlg.IsSchematicModified();

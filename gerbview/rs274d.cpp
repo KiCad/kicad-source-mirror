@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@
  *   D01 = activating light (pen down) when placement
  *   D02 = light extinction (pen up) when placement
  *   D03 = Flash
- *   D09 = VAPE Flash (I never see this command in gerber file)
+ *   D09 = VAPE Flash (I never see this command in Gerber file)
  *   D51 = G54 preceded by -> Select VAPE
  *
  * D10 ... D999 = Identification Tool: tool selection
@@ -86,16 +86,15 @@
 
 
 /**
- * Function fillFlashedGBRITEM
- * initializes a given GBRITEM so that it can draw a circle which is filled and
+ * Initializes a given GBRITEM so that it can draw a circle which is filled and
  * has no pen border.
  *
  * @param aGbrItem The GBRITEM to fill in.
- * @param aAperture the associated type of aperture
- * @param Dcode_index The DCODE value, like D14
- * @param aPos The center point of the flash
- * @param aSize The diameter of the round flash
- * @param aLayerNegative = true if the current layer is negative
+ * @param aAperture the associated type of aperture.
+ * @param Dcode_index The DCODE value, like D14.
+ * @param aPos The center point of the flash.
+ * @param aSize The diameter of the round flash.
+ * @param aLayerNegative set to true if the current layer is negative.
  */
 void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                           APERTURE_T        aAperture,
@@ -142,22 +141,21 @@ void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
 
 
 /**
- * Function fillLineGBRITEM
- * initializes a given GBRITEM so that it can draw a linear D code.
+ * Initialize a given GBRITEM so that it can draw a linear D code.
  *
  * @param aGbrItem The GERBER_DRAW_ITEM to fill in.
- * @param Dcode_index The DCODE value, like D14
- * @param aStart The starting point of the line
- * @param aEnd The ending point of the line
+ * @param Dcode_index The DCODE value, like D14.
+ * @param aStart The starting point of the line.
+ * @param aEnd The ending point of the line.
  * @param aPenSize The size of the flash. Note rectangular shapes are legal.
- * @param aLayerNegative = true if the current layer is negative
+ * @param aLayerNegative set to true if the current layer is negative.
  */
 void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
-                              int               Dcode_index,
-                              const wxPoint&    aStart,
-                              const wxPoint&    aEnd,
-                              wxSize            aPenSize,
-                              bool              aLayerNegative  )
+                       int               Dcode_index,
+                       const wxPoint&    aStart,
+                       const wxPoint&    aEnd,
+                       wxSize            aPenSize,
+                       bool              aLayerNegative )
 {
     aGbrItem->m_Flashed = false;
 
@@ -174,38 +172,36 @@ void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
 
 
 /**
- * Function fillArcGBRITEM
- * initializes a given GBRITEM so that it can draw an arc G code.
- * <p>
- * if multiquadrant == true : arc can be 0 to 360 degrees
+ * Initialize a given GBRITEM so that it can draw an arc G code.
+ *
+ * If multiquadrant == true : arc can be 0 to 360 degrees
  *   and \a rel_center is the center coordinate relative to start point.
- * <p>
- * if multiquadrant == false arc can be only 0 to 90 deg,
+ *
+ * If multiquadrant == false arc can be only 0 to 90 deg,
  *     and only in the same quadrant :
  * <ul>
  * <li> absolute angle 0 to 90 (quadrant 1) or
  * <li> absolute angle 90 to 180 (quadrant 2) or
  * <li> absolute angle 180 to 270 (quadrant 3) or
  * <li> absolute angle 270 to 0 (quadrant 4)
- * </ul><p>
+ * </ul>
+ *
  * @param aGbrItem is the GBRITEM to fill in.
- * @param Dcode_index is the DCODE value, like D14
- * @param aStart is the starting point
- * @param aEnd is the ending point
+ * @param Dcode_index is the DCODE value, like D14.
+ * @param aStart is the starting point.
+ * @param aEnd is the ending point.
  * @param aRelCenter is the center coordinate relative to start point,
  *   given in ABSOLUTE VALUE and the sign of values x et y de rel_center
  *   must be calculated from the previously given constraint: arc only in the same quadrant.
  * @param aClockwise true if arc must be created clockwise
  * @param aPenSize The size of the flash. Note rectangular shapes are legal.
- * @param aMultiquadrant = true to create arcs upto 360 deg,
+ * @param aMultiquadrant set to true to create arcs up to 360 degrees,
  *                      false when arc is inside one quadrant
- * @param aLayerNegative = true if the current layer is negative
+ * @param aLayerNegative set to true if the current layer is negative.
  */
-void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index,
-                      const wxPoint& aStart, const wxPoint& aEnd,
-                      const wxPoint& aRelCenter, wxSize aPenSize,
-                      bool aClockwise, bool aMultiquadrant,
-                      bool aLayerNegative  )
+void fillArcGBRITEM( GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, const wxPoint& aStart,
+                     const wxPoint& aEnd, const wxPoint& aRelCenter, wxSize aPenSize,
+                     bool aClockwise, bool aMultiquadrant, bool aLayerNegative  )
 {
     wxPoint center, delta;
 
@@ -217,7 +213,9 @@ void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index,
         aGbrItem->SetNetAttributes( aGbrItem->m_GerberImageFile->m_NetAttributeDict );
 
     if( aMultiquadrant )
+    {
         center = aStart + aRelCenter;
+    }
     else
     {
         // in single quadrant mode the relative coordinate aRelCenter is always >= 0
@@ -239,39 +237,39 @@ void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index,
          */
         if( (delta.x >= 0) && (delta.y >= 0) )
         {
-        /* Quadrant 1 (trigo or cclockwise):
-         *  C | E
-         * ---S---
-         *  3 | 4
-         */
+            /* Quadrant 1 (trigo or cclockwise):
+             *  C | E
+             * ---S---
+             *  3 | 4
+             */
             center.x = -center.x;
         }
         else if( (delta.x >= 0) && (delta.y < 0) )
         {
-        /* Quadrant 4 (trigo or cclockwise):
-         *  2 | C
-         * ---S---
-         *  3 | E
-         */
-        // Nothing to do
+            /* Quadrant 4 (trigo or cclockwise):
+             *  2 | C
+             * ---S---
+             *  3 | E
+             */
+            // Nothing to do
         }
         else if( (delta.x < 0) && (delta.y >= 0) )
         {
-        /* Quadrant 2 (trigo or cclockwise):
-         *  E | 1
-         * ---S---
-         *  C | 4
-         */
+            /* Quadrant 2 (trigo or cclockwise):
+             *  E | 1
+             * ---S---
+             *  C | 4
+             */
             center.x = -center.x;
             center.y = -center.y;
         }
         else
         {
-        /* Quadrant 3 (trigo or cclockwise):
-         *  2 | 1
-         * ---S---
-         *  E | C
-         */
+            /* Quadrant 3 (trigo or cclockwise):
+             *  2 | 1
+             * ---S---
+             *  E | C
+             */
             center.y = -center.y;
         }
 
@@ -302,48 +300,44 @@ void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index,
 
 
 /**
- * Function fillArcPOLY
- * creates an arc G code when found in poly outlines.
- * <p>
- * if multiquadrant == true : arc can be 0 to 360 degrees
- *   and \a rel_center is the center coordinate relative to start point.
- * <p>
- * if multiquadrant == false arc can be only 0 to 90 deg,
- *     and only in the same quadrant :
+ * Create an arc G code when found in polygon outlines.
+ *
+ * If multiquadrant == true : arc can be 0 to 360 degrees and \a rel_center is the center
+ * coordinate relative to start point.  If not multiquadrant, the arc can be only 0 to 90 deg,
+ * and only in the same quadrant:
+ *
  * <ul>
  * <li> absolute angle 0 to 90 (quadrant 1) or
  * <li> absolute angle 90 to 180 (quadrant 2) or
  * <li> absolute angle 180 to 270 (quadrant 3) or
  * <li> absolute angle 270 to 0 (quadrant 4)
- * </ul><p>
+ * </ul>
+ *
  * @param aGbrItem is the GBRITEM to fill in.
- * @param aStart is the starting point
- * @param aEnd is the ending point
+ * @param aStart is the starting point.
+ * @param aEnd is the ending point.
  * @param rel_center is the center coordinate relative to start point,
  *   given in ABSOLUTE VALUE and the sign of values x et y de rel_center
  *   must be calculated from the previously given constraint: arc only in the
  * same quadrant.
  * @param aClockwise true if arc must be created clockwise
- * @param aMultiquadrant = true to create arcs upto 360 deg,
- *                      false when arc is inside one quadrant
- * @param aLayerNegative = true if the current layer is negative
+ * @param aMultiquadrant set to true to create arcs up to 360 deg or
+ *                       false when arc is inside one quadrant
+ * @param aLayerNegative set to true if the current layer is negative
  */
-static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
-                          const wxPoint& aStart, const wxPoint& aEnd,
-                          const wxPoint& rel_center,
-                          bool aClockwise, bool aMultiquadrant,
-                          bool aLayerNegative  )
+static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const wxPoint& aStart, const wxPoint& aEnd,
+                          const wxPoint& rel_center, bool aClockwise, bool aMultiquadrant,
+                          bool aLayerNegative )
 {
     /* in order to calculate arc parameters, we use fillArcGBRITEM
      * so we muse create a dummy track and use its geometric parameters
      */
-    static GERBER_DRAW_ITEM dummyGbrItem( NULL );
+    static GERBER_DRAW_ITEM dummyGbrItem( nullptr );
 
     aGbrItem->SetLayerPolarity( aLayerNegative );
 
-    fillArcGBRITEM(  &dummyGbrItem, 0,
-                     aStart, aEnd, rel_center, wxSize(0, 0),
-                     aClockwise, aMultiquadrant, aLayerNegative );
+    fillArcGBRITEM( &dummyGbrItem, 0, aStart, aEnd, rel_center, wxSize( 0, 0 ),
+                    aClockwise, aMultiquadrant, aLayerNegative );
 
     aGbrItem->SetNetAttributes( aGbrItem->m_GerberImageFile->m_NetAttributeDict );
 
@@ -371,6 +365,7 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
         end_angle += 3600;
 
     double arc_angle = start_angle - end_angle;
+
     // Approximate arc by 36 segments per 360 degree
     const int increment_angle = 3600 / 36;
     int count = std::abs( arc_angle / increment_angle );
@@ -385,13 +380,14 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
     {
         double rot;
         wxPoint end_arc = start;
+
         if( aClockwise )
-            rot = ii * increment_angle; // rot is in 0.1 deg
+            rot = ii * increment_angle;              // rot is in 0.1 deg
         else
-            rot = (count - ii) * increment_angle; // rot is in 0.1 deg
+            rot = ( count - ii ) * increment_angle;  // rot is in 0.1 deg
 
         if( ii < count )
-                RotatePoint( &end_arc, -rot );
+            RotatePoint( &end_arc, -rot );
         else    // last point
             end_arc = aClockwise ? end : start;
 
@@ -400,18 +396,18 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
 }
 
 
-/* Read the Gnn sequence and returns the value nn.
- */
 int GERBER_FILE_IMAGE::GCodeNumber( char*& Text )
 {
     int   ii = 0;
     char* text;
     char  line[1024];
 
-    if( Text == NULL )
+    if( Text == nullptr )
         return 0;
+
     Text++;
     text = line;
+
     while( IsNumber( *Text ) )
     {
         *(text++) = *(Text++);
@@ -423,19 +419,18 @@ int GERBER_FILE_IMAGE::GCodeNumber( char*& Text )
 }
 
 
-/* Get the sequence Dnn and returns the value nn
- */
 int GERBER_FILE_IMAGE::DCodeNumber( char*& Text )
 {
     int   ii = 0;
     char* text;
     char  line[1024];
 
-    if( Text == NULL )
+    if( Text == nullptr )
         return 0;
 
     Text++;
     text = line;
+
     while( IsNumber( *Text ) )
         *(text++) = *(Text++);
 
@@ -447,12 +442,9 @@ int GERBER_FILE_IMAGE::DCodeNumber( char*& Text )
 
 bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
 {
-//    D( printf( "%22s: G_CODE<%d>\n", __func__, G_command ); )
-
     switch( G_command )
     {
-    case GC_PHOTO_MODE:     // can starts a D03 flash command: redundant, can
-                            // be safely ignored
+    case GC_PHOTO_MODE:     // can starts a D03 flash command: redundant, can be safely ignored.
         break;
 
     case GC_LINEAR_INTERPOL_1X:
@@ -474,6 +466,7 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
         if( strncmp( text, " #@! ", 5 ) == 0 )
         {
             text += 5;
+
             // The string starting at text is the same as the X2 attribute,
             // but a X2 attribute ends by '%'. So we build the X2 attribute string
             std::string x2buf;
@@ -483,17 +476,19 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
                 x2buf += *text;
                 text++;
             }
+
             // add the end of X2 attribute string
             x2buf += "*%";
             x2buf += '\0';
 
             char* cptr = (char*)x2buf.data();
             int code_command = ReadXCommandID( cptr );
-            ExecuteRS274XCommand( code_command, NULL, 0, cptr );
+            ExecuteRS274XCommand( code_command, nullptr, 0, cptr );
         }
 
         while( *text && (*text != '*') )
             text++;
+
         break;
 
     case GC_SELECT_TOOL:
@@ -502,8 +497,10 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
 
         if( D_commande < FIRST_DCODE )
             return false;
+
         if( D_commande > (TOOLS_MAX_COUNT - 1) )
             D_commande = TOOLS_MAX_COUNT - 1;
+
         m_Current_Tool = D_commande;
         D_CODE* pt_Dcode = GetDCODE( D_commande );
 
@@ -557,6 +554,7 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
 
             StepAndRepeatItem( *gbritem );
         }
+
         m_Exposure = false;
         m_PolygonFillMode = false;
         m_PolygonFillModeState = 0;
@@ -586,7 +584,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
     GERBER_DRAW_ITEM* gbritem;
 
     int      dcode = 0;
-    D_CODE*  tool  = NULL;
+    D_CODE*  tool  = nullptr;
     wxString msg;
 
     if( D_commande >= FIRST_DCODE )  // This is a "Set tool" command
@@ -643,6 +641,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 if( !m_AsArcG74G75Cmd )
                 {
                     AddMessageToList( _( "Invalid Gerber file: missing G74 or G75 arc command" ) );
+
                     // Disable further warning messages:
                     m_AsArcG74G75Cmd = true;
                 }
@@ -659,6 +658,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 gbritem = GetLastItemInList();
 
                 gbritem->m_Start = m_PreviousPos;       // m_Start is used as temporary storage
+
                 if( gbritem->m_Polygon.OutlineCount() == 0 )
                 {
                     gbritem->m_Polygon.NewOutline();
@@ -681,6 +681,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 gbritem->m_Polygon.Append( gbritem->m_Polygon.CVertex( 0 ) );
                 StepAndRepeatItem( *gbritem );
             }
+
             m_Exposure    = false;
             m_PreviousPos = m_CurrentPos;
             m_PolygonFillModeState = 0;
@@ -757,6 +758,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 
         case 3:     // code D3: flash aperture
             tool = GetDCODE( m_Current_Tool );
+
             if( tool )
             {
                 size     = tool->m_Size;

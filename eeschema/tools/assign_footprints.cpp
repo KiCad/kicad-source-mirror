@@ -129,7 +129,7 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
 
     FILE* cmpFile = wxFopen( aFullFilename, wxT( "rt" ) );
 
-    if( cmpFile == NULL )
+    if( cmpFile == nullptr )
         return false;
 
     // cmpFileReader dtor will close cmpFile

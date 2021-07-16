@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,14 +27,11 @@
 
 #include "dcode_selection_box.h"
 
-/*******************************************/
-/* Helper class for displaying DCodes list */
-/*******************************************/
 
 DCODE_SELECTION_BOX::DCODE_SELECTION_BOX( wxAuiToolBar* aParent, wxWindowID aId,
                                           const wxPoint& aLocation, const wxSize& aSize,
                                           const wxArrayString* aChoices ) :
-    wxComboBox( aParent, aId, wxEmptyString, aLocation, aSize, 0, NULL, wxCB_READONLY )
+    wxComboBox( aParent, aId, wxEmptyString, aLocation, aSize, 0, nullptr, wxCB_READONLY )
 {
     if( aChoices )
         // Append aChoices here is by far faster than use aChoices inside
@@ -59,7 +56,7 @@ int DCODE_SELECTION_BOX::GetSelectedDCodeId()
         wxString msg = GetString( ii ).AfterFirst( ' ' ).BeforeFirst( ' ' );
         long id;
 
-        if( msg.ToLong(&id) )
+        if( msg.ToLong( &id ) )
             return id;
     }
 
@@ -67,9 +64,6 @@ int DCODE_SELECTION_BOX::GetSelectedDCodeId()
 }
 
 
-/* SetDCodeSelection
- * aDCodeId = the DCode Id to select or <= 0 to select "no selection"
- */
 void DCODE_SELECTION_BOX::SetDCodeSelection( int aDCodeId )
 {
     wxString msg;

@@ -121,7 +121,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     }
 
     createProjectSymbolLibTable( m_messagePanel->Reporter() );
-    Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
+    Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, nullptr );
     Prj().SchSymbolLibTable();
 
     remapSymbolsToLibTable( m_messagePanel->Reporter() );
@@ -133,7 +133,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     SYMBOL_LIBS::LibNamesAndPaths( &Prj(), true, &paths, &libNames );
 
     // Reload the cache symbol library.
-    Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, NULL );
+    Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
     Prj().SchLibs();
 
     Raise();
@@ -283,7 +283,7 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
 
 bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_SYMBOL* aSymbol )
 {
-    wxCHECK_MSG( aSymbol != NULL, false, "Null pointer passed to remapSymbolToLibTable." );
+    wxCHECK_MSG( aSymbol != nullptr, false, "Null pointer passed to remapSymbolToLibTable." );
     wxCHECK_MSG( aSymbol->GetLibId().GetLibNickname().empty(), false,
                  "Cannot remap symbol that is already mapped." );
     wxCHECK_MSG( !aSymbol->GetLibId().GetLibItemName().empty(), false,

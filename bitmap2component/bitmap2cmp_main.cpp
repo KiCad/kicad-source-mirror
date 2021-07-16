@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 jean-pierre.charras
- * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,15 +30,14 @@
 #include <settings/settings_manager.h>
 
 
-//-----<KIFACE>-----------------------------------------------------------------
-
 namespace BMP2CMP {
 
 static struct IFACE : public KIFACE_I
 {
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
 
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
+                            int aCtlBits = 0 ) override
     {
         InitSettings( new BITMAP2CMP_SETTINGS );
         Pgm().GetSettingsManager().RegisterSettings( KifaceSettings() );
@@ -46,19 +45,18 @@ static struct IFACE : public KIFACE_I
     }
 
     /**
-     * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this
-     * is to retrieve a pointer to a static instance of an interface, similar to
-     * how the KIFACE interface is exported.  But if you know what you are doing
-     * use it to retrieve anything you want.
+     * Return a pointer to the requested object.
+     *
+     * The safest way to use this is to retrieve a pointer to a static instance of an interface,
+     * similar to how the KIFACE interface is exported.  But if you know what you are doing use
+     * it to retrieve anything you want.
      *
      * @param aDataId identifies which object you want the address of.
-     *
-     * @return void* - and must be cast into the know type.
+     * @return the object which must be cast into the known type.
      */
     void* IfaceOrAddress( int aDataId ) override
     {
-        return NULL;
+        return nullptr;
     }
 
     IFACE( const char* aDSOname, KIWAY::FACE_T aType ) :
@@ -72,6 +70,7 @@ static struct IFACE : public KIFACE_I
 using namespace BMP2CMP;
 
 static PGM_BASE* process;
+
 
 KIFACE_I& Kiface()
 {

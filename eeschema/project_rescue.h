@@ -82,7 +82,7 @@ public:
      * Get the part that can be loaded from the project cache, if possible, or
      * else NULL.
      */
-    virtual LIB_SYMBOL* GetCacheCandidate() const { return NULL; }
+    virtual LIB_SYMBOL* GetCacheCandidate() const { return nullptr; }
 
     /**
      * Get the part the would be loaded from the libraries, if possible, or else
@@ -138,7 +138,7 @@ public:
     RESCUE_CASE_CANDIDATE( const wxString& aRequestedName, const wxString& aNewName,
                            LIB_SYMBOL* aLibCandidate, int aUnit = 0, int aConvert = 0 );
 
-    RESCUE_CASE_CANDIDATE() { m_lib_candidate = NULL; }
+    RESCUE_CASE_CANDIDATE() { m_lib_candidate = nullptr; }
 
     virtual wxString GetActionDescription() const override;
 

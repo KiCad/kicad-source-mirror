@@ -60,7 +60,7 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
 
     // Do not display the grid: the look is not good for a small canvas area.
     // But mainly, due to some strange bug I (JPC) was unable to fix, the grid creates
-    // strange artifacts on Windows when eeschema is run from Kicad manager (but not in
+    // strange artifacts on Windows when Eeschema is run from KiCad manager (but not in
     // stand alone...).
     m_preview->GetGAL()->SetGridVisibility( false );
 
@@ -105,7 +105,7 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
     SetSizer( m_outerSizer );
     Layout();
 
-    Connect( wxEVT_SIZE, wxSizeEventHandler( SYMBOL_PREVIEW_WIDGET::onSize ), NULL, this );
+    Connect( wxEVT_SIZE, wxSizeEventHandler( SYMBOL_PREVIEW_WIDGET::onSize ), nullptr, this );
 }
 
 
@@ -206,7 +206,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
 
         view->Add( m_previewItem );
 
-        // Get the symbole size, in internal units
+        // Get the symbol size, in internal units
         m_itemBBox = m_previewItem->GetUnitBoundingBox( settings->m_ShowUnit,
                                                         settings->m_ShowConvert );
 
@@ -241,7 +241,9 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aCo
         m_previewItem = new LIB_SYMBOL( *aSymbol );
 
         // For symbols having a De Morgan body style, use the first style
-        auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+        auto settings =
+                static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+
         // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
         // draw all of them.)
         settings->m_ShowUnit = ( m_previewItem->IsMulti() && aUnit == 0 ) ? 1 : aUnit;
@@ -251,7 +253,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aCo
 
         view->Add( m_previewItem );
 
-        // Get the symbole size, in internal units
+        // Get the symbol size, in internal units
         m_itemBBox = aSymbol->GetUnitBoundingBox( settings->m_ShowUnit, settings->m_ShowConvert );
 
         // Calculate the draw scale to fit the drawing area

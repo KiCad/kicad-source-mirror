@@ -88,7 +88,7 @@ static void getSymbols( SCHEMATIC* aSchematic, std::vector<SCH_SYMBOL*>& aSymbol
  */
 static LIB_SYMBOL* findSymbol( const wxString& aName, SYMBOL_LIBS* aLibs, bool aCached )
 {
-    LIB_SYMBOL *symbol = NULL;
+    LIB_SYMBOL *symbol = nullptr;
     wxString new_name = LIB_ID::FixIllegalChars( aName, false );
 
     for( SYMBOL_LIB& each_lib : *aLibs )
@@ -233,8 +233,8 @@ RESCUE_CACHE_CANDIDATE::RESCUE_CACHE_CANDIDATE( const wxString& aRequestedName,
 
 RESCUE_CACHE_CANDIDATE::RESCUE_CACHE_CANDIDATE()
 {
-    m_cache_candidate = NULL;
-    m_lib_candidate = NULL;
+    m_cache_candidate = nullptr;
+    m_lib_candidate = nullptr;
 }
 
 
@@ -359,8 +359,8 @@ RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::RESCUE_SYMBOL_LIB_TABLE_CANDIDATE(
 
 RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::RESCUE_SYMBOL_LIB_TABLE_CANDIDATE()
 {
-    m_cache_candidate = NULL;
-    m_lib_candidate = NULL;
+    m_cache_candidate = nullptr;
+    m_lib_candidate = nullptr;
 }
 
 
@@ -729,7 +729,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     boost::ptr_vector<SYMBOL_LIB> libsSave;
     libsSave.transfer( libsSave.end(), libs->begin(), libs->end(), *libs );
 
-    m_prj->SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, NULL );
+    m_prj->SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
 
     libs = new SYMBOL_LIBS();
 
@@ -843,7 +843,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     }
 
     // Relaod the symbol library table.
-    m_prj->SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
+    m_prj->SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, nullptr );
 
     // This can only happen if the symbol library table file was corrupted on write.
     if( !m_prj->SchSymbolLibTable() )

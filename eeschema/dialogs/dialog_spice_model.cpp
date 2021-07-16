@@ -247,21 +247,19 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
 
         switch( m_pasType->GetSelection() )
         {
-            case 0: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_RESISTOR; break;
-            case 1: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_CAPACITOR; break;
-            case 2: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_INDUCTOR; break;
+        case 0: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_RESISTOR; break;
+        case 1: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_CAPACITOR; break;
+        case 2: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_INDUCTOR; break;
 
-            default:
-                wxASSERT_MSG( false, "Unhandled passive type" );
-                return false;
-                break;
+        default:
+            wxASSERT_MSG( false, "Unhandled passive type" );
+            return false;
+            break;
         }
 
         m_fieldsTmp[SF_MODEL] = m_pasValue->GetValue();
     }
-
-    // Model
-    else if( page == m_model )
+    else if( page == m_model )    // Model
     {
         if( !m_model->Validate() )
             return false;
@@ -656,7 +654,7 @@ bool DIALOG_SPICE_MODEL::parsePowerSource( const wxString& aModel )
 }
 
 
-bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
+bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget )
 {
     wxString acdc, trans;
     wxWindow* page = m_powerNotebook->GetCurrentPage();
@@ -677,7 +675,7 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
     }
     catch( ... )
     {
-        DisplayError( NULL, wxT( "Invalid DC value" ) );
+        DisplayError( this, wxT( "Invalid DC value" ) );
         return false;
     }
 
@@ -695,7 +693,7 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
     }
     catch( ... )
     {
-        DisplayError( NULL, wxT( "Invalid AC magnitude or phase" ) );
+        DisplayError( this, wxT( "Invalid AC magnitude or phase" ) );
         return false;
     }
 
@@ -839,6 +837,7 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
 {
     //First, expand env vars, if any
     wxString libname = ExpandEnvVarSubstitutions( aFilePath, &Prj() );
+
     // Make path absolute, especially if it is relative to the project path
     libname = Prj().AbsolutePath( libname );
 
@@ -848,7 +847,7 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
     bool in_subckt = false;        // flag indicating that the parser is inside a .subckt section
 
     if( !filePath.Exists() )
-            return;
+        return;
 
     // Display the library contents
     wxWindowUpdateLocker updateLock( this );
@@ -889,7 +888,6 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
                 if( type != SP_UNKNOWN )
                     m_models.emplace( name, MODEL( line_nr, type ) );
             }
-
             else if( token == ".subckt" )
             {
                 wxASSERT( !in_subckt );
@@ -902,7 +900,6 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
 
                 m_models.emplace( name, MODEL( line_nr, SP_SUBCKT ) );
             }
-
             else if( token == ".ends" )
             {
                 wxASSERT( in_subckt );
@@ -944,9 +941,10 @@ SCH_FIELD& DIALOG_SPICE_MODEL::getSchField( int aFieldType )
             NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( (SPICE_FIELD) aFieldType );
 
     auto fieldIt = std::find_if( m_schfields->begin(), m_schfields->end(),
-                                 [&]( const SCH_FIELD& f ) {
-        return f.GetName() == spiceField;
-    } );
+                                 [&]( const SCH_FIELD& f )
+                                 {
+                                     return f.GetName() == spiceField;
+                                 } );
 
     // Found one, so return it
     if( fieldIt != m_schfields->end() )
@@ -1014,6 +1012,7 @@ void DIALOG_SPICE_MODEL::onSelectLibrary( wxCommandEvent& event )
 {
     //First, expand env vars, if any, in lib path
     wxString libname = ExpandEnvVarSubstitutions( m_modelLibrary->GetValue(), &Prj() );
+
     // Make path absolute, especially if it is relative to the project path
     libname = Prj().AbsolutePath( libname );
 
@@ -1024,7 +1023,7 @@ void DIALOG_SPICE_MODEL::onSelectLibrary( wxCommandEvent& event )
 
     wxString     wildcards = SpiceLibraryFileWildcard() + "|" + AllFilesWildcard();
     wxFileDialog openDlg( this, _( "Select library" ), searchPath, "", wildcards,
-            wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( openDlg.ShowModal() == wxID_CANCEL )
         return;

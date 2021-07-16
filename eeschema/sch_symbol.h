@@ -78,7 +78,7 @@ extern std::string toUTFTildaText( const wxString& txt );
 class SCH_SYMBOL : public SCH_ITEM
 {
 public:
-    SCH_SYMBOL( const wxPoint& pos = wxPoint( 0, 0 ), SCH_ITEM* aParent = NULL );
+    SCH_SYMBOL( const wxPoint& pos = wxPoint( 0, 0 ), SCH_ITEM* aParent = nullptr );
 
     /**
      * Create schematic symbol from library symbol object.

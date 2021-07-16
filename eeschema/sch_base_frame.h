@@ -73,7 +73,7 @@ class SYMBOL_EDITOR_SETTINGS;
  * @return The symbol found in the library or NULL if the symbol was not found.
  */
 LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
-                             SYMBOL_LIB* aCacheLib = NULL, wxWindow* aParent = NULL,
+                             SYMBOL_LIB* aCacheLib = nullptr, wxWindow* aParent = nullptr,
                              bool aShowErrorMsg = false );
 
 /**

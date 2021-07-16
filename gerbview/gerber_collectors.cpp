@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,14 +28,11 @@ const KICAD_T GERBER_COLLECTOR::AllItems[] = {
 
 
 /**
- * Function Inspect
- * is the examining function within the INSPECTOR which is passed to the
- * Iterate function.
+ * The examining function within the INSPECTOR which is passed to the iterate function.
  *
- * @param testItem An EDA_ITEM to examine.
- * @param testData not used here.
- * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
- *   else SCAN_CONTINUE;
+ * @param testItem is an EDA_ITEM to examine.
+ * @param testData is not used here.
+ * @return SEARCH_QUIT if the iterator is to stop the scan, else SCAN_CONTINUE.
  */
 SEARCH_RESULT GERBER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
@@ -60,7 +57,7 @@ void GERBER_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aScanList[],
     // the Inspect() function.
     SetRefPos( aRefPos );
 
-    aItem->Visit( m_inspector, NULL, m_scanTypes );
+    aItem->Visit( m_inspector, nullptr, m_scanTypes );
 
     // record the length of the primary list before concatenating on to it.
     m_PrimaryLength = m_list.size();

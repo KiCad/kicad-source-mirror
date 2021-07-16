@@ -48,14 +48,14 @@ LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int idfield ) :
 
 
 LIB_FIELD::LIB_FIELD( int idfield ) :
-    LIB_ITEM( LIB_FIELD_T, NULL )
+    LIB_ITEM( LIB_FIELD_T, nullptr )
 {
     Init( idfield );
 }
 
 
 LIB_FIELD::LIB_FIELD( int aID, const wxString& aName ) :
-    LIB_ITEM( LIB_FIELD_T, NULL )
+    LIB_ITEM( LIB_FIELD_T, nullptr )
 {
     Init( aID );
     m_name = aName;
@@ -402,9 +402,7 @@ void LIB_FIELD::SetName( const wxString& aName )
 
 wxString LIB_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( "%s '%s'",
-                             GetName(),
-                             ShortenedShownText() );
+    return wxString::Format( "%s '%s'", GetName(), ShortenedShownText() );
 }
 
 

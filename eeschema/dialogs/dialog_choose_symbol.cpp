@@ -96,7 +96,7 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
         m_hsplitter = new wxSplitterWindow( m_vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                             wxSP_LIVE_UPDATE | wxSP_NOBORDER | wxSP_3DSASH );
 
-        //Avoid the splitter window being assigned as the Parent to additional windows
+        // Avoid the splitter window being assigned as the parent to additional windows.
         m_vsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
         m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
 
@@ -219,7 +219,7 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
     if( m_details )
     {
         m_details->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_CHOOSE_SYMBOL::OnCharHook ),
-                            NULL, this );
+                            nullptr, this );
     }
 }
 
@@ -250,7 +250,8 @@ DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
     if( m_details )
     {
         m_details->Disconnect( wxEVT_CHAR_HOOK,
-                               wxKeyEventHandler( DIALOG_CHOOSE_SYMBOL::OnCharHook ), NULL, this );
+                               wxKeyEventHandler( DIALOG_CHOOSE_SYMBOL::OnCharHook ), nullptr,
+                               this );
     }
 
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )

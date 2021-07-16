@@ -53,7 +53,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBO
     updateSlider();
 
     m_simTimer.SetOwner( this );
-    Connect( wxEVT_TIMER, wxTimerEventHandler( TUNER_SLIDER::onSimTimer ), NULL, this );
+    Connect( wxEVT_TIMER, wxTimerEventHandler( TUNER_SLIDER::onSimTimer ), nullptr, this );
 }
 
 
@@ -201,7 +201,7 @@ void TUNER_SLIDER::onMinTextEnter( wxCommandEvent& event )
 
 void TUNER_SLIDER::onSimTimer( wxTimerEvent& event )
 {
-    if(m_changed)
+    if( m_changed )
     {
         wxQueueEvent( m_frame, new wxCommandEvent( EVT_SIM_UPDATE ) );
         m_changed = false;

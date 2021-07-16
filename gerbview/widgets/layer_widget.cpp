@@ -49,8 +49,7 @@ const wxEventType LAYER_WIDGET::EVT_LAYER_COLOR_CHANGE = wxNewEventType();
 
 
 /**
- * Function shrinkFont
- * reduces the size of the wxFont associated with \a aControl
+ * Reduce the size of the wxFont associated with \a aControl.
  */
 static void shrinkFont( wxWindow* aControl, int aPointSize )
 {
@@ -105,7 +104,6 @@ void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
 
         layer = getDecodedId( getLayerComp( row, 0 )->GetId() );
     }
-
     else
     {
         // all nested controls on a given row will have their ID encoded with
@@ -250,7 +248,8 @@ void LAYER_WIDGET::OnTabChange( wxNotebookEvent& event )
 //    wxFocusEvent    event( wxEVT_SET_FOCUS );
 //    m_FocusOwner->AddPendingEvent( event );
 
-    passOnFocus();      // does not work in this context, probably because we have receive control here too early.
+    // Does not work in this context, probably because we have receive control here too early.
+    passOnFocus();
 }
 
 
@@ -261,7 +260,7 @@ wxWindow* LAYER_WIDGET::getLayerComp( int aRow, int aColumn ) const
     if( ndx < m_LayersFlexGridSizer->GetChildren().GetCount() )
         return m_LayersFlexGridSizer->GetChildren()[ndx]->GetWindow();
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -290,7 +289,7 @@ wxWindow* LAYER_WIDGET::getRenderComp( int aRow, int aColumn ) const
     if( (unsigned) ndx < m_RenderFlexGridSizer->GetChildren().GetCount() )
         return m_RenderFlexGridSizer->GetChildren()[ndx]->GetWindow();
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -334,12 +333,14 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
                                  getBackgroundLayerColor(), aSpec.defaultColor, SWATCH_SMALL );
     bmb->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
     bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnLayerSwatchChanged, this );
-    bmb->SetToolTip( _("Left double click or middle click for color change, right click for menu" ) );
+    bmb->SetToolTip( _("Left double click or middle click for color change, right click for "
+                       "menu" ) );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
 
     // column 2 (COLUMN_COLOR_LYR_CB)
     col = COLUMN_COLOR_LYR_CB;
-    wxCheckBox* cb = new wxCheckBox( m_LayerScrolledWindow, encodeId( col, aSpec.id ), wxEmptyString );
+    wxCheckBox* cb = new wxCheckBox( m_LayerScrolledWindow, encodeId( col, aSpec.id ),
+                                     wxEmptyString );
     cb->SetValue( aSpec.state );
     cb->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED, &LAYER_WIDGET::OnLayerCheckBox, this );
     cb->SetToolTip( _( "Enable this for visibility" ) );
@@ -478,8 +479,6 @@ void LAYER_WIDGET::passOnFocus()
 }
 
 
-//-----<public>-------------------------------------------------------
-
 LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID id,
                             const wxPoint& pos, const wxSize& size, long style ) :
     wxPanel( aParent, id, pos, size, style ),
@@ -498,7 +497,8 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
 
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_notebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP );
+    m_notebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                    wxAUI_NB_TOP );
 
     wxFont font = m_notebook->GetFont();
 
@@ -509,12 +509,14 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
     m_notebook->SetSelectedFont( font );
     m_notebook->SetMeasuringFont( font );
 
-    m_LayerPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+    m_LayerPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                wxTAB_TRAVERSAL );
 
     wxBoxSizer* layerPanelSizer;
     layerPanelSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_LayerScrolledWindow = new wxScrolledWindow( m_LayerPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER );
+    m_LayerScrolledWindow = new wxScrolledWindow( m_LayerPanel, wxID_ANY, wxDefaultPosition,
+                                                  wxDefaultSize, wxNO_BORDER );
     m_LayerScrolledWindow->SetScrollRate( 5, 5 );
     m_LayersFlexGridSizer = new wxFlexGridSizer( 0, LYR_COLUMN_COUNT, 0, 1 );
     m_LayersFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
@@ -526,18 +528,20 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
     m_LayerScrolledWindow->SetSizer( m_LayersFlexGridSizer );
     m_LayerScrolledWindow->Layout();
     m_LayersFlexGridSizer->Fit( m_LayerScrolledWindow );
-    layerPanelSizer->Add( m_LayerScrolledWindow, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 2 );
+    layerPanelSizer->Add( m_LayerScrolledWindow, 1, wxBOTTOM | wxEXPAND | wxLEFT | wxTOP, 2 );
 
     m_LayerPanel->SetSizer( layerPanelSizer );
     m_LayerPanel->Layout();
     layerPanelSizer->Fit( m_LayerPanel );
     m_notebook->AddPage( m_LayerPanel, _( "Layers" ), true );
-    m_RenderingPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+    m_RenderingPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                    wxTAB_TRAVERSAL );
 
     wxBoxSizer* renderPanelSizer;
     renderPanelSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_RenderScrolledWindow = new wxScrolledWindow( m_RenderingPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER );
+    m_RenderScrolledWindow = new wxScrolledWindow( m_RenderingPanel, wxID_ANY, wxDefaultPosition,
+                                                   wxDefaultSize, wxNO_BORDER );
     m_RenderScrolledWindow->SetScrollRate( 5, 5 );
     m_RenderFlexGridSizer = new wxFlexGridSizer( 0, RND_COLUMN_COUNT, 0, 1 );
     m_RenderFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
@@ -546,7 +550,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
     m_RenderScrolledWindow->SetSizer( m_RenderFlexGridSizer );
     m_RenderScrolledWindow->Layout();
     m_RenderFlexGridSizer->Fit( m_RenderScrolledWindow );
-    renderPanelSizer->Add( m_RenderScrolledWindow, 1, wxALL|wxEXPAND, 5 );
+    renderPanelSizer->Add( m_RenderScrolledWindow, 1, wxALL | wxEXPAND, 5 );
 
     m_RenderingPanel->SetSizer( renderPanelSizer );
     m_RenderingPanel->Layout();
@@ -591,7 +595,6 @@ wxSize LAYER_WIDGET::GetBestSize() const
     // Account for the parent's frame:
     totWidth += 15;
 
-
     /* The minimum height is a small size to properly force computation
      * of the panel's scrollbars (otherwise it will assume it *has* all
      * this space) */
@@ -600,7 +603,6 @@ wxSize LAYER_WIDGET::GetBestSize() const
     wxSize layerz( totWidth, totHeight );
 
     layerz += m_LayerPanel->GetWindowBorderSize();
-
 
     // size of m_RenderScrolledWindow --------------
     widths = m_RenderFlexGridSizer->GetColWidths();
@@ -613,6 +615,7 @@ wxSize LAYER_WIDGET::GetBestSize() const
             totWidth += widths[i] + m_RenderFlexGridSizer->GetHGap();
         }
     }
+
     // account for the parent's frame, this one has void space of 10 PLUS a border:
     totWidth += 15;
 
@@ -713,6 +716,7 @@ void LAYER_WIDGET::SelectLayer( LAYER_NUM aLayer )
 LAYER_NUM LAYER_WIDGET::GetSelectedLayer()
 {
     wxWindow* w = getLayerComp( m_CurrentRow, 0 );
+
     if( w )
         return getDecodedId( w->GetId() );
 
@@ -730,6 +734,7 @@ void LAYER_WIDGET::SetLayerVisible( LAYER_NUM aLayer, bool isVisible )
 void LAYER_WIDGET::setLayerCheckbox( LAYER_NUM aLayer, bool isVisible )
 {
     int row = findLayerRow( aLayer );
+
     if( row >= 0 )
     {
         wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
@@ -742,12 +747,14 @@ void LAYER_WIDGET::setLayerCheckbox( LAYER_NUM aLayer, bool isVisible )
 bool LAYER_WIDGET::IsLayerVisible( LAYER_NUM aLayer )
 {
     int row = findLayerRow( aLayer );
+
     if( row >= 0 )
     {
         wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
         wxASSERT( cb );
         return cb->GetValue();
     }
+
     return false;
 }
 
@@ -755,6 +762,7 @@ bool LAYER_WIDGET::IsLayerVisible( LAYER_NUM aLayer )
 void LAYER_WIDGET::SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor )
 {
     int row = findLayerRow( aLayer );
+
     if( row >= 0 )
     {
         int col = 1;    // bitmap button is column 1
@@ -769,6 +777,7 @@ void LAYER_WIDGET::SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor )
 COLOR4D LAYER_WIDGET::GetLayerColor( LAYER_NUM aLayer ) const
 {
     int row = findLayerRow( aLayer );
+
     if( row >= 0 )
     {
         int col = 1;    // bitmap button is column 1
@@ -853,10 +862,9 @@ void LAYER_WIDGET::UpdateLayerIcons()
 
 
 /**
- * MYFRAME
- * is a test class here to exercise the LAYER_WIDGET and explore use cases.
- * @see http://www.kirix.com/labs/wxaui/screenshots.html
- * for ideas.
+ * A test class here to exercise the LAYER_WIDGET and explore use cases.
+ *
+ * @see http://www.kirix.com/labs/wxaui/screenshots.html for ideas.
  */
 class MYFRAME : public wxFrame
 {
@@ -905,7 +913,7 @@ class MYFRAME : public wxFrame
 public:
     MYFRAME( wxWindow * parent ) :
         wxFrame( parent, -1, wxT( "wxAUI Test" ), wxDefaultPosition,
-            wxSize( 800, 600 ), wxDEFAULT_FRAME_STYLE )
+                 wxSize( 800, 600 ), wxDEFAULT_FRAME_STYLE )
     {
         // notify wxAUI which frame to use
         m_mgr.SetManagedWindow( this );
@@ -914,19 +922,20 @@ public:
 
         // add some layer rows
         static const LAYER_WIDGET::ROW layerRows[] = {
-            LAYER_WIDGET::ROW( wxT("layer 1"), 0, RED, wxT("RED"), false ),
-            LAYER_WIDGET::ROW( wxT("layer 2"), 1, GREEN, wxT("GREEN"), true ),
-            LAYER_WIDGET::ROW( wxT("brown_layer"), 2, BROWN, wxT("BROWN"), true ),
-            LAYER_WIDGET::ROW( wxT("layer_4_you"), 3, BLUE, wxT("BLUE"), false ),
+            LAYER_WIDGET::ROW( wxT( "layer 1" ), 0, RED, wxT( "RED" ), false ),
+            LAYER_WIDGET::ROW( wxT( "layer 2" ), 1, GREEN, wxT( "GREEN" ), true ),
+            LAYER_WIDGET::ROW( wxT( "brown_layer" ), 2, BROWN, wxT( "BROWN" ), true ),
+            LAYER_WIDGET::ROW( wxT( "layer_4_you" ), 3, BLUE, wxT( "BLUE" ), false ),
         };
 
         lw->AppendLayerRows( layerRows, arrayDim(layerRows) );
 
         // add some render rows
         static const LAYER_WIDGET::ROW renderRows[] = {
-            LAYER_WIDGET::ROW( wxT("With Very Large Ears"), 0, COLOR4D::UNSPECIFIED, wxT("Spock here") ),
-            LAYER_WIDGET::ROW( wxT("With Legs"), 1, YELLOW ),
-            LAYER_WIDGET::ROW( wxT("With Oval Eyes"), 1, BROWN, wxT("My eyes are upon you") ),
+            LAYER_WIDGET::ROW( wxT( "With Very Large Ears" ), 0, COLOR4D::UNSPECIFIED,
+                               wxT( "Spock here" ) ),
+            LAYER_WIDGET::ROW( wxT( "With Legs" ), 1, YELLOW ),
+            LAYER_WIDGET::ROW( wxT( "With Oval Eyes" ), 1, BROWN, wxT( "My eyes are upon you" ) ),
         };
 
         lw->AppendRenderRows( renderRows, arrayDim(renderRows) );
@@ -937,8 +946,6 @@ public:
         li.MinSize( lw->GetBestSize() );
         li.BestSize( lw->GetBestSize() );
         li.Left();
-//        li.MaximizeButton( true );
-//        li.MinimizeButton( true );
         li.CloseButton( false );
         li.Caption( wxT( "Layers" ) );
         m_mgr.AddPane( lw, li );
@@ -976,7 +983,7 @@ public:
 
     bool OnInit()
     {
-        wxFrame* frame = new MYFRAME( NULL );
+        wxFrame* frame = new MYFRAME( nullptr );
 
         SetTopWindow( frame );
         frame->Show();

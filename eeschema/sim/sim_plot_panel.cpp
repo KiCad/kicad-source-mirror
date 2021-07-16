@@ -452,7 +452,7 @@ void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
 bool SIM_PLOT_PANEL::addTrace( const wxString& aName, int aPoints, const double* aX,
                                const double* aY, SIM_PLOT_TYPE aType, const wxString& aParam )
 {
-    TRACE* trace = NULL;
+    TRACE* trace = nullptr;
     wxString name = aName;
 
     if( aType & SPT_AC_MAG )
@@ -601,7 +601,7 @@ void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, bool aEnable )
     else
     {
         CURSOR* c = t->GetCursor();
-        t->SetCursor( NULL );
+        t->SetCursor( nullptr );
         m_plotWin->DelLayer( c, true );
     }
 

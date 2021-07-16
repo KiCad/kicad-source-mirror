@@ -159,7 +159,7 @@ public:
         return SCH_ITEM::Matches( GetText(), aSearchData );
     }
 
-    bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData = NULL ) override
+    bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData = nullptr ) override
     {
         return EDA_TEXT::Replace( aSearchData );
     }

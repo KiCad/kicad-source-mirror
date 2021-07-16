@@ -217,9 +217,9 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook* parent, const wxString& ti
 {
     m_IdNetType           = id_NetType;
     m_pageNetFmtName      = title;
-    m_CommandStringCtrl   = NULL;
-    m_TitleStringCtrl     = NULL;
-    m_AdjustPassiveValues = NULL;
+    m_CommandStringCtrl   = nullptr;
+    m_TitleStringCtrl     = nullptr;
+    m_AdjustPassiveValues = nullptr;
 
     wxString netfmtName = static_cast<NETLIST_DIALOG*>( parent->GetParent() )->m_DefaultNetFmtName;
 
@@ -254,7 +254,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     m_DefaultNetFmtName = settings.m_NetFormatName;
 
     for( NETLIST_PAGE_DIALOG*& page : m_PanelNetType)
-        page = NULL;
+        page = nullptr;
 
     // Add notebook pages:
     m_PanelNetType[PANELPCBNEW] = new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "KiCad" ),
@@ -334,7 +334,7 @@ void NETLIST_DIALOG::InstallPageSpice()
     wxStaticText* spice_label = new wxStaticText( page, -1, _( "External simulator command:" ) );
     spice_label->SetToolTip( _( "Enter the command line to run spice\n"
                                 "Usually <path to spice binary> %I\n"
-                                "%I will be replaced by the actual spice netlist name") );
+                                "%I will be replaced by the actual spice netlist name" ) );
     page->m_LowBoxSizer->Add( spice_label, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     page->m_CommandStringCtrl = new wxTextCtrl( page, -1, simulatorCommand,
@@ -415,7 +415,7 @@ void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
 {
     NETLIST_PAGE_DIALOG* currPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
 
-    if( currPage == NULL )
+    if( currPage == nullptr )
         return;
 
     m_DefaultNetFmtName = currPage->GetPageNetFmtName();
@@ -496,7 +496,7 @@ bool NETLIST_DIALOG::TransferDataFromWindow()
     wxString fullname = fn.GetFullName();
     wxString path     = fn.GetPath();
 
-    // fullname does not and should not include the path, per wx docs.
+    // full name does not and should not include the path, per wx docs.
     wxFileDialog dlg( this, title, path, fullname, fileWildcard, wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -578,7 +578,7 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup()
         {
             NETLIST_PAGE_DIALOG* currPage = m_PanelNetType[ii + PANELCUSTOMBASE];
 
-            if( currPage == NULL )
+            if( currPage == nullptr )
                 break;
 
             wxString title = currPage->m_TitleStringCtrl->GetValue();
@@ -626,7 +626,7 @@ void NETLIST_DIALOG::OnAddGenerator( wxCommandEvent& event )
         netTypeId = PANELCUSTOMBASE + ii;
         currPage = m_PanelNetType[ii + PANELCUSTOMBASE];
 
-        if( currPage == NULL )
+        if( currPage == nullptr )
             break;
 
         if( currPage->GetPageNetFmtName() == title )

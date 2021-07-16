@@ -35,7 +35,6 @@ public:
 
     GERBER_COLLECTOR()
     {
-        //m_Guide = NULL;
         m_PrimaryLength = 0;
         SetScanTypes( AllItems );
     }
@@ -44,18 +43,6 @@ public:
     {
         m_List2nd.clear();
     }
-
-    /*void Append2nd( BOARD_ITEM* item )
-    {
-        m_List2nd.push_back( item );
-    }*/
-
-    /**
-     * Record which COLLECTORS_GUIDE to use.
-     *
-     * @param aGuide is the guide to use in the collection.
-     */
-    //void SetGuide( const COLLECTORS_GUIDE* aGuide ) { m_Guide = aGuide; }
 
     /**
      * Overload the [](int) operator to return a EDA_ITEM* instead of an EDA_ITEM* type.
@@ -68,7 +55,7 @@ public:
         if( (unsigned)ndx < (unsigned)GetCount() )
             return (EDA_ITEM*) m_list[ ndx ];
 
-        return NULL;
+        return nullptr;
     }
 
     /**
@@ -106,11 +93,6 @@ protected:
      * "list" at the end of the search.
      */
     std::vector<EDA_ITEM*> m_List2nd;
-
-    /**
-     * Determines which items are to be collected by Inspect()
-     */
-    //const COLLECTORS_GUIDE* m_Guide;
 
     /**
      * The number of items that were originally in the primary list before the

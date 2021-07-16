@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -78,23 +78,23 @@ int GERBVIEW_INSPECTION_TOOL::ShowDCodes( const TOOL_EVENT& aEvent )
 
     switch( m_frame->GetUserUnits() )
     {
-        case EDA_UNITS::MILLIMETRES:
-            scale = IU_PER_MM;
-            units = "mm";
-            break;
+    case EDA_UNITS::MILLIMETRES:
+        scale = IU_PER_MM;
+        units = "mm";
+        break;
 
-        case EDA_UNITS::INCHES:
-            scale = IU_PER_MILS * 1000;
-            units = "in";
-            break;
+    case EDA_UNITS::INCHES:
+        scale = IU_PER_MILS * 1000;
+        units = "in";
+        break;
 
-        case EDA_UNITS::MILS:
-            scale = IU_PER_MILS;
-            units = "mil";
-            break;
+    case EDA_UNITS::MILS:
+        scale = IU_PER_MILS;
+        units = "mil";
+        break;
 
-        default:
-            wxASSERT_MSG( false, "Invalid units" );
+    default:
+        wxASSERT_MSG( false, "Invalid units" );
     }
 
     for( unsigned int layer = 0; layer < m_frame->ImagesMaxCount(); ++layer )
@@ -118,7 +118,7 @@ int GERBVIEW_INSPECTION_TOOL::ShowDCodes( const TOOL_EVENT& aEvent )
         {
             D_CODE* pt_D_code = gerber->GetDCODE( ii + FIRST_DCODE );
 
-            if( pt_D_code == NULL )
+            if( pt_D_code == nullptr )
                 continue;
 
             if( !pt_D_code->m_InUse && !pt_D_code->m_Defined )
@@ -144,7 +144,7 @@ int GERBVIEW_INSPECTION_TOOL::ShowDCodes( const TOOL_EVENT& aEvent )
         }
     }
 
-    wxSingleChoiceDialog dlg( m_frame, wxEmptyString, _( "D Codes" ), list, (void**) NULL,
+    wxSingleChoiceDialog dlg( m_frame, wxEmptyString, _( "D Codes" ), list, (void**) nullptr,
                               wxCHOICEDLG_STYLE & ~wxCANCEL );
 
     dlg.ShowModal();
@@ -269,9 +269,9 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        // click or drag starts
         else if( !originSet && ( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
         {
+            // click or drag starts
             twoPtMgr.SetOrigin( cursorPos );
             twoPtMgr.SetEnd( cursorPos );
 
@@ -280,17 +280,17 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
             originSet = true;
         }
-        // second click or mouse up after drag ends
         else if( originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
         {
+            // second click or mouse up after drag ends
             originSet = false;
 
             controls.SetAutoPan( false );
             controls.CaptureCursor( false );
         }
-        // move or drag when origin set updates rules
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
+            // move or drag when origin set updates rules
             twoPtMgr.SetAngleSnap( evt->Modifier( MD_SHIFT ) );
             twoPtMgr.SetEnd( cursorPos );
 

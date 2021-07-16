@@ -36,7 +36,7 @@
 #include <board_item.h>
 
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
-    SCH_ITEM( NULL, SCH_LINE_T )
+    SCH_ITEM( nullptr, SCH_LINE_T )
 {
     m_start           = pos;
     m_end             = pos;
@@ -439,7 +439,7 @@ int SCH_LINE::GetReverseAngleFrom( const wxPoint& aPoint ) const
 
 bool SCH_LINE::IsParallel( const SCH_LINE* aLine ) const
 {
-    wxCHECK_MSG( aLine != NULL && aLine->Type() == SCH_LINE_T, false,
+    wxCHECK_MSG( aLine != nullptr && aLine->Type() == SCH_LINE_T, false,
                  wxT( "Cannot test line segment for overlap." ) );
 
     wxPoint firstSeg   = m_end - m_start;
@@ -460,7 +460,7 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
         return lhs.x < rhs.x;
     };
 
-    wxCHECK_MSG( aLine != NULL && aLine->Type() == SCH_LINE_T, NULL,
+    wxCHECK_MSG( aLine != nullptr && aLine->Type() == SCH_LINE_T, nullptr,
                  wxT( "Cannot test line segment for overlap." ) );
 
     if( this == aLine || GetLayer() != aLine->GetLayer() )

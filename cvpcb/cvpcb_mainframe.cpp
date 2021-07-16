@@ -64,14 +64,14 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, _( "Assign Footprints" ), wxDefaultPosition,
                   wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
 {
-    m_symbolsListBox      = NULL;
-    m_footprintListBox    = NULL;
-    m_librariesListBox    = NULL;
-    m_mainToolBar         = NULL;
+    m_symbolsListBox      = nullptr;
+    m_footprintListBox    = nullptr;
+    m_librariesListBox    = nullptr;
+    m_mainToolBar         = nullptr;
     m_modified            = false;
     m_skipComponentSelect = false;
     m_filteringOptions    = FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST;
-    m_tcFilterString      = NULL;
+    m_tcFilterString      = nullptr;
     m_FootprintsList      = FOOTPRINT_LIST::GetInstance( Kiway() );
     m_initialized         = false;
     m_aboutTitle          = "CvPcb";
@@ -512,7 +512,7 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
 
     COMPONENT* symbol = m_netlist.GetComponent( aAssociation.GetComponentIndex() );
 
-    if( symbol == NULL )
+    if( symbol == nullptr )
         return;
 
     LIB_ID fpid    = aAssociation.GetNewFootprint();
@@ -594,7 +594,7 @@ void CVPCB_MAINFRAME::refreshAfterSymbolSearch( COMPONENT* aSymbol )
     if( m_auimgr.GetManagedWindow() )   // Be sure Aui Manager is initialized
         m_auimgr.Update();              // (could be not the case when starting CvPcb)
 
-    if( aSymbol == NULL )
+    if( aSymbol == nullptr )
     {
         DisplayStatus();
         return;
@@ -825,7 +825,7 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA( bool aClearHighligntOnly )
     if ( selection < 0 )    // Nothing selected
         return;
 
-    if( m_netlist.GetComponent( selection ) == NULL )
+    if( m_netlist.GetComponent( selection ) == nullptr )
         return;
 
     // Now highlight the selected symbol:
@@ -878,13 +878,13 @@ void CVPCB_MAINFRAME::BuildFootprintsListBox()
 {
     wxFont   guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 
-    if( m_footprintListBox == NULL )
+    if( m_footprintListBox == nullptr )
     {
         m_footprintListBox = new FOOTPRINTS_LISTBOX( this, ID_CVPCB_FOOTPRINT_LIST );
         m_footprintListBox->SetFont( KIUI::GetMonospacedUIFont() );
     }
 
-    m_footprintListBox->SetFootprints( *m_FootprintsList, wxEmptyString, NULL, wxEmptyString,
+    m_footprintListBox->SetFootprints( *m_FootprintsList, wxEmptyString, nullptr, wxEmptyString,
                                        FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
     DisplayStatus();
 }
@@ -896,7 +896,7 @@ void CVPCB_MAINFRAME::BuildSymbolsListBox()
     COMPONENT*  symbol;
     wxFont      guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 
-    if( m_symbolsListBox == NULL )
+    if( m_symbolsListBox == nullptr )
     {
         m_symbolsListBox = new COMPONENTS_LISTBOX( this, ID_CVPCB_COMPONENT_LIST );
         m_symbolsListBox->SetFont( KIUI::GetMonospacedUIFont() );
@@ -930,7 +930,7 @@ void CVPCB_MAINFRAME::BuildLibrariesListBox()
 {
     wxFont   guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 
-    if( m_librariesListBox == NULL )
+    if( m_librariesListBox == nullptr )
     {
         m_librariesListBox = new LIBRARY_LISTBOX( this, ID_CVPCB_LIBRARY_LIST );
         m_librariesListBox->SetFont( KIUI::GetMonospacedUIFont() );
@@ -959,7 +959,7 @@ COMPONENT* CVPCB_MAINFRAME::GetSelectedComponent()
     if( selection >= 0 && selection < (int) m_netlist.GetCount() )
         return m_netlist.GetComponent( selection );
 
-    return NULL;
+    return nullptr;
 }
 
 

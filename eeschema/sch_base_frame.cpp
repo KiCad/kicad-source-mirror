@@ -195,7 +195,7 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 LIB_SYMBOL* SCH_BASE_FRAME::GetLibSymbol( const LIB_ID& aLibId, bool aUseCacheLib,
                                           bool aShowErrorMsg )
 {
-    SYMBOL_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : NULL;
+    SYMBOL_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : nullptr;
 
     return SchGetLibSymbol( aLibId, Prj().SchSymbolLibTable(), cache, this, aShowErrorMsg );
 }

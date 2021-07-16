@@ -333,7 +333,7 @@ bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, SCH_SCREEN* aScreen )
             SCH_LINE* wire = static_cast<SCH_LINE*>( item );
 
             if( IsPointOnSegment( wire->GetStartPoint(), wire->GetEndPoint(), aPoint )
-                                && !wire->IsEndPoint( aPoint ) )
+              && !wire->IsEndPoint( aPoint ) )
             {
                 wires.push_back( wire );
             }
@@ -341,7 +341,7 @@ bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, SCH_SCREEN* aScreen )
     }
 
     for( SCH_LINE* wire : wires )
-        brokenSegments |= BreakSegment( wire, aPoint, NULL, aScreen );
+        brokenSegments |= BreakSegment( wire, aPoint, nullptr, aScreen );
 
     return brokenSegments;
 }
@@ -437,7 +437,6 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
             } );
 
     SaveCopyInUndoList( undoList, UNDO_REDO::DELETED, aAppend );
-
 
     for( SCH_LINE* line : lines )
     {

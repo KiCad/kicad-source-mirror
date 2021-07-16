@@ -40,18 +40,18 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
                                                unsigned aNetlistOptions )
 {
     (void)aNetlistOptions;      //unused
-    FILE* f = NULL;
+    FILE* f = nullptr;
     wxString    field;
     wxString    footprint;
     int         ret = 0;        // zero now, OR in the sign bit on error
     wxString    netName;
 
 
-    if( ( f = wxFopen( aOutFileName, wxT( "wt" ) ) ) == NULL )
+    if( ( f = wxFopen( aOutFileName, wxT( "wt" ) ) ) == nullptr )
     {
         wxString msg;
         msg.Printf( _( "Failed to create file '%s'." ), aOutFileName );
-        DisplayError( NULL, msg );
+        DisplayError( nullptr, msg );
         return false;
     }
 
