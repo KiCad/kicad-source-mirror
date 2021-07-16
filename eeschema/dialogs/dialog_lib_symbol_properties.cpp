@@ -85,7 +85,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_deleteFilterButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
     m_editFilterButton->SetBitmap( KiBitmap( BITMAPS::small_edit ) );
 
-    if( aParent->IsSymbolFromLegacyLibrary() )
+    if( aParent->IsSymbolFromLegacyLibrary() && !aParent->IsSymbolFromSchematic() )
     {
         m_stdSizerButtonCancel->SetDefault();
         m_stdSizerButtonOK->SetLabel( _( "Read Only" ) );
