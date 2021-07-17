@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-15 02:34+0000\n"
+"PO-Revision-Date: 2021-07-17 23:10+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -10758,7 +10758,7 @@ msgstr "JFET では、ピン順はドレイン、ゲート、ソースです"
 #, c-format
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
-msgstr ""
+msgstr "少なくとも最初の%d個のパラメータを過渡応答解析のソースに指定する必要があります"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:809
 msgid ""
@@ -31229,10 +31229,9 @@ msgstr "列ラベル %s が見つかりませんでした。"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1589
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1668
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1735
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
-msgstr ""
-"行 %zu の行サイズが無効です。 %zu 個の要素が必要ですが、%zu が見つかりました"
+msgstr "行 %zu の行サイズが無効です。 %zu 個の要素が必要ですが、%zu 個見つかりました。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:498
 #, c-format
@@ -31281,16 +31280,14 @@ msgstr "トークン数が無効です。 8を期待しましたが、%zu が見
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1260
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1449
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid format for record_tag string '%s' in row %zu."
-msgstr ""
-"無効なフォーマットのrecodr_tag文字列 \"%s\" がトレース定義行 %zu にあります"
+msgstr "無効なフォーマットのrecord_tag文字列 \"%s\" が %zu 行目にあります。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1420
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
-msgstr ""
-"行 %zu の行サイズが無効です。 %zu 個の要素が必要ですが、%zu が見つかりました"
+msgstr "行 %zu の行サイズが無効です。 %zu 個の要素が必要ですが、%zu 個見つかりました。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1459
 #, c-format
@@ -31514,11 +31511,9 @@ msgid "Page type '%s' is not valid."
 msgstr "ページ タイプ \"%s\" は不正です。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1541
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
-msgstr ""
-"レイヤー \"%s\" (ファイル \"%s\"、行 %d) は固定されたレイヤー ハッシュにあり"
-"ません"
+msgstr "レイヤー '%s' (ファイル %s、行 %d) は固定されたレイヤー ハッシュにありません。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1579
 #, c-format
@@ -31526,9 +31521,9 @@ msgid "%d is not a valid layer count"
 msgstr "%d は有効なレイヤー番号ではありません"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2221
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr "重複したネットクラス名 \"%s\"、ファイル \"%s\"、行 %d、オフセット %d"
+msgstr "重複したネットクラス名 '%s'、ファイル '%s'、行 %d、オフセット %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3068
 #, c-format
@@ -31640,12 +31635,12 @@ msgid "Missing '$EndMODULE' for MODULE '%s'."
 msgstr "モジュール '%s' に対する '$EndMODULE' が見つかりません。"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1480
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
 msgstr "未知のパッド形状 '%c=0x%02x' 、行 %d 、フットプリント '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1685
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr "不明な FP_SHAPE タイプ:'%c=0x%02x' 、行 %d 、フットプリント '%s'."
 
