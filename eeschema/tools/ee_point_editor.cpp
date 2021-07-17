@@ -37,6 +37,7 @@ using namespace std::placeholders;
 #include <sch_line.h>
 #include <sch_bitmap.h>
 #include <sch_sheet.h>
+#include <sch_shape.h>
 #include <sch_sheet_pin.h>
 #include <symbol_edit_frame.h>
 #include <lib_shape.h>
@@ -123,8 +124,59 @@ public:
                 break;
 
             default:
-                wxFAIL_MSG( "EDIT_POINTS_FACTORY::Make not implemented for "
-                            + shape->SHAPE_T_asString() );
+                UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
+            }
+        }
+            break;
+
+        case SCH_SHAPE_T:
+        {
+            SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
+
+            switch( shape->GetShape() )
+            {
+            case SHAPE_T::ARC:
+                points->AddPoint( shape->GetPosition() );
+                points->AddPoint( shape->GetStart() );
+                points->AddPoint( shape->GetEnd() );
+                break;
+
+            case SHAPE_T::CIRCLE:
+                points->AddPoint( shape->GetPosition() );
+                points->AddPoint( shape->GetEnd() );
+                break;
+
+            case SHAPE_T::RECT:
+            {
+                // point editor works only with rectangles having width and height > 0
+                // Some symbols can have rectangles with width or height < 0
+                // So normalize the size:
+                BOX2I dummy;
+                dummy.SetOrigin( shape->GetPosition() );
+                dummy.SetEnd( shape->GetEnd() );
+                dummy.Normalize();
+                VECTOR2I topLeft = dummy.GetPosition();
+                VECTOR2I botRight = dummy.GetEnd();
+
+                points->AddPoint( topLeft );
+                points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
+                points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+                points->AddPoint( botRight );
+            }
+                break;
+
+            case SHAPE_T::POLY:
+                for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
+                    points->AddPoint( pt );
+
+                break;
+
+            case SHAPE_T::BEZIER:
+                // TODO
+                break;
+
+            default:
+                UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
             }
         }
             break;
@@ -275,8 +327,9 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 {
     static KICAD_T supportedTypes[] = {
         LIB_SHAPE_T,
+        SCH_SHAPE_T,
         SCH_SHEET_T,
-        SCH_LINE_LOCATE_GRAPHIC_LINE_T,
+        SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
         SCH_BITMAP_T,
         EOT
     };
@@ -540,8 +593,71 @@ void EE_POINT_EDITOR::updateParentItem() const
             break;
 
         default:
-            wxFAIL_MSG( "EE_POINT_EDITOR::updateParentItem not implemented for "
-                        + shape->SHAPE_T_asString() );
+            UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
+        }
+    }
+        break;
+
+    case SCH_SHAPE_T:
+    {
+        SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
+
+        switch( shape->GetShape() )
+        {
+        case SHAPE_T::ARC:
+            if( getEditedPointIndex() == ARC_CENTER )
+            {
+                shape->SetEditState( 4 );
+                shape->CalcEdit( (wxPoint) m_editPoints->Point( ARC_CENTER ).GetPosition() );
+            }
+            else if( getEditedPointIndex() == ARC_START )
+            {
+                shape->SetEditState( 2 );
+                shape->CalcEdit( (wxPoint) m_editPoints->Point( ARC_START ).GetPosition() );
+            }
+            else if( getEditedPointIndex() == ARC_END )
+            {
+                shape->SetEditState( 3 );
+                shape->CalcEdit( (wxPoint) m_editPoints->Point( ARC_END ).GetPosition() );
+            }
+            break;
+
+        case SHAPE_T::CIRCLE:
+            shape->SetPosition( (wxPoint) m_editPoints->Point( CIRC_CENTER ).GetPosition() );
+            shape->SetEnd( (wxPoint) m_editPoints->Point( CIRC_END ).GetPosition() );
+            break;
+
+        case SHAPE_T::POLY:
+            shape->GetPolyShape().RemoveAllContours();
+            shape->GetPolyShape().NewOutline();
+
+            for( unsigned i = 0; i < m_editPoints->PointsSize(); ++i )
+                shape->GetPolyShape().Append( m_editPoints->Point( i ).GetPosition() );
+
+            break;
+
+        case SHAPE_T::RECT:
+        {
+            EE_GRID_HELPER gridHelper( m_toolMgr );
+            VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
+            VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
+            VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
+            VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
+
+            pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ),
+                             topLeft, topRight, botLeft, botRight, &gridHelper );
+
+            shape->SetPosition( (wxPoint) topLeft );
+            shape->SetEnd( (wxPoint) botRight );
+        }
+            break;
+
+        case SHAPE_T::BEZIER:
+            // TODO
+            break;
+
+        default:
+            UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
         }
     }
         break;
@@ -732,8 +848,73 @@ void EE_POINT_EDITOR::updatePoints()
             break;
 
         default:
-            wxFAIL_MSG( "EE_POINT_EDITOR::updatePoints not implemented for "
-                        + shape->SHAPE_T_asString() );
+            UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
+        }
+    }
+        break;
+
+    case SCH_SHAPE_T:
+    {
+        SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
+
+        switch( shape->GetShape() )
+        {
+        case SHAPE_T::ARC:
+            m_editPoints->Point( ARC_CENTER ).SetPosition( shape->GetPosition() );
+            m_editPoints->Point( ARC_START ).SetPosition( shape->GetStart() );
+            m_editPoints->Point( ARC_END ).SetPosition( shape->GetEnd() );
+            break;
+
+        case SHAPE_T::CIRCLE:
+            m_editPoints->Point( CIRC_CENTER ).SetPosition( shape->GetPosition() );
+            m_editPoints->Point( CIRC_END ).SetPosition( shape->GetEnd() );
+            break;
+
+        case SHAPE_T::POLY:
+        {
+            if( (int) m_editPoints->PointsSize() != shape->GetPointCount() )
+            {
+                getView()->Remove( m_editPoints.get() );
+                m_editedPoint = nullptr;
+                m_editPoints = EDIT_POINTS_FACTORY::Make( item, m_frame );
+                getView()->Add( m_editPoints.get() );
+            }
+            else
+            {
+                int ii = 0;
+
+                for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
+                    m_editPoints->Point( ii++ ).SetPosition( pt );
+            }
+
+            break;
+        }
+
+        case SHAPE_T::RECT:
+        {
+            // point editor works only with rectangles having width and height > 0
+            // Some symbols can have rectangles with width or height < 0
+            // So normalize the size:
+            BOX2I dummy;
+            dummy.SetOrigin( shape->GetPosition() );
+            dummy.SetEnd( shape->GetEnd() );
+            dummy.Normalize();
+            VECTOR2I topLeft = dummy.GetPosition();
+            VECTOR2I botRight = dummy.GetEnd();
+
+            m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
+            m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
+            m_editPoints->Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
+            m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
+        }
+            break;
+
+        case SHAPE_T::BEZIER:
+            // TODO
+            break;
+
+        default:
+            UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
         }
     }
         break;

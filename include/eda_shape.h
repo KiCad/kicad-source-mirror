@@ -30,12 +30,14 @@
 #include <trigo.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/geometry_utils.h>
+#include <stroke_params.h>
 
 class LINE_READER;
 class EDA_DRAW_FRAME;
 class FOOTPRINT;
 class MSG_PANEL_ITEM;
 
+using KIGFX::COLOR4D;
 
 enum class SHAPE_T : int
 {
@@ -75,18 +77,24 @@ public:
 
     wxString SHAPE_T_asString() const;
 
-    void SetFillMode( FILL_T aFill ) { m_fill = aFill; }
-    FILL_T GetFillType() const { return m_fill; }
-
-    bool IsFilled() const { return GetFillType() != FILL_T::NO_FILL; }
+    bool IsFilled() const
+    {
+        return GetFillMode() != FILL_T::NO_FILL;
+    }
 
     void SetFilled( bool aFlag )
     {
         m_fill = aFlag ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
     }
 
-    void SetWidth( int aWidth )             { m_width = aWidth; }
-    int GetWidth() const                    { return m_width; }
+    void SetFillMode( FILL_T aFill )           { m_fill = aFill; }
+    FILL_T GetFillMode() const                 { return m_fill; }
+
+    COLOR4D GetFillColor() const               { return m_fillColor; }
+    void SetFillColor( const COLOR4D& aColor ) { m_fillColor = aColor; }
+
+    void SetWidth( int aWidth )                { m_stroke.SetWidth( aWidth ); }
+    int GetWidth() const                       { return m_stroke.GetWidth(); }
 
     void SetShape( SHAPE_T aShape )         { m_shape = aShape; }
     SHAPE_T GetShape() const                { return m_shape; }
@@ -232,9 +240,12 @@ public:
 
     /**
      * Make a set of SHAPE objects representing the EDA_SHAPE.  Caller owns the objects.
+     *
+     * @param aEdgeOnly indicates only edges should be generated (even if 0 width), and no fill
+     *                  shapes.
      */
     // fixme: move to shape_compound
-    std::vector<SHAPE*> MakeEffectiveShapes() const;
+    std::vector<SHAPE*> MakeEffectiveShapes( bool aEdgeOnly = false ) const;
 
     void ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
 
@@ -294,8 +305,10 @@ protected:
 protected:
     bool                 m_endsSwapped;  // true if start/end were swapped e.g. SetArcAngleAndEnd
     SHAPE_T              m_shape;        // Shape: line, Circle, Arc
-    int                  m_width;        // thickness of lines ...
+    STROKE_PARAMS        m_stroke;       // Line style, width, etc.
     FILL_T               m_fill;
+    COLOR4D              m_fillColor;
+
     wxPoint              m_start;        // Line start point or Circle center
     wxPoint              m_end;          // Line end point or Circle 3 o'clock point
 

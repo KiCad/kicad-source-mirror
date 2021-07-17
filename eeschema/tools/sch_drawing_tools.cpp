@@ -53,7 +53,7 @@
 #include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
-
+#include <sch_shape.h>
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
@@ -62,7 +62,9 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastTextOrientation( LABEL_SPIN_STYLE::RIGHT ),
         m_lastTextBold( false ),
         m_lastTextItalic( false ),
+        m_lastFillStyle( FILL_T::NO_FILL ),
         m_inPlaceSymbol( false ),
+        m_inDrawShape( false ),
         m_inPlaceImage( false ),
         m_inSingleClickPlace( false ),
         m_inTwoClickPlace( false ),
@@ -1180,8 +1182,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             else            // ... and second click places:
             {
                 item->ClearFlags( IS_MOVING );
-                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item,
-                                                     false );
+                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), item, false );
                 item = nullptr;
 
                 m_view->ClearPreview();
@@ -1234,6 +1235,165 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     controls->CaptureCursor( false );
     controls->ForceCursorPosition( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    return 0;
+}
+
+
+int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
+{
+    if( m_inDrawShape )
+        return 0;
+    else
+        m_inDrawShape = true;
+
+    SHAPE_T type = aEvent.Parameter<SHAPE_T>();
+
+    // We might be running as the same shape in another co-routine.  Make sure that one
+    // gets whacked.
+    m_toolMgr->DeactivateTool();
+
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    getViewControls()->ShowCursor( true );
+
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
+    Activate();
+
+    SCH_SHAPE* item = nullptr;
+
+    auto setCursor =
+            [&]()
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
+    auto cleanup =
+            [&] ()
+            {
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                m_view->ClearPreview();
+                delete item;
+                item = nullptr;
+            };
+
+    // Prime the pump
+    if( aEvent.HasPosition() )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
+
+    // Set initial cursor
+    setCursor();
+
+    // Main loop: keep receiving events
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        setCursor();
+
+        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
+
+        if( evt->IsCancelInteractive() )
+        {
+            if( item )
+            {
+                cleanup();
+            }
+            else
+            {
+                m_frame->PopTool( tool );
+                break;
+            }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( item && evt->IsMoveTool() )
+            {
+                // we're already drawing our own item; ignore the move tool
+                evt->SetPassEvent( false );
+                continue;
+            }
+
+            if( item )
+                cleanup();
+
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
+                break;
+            }
+            else
+            {
+                m_frame->PopTool( tool );
+                break;
+            }
+        }
+        else if( evt->IsClick( BUT_LEFT ) && !item )
+        {
+            EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+            int lineWidth = Mils2iu( cfg->m_Drawing.default_line_thickness );
+
+            item = new SCH_SHAPE( type, lineWidth, m_lastFillStyle );
+            item->SetFlags( IS_NEW );
+            item->BeginEdit( (wxPoint) cursorPos );
+
+            m_view->ClearPreview();
+            m_view->AddToPreview( item->Clone() );
+        }
+        else if( item && ( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                        || evt->IsAction( &EE_ACTIONS::finishDrawing ) ) )
+        {
+            if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &EE_ACTIONS::finishDrawing )
+                    || !item->ContinueEdit( (wxPoint) cursorPos ) )
+            {
+                item->EndEdit();
+                item->ClearEditFlags();
+                item->SetFlags( IS_NEW );
+
+                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), item, false );
+                m_selectionTool->AddItemToSel( item );
+                item = nullptr;
+
+                m_view->ClearPreview();
+                m_toolMgr->RunAction( ACTIONS::activatePointEditor );
+            }
+        }
+        else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        {
+            item->CalcEdit( (wxPoint) cursorPos );
+            m_view->ClearPreview();
+            m_view->AddToPreview( item->Clone() );
+        }
+        else if( evt->IsDblClick( BUT_LEFT ) && !item )
+        {
+            m_toolMgr->RunAction( EE_ACTIONS::properties, true );
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // Warp after context menu only if dragging...
+            if( !item )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+        }
+        else
+        {
+            evt->SetPassEvent();
+        }
+
+        // Enable autopanning and cursor capture only when there is a shape being drawn
+        getViewControls()->SetAutoPan( item != nullptr );
+        getViewControls()->CaptureCursor( item != nullptr );
+    }
+
+    getViewControls()->SetAutoPan( false );
+    getViewControls()->CaptureCursor( false );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_inDrawShape = false;
     return 0;
 }
 
@@ -1333,8 +1493,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-            sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(),
-                                   static_cast<wxPoint>( cursorPos ) );
+            sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), (wxPoint) cursorPos );
             sheet->SetFlags( IS_NEW | IS_RESIZING );
             sheet->SetScreen( nullptr );
             sheet->SetBorderWidth( Mils2iu( cfg->m_Drawing.default_line_thickness ) );
@@ -1448,5 +1607,8 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::importSheetPin.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::importSingleSheetPin.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeSchematicText.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawRectangle.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawCircle.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawArc.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceImage,          EE_ACTIONS::placeImage.MakeEvent() );
 }

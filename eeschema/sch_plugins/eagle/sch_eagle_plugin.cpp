@@ -33,11 +33,11 @@
 #include <wx/tokenzr.h>
 #include <wx/wfstream.h>
 #include <wx/xml/xml.h>
-#include <wx/msgdlg.h>
 
 #include <symbol_library.h>
 #include <plugins/eagle/eagle_parser.h>
 #include <string_utils.h>
+#include <gr_text.h>
 #include <lib_shape.h>
 #include <lib_id.h>
 #include <lib_item.h>
@@ -1755,7 +1755,7 @@ LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSym
 
     circle->SetPosition( center );
     circle->SetEnd( wxPoint( center.x + c.radius.ToSchUnits(), center.y ) );
-    circle->SetWidth( c.width.ToSchUnits() );
+    circle->SetStroke( STROKE_PARAMS( c.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
     circle->SetUnit( aGateNumber );
 
     return circle;
@@ -1823,12 +1823,12 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
                                 + ( ( center.y - begin.y ) * ( center.y - begin.y ) ) ) )
                      * 2;
 
-            arc->SetWidth( 1 );
+            arc->SetStroke( STROKE_PARAMS( 1, PLOT_DASH_TYPE::SOLID ) );
             arc->SetFillMode( FILL_T::FILLED_SHAPE );
         }
         else
         {
-            arc->SetWidth( ewire.width.ToSchUnits() );
+            arc->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
         }
 
         arc->SetArcGeometry( begin, (wxPoint) CalcArcMid( begin, end, center ), end );
@@ -1843,7 +1843,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
         poly->AddPoint( begin );
         poly->AddPoint( end );
         poly->SetUnit( aGateNumber );
-        poly->SetWidth( ewire.width.ToSchUnits() );
+        poly->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
 
         return poly;
     }

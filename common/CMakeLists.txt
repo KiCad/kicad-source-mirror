@@ -385,6 +385,7 @@ set( COMMON_SRCS
     search_stack.cpp
     searchhelpfilefullpath.cpp
     status_popup.cpp
+    stroke_params.cpp
     systemdirsappend.cpp
     template_fieldnames.cpp
     textentry_tricks.cpp
@@ -613,6 +614,14 @@ generate_lemon_grammar(
     libeval_compiler/grammar.lemon
     )
 
+# auto-generate stroke_params_lexer.h and stroke_params_keywords.cpp
+make_lexer(
+    common
+    stroke_params.keywords
+    stroke_params_lexer.h
+    stroke_params_keywords.cpp
+    STROKEPARAMS_T
+    )
 
 # auto-generate netlist_lexer.h and netlist_keywords.cpp
 make_lexer(

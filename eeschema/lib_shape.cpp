@@ -33,10 +33,9 @@
 #include <lib_shape.h>
 
 
-LIB_SHAPE::LIB_SHAPE( LIB_SYMBOL* aParent, SHAPE_T aShape, int aDefaultLineWidth,
-                      FILL_T aFillType ) :
+LIB_SHAPE::LIB_SHAPE( LIB_SYMBOL* aParent, SHAPE_T aShape, int aLineWidth, FILL_T aFillType ) :
     LIB_ITEM( LIB_SHAPE_T, aParent ),
-    EDA_SHAPE( aShape, aDefaultLineWidth, aFillType, true )
+    EDA_SHAPE( aShape, aLineWidth, aFillType, true )
 {
     m_editState = 0;
 }
@@ -260,7 +259,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
             std::swap( pt1, pt2 );
     }
 
-    if( forceNoFill || GetFillType() == FILL_T::NO_FILL )
+    if( forceNoFill || GetFillMode() == FILL_T::NO_FILL )
     {
         penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
 
@@ -292,7 +291,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
     }
     else
     {
-        if( GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+        if( GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
             fillColor = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
         switch( GetShape() )
@@ -415,46 +414,20 @@ void LIB_SHAPE::AddPoint( const wxPoint& aPosition )
     }
     else
     {
-        wxFAIL_MSG( "LIB_SHAPE::AddPoint not implemented for " + SHAPE_T_asString() );
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
 
 
 void LIB_SHAPE::CalcArcAngles( int& aStartAngle, int& aEndAngle ) const
 {
-    wxPoint centerStartVector = GetStart() - GetCenter();
-    wxPoint centerEndVector   = GetEnd() - GetCenter();
+    double start;
+    double end;
 
-    // Angles in Eeschema are still integers
-    aStartAngle = KiROUND( ArcTangente( centerStartVector.y, centerStartVector.x ) );
-    aEndAngle = KiROUND( ArcTangente( centerEndVector.y, centerEndVector.x ) );
+    EDA_SHAPE::CalcArcAngles( start, end );
 
-    NORMALIZE_ANGLE_POS( aStartAngle );
-    NORMALIZE_ANGLE_POS( aEndAngle );  // angles = 0 .. 3600
-
-    // Restrict angle to less than 180 to avoid PBS display mirror Trace because it is
-    // assumed that the arc is less than 180 deg to find orientation after rotate or mirror.
-    if( ( aEndAngle - aStartAngle ) > 1800 )
-        aEndAngle -= 3600;
-    else if( ( aEndAngle - aStartAngle ) <= -1800 )
-        aEndAngle += 3600;
-
-    while( ( aEndAngle - aStartAngle ) >= 1800 )
-    {
-        aEndAngle--;
-        aStartAngle++;
-    }
-
-    while( ( aStartAngle - aEndAngle ) >= 1800 )
-    {
-        aEndAngle++;
-        aStartAngle--;
-    }
-
-    NORMALIZE_ANGLE_POS( aStartAngle );
-
-    if( !IsMoving() )
-        NORMALIZE_ANGLE_POS( aEndAngle );
+    aStartAngle = KiROUND( start * 10.0 );
+    aEndAngle = KiROUND( end * 10.0 );
 }
 
 

@@ -442,7 +442,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         switch( pad->GetShape() )
         {
         default:
-            wxASSERT_MSG( false, "Pad type not implemented" );
+            UNIMPLEMENTED_FOR( pad->ShowPadShape() );
             KI_FALLTHROUGH;
 
         case PAD_SHAPE::CIRCLE:

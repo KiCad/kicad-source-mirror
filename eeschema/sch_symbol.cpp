@@ -95,10 +95,10 @@ static LIB_SYMBOL* dummy()
 }
 
 
-SCH_SYMBOL::SCH_SYMBOL( const wxPoint& aPos, SCH_ITEM* aParent ) :
-    SCH_ITEM( aParent, SCH_SYMBOL_T )
+SCH_SYMBOL::SCH_SYMBOL() :
+    SCH_ITEM( nullptr, SCH_SYMBOL_T )
 {
-    Init( aPos );
+    Init( wxPoint( 0, 0 ) );
 }
 
 

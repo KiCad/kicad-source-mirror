@@ -39,6 +39,7 @@ class SCH_BITMAP;
 class SCH_JUNCTION;
 class SCH_NO_CONNECT;
 class SCH_LINE;
+class SCH_SHAPE;
 class SCH_BUS_ENTRY_BASE;
 class SCH_TEXT;
 class SCH_SYMBOL;
@@ -148,6 +149,7 @@ private:
     void saveNoConnect( SCH_NO_CONNECT* aNoConnect, int aNestLevel );
     void saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLevel );
     void saveLine( SCH_LINE* aLine, int aNestLevel );
+    void saveShape( SCH_SHAPE* aShape, int aNestLevel );
     void saveText( SCH_TEXT* aText, int aNestLevel );
     void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNestLevel );
     void saveInstances( const std::vector<SCH_SHEET_INSTANCE>&        aSheets,

@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_bus_entry.h
- *
- */
-
 #ifndef _SCH_BUS_ENTRY_H_
 #define _SCH_BUS_ENTRY_H_
 
@@ -81,11 +76,9 @@ public:
     virtual STROKE_PARAMS GetStroke() const override { return m_stroke; }
     virtual void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
 
-    PLOT_DASH_TYPE GetStrokeStyle() const;
-    void SetStrokeStyle( PLOT_DASH_TYPE aStyle ) { m_stroke.SetPlotStyle( aStyle ); }
+    PLOT_DASH_TYPE GetLineStyle() const;
 
-    COLOR4D GetStrokeColor() const;
-    void SetStrokeColor( const COLOR4D& aColor ) { m_stroke.SetColor( aColor ); }
+    COLOR4D GetBusEntryColor() const;
 
     void SwapData( SCH_ITEM* aItem ) override;
 

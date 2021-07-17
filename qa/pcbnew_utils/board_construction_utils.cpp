@@ -34,12 +34,12 @@ namespace KI_TEST
 
 void DrawSegment( FOOTPRINT& aFootprint, const SEG& aSeg, int aWidth, PCB_LAYER_ID aLayer )
 {
-    auto seg = std::make_unique<FP_SHAPE>( &aFootprint, SHAPE_T::SEGMENT );
+    std::unique_ptr<FP_SHAPE> seg = std::make_unique<FP_SHAPE>( &aFootprint, SHAPE_T::SEGMENT );
 
     seg->SetStart0( (wxPoint) aSeg.A );
     seg->SetEnd0( (wxPoint) aSeg.B );
 
-    seg->SetWidth( aWidth );
+    seg->SetStroke( STROKE_PARAMS( aWidth, PLOT_DASH_TYPE::SOLID ) );
     seg->SetLayer( aLayer );
 
     aFootprint.Add( seg.release() );
@@ -59,16 +59,16 @@ void DrawPolyline( FOOTPRINT& aFootprint, const std::vector<VECTOR2I>& aPts, int
 void DrawArc( FOOTPRINT& aFootprint, const VECTOR2I& aCentre, const VECTOR2I& aStart,
               double aAngle, int aWidth, PCB_LAYER_ID aLayer )
 {
-    auto seg = std::make_unique<FP_SHAPE>( &aFootprint, SHAPE_T::ARC );
+    std::unique_ptr<FP_SHAPE>  arc = std::make_unique<FP_SHAPE>( &aFootprint, SHAPE_T::ARC );
 
-    seg->SetCenter0( (wxPoint) aCentre );
-    seg->SetStart0( (wxPoint) aStart );
-    seg->SetArcAngleAndEnd0( aAngle * 10 );
+    arc->SetCenter0( (wxPoint) aCentre );
+    arc->SetStart0( (wxPoint) aStart );
+    arc->SetArcAngleAndEnd0( aAngle * 10 );
 
-    seg->SetWidth( aWidth );
-    seg->SetLayer( aLayer );
+    arc->SetStroke( STROKE_PARAMS( aWidth, PLOT_DASH_TYPE::SOLID ) );
+    arc->SetLayer( aLayer );
 
-    aFootprint.Add( seg.release() );
+    aFootprint.Add( arc.release() );
 }
 
 

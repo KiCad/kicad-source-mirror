@@ -59,12 +59,13 @@ int GRAPHICS_IMPORTER_PCBNEW::MapLineWidth( double aLineWidth )
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth )
+void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd,
+                                        double aWidth )
 {
     std::unique_ptr<PCB_SHAPE> line( createDrawing() );
     line->SetShape( SHAPE_T::SEGMENT );
     line->SetLayer( GetLayer() );
-    line->SetWidth( MapLineWidth( aWidth ) );
+    line->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
     line->SetStart( MapCoordinate( aOrigin ) );
     line->SetEnd( MapCoordinate( aEnd ) );
 
@@ -75,13 +76,14 @@ void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D&
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled )
+void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth,
+                                          bool aFilled )
 {
     std::unique_ptr<PCB_SHAPE> circle( createDrawing() );
     circle->SetShape( SHAPE_T::CIRCLE );
     circle->SetFilled( aFilled );
     circle->SetLayer( GetLayer() );
-    circle->SetWidth( MapLineWidth( aWidth ) );
+    circle->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
     circle->SetStart( MapCoordinate( aCenter ));
     circle->SetEnd( MapCoordinate( VECTOR2D( aCenter.x + aRadius, aCenter.y ) ) );
 
@@ -111,7 +113,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
 
     arc->SetArcGeometry( MapCoordinate( aStart ), MapCoordinate( mid ), MapCoordinate( end ) );
 
-    arc->SetWidth( MapLineWidth( aWidth ) );
+    arc->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
 
     if( arc->Type() == PCB_FP_SHAPE_T )
         static_cast<FP_SHAPE*>( arc.get() )->SetLocalCoord();
@@ -137,14 +139,15 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector< VECTOR2D >& aVerti
     if( polygon->Type() == PCB_FP_SHAPE_T )
         static_cast<FP_SHAPE*>( polygon.get() )->SetLocalCoord();
 
-    polygon->SetWidth( MapLineWidth( aWidth ) );
+    polygon->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
     addItem( std::move( polygon ) );
 }
 
 
 void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString& aText,
-        double aHeight, double aWidth, double aThickness, double aOrientation,
-        EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify )
+                                        double aHeight, double aWidth, double aThickness,
+                                        double aOrientation, EDA_TEXT_HJUSTIFY_T aHJustify,
+                                        EDA_TEXT_VJUSTIFY_T aVJustify )
 {
     std::unique_ptr<BOARD_ITEM> boardItem;
     EDA_TEXT* textItem;
@@ -167,12 +170,13 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
 
 
 void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,
-                const VECTOR2D& BezierControl2, const VECTOR2D& aEnd, double aWidth )
+                                          const VECTOR2D& BezierControl2, const VECTOR2D& aEnd,
+                                          double aWidth )
 {
     std::unique_ptr<PCB_SHAPE> spline( createDrawing() );
     spline->SetShape( SHAPE_T::BEZIER );
     spline->SetLayer( GetLayer() );
-    spline->SetWidth( MapLineWidth( aWidth ) );
+    spline->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
     spline->SetStart( MapCoordinate( aStart ) );
     spline->SetBezierC1( MapCoordinate( BezierControl1 ));
     spline->SetBezierC2( MapCoordinate( BezierControl2 ));

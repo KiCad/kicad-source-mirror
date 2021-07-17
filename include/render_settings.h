@@ -203,6 +203,15 @@ public:
     int GetMinPenWidth() const { return m_minPenWidth; }
     void SetMinPenWidth( int aWidth ) { m_minPenWidth = aWidth; }
 
+    double GetDashLengthRatio() const { return m_dashLengthRatio; }
+    void SetDashLengthRatio( double aRatio ) { m_dashLengthRatio = aRatio; }
+    double GetDashLength( int aLineWidth ) const;
+    double GetDotLength( int aLineWidth ) const;
+
+    double GetGapLengthRatio() const { return m_gapLengthRatio; }
+    void SetGapLengthRatio( double aRatio ) { m_gapLengthRatio = aRatio; }
+    double GetGapLength( int aLineWidth ) const;
+
     bool GetShowPageLimits() const { return m_showPageLimits; }
     void SetShowPageLimits( bool aDraw ) { m_showPageLimits = aDraw; }
 
@@ -309,6 +318,9 @@ protected:
     int           m_defaultPenWidth;
     int           m_minPenWidth;          // Some clients (such as PDF) don't like ultra-thin
                                           // lines.  This sets an absolute minimum.
+    double        m_dashLengthRatio;
+    double        m_gapLengthRatio;
+
     bool          m_showPageLimits;
     bool          m_isPrinting;
 

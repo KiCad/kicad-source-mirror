@@ -270,7 +270,7 @@ private:
     MODE                      m_mode;
     bool                      m_inDrawingTool;     // Re-entrancy guard
 
-    unsigned int              m_lineWidth;         // Current line width for multi-segment drawing
+    STROKE_PARAMS             m_stroke;            // Current stroke for multi-segment drawing
     static const unsigned int WIDTH_STEP;          // Amount of width change for one -/+ key press
 
 

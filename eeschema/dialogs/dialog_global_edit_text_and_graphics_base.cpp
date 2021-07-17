@@ -327,14 +327,14 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_setBgColor = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Sheet background color:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_setBgColor, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_setFillColor = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Fill color:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_setFillColor, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_bgColorSwatch = new COLOR_SWATCH( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_bgColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-	m_bgColorSwatch->SetMinSize( wxSize( 48,24 ) );
+	m_fillColorSwatch = new COLOR_SWATCH( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fillColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+	m_fillColorSwatch->SetMinSize( wxSize( 48,24 ) );
 
-	fgSizer1->Add( m_bgColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_fillColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_dotSizeLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Junction size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dotSizeLabel->Wrap( -1 );

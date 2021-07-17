@@ -308,7 +308,7 @@ void GRAPHICS_CLEANER::mergeRects()
                     rect->SetStart( top->start );
                     rect->SetEnd( bottom->end );
                     rect->SetLayer( top->shape->GetLayer() );
-                    rect->SetWidth( top->shape->GetWidth() );
+                    rect->SetStroke( top->shape->GetStroke() );
 
                     m_commit.Add( rect );
                     m_commit.Remove( left->shape );

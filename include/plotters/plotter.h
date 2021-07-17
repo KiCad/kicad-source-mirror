@@ -38,6 +38,7 @@
 #include <page_info.h>
 #include <outline_mode.h>
 #include <gal/color4d.h>
+#include <stroke_params.h>
 #include <render_settings.h>
 
 class COLOR_SETTINGS;
@@ -96,20 +97,6 @@ enum class PLOT_TEXT_MODE
     NATIVE,
     PHANTOM,
     DEFAULT
-};
-
-/**
- * Dashed line types.
- */
-enum class PLOT_DASH_TYPE
-{
-    DEFAULT    = -1,
-    SOLID      = 0,
-    FIRST_TYPE = SOLID,
-    DASH,
-    DOT,
-    DASHDOT,
-    LAST_TYPE = DASHDOT
 };
 
 /**

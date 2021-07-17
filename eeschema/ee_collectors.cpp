@@ -43,6 +43,7 @@ const KICAD_T EE_COLLECTOR::AllItems[] = {
 
 
 const KICAD_T EE_COLLECTOR::EditableItems[] = {
+    SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
@@ -80,6 +81,7 @@ const KICAD_T EE_COLLECTOR::MovableItems[] =
     SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
     SCH_BITMAP_T,
+    SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,

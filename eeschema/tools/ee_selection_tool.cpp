@@ -150,13 +150,13 @@ bool EE_SELECTION_TOOL::Init()
         m_isSymbolViewer = symbolViewerFrame != nullptr;
     }
 
-    static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
-    static KICAD_T connectedTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T,
+    static KICAD_T wireOrBusTypes[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T, EOT };
+    static KICAD_T connectedTypes[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T,
                                         SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_LABEL_T,
                                         SCH_SHEET_PIN_T, SCH_PIN_T, EOT };
 
-    auto wireSelection =      E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_WIRE_T );
-    auto busSelection =       E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_BUS_T );
+    auto wireSelection =      E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_ITEM_LOCATE_WIRE_T );
+    auto busSelection =       E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_ITEM_LOCATE_BUS_T );
     auto wireOrBusSelection = E_C::MoreThan( 0 ) && E_C::OnlyTypes( wireOrBusTypes );
     auto connectedSelection = E_C::MoreThan( 0 ) && E_C::OnlyTypes( connectedTypes );
     auto sheetSelection =     E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
@@ -293,6 +293,7 @@ const KICAD_T movableSchematicItems[] =
     SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
     SCH_BITMAP_T,
+    SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
@@ -307,7 +308,7 @@ const KICAD_T movableSchematicItems[] =
 
 const KICAD_T movableSymbolItems[] =
 {
-    LIB_SHAPE_T,
+   LIB_SHAPE_T,
     LIB_TEXT_T,
     LIB_PIN_T,
     LIB_FIELD_T,
@@ -1334,18 +1335,18 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
 static KICAD_T nodeTypes[] =
 {
-    SCH_SYMBOL_LOCATE_POWER_T,
-    SCH_PIN_T,
-    SCH_LINE_LOCATE_WIRE_T,
-    SCH_LINE_LOCATE_BUS_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_SHEET_PIN_T,
-    SCH_JUNCTION_T,
-    EOT
+        SCH_SYMBOL_LOCATE_POWER_T,
+        SCH_PIN_T,
+        SCH_ITEM_LOCATE_WIRE_T,
+        SCH_ITEM_LOCATE_BUS_T,
+        SCH_BUS_WIRE_ENTRY_T,
+        SCH_BUS_BUS_ENTRY_T,
+        SCH_LABEL_T,
+        SCH_HIER_LABEL_T,
+        SCH_GLOBAL_LABEL_T,
+        SCH_SHEET_PIN_T,
+        SCH_JUNCTION_T,
+        EOT
 };
 
 
@@ -1383,7 +1384,7 @@ int EE_SELECTION_TOOL::SelectNode( const TOOL_EVENT& aEvent )
 
 int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 {
-    static KICAD_T wiresAndBuses[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+    static KICAD_T wiresAndBuses[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T, EOT };
 
     RequestSelection( wiresAndBuses );
 

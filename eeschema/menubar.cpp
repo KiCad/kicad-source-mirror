@@ -215,6 +215,9 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->Add( EE_ACTIONS::importSheetPin );
 
     placeMenu->AppendSeparator();
+    placeMenu->Add( EE_ACTIONS::drawRectangle );
+    placeMenu->Add( EE_ACTIONS::drawCircle );
+    placeMenu->Add( EE_ACTIONS::drawArc );
     placeMenu->Add( EE_ACTIONS::drawLines );
     placeMenu->Add( EE_ACTIONS::placeSchematicText );
     placeMenu->Add( EE_ACTIONS::placeImage );

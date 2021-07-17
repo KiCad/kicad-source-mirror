@@ -236,7 +236,8 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             else
                 poly->SetFilled( true );
 
-            poly->SetWidth( board->GetDesignSettings().GetLineThickness( m_params.m_layer ) );
+            poly->SetStroke( STROKE_PARAMS( board->GetDesignSettings().GetLineThickness( layer ),
+                                            PLOT_DASH_TYPE::SOLID ) );
             poly->SetLayer( layer );
             poly->SetPolyShape( *aZone->Outline() );
 

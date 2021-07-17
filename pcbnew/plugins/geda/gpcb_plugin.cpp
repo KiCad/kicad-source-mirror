@@ -469,7 +469,8 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                                        parseInt( parameters[3], conv_unit ) ) );
             shape->SetEnd0( wxPoint( parseInt( parameters[4], conv_unit ),
                                      parseInt( parameters[5], conv_unit ) ) );
-            shape->SetWidth( parseInt( parameters[6], conv_unit ) );
+            shape->SetStroke( STROKE_PARAMS( parseInt( parameters[6], conv_unit ),
+                                             PLOT_DASH_TYPE::SOLID ) );
             shape->SetDrawCoord();
             footprint->Add( shape );
             continue;
@@ -517,7 +518,8 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             // Angle value is clockwise in gpcb and Pcbnew.
             shape->SetArcAngleAndEnd0( sweep_angle );
 
-            shape->SetWidth( parseInt( parameters[8], conv_unit ) );
+            shape->SetStroke( STROKE_PARAMS( parseInt( parameters[8], conv_unit ),
+                                             PLOT_DASH_TYPE::SOLID ) );
             shape->SetDrawCoord();
             continue;
         }

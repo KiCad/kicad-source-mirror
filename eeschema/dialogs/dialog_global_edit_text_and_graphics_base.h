@@ -88,8 +88,8 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		COLOR_SWATCH* m_colorSwatch;
 		wxStaticText* lineStyleLabel;
 		wxChoice* m_lineStyle;
-		wxCheckBox* m_setBgColor;
-		COLOR_SWATCH* m_bgColorSwatch;
+		wxCheckBox* m_setFillColor;
+		COLOR_SWATCH* m_fillColorSwatch;
 		wxStaticText* m_dotSizeLabel;
 		wxTextCtrl* m_dotSizeCtrl;
 		wxStaticText* m_dotSizeUnits;

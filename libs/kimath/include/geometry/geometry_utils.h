@@ -149,24 +149,5 @@ VECTOR2<T> GetVectorSnapped45( const VECTOR2<T>& aVec, bool only45 = false )
 bool ClipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &y2 );
 
 
-/**
- * Dashed and dotted line patterns.
- */
-
-constexpr double dot_mark_len( double aLineWidth )
-{
-    return std::max( 1.0, aLineWidth );
-}
-
-constexpr double dash_gap_len( double aLineWidth )
-{
-    return 3.0 * dot_mark_len( aLineWidth ) + ( 2.0 * aLineWidth );
-}
-
-constexpr double dash_mark_len( double aLineWidth )
-{
-    return std::max( dash_gap_len( aLineWidth ), 5.0 * dot_mark_len( aLineWidth ) );
-}
-
 #endif  // #ifndef GEOMETRY_UTILS_H
 

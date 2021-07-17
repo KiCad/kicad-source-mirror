@@ -91,6 +91,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_rescue_each_base.cpp
     dialogs/dialog_sch_import_settings.cpp
     dialogs/dialog_sch_import_settings_base.cpp
+    dialogs/dialog_shape_properties.cpp
+    dialogs/dialog_shape_properties_base.cpp
     dialogs/dialog_sheet_pin_properties.cpp
     dialogs/dialog_sheet_pin_properties_base.cpp
     dialogs/dialog_sheet_properties.cpp
@@ -183,7 +185,6 @@ set( EESCHEMA_SRCS
     lib_pin.cpp
     lib_symbol.cpp
     lib_text.cpp
-    symbol_viewer_frame.cpp
     libarch.cpp
     menubar.cpp
     pin_numbers.cpp
@@ -210,6 +211,7 @@ set( EESCHEMA_SRCS
     sch_screen.cpp
     sch_plugins/kicad/sch_sexpr_parser.cpp
     sch_plugins/kicad/sch_sexpr_plugin.cpp
+    sch_shape.cpp
     sch_sheet.cpp
     sch_sheet_path.cpp
     sch_sheet_pin.cpp
@@ -226,6 +228,7 @@ set( EESCHEMA_SRCS
     symbol_library.cpp
     symbol_tree_model_adapter.cpp
     symbol_tree_synchronizing_adapter.cpp
+    symbol_viewer_frame.cpp
     toolbars_symbol_viewer.cpp
     toolbars_sch_editor.cpp
     transform.cpp

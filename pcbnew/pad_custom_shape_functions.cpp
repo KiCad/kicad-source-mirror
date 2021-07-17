@@ -48,7 +48,7 @@ void PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aF
     item->SetShape( SHAPE_T::POLY );
     item->SetFilled( aFilled );
     item->SetPolyShape( poly_no_hole );
-    item->SetWidth( aThickness );
+    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
@@ -60,7 +60,7 @@ void PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness, b
     PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
     item->SetFilled( aFilled );
     item->SetPolyPoints( aPoly );
-    item->SetWidth( aThickness );
+    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
@@ -73,7 +73,7 @@ void PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int a
     item->SetFilled( false );
     item->SetStart( aStart );
     item->SetEnd( aEnd );
-    item->SetWidth( aThickness );
+    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
@@ -88,7 +88,7 @@ void PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aA
     item->SetCenter( aCenter );
     item->SetStart( aStart );
     item->SetArcAngleAndEnd( aArcAngle );
-    item->SetWidth( aThickness );
+    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
@@ -104,7 +104,7 @@ void PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const w
     item->SetEnd( aEnd );
     item->SetBezierC1( aCtrl1 );
     item->SetBezierC2( aCtrl2 );
-    item->SetWidth( aThickness );
+    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
@@ -117,7 +117,7 @@ void PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThicknes
     item->SetFilled( aFilled );
     item->SetStart( aCenter );
     item->SetEnd( wxPoint( aCenter.x + aRadius, aCenter.y ) );
-    item->SetWidth( aThickness );
+    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
@@ -131,7 +131,7 @@ void PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThi
     item->SetFilled( aFilled );
     item->SetStart( aStart );
     item->SetEnd( aEnd );
-    item->SetWidth( aThickness );
+    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();

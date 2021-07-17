@@ -78,6 +78,11 @@ public:
 
     wxPoint GetCenter() const override { return getCenter(); }
 
+    bool HasLineStroke() const override { return true; }
+
+    STROKE_PARAMS GetStroke() const override { return m_stroke; }
+    void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
+
     /**
      * Allows items to return their visual center rather than their anchor. For some shapes this
      * is similar to GetCenter(), but for unfilled shapes a point on the outline is better.

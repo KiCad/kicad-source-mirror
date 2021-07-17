@@ -1667,7 +1667,7 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
     if( layer < FIRST_LAYER || layer > LAST_NON_COPPER_LAYER )
         layer = SILKSCREEN_N_FRONT;
 
-    dwg->SetWidth( width );
+    dwg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
     dwg->SetLayer( leg_layer2new( m_cu_count,  layer ) );
 
     FP_SHAPE* fpShape = dwg.release();
@@ -1846,18 +1846,9 @@ void LEGACY_PLUGIN::loadPCB_LINE()
 
             dseg->SetShape( static_cast<SHAPE_T>( shape ) );
             dseg->SetFilled( false );
-            dseg->SetWidth( width );
-
-            if( dseg->GetShape() == SHAPE_T::ARC )
-            {
-                dseg->SetCenter( wxPoint( start_x, start_y ) );
-                dseg->SetStart( wxPoint( end_x, end_y ) );
-            }
-            else
-            {
-                dseg->SetStart( wxPoint( start_x, start_y ) );
-                dseg->SetEnd( wxPoint( end_x, end_y ) );
-            }
+            dseg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+            dseg->SetStart( wxPoint( start_x, start_y ) );
+            dseg->SetEnd( wxPoint( end_x, end_y ) );
         }
         else if( TESTLINE( "De" ) )
         {

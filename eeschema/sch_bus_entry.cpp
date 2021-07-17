@@ -26,6 +26,7 @@
 #include <bitmaps.h>
 #include <core/mirror.h>
 #include <schematic.h>
+#include <geometry/shape_segment.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
 #include <sch_junction.h>
@@ -172,7 +173,7 @@ const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
 }
 
 
-COLOR4D SCH_BUS_ENTRY_BASE::GetStrokeColor() const
+COLOR4D SCH_BUS_ENTRY_BASE::GetBusEntryColor() const
 {
     if( m_stroke.GetColor() != COLOR4D::UNSPECIFIED )
     {
@@ -190,7 +191,7 @@ COLOR4D SCH_BUS_ENTRY_BASE::GetStrokeColor() const
 }
 
 
-PLOT_DASH_TYPE SCH_BUS_ENTRY_BASE::GetStrokeStyle() const
+PLOT_DASH_TYPE SCH_BUS_ENTRY_BASE::GetLineStyle() const
 {
     if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
     {
@@ -267,57 +268,25 @@ void SCH_BUS_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemLis
 void SCH_BUS_ENTRY_BASE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
-    COLOR4D color = ( GetStrokeColor() == COLOR4D::UNSPECIFIED ) ?
-                    aSettings->GetLayerColor( m_layer ) : GetStrokeColor();
+    COLOR4D color = ( GetBusEntryColor() == COLOR4D::UNSPECIFIED ) ?
+                    aSettings->GetLayerColor( m_layer ) : GetBusEntryColor();
     wxPoint start = m_pos + aOffset;
     wxPoint end = GetEnd() + aOffset;
     int     penWidth = ( GetPenWidth() == 0 ) ? aSettings->GetDefaultPenWidth() : GetPenWidth();
 
-    if( GetStrokeStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
+    if( GetLineStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
     {
         GRLine( nullptr, DC, start.x, start.y, end.x, end.y, penWidth, color );
     }
     else
     {
-        EDA_RECT clip( (wxPoint) start, wxSize( end.x - start.x, end.y - start.y ) );
-        clip.Normalize();
+        SHAPE_SEGMENT segment( start, end );
 
-        double theta = atan2( end.y - start.y, end.x - start.x );
-        double strokes[] = { 1.0, dash_gap_len( penWidth ), 1.0, dash_gap_len( penWidth ) };
-
-        switch( GetStrokeStyle() )
-        {
-        default:
-        case PLOT_DASH_TYPE::DASH:
-            strokes[0] = strokes[2] = dash_mark_len( penWidth );
-            break;
-        case PLOT_DASH_TYPE::DOT:
-            strokes[0] = strokes[2] = dot_mark_len( penWidth );
-            break;
-        case PLOT_DASH_TYPE::DASHDOT:
-            strokes[0] = dash_mark_len( penWidth );
-            strokes[2] = dot_mark_len( penWidth );
-            break;
-        }
-
-        for( size_t i = 0; i < 10000; ++i )
-        {
-            // Calculations MUST be done in doubles to keep from accumulating rounding
-            // errors as we go.
-            wxPoint next( start.x + strokes[ i % 4 ] * cos( theta ),
-                          start.y + strokes[ i % 4 ] * sin( theta ) );
-
-            // Drawing each segment can be done rounded to ints.
-            wxPoint segStart( KiROUND( start.x ), KiROUND( start.y ) );
-            wxPoint segEnd( KiROUND( next.x ), KiROUND( next.y ) );
-
-            if( ClipLine( &clip, segStart.x, segStart.y, segEnd.x, segEnd.y ) )
-                break;
-            else if( i % 2 == 0 )
-                GRLine( nullptr, DC, segStart.x, segStart.y, segEnd.x, segEnd.y, penWidth, color );
-
-            start = next;
-        }
+        STROKE_PARAMS::Stroke( &segment, GetLineStyle(), penWidth, aSettings,
+                               [&]( const wxPoint& a, const wxPoint& b )
+                               {
+                                   GRLine( nullptr, DC, a.x, a.y, b.x, b.y, penWidth, color );
+                               } );
     }
 }
 
@@ -503,15 +472,15 @@ void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter ) const
 {
     auto* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
 
-    COLOR4D color = ( GetStrokeColor() == COLOR4D::UNSPECIFIED ) ?
-                    settings->GetLayerColor( m_layer ) : GetStrokeColor();
+    COLOR4D color = ( GetBusEntryColor() == COLOR4D::UNSPECIFIED ) ?
+                    settings->GetLayerColor( m_layer ) : GetBusEntryColor();
     int     penWidth = ( GetPenWidth() == 0 ) ? settings->GetDefaultPenWidth() : GetPenWidth();
 
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
 
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetColor( color );
-    aPlotter->SetDash( GetStrokeStyle() );
+    aPlotter->SetDash( GetLineStyle() );
     aPlotter->MoveTo( m_pos );
     aPlotter->FinishTo( GetEnd() );
 }

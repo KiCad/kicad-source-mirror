@@ -200,7 +200,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
             graphic->SetShape( SHAPE_T::POLY );
             graphic->SetFilled( false );
-            graphic->SetWidth( poly.Outline( 0 ).Width() );
+            graphic->SetStroke( STROKE_PARAMS( poly.Outline( 0 ).Width() ) );
             graphic->SetLayer( destLayer );
             graphic->SetPolyShape( poly );
 
@@ -329,15 +329,14 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
 
                         if( aItem->Type() == PCB_ARC_T )
                         {
-                            std::shared_ptr<SHAPE> es =
-                                    static_cast<PCB_ARC*>( aItem )->GetEffectiveShape();
-                            arc = *static_cast<SHAPE_ARC*>( es.get() );
+                            PCB_ARC* pcb_arc = static_cast<PCB_ARC*>( aItem );
+                            arc = *static_cast<SHAPE_ARC*>( pcb_arc->GetEffectiveShape().get() );
                         }
                         else
                         {
-                            PCB_SHAPE* ps = static_cast<PCB_SHAPE*>( aItem );
-                            arc = SHAPE_ARC( ps->GetStart(), ps->GetArcMid(), ps->GetEnd(),
-                                             ps->GetWidth() );
+                            PCB_SHAPE* pcb_shape = static_cast<PCB_SHAPE*>( aItem );
+                            arc = SHAPE_ARC( pcb_shape->GetStart(), pcb_shape->GetArcMid(),
+                                             pcb_shape->GetEnd(), pcb_shape->GetWidth() );
                         }
 
                         if( aDirection )
@@ -715,8 +714,6 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
         }
         else
         {
-
-
             if( !IsCopperLayer( targetLayer ) )
             {
                 if( copperLayer == UNSELECTED_LAYER )
@@ -825,7 +822,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
 
         arc->SetFilled( false );
         arc->SetLayer( layer );
-        arc->SetWidth( line->GetWidth() );
+        arc->SetStroke( line->GetStroke() );
 
         arc->SetCenter( wxPoint( center ) );
         arc->SetStart( wxPoint( start ) );

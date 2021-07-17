@@ -25,7 +25,7 @@
 #include <dialog_lib_shape_properties.h>
 #include <symbol_edit_frame.h>
 #include <confirm.h>
-
+#include <lib_shape.h>
 
 DIALOG_LIB_SHAPE_PROPERTIES::DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
                                                           LIB_ITEM* aItem ) :
@@ -85,7 +85,7 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
     m_checkApplyToAllConversions->Enable( enblConvOptStyle );
 
     if( shape )
-        m_fillCtrl->SetSelection( static_cast<int>( shape->GetFillType() ) - 1 );
+        m_fillCtrl->SetSelection( static_cast<int>( shape->GetFillMode() ) - 1 );
 
     m_fillCtrl->Enable( shape != nullptr );
 
@@ -98,13 +98,16 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    EDA_SHAPE*  shape = dynamic_cast<EDA_SHAPE*>( m_item );
+    LIB_SHAPE* shape = dynamic_cast<LIB_SHAPE*>( m_item );
 
     if( shape )
+    {
         shape->SetFillMode( static_cast<FILL_T>( std::max( m_fillCtrl->GetSelection() + 1, 1 ) ) );
 
-    if( shape )
-        shape->SetWidth( m_lineWidth.GetValue() );
+        STROKE_PARAMS stroke = shape->GetStroke();
+        stroke.SetWidth( m_lineWidth.GetValue() );
+        shape->SetStroke( stroke );
+    }
 
     if( GetApplyToAllConversions() )
         m_item->SetConvert( 0 );

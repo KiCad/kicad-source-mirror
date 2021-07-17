@@ -178,7 +178,7 @@ void PCB_ARC::AddToFootprint( FOOTPRINT* aFootprint )
         arc->SetStart0( wxPoint( m_StartX, m_StartY ) );
         arc->SetArcAngleAndEnd0( -m_Angle );
 
-        arc->SetWidth( m_Width );
+        arc->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
         arc->SetLayer( m_KiCadLayer );
 
         arc->SetDrawCoord();
@@ -197,7 +197,7 @@ void PCB_ARC::AddToBoard()
     arc->SetCenter( wxPoint( m_positionX, m_positionY ) );
     arc->SetStart( wxPoint( m_StartX, m_StartY ) );
     arc->SetArcAngleAndEnd( -m_Angle );
-    arc->SetWidth( m_Width );
+    arc->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
 }
 
 

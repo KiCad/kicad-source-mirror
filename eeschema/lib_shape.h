@@ -49,6 +49,9 @@ public:
         return ShowShape();
     }
 
+    STROKE_PARAMS GetStroke() const { return m_stroke; }
+    void SetStroke( const STROKE_PARAMS& aStroke ) { m_stroke = aStroke; }
+
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
@@ -59,7 +62,7 @@ public:
         // For historical reasons, a stored value of 0 means "default width" and negative
         // numbers meant "don't stroke".
 
-        if( GetPenWidth() < 0 && GetFillType() != FILL_T::NO_FILL )
+        if( GetPenWidth() < 0 && GetFillMode() != FILL_T::NO_FILL )
             return 0;
         else if( GetPenWidth() == 0 )
             return aSettings->GetDefaultPenWidth();

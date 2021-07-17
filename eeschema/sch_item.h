@@ -29,8 +29,7 @@
 #include <unordered_set>
 
 #include <eda_item.h>
-#include <plotters/plotter.h>      // for PLOT_DASH_TYPE definition
-
+#include <plotters/plotter.h>
 #include <default_values.h>
 #include <sch_sheet_path.h>
 #include <netclass.h>
@@ -135,44 +134,6 @@ typedef std::unordered_set<SCH_ITEM*> SCH_ITEM_SET;
 
 
 /**
- * Simple container to manage line stroke parameters.
- */
-class STROKE_PARAMS
-{
-public:
-    STROKE_PARAMS( int aWidth = Mils2iu( DEFAULT_LINE_WIDTH_MILS ),
-                   PLOT_DASH_TYPE aPlotStyle = PLOT_DASH_TYPE::DEFAULT,
-                   const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) :
-            m_width( aWidth ),
-            m_plotstyle( aPlotStyle ),
-            m_color( aColor )
-    {
-    }
-
-    int GetWidth() const { return m_width; }
-    void SetWidth( int aWidth ) { m_width = aWidth; }
-
-    PLOT_DASH_TYPE GetPlotStyle() const { return m_plotstyle; }
-    void SetPlotStyle( PLOT_DASH_TYPE aPlotStyle ) { m_plotstyle = aPlotStyle; }
-
-    COLOR4D GetColor() const { return m_color; }
-    void SetColor( const COLOR4D& aColor ) { m_color = aColor; }
-
-    bool operator!=( const STROKE_PARAMS& aOther )
-    {
-        return m_width != aOther.m_width
-                || m_plotstyle != aOther.m_plotstyle
-                || m_color != aOther.m_color;
-    }
-
-private:
-    int            m_width;
-    PLOT_DASH_TYPE m_plotstyle;
-    COLOR4D        m_color;
-};
-
-
-/**
  * Base class for any item which can be embedded within the #SCHEMATIC container class,
  * and therefore instances of derived classes should only be found in EESCHEMA or other
  * programs that use class SCHEMATIC and its contents.
@@ -193,6 +154,24 @@ public:
     virtual wxString GetClass() const override
     {
         return wxT( "SCH_ITEM" );
+    }
+
+    bool IsType( const KICAD_T aScanTypes[] ) const override
+    {
+        if( EDA_ITEM::IsType( aScanTypes ) )
+            return true;
+
+        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        {
+            if( *p == SCH_ITEM_LOCATE_WIRE_T && m_layer == LAYER_WIRE )
+                return true;
+            else if ( *p == SCH_ITEM_LOCATE_BUS_T && m_layer == LAYER_BUS )
+                return true;
+            else if ( *p == SCH_ITEM_LOCATE_GRAPHIC_LINE_T && m_layer == LAYER_NOTES )
+                return true;
+        }
+
+        return false;
     }
 
     /**

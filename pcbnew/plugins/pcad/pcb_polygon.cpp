@@ -166,7 +166,7 @@ void PCB_POLYGON::AddToFootprint( FOOTPRINT* aFootprint )
         FP_SHAPE* dwg = new FP_SHAPE( aFootprint, SHAPE_T::POLY );
         aFootprint->Add( dwg );
 
-        dwg->SetWidth( 0 );
+        dwg->SetStroke( STROKE_PARAMS( 0 ) );
         dwg->SetLayer( m_KiCadLayer );
 
         auto outline = new std::vector<wxPoint>;

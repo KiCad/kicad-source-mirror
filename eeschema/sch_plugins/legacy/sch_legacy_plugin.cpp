@@ -41,6 +41,7 @@
 #include <trigo.h>
 #include <progress_reporter.h>
 #include <general.h>
+#include <gr_text.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>
@@ -3286,7 +3287,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     arc->SetUnit( parseInt( aReader, line, &line ) );
     arc->SetConvert( parseInt( aReader, line, &line ) );
-    arc->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
+    arc->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
+                                   PLOT_DASH_TYPE::SOLID ) );
 
     // Old libraries (version <= 2.2) do not have always this FILL MODE param
     // when fill mode is no fill (default mode).
@@ -3359,7 +3361,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL>& aSy
     circle->SetEnd( wxPoint( center.x + radius, center.y ) );
     circle->SetUnit( parseInt( aReader, line, &line ) );
     circle->SetConvert( parseInt( aReader, line, &line ) );
-    circle->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
+    circle->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
+                                      PLOT_DASH_TYPE::SOLID ) );
 
     if( *line != 0 )
         circle->SetFillMode( parseFillMode( aReader, line, &line ) );
@@ -3488,7 +3491,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadRect( std::unique_ptr<LIB_SYMBOL>& aSymb
 
     rectangle->SetUnit( parseInt( aReader, line, &line ) );
     rectangle->SetConvert( parseInt( aReader, line, &line ) );
-    rectangle->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
+    rectangle->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
+                                         PLOT_DASH_TYPE::SOLID ) );
 
     if( *line != 0 )
         rectangle->SetFillMode( parseFillMode( aReader, line, &line ) );
@@ -3708,7 +3712,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMBOL>& a
     int points = parseInt( aReader, line, &line );
     polyLine->SetUnit( parseInt( aReader, line, &line ) );
     polyLine->SetConvert( parseInt( aReader, line, &line ) );
-    polyLine->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
+    polyLine->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
+                                        PLOT_DASH_TYPE::SOLID ) );
 
     wxPoint pt;
 
@@ -3741,7 +3746,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_SYMBOL>& aSy
 
     bezier->SetUnit( parseInt( aReader, line, &line ) );
     bezier->SetConvert( parseInt( aReader, line, &line ) );
-    bezier->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
+    bezier->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
+                                      PLOT_DASH_TYPE::SOLID ) );
 
     bezier->SetStart( wxPoint( Mils2Iu( parseInt( aReader, line, &line ) ),
                                Mils2Iu( parseInt( aReader, line, &line ) ) ) );
@@ -4002,7 +4008,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveArc( LIB_SHAPE* aArc, OUTPUTFORMATTER& aFormat
                       aArc->GetUnit(),
                       aArc->GetConvert(),
                       Iu2Mils( aArc->GetWidth() ),
-                      fill_tab[ static_cast<int>( aArc->GetFillType() ) - 1 ],
+                      fill_tab[ static_cast<int>( aArc->GetFillMode() ) - 1 ],
                       Iu2Mils( aArc->GetStart().x ),
                       Iu2Mils( aArc->GetStart().y ),
                       Iu2Mils( aArc->GetEnd().x ),
@@ -4023,7 +4029,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_SHAPE* aBezier, OUTPUTFORMATTER& a
     for( const wxPoint& pt : aBezier->GetBezierPoints() )
         aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
 
-    aFormatter.Print( 0, " %c\n", fill_tab[ static_cast<int>( aBezier->GetFillType() ) - 1 ] );
+    aFormatter.Print( 0, " %c\n", fill_tab[ static_cast<int>( aBezier->GetFillMode() ) - 1 ] );
 }
 
 
@@ -4038,7 +4044,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveCircle( LIB_SHAPE* aCircle, OUTPUTFORMATTER& a
                       aCircle->GetUnit(),
                       aCircle->GetConvert(),
                       Iu2Mils( aCircle->GetWidth() ),
-                      fill_tab[ static_cast<int>( aCircle->GetFillType() ) - 1 ] );
+                      fill_tab[ static_cast<int>( aCircle->GetFillMode() ) - 1 ] );
 }
 
 
@@ -4168,7 +4174,7 @@ void SCH_LEGACY_PLUGIN_CACHE::savePolyLine( LIB_SHAPE* aPolyLine, OUTPUTFORMATTE
     for( const VECTOR2I& pt : aPolyLine->GetPolyShape().Outline( 0 ).CPoints() )
         aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
 
-    aFormatter.Print( 0, " %c\n", fill_tab[ static_cast<int>( aPolyLine->GetFillType() ) - 1 ] );
+    aFormatter.Print( 0, " %c\n", fill_tab[ static_cast<int>( aPolyLine->GetFillMode() ) - 1 ] );
 }
 
 
@@ -4184,7 +4190,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveRectangle( LIB_SHAPE* aRectangle, OUTPUTFORMAT
                       aRectangle->GetUnit(),
                       aRectangle->GetConvert(),
                       Iu2Mils( aRectangle->GetWidth() ),
-                      fill_tab[ static_cast<int>( aRectangle->GetFillType() ) - 1 ] );
+                      fill_tab[ static_cast<int>( aRectangle->GetFillMode() ) - 1 ] );
 }
 
 

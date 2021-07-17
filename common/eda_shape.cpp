@@ -40,8 +40,9 @@
 EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill, bool eeWinding ) :
     m_endsSwapped( false ),
     m_shape( aType ),
-    m_width( aLineWidth ),
+    m_stroke( aLineWidth, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
     m_fill( aFill ),
+    m_fillColor( COLOR4D::UNSPECIFIED ),
     m_editState( 0 ),
     m_eeWinding( eeWinding )
 {
@@ -352,7 +353,7 @@ void EDA_SHAPE::flip( const wxPoint& aCentre, bool aFlipLeftRight )
         {
             std::vector<wxPoint> ctrlPoints = { m_start, m_bezierC1, m_bezierC2, m_end };
             BEZIER_POLY converter( ctrlPoints );
-            converter.GetPoly( m_bezierPoints, m_width );
+            converter.GetPoly( m_bezierPoints, m_stroke.GetWidth() );
         }
         break;
 
@@ -605,7 +606,7 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         break;
     }
 
-    aList.emplace_back( _( "Line width" ), MessageTextFromValue( units, m_width ) );
+    aList.emplace_back( _( "Line width" ), MessageTextFromValue( units, GetWidth() ) );
 }
 
 
@@ -663,7 +664,7 @@ const EDA_RECT EDA_SHAPE::getBoundingBox() const
         break;
     }
 
-    bbox.Inflate( std::max( 0, m_width / 2 ) );
+    bbox.Inflate( std::max( 0, GetWidth() ) / 2 );
     bbox.Normalize();
 
     return bbox;
@@ -674,8 +675,8 @@ bool EDA_SHAPE::hitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int maxdist = aAccuracy;
 
-    if( m_width > 0 )
-        maxdist += m_width / 2;
+    if( GetWidth() > 0 )
+        maxdist += GetWidth() / 2;
 
     switch( m_shape )
     {
@@ -727,7 +728,7 @@ bool EDA_SHAPE::hitTest( const wxPoint& aPosition, int aAccuracy ) const
     }
 
     case SHAPE_T::BEZIER:
-        const_cast<EDA_SHAPE*>( this )->RebuildBezierToSegmentsPointsList( m_width );
+        const_cast<EDA_SHAPE*>( this )->RebuildBezierToSegmentsPointsList( GetWidth() );
 
         for( unsigned int i= 1; i < m_bezierPoints.size(); i++)
         {
@@ -1070,7 +1071,7 @@ void EDA_SHAPE::SetPolyPoints( const std::vector<wxPoint>& aPoints )
 }
 
 
-std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes() const
+std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
 {
     std::vector<SHAPE*> effectiveShapes;
 
@@ -1078,60 +1079,50 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes() const
     {
     case SHAPE_T::ARC:
         effectiveShapes.emplace_back( new SHAPE_ARC( m_arcCenter, m_start, GetArcAngle() / 10.0,
-                                                     m_width ) );
+                                                     GetWidth() ) );
         break;
 
     case SHAPE_T::SEGMENT:
-        effectiveShapes.emplace_back( new SHAPE_SEGMENT( m_start, m_end, m_width ) );
+        effectiveShapes.emplace_back( new SHAPE_SEGMENT( m_start, m_end, GetWidth() ) );
         break;
 
     case SHAPE_T::RECT:
     {
         std::vector<wxPoint> pts = GetRectCorners();
 
-        if( IsFilled() )
+        if( IsFilled() && !aEdgeOnly )
             effectiveShapes.emplace_back( new SHAPE_SIMPLE( pts ) );
 
-        if( m_width > 0 || !IsFilled() )
+        if( GetWidth() > 0 || !IsFilled() || aEdgeOnly )
         {
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[0], pts[1], m_width ) );
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[1], pts[2], m_width ) );
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[2], pts[3], m_width ) );
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[3], pts[0], m_width ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[0], pts[1], GetWidth() ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[1], pts[2], GetWidth() ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[2], pts[3], GetWidth() ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[3], pts[0], GetWidth() ) );
         }
     }
         break;
 
     case SHAPE_T::CIRCLE:
     {
-        if( IsFilled() )
+        if( IsFilled() && !aEdgeOnly )
             effectiveShapes.emplace_back( new SHAPE_CIRCLE( getCenter(), GetRadius() ) );
 
-        if( m_width > 0 || !IsFilled() )
-        {
-            // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC
-            SHAPE_ARC        circle( getCenter(), GetEnd(), 360.0 );
-            SHAPE_LINE_CHAIN l = circle.ConvertToPolyline();
-
-            for( int i = 0; i < l.SegmentCount(); i++ )
-            {
-                effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ).A, l.Segment( i ).B,
-                                                                 m_width ) );
-            }
-        }
+        if( GetWidth() > 0 || !IsFilled() || aEdgeOnly )
+            effectiveShapes.emplace_back( new SHAPE_ARC( getCenter(), GetEnd(), 360.0 ) );
 
         break;
     }
 
     case SHAPE_T::BEZIER:
     {
-        auto bezierPoints = buildBezierToSegmentsPointsList( GetWidth() );
+        std::vector<wxPoint> bezierPoints = buildBezierToSegmentsPointsList( GetWidth() );
         wxPoint start_pt = bezierPoints[0];
 
         for( unsigned int jj = 1; jj < bezierPoints.size(); jj++ )
         {
             wxPoint end_pt = bezierPoints[jj];
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( start_pt, end_pt, m_width ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( start_pt, end_pt, GetWidth() ) );
             start_pt = end_pt;
         }
 
@@ -1145,13 +1136,13 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes() const
         l.Rotate( -DECIDEG2RAD( getParentOrientation() ) );
         l.Move( getParentPosition() );
 
-        if( IsFilled() )
+        if( IsFilled() && !aEdgeOnly )
             effectiveShapes.emplace_back( new SHAPE_SIMPLE( l ) );
 
-        if( m_width > 0 || !IsFilled() )
+        if( GetWidth() > 0 || !IsFilled() || aEdgeOnly )
         {
             for( int i = 0; i < l.SegmentCount(); i++ )
-                effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ), m_width ) );
+                effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ), GetWidth() ) );
         }
     }
         break;
@@ -1322,9 +1313,9 @@ void EDA_SHAPE::calcEdit( const wxPoint& aPosition )
 
         case 4:
         {
-            double chordA = GetLineLength( m_start, aPosition );
-            double chordB = GetLineLength( m_end, aPosition );
-            radius = int( ( chordA + chordB ) / 2.0 ) + 1;
+            double radialA = GetLineLength( m_start, aPosition );
+            double radialB = GetLineLength( m_end, aPosition );
+            radius = int( ( radialA + radialB ) / 2.0 ) + 1;
         }
             break;
 
@@ -1373,6 +1364,10 @@ void EDA_SHAPE::calcEdit( const wxPoint& aPosition )
         case 4:
             // Pick the one closer to the mouse position
             m_arcCenter = GetLineLength( c1, aPosition ) < GetLineLength( c2, aPosition ) ? c1 : c2;
+
+            if( GetArcAngle() > 1800 )
+                std::swap( m_start, m_end );
+
             break;
         }
     }
@@ -1425,7 +1420,7 @@ void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
     EDA_SHAPE* image = dynamic_cast<EDA_SHAPE*>( aImage );
     assert( image );
 
-    std::swap( m_width, image->m_width );
+    std::swap( m_stroke, image->m_stroke );
     std::swap( m_start, image->m_start );
     std::swap( m_end, image->m_end );
     std::swap( m_arcCenter, image->m_arcCenter );
@@ -1462,12 +1457,16 @@ int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
     else if( m_shape == SHAPE_T::POLY )
     {
         TEST( m_poly.TotalVertices(), aOther->m_poly.TotalVertices() );
-
-        for( int ii = 0; ii < m_poly.TotalVertices(); ++ii )
-            TEST_PT( m_poly.CVertex( ii ), aOther->m_poly.CVertex( ii ) );
     }
 
-    TEST_E( m_width, aOther->m_width );
+    for( size_t ii = 0; ii < m_bezierPoints.size(); ++ii )
+        TEST_PT( m_bezierPoints[ii], aOther->m_bezierPoints[ii] );
+
+    for( int ii = 0; ii < m_poly.TotalVertices(); ++ii )
+        TEST_PT( m_poly.CVertex( ii ), aOther->m_poly.CVertex( ii ) );
+
+    TEST_E( m_stroke.GetWidth(), aOther->m_stroke.GetWidth() );
+    TEST( (int) m_stroke.GetPlotStyle(), (int) aOther->m_stroke.GetPlotStyle() );
     TEST( (int) m_fill, (int) aOther->m_fill );
 
     return 0;
@@ -1479,7 +1478,7 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
                                                       int aError, ERROR_LOC aErrorLoc,
                                                       bool ignoreLineWidth ) const
 {
-    int width = ignoreLineWidth ? 0 : m_width;
+    int width = ignoreLineWidth ? 0 : GetWidth();
 
     width += 2 * aClearanceValue;
 
@@ -1580,7 +1579,7 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
         std::vector<wxPoint> ctrlPts = { GetStart(), GetBezierC1(), GetBezierC2(), GetEnd() };
         BEZIER_POLY converter( ctrlPts );
         std::vector< wxPoint> poly;
-        converter.GetPoly( poly, m_width );
+        converter.GetPoly( poly, GetWidth() );
 
         for( unsigned ii = 1; ii < poly.size(); ii++ )
         {

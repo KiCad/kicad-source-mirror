@@ -148,7 +148,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     auto queryBoardOutlineItems =
             [&]( BOARD_ITEM *item ) -> bool
             {
-                PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+                PCB_SHAPE*    shape = static_cast<PCB_SHAPE*>( item );
+                STROKE_PARAMS stroke( 0 );
 
                 if( shape->GetShape() == SHAPE_T::RECT )
                 {
@@ -157,19 +158,19 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetEndX( shape->GetStartX() );
-                    edges.back()->SetWidth( 0 );
+                    edges.back()->SetStroke( stroke );
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetEndY( shape->GetStartY() );
-                    edges.back()->SetWidth( 0 );
+                    edges.back()->SetStroke( stroke );
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetStartX( shape->GetEndX() );
-                    edges.back()->SetWidth( 0 );
+                    edges.back()->SetStroke( stroke );
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetStartY( shape->GetEndY() );
-                    edges.back()->SetWidth( 0 );
+                    edges.back()->SetStroke( stroke );
                     return true;
                 }
                 else if( shape->GetShape() == SHAPE_T::POLY )
@@ -185,12 +186,12 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                         edges.back()->SetShape( SHAPE_T::SEGMENT );
                         edges.back()->SetStart((wxPoint) seg.A );
                         edges.back()->SetEnd((wxPoint) seg.B );
-                        edges.back()->SetWidth( 0 );
+                        edges.back()->SetStroke( stroke );
                     }
                 }
 
                 edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
-                edges.back()->SetWidth( 0 );
+                edges.back()->SetStroke( stroke );
                 return true;
             };
 

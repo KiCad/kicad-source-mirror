@@ -127,6 +127,7 @@ enum KICAD_T
     SCH_BUS_WIRE_ENTRY_T,
     SCH_BUS_BUS_ENTRY_T,
     SCH_LINE_T,
+    SCH_SHAPE_T,
     SCH_BITMAP_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
@@ -146,10 +147,10 @@ enum KICAD_T
     SCH_FIELD_LOCATE_FOOTPRINT_T,
     SCH_FIELD_LOCATE_DATASHEET_T,
 
-    // Same for picking wires and buses from SCH_LINE_T items
-    SCH_LINE_LOCATE_WIRE_T,
-    SCH_LINE_LOCATE_BUS_T,
-    SCH_LINE_LOCATE_GRAPHIC_LINE_T,
+    // Same for picking wires, buses and graphics from SCH_ITEM_T items
+    SCH_ITEM_LOCATE_WIRE_T,
+    SCH_ITEM_LOCATE_BUS_T,
+    SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
 
     // Same for picking labels attached to wires and/or buses
     SCH_LABEL_LOCATE_WIRE_T,
@@ -224,7 +225,7 @@ enum KICAD_T
  * Return the underlying type of the given type.
  *
  * This is useful for finding the element type given one of the "non-type" types such as
- * SCH_LINE_LOCATE_WIRE_T.
+ * SCH_ITEM_LOCATE_WIRE_T.
  *
  * @param aType Given type to resolve.
  * @return Base type.
@@ -239,9 +240,9 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
     case SCH_FIELD_LOCATE_DATASHEET_T:
         return SCH_FIELD_T;
 
-    case SCH_LINE_LOCATE_WIRE_T:
-    case SCH_LINE_LOCATE_BUS_T:
-    case SCH_LINE_LOCATE_GRAPHIC_LINE_T:
+    case SCH_ITEM_LOCATE_WIRE_T:
+    case SCH_ITEM_LOCATE_BUS_T:
+    case SCH_ITEM_LOCATE_GRAPHIC_LINE_T:
         return SCH_LINE_T;
 
     case SCH_LABEL_LOCATE_WIRE_T:
@@ -287,9 +288,9 @@ constexpr bool IsInstantiableType( const KICAD_T aType )
     case SCH_FIELD_LOCATE_FOOTPRINT_T:
     case SCH_FIELD_LOCATE_DATASHEET_T:
 
-    case SCH_LINE_LOCATE_WIRE_T:
-    case SCH_LINE_LOCATE_BUS_T:
-    case SCH_LINE_LOCATE_GRAPHIC_LINE_T:
+    case SCH_ITEM_LOCATE_WIRE_T:
+    case SCH_ITEM_LOCATE_BUS_T:
+    case SCH_ITEM_LOCATE_GRAPHIC_LINE_T:
 
     case SCH_LABEL_LOCATE_WIRE_T:
     case SCH_LABEL_LOCATE_BUS_T:
@@ -346,9 +347,9 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
     case SCH_FIELD_LOCATE_FOOTPRINT_T:
     case SCH_FIELD_LOCATE_DATASHEET_T:
 
-    case SCH_LINE_LOCATE_WIRE_T:
-    case SCH_LINE_LOCATE_BUS_T:
-    case SCH_LINE_LOCATE_GRAPHIC_LINE_T:
+    case SCH_ITEM_LOCATE_WIRE_T:
+    case SCH_ITEM_LOCATE_BUS_T:
+    case SCH_ITEM_LOCATE_GRAPHIC_LINE_T:
 
     case SCH_LABEL_LOCATE_WIRE_T:
     case SCH_LABEL_LOCATE_BUS_T:

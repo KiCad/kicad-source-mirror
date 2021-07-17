@@ -421,7 +421,7 @@ void BRDITEMS_PLOTTER::PlotDimension( const PCB_DIMENSION_BASE* aDim )
 
     PCB_SHAPE draw;
 
-    draw.SetWidth( aDim->GetLineThickness() );
+    draw.SetStroke( STROKE_PARAMS( aDim->GetLineThickness(), PLOT_DASH_TYPE::SOLID ) );
     draw.SetLayer( aDim->GetLayer() );
 
     COLOR4D color = ColorSettings()->GetColor( aDim->GetLayer() );
@@ -482,7 +482,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( const PCB_TARGET* aMire )
 
     draw.SetShape( SHAPE_T::CIRCLE );
     draw.SetFilled( false );
-    draw.SetWidth( aMire->GetWidth() );
+    draw.SetStroke( STROKE_PARAMS( aMire->GetWidth(), PLOT_DASH_TYPE::SOLID ) );
     draw.SetLayer( aMire->GetLayer() );
     draw.SetStart( aMire->GetPosition() );
     radius = aMire->GetSize() / 3;

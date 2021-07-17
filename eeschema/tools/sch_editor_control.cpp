@@ -734,8 +734,8 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
 #ifdef KICAD_SPICE
 
-static KICAD_T wires[] = { SCH_LINE_LOCATE_WIRE_T, EOT };
-static KICAD_T wiresAndPins[] = { SCH_LINE_LOCATE_WIRE_T, SCH_PIN_T, SCH_SHEET_PIN_T, EOT };
+static KICAD_T wires[] = { SCH_ITEM_LOCATE_WIRE_T, EOT };
+static KICAD_T wiresAndPins[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_PIN_T, SCH_SHEET_PIN_T, EOT };
 static KICAD_T fieldsAndSymbols[] = { SCH_SYMBOL_T, SCH_FIELD_T, EOT };
 
 #define HITTEST_THRESHOLD_PIXELS 5

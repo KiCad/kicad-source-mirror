@@ -22,6 +22,7 @@
  */
 
 #include <kiway.h>
+#include <macros.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <fp_lib_table.h>
 #include <board.h>

@@ -2142,7 +2142,8 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
 
     PCB_SHAPE* primitive = new PCB_SHAPE();
     primitive->SetShape( listtype[type] );
-    primitive->SetWidth( m_board->GetDesignSettings().GetLineThickness( F_Cu ) );
+    primitive->SetStroke( STROKE_PARAMS( m_board->GetDesignSettings().GetLineThickness( F_Cu ),
+                                         PLOT_DASH_TYPE::SOLID ) );
     primitive->SetFilled( true );
 
     if( listtype[type] == SHAPE_T::POLY )

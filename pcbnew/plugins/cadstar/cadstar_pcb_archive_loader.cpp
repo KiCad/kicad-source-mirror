@@ -1179,7 +1179,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
             padShape->SetShape( SHAPE_T::POLY );
             padShape->SetFilled( true );
             padShape->SetPolyShape( padOutline );
-            padShape->SetWidth( 0 );
+            padShape->SetStroke( STROKE_PARAMS( 0 ) );
             padShape->Move( padOffset - drillOffset );
             padShape->Rotate( wxPoint( 0, 0 ),
                               1800.0 - getAngleTenthDegree( csPadcode.SlotOrientation ) );
@@ -2436,7 +2436,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks( const NET_ID&         aCadstarNe
     {
         PCB_SHAPE* shape = getShapeFromVertex( prevEnd, v.Vertex );
         shape->SetLayer( getKiCadLayer( aCadstarRoute.LayerID ) );
-        shape->SetWidth( getKiCadLength( v.RouteWidth ) );
+        shape->SetStroke( STROKE_PARAMS( getKiCadLength( v.RouteWidth ), PLOT_DASH_TYPE::SOLID ) );
         shape->SetLocked( v.Fixed );
         shapes.push_back( shape );
         prevEnd = v.Vertex.End;
@@ -2695,14 +2695,15 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
 
         shape->SetFilled( true );
 
-        SHAPE_POLY_SET shapePolys = getPolySetFromCadstarShape(
-                aCadstarShape, -1, aContainer, aMoveVector, aRotationAngle, aScalingFactor,
-                aTransformCentre, aMirrorInvert );
+        SHAPE_POLY_SET shapePolys = getPolySetFromCadstarShape( aCadstarShape, -1, aContainer,
+                                                                aMoveVector, aRotationAngle,
+                                                                aScalingFactor, aTransformCentre,
+                                                                aMirrorInvert );
 
         shapePolys.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
 
         shape->SetPolyShape( shapePolys );
-        shape->SetWidth( aLineThickness );
+        shape->SetStroke( STROKE_PARAMS( aLineThickness, PLOT_DASH_TYPE::SOLID ) );
         shape->SetLayer( aKiCadLayer );
         aContainer->Add( shape, ADD_MODE::APPEND );
 
@@ -2752,7 +2753,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarVerticesAsShapes( const std::vector<
 
     for( PCB_SHAPE* shape : shapes )
     {
-        shape->SetWidth( aLineThickness );
+        shape->SetStroke( STROKE_PARAMS( aLineThickness, PLOT_DASH_TYPE::SOLID ) );
         shape->SetLayer( aKiCadLayer );
         shape->SetParent( aContainer );
         aContainer->Add( shape, ADD_MODE::APPEND );

@@ -164,7 +164,7 @@ DRAWING_TOOL::DRAWING_TOOL() :
     m_frame( nullptr ),
     m_mode( MODE::NONE ),
     m_inDrawingTool( false ),
-    m_lineWidth( 1 )
+    m_stroke( 1, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED )
 {
 }
 
@@ -836,17 +836,17 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) && step != SET_ORIGIN )
         {
-            m_lineWidth += WIDTH_STEP;
-            dimension->SetLineThickness( m_lineWidth );
+            m_stroke.SetWidth( m_stroke.GetWidth() + WIDTH_STEP );
+            dimension->SetLineThickness( m_stroke.GetWidth() );
             m_view->Update( &preview );
             frame()->SetMsgPanel( dimension );
         }
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && step != SET_ORIGIN )
         {
-            if( m_lineWidth > WIDTH_STEP )
+            if( (unsigned) m_stroke.GetWidth() > WIDTH_STEP )
             {
-                m_lineWidth -= WIDTH_STEP;
-                dimension->SetLineThickness( m_lineWidth );
+                m_stroke.SetWidth( m_stroke.GetWidth() - WIDTH_STEP );
+                dimension->SetLineThickness( m_stroke.GetWidth() );
                 m_view->Update( &preview );
                 frame()->SetMsgPanel( dimension );
             }
@@ -1434,7 +1434,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
     PCB_SHAPE*&      graphic = *aGraphic;
     PCB_LAYER_ID     drawingLayer = m_frame->GetActiveLayer();
 
-    m_lineWidth = getSegmentWidth( drawingLayer );
+    m_stroke.SetWidth( getSegmentWidth( drawingLayer ) );
 
     // geometric construction manager
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPointManager;
@@ -1533,7 +1533,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
             drawingLayer = m_frame->GetActiveLayer();
-            m_lineWidth = getSegmentWidth( drawingLayer );
+            m_stroke.SetWidth( getSegmentWidth( drawingLayer ) );
 
             if( graphic )
             {
@@ -1544,7 +1544,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                 }
 
                 graphic->SetLayer( drawingLayer );
-                graphic->SetWidth( m_lineWidth );
+                graphic->SetStroke( m_stroke );
                 m_view->Update( &preview );
                 frame()->SetMsgPanel( graphic );
             }
@@ -1583,12 +1583,12 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                     aStartingPoint = NULLOPT;
                 }
 
-                m_lineWidth = getSegmentWidth( drawingLayer );
+                m_stroke.SetWidth( getSegmentWidth( drawingLayer ) );
 
                 // Init the new item attributes
                 graphic->SetShape( static_cast<SHAPE_T>( shape ) );
                 graphic->SetFilled( false );
-                graphic->SetWidth( m_lineWidth );
+                graphic->SetStroke( m_stroke );
                 graphic->SetLayer( drawingLayer );
                 grid.SetSkipPoint( cursorPos );
 
@@ -1680,17 +1680,20 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
-            m_lineWidth += WIDTH_STEP;
-            graphic->SetWidth( m_lineWidth );
+            m_stroke.SetWidth( m_stroke.GetWidth() + WIDTH_STEP );
+            graphic->SetStroke( m_stroke );
             m_view->Update( &preview );
             frame()->SetMsgPanel( graphic );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && ( m_lineWidth > WIDTH_STEP ) )
+        else if( evt->IsAction( &PCB_ACTIONS::decWidth ) )
         {
-            m_lineWidth -= WIDTH_STEP;
-            graphic->SetWidth( m_lineWidth );
-            m_view->Update( &preview );
-            frame()->SetMsgPanel( graphic );
+            if( (unsigned) m_stroke.GetWidth() > WIDTH_STEP )
+            {
+                m_stroke.SetWidth( m_stroke.GetWidth() - WIDTH_STEP );
+                graphic->SetStroke( m_stroke );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( graphic );
+            }
         }
         else if( evt->IsAction( &ACTIONS::resetLocalCoords ) )
         {
@@ -1754,7 +1757,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
 
     PCB_LAYER_ID drawingLayer = m_frame->GetActiveLayer();
 
-    m_lineWidth = getSegmentWidth( drawingLayer );
+    m_stroke.SetWidth( getSegmentWidth( drawingLayer ) );
 
     // Arc geometric construction manager
     KIGFX::PREVIEW::ARC_GEOM_MANAGER arcManager;
@@ -1855,12 +1858,12 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
                 m_controls->CaptureCursor( true );
 
                 drawingLayer = m_frame->GetActiveLayer();
-                m_lineWidth = getSegmentWidth( drawingLayer );
+                m_stroke.SetWidth( getSegmentWidth( drawingLayer ) );
 
                 // Init the new item attributes
                 // (non-geometric, those are handled by the manager)
                 graphic->SetShape( SHAPE_T::ARC );
-                graphic->SetWidth( m_lineWidth );
+                graphic->SetStroke( m_stroke );
 
                 if( !m_view->IsLayerVisible( drawingLayer ) )
                 {
@@ -1890,7 +1893,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
             drawingLayer = m_frame->GetActiveLayer();
-            m_lineWidth = getSegmentWidth( drawingLayer );
+            m_stroke.SetWidth( getSegmentWidth( drawingLayer ) );
 
             if( graphic )
             {
@@ -1901,7 +1904,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
                 }
 
                 graphic->SetLayer( drawingLayer );
-                graphic->SetWidth( m_lineWidth );
+                graphic->SetStroke( m_stroke );
                 m_view->Update( &preview );
                 frame()->SetMsgPanel( graphic );
             }
@@ -1938,17 +1941,20 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
-            m_lineWidth += WIDTH_STEP;
-            graphic->SetWidth( m_lineWidth );
+            m_stroke.SetWidth( m_stroke.GetWidth() + WIDTH_STEP );
+            graphic->SetStroke( m_stroke );
             m_view->Update( &preview );
             frame()->SetMsgPanel( graphic );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && m_lineWidth > WIDTH_STEP )
+        else if( evt->IsAction( &PCB_ACTIONS::decWidth ) )
         {
-            m_lineWidth -= WIDTH_STEP;
-            graphic->SetWidth( m_lineWidth );
-            m_view->Update( &preview );
-            frame()->SetMsgPanel( graphic );
+            if( (unsigned) m_stroke.GetWidth() > WIDTH_STEP )
+            {
+                m_stroke.SetWidth( m_stroke.GetWidth() - WIDTH_STEP );
+                graphic->SetStroke( m_stroke );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( graphic );
+            }
         }
         else if( evt->IsAction( &PCB_ACTIONS::arcPosture ) )
         {

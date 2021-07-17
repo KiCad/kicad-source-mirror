@@ -319,7 +319,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
     }
     else if( ext == FootprintAssignmentFileExtension )
     {
-        // JEY TODO
+        // TODO
     }
     else if( ext == "rpt" )
     {

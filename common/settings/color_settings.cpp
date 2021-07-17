@@ -94,6 +94,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "schematic.label_local",       LAYER_LOCLABEL               );
     CLR( "schematic.no_connect",        LAYER_NOCONNECT              );
     CLR( "schematic.note",              LAYER_NOTES                  );
+    CLR( "schematic.note_background",   LAYER_NOTES_BACKGROUND       );
     CLR( "schematic.pin",               LAYER_PIN                    );
     CLR( "schematic.pin_name",          LAYER_PINNAM                 );
     CLR( "schematic.pin_number",        LAYER_PINNUM                 );

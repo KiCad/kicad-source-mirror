@@ -319,7 +319,7 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
 
 bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, SCH_SCREEN* aScreen )
 {
-    static const KICAD_T wiresAndBuses[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+    static const KICAD_T wiresAndBuses[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T, EOT };
 
     if( aScreen == nullptr )
         aScreen = GetScreen();
@@ -380,7 +380,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
     SCH_SCREEN*        screen = GetScreen();
     PICKED_ITEMS_LIST  undoList;
     EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-    KICAD_T            wiresAndBuses[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+    KICAD_T            wiresAndBuses[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T, EOT };
 
     auto remove_item = [ & ]( SCH_ITEM* aItem ) -> void
     {

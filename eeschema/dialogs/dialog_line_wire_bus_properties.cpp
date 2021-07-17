@@ -22,35 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <bitmaps.h>
 #include <sch_line.h>
 #include <dialog_line_wire_bus_properties.h>
 #include <dialogs/dialog_color_picker.h>
 #include <settings/settings_manager.h>
 #include <sch_edit_frame.h>
+#include <stroke_params.h>
 #include <widgets/color_swatch.h>
-
-
-struct lineTypeStruct
-{
-    wxString      name;
-    const BITMAPS bitmap;
-};
-
-
-/*
- * Conversion map between PLOT_DASH_TYPE values and style names displayed
- */
-const std::map<PLOT_DASH_TYPE, struct lineTypeStruct> lineTypeNames = {
-    { PLOT_DASH_TYPE::SOLID, { _( "Solid" ), BITMAPS::stroke_solid } },
-    { PLOT_DASH_TYPE::DASH, { _( "Dashed" ), BITMAPS::stroke_dash } },
-    { PLOT_DASH_TYPE::DOT, { _( "Dotted" ), BITMAPS::stroke_dot } },
-    { PLOT_DASH_TYPE::DASHDOT, { _( "Dash-Dot" ), BITMAPS::stroke_dashdot } },
-};
-
-
-#define DEFAULT_STYLE _( "Default" )
-#define INDETERMINATE_STYLE _( "Leave unchanged" )
 
 
 DIALOG_LINE_WIRE_BUS_PROPERTIES::DIALOG_LINE_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME* aParent,

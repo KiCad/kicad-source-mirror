@@ -320,7 +320,11 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
         if( !m_lineWidth.IsIndeterminate() )
         {
             if( drawItem )
-                drawItem->SetWidth( m_lineWidth.GetValue() );
+            {
+                STROKE_PARAMS stroke = drawItem->GetStroke();
+                stroke.SetWidth( m_lineWidth.GetValue() );
+                drawItem->SetStroke( stroke );
+            }
 
             if( dimension )
                 dimension->SetLineThickness( m_lineWidth.GetValue() );
@@ -341,7 +345,11 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
             fpTextItem->SetKeepUpright( m_brdSettings->GetTextUpright( layer ) );
 
         if( drawItem )
-            drawItem->SetWidth( m_brdSettings->GetLineThickness( layer ) );
+        {
+            STROKE_PARAMS stroke = drawItem->GetStroke();
+            stroke.SetWidth( m_brdSettings->GetLineThickness( layer ) );
+            drawItem->SetStroke( stroke );
+        }
 
         if( dimension )
             dimension->SetLineThickness( m_brdSettings->GetLineThickness( layer ) );

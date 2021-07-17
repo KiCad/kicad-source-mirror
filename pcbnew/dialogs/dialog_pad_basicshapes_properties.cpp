@@ -181,7 +181,10 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
     }
 
     // Transfer data out of the GUI.
-    m_shape->SetWidth( m_thickness.GetValue() );
+    STROKE_PARAMS stroke = m_shape->GetStroke();
+    stroke.SetWidth( m_thickness.GetValue() );
+    m_shape->SetStroke( stroke );
+
     m_shape->SetFilled( m_filledCtrl->GetValue() );
 
     switch( m_shape->GetShape() )
@@ -311,7 +314,11 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataFromWindow()
         return false;
 
     m_shape->SetPolyPoints( m_currPoints );
-    m_shape->SetWidth( m_thickness.GetValue() );
+
+    STROKE_PARAMS stroke = m_shape->GetStroke();
+    stroke.SetWidth( m_thickness.GetValue() );
+    m_shape->SetStroke( stroke );
+
     m_shape->SetFilled( m_filledCtrl->GetValue() );
 
     return true;
@@ -616,7 +623,10 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<std::shared_ptr<PCB
             }
 
             // Transform parameters common to all shape types (some can be unused)
-            shape->SetWidth( KiROUND( shape->GetWidth() * scale ) );
+            STROKE_PARAMS stroke = shape->GetStroke();
+            stroke.SetWidth( KiROUND( shape->GetWidth() * scale ) );
+            shape->SetStroke( stroke );
+
             shape->Move( currMoveVect );
             shape->Scale( scale );
             shape->Rotate( wxPoint( 0, 0 ), curr_rotation );

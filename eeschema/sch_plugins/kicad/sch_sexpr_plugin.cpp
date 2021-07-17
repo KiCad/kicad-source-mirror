@@ -37,6 +37,7 @@
 #include <sch_edit_frame.h>       // SYMBOL_ORIENTATION_T
 #include <sch_junction.h>
 #include <sch_line.h>
+#include <sch_shape.h>
 #include <sch_no_connect.h>
 #include <sch_text.h>
 #include <sch_sheet.h>
@@ -59,7 +60,6 @@
 #include <wx_filename.h>       // for ::ResolvePossibleSymlinks()
 #include <progress_reporter.h>
 
-
 using namespace TSCHEMATIC_T;
 
 
@@ -80,13 +80,26 @@ static void formatFill( OUTPUTFORMATTER* aFormatter, int aNestLevel, FILL_T aFil
 
     switch( aFillMode )
     {
-    default:
     case FILL_T::NO_FILL:                  fillType = "none";       break;
     case FILL_T::FILLED_SHAPE:             fillType = "outline";    break;
     case FILL_T::FILLED_WITH_BG_BODYCOLOR: fillType = "background"; break;
+    case FILL_T::FILLED_WITH_COLOR:        fillType = "color";      break;
     }
 
-    aFormatter->Print( aNestLevel, "(fill (type %s))", fillType );
+    if( aFillMode == FILL_T::FILLED_WITH_COLOR )
+    {
+        aFormatter->Print( aNestLevel, "(fill (type %s) (color %d %d %d %s))",
+                           fillType,
+                           KiROUND( aFillColor.r * 255.0 ),
+                           KiROUND( aFillColor.g * 255.0 ),
+                           KiROUND( aFillColor.b * 255.0 ),
+                           Double2Str( aFillColor.a ).c_str() );
+    }
+    else
+    {
+        aFormatter->Print( aNestLevel, "(fill (type %s))",
+                           fillType );
+    }
 }
 
 
@@ -222,23 +235,6 @@ static double getSheetPinAngle( SHEET_SIDE aSide )
 }
 
 
-static wxString getLineStyleToken( PLOT_DASH_TYPE aStyle )
-{
-    wxString token;
-
-    switch( aStyle )
-    {
-    case PLOT_DASH_TYPE::DASH:     token = "dash";      break;
-    case PLOT_DASH_TYPE::DOT:      token = "dot";       break;
-    case PLOT_DASH_TYPE::DASHDOT:  token = "dash_dot";  break;
-    case PLOT_DASH_TYPE::SOLID:    token = "solid";     break;
-    case PLOT_DASH_TYPE::DEFAULT:  token = "default";   break;
-    }
-
-    return token;
-}
-
-
 static const char* getTextTypeToken( KICAD_T aType )
 {
     switch( aType )
@@ -249,28 +245,6 @@ static const char* getTextTypeToken( KICAD_T aType )
     case SCH_HIER_LABEL_T:    return SCHEMATIC_LEXER::TokenName( T_hierarchical_label );
     default:     wxFAIL;      return SCHEMATIC_LEXER::TokenName( T_text );
     }
-}
-
-
-/**
- * Write stroke definition to \a aFormatter.
- *
- * @param aFormatter A pointer to the #OUTPUTFORMATTER object to write to.
- * @param aNestLevel The nest level to indent the stroke definition.
- * @param aStroke The stroke width, line-style and color.
- */
-static void formatStroke( OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                          const STROKE_PARAMS& aStroke )
-{
-    wxASSERT( aFormatter != nullptr );
-
-    aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s) (color %d %d %d %s))",
-                       FormatInternalUnits( aStroke.GetWidth() ).c_str(),
-                       TO_UTF8( getLineStyleToken( aStroke.GetPlotStyle() ) ),
-                       KiROUND( aStroke.GetColor().r * 255.0 ),
-                       KiROUND( aStroke.GetColor().g * 255.0 ),
-                       KiROUND( aStroke.GetColor().b * 255.0 ),
-                       Double2Str( aStroke.GetColor().a ).c_str() );
 }
 
 
@@ -289,7 +263,7 @@ static void formatArc( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* a
                        FormatInternalUnits( aArc->GetArcMid() ).c_str(),
                        FormatInternalUnits( aArc->GetEnd() ).c_str() );
 
-    formatStroke( aFormatter, aNestLevel + 1, aStroke );
+    aStroke.Format( aFormatter, aNestLevel + 1 );
     aFormatter->Print( 0, "\n" );
     formatFill( aFormatter, aNestLevel + 1, aFillMode, aFillColor );
     aFormatter->Print( 0, "\n" );
@@ -310,7 +284,7 @@ static void formatCircle( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE
                        FormatInternalUnits( aCircle->GetStart().y ).c_str(),
                        FormatInternalUnits( aCircle->GetRadius() ).c_str() );
 
-    formatStroke( aFormatter, aNestLevel + 1, aStroke );
+    aStroke.Format( aFormatter, aNestLevel + 1 );
     aFormatter->Print( 0, "\n" );
     formatFill( aFormatter, aNestLevel + 1, aFillMode, aFillColor );
     aFormatter->Print( 0, "\n" );
@@ -331,7 +305,7 @@ static void formatRect( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* 
                        FormatInternalUnits( aRect->GetStart().y ).c_str(),
                        FormatInternalUnits( aRect->GetEnd().x ).c_str(),
                        FormatInternalUnits( aRect->GetEnd().y ).c_str() );
-    formatStroke( aFormatter, aNestLevel + 1, aStroke );
+    aStroke.Format( aFormatter, aNestLevel + 1 );
     aFormatter->Print( 0, "\n" );
     formatFill( aFormatter, aNestLevel + 1, aFillMode, aFillColor );
     aFormatter->Print( 0, "\n" );
@@ -359,7 +333,7 @@ static void formatBezier( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE
 
     aFormatter->Print( 0, ")\n" );  // Closes pts token on same line.
 
-    formatStroke( aFormatter, aNestLevel + 1, aStroke );
+    aStroke.Format( aFormatter, aNestLevel + 1 );
     aFormatter->Print( 0, "\n" );
     formatFill( aFormatter, aNestLevel + 1, aFillMode, aFillColor );
     aFormatter->Print( 0, "\n" );
@@ -411,7 +385,7 @@ static void formatPoly( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* 
         aFormatter->Print( aNestLevel + 1, ")\n" );  // Closes pts token with multiple lines.
     }
 
-    formatStroke( aFormatter, aNestLevel + 1, aStroke );
+    aStroke.Format( aFormatter, aNestLevel + 1 );
     aFormatter->Print( 0, "\n" );
     formatFill( aFormatter, aNestLevel + 1, aFillMode, aFillColor );
     aFormatter->Print( 0, "\n" );
@@ -840,6 +814,10 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
             saveLine( static_cast<SCH_LINE*>( item ), 1 );
             break;
 
+        case SCH_SHAPE_T:
+            saveShape( static_cast<SCH_SHAPE*>( item ), 1 );
+            break;
+
         case SCH_TEXT_T:
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
@@ -979,6 +957,10 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
 
         case SCH_LINE_T:
             saveLine( static_cast< SCH_LINE* >( item ), 0 );
+            break;
+
+        case SCH_SHAPE_T:
+            saveShape( static_cast<SCH_SHAPE*>( item ), 0 );
             break;
 
         case SCH_TEXT_T:
@@ -1252,7 +1234,7 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
                           aSheet->GetBorderColor() );
 
     stroke.SetWidth( aSheet->GetBorderWidth() );
-    formatStroke( m_out, aNestLevel + 1, stroke );
+    stroke.Format( m_out, aNestLevel + 1 );
 
     m_out->Print( 0, "\n" );
 
@@ -1341,13 +1323,57 @@ void SCH_SEXPR_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLev
                       FormatInternalUnits( aBusEntry->GetSize().GetWidth() ).c_str(),
                       FormatInternalUnits( aBusEntry->GetSize().GetHeight() ).c_str() );
 
-        formatStroke( m_out, aNestLevel + 1, aBusEntry->GetStroke() );
+        aBusEntry->GetStroke().Format( m_out, aNestLevel + 1 );
 
         m_out->Print( 0, "\n" );
 
         m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aBusEntry->m_Uuid.AsString() ) );
 
         m_out->Print( aNestLevel, ")\n" );
+    }
+}
+
+
+void SCH_SEXPR_PLUGIN::saveShape( SCH_SHAPE* aShape, int aNestLevel )
+{
+    wxCHECK_RET( aShape != nullptr && m_out != nullptr, "" );
+
+    wxString lineType;
+
+    switch( aShape->GetShape() )
+    {
+    case SHAPE_T::ARC:
+        int x1;
+        int x2;
+
+        aShape->CalcArcAngles( x1, x2 );
+
+        formatArc( m_out, aNestLevel, aShape, x1, x2, aShape->GetStroke(), aShape->GetFillMode(),
+                   aShape->GetFillColor(), aShape->m_Uuid );
+        break;
+
+    case SHAPE_T::CIRCLE:
+        formatCircle( m_out, aNestLevel, aShape, aShape->GetStroke(), aShape->GetFillMode(),
+                      aShape->GetFillColor(), aShape->m_Uuid );
+        break;
+
+    case SHAPE_T::RECT:
+        formatRect( m_out, aNestLevel, aShape, aShape->GetStroke(), aShape->GetFillMode(),
+                    aShape->GetFillColor(), aShape->m_Uuid );
+        break;
+
+    case SHAPE_T::BEZIER:
+        formatBezier( m_out, aNestLevel, aShape, aShape->GetStroke(), aShape->GetFillMode(),
+                      aShape->GetFillColor(), aShape->m_Uuid );
+        break;
+
+    case SHAPE_T::POLY:
+        formatPoly( m_out, aNestLevel, aShape, aShape->GetStroke(), aShape->GetFillMode(),
+                    aShape->GetFillColor(), aShape->m_Uuid );
+        break;
+
+    default:
+        UNIMPLEMENTED_FOR( aShape->SHAPE_T_asString() );
     }
 }
 
@@ -1364,8 +1390,9 @@ void SCH_SEXPR_PLUGIN::saveLine( SCH_LINE* aLine, int aNestLevel )
     {
     case LAYER_BUS:     lineType = "bus";       break;
     case LAYER_WIRE:    lineType = "wire";      break;
-    case LAYER_NOTES:
-    default:            lineType = "polyline";  break;
+    case LAYER_NOTES:   lineType = "polyline";  break;
+    default:
+        UNIMPLEMENTED_FOR( LayerName( aLine->GetLayer() ) );
     }
 
     m_out->Print( aNestLevel, "(%s (pts (xy %s %s) (xy %s %s))\n",
@@ -1375,7 +1402,7 @@ void SCH_SEXPR_PLUGIN::saveLine( SCH_LINE* aLine, int aNestLevel )
                   FormatInternalUnits( aLine->GetEndPoint().x ).c_str(),
                   FormatInternalUnits( aLine->GetEndPoint().y ).c_str() );
 
-    formatStroke( m_out, aNestLevel + 1, line_stroke );
+    line_stroke.Format( m_out, aNestLevel + 1 );
     m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aLine->m_Uuid.AsString() ) );
@@ -1934,7 +1961,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTE
     {
         LIB_SHAPE*    shape = static_cast<LIB_SHAPE*>( aItem );
         STROKE_PARAMS stroke;
-        FILL_T        fillMode = shape->GetFillType();
+        FILL_T        fillMode = shape->GetFillMode();
 
         stroke.SetWidth( shape->GetWidth() );
 

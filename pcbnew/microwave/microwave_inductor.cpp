@@ -427,7 +427,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
         FP_SHAPE* seg = new FP_SHAPE( footprint, SHAPE_T::SEGMENT );
         seg->SetStart( buffer[jj - 1] );
         seg->SetEnd( buffer[jj] );
-        seg->SetWidth( aInductorPattern.m_Width );
+        seg->SetStroke( STROKE_PARAMS( aInductorPattern.m_Width, PLOT_DASH_TYPE::SOLID ) );
         seg->SetLayer( footprint->GetLayer() );
         seg->SetStart0( seg->GetStart() - footprint->GetPosition() );
         seg->SetEnd0( seg->GetEnd() - footprint->GetPosition() );

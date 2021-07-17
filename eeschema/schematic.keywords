@@ -21,13 +21,10 @@ color
 comment
 company
 convert
-dash
-dash_dot
 data
 date
 default
 diameter
-dot
 edge_clock_high
 effects
 end
@@ -108,7 +105,6 @@ shape
 sheet
 sheet_instances
 size
-solid
 start
 stroke
 symbol

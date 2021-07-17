@@ -125,7 +125,7 @@ void PCB_LINE::AddToFootprint( FOOTPRINT* aFootprint )
         segment->SetStart0( wxPoint( m_positionX, m_positionY ) );
         segment->SetEnd0( wxPoint( m_ToX, m_ToY ) );
 
-        segment->SetWidth( m_Width );
+        segment->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
         segment->SetLayer( m_KiCadLayer );
 
         segment->SetDrawCoord();
@@ -156,7 +156,7 @@ void PCB_LINE::AddToBoard()
         segment->SetLayer( m_KiCadLayer );
         segment->SetStart( wxPoint( m_positionX, m_positionY ) );
         segment->SetEnd( wxPoint( m_ToX, m_ToY ) );
-        segment->SetWidth( m_Width );
+        segment->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
     }
 }
 

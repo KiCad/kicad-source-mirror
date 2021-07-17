@@ -139,9 +139,9 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
 
     placeMenu->Add( EE_ACTIONS::placeSymbolPin );
     placeMenu->Add( EE_ACTIONS::placeSymbolText );
-    placeMenu->Add( EE_ACTIONS::drawSymbolRectangle );
-    placeMenu->Add( EE_ACTIONS::drawSymbolCircle );
-    placeMenu->Add( EE_ACTIONS::drawSymbolArc );
+    placeMenu->Add( EE_ACTIONS::drawRectangle );
+    placeMenu->Add( EE_ACTIONS::drawCircle );
+    placeMenu->Add( EE_ACTIONS::drawArc );
     placeMenu->Add( EE_ACTIONS::drawSymbolLines );
 
 

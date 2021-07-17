@@ -27,6 +27,7 @@
 #include <sch_symbol.h>
 #include <sch_connection.h>
 #include <sch_edit_frame.h>
+#include <sch_shape.h>
 #include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_sheet.h>
@@ -117,8 +118,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
 
     m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
     m_colorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
-    m_bgColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
-    m_bgColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_fillColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+    m_fillColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_dotColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
     m_dotColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
@@ -217,7 +218,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_lineStyle->SetStringSelection( INDETERMINATE_ACTION );
     m_junctionSize.SetValue( INDETERMINATE_ACTION );
     m_setColor->SetValue( false );
-    m_setBgColor->SetValue( false );
+    m_setFillColor->SetValue( false );
     m_setDotColor->SetValue( false );
 
     return true;
@@ -240,7 +241,6 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
 
     EDA_TEXT*     eda_text = dynamic_cast<EDA_TEXT*>( aItem );
     SCH_TEXT*     sch_text = dynamic_cast<SCH_TEXT*>( aItem );
-    SCH_LINE*     lineItem = dynamic_cast<SCH_LINE*>( aItem );
     SCH_JUNCTION* junction = dynamic_cast<SCH_JUNCTION*>( aItem );
 
     m_parent->SaveCopyInUndoList( aSheetPath.LastScreen(), aItem, UNDO_REDO::CHANGED, m_appendUndo );
@@ -274,21 +274,40 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
             sch_text->SetLabelSpinStyle( (LABEL_SPIN_STYLE::SPIN) m_orientation->GetSelection() );
     }
 
-    if( lineItem )
+    if( aItem->HasLineStroke() )
     {
+        STROKE_PARAMS stroke = aItem->GetStroke();
+
         if( !m_lineWidth.IsIndeterminate() )
-            lineItem->SetLineWidth( m_lineWidth.GetValue() );
+            stroke.SetWidth( m_lineWidth.GetValue() );
 
         if( m_lineStyle->GetStringSelection() != INDETERMINATE_ACTION )
         {
             if( m_lineStyle->GetStringSelection() == DEFAULT_STYLE )
-                lineItem->SetLineStyle( PLOT_DASH_TYPE::DEFAULT );
+                stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
             else
-                lineItem->SetLineStyle( m_lineStyle->GetSelection() );
+                stroke.SetPlotStyle( (PLOT_DASH_TYPE) m_lineStyle->GetSelection() );
         }
 
         if( m_setColor->GetValue() )
-            lineItem->SetLineColor( m_colorSwatch->GetSwatchColor() );
+            stroke.SetColor( m_colorSwatch->GetSwatchColor() );
+
+        aItem->SetStroke( stroke );
+    }
+
+    if( aItem->Type() == SCH_SHAPE_T )
+    {
+        SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
+
+        if( m_setFillColor->GetValue() )
+        {
+            shape->SetFillColor( m_fillColorSwatch->GetSwatchColor() );
+
+            if( m_fillColorSwatch->GetSwatchColor() == COLOR4D::UNSPECIFIED )
+                shape->SetFillMode( FILL_T::NO_FILL );
+            else
+                shape->SetFillMode( FILL_T::FILLED_WITH_COLOR );
+        }
     }
 
     if( junction )
@@ -348,9 +367,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         }
     }
 
-    static KICAD_T wireTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LABEL_LOCATE_WIRE_T, EOT };
-    static KICAD_T busTypes[] = { SCH_LINE_LOCATE_BUS_T, SCH_LABEL_LOCATE_BUS_T, EOT };
-    static KICAD_T schTextAndGraphics[] = { SCH_TEXT_T, SCH_LINE_LOCATE_GRAPHIC_LINE_T, EOT };
+    static KICAD_T wireTypes[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_LABEL_LOCATE_WIRE_T, EOT };
+    static KICAD_T busTypes[] = { SCH_ITEM_LOCATE_BUS_T, SCH_LABEL_LOCATE_BUS_T, EOT };
+    static KICAD_T schTextAndGraphics[] = { SCH_TEXT_T, SCH_ITEM_LOCATE_GRAPHIC_LINE_T, EOT };
 
     if( aItem->Type() == SCH_SYMBOL_T )
     {
@@ -409,8 +428,8 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
             if( m_setColor->GetValue() )
                 sheet->SetBorderColor( m_colorSwatch->GetSwatchColor() );
 
-            if( m_setBgColor->GetValue() )
-                sheet->SetBackgroundColor( m_bgColorSwatch->GetSwatchColor() );
+            if( m_setFillColor->GetValue() )
+                sheet->SetBackgroundColor( m_fillColorSwatch->GetSwatchColor() );
         }
     }
     else if( aItem->Type() == SCH_JUNCTION_T )

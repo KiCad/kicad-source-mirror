@@ -254,8 +254,9 @@ static struct PCB_SHAPE_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ) );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Thickness" ),
-                    &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
+        // JEY TODO:
+        //propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Thickness" ),
+        //            &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
         // TODO show certain properties depending on the shape
         //propMgr.AddProperty( new PROPERTY<PCB_SHAPE, double>( _HKI( "Angle" ),
         //            &PCB_SHAPE::SetArcAngle, &PCB_SHAPE::GetAngle, PROPERTY_DISPLAY::DECIDEGREE ) );

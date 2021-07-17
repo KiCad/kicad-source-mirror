@@ -28,15 +28,16 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
+#include <tools/sch_drawing_tools.h>
 #include <widgets/infobar.h>
 #include <ee_actions.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <eda_item.h>
-#include <reporter.h>
 #include <string_utils.h>
 #include <sch_item.h>
 #include <sch_symbol.h>
+#include <sch_shape.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_text.h>
@@ -59,16 +60,14 @@
 #include <dialogs/dialog_sheet_pin_properties.h>
 #include <dialogs/dialog_field_properties.h>
 #include <dialogs/dialog_junction_props.h>
-#include "sch_drawing_tools.h"
+#include <dialogs/dialog_shape_properties.h>
+#include <dialogs/dialog_text_and_label_properties.h>
 #include <math/util.h>      // for KiROUND
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
-#include <dialogs/dialog_text_and_label_properties.h>
 #include <core/kicad_algo.h>
 #include <wx/textdlg.h>
-
-
 
 class SYMBOL_UNIT_MENU : public ACTION_MENU
 {
@@ -415,6 +414,7 @@ bool SCH_EDIT_TOOL::Init()
 
 
 const KICAD_T rotatableItems[] = {
+    SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
@@ -533,6 +533,13 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             break;
         }
 
+        case SCH_SHAPE_T:
+            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
+                head->Rotate( rotPoint );
+
+            break;
+
+
         case SCH_BITMAP_T:
             for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
                 head->Rotate( rotPoint );
@@ -554,7 +561,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         }
 
         default:
-            break;
+            UNIMPLEMENTED_FOR( head->GetClass() );
         }
 
         connections = head->IsConnectable();
@@ -744,6 +751,14 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             break;
         }
 
+        case SCH_SHAPE_T:
+            if( vertical )
+                item->MirrorVertically( item->GetPosition().y );
+            else
+                item->MirrorHorizontally( item->GetPosition().x );
+
+            break;
+
         case SCH_BITMAP_T:
             if( vertical )
                 item->MirrorVertically( item->GetPosition().y );
@@ -766,7 +781,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             break;
 
         default:
-            break;
+            UNIMPLEMENTED_FOR( item->GetClass() );
         }
 
         connections = item->IsConnectable();
@@ -915,6 +930,7 @@ static KICAD_T deletableItems[] =
     SCH_LINE_T,
     SCH_BUS_BUS_ENTRY_T,
     SCH_BUS_WIRE_ENTRY_T,
+    SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
@@ -1455,6 +1471,18 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         if( !field->IsVisible() )
             clearSelection = true;
+    }
+        break;
+
+    case SCH_SHAPE_T:
+    {
+        DIALOG_SHAPE_PROPERTIES dlg( m_frame, static_cast<SCH_SHAPE*>( item ) );
+
+        if( dlg.ShowModal() == wxID_OK )
+        {
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+            m_frame->OnModify();
+        }
     }
         break;
 

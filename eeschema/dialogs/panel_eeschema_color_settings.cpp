@@ -49,6 +49,7 @@
 
 std::set<int> g_excludedLayers =
         {
+            LAYER_NOTES_BACKGROUND,
             LAYER_DANGLING
         };
 
@@ -208,7 +209,6 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createSwatches()
 
         layers.push_back( i );
     }
-
 
     std::sort( layers.begin(), layers.end(),
                []( SCH_LAYER_ID a, SCH_LAYER_ID b )
@@ -382,7 +382,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         comp_body->SetUnit( 0 );
         comp_body->SetConvert( 0 );
-        comp_body->SetWidth( Mils2iu( 10 ) );
+        comp_body->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         comp_body->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
         comp_body->AddPoint( MILS_POINT( p.x - 200, p.y + 200 ) );
         comp_body->AddPoint( MILS_POINT( p.x + 200, p.y ) );

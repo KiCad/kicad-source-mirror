@@ -35,11 +35,10 @@
  */
 
 #include <base_units.h>
-#include <common.h>
 #include <string_utils.h>
 #include <math/util.h>      // for KiROUND
 #include <macros.h>
-#include <title_block.h>
+
 
 #if defined( PCBNEW ) || defined( CVPCB ) || defined( EESCHEMA ) || defined( GERBVIEW ) || defined( PL_EDITOR )
 #define IU_TO_MM( x )       ( x / IU_PER_MM )

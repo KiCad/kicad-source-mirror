@@ -1682,7 +1682,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
         }
 
         shape->SetUnit( aGateNumber );
-        shape->SetWidth( aLineThickness );
+        shape->SetStroke( STROKE_PARAMS( aLineThickness, PLOT_DASH_TYPE::SOLID ) );
         aSymbol->AddDrawItem( shape );
 
         prev = cur;

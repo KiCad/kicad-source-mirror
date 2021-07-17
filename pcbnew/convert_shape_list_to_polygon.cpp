@@ -745,8 +745,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     break;
 
                 default:
-                    wxFAIL_MSG( "ConvertOutlineToPolygon not implemented for "
-                                + graphic->SHAPE_T_asString() );
+                    UNIMPLEMENTED_FOR( graphic->SHAPE_T_asString() );
                     return false;
                 }
 

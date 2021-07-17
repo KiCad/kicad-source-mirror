@@ -51,6 +51,27 @@ RENDER_SETTINGS::~RENDER_SETTINGS()
 }
 
 
+constexpr double visualCorrection = 0.8;
+
+
+double RENDER_SETTINGS::GetDashLength( int aLineWidth ) const
+{
+    return std::max( m_dashLengthRatio - visualCorrection, 1.0 ) * aLineWidth;
+}
+
+
+double RENDER_SETTINGS::GetDotLength( int aLineWidth ) const
+{
+    return ( 1.0 - visualCorrection ) * aLineWidth;
+}
+
+
+double RENDER_SETTINGS::GetGapLength( int aLineWidth ) const
+{
+    return std::max( m_gapLengthRatio + visualCorrection, 1.0 ) * aLineWidth;
+}
+
+
 void RENDER_SETTINGS::update()
 {
     // Calculate darkened/highlighted variants of layer colors

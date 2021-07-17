@@ -531,7 +531,7 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
                 if( aConvert && shape.m_convert && ( shape.m_convert != aConvert ) )
                     continue;
 
-                if( shape.GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+                if( shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
                     shape.Print( aSettings, aOffset, (void*) false, aOpts.transform );
             }
         }
@@ -568,7 +568,7 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
         else if( item.Type() == LIB_SHAPE_T )
         {
             LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
-            bool       forceNoFill = shape.GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR;
+            bool       forceNoFill = shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR;
 
             shape.Print( aSettings, aOffset, (void*) forceNoFill, aOpts.transform );
         }
@@ -603,7 +603,7 @@ void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint
         if( aConvert && shape.m_convert && ( shape.m_convert != aConvert ) )
             continue;
 
-        if( shape.GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR && aPlotter->GetColorMode() )
+        if( shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR && aPlotter->GetColorMode() )
             shape.Plot( aPlotter, aOffset, true, aTransform );
     }
 
@@ -627,7 +627,7 @@ void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint
         if( item.Type() == LIB_SHAPE_T )
         {
             const LIB_SHAPE& shape = static_cast<const LIB_SHAPE&>( item );
-            forceNoFill = shape.GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR;
+            forceNoFill = shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR;
         }
 
         item.Plot( aPlotter, aOffset, !forceNoFill, aTransform );

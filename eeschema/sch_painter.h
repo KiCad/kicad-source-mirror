@@ -47,6 +47,7 @@ class SCH_HIERLABEL;
 class SCH_GLOBALLABEL;
 class SCH_SHEET;
 class SCH_SHEET_PIN;
+class SCH_SHAPE;
 class SCH_MARKER;
 class SCH_NO_CONNECT;
 class SCH_LINE;
@@ -156,6 +157,7 @@ private:
     void draw( SCH_SYMBOL* aSymbol, int aLayer );
     void draw( const SCH_JUNCTION* aJct, int aLayer );
     void draw( const SCH_FIELD* aField, int aLayer );
+    void draw( const SCH_SHAPE* shape, int aLayer );
     void draw( const SCH_TEXT* aText, int aLayer );
     void draw( SCH_HIERLABEL* aLabel, int aLayer );
     void draw( SCH_GLOBALLABEL* aLabel, int aLayer );

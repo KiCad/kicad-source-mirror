@@ -49,6 +49,7 @@ class SCH_BITMAP;
 class SCH_BUS_WIRE_ENTRY;
 class SCH_SYMBOL;
 class SCH_FIELD;
+class SCH_SHAPE;
 class SCH_JUNCTION;
 class SCH_LINE;
 class SCH_NO_CONNECT;
@@ -188,6 +189,10 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     SCH_NO_CONNECT* parseNoConnect();
     SCH_BUS_WIRE_ENTRY* parseBusEntry();
     SCH_LINE* parseLine();
+    SCH_SHAPE* parseSchArc();
+    SCH_SHAPE* parseSchCircle();
+    SCH_SHAPE* parseSchRectangle();
+    SCH_SHAPE* parseSchBezier();
     SCH_TEXT* parseSchText();
     void parseBusAlias( SCH_SCREEN* aScreen );
 

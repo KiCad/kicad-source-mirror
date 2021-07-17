@@ -1059,7 +1059,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                                                          symbol ) );
                 }
 
-                line->SetWidth( elem.lineWidth );
+                line->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
             }
             else if( i + 3 == elem.points.size() )
             {
@@ -1078,7 +1078,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                                                          symbol ) );
                 }
 
-                line->SetWidth( elem.lineWidth );
+                line->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
             }
             else
             {
@@ -1102,7 +1102,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                     }
                 }
 
-                bezier->SetWidth( elem.lineWidth );
+                bezier->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
             }
         }
     }
@@ -1163,7 +1163,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
         for( wxPoint& point : elem.points )
             line->AddPoint( GetRelativePosition( point + m_sheetOffset, symbol ) );
 
-        line->SetWidth( elem.lineWidth );
+        line->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
     }
 }
 
@@ -1224,7 +1224,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
 
         line->AddPoint( GetRelativePosition( elem.points.front() + m_sheetOffset, symbol ) );
 
-        line->SetWidth( elem.lineWidth );
+        line->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
 
         if( !elem.isSolid )
             line->SetFillMode( FILL_T::NO_FILL );
@@ -1303,7 +1303,7 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
 
         rect->SetPosition( GetRelativePosition( elem.topRight + m_sheetOffset, symbol ) );
         rect->SetEnd( GetRelativePosition( elem.bottomLeft + m_sheetOffset, symbol ) );
-        rect->SetWidth( elem.lineWidth );
+        rect->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
 
         if( !elem.isSolid )
             rect->SetFillMode( FILL_T::NO_FILL );
@@ -1351,7 +1351,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
 
             circle->SetPosition( GetRelativePosition( elem.center + m_sheetOffset, symbol ) );
             circle->SetEnd( circle->GetPosition() + wxPoint( elem.radius, 0 ) );
-            circle->SetWidth( elem.lineWidth );
+            circle->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
         }
         else
         {
@@ -1371,7 +1371,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             arcEnd += arc->GetCenter();
             arc->SetEnd( arcEnd );
 
-            arc->SetWidth( elem.lineWidth );
+            arc->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
         }
     }
 }
@@ -1417,7 +1417,7 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
         line->AddPoint( GetRelativePosition( elem.point1 + m_sheetOffset, symbol ) );
         line->AddPoint( GetRelativePosition( elem.point2 + m_sheetOffset, symbol ) );
 
-        line->SetWidth( elem.lineWidth );
+        line->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
     }
 }
 
@@ -1487,7 +1487,7 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
 
         rect->SetPosition( GetRelativePosition( sheetTopRight, symbol ) );
         rect->SetEnd( GetRelativePosition( sheetBottomLeft, symbol ) );
-        rect->SetWidth( elem.lineWidth );
+        rect->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
 
         if( !elem.isSolid )
             rect->SetFillMode( FILL_T::NO_FILL );
@@ -1606,7 +1606,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
     {
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetWidth( Mils2iu( 10 ) );
+        line1->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -50 ) } );
 
@@ -1614,7 +1614,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
         {
             LIB_SHAPE* circle = new LIB_SHAPE( aKsymbol, SHAPE_T::CIRCLE );
             aKsymbol->AddDrawItem( circle );
-            circle->SetWidth( Mils2iu( 5 ) );
+            circle->SetStroke( STROKE_PARAMS( Mils2iu( 5 ), PLOT_DASH_TYPE::SOLID ) );
             circle->SetPosition( { Mils2iu( 0 ), Mils2iu( -75 ) } );
             circle->SetEnd( circle->GetPosition() + wxPoint( Mils2iu( 25 ), 0 ) );
         }
@@ -1622,7 +1622,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetWidth( Mils2iu( 10 ) );
+            line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
             line2->AddPoint( { Mils2iu( -25 ), Mils2iu( -50 ) } );
             line2->AddPoint( { Mils2iu( 25 ), Mils2iu( -50 ) } );
             line2->AddPoint( { Mils2iu( 0 ), Mils2iu( -100 ) } );
@@ -1635,13 +1635,13 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
     {
         LIB_SHAPE* line = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line );
-        line->SetWidth( Mils2iu( 10 ) );
+        line->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line->AddPoint( { 0, 0 } );
         line->AddPoint( { 0, Mils2iu( -72 ) } );
 
         LIB_SHAPE* bezier = new LIB_SHAPE( aKsymbol, SHAPE_T::BEZIER );
         aKsymbol->AddDrawItem( bezier );
-        bezier->SetWidth( Mils2iu( 5 ) );
+        bezier->SetStroke( STROKE_PARAMS( Mils2iu( 5 ), PLOT_DASH_TYPE::SOLID ) );
         bezier->AddPoint( { Mils2iu( 30 ), Mils2iu( -50 ) } );
         bezier->AddPoint( { Mils2iu( 30 ), Mils2iu( -87 ) } );
         bezier->AddPoint( { Mils2iu( -30 ), Mils2iu( -63 ) } );
@@ -1656,7 +1656,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
     {
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetWidth( Mils2iu( 10 ) );
+        line1->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -100 ) } );
 
@@ -1664,25 +1664,25 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetWidth( Mils2iu( 10 ) );
+            line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
             line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
             line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
 
             LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line3 );
-            line3->SetWidth( Mils2iu( 10 ) );
+            line3->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
             line3->AddPoint( { Mils2iu( -70 ), Mils2iu( -130 ) } );
             line3->AddPoint( { Mils2iu( 70 ), Mils2iu( -130 ) } );
 
             LIB_SHAPE* line4 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line4 );
-            line4->SetWidth( Mils2iu( 10 ) );
+            line4->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
             line4->AddPoint( { Mils2iu( -40 ), Mils2iu( -160 ) } );
             line4->AddPoint( { Mils2iu( 40 ), Mils2iu( -160 ) } );
 
             LIB_SHAPE* line5 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line5 );
-            line5->SetWidth( Mils2iu( 10 ) );
+            line5->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
             line5->AddPoint( { Mils2iu( -10 ), Mils2iu( -190 ) } );
             line5->AddPoint( { Mils2iu( 10 ), Mils2iu( -190 ) } );
         }
@@ -1690,7 +1690,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetWidth( Mils2iu( 10 ) );
+            line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
             line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
             line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
             line2->AddPoint( { Mils2iu( 0 ), Mils2iu( -200 ) } );
@@ -1700,7 +1700,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetWidth( Mils2iu( 10 ) );
+            line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
             line2->AddPoint( { Mils2iu( -150 ), Mils2iu( -200 ) } );
             line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
             line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
@@ -1708,7 +1708,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
 
             LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line3 );
-            line3->SetWidth( Mils2iu( 10 ) );
+            line3->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
             line3->AddPoint( { Mils2iu( 0 ), Mils2iu( -100 ) } );
             line3->AddPoint( { Mils2iu( -50 ), Mils2iu( -200 ) } );
         }
@@ -1716,7 +1716,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetWidth( Mils2iu( 10 ) );
+            line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
             line2->AddPoint( { Mils2iu( -25 ), Mils2iu( -50 ) } );
             line2->AddPoint( { Mils2iu( 0 ), Mils2iu( -100 ) } );
             line2->AddPoint( { Mils2iu( 25 ), Mils2iu( -50 ) } );
@@ -1731,25 +1731,25 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
     {
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetWidth( Mils2iu( 10 ) );
+        line1->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -160 ) } );
 
         LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line2 );
-        line2->SetWidth( Mils2iu( 10 ) );
+        line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -160 ) } );
         line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -160 ) } );
 
         LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line3 );
-        line3->SetWidth( Mils2iu( 10 ) );
+        line3->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line3->AddPoint( { Mils2iu( -60 ), Mils2iu( -200 ) } );
         line3->AddPoint( { Mils2iu( 60 ), Mils2iu( -200 ) } );
 
         LIB_SHAPE* line4 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line4 );
-        line4->SetWidth( Mils2iu( 10 ) );
+        line4->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line4->AddPoint( { Mils2iu( -20 ), Mils2iu( -240 ) } );
         line4->AddPoint( { Mils2iu( 20 ), Mils2iu( -240 ) } );
 
@@ -1758,7 +1758,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
 
         LIB_SHAPE* circle = new LIB_SHAPE( aKsymbol, SHAPE_T::CIRCLE );
         aKsymbol->AddDrawItem( circle );
-        circle->SetWidth( Mils2iu( 10 ) );
+        circle->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         circle->SetPosition( { Mils2iu( 0 ), Mils2iu( -160 ) } );
         circle->SetEnd( circle->GetPosition() + wxPoint( Mils2iu( 120 ), 0 ) );
 
@@ -1768,13 +1768,13 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
     {
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetWidth( Mils2iu( 10 ) );
+        line1->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -200 ) } );
 
         LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line2 );
-        line2->SetWidth( Mils2iu( 10 ) );
+        line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -200 ) } );
         line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -200 ) } );
 
@@ -1790,13 +1790,13 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
 
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetWidth( Mils2iu( 10 ) );
+        line1->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -100 ) } );
 
         LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line2 );
-        line2->SetWidth( Mils2iu( 10 ) );
+        line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line2->AddPoint( { Mils2iu( -50 ), Mils2iu( -100 ) } );
         line2->AddPoint( { Mils2iu( 50 ), Mils2iu( -100 ) } );
 

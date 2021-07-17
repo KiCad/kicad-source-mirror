@@ -103,7 +103,7 @@ void FP_SHAPE::SetDrawCoord()
         m_bezierC2  += fp->GetPosition();
     }
 
-    RebuildBezierToSegmentsPointsList( m_width );
+    RebuildBezierToSegmentsPointsList( GetWidth() );
 }
 
 
@@ -247,7 +247,7 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         }
 
         if( GetShape() == SHAPE_T::BEZIER )
-            RebuildBezierToSegmentsPointsList( m_width );
+            RebuildBezierToSegmentsPointsList( GetWidth() );
 
         if( GetShape() == SHAPE_T::ARC )
         {
@@ -306,7 +306,7 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
         }
 
         if( GetShape() == SHAPE_T::BEZIER )
-            RebuildBezierToSegmentsPointsList( m_width );
+            RebuildBezierToSegmentsPointsList( GetWidth() );
 
         break;
 
