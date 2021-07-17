@@ -185,8 +185,8 @@ private:
 
     void HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aVertices );
 
-    PCB_SHAPE* HelperCreateAndAddDrawsegment( uint16_t aComponent );
-    void HelperDrawsegmentSetLocalCoord( PCB_SHAPE* aShape, uint16_t aComponent );
+    PCB_SHAPE* HelperCreateAndAddShape( uint16_t aComponent );
+    void HelperShapeSetLocalCoord( PCB_SHAPE* aShape, uint16_t aComponent );
 
     BOARD*                               m_board;
     std::vector<FOOTPRINT*>              m_components;

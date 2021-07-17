@@ -160,7 +160,7 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
-        // Update arc angle but do not yet update m_thirdPoint0 and m_thirdPoint,
+        // Update arc angle but do not yet update m_ThirdPoint0 and m_thirdPoint,
         // arc center and start point must be updated before calculation arc end.
         SetAngle( -GetAngle(), false );
         KI_FALLTHROUGH;
@@ -227,7 +227,7 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
-        // Update arc angle but do not yet update m_thirdPoint0 and m_thirdPoint,
+        // Update arc angle but do not yet update m_ThirdPoint0 and m_thirdPoint,
         // arc center and start point must be updated before calculation arc end.
         SetAngle( -GetAngle(), false );
         KI_FALLTHROUGH;

@@ -463,9 +463,8 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                                    aLineReader->LineNumber(), 0 );
             }
 
-            FP_SHAPE* shape = new FP_SHAPE( footprint.get() );
+            FP_SHAPE* shape = new FP_SHAPE( footprint.get(), SHAPE_T::SEGMENT );
             shape->SetLayer( F_SilkS );
-            shape->SetShape( SHAPE_T::SEGMENT );
             shape->SetStart0( wxPoint( parseInt( parameters[2], conv_unit ),
                                        parseInt( parameters[3], conv_unit ) ) );
             shape->SetEnd0( wxPoint( parseInt( parameters[4], conv_unit ),
@@ -487,9 +486,8 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             }
 
             // Pcbnew does know ellipse so we must have Width = Height
-            FP_SHAPE* shape = new FP_SHAPE( footprint.get() );
+            FP_SHAPE* shape = new FP_SHAPE( footprint.get(), SHAPE_T::ARC );
             shape->SetLayer( F_SilkS );
-            shape->SetShape( SHAPE_T::ARC );
             footprint->Add( shape );
 
             // for and arc: ibuf[3] = ibuf[4]. Pcbnew does not know ellipses

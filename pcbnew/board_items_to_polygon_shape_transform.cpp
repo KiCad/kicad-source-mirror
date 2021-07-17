@@ -516,7 +516,7 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
         break;
     }
 
-    case SHAPE_T::BEZIER: // Bezier curve
+    case SHAPE_T::BEZIER:
     {
         std::vector<wxPoint> ctrlPoints = { m_start, m_bezierC1, m_bezierC2, m_end };
         BEZIER_POLY converter( ctrlPoints );
@@ -533,7 +533,7 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
     }
 
     default:
-        wxFAIL_MSG( "PCB_SHAPE::TransformShapeWithClearanceToPolygon no implementation for "
+        wxFAIL_MSG( "EDA_SHAPE::TransformShapeWithClearanceToPolygon not implemented for "
                     + SHAPE_T_asString() );
         break;
     }

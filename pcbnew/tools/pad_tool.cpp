@@ -705,8 +705,7 @@ void PAD_TOOL::recombinePad( PAD* aPad )
 
             aPad->SetOffset( wxPoint( 0, 0 ) );
 
-            PCB_SHAPE* shape = new PCB_SHAPE;
-            shape->SetShape( SHAPE_T::POLY );
+            PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
             shape->SetFilled( true );
             shape->SetWidth( 0 );
             shape->SetPolyShape( existingOutline );

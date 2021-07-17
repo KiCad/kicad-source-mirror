@@ -191,11 +191,10 @@ void PCB_ARC::AddToFootprint( FOOTPRINT* aFootprint )
 
 void PCB_ARC::AddToBoard()
 {
-    PCB_SHAPE* arc = new PCB_SHAPE( m_board );
+    PCB_SHAPE* arc = new PCB_SHAPE( m_board, IsCircle() ? SHAPE_T::CIRCLE : SHAPE_T::ARC );
 
     m_board->Add( arc, ADD_MODE::APPEND );
 
-    arc->SetShape( IsCircle() ? SHAPE_T::CIRCLE : SHAPE_T::ARC );
     arc->SetFilled( false );
     arc->SetLayer( m_KiCadLayer );
     arc->SetStart( wxPoint( m_positionX, m_positionY ) );

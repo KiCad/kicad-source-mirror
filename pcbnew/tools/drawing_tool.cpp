@@ -1612,8 +1612,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
                     // If the user clicks on an existing snap point from a drawsegment
                     //  we finish the segment as they are likely closing a path
-                    if( snapItem
-                        && ( shape == SHAPE_T::RECT || graphic->GetLength() > 0.0 ) )
+                    if( snapItem && ( shape == SHAPE_T::RECT || graphic->GetLength() > 0.0 ) )
                     {
                         commit.Add( graphic );
                         commit.Push( _( "Draw a line segment" ) );

@@ -896,10 +896,8 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                 if( layer != UNDEFINED_LAYER ) // unsupported layer
                 {
-                    PCB_SHAPE* shape = new PCB_SHAPE( m_board );
+                    PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::CIRCLE );
                     m_board->Add( shape, ADD_MODE::APPEND );
-
-                    shape->SetShape( SHAPE_T::CIRCLE );
                     shape->SetFilled( false );
                     shape->SetLayer( layer );
                     shape->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );

@@ -191,9 +191,9 @@ private:
      * @param aContainer to draw on (e.g. m_board)
      * @param aCadstarGroupID to add the text to
      * @param aCadstarLayerOverride if not empty, overrides the LayerID in aCadstarText
-     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
-     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
-     * @param aScalingFactor scale draw segment by this amount
+     * @param aMoveVector move text by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate text by this amount (in tenth degrees)
+     * @param aScalingFactor scale text by this amount
      * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
      * @param aMirrorInvert if true, it inverts the Mirror status of aCadstarText
      */
@@ -214,11 +214,11 @@ private:
      * @param aShapeName for reporting warnings/errors to the user
      * @param aContainer to draw on (e.g. m_board)
      * @param aCadstarGroupID to add the shape to
-     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
-     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
-     * @param aScalingFactor scale draw segment by this amount
+     * @param aMoveVector move shapes by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate shapes by this amount (in tenth degrees)
+     * @param aScalingFactor scale shapes by this amount
      * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
-     * @param aMirrorInvert if true, mirrors the shape
+     * @param aMirrorInvert if true, mirrors the shapes
      */
     void drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_ID& aKiCadLayer,
                            const int& aLineThickness, const wxString& aShapeName,
@@ -230,17 +230,17 @@ private:
                            const bool& aMirrorInvert = false );
 
     /**
-     * @brief Uses PCB_SHAPE to draw the cutouts on m_board object
+     * @brief Uses PCB_SHAPEs to draw the cutouts on m_board object
      * @param aVertices
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
      * @param aContainer to draw on (e.g. m_board)
-     * @param aCadstarGroupID to add the shape to
-     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
-     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
-     * @param aScalingFactor scale draw segment by this amount
+     * @param aCadstarGroupID to add the shapes to
+     * @param aMoveVector move shapes by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate shapes by this amount (in tenth degrees)
+     * @param aScalingFactor scale shapes by this amount
      * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
-     * @param aMirrorInvert if true, mirrors the drawsegments
+     * @param aMirrorInvert if true, mirrors the shapes
      */
     void drawCadstarCutoutsAsShapes( const std::vector<CUTOUT>& aCutouts,
                                      const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
@@ -259,11 +259,11 @@ private:
      * @param aLineThickness Thickness of line to draw with
      * @param aContainer to draw on (e.g. m_board)
      * @param aCadstarGroupID to add the shape to
-     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
-     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
-     * @param aScalingFactor scale draw segment by this amount
+     * @param aMoveVector move shape by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate shape by this amount (in tenth degrees)
+     * @param aScalingFactor scale shape by this amount
      * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
-     * @param aMirrorInvert if true, mirrors the drawsegment
+     * @param aMirrorInvert if true, mirrors the shape
      * @param aCadstarGroupID to add the shape to
      */
     void drawCadstarVerticesAsShapes( const std::vector<VERTEX>& aCadstarVertices,
@@ -281,11 +281,11 @@ private:
      * @param aCadstarVertices
      * @param aContainer to draw on (e.g. m_board). Can be nullptr.
      * @param aCadstarGroupID to add the shape to
-     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
-     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
-     * @param aScalingFactor scale draw segment by this amount
+     * @param aMoveVector move shapes by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate shapes by this amount (in tenth degrees)
+     * @param aScalingFactor scale shapes by this amount
      * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
-     * @param aMirrorInvert if true, mirrors the drawsegment
+     * @param aMirrorInvert if true, mirrors the shapes
      * @return
      */
     std::vector<PCB_SHAPE*> getShapesFromVertices( const std::vector<VERTEX>& aCadstarVertices,
@@ -303,11 +303,11 @@ private:
      * @param aCadstarVertex
      * @param aContainer to draw on (e.g. m_board). Can be nullptr.
      * @param aCadstarGroupID to add the shape to
-     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
-     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
-     * @param aScalingFactor scale draw segment by this amount
+     * @param aMoveVector move shapes by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate shapes by this amount (in tenth degrees)
+     * @param aScalingFactor scale shapes by this amount
      * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
-     * @param aMirrorInvert if true, mirrors the drawsegment
+     * @param aMirrorInvert if true, mirrors the shapes
      * @return
      */
     PCB_SHAPE* getShapeFromVertex( const POINT& aCadstarStartPoint,
@@ -335,11 +335,11 @@ private:
      * @param aCadstarShape
      * @param aLineThickness Thickness of line is used for expanding the polygon by half.
      * @param aContainer to draw on (e.g. m_board). Can be nullptr.
-     * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
-     * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
-     * @param aScalingFactor scale draw segment by this amount
+     * @param aMoveVector move poly by this amount (in KiCad coordinates)
+     * @param aRotationAngle rotate poly by this amount (in tenth degrees)
+     * @param aScalingFactor scale poly by this amount
      * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
-     * @param aMirrorInvert if true, mirrors the shape
+     * @param aMirrorInvert if true, mirrors the poly
      * @return
      */
     SHAPE_POLY_SET getPolySetFromCadstarShape( const SHAPE& aCadstarShape,
@@ -361,12 +361,13 @@ private:
     /**
      * @brief Returns a vector of pointers to TRACK/ARC objects. Caller owns the objects
      * @param aShapes
-     * @param aParentContainer sets this as the parent of each TRACK object and Add()s it to the parent
+     * @param aParentContainer sets this as the parent of each TRACK object and Add()s it to the
+     *                         parent
      * @param aNet sets all the tracks to this net, unless nullptr
-     * @param aLayerOverride Sets all tracks to this layer, or, if it is UNDEFINED_LAYER, uses the layers
-     *                       in the DrawSegments
-     * @param aWidthOverride Sets all tracks to this width, or, if it is UNDEFINED_LAYER, uses the width
-     *                       in the DrawSegments
+     * @param aLayerOverride Sets all tracks to this layer, or, if it is UNDEFINED_LAYER, uses the
+     *                       layers in the shapes
+     * @param aWidthOverride Sets all tracks to this width, or, if it is UNDEFINED_LAYER, uses the
+     *                       width in the shapes
      * @return
     */
     std::vector<PCB_TRACK*> makeTracksFromShapes( const std::vector<PCB_SHAPE*> aShapes,

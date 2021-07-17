@@ -297,7 +297,7 @@ protected:
     const std::vector<wxPoint> buildBezierToSegmentsPointsList( int aMinSegLen  ) const;
 
 protected:
-    SHAPE_T       m_shape;        // Shape: line, Circle, Arc
+    SHAPE_T              m_shape;        // Shape: line, Circle, Arc
     int                  m_width;        // thickness of lines ...
     bool                 m_filled;       // Pretty much what it says on the tin...
     wxPoint              m_start;        // Line start point or Circle and Arc center

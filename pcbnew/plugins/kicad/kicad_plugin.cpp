@@ -905,8 +905,7 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
         break;
 
     default:
-        wxFAIL_MSG( "PCB_IO::format cannot format unknown PCB_SHAPE shape:"
-                    + aShape->SHAPE_T_asString() );
+        wxFAIL_MSG( "PCB_IO::format not implemented for " + aShape->SHAPE_T_asString() );
         return;
     };
 
@@ -1039,8 +1038,7 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
         break;
 
     default:
-        wxFAIL_MSG( "PCB_IO::format cannot format unknown FP_SHAPE shape:"
-                    + aFPShape->SHAPE_T_asString() );
+        wxFAIL_MSG( "PCB_IO::format not implemented for " + aFPShape->SHAPE_T_asString() );
         return;
     };
 

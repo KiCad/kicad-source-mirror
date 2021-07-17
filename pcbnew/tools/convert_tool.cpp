@@ -689,9 +689,8 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    PCB_SHAPE* graphic = new PCB_SHAPE;
+                    PCB_SHAPE* graphic = new PCB_SHAPE( nullptr, SHAPE_T::SEGMENT );
 
-                    graphic->SetShape( SHAPE_T::SEGMENT );
                     graphic->SetLayer( targetLayer );
                     graphic->SetStart( wxPoint( seg.A ) );
                     graphic->SetEnd( wxPoint( seg.B ) );

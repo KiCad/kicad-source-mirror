@@ -57,8 +57,7 @@ void PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aF
 
 void PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness, bool aFilled )
 {
-    PCB_SHAPE* item = new PCB_SHAPE();
-    item->SetShape( SHAPE_T::POLY );
+    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
     item->SetFilled( aFilled );
     item->SetPolyPoints( aPoly );
     item->SetWidth( aThickness );
@@ -70,8 +69,7 @@ void PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness, b
 
 void PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness )
 {
-    PCB_SHAPE* item = new PCB_SHAPE();
-    item->SetShape( SHAPE_T::SEGMENT );
+    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::SEGMENT );
     item->SetFilled( false );
     item->SetStart( aStart );
     item->SetEnd( aEnd );
@@ -85,8 +83,7 @@ void PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int a
 void PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aArcAngle,
                            int aThickness )
 {
-    PCB_SHAPE* item = new PCB_SHAPE();
-    item->SetShape( SHAPE_T::ARC );
+    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::ARC );
     item->SetFilled( false );
     item->SetArcCenter( aCenter );
     item->SetArcStart( aStart );
@@ -101,8 +98,7 @@ void PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aA
 void PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const wxPoint& aCtrl1,
                              const wxPoint& aCtrl2, int aThickness )
 {
-    PCB_SHAPE* item = new PCB_SHAPE();
-    item->SetShape( SHAPE_T::BEZIER );
+    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::BEZIER );
     item->SetFilled( false );
     item->SetStart( aStart );
     item->SetEnd( aEnd );
@@ -117,8 +113,7 @@ void PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const w
 
 void PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness, bool aFilled )
 {
-    PCB_SHAPE* item = new PCB_SHAPE();
-    item->SetShape( SHAPE_T::CIRCLE );
+    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::CIRCLE );
     item->SetFilled( aFilled );
     item->SetStart( aCenter );
     item->SetEnd( wxPoint( aCenter.x + aRadius, aCenter.y ) );
@@ -132,8 +127,7 @@ void PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThicknes
 void PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness,
                             bool aFilled)
 {
-    PCB_SHAPE* item = new PCB_SHAPE();
-    item->SetShape( SHAPE_T::RECT );
+    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T:: RECT );
     item->SetFilled( aFilled );
     item->SetStart( aStart );
     item->SetEnd( aEnd );

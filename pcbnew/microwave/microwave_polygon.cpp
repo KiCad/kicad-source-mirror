@@ -341,8 +341,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     pad2->SetX( pad2->GetPos0().x );
 
     // Add a polygonal edge (corners will be added later) on copper layer
-    shape = new FP_SHAPE( footprint );
-    shape->SetShape( SHAPE_T::POLY );
+    shape = new FP_SHAPE( footprint, SHAPE_T::POLY );
     shape->SetFilled( true );
     shape->SetLayer( F_Cu );
 
