@@ -411,8 +411,8 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
             polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
         }
 
-        break;
         TO_POLY_SHAPE;
+        break;
     }
 
     case AMP_POLYGON:
