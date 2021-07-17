@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-01 16:20+0000\n"
+"PO-Revision-Date: 2021-07-17 23:10+0000\n"
 "Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -218,9 +218,8 @@ msgstr "레이트 레이싱 로드 : 레이어"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:881
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:644
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "3D 모델 로딩"
+msgstr "3D 모델 로드 중..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:1021
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:654
@@ -267,9 +266,9 @@ msgstr "OpenGL 로드: 레이어"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2199
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "로딩 %s"
+msgstr "로딩 %s..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
@@ -366,54 +365,44 @@ msgid "Render current view using Raytracing"
 msgstr "레이트레이싱으로 현재 뷰 렌더링"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:27
-#, fuzzy
 msgid "Background top:"
-msgstr "흰색"
+msgstr "배경색 상단:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:34
-#, fuzzy
 msgid "Background bottom:"
-msgstr "배경색, 하단"
+msgstr "배경색 하단:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:47
-#, fuzzy
 msgid "Silkscreen top:"
-msgstr "Silkscreen Cmp"
+msgstr "실크 스크린 상단:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:54
-#, fuzzy
 msgid "Silkscreen bottom:"
-msgstr "실크스크린 색상"
+msgstr "실크 스크린 하단:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:67
-#, fuzzy
 msgid "Solder mask top:"
-msgstr "Solder mask Cmp"
+msgstr "솔더 마스크 상단:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:74
-#, fuzzy
 msgid "Solder mask bottom:"
-msgstr "솔더 마스크 색상"
+msgstr "솔더 마스크 하단:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:87
-#, fuzzy
 msgid "Solder paste:"
-msgstr "Solder paste Copper"
+msgstr "솔더 페이스트:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:100
-#, fuzzy
 msgid "Copper/surface finish:"
-msgstr "Copper"
+msgstr "구리/표면 마감:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:113
-#, fuzzy
 msgid "Board body:"
-msgstr "보드 파일:"
+msgstr "보드 본체:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:126
-#, fuzzy
 msgid "Load Colors from Board Stackup"
-msgstr "물리적 스택에서 색상 가져오기"
+msgstr "보드 스택업에서 색상 로드"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:21
 msgid "3D Model Visibility"
@@ -498,24 +487,20 @@ msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr "도금 된 구리와 도금되지 않은 구리에 다른 색상을 사용합니다. (느림)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "Material properties:"
-msgstr "재료 속성"
+msgstr "재료 속성:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "Realistic"
-msgstr "현실적인 모드"
+msgstr "실감"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "Solid colors"
-msgstr "선택 색상 :"
+msgstr "단색"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "CAD colors"
-msgstr "색상"
+msgstr "CAD 색상"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:114
 msgid "Camera Options"
@@ -547,7 +532,6 @@ msgstr "애니메이션 속도:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:23
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
-#, fuzzy
 msgid "Rendering Options"
 msgstr "렌더링 옵션"
 
@@ -612,25 +596,21 @@ msgid "Disable holes"
 msgstr "홀 사용 안 함"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
-#, fuzzy
 msgid "Procedural textures (slow)"
-msgstr "절차적 질감"
+msgstr "절차적 질감(느림)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
-#, fuzzy
 msgid "Add floor (slow)"
-msgstr "층 추가"
+msgstr "층 추가(느림)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
-#, fuzzy
 msgid "Anti-aliasing (slow)"
-msgstr "안티 앨리어싱"
+msgstr "안티-앨리어싱(느림)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
-#, fuzzy
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr "최종 렌더에 화면 공간 주변 폐쇄 및 전역 조명 반사 적용(느림)"
+msgstr "화면 공간 주변 막힘 및 전역 조명 반사(느림)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -706,55 +686,45 @@ msgstr "하단 조명:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:181
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:198
-#, fuzzy
 msgid "Elevation (deg)"
-msgstr "고도 (도)"
+msgstr "높이 (도)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:185
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:202
-#, fuzzy
 msgid "Azimuth (deg)"
 msgstr "방위각 (도)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:206
-#, fuzzy
 msgid "Light 1:"
-msgstr "오른쪽"
+msgstr "광선 1:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:222
-#, fuzzy
 msgid "Light 5:"
-msgstr "오른쪽"
+msgstr "광선 5:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:235
-#, fuzzy
 msgid "Light 2:"
-msgstr "오른쪽"
+msgstr "광선 2:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:251
-#, fuzzy
 msgid "Light 6:"
-msgstr "오른쪽"
+msgstr "광선 6:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:264
-#, fuzzy
 msgid "Light 3:"
-msgstr "오른쪽"
+msgstr "광선 3:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:280
-#, fuzzy
 msgid "Light 7:"
-msgstr "오른쪽"
+msgstr "광선 7:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:293
-#, fuzzy
 msgid "Light 4:"
-msgstr "오른쪽"
+msgstr "광선 4:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:309
-#, fuzzy
 msgid "Light 8:"
-msgstr "오른쪽"
+msgstr "광선8:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:100
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:72
@@ -784,11 +754,9 @@ msgstr "3D 이미지 파일 이름"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:738 common/eda_base_frame.cpp:1043
 #: common/eda_base_frame.cpp:1048 pcbnew/plugins/altium/altium_pcb.cpp:1315
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
-"파일 저장에 필요한 권한이 충분하지 않음\n"
-"%s"
+msgstr "파일 '%s'을 저장할 수 있는 권한이 없습니다."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:739 common/confirm.cpp:130
 #: common/confirm.cpp:269 common/dialogs/panel_setup_severities.cpp:43
@@ -1139,7 +1107,6 @@ msgid "Inch"
 msgstr "인치"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:159
-#, fuzzy
 msgid "DPI"
 msgstr "DPI"
 
@@ -1167,9 +1134,9 @@ msgstr "로고 파일 작성"
 #: bitmap2component/bitmap2cmp_gui.cpp:795
 #: bitmap2component/bitmap2cmp_gui.cpp:834
 #: bitmap2component/bitmap2cmp_gui.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' could not be created."
-msgstr "\"%s\" 파일을 만들 수 없습니다."
+msgstr "'%s' 파일을 만들 수 없습니다."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:775
 msgid "Create PostScript File"
@@ -1263,7 +1230,6 @@ msgstr "크기:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:126
 #: bitmap2component/bitmap2cmp_gui_base.cpp:131
-#, fuzzy
 msgid "300"
 msgstr "300"
 
@@ -1298,7 +1264,6 @@ msgstr "도면 시트 (.kicad_wks 파일)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
-#, fuzzy
 msgid "Output Format"
 msgstr "출력 형식"
 
@@ -1318,36 +1283,30 @@ msgstr "레벨을 조정하여 그레이 스케일 그림을 흑백 그림으로
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:352
-#, fuzzy
 msgid "Negative"
-msgstr "음영 플로트"
+msgstr "네거티브"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:530
-#, fuzzy
 msgid "Front silk screen"
-msgstr "실크스크린에 패드 인쇄"
+msgstr "전면 실크 스크린"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:536
-#, fuzzy
 msgid "Front solder mask"
-msgstr "Solder mask Cmp"
+msgstr "전면 솔더 마스크"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
-#, fuzzy
 msgid "User layer Eco1"
-msgstr "드로우 레이어 복사"
+msgstr "사용자 레이어 Eco1"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
-#, fuzzy
 msgid "User layer Eco2"
-msgstr "드로우 레이어 복사"
+msgstr "사용자 레이어 Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
-#, fuzzy
 msgid "Board Layer for Outline"
-msgstr "보드 파일:"
+msgstr "아웃라인용 보드 레이어"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -1355,20 +1314,19 @@ msgid ""
 "The reference designator and value are always placed on the silk screen "
 "layer (but will be marked invisible)."
 msgstr ""
+"윤곽선을 그릴 보드 층을 선택합니다.\n"
+"기준 지정자와 값은 항상 실크 스크린 층에 배치됩니다(그러나 보이지 않음으로 표시됨)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
-#, fuzzy
 msgid "Bitmap to Component Converter"
-msgstr "라이브러리 컴포넌트 속성"
+msgstr "비트맵을 부품으로 변환"
 
 #: common/base_units.cpp:436
-#, fuzzy
 msgid "sq. mm"
 msgstr "sq. mm"
 
 #: common/base_units.cpp:438
-#, fuzzy
 msgid "cu. mm"
 msgstr "cu. mm"
 
@@ -1390,7 +1348,6 @@ msgstr "cu. mm"
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:143
 #: pagelayout_editor/pl_editor_frame.cpp:735
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
-#, fuzzy
 msgid "mils"
 msgstr "mils"
 
@@ -1439,46 +1396,44 @@ msgstr "%"
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr ""
+msgstr "환경 변수 확장 실패: '%c'가 %u 위치의 '%s'에 없습니다."
 
 #: common/common.cpp:320
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr ""
+msgstr "경로 '%s'를 '%s'에 대하여 절대적으로 만들 수 없습니다."
 
 #: common/common.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created.\n"
-msgstr "보고서 파일 '%s' 생성됨\n"
+msgstr "출력 디렉토리 '%s'가 생성되었습니다.\n"
 
 #: common/common.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'.\n"
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "출력 디렉토리 '%s'을 생성할 수 없습니다.\n"
 
 #: common/common.cpp:615
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr ""
+msgstr "이 운영 체제는 KiCad 및 해당 종속 항목에서 지원되지 않습니다."
 
 #: common/common.cpp:617
 msgid "Unsupported Operating System"
-msgstr ""
+msgstr "지원되지 않는 운영 체제"
 
 #: common/common.cpp:620
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
-msgstr ""
+msgstr "이 시스템의 KiCad 관련 문제는 공식 버그 트래커에 보고할 수 없습니다."
 
 #: common/confirm.cpp:57
-#, fuzzy
 msgid "Do not show again"
-msgstr "영역 숨기기"
+msgstr "다시 표시 안 함"
 
 #: common/confirm.cpp:127
-#, fuzzy
 msgid "Message"
-msgstr "메시지:"
+msgstr "메시지"
 
 #: common/confirm.cpp:128
 msgid "Question"
@@ -1502,40 +1457,36 @@ msgid "Warning"
 msgstr "경고"
 
 #: common/confirm.cpp:158 common/confirm.cpp:185
-#, fuzzy
 msgid "Save Changes?"
-msgstr "변경 내용을 저장 할까요?"
+msgstr "변경 사항을 저장 할까요?"
 
 #: common/confirm.cpp:160 common/confirm.cpp:187
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
+msgstr "저장하지 않으면 모든 변경 사항이 영구적으로 손실됩니다."
 
 #: common/confirm.cpp:161 common/confirm.cpp:188 common/tool/actions.cpp:67
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 #: eeschema/symbol_editor/symbol_editor.cpp:614
 #: eeschema/widgets/tuner_slider_base.cpp:66
 #: pcbnew/footprint_libraries_utils.cpp:964
-#, fuzzy
 msgid "Save"
-msgstr "설정 저장"
+msgstr "저장"
 
 #: common/confirm.cpp:161 common/confirm.cpp:188
-#, fuzzy
 msgid "Discard Changes"
-msgstr "변경 없음"
+msgstr "변경 사항 무시"
 
 #: common/confirm.cpp:164 common/confirm.cpp:239
 msgid "Apply to all"
-msgstr ""
+msgstr "모두에 적용"
 
 #: common/confirm.cpp:200
 msgid "Your current changes will be permanently lost."
-msgstr ""
+msgstr "현재 변경 내용이 영구적으로 손실됩니다."
 
 #: common/confirm.cpp:201 common/tool/actions.cpp:91
-#, fuzzy
 msgid "Revert"
-msgstr "안 함"
+msgstr "되돌리기"
 
 #: common/confirm.cpp:201 common/confirm.cpp:231 common/tool/actions.cpp:122
 #: eeschema/dialogs/dialog_erc.cpp:277
@@ -1551,7 +1502,6 @@ msgid "OK"
 msgstr "확인"
 
 #: common/confirm.cpp:285
-#, fuzzy
 msgid "Info"
 msgstr "정보"
 
@@ -3558,51 +3508,42 @@ msgstr "트랙 두께"
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1491
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:196
-#, fuzzy
 msgid "Via Size"
-msgstr "세로 크기"
+msgstr "비아 크기"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
-#, fuzzy
 msgid "Via Hole"
-msgstr "비아 %.1f"
+msgstr "비아 홀"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:198
-#, fuzzy
 msgid "uVia Size"
-msgstr "비아 크기"
+msgstr "마이크로 비아 크기"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
-#, fuzzy
 msgid "uVia Hole"
-msgstr "비아 %.1f"
+msgstr "마이크로 비아 홀"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:49
-#, fuzzy
 msgid "DP Width"
-msgstr "두께"
+msgstr "DP 폭"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:50
-#, fuzzy
 msgid "DP Gap"
-msgstr "간격 추가"
+msgstr "DP 간격"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
-#, fuzzy
 msgid "Wire Thickness"
-msgstr "선 설정"
+msgstr "배선 두께"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
-#, fuzzy
 msgid "Bus Thickness"
-msgstr "보드 파일:"
+msgstr "버스 두께"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:54
 #: eeschema/dialogs/dialog_edit_line_style_base.h:67 eeschema/sch_line.cpp:893
-#, fuzzy
 msgid "Line Style"
-msgstr "선 삭제"
+msgstr "선 스타일"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60 common/pgm_base.cpp:72
 #: common/widgets/footprint_select_widget.cpp:145
@@ -3617,12 +3558,11 @@ msgstr "기본값"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
 msgid "Set color to transparent to use Kicad default color."
-msgstr ""
+msgstr "Kicad 기본 색상을 사용하려면 색상을 투명으로 설정합니다."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
-#, fuzzy
 msgid "Filter Nets"
-msgstr "페이지 설정"
+msgstr "필터 네트"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:108
 msgid "Net class filter:"
@@ -3635,34 +3575,29 @@ msgstr "네트 이름 필터 :"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:140
 #: pcbnew/widgets/appearance_controls.cpp:855
-#, fuzzy
 msgid "Show All Nets"
-msgstr "모두 보이기"
+msgstr "모든 네트 보기"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:146
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:60
-#, fuzzy
 msgid "Apply Filters"
-msgstr "형상 필터"
+msgstr "필터 적용"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:156
-#, fuzzy
 msgid "Assign Net Class"
-msgstr "미연결 플래그 추가"
+msgstr "네트 클래스 지정"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:161
-#, fuzzy
 msgid "New net class:"
-msgstr "네트 이름 사용"
+msgstr "새로운 네트 클래스:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:178
-#, fuzzy
 msgid "Assign To All Listed Nets"
-msgstr "미연결 플래그 추가"
+msgstr "나열된 모든 네트에 할당"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:184
 msgid "Assign To Selected Nets"
-msgstr ""
+msgstr "선택한 네트에 할당"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:212
 #: pcbnew/board_connected_item.cpp:184
@@ -3675,11 +3610,11 @@ msgstr "네트"
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:108
 msgid "Ignore"
-msgstr ""
+msgstr "무시"
 
 #: common/dialogs/panel_setup_severities.cpp:108
 msgid "From Pin Conflicts Map"
-msgstr ""
+msgstr "핀 충돌 맵에서"
 
 #: common/dialogs/panel_text_variables.cpp:114
 #: common/dialogs/panel_text_variables.cpp:142
@@ -3687,9 +3622,8 @@ msgid "Variable name cannot be empty."
 msgstr "변수 이름은 비워 둘 수 없습니다."
 
 #: common/dialogs/panel_text_variables_base.cpp:37
-#, fuzzy
 msgid "Variable Name"
-msgstr "네트 이름"
+msgstr "변수 이름"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
 msgid "Text Substitution"
@@ -3700,48 +3634,42 @@ msgstr "텍스트 대체"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:522
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:542
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:562
-#, fuzzy
 msgid "Error:"
-msgstr "에러"
+msgstr "에러:"
 
 #: common/dialogs/wx_html_report_panel.cpp:192
 #: common/dialogs/wx_html_report_panel.cpp:215
-#, fuzzy
 msgid "Warning:"
-msgstr "경고"
+msgstr "경고:"
 
 #: common/dialogs/wx_html_report_panel.cpp:217
-#, fuzzy
 msgid "Info:"
-msgstr "정보"
+msgstr "정보:"
 
 #: common/dialogs/wx_html_report_panel.cpp:334
 #: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:642
-#, fuzzy
 msgid "Save Report to File"
-msgstr "프로젝트 파일 저장 (&P)"
+msgstr "보고서 파일 저장"
 
 #: common/dialogs/wx_html_report_panel.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "'%s' 파일에 보고서를 쓸 수 없습니다."
 
 #: common/dialogs/wx_html_report_panel.cpp:353
 msgid "File save error"
 msgstr "파일 저장 오류"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:14
-#, fuzzy
 msgid "Output Messages"
-msgstr "출력 형식"
+msgstr "출력 메시지"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:31
 #: eeschema/dialogs/dialog_erc_base.cpp:66
 #: pcbnew/dialogs/dialog_drc_base.cpp:147
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:32
-#, fuzzy
 msgid "Show:"
-msgstr "모두 보이기"
+msgstr "보이기:"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:35
 #: eeschema/dialogs/dialog_erc_base.cpp:70 eeschema/lib_item.cpp:57
@@ -3757,39 +3685,35 @@ msgstr "모두"
 #: eeschema/dialogs/dialog_erc_base.cpp:82
 #: pcbnew/dialogs/dialog_drc_base.cpp:163
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:49
-#, fuzzy
 msgid "Warnings"
 msgstr "경고"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:54
-#, fuzzy
 msgid "Actions"
-msgstr "호 설정"
+msgstr "조치"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:60
-#, fuzzy
 msgid "Infos"
 msgstr "정보"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:66
 #: eeschema/dialogs/dialog_erc_base.cpp:97
 #: pcbnew/dialogs/dialog_drc_base.cpp:178
-#, fuzzy
 msgid "Save..."
-msgstr "다른 이름으로 저장 (&S)..."
+msgstr "저장..."
 
 #: common/draw_panel_gal.cpp:249 common/draw_panel_gal.cpp:411
 msgid "Could not use OpenGL, falling back to software rendering"
-msgstr ""
+msgstr "OpenGL을 사용할 수 없으며, 소프트웨어 렌더링으로 대체됨"
 
 #: common/draw_panel_gal.cpp:255 common/draw_panel_gal.cpp:418
 msgid "Could not use OpenGL"
-msgstr ""
+msgstr "OpenGL을 사용할 수 없음"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' was not fully read."
-msgstr "\"%s\" 파일을 완전히 읽지 못했음"
+msgstr "'%s' 파일을 완전히 읽지 못했음."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -3975,11 +3899,9 @@ msgid "Hotkeys"
 msgstr "현재 단축키 목록 보이기"
 
 #: common/eda_base_frame.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr ""
-"파일 저장에 필요한 권한이 충분하지 않음\n"
-"%s"
+msgstr "폴더 '%s'에 대한 권한이 없습니다."
 
 #: common/eda_base_frame.cpp:1078
 #, c-format
@@ -4680,9 +4602,8 @@ msgstr "%s 파일을 만들 수 없습니다."
 
 #: common/grid_tricks.cpp:241 common/tool/actions.cpp:154
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1890
-#, fuzzy
 msgid "Cut"
-msgstr "현재"
+msgstr "자르기"
 
 #: common/grid_tricks.cpp:241
 #, fuzzy
@@ -4691,14 +4612,12 @@ msgstr "선택된 항목 잘라내기"
 
 #: common/grid_tricks.cpp:242 common/tool/actions.cpp:160
 #: eeschema/tools/ee_actions.cpp:153
-#, fuzzy
 msgid "Copy"
-msgstr "문서 복사"
+msgstr "복사"
 
 #: common/grid_tricks.cpp:242
-#, fuzzy
 msgid "Copy selected cells to clipboard"
-msgstr "클립보드로 3D 이미지 복사"
+msgstr "선택한 셀을 클립보드에 복사"
 
 #: common/grid_tricks.cpp:243 common/tool/actions.cpp:166
 msgid "Paste"
@@ -4706,7 +4625,7 @@ msgstr "붙여넣기"
 
 #: common/grid_tricks.cpp:243
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr ""
+msgstr "현재 셀의 행렬에 클립보드 셀 붙여넣기"
 
 #: common/grid_tricks.cpp:244 common/tool/actions.cpp:192
 #: kicad/project_tree_pane.cpp:790 pcbnew/plugins/kicad/pcb_parser.cpp:763
@@ -4715,9 +4634,8 @@ msgid "Delete"
 msgstr "삭제"
 
 #: common/grid_tricks.cpp:244
-#, fuzzy
 msgid "Delete selected cells"
-msgstr "선택된 항목 잘라내기"
+msgstr "선택한 셀 삭제"
 
 #: common/grid_tricks.cpp:245 common/tool/actions.cpp:172
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -4726,108 +4644,93 @@ msgstr "선택된 항목 잘라내기"
 #: pcbnew/dialogs/dialog_import_settings.cpp:54
 #: pcbnew/dialogs/dialog_import_settings.cpp:99
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:76
-#, fuzzy
 msgid "Select All"
-msgstr "모두 삭제"
+msgstr "모두 선택"
 
 #: common/grid_tricks.cpp:245
-#, fuzzy
 msgid "Select all cells"
-msgstr "항목 선택"
+msgstr "모든 셀 선택"
 
 #: common/hotkey_store.cpp:43
 msgid "Pan Left/Right"
-msgstr ""
+msgstr "왼쪽/오른쪽 이동"
 
 #: common/hotkey_store.cpp:44
 msgid "Pan Up/Down"
-msgstr ""
+msgstr "위/아래로 이동"
 
 #: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:255
-#, fuzzy
 msgid "Finish Drawing"
-msgstr "드로잉 마침"
+msgstr "그리기 완료"
 
 #: common/hotkey_store.cpp:47 common/hotkey_store.cpp:52
-#, fuzzy
 msgid "Show Clarify Selection Menu"
-msgstr "선택"
+msgstr "선택 항목 지우기 메뉴 표시"
 
 #: common/hotkey_store.cpp:48 common/hotkey_store.cpp:53
-#, fuzzy
 msgid "Add to Selection"
-msgstr "확대 선택"
+msgstr "선택 항목에 추가"
 
 #: common/hotkey_store.cpp:49 common/hotkey_store.cpp:54
 msgid "Toggle Selection State"
-msgstr ""
+msgstr "선택 상태 전환"
 
 #: common/hotkey_store.cpp:50 common/hotkey_store.cpp:55
-#, fuzzy
 msgid "Remove from Selection"
-msgstr "확대 선택"
+msgstr "선택에서 제거"
 
 #: common/hotkey_store.cpp:57
 msgid "Ignore Grid Snaps"
-msgstr ""
+msgstr "그리드 스냅 무시"
 
 #: common/hotkey_store.cpp:58
 msgid "Ignore Other Snaps"
-msgstr ""
+msgstr "다른 스냅 무시"
 
 #: common/hotkey_store.cpp:59
-#, fuzzy
 msgid "Ignore H/V/45 Constraints"
-msgstr "풋프린트"
+msgstr "H/V/45 제약 조건 무시"
 
 #: common/hotkey_store.cpp:64 common/tool/action_menu.cpp:224
 #: common/tool/actions.cpp:115
-#, fuzzy
 msgid "Quit"
-msgstr "종료 (&Q)"
+msgstr "종료"
 
 #: common/hotkey_store.cpp:79
-#, fuzzy
 msgid "Project Manager"
-msgstr "프로젝트 (&P)"
+msgstr "프로젝트 매니저"
 
 #: common/hotkey_store.cpp:80 eeschema/eeschema_config.cpp:67
 #: eeschema/menubar.cpp:125 eeschema/sch_edit_frame.cpp:1285
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "회로도 애노테이션"
+msgstr "회로도 편집기"
 
 #: common/hotkey_store.cpp:81 kicad/tools/kicad_manager_actions.cpp:76
 #: pcbnew/menubar_pcb_editor.cpp:184 pcbnew/pcb_edit_frame.cpp:1259
 #: pcbnew/pcbnew_config.cpp:57
-#, fuzzy
 msgid "PCB Editor"
-msgstr "에디터 (&E)"
+msgstr "PCB 에디터"
 
 #: common/hotkey_store.cpp:82 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:86 pagelayout_editor/pl_editor_frame.cpp:481
 #: pagelayout_editor/pl_editor_frame.cpp:555
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "라이브러리 에디터 실행"
+msgstr "도면 시트 편집기"
 
 #: common/hotkey_store.cpp:154
 msgid "Gestures"
-msgstr ""
+msgstr "제스처"
 
 #: common/kiway.cpp:253
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "kiface 라이브러리 \"%s\" 로드 실패."
+msgstr "kiface 라이브러리 '%s' 로드 실패."
 
 #: common/kiway.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
-msgstr ""
-"풋프린트 '%s' 을 '%s 라이브러리에서 로드할 수 없음.\n"
-"\n"
-"%s"
+msgstr "kiface 라이브러리 '%s'에서 인스턴스 이름과 버전을 읽을 수 없습니다."
 
 #: common/kiway.cpp:295
 #, c-format
@@ -4836,25 +4739,29 @@ msgid ""
 "\"%s\"\n"
 "could not be loaded\n"
 msgstr ""
+"치명적인 설치 버그. 파일:\n"
+"\"%s\"\n"
+"로드할 수 없음\n"
 
 #: common/kiway.cpp:299
 msgid "It is missing.\n"
-msgstr ""
+msgstr "누락되었습니다.\n"
 
 #: common/kiway.cpp:301
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr ""
+msgstr "공유 라이브러리(.dll 또는 .so) 파일이 누락된것 같습니다.\n"
 
 #: common/kiway.cpp:303
 msgid ""
 "From command line: argv[0]:\n"
 "'"
 msgstr ""
+"명령줄에서: argv[0]:\n"
+"'"
 
 #: common/kiway.cpp:411 common/kiway.cpp:415 common/kiway.cpp:419
-#, fuzzy
 msgid "Error loading editor."
-msgstr "회로도 라이브러리 열기 시작"
+msgstr "편집기를 로드하는 중에 오류가 발생했습니다."
 
 #: common/kiway.cpp:504
 #, c-format
@@ -4862,220 +4769,209 @@ msgid "Unable to switch language to %s"
 msgstr "언어를 %s로 전환 할 수 없음"
 
 #: common/languages_menu.cpp:48
-#, fuzzy
 msgid "Set Language"
-msgstr "언어"
+msgstr "언어 설정"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
-msgstr ""
+msgstr "F.Cu"
 
 #: common/layer_id.cpp:33
 msgid "In1.Cu"
-msgstr ""
+msgstr "In1.Cu"
 
 #: common/layer_id.cpp:34
 msgid "In2.Cu"
-msgstr ""
+msgstr "In2.Cu"
 
 #: common/layer_id.cpp:35
 msgid "In3.Cu"
-msgstr ""
+msgstr "In3.Cu"
 
 #: common/layer_id.cpp:36
 msgid "In4.Cu"
-msgstr ""
+msgstr "In4.Cu"
 
 #: common/layer_id.cpp:37
 msgid "In5.Cu"
-msgstr ""
+msgstr "In5.Cu"
 
 #: common/layer_id.cpp:38
 msgid "In6.Cu"
-msgstr ""
+msgstr "In6.Cu"
 
 #: common/layer_id.cpp:39
 msgid "In7.Cu"
-msgstr ""
+msgstr "In7.Cu"
 
 #: common/layer_id.cpp:40
 msgid "In8.Cu"
-msgstr ""
+msgstr "In8.Cu"
 
 #: common/layer_id.cpp:41
 msgid "In9.Cu"
-msgstr ""
+msgstr "In9.Cu"
 
 #: common/layer_id.cpp:42
 msgid "In10.Cu"
-msgstr ""
+msgstr "In10.Cu"
 
 #: common/layer_id.cpp:43
 msgid "In11.Cu"
-msgstr ""
+msgstr "In11.Cu"
 
 #: common/layer_id.cpp:44
 msgid "In12.Cu"
-msgstr ""
+msgstr "In12.Cu"
 
 #: common/layer_id.cpp:45
 msgid "In13.Cu"
-msgstr ""
+msgstr "In13.Cu"
 
 #: common/layer_id.cpp:46
 msgid "In14.Cu"
-msgstr ""
+msgstr "In14.Cu"
 
 #: common/layer_id.cpp:47
 msgid "In15.Cu"
-msgstr ""
+msgstr "In15.Cu"
 
 #: common/layer_id.cpp:48
 msgid "In16.Cu"
-msgstr ""
+msgstr "In16.Cu"
 
 #: common/layer_id.cpp:49
 msgid "In17.Cu"
-msgstr ""
+msgstr "In17.Cu"
 
 #: common/layer_id.cpp:50
 msgid "In18.Cu"
-msgstr ""
+msgstr "In18.Cu"
 
 #: common/layer_id.cpp:51
 msgid "In19.Cu"
-msgstr ""
+msgstr "In19.Cu"
 
 #: common/layer_id.cpp:52
 msgid "In20.Cu"
-msgstr ""
+msgstr "In20.Cu"
 
 #: common/layer_id.cpp:53
 msgid "In21.Cu"
-msgstr ""
+msgstr "In21.Cu"
 
 #: common/layer_id.cpp:54
 msgid "In22.Cu"
-msgstr ""
+msgstr "In22.Cu"
 
 #: common/layer_id.cpp:55
 msgid "In23.Cu"
-msgstr ""
+msgstr "In23.Cu"
 
 #: common/layer_id.cpp:56
 msgid "In24.Cu"
-msgstr ""
+msgstr "In24.Cu"
 
 #: common/layer_id.cpp:57
 msgid "In25.Cu"
-msgstr ""
+msgstr "In25.Cu"
 
 #: common/layer_id.cpp:58
 msgid "In26.Cu"
-msgstr ""
+msgstr "In26.Cu"
 
 #: common/layer_id.cpp:59
 msgid "In27.Cu"
-msgstr ""
+msgstr "In27.Cu"
 
 #: common/layer_id.cpp:60
 msgid "In28.Cu"
-msgstr ""
+msgstr "In28.Cu"
 
 #: common/layer_id.cpp:61
 msgid "In29.Cu"
-msgstr ""
+msgstr "In29.Cu"
 
 #: common/layer_id.cpp:62
 msgid "In30.Cu"
-msgstr ""
+msgstr "In30.Cu"
 
 #: common/layer_id.cpp:63
 msgid "B.Cu"
-msgstr ""
+msgstr "B.Cu"
 
 #: common/layer_id.cpp:66
-#, fuzzy
 msgid "B.Adhesive"
-msgstr "Adhesive Cmp"
+msgstr "B.Adhesive"
 
 #: common/layer_id.cpp:67
-#, fuzzy
 msgid "F.Adhesive"
-msgstr "Adhesive Cmp"
+msgstr "F.Adhesive"
 
 #: common/layer_id.cpp:68
-#, fuzzy
 msgid "B.Paste"
-msgstr "붙여넣기"
+msgstr "B.Paste"
 
 #: common/layer_id.cpp:69
-#, fuzzy
 msgid "F.Paste"
-msgstr "붙여넣기"
+msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
-#, fuzzy
 msgid "B.Silkscreen"
-msgstr "Silkscreen Cmp"
+msgstr "B.Silkscreen"
 
 #: common/layer_id.cpp:71
 #, fuzzy
 msgid "F.Silkscreen"
-msgstr "Silkscreen Cmp"
+msgstr "F.Silkscreen"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
-msgstr ""
+msgstr "B.Mask"
 
 #: common/layer_id.cpp:73
 msgid "F.Mask"
-msgstr ""
+msgstr "F.Mask"
 
 #: common/layer_id.cpp:76
 msgid "User.Drawings"
 msgstr "User.Drawings"
 
 #: common/layer_id.cpp:77
-#, fuzzy
 msgid "User.Comments"
-msgstr "주석1:"
+msgstr "User.Comments"
 
 #: common/layer_id.cpp:78
-#, fuzzy
 msgid "User.Eco1"
-msgstr "드로우 레이어 복사"
+msgstr "User.Eco1"
 
 #: common/layer_id.cpp:79
-#, fuzzy
 msgid "User.Eco2"
-msgstr "드로우 레이어 복사"
+msgstr "User.Eco2"
 
 #: common/layer_id.cpp:80
-#, fuzzy
 msgid "Edge.Cuts"
-msgstr "에지"
+msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:662
-#, fuzzy
 msgid "Margin"
-msgstr "Draft layer"
+msgstr "여백"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
-msgstr ""
+msgstr "F.Courtyard"
 
 #: common/layer_id.cpp:85
 msgid "B.Courtyard"
-msgstr ""
+msgstr "B.Courtyard"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
-msgstr ""
+msgstr "F.Fab"
 
 #: common/layer_id.cpp:87
 msgid "B.Fab"
-msgstr ""
+msgstr "B.Fab"
 
 #: common/layer_id.cpp:90
 #, fuzzy
@@ -5123,125 +5019,105 @@ msgid "User.9"
 msgstr "사용자"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:763
-#, fuzzy
 msgid "Rescue"
-msgstr "복구 (&R)"
+msgstr "복구"
 
 #: common/layer_id.cpp:105
-#, fuzzy
 msgid "Wires"
-msgstr "와이어"
+msgstr "배선"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr ""
+msgstr "버스"
 
 #: common/layer_id.cpp:107
-#, fuzzy
 msgid "Bus junctions"
-msgstr "교차점"
+msgstr "버스 교차점"
 
 #: common/layer_id.cpp:108
-#, fuzzy
 msgid "Junctions"
 msgstr "교차점"
 
 #: common/layer_id.cpp:109
-#, fuzzy
 msgid "Labels"
 msgstr "라벨"
 
 #: common/layer_id.cpp:110
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
-#, fuzzy
 msgid "Global labels"
-msgstr "전역 라벨 추가"
+msgstr "전역 라벨"
 
 #: common/layer_id.cpp:111
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
-#, fuzzy
 msgid "Hierarchical labels"
-msgstr "계층구조 심볼 (시트) 추가"
+msgstr "계층구조 레이블"
 
 #: common/layer_id.cpp:112
-#, fuzzy
 msgid "Pin numbers"
-msgstr "펜 번호:"
+msgstr "펜 번호"
 
 #: common/layer_id.cpp:113
-#, fuzzy
 msgid "Pin names"
-msgstr "핀 이름:"
+msgstr "핀 이름"
 
 #: common/layer_id.cpp:114
-#, fuzzy
 msgid "Symbol references"
-msgstr "모듈 레퍼런스 인쇄"
+msgstr "심볼 참조"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Symbol values"
-msgstr "모듈 값 인쇄"
+msgstr "심볼 값"
 
 #: common/layer_id.cpp:116
 msgid "Symbol fields"
 msgstr "심볼 필드"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Symbol body outlines"
-msgstr "보드 파일:"
+msgstr "심볼 본체 외곽선"
 
 #: common/layer_id.cpp:118
 msgid "Symbol body fills"
-msgstr "심볼 본문 채우기"
+msgstr "심볼 본체 채우기"
 
 #: common/layer_id.cpp:119
 msgid "Notes"
-msgstr "노트"
+msgstr "메모"
 
 #: common/layer_id.cpp:120
 msgid "Pins"
-msgstr ""
+msgstr "핀"
 
 #: common/layer_id.cpp:121
-#, fuzzy
 msgid "Sheet borders"
-msgstr "시트 라벨"
+msgstr "시트 테두리"
 
 #: common/layer_id.cpp:122
-#, fuzzy
 msgid "Sheet backgrounds"
-msgstr "검정색"
+msgstr "시트 배경"
 
 #: common/layer_id.cpp:123
-#, fuzzy
 msgid "Sheet names"
-msgstr "시트 이름:"
+msgstr "시트 이름"
 
 #: common/layer_id.cpp:124
-#, fuzzy
 msgid "Sheet fields"
-msgstr "항목 삭제"
+msgstr "시트 필드"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Sheet file names"
-msgstr "시트 파일"
+msgstr "시트 파일 이름"
 
 #: common/layer_id.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
-#, fuzzy
 msgid "Sheet pins"
-msgstr "시트 추가"
+msgstr "시트 핀"
 
 #: common/layer_id.cpp:127
-#, fuzzy
 msgid "No-connect symbols"
-msgstr "미연결 플래그 추가"
+msgstr "연결 안 함 기호"
 
 #: common/layer_id.cpp:128
-#, fuzzy
 msgid "ERC warnings"
 msgstr "ERC 경고"
 
@@ -5250,9 +5126,8 @@ msgid "ERC errors"
 msgstr "ERC 에러"
 
 #: common/layer_id.cpp:130 common/layer_id.cpp:170
-#, fuzzy
 msgid "Helper items"
-msgstr "항목 삭제"
+msgstr "도우미 항목"
 
 #: common/layer_id.cpp:131 common/layer_id.cpp:171 common/tool/grid_menu.cpp:40
 #: gerbview/widgets/gerbview_layer_widget.cpp:108
@@ -5262,46 +5137,40 @@ msgstr "그리드"
 
 #: common/layer_id.cpp:132
 msgid "Axes"
-msgstr ""
+msgstr "축"
 
 #: common/layer_id.cpp:133 common/layer_id.cpp:173
 #: gerbview/widgets/gerbview_layer_widget.cpp:110
-#, fuzzy
 msgid "Background"
-msgstr "흰색"
+msgstr "배경"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:169
 msgid "Cursor"
 msgstr "커서"
 
 #: common/layer_id.cpp:135
-#, fuzzy
 msgid "Highlighted items"
-msgstr "네트 높이"
+msgstr "강조 표시된 항목"
 
 #: common/layer_id.cpp:136
-#, fuzzy
 msgid "Hidden items"
-msgstr "텍스트 추가"
+msgstr "숨겨진 항목"
 
 #: common/layer_id.cpp:137 common/layer_id.cpp:174
-#, fuzzy
 msgid "Selection highlight"
-msgstr "네트 하이라이트"
+msgstr "선택 강조"
 
 #: common/layer_id.cpp:138 common/layer_id.cpp:168
 msgid "Drawing sheet"
 msgstr "도면 시트"
 
 #: common/layer_id.cpp:142
-#, fuzzy
 msgid "Footprints front"
-msgstr "풋프린트"
+msgstr "풋프린트 앞면"
 
 #: common/layer_id.cpp:143
-#, fuzzy
 msgid "Footprints back"
-msgstr "풋프린트"
+msgstr "풋프린트 뒷면"
 
 #: common/layer_id.cpp:144
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
@@ -5309,7 +5178,6 @@ msgstr "풋프린트"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:344
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
 #: pcbnew/widgets/appearance_controls.cpp:348
-#, fuzzy
 msgid "Values"
 msgstr "값"
 
@@ -5317,39 +5185,32 @@ msgstr "값"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
-#, fuzzy
 msgid "Reference designators"
-msgstr "사용자 지정 에디터:"
+msgstr "참조 지정자"
 
 #: common/layer_id.cpp:146
-#, fuzzy
 msgid "Footprint text front"
-msgstr "풋프린트 텍스트"
+msgstr "풋프린트 텍스트 앞면"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text back"
-msgstr "풋프린트 텍스트"
+msgstr "풋프린트 텍스트 뒷면"
 
 #: common/layer_id.cpp:148
-#, fuzzy
 msgid "Hidden text"
-msgstr "텍스트 추가"
+msgstr "숨겨진 텍스트"
 
 #: common/layer_id.cpp:149
-#, fuzzy
 msgid "Pads front"
-msgstr "패드:"
+msgstr "패드 앞면"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Pads back"
-msgstr "패드:"
+msgstr "패드 뒷면"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Through-hole pads"
-msgstr "비아 드래그"
+msgstr "스루홀 패드"
 
 #: common/layer_id.cpp:152
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
@@ -5361,44 +5222,36 @@ msgid "Tracks"
 msgstr "트랙"
 
 #: common/layer_id.cpp:153
-#, fuzzy
 msgid "Through vias"
-msgstr "비아 드래그"
+msgstr "관통 비아"
 
 #: common/layer_id.cpp:154
-#, fuzzy
 msgid "Bl/Buried vias"
-msgstr "숨은 비아"
+msgstr "Bl/Buried 비아"
 
 #: common/layer_id.cpp:155
-#, fuzzy
 msgid "Micro-vias"
-msgstr "앵커 설치"
+msgstr "마이크로 비아"
 
 #: common/layer_id.cpp:156
-#, fuzzy
 msgid "Via holes"
-msgstr "비아 %.1f"
+msgstr "비아 홀"
 
 #: common/layer_id.cpp:157
-#, fuzzy
 msgid "Via hole walls"
-msgstr "비아 %.1f"
+msgstr "비아 홀 벽"
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Plated holes"
-msgstr "비아 홀 보이기"
+msgstr "도금된 홀"
 
 #: common/layer_id.cpp:159
-#, fuzzy
 msgid "Plated hole walls"
-msgstr "비아 홀 보이기"
+msgstr "도금된 홀 벽"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Non-plated holes"
-msgstr "비아 홀 보이기"
+msgstr "비도금 홀"
 
 #: common/layer_id.cpp:161 pcbnew/dialogs/panel_edit_options_base.cpp:317
 #: pcbnew/widgets/appearance_controls.cpp:354
@@ -5407,42 +5260,36 @@ msgid "Ratsnest"
 msgstr "연결선"
 
 #: common/layer_id.cpp:162
-#, fuzzy
 msgid "No-connects"
-msgstr "연결"
+msgstr "연결되지 않음"
 
 #: common/layer_id.cpp:163
-#, fuzzy
 msgid "DRC warnings"
-msgstr "경고"
+msgstr "DRC 경고"
 
 #: common/layer_id.cpp:164
-#, fuzzy
 msgid "DRC errors"
-msgstr "에러"
+msgstr "DRC 에러"
 
 #: common/layer_id.cpp:165
-#, fuzzy
 msgid "DRC exclusions"
-msgstr "삭제 선택"
+msgstr "DRC 제외"
 
 #: common/layer_id.cpp:166
-#, fuzzy
 msgid "DRC marker shadows"
-msgstr "마커 찾기"
+msgstr "DRC 마커 그림자"
 
 #: common/layer_id.cpp:167 pcbnew/widgets/appearance_controls.cpp:359
 msgid "Anchors"
 msgstr "앵커"
 
 #: common/layer_id.cpp:172
-#, fuzzy
 msgid "Grid axes"
-msgstr "그리드 크기"
+msgstr "그리드 축"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
-msgstr ""
+msgstr "논리 라이브러리 이름에 잘못된 문자가 있음"
 
 #: common/lib_tree_model.cpp:139 eeschema/lib_item.cpp:61
 #: eeschema/sch_pin.cpp:189 eeschema/symbol_editor/symbol_editor.cpp:1199
@@ -5458,25 +5305,24 @@ msgstr ""
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:223
 msgid "Unit"
-msgstr "유닛"
+msgstr "단위"
 
 #: common/lib_tree_model_adapter.cpp:272
-#, fuzzy
 msgid "Item"
-msgstr "Nb 항목"
+msgstr "항목"
 
 #: common/libeval_compiler/libeval_compiler.cpp:566
 #, c-format
 msgid "Unrecognized character '%c'"
-msgstr ""
+msgstr "인식할 수 없는 문자 '%c'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:826
 msgid "Unknown parent of function parameters"
-msgstr ""
+msgstr "알 수 없는 함수 매개 변수의 상위 항목"
 
 #: common/libeval_compiler/libeval_compiler.cpp:845
 msgid "Unknown parent of property"
-msgstr ""
+msgstr "알 수 없는 속성의 상위 항목"
 
 #: common/libeval_compiler/libeval_compiler.cpp:868
 #: common/libeval_compiler/libeval_compiler.cpp:896
@@ -5490,12 +5336,12 @@ msgstr "인식할 수 없는 항목 '%s'"
 #: common/libeval_compiler/libeval_compiler.cpp:973
 #, c-format
 msgid "Unrecognized property '%s'"
-msgstr ""
+msgstr "인식할 수 없는 속성 '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:908
 #, c-format
 msgid "Unrecognized function '%s'"
-msgstr ""
+msgstr "인식할 수 없는 함수 '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1003
 #, c-format
@@ -5505,12 +5351,12 @@ msgstr "단위 누락 '%s'| (%s)"
 #: common/libeval_compiler/libeval_compiler.cpp:1120
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "'%s'와 %lf 사이의 유형 불일치"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "%lf와 '%s' 간의 유형 불일치"
 
 #: common/pgm_base.cpp:166
 msgid "No default editor found, you must choose it"
@@ -5518,28 +5364,27 @@ msgstr "기본 편집기를 선택해야 합니다"
 
 #: common/pgm_base.cpp:186
 msgid "Executable file (*.exe)|*.exe"
-msgstr ""
+msgstr "실행 파일(*.exe)|*.exe"
 
 #: common/pgm_base.cpp:188
 msgid "Executable file (*)|*"
-msgstr ""
+msgstr "실행 파일(*)|*"
 
 #: common/pgm_base.cpp:198
-#, fuzzy
 msgid "Select Preferred Editor"
-msgstr "사용자 지정 에디터:"
+msgstr "선호하는 편집기 선택"
 
 #: common/pgm_base.cpp:212
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "환경 변수 HOME이 비어 있습니다.  계속할 수 없습니다."
+msgstr "환경 변수 HOME이 비어 있습니다. 계속할 수 없습니다."
 
 #: common/pgm_base.cpp:421
 msgid "This language is not supported by the operating system."
-msgstr ""
+msgstr "이 언어는 운영 체제에서 지원되지 않습니다."
 
 #: common/pgm_base.cpp:472 common/pgm_base.cpp:510
 msgid "The KiCad language file for this language is not installed."
-msgstr ""
+msgstr "이 언어에 대한 KiCad 언어 파일이 설치되어 있지 않습니다."
 
 #: common/plugins/altium/altium_parser.cpp:112
 msgid ""
@@ -5547,16 +5392,18 @@ msgid ""
 "properties. Because this is missing, imported data might be malformed or "
 "missing."
 msgstr ""
+"Altium 가져오기의 경우 속성 목록 끝에 null 바이트가 있다고 가정합니다. 이것이 없기 때문에 가져온 데이터의 형식이 잘못되었거나 "
+"누락되었을 수 있습니다."
 
 #: common/plugins/altium/altium_parser.cpp:228
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr ""
+msgstr "단위 '%s'가 'mil'로 끝나지 않습니다."
 
 #: common/plugins/altium/altium_parser.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "'%s'를 두배로 변환할 수 없습니다."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2319
 #, c-format
@@ -5569,22 +5416,22 @@ msgstr "'%s' 파일을 열 수 없음"
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2375
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2381
 msgid "The selected file is not valid or might be corrupt!"
-msgstr ""
+msgstr "선택한 파일이 유효하지 않거나 손상되었을 수 있습니다!"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2480
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr ""
+msgstr "'%s'에 예기치 않은 포인트 개수가 있습니다. %d를 찾았지만 %d가 필요합니다."
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:39
 #, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr ""
+msgstr "노드 '%s'가 '%s'에 없음"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:42
 #, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr ""
+msgstr "노드 '%s' 가 '%s'에서 알 수 없음"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:45
 #, c-format
@@ -5612,14 +5459,12 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr ""
 
 #: common/project.cpp:311 common/project.cpp:316 pcbnew/pcb_base_frame.cpp:156
-#, fuzzy
 msgid "Error loading project footprint library table."
-msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
+msgstr "프로젝트 풋프린트 라이브러리 테이블을 로드하는 동안 오류가 발생했습니다."
 
 #: common/project/project_archiver.cpp:63
-#, fuzzy
 msgid "Failed to output data."
-msgstr "열기 실패"
+msgstr "데이터를 출력하지 못했습니다."
 
 #: common/project/project_archiver.cpp:91
 msgid "Could not open archive file\n"
@@ -5627,31 +5472,31 @@ msgstr "아카이브 파일을 열 수 없음\n"
 
 #: common/project/project_archiver.cpp:100
 msgid "Invalid archive file format\n"
-msgstr ""
+msgstr "잘못된 보관 파일 형식\n"
 
 #: common/project/project_archiver.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'.\n"
-msgstr "\"%s\" 파일을 추출하는 중\n"
+msgstr "'%s' 파일을 추출하는 중.\n"
 
 #: common/project/project_archiver.cpp:151
 msgid "Error extracting file!\n"
 msgstr "파일 추출 오류!\n"
 
 #: common/project/project_archiver.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create archive file '%s'.\n"
-msgstr "%s 아카이브 파일을 생성할 수 없음\n"
+msgstr "'%s' 보관 파일을 생성할 수 없음\n"
 
 #: common/project/project_archiver.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'.\n"
-msgstr "\"%s\" 아카이브 파일\n"
+msgstr "'%s' 보관 파일\n"
 
 #: common/project/project_archiver.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'.\n"
-msgstr "%s 파일을 백업하지 못함.\n"
+msgstr "'%s' 파일을 백업하지 못함.\n"
 
 #: common/project/project_archiver.cpp:290
 #, c-format
@@ -5688,19 +5533,16 @@ msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr ""
 
 #: common/settings/color_settings.cpp:308
-#, fuzzy
 msgid "(Footprints)"
-msgstr "풋프린트"
+msgstr "(풋프린트)"
 
 #: common/settings/color_settings.cpp:360
-#, fuzzy
 msgid "KiCad Default"
-msgstr "기본값"
+msgstr "KiCad 기본값"
 
 #: common/settings/color_settings.cpp:365
-#, fuzzy
 msgid "KiCad Classic"
-msgstr "레이어"
+msgstr "KiCad 모범"
 
 #: common/template_fieldnames.cpp:72 eeschema/sch_sheet.cpp:60
 #, c-format
@@ -5722,18 +5564,16 @@ msgid "New..."
 msgstr "새로 만들기…"
 
 #: common/tool/actions.cpp:43
-#, fuzzy
 msgid "Create a new document in the editor"
-msgstr "새 디렉토리 만들기"
+msgstr "편집기에서 새 문서 만들기"
 
 #: common/tool/actions.cpp:49
 msgid "New Library..."
 msgstr "새 라이브러리…"
 
 #: common/tool/actions.cpp:49
-#, fuzzy
 msgid "Create a new library folder"
-msgstr "새 디렉토리 만들기"
+msgstr "새 라이브러리 폴더 만들기"
 
 #: common/tool/actions.cpp:55
 msgid "Add Library..."
@@ -5748,56 +5588,49 @@ msgid "Open..."
 msgstr "열기…"
 
 #: common/tool/actions.cpp:61
-#, fuzzy
 msgid "Open existing document"
-msgstr "보드 열기"
+msgstr "기존 문서 열기"
 
 #: common/tool/actions.cpp:67
-#, fuzzy
 msgid "Save changes"
-msgstr "설정 저장 (&S)"
+msgstr "변경 사항 저장"
 
 #: common/tool/actions.cpp:73 eeschema/sim/sim_plot_frame_base.cpp:33
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Save As..."
-msgstr "다른 이름으로 저장 (&S)..."
+msgstr "다른 이름으로 저장..."
 
 #: common/tool/actions.cpp:73
 msgid "Save current document to another location"
-msgstr ""
+msgstr "현재 문서를 다른 위치에 저장"
 
 #: common/tool/actions.cpp:79
-#, fuzzy
 msgid "Save Copy As..."
-msgstr "다른 이름으로 저장 (&S)..."
+msgstr "다른 이름으로 사본 저장..."
 
 #: common/tool/actions.cpp:79
-#, fuzzy
 msgid "Save a copy of the current document to another location"
-msgstr "현재 보드 저장"
+msgstr "현재 문서의 복사본을 다른 위치에 저장"
 
 #: common/tool/actions.cpp:85
 msgid "Save All"
 msgstr "모두 저장"
 
 #: common/tool/actions.cpp:85
-#, fuzzy
 msgid "Save all changes"
-msgstr "모두 저장"
+msgstr "모든 변경 사항 저장"
 
 #: common/tool/actions.cpp:91
 msgid "Throw away changes"
-msgstr ""
+msgstr "변경 사항 폐기"
 
 #: common/tool/actions.cpp:97
 msgid "Page Settings..."
 msgstr "페이지 설정..."
 
 #: common/tool/actions.cpp:97
-#, fuzzy
 msgid "Settings for paper size and title block info"
-msgstr "페이지 설정"
+msgstr "용지 크기 및 제목 블록 정보 설정"
 
 #: common/tool/actions.cpp:103 kicad/project_tree_pane.cpp:803
 msgid "Print..."
@@ -5813,43 +5646,36 @@ msgid "Plot"
 msgstr "플로트"
 
 #: common/tool/actions.cpp:115
-#, fuzzy
 msgid "Close the current editor"
-msgstr "풋프린트 이동"
+msgstr "현재 편집기 닫기"
 
 #: common/tool/actions.cpp:122
-#, fuzzy
 msgid "Cancel current tool"
-msgstr "현재 툴 선택 해제"
+msgstr "현재 도구 취소"
 
 #: common/tool/actions.cpp:128
-#, fuzzy
 msgid "Show Context Menu"
-msgstr "시트 이름:"
+msgstr "상황에 맞는 메뉴 표시"
 
 #: common/tool/actions.cpp:128
 msgid "Perform the right-mouse-button action"
-msgstr ""
+msgstr "마우스 오른쪽 버튼 동작 수행"
 
 #: common/tool/actions.cpp:137
-#, fuzzy
 msgid "Undo"
-msgstr "되돌리기 (&U)\t"
+msgstr "실행 취소"
 
 #: common/tool/actions.cpp:137
-#, fuzzy
 msgid "Undo last edit"
-msgstr "마지막 수정 되돌리기"
+msgstr "마지막 편집 실행 취소"
 
 #: common/tool/actions.cpp:148
-#, fuzzy
 msgid "Redo"
-msgstr "다시 실행 (&R)\t"
+msgstr "재실행"
 
 #: common/tool/actions.cpp:148
-#, fuzzy
 msgid "Redo last edit"
-msgstr "마지막 수정 되돌리기"
+msgstr "마지막 편집 재 실행"
 
 #: common/tool/actions.cpp:154
 #, fuzzy
@@ -5881,9 +5707,8 @@ msgid "Paste item(s) from clipboard with options"
 msgstr "클립보드로 플로트"
 
 #: common/tool/actions.cpp:181
-#, fuzzy
 msgid "Duplicate"
-msgstr "중복"
+msgstr "복제"
 
 #: common/tool/actions.cpp:181
 #, fuzzy
@@ -6418,14 +6243,15 @@ msgid "Report Bug"
 msgstr "Cmp 파일:"
 
 #: common/tool/common_control.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' or\n"
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"도움말 파일 \"%s\"을 찾을 수 없습니다.\n"
-"KiCad 온라인 도움말에 접속 하시겠습니까?"
+"도움말 파일 '%s' 또는\n"
+"'%s'를 찾을 수 없습니다.\n"
+"KiCad 온라인 도움말에 액세스하시겠습니까?"
 
 #: common/tool/common_control.cpp:219 common/tool/common_control.cpp:239
 msgid "File Not Found"
@@ -7085,13 +6911,9 @@ msgid ""
 msgstr ""
 
 #: cvpcb/cvpcb.cpp:187
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table."
-msgstr ""
-"전역 풋프린트 라이브러리 테이블 로드 중 오류 발생 :\n"
-"\n"
-"%s"
+msgstr "전역 풋프린트 라이브러리 테이블을 로드하는 중에 오류가 발생했습니다."
 
 #: cvpcb/cvpcb_mainframe.cpp:64 cvpcb/menubar.cpp:51
 #, fuzzy
@@ -9143,13 +8965,14 @@ msgid "Cannot copy global symbol library table file '%s' to '%s'."
 msgstr "전역 심볼 라이브러리 테이블 파일 '%s'를 '%s'에 복사할 수 없음."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading global symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"전역 심볼 라이브러리 테이블 저장 오류:\n"
+"전역 심볼 라이브러리 테이블 저장 오류.\n"
+"\n"
 "%s"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
@@ -10066,11 +9889,13 @@ msgstr "디렉토리 삭제 (&D)"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:231
 #: pcbnew/dialogs/dialog_gendrill.cpp:305 pcbnew/dialogs/dialog_plot.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
-msgstr "'%s'를 삭제하겠습니까?"
+msgstr ""
+"상대 경로를 사용하시겠습니까\n"
+"'%s'?"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:233
 #: pcbnew/dialogs/dialog_export_svg.cpp:214
@@ -10181,9 +10006,9 @@ msgid "Failed to create file '%s'."
 msgstr "파일 만들기 실패"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:874
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'.\n"
-msgstr "열기 실패"
+msgstr "'%s'에 플롯됨.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1250
 #, c-format
@@ -12078,9 +11903,8 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: pcbnew/dialogs/panel_edit_options_base.cpp:117
 #: pcbnew/dialogs/panel_edit_options_base.cpp:198
-#, fuzzy
 msgid "Add item(s) to selection."
-msgstr "확대 선택"
+msgstr "선택에 항목을 추가합니다."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:166
@@ -12449,11 +12273,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:439 eeschema/symbol_library.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr ""
-"심볼 라이브러리 \"%s\"을 로드하지 못함.\n"
-" %s"
+msgstr "심볼 라이브러리 '%s' 을 로드하지 못함."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:442
 #, fuzzy
@@ -12634,12 +12456,9 @@ msgid "Error loading drawing sheet."
 msgstr "회로도 라이브러리 열기 시작"
 
 #: eeschema/eeschema_config.cpp:271 eeschema/sheet.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading the symbol library table '%s'."
-msgstr ""
-"심볼 라이브러리 %s을 로드하는 중 오류 발생.\n"
-"\n"
-"%s"
+msgstr "심볼 라이브러리 테이블 '%s'을 로드하는 동안 오류가 발생했습니다."
 
 #: eeschema/erc.cpp:59 eeschema/erc.cpp:76
 #, fuzzy
@@ -12875,11 +12694,13 @@ msgid "Schematic Files"
 msgstr "회로도 파일:"
 
 #: eeschema/files-io.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
-msgstr "'%s'회로도 파일을 저장하는 중 오류 발생."
+msgstr ""
+"'%s'회로도 파일을 저장하는 중 오류 발생.\n"
+"%s"
 
 #: eeschema/files-io.cpp:146 pcbnew/files.cpp:1018
 #, fuzzy, c-format
@@ -14134,13 +13955,8 @@ msgid "Invalid symbol convert number %s"
 msgstr "보드 파일명:"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:428
-#, fuzzy
 msgid "Floating point number with incorrect locale"
-msgstr ""
-"잘못된 부동 소수점 숫자 :\n"
-"파일: \"%s\"\n"
-"라인: %d\n"
-"옵셋: %d"
+msgstr "잘못된 로케일이 있는 부동 소수점 숫자"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:438
 #, fuzzy
@@ -14298,11 +14114,9 @@ msgid "Unexpected end of file."
 msgstr "예상치 못한 파일의 끝"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2710
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr ""
-"파일 저장에 필요한 권한이 충분하지 않음\n"
-"%s"
+msgstr "라이브러리 '%s'를 읽을 수 있는 권한이 없습니다."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2719
 msgid "symbol document library file is empty"
@@ -15561,12 +15375,9 @@ msgid "Export Symbol"
 msgstr "보드 내보내기"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr ""
-"전역 심볼 라이브러리 테이블을 로드하는 중 오류 발생.\n"
-"\n"
-"%s"
+msgstr "심볼 라이브러리 파일 '%s'을 로드하는 동안 오류가 발생했습니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:157
 #: kicad/tools/kicad_manager_control.cpp:257
@@ -15578,19 +15389,14 @@ msgid "Overwrite"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr ""
-"파일 저장에 필요한 권한이 충분하지 않음\n"
-"%s"
+msgstr "라이브러리 '%s'를 저장할 수 있는 권한이 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating symbol library '%s'."
-msgstr ""
-"심볼 라이브러리 %s을 로드하는 중 오류 발생.\n"
-"\n"
-"%s"
+msgstr "심볼 라이브러리 '%s'를 만드는 동안 오류가 발생했습니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
 #, fuzzy, c-format
@@ -15599,12 +15405,8 @@ msgstr "%s 라이브러리의 %s 컴포넌트가 삭제되었습니다."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:106
 #: eeschema/symbol_tree_model_adapter.cpp:105
-#, fuzzy
 msgid "Errors loading symbols:"
-msgstr ""
-"심볼 라이브러리 %s을 로드하는 중 오류 발생.\n"
-"\n"
-"%s"
+msgstr "심볼 로드 중 오류 발생:"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:176
 #, fuzzy, c-format
@@ -15643,12 +15445,9 @@ msgid ""
 msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
 
 #: eeschema/symbol_library.cpp:572 eeschema/symbol_tree_model_adapter.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol library '%s'."
-msgstr ""
-"심볼 라이브러리 %s을 로드하는 중 오류 발생.\n"
-"\n"
-"%s"
+msgstr "심볼 라이브러리 '%s'를 로드하는 동안 오류가 발생했습니다."
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:259
 #, fuzzy
@@ -16948,12 +16747,9 @@ msgstr ""
 #: eeschema/tools/sch_drawing_tools.cpp:516
 #: pagelayout_editor/pl_editor_frame.cpp:855
 #: pagelayout_editor/pl_editor_frame.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "Could not load image from '%s'."
-msgstr ""
-"풋프린트 '%s' 을 '%s 라이브러리에서 로드할 수 없음.\n"
-"\n"
-"%s"
+msgstr "'%s'에서 이미지를 로드할 수 없습니다."
 
 #: eeschema/tools/sch_drawing_tools.cpp:643
 #: eeschema/tools/sch_drawing_tools.cpp:1149
@@ -18372,9 +18168,8 @@ msgid "[no project loaded]"
 msgstr "로드 된 풋 프린트 없음."
 
 #: kicad/kicad_manager_frame.cpp:625
-#, fuzzy
 msgid "KiCad "
-msgstr "키캐드"
+msgstr "키캐드 "
 
 #: kicad/kicad_manager_frame.cpp:664
 #, c-format
@@ -18779,11 +18574,9 @@ msgstr "새 프로젝트 (&N)"
 
 #: kicad/tools/kicad_manager_control.cpp:228
 #: kicad/tools/kicad_manager_control.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write to folder '%s'."
-msgstr ""
-"파일 저장에 필요한 권한이 충분하지 않음\n"
-"%s"
+msgstr "폴더 '%s'에 저장할 수 있는 권한이 없습니다."
 
 #: kicad/tools/kicad_manager_control.cpp:249
 #, fuzzy
@@ -21959,9 +21752,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:614
 #: pcbnew/tools/pcb_control.cpp:1022
-#, fuzzy
 msgid "Loading PCB"
-msgstr "열기: "
+msgstr "PCB 로드 중"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:220
 #, c-format
@@ -24908,12 +24700,9 @@ msgid "footprint"
 msgstr "풋프린트"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr ""
-"빈 풋프린트 라이브러리 테이블 파일을 쓰는 중 오류 발생.\n"
-"\n"
-"%s"
+msgstr "빈 풋프린트 라이브러리 테이블 '%s'를 쓰는 동안 오류가 발생했습니다."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 #, fuzzy
@@ -24921,12 +24710,9 @@ msgid "Please select a footprint library table file."
 msgstr "하나의 라이브러리 파일에 풋프린트 압축 또는 추가"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr ""
-"파일 %s 이 올바른 풋프린트 라이브러리 테이블 파일이 아님.\n"
-"\n"
-"%s"
+msgstr "'%s'은 유효한 풋프린트 라이브러리 테이블이 아닙니다."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
 #, fuzzy, c-format
@@ -24934,7 +24720,7 @@ msgid "Cannot create library table path '%s'."
 msgstr "전역 라이브러리 테이블 경로 '%s'를 만들 수 없음."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot copy footprint library table from:\n"
 "%s\n"
@@ -24942,12 +24728,9 @@ msgid ""
 "%s."
 msgstr ""
 "전역 풋프린트 라이브러리 테이블 파일을 복사할 수 없음:\n"
-"\n"
-" \"%s\"\n"
-"\n"
-":to:\n"
-"\n"
-"\"%s\"."
+"%s\n"
+"에서:\n"
+"%s."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:133
 #, fuzzy
@@ -29811,15 +29594,15 @@ msgid "Footprint Report"
 msgstr "풋프린트 텍스트"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'"
-msgstr "파일 민들기 %s\n"
+msgstr "생성된 파일 '%s'"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:354
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'."
-msgstr "파일 민들기 %s\n"
+msgstr "'%s' 파일 생성됨."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:152
 #, fuzzy, c-format
@@ -29878,9 +29661,9 @@ msgid "Recovery file '%s' not found."
 msgstr "%s 파일을 찾을 수 없습니다."
 
 #: pcbnew/files.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "복구 파일을 엽니다."
+msgstr "복구 파일 '%s'을 로드하시겠습니까?"
 
 #: pcbnew/files.cpp:374
 #, fuzzy, c-format
@@ -29929,11 +29712,9 @@ msgid "Error loading PCB '%s'."
 msgstr "회로도 라이브러리 열기 시작"
 
 #: pcbnew/files.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr ""
-"보드 파일 로드 중 메모리 소진:\n"
-"%s"
+msgstr "PCB '%s' 로드 중 메모리 소진"
 
 #: pcbnew/files.cpp:834
 #, fuzzy, c-format
@@ -29947,11 +29728,9 @@ msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
 
 #: pcbnew/files.cpp:955 pcbnew/files.cpp:1094
 #: pcbnew/footprint_libraries_utils.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr ""
-"파일 저장에 필요한 권한이 충분하지 않음\n"
-"%s"
+msgstr "'%s' 파일 저장에 필요한 권한이 충분하지 않음."
 
 #: pcbnew/files.cpp:983 pcbnew/files.cpp:1139
 #, fuzzy, c-format
@@ -30435,12 +30214,9 @@ msgid "Documentation"
 msgstr "풋프린트 문서"
 
 #: pcbnew/generate_footprint_info.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr ""
-"풋프린트 %s 을 %s 라이브러리에서 로드 중 오류 발생.\n"
-"\n"
-"%s"
+msgstr "풋프린트 %s 을 '%s' 라이브러리에서 로드 중 오류 발생."
 
 #: pcbnew/generate_footprint_info.cpp:121
 msgid "doc url"
@@ -31199,9 +30975,9 @@ msgid "Netlist Load Error"
 msgstr "네트리스트 에러: %s"
 
 #: pcbnew/netlist_reader/netlist.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol %s.\n"
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "심볼 %s에 대해 정의된 풋프린트가 없습니다.\n"
 
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, c-format
@@ -31222,16 +30998,15 @@ msgstr ""
 "%s 풋 프린트 라이브러리 테이블에서 \"%s \"풋프린트를 찾을 수 없습니다.\n"
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d"
 msgstr ""
-"잘못된 속성 이름\n"
+"잘못된 풋프린트 ID의\n"
 "파일: '%s'\n"
-"라인: %d\n"
-"옵셋: %d"
+"라인: %d"
 
 #: pcbnew/pad.cpp:692
 #, c-format
@@ -31779,9 +31554,8 @@ msgid "Error reading file: cannot determine length."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:86
-#, fuzzy
 msgid "Error reading file."
-msgstr "파일 추출 오류!\n"
+msgstr "파일을 읽는 중 오류가 발생함."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:465
 #, fuzzy, c-format
@@ -32531,11 +32305,9 @@ msgstr ""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:982
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2533
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
-"파일 저장에 필요한 권한이 충분하지 않음\n"
-"%s"
+msgstr "'%s' 폴더를 삭제에 필요한 권한이 충분하지 않음."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:990
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2541
@@ -32629,11 +32401,9 @@ msgid "Footprint file name '%s' is not valid."
 msgstr "%s 풋프린트 ID가 잘못되었습니다."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2437
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete '%s'."
-msgstr ""
-"파일 저장에 필요한 권한이 충분하지 않음\n"
-"%s"
+msgstr "'%s' 삭제에 필요한 권한이 충분하지 않음."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2508
 #, fuzzy, c-format
@@ -32705,11 +32475,7 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2221
 #, fuzzy, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr ""
-"빈 속성 이름\n"
-"파일: '%s'\n"
-"라인: %d\n"
-"옵셋: %d"
+msgstr "파일 '%s', 라인 %d, 옵셋 %d의 NETCLASS 이름 '%s' 복제."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3068
 #, fuzzy, c-format
@@ -32730,28 +32496,26 @@ msgid "Cannot handle footprint text type %s"
 msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3997
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"잘못된 속성 이름\n"
-"파일: '%s'\n"
-"라인: %d\n"
-"옵셋: %d"
+"잘못된 네트 ID\n"
+"파일: %s\n"
+"라인: %d 옵셋: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4018
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net name doesn't match ID in\n"
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"잘못된 속성 이름\n"
-"파일: '%s'\n"
-"라인: %d\n"
-"옵셋: %d"
+"네트 이름이 ID와 일치하지 않음\n"
+"파일: %s\n"
+"라인: %d 옵셋: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4470
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4550
@@ -32850,27 +32614,23 @@ msgstr ""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2983
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3022
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"잘못된 속성 이름\n"
-"파일: '%s'\n"
-"라인: %d\n"
-"옵셋: %d"
+"'%s' 파일에 잘못된 부동 소수점 수 있음:\n"
+"라인: %d, 옵셋: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2993
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3032
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"잘못된 부동 소수점 숫자 :\n"
-"파일: \"%s\"\n"
-"라인: %d\n"
-"옵셋: %d"
+"파일에 부동 소수점 숫자 누락: '%s'\n"
+"라인: %d, 옵셋: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3176
 #, fuzzy, c-format
