@@ -1255,23 +1255,14 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
                 }
 
                 case SHAPE_T::ARC:
-                {
-                    int arcendx, arcendy;
-                    arcendx = shape->GetEnd0().x - shape->GetStart0().x;
-                    arcendy = shape->GetEnd0().y - shape->GetStart0().y;
-                    RotatePoint( &arcendx, &arcendy, -shape->GetAngle() );
-                    arcendx += shape->GetStart0().x;
-                    arcendy += shape->GetStart0().y;
-
                     fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                             shape->GetStart0().x / SCALE_FACTOR,
+                             -shape->GetStart0().y / SCALE_FACTOR,
                              shape->GetEnd0().x / SCALE_FACTOR,
                              -shape->GetEnd0().y / SCALE_FACTOR,
-                             arcendx / SCALE_FACTOR,
-                             -arcendy / SCALE_FACTOR,
-                             shape->GetStart0().x / SCALE_FACTOR,
-                             -shape->GetStart0().y / SCALE_FACTOR );
+                             shape->GetCenter0().x / SCALE_FACTOR,
+                             -shape->GetCenter0().y / SCALE_FACTOR );
                     break;
-                }
 
                 case SHAPE_T::POLY:
                     // Not exported (TODO)

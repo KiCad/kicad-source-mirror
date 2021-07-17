@@ -916,6 +916,8 @@ LIB_ARC* SCH_SEXPR_PARSER::parseArc()
     wxPoint midPoint;
     wxPoint endPoint;
     wxPoint pos;
+    int startAngle;
+    int endAngle;
     FILL_PARAMS fill;
     bool hasMidPoint = false;
     std::unique_ptr<LIB_ARC> arc = std::make_unique<LIB_ARC>( nullptr );
@@ -964,19 +966,16 @@ LIB_ARC* SCH_SEXPR_PARSER::parseArc()
                     break;
 
                 case T_length:
-                    arc->SetRadius( parseInternalUnits( "radius length" ) );
+                    parseInternalUnits( "radius length" );
                     NeedRIGHT();
                     break;
 
                 case T_angles:
                 {
-                    int angle1 = KiROUND( parseDouble( "start radius angle" ) * 10.0 );
-                    int angle2 = KiROUND( parseDouble( "end radius angle" ) * 10.0 );
-
-                    NORMALIZE_ANGLE_POS( angle1 );
-                    NORMALIZE_ANGLE_POS( angle2 );
-                    arc->SetFirstRadiusAngle( angle1 );
-                    arc->SetSecondRadiusAngle( angle2 );
+                    startAngle = KiROUND( parseDouble( "start radius angle" ) * 10.0 );
+                    endAngle = KiROUND( parseDouble( "end radius angle" ) * 10.0 );
+                    NORMALIZE_ANGLE_POS( startAngle );
+                    NORMALIZE_ANGLE_POS( endAngle );
                     NeedRIGHT();
                     break;
                 }
@@ -1016,13 +1015,25 @@ LIB_ARC* SCH_SEXPR_PARSER::parseArc()
 
     if( hasMidPoint )
     {
-        VECTOR2I center = GetArcCenter( arc->GetStart(), midPoint, arc->GetEnd() );
+        VECTOR2I center = CalcArcCenter( arc->GetStart(), midPoint, arc->GetEnd());
 
-        arc->SetPosition( wxPoint( center.x, center.y ) );
-
-        // @todo Calculate the radius.
-
-        arc->CalcRadiusAngles();
+        arc->SetCenter( (wxPoint) center );
+    }
+    else
+    {
+        /**
+         * This accounts for an oddity in the old library format, where the symbol is overdefined.
+         * The previous draw (based on wxwidgets) used start point and end point and always drew
+         * counter-clockwise.  The new GAL draw takes center, radius and start/end angles.  All of
+         * these points were stored in the file, so we need to mimic the swapping of start/end
+         * points rather than using the stored angles in order to properly map edge cases.
+         */
+        if( !TRANSFORM().MapAngles( &startAngle, &endAngle ) )
+        {
+            wxPoint temp = arc->GetStart();
+            arc->SetStart( arc->GetEnd() );
+            arc->SetEnd( temp );
+        }
     }
 
     return arc.release();

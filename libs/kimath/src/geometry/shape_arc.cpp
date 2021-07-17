@@ -188,7 +188,7 @@ SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndAngle( const VECTOR2I& aStart, const 
     m_end   = aEnd;
     m_width = aWidth;
 
-    VECTOR2I center( GetArcCenter( aStart, aEnd, aAngle ) );
+    VECTOR2I center( CalcArcCenter( aStart, aEnd, aAngle ) );
 
     RotatePoint( m_mid, center, -aAngle * 10.0 / 2.0 );
 
@@ -463,7 +463,7 @@ double SHAPE_ARC::GetEndAngle() const
 
 VECTOR2I SHAPE_ARC::GetCenter() const
 {
-    return GetArcCenter( m_start, m_mid, m_end );
+    return CalcArcCenter( m_start, m_mid, m_end );
 }
 
 

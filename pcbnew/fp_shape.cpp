@@ -57,7 +57,7 @@ void FP_SHAPE::SetLocalCoord()
     {
         m_start0 = m_start;
         m_end0 = m_end;
-        m_thirdPoint0 = m_thirdPoint;
+        m_arcCenter0 = m_arcCenter;
         m_bezierC1_0 = m_bezierC1;
         m_bezierC2_0 = m_bezierC2;
         return;
@@ -65,13 +65,13 @@ void FP_SHAPE::SetLocalCoord()
 
     m_start0 = m_start - fp->GetPosition();
     m_end0 = m_end - fp->GetPosition();
-    m_thirdPoint0 = m_thirdPoint - fp->GetPosition();
+    m_arcCenter0 = m_arcCenter - fp->GetPosition();
     m_bezierC1_0 = m_bezierC1 - fp->GetPosition();
     m_bezierC2_0 = m_bezierC2 - fp->GetPosition();
     double angle = fp->GetOrientation();
     RotatePoint( &m_start0.x, &m_start0.y, -angle );
     RotatePoint( &m_end0.x, &m_end0.y, -angle );
-    RotatePoint( &m_thirdPoint0.x, &m_thirdPoint0.y, -angle );
+    RotatePoint( &m_arcCenter0.x, &m_arcCenter0.y, -angle );
     RotatePoint( &m_bezierC1_0.x, &m_bezierC1_0.y, -angle );
     RotatePoint( &m_bezierC2_0.x, &m_bezierC2_0.y, -angle );
 }
@@ -83,7 +83,7 @@ void FP_SHAPE::SetDrawCoord()
 
     m_start      = m_start0;
     m_end        = m_end0;
-    m_thirdPoint = m_thirdPoint0;
+    m_arcCenter = m_arcCenter0;
     m_bezierC1   = m_bezierC1_0;
     m_bezierC2   = m_bezierC2_0;
 
@@ -91,13 +91,13 @@ void FP_SHAPE::SetDrawCoord()
     {
         RotatePoint( &m_start.x, &m_start.y, fp->GetOrientation() );
         RotatePoint( &m_end.x, &m_end.y, fp->GetOrientation() );
-        RotatePoint( &m_thirdPoint.x, &m_thirdPoint.y, fp->GetOrientation() );
+        RotatePoint( &m_arcCenter.x, &m_arcCenter.y, fp->GetOrientation() );
         RotatePoint( &m_bezierC1.x, &m_bezierC1.y, fp->GetOrientation() );
         RotatePoint( &m_bezierC2.x, &m_bezierC2.y, fp->GetOrientation() );
 
         m_start      += fp->GetPosition();
         m_end        += fp->GetPosition();
-        m_thirdPoint += fp->GetPosition();
+        m_arcCenter += fp->GetPosition();
         m_bezierC1   += fp->GetPosition();
         m_bezierC2   += fp->GetPosition();
     }
@@ -137,19 +137,54 @@ EDA_ITEM* FP_SHAPE::Clone() const
 }
 
 
-void FP_SHAPE::SetAngle( double aAngle, bool aUpdateEnd )
+wxPoint FP_SHAPE::GetCenter0() const
 {
-    // Mark as depreciated.
-    // m_Angle does not define the arc anymore
-    // Update the parent class (updates the global m_ThirdPoint)
-    PCB_SHAPE::SetAngle( aAngle, aUpdateEnd );
-
-    // Also update the local m_thirdPoint0 if requested
-    if( aUpdateEnd )
+    switch( m_shape )
     {
-        m_thirdPoint0 = m_end0;
-        RotatePoint( &m_thirdPoint0, m_start0, -m_angle );
+    case SHAPE_T::ARC:
+        return m_arcCenter0;
+
+    case SHAPE_T::CIRCLE:
+        return m_start0;
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+        return wxPoint();
     }
+}
+
+
+void FP_SHAPE::SetCenter0( const wxPoint& aCenter )
+{
+    switch( m_shape )
+    {
+    case SHAPE_T::ARC:
+        m_arcCenter0 = aCenter;
+        break;
+
+    case SHAPE_T::CIRCLE:
+        m_start0 = aCenter;
+        break;
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    }
+}
+
+
+void FP_SHAPE::SetArcAngle( double aAngle )
+{
+    PCB_SHAPE::SetArcAngle( aAngle );
+}
+
+
+void FP_SHAPE::SetArcAngleAndEnd0( double aAngle )
+{
+    PCB_SHAPE::SetArcAngle( aAngle );
+
+    wxPoint end = GetStart0();
+    RotatePoint( &end, GetCenter0(), -m_arcAngle );
+    SetEnd0( end );
 }
 
 
@@ -160,9 +195,9 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
-        // Update arc angle but do not yet update m_ThirdPoint0 and m_thirdPoint,
+        // Update arc angle but do not yet update m_arcCenter0 and m_arcCenter,
         // arc center and start point must be updated before calculation arc end.
-        SetAngle( -GetAngle(), false );
+        SetArcAngle( -GetArcAngle() );
         KI_FALLTHROUGH;
 
     default:
@@ -177,12 +212,12 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         {
             MIRROR( m_start.x, aCentre.x );
             MIRROR( m_end.x, aCentre.x );
-            MIRROR( m_thirdPoint.x, aCentre.x );
+            MIRROR( m_arcCenter.x, aCentre.x );
             MIRROR( m_bezierC1.x, aCentre.x );
             MIRROR( m_bezierC2.x, aCentre.x );
             MIRROR( m_start0.x, pt.x );
             MIRROR( m_end0.x, pt.x );
-            MIRROR( m_thirdPoint0.x, pt.x );
+            MIRROR( m_arcCenter0.x, pt.x );
             MIRROR( m_bezierC1_0.x, pt.x );
             MIRROR( m_bezierC2_0.x, pt.x );
         }
@@ -190,12 +225,12 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         {
             MIRROR( m_start.y, aCentre.y );
             MIRROR( m_end.y, aCentre.y );
-            MIRROR( m_thirdPoint.y, aCentre.y );
+            MIRROR( m_arcCenter.y, aCentre.y );
             MIRROR( m_bezierC1.y, aCentre.y );
             MIRROR( m_bezierC2.y, aCentre.y );
             MIRROR( m_start0.y, pt.y );
             MIRROR( m_end0.y, pt.y );
-            MIRROR( m_thirdPoint0.y, pt.y );
+            MIRROR( m_arcCenter0.y, pt.y );
             MIRROR( m_bezierC1_0.y, pt.y );
             MIRROR( m_bezierC2_0.y, pt.y );
         }
@@ -227,9 +262,9 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
-        // Update arc angle but do not yet update m_ThirdPoint0 and m_thirdPoint,
+        // Update arc angle but do not yet update m_arcCenter0 and m_arcCenter,
         // arc center and start point must be updated before calculation arc end.
-        SetAngle( -GetAngle(), false );
+        SetArcAngle( -GetArcAngle() );
         KI_FALLTHROUGH;
 
     default:
@@ -239,7 +274,7 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
         {
             MIRROR( m_start0.y, aCentre.y );
             MIRROR( m_end0.y, aCentre.y );
-            MIRROR( m_thirdPoint0.y, aCentre.y );
+            MIRROR( m_arcCenter0.y, aCentre.y );
             MIRROR( m_bezierC1_0.y, aCentre.y );
             MIRROR( m_bezierC2_0.y, aCentre.y );
         }
@@ -247,7 +282,7 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
         {
             MIRROR( m_start0.x, aCentre.x );
             MIRROR( m_end0.x, aCentre.x );
-            MIRROR( m_thirdPoint0.x, aCentre.x );
+            MIRROR( m_arcCenter0.x, aCentre.x );
             MIRROR( m_bezierC1_0.x, aCentre.x );
             MIRROR( m_bezierC2_0.x, aCentre.x );
         }
@@ -290,7 +325,7 @@ void FP_SHAPE::Move( const wxPoint& aMoveVector )
     // This is a footprint shape modification.
     m_start0      += aMoveVector;
     m_end0        += aMoveVector;
-    m_thirdPoint0 += aMoveVector;
+    m_arcCenter0 += aMoveVector;
     m_bezierC1_0  += aMoveVector;
     m_bezierC2_0  += aMoveVector;
 

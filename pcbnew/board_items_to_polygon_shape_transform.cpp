@@ -23,6 +23,7 @@
  */
 
 #include <vector>
+#include <macros.h>
 #include <bezier_curves.h>
 #include <board_design_settings.h>
 #include <trigo.h>
@@ -465,12 +466,12 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
     }
 
     case SHAPE_T::ARC:
-        TransformArcToPolygon( aCornerBuffer, GetArcStart(), GetArcMid(), GetArcEnd(), width,
-                               aError, aErrorLoc );
+        TransformArcToPolygon( aCornerBuffer, GetStart(), GetArcMid(), GetEnd(), width, aError,
+                               aErrorLoc );
         break;
 
     case SHAPE_T::SEGMENT:
-        TransformOvalToPolygon( aCornerBuffer, m_start, m_end, width, aError, aErrorLoc );
+        TransformOvalToPolygon( aCornerBuffer, GetStart(), GetEnd(), width, aError, aErrorLoc );
         break;
 
     case SHAPE_T::POLY:
@@ -518,8 +519,8 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
 
     case SHAPE_T::BEZIER:
     {
-        std::vector<wxPoint> ctrlPoints = { m_start, m_bezierC1, m_bezierC2, m_end };
-        BEZIER_POLY converter( ctrlPoints );
+        std::vector<wxPoint> ctrlPts = { GetStart(), GetBezierC1(), GetBezierC2(), GetEnd() };
+        BEZIER_POLY converter( ctrlPts );
         std::vector< wxPoint> poly;
         converter.GetPoly( poly, m_width );
 
@@ -533,8 +534,7 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
     }
 
     default:
-        wxFAIL_MSG( "EDA_SHAPE::TransformShapeWithClearanceToPolygon not implemented for "
-                    + SHAPE_T_asString() );
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         break;
     }
 }

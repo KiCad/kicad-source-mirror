@@ -497,7 +497,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             wxPoint centre( parseInt( parameters[2], conv_unit ),
                             parseInt( parameters[3], conv_unit ) );
 
-            shape->SetStart0( centre );
+            shape->SetCenter0( centre );
 
             // Pcbnew start angles are inverted and 180 degrees from Geda PCB angles.
             double start_angle = parseInt( parameters[6], -10.0 ) + 1800.0;
@@ -509,14 +509,14 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             if( sweep_angle == -3600.0 )
                 shape->SetShape( SHAPE_T::CIRCLE );
 
-            // Angle value is clockwise in gpcb and Pcbnew.
-            shape->SetAngle( sweep_angle );
-            shape->SetEnd0( wxPoint( radius, 0 ) );
-
             // Calculate start point coordinate of arc
-            wxPoint arcStart( shape->GetEnd0() );
+            wxPoint arcStart( radius, 0 );
             RotatePoint( &arcStart, -start_angle );
-            shape->SetEnd0( centre + arcStart );
+            shape->SetStart0( arcStart + centre );
+
+            // Angle value is clockwise in gpcb and Pcbnew.
+            shape->SetArcAngleAndEnd0( sweep_angle );
+
             shape->SetWidth( parseInt( parameters[8], conv_unit ) );
             shape->SetDrawCoord();
             continue;

@@ -85,9 +85,9 @@ void PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aA
 {
     PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::ARC );
     item->SetFilled( false );
-    item->SetArcCenter( aCenter );
-    item->SetArcStart( aStart );
-    item->SetAngle( aArcAngle );
+    item->SetCenter( aCenter );
+    item->SetStart( aStart );
+    item->SetArcAngleAndEnd( aArcAngle );
     item->SetWidth( aThickness );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );

@@ -174,12 +174,9 @@ void PCB_ARC::AddToFootprint( FOOTPRINT* aFootprint )
         FP_SHAPE* arc = new FP_SHAPE( aFootprint, IsCircle() ? SHAPE_T::CIRCLE : SHAPE_T::ARC );
         aFootprint->Add( arc );
 
-        arc->SetStart0( wxPoint( m_positionX, m_positionY ) );
-        arc->SetEnd0( wxPoint( m_StartX, m_StartY ) );
-
-        // Setting angle will set m_thirdPoint0, so must be done after setting
-        // m_start0 and m_end0
-        arc->SetAngle( -m_Angle );
+        arc->SetCenter0( wxPoint( m_positionX, m_positionY ) );
+        arc->SetStart0( wxPoint( m_StartX, m_StartY ) );
+        arc->SetArcAngleAndEnd0( -m_Angle );
 
         arc->SetWidth( m_Width );
         arc->SetLayer( m_KiCadLayer );
@@ -197,9 +194,9 @@ void PCB_ARC::AddToBoard()
 
     arc->SetFilled( false );
     arc->SetLayer( m_KiCadLayer );
-    arc->SetStart( wxPoint( m_positionX, m_positionY ) );
-    arc->SetEnd( wxPoint( m_StartX, m_StartY ) );
-    arc->SetAngle( -m_Angle );
+    arc->SetCenter( wxPoint( m_positionX, m_positionY ) );
+    arc->SetStart( wxPoint( m_StartX, m_StartY ) );
+    arc->SetArcAngleAndEnd( -m_Angle );
     arc->SetWidth( m_Width );
 }
 

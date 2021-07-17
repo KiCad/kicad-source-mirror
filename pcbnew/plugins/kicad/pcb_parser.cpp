@@ -2392,7 +2392,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetArcCenter( pt );
+        shape->SetCenter( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
@@ -2402,7 +2402,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetArcStart( pt );
+        shape->SetStart( pt );
         NeedRIGHT();
         break;
 
@@ -2426,7 +2426,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetArcCenter( pt );
+        shape->SetStart( pt );
         NeedRIGHT();
         NeedLEFT();
 
@@ -2570,7 +2570,8 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         Expecting( "gr_arc, gr_circle, gr_curve, gr_line, gr_poly, or gp_rect" );
     }
 
-    bool foundFill = false;
+    bool   foundFill = false;
+    double angle;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2582,7 +2583,11 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         switch( token )
         {
         case T_angle:
-            shape->SetAngle( parseDouble( "segment angle" ) * 10.0 );
+            angle = parseDouble( "segment angle" ) * 10.0;
+
+            if( shape->GetShape() == SHAPE_T::ARC )
+                shape->SetArcAngleAndEnd( angle );
+
             NeedRIGHT();
             break;
 
@@ -3419,7 +3424,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             FP_SHAPE* shape = parseFP_SHAPE();
 
             // Drop 0 and NaN angles as these can corrupt/crash the schematic
-            if( std::isnormal( shape->GetAngle() ) )
+            if( std::isnormal( shape->GetArcAngle() ) )
             {
                 shape->SetParent( footprint.get() );
                 shape->SetDrawCoord();
@@ -3654,7 +3659,7 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetStart0( pt );
+        shape->SetCenter0( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
@@ -3664,7 +3669,7 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        shape->SetEnd0( pt );
+        shape->SetStart0( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
@@ -3672,9 +3677,7 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
         if( token != T_angle )
             Expecting( T_angle );
 
-        // Setting angle will set m_thirdPoint0, so must be done after setting
-        // m_start0 and m_end0
-        shape->SetAngle( parseDouble( "segment angle" ) * 10.0 );
+        shape->SetArcAngleAndEnd0( parseDouble( "segment angle" ) * 10.0 );
         NeedRIGHT();
         break;
 
@@ -4346,8 +4349,8 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 {
                 case T_gr_arc:
                     dummyShape = parsePCB_SHAPE();
-                    pad->AddPrimitiveArc( dummyShape->GetCenter(), dummyShape->GetArcStart(),
-                                          dummyShape->GetAngle(), dummyShape->GetWidth() );
+                    pad->AddPrimitiveArc( dummyShape->GetCenter(), dummyShape->GetStart(),
+                                          dummyShape->GetArcAngle(), dummyShape->GetWidth() );
                     break;
 
                 case T_gr_line:

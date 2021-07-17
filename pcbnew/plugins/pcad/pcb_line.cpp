@@ -150,7 +150,7 @@ void PCB_LINE::AddToBoard()
     }
     else
     {
-        PCB_SHAPE* segment = new PCB_SHAPE( m_board );
+        PCB_SHAPE* segment = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
         m_board->Add( segment, ADD_MODE::APPEND );
 
         segment->SetLayer( m_KiCadLayer );

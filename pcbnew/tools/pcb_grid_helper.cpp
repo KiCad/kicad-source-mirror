@@ -543,8 +543,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 }
 
                 case SHAPE_T::ARC:
-                    addAnchor( shape->GetArcStart(), CORNER | SNAPPABLE, shape );
-                    addAnchor( shape->GetArcEnd(), CORNER | SNAPPABLE, shape );
+                    addAnchor( shape->GetStart(), CORNER | SNAPPABLE, shape );
+                    addAnchor( shape->GetEnd(), CORNER | SNAPPABLE, shape );
                     addAnchor( shape->GetArcMid(), CORNER | SNAPPABLE, shape );
                     addAnchor( shape->GetCenter(), ORIGIN | SNAPPABLE, shape );
                     break;
@@ -598,7 +598,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     KI_FALLTHROUGH;
 
                 default:
-                    addAnchor( shape->GetStart(), ORIGIN | SNAPPABLE, shape );
+                    addAnchor( shape->GetPosition(), ORIGIN | SNAPPABLE, shape );
                     break;
             }
             break;

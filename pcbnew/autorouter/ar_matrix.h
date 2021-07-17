@@ -108,7 +108,7 @@ public:
     DIST_CELL   GetDist( int aRow, int aCol, int aSide );
     void        SetDist( int aRow, int aCol, int aSide, DIST_CELL );
 
-    void TraceSegmentPcb( PCB_SHAPE* pt_segm, int color, int marge, AR_MATRIX::CELL_OP op_logic );
+    void TraceSegmentPcb( PCB_SHAPE* aShape, int aColor, int aMargin, AR_MATRIX::CELL_OP op_logic );
 
     void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1, int marge, int aKeepOut,
                                  LSET aLayerMask );

@@ -802,10 +802,10 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             path->SetAperture( 0 );//scale( graphic->GetWidth() ) );
             path->SetLayerId( "signal" );
 
-            wxPoint arc_centre = graphic->GetStart0();
-            double  radius = graphic->GetRadius() + graphic->GetWidth() / 2;
-            double  arcStartDeg = graphic->GetArcAngleStart() / 10.0;
-            double  arcAngleDeg = graphic->GetAngle() / 10.0;
+            wxPoint arc_centre = graphic->GetCenter0();
+            double radius = graphic->GetRadius() + graphic->GetWidth()/2;
+            double arcStartDeg = graphic->GetArcAngleStart() / 10.0;
+            double arcAngleDeg = graphic->GetArcAngle() / 10.0;
 
             // For some obscure reason, FreeRouter does not show the same polygonal
             // shape for polygons CW and CCW. So used only the order of corners
@@ -841,10 +841,10 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 
             wxPoint move = graphic->GetCenter() - arc_centre;
 
-            TransformCircleToPolygon( polyBuffer, graphic->GetArcStart() - move,
+            TransformCircleToPolygon( polyBuffer, graphic->GetStart() - move,
                                       graphic->GetWidth() / 2, ARC_HIGH_DEF, ERROR_INSIDE );
 
-            TransformCircleToPolygon( polyBuffer, graphic->GetArcEnd() - move,
+            TransformCircleToPolygon( polyBuffer, graphic->GetEnd() - move,
                                       graphic->GetWidth() / 2, ARC_HIGH_DEF, ERROR_INSIDE );
 
             polyBuffer.Simplify( SHAPE_POLY_SET::PM_FAST );

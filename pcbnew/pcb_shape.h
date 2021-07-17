@@ -73,8 +73,8 @@ public:
         return false;
     }
 
-    void SetPosition( const wxPoint& aPos ) override { SetShapePos( aPos ); }
-    wxPoint GetPosition() const override { return GetShapePos(); }
+    void SetPosition( const wxPoint& aPos ) override { setPosition( aPos ); }
+    wxPoint GetPosition() const override { return getPosition(); }
 
     wxPoint GetCenter() const override { return getCenter(); }
 

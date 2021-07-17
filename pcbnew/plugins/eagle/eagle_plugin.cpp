@@ -715,6 +715,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                 if( !w.curve )
                 {
+                    shape->SetShape( SHAPE_T::SEGMENT );
                     shape->SetStart( start );
                     shape->SetEnd( end );
                 }
@@ -723,9 +724,9 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     wxPoint center = ConvertArcCenter( start, end, *w.curve );
 
                     shape->SetShape( SHAPE_T::ARC );
-                    shape->SetStart( center );
-                    shape->SetEnd( start );
-                    shape->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
+                    shape->SetCenter( center );
+                    shape->SetStart( start );
+                    shape->SetArcAngleAndEnd( *w.curve * -10.0 ); // KiCad rotates the other way
                 }
 
                 shape->SetLayer( layer );
@@ -1773,9 +1774,9 @@ void EAGLE_PLUGIN::packageWire( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         dwg = new FP_SHAPE( aFootprint, SHAPE_T::ARC );
         wxPoint center = ConvertArcCenter( start, end, *w.curve );
 
-        dwg->SetStart0( center );
-        dwg->SetEnd0( start );
-        dwg->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
+        dwg->SetCenter0( center );
+        dwg->SetStart0( start );
+        dwg->SetArcAngleAndEnd0( *w.curve * -10.0 ); // KiCad rotates the other way
     }
 
     dwg->SetLayer( layer );

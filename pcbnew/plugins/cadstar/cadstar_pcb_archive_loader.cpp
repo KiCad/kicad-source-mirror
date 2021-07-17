@@ -2818,8 +2818,8 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
         else
             shape = new PCB_SHAPE( aContainer, SHAPE_T::ARC );
 
-        shape->SetArcStart( startPoint );
-        shape->SetArcCenter( centerPoint );
+        shape->SetCenter( centerPoint );
+        shape->SetStart( startPoint );
 
         arcStartAngle = getPolarAngle( startPoint - centerPoint );
         arcEndAngle   = getPolarAngle( endPoint - centerPoint );
@@ -2828,9 +2828,9 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
         // with opposite start/end points and same centre point)
 
         if( cw )
-            shape->SetAngle( NormalizeAnglePos( arcAngle ) );
+            shape->SetArcAngleAndEnd( NormalizeAnglePos( arcAngle ) );
         else
-            shape->SetAngle( NormalizeAngleNeg( arcAngle ) );
+            shape->SetArcAngleAndEnd( NormalizeAngleNeg( arcAngle ) );
 
         break;
     }
@@ -2960,12 +2960,12 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromShapes( const std::
             if( shape->GetClass() == wxT( "MGRAPHIC" ) )
             {
                 FP_SHAPE* fp_shape = (FP_SHAPE*) shape;
-                SHAPE_ARC arc( fp_shape->GetStart0(), fp_shape->GetEnd0(), (double) fp_shape->GetAngle() / 10.0 );
+                SHAPE_ARC arc( fp_shape->GetCenter0(), fp_shape->GetStart0(), fp_shape->GetArcAngle() / 10.0 );
                 lineChain.Append( arc );
             }
             else
             {
-                SHAPE_ARC arc( shape->GetCenter(), shape->GetArcStart(), (double) shape->GetAngle() / 10.0 );
+                SHAPE_ARC arc( shape->GetCenter(), shape->GetStart(), shape->GetArcAngle() / 10.0 );
                 lineChain.Append( arc );
             }
         }
@@ -3041,15 +3041,13 @@ std::vector<PCB_TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromShapes(
             if( shape->GetClass() == wxT( "MGRAPHIC" ) )
             {
                 FP_SHAPE* fp_shape = (FP_SHAPE*) shape;
-                SHAPE_ARC arc( fp_shape->GetStart0(), fp_shape->GetEnd0(),
-                               (double) fp_shape->GetAngle() / 10.0 );
-                SHAPE_ARC arc( fp_shape->GetStart0(), fp_shape->GetEnd0(),
-                               fp_shape->GetAngle() / 10.0 );
+                SHAPE_ARC arc( fp_shape->GetCenter0(), fp_shape->GetStart0(),
+                               fp_shape->GetArcAngle() / 10.0 );
                 track = new PCB_ARC( aParentContainer, &arc );
             }
             else
             {
-                SHAPE_ARC arc( shape->GetCenter(), shape->GetArcStart(), (double) shape->GetAngle() / 10.0 );
+                SHAPE_ARC arc( shape->GetCenter(), shape->GetStart(), shape->GetArcAngle() / 10.0 );
                 track = new PCB_ARC( aParentContainer, &arc );
             }
             break;

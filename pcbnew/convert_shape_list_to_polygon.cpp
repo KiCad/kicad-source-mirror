@@ -95,18 +95,8 @@ static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const wxPoint& aPoint,
         if( graphic == aShape || ( graphic->GetFlags() & SKIP_STRUCT ) != 0 )
             continue;
 
-        switch( graphic->GetShape() )
-        {
-        case SHAPE_T::ARC:
-            if( aPoint == graphic->GetArcStart() || aPoint == graphic->GetArcEnd() )
-                return graphic;
-
-            break;
-
-        default:
-            if( aPoint == graphic->GetStart() || aPoint == graphic->GetEnd() )
-                return graphic;
-        }
+        if( aPoint == graphic->GetStart() || aPoint == graphic->GetEnd() )
+            return graphic;
     }
 
     // Search again for anything that's close, even something already used.  (The latter is
@@ -121,42 +111,20 @@ static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const wxPoint& aPoint,
         if( graphic == aShape )
             continue;
 
-        switch( graphic->GetShape() )
+        d_sq = ( pt - graphic->GetStart() ).SquaredEuclideanNorm();
+
+        if( d_sq < closest_dist_sq )
         {
-        case SHAPE_T::ARC:
-            d_sq = ( pt - graphic->GetArcStart() ).SquaredEuclideanNorm();
+            closest_dist_sq = d_sq;
+            closest_graphic = graphic;
+        }
 
-            if( d_sq < closest_dist_sq )
-            {
-                closest_dist_sq = d_sq;
-                closest_graphic = graphic;
-            }
+        d_sq = ( pt - graphic->GetEnd() ).SquaredEuclideanNorm();
 
-            d_sq = ( pt - graphic->GetArcEnd() ).SquaredEuclideanNorm();
-
-            if( d_sq < closest_dist_sq )
-            {
-                closest_dist_sq = d_sq;
-                closest_graphic = graphic;
-            }
-            break;
-
-        default:
-            d_sq = ( pt - graphic->GetStart() ).SquaredEuclideanNorm();
-
-            if( d_sq < closest_dist_sq )
-            {
-                closest_dist_sq = d_sq;
-                closest_graphic = graphic;
-            }
-
-            d_sq = ( pt - graphic->GetEnd() ).SquaredEuclideanNorm();
-
-            if( d_sq < closest_dist_sq )
-            {
-                closest_dist_sq = d_sq;
-                closest_graphic = graphic;
-            }
+        if( d_sq < closest_dist_sq )
+        {
+            closest_dist_sq = d_sq;
+            closest_graphic = graphic;
         }
     }
 
@@ -221,9 +189,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
 
         case SHAPE_T::ARC:
             {
-                wxPoint  pstart = graphic->GetArcStart();
+                wxPoint  pstart = graphic->GetStart();
                 wxPoint  center = graphic->GetCenter();
-                double   angle  = -graphic->GetAngle();
+                double   angle  = -graphic->GetArcAngle();
                 double   radius = graphic->GetRadius();
                 int      steps  = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
                 wxPoint  pt;
@@ -389,8 +357,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         // Polygon start point. Arbitrarily chosen end of the
         // segment and build the poly from here.
 
-        wxPoint startPt = graphic->GetShape() == SHAPE_T::ARC ? graphic->GetArcEnd()
-                                                              : graphic->GetEnd();
+        wxPoint startPt = graphic->GetEnd();
 
         prevPt = startPt;
         aPolygons.NewOutline();
@@ -443,16 +410,16 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 // We do not support arcs in polygons, so approximate an arc with a series of
                 // short lines and put those line segments into the !same! PATH.
 
-                wxPoint pstart  = graphic->GetArcStart();
-                wxPoint pend    = graphic->GetArcEnd();
+                wxPoint pstart  = graphic->GetStart();
+                wxPoint pend    = graphic->GetEnd();
                 wxPoint pcenter = graphic->GetCenter();
-                double  angle   = -graphic->GetAngle();
+                double  angle   = -graphic->GetArcAngle();
                 double  radius  = graphic->GetRadius();
                 int     steps   = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
 
                 if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
                 {
-                    wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), aChainingEpsilon ) );
+                    wxASSERT( close_enough( prevPt, graphic->GetEnd(), aChainingEpsilon ) );
 
                     angle = -angle;
                     std::swap( pstart, pend );
@@ -535,8 +502,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 break;
 
             default:
-                wxFAIL_MSG( "ConvertOutlineToPolygon not implemented for "
-                            + graphic->SHAPE_T_asString() );
+                UNIMPLEMENTED_FOR( graphic->SHAPE_T_asString() );
                 return false;
             }
 
@@ -668,8 +634,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
             // Polygon start point. Arbitrarily chosen end of the segment and build the poly
             // from here.
 
-            wxPoint startPt( graphic->GetEnd() );
-            prevPt = graphic->GetEnd();
+            wxPoint startPt = graphic->GetEnd();
+            prevPt = startPt;
             aPolygons.Append( prevPt, -1, hole );
 
             // do not append the other end point yet, this first 'graphic' might be an arc
@@ -700,17 +666,16 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     // We do not support arcs in polygons, so approximate an arc with a series of
                     // short lines and put those line segments into the !same! PATH.
                     {
-                        wxPoint pstart  = graphic->GetArcStart();
-                        wxPoint pend    = graphic->GetArcEnd();
+                        wxPoint pstart  = graphic->GetStart();
+                        wxPoint pend    = graphic->GetEnd();
                         wxPoint pcenter = graphic->GetCenter();
-                        double  angle   = -graphic->GetAngle();
+                        double  angle   = -graphic->GetArcAngle();
                         int     radius  = graphic->GetRadius();
                         int     steps = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
 
                         if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
                         {
-                            wxASSERT( close_enough( prevPt, graphic->GetArcEnd(),
-                                                    aChainingEpsilon ) );
+                            wxASSERT( close_enough( prevPt, graphic->GetEnd(), aChainingEpsilon ) );
 
                             angle = -angle;
                             std::swap( pstart, pend );

@@ -70,10 +70,9 @@ public:
     /**
      * Sets the angle for arcs, and normalizes it within the range 0 - 360 degrees.
      * @param aAngle is tenths of degrees, but will soon be degrees.
-     * @param aUpdateEnd = true to update also arc end coordinates m_thirdPoint and
-     * m_thirdPoint0, so must be called after setting m_Start, m_start0, m_End and m_end0
      */
-    void SetAngle( double aAngle, bool aUpdateEnd = true ) override;
+    void SetArcAngle( double aAngle ) override;
+    void SetArcAngleAndEnd0( double aAngle );
 
     /**
      * Move an edge of the footprint.
@@ -114,14 +113,14 @@ public:
     void SetEnd0( const wxPoint& aPoint )       { m_end0 = aPoint; }
     const wxPoint& GetEnd0() const              { return m_end0; }
 
-    void SetThirdPoint0( const wxPoint& aPoint ){ m_thirdPoint0 = aPoint; }
-    const wxPoint& GetThirdPoint0() const       { return m_thirdPoint0; }
-
     void SetBezierC1_0( const wxPoint& aPoint ) { m_bezierC1_0 = aPoint; }
     const wxPoint& GetBezierC1_0() const        { return m_bezierC1_0; }
 
     void SetBezierC2_0( const wxPoint& aPoint ) { m_bezierC2_0 = aPoint; }
     const wxPoint& GetBezierC2_0() const        { return m_bezierC2_0; }
+
+    wxPoint GetCenter0() const;
+    void SetCenter0( const wxPoint& aPt );
 
     /**
      * Set relative coordinates from draw coordinates.
@@ -160,7 +159,7 @@ public:
 protected:
     wxPoint m_start0;       ///< Start point or circle center, relative to footprint origin, orient 0.
     wxPoint m_end0;         ///< End point or circle edge, relative to footprint origin, orient 0.
-    wxPoint m_thirdPoint0;  ///< End point for an arc.
+    wxPoint m_arcCenter0;   ///< Center of arc, relative to footprint origin, orient 0.
     wxPoint m_bezierC1_0;   ///< Bezier Control Point 1, relative to footprint origin, orient 0.
     wxPoint m_bezierC2_0;   ///< Bezier Control Point 2, relative to footprint origin, orient 0.
 };

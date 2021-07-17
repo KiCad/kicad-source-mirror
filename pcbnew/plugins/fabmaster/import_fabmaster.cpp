@@ -2120,16 +2120,16 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         if( src->mirror )
                         {
                             arc->SetLayer( FlipLayer( layer ) );
-                            arc->SetArcCenter( wxPoint( lsrc->center_x, 2 * src->y - lsrc->center_y ));
-                            arc->SetArcStart( wxPoint( lsrc->end_x, 2 * src->y - lsrc->end_y ) );
-                            arc->SetAngle( lsrc->result.GetCentralAngle() * 10.0 );
+                            arc->SetCenter( wxPoint( lsrc->center_x, 2 * src->y - lsrc->center_y ) );
+                            arc->SetStart( wxPoint( lsrc->end_x, 2 * src->y - lsrc->end_y ) );
+                            arc->SetArcAngleAndEnd0( lsrc->result.GetCentralAngle() * 10.0 );
                         }
                         else
                         {
                             arc->SetLayer( layer );
-                            arc->SetArcCenter( wxPoint( lsrc->center_x, lsrc->center_y ));
-                            arc->SetArcStart( wxPoint( lsrc->end_x, lsrc->end_y ) );
-                            arc->SetAngle( -lsrc->result.GetCentralAngle() * 10.0 );
+                            arc->SetCenter( wxPoint( lsrc->center_x, lsrc->center_y ) );
+                            arc->SetStart( wxPoint( lsrc->end_x, lsrc->end_y ) );
+                            arc->SetArcAngleAndEnd0( -lsrc->result.GetCentralAngle() * 10.0 );
                         }
 
                         arc->SetWidth( lsrc->width );
@@ -2773,9 +2773,9 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
             PCB_SHAPE* arc = new PCB_SHAPE( aBoard, SHAPE_T::ARC );
             arc->SetLayer( layer );
-            arc->SetArcCenter( wxPoint( src->center_x, src->center_y ));
-            arc->SetArcStart( wxPoint( src->start_x, src->start_y ) );
-            arc->SetAngle( src->result.GetCentralAngle() * 10.0 );
+            arc->SetCenter( wxPoint( src->center_x, src->center_y ) );
+            arc->SetStart( wxPoint( src->start_x, src->start_y ) );
+            arc->SetArcAngleAndEnd( src->result.GetCentralAngle() * 10.0 );
             arc->SetWidth( src->width );
 
             if( arc->GetWidth() == 0 )
@@ -2888,9 +2888,9 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
 
                 PCB_SHAPE* arc = new PCB_SHAPE( aBoard, SHAPE_T::ARC );
                 arc->SetLayer( layer );
-                arc->SetArcCenter( wxPoint( src->center_x, src->center_y ));
-                arc->SetArcStart( wxPoint( src->start_x, src->start_y ) );
-                arc->SetAngle( src->result.GetCentralAngle() * 10.0 );
+                arc->SetCenter( wxPoint( src->center_x, src->center_y ) );
+                arc->SetStart( wxPoint( src->start_x, src->start_y ) );
+                arc->SetArcAngleAndEnd( src->result.GetCentralAngle() * 10.0 );
                 arc->SetWidth( src->width );
 
                 aBoard->Add( arc, ADD_MODE::APPEND );

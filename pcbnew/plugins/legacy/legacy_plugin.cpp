@@ -1582,21 +1582,18 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
     {
     case SHAPE_T::ARC:
     {
-        BIU    start0_x = biuParse( line + SZ( "DA" ), &data );
-        BIU    start0_y = biuParse( data, &data );
-        BIU    end0_x = biuParse( data, &data );
-        BIU    end0_y = biuParse( data, &data );
-        double angle = degParse( data, &data );
+        BIU     center0_x = biuParse( line + SZ( "DA" ), &data );
+        BIU     center0_y = biuParse( data, &data );
+        BIU     start0_x = biuParse( data, &data );
+        BIU     start0_y = biuParse( data, &data );
+        double  angle = degParse( data, &data );
 
         width = biuParse( data, &data );
         layer = layerParse( data );
 
+        dwg->SetCenter0( wxPoint( center0_x, center0_y ) );
         dwg->SetStart0( wxPoint( start0_x, start0_y ) );
-        dwg->SetEnd0( wxPoint( end0_x, end0_y ) );
-
-        // Setting angle will set m_thirdPoint0, so must be done after setting
-        // m_start0 and m_end0
-        dwg->SetAngle( angle );
+        dwg->SetArcAngleAndEnd0( angle );
         break;
     }
 
@@ -1882,7 +1879,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                 case 2:
                     double angle;
                     angle = degParse( data );
-                    dseg->SetAngle( angle );    // m_Angle
+                    dseg->SetArcAngleAndEnd( angle );    // m_Angle
                     break;
                 case 3:
                     const_cast<KIID&>( dseg->m_Uuid ) = KIID( data );

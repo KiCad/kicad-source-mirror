@@ -138,33 +138,44 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 
     case PCB_FP_SHAPE_T:
     {
-        const FP_SHAPE* segment = static_cast<const FP_SHAPE*>( aItem );
-        ret = hash_board_item( segment, aFlags );
-        hash_combine( ret, segment->GetShape() );
-        hash_combine( ret, segment->GetWidth() );
-        hash_combine( ret, segment->IsFilled() );
-        hash_combine( ret, segment->GetRadius() );
+        const FP_SHAPE* shape = static_cast<const FP_SHAPE*>( aItem );
+        ret = hash_board_item( shape, aFlags );
+        hash_combine( ret, shape->GetShape() );
+        hash_combine( ret, shape->GetWidth() );
+        hash_combine( ret, shape->IsFilled() );
+        hash_combine( ret, shape->GetRadius() );
 
         if( aFlags & HASH_POS )
         {
             if( aFlags & REL_COORD )
             {
-                hash_combine( ret, segment->GetStart0().x );
-                hash_combine( ret, segment->GetStart0().y );
-                hash_combine( ret, segment->GetEnd0().x );
-                hash_combine( ret, segment->GetEnd0().y );
+                hash_combine( ret, shape->GetStart0().x );
+                hash_combine( ret, shape->GetStart0().y );
+                hash_combine( ret, shape->GetEnd0().x );
+                hash_combine( ret, shape->GetEnd0().y );
+
+                if( shape->GetShape() == SHAPE_T::ARC )
+                {
+                    hash_combine( ret, shape->GetCenter0().x );
+                    hash_combine( ret, shape->GetCenter0().y );
+                    hash_combine( ret, shape->GetArcAngle() );
+                }
             }
             else
             {
-                hash_combine( ret, segment->GetStart().x );
-                hash_combine( ret, segment->GetStart().y );
-                hash_combine( ret, segment->GetEnd().x );
-                hash_combine( ret, segment->GetEnd().y );
+                hash_combine( ret, shape->GetStart().x );
+                hash_combine( ret, shape->GetStart().y );
+                hash_combine( ret, shape->GetEnd().x );
+                hash_combine( ret, shape->GetEnd().y );
+
+                if( shape->GetShape() == SHAPE_T::ARC )
+                {
+                    hash_combine( ret, shape->GetCenter().x );
+                    hash_combine( ret, shape->GetCenter().y );
+                    hash_combine( ret, shape->GetArcAngle() );
+                }
             }
         }
-
-        if( aFlags & HASH_ROT )
-            hash_combine( ret, segment->GetAngle() );
     }
         break;
 

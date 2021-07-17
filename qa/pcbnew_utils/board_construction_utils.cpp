@@ -61,9 +61,9 @@ void DrawArc( FOOTPRINT& aFootprint, const VECTOR2I& aCentre, const VECTOR2I& aS
 {
     auto seg = std::make_unique<FP_SHAPE>( &aFootprint, SHAPE_T::ARC );
 
-    seg->SetStart0( (wxPoint) aCentre );
-    seg->SetEnd0( (wxPoint) aStart );
-    seg->SetAngle( aAngle * 10 );
+    seg->SetCenter0( (wxPoint) aCentre );
+    seg->SetStart0( (wxPoint) aStart );
+    seg->SetArcAngleAndEnd0( aAngle * 10 );
 
     seg->SetWidth( aWidth );
     seg->SetLayer( aLayer );

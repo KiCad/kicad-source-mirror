@@ -1810,12 +1810,13 @@ void SCH_SEXPR_PLUGIN_CACHE::saveArc( LIB_ARC* aArc, OUTPUTFORMATTER& aFormatter
 {
     wxCHECK_RET( aArc && aArc->Type() == LIB_ARC_T, "Invalid LIB_ARC object." );
 
-    int x1 = aArc->GetFirstRadiusAngle();
+    int x1;
+    int x2;
+
+    aArc->CalcAngles( x1, x2 );
 
     if( x1 > 1800 )
         x1 -= 3600;
-
-    int x2 = aArc->GetSecondRadiusAngle();
 
     if( x2 > 1800 )
         x2 -= 3600;

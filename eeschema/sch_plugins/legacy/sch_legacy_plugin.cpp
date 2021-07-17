@@ -3280,15 +3280,13 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     center.y = Mils2Iu( parseInt( aReader, line, &line ) );
 
     arc->SetPosition( center );
-    arc->SetRadius( Mils2Iu( parseInt( aReader, line, &line ) ) );
 
+    int radius = Mils2Iu( parseInt( aReader, line, &line ) );
     int angle1 = parseInt( aReader, line, &line );
     int angle2 = parseInt( aReader, line, &line );
 
     NORMALIZE_ANGLE_POS( angle1 );
     NORMALIZE_ANGLE_POS( angle2 );
-    arc->SetFirstRadiusAngle( angle1 );
-    arc->SetSecondRadiusAngle( angle2 );
 
     arc->SetUnit( parseInt( aReader, line, &line ) );
     arc->SetConvert( parseInt( aReader, line, &line ) );
@@ -3316,15 +3314,29 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     {
         // Actual Coordinates of arc ends are not read from file
         // (old library), calculate them
-        wxPoint arcStart( arc->GetRadius(), 0 );
-        wxPoint arcEnd( arc->GetRadius(), 0 );
+        wxPoint arcStart( radius, 0 );
+        wxPoint arcEnd( radius, 0 );
 
         RotatePoint( &arcStart.x, &arcStart.y, -angle1 );
-        arcStart += arc->GetPosition();
+        arcStart += arc->GetCenter();
         arc->SetStart( arcStart );
         RotatePoint( &arcEnd.x, &arcEnd.y, -angle2 );
-        arcEnd += arc->GetPosition();
+        arcEnd += arc->GetCenter();
         arc->SetEnd( arcEnd );
+    }
+
+    /**
+     * This accounts for an oddity in the old library format, where the symbol is overdefined.
+     * The previous draw (based on wxwidgets) used start point and end point and always drew
+     * counter-clockwise.  The new GAL draw takes center, radius and start/end angles.  All of
+     * these points were stored in the file, so we need to mimic the swapping of start/end
+     * points rather than using the stored angles in order to properly map edge cases.
+     */
+    if( !TRANSFORM().MapAngles( &angle1, &angle2 ) )
+    {
+        wxPoint temp = arc->GetStart();
+        arc->SetStart( arc->GetEnd() );
+        arc->SetEnd( temp );
     }
 
     return arc;
@@ -3955,12 +3967,13 @@ void SCH_LEGACY_PLUGIN_CACHE::saveArc( LIB_ARC* aArc, OUTPUTFORMATTER& aFormatte
 {
     wxCHECK_RET( aArc && aArc->Type() == LIB_ARC_T, "Invalid LIB_ARC object." );
 
-    int x1 = aArc->GetFirstRadiusAngle();
+    int x1;
+    int x2;
+
+    aArc->CalcAngles( x1, x2 );
 
     if( x1 > 1800 )
         x1 -= 3600;
-
-    int x2 = aArc->GetSecondRadiusAngle();
 
     if( x2 > 1800 )
         x2 -= 3600;
@@ -3968,30 +3981,27 @@ void SCH_LEGACY_PLUGIN_CACHE::saveArc( LIB_ARC* aArc, OUTPUTFORMATTER& aFormatte
     aFormatter.Print( 0, "A %d %d %d %d %d %d %d %d %c %d %d %d %d\n",
                       Iu2Mils( aArc->GetPosition().x ), Iu2Mils( aArc->GetPosition().y ),
                       Iu2Mils( aArc->GetRadius() ), x1, x2, aArc->GetUnit(), aArc->GetConvert(),
-                      Iu2Mils( aArc->GetWidth() ),
-                               fill_tab[ static_cast<int>( aArc->GetFillMode() ) ],
+                      Iu2Mils( aArc->GetWidth() ), fill_tab[ (int) aArc->GetFillMode() ],
                       Iu2Mils( aArc->GetStart().x ), Iu2Mils( aArc->GetStart().y ),
                       Iu2Mils( aArc->GetEnd().x ), Iu2Mils( aArc->GetEnd().y ) );
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier,
-                                          OUTPUTFORMATTER& aFormatter )
+void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier, OUTPUTFORMATTER& aFormatter )
 {
     wxCHECK_RET( aBezier && aBezier->Type() == LIB_BEZIER_T, "Invalid LIB_BEZIER object." );
 
     aFormatter.Print( 0, "B %u %d %d %d", (unsigned)aBezier->GetPoints().size(),
                       aBezier->GetUnit(), aBezier->GetConvert(), Iu2Mils( aBezier->GetWidth() ) );
 
-    for( const auto& pt : aBezier->GetPoints() )
+    for( const wxPoint& pt : aBezier->GetPoints() )
         aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
 
     aFormatter.Print( 0, " %c\n", fill_tab[static_cast<int>( aBezier->GetFillMode() )] );
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::saveCircle( LIB_CIRCLE* aCircle,
-                                          OUTPUTFORMATTER& aFormatter )
+void SCH_LEGACY_PLUGIN_CACHE::saveCircle( LIB_CIRCLE* aCircle, OUTPUTFORMATTER& aFormatter )
 {
     wxCHECK_RET( aCircle && aCircle->Type() == LIB_CIRCLE_T, "Invalid LIB_CIRCLE object." );
 

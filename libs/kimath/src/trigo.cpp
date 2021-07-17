@@ -160,8 +160,8 @@ bool TestSegmentHit( const wxPoint& aRefPoint, const wxPoint& aStart, const wxPo
 }
 
 
-const VECTOR2I GetArcMid( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCenter,
-                          bool aMinArcAngle )
+const VECTOR2I CalcArcMid( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCenter,
+                           bool aMinArcAngle )
 {
     VECTOR2I startVector = aStart - aCenter;
     VECTOR2I endVector = aEnd - aCenter;
@@ -359,7 +359,7 @@ void RotatePoint( double* pX, double* pY, double angle )
 }
 
 
-const wxPoint GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle )
+const wxPoint CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle )
 {
     VECTOR2I start = aStart;
     VECTOR2I end = aEnd;
@@ -387,7 +387,7 @@ const wxPoint GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double
 }
 
 
-const VECTOR2D GetArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd )
+const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd )
 {
     VECTOR2D center;
     double yDelta_21 = aMid.y - aStart.y;
@@ -451,12 +451,12 @@ const VECTOR2D GetArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const
 }
 
 
-const VECTOR2I GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
+const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
 {
     VECTOR2D dStart( static_cast<double>( aStart.x ), static_cast<double>( aStart.y ) );
     VECTOR2D dMid( static_cast<double>( aMid.x ), static_cast<double>( aMid.y ) );
     VECTOR2D dEnd( static_cast<double>( aEnd.x ), static_cast<double>( aEnd.y ) );
-    VECTOR2D dCenter =  GetArcCenter( dStart, dMid, dEnd );
+    VECTOR2D dCenter = CalcArcCenter( dStart, dMid, dEnd );
 
     VECTOR2I iCenter;
 
@@ -472,12 +472,12 @@ const VECTOR2I GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const
 }
 
 
-const wxPoint GetArcCenter( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd )
+const wxPoint CalcArcCenter( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd )
 {
     VECTOR2D dStart( static_cast<double>( aStart.x ), static_cast<double>( aStart.y ) );
     VECTOR2D dMid( static_cast<double>( aMid.x ), static_cast<double>( aMid.y ) );
     VECTOR2D dEnd( static_cast<double>( aEnd.x ), static_cast<double>( aEnd.y ) );
-    VECTOR2D dCenter =  GetArcCenter( dStart, dMid, dEnd );
+    VECTOR2D dCenter = CalcArcCenter( dStart, dMid, dEnd );
 
     wxPoint iCenter;
 
@@ -493,9 +493,9 @@ const wxPoint GetArcCenter( const wxPoint& aStart, const wxPoint& aMid, const wx
 }
 
 
-double GetArcAngle( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
+double CalcArcAngle( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
 {
-    VECTOR2I center = GetArcCenter( aStart, aMid, aEnd );
+    VECTOR2I center = CalcArcCenter( aStart, aMid, aEnd );
 
     // Check if the new arc is CW or CCW
     VECTOR2D startLine = aStart - center;

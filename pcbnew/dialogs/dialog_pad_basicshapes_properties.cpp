@@ -112,14 +112,14 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
 
     case SHAPE_T::ARC:
         SetTitle( _( "Arc" ) );
-        m_startX.SetValue( m_shape->GetEnd().x );     // confusingly, the start point of the arc
-        m_startY.SetValue( m_shape->GetEnd().y );
+        m_startX.SetValue( m_shape->GetStart().x );
+        m_startY.SetValue( m_shape->GetStart().y );
         m_staticTextPosEnd->SetLabel( _( "Center" ) );
-        m_endX.SetValue( m_shape->GetStart().x );     // arc center
-        m_endY.SetValue( m_shape->GetStart().y );
+        m_endX.SetValue( m_shape->GetCenter().x );
+        m_endY.SetValue( m_shape->GetCenter().y );
         m_radiusLabel->SetLabel( _( "Angle:" ) );
         m_radius.SetUnits( EDA_UNITS::DEGREES );
-        m_radius.SetValue( m_shape->GetAngle() );
+        m_radius.SetValue( m_shape->GetArcAngle() );
         m_ctrl1X.Show( false, true );
         m_ctrl1Y.Show( false, true );
         m_ctrl2X.Show( false, true );
@@ -199,13 +199,9 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
         break;
 
     case SHAPE_T::ARC:
-        // NB: we store the center of the arc in m_Start, and, confusingly,
-        // the start point in m_End
-        m_shape->SetStart( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
-        m_shape->SetEnd( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
-
-        // arc angle
-        m_shape->SetAngle( m_radius.GetValue() );
+        m_shape->SetCenter( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
+        m_shape->SetStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
+        m_shape->SetArcAngleAndEnd( m_radius.GetValue() );
         break;
 
     case SHAPE_T::CIRCLE:

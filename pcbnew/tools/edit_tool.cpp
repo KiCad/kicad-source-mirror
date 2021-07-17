@@ -555,7 +555,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
         VECTOR2I newCenter = circlehelper.Center;
         VECTOR2I newStart = cSegTanStart.LineProject( newCenter );
         VECTOR2I newEnd = cSegTanEnd.LineProject( newCenter );
-        VECTOR2I newMid = GetArcMid( newStart, newEnd, newCenter );
+        VECTOR2I newMid = CalcArcMid( newStart, newEnd, newCenter );
 
         // Update objects
         theArc->SetStart( (wxPoint) newStart );

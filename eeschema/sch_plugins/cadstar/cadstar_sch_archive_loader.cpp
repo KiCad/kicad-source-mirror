@@ -1590,15 +1590,16 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices(
-        const std::vector<VERTEX>& aCadstarVertices, wxPoint aSymbolOrigin, LIB_SYMBOL* aSymbol,
-        int aGateNumber, int aLineThickness )
+void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
+                                                                 wxPoint aSymbolOrigin,
+                                                                 LIB_SYMBOL* aSymbol,
+                                                                 int aGateNumber,
+                                                                 int aLineThickness )
 {
     const VERTEX* prev = &aCadstarVertices.at( 0 );
     const VERTEX* cur;
 
-    wxASSERT_MSG(
-            prev->Type == VERTEX_TYPE::POINT, "First vertex should always be a point vertex" );
+    wxASSERT_MSG( prev->Type == VERTEX_TYPE::POINT, "First vertex should always be a point." );
 
     for( size_t i = 1; i < aCadstarVertices.size(); i++ )
     {
@@ -1651,7 +1652,6 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices(
                 ( (LIB_ARC*) segment )->SetEnd( endPoint );
             }
 
-            ( (LIB_ARC*) segment )->CalcRadiusAngles();
             break;
         }
 
@@ -2778,7 +2778,6 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
             arc.SetPosition( scalePt( arc.GetPosition() ) );
             arc.SetStart( scalePt( arc.GetStart() ) );
             arc.SetEnd( scalePt( arc.GetEnd() ) );
-            arc.CalcRadiusAngles(); // Maybe not needed?
         }
         break;
 

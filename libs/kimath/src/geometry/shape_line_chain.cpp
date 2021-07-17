@@ -38,7 +38,7 @@
 #include <math/box2.h>       // for BOX2I
 #include <math/util.h>       // for rescale
 #include <math/vector2d.h>   // for VECTOR2, VECTOR2I
-#include <trigo.h>  // for RAD2DECIDEG, GetArcAngle
+#include <trigo.h>  // for RAD2DECIDEG, CalcArcAngle
 
 class SHAPE;
 

@@ -92,27 +92,8 @@ public:
     void SetWidth( int aWidth ) { m_width = aWidth; }
     int GetWidth() const        { return m_width; }
 
-    /**
-     * Set the angle for arcs, and normalizes it within the range 0 - 360 degrees.
-     *
-     * @param aAngle is tenths of degrees, but will soon be degrees.
-     * @param aUpdateEnd set to true to update also arc end coordinates m_thirdPoint, so must
-     *                   be called after setting m_Start and m_End.
-     */
-    virtual void SetAngle( double aAngle, bool aUpdateEnd = true );
-    double GetAngle() const { return m_angle; }
-
     void SetShape( SHAPE_T aShape )                 { m_shape = aShape; }
     SHAPE_T GetShape() const                        { return m_shape; }
-
-    void SetBezierC1( const wxPoint& aPoint )    { m_bezierC1 = aPoint; }
-    const wxPoint& GetBezierC1() const           { return m_bezierC1; }
-
-    void SetBezierC2( const wxPoint& aPoint )    { m_bezierC2 = aPoint; }
-    const wxPoint& GetBezierC2() const           { return m_bezierC2; }
-
-    void SetShapePos( const wxPoint& aPos );
-    wxPoint GetShapePos() const;
 
     /**
      * Return the starting point of the graphic.
@@ -135,22 +116,26 @@ public:
     void SetEndX( int x )                   { m_end.x = x; }
 
     /**
-     * Function GetThirdPoint
-     * returns the third point point of the graphic
+     * Set the angle for arcs, and normalizes it within the range 0 - 360 degrees.
+     *
+     * @param aAngle is tenths of degrees, but will soon be degrees.
      */
-    const wxPoint& GetThirdPoint() const           { return m_thirdPoint; }
-    int GetThirdPointY()                           { return m_thirdPoint.y; }
-    int GetThirdPointX()                           { return m_thirdPoint.x; }
-    void SetThirdPoint( const wxPoint& aPoint )    { m_thirdPoint = aPoint; }
-    void SetThirdPointY( int y )                   { m_thirdPoint.y = y; }
-    void SetThirdPointX( int x )                   { m_thirdPoint.x = x; }
+    virtual void SetArcAngle( double aAngle );
+    virtual void SetArcAngleAndEnd( double aAngle );
+    double GetArcAngle() const { return m_arcAngle; }
+
+    void SetBezierC1( const wxPoint& aPt )  { m_bezierC1 = aPt; }
+    const wxPoint& GetBezierC1() const      { return m_bezierC1; }
+
+    void SetBezierC2( const wxPoint& aPt )  { m_bezierC2 = aPt; }
+    const wxPoint& GetBezierC2() const      { return m_bezierC2; }
+
+    wxPoint getCenter() const;
+    void SetCenter( const wxPoint& aCenter );
 
     // Some attributes are read only, since they are derived from m_Start, m_End, and m_Angle.
     // No Set...() function for these attributes.
 
-    wxPoint getCenter() const;
-    wxPoint GetArcStart() const      { return m_end; }
-    wxPoint GetArcEnd() const;
     wxPoint GetArcMid() const;
     std::vector<wxPoint> GetRectCorners() const;
 
@@ -164,34 +149,7 @@ public:
      */
     double GetArcAngleEnd() const;
 
-    /**
-     * Return the radius of this item.
-     *
-     * Has meaning only for arcs and circles.
-     */
     int GetRadius() const;
-
-    /**
-     * Initialize the start arc point.
-     *
-     * Can be used for circles to initialize one point of the cicumference.
-     */
-    void SetArcStart( const wxPoint& aArcStartPoint )
-    {
-        m_end = aArcStartPoint;
-    }
-
-    /**
-     * Initialize the end arc point.
-     *
-     * Can be used for circles to initialize one point of the cicumference.
-     */
-    void SetArcEnd( const wxPoint& aArcEndPoint )
-    {
-        m_thirdPoint = aArcEndPoint;
-    }
-
-    void SetArcCenter( const wxPoint& aCenterPoint ) { m_start = aCenterPoint; }
 
     /**
      * Set the three controlling points for an arc.
@@ -278,6 +236,9 @@ public:
     int Compare( const EDA_SHAPE* aOther ) const;
 
 protected:
+    void setPosition( const wxPoint& aPos );
+    wxPoint getPosition() const;
+
     void move( const wxPoint& aMoveVector );
     void rotate( const wxPoint& aRotCentre, double aAngle );
     void flip( const wxPoint& aCentre, bool aFlipLeftRight );
@@ -300,11 +261,11 @@ protected:
     SHAPE_T              m_shape;        // Shape: line, Circle, Arc
     int                  m_width;        // thickness of lines ...
     bool                 m_filled;       // Pretty much what it says on the tin...
-    wxPoint              m_start;        // Line start point or Circle and Arc center
-    wxPoint              m_end;          // Line end point or circle and arc start point
+    wxPoint              m_start;        // Line start point or Circle center
+    wxPoint              m_end;          // Line end point or Circle 3 o'clock point
 
-    wxPoint              m_thirdPoint;   // Used only for Arcs: arc end point
-    double               m_angle;        // Used only for Arcs: Arc angle in 1/10 deg
+    wxPoint              m_arcCenter;    // Used only for Arcs: arc end point
+    double               m_arcAngle;     // Used only for Arcs: Arc angle in 1/10 deg
 
     wxPoint              m_bezierC1;     // Bezier Control Point 1
     wxPoint              m_bezierC2;     // Bezier Control Point 2

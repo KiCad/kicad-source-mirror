@@ -24,6 +24,7 @@
  */
 
 #include <reporter.h>
+#include <macros.h>
 #include <board_commit.h>
 #include <cleanup_item.h>
 #include <pcb_shape.h>
@@ -71,13 +72,11 @@ bool GRAPHICS_CLEANER::isNullShape( PCB_SHAPE* aShape )
     {
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECT:
+    case SHAPE_T::ARC:
         return aShape->GetStart() == aShape->GetEnd();
 
     case SHAPE_T::CIRCLE:
         return aShape->GetRadius() == 0;
-
-    case SHAPE_T::ARC:
-        return aShape->GetCenter() == aShape->GetArcStart();
 
     case SHAPE_T::POLY:
         return aShape->GetPointCount() == 0;
@@ -87,8 +86,7 @@ bool GRAPHICS_CLEANER::isNullShape( PCB_SHAPE* aShape )
         return aShape->GetBezierPoints().empty();
 
     default:
-        wxFAIL_MSG( "GRAPHICS_CLEANER::isNullSegment unsupported PCB_SHAPE shape: "
-                    + aShape->SHAPE_T_asString() );
+        UNIMPLEMENTED_FOR( aShape->SHAPE_T_asString() );
         return false;
     }
 }
@@ -113,8 +111,8 @@ bool GRAPHICS_CLEANER::areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 )
 
     case SHAPE_T::ARC:
         return aShape1->GetCenter() == aShape2->GetCenter()
-                && aShape1->GetArcStart() == aShape2->GetArcStart()
-                && aShape1->GetAngle() == aShape2->GetAngle();
+                && aShape1->GetStart() == aShape2->GetStart()
+                && aShape1->GetArcAngle() == aShape2->GetArcAngle();
 
     case SHAPE_T::POLY:
         // TODO

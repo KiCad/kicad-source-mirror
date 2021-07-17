@@ -189,7 +189,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 
     case SHAPE_T::ARC:
         SetTitle( _( "Arc Properties" ) );
-        m_AngleValue = m_item->GetAngle() / 10.0;
+        m_AngleValue = m_item->GetArcAngle() / 10.0;
         m_filledCtrl->Show( false );
         break;
 
@@ -220,12 +220,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         break;
     }
 
-    if( m_item->GetShape() == SHAPE_T::ARC )
-    {
-        m_startX.SetValue( m_item->GetArcStart().x );
-        m_startY.SetValue( m_item->GetArcStart().y );
-    }
-    else if( m_flipStartEnd )
+    if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
     {
         m_startX.SetValue( m_item->GetEnd().x );
         m_startY.SetValue( m_item->GetEnd().y );
@@ -240,12 +235,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
     {
         m_endX.SetValue( m_item->GetRadius() );
     }
-    else if( m_item->GetShape() == SHAPE_T::ARC )
-    {
-        m_endX.SetValue( m_item->GetArcEnd().x );
-        m_endY.SetValue( m_item->GetArcEnd().y );
-    }
-    else if( m_flipStartEnd )
+    else if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
     {
         m_endX.SetValue( m_item->GetStart().x );
         m_endY.SetValue( m_item->GetStart().y );
@@ -292,11 +282,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     BOARD_COMMIT commit( m_parent );
     commit.Modify( m_item );
 
-    if( m_item->GetShape() == SHAPE_T::ARC )
-    {
-        m_item->SetArcStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
-    }
-    else if( m_flipStartEnd )
+    if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
     {
         m_item->SetEndX( m_startX.GetValue() );
         m_item->SetEndY( m_startY.GetValue() );
@@ -311,11 +297,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     {
         m_item->SetEnd( m_item->GetStart() + wxPoint( m_endX.GetValue(), 0 ) );
     }
-    else if( m_item->GetShape() == SHAPE_T::ARC )
-    {
-        m_item->SetArcEnd( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
-    }
-    else if( m_flipStartEnd )
+    else if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
     {
         m_item->SetStartX( m_endX.GetValue() );
         m_item->SetStartY( m_endY.GetValue() );
@@ -329,14 +311,14 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     // For Bezier curve: Set the two control points
     if( m_item->GetShape() == SHAPE_T::BEZIER )
     {
-        m_item->SetBezierC1( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue()));
-        m_item->SetBezierC2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue()));
+        m_item->SetBezierC1( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue() ) );
+        m_item->SetBezierC2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue() ) );
     }
 
     if( m_item->GetShape() == SHAPE_T::ARC )
     {
-        m_item->SetArcCenter( GetArcCenter( m_item->GetArcStart(), m_item->GetArcEnd(), m_AngleValue ));
-        m_item->SetAngle( m_AngleValue * 10.0, false );
+        m_item->SetCenter( CalcArcCenter( m_item->GetStart(), m_item->GetEnd(), m_AngleValue ) );
+        m_item->SetArcAngle( m_AngleValue * 10.0 );
     }
 
     if( m_fp_item )
@@ -345,10 +327,13 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         m_fp_item->SetStart0( m_fp_item->GetStart() );
         m_fp_item->SetEnd0( m_fp_item->GetEnd() );
 
-        if( m_fp_item->GetShape() == SHAPE_T::BEZIER )
+        if( m_item->GetShape() == SHAPE_T::ARC )
+            m_fp_item->SetCenter0( m_fp_item->GetCenter() );
+
+        if( m_item->GetShape() == SHAPE_T::BEZIER )
         {
-            m_fp_item->SetBezierC1_0( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue()));
-            m_fp_item->SetBezierC2_0( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue()));
+            m_fp_item->SetBezierC1_0( m_fp_item->GetBezierC1() );
+            m_fp_item->SetBezierC2_0( m_fp_item->GetBezierC2() );
         }
     }
 
@@ -408,8 +393,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
         break;
 
     default:
-        wxFAIL_MSG( "DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate not implemented for shape "
-                    + m_item->SHAPE_T_asString() );
+        UNIMPLEMENTED_FOR( m_item->SHAPE_T_asString() );
         break;
     }
 

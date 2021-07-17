@@ -255,7 +255,7 @@ static struct PCB_SHAPE_DESC
                     &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
         // TODO show certain properties depending on the shape
         //propMgr.AddProperty( new PROPERTY<PCB_SHAPE, double>( _HKI( "Angle" ),
-        //            &PCB_SHAPE::SetAngle, &PCB_SHAPE::GetAngle, PROPERTY_DISPLAY::DECIDEGREE ) );
+        //            &PCB_SHAPE::SetArcAngle, &PCB_SHAPE::GetAngle, PROPERTY_DISPLAY::DECIDEGREE ) );
         // TODO or may have different names (arcs)
         // TODO type?
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End X" ),

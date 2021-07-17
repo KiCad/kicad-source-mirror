@@ -711,9 +711,8 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
         case SHAPE_T::ARC:
             bs_info[0] = _( "Arc" );
             bs_info[1] = _( "center" ) + wxS( " " )+ formatCoord( m_units, primitive->GetCenter() );
-            bs_info[2] = _( "start" ) + wxS( " " )+ formatCoord( m_units,
-                                                                 primitive->GetArcStart() );
-            bs_info[3] = _( "angle" ) + wxS( " " )+ FormatAngle( primitive->GetAngle() );
+            bs_info[2] = _( "start" ) + wxS( " " )+ formatCoord( m_units, primitive->GetStart() );
+            bs_info[3] = _( "angle" ) + wxS( " " )+ FormatAngle( primitive->GetArcAngle() );
             break;
 
         case SHAPE_T::CIRCLE:

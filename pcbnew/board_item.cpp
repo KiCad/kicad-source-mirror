@@ -28,6 +28,7 @@
 #include <wx/debug.h>
 #include <wx/msgdlg.h>
 #include <i18n_utility.h>
+#include <macros.h>
 #include <board.h>
 #include <pcb_group.h>
 
@@ -167,7 +168,7 @@ std::shared_ptr<SHAPE> BOARD_ITEM::GetEffectiveShape( PCB_LAYER_ID aLayer ) cons
 {
     std::shared_ptr<SHAPE> shape;
 
-    wxFAIL_MSG( "GetEffectiveShape() not implemented for " + GetClass() );
+    UNIMPLEMENTED_FOR( GetClass() );
 
     return shape;
 }

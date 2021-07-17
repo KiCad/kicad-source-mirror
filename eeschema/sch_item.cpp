@@ -196,7 +196,7 @@ SCH_CONNECTION* SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet,
 
 void SCH_ITEM::SwapData( SCH_ITEM* aItem )
 {
-    wxFAIL_MSG( wxT( "SwapData() method not implemented for class " ) + GetClass() );
+    UNIMPLEMENTED_FOR( GetClass() );
 }
 
 

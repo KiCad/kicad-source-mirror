@@ -579,37 +579,14 @@ void SCH_PAINTER::draw( const LIB_ARC *aArc, int aLayer )
 
     if( setDeviceColors( aArc, aLayer ) )
     {
-        int sai = aArc->GetFirstRadiusAngle();
-        int eai = aArc->GetSecondRadiusAngle();
+        int startAngle;
+        int endAngle;
+        aArc->CalcAngles( startAngle, endAngle );
 
-        /**
-         * This accounts for an oddity in the old library format, where the symbol
-         * is overdefined.  The previous draw (based on wxwidgets) used start point and end
-         * point and always drew counter-clockwise.  The new GAL draw takes center, radius and
-         * start/end angles.  All of these points were stored in the file, so we need to mimic the
-         * swapping of start/end points rather than using the stored angles in order to properly map
-         * edge cases.
-         *
-         * todo(v6): Remove this hack when we update the file format and do translation on loading.
-         */
-        if( !TRANSFORM().MapAngles( &sai, &eai ) )
-        {
-            LIB_ARC new_arc( *aArc );
+        TRANSFORM().MapAngles( &startAngle, &endAngle );
 
-            new_arc.SetStart( aArc->GetEnd() );
-            new_arc.SetEnd( aArc->GetStart() );
-            new_arc.CalcRadiusAngles();
-            sai = new_arc.GetFirstRadiusAngle();
-            eai = new_arc.GetSecondRadiusAngle();
-            TRANSFORM().MapAngles( &sai, &eai );
-        }
-
-        double sa = (double) sai * M_PI / 1800.0;
-        double ea = (double) eai * M_PI / 1800.0 ;
-
-        VECTOR2D pos = mapCoords( aArc->GetPosition() );
-
-        m_gal->DrawArc( pos, aArc->GetRadius(), sa, ea );
+        m_gal->DrawArc( mapCoords( aArc->GetCenter() ), aArc->GetRadius(),
+                        DECIDEG2RAD( startAngle ), DECIDEG2RAD( endAngle ) );
     }
 }
 

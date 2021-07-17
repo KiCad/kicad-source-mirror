@@ -1713,17 +1713,16 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER& aMgr,
                                           PCB_SHAPE& aArc )
 {
-    auto vec = aMgr.GetOrigin();
+    VECTOR2I vec = aMgr.GetOrigin();
 
-    aArc.SetArcCenter( { vec.x, vec.y } );
+    aArc.SetCenter( (wxPoint) vec );
 
     vec = aMgr.GetStartRadiusEnd();
-    aArc.SetArcStart( { vec.x, vec.y } );
-
-    aArc.SetAngle( RAD2DECIDEG( -aMgr.GetSubtended() ) );
-
+    aArc.SetStart( (wxPoint) vec );
     vec = aMgr.GetEndRadiusEnd();
-    aArc.SetArcEnd( { vec.x, vec.y } );
+    aArc.SetEnd( (wxPoint) vec );
+
+    aArc.SetArcAngle( RAD2DECIDEG( -aMgr.GetSubtended() ) );
 }
 
 
@@ -1892,7 +1891,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         {
             if( arcManager.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_START )
             {
-                graphic->SetAngle( 900, true );
+                graphic->SetArcAngleAndEnd( 900 );
                 frame()->OnEditItemRequest( graphic );
                 m_view->Update( &preview );
                 frame()->SetMsgPanel( graphic );

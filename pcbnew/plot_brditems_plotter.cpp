@@ -541,10 +541,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
 
     m_plotter->SetColor( getColor( aShape->GetLayer() ) );
 
-    bool    sketch = GetPlotMode() == SKETCH;
-    int     thickness = aShape->GetWidth();
-    wxPoint pos( aShape->GetStart() );
-    wxPoint end( aShape->GetEnd() );
+    bool sketch = GetPlotMode() == SKETCH;
+    int  thickness = aShape->GetWidth();
 
     GBR_METADATA gbr_metadata;
     gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
@@ -568,7 +566,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
     switch( aShape->GetShape() )
     {
     case SHAPE_T::SEGMENT:
-        m_plotter->ThickSegment( pos, end, thickness, GetPlotMode(), &gbr_metadata );
+        m_plotter->ThickSegment( aShape->GetStart(), aShape->GetEnd(), thickness, GetPlotMode(),
+                                 &gbr_metadata );
         break;
 
     case SHAPE_T::RECT:
@@ -596,30 +595,38 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
         break;
 
     case SHAPE_T::CIRCLE:
-        radius = KiROUND( GetLineLength( end, pos ) );
+        radius = KiROUND( GetLineLength( aShape->GetStart(), aShape->GetEnd() ) );
 
         if( aShape->IsFilled() )
-            m_plotter->FilledCircle( pos, radius * 2 + thickness, GetPlotMode(), &gbr_metadata );
+        {
+            m_plotter->FilledCircle( aShape->GetStart(), radius * 2 + thickness, GetPlotMode(),
+                                     &gbr_metadata );
+        }
         else
-            m_plotter->ThickCircle( pos, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+        {
+            m_plotter->ThickCircle( aShape->GetStart(), radius * 2, thickness, GetPlotMode(),
+                                    &gbr_metadata );
+        }
 
         break;
 
     case SHAPE_T::ARC:
     {
-        radius = KiROUND( GetLineLength( end, pos ) );
-        double startAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
-        double endAngle = startAngle + aShape->GetAngle();
+        radius = KiROUND( GetLineLength( aShape->GetCenter(), aShape->GetStart() ) );
+        double startAngle  = ArcTangente( aShape->GetStart().y - aShape->GetCenter().y,
+                                          aShape->GetStart().x - aShape->GetCenter().x );
+        double endAngle = startAngle + aShape->GetArcAngle();
 
         // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
-        if( std::abs( aShape->GetAngle() ) == 3600.0 )
+        if( std::abs( aShape->GetArcAngle() ) == 3600.0 )
         {
-            m_plotter->ThickCircle( pos, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+            m_plotter->ThickCircle( aShape->GetCenter(), radius * 2, thickness, GetPlotMode(),
+                                    &gbr_metadata );
         }
         else
         {
-            m_plotter->ThickArc( pos, -endAngle, -startAngle, radius, thickness, GetPlotMode(),
-                                 &gbr_metadata );
+            m_plotter->ThickArc( aShape->GetCenter(), -endAngle, -startAngle, radius, thickness,
+                                 GetPlotMode(), &gbr_metadata );
         }
     }
         break;
@@ -865,15 +872,10 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
     if( !m_layerMask[aShape->GetLayer()] )
         return;
 
-    int     radius = 0;
-    double  StAngle = 0, EndAngle = 0;
     bool    sketch = GetPlotMode() == SKETCH;
     int     thickness = aShape->GetWidth();
 
     m_plotter->SetColor( getColor( aShape->GetLayer() ) );
-
-    wxPoint start( aShape->GetStart() );
-    wxPoint end( aShape->GetEnd() );
 
     GBR_METADATA gbr_metadata;
 
@@ -889,34 +891,42 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
     switch( aShape->GetShape() )
     {
     case SHAPE_T::SEGMENT:
-        m_plotter->ThickSegment( start, end, thickness, GetPlotMode(), &gbr_metadata );
+        m_plotter->ThickSegment( aShape->GetStart(), aShape->GetEnd(), thickness, GetPlotMode(),
+                                 &gbr_metadata );
         break;
 
     case SHAPE_T::CIRCLE:
-        radius = KiROUND( GetLineLength( end, start ) );
-
         if( aShape->IsFilled() )
-            m_plotter->FilledCircle( start, radius * 2 + thickness, GetPlotMode(), &gbr_metadata );
+        {
+            m_plotter->FilledCircle( aShape->GetStart(), aShape->GetRadius() * 2 + thickness,
+                                     GetPlotMode(), &gbr_metadata );
+        }
         else
-            m_plotter->ThickCircle( start, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+        {
+            m_plotter->ThickCircle( aShape->GetStart(), aShape->GetRadius() * 2, thickness,
+                                    GetPlotMode(), &gbr_metadata );
+        }
 
         break;
 
     case SHAPE_T::ARC:
-        radius = KiROUND( GetLineLength( end, start ) );
-        StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
-        EndAngle = StAngle + aShape->GetAngle();
+    {
+        double startAngle  = ArcTangente( aShape->GetStart().y - aShape->GetCenter().y,
+                                          aShape->GetStart().x - aShape->GetCenter().x );
+        double endAngle = startAngle + aShape->GetArcAngle();
 
         // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
-        if( std::abs( aShape->GetAngle() ) == 3600.0 )
+        if( std::abs( aShape->GetArcAngle() ) == 3600.0 )
         {
-            m_plotter->ThickCircle( start, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+            m_plotter->ThickCircle( aShape->GetCenter(), aShape->GetRadius() * 2, thickness,
+                                    GetPlotMode(), &gbr_metadata );
         }
         else
         {
-            m_plotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, GetPlotMode(),
-                                 &gbr_metadata );
+            m_plotter->ThickArc( aShape->GetCenter(), -endAngle, -startAngle, aShape->GetRadius(),
+                                 thickness, GetPlotMode(), &gbr_metadata );
         }
+    }
         break;
 
     case SHAPE_T::BEZIER:
@@ -984,8 +994,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
     }
 
     default:
-        wxASSERT_MSG( false, "Unhandled PCB_SHAPE shape" );
-        m_plotter->ThickSegment( start, end, thickness, GetPlotMode(), &gbr_metadata );
+        UNIMPLEMENTED_FOR( aShape->SHAPE_T_asString() );
     }
 }
 

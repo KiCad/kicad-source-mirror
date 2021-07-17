@@ -424,8 +424,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     // Generate segments
     for( unsigned jj = 1; jj < buffer.size(); jj++ )
     {
-        FP_SHAPE* seg;
-        seg = new FP_SHAPE( footprint, SHAPE_T::SEGMENT );
+        FP_SHAPE* seg = new FP_SHAPE( footprint, SHAPE_T::SEGMENT );
         seg->SetStart( buffer[jj - 1] );
         seg->SetEnd( buffer[jj] );
         seg->SetWidth( aInductorPattern.m_Width );

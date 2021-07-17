@@ -51,7 +51,6 @@ set( QA_EESCHEMA_SRCS
     sch_plugins/altium/test_altium_parser_sch.cpp
 
     test_eagle_plugin.cpp
-    test_lib_arc.cpp
     test_lib_part.cpp
     test_netlists.cpp
     test_sch_pin.cpp

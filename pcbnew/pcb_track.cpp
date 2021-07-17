@@ -956,13 +956,13 @@ void PCB_VIA::SwapData( BOARD_ITEM* aImage )
 
 wxPoint PCB_ARC::GetPosition() const
 {
-    auto center = GetArcCenter( VECTOR2I( m_Start ), VECTOR2I( m_Mid ), VECTOR2I( m_End ) );
+    auto center = CalcArcCenter( VECTOR2I( m_Start ), VECTOR2I( m_Mid ), VECTOR2I( m_End ));
     return wxPoint( center.x, center.y );
 }
 
 double PCB_ARC::GetRadius() const
 {
-    auto center = GetArcCenter( VECTOR2I( m_Start ), VECTOR2I( m_Mid ), VECTOR2I( m_End ) );
+    auto center = CalcArcCenter( VECTOR2I( m_Start ), VECTOR2I( m_Mid ), VECTOR2I( m_End ));
     return GetLineLength( wxPoint( center ), m_Start );
 }
 

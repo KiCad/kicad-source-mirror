@@ -24,7 +24,7 @@
 #include <math/util.h>          // for KiROUND
 #include <math/vector2d.h>      // for VECTOR2I
 #include <math.h>               // for sqrt
-#include <trigo.h>              // for GetArcMid
+#include <trigo.h>              // for CalcArcMid
 
 
 CIRCLE::CIRCLE()
@@ -126,7 +126,7 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
         // Calculate bisector
         VECTOR2I lineApt = furthestFromIntersect( aLineA.A, aLineA.B );
         VECTOR2I lineBpt = furthestFromIntersect( aLineB.A, aLineB.B );
-        VECTOR2I bisectorPt = GetArcMid( lineApt, lineBpt, intersectPoint, true );
+        VECTOR2I bisectorPt = CalcArcMid( lineApt, lineBpt, intersectPoint, true );
 
         anglebisector.A = intersectPoint;
         anglebisector.B = bisectorPt;

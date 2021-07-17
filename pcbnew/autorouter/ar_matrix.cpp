@@ -762,35 +762,34 @@ void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, LSET a
 }
 
 
-void AR_MATRIX::TraceSegmentPcb( PCB_SHAPE* pt_segm, int color, int marge,
+void AR_MATRIX::TraceSegmentPcb( PCB_SHAPE* aShape, int aColor, int aMargin,
                                  AR_MATRIX::CELL_OP op_logic )
 {
-    int half_width = ( pt_segm->GetWidth() / 2 ) + marge;
+    int half_width = ( aShape->GetWidth() / 2 ) + aMargin;
 
     // Calculate the bounding rectangle of the segment (if H, V or Via)
-    int ux0 = pt_segm->GetStart().x - GetBrdCoordOrigin().x;
-    int uy0 = pt_segm->GetStart().y - GetBrdCoordOrigin().y;
-    int ux1 = pt_segm->GetEnd().x - GetBrdCoordOrigin().x;
-    int uy1 = pt_segm->GetEnd().y - GetBrdCoordOrigin().y;
-
     LAYER_NUM layer = UNDEFINED_LAYER;    // Draw on all layers
 
-    switch( pt_segm->GetShape() )
+    if( aShape->GetShape() == SHAPE_T::CIRCLE || aShape->GetShape() == SHAPE_T::SEGMENT )
     {
-    case SHAPE_T::CIRCLE:
-        traceCircle( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
-        break;
+        int ux0 = aShape->GetStart().x - GetBrdCoordOrigin().x;
+        int uy0 = aShape->GetStart().y - GetBrdCoordOrigin().y;
+        int ux1 = aShape->GetEnd().x - GetBrdCoordOrigin().x;
+        int uy1 = aShape->GetEnd().y - GetBrdCoordOrigin().y;
 
-    case SHAPE_T::ARC:
-        traceArc( ux0, uy0, ux1, uy1, pt_segm->GetAngle(), half_width, layer, color, op_logic );
-        break;
+        if( aShape->GetShape() == SHAPE_T::CIRCLE )
+            traceCircle( ux0, uy0, ux1, uy1, half_width, layer, aColor, op_logic );
+        else
+            drawSegmentQcq( ux0, uy0, ux1, uy1, half_width, layer, aColor, op_logic );
+    }
+    else if( aShape->GetShape() == SHAPE_T::ARC )
+    {
+        int ux0 = aShape->GetCenter().x - GetBrdCoordOrigin().x;
+        int uy0 = aShape->GetCenter().y - GetBrdCoordOrigin().y;
+        int ux1 = aShape->GetStart().x - GetBrdCoordOrigin().x;
+        int uy1 = aShape->GetStart().y - GetBrdCoordOrigin().y;
 
-    case SHAPE_T::SEGMENT:
-        drawSegmentQcq( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
-        break;
-
-    default:
-        break;
+        traceArc( ux0, uy0, ux1, uy1, aShape->GetArcAngle(), half_width, layer, aColor, op_logic );
     }
 }
 

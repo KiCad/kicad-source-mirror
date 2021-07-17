@@ -23,6 +23,7 @@
 
 
 #include "pad_tool.h"
+#include <macros.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view.h>
@@ -612,12 +613,38 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
             shape->SetShape( primitive->GetShape() );
             shape->SetFilled( primitive->IsFilled() );
             shape->SetWidth( primitive->GetWidth() );
-            shape->SetStart( primitive->GetStart() );
-            shape->SetEnd( primitive->GetEnd() );
-            shape->SetBezierC1( primitive->GetBezierC1());
-            shape->SetBezierC2( primitive->GetBezierC2());
-            shape->SetAngle( primitive->GetAngle() );
-            shape->SetPolyShape( primitive->GetPolyShape() );
+
+            switch( shape->GetShape() )
+            {
+            case SHAPE_T::SEGMENT:
+            case SHAPE_T::RECT:
+            case SHAPE_T::CIRCLE:
+                shape->SetStart( primitive->GetStart() );
+                shape->SetEnd( primitive->GetEnd() );
+                break;
+
+            case SHAPE_T::ARC:
+                shape->SetStart( primitive->GetStart() );
+                shape->SetEnd( primitive->GetEnd() );
+                shape->SetCenter( primitive->GetCenter() );
+                shape->SetArcAngle( primitive->GetArcAngle() );
+                break;
+
+            case SHAPE_T::BEZIER:
+                shape->SetStart( primitive->GetStart() );
+                shape->SetEnd( primitive->GetEnd() );
+                shape->SetBezierC1( primitive->GetBezierC1() );
+                shape->SetBezierC2( primitive->GetBezierC2() );
+                break;
+
+            case SHAPE_T::POLY:
+                shape->SetPolyShape( primitive->GetPolyShape() );
+                break;
+
+            default:
+                UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
+            }
+
             shape->SetLocalCoord();
             shape->Move( aPad->GetPosition() );
             shape->Rotate( aPad->GetPosition(), aPad->GetOrientation() );
@@ -724,12 +751,38 @@ void PAD_TOOL::recombinePad( PAD* aPad )
         pcbShape->SetShape( fpShape->GetShape() );
         pcbShape->SetFilled( fpShape->IsFilled() );
         pcbShape->SetWidth( fpShape->GetWidth() );
-        pcbShape->SetStart( fpShape->GetStart() );
-        pcbShape->SetEnd( fpShape->GetEnd() );
-        pcbShape->SetBezierC1( fpShape->GetBezierC1());
-        pcbShape->SetBezierC2( fpShape->GetBezierC2());
-        pcbShape->SetAngle( fpShape->GetAngle() );
-        pcbShape->SetPolyShape( fpShape->GetPolyShape() );
+
+
+        switch( pcbShape->GetShape() )
+        {
+        case SHAPE_T::SEGMENT:
+        case SHAPE_T::RECT:
+        case SHAPE_T::CIRCLE:
+            pcbShape->SetStart( fpShape->GetStart() );
+            pcbShape->SetEnd( fpShape->GetEnd() );
+            break;
+
+        case SHAPE_T::ARC:
+            pcbShape->SetStart( fpShape->GetStart() );
+            pcbShape->SetEnd( fpShape->GetEnd() );
+            pcbShape->SetCenter( fpShape->GetCenter() );
+            pcbShape->SetArcAngle( fpShape->GetArcAngle() );
+            break;
+
+        case SHAPE_T::BEZIER:
+            pcbShape->SetStart( fpShape->GetStart() );
+            pcbShape->SetEnd( fpShape->GetEnd() );
+            pcbShape->SetBezierC1( fpShape->GetBezierC1() );
+            pcbShape->SetBezierC2( fpShape->GetBezierC2() );
+            break;
+
+        case SHAPE_T::POLY:
+            pcbShape->SetPolyShape( fpShape->GetPolyShape() );
+            break;
+
+        default:
+            UNIMPLEMENTED_FOR( pcbShape->SHAPE_T_asString() );
+        }
 
         pcbShape->Move( - aPad->GetPosition() );
         pcbShape->Rotate( wxPoint( 0, 0 ), - aPad->GetOrientation() );

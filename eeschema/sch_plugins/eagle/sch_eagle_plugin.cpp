@@ -1581,7 +1581,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
 
 
 bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBOL>& aSymbol,
-        EDEVICE* aDevice, int aGateNumber, const wxString& aGateName )
+                                   EDEVICE* aDevice, int aGateNumber, const wxString& aGateName )
 {
     wxString               symbolName = aSymbolNode->GetAttribute( "name" );
     std::vector<LIB_ITEM*> items;
@@ -1831,8 +1831,6 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
             arc->SetEnd( begin );
         }
 
-        arc->SetRadius( radius );
-        arc->CalcRadiusAngles();
         arc->SetUnit( aGateNumber );
 
         return (LIB_ITEM*) arc.release();
@@ -1891,25 +1889,11 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlN
 
     switch( roti )
     {
-    default:
-        wxASSERT_MSG( false, wxString::Format( "Unhandled orientation (%d degrees)", roti ) );
-        KI_FALLTHROUGH;
-
-    case 0:
-        pin->SetOrientation( 'R' );
-        break;
-
-    case 90:
-        pin->SetOrientation( 'U' );
-        break;
-
-    case 180:
-        pin->SetOrientation( 'L' );
-        break;
-
-    case 270:
-        pin->SetOrientation( 'D' );
-        break;
+    case 0:   pin->SetOrientation( 'R' ); break;
+    case 90:  pin->SetOrientation( 'U' ); break;
+    case 180: pin->SetOrientation( 'L' ); break;
+    case 270: pin->SetOrientation( 'D' ); break;
+    default:  wxFAIL_MSG( wxString::Format( "Unhandled orientation (%d degrees).", roti ) );
     }
 
     pin->SetLength( Mils2iu( 300 ) );  // Default pin length when not defined.
@@ -1959,17 +1943,11 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlN
         wxString function = aEPin->function.Get();
 
         if( function == "dot" )
-        {
             pin->SetShape( GRAPHIC_PINSHAPE::INVERTED );
-        }
         else if( function == "clk" )
-        {
             pin->SetShape( GRAPHIC_PINSHAPE::CLOCK );
-        }
         else if( function == "dotclk" )
-        {
             pin->SetShape( GRAPHIC_PINSHAPE::INVERTED_CLOCK );
-        }
     }
 
     return pin.release();

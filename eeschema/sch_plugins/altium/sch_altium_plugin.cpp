@@ -62,7 +62,7 @@
 #include <wx/log.h>
 #include <wx/zstream.h>
 #include <wx/wfstream.h>
-
+#include <trigo.h>
 
 const wxPoint GetRelativePosition( const wxPoint& aPosition, const SCH_SYMBOL* aSymbol )
 {
@@ -1350,21 +1350,23 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
         }
         else
         {
-            if( fmod( 360.0 + elem.endAngle - elem.startAngle, 360.0 ) > 180.0 )
-            {
-                m_reporter->Report( _( "Arcs in symbols cannot exceed 180 degrees." ),
-                                    RPT_SEVERITY_ERROR );
-                return;
-            }
-
             LIB_ARC* arc = new LIB_ARC( libSymbolIt->second );
             libSymbolIt->second->AddDrawItem( arc );
             arc->SetUnit( elem.ownerpartid );
-            arc->SetPosition( GetRelativePosition( elem.center + m_sheetOffset, symbol ) );
-            arc->SetRadius( elem.radius );
-            arc->SetFirstRadiusAngle( elem.startAngle * 10. );
-            arc->SetSecondRadiusAngle( elem.endAngle * 10. );
-            arc->CalcEndPoints();
+
+            arc->SetCenter( GetRelativePosition( elem.center + m_sheetOffset, symbol ) );
+
+            wxPoint arcStart( elem.radius, 0 );
+            RotatePoint( &arcStart.x, &arcStart.y, -elem.startAngle * 10.0 );
+            arcStart += arc->GetCenter();
+            arc->SetStart( arcStart );
+
+            wxPoint arcEnd( elem.radius, 0 );
+            RotatePoint( &arcEnd.x, &arcEnd.y, -elem.endAngle * 10.0 );
+            arcEnd += arc->GetCenter();
+            arc->SetEnd( arcEnd );
+
+            arc->SetWidth( elem.lineWidth );
         }
     }
 }

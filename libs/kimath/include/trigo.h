@@ -106,15 +106,15 @@ void RotatePoint( double *pX, double *pY, double cx, double cy, double angle );
  * @param aEnd The ending point of the circle (equivalent to aStart)
  * @return The center of the circle
  */
-const VECTOR2I GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
-const VECTOR2D GetArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd );
-const wxPoint GetArcCenter( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd );
-const wxPoint GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle );
+const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
+const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd );
+const wxPoint CalcArcCenter( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd );
+const wxPoint CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle );
 
 /**
  * Return the subtended angle for a given arc.
  */
-double GetArcAngle( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
+double CalcArcAngle( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
 
 /**
  * Return the middle point of an arc, half-way between aStart and aEnd. There are two possible
@@ -127,8 +127,8 @@ double GetArcAngle( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I
  * @param aMinArcAngle If true, returns the point that results in the smallest arc angle.
  * @return The middle point of the arc
 */
-const VECTOR2I GetArcMid( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCenter,
-                          bool aMinArcAngle = true );
+const VECTOR2I CalcArcMid( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCenter,
+                           bool aMinArcAngle = true );
 
 /* Return the arc tangent of 0.1 degrees coord vector dx, dy
  * between -1800 and 1800

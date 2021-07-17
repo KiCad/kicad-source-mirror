@@ -862,24 +862,25 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
             else if( cur->isRound )
             {
                 shape->SetShape( SHAPE_T::ARC );
-                shape->SetAngle( -NormalizeAngleDegreesPos( cur->endangle - cur->startangle ) * 10. );
 
+                double  includedAngle  = cur->endangle - cur->startangle;
                 double  startradiant   = DEG2RAD( cur->startangle );
                 wxPoint arcStartOffset = wxPoint( KiROUND( std::cos( startradiant ) * cur->radius ),
-                        -KiROUND( std::sin( startradiant ) * cur->radius ) );
+                                                 -KiROUND( std::sin( startradiant ) * cur->radius ) );
                 wxPoint arcStart       = cur->center + arcStartOffset;
-                shape->SetArcCenter( cur->center );
-                shape->SetArcStart( arcStart );
+
+                shape->SetCenter( cur->center );
+                shape->SetStart( arcStart );
+                shape->SetArcAngleAndEnd( -NormalizeAngleDegreesPos( includedAngle ) * 10.0 );
 
                 if( !last->isRound )
                 {
                     double  endradiant   = DEG2RAD( cur->endangle );
                     wxPoint arcEndOffset = wxPoint( KiROUND( std::cos( endradiant ) * cur->radius ),
-                            -KiROUND( std::sin( endradiant ) * cur->radius ) );
+                                                   -KiROUND( std::sin( endradiant ) * cur->radius ) );
                     wxPoint arcEnd       = cur->center + arcEndOffset;
 
-                    PCB_SHAPE* shape2 = new PCB_SHAPE( m_board );
-                    shape2->SetShape( SHAPE_T::SEGMENT );
+                    PCB_SHAPE* shape2 = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
                     m_board->Add( shape2, ADD_MODE::APPEND );
                     shape2->SetWidth( m_board->GetDesignSettings().GetLineThickness( Edge_Cuts ) );
                     shape2->SetLayer( Edge_Cuts );
@@ -888,14 +889,11 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
                     // TODO: this is more of a hack than the real solution
                     double lineLengthStart = GetLineLength( last->position, arcStart );
                     double lineLengthEnd   = GetLineLength( last->position, arcEnd );
+
                     if( lineLengthStart > lineLengthEnd )
-                    {
                         shape2->SetEnd( cur->center + arcEndOffset );
-                    }
                     else
-                    {
                         shape2->SetEnd( cur->center + arcStartOffset );
-                    }
                 }
             }
             last = cur;
@@ -1922,22 +1920,25 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
         {
             PCB_SHAPE shape( nullptr ); // just a helper to get the graphic
             shape.SetWidth( elem.width );
-            shape.SetArcCenter( elem.center );
 
             if( elem.startangle == 0. && elem.endangle == 360. )
             { // TODO: other variants to define circle?
                 shape.SetShape( SHAPE_T::CIRCLE );
-                shape.SetArcStart( elem.center - wxPoint( 0, elem.radius ) );
+                shape.SetStart( elem.center );
+                shape.SetEnd( elem.center - wxPoint( 0, elem.radius ) );
             }
             else
             {
                 shape.SetShape( SHAPE_T::ARC );
 
+                double  includedAngle  = elem.endangle - elem.startangle;
                 double  startradiant   = DEG2RAD( elem.startangle );
                 wxPoint arcStartOffset = wxPoint( KiROUND( std::cos( startradiant ) * elem.radius ),
                                                  -KiROUND( std::sin( startradiant ) * elem.radius ) );
-                shape.SetArcStart( elem.center + arcStartOffset );
-                shape.SetAngle( -NormalizeAngleDegreesPos( elem.endangle - elem.startangle ) * 10. );
+
+                shape.SetCenter( elem.center );
+                shape.SetStart( elem.center + arcStartOffset );
+                shape.SetArcAngleAndEnd( -NormalizeAngleDegreesPos( includedAngle ) * 10.0 );
             }
 
             ZONE* zone = new ZONE( m_board );
@@ -2023,24 +2024,27 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
         else
         {
             PCB_SHAPE* shape = HelperCreateAndAddShape( elem.component );
-            shape->SetArcCenter( elem.center );
             shape->SetWidth( elem.width );
             shape->SetLayer( klayer );
 
             if( elem.startangle == 0. && elem.endangle == 360. )
             { // TODO: other variants to define circle?
                 shape->SetShape( SHAPE_T::CIRCLE );
-                shape->SetArcStart( elem.center - wxPoint( 0, elem.radius ) );
+                shape->SetStart( elem.center );
+                shape->SetEnd( elem.center - wxPoint( 0, elem.radius ) );
             }
             else
             {
                 shape->SetShape( SHAPE_T::ARC );
-                shape->SetAngle( -NormalizeAngleDegreesPos( elem.endangle - elem.startangle ) * 10. );
 
+                double  includedAngle  = elem.endangle - elem.startangle;
                 double  startradiant   = DEG2RAD( elem.startangle );
                 wxPoint arcStartOffset = wxPoint( KiROUND( std::cos( startradiant ) * elem.radius ),
                                                   -KiROUND( std::sin( startradiant ) * elem.radius ) );
-                shape->SetArcStart( elem.center + arcStartOffset );
+
+                shape->SetCenter( elem.center );
+                shape->SetStart( elem.center + arcStartOffset );
+                shape->SetArcAngleAndEnd( -NormalizeAngleDegreesPos( includedAngle ) * 10.0 );
             }
 
             HelperShapeSetLocalCoord( shape, elem.component );
@@ -2363,9 +2367,9 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
                 // circle
                 shape->SetShape( SHAPE_T::CIRCLE );
                 shape->SetFilled( true );
-                shape->SetArcCenter( aElem.position );
+                shape->SetStart( aElem.position );
+                shape->SetEnd( aElem.position - wxPoint( 0, aElem.topsize.x / 4 ) );
                 shape->SetWidth( aElem.topsize.x / 2 );
-                shape->SetArcStart( aElem.position - wxPoint( 0, aElem.topsize.x / 4 ) );
             }
             else if( aElem.topsize.x < aElem.topsize.y )
             {
@@ -2396,9 +2400,9 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
             shape->SetShape( SHAPE_T::CIRCLE );
             shape->SetFilled( true );
             shape->SetLayer( klayer );
-            shape->SetArcCenter( aElem.position );
+            shape->SetStart( aElem.position );
+            shape->SetEnd( aElem.position - wxPoint( 0, aElem.topsize.x / 4 ) );
             shape->SetWidth( aElem.topsize.x / 2 );
-            shape->SetArcStart( aElem.position - wxPoint( 0, aElem.topsize.x / 4 ) );
             HelperShapeSetLocalCoord( shape, aElem.component );
         }
         else
