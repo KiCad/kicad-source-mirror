@@ -6,7 +6,7 @@
 # Michal Jahelka <michal.jahelka@pavelek.cz>, 2019
 # translation of kicad.po to
 # Radovan Blažek <blazra@gmail.com>, 2020.
-# Jan Vykydal <vvykys@gmail.com>, 2020.
+# Jan Vykydal <vvykys@gmail.com>, 2020, 2021.
 # Jan Straka <bach@email.cz>, 2020, 2021.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 # Radek Kuznik <radek.kzn@gmail.com>, 2021.
@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-15 02:34+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2021-07-17 23:10+0000\n"
+"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -21056,7 +21056,7 @@ msgstr "Referenční identifikátory"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:106
 msgid "Geographical Reannotation"
-msgstr ""
+msgstr "Geografická reanotace"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:52
 msgid "Board Setup"
@@ -21068,16 +21068,15 @@ msgstr "Import nastavení z jiné desky..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:80
 msgid "Board Stackup"
-msgstr "Zásobník desek"
+msgstr "Struktura DPS"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:88
 msgid "Board Editor Layers"
 msgstr "Vrstvy editoru desky"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:90
-#, fuzzy
 msgid "Physical Stackup"
-msgstr "Strana desky"
+msgstr "Fyzická struktura DPS"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:93
 msgid "Board Finish"
@@ -21112,9 +21111,8 @@ msgstr "Předdefinované velikosti"
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
 #: pcbnew/pcb_edit_frame.cpp:1633
-#, fuzzy
 msgid "Custom Rules"
-msgstr "Vlastní nastavení vrstev"
+msgstr "Vlastní pravidla"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:178
 #, c-format
@@ -21125,9 +21123,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:614
 #: pcbnew/tools/pcb_control.cpp:1022
-#, fuzzy
 msgid "Loading PCB"
-msgstr "Načítání"
+msgstr "Načítání DPS"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:220
 #, c-format
