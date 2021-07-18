@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-17 23:10+0000\n"
-"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
+"PO-Revision-Date: 2021-07-18 15:48+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -367,14 +367,12 @@ msgid "Render current view using Raytracing"
 msgstr "Rendrování aktuálního pohledu pomocí Raytracingu"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:27
-#, fuzzy
 msgid "Background top:"
-msgstr "Pozadí"
+msgstr "Barva pozadí shora:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:34
-#, fuzzy
 msgid "Background bottom:"
-msgstr "Barva pozadí"
+msgstr "Barva pozadí zespodu:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:47
 msgid "Silkscreen top:"
@@ -501,9 +499,8 @@ msgid "Realistic"
 msgstr "Realistický mód"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "Solid colors"
-msgstr "Plné barvy:"
+msgstr "Neprůhledné barvy"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
 msgid "CAD colors"
@@ -4483,13 +4480,13 @@ msgid "Errors were encountered loading footprints:"
 msgstr "Vyskytly se chyby při načítání pouzder:"
 
 #: common/fp_lib_table.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
-"V souboru tabulky knihoven pouzder nalezen zdvojený název knihovny \"%s\" na "
-"řádku %d"
+"V souboru tabulky knihoven pouzder nalezen zdvojený název knihovny '%s' na "
+"řádku %d."
 
 #: common/fp_lib_table.cpp:300
 #, c-format
@@ -13605,13 +13602,9 @@ msgid "Invalid parent symbol name"
 msgstr "Neplatné jméno signálu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:260
-#, c-format, fuzzy
+#, c-format
 msgid "No parent for extended symbol %s"
-msgstr ""
-"Žádný rodič pro rozšířený symbol %s v\n"
-"souboru: \"%s\"\n"
-"řádek: %d\n"
-"offset: %d"
+msgstr "Žádný nadřazený symbol pro rozšířený symbol %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:275
 #, fuzzy
@@ -13624,13 +13617,9 @@ msgid "Invalid symbol unit name prefix %s"
 msgstr "Neplatný prefix jednotky"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:293
-#, c-format, fuzzy
+#, c-format
 msgid "Invalid symbol unit name suffix %s"
-msgstr ""
-"Přípona neplatného názvu jednotky symbolu %s v\n"
-"souboru: \"%s\"\n"
-"řádek: %d\n"
-"offset: %d"
+msgstr "Nesprávná přípona %s ve jménu jednotky"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:299
 #, fuzzy, c-format
@@ -13638,36 +13627,21 @@ msgid "Invalid symbol unit number %s"
 msgstr "Neplatný identifikátor knihovny symbolů"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
-#, c-format, fuzzy
+#, c-format
 msgid "Invalid symbol convert number %s"
-msgstr ""
-"Neplatné číslo jednotky symbolu %s v\n"
-"souboru: \"%s\"\n"
-"řádek: %d\n"
-"offset: %d"
+msgstr "Nesprávné číslo konverze symbolů %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:428
-#, fuzzy
 msgid "Floating point number with incorrect locale"
-msgstr ""
-"Číslo s plovoucí desetinnou čárkou se špatnou místní hodnotou v\n"
-"souboru: \"%s\"\n"
-"řádek: %d\n"
-"offset: %d"
+msgstr "Plovoucí číslo s nesprávným oddělovačem"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:438
-#, fuzzy
 msgid "Invalid floating point number"
-msgstr ""
-"Neplatné reálné číslo v\n"
-"souboru: \"%s\"\n"
-"řádek: %d\n"
-"offset: %d"
+msgstr "Neplatné plovoucí číslo"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:444
-#, fuzzy
 msgid "Missing floating point number"
-msgstr "Chybí číslo verze."
+msgstr "Chybí plovoucí číslo"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:749
 #, fuzzy
@@ -13682,9 +13656,8 @@ msgstr "Neplatné jméno signálu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:779
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1720
-#, fuzzy
 msgid "Empty property name"
-msgstr "Zadejte jméno pouzdra:"
+msgstr "Prázdný název vlastnosti"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:788
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1728
@@ -13785,7 +13758,7 @@ msgstr "očekávaný řetězec bez uvozovek"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:871
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file."
-msgstr "'%s' se nezdá být soubor Eeschema"
+msgstr "'%s' se nezdá být soubor Eeschema."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:901
 msgid "Missing 'EELAYER END'"
@@ -21268,9 +21241,9 @@ msgid "Drill holes"
 msgstr "Vrtání otvorů"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:727
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing file '%s'."
-msgstr "Chyba při zápisu do souboru \"%s\""
+msgstr "Chyba při zápisu do souboru '%s'."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:117
 msgid "Board Size"
@@ -21728,13 +21701,13 @@ msgid "Bad numeric value for %s: %s"
 msgstr "Špatná číselná hodnota pro %s: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not determine numbering start from '%s': expected value consistent "
 "with alphabet '%s'."
 msgstr ""
-"Nelze určit začátek číslování od \"%s\": očekávaná hodnota v souladu s "
-"abecedou \"%s\""
+"Nelze určit začátek číslování z '%s': Očekávaná hodnota musí být "
+"kompatibilní s abecedou '%s'."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:307
 msgid "step value"
@@ -22677,9 +22650,9 @@ msgstr "Exportováno \"%s\"."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:272
 #: pcbnew/exporters/gen_footprints_placefile.cpp:387
 #: pcbnew/exporters/gen_footprints_placefile.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create '%s'."
-msgstr "Nelze vytvořit %s"
+msgstr "Nelze vytvořit '%s'."
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:29
 msgid ""
@@ -22746,9 +22719,9 @@ msgstr "Jste si jisti, že chcete smazat položku?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:254
 #: pcbnew/plugins/altium/altium_pcb.cpp:1284
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create folder '%s'."
-msgstr "Selhalo vytvoření souboru \"%s\""
+msgstr "Nepodařilo se vytvořit složku '%s'."
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
@@ -23943,24 +23916,18 @@ msgid "footprint"
 msgstr "pouzdro"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
-#, c-format, fuzzy
+#, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr ""
-"Chyba nastala při zápisu prázdné tabulky knihovny symbolů.\n"
-"\n"
-"%s"
+msgstr "Chyba při zápisu prázdné tabulky knihovny symbolů '%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 msgid "Please select a footprint library table file."
 msgstr "Prosím, vyberte soubor tabulky knihovnu pouzder."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
-#, c-format, fuzzy
+#, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr ""
-"Soubor \"%s\" není platný soubor tabulky knihovny symbolů.\n"
-"\n"
-"%s"
+msgstr "'%s' není platná tabulka knihoven pouzder."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
 #, fuzzy, c-format
@@ -23968,25 +23935,21 @@ msgid "Cannot create library table path '%s'."
 msgstr "Nelze vytvořit globální tabulku knihoven cesta '%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot copy footprint library table from:\n"
 "%s\n"
 "to:\n"
 "%s."
 msgstr ""
-"Nelze kopírovat soubor globální tabulky symbolu knihovny:\n"
-"\n"
-" \"%s\"\n"
-"\n"
-":do:\n"
-"\n"
-"\"%s\"."
+"Nelze kopírovat tabulku knihoven pouzder z:\n"
+"%s\n"
+"do:\n"
+"%s."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:133
-#, fuzzy
 msgid "Error loading footprint library table."
-msgstr "Chyba načtení tabulky knihovny pouzder projektu"
+msgstr "Chyba načtení tabulky knihovny pouzder."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:178
 msgid "Circle Properties"
@@ -26931,9 +26894,8 @@ msgid "Add User-defined Layer"
 msgstr "Uživatelem definovaná mřížka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
-#, fuzzy
 msgid "Add User Defined Layer..."
-msgstr "Uživatelem definovaná mřížka"
+msgstr "Přidat uživatelsky definovanou vrstvu..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:44
 #, fuzzy
@@ -28674,13 +28636,13 @@ msgid "Placement file: '%s'."
 msgstr "Soubor umístění: \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:526
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint report file created:\n"
 "'%s'."
 msgstr ""
 "Soubor hlášení pouzdra vytvořen:\n"
-"\"%s\""
+"'%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:527
 msgid "Footprint Report"
@@ -28693,19 +28655,19 @@ msgstr "Vytvořit soubor %s"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:354
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:113
-#, c-format, fuzzy
+#, c-format
 msgid "Created file '%s'."
-msgstr "Vytvořit soubor %s"
+msgstr "Vytvořit soubor '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create job file '%s'."
-msgstr "Nelze vytvořit soubor \"%s\""
+msgstr "Nelze vytvořit soubor job '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Create Gerber job file '%s'."
-msgstr "Vytvořit Gerber job soubor \"%s\""
+msgstr "Vytvořit Gerber job soubor '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:575
 msgid ""
@@ -28801,32 +28763,25 @@ msgid "Error loading PCB '%s'."
 msgstr "Chyba při načítání schématu '%s'."
 
 #: pcbnew/files.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr ""
-"Chyba načítání souboru desky.\n"
-"%s"
+msgstr "Přetečení paměti při načítání DPS '%s'"
 
 #: pcbnew/files.cpp:834
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
-"Chyba při ukládání pouzdra '%s' do knihovny specifických pouzder projektu: %s"
+"Chyba při ukládání pouzdra %s do knihovny pouzder specifických pro projekt."
 
 #: pcbnew/files.cpp:863
-#, fuzzy
 msgid "Error saving project specific footprint library table."
-msgstr ""
-"Došlo k chybě při ukládání tabulky knihoven pouzder specifické pro projekt: "
-"%s"
+msgstr "Chyba ukládání tabulky pouzder projektu."
 
 #: pcbnew/files.cpp:955 pcbnew/files.cpp:1094
 #: pcbnew/footprint_libraries_utils.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr ""
-"Nedostatek požadovaných oprávnění k uložení souboru\n"
-"%s"
+msgstr "Nedostatečná oprávnění k zápisu do souboru '%s'."
 
 #: pcbnew/files.cpp:983 pcbnew/files.cpp:1139
 #, c-format
@@ -28843,13 +28798,13 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Chyba uložení souboru desky \"%s\".\n"
-"Nepodařilo se přejmenovat dočasný soubor \"%s\""
+"Chyba uložení souboru desky '%s'.\n"
+"Nepodařilo se přejmenovat dočasný soubor '%s."
 
 #: pcbnew/files.cpp:1143
 #, c-format
@@ -28980,9 +28935,8 @@ msgid "[from %s]"
 msgstr "(z %s)"
 
 #: pcbnew/footprint_edit_frame.cpp:797
-#, fuzzy
 msgid "[no footprint loaded]"
-msgstr "Nenačteno pouzdro."
+msgstr "[nenačteno pouzdro]"
 
 #: pcbnew/footprint_edit_frame.cpp:853
 msgid "Updating Footprint Libraries"
@@ -29027,14 +28981,12 @@ msgid "Footprint library not enabled."
 msgstr "Knihovna pouzdra není povolena."
 
 #: pcbnew/footprint_info_impl.cpp:130
-#, fuzzy
 msgid "Fetching footprint libraries..."
-msgstr "Načítání knihoven pouzder"
+msgstr "Načítání knihoven pouzder..."
 
 #: pcbnew/footprint_info_impl.cpp:159
-#, fuzzy
 msgid "Loading footprints..."
-msgstr "Načítám pouzdra"
+msgstr "Načítám pouzdra..."
 
 #: pcbnew/footprint_libraries_utils.cpp:58
 msgid ""
@@ -29065,9 +29017,8 @@ msgid "Import Footprint"
 msgstr "Importovat pouzdro"
 
 #: pcbnew/footprint_libraries_utils.cpp:261
-#, fuzzy
 msgid "Not a footprint file."
-msgstr "Není soubor pouzdra"
+msgstr "Není soubor pouzdra."
 
 #: pcbnew/footprint_libraries_utils.cpp:273
 #, c-format
@@ -29079,9 +29030,9 @@ msgid "Export Footprint"
 msgstr "Export pouzdra"
 
 #: pcbnew/footprint_libraries_utils.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint exported to file '%s'."
-msgstr "Pouzdro exportováno do souboru \"%s\""
+msgstr "Pouzdro exportováno do souboru '%s'."
 
 #: pcbnew/footprint_libraries_utils.cpp:462
 #, fuzzy, c-format
@@ -29296,12 +29247,9 @@ msgid "Documentation"
 msgstr "Dokumentace"
 
 #: pcbnew/generate_footprint_info.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr ""
-"Chyba při načítání pouzdra %s z knihovny %s.\n"
-"\n"
-"%s"
+msgstr "Chyba při načítání pouzdra %s z knihovny '%s'."
 
 #: pcbnew/generate_footprint_info.cpp:121
 msgid "doc url"
@@ -29433,9 +29381,9 @@ msgid "Footprints [%u items]"
 msgstr "POuzdra [%u položek]"
 
 #: pcbnew/load_select_footprint.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' saved."
-msgstr "Pouzdro \"%s\" uloženo"
+msgstr "Pouzdro '%s' uloženo."
 
 #: pcbnew/load_select_footprint.cpp:441
 #, fuzzy, c-format
@@ -30232,9 +30180,8 @@ msgid "Round Radius Ratio"
 msgstr "Spustit simulaci"
 
 #: pcbnew/pcb_base_frame.cpp:151
-#, fuzzy
 msgid "Error loading project footprint libraries."
-msgstr "Chyba při načítání knihoven pouzder projektu"
+msgstr "Chyba při načítání knihoven pouzder projektu."
 
 #: pcbnew/pcb_dimension.cpp:299
 msgid "Dimension"
@@ -30307,9 +30254,8 @@ msgid "Schematic file '%s' not found."
 msgstr "Soubor schématu \"%s\" nenalezen."
 
 #: pcbnew/pcb_edit_frame.cpp:1488
-#, fuzzy
 msgid "Eeschema failed to load."
-msgstr "Eeschema se nepodařilo načíst:"
+msgstr "Eeschema se nepodařilo načíst."
 
 #: pcbnew/pcb_edit_frame.cpp:1627
 msgid "Edit design rules"
@@ -30579,19 +30525,19 @@ msgid "'%s' was not parsed correctly."
 msgstr "Zóna mědi (%s) nemá žádné plošky připojené."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not fully parsed."
-msgstr "Soubor \"%s\" nebyl zcela načten"
+msgstr "'%s' nebyl zcela analyzován."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:509
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'."
-msgstr "Soubor nebyl nalezen: '%s'"
+msgstr "Soubor nenalezen: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate netclass name '%s'."
-msgstr "Duplicitní název třídy spojů \"%s\""
+msgstr "Duplicitní název třídy spojů '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1010
 #: pcbnew/plugins/altium/altium_pcb.cpp:1088
@@ -30616,9 +30562,9 @@ msgid "No 3D-models will be imported."
 msgstr "Nelze vytvořit adresář \"%s\" -> nebudou importovány žádné 3D modely."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1301
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'. 3D-model not imported."
-msgstr "Soubor nebyl nalezen: '%s'"
+msgstr "Soubor nenalezen: '%s'. 3D-model neimportován."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1341
 #, fuzzy
@@ -31235,9 +31181,9 @@ msgid "Expecting pad size values but found %s : %s in row %zu."
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid pad size in row %zu."
-msgstr "Neplatná velikost plošky na řádku %zu"
+msgstr "Neplatná velikost plošky na řádku %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:603
 #, c-format
@@ -31245,9 +31191,9 @@ msgid "Expecting pad offset values but found %s:%s in row %zu."
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
-msgstr "Neznámý název tvaru plošky '%s' na vrstvě '%s' na řádku %zu"
+msgstr "Neznámý název tvaru plošky '%s' na vrstvě '%s' na řádku %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:970
 #, c-format
@@ -31308,9 +31254,9 @@ msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
 msgstr ""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to an integer."
-msgstr "Nelze převézt \"%s\" na integer"
+msgstr "Nelze převézt '%s' na integer."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:229
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:877
@@ -31321,9 +31267,9 @@ msgstr "Knihovna pouzdra nenalezena."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:283
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr "knihovna \"%s\" nemá žádné pouzdro \"%s\" k smazání"
+msgstr "Knihovna '%s' nemá žádné pouzdro '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:347
 #: pcbnew/plugins/kicad/pcb_parser.cpp:573
@@ -31339,11 +31285,9 @@ msgstr "Token prvku obsahuje %d parametrů."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:982
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2533
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
-"Nedostatek požadovaných oprávnění k uložení souboru\n"
-"%s"
+msgstr "Nedostatečná oprávnění k odstranění složky '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:990
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2541
@@ -31364,14 +31308,14 @@ msgid "Footprint library '%s' cannot be deleted."
 msgstr "Knihovnu pouzder \"%s\" nelze odstranit."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create footprint library '%s'."
-msgstr "Nelze vytvořit knihovnu pouzder \"%s\""
+msgstr "Nelze vytvořit knihovnu pouzder '%s'."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:178
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' is read only."
-msgstr "Knihovna pouzder \"%s\" je pouze pro čtení"
+msgstr "Knihovna pouzder '%s' je pouze pro čtení."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:216
 #, fuzzy, c-format
@@ -31411,14 +31355,12 @@ msgid "unknown zone corner smoothing type %d"
 msgstr "neznámé zaoblení okraje zóny typu %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2202
-#, fuzzy
 msgid "Open cancelled by user."
-msgstr "-------- ERC zrušeno uživatelem.<br><br>"
+msgstr "Otevírání zrušeno uživatelem."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2251
-#, fuzzy
 msgid "This file does not contain a PCB."
-msgstr "tento soubor neobsahuje DPS"
+msgstr "Tento soubor neobsahuje DPS."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2401
 #, fuzzy, c-format
@@ -31439,11 +31381,9 @@ msgid "Footprint file name '%s' is not valid."
 msgstr "Název souboru pouzdra \"%s\" není platný."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2437
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete '%s'."
-msgstr ""
-"Nedostatek požadovaných oprávnění k uložení souboru\n"
-"%s"
+msgstr "Nedostatečná oprávnění k odstranění '%s'."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2508
 #, fuzzy, c-format
@@ -31500,14 +31440,14 @@ msgid "Undefined layers:"
 msgstr "Nedefinované vrstvy:"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1010
-#, c-format, fuzzy
+#, c-format
 msgid "Page type '%s' is not valid."
-msgstr "Typ stránky \"%s\" není platný"
+msgstr "Typ stránky '%s' není platný."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1541
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
-msgstr "Vrstva \"%s\" v souboru \"%s\" na řádku %d, není v pevné vrstvě hash"
+msgstr "Vrstva '%s' v souboru '%s' na řádku %d není v pevné vrstvě hash."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1579
 #, c-format
@@ -31515,13 +31455,12 @@ msgid "%d is not a valid layer count"
 msgstr "%d není platný počet vrstev"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2221
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr ""
-"Duplicitní název Třídy spojů \"%s\" v souboru \"%s\" na řádku %d, ofset %d"
+msgstr "Duplicitní název Třídy spojů '%s' v souboru '%s' na řádku %d, ofset %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3068
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -31529,9 +31468,9 @@ msgid ""
 "offset: %d."
 msgstr ""
 "Neplatné ID pouzdra v\n"
-"souboru: \"%s\"\n"
+"souboru: '%s'\n"
 "řádek: %d\n"
-"offset: %d"
+"ofset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3402
 #, c-format
@@ -31539,32 +31478,30 @@ msgid "Cannot handle footprint text type %s"
 msgstr "Nelze zpracovat typ textu pouzdra %s"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3997
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
 "Neplatné ID sítě v\n"
-"souboru: '%s'\n"
-"řádek: %d\n"
-"offset: %d"
+"souboru: %s\n"
+"řádek: %d offset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4018
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net name doesn't match ID in\n"
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
 "Název sítě neodpovídá ID sítě v\n"
-"souboru: '%s'\n"
-"řádek: %d\n"
-"offset: %d"
+"souboru: %s\n"
+"řádek: %d offset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4470
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4550
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: '%s'\n"
@@ -31574,7 +31511,7 @@ msgstr ""
 "Neplatné ID sítě v\n"
 "souboru: '%s'\n"
 "řádek: %d\n"
-"offset: %d"
+"ofset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4644
 #, c-format
@@ -31590,7 +31527,7 @@ msgstr ""
 "offset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4754
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 " file: '%s;\n"
@@ -31598,9 +31535,9 @@ msgid ""
 "offset: %d."
 msgstr ""
 "Neplatné ID sítě v\n"
-"souboru: '%s'\n"
+" souboru: '%s'\n"
 "řádek: %d\n"
-"offset: %d"
+"ofset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4872
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2630
@@ -31622,29 +31559,29 @@ msgid "File '%s' has an unrecognized version: %d."
 msgstr ""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:750
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "Neznámý typ listu \"%s\" na řádku:%d"
+msgstr "Neznámý typ listu '%s' na řádku: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1430
-#, fuzzy, c-format
+#, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
-msgstr "Chybí '$EndMODULE' pro MODULE \"%s\""
+msgstr "Chybí '$EndMODULE' pro MODULE '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1480
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
-msgstr "Neznámý tvar plošky '%c=0x%02x' na řádku:%d pouzdra: \"%s\""
+msgstr "Neznámý tvar plošky '%c=0x%02x' na řádku: %d pouzdra: '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1685
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
-msgstr "Neznámý typ EDGE_MODULE: '%c=0x%02x' na řádku:%d pouzdra: \"%s\""
+msgstr "Neznámý typ 'FP_SHAPE: '%c=0x%02x' na řádku:%d pouzdra: '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2466
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate NETCLASS name '%s'."
-msgstr "duplicitní název třídy spojů \"%s\""
+msgstr "Duplicitní název TŘÍDY SPOJŮ '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2545
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2556
@@ -31664,27 +31601,23 @@ msgstr ""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2983
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3022
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Neplatné reálné číslo v\n"
-"souboru: \"%s\"\n"
-"řádek: %d\n"
-"offset: %d"
+"Neplatný plovoucí číslo v souboru: soubor '%s'\n"
+"řádek: %d, ofset: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2993
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3032
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Chybí číslo s plovoucí čárkou v\n"
-"souboru: \"%s\"\n"
-"řádek:: %d\n"
-"offset: %d"
+"Chybí číslo s plovoucí čárkou v souboru: '%s'\n"
+"řádek:: %d, ofset: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3176
 #, c-format
@@ -31703,9 +31636,8 @@ msgid "Unknown PCad layer %u"
 msgstr "Neznámá vrstva PCad %u"
 
 #: pcbnew/plugins/pcad/pcb.cpp:748
-#, fuzzy
 msgid "KiCad only supports 32 signal layers."
-msgstr "KiCad podporuje pouze 32 signálních vrstev"
+msgstr "KiCad podporuje pouze 32 signálních vrstev."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:91
 #, fuzzy
@@ -31713,9 +31645,9 @@ msgid "Unable to find library section."
 msgstr "Nelze najít soubor knihovny %s."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find viaStyleDef %s."
-msgstr "Nelze najít prohlížeč PDF pro \"%s\""
+msgstr "Nelze najít viaStyleDef %s."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:70
 msgid "Exception on python action plugin code"
@@ -32211,18 +32143,18 @@ msgid "Session file imported and merged OK."
 msgstr "Soubor relace importován a sloučen - OK."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr "Soubor relace používá neplatnou vrstvu \"%s\""
+msgstr "Soubor relace používá neplatný ID vrstvy '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:217
 msgid "Session via padstack has no shapes"
 msgstr "Vrstvy prvků prokovů neobsahují žádné tvary"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported via shape: %s."
-msgstr "Nepodporovaný tvar prokovu: %s"
+msgstr "Nepodporovaný tvar prokovu: %s."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:246
 #: pcbnew/specctra_import_export/specctra_import.cpp:271
@@ -32732,9 +32664,8 @@ msgid "Draw a dimension"
 msgstr "Nakreslit rozměr"
 
 #: pcbnew/tools/drawing_tool.cpp:1154
-#, fuzzy
 msgid "No graphic items found in file."
-msgstr "Zobrazit pouze obrys grafických prvků"
+msgstr "Nenalezeny žádné grafické položky v souboru."
 
 #: pcbnew/tools/drawing_tool.cpp:1205 pcbnew/tools/drawing_tool.cpp:1276
 msgid "Place a DXF_SVG drawing"
@@ -35288,7 +35219,7 @@ msgstr "Zóna %s na %s"
 
 #: pcbnew/zone.cpp:1399
 msgid "Inherited"
-msgstr ""
+msgstr "Dědičný"
 
 #: pcbnew/zone.cpp:1417
 msgid "Min Width"
