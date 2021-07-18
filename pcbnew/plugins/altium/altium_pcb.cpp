@@ -1800,12 +1800,11 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
             else
             {
                 shape.SetShape( PCB_SHAPE_TYPE::ARC );
-                shape.SetAngle( -NormalizeAngleDegreesPos( elem.endangle - elem.startangle ) * 10. );
-
                 double  startradiant   = DEG2RAD( elem.startangle );
                 wxPoint arcStartOffset = wxPoint( KiROUND( std::cos( startradiant ) * elem.radius ),
-                        -KiROUND( std::sin( startradiant ) * elem.radius ) );
+                                                 -KiROUND( std::sin( startradiant ) * elem.radius ) );
                 shape.SetArcStart( elem.center + arcStartOffset );
+                shape.SetAngle( -NormalizeAngleDegreesPos( elem.endangle - elem.startangle ) * 10. );
             }
 
             ZONE* zone = new ZONE( m_board );
