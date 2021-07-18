@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
 "PO-Revision-Date: 2021-07-18 15:48+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -403,9 +403,8 @@ msgid "Board body:"
 msgstr "Tělo desky:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:126
-#, fuzzy
 msgid "Load Colors from Board Stackup"
-msgstr "Importujte barvy z fyzického zásobníku"
+msgstr "Načíst barvy ze struktury DPS"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:21
 msgid "3D Model Visibility"
@@ -21093,6 +21092,8 @@ msgid ""
 "Error importing settings from board:\n"
 "Associated project file %s could not be loaded"
 msgstr ""
+"Chyba při importování nastavení z desky:\n"
+"Přidružený soubor projektu %s nelze načíst"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:614
 #: pcbnew/tools/pcb_control.cpp:1022
@@ -35266,9 +35267,8 @@ msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Vytvořit komponentu z bitmapy pro použití s KiCadem"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-#, fuzzy
 msgid "bitmap2component"
-msgstr "Spustit Bitmap2Component"
+msgstr "Převod obrázků"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
@@ -35281,12 +35281,11 @@ msgstr "Barva čáry schématu"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr ""
+msgstr "Samostatný editor schémat pro KiCad schémata"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-#, fuzzy
 msgid "eeschema"
-msgstr "Eeschema"
+msgstr "Editor schémat"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -35297,9 +35296,8 @@ msgid "View Gerber files"
 msgstr "Zobrazit soubory Gerber"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-#, fuzzy
 msgid "gerbview"
-msgstr "Gerbview"
+msgstr "Prohlížeč gerber"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -35335,9 +35333,8 @@ msgid "Standalone circuit board editor for KiCad boards"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-#, fuzzy
 msgid "pcbnew"
-msgstr "Pcbnew"
+msgstr "Editor DPS"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -35352,6 +35349,12 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"KiCad je bezplatný nástroj s otevřeným zdrojovým kódem pro automatizaci "
+"elektronického návrhu (EDA). Obsahuje editor schémat a desek plošných spojů "
+"(DPS). Má integrovaný simulátor obvodů. Umožňuje 3D vykreslování a export "
+"dat do mnoha formátů. KiCad také obsahuje vysoce kvalitní knihovnu komponent "
+"s tisíci symbolů, pouzder a 3D modelů. KiCad má minimální systémové "
+"požadavky a běží na Linuxu, Windows i macOS."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
 msgid "KiCad Main Window"
