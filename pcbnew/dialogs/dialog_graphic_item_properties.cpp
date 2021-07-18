@@ -257,10 +257,10 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
     }
 
     // For Bezier curve:
-    m_bezierCtrl1X.SetValue( m_item->GetBezControl1().x );
-    m_bezierCtrl1Y.SetValue( m_item->GetBezControl1().y );
-    m_bezierCtrl2X.SetValue( m_item->GetBezControl2().x );
-    m_bezierCtrl2Y.SetValue( m_item->GetBezControl2().y );
+    m_bezierCtrl1X.SetValue( m_item->GetBezierC1().x );
+    m_bezierCtrl1Y.SetValue( m_item->GetBezierC1().y );
+    m_bezierCtrl2X.SetValue( m_item->GetBezierC2().x );
+    m_bezierCtrl2Y.SetValue( m_item->GetBezierC2().y );
 
     m_filledCtrl->SetValue( m_item->IsFilled() );
     m_locked->SetValue( m_item->IsLocked() );
@@ -329,8 +329,8 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     // For Bezier curve: Set the two control points
     if( m_item->GetShape() == PCB_SHAPE_TYPE::CURVE )
     {
-        m_item->SetBezControl1( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue() ) );
-        m_item->SetBezControl2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue() ) );
+        m_item->SetBezierC1( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue()));
+        m_item->SetBezierC2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue()));
     }
 
     if( m_item->GetShape() == PCB_SHAPE_TYPE::ARC )
@@ -347,8 +347,8 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
 
         if( m_fp_item->GetShape() == PCB_SHAPE_TYPE::CURVE )
         {
-            m_fp_item->SetBezier0_C1( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue() ) );
-            m_fp_item->SetBezier0_C2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue() ) );
+            m_fp_item->SetBezierC1_0( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue()));
+            m_fp_item->SetBezierC2_0( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue()));
         }
     }
 

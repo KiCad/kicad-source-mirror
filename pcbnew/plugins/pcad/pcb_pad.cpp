@@ -58,7 +58,7 @@ PCB_PAD::~PCB_PAD()
 }
 
 
-void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
+void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                      const wxString& aActualConversion )
 {
     XNODE*          lNode;
@@ -89,7 +89,7 @@ void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
 
     if( lNode )
     {
-        SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_positionX, &m_positionY,
+        SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_positionX, &m_positionY,
                      aActualConversion );
     }
 
@@ -150,7 +150,7 @@ void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
     cNode = FindNode( lNode, wxT( "holeDiam" ) );
 
     if( cNode )
-        SetWidth( cNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Hole, aActualConversion );
+        SetWidth( cNode->GetNodeContent(), aDefaultUnits, &m_Hole, aActualConversion );
 
     if( FindNodeGetContent( lNode, wxT( "isHolePlated" ) ) == wxT( "False" ) )
         m_IsHolePlated = false;
@@ -166,7 +166,7 @@ void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
             if( FindNode( cNode, wxT( "layerNumRef" ) ) )
             {
                 padShape = new PCB_PAD_SHAPE( m_callbacks, m_board );
-                padShape->Parse( cNode, aDefaultMeasurementUnit, aActualConversion );
+                padShape->Parse( cNode, aDefaultUnits, aActualConversion );
                 m_Shapes.Add( padShape );
             }
         }
@@ -290,6 +290,7 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
 
         // Set the proper net code
         NETINFO_ITEM* netinfo = m_board->FindNet( m_net );
+
         if( netinfo == NULL )   // I believe this should not happen, but just in case
         {
             // It is a new net

@@ -40,7 +40,7 @@ public:
     PCB_PAD_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_PAD_SHAPE();
 
-    virtual void Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
+    virtual void Parse( XNODE* aNode, const wxString& aDefaultUnits,
                         const wxString& aActualConversion );
 
     void AddToBoard() override;

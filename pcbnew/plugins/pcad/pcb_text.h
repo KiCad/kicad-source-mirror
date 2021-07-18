@@ -42,7 +42,7 @@ public:
     PCB_TEXT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_TEXT();
 
-    virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultMeasurementUnit,
+    virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
                         const wxString& aActualConversion );
 
     void AddToFootprint( FOOTPRINT* aFootprint ) override;

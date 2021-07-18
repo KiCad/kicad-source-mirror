@@ -41,7 +41,7 @@ public:
     ~PCB_COPPER_POUR();
 
     virtual bool Parse( XNODE*          aNode,
-                        const wxString& aDefaultMeasurementUnit,
+                        const wxString& aDefaultUnits,
                         const wxString& aActualConversion ) override;
 };
 

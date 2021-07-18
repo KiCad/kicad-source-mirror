@@ -1964,26 +1964,26 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
                 // We convert them to an oval in most cases, but handle also the possibility of
                 // encountering arcs in here.
 
-                std::vector<PCB_SHAPE*> outlineSegments =
-                        getDrawSegmentsFromVertices( csCopper.Shape.Vertices );
+                std::vector<PCB_SHAPE*> outlineShapes = getShapesFromVertices( csCopper.Shape.Vertices );
 
-                for( auto& seg : outlineSegments )
+                for( PCB_SHAPE* shape : outlineShapes )
                 {
-                    SHAPE_POLY_SET segment;
+                    SHAPE_POLY_SET poly;
 
-                    if( seg->GetShape() == PCB_SHAPE_TYPE::ARC )
+                    if( shape->GetShape() == PCB_SHAPE_TYPE::ARC )
                     {
-                        TransformArcToPolygon( segment, seg->GetStart(), seg->GetArcMid(),
-                                               seg->GetEnd(), copperWidth, ARC_HIGH_DEF,
+                        TransformArcToPolygon( poly, shape->GetArcStart(), shape->GetArcMid(),
+                                               shape->GetArcEnd(), copperWidth, ARC_HIGH_DEF,
                                                ERROR_LOC::ERROR_INSIDE );
                     }
                     else
                     {
-                        TransformOvalToPolygon( segment, seg->GetStart(), seg->GetEnd(),
-                                                copperWidth, ARC_HIGH_DEF, ERROR_LOC::ERROR_INSIDE );
+                        TransformOvalToPolygon( poly, shape->GetStart(), shape->GetEnd(),
+                                                copperWidth, ARC_HIGH_DEF,
+                                                ERROR_LOC::ERROR_INSIDE );
                     }
 
-                    rawPolys.BooleanAdd( segment, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                    rawPolys.BooleanAdd( poly, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
                 }
 
             }
@@ -2028,31 +2028,29 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
         if( csCopper.Shape.Type == SHAPE_TYPE::OPENSHAPE
                 || csCopper.Shape.Type == SHAPE_TYPE::OUTLINE )
         {
-            std::vector<PCB_SHAPE*> outlineSegments =
-                    getDrawSegmentsFromVertices( csCopper.Shape.Vertices );
+            std::vector<PCB_SHAPE*> outlineShapes = getShapesFromVertices( csCopper.Shape.Vertices );
 
-            std::vector<PCB_TRACK*> outlineTracks = makeTracksFromDrawsegments( outlineSegments,
-                    m_board, getKiCadNet( csCopper.NetRef.NetID ),
-                    getKiCadLayer( csCopper.LayerID ),
-                    getKiCadLength( getCopperCode( csCopper.CopperCodeID ).CopperWidth ) );
+            std::vector<PCB_TRACK*> outlineTracks = makeTracksFromShapes( outlineShapes, m_board,
+                                                      getKiCadNet( csCopper.NetRef.NetID ),
+                                                      getKiCadLayer( csCopper.LayerID ),
+                                                      getKiCadLength( getCopperCode( csCopper.CopperCodeID ).CopperWidth ) );
 
             //cleanup
-            for( PCB_SHAPE* seg : outlineSegments )
-                delete seg;
+            for( PCB_SHAPE* shape : outlineShapes )
+                delete shape;
 
             for( CUTOUT cutout : csCopper.Shape.Cutouts )
             {
-                std::vector<PCB_SHAPE*> cutoutSeg =
-                        getDrawSegmentsFromVertices( cutout.Vertices );
+                std::vector<PCB_SHAPE*> cutoutShapes = getShapesFromVertices( cutout.Vertices );
 
-                std::vector<PCB_TRACK*> cutoutTracks = makeTracksFromDrawsegments( cutoutSeg,
-                        m_board, getKiCadNet( csCopper.NetRef.NetID ),
-                        getKiCadLayer( csCopper.LayerID ),
-                        getKiCadLength( getCopperCode( csCopper.CopperCodeID ).CopperWidth ) );
+                std::vector<PCB_TRACK*> cutoutTracks = makeTracksFromShapes( cutoutShapes, m_board,
+                                                         getKiCadNet( csCopper.NetRef.NetID ),
+                                                         getKiCadLayer( csCopper.LayerID ),
+                                                         getKiCadLength( getCopperCode( csCopper.CopperCodeID ).CopperWidth ));
 
                 //cleanup
-                for( PCB_SHAPE* seg : cutoutSeg )
-                    delete seg;
+                for( PCB_SHAPE* shape : cutoutShapes )
+                    delete shape;
             }
         }
         else
@@ -2355,7 +2353,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks( const NET_ID&         aCadstarNe
 
     for( const NET_PCB::ROUTE_VERTEX& v : routeVertices )
     {
-        PCB_SHAPE* shape = getDrawSegmentFromVertex( prevEnd, v.Vertex );
+        PCB_SHAPE* shape = getShapeFromVertex( prevEnd, v.Vertex );
         shape->SetLayer( getKiCadLayer( aCadstarRoute.LayerID ) );
         shape->SetWidth( getKiCadLength( v.RouteWidth ) );
         shape->SetLocked( v.Fixed );
@@ -2364,7 +2362,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks( const NET_ID&         aCadstarNe
     }
 
     NETINFO_ITEM*           net = getKiCadNet( aCadstarNetID );
-    std::vector<PCB_TRACK*> tracks = makeTracksFromDrawsegments( shapes, m_board, net );
+    std::vector<PCB_TRACK*> tracks = makeTracksFromShapes( shapes, m_board, net );
 
     //cleanup
     for( PCB_SHAPE* shape : shapes )
@@ -2593,12 +2591,12 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
     case SHAPE_TYPE::OPENSHAPE:
     case SHAPE_TYPE::OUTLINE:
         ///TODO update this when Polygons in KiCad can be defined with no fill
-        drawCadstarVerticesAsSegments( aCadstarShape.Vertices, aKiCadLayer, aLineThickness,
-                aContainer, aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
-                aTransformCentre, aMirrorInvert );
-        drawCadstarCutoutsAsSegments( aCadstarShape.Cutouts, aKiCadLayer, aLineThickness,
-                aContainer, aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
-                aTransformCentre, aMirrorInvert );
+        drawCadstarVerticesAsShapes( aCadstarShape.Vertices, aKiCadLayer, aLineThickness,
+                                     aContainer, aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
+                                     aTransformCentre, aMirrorInvert );
+        drawCadstarCutoutsAsShapes( aCadstarShape.Cutouts, aKiCadLayer, aLineThickness,
+                                    aContainer, aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
+                                    aTransformCentre, aMirrorInvert );
         break;
 
     case SHAPE_TYPE::HATCHED:
@@ -2643,50 +2641,61 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
 }
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarCutoutsAsSegments( const std::vector<CUTOUT>& aCutouts,
-                                                               const PCB_LAYER_ID& aKiCadLayer,
-                                                               const int& aLineThickness,
-                                                               BOARD_ITEM_CONTAINER* aContainer,
-                                                               const GROUP_ID& aCadstarGroupID,
-                                                               const wxPoint& aMoveVector,
-                                                               const double& aRotationAngle,
-                                                               const double& aScalingFactor,
-                                                               const wxPoint& aTransformCentre,
-                                                               const bool& aMirrorInvert )
+void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarCutoutsAsShapes( const std::vector<CUTOUT>& aCutouts,
+                                                             const PCB_LAYER_ID& aKiCadLayer,
+                                                             const int& aLineThickness,
+                                                             BOARD_ITEM_CONTAINER* aContainer,
+                                                             const GROUP_ID& aCadstarGroupID,
+                                                             const wxPoint& aMoveVector,
+                                                             const double& aRotationAngle,
+                                                             const double& aScalingFactor,
+                                                             const wxPoint& aTransformCentre,
+                                                             const bool& aMirrorInvert )
 {
     for( CUTOUT cutout : aCutouts )
     {
-        drawCadstarVerticesAsSegments( cutout.Vertices, aKiCadLayer, aLineThickness, aContainer,
-                                       aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
-                                       aTransformCentre, aMirrorInvert );
+        drawCadstarVerticesAsShapes( cutout.Vertices, aKiCadLayer, aLineThickness, aContainer,
+                                     aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
+                                     aTransformCentre, aMirrorInvert );
     }
 }
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarVerticesAsSegments(
-        const std::vector<VERTEX>& aCadstarVertices, const PCB_LAYER_ID& aKiCadLayer,
-        const int& aLineThickness, BOARD_ITEM_CONTAINER* aContainer,
-        const GROUP_ID& aCadstarGroupID, const wxPoint& aMoveVector, const double& aRotationAngle,
-        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarVerticesAsShapes( const std::vector<VERTEX>& aCadstarVertices,
+                                                              const PCB_LAYER_ID& aKiCadLayer,
+                                                              const int& aLineThickness,
+                                                              BOARD_ITEM_CONTAINER* aContainer,
+                                                              const GROUP_ID& aCadstarGroupID,
+                                                              const wxPoint& aMoveVector,
+                                                              const double& aRotationAngle,
+                                                              const double& aScalingFactor,
+                                                              const wxPoint& aTransformCentre,
+                                                              const bool& aMirrorInvert )
 {
-    std::vector<PCB_SHAPE*> drawSegments =
-            getDrawSegmentsFromVertices( aCadstarVertices, aContainer, aCadstarGroupID, aMoveVector,
-                    aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert );
+    std::vector<PCB_SHAPE*> shapes = getShapesFromVertices( aCadstarVertices, aContainer,
+                                                            aCadstarGroupID, aMoveVector,
+                                                            aRotationAngle, aScalingFactor,
+                                                            aTransformCentre, aMirrorInvert );
 
-    for( PCB_SHAPE* ds : drawSegments )
+    for( PCB_SHAPE* shape : shapes )
     {
-        ds->SetWidth( aLineThickness );
-        ds->SetLayer( aKiCadLayer );
-        ds->SetParent( aContainer );
-        aContainer->Add( ds, ADD_MODE::APPEND );
+        shape->SetWidth( aLineThickness );
+        shape->SetLayer( aKiCadLayer );
+        shape->SetParent( aContainer );
+        aContainer->Add( shape, ADD_MODE::APPEND );
     }
 }
 
 
-std::vector<PCB_SHAPE*> CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentsFromVertices(
-        const std::vector<VERTEX>& aCadstarVertices, BOARD_ITEM_CONTAINER* aContainer,
-        const GROUP_ID& aCadstarGroupID, const wxPoint& aMoveVector, const double& aRotationAngle,
-        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+std::vector<PCB_SHAPE*> CADSTAR_PCB_ARCHIVE_LOADER::getShapesFromVertices(
+                                                    const std::vector<VERTEX>& aCadstarVertices,
+                                                    BOARD_ITEM_CONTAINER* aContainer,
+                                                    const GROUP_ID& aCadstarGroupID,
+                                                    const wxPoint& aMoveVector,
+                                                    const double& aRotationAngle,
+                                                    const double& aScalingFactor,
+                                                    const wxPoint& aTransformCentre,
+                                                    const bool& aMirrorInvert )
 {
     std::vector<PCB_SHAPE*> drawSegments;
 
@@ -2700,9 +2709,9 @@ std::vector<PCB_SHAPE*> CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentsFromVertices(
     for( size_t i = 1; i < aCadstarVertices.size(); i++ )
     {
         cur = &aCadstarVertices.at( i );
-        drawSegments.push_back(
-                getDrawSegmentFromVertex( prev->End, *cur, aContainer, aCadstarGroupID, aMoveVector,
-                        aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert ) );
+        drawSegments.push_back( getShapeFromVertex( prev->End, *cur, aContainer, aCadstarGroupID,
+                                                    aMoveVector, aRotationAngle, aScalingFactor,
+                                                    aTransformCentre, aMirrorInvert ) );
         prev = cur;
     }
 
@@ -2710,17 +2719,17 @@ std::vector<PCB_SHAPE*> CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentsFromVertices(
 }
 
 
-PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aCadstarStartPoint,
-                                                                 const VERTEX& aCadstarVertex,
-                                                                 BOARD_ITEM_CONTAINER* aContainer,
-                                                                 const GROUP_ID& aCadstarGroupID,
-                                                                 const wxPoint& aMoveVector,
-                                                                 const double& aRotationAngle,
-                                                                 const double& aScalingFactor,
-                                                                 const wxPoint& aTransformCentre,
-                                                                 const bool& aMirrorInvert )
+PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstarStartPoint,
+                                                           const VERTEX& aCadstarVertex,
+                                                           BOARD_ITEM_CONTAINER* aContainer,
+                                                           const GROUP_ID& aCadstarGroupID,
+                                                           const wxPoint& aMoveVector,
+                                                           const double& aRotationAngle,
+                                                           const double& aScalingFactor,
+                                                           const wxPoint& aTransformCentre,
+                                                           const bool& aMirrorInvert )
 {
-    PCB_SHAPE* ds = nullptr;
+    PCB_SHAPE* shape = nullptr;
     bool       cw = false;
     double     arcStartAngle, arcEndAngle, arcAngle;
 
@@ -2730,9 +2739,13 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aC
 
     if( aCadstarVertex.Type == VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE
             || aCadstarVertex.Type == VERTEX_TYPE::CLOCKWISE_SEMICIRCLE )
+    {
         centerPoint = ( startPoint + endPoint ) / 2;
+    }
     else
+    {
         centerPoint = getKiCadPoint( aCadstarVertex.Center );
+    }
 
     switch( aCadstarVertex.Type )
     {
@@ -2741,16 +2754,16 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aC
 
         if( isFootprint( aContainer ) )
         {
-            ds = new FP_SHAPE( static_cast<FOOTPRINT*>( aContainer ), PCB_SHAPE_TYPE::SEGMENT );
+            shape = new FP_SHAPE( static_cast<FOOTPRINT*>( aContainer ), PCB_SHAPE_TYPE::SEGMENT );
         }
         else
         {
-            ds = new PCB_SHAPE( aContainer );
-            ds->SetShape( PCB_SHAPE_TYPE::SEGMENT );
+            shape = new PCB_SHAPE( aContainer );
+            shape->SetShape( PCB_SHAPE_TYPE::SEGMENT );
         }
 
-        ds->SetStart( startPoint );
-        ds->SetEnd( endPoint );
+        shape->SetStart( startPoint );
+        shape->SetEnd( endPoint );
         break;
 
     case VERTEX_TYPE::CLOCKWISE_SEMICIRCLE:
@@ -2763,16 +2776,16 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aC
 
         if( isFootprint( aContainer ) )
         {
-            ds = new FP_SHAPE( (FOOTPRINT*) aContainer, PCB_SHAPE_TYPE::ARC );
+            shape = new FP_SHAPE((FOOTPRINT*) aContainer, PCB_SHAPE_TYPE::ARC );
         }
         else
         {
-            ds = new PCB_SHAPE( aContainer );
-            ds->SetShape( PCB_SHAPE_TYPE::ARC );
+            shape = new PCB_SHAPE( aContainer );
+            shape->SetShape( PCB_SHAPE_TYPE::ARC );
         }
 
-        ds->SetArcStart( startPoint );
-        ds->SetCenter( centerPoint );
+        shape->SetArcStart( startPoint );
+        shape->SetCenter( centerPoint );
 
         arcStartAngle = getPolarAngle( startPoint - centerPoint );
         arcEndAngle   = getPolarAngle( endPoint - centerPoint );
@@ -2781,37 +2794,37 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aC
         // with opposite start/end points and same centre point)
 
         if( cw )
-            ds->SetAngle( NormalizeAnglePos( arcAngle ) );
+            shape->SetAngle( NormalizeAnglePos( arcAngle ) );
         else
-            ds->SetAngle( NormalizeAngleNeg( arcAngle ) );
+            shape->SetAngle( NormalizeAngleNeg( arcAngle ) );
 
         break;
     }
 
     //Apply transforms
     if( aMirrorInvert )
-        ds->Flip( aTransformCentre, true );
+        shape->Flip( aTransformCentre, true );
 
     if( aScalingFactor != 1.0 )
     {
-        ds->Move( -aTransformCentre );
-        ds->Scale( aScalingFactor );
-        ds->Move( aTransformCentre );
+        shape->Move( -aTransformCentre );
+        shape->Scale( aScalingFactor );
+        shape->Move( aTransformCentre );
     }
 
     if( aRotationAngle != 0.0 )
-        ds->Rotate( aTransformCentre, aRotationAngle );
+        shape->Rotate( aTransformCentre, aRotationAngle );
 
     if( aMoveVector != wxPoint{ 0, 0 } )
-        ds->Move( aMoveVector );
+        shape->Move( aMoveVector );
 
-    if( isFootprint( aContainer ) && ds != nullptr )
-        static_cast<FP_SHAPE*>( ds )->SetLocalCoord();
+    if( isFootprint( aContainer ) && shape != nullptr )
+        static_cast<FP_SHAPE*>( shape )->SetLocalCoord();
 
     if( !aCadstarGroupID.IsEmpty() )
-        addToGroup( aCadstarGroupID, ds );
+        addToGroup( aCadstarGroupID, shape );
 
-    return ds;
+    return shape;
 }
 
 
@@ -2853,35 +2866,29 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
 {
     GROUP_ID noGroup = wxEmptyString;
 
-    std::vector<PCB_SHAPE*> outlineSegments = getDrawSegmentsFromVertices( aCadstarShape.Vertices,
-                                                                           aContainer, noGroup,
-                                                                           aMoveVector,
-                                                                           aRotationAngle,
-                                                                           aScalingFactor,
-                                                                           aTransformCentre,
-                                                                           aMirrorInvert );
+    std::vector<PCB_SHAPE*> outlineShapes = getShapesFromVertices( aCadstarShape.Vertices,
+                                                                   aContainer, noGroup, aMoveVector,
+                                                                   aRotationAngle, aScalingFactor,
+                                                                   aTransformCentre, aMirrorInvert );
 
-    SHAPE_POLY_SET polySet( getLineChainFromDrawsegments( outlineSegments ) );
+    SHAPE_POLY_SET polySet( getLineChainFromShapes( outlineShapes ) );
 
     //cleanup
-    for( PCB_SHAPE* seg : outlineSegments )
-            delete seg;
+    for( PCB_SHAPE* shape : outlineShapes )
+            delete shape;
 
     for( CUTOUT cutout : aCadstarShape.Cutouts )
     {
-        std::vector<PCB_SHAPE*> cutoutSeg = getDrawSegmentsFromVertices( cutout.Vertices,
-                                                                         aContainer, noGroup,
-                                                                         aMoveVector,
-                                                                         aRotationAngle,
-                                                                         aScalingFactor,
-                                                                         aTransformCentre,
-                                                                         aMirrorInvert );
+        std::vector<PCB_SHAPE*> cutoutShapes = getShapesFromVertices( cutout.Vertices, aContainer,
+                                                                      noGroup, aMoveVector,
+                                                                      aRotationAngle, aScalingFactor,
+                                                                      aTransformCentre, aMirrorInvert );
 
-        polySet.AddHole( getLineChainFromDrawsegments( cutoutSeg ) );
+        polySet.AddHole( getLineChainFromShapes( cutoutShapes ) );
 
         //cleanup
-        for( PCB_SHAPE* seg : cutoutSeg )
-            delete seg;
+        for( PCB_SHAPE* shape : cutoutShapes )
+            delete shape;
     }
 
     if( aLineThickness > 0 )
@@ -2903,40 +2910,40 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
 }
 
 
-SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments( const std::vector<PCB_SHAPE*> aDrawsegments )
+SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromShapes( const std::vector<PCB_SHAPE*> aShapes )
 {
     SHAPE_LINE_CHAIN lineChain;
 
-    for( PCB_SHAPE* ds : aDrawsegments )
+    for( PCB_SHAPE* shape : aShapes )
     {
-        switch( ds->GetShape() )
+        switch( shape->GetShape() )
         {
         case PCB_SHAPE_TYPE::ARC:
         {
-            if( ds->GetClass() == wxT( "MGRAPHIC" ) )
+            if( shape->GetClass() == wxT( "MGRAPHIC" ) )
             {
-                FP_SHAPE* em = (FP_SHAPE*) ds;
-                SHAPE_ARC arc( em->GetStart0(), em->GetEnd0(), (double) em->GetAngle() / 10.0 );
+                FP_SHAPE* fp_shape = (FP_SHAPE*) shape;
+                SHAPE_ARC arc( fp_shape->GetStart0(), fp_shape->GetEnd0(), fp_shape->GetAngle() / 10.0 );
                 lineChain.Append( arc );
             }
             else
             {
-                SHAPE_ARC arc( ds->GetCenter(), ds->GetArcStart(), (double) ds->GetAngle() / 10.0 );
+                SHAPE_ARC arc( shape->GetCenter(), shape->GetArcStart(), shape->GetAngle() / 10.0 );
                 lineChain.Append( arc );
             }
         }
         break;
         case PCB_SHAPE_TYPE::SEGMENT:
-            if( ds->GetClass() == wxT( "MGRAPHIC" ) )
+            if( shape->GetClass() == wxT( "MGRAPHIC" ) )
             {
-                FP_SHAPE* em = (FP_SHAPE*) ds;
-                lineChain.Append( em->GetStart0().x, em->GetStart0().y );
-                lineChain.Append( em->GetEnd0().x, em->GetEnd0().y );
+                FP_SHAPE* fp_shape = (FP_SHAPE*) shape;
+                lineChain.Append( fp_shape->GetStart0().x, fp_shape->GetStart0().y );
+                lineChain.Append( fp_shape->GetEnd0().x, fp_shape->GetEnd0().y );
             }
             else
             {
-                lineChain.Append( ds->GetStartX(), ds->GetStartY() );
-                lineChain.Append( ds->GetEndX(), ds->GetEndY() );
+                lineChain.Append( shape->GetStartX(), shape->GetStartY() );
+                lineChain.Append( shape->GetEndX(), shape->GetEndY() );
             }
             break;
 
@@ -2960,8 +2967,8 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments( const
 }
 
 
-std::vector<PCB_TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
-                                                  const std::vector<PCB_SHAPE*> aDrawsegments,
+std::vector<PCB_TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromShapes(
+                                                  const std::vector<PCB_SHAPE*> aShapes,
                                                   BOARD_ITEM_CONTAINER* aParentContainer,
                                                   NETINFO_ITEM* aNet, PCB_LAYER_ID aLayerOverride,
                                                   int aWidthOverride )
@@ -2989,36 +2996,36 @@ std::vector<PCB_TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
                 }
             };
 
-    for( PCB_SHAPE* ds : aDrawsegments )
+    for( PCB_SHAPE* shape : aShapes )
     {
-        switch( ds->GetShape() )
+        switch( shape->GetShape() )
         {
         case PCB_SHAPE_TYPE::ARC:
-            if( ds->GetClass() == wxT( "MGRAPHIC" ) )
+            if( shape->GetClass() == wxT( "MGRAPHIC" ) )
             {
-                FP_SHAPE* em = (FP_SHAPE*) ds;
-                SHAPE_ARC arc( em->GetStart0(), em->GetEnd0(), (double) em->GetAngle() / 10.0 );
+                FP_SHAPE* fp_shape = (FP_SHAPE*) shape;
+                SHAPE_ARC arc( fp_shape->GetStart0(), fp_shape->GetEnd0(), fp_shape->GetAngle() / 10.0 );
                 track = new PCB_ARC( aParentContainer, &arc );
             }
             else
             {
-                SHAPE_ARC arc( ds->GetCenter(), ds->GetArcStart(), (double) ds->GetAngle() / 10.0 );
+                SHAPE_ARC arc( shape->GetCenter(), shape->GetArcStart(), shape->GetAngle() / 10.0 );
                 track = new PCB_ARC( aParentContainer, &arc );
             }
             break;
         case PCB_SHAPE_TYPE::SEGMENT:
-            if( ds->GetClass() == wxT( "MGRAPHIC" ) )
+            if( shape->GetClass() == wxT( "MGRAPHIC" ) )
             {
-                FP_SHAPE* em = (FP_SHAPE*) ds;
+                FP_SHAPE* fp_shape = (FP_SHAPE*) shape;
                 track = new PCB_TRACK( aParentContainer );
-                track->SetStart( em->GetStart0() );
-                track->SetEnd( em->GetEnd0() );
+                track->SetStart( fp_shape->GetStart0() );
+                track->SetEnd( fp_shape->GetEnd0() );
             }
             else
             {
                 track = new PCB_TRACK( aParentContainer );
-                track->SetStart( ds->GetStart() );
-                track->SetEnd( ds->GetEnd() );
+                track->SetStart( shape->GetStart() );
+                track->SetEnd( shape->GetEnd() );
             }
             break;
 
@@ -3028,19 +3035,19 @@ std::vector<PCB_TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
         }
 
         if( aWidthOverride == -1 )
-            track->SetWidth( ds->GetWidth() );
+            track->SetWidth( shape->GetWidth() );
         else
             track->SetWidth( aWidthOverride );
 
         if( aLayerOverride == PCB_LAYER_ID::UNDEFINED_LAYER )
-            track->SetLayer( ds->GetLayer() );
+            track->SetLayer( shape->GetLayer() );
         else
             track->SetLayer( aLayerOverride );
 
         if( aNet != nullptr )
             track->SetNet( aNet );
 
-        track->SetLocked( ds->IsLocked() );
+        track->SetLocked( shape->IsLocked() );
 
         // Apply route offsetting, mimmicking the behaviour of the CADSTAR post processor
         if( prevTrack != nullptr )

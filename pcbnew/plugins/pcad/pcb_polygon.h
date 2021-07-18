@@ -42,7 +42,7 @@ public:
     PCB_POLYGON( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
     ~PCB_POLYGON();
 
-    virtual bool Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
+    virtual bool Parse( XNODE* aNode, const wxString& aDefaultUnits,
                         const wxString& aActualConversion );
 
     virtual void SetPosOffset( int aX_offs, int aY_offs ) override;
@@ -59,7 +59,7 @@ public:
     void SetOutline( VERTICES_ARRAY* aOutline );
 
     void FormPolygon( XNODE* aNode, VERTICES_ARRAY* aPolygon,
-                      const wxString& aDefaultMeasurementUnit, const wxString& actualConversion );
+                      const wxString& aDefaultUnits, const wxString& actualConversion );
 
     int             m_width;
     int             m_priority;

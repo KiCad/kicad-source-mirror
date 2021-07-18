@@ -893,8 +893,8 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
         m_out->Print( aNestLevel, "(gr_curve%s (pts (xy %s) (xy %s) (xy %s) (xy %s))",
                       locked.c_str(),
                       FormatInternalUnits( aShape->GetStart() ).c_str(),
-                      FormatInternalUnits( aShape->GetBezControl1() ).c_str(),
-                      FormatInternalUnits( aShape->GetBezControl2() ).c_str(),
+                      FormatInternalUnits( aShape->GetBezierC1() ).c_str(),
+                      FormatInternalUnits( aShape->GetBezierC2() ).c_str(),
                       FormatInternalUnits( aShape->GetEnd() ).c_str() );
         break;
 
@@ -1018,8 +1018,8 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
         m_out->Print( aNestLevel, "(fp_curve%s (pts (xy %s) (xy %s) (xy %s) (xy %s))",
                       locked.c_str(),
                       FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
-                      FormatInternalUnits( aFPShape->GetBezier0_C1() ).c_str(),
-                      FormatInternalUnits( aFPShape->GetBezier0_C2() ).c_str(),
+                      FormatInternalUnits( aFPShape->GetBezierC1_0() ).c_str(),
+                      FormatInternalUnits( aFPShape->GetBezierC2_0() ).c_str(),
                       FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
         break;
 
@@ -1636,8 +1636,8 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
             case PCB_SHAPE_TYPE::CURVE: //  Bezier Curve
                 m_out->Print( nested_level, "(gr_curve (pts (xy %s) (xy %s) (xy %s) (xy %s))",
                               FormatInternalUnits( primitive->GetStart() ).c_str(),
-                              FormatInternalUnits( primitive->GetBezControl1() ).c_str(),
-                              FormatInternalUnits( primitive->GetBezControl2() ).c_str(),
+                              FormatInternalUnits( primitive->GetBezierC1() ).c_str(),
+                              FormatInternalUnits( primitive->GetBezierC2() ).c_str(),
                               FormatInternalUnits( primitive->GetEnd() ).c_str() );
                 break;
 

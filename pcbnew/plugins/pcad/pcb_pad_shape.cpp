@@ -32,8 +32,8 @@
 
 namespace PCAD2KICAD {
 
-PCB_PAD_SHAPE::PCB_PAD_SHAPE( PCB_CALLBACKS*    aCallbacks,
-                              BOARD*            aBoard ) : PCB_COMPONENT( aCallbacks, aBoard )
+PCB_PAD_SHAPE::PCB_PAD_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+    PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_Shape     = wxEmptyString;
     m_Width     = 0;
@@ -46,8 +46,7 @@ PCB_PAD_SHAPE::~PCB_PAD_SHAPE()
 }
 
 
-void PCB_PAD_SHAPE::Parse( XNODE*          aNode,
-                           const wxString& aDefaultMeasurementUnit,
+void PCB_PAD_SHAPE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                            const wxString& aActualConversion )
 {
     wxString    str, s;
@@ -83,14 +82,12 @@ void PCB_PAD_SHAPE::Parse( XNODE*          aNode,
         lNode = FindNode( aNode, wxT( "shapeWidth" ) );
 
         if( lNode )
-            SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Width,
-                      aActualConversion );
+            SetWidth( lNode->GetNodeContent(), aDefaultUnits, &m_Width, aActualConversion );
 
         lNode = FindNode( aNode, wxT( "shapeHeight" ) );
 
         if( lNode )
-            SetWidth(
-                    lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Height, aActualConversion );
+            SetWidth( lNode->GetNodeContent(), aDefaultUnits, &m_Height, aActualConversion );
     }
     else if( m_Shape == wxT( "Polygon" ) )
     {
@@ -108,7 +105,7 @@ void PCB_PAD_SHAPE::Parse( XNODE*          aNode,
         while( lNode )
         {
             s = lNode->GetNodeContent();
-            SetPosition( s, aDefaultMeasurementUnit, &x, &y, aActualConversion );
+            SetPosition( s, aDefaultUnits, &x, &y, aActualConversion );
 
             if( minX > x )
                 minX = x;

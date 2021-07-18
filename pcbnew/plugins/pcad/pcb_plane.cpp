@@ -46,8 +46,7 @@ PCB_PLANE::~PCB_PLANE()
 }
 
 
-bool PCB_PLANE::Parse( XNODE*          aNode,
-                       const wxString& aDefaultMeasurementUnit,
+bool PCB_PLANE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                        const wxString& aActualConversion )
 {
     XNODE*          lNode;
@@ -65,15 +64,17 @@ bool PCB_PLANE::Parse( XNODE*          aNode,
     }
 
     if( FindNode( aNode, wxT( "width" ) ) )
-        SetWidth( FindNode( aNode, wxT( "width" ) )->GetNodeContent(),
-                  aDefaultMeasurementUnit, &m_width, aActualConversion );
+    {
+        SetWidth( FindNode( aNode, wxT( "width" ) )->GetNodeContent(), aDefaultUnits, &m_width,
+                  aActualConversion );
+    }
 
     lNode = FindNode( aNode, wxT( "pcbPoly" ) );
 
     if( lNode )
     {
         // retrieve plane outline
-        FormPolygon( lNode, &m_outline, aDefaultMeasurementUnit, aActualConversion );
+        FormPolygon( lNode, &m_outline, aDefaultUnits, aActualConversion );
 
         m_positionX = m_outline[0]->x;
         m_positionY = m_outline[0]->y;

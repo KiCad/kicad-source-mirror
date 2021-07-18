@@ -40,7 +40,7 @@ public:
     PCB_VIA_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_VIA_SHAPE();
 
-    virtual void Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
+    virtual void Parse( XNODE* aNode, const wxString& aDefaultUnits,
                         const wxString& aActualConversion ) override;
 };
 

@@ -164,8 +164,8 @@ void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D
     spline->SetLayer( GetLayer() );
     spline->SetWidth( MapLineWidth( aWidth ) );
     spline->SetStart( MapCoordinate( aStart ) );
-    spline->SetBezControl1( MapCoordinate( BezierControl1 ) );
-    spline->SetBezControl2( MapCoordinate( BezierControl2 ) );
+    spline->SetBezierC1( MapCoordinate( BezierControl1 ));
+    spline->SetBezierC2( MapCoordinate( BezierControl2 ));
     spline->SetEnd( MapCoordinate( aEnd ) );
     spline->RebuildBezierToSegmentsPointsList( aWidth );
 

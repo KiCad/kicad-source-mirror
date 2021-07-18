@@ -32,8 +32,8 @@
 
 namespace PCAD2KICAD {
 
-PCB_VIA_SHAPE::PCB_VIA_SHAPE( PCB_CALLBACKS*    aCallbacks,
-                              BOARD*            aBoard ) : PCB_PAD_SHAPE( aCallbacks, aBoard )
+PCB_VIA_SHAPE::PCB_VIA_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+    PCB_PAD_SHAPE( aCallbacks, aBoard )
 {
 }
 
@@ -43,8 +43,7 @@ PCB_VIA_SHAPE::~PCB_VIA_SHAPE()
 }
 
 
-void PCB_VIA_SHAPE::Parse( XNODE*          aNode,
-                           const wxString& aDefaultMeasurementUnit,
+void PCB_VIA_SHAPE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                            const wxString& aActualConversion )
 {
     XNODE*      lNode;
@@ -72,12 +71,12 @@ void PCB_VIA_SHAPE::Parse( XNODE*          aNode,
     lNode = FindNode( aNode, wxT( "shapeWidth" ) );
 
     if( lNode )
-        SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Width, aActualConversion );
+        SetWidth( lNode->GetNodeContent(), aDefaultUnits, &m_Width, aActualConversion );
 
     lNode = FindNode( aNode, wxT( "shapeHeight" ) );
 
     if( lNode )
-        SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Height, aActualConversion );
+        SetWidth( lNode->GetNodeContent(), aDefaultUnits, &m_Height, aActualConversion );
 
 }
 

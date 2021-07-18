@@ -46,7 +46,7 @@ PCB_TEXT::~PCB_TEXT()
 }
 
 
-void PCB_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultMeasurementUnit,
+void PCB_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
                       const wxString& aActualConversion )
 {
     XNODE*      lNode;
@@ -61,7 +61,7 @@ void PCB_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultMeasurem
 
     if( lNode )
     {
-        SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_positionX, &m_positionY,
+        SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_positionX, &m_positionY,
                      aActualConversion );
     }
 
@@ -88,7 +88,7 @@ void PCB_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultMeasurem
     lNode = FindNode( aNode, wxT( "textStyleRef" ) );
 
     if( lNode )
-        SetFontProperty( lNode, &m_name, aDefaultMeasurementUnit, aActualConversion );
+        SetFontProperty( lNode, &m_name, aDefaultUnits, aActualConversion );
 }
 
 

@@ -37,8 +37,8 @@
 
 namespace PCAD2KICAD {
 
-PCB_LINE::PCB_LINE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) : PCB_COMPONENT( aCallbacks,
-                                                                                aBoard )
+PCB_LINE::PCB_LINE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+    PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_Width     = 0;
     m_ToX       = 0;
@@ -52,9 +52,7 @@ PCB_LINE::~PCB_LINE()
 }
 
 
-void PCB_LINE::Parse( XNODE*          aNode,
-                      int             aLayer,
-                      const wxString& aDefaultMeasurementUnit,
+void PCB_LINE::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
                       const wxString& aActualConversion )
 {
     XNODE*      lNode;
@@ -70,20 +68,21 @@ void PCB_LINE::Parse( XNODE*          aNode,
     lNode   = FindNode( aNode, wxT( "pt" ) );
 
     if( lNode )
-        SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
-                     &m_positionX, &m_positionY, aActualConversion );
+    {
+        SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_positionX, &m_positionY,
+                     aActualConversion );
+    }
 
     if( lNode )
         lNode = lNode->GetNext();
 
     if( lNode )
-        SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
-                     &m_ToX, &m_ToY, aActualConversion );
+        SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_ToX, &m_ToY, aActualConversion );
 
     lNode = FindNode( aNode, wxT( "width" ) );
 
     if( lNode )
-        SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Width, aActualConversion );
+        SetWidth( lNode->GetNodeContent(), aDefaultUnits, &m_Width, aActualConversion );
 
     lNode = FindNode( aNode, wxT( "netNameRef" ) );
 
@@ -123,8 +122,8 @@ void PCB_LINE::AddToFootprint( FOOTPRINT* aFootprint )
         FP_SHAPE* segment = new FP_SHAPE( aFootprint, PCB_SHAPE_TYPE::SEGMENT );
         aFootprint->Add( segment );
 
-        segment->m_Start0   = wxPoint( m_positionX, m_positionY );
-        segment->m_End0     = wxPoint( m_ToX, m_ToY );
+        segment->SetStart0( wxPoint( m_positionX, m_positionY ) );
+        segment->SetEnd0( wxPoint( m_ToX, m_ToY ) );
 
         segment->SetWidth( m_Width );
         segment->SetLayer( m_KiCadLayer );

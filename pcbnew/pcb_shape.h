@@ -109,11 +109,11 @@ public:
     void SetShape( PCB_SHAPE_TYPE aShape )          { m_shape = aShape; }
     PCB_SHAPE_TYPE GetShape() const                 { return m_shape; }
 
-    void SetBezControl1( const wxPoint& aPoint )    { m_bezierC1 = aPoint; }
-    const wxPoint& GetBezControl1() const           { return m_bezierC1; }
+    void SetBezierC1( const wxPoint& aPoint )       { m_bezierC1 = aPoint; }
+    const wxPoint& GetBezierC1() const              { return m_bezierC1; }
 
-    void SetBezControl2( const wxPoint& aPoint )    { m_bezierC2 = aPoint; }
-    const wxPoint& GetBezControl2() const           { return m_bezierC2; }
+    void SetBezierC2( const wxPoint& aPoint )       { m_bezierC2 = aPoint; }
+    const wxPoint& GetBezierC2() const              { return m_bezierC2; }
 
     void SetPosition( const wxPoint& aPos ) override;
     wxPoint GetPosition() const override;

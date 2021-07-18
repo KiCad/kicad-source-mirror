@@ -1212,43 +1212,44 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
                 {
                 case PCB_SHAPE_TYPE::SEGMENT:
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             shape->m_Start0.x / SCALE_FACTOR,
-                             -shape->m_Start0.y / SCALE_FACTOR,
-                             shape->m_End0.x / SCALE_FACTOR,
-                             -shape->m_End0.y / SCALE_FACTOR );
+                             shape->GetStart0().x / SCALE_FACTOR,
+                             -shape->GetStart0().y / SCALE_FACTOR,
+                             shape->GetEnd0().x / SCALE_FACTOR,
+                             -shape->GetEnd0().y / SCALE_FACTOR );
                     break;
 
                 case PCB_SHAPE_TYPE::RECT:
                 {
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             shape->m_Start0.x / SCALE_FACTOR,
-                             -shape->m_Start0.y / SCALE_FACTOR,
-                             shape->m_End0.x / SCALE_FACTOR,
-                             -shape->m_Start0.y / SCALE_FACTOR );
+                             shape->GetStart0().x / SCALE_FACTOR,
+                             -shape->GetStart0().y / SCALE_FACTOR,
+                             shape->GetEnd0().x / SCALE_FACTOR,
+                             -shape->GetStart0().y / SCALE_FACTOR );
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             shape->m_End0.x / SCALE_FACTOR,
-                             -shape->m_Start0.y / SCALE_FACTOR,
-                             shape->m_End0.x / SCALE_FACTOR,
-                             -shape->m_End0.y / SCALE_FACTOR );
+                             shape->GetEnd0().x / SCALE_FACTOR,
+                             -shape->GetStart0().y / SCALE_FACTOR,
+                             shape->GetEnd0().x / SCALE_FACTOR,
+                             -shape->GetEnd0().y / SCALE_FACTOR );
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             shape->m_End0.x / SCALE_FACTOR,
-                             -shape->m_End0.y / SCALE_FACTOR,
-                             shape->m_Start0.x / SCALE_FACTOR,
-                             -shape->m_End0.y / SCALE_FACTOR );
+                             shape->GetEnd0().x / SCALE_FACTOR,
+                             -shape->GetEnd0().y / SCALE_FACTOR,
+                             shape->GetStart0().x / SCALE_FACTOR,
+                             -shape->GetEnd0().y / SCALE_FACTOR );
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             shape->m_Start0.x / SCALE_FACTOR,
-                             -shape->m_End0.y / SCALE_FACTOR,
-                             shape->m_Start0.x / SCALE_FACTOR,
-                             -shape->m_Start0.y / SCALE_FACTOR );
+                             shape->GetStart0().x / SCALE_FACTOR,
+                             -shape->GetEnd0().y / SCALE_FACTOR,
+                             shape->GetStart0().x / SCALE_FACTOR,
+                             -shape->GetStart0().y / SCALE_FACTOR );
                 }
                     break;
 
                 case PCB_SHAPE_TYPE::CIRCLE:
                 {
-                    int radius = KiROUND( GetLineLength( shape->m_End0, shape->m_Start0 ) );
+                    int radius = KiROUND( GetLineLength( shape->GetEnd0(), shape->GetStart0() ) );
+
                     fprintf( aFile, "CIRCLE %g %g %g\n",
-                             shape->m_Start0.x / SCALE_FACTOR,
-                             -shape->m_Start0.y / SCALE_FACTOR,
+                             shape->GetStart0().x / SCALE_FACTOR,
+                             -shape->GetStart0().y / SCALE_FACTOR,
                              radius / SCALE_FACTOR );
                     break;
                 }
@@ -1256,14 +1257,14 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
                 case PCB_SHAPE_TYPE::ARC:
                 {
                     int arcendx, arcendy;
-                    arcendx = shape->m_End0.x - shape->m_Start0.x;
-                    arcendy = shape->m_End0.y - shape->m_Start0.y;
+                    arcendx = shape->GetEnd0().x - shape->GetStart0().x;
+                    arcendy = shape->GetEnd0().y - shape->GetStart0().y;
                     RotatePoint( &arcendx, &arcendy, -shape->GetAngle() );
                     arcendx += shape->GetStart0().x;
                     arcendy += shape->GetStart0().y;
 
                     fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                             shape->m_End0.x / SCALE_FACTOR,
+                             shape->GetEnd0().x / SCALE_FACTOR,
                              -shape->GetEnd0().y / SCALE_FACTOR,
                              arcendx / SCALE_FACTOR,
                              -arcendy / SCALE_FACTOR,

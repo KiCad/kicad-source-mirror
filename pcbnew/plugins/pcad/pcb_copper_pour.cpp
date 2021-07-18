@@ -33,9 +33,7 @@
 
 namespace PCAD2KICAD {
 
-PCB_COPPER_POUR::PCB_COPPER_POUR( PCB_CALLBACKS*    aCallbacks,
-                                  BOARD*            aBoard,
-                                  int               aPCadLayer ) :
+PCB_COPPER_POUR::PCB_COPPER_POUR( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer ) :
     PCB_POLYGON( aCallbacks, aBoard, aPCadLayer )
 {
     m_filled = false;
@@ -47,8 +45,7 @@ PCB_COPPER_POUR::~PCB_COPPER_POUR()
 }
 
 
-bool PCB_COPPER_POUR::Parse( XNODE*          aNode,
-                             const wxString& aDefaultMeasurementUnit,
+bool PCB_COPPER_POUR::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                              const wxString& aActualConversion )
 {
     XNODE*          lNode;
@@ -67,16 +64,22 @@ bool PCB_COPPER_POUR::Parse( XNODE*          aNode,
     }
 
     if( FindNode( aNode, wxT( "width" ) ) )
-        SetWidth( FindNode( aNode, wxT( "width" ) )->GetNodeContent(),
-                  aDefaultMeasurementUnit, &m_width, aActualConversion );
+    {
+        SetWidth( FindNode( aNode, wxT( "width" ) )->GetNodeContent(), aDefaultUnits, &m_width,
+                  aActualConversion );
+    }
 
     if( FindNode( aNode, wxT( "pourSpacing" ) ) )
-        SetWidth( FindNode( aNode, wxT( "pourSpacing" ) )->GetNodeContent(),
-                  aDefaultMeasurementUnit, &pourSpacing, aActualConversion );
+    {
+        SetWidth( FindNode( aNode, wxT( "pourSpacing" ) )->GetNodeContent(), aDefaultUnits,
+                  &pourSpacing, aActualConversion );
+    }
 
     if( FindNode( aNode, wxT( "thermalWidth" ) ) )
-        SetWidth( FindNode( aNode, wxT( "thermalWidth" ) )->GetNodeContent(),
-                  aDefaultMeasurementUnit, &thermalWidth, aActualConversion );
+    {
+        SetWidth( FindNode( aNode, wxT( "thermalWidth" ) )->GetNodeContent(), aDefaultUnits,
+                  &thermalWidth, aActualConversion );
+    }
 
     if( FindNode( aNode, wxT( "island" ) ) )
         m_filled = true;
@@ -86,7 +89,7 @@ bool PCB_COPPER_POUR::Parse( XNODE*          aNode,
     if( lNode )
     {
         // retrieve copper pour outline
-        FormPolygon( lNode, &m_outline, aDefaultMeasurementUnit, aActualConversion );
+        FormPolygon( lNode, &m_outline, aDefaultUnits, aActualConversion );
 
         m_positionX = m_outline[0]->x;
         m_positionY = m_outline[0]->y;

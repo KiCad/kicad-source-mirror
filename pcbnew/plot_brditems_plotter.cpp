@@ -679,8 +679,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
         break;
 
     case PCB_SHAPE_TYPE::CURVE:
-        m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezControl1(),
-                                aShape->GetBezControl2(), aShape->GetEnd(), 0, thickness );
+        m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezierC1(),
+                                aShape->GetBezierC2(), aShape->GetEnd(), 0, thickness );
         break;
 
     default:
@@ -921,8 +921,8 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
         break;
 
     case PCB_SHAPE_TYPE::CURVE:
-        m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezControl1(),
-                                aShape->GetBezControl2(), aShape->GetEnd(), 0, thickness );
+        m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezierC1(),
+                                aShape->GetBezierC2(), aShape->GetEnd(), 0, thickness );
         break;
 
     case PCB_SHAPE_TYPE::POLYGON:

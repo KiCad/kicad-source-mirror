@@ -39,7 +39,7 @@ public:
     PCB_PLANE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
     ~PCB_PLANE();
 
-    virtual bool Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
+    virtual bool Parse( XNODE* aNode, const wxString& aDefaultUnits,
                         const wxString& aActualConversion ) override;
 };
 

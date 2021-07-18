@@ -101,10 +101,10 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_startY.SetValue( m_shape->GetStart().y );
         m_endX.SetValue( m_shape->GetEnd().x );
         m_endY.SetValue( m_shape->GetEnd().y );
-        m_ctrl1X.SetValue( m_shape->GetBezControl1().x );
-        m_ctrl1Y.SetValue( m_shape->GetBezControl1().y );
-        m_ctrl2X.SetValue( m_shape->GetBezControl2().x );
-        m_ctrl2Y.SetValue( m_shape->GetBezControl2().y );
+        m_ctrl1X.SetValue( m_shape->GetBezierC1().x );
+        m_ctrl1Y.SetValue( m_shape->GetBezierC1().y );
+        m_ctrl2X.SetValue( m_shape->GetBezierC2().x );
+        m_ctrl2Y.SetValue( m_shape->GetBezierC2().y );
         m_radius.Show( false );
         m_filledCtrl->Show( false );
         break;
@@ -192,8 +192,8 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
     case PCB_SHAPE_TYPE::CURVE: // Segment with rounded ends
         m_shape->SetStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
         m_shape->SetEnd( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
-        m_shape->SetBezControl1( wxPoint( m_ctrl1X.GetValue(), m_ctrl1Y.GetValue() ) );
-        m_shape->SetBezControl1( wxPoint( m_ctrl2X.GetValue(), m_ctrl2Y.GetValue() ) );
+        m_shape->SetBezierC1( wxPoint( m_ctrl1X.GetValue(), m_ctrl1Y.GetValue()));
+        m_shape->SetBezierC1( wxPoint( m_ctrl2X.GetValue(), m_ctrl2Y.GetValue()));
         break;
 
     case PCB_SHAPE_TYPE::ARC: // Arc with rounded ends

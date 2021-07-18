@@ -227,8 +227,8 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
         case PCB_SHAPE_TYPE::CURVE:
             points->AddPoint( shape->GetStart() );
-            points->AddPoint( shape->GetBezControl1() );
-            points->AddPoint( shape->GetBezControl2() );
+            points->AddPoint( shape->GetBezierC1() );
+            points->AddPoint( shape->GetBezierC2() );
             points->AddPoint( shape->GetEnd() );
             break;
 
@@ -1153,9 +1153,9 @@ void PCB_POINT_EDITOR::updateItem() const
             if( isModified( m_editPoints->Point( BEZIER_CURVE_START ) ) )
                 shape->SetStart( (wxPoint) m_editPoints->Point( BEZIER_CURVE_START ).GetPosition() );
             else if( isModified( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ) ) )
-                shape->SetBezControl1( (wxPoint) m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition() );
+                shape->SetBezierC1((wxPoint) m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition());
             else if( isModified( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ) ) )
-                shape->SetBezControl2( (wxPoint) m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition() );
+                shape->SetBezierC2((wxPoint) m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition());
             else if( isModified( m_editPoints->Point( BEZIER_CURVE_END ) ) )
                 shape->SetEnd( (wxPoint) m_editPoints->Point( BEZIER_CURVE_END ).GetPosition() );
 
@@ -1587,8 +1587,8 @@ void PCB_POINT_EDITOR::updatePoints()
 
         case PCB_SHAPE_TYPE::CURVE:
             m_editPoints->Point( BEZIER_CURVE_START ).SetPosition( shape->GetStart() );
-            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).SetPosition( shape->GetBezControl1() );
-            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).SetPosition( shape->GetBezControl2() );
+            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).SetPosition( shape->GetBezierC1() );
+            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).SetPosition( shape->GetBezierC2() );
             m_editPoints->Point( BEZIER_CURVE_END ).SetPosition( shape->GetEnd() );
             break;
 

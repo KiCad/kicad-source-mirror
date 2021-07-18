@@ -2417,8 +2417,8 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
             Expecting( T_pts );
 
         shape->SetStart( parseXY() );
-        shape->SetBezControl1( parseXY() );
-        shape->SetBezControl2( parseXY() );
+        shape->SetBezierC1( parseXY());
+        shape->SetBezierC2( parseXY());
         shape->SetEnd( parseXY() );
         NeedRIGHT();
         break;
@@ -3616,8 +3616,8 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
         if( token != T_angle )
             Expecting( T_angle );
 
-        // Setting angle will set m_ThirdPoint0, so must be done after setting
-        // m_Start0 and m_End0
+        // Setting angle will set m_thirdPoint0, so must be done after setting
+        // m_start0 and m_end0
         shape->SetAngle( parseDouble( "segment angle" ) * 10.0 );
         NeedRIGHT();
         break;
@@ -3675,8 +3675,8 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
             Expecting( T_pts );
 
         shape->SetStart0( parseXY() );
-        shape->SetBezier0_C1( parseXY() );
-        shape->SetBezier0_C2( parseXY() );
+        shape->SetBezierC1_0( parseXY());
+        shape->SetBezierC2_0( parseXY());
         shape->SetEnd0( parseXY() );
         NeedRIGHT();
         break;
@@ -4323,8 +4323,8 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_gr_curve:
                     dummysegm = parsePCB_SHAPE();
                     pad->AddPrimitiveCurve( dummysegm->GetStart(), dummysegm->GetEnd(),
-                                            dummysegm->GetBezControl1(),
-                                            dummysegm->GetBezControl2(), dummysegm->GetWidth() );
+                                            dummysegm->GetBezierC1(),
+                                            dummysegm->GetBezierC2(), dummysegm->GetWidth() );
                     break;
 
                 default:

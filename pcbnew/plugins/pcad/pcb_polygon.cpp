@@ -26,7 +26,6 @@
 #include <pcad/pcb_polygon.h>
 
 #include <board.h>
-#include <common.h>
 #include <footprint.h>
 #include <fp_shape.h>
 #include <math/util.h>      // for KiROUND
@@ -107,9 +106,8 @@ void PCB_POLYGON::SetOutline( VERTICES_ARRAY* aOutline )
     }
 }
 
-void PCB_POLYGON::FormPolygon( XNODE*   aNode, VERTICES_ARRAY* aPolygon,
-                               const wxString& aDefaultMeasurementUnit,
-                               const wxString& aActualConversion )
+void PCB_POLYGON::FormPolygon( XNODE* aNode, VERTICES_ARRAY* aPolygon,
+                               const wxString& aDefaultUnits, const wxString& aActualConversion )
 {
     XNODE*      lNode;
     double      x, y;
@@ -120,8 +118,8 @@ void PCB_POLYGON::FormPolygon( XNODE*   aNode, VERTICES_ARRAY* aPolygon,
     {
         if( lNode->GetName() == wxT( "pt" ) )
         {
-            SetDoublePrecisionPosition(
-                lNode->GetNodeContent(), aDefaultMeasurementUnit, &x, &y, aActualConversion );
+            SetDoublePrecisionPosition( lNode->GetNodeContent(), aDefaultUnits, &x, &y,
+                                        aActualConversion );
             aPolygon->Add( new wxRealPoint( x, y ) );
         }
 
@@ -130,8 +128,7 @@ void PCB_POLYGON::FormPolygon( XNODE*   aNode, VERTICES_ARRAY* aPolygon,
 }
 
 
-bool PCB_POLYGON::Parse( XNODE*          aNode,
-                         const wxString& aDefaultMeasurementUnit,
+bool PCB_POLYGON::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                          const wxString& aActualConversion )
 {
     XNODE*      lNode;
@@ -149,14 +146,14 @@ bool PCB_POLYGON::Parse( XNODE*          aNode,
     }
 
     // retrieve polygon outline
-    FormPolygon( aNode, &m_outline, aDefaultMeasurementUnit, aActualConversion );
+    FormPolygon( aNode, &m_outline, aDefaultUnits, aActualConversion );
 
     m_positionX = m_outline[0]->x;
     m_positionY = m_outline[0]->y;
 
     // fill the polygon with the same contour as its outline is
     m_islands.Add( new VERTICES_ARRAY );
-    FormPolygon( aNode, m_islands[0], aDefaultMeasurementUnit, aActualConversion );
+    FormPolygon( aNode, m_islands[0], aDefaultUnits, aActualConversion );
 
     return true;
 }

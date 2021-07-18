@@ -689,7 +689,6 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             else    // pad name is a duplicate within this footprint
             {
                 char    buf[32];
-
                 int     duplicates = ++pinmap[ padName ];
 
                 sprintf( buf, "@%d", duplicates );
@@ -753,11 +752,11 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
                 path->SetLayerId( "signal" );
 
                 double radius = graphic->GetRadius();
-                wxPoint circle_centre = graphic->m_Start0;
+                wxPoint circle_centre = graphic->GetStart0();
 
                 SHAPE_LINE_CHAIN polyline;
-                ConvertArcToPolyline( polyline, VECTOR2I( circle_centre ), radius,
-                                      0.0, 360.0, ARC_HIGH_DEF, ERROR_INSIDE );
+                ConvertArcToPolyline( polyline, VECTOR2I( circle_centre ), radius, 0.0, 360.0,
+                                      ARC_HIGH_DEF, ERROR_INSIDE );
 
                 for( int ii = 0; ii < polyline.PointCount(); ++ii )
                 {
@@ -805,8 +804,8 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
                 path->SetAperture( 0 );//scale( graphic->GetWidth() ) );
                 path->SetLayerId( "signal" );
 
-                wxPoint arc_centre = graphic->m_Start0;
-                double radius = graphic->GetRadius()+ graphic->GetWidth()/2;
+                wxPoint arc_centre = graphic->GetStart0();
+                double radius = graphic->GetRadius() + graphic->GetWidth()/2;
                 double arcStartDeg = graphic->GetArcAngleStart() / 10.0;
                 double arcAngleDeg = graphic->GetAngle() / 10.0;
 

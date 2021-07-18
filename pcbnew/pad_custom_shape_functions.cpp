@@ -104,8 +104,8 @@ void PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const w
     item->SetFilled( false );
     item->SetStart( aStart );
     item->SetEnd( aEnd );
-    item->SetBezControl1( aCtrl1 );
-    item->SetBezControl2( aCtrl2 );
+    item->SetBezierC1( aCtrl1 );
+    item->SetBezierC2( aCtrl2 );
     item->SetWidth( aThickness );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );

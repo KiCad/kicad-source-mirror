@@ -71,7 +71,7 @@ public:
      * Sets the angle for arcs, and normalizes it within the range 0 - 360 degrees.
      * @param aAngle is tenths of degrees, but will soon be degrees.
      * @param aUpdateEnd = true to update also arc end coordinates m_thirdPoint and
-     * m_ThirdPoint0, so must be called after setting m_Start, m_Start0, m_End and m_End0
+     * m_thirdPoint0, so must be called after setting m_Start, m_start0, m_End and m_end0
      */
     void SetAngle( double aAngle, bool aUpdateEnd = true ) override;
 
@@ -108,20 +108,20 @@ public:
 
     bool IsParentFlipped() const;
 
-    void SetStart0( const wxPoint& aPoint )     { m_Start0 = aPoint; }
-    const wxPoint& GetStart0() const            { return m_Start0; }
+    void SetStart0( const wxPoint& aPoint )     { m_start0 = aPoint; }
+    const wxPoint& GetStart0() const            { return m_start0; }
 
-    void SetEnd0( const wxPoint& aPoint )       { m_End0 = aPoint; }
-    const wxPoint& GetEnd0() const              { return m_End0; }
+    void SetEnd0( const wxPoint& aPoint )       { m_end0 = aPoint; }
+    const wxPoint& GetEnd0() const              { return m_end0; }
 
-    void SetThirdPoint0( const wxPoint& aPoint ){ m_ThirdPoint0 = aPoint; }
-    const wxPoint& GetThirdPoint0() const       { return m_ThirdPoint0; }
+    void SetThirdPoint0( const wxPoint& aPoint ){ m_thirdPoint0 = aPoint; }
+    const wxPoint& GetThirdPoint0() const       { return m_thirdPoint0; }
 
-    void SetBezier0_C1( const wxPoint& aPoint ) { m_Bezier0_C1 = aPoint; }
-    const wxPoint& GetBezier0_C1() const        { return m_Bezier0_C1; }
+    void SetBezierC1_0( const wxPoint& aPoint ) { m_bezierC1_0 = aPoint; }
+    const wxPoint& GetBezierC1_0() const        { return m_bezierC1_0; }
 
-    void SetBezier0_C2( const wxPoint& aPoint ) { m_Bezier0_C2 = aPoint; }
-    const wxPoint& GetBezier0_C2() const        { return m_Bezier0_C2; }
+    void SetBezierC2_0( const wxPoint& aPoint ) { m_bezierC2_0 = aPoint; }
+    const wxPoint& GetBezierC2_0() const        { return m_bezierC2_0; }
 
     /**
      * Set relative coordinates from draw coordinates.
@@ -157,11 +157,12 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
-    wxPoint m_Start0;       ///< Start point or center, relative to footprint origin, orient 0.
-    wxPoint m_End0;         ///< End point, relative to footprint origin, orient 0.
-    wxPoint m_ThirdPoint0;  ///< End point for an arc.
-    wxPoint m_Bezier0_C1;   ///< Bezier Control Point 1, relative to footprint origin, orient 0.
-    wxPoint m_Bezier0_C2;   ///< Bezier Control Point 2, relative to footprint origin, orient 0.
+protected:
+    wxPoint m_start0;       ///< Start point or circle center, relative to footprint origin, orient 0.
+    wxPoint m_end0;         ///< End point or circle edge, relative to footprint origin, orient 0.
+    wxPoint m_thirdPoint0;  ///< End point for an arc.
+    wxPoint m_bezierC1_0;   ///< Bezier Control Point 1, relative to footprint origin, orient 0.
+    wxPoint m_bezierC2_0;   ///< Bezier Control Point 2, relative to footprint origin, orient 0.
 };
 
 #endif    // FP_SHAPE_H

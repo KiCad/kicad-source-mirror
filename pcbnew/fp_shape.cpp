@@ -57,25 +57,25 @@ void FP_SHAPE::SetLocalCoord()
 
     if( fp == NULL )
     {
-        m_Start0 = m_start;
-        m_End0 = m_end;
-        m_ThirdPoint0 = m_thirdPoint;
-        m_Bezier0_C1 = m_bezierC1;
-        m_Bezier0_C2 = m_bezierC2;
+        m_start0 = m_start;
+        m_end0 = m_end;
+        m_thirdPoint0 = m_thirdPoint;
+        m_bezierC1_0 = m_bezierC1;
+        m_bezierC2_0 = m_bezierC2;
         return;
     }
 
-    m_Start0 = m_start - fp->GetPosition();
-    m_End0 = m_end - fp->GetPosition();
-    m_ThirdPoint0 = m_thirdPoint - fp->GetPosition();
-    m_Bezier0_C1 = m_bezierC1 - fp->GetPosition();
-    m_Bezier0_C2 = m_bezierC2 - fp->GetPosition();
+    m_start0 = m_start - fp->GetPosition();
+    m_end0 = m_end - fp->GetPosition();
+    m_thirdPoint0 = m_thirdPoint - fp->GetPosition();
+    m_bezierC1_0 = m_bezierC1 - fp->GetPosition();
+    m_bezierC2_0 = m_bezierC2 - fp->GetPosition();
     double angle = fp->GetOrientation();
-    RotatePoint( &m_Start0.x, &m_Start0.y, -angle );
-    RotatePoint( &m_End0.x, &m_End0.y, -angle );
-    RotatePoint( &m_ThirdPoint0.x, &m_ThirdPoint0.y, -angle );
-    RotatePoint( &m_Bezier0_C1.x, &m_Bezier0_C1.y, -angle );
-    RotatePoint( &m_Bezier0_C2.x, &m_Bezier0_C2.y, -angle );
+    RotatePoint( &m_start0.x, &m_start0.y, -angle );
+    RotatePoint( &m_end0.x, &m_end0.y, -angle );
+    RotatePoint( &m_thirdPoint0.x, &m_thirdPoint0.y, -angle );
+    RotatePoint( &m_bezierC1_0.x, &m_bezierC1_0.y, -angle );
+    RotatePoint( &m_bezierC2_0.x, &m_bezierC2_0.y, -angle );
 }
 
 
@@ -83,11 +83,11 @@ void FP_SHAPE::SetDrawCoord()
 {
     FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_parent );
 
-    m_start      = m_Start0;
-    m_end        = m_End0;
-    m_thirdPoint = m_ThirdPoint0;
-    m_bezierC1   = m_Bezier0_C1;
-    m_bezierC2   = m_Bezier0_C2;
+    m_start      = m_start0;
+    m_end        = m_end0;
+    m_thirdPoint = m_thirdPoint0;
+    m_bezierC1   = m_bezierC1_0;
+    m_bezierC2   = m_bezierC2_0;
 
     if( fp )
     {
@@ -146,11 +146,11 @@ void FP_SHAPE::SetAngle( double aAngle, bool aUpdateEnd )
     // Update the parent class (updates the global m_ThirdPoint)
     PCB_SHAPE::SetAngle( aAngle, aUpdateEnd );
 
-    // Also update the local m_ThirdPoint0 if requested
+    // Also update the local m_thirdPoint0 if requested
     if( aUpdateEnd )
     {
-        m_ThirdPoint0 = m_End0;
-        RotatePoint( &m_ThirdPoint0, m_Start0, -m_angle );
+        m_thirdPoint0 = m_end0;
+        RotatePoint( &m_thirdPoint0, m_start0, -m_angle );
     }
 }
 
@@ -162,7 +162,7 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     switch( GetShape() )
     {
     case PCB_SHAPE_TYPE::ARC:
-        // Update arc angle but do not yet update m_ThirdPoint0 and m_thirdPoint,
+        // Update arc angle but do not yet update m_thirdPoint0 and m_thirdPoint,
         // arc center and start point must be updated before calculation arc end.
         SetAngle( -GetAngle(), false );
         KI_FALLTHROUGH;
@@ -172,7 +172,7 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     case PCB_SHAPE_TYPE::CURVE:
         // If Start0 and Start are equal (ie: Footprint Editor), then flip both sets around the
         // centre point.
-        if( m_start == m_Start0 )
+        if( m_start == m_start0 )
             pt = aCentre;
 
         if( aFlipLeftRight )
@@ -182,11 +182,11 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
             MIRROR( m_thirdPoint.x, aCentre.x );
             MIRROR( m_bezierC1.x, aCentre.x );
             MIRROR( m_bezierC2.x, aCentre.x );
-            MIRROR( m_Start0.x, pt.x );
-            MIRROR( m_End0.x, pt.x );
-            MIRROR( m_ThirdPoint0.x, pt.x );
-            MIRROR( m_Bezier0_C1.x, pt.x );
-            MIRROR( m_Bezier0_C2.x, pt.x );
+            MIRROR( m_start0.x, pt.x );
+            MIRROR( m_end0.x, pt.x );
+            MIRROR( m_thirdPoint0.x, pt.x );
+            MIRROR( m_bezierC1_0.x, pt.x );
+            MIRROR( m_bezierC2_0.x, pt.x );
         }
         else
         {
@@ -195,11 +195,11 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
             MIRROR( m_thirdPoint.y, aCentre.y );
             MIRROR( m_bezierC1.y, aCentre.y );
             MIRROR( m_bezierC2.y, aCentre.y );
-            MIRROR( m_Start0.y, pt.y );
-            MIRROR( m_End0.y, pt.y );
-            MIRROR( m_ThirdPoint0.y, pt.y );
-            MIRROR( m_Bezier0_C1.y, pt.y );
-            MIRROR( m_Bezier0_C2.y, pt.y );
+            MIRROR( m_start0.y, pt.y );
+            MIRROR( m_end0.y, pt.y );
+            MIRROR( m_thirdPoint0.y, pt.y );
+            MIRROR( m_bezierC1_0.y, pt.y );
+            MIRROR( m_bezierC2_0.y, pt.y );
         }
 
         RebuildBezierToSegmentsPointsList( m_width );
@@ -229,7 +229,7 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
     switch( GetShape() )
     {
     case PCB_SHAPE_TYPE::ARC:
-        // Update arc angle but do not yet update m_ThirdPoint0 and m_thirdPoint,
+        // Update arc angle but do not yet update m_thirdPoint0 and m_thirdPoint,
         // arc center and start point must be updated before calculation arc end.
         SetAngle( -GetAngle(), false );
         KI_FALLTHROUGH;
@@ -239,19 +239,19 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
     case PCB_SHAPE_TYPE::SEGMENT:
         if( aMirrorAroundXAxis )
         {
-            MIRROR( m_Start0.y, aCentre.y );
-            MIRROR( m_End0.y, aCentre.y );
-            MIRROR( m_ThirdPoint0.y, aCentre.y );
-            MIRROR( m_Bezier0_C1.y, aCentre.y );
-            MIRROR( m_Bezier0_C2.y, aCentre.y );
+            MIRROR( m_start0.y, aCentre.y );
+            MIRROR( m_end0.y, aCentre.y );
+            MIRROR( m_thirdPoint0.y, aCentre.y );
+            MIRROR( m_bezierC1_0.y, aCentre.y );
+            MIRROR( m_bezierC2_0.y, aCentre.y );
         }
         else
         {
-            MIRROR( m_Start0.x, aCentre.x );
-            MIRROR( m_End0.x, aCentre.x );
-            MIRROR( m_ThirdPoint0.x, aCentre.x );
-            MIRROR( m_Bezier0_C1.x, aCentre.x );
-            MIRROR( m_Bezier0_C2.x, aCentre.x );
+            MIRROR( m_start0.x, aCentre.x );
+            MIRROR( m_end0.x, aCentre.x );
+            MIRROR( m_thirdPoint0.x, aCentre.x );
+            MIRROR( m_bezierC1_0.x, aCentre.x );
+            MIRROR( m_bezierC2_0.x, aCentre.x );
         }
 
         for( unsigned ii = 0; ii < m_bezierPoints.size(); ii++ )
@@ -290,11 +290,11 @@ void FP_SHAPE::Move( const wxPoint& aMoveVector )
 {
     // Move an edge of the footprint.
     // This is a footprint shape modification.
-    m_Start0      += aMoveVector;
-    m_End0        += aMoveVector;
-    m_ThirdPoint0 += aMoveVector;
-    m_Bezier0_C1  += aMoveVector;
-    m_Bezier0_C2  += aMoveVector;
+    m_start0      += aMoveVector;
+    m_end0        += aMoveVector;
+    m_thirdPoint0 += aMoveVector;
+    m_bezierC1_0  += aMoveVector;
+    m_bezierC2_0  += aMoveVector;
 
     switch( GetShape() )
     {

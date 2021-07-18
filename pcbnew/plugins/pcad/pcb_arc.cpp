@@ -37,7 +37,8 @@
 
 namespace PCAD2KICAD {
 
-PCB_ARC::PCB_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) : PCB_COMPONENT( aCallbacks, aBoard )
+PCB_ARC::PCB_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+    PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_objType    = wxT( 'A' );
     m_StartX     = 0;
@@ -52,9 +53,7 @@ PCB_ARC::~PCB_ARC()
 }
 
 
-void PCB_ARC::Parse( XNODE*          aNode,
-                     int             aLayer,
-                     const wxString& aDefaultMeasurementUnit,
+void PCB_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
                      const wxString& aActualConversion )
 {
     XNODE*      lNode;
@@ -67,8 +66,10 @@ void PCB_ARC::Parse( XNODE*          aNode,
     m_KiCadLayer    = GetKiCadLayer();
 
     if( FindNode( aNode, wxT( "width" ) ) )
-        SetWidth( FindNode( aNode, wxT( "width" ) )->GetNodeContent(),
-                  aDefaultMeasurementUnit, &m_Width, aActualConversion );
+    {
+        SetWidth( FindNode( aNode, wxT( "width" ) )->GetNodeContent(), aDefaultUnits, &m_Width,
+                  aActualConversion );
+    }
 
     if( aNode->GetName() == wxT( "triplePointArc" ) )
     {
@@ -76,24 +77,27 @@ void PCB_ARC::Parse( XNODE*          aNode,
         lNode = FindNode( aNode, wxT( "pt" ) );
 
         if( lNode )
-            SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
-                         &m_positionX, &m_positionY, aActualConversion );
+        {
+            SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_positionX, &m_positionY,
+                         aActualConversion );
+        }
 
         // start point
         if( lNode )
             lNode = lNode->GetNext();
 
         if( lNode )
-            SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
-                         &m_StartX, &m_StartY, aActualConversion );
+        {
+            SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_StartX, &m_StartY,
+                         aActualConversion );
+        }
 
         // end point
         if( lNode )
             lNode = lNode->GetNext();
 
         if( lNode )
-            SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
-                         &endX, &endY, aActualConversion );
+            SetPosition( lNode->GetNodeContent(), aDefaultUnits, &endX, &endY, aActualConversion );
 
         if( m_StartX == endX && m_StartY == endY )
         {
@@ -113,20 +117,27 @@ void PCB_ARC::Parse( XNODE*          aNode,
         lNode = FindNode( aNode, wxT( "pt" ) );
 
         if( lNode )
-            SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
-                         &m_positionX, &m_positionY, aActualConversion );
+        {
+            SetPosition( lNode->GetNodeContent(), aDefaultUnits, &m_positionX, &m_positionY,
+                         aActualConversion );
+        }
 
         lNode   = FindNode( aNode, wxT( "radius" ) );
+
         if( lNode)
-            SetWidth( FindNode( aNode, wxT( "radius" ) )->GetNodeContent(),
-                      aDefaultMeasurementUnit, &r, aActualConversion );
+        {
+            SetWidth( FindNode( aNode, wxT( "radius" ) )->GetNodeContent(), aDefaultUnits, &r,
+                      aActualConversion );
+        }
 
 
         lNode   = FindNode( aNode, wxT( "startAngle" ) );
+
         if( lNode )
             a = StrToInt1Units( lNode->GetNodeContent() );
 
         lNode   = FindNode( aNode, wxT( "sweepAngle" ) );
+
         if( lNode )
             m_Angle = StrToInt1Units( lNode->GetNodeContent() );
 
@@ -164,11 +175,11 @@ void PCB_ARC::AddToFootprint( FOOTPRINT* aFootprint )
                 aFootprint, ( IsCircle() ? PCB_SHAPE_TYPE::CIRCLE : PCB_SHAPE_TYPE::ARC ) );
         aFootprint->Add( arc );
 
-        arc->m_Start0   = wxPoint( m_positionX, m_positionY );
-        arc->m_End0     = wxPoint( m_StartX, m_StartY );
+        arc->SetStart0( wxPoint( m_positionX, m_positionY ) );
+        arc->SetEnd0( wxPoint( m_StartX, m_StartY ) );
 
-        // Setting angle will set m_ThirdPoint0, so must be done after setting
-        // m_Start0 and m_End0
+        // Setting angle will set m_thirdPoint0, so must be done after setting
+        // m_start0 and m_end0
         arc->SetAngle( -m_Angle );
 
         arc->SetWidth( m_Width );

@@ -605,8 +605,8 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
             shape->SetWidth( primitive->GetWidth() );
             shape->SetStart( primitive->GetStart() );
             shape->SetEnd( primitive->GetEnd() );
-            shape->SetBezControl1( primitive->GetBezControl1() );
-            shape->SetBezControl2( primitive->GetBezControl2() );
+            shape->SetBezierC1( primitive->GetBezierC1());
+            shape->SetBezierC2( primitive->GetBezierC2());
             shape->SetAngle( primitive->GetAngle() );
             shape->SetPolyShape( primitive->GetPolyShape() );
             shape->SetLocalCoord();
@@ -716,8 +716,8 @@ void PAD_TOOL::recombinePad( PAD* aPad )
         pcbShape->SetWidth( fpShape->GetWidth() );
         pcbShape->SetStart( fpShape->GetStart() );
         pcbShape->SetEnd( fpShape->GetEnd() );
-        pcbShape->SetBezControl1( fpShape->GetBezControl1() );
-        pcbShape->SetBezControl2( fpShape->GetBezControl2() );
+        pcbShape->SetBezierC1( fpShape->GetBezierC1());
+        pcbShape->SetBezierC2( fpShape->GetBezierC2());
         pcbShape->SetAngle( fpShape->GetAngle() );
         pcbShape->SetPolyShape( fpShape->GetPolyShape() );
 

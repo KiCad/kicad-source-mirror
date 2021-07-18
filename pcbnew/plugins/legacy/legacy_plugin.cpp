@@ -1711,11 +1711,11 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
             width   = biuParse( data, &data );
             layer   = layerParse( data );
 
-            dwg->m_Start0 = wxPoint( start0_x, start0_y );
-            dwg->m_End0   = wxPoint( end0_x, end0_y );
+            dwg->SetStart0( wxPoint( start0_x, start0_y ) );
+            dwg->SetEnd0( wxPoint( end0_x, end0_y ) );
 
-            // Setting angle will set m_ThirdPoint0, so must be done after setting
-            // m_Start0 and m_End0
+            // Setting angle will set m_thirdPoint0, so must be done after setting
+            // m_start0 and m_end0
             dwg->SetAngle( angle );
         }
         break;
@@ -1732,8 +1732,8 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
             width   = biuParse( data, &data );
             layer   = layerParse( data );
 
-            dwg->m_Start0 = wxPoint( start0_x, start0_y );
-            dwg->m_End0   = wxPoint( end0_x, end0_y );
+            dwg->SetStart0( wxPoint( start0_x, start0_y ) );
+            dwg->SetEnd0( wxPoint( end0_x, end0_y ) );
         }
         break;
 
@@ -1749,8 +1749,8 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
             width   = biuParse( data, &data );
             layer   = layerParse( data );
 
-            dwg->m_Start0 = wxPoint( start0_x, start0_y );
-            dwg->m_End0   = wxPoint( end0_x, end0_y );
+            dwg->SetStart0( wxPoint( start0_x, start0_y ) );
+            dwg->SetEnd0( wxPoint( end0_x, end0_y ) );
 
             std::vector<wxPoint> pts;
             pts.reserve( ptCount );
@@ -2029,7 +2029,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     break;
                 case 6:
                     y = biuParse( data );
-                    dseg->SetBezControl1( wxPoint( x, y ) );
+                    dseg->SetBezierC1( wxPoint( x, y ));
                     break;
 
                 case 7:
@@ -2037,7 +2037,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     break;
                 case 8:
                     y = biuParse( data );
-                    dseg->SetBezControl2( wxPoint( x, y ) );
+                    dseg->SetBezierC2( wxPoint( x, y ));
                     break;
 
                 default:

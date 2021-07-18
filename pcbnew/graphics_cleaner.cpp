@@ -122,8 +122,8 @@ bool GRAPHICS_CLEANER::areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 )
         return false;
 
     case PCB_SHAPE_TYPE::CURVE:
-        return aShape1->GetBezControl1() == aShape2->GetBezControl1()
-                && aShape1->GetBezControl2() == aShape2->GetBezControl2()
+        return aShape1->GetBezierC1() == aShape2->GetBezierC1()
+                && aShape1->GetBezierC2() == aShape2->GetBezierC2()
                 && aShape1->GetBezierPoints() == aShape2->GetBezierPoints();
 
     default:

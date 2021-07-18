@@ -42,7 +42,7 @@ public:
     PCB_LINE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_LINE();
 
-    virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultMeasurementUnit,
+    virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
                         const wxString& aActualConversion );
 
     virtual void SetPosOffset( int aX_offs, int aY_offs ) override;

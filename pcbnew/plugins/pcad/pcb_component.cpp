@@ -34,8 +34,7 @@
 
 namespace PCAD2KICAD {
 
-PCB_COMPONENT::PCB_COMPONENT( PCB_CALLBACKS*    aCallbacks,
-                              BOARD*            aBoard ) :
+PCB_COMPONENT::PCB_COMPONENT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
         m_uuid(),
         m_callbacks( aCallbacks ),
         m_board( aBoard )

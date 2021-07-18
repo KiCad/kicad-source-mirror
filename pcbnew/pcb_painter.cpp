@@ -1497,8 +1497,8 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             // Use thickness as filter value to convert the curve to polyline when the curve
             // is not supported
             m_gal->DrawCurve( VECTOR2D( aShape->GetStart() ),
-                              VECTOR2D( aShape->GetBezControl1() ),
-                              VECTOR2D( aShape->GetBezControl2() ),
+                              VECTOR2D( aShape->GetBezierC1() ),
+                              VECTOR2D( aShape->GetBezierC2() ),
                               VECTOR2D( aShape->GetEnd() ), thickness );
         }
         else
@@ -1510,8 +1510,8 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             // Use thickness as filter value to convert the curve to polyline when the curve
             // is not supported
             m_gal->DrawCurve( VECTOR2D( aShape->GetStart() ),
-                              VECTOR2D( aShape->GetBezControl1() ),
-                              VECTOR2D( aShape->GetBezControl2() ),
+                              VECTOR2D( aShape->GetBezierC1() ),
+                              VECTOR2D( aShape->GetBezierC2() ),
                               VECTOR2D( aShape->GetEnd() ), thickness );
         }
         break;
