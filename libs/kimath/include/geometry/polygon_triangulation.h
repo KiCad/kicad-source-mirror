@@ -154,10 +154,10 @@ private:
             if( nextZ )
                 nextZ->prevZ = prevZ;
 
-            next = NULL;
-            prev = NULL;
-            nextZ = NULL;
-            prevZ = NULL;
+            next = nullptr;
+            prev = nullptr;
+            nextZ = nullptr;
+            prevZ = nullptr;
         }
 
         void updateOrder()

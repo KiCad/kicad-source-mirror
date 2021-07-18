@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +34,6 @@
 WRL1COORDS::WRL1COORDS( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
     m_Type = WRL1NODES::WRL1_COORDINATE3;
-    return;
 }
 
 
@@ -43,20 +43,16 @@ WRL1COORDS::WRL1COORDS( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     m_Type = WRL1NODES::WRL1_COORDINATE3;
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
-
-    return;
 }
 
 
 WRL1COORDS::~WRL1COORDS()
 {
-    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     wxLogTrace( MASK_VRML, " * [INFO] Destroying Coordinate3 node\n" );
-    #endif
-
-    return;
+#endif
 }
 
 
@@ -64,14 +60,14 @@ bool WRL1COORDS::AddRefNode( WRL1NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] AddRefNode is not applicable";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -81,14 +77,14 @@ bool WRL1COORDS::AddChildNode( WRL1NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] AddChildNode is not applicable";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -103,7 +99,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -111,14 +107,14 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             ostr << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( '{' != tok )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         do {
             std::ostringstream ostr;
             ostr << proc.GetError() << "\n";
@@ -127,7 +123,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             ostr << "' at line " << line << ", column " << column << "\n";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -143,14 +139,14 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
     if( !proc.ReadName( glob ) )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << proc.GetError();
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -162,7 +158,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
     {
         if( !proc.ReadMFVec3f( points ) )
         {
-            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -172,14 +168,14 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 ostr << " * [INFO] message: '" << proc.GetError();
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
     }
     else
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -188,12 +184,12 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             ostr << " * [INFO] file: '" << proc.GetFileName();
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
-    // assuming legacy kicad expectation of 1U = 0.1 inch,
+    // assuming legacy KiCad expectation of 1U = 0.1 inch,
     // convert to mm to meet the expectations of the SG structure
     std::vector< WRLVEC3F >::iterator sP = points.begin();
     std::vector< WRLVEC3F >::iterator eP = points.end();
@@ -214,7 +210,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
     proc.GetFilePosData( line, column );
 
-    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -223,7 +219,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         ostr << " * [INFO] file: '" << proc.GetFileName();
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -233,29 +229,26 @@ void WRL1COORDS::GetCoords( WRLVEC3F*& aCoordList, size_t& aListSize )
 {
     if( points.size() < 3 )
     {
-        aCoordList = NULL;
+        aCoordList = nullptr;
         aListSize = 0;
         return;
     }
 
     aCoordList = &points[0];
     aListSize = points.size();
-    return;
 }
 
 
 SGNODE* WRL1COORDS::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
-    if( NULL == sp )
+    if( nullptr == sp )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         wxLogTrace( MASK_VRML, " * [INFO] bad model: no base data given\n" );
-        #endif
 
-        return NULL;
+        return nullptr;
     }
 
     sp->coord = this;
 
-    return NULL;
+    return nullptr;
 }

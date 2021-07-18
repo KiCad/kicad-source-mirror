@@ -139,7 +139,7 @@ public:
     virtual SHAPE* Clone() const
     {
         assert( false );
-        return NULL;
+        return nullptr;
     };
 
     /**

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,12 +39,12 @@
 KICAD_PLUGIN_LDR_3D::KICAD_PLUGIN_LDR_3D()
 {
     ok = false;
-    m_getNExtensions = NULL;
-    m_getModelExtension = NULL;
-    m_getNFilters = NULL;
-    m_getFileFilter = NULL;
-    m_canRender = NULL;
-    m_load = NULL;
+    m_getNExtensions = nullptr;
+    m_getModelExtension = nullptr;
+    m_getNFilters = nullptr;
+    m_getFileFilter = nullptr;
+    m_canRender = nullptr;
+    m_load = nullptr;
 
     return;
 }
@@ -73,13 +74,13 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             m_error = ostr.str();
         }
 
-        #ifdef DEBUG
+#ifdef DEBUG
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [INFO] failed on file " << aFullFileName.ToUTF8() << "\n";
         ostr << " * [INFO] error: " << m_error;
         wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-        #endif
+#endif
 
         return false;
     }
@@ -94,128 +95,128 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
     LINK_ITEM( m_canRender, PLUGIN_3D_CAN_RENDER, "CanRender" );
     LINK_ITEM( m_load, PLUGIN_3D_LOAD, "Load" );
 
-    #ifdef DEBUG
-        bool fail = false;
+#ifdef DEBUG
+    bool fail = false;
 
-        if( !m_getNExtensions )
+    if( !m_getNExtensions )
+    {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        wxString errmsg = "incompatible plugin (missing function 'GetNExtensions')";
+        ostr << errmsg.ToUTF8() << "\n";
+        ostr << "'" << aFullFileName.ToUTF8() << "'";
+        wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
+        fail = true;
+    }
+
+    if( !m_getModelExtension )
+    {
+        if( !fail )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            wxString errmsg = "incompatible plugin (missing function 'GetNExtensions')";
+            wxString errmsg = "incompatible plugin (missing function 'GetModelExtension')";
             ostr << errmsg.ToUTF8() << "\n";
             ostr << "'" << aFullFileName.ToUTF8() << "'";
             wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
             fail = true;
         }
-
-        if( !m_getModelExtension )
+        else
         {
-            if( !fail )
-            {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                wxString errmsg = "incompatible plugin (missing function 'GetModelExtension')";
-                ostr << errmsg.ToUTF8() << "\n";
-                ostr << "'" << aFullFileName.ToUTF8() << "'";
-                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-                fail = true;
-            }
-            else
-            {
-                std::ostringstream ostr;
-                wxString errmsg = "missing function 'GetModelExtension'";
-                ostr << errmsg.ToUTF8();
-                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-            }
+            std::ostringstream ostr;
+            wxString errmsg = "missing function 'GetModelExtension'";
+            ostr << errmsg.ToUTF8();
+            wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
         }
+    }
 
-        if( !m_getNFilters )
+    if( !m_getNFilters )
+    {
+        if( !fail )
         {
-            if( !fail )
-            {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                wxString errmsg = "incompatible plugin (missing function 'GetNFilters')";
-                ostr << errmsg.ToUTF8() << "\n";
-                ostr << "'" << aFullFileName.ToUTF8() << "'";
-                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-                fail = true;
-            }
-            else
-            {
-                std::ostringstream ostr;
-                wxString errmsg = "missing function 'GetNFilters'";
-                ostr << errmsg.ToUTF8();
-                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-            }
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            wxString errmsg = "incompatible plugin (missing function 'GetNFilters')";
+            ostr << errmsg.ToUTF8() << "\n";
+            ostr << "'" << aFullFileName.ToUTF8() << "'";
+            wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
+            fail = true;
         }
-
-        if( !m_getFileFilter )
+        else
         {
-            if( !fail )
-            {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                wxString errmsg = "incompatible plugin (missing function 'GetFileFilter')";
-                ostr << errmsg.ToUTF8() << "\n";
-                ostr << "'" << aFullFileName.ToUTF8() << "'";
-                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-                fail = true;
-            }
-            else
-            {
-                std::ostringstream ostr;
-                wxString errmsg = "missing function 'GetFileFilter'";
-                ostr << errmsg.ToUTF8();
-                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-            }
+            std::ostringstream ostr;
+            wxString errmsg = "missing function 'GetNFilters'";
+            ostr << errmsg.ToUTF8();
+            wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
         }
+    }
 
-        if( !m_canRender )
+    if( !m_getFileFilter )
+    {
+        if( !fail )
         {
-            if( !fail )
-            {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                wxString errmsg = "incompatible plugin (missing function 'CanRender')";
-                ostr << errmsg.ToUTF8() << "\n";
-                ostr << "'" << aFullFileName.ToUTF8() << "'";
-                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-                fail = true;
-            }
-            else
-            {
-                std::ostringstream ostr;
-                wxString errmsg = "missing function 'CanRender'";
-                ostr << errmsg.ToUTF8();
-                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-            }
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            wxString errmsg = "incompatible plugin (missing function 'GetFileFilter')";
+            ostr << errmsg.ToUTF8() << "\n";
+            ostr << "'" << aFullFileName.ToUTF8() << "'";
+            wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
+            fail = true;
         }
-
-        if( !m_load )
+        else
         {
-            if( !fail )
-            {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                wxString errmsg = "incompatible plugin (missing function 'Load')";
-                ostr << errmsg.ToUTF8() << "\n";
-                ostr << "'" << aFullFileName.ToUTF8() << "'";
-                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-            }
-            else
-            {
-                std::ostringstream ostr;
-                wxString errmsg = "missing function 'Load'";
-                ostr << errmsg.ToUTF8();
-                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-            }
+            std::ostringstream ostr;
+            wxString errmsg = "missing function 'GetFileFilter'";
+            ostr << errmsg.ToUTF8();
+            wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
         }
+    }
 
-    #endif
+    if( !m_canRender )
+    {
+        if( !fail )
+        {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            wxString errmsg = "incompatible plugin (missing function 'CanRender')";
+            ostr << errmsg.ToUTF8() << "\n";
+            ostr << "'" << aFullFileName.ToUTF8() << "'";
+            wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
+            fail = true;
+        }
+        else
+        {
+            std::ostringstream ostr;
+            wxString errmsg = "missing function 'CanRender'";
+            ostr << errmsg.ToUTF8();
+            wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
+        }
+    }
+
+    if( !m_load )
+    {
+        if( !fail )
+        {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            wxString errmsg = "incompatible plugin (missing function 'Load')";
+            ostr << errmsg.ToUTF8() << "\n";
+            ostr << "'" << aFullFileName.ToUTF8() << "'";
+            wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
+        }
+        else
+        {
+            std::ostringstream ostr;
+            wxString errmsg = "missing function 'Load'";
+            ostr << errmsg.ToUTF8();
+            wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
+        }
+    }
+
+#endif
 
     if( !m_getNExtensions || !m_getModelExtension || !m_getNFilters
-        || !m_getFileFilter || !m_canRender || !m_load )
+      || !m_getFileFilter || !m_canRender || !m_load )
     {
         Close();
 
@@ -233,7 +234,7 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
 
 void KICAD_PLUGIN_LDR_3D::Close( void )
 {
-    #ifdef DEBUG
+#ifdef DEBUG
     if( ok )
     {
         std::ostringstream ostr;
@@ -241,15 +242,15 @@ void KICAD_PLUGIN_LDR_3D::Close( void )
         ostr << " * [INFO] closing plugin";
         wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
     }
-    #endif
+#endif
 
     ok = false;
-    m_getNExtensions = NULL;
-    m_getModelExtension = NULL;
-    m_getNFilters = NULL;
-    m_getFileFilter = NULL;
-    m_canRender = NULL;
-    m_load = NULL;
+    m_getNExtensions = nullptr;
+    m_getModelExtension = nullptr;
+    m_getNFilters = nullptr;
+    m_getFileFilter = nullptr;
+    m_canRender = nullptr;
+    m_load = nullptr;
     close();
 
     return;
@@ -257,7 +258,7 @@ void KICAD_PLUGIN_LDR_3D::Close( void )
 
 
 void KICAD_PLUGIN_LDR_3D::GetLoaderVersion( unsigned char* Major, unsigned char* Minor,
-    unsigned char* Patch, unsigned char* Revision ) const
+                                            unsigned char* Patch, unsigned char* Revision ) const
 {
     if( Major )
         *Major = PLUGIN_3D_MAJOR;
@@ -275,7 +276,6 @@ void KICAD_PLUGIN_LDR_3D::GetLoaderVersion( unsigned char* Major, unsigned char*
 }
 
 
-// these functions are shadows of the 3D Plugin functions from 3d_plugin.h
 int KICAD_PLUGIN_LDR_3D::GetNExtensions( void )
 {
     m_error.clear();
@@ -288,16 +288,16 @@ int KICAD_PLUGIN_LDR_3D::GetNExtensions( void )
         return 0;
     }
 
-    if( NULL == m_getNExtensions )
+    if( nullptr == m_getNExtensions )
     {
         m_error = "[BUG] GetNExtensions is not linked";
 
-        #ifdef DEBUG
+#ifdef DEBUG
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * " << m_error;
         wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-        #endif
+#endif
 
         return 0;
     }
@@ -315,21 +315,21 @@ char const* KICAD_PLUGIN_LDR_3D::GetModelExtension( int aIndex )
         if( m_error.empty() )
             m_error = "[INFO] no open plugin / plugin could not be opened";
 
-        return NULL;
+        return nullptr;
     }
 
-    if( NULL == m_getModelExtension )
+    if( nullptr == m_getModelExtension )
     {
         m_error = "[BUG] GetModelExtension is not linked";
 
-        #ifdef DEBUG
+#ifdef DEBUG
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * " << m_error;
         wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
     return m_getModelExtension( aIndex );
@@ -348,16 +348,16 @@ int KICAD_PLUGIN_LDR_3D::GetNFilters( void )
         return 0;
     }
 
-    if( NULL == m_getNFilters )
+    if( nullptr == m_getNFilters )
     {
         m_error = "[BUG] GetNFilters is not linked";
 
-        #ifdef DEBUG
+#ifdef DEBUG
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * " << m_error;
         wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-        #endif
+#endif
 
         return 0;
     }
@@ -375,21 +375,21 @@ char const* KICAD_PLUGIN_LDR_3D::GetFileFilter( int aIndex )
         if( m_error.empty() )
             m_error = "[INFO] no open plugin / plugin could not be opened";
 
-        return NULL;
+        return nullptr;
     }
 
-    if( NULL == m_getFileFilter )
+    if( nullptr == m_getFileFilter )
     {
         m_error = "[BUG] GetFileFilter is not linked";
 
-        #ifdef DEBUG
+#ifdef DEBUG
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * " << m_error;
         wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
     return m_getFileFilter( aIndex );
@@ -408,16 +408,16 @@ bool KICAD_PLUGIN_LDR_3D::CanRender( void )
         return false;
     }
 
-    if( NULL == m_canRender )
+    if( nullptr == m_canRender )
     {
         m_error = "[BUG] CanRender is not linked";
 
-        #ifdef DEBUG
+#ifdef DEBUG
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * " << m_error;
         wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-        #endif
+#endif
 
         return false;
     }
@@ -435,21 +435,21 @@ SCENEGRAPH* KICAD_PLUGIN_LDR_3D::Load( char const* aFileName )
         if( m_error.empty() )
             m_error = "[INFO] no open plugin / plugin could not be opened";
 
-        return NULL;
+        return nullptr;
     }
 
-    if( NULL == m_load )
+    if( nullptr == m_load )
     {
         m_error = "[BUG] Load is not linked";
 
-        #ifdef DEBUG
+#ifdef DEBUG
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * " << m_error;
         wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
     return m_load( aFileName );

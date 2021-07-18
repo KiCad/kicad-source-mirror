@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2015 jean-pierre.charras
- * Copyright (C) 2015 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,10 +26,7 @@
 #include "pcb_calculator_settings.h"
 
 // Pcb_calculator data file extension:
-const wxString PcbCalcDataFileExt( wxT("pcbcalc") );
-
-
-// PCB_CALCULATOR_APP
+const wxString PcbCalcDataFileExt( wxT( "pcbcalc" ) );
 
 
 namespace PCBCALC {
@@ -46,34 +43,37 @@ static struct IFACE : public KIFACE_I
 
     void OnKifaceEnd() override;
 
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
+                            int aCtlBits = 0 ) override
     {
         return new PCB_CALCULATOR_FRAME( aKiway, aParent );
     }
 
     /**
-     * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this
-     * is to retrieve a pointer to a static instance of an interface, similar to
-     * how the KIFACE interface is exported.  But if you know what you are doing
+     * Return a pointer to the requested object.
+     *
+     * The safest way to use this is to retrieve a pointer to a static instance of an interface,
+     * similar to how the KIFACE interface is exported.  But if you know what you are doing
      * use it to retrieve anything you want.
      *
      * @param aDataId identifies which object you want the address of.
-     *
-     * @return void* - and must be cast into the know type.
+     * @return the requested object and must be cast into the know type.
      */
     void* IfaceOrAddress( int aDataId ) override
     {
-        return NULL;
+        return nullptr;
     }
 
 } kiface( "pcb_calculator", KIWAY::FACE_PCB_CALCULATOR );
 
+
 } // namespace
+
 
 using namespace PCBCALC;
 
 static PGM_BASE* process;
+
 
 KIFACE_I& Kiface() { return kiface; }
 

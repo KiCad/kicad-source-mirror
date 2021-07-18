@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,32 +34,29 @@
 
 WRL2APPEARANCE::WRL2APPEARANCE() : WRL2NODE()
 {
-    material = NULL;
-    texture = NULL;
-    textureTransform = NULL;
+    material = nullptr;
+    texture = nullptr;
+    textureTransform = nullptr;
     m_Type = WRL2NODES::WRL2_APPEARANCE;
-    return;
 }
 
 
 WRL2APPEARANCE::WRL2APPEARANCE( WRL2NODE* aParent ) : WRL2NODE()
 {
-    material = NULL;
-    texture = NULL;
-    textureTransform = NULL;
+    material = nullptr;
+    texture = nullptr;
+    textureTransform = nullptr;
     m_Type = WRL2NODES::WRL2_APPEARANCE;
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
-
-    return;
 }
 
 
 WRL2APPEARANCE::~WRL2APPEARANCE()
 {
-    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Destroying Appearance with " << m_Children.size();
@@ -66,7 +64,7 @@ WRL2APPEARANCE::~WRL2APPEARANCE()
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 }
 
 
@@ -94,7 +92,7 @@ bool WRL2APPEARANCE::isDangling( void )
 {
     // this node is dangling unless it has a parent of type WRL2_SHAPE
 
-    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_SHAPE )
+    if( nullptr == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_SHAPE )
         return true;
 
     return false;
@@ -103,16 +101,16 @@ bool WRL2APPEARANCE::isDangling( void )
 
 bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] NULL passed for aNode";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -121,7 +119,7 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
 
     if( !checkNodeType( type ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -129,23 +127,23 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
             ostr << aNode->GetNodeTypeName( type ) << "'";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( WRL2NODES::WRL2_MATERIAL == type )
     {
-        if( NULL != material )
+        if( nullptr != material )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << " * [INFO] bad file format; multiple material nodes";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -156,16 +154,16 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
 
     if( WRL2NODES::WRL2_TEXTURETRANSFORM == type )
     {
-        if( NULL != textureTransform )
+        if( nullptr != textureTransform )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << " * [INFO] bad file format; multiple textureTransform nodes";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -174,16 +172,16 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
         return WRL2NODE::AddRefNode( aNode );
     }
 
-    if( NULL != texture )
+    if( nullptr != texture )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] bad file format; multiple texture nodes";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -195,16 +193,16 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
 
 bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] NULL passed for aNode";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -213,7 +211,7 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
 
     if( !checkNodeType( type ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -221,23 +219,23 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
             ostr << aNode->GetNodeTypeName( type ) << "'";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( WRL2NODES::WRL2_MATERIAL == type )
     {
-        if( NULL != material )
+        if( nullptr != material )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << " * [INFO] bad file format; multiple material nodes";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -248,16 +246,16 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
 
     if( WRL2NODES::WRL2_TEXTURETRANSFORM == type )
     {
-        if( NULL != textureTransform )
+        if( nullptr != textureTransform )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << " * [INFO] bad file format; multiple textureTransform nodes";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -266,16 +264,16 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
         return WRL2NODE::AddChildNode( aNode );
     }
 
-    if( NULL != texture )
+    if( nullptr != texture )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] bad file format; multiple texture nodes";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -287,16 +285,16 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
 
 bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 {
-    if( NULL == aTopNode )
+    if( nullptr == aTopNode )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] aTopNode is NULL";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -308,7 +306,7 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -316,14 +314,14 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( '{' != tok )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << proc.GetError() << "\n";
@@ -332,7 +330,7 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr  << "' at line " << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -350,14 +348,14 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !proc.ReadName( glob ) )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << proc.GetError();
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -371,55 +369,55 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !glob.compare( "material" ) )
         {
-            if( !aTopNode->ReadNode( proc, this, NULL ) )
+            if( !aTopNode->ReadNode( proc, this, nullptr ) )
             {
-                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                     ostr << " * [INFO] could not read material information";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
         }
         else if( !glob.compare( "texture" ) )
         {
-            if( !aTopNode->ReadNode( proc, this, NULL ) )
+            if( !aTopNode->ReadNode( proc, this, nullptr ) )
             {
-                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                     ostr << " * [INFO] could not read texture information";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
         }
         else if( !glob.compare( "textureTransform" ) )
         {
-            if( !aTopNode->ReadNode( proc, this, NULL ) )
+            if( !aTopNode->ReadNode( proc, this, nullptr ) )
             {
-                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                     ostr << " * [INFO] could not read textureTransform information";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
         }
         else
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -428,7 +426,7 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -440,14 +438,14 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
 SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent )
 {
-    if( NULL == material && NULL == texture )
-        return NULL;
+    if( nullptr == material && nullptr == texture )
+        return nullptr;
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
+    if( nullptr != aParent && ptype != S3D::SGTYPE_SHAPE )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -455,12 +453,12 @@ SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent )
             ostr << ptype << ")";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
-    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Translating Appearance with " << m_Children.size();
@@ -468,28 +466,28 @@ SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent )
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     if( m_sgNode )
     {
-        if( NULL != aParent )
+        if( nullptr != aParent )
         {
-            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+            if( nullptr == S3D::GetSGNodeParent( m_sgNode )
                 && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
             else if( aParent != S3D::GetSGNodeParent( m_sgNode )
                      && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
         }
 
         return m_sgNode;
     }
 
-    if( NULL != texture )
+    if( nullptr != texture )
     {
         // use a default gray appearance
         IFSG_APPEARANCE matNode( aParent );
@@ -512,41 +510,38 @@ SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent )
 
 void WRL2APPEARANCE::unlinkChildNode( const WRL2NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     if( aNode->GetParent() == this )
     {
         if( aNode == material )
-            material = NULL;
+            material = nullptr;
         else if( aNode == texture )
-            texture = NULL;
+            texture = nullptr;
         else if( aNode == textureTransform )
-            textureTransform = NULL;
+            textureTransform = nullptr;
 
     }
 
     WRL2NODE::unlinkChildNode( aNode );
-    return;
 }
 
 
 void WRL2APPEARANCE::unlinkRefNode( const WRL2NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     if( aNode->GetParent() != this )
     {
         if( aNode == material )
-            material = NULL;
+            material = nullptr;
         else if( aNode == texture )
-            texture = NULL;
+            texture = nullptr;
         else if( aNode == textureTransform )
-            textureTransform = NULL;
-
+            textureTransform = nullptr;
     }
 
     WRL2NODE::unlinkRefNode( aNode );
-    return;
 }

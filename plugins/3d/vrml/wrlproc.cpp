@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,22 +29,31 @@
 #include <wx/log.h>
 #include "wrlproc.h"
 
-#define GETLINE do {\
-    try { \
-        char* cp = m_file->ReadLine(); \
-        if( NULL == cp ) { \
-            m_eof = true; \
-            m_buf.clear(); \
-        } else { \
-            m_buf = cp; \
-            m_bufpos = 0; \
-        } \
-        m_fileline = m_file->LineNumber(); \
-    } catch( ... ) { \
-        m_error = " * [INFO] input line too long"; \
-        m_eof = true; \
-        m_buf.clear(); \
-    } } while( 0 )
+#define GETLINE                                                                                \
+    do                                                                                         \
+    {                                                                                          \
+        try                                                                                    \
+        {                                                                                      \
+            char* cp = m_file->ReadLine();                                                     \
+            if( nullptr == cp )                                                                \
+            {                                                                                  \
+                m_eof = true;                                                                  \
+                m_buf.clear();                                                                 \
+            }                                                                                  \
+            else                                                                               \
+            {                                                                                  \
+                m_buf = cp;                                                                    \
+                m_bufpos = 0;                                                                  \
+            }                                                                                  \
+            m_fileline = m_file->LineNumber();                                                 \
+        }                                                                                      \
+        catch( ... )                                                                           \
+        {                                                                                      \
+            m_error = " * [INFO] input line too long";                                         \
+            m_eof = true;                                                                      \
+            m_buf.clear();                                                                     \
+        }                                                                                      \
+    } while( 0 )
 
 
 WRLPROC::WRLPROC( LINE_READER* aLineReader )
@@ -54,7 +64,7 @@ WRLPROC::WRLPROC( LINE_READER* aLineReader )
     m_bufpos = 0;
     m_file = aLineReader;
 
-    if( NULL == aLineReader )
+    if( nullptr == aLineReader )
     {
         m_eof = true;
         return;
@@ -119,14 +129,11 @@ WRLPROC::WRLPROC( LINE_READER* aLineReader )
     m_error.append( m_filename );
     m_error.append( 1, '\'' );
     m_badchars.clear();
-
-    return;
 }
 
 
 WRLPROC::~WRLPROC()
 {
-    return;
 }
 
 
@@ -227,7 +234,7 @@ WRLVERSION WRLPROC::GetVRMLType( void )
 const char* WRLPROC::GetParentDir( void )
 {
     if( m_filedir.empty() )
-        return NULL;
+        return nullptr;
 
     return m_filedir.c_str();
 }
@@ -620,7 +627,8 @@ bool WRLPROC::ReadString( std::string& aSFString )
         if( !EatSpace() )
         {
             std::ostringstream ostr;
-            ostr << "invalid VRML file; expecting string at line " << ifline << " but found nothing";
+            ostr << "invalid VRML file; expecting string at line " << ifline <<
+                    " but found nothing";
             m_error = ostr.str();
 
             return false;
@@ -677,7 +685,6 @@ bool WRLPROC::ReadString( std::string& aSFString )
                 m_error = ostr.str();
 
                 return false;
-
             }
         }
 
@@ -730,13 +737,21 @@ bool WRLPROC::ReadSFBool( bool& aSFBool )
         return false;
 
     if( !tmp.compare( "0" ) )
+    {
         aSFBool = false;
+    }
     else if( !tmp.compare( "1" ) )
+    {
         aSFBool = true;
+    }
     else if( !tmp.compare( "TRUE" ) )
+    {
         aSFBool = true;
+    }
     else if( !tmp.compare( "FALSE" ) )
+    {
         aSFBool = false;
+    }
     else
     {
         std::ostringstream ostr;
@@ -1477,7 +1492,6 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
 
         if( ',' == m_buf[m_bufpos] )
             Pop();
-
     }
 
     ++m_bufpos;
@@ -1813,7 +1827,6 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
 
         if( ',' == m_buf[m_bufpos] )
             Pop();
-
     }
 
     ++m_bufpos;
@@ -2008,6 +2021,4 @@ void WRLPROC::Pop( void )
 {
     if( m_bufpos < m_buf.size() )
         ++m_bufpos;
-
-    return;
 }

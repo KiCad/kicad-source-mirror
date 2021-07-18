@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ extern double DoubleFromString( const wxString& TextValue );
 
 // A helper function to find the choice in a list of values
 // return true if a index in aList that matches aValue is found.
-static bool findMatch(wxArrayString& aList, const wxString& aValue, int& aIdx )
+static bool findMatch( wxArrayString& aList, const wxString& aValue, int& aIdx )
 {
     bool success = false;
     // Find the previous choice index:
@@ -108,11 +108,6 @@ static bool findMatch(wxArrayString& aList, const wxString& aValue, int& aIdx )
 }
 
 
-/**
- * Function OnEpsilonR_Button
- * Shows a list of current relative dielectric constant(Er)
- * and set the selected value in main dialog frame
- */
 void PCB_CALCULATOR_FRAME::OnTranslineEpsilonR_Button( wxCommandEvent& event )
 {
     wxArrayString list = StandardRelativeDielectricConstantList();
@@ -131,11 +126,6 @@ void PCB_CALCULATOR_FRAME::OnTranslineEpsilonR_Button( wxCommandEvent& event )
 }
 
 
-/**
- * Function OnTanD_Button
- * Shows a list of current dielectric loss factor (tangent delta)
- * and set the selected value in main dialog frame
- */
 void PCB_CALCULATOR_FRAME::OnTranslineTanD_Button( wxCommandEvent& event )
 {
     wxArrayString list = StandardLossTangentList();
@@ -147,18 +137,13 @@ void PCB_CALCULATOR_FRAME::OnTranslineTanD_Button( wxCommandEvent& event )
     findMatch( list, prevChoiceStr, prevChoice );
 
     int index = wxGetSingleChoiceIndex( wxEmptyString, _( "Dielectric Loss Factor" ), list,
-                                        prevChoice, NULL );
+                                        prevChoice, nullptr );
 
     if( index >= 0 && !list.Item( index ).IsEmpty() )   // i.e. non canceled.
         m_Value_TanD->SetValue( list.Item( index ).BeforeFirst( ' ' ) );
 }
 
 
-/**
- * Function OnTranslineRho_Button
- * Shows a list of current Specific resistance list (rho)
- * and set the selected value in main dialog frame
- */
 void PCB_CALCULATOR_FRAME::OnTranslineRho_Button( wxCommandEvent& event )
 {
     wxArrayString list = StandardResistivityList();
@@ -170,7 +155,7 @@ void PCB_CALCULATOR_FRAME::OnTranslineRho_Button( wxCommandEvent& event )
     findMatch( list, prevChoiceStr, prevChoice );
 
     int index = wxGetSingleChoiceIndex( wxEmptyString, _( "Specific Resistance" ), list,
-                                        prevChoice, NULL );
+                                        prevChoice, nullptr );
 
     if( index >= 0 && !list.Item( index ).IsEmpty() )   // i.e. non canceled.
         m_Value_Rho->SetValue( list.Item( index ).BeforeFirst( ' ' ) );
@@ -186,14 +171,6 @@ struct DLG_PRM_DATA
 };
 
 
-/**
- * Function TranslineTypeSelection
- * Must be called after selection of a new transline.
- * Update all values, labels and tool tips of parameters needed
- * by the new transline
- * Irrelevant parameters texts are blanked.
- * @param aType = the transline_type_id of the new selected transline
-*/
 void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType )
 {
     m_currTransLineType = aType;
@@ -221,17 +198,19 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
     wxStaticText* left_msg_list[] =
     {
         m_left_message1, m_left_message2, m_left_message3, m_left_message4, m_left_message5,
-        m_left_message6, m_left_message7, NULL
+        m_left_message6, m_left_message7, nullptr
     };
+
     wxStaticText* msg_list[] =
     {
-        m_Message1, m_Message2, m_Message3, m_Message4, m_Message5, m_Message6, m_Message7, NULL
+        m_Message1, m_Message2, m_Message3, m_Message4, m_Message5, m_Message6, m_Message7, nullptr
     };
 
     unsigned jj = 0;
+
     for( ; jj < tr_ident->m_Messages.GetCount(); jj++ )
     {
-        if( left_msg_list[jj] == NULL )
+        if( left_msg_list[jj] == nullptr )
             break;
 
         left_msg_list[jj]->SetLabel( tr_ident->m_Messages[jj] );
@@ -246,12 +225,12 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
     }
 
 
-// Init parameters dialog items
+    // Init parameters dialog items
     struct DLG_PRM_DATA substrateprms[] =
             {
-                { m_EpsilonR_label,       m_Value_EpsilonR,       NULL },
-                { m_TanD_label,           m_Value_TanD,           NULL },
-                { m_Rho_label,            m_Value_Rho,            NULL },
+                { m_EpsilonR_label,       m_Value_EpsilonR,       nullptr },
+                { m_TanD_label,           m_Value_TanD,           nullptr },
+                { m_Rho_label,            m_Value_Rho,            nullptr },
                 { m_substrate_prm4_label, m_Substrate_prm4_Value, m_SubsPrm4_choiceUnit },
                 { m_substrate_prm5_label, m_Substrate_prm5_Value, m_SubsPrm5_choiceUnit },
                 { m_substrate_prm6_label, m_Substrate_prm6_Value, m_SubsPrm6_choiceUnit },
@@ -259,7 +238,8 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
                 { m_substrate_prm8_label, m_Substrate_prm8_Value, m_SubsPrm8_choiceUnit },
                 { m_substrate_prm9_label, m_Substrate_prm9_Value, m_SubsPrm9_choiceUnit }
             };
-    #define substrateprms_cnt (sizeof(substrateprms)/sizeof(substrateprms[0]))
+
+#define substrateprms_cnt (sizeof(substrateprms)/sizeof(substrateprms[0]))
 
     struct DLG_PRM_DATA physprms[] =
             {
@@ -267,7 +247,8 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
                 { m_phys_prm2_label, m_Phys_prm2_Value, m_choiceUnit_Param2 },
                 { m_phys_prm3_label, m_Phys_prm3_Value, m_choiceUnit_Param3 }
             };
-    #define physprms_cnt (sizeof(physprms)/sizeof(physprms[0]))
+
+#define physprms_cnt (sizeof(physprms)/sizeof(physprms[0]))
 
     struct DLG_PRM_DATA elecprms[] =
             {
@@ -275,13 +256,15 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
                 { m_elec_prm2_label, m_Elec_prm2_Value, m_choiceUnit_ElecPrm2 },
                 { m_elec_prm3_label, m_Elec_prm3_Value, m_choiceUnit_ElecPrm3 }
             };
-    #define elecprms_cnt (sizeof(elecprms)/sizeof(elecprms[0]))
+
+#define elecprms_cnt (sizeof(elecprms)/sizeof(elecprms[0]))
 
     struct DLG_PRM_DATA frequencyprms[] =
     {
         { m_Frequency_label,m_Value_Frequency_Ctrl, m_choiceUnit_Frequency }
     };
-    #define frequencyprms_cnt (sizeof(frequencyprms)/sizeof(frequencyprms[0]))
+
+#define frequencyprms_cnt (sizeof(frequencyprms)/sizeof(frequencyprms[0]))
 
     unsigned idxsubs = 0;
     unsigned idxphys = 0;
@@ -291,7 +274,8 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
     for( unsigned ii = 0; ii < tr_ident->GetPrmsCount(); ii++ )
     {
         TRANSLINE_PRM* prm = tr_ident->GetPrm( ii );
-        struct DLG_PRM_DATA * data = NULL;
+        struct DLG_PRM_DATA * data = nullptr;
+
         switch( prm->m_Type )
         {
         case PRM_TYPE_SUBS:
@@ -408,11 +392,7 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
    }
 }
 
-/**
- * Function TransfDlgDataToTranslineParams
- * Read values entered in dialog frame, and copy these values
- * in current transline parameters, converted in normalized units
- */
+
 void PCB_CALCULATOR_FRAME::TransfDlgDataToTranslineParams()
 {
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
@@ -437,10 +417,6 @@ void PCB_CALCULATOR_FRAME::TransfDlgDataToTranslineParams()
 }
 
 
-/**
- * Function OnTranslineSelection
- * Called on new transmission line selection
- */
 void PCB_CALCULATOR_FRAME::OnTranslineSelection( wxCommandEvent& event )
 {
     enum TRANSLINE_TYPE_ID id = (enum TRANSLINE_TYPE_ID) event.GetSelection();
@@ -454,11 +430,6 @@ void PCB_CALCULATOR_FRAME::OnTranslineSelection( wxCommandEvent& event )
 }
 
 
-/**
- * Function OnTransLineResetButtonClick
- * Called when the user clicks the reset button. This sets
- * the parameters to their default values.
- */
 void PCB_CALCULATOR_FRAME::OnTransLineResetButtonClick( wxCommandEvent& event )
 {
     TranslineTypeSelection( DEFAULT_TYPE );

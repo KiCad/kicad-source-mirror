@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -57,7 +57,7 @@ public:
     PLEDITOR_PRINTOUT( PL_EDITOR_FRAME* aParent, const wxString& aTitle ) :
         wxPrintout( aTitle )
     {
-        wxASSERT( aParent != NULL );
+        wxASSERT( aParent != nullptr );
         m_parent = aParent;
     }
 
@@ -93,9 +93,10 @@ public:
         if( show )
         {
             bool centre = false;
+
             if( s_size.x == 0 || s_size.y == 0 )
             {
-                s_size = (m_parent->GetSize() * 3) / 4;
+                s_size = ( m_parent->GetSize() * 3 ) / 4;
                 s_pos = wxDefaultPosition;
                 centre = true;
             }
@@ -115,6 +116,7 @@ public:
 
             ret = wxPreviewFrame::Show( show );
         }
+
         return ret;
     }
 
@@ -154,9 +156,7 @@ void PLEDITOR_PRINTOUT::GetPageInfo( int* minPage, int* maxPage,
     *maxPage = *selPageTo   = 2;
 }
 
-/*
- * This is the real print function: print the active screen
- */
+
 void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
 {
     wxPoint  tmp_startvisu;

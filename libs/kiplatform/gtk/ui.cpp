@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Ian McInerney <Ian.S.McInerney at ieee.org>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -90,7 +90,8 @@ bool KIPLATFORM::UI::IsStockCursorOk( wxStockCursor aCursor )
 
 void KIPLATFORM::UI::EllipsizeChoiceBox( wxChoice* aChoice )
 {
-    // This function is based on the code inside the function post_process_ui in gtkfilechooserwidget.c
+    // This function is based on the code inside the function post_process_ui in
+    // gtkfilechooserwidget.c
     GList* cells = gtk_cell_layout_get_cells( GTK_CELL_LAYOUT( aChoice->m_widget ) );
 
     if( !cells )
@@ -101,7 +102,7 @@ void KIPLATFORM::UI::EllipsizeChoiceBox( wxChoice* aChoice )
     if( !cell )
         return;
 
-    g_object_set( G_OBJECT( cell ), "ellipsize", PANGO_ELLIPSIZE_END, NULL );
+    g_object_set( G_OBJECT( cell ), "ellipsize", PANGO_ELLIPSIZE_END, nullptr );
 
     // Only the list of cells must be freed, the renderer isn't ours to free
     g_list_free( cells );
@@ -114,7 +115,7 @@ double KIPLATFORM::UI::GetSystemScaleFactor( const wxWindow* aWindow )
 
     GtkWidget* widget = static_cast<GtkWidget*>( aWindow->GetHandle() );
 
-    if( widget && gtk_check_version( 3, 10, 0 ) == NULL )
+    if( widget && gtk_check_version( 3, 10, 0 ) == nullptr )
         val = gtk_widget_get_scale_factor( widget );
 
     return val;

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,11 +48,11 @@
 
 SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline );
 
+
 WRL2BASE::WRL2BASE() : WRL2NODE()
 {
     m_useInline = false;
     m_Type = WRL2NODES::WRL2_BASE;
-    return;
 }
 
 
@@ -65,29 +66,26 @@ WRL2BASE::~WRL2BASE()
         SGNODE* np = iS->second;
 
         // destroy any orphaned Inline{} node data
-        if( np && NULL == S3D::GetSGNodeParent( np ) )
+        if( np && nullptr == S3D::GetSGNodeParent( np ) )
             S3D::DestroyNode( np );
 
         ++iS;
     }
 
     m_inlineModels.clear();
-
-    return;
 }
 
 
-// functions inherited from WRL2NODE
 bool WRL2BASE::SetParent( WRL2NODE* aParent, bool /* doUnlink */ )
 {
-    #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] attempting to set parent on WRL2BASE node";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -96,7 +94,6 @@ bool WRL2BASE::SetParent( WRL2NODE* aParent, bool /* doUnlink */ )
 void WRL2BASE::SetEnableInline( bool enable )
 {
     m_useInline = enable;
-    return;
 }
 
 
@@ -109,7 +106,7 @@ bool WRL2BASE::GetEnableInline( void )
 SGNODE* WRL2BASE::GetInlineData( const std::string& aName )
 {
     if( aName.empty() )
-        return NULL;
+        return nullptr;
 
     std::map< std::string, SGNODE* >::iterator dp = m_inlineModels.find( aName );
 
@@ -121,7 +118,7 @@ SGNODE* WRL2BASE::GetInlineData( const std::string& aName )
     if( aName.compare( 0, 7, "file://" ) == 0 )
     {
         if( aName.length() <= 7 )
-            return NULL;
+            return nullptr;
 
         tname = wxString::FromUTF8Unchecked( aName.substr( 7 ).c_str() );
     }
@@ -142,16 +139,16 @@ SGNODE* WRL2BASE::GetInlineData( const std::string& aName )
 
     if( !fn.Normalize() )
     {
-        m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, NULL ) );
-        return NULL;
+        m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, nullptr ) );
+        return nullptr;
     }
 
     SCENEGRAPH* sp = LoadVRML( fn.GetFullPath(), false );
 
-    if( NULL == sp )
+    if( nullptr == sp )
     {
-        m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, NULL ) );
-        return NULL;
+        m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, nullptr ) );
+        return nullptr;
     }
 
     m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, (SGNODE*)sp ) );
@@ -162,14 +159,14 @@ SGNODE* WRL2BASE::GetInlineData( const std::string& aName )
 
 std::string WRL2BASE::GetName( void )
 {
-    #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] attempting to extract name from virtual base node";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return std::string( "" );
 }
@@ -177,14 +174,14 @@ std::string WRL2BASE::GetName( void )
 
 bool WRL2BASE::SetName( const std::string& aName )
 {
-    #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] attempting to set name on virtual base node";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -194,19 +191,19 @@ bool WRL2BASE::Read( WRLPROC& proc )
 {
     if( proc.GetVRMLType() != WRLVERSION::VRML_V2 )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] no open file or file is not a VRML2 file";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
-    WRL2NODE* node = NULL;
+    WRL2NODE* node = nullptr;
     m_dir = proc.GetParentDir();
 
     while( ReadNode( proc, this, &node ) && !proc.eof() );
@@ -227,19 +224,19 @@ bool WRL2BASE::isDangling( void )
 
 bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     if( !aParent )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] invoked with NULL parent";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -248,38 +245,38 @@ bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
 
     if( !proc.ReadName( glob ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << proc.GetError();
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
-    WRL2NODE* ref = aParent->FindNode( glob, NULL );
+    WRL2NODE* ref = aParent->FindNode( glob, nullptr );
 
     // return 'true' - the file may be defective but it may still be somewhat OK
-    if( NULL == ref )
+    if( nullptr == ref )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] node '" << glob << "' not found";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return true;
     }
 
     if( !aParent->AddRefNode( ref ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -288,12 +285,12 @@ bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
             ostr << aParent->GetNodeTypeName( aParent->GetNodeType() );
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = ref;
 
     return true;
@@ -302,36 +299,36 @@ bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
 
 bool WRL2BASE::implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
-    if( NULL == aParent )
+    if( nullptr == aParent )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] invalid parent pointer (NULL)";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     std::string glob;
-    WRL2NODE* lnode = NULL;
+    WRL2NODE* lnode = nullptr;
 
     if( !proc.ReadName( glob ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << proc.GetError();
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -341,12 +338,12 @@ bool WRL2BASE::implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
 
     if( ReadNode( proc, aParent, &lnode ) )
     {
-        if( NULL != aNode )
+        if( nullptr != aNode )
             *aNode = lnode;
 
         if( lnode && !lnode->SetName( glob ) )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 size_t line, column;
@@ -356,7 +353,7 @@ bool WRL2BASE::implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
                 ostr << line << ", column " << column;
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -376,19 +373,19 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     // must always check the value of aNode when the function returns
     // 'true' since it will be NULL if the node type is not supported.
 
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
-    if( NULL == aParent )
+    if( nullptr == aParent )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] invalid parent pointer (NULL)";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -398,7 +395,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
     if( !proc.ReadName( glob ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         if( !proc.eof() )
         {
             std::ostringstream ostr;
@@ -406,7 +403,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
             ostr << proc.GetError();
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         }
-        #endif
+#endif
 
         return false;
     }
@@ -426,14 +423,14 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     {
         if( !implementUse( proc, aParent, aNode ) )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << proc.GetError();
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -445,14 +442,14 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     {
         if( !implementDef( proc, aParent, aNode ) )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << proc.GetError();
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -465,14 +462,14 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     {
         if( !proc.ReadName( glob ) || !proc.DiscardList() )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << proc.GetError();
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -485,14 +482,14 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     {
         if( !proc.ReadName( glob ) || !proc.ReadName( glob ) || !proc.DiscardList() )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << proc.GetError();
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -505,14 +502,14 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     {
         if( !proc.ReadGlob( glob ) || !proc.ReadGlob( glob ) || !proc.ReadGlob( glob ) )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << proc.GetError();
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -525,13 +522,13 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     size_t column = 0;
     proc.GetFilePosData( line, column );
 
-    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Processing node '" << glob << "' ID: " << ntype;
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     switch( ntype )
     {
@@ -563,18 +560,18 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
             do {
                 std::ostringstream ostr;
                 ostr << " * [INFO] FAIL: discard " << glob << " node at l";
                 ostr << line << ", c" << column;
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         else
         {
             do {
@@ -584,7 +581,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
         }
-        #endif
+#endif
 
         break;
 
@@ -599,18 +596,18 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
             do {
                 std::ostringstream ostr;
                 ostr << " * [INFO] FAIL: discard " << glob << " node at l";
                 ostr << line << ", c" << column;
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         else
         {
             std::ostringstream ostr;
@@ -618,7 +615,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
             ostr << line << ", c" << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         }
-        #endif
+#endif
 
         break;
 
@@ -626,18 +623,18 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
             do {
                 std::ostringstream ostr;
                 ostr << " * [INFO] FAIL: discard " << glob << " node at l";
                 ostr << line << ", c" << column;
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         else
         {
             do {
@@ -647,7 +644,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
         }
-        #endif
+#endif
 
         break;
 
@@ -655,18 +652,18 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
             do {
                 std::ostringstream ostr;
                 ostr << " * [INFO] FAIL: discard " << glob << " node at l";
                 ostr << line << ", c" << column;
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         else
         {
             std::ostringstream ostr;
@@ -674,7 +671,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
             ostr << line << ", c" << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         }
-        #endif
+#endif
 
         break;
 
@@ -724,18 +721,18 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
             do {
                 std::ostringstream ostr;
                 ostr << " * [INFO] FAIL: discard " << glob << " node at l";
                 ostr << line << ", c" << column;
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         else
         {
             std::ostringstream ostr;
@@ -743,7 +740,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
             ostr << line << ", c" << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         }
-        #endif
+#endif
 
         break;
 
@@ -814,7 +811,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         if( !proc.DiscardNode() )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << proc.GetError() << "\n";
@@ -823,11 +820,11 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
                 ostr << ", column " << column;
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         else
         {
             std::ostringstream ostr;
@@ -835,7 +832,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
             ostr << line << ", c" << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         }
-        #endif
+#endif
 
         break;
     }
@@ -847,7 +844,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 bool WRL2BASE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 {
     // this function makes no sense in the base node
-    #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
     do {
         std::ostringstream ostr;
         ostr << proc.GetError() << "\n";
@@ -855,7 +852,7 @@ bool WRL2BASE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         ostr << " * [BUG] this method must never be invoked on a WRL2BASE object";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -863,8 +860,8 @@ bool WRL2BASE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
 bool WRL2BASE::readTransform( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     WRL2TRANSFORM* np = new WRL2TRANSFORM( aParent );
 
@@ -874,7 +871,7 @@ bool WRL2BASE::readTransform( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -883,8 +880,8 @@ bool WRL2BASE::readTransform( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode
 
 bool WRL2BASE::readShape( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     WRL2SHAPE* np = new WRL2SHAPE( aParent );
 
@@ -894,7 +891,7 @@ bool WRL2BASE::readShape( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -903,8 +900,8 @@ bool WRL2BASE::readShape( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
 bool WRL2BASE::readAppearance( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     WRL2APPEARANCE* np = new WRL2APPEARANCE( aParent );
 
@@ -914,7 +911,7 @@ bool WRL2BASE::readAppearance( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNod
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -923,8 +920,8 @@ bool WRL2BASE::readAppearance( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNod
 
 bool WRL2BASE::readMaterial( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     WRL2MATERIAL* np = new WRL2MATERIAL( aParent );
 
@@ -934,7 +931,7 @@ bool WRL2BASE::readMaterial( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -943,8 +940,8 @@ bool WRL2BASE::readMaterial( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
 
 bool WRL2BASE::readFaceSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     WRL2FACESET* np = new WRL2FACESET( aParent );
 
@@ -954,7 +951,7 @@ bool WRL2BASE::readFaceSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -963,8 +960,8 @@ bool WRL2BASE::readFaceSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
 bool WRL2BASE::readLineSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     WRL2LINESET* np = new WRL2LINESET( aParent );
 
@@ -974,7 +971,7 @@ bool WRL2BASE::readLineSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -983,8 +980,8 @@ bool WRL2BASE::readLineSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
 bool WRL2BASE::readPointSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     WRL2POINTSET* np = new WRL2POINTSET( aParent );
 
@@ -994,7 +991,7 @@ bool WRL2BASE::readPointSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -1003,8 +1000,8 @@ bool WRL2BASE::readPointSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
 
 bool WRL2BASE::readCoords( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     WRL2COORDS* np = new WRL2COORDS( aParent );
 
@@ -1014,7 +1011,7 @@ bool WRL2BASE::readCoords( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -1023,8 +1020,8 @@ bool WRL2BASE::readCoords( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
 bool WRL2BASE::readNorms( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     WRL2NORMS* np = new WRL2NORMS( aParent );
 
@@ -1034,7 +1031,7 @@ bool WRL2BASE::readNorms( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -1043,8 +1040,8 @@ bool WRL2BASE::readNorms( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
 bool WRL2BASE::readColor( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     WRL2COLOR* np = new WRL2COLOR( aParent );
 
@@ -1054,7 +1051,7 @@ bool WRL2BASE::readColor( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -1063,8 +1060,8 @@ bool WRL2BASE::readColor( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
 bool WRL2BASE::readBox( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     WRL2BOX* np = new WRL2BOX( aParent );
 
@@ -1074,7 +1071,7 @@ bool WRL2BASE::readBox( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -1083,8 +1080,8 @@ bool WRL2BASE::readBox( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
 bool WRL2BASE::readSwitch( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     WRL2SWITCH* np = new WRL2SWITCH( aParent );
 
@@ -1094,7 +1091,7 @@ bool WRL2BASE::readSwitch( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -1103,8 +1100,8 @@ bool WRL2BASE::readSwitch( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
 bool WRL2BASE::readInline( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
+    if( nullptr != aNode )
+        *aNode = nullptr;
 
     if( !m_useInline )
     {
@@ -1114,7 +1111,7 @@ bool WRL2BASE::readInline( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         if( !proc.DiscardNode() )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << proc.GetError() << "\n";
@@ -1123,7 +1120,7 @@ bool WRL2BASE::readInline( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
                 ostr << ", column " << column;
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -1139,7 +1136,7 @@ bool WRL2BASE::readInline( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         return false;
     }
 
-    if( NULL != aNode )
+    if( nullptr != aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
@@ -1149,13 +1146,13 @@ bool WRL2BASE::readInline( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
 {
     if( m_Children.empty() )
-        return NULL;
+        return nullptr;
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
+    if( nullptr != aParent && ptype != S3D::SGTYPE_SHAPE )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -1163,24 +1160,24 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
             ostr << ptype << ")";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
     if( m_sgNode )
     {
-        if( NULL != aParent )
+        if( nullptr != aParent )
         {
-            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+            if( nullptr == S3D::GetSGNodeParent( m_sgNode )
                 && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
             else if( aParent != S3D::GetSGNodeParent( m_sgNode )
                      && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
         }
 
@@ -1209,7 +1206,7 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
                 IFSG_TRANSFORM wrapper( topNode.GetRawPtr() );
                 SGNODE* pshape = (*sC)->TranslateToSG( wrapper.GetRawPtr() );
 
-                if( NULL != pshape )
+                if( nullptr != pshape )
                     test = true;
                 else
                     wrapper.Destroy();
@@ -1222,7 +1219,7 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
         case WRL2NODES::WRL2_SWITCH:
         case WRL2NODES::WRL2_INLINE:
 
-            if( NULL != (*sC)->TranslateToSG( topNode.GetRawPtr() ) )
+            if( nullptr != (*sC)->TranslateToSG( topNode.GetRawPtr() ) )
                 test = true;
 
             break;
@@ -1237,7 +1234,7 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
     if( false == test )
     {
         topNode.Destroy();
-        return NULL;
+        return nullptr;
     }
 
     m_sgNode = topNode.GetRawPtr();

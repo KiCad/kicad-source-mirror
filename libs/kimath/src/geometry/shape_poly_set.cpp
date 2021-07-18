@@ -105,7 +105,7 @@ SHAPE* SHAPE_POLY_SET::Clone() const
 
 
 bool SHAPE_POLY_SET::GetRelativeIndices( int aGlobalIdx,
-        SHAPE_POLY_SET::VERTEX_INDEX* aRelativeIndices ) const
+                                         SHAPE_POLY_SET::VERTEX_INDEX* aRelativeIndices ) const
 {
     int polygonIdx = 0;
     unsigned int contourIdx = 0;
@@ -652,7 +652,8 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
                     CLIPPER_Z_VALUE                    zval = newIntersectPoints.at( pt );
 
                     // Fixup arc end points to match the new intersection points found in clipper
-                    //@todo consider editing the intersection point to be the "true" arc intersection
+                    // @todo consider editing the intersection point to be the "true" arc
+                    //       intersection.
                     if( poly[i].IsSharedPt( j ) )
                     {
                         poly[i].amendArcEnd( shape.first, pt );
@@ -845,7 +846,7 @@ struct FractureEdge
 {
     FractureEdge( int y = 0 ) :
         m_connected( false ),
-        m_next( NULL )
+        m_next( nullptr )
     {
         m_p1.x = m_p2.y = y;
     }
@@ -854,7 +855,7 @@ struct FractureEdge
         m_connected( connected ),
         m_p1( p1 ),
         m_p2( p2 ),
-        m_next( NULL )
+        m_next( nullptr )
     {
     }
 
@@ -880,7 +881,7 @@ static int processEdge( FractureEdgeSet& edges, FractureEdge* edge )
     int min_dist    = std::numeric_limits<int>::max();
     int x_nearest   = 0;
 
-    FractureEdge* e_nearest = NULL;
+    FractureEdge* e_nearest = nullptr;
 
     for( FractureEdge* e : edges )
     {
@@ -951,7 +952,7 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
 {
     FractureEdgeSet edges;
     FractureEdgeSet border_edges;
-    FractureEdge*   root = NULL;
+    FractureEdge*   root = nullptr;
 
     bool first = true;
 
@@ -965,7 +966,7 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
         const std::vector<VECTOR2I>& points = path.CPoints();
         int pointCount = points.size();
 
-        FractureEdge* prev = NULL, * first_edge = NULL;
+        FractureEdge* prev = nullptr, * first_edge = nullptr;
 
         int x_min = std::numeric_limits<int>::max();
 
@@ -980,7 +981,7 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
             // Do not use path.CPoint() here; open-coding it using the local variables "points"
             // and "pointCount" gives a non-trivial performance boost to zone fill times.
             FractureEdge* fe = new FractureEdge( first, points[ i ],
-                                                        points[ i+1 == pointCount ? 0 : i+1 ] );
+                                                 points[ i+1 == pointCount ? 0 : i+1 ] );
 
             if( !root )
                 root = fe;
@@ -1015,7 +1016,7 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
     {
         int x_min = std::numeric_limits<int>::max();
 
-        FractureEdge* smallestX = NULL;
+        FractureEdge* smallestX = nullptr;
 
         // find the left-most hole edge and merge with the outline
         for( FractureEdge* border_edge : border_edges )
@@ -1274,7 +1275,7 @@ int SHAPE_POLY_SET::NormalizeAreaOutlines()
 
     Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-    // If any hole, substract it to main outline
+    // If any hole, subtract it to main outline
     if( holesBuffer.OutlineCount() )
     {
         holesBuffer.Simplify( SHAPE_POLY_SET::PM_FAST );
@@ -2022,7 +2023,8 @@ SHAPE_POLY_SET SHAPE_POLY_SET::Fillet( int aRadius, int aErrorMax )
 
 
 SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
-                                        unsigned int aDistance, int aIndex, int aErrorMax )
+                                                              unsigned int aDistance,
+                                                              int aIndex, int aErrorMax )
 {
     // Null segments create serious issues in calculations. Remove them:
     RemoveNullSegments();
@@ -2204,6 +2206,7 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
     return *this;
 }
 
+
 MD5_HASH SHAPE_POLY_SET::GetHash() const
 {
     if( !m_hash.IsValid() )
@@ -2323,7 +2326,7 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
 
     if( aPartition )
     {
-        // This partitions into regularly-sized grids (1cm in pcbnew)
+        // This partitions into regularly-sized grids (1cm in Pcbnew)
         SHAPE_POLY_SET flattened( *this );
         flattened.ClearArcs();
         partitionPolyIntoRegularCellGrid( flattened, 1e7, tmpSet );
@@ -2344,7 +2347,7 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
         m_triangulatedPolys.push_back( std::make_unique<TRIANGULATED_POLYGON>() );
         PolygonTriangulation tess( *m_triangulatedPolys.back() );
 
-        // If the tesselation fails, we re-fracture the polygon, which will
+        // If the tessellation fails, we re-fracture the polygon, which will
         // first simplify the system before fracturing and removing the holes
         // This may result in multiple, disjoint polygons.
         if( !tess.TesselatePolygon( tmpSet.Polygon( 0 ).front() ) )

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -275,7 +276,7 @@ public:
 
     const query_iterator qend()
     {
-        return query_iterator( m_shapes.end(), m_shapes.end(), NULL, 0, false );
+        return query_iterator( m_shapes.end(), m_shapes.end(), nullptr, 0, false );
     }
 
     iterator begin()

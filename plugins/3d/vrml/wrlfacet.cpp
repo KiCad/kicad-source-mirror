@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,16 +124,16 @@ static float VCalcCosAngle( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLVEC
     // place a limit to prevent calculations from blowing up
     if( dn < LOWER_LIMIT )
     {
-        if( (p12 + p13 - p23) < FLT_EPSILON )
+        if( ( p12 + p13 - p23 ) < FLT_EPSILON )
             return -1.0f;
 
-        if( (p12 + p13 - p23) > FLT_EPSILON )
+        if( ( p12 + p13 - p23 ) > FLT_EPSILON )
             return 1.0f;
 
         return 0.0f;
     }
 
-    float cosAngle = (p12 + p13 - p23) / dn;
+    float cosAngle = ( p12 + p13 - p23 ) / dn;
 
     // check the domain; errors in the cosAngle calculation
     // can result in domain errors
@@ -167,8 +168,6 @@ void FACET::Init()
     face_normal.y = 0.0;
     face_normal.z = 0.0;
     maxIdx = 0;
-
-    return;
 }
 
 
@@ -200,8 +199,6 @@ void FACET::AddVertex( WRLVEC3F& aVertex, int aIndex )
 
     if( aIndex > maxIdx )
         maxIdx = aIndex;
-
-    return;
 }
 
 
@@ -386,8 +383,8 @@ void FACET::CalcVertexNormal( int aIndex, std::list< FACET* > &aFacetList, float
 
             // normalize the vector
             float dn = sqrtf( norms[idx].x * norms[idx].x
-                + norms[idx].y * norms[idx].y
-                + norms[idx].z * norms[idx].z );
+                            + norms[idx].y * norms[idx].y
+                            + norms[idx].z * norms[idx].z );
 
             if( dn > LOWER_LIMIT )
             {
@@ -410,8 +407,6 @@ void FACET::CalcVertexNormal( int aIndex, std::list< FACET* > &aFacetList, float
         ++idx;
         ++sI;
     }
-
-    return;
 }
 
 
@@ -466,7 +461,7 @@ bool FACET::GetFaceNormal( WRLVEC3F& aNorm )
 
 
 bool FACET::GetData( std::vector< WRLVEC3F >& aVertexList, std::vector< WRLVEC3F >& aNormalsList,
-     std::vector< SGCOLOR >& aColorsList, WRL1_ORDER aVertexOrder )
+                     std::vector< SGCOLOR >& aColorsList, WRL1_ORDER aVertexOrder )
 {
     // if no normals are calculated we simply return
     if( norms.empty() )
@@ -663,8 +658,6 @@ void FACET::CollectVertices( std::vector< std::list< FACET* > >& aFacetList )
         aFacetList[*sI].push_back( this );
         ++sI;
     }
-
-    return;
 }
 
 
@@ -681,8 +674,6 @@ void FACET::Renormalize( float aMaxValue )
         vnweight[i].y /= aMaxValue;
         vnweight[i].z /= aMaxValue;
     }
-
-    return;
 }
 
 
@@ -711,10 +702,10 @@ FACET* SHAPE::NewFacet()
 
 
 SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrder,
-        float aCreaseLimit, bool isVRML2 )
+                          float aCreaseLimit, bool isVRML2 )
 {
     if( facets.empty() || !facets.front()->HasMinPoints() )
-        return NULL;
+        return nullptr;
 
     std::vector< std::list< FACET* > > flist;
 
@@ -744,7 +735,7 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
     ++maxIdx;
 
     if( maxIdx < 3 )
-        return NULL;
+        return nullptr;
 
     flist.resize( maxIdx );
 
@@ -790,7 +781,7 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
     flist.clear();
 
     if( vertices.size() < 3 )
-        return NULL;
+        return nullptr;
 
     IFSG_SHAPE shapeNode( false );
 
@@ -800,7 +791,7 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
 
         if( aColor )
         {
-            if( NULL == S3D::GetSGNodeParent( aColor ) )
+            if( nullptr == S3D::GetSGNodeParent( aColor ) )
                 shapeNode.AddChildNode( aColor );
             else
                 shapeNode.AddRefNode( aColor );

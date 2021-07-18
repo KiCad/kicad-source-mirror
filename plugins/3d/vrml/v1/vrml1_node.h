@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,16 +68,22 @@ struct WRL1STATUS
 {
     // material
     WRL1MATERIAL* mat;
+
     // normals
     WRL1NODE* norm;
+
     // coordinate3
     WRL1COORDS* coord;
+
     // material binding
     WRL1_BINDING matbind;
+
     // normal binding
     WRL1_BINDING normbind;
+
     // transform
     glm::mat4 txmatrix;
+
     // winding order of vertices
     WRL1_ORDER order;
 
@@ -91,11 +98,11 @@ struct WRL1STATUS
 
     void Init()
     {
-        mat = NULL;
+        mat = nullptr;
         matbind = WRL1_BINDING::BIND_OVERALL;
-        norm = NULL;
+        norm = nullptr;
         normbind = WRL1_BINDING::BIND_DEFAULT;
-        coord = NULL;
+        coord = nullptr;
         txmatrix = glm::scale( glm::mat4( 1.0 ), glm::vec3( 1.0 ) );
         order = WRL1_ORDER::ORD_UNKNOWN;
         creaseLimit = 0.878f;
@@ -105,11 +112,118 @@ struct WRL1STATUS
 
 
 /**
- * WRL1NODE
- * represents the base class of all VRML1 nodes
+ * The base class of all VRML1 nodes
  */
 class WRL1NODE
 {
+public:
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+    static std::string tabs;
+#endif
+
+    // cancel the dictionary pointer; for internal use only
+    void cancelDict( void );
+
+    /**
+     * Return the ID based on the given \a aNodeName or WRL1_INVALID (WRL1_END)
+     * if no such node name exists.
+     */
+    WRL1NODES getNodeTypeID( const std::string& aNodeName );
+
+    /**
+     * Remove references to an owned child; it is invoked by the child upon destruction
+     * to ensure that the parent has no invalid references.
+     *
+     * @param aNode is the child which is being deleted.
+     */
+    virtual void unlinkChildNode( const WRL1NODE* aNode );
+
+    /**
+     * Remove pointers to a referenced node; it is invoked by the referenced node
+     * upon destruction to ensure that the referring node has no invalid references.
+     *
+     * @param aNode is the node which is being deleted.
+     */
+    virtual void unlinkRefNode( const WRL1NODE* aNode );
+
+    /**
+     * Add a pointer to a node which references, but does not own, this node.
+     *
+     * Such back-pointers are required to ensure that invalidated references
+     * are removed when a node is deleted
+     *
+     * @param aNode is the node holding a reference to this object.
+     */
+    void addNodeRef( WRL1NODE* aNode );
+
+    /**
+     * Remove a pointer to a node which references, but does not own, this node.
+     *
+     * @param aNode is the node holding a reference to this object.
+     */
+    void delNodeRef( WRL1NODE* aNode );
+
+public:
+    WRL1NODE( NAMEREGISTER* aDictionary );
+    virtual ~WRL1NODE();
+
+    // read data via the given file processor and WRL1BASE object
+    virtual bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) = 0;
+
+    /**
+     * Return the type of this node instance.
+     */
+    WRL1NODES GetNodeType( void ) const;
+
+    /**
+     * Return a pointer to the parent SGNODE of this object or NULL if the object has no
+     * parent (ie. top level transform).
+     */
+    WRL1NODE* GetParent( void ) const;
+
+    /**
+     * Set the parent WRL1NODE of this object.
+     *
+     * @param aParent [in] is the desired parent node.
+     * @param doUnlink indicates that the child must be unlinked from the parent
+     * @return true if the operation succeeds; false if the given node is not allowed to
+     *         be a parent to the derived object.
+     */
+    virtual bool SetParent( WRL1NODE* aParent, bool doUnlink = true );
+
+    virtual std::string GetName( void );
+    virtual bool SetName( const std::string& aName );
+
+    const char* GetNodeTypeName( WRL1NODES aNodeType ) const;
+
+    size_t GetNItems( void ) const;
+
+    /**
+     * Search the tree of linked nodes and returns a reference to the current node with the
+     * given name.
+     *
+     * The reference is then typically added to another node via AddRefNode().
+     *
+     * @param aNodeName is the name of the node to search for.
+     * @return is a valid node pointer on success, otherwise NULL.
+     */
+    virtual WRL1NODE* FindNode( const std::string& aNodeName );
+
+    virtual bool AddChildNode( WRL1NODE* aNode );
+
+    virtual bool AddRefNode( WRL1NODE* aNode );
+
+    std::string GetError( void );
+
+    /**
+     * Produce a representation of the data using the intermediate scenegraph structures of the
+     * kicad_3dsg library.
+     *
+     * @param aParent is a pointer to the parent SG node.
+     * @return is non-NULL on success.
+     */
+    virtual SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) = 0;
+
 private:
     void addItem( WRL1NODE* aNode );
     void delItem( const WRL1NODE* aNode );
@@ -136,122 +250,6 @@ protected:
     // dictionary must be propagated to all children as well - perhaps
     // this is best done via a SetDictionary() function.
     NAMEREGISTER* m_dictionary;
-
-public:
-    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    static std::string tabs;
-    #endif
-
-    // cancel the dictionary pointer; for internal use only
-    void cancelDict( void );
-
-    /**
-     * Function getNodeTypeID
-     * returns the ID based on the given aNodeName or WRL1_INVALID (WRL1_END)
-     * if no such node name exists
-     */
-    WRL1NODES getNodeTypeID( const std::string& aNodeName );
-
-    /**
-     * Function unlinkChild
-     * removes references to an owned child; it is invoked by the child upon destruction
-     * to ensure that the parent has no invalid references.
-     *
-     * @param aNode is the child which is being deleted
-     */
-    virtual void unlinkChildNode( const WRL1NODE* aNode );
-
-    /**
-     * Function unlinkRef
-     * removes pointers to a referenced node; it is invoked by the referenced node
-     * upon destruction to ensure that the referring node has no invalid references.
-     *
-     * @param aNode is the node which is being deleted
-     */
-    virtual void unlinkRefNode( const WRL1NODE* aNode );
-
-    /**
-     * Function addNodeRef
-     * adds a pointer to a node which references, but does not own, this node.
-     * Such back-pointers are required to ensure that invalidated references
-     * are removed when a node is deleted
-     *
-     * @param aNode is the node holding a reference to this object
-     */
-    void addNodeRef( WRL1NODE* aNode );
-
-    /**
-     * Function delNodeRef
-     * removes a pointer to a node which references, but does not own, this node.
-     *
-     * @param aNode is the node holding a reference to this object
-     */
-    void delNodeRef( WRL1NODE* aNode );
-
-public:
-    WRL1NODE( NAMEREGISTER* aDictionary );
-    virtual ~WRL1NODE();
-
-    // read data via the given file processor and WRL1BASE object
-    virtual bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) = 0;
-
-    /**
-     * Function GetNodeType
-     * returns the type of this node instance
-     */
-    WRL1NODES GetNodeType( void ) const;
-
-    /**
-     * Function GetParent
-     * returns a pointer to the parent SGNODE of this object
-     * or NULL if the object has no parent (ie. top level transform)
-     */
-    WRL1NODE* GetParent( void ) const;
-
-    /**
-     * Function SetParent
-     * sets the parent WRL1NODE of this object.
-     *
-     * @param aParent [in] is the desired parent node
-     * @param doUnlink indicates that the child must be unlinked from the parent
-     * @return true if the operation succeeds; false if
-     * the given node is not allowed to be a parent to
-     * the derived object.
-     */
-    virtual bool SetParent( WRL1NODE* aParent, bool doUnlink = true );
-
-    virtual std::string GetName( void );
-    virtual bool SetName( const std::string& aName );
-
-    const char* GetNodeTypeName( WRL1NODES aNodeType ) const;
-
-    size_t GetNItems( void ) const;
-
-    /**
-     * Function FindNode searches the tree of linked nodes and returns a
-     * reference to the current node with the given name. The reference
-     * is then typically added to another node via AddRefNode().
-     *
-     * @param aNodeName is the name of the node to search for
-     * @return is a valid node pointer on success, otherwise NULL
-     */
-    virtual WRL1NODE* FindNode( const std::string& aNodeName );
-
-    virtual bool AddChildNode( WRL1NODE* aNode );
-
-    virtual bool AddRefNode( WRL1NODE* aNode );
-
-    std::string GetError( void );
-
-    /**
-     * Function TranslateToSG
-     * produces a representation of the data using the intermediate
-     * scenegraph structures of the kicad_3dsg library.
-     *
-     * @param aParent is a pointer to the parent SG node
-     * @return is non-NULL on success
-     */
-    virtual SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) = 0;
 };
 
 #endif  // VRML1_NODE_H

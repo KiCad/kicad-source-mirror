@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,61 +34,54 @@
 
 WRL1MATERIAL::WRL1MATERIAL( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
-    colors[0] = NULL;
-    colors[1] = NULL;
+    colors[0] = nullptr;
+    colors[1] = nullptr;
     m_Type = WRL1NODES::WRL1_MATERIAL;
-    return;
 }
 
 
 WRL1MATERIAL::WRL1MATERIAL( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     WRL1NODE( aDictionary )
 {
-    colors[0] = NULL;
-    colors[1] = NULL;
+    colors[0] = nullptr;
+    colors[1] = nullptr;
     m_Type = WRL1NODES::WRL1_MATERIAL;
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
-
-    return;
 }
 
 
 WRL1MATERIAL::~WRL1MATERIAL()
 {
-    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    wxLogTrace( MASK_VRML, " * [INFO] Destroying Material node\n" );
-    #endif
+    wxLogTrace( MASK_VRML, " * [INFO] Destroying Material node" );
 
     // destroy any orphaned color nodes
     for( int i = 0; i < 2; ++i )
     {
-        if( NULL != colors[i] )
+        if( nullptr != colors[i] )
         {
-            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
             do {
                 std::ostringstream ostr;
                 ostr << " * [INFO] Destroying SGCOLOR #" << i;
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
-            if( NULL == S3D::GetSGNodeParent( colors[i] ) )
+            if( nullptr == S3D::GetSGNodeParent( colors[i] ) )
                 S3D::DestroyNode( colors[i] );
 
-            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
             do {
                 std::ostringstream ostr;
                 ostr << " * [INFO] destroyed SGCOLOR #" << i;
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
         }
     }
-
-    return;
 }
 
 
@@ -95,14 +89,14 @@ bool WRL1MATERIAL::AddRefNode( WRL1NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] AddRefNode is not applicable";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -112,14 +106,14 @@ bool WRL1MATERIAL::AddChildNode( WRL1NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] AddChildNode is not applicable";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -127,16 +121,16 @@ bool WRL1MATERIAL::AddChildNode( WRL1NODE* aNode )
 
 bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 {
-    if( NULL == aTopNode )
+    if( nullptr == aTopNode )
     {
-        #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] aTopNode is NULL";
+            ostr << " * [BUG] aTopNode is nullptr";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -148,7 +142,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -156,14 +150,14 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             ostr << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( '{' != tok )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         do {
             std::ostringstream ostr;
             ostr << proc.GetError() << "\n";
@@ -172,7 +166,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             ostr << "' at line " << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -190,14 +184,14 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
         if( !proc.ReadName( glob ) )
         {
-            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << proc.GetError();
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -216,7 +210,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadMFVec3f( specularColor ) )
             {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -226,7 +220,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -235,7 +229,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadMFVec3f( diffuseColor ) )
             {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -245,7 +239,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -254,7 +248,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadMFVec3f( emissiveColor ) )
             {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -264,7 +258,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -273,7 +267,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadMFFloat( shininess ) )
             {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -283,7 +277,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -292,7 +286,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadMFFloat( transparency ) )
             {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -302,7 +296,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -311,7 +305,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadMFVec3f( ambientColor ) )
             {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -321,14 +315,14 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
         }
         else
         {
-            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -337,7 +331,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -349,18 +343,16 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
 SGNODE* WRL1MATERIAL::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
-    if( NULL == sp )
+    if( nullptr == sp )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        wxLogTrace( MASK_VRML, " * [INFO] bad model: no base data given\n" );
-        #endif
+        wxLogTrace( MASK_VRML, " * [INFO] bad model: no base data given" );
 
-        return NULL;
+        return nullptr;
     }
 
     sp->mat = this;
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -372,7 +364,7 @@ SGNODE* WRL1MATERIAL::GetAppearance( int aIndex )
     if( aIndex != 0 && aIndex != 1 )
         aIndex = 0;
 
-    if( NULL != colors[ aIndex ] )
+    if( nullptr != colors[ aIndex ] )
         return colors[ aIndex ];
 
     IFSG_APPEARANCE app( true );
@@ -475,7 +467,7 @@ SGNODE* WRL1MATERIAL::GetAppearance( int aIndex )
 
 void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
 {
-    if( NULL == aColor )
+    if( nullptr == aColor )
         return;
 
     // Calculate the color based on the given index using the formula:
@@ -639,8 +631,6 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
     checkRange( green );
     checkRange( blue );
     aColor->SetColor( red, green, blue );
-
-    return;
 }
 
 
@@ -650,32 +640,28 @@ void WRL1MATERIAL::checkRange( float& aValue )
         aValue = 0.0;
     else if( aValue > 1.0 )
         aValue = 1.0;
-
-    return;
 }
 
 
 void WRL1MATERIAL::Reclaim( SGNODE* aColor )
 {
-    if( NULL == aColor )
+    if( nullptr == aColor )
         return;
 
     if( aColor == colors[0] )
     {
-        if( NULL == S3D::GetSGNodeParent( aColor ) )
+        if( nullptr == S3D::GetSGNodeParent( aColor ) )
         {
-            colors[0] = NULL;
+            colors[0] = nullptr;
             S3D::DestroyNode( aColor );
         }
 
         return;
     }
 
-    if( aColor == colors[1] && NULL == S3D::GetSGNodeParent( aColor ) )
+    if( aColor == colors[1] && nullptr == S3D::GetSGNodeParent( aColor ) )
     {
-        colors[1] = NULL;
+        colors[1] = nullptr;
         S3D::DestroyNode( aColor );
     }
-
-    return;
 }

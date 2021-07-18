@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,23 +68,23 @@ bool X3D_DICT::DelName( const wxString& aName, X3DNODE* aNode )
 X3DNODE* X3D_DICT::FindName( const wxString& aName )
 {
     if( aName.empty() )
-        return NULL;
+        return nullptr;
 
     std::map< wxString, X3DNODE* >::iterator ir = reg.find( aName );
 
     if( ir != reg.end() )
         return ir->second;
 
-    return NULL;
+    return nullptr;
 }
 
 
 X3DNODE::X3DNODE()
 {
     m_Type = X3D_INVALID;
-    m_Parent = NULL;
-    m_sgNode = NULL;
-    m_Dict = NULL;
+    m_Parent = nullptr;
+    m_sgNode = nullptr;
+    m_Dict = nullptr;
 
     return;
 }
@@ -91,7 +92,7 @@ X3DNODE::X3DNODE()
 
 X3DNODE::~X3DNODE()
 {
-    if( !m_Name.empty() && NULL != m_Dict )
+    if( !m_Name.empty() && nullptr != m_Dict )
         m_Dict->DelName( m_Name, this );
 
     return;
@@ -172,12 +173,12 @@ void X3DNODE::delNodeRef( X3DNODE* aNode )
         return;
     }
 
-    #ifdef DEBUG_X3D
+#ifdef DEBUG_X3D
     std::ostringstream ostr;
     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     ostr << " * [BUG] delNodeRef() did not find its target";
     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    #endif
+#endif
 
     return;
 }

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,8 +38,6 @@ WRL2BOX::WRL2BOX() : WRL2NODE()
     size.x = 2.0;
     size.y = 2.0;
     size.z = 2.0;
-
-    return;
 }
 
 
@@ -50,20 +49,14 @@ WRL2BOX::WRL2BOX( WRL2NODE* aParent ) : WRL2NODE()
     size.y = 2.0;
     size.z = 2.0;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
-
-    return;
 }
 
 
 WRL2BOX::~WRL2BOX()
 {
-    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    wxLogTrace( MASK_VRML, " * [INFO] Destroying Box node\n" );
-    #endif
-
-    return;
+    wxLogTrace( MASK_VRML, " * [INFO] Destroying Box node" );
 }
 
 
@@ -71,7 +64,7 @@ bool WRL2BOX::isDangling( void )
 {
     // this node is dangling unless it has a parent of type WRL2_SHAPE
 
-    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_SHAPE )
+    if( nullptr == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_SHAPE )
         return true;
 
     return false;
@@ -87,7 +80,7 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -95,14 +88,14 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( '{' != tok )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << proc.GetError() << "\n";
@@ -111,7 +104,7 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr  << "' at line " << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -127,14 +120,14 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( !proc.ReadName( glob ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << proc.GetError();
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -146,7 +139,7 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     {
         if( !proc.ReadSFVec3f( size ) )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -156,7 +149,7 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 ostr << " * [INFO] message: '" << proc.GetError() << "'";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -166,7 +159,7 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     }
     else
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -175,14 +168,14 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( size.x < 1e-6 || size.y < 1e-6 || size.z < 1e-6 )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -191,7 +184,7 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
     }
 
     if( proc.Peek() == '}' )
@@ -202,7 +195,7 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     proc.GetFilePosData( line, column );
 
-    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -211,7 +204,7 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -221,14 +214,14 @@ bool WRL2BOX::AddRefNode( WRL2NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] AddRefNode is not applicable";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -238,14 +231,14 @@ bool WRL2BOX::AddChildNode( WRL2NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] AddChildNode is not applicable";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -255,9 +248,9 @@ SGNODE* WRL2BOX::TranslateToSG( SGNODE* aParent )
 {
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
+    if( nullptr != aParent && ptype != S3D::SGTYPE_SHAPE )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -265,28 +258,28 @@ SGNODE* WRL2BOX::TranslateToSG( SGNODE* aParent )
             ostr << ptype << ")";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
     // do not render a bad box
     if( size.x < 1e-6 || size.y < 1e-6 || size.z < 1e-6 )
-        return NULL;
+        return nullptr;
 
     if( m_sgNode )
     {
-        if( NULL != aParent )
+        if( nullptr != aParent )
         {
-            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+            if( nullptr == S3D::GetSGNodeParent( m_sgNode )
                 && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
             else if( aParent != S3D::GetSGNodeParent( m_sgNode )
                      && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
         }
 
@@ -301,6 +294,7 @@ SGNODE* WRL2BOX::TranslateToSG( SGNODE* aParent )
     std::vector< SGVECTOR > norms;
     std::vector< int > idx;
     int base = 0;
+
     // top
     vertices.emplace_back( -x, -y, z );
     vertices.emplace_back(  x, -y, z );
@@ -317,6 +311,7 @@ SGNODE* WRL2BOX::TranslateToSG( SGNODE* aParent )
     idx.push_back( base + 2 );
     idx.push_back( base + 3 );
     base += 4;
+
     // bottom
     vertices.emplace_back( -x, -y, -z );
     vertices.emplace_back(  x, -y, -z );
@@ -333,6 +328,7 @@ SGNODE* WRL2BOX::TranslateToSG( SGNODE* aParent )
     idx.push_back( base + 3 );
     idx.push_back( base + 2 );
     base += 4;
+
     // front
     vertices.emplace_back( -x, -y,  z );
     vertices.emplace_back( -x, -y, -z );
@@ -349,6 +345,7 @@ SGNODE* WRL2BOX::TranslateToSG( SGNODE* aParent )
     idx.push_back( base + 2 );
     idx.push_back( base + 3 );
     base += 4;
+
     // back
     vertices.emplace_back( -x, y,  z );
     vertices.emplace_back( -x, y, -z );
@@ -365,6 +362,7 @@ SGNODE* WRL2BOX::TranslateToSG( SGNODE* aParent )
     idx.push_back( base + 3 );
     idx.push_back( base + 2 );
     base += 4;
+
     // left
     vertices.emplace_back( -x, -y, -z );
     vertices.emplace_back( -x, -y,  z );
@@ -381,6 +379,7 @@ SGNODE* WRL2BOX::TranslateToSG( SGNODE* aParent )
     idx.push_back( base + 2 );
     idx.push_back( base + 3 );
     base += 4;
+
     // right
     vertices.emplace_back( x, -y, -z );
     vertices.emplace_back( x, -y,  z );

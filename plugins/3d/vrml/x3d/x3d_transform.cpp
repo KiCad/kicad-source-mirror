@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +45,7 @@ X3DTRANSFORM::X3DTRANSFORM( X3DNODE* aParent ) : X3DNODE()
     m_Type = X3D_TRANSFORM;
     init();
 
-    if( NULL != aParent )
+    if( nullptr != aParent )
     {
         X3DNODES ptype = aParent->GetNodeType();
 
@@ -52,7 +53,7 @@ X3DTRANSFORM::X3DTRANSFORM( X3DNODE* aParent ) : X3DNODE()
             m_Parent = aParent;
     }
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
 
     return;
@@ -61,7 +62,7 @@ X3DTRANSFORM::X3DTRANSFORM( X3DNODE* aParent ) : X3DNODE()
 
 X3DTRANSFORM::~X3DTRANSFORM()
 {
-    #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
+#if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Destroying Transform with " << m_Children.size();
@@ -69,7 +70,7 @@ X3DTRANSFORM::~X3DTRANSFORM()
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return;
 }
@@ -117,9 +118,7 @@ void X3DTRANSFORM::readFields( wxXmlNode* aNode )
     // legacy behavior of 1 X3D unit = 0.1 inch; the SG*
     // classes expect all units in mm.
 
-    for( prop = aNode->GetAttributes();
-         prop != NULL;
-         prop = prop->GetNext() )
+    for( prop = aNode->GetAttributes(); prop != nullptr; prop = prop->GetNext() )
     {
         const wxString& pname = prop->GetName();
 
@@ -134,35 +133,36 @@ void X3DTRANSFORM::readFields( wxXmlNode* aNode )
             center *= 2.54;
         }
         else if( pname == "scale" )
+        {
             X3D::ParseSFVec3( prop->GetValue(), scale );
+        }
         else if( pname == "translation" )
         {
             X3D::ParseSFVec3( prop->GetValue(), translation );
             translation *= 2.54;
         }
         else if( pname == "rotation" )
+        {
             X3D::ParseSFRotation( prop->GetValue(), rotation );
+        }
         else if( pname == "scaleOrientation" )
+        {
             X3D::ParseSFRotation( prop->GetValue(), scaleOrientation );
-
+        }
     }
-
-    return;
 }
 
 
 bool X3DTRANSFORM::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
 {
-    if( NULL == aTopNode || NULL == aNode )
+    if( nullptr == aTopNode || nullptr == aNode )
         return false;
 
     m_Dict = &aDict;
     readFields( aNode );
     bool ok = false;
 
-    for( wxXmlNode* child = aNode->GetChildren();
-         child != NULL;
-         child = child->GetNext() )
+    for( wxXmlNode* child = aNode->GetChildren(); child != nullptr; child = child->GetNext() )
     {
         wxString name = child->GetName();
 
@@ -190,7 +190,7 @@ bool X3DTRANSFORM::SetParent( X3DNODE* aParent, bool doUnlink )
     if( aParent == m_Parent )
         return true;
 
-    if( NULL != aParent )
+    if( nullptr != aParent )
     {
         X3DNODES nt = aParent->GetNodeType();
 
@@ -198,12 +198,12 @@ bool X3DTRANSFORM::SetParent( X3DNODE* aParent, bool doUnlink )
             return false;
     }
 
-    if( NULL != m_Parent && doUnlink )
+    if( nullptr != m_Parent && doUnlink )
         m_Parent->unlinkChildNode( this );
 
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
 
     return true;
@@ -212,7 +212,7 @@ bool X3DTRANSFORM::SetParent( X3DNODE* aParent, bool doUnlink )
 
 bool X3DTRANSFORM::AddChildNode( X3DNODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return false;
 
     X3DNODES tchild = aNode->GetNodeType();
@@ -242,7 +242,7 @@ bool X3DTRANSFORM::AddChildNode( X3DNODE* aNode )
 
 bool X3DTRANSFORM::AddRefNode( X3DNODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return false;
 
     X3DNODES tchild = aNode->GetNodeType();
@@ -270,7 +270,7 @@ bool X3DTRANSFORM::AddRefNode( X3DNODE* aNode )
 
 SGNODE* X3DTRANSFORM::TranslateToSG( SGNODE* aParent )
 {
-    #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
+#if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Translating Transform with " << m_Children.size();
@@ -278,16 +278,16 @@ SGNODE* X3DTRANSFORM::TranslateToSG( SGNODE* aParent )
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     if( m_Children.empty() && m_Refs.empty() )
-        return NULL;
+        return nullptr;
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
+    if( nullptr != aParent && ptype != S3D::SGTYPE_TRANSFORM )
     {
-        #ifdef DEBUG_X3D
+#ifdef DEBUG_X3D
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -295,24 +295,24 @@ SGNODE* X3DTRANSFORM::TranslateToSG( SGNODE* aParent )
             ostr << ptype << ")";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
     if( m_sgNode )
     {
-        if( NULL != aParent )
+        if( nullptr != aParent )
         {
-            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+            if( nullptr == S3D::GetSGNodeParent( m_sgNode )
                 && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
             else if( aParent != S3D::GetSGNodeParent( m_sgNode )
                      && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
         }
 
@@ -344,7 +344,7 @@ SGNODE* X3DTRANSFORM::TranslateToSG( SGNODE* aParent )
             case X3D_SWITCH:
             case X3D_TRANSFORM:
 
-                if( NULL != (*sC)->TranslateToSG( txNode.GetRawPtr() ) )
+                if( nullptr != (*sC)->TranslateToSG( txNode.GetRawPtr() ) )
                     test = true;
 
                 break;
@@ -363,7 +363,7 @@ SGNODE* X3DTRANSFORM::TranslateToSG( SGNODE* aParent )
     if( false == test )
     {
         txNode.Destroy();
-        return NULL;
+        return nullptr;
     }
 
     txNode.SetScale( SGPOINT( scale.x, scale.y, scale.z ) );
@@ -371,7 +371,7 @@ SGNODE* X3DTRANSFORM::TranslateToSG( SGNODE* aParent )
     txNode.SetTranslation( SGPOINT( translation.x, translation.y, translation.z ) );
     txNode.SetScaleOrientation( SGVECTOR( scaleOrientation.x, scaleOrientation.y,
                                           scaleOrientation.z ), scaleOrientation.w );
-    txNode.SetRotation( SGVECTOR( rotation.x, rotation.y, rotation.z), rotation.w );
+    txNode.SetRotation( SGVECTOR( rotation.x, rotation.y, rotation.z ), rotation.w );
 
     m_sgNode = txNode.GetRawPtr();
 

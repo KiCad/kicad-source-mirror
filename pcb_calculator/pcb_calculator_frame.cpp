@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2015 jean-pierre.charras
- * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,8 @@
 
 
 // extension of pcb_calculator data filename:
-const wxString DataFileNameExt( wxT("pcbcalc") );
+const wxString DataFileNameExt( wxT( "pcbcalc" ) );
+
 
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_CALCULATOR_FRAME_BASE( aParent ),
@@ -40,9 +41,9 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_bpButtonSynthetize->SetBitmap( KiBitmap( BITMAPS::small_up ) );
 
     SetKiway( this, aKiway );
-    m_currTransLine     = NULL;
+    m_currTransLine     = nullptr;
     m_currTransLineType = DEFAULT_TYPE;
-    m_currAttenuator    = NULL;
+    m_currAttenuator    = nullptr;
     m_RegulatorListChanged = false;
     m_TWMode = TW_MASTER_CURRENT;
     m_TWNested = false;
@@ -52,16 +53,16 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Populate transline list ordered like in dialog menu list
     const static TRANSLINE_TYPE_ID tltype_list[8] =
-            {
-                MICROSTRIP_TYPE,
-                CPW_TYPE,
-                GROUNDED_CPW_TYPE,
-                RECTWAVEGUIDE_TYPE,
-                COAX_TYPE,
-                C_MICROSTRIP_TYPE,
-                STRIPLINE_TYPE,
-                TWISTEDPAIR_TYPE
-            };
+    {
+        MICROSTRIP_TYPE,
+        CPW_TYPE,
+        GROUNDED_CPW_TYPE,
+        RECTWAVEGUIDE_TYPE,
+        COAX_TYPE,
+        C_MICROSTRIP_TYPE,
+        STRIPLINE_TYPE,
+        TWISTEDPAIR_TYPE
+    };
 
     for( int ii = 0; ii < 8; ii++ )
         m_transline_list.push_back( new TRANSLINE_IDENT( tltype_list[ii] ) );
@@ -277,7 +278,7 @@ void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
 
 void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    if( aCfg == NULL )
+    if( aCfg == nullptr )
         return;
 
     EDA_BASE_FRAME::LoadSettings( aCfg );
@@ -321,7 +322,7 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
 void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    if( aCfg == NULL )
+    if( aCfg == nullptr )
         return;
 
     EDA_BASE_FRAME::SaveSettings( aCfg );
@@ -355,11 +356,6 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-/**
- * Function OnTranslineAnalyse
- * Run a new analyse for the current transline with current parameters
- * and displays the electrical parameters
- */
 void PCB_CALCULATOR_FRAME::OnTranslineAnalyse( wxCommandEvent& event )
 {
     if( m_currTransLine )
@@ -370,11 +366,6 @@ void PCB_CALCULATOR_FRAME::OnTranslineAnalyse( wxCommandEvent& event )
 }
 
 
-/**
- * Function OnTranslineSynthetize
- * Run a new synthezis for the current transline with current parameters
- * and displays the geometrical parameters
- */
 void PCB_CALCULATOR_FRAME::OnTranslineSynthetize( wxCommandEvent& event )
 {
     if( m_currTransLine )
@@ -385,9 +376,6 @@ void PCB_CALCULATOR_FRAME::OnTranslineSynthetize( wxCommandEvent& event )
 }
 
 
-/* returns the full filename of the selected pcb_calculator data file
- * the extension file is forced
- */
 const wxString PCB_CALCULATOR_FRAME::GetDataFilename()
 {
     if( m_regulators_fileNameCtrl->GetValue().IsEmpty() )
@@ -399,15 +387,12 @@ const wxString PCB_CALCULATOR_FRAME::GetDataFilename()
 }
 
 
-/* Initialize the full filename of the selected pcb_calculator data file
- * force the standard extension of the file (.pcbcalc)
- * aFilename = the full filename, with or without extension
- */
-void PCB_CALCULATOR_FRAME::SetDataFilename( const wxString & aFilename)
+void PCB_CALCULATOR_FRAME::SetDataFilename( const wxString& aFilename )
 {
     if( aFilename.IsEmpty() )
+    {
         m_regulators_fileNameCtrl->SetValue( wxEmptyString );
-
+    }
     else
     {
         wxFileName fn( aFilename );

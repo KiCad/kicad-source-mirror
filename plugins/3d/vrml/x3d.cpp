@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  * Copyright (C) 2013 Tuomas Vaherkoski <tuomasvaherkoski@gmail.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@
 
 /*
  * Description:
- *  This plugin implements the legacy kicad X3D parser.
+ *  This plugin implements the legacy KiCad X3D parser.
  *  Due to the rare use of X3D models, this plugin is a simple
  *  reimplementation of the legacy x3dmodelparser.cpp and is not
  *  intended to be a compliant X3D implementation.
@@ -49,23 +49,21 @@ SCENEGRAPH* X3DPARSER::Load( const wxString& aFileName )
     wxXmlDocument doc;
 
     if( !stream.IsOk() || !doc.Load( stream ) )
-        return NULL;
+        return nullptr;
 
     if( doc.GetRoot()->GetName() != wxT( "X3D" ) )
-        return NULL;
+        return nullptr;
 
     NODE_LIST children; // VRML Grouping Nodes at top level
 
     if( !getGroupingNodes( doc.GetRoot(), children ) )
-        return NULL;
+        return nullptr;
 
     X3D_DICT dictionary;    // dictionary for USE/DEF implementation
     X3DNODE* topNode = new X3DTRANSFORM;
     bool ok = false;
 
-    for( NODE_LIST::iterator node_it = children.begin();
-         node_it != children.end();
-         ++node_it )
+    for( NODE_LIST::iterator node_it = children.begin(); node_it != children.end(); ++node_it )
     {
         wxXmlNode* node = *node_it;
         wxString name = node->GetName();
@@ -81,10 +79,10 @@ SCENEGRAPH* X3DPARSER::Load( const wxString& aFileName )
         }
     }
 
-    SCENEGRAPH* sp = NULL;
+    SCENEGRAPH* sp = nullptr;
 
     if( ok )
-        sp = (SCENEGRAPH*) topNode->TranslateToSG( NULL );
+        sp = (SCENEGRAPH*) topNode->TranslateToSG( nullptr );
 
     delete topNode;
     return sp;
@@ -94,11 +92,9 @@ SCENEGRAPH* X3DPARSER::Load( const wxString& aFileName )
 bool X3DPARSER::getGroupingNodes( wxXmlNode* aNode, std::vector<wxXmlNode*>& aResult )
 {
     aResult.clear();
-    wxXmlNode* scene = NULL;
+    wxXmlNode* scene = nullptr;
 
-    for( wxXmlNode* child = aNode->GetChildren();
-         child != NULL;
-         child = child->GetNext() )
+    for( wxXmlNode* child = aNode->GetChildren(); child != nullptr; child = child->GetNext() )
     {
         if( child->GetName() == "Scene" )
         {
@@ -107,12 +103,10 @@ bool X3DPARSER::getGroupingNodes( wxXmlNode* aNode, std::vector<wxXmlNode*>& aRe
         }
     }
 
-    if( NULL == scene )
+    if( nullptr == scene )
         return false;
 
-    for( wxXmlNode* child = scene->GetChildren();
-         child != NULL;
-         child = child->GetNext() )
+    for( wxXmlNode* child = scene->GetChildren(); child != nullptr; child = child->GetNext() )
     {
         const wxString& name = child->GetName();
 

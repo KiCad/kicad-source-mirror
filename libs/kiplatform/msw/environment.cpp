@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Ian McInerney <Ian.S.McInerney at ieee.org>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -44,10 +44,10 @@ bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )
     SHFILEOPSTRUCT fileOp;
     ::ZeroMemory( &fileOp, sizeof( fileOp ) );
 
-    fileOp.hwnd   = NULL; // Set to null since there is no progress dialog
+    fileOp.hwnd   = nullptr; // Set to null since there is no progress dialog
     fileOp.wFunc  = FO_DELETE;
     fileOp.pFrom  = temp.c_str();
-    fileOp.pTo    = NULL; // Set to to NULL since we aren't moving the file
+    fileOp.pTo    = nullptr; // Set to to NULL since we aren't moving the file
     fileOp.fFlags = FOF_ALLOWUNDO | FOF_NOERRORUI | FOF_NOCONFIRMATION | FOF_SILENT;
 
     int eVal = SHFileOperation( &fileOp );
@@ -70,7 +70,7 @@ bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
 
 wxString KIPLATFORM::ENV::GetDocumentsPath()
 {
-    // If called by a python script in stand-alone (outside kicad), wxStandardPaths::Get()
+    // If called by a python script in stand-alone (outside KiCad), wxStandardPaths::Get()
     // complains about not existing app. so use a dummy app
     if( wxTheApp ==  nullptr )
     {
@@ -84,7 +84,7 @@ wxString KIPLATFORM::ENV::GetDocumentsPath()
 
 wxString KIPLATFORM::ENV::GetUserConfigPath()
 {
-    // If called by a python script in stand-alone (outside kicad), wxStandardPaths::Get()
+    // If called by a python script in stand-alone (outside KiCad), wxStandardPaths::Get()
     // complains about not existing app. so use a dummy app
     if( wxTheApp ==  nullptr )
     {
@@ -100,9 +100,9 @@ wxString KIPLATFORM::ENV::GetUserCachePath()
 {
     // Unfortunately AppData/Local is the closest analog to "Cache" directories of other platforms
 
-    // Make sure we dont include the "appinfo" (appended app name)
+    // Make sure we don't include the "appinfo" (appended app name)
 
-    // If called by a python script in stand-alone (outside kicad), wxStandardPaths::Get()
+    // If called by a python script in stand-alone (outside KiCad), wxStandardPaths::Get()
     // complains about not existing app. so use a dummy app
     if( wxTheApp ==  nullptr )
     {

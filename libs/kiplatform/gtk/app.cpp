@@ -2,7 +2,7 @@
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
 * Copyright (C) 2020 Mark Roszko <mark.roszko@gmail.com>
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software: you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the
@@ -41,7 +41,7 @@ bool KIPLATFORM::APP::Init()
 {
 #if !defined( KICAD_SHOW_GTK_MESSAGES )
     // Attach a logger that will consume the annoying GTK error messages
-    g_log_set_writer_func( nullLogWriter, NULL, NULL );
+    g_log_set_writer_func( nullLogWriter, nullptr, nullptr );
 #endif
 
     return true;

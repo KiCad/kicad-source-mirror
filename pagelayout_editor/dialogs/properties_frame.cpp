@@ -38,25 +38,39 @@
 PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
         PANEL_PROPERTIES_BASE( aParent ),
         m_scintillaTricks( nullptr ),
-        m_textCtrlTextSizeXBinder( aParent, m_staticTextTsizeX, m_textCtrlTextSizeX, m_TextTextSizeXUnits ),
-        m_textCtrlTextSizeYBinder( aParent, m_staticTextTsizeY, m_textCtrlTextSizeY, m_TextTextSizeYUnits ),
-        m_textCtrlConstraintXBinder( aParent, m_staticTextConstraintX, m_textCtrlConstraintX, m_TextConstraintXUnits ),
-        m_textCtrlConstraintYBinder( aParent, m_staticTextConstraintY, m_textCtrlConstraintY, m_TextConstraintYUnits ),
+        m_textCtrlTextSizeXBinder( aParent, m_staticTextTsizeX, m_textCtrlTextSizeX,
+                                   m_TextTextSizeXUnits ),
+        m_textCtrlTextSizeYBinder( aParent, m_staticTextTsizeY, m_textCtrlTextSizeY,
+                                   m_TextTextSizeYUnits ),
+        m_textCtrlConstraintXBinder( aParent, m_staticTextConstraintX, m_textCtrlConstraintX,
+                                     m_TextConstraintXUnits ),
+        m_textCtrlConstraintYBinder( aParent, m_staticTextConstraintY, m_textCtrlConstraintY,
+                                     m_TextConstraintYUnits ),
         m_textCtrlPosXBinder( aParent, m_staticTextPosX, m_textCtrlPosX, m_TextPosXUnits ),
         m_textCtrlPosYBinder( aParent, m_staticTextPosY, m_textCtrlPosY, m_TextPosYUnits ),
         m_textCtrlEndXBinder( aParent, m_staticTextEndX, m_textCtrlEndX, m_TextEndXUnits ),
         m_textCtrlEndYBinder( aParent, m_staticTextEndY, m_textCtrlEndY, m_TextEndYUnits ),
         m_textCtrlStepXBinder( aParent, m_staticTextStepX, m_textCtrlStepX, m_TextStepXUnits ),
         m_textCtrlStepYBinder( aParent, m_staticTextStepY, m_textCtrlStepY, m_TextStepYUnits ),
-        m_textCtrlDefaultTextSizeXBinder( aParent, m_staticTextDefTsX, m_textCtrlDefaultTextSizeX, m_TextDefaultTextSizeXUnits ),
-        m_textCtrlDefaultTextSizeYBinder( aParent, m_staticTextDefTsY, m_textCtrlDefaultTextSizeY, m_TextDefaultTextSizeYUnits ),
-        m_textCtrlDefaultLineWidthBinder( aParent, m_staticTextDefLineW, m_textCtrlDefaultLineWidth, m_TextDefaultLineWidthUnits ),
-        m_textCtrlDefaultTextThicknessBinder( aParent, m_staticTextDefTextThickness, m_textCtrlDefaultTextThickness, m_TextDefaultTextThicknessUnits ),
-        m_textCtrlLeftMarginBinder( aParent, m_staticTextLeftMargin, m_textCtrlLeftMargin, m_TextLeftMarginUnits ),
-        m_textCtrlRightMarginBinder( aParent, m_staticTextDefRightMargin, m_textCtrlRightMargin, m_TextRightMarginUnits ),
-        m_textCtrlTopMarginBinder( aParent, m_staticTextTopMargin, m_textCtrlTopMargin, m_TextTopMarginUnits ),
-        m_textCtrlBottomMarginBinder( aParent, m_staticTextBottomMargin, m_textCtrlBottomMargin, m_TextBottomMarginUnits ),
-        m_textCtrlThicknessBinder( aParent, m_staticTextThickness, m_textCtrlThickness, m_TextLineThicknessUnits )
+        m_textCtrlDefaultTextSizeXBinder( aParent, m_staticTextDefTsX, m_textCtrlDefaultTextSizeX,
+                                          m_TextDefaultTextSizeXUnits ),
+        m_textCtrlDefaultTextSizeYBinder( aParent, m_staticTextDefTsY, m_textCtrlDefaultTextSizeY,
+                                          m_TextDefaultTextSizeYUnits ),
+        m_textCtrlDefaultLineWidthBinder( aParent, m_staticTextDefLineW,
+                                          m_textCtrlDefaultLineWidth, m_TextDefaultLineWidthUnits ),
+        m_textCtrlDefaultTextThicknessBinder( aParent, m_staticTextDefTextThickness,
+                                              m_textCtrlDefaultTextThickness,
+                                              m_TextDefaultTextThicknessUnits ),
+        m_textCtrlLeftMarginBinder( aParent, m_staticTextLeftMargin, m_textCtrlLeftMargin,
+                                    m_TextLeftMarginUnits ),
+        m_textCtrlRightMarginBinder( aParent, m_staticTextDefRightMargin, m_textCtrlRightMargin,
+                                     m_TextRightMarginUnits ),
+        m_textCtrlTopMarginBinder( aParent, m_staticTextTopMargin, m_textCtrlTopMargin,
+                                   m_TextTopMarginUnits ),
+        m_textCtrlBottomMarginBinder( aParent, m_staticTextBottomMargin, m_textCtrlBottomMargin,
+                                      m_TextBottomMarginUnits ),
+        m_textCtrlThicknessBinder( aParent, m_staticTextThickness, m_textCtrlThickness,
+                                   m_TextLineThicknessUnits )
 {
     m_parent = aParent;
 
@@ -102,7 +116,6 @@ wxSize PROPERTIES_FRAME::GetMinSize() const
 }
 
 
-// Data transfer from general properties to widgets
 void PROPERTIES_FRAME::CopyPrmsFromGeneralToPanel()
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
@@ -120,13 +133,17 @@ void PROPERTIES_FRAME::CopyPrmsFromGeneralToPanel()
     m_textCtrlDefaultTextThicknessBinder.SetDoubleValue(
             From_User_Unit( EDA_UNITS::MILLIMETRES, model.m_DefaultTextThickness ) );
 
-    m_textCtrlLeftMarginBinder.SetDoubleValue( From_User_Unit( EDA_UNITS::MILLIMETRES, model.GetLeftMargin() ) );
-    m_textCtrlRightMarginBinder.SetDoubleValue(From_User_Unit(  EDA_UNITS::MILLIMETRES, model.GetRightMargin() ) );
-    m_textCtrlTopMarginBinder.SetDoubleValue( From_User_Unit( EDA_UNITS::MILLIMETRES, model.GetTopMargin() ) );
-    m_textCtrlBottomMarginBinder.SetDoubleValue( From_User_Unit( EDA_UNITS::MILLIMETRES, model.GetBottomMargin() ) );
+    m_textCtrlLeftMarginBinder.SetDoubleValue( From_User_Unit( EDA_UNITS::MILLIMETRES,
+                                                               model.GetLeftMargin() ) );
+    m_textCtrlRightMarginBinder.SetDoubleValue( From_User_Unit(  EDA_UNITS::MILLIMETRES,
+                                                                 model.GetRightMargin() ) );
+    m_textCtrlTopMarginBinder.SetDoubleValue( From_User_Unit( EDA_UNITS::MILLIMETRES,
+                                                              model.GetTopMargin() ) );
+    m_textCtrlBottomMarginBinder.SetDoubleValue( From_User_Unit( EDA_UNITS::MILLIMETRES,
+                                                                 model.GetBottomMargin() ) );
 }
 
-// Data transfer from widgets to general properties
+
 bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
@@ -159,7 +176,6 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
 }
 
 
-// Data transfer from item to widgets in properties frame
 void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
 {
     if( !aItem )
@@ -221,6 +237,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     {
         DS_DATA_ITEM_TEXT* item = static_cast<DS_DATA_ITEM_TEXT*>( aItem );
         item->m_FullText = item->m_TextBase;
+
         // Replace our '\' 'n' sequence by the EOL char
         item->ReplaceAntiSlashSequence();
         m_stcText->SetValue( item->m_FullText );
@@ -266,6 +283,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     if( aItem->GetType() == DS_DATA_ITEM::DS_POLYPOLYGON )
     {
         DS_DATA_ITEM_POLYGONS* item = static_cast<DS_DATA_ITEM_POLYGONS*>( aItem );
+
         // Rotation (poly and text)
         msg.Printf( wxT("%.3f"), item->m_Orient );
         m_textCtrlRotation->SetValue( msg );
@@ -274,6 +292,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     if( aItem->GetType() == DS_DATA_ITEM::DS_BITMAP )
     {
         DS_DATA_ITEM_BITMAP* item = static_cast<DS_DATA_ITEM_BITMAP*>( aItem );
+
         // select definition in PPI
         msg.Printf( wxT("%d"), item->GetPPI() );
         m_textCtrlBitmapDPI->SetValue( msg );
@@ -284,7 +303,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     m_SizerTextOptions->Show( aItem->GetType() == DS_DATA_ITEM::DS_TEXT );
 
     m_sbSizerEndPosition->Show( aItem->GetType() == DS_DATA_ITEM::DS_SEGMENT
-                           || aItem->GetType() == DS_DATA_ITEM::DS_RECT );
+                                || aItem->GetType() == DS_DATA_ITEM::DS_RECT );
 
     m_textCtrlThicknessBinder.Show( aItem->GetType() != DS_DATA_ITEM::DS_BITMAP );
 
@@ -324,13 +343,13 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     // until the frame is resized). Joys of multiplatform dev.
     m_swItemProperties->Fit();
 #endif
+
     // send a size event to be sure scrollbars will be added/removed as needed
     m_swItemProperties->PostSizeEvent();
     m_swItemProperties->Refresh();
 }
 
 
-// Event function called by clicking on the OK button
 void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
 {
     PL_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
@@ -344,6 +363,7 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
     {
         DS_DATA_ITEM* dataItem = drawItem->GetPeer();
         CopyPrmsFromPanelToItem( dataItem );
+
         // Be sure what is displayed is what is set for item
         // (mainly, texts can be modified if they contain "\n")
         CopyPrmsFromItemToPanel( dataItem );
@@ -379,10 +399,9 @@ void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
 }
 
 
-// Data transfer from  properties frame to item parameters
 bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
 {
-    if( aItem == NULL )
+    if( aItem == nullptr )
         return false;
 
     wxString msg;
@@ -399,7 +418,8 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
     }
 
     // Import thickness
-    aItem->m_LineWidth = To_User_Unit( EDA_UNITS::MILLIMETRES, m_textCtrlThicknessBinder.GetValue() );
+    aItem->m_LineWidth = To_User_Unit( EDA_UNITS::MILLIMETRES,
+                                       m_textCtrlThicknessBinder.GetValue() );
 
     // Import Start point
     aItem->m_Pos.m_Pos.x = To_User_Unit( EDA_UNITS::MILLIMETRES, m_textCtrlPosXBinder.GetValue() );
@@ -431,8 +451,10 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
     msg.ToLong( &itmp );
     aItem->m_RepeatCount = itmp;
 
-    aItem->m_IncrementVector.x = To_User_Unit( EDA_UNITS::MILLIMETRES, m_textCtrlStepXBinder.GetValue() );
-    aItem->m_IncrementVector.y = To_User_Unit( EDA_UNITS::MILLIMETRES, m_textCtrlStepYBinder.GetValue() );
+    aItem->m_IncrementVector.x = To_User_Unit( EDA_UNITS::MILLIMETRES,
+                                               m_textCtrlStepXBinder.GetValue() );
+    aItem->m_IncrementVector.y = To_User_Unit( EDA_UNITS::MILLIMETRES,
+                                               m_textCtrlStepYBinder.GetValue() );
 
     if( aItem->GetType() == DS_DATA_ITEM::DS_TEXT )
     {
@@ -456,7 +478,7 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
 
         switch( m_choiceVjustify->GetSelection() )
         {
-        case 0: item->m_Vjustify = GR_TEXT_VJUSTIFY_TOP; break;
+        case 0: item->m_Vjustify = GR_TEXT_VJUSTIFY_TOP;    break;
         case 1: item->m_Vjustify = GR_TEXT_VJUSTIFY_CENTER; break;
         case 2: item->m_Vjustify = GR_TEXT_VJUSTIFY_BOTTOM; break;
         }

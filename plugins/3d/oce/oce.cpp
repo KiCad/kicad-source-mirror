@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,7 @@
  */
 
 /*
- * Description:
- *  This plugin implements a STEP/IGES model renderer for KiCad via OCE
+ * This plugin implements a STEP/IGES model renderer for KiCad via OCE
  */
 
 #include <wx/filename.h>
@@ -66,6 +65,7 @@ void GetPluginVersion( unsigned char* Major,
     return;
 }
 
+
 static struct FILE_DATA
 {
     std::vector<std::string> extensions;
@@ -75,13 +75,21 @@ static struct FILE_DATA
     {
 #ifdef _WIN32
         extensions = { "stp","step","stpz","stp.gz","step.gz","igs","iges" };
-        filters = { "STEP (*.stp;*.step;*.stpz;*.stp.gz;*.step.gz)|*.stp;*.step;*.stpz;*stp.gz;*.step.gz",
-                    "IGES (*.igs;*.iges)|*.igs;*.iges" };
+        filters = {
+            "STEP (*.stp;*.step;*.stpz;*.stp.gz;*.step.gz)|*.stp;*.step;*.stpz;*stp.gz;*.step.gz",
+            "IGES (*.igs;*.iges)|*.igs;*.iges" };
 #else
-        extensions = { "stp","STP","stpZ","stpz","STPZ","step","STEP","stp.gz","STP.GZ","step.gz","STEP.GZ","igs","IGS","iges","IGES" };
-        filters = { "STEP (*.stp;*.STP;*.stpZ;*.stpz;*.STPZ;*.step;*.STEP;*.stp.gz;*.STP.GZ;*.step.gz;*.STEP.GZ)"
-                        "|*.stp;*.STP;*.stpZ;*.stpz;*.STPZ;*.step;*.STEP;*.stp.gz;*.STP.GZ;*.step.gz;*.STEP.GZ",
-                    "IGES (*.igs;*.IGS;*.iges;*.IGES)|*.igs;*.IGS;*.iges;*.IGES" };
+        extensions = {
+            "stp","STP","stpZ","stpz","STPZ","step","STEP","stp.gz","STP.GZ","step.gz","STEP.GZ",
+            "igs","IGS","iges","IGES"
+        };
+
+        filters = {
+            "STEP (*.stp;*.STP;*.stpZ;*.stpz;*.STPZ;*.step;*.STEP;*.stp.gz;*.STP.GZ;*.step.gz;"
+            "*.STEP.GZ)|*.stp;*.STP;*.stpZ;*.stpz;*.STPZ;*.step;*.STEP;*.stp.gz;*.STP.GZ;"
+            "*.step.gz;*.STEP.GZ",
+            "IGES (*.igs;*.IGS;*.iges;*.IGES)|*.igs;*.IGS;*.iges;*.IGES"
+        };
 #endif
     }
 
@@ -97,7 +105,7 @@ int GetNExtensions( void )
 char const* GetModelExtension( int aIndex )
 {
     if( aIndex < 0 || aIndex >= int( file_data.extensions.size() ) )
-        return NULL;
+        return nullptr;
 
     return file_data.extensions[aIndex].c_str();
 }
@@ -112,7 +120,7 @@ int GetNFilters( void )
 char const* GetFileFilter( int aIndex )
 {
     if( aIndex < 0 || aIndex >= int( file_data.filters.size() ) )
-        return NULL;
+        return nullptr;
 
     return file_data.filters[aIndex].c_str();
 }
@@ -127,13 +135,13 @@ bool CanRender( void )
 
 SCENEGRAPH* Load( char const* aFileName )
 {
-    if( NULL == aFileName )
-        return NULL;
+    if( nullptr == aFileName )
+        return nullptr;
 
     wxString fname = wxString::FromUTF8Unchecked( aFileName );
 
     if( !wxFileName::FileExists( fname ) )
-        return NULL;
+        return nullptr;
 
     return LoadModel( aFileName );
 }

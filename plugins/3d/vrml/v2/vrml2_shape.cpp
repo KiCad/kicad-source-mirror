@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,30 +35,27 @@
 
 WRL2SHAPE::WRL2SHAPE() : WRL2NODE()
 {
-    appearance = NULL;
-    geometry = NULL;
+    appearance = nullptr;
+    geometry = nullptr;
     m_Type = WRL2NODES::WRL2_SHAPE;
-    return;
 }
 
 
 WRL2SHAPE::WRL2SHAPE( WRL2NODE* aParent ) : WRL2NODE()
 {
-    appearance = NULL;
-    geometry = NULL;
+    appearance = nullptr;
+    geometry = nullptr;
     m_Type = WRL2NODES::WRL2_SHAPE;
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
-
-    return;
 }
 
 
 WRL2SHAPE::~WRL2SHAPE()
 {
-    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Destroying Shape with " << m_Children.size();
@@ -65,9 +63,7 @@ WRL2SHAPE::~WRL2SHAPE()
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
-
-    return;
+#endif
 }
 
 
@@ -77,7 +73,7 @@ bool WRL2SHAPE::isDangling( void )
     // WRL2_TRANSFORM
     // WRL2_SWITCH
 
-    if( NULL == m_Parent
+    if( nullptr == m_Parent
         || ( m_Parent->GetNodeType() != WRL2NODES::WRL2_TRANSFORM
              && m_Parent->GetNodeType() != WRL2NODES::WRL2_SWITCH ) )
         return true;
@@ -88,16 +84,16 @@ bool WRL2SHAPE::isDangling( void )
 
 bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] NULL passed for aNode";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -106,7 +102,7 @@ bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
 
     if( !checkNodeType( type ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -114,23 +110,23 @@ bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
             ostr << aNode->GetNodeTypeName( type ) << "'";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( WRL2NODES::WRL2_APPEARANCE == type )
     {
-        if( NULL != appearance )
+        if( nullptr != appearance )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << " * [INFO] bad file format; multiple appearance nodes";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -139,16 +135,16 @@ bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
         return WRL2NODE::AddRefNode( aNode );
     }
 
-    if( NULL != geometry )
+    if( nullptr != geometry )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] bad file format; multiple geometry nodes";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -160,16 +156,16 @@ bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
 
 bool WRL2SHAPE::AddChildNode( WRL2NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] NULL passed for aNode";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -178,7 +174,7 @@ bool WRL2SHAPE::AddChildNode( WRL2NODE* aNode )
 
     if( !checkNodeType( type ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -186,23 +182,23 @@ bool WRL2SHAPE::AddChildNode( WRL2NODE* aNode )
             ostr << aNode->GetNodeTypeName( type ) << "'";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( WRL2NODES::WRL2_APPEARANCE == type )
     {
-        if( NULL != appearance )
+        if( nullptr != appearance )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << " * [INFO] bad file format; multiple appearance nodes";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -211,16 +207,16 @@ bool WRL2SHAPE::AddChildNode( WRL2NODE* aNode )
         return WRL2NODE::AddChildNode( aNode );
     }
 
-    if( NULL != geometry )
+    if( nullptr != geometry )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] bad file format; multiple geometry nodes";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -258,16 +254,16 @@ bool WRL2SHAPE::checkNodeType( WRL2NODES aType )
 
 bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 {
-    if( NULL == aTopNode )
+    if( nullptr == aTopNode )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] aTopNode is NULL";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -279,7 +275,7 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -287,14 +283,14 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( '{' != tok )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << proc.GetError() << "\n";
@@ -303,7 +299,7 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr  << "' at line " << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -321,14 +317,14 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !proc.ReadName( glob ) )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << proc.GetError();
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -341,39 +337,39 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !glob.compare( "appearance" ) )
         {
-            if( !aTopNode->ReadNode( proc, this, NULL ) )
+            if( !aTopNode->ReadNode( proc, this, nullptr ) )
             {
-                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                     ostr << " * [INFO] could not read appearance information";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
         }
         else if( !glob.compare( "geometry" ) )
         {
-            if( !aTopNode->ReadNode( proc, this, NULL ) )
+            if( !aTopNode->ReadNode( proc, this, nullptr ) )
             {
-                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                     ostr << " * [INFO] could not read geometry information";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
         }
         else
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -382,7 +378,7 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -394,8 +390,8 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
 SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
 {
-    if( NULL == geometry )
-        return NULL;
+    if( nullptr == geometry )
+        return nullptr;
 
     WRL2NODES geomType = geometry->GetNodeType();
 
@@ -404,14 +400,14 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
     case WRL2NODES::WRL2_INDEXEDLINESET:
     case WRL2NODES::WRL2_POINTSET:
     case WRL2NODES::WRL2_TEXT:
-        return NULL;
+        return nullptr;
         break;
 
     default:
         break;
     }
 
-    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Translating Shape with " << m_Children.size();
@@ -419,7 +415,7 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     bool vcolors = false;
 
@@ -427,20 +423,20 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
         vcolors = ((WRL2FACESET*)geometry)->HasColors();
 
     // if there is no appearance, make use of the per vertex colors if available
-    if( NULL == appearance )
+    if( nullptr == appearance )
     {
         if( WRL2NODES::WRL2_INDEXEDFACESET != geometry->GetNodeType() )
-            return NULL;
+            return nullptr;
 
         if( !vcolors )
-            return NULL;
+            return nullptr;
     }
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
+    if( nullptr != aParent && ptype != S3D::SGTYPE_TRANSFORM )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -448,24 +444,24 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
             ostr << ptype << ")";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
     if( m_sgNode )
     {
-        if( NULL != aParent )
+        if( nullptr != aParent )
         {
-            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+            if( nullptr == S3D::GetSGNodeParent( m_sgNode )
                 && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
             else if( aParent != S3D::GetSGNodeParent( m_sgNode )
                      && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
         }
 
@@ -477,26 +473,26 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
     SGNODE* pShape = shNode.GetRawPtr();
     SGNODE* pGeom = geometry->TranslateToSG( pShape );
 
-    if( NULL == pGeom )
+    if( nullptr == pGeom )
     {
         // this can happen if a VRML file contains
         // empty point or index sets
         shNode.Destroy();
-        return NULL;
+        return nullptr;
     }
 
-    SGNODE* pApp = NULL;
+    SGNODE* pApp = nullptr;
 
-    if( NULL != appearance )
+    if( nullptr != appearance )
         pApp = appearance->TranslateToSG( pShape );
 
-    if( NULL != appearance && NULL == pApp )
+    if( nullptr != appearance && nullptr == pApp )
     {
         IFSG_FACESET tmp( false );
         tmp.Attach( pGeom );
         tmp.Destroy();
         shNode.Destroy();
-        return NULL;
+        return nullptr;
     }
 
     m_sgNode = shNode.GetRawPtr();
@@ -507,29 +503,27 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
 
 void WRL2SHAPE::unlinkChildNode( const WRL2NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     if( aNode == appearance )
-        appearance = NULL;
+        appearance = nullptr;
     else if( aNode == geometry )
-        geometry = NULL;
+        geometry = nullptr;
 
     WRL2NODE::unlinkChildNode( aNode );
-    return;
 }
 
 
 void WRL2SHAPE::unlinkRefNode( const WRL2NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     if( aNode == appearance )
-        appearance = NULL;
+        appearance = nullptr;
     else if( aNode == geometry )
-        geometry = NULL;
+        geometry = nullptr;
 
     WRL2NODE::unlinkRefNode( aNode );
-    return;
 }

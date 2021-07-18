@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,8 +36,6 @@ WRL1SWITCH::WRL1SWITCH( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
     m_Type = WRL1NODES::WRL1_SWITCH;
     whichChild = -1;
-
-    return;
 }
 
 
@@ -47,16 +46,14 @@ WRL1SWITCH::WRL1SWITCH( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     m_Parent = aParent;
     whichChild = -1;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
-
-    return;
 }
 
 
 WRL1SWITCH::~WRL1SWITCH()
 {
-    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Destroying Switch with " << m_Children.size();
@@ -64,13 +61,10 @@ WRL1SWITCH::~WRL1SWITCH()
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
-
-    return;
+#endif
 }
 
 
-// functions inherited from WRL1NODE
 bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 {
     /*
@@ -82,16 +76,16 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
      * }
      */
 
-    if( NULL == aTopNode )
+    if( nullptr == aTopNode )
     {
-        #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] aTopNode is NULL";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -103,7 +97,7 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -111,14 +105,14 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             ostr << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( '{' != tok )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         do {
             std::ostringstream ostr;
             ostr << proc.GetError() << "\n";
@@ -127,7 +121,7 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             ostr << "' at line " << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -148,14 +142,14 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadName( glob ) )
             {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                     ostr << proc.GetError();
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -164,7 +158,7 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             {
                 if( !proc.ReadSFInt( whichChild ) )
                 {
-                    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                     do {
                         std::ostringstream ostr;
                         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -174,7 +168,7 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                         ostr << " * [INFO] message: '" << proc.GetError() << "'";
                         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                     } while( 0 );
-                    #endif
+#endif
 
                     return false;
                 }
@@ -182,7 +176,7 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 continue;
             }
 
-            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -191,16 +185,16 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
 
         proc.GetFilePosData( line, column );
 
-        if( !aTopNode->ReadNode( proc, this, NULL ) )
+        if( !aTopNode->ReadNode( proc, this, nullptr ) )
         {
-            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -208,7 +202,7 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 ostr << line << ", column " << column;
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -224,7 +218,7 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
 SGNODE* WRL1SWITCH::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
-    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Translating Switch with " << m_Children.size();
@@ -233,15 +227,15 @@ SGNODE* WRL1SWITCH::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
         ostr << m_Items.size() << " items)";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     if( m_Items.empty() )
-        return NULL;
+        return nullptr;
 
     if( whichChild < 0 || whichChild >= (int)m_Items.size() )
-        return NULL;
+        return nullptr;
 
-    if( sp == NULL )
+    if( sp == nullptr )
     {
         m_current.Init();
         sp = &m_current;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,13 +96,16 @@ typedef std::pair< std::string, std::vector< SGNODE* > > NODEITEM;
 struct DATA;
 
 bool processNode( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
-    std::vector< SGNODE* >* items );
+                  std::vector< SGNODE* >* items );
+
 
 bool processComp( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
-    std::vector< SGNODE* >* items );
+                  std::vector< SGNODE* >* items );
+
 
 bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
-    std::vector< SGNODE* >* items, Quantity_Color* color );
+                  std::vector< SGNODE* >* items, Quantity_Color* color );
+
 
 struct DATA
 {
@@ -120,8 +123,8 @@ struct DATA
 
     DATA()
     {
-        scene = NULL;
-        defaultColor = NULL;
+        scene = nullptr;
+        defaultColor = nullptr;
         refColor.SetValues( Quantity_NOC_BLACK );
         renderBoth = false;
         hasSolid = false;
@@ -137,7 +140,7 @@ struct DATA
 
             while( sC != eC )
             {
-                if( NULL == S3D::GetSGNodeParent( sC->second ) )
+                if( nullptr == S3D::GetSGNodeParent( sC->second ) )
                     S3D::DestroyNode( sC->second );
 
                 ++sC;
@@ -146,7 +149,7 @@ struct DATA
             colors.clear();
         }
 
-        if( defaultColor && NULL == S3D::GetSGNodeParent( defaultColor ) )
+        if( defaultColor && nullptr == S3D::GetSGNodeParent( defaultColor ) )
             S3D::DestroyNode(defaultColor);
 
         // destroy any faces with no parent
@@ -157,7 +160,7 @@ struct DATA
 
             while( sF != eF )
             {
-                if( NULL == S3D::GetSGNodeParent( sF->second ) )
+                if( nullptr == S3D::GetSGNodeParent( sF->second ) )
                     S3D::DestroyNode( sF->second );
 
                 ++sF;
@@ -179,7 +182,7 @@ struct DATA
 
                 while( sV != eV )
                 {
-                    if( NULL == S3D::GetSGNodeParent( *sV ) )
+                    if( nullptr == S3D::GetSGNodeParent( *sV ) )
                         S3D::DestroyNode( *sV );
 
                     ++sV;
@@ -194,14 +197,12 @@ struct DATA
 
         if( scene )
             S3D::DestroyNode(scene);
-
-        return;
     }
 
     // find collection of tagged nodes
     bool GetShape( const std::string& id, std::vector< SGNODE* >*& listPtr )
     {
-        listPtr = NULL;
+        listPtr = nullptr;
         NODEMAP::iterator item;
         item = shapes.find( id );
 
@@ -219,7 +220,7 @@ struct DATA
         item = faces.find( id );
 
         if( item == faces.end() )
-            return NULL;
+            return nullptr;
 
         return item->second;
     }
@@ -227,7 +228,7 @@ struct DATA
     // return color if found; if not found, create SGAPPEARANCE
     SGNODE* GetColor( Quantity_Color* colorObj )
     {
-        if( NULL == colorObj )
+        if( nullptr == colorObj )
         {
             if( defaultColor )
                 return defaultColor;
@@ -279,7 +280,7 @@ FormatType fileType( const char* aFileName )
         return FMT_NONE;
 
     if( fname.GetExt().MakeUpper().EndsWith( "STPZ" ) ||
-            fname.GetExt().MakeUpper().EndsWith( "GZ" ) )
+        fname.GetExt().MakeUpper().EndsWith( "GZ" ) )
         return FMT_STPZ;
 
     char iline[82];
@@ -344,8 +345,6 @@ void getTag( TDF_Label& label, std::string& aTag )
         aTag.append( 1, *bI );
         ++bI;
     }
-
-    return;
 }
 
 
@@ -372,7 +371,7 @@ bool getColor( DATA& data, TDF_Label label, Quantity_Color& color )
 
 void addItems( SGNODE* parent, std::vector< SGNODE* >* lp )
 {
-    if( NULL == lp )
+    if( nullptr == lp )
         return;
 
     std::vector< SGNODE* >::iterator sL = lp->begin();
@@ -383,19 +382,17 @@ void addItems( SGNODE* parent, std::vector< SGNODE* >* lp )
     {
         item = *sL;
 
-        if( NULL == S3D::GetSGNodeParent( item ) )
+        if( nullptr == S3D::GetSGNodeParent( item ) )
             S3D::AddSGNodeChild( parent, item );
         else
             S3D::AddSGNodeRef( parent, item );
 
         ++sL;
     }
-
-    return;
 }
 
 
-bool readIGES( Handle(TDocStd_Document)& m_doc, const char* fname )
+bool readIGES( Handle( TDocStd_Document ) & m_doc, const char* fname )
 {
     IGESCAFControl_Reader reader;
     IFSelect_ReturnStatus stat  = reader.ReadFile( fname );
@@ -441,9 +438,9 @@ bool readSTEP( Handle(TDocStd_Document)& m_doc, const char* fname )
         return false;
 
     // set other translation options
-    reader.SetColorMode(true);  // use model colors
-    reader.SetNameMode(false);  // don't use label names
-    reader.SetLayerMode(false); // ignore LAYER data
+    reader.SetColorMode( true );  // use model colors
+    reader.SetNameMode( false );  // don't use label names
+    reader.SetLayerMode( false ); // ignore LAYER data
 
     if ( !reader.Transfer( m_doc ) )
     {
@@ -539,27 +536,30 @@ SCENEGRAPH* LoadModel( char const* filename )
 
     switch( modelFmt )
     {
-        case FMT_IGES:
-            data.renderBoth = true;
+    case FMT_IGES:
+        data.renderBoth = true;
 
-            if( !readIGES( data.m_doc, filename ) )
-                return NULL;
-            break;
+        if( !readIGES( data.m_doc, filename ) )
+            return nullptr;
 
-        case FMT_STEP:
-            if( !readSTEP( data.m_doc, filename ) )
-                return NULL;
-            break;
+        break;
 
-        case FMT_STPZ:
-            if( !readSTEPZ( data.m_doc, filename ) )
-                return NULL;
-            break;
+    case FMT_STEP:
+        if( !readSTEP( data.m_doc, filename ) )
+            return nullptr;
+
+        break;
+
+    case FMT_STPZ:
+        if( !readSTEPZ( data.m_doc, filename ) )
+            return nullptr;
+
+        break;
 
 
-        default:
-            return NULL;
-            break;
+    default:
+        return nullptr;
+        break;
     }
 
     data.m_assy = XCAFDoc_DocumentTool::ShapeTool( data.m_doc->Main() );
@@ -579,21 +579,21 @@ SCENEGRAPH* LoadModel( char const* filename )
 
     while( id <= nshapes )
     {
-        TopoDS_Shape shape = data.m_assy->GetShape( frshapes.Value(id) );
+        TopoDS_Shape shape = data.m_assy->GetShape( frshapes.Value( id ) );
 
-        if ( !shape.IsNull() && processNode( shape, data, data.scene, NULL ) )
+        if ( !shape.IsNull() && processNode( shape, data, data.scene, nullptr ) )
             ret = true;
 
         ++id;
     };
 
     if( !ret )
-        return NULL;
+        return nullptr;
 
     SCENEGRAPH* scene = (SCENEGRAPH*)data.scene;
 
     // DEBUG: WRITE OUT VRML2 FILE TO CONFIRM STRUCTURE
-    #if ( defined( DEBUG_OCE ) && DEBUG_OCE > 3 )
+#if ( defined( DEBUG_OCE ) && DEBUG_OCE > 3 )
     if( data.scene )
     {
         wxFileName fn( wxString::FromUTF8Unchecked( filename ) );
@@ -605,20 +605,20 @@ SCENEGRAPH* LoadModel( char const* filename )
             output = wxT( "_iges-" );
 
         output.append( fn.GetName() );
-        output.append( wxT(".wrl") );
+        output.append( wxT( ".wrl" ) );
         S3D::WriteVRML( output.ToUTF8(), true, data.scene, true, true );
     }
-    #endif
+#endif
 
     // set to NULL to prevent automatic destruction of the scene data
-    data.scene = NULL;
+    data.scene = nullptr;
 
     return scene;
 }
 
 
 bool processShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
-    std::vector< SGNODE* >* items, Quantity_Color* color )
+                   std::vector< SGNODE* >* items, Quantity_Color* color )
 {
     TopoDS_Iterator it;
     bool ret = false;
@@ -636,13 +636,13 @@ bool processShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
 
 
 bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
-    std::vector< SGNODE* >* items )
+                   std::vector< SGNODE* >* items )
 {
     TDF_Label label;
     data.hasSolid = true;
     std::string partID;
     Quantity_Color col;
-    Quantity_Color* lcolor = NULL;
+    Quantity_Color* lcolor = nullptr;
 
     // Search the whole model first to make sure something exists (may or may not have color)
     if( !data.m_assy->Search( shape, label ) )
@@ -666,7 +666,7 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
         if( !found_color )
         {
             if( data.m_assy->Search( shape, label, Standard_False, Standard_True, Standard_True ) &&
-                    getColor( data, label, col ) )
+                getColor( data, label, col ) )
             {
                 found_color = true;
                 lcolor = &col;
@@ -676,19 +676,22 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
         // If the components do not have color information, search all components without location
         if( !found_color )
         {
-            if( data.m_assy->Search( shape, label, Standard_False, Standard_False, Standard_True ) &&
-                    getColor( data, label, col ) )
+            if( data.m_assy->Search( shape, label, Standard_False, Standard_False,
+                                     Standard_True ) &&
+                getColor( data, label, col ) )
             {
                 found_color = true;
                 lcolor = &col;
             }
         }
 
-        // Our last chance to find the color looks for color as a subshape of top-level simple shapes
+        // Our last chance to find the color looks for color as a subshape of top-level simple
+        // shapes.
         if( !found_color )
         {
-            if( data.m_assy->Search( shape, label, Standard_False, Standard_False, Standard_False ) &&
-                    getColor( data, label, col ) )
+            if( data.m_assy->Search( shape, label, Standard_False, Standard_False,
+                                     Standard_False ) &&
+                getColor( data, label, col ) )
             {
                 found_color = true;
                 lcolor = &col;
@@ -716,7 +719,7 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
             childNode.SetRotation( SGVECTOR( axis.X(), axis.Y(), axis.Z() ), angle );
     }
 
-    std::vector< SGNODE* >* component = NULL;
+    std::vector< SGNODE* >* component = nullptr;
 
     if( !partID.empty() )
         data.GetShape( partID, component );
@@ -725,7 +728,7 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
     {
         addItems( pptr, component );
 
-        if( NULL != items )
+        if( nullptr != items )
             items->push_back( pptr );
     }
 
@@ -742,7 +745,7 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
 
     if( !ret )
         childNode.Destroy();
-    else if( NULL != items )
+    else if( nullptr != items )
         items->push_back( pptr );
 
     return ret;
@@ -750,7 +753,7 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
 
 
 bool processComp( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
-    std::vector< SGNODE* >* items )
+                  std::vector< SGNODE* >* items )
 {
     TopoDS_Iterator it;
     IFSG_TRANSFORM childNode( parent );
@@ -778,35 +781,39 @@ bool processComp( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
 
         switch( stype )
         {
-            case TopAbs_COMPOUND:
-            case TopAbs_COMPSOLID:
-                if( processComp( subShape, data, pptr, items ) )
-                    ret = true;
-                break;
+        case TopAbs_COMPOUND:
+        case TopAbs_COMPSOLID:
+            if( processComp( subShape, data, pptr, items ) )
+                ret = true;
 
-            case TopAbs_SOLID:
-                if( processSolid( subShape, data, pptr, items ) )
-                    ret = true;
-                break;
+            break;
 
-            case TopAbs_SHELL:
-                if( processShell( subShape, data, pptr, items, NULL ) )
-                    ret = true;
-                break;
+        case TopAbs_SOLID:
+            if( processSolid( subShape, data, pptr, items ) )
+                ret = true;
 
-            case TopAbs_FACE:
-                if( processFace( TopoDS::Face( subShape ), data, pptr, items, NULL ) )
-                    ret = true;
-                break;
+            break;
 
-            default:
-                break;
+        case TopAbs_SHELL:
+            if( processShell( subShape, data, pptr, items, nullptr ) )
+                ret = true;
+
+            break;
+
+        case TopAbs_FACE:
+            if( processFace( TopoDS::Face( subShape ), data, pptr, items, nullptr ) )
+                ret = true;
+
+            break;
+
+        default:
+            break;
         }
     }
 
     if( !ret )
         childNode.Destroy();
-    else if( NULL != items )
+    else if( nullptr != items )
         items->push_back( pptr );
 
     return ret;
@@ -822,29 +829,33 @@ bool processNode( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
 
     switch( stype )
     {
-        case TopAbs_COMPOUND:
-        case TopAbs_COMPSOLID:
-            if( processComp( shape, data, parent, items ) )
-                ret = true;
-            break;
+    case TopAbs_COMPOUND:
+    case TopAbs_COMPSOLID:
+        if( processComp( shape, data, parent, items ) )
+            ret = true;
 
-        case TopAbs_SOLID:
-            if( processSolid( shape, data, parent, items ) )
-                ret = true;
-            break;
+        break;
 
-        case TopAbs_SHELL:
-            if( processShell( shape, data, parent, items, NULL ) )
-                ret = true;
-            break;
+    case TopAbs_SOLID:
+        if( processSolid( shape, data, parent, items ) )
+            ret = true;
 
-        case TopAbs_FACE:
-            if( processFace( TopoDS::Face( shape ), data, parent, items, NULL ) )
-                ret = true;
-            break;
+        break;
 
-        default:
-            break;
+    case TopAbs_SHELL:
+        if( processShell( shape, data, parent, items, nullptr ) )
+            ret = true;
+
+        break;
+
+    case TopAbs_FACE:
+        if( processFace( TopoDS::Face( shape ), data, parent, items, nullptr ) )
+            ret = true;
+
+        break;
+
+    default:
+        break;
     }
 
     return ret;
@@ -852,13 +863,13 @@ bool processNode( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
 
 
 bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
-    std::vector< SGNODE* >* items, Quantity_Color* color )
+                  std::vector< SGNODE* >* items, Quantity_Color* color )
 {
     if( Standard_True == face.IsNull() )
         return false;
 
     bool reverse = ( face.Orientation() == TopAbs_REVERSED );
-    SGNODE* ashape = NULL;
+    SGNODE* ashape = nullptr;
     std::string partID;
     TDF_Label label;
 
@@ -877,12 +888,12 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
 
     if( ashape )
     {
-        if( NULL == S3D::GetSGNodeParent( ashape ) )
+        if( nullptr == S3D::GetSGNodeParent( ashape ) )
             S3D::AddSGNodeChild( parent, ashape );
         else
             S3D::AddSGNodeRef( parent, ashape );
 
-        if( NULL != items )
+        if( nullptr != items )
             items->push_back( ashape );
 
         if( useBothSides )
@@ -891,12 +902,12 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
             id2.append( "b" );
             SGNODE* shapeB = data.GetFace( id2 );
 
-            if( NULL == S3D::GetSGNodeParent( shapeB ) )
+            if( nullptr == S3D::GetSGNodeParent( shapeB ) )
                 S3D::AddSGNodeChild( parent, shapeB );
             else
                 S3D::AddSGNodeRef( parent, shapeB );
 
-            if( NULL != items )
+            if( nullptr != items )
                 items->push_back( shapeB );
         }
 
@@ -905,12 +916,12 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
 
     TopLoc_Location loc;
     Standard_Boolean isTessellate (Standard_False);
-    Handle(Poly_Triangulation) triangulation = BRep_Tool::Triangulation( face, loc );
+    Handle( Poly_Triangulation ) triangulation = BRep_Tool::Triangulation( face, loc );
 
     if( triangulation.IsNull() || triangulation->Deflection() > USER_PREC + Precision::Confusion() )
         isTessellate = Standard_True;
 
-    if (isTessellate)
+    if( isTessellate )
     {
         BRepMesh_IncrementalMesh IM(face, USER_PREC, Standard_False, USER_ANGLE );
         triangulation = BRep_Tool::Triangulation( face, loc );
@@ -944,7 +955,7 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
     IFSG_COORDS vcoords( vface );
     IFSG_COORDINDEX coordIdx( vface );
 
-    if( NULL == S3D::GetSGNodeParent( ocolor ) )
+    if( nullptr == S3D::GetSGNodeParent( ocolor ) )
         S3D::AddSGNodeChild( vshape.GetRawPtr(), ocolor );
     else
         S3D::AddSGNodeRef( vshape.GetRawPtr(), ocolor );
@@ -957,13 +968,13 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
     std::vector< int > indices2;
     gp_Trsf tx;
 
-    for(int i = 1; i <= triangulation->NbNodes(); i++)
+    for( int i = 1; i <= triangulation->NbNodes(); i++ )
     {
         gp_XYZ v( arrPolyNodes(i).Coord() );
         vertices.emplace_back( v.X(), v.Y(), v.Z() );
     }
 
-    for(int i = 1; i <= triangulation->NbTriangles(); i++)
+    for( int i = 1; i <= triangulation->NbTriangles(); i++ )
     {
         int a, b, c;
         arrTriangles( i ).Get( a, b, c );
@@ -974,7 +985,9 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
             int tmp = b - 1;
             b = c - 1;
             c = tmp;
-        } else {
+        }
+        else
+        {
             b--;
             c--;
         }
@@ -993,12 +1006,11 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
 
     vcoords.SetCoordsList( vertices.size(), &vertices[0] );
     coordIdx.SetIndices( indices.size(), &indices[0] );
-    vface.CalcNormals( NULL );
+    vface.CalcNormals( nullptr );
     vshape.SetParent( parent );
 
     if( !partID.empty() )
-        data.faces.insert( std::pair< std::string,
-            SGNODE* >( partID, vshape.GetRawPtr() ) );
+        data.faces.insert( std::pair< std::string, SGNODE* >( partID, vshape.GetRawPtr() ) );
 
     // The outer surface of an IGES model is indeterminate so
     // we must render both sides of a surface.
@@ -1014,12 +1026,11 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
 
         vcoords2.SetCoordsList( vertices.size(), &vertices[0] );
         coordIdx2.SetIndices( indices2.size(), &indices2[0] );
-        vface2.CalcNormals( NULL );
+        vface2.CalcNormals( nullptr );
         vshape2.SetParent( parent );
 
         if( !partID.empty() )
-            data.faces.insert( std::pair< std::string,
-                SGNODE* >( id2, vshape2.GetRawPtr() ) );
+            data.faces.insert( std::pair< std::string, SGNODE* >( id2, vshape2.GetRawPtr() ) );
     }
 
     return true;

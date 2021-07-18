@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ bool PCB_CALCULATOR_FRAME::ReadDataFile()
 {
     FILE* file = wxFopen( GetDataFilename(), wxT( "rt" ) );
 
-    if( file == NULL )
+    if( file == nullptr )
         return false;
 
     // Switch the locale to standard C (needed to read/write floating point numbers)
@@ -83,6 +83,7 @@ bool PCB_CALCULATOR_FRAME::ReadDataFile()
 
     return true;
 }
+
 
 bool PCB_CALCULATOR_FRAME::WriteDataFile()
 {
@@ -117,10 +118,12 @@ PCB_CALCULATOR_DATAFILE::PCB_CALCULATOR_DATAFILE( REGULATOR_LIST * aList )
     m_list = aList;
 }
 
+
 static const char* regtype_str[] =
 {
     "normal", "3terminal"
 };
+
 
 int PCB_CALCULATOR_DATAFILE::WriteHeader( OUTPUTFORMATTER* aFormatter ) const
 {
@@ -141,6 +144,7 @@ void PCB_CALCULATOR_DATAFILE::Format( OUTPUTFORMATTER* aFormatter,
 {
     // Write regulators list:
     aFormatter->Print( aNestLevel++, "(%s\n", getTokenName( T_regulators ) );
+
     for( unsigned ii = 0; ii < m_list->m_List.size(); ii++ )
     {
         REGULATOR_DATA * item = m_list->m_List[ii];
@@ -148,15 +152,18 @@ void PCB_CALCULATOR_DATAFILE::Format( OUTPUTFORMATTER* aFormatter,
                            aFormatter->Quotew(item->m_Name ).c_str() );
         aFormatter->Print( aNestLevel+1, "(%s %g)\n", getTokenName( T_reg_vref ),
                            item->m_Vref );
+
         if( item->m_Iadj != 0 && item->m_Type == 1)
         {
             aFormatter->Print( aNestLevel+1, "(%s %g)\n", getTokenName( T_reg_iadj ),
                                item->m_Iadj );
         }
+
         aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_reg_type ),
                            regtype_str[item->m_Type] );
         aFormatter->Print( aNestLevel, ")\n" );
-   }
+    }
+
     aFormatter->Print( --aNestLevel, ")\n" );
 }
 
@@ -167,16 +174,14 @@ void PCB_CALCULATOR_DATAFILE::Parse( PCB_CALCULATOR_DATAFILE_PARSER* aParser )
 }
 
 
-
-// PCB_CALCULATOR_DATAFILE_PARSER
-
 PCB_CALCULATOR_DATAFILE_PARSER::PCB_CALCULATOR_DATAFILE_PARSER( LINE_READER* aReader ) :
     PCB_CALCULATOR_DATAFILE_LEXER( aReader )
 {
 }
 
 
-PCB_CALCULATOR_DATAFILE_PARSER::PCB_CALCULATOR_DATAFILE_PARSER( char* aLine, const wxString& aSource ) :
+PCB_CALCULATOR_DATAFILE_PARSER::PCB_CALCULATOR_DATAFILE_PARSER( char* aLine,
+                                                                const wxString& aSource ) :
     PCB_CALCULATOR_DATAFILE_LEXER( aLine, aSource )
 {
 }
@@ -185,6 +190,7 @@ PCB_CALCULATOR_DATAFILE_PARSER::PCB_CALCULATOR_DATAFILE_PARSER( char* aLine, con
 void PCB_CALCULATOR_DATAFILE_PARSER::Parse( PCB_CALCULATOR_DATAFILE* aDataList )
 {
     T token;
+
     while( ( token = NextTok() ) != T_EOF)
     {
         if( token == T_LEFT )
@@ -199,6 +205,7 @@ void PCB_CALCULATOR_DATAFILE_PARSER::Parse( PCB_CALCULATOR_DATAFILE* aDataList )
         }
     }
 }
+
 
 void PCB_CALCULATOR_DATAFILE_PARSER::ParseRegulatorDescr( PCB_CALCULATOR_DATAFILE* aDataList )
 {
@@ -236,28 +243,34 @@ void PCB_CALCULATOR_DATAFILE_PARSER::ParseRegulatorDescr( PCB_CALCULATOR_DATAFIL
                 {
                 case T_reg_vref:   // the voltage reference value
                     token = NextTok();
+
                     if( token != T_NUMBER )
                         Expecting( T_NUMBER );
+
                     sscanf( CurText(), "%lf" , &vref);
                     NeedRIGHT();
                     break;
 
                 case T_reg_iadj:   // the Iadj reference value
                     token = NextTok();
+
                     if( token != T_NUMBER )
                         Expecting( T_NUMBER );
+
                     sscanf( CurText(), "%lf" , &iadj);
                     NeedRIGHT();
                     break;
 
                 case T_reg_type:   // type: normal or 3 terminal reg
                     token = NextTok();
-                   if( strcasecmp( CurText(), regtype_str[0] ) == 0 )
+
+                    if( strcasecmp( CurText(), regtype_str[0] ) == 0 )
                         type = 0;
                     else if( strcasecmp( CurText(), regtype_str[1] ) == 0 )
                         type = 1;
                     else
                         Unexpected( CurText() );
+
                     NeedRIGHT();
                     break;
 
@@ -271,7 +284,8 @@ void PCB_CALCULATOR_DATAFILE_PARSER::ParseRegulatorDescr( PCB_CALCULATOR_DATAFIL
             {
                 if( type != 1 )
                     iadj = 0.0;
-                REGULATOR_DATA * new_item = new REGULATOR_DATA(name, vref, type, iadj );
+
+                REGULATOR_DATA* new_item = new REGULATOR_DATA( name, vref, type, iadj );
                 aDataList->m_list->Add( new_item );
             }
         }

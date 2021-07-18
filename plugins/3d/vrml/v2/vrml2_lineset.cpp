@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,8 +38,6 @@ WRL2LINESET::WRL2LINESET() : WRL2NODE()
 {
     setDefaults();
     m_Type = WRL2NODES::WRL2_INDEXEDLINESET;
-
-    return;
 }
 
 
@@ -48,16 +47,14 @@ WRL2LINESET::WRL2LINESET( WRL2NODE* aParent ) : WRL2NODE()
     m_Type = WRL2NODES::WRL2_INDEXEDLINESET;
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
-
-    return;
 }
 
 
 WRL2LINESET::~WRL2LINESET()
 {
-    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Destroying IndexedLineSet with " << m_Children.size();
@@ -65,16 +62,14 @@ WRL2LINESET::~WRL2LINESET()
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
-
-    return;
+#endif
 }
 
 
 void WRL2LINESET::setDefaults( void )
 {
-    color = NULL;
-    coord = NULL;
+    color = nullptr;
+    coord = nullptr;
     colorPerVertex = true;
 }
 
@@ -104,7 +99,7 @@ bool WRL2LINESET::isDangling( void )
 {
     // this node is dangling unless it has a parent of type WRL2_SHAPE
 
-    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_SHAPE )
+    if( nullptr == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_SHAPE )
         return true;
 
     return false;
@@ -113,16 +108,16 @@ bool WRL2LINESET::isDangling( void )
 
 bool WRL2LINESET::AddRefNode( WRL2NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] NULL passed for aNode";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -131,7 +126,7 @@ bool WRL2LINESET::AddRefNode( WRL2NODE* aNode )
 
     if( !checkNodeType( type ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -139,23 +134,23 @@ bool WRL2LINESET::AddRefNode( WRL2NODE* aNode )
             ostr << aNode->GetNodeTypeName( type ) << "'";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( WRL2NODES::WRL2_COLOR == type )
     {
-        if( NULL != color )
+        if( nullptr != color )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << " * [INFO] bad file format; multiple color nodes";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -166,16 +161,16 @@ bool WRL2LINESET::AddRefNode( WRL2NODE* aNode )
 
     if( WRL2NODES::WRL2_COORDINATE == type )
     {
-        if( NULL != coord )
+        if( nullptr != coord )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << " * [INFO] bad file format; multiple coordinate nodes";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -190,16 +185,16 @@ bool WRL2LINESET::AddRefNode( WRL2NODE* aNode )
 
 bool WRL2LINESET::AddChildNode( WRL2NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
     {
-        #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] NULL passed for aNode";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -208,7 +203,7 @@ bool WRL2LINESET::AddChildNode( WRL2NODE* aNode )
 
     if( !checkNodeType( type ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -216,23 +211,23 @@ bool WRL2LINESET::AddChildNode( WRL2NODE* aNode )
             ostr << aNode->GetNodeTypeName( type ) << "'";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( WRL2NODES::WRL2_COLOR == type )
     {
-        if( NULL != color )
+        if( nullptr != color )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << " * [INFO] bad file format; multiple color nodes";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -243,16 +238,16 @@ bool WRL2LINESET::AddChildNode( WRL2NODE* aNode )
 
     if( WRL2NODES::WRL2_COORDINATE == type )
     {
-        if( NULL != coord )
+        if( nullptr != coord )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << " * [INFO] bad file format; multiple coordinate nodes";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -275,7 +270,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -283,14 +278,14 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( '{' != tok )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr << proc.GetError() << "\n";
@@ -299,7 +294,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr  << "' at line " << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -317,14 +312,14 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !proc.ReadName( glob ) )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << proc.GetError();
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -345,7 +340,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFBool( colorPerVertex ) )
             {
-                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -355,7 +350,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -364,7 +359,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadMFInt( colorIndex ) )
             {
-                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -374,7 +369,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -383,7 +378,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadMFInt( coordIndex ) )
             {
-                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -393,46 +388,46 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
         }
         else if( !glob.compare( "color" ) )
         {
-            if( !aTopNode->ReadNode( proc, this, NULL ) )
+            if( !aTopNode->ReadNode( proc, this, nullptr ) )
             {
-                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                     ostr << " * [INFO] could not read color node information";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
         }
         else if( !glob.compare( "coord" ) )
         {
-            if( !aTopNode->ReadNode( proc, this, NULL ) )
+            if( !aTopNode->ReadNode( proc, this, nullptr ) )
             {
-                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                     ostr << " * [INFO] could not read coord node information";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
         }
         else
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -441,7 +436,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -454,51 +449,47 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 SGNODE* WRL2LINESET::TranslateToSG( SGNODE* aParent )
 {
     // note: there are no plans to support drawing of lines
-    return NULL;
+    return nullptr;
 }
 
 
 void WRL2LINESET::unlinkChildNode( const WRL2NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     if( aNode->GetParent() == this )
     {
         if( aNode == color )
-            color = NULL;
+            color = nullptr;
         else if( aNode == coord )
-            coord = NULL;
-
+            coord = nullptr;
     }
 
     WRL2NODE::unlinkChildNode( aNode );
-    return;
 }
 
 
 void WRL2LINESET::unlinkRefNode( const WRL2NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     if( aNode->GetParent() != this )
     {
         if( aNode == color )
-            color = NULL;
+            color = nullptr;
         else if( aNode == coord )
-            coord = NULL;
-
+            coord = nullptr;
     }
 
     WRL2NODE::unlinkRefNode( aNode );
-    return;
 }
 
 
 bool WRL2LINESET::HasColors( void )
 {
-    if( NULL == color )
+    if( nullptr == color )
         return false;
 
     return ((WRL2COLOR*) color)->HasColors();

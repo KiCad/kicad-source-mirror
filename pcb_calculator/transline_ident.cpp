@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras
- * Copyright (C) 2004-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,16 +42,9 @@
 #include "transline_ident.h"
 
 
-/*
- * TRANSLINE_PRM
- * A class to handle one parameter of transline
- */
-TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
-                              const char* aKeywordCfg,
-                              const wxString& aDlgLabel,
-                              const wxString& aToolTip,
-                              double aValue,
-                              bool aConvUnit )
+TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId, const char* aKeywordCfg,
+                              const wxString& aDlgLabel, const wxString& aToolTip,
+                              double aValue, bool aConvUnit )
 {
     m_Type          = aType;
     m_Id            = aId;
@@ -60,8 +53,8 @@ TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
     m_ToolTip       = aToolTip;
     m_Value         = aValue;
     m_ConvUnit      = aConvUnit;
-    m_ValueCtrl     = NULL;
-    m_UnitCtrl      = NULL;
+    m_ValueCtrl     = nullptr;
+    m_UnitCtrl      = nullptr;
     m_UnitSelection = 0;
     m_NormalizedValue = 0;
  }
@@ -85,23 +78,11 @@ double TRANSLINE_PRM::FromUserUnit()
 }
 
 
-/*
- * TRANSLINE_IDENT
- * A class to handle a list of parameters of a given transline
- * Important note:
- * the first string of TRANSLINE_PRM (m_KeyWord) is a keyword in config file.
- * it can contain only ASCII7 chars
- * the second string of TRANSLINE_PRM (m_DlgLabel) is a string translated for dialog,
- * so mark it for translation (m_KeyWord and m_DlgLabel are usually the same in English)
- * and of course do not mark translatable m_DlgLabel that obviously cannot be translated,
- * like "H" or "H_t"
- */
-
 TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 {
     m_Type = aType;               // The type of transline handled
-    m_Icon = NULL;                // An xpm icon to display in dialogs
-    m_TLine = NULL;               // The TRANSLINE itself
+    m_Icon = nullptr;             // An xpm icon to display in dialogs
+    m_TLine = nullptr;            // The TRANSLINE itself
     m_HasPrmSelection = false;    // true if selection of parameters must be enabled in dialog menu
 
     // Add common prms:
@@ -118,7 +99,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
     // Default value is for copper
     AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, RHO_PRM,
                                "Rho", wxT( "ρ" ),
-                               _( "Electrical resistivity or specific electrical resistance of conductor (ohm*meter)" ),
+                               _( "Electrical resistivity or specific electrical resistance of "
+                                  "conductor (ohm*meter)" ),
                                1.72e-8, false ) );
 
     // Default value is in GHz
@@ -149,10 +131,12 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    "Rough", _( "Roughness" ),
                                    _( "Conductor roughness" ), 0.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   "mu Rel S", wxString::Format( wxT( "μ(%s)" ), _( "substrate" ) ),
+                                   "mu Rel S", wxString::Format( wxT( "μ(%s)" ),
+                                                                 _( "substrate" ) ),
                                    _( "Relative permeability (mu) of substrate" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ),
+                                                                 _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
@@ -183,7 +167,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ),
+                                                                 _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
@@ -216,7 +201,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ),
+                                                                 _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
@@ -248,10 +234,12 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Messages.Add( _( "TM-modes:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   "mu Rel I", wxString::Format( wxT( "μ(%s)" ), _( "insulator" ) ),
+                                   "mu Rel I", wxString::Format( wxT( "μ(%s)" ),
+                                                                 _( "insulator" ) ),
                                    _( "Relative permeability (mu) of insulator" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ),
+                                                                 _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
@@ -281,10 +269,12 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Messages.Add( _( "TM-modes:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   "mu Rel I", wxString::Format( wxT( "μ(%s)" ), _( "insulator" ) ),
+                                   "mu Rel I", wxString::Format( wxT( "μ(%s)" ),
+                                                                 _( "insulator" ) ),
                                    _( "Relative permeability (mu) of insulator" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ),
+                                                                 _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
@@ -327,7 +317,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    "Rough", _( "Roughness" ),
                                    _( "Conductor roughness" ), 0.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
+                                   "mu rel C", wxString::Format( wxT( "μ(%s)" ),
+                                                                 _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
@@ -340,10 +331,12 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_E_PRM,
                                    "Zeven", _( "Zeven" ),
-                                   _( "Even mode impedance (lines driven by common voltages)" ), 50.0, true ) );
+                                   _( "Even mode impedance (lines driven by common voltages)" ),
+                                   50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_O_PRM,
                                    "Zodd", _( "Zodd" ),
-                                   _( "Odd mode impedance (lines driven by opposite (differential) voltages)" ), 50.0, true ) );
+                                   _( "Odd mode impedance (lines driven by opposite "
+                                      "(differential) voltages)" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
                                    "Ang_l", "Ang_l",
                                    _( "Electrical length" ), 0.0, true ) );
@@ -366,7 +359,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ),
+                                                                 _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1, false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
@@ -395,11 +389,13 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    "Twists", _( "Twists" ),
                                    _( "Number of twists per length" ), 0.0, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ),
+                                                                 _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, TWISTEDPAIR_EPSILONR_ENV_PRM,
-                                   "ErEnv", wxString::Format( wxT( "εr(%s)" ), _( "environment" ) ),
+                                   "ErEnv", wxString::Format( wxT( "εr(%s)" ),
+                                                              _( "environment" ) ),
                                    _( "Relative permittivity of environment" ), 1,
                                    false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_DIAM_IN_PRM,

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,14 +72,14 @@ bool NAMEREGISTER::DelName( const std::string& aName, WRL1NODE* aNode )
 WRL1NODE* NAMEREGISTER::FindName( const std::string& aName )
 {
     if( aName.empty() )
-        return NULL;
+        return nullptr;
 
     std::map< std::string, WRL1NODE* >::iterator ir = reg.find( aName );
 
     if( ir != reg.end() )
         return ir->second;
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -86,14 +87,16 @@ typedef std::pair< std::string, WRL1NODES > NODEITEM;
 typedef std::map< std::string, WRL1NODES > NODEMAP;
 static NODEMAP nodenames;
 
+
 #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
 std::string WRL1NODE::tabs = "";
 #endif
 
+
 WRL1NODE::WRL1NODE( NAMEREGISTER* aDictionary )
 {
-    m_sgNode = NULL;
-    m_Parent = NULL;
+    m_sgNode = nullptr;
+    m_Parent = nullptr;
     m_Type = WRL1NODES::WRL1_END;
     m_dictionary = aDictionary;
 
@@ -135,14 +138,12 @@ WRL1NODE::WRL1NODE( NAMEREGISTER* aDictionary )
         nodenames.insert( NODEITEM( "WWWAnchor", WRL1NODES::WRL1_WWWANCHOR ) );
         nodenames.insert( NODEITEM( "WWWInline", WRL1NODES::WRL1_WWWINLINE ) );
     }
-
-    return;
 }
 
 
 WRL1NODE::~WRL1NODE()
 {
-    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] ^^ Destroying Type " << m_Type << " with " << m_Children.size();
@@ -150,7 +151,7 @@ WRL1NODE::~WRL1NODE()
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     m_Items.clear();
 
@@ -163,13 +164,13 @@ WRL1NODE::~WRL1NODE()
     std::list< WRL1NODE* >::iterator sBP = m_BackPointers.begin();
     std::list< WRL1NODE* >::iterator eBP = m_BackPointers.end();
 
-    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     int acc = 0;
-    #endif
+#endif
 
     while( sBP != eBP )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
         ++acc;
         do {
             std::ostringstream ostr;
@@ -177,16 +178,16 @@ WRL1NODE::~WRL1NODE()
             ostr << acc;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
         (*sBP)->unlinkRefNode( this );
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
         do {
             std::ostringstream ostr;
             ostr << " * [INFO] " << tabs << "Type " << m_Type << " has unlinked ref #";
             ostr << acc;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
         ++sBP;
     }
 
@@ -195,49 +196,54 @@ WRL1NODE::~WRL1NODE()
     std::list< WRL1NODE* >::iterator sC = m_Children.begin();
     std::list< WRL1NODE* >::iterator eC = m_Children.end();
 
-    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     std::string otabs = tabs;
     tabs.append( "    " );
-    #endif
+#endif
 
     while( sC != eC )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
         ++acc;
+
         do {
             std::ostringstream ostr;
             ostr << " * [INFO] " << otabs << "Type " << m_Type << " is Deleting child #";
             ostr << acc;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
-        (*sC)->SetParent( NULL, false );
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#endif
+
+        (*sC)->SetParent( nullptr, false );
+
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
         do {
             std::ostringstream ostr;
             ostr << " * [INFO] " << otabs << "Type " << m_Type << " has unlinked child #";
             ostr << acc;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
+
         delete *sC;
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
         do {
             std::ostringstream ostr;
             ostr << " * [INFO] " << otabs << "Type " << m_Type << " has deleted child #";
             ostr << acc;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
+
         ++sC;
     }
 
-    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     tabs = otabs;
-    #endif
+#endif
 
     m_Children.clear();
-    return;
 }
 
 
@@ -252,11 +258,10 @@ void WRL1NODE::cancelDict( void )
         ++sC;
     }
 
-    if( m_Type == WRL1NODES::WRL1_BASE && NULL != m_dictionary )
+    if( m_Type == WRL1NODES::WRL1_BASE && nullptr != m_dictionary )
         delete m_dictionary;
 
-    m_dictionary = NULL;
-    return;
+    m_dictionary = nullptr;
 }
 
 
@@ -278,8 +283,6 @@ void WRL1NODE::addNodeRef( WRL1NODE* aNode )
     }
 
     m_BackPointers.push_back( aNode );
-
-    return;
 }
 
 
@@ -294,16 +297,14 @@ void WRL1NODE::delNodeRef( WRL1NODE* aNode )
         return;
     }
 
-    #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] delNodeRef() did not find its target";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
-
-    return;
+#endif
 }
 
 
@@ -332,14 +333,14 @@ bool WRL1NODE::SetName( const std::string& aName )
 
     if( isdigit( aName[0] ) )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] invalid node name '" << aName << "' (begins with digit)";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -353,7 +354,7 @@ bool WRL1NODE::SetName( const std::string& aName )
     if( std::string::npos != aName.find_first_of( BAD_CHARS1 )
         || std::string::npos != aName.find_first_of( BAD_CHARS2 ) )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -361,7 +362,7 @@ bool WRL1NODE::SetName( const std::string& aName )
             ostr << "' (contains invalid character)";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -415,8 +416,8 @@ std::string WRL1NODE::GetError( void )
 
 WRL1NODE* WRL1NODE::FindNode( const std::string& aNodeName )
 {
-    if( NULL == m_dictionary )
-        return NULL;
+    if( nullptr == m_dictionary )
+        return nullptr;
 
     return m_dictionary->FindName( aNodeName );
 }
@@ -427,12 +428,12 @@ bool WRL1NODE::SetParent( WRL1NODE* aParent, bool doUnlink )
     if( aParent == m_Parent )
         return true;
 
-    if( NULL != m_Parent && doUnlink )
+    if( nullptr != m_Parent && doUnlink )
         m_Parent->unlinkChildNode( this );
 
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
 
     return true;
@@ -443,14 +444,14 @@ bool WRL1NODE::AddChildNode( WRL1NODE* aNode )
 {
     if( aNode->GetNodeType() == WRL1NODES::WRL1_BASE )
     {
-        #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] attempting to add a base node to another node";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -478,30 +479,30 @@ bool WRL1NODE::AddChildNode( WRL1NODE* aNode )
 
 bool WRL1NODE::AddRefNode( WRL1NODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
     {
-        #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] NULL passed as node pointer";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( aNode->GetNodeType() == WRL1NODES::WRL1_BASE )
     {
-        #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] attempting to add a base node ref to another base node";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -533,8 +534,6 @@ void WRL1NODE::unlinkChildNode( const WRL1NODE* aNode )
 
         ++sL;
     }
-
-    return;
 }
 
 
@@ -554,15 +553,12 @@ void WRL1NODE::unlinkRefNode( const WRL1NODE* aNode )
 
         ++sL;
     }
-
-    return;
 }
 
 
 void WRL1NODE::addItem( WRL1NODE* aNode )
 {
     m_Items.push_back( aNode );
-    return;
 }
 
 
@@ -581,6 +577,4 @@ void WRL1NODE::delItem( const WRL1NODE* aNode )
 
         ++sL;
     }
-
-    return;
 }

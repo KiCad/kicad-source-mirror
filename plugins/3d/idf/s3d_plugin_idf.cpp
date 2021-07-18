@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,24 +53,41 @@
 
 // read and instantiate an IDF component outline
 static SCENEGRAPH* loadIDFOutline( const wxString& aFileName );
+
+
 // read and render an IDF board assembly
 static SCENEGRAPH* loadIDFBoard( const wxString& aFileName );
+
+
 // model a single extruded outline
 // idxColor = color index to use
 // aParent = parent SCENEGRAPH object, if any
 static SCENEGRAPH* addOutline( IDF3_COMP_OUTLINE* outline, int idxColor, SGNODE* aParent );
+
+
 // model the board extrusion
 static SCENEGRAPH* makeBoard( IDF3_BOARD& brd, SGNODE* aParent );
+
+
 // model all included components
 static bool makeComponents( IDF3_BOARD& brd, SGNODE* aParent );
+
+
 // model any .OTHER_OUTLINE items
 static bool makeOtherOutlines( IDF3_BOARD& brd, SGNODE* aParent );
+
+
 // convert the IDF outline to VRML intermediate data
 static bool getOutlineModel( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* items );
+
+
 // convert IDF segment data to VRML segment data
 static bool addSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg );
+
+
 // convert the VRML intermediate data into SG* data
-static SCENEGRAPH* vrmlToSG( VRML_LAYER& vpcb, int idxColor, SGNODE* aParent, double top, double bottom );
+static SCENEGRAPH* vrmlToSG( VRML_LAYER& vpcb, int idxColor, SGNODE* aParent, double top,
+                             double bottom );
 
 
 class LOCALESWITCH
@@ -105,63 +123,63 @@ static SGNODE* getColor( IFSG_SHAPE& shape, int colorIdx )
         // green for PCB
         material.SetSpecular( 0.13f, 0.81f, 0.22f );
         material.SetDiffuse( 0.13f, 0.81f, 0.22f );
+
         // default ambient intensity
         material.SetShininess( 0.3f );
-
         break;
 
     case 1:
         // magenta
         material.SetSpecular( 0.8f, 0.0f, 0.8f );
         material.SetDiffuse( 0.6f, 0.0f, 0.6f );
+
         // default ambient intensity
         material.SetShininess( 0.3f );
-
         break;
 
     case 2:
         // red
         material.SetSpecular( 0.69f, 0.14f, 0.14f );
         material.SetDiffuse( 0.69f, 0.14f, 0.14f );
+
         // default ambient intensity
         material.SetShininess( 0.3f );
-
         break;
 
     case 3:
         // orange
         material.SetSpecular( 1.0f, 0.44f, 0.0f );
         material.SetDiffuse( 1.0f, 0.44f, 0.0f );
+
         // default ambient intensity
         material.SetShininess( 0.3f );
-
         break;
 
     case 4:
         // yellow
         material.SetSpecular( 0.93f, 0.94f, 0.16f );
         material.SetDiffuse( 0.93f, 0.94f, 0.16f );
+
         // default ambient intensity
         material.SetShininess( 0.3f );
-
         break;
 
     case 5:
         // blue
         material.SetSpecular( 0.1f, 0.11f, 0.88f );
         material.SetDiffuse( 0.1f, 0.11f, 0.88f );
+
         // default ambient intensity
         material.SetShininess( 0.3f );
-
         break;
 
     default:
         // violet
         material.SetSpecular( 0.32f, 0.07f, 0.64f );
         material.SetDiffuse( 0.32f, 0.07f, 0.64f );
+
         // default ambient intensity
         material.SetShininess( 0.3f );
-
         break;
     }
 
@@ -178,8 +196,8 @@ const char* GetKicadPluginName( void )
 }
 
 
-void GetPluginVersion( unsigned char* Major,
-    unsigned char* Minor, unsigned char* Patch, unsigned char* Revision )
+void GetPluginVersion( unsigned char* Major, unsigned char* Minor, unsigned char* Patch,
+                       unsigned char* Revision )
 {
     if( Major )
         *Major = PLUGIN_3D_IDF_MAJOR;
@@ -192,9 +210,8 @@ void GetPluginVersion( unsigned char* Major,
 
     if( Revision )
         *Revision = PLUGIN_3D_IDF_REVNO;
-
-    return;
 }
+
 
 // number of extensions supported
 #ifdef _WIN32
@@ -203,11 +220,14 @@ void GetPluginVersion( unsigned char* Major,
     #define NEXTS 4
 #endif
 
+
 // number of filter sets supported
 #define NFILS 2
 
+
 static char ext0[] = "idf";
 static char ext1[] = "emn";
+
 
 #ifdef _WIN32
     static char fil0[] = "IDF (*.idf)|*.idf";
@@ -235,8 +255,6 @@ static struct FILE_DATA
         extensions[2] = ext2;
         extensions[3] = ext3;
 #endif
-
-        return;
     }
 
 } file_data;
@@ -251,7 +269,7 @@ int GetNExtensions( void )
 char const* GetModelExtension( int aIndex )
 {
     if( aIndex < 0 || aIndex >= NEXTS )
-        return NULL;
+        return nullptr;
 
     return file_data.extensions[aIndex];
 }
@@ -266,7 +284,7 @@ int GetNFilters( void )
 char const* GetFileFilter( int aIndex )
 {
     if( aIndex < 0 || aIndex >= NFILS )
-        return NULL;
+        return nullptr;
 
     return file_data.filters[aIndex];
 }
@@ -281,15 +299,15 @@ bool CanRender( void )
 
 SCENEGRAPH* Load( char const* aFileName )
 {
-    if( NULL == aFileName )
-        return NULL;
+    if( nullptr == aFileName )
+        return nullptr;
 
     wxFileName fname;
     fname.Assign( wxString::FromUTF8Unchecked( aFileName ) );
 
     wxString ext = fname.GetExt();
 
-    SCENEGRAPH* data = NULL;
+    SCENEGRAPH* data = nullptr;
 
     if( !ext.Cmp( wxT( "idf" ) ) || !ext.Cmp( wxT( "IDF" ) ) )
     {
@@ -302,16 +320,16 @@ SCENEGRAPH* Load( char const* aFileName )
     }
 
     // DEBUG: WRITE OUT IDF FILE TO CONFIRM NORMALS
-    #if defined( DEBUG_IDF ) && DEBUG_IDF > 3
+#if defined( DEBUG_IDF ) && DEBUG_IDF > 3
     if( data )
     {
         wxFileName fn( aFileName );
         wxString output = wxT( "_idf-" );
         output.append( fn.GetName() );
-        output.append( wxT(".wrl") );
-        S3D::WriteVRML( output.ToUTF8(), true, (SGNODE*)(data), true, true );
+        output.append( wxT( ".wrl" ) );
+        S3D::WriteVRML( output.ToUTF8(), true, (SGNODE*) ( data ), true, true );
     }
-    #endif
+#endif
 
     return data;
 }
@@ -339,28 +357,28 @@ static bool getOutlineModel( VRML_LAYER& model, const std::list< IDF_OUTLINE* >*
 
         if( nvcont < 0 )
         {
-            #ifdef DEBUG
+#ifdef DEBUG
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << " * [INFO] cannot create an outline";
                 wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
 
         if( (*scont)->size() < 1 )
         {
-            #ifdef DEBUG
+#ifdef DEBUG
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << " * [INFO] invalid contour: no vertices";
                 wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -369,20 +387,21 @@ static bool getOutlineModel( VRML_LAYER& model, const std::list< IDF_OUTLINE* >*
         eseg = (*scont)->end();
 
         iseg = 0;
+
         while( sseg != eseg )
         {
             lseg = **sseg;
 
             if( !addSegment( model, &lseg, nvcont, iseg ) )
             {
-                #ifdef DEBUG
+#ifdef DEBUG
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                     ostr << " * [BUG] cannot add segment";
                     wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -409,14 +428,14 @@ static bool addSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg
         {
             if( iseg != 0 )
             {
-                #ifdef DEBUG
+#ifdef DEBUG
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                     ostr << " * [INFO] adding a circle to an existing vertex list";
                     wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -437,9 +456,10 @@ static bool addSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg
 }
 
 
-static SCENEGRAPH* vrmlToSG( VRML_LAYER& vpcb, int idxColor, SGNODE* aParent, double top, double bottom )
+static SCENEGRAPH* vrmlToSG( VRML_LAYER& vpcb, int idxColor, SGNODE* aParent, double top,
+                             double bottom )
 {
-    vpcb.Tesselate( NULL );
+    vpcb.Tesselate( nullptr );
     std::vector< double > vertices;
     std::vector< int > idxPlane;
     std::vector< int > idxSide;
@@ -453,30 +473,30 @@ static SCENEGRAPH* vrmlToSG( VRML_LAYER& vpcb, int idxColor, SGNODE* aParent, do
 
     if( !vpcb.Get3DTriangles( vertices, idxPlane, idxSide, top, bottom ) )
     {
-        #ifdef DEBUG
+#ifdef DEBUG
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] no vertex data";
             wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
     if( ( idxPlane.size() % 3 ) || ( idxSide.size() % 3 ) )
     {
-        #ifdef DEBUG
+#ifdef DEBUG
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] index lists are not a multiple of 3 (not a triangle list)";
             wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
     std::vector< SGPOINT > vlist;
@@ -487,14 +507,24 @@ static SCENEGRAPH* vrmlToSG( VRML_LAYER& vpcb, int idxColor, SGNODE* aParent, do
         vlist.emplace_back( vertices[j], vertices[j+1], vertices[j+2] );
 
     // create the intermediate scenegraph
-    IFSG_TRANSFORM* tx0 = new IFSG_TRANSFORM( aParent );            // tx0 = Transform for this outline
-    IFSG_SHAPE* shape = new IFSG_SHAPE( *tx0 );                     // shape will hold (a) all vertices and (b) a local list of normals
-    IFSG_FACESET* face = new IFSG_FACESET( *shape );                // this face shall represent the top and bottom planes
-    IFSG_COORDS* cp = new IFSG_COORDS( *face );                     // coordinates for all faces
+    IFSG_TRANSFORM* tx0 = new IFSG_TRANSFORM( aParent );   // tx0 = Transform for this outline
+
+    // shape will hold (a) all vertices and (b) a local list of normals
+    IFSG_SHAPE* shape = new IFSG_SHAPE( *tx0 );
+
+    // this face shall represent the top and bottom planes
+    IFSG_FACESET* face = new IFSG_FACESET( *shape );
+
+    // coordinates for all faces
+    IFSG_COORDS* cp = new IFSG_COORDS( *face );
     cp->SetCoordsList( nvert, &vlist[0] );
-    IFSG_COORDINDEX* coordIdx = new IFSG_COORDINDEX( *face );       // coordinate indices for top and bottom planes only
+
+    // coordinate indices for top and bottom planes only.
+    IFSG_COORDINDEX* coordIdx = new IFSG_COORDINDEX( *face );
     coordIdx->SetIndices( idxPlane.size(), &idxPlane[0] );
-    IFSG_NORMALS* norms = new IFSG_NORMALS( *face );                // normals for the top and bottom planes
+
+    // normals for the top and bottom planes.
+    IFSG_NORMALS* norms = new IFSG_NORMALS( *face );
 
     // number of TOP (and bottom) vertices
     j = nvert / 2;
@@ -573,16 +603,16 @@ static SCENEGRAPH* addOutline( IDF3_COMP_OUTLINE* outline, int idxColor, SGNODE*
 
     if( !getOutlineModel( vpcb, outline->GetOutlines() ) )
     {
-        #ifdef DEBUG
+#ifdef DEBUG
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] no valid outline data";
             wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
     vpcb.EnsureWinding( 0, false );
@@ -607,13 +637,13 @@ static SCENEGRAPH* loadIDFOutline( const wxString& aFileName )
 {
     LOCALESWITCH switcher;
     IDF3_BOARD brd( IDF3::CAD_ELEC );
-    IDF3_COMP_OUTLINE* outline = NULL;
+    IDF3_COMP_OUTLINE* outline = nullptr;
 
     outline = brd.GetComponentOutline( aFileName );
 
-    if( NULL == outline )
+    if( nullptr == outline )
     {
-        #ifdef DEBUG
+#ifdef DEBUG
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -623,12 +653,12 @@ static SCENEGRAPH* loadIDFOutline( const wxString& aFileName )
             ostr << aFileName << "'";
             wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
-    SCENEGRAPH* data = addOutline( outline, -1, NULL );
+    SCENEGRAPH* data = addOutline( outline, -1, nullptr );
 
     return data;
 }
@@ -642,7 +672,7 @@ static SCENEGRAPH* loadIDFBoard( const wxString& aFileName )
     // note: if the IDF model is defective no outline substitutes shall be made
     if( !brd.ReadFile( aFileName, true ) )
     {
-        #ifdef DEBUG
+#ifdef DEBUG
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -651,9 +681,9 @@ static SCENEGRAPH* loadIDFBoard( const wxString& aFileName )
             ostr << " * [INFO] IDF file '" << aFileName.ToUTF8() << "'";
             wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
     IFSG_TRANSFORM tx0( true );
@@ -663,7 +693,7 @@ static SCENEGRAPH* loadIDFBoard( const wxString& aFileName )
     bool noComp = false;
     bool noOther = false;
 
-    if( NULL == makeBoard( brd, topNode ) )
+    if( nullptr == makeBoard( brd, topNode ) )
         noBoard = true;
 
     if( !makeComponents( brd, topNode ) )
@@ -675,7 +705,7 @@ static SCENEGRAPH* loadIDFBoard( const wxString& aFileName )
     if( noBoard && noComp && noOther )
     {
         tx0.Destroy();
-        return NULL;
+        return nullptr;
     }
 
     return (SCENEGRAPH*) topNode;
@@ -684,18 +714,18 @@ static SCENEGRAPH* loadIDFBoard( const wxString& aFileName )
 
 static SCENEGRAPH* makeBoard( IDF3_BOARD& brd, SGNODE* aParent )
 {
-    if( NULL == aParent )
-        return NULL;
+    if( nullptr == aParent )
+        return nullptr;
 
     VRML_LAYER vpcb;
 
     // check if no board outline
     if( brd.GetBoardOutlinesSize() < 1 )
-        return NULL;
+        return nullptr;
 
 
     if( !getOutlineModel( vpcb, brd.GetBoardOutline()->GetOutlines() ) )
-        return NULL;
+        return nullptr;
 
     vpcb.EnsureWinding( 0, false );
 
@@ -747,7 +777,7 @@ static SCENEGRAPH* makeBoard( IDF3_BOARD& brd, SGNODE* aParent )
 
 static bool makeComponents( IDF3_BOARD& brd, SGNODE* aParent )
 {
-    if( NULL == aParent )
+    if( nullptr == aParent )
         return false;
 
     int ncomponents = 0;
@@ -798,28 +828,27 @@ static bool makeComponents( IDF3_BOARD& brd, SGNODE* aParent )
 
             pout = (IDF3_COMP_OUTLINE*)((*so)->GetOutline());
 
-            if( NULL == pout  )
+            if( nullptr == pout  )
             {
                 ++so;
                 continue;
             }
 
             dataItem = dataMap.find( pout->GetUID() );
-            SCENEGRAPH* sg = NULL;
+            SCENEGRAPH* sg = nullptr;
 
             if( dataItem == dataMap.end() )
             {
-                sg = addOutline( pout, -1, NULL );
+                sg = addOutline( pout, -1, nullptr );
 
-                if( NULL == sg )
+                if( nullptr == sg )
                 {
                     ++so;
                     continue;
                 }
 
                 ++ncomponents;
-                dataMap.insert( std::pair< std::string, SGNODE* >
-                    ( pout->GetUID(), (SGNODE*)sg ) );
+                dataMap.insert( std::pair< std::string, SGNODE* >( pout->GetUID(), (SGNODE*)sg ) );
             }
             else
             {
@@ -830,7 +859,7 @@ static bool makeComponents( IDF3_BOARD& brd, SGNODE* aParent )
             IFSG_TRANSFORM txN( false );
             txN.Attach( (SGNODE*)sg );
 
-            if( NULL == txN.GetParent() )
+            if( nullptr == txN.GetParent() )
                 tx0.AddChildNode( txN );
             else
                 tx0.AddRefNode( txN );
@@ -869,7 +898,7 @@ static bool makeComponents( IDF3_BOARD& brd, SGNODE* aParent )
 
 static bool makeOtherOutlines( IDF3_BOARD& brd, SGNODE* aParent )
 {
-    if( NULL == aParent )
+    if( nullptr == aParent )
         return false;
 
     VRML_LAYER vpcb;
@@ -922,7 +951,7 @@ static bool makeOtherOutlines( IDF3_BOARD& brd, SGNODE* aParent )
             top = bot + pout->GetThickness();
         }
 
-        if( NULL == vrmlToSG( vpcb, -1, aParent, top, bot ) )
+        if( nullptr == vrmlToSG( vpcb, -1, aParent, top, bot ) )
         {
             vpcb.Clear();
             ++sc;

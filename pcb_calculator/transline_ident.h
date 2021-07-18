@@ -53,6 +53,10 @@ enum PRM_TYPE {
     PRM_TYPE_FREQUENCY
 };
 
+
+/**
+ * A class to handle one parameter of transline.
+ */
 class TRANSLINE_PRM
 {
 public:
@@ -62,12 +66,10 @@ public:
      * @param aDlgLabel is a I18n string used to identify the parameter in dialog.
      *                  usually aDlgLabel is same as aKeywordCfg, but translatable.
      */
-    TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
-                   const char* aKeywordCfg = "",
+    TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId, const char* aKeywordCfg = "",
                    const wxString& aDlgLabel = wxEmptyString,
                    const wxString& aToolTip = wxEmptyString,
-                   double aValue = 0.0,
-                   bool aConvUnit = false );
+                   double aValue = 0.0, bool aConvUnit = false );
 
     double ToUserUnit();
     double FromUserUnit();
@@ -86,8 +88,14 @@ public:
 };
 
 
-// A class to handle the list of available transm. lines
-// with messages, tooptips ...
+/**
+ * A class to handle a list of parameters of a given transline.
+ *
+ * @note The first string of TRANSLINE_PRM (m_KeyWord) is a keyword in config file.
+ *       It can contain only ASCII7 chars.  The second string of TRANSLINE_PRM is a
+ *       string translated for dialog so mark it for translation.  Do not mark translatable
+ *       m_DlgLabel that obviously cannot be translated, like "H" or "H_t".
+ */
 class TRANSLINE_IDENT
 {
 public:
@@ -105,7 +113,7 @@ public:
         if( aIdx < m_prms_List.size() )
             return m_prms_List[aIdx];
         else
-            return NULL;
+            return nullptr;
     }
 
     unsigned GetPrmsCount() const

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +34,6 @@
 X3DCOORDS::X3DCOORDS() : X3DNODE()
 {
     m_Type = X3D_COORDINATE;
-
-    return;
 }
 
 
@@ -42,7 +41,7 @@ X3DCOORDS::X3DCOORDS( X3DNODE* aParent ) : X3DNODE()
 {
     m_Type = X3D_COORDINATE;
 
-    if( NULL != aParent )
+    if( nullptr != aParent )
     {
         X3DNODES ptype = aParent->GetNodeType();
 
@@ -50,33 +49,26 @@ X3DCOORDS::X3DCOORDS( X3DNODE* aParent ) : X3DNODE()
             m_Parent = aParent;
     }
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
-
-    return;
 }
 
 
 X3DCOORDS::~X3DCOORDS()
 {
-    #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    wxLogTrace( MASK_VRML, " * [INFO] Destroying Coordinate\n" );
-    #endif
-    return;
+    wxLogTrace( MASK_VRML, " * [INFO] Destroying Coordinate" );
 }
 
 
 bool X3DCOORDS::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
 {
-    if( NULL == aTopNode || NULL == aNode )
+    if( nullptr == aTopNode || nullptr == aNode )
         return false;
 
     m_Dict = &aDict;
     wxXmlAttribute* prop;
 
-    for( prop = aNode->GetAttributes();
-         prop != NULL;
-         prop = prop->GetNext() )
+    for( prop = aNode->GetAttributes(); prop != nullptr; prop = prop->GetNext() )
     {
         const wxString& pname = prop->GetName();
 
@@ -124,7 +116,6 @@ bool X3DCOORDS::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
 
                 ++i;
             }
-
         }
     }
 
@@ -143,7 +134,7 @@ bool X3DCOORDS::SetParent( X3DNODE* aParent, bool doUnlink )
     if( aParent == m_Parent )
         return true;
 
-    if( NULL != aParent )
+    if( nullptr != aParent )
     {
         X3DNODES nt = aParent->GetNodeType();
 
@@ -151,12 +142,12 @@ bool X3DCOORDS::SetParent( X3DNODE* aParent, bool doUnlink )
             return false;
     }
 
-    if( NULL != m_Parent && doUnlink )
+    if( nullptr != m_Parent && doUnlink )
         m_Parent->unlinkChildNode( this );
 
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
 
     return true;
@@ -179,18 +170,17 @@ void X3DCOORDS::GetCoords( WRLVEC3F*& aCoordList, size_t& aListSize )
 {
     if( points.size() < 3 )
     {
-        aCoordList = NULL;
+        aCoordList = nullptr;
         aListSize = 0;
         return;
     }
 
     aCoordList = &points[0];
     aListSize = points.size();
-    return;
 }
 
 
 SGNODE* X3DCOORDS::TranslateToSG( SGNODE* aParent )
 {
-    return NULL;
+    return nullptr;
 }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,11 +24,11 @@
 
 /*
  * Description:
- *  This plugin implements the legacy kicad VRML1/VRML2 and X3D parsers
+ *  This plugin implements the legacy KiCad VRML1/VRML2 and X3D parsers
  *  The plugin will invoke a VRML1 or VRML2 parser depending on the
  *  identifying information in the file header:
  *
- *  #VRML V1.0 ascii
+ *  #VRML V1.0 ASCII
  *  #VRML V2.0 utf8
  */
 
@@ -61,8 +61,8 @@ const char* GetKicadPluginName( void )
 }
 
 
-void GetPluginVersion( unsigned char* Major,
-                       unsigned char* Minor, unsigned char* Patch, unsigned char* Revision )
+void GetPluginVersion( unsigned char* Major, unsigned char* Minor, unsigned char* Patch,
+                       unsigned char* Revision )
 {
     if( Major )
         *Major = PLUGIN_VRML_MAJOR;
@@ -111,7 +111,7 @@ int GetNExtensions( void )
 char const* GetModelExtension( int aIndex )
 {
     if( aIndex < 0 || aIndex >= int( file_data.extensions.size() ) )
-        return NULL;
+        return nullptr;
 
     return file_data.extensions[aIndex].c_str();
 }
@@ -126,7 +126,7 @@ int GetNFilters( void )
 char const* GetFileFilter( int aIndex )
 {
     if( aIndex < 0 || aIndex >= int( file_data.filters.size() ) )
-        return NULL;
+        return nullptr;
 
     return file_data.filters[aIndex].c_str();
 }
@@ -147,7 +147,7 @@ class LOCALESWITCH
 public:
     LOCALESWITCH()
     {
-        m_locale = setlocale( LC_NUMERIC, NULL );
+        m_locale = setlocale( LC_NUMERIC, nullptr );
         setlocale( LC_NUMERIC, "C" );
     }
 
@@ -160,8 +160,8 @@ public:
 
 SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 {
-    FILE_LINE_READER* modelFile = NULL;
-    SCENEGRAPH* scene = NULL;
+    FILE_LINE_READER* modelFile = nullptr;
+    SCENEGRAPH* scene = nullptr;
     wxString filename = aFileName;
     wxFileName tmpfilename;
 
@@ -217,7 +217,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
     catch( IO_ERROR & )
     {
         wxLogError( wxS( " * " ) + _( "[INFO] load failed: input line too long\n" ) );
-        return NULL;
+        return nullptr;
     }
 
 
@@ -230,26 +230,26 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 
     if( proc.GetVRMLType() == WRLVERSION::VRML_V1 )
     {
-        wxLogTrace( MASK_VRML, " * [INFO] Processing VRML 1.0 file\n" );
+        wxLogTrace( MASK_VRML, " * [INFO] Processing VRML 1.0 file" );
 
         WRL1BASE* bp = new WRL1BASE;
 
         if( !bp->Read( proc ) )
         {
-            wxLogTrace( MASK_VRML, " * [INFO] load failed\n" );
+            wxLogTrace( MASK_VRML, " * [INFO] load failed" );
         }
         else
         {
-            wxLogTrace( MASK_VRML, " * [INFO] load completed\n" );
+            wxLogTrace( MASK_VRML, " * [INFO] load completed" );
 
-            scene = (SCENEGRAPH*)bp->TranslateToSG( NULL, NULL );
+            scene = (SCENEGRAPH*)bp->TranslateToSG( nullptr, nullptr );
         }
 
         delete bp;
     }
     else
     {
-        wxLogTrace( MASK_VRML, " * [INFO] Processing VRML 2.0 file\n" );
+        wxLogTrace( MASK_VRML, " * [INFO] Processing VRML 2.0 file" );
 
         WRL2BASE* bp = new WRL2BASE;
 
@@ -258,25 +258,25 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 
         if( !bp->Read( proc ) )
         {
-            wxLogTrace( MASK_VRML, " * [INFO] load failed\n" );
+            wxLogTrace( MASK_VRML, " * [INFO] load failed" );
         }
         else
         {
-            wxLogTrace( MASK_VRML, " * [INFO] load completed\n" );
+            wxLogTrace( MASK_VRML, " * [INFO] load completed" );
 
             // for now we recalculate all normals per-vertex per-face
-            scene = (SCENEGRAPH*)bp->TranslateToSG( NULL );
+            scene = (SCENEGRAPH*)bp->TranslateToSG( nullptr );
         }
 
         delete bp;
     }
 
-    if( NULL != modelFile )
+    if( nullptr != modelFile )
         delete modelFile;
 
     // DEBUG: WRITE OUT VRML2 FILE TO CONFIRM STRUCTURE
-    #if ( defined( DEBUG_VRML1 ) && DEBUG_VRML1 > 3 ) \
-        || ( defined( DEBUG_VRML2 ) && DEBUG_VRML2 > 3 )
+#if ( defined( DEBUG_VRML1 ) && DEBUG_VRML1 > 3 )           \
+    || ( defined( DEBUG_VRML2 ) && DEBUG_VRML2 > 3 )
     if( scene )
     {
         wxFileName fn( wxString::FromUTF8Unchecked( aFileName ) );
@@ -291,7 +291,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
         output.append( wxT(".wrl") );
         S3D::WriteVRML( output.ToUTF8(), true, (SGNODE*)(scene), true, true );
     }
-    #endif
+#endif
 
     return scene;
 }
@@ -299,7 +299,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 
 SCENEGRAPH* LoadX3D( const wxString& aFileName )
 {
-    SCENEGRAPH* scene = NULL;
+    SCENEGRAPH* scene = nullptr;
     X3DPARSER model;
     scene = model.Load( aFileName );
 
@@ -309,17 +309,17 @@ SCENEGRAPH* LoadX3D( const wxString& aFileName )
 
 SCENEGRAPH* Load( char const* aFileName )
 {
-    if( NULL == aFileName )
-        return NULL;
+    if( nullptr == aFileName )
+        return nullptr;
 
     wxString fname = wxString::FromUTF8Unchecked( aFileName );
 
     if( !wxFileName::FileExists( fname ) )
-        return NULL;
+        return nullptr;
 
     LOCALESWITCH switcher;
 
-    SCENEGRAPH* scene = NULL;
+    SCENEGRAPH* scene = nullptr;
     wxString ext = wxFileName( fname ).GetExt();
 
     if( ext == "x3d" || ext == "X3D" )

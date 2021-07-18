@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +34,6 @@
 WRL2NORMS::WRL2NORMS() : WRL2NODE()
 {
     m_Type = WRL2NODES::WRL2_NORMAL;
-    return;
 }
 
 
@@ -42,20 +42,14 @@ WRL2NORMS::WRL2NORMS( WRL2NODE* aParent ) : WRL2NODE()
     m_Type = WRL2NODES::WRL2_NORMAL;
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
-
-    return;
 }
 
 
 WRL2NORMS::~WRL2NORMS()
 {
-    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 3 )
-    wxLogTrace( MASK_VRML, " * [INFO] Destroying Normal node\n" );
-    #endif
-
-    return;
+    wxLogTrace( MASK_VRML, " * [INFO] Destroying Normal node" );
 }
 
 
@@ -63,7 +57,7 @@ bool WRL2NORMS::isDangling( void )
 {
     // this node is dangling unless it has a parent of type WRL2_INDEXEDFACESET
 
-    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_INDEXEDFACESET )
+    if( nullptr == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_INDEXEDFACESET )
         return true;
 
     return false;
@@ -74,14 +68,14 @@ bool WRL2NORMS::AddRefNode( WRL2NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
     do {
         std::ostringstream ostr;
         ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr<< " * [BUG] AddRefNode is not applicable";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -91,14 +85,14 @@ bool WRL2NORMS::AddChildNode( WRL2NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG_VRML2
+#ifdef DEBUG_VRML2
     do {
         std::ostringstream ostr;
         ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr<< " * [BUG] AddChildNode is not applicable";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -113,7 +107,7 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -121,14 +115,14 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr<< line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( '{' != tok )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr<< proc.GetError() << "\n";
@@ -137,7 +131,7 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr << "' at line " << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -153,14 +147,14 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( !proc.ReadName( glob ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr<< proc.GetError();
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -172,7 +166,7 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     {
         if( !proc.ReadMFVec3f( vectors ) )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -182,14 +176,14 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 ostr<< " * [INFO] message: '" << proc.GetError() << "'";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
     }
     else
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         do {
             std::ostringstream ostr;
             ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -198,7 +192,7 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             ostr<< " * [INFO] file: '" << proc.GetFileName() << "'";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -211,7 +205,7 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     proc.GetFilePosData( line, column );
 
-    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
     do {
         std::ostringstream ostr;
         ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -220,7 +214,7 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         ostr<< " * [INFO] file: '" << proc.GetFileName() << "'";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -229,5 +223,5 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 SGNODE* WRL2NORMS::TranslateToSG( SGNODE* aParent )
 {
     // any data manipulation must be performed by the parent node
-    return NULL;
+    return nullptr;
 }

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,14 +34,12 @@
 bool X3D::ReadTransform( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
 {
     // note: we must have a parent or else we will have a memory leak
-    if( NULL == aParent || NULL == aNode )
+    if( nullptr == aParent || nullptr == aNode )
         return false;
 
     wxXmlAttribute* prop;
 
-    for( prop = aNode->GetAttributes();
-         prop != NULL;
-         prop = prop->GetNext() )
+    for( prop = aNode->GetAttributes(); prop != nullptr; prop = prop->GetNext() )
     {
         const wxString& pname = prop->GetName();
 
@@ -48,7 +47,7 @@ bool X3D::ReadTransform( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
         {
             X3DNODE* np = aDict.FindName( prop->GetValue() );
 
-            if( NULL == np )
+            if( nullptr == np )
                 return false;
 
             if( !aParent->AddRefNode( np ) )
@@ -80,14 +79,12 @@ bool X3D::ReadSwitch( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
 bool X3D::ReadShape( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
 {
     // note: we must have a parent or else we will have a memory leak
-    if( NULL == aParent || NULL == aNode )
+    if( nullptr == aParent || nullptr == aNode )
         return false;
 
     wxXmlAttribute* prop;
 
-    for( prop = aNode->GetAttributes();
-         prop != NULL;
-         prop = prop->GetNext() )
+    for( prop = aNode->GetAttributes(); prop != nullptr; prop = prop->GetNext() )
     {
         const wxString& pname = prop->GetName();
 
@@ -95,7 +92,7 @@ bool X3D::ReadShape( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
         {
             X3DNODE* np = aDict.FindName( prop->GetValue() );
 
-            if( NULL == np )
+            if( nullptr == np )
                 return false;
 
             if( !aParent->AddRefNode( np ) )
@@ -120,14 +117,12 @@ bool X3D::ReadShape( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
 bool X3D::ReadAppearance( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
 {
     // note: we must have a parent or else we will have a memory leak
-    if( NULL == aParent || NULL == aNode )
+    if( nullptr == aParent || nullptr == aNode )
         return false;
 
     wxXmlAttribute* prop;
 
-    for( prop = aNode->GetAttributes();
-         prop != NULL;
-         prop = prop->GetNext() )
+    for( prop = aNode->GetAttributes(); prop != nullptr; prop = prop->GetNext() )
     {
         const wxString& pname = prop->GetName();
 
@@ -135,7 +130,7 @@ bool X3D::ReadAppearance( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
         {
             X3DNODE* np = aDict.FindName( prop->GetValue() );
 
-            if( NULL == np )
+            if( nullptr == np )
                 return false;
 
             if( !aParent->AddRefNode( np ) )
@@ -160,14 +155,12 @@ bool X3D::ReadAppearance( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
 bool X3D::ReadIndexedFaceSet( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
 {
     // note: we must have a parent or else we will have a memory leak
-    if( NULL == aParent || NULL == aNode )
+    if( nullptr == aParent || nullptr == aNode )
         return false;
 
     wxXmlAttribute* prop;
 
-    for( prop = aNode->GetAttributes();
-         prop != NULL;
-         prop = prop->GetNext() )
+    for( prop = aNode->GetAttributes(); prop != nullptr; prop = prop->GetNext() )
     {
         const wxString& pname = prop->GetName();
 
@@ -175,7 +168,7 @@ bool X3D::ReadIndexedFaceSet( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDic
         {
             X3DNODE* np = aDict.FindName( prop->GetValue() );
 
-            if( NULL == np )
+            if( nullptr == np )
                 return false;
 
             if( !aParent->AddRefNode( np ) )
@@ -200,14 +193,12 @@ bool X3D::ReadIndexedFaceSet( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDic
 bool X3D::ReadCoordinates( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
 {
     // note: we must have a parent or else we will have a memory leak
-    if( NULL == aParent || NULL == aNode )
+    if( nullptr == aParent || nullptr == aNode )
         return false;
 
     wxXmlAttribute* prop;
 
-    for( prop = aNode->GetAttributes();
-         prop != NULL;
-         prop = prop->GetNext() )
+    for( prop = aNode->GetAttributes(); prop != nullptr; prop = prop->GetNext() )
     {
         const wxString& pname = prop->GetName();
 
@@ -215,7 +206,7 @@ bool X3D::ReadCoordinates( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
         {
             X3DNODE* np = aDict.FindName( prop->GetValue() );
 
-            if( NULL == np )
+            if( nullptr == np )
                 return false;
 
             if( !aParent->AddRefNode( np ) )

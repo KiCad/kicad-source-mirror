@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -30,12 +30,14 @@
 #include <geometry/shape.h>
 #include <geometry/shape_file_io.h>
 
+
 SHAPE_FILE_IO::SHAPE_FILE_IO()
 {
     m_groupActive = false;
     m_mode = IOM_WRITE;
     m_file = stdout;
 }
+
 
 SHAPE_FILE_IO::SHAPE_FILE_IO( const std::string& aFilename, SHAPE_FILE_IO::IO_MODE aMode )
 {
@@ -54,7 +56,7 @@ SHAPE_FILE_IO::SHAPE_FILE_IO( const std::string& aFilename, SHAPE_FILE_IO::IO_MO
     }
     else
     {
-        m_file = NULL;
+        m_file = nullptr;
     }
 
     m_mode = aMode;
@@ -84,7 +86,7 @@ SHAPE* SHAPE_FILE_IO::Read()
     do {
 
         if (fscanf(m_file, "%s", tmp) != 1)
-            return NULL;
+            return nullptr;
 
         if( !strcmp( tmp, "shape" )
             break;
@@ -92,7 +94,7 @@ SHAPE* SHAPE_FILE_IO::Read()
 
     int type;
 
-    SHAPE *rv = NULL;
+    SHAPE *rv = nullptr;
 
     fscanf(m_file,"%d %s", &type, tmp);
 
@@ -104,14 +106,14 @@ SHAPE* SHAPE_FILE_IO::Read()
     }
 
     if(!rv)
-        return NULL;
+        return nullptr;
 
     rv.Parse ( )
 
     fprintf(m_file,"shape %d %s %s\n", aShape->Type(), aName.c_str(), sh.c_str() );
 */
     assert( false );
-    return NULL;
+    return nullptr;
 }
 
 

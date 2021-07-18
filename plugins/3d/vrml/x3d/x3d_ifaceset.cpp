@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +39,7 @@
 X3DIFACESET::X3DIFACESET() : X3DNODE()
 {
     m_Type = X3D_INDEXED_FACE_SET;
-    coord = NULL;
+    coord = nullptr;
     init();
 
     return;
@@ -48,10 +49,10 @@ X3DIFACESET::X3DIFACESET() : X3DNODE()
 X3DIFACESET::X3DIFACESET( X3DNODE* aParent ) : X3DNODE()
 {
     m_Type = X3D_INDEXED_FACE_SET;
-    coord = NULL;
+    coord = nullptr;
     init();
 
-    if( NULL != aParent )
+    if( nullptr != aParent )
     {
         X3DNODES ptype = aParent->GetNodeType();
 
@@ -59,7 +60,7 @@ X3DIFACESET::X3DIFACESET( X3DNODE* aParent ) : X3DNODE()
             m_Parent = aParent;
     }
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
 
     return;
@@ -68,9 +69,9 @@ X3DIFACESET::X3DIFACESET( X3DNODE* aParent ) : X3DNODE()
 
 X3DIFACESET::~X3DIFACESET()
 {
-    #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
+#if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
     wxLogTrace( MASK_VRML, " * [INFO] Destroying IndexedFaceSet\n" );
-    #endif
+#endif
 
     return;
 }
@@ -78,7 +79,7 @@ X3DIFACESET::~X3DIFACESET()
 
 void X3DIFACESET::init()
 {
-    coord = NULL;
+    coord = nullptr;
 
     ccw = true;
     creaseAngle = 0.733f;   // approx 42 degrees; this is larger than VRML spec.
@@ -96,9 +97,7 @@ void X3DIFACESET::readFields( wxXmlNode* aNode )
 
     wxXmlAttribute* prop;
 
-    for( prop = aNode->GetAttributes();
-         prop != NULL;
-         prop = prop->GetNext() )
+    for( prop = aNode->GetAttributes(); prop != nullptr; prop = prop->GetNext() )
     {
         const wxString& pname = prop->GetName();
 
@@ -108,7 +107,9 @@ void X3DIFACESET::readFields( wxXmlNode* aNode )
             m_Dict->AddName( m_Name, this );
         }
         else if( pname == "ccw" )
+        {
             X3D::ParseSFBool( prop->GetValue(), ccw );
+        }
         else if( pname == "creaseAngle" )
         {
             X3D::ParseSFFloat( prop->GetValue(), creaseAngle );
@@ -139,16 +140,14 @@ void X3DIFACESET::readFields( wxXmlNode* aNode )
 
 bool X3DIFACESET::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
 {
-    if( NULL == aTopNode || NULL == aNode )
+    if( nullptr == aTopNode || nullptr == aNode )
         return false;
 
     m_Dict = &aDict;
     readFields( aNode );
     bool ok = false;
 
-    for( wxXmlNode* child = aNode->GetChildren();
-         child != NULL;
-         child = child->GetNext() )
+    for( wxXmlNode* child = aNode->GetChildren(); child != nullptr; child = child->GetNext() )
     {
         if( child->GetName() == "Coordinate" )
             ok = X3D::ReadCoordinates( child, this, aDict );
@@ -171,7 +170,7 @@ bool X3DIFACESET::SetParent( X3DNODE* aParent, bool doUnlink )
     if( aParent == m_Parent )
         return true;
 
-    if( NULL != aParent )
+    if( nullptr != aParent )
     {
         X3DNODES nt = aParent->GetNodeType();
 
@@ -179,12 +178,12 @@ bool X3DIFACESET::SetParent( X3DNODE* aParent, bool doUnlink )
             return false;
     }
 
-    if( NULL != m_Parent && doUnlink )
+    if( nullptr != m_Parent && doUnlink )
         m_Parent->unlinkChildNode( this );
 
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
 
     return true;
@@ -193,7 +192,7 @@ bool X3DIFACESET::SetParent( X3DNODE* aParent, bool doUnlink )
 
 bool X3DIFACESET::AddChildNode( X3DNODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return false;
 
     if( aNode->GetNodeType() != X3D_COORDINATE )
@@ -202,7 +201,7 @@ bool X3DIFACESET::AddChildNode( X3DNODE* aNode )
     if( aNode == coord )
         return true;
 
-    if( NULL != coord )
+    if( nullptr != coord )
         return false;
 
     m_Children.push_back( aNode );
@@ -217,7 +216,7 @@ bool X3DIFACESET::AddChildNode( X3DNODE* aNode )
 
 bool X3DIFACESET::AddRefNode( X3DNODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return false;
 
     if( aNode->GetNodeType() != X3D_COORDINATE )
@@ -226,7 +225,7 @@ bool X3DIFACESET::AddRefNode( X3DNODE* aNode )
     if( aNode == coord )
         return true;
 
-    if( NULL != coord )
+    if( nullptr != coord )
         return false;
 
     m_Refs.push_back( aNode );
@@ -240,9 +239,9 @@ SGNODE* X3DIFACESET::TranslateToSG( SGNODE* aParent )
 {
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
+    if( nullptr != aParent && ptype != S3D::SGTYPE_SHAPE )
     {
-        #ifdef DEBUG_X3D
+#ifdef DEBUG_X3D
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -250,12 +249,12 @@ SGNODE* X3DIFACESET::TranslateToSG( SGNODE* aParent )
             ostr << ptype << ")";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
-    #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
+#if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Translating IndexedFaceSet with " << m_Children.size();
@@ -264,21 +263,21 @@ SGNODE* X3DIFACESET::TranslateToSG( SGNODE* aParent )
         ostr << coordIndex.size() << " coord indices";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     if( m_sgNode )
     {
-        if( NULL != aParent )
+        if( nullptr != aParent )
         {
-            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+            if( nullptr == S3D::GetSGNodeParent( m_sgNode )
                 && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
             else if( aParent != S3D::GetSGNodeParent( m_sgNode )
                      && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
         }
 
@@ -287,15 +286,15 @@ SGNODE* X3DIFACESET::TranslateToSG( SGNODE* aParent )
 
     size_t vsize = coordIndex.size();
 
-    if( NULL == coord || vsize < 3 )
-        return NULL;
+    if( nullptr == coord || vsize < 3 )
+        return nullptr;
 
     WRLVEC3F* pcoords;
     size_t coordsize;
     ((X3DCOORDS*) coord)->GetCoords( pcoords, coordsize );
 
     if( coordsize < 3 )
-        return NULL;
+        return nullptr;
 
     // check that all indices are valid
     for( size_t idx = 0; idx < vsize; ++idx )
@@ -304,11 +303,11 @@ SGNODE* X3DIFACESET::TranslateToSG( SGNODE* aParent )
             continue;
 
         if( coordIndex[idx] >= (int)coordsize )
-            return NULL;
+            return nullptr;
     }
 
     SHAPE   lShape;
-    FACET*  fp = NULL;
+    FACET*  fp = nullptr;
     size_t  iCoord;
     int     idx;        // coordinate index
 
@@ -319,10 +318,10 @@ SGNODE* X3DIFACESET::TranslateToSG( SGNODE* aParent )
 
         if( idx < 0 )
         {
-            if( NULL != fp )
+            if( nullptr != fp )
             {
                 if( fp->HasMinPoints() )
-                    fp = NULL;
+                    fp = nullptr;
                 else
                     fp->Init();
             }
@@ -334,19 +333,19 @@ SGNODE* X3DIFACESET::TranslateToSG( SGNODE* aParent )
         if( idx >= (int)coordsize )
             continue;
 
-        if( NULL == fp )
+        if( nullptr == fp )
             fp = lShape.NewFacet();
 
         // push the vertex value and index
         fp->AddVertex( pcoords[idx], idx );
     }
 
-    SGNODE* np = NULL;
+    SGNODE* np = nullptr;
 
     if( ccw )
-        np = lShape.CalcShape( aParent, NULL, WRL1_ORDER::ORD_CCW, creaseLimit, true );
+        np = lShape.CalcShape( aParent, nullptr, WRL1_ORDER::ORD_CCW, creaseLimit, true );
     else
-        np = lShape.CalcShape( aParent, NULL, WRL1_ORDER::ORD_CLOCKWISE, creaseLimit, true );
+        np = lShape.CalcShape( aParent, nullptr, WRL1_ORDER::ORD_CLOCKWISE, creaseLimit, true );
 
     return np;
 }

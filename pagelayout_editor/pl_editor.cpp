@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -49,42 +50,41 @@ static struct IFACE : public KIFACE_I
 
     void OnKifaceEnd() override;
 
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
+                            int aCtlBits = 0 ) override
     {
         switch( aClassId )
         {
         case FRAME_PL_EDITOR:
-            {
-                PL_EDITOR_FRAME* frame = new PL_EDITOR_FRAME( aKiway, aParent );
-                return frame;
-            }
+        {
+            PL_EDITOR_FRAME* frame = new PL_EDITOR_FRAME( aKiway, aParent );
+            return frame;
             break;
+        }
 
         default:
             ;
         }
 
-        return NULL;
+        return nullptr;
     }
 
     /**
-     * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this
-     * is to retrieve a pointer to a static instance of an interface, similar to
-     * how the KIFACE interface is exported.  But if you know what you are doing
+     * Return a pointer to the requested object.
+     *
+     * The safest way to use this is to retrieve a pointer to a static instance of an interface,
+     * similar to how the KIFACE interface is exported.  But if you know what you are doing
      * use it to retrieve anything you want.
      *
      * @param aDataId identifies which object you want the address of.
-     *
-     * @return void* - and must be cast into the know type.
+     * @return the object requested and must be cast into the know type.
      */
     void* IfaceOrAddress( int aDataId ) override
     {
-        return NULL;
+        return nullptr;
     }
 
     /**
-     * Function SaveFileAs
      * Saving a file under a different name is delegated to the various KIFACEs because
      * the project doesn't know the internal format of the various files (which may have
      * paths in them that need updating).
@@ -97,9 +97,12 @@ static struct IFACE : public KIFACE_I
 
 } // namespace
 
+
 using namespace PGE;
 
+
 static PGM_BASE* process;
+
 
 KIFACE_I& Kiface() { return kiface; }
 

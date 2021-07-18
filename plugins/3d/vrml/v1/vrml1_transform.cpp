@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +44,7 @@ WRL1TRANSFORM::WRL1TRANSFORM( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     m_Type = WRL1NODES::WRL1_TRANSFORM;
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
 
     return;
@@ -52,7 +53,7 @@ WRL1TRANSFORM::WRL1TRANSFORM( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 
 WRL1TRANSFORM::~WRL1TRANSFORM()
 {
-    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Destroying Transform with " << m_Children.size();
@@ -60,9 +61,7 @@ WRL1TRANSFORM::~WRL1TRANSFORM()
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
-
-    return;
+#endif
 }
 
 
@@ -80,16 +79,16 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
      * }
      */
 
-    if( NULL == aTopNode )
+    if( nullptr == aTopNode )
     {
-        #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [BUG] aTopNode is NULL";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -118,7 +117,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -126,14 +125,14 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             ostr << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
 
     if( '{' != tok )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         do {
             std::ostringstream ostr;
             ostr << proc.GetError() << "\n";
@@ -142,7 +141,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             ostr << "' at line " << line << ", column " << column;
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
         return false;
     }
@@ -160,14 +159,14 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
         if( !proc.ReadName( glob ) )
         {
-            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 ostr << proc.GetError();
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -185,7 +184,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( center ) )
             {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -195,7 +194,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -209,7 +208,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadSFRotation( rotation ) )
             {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -219,7 +218,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -228,7 +227,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( scale ) )
             {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -238,7 +237,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -247,7 +246,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadSFRotation( scaleOrientation ) )
             {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -257,7 +256,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -266,7 +265,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( translation ) )
             {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
                 do {
                     std::ostringstream ostr;
                     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -276,7 +275,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                     ostr << " * [INFO] message: '" << proc.GetError() << "'";
                     wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
                 } while( 0 );
-                #endif
+#endif
 
                 return false;
             }
@@ -288,7 +287,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         }
         else
         {
-            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
             do {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -297,7 +296,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
-            #endif
+#endif
 
             return false;
         }
@@ -311,14 +310,14 @@ bool WRL1TRANSFORM::AddRefNode( WRL1NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] AddRefNode is not applicable";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -328,14 +327,14 @@ bool WRL1TRANSFORM::AddChildNode( WRL1NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG_VRML1
+#ifdef DEBUG_VRML1
     do {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] AddChildNode is not applicable";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return false;
 }
@@ -343,19 +342,17 @@ bool WRL1TRANSFORM::AddChildNode( WRL1NODE* aNode )
 
 SGNODE* WRL1TRANSFORM::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
-    if( NULL == m_Parent )
-        return NULL;
+    if( nullptr == m_Parent )
+        return nullptr;
 
     if( WRL1NODES::WRL1_BASE == m_Parent->GetNodeType() )
-        return NULL;
+        return nullptr;
 
-    if( NULL == sp )
+    if( nullptr == sp )
     {
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        wxLogTrace( MASK_VRML, " * [INFO] bad model: no base data given\n" );
-        #endif
+        wxLogTrace( MASK_VRML, " * [INFO] bad model: no base data given" );
 
-        return NULL;
+        return nullptr;
     }
 
     // rotation
@@ -365,20 +362,24 @@ SGNODE* WRL1TRANSFORM::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     rZ = rotation.z;
     rW = rotation.w;
     glm::mat4 rM = glm::rotate( glm::mat4( 1.0f ), rW, glm::vec3( rX, rY, rZ ) );
+
     // translation
     float dX, dY, dZ;
     dX = translation.x;
     dY = translation.y;
     dZ = translation.z;
     glm::mat4 tM = glm::translate( glm::mat4( 1.0f ), glm::vec3( dX, dY, dZ ) );
+
     // center
     dX = center.x;
     dY = center.y;
     dZ = center.z;
     glm::mat4 cM = glm::translate( glm::mat4( 1.0f ), glm::vec3( dX, dY, dZ ) );
     glm::mat4 ncM = glm::translate( glm::mat4( 1.0f ), glm::vec3( -dX, -dY, -dZ ) );
+
     // scale
     glm::mat4 sM = glm::scale( glm::mat4( 1.0 ), glm::vec3( scale.x, scale.y, scale.z ) );
+
     // scaleOrientation
     rX = scaleOrientation.x;
     rY = scaleOrientation.y;
@@ -391,5 +392,5 @@ SGNODE* WRL1TRANSFORM::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     // tx' = tM * cM * rM * srM * sM * nsrM * ncM
     sp->txmatrix = sp->txmatrix * tM * cM * rM * srM * sM * nsrM * ncM;
 
-    return NULL;
+    return nullptr;
 }

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,20 +35,18 @@
 X3DSHAPE::X3DSHAPE() : X3DNODE()
 {
     m_Type = X3D_SHAPE;
-    appearance = NULL;
-    geometry = NULL;
-
-    return;
+    appearance = nullptr;
+    geometry = nullptr;
 }
 
 
 X3DSHAPE::X3DSHAPE( X3DNODE* aParent ) : X3DNODE()
 {
     m_Type = X3D_SHAPE;
-    appearance = NULL;
-    geometry = NULL;
+    appearance = nullptr;
+    geometry = nullptr;
 
-    if( NULL != aParent )
+    if( nullptr != aParent )
     {
         X3DNODES ptype = aParent->GetNodeType();
 
@@ -55,16 +54,14 @@ X3DSHAPE::X3DSHAPE( X3DNODE* aParent ) : X3DNODE()
             m_Parent = aParent;
     }
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
-
-    return;
 }
 
 
 X3DSHAPE::~X3DSHAPE()
 {
-    #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
+#if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Destroying Shape with " << m_Children.size();
@@ -72,7 +69,7 @@ X3DSHAPE::~X3DSHAPE()
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     return;
 }
@@ -80,18 +77,16 @@ X3DSHAPE::~X3DSHAPE()
 
 bool X3DSHAPE::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
 {
-    if( NULL == aTopNode || NULL == aNode )
+    if( nullptr == aTopNode || nullptr == aNode )
         return false;
 
-    if( NULL != appearance || NULL != geometry )
+    if( nullptr != appearance || nullptr != geometry )
         return false;
 
     m_Dict = &aDict;
     wxXmlAttribute* prop;
 
-    for( prop = aNode->GetAttributes();
-         prop != NULL;
-         prop = prop->GetNext() )
+    for( prop = aNode->GetAttributes(); prop != nullptr; prop = prop->GetNext() )
     {
         const wxString& pname = prop->GetName();
 
@@ -102,20 +97,17 @@ bool X3DSHAPE::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
         }
     }
 
-    for( wxXmlNode* child = aNode->GetChildren();
-         child != NULL;
-         child = child->GetNext() )
+    for( wxXmlNode* child = aNode->GetChildren(); child != nullptr; child = child->GetNext() )
     {
         wxString name = child->GetName();
 
-        if( name == "Appearance" && NULL == appearance )
+        if( name == "Appearance" && nullptr == appearance )
             X3D::ReadAppearance( child, this, aDict );
-        else if( name == "IndexedFaceSet" && NULL == geometry )
+        else if( name == "IndexedFaceSet" && nullptr == geometry )
             X3D::ReadIndexedFaceSet( child, this, aDict );
-
     }
 
-    if( NULL == appearance || NULL == geometry )
+    if( nullptr == appearance || nullptr == geometry )
         return false;
 
     if( !SetParent( aTopNode ) )
@@ -130,7 +122,7 @@ bool X3DSHAPE::SetParent( X3DNODE* aParent, bool doUnlink )
     if( aParent == m_Parent )
         return true;
 
-    if( NULL != aParent )
+    if( nullptr != aParent )
     {
         X3DNODES nt = aParent->GetNodeType();
 
@@ -138,12 +130,12 @@ bool X3DSHAPE::SetParent( X3DNODE* aParent, bool doUnlink )
             return false;
     }
 
-    if( NULL != m_Parent && doUnlink )
+    if( nullptr != m_Parent && doUnlink )
         m_Parent->unlinkChildNode( this );
 
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
 
     return true;
@@ -152,7 +144,7 @@ bool X3DSHAPE::SetParent( X3DNODE* aParent, bool doUnlink )
 
 bool X3DSHAPE::AddChildNode( X3DNODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return false;
 
     X3DNODES tchild = aNode->GetNodeType();
@@ -173,23 +165,27 @@ bool X3DSHAPE::AddChildNode( X3DNODE* aNode )
 
     if( X3D_APPEARANCE == tchild )
     {
-        if( NULL == appearance )
+        if( nullptr == appearance )
         {
             m_Children.push_back( aNode );
             appearance = aNode;
         }
         else
+        {
             return false;
+        }
     }
     else
     {
-        if( NULL == geometry )
+        if( nullptr == geometry )
         {
             m_Children.push_back( aNode );
             geometry = aNode;
         }
         else
+        {
             return false;
+        }
     }
 
     if( aNode->GetParent() != this )
@@ -201,7 +197,7 @@ bool X3DSHAPE::AddChildNode( X3DNODE* aNode )
 
 bool X3DSHAPE::AddRefNode( X3DNODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return false;
 
     X3DNODES tchild = aNode->GetNodeType();
@@ -222,25 +218,29 @@ bool X3DSHAPE::AddRefNode( X3DNODE* aNode )
 
     if( X3D_APPEARANCE == tchild )
     {
-        if( NULL == appearance )
+        if( nullptr == appearance )
         {
             m_Refs.push_back( aNode );
             aNode->addNodeRef( this );
             appearance = aNode;
         }
         else
+        {
             return false;
+        }
     }
     else
     {
-        if( NULL == geometry )
+        if( nullptr == geometry )
         {
             m_Refs.push_back( aNode );
             aNode->addNodeRef( this );
             geometry = aNode;
         }
         else
+        {
             return false;
+        }
     }
 
     return true;
@@ -249,10 +249,10 @@ bool X3DSHAPE::AddRefNode( X3DNODE* aNode )
 
 SGNODE* X3DSHAPE::TranslateToSG( SGNODE* aParent )
 {
-    if( NULL == geometry || NULL == appearance )
-        return NULL;
+    if( nullptr == geometry || nullptr == appearance )
+        return nullptr;
 
-    #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
+#if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Translating Shape with " << m_Children.size();
@@ -260,13 +260,13 @@ SGNODE* X3DSHAPE::TranslateToSG( SGNODE* aParent )
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
+    if( nullptr != aParent && ptype != S3D::SGTYPE_TRANSFORM )
     {
-        #ifdef DEBUG_X3D
+#ifdef DEBUG_X3D
         do {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -274,24 +274,24 @@ SGNODE* X3DSHAPE::TranslateToSG( SGNODE* aParent )
             ostr << ptype << ")";
             wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         } while( 0 );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
     if( m_sgNode )
     {
-        if( NULL != aParent )
+        if( nullptr != aParent )
         {
-            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+            if( nullptr == S3D::GetSGNodeParent( m_sgNode )
                 && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
             else if( aParent != S3D::GetSGNodeParent( m_sgNode )
                      && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
         }
 
@@ -304,7 +304,7 @@ SGNODE* X3DSHAPE::TranslateToSG( SGNODE* aParent )
     SGNODE* pGeom = geometry->TranslateToSG( pShape );
     SGNODE* pApp = appearance->TranslateToSG( pShape );
 
-    if( NULL == pApp || NULL == pGeom )
+    if( nullptr == pApp || nullptr == pGeom )
     {
         if( pGeom )
         {
@@ -321,7 +321,7 @@ SGNODE* X3DSHAPE::TranslateToSG( SGNODE* aParent )
         }
 
         shNode.Destroy();
-        return NULL;
+        return nullptr;
     }
 
     m_sgNode = shNode.GetRawPtr();
@@ -332,29 +332,27 @@ SGNODE* X3DSHAPE::TranslateToSG( SGNODE* aParent )
 
 void X3DSHAPE::unlinkChildNode( const X3DNODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     if( aNode == appearance )
-        appearance = NULL;
+        appearance = nullptr;
     else if( aNode == geometry )
-        geometry = NULL;
+        geometry = nullptr;
 
     X3DNODE::unlinkChildNode( aNode );
-    return;
 }
 
 
 void X3DSHAPE::unlinkRefNode( const X3DNODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     if( aNode == appearance )
-        appearance = NULL;
+        appearance = nullptr;
     else if( aNode == geometry )
-        geometry = NULL;
+        geometry = nullptr;
 
     X3DNODE::unlinkRefNode( aNode );
-    return;
 }

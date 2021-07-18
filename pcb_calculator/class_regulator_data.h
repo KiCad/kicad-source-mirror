@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre.charras
- * Copyright (C) 1992-2021 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,13 +76,15 @@ public:
     {
         // add new item an try to keep alphabetic order,
         // and because name have numbers inside, use a KiCad compare function
-        // that handles number as numbers not ascii chars
+        // that handles number as numbers not ASCII chars
         unsigned ii = 0;
+
         for( ; ii < m_List.size(); ii++ )
         {
             if( UTIL::RefDesStringCompare( aItem->m_Name, m_List[ii]->m_Name ) < 0 )
                 break;
         }
+
         m_List.insert( m_List.begin() + ii, aItem );
     }
 
@@ -95,7 +97,7 @@ public:
                 return  m_List[ii];
             }
         }
-        return NULL;
+        return nullptr;
     }
 
     void Remove( const wxString & aRegName )

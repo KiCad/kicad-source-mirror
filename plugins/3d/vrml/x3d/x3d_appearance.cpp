@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +46,7 @@ X3DAPP::X3DAPP( X3DNODE* aParent ) : X3DNODE()
     m_Type = X3D_APPEARANCE;
     init();
 
-    if( NULL != aParent )
+    if( nullptr != aParent )
     {
         X3DNODES ptype = aParent->GetNodeType();
 
@@ -53,7 +54,7 @@ X3DAPP::X3DAPP( X3DNODE* aParent ) : X3DNODE()
             m_Parent = aParent;
     }
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
 
     return;
@@ -62,9 +63,7 @@ X3DAPP::X3DAPP( X3DNODE* aParent ) : X3DNODE()
 
 X3DAPP::~X3DAPP()
 {
-    #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    wxLogTrace( MASK_VRML, " * [INFO] Destroying Appearance\n" );
-    #endif
+    wxLogTrace( MASK_VRML, " * [INFO] Destroying Appearance" );
 
     if( !m_MatName.empty() && m_Dict )
         m_Dict->DelName( m_MatName, this );
@@ -106,9 +105,7 @@ void X3DAPP::readFields( wxXmlNode* aNode )
 
     wxXmlAttribute* prop;
 
-    for( prop = aNode->GetAttributes();
-         prop != NULL;
-         prop = prop->GetNext() )
+    for( prop = aNode->GetAttributes(); prop != nullptr; prop = prop->GetNext() )
     {
         const wxString& pname = prop->GetName();
 
@@ -121,7 +118,7 @@ void X3DAPP::readFields( wxXmlNode* aNode )
         {
             X3DNODE* np = m_Dict->FindName( prop->GetValue() );
 
-            if( NULL != np && np->GetNodeType() == X3D_APPEARANCE )
+            if( nullptr != np && np->GetNodeType() == X3D_APPEARANCE )
             {
                 X3DAPP* ap = (X3DAPP*) np;
                 diffuseColor = ap->diffuseColor;
@@ -133,35 +130,42 @@ void X3DAPP::readFields( wxXmlNode* aNode )
             }
         }
         else if( pname == "diffuseColor" )
+        {
             X3D::ParseSFVec3( prop->GetValue(), diffuseColor );
+        }
         else if( pname == "emissiveColor" )
+        {
             X3D::ParseSFVec3( prop->GetValue(), emissiveColor );
+        }
         else if( pname == "specularColor" )
+        {
             X3D::ParseSFVec3( prop->GetValue(), specularColor );
+        }
         else if( pname == "ambientIntensity" )
+        {
             X3D::ParseSFFloat( prop->GetValue(), ambientIntensity );
+        }
         else if( pname == "shininess" )
+        {
             X3D::ParseSFFloat( prop->GetValue(), shininess );
+        }
         else if( pname == "transparency" )
+        {
             X3D::ParseSFFloat( prop->GetValue(), transparency );
-
+        }
     }
-
-    return;
 }
 
 
 bool X3DAPP::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
 {
-    if( NULL == aTopNode || NULL == aNode )
+    if( nullptr == aTopNode || nullptr == aNode )
         return false;
 
     m_Dict = &aDict;
     wxXmlAttribute* prop;
 
-    for( prop = aNode->GetAttributes();
-         prop != NULL;
-         prop = prop->GetNext() )
+    for( prop = aNode->GetAttributes(); prop != nullptr; prop = prop->GetNext() )
     {
         const wxString& pname = prop->GetName();
 
@@ -172,18 +176,16 @@ bool X3DAPP::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
         }
     }
 
-    wxXmlNode* pmat = NULL;
+    wxXmlNode* pmat = nullptr;
 
-    for( wxXmlNode* child = aNode->GetChildren();
-         child != NULL;
-         child = child->GetNext() )
+    for( wxXmlNode* child = aNode->GetChildren(); child != nullptr; child = child->GetNext() )
     {
         if( child->GetName() == "Material" )
             pmat = child;
 
     }
 
-    if( NULL == pmat )
+    if( nullptr == pmat )
         return false;
 
     readFields( pmat );
@@ -200,7 +202,7 @@ bool X3DAPP::SetParent( X3DNODE* aParent, bool doUnlink )
     if( aParent == m_Parent )
         return true;
 
-    if( NULL != aParent )
+    if( nullptr != aParent )
     {
         X3DNODES nt = aParent->GetNodeType();
 
@@ -208,19 +210,19 @@ bool X3DAPP::SetParent( X3DNODE* aParent, bool doUnlink )
             return false;
     }
 
-    if( NULL != m_Parent && doUnlink )
+    if( nullptr != m_Parent && doUnlink )
         m_Parent->unlinkChildNode( this );
 
     m_Parent = aParent;
 
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
 
     return true;
 }
 
 
-    bool X3DAPP::AddChildNode( X3DNODE* aNode )
+bool X3DAPP::AddChildNode( X3DNODE* aNode )
 {
     return false;
 }
@@ -236,20 +238,20 @@ SGNODE* X3DAPP::TranslateToSG( SGNODE* aParent )
 {
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
+    if( nullptr != aParent && ptype != S3D::SGTYPE_SHAPE )
     {
-        #ifdef DEBUG_X3D
+#ifdef DEBUG_X3D
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [BUG] Appearance does not have a Shape parent (parent ID: ";
         ostr << ptype << ")";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        #endif
+#endif
 
-        return NULL;
+        return nullptr;
     }
 
-    #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
+#if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
     do {
         std::ostringstream ostr;
         ostr << " * [INFO] Translating Appearance with " << m_Children.size();
@@ -257,21 +259,21 @@ SGNODE* X3DAPP::TranslateToSG( SGNODE* aParent )
         ostr << m_BackPointers.size() << " backpointers";
         wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     } while( 0 );
-    #endif
+#endif
 
     if( m_sgNode )
     {
-        if( NULL != aParent )
+        if( nullptr != aParent )
         {
-            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+            if( nullptr == S3D::GetSGNodeParent( m_sgNode )
                 && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
             else if( aParent != S3D::GetSGNodeParent( m_sgNode )
                      && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
             {
-                return NULL;
+                return nullptr;
             }
         }
 
