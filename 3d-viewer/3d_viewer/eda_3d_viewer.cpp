@@ -112,7 +112,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY *aKiway, PCB_BASE_FRAME *aParent
 
     m_canvas = new EDA_3D_CANVAS( this,
                                   OGL_ATT_LIST::GetAttributesList( m_boardAdapter.GetAntiAliasingMode() ),
-                                  aParent->GetBoard(), m_boardAdapter, m_currentCamera,
+                                  m_boardAdapter, m_currentCamera,
                                   Prj().Get3DCacheManager() );
 
     auto config = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();

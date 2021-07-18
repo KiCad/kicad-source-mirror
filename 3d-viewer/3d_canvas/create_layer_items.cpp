@@ -148,6 +148,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     m_holeCount                = 0;
     m_averageHoleDiameter      = 0;
 
+    if( !m_board )
+        return;
+
     // Prepare track list, convert in a vector. Calc statistic for the holes
     std::vector<const PCB_TRACK*> trackList;
     trackList.clear();

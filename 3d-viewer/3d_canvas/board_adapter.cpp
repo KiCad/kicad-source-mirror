@@ -155,7 +155,7 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const
 {
     wxASSERT( aLayer < PCB_LAYER_ID_COUNT );
 
-    if( !m_board->IsLayerEnabled( aLayer ) )
+    if( m_board && !m_board->IsLayerEnabled( aLayer ) )
         return false;
 
     // see if layer needs to be shown
@@ -210,7 +210,7 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const
 
     default:
         // the layer is an internal copper layer, used the visibility
-        return m_board->IsLayerVisible( aLayer );
+        return m_board && m_board->IsLayerVisible( aLayer );
     }
 }
 
@@ -252,7 +252,8 @@ bool BOARD_ADAPTER::IsFootprintShown( FOOTPRINT_ATTR_T aFPAttributes ) const
 
 int BOARD_ADAPTER::GetHolePlatingThickness() const noexcept
 {
-    return m_board->GetDesignSettings().GetHolePlatingThickness();
+    return m_board ? m_board->GetDesignSettings().GetHolePlatingThickness()
+                   : 0.035 * PCB_IU_PER_MM;
 }
 
 
@@ -295,11 +296,13 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     // to ensure any item, even outside the board outlines can be seen
     bool boardEdgesOnly = true;
 
-    if( m_board->IsFootprintHolder() || !GetFlag( FL_USE_REALISTIC_MODE )
+    if( ( m_board && m_board->IsFootprintHolder() ) || !GetFlag( FL_USE_REALISTIC_MODE )
             || !succeedToGetBoardPolygon )
         boardEdgesOnly = false;
 
-    EDA_RECT bbbox = m_board->ComputeBoundingBox( boardEdgesOnly );
+    EDA_RECT bbbox;
+    if( m_board )
+        bbbox = m_board->ComputeBoundingBox( boardEdgesOnly );
 
     // Gives a non null size to avoid issues in zoom / scale calculations
     if( ( bbbox.GetWidth() == 0 ) && ( bbbox.GetHeight() == 0 ) )
@@ -312,7 +315,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
     m_boardPos.y = -m_boardPos.y; // The y coord is inverted in 3D viewer
 
-    m_copperLayersCount = m_board->GetCopperLayerCount();
+    m_copperLayersCount = m_board ? m_board->GetCopperLayerCount() : 2;
 
     // Ensure the board has 2 sides for 3D views, because it is hard to find
     // a *really* single side board in the true life...
@@ -322,7 +325,9 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     // Calculate the conversion to apply to all positions.
     m_biuTo3Dunits = RANGE_SCALE_3D / std::max( m_boardSize.x, m_boardSize.y );
 
-    m_epoxyThickness3DU = m_board->GetDesignSettings().GetBoardThickness() * m_biuTo3Dunits;
+    m_epoxyThickness3DU = m_board
+                            ? m_board->GetDesignSettings().GetBoardThickness() * m_biuTo3Dunits
+                            : 1.6 * PCB_IU_PER_MM * m_biuTo3Dunits;
 
     // !TODO: use value defined by user (currently use default values by ctor
     m_copperThickness3DU         = COPPER_THICKNESS     * m_biuTo3Dunits;
@@ -462,6 +467,9 @@ extern bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutli
 bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
 {
     m_board_poly.RemoveAllContours();
+
+    if( !m_board )
+        return false;
 
     bool success;
 

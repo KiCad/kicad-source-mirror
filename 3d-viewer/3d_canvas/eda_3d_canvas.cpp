@@ -87,7 +87,7 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, wxGLCanvas )
 END_EVENT_TABLE()
 
 
-EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* aBoard,
+EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList,
                               BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera,
                               S3D_CACHE* a3DCachePointer )
         : HIDPI_GL_CANVAS( aParent, wxID_ANY, aAttribList, wxDefaultPosition, wxDefaultSize,
@@ -138,9 +138,6 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
     m_3d_render_ogl_legacy->SetBusyIndicatorFactory( busy_indicator_factory );
 
     RenderEngineChanged();
-
-    wxASSERT( aBoard != nullptr );
-    m_boardAdapter.SetBoard( aBoard );
 
     m_boardAdapter.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
 

@@ -721,6 +721,9 @@ void RENDER_3D_LEGACY::generateCylinder( const SFVEC2F& aCenter, float aInnerRad
 
 void RENDER_3D_LEGACY::generateViasAndPads()
 {
+    if( !m_boardAdapter.GetBoard() )
+        return;
+
     const int   platingThickness    = m_boardAdapter.GetHolePlatingThickness();
     const float platingThickness3d  = platingThickness * m_boardAdapter.BiuTo3dUnits();
 
@@ -862,6 +865,9 @@ void RENDER_3D_LEGACY::generateViasAndPads()
 
 void RENDER_3D_LEGACY::load3dModels( REPORTER* aStatusReporter )
 {
+    if( !m_boardAdapter.GetBoard() )
+        return;
+
     if( !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL )
       && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT )
       && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_VIRTUAL ) )

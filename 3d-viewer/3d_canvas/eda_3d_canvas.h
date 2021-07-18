@@ -56,7 +56,7 @@ public:
      *  @param aBoard The board.
      *  @param aSettings the settings options to be used by this canvas.
      */
-    EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* aBoard,
+    EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList,
                    BOARD_ADAPTER& aSettings, CAMERA& aCamera, S3D_CACHE* a3DCachePointer );
 
     ~EDA_3D_CANVAS();

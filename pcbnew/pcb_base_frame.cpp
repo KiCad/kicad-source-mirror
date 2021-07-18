@@ -452,6 +452,11 @@ EDA_3D_VIEWER_FRAME* PCB_BASE_FRAME::CreateAndShow3D_Frame()
     if( wxWindow::FindFocus() != draw3DFrame )
         draw3DFrame->SetFocus();
 
+    // Allocate a slice of time to display the 3D frame
+    wxSafeYield();
+    // And show the current board
+    Update3DView( true, true );
+
     return draw3DFrame;
 }
 

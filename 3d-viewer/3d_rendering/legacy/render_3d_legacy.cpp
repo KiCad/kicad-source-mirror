@@ -1174,6 +1174,8 @@ void RENDER_3D_LEGACY::renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPos
 void RENDER_3D_LEGACY::render3dModelsSelected( bool aRenderTopOrBot, bool aRenderTransparentOnly,
                                                bool aRenderSelectedOnly )
 {
+    if( !m_boardAdapter.GetBoard() )
+        return;
 
     MODEL_3D::BeginDrawMulti( !aRenderSelectedOnly );
 

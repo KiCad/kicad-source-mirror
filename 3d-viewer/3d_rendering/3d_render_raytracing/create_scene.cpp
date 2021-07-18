@@ -1251,6 +1251,9 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
 
 void RENDER_3D_RAYTRACE::addPadsAndVias()
 {
+    if( !m_boardAdapter.GetBoard() )
+        return;
+
     // Insert plated vertical holes inside the board
 
     // Insert vias holes (vertical cylinders)
@@ -1279,6 +1282,9 @@ void RENDER_3D_RAYTRACE::addPadsAndVias()
 
 void RENDER_3D_RAYTRACE::loadModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation )
 {
+    if( !m_boardAdapter.GetBoard() )
+        return;
+
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
