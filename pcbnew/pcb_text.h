@@ -64,6 +64,10 @@ public:
 
     wxString GetShownText( int aDepth = 0 ) const override;
 
+    /// PCB_TEXTs are always visible:
+    void SetVisible( bool aVisible ) override { /* do nothing */}
+    bool IsVisible() const override { return true; }
+
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
     {
         return BOARD_ITEM::Matches( GetShownText(), aSearchData );

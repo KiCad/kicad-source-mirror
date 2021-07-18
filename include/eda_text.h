@@ -182,8 +182,8 @@ public:
     void SetBold( bool aBold )                  { m_e.Bit( TE_BOLD, aBold); }
     bool IsBold() const                         { return m_e.Bit( TE_BOLD ); }
 
-    void SetVisible( bool aVisible )            { m_e.Bit( TE_VISIBLE, aVisible ); }
-    bool IsVisible() const                      { return m_e.Bit( TE_VISIBLE ); }
+    virtual void SetVisible( bool aVisible )    { m_e.Bit( TE_VISIBLE, aVisible ); }
+    virtual bool IsVisible() const              { return m_e.Bit( TE_VISIBLE ); }
 
     void SetMirrored( bool isMirrored )         { m_e.Bit( TE_MIRROR, isMirrored ); }
     bool IsMirrored() const                     { return m_e.Bit( TE_MIRROR ); }

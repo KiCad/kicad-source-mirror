@@ -1711,7 +1711,8 @@ void PCB_IO::format( const PCB_TEXT* aText, int aNestLevel ) const
 
     m_out->Print( 0, "\n" );
 
-    aText->EDA_TEXT::Format( m_out, aNestLevel, m_ctl );
+    // PCB_TEXTS are never hidden, so always omit "hide" attribute
+    aText->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
 
     m_out->Print( aNestLevel, ")\n" );
 }
