@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-17 23:10+0000\n"
+"PO-Revision-Date: 2021-07-18 15:48+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -17228,29 +17228,28 @@ msgstr "Capas de mecanizado (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
 #: gerbview/files.cpp:154
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
-msgstr "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
+msgstr "Maestro de pads superiores (*.GPT)|*.GPT;*.gpt|"
 
 #: gerbview/files.cpp:155
 msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
-msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
+msgstr "Maestro de pads inferiores (*.GPB)|*.GPB;*.gpb|"
 
 #: gerbview/files.cpp:173
 msgid "Open Gerber File(s)"
 msgstr "Abrir archivo(s) Gerber"
 
 #: gerbview/files.cpp:230
-#, fuzzy
 msgid "File not found:"
-msgstr "Archivo no encontrado"
+msgstr "Archivo no encontrado:"
 
 #: gerbview/files.cpp:242
 msgid "Loading Gerber files..."
 msgstr "Cargando archivos Gerber..."
 
 #: gerbview/files.cpp:245 gerbview/files.cpp:252
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %u/%zu %s..."
-msgstr "Cargando %s"
+msgstr "Cargando %u/%zu %s..."
 
 #: gerbview/files.cpp:276
 #, c-format
@@ -17264,24 +17263,24 @@ msgid "Open NC (Excellon) Drill File(s)"
 msgstr "Abrir archivo(s) de taladros NC (Excellon)"
 
 #: gerbview/files.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Zip file '%s' cannot be opened."
-msgstr "No puede abrirse el archivo Zip \"%s\""
+msgstr "No puede abrirse el archivo Zip '%s'."
 
 #: gerbview/files.cpp:513
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (unknown type).\n"
-msgstr "Info: archivo <i>\"%s\"</i> descartado (tipo de archivo desconocido)\n"
+msgstr "Archivo '%s' salteado (tipo desconocido).\n"
 
 #: gerbview/files.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (gerber job file).\n"
-msgstr "Info: archivo <i>\"%s\"</i> descartado (tipo de archivo desconocido)\n"
+msgstr "Archivo '%s' salteado (archivo de trabajo gerber).\n"
 
 #: gerbview/files.cpp:566
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>\n"
-msgstr "<b>No puede crearse al archivo temporal \"%s\"</b>\n"
+msgstr "<b>No puede crearse al archivo temporal '%s'.</b>\n"
 
 #: gerbview/files.cpp:596
 #, c-format
@@ -17334,14 +17333,14 @@ msgid "Net:"
 msgstr "Red:"
 
 #: gerbview/gerber_draw_item.cpp:739
-#, fuzzy, c-format
+#, c-format
 msgid "Cmp: %s  Pad: %s"
-msgstr "Cmp: %s;  Pad: %s"
+msgstr "Cmp: %s  Pad: %s"
 
 #: gerbview/gerber_draw_item.cpp:743
-#, fuzzy, c-format
+#, c-format
 msgid "Cmp: %s  Pad: %s  Fct %s"
-msgstr "Cmp: %s;  Pad: %s"
+msgstr "Cmp: %s  Pad: %s  Fct %s"
 
 #: gerbview/gerber_draw_item.cpp:751 gerbview/toolbars_gerber.cpp:122
 #: gerbview/toolbars_gerber.cpp:125
@@ -17383,31 +17382,26 @@ msgid "Graphic layer %d"
 msgstr "Capa gráfica %d"
 
 #: gerbview/gerbview_frame.cpp:73 gerbview/menubar.cpp:125
-#, fuzzy
 msgid "Clear Recent Zip Files"
-msgstr "Abrir archivo de ta&ladros Excellon reciente"
+msgstr "Limpiar archivos zip recientes"
 
 #: gerbview/gerbview_frame.cpp:75 gerbview/menubar.cpp:89
-#, fuzzy
 msgid "Clear Recent Drill Files"
-msgstr "Abrir archivo de ta&ladros Excellon reciente"
+msgstr "Limpiar archivos de taladro recientes"
 
 #: gerbview/gerbview_frame.cpp:77 gerbview/menubar.cpp:107
-#, fuzzy
 msgid "Clear Recent Job Files"
-msgstr "Abrir archivo de traba&jo Gerber reciente"
+msgstr "Limpiar archivos de trabajo recientes"
 
 #: gerbview/gerbview_frame.cpp:94
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
-#, fuzzy
 msgid "KiCad Gerber Viewer"
-msgstr "Visor de archivos Gerber"
+msgstr "Visor Gerber de KiCad"
 
 #: gerbview/gerbview_frame.cpp:608 gerbview/gerbview_frame.cpp:632
 #: gerbview/menubar.cpp:146 kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Gerber Viewer"
-msgstr "Visor de archivos Gerber"
+msgstr "Visor Gerber"
 
 #: gerbview/gerbview_frame.cpp:613
 #, c-format
@@ -17415,9 +17409,8 @@ msgid "Drawing layer %d not in use"
 msgstr "La capa de dibujo %d no está en uso"
 
 #: gerbview/gerbview_frame.cpp:630
-#, fuzzy
 msgid "(with X2 attributes)"
-msgstr " (con atributos X2)"
+msgstr "(con atributos X2)"
 
 #: gerbview/gerbview_frame.cpp:639
 #, c-format
@@ -17433,40 +17426,34 @@ msgid "GerbView"
 msgstr "GerbView"
 
 #: gerbview/job_file_reader.cpp:157
-#, fuzzy
 msgid "This job file uses an outdated format. Please recreate it."
 msgstr ""
-"Este archivo de trabajo utiliza un formato obsoleto. Por favor, créelo de "
-"nuevo."
+"Este archivo de trabajo utiliza un formato desactualizado. Por favor, créelo "
+"de nuevo."
 
 #: gerbview/job_file_reader.cpp:193
 msgid "Open Gerber Job File"
 msgstr "Abrir archivo de trabajo Gerber"
 
 #: gerbview/menubar.cpp:67
-#, fuzzy
 msgid "Open Recent Gerber File"
-msgstr "Abrir archivo de traba&jo Gerber reciente"
+msgstr "Abrir archivo Gerber reciente"
 
 #: gerbview/menubar.cpp:71
-#, fuzzy
 msgid "Clear Recent Gerber Files"
-msgstr "Abrir archivo de traba&jo Gerber reciente"
+msgstr "Limpiar archivos Gerber recientes"
 
 #: gerbview/menubar.cpp:85
-#, fuzzy
 msgid "Open Recent Drill File"
-msgstr "Abrir archivo de ta&ladros Excellon reciente"
+msgstr "Abrir archivo de taladros reciente"
 
 #: gerbview/menubar.cpp:103
-#, fuzzy
 msgid "Open Recent Job File"
-msgstr "Abrir archivo de traba&jo reciente"
+msgstr "Abrir archivo de trabajo reciente"
 
 #: gerbview/menubar.cpp:121
-#, fuzzy
 msgid "Open Recent Zip File"
-msgstr "Abrir &reciente"
+msgstr "Abrir archivo zip reciente"
 
 #: gerbview/readgerb.cpp:63
 #, c-format
@@ -17474,24 +17461,20 @@ msgid "File \"%s\" not found"
 msgstr "No se ha encontrado el archivo \"%s\""
 
 #: gerbview/readgerb.cpp:88
-#, fuzzy
 msgid ""
 "Warning: this file has no D-Code definition\n"
 "Therefore the size of some items is undefined"
 msgstr ""
-"Atención: este archivo no tienen definiciones de códigos D\n"
-"Quizá sea un archivo en codificación RS274D\n"
-"por lo que el tamaño de los elementos no está definido"
+"Advertencia: este archivo no tiene una definición de código-D\n"
+"Por lo que el tamaño de algunos elementos está indefinido"
 
 #: gerbview/readgerb.cpp:91
-#, fuzzy
 msgid ""
 "Warning: this file has some missing D-Code definitions\n"
 "Therefore the size of some items is undefined"
 msgstr ""
-"Atención: este archivo no tienen definiciones de códigos D\n"
-"Quizá sea un archivo en codificación RS274D\n"
-"por lo que el tamaño de los elementos no está definido"
+"Advertencia: a este archivo le faltan algunas definiciones de código-D\n"
+"Por lo que el tamaño de algunos elementos está indefinido"
 
 #: gerbview/rs274d.cpp:645
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -17500,8 +17483,7 @@ msgstr "Archivo Gerber inválido: falta el comando de arco G74 o G75"
 #: gerbview/rs274x.cpp:229
 #, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\""
-msgstr ""
-"RS274X: Formato de comando GERBER no válido '%c' en la línea % d: \"%s\""
+msgstr "RS274X: Formato de comando GERBER no válido '%c' en la línea %d: \"%s\""
 
 #: gerbview/rs274x.cpp:232
 #, c-format
@@ -17541,22 +17523,19 @@ msgid "<No selection>"
 msgstr "<Sin selección>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
-#, fuzzy
 msgid "Open Gerber Plot File(s)..."
-msgstr "Abrir archivo(s) &Gerber..."
+msgstr "Abrir archivo(s) de trazado Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
-#, fuzzy
 msgid ""
 "Open Gerber plot file(s) on the current layer. Previous data will be deleted"
 msgstr ""
-"Abre archivo(s) Gerber en la capa activa. La información anterior será "
-"eliminada"
+"Abre archivo(s) de trazado Gerber en la capa actual. Los datos anteriores "
+"serán eliminados"
 
 #: gerbview/tools/gerbview_actions.cpp:45
-#, fuzzy
 msgid "Open Excellon Drill File(s)..."
-msgstr "Abrir archivo(s) de ta&ladros Excellon..."
+msgstr "Abrir archivo(s) de taladros Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
 msgid ""
@@ -17567,21 +17546,17 @@ msgstr ""
 "anterior se perderá"
 
 #: gerbview/tools/gerbview_actions.cpp:51
-#, fuzzy
 msgid "Open Gerber Job File..."
-msgstr "Abrir archivo de traba&jo Gerber..."
+msgstr "Abrir archivo de trabajo Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
-#, fuzzy
 msgid "Open a Gerber job file and its associated gerber plot files"
 msgstr ""
-"Abrir un archivo de trabajo Gerber, y cargar archivos asociados Gerrber en "
-"función del trabajo"
+"Abrir un archivo de trabajo Gerber y los archivos de trazado Gerber asociados"
 
 #: gerbview/tools/gerbview_actions.cpp:57
-#, fuzzy
 msgid "Open Zip Archive File..."
-msgstr "Abrir archivo &Zip..."
+msgstr "Abrir archivo Zip..."
 
 #: gerbview/tools/gerbview_actions.cpp:58
 msgid "Open a zipped archive (Gerber and Drill) file"
@@ -17596,46 +17571,40 @@ msgid "Show or hide the layer manager"
 msgstr "Mostrar u ocultar el administración de capas"
 
 #: gerbview/tools/gerbview_actions.cpp:69
-#, fuzzy
 msgid "List DCodes..."
-msgstr "&Listar códigos D"
+msgstr "Listar códigos D..."
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "List D-codes defined in Gerber files"
 msgstr "Listar códigos D en archivos Gerber"
 
 #: gerbview/tools/gerbview_actions.cpp:75
-#, fuzzy
 msgid "Show Source..."
-msgstr "Mo&strar origen"
+msgstr "Mostrar origen..."
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "Show source file for the current layer"
 msgstr "Muestra el archivo fuente de la capa activa"
 
 #: gerbview/tools/gerbview_actions.cpp:81
-#, fuzzy
 msgid "Export to PCB Editor..."
-msgstr "Cambiar a editor de PCB"
+msgstr "Exportar al editor de placas..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
 msgstr "Exportar datos como un archivo de placa de KiCad"
 
 #: gerbview/tools/gerbview_actions.cpp:87
-#, fuzzy
 msgid "Clear Current Layer..."
-msgstr "Limpiar &capa activa..."
+msgstr "Limpiar capa activa..."
 
 #: gerbview/tools/gerbview_actions.cpp:87
-#, fuzzy
 msgid "Clear the selected graphic layer"
-msgstr "Seleccione una librería de símbolos."
+msgstr "Limpiar la capa de gráficos seleccionada"
 
 #: gerbview/tools/gerbview_actions.cpp:92
-#, fuzzy
 msgid "Clear All Layers"
-msgstr "Eliminar tod&as las capas"
+msgstr "Limpiar todas las capas"
 
 #: gerbview/tools/gerbview_actions.cpp:93
 msgid "Clear all layers. All data will be deleted"
@@ -17651,7 +17620,7 @@ msgstr "Recargar todas las capas. Se volverán a cargar todos los datos"
 
 #: gerbview/tools/gerbview_actions.cpp:108
 msgid "Clear Highlight"
-msgstr "Eliminar remarcado"
+msgstr "Limpiar resaltado"
 
 #: gerbview/tools/gerbview_actions.cpp:118
 msgid "Highlight Component"
@@ -17662,24 +17631,20 @@ msgid "Highlight Attribute"
 msgstr "Resaltar atributo"
 
 #: gerbview/tools/gerbview_actions.cpp:128
-#, fuzzy
 msgid "Highlight DCode"
-msgstr "Resaltar red"
+msgstr "Resaltar código D"
 
 #: gerbview/tools/gerbview_actions.cpp:134
-#, fuzzy
 msgid "Next Layer"
-msgstr "Capa Seg."
+msgstr "Capa siguiente"
 
 #: gerbview/tools/gerbview_actions.cpp:139
-#, fuzzy
 msgid "Previous Layer"
-msgstr "Cambiar a la capa anterior"
+msgstr "Capa anterior"
 
 #: gerbview/tools/gerbview_actions.cpp:144
-#, fuzzy
 msgid "Sketch Lines"
-msgstr "&Líneas en boceto"
+msgstr "Líneas en boceto"
 
 #: gerbview/tools/gerbview_actions.cpp:144
 msgid "Show lines in outline mode"
@@ -17729,14 +17694,12 @@ msgid "Show layers in diff (compare) mode"
 msgstr "Mostrar capas en modo diferencia (comparar)"
 
 #: gerbview/tools/gerbview_actions.cpp:178
-#, fuzzy
 msgid "Flip Gerber View"
-msgstr "Visor de archivos Gerber"
+msgstr "Voltear vista Gerber"
 
 #: gerbview/tools/gerbview_actions.cpp:178
-#, fuzzy
 msgid "Show as mirror image"
-msgstr "Mostrar microvías"
+msgstr "Mostrar como una imagen espejada"
 
 #: gerbview/tools/gerbview_control.cpp:112
 msgid "None of the Gerber layers contain any data"
@@ -17751,19 +17714,18 @@ msgid "D Codes"
 msgstr "Códigos D"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Source file '%s' not found."
-msgstr "No se ha encontrado el archivo de recuperación \"%s\"."
+msgstr "No se ha encontrado el archivo fuente '%s'."
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#, fuzzy
 msgid "No editor defined. Please select one."
-msgstr "No hay un editor definido. Por favor, seleccione uno"
+msgstr "No hay un editor definido. Por favor seleccione uno."
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "No file loaded on the active layer %d."
-msgstr "No se ha cargado un archivo en la capa activa %d"
+msgstr "No se ha cargado un archivo en la capa activa %d."
 
 #: gerbview/tools/gerbview_selection_tool.cpp:48
 msgid "Highlight"
@@ -17785,9 +17747,9 @@ msgid "Highlight Aperture Type \"%s\""
 msgstr "Remarcar aperturas de tipo \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight DCode D%d"
-msgstr "Resaltar"
+msgstr "Resaltar código D D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:84
 #: gerbview/widgets/layer_widget.cpp:534
@@ -17827,18 +17789,16 @@ msgstr "Mostrar los puntos de cuadrícula (x,y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:109
 #: pcbnew/widgets/appearance_controls.cpp:360
-#, fuzzy
 msgid "Drawing Sheet"
-msgstr "Arrastrar hoja"
+msgstr "Hoja de dibujo"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:109
-#, fuzzy
 msgid "Show drawing sheet border and title block"
-msgstr "Imprimir marco y bloque de título"
+msgstr "Mostrar el marco y bloque de título de la hoja de dibujo"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:110
 msgid "PCB Background"
-msgstr "Fonde de la PCB"
+msgstr "Fondo de la placa"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:129
 #: pcbnew/widgets/appearance_controls.cpp:1596
@@ -17864,14 +17824,12 @@ msgid "Sort Layers if X2 Mode"
 msgstr "Ordenar capas en modo X2"
 
 #: gerbview/widgets/layer_widget.cpp:130
-#, fuzzy
 msgid "Change Layer Color for"
-msgstr "Cambiar color de capa por "
+msgstr "Cambiar color de capa por"
 
 #: gerbview/widgets/layer_widget.cpp:180
-#, fuzzy
 msgid "Change Render Color for"
-msgstr "Cambiar color de renderizado por "
+msgstr "Cambiar color de renderizado por"
 
 #: gerbview/widgets/layer_widget.cpp:337
 #: pcbnew/widgets/appearance_controls.cpp:1908
@@ -17892,9 +17850,8 @@ msgid "Left double click or middle click for color change"
 msgstr "Doble click izquierdo o botón central para cambiar el color"
 
 #: include/base_units.h:47
-#, fuzzy
 msgid "-- mixed values --"
-msgstr "Valor del campo"
+msgstr "-- valores mixtos --"
 
 #: include/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
@@ -17903,9 +17860,8 @@ msgstr ""
 "KiCad"
 
 #: include/filehistory.h:54
-#, fuzzy
 msgid "Clear Recent Files"
-msgstr "Borra el contenido de la capa activa"
+msgstr "Limpiar archivos recientes"
 
 #: include/kiway_player.h:242
 msgid "This file is already open."
@@ -17916,9 +17872,8 @@ msgid "Library Path"
 msgstr "Ruta de la librería"
 
 #: include/lib_table_grid.h:187
-#, fuzzy
 msgid "Library Format"
-msgstr "Ruta de la librería"
+msgstr "Formato de librería"
 
 #: include/lib_table_grid.h:190
 msgid "Active"
@@ -17935,14 +17890,12 @@ msgstr ""
 "de KiCad"
 
 #: include/project.h:41
-#, fuzzy
 msgid "untitled"
-msgstr "Cantidad"
+msgstr "sin título"
 
 #: include/widgets/infobar.h:113
-#, fuzzy
 msgid "Hide this message."
-msgstr "mostrar este mensaje"
+msgstr "Ocultar este mensaje."
 
 #: include/widgets/resettable_panel.h:54
 msgid "Reset all settings on this page to their default"
@@ -17978,34 +17931,29 @@ msgid "Project Template Selector"
 msgstr "Selector de plantillas de proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:108
-#, fuzzy
 msgid "Edit the project schematic"
-msgstr "en todo el esquema?"
+msgstr "Editar el esquema del proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:112
-#, fuzzy
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "Editar las listas de librerías de símbolos globales y de proyecto"
+msgstr "Editar las librerías de símbolos de esquema globales y/o del proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:116
-#, fuzzy
 msgid "Edit the project PCB design"
-msgstr "Editar pin de hoja"
+msgstr "Editar el diseño de placa del proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
-#, fuzzy
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr "Editar las listas de librerías de símbolos globales y del proyecto"
+msgstr "Editar las librerías de huellas de placas globales y/o del proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:124
-#, fuzzy
 msgid "Preview Gerber files"
-msgstr "Ver archivos Gerber"
+msgstr "Previsualizar archivos Gerber"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:128
-#, fuzzy
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Convertir imágenes de mapa de bits en elementos de esquema o PCB."
+msgstr ""
+"Convertir imágenes de mapa de bits en símbolos de esquema o huellas de placa"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:132
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -18042,9 +17990,9 @@ msgid "Target Directory"
 msgstr "Directorio destino"
 
 #: kicad/files-io.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Unzipping project in '%s'.\n"
-msgstr "Descomprimiendo proyecto en \"%s\"\n"
+msgstr "Descomprimiendo proyecto en '%s'.\n"
 
 #: kicad/files-io.cpp:117
 msgid "Archive Project Files"
@@ -18086,83 +18034,75 @@ msgstr ""
 "El proyecto no se puede importar."
 
 #: kicad/import_project.cpp:223
-#, fuzzy
 msgid "Import CADSTAR Archive Project Files"
-msgstr "Archivos de proyecto archivado"
+msgstr "Importar archivos de proyecto CADSTAR"
 
 #: kicad/import_project.cpp:231
 msgid "Import Eagle Project Files"
 msgstr "Importar archivos de proyecto de Eagle"
 
 #: kicad/kicad.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
-msgstr "El archivo \"%s\" no parece ser un archivo de esquema válido."
+msgstr ""
+"El archivo '%s'\n"
+"no parece ser un archivo de proyecto de KiCad válido."
 
 #: kicad/kicad_manager_frame.cpp:157
-#, fuzzy
 msgid "Project Files"
-msgstr "Archivo de proyecto <"
+msgstr "Archivos de proyecto"
 
 #: kicad/kicad_manager_frame.cpp:161
-#, fuzzy
 msgid "Editors"
-msgstr "&Editor ..."
+msgstr "Editores"
 
 #: kicad/kicad_manager_frame.cpp:553
 msgid "Load File to Edit"
 msgstr "Abrir archivo para edición"
 
 #: kicad/kicad_manager_frame.cpp:622
-#, fuzzy
 msgid "[no project loaded]"
-msgstr "[sin proyecto]"
+msgstr "[sin proyecto cargado]"
 
 #: kicad/kicad_manager_frame.cpp:625
-#, fuzzy
 msgid "KiCad "
-msgstr "KiCad"
+msgstr "KiCad "
 
 #: kicad/kicad_manager_frame.cpp:664
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr "Proyecto: '%s'"
+msgstr "Proyecto: %s"
 
 #: kicad/kicad_manager_frame.cpp:699
-#, fuzzy
 msgid "Restoring session"
-msgstr "Configuración de las extensiones de archivo, directorios y otros..."
+msgstr "Restaurando sesión"
 
 #: kicad/kicad_manager_frame.cpp:709
-#, fuzzy, c-format
+#, c-format
 msgid "Restoring \"%s\""
-msgstr "Esperando \"%s\""
+msgstr "Restaurando \"%s\""
 
 #: kicad/menubar.cpp:54
-#, fuzzy
 msgid "Clear Recent Projects"
-msgstr "Abrir un proyecto reciente"
+msgstr "Limpiar proyectos recientes"
 
 #: kicad/menubar.cpp:91
-#, fuzzy
 msgid "Import Non-KiCad Project..."
-msgstr "Importar archivo de placa ajena a KiCad..."
+msgstr "Importar proyecto ajeno a KiCad..."
 
 #: kicad/menubar.cpp:94
-#, fuzzy
 msgid "CADSTAR Project..."
-msgstr "Importar proyecto"
+msgstr "Proyecto de CADSTAR..."
 
 #: kicad/menubar.cpp:95
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
 msgstr "Importar esquema y placa de CADSTAR (* .csa, * .cpa)"
 
 #: kicad/menubar.cpp:99
-#, fuzzy
 msgid "EAGLE Project..."
-msgstr "Importar proyecto EAGLE..."
+msgstr "Proyecto de EAGLE..."
 
 #: kicad/menubar.cpp:100
 msgid "Import EAGLE CAD XML schematic and board"
@@ -18189,58 +18129,52 @@ msgid "Browse Project Files"
 msgstr "Examinar archivos del proyecto"
 
 #: kicad/menubar.cpp:129
-#, fuzzy
 msgid "Open project directory in file browser"
-msgstr "Abrir carpeta de proyecto en el explorador"
+msgstr "Abrir carpeta de proyecto en el explorador de archivos"
 
 #: kicad/menubar.cpp:154
 msgid "Edit Local File..."
 msgstr "Editar archivo local..."
 
 #: kicad/menubar.cpp:155
-#, fuzzy
 msgid "Edit local file in text editor"
-msgstr "Abrir el archivo de complemento en el editor de texto"
+msgstr "Editar archivo local en el editor de texto"
 
 #: kicad/menubar.cpp:214
 msgid "Archive all project files"
 msgstr "Archivar todos los ficheros del proyecto"
 
 #: kicad/menubar.cpp:227
-#, fuzzy
 msgid "Reveal project folder in Finder"
-msgstr "Abrir carpeta de proyecto en el explorador"
+msgstr "Revelar la carpeta del proyecto en Finder"
 
 #: kicad/menubar.cpp:229
 msgid "Open project directory in file explorer"
 msgstr "Abrir carpeta de proyecto en el explorador"
 
 #: kicad/project_template.cpp:52
-#, fuzzy
 msgid "Could open the template path!"
-msgstr "¡Ha podido abrirse la ruta a la plantilla! "
+msgstr "¡Ha podido abrirse la ruta a la plantilla!"
 
 #: kicad/project_template.cpp:57
-#, fuzzy
 msgid "Couldn't open the meta information directory for this template!"
-msgstr "¡No puede abrirse la carpeta con la información de esta plantilla! "
+msgstr "¡No puede abrirse la carpeta con la información de esta plantilla!"
 
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
 msgstr "¡No puede encontrarse la información HTML de esta plantilla!"
 
 #: kicad/project_template.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create folder '%s'."
-msgstr "No puede crearse la carpeta \"%s\"."
+msgstr "No puede crearse la carpeta '%s'."
 
 #: kicad/project_tree_item.cpp:110
-#, fuzzy
 msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
 msgstr ""
-"El tipo de archivo cambiará al modificar su extensión.\n"
+"Cambiando la extensión del archivo cambiará el tipo de archivo.\n"
 "¿Desea continuar?"
 
 #: kicad/project_tree_item.cpp:112
@@ -18252,24 +18186,22 @@ msgid "Unable to rename file ... "
 msgstr "Imposible renombrar el archivo... "
 
 #: kicad/project_tree_item.cpp:120
-#, fuzzy
 msgid "Permission error?"
 msgstr "¿Error de permisos?"
 
 #: kicad/project_tree_item.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to recycle bin."
-msgstr "No puede convertirse \"%s\" a un entero"
+msgstr "No puede moverse '%s' a la papelera."
 
 #: kicad/project_tree_item.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to trash."
-msgstr "No puede convertirse \"%s\" a un entero"
+msgstr "No puede moverse '%s' a la basura."
 
 #: kicad/project_tree_pane.cpp:256
-#, fuzzy
 msgid "Directory name:"
-msgstr "Dirección:"
+msgstr "Nombre de la carpeta:"
 
 #: kicad/project_tree_pane.cpp:256
 msgid "Create New Directory"
